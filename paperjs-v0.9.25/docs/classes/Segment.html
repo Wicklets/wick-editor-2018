@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Segment</title>
+<base target="class-frame">
+<link href="../assets/css/docs.css" rel="stylesheet" type="text/css">
+<script src="../assets/js/paper.js"></script>
+<script src="../assets/js/jquery.js"></script>
+<script src="../assets/js/codemirror.js"></script>
+<script src="../assets/js/docs.js"></script>
+</head>
+<body class="reference">
+<div class="reference-class">
+<h1>Segment</h1>
+
+<p>The Segment object represents the points of a path through which its
+<a href="../classes/Curve.html"><tt>Curve</tt></a> objects pass. The segments of a path can be accessed through
+its <a href="../classes/Path.html#segments"><tt>path.segments</tt></a> array.</p>
+<p>Each segment consists of an anchor point (<a href="../classes/Segment.html#point"><tt>segment.point</tt></a>) and
+optionaly an incoming and an outgoing handle (<a href="../classes/Segment.html#handlein"><tt>segment.handleIn</tt></a> and
+<a href="../classes/Segment.html#handleout"><tt>segment.handleOut</tt></a>), describing the tangents of the two <a href="../classes/Curve.html"><tt>Curve</tt></a>
+objects that are connected by this segment.</p>
+
+</div>
+
+<!-- ============================== constructors ========================= -->
+<div class="reference-members"><h2>Constructors</h2>
+	
+		
+<div id="segment" class="member">
+<div class="member-link">
+<a name="segment" href="#segment"><tt><b>Segment</b>([point[, handleIn[, handleOut]]])</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+    <p>Creates a new Segment object.</p>
+    
+<ul><b>Parameters:</b>
+
+<li>
+<tt>point:</tt> 
+<a href="../classes/Point.html"><tt>Point</tt></a>
+&mdash;&nbsp;the anchor point of the segment
+&mdash;&nbsp;optional, default: <tt>{x: 0, y: 0}</tt>
+</li>
+
+<li>
+<tt>handleIn:</tt> 
+<a href="../classes/Point.html"><tt>Point</tt></a>
+&mdash;&nbsp;the handle point relative to the
+anchor point of the segment that describes the in tangent of the
+segment
+&mdash;&nbsp;optional, default: <tt>{x: 0, y: 0}</tt>
+</li>
+
+<li>
+<tt>handleOut:</tt> 
+<a href="../classes/Point.html"><tt>Point</tt></a>
+&mdash;&nbsp;the handle point relative to the
+anchor point of the segment that describes the out tangent of the
+segment
+&mdash;&nbsp;optional, default: <tt>{x: 0, y: 0}</tt>
+</li>
+
+</ul>
+
+    
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/Segment.html"><tt>Segment</tt></a></tt>
+</li>
+	
+	</ul>
+
+    
+    <p>
+<b>Example</b> 
+</p>
+
+<div class="paperscript split">
+
+<div class="buttons">
+<div class="button run">Run</div>
+</div>
+
+<script type="text/paperscript" canvas="canvas-0">
+var handleIn = new Point(-80, -100);
+var handleOut = new Point(80, 100);
+
+var firstPoint = new Point(100, 50);
+var firstSegment = new Segment(firstPoint, null, handleOut);
+
+var secondPoint = new Point(300, 50);
+var secondSegment = new Segment(secondPoint, handleIn, null);
+
+var path = new Path(firstSegment, secondSegment);
+path.strokeColor = 'black';
+</script>
+<div class="canvas"><canvas width="516" height="100" id="canvas-0"></canvas></div>
+</div>
+
+
+</div>
+</div>
+</div>
+	
+		
+<div id="segment-object" class="member">
+<div class="member-link">
+<a name="segment-object" href="#segment-object"><tt><b>Segment</b>(object)</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+    <p>Creates a new Segment object.</p>
+    
+<ul><b>Parameters:</b>
+
+<li>
+<tt>object:</tt> 
+<tt>Object</tt>
+&mdash;&nbsp;an object literal containing properties to
+be set on the segment
+
+</li>
+
+</ul>
+
+    
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/Segment.html"><tt>Segment</tt></a></tt>
+</li>
+	
+	</ul>
+
+    
+    <p>
+<b>Example</b> &mdash; Creating segments using object notation:
+</p>
+
+<div class="paperscript split">
+
+<div class="buttons">
+<div class="button run">Run</div>
+</div>
+
+<script type="text/paperscript" canvas="canvas-1">
+var firstSegment = new Segment({
+    point: [100, 50],
+    handleOut: [80, 100]
+});
+
+var secondSegment = new Segment({
+    point: [300, 50],
+    handleIn: [-80, -100]
+});
+
+var path = new Path({
+    segments: [firstSegment, secondSegment],
+    strokeColor: 'black'
+});
+</script>
+<div class="canvas"><canvas width="516" height="100" id="canvas-1"></canvas></div>
+</div>
+
+
+</div>
+</div>
+</div>
+	
+</div>
+
+
+
+
+
+	<div class="reference-members"><h2>Properties</h2>
+		
+			
+<div id="point" class="member">
+<div class="member-link">
+<a name="point" href="#point"><tt><b>point</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The anchor point of the segment.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<a href="../classes/Point.html"><tt>Point</tt></a>
+	</li>
+	</ul>
+    
+	
+	
+</div>
+
+</div>
+</div>
+		
+			
+<div id="handlein" class="member">
+<div class="member-link">
+<a name="handlein" href="#handlein"><tt><b>handleIn</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The handle point relative to the anchor point of the segment that
+describes the in tangent of the segment.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<a href="../classes/Point.html"><tt>Point</tt></a>
+	</li>
+	</ul>
+    
+	
+	
+</div>
+
+</div>
+</div>
+		
+			
+<div id="handleout" class="member">
+<div class="member-link">
+<a name="handleout" href="#handleout"><tt><b>handleOut</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The handle point relative to the anchor point of the segment that
+describes the out tangent of the segment.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<a href="../classes/Point.html"><tt>Point</tt></a>
+	</li>
+	</ul>
+    
+	
+	
+</div>
+
+</div>
+</div>
+		
+			
+<div id="selected" class="member">
+<div class="member-link">
+<a name="selected" href="#selected"><tt><b>selected</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>Specifies whether the <a href="../classes/Segment.html#point"><tt>point</tt></a> of the segment is selected.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<tt>Boolean</tt>
+	</li>
+	</ul>
+    
+	
+	<p>
+<b>Example</b> 
+</p>
+
+<div class="paperscript split">
+
+<div class="buttons">
+<div class="button run">Run</div>
+</div>
+
+<script type="text/paperscript" canvas="canvas-2">
+var path = new Path.Circle({
+    center: [80, 50],
+    radius: 40
+});
+
+// Select the third segment point:
+path.segments[2].selected = true;
+</script>
+<div class="canvas"><canvas width="516" height="100" id="canvas-2"></canvas></div>
+</div>
+
+
+</div>
+
+</div>
+</div>
+		
+			
+	<h3>Hierarchy</h3>
+
+<div id="index" class="member">
+<div class="member-link">
+<a name="index" href="#index"><tt><b>index</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The index of the segment in the <a href="../classes/Path.html#segments"><tt>path.segments</tt></a> array that the
+segment belongs to.</p>
+	
+		<p>Read only.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<tt>Number</tt>
+	</li>
+	</ul>
+    
+	
+	
+</div>
+
+</div>
+</div>
+		
+			
+<div id="path" class="member">
+<div class="member-link">
+<a name="path" href="#path"><tt><b>path</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The path that the segment belongs to.</p>
+	
+		<p>Read only.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<a href="../classes/Path.html"><tt>Path</tt></a>
+	</li>
+	</ul>
+    
+	
+	
+</div>
+
+</div>
+</div>
+		
+			
+<div id="curve" class="member">
+<div class="member-link">
+<a name="curve" href="#curve"><tt><b>curve</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The curve that the segment belongs to. For the last segment of an open
+path, the previous segment is returned.</p>
+	
+		<p>Read only.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<a href="../classes/Curve.html"><tt>Curve</tt></a>
+	</li>
+	</ul>
+    
+	
+	
+</div>
+
+</div>
+</div>
+		
+			
+<div id="location" class="member">
+<div class="member-link">
+<a name="location" href="#location"><tt><b>location</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The curve location that describes this segment's position ont the path.</p>
+	
+		<p>Read only.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<a href="../classes/CurveLocation.html"><tt>CurveLocation</tt></a>
+	</li>
+	</ul>
+    
+	
+	
+</div>
+
+</div>
+</div>
+		
+			
+	<h3>Sibling Segments</h3>
+
+<div id="next" class="member">
+<div class="member-link">
+<a name="next" href="#next"><tt><b>next</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The next segment in the <a href="../classes/Path.html#segments"><tt>path.segments</tt></a> array that the segment
+belongs to. If the segments belongs to a closed path, the first segment
+is returned for the last segment of the path.</p>
+	
+		<p>Read only.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<a href="../classes/Segment.html"><tt>Segment</tt></a>
+	</li>
+	</ul>
+    
+	
+	
+</div>
+
+</div>
+</div>
+		
+			
+<div id="previous" class="member">
+<div class="member-link">
+<a name="previous" href="#previous"><tt><b>previous</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The previous segment in the <a href="../classes/Path.html#segments"><tt>path.segments</tt></a> array that the
+segment belongs to. If the segments belongs to a closed path, the last
+segment is returned for the first segment of the path.</p>
+	
+		<p>Read only.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<a href="../classes/Segment.html"><tt>Segment</tt></a>
+	</li>
+	</ul>
+    
+	
+	
+</div>
+
+</div>
+</div>
+		
+	</div>
+
+
+
+<!-- ============================== methods ================================ -->
+	<div class="reference-members"><h2>Methods</h2>
+		
+			
+<div id="hashandles" class="member">
+<div class="member-link">
+<a name="hashandles" href="#hashandles"><tt><b>hasHandles</b>()</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Checks if the segment has any curve handles set.</p>
+    
+	
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><tt>Boolean</tt></tt>&nbsp;&mdash;&nbsp;<tt>true</tt> if the segment has handles set, <tt>false</tt> otherwise
+</li>
+	
+	</ul>
+
+	
+	<p><b>See also:</b>
+	<tt><tt>Segment#getHandleIn</tt>()</tt>, <tt><tt>Segment#getHandleOut</tt>()</tt>, <tt><a href="../classes/Curve.html#hashandles"><tt>curve.hasHandles</tt></a>()</tt>, <tt><a href="../classes/Path.html#hashandles"><tt>path.hasHandles</tt></a>()</tt>
+	</p>
+
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="clearhandles" class="member">
+<div class="member-link">
+<a name="clearhandles" href="#clearhandles"><tt><b>clearHandles</b>()</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Clears the segment's handles by setting their coordinates to zero,
+turning the segment into a corner.</p>
+    
+	
+	
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="isfirst" class="member">
+<div class="member-link">
+<a name="isfirst" href="#isfirst"><tt><b>isFirst</b>()</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Checks if the this is the first segment in the <a href="../classes/Path.html#segments"><tt>path.segments</tt></a>
+array.</p>
+    
+	
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><tt>Boolean</tt></tt>&nbsp;&mdash;&nbsp;<tt>true</tt> if this is the first segment, <tt>false</tt> otherwise
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="islast" class="member">
+<div class="member-link">
+<a name="islast" href="#islast"><tt><b>isLast</b>()</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Checks if the this is the last segment in the <a href="../classes/Path.html#segments"><tt>path.segments</tt></a>
+array.</p>
+    
+	
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><tt>Boolean</tt></tt>&nbsp;&mdash;&nbsp;<tt>true</tt> if this is the last segment, <tt>false</tt> otherwise
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="reverse" class="member">
+<div class="member-link">
+<a name="reverse" href="#reverse"><tt><b>reverse</b>()</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Reverses the <a href="../classes/Segment.html#handlein"><tt>handleIn</tt></a> and <a href="../classes/Segment.html#handleout"><tt>handleOut</tt></a> vectors of this
+segment. Note: the actual segment is modified, no copy is created.</p>
+    
+	
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/Segment.html"><tt>Segment</tt></a></tt>&nbsp;&mdash;&nbsp;the reversed segment
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="reversed" class="member">
+<div class="member-link">
+<a name="reversed" href="#reversed"><tt><b>reversed</b>()</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Returns the reversed the segment, without modifying the segment itself.</p>
+    
+	
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/Segment.html"><tt>Segment</tt></a></tt>&nbsp;&mdash;&nbsp;the reversed segment
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="remove" class="member">
+<div class="member-link">
+<a name="remove" href="#remove"><tt><b>remove</b>()</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Removes the segment from the path that it belongs to.</p>
+    
+	
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><tt>Boolean</tt></tt>&nbsp;&mdash;&nbsp;<tt>true</tt> if the segment was removed, <tt>false</tt> otherwise
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="tostring" class="member">
+<div class="member-link">
+<a name="tostring" href="#tostring"><tt><b>toString</b>()</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	
+    
+	
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><tt>String</tt></tt>&nbsp;&mdash;&nbsp;a string representation of the segment
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="transform-matrix" class="member">
+<div class="member-link">
+<a name="transform-matrix" href="#transform-matrix"><tt><b>transform</b>(matrix)</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Transform the segment by the specified matrix.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>matrix:</tt> 
+<a href="../classes/Matrix.html"><tt>Matrix</tt></a>
+&mdash;&nbsp;the matrix to transform the segment by
+
+</li>
+
+</ul>
+
+	
+	
+	
+</div>
+</div>
+</div>
+		
+	</div>
+
+
+
+
+<!-- =========================== copyright notice ========================= -->
+<p class="footer">Copyright &#169; 2011 <a href="http://www.lehni.org" target="_blank">J&uuml;rg Lehni</a> &amp; <a href="http://www.jonathanpuckey.com" target="_blank">Jonathan Puckey</a>. All Rights Reserved.</p>
+<div class="content-end"></div>
+
+</body>

@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>View</title>
+<base target="class-frame">
+<link href="../assets/css/docs.css" rel="stylesheet" type="text/css">
+<script src="../assets/js/paper.js"></script>
+<script src="../assets/js/jquery.js"></script>
+<script src="../assets/js/codemirror.js"></script>
+<script src="../assets/js/docs.js"></script>
+</head>
+<body class="reference">
+<div class="reference-class">
+<h1>View</h1>
+
+<p>The View object wraps an HTML element and handles drawing and user
+interaction through mouse and keyboard for it. It offer means to scroll the
+view, find the currently visible bounds in project coordinates, or the
+center, both useful for constructing artwork that should appear centered on
+screen.</p>
+
+</div>
+
+
+
+
+
+	<div class="reference-members"><h2>Properties</h2>
+		
+			
+<div id="element" class="member">
+<div class="member-link">
+<a name="element" href="#element"><tt><b>element</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The underlying native element.</p>
+	
+		<p>Read only.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<tt>HTMLCanvasElement</tt>
+	</li>
+	</ul>
+    
+	
+	
+</div>
+
+</div>
+</div>
+		
+			
+<div id="pixelratio" class="member">
+<div class="member-link">
+<a name="pixelratio" href="#pixelratio"><tt><b>pixelRatio</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The ratio between physical pixels and device-independent pixels (DIPs)
+of the underlying canvas / device.</p>
+<p>It is <tt>1</tt> for normal displays, and <tt>2</tt> or more for
+high-resolution displays.</p>
+	
+		<p>Read only.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<tt>Number</tt>
+	</li>
+	</ul>
+    
+	
+	
+</div>
+
+</div>
+</div>
+		
+			
+<div id="resolution" class="member">
+<div class="member-link">
+<a name="resolution" href="#resolution"><tt><b>resolution</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The resoltuion of the underlying canvas / device in pixel per inch (DPI).</p>
+<p>It is <tt>72</tt> for normal displays, and <tt>144</tt> for high-resolution
+displays with a pixel-ratio of <tt>2</tt>.</p>
+	
+		<p>Read only.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<tt>Number</tt>
+	</li>
+	</ul>
+    
+	
+	
+</div>
+
+</div>
+</div>
+		
+			
+<div id="viewsize" class="member">
+<div class="member-link">
+<a name="viewsize" href="#viewsize"><tt><b>viewSize</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The size of the view. Changing the view's size will resize it's
+underlying element.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<a href="../classes/Size.html"><tt>Size</tt></a>
+	</li>
+	</ul>
+    
+	
+	
+</div>
+
+</div>
+</div>
+		
+			
+<div id="bounds" class="member">
+<div class="member-link">
+<a name="bounds" href="#bounds"><tt><b>bounds</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The bounds of the currently visible area in project coordinates.</p>
+	
+		<p>Read only.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<a href="../classes/Rectangle.html"><tt>Rectangle</tt></a>
+	</li>
+	</ul>
+    
+	
+	
+</div>
+
+</div>
+</div>
+		
+			
+<div id="size" class="member">
+<div class="member-link">
+<a name="size" href="#size"><tt><b>size</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The size of the visible area in project coordinates.</p>
+	
+		<p>Read only.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<a href="../classes/Size.html"><tt>Size</tt></a>
+	</li>
+	</ul>
+    
+	
+	
+</div>
+
+</div>
+</div>
+		
+			
+<div id="center" class="member">
+<div class="member-link">
+<a name="center" href="#center"><tt><b>center</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The center of the visible area in project coordinates.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<a href="../classes/Point.html"><tt>Point</tt></a>
+	</li>
+	</ul>
+    
+	
+	
+</div>
+
+</div>
+</div>
+		
+			
+<div id="zoom" class="member">
+<div class="member-link">
+<a name="zoom" href="#zoom"><tt><b>zoom</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The zoom factor by which the project coordinates are magnified.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<tt>Number</tt>
+	</li>
+	</ul>
+    
+	
+	
+</div>
+
+</div>
+</div>
+		
+			
+	<h3>Event Handlers</h3>
+
+<div id="onframe" class="member">
+<div class="member-link">
+<a name="onframe" href="#onframe"><tt><b>onFrame</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>Handler function to be called on each frame of an animation.</p>
+<p>The function receives an event object which contains information about
+the frame event:</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<tt>Function</tt>
+	</li>
+	</ul>
+    <ul>
+<b>Options:</b>
+<li><tt>event.count: <tt>Number</tt></tt> &mdash; the number of times the frame event was
+firedundefined</li>
+<li><tt>event.time: <tt>Number</tt></tt> &mdash; the total amount of time passed since the
+first frame event in secondsundefined</li>
+<li><tt>event.delta: <tt>Number</tt></tt> &mdash; the time passed in seconds since the last
+frame eventundefined</li>
+</ul>
+	
+	<p>
+<b>Example</b> &mdash; Creating an animation:
+</p>
+
+<div class="paperscript split">
+
+<div class="buttons">
+<div class="button run">Run</div>
+</div>
+
+<script type="text/paperscript" canvas="canvas-0">
+// Create a rectangle shaped path with its top left point at:
+// {x: 50, y: 25} and a size of {width: 50, height: 50}
+var path = new Path.Rectangle(new Point(50, 25), new Size(50, 50));
+path.fillColor = 'black';
+
+function onFrame(event) {
+    // Every frame, rotate the path by 3 degrees:
+    path.rotate(3);
+}
+</script>
+<div class="canvas"><canvas width="516" height="100" id="canvas-0"></canvas></div>
+</div>
+
+
+</div>
+
+</div>
+</div>
+		
+			
+<div id="onresize" class="member">
+<div class="member-link">
+<a name="onresize" href="#onresize"><tt><b>onResize</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>Handler function that is called whenever a view is resized.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<tt>Function</tt>
+	</li>
+	</ul>
+    
+	
+	<p>
+<b>Example</b> &mdash; Repositioning items when a view is resized:
+</p>
+
+
+<pre class="code">// Create a circle shaped path in the center of the view:
+var path = new Path.Circle(view.bounds.center, 30);
+path.fillColor = 'red';
+
+function onResize(event) {
+    // Whenever the view is resized, move the path to its center:
+    path.position = view.center;
+}</pre>
+
+</div>
+
+</div>
+</div>
+		
+	</div>
+
+
+
+<!-- ============================== methods ================================ -->
+	<div class="reference-members"><h2>Methods</h2>
+		
+			
+<div id="remove" class="member">
+<div class="member-link">
+<a name="remove" href="#remove"><tt><b>remove</b>()</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Removes this view from the project and frees the associated element.</p>
+    
+	
+	
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="isvisible" class="member">
+<div class="member-link">
+<a name="isvisible" href="#isvisible"><tt><b>isVisible</b>()</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Checks whether the view is currently visible within the current browser
+viewport.</p>
+    
+	
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><tt>Boolean</tt></tt>&nbsp;&mdash;&nbsp;whether the view is visible
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="scrollby-point" class="member">
+<div class="member-link">
+<a name="scrollby-point" href="#scrollby-point"><tt><b>scrollBy</b>(point)</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Scrolls the view by the given vector.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>point:</tt> 
+<a href="../classes/Point.html"><tt>Point</tt></a>
+
+
+</li>
+
+</ul>
+
+	
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="play" class="member">
+<div class="member-link">
+<a name="play" href="#play"><tt><b>play</b>()</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Makes all animation play by adding the view to the request animation
+loop.</p>
+    
+	
+	
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="pause" class="member">
+<div class="member-link">
+<a name="pause" href="#pause"><tt><b>pause</b>()</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Makes all animation pause by removing the view to the request animation
+loop.</p>
+    
+	
+	
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="update" class="member">
+<div class="member-link">
+<a name="update" href="#update"><tt><b>update</b>([force])</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Updates the view if there are changes. Note that when using built-in
+event hanlders for interaction, animation and load events, this method is
+invoked for you automatically at the end.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>force:</tt> 
+<tt>Boolean</tt>
+&mdash;&nbsp;<tt>true</tt> if the view should be updated even
+if no change has happened, <tt>false</tt> otherwise
+&mdash;&nbsp;optional, default: <tt>false</tt>
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><tt>Boolean</tt></tt>&nbsp;&mdash;&nbsp;<tt>true</tt> if the view was updated, <tt>false</tt> otherwise
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="projecttoview-point" class="member">
+<div class="member-link">
+<a name="projecttoview-point" href="#projecttoview-point"><tt><b>projectToView</b>(point)</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>point:</tt> 
+<a href="../classes/Point.html"><tt>Point</tt></a>
+
+
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/Point.html"><tt>Point</tt></a></tt>
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="viewtoproject-point" class="member">
+<div class="member-link">
+<a name="viewtoproject-point" href="#viewtoproject-point"><tt><b>viewToProject</b>(point)</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>point:</tt> 
+<a href="../classes/Point.html"><tt>Point</tt></a>
+
+
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/Point.html"><tt>Point</tt></a></tt>
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<h3>Event Handling</h3>
+
+<div id="on-type-function" class="member">
+<div class="member-link">
+<a name="on-type-function" href="#on-type-function"><tt><b>on</b>(type, function)</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Attach an event handler to the view.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>type:</tt> 
+<tt>String('frame'|'resize')</tt>
+&mdash;&nbsp;the event type
+
+</li>
+
+<li>
+<tt>function:</tt> 
+<tt>Function</tt>
+&mdash;&nbsp;The function to be called when the event
+occurs
+
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/View.html"><tt>View</tt></a></tt>&nbsp;&mdash;&nbsp;this view itself, so calls can be chained
+</li>
+	
+	</ul>
+
+	
+	<p>
+<b>Example</b> &mdash; Create a rectangle shaped path with its top left point at: {x: 50, y: 25} and a size of {width: 50, height: 50}
+</p>
+
+<div class="paperscript split">
+
+<div class="buttons">
+<div class="button run">Run</div>
+</div>
+
+<script type="text/paperscript" canvas="canvas-1">
+var path = new Path.Rectangle(new Point(50, 25), new Size(50, 50));
+path.fillColor = 'black';
+
+var frameHandler = function(event) {
+    // Every frame, rotate the path by 3 degrees:
+    path.rotate(3);
+};
+
+view.on('frame', frameHandler);
+</script>
+<div class="canvas"><canvas width="516" height="100" id="canvas-1"></canvas></div>
+</div>
+
+
+</div>
+</div>
+</div>
+		
+			
+<div id="on-param" class="member">
+<div class="member-link">
+<a name="on-param" href="#on-param"><tt><b>on</b>(param)</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Attach one or more event handlers to the view.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>param:</tt> 
+<tt>Object</tt>
+&mdash;&nbsp;an object literal containing one or more of the
+following properties: <tt>frame, resize</tt>
+
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/View.html"><tt>View</tt></a></tt>&nbsp;&mdash;&nbsp;this view itself, so calls can be chained
+</li>
+	
+	</ul>
+
+	
+	<p>
+<b>Example</b> &mdash; Create a rectangle shaped path with its top left point at: {x: 50, y: 25} and a size of {width: 50, height: 50}
+</p>
+
+<div class="paperscript split">
+
+<div class="buttons">
+<div class="button run">Run</div>
+</div>
+
+<script type="text/paperscript" canvas="canvas-2">
+var path = new Path.Rectangle(new Point(50, 25), new Size(50, 50));
+path.fillColor = 'black';
+
+var frameHandler = function(event) {
+    // Every frame, rotate the path by 3 degrees:
+    path.rotate(3);
+};
+
+view.on({
+    frame: frameHandler
+});
+</script>
+<div class="canvas"><canvas width="516" height="100" id="canvas-2"></canvas></div>
+</div>
+
+
+</div>
+</div>
+</div>
+		
+			
+<div id="off-type-function" class="member">
+<div class="member-link">
+<a name="off-type-function" href="#off-type-function"><tt><b>off</b>(type, function)</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Detach an event handler from the view.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>type:</tt> 
+<tt>String('frame'|'resize')</tt>
+&mdash;&nbsp;the event type
+
+</li>
+
+<li>
+<tt>function:</tt> 
+<tt>Function</tt>
+&mdash;&nbsp;The function to be detached
+
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/View.html"><tt>View</tt></a></tt>&nbsp;&mdash;&nbsp;this view itself, so calls can be chained
+</li>
+	
+	</ul>
+
+	
+	<p>
+<b>Example</b> &mdash; Create a rectangle shaped path with its top left point at: {x: 50, y: 25} and a size of {width: 50, height: 50}
+</p>
+
+<div class="paperscript split">
+
+<div class="buttons">
+<div class="button run">Run</div>
+</div>
+
+<script type="text/paperscript" canvas="canvas-3">
+var path = new Path.Rectangle(new Point(50, 25), new Size(50, 50));
+path.fillColor = 'black';
+
+var frameHandler = function(event) {
+    // Every frame, rotate the path by 3 degrees:
+    path.rotate(3);
+};
+
+view.on({
+    frame: frameHandler
+});
+
+// When the user presses the mouse,
+// detach the frame handler from the view:
+function onMouseDown(event) {
+    view.off('frame');
+}
+</script>
+<div class="canvas"><canvas width="516" height="100" id="canvas-3"></canvas></div>
+</div>
+
+
+</div>
+</div>
+</div>
+		
+			
+<div id="off-param" class="member">
+<div class="member-link">
+<a name="off-param" href="#off-param"><tt><b>off</b>(param)</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Detach one or more event handlers from the view.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>param:</tt> 
+<tt>Object</tt>
+&mdash;&nbsp;an object literal containing one or more of the
+following properties: <tt>frame, resize</tt>
+
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/View.html"><tt>View</tt></a></tt>&nbsp;&mdash;&nbsp;this view itself, so calls can be chained
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="emit-type-event" class="member">
+<div class="member-link">
+<a name="emit-type-event" href="#emit-type-event"><tt><b>emit</b>(type, event)</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Emit an event on the view.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>type:</tt> 
+<tt>String('frame'|'resize')</tt>
+&mdash;&nbsp;the event type
+
+</li>
+
+<li>
+<tt>event:</tt> 
+<tt>Object</tt>
+&mdash;&nbsp;an object literal containing properties describing
+the event
+
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><tt>Boolean</tt></tt>&nbsp;&mdash;&nbsp;<tt>true</tt> if the event had listeners, <tt>false</tt> otherwise
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="responds-type" class="member">
+<div class="member-link">
+<a name="responds-type" href="#responds-type"><tt><b>responds</b>(type)</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Check if the view has one or more event handlers of the specified type.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>type:</tt> 
+<tt>String('frame'|'resize')</tt>
+&mdash;&nbsp;the event type
+
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><tt>Boolean</tt></tt>&nbsp;&mdash;&nbsp;<tt>true</tt> if the view has one or more event handlers of
+the specified type, <tt>false</tt> otherwise
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+	</div>
+
+
+
+
+<!-- =========================== copyright notice ========================= -->
+<p class="footer">Copyright &#169; 2011 <a href="http://www.lehni.org" target="_blank">J&uuml;rg Lehni</a> &amp; <a href="http://www.jonathanpuckey.com" target="_blank">Jonathan Puckey</a>. All Rights Reserved.</p>
+<div class="content-end"></div>
+
+</body>

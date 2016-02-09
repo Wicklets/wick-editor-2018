@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Matrix</title>
+<base target="class-frame">
+<link href="../assets/css/docs.css" rel="stylesheet" type="text/css">
+<script src="../assets/js/paper.js"></script>
+<script src="../assets/js/jquery.js"></script>
+<script src="../assets/js/codemirror.js"></script>
+<script src="../assets/js/docs.js"></script>
+</head>
+<body class="reference">
+<div class="reference-class">
+<h1>Matrix</h1>
+
+<p>An affine transform performs a linear mapping from 2D coordinates
+to other 2D coordinates that preserves the "straightness" and
+"parallelness" of lines.</p>
+<p>Such a coordinate transformation can be represented by a 3 row by 3
+column matrix with an implied last row of [ 0 0 1 ]. This matrix
+transforms source coordinates (x,y) into destination coordinates (x',y')
+by considering them to be a column vector and multiplying the coordinate
+vector by the matrix according to the following process:</p>
+<pre class="code">
+     [ x ]   [ a  b  tx ] [ x ]   [ a * x + b * y + tx ]
+     [ y ] = [ c  d  ty ] [ y ] = [ c * x + d * y + ty ]
+     [ 1 ]   [ 0  0  1  ] [ 1 ]   [         1          ]
+</pre>
+<p>This class is optimized for speed and minimizes calculations based on its
+knowledge of the underlying matrix (as opposed to say simply performing
+matrix multiplication).</p>
+
+</div>
+
+<!-- ============================== constructors ========================= -->
+<div class="reference-members"><h2>Constructors</h2>
+	
+		
+<div id="matrix-a-c-b-d-tx-ty" class="member">
+<div class="member-link">
+<a name="matrix-a-c-b-d-tx-ty" href="#matrix-a-c-b-d-tx-ty"><tt><b>Matrix</b>(a, c, b, d, tx, ty)</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+    <p>Creates a 2D affine transform.</p>
+    
+<ul><b>Parameters:</b>
+
+<li>
+<tt>a:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the a property of the transform
+
+</li>
+
+<li>
+<tt>c:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the c property of the transform
+
+</li>
+
+<li>
+<tt>b:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the b property of the transform
+
+</li>
+
+<li>
+<tt>d:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the d property of the transform
+
+</li>
+
+<li>
+<tt>tx:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the tx property of the transform
+
+</li>
+
+<li>
+<tt>ty:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the ty property of the transform
+
+</li>
+
+</ul>
+
+    
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/Matrix.html"><tt>Matrix</tt></a></tt>
+</li>
+	
+	</ul>
+
+    
+    
+</div>
+</div>
+</div>
+	
+</div>
+
+
+
+
+
+	<div class="reference-members"><h2>Properties</h2>
+		
+			
+<div id="a" class="member">
+<div class="member-link">
+<a name="a" href="#a"><tt><b>a</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The value that affects the transformation along the x axis when scaling
+or rotating, positioned at (0, 0) in the transformation matrix.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<tt>Number</tt>
+	</li>
+	</ul>
+    
+	
+	
+</div>
+
+</div>
+</div>
+		
+			
+<div id="c" class="member">
+<div class="member-link">
+<a name="c" href="#c"><tt><b>c</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The value that affects the transformation along the y axis when rotating
+or skewing, positioned at (1, 0) in the transformation matrix.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<tt>Number</tt>
+	</li>
+	</ul>
+    
+	
+	
+</div>
+
+</div>
+</div>
+		
+			
+<div id="b" class="member">
+<div class="member-link">
+<a name="b" href="#b"><tt><b>b</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The value that affects the transformation along the x axis when rotating
+or skewing, positioned at (0, 1) in the transformation matrix.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<tt>Number</tt>
+	</li>
+	</ul>
+    
+	
+	
+</div>
+
+</div>
+</div>
+		
+			
+<div id="d" class="member">
+<div class="member-link">
+<a name="d" href="#d"><tt><b>d</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The value that affects the transformation along the y axis when scaling
+or rotating, positioned at (1, 1) in the transformation matrix.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<tt>Number</tt>
+	</li>
+	</ul>
+    
+	
+	
+</div>
+
+</div>
+</div>
+		
+			
+<div id="tx" class="member">
+<div class="member-link">
+<a name="tx" href="#tx"><tt><b>tx</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The distance by which to translate along the x axis, positioned at (2, 0)
+in the transformation matrix.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<tt>Number</tt>
+	</li>
+	</ul>
+    
+	
+	
+</div>
+
+</div>
+</div>
+		
+			
+<div id="ty" class="member">
+<div class="member-link">
+<a name="ty" href="#ty"><tt><b>ty</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The distance by which to translate along the y axis, positioned at (2, 1)
+in the transformation matrix.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<tt>Number</tt>
+	</li>
+	</ul>
+    
+	
+	
+</div>
+
+</div>
+</div>
+		
+			
+<div id="values" class="member">
+<div class="member-link">
+<a name="values" href="#values"><tt><b>values</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The transform values as an array, in the same sequence as they are passed
+to <a href="../classes/Matrix.html#initialize-a-c,b,d,tx,ty"><tt>initialize(a, c,b,d,tx,ty)</tt></a>.</p>
+	
+		<p>Read only.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<tt>Number</tt>
+	</li>
+	</ul>
+    
+	
+	
+</div>
+
+</div>
+</div>
+		
+			
+<div id="translation" class="member">
+<div class="member-link">
+<a name="translation" href="#translation"><tt><b>translation</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The translation of the matrix as a vector.</p>
+	
+		<p>Read only.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<a href="../classes/Point.html"><tt>Point</tt></a>
+	</li>
+	</ul>
+    
+	
+	
+</div>
+
+</div>
+</div>
+		
+			
+<div id="scaling" class="member">
+<div class="member-link">
+<a name="scaling" href="#scaling"><tt><b>scaling</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The scaling values of the matrix, if it can be decomposed.</p>
+	
+		<p>Read only.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<a href="../classes/Point.html"><tt>Point</tt></a>
+	</li>
+	</ul>
+    
+	
+	<p><b>See also:</b>
+	<tt><a href="../classes/Matrix.html#decompose"><tt>decompose</tt></a>()</tt>
+	</p>
+
+	
+</div>
+
+</div>
+</div>
+		
+			
+<div id="rotation" class="member">
+<div class="member-link">
+<a name="rotation" href="#rotation"><tt><b>rotation</b></tt></a>
+</div>
+<div class="member-description hidden">
+
+<div class="member-text">
+	<p>The rotation angle of the matrix, if it can be decomposed.</p>
+	
+		<p>Read only.</p>
+	
+	
+	<ul><b>Type:</b>
+	<li>
+		<tt>Number</tt>
+	</li>
+	</ul>
+    
+	
+	<p><b>See also:</b>
+	<tt><a href="../classes/Matrix.html#decompose"><tt>decompose</tt></a>()</tt>
+	</p>
+
+	
+</div>
+
+</div>
+</div>
+		
+	</div>
+
+
+
+<!-- ============================== methods ================================ -->
+	<div class="reference-members"><h2>Methods</h2>
+		
+			
+<div id="set-a-c-b-d-tx-ty" class="member">
+<div class="member-link">
+<a name="set-a-c-b-d-tx-ty" href="#set-a-c-b-d-tx-ty"><tt><b>set</b>(a, c, b, d, tx, ty)</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Sets this transform to the matrix specified by the 6 values.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>a:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the a property of the transform
+
+</li>
+
+<li>
+<tt>c:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the c property of the transform
+
+</li>
+
+<li>
+<tt>b:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the b property of the transform
+
+</li>
+
+<li>
+<tt>d:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the d property of the transform
+
+</li>
+
+<li>
+<tt>tx:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the tx property of the transform
+
+</li>
+
+<li>
+<tt>ty:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the ty property of the transform
+
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/Matrix.html"><tt>Matrix</tt></a></tt>&nbsp;&mdash;&nbsp;this affine transform
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="clone" class="member">
+<div class="member-link">
+<a name="clone" href="#clone"><tt><b>clone</b>()</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	
+    
+	
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/Matrix.html"><tt>Matrix</tt></a></tt>&nbsp;&mdash;&nbsp;a copy of this transform
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="equals-matrix" class="member">
+<div class="member-link">
+<a name="equals-matrix" href="#equals-matrix"><tt><b>equals</b>(matrix)</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Checks whether the two matrices describe the same transformation.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>matrix:</tt> 
+<a href="../classes/Matrix.html"><tt>Matrix</tt></a>
+&mdash;&nbsp;the matrix to compare this matrix to
+
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><tt>Boolean</tt></tt>&nbsp;&mdash;&nbsp;<tt>true</tt> if the matrices are equal, <tt>false</tt> otherwise
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="tostring" class="member">
+<div class="member-link">
+<a name="tostring" href="#tostring"><tt><b>toString</b>()</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	
+    
+	
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><tt>String</tt></tt>&nbsp;&mdash;&nbsp;a string representation of this transform
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="reset" class="member">
+<div class="member-link">
+<a name="reset" href="#reset"><tt><b>reset</b>()</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Resets the matrix by setting its values to the ones of the identity
+matrix that results in no transformation.</p>
+    
+	
+	
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="apply-recursively" class="member">
+<div class="member-link">
+<a name="apply-recursively" href="#apply-recursively"><tt><b>apply</b>(recursively)</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Attempts to apply the matrix to the content of item that it belongs to,
+meaning its transformation is baked into the item's content or children.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>recursively:</tt> 
+<tt>Boolean</tt>
+&mdash;&nbsp;controls whether to apply transformations
+recursively on children
+
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><tt>Boolean</tt></tt>&nbsp;&mdash;&nbsp;<tt>true</tt> if the matrix was applied, <tt>false</tt> otherwise
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="translate-point" class="member">
+<div class="member-link">
+<a name="translate-point" href="#translate-point"><tt><b>translate</b>(point)</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Concatenates this transform with a translate transformation.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>point:</tt> 
+<a href="../classes/Point.html"><tt>Point</tt></a>
+&mdash;&nbsp;the vector to translate by
+
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/Matrix.html"><tt>Matrix</tt></a></tt>&nbsp;&mdash;&nbsp;this affine transform
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="translate-dx-dy" class="member">
+<div class="member-link">
+<a name="translate-dx-dy" href="#translate-dx-dy"><tt><b>translate</b>(dx, dy)</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Concatenates this transform with a translate transformation.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>dx:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the distance to translate in the x direction
+
+</li>
+
+<li>
+<tt>dy:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the distance to translate in the y direction
+
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/Matrix.html"><tt>Matrix</tt></a></tt>&nbsp;&mdash;&nbsp;this affine transform
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="scale-scale" class="member">
+<div class="member-link">
+<a name="scale-scale" href="#scale-scale"><tt><b>scale</b>(scale[, center])</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Concatenates this transform with a scaling transformation.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>scale:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the scaling factor
+
+</li>
+
+<li>
+<tt>center:</tt> 
+<a href="../classes/Point.html"><tt>Point</tt></a>
+&mdash;&nbsp;the center for the scaling transformation
+&mdash;&nbsp;optional
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/Matrix.html"><tt>Matrix</tt></a></tt>&nbsp;&mdash;&nbsp;this affine transform
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="scale-hor-ver" class="member">
+<div class="member-link">
+<a name="scale-hor-ver" href="#scale-hor-ver"><tt><b>scale</b>(hor, ver[, center])</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Concatenates this transform with a scaling transformation.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>hor:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the horizontal scaling factor
+
+</li>
+
+<li>
+<tt>ver:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the vertical scaling factor
+
+</li>
+
+<li>
+<tt>center:</tt> 
+<a href="../classes/Point.html"><tt>Point</tt></a>
+&mdash;&nbsp;the center for the scaling transformation
+&mdash;&nbsp;optional
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/Matrix.html"><tt>Matrix</tt></a></tt>&nbsp;&mdash;&nbsp;this affine transform
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="rotate-angle-center" class="member">
+<div class="member-link">
+<a name="rotate-angle-center" href="#rotate-angle-center"><tt><b>rotate</b>(angle, center)</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Concatenates this transform with a rotation transformation around an
+anchor point.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>angle:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the angle of rotation measured in degrees
+
+</li>
+
+<li>
+<tt>center:</tt> 
+<a href="../classes/Point.html"><tt>Point</tt></a>
+&mdash;&nbsp;the anchor point to rotate around
+
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/Matrix.html"><tt>Matrix</tt></a></tt>&nbsp;&mdash;&nbsp;this affine transform
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="rotate-angle-x-y" class="member">
+<div class="member-link">
+<a name="rotate-angle-x-y" href="#rotate-angle-x-y"><tt><b>rotate</b>(angle, x, y)</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Concatenates this transform with a rotation transformation around an
+anchor point.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>angle:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the angle of rotation measured in degrees
+
+</li>
+
+<li>
+<tt>x:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the x coordinate of the anchor point
+
+</li>
+
+<li>
+<tt>y:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the y coordinate of the anchor point
+
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/Matrix.html"><tt>Matrix</tt></a></tt>&nbsp;&mdash;&nbsp;this affine transform
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="shear-shear" class="member">
+<div class="member-link">
+<a name="shear-shear" href="#shear-shear"><tt><b>shear</b>(shear[, center])</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Concatenates this transform with a shear transformation.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>shear:</tt> 
+<a href="../classes/Point.html"><tt>Point</tt></a>
+&mdash;&nbsp;the shear factor in x and y direction
+
+</li>
+
+<li>
+<tt>center:</tt> 
+<a href="../classes/Point.html"><tt>Point</tt></a>
+&mdash;&nbsp;the center for the shear transformation
+&mdash;&nbsp;optional
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/Matrix.html"><tt>Matrix</tt></a></tt>&nbsp;&mdash;&nbsp;this affine transform
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="shear-hor-ver" class="member">
+<div class="member-link">
+<a name="shear-hor-ver" href="#shear-hor-ver"><tt><b>shear</b>(hor, ver[, center])</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Concatenates this transform with a shear transformation.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>hor:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the horizontal shear factor
+
+</li>
+
+<li>
+<tt>ver:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the vertical shear factor
+
+</li>
+
+<li>
+<tt>center:</tt> 
+<a href="../classes/Point.html"><tt>Point</tt></a>
+&mdash;&nbsp;the center for the shear transformation
+&mdash;&nbsp;optional
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/Matrix.html"><tt>Matrix</tt></a></tt>&nbsp;&mdash;&nbsp;this affine transform
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="skew-skew" class="member">
+<div class="member-link">
+<a name="skew-skew" href="#skew-skew"><tt><b>skew</b>(skew[, center])</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Concatenates this transform with a skew transformation.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>skew:</tt> 
+<a href="../classes/Point.html"><tt>Point</tt></a>
+&mdash;&nbsp;the skew angles in x and y direction in degrees
+
+</li>
+
+<li>
+<tt>center:</tt> 
+<a href="../classes/Point.html"><tt>Point</tt></a>
+&mdash;&nbsp;the center for the skew transformation
+&mdash;&nbsp;optional
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/Matrix.html"><tt>Matrix</tt></a></tt>&nbsp;&mdash;&nbsp;this affine transform
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="skew-hor-ver" class="member">
+<div class="member-link">
+<a name="skew-hor-ver" href="#skew-hor-ver"><tt><b>skew</b>(hor, ver[, center])</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Concatenates this transform with a skew transformation.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>hor:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the horizontal skew angle in degrees
+
+</li>
+
+<li>
+<tt>ver:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the vertical skew angle in degrees
+
+</li>
+
+<li>
+<tt>center:</tt> 
+<a href="../classes/Point.html"><tt>Point</tt></a>
+&mdash;&nbsp;the center for the skew transformation
+&mdash;&nbsp;optional
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/Matrix.html"><tt>Matrix</tt></a></tt>&nbsp;&mdash;&nbsp;this affine transform
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="concatenate-mx" class="member">
+<div class="member-link">
+<a name="concatenate-mx" href="#concatenate-mx"><tt><b>concatenate</b>(mx)</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Concatenates the given affine transform to this transform.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>mx:</tt> 
+<a href="../classes/Matrix.html"><tt>Matrix</tt></a>
+&mdash;&nbsp;the transform to concatenate
+
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/Matrix.html"><tt>Matrix</tt></a></tt>&nbsp;&mdash;&nbsp;this affine transform
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="preconcatenate-mx" class="member">
+<div class="member-link">
+<a name="preconcatenate-mx" href="#preconcatenate-mx"><tt><b>preConcatenate</b>(mx)</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Pre-concatenates the given affine transform to this transform.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>mx:</tt> 
+<a href="../classes/Matrix.html"><tt>Matrix</tt></a>
+&mdash;&nbsp;the transform to preconcatenate
+
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/Matrix.html"><tt>Matrix</tt></a></tt>&nbsp;&mdash;&nbsp;this affine transform
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="chain-mx" class="member">
+<div class="member-link">
+<a name="chain-mx" href="#chain-mx"><tt><b>chain</b>(mx)</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Returns a new instance of the result of the concatenation of the given
+affine transform with this transform.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>mx:</tt> 
+<a href="../classes/Matrix.html"><tt>Matrix</tt></a>
+&mdash;&nbsp;the transform to concatenate
+
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/Matrix.html"><tt>Matrix</tt></a></tt>&nbsp;&mdash;&nbsp;the newly created affine transform
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="isidentity" class="member">
+<div class="member-link">
+<a name="isidentity" href="#isidentity"><tt><b>isIdentity</b>()</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	
+    
+	
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><tt>Boolean</tt></tt>&nbsp;&mdash;&nbsp;whether this transform is the identity transform
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="isinvertible" class="member">
+<div class="member-link">
+<a name="isinvertible" href="#isinvertible"><tt><b>isInvertible</b>()</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Returns whether the transform is invertible. A transform is not
+invertible if the determinant is 0 or any value is non-finite or NaN.</p>
+    
+	
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><tt>Boolean</tt></tt>&nbsp;&mdash;&nbsp;whether the transform is invertible
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="issingular" class="member">
+<div class="member-link">
+<a name="issingular" href="#issingular"><tt><b>isSingular</b>()</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Checks whether the matrix is singular or not. Singular matrices cannot be
+inverted.</p>
+    
+	
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><tt>Boolean</tt></tt>&nbsp;&mdash;&nbsp;whether the matrix is singular
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="transform-point" class="member">
+<div class="member-link">
+<a name="transform-point" href="#transform-point"><tt><b>transform</b>(point)</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Transforms a point and returns the result.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>point:</tt> 
+<a href="../classes/Point.html"><tt>Point</tt></a>
+&mdash;&nbsp;the point to be transformed
+
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/Point.html"><tt>Point</tt></a></tt>&nbsp;&mdash;&nbsp;the transformed point
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="transform-src-dst-count" class="member">
+<div class="member-link">
+<a name="transform-src-dst-count" href="#transform-src-dst-count"><tt><b>transform</b>(src, dst, count)</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Transforms an array of coordinates by this matrix and stores the results
+into the destination array, which is also returned.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>src:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the array containing the source points
+as x, y value pairs
+
+</li>
+
+<li>
+<tt>dst:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the array into which to store the transformed
+point pairs
+
+</li>
+
+<li>
+<tt>count:</tt> 
+<tt>Number</tt>
+&mdash;&nbsp;the number of points to transform
+
+</li>
+
+</ul>
+
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><tt>Number</tt></tt>&nbsp;&mdash;&nbsp;the dst array, containing the transformed coordinates
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="inversetransform-point" class="member">
+<div class="member-link">
+<a name="inversetransform-point" href="#inversetransform-point"><tt><b>inverseTransform</b>(point)</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Inverse transforms a point and returns the result.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>point:</tt> 
+<a href="../classes/Point.html"><tt>Point</tt></a>
+&mdash;&nbsp;the point to be transformed
+
+</li>
+
+</ul>
+
+	
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="decompose" class="member">
+<div class="member-link">
+<a name="decompose" href="#decompose"><tt><b>decompose</b>()</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Attempts to decompose the affine transformation described by this matrix
+into <tt>scaling</tt>, <tt>rotation</tt> and <tt>shearing</tt>, and returns
+an object with these properties if it succeeded, <tt>null</tt> otherwise.</p>
+    
+	
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><tt>Object</tt></tt>&nbsp;&mdash;&nbsp;the decomposed matrix, or <tt>null</tt> if decomposition
+is not possible
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="inverted" class="member">
+<div class="member-link">
+<a name="inverted" href="#inverted"><tt><b>inverted</b>()</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Creates the inversion of the transformation of the matrix and returns it
+as a new insteance. If the matrix is not invertible (in which case
+<a href="../classes/Matrix.html#issingular"><tt>isSingular</tt></a>() returns true), <tt>null </tt> is returned.</p>
+    
+	
+	
+	<ul><b>Returns:</b>
+	
+		<li>
+<tt><a href="../classes/Matrix.html"><tt>Matrix</tt></a></tt>&nbsp;&mdash;&nbsp;the inverted matrix, or <tt>null </tt>, if the matrix is
+singular
+</li>
+	
+	</ul>
+
+	
+	
+</div>
+</div>
+</div>
+		
+			
+<div id="applytocontext-ctx" class="member">
+<div class="member-link">
+<a name="applytocontext-ctx" href="#applytocontext-ctx"><tt><b>applyToContext</b>(ctx)</tt></a>
+</div>
+<div class="member-description hidden">
+<div class="member-text">
+	<p>Applies this matrix to the specified Canvas Context.</p>
+    
+	
+<ul><b>Parameters:</b>
+
+<li>
+<tt>ctx:</tt> 
+<tt>CanvasRenderingContext2D</tt>
+
+
+</li>
+
+</ul>
+
+	
+	
+	
+</div>
+</div>
+</div>
+		
+	</div>
+
+
+
+
+<!-- =========================== copyright notice ========================= -->
+<p class="footer">Copyright &#169; 2011 <a href="http://www.lehni.org" target="_blank">J&uuml;rg Lehni</a> &amp; <a href="http://www.jonathanpuckey.com" target="_blank">Jonathan Puckey</a>. All Rights Reserved.</p>
+<div class="content-end"></div>
+
+</body>
