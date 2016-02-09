@@ -4,90 +4,37 @@
 <html>
 
 <head>
-<title>Wick Editor (Test)</title>
+	<title>Wick Editor (Test)</title>
 
-<style type="text/css">
-	* { margin:0; padding:0; } /* to remove the top and left whitespace */
+	<style type="text/css">
+		* { margin:0; padding:0; } /* to remove the top and left whitespace */
 
-	html, body { width:100%; height:100%; } /* just to be sure these are full screen*/
+		html, body { width:100%; height:100%; } /* just to be sure these are full screen*/
 
-	canvas { display:block; } /* To remove the scrollbars */
+		canvas { display:block; } /* To remove the scrollbars */
 
+		/* to show the canvas bounds */
+		canvas {
+		    background: #eee;
+		}
 
-	/* to show the canvas bounds */
-	canvas {
-	    background: #eee;
-	}
+		div {
+		    position: absolute;
+		    top: 20px;
+		    left: 20px;
+		    width: 200px;
+		}
 
-	div {
-	    position: absolute;
-	    top: 20px;
-	    left: 20px;
-	    width: 200px;
-	}
+		#dragBox {
+			width: 900px;
+			height: 900px;
+			background-color: red;
+		}
+	</style>
 
-	#dragBox {
-		width: 900px;
-		height: 900px;
-		background-color: red;
-	}
-</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-
-<script>
-$(document).ready(function() {
-	var canvas = document.getElementById('canvas'),
-		context = canvas.getContext('2d');
-
-	$("#canvas").on('dragover', function(e) {
-		//alert("BOGO!");
-
-		return false;
-	});
-	$("#canvas").on('drop', function(e) {
-		alert("BOGO!");
-
-		//prevent browser from open the file when drop off
-		e.stopPropagation();
-		e.preventDefault();
-		
-		//retrieve uploaded files data
-		var files = e.originalEvent.dataTransfer.files;
-		processFiles(files);
-
-		return false;
-	});
-
-	// resize the canvas to fill browser window dynamically
-	window.addEventListener('resize', resizeCanvas, false);
-
-	function resizeCanvas() {
-	        canvas.width = window.innerWidth;
-	        canvas.height = window.innerHeight;
-	        
-	        /**
-	         * Your drawings need to be inside this function otherwise they will be reset when 
-	         * you resize the browser window and the canvas goes will be cleared.
-	         */
-	        drawStuff();
-	}
-	resizeCanvas();
-
-	function drawStuff() {
-		var radius = 50;
-
-		context.beginPath();
-		context.arc(canvas.width/2, canvas.height/2, radius, 0, 2 * Math.PI, false);
-		context.fillStyle = 'green';
-		context.fill();
-		context.lineWidth = 5;
-		context.strokeStyle = '#003300';
-		context.stroke();
-	}
-})
-</script>
-
+	<script src="canvas.js"></script>
 </head>
 
 <body>
