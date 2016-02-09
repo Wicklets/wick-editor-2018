@@ -6,7 +6,7 @@ Wick is a multipurpose animation and game creation environment allowing both adv
 
 Created by Zach Rispoli and Luca Damasco. 
 
-## Current todo
+### Current todo
 
 Barebones editor with:
  - Images
