@@ -25,12 +25,39 @@
 	    left: 20px;
 	    width: 200px;
 	}
+
+	#dragBox {
+		width: 900px;
+		height: 900px;
+		background-color: red;
+	}
 </style>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
 <script>
-function startEditor() {
+$(document).ready(function() {
 	var canvas = document.getElementById('canvas'),
-	context = canvas.getContext('2d');
+		context = canvas.getContext('2d');
+
+	$("#canvas").on('dragover', function(e) {
+		//alert("BOGO!");
+
+		return false;
+	});
+	$("#canvas").on('drop', function(e) {
+		alert("BOGO!");
+
+		//prevent browser from open the file when drop off
+		e.stopPropagation();
+		e.preventDefault();
+		
+		//retrieve uploaded files data
+		var files = e.originalEvent.dataTransfer.files;
+		processFiles(files);
+
+		return false;
+	});
 
 	// resize the canvas to fill browser window dynamically
 	window.addEventListener('resize', resizeCanvas, false);
@@ -58,12 +85,12 @@ function startEditor() {
 		context.strokeStyle = '#003300';
 		context.stroke();
 	}
-}
+})
 </script>
 
 </head>
 
-<body onLoad="startEditor();">
+<body>
 	<canvas id="canvas"></canvas>
 </body>
 
