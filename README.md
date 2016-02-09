@@ -8,8 +8,9 @@ Created by Zach Rispoli and Luca Damasco.
 
 ## Current todo
 
-Editor with:
+Barebones editor with:
  - Images
  - Buttons
  - Timeline
+
 It can make simple point-and-click adventure games.
