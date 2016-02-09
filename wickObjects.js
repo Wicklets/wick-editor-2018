@@ -21,15 +21,3 @@ function wickImage(imgPath, x, y, name) {
   imgOut.height = imgOut.img.height;
   return imgOut;
 }
-
-function loadImage(imgPath, x, y, name) {
-  return wickImage(imgPath, x, y, name);
-}
-
-// Always assume 9 arguments are passed in. Including cropping and size information.
-// img should be a wickImage.
-function image(cnv, img) {
-  ctx = cnv.getContext('2d');
-  // ctx.drawImage(img.img, img.sx, img.sy, img.sWidth, img.sHeight,
-  //                        img.x, img.y, img.width, img.height);
-}
