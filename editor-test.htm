@@ -1,0 +1,70 @@
+<!-- This is an early test environment for the Wick editor. -z -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Wick Editor (Test)</title>
+
+<style type="text/css">
+	* { margin:0; padding:0; } /* to remove the top and left whitespace */
+
+	html, body { width:100%; height:100%; } /* just to be sure these are full screen*/
+
+	canvas { display:block; } /* To remove the scrollbars */
+
+
+	/* to show the canvas bounds */
+	canvas {
+	    background: #eee;
+	}
+
+	div {
+	    position: absolute;
+	    top: 20px;
+	    left: 20px;
+	    width: 200px;
+	}
+</style>
+
+<script>
+function startEditor() {
+	var canvas = document.getElementById('canvas'),
+	context = canvas.getContext('2d');
+
+	// resize the canvas to fill browser window dynamically
+	window.addEventListener('resize', resizeCanvas, false);
+
+	function resizeCanvas() {
+	        canvas.width = window.innerWidth;
+	        canvas.height = window.innerHeight;
+	        
+	        /**
+	         * Your drawings need to be inside this function otherwise they will be reset when 
+	         * you resize the browser window and the canvas goes will be cleared.
+	         */
+	        drawStuff();
+	}
+	resizeCanvas();
+
+	function drawStuff() {
+		var radius = 50;
+
+		context.beginPath();
+		context.arc(canvas.width/2, canvas.height/2, radius, 0, 2 * Math.PI, false);
+		context.fillStyle = 'green';
+		context.fill();
+		context.lineWidth = 5;
+		context.strokeStyle = '#003300';
+		context.stroke();
+	}
+}
+</script>
+
+</head>
+
+<body onLoad="startEditor();">
+	<canvas id="canvas"></canvas>
+</body>
+
+</html>
