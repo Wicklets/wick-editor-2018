@@ -4,115 +4,37 @@
 <html>
 
 <head>
-<title>Wick Editor (Test)</title>
+	<title>Wick Editor (Test)</title>
 
-<style type="text/css">
-	* { margin:0; padding:0; } /* to remove the top and left whitespace */
+	<style type="text/css">
+		* { margin:0; padding:0; } /* to remove the top and left whitespace */
 
-	html, body { width:100%; height:100%; } /* just to be sure these are full screen*/
+		html, body { width:100%; height:100%; } /* just to be sure these are full screen*/
 
-	canvas { display:block; } /* To remove the scrollbars */
+		canvas { display:block; } /* To remove the scrollbars */
 
-
-	/* to show the canvas bounds */
-	canvas {
-	    background: #eee;
-	}
-
-	div {
-	    position: absolute;
-	    top: 20px;
-	    left: 20px;
-	    width: 200px;
-	}
-
-	#dragBox {
-		width: 900px;
-		height: 900px;
-		background-color: red;
-	}
-</style>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-
-<script>
-$(document).ready(function() {
-	var canvas = document.getElementById('canvas'),
-		ctx = canvas.getContext('2d');
-
-	var testImage;
-	var testImageUploaded = false;
-	var showUploadAlert = false;
-
-	$("#canvas").on('dragover', function(e) {
-		showUploadAlert = true;
-		return false;
-	});
-	$("#canvas").on('dragleave', function(e) {
-		showUploadAlert = false;
-		return false;
-	});
-	$("#canvas").on('drop', function(e) {
-		// prevent browser from open the file when drop off
-		e.stopPropagation();
-		e.preventDefault();
-		
-		// retrieve uploaded files data
-		var files = e.originalEvent.dataTransfer.files;
-		var file = files[0];
-
-		// read file as data URL
-		var reader = new FileReader();
-		reader.onload = (function(theFile) {
-			return function(e) {
-				console.log("you dragged in "+theFile.name);
-				testImage = new Image;
-				testImage.src = e.target.result;
-				testImageUploaded = true;
-			};
-		})(file);
-		reader.readAsDataURL(file);
-		
-		showUploadAlert = false;
-
-		return false;
-	});
-
-	// resize the canvas to fill browser window dynamically
-	window.addEventListener('resize', resizeCanvas, false);
-	function resizeCanvas() {
-		canvas.width = window.innerWidth;
-		canvas.height = window.innerHeight;
-
-		drawStuff();
-	}
-	resizeCanvas();
-
-	// start draw loop
-	var FPS = 30;
-	setInterval(function() {
-		// update call goes here !!!
-		drawStuff();
-	}, 1000/FPS);
-
-	function drawStuff() {
-		ctx.fillStyle = '#DDDDDD';
-		ctx.fillRect(0,0,canvas.width,canvas.height);
-
-		if(testImageUploaded) {
-			ctx.drawImage(testImage,0,0);
+		/* to show the canvas bounds */
+		canvas {
+		    background: #eee;
 		}
 
-		if(showUploadAlert) {
-			ctx.fillStyle = '#000000';
-			ctx.textAlign = 'center';
-			ctx.font = "30px Arial";
-			ctx.fillText("are you gonna drop that in here or what",canvas.width/2,canvas.height/2);
+		div {
+		    position: absolute;
+		    top: 20px;
+		    left: 20px;
+		    width: 200px;
 		}
-	}
-})
-</script>
 
+		#dragBox {
+			width: 900px;
+			height: 900px;
+			background-color: red;
+		}
+	</style>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+	<script src="canvas.js"></script>
 </head>
 
 <body>
