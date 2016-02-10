@@ -11,7 +11,7 @@ function wickObject(x, y, rotation, name) {
 
 function wickImage(src, x, y, name) {
   var imgOut = wickObject(x,y,0,name);
-  
+
   imgOut.img = new Image;
   imgOut.img.src = src;
 
