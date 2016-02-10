@@ -4,21 +4,10 @@ $(document).ready(function() {
 	var showUploadAlert = false;
 	var mousePos;
 
-<<<<<<< HEAD
 	var canvas = new fabric.Canvas('canvas');
-	canvas.selectionColor = 'rgba(0,255,0,0.3)';
-	canvas.selectionBorderColor = 'red';
-	canvas.selectionLineWidth = 5;
-=======
-	var objects = [];
-
-	var canvas = new fabric.Canvas('canvas');
-	canvas.add(new fabric.Circle({ radius: 30, fill: '#f55', top: 100, left: 100 }));
-
 	canvas.selectionColor = 'rgba(0,0,5,0.1)';
 	canvas.selectionBorderColor = 'grey';
 	canvas.selectionLineWidth = 2;
->>>>>>> 32c91f61800419f4b1aeb6d0c6cc12637d12bbf7
 
 	var ctx = canvas.getContext('2d');
 
