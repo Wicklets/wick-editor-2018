@@ -31,15 +31,15 @@ $(document).ready(function() {
 /*****************************
 	Drag and drop events
 *****************************/
-	$("#canvas").on('dragover', function(e) {
+	$("#canvasContainer").on('dragover', function(e) {
 		showUploadAlert = true;
 		return false;
 	});
-	$("#canvas").on('dragleave', function(e) {
+	$("#canvasContainer").on('dragleave', function(e) {
 		showUploadAlert = false;
 		return false;
 	});
-	$("#canvas").on('drop', function(e) {
+	$("#canvasContainer").on('drop', function(e) {
 		// prevent browser from open the file when drop off
 		e.stopPropagation();
 		e.preventDefault();
