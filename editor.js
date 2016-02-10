@@ -7,8 +7,9 @@ $(document).ready(function() {
 
 	var objects = [];
 
-	var canvas = document.getElementById('canvas'),
-		ctx = canvas.getContext('2d');
+	var canvas = new fabric.Canvas("c");
+	
+	var ctx = canvas.getContext('2d');
 
 /*****************************
 	Mouse events
@@ -49,8 +50,13 @@ $(document).ready(function() {
 			return function(e) {
 				console.log("you dragged in "+theFile.name);
 				// TODO: place image at mouse position
-				var newImg = wickImage(e.target.result, canvas.width/2, canvas.height/2, theFile.name);
-				objects.push(newImg);
+
+				fabric.Image.fromURL(theFile.name, function(oImg) {
+					canvas.add(oImg);
+				});
+
+				// var newImg = wickImage(e.target.result, canvas.width/2, canvas.height/2, theFile.name);
+				// objects.push(newImg);
 			};
 		})(file);
 		reader.readAsDataURL(file);
