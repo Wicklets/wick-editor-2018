@@ -25,5 +25,22 @@ function wickImage(src, x, y, name) {
   imgOut.width = imgOut.img.width;
   imgOut.height = imgOut.img.height;
 
+
+  imgOut.draw = function(ctx) {
+    ctx.drawImage(imgOut.img, imgOut.sx, imgOut.sy, imgOut.sWidth, imgOut.sHeight,
+                              imgOut.x, imgOut.y, imgOut.width, imgOut.height);
+  }
+
+  // Returns true if the given mouse position is within the image,
+  // else false.
+  imgOut.hover = function(mx, my) {
+    var l = imgOut.x;
+    var r = imgOut.x + imgOut.sWidth;
+    var t = imgOut.y;
+    var b = imgOut.y + imgOut.sHeight;
+    return (((mx >= l) && (mx <= r)) &&
+            ((my >= t) && (my <= b)));
+  }
+
   return imgOut;
 }

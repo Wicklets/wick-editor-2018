@@ -7,15 +7,16 @@ $(document).ready(function() {
 
 	var objects = [];
 
-	var canvas = document.getElementById('canvas'),
-		ctx = canvas.getContext('2d');
+	var canvas = new fabric.Canvas("c");
+	
+	var ctx = canvas.getContext('2d');
 
 /*****************************
 	Mouse events
 *****************************/
 	function getMousePos(canvas, evt) {
 		var rect = canvas.getBoundingClientRect();
-		return { x: evt.clientX - rect.left, 
+		return { x: evt.clientX - rect.left,
 				 y: evt.clientY - rect.top };
 	}
 	canvas.addEventListener('mousemove', function(evt) {
@@ -49,12 +50,17 @@ $(document).ready(function() {
 			return function(e) {
 				console.log("you dragged in "+theFile.name);
 				// TODO: place image at mouse position
-				var newImg = wickImage(e.target.result, canvas.width/2, canvas.height/2, theFile.name);
-				objects.push(newImg);
+
+				fabric.Image.fromURL(theFile.name, function(oImg) {
+					canvas.add(oImg);
+				});
+
+				// var newImg = wickImage(e.target.result, canvas.width/2, canvas.height/2, theFile.name);
+				// objects.push(newImg);
 			};
 		})(file);
 		reader.readAsDataURL(file);
-		
+
 		showUploadAlert = false;
 
 		return false;
@@ -88,17 +94,18 @@ $(document).ready(function() {
 	function draw() {
 		ctx.fillStyle = '#DDDDDD';
 		ctx.fillRect(0,0,canvas.width,canvas.height);
-		
+
 		for(var i = 0; i < objects.length; i++) {
 			var obj = objects[i];
 			//ctx.save();
 			//ctx.translate(objects[i].img.width/2, objects[i].img.height/2);
 			//ctx.rotate(objects[i].rotation)
 			//ctx.translate(-objects[i].img.width/2, -objects[i].img.height/2);
-			ctx.drawImage(obj.img, obj.x-obj.width/2, obj.y-obj.height/2);
+			obj.draw(ctx);
+			//ctx.drawImage(obj.img, obj.x-obj.width/2, obj.y-obj.height/2);
 			//ctx.restore();
 		}
-		
+
 		if(showUploadAlert) {
 			ctx.fillStyle = '#000000';
 			ctx.textAlign = 'center';
