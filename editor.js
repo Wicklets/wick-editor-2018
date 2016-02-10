@@ -11,9 +11,28 @@ $(document).ready(function() {
 
 	var ctx = canvas.getContext('2d');
 
+	var play = new fabric.Triangle({
+  	width: 30, height: 30, fill: 'green', left: 50, top: 20, angle : 90,
+		selectable : false
+	});
+
+	play.on('selected', function() {
+		console.log("Bogo Tastic");
+	});
+
+	canvas.add(play);
+
+
 /*****************************
 	Mouse events
 *****************************/
+
+	canvas.on('mouse:move', function(event) {
+		var pointer = canvas.getPointer(event.e);
+		canvas.px = pointer.x;
+		canvas.py = pointer.y;
+	});
+
 	/*function getMousePos(canvas, evt) {
 		var rect = canvas.getBoundingClientRect();
 		return { x: evt.clientX - rect.left,
@@ -52,8 +71,14 @@ $(document).ready(function() {
 				// TODO: place image at mouse position
 
 				fabric.Image.fromURL(e.target.result, function(oImg) {
+					// Snap to cursor position.
+					oImg.left = (canvas.width/2) - (oImg.width/2);
+					oImg.top = (canvas.height/2) - (oImg.height/2);
+
 					canvas.add(oImg);
 				});
+
+
 			};
 		})(file);
 		reader.readAsDataURL(file);
