@@ -37,14 +37,28 @@ $(document).ready(function() {
 	*****************************/
 
 	var keys = [];
+	var action = false;
 
 	document.body.addEventListener("keydown", function (e) {
 	  keys[e.keyCode] = true;
+		action = true;
+		checkKeys();
 	});
 
 	document.body.addEventListener("keyup", function (e) {
 	  keys[e.keyCode] = false;
+		action = false;
 	});
+
+	function checkKeys() {
+		if (keys[16]) { // SHIFT
+			if (keys[39]) { // RIGHT ARROW
+				incrementFrame();
+			} else if (keys[37]) { // LEFT ARROW
+				decrementFrame();
+			}
+		}
+	}
 
 /*****************************
 	Drag and drop events
@@ -96,16 +110,19 @@ $(document).ready(function() {
 *****************************/
 
 	var _frames = [];
-	var currentFrame = $('textarea#frameSelector').val();
+	var currentFrame = parseInt($('textarea#frameSelector').val());
 
+	// Store a frame as a JSON String.
 	function storeFrame(frame) {
 		_frames[frame] = JSON.stringify(canvas);
 	}
 
+	// Clear current canvas.
 	function clearFrame() {
 		canvas.clear();
 	}
 
+	// Loads the frame passed in as an int, if possible.
 	function loadFrame(frame) {
 
 		if (_frames[frame] === undefined) {
@@ -114,6 +131,34 @@ $(document).ready(function() {
 		} else {
 			// Load the JSON string and immediately use canvas.renderAll as a callback
 			canvas.loadFromJSON(_frames[frame], canvas.renderAll.bind(canvas));
+		}
+	}
+
+	// Goes to the frame passed in as an int.
+	function goToFrame(frame) {
+		if (nextFrame == NaN) {
+			alert("Invalid Frame! Frame must be an integer!");
+		} else if (nextFrame < 1) {
+			alert("Invalid Frame! Frame must be greater than 0!");
+		} else {
+			storeFrame(currentFrame);
+			loadFrame(nextFrame);
+			currentFrame = nextFrame;
+			document.getElementById("frameSelector").value = currentFrame;
+		}
+	}
+
+	// Go to the next frame.
+	function incrementFrame() {
+		nextFrame = currentFrame + 1;
+		goToFrame(nextFrame);
+	}
+
+	// Go to the previous frame.
+	function decrementFrame() {
+		nextFrame = currentFrame - 1;
+		if (nextFrame > 0) {
+			goToFrame(nextFrame);
 		}
 	}
 
@@ -128,13 +173,7 @@ $(document).ready(function() {
 
 	$("#gotoFrameButton").on("click", function(e){
 		nextFrame = parseInt($('textarea#frameSelector').val());
-		if (nextFrame != NaN) {
-			storeFrame(currentFrame);
-			loadFrame(nextFrame);
-			currentFrame = nextFrame;
-		} else {
-			alert("Invalid Frame! Frame must be an integer!");
-		}
+		goToFrame(nextFrame);
 	});
 
 /*****************************
