@@ -11,28 +11,6 @@ $(document).ready(function() {
 
 	var ctx = canvas.getContext('2d');
 
-/******************************
-	Play Button
-*****************************/
-	var play = new fabric.Triangle({
-  	width: 30, height: 30, fill: 'green', left: 50, top: 20, angle : 90,
-		selectable : false
-	});
-
-	play.hover = function() {
-		console.log
-	}
-
-	play.on('object:over', function() {
-		console.log("Bogo Tastic");
-	});
-
-	// canvas.on('mouse:move', function() {
-	// 	console.log("Canvas Mouse Move");
-	// })
-
-	canvas.add(play);
-	canvas.objects
 /*****************************
 	Mouse events
 *****************************/
@@ -100,15 +78,31 @@ $(document).ready(function() {
 	});
 
 /*****************************
+	Temporary GUI events
+*****************************/
+
+	$("#exportButton").on("click", function(e){ 
+		console.log(JSON.stringify(canvas));
+	});
+	$("#gotoFrameButton").on("click", function(e){ 
+		alert("goin to frame " + $('textarea#frameSelector').val());
+	});
+
+/*****************************
 	Resize window events
 *****************************/
 	window.addEventListener('resize', resizeCanvas, false);
 	function resizeCanvas() {
+		// for raw html5 canvas
 		//canvas.width = window.innerWidth;
 		//canvas.height = window.innerHeight;
+
+		// for fabric.js canvas
 		canvas.setWidth( window.innerWidth );
 		canvas.setHeight( window.innerHeight );
+
 		canvas.calcOffset();
+
 		draw();
 	}
 	resizeCanvas();
