@@ -2,7 +2,10 @@
 
 $(document).ready(function() {
 	var showUploadAlert = false;
+	var drawDebugInfo = true;
 	var mousePos;
+
+	var objects = [];
 
 	var canvas = document.getElementById('canvas'),
 		ctx = canvas.getContext('2d');
@@ -17,7 +20,6 @@ $(document).ready(function() {
 	}
 	canvas.addEventListener('mousemove', function(evt) {
 		mousePos = getMousePos(canvas, evt);
-		var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
 	}, false);
 
 /*****************************
@@ -35,8 +37,9 @@ $(document).ready(function() {
 		// prevent browser from open the file when drop off
 		e.stopPropagation();
 		e.preventDefault();
-		
+
 		// retrieve uploaded files data
+		// TODO: multiple files at once
 		var files = e.originalEvent.dataTransfer.files;
 		var file = files[0];
 
@@ -45,10 +48,9 @@ $(document).ready(function() {
 		reader.onload = (function(theFile) {
 			return function(e) {
 				console.log("you dragged in "+theFile.name);
-				//testImage = new Image;
-				//testImage.src = e.target.result;
 				// TODO: place image at mouse position
-				//testImageUploaded = true;
+				var newImg = wickImage(e.target.result, canvas.width/2, canvas.height/2, theFile.name);
+				objects.push(newImg);
 			};
 		})(file);
 		reader.readAsDataURL(file);
@@ -65,7 +67,6 @@ $(document).ready(function() {
 	function resizeCanvas() {
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
-
 		draw();
 	}
 	resizeCanvas();
@@ -88,20 +89,35 @@ $(document).ready(function() {
 		ctx.fillStyle = '#DDDDDD';
 		ctx.fillRect(0,0,canvas.width,canvas.height);
 		
-		//if(testImageUploaded) {
-			ctx.save();
-			//ctx.translate(testImage.width/2, testImage.height/2);
-			//ctx.rotate(spinny)
-			//ctx.translate(-testImage.width/2, -testImage.height/2);
-			//ctx.drawImage(testImage,0,0);
-			ctx.restore();
-		//}
+		for(var i = 0; i < objects.length; i++) {
+			var obj = objects[i];
+			//ctx.save();
+			//ctx.translate(objects[i].img.width/2, objects[i].img.height/2);
+			//ctx.rotate(objects[i].rotation)
+			//ctx.translate(-objects[i].img.width/2, -objects[i].img.height/2);
+			ctx.drawImage(obj.img, obj.x-obj.width/2, obj.y-obj.height/2);
+			//ctx.restore();
+		}
 		
 		if(showUploadAlert) {
 			ctx.fillStyle = '#000000';
 			ctx.textAlign = 'center';
 			ctx.font = "30px Arial";
 			ctx.fillText("are you gonna drop that in here or what",canvas.width/2,canvas.height/2);
+		}
+
+		if(drawDebugInfo) {
+			var lineHeight = 14;
+
+			ctx.fillStyle = '#000000';
+			ctx.textAlign = 'left';
+			ctx.font = lineHeight+"px Arial";
+
+			ctx.fillText("objects in scene",5,lineHeight);
+			for(var i = 0; i < objects.length; i++) {
+				var obj = objects[i];
+				ctx.fillText(obj.name,5,lineHeight*(i+2));
+			}
 		}
 	}
 })

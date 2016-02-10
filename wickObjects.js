@@ -1,14 +1,19 @@
-function wickObject(x,y,rotation,name) {
-  this.x = x;
-  this.y = y;
-  this.rot = rotation;
-  this.name = name;
-  return this;
+function wickObject(x, y, rotation, name) {
+  var objOut = {};
+
+  objOut.x = x;
+  objOut.y = y;
+  objOut.rotation = rotation;
+  objOut.name = name;
+
+  return objOut;
 }
 
-function wickImage(imgPath, x, y, name) {
-  imgOut = wickObject(0,0,0,name);
-  imgOut.img = new Image();
+function wickImage(src, x, y, name) {
+  var imgOut = wickObject(x,y,0,name);
+  
+  imgOut.img = new Image;
+  imgOut.img.src = src;
 
   // Initialize image with no crop data.
   imgOut.sx = 0;
@@ -19,5 +24,6 @@ function wickImage(imgPath, x, y, name) {
   // Initialize image at original size;
   imgOut.width = imgOut.img.width;
   imgOut.height = imgOut.img.height;
+
   return imgOut;
 }
