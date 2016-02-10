@@ -11,22 +11,34 @@ $(document).ready(function() {
 
 	var ctx = canvas.getContext('2d');
 
+/******************************
+	Play Button
+*****************************/
 	var play = new fabric.Triangle({
   	width: 30, height: 30, fill: 'green', left: 50, top: 20, angle : 90,
 		selectable : false
 	});
 
-	play.on('selected', function() {
+	play.hover = function() {
+		console.log
+	}
+
+	play.on('object:over', function() {
 		console.log("Bogo Tastic");
 	});
 
+	// canvas.on('mouse:move', function() {
+	// 	console.log("Canvas Mouse Move");
+	// })
+
 	canvas.add(play);
-
-
+	canvas.objects
 /*****************************
 	Mouse events
 *****************************/
 
+	// Save mouse coordinates within the canvas.
+	// NOTE: This only works properly when the window is in focus.
 	canvas.on('mouse:move', function(event) {
 		var pointer = canvas.getPointer(event.e);
 		canvas.px = pointer.x;
@@ -67,18 +79,17 @@ $(document).ready(function() {
 		var reader = new FileReader();
 		reader.onload = (function(theFile) {
 			return function(e) {
-				console.log("you dragged in "+theFile.name);
+				console.log("you dragged in " + theFile.name);
 				// TODO: place image at mouse position
 
 				fabric.Image.fromURL(e.target.result, function(oImg) {
-					// Snap to cursor position.
+					// Snap to center of window on drag.
 					oImg.left = (canvas.width/2) - (oImg.width/2);
 					oImg.top = (canvas.height/2) - (oImg.height/2);
-
 					canvas.add(oImg);
 				});
 
-
+				console.log(canvas._objects);
 			};
 		})(file);
 		reader.readAsDataURL(file);
@@ -121,7 +132,8 @@ $(document).ready(function() {
 			ctx.fillStyle = '#000000';
 			ctx.textAlign = 'center';
 			ctx.font = "30px Arial";
-			ctx.fillText("Drop image to add to scene...",canvas.width/2,canvas.height/2);
+			ctx.fillText("Drop image to add to scene...",
+			              canvas.width/2,canvas.height/2);
 		}
 	}
 })
