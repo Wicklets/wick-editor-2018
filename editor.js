@@ -6,9 +6,14 @@ $(document).ready(function() {
 	var mousePos;
 
 	var objects = [];
-
-	var canvas = new fabric.Canvas("c");
 	
+	var canvas = new fabric.Canvas('canvas');
+	canvas.add(new fabric.Circle({ radius: 30, fill: '#f55', top: 100, left: 100 }));
+
+	canvas.selectionColor = 'rgba(0,255,0,0.3)';
+	canvas.selectionBorderColor = 'red';
+	canvas.selectionLineWidth = 5;
+
 	var ctx = canvas.getContext('2d');
 
 /*****************************
@@ -19,9 +24,9 @@ $(document).ready(function() {
 		return { x: evt.clientX - rect.left,
 				 y: evt.clientY - rect.top };
 	}
-	canvas.addEventListener('mousemove', function(evt) {
+	/*canvas.addEventListener('mousemove', function(evt) {
 		mousePos = getMousePos(canvas, evt);
-	}, false);
+	}, false);*/
 
 /*****************************
 	Drag and drop events
@@ -92,9 +97,6 @@ $(document).ready(function() {
 	}
 
 	function draw() {
-		ctx.fillStyle = '#DDDDDD';
-		ctx.fillRect(0,0,canvas.width,canvas.height);
-
 		for(var i = 0; i < objects.length; i++) {
 			var obj = objects[i];
 			//ctx.save();
@@ -129,3 +131,4 @@ $(document).ready(function() {
 		}
 	}
 })
+
