@@ -1,4 +1,4 @@
-// this has all the code for starting, updating, and drawing to the canvas.
+// this has all the code for starting, updating, and drawing in the editor.
 
 $(document).ready(function() {
 	var showUploadAlert = false;
@@ -103,7 +103,7 @@ $(document).ready(function() {
 			ctx.fillStyle = '#000000';
 			ctx.textAlign = 'center';
 			ctx.font = "30px Arial";
-			ctx.fillText("are you gonna drop that in here or what",canvas.width/2,canvas.height/2);
+			ctx.fillText("Drop image to add to scene...",canvas.width/2,canvas.height/2);
 		}
 
 		if(drawDebugInfo) {
@@ -113,10 +113,11 @@ $(document).ready(function() {
 			ctx.textAlign = 'left';
 			ctx.font = lineHeight+"px Arial";
 
-			ctx.fillText("objects in scene",5,lineHeight);
+			ctx.fillText("objects in scene:",5,lineHeight);
 			for(var i = 0; i < objects.length; i++) {
 				var obj = objects[i];
-				ctx.fillText(obj.name,5,lineHeight*(i+2));
+				var objDebugData = obj.name + ": (" + obj.x + ", " + obj.y + ")";
+				ctx.fillText(objDebugData,5,lineHeight*(i+2));
 			}
 		}
 	}
