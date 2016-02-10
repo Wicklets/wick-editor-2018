@@ -32,6 +32,20 @@ $(document).ready(function() {
 		mousePos = getMousePos(canvas, evt);
 	}, false);*/
 
+	/*****************************
+		Key Events
+	*****************************/
+
+	var keys = [];
+
+	document.body.addEventListener("keydown", function (e) {
+	  keys[e.keyCode] = true;
+	});
+
+	document.body.addEventListener("keyup", function (e) {
+	  keys[e.keyCode] = false;
+	});
+
 /*****************************
 	Drag and drop events
 *****************************/
@@ -78,14 +92,49 @@ $(document).ready(function() {
 	});
 
 /*****************************
+	Frame Data
+*****************************/
+
+	var _frames = [];
+	var currentFrame = $('textarea#frameSelector').val();
+
+	function storeFrame(frame) {
+		_frames[frame] = JSON.stringify(canvas);
+	}
+
+	function clearFrame() {
+		canvas.clear();
+	}
+
+	function loadFrame(frame) {
+
+		if (_frames[frame] === undefined) {
+			// We're in a frame that doesn't exist. Just draw a blank canvas.
+			canvas.clear();
+		} else {
+			// Load the JSON string and immediately use canvas.renderAll as a callback
+			canvas.loadFromJSON(_frames[frame], canvas.renderAll.bind(canvas));
+		}
+	}
+
+/*****************************
 	Temporary GUI events
 *****************************/
 
-	$("#exportButton").on("click", function(e){ 
+	$("#exportButton").on("click", function(e){
 		console.log(JSON.stringify(canvas));
 	});
-	$("#gotoFrameButton").on("click", function(e){ 
-		alert("goin to frame " + $('textarea#frameSelector').val());
+
+
+	$("#gotoFrameButton").on("click", function(e){
+		nextFrame = parseInt($('textarea#frameSelector').val());
+		if (nextFrame != NaN) {
+			storeFrame(currentFrame);
+			loadFrame(nextFrame);
+			currentFrame = nextFrame;
+		} else {
+			alert("Invalid Frame! Frame must be an integer!");
+		}
 	});
 
 /*****************************
@@ -131,3 +180,16 @@ $(document).ready(function() {
 		}
 	}
 })
+
+/*****************************
+	utilities
+*****************************/
+
+// http://stackoverflow.com/questions/14636536/
+// how-to-check-if-a-variable-is-an-integer-in-javascript
+function isInt(data) {
+	if (data === parseInt(data, 10))
+	    return true;
+	else
+	    return false;
+}
