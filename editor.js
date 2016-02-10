@@ -56,12 +56,9 @@ $(document).ready(function() {
 				console.log("you dragged in "+theFile.name);
 				// TODO: place image at mouse position
 
-				fabric.Image.fromURL(theFile.name, function(oImg) {
+				fabric.Image.fromURL(e.target.result, function(oImg) {
 					canvas.add(oImg);
 				});
-
-				// var newImg = wickImage(e.target.result, canvas.width/2, canvas.height/2, theFile.name);
-				// objects.push(newImg);
 			};
 		})(file);
 		reader.readAsDataURL(file);
