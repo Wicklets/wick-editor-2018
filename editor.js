@@ -2,14 +2,9 @@
 
 $(document).ready(function() {
 	var showUploadAlert = false;
-	var drawDebugInfo = true;
 	var mousePos;
 
-	var objects = [];
-	
 	var canvas = new fabric.Canvas('canvas');
-	canvas.add(new fabric.Circle({ radius: 30, fill: '#f55', top: 100, left: 100 }));
-
 	canvas.selectionColor = 'rgba(0,255,0,0.3)';
 	canvas.selectionBorderColor = 'red';
 	canvas.selectionLineWidth = 5;
@@ -19,12 +14,12 @@ $(document).ready(function() {
 /*****************************
 	Mouse events
 *****************************/
-	function getMousePos(canvas, evt) {
+	/*function getMousePos(canvas, evt) {
 		var rect = canvas.getBoundingClientRect();
 		return { x: evt.clientX - rect.left,
 				 y: evt.clientY - rect.top };
 	}
-	/*canvas.addEventListener('mousemove', function(evt) {
+	canvas.addEventListener('mousemove', function(evt) {
 		mousePos = getMousePos(canvas, evt);
 	}, false);*/
 
@@ -73,8 +68,11 @@ $(document).ready(function() {
 *****************************/
 	window.addEventListener('resize', resizeCanvas, false);
 	function resizeCanvas() {
-		canvas.width = window.innerWidth;
-		canvas.height = window.innerHeight;
+		//canvas.width = window.innerWidth;
+		//canvas.height = window.innerHeight;
+		canvas.setWidth( window.innerWidth );
+		canvas.setHeight( window.innerHeight );
+		canvas.calcOffset();
 		draw();
 	}
 	resizeCanvas();
@@ -94,37 +92,11 @@ $(document).ready(function() {
 	}
 
 	function draw() {
-		for(var i = 0; i < objects.length; i++) {
-			var obj = objects[i];
-			//ctx.save();
-			//ctx.translate(objects[i].img.width/2, objects[i].img.height/2);
-			//ctx.rotate(objects[i].rotation)
-			//ctx.translate(-objects[i].img.width/2, -objects[i].img.height/2);
-			obj.draw(ctx);
-			//ctx.drawImage(obj.img, obj.x-obj.width/2, obj.y-obj.height/2);
-			//ctx.restore();
-		}
-
 		if(showUploadAlert) {
 			ctx.fillStyle = '#000000';
 			ctx.textAlign = 'center';
 			ctx.font = "30px Arial";
 			ctx.fillText("Drop image to add to scene...",canvas.width/2,canvas.height/2);
-		}
-
-		if(drawDebugInfo) {
-			var lineHeight = 14;
-
-			ctx.fillStyle = '#000000';
-			ctx.textAlign = 'left';
-			ctx.font = lineHeight+"px Arial";
-
-			ctx.fillText("objects in scene:",5,lineHeight);
-			for(var i = 0; i < objects.length; i++) {
-				var obj = objects[i];
-				var objDebugData = obj.name + ": (" + obj.x + ", " + obj.y + ")";
-				ctx.fillText(objDebugData,5,lineHeight*(i+2));
-			}
 		}
 	}
 })
