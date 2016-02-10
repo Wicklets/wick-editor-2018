@@ -15,7 +15,7 @@ $(document).ready(function() {
 *****************************/
 	function getMousePos(canvas, evt) {
 		var rect = canvas.getBoundingClientRect();
-		return { x: evt.clientX - rect.left, 
+		return { x: evt.clientX - rect.left,
 				 y: evt.clientY - rect.top };
 	}
 	canvas.addEventListener('mousemove', function(evt) {
@@ -54,7 +54,7 @@ $(document).ready(function() {
 			};
 		})(file);
 		reader.readAsDataURL(file);
-		
+
 		showUploadAlert = false;
 
 		return false;
@@ -88,17 +88,18 @@ $(document).ready(function() {
 	function draw() {
 		ctx.fillStyle = '#DDDDDD';
 		ctx.fillRect(0,0,canvas.width,canvas.height);
-		
+
 		for(var i = 0; i < objects.length; i++) {
 			var obj = objects[i];
 			//ctx.save();
 			//ctx.translate(objects[i].img.width/2, objects[i].img.height/2);
 			//ctx.rotate(objects[i].rotation)
 			//ctx.translate(-objects[i].img.width/2, -objects[i].img.height/2);
-			ctx.drawImage(obj.img, obj.x-obj.width/2, obj.y-obj.height/2);
+			obj.draw(ctx);
+			//ctx.drawImage(obj.img, obj.x-obj.width/2, obj.y-obj.height/2);
 			//ctx.restore();
 		}
-		
+
 		if(showUploadAlert) {
 			ctx.fillStyle = '#000000';
 			ctx.textAlign = 'center';

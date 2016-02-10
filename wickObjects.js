@@ -11,7 +11,7 @@ function wickObject(x, y, rotation, name) {
 
 function wickImage(src, x, y, name) {
   var imgOut = wickObject(x,y,0,name);
-  
+
   imgOut.img = new Image;
   imgOut.img.src = src;
 
@@ -24,6 +24,16 @@ function wickImage(src, x, y, name) {
   // Initialize image at original size;
   imgOut.width = imgOut.img.width;
   imgOut.height = imgOut.img.height;
+
+
+  imgOut.draw = function(ctx) {
+    ctx.drawImage(imgOut.img, imgOut.sx, imgOut.sy, imgOut.sWidth, imgOut.sHeight,
+                              imgOut.x, imgOut.y, imgOut.width, imgOut.height);
+  }
+
+  // imgOut.hover = function(mx, my) {
+  //   return
+  // }
 
   return imgOut;
 }
