@@ -1,12 +1,40 @@
-function wickObject(x, y, rotation, name) {
+// Object that stores the entire
+function wickObject(fabricObject) {
   var objOut = {};
-
-  objOut.x = x;
-  objOut.y = y;
-  objOut.rotation = rotation;
-  objOut.name = name;
-
+  objOut.fabricObject;
+  objOut.timeline = [];
   return objOut;
+
+  function saveFrame(frame) {
+    if (frame > 0) {
+      this.timeline[frame] = wickFrame(this.fabricObject);
+    }
+  }
+
+  function loadFrame(frame) {
+    if (frame > 0) {
+      wickFrame = this.timeline[frame];
+      if (!(wickFrame == undefined)) {
+        wickFrame["src"] = this.fabricObject["src"];
+        return wickFrame;
+      }
+    }
+    return undefined;
+    }
+    
+}
+
+// A wickFrame contains everything that a fabric js object does except the
+// source as it is meant to just contain reference positions.
+function wickFrame(obj) {
+  wf = {};
+  for (var key in obj.keys()) {
+    if (key == "src") {
+      continue;
+    }
+    wf[key] = obj[key];
+  }
+  return wf;
 }
 
 function wickImage(src, x, y, name) {
