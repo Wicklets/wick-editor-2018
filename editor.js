@@ -2,6 +2,11 @@ $(document).ready(function() {
 
 	// Global editor vars
 	var showUploadAlert = false;
+	var currentWickID = 0;
+
+	var frames = [];
+	var currentFrame = 1;
+	document.getElementById("frameSelector").value = currentFrame;
 
 	// Setup canvas
 	var canvas = new fabric.Canvas('canvas');
@@ -21,18 +26,28 @@ $(document).ready(function() {
 	$("#nextFrameButton").on("click", function(e){ 
 		nextFrame(); 
 	});
-	$("#cloneFrameButton").on("click", function(e){ 
-		cloneFrame(); 
-	});
+
 	$("#gotoFrameButton").on("click", function(e){
 		var toFrame = parseInt($('textarea#frameSelector').val());
 		goToFrame(toFrame);
 	});
+
 	$("#deleteObjectButton").on("click", function(e){
 		canvas.getActiveObject().remove();
 	});
+	$("#addScriptButton").on("click", function(e){
+		//alert(canvas.getActiveObject().wickData);
+		canvas.getActiveObject().wickData.clickable = true;
+		canvas.getActiveObject().wickData.toFrame = prompt("Enter a frame:")
+	});
 	$("#exportButton").on("click", function(e){
-		console.log(JSON.stringify(canvas));
+		//console.log(JSON.stringify(canvas));
+		//console.log(getSerializedProject());
+		//console.log(canvas.getActiveObject().testBogo);
+		alert("NOT YET IMPLEMENTED");
+	});
+	$("#testActionButton").on("click", function(e){
+		goToFrame(canvas.getActiveObject().wickData.toFrame);
 	});
 
 /*****************************
@@ -88,7 +103,7 @@ $(document).ready(function() {
 		return false;
 	});
 	$("#canvasContainer").on('drop', function(e) {
-		// prevent browser from open the file when drop off
+		// prevent browser from opening the file
 		e.stopPropagation();
 		e.preventDefault();
 
@@ -105,6 +120,10 @@ $(document).ready(function() {
 					// add new object to fabric canvas
 					oImg.left = (canvas.width/2) - (oImg.width/2);
 					oImg.top = (canvas.height/2) - (oImg.height/2);
+
+					oImg.wickData = {}
+					oImg.wickData.clickable = false;
+
 					canvas.add(oImg);
 				});
 			};
@@ -120,38 +139,34 @@ $(document).ready(function() {
 	Timeline
 *****************************/
 
-	var _frames = [];
-	var currentFrame = 1;
-	document.getElementById("frameSelector").value = currentFrame;
-
-	// Load and store serialized frames
-	function storeFrame(frame) {
-		_frames[frame] = JSON.stringify(canvas);
+	// Load serialized frames
+	function storeCurrentFrame() {
+		frames[currentFrame] = [];
+		canvas.forEachObject(function(obj){
+		    frames[currentFrame].push(obj);
+		});
 	}
+
+	// Save serialized frames
 	function loadFrame(frame) {
-		if (_frames[frame] === undefined) {
+		if (frames[frame] === undefined) {
 			// We're in a frame that doesn't exist. Just draw a blank canvas.
 			canvas.clear();
 		} else {
 			// Load the JSON string and immediately use canvas.renderAll as a callback
-			canvas.loadFromJSON(_frames[frame], canvas.renderAll.bind(canvas));
+			//canvas.loadFromJSON(frames[frame], canvas.renderAll.bind(canvas));
+			canvas.clear();
+			for(var i = 0; i < frames[frame].length; i++) {
+				canvas.add(frames[frame][i]);
+			}
 		}
 	}
 
 	// Goes to a specified frame
 	function goToFrame(toFrame) {
-		storeFrame(currentFrame);
+		storeCurrentFrame();
 
 		currentFrame = toFrame;
-		loadFrame(currentFrame);
-
-		document.getElementById("frameSelector").value = currentFrame;
-	}
-
-	// Make new frame that is identical to current frame
-	// TODO: this don't work bc canvas.loadFromJSON replaces current stuff......
-	function cloneFrame() {
-		currentFrame++;
 		loadFrame(currentFrame);
 
 		document.getElementById("frameSelector").value = currentFrame;
