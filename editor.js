@@ -1,15 +1,36 @@
-// this has all the code for starting, updating, and drawing in the editor.
-
 $(document).ready(function() {
-	var showUploadAlert = false;
-	var mousePos;
 
+	// Global editor vars
+	var showUploadAlert = false;
+
+	// Setup canvas
 	var canvas = new fabric.Canvas('canvas');
 	canvas.selectionColor = 'rgba(0,0,5,0.1)';
 	canvas.selectionBorderColor = 'grey';
 	canvas.selectionLineWidth = 2;
 
 	var ctx = canvas.getContext('2d');
+
+/*****************************
+	Temporary GUI events
+*****************************/
+
+	$("#prevFrameButton").on("click", function(e){ 
+		prevFrame(); 
+	});
+	$("#nextFrameButton").on("click", function(e){ 
+		nextFrame(); 
+	});
+	$("#cloneFrameButton").on("click", function(e){ 
+		cloneFrame(); 
+	});
+	$("#gotoFrameButton").on("click", function(e){
+		var toFrame = parseInt($('textarea#frameSelector').val());
+		goToFrame(toFrame);
+	});
+	$("#deleteObjectButton").on("click", function(e){
+		canvas.getActiveObject().remove();
+	});
 
 /*****************************
 	Mouse events
@@ -23,18 +44,9 @@ $(document).ready(function() {
 		canvas.py = pointer.y;
 	});
 
-	/*function getMousePos(canvas, evt) {
-		var rect = canvas.getBoundingClientRect();
-		return { x: evt.clientX - rect.left,
-				 y: evt.clientY - rect.top };
-	}
-	canvas.addEventListener('mousemove', function(evt) {
-		mousePos = getMousePos(canvas, evt);
-	}, false);*/
-
-	/*****************************
-		Key Events
-	*****************************/
+/*****************************
+	Key Events
+*****************************/
 
 	var keys = [];
 	var action = false;
@@ -51,11 +63,11 @@ $(document).ready(function() {
 	});
 
 	function checkKeys() {
-		if (keys[16]) { // SHIFT
-			if (keys[39]) { // RIGHT ARROW
-				incrementFrame();
-			} else if (keys[37]) { // LEFT ARROW
-				decrementFrame();
+		if (keys[16]) { // Shift
+			if (keys[39]) { // Right arrow
+				nextFrame();
+			} else if (keys[37]) { // Left arrow
+				prevFrame();
 			}
 		}
 	}
@@ -63,6 +75,7 @@ $(document).ready(function() {
 /*****************************
 	Drag and drop events
 *****************************/
+
 	$("#canvasContainer").on('dragover', function(e) {
 		showUploadAlert = true;
 		return false;
@@ -85,11 +98,8 @@ $(document).ready(function() {
 		var reader = new FileReader();
 		reader.onload = (function(theFile) {
 			return function(e) {
-				console.log("you dragged in " + theFile.name);
-				// TODO: place image at mouse position
-
 				fabric.Image.fromURL(e.target.result, function(oImg) {
-					// Snap to center of window on drag.
+					// add new object to fabric canvas
 					oImg.left = (canvas.width/2) - (oImg.width/2);
 					oImg.top = (canvas.height/2) - (oImg.height/2);
 					canvas.add(oImg);
@@ -104,25 +114,18 @@ $(document).ready(function() {
 	});
 
 /*****************************
-	Frame Data
+	Timeline
 *****************************/
 
 	var _frames = [];
-	var currentFrame = parseInt($('textarea#frameSelector').val());
+	var currentFrame = 1;
+	document.getElementById("frameSelector").value = currentFrame;
 
-	// Store a frame as a JSON String.
+	// Load and store serialized frames
 	function storeFrame(frame) {
 		_frames[frame] = JSON.stringify(canvas);
 	}
-
-	// Clear current canvas.
-	function clearFrame() {
-		canvas.clear();
-	}
-
-	// Loads the frame passed in as an int, if possible.
 	function loadFrame(frame) {
-
 		if (_frames[frame] === undefined) {
 			// We're in a frame that doesn't exist. Just draw a blank canvas.
 			canvas.clear();
@@ -132,51 +135,43 @@ $(document).ready(function() {
 		}
 	}
 
-	// Goes to the frame passed in as an int.
-	function goToFrame(frame) {
-		if (nextFrame == NaN) {
-			alert("Invalid Frame! Frame must be an integer!");
-		} else if (nextFrame < 1) {
-			alert("Invalid Frame! Frame must be greater than 0!");
-		} else {
-			storeFrame(currentFrame);
-			loadFrame(nextFrame);
-			currentFrame = nextFrame;
-			document.getElementById("frameSelector").value = currentFrame;
-		}
+	// Goes to a specified frame
+	function goToFrame(toFrame) {
+		storeFrame(currentFrame);
+
+		currentFrame = toFrame;
+		loadFrame(currentFrame);
+
+		document.getElementById("frameSelector").value = currentFrame;
+	}
+
+	// Make new frame that is identical to current frame
+	// TODO: this don't work bc canvas.loadFromJSON replaces current stuff......
+	function cloneFrame() {
+		currentFrame++;
+		loadFrame(currentFrame);
+
+		document.getElementById("frameSelector").value = currentFrame;
 	}
 
 	// Go to the next frame.
-	function incrementFrame() {
-		nextFrame = currentFrame + 1;
-		goToFrame(nextFrame);
+	function nextFrame() {
+		goToFrame(currentFrame + 1);
 	}
 
 	// Go to the previous frame.
-	function decrementFrame() {
-		nextFrame = currentFrame - 1;
-		if (nextFrame > 0) {
-			goToFrame(nextFrame);
+	function prevFrame() {
+		var toFrame = currentFrame - 1;
+		if (toFrame > 0) {
+			goToFrame(toFrame);
 		}
 	}
 
 /*****************************
-	Temporary GUI events
+	Draw loop
 *****************************/
 
-	$("#exportButton").on("click", function(e){
-		console.log(JSON.stringify(canvas));
-	});
-
-
-	$("#gotoFrameButton").on("click", function(e){
-		nextFrame = parseInt($('textarea#frameSelector').val());
-		goToFrame(nextFrame);
-	});
-
-/*****************************
-	Resize window events
-*****************************/
+	// update canvas size on window resize
 	window.addEventListener('resize', resizeCanvas, false);
 	function resizeCanvas() {
 		// for raw html5 canvas
@@ -188,24 +183,14 @@ $(document).ready(function() {
 		canvas.setHeight( window.innerHeight );
 
 		canvas.calcOffset();
-
-		draw();
 	}
 	resizeCanvas();
 
-/*****************************
-	Draw/Update loop
-*****************************/
 	// start draw/update loop
 	var FPS = 30;
 	setInterval(function() {
-		update();
 		draw();
 	}, 1000/FPS);
-
-	function update() {
-		//spinny+=0.5;
-	}
 
 	function draw() {
 		if(showUploadAlert) {
@@ -217,16 +202,3 @@ $(document).ready(function() {
 		}
 	}
 })
-
-/*****************************
-	utilities
-*****************************/
-
-// http://stackoverflow.com/questions/14636536/
-// how-to-check-if-a-variable-is-an-integer-in-javascript
-function isInt(data) {
-	if (data === parseInt(data, 10))
-	    return true;
-	else
-	    return false;
-}
