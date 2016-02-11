@@ -15,12 +15,21 @@ $(document).ready(function() {
 	Temporary GUI events
 *****************************/
 
-	$("#prevFrameButton").on("click", function(e){ nextFrame(); });
-	$("#nextFrameButton").on("click", function(e){ prevFrame(); });
-
+	$("#prevFrameButton").on("click", function(e){ 
+		prevFrame(); 
+	});
+	$("#nextFrameButton").on("click", function(e){ 
+		nextFrame(); 
+	});
+	$("#cloneFrameButton").on("click", function(e){ 
+		cloneFrame(); 
+	});
 	$("#gotoFrameButton").on("click", function(e){
 		var toFrame = parseInt($('textarea#frameSelector').val());
 		goToFrame(toFrame);
+	});
+	$("#deleteObjectButton").on("click", function(e){
+		canvas.getActiveObject().remove();
 	});
 
 /*****************************
@@ -54,11 +63,11 @@ $(document).ready(function() {
 	});
 
 	function checkKeys() {
-		if (keys[16]) { // SHIFT
-			if (keys[39]) { // RIGHT ARROW
-				prevFrame();
-			} else if (keys[37]) { // LEFT ARROW
+		if (keys[16]) { // Shift
+			if (keys[39]) { // Right arrow
 				nextFrame();
+			} else if (keys[37]) { // Left arrow
+				prevFrame();
 			}
 		}
 	}
@@ -126,7 +135,7 @@ $(document).ready(function() {
 		}
 	}
 
-	// Goes to the frame passed in as an int.
+	// Goes to a specified frame
 	function goToFrame(toFrame) {
 		storeFrame(currentFrame);
 
@@ -136,13 +145,22 @@ $(document).ready(function() {
 		document.getElementById("frameSelector").value = currentFrame;
 	}
 
+	// Make new frame that is identical to current frame
+	// TODO: this don't work bc canvas.loadFromJSON replaces current stuff......
+	function cloneFrame() {
+		currentFrame++;
+		loadFrame(currentFrame);
+
+		document.getElementById("frameSelector").value = currentFrame;
+	}
+
 	// Go to the next frame.
-	function prevFrame() {
+	function nextFrame() {
 		goToFrame(currentFrame + 1);
 	}
 
 	// Go to the previous frame.
-	function nextFrame() {
+	function prevFrame() {
 		var toFrame = currentFrame - 1;
 		if (toFrame > 0) {
 			goToFrame(toFrame);

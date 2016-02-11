@@ -21,6 +21,12 @@
 			text-align: center;
 			background-color: #DDDDDD;
 			box-shadow: 3px 3px 5px #666;
+			font-size: 14px;
+			font-family: "Arial", sans-serif;
+			padding-top: 5px;
+			padding-bottom: 5px;
+			padding-left: 5px;
+			padding-right: 5px;
 		}
 	</style>
 
@@ -38,15 +44,19 @@
 	</div>
 
 	<div id="temporaryGUI">
-
 		<button type="button" id="prevFrameButton"><-</button>
 		<textarea id="frameSelector" rows="1" cols="3"></textarea>
 		<button type="button" id="nextFrameButton">-></button>
+		<button type="button" id="cloneFrameButton">clone</button>
 
 		<br />
 
 		<button type="button" id="gotoFrameButton">Go</button>
 		<div id="info">Shift+Left/Right to advance frames</div>
+
+		<button type="button" id="deleteObjectButton">Delete</button>
+
+		<br />
 
 		<a href="data:application/octet-stream;charset=utf-16le;base64,//5mAG8AbwAgAGIAYQByAAoA"><button type="button">Export</button></a>
 	</div>
