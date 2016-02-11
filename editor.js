@@ -31,6 +31,9 @@ $(document).ready(function() {
 	$("#deleteObjectButton").on("click", function(e){
 		canvas.getActiveObject().remove();
 	});
+	$("#exportButton").on("click", function(e){
+		console.log(JSON.stringify(canvas));
+	});
 
 /*****************************
 	Mouse events
