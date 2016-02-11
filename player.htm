@@ -2,7 +2,7 @@
 <html>
 
 <head>
-	<title>Wick Editor</title>
+	<title>Wick Player</title>
 
 	<style type="text/css">
 		* { margin:0; padding:0; } /* to remove the top and left whitespace */
@@ -13,10 +13,9 @@
 
 		#temporaryGUI {
 			position: absolute;
-			width: 130px;
+			width: 215px;
 			top: 0px;
 			left: 0px;
-			text-align: center;
 			background-color: #DDDDDD;
 			box-shadow: 3px 3px 5px #666;
 			font-size: 14px;
@@ -30,9 +29,7 @@
 
 	<!-- Note that we have to bundle our own minified libs to allow people to play their projects without an internet connection. -z -->
 	<script src="jquery.min.js"></script>
-	<script src="fabric.js"></script>
-	<script src="wickObjects.js"></script>
-	<script src="editor.js"></script>
+	<script src="player.js"></script>
 </head>
 
 <body>
@@ -41,22 +38,7 @@
 	</div>
 
 	<div id="temporaryGUI">
-		<button type="button" id="prevFrameButton"><-</button>
-		<textarea id="frameSelector" rows="1" cols="3"></textarea>
-		<button type="button" id="nextFrameButton">-></button>
-
-		<br />
-
-		<button type="button" id="gotoFrameButton">Go</button>
-		<div id="info">Shift+Left/Right to advance frames</div>
-		<br />
-
-		<button type="button" id="sendToBackButton">Send To Back</button>
-		<button type="button" id="deleteObjectButton">Delete</button><br />
-		<br />
-		<button type="button" id="addScriptButton">Add Script...</button><br />
-		<button type="button" id="exportButton">Export</button></a><br />
-		<button type="button" id="testActionButton">Test action</button></a>
+		<input id="projectFile" type='file' />
 	</div>
 </body>
 

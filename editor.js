@@ -14,7 +14,7 @@ $(document).ready(function() {
     canvas.selectionBorderColor = 'grey';
     canvas.selectionLineWidth = 2;
 
-    var ctx = canvas.getContext('2d');
+    var context = canvas.getContext('2d');
 
 /*****************************
     Temporary GUI events
@@ -213,10 +213,10 @@ $(document).ready(function() {
 
     function draw() {
         if(showUploadAlert) {
-            ctx.fillStyle = '#000000';
-            ctx.textAlign = 'center';
-            ctx.font = "30px Arial";
-            ctx.fillText("Drop image to add to scene...",
+            context.fillStyle = '#000000';
+            context.textAlign = 'center';
+            context.font = "30px Arial";
+            context.fillText("Drop image to add to scene...",
                           canvas.width/2,canvas.height/2);
         }
     }
@@ -232,36 +232,14 @@ $(document).ready(function() {
             wickObjectFrames[fi] = [];
             for(var i = 0; i < frame.length; i++) {
                 var obj = frame[i];
-                wickObj = fabricObjectToWickObject(obj)
-                console.log(wickObj);
+                var srcObj = JSON.parse(JSON.stringify(frame[i]));//hacky way to get src
+                wickObj = fabricObjectToWickObject(obj);
+                wickObj.src = srcObj.src;
                 wickObjectFrames[fi].push(wickObj);
             }
         }
+        var outString = "data:text/csv,";
+        outString += JSON.stringify(wickObjectFrames);
+        window.open(outString);
     }
-
-/**********************************
-  Object constructors & definitons
-***********************************/
-
-    function fabricObjectToWickObject(fabObj) {
-        obj = wickObject();
-
-        obj.left    = fabObj.left;
-        obj.top     = fabObj.top;
-        obj.width   = fabObj.width;
-        obj.height  = fabObj.height;
-        obj.scaleX  = fabObj.scaleX;
-        obj.scaleY  = fabObj.scaleY;
-        obj.angle   = fabObj.angle;
-        obj.flipX   = fabObj.flipX;
-        obj.flipY   = fabObj.flipY;
-        obj.opacity = fabObj.opacity;
-        obj.src     = fabObj.src;
-
-        return obj;
-    }
-
-    function wickObject() {
-        return {};
-    }
-})
+});
