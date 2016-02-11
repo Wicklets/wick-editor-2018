@@ -30,11 +30,9 @@
 		}
 	</style>
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<!-- Note that we have to hold our own minified libs to allow people to play their projects without an internet connection. -z -->
+	<script src="jquery.min.js"></script>
 	<script src="fabric.js"></script>
-
-	<script src="util.js"></script>
-	<script src="wickObjects.js"></script>
 	<script src="editor.js"></script>
 </head>
 
@@ -52,19 +50,13 @@
 
 		<button type="button" id="gotoFrameButton">Go</button>
 		<div id="info">Shift+Left/Right to advance frames</div>
-
-		<button type="button" id="deleteObjectButton">Delete</button>
-
 		<br />
 
-		<button type="button" id="addScriptButton">Add Script...</button>
-
+		<button type="button" id="sendToBackButton">Send To Back</button>
+		<button type="button" id="deleteObjectButton">Delete</button><br />
 		<br />
-
-		<button type="button" id="exportButton">Export</button></a>
-
-		<br />
-
+		<button type="button" id="addScriptButton">Add Script...</button><br />
+		<button type="button" id="exportButton">Export</button></a><br />
 		<button type="button" id="testActionButton">Test action</button></a>
 	</div>
 </body>
