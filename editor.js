@@ -146,7 +146,7 @@ $(document).ready(function() {
     function storeCurrentFrame() {
         frames[currentFrame] = [];
         canvas.forEachObject(function(obj){
-            frames[currentFrame].push(obj);
+            frames[currentFrame].unshift(obj);
         });
     }
 
@@ -158,7 +158,7 @@ $(document).ready(function() {
 
 			canvas.forEachObject(function(obj){
 					// Deepcopy and add to frame.
-					frames[frame].push(jQuery.extend(true, {}, obj));
+					frames[frame].unshift(jQuery.extend(true, {}, obj));
 			});
 		}
 
