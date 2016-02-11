@@ -153,11 +153,11 @@ $(document).ready(function() {
 		}
 
     // Save serialized frames
-    function loadFrame(frame) {
+    function loadFrame(f) {
         canvas.clear();
-        if (frames[frame] != undefined) {
-            for(var i = 0; i < frames[frame].length; i++) {
-                canvas.add(frames[frame][i]);
+        if (frames[f] != undefined) {
+            for(var i = 0; i < frames[f].length; i++) {
+                canvas.add(frames[f][i]);
             }
         }
     }
