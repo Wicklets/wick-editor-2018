@@ -94,8 +94,6 @@ $(document).ready(function() {
 					oImg.top = (canvas.height/2) - (oImg.height/2);
 					canvas.add(oImg);
 				});
-
-				console.log(canvas._objects);
 			};
 		})(file);
 		reader.readAsDataURL(file);
