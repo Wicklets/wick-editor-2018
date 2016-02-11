@@ -1,6 +1,6 @@
 # Wick
 
-Version 0.0.1.1.a.dev ;) 
+Version 0.0.1.1.1
 
 Wick is a multipurpose animation and game creation environment allowing both advanced programmers and beginners to make, sketches, projects, doohickies, internet bullshits, and full-fledged artworks. 
 
