@@ -20,11 +20,11 @@ $(document).ready(function() {
     Temporary GUI events
 *****************************/
 
-    $("#prevFrameButton").on("click", function(e){ 
-        prevFrame(); 
+    $("#prevFrameButton").on("click", function(e){
+        prevFrame();
     });
-    $("#nextFrameButton").on("click", function(e){ 
-        nextFrame(); 
+    $("#nextFrameButton").on("click", function(e){
+        nextFrame();
     });
 
     $("#gotoFrameButton").on("click", function(e){
@@ -72,23 +72,25 @@ $(document).ready(function() {
 
     document.body.addEventListener("keydown", function (e) {
       keys[e.keyCode] = true;
-        action = true;
-        checkKeys();
+      action = true;
+      checkKeys();
     });
 
     document.body.addEventListener("keyup", function (e) {
       keys[e.keyCode] = false;
-        action = false;
+      action = false;
     });
 
     function checkKeys() {
-        if (keys[16]) { // Shift
-            if (keys[39]) { // Right arrow
-                nextFrame();
-            } else if (keys[37]) { // Left arrow
-                prevFrame();
-            }
-        }
+      if (keys[16]) { // Shift
+        if (keys[39]) { // Right arrow
+          nextFrame();
+        } else if (keys[37]) { // Left arrow
+          prevFrame();
+        } else if (keys[190]) { // Period or > key.
+					copyIntoNextFrame();
+				}
+      }
     }
 
 /*****************************
@@ -148,6 +150,18 @@ $(document).ready(function() {
         });
     }
 
+		// Store current canvas into any frame.
+		// http://stackoverflow.com/questions/122102/
+		// what-is-the-most-efficient-way-to-clone-an-object
+		function storeIntoFrame(frame) {
+			frames[frame] = [];
+
+			canvas.forEachObject(function(obj){
+					// Deepcopy and add to frame.
+					frames[frame].push(jQuery.extend(true, {}, obj));
+			});
+		}
+
     // Save serialized frames
     function loadFrame(frame) {
         if (frames[frame] === undefined) {
@@ -163,7 +177,7 @@ $(document).ready(function() {
         }
     }
 
-    // Goes to a specified frame
+    // Goes to a specified frame.
     function goToFrame(toFrame) {
         storeCurrentFrame();
 
@@ -177,6 +191,12 @@ $(document).ready(function() {
     function nextFrame() {
         goToFrame(currentFrame + 1);
     }
+
+		// Go to the next frame and copy the last frame into it.
+		function copyIntoNextFrame() {
+			storeIntoFrame(currentFrame + 1);
+			goToFrame(currentFrame + 1);
+		}
 
     // Go to the previous frame.
     function prevFrame() {
