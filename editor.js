@@ -145,13 +145,14 @@ $(document).ready(function() {
     // Store current canvas into frame f
     function storeCanvasIntoFrame(f) {
         frames[f] = [];
+			canvas.forEachObject(function(obj){
+					// Deepcopy and add to frame.
+					// TODO : Do not copy data. Only store necessary manipulations.
+					frames[f].unshift(jQuery.extend(true, {}, obj));
+			});
+		}
 
-        canvas.forEachObject(function(obj){
-            // Deepcopy and add to frame.
-            frames[f].push(jQuery.extend(true, {}, obj));
-        });
-    }
-
+    // Save serialized frames
     function loadFrame(frame) {
         canvas.clear();
         if (frames[frame] != undefined) {
