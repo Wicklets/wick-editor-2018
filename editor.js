@@ -71,26 +71,26 @@ $(document).ready(function() {
     var action = false;
 
     document.body.addEventListener("keydown", function (e) {
-      keys[e.keyCode] = true;
-      action = true;
-      checkKeys();
+        keys[e.keyCode] = true;
+        action = true;
+        checkKeys();
     });
 
     document.body.addEventListener("keyup", function (e) {
-      keys[e.keyCode] = false;
-      action = false;
+        keys[e.keyCode] = false;
+        action = false;
     });
 
     function checkKeys() {
-      if (keys[16]) { // Shift
-        if (keys[39]) { // Right arrow
-          nextFrame();
-        } else if (keys[37]) { // Left arrow
-          prevFrame();
-        } else if (keys[190]) { // Period or > key.
-					copyIntoNextFrame();
-				}
-      }
+        if (keys[16]) { // Shift
+            if (keys[39]) { // Right arrow
+                nextFrame();
+            } else if (keys[37]) { // Left arrow
+                prevFrame();
+            } else if (keys[190]) { // Period or > key.
+                cloneCurrentFrame();
+            }
+        }
     }
 
 /*****************************
@@ -142,35 +142,19 @@ $(document).ready(function() {
     Timeline
 *****************************/
 
-    // Load serialized frames
-    function storeCurrentFrame() {
-        frames[currentFrame] = [];
+    // Store current canvas into frame f
+    function storeCanvasIntoFrame(f) {
+        frames[f] = [];
+
         canvas.forEachObject(function(obj){
-            frames[currentFrame].push(obj);
+            // Deepcopy and add to frame.
+            frames[f].push(jQuery.extend(true, {}, obj));
         });
     }
 
-		// Store current canvas into any frame.
-		// http://stackoverflow.com/questions/122102/
-		// what-is-the-most-efficient-way-to-clone-an-object
-		function storeIntoFrame(frame) {
-			frames[frame] = [];
-
-			canvas.forEachObject(function(obj){
-					// Deepcopy and add to frame.
-					frames[frame].push(jQuery.extend(true, {}, obj));
-			});
-		}
-
-    // Save serialized frames
     function loadFrame(frame) {
-        if (frames[frame] === undefined) {
-            // We're in a frame that doesn't exist. Just draw a blank canvas.
-            canvas.clear();
-        } else {
-            // Load the JSON string and immediately use canvas.renderAll as a callback
-            //canvas.loadFromJSON(frames[frame], canvas.renderAll.bind(canvas));
-            canvas.clear();
+        canvas.clear();
+        if (frames[frame] != undefined) {
             for(var i = 0; i < frames[frame].length; i++) {
                 canvas.add(frames[frame][i]);
             }
@@ -179,7 +163,7 @@ $(document).ready(function() {
 
     // Goes to a specified frame.
     function goToFrame(toFrame) {
-        storeCurrentFrame();
+        storeCanvasIntoFrame(currentFrame);
 
         currentFrame = toFrame;
         loadFrame(currentFrame);
@@ -192,18 +176,18 @@ $(document).ready(function() {
         goToFrame(currentFrame + 1);
     }
 
-		// Go to the next frame and copy the last frame into it.
-		function copyIntoNextFrame() {
-			storeIntoFrame(currentFrame + 1);
-			goToFrame(currentFrame + 1);
-		}
-
     // Go to the previous frame.
     function prevFrame() {
         var toFrame = currentFrame - 1;
         if (toFrame > 0) {
             goToFrame(toFrame);
         }
+    }
+
+    // Go to the next frame and copy the last frame into it.
+    function cloneCurrentFrame() {
+        storeCanvasIntoFrame(currentFrame + 1);
+        goToFrame(currentFrame + 1);
     }
 
 /*****************************
@@ -237,7 +221,7 @@ $(document).ready(function() {
             context.textAlign = 'center';
             context.font = "30px Arial";
             context.fillText("Drop image to add to scene...",
-                          canvas.width/2,canvas.height/2);
+                            canvas.width/2,canvas.height/2);
         }
     }
 
