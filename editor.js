@@ -146,6 +146,7 @@ $(document).ready(function() {
     function storeCurrentFrame() {
         frames[currentFrame] = [];
         canvas.forEachObject(function(obj){
+				   	// TODO : Do not copy data. Only store necessary manipulations. 
             frames[currentFrame].unshift(obj);
         });
     }
@@ -158,6 +159,7 @@ $(document).ready(function() {
 
 			canvas.forEachObject(function(obj){
 					// Deepcopy and add to frame.
+					// TODO : Do not copy data. Only store necessary manipulations.
 					frames[frame].unshift(jQuery.extend(true, {}, obj));
 			});
 		}
