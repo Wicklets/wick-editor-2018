@@ -1,4 +1,4 @@
-<!-- This is an early test environment for the Wick editor. -z -->
+<!-- This is an early test environment for the Wick editor and player. -z -->
 
 <!DOCTYPE html>
 <html>
@@ -13,35 +13,21 @@
 
 		canvas { display:block; } /* To remove the scrollbars */
 
-		#exportButton {
+		#temporaryGUI {
 			position: absolute;
-			width: 50px;
-			height: 20px;
+			width: 130px;
 			top: 0px;
 			left: 0px;
 			text-align: center;
-		}
-
-		#gotoFrameButton {
-			position: absolute;
-			width: 50px;
-			height: 20px;
-			top: 70px;
-			left: 0;
-			text-align: center;
-		}
-
-		#frameSelector {
-			position: absolute;
-			top: 50px;
-			left: 0px;
-			text-align: center;
-			resize: none;
+			background-color: #DDDDDD;
+			box-shadow: 3px 3px 5px #666;
 		}
 	</style>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script src="fabric.js"></script>
+
+	<script src="util.js"></script>
 	<script src="wickObjects.js"></script>
 	<script src="editor.js"></script>
 </head>
@@ -50,9 +36,20 @@
 	<div id="canvasContainer">
 		<canvas id="canvas"></canvas>
 	</div>
-	<button type="button" id="exportButton">Export</button>
-	<textarea id="frameSelector" rows="1" cols="3">1</textarea>
-	<button type="button" id="gotoFrameButton">Go</button>
+
+	<div id="temporaryGUI">
+
+		<button type="button" id="prevFrameButton"><-</button>
+		<textarea id="frameSelector" rows="1" cols="3"></textarea>
+		<button type="button" id="nextFrameButton">-></button>
+
+		<br />
+
+		<button type="button" id="gotoFrameButton">Go</button>
+		<div id="info">Shift+Left/Right to advance frames</div>
+
+		<a href="data:application/octet-stream;charset=utf-16le;base64,//5mAG8AbwAgAGIAYQByAAoA"><button type="button">Export</button></a>
+	</div>
 </body>
 
 </html>
