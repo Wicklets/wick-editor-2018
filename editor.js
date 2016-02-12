@@ -3,6 +3,7 @@ $(document).ready(function() {
     // Global editor vars
     var showUploadAlert = false;
     var currentWickID = 0;
+    var showPageLeaveWarning = false;
 
     var frames = [[]];
     var currentFrame = 1;
@@ -20,6 +21,13 @@ $(document).ready(function() {
     Temporary GUI events
 *****************************/
 
+    $("#exportButton").on("click", function(e){
+        exportProject();
+    });
+    $("#importButton").on("click", function(e){
+        alert("Not yet implemented!");
+    });
+
     $("#prevFrameButton").on("click", function(e){
         prevFrame();
     });
@@ -30,25 +38,6 @@ $(document).ready(function() {
     $("#gotoFrameButton").on("click", function(e){
         var toFrame = parseInt($('textarea#frameSelector').val());
         goToFrame(toFrame);
-    });
-
-    $("#bringToFrontButton").on("click", function(e){
-        canvas.bringToFront(canvas.getActiveObject());
-    });
-    $("#sendToBackButton").on("click", function(e){
-        canvas.sendToBack(canvas.getActiveObject());
-    });
-
-    $("#addScriptButton").on("click", function(e){
-        canvas.getActiveObject().wickData.clickable = true;
-        canvas.getActiveObject().wickData.toFrame = prompt("Enter a frame:")
-    });
-    $("#exportButton").on("click", function(e){
-        storeCurrentFrame();
-        exportProject();
-    });
-    $("#testActionButton").on("click", function(e){
-        goToFrame(canvas.getActiveObject().wickData.toFrame);
     });
     $("#cloneFrameButton").on("click", function(e){
         cloneCurrentFrame();
@@ -66,21 +55,76 @@ $(document).ready(function() {
         canvas.py = pointer.y;
     });
 
-/*********************************
-    Custom double-click menu
+    document.getElementById("canvasContainer").addEventListener("mousedown", function(event) {
+        closeRightClickMenu();
+    }, false);
+
+/**********************************
+    Right-click menu
 **********************************/
 
+    function openRightClickMenu() {
+        // Make menu visible
+        $("#rightClickMenu").css('visibility', 'visible');
+        // Attach it to the mouse
+        $("#rightClickMenu").css('top', canvas.py+'px');
+        $("#rightClickMenu").css('left', canvas.px+'px');
+
+        // Don't show object manipulation options if nothing is selected
+        if(canvas.getActiveObject() != undefined) {
+            $("#objectManipButtons").css('display', 'inline');
+        } else {
+            $("#objectManipButtons").css('display', 'none');
+        }
+    }
+
+    function closeRightClickMenu() {
+        // Hide menu
+        $("#rightClickMenu").css('visibility', 'hidden');
+        $("#rightClickMenu").css('top', '0px');
+        $("#rightClickMenu").css('left', '0px');
+    }
+    
+    // Add right-click menu events
     if (document.addEventListener) {
         document.addEventListener('contextmenu', function(e) {
-            alert("Someday this will open the custom menu.");
+            openRightClickMenu();
             e.preventDefault();
         }, false);
     } else {
         document.attachEvent('oncontextmenu', function() {
-            alert("Someday this will open the custom menu.");
+            openRightClickMenu();
             window.event.returnValue = false;
         });
     }
+
+    // Menu buttons
+    $("#bringToFrontButton").on("click", function(e){
+        canvas.bringToFront(canvas.getActiveObject());
+        closeRightClickMenu();
+    });
+    $("#sendToBackButton").on("click", function(e){
+        canvas.sendToBack(canvas.getActiveObject());
+        closeRightClickMenu();
+    });
+    $("#addScriptButton").on("click", function(e){
+        canvas.getActiveObject().wickData.clickable = true;
+        canvas.getActiveObject().wickData.toFrame = prompt("Enter a frame:");
+        closeRightClickMenu();
+    });
+    $("#testActionButton").on("click", function(e){
+        goToFrame(canvas.getActiveObject().wickData.toFrame);
+        closeRightClickMenu();
+    });
+    $("#deleteButton").on("click", function(e){
+        canvas.getActiveObject().remove();
+        closeRightClickMenu();
+    });
+
+    $("#clearFrameButton").on("click", function(e){
+        canvas.clear();
+        closeRightClickMenu();
+    });
 
 /*****************************
     Key Events
@@ -158,6 +202,19 @@ $(document).ready(function() {
     });
 
 /*****************************
+    Leave page warning
+*****************************/
+
+    if(showPageLeaveWarning) {
+        window.addEventListener("beforeunload", function (e) {
+            var confirmationMessage = 'Warning: All unsaved changes will be lost!';
+
+            (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+            return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+        });
+    }
+
+/*****************************
     Timeline
 *****************************/
 
@@ -219,6 +276,11 @@ $(document).ready(function() {
     function resizeCanvas() {
         canvas.setWidth( window.innerWidth );
         canvas.setHeight( window.innerHeight );
+
+        // center timeline
+        var GUIWidth = parseInt($("#timelineGUI").css("width"))/2;
+        $("#timelineGUI").css('left', canvas.width/2-GUIWidth+'px');
+
         canvas.calcOffset();
     }
     resizeCanvas();
