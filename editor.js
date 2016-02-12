@@ -66,6 +66,22 @@ $(document).ready(function() {
         canvas.py = pointer.y;
     });
 
+/*********************************
+    Custom double-click menu
+**********************************/
+
+    if (document.addEventListener) {
+        document.addEventListener('contextmenu', function(e) {
+            alert("Someday this will open the custom menu.");
+            e.preventDefault();
+        }, false);
+    } else {
+        document.attachEvent('oncontextmenu', function() {
+            alert("Someday this will open the custom menu.");
+            window.event.returnValue = false;
+        });
+    }
+
 /*****************************
     Key Events
 *****************************/
