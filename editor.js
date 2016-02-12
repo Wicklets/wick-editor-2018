@@ -32,8 +32,8 @@ $(document).ready(function() {
         goToFrame(toFrame);
     });
 
-    $("#deleteObjectButton").on("click", function(e){
-        canvas.getActiveObject().remove();
+    $("#bringToFrontButton").on("click", function(e){
+        canvas.bringToFront(canvas.getActiveObject());
     });
     $("#sendToBackButton").on("click", function(e){
         canvas.sendToBack(canvas.getActiveObject());

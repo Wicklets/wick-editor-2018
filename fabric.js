@@ -8509,6 +8509,8 @@ fabric.PatternBrush = fabric.util.createClass(fabric.PencilBrush, /** @lends fab
       switch (corner) {
         case 'mtr':
           return 'rotate';
+        case 'del':
+          return 'delete';
         case 'ml':
         case 'mr':
           return e.shiftKey ? 'skewY' : 'scaleX';
@@ -9800,6 +9802,7 @@ fabric.PatternBrush = fabric.util.createClass(fabric.PencilBrush, /** @lends fab
      * @private
      * @param {Event} e Event object fired on mousedown
      */
+     // edit this function to add custom buttons (zrispo)
     __onMouseDown: function (e) {
 
       // accept only left clicks
@@ -9833,6 +9836,11 @@ fabric.PatternBrush = fabric.util.createClass(fabric.PencilBrush, /** @lends fab
       else if (shouldGroup) {
         this._handleGrouping(e, target);
         target = this.getActiveGroup();
+      }
+
+      // delete button (zrispo)
+      if (target && target.__corner === 'del') {
+        this.getActiveObject().remove();
       }
 
       if (target && target.selectable && (target.__corner || !shouldGroup)) {
@@ -12890,7 +12898,8 @@ fabric.util.object.extend(fabric.StaticCanvas.prototype, /** @lends fabric.Stati
           mt  = new fabric.Point((tr.x + tl.x)/2, (tr.y + tl.y)/2),
           mr  = new fabric.Point((br.x + tr.x)/2, (br.y + tr.y)/2),
           mb  = new fabric.Point((br.x + bl.x)/2, (br.y + bl.y)/2),
-          mtr = new fabric.Point(mt.x + sinTh * this.rotatingPointOffset, mt.y - cosTh * this.rotatingPointOffset);
+          mtr = new fabric.Point(mt.x + sinTh * this.rotatingPointOffset, mt.y - cosTh * this.rotatingPointOffset),
+          del  = new fabric.Point(tl.x + 20 + (currentWidth * cosTh), tl.y - 20 + (currentWidth * sinTh));
       // debugging
 
       /* setTimeout(function() {
@@ -12912,7 +12921,8 @@ fabric.util.object.extend(fabric.StaticCanvas.prototype, /** @lends fabric.Stati
         // middle
         ml: ml, mt: mt, mr: mr, mb: mb,
         // rotating point
-        mtr: mtr
+        mtr: mtr,
+        del: del
       };
 
       // set coordinates of the draggable boxes in the corners used to scale/rotate the image
@@ -13564,9 +13574,19 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
       }
 
       // delete button (zrispo)
+      this._drawControl('del', ctx, methodName,
+        left + width + 20,
+        top - 20);
+
+      // send to front button (zrispo)
       this._drawControl('ml', ctx, methodName,
         left + width + 20,
-        top);
+        top - 20);
+
+      // send to back button (zrispo)
+      this._drawControl('ml', ctx, methodName,
+        left + width + 20,
+        top - 20);
 
       ctx.restore();
 
@@ -13646,7 +13666,8 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
           mt: true,
           mr: true,
           mb: true,
-          mtr: true
+          mtr: true,
+          del: true
         };
       }
       return this._controlsVisibility;
@@ -24184,7 +24205,8 @@ fabric.util.object.extend(fabric.IText.prototype, /** @lends fabric.IText.protot
       mt: false,
       mr: true,
       mb: false,
-      mtr: true
+      mtr: true,
+      del: true
     };
   };
   /**
