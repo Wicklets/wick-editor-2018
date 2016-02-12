@@ -13563,6 +13563,11 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
           top - this.rotatingPointOffset);
       }
 
+      // delete button (zrispo)
+      this._drawControl('ml', ctx, methodName,
+        left + width + 20,
+        top);
+
       ctx.restore();
 
       return this;

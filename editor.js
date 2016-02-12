@@ -50,6 +50,9 @@ $(document).ready(function() {
     $("#testActionButton").on("click", function(e){
         goToFrame(canvas.getActiveObject().wickData.toFrame);
     });
+    $("#cloneFrameButton").on("click", function(e){
+        cloneCurrentFrame();
+    });
 
 /*****************************
     Mouse events
@@ -146,9 +149,9 @@ $(document).ready(function() {
     function storeCanvasIntoFrame(f) {
         frames[f] = [];
 			canvas.forEachObject(function(obj){
-					// Deepcopy and add to frame.
-					// TODO : Do not copy data. Only store necessary manipulations.
-					frames[f].unshift(jQuery.extend(true, {}, obj));
+				// Deepcopy and add to frame.
+				// TODO : Do not copy data. Only store necessary manipulations.
+				frames[f].unshift(jQuery.extend(true, {}, obj));
 			});
 		}
 
@@ -198,14 +201,8 @@ $(document).ready(function() {
     // update canvas size on window resize
     window.addEventListener('resize', resizeCanvas, false);
     function resizeCanvas() {
-        // for raw html5 canvas
-        //canvas.width = window.innerWidth;
-        //canvas.height = window.innerHeight;
-
-        // for fabric.js canvas
         canvas.setWidth( window.innerWidth );
         canvas.setHeight( window.innerHeight );
-
         canvas.calcOffset();
     }
     resizeCanvas();
@@ -218,7 +215,7 @@ $(document).ready(function() {
 
     function draw() {
         if(showUploadAlert) {
-            context.fillStyle = '#000000';
+            context.fillStyle = '#000';
             context.textAlign = 'center';
             context.font = "30px Arial";
             context.fillText("Drop image to add to scene...",
