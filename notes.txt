@@ -1,2 +1,0 @@
-line 9796: mouse click events
-
