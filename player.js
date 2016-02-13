@@ -26,11 +26,13 @@ $(document).ready(function() {
 
             // make canvas images out of src
             for(var f = 0; f < frames.length; f++) {
+                console.log("Loading frame "+f+"...");
                 var frame = frames[f];
                 for(var i = 0; i < frame.length; i++) {
                     var obj = frame[i];
                     obj.image = new Image();
                     obj.image.src = obj.src;
+                    console.log("Loaded object " + obj.wickData.name);
                 }
             }
         }
@@ -50,12 +52,49 @@ $(document).ready(function() {
     }
 
     canvas.addEventListener('mousemove', function(evt) {
-        mousePos = getMousePos(canvas, evt);
+        if(projectLoaded) {
+            mousePos = getMousePos(canvas, evt);
+
+            // Check if we're hovered over a clickable object...
+            var hoveredOverObj = false;
+            for(var i = 0; i < frames[currentFrame].length; i++) {
+                var obj = frames[currentFrame][i];
+                if(obj.wickData.clickable && mouseInsideObj(obj)) {
+                    hoveredOverObj = true;
+                    break;
+                }
+            }
+            //...and change the cursor if we are
+            if(hoveredOverObj) {
+                $('html,body').css('cursor','pointer');
+            } else {
+                $('html,body').css('cursor','default');
+            }
+        }
     }, false);
 
     document.getElementById("canvasContainer").addEventListener("mousedown", function(event) {
-        // TODO: Check for clickable wickObjects in current frame
+        // Check if we clicked a clickable object
+        for(var i = 0; i < frames[currentFrame].length; i++) {
+            var obj = frames[currentFrame][i];
+            if(obj.wickData.clickable && mouseInsideObj(obj)) {
+                currentFrame = obj.wickData.toFrame;
+                console.log("Went to frame " + currentFrame);
+                break;
+            }
+        }
     }, false);
+
+/*****************************
+    Player Utils
+*****************************/
+
+function mouseInsideObj(obj) {
+    return mousePos.x >= obj.left && 
+           mousePos.y >= obj.top &&
+           mousePos.x <= obj.left + obj.width && 
+           mousePos.y <= obj.top + obj.height;
+}
 
 /*****************************
     Draw loop
@@ -72,8 +111,10 @@ $(document).ready(function() {
     // start draw/update loop
     var FPS = 30;
     setInterval(function() {
-        update();
-        draw();
+        if(projectLoaded) {
+            update();
+            draw();
+        }
     }, 1000/FPS);
 
     function update() {
@@ -87,11 +128,9 @@ $(document).ready(function() {
         context.fill();
 
         // Draw current frame content
-        if(projectLoaded) {
-            for(var i = 0; i < frames[currentFrame].length; i++) {
-                var obj = frames[currentFrame][i];
-                context.drawImage(obj.image, obj.left, obj.top);
-            }
+        for(var i = 0; i < frames[currentFrame].length; i++) {
+            var obj = frames[currentFrame][i];
+            context.drawImage(obj.image, obj.left, obj.top);
         }
     }
 

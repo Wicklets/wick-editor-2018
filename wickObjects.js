@@ -12,6 +12,7 @@ function fabricObjectToWickObject(fabObj) {
     obj.flipY    = fabObj.flipY;
     obj.opacity  = fabObj.opacity;
     obj.src      = fabObj.src;
+
     obj.wickData = fabObj.wickData;
 
     return obj;

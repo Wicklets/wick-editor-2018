@@ -189,6 +189,7 @@ $(document).ready(function() {
 
                     oImg.wickData = {}
                     oImg.wickData.clickable = false;
+                    oImg.wickData.name = e.target.filename;
 
                     canvas.add(oImg);
                 });
