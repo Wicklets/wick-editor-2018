@@ -309,6 +309,23 @@ $(document).ready(function() {
     Import/Export
 *****************************/
 
+    // This function will not work unless you run the editor on a server
+    function getExternalFileAsString(path) {
+
+        var rawFile = new XMLHttpRequest();
+        rawFile.open("GET", path, false);
+
+        rawFile.onreadystatechange = function () {
+            if(rawFile.readyState === 4) {
+                if(rawFile.status === 200 || rawFile.status == 0) {
+                    return rawFile.responseText;
+                }
+            }
+        }
+        rawFile.send(null);
+    }
+
+    // Converts all fabric objects in all frames into wick objects and JSON stringifies the result
     function getProjectAsJSON() {
         storeCanvasIntoFrame(currentFrame);
 
@@ -329,17 +346,27 @@ $(document).ready(function() {
     }
 
     function exportProjectAsJSON() {
+        // Save JSON project
         var blob = new Blob([getProjectAsJSON()], {type: "text/plain;charset=utf-8"});
         saveAs(blob, "project.json");
     }
 
     function exportProjectAsHTML() {
         var fileOut = "";
+
+        // Add JSON project
         fileOut += "<script>var bundledJSONProject = '" + getProjectAsJSON() + "';</script>" + "\n";
-        fileOut += "<script>" + bundledPlayerCode + "</script>"+ "\n";
+
+        // Add the player scripts
+        var playerScript = rawFile.responseText;
+        playerScript = playerScript.replace("loadBundledJSONWickProject = false","loadBundledJSONWickProject = true");
+        fileOut += "<script>" + playerScript + "</script>"+ "\n";
+
+        // Add the canvas
         fileOut += '<div id="canvasContainer"><canvas id="canvas"></canvas></div>'+ "\n";
 
+        // Save whole thing as html file
         var blob = new Blob([fileOut], {type: "text/plain;charset=utf-8"});
-        saveAs(blob, "project.htm");
+        saveAs(blob, "project.html");
     }
 });

@@ -19,9 +19,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 *****************************/
 
     if(loadBundledJSONWickProject) {
-        // Hide project import GUI becuase this is a bundled project!
-        //document.getElementById("menuBarGUI").style.display = "none";
-
         // Load from a project JSON bundled with the player.
         // This variable is set by the editor.
         // Never set manually!!
