@@ -1,10 +1,14 @@
-$(document).ready(function() {
+document.addEventListener("DOMContentLoaded", function(event) { 
 
     // Global player vars
     var frames = [[]];
     var currentFrame = 1;
     var projectLoaded = false;
     var mousePos;
+
+    // This variable is set by makeBundles.py.
+    // Never set manually!!
+    var loadBundledJSONWickProject = false;
 
     // Setup canvas
     var canvas = document.getElementById("canvas");
@@ -13,31 +17,28 @@ $(document).ready(function() {
 /*****************************
     Temporary GUI events
 *****************************/
-    
-    var fileInput = document.getElementById('projectFile');
-    fileInput.addEventListener('change', function(e) {
 
-        var file = fileInput.files[0];
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            // load project JSON
-            frames = JSON.parse(reader.result);
-            projectLoaded = true;
+    if(loadBundledJSONWickProject) {
+        // Hide project import GUI becuase this is a bundled project!
+        //document.getElementById("menuBarGUI").style.display = "none";
 
-            // make canvas images out of src
-            for(var f = 0; f < frames.length; f++) {
-                console.log("Loading frame "+f+"...");
-                var frame = frames[f];
-                for(var i = 0; i < frame.length; i++) {
-                    var obj = frame[i];
-                    obj.image = new Image();
-                    obj.image.src = obj.src;
-                    console.log("Loaded object " + obj.wickData.name);
-                }
-            }
-        }
-        reader.readAsText(file);
-    });
+        // Load from a project JSON bundled with the player.
+        // This variable is set by the editor.
+        // Never set manually!!
+        loadJSONProject(bundledJSONProject);
+    } else {
+        // Setup the load project GUI to load an external file otherwise.
+        var fileInput = document.getElementById('projectFile');
+        fileInput.addEventListener('change', function(e) {
+
+            var file = fileInput.files[0];
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                loadJSONProject(reader.result);
+            };
+            reader.readAsText(file);
+        });
+    }
 
 /*****************************
     Mouse events
@@ -66,9 +67,9 @@ $(document).ready(function() {
             }
             //...and change the cursor if we are
             if(hoveredOverObj) {
-                $('html,body').css('cursor','pointer');
+                document.getElementById("canvasContainer").style.cursor = "pointer";
             } else {
-                $('html,body').css('cursor','default');
+                document.getElementById("canvasContainer").style.cursor = "default";
             }
         }
     }, false);
@@ -131,6 +132,28 @@ function mouseInsideObj(obj) {
         for(var i = 0; i < frames[currentFrame].length; i++) {
             var obj = frames[currentFrame][i];
             context.drawImage(obj.image, obj.left, obj.top);
+        }
+    }
+
+/*****************************
+    Opening projects
+*****************************/
+
+    function loadJSONProject(proj) {
+        // load project JSON
+        frames = JSON.parse(proj);
+        projectLoaded = true;
+
+        // make canvas images out of src
+        for(var f = 0; f < frames.length; f++) {
+            console.log("Loading frame "+f+"...");
+            var frame = frames[f];
+            for(var i = 0; i < frame.length; i++) {
+                var obj = frame[i];
+                obj.image = new Image();
+                obj.image.src = obj.src;
+                console.log("Loaded object " + obj.wickData.name);
+            }
         }
     }
 

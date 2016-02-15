@@ -21,8 +21,11 @@ $(document).ready(function() {
     Temporary GUI events
 *****************************/
 
-    $("#exportButton").on("click", function(e){
-        exportProject();
+    $("#exportJSONButton").on("click", function(e){
+        exportProjectAsJSON();
+    });
+    $("#exportHTMLButton").on("click", function(e){
+        exportProjectAsHTML();
     });
     $("#importButton").on("click", function(e){
         alert("Not yet implemented!");
@@ -306,7 +309,9 @@ $(document).ready(function() {
     Import/Export
 *****************************/
 
-    function exportProject() {
+    function getProjectAsJSON() {
+        storeCanvasIntoFrame(currentFrame);
+
         wickObjectFrames = [];
         for(var fi = 0; fi < frames.length; fi++) {
             var frame = frames[fi];
@@ -317,10 +322,24 @@ $(document).ready(function() {
                 wickObj = fabricObjectToWickObject(obj);
                 wickObj.src = srcObj.src;
                 wickObjectFrames[fi].push(wickObj);
+                console.log(wickObj);
             }
         }
-        var outString = "data:text/csv,";
-        outString += JSON.stringify(wickObjectFrames);
-        window.open(outString);
+        return JSON.stringify(wickObjectFrames);
+    }
+
+    function exportProjectAsJSON() {
+        var blob = new Blob([getProjectAsJSON()], {type: "text/plain;charset=utf-8"});
+        saveAs(blob, "project.json");
+    }
+
+    function exportProjectAsHTML() {
+        var fileOut = "";
+        fileOut += "<script>var bundledJSONProject = '" + getProjectAsJSON() + "';</script>" + "\n";
+        fileOut += "<script>" + bundledPlayerCode + "</script>"+ "\n";
+        fileOut += '<div id="canvasContainer"><canvas id="canvas"></canvas></div>'+ "\n";
+
+        var blob = new Blob([fileOut], {type: "text/plain;charset=utf-8"});
+        saveAs(blob, "project.htm");
     }
 });
