@@ -45,7 +45,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 var obj = frames[currentFrame][i];
                 if(obj.wickData.clickable && mouseInsideObj(obj)) {
                     hoveredOverObj = true;
+                    obj.hoveredOver = true;
                     break;
+                } else {
+                    obj.hoveredOver = false;
                 }
             }
             //...and change the cursor if we are
@@ -74,10 +77,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 *****************************/
 
 function mouseInsideObj(obj) {
-    return mousePos.x >= obj.left && 
-           mousePos.y >= obj.top &&
-           mousePos.x <= obj.left + obj.width && 
-           mousePos.y <= obj.top + obj.height;
+
+    var scaledObjLeft = obj.left;
+    var scaledObjTop = obj.top;
+    var scaledObjWidth = obj.width*obj.scaleX;
+    var scaledObjHeight = obj.height*obj.scaleY;
+
+    return mousePos.x >= scaledObjLeft && 
+           mousePos.y >= scaledObjTop &&
+           mousePos.x <= scaledObjLeft + scaledObjWidth && 
+           mousePos.y <= scaledObjTop + scaledObjHeight;
 }
 
 /*****************************
@@ -113,8 +122,16 @@ function mouseInsideObj(obj) {
 
         // Draw current frame content
         for(var i = 0; i < frames[currentFrame].length; i++) {
+            context.save();
+
             var obj = frames[currentFrame][i];
-            context.drawImage(obj.image, obj.left, obj.top);
+            context.translate(obj.left, obj.top);
+            //if(!obj.hoveredOver) {
+                context.scale(obj.scaleX, obj.scaleY);
+            //}
+            context.drawImage(obj.image, 0, 0);
+
+            context.restore();
         }
     }
 
