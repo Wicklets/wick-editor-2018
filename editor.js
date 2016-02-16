@@ -309,22 +309,6 @@ $(document).ready(function() {
     Import/Export
 *****************************/
 
-    // This function will not work unless you run the editor on a server
-    function getExternalFileAsString(path) {
-
-        var rawFile = new XMLHttpRequest();
-        rawFile.open("GET", path, false);
-
-        rawFile.onreadystatechange = function () {
-            if(rawFile.readyState === 4) {
-                if(rawFile.status === 200 || rawFile.status == 0) {
-                    return rawFile.responseText;
-                }
-            }
-        }
-        rawFile.send(null);
-    }
-
     // Converts all fabric objects in all frames into wick objects and JSON stringifies the result
     function getProjectAsJSON() {
         storeCanvasIntoFrame(currentFrame);
@@ -357,8 +341,18 @@ $(document).ready(function() {
         // Add JSON project
         fileOut += "<script>var bundledJSONProject = '" + getProjectAsJSON() + "';</script>" + "\n";
 
-        // Add the player scripts
-        var playerScript = rawFile.responseText;
+        // Add the player scripts (need to download player.js)
+        var playerScript = "";
+        var rawFile = new XMLHttpRequest();
+        rawFile.open("GET", "player.js", false);
+        rawFile.onreadystatechange = function () {
+            if(rawFile.readyState === 4) {
+                if(rawFile.status === 200 || rawFile.status == 0) {
+                    playerScript = rawFile.responseText;
+                }
+            }
+        }
+        rawFile.send(null);
         playerScript = playerScript.replace("loadBundledJSONWickProject = false","loadBundledJSONWickProject = true");
         fileOut += "<script>" + playerScript + "</script>"+ "\n";
 
