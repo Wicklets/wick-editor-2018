@@ -356,8 +356,19 @@ $(document).ready(function() {
         playerScript = playerScript.replace("loadBundledJSONWickProject = false","loadBundledJSONWickProject = true");
         fileOut += "<script>" + playerScript + "</script>"+ "\n";
 
-        // Add the canvas
-        fileOut += '<div id="canvasContainer"><canvas id="canvas"></canvas></div>'+ "\n";
+        // Add the player page
+        var playerHtm = "";
+        var rawFile = new XMLHttpRequest();
+        rawFile.open("GET", "player.htm", false);
+        rawFile.onreadystatechange = function () {
+            if(rawFile.readyState === 4) {
+                if(rawFile.status === 200 || rawFile.status == 0) {
+                    playerHtm = rawFile.responseText;
+                }
+            }
+        }
+        rawFile.send(null);
+        fileOut += playerHtm + "\n";
 
         // Save whole thing as html file
         var blob = new Blob([fileOut], {type: "text/plain;charset=utf-8"});

@@ -18,24 +18,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
     Temporary GUI events
 *****************************/
 
-    if(loadBundledJSONWickProject) {
-        // Load from a project JSON bundled with the player.
-        // This variable is set by the editor.
-        // Never set manually!!
-        loadJSONProject(bundledJSONProject);
-    } else {
-        // Setup the load project GUI to load an external file otherwise.
-        var fileInput = document.getElementById('projectFile');
-        fileInput.addEventListener('change', function(e) {
-
-            var file = fileInput.files[0];
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                loadJSONProject(reader.result);
-            };
-            reader.readAsText(file);
-        });
-    }
+    // Load from a project JSON bundled with the player.
+    // This variable is set by the editor.
+    // Never set manually!!
+    loadJSONProject(bundledJSONProject);
 
 /*****************************
     Mouse events

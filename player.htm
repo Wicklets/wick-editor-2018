@@ -2,21 +2,14 @@
 <html>
 
 <head>
-	<title>Wick Player</title>
+	<title>Wick Player 2</title>
 
-	<link rel="stylesheet" type="text/css" href="gui.css">
+	<style>
+		* { margin:0; padding:0; } /* to remove the top and left whitespace */
 
-	<style type="text/css">
-		#menuBarGUI {
-			top: 0px;
-			left: 0px;
-			text-align: center;
-			width: 150px;
-		}
+		html, body { width:100%; height:100%; } /* just to be sure these are full screen*/
 
-		#projectFile {
-			width: 150px;
-		}
+		canvas { display:block; } /* To remove the scrollbars */
 	</style>
 
 	<script src="player.js"></script>
@@ -25,12 +18,6 @@
 <body>
 	<div id="canvasContainer">
 		<canvas id="canvas"></canvas>
-	</div>
-
-	<div id="menuBarGUI" class="GUIBox">
-		Wick Player Dev<br />
-		<hr />
-		<input id="projectFile" type='file' />
 	</div>
 </body>
 
