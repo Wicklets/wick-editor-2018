@@ -1,3 +1,27 @@
+function fabricObjectToWickObject(fabObj) {
+    obj = wickObject();
+
+    obj.left     = fabObj.left;
+    obj.top      = fabObj.top;
+    obj.width    = fabObj.width;
+    obj.height   = fabObj.height;
+    obj.scaleX   = fabObj.scaleX;
+    obj.scaleY   = fabObj.scaleY;
+    obj.angle    = fabObj.angle;
+    obj.flipX    = fabObj.flipX;
+    obj.flipY    = fabObj.flipY;
+    obj.opacity  = fabObj.opacity;
+    obj.src      = fabObj.src;
+
+    obj.wickData = fabObj.wickData;
+
+    return obj;
+}
+
+function wickObject() {
+    return {};
+}
+
 $(document).ready(function() {
 
     // Global editor vars
@@ -225,12 +249,12 @@ $(document).ready(function() {
     // Store current canvas into frame f
     function storeCanvasIntoFrame(f) {
         frames[f] = [];
-			canvas.forEachObject(function(obj){
-				// Deepcopy and add to frame.
-				// TODO : Do not copy data. Only store necessary manipulations.
-				frames[f].unshift(jQuery.extend(true, {}, obj));
-			});
-		}
+            canvas.forEachObject(function(obj){
+                // Deepcopy and add to frame.
+                // TODO : Do not copy data. Only store necessary manipulations.
+                frames[f].unshift(jQuery.extend(true, {}, obj));
+            });
+        }
 
     // Save serialized frames
     function loadFrame(f) {
@@ -344,7 +368,7 @@ $(document).ready(function() {
         // Add the player scripts (need to download player.js)
         var playerScript = "";
         var rawFile = new XMLHttpRequest();
-        rawFile.open("GET", "player.js", false);
+        rawFile.open("GET", "empty-wick-player.htm", false);
         rawFile.onreadystatechange = function () {
             if(rawFile.readyState === 4) {
                 if(rawFile.status === 200 || rawFile.status == 0) {
@@ -354,21 +378,7 @@ $(document).ready(function() {
         }
         rawFile.send(null);
         playerScript = playerScript.replace("loadBundledJSONWickProject = false","loadBundledJSONWickProject = true");
-        fileOut += "<script>" + playerScript + "</script>"+ "\n";
-
-        // Add the player page
-        var playerHtm = "";
-        var rawFile = new XMLHttpRequest();
-        rawFile.open("GET", "player.htm", false);
-        rawFile.onreadystatechange = function () {
-            if(rawFile.readyState === 4) {
-                if(rawFile.status === 200 || rawFile.status == 0) {
-                    playerHtm = rawFile.responseText;
-                }
-            }
-        }
-        rawFile.send(null);
-        fileOut += playerHtm + "\n";
+        fileOut += playerScript + "\n";
 
         // Save whole thing as html file
         var blob = new Blob([fileOut], {type: "text/plain;charset=utf-8"});
