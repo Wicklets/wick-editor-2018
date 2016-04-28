@@ -179,9 +179,7 @@ function pointInsideObj(obj, point) {
 
     function draw() {
         // Clear canvas
-        context.fillStyle = '#FFFFFF';
-        context.rect(0, 0, canvas.width, canvas.height);
-        context.fill();
+        context.clearRect(0, 0, canvas.width, canvas.height);
 
         // Draw current frame content
         for(var i = 0; i < frames[currentFrame].length; i++) {
