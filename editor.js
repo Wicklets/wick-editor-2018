@@ -1,26 +1,4 @@
-function fabricObjectToWickObject(fabObj) {
-    obj = wickObject();
-
-    obj.left     = fabObj.left;
-    obj.top      = fabObj.top;
-    obj.width    = fabObj.width;
-    obj.height   = fabObj.height;
-    obj.scaleX   = fabObj.scaleX;
-    obj.scaleY   = fabObj.scaleY;
-    obj.angle    = fabObj.angle;
-    obj.flipX    = fabObj.flipX;
-    obj.flipY    = fabObj.flipY;
-    obj.opacity  = fabObj.opacity;
-    obj.src      = fabObj.src;
-
-    obj.wickData = fabObj.wickData;
-
-    return obj;
-}
-
-function wickObject() {
-    return {};
-}
+// slap a GNU on this baby
 
 $(document).ready(function() {
 
@@ -51,9 +29,10 @@ $(document).ready(function() {
     $("#exportHTMLButton").on("click", function(e){
         exportProjectAsHTML();
     });
-    $("#importButton").on("click", function(e){
-        alert("Not yet implemented!");
-    });
+
+    document.getElementById("importButton").onchange = function(e){
+        importJSONProject(document.getElementById("importButton"));
+    };
 
     $("#prevFrameButton").on("click", function(e){
         prevFrame();
@@ -249,12 +228,11 @@ $(document).ready(function() {
     // Store current canvas into frame f
     function storeCanvasIntoFrame(f) {
         frames[f] = [];
-            canvas.forEachObject(function(obj){
-                // Deepcopy and add to frame.
-                // TODO : Do not copy data. Only store necessary manipulations.
-                frames[f].unshift(jQuery.extend(true, {}, obj));
-            });
-        }
+        canvas.forEachObject(function(obj){
+            // Deepcopy and add to frame
+            frames[f].unshift(jQuery.extend(true, {}, obj));
+        });
+    }
 
     // Save serialized frames
     function loadFrame(f) {
@@ -296,42 +274,28 @@ $(document).ready(function() {
     }
 
 /*****************************
-    Draw loop
+    Export projects
 *****************************/
 
-    // update canvas size on window resize
-    window.addEventListener('resize', resizeCanvas, false);
-    function resizeCanvas() {
-        canvas.setWidth( window.innerWidth );
-        canvas.setHeight( window.innerHeight );
+    function fabricObjectToWickObject(fabObj) {
+        wickObj = {};
 
-        // center timeline
-        var GUIWidth = parseInt($("#timelineGUI").css("width"))/2;
-        $("#timelineGUI").css('left', canvas.width/2-GUIWidth+'px');
+        wickObj.left     = fabObj.left;
+        wickObj.top      = fabObj.top;
+        wickObj.width    = fabObj.width;
+        wickObj.height   = fabObj.height;
+        wickObj.scaleX   = fabObj.scaleX;
+        wickObj.scaleY   = fabObj.scaleY;
+        wickObj.angle    = fabObj.angle;
+        wickObj.flipX    = fabObj.flipX;
+        wickObj.flipY    = fabObj.flipY;
+        wickObj.opacity  = fabObj.opacity;
+        wickObj.src      = fabObj.src;
 
-        canvas.calcOffset();
+        wickObj.wickData = fabObj.wickData;
+
+        return wickObj;
     }
-    resizeCanvas();
-
-    // start draw/update loop
-    var FPS = 30;
-    setInterval(function() {
-        draw();
-    }, 1000/FPS);
-
-    function draw() {
-        if(showUploadAlert) {
-            context.fillStyle = '#000';
-            context.textAlign = 'center';
-            context.font = "30px Arial";
-            context.fillText("Drop image to add to scene...",
-                            canvas.width/2,canvas.height/2);
-        }
-    }
-
-/*****************************
-    Import/Export
-*****************************/
 
     // Converts all fabric objects in all frames into wick objects and JSON stringifies the result
     function getProjectAsJSON() {
@@ -383,5 +347,104 @@ $(document).ready(function() {
         // Save whole thing as html file
         var blob = new Blob([fileOut], {type: "text/plain;charset=utf-8"});
         saveAs(blob, "project.html");
+    }
+
+/*****************************
+    Import projects
+*****************************/
+    
+    function wickObjectToFabricObject(wickObj, callback) {
+        fabric.Image.fromURL(wickObj.src, function(oImg) {
+            
+            oImg.left     = wickObj.left;
+            oImg.top      = wickObj.top;
+            oImg.width    = wickObj.width;
+            oImg.height   = wickObj.height;
+            oImg.scaleX   = wickObj.scaleX;
+            oImg.scaleY   = wickObj.scaleY;
+            oImg.angle    = wickObj.angle;
+            oImg.flipX    = wickObj.flipX;
+            oImg.flipY    = wickObj.flipY;
+            oImg.opacity  = wickObj.opacity;
+
+            oImg.wickData = wickObj.wickData;
+
+            callback(oImg);
+        });
+    }
+
+    function importJSONProject(filePath) {
+        var frames = [[]];
+
+        if(filePath.files && filePath.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                jsonString = e.target.result;
+                loadProjectFromJSON(jsonString);
+
+            };
+            reader.readAsText(filePath.files[0]);
+        }
+    }
+
+    function convertWickObjectToFabricObject(fi, i) {
+
+        var wickObj = frames[fi][i];
+        wickObjectToFabricObject(wickObj, function(fabricObj) {
+            frames[fi][i] = fabricObj;
+        });
+
+    }
+
+    function loadProjectFromJSON(jsonString) {
+
+        // Load wick objects into frames array
+        frames = JSON.parse(jsonString);
+        console.log(frames);
+
+        // Convert wick objects to fabric.js objects
+        for(var fi = 0; fi < frames.length; fi++) {
+            for(var i = 0; i < frames[fi].length; i++) {
+                convertWickObjectToFabricObject(fi,i);
+            }
+        }
+
+        console.log(frames);
+        currentFrame = 0;
+        loadFrame(currentFrame);
+    }
+
+/*****************************
+    Draw loop
+*****************************/
+
+    // update canvas size on window resize
+    window.addEventListener('resize', resizeCanvas, false);
+    function resizeCanvas() {
+        canvas.setWidth( window.innerWidth );
+        canvas.setHeight( window.innerHeight );
+
+        // center timeline
+        var GUIWidth = parseInt($("#timelineGUI").css("width"))/2;
+        $("#timelineGUI").css('left', canvas.width/2-GUIWidth+'px');
+
+        canvas.calcOffset();
+    }
+    resizeCanvas();
+
+    // start draw/update loop
+    var FPS = 30;
+    setInterval(function() {
+        draw();
+    }, 1000/FPS);
+
+    function draw() {
+        if(showUploadAlert) {
+            context.fillStyle = '#000';
+            context.textAlign = 'center';
+            context.font = "30px Arial";
+            context.fillText("Drop image to add to scene...",
+                            canvas.width/2,canvas.height/2);
+        }
     }
 });
