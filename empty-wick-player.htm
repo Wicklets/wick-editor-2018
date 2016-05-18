@@ -5,17 +5,17 @@
 <html>
 
 <head>
-	<title>Wick Player</title>
+<title>Wick Player</title>
 
-	<style>
-		* { margin:0; padding:0; } /* to remove the top and left whitespace */
+<style>
+	* { margin:0; padding:0; } /* to remove the top and left whitespace */
 
-		html, body { width:100%; height:100%; } /* just to be sure these are full screen*/
+	html, body { width:100%; height:100%; } /* just to be sure these are full screen*/
 
-		canvas { display:block; } /* To remove the scrollbars */
-	</style>
+	canvas { display:block; } /* To remove the scrollbars */
+</style>
 
-	<script>
+<script>
 document.addEventListener("DOMContentLoaded", function(event) { 
 
     // Global player vars
@@ -24,8 +24,26 @@ document.addEventListener("DOMContentLoaded", function(event) {
     var projectLoaded = false;
     var mousePos;
 
-    // Debugging slowness issues
-    var updateCount = 0;
+    // Framerate keeper 
+    // http://www.html5gamedevs.com/topic/1828-how-to-calculate-fps-in-plain-javascript/
+    var fps = { 
+        startTime : 0,  
+        frameNumber : 0,    
+        getFPS : function() {
+            this.frameNumber++;
+
+            var d = new Date().getTime();
+            var currentTime = ( d - this.startTime ) / 1000;
+            var result = Math.floor( ( this.frameNumber / currentTime ) );
+
+            if( currentTime > 1 ) {
+                this.startTime = new Date().getTime();
+                this.frameNumber = 0;
+            }
+
+            return result;
+        }   
+    };
 
     // Never set manually!!
     var loadBundledJSONWickProject = false;
@@ -48,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     desktopMode = !mobileMode;
 
 /*****************************
-    Mouse events
+    Mouse events (desktop)
 *****************************/
 
     if(desktopMode) {
@@ -102,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
 
 /*****************************
-    Touch events
+    Touch events (mobile)
 *****************************/
 
     if(mobileMode) {
@@ -168,7 +186,6 @@ function pointInsideObj(obj, point) {
         if(projectLoaded) {
             update();
             draw();
-            updateCount++;
         }
     }
     animate();
@@ -195,8 +212,7 @@ function pointInsideObj(obj, point) {
 
         context.fillStyle = "Black";
         context.font      = "normal 16pt Arial";
-        context.fillText(updateCount, 10, 26);
-        context.fillText(frames[currentFrame].length, 10, 26+16);
+        context.fillText(fps.getFPS(), 10, 26);
 
     }
 
