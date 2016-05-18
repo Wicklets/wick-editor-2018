@@ -4,7 +4,11 @@ Wick is a multipurpose creation environment that allows anyone to build a wide r
 
 A research project by Zach Rispoli and Luca Damasco. 
 
-### How to use the editor
+Try the editor [here](http://zrispo.co/wick/wick-editor.htm)!
+
+Try a simple game make with the editor [here](http://zrispo.co/wick/test/dont-click-the-bee.html)!
+
+### How to run the editor locally
 * Clone or download and unzip this repo
 * Open terminal in the newly made `wick` folder and run a python webserver using: `python -m SimpleHTTPServer`
 * Open a browser window, and go to `http://localhost:8000/`
