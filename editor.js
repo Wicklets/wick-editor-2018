@@ -332,7 +332,7 @@ $(document).ready(function() {
         // Add the player scripts (need to download player.js)
         var playerScript = "";
         var rawFile = new XMLHttpRequest();
-        rawFile.open("GET", "empty-wick-player.htm", false);
+        rawFile.open("GET", "empty-player.htm", false);
         rawFile.onreadystatechange = function () {
             if(rawFile.readyState === 4) {
                 if(rawFile.status === 200 || rawFile.status == 0) {
@@ -409,7 +409,6 @@ $(document).ready(function() {
             }
         }
 
-        console.log(frames);
         currentFrame = 0;
         loadFrame(currentFrame);
     }
