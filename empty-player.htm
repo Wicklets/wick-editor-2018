@@ -155,18 +155,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
     Player Utils
 *****************************/
 
-function pointInsideObj(obj, point) {
+    function pointInsideObj(obj, point) {
 
-    var scaledObjLeft = obj.left;
-    var scaledObjTop = obj.top;
-    var scaledObjWidth = obj.width*obj.scaleX;
-    var scaledObjHeight = obj.height*obj.scaleY;
+        var scaledObjLeft = obj.left;
+        var scaledObjTop = obj.top;
+        var scaledObjWidth = obj.width*obj.scaleX;
+        var scaledObjHeight = obj.height*obj.scaleY;
 
-    return point.x >= scaledObjLeft && 
-           point.y >= scaledObjTop &&
-           point.x <= scaledObjLeft + scaledObjWidth && 
-           point.y <= scaledObjTop + scaledObjHeight;
-}
+        return point.x >= scaledObjLeft && 
+               point.y >= scaledObjTop &&
+               point.x <= scaledObjLeft + scaledObjWidth && 
+               point.y <= scaledObjTop + scaledObjHeight;
+    }
 
 /*****************************
     Draw loop
