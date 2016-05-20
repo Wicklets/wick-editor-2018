@@ -134,7 +134,6 @@ var WickPlayer = (function () {
 		var resizeCanvas = function () {
 			canvas.width = window.innerWidth;
 			canvas.height = window.innerHeight;
-			console.log("wow")
 		}
 		window.addEventListener('resize', resizeCanvas, false);
 		resizeCanvas();
@@ -216,8 +215,8 @@ var WickPlayer = (function () {
 		}
 
 		context.fillStyle = "Black";
-		context.font      = "normal 16pt Arial";
-		context.fillText(fps.getFPS(), 10, 26);
+		context.font      = "normal 14pt Arial";
+		context.fillText(fps.getFPS() + " FPS", canvas.width-80, 29);
 
 	}
 
