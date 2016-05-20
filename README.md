@@ -6,7 +6,7 @@ A research project by Zach Rispoli and Luca Damasco.
 
 Try the editor [here](http://zrispo.co/wick/editor.htm)!
 
-Try a simple game make with the editor [here](http://zrispo.co/wick/examples/game.html)!
+Try a simple game made with the editor [here](http://zrispo.co/wick/examples/game.html)!
 
 ### How to run the editor locally
 * Clone or download and unzip this repo
