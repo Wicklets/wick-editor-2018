@@ -16,6 +16,12 @@
 			margin-top: 2px;
 		}
 
+		#playerCanvasContainer {
+			background-color: red;
+			width: 800px;
+			height: 800px;
+		}
+
 		.GUIBox {
 			position: absolute;
 			font-size: 12px;
@@ -61,11 +67,16 @@
 		<canvas id="canvas"></canvas>
 	</div>
 
+	<div id="playerCanvasContainer">
+		<canvas id="playerCanvas"></canvas>
+	</div>
+
 	<div id="menuBarGUI" class="GUIBox">
 		Wick Editor Dev<br />
 		<hr />
-		<button type="button" id="exportJSONButton">Export Project as JSON</button><br />
-		<button type="button" id="exportHTMLButton">Export Project as HTML</button><br />
+		<button type="button" id="exportJSONButton">Save Project as JSON File</button><br />
+		<button type="button" id="exportHTMLButton">Export Project as Webpage</button><br />
+		<button type="button" id="runButton">Run Project</button><br />
 		<input type="file" id="importButton" />
 	</div>
 

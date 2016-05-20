@@ -29,6 +29,9 @@ $(document).ready(function() {
     $("#exportHTMLButton").on("click", function(e){
         exportProjectAsHTML();
     });
+    $("#runButton").on("click", function(e){
+        runProject();
+    });
 
     document.getElementById("importButton").onchange = function(e){
         importJSONProject(document.getElementById("importButton"));
@@ -330,19 +333,32 @@ $(document).ready(function() {
         fileOut += "<script>var bundledJSONProject = '" + getProjectAsJSON() + "';</script>" + "\n";
 
         // Add the player scripts (need to download player.js)
-        var playerScript = "";
-        var rawFile = new XMLHttpRequest();
-        rawFile.open("GET", "empty-player.htm", false);
-        rawFile.onreadystatechange = function () {
-            if(rawFile.readyState === 4) {
-                if(rawFile.status === 200 || rawFile.status == 0) {
-                    playerScript = rawFile.responseText;
+        var playerHTML = "";
+        var rawFileForHTML = new XMLHttpRequest();
+        rawFileForHTML.open("GET", "empty-player.htm", false);
+        rawFileForHTML.onreadystatechange = function () {
+            if(rawFileForHTML.readyState === 4) {
+                if(rawFileForHTML.status === 200 || rawFileForHTML.status == 0) {
+                    playerHTML = rawFileForHTML.responseText;
                 }
             }
         }
-        rawFile.send(null);
-        playerScript = playerScript.replace("loadBundledJSONWickProject = false","loadBundledJSONWickProject = true");
-        fileOut += playerScript + "\n";
+        rawFileForHTML.send(null);
+        playerHTML = playerHTML.replace("loadBundledJSONWickProject = false","loadBundledJSONWickProject = true");
+        fileOut += playerHTML + "\n";
+
+        var playerScript = "";
+        var rawFileForScript = new XMLHttpRequest();
+        rawFileForScript.open("GET", "player.js", false);
+        rawFileForScript.onreadystatechange = function () {
+            if(rawFileForScript.readyState === 4) {
+                if(rawFileForScript.status === 200 || rawFileForScript.status == 0) {
+                    playerScript = rawFileForScript.responseText;
+                }
+            }
+        }
+        rawFileForScript.send(null);
+        fileOut += "<script>" + playerScript + "</script>\n";
 
         // Save whole thing as html file
         var blob = new Blob([fileOut], {type: "text/plain;charset=utf-8"});
@@ -411,6 +427,14 @@ $(document).ready(function() {
 
         currentFrame = 0;
         loadFrame(currentFrame);
+    }
+
+/*****************************
+    Run projects
+*****************************/
+
+    function runProject() {
+        
     }
 
 /*****************************
