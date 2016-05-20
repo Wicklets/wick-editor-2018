@@ -16,10 +16,14 @@
 			margin-top: 2px;
 		}
 
-		#playerCanvasContainer {
-			background-color: red;
-			width: 800px;
-			height: 800px;
+		#editor {
+			display: block;
+			background-color: white;
+		}
+
+		#builtinPlayer {
+			display: none;
+			background-color: gray;
 		}
 
 		.GUIBox {
@@ -35,6 +39,12 @@
 		}
 
 		#menuBarGUI {
+			top: 0px;
+			left: 0px;
+			text-align: center;
+		}
+
+		#builtinPlayerGUI {
 			top: 0px;
 			left: 0px;
 			text-align: center;
@@ -60,47 +70,65 @@
 	<script src="lib/FileSaver.min.js"></script>
 
 	<script src="editor.js"></script>
+	<script src="player.js"></script>
+
+	<!-- Set everything up inside this function -->
+	<script>
+		$(document).ready(function() { 
+			WickEditor.setup();
+		});
+	</script>
 </head>
 
 <body>
-	<div id="canvasContainer">
-		<canvas id="canvas"></canvas>
-	</div>
-
-	<div id="playerCanvasContainer">
-		<canvas id="playerCanvas"></canvas>
-	</div>
-
-	<div id="menuBarGUI" class="GUIBox">
-		Wick Editor Dev<br />
-		<hr />
-		<button type="button" id="exportJSONButton">Save Project as JSON File</button><br />
-		<button type="button" id="exportHTMLButton">Export Project as Webpage</button><br />
-		<button type="button" id="runButton">Run Project</button><br />
-		<input type="file" id="importButton" />
-	</div>
-
-	<div id="timelineGUI" class="GUIBox">
-		<button type="button" id="prevFrameButton"><-</button>
-		<textarea id="frameSelector" rows="1" cols="3"></textarea>
-		<button type="button" id="nextFrameButton">-></button>
-
-		<br />
-
-		<button type="button" id="cloneFrameButton">Clone Frame</button>
-		<button type="button" id="gotoFrameButton">Go</button>
-	</div>
-
-	<div id="rightClickMenu" class="GUIBox">
-		<div id="objectManipButtons">
-			<button type="button" id="sendToBackButton">Send To Back</button><br/>
-			<button type="button" id="bringToFrontButton">Bring To Front</button><br/>
-			<button type="button" id="addScriptButton">Add Script...</button><br/>
-			<button type="button" id="testActionButton">Test Action</button><br/>
-			<button type="button" id="deleteButton">Delete</button><br/>
-			<hr />
+	<div id="editor">
+		<div id="editorCanvasContainer">
+			<canvas id="editorCanvas"></canvas>
 		</div>
-		<button type="button" id="clearFrameButton">Clear Frame</button><br/>
+
+		<div id="menuBarGUI" class="GUIBox">
+			Wick Editor Dev<br />
+			<hr />
+			<button type="button" id="exportJSONButton">Save Project as JSON File</button><br />
+			<button type="button" id="exportHTMLButton">Export Project as Webpage</button><br />
+			<button type="button" id="runButton">Run Project</button><br />
+			<input type="file" id="importButton" />
+		</div>
+
+		<div id="timelineGUI" class="GUIBox">
+			<button type="button" id="prevFrameButton"><-</button>
+			<textarea id="frameSelector" rows="1" cols="3"></textarea>
+			<button type="button" id="nextFrameButton">-></button>
+
+			<br />
+
+			<button type="button" id="cloneFrameButton">Clone Frame</button>
+			<button type="button" id="gotoFrameButton">Go</button>
+		</div>
+
+		<div id="rightClickMenu" class="GUIBox">
+			<div id="objectManipButtons">
+				<button type="button" id="sendToBackButton">Send To Back</button><br/>
+				<button type="button" id="bringToFrontButton">Bring To Front</button><br/>
+				<button type="button" id="addScriptButton">Add Script...</button><br/>
+				<button type="button" id="testActionButton">Test Action</button><br/>
+				<button type="button" id="deleteButton">Delete</button><br/>
+				<hr />
+			</div>
+			<button type="button" id="clearFrameButton">Clear Frame</button><br/>
+		</div>
+	</div>
+
+	<div id="builtinPlayer">
+		<div id="playerCanvasContainer">
+			<canvas id="playerCanvas"></canvas>
+		</div>
+
+		<div id="builtinPlayerGUI" class="GUIBox">
+			Builtin Player<br />
+			<hr />
+			<button type="button" id="closeBuiltinPlayerButton">Close Player</button><br />
+		</div>
 	</div>
 </body>
 
