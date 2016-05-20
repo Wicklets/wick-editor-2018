@@ -4,9 +4,9 @@ Wick is a multipurpose creation environment that allows anyone to build a wide r
 
 A research project by Zach Rispoli and Luca Damasco. 
 
-Try the editor [here](http://zrispo.co/wick/wick-editor.htm)!
+Try the editor [here](http://zrispo.co/wick/editor.htm)!
 
-Try a simple game make with the editor [here](http://zrispo.co/wick/test/dont-click-the-bee.html)!
+Try a simple game make with the editor [here](http://zrispo.co/examples/game.html)!
 
 ### How to run the editor locally
 * Clone or download and unzip this repo
