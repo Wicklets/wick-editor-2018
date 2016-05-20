@@ -34,6 +34,8 @@
 			padding-bottom: 5px;
 			padding-left: 5px;
 			padding-right: 5px;
+			border: 1px solid #999999;
+			border-radius: 5px;
 		}
 
 		#menuBarGUI {
@@ -61,6 +63,13 @@
 			background-color: #DDDDDD;
 			visibility: hidden;
 		}
+
+		.button {
+			
+		}
+		.button:hover {
+			background-color: #FFFFFF;
+		}
 	</style>
 
 	<script src="lib/jquery.min.js"></script>
@@ -85,35 +94,38 @@
 		</div>
 
 		<div id="menuBarGUI" class="GUIBox">
-			Wick Editor Dev<br />
+			<strong>Wick Editor Dev</strong><br />
 			<hr />
-			<button type="button" id="exportJSONButton">Save Project as JSON File</button><br />
-			<button type="button" id="exportHTMLButton">Export Project as Webpage</button><br />
-			<button type="button" id="runButton">Run Project</button><br />
-			<input type="file" id="importButton" />
+			<div class="button" id="exportJSONButton">Save Project as JSON File</div>
+			<div class="button" id="exportHTMLButton">Export Project as Webpage</div>
+			<br />
+			Import JSON: <br />
+			<input type="file" id="importButton" /><br />
+			<br />
+			<div class="button" id="runButton">Run Project</div>
 		</div>
 
 		<div id="timelineGUI" class="GUIBox">
-			<button type="button" id="prevFrameButton"><-</button>
+			<div class="button" id="prevFrameButton"><-</div>
 			<textarea id="frameSelector" rows="1" cols="3"></textarea>
-			<button type="button" id="nextFrameButton">-></button>
+			<div class="button" id="nextFrameButton">-></div>
 
 			<br />
 
-			<button type="button" id="cloneFrameButton">Clone Frame</button>
-			<button type="button" id="gotoFrameButton">Go</button>
+			<div class="button" id="cloneFrameButton">Clone Frame</div>
+			<div class="button" id="gotoFrameButton">Go</div>
 		</div>
 
 		<div id="rightClickMenu" class="GUIBox">
 			<div id="objectManipButtons">
-				<button type="button" id="sendToBackButton">Send To Back</button><br/>
-				<button type="button" id="bringToFrontButton">Bring To Front</button><br/>
-				<button type="button" id="addScriptButton">Add Script...</button><br/>
-				<button type="button" id="testActionButton">Test Action</button><br/>
-				<button type="button" id="deleteButton">Delete</button><br/>
+				<div class="button" id="sendToBackButton">Send To Back</div>
+				<div class="button" id="bringToFrontButton">Bring To Front</div>
+				<div class="button" id="addScriptButton">Add Script...</div>
+				<div class="button" id="testActionButton">Test Action</div>
+				<div class="button" id="deleteButton">Delete</div>
 				<hr />
 			</div>
-			<button type="button" id="clearFrameButton">Clear Frame</button><br/>
+			<div class="button" id="clearFrameButton">Clear Frame</div>
 		</div>
 	</div>
 
@@ -123,9 +135,9 @@
 		</div>
 
 		<div id="builtinPlayerGUI" class="GUIBox">
-			Builtin Player<br />
+			<strong>Builtin Player</strong><br />
 			<hr />
-			<button type="button" id="closeBuiltinPlayerButton">Close Player</button><br />
+			<div class="button" id="closeBuiltinPlayerButton">Close Player</div>
 		</div>
 	</div>
 </body>

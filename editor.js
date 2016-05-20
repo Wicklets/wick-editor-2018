@@ -8,7 +8,7 @@ var WickEditor = (function () {
 	/* Flag to display feedback when something's being dragged into the editor */
 	var showUploadAlert;
 
-	/* Project frames - temporary, will be replaced with root object */
+	/* Project frames - temporary, will be replaced with 'root' object (see design docs on github) */
 	var frames;
 
 	/* Other editor variables */
