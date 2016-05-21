@@ -2,13 +2,19 @@
 	Object
 *****************************/
 
-var WickObject = function () {
+var WickObject = function (_left, _top, _width, _height, _scaleX, _scaleY, _angle, _flipX, _flipY, _opacity, _src) {
 
-	// x, y, rotation, all that stuff
-	this.x = 0;
-	this.y = 0;
-	this.rotation = 0;
-	this.alpha = 0;
+	this.left    = _left;
+	this.top     = _top;
+	this.width   = _width;
+	this.height  = _height;
+	this.scaleX  = _scaleX;
+	this.scaleY  = _scaleY;
+	this.angle   = _angle;
+	this.flipX   = _flipX;
+	this.flipY   = _flipY;
+	this.opacity = _opacity;
+	this.src	 = _src; 
 
 };
 
@@ -22,7 +28,7 @@ var StaticObject = function () {
 	// Data object (image, sound, video, etc.)
 
 };
-StaticObject.prototype = new WickObject();
+StaticObject.prototype = new WickObject(0,0,0,0,0,0,0,0,0,0,'');
 
 StaticObject.prototype.convertToSymbol = function(wickObject) {
 
@@ -40,7 +46,7 @@ var DynamicObject = function () {
 	// Script data
 
 };
-DynamicObject.prototype = new WickObject();
+DynamicObject.prototype = new WickObject(0,0,0,0,0,0,0,0,0,0,'');
 
 var DO = new DynamicObject();
-console.log(DO.x);
+console.log(DO.left);
