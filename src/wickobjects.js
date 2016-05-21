@@ -1,3 +1,5 @@
+/* NOTE: The names 'static' and 'dynamic' are temporary... */
+
 /*****************************
 	Object
 *****************************/
@@ -31,7 +33,7 @@ StaticObject.prototype.convertToSymbol = function(wickObject) {
 }
 
 /*****************************
-	Symbol
+	Dynamic
 *****************************/
 
 var DynamicObject = function () {
@@ -42,5 +44,8 @@ var DynamicObject = function () {
 };
 DynamicObject.prototype = new WickObject();
 
+var SO = new StaticObject();
+console.log(SO);
+
 var DO = new DynamicObject();
-console.log(DO.x);
+console.log(DO);
