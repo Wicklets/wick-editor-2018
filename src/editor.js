@@ -14,6 +14,9 @@ var WickEditor = (function () {
 	/* Other editor variables */
 	var currentFrame;
 
+	/* Mouse input variables */
+	var mouse = {};
+
 	/* Key input variables */
 	var keys;
 
@@ -110,11 +113,17 @@ var WickEditor = (function () {
 
 	// Setup mouse events
 
-		canvas.on('mouse:move', function(event) {
+		/*canvas.on('mouse:move', function(event) {
 			var pointer = canvas.getPointer(event.e);
 			canvas.px = pointer.x;
 			canvas.py = pointer.y;
-		});
+		});*/
+		document.addEventListener( 'mousemove', function ( event ) {
+
+			mouse.x = event.clientX;
+			mouse.y = event.clientY;
+
+		}, false );
 
 		document.getElementById("editorCanvasContainer").addEventListener("mousedown", function(event) {
 			closeRightClickMenu();
@@ -220,8 +229,8 @@ var WickEditor = (function () {
 		// Make rightclick menu visible
 		$("#rightClickMenu").css('visibility', 'visible');
 		// Attach it to the mouse
-		$("#rightClickMenu").css('top', canvas.py+'px');
-		$("#rightClickMenu").css('left', canvas.px+'px');
+		$("#rightClickMenu").css('top', mouse.y+'px');
+		$("#rightClickMenu").css('left', mouse.x+'px');
 
 		// (fabric) Don't show object manipulation options if nothing is selected
 		if(canvas.getActiveObject() != undefined) {
