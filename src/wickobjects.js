@@ -5,6 +5,10 @@
 var WickObject = function () {
 
 	// x, y, rotation, all that stuff
+	this.x = 0;
+	this.y = 0;
+	this.rotation = 0;
+	this.alpha = 0;
 
 };
 
@@ -15,10 +19,10 @@ var WickObject = function () {
 var StaticObject = function () {
 
 	// Inherits everything from WickObject
-
 	// Data object (image, sound, video, etc.)
 
 };
+StaticObject.prototype = new WickObject();
 
 StaticObject.prototype.convertToSymbol = function(wickObject) {
 
@@ -30,12 +34,13 @@ StaticObject.prototype.convertToSymbol = function(wickObject) {
 	Symbol
 *****************************/
 
-var Symbol = function () {
-
-	// Inherits everything from WickObject
-
+var DynamicObject = function () {
 	// Timeline
 
 	// Script data
 
 };
+DynamicObject.prototype = new WickObject();
+
+var DO = new DynamicObject();
+console.log(DO.x);
