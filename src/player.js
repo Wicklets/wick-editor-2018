@@ -1,6 +1,6 @@
 var WickPlayer = (function () {
 
-	var wickPlayer = { REVISION: "dev" };
+	var wickPlayer = { };
 
 	// Framerate keeper 
 	// http://www.html5gamedevs.com/topic/1828-how-to-calculate-fps-in-plain-javascript/
@@ -152,19 +152,7 @@ var WickPlayer = (function () {
 	}
 
 /*****************************
-	Check for Mobile/Desktop
-*****************************/
-
-/*****************************
-	Mouse events (desktop)
-*****************************/
-
-/*****************************
-	Touch events (mobile)
-*****************************/
-
-/*****************************
-	Player Utils
+	Utils
 *****************************/
 
 	var pointInsideObj = function(obj, point) {
@@ -181,10 +169,8 @@ var WickPlayer = (function () {
 	}
 
 /*****************************
-	Draw loop
+	Draw/update loop
 *****************************/
-
-	
 
 	var animate = function () {
 		requestAnimationFrame(animate);
@@ -243,10 +229,6 @@ var WickPlayer = (function () {
 
 		console.log(frames)
 	}
-
-/*****************************
-	Load bundled project
-*****************************/
 
 	return wickPlayer;
 

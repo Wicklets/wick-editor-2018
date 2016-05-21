@@ -1,6 +1,6 @@
 var WickEditor = (function () {
 
-	var wickEditor = { REVISION: "dev" };
+	var wickEditor = { };
 
 	/* Settings */
 	var SHOW_PAGE_LEAVE_WARNING = false;
@@ -217,13 +217,13 @@ var WickEditor = (function () {
 **********************************/
 
 	var openRightClickMenu = function () {
-		// Make menu visible
+		// Make rightclick menu visible
 		$("#rightClickMenu").css('visibility', 'visible');
 		// Attach it to the mouse
 		$("#rightClickMenu").css('top', canvas.py+'px');
 		$("#rightClickMenu").css('left', canvas.px+'px');
 
-		// Don't show object manipulation options if nothing is selected
+		// (fabric) Don't show object manipulation options if nothing is selected
 		if(canvas.getActiveObject() != undefined) {
 			$("#objectManipButtons").css('display', 'inline');
 		} else {
@@ -232,7 +232,7 @@ var WickEditor = (function () {
 	}
 
 	var closeRightClickMenu = function () {
-		// Hide menu
+		// Hide rightclick menu
 		$("#rightClickMenu").css('visibility', 'hidden');
 		$("#rightClickMenu").css('top', '0px');
 		$("#rightClickMenu").css('left', '0px');
