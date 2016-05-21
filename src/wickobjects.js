@@ -1,8 +1,10 @@
 /* NOTE: The names 'static' and 'dynamic' are temporary... */
 
 /*****************************
-	Object
+	Object 
 *****************************/
+
+// Never used directly. Only to be inherited
 
 var WickObject = function (_left, _top, _width, _height, _scaleX, _scaleY, _angle, _flipX, _flipY, _opacity, _src) {
 
