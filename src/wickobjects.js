@@ -4,19 +4,19 @@
 	Object
 *****************************/
 
-var WickObject = function (_left, _top, _width, _height, _scaleX, _scaleY, _angle, _flipX, _flipY, _opacity, _src) {
+var WickObject = function () {
 
-	this.left    = _left;
-	this.top     = _top;
-	this.width   = _width;
-	this.height  = _height;
-	this.scaleX  = _scaleX;
-	this.scaleY  = _scaleY;
-	this.angle   = _angle;
-	this.flipX   = _flipX;
-	this.flipY   = _flipY;
-	this.opacity = _opacity;
-	this.src	 = _src; 
+	this.left    = 0;
+	this.top     = 0;
+	this.width   = 0;
+	this.height  = 0;
+	this.scaleX  = 1;
+	this.scaleY  = 1;
+	this.angle   = 0;
+	this.flipX   = false;
+	this.flipY   = false;
+	this.opacity = 1;
+	//this.src	 = undefined; 
 
 };
 
@@ -30,7 +30,7 @@ var StaticObject = function () {
 	// Data object (image, sound, video, etc.)
 
 };
-StaticObject.prototype = new WickObject(0,0,0,0,0,0,0,0,0,0,'');
+StaticObject.prototype = new WickObject();
 
 StaticObject.prototype.convertToSymbol = function(wickObject) {
 
@@ -48,7 +48,7 @@ var DynamicObject = function () {
 	// Script data
 
 };
-DynamicObject.prototype = new WickObject(0,0,0,0,0,0,0,0,0,0,'');
+DynamicObject.prototype = new WickObject();
 
 var SO = new StaticObject();
 console.log(SO);
