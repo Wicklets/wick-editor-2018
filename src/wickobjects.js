@@ -51,11 +51,3 @@ var DynamicObject = function () {
 	// Script data
 
 };
-
-DynamicObject.prototype = new WickObject();
-
-var SO = new StaticObject();
-console.log(SO);
-
-var DO = new DynamicObject();
-console.log(DO);

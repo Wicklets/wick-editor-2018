@@ -49,7 +49,7 @@ var WickEditor = (function () {
 	// Setup main menu events
 
 		$("#exportJSONButton").on("click", function(e){
-		exportProjectAsJSON();
+		exportProjectAsJSONFile();
 		});
 		$("#exportHTMLButton").on("click", function(e){
 			exportProjectAsHTML();
@@ -366,7 +366,7 @@ var WickEditor = (function () {
 		return JSON.stringify(wickObjectFrames);
 	}
 
-	var exportProjectAsJSON = function () {
+	var exportProjectAsJSONFile = function () {
 		// Save JSON project
 		var blob = new Blob([getProjectAsJSON()], {type: "text/plain;charset=utf-8"});
 		saveAs(blob, "project.json");
