@@ -1,4 +1,5 @@
-/* NOTE: The names 'static' and 'dynamic' are temporary... */
+/* NOTE: The names 'static' and 'dynamic' are temporary...
+   Need to find other names that makes sense */
 
 /*****************************
 	Object 
@@ -46,14 +47,9 @@ StaticObject.prototype.convertToSymbol = function(wickObject) {
 
 var DynamicObject = function () {
 	// Timeline
+	this.timeline = new WickTimeline();
 
 	// Script data
 
 };
 DynamicObject.prototype = new WickObject(0,0,0,0,0,0,0,0,0,0,'');
-
-var SO = new StaticObject();
-console.log(SO);
-
-var DO = new DynamicObject();
-console.log(DO);

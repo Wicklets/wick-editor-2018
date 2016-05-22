@@ -1,6 +1,6 @@
 var WickEditor = (function () {
 
-	var wickEditor = { };
+	var wickEditor = {};
 
 	/* Settings */
 	var SHOW_PAGE_LEAVE_WARNING = false;
@@ -8,11 +8,9 @@ var WickEditor = (function () {
 	/* Flag to display feedback when something's being dragged into the editor */
 	var showUploadAlert;
 
-	/* Project frames - temporary, will be replaced with 'root' object (see design docs on github) */
-	var frames;
-
-	/* Other editor variables */
-	var currentFrame;
+	/* Current project in editor */
+	var project;
+	var frames = undefined;
 
 	/* Mouse input variables */
 	var mouse = {};
@@ -34,7 +32,7 @@ var WickEditor = (function () {
 
 		showUploadAlert = false;
 
-		frames = [[]];
+		project = new WickProject();
 
 		currentFrame = 1;
 		document.getElementById("frameSelector").value = currentFrame;
@@ -113,11 +111,6 @@ var WickEditor = (function () {
 
 	// Setup mouse events
 
-		/*canvas.on('mouse:move', function(event) {
-			var pointer = canvas.getPointer(event.e);
-			canvas.px = pointer.x;
-			canvas.py = pointer.y;
-		});*/
 		document.addEventListener( 'mousemove', function ( event ) {
 
 			mouse.x = event.clientX;
@@ -317,7 +310,7 @@ var WickEditor = (function () {
 					oImg.left = (canvas.width/2) - (oImg.width/2);
 					oImg.top = (canvas.height/2) - (oImg.height/2);
 
-					oImg.wickData = {}
+					oImg.wickData = {};
 					oImg.wickData.clickable = false;
 					oImg.wickData.name = e.target.filename;
 
