@@ -10,6 +10,9 @@ var WickEditor = (function () {
 
 	/* Current project in editor */
 	var project;
+
+	/* Position of playhead to keep track of what frame we're editing */
+	var playheadPosition;
 	var frames = undefined;
 
 	/* Mouse input variables */
@@ -33,9 +36,7 @@ var WickEditor = (function () {
 		showUploadAlert = false;
 
 		project = new WickProject();
-
-		currentFrame = 1;
-		document.getElementById("frameSelector").value = currentFrame;
+		playheadPosition = new ObjectIndexer("ROOT", 0, 0);
 
 	// Setup canvas
 
@@ -244,52 +245,62 @@ var WickEditor = (function () {
 	Timeline
 *****************************/
 
-	// Store current canvas into frame f
-	var storeCanvasIntoFrame = function (f) {
-		frames[f] = [];
-		canvas.forEachObject(function(obj){
-			// Deepcopy and add to frame
-			frames[f].unshift(jQuery.extend(true, {}, obj));
-		});
-	}
+	// Load specified frame into canvas
+	var loadFrameIntoCanvas = function (specifiedPlayheadPosition) {
 
-	// Save serialized frames
-	var loadFrame = function (f) {
 		canvas.clear();
-		if (frames[f] != undefined) {
-			for(var i = 0; i < frames[f].length; i++) {
-				canvas.add(frames[f][i]);
-			}
+
+		var frame = project.getFrame(playheadPosition);
+
+		console.log(frame)
+
+		for(var i = 0; i < frame.wickObjects.length; i++) {
+			frame.wickObjects[i].getFabricObject(function(fabricObj) {
+	            canvas.add(fabricObj);
+	            console.log(fabricObj)
+	        });
 		}
+
 	}
 
 	// Goes to a specified frame.
-	var goToFrame = function (toFrame) {
-		storeCanvasIntoFrame(currentFrame);
+	var movePlayheadTo = function (newPlayHeadPosition) {
+		project.storeCanvasIntoFrame(playheadPosition, canvas);
 
-		currentFrame = toFrame;
-		loadFrame(currentFrame);
-
-		document.getElementById("frameSelector").value = currentFrame;
+		playheadPosition = newPlayHeadPosition;
+		loadFrameIntoCanvas(playheadPosition);
 	}
 
 	// Go to the next frame.
 	var nextFrame = function () {
-		goToFrame(currentFrame + 1);
+
+		var newPlayHeadPosition = new ObjectIndexer(
+			playheadPosition.objectIndex,
+			playheadPosition.layerIndex,
+			playheadPosition.frameIndex+1);
+
+		var frame = project.getFrame(newPlayHeadPosition);
+		if(!frame) {
+			project.addEmptyFrame(newPlayHeadPosition);
+		}
+
+		movePlayheadTo(newPlayHeadPosition);
+
 	}
 
 	// Go to the previous frame.
 	var prevFrame = function () {
-		var toFrame = currentFrame - 1;
-		if (toFrame > 0) {
-			goToFrame(toFrame);
-		}
-	}
 
-	// Go to the next frame and copy the last frame into it.
-	var cloneCurrentFrame = function () {
-		storeCanvasIntoFrame(currentFrame + 1);
-		goToFrame(currentFrame + 1);
+		if (playheadPosition.frameIndex > 0) {
+
+			var newPlayHeadPosition = new ObjectIndexer(
+				playheadPosition.objectIndex,
+				playheadPosition.layerIndex,
+				playheadPosition.frameIndex-1);
+
+			movePlayheadTo(newPlayHeadPosition);
+		}
+
 	}
 
 /*****************************
@@ -310,9 +321,9 @@ var WickEditor = (function () {
 					oImg.left = (canvas.width/2) - (oImg.width/2);
 					oImg.top = (canvas.height/2) - (oImg.height/2);
 
-					oImg.wickData = {};
-					oImg.wickData.clickable = false;
-					oImg.wickData.name = e.target.filename;
+					oImg.wickData = { clickable: false, toFrame: 0 };
+
+					console.log(oImg)
 
 					canvas.add(oImg);
 				});
@@ -327,43 +338,10 @@ var WickEditor = (function () {
 	Export projects
 *****************************/
 
-	var fabricObjectToWickObject = function (fabObj) {
-		wickObj = {};
-
-		wickObj.left     = fabObj.left;
-		wickObj.top      = fabObj.top;
-		wickObj.width    = fabObj.width;
-		wickObj.height   = fabObj.height;
-		wickObj.scaleX   = fabObj.scaleX;
-		wickObj.scaleY   = fabObj.scaleY;
-		wickObj.angle    = fabObj.angle;
-		wickObj.flipX    = fabObj.flipX;
-		wickObj.flipY    = fabObj.flipY;
-		wickObj.opacity  = fabObj.opacity;
-		wickObj.src      = fabObj.src;
-
-		wickObj.wickData = fabObj.wickData;
-
-		return wickObj;
-	}
-
 	// Converts all fabric objects in all frames into wick objects and JSON stringifies the result
 	var getProjectAsJSON = function () {
-		storeCanvasIntoFrame(currentFrame);
-
-		wickObjectFrames = [];
-		for(var fi = 0; fi < frames.length; fi++) {
-			var frame = frames[fi];
-			wickObjectFrames[fi] = [];
-			for(var i = 0; i < frame.length; i++) {
-				var obj = frame[i];
-				var srcObj = JSON.parse(JSON.stringify(frame[i]));//hacky way to get src
-				wickObj = fabricObjectToWickObject(obj);
-				wickObj.src = srcObj.src;
-				wickObjectFrames[fi].push(wickObj);
-			}
-		}
-		return JSON.stringify(wickObjectFrames);
+		project.storeCanvasIntoFrame(specifiedPlayheadPosition, canvas);
+		return JSON.stringify(project);
 	}
 
 	var exportProjectAsJSONFile = function () {
@@ -409,26 +387,6 @@ var WickEditor = (function () {
 /*****************************
 	Import projects
 *****************************/
-	
-	var wickObjectToFabricObject = function (wickObj, callback) {
-		fabric.Image.fromURL(wickObj.src, function(oImg) {
-			
-			oImg.left     = wickObj.left;
-			oImg.top      = wickObj.top;
-			oImg.width    = wickObj.width;
-			oImg.height   = wickObj.height;
-			oImg.scaleX   = wickObj.scaleX;
-			oImg.scaleY   = wickObj.scaleY;
-			oImg.angle    = wickObj.angle;
-			oImg.flipX    = wickObj.flipX;
-			oImg.flipY    = wickObj.flipY;
-			oImg.opacity  = wickObj.opacity;
-
-			oImg.wickData = wickObj.wickData;
-
-			callback(oImg);
-		});
-	}
 
 	var importJSONProject = function (filePath) {
 		var frames = [[]];
@@ -438,35 +396,14 @@ var WickEditor = (function () {
 			reader.onload = function (e) {
 				jsonString = e.target.result;
 				loadProjectFromJSON(jsonString);
-
 			};
 			reader.readAsText(filePath.files[0]);
 		}
 	}
 
-	var convertWickObjectToFabricObject = function (fi, i) {
-
-		var wickObj = frames[fi][i];
-		wickObjectToFabricObject(wickObj, function(fabricObj) {
-			frames[fi][i] = fabricObj;
-		});
-
-	}
-
 	var loadProjectFromJSON = function (jsonString) {
-
-		// Load wick objects into frames array
-		frames = JSON.parse(jsonString);
-		console.log(frames);
-
-		// Convert wick objects to fabric.js objects
-		for(var fi = 0; fi < frames.length; fi++) {
-			for(var i = 0; i < frames[fi].length; i++) {
-				convertWickObjectToFabricObject(fi,i);
-			}
-		}
-
-		currentFrame = 0;
+		project = JSON.parse(jsonString);
+		playheadPosition = new ObjectIndexer("ROOT", 0, 0);
 		loadFrame(currentFrame);
 	}
 

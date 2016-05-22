@@ -14,44 +14,42 @@ var WickProject = function () {
 
 };
 
-/*****************************
-	Timelines 
-*****************************/
+WickProject.prototype.getFrame = function(playheadPosition) {
 
-// Stores a bunch of layers.
+	var layer = this.rootObject.timeline.layers[playheadPosition.layerIndex]
+	var frame = layer.frames[playheadPosition.frameIndex];
+	return frame;
 
-var WickTimeline = function () {
-
-	this.layers = [];
-
-	var emptyLayer = new WickLayer();
-	this.layers.push(emptyLayer);
-
-};
-
-WickTimeline.prototype.addObject = function(wickObject) {
 }
 
-/*****************************
-	Layers 
-*****************************/
+WickProject.prototype.addEmptyFrame = function(playheadPosition) {
 
-// Stores a bunch of frames.
+	var layer = this.rootObject.timeline.layers[playheadPosition.layerIndex];
+	layer.frames[playheadPosition.frameIndex] = new WickFrame();
 
-var WickLayer = function () {
+}
 
-	this.frames = [];
+WickProject.prototype.storeCanvasIntoFrame = function(playheadPosition, canvas) {
 
-};
+	// Clear current frame
 
-/*****************************
-	Frames
-*****************************/
+	this.rootObject.timeline.layers[playheadPosition.layerIndex].frames[playheadPosition.frameIndex].wickObjects = [];
 
-// Stores a bunch of wickobjects.
+	// Get fabric objects from canvas
 
-var WickFrame = function () {
+	var fabricObjectsInCanvas = [];
 
-	this.wickObjects = [];
+	canvas.forEachObject(function(obj){
+		// Deepcopy and add to frame
+		fabricObjectsInCanvas.unshift(jQuery.extend(true, {}, obj));
+	});
 
-};
+	// Add those objects to the frame
+
+	for(var i = 0; i < fabricObjectsInCanvas.length; i++) {
+		var wickObject = new WickObject();
+		wickObject.createFromFabricObject(fabricObjectsInCanvas[i])
+		this.rootObject.timeline.layers[playheadPosition.layerIndex].frames[playheadPosition.frameIndex].wickObjects.push(wickObject);
+	}
+
+}
