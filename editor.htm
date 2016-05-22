@@ -35,7 +35,6 @@
 			padding-left: 5px;
 			padding-right: 5px;
 			border: 1px solid #999999;
-			border-radius: 5px;
 		}
 
 		#menuBarGUI {
@@ -58,6 +57,7 @@
 		}
 
 		#rightClickMenu {
+			position: fixed;
 			top: 0px;
 			left: 0px;
 			background-color: #DDDDDD;
@@ -70,14 +70,21 @@
 		.button:hover {
 			background-color: #FFFFFF;
 		}
+
+		.timelineFrame {
+			width: 12px;
+			height: 20px;
+			background-color: red;
+		}
 	</style>
 
 	<script src="lib/jquery.min.js"></script>
 	<script src="lib/fabric.js"></script>
 	<script src="lib/FileSaver.min.js"></script>
-
+	
 	<script src="src/wickobjects.js"></script>
 	<script src="src/wickproject.js"></script>
+	<script src="src/timelinegui.js"></script>
 
 	<script src="src/editor.js"></script>
 	<script src="src/player.js"></script>
@@ -117,6 +124,10 @@
 
 			<div class="button" id="cloneFrameButton">Clone Frame</div>
 			<div class="button" id="gotoFrameButton">Go</div>
+
+			<br />
+
+			<div class="timelineFrame"></div>
 		</div>
 
 		<div id="rightClickMenu" class="GUIBox">

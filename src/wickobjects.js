@@ -1,7 +1,8 @@
-/* NOTE: The names 'static' and 'dynamic' are temporary... */
+/* NOTE: The names 'static' and 'dynamic' are temporary...
+   Need to find other names that makes sense */
 
 /*****************************
-	Object
+	Object 
 *****************************/
 
 var WickObject = function () {
@@ -19,6 +20,7 @@ var WickObject = function () {
 	//this.src	 = undefined; 
 
 };
+// Never used directly. Only to be inherited
 
 /*****************************
 	Static
@@ -44,10 +46,12 @@ StaticObject.prototype.convertToSymbol = function(wickObject) {
 
 var DynamicObject = function () {
 	// Timeline
+	this.timeline = new WickTimeline();
 
 	// Script data
 
 };
+
 DynamicObject.prototype = new WickObject();
 
 var SO = new StaticObject();
