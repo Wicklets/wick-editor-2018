@@ -36,7 +36,7 @@ var WickEditor = (function () {
 		showUploadAlert = false;
 
 		project = new WickProject();
-		playheadPosition = new ObjectIndexer("ROOT", 0, 0);
+		playheadPosition = new PlayheadPosition();
 
 	// Setup canvas
 
@@ -74,8 +74,9 @@ var WickEditor = (function () {
 		});
 
 		$("#gotoFrameButton").on("click", function(e){
-			var toFrame = parseInt($('textarea#frameSelector').val());
-			goToFrame(toFrame);
+			//needs to use new playhead system
+			//var toFrame = parseInt($('textarea#frameSelector').val());
+			//goToFrame(toFrame);
 		});
 		$("#cloneFrameButton").on("click", function(e){
 			cloneCurrentFrame();
@@ -97,8 +98,9 @@ var WickEditor = (function () {
 			closeRightClickMenu();
 		});
 		$("#testActionButton").on("click", function(e){
-			goToFrame(canvas.getActiveObject().wickData.toFrame);
-			closeRightClickMenu();
+			//needs to use playead system
+			//goToFrame(canvas.getActiveObject().wickData.toFrame);
+			//closeRightClickMenu();
 		});
 		$("#deleteButton").on("click", function(e){
 			canvas.getActiveObject().remove();
@@ -263,43 +265,66 @@ var WickEditor = (function () {
 
 	}
 
-	// Goes to a specified frame.
-	var movePlayheadTo = function (newPlayHeadPosition) {
+	// Moves playhead to specified frame and updates the canvas and project.
+	var gotoFrame = function (newFrameIndex) {
+
+		// Store changes made to current frame in the project
 		project.storeCanvasIntoFrame(playheadPosition, canvas);
 
-		playheadPosition = newPlayHeadPosition;
+		// Move the playhead
+		playheadPosition.moveToFrame(newFrameIndex)
+
+		// Add a new frame to the project if one doesn't exist
+		var frame = project.getFrame(playheadPosition);
+		if(!frame) {
+			project.addEmptyFrame(playheadPosition);
+		}
+
+		// Load stuff in the new frame into the canvas
 		loadFrameIntoCanvas(playheadPosition);
+
 	}
 
 	// Go to the next frame.
 	var nextFrame = function () {
 
-		var newPlayHeadPosition = new ObjectIndexer(
-			playheadPosition.objectIndex,
-			playheadPosition.layerIndex,
-			playheadPosition.frameIndex+1);
-
-		var frame = project.getFrame(newPlayHeadPosition);
-		if(!frame) {
-			project.addEmptyFrame(newPlayHeadPosition);
-		}
-
-		movePlayheadTo(newPlayHeadPosition);
+		gotoFrame(playheadPosition.getCurrentFrameIndex()+1)
 
 	}
 
 	// Go to the previous frame.
 	var prevFrame = function () {
 
-		if (playheadPosition.frameIndex > 0) {
+		if(playheadPosition.getCurrentFrameIndex() <= 0) {
 
-			var newPlayHeadPosition = new ObjectIndexer(
-				playheadPosition.objectIndex,
-				playheadPosition.layerIndex,
-				playheadPosition.frameIndex-1);
+			console.err("prevFrame() called when playhead is at frame 0!");
 
-			movePlayheadTo(newPlayHeadPosition);
+		} else {
+
+			gotoFrame(playheadPosition.getCurrentFrameIndex()-1)
+
 		}
+
+	}
+
+	// 
+	var goToLayer = function () {
+
+		console.err("goToLayer() Not yet implemented!")
+
+	}
+
+	// 
+	var moveOutOfObject = function () {
+
+		console.err("moveOutOfObject() Not yet implemented!")
+
+	}
+
+	// 
+	var moveInsideObject = function () {
+
+		console.err("moveInsideObject() Not yet implemented!")
 
 	}
 
@@ -337,41 +362,25 @@ var WickEditor = (function () {
 /*****************************
 	Export projects
 *****************************/
-
-	// Converts all fabric objects in all frames into wick objects and JSON stringifies the result
+	
 	var getProjectAsJSON = function () {
-		project.storeCanvasIntoFrame(specifiedPlayheadPosition, canvas);
+		// make sure project is synced up with canvas
+		project.storeCanvasIntoFrame(playheadPosition, canvas);
+
 		return JSON.stringify(project);
 	}
 
 	var exportProjectAsJSONFile = function () {
-		// Save JSON project
+		// Save JSON project and have user download it
 		var blob = new Blob([getProjectAsJSON()], {type: "text/plain;charset=utf-8"});
 		saveAs(blob, "project.json");
-	}
-
-	var downloadFile = function (url) {
-
-		var fileString = "";
-		var rawFile = new XMLHttpRequest();
-		rawFile.open("GET", url, false);
-		rawFile.onreadystatechange = function () {
-			if(rawFile.readyState === 4) {
-				if(rawFile.status === 200 || rawFile.status == 0) {
-					fileString = rawFile.responseText;
-				}
-			}
-		}
-		rawFile.send(null);
-		return fileString;
-
 	}
 
 	var exportProjectAsHTML = function () {
 		var fileOut = "";
 
 		// Add the player webpage (need to download the empty player)
-		fileOut += downloadFile("empty-player.htm") + "\n";
+		fileOut += WickUtils.downloadFile("empty-player.htm") + "\n";
 
 		// Add the player (need to download the player code)
 		fileOut += "<script>" + downloadFile("player.js") + "</script>\n";
@@ -403,7 +412,7 @@ var WickEditor = (function () {
 
 	var loadProjectFromJSON = function (jsonString) {
 		project = JSON.parse(jsonString);
-		playheadPosition = new ObjectIndexer("ROOT", 0, 0);
+		playheadPosition = new PlayheadPosition();
 		loadFrame(currentFrame);
 	}
 
