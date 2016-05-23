@@ -23,10 +23,11 @@ var WickPlayer = (function () {
 		}   
 	};
 
-	// Editor vars
-	var frames;
-	var currentFrame;
+	var project;
+	var currentFrameObjects;
+
 	var projectLoaded;
+
 	var mousePos;
 
 	var canvas;
@@ -35,7 +36,7 @@ var WickPlayer = (function () {
 	var mobileMode;
 	var desktopMode;
 
-	wickPlayer.runProject = function(project) {
+	wickPlayer.runProject = function(projectJSON) {
 
 		// Initialize editor vars
 		frames = [[]];
@@ -67,9 +68,9 @@ var WickPlayer = (function () {
 
 					// Check if we're hovered over a clickable object...
 					var hoveredOverObj = false;
-					for(var i = 0; i < frames[currentFrame].length; i++) {
-						var obj = frames[currentFrame][i];
-						if(obj.wickData.clickable && pointInsideObj(obj, mousePos)) {
+					for(var i = 0; i < currentFrameObjects.length; i++) {
+						var obj = currentFrameObjects[i];
+						if(obj.clickable && pointInsideObj(obj, mousePos)) {
 							hoveredOverObj = true;
 							obj.hoveredOver = true;
 							break;
@@ -88,10 +89,10 @@ var WickPlayer = (function () {
 
 			document.getElementById("playerCanvasContainer").addEventListener("mousedown", function() {
 				// Check if we clicked a clickable object
-				for(var i = 0; i < frames[currentFrame].length; i++) {
-					var obj = frames[currentFrame][i];
-					if(obj.wickData.clickable && pointInsideObj(obj, mousePos)) {
-						currentFrame = obj.wickData.toFrame;
+				for(var i = 0; i < currentFrameObjects.length; i++) {
+					var obj = currentFrameObjects[i];
+					if(obj.clickable && pointInsideObj(obj, mousePos)) {
+						project.rootObject.currentFrame = obj.toFrame;
 						console.log("Went to frame " + currentFrame);
 						draw();
 						break;
@@ -119,8 +120,8 @@ var WickPlayer = (function () {
 				// Check if we touched a clickable object
 				for(var i = 0; i < frames[currentFrame].length; i++) {
 					var obj = frames[currentFrame][i];
-					if(obj.wickData.clickable && pointInsideObj(obj, getTouchPos(canvas, evt))) {
-						currentFrame = obj.wickData.toFrame;
+					if(obj.clickable && pointInsideObj(obj, getTouchPos(canvas, evt))) {
+						currentFrame = obj.toFrame;
 						console.log("Went to frame " + currentFrame);
 						draw();
 						break;
@@ -141,13 +142,13 @@ var WickPlayer = (function () {
 		// start draw/update loop
 		animate();
 
-		loadJSONProject(project);
+		loadJSONProject(projectJSON);
 
 	}
 
 	wickPlayer.stopRunningCurrentProject = function() {
 
-		console.log("WARNING: Builtin player cleanup (in WickPlayer.stopRunningCurrentProject()) not yet implemented! This can lead to slowness!!")
+		console.error("WARNING: Builtin player cleanup (in WickPlayer.stopRunningCurrentProject()) not yet implemented! This can lead to slowness/problems!!")
 
 	}
 
@@ -182,6 +183,12 @@ var WickPlayer = (function () {
 
 	var update = function () {
 		
+		// Run scripts, advance all timelines one frame, etc.
+
+		var root = project.rootObject;
+		var currentFrame = root.layers[0].frames[root.currentFrame];
+		currentFrameObjects = currentFrame.wickObjects;
+
 	}
 
 	var draw = function () {
@@ -189,13 +196,15 @@ var WickPlayer = (function () {
 		context.clearRect(0, 0, canvas.width, canvas.height);
 
 		// Draw current frame content
-		for(var i = 0; i < frames[currentFrame].length; i++) {
+		for(var i = 0; i < currentFrameObjects.length; i++) {
 			context.save();
 
-			var obj = frames[currentFrame][i];
-			context.translate(obj.left, obj.top);
-			context.scale(obj.scaleX, obj.scaleY);
-			context.drawImage(obj.image, 0, 0);
+			var obj = currentFrameObjects[i];
+			if(obj.imageIsLoaded) {
+				context.translate(obj.left, obj.top);
+				context.scale(obj.scaleX, obj.scaleY);
+				context.drawImage(obj.image, 0, 0);
+			}
 
 			context.restore();
 		}
@@ -211,23 +220,25 @@ var WickPlayer = (function () {
 *****************************/
 
 	var loadJSONProject = function (proj) {
-		// load project JSON
-		frames = JSON.parse(proj);
 		projectLoaded = true;
+		project = JSON.parse(proj);
 
-		// make canvas images out of src
-		for(var f = 0; f < frames.length; f++) {
-			console.log("Loading frame "+f+"...");
-			var frame = frames[f];
-			for(var i = 0; i < frame.length; i++) {
-				var obj = frame[i];
-				obj.image = new Image();
-				obj.image.src = obj.src;
-				console.log("Loaded object " + obj.wickData.name);
-			}
+		// Load images
+
+		var root = project.rootObject;
+		var currentFrame = root.layers[0].frames[root.currentFrame].wickObjects;
+
+		console.log(root)
+
+		for(var i = 0; i < currentFrame.length; i++) {
+			var obj = currentFrame[i];
+			obj.image = new Image();
+			obj.image.src = obj.src;
+			obj.image.onload = function() {
+				obj.imageIsLoaded = true;
+				console.log("loaded")
+			};
 		}
-
-		console.log(frames)
 	}
 
 	return wickPlayer;

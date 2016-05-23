@@ -421,6 +421,8 @@ var WickEditor = (function () {
 *****************************/
 
 	var runProject = function () {
+		console.log(project.rootObject)
+
 		// Hide the editor
 		document.getElementById("editor").style.display = "none";
 

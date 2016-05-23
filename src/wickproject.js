@@ -19,7 +19,7 @@ WickProject.prototype.getFrame = function(playheadPosition) {
 	// TODO: recursive timelines
 	var rootPlayheadPosition = playheadPosition.playheadStack[0];
 
-	var layer = this.rootObject.timeline.layers[rootPlayheadPosition.layerIndex]
+	var layer = this.rootObject.layers[rootPlayheadPosition.layerIndex]
 	var frame = layer.frames[rootPlayheadPosition.frameIndex];
 	return frame;
 
@@ -30,7 +30,7 @@ WickProject.prototype.addEmptyFrame = function(playheadPosition) {
 	// TODO: recursive timelines
 	var rootPlayheadPosition = playheadPosition.playheadStack[0];
 
-	var layer = this.rootObject.timeline.layers[rootPlayheadPosition.layerIndex];
+	var layer = this.rootObject.layers[rootPlayheadPosition.layerIndex];
 	layer.frames[rootPlayheadPosition.frameIndex] = new WickFrame();
 
 }
@@ -42,7 +42,7 @@ WickProject.prototype.storeCanvasIntoFrame = function(playheadPosition, canvas) 
 
 	// Clear current frame
 
-	this.rootObject.timeline.layers[rootPlayheadPosition.layerIndex].frames[rootPlayheadPosition.frameIndex].wickObjects = [];
+	this.rootObject.layers[rootPlayheadPosition.layerIndex].frames[rootPlayheadPosition.frameIndex].wickObjects = [];
 
 	// Get fabric objects from canvas
 
@@ -58,7 +58,7 @@ WickProject.prototype.storeCanvasIntoFrame = function(playheadPosition, canvas) 
 	for(var i = 0; i < fabricObjectsInCanvas.length; i++) {
 		var wickObject = new WickObject();
 		wickObject.createFromFabricObject(fabricObjectsInCanvas[i])
-		this.rootObject.timeline.layers[rootPlayheadPosition.layerIndex].frames[rootPlayheadPosition.frameIndex].wickObjects.push(wickObject);
+		this.rootObject.layers[rootPlayheadPosition.layerIndex].frames[rootPlayheadPosition.frameIndex].wickObjects.push(wickObject);
 	}
 
 }

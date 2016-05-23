@@ -7,27 +7,33 @@
 
 // Never used directly. Only to be inherited
 
-var WickObject = function () {
+var setDefaultWickObjectVars = function (obj) {
 
-	this.left = 0;
-	this.top = 0;
+	obj.left = 0;
+	obj.top = 0;
 
-	this.width = 0;
-	this.height = 0;
+	obj.width = 0;
+	obj.height = 0;
 
-	this.scaleX = 1;
-	this.scaleY = 1;
+	obj.scaleX = 1;
+	obj.scaleY = 1;
 
-	this.angle = 0;
+	obj.angle = 0;
 
-	this.flipX = false;
-	this.flipY = false;
+	obj.flipX = false;
+	obj.flipY = false;
 
-	this.opacity = 1;
+	obj.opacity = 1;
 
-	this.wickData = { clickable: false, toFrame: null }
+	obj.clickable = false;
+	obj.toFrame = null;
+	obj.currentFrame = 0;
 
 };
+
+var WickObject = function () {
+
+}
 WickObject.prototype = new WickObject();
 
 WickObject.prototype.createFromFabricObject = function (fabObj) {
@@ -58,6 +64,7 @@ WickObject.prototype.createFromFabricObject = function (fabObj) {
 
 	this.clickable = fabObj.wickData.clickable;
 	this.toFrame = fabObj.wickData.toFrame;
+	this.currentFrame = fabObj.wickData.currentFrame;
 
 };
 
@@ -84,7 +91,8 @@ WickObject.prototype.getFabricObject = function (callback) {
 
         oImg.wickData = {
         	clickable: that.clickable,
-        	toFrame: that.toFrame
+        	toFrame: that.toFrame,
+        	currentFrame: that.currentFrame
         };
 
         callback(oImg);
@@ -99,6 +107,8 @@ WickObject.prototype.getFabricObject = function (callback) {
 // Inherits everything from WickObject
 
 var StaticObject = function () {
+
+	setDefaultWickObjectVars(this);
 
 	// Data object (image, sound, video, etc.)
 
@@ -117,27 +127,17 @@ StaticObject.prototype.convertToSymbol = function(wickObject) {
 
 var DynamicObject = function () {
 
-	// Timeline
-	this.timeline = new WickTimeline();
-
-	// Script data
-
-};
-
-/*****************************
-	Timelines 
-*****************************/
-
-// Stores a bunch of layers.
-
-var WickTimeline = function () {
+	setDefaultWickObjectVars(this);
 
 	this.layers = [];
 
 	var emptyLayer = new WickLayer();
 	this.layers.push(emptyLayer);
 
+	// Script data
+
 };
+DynamicObject.prototype = new WickObject();
 
 /*****************************
 	Layers 
