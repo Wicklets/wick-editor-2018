@@ -39,8 +39,6 @@ var WickPlayer = (function () {
 	wickPlayer.runProject = function(projectJSON) {
 
 		// Initialize editor vars
-		frames = [[]];
-		currentFrame = 1;
 		projectLoaded = false;
 
 		// Setup canvas

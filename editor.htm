@@ -2,7 +2,7 @@
 <html>
 
 <head>
-	<title>Wick Editor</title>
+	<title>Wick Editor Dev</title>
 
 	<style type="text/css">
 		* { margin:0; padding:0; } /* to remove the top and left whitespace */
@@ -71,10 +71,23 @@
 			background-color: #FFFFFF;
 		}
 
+		#timeline {
+
+		}
+
 		.timelineFrame {
 			width: 12px;
 			height: 20px;
 			background-color: red;
+			float:left;
+			margin-left: 3px;
+		}
+		.timelineFrame:hover {
+			background-color: orange;
+		}
+
+		.timelineFrame.active {
+			background-color: yellow;
 		}
 	</style>
 
@@ -84,7 +97,7 @@
 	
 	<script src="src/wickobjects.js"></script>
 	<script src="src/wickproject.js"></script>
-	<script src="src/timelinegui.js"></script>
+	<script src="src/timeline.js"></script>
 
 	<script src="src/editor.js"></script>
 	<script src="src/player.js"></script>
@@ -98,10 +111,14 @@
 </head>
 
 <body>
+	<!-- Editor GUI, visible when a project is being edited & not running -->
+
 	<div id="editor">
 		<div id="editorCanvasContainer">
 			<canvas id="editorCanvas"></canvas>
 		</div>
+
+		<!-- Main menu GUI, top left corner -->
 
 		<div id="menuBarGUI" class="GUIBox">
 			<strong>Wick Editor Dev</strong><br />
@@ -115,20 +132,27 @@
 			<div class="button" id="runButton">Run Project</div>
 		</div>
 
+		<!-- Timeline GUI, centered at the top of the screen -->
+
 		<div id="timelineGUI" class="GUIBox">
+			<!-- Temporary frame forward/backward buttons until we have a proper timeline gui -->
+
 			<div class="button" id="prevFrameButton"><-</div>
 			<textarea id="frameSelector" rows="1" cols="3"></textarea>
 			<div class="button" id="nextFrameButton">-></div>
 
 			<br />
 
-			<div class="button" id="cloneFrameButton">Clone Frame</div>
 			<div class="button" id="gotoFrameButton">Go</div>
 
 			<br />
 
-			<div class="timelineFrame"></div>
+			<div id="timeline">
+				<!-- Populated with 'timelineFrame' divs by editor. -->
+			</div>
 		</div>
+
+		<!-- Right click menu, appears next to mouse on right click -->
 
 		<div id="rightClickMenu" class="GUIBox">
 			<div id="objectManipButtons">
@@ -142,6 +166,8 @@
 			<div class="button" id="clearFrameButton">Clear Frame</div>
 		</div>
 	</div>
+
+	<!-- Builtin player, visible when a project is running -->
 
 	<div id="builtinPlayer">
 		<div id="playerCanvasContainer">

@@ -56,13 +56,3 @@ PlayheadPosition.prototype.goDownOneLevel = function () {
 	}
 
 }
-
-var WickTimelineGUI = (function () {
-
-	var wickTimelineGUI = { };
-
-	
-
-	return wickTimelineGUI;
-
-})();

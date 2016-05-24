@@ -14,6 +14,8 @@ var WickProject = function () {
 
 };
 
+// All of these functions should be in wickobjects.js so we can have the recusive timeline system
+
 WickProject.prototype.getFrame = function(playheadPosition) {
 
 	// TODO: recursive timelines
@@ -22,6 +24,12 @@ WickProject.prototype.getFrame = function(playheadPosition) {
 	var layer = this.rootObject.layers[rootPlayheadPosition.layerIndex]
 	var frame = layer.frames[rootPlayheadPosition.frameIndex];
 	return frame;
+
+}
+
+WickProject.prototype.getObject = function(playheadPosition) {
+	
+	//TODO: recursive timelines
 
 }
 

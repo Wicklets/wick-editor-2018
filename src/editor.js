@@ -13,7 +13,9 @@ var WickEditor = (function () {
 
 	/* Position of playhead to keep track of what frame we're editing */
 	var playheadPosition;
-	var frames = undefined;
+
+	/* Reference to current object we're inside */
+	var currentObjectBeingEdited;
 
 	/* Mouse input variables */
 	var mouse = {};
@@ -38,6 +40,19 @@ var WickEditor = (function () {
 		project = new WickProject();
 		playheadPosition = new PlayheadPosition();
 
+		// Start editor inside root object (which we can't ever leave from)
+		currentObjectBeingEdited = project.rootObject;
+
+		// Add some empty frames (temporary - just for testing timeline GUI.)
+		var emptyFrameAddPosition = new PlayheadPosition();
+		emptyFrameAddPosition.moveToFrame(1);
+		project.addEmptyFrame(emptyFrameAddPosition);
+		emptyFrameAddPosition.moveToFrame(2);
+		project.addEmptyFrame(emptyFrameAddPosition);
+		emptyFrameAddPosition.moveToFrame(3);
+		project.addEmptyFrame(emptyFrameAddPosition);
+		updateTimelineGUI();
+
 	// Setup canvas
 
 		canvas = new fabric.Canvas('editorCanvas');
@@ -50,7 +65,7 @@ var WickEditor = (function () {
 	// Setup main menu events
 
 		$("#exportJSONButton").on("click", function(e){
-		exportProjectAsJSONFile();
+			exportProjectAsJSONFile();
 		});
 		$("#exportHTMLButton").on("click", function(e){
 			exportProjectAsHTML();
@@ -66,22 +81,6 @@ var WickEditor = (function () {
 			importJSONProject(document.getElementById("importButton"));
 		};
 
-		$("#prevFrameButton").on("click", function(e){
-			prevFrame();
-		});
-		$("#nextFrameButton").on("click", function(e){
-			nextFrame();
-		});
-
-		$("#gotoFrameButton").on("click", function(e){
-			//needs to use new playhead system
-			//var toFrame = parseInt($('textarea#frameSelector').val());
-			//goToFrame(toFrame);
-		});
-		$("#cloneFrameButton").on("click", function(e){
-			cloneCurrentFrame();
-		});
-
 	// Setup right click menu button events
 
 		$("#bringToFrontButton").on("click", function(e){
@@ -96,11 +95,6 @@ var WickEditor = (function () {
 			canvas.getActiveObject().wickData.clickable = true;
 			canvas.getActiveObject().wickData.toFrame = prompt("Enter a frame:");
 			closeRightClickMenu();
-		});
-		$("#testActionButton").on("click", function(e){
-			//needs to use playead system
-			//goToFrame(canvas.getActiveObject().wickData.toFrame);
-			//closeRightClickMenu();
 		});
 		$("#deleteButton").on("click", function(e){
 			canvas.getActiveObject().remove();
@@ -151,8 +145,6 @@ var WickEditor = (function () {
 					nextFrame();
 				} else if (keys[37]) { // Left arrow
 					prevFrame();
-				} else if (keys[190]) { // '.' or '>'
-					cloneCurrentFrame();
 				}
 			}
 
@@ -248,18 +240,15 @@ var WickEditor = (function () {
 *****************************/
 
 	// Load specified frame into canvas
-	var loadFrameIntoCanvas = function (specifiedPlayheadPosition) {
+	var refreshObjectsOnCanvas = function () {
 
 		canvas.clear();
 
 		var frame = project.getFrame(playheadPosition);
 
-		console.log(frame)
-
 		for(var i = 0; i < frame.wickObjects.length; i++) {
 			frame.wickObjects[i].getFabricObject(function(fabricObj) {
 	            canvas.add(fabricObj);
-	            console.log(fabricObj)
 	        });
 		}
 
@@ -268,42 +257,19 @@ var WickEditor = (function () {
 	// Moves playhead to specified frame and updates the canvas and project.
 	var gotoFrame = function (newFrameIndex) {
 
+		console.log("Moving playhead to frame " + newFrameIndex)
+
 		// Store changes made to current frame in the project
 		project.storeCanvasIntoFrame(playheadPosition, canvas);
 
 		// Move the playhead
 		playheadPosition.moveToFrame(newFrameIndex)
 
-		// Add a new frame to the project if one doesn't exist
-		var frame = project.getFrame(playheadPosition);
-		if(!frame) {
-			project.addEmptyFrame(playheadPosition);
-		}
-
 		// Load stuff in the new frame into the canvas
-		loadFrameIntoCanvas(playheadPosition);
+		refreshObjectsOnCanvas();
 
-	}
-
-	// Go to the next frame.
-	var nextFrame = function () {
-
-		gotoFrame(playheadPosition.getCurrentFrameIndex()+1)
-
-	}
-
-	// Go to the previous frame.
-	var prevFrame = function () {
-
-		if(playheadPosition.getCurrentFrameIndex() <= 0) {
-
-			console.err("prevFrame() called when playhead is at frame 0!");
-
-		} else {
-
-			gotoFrame(playheadPosition.getCurrentFrameIndex()-1)
-
-		}
+		// Update timeline GUI
+		updateTimelineGUI();
 
 	}
 
@@ -325,6 +291,31 @@ var WickEditor = (function () {
 	var moveInsideObject = function () {
 
 		console.err("moveInsideObject() Not yet implemented!")
+
+	}
+
+	var updateTimelineGUI = function () {
+
+		var timeline = document.getElementById("timeline");
+		timeline.innerHTML = "";
+
+		for(var i = 0; i < currentObjectBeingEdited.layers[0].frames.length; i++) {
+
+			var frameDiv = document.createElement("div");
+			frameDiv.id = "frame" + i;
+			if(playheadPosition.getCurrentFrameIndex() == i) {
+				frameDiv.className = "timelineFrame active";
+			} else {
+				frameDiv.className = "timelineFrame";
+			}
+			timeline.appendChild(frameDiv);
+
+			document.getElementById("frame" + i).addEventListener("mousedown", function(index) {
+				return function () {
+	                gotoFrame(index);
+	            };
+			}(i), false);
+		}
 
 	}
 
@@ -421,7 +412,8 @@ var WickEditor = (function () {
 *****************************/
 
 	var runProject = function () {
-		console.log(project.rootObject)
+		console.log("Running project in builtin player:")
+		console.log(project)
 
 		// Hide the editor
 		document.getElementById("editor").style.display = "none";
@@ -451,6 +443,7 @@ var WickEditor = (function () {
 
 	var draw = function () {
 		if(showUploadAlert) {
+			// Draw this when a file is hovered over the editor
 			context.fillStyle = '#000';
 			context.textAlign = 'center';
 			context.font = "30px Arial";
