@@ -112,6 +112,8 @@ var StaticObject = function () {
 
 	// Data object (image, sound, video, etc.)
 
+	var data;
+
 };
 StaticObject.prototype = new WickObject();
 
@@ -129,12 +131,13 @@ var DynamicObject = function () {
 
 	setDefaultWickObjectVars(this);
 
-	this.layers = [];
+	// Sub-timline
 
-	var emptyLayer = new WickLayer();
-	this.layers.push(emptyLayer);
+	this.layers = [new WickLayer()];
 
 	// Script data
+
+	// TODO
 
 };
 DynamicObject.prototype = new WickObject();

@@ -225,16 +225,13 @@ var WickPlayer = (function () {
 
 		var root = project.rootObject;
 		var currentFrame = root.layers[0].frames[root.currentFrame].wickObjects;
-
-		console.log(root)
-
+		
 		for(var i = 0; i < currentFrame.length; i++) {
 			var obj = currentFrame[i];
 			obj.image = new Image();
 			obj.image.src = obj.src;
 			obj.image.onload = function() {
 				obj.imageIsLoaded = true;
-				console.log("loaded")
 			};
 		}
 	}

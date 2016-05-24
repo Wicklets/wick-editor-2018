@@ -45,12 +45,11 @@ var WickEditor = (function () {
 
 		// Add some empty frames (temporary - just for testing timeline GUI.)
 		var emptyFrameAddPosition = new PlayheadPosition();
-		emptyFrameAddPosition.moveToFrame(1);
-		project.addEmptyFrame(emptyFrameAddPosition);
-		emptyFrameAddPosition.moveToFrame(2);
-		project.addEmptyFrame(emptyFrameAddPosition);
-		emptyFrameAddPosition.moveToFrame(3);
-		project.addEmptyFrame(emptyFrameAddPosition);
+		var nFramesToAdd = 7;
+		for (var i = 1; i <= nFramesToAdd; i ++) {
+			emptyFrameAddPosition.moveToFrame(i);
+			project.addEmptyFrame(emptyFrameAddPosition);
+		}
 		updateTimelineGUI();
 
 	// Setup canvas
@@ -142,9 +141,9 @@ var WickEditor = (function () {
 			
 			if (keys[16]) { // Shift
 				if (keys[39]) { // Right arrow
-					nextFrame();
+					
 				} else if (keys[37]) { // Left arrow
-					prevFrame();
+					
 				}
 			}
 
@@ -257,13 +256,13 @@ var WickEditor = (function () {
 	// Moves playhead to specified frame and updates the canvas and project.
 	var gotoFrame = function (newFrameIndex) {
 
-		console.log("Moving playhead to frame " + newFrameIndex)
+		console.log("Moving playhead to frame " + newFrameIndex);
 
 		// Store changes made to current frame in the project
 		project.storeCanvasIntoFrame(playheadPosition, canvas);
 
 		// Move the playhead
-		playheadPosition.moveToFrame(newFrameIndex)
+		playheadPosition.moveToFrame(newFrameIndex);
 
 		// Load stuff in the new frame into the canvas
 		refreshObjectsOnCanvas();
@@ -389,8 +388,6 @@ var WickEditor = (function () {
 *****************************/
 
 	var importJSONProject = function (filePath) {
-		var frames = [[]];
-
 		if(filePath.files && filePath.files[0]) {
 			var reader = new FileReader();
 			reader.onload = function (e) {
