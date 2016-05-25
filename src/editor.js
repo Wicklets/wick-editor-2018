@@ -111,7 +111,7 @@ var WickEditor = (function () {
 			closeRightClickMenu();
 		});
 		$("#editScriptsButton").on("click", function(e){
-			// TODO MVP
+			fabricCanvas.getActiveObject().wickData.toFrame = prompt("Enter script:");
 			closeRightClickMenu();
 		});
 		$("#deleteButton").on("click", function(e){
@@ -373,6 +373,7 @@ var WickEditor = (function () {
 					oImg.left = (fabricCanvas.width/2) - (oImg.width/2);
 					oImg.top = (fabricCanvas.height/2) - (oImg.height/2);
 
+					// TODO: Remove this?  Is clickable still supported?
 					oImg.wickData = { clickable: false, toFrame: 0 };
 
 					console.log("Adding fabric object to canvas:")
