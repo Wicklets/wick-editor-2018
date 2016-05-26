@@ -1,7 +1,6 @@
 var ObjectIndexer = function (objectIndex, layerIndex, frameIndex) {
 
 	this.objectIndex = objectIndex;
-	this.layerIndex = layerIndex;
 	this.frameIndex = frameIndex;
 
 };
@@ -19,21 +18,9 @@ PlayheadPosition.prototype.getCurrentFrameIndex = function () {
 
 }
 
-PlayheadPosition.prototype.getCurrentLayerIndex = function () {
-
-	return this.playheadStack[this.playheadStack.length-1].layerIndex;
-
-}
-
 PlayheadPosition.prototype.moveToFrame = function (newFrameIndex) {
 	
 	this.playheadStack[this.playheadStack.length-1].frameIndex = newFrameIndex;
-
-};
-
-PlayheadPosition.prototype.moveToLayer = function (newLayerIndex) {
-	
-	this.playheadStack[this.playheadStack.length-1].layerIndex = newLayerIndex;
 
 };
 

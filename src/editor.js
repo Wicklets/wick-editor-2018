@@ -1,6 +1,6 @@
 var WickEditor = (function () {
 
-	var wickEditor = {};
+	var wickEditor = { version: '1' };
 
 	/* Settings */
 	var SHOW_PAGE_LEAVE_WARNING = false;
@@ -11,7 +11,7 @@ var WickEditor = (function () {
 	/* Current project in editor */
 	var project;
 
-	/* Position of playhead to keep track of what frame we're editing */
+	/* Position of playhead to keep track of what object and frame of that object we're editing */
 	var playheadPosition;
 
 	/* Reference to current object we're inside */
@@ -24,14 +24,16 @@ var WickEditor = (function () {
 	var keys;
 
 	/* Fabric canvas and context */
-	var canvas;
-	var context;
+	var fabricCanvas;
+	var fabricContext;
 
 /*****************************
 	Setup
 *****************************/
 
 	wickEditor.setup = function() {
+
+		console.log("WickEditor " + wickEditor.version)
 
 	// Setup editor vars
 
@@ -52,14 +54,32 @@ var WickEditor = (function () {
 		}
 		updateTimelineGUI();
 
-	// Setup canvas
+	// Setup fabric canvas
 
-		canvas = new fabric.Canvas('editorCanvas');
-		canvas.selectionColor = 'rgba(0,0,5,0.1)';
-		canvas.selectionBorderColor = 'grey';
-		canvas.selectionLineWidth = 2;
+		fabricCanvas = new fabric.Canvas('editorCanvas');
+		fabricCanvas.selectionColor = 'rgba(0,0,5,0.1)';
+		fabricCanvas.selectionBorderColor = 'grey';
+		fabricCanvas.selectionLineWidth = 2;
+		fabricCanvas.backgroundColor = "#EEE"
 
-		context = canvas.getContext('2d');
+		fabricContext = fabricCanvas.getContext('2d');
+
+	// White box that shows resolution/objects that will be on screen when project is exported
+
+		var frameInside = new fabric.Rect({
+			fill: '#FFF',
+		});
+		frameInside.wickCanvasName = "frame";
+		fabricCanvas.add(frameInside);
+
+		frameInside.width = project.resolution.x;
+		frameInside.height = project.resolution.y;
+		frameInside.left = (window.innerWidth-project.resolution.x)/2;
+		frameInside.top = (window.innerHeight-project.resolution.y)/2;
+
+		frameInside.hasControls = false;
+		frameInside.selectable = false;
+		frameInside.evented = false;
 
 	// Setup main menu events
 
@@ -83,26 +103,33 @@ var WickEditor = (function () {
 	// Setup right click menu button events
 
 		$("#bringToFrontButton").on("click", function(e){
-			canvas.bringToFront(canvas.getActiveObject());
+			fabricCanvas.bringToFront(fabricCanvas.getActiveObject());
 			closeRightClickMenu();
 		});
 		$("#sendToBackButton").on("click", function(e){
-			canvas.sendToBack(canvas.getActiveObject());
+			fabricCanvas.sendToBack(fabricCanvas.getActiveObject());
 			closeRightClickMenu();
 		});
-		$("#addScriptButton").on("click", function(e){
-			canvas.getActiveObject().wickData.clickable = true;
-			canvas.getActiveObject().wickData.toFrame = prompt("Enter a frame:");
+		$("#editScriptsButton").on("click", function(e){
+			// TODO MVP
 			closeRightClickMenu();
 		});
 		$("#deleteButton").on("click", function(e){
-			canvas.getActiveObject().remove();
+			fabricCanvas.getActiveObject().remove();
 			closeRightClickMenu();
 		});
 
 		$("#clearFrameButton").on("click", function(e){
-			canvas.clear();
-			closeRightClickMenu();
+			//canvas.clear();
+			//closeRightClickMenu();
+			console.log("clearFrameButton hack!!!!!!!!!!!!!!!!")
+			var fabricObjectsInCanvas = [];
+
+			fabricCanvas.forEachObject(function(obj){
+				// Deepcopy and add to frame
+				fabricObjectsInCanvas.unshift(jQuery.extend(true, {}, obj));
+			});
+			console.log(fabricObjectsInCanvas);
 		});
 
 	// Setup mouse events
@@ -138,13 +165,19 @@ var WickEditor = (function () {
 
 		document.body.addEventListener("keydown", function (e) {
 			keys[e.keyCode] = true;
+
+			if(keys[8]) {
+		        e.preventDefault();
+		        if(fabricCanvas.getActiveObject()) {
+			        fabricCanvas.getActiveObject().remove();
+			        closeRightClickMenu();
+			    }
+		    }
 			
-			if (keys[16]) { // Shift
-				if (keys[39]) { // Right arrow
-					
-				} else if (keys[37]) { // Left arrow
-					
-				}
+			if (keys[39]) { // Right arrow
+				
+			} else if (keys[37]) { // Left arrow
+				
 			}
 
 		});
@@ -187,14 +220,25 @@ var WickEditor = (function () {
 	// Setup window resize events
 
 		var resizeCanvas = function () {
+
 			// resize canvas
-			canvas.setWidth( window.innerWidth );
-			canvas.setHeight( window.innerHeight );
-			canvas.calcOffset();
+			fabricCanvas.setWidth( window.innerWidth );
+			fabricCanvas.setHeight( window.innerHeight );
+			fabricCanvas.calcOffset();
+
+			fabricCanvas.forEachObject(function(obj){
+				if(obj.wickCanvasName == "frame") {
+					obj.width = project.resolution.x;
+					obj.height = project.resolution.y;
+					obj.left = (window.innerWidth-project.resolution.x)/2;
+					obj.top = (window.innerHeight-project.resolution.y)/2;
+					obj.setCoords();
+				}
+			});
 
 			// also center timeline
 			var GUIWidth = parseInt($("#timelineGUI").css("width"))/2;
-			$("#timelineGUI").css('left', canvas.width/2-GUIWidth+'px');
+			$("#timelineGUI").css('left', fabricCanvas.width/2-GUIWidth+'px');
 
 		}
 		window.addEventListener('resize', resizeCanvas, false);
@@ -220,7 +264,7 @@ var WickEditor = (function () {
 		$("#rightClickMenu").css('left', mouse.x+'px');
 
 		// (fabric) Don't show object manipulation options if nothing is selected
-		if(canvas.getActiveObject() != undefined) {
+		if(fabricCanvas.getActiveObject() != undefined) {
 			$("#objectManipButtons").css('display', 'inline');
 		} else {
 			$("#objectManipButtons").css('display', 'none');
@@ -238,17 +282,17 @@ var WickEditor = (function () {
 	Timeline
 *****************************/
 
-	// Load specified frame into canvas
+	// Load specified frame into fabric canvas
 	var refreshObjectsOnCanvas = function () {
 
-		canvas.clear();
+		fabricCanvas.clear();
 
 		var frame = project.getFrame(playheadPosition);
 
 		for(var i = 0; i < frame.wickObjects.length; i++) {
 			frame.wickObjects[i].getFabricObject(function(fabricObj) {
-	            canvas.add(fabricObj);
-	        });
+				fabricCanvas.add(fabricObj);
+			});
 		}
 
 	}
@@ -259,7 +303,7 @@ var WickEditor = (function () {
 		console.log("Moving playhead to frame " + newFrameIndex);
 
 		// Store changes made to current frame in the project
-		project.storeCanvasIntoFrame(playheadPosition, canvas);
+		project.storeCanvasIntoFrame(playheadPosition, fabricCanvas);
 
 		// Move the playhead
 		playheadPosition.moveToFrame(newFrameIndex);
@@ -269,13 +313,6 @@ var WickEditor = (function () {
 
 		// Update timeline GUI
 		updateTimelineGUI();
-
-	}
-
-	// 
-	var goToLayer = function () {
-
-		console.err("goToLayer() Not yet implemented!")
 
 	}
 
@@ -298,7 +335,7 @@ var WickEditor = (function () {
 		var timeline = document.getElementById("timeline");
 		timeline.innerHTML = "";
 
-		for(var i = 0; i < currentObjectBeingEdited.layers[0].frames.length; i++) {
+		for(var i = 0; i < currentObjectBeingEdited.frames.length; i++) {
 
 			var frameDiv = document.createElement("div");
 			frameDiv.id = "frame" + i;
@@ -311,8 +348,8 @@ var WickEditor = (function () {
 
 			document.getElementById("frame" + i).addEventListener("mousedown", function(index) {
 				return function () {
-	                gotoFrame(index);
-	            };
+					gotoFrame(index);
+				};
 			}(i), false);
 		}
 
@@ -333,14 +370,15 @@ var WickEditor = (function () {
 			return function(e) {
 				fabric.Image.fromURL(e.target.result, function(oImg) {
 					// add new object to fabric canvas
-					oImg.left = (canvas.width/2) - (oImg.width/2);
-					oImg.top = (canvas.height/2) - (oImg.height/2);
+					oImg.left = (fabricCanvas.width/2) - (oImg.width/2);
+					oImg.top = (fabricCanvas.height/2) - (oImg.height/2);
 
 					oImg.wickData = { clickable: false, toFrame: 0 };
 
+					console.log("Adding fabric object to canvas:")
 					console.log(oImg)
 
-					canvas.add(oImg);
+					fabricCanvas.add(oImg);
 				});
 			};
 		})(file);
@@ -355,7 +393,7 @@ var WickEditor = (function () {
 	
 	var getProjectAsJSON = function () {
 		// make sure project is synced up with canvas
-		project.storeCanvasIntoFrame(playheadPosition, canvas);
+		project.storeCanvasIntoFrame(playheadPosition, fabricCanvas);
 
 		return JSON.stringify(project);
 	}
@@ -439,13 +477,17 @@ var WickEditor = (function () {
 *****************************/
 
 	var draw = function () {
+
 		if(showUploadAlert) {
 			// Draw this when a file is hovered over the editor
-			context.fillStyle = '#000';
-			context.textAlign = 'center';
-			context.font = "30px Arial";
-			context.fillText("Drop image to add to scene...",
-							canvas.width/2,canvas.height/2);
+			fabricContext.fillStyle = '#000';
+			fabricContext.textAlign = 'center';
+			fabricContext.font = "30px Arial";
+			fabricContext.fillText(
+				"Drop image to add to scene...",
+				fabricContext.width/2,
+				fabricContext.height/2
+			);
 		}
 	}
 
