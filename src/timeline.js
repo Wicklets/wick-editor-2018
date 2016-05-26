@@ -14,13 +14,13 @@ var PlayheadPosition = function () {
 
 PlayheadPosition.prototype.getCurrentFrameIndex = function () {
 
-	return this.playheadStack[this.playheadStack.length-1].frameIndex;
+	return this.playheadStack[this.playheadStack.length - 1].frameIndex;
 
 }
 
 PlayheadPosition.prototype.moveToFrame = function (newFrameIndex) {
 	
-	this.playheadStack[this.playheadStack.length-1].frameIndex = newFrameIndex;
+	this.playheadStack[this.playheadStack.length - 1].frameIndex = newFrameIndex;
 
 };
 

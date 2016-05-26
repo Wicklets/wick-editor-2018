@@ -6,6 +6,4 @@ var WickFrame = function () {
 
 WickTimeline.prototype.addObject = function(wickObject) {
 
-	
-
 }

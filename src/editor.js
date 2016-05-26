@@ -114,7 +114,7 @@ var WickEditor = (function () {
 			closeRightClickMenu();
 		});
 		$("#editScriptsButton").on("click", function(e){
-			// TODO MVP
+			fabricCanvas.getActiveObject().wickData.toFrame = prompt("Enter script:");
 			closeRightClickMenu();
 		});
 		$("#deleteButton").on("click", function(e){
@@ -377,7 +377,7 @@ var WickEditor = (function () {
 					// add new object to fabric canvas
 					oImg.left = (fabricCanvas.width/2) - (oImg.width/2);
 					oImg.top = (fabricCanvas.height/2) - (oImg.height/2);
-
+					
 					oImg.wickData = { subWickObjects: [] };
 
 					fabricCanvas.add(oImg);
