@@ -43,6 +43,7 @@ WickProject.prototype.addEmptyFrame = function(playheadPosition) {
 
 WickProject.prototype.storeCanvasIntoFrame = function(playheadPosition, canvas) {
 
+/*
 	// TODO: recursive timelines
 	var rootPlayheadPosition = playheadPosition.playheadStack[0];
 
@@ -53,7 +54,6 @@ WickProject.prototype.storeCanvasIntoFrame = function(playheadPosition, canvas) 
 	// Get fabric objects from canvas
 
 	var fabricObjectsInCanvas = [];
-
 	canvas.forEachObject(function(obj){
 		// Deepcopy and add to frame
 		fabricObjectsInCanvas.unshift(jQuery.extend(true, {}, obj));
@@ -64,9 +64,11 @@ WickProject.prototype.storeCanvasIntoFrame = function(playheadPosition, canvas) 
 	for(var i = 0; i < fabricObjectsInCanvas.length; i++) {
 		if(!fabricObjectsInCanvas[i].wickCanvasName) {
 			var wickObject = new WickObject();
-			wickObject.createFromFabricObject(fabricObjectsInCanvas[i])
+			wickObject.getFabricObjectOf(fabricObjectsInCanvas[i])
 			this.rootObject.frames[rootPlayheadPosition.frameIndex].wickObjects.push(wickObject);
+
 		}
 	}
+*/
 
 }

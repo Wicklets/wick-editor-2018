@@ -51,6 +51,8 @@ var DynamicObject = function () {
 };
 DynamicObject.prototype = new WickObject();
 
+DynamicObject.prototype.update
+
 /*****************************
 	Frames
 *****************************/

@@ -1,6 +1,6 @@
 var WickEditor = (function () {
 
-	var wickEditor = { version: '1' };
+	var wickEditor = { version: '0' };
 
 	/* Settings */
 	var SHOW_PAGE_LEAVE_WARNING = false;
@@ -27,13 +27,15 @@ var WickEditor = (function () {
 	var fabricCanvas;
 	var fabricContext;
 
+	var frameInside;
+
 /*****************************
 	Setup
 *****************************/
 
 	wickEditor.setup = function() {
 
-		console.log("WickEditor " + wickEditor.version)
+		console.log("WickEditor rev " + wickEditor.version)
 
 	// Setup editor vars
 
@@ -66,11 +68,10 @@ var WickEditor = (function () {
 
 	// White box that shows resolution/objects that will be on screen when project is exported
 
-		var frameInside = new fabric.Rect({
+		frameInside = new fabric.Rect({
 			fill: '#FFF',
 		});
 		frameInside.wickCanvasName = "frame";
-		fabricCanvas.add(frameInside);
 
 		frameInside.width = project.resolution.x;
 		frameInside.height = project.resolution.y;
@@ -80,6 +81,8 @@ var WickEditor = (function () {
 		frameInside.hasControls = false;
 		frameInside.selectable = false;
 		frameInside.evented = false;
+
+		fabricCanvas.add(frameInside)
 
 	// Setup main menu events
 
@@ -287,6 +290,8 @@ var WickEditor = (function () {
 
 		fabricCanvas.clear();
 
+		fabricCanvas.add(frameInside);
+
 		var frame = project.getFrame(playheadPosition);
 
 		for(var i = 0; i < frame.wickObjects.length; i++) {
@@ -373,10 +378,7 @@ var WickEditor = (function () {
 					oImg.left = (fabricCanvas.width/2) - (oImg.width/2);
 					oImg.top = (fabricCanvas.height/2) - (oImg.height/2);
 
-					oImg.wickData = { clickable: false, toFrame: 0 };
-
-					console.log("Adding fabric object to canvas:")
-					console.log(oImg)
+					oImg.wickData = { subWickObjects: [] };
 
 					fabricCanvas.add(oImg);
 				});
