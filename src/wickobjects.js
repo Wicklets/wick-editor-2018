@@ -5,53 +5,55 @@
 	Object 
 *****************************/
 
-// Never used directly. Only to be inherited
-
 var WickObject = function () {
 
-}
-WickObject.prototype = new WickObject();
+	// Note that the only object with parentObject as null is the root object.
+	this.parentObject = null;
 
-/*****************************
-	Static
-*****************************/
+	this.currentFrame = null;
 
-// Inherits everything from WickObject
+	this.isSymbol = false;
 
-var StaticObject = function () {
-
-	// Data object (image, sound, video, etc.)
-	// At the moment, images are only supported, so keep a 'src' for the image data
-
-	var src;
+	this.dataURL = undefined;
 
 };
-StaticObject.prototype = new WickObject();
 
-StaticObject.prototype.convertToSymbol = function(wickObject) {
+WickObject.prototype.getCurrentFrame = function() {
 
-	// Create new Symbol with single frame that contains only this Static object
+	return this.frames[this.currentFrame];
 
 }
 
-/*****************************
-	Dynamic
-*****************************/
+WickObject.prototype.addEmptyFrame = function(newFrameIndex) {
 
-var DynamicObject = function () {
+	this.frames[newFrameIndex] = new WickFrame();
 
-	// Sub-timeline
+}
 
-	this.frames = [new WickFrame()];
+WickObject.prototype.getAllStaticObjectDataURLsRecursively = function () {
 
-	// Script data
+	// TODO: make this return ALL static object's data URLs
 
-	// TODO
+	if (frames.length > 0) {
+		console.error("getAllStaticObjectDataURLsRecursively(): Symbol has no frames! Deal with this")
+	} else {
+		if(this.frames[0].wickObjects.length > 0) {
+			var firstFrameObjects = this.frames[0].wickObjects;
+			for(var i = 0; i < firstFrameObjects.length; i++) {
+				if(firstFrameObjects[i].isSymbol) {
+					return firstFrameObjects[i].getAllStaticObjectDataURLsRecursively();
+				} else {
+					console.log("bogo")
+					return firstFrameObjects[i].dataURL;
+				}
+			}
+		} else {
+			console.error("getAllStaticObjectDataURLsRecursively(): Symbol's first frame has no objects! Deal with this")
+		}
+	}
 
-};
-DynamicObject.prototype = new WickObject();
+}
 
-DynamicObject.prototype.update
 
 /*****************************
 	Frames

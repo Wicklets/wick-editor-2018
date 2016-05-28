@@ -88,6 +88,16 @@
 		.timelineFrame.active {
 			background-color: yellow;
 		}
+
+		#fileImportOverlay {
+			visibility: hidden;
+			position: absolute;
+			width: 100px;
+			height: 100px;
+			background-color: red;
+			left: 50%;
+			top: 50%;
+		}
 	</style>
 
 	<script src="lib/jquery.min.js"></script>
@@ -96,8 +106,8 @@
 	
 	<script src="src/scripts.js"></script>
 	<script src="src/wickobjects.js"></script>
-	<script src="src/wickproject.js"></script>
-	<script src="src/timeline.js"></script>
+	<script src="src/project.js"></script>
+	<script src="src/fabric-canvas.js"></script>
 
 	<script src="src/editor.js"></script>
 	<script src="src/player.js"></script>
@@ -126,7 +136,7 @@
 			<div class="button" id="exportJSONButton">Save Project as JSON File</div>
 			<div class="button" id="exportHTMLButton">Export Project as Webpage</div>
 			<br />
-			Import JSON: <br />
+			Import JSON Project: <br />
 			<input type="file" id="importButton" /><br />
 			<br />
 			<div class="button" id="runButton">Run Project</div>
@@ -143,15 +153,27 @@
 		<!-- Right click menu, appears next to mouse on right click -->
 
 		<div id="rightClickMenu" class="GUIBox">
-			<div id="objectManipButtons">
+			<div id="staticObjectButtons">
+				<div class="button" id="convertToSymbolButton">Convert to Symbol</div>
+				<hr />
+			</div>
+			<div id="symbolButtons">
+				<div class="button" id="editObjectButton">Edit Object</div>
+				<div class="button" id="editScriptsButton">Edit Scripts</div>
+				<hr />
+			</div>
+			<div id="commonObjectButtons">
 				<div class="button" id="sendToBackButton">Send To Back</div>
 				<div class="button" id="bringToFrontButton">Bring To Front</div>
-				<div class="button" id="editScriptsButton">Edit Scripts</div>
 				<div class="button" id="deleteButton">Delete</div>
 				<hr />
 			</div>
 			<div class="button" id="clearFrameButton">Clear Frame</div>
 		</div>
+
+		<!-- Shows up when file is dragged over editor -->
+		<div id="fileImportOverlay">Drop file to import...</div>
+
 	</div>
 
 	<!-- Builtin player, visible when a project is running -->
