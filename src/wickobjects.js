@@ -30,31 +30,6 @@ WickObject.prototype.addEmptyFrame = function(newFrameIndex) {
 
 }
 
-WickObject.prototype.getAllStaticObjectDataURLsRecursively = function () {
-
-	// TODO: make this return ALL static object's data URLs
-
-	if (frames.length > 0) {
-		console.error("getAllStaticObjectDataURLsRecursively(): Symbol has no frames! Deal with this")
-	} else {
-		if(this.frames[0].wickObjects.length > 0) {
-			var firstFrameObjects = this.frames[0].wickObjects;
-			for(var i = 0; i < firstFrameObjects.length; i++) {
-				if(firstFrameObjects[i].isSymbol) {
-					return firstFrameObjects[i].getAllStaticObjectDataURLsRecursively();
-				} else {
-					console.log("bogo")
-					return firstFrameObjects[i].dataURL;
-				}
-			}
-		} else {
-			console.error("getAllStaticObjectDataURLsRecursively(): Symbol's first frame has no objects! Deal with this")
-		}
-	}
-
-}
-
-
 /*****************************
 	Frames
 *****************************/

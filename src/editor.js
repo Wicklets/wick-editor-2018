@@ -2,9 +2,6 @@ var WickEditor = (function () {
 
 	var wickEditor = { version: '0' };
 
-	/* Settings */
-	var SHOW_PAGE_LEAVE_WARNING = false;
-
 	/* Current project in editor */
 	var project;
 
@@ -74,18 +71,16 @@ var WickEditor = (function () {
 			symbol.flipY = false;
 			symbol.isSymbol = true;
 			symbol.currentFrame = 0;
+			symbol.parentObject = currentObject;
 			symbol.frames = [new WickFrame()];
 			symbol.frames[0].wickObjects[0] = fabricCanvas.getActiveObject().wickObject;
 			symbol.frames[0].wickObjects[0].left = 0;
 			symbol.frames[0].wickObjects[0].top = 0;
 			symbol.frames[0].wickObjects[0].parentObject = symbol;
 			fabricCanvas.getActiveObject().remove();
-			console.log(symbol);
 			fabricCanvas.addWickObjectToCanvas(symbol);
 
 			gotoFrame(currentObject.currentFrame);
-			console.log("Object converted to symbol. Result:")
-			console.log(project.rootObject.frames)
 			closeRightClickMenu();
 		});
 
@@ -100,8 +95,7 @@ var WickEditor = (function () {
 			closeRightClickMenu();
 		});
 		$("#deleteButton").on("click", function (e) {
-			console.error("Fix! Uses old fabric canvas")
-			//fabricCanvas.getActiveObject().remove();
+			fabricCanvas.getActiveObject().remove();
 			closeRightClickMenu();
 		});
 
@@ -115,9 +109,13 @@ var WickEditor = (function () {
 			closeRightClickMenu();
 		});
 
+		$("#finishEditingObjectButton").on("click", function (e) {
+			moveOutOfObject();
+			closeRightClickMenu();
+		});
+
 		$("#clearFrameButton").on("click", function (e) {
-			console.error("Fix! Uses old fabric canvas")
-			//canvas.clear();
+			fabricCanvas.clear();
 			closeRightClickMenu();
 		});
 
@@ -157,12 +155,10 @@ var WickEditor = (function () {
 
 			if(keys[8]) {
 		        e.preventDefault();
-		        console.error("Fix! Uses old fabric canvas")
-		        /*
+
 		        if(fabricCanvas.getActiveObject()) {
 			        fabricCanvas.getActiveObject().remove();
 			    }
-			    */
 		    }
 			
 			if (keys[39]) { // Right arrow
@@ -201,6 +197,7 @@ var WickEditor = (function () {
 
 	// Setup leave page warning event
 
+		var SHOW_PAGE_LEAVE_WARNING = false;
 		if(SHOW_PAGE_LEAVE_WARNING) {
 			window.addEventListener("beforeunload", function (e) {
 				var confirmationMessage = 'Warning: All unsaved changes will be lost!';
@@ -254,6 +251,12 @@ var WickEditor = (function () {
 		$("#commonObjectButtons").css('display', 'none');
 		$("#symbolButtons").css('display', 'none');
 		$("#staticObjectButtons").css('display', 'none');
+		$("#finishEditingObjectButton").css('display', 'none');
+
+		// Only show "Finish Editing Object" button if we're not in root
+		if(currentObject.parentObject) {
+			$("#finishEditingObjectButton").css('display', 'inline');
+		}
 
 		if(fabricCanvas.getActiveObject()) {
 			$("#commonObjectButtons").css('display', 'inline');
@@ -297,7 +300,18 @@ var WickEditor = (function () {
 	// 
 	var moveOutOfObject = function () {
 
-		console.error("moveOutOfObject() Not yet implemented!")
+		// Store changes made to current frame in the project
+		currentObject.frames[currentObject.currentFrame].wickObjects = fabricCanvas.getWickObjectsInCanvas();
+
+		currentObject = currentObject.parentObject;
+
+		// Load wickobjects in the frame we moved to into the canvas
+		fabricCanvas.storeObjectsIntoCanvas( currentObject.getCurrentFrame().wickObjects );
+
+		updateTimelineGUI();
+
+		console.log("Synced fabric canvas and project. Result:")
+		console.log(project);
 
 	}
 
