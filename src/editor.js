@@ -72,6 +72,7 @@ var WickEditor = (function () {
 			symbol.isSymbol = true;
 			symbol.currentFrame = 0;
 			symbol.parentObject = currentObject;
+			symbol.wickScripts = {};
 			symbol.frames = [new WickFrame()];
 			symbol.frames[0].wickObjects[0] = fabricCanvas.getActiveObject().wickObject;
 			symbol.frames[0].wickObjects[0].left = 0;

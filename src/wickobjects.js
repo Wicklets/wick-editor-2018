@@ -16,6 +16,8 @@ var WickObject = function () {
 
 	this.dataURL = undefined;
 
+	this.wickScripts = null;
+
 };
 
 WickObject.prototype.getCurrentFrame = function() {
