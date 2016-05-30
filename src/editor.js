@@ -177,11 +177,13 @@ var WickEditor = (function () {
 	// Setup drag/drop events
 
 		$("#editorCanvasContainer").on('dragover', function(e) {
-			$("#fileImportOverlay").css('visibility', 'visible');
+			//$("#fileImportOverlay").css('visibility', 'visible');
+			fabricCanvas.showDragToImportFileAlert();
 			return false;
 		});
 		$("#editorCanvasContainer").on('dragleave', function(e) {
-			$("#fileImportOverlay").css('visibility', 'hidden');
+			//$("#fileImportOverlay").css('visibility', 'hidden');
+			fabricCanvas.hideDragToImportFileAlert();
 			return false;
 		});
 		$("#editorCanvasContainer").on('drop', function(e) {
@@ -191,7 +193,8 @@ var WickEditor = (function () {
 
 			importFilesDroppedIntoEditor(e.originalEvent.dataTransfer.files);
 
-			$("#fileImportOverlay").css('visibility', 'hidden');
+			//$("#fileImportOverlay").css('visibility', 'hidden');
+			fabricCanvas.hideDragToImportFileAlert();
 
 			return false;
 		});

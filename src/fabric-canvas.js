@@ -1,5 +1,17 @@
 var FabricCanvas = function () {
 
+	// When a fabric object is created from a wick object (and vice versa), 
+	// these properties must be set on the new object
+	this.sharedFabricWickObjectProperties = [
+		"left",
+		"top",
+		"scaleX",
+		"scaleY",
+		"angle",
+		"flipX",
+		"flipY"
+	];
+
 // Setup fabric canvas
 
 	this.canvas = new fabric.Canvas('editorCanvas');
@@ -12,16 +24,45 @@ var FabricCanvas = function () {
 
 // White box that shows resolution/objects that will be on screen when project is exported
 
-	var frameInside = new fabric.Rect({
+	this.frameInside = new fabric.Rect({
 		fill: '#FFF',
 	});
-	frameInside.wickCanvasName = "frame";
+	this.frameInside.wickCanvasName = "frameInside";
 
-	frameInside.hasControls = false;
-	frameInside.selectable = false;
-	frameInside.evented = false;
+	this.frameInside.hasControls = false;
+	this.frameInside.selectable = false;
+	this.frameInside.evented = false;
 
-	this.canvas.add(frameInside)
+	this.canvas.add(this.frameInside)
+
+// Text and fade that alerts the user to drop files into editor
+// Shows up when a file is dragged over the editor
+
+	// Fade
+	this.dragToImportFileFade = new fabric.Rect({
+		fill: '#000',
+		opacity: 0
+	});
+	this.dragToImportFileFade.wickCanvasName = "dragToImportFileFade";
+
+	this.dragToImportFileFade.hasControls = false;
+	this.dragToImportFileFade.selectable = false;
+	this.dragToImportFileFade.evented = false;
+
+	this.canvas.add(this.dragToImportFileFade);
+
+	// Text
+	this.dragToImportFileText = new fabric.Text('Drop file to import', {
+		fill: '#000',
+		opacity: 0
+	});
+	this.dragToImportFileText.wickCanvasName = "dragToImportFileText";
+
+	this.dragToImportFileText.hasControls = false;
+	this.dragToImportFileText.selectable = false;
+	this.dragToImportFileText.evented = false;
+
+	this.canvas.add(this.dragToImportFileText);
 
 }
 
@@ -32,8 +73,7 @@ FabricCanvas.prototype.clearCanvas = function () {
 	// Clear canvas except for wick GUI elements
 	this.canvas.forEachObject(function(fabricObj) {
 		if(!fabricObj.wickCanvasName) {
-			//fabricObj.remove();
-			canvas.remove(fabricObj)
+			canvas.remove(fabricObj);
 		} 
 	});
 
@@ -44,19 +84,47 @@ FabricCanvas.prototype.resize = function (projectWidth, projectHeight) {
 	this.canvas.setWidth ( window.innerWidth  );
 	this.canvas.setHeight( window.innerHeight );
 
+	// Re-center the import file alert text and fade
+
+	this.dragToImportFileFade.width = window.innerWidth;
+	this.dragToImportFileFade.height = window.innerWidth;
+	this.dragToImportFileFade.left = 0;
+	this.dragToImportFileFade.top  = 0;
+	this.dragToImportFileFade.setCoords();
+
+	this.dragToImportFileText.left = window.innerWidth/2;
+	this.dragToImportFileText.top  = window.innerHeight/2;
+	this.dragToImportFileText.setCoords();
+
 	// Re-center the white frame box
-	this.canvas.forEachObject(function(obj){
-		if(obj.wickCanvasName == "frame") {
-			obj.width  = projectWidth;
-			obj.height = projectHeight;
-			obj.left = (window.innerWidth -projectWidth) /2;
-			obj.top  = (window.innerHeight-projectHeight)/2;
-			obj.setCoords();
-		}
-	});
+
+	this.frameInside.width  = projectWidth;
+	this.frameInside.height = projectHeight;
+	this.frameInside.left = (window.innerWidth -projectWidth) /2;
+	this.frameInside.top  = (window.innerHeight-projectHeight)/2;
+	this.frameInside.setCoords();
 
 	this.canvas.renderAll();
 	this.canvas.calcOffset();
+
+}
+
+FabricCanvas.prototype.showDragToImportFileAlert = function() {
+
+	this.canvas.bringToFront(this.dragToImportFileFade);
+	this.canvas.bringToFront(this.dragToImportFileText);
+
+	this.dragToImportFileFade.opacity = 0.3;
+	this.dragToImportFileText.opacity = 1.0;
+	this.canvas.renderAll();
+
+}
+
+FabricCanvas.prototype.hideDragToImportFileAlert = function() {
+
+	this.dragToImportFileFade.opacity = 0;
+	this.dragToImportFileText.opacity = 0;
+	this.canvas.renderAll();
 
 }
 
@@ -86,28 +154,33 @@ FabricCanvas.prototype.makeFabricObjectFromWickObject = function (wickObject, ca
 			canvas.add(group);
 		}
 
+		// Create a list of every object in the first frame of the symbol
 		var firstFrameObjects = wickObject.frames[0].wickObjects;
 		var firstFrameFabricObjects = [];
+
 		for(var i = 0; i < firstFrameObjects.length; i++) {
+
 			this.makeFabricObjectFromWickObject(firstFrameObjects[i], function(fabricObject) {
 				//firstFrameFabricObjects[i] = fabricObject; //scope issue
 				firstFrameFabricObjects.push(fabricObject);
+
+				// List fully populated
 				if(firstFrameFabricObjects.length == firstFrameObjects.length) {
 					makeGroupOutOfFabricObjects(firstFrameFabricObjects);
 				}
 			})
+
 		}
 
 	} else {
 
+		var sharedFabricWickObjectProperties = this.sharedFabricWickObjectProperties;
+
 		fabric.Image.fromURL(wickObject.dataURL, function(oImg) {
-			oImg.left   = wickObject.left;
-			oImg.top    = wickObject.top;
-			oImg.scaleX = wickObject.scaleX;
-			oImg.scaleY = wickObject.scaleY;
-			oImg.angle  = wickObject.angle;
-			oImg.flipX  = wickObject.flipX;
-			oImg.flipY  = wickObject.flipY;
+			for(var i = 0; i < sharedFabricWickObjectProperties.length; i++) {
+				var prop = sharedFabricWickObjectProperties[i];
+				oImg[prop] = wickObject[prop];
+			}
 
 			oImg.wickObject = wickObject;
 
@@ -143,6 +216,8 @@ FabricCanvas.prototype.storeObjectsIntoCanvas = function (wickObjects) {
 
 FabricCanvas.prototype.getWickObjectsInCanvas = function () {
 
+	var sharedFabricWickObjectProperties = this.sharedFabricWickObjectProperties;
+
 	var wickObjects = [];
 
 	this.canvas.forEachObject(function(fabricObj) {
@@ -152,13 +227,10 @@ FabricCanvas.prototype.getWickObjectsInCanvas = function () {
 
 		if(wickObject) {
 			// Set fabric properties on wick object
-			wickObject.left   = fabricObj.left;
-			wickObject.top    = fabricObj.top;
-			wickObject.scaleX = fabricObj.scaleX;
-			wickObject.scaleY = fabricObj.scaleY;
-			wickObject.angle  = fabricObj.angle;
-			wickObject.flipX  = fabricObj.flipX;
-			wickObject.flipY  = fabricObj.flipY;
+			for(var i = 0; i < sharedFabricWickObjectProperties.length; i++) {
+				var prop = sharedFabricWickObjectProperties[i];
+				wickObject[prop] = fabricObj[prop];
+			}
 
 			wickObjects.push(wickObject);
 		}
