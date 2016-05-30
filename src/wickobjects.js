@@ -7,7 +7,7 @@
 
 var WickObject = function () {
 
-	// Note that the only object with parentObject as null is the root object.
+	// Note that the root object is the only object with parentObject as null.
 	this.parentObject = null;
 
 	this.currentFrame = null;
@@ -16,6 +16,7 @@ var WickObject = function () {
 
 	this.dataURL = undefined;
 
+	// Dictionary mapping function names to WickScript object
 	this.wickScripts = null;
 
 };

@@ -3,7 +3,6 @@
 *****************************/
 
 var WickScript = function (eventName, scriptString) {
-
 	this.eventName = eventName;
 	this.scriptString = scriptString;
 };

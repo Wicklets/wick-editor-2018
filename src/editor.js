@@ -105,8 +105,8 @@ var WickEditor = (function () {
 			closeRightClickMenu();
 		});
 		$("#editScriptsButton").on("click", function (e) {
-			console.error("Fix! Uses old fabric canvas")
-			//fabricCanvas.getActiveObject().wickData.toFrame = prompt("Enter script:");
+			fabricCanvas.getActiveObject().wickObject.wickScripts['update'] = prompt("Enter update script:");
+			console.log(fabricCanvas.getActiveObject().wickObject);
 			closeRightClickMenu();
 		});
 
@@ -333,6 +333,7 @@ var WickEditor = (function () {
 
 		updateTimelineGUI();
 
+		// Printing this to debug timeline system
 		console.log("Synced fabric canvas and project. Result:")
 		console.log(project);
 
