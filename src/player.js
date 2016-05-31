@@ -221,6 +221,9 @@ var WickPlayer = (function () {
 		projectLoaded = true;
 		project = JSON.parse(proj);
 
+		console.log("Player loaded project:")
+		console.log(project);
+
 		// Load images
 
 		var root = project.rootObject;

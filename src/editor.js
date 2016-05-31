@@ -405,7 +405,7 @@ var WickEditor = (function () {
 	
 	var getProjectAsJSON = function () {
 		// Store changes made to current frame in the project
-		console.error("Missing code here! Read comment")
+		currentObject.frames[currentObject.currentFrame].wickObjects = fabricCanvas.getWickObjectsInCanvas();
 
 		return JSON.stringify(project);
 	}
