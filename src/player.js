@@ -96,6 +96,10 @@ var WickPlayer = (function () {
 						break;
 					}
 				}
+
+				console.error("remove this here")
+				console.log(project.rootObject.currentFrame);
+				advanceTimeline(project.rootObject);
 			}, false);
 
 		}
@@ -113,8 +117,6 @@ var WickPlayer = (function () {
 			}
 
 			document.getElementById("playerCanvasContainer").addEventListener("touchstart", function(evt) {
-				console.log("bogo");
-
 				// Check if we touched a clickable object
 				for(var i = 0; i < frames[currentFrame].length; i++) {
 					var obj = frames[currentFrame][i];
@@ -181,11 +183,38 @@ var WickPlayer = (function () {
 
 	var update = function () {
 		
-		// Run scripts, advance all timelines one frame, etc.
+		// Advance all timelines one frame
+
+		advanceTimeline(project.rootObject);
+
+		// Run scripts
+
+		// TODO
+
+		// Update current objects
 
 		var root = project.rootObject;
-		var currentFrame = root.layers[0].frames[root.currentFrame];
+		var currentFrame = root.frames[root.currentFrame];
 		currentFrameObjects = currentFrame.wickObjects;
+
+	}
+
+	var advanceTimeline = function (obj) {
+
+		obj.currentFrame++;
+		if(obj.currentFrame == obj.frames.length) {
+			obj.currentFrame = 0;
+		}
+
+		for(var f = 0; f < obj.frames.length; f++) {
+			var currentFrameObjects = obj.frames[f].wickObjects;
+			for(var o = 0; o < currentFrameObjects.length; o++) {
+				var subObj = currentFrameObjects[o];
+				if(subObj.isSymbol) {
+					advanceTimeline(subObj);
+				}
+			}
+		}
 
 	}
 
@@ -193,23 +222,40 @@ var WickPlayer = (function () {
 		// Clear canvas
 		context.clearRect(0, 0, canvas.width, canvas.height);
 
-		// Draw current frame content
-		for(var i = 0; i < currentFrameObjects.length; i++) {
-			context.save();
+		// Draw root object, this will recursively draw every object!
+		drawWickObject(project.rootObject);
 
-			var obj = currentFrameObjects[i];
-			if(obj.imageIsLoaded) {
-				context.translate(obj.left, obj.top);
-				context.scale(obj.scaleX, obj.scaleY);
-				context.drawImage(obj.image, 0, 0);
-			}
-
-			context.restore();
-		}
-
+		// Draw FPS counter
 		context.fillStyle = "Black";
 		context.font      = "normal 14pt Arial";
 		context.fillText(fps.getFPS() + " FPS", canvas.width-80, 29);
+
+	}
+
+	var drawWickObject = function (obj) {
+
+		if(obj.isSymbol) {
+
+			// Recursively draw all sub objects.
+
+			var activeFrame = obj.frames[obj.currentFrame];
+			for(var i = 0; i < activeFrame.wickObjects.length; i++) {
+				drawWickObject(activeFrame.wickObjects[i]);
+			}
+
+		} else {
+
+			// Draw the content of this static object.
+
+			context.save();
+
+			context.translate(obj.left, obj.top);
+			context.scale(obj.scaleX, obj.scaleY);
+			context.drawImage(obj.image, 0, 0);
+
+			context.restore();
+			
+		}
 
 	}
 
@@ -221,22 +267,36 @@ var WickPlayer = (function () {
 		projectLoaded = true;
 		project = JSON.parse(proj);
 
-		console.log("Player loaded project:")
+		console.log("Player loading project:")
 		console.log(project);
 
 		// Load images
 
 		var root = project.rootObject;
-		var currentFrame = root.layers[0].frames[root.currentFrame].wickObjects;
-		
-		for(var i = 0; i < currentFrame.length; i++) {
-			var obj = currentFrame[i];
-			obj.image = new Image();
-			obj.image.src = obj.src;
-			obj.image.onload = function() {
-				obj.imageIsLoaded = true;
-			};
+		loadImages(root);
+	}
+
+	var loadImages = function (obj) {
+
+		// Recursively load images of wickobject.
+
+		for(var f = 0; f < obj.frames.length; f++) {
+			var currentFrameObjects = obj.frames[f].wickObjects;
+			for(var o = 0; o < currentFrameObjects.length; o++) {
+				var subObj = currentFrameObjects[o];
+				if(subObj.isSymbol) {
+					loadImages(subObj);
+				} else {
+					subObj.image = new Image();
+					subObj.image.src = subObj.dataURL;
+					subObj.image.onload = function() {
+						// Scope issue - fix this, we need it for preloaders
+						//subObj.imageIsLoaded = true;
+					};
+				}
+			}
 		}
+
 	}
 
 	return wickPlayer;

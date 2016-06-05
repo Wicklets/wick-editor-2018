@@ -30,10 +30,6 @@ var WickEditor = (function () {
 		currentObject = project.rootObject;
 
 		// Add some empty frames (temporary - just for testing timeline GUI.)
-		var nFramesToAdd = 7;
-		for (var i = 1; i <= nFramesToAdd; i ++) {
-			currentObject.addEmptyFrame(i);
-		}
 		updateTimelineGUI();
 
 		// Setup fabric
@@ -57,6 +53,20 @@ var WickEditor = (function () {
 		document.getElementById("importButton").onchange = function (e) {
 			importJSONProject(document.getElementById("importButton"));
 		};
+
+	// Setup timeline GUI events
+
+		$("#addEmptyFrameButton").on("click", function (e) {
+			// Add an empty frame
+			currentObject.addEmptyFrame(currentObject.frames.length);
+
+			// Move to that new frame
+			gotoFrame(currentObject.frames.length-1);
+
+			// Update GUI
+			resizeWindow();
+			updateTimelineGUI();
+		});
 
 	// Setup right click menu button events
 
@@ -177,12 +187,10 @@ var WickEditor = (function () {
 	// Setup drag/drop events
 
 		$("#editorCanvasContainer").on('dragover', function(e) {
-			//$("#fileImportOverlay").css('visibility', 'visible');
 			fabricCanvas.showDragToImportFileAlert();
 			return false;
 		});
 		$("#editorCanvasContainer").on('dragleave', function(e) {
-			//$("#fileImportOverlay").css('visibility', 'hidden');
 			fabricCanvas.hideDragToImportFileAlert();
 			return false;
 		});
@@ -193,7 +201,6 @@ var WickEditor = (function () {
 
 			importFilesDroppedIntoEditor(e.originalEvent.dataTransfer.files);
 
-			//$("#fileImportOverlay").css('visibility', 'hidden');
 			fabricCanvas.hideDragToImportFileAlert();
 
 			return false;
@@ -382,6 +389,7 @@ var WickEditor = (function () {
 
 				// Create a new wick object with that data
 				var obj = new WickObject();
+				obj.objectName = theFile.name;
 				obj.dataURL = fileDataURL;
 				obj.left = (window.innerWidth/2);
 				obj.top = (window.innerHeight/2);
@@ -407,6 +415,10 @@ var WickEditor = (function () {
 		// Store changes made to current frame in the project
 		currentObject.frames[currentObject.currentFrame].wickObjects = fabricCanvas.getWickObjectsInCanvas();
 
+		// Remove parent object references 
+		// (can't JSONify objects with circular references, plus player doesn't need them)
+		project.rootObject.removeParentObjectRefences();
+
 		return JSON.stringify(project);
 	}
 
@@ -420,10 +432,10 @@ var WickEditor = (function () {
 		var fileOut = "";
 
 		// Add the player webpage (need to download the empty player)
-		fileOut += WickUtils.downloadFile("empty-player.htm") + "\n";
+		fileOut += WickUtils.downloadFile("player.htm") + "\n";
 
 		// Add the player (need to download the player code)
-		fileOut += "<script>" + downloadFile("player.js") + "</script>\n";
+		fileOut += "<script>" + WickUtils.downloadFile("src/player.js") + "</script>\n";
 
 		// Bundle the JSON project
 		fileOut += "<script>WickPlayer.runProject('" + getProjectAsJSON() + "');</script>" + "\n";
@@ -449,6 +461,8 @@ var WickEditor = (function () {
 	}
 
 	var loadProjectFromJSON = function (jsonString) {
+		console.error("Remember to regenerate parent object references here.");
+
 		project = JSON.parse(jsonString);
 		playheadPosition = new PlayheadPosition();
 		loadFrame(currentFrame);
