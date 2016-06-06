@@ -18,7 +18,7 @@ var FabricCanvas = function () {
 	this.canvas.selectionColor = 'rgba(0,0,5,0.1)';
 	this.canvas.selectionBorderColor = 'grey';
 	this.canvas.selectionLineWidth = 2;
-	this.canvas.backgroundColor = "#EEE"
+	this.canvas.backgroundColor = "#EEE";
 
 	this.context = this.canvas.getContext('2d');
 
@@ -45,8 +45,6 @@ var FabricCanvas = function () {
 	// The vectors can then be edited with paper.js.
 	//
 	this.canvas.on('object:added', function(e) {
-		/*var activeObject = e.target;
-		console.log(activeObject.get('left'), activeObject.get('top'));*/
 		if(e.target.type === "path") {
 			console.log(e.target)
 
@@ -244,7 +242,7 @@ FabricCanvas.prototype.hideDragToImportFileAlert = function() {
 
 FabricCanvas.prototype.makeFabricObjectFromWickObject = function (wickObject, callback) {
 
-	var canvas = this.canvas;
+	var that = this;
 
 	if(wickObject.isSymbol) {
 
@@ -259,9 +257,7 @@ FabricCanvas.prototype.makeFabricObjectFromWickObject = function (wickObject, ca
 			// Add that group to the fabric canvas
 			group.wickObject = wickObject;
 			group.isGroup = true;
-			group.top = wickObject.top;
-			group.left = wickObject.left;
-			canvas.add(group);
+			that.canvas.add(group);
 		}
 
 		// Create a list of every object in the first frame of the symbol
@@ -287,11 +283,20 @@ FabricCanvas.prototype.makeFabricObjectFromWickObject = function (wickObject, ca
 		var sharedFabricWickObjectProperties = this.sharedFabricWickObjectProperties;
 
 		fabric.Image.fromURL(wickObject.dataURL, function(oImg) {
+			// Set shared wick/fabric positioning properties
 			for(var i = 0; i < sharedFabricWickObjectProperties.length; i++) {
 				var prop = sharedFabricWickObjectProperties[i];
 				oImg[prop] = wickObject[prop];
 			}
 
+			// Position the fabric object relative to it's parents.
+			//var relativePosition = that.getRelativePosition(wickObject);
+			var relativePosition = wickObject.getRelativePosition();
+			oImg.top = relativePosition.top;
+			oImg.left = relativePosition.left;
+
+			// Store a reference to the wick object inside the fabric object
+			// to use when we put this object back into the project.
 			oImg.wickObject = wickObject;
 
 			callback(oImg);
@@ -342,6 +347,12 @@ FabricCanvas.prototype.getWickObjectsInCanvas = function () {
 			for(var i = 0; i < sharedFabricWickObjectProperties.length; i++) {
 				var prop = sharedFabricWickObjectProperties[i];
 				wickObject[prop] = fabricObj[prop];
+			}
+
+			if(wickObject.parentObject) {
+				var parentsPositionTotal = wickObject.parentObject.getRelativePosition();
+				wickObject.top -= parentsPositionTotal.top;
+				wickObject.left -= parentsPositionTotal.left;
 			}
 
 			wickObjects.push(wickObject);

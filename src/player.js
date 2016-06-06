@@ -96,10 +96,6 @@ var WickPlayer = (function () {
 						break;
 					}
 				}
-
-				console.error("remove this here")
-				console.log(project.rootObject.currentFrame);
-				advanceTimeline(project.rootObject);
 			}, false);
 
 		}
@@ -269,11 +265,25 @@ var WickPlayer = (function () {
 
 		console.log("Player loading project:")
 		console.log(project);
+		
+		resetAllPlayheads(project.rootObject);
+		loadImages(project.rootObject);
+	}
 
-		// Load images
+	var resetAllPlayheads = function (obj) {
 
-		var root = project.rootObject;
-		loadImages(root);
+		// Recursively set all timelines to first frame
+
+		obj.currentFrame = 0;
+		for(var f = 0; f < obj.frames.length; f++) {
+			var currentFrameObjects = obj.frames[f].wickObjects;
+			for(var o = 0; o < currentFrameObjects.length; o++) {
+				var subObj = currentFrameObjects[o];
+				if(subObj.isSymbol) {
+					resetAllPlayheads(subObj);
+				}
+			}
+		}
 	}
 
 	var loadImages = function (obj) {

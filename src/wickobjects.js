@@ -62,6 +62,47 @@ WickObject.prototype.removeParentObjectRefences = function() {
 
 }
 
+// Used to put parent object references back after 
+WickObject.prototype.regenerateParentObjectReferences = function() {
+
+	if(this.isSymbol) {
+
+		// Recursively remove parent object references of all objects inside this symbol.
+
+		for(var f = 0; f < this.frames.length; f++) {
+			var frame = this.frames[f];
+			for (var o = 0; o < frame.wickObjects.length; o++) {
+				var wickObject = frame.wickObjects[o];
+				wickObject.removeParentObjectRefences();
+			}
+		}
+	}
+
+}
+
+// Uses all parent's positions to calculate correct position on canvas
+WickObject.prototype.getRelativePosition = function () {
+
+	if(this.isRoot) {
+		return {
+			top: 0,
+			left: 0
+		};
+	} else if(this.parentObject) {
+		var parentPosition = this.parentObject.getRelativePosition();
+		return {
+			top: this.top + parentPosition.top,
+			left: this.left + parentPosition.left
+		};
+	} else {
+		return { 
+			top: this.top,
+			left: this.left 
+		};
+	}
+
+}
+
 /*****************************
 	Frames
 *****************************/

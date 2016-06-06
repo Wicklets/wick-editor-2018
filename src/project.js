@@ -11,6 +11,7 @@ var WickProject = function () {
 	// cannot ever leave the root object.
 	this.rootObject = new WickObject();
 	this.rootObject.isSymbol = true;
+	this.rootObject.isRoot = true;
 	this.rootObject.currentFrame = 0;
 	this.rootObject.frames = [new WickFrame()];
 	

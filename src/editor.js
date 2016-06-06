@@ -177,7 +177,7 @@ var WickEditor = (function () {
 
 		keys = [];
 
-		document.body.addEventListener("keydown", function (e) {
+		document.getElementById("editorCanvasContainer").addEventListener("keydown", function (e) {
 			keys[e.keyCode] = true;
 
 			if(keys[8]) {
@@ -196,7 +196,7 @@ var WickEditor = (function () {
 
 		});
 
-		document.body.addEventListener("keyup", function (e) {
+		document.getElementById("editorCanvasContainer").addEventListener("keyup", function (e) {
 			keys[e.keyCode] = false;
 		});
 
@@ -325,9 +325,6 @@ var WickEditor = (function () {
 
 		updateTimelineGUI();
 
-		console.log("Synced fabric canvas and project. Result:")
-		console.log(project);
-
 	}
 
 	// 
@@ -342,9 +339,6 @@ var WickEditor = (function () {
 		fabricCanvas.storeObjectsIntoCanvas( currentObject.getCurrentFrame().wickObjects );
 
 		updateTimelineGUI();
-
-		console.log("Synced fabric canvas and project. Result:")
-		console.log(project);
 
 	}
 
@@ -361,10 +355,6 @@ var WickEditor = (function () {
 		fabricCanvas.storeObjectsIntoCanvas( currentObject.getCurrentFrame().wickObjects );
 
 		updateTimelineGUI();
-
-		// Printing this to debug timeline system
-		console.log("Synced fabric canvas and project. Result:")
-		console.log(project);
 
 	}
 
