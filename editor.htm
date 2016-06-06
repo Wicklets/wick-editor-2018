@@ -2,7 +2,7 @@
 <html>
 
 <head>
-	<title>Wick Editor</title>
+	<title>Wick Editor Dev</title>
 
 	<style type="text/css">
 		* { margin:0; padding:0; } /* to remove the top and left whitespace */
@@ -16,6 +16,14 @@
 			margin-top: 2px;
 		}
 
+		#editor {
+			display: block;
+		}
+
+		#builtinPlayer {
+			display: none;
+		}
+
 		.GUIBox {
 			position: absolute;
 			font-size: 12px;
@@ -26,6 +34,7 @@
 			padding-bottom: 5px;
 			padding-left: 5px;
 			padding-right: 5px;
+			border: 1px solid #999999;
 		}
 
 		#menuBarGUI {
@@ -34,63 +43,176 @@
 			text-align: center;
 		}
 
-		#timelineGUI {
-			width: 130px;
+		#builtinPlayerGUI {
 			top: 0px;
 			left: 0px;
 			text-align: center;
 		}
 
+		#timelineGUI {
+			top: 0px;
+			left: 0px;
+			text-align: center;
+		}
+
+		#toolbarGUI {
+			top: 50%;
+			left: 0px;
+			text-align: left;
+		}
+
+		#toolOptions {
+			display: none;
+		}
+
 		#rightClickMenu {
+			position: fixed;
 			top: 0px;
 			left: 0px;
 			background-color: #DDDDDD;
 			visibility: hidden;
 		}
+
+		.button {
+			
+		}
+		.button:hover {
+			background-color: #FFFFFF;
+		}
+
+		#timeline {
+
+		}
+
+		.timelineFrame {
+			width: 20px;
+			height: 30px;
+			background-color: red;
+			float:left;
+			margin-left: 3px;
+		}
+		.timelineFrame:hover {
+			background-color: orange;
+		}
+
+		.timelineFrame.active {
+			background-color: yellow;
+		}
+
+		#fileImportOverlay {
+			visibility: hidden;
+			position: absolute;
+			width: 100px;
+			height: 100px;
+			background-color: red;
+			left: 50%;
+			top: 50%;
+		}
 	</style>
 
 	<script src="lib/jquery.min.js"></script>
 	<script src="lib/fabric.js"></script>
+	<script type="text/javascript" src="lib/paper-core.min.js"></script>
 	<script src="lib/FileSaver.min.js"></script>
+	
+	<script src="src/util.js"></script>
+	<script src="src/scripts.js"></script>
+	<script src="src/wickobjects.js"></script>
+	<script src="src/project.js"></script>
+	<script src="src/fabric-canvas.js"></script>
+	<script src="src/paper-canvas.js"></script>
 
-	<script src="editor.js"></script>
+	<script src="src/editor.js"></script>
+	<script src="src/player.js"></script>
+
+	<!-- Set everything up inside this function -->
+	<script>
+		$(document).ready(function() { 
+			WickEditor.setup();
+		});
+	</script>
 </head>
 
 <body>
-	<div id="canvasContainer">
-		<canvas id="canvas"></canvas>
-	</div>
+	<!-- Editor GUI, visible when a project is being edited & not running -->
 
-	<div id="menuBarGUI" class="GUIBox">
-		Wick Editor Dev<br />
-		<hr />
-		<button type="button" id="exportJSONButton">Export Project as JSON</button><br />
-		<button type="button" id="exportHTMLButton">Export Project as HTML</button><br />
-		<input type="file" id="importButton" />
-	</div>
-
-	<div id="timelineGUI" class="GUIBox">
-		<button type="button" id="prevFrameButton"><-</button>
-		<textarea id="frameSelector" rows="1" cols="3"></textarea>
-		<button type="button" id="nextFrameButton">-></button>
-
-		<br />
-
-		<button type="button" id="cloneFrameButton">Clone Frame</button>
-		<button type="button" id="gotoFrameButton">Go</button>
-	</div>
-
-	<div id="rightClickMenu" class="GUIBox">
-		<div id="objectManipButtons">
-			<button type="button" id="sendToBackButton">Send To Back</button><br/>
-			<button type="button" id="bringToFrontButton">Bring To Front</button><br/>
-			<button type="button" id="addScriptButton">Add Script...</button><br/>
-			<button type="button" id="testActionButton">Test Action</button><br/>
-			<button type="button" id="deleteButton">Delete</button><br/>
-			<hr />
+	<div id="editor">
+		<div id="editorCanvasContainer">
+			<canvas id="editorCanvas"></canvas>
 		</div>
-		<button type="button" id="clearFrameButton">Clear Frame</button><br/>
+
+		<!-- Main menu GUI, top left corner -->
+
+		<div id="menuBarGUI" class="GUIBox">
+			<strong>Wick Editor Dev</strong><br />
+			<hr />
+			<div class="button" id="exportJSONButton">Save Project as JSON File</div>
+			<div class="button" id="exportHTMLButton">Export Project as Webpage</div>
+			<br />
+			Import JSON Project: <br />
+			<input type="file" id="importButton" /><br />
+			<br />
+			<div class="button" id="runButton">Run Project</div>
+		</div>
+
+		<!-- Timeline GUI, centered at the top of the screen -->
+
+		<div id="timelineGUI" class="GUIBox">
+			<div class="button" id="addEmptyFrameButton">Add Empty Frame</div>
+			<div id="timeline">
+				<!-- Populated with 'timelineFrame' divs by editor. -->
+			</div>
+		</div>
+
+		<!-- Toolbar GUI, centered at the left side of the screen -->
+
+		<div id="toolbarGUI" class="GUIBox">
+			<div class="button" id="mouseToolButton">Mouse</div>
+			<div class="button" id="paintbrushToolButton">Paintbrush</div>
+			<div id="toolOptions">
+				<hr />
+				Line Width: <input type="range" value="30" min="0" max="150" id="lineWidth"><br />
+				Line Color: <input type="color" value="#FFFF00" id="lineColor">
+			</div>
+		</div>
+
+		<!-- Right click menu, appears next to mouse on right click -->
+
+		<div id="rightClickMenu" class="GUIBox">
+			<div id="staticObjectButtons">
+				<div class="button" id="convertToSymbolButton">Convert to Symbol</div>
+				<hr />
+			</div>
+			<div id="symbolButtons">
+				<div class="button" id="editObjectButton">Edit Object</div>
+				<div class="button" id="editScriptsButton">Edit Scripts</div>
+				<hr />
+			</div>
+			<div id="commonObjectButtons">
+				<div class="button" id="sendToBackButton">Send To Back</div>
+				<div class="button" id="bringToFrontButton">Bring To Front</div>
+				<div class="button" id="deleteButton">Delete</div>
+				<hr />
+			</div>
+			<div class="button" id="finishEditingObjectButton">Finish Editing Object</div>
+			<div class="button" id="clearFrameButton">Clear Frame</div>
+		</div>
 	</div>
+
+	<!-- Builtin player, visible when a project is running -->
+
+	<div id="builtinPlayer">
+		<div id="playerCanvasContainer">
+			<canvas id="playerCanvas"></canvas>
+		</div>
+
+		<div id="builtinPlayerGUI" class="GUIBox">
+			<strong>Builtin Player</strong><br />
+			<hr />
+			<div class="button" id="closeBuiltinPlayerButton">Close Player</div>
+		</div>
+	</div>
+
 </body>
 
 </html>
