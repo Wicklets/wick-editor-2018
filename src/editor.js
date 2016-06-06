@@ -387,6 +387,7 @@ var WickEditor = (function () {
 
 			var frameDiv = document.createElement("div");
 			frameDiv.id = "frame" + i;
+			frameDiv.innerHTML = i;
 			if(currentObject.currentFrame == i) {
 				frameDiv.className = "timelineFrame active";
 			} else {
@@ -497,10 +498,12 @@ var WickEditor = (function () {
 
 	var loadProjectFromJSON = function (jsonString) {
 		console.error("Remember to regenerate parent object references here.");
+		console.error("Remember to put prototypes back on objects here.");
 
 		project = JSON.parse(jsonString);
-		playheadPosition = new PlayheadPosition();
-		loadFrame(currentFrame);
+		currentObject = project.rootObject;
+		gotoFrame(0);
+		updateTimelineGUI();
 	}
 
 /*****************************
