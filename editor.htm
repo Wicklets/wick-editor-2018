@@ -55,6 +55,16 @@
 			text-align: center;
 		}
 
+		#toolbarGUI {
+			top: 50%;
+			left: 0px;
+			text-align: left;
+		}
+
+		#toolOptions {
+			display: none;
+		}
+
 		#rightClickMenu {
 			position: fixed;
 			top: 0px;
@@ -102,6 +112,7 @@
 
 	<script src="lib/jquery.min.js"></script>
 	<script src="lib/fabric.js"></script>
+	<script type="text/javascript" src="lib/paper-core.min.js"></script>
 	<script src="lib/FileSaver.min.js"></script>
 	
 	<script src="src/util.js"></script>
@@ -109,6 +120,7 @@
 	<script src="src/wickobjects.js"></script>
 	<script src="src/project.js"></script>
 	<script src="src/fabric-canvas.js"></script>
+	<script src="src/paper-canvas.js"></script>
 
 	<script src="src/editor.js"></script>
 	<script src="src/player.js"></script>
@@ -152,6 +164,18 @@
 			</div>
 		</div>
 
+		<!-- Toolbar GUI, centered at the left side of the screen -->
+
+		<div id="toolbarGUI" class="GUIBox">
+			<div class="button" id="mouseToolButton">Mouse</div>
+			<div class="button" id="paintbrushToolButton">Paintbrush</div>
+			<div id="toolOptions">
+				<hr />
+				Line Width: <input type="range" value="30" min="0" max="150" id="lineWidth"><br />
+				Line Color: <input type="color" value="#FFFF00" id="lineColor">
+			</div>
+		</div>
+
 		<!-- Right click menu, appears next to mouse on right click -->
 
 		<div id="rightClickMenu" class="GUIBox">
@@ -188,6 +212,7 @@
 			<div class="button" id="closeBuiltinPlayerButton">Close Player</div>
 		</div>
 	</div>
+
 </body>
 
 </html>

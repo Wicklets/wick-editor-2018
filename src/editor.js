@@ -8,8 +8,11 @@ var WickEditor = (function () {
 	/* Current object being edited */
 	var currentObject;
 
-	/* Object that handles all the Fabric.js stuff */
+	/* Handles all the Fabric.js stuff */
 	var fabricCanvas;
+
+	/* Handles all the paper.js stuff */
+	var paperCanvas;
 
 	/* Mouse and keyboard input variables */
 	var mouse = {};
@@ -29,11 +32,14 @@ var WickEditor = (function () {
 		project = new WickProject();
 		currentObject = project.rootObject;
 
-		// Add some empty frames (temporary - just for testing timeline GUI.)
-		updateTimelineGUI();
-
 		// Setup fabric
 		fabricCanvas = new FabricCanvas();
+
+		// Setup paper
+		paperCanvas = new PaperCanvas();
+
+		// Set the GUI to an initial state
+		updateTimelineGUI();
 
 	// Setup main menu events
 
@@ -53,6 +59,16 @@ var WickEditor = (function () {
 		document.getElementById("importButton").onchange = function (e) {
 			importJSONProject(document.getElementById("importButton"));
 		};
+
+	// Setup toolbar GUI events
+
+		$("#mouseToolButton").on("click", function (e) {
+			fabricCanvas.stopDrawingMode();
+		});
+
+		$("#paintbrushToolButton").on("click", function (e) {
+			fabricCanvas.startDrawingMode();
+		});
 
 	// Setup timeline GUI events
 
@@ -84,7 +100,7 @@ var WickEditor = (function () {
 			symbol.parentObject = currentObject;
 			symbol.wickScripts = {};
 			symbol.frames = [new WickFrame()];
-			symbol.frames[0].wickObjects[0] = fabricCanvas.getActiveObject().wickObject;
+			symbol.frames[0].wickObjects[0] = fabricCanvas.getActiveObject().wickObject; // TODO: Convert multiple symbols to objects
 			symbol.frames[0].wickObjects[0].left = 0;
 			symbol.frames[0].wickObjects[0].top = 0;
 			symbol.frames[0].wickObjects[0].parentObject = symbol;
@@ -286,6 +302,12 @@ var WickEditor = (function () {
 		$("#rightClickMenu").css('left','0px');
 	}
 
+/**********************************
+	Toolbar/Tools
+**********************************/
+
+// todo
+
 /*****************************
 	Timeline
 *****************************/
@@ -346,7 +368,17 @@ var WickEditor = (function () {
 
 	}
 
+/*****************************
+	GUI
+*****************************/
+
 	var updateTimelineGUI = function () {
+
+		// Update the paper canvas inside the fabric canvas.
+
+		fabricCanvas.reloadPaperCanvas(paperCanvas.getCanvas());
+
+		// Update timeline GUI to match the current object's frames.
 
 		var timeline = document.getElementById("timeline");
 		timeline.innerHTML = "";
@@ -377,34 +409,37 @@ var WickEditor = (function () {
 
 	var importFilesDroppedIntoEditor = function(files) {
 		// Retrieve uploaded files data
-		// TODO: multiple files at once
-		var file = files[0];
+		for (var i = 0; i < files.length; i++) {
+			var file = files[i];
 
-		// Read file as data URL
-		var reader = new FileReader();
-		reader.onload = (function(theFile) {
-			return function(e) {
-				// Upload successful, we have the data URL
-				var fileDataURL = e.target.result;
+			// Read file as data URL
+			var reader = new FileReader();
+			reader.onload = (function(theFile) {
+				return function(e) {
+					// TODO: Check filetype for image/sound/video/etc.
 
-				// Create a new wick object with that data
-				var obj = new WickObject();
-				obj.objectName = theFile.name;
-				obj.dataURL = fileDataURL;
-				obj.left = (window.innerWidth/2);
-				obj.top = (window.innerHeight/2);
-				obj.scaleX = 1;
-				obj.scaleY = 1;
-				obj.angle  = 0;
-				obj.flipX  = false;
-				obj.flipY  = false;
-				obj.parentObject = currentObject;
+					// Upload successful, we have the data URL
+					var fileDataURL = e.target.result;
 
-				// Put that wickobject in the fabric canvas
-				fabricCanvas.addWickObjectToCanvas(obj);
-			};
-		})(file);
-		reader.readAsDataURL(file);
+					// Create a new wick object with that data
+					var obj = new WickObject();
+					obj.objectName = theFile.name;
+					obj.dataURL = fileDataURL;
+					obj.left = (window.innerWidth/2);
+					obj.top = (window.innerHeight/2);
+					obj.scaleX = 1;
+					obj.scaleY = 1;
+					obj.angle  = 0;
+					obj.flipX  = false;
+					obj.flipY  = false;
+					obj.parentObject = currentObject;
+
+					// Put that wickobject in the fabric canvas
+					fabricCanvas.addWickObjectToCanvas(obj);
+				};
+			})(file);
+			reader.readAsDataURL(file);
+		}
 	}
 
 /*****************************

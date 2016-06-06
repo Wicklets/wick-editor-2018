@@ -19,6 +19,7 @@ var WickObject = function () {
 	// Data, only used by static objects
 	// Currently only supports images, but will later support sounds, vectors, etc.
 	this.dataURL = undefined;
+	// this.dataType = "image"; // This is how we will support different formats later
 
 	// List of frames, only used by symbols
 	this.frames = undefined;
