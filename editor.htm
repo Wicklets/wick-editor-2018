@@ -43,6 +43,13 @@
 			text-align: center;
 		}
 
+		#scriptingGUI {
+			bottom: 0px;
+			left: 0px;
+			text-align: center;
+			visibility: hidden;
+		}
+
 		#builtinPlayerGUI {
 			top: 0px;
 			left: 0px;
@@ -153,6 +160,17 @@
 			<input type="file" id="importButton" /><br />
 			<br />
 			<div class="button" id="runButton">Run Project</div>
+		</div>
+
+		<!-- WickObject Scripting GUI, bottom left corner -->
+
+		<div id="scriptingGUI" class="GUIBox">
+			<div class="button" id="onLoadButton">onLoad</div>
+			<div class="button" id="onClickButton">onClick</div>
+			<div class="button" id="onUpdateButton">onUpdate</div>
+			<div class="button" id="closeScriptingGUIButton">Close</div>
+			<hr />
+			<textarea id="scriptTextArea" rows="20" cols="80"></textarea>
 		</div>
 
 		<!-- Timeline GUI, centered at the top of the screen -->

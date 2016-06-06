@@ -60,6 +60,27 @@ var WickEditor = (function () {
 			importJSONProject(document.getElementById("importButton"));
 		};
 
+	// Setup scripting GUI events
+
+		$("#closeScriptingGUIButton").on("click", function (e) {
+			closeScriptingGUI();
+		});
+
+		$("#scriptTextArea").bind('input propertychange', function() {
+			fabricCanvas.getActiveObject().wickObject.wickScripts[currentScript] = this.value;
+			console.log(fabricCanvas.getActiveObject());
+		});
+
+		// Load scripts into the script editor GUI
+		fabricCanvas.getCanvas().on('object:selected', function(e) {
+			reloadScriptingGUI();
+		});
+
+		// Clear scripting bar when object deselected
+		fabricCanvas.getCanvas().on('selection:cleared', function(e) {
+			closeScriptingGUI();
+		});
+
 	// Setup toolbar GUI events
 
 		$("#mouseToolButton").on("click", function (e) {
@@ -131,8 +152,7 @@ var WickEditor = (function () {
 			closeRightClickMenu();
 		});
 		$("#editScriptsButton").on("click", function (e) {
-			fabricCanvas.getActiveObject().wickObject.wickScripts['update'] = prompt("Enter update script:");
-			console.log(fabricCanvas.getActiveObject().wickObject);
+			openScriptingGUI();
 			closeRightClickMenu();
 		});
 
@@ -361,6 +381,25 @@ var WickEditor = (function () {
 /*****************************
 	GUI
 *****************************/
+
+	var defaultScript = 'onLoad';
+	var currentScript = defaultScript;
+
+	var openScriptingGUI = function () {
+		$("#scriptingGUI").css('visibility', 'visible');
+		reloadScriptingGUI();
+	};
+
+	var closeScriptingGUI = function() {
+		currentScript = defaultScript;
+		$("#scriptingGUI").css('visibility', 'hidden');
+	};
+
+	var reloadScriptingGUI = function() {
+		currentScript = defaultScript;
+		if(fabricCanvas.getActiveObject().wickObject.wickScripts && fabricCanvas.getActiveObject().wickObject.wickScripts[currentScript])
+			$("#scriptTextArea").text(fabricCanvas.getActiveObject().wickObject.wickScripts[currentScript]);
+	};
 
 	var updateTimelineGUI = function () {
 

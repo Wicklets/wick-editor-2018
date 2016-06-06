@@ -131,6 +131,12 @@ FabricCanvas.prototype.clearCanvas = function () {
 
 }
 
+FabricCanvas.prototype.getCanvas = function() {
+
+	return this.canvas;
+
+}
+
 FabricCanvas.prototype.getActiveObject = function () {
 
 	return this.canvas.getActiveObject();
