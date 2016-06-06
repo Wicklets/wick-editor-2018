@@ -2,7 +2,7 @@
 
 Wick is a multipurpose creation environment that allows anyone to build a wide range of easily sharable internet games, animations and interactive doohickies - all in the browser.  
 
-A research project by Zach Rispoli and Luca Damasco. 
+A research project by Zach Rispoli, Luca Damasco, and Josh Rispoli. 
 
 Try the editor [here](http://zrispo.co/wick/editor.htm)!
 
