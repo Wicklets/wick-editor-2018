@@ -38,9 +38,12 @@ var FabricCanvas = function () {
 		that.canvas.freeDrawingBrush.color = this.value;
 	};
 
-	// (Need better way to do this)
 	// When a path is done being drawn, create a wick object out of it.
 	// This is to get around the player currently not supporting paths.
+	//
+	// Later on, we will rasterize the path drawn by fabric, and vectorize it using potrace.
+	// The vectors can then be edited with paper.js.
+	//
 	this.canvas.on('object:added', function(e) {
 		/*var activeObject = e.target;
 		console.log(activeObject.get('left'), activeObject.get('top'));*/
