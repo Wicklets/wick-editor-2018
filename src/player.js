@@ -12,6 +12,8 @@ var WickPlayer = (function () {
 	var canvas;
 	var context;
 
+	var canvasContainerEl;
+
 	// Flags for different player modes (phone or desktop)
 	var mobileMode;
 	var desktopMode;
@@ -51,7 +53,7 @@ var WickPlayer = (function () {
 		canvas = document.getElementById("playerCanvas");
 		context = canvas.getContext('2d');
 
-		var canvasContainerEl = document.getElementById("playerCanvasContainer");
+		canvasContainerEl = document.getElementById("playerCanvasContainer");
 
 		// Check if we're on a mobile device or not
 		mobileMode = inMobileMode();
@@ -145,15 +147,11 @@ var WickPlayer = (function () {
 
 		// Check if we're hovered over a clickable object...
 		var hoveredOverObj = false;
-		for(var i = 0; i < currentFrameObjects.length; i++) {
-			var obj = currentFrameObjects[i];
-			if(pointInsideObj(obj, mousePos)) {
+		forEachActiveChildObject(project.rootObject, function(currObj) {
+			if(pointInsideObj(currObj, mousePos)) {
 				hoveredOverObj = true;
-				break;
-			} else {
-				obj.hoveredOver = false;
 			}
-		}
+		});
 
 		//...and change the cursor if we are
 		if(hoveredOverObj) {
@@ -204,7 +202,7 @@ var WickPlayer = (function () {
 
 	/* Probably broken right now !!! Needs to use parent's position !!! */
 	var pointInsideObj = function(obj, point) {
-
+		
 		var scaledObjLeft = obj.left;
 		var scaledObjTop = obj.top;
 		var scaledObjWidth = obj.width*obj.scaleX;

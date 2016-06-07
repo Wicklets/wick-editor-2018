@@ -120,22 +120,19 @@ var WickEditor = (function () {
 
 		$("#convertToSymbolButton").on("click", function (e) {
 			var symbol = new WickObject();
+
 			symbol.parentObject = currentObject;
 			symbol.left = fabricCanvas.getActiveObject().left;
 			symbol.top = fabricCanvas.getActiveObject().top;
-			symbol.scaleX = 1;
-			symbol.scaleY = 1;
-			symbol.angle = 0;
-			symbol.flipX = false;
-			symbol.flipY = false;
-			symbol.isSymbol = true;
-			symbol.currentFrame = 0;
-			symbol.wickScripts = {};
-			symbol.frames = [new WickFrame()];
-			symbol.frames[0].wickObjects[0] = fabricCanvas.getActiveObject().wickObject; // TODO: Convert multiple symbols to objects
+			symbol.setDefaultPositioningValues();
+			symbol.setDefaultSymbolValues();
+
+			// TODO: Convert multiple symbols to objects
+			symbol.frames[0].wickObjects[0] = fabricCanvas.getActiveObject().wickObject;
 			symbol.frames[0].wickObjects[0].parentObject = symbol;
 			symbol.frames[0].wickObjects[0].left = 0;
 			symbol.frames[0].wickObjects[0].top = 0;
+
 			fabricCanvas.getActiveObject().remove();
 			fabricCanvas.addWickObjectToCanvas(symbol);
 
@@ -243,17 +240,12 @@ var WickEditor = (function () {
 		fabricCanvas.getCanvas().on('object:added', function(e) {
 			if(e.target.type === "path") {
 				e.target.cloneAsImage(function(clone) {
-					// Create a new wick object with that data
+					// Create a new wick object with the paths data
 					var obj = new WickObject();
-					//obj.objectName = theFile.name;
 					obj.dataURL = clone._element.currentSrc;
 					obj.left = e.target.left - clone.width/2;
 					obj.top = e.target.top - clone.height/2;
-					obj.scaleX = 1;
-					obj.scaleY = 1;
-					obj.angle  = 0;
-					obj.flipX  = false;
-					obj.flipY  = false;
+					obj.setDefaultPositioningValues();
 					obj.parentObject = currentObject;
 
 					// Put that wickobject in the fabric canvas
@@ -507,28 +499,34 @@ var WickEditor = (function () {
 				return function(e) {
 					// TODO: Check filetype for image/sound/video/etc.
 
-					// Upload successful, we have the data URL
-					var fileDataURL = e.target.result;
-
-					// Create a new wick object with that data
-					var obj = new WickObject();
-					obj.objectName = theFile.name;
-					obj.dataURL = fileDataURL;
-					obj.left = 0//(window.innerWidth/2);
-					obj.top = 0//(window.innerHeight/2);
-					obj.scaleX = 1;
-					obj.scaleY = 1;
-					obj.angle  = 0;
-					obj.flipX  = false;
-					obj.flipY  = false;
-					obj.parentObject = currentObject;
-
-					// Put that wickobject in the fabric canvas
-					fabricCanvas.addWickObjectToCanvas(obj);
+					importImage(theFile.name, e.target.result)
 				};
 			})(file);
 			reader.readAsDataURL(file);
 		}
+	}
+
+	var importImage = function (name, data) {
+
+		var fileImage = new Image();
+		fileImage.src = data;
+
+		fileImage.onload = function() {
+			// Create a new wick object with that data
+			var obj = new WickObject();
+			obj.setDefaultPositioningValues();
+			obj.objectName = name;
+			obj.dataURL = data;
+			obj.left = 0//(window.innerWidth/2);
+			obj.top = 0//(window.innerHeight/2);
+			obj.width = fileImage.width;
+			obj.height = fileImage.height;
+			obj.parentObject = currentObject;
+
+			// Put that wickobject in the fabric canvas
+			fabricCanvas.addWickObjectToCanvas(obj);
+		}
+
 	}
 
 /*****************************
@@ -541,10 +539,14 @@ var WickEditor = (function () {
 
 		// Remove parent object references 
 		// (can't JSONify objects with circular references, player doesn't need them anyway)
-		// (note that these are regenerated when player is closed/project is imported)
 		project.rootObject.removeParentObjectRefences();
 
-		return JSON.stringify(project);
+		var JSONProject = JSON.stringify(project);
+
+		// Put parent object references back in all objects
+		project.rootObject.regenerateParentObjectReferences();
+
+		return JSONProject;
 	}
 
 	var exportProjectAsJSONFile = function () {
@@ -619,9 +621,6 @@ var WickEditor = (function () {
 
 		// Clean up player
 		WickPlayer.stopRunningCurrentProject();
-
-		// Put parent object references back
-		project.rootObject.regenerateParentObjectReferences();
 	}
 
 	return wickEditor;

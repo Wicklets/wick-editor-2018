@@ -5,6 +5,8 @@ var FabricCanvas = function () {
 	this.sharedFabricWickObjectProperties = [
 		"left",
 		"top",
+		"width",
+		"height",
 		"scaleX",
 		"scaleY",
 		"angle",

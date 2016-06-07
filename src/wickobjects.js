@@ -29,6 +29,25 @@ var WickObject = function () {
 
 };
 
+WickObject.prototype.setDefaultPositioningValues = function () {
+
+	this.scaleX = 1;
+	this.scaleY = 1;
+	this.angle  = 0;
+	this.flipX  = false;
+	this.flipY  = false;
+
+}
+
+WickObject.prototype.setDefaultSymbolValues = function () {
+
+	this.isSymbol = true;
+	this.currentFrame = 0;
+	this.wickScripts = {};
+	this.frames = [new WickFrame()];
+
+}
+
 WickObject.prototype.getCurrentFrame = function() {
 
 	return this.frames[this.currentFrame];
