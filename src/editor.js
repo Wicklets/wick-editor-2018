@@ -190,6 +190,7 @@ var WickEditor = (function () {
 		document.getElementById("editorCanvasContainer").addEventListener("keydown", function (e) {
 			keys[e.keyCode] = true;
 
+			// Backspace: delete selected objects
 			if(keys[8]) {
 		        e.preventDefault();
 
@@ -198,9 +199,13 @@ var WickEditor = (function () {
 			    }
 		    }
 			
-			if (keys[39]) { // Right arrow
+			// Right arrow
+			if (keys[39]) {
 				
-			} else if (keys[37]) { // Left arrow
+			}
+
+			// Left arrow
+			if (keys[37]) {
 				
 			}
 
@@ -404,7 +409,7 @@ var WickEditor = (function () {
 	}
 
 /*****************************
-	???
+	Editor action utils
 *****************************/
 
 var convertActiveObjectToSymbol = function () {
