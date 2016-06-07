@@ -62,6 +62,18 @@ var WickEditor = (function () {
 
 	// Setup scripting GUI events
 
+		$("#onLoadButton").on("click", function (e) {
+			changeCurrentScript('onLoad');
+		});
+
+		$("#onClickButton").on("click", function (e) {
+			changeCurrentScript('onClick');
+		});
+
+		$("#onUpdateButton").on("click", function (e) {
+			changeCurrentScript('onUpdate');
+		});
+
 		$("#closeScriptingGUIButton").on("click", function (e) {
 			closeScriptingGUI();
 		});
@@ -432,21 +444,28 @@ var WickEditor = (function () {
 		reloadScriptingGUI();
 	};
 
+	var reloadScriptingGUI = function() {
+		changeCurrentScript(defaultScript);
+	};
+
+	var changeCurrentScript = function(scriptString) {
+		currentScript = scriptString;
+		reloadScriptingGUITextArea();
+	};
+
+	var reloadScriptingGUITextArea = function() {
+		var activeObj = fabricCanvas.getActiveObject();
+		if(activeObj && activeObj.wickObject.wickScripts && activeObj.wickObject.wickScripts[currentScript]) {
+			var script = fabricCanvas.getActiveObject().wickObject.wickScripts[currentScript];
+			$("#scriptTextArea").val(script);
+		} else {
+			$("#scriptTextArea").val("");
+		}
+	};
+
 	var closeScriptingGUI = function() {
 		currentScript = defaultScript;
 		$("#scriptingGUI").css('visibility', 'hidden');
-	};
-
-	var reloadScriptingGUI = function() {
-		currentScript = defaultScript;
-
-		var activeObj = fabricCanvas.getActiveObject();
-		if(activeObj) {
-			if(activeObj.wickObject.wickScripts && activeObj.wickObject.wickScripts[currentScript]) {
-				var script = fabricCanvas.getActiveObject().wickObject.wickScripts[currentScript];
-				$("#scriptTextArea").text(script);
-			}
-		}
 	};
 
 	var updateTimelineGUI = function () {
