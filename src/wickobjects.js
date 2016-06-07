@@ -65,6 +65,8 @@ WickObject.prototype.removeParentObjectRefences = function() {
 // Used to put parent object references back after 
 WickObject.prototype.regenerateParentObjectReferences = function() {
 
+	var parentObject = this;
+
 	if(this.isSymbol) {
 
 		// Recursively remove parent object references of all objects inside this symbol.
@@ -72,8 +74,10 @@ WickObject.prototype.regenerateParentObjectReferences = function() {
 		for(var f = 0; f < this.frames.length; f++) {
 			var frame = this.frames[f];
 			for (var o = 0; o < frame.wickObjects.length; o++) {
-				var wickObject = frame.wickObjects[o];
-				wickObject.removeParentObjectRefences();
+				console.log(parentObject)
+				frame.wickObjects[o].parentObject = parentObject;
+				console.log(frame.wickObjects[o])
+				frame.wickObjects[o].regenerateParentObjectReferences();
 			}
 		}
 	}
@@ -88,16 +92,11 @@ WickObject.prototype.getRelativePosition = function () {
 			top: 0,
 			left: 0
 		};
-	} else if(this.parentObject) {
+	} else {
 		var parentPosition = this.parentObject.getRelativePosition();
 		return {
 			top: this.top + parentPosition.top,
 			left: this.left + parentPosition.left
-		};
-	} else {
-		return { 
-			top: this.top,
-			left: this.left 
 		};
 	}
 

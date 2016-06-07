@@ -38,38 +38,6 @@ var FabricCanvas = function () {
 		that.canvas.freeDrawingBrush.color = this.value;
 	};
 
-	// When a path is done being drawn, create a wick object out of it.
-	// This is to get around the player currently not supporting paths.
-	//
-	// Later on, we will rasterize the path drawn by fabric, and vectorize it using potrace.
-	// The vectors can then be edited with paper.js.
-	//
-	this.canvas.on('object:added', function(e) {
-		if(e.target.type === "path") {
-			console.log(e.target)
-
-			e.target.cloneAsImage(function(clone) {
-				// Create a new wick object with that data
-				var obj = new WickObject();
-				//obj.objectName = theFile.name;
-				obj.dataURL = clone._element.currentSrc;
-				obj.left = (window.innerWidth/2);
-				obj.top = (window.innerHeight/2);
-				obj.scaleX = 1;
-				obj.scaleY = 1;
-				obj.angle  = 0;
-				obj.flipX  = false;
-				obj.flipY  = false;
-				//obj.parentObject = currentObject;
-
-				// Put that wickobject in the fabric canvas
-				that.addWickObjectToCanvas(obj);
-			});
-
-			that.canvas.remove(e.target);
-		}
-	});
-
 // Fabric object that holds the paper canvas (isn't set up yet - editor handles that)
 
 	this.paperCanvas = undefined;

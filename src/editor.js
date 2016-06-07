@@ -109,6 +109,7 @@ var WickEditor = (function () {
 
 		$("#convertToSymbolButton").on("click", function (e) {
 			var symbol = new WickObject();
+			symbol.parentObject = currentObject;
 			symbol.left = fabricCanvas.getActiveObject().left;
 			symbol.top = fabricCanvas.getActiveObject().top;
 			symbol.scaleX = 1;
@@ -118,13 +119,12 @@ var WickEditor = (function () {
 			symbol.flipY = false;
 			symbol.isSymbol = true;
 			symbol.currentFrame = 0;
-			symbol.parentObject = currentObject;
 			symbol.wickScripts = {};
 			symbol.frames = [new WickFrame()];
 			symbol.frames[0].wickObjects[0] = fabricCanvas.getActiveObject().wickObject; // TODO: Convert multiple symbols to objects
+			symbol.frames[0].wickObjects[0].parentObject = symbol;
 			symbol.frames[0].wickObjects[0].left = 0;
 			symbol.frames[0].wickObjects[0].top = 0;
-			symbol.frames[0].wickObjects[0].parentObject = symbol;
 			fabricCanvas.getActiveObject().remove();
 			fabricCanvas.addWickObjectToCanvas(symbol);
 
@@ -218,6 +218,40 @@ var WickEditor = (function () {
 
 		document.getElementById("editorCanvasContainer").addEventListener("keyup", function (e) {
 			keys[e.keyCode] = false;
+		});
+
+	//
+
+		// When a path is done being drawn, create a wick object out of it.
+		// This is to get around the player currently not supporting paths.
+		//
+		// Later on, we will rasterize the path drawn by fabric, and vectorize it using potrace.
+		// The vectors can then be edited with paper.js.
+		//
+		fabricCanvas.getCanvas().on('object:added', function(e) {
+			if(e.target.type === "path") {
+				console.log(e.target)
+
+				e.target.cloneAsImage(function(clone) {
+					// Create a new wick object with that data
+					var obj = new WickObject();
+					//obj.objectName = theFile.name;
+					obj.dataURL = clone._element.currentSrc;
+					obj.left = (window.innerWidth/2);
+					obj.top = (window.innerHeight/2);
+					obj.scaleX = 1;
+					obj.scaleY = 1;
+					obj.angle  = 0;
+					obj.flipX  = false;
+					obj.flipY  = false;
+					obj.parentObject = currentObject;
+
+					// Put that wickobject in the fabric canvas
+					fabricCanvas.addWickObjectToCanvas(obj);
+				});
+
+				fabricCanvas.getCanvas().remove(e.target);
+			}
 		});
 
 	// Setup drag/drop events
@@ -403,6 +437,8 @@ var WickEditor = (function () {
 
 	var updateTimelineGUI = function () {
 
+		console.log(project.rootObject.frames)
+
 		// Update the paper canvas inside the fabric canvas.
 
 		fabricCanvas.reloadPaperCanvas(paperCanvas.getCanvas());
@@ -455,8 +491,8 @@ var WickEditor = (function () {
 					var obj = new WickObject();
 					obj.objectName = theFile.name;
 					obj.dataURL = fileDataURL;
-					obj.left = (window.innerWidth/2);
-					obj.top = (window.innerHeight/2);
+					obj.left = 0//(window.innerWidth/2);
+					obj.top = 0//(window.innerHeight/2);
 					obj.scaleX = 1;
 					obj.scaleY = 1;
 					obj.angle  = 0;
@@ -526,10 +562,10 @@ var WickEditor = (function () {
 	}
 
 	var loadProjectFromJSON = function (jsonString) {
-		console.error("Remember to regenerate parent object references here.");
 		console.error("Remember to put prototypes back on objects here.");
 
 		project = JSON.parse(jsonString);
+		project.rootObject.regenerateParentObjectReferences();
 		currentObject = project.rootObject;
 		gotoFrame(0);
 		updateTimelineGUI();
@@ -563,6 +599,9 @@ var WickEditor = (function () {
 
 		// Clean up player
 		WickPlayer.stopRunningCurrentProject();
+
+		// Put parent object references back
+		project.rootObject.regenerateParentObjectReferences();
 	}
 
 	return wickEditor;
