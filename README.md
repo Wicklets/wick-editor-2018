@@ -1,5 +1,3 @@
-![mascot](test-images/SUPERDUMB.png)
-
 # Wick
 
 Wick is a multipurpose creation environment that allows anyone to build a wide range of easily sharable internet games, animations and interactive doohickies for both phones and desktops - all in the browser.
