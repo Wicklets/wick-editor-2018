@@ -220,7 +220,8 @@ var WickEditor = (function () {
 			keys[e.keyCode] = false;
 		});
 
-	//
+	// Path to wick object conversion
+	// This should not be here, the current drawing system is temporary though, so get rid of it later
 
 		// When a path is done being drawn, create a wick object out of it.
 		// This is to get around the player currently not supporting paths.
@@ -251,6 +252,16 @@ var WickEditor = (function () {
 				});
 
 				fabricCanvas.getCanvas().remove(e.target);
+			}
+		});
+
+	// The extended version of the fabric canvas fires off a mouse:down event on right clicks
+	// We use this here to select an item with a right click
+
+		fabricCanvas.getCanvas().on('mouse:down', function(e) {
+			if(e.target) {
+				var id = fabricCanvas.getCanvas().getObjects().indexOf(e.target);
+				fabricCanvas.getCanvas().setActiveObject(fabricCanvas.getCanvas().item(id));
 			}
 		});
 
@@ -431,8 +442,14 @@ var WickEditor = (function () {
 
 	var reloadScriptingGUI = function() {
 		currentScript = defaultScript;
-		if(fabricCanvas.getActiveObject().wickObject.wickScripts && fabricCanvas.getActiveObject().wickObject.wickScripts[currentScript])
-			$("#scriptTextArea").text(fabricCanvas.getActiveObject().wickObject.wickScripts[currentScript]);
+
+		var activeObj = fabricCanvas.getActiveObject();
+		if(activeObj) {
+			if(activeObj.wickObject.wickScripts && activeObj.wickObject.wickScripts[currentScript]) {
+				var script = fabricCanvas.getActiveObject().wickObject.wickScripts[currentScript];
+				$("#scriptTextArea").text(script);
+			}
+		}
 	};
 
 	var updateTimelineGUI = function () {

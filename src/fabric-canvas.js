@@ -14,7 +14,7 @@ var FabricCanvas = function () {
 
 // Setup fabric canvas
 
-	this.canvas = new fabric.Canvas('editorCanvas');
+	this.canvas = new fabric.CanvasEx('editorCanvas');
 	this.canvas.selectionColor = 'rgba(0,0,5,0.1)';
 	this.canvas.selectionBorderColor = 'grey';
 	this.canvas.selectionLineWidth = 2;
