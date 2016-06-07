@@ -111,6 +111,10 @@ var WickPlayer = (function () {
 		// Set this object to it's first frame
 		wickObj.currentFrame = 0;
 
+		// Stop this object
+		// (Note: objects should probably be playing instead of stopped initially)
+		wickObj.isPlaying = false;
+
 		// Recursively set all timelines to first frame as well
 		forEachChildObject(wickObj, function(subObj) {
 			if(subObj.isSymbol) {
@@ -164,16 +168,13 @@ var WickPlayer = (function () {
 
 	var onMouseDown = function (evt) {
 		
-		// Check if we clicked a clickable object
-		for(var i = 0; i < currentFrameObjects.length; i++) {
-			var obj = currentFrameObjects[i];
-			if(obj.clickable && pointInsideObj(obj, mousePos)) {
-				project.rootObject.currentFrame = obj.toFrame;
-				console.log("Went to frame " + currentFrame);
-				draw();
-				break;
+		forEachActiveChildObject(project.rootObject, function(currObj) {
+			if(pointInsideObj(currObj, mousePos)) {
+				console.error("Clicked object:");
+				console.log(currObj);
+				console.error("...but onClick scripts not yet implemented!");
 			}
-		}
+		});
 
 	}
 
@@ -183,16 +184,15 @@ var WickPlayer = (function () {
 
 	var onTouchStart = function (evt) {
 
-		// Check if we touched a clickable object
-		for(var i = 0; i < frames[currentFrame].length; i++) {
-			var obj = frames[currentFrame][i];
-			if(obj.clickable && pointInsideObj(obj, getTouchPos(canvas, evt))) {
-				currentFrame = obj.toFrame;
-				console.log("Went to frame " + currentFrame);
-				draw();
-				break;
+		var touchPos = getTouchPos(canvas, evt);
+
+		forEachActiveChildObject(project.rootObject, function(currObj) {
+			if(pointInsideObj(obj, touchPos)) {
+				console.error("Touched object:");
+				console.log(currObj);
+				console.error("...but onClick scripts not yet implemented!");
 			}
-		}
+		});
 
 	}
 
@@ -202,7 +202,7 @@ var WickPlayer = (function () {
 
 	/* Probably broken right now !!! Needs to use parent's position !!! */
 	var pointInsideObj = function(obj, point) {
-		
+
 		var scaledObjLeft = obj.left;
 		var scaledObjTop = obj.top;
 		var scaledObjWidth = obj.width*obj.scaleX;
@@ -250,18 +250,22 @@ var WickPlayer = (function () {
 		// Advance all timelines one frame
 		advanceTimeline(project.rootObject);
 
-		// Run scripts
+		// Run load/update scripts
 		// TODO
 
 	}
 
 	var advanceTimeline = function (obj) {
 
-		obj.currentFrame++;
-		if(obj.currentFrame == obj.frames.length) {
-			obj.currentFrame = 0;
+		// Advance timeline for this object
+		if(obj.isPlaying) {
+			obj.currentFrame++;
+			if(obj.currentFrame == obj.frames.length) {
+				obj.currentFrame = 0;
+			}
 		}
 
+		// Recusively advance timelines of all children
 		forEachActiveChildObject(obj, function(subObj) {
 			if(subObj.isSymbol) {
 				advanceTimeline(subObj);
