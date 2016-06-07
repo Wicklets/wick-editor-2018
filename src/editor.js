@@ -44,10 +44,10 @@ var WickEditor = (function () {
 	// Setup main menu events
 
 		$("#exportJSONButton").on("click", function (e) {
-			exportProjectAsJSONFile();
+			WickUtils.saveProjectAsJSONFile(getProjectAsJSON());
 		});
 		$("#exportHTMLButton").on("click", function (e) {
-			exportProjectAsHTML();
+			WickUtils.saveProjectAsJHTMLFile(getProjectAsJSON());
 		});
 		$("#runButton").on("click", function (e) {
 			runProject();
@@ -57,7 +57,10 @@ var WickEditor = (function () {
 		});
 
 		document.getElementById("importButton").onchange = function (e) {
-			importJSONProject(document.getElementById("importButton"));
+			WickUtils.readJSONFromFileChooser(
+				document.getElementById("importButton"), 
+				loadProjectFromJSON
+			);
 		};
 
 	// Setup scripting GUI events
@@ -477,18 +480,20 @@ var convertActiveObjectToSymbol = function () {
 		console.log("updateTimelineGUI() called. project state:")
 		console.log(project.rootObject.frames)
 
-		// Update the paper canvas inside the fabric canvas.
+		// Update the paper canvas inside the fabric canvas
 
 		fabricCanvas.reloadPaperCanvas(paperCanvas.getCanvas());
 
-		// Update timeline GUI to match the current object's frames.
+		// Reset the timeline div
 
 		var timeline = document.getElementById("timeline");
 		timeline.innerHTML = "";
+		timeline.style.width = currentObject.frames.length*23 + 6 + "px";
 
 		for(var i = 0; i < currentObject.frames.length; i++) {
 
-			var frameDiv = document.createElement("div");
+			// Create the frame element
+			var frameDiv = document.createElement("span");
 			frameDiv.id = "frame" + i;
 			frameDiv.innerHTML = i;
 			if(currentObject.currentFrame == i) {
@@ -498,6 +503,7 @@ var convertActiveObjectToSymbol = function () {
 			}
 			timeline.appendChild(frameDiv);
 
+			// Add mousedown event to the frame element so we can go to that frame when its clicked
 			document.getElementById("frame" + i).addEventListener("mousedown", function(index) {
 				return function () {
 					gotoFrame(index);
@@ -521,7 +527,6 @@ var convertActiveObjectToSymbol = function () {
 			reader.onload = (function(theFile) {
 				return function(e) {
 					// TODO: Check filetype for image/sound/video/etc.
-
 					importImage(theFile.name, e.target.result)
 				};
 			})(file);
@@ -559,6 +564,14 @@ var convertActiveObjectToSymbol = function () {
 
 	}
 
+	var importSound = function (name, data) {
+
+	}
+
+	var importVectors = function (name, data) {
+
+	}
+
 /*****************************
 	Export projects
 *****************************/
@@ -579,60 +592,31 @@ var convertActiveObjectToSymbol = function () {
 		return JSONProject;
 	}
 
-	var exportProjectAsJSONFile = function () {
-		// Save JSON project and have user download it
-		var blob = new Blob([getProjectAsJSON()], {type: "text/plain;charset=utf-8"});
-		saveAs(blob, "project.json");
-	}
-
-	var exportProjectAsHTML = function () {
-		var fileOut = "";
-
-		// Add the player webpage (need to download the empty player)
-		fileOut += WickUtils.downloadFile("player.htm") + "\n";
-
-		// Add the any libs that the player needs
-		fileOut += "<script>" + WickUtils.downloadFile("src/fpscounter.js") + "</script>\n";
-
-		// Add the player (need to download the player code)
-		fileOut += "<script>" + WickUtils.downloadFile("src/player.js") + "</script>\n";
-
-		// Bundle the JSON project
-		fileOut += "<script>WickPlayer.runProject('" + getProjectAsJSON() + "');</script>" + "\n";
-
-		// Save whole thing as html file
-		var blob = new Blob([fileOut], {type: "text/plain;charset=utf-8"});
-		saveAs(blob, "project.html");
-	}
-
 /*****************************
 	Import projects
 *****************************/
 
-	var importJSONProject = function (filePath) {
-		if(filePath.files && filePath.files[0]) {
-			var reader = new FileReader();
-			reader.onload = function (e) {
-				jsonString = e.target.result;
-				loadProjectFromJSON(jsonString);
-			};
-			reader.readAsText(filePath.files[0]);
-		}
-	}
-
 	var loadProjectFromJSON = function (jsonString) {
 		console.error("Remember to put prototypes back on objects here.");
 
+		// Replace current project with project in JSON
 		project = JSON.parse(jsonString);
+
+		// Regenerate parent object references
+		// These were removed earlier because JSON can't handle infinitely recursive objects (duh)
 		project.rootObject.regenerateParentObjectReferences();
+
+		// Start editing the first frame of root
+		// TODO: Projects should store the current place they were in when last saved
 		currentObject = project.rootObject;
 		gotoFrame(0);
+
 		updateTimelineGUI();
 	}
 
-/*****************************
-	Run projects
-*****************************/
+/**************************************
+	Run projects with builtin player
+***************************************/
 
 	var runProject = function () {
 		// Hide the editor, show the player
