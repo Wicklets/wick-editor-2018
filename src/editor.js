@@ -440,7 +440,7 @@ var WickEditor = (function () {
 			var script = fabricCanvas.getActiveObject().wickObject.wickScripts[currentScript];
 			$("#scriptTextArea").val(script);
 		} else {
-			$("#scriptTextArea").val("{\n\n}");
+			$("#scriptTextArea").val("// " + currentScript + "\n{\n\n}");
 		}
 	};
 
