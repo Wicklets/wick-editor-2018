@@ -234,10 +234,16 @@ var WickPlayer = (function () {
 
 			// Recursively draw all sub objects.
 
+			context.save();
+			context.translate(obj.left, obj.top);
+			context.scale(obj.scaleX, obj.scaleY);
+
 			var activeFrame = obj.frames[obj.currentFrame];
 			for(var i = 0; i < activeFrame.wickObjects.length; i++) {
 				drawWickObject(activeFrame.wickObjects[i]);
 			}
+
+			context.restore();
 
 		} else {
 
@@ -286,12 +292,12 @@ var WickPlayer = (function () {
 		}
 	}
 
-	var loadImages = function (obj) {
+	var loadImages = function (wickObj) {
 
-		// Recursively load images of wickobject.
+		// Recursively load images of wickObj
 
-		for(var f = 0; f < obj.frames.length; f++) {
-			var currentFrameObjects = obj.frames[f].wickObjects;
+		for(var f = 0; f < wickObj.frames.length; f++) {
+			var currentFrameObjects = wickObj.frames[f].wickObjects;
 			for(var o = 0; o < currentFrameObjects.length; o++) {
 				var subObj = currentFrameObjects[o];
 				if(subObj.isSymbol) {
