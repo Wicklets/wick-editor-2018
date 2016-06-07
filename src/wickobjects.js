@@ -74,9 +74,7 @@ WickObject.prototype.regenerateParentObjectReferences = function() {
 		for(var f = 0; f < this.frames.length; f++) {
 			var frame = this.frames[f];
 			for (var o = 0; o < frame.wickObjects.length; o++) {
-				console.log(parentObject)
 				frame.wickObjects[o].parentObject = parentObject;
-				console.log(frame.wickObjects[o])
 				frame.wickObjects[o].regenerateParentObjectReferences();
 			}
 		}

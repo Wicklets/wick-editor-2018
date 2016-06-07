@@ -242,8 +242,6 @@ var WickEditor = (function () {
 		//
 		fabricCanvas.getCanvas().on('object:added', function(e) {
 			if(e.target.type === "path") {
-				console.log(e.target)
-
 				e.target.cloneAsImage(function(clone) {
 					// Create a new wick object with that data
 					var obj = new WickObject();
@@ -472,6 +470,7 @@ var WickEditor = (function () {
 
 	var updateTimelineGUI = function () {
 
+		console.log("updateTimelineGUI() called. project state:")
 		console.log(project.rootObject.frames)
 
 		// Update the paper canvas inside the fabric canvas.
