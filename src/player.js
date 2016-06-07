@@ -2,13 +2,17 @@ var WickPlayer = (function () {
 
 	var wickPlayer = { };
 
+	// Current project being played by player
 	var project;
 
+	// Input vars for mouse and (later) keyboard and accelerometer
 	var mousePos;
 
+	// Canvas stuff
 	var canvas;
 	var context;
 
+	// Flags for different player modes (phone or desktop)
 	var mobileMode;
 	var desktopMode;
 
