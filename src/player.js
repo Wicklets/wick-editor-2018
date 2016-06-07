@@ -238,10 +238,10 @@ var WickPlayer = (function () {
 			context.translate(obj.left, obj.top);
 			context.scale(obj.scaleX, obj.scaleY);
 
-			var activeFrame = obj.frames[obj.currentFrame];
-			for(var i = 0; i < activeFrame.wickObjects.length; i++) {
-				drawWickObject(activeFrame.wickObjects[i]);
-			}
+				var activeFrame = obj.frames[obj.currentFrame];
+				for(var i = 0; i < activeFrame.wickObjects.length; i++) {
+					drawWickObject(activeFrame.wickObjects[i]);
+				}
 
 			context.restore();
 
@@ -251,9 +251,9 @@ var WickPlayer = (function () {
 
 			context.save();
 
-			context.translate(obj.left, obj.top);
-			context.scale(obj.scaleX, obj.scaleY);
-			context.drawImage(obj.image, 0, 0);
+				context.translate(obj.left, obj.top);
+				context.scale(obj.scaleX, obj.scaleY);
+				context.drawImage(obj.image, 0, 0);
 
 			context.restore();
 			
