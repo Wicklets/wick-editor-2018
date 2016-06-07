@@ -119,34 +119,16 @@ var WickEditor = (function () {
 	// Setup right click menu button events
 
 		$("#convertToSymbolButton").on("click", function (e) {
-			var symbol = new WickObject();
-
-			symbol.parentObject = currentObject;
-			symbol.left = fabricCanvas.getActiveObject().left;
-			symbol.top = fabricCanvas.getActiveObject().top;
-			symbol.setDefaultPositioningValues();
-			symbol.setDefaultSymbolValues();
-
-			// TODO: Convert multiple symbols to objects
-			symbol.frames[0].wickObjects[0] = fabricCanvas.getActiveObject().wickObject;
-			symbol.frames[0].wickObjects[0].parentObject = symbol;
-			symbol.frames[0].wickObjects[0].left = 0;
-			symbol.frames[0].wickObjects[0].top = 0;
-
-			fabricCanvas.getActiveObject().remove();
-			fabricCanvas.addWickObjectToCanvas(symbol);
-
-			gotoFrame(currentObject.currentFrame);
-			closeRightClickMenu();
+			convertActiveObjectToSymbol();
 		});
 
 		$("#bringToFrontButton").on("click", function (e) {
-			console.error("Fix! Uses old fabric canvas")
+			console.error("Fix! Uses old fabric canvas");
 			//fabricCanvas.bringToFront(fabricCanvas.getActiveObject());
 			closeRightClickMenu();
 		});
 		$("#sendToBackButton").on("click", function (e) {
-			console.error("Fix! Uses old fabric canvas")
+			console.error("Fix! Uses old fabric canvas");
 			//fabricCanvas.sendToBack(fabricCanvas.getActiveObject());
 			closeRightClickMenu();
 		});
@@ -240,16 +222,24 @@ var WickEditor = (function () {
 		fabricCanvas.getCanvas().on('object:added', function(e) {
 			if(e.target.type === "path") {
 				e.target.cloneAsImage(function(clone) {
-					// Create a new wick object with the paths data
-					var obj = new WickObject();
-					obj.dataURL = clone._element.currentSrc;
-					obj.left = e.target.left - clone.width/2;
-					obj.top = e.target.top - clone.height/2;
-					obj.setDefaultPositioningValues();
-					obj.parentObject = currentObject;
 
-					// Put that wickobject in the fabric canvas
-					fabricCanvas.addWickObjectToCanvas(obj);
+					var fileImage = new Image();
+					fileImage.src = clone._element.currentSrc;
+
+					fileImage.onload = function() {
+						var obj = new WickObject();
+
+						obj.setDefaultPositioningValues();
+						obj.width = fileImage.width;
+						obj.height = fileImage.height;
+						obj.left = e.target.left - clone.width/2;
+						obj.top = e.target.top - clone.height/2;
+
+						obj.parentObject = currentObject;
+						obj.dataURL = clone._element.currentSrc;
+
+						fabricCanvas.addWickObjectToCanvas(obj);
+					}
 				});
 
 				fabricCanvas.getCanvas().remove(e.target);
@@ -414,6 +404,34 @@ var WickEditor = (function () {
 	}
 
 /*****************************
+	???
+*****************************/
+
+var convertActiveObjectToSymbol = function () {
+
+	var symbol = new WickObject();
+
+	symbol.parentObject = currentObject;
+	symbol.left = fabricCanvas.getActiveObject().left;
+	symbol.top = fabricCanvas.getActiveObject().top;
+	symbol.setDefaultPositioningValues();
+	symbol.setDefaultSymbolValues();
+
+	// TODO: Convert multiple symbols to objects
+	symbol.frames[0].wickObjects[0] = fabricCanvas.getActiveObject().wickObject;
+	symbol.frames[0].wickObjects[0].parentObject = symbol;
+	symbol.frames[0].wickObjects[0].left = 0;
+	symbol.frames[0].wickObjects[0].top = 0;
+
+	fabricCanvas.getActiveObject().remove();
+	fabricCanvas.addWickObjectToCanvas(symbol);
+
+	gotoFrame(currentObject.currentFrame);
+	closeRightClickMenu();
+
+}
+
+/*****************************
 	GUI
 *****************************/
 
@@ -514,14 +532,21 @@ var WickEditor = (function () {
 		fileImage.onload = function() {
 			// Create a new wick object with that data
 			var obj = new WickObject();
-			obj.setDefaultPositioningValues();
+
+			obj.parentObject = currentObject;
 			obj.objectName = name;
 			obj.dataURL = data;
-			obj.left = 0//(window.innerWidth/2);
-			obj.top = 0//(window.innerHeight/2);
+
+			obj.setDefaultPositioningValues();
 			obj.width = fileImage.width;
 			obj.height = fileImage.height;
-			obj.parentObject = currentObject;
+			if(currentObject.isRoot) {
+				obj.left = window.innerWidth/2 - obj.width/2;
+				obj.top = window.innerHeight/2 - obj.height/2;
+			} else {
+				obj.left = 0;
+				obj.top = 0;
+			}
 
 			// Put that wickobject in the fabric canvas
 			fabricCanvas.addWickObjectToCanvas(obj);
