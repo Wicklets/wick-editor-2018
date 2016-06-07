@@ -62,12 +62,6 @@
 			text-align: center;
 		}
 
-		#timelineGUI {
-			top: 0px;
-			left: 0px;
-			text-align: center;
-		}
-
 		#toolbarGUI {
 			top: 20%;
 			left: 0px;
@@ -90,27 +84,48 @@
 			
 		}
 		.button:hover {
+			cursor: pointer;
 			background-color: #FFFFFF;
+		}
+		.button:active {
+			cursor: pointer;
+			background-color: #FFFF00;
+		}
+
+		#timelineGUI {
+			top: 0px;
+			left: 0px;
+			width: 200px;
+		}
+
+		#timelineScrollContainer {
+			width: 200px;
+			overflow-x:scroll;
 		}
 
 		#timeline {
-
+			float:left;
 		}
 
 		.timelineFrame {
 			width: 20px;
 			height: 30px;
-			background-color: red;
-			float:left;
+			background-color: white;
+			text-align: center;
 			margin-left: 3px;
+			margin-top: 3px;
+			float: left;
 		}
 		.timelineFrame:hover {
-			background-color: orange;
+			cursor: pointer;
+			background-color: white;
+			-moz-box-shadow:    inset 0 0 3px #FFFF00;
+			-webkit-box-shadow: inset 0 0 3px #FFFF00;
+			box-shadow:         inset 0 0 3px #FFFF00;
 		}
 
 		.timelineFrame.active {
-			background-color: red;
-			border-style: groove;
+			background-color: yellow;
 		}
 
 		#fileImportOverlay {
@@ -186,8 +201,10 @@
 
 		<div id="timelineGUI" class="GUIBox">
 			<div class="button" id="addEmptyFrameButton">Add Empty Frame</div>
-			<div id="timeline">
-				<!-- Populated with 'timelineFrame' divs by editor. -->
+			<div id="timelineScrollContainer">
+				<div id="timeline">
+					<!-- Populated with 'timelineFrame' divs by editor. -->
+				</div>
 			</div>
 		</div>
 
