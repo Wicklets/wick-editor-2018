@@ -19,4 +19,8 @@ var WickProject = function () {
 	this.resolution.x = 650;
 	this.resolution.y = 500;
 
+	this.backgroundColor = "#FFFFFF";
+
+	this.framerate = 12;
+
 };

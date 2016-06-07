@@ -26,8 +26,6 @@ var WickPlayer = (function () {
 	var project;
 	var currentFrameObjects;
 
-	var projectLoaded;
-
 	var mousePos;
 
 	var canvas;
@@ -37,9 +35,6 @@ var WickPlayer = (function () {
 	var desktopMode;
 
 	wickPlayer.runProject = function(projectJSON) {
-
-		// Initialize editor vars
-		projectLoaded = false;
 
 		// Setup canvas
 		canvas = document.getElementById("playerCanvas");
@@ -61,27 +56,25 @@ var WickPlayer = (function () {
 			}
 
 			canvas.addEventListener('mousemove', function(evt) {
-				if(projectLoaded) {
-					mousePos = getMousePos(canvas, evt);
+				mousePos = getMousePos(canvas, evt);
 
-					// Check if we're hovered over a clickable object...
-					var hoveredOverObj = false;
-					for(var i = 0; i < currentFrameObjects.length; i++) {
-						var obj = currentFrameObjects[i];
-						if(obj.clickable && pointInsideObj(obj, mousePos)) {
-							hoveredOverObj = true;
-							obj.hoveredOver = true;
-							break;
-						} else {
-							obj.hoveredOver = false;
-						}
-					}
-					//...and change the cursor if we are
-					if(hoveredOverObj) {
-						document.getElementById("playerCanvasContainer").style.cursor = "pointer";
+				// Check if we're hovered over a clickable object...
+				var hoveredOverObj = false;
+				for(var i = 0; i < currentFrameObjects.length; i++) {
+					var obj = currentFrameObjects[i];
+					if(obj.clickable && pointInsideObj(obj, mousePos)) {
+						hoveredOverObj = true;
+						obj.hoveredOver = true;
+						break;
 					} else {
-						document.getElementById("playerCanvasContainer").style.cursor = "default";
+						obj.hoveredOver = false;
 					}
+				}
+				//...and change the cursor if we are
+				if(hoveredOverObj) {
+					document.getElementById("playerCanvasContainer").style.cursor = "pointer";
+				} else {
+					document.getElementById("playerCanvasContainer").style.cursor = "default";
 				}
 			}, false);
 
@@ -135,9 +128,6 @@ var WickPlayer = (function () {
 		window.addEventListener('resize', resizeCanvas, false);
 		resizeCanvas();
 
-		// start draw/update loop
-		animate();
-
 		loadJSONProject(projectJSON);
 
 	}
@@ -170,11 +160,13 @@ var WickPlayer = (function () {
 *****************************/
 
 	var animate = function () {
-		requestAnimationFrame(animate);
-		if(projectLoaded) {
+
+		setTimeout(function() {
+			requestAnimationFrame(animate);
 			update();
 			draw();
-		}
+		}, 1000 / project.framerate);
+
 	}
 
 	var update = function () {
@@ -266,7 +258,6 @@ var WickPlayer = (function () {
 *****************************/
 
 	var loadJSONProject = function (proj) {
-		projectLoaded = true;
 		project = JSON.parse(proj);
 
 		console.log("Player loading project:")
@@ -274,6 +265,9 @@ var WickPlayer = (function () {
 		
 		resetAllPlayheads(project.rootObject);
 		loadImages(project.rootObject);
+
+		// start draw/update loop
+		animate();
 	}
 
 	var resetAllPlayheads = function (obj) {
