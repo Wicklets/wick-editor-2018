@@ -327,14 +327,6 @@ var WickEditor = (function () {
 		window.addEventListener('resize', resizeWindow, false);
 		resizeWindow();
 
-		// Start draw/update loop
-		// Not currently using this - fabric.js handles everything
-		/*
-		var FPS = 30;
-		setInterval(function() {
-			draw();
-		}, 1000/FPS);*/
-
 	}
 
 /**********************************
@@ -376,12 +368,6 @@ var WickEditor = (function () {
 		$("#rightClickMenu").css('left','0px');
 	}
 
-/**********************************
-	Toolbar/Tools
-**********************************/
-
-// todo
-
 /*****************************
 	Timeline
 *****************************/
@@ -392,6 +378,7 @@ var WickEditor = (function () {
 		// Store changes made to current frame in the project
 		currentObject.frames[currentObject.currentFrame].wickObjects = fabricCanvas.getWickObjectsInCanvas();
 
+		// move playhead
 		currentObject.currentFrame = newFrameIndex;
 
 		// Load wickobjects in the frame we moved to into the canvas
@@ -407,6 +394,7 @@ var WickEditor = (function () {
 		// Store changes made to current frame in the project
 		currentObject.frames[currentObject.currentFrame].wickObjects = fabricCanvas.getWickObjectsInCanvas();
 
+		// Set the editor to be editing the parent object
 		currentObject = currentObject.parentObject;
 
 		// Load wickobjects in the frame we moved to into the canvas
@@ -422,6 +410,7 @@ var WickEditor = (function () {
 		// Store changes made to current frame in the project
 		currentObject.frames[currentObject.currentFrame].wickObjects = fabricCanvas.getWickObjectsInCanvas();
 
+		// Set the editor to be editing this object at its first frame
 		currentObject = object;
 		currentObject.currentFrame = 0;
 
@@ -551,7 +540,8 @@ var WickEditor = (function () {
 		currentObject.frames[currentObject.currentFrame].wickObjects = fabricCanvas.getWickObjectsInCanvas();
 
 		// Remove parent object references 
-		// (can't JSONify objects with circular references, plus player doesn't need them)
+		// (can't JSONify objects with circular references, player doesn't need them anyway)
+		// (note that these are regenerated when player is closed/project is imported)
 		project.rootObject.removeParentObjectRefences();
 
 		return JSON.stringify(project);
@@ -568,6 +558,9 @@ var WickEditor = (function () {
 
 		// Add the player webpage (need to download the empty player)
 		fileOut += WickUtils.downloadFile("player.htm") + "\n";
+
+		// Add the any libs that the player needs
+		fileOut += "<script>" + WickUtils.downloadFile("src/fpscounter.js") + "</script>\n";
 
 		// Add the player (need to download the player code)
 		fileOut += "<script>" + WickUtils.downloadFile("src/player.js") + "</script>\n";
@@ -610,13 +603,8 @@ var WickEditor = (function () {
 *****************************/
 
 	var runProject = function () {
-		console.log("Running project in builtin player:")
-		console.log(project)
-
-		// Hide the editor
+		// Hide the editor, show the player
 		document.getElementById("editor").style.display = "none";
-
-		// Show the player
 		document.getElementById("builtinPlayer").style.display = "block";
 
 		// JSONify the project and have the builtin player run it
@@ -625,10 +613,8 @@ var WickEditor = (function () {
 	}
 
 	var closeBuiltinPlayer = function() {
-		// Show the editor
+		// Show the editor, hide the player
 		document.getElementById("builtinPlayer").style.display = "none";
-
-		// Hide the player
 		document.getElementById("editor").style.display = "block";
 
 		// Clean up player
