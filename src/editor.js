@@ -168,6 +168,7 @@ var WickEditor = (function () {
 
 		$("#convertToSymbolButton").on("click", function (e) {
 			convertActiveObjectToSymbol();
+			openScriptingGUI();
 		});
 
 		$("#bringToFrontButton").on("click", function (e) {

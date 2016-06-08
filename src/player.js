@@ -332,6 +332,7 @@ var WickPlayer = (function () {
 	var runOnClickScript = function (obj) {
 
 		if(obj.wickScripts.onClick) {
+			var script = obj.wickScripts.onClick;
 			eval(obj.wickScripts.onClick);
 		}
 
