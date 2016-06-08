@@ -28,8 +28,7 @@
 			position: absolute;
 			font-size: 12px;
 			font-family: "Arial", sans-serif;
-			background-color: #DDDDDD;
-			box-shadow: 2px 2px 5px #666;
+			background-color: #EEEEEE;
 			padding-top: 5px;
 			padding-bottom: 5px;
 			padding-left: 5px;
@@ -44,8 +43,8 @@
 		}
 
 		#scriptingGUI {
-			top: 28%;
-			left: 0px;
+			bottom: 10px;
+			left: 10px;
 			text-align: center;
 			visibility: hidden;
 
@@ -58,7 +57,7 @@
 		}
 
 		#toolbarGUI {
-			top: 20%;
+			top: 100px;
 			left: 0px;
 			text-align: left;
 		}
@@ -76,7 +75,7 @@
 		}
 
 		.button {
-			
+			padding: 3px;
 		}
 		.button:hover {
 			cursor: pointer;
@@ -85,6 +84,10 @@
 		.button:active {
 			cursor: pointer;
 			background-color: #FFFF00;
+		}
+
+		.buttonInRow {
+			float: left;
 		}
 
 		#timelineGUI {
@@ -114,9 +117,9 @@
 		.timelineFrame:hover {
 			cursor: pointer;
 			background-color: white;
-			-moz-box-shadow:    inset 0 0 3px #FFFF00;
-			-webkit-box-shadow: inset 0 0 3px #FFFF00;
-			box-shadow:         inset 0 0 3px #FFFF00;
+			-moz-box-shadow:    inset 0 0 3px #000000;
+			-webkit-box-shadow: inset 0 0 3px #000000;
+			box-shadow:         inset 0 0 3px #000000;
 		}
 
 		.timelineFrame.active {
@@ -137,6 +140,10 @@
 			background-color: red;
 			left: 50%;
 			top: 50%;
+		}
+
+		input[type=file] { 
+			display: none;
 		}
 	</style>
 
@@ -167,39 +174,37 @@
 </head>
 
 <body>
-	<!-- Editor GUI, visible when a project is being edited & not running -->
+<!-- Editor GUI, visible when a project is being edited & not running -->
 
 	<div id="editor">
 		<div tabindex="1" id="editorCanvasContainer">
 			<canvas id="editorCanvas"></canvas>
 		</div>
 
-		<!-- Main menu GUI, top left corner -->
+	<!-- Main menu GUI, top left corner -->
 
 		<div id="menuBarGUI" class="GUIBox">
 			<strong>Wick Editor Dev</strong><br />
+
 			<hr />
-			<div class="button" id="exportJSONButton">Save Project as JSON File</div>
-			<div class="button" id="exportHTMLButton">Export Project as Webpage</div>
-			<br />
-			Import JSON Project: <br />
-			<input type="file" id="importButton" /><br />
-			<br />
-			<div class="button" id="runButton">Run Project</div>
+			<div class="button buttonInRow" id="exportJSONButton">
+				<img src="resources/save.png" width="30" />
+			</div>
+			<div class="button buttonInRow" id="exportHTMLButton">
+				<img src="resources/export.png" width="30" />
+			</div>	
+			<div class="button buttonInRow" id="openProjectButton">
+				<img src="resources/open-folder.png" width="30" />
+			</div>
+			<div class="button buttonInRow" id="runButton">
+				<img src="resources/play.png" width="30" />
+			</div>
+
+			<!-- Hidden, gets clicked automatically by openProjectButton -->
+			<input type="file" id="importButton" /> 
 		</div>
 
-		<!-- WickObject Scripting GUI, bottom left corner -->
-
-		<div id="scriptingGUI" class="GUIBox">
-			<div class="button" id="onLoadButton">onLoad</div>
-			<div class="button" id="onClickButton">onClick</div>
-			<div class="button" id="onUpdateButton">onUpdate</div>
-			<div class="button" id="closeScriptingGUIButton"><font color="red">Close</font></div>
-			<hr />
-			<div id="scriptEditor"></div>
-		</div>
-
-		<!-- Timeline GUI, centered at the top of the screen -->
+	<!-- Timeline GUI, centered at the top of the screen -->
 
 		<div id="timelineGUI" class="GUIBox">
 			<div class="button" id="addEmptyFrameButton">Add Empty Frame</div>
@@ -210,19 +215,37 @@
 			</div>
 		</div>
 
-		<!-- Toolbar GUI, centered at the left side of the screen -->
+	<!-- Toolbar GUI, centered at the left side of the screen -->
 
 		<div id="toolbarGUI" class="GUIBox">
-			<div class="button" id="mouseToolButton">Mouse</div>
-			<div class="button" id="paintbrushToolButton">Paintbrush</div>
+			<div class="button" id="mouseToolButton">
+				<img src="resources/cursor.png" width="30"></img>
+			</div>
+
+			<hr />
+
+			<div class="button" id="paintbrushToolButton">
+				<img src="resources/paintbrush.png" width="30"></img>
+			</div>
+
 			<div id="toolOptions">
-				<hr />
 				Line Width: <input type="range" value="30" min="0" max="150" id="lineWidth"><br />
 				Line Color: <input type="color" value="#FFFF00" id="lineColor">
 			</div>
 		</div>
 
-		<!-- Right click menu, appears next to mouse on right click -->
+	<!-- WickObject Scripting GUI, bottom left corner -->
+
+		<div id="scriptingGUI" class="GUIBox">
+			<div class="button" id="onLoadButton">onLoad</div>
+			<div class="button" id="onClickButton">onClick</div>
+			<div class="button" id="onUpdateButton">onUpdate</div>
+			<div class="button" id="closeScriptingGUIButton"><font color="red">Close</font></div>
+			<hr />
+			<div id="scriptEditor"></div>
+		</div>
+
+	<!-- Right click menu, appears next to mouse on right click -->
 
 		<div id="rightClickMenu" class="GUIBox">
 			<div id="staticObjectButtons">
@@ -245,7 +268,7 @@
 		</div>
 	</div>
 
-	<!-- Builtin player, visible when a project is running -->
+<!-- Builtin player, visible when a project is running -->
 
 	<div id="builtinPlayer">
 		<div id="playerCanvasContainer">

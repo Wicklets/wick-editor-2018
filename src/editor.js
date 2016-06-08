@@ -4,7 +4,7 @@ var WickEditor = (function () {
 
 	/* Editor settings */
 	var SHOW_PAGE_LEAVE_WARNING = false;
-	var LOAD_DEV_TEST_PROJECT = true;
+	var LOAD_UNIT_TEST_PROJECT = true;
 
 	/* Current project in editor */
 	var project;
@@ -53,13 +53,14 @@ var WickEditor = (function () {
 		scriptEditor = ace.edit("scriptEditor");
 	    scriptEditor.setTheme("ace/theme/chrome");
 	    scriptEditor.getSession().setMode("ace/mode/javascript");
+	    scriptEditor.$blockScrolling = Infinity; // Makes that weird message go away
 
 		// Set the GUI to an initial state
 		updateTimelineGUI();
 
 		// Load the 'unit test' project
-		if(LOAD_DEV_TEST_PROJECT) {
-			var devTestProjectJSON = WickUtils.downloadFile("tests/dev-test-project.json");
+		if(LOAD_UNIT_TEST_PROJECT) {
+			var devTestProjectJSON = WickUtils.downloadFile("tests/unit-test-project.json");
 			loadProjectFromJSON(devTestProjectJSON);
 		}
 
@@ -69,11 +70,16 @@ var WickEditor = (function () {
 			WickUtils.saveProjectAsJSONFile(getProjectAsJSON());
 		});
 		$("#exportHTMLButton").on("click", function (e) {
-			WickUtils.saveProjectAsJHTMLFile(getProjectAsJSON());
+			WickUtils.saveProjectAsHTMLFile(getProjectAsJSON());
 		});
 		$("#runButton").on("click", function (e) {
 			runProject();
 		});
+		importButton
+		$('#openProjectButton').click(function(){
+			$('#importButton').click();
+		});
+
 		$("#closeBuiltinPlayerButton").on("click", function (e) {
 			closeBuiltinPlayer();
 		});
@@ -112,7 +118,9 @@ var WickEditor = (function () {
 
 		// Update selected objects scripts when script editor text changes
 		scriptEditor.getSession().on('change', function(e) {
-			fabricCanvas.getActiveObject().wickObject.wickScripts[currentScript] = scriptEditor.getValue();
+			if(fabricCanvas.getActiveObject().wickObject.isSymbol) {
+				fabricCanvas.getActiveObject().wickObject.wickScripts[currentScript] = scriptEditor.getValue();
+			}
 		});
 
 		// Load scripts into the script editor GUI
@@ -240,6 +248,11 @@ var WickEditor = (function () {
 			// Left arrow
 			if (keys[37]) {
 				
+			}
+
+			// Tilde: log project state to canvas
+			if(keys[192]) {
+				console.log(project);
 			}
 
 		});
@@ -502,9 +515,6 @@ var convertActiveObjectToSymbol = function () {
 	};
 
 	var updateTimelineGUI = function () {
-
-		console.log("updateTimelineGUI() called. project state:")
-		console.log(project.rootObject.frames)
 
 		// Update the paper canvas inside the fabric canvas
 

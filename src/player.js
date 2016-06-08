@@ -18,6 +18,9 @@ var WickPlayer = (function () {
 	var mobileMode;
 	var desktopMode;
 
+	// Set this to true to stop the next requestAnimationFrame
+	var stopDrawLoop;
+
 /*****************************
 	Page/DOM Utils
 *****************************/
@@ -49,6 +52,8 @@ var WickPlayer = (function () {
 
 	wickPlayer.runProject = function(projectJSON) {
 
+		stopDrawLoop = false;
+
 		// Setup canvas
 		canvas = document.getElementById("playerCanvas");
 		context = canvas.getContext('2d');
@@ -71,10 +76,6 @@ var WickPlayer = (function () {
 		}
 
 		// update canvas size on window resize
-		var resizeCanvas = function () {
-			canvas.width = window.innerWidth;
-			canvas.height = window.innerHeight;
-		}
 		window.addEventListener('resize', resizeCanvas, false);
 		resizeCanvas();
 
@@ -85,7 +86,10 @@ var WickPlayer = (function () {
 
 	wickPlayer.stopRunningCurrentProject = function() {
 
-		console.error("WARNING: Builtin player cleanup (in WickPlayer.stopRunningCurrentProject()) not yet implemented! This can lead to slowness/problems!!")
+		stopDrawLoop = true;
+		canvasContainerEl.removeEventListener("mousedown", onMouseDown);
+		canvasContainerEl.removeEventListener("touchstart", onTouchStart);
+		window.removeEventListener('resize', resizeCanvas);
 
 	}
 
@@ -145,7 +149,16 @@ var WickPlayer = (function () {
 	}
 
 /*****************************
-	Desktop Event functions
+	Common event functions
+*****************************/
+
+	var resizeCanvas = function () {
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+	}
+
+/*****************************
+	Desktop event functions
 *****************************/
 
 	var onMouseMove = function (evt) {
@@ -182,7 +195,7 @@ var WickPlayer = (function () {
 	}
 
 /*****************************
-	Mobile Event functions
+	Mobile event functions
 *****************************/
 
 	var onTouchStart = function (evt) {
@@ -241,9 +254,11 @@ var WickPlayer = (function () {
 	var animate = function () {
 
 		setTimeout(function() {
-			requestAnimationFrame(animate);
-			update();
-			draw();
+			if(!stopDrawLoop) {
+				requestAnimationFrame(animate);
+				update();
+				draw();
+			}
 		}, 1000 / project.framerate);
 
 	}

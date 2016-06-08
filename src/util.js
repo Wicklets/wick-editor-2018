@@ -30,7 +30,7 @@
 		fileOut += "<script>" + WickUtils.downloadFile("src/player.js") + "</script>\n";
 
 		// Bundle the JSON project
-		fileOut += "<script>WickPlayer.runProject('" + project + "');</script>" + "\n";
+		fileOut += "<script>WickPlayer.runProject('" + projectJSON + "');</script>" + "\n";
 
 		// Save whole thing as html file
 		var blob = new Blob([fileOut], {type: "text/plain;charset=utf-8"});
