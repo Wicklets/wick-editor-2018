@@ -3,7 +3,7 @@ var WickEditor = (function () {
 	var wickEditor = { version: '0' };
 
 	/* Editor settings */
-	var SHOW_PAGE_LEAVE_WARNING = true;
+	var SHOW_PAGE_LEAVE_WARNING = false;
 	var LOAD_UNIT_TEST_PROJECT = false;
 
 	/* Current project in editor */
@@ -511,16 +511,6 @@ var convertActiveObjectToSymbol = function () {
 		if(activeObj && activeObj.wickObject.wickScripts && activeObj.wickObject.wickScripts[currentScript]) {
 			var script = fabricCanvas.getActiveObject().wickObject.wickScripts[currentScript];
 			scriptEditor.setValue(script, -1);
-		} else {
-			var emptyFunctionScript = "// " + currentScript + "\n";
-			if(currentScript === "onLoad") {
-				emptyFunctionScript += "// This script runs once when this object enters the scene.\n";
-			} else if(currentScript === "onClick") {
-				emptyFunctionScript += "// This script runs when this object is clicked on.\n";
-			} else if(currentScript === "onUpdate") {
-				emptyFunctionScript += "// This script runs repeatedly whenever this object is in the scene.\n";
-			}
-			scriptEditor.setValue(emptyFunctionScript, -1);
 		}
 	};
 
@@ -623,9 +613,9 @@ var convertActiveObjectToSymbol = function () {
 
 	}
 
-/*****************************
-	Export projects
-*****************************/
+/**********************************
+	Import/Export JSON projects
+**********************************/
 	
 	var getProjectAsJSON = function () {
 		// Store changes made to current frame in the project
@@ -635,17 +625,19 @@ var convertActiveObjectToSymbol = function () {
 		// (can't JSONify objects with circular references, player doesn't need them anyway)
 		project.rootObject.removeParentObjectRefences();
 
+		// Encode scripts to avoid JSON format problems
+		WickSharedUtils.encodeScripts(project.rootObject);
+
 		var JSONProject = JSON.stringify(project);
 
 		// Put parent object references back in all objects
 		project.rootObject.regenerateParentObjectReferences();
 
+		// Decode scripts back to human-readble and eval()-able format
+		WickSharedUtils.decodeScripts(project.rootObject);
+
 		return JSONProject;
 	}
-
-/*****************************
-	Import projects
-*****************************/
 
 	var loadProjectFromJSON = function (jsonString) {
 		// Replace current project with project in JSON
@@ -657,6 +649,9 @@ var convertActiveObjectToSymbol = function () {
 		// Regenerate parent object references
 		// These were removed earlier because JSON can't handle infinitely recursive objects (duh)
 		project.rootObject.regenerateParentObjectReferences();
+
+		// Decode scripts back to human-readble and eval()-able format
+		WickSharedUtils.decodeScripts(project.rootObject);
 
 		// Start editing the first frame of root
 		// TODO: Projects should store the current place they were in when last saved
@@ -680,13 +675,9 @@ var convertActiveObjectToSymbol = function () {
 
 		// Recursively put the prototypes back on the children objects
 		if(obj.isSymbol) {
-			for(var f = 0; f < obj.frames.length; f++) {
-				var frame = obj.frames[f];
-				for (var o = 0; o < frame.wickObjects.length; o++) {
-					var wickObject = frame.wickObjects[o];
-					putPrototypeBackOnObject(wickObject);
-				}
-			}
+			WickSharedUtils.forEachChildObject(obj, function(currObj) {
+				putPrototypeBackOnObject(currObj);
+			});
 		}
 	}
 

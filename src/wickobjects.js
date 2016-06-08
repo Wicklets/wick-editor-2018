@@ -43,8 +43,12 @@ WickObject.prototype.setDefaultSymbolValues = function () {
 
 	this.isSymbol = true;
 	this.currentFrame = 0;
-	this.wickScripts = {};
 	this.frames = [new WickFrame()];
+	this.wickScripts = {
+		"onLoad" : "// onLoad\n// This script runs once when this object enters the scene.\n",
+		"onClick" : "// onClick\n// This script runs when this object is clicked on.\n",
+		"onUpdate": "// onUpdate\n// This script runs repeatedly whenever this object is in the scene.\n"
+	};
 
 }
 

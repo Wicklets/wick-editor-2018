@@ -103,6 +103,7 @@ var WickPlayer = (function () {
 		console.log("Player loading project:")
 		console.log(project);
 		
+		WickSharedUtils.decodeScripts(project.rootObject);
 		resetAllPlayheads(project.rootObject);
 		loadImages(project.rootObject);
 
@@ -123,7 +124,7 @@ var WickPlayer = (function () {
 		wickObj.onLoadScriptRan = false;
 
 		// Recursively set all timelines to first frame as well
-		forEachChildObject(wickObj, function(subObj) {
+		WickSharedUtils.forEachChildObject(wickObj, function(subObj) {
 			if(subObj.isSymbol) {
 				resetAllPlayheads(subObj);
 			}
@@ -134,7 +135,7 @@ var WickPlayer = (function () {
 	var loadImages = function (wickObj) {
 
 		// Recursively load images of wickObj
-		forEachChildObject(wickObj, function(subObj) {
+		WickSharedUtils.forEachChildObject(wickObj, function(subObj) {
 			if(subObj.isSymbol) {
 				loadImages(subObj);
 			} else {
@@ -167,7 +168,7 @@ var WickPlayer = (function () {
 
 		// Check if we're hovered over a clickable object...
 		var hoveredOverObj = false;
-		forEachActiveChildObject(project.rootObject, function(currObj) {
+		WickSharedUtils.forEachActiveChildObject(project.rootObject, function(currObj) {
 			if(pointInsideObj(currObj, mousePos) && wickObjectIsClickable(currObj)) {
 				hoveredOverObj = true;
 			}
@@ -184,7 +185,7 @@ var WickPlayer = (function () {
 
 	var onMouseDown = function (evt) {
 		
-		forEachActiveChildObject(project.rootObject, function(currObj) {
+		WickSharedUtils.forEachActiveChildObject(project.rootObject, function(currObj) {
 			if(pointInsideObj(currObj, mousePos) && wickObjectIsClickable(currObj)) {
 				runOnClickScript(currObj);
 			}
@@ -200,7 +201,7 @@ var WickPlayer = (function () {
 
 		var touchPos = getTouchPos(canvas, evt);
 
-		forEachActiveChildObject(project.rootObject, function(currObj) {
+		WickSharedUtils.forEachActiveChildObject(project.rootObject, function(currObj) {
 			if(pointInsideObj(obj, touchPos) && wickObjectIsClickable(currObj)) {
 				console.error("Touched object:");
 				console.log(currObj);
@@ -230,23 +231,6 @@ var WickPlayer = (function () {
 
 	var wickObjectIsClickable = function (wickObj) {
 		return wickObj.isSymbol && wickObj.wickScripts['onClick'];
-	}
-
-	/* Call callback function for every child object in parentObj */
-	var forEachChildObject = function (parentObj, callback) {
-		for(var f = 0; f < parentObj.frames.length; f++) {
-			for(var o = 0; o < parentObj.frames[f].wickObjects.length; o++) {
-				callback(parentObj.frames[f].wickObjects[o]);
-			}
-		}
-	}
-
-	/* Call callback function for every child object in parentObj's current frame */
-	var forEachActiveChildObject = function (parentObj, callback) {
-		var currFrame = parentObj.currentFrame;
-		for(var o = 0; o < parentObj.frames[currFrame].wickObjects.length; o++) {
-			callback(parentObj.frames[currFrame].wickObjects[o]);
-		}
 	}
 
 /*****************************
@@ -295,7 +279,7 @@ var WickPlayer = (function () {
 			// Run onLoad script
 			if(obj && obj.wickScripts) {
 				//console.log(obj.wickScripts['onLoad']);
-				eval(obj.wickScripts.onLoad.replace("this.","obj."));
+				eval(obj.wickScripts.onLoad);
 				obj.onLoadScriptRan = true;
 			} else {
 				//console.log("obj contains no wickScripts or onLoad function");
@@ -303,7 +287,7 @@ var WickPlayer = (function () {
 
 			// Recursively run all onLoads
 			if(obj.isSymbol) {
-				forEachActiveChildObject(obj, function(subObj) {
+				WickSharedUtils.forEachActiveChildObject(obj, function(subObj) {
 					runOnLoadScript(subObj);
 				});
 			}
@@ -317,14 +301,14 @@ var WickPlayer = (function () {
 		// Run update script
 		if(obj && obj.wickScripts) {
 			//console.log(obj.wickScripts['onUpdate']);
-			eval(obj.wickScripts.onUpdate.replace("this.","obj."));
+			eval(obj.wickScripts.onUpdate);
 		} else {
 			//console.log("obj contains no wickScripts or update function");
 		}
 
 		// Recursively run all updates
 		if(obj.isSymbol) {
-			forEachActiveChildObject(obj, function(subObj) {
+			WickSharedUtils.forEachActiveChildObject(obj, function(subObj) {
 				runUpdateScript(subObj);
 			});
 		}
@@ -334,7 +318,7 @@ var WickPlayer = (function () {
 	var runOnClickScript = function (obj) {
 
 		if(obj.wickScripts.onClick) {
-			eval(obj.wickScripts.onClick.replace("this.","obj."));
+			eval(obj.wickScripts.onClick);
 		}
 
 	}
@@ -353,7 +337,7 @@ var WickPlayer = (function () {
 
 		// Recusively advance timelines of all children
 		if(obj.isSymbol) {
-			forEachActiveChildObject(obj, function(subObj) {
+			WickSharedUtils.forEachActiveChildObject(obj, function(subObj) {
 				if(subObj.isSymbol) {
 					advanceTimeline(subObj);
 				}
@@ -390,7 +374,7 @@ var WickPlayer = (function () {
 			context.translate(obj.left, obj.top);
 			context.scale(obj.scaleX, obj.scaleY);
 
-				forEachActiveChildObject(obj, function(subObj) {
+				WickSharedUtils.forEachActiveChildObject(obj, function(subObj) {
 					drawWickObject(subObj);
 				});
 
