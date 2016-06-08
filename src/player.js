@@ -202,10 +202,8 @@ var WickPlayer = (function () {
 		var touchPos = getTouchPos(canvas, evt);
 
 		WickSharedUtils.forEachActiveChildObject(project.rootObject, function(currObj) {
-			if(pointInsideObj(obj, touchPos) && wickObjectIsClickable(currObj)) {
-				console.error("Touched object:");
-				console.log(currObj);
-				console.error("...but onClick scripts not yet implemented!");
+			if(pointInsideObj(currObj, touchPos) && wickObjectIsClickable(currObj)) {
+				runOnClickScript(currObj);
 			}
 		});
 
