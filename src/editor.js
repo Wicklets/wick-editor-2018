@@ -21,6 +21,10 @@ var WickEditor = (function () {
 	/* Syntax highlighter for script editor window */
 	var scriptEditor;
 
+	/* Variables for script editor */
+	var defaultScript = 'onLoad';
+	var currentScript = defaultScript;
+
 	/* Mouse and keyboard input variables */
 	var mouse = {};
 	var keys;
@@ -47,7 +51,7 @@ var WickEditor = (function () {
 
 		// Setup syntax highligter for scripts window
 		scriptEditor = ace.edit("scriptEditor");
-	    scriptEditor.setTheme("ace/theme/monokai");
+	    scriptEditor.setTheme("ace/theme/chrome");
 	    scriptEditor.getSession().setMode("ace/mode/javascript");
 
 		// Set the GUI to an initial state
@@ -81,6 +85,13 @@ var WickEditor = (function () {
 			);
 		};
 
+		document.getElementById("importButton").onchange = function (e) {
+			WickUtils.readJSONFromFileChooser(
+				document.getElementById("importButton"), 
+				loadProjectFromJSON
+			);
+		};
+
 	// Setup scripting GUI events
 
 		$("#onLoadButton").on("click", function (e) {
@@ -99,8 +110,9 @@ var WickEditor = (function () {
 			closeScriptingGUI();
 		});
 
-		$("#scriptTextArea").bind('input propertychange', function() {
-			fabricCanvas.getActiveObject().wickObject.wickScripts[currentScript] = this.value;
+		// Update selected objects scripts when script editor text changes
+		scriptEditor.getSession().on('change', function(e) {
+			fabricCanvas.getActiveObject().wickObject.wickScripts[currentScript] = scriptEditor.getValue();
 		});
 
 		// Load scripts into the script editor GUI
@@ -460,9 +472,6 @@ var convertActiveObjectToSymbol = function () {
 	GUI
 *****************************/
 
-	var defaultScript = 'onLoad';
-	var currentScript = defaultScript;
-
 	var openScriptingGUI = function () {
 		$("#scriptingGUI").css('visibility', 'visible');
 		reloadScriptingGUI();
@@ -481,9 +490,9 @@ var convertActiveObjectToSymbol = function () {
 		var activeObj = fabricCanvas.getActiveObject();
 		if(activeObj && activeObj.wickObject.wickScripts && activeObj.wickObject.wickScripts[currentScript]) {
 			var script = fabricCanvas.getActiveObject().wickObject.wickScripts[currentScript];
-			$("#scriptTextArea").val(script);
+			scriptEditor.setValue(script, -1);
 		} else {
-			$("#scriptTextArea").val("// " + currentScript + "\n{\n\n}");
+			scriptEditor.setValue("// " + currentScript + "\n", -1);
 		}
 	};
 
