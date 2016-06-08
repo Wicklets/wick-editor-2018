@@ -115,6 +115,9 @@ var WickPlayer = (function () {
 		// (Note: objects should probably be playing instead of stopped initially)
 		wickObj.isPlaying = false;
 
+		// Set this object to need its onLoad script run
+		wickObj.onLoadScriptRan = false;
+
 		// Recursively set all timelines to first frame as well
 		forEachChildObject(wickObj, function(subObj) {
 			if(subObj.isSymbol) {
@@ -247,11 +250,67 @@ var WickPlayer = (function () {
 
 	var update = function () {
 		
-		// Advance all timelines one frame
-		advanceTimeline(project.rootObject);
+		updateObj(project.rootObject);
 
-		// Run load/update scripts
-		// TODO
+	}
+
+	var updateObj = function (obj) {
+
+		// Run obj's onLoad if necessary, then all subObj's
+		runOnLoadScript(obj);
+
+		// Run obj's update if necessary, then all subObj's
+		runUpdateScript(obj);
+
+		// Advance obj's timeline one frame, then subobj's timelines
+		advanceTimeline(obj);
+
+	}
+
+	var runOnLoadScript = function (obj) {
+
+		if(!obj.onLoadScriptRan) {
+
+			// Run onLoad script
+			if(obj && obj.wickScripts) {
+
+				console.log(obj.wickScripts['onLoad']);
+				obj.onLoadScriptRan = true;
+
+			} else {
+
+				console.log("obj contains no wickScripts or onLoad function");
+
+			}
+
+			// Recursively run all onLoads
+			if(obj.isSymbol)
+				forEachActiveChildObject(obj, function(subObj) {
+					runOnLoadScript(subObj);
+				});
+
+		}
+
+	}
+
+	var runUpdateScript = function (obj) {
+
+		// Run update script
+		if(obj && obj.wickScripts) {
+
+			console.log(obj.wickScripts['onUpdate']);
+
+		} else {
+
+			console.log("obj contains no wickScripts or update function");
+			
+		}
+
+		// Recursively run all updates
+		if(obj.isSymbol)
+			forEachActiveChildObject(obj, function(subObj) {
+				runUpdateScript(subObj);
+			});
 
 	}
 
@@ -265,7 +324,10 @@ var WickPlayer = (function () {
 			}
 		}
 
+		obj.onLoadScriptRan = false;
+
 		// Recusively advance timelines of all children
+		if(obj.isSymbol)
 		forEachActiveChildObject(obj, function(subObj) {
 			if(subObj.isSymbol) {
 				advanceTimeline(subObj);
