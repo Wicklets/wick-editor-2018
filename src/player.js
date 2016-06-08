@@ -273,14 +273,10 @@ var WickPlayer = (function () {
 
 			// Run onLoad script
 			if(obj && obj.wickScripts) {
-
-				console.log(obj.wickScripts['onLoad']);
+				//console.log(obj.wickScripts['onLoad']);
 				obj.onLoadScriptRan = true;
-
 			} else {
-
-				console.log("obj contains no wickScripts or onLoad function");
-
+				//console.log("obj contains no wickScripts or onLoad function");
 			}
 
 			// Recursively run all onLoads
@@ -297,13 +293,9 @@ var WickPlayer = (function () {
 
 		// Run update script
 		if(obj && obj.wickScripts) {
-
-			console.log(obj.wickScripts['onUpdate']);
-
+			//console.log(obj.wickScripts['onUpdate']);
 		} else {
-
-			console.log("obj contains no wickScripts or update function");
-			
+			//console.log("obj contains no wickScripts or update function");
 		}
 
 		// Recursively run all updates
