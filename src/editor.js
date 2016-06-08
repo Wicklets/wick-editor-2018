@@ -35,7 +35,7 @@ var WickEditor = (function () {
 
 	wickEditor.setup = function() {
 
-		console.log("WickEditor rev " + wickEditor.version)
+		console.log("WickEditor rev " + wickEditor.version);
 
 	// Setup editor vars
 
@@ -168,7 +168,6 @@ var WickEditor = (function () {
 
 		$("#convertToSymbolButton").on("click", function (e) {
 			convertActiveObjectToSymbol();
-			openScriptingGUI();
 		});
 
 		$("#bringToFrontButton").on("click", function (e) {

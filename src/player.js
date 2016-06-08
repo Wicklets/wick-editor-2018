@@ -295,6 +295,7 @@ var WickPlayer = (function () {
 			// Run onLoad script
 			if(obj && obj.wickScripts) {
 				//console.log(obj.wickScripts['onLoad']);
+				eval(obj.wickScripts.onLoad);
 				obj.onLoadScriptRan = true;
 			} else {
 				//console.log("obj contains no wickScripts or onLoad function");
@@ -316,6 +317,7 @@ var WickPlayer = (function () {
 		// Run update script
 		if(obj && obj.wickScripts) {
 			//console.log(obj.wickScripts['onUpdate']);
+			eval(obj.wickScripts.onUpdate);
 		} else {
 			//console.log("obj contains no wickScripts or update function");
 		}
@@ -332,7 +334,6 @@ var WickPlayer = (function () {
 	var runOnClickScript = function (obj) {
 
 		if(obj.wickScripts.onClick) {
-			var script = obj.wickScripts.onClick;
 			eval(obj.wickScripts.onClick);
 		}
 
@@ -346,9 +347,9 @@ var WickPlayer = (function () {
 			if(obj.currentFrame == obj.frames.length) {
 				obj.currentFrame = 0;
 			}
-		}
 
-		obj.onLoadScriptRan = false;
+			obj.onLoadScriptRan = false;
+		}
 
 		// Recusively advance timelines of all children
 		if(obj.isSymbol) {
