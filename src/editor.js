@@ -2,6 +2,10 @@ var WickEditor = (function () {
 
 	var wickEditor = { version: '0' };
 
+	/* Editor settings */
+	var SHOW_PAGE_LEAVE_WARNING = false;
+	var LOAD_DEV_TEST_PROJECT = true;
+
 	/* Current project in editor */
 	var project;
 
@@ -13,6 +17,9 @@ var WickEditor = (function () {
 
 	/* Handles all the paper.js stuff */
 	var paperCanvas;
+
+	/* Syntax highlighter for script editor window */
+	var scriptEditor;
 
 	/* Mouse and keyboard input variables */
 	var mouse = {};
@@ -38,8 +45,19 @@ var WickEditor = (function () {
 		// Setup paper
 		paperCanvas = new PaperCanvas();
 
+		// Setup syntax highligter for scripts window
+		scriptEditor = ace.edit("scriptEditor");
+	    scriptEditor.setTheme("ace/theme/monokai");
+	    scriptEditor.getSession().setMode("ace/mode/javascript");
+
 		// Set the GUI to an initial state
 		updateTimelineGUI();
+
+		// Load the 'unit test' project
+		if(LOAD_DEV_TEST_PROJECT) {
+			var devTestProjectJSON = WickUtils.downloadFile("tests/dev-test-project.json");
+			loadProjectFromJSON(devTestProjectJSON);
+		}
 
 	// Setup main menu events
 
@@ -288,7 +306,6 @@ var WickEditor = (function () {
 
 	// Setup leave page warning event
 
-		var SHOW_PAGE_LEAVE_WARNING = false;
 		if(SHOW_PAGE_LEAVE_WARNING) {
 			window.addEventListener("beforeunload", function (e) {
 				var confirmationMessage = 'Warning: All unsaved changes will be lost!';
@@ -597,10 +614,11 @@ var convertActiveObjectToSymbol = function () {
 *****************************/
 
 	var loadProjectFromJSON = function (jsonString) {
-		console.error("Remember to put prototypes back on objects here.");
-
 		// Replace current project with project in JSON
 		project = JSON.parse(jsonString);
+
+		// Put prototypes back on object ('class methods'), they don't get JSONified on project export.
+		putPrototypeBackOnObject(project.rootObject);
 
 		// Regenerate parent object references
 		// These were removed earlier because JSON can't handle infinitely recursive objects (duh)
@@ -609,14 +627,38 @@ var convertActiveObjectToSymbol = function () {
 		// Start editing the first frame of root
 		// TODO: Projects should store the current place they were in when last saved
 		currentObject = project.rootObject;
-		gotoFrame(0);
+		currentObject.currentFrame = 0;
+
+		// Load wickobjects in the frame we moved to into the canvas
+		fabricCanvas.storeObjectsIntoCanvas( currentObject.getCurrentFrame().wickObjects );
 
 		updateTimelineGUI();
+
+		console.log("loaded project:");
+		console.log(project);
 	}
 
-/**************************************
+	// This is supposedly a nasty thing to do - think about possible alternatives for IE and stuff
+	var putPrototypeBackOnObject = function (obj) {
+
+		// Put the prototype back on this object
+		obj.__proto__ = WickObject.prototype;
+
+		// Recursively put the prototypes back on the children objects
+		if(obj.isSymbol) {
+			for(var f = 0; f < obj.frames.length; f++) {
+				var frame = obj.frames[f];
+				for (var o = 0; o < frame.wickObjects.length; o++) {
+					var wickObject = frame.wickObjects[o];
+					putPrototypeBackOnObject(wickObject);
+				}
+			}
+		}
+	}
+
+/****************************************
 	Run projects with builtin player
-***************************************/
+*****************************************/
 
 	var runProject = function () {
 		// Hide the editor, show the player

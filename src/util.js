@@ -23,7 +23,7 @@
 		// Add the player webpage (need to download the empty player)
 		fileOut += WickUtils.downloadFile("player.htm") + "\n";
 
-		// Add the any libs that the player needs
+		// Add any libs that the player needs
 		fileOut += "<script>" + WickUtils.downloadFile("lib/fpscounter.js") + "</script>\n";
 
 		// Add the player (need to download the player code)
