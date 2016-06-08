@@ -66,6 +66,14 @@ var WickEditor = (function () {
 
 	// Setup main menu events
 
+		$("#newProjectButton").on("click", function (e) {
+			if(confirm("Create a new project? All unsaved changes to the current project will be lost!")) {
+				project = new WickProject();
+				currentObject = project.rootObject;
+				fabricCanvas.storeObjectsIntoCanvas( currentObject.getCurrentFrame().wickObjects );
+				updateTimelineGUI();
+			}
+		});
 		$("#exportJSONButton").on("click", function (e) {
 			WickUtils.saveProjectAsJSONFile(getProjectAsJSON());
 		});
@@ -75,7 +83,6 @@ var WickEditor = (function () {
 		$("#runButton").on("click", function (e) {
 			runProject();
 		});
-		importButton
 		$('#openProjectButton').click(function(){
 			$('#importButton').click();
 		});

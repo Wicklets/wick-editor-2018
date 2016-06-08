@@ -168,7 +168,7 @@ var WickPlayer = (function () {
 		// Check if we're hovered over a clickable object...
 		var hoveredOverObj = false;
 		forEachActiveChildObject(project.rootObject, function(currObj) {
-			if(pointInsideObj(currObj, mousePos)) {
+			if(pointInsideObj(currObj, mousePos) && wickObjectIsClickable(currObj)) {
 				hoveredOverObj = true;
 			}
 		});
@@ -185,10 +185,8 @@ var WickPlayer = (function () {
 	var onMouseDown = function (evt) {
 		
 		forEachActiveChildObject(project.rootObject, function(currObj) {
-			if(pointInsideObj(currObj, mousePos)) {
-				console.error("Clicked object:");
-				console.log(currObj);
-				console.error("...but onClick scripts not yet implemented!");
+			if(pointInsideObj(currObj, mousePos) && wickObjectIsClickable(currObj)) {
+				runOnClickScript(currObj);
 			}
 		});
 
@@ -203,7 +201,7 @@ var WickPlayer = (function () {
 		var touchPos = getTouchPos(canvas, evt);
 
 		forEachActiveChildObject(project.rootObject, function(currObj) {
-			if(pointInsideObj(obj, touchPos)) {
+			if(pointInsideObj(obj, touchPos) && wickObjectIsClickable(currObj)) {
 				console.error("Touched object:");
 				console.log(currObj);
 				console.error("...but onClick scripts not yet implemented!");
@@ -228,6 +226,10 @@ var WickPlayer = (function () {
 			   point.y >= scaledObjTop &&
 			   point.x <= scaledObjLeft + scaledObjWidth && 
 			   point.y <= scaledObjTop + scaledObjHeight;
+	}
+
+	var wickObjectIsClickable = function (wickObj) {
+		return wickObj.isSymbol && wickObj.wickScripts['onClick'];
 	}
 
 	/* Call callback function for every child object in parentObj */
@@ -263,6 +265,10 @@ var WickPlayer = (function () {
 
 	}
 
+/*****************************
+	Update/run scripts
+*****************************/
+
 	var update = function () {
 		
 		updateObj(project.rootObject);
@@ -295,10 +301,11 @@ var WickPlayer = (function () {
 			}
 
 			// Recursively run all onLoads
-			if(obj.isSymbol)
+			if(obj.isSymbol) {
 				forEachActiveChildObject(obj, function(subObj) {
 					runOnLoadScript(subObj);
 				});
+			}
 
 		}
 
@@ -314,10 +321,19 @@ var WickPlayer = (function () {
 		}
 
 		// Recursively run all updates
-		if(obj.isSymbol)
+		if(obj.isSymbol) {
 			forEachActiveChildObject(obj, function(subObj) {
 				runUpdateScript(subObj);
 			});
+		}
+
+	}
+
+	var runOnClickScript = function (obj) {
+
+		if(obj.wickScripts.onClick) {
+			eval(obj.wickScripts.onClick);
+		}
 
 	}
 
@@ -334,14 +350,19 @@ var WickPlayer = (function () {
 		obj.onLoadScriptRan = false;
 
 		// Recusively advance timelines of all children
-		if(obj.isSymbol)
-		forEachActiveChildObject(obj, function(subObj) {
-			if(subObj.isSymbol) {
-				advanceTimeline(subObj);
-			}
-		});
+		if(obj.isSymbol) {
+			forEachActiveChildObject(obj, function(subObj) {
+				if(subObj.isSymbol) {
+					advanceTimeline(subObj);
+				}
+			});
+		}
 
 	}
+
+/*****************************
+	Draw
+*****************************/
 
 	var draw = function () {
 		// Clear canvas
