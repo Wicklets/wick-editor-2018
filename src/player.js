@@ -295,7 +295,7 @@ var WickPlayer = (function () {
 			// Run onLoad script
 			if(obj && obj.wickScripts) {
 				//console.log(obj.wickScripts['onLoad']);
-				eval(obj.wickScripts.onLoad);
+				eval(obj.wickScripts.onLoad.replace("this.","obj."));
 				obj.onLoadScriptRan = true;
 			} else {
 				//console.log("obj contains no wickScripts or onLoad function");
@@ -317,7 +317,7 @@ var WickPlayer = (function () {
 		// Run update script
 		if(obj && obj.wickScripts) {
 			//console.log(obj.wickScripts['onUpdate']);
-			eval(obj.wickScripts.onUpdate);
+			eval(obj.wickScripts.onUpdate.replace("this.","obj."));
 		} else {
 			//console.log("obj contains no wickScripts or update function");
 		}
@@ -334,7 +334,7 @@ var WickPlayer = (function () {
 	var runOnClickScript = function (obj) {
 
 		if(obj.wickScripts.onClick) {
-			eval(obj.wickScripts.onClick);
+			eval(obj.wickScripts.onClick.replace("this.","obj."));
 		}
 
 	}

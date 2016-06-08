@@ -512,7 +512,15 @@ var convertActiveObjectToSymbol = function () {
 			var script = fabricCanvas.getActiveObject().wickObject.wickScripts[currentScript];
 			scriptEditor.setValue(script, -1);
 		} else {
-			scriptEditor.setValue("// " + currentScript + "\n", -1);
+			var emptyFunctionScript = "// " + currentScript + "\n";
+			if(currentScript === "onLoad") {
+				emptyFunctionScript += "// This script runs once when this object enters the scene.\n";
+			} else if(currentScript === "onClick") {
+				emptyFunctionScript += "// This script runs when this object is clicked on.\n";
+			} else if(currentScript === "onUpdate") {
+				emptyFunctionScript += "// This script runs repeatedly whenever this object is in the scene.\n";
+			}
+			scriptEditor.setValue(emptyFunctionScript, -1);
 		}
 	};
 
