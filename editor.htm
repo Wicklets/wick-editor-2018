@@ -81,13 +81,13 @@
 	<!-- Toolbar GUI, centered at the left side of the screen -->
 
 		<div id="toolbarGUI" class="GUIBox">
-			<div class="button" id="mouseToolButton">
+			<div class="button" id="mouseToolButton" onclick="WickEditor.stopDrawingMode();">
 				<img src="resources/cursor.png" width="30"></img>
 			</div>
 
 			<hr />
 
-			<div class="button" id="paintbrushToolButton">
+			<div class="button" id="paintbrushToolButton" onclick="WickEditor.startDrawingMode();">
 				<img src="resources/paintbrush.png" width="30"></img>
 			</div>
 
