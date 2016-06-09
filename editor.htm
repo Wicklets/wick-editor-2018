@@ -14,16 +14,16 @@
 	<script src="lib/FileSaver.min.js"></script>
 	<script src="lib/fpscounter.js"></script>
 	
-	<script src="src/util.js"></script>
-	<script src="src/sharedutils.js"></script>
-	<script src="src/scripts.js"></script>
-	<script src="src/wickobjects.js"></script>
-	<script src="src/project.js"></script>
-	<script src="src/fabric-canvas.js"></script>
-	<script src="src/paper-canvas.js"></script>
+	<script src="src/wickfileutils.js"></script>
+	<script src="src/wicksharedutils.js"></script>
+	<script src="src/wickobject.js"></script>
+	<script src="src/wickproject.js"></script>
+	<script src="src/wickfabriccanvas.js"></script>
+	<script src="src/wickpapercanvas.js"></script>
+	<script src="src/wickscriptingide.js"></script>
 
-	<script src="src/editor.js"></script>
-	<script src="src/player.js"></script>
+	<script src="src/wickeditor.js"></script>
+	<script src="src/wickplayer.js"></script>
 
 	<!-- Set everything up inside this function -->
 	<script>
@@ -47,30 +47,30 @@
 			<strong>Wick Editor</strong><br />
 
 			<hr />
-			<div class="button buttonInRow" id="newProjectButton">
+			<div class="button buttonInRow" id="newProjectButton" onclick="WickEditor.newProject();">
 				<img src="resources/trashcan.png" width="30" />
 			</div>	
-			<div class="button buttonInRow" id="exportJSONButton">
+			<div class="button buttonInRow" id="exportJSONButton" onclick="WickEditor.saveProject();">
 				<img src="resources/save.png" width="30" />
 			</div>
-			<div class="button buttonInRow" id="exportHTMLButton">
+			<div class="button buttonInRow" id="exportHTMLButton" onclick="WickEditor.exportProject();">
 				<img src="resources/export.png" width="30" />
 			</div>
-			<div class="button buttonInRow" id="openProjectButton">
+			<div class="button buttonInRow" id="openProjectButton" onclick="$('#importButton').click();">
 				<img src="resources/open-folder.png" width="30" />
 			</div>
-			<div class="button buttonInRow" id="runButton">
+			<div class="button buttonInRow" id="runButton" onclick="WickEditor.runProject();">
 				<img src="resources/play.png" width="30" />
 			</div>
 
 			<!-- Hidden, gets clicked automatically by openProjectButton -->
-			<input type="file" id="importButton" /> 
+			<input type="file" id="importButton" onchange="WickEditor.openProject();" /> 
 		</div>
 
 	<!-- Timeline GUI, centered at the top of the screen -->
 
 		<div id="timelineGUI" class="GUIBox">
-			<div class="button" id="addEmptyFrameButton">Add Empty Frame</div>
+			<div class="button" id="addEmptyFrameButton" onclick="WickEditor.addEmptyFrame();">Add Empty Frame</div>
 			<div id="timelineScrollContainer">
 				<div id="timeline">
 					<!-- Populated with 'timelineFrame' divs by editor. -->
@@ -141,7 +141,7 @@
 		<div id="builtinPlayerGUI" class="GUIBox">
 			<strong>Builtin Player</strong><br />
 			<hr />
-			<div class="button" id="closeBuiltinPlayerButton">Close Player</div>
+			<div class="button" id="closeBuiltinPlayerButton" onclick="WickEditor.closeBuiltinPlayer();">Close Player</div>
 		</div>
 	</div>
 

@@ -1,12 +1,18 @@
 var WickEditor = (function () {
 
-	var wickEditor = { version: '0' };
+	var wickEditor = { version: 'pre-alpha' };
 
-	/* Editor settings */
+/*****************************
+	Settings
+*****************************/
+	
 	var SHOW_PAGE_LEAVE_WARNING = false;
 	var LOAD_UNIT_TEST_PROJECT = true;
 	var UNIT_TEST_PROJECT_PATH = "tests/multi-object-symbol-test.json";
-	var SCRIPT_IDE_ACE_THEME = "ace/theme/chrome";
+
+/*****************************
+	Setup editor vars
+*****************************/
 
 	/* Current project in editor */
 	var project;
@@ -20,8 +26,8 @@ var WickEditor = (function () {
 	/* Handles all the paper.js stuff */
 	var paperCanvas;
 
-	/* Syntax highlighter for script editor window */
-	var scriptEditor;
+	/* Scripting IDE */
+	var scriptingIDE;
 
 	/* Variables for script editor */
 	var currentScript;
@@ -30,13 +36,13 @@ var WickEditor = (function () {
 	var mouse = {};
 	var keys;
 
+/*****************************
+	Setup editor
+*****************************/
+
 	wickEditor.setup = function() {
 
 		console.log("WickEditor rev " + wickEditor.version);
-
-/*****************************
-	Setup editor vars
-*****************************/
 
 		// Create a new project
 		project = new WickProject();
@@ -48,166 +54,23 @@ var WickEditor = (function () {
 		// Setup paper
 		paperCanvas = new PaperCanvas();
 
-		// Setup syntax highligter for scripts window
-		scriptEditor = ace.edit("scriptEditor");
-	    scriptEditor.setTheme(SCRIPT_IDE_ACE_THEME);
-	    scriptEditor.getSession().setMode("ace/mode/javascript");
-	    scriptEditor.$blockScrolling = Infinity; // Makes that weird message go away
+		// Setup scripting IDE
+		scriptingIDE = new WickScriptingIDE();
 
 		// Set the GUI to an initial state
 		updateTimelineGUI();
 
 		// Load the 'unit test' project
 		if(LOAD_UNIT_TEST_PROJECT) {
-			var devTestProjectJSON = WickUtils.downloadFile(UNIT_TEST_PROJECT_PATH);
+			var devTestProjectJSON = WickFileUtils.downloadFile(UNIT_TEST_PROJECT_PATH);
 			loadProjectFromJSON(devTestProjectJSON);
 		}
 
-/*****************************
-	Bind events
-*****************************/
+/**********************************
+	DOM stuff
+**********************************/
 
-	// Setup main menu events
-
-		$("#newProjectButton").on("click", function (e) {
-			if(confirm("Create a new project? All unsaved changes to the current project will be lost!")) {
-				project = new WickProject();
-				currentObject = project.rootObject;
-				fabricCanvas.storeObjectsIntoCanvas( currentObject.getCurrentFrame().wickObjects );
-				updateTimelineGUI();
-			}
-		});
-		$("#exportJSONButton").on("click", function (e) {
-			WickUtils.saveProjectAsJSONFile(getProjectAsJSON());
-		});
-		$("#exportHTMLButton").on("click", function (e) {
-			WickUtils.saveProjectAsHTMLFile(getProjectAsJSON());
-		});
-		$("#runButton").on("click", function (e) {
-			runProject();
-		});
-		$('#openProjectButton').click(function(){
-			$('#importButton').click();
-		});
-
-		$("#closeBuiltinPlayerButton").on("click", function (e) {
-			closeBuiltinPlayer();
-		});
-
-		document.getElementById("importButton").onchange = function (e) {
-			WickUtils.readJSONFromFileChooser(
-				document.getElementById("importButton"), 
-				loadProjectFromJSON
-			);
-		};
-
-		document.getElementById("importButton").onchange = function (e) {
-			WickUtils.readJSONFromFileChooser(
-				document.getElementById("importButton"), 
-				loadProjectFromJSON
-			);
-		};
-
-	// Setup scripting GUI events
-
-		$("#onLoadButton").on("click", function (e) {
-			changeCurrentScript('onLoad');
-		});
-
-		$("#onClickButton").on("click", function (e) {
-			changeCurrentScript('onClick');
-		});
-
-		$("#onUpdateButton").on("click", function (e) {
-			changeCurrentScript('onUpdate');
-		});
-
-		$("#closeScriptingGUIButton").on("click", function (e) {
-			closeScriptingGUI();
-		});
-
-		// Update selected objects scripts when script editor text changes
-		scriptEditor.getSession().on('change', function(e) {
-			if(fabricCanvas.getActiveObject().wickObject.isSymbol) {
-				fabricCanvas.getActiveObject().wickObject.wickScripts[currentScript] = scriptEditor.getValue();
-			}
-		});
-
-		// Load scripts into the script editor GUI
-		fabricCanvas.getCanvas().on('object:selected', function(e) {
-			reloadScriptingGUI();
-		});
-
-		// Clear scripting bar when object deselected
-		fabricCanvas.getCanvas().on('selection:cleared', function(e) {
-			closeScriptingGUI();
-		});
-
-	// Setup toolbar GUI events
-
-		$("#mouseToolButton").on("click", function (e) {
-			fabricCanvas.stopDrawingMode();
-		});
-
-		$("#paintbrushToolButton").on("click", function (e) {
-			fabricCanvas.startDrawingMode();
-		});
-
-	// Setup timeline GUI events
-
-		$("#addEmptyFrameButton").on("click", function (e) {
-			// Add an empty frame
-			currentObject.addEmptyFrame(currentObject.frames.length);
-
-			// Move to that new frame
-			gotoFrame(currentObject.frames.length-1);
-
-			// Update GUI
-			resizeWindow();
-			updateTimelineGUI();
-		});
-
-	// Setup right click menu button events
-
-		$("#convertToSymbolButton").on("click", function (e) {
-			convertActiveObjectToSymbol();
-		});
-
-		$("#bringToFrontButton").on("click", function (e) {
-			console.error("Fix! Uses old fabric canvas");
-			//fabricCanvas.bringToFront(fabricCanvas.getActiveObject());
-			closeRightClickMenu();
-		});
-		$("#sendToBackButton").on("click", function (e) {
-			console.error("Fix! Uses old fabric canvas");
-			//fabricCanvas.sendToBack(fabricCanvas.getActiveObject());
-			closeRightClickMenu();
-		});
-		$("#deleteButton").on("click", function (e) {
-			deleteActiveObject();
-			closeRightClickMenu();
-		});
-
-		$("#editObjectButton").on("click", function (e) {
-			moveInsideObject(fabricCanvas.getActiveObject().wickObject);
-			closeRightClickMenu();
-		});
-		$("#editScriptsButton").on("click", function (e) {
-			openScriptingGUI();
-			closeRightClickMenu();
-		});
-
-		$("#finishEditingObjectButton").on("click", function (e) {
-			moveOutOfObject();
-			closeRightClickMenu();
-		});
-
-		$("#clearFrameButton").on("click", function (e) {
-			fabricCanvas.clear();
-			closeRightClickMenu();
-		});
-
-	// Setup mouse events
+	// Setup mouse move event
 
 		document.addEventListener( 'mousemove', function ( event ) {
 
@@ -216,19 +79,12 @@ var WickEditor = (function () {
 
 		}, false );
 
-		document.getElementById("editorCanvasContainer").addEventListener("mousedown", function(event) {
-			//closeRightClickMenu();
-		}, false);
-
 
 	// Setup right click events
 
-		if (document.addEventListener) {
-			document.addEventListener('contextmenu', function(e) {
-				//openRightClickMenu();
-				e.preventDefault();
-			}, false);
-		}
+		document.addEventListener('contextmenu', function(e) {
+			e.preventDefault();
+		}, false);
 
 	// Setup keypress events
 
@@ -263,6 +119,87 @@ var WickEditor = (function () {
 
 		document.getElementById("editorCanvasContainer").addEventListener("keyup", function (e) {
 			keys[e.keyCode] = false;
+		});
+
+
+	// Setup drag/drop events
+
+		$("#editorCanvasContainer").on('dragover', function(e) {
+			fabricCanvas.showDragToImportFileAlert();
+			return false;
+		});
+		$("#editorCanvasContainer").on('dragleave', function(e) {
+			fabricCanvas.hideDragToImportFileAlert();
+			return false;
+		});
+		$("#editorCanvasContainer").on('drop', function(e) {
+			// prevent browser from opening the file
+			e.stopPropagation();
+			e.preventDefault();
+
+			importFilesDroppedIntoEditor(e.originalEvent.dataTransfer.files);
+			fabricCanvas.hideDragToImportFileAlert();
+
+			return false;
+		});
+
+	// Setup leave page warning event
+
+		if(SHOW_PAGE_LEAVE_WARNING) {
+			window.addEventListener("beforeunload", function (e) {
+				var confirmationMessage = 'Warning: All unsaved changes will be lost!';
+
+				(e || window.event).returnValue = confirmationMessage; //Gecko + IE
+				return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+			});
+		}
+
+	// Setup window resize event
+
+		var resizeWindow = function () {
+			resizeCanvasAndGUI();
+		}
+		window.addEventListener('resize', resizeWindow, false);
+		resizeWindow();
+
+/********************************************************
+	Other methods that should be moved somewhere else
+********************************************************/
+
+	
+	// Setup scripting GUI events
+
+		$("#onLoadButton").on("click", function (e) {
+			changeCurrentScript('onLoad');
+		});
+
+		$("#onClickButton").on("click", function (e) {
+			changeCurrentScript('onClick');
+		});
+
+		$("#onUpdateButton").on("click", function (e) {
+			changeCurrentScript('onUpdate');
+		});
+
+		$("#closeScriptingGUIButton").on("click", function (e) {
+			closeScriptingGUI();
+		});
+
+		// Update selected objects scripts when script editor text changes
+		scriptingIDE.aceEditor.getSession().on('change', function(e) {
+			if(fabricCanvas.getActiveObject().wickObject.isSymbol) {
+				fabricCanvas.getActiveObject().wickObject.wickScripts[currentScript] = scriptingIDE.aceEditor.getValue();
+			}
+		});
+
+		// Load scripts into the script editor GUI
+		fabricCanvas.getCanvas().on('object:selected', function(e) {
+			reloadScriptingGUI();
+		});
+
+		// Clear scripting bar when object deselected
+		fabricCanvas.getCanvas().on('selection:cleared', function(e) {
+			closeScriptingGUI();
 		});
 
 	// Path to wick object conversion
@@ -322,57 +259,6 @@ var WickEditor = (function () {
 			}
 		});
 
-	// Setup drag/drop events
-
-		$("#editorCanvasContainer").on('dragover', function(e) {
-			fabricCanvas.showDragToImportFileAlert();
-			return false;
-		});
-		$("#editorCanvasContainer").on('dragleave', function(e) {
-			fabricCanvas.hideDragToImportFileAlert();
-			return false;
-		});
-		$("#editorCanvasContainer").on('drop', function(e) {
-			// prevent browser from opening the file
-			e.stopPropagation();
-			e.preventDefault();
-
-			importFilesDroppedIntoEditor(e.originalEvent.dataTransfer.files);
-			fabricCanvas.hideDragToImportFileAlert();
-
-			return false;
-		});
-
-	// Setup leave page warning event
-
-		if(SHOW_PAGE_LEAVE_WARNING) {
-			window.addEventListener("beforeunload", function (e) {
-				var confirmationMessage = 'Warning: All unsaved changes will be lost!';
-
-				(e || window.event).returnValue = confirmationMessage; //Gecko + IE
-				return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
-			});
-		}
-
-	// Setup window resize events
-
-		var resizeWindow = function () {
-
-			// Resize canvas
-			fabricCanvas.resize(
-				project.resolution.x, 
-				project.resolution.y
-			);
-
-			// Also center timeline
-			var GUIWidth = parseInt($("#timelineGUI").css("width")) / 2;
-			var timelineOffset = window.innerWidth/2 - GUIWidth;
-			$("#timelineGUI").css('left', timelineOffset+'px');
-
-		}
-		window.addEventListener('resize', resizeWindow, false);
-		resizeWindow();
-
 	}
 
 /**********************************
@@ -380,6 +266,45 @@ var WickEditor = (function () {
 **********************************/
 
 	var openRightClickMenu = function () {
+
+		/*$("#convertToSymbolButton").on("click", function (e) {
+			convertActiveObjectToSymbol();
+		});
+
+		$("#bringToFrontButton").on("click", function (e) {
+			console.error("Fix! Uses old fabric canvas");
+			//fabricCanvas.bringToFront(fabricCanvas.getActiveObject());
+			closeRightClickMenu();
+		});
+		$("#sendToBackButton").on("click", function (e) {
+			console.error("Fix! Uses old fabric canvas");
+			//fabricCanvas.sendToBack(fabricCanvas.getActiveObject());
+			closeRightClickMenu();
+		});
+		$("#deleteButton").on("click", function (e) {
+			deleteActiveObject();
+			closeRightClickMenu();
+		});
+
+		$("#editObjectButton").on("click", function (e) {
+			moveInsideObject(fabricCanvas.getActiveObject().wickObject);
+			closeRightClickMenu();
+		});
+		$("#editScriptsButton").on("click", function (e) {
+			openScriptingGUI();
+			closeRightClickMenu();
+		});
+
+		$("#finishEditingObjectButton").on("click", function (e) {
+			moveOutOfObject();
+			closeRightClickMenu();
+		});
+
+		$("#clearFrameButton").on("click", function (e) {
+			fabricCanvas.clear();
+			closeRightClickMenu();
+		});*/
+
 		// Make rightclick menu visible
 		$("#rightClickMenu").css('visibility', 'visible');
 		// Attach it to the mouse
@@ -418,6 +343,20 @@ var WickEditor = (function () {
 /*****************************
 	Timeline
 *****************************/
+
+	wickEditor.addEmptyFrame = function () {
+
+		// Add an empty frame
+		currentObject.addEmptyFrame(currentObject.frames.length);
+
+		// Move to that new frame
+		gotoFrame(currentObject.frames.length-1);
+
+		// Update GUI
+		resizeCanvasAndGUI();
+		updateTimelineGUI();
+
+	}
 
 	// Moves playhead to specified frame and updates the canvas and project.
 	var gotoFrame = function (newFrameIndex) {
@@ -468,63 +407,101 @@ var WickEditor = (function () {
 
 	}
 
-/*****************************
-	Editor action utils
-*****************************/
+/***********************************
+	Public editor action methods
+***********************************/
 
-var deleteActiveObject = function () {
+	wickEditor.newProject = function () {
 
-	if (fabricCanvas.getCanvas().getActiveGroup()) {
-		fabricCanvas.getCanvas().getActiveGroup().forEachObject(function(o) { 
-			fabricCanvas.getCanvas().remove(o);
-		});
-		fabricCanvas.getCanvas().discardActiveGroup().renderAll();
-	} else {
-		fabricCanvas.getCanvas().remove(fabricCanvas.getCanvas().getActiveObject());
-	}
-	
-}
-
-var convertActiveObjectToSymbol = function () {
-
-	var symbol = new WickObject();
-
-	var selectedObject = fabricCanvas.getCanvas().getActiveObject() || fabricCanvas.getCanvas().getActiveGroup();
-
-	symbol.parentObject = currentObject;
-	symbol.left = 0//selectedObject.left;
-	symbol.top = 0//selectedObject.top;
-	symbol.setDefaultPositioningValues();
-	symbol.setDefaultSymbolValues();
-
-	if (selectedObject._objects) {
-		// Multiple objects are selected, put them all in the new symbol
-		for(var i = 0; i < selectedObject._objects.length; i++) {
-			console.log(selectedObject._objects[i].wickObject);
-			symbol.frames[0].wickObjects[i] = selectedObject._objects[i].wickObject;
-			symbol.frames[0].wickObjects[i].parentObject = symbol;
-			symbol.frames[0].wickObjects[i].left = 0;
-			symbol.frames[0].wickObjects[i].top = 0;
+		if(confirm("Create a new project? All unsaved changes to the current project will be lost!")) {
+			project = new WickProject();
+			currentObject = project.rootObject;
+			fabricCanvas.storeObjectsIntoCanvas( currentObject.getCurrentFrame().wickObjects );
+			updateTimelineGUI();
 		}
-		while(selectedObject._objects.length > 0) {
-			selectedObject._objects[0].remove();
-		}
-	} else {
-		// Only one object is selected
-		symbol.frames[0].wickObjects[0] = selectedObject.wickObject;
-		symbol.frames[0].wickObjects[0].parentObject = symbol;
-		symbol.frames[0].wickObjects[0].left = 0;
-		symbol.frames[0].wickObjects[0].top = 0;
 
-		selectedObject.remove();
 	}
 
-	fabricCanvas.addWickObjectToCanvas(symbol);
+	wickEditor.saveProject = function () {
 
-	gotoFrame(currentObject.currentFrame);
-	closeRightClickMenu();
+		WickFileUtils.saveProjectAsJSONFile(getProjectAsJSON());
 
-}
+	}
+
+	wickEditor.openProject = function () {
+		WickFileUtils.readJSONFromFileChooser(
+			document.getElementById("importButton"), 
+			loadProjectFromJSON
+		);
+	}
+
+	wickEditor.exportProject = function () {
+
+		WickFileUtils.saveProjectAsHTMLFile(getProjectAsJSON());
+
+	}
+
+	wickEditor.startDrawingMode = function () {
+		fabricCanvas.startDrawingMode();
+	}
+
+	wickEditor.stopDrawingMode = function () {
+		fabricCanvas.stopDrawingMode();	
+	}
+
+	var deleteActiveObject = function () {
+
+		if (fabricCanvas.getCanvas().getActiveGroup()) {
+			fabricCanvas.getCanvas().getActiveGroup().forEachObject(function(o) { 
+				fabricCanvas.getCanvas().remove(o);
+			});
+			fabricCanvas.getCanvas().discardActiveGroup().renderAll();
+		} else {
+			fabricCanvas.getCanvas().remove(fabricCanvas.getCanvas().getActiveObject());
+		}
+		
+	}
+
+	var convertActiveObjectToSymbol = function () {
+
+		var symbol = new WickObject();
+
+		var selectedObject = fabricCanvas.getCanvas().getActiveObject() || fabricCanvas.getCanvas().getActiveGroup();
+
+		symbol.parentObject = currentObject;
+		symbol.left = 0//selectedObject.left;
+		symbol.top = 0//selectedObject.top;
+		symbol.setDefaultPositioningValues();
+		symbol.setDefaultSymbolValues();
+
+		if (selectedObject._objects) {
+			// Multiple objects are selected, put them all in the new symbol
+			for(var i = 0; i < selectedObject._objects.length; i++) {
+				console.log(selectedObject._objects[i].wickObject);
+				symbol.frames[0].wickObjects[i] = selectedObject._objects[i].wickObject;
+				symbol.frames[0].wickObjects[i].parentObject = symbol;
+				symbol.frames[0].wickObjects[i].left = 0;
+				symbol.frames[0].wickObjects[i].top = 0;
+			}
+			while(selectedObject._objects.length > 0) {
+				selectedObject._objects[0].remove();
+			}
+		} else {
+			// Only one object is selected
+			symbol.frames[0].wickObjects[0] = selectedObject.wickObject;
+			symbol.frames[0].wickObjects[0].parentObject = symbol;
+			symbol.frames[0].wickObjects[0].left = 0;
+			symbol.frames[0].wickObjects[0].top = 0;
+
+			selectedObject.remove();
+		}
+
+		fabricCanvas.addWickObjectToCanvas(symbol);
+
+		gotoFrame(currentObject.currentFrame);
+		closeRightClickMenu();
+
+	}
 
 /*****************************
 	GUI
@@ -548,13 +525,26 @@ var convertActiveObjectToSymbol = function () {
 		var activeObj = fabricCanvas.getActiveObject();
 		if(activeObj && activeObj.wickObject.wickScripts && activeObj.wickObject.wickScripts[currentScript]) {
 			var script = fabricCanvas.getActiveObject().wickObject.wickScripts[currentScript];
-			scriptEditor.setValue(script, -1);
+			scriptingIDE.aceEditor.setValue(script, -1);
 		}
 	};
 
 	var closeScriptingGUI = function() {
 		$("#scriptingGUI").css('visibility', 'hidden');
 	};
+
+	var resizeCanvasAndGUI = function () {
+		// Resize canvas
+		fabricCanvas.resize(
+			project.resolution.x, 
+			project.resolution.y
+		);
+
+		// Also center timeline
+		var GUIWidth = parseInt($("#timelineGUI").css("width")) / 2;
+		var timelineOffset = window.innerWidth/2 - GUIWidth;
+		$("#timelineGUI").css('left', timelineOffset+'px');
+	}
 
 	var updateTimelineGUI = function () {
 
@@ -722,7 +712,7 @@ var convertActiveObjectToSymbol = function () {
 	Run projects with builtin player
 *****************************************/
 
-	var runProject = function () {
+	wickEditor.runProject = function () {
 		// Hide the editor, show the player
 		document.getElementById("editor").style.display = "none";
 		document.getElementById("builtinPlayer").style.display = "block";
@@ -732,7 +722,7 @@ var convertActiveObjectToSymbol = function () {
 		WickPlayer.runProject(JSONProject);
 	}
 
-	var closeBuiltinPlayer = function() {
+	wickEditor.closeBuiltinPlayer = function() {
 		// Show the editor, hide the player
 		document.getElementById("builtinPlayer").style.display = "none";
 		document.getElementById("editor").style.display = "block";

@@ -1,4 +1,4 @@
- var WickUtils = (function () {
+ var WickFileUtils = (function () {
 
 	var wickUtils = { };
 
@@ -27,8 +27,8 @@
 		fileOut += "<script>" + WickUtils.downloadFile("lib/fpscounter.js") + "</script>\n";
 
 		// Add the player (need to download the player code)
-		fileOut += "<script>" + WickUtils.downloadFile("src/sharedutils.js") + "</script>\n";
-		fileOut += "<script>" + WickUtils.downloadFile("src/player.js") + "</script>\n";
+		fileOut += "<script>" + WickUtils.downloadFile("src/wicksharedutils.js") + "</script>\n";
+		fileOut += "<script>" + WickUtils.downloadFile("src/wickplayer.js") + "</script>\n";
 
 		// Bundle the JSON project
 		fileOut += "<script>WickPlayer.runProject('" + projectJSON + "');</script>" + "\n";
