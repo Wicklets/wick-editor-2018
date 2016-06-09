@@ -3,8 +3,8 @@ var WickEditor = (function () {
 	var wickEditor = { version: '0' };
 
 	/* Editor settings */
-	var SHOW_PAGE_LEAVE_WARNING = true;
-	var LOAD_UNIT_TEST_PROJECT = false;
+	var SHOW_PAGE_LEAVE_WARNING = false;
+	var LOAD_UNIT_TEST_PROJECT = true;
 
 	/* Current project in editor */
 	var project;
@@ -25,22 +25,19 @@ var WickEditor = (function () {
 	var scriptEditor;
 
 	/* Variables for script editor */
-	var defaultScript = 'onLoad';
-	var currentScript = defaultScript;
+	var currentScript;
 
 	/* Mouse and keyboard input variables */
 	var mouse = {};
 	var keys;
 
-/*****************************
-	Setup
-*****************************/
-
 	wickEditor.setup = function() {
 
 		console.log("WickEditor rev " + wickEditor.version);
 
-	// Setup editor vars
+/*****************************
+	Setup editor vars
+*****************************/
 
 		// Create a new project
 		project = new WickProject();
@@ -66,6 +63,10 @@ var WickEditor = (function () {
 			var devTestProjectJSON = WickUtils.downloadFile("tests/unit-test-project.json");
 			loadProjectFromJSON(devTestProjectJSON);
 		}
+
+/*****************************
+	Bind events
+*****************************/
 
 	// Setup main menu events
 
@@ -259,6 +260,7 @@ var WickEditor = (function () {
 			// Tilde: log project state to canvas
 			if(keys[192]) {
 				console.log(project);
+				console.log(fabricCanvas);
 			}
 
 		});
@@ -309,11 +311,15 @@ var WickEditor = (function () {
 		fabricCanvas.getCanvas().on('mouse:down', function(e) {
 			selectedObject = e.target;
 			if(e.e.button == 2) {
-				if(selectedObject._objects.length < 2) {
+
+				console.log(selectedObject)
+
+				if (selectedObject && selectedObject.wickObject) {
 					var id = fabricCanvas.getCanvas().getObjects().indexOf(e.target);
 					fabricCanvas.getCanvas().setActiveObject(fabricCanvas.getCanvas().item(id));
 				}
 				openRightClickMenu();
+
 			} else {
 				closeRightClickMenu();
 			}
@@ -335,7 +341,6 @@ var WickEditor = (function () {
 			e.preventDefault();
 
 			importFilesDroppedIntoEditor(e.originalEvent.dataTransfer.files);
-
 			fabricCanvas.hideDragToImportFileAlert();
 
 			return false;
@@ -397,7 +402,7 @@ var WickEditor = (function () {
 
 		if(selectedObject) {
 			$("#commonObjectButtons").css('display', 'inline');
-			if(selectedObject._objects.length == 1 && selectedObject.wickObject.isSymbol) {
+			if(selectedObject.wickObject && selectedObject.wickObject.isSymbol) {
 				$("#symbolButtons").css('display', 'inline');
 			} else {
 				$("#staticObjectButtons").css('display', 'inline');
@@ -474,18 +479,33 @@ var convertActiveObjectToSymbol = function () {
 	var symbol = new WickObject();
 
 	symbol.parentObject = currentObject;
-	symbol.left = fabricCanvas.getActiveObject().left;
-	symbol.top = fabricCanvas.getActiveObject().top;
+	symbol.left = 0//selectedObject.left;
+	symbol.top = 0//selectedObject.top;
 	symbol.setDefaultPositioningValues();
 	symbol.setDefaultSymbolValues();
 
-	// TODO: Convert multiple symbols to objects
-	symbol.frames[0].wickObjects[0] = fabricCanvas.getActiveObject().wickObject;
-	symbol.frames[0].wickObjects[0].parentObject = symbol;
-	symbol.frames[0].wickObjects[0].left = 0;
-	symbol.frames[0].wickObjects[0].top = 0;
+	if (selectedObject._objects) {
+		// Multiple objects are selected, put them all in the new symbol
+		for(var i = 0; i < selectedObject._objects.length; i++) {
+			console.log(selectedObject._objects[i].wickObject);
+			symbol.frames[0].wickObjects[i] = selectedObject._objects[i].wickObject;
+			symbol.frames[0].wickObjects[i].parentObject = symbol;
+			symbol.frames[0].wickObjects[i].left = 0;
+			symbol.frames[0].wickObjects[i].top = 0;
+		}
+		while(selectedObject._objects.length > 0) {
+			selectedObject._objects[0].remove();
+		}
+	} else {
+		// Only one object is selected
+		symbol.frames[0].wickObjects[0] = selectedObject.wickObject;
+		symbol.frames[0].wickObjects[0].parentObject = symbol;
+		symbol.frames[0].wickObjects[0].left = 0;
+		symbol.frames[0].wickObjects[0].top = 0;
 
-	fabricCanvas.getActiveObject().remove();
+		selectedObject.remove();
+	}
+
 	fabricCanvas.addWickObjectToCanvas(symbol);
 
 	gotoFrame(currentObject.currentFrame);
@@ -503,7 +523,7 @@ var convertActiveObjectToSymbol = function () {
 	};
 
 	var reloadScriptingGUI = function() {
-		changeCurrentScript(defaultScript);
+		changeCurrentScript('onLoad');
 	};
 
 	var changeCurrentScript = function(scriptString) {
@@ -520,7 +540,6 @@ var convertActiveObjectToSymbol = function () {
 	};
 
 	var closeScriptingGUI = function() {
-		currentScript = defaultScript;
 		$("#scriptingGUI").css('visibility', 'hidden');
 	};
 
