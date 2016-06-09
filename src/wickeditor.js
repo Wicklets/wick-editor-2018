@@ -253,7 +253,7 @@ $("#convertToSymbolButton").on("click", function (e) {
 				e.target.cloneAsImage(function(clone) {
 
 					var fileImage = new Image();
-					fileImage.src = clone._element.currentSrc;
+					fileImage.src = clone._element.currentSrc || clone._element.src;
 
 					fileImage.onload = function() {
 						var obj = new WickObject();
@@ -265,7 +265,7 @@ $("#convertToSymbolButton").on("click", function (e) {
 						obj.top = e.target.top - clone.height/2;
 
 						obj.parentObject = currentObject;
-						obj.dataURL = clone._element.currentSrc;
+						obj.dataURL = fileImage.src;
 
 						fabricCanvas.addWickObjectToCanvas(obj);
 					}
