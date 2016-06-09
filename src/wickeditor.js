@@ -96,7 +96,7 @@ var WickEditor = (function () {
 			// Backspace: delete selected objects
 			if(keys[8]) {
 				e.preventDefault();
-				deleteActiveObject();
+				deleteSelectedObject();
 			}
 			
 			// Right arrow
@@ -165,44 +165,6 @@ var WickEditor = (function () {
 /********************************************************
 	Other methods that should be moved somewhere else
 ********************************************************/
-
-		$("#convertToSymbolButton").on("click", function (e) {
-			convertActiveObjectToSymbol();
-		});
-
-		$("#bringToFrontButton").on("click", function (e) {
-			console.error("Fix! Uses old fabric canvas");
-			//fabricCanvas.bringToFront(fabricCanvas.getActiveObject());
-			closeRightClickMenu();
-		});
-		$("#sendToBackButton").on("click", function (e) {
-			console.error("Fix! Uses old fabric canvas");
-			//fabricCanvas.sendToBack(fabricCanvas.getActiveObject());
-			closeRightClickMenu();
-		});
-		$("#deleteButton").on("click", function (e) {
-			deleteActiveObject();
-			closeRightClickMenu();
-		});
-
-		$("#editObjectButton").on("click", function (e) {
-			moveInsideObject(fabricCanvas.getActiveObject().wickObject);
-			closeRightClickMenu();
-		});
-		$("#editScriptsButton").on("click", function (e) {
-			openScriptingGUI();
-			closeRightClickMenu();
-		});
-
-		$("#finishEditingObjectButton").on("click", function (e) {
-			moveOutOfObject();
-			closeRightClickMenu();
-		});
-
-		$("#clearFrameButton").on("click", function (e) {
-			fabricCanvas.clear();
-			closeRightClickMenu();
-		});
 	
 	// Setup scripting GUI events
 
@@ -292,7 +254,7 @@ var WickEditor = (function () {
 				openRightClickMenu();
 
 			} else {
-				closeRightClickMenu();
+				WickEditor.closeRightClickMenu();
 			}
 		});
 
@@ -304,6 +266,15 @@ var WickEditor = (function () {
 
 	var openRightClickMenu = function () {
 
+		var createButton = function (buttonName, functionName) {
+			var button = "";
+			button += '<div class="button" ';
+			button += 'onclick="WickEditor.closeRightClickMenu(); ';
+			button += 'WickEditor.' + functionName + '();">';
+			button += buttonName + '</div>'
+			return button
+		}
+
 		// Make rightclick menu visible
 		$("#rightClickMenu").css('visibility', 'visible');
 		// Attach it to the mouse
@@ -311,28 +282,36 @@ var WickEditor = (function () {
 		$("#rightClickMenu").css('left', mouse.x+'px');
 
 		// Update right click menu depending on what type of wickobject is selected
-		$("#commonObjectButtons").css('display', 'none');
-		$("#symbolButtons").css('display', 'none');
-		$("#staticObjectButtons").css('display', 'none');
-		$("#finishEditingObjectButton").css('display', 'none');
+		var newButtons = "";
 
 		// Only show "Finish Editing Object" button if we're not in root
 		if(currentObject.parentObject) {
-			$("#finishEditingObjectButton").css('display', 'inline');
+			newButtons += createButton("Finish Editing Object", "moveOutOfObject");
 		}
 
 		var selectedObject = fabricCanvas.getCanvas().getActiveObject() || fabricCanvas.getCanvas().getActiveGroup();
 		if(selectedObject) {
-			$("#commonObjectButtons").css('display', 'inline');
 			if(selectedObject.wickObject && selectedObject.wickObject.isSymbol) {
-				$("#symbolButtons").css('display', 'inline');
+				newButtons += createButton("Edit Object", "editSelectedObject");
+				newButtons += createButton("Edit Scripts", "editScriptsOfSelectedObject");
+				newButtons += '<hr />';
 			} else {
-				$("#staticObjectButtons").css('display', 'inline');
+				newButtons += createButton("Convert to Symbol", "convertSelectedObjectToSymbol");
+				newButtons += '<hr />';
 			}
+
+			newButtons += createButton("Send To Back", "sendSelectedObjectToBack");
+			newButtons += createButton("Bring To Front", "bringSelectedObjectToFront");
+			newButtons += createButton("Delete", "deleteSelectedObject");
+			newButtons += '<hr />';
 		}
+
+		newButtons += createButton("Clear Frame", "clearFrame");
+
+		$("#rightClickMenu").html(newButtons);
 	}
 
-	var closeRightClickMenu = function () {
+	wickEditor.closeRightClickMenu = function () {
 		// Hide rightclick menu
 		$("#rightClickMenu").css('visibility', 'hidden');
 		$("#rightClickMenu").css('top', '0px');
@@ -435,10 +414,12 @@ var WickEditor = (function () {
 	}
 
 	wickEditor.exportProject = function () {
-
 		WickFileUtils.saveProjectAsHTMLFile(getProjectAsJSON());
-
 	}
+
+/***********************************
+	Toolbar methods
+***********************************/
 
 	wickEditor.startDrawingMode = function () {
 		fabricCanvas.startDrawingMode();
@@ -448,7 +429,11 @@ var WickEditor = (function () {
 		fabricCanvas.stopDrawingMode();	
 	}
 
-	var deleteActiveObject = function () {
+/***********************************
+	WickObject edit methods
+***********************************/
+
+	wickEditor.deleteSelectedObject = function () {
 
 		if (fabricCanvas.getCanvas().getActiveGroup()) {
 			fabricCanvas.getCanvas().getActiveGroup().forEachObject(function(o) { 
@@ -461,15 +446,15 @@ var WickEditor = (function () {
 		
 	}
 
-	var convertActiveObjectToSymbol = function () {
+	wickEditor.convertSelectedObjectToSymbol = function () {
 
 		var symbol = new WickObject();
 
 		var selectedObject = fabricCanvas.getCanvas().getActiveObject() || fabricCanvas.getCanvas().getActiveGroup();
 
 		symbol.parentObject = currentObject;
-		symbol.left = 0//selectedObject.left;
-		symbol.top = 0//selectedObject.top;
+		symbol.left = selectedObject.left;
+		symbol.top = selectedObject.top;
 		symbol.setDefaultPositioningValues();
 		symbol.setDefaultSymbolValues();
 
@@ -498,12 +483,31 @@ var WickEditor = (function () {
 		fabricCanvas.addWickObjectToCanvas(symbol);
 
 		gotoFrame(currentObject.currentFrame);
-		closeRightClickMenu();
 
 	}
 
+	wickEditor.editSelectedObject = function () {
+		moveInsideObject(fabricCanvas.getActiveObject().wickObject);
+	}
+
+	wickEditor.editScriptsOfSelectedObject = function () {
+		openScriptingGUI();
+	}
+
+	wickEditor.sendSelectedObjectToBack = function () {
+		console.error("Not yet implemented");
+	}
+
+	wickEditor.bringSelectedObjectToFront = function () {
+		console.error("Not yet implemented");
+	}
+
+	wickEditor.clearFrame = function () {
+		console.error("Not yet implemented");
+	}
+
 /*****************************
-	GUI
+	should be in wickscriptingide.js
 *****************************/
 
 	var openScriptingGUI = function () {
@@ -536,6 +540,10 @@ var WickEditor = (function () {
 		$("#scriptingGUI").css('visibility', 'hidden');
 	};
 
+/*****************************
+	GUI
+*****************************/
+
 	var resizeCanvasAndGUI = function () {
 		// Resize canvas
 		fabricCanvas.resize(
@@ -548,6 +556,10 @@ var WickEditor = (function () {
 		var timelineOffset = window.innerWidth/2 - GUIWidth;
 		$("#timelineGUI").css('left', timelineOffset+'px');
 	}
+
+/*****************************
+	should be in wicktimelinegui.js
+*****************************/
 
 	var updateTimelineGUI = function () {
 
