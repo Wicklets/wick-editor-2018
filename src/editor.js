@@ -3,7 +3,7 @@ var WickEditor = (function () {
 	var wickEditor = { version: '0' };
 
 	/* Editor settings */
-	var SHOW_PAGE_LEAVE_WARNING = true;
+	var SHOW_PAGE_LEAVE_WARNING = false;
 	var LOAD_UNIT_TEST_PROJECT = true;
 
 	/* Current project in editor */
@@ -11,6 +11,9 @@ var WickEditor = (function () {
 
 	/* Current object being edited */
 	var currentObject;
+
+	/* Reference to selected object in fabric canvas */
+	var selectedObject;
 
 	/* Handles all the Fabric.js stuff */
 	var fabricCanvas;
@@ -214,21 +217,17 @@ var WickEditor = (function () {
 		}, false );
 
 		document.getElementById("editorCanvasContainer").addEventListener("mousedown", function(event) {
-			closeRightClickMenu();
+			//closeRightClickMenu();
 		}, false);
+
 
 	// Setup right click events
 
 		if (document.addEventListener) {
 			document.addEventListener('contextmenu', function(e) {
-				openRightClickMenu();
+				//openRightClickMenu();
 				e.preventDefault();
 			}, false);
-		} else {
-			document.attachEvent('oncontextmenu', function() {
-				openRightClickMenu();
-				window.event.returnValue = false;
-			});
 		}
 
 	// Setup keypress events
@@ -308,9 +307,15 @@ var WickEditor = (function () {
 	// We use this here to select an item with a right click
 
 		fabricCanvas.getCanvas().on('mouse:down', function(e) {
-			if(e.target) {
-				var id = fabricCanvas.getCanvas().getObjects().indexOf(e.target);
-				fabricCanvas.getCanvas().setActiveObject(fabricCanvas.getCanvas().item(id));
+			selectedObject = e.target;
+			if(e.e.button == 2) {
+				if(selectedObject._objects.length < 2) {
+					var id = fabricCanvas.getCanvas().getObjects().indexOf(e.target);
+					fabricCanvas.getCanvas().setActiveObject(fabricCanvas.getCanvas().item(id));
+				}
+				openRightClickMenu();
+			} else {
+				closeRightClickMenu();
 			}
 		});
 
@@ -390,9 +395,9 @@ var WickEditor = (function () {
 			$("#finishEditingObjectButton").css('display', 'inline');
 		}
 
-		if(fabricCanvas.getActiveObject()) {
+		if(selectedObject) {
 			$("#commonObjectButtons").css('display', 'inline');
-			if(fabricCanvas.getActiveObject().wickObject.isSymbol) {
+			if(selectedObject._objects.length == 1 && selectedObject.wickObject.isSymbol) {
 				$("#symbolButtons").css('display', 'inline');
 			} else {
 				$("#staticObjectButtons").css('display', 'inline');
