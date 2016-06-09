@@ -166,7 +166,7 @@ var WickEditor = (function () {
 	Other methods that should be moved somewhere else
 ********************************************************/
 
-$("#convertToSymbolButton").on("click", function (e) {
+		$("#convertToSymbolButton").on("click", function (e) {
 			convertActiveObjectToSymbol();
 		});
 
