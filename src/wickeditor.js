@@ -6,8 +6,8 @@ var WickEditor = (function () {
 	Settings
 *****************************/
 	
-	var SHOW_PAGE_LEAVE_WARNING = false;
-	var LOAD_UNIT_TEST_PROJECT = true;
+	var SHOW_PAGE_LEAVE_WARNING = true;
+	var LOAD_UNIT_TEST_PROJECT = false;
 	var UNIT_TEST_PROJECT_PATH = "tests/multi-object-symbol-test.json";
 
 /*****************************
@@ -166,6 +166,43 @@ var WickEditor = (function () {
 	Other methods that should be moved somewhere else
 ********************************************************/
 
+$("#convertToSymbolButton").on("click", function (e) {
+			convertActiveObjectToSymbol();
+		});
+
+		$("#bringToFrontButton").on("click", function (e) {
+			console.error("Fix! Uses old fabric canvas");
+			//fabricCanvas.bringToFront(fabricCanvas.getActiveObject());
+			closeRightClickMenu();
+		});
+		$("#sendToBackButton").on("click", function (e) {
+			console.error("Fix! Uses old fabric canvas");
+			//fabricCanvas.sendToBack(fabricCanvas.getActiveObject());
+			closeRightClickMenu();
+		});
+		$("#deleteButton").on("click", function (e) {
+			deleteActiveObject();
+			closeRightClickMenu();
+		});
+
+		$("#editObjectButton").on("click", function (e) {
+			moveInsideObject(fabricCanvas.getActiveObject().wickObject);
+			closeRightClickMenu();
+		});
+		$("#editScriptsButton").on("click", function (e) {
+			openScriptingGUI();
+			closeRightClickMenu();
+		});
+
+		$("#finishEditingObjectButton").on("click", function (e) {
+			moveOutOfObject();
+			closeRightClickMenu();
+		});
+
+		$("#clearFrameButton").on("click", function (e) {
+			fabricCanvas.clear();
+			closeRightClickMenu();
+		});
 	
 	// Setup scripting GUI events
 
@@ -266,44 +303,6 @@ var WickEditor = (function () {
 **********************************/
 
 	var openRightClickMenu = function () {
-
-		/*$("#convertToSymbolButton").on("click", function (e) {
-			convertActiveObjectToSymbol();
-		});
-
-		$("#bringToFrontButton").on("click", function (e) {
-			console.error("Fix! Uses old fabric canvas");
-			//fabricCanvas.bringToFront(fabricCanvas.getActiveObject());
-			closeRightClickMenu();
-		});
-		$("#sendToBackButton").on("click", function (e) {
-			console.error("Fix! Uses old fabric canvas");
-			//fabricCanvas.sendToBack(fabricCanvas.getActiveObject());
-			closeRightClickMenu();
-		});
-		$("#deleteButton").on("click", function (e) {
-			deleteActiveObject();
-			closeRightClickMenu();
-		});
-
-		$("#editObjectButton").on("click", function (e) {
-			moveInsideObject(fabricCanvas.getActiveObject().wickObject);
-			closeRightClickMenu();
-		});
-		$("#editScriptsButton").on("click", function (e) {
-			openScriptingGUI();
-			closeRightClickMenu();
-		});
-
-		$("#finishEditingObjectButton").on("click", function (e) {
-			moveOutOfObject();
-			closeRightClickMenu();
-		});
-
-		$("#clearFrameButton").on("click", function (e) {
-			fabricCanvas.clear();
-			closeRightClickMenu();
-		});*/
 
 		// Make rightclick menu visible
 		$("#rightClickMenu").css('visibility', 'visible');
