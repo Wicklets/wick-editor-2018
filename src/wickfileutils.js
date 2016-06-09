@@ -21,14 +21,14 @@
 		var fileOut = "";
 
 		// Add the player webpage (need to download the empty player)
-		fileOut += WickUtils.downloadFile("player.htm") + "\n";
+		fileOut += WickFileUtils.downloadFile("player.htm") + "\n";
 
 		// Add any libs that the player needs
-		fileOut += "<script>" + WickUtils.downloadFile("lib/fpscounter.js") + "</script>\n";
+		fileOut += "<script>" + WickFileUtils.downloadFile("lib/fpscounter.js") + "</script>\n";
 
 		// Add the player (need to download the player code)
-		fileOut += "<script>" + WickUtils.downloadFile("src/wicksharedutils.js") + "</script>\n";
-		fileOut += "<script>" + WickUtils.downloadFile("src/wickplayer.js") + "</script>\n";
+		fileOut += "<script>" + WickFileUtils.downloadFile("src/wicksharedutils.js") + "</script>\n";
+		fileOut += "<script>" + WickFileUtils.downloadFile("src/wickplayer.js") + "</script>\n";
 
 		// Bundle the JSON project
 		fileOut += "<script>WickPlayer.runProject('" + projectJSON + "');</script>" + "\n";
