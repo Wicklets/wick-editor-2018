@@ -78,6 +78,9 @@ hr {
 	cursor: pointer;
 	background-color: #A0A0A0;
 }
+.activeScriptButton {
+	background-color: #FF00FF;
+}
 
 .buttonInRow {
 	float: left;
