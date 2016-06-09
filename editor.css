@@ -40,7 +40,12 @@ hr {
 	left: 10px;
 	text-align: center;
 	visibility: hidden;
+}
 
+#propertiesGUI {
+	bottom: 10px;
+	right: 10px;
+	text-align: center;
 }
 
 #builtinPlayerGUI {
@@ -65,6 +70,10 @@ hr {
 	left: 0px;
 	background-color: #CACACA;
 	visibility: hidden;
+}
+
+#objectNameBox {
+
 }
 
 .button {
