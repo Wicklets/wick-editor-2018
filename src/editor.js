@@ -5,15 +5,14 @@ var WickEditor = (function () {
 	/* Editor settings */
 	var SHOW_PAGE_LEAVE_WARNING = false;
 	var LOAD_UNIT_TEST_PROJECT = true;
+	var UNIT_TEST_PROJECT_PATH = "tests/multi-object-symbol-test.json";
+	var SCRIPT_IDE_ACE_THEME = "ace/theme/chrome";
 
 	/* Current project in editor */
 	var project;
 
 	/* Current object being edited */
 	var currentObject;
-
-	/* Reference to selected object in fabric canvas */
-	var selectedObject;
 
 	/* Handles all the Fabric.js stuff */
 	var fabricCanvas;
@@ -51,7 +50,7 @@ var WickEditor = (function () {
 
 		// Setup syntax highligter for scripts window
 		scriptEditor = ace.edit("scriptEditor");
-	    scriptEditor.setTheme("ace/theme/chrome");
+	    scriptEditor.setTheme(SCRIPT_IDE_ACE_THEME);
 	    scriptEditor.getSession().setMode("ace/mode/javascript");
 	    scriptEditor.$blockScrolling = Infinity; // Makes that weird message go away
 
@@ -60,7 +59,7 @@ var WickEditor = (function () {
 
 		// Load the 'unit test' project
 		if(LOAD_UNIT_TEST_PROJECT) {
-			var devTestProjectJSON = WickUtils.downloadFile("tests/unit-test-project.json");
+			var devTestProjectJSON = WickUtils.downloadFile(UNIT_TEST_PROJECT_PATH);
 			loadProjectFromJSON(devTestProjectJSON);
 		}
 
@@ -185,7 +184,7 @@ var WickEditor = (function () {
 			closeRightClickMenu();
 		});
 		$("#deleteButton").on("click", function (e) {
-			fabricCanvas.getActiveObject().remove();
+			deleteActiveObject();
 			closeRightClickMenu();
 		});
 
@@ -240,12 +239,9 @@ var WickEditor = (function () {
 
 			// Backspace: delete selected objects
 			if(keys[8]) {
-		        e.preventDefault();
-
-		        if(fabricCanvas.getActiveObject()) {
-			        fabricCanvas.getActiveObject().remove();
-			    }
-		    }
+				e.preventDefault();
+				deleteActiveObject();
+			}
 			
 			// Right arrow
 			if (keys[39]) {
@@ -309,14 +305,15 @@ var WickEditor = (function () {
 	// We use this here to select an item with a right click
 
 		fabricCanvas.getCanvas().on('mouse:down', function(e) {
-			selectedObject = e.target;
 			if(e.e.button == 2) {
 
-				console.log(selectedObject)
-
-				if (selectedObject && selectedObject.wickObject) {
+				if (e.target && e.target.wickObject) {
 					var id = fabricCanvas.getCanvas().getObjects().indexOf(e.target);
 					fabricCanvas.getCanvas().setActiveObject(fabricCanvas.getCanvas().item(id));
+				}
+
+				if(!e.target) {
+					fabricCanvas.getCanvas().deactivateAll().renderAll();
 				}
 				openRightClickMenu();
 
@@ -400,6 +397,7 @@ var WickEditor = (function () {
 			$("#finishEditingObjectButton").css('display', 'inline');
 		}
 
+		var selectedObject = fabricCanvas.getCanvas().getActiveObject() || fabricCanvas.getCanvas().getActiveGroup();
 		if(selectedObject) {
 			$("#commonObjectButtons").css('display', 'inline');
 			if(selectedObject.wickObject && selectedObject.wickObject.isSymbol) {
@@ -474,9 +472,24 @@ var WickEditor = (function () {
 	Editor action utils
 *****************************/
 
+var deleteActiveObject = function () {
+
+	if (fabricCanvas.getCanvas().getActiveGroup()) {
+		fabricCanvas.getCanvas().getActiveGroup().forEachObject(function(o) { 
+			fabricCanvas.getCanvas().remove(o);
+		});
+		fabricCanvas.getCanvas().discardActiveGroup().renderAll();
+	} else {
+		fabricCanvas.getCanvas().remove(fabricCanvas.getCanvas().getActiveObject());
+	}
+	
+}
+
 var convertActiveObjectToSymbol = function () {
 
 	var symbol = new WickObject();
+
+	var selectedObject = fabricCanvas.getCanvas().getActiveObject() || fabricCanvas.getCanvas().getActiveGroup();
 
 	symbol.parentObject = currentObject;
 	symbol.left = 0//selectedObject.left;
