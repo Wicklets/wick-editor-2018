@@ -530,6 +530,10 @@ var WickEditor = (function () {
 			var script = fabricCanvas.getActiveObject().wickObject.wickScripts[currentScript];
 			scriptingIDE.aceEditor.setValue(script, -1);
 		}
+
+		document.getElementById("onLoadButton").className = (currentScript == 'onLoad' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
+		document.getElementById("onUpdateButton").className = (currentScript == 'onUpdate' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
+		document.getElementById("onClickButton").className = (currentScript == 'onClick' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
 	};
 
 	var closeScriptingGUI = function() {
