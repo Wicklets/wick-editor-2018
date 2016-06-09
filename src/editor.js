@@ -3,8 +3,8 @@ var WickEditor = (function () {
 	var wickEditor = { version: '0' };
 
 	/* Editor settings */
-	var SHOW_PAGE_LEAVE_WARNING = false;
-	var LOAD_UNIT_TEST_PROJECT = true;
+	var SHOW_PAGE_LEAVE_WARNING = true;
+	var LOAD_UNIT_TEST_PROJECT = false;
 
 	/* Current project in editor */
 	var project;
