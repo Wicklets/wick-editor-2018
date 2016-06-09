@@ -277,7 +277,7 @@ var WickPlayer = (function () {
 			// Run onLoad script
 			if(obj && obj.wickScripts) {
 				//console.log(obj.wickScripts['onLoad']);
-				eval(obj.wickScripts.onLoad);
+				evalScript(obj, obj.wickScripts.onLoad);
 				obj.onLoadScriptRan = true;
 			} else {
 				//console.log("obj contains no wickScripts or onLoad function");
@@ -299,7 +299,7 @@ var WickPlayer = (function () {
 		// Run update script
 		if(obj && obj.wickScripts) {
 			//console.log(obj.wickScripts['onUpdate']);
-			eval(obj.wickScripts.onUpdate);
+			evalScript(obj, obj.wickScripts.onUpdate);
 		} else {
 			//console.log("obj contains no wickScripts or update function");
 		}
@@ -316,8 +316,29 @@ var WickPlayer = (function () {
 	var runOnClickScript = function (obj) {
 
 		if(obj.wickScripts.onClick) {
-			eval(obj.wickScripts.onClick);
+			evalScript(obj, obj.wickScripts.onClick);
 		}
+
+	}
+
+	var evalScript = function (obj, script) {
+
+		var gotoAndPlay = function (frame) {
+			project.rootObject.currentFrame = frame;
+			project.rootObject.isPlaying = true;
+		}
+		var gotoAndStop = function (frame) {
+			project.rootObject.currentFrame = frame;
+			project.rootObject.isPlaying = false;
+		}
+		var play = function (frame) {
+			project.rootObject.isPlaying = true;
+		}
+		var stop = function (frame) {
+			project.rootObject.isPlaying = false;
+		}
+
+		eval(script.replace("this.","obj."));
 
 	}
 

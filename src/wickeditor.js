@@ -468,8 +468,8 @@ $("#convertToSymbolButton").on("click", function (e) {
 		var selectedObject = fabricCanvas.getCanvas().getActiveObject() || fabricCanvas.getCanvas().getActiveGroup();
 
 		symbol.parentObject = currentObject;
-		symbol.left = 0//selectedObject.left;
-		symbol.top = 0//selectedObject.top;
+		symbol.left = selectedObject.left;
+		symbol.top = selectedObject.top;
 		symbol.setDefaultPositioningValues();
 		symbol.setDefaultSymbolValues();
 
