@@ -334,7 +334,10 @@ var WickPlayer = (function () {
 			project.rootObject.isPlaying = false;
 		}
 
-		eval(script.replace("this.","obj."));
+		for(var i = 0; i < 100; i++){ // !!! why plseae dont do this
+			script = script.replace("this.","obj.");
+		}
+		eval(script);
 
 	}
 
@@ -381,6 +384,14 @@ var WickPlayer = (function () {
 
 	}
 
+	var doRotationForObject = function (wickObject) {
+
+		context.translate(wickObject.width/2, wickObject.height/2);
+		context.rotate(wickObject.angle/360*2*3.14159);
+		context.translate(-wickObject.width/2, -wickObject.height/2);
+
+	}
+
 	var drawWickObject = function (obj) {
 
 		if(obj.isSymbol) {
@@ -389,6 +400,7 @@ var WickPlayer = (function () {
 
 			context.save();
 			context.translate(obj.left, obj.top);
+			doRotationForObject(obj);
 			context.scale(obj.scaleX, obj.scaleY);
 
 				WickSharedUtils.forEachActiveChildObject(obj, function(subObj) {
@@ -404,6 +416,7 @@ var WickPlayer = (function () {
 			context.save();
 
 				context.translate(obj.left, obj.top);
+				doRotationForObject(obj);
 				context.scale(obj.scaleX, obj.scaleY);
 				context.drawImage(obj.image, 0, 0);
 
