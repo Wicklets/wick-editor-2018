@@ -271,6 +271,10 @@ FabricCanvas.prototype.makeFabricObjectFromWickObject = function (wickObject, ca
 			oImg.top = relativePosition.top;
 			oImg.left = relativePosition.left;
 
+			// Set the fabric.js option to only select if the pixel you're over isn't transparent
+			oImg.perPixelTargetFind = true;
+			oImg.targetFindTolerance = 4;
+
 			// Store a reference to the wick object inside the fabric object
 			// to use when we put this object back into the project.
 			oImg.wickObject = wickObject;
