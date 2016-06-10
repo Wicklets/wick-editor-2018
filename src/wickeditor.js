@@ -781,9 +781,6 @@ var WickEditor = (function () {
 **********************************/
 
 	var getWickObjectAsJSON = function (wickObject) {
-		// Store changes made to current frame in the project
-		currentObject.frames[currentObject.currentFrame].wickObjects = fabricCanvas.getWickObjectsInCanvas();
-
 		// Remove parent object references 
 		// (can't JSONify objects with circular references, player doesn't need them anyway)
 		wickObject.removeParentObjectRefences();
@@ -793,7 +790,11 @@ var WickEditor = (function () {
 
 		var JSONWickObject = JSON.stringify(wickObject);
 
+		// Put prototypes back on object ('class methods'), they don't get JSONified on project export.
+		putPrototypeBackOnObject(wickObject);
+
 		// Put parent object references back in all objects
+		wickObject.parentObject = currentObject;
 		wickObject.regenerateParentObjectReferences();
 
 		// Decode scripts back to human-readble and eval()-able format
