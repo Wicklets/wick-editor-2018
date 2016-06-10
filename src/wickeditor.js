@@ -475,6 +475,9 @@ var WickEditor = (function () {
 
 		fabricCanvas.addWickObjectToCanvas(symbol);
 
+		// deselect everything
+		fabricCanvas.getCanvas().deactivateAll().renderAll();
+
 		gotoFrame(currentObject.currentFrame);
 
 	}
