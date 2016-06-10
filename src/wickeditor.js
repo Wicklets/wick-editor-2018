@@ -7,7 +7,7 @@ var WickEditor = (function () {
 *****************************/
 	
 	var SHOW_PAGE_LEAVE_WARNING = true;
-	var LOAD_UNIT_TEST_PROJECT = false;
+	var AUTO_LOAD_UNIT_TEST_PROJECT = false;
 	var UNIT_TEST_PROJECT_PATH = "tests/multi-object-symbol-test.json";
 
 /*****************************
@@ -61,7 +61,7 @@ var WickEditor = (function () {
 		updateTimelineGUI();
 
 		// Load the 'unit test' project
-		if(LOAD_UNIT_TEST_PROJECT) {
+		if(AUTO_LOAD_UNIT_TEST_PROJECT) {
 			var devTestProjectJSON = WickFileUtils.downloadFile(UNIT_TEST_PROJECT_PATH);
 			loadProjectFromJSON(devTestProjectJSON);
 		}
@@ -96,7 +96,7 @@ var WickEditor = (function () {
 			// Backspace: delete selected objects
 			if(keys[8]) {
 				e.preventDefault();
-				deleteSelectedObject();
+				wickEditor.deleteSelectedObject();
 			}
 			
 			// Right arrow
@@ -121,6 +121,52 @@ var WickEditor = (function () {
 			keys[e.keyCode] = false;
 		});
 
+	// Setup copy/paste events
+
+		var focusHiddenArea = function() {
+		    // In order to ensure that the browser will fire clipboard events, we always need to have something selected
+		    $("#hidden-input").val(' ');
+		    $("#hidden-input").focus().select();
+		};
+
+		var standardClipboardEvent = function(clipboardEvent, event) {
+		var clipboardData = event.clipboardData;
+		if (clipboardEvent == 'cut' || clipboardEvent == 'copy') {
+			//clipboardData.setData('text/plain', "bogoText");
+
+			var selectedObject = fabricCanvas.getCanvas().getActiveObject() || fabricCanvas.getCanvas().getActiveGroup();
+			var selectedWickObject = selectedObject.wickObject;
+			clipboardData.setData('text/plain', getWickObjectAsJSON(selectedWickObject));
+		}
+		if (clipboardEvent == 'paste') {
+			//console.log('Clipboard Plain Text: ' + clipboardData.getData('text/plain'));
+			//console.log('Clipboard HTML: ' + clipboardData.getData('text/html'));
+
+			var wickObjectJSON = clipboardData.getData('text/plain');
+			var wickObject = getWickObjectFromJSON(wickObjectJSON);
+			wickObject.top += 55;
+			wickObject.left += 55; // just to position it a bit over (temporary)
+			fabricCanvas.addWickObjectToCanvas(wickObject);
+		}
+		};
+
+		['cut', 'copy', 'paste'].forEach(function(event) {
+	    	document.addEventListener(event, function(e) {
+	        if(!scriptingIDE.open) {
+	        	console.log(event);
+		        /*if (isIe) {
+		            ieClipboardEvent(event);
+		        } else {
+		            standardClipboardEvent(event, e);
+		            focusHiddenArea();
+		            e.preventDefault();
+		        }*/
+		        standardClipboardEvent(event, e);
+	            focusHiddenArea();
+	            e.preventDefault();
+	        }
+	    });
+	});
 
 	// Setup drag/drop events
 
@@ -260,66 +306,8 @@ var WickEditor = (function () {
 
 	}
 
-/**********************************
-	Right-click menu 
-**********************************/
-
-	var openRightClickMenu = function () {
-
-		var createButton = function (buttonName, functionName) {
-			var button = "";
-			button += '<div class="button" ';
-			button += 'onclick="WickEditor.closeRightClickMenu(); ';
-			button += 'WickEditor.' + functionName + '();">';
-			button += buttonName + '</div>'
-			return button
-		}
-
-		// Make rightclick menu visible
-		$("#rightClickMenu").css('visibility', 'visible');
-		// Attach it to the mouse
-		$("#rightClickMenu").css('top', mouse.y+'px');
-		$("#rightClickMenu").css('left', mouse.x+'px');
-
-		// Update right click menu depending on what type of wickobject is selected
-		var newButtons = "";
-
-		// Only show "Finish Editing Object" button if we're not in root
-		if(currentObject.parentObject) {
-			newButtons += createButton("Finish Editing Object", "moveOutOfObject");
-		}
-
-		var selectedObject = fabricCanvas.getCanvas().getActiveObject() || fabricCanvas.getCanvas().getActiveGroup();
-		if(selectedObject) {
-			if(selectedObject.wickObject && selectedObject.wickObject.isSymbol) {
-				newButtons += createButton("Edit Object", "editSelectedObject");
-				newButtons += createButton("Edit Scripts", "editScriptsOfSelectedObject");
-				newButtons += '<hr />';
-			} else {
-				newButtons += createButton("Convert to Symbol", "convertSelectedObjectToSymbol");
-				newButtons += '<hr />';
-			}
-
-			newButtons += createButton("Send To Back", "sendSelectedObjectToBack");
-			newButtons += createButton("Bring To Front", "bringSelectedObjectToFront");
-			newButtons += createButton("Delete", "deleteSelectedObject");
-			newButtons += '<hr />';
-		}
-
-		newButtons += createButton("Clear Frame", "clearFrame");
-
-		$("#rightClickMenu").html(newButtons);
-	}
-
-	wickEditor.closeRightClickMenu = function () {
-		// Hide rightclick menu
-		$("#rightClickMenu").css('visibility', 'hidden');
-		$("#rightClickMenu").css('top', '0px');
-		$("#rightClickMenu").css('left','0px');
-	}
-
 /*****************************
-	Timeline
+	Timeline methods
 *****************************/
 
 	wickEditor.addEmptyFrame = function () {
@@ -386,7 +374,7 @@ var WickEditor = (function () {
 	}
 
 /***********************************
-	Public editor action methods
+	editor project methods
 ***********************************/
 
 	wickEditor.newProject = function () {
@@ -430,7 +418,7 @@ var WickEditor = (function () {
 	}
 
 /***********************************
-	WickObject edit methods
+	WickObject methods
 ***********************************/
 
 	wickEditor.deleteSelectedObject = function () {
@@ -461,7 +449,6 @@ var WickEditor = (function () {
 		if (selectedObject._objects) {
 			// Multiple objects are selected, put them all in the new symbol
 			for(var i = 0; i < selectedObject._objects.length; i++) {
-				console.log(selectedObject._objects[i].wickObject);
 				symbol.frames[0].wickObjects[i] = selectedObject._objects[i].wickObject;
 				symbol.frames[0].wickObjects[i].parentObject = symbol;
 				symbol.frames[0].wickObjects[i].left = 0;
@@ -494,6 +481,10 @@ var WickEditor = (function () {
 		openScriptingGUI();
 	}
 
+	wickEditor.finishEditingObject = function () {
+		moveOutOfObject();
+	}
+
 	wickEditor.sendSelectedObjectToBack = function () {
 		console.error("Not yet implemented");
 	}
@@ -511,6 +502,7 @@ var WickEditor = (function () {
 *****************************/
 
 	var openScriptingGUI = function () {
+		scriptingIDE.open = true;
 		$("#scriptingGUI").css('visibility', 'visible');
 		reloadScriptingGUI();
 	};
@@ -537,6 +529,7 @@ var WickEditor = (function () {
 	};
 
 	var closeScriptingGUI = function() {
+		scriptingIDE.open = false;
 		$("#scriptingGUI").css('visibility', 'hidden');
 	};
 
@@ -555,6 +548,63 @@ var WickEditor = (function () {
 		var GUIWidth = parseInt($("#timelineGUI").css("width")) / 2;
 		var timelineOffset = window.innerWidth/2 - GUIWidth;
 		$("#timelineGUI").css('left', timelineOffset+'px');
+	}
+
+/***************************************
+	should be in wickrightclickmenu.js
+***************************************/
+
+	var openRightClickMenu = function () {
+
+		var createButton = function (buttonName, functionName) {
+			var button = "";
+			button += '<div class="button" ';
+			button += 'onclick="WickEditor.closeRightClickMenu(); ';
+			button += 'WickEditor.' + functionName + '();">';
+			button += buttonName + '</div>'
+			return button
+		}
+
+		// Make rightclick menu visible
+		$("#rightClickMenu").css('visibility', 'visible');
+		// Attach it to the mouse
+		$("#rightClickMenu").css('top', mouse.y+'px');
+		$("#rightClickMenu").css('left', mouse.x+'px');
+
+		// Update right click menu depending on what type of wickobject is selected
+		var newButtons = "";
+
+		// Only show "Finish Editing Object" button if we're not in root
+		if(currentObject.parentObject) {
+			newButtons += createButton("Finish Editing Object", "finishEditingObject");
+		}
+
+		var selectedObject = fabricCanvas.getCanvas().getActiveObject() || fabricCanvas.getCanvas().getActiveGroup();
+		if(selectedObject) {
+			if(selectedObject.wickObject && selectedObject.wickObject.isSymbol) {
+				newButtons += createButton("Edit Object", "editSelectedObject");
+				newButtons += createButton("Edit Scripts", "editScriptsOfSelectedObject");
+				newButtons += '<hr />';
+			} else {
+				newButtons += createButton("Convert to Symbol", "convertSelectedObjectToSymbol");
+				newButtons += '<hr />';
+			}
+
+			newButtons += createButton("Send To Back", "sendSelectedObjectToBack");
+			newButtons += createButton("Bring To Front", "bringSelectedObjectToFront");
+			newButtons += createButton("Delete", "deleteSelectedObject");
+		} else {
+			newButtons += createButton("Clear Frame", "clearFrame");
+		}
+
+		$("#rightClickMenu").html(newButtons);
+	}
+
+	wickEditor.closeRightClickMenu = function () {
+		// Hide rightclick menu
+		$("#rightClickMenu").css('visibility', 'hidden');
+		$("#rightClickMenu").css('top', '0px');
+		$("#rightClickMenu").css('left','0px');
 	}
 
 /*****************************
@@ -704,9 +754,6 @@ var WickEditor = (function () {
 		fabricCanvas.storeObjectsIntoCanvas( currentObject.getCurrentFrame().wickObjects );
 
 		updateTimelineGUI();
-
-		console.log("loaded project:");
-		console.log(project);
 	}
 
 	// This is supposedly a nasty thing to do - think about possible alternatives for IE and stuff
@@ -721,6 +768,50 @@ var WickEditor = (function () {
 				putPrototypeBackOnObject(currObj);
 			});
 		}
+	}
+
+/**********************************
+	Copy/Paste wick objects
+**********************************/
+
+	var getWickObjectAsJSON = function (wickObject) {
+		// Store changes made to current frame in the project
+		currentObject.frames[currentObject.currentFrame].wickObjects = fabricCanvas.getWickObjectsInCanvas();
+
+		// Remove parent object references 
+		// (can't JSONify objects with circular references, player doesn't need them anyway)
+		wickObject.removeParentObjectRefences();
+
+		// Encode scripts to avoid JSON format problems
+		WickSharedUtils.encodeScripts(wickObject);
+
+		var JSONWickObject = JSON.stringify(wickObject);
+
+		// Put parent object references back in all objects
+		wickObject.regenerateParentObjectReferences();
+
+		// Decode scripts back to human-readble and eval()-able format
+		WickSharedUtils.decodeScripts(wickObject);
+
+		return JSONWickObject;
+	}
+
+	var getWickObjectFromJSON = function (jsonString) {
+		// Replace current project with project in JSON
+		var newWickObject = JSON.parse(jsonString);
+
+		// Put prototypes back on object ('class methods'), they don't get JSONified on project export.
+		putPrototypeBackOnObject(newWickObject);
+
+		// Regenerate parent object references
+		// These were removed earlier because JSON can't handle infinitely recursive objects (duh)
+		newWickObject.parentObject = currentObject;
+		newWickObject.regenerateParentObjectReferences();
+
+		// Decode scripts back to human-readble and eval()-able format
+		WickSharedUtils.decodeScripts(newWickObject);
+
+		return newWickObject;
 	}
 
 /****************************************

@@ -25,10 +25,6 @@ var WickPlayer = (function () {
 	Page/DOM Utils
 *****************************/
 
-	var inMobileMode = function () {
-		return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-	}
-
 	var getMousePos = function (canvas, evt) {
 		var rect = canvas.getBoundingClientRect();
 		return {
@@ -61,7 +57,7 @@ var WickPlayer = (function () {
 		canvasContainerEl = document.getElementById("playerCanvasContainer");
 
 		// Check if we're on a mobile device or not
-		mobileMode = inMobileMode();
+		mobileMode = BrowserDetectionUtils.inMobileMode;
 		desktopMode = !mobileMode;
 
 		// Setup mouse events (desktop mode)

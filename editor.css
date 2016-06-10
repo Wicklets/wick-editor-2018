@@ -21,7 +21,7 @@ hr {
 	position: absolute;
 	font-size: 12px;
 	font-family: "Arial", sans-serif;
-	background-color: #DDDDDD;
+	background-color: #EEEEEE;
 	padding-top: 5px;
 	padding-bottom: 5px;
 	padding-left: 5px;
@@ -68,7 +68,7 @@ hr {
 	position: fixed;
 	top: 0px;
 	left: 0px;
-	background-color: #CACACA;
+	background-color: #EEEEEE;
 	visibility: hidden;
 }
 
@@ -88,7 +88,7 @@ hr {
 	background-color: #A0A0A0;
 }
 .activeScriptButton {
-	background-color: #FF00FF;
+	background-color: #FFFFFF;
 }
 
 .buttonInRow {
@@ -149,4 +149,25 @@ hr {
 
 input[type=file] { 
 	display: none;
+}
+
+.hidden {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    display: block;
+    font-size: 1;
+    z-index: -1;
+    color: transparent;
+    background: transparent;
+    overflow: hidden;
+    border: none;
+    padding: 0;
+    resize: none;
+    outline: none;
+    -webkit-user-select: text;
+    user-select: text;
+    /* Because for user-select:none, Safari won't allow input */
 }

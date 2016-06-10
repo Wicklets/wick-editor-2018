@@ -5,6 +5,8 @@ var WickScriptingIDE = function () {
 	this.aceEditor.getSession().setMode("ace/mode/javascript");
 	this.aceEditor.$blockScrolling = Infinity; // Makes that weird message go away
 
+	this.open = false;
+
 }
 
 WickScriptingIDE.prototype.nothing = function() {

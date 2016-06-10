@@ -13,6 +13,7 @@
 	<script src="lib/paper-core.min.js" type="text/javascript"></script>
 	<script src="lib/FileSaver.min.js"></script>
 	<script src="lib/fpscounter.js"></script>
+	<script src="lib/browserdetection.js"></script>
 	
 	<script src="src/wickfileutils.js"></script>
 	<script src="src/wicksharedutils.js"></script>
@@ -34,6 +35,11 @@
 </head>
 
 <body>
+
+<!-- Hidden element to always be selected so browser always fires copy/paste events -->
+
+	<input id="hidden-input" class="hidden" type="text" value="" />
+
 <!-- Editor GUI, visible when a project is being edited & not running -->
 
 	<div id="editor">
