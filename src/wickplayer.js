@@ -344,7 +344,9 @@ var WickPlayer = (function () {
 		if(obj.isPlaying) {
 			obj.currentFrame++;
 			if(obj.currentFrame == obj.frames.length) {
-				obj.currentFrame = 0;
+				//Disable looping animations for today's demo  
+				//obj.currentFrame = 0;
+				obj.currentFrame = obj.frames.length-1;
 			}
 
 			obj.onLoadScriptRan = false;

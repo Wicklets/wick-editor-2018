@@ -6,7 +6,7 @@ var WickEditor = (function () {
 	Settings
 *****************************/
 	
-	var SHOW_PAGE_LEAVE_WARNING = true;
+	var SHOW_PAGE_LEAVE_WARNING = false;
 	var AUTO_LOAD_UNIT_TEST_PROJECT = false;
 	var UNIT_TEST_PROJECT_PATH = "tests/multi-object-symbol-test.json";
 
@@ -451,8 +451,14 @@ var WickEditor = (function () {
 			for(var i = 0; i < selectedObject._objects.length; i++) {
 				symbol.frames[0].wickObjects[i] = selectedObject._objects[i].wickObject;
 				symbol.frames[0].wickObjects[i].parentObject = symbol;
-				symbol.frames[0].wickObjects[i].left = 0;
-				symbol.frames[0].wickObjects[i].top = 0;
+
+				// Position child objects relative to symbols position
+				var childOldLeft = symbol.frames[0].wickObjects[i].left;
+				var childOldTop = symbol.frames[0].wickObjects[i].top;
+				var childNewLeft = childOldLeft - symbol.left;
+				var childNewTop = childOldTop - symbol.top;
+				symbol.frames[0].wickObjects[i].left = childNewLeft;
+				symbol.frames[0].wickObjects[i].top = childNewTop;
 			}
 			while(selectedObject._objects.length > 0) {
 				selectedObject._objects[0].remove();
