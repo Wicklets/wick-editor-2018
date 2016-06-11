@@ -143,6 +143,21 @@ var WickEditor = (function () {
 			//console.log('Clipboard HTML: ' + clipboardData.getData('text/html'));
 
 			var wickObjectJSON = clipboardData.getData('text/plain');
+
+			var items = clipboardData.items;
+
+			// Determine what kind of object is being pasted in and handle it. 
+			if (items) {
+				for (i=0; i < items.length; i++) {
+					console.log(items[i].type);
+				}
+				console.log("______");
+				var last = items.length-1;
+				var item = items[last];
+				var itemType = item.type;
+				console.log(itemType);
+			}
+
 			var wickObject = getWickObjectFromJSON(wickObjectJSON);
 			wickObject.top += 55;
 			wickObject.left += 55; // just to position it a bit over (temporary)
