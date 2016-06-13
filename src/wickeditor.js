@@ -146,38 +146,58 @@ var WickEditor = (function () {
 		var standardClipboardEvent = function(clipboardEvent, event) {
 			var clipboardData = event.clipboardData;
 			if (clipboardEvent == 'cut' || clipboardEvent == 'copy') {
-				//clipboardData.setData('text/plain', "bogoText");
-
 				var selectedObject = fabricCanvas.getCanvas().getActiveObject() || fabricCanvas.getCanvas().getActiveGroup();
 				var selectedWickObject = selectedObject.wickObject;
-				clipboardData.setData('text/plain', WickObjectUtils.getWickObjectAsJSON(selectedWickObject, currentObject));
+				clipboardData.setData('text/wickobjectjson', WickObjectUtils.getWickObjectAsJSON(selectedWickObject, currentObject));
 			}
 			if (clipboardEvent == 'paste') {
-				//console.log('Clipboard Plain Text: ' + clipboardData.getData('text/plain'));
-				//console.log('Clipboard HTML: ' + clipboardData.getData('text/html'));
 
-				var wickObjectJSON = clipboardData.getData('text/plain');
-				var wickObject = WickObjectUtils.getWickObjectFromJSON(wickObjectJSON, currentObject);
-				wickObject.top += 55;
-				wickObject.left += 55; // just to position it a bit over (temporary)
-				fabricCanvas.addWickObjectToCanvas(wickObject);
+				var items = clipboardData.items;
+
+				for (i=0; i<items.length; i++) {
+					var fileType = items[i].type;
+					var file = clipboardData.getData(items[i].type);
+					console.log(fileType)
+					if(fileType === 'text/wickobjectjson') {
+
+					}
+					else if (fileType === 'text/') {
+
+					}
+				}
+
+				/*if (items) {
+					// Determine what kind of object is being pasted in and handle it. 
+					for (i=0; i < items.length; i++) {
+						console.log(items[i].type);
+					}
+					console.log("______");
+					var last = items.length-1;
+					var item = items[last];
+					var itemType = item.type;
+					console.log(itemType);
+				} else {
+					// Get JSON from clipboard, create wick object from it
+					var wickObjectJSON = clipboardData.getData('text/plain');
+					var wickObject = WickObjectUtils.getWickObjectFromJSON(wickObjectJSON, currentObject);
+					wickObject.top += 55;
+					wickObject.left += 55; // just to position it a bit over (temporary)
+
+					fabricCanvas.addWickObjectToCanvas(wickObject);
+				}*/
 			}
 		};
 
 		['cut', 'copy', 'paste'].forEach(function(event) {
 			document.addEventListener(event, function(e) {
 				if(!scriptingIDE.open) {
-					console.log(event);
-					/*if (isIe) {
-						ieClipboardEvent(event);
-					} else {
+					//if (isIe) {
+					//	ieClipboardEvent(event);
+					//} else {
 						standardClipboardEvent(event, e);
 						focusHiddenArea();
 						e.preventDefault();
-					}*/
-					standardClipboardEvent(event, e);
-					focusHiddenArea();
-					e.preventDefault();
+					//}
 				}
 			});
 		});
@@ -248,24 +268,16 @@ var WickEditor = (function () {
 		fabricCanvas.getCanvas().on('object:added', function(e) {
 			if(e.target.type === "path") {
 				e.target.cloneAsImage(function(clone) {
-
-					var fileImage = new Image();
-					fileImage.src = clone._element.currentSrc || clone._element.src;
-
-					fileImage.onload = function() {
-						var obj = new WickObject();
-
-						obj.setDefaultPositioningValues();
-						obj.width = fileImage.width;
-						obj.height = fileImage.height;
-						obj.left = e.target.left - clone.width/2;
-						obj.top = e.target.top - clone.height/2;
-
-						obj.parentObject = currentObject;
-						obj.imageData = fileImage.src;
-
-						fabricCanvas.addWickObjectToCanvas(obj);
-					}
+					var imgSrc = clone._element.currentSrc || clone._element.src;
+					var left = e.target.left - clone.width/2;
+					var top = e.target.top - clone.height/2;
+					WickObjectUtils.createWickObjectFromImage(
+						imgSrc, 
+						left, 
+						top, 
+						currentObject, 
+						function(obj) { fabricCanvas.addWickObjectToCanvas(obj) }
+					);
 				});
 
 				fabricCanvas.getCanvas().remove(e.target);
@@ -476,33 +488,29 @@ var WickEditor = (function () {
 		$("#rightClickMenu").css('top', mouse.y+'px');
 		$("#rightClickMenu").css('left', mouse.x+'px');
 
-		// Update right click menu depending on what type of wickobject is selected
-		var newButtons = "";
+		$("#insideSymbolButtons").css('display', 'none');
+		$("#symbolButtons").css('display', 'none');
+		$("#staticObjectButtons").css('display', 'none');
+		$("#commonObjectButtons").css('display', 'none');
+		$("#frameButtons").css('display', 'none');
 
-		// Only show "Finish Editing Object" button if we're not in root
-		if(currentObject.parentObject) {
-			newButtons += createButton("Finish Editing Object", "finishEditingObject");
+		if(!currentObject.isRoot) {
+			$("#insideSymbolButtons").css('display', 'block');
 		}
 
-		var selectedObject = fabricCanvas.getCanvas().getActiveObject() || fabricCanvas.getCanvas().getActiveGroup();
+		var selectedObject = fabricCanvas.getCanvas().getActiveObject() 
+		                  || fabricCanvas.getCanvas().getActiveGroup();
 		if(selectedObject) {
 			if(selectedObject.wickObject && selectedObject.wickObject.isSymbol) {
-				newButtons += createButton("Edit Object", "editSelectedObject");
-				newButtons += createButton("Edit Scripts", "editScriptsOfSelectedObject");
-				newButtons += '<hr />';
+				$("#symbolButtons").css('display', 'block');
 			} else {
-				newButtons += createButton("Convert to Symbol", "convertSelectedObjectToSymbol");
-				newButtons += '<hr />';
+				$("#staticObjectButtons").css('display', 'block');
 			}
-
-			newButtons += createButton("Send To Back", "sendSelectedObjectToBack");
-			newButtons += createButton("Bring To Front", "bringSelectedObjectToFront");
-			newButtons += createButton("Delete", "deleteSelectedObject");
+			$("#commonObjectButtons").css('display', 'block');
+			
 		} else {
-			newButtons += createButton("Clear Frame", "clearFrame");
+			$("#frameButtons").css('display', 'block');
 		}
-
-		$("#rightClickMenu").html(newButtons);
 	}
 
 	wickEditor.closeRightClickMenu = function () {
@@ -510,6 +518,11 @@ var WickEditor = (function () {
 		$("#rightClickMenu").css('visibility', 'hidden');
 		$("#rightClickMenu").css('top', '0px');
 		$("#rightClickMenu").css('left','0px');
+
+		$("#symbolButtons").css('display', 'none');
+		$("#staticObjectButtons").css('display', 'none');
+		$("#commonObjectButtons").css('display', 'none');
+		$("#frameButtons").css('display', 'none');
 	}
 
 /****************************************

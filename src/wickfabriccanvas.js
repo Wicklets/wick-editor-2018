@@ -289,7 +289,7 @@ FabricCanvas.prototype.makeFabricObjectFromWickObject = function (wickObject, ca
 FabricCanvas.prototype.addWickObjectToCanvas = function (wickObject) {
 
 	var canvas = this.canvas;
-
+	
 	this.makeFabricObjectFromWickObject(wickObject, function(fabricObject) {
 		canvas.add(fabricObject);
 	});

@@ -57,6 +57,26 @@
 		return newWickObject;
 	}
 
+	wickUtils.createWickObjectFromImage = function (imgSrc, left, top, parentObject, callback) {
+		var fileImage = new Image();
+		fileImage.src = imgSrc;
+
+		fileImage.onload = function() {
+			var obj = new WickObject();
+
+			obj.setDefaultPositioningValues();
+			obj.width = fileImage.width;
+			obj.height = fileImage.height;
+			obj.left = left;
+			obj.top = top;
+
+			obj.parentObject = parentObject;
+			obj.imageData = fileImage.src;
+
+			callback(obj);
+		}
+	}
+
 	return wickUtils;
 
 })();
