@@ -117,14 +117,26 @@ var WickEditor = (function () {
 		document.getElementById("editorCanvasContainer").addEventListener("keydown", function (e) {
 			keys[e.keyCode] = true;
 
+			var controlKeyDown = keys[91];
+			var shiftKeyDown = keys[16];
+
+			// Control-shift-z: redo
+			if(e.keyCode == 90 && controlKeyDown && shiftKeyDown) {
+				console.log("Redo!");
+			}
+			// Control-z: undo
+			else if(e.keyCode == 90 && controlKeyDown) {
+				console.log("Undo!");
+			}
+
 			// Backspace: delete selected objects
-			if(keys[8]) {
+			if(e.keyCode == 8) {
 				e.preventDefault();
 				wickEditor.deleteSelectedObject();
 			}
 
 			// Tilde: log project state to canvas (for debugging)
-			if(keys[192]) {
+			if(e.keyCode == 192) {
 				console.log(project);
 				console.log(fabricCanvas);
 			}
