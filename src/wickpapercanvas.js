@@ -1,3 +1,13 @@
+// Very important note:
+// Whenever we get back to working on the vector editor, this code needs to be in an update event:
+//fabricCanvas.reloadPaperCanvas(paperCanvas.getCanvas());
+
+
+
+
+
+
+
 var PaperCanvas = function () {
 
 	// Get a reference to the canvas object
@@ -29,3 +39,4 @@ var PaperCanvas = function () {
 PaperCanvas.prototype.getCanvas = function() {
 	return this.paperCanvas;
 };
+

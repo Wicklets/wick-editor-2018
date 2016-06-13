@@ -221,9 +221,7 @@ FabricCanvas.prototype.makeFabricObjectFromWickObject = function (wickObject, ca
 	var that = this;
 
 	if(wickObject.isSymbol) {
-
-		console.log("SYM " + wickObject.left + ", " + wickObject.top);
-
+		
 		var makeGroupOutOfFabricObjects = function (fabricObjects) {
 			// Create a group out of all objects on the first frame of this dynamic object
 			var group = new fabric.Group();
@@ -258,11 +256,9 @@ FabricCanvas.prototype.makeFabricObjectFromWickObject = function (wickObject, ca
 
 	} else {
 
-		console.log("STA " + wickObject.left + ", " + wickObject.top);
-
 		var sharedFabricWickObjectProperties = this.sharedFabricWickObjectProperties;
 
-		fabric.Image.fromURL(wickObject.dataURL, function(oImg) {
+		fabric.Image.fromURL(wickObject.imageData, function(oImg) {
 			// Set shared wick/fabric positioning properties
 			for(var i = 0; i < sharedFabricWickObjectProperties.length; i++) {
 				var prop = sharedFabricWickObjectProperties[i];
