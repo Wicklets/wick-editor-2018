@@ -161,52 +161,39 @@ var WickEditor = (function () {
 			$("#hidden-input").focus().select();
 		};
 
-		var standardClipboardEvent = function(clipboardEvent, event) {
-			var clipboardData = event.clipboardData;
-			if (clipboardEvent == 'cut' || clipboardEvent == 'copy') {
-				var selectedObject = fabricCanvas.getCanvas().getActiveObject() || fabricCanvas.getCanvas().getActiveGroup();
-				var selectedWickObject = selectedObject.wickObject;
-				clipboardData.setData('text/wickobjectjson', WickObjectUtils.getWickObjectAsJSON(selectedWickObject, currentObject));
+		document.addEventListener("copy", function(e) {
+			var clipboardData = e.clipboardData;
+			if(!scriptingIDE.open) {
+				focusHiddenArea();
+				e.preventDefault();
+				WickObjectUtils.copyWickObjectJSONToClipboard(clipboardData, fabricCanvas, currentObject);
 			}
-			if (clipboardEvent == 'paste') {
+		});
+
+		document.addEventListener("paste", function(e) {
+			var clipboardData = e.clipboardData;
+			if(!scriptingIDE.open) { 
+				focusHiddenArea();
+				e.preventDefault();
 
 				var items = clipboardData.items;
 
 				for (i=0; i<items.length; i++) {
+
 					var fileType = items[i].type;
 					var file = clipboardData.getData(items[i].type);
-					console.log(fileType)
-					if(fileType === 'text/wickobjectjson') {
-						// Get JSON from clipboard, create wick object from it
-						var wickObjectJSON = clipboardData.getData('text/wickobjectjson');
-						var wickObject = WickObjectUtils.getWickObjectFromJSON(wickObjectJSON, currentObject);
-						wickObject.top += 55;
-						wickObject.left += 55; // just to position it a bit over (temporary)
 
-						fabricCanvas.addWickObjectToCanvas(wickObject);
-					}
-					else if (fileType === 'image/png') {
+					if (fileType === 'image/png') {
 						var blob = items[i].getAsFile();
 						var URLObj = window.URL || window.webkitURL;
 						var source = URLObj.createObjectURL(blob);
 						importImage("File names for pasted images not set.", source);
-					}
+					} else if (fileType == 'text/wickobjectjson' ||
+						       fileType == 'text/wickobjectarrayjson') {
+						WickObjectUtils.pasteWickObjectJSONFromClipboardIntoCanvas(fileType, clipboardData, fabricCanvas, currentObject);
+					}	
 				}
 			}
-		};
-
-		['cut', 'copy', 'paste'].forEach(function(event) {
-			document.addEventListener(event, function(e) {
-				if(!scriptingIDE.open) {
-					//if (isIe) {
-					//	ieClipboardEvent(event);
-					//} else {
-						standardClipboardEvent(event, e);
-						focusHiddenArea();
-						e.preventDefault();
-					//}
-				}
-			});
 		});
 
 	// Setup drag/drop events
@@ -426,7 +413,7 @@ var WickEditor = (function () {
 				fabricCanvas.getCanvas().add(obj);
 			}
 		}
-		
+
 		var action = new WickAction(doAction,undoAction);
 		actionHandler.doAction(action);
 		
