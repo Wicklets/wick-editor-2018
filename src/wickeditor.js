@@ -212,6 +212,10 @@ var WickEditor = (function () {
 			return false;
 		});
 
+	// Setup properties UI events
+
+	updatePropertiesGUI('project');
+		
 	// Setup leave page warning event
 
 		if(SHOW_PAGE_LEAVE_WARNING) {
@@ -456,9 +460,95 @@ var WickEditor = (function () {
 		console.error("Not yet implemented");
 	}
 
-/****************************************
-	Right click menu GUI
-*****************************************/
+/*****************************
+	should be in wickpropertiesgui.js
+*****************************/
+
+	var updatePropertiesGUI = function(tab) {
+
+		$("#projectProperties").css('display', 'none');
+		$("#symbolProperties").css('display', 'none');
+		$("#textProperties").css('display', 'none');
+
+		switch(tab) {
+			case 'project':
+				$("#propertiesGUI").css('display', 'inline');
+				$("#projectProperties").css('display', 'inline');
+				break;
+			case 'symbol':
+				$("#propertiesGUI").css('display', 'inline');
+				$("#symbolProperties").css('display', 'inline');
+				break;
+			case 'edit':
+				$("#propertiesGUI").css('display', 'inline');
+				$("#textProperties").css('display', 'inline');
+				break;
+			case 'hide':
+				$("#propertiesGUI").css('display', 'none');
+				break;
+			case 'show':
+				$("#propertiesGUI").css('display', 'inline');
+				break;
+		}
+
+	};
+
+/*****************************
+	should be in wickscriptingide.js
+*****************************/
+
+	var openScriptingGUI = function () {
+		scriptingIDE.open = true;
+		$("#scriptingGUI").css('visibility', 'visible');
+		reloadScriptingGUI();
+	};
+
+	var reloadScriptingGUI = function() {
+		changeCurrentScript('onLoad');
+	};
+
+	var changeCurrentScript = function(scriptString) {
+		currentScript = scriptString;
+		reloadScriptingGUITextArea();
+	};
+
+	var reloadScriptingGUITextArea = function() {
+		var activeObj = fabricCanvas.getActiveObject();
+		if(activeObj && activeObj.wickObject.wickScripts && activeObj.wickObject.wickScripts[currentScript]) {
+			var script = fabricCanvas.getActiveObject().wickObject.wickScripts[currentScript];
+			scriptingIDE.aceEditor.setValue(script, -1);
+		}
+
+		document.getElementById("onLoadButton").className = (currentScript == 'onLoad' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
+		document.getElementById("onUpdateButton").className = (currentScript == 'onUpdate' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
+		document.getElementById("onClickButton").className = (currentScript == 'onClick' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
+	};
+
+	var closeScriptingGUI = function() {
+		scriptingIDE.open = false;
+		$("#scriptingGUI").css('visibility', 'hidden');
+	};
+
+/*****************************
+	GUI
+*****************************/
+
+	var resizeCanvasAndGUI = function () {
+		// Resize canvas
+		fabricCanvas.resize(
+			project.resolution.x, 
+			project.resolution.y
+		);
+
+		// Also center timeline
+		var GUIWidth = parseInt($("#timelineGUI").css("width")) / 2;
+		var timelineOffset = window.innerWidth/2 - GUIWidth;
+		$("#timelineGUI").css('left', timelineOffset+'px');
+	}
+
+/***************************************
+	should be in wickrightclickmenu.js
+***************************************/
 
 	wickEditor.openRightClickMenu = function () {
 

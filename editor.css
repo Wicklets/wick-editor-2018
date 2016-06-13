@@ -33,6 +33,7 @@ hr {
 	top: 0px;
 	left: 0px;
 	text-align: center;
+	display: block;
 }
 
 #scriptingGUI {
@@ -46,6 +47,7 @@ hr {
 	bottom: 10px;
 	right: 10px;
 	text-align: center;
+	display: inline;
 }
 
 #builtinPlayerGUI {
@@ -72,8 +74,17 @@ hr {
 	visibility: hidden;
 }
 
-#objectNameBox {
-
+#projectProperties { 
+	visibility: visible;
+	display: inline;
+}
+#symbolProperties {
+	visibility: hidden;
+	display: none;
+}
+#textProperties {
+	visibility: hidden;
+	display: none;
 }
 
 .button {
