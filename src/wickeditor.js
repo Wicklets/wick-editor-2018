@@ -204,6 +204,10 @@ var WickEditor = (function () {
 			return false;
 		});
 
+	// Setup properties UI events
+
+	updatePropertiesGUI('project');
+		
 	// Setup leave page warning event
 
 		if(SHOW_PAGE_LEAVE_WARNING) {
@@ -389,7 +393,7 @@ var WickEditor = (function () {
 	}
 
 /***********************************
-	editor project methods
+	Editor project methods
 ***********************************/
 
 	wickEditor.newProject = function () {
@@ -520,6 +524,39 @@ var WickEditor = (function () {
 	wickEditor.clearFrame = function () {
 		console.error("Not yet implemented");
 	}
+
+/*****************************
+	should be in wickpropertiesgui.js
+*****************************/
+
+	var updatePropertiesGUI = function(tab) {
+
+		$("#projectProperties").css('display', 'none');
+		$("#symbolProperties").css('display', 'none');
+		$("#textProperties").css('display', 'none');
+
+		switch(tab) {
+			case 'project':
+				$("#propertiesGUI").css('display', 'inline');
+				$("#projectProperties").css('display', 'inline');
+				break;
+			case 'symbol':
+				$("#propertiesGUI").css('display', 'inline');
+				$("#symbolProperties").css('display', 'inline');
+				break;
+			case 'edit':
+				$("#propertiesGUI").css('display', 'inline');
+				$("#textProperties").css('display', 'inline');
+				break;
+			case 'hide':
+				$("#propertiesGUI").css('display', 'none');
+				break;
+			case 'show':
+				$("#propertiesGUI").css('display', 'inline');
+				break;
+		}
+
+	};
 
 /*****************************
 	should be in wickscriptingide.js
