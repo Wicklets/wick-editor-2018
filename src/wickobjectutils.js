@@ -62,11 +62,12 @@
 		fileImage.src = imgSrc;
 
 		fileImage.onload = function() {
+
 			var obj = new WickObject();
 
 			obj.setDefaultPositioningValues();
-			obj.width = fileImage.width;
-			obj.height = fileImage.height;
+			obj.width = fileImage.width / window.devicePixelRatio;
+			obj.height = fileImage.height / window.devicePixelRatio;
 			obj.left = left;
 			obj.top = top;
 

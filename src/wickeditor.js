@@ -160,7 +160,7 @@ var WickEditor = (function () {
 					console.log(fileType)
 					if(fileType === 'text/wickobjectjson') {
 						// Get JSON from clipboard, create wick object from it
-						var wickObjectJSON = clipboardData.getData('text/plain');
+						var wickObjectJSON = clipboardData.getData('text/wickobjectjson');
 						var wickObject = WickObjectUtils.getWickObjectFromJSON(wickObjectJSON, currentObject);
 						wickObject.top += 55;
 						wickObject.left += 55; // just to position it a bit over (temporary)
@@ -258,8 +258,8 @@ var WickEditor = (function () {
 			if(e.target.type === "path") {
 				e.target.cloneAsImage(function(clone) {
 					var imgSrc = clone._element.currentSrc || clone._element.src;
-					var left = e.target.left - clone.width/2;
-					var top = e.target.top - clone.height/2;
+					var left = e.target.left - clone.width/2/window.devicePixelRatio;
+					var top = e.target.top - clone.height/2/window.devicePixelRatio;
 					WickObjectUtils.createWickObjectFromImage(
 						imgSrc, 
 						left, 
@@ -602,6 +602,7 @@ var WickEditor = (function () {
 		fileImage.src = data;
 
 		fileImage.onload = function() {
+
 			// Create a new wick object with that data
 			var obj = new WickObject();
 
@@ -610,8 +611,8 @@ var WickEditor = (function () {
 			obj.imageData = data;
 
 			obj.setDefaultPositioningValues();
-			obj.width = fileImage.width;
-			obj.height = fileImage.height;
+			obj.width = fileImage.width / window.devicePixelRatio;
+			obj.height = fileImage.height / window.devicePixelRatio;
 			if(currentObject.isRoot) {
 				obj.left = window.innerWidth/2 - obj.width/2;
 				obj.top = window.innerHeight/2 - obj.height/2;
