@@ -76,6 +76,7 @@ var FabricCanvas = function () {
 	// Text
 	this.dragToImportFileText = new fabric.Text('Drop file to import', {
 		fill: '#000',
+		fontFamily: 'arial',
 		opacity: 0
 	});
 	this.dragToImportFileText.wickCanvasName = "dragToImportFileText";
@@ -126,8 +127,8 @@ FabricCanvas.prototype.resize = function (projectWidth, projectHeight) {
 	this.dragToImportFileFade.top  = 0;
 	this.dragToImportFileFade.setCoords();
 
-	this.dragToImportFileText.left = window.innerWidth/2;
-	this.dragToImportFileText.top  = window.innerHeight/2;
+	this.dragToImportFileText.left = window.innerWidth/2-this.dragToImportFileText.width/2;
+	this.dragToImportFileText.top  = window.innerHeight/2-this.dragToImportFileText.height/2;
 	this.dragToImportFileText.setCoords();
 
 	// Re-center the white frame box
@@ -258,29 +259,63 @@ FabricCanvas.prototype.makeFabricObjectFromWickObject = function (wickObject, ca
 
 		var sharedFabricWickObjectProperties = this.sharedFabricWickObjectProperties;
 
-		fabric.Image.fromURL(wickObject.imageData, function(oImg) {
+		if(wickObject.imageData) {
+
+			fabric.Image.fromURL(wickObject.imageData, function(newFabricImage) {
+				// Set shared wick/fabric positioning properties
+				for(var i = 0; i < sharedFabricWickObjectProperties.length; i++) {
+					var prop = sharedFabricWickObjectProperties[i];
+					newFabricImage[prop] = wickObject[prop];
+				}
+
+				// Position the fabric object relative to it's parents.
+				//var relativePosition = that.getRelativePosition(wickObject);
+				var relativePosition = wickObject.getRelativePosition();
+				newFabricImage.top = relativePosition.top;
+				newFabricImage.left = relativePosition.left;
+
+				// Set the fabric.js option to only select if the pixel you're over isn't transparent
+				newFabricImage.perPixelTargetFind = true;
+				newFabricImage.targetFindTolerance = 4;
+
+				// Store a reference to the wick object inside the fabric object
+				// to use when we put this object back into the project.
+				newFabricImage.wickObject = wickObject;
+
+				callback(newFabricImage);
+			});
+
+		} else if(wickObject.fontData) {
+
+			// Set font properties
+			var newFabricText = new fabric.IText(wickObject.fontData.text, { 
+				fontFamily: wickObject.fontData.fontFamily,
+				text: wickObject.fontData.text
+			});
+
 			// Set shared wick/fabric positioning properties
 			for(var i = 0; i < sharedFabricWickObjectProperties.length; i++) {
 				var prop = sharedFabricWickObjectProperties[i];
-				oImg[prop] = wickObject[prop];
+				newFabricText[prop] = wickObject[prop];
 			}
 
 			// Position the fabric object relative to it's parents.
 			//var relativePosition = that.getRelativePosition(wickObject);
 			var relativePosition = wickObject.getRelativePosition();
-			oImg.top = relativePosition.top;
-			oImg.left = relativePosition.left;
+			newFabricText.top = relativePosition.top;
+			newFabricText.left = relativePosition.left;
 
 			// Set the fabric.js option to only select if the pixel you're over isn't transparent
-			oImg.perPixelTargetFind = true;
-			oImg.targetFindTolerance = 4;
+			newFabricText.perPixelTargetFind = true;
+			newFabricText.targetFindTolerance = 4;
 
 			// Store a reference to the wick object inside the fabric object
 			// to use when we put this object back into the project.
-			oImg.wickObject = wickObject;
+			newFabricText.wickObject = wickObject;
 
-			callback(oImg);
-		});
+			callback(newFabricText);
+
+		}
 
 	}
 
@@ -294,6 +329,23 @@ FabricCanvas.prototype.addWickObjectToCanvas = function (wickObject) {
 		canvas.add(fabricObject);
 	});
 
+}
+
+FabricCanvas.prototype.convertPathToWickObjectAndAddToCanvas = function (fabricPath, currentObject) {
+	var that = this;
+
+	fabricPath.cloneAsImage(function(clone) {
+		var imgSrc = clone._element.currentSrc || clone._element.src;
+		var left = fabricPath.left - clone.width/2/window.devicePixelRatio;
+		var top = fabricPath.top - clone.height/2/window.devicePixelRatio;
+		WickObjectUtils.createWickObjectFromImage(
+			imgSrc, 
+			left, 
+			top, 
+			currentObject, 
+			function(obj) { that.addWickObjectToCanvas(obj) }
+		);
+	});
 }
 
 FabricCanvas.prototype.storeObjectsIntoCanvas = function (wickObjects) {
@@ -327,6 +379,11 @@ FabricCanvas.prototype.getWickObjectsInCanvas = function () {
 			for(var i = 0; i < sharedFabricWickObjectProperties.length; i++) {
 				var prop = sharedFabricWickObjectProperties[i];
 				wickObject[prop] = fabricObj[prop];
+			}
+
+			if(wickObject.fontData) {
+				wickObject.fontData.text = fabricObj.text;
+				wickObject.fontData.fontFamily = fabricObj.fontFamily;
 			}
 
 			if(wickObject.parentObject) {

@@ -257,28 +257,11 @@ var WickEditor = (function () {
 			scriptingIDE.closeScriptingGUI();
 		});
 
-		// When a path is done being drawn, create a wick object out of it.
-		// This is to get around the player currently not supporting paths.
-		//
-		// Later on, we will rasterize the path drawn by fabric, and vectorize it using potrace.
-		// The vectors can then be edited with paper.js.
-		//
 		fabricCanvas.getCanvas().on('object:added', function(e) {
 			if(e.target.type === "path") {
-				e.target.cloneAsImage(function(clone) {
-					var imgSrc = clone._element.currentSrc || clone._element.src;
-					var left = e.target.left - clone.width/2/window.devicePixelRatio;
-					var top = e.target.top - clone.height/2/window.devicePixelRatio;
-					WickObjectUtils.createWickObjectFromImage(
-						imgSrc, 
-						left, 
-						top, 
-						currentObject, 
-						function(obj) { fabricCanvas.addWickObjectToCanvas(obj) }
-					);
-				});
-
-				fabricCanvas.getCanvas().remove(e.target);
+				var path = e.target;
+				fabricCanvas.convertPathToWickObjectAndAddToCanvas(path, currentObject);
+				fabricCanvas.getCanvas().remove(path);
 			}
 		});
 
@@ -373,6 +356,26 @@ var WickEditor = (function () {
 
 	wickEditor.stopDrawingMode = function () {
 		fabricCanvas.stopDrawingMode();	
+	}
+
+	wickEditor.addNewText = function () {
+
+		var textWickObject = new WickObject();
+
+		textWickObject.setDefaultPositioningValues();
+		textWickObject.left = window.innerWidth/2;
+		textWickObject.top = window.innerHeight/2;
+
+		textWickObject.parentObject = currentObject;
+
+		textWickObject.fontData = {
+			text: 'Click to edit text',
+			fontFamily: 'arial black'
+		};
+
+		fabricCanvas.addWickObjectToCanvas(textWickObject);
+
+		WickEditor.gotoFrame(currentObject.currentFrame);
 	}
 
 /***********************************
@@ -720,32 +723,20 @@ var WickEditor = (function () {
 
 	var importImage = function (name, data) {
 
-		var fileImage = new Image();
-		fileImage.src = data;
-
-		fileImage.onload = function() {
-
-			// Create a new wick object with that data
-			var obj = new WickObject();
-
-			obj.parentObject = currentObject;
-			obj.objectName = name;
-			obj.imageData = data;
-
-			obj.setDefaultPositioningValues();
-			obj.width = fileImage.width / window.devicePixelRatio;
-			obj.height = fileImage.height / window.devicePixelRatio;
-			if(currentObject.isRoot) {
-				obj.left = window.innerWidth/2 - obj.width/2;
-				obj.top = window.innerHeight/2 - obj.height/2;
-			} else {
-				obj.left = 0;
-				obj.top = 0;
-			}
-
-			// Put that wickobject in the fabric canvas
-			fabricCanvas.addWickObjectToCanvas(obj);
+		var left = 0;
+		var top = 0;
+		if(currentObject.isRoot) {
+			left = window.innerWidth/2;
+			top = window.innerHeight/2;
 		}
+
+		WickObjectUtils.createWickObjectFromImage(
+			data, 
+			left, 
+			top, 
+			currentObject, 
+			function(o) { fabricCanvas.addWickObjectToCanvas(o); }
+		);
 
 	}
 
