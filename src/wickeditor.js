@@ -32,6 +32,9 @@ var WickEditor = (function () {
 	/* Timeline controller */
 	var timelineController;
 
+	/* Action handler (undo/redo stack) */
+	var actionHandler;
+
 	/* Mouse and keyboard input variables */
 	var mouse = {};
 	var keys;
@@ -60,6 +63,9 @@ var WickEditor = (function () {
 		// Set the timeline controller GUI to an initial state
 		timelineController = new WickTimelineController();
 		timelineController.updateGUI(currentObject);
+
+		// Setup action handler
+		actionHandler = new WickActionHandler();
 
 		// Load the 'unit test' project
 		if(AUTO_LOAD_UNIT_TEST_PROJECT) {
@@ -122,11 +128,11 @@ var WickEditor = (function () {
 
 			// Control-shift-z: redo
 			if(e.keyCode == 90 && controlKeyDown && shiftKeyDown) {
-				console.log("Redo!");
+				console.error("Redo not yet bound to hotkey!");
 			}
 			// Control-z: undo
 			else if(e.keyCode == 90 && controlKeyDown) {
-				console.log("Undo!");
+				actionHandler.undoAction();
 			}
 
 			// Backspace: delete selected objects
@@ -388,14 +394,24 @@ var WickEditor = (function () {
 
 	wickEditor.deleteSelectedObject = function () {
 
-		if (fabricCanvas.getCanvas().getActiveGroup()) {
-			fabricCanvas.getCanvas().getActiveGroup().forEachObject(function(o) { 
-				fabricCanvas.getCanvas().remove(o);
-			});
-			fabricCanvas.getCanvas().discardActiveGroup().renderAll();
-		} else {
-			fabricCanvas.getCanvas().remove(fabricCanvas.getCanvas().getActiveObject());
+		var doAction = function () {
+			if (fabricCanvas.getCanvas().getActiveGroup()) {
+				fabricCanvas.getCanvas().getActiveGroup().forEachObject(function(o) { 
+					fabricCanvas.getCanvas().remove(o);
+				});
+				fabricCanvas.getCanvas().discardActiveGroup().renderAll();
+			} else {
+				fabricCanvas.getCanvas().remove(fabricCanvas.getCanvas().getActiveObject());
+			}
 		}
+		
+		var obj = fabricCanvas.getCanvas().getActiveObject();
+		var undoAction = function () {
+			fabricCanvas.getCanvas().add(obj);
+		}
+
+		var action = new WickAction(doAction,undoAction);
+		actionHandler.doAction(action);
 		
 	}
 
