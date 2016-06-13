@@ -10,5 +10,5 @@ Try a simple game made with the editor [here](http://zrispo.co/wick/examples/gam
 
 ### How to run the editor/player locally for development
 * Clone or download and unzip this repo
-* Open terminal in the newly made `wick` folder and start an HTTP server: 'npm install http-server -g', `http-server -p 8000`
+* Open terminal in the newly made `wick` folder and start an HTTP server: `npm install http-server -g`, `http-server -p 8000`
 * Open a browser window, and go to `http://localhost:8000/`
