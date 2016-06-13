@@ -16,11 +16,13 @@
 	<script src="lib/browserdetection.js"></script>
 	
 	<script src="src/wickfileutils.js"></script>
+	<script src="src/wickobjectutils.js"></script>
 	<script src="src/wicksharedutils.js"></script>
 	<script src="src/wickobject.js"></script>
 	<script src="src/wickproject.js"></script>
 	<script src="src/wickfabriccanvas.js"></script>
 	<script src="src/wickpapercanvas.js"></script>
+	<script src="src/wicktimelinecontroller.js"></script>
 	<script src="src/wickscriptingide.js"></script>
 
 	<script src="src/wickeditor.js"></script>
@@ -131,8 +133,29 @@
 	<!-- Right click menu, appears next to mouse on right click -->
 
 		<div id="rightClickMenu" class="GUIBox">
-			<!-- Populated by editor -->
+			<div id="insideSymbolButtons">
+				<div class="button" onclick="WickEditor.closeRightClickMenu();WickEditor.finishEditingObject();" >Finish Editing Object</div>
+			</div>
+			<div id="symbolButtons">
+				<div class="button" onclick="WickEditor.closeRightClickMenu();WickEditor.editSelectedObject();" >Edit Object</div>
+				<div class="button" onclick="WickEditor.closeRightClickMenu();WickEditor.editScriptsOfSelectedObject();" >Edit Scripts</div>
+				<hr />
+			</div>
+			<div id="staticObjectButtons">
+				<div class="button" onclick="WickEditor.closeRightClickMenu();WickEditor.convertSelectedObjectToSymbol();" >Convert to Symbol</div>
+				<hr />
+			</div>
+			<div id="commonObjectButtons">
+				<div class="button" onclick="WickEditor.closeRightClickMenu();WickEditor.sendSelectedObjectToBack();" >Send to Back</div>
+				<div class="button" onclick="WickEditor.closeRightClickMenu();WickEditor.bringSelectedObjectToFront();" >Bring to Front</div>
+				<div class="button" onclick="WickEditor.closeRightClickMenu();WickEditor.deleteSelectedObject();" >Delete</div>
+				<hr />
+			</div>
+			<div id="frameButtons">
+				<div class="button" onclick="WickEditor.closeRightClickMenu();WickEditor.clearFrame();" >Clear Frame</div>
+			</div>
 		</div>
+
 	</div>
 
 <!-- Builtin player, visible when a project is running -->

@@ -136,7 +136,7 @@ var WickPlayer = (function () {
 				loadImages(subObj);
 			} else {
 				subObj.image = new Image();
-				subObj.image.src = subObj.dataURL;
+				subObj.image.src = subObj.imageData;
 				subObj.image.onload = function() {
 					// Scope issue - fix this, we need it for preloaders
 					//subObj.imageIsLoaded = true;
