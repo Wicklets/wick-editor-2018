@@ -404,12 +404,29 @@ var WickEditor = (function () {
 				fabricCanvas.getCanvas().remove(fabricCanvas.getCanvas().getActiveObject());
 			}
 		}
+
+		var obj = fabricCanvas.getCanvas().getActiveObject() 
+		var group = fabricCanvas.getCanvas().getActiveGroup();
+		var groupObjs = [];
 		
-		var obj = fabricCanvas.getCanvas().getActiveObject();
-		var undoAction = function () {
-			fabricCanvas.getCanvas().add(obj);
+		if(group) {
+			var items = group._objects;
+			group._restoreObjectsState();
+			for(var i = 0; i < items.length; i++) {
+				groupObjs.push(items[i]);
+			}
 		}
 
+		var undoAction = function () {
+			if(group) {
+				for(var i = 0; i < groupObjs.length; i++) {
+					fabricCanvas.getCanvas().add(groupObjs[i]);
+				}
+			} else {
+				fabricCanvas.getCanvas().add(obj);
+			}
+		}
+		
 		var action = new WickAction(doAction,undoAction);
 		actionHandler.doAction(action);
 		
