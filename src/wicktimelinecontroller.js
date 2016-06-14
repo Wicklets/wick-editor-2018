@@ -1,36 +1,35 @@
 var WickTimelineController = function (wickEditor) {
 
-	this.updateGUI(wickEditor.currentObject);
+	this.updateGUI = function (currentObject) {
 
-}
+		// Reset the timeline div
 
-WickTimelineController.prototype.updateGUI = function (currentObject) {
+		var timeline = document.getElementById("timeline");
+		timeline.innerHTML = "";
+		timeline.style.width = wickEditor.currentObject.frames.length*23 + 6 + "px";
 
-	// Reset the timeline div
+		for(var i = 0; i < wickEditor.currentObject.frames.length; i++) {
 
-	var timeline = document.getElementById("timeline");
-	timeline.innerHTML = "";
-	timeline.style.width = currentObject.frames.length*23 + 6 + "px";
+			// Create the frame element
+			var frameDiv = document.createElement("span");
+			frameDiv.id = "frame" + i;
+			frameDiv.innerHTML = i;
+			if(wickEditor.currentObject.currentFrame == i) {
+				frameDiv.className = "timelineFrame active";
+			} else {
+				frameDiv.className = "timelineFrame";
+			}
+			timeline.appendChild(frameDiv);
 
-	for(var i = 0; i < currentObject.frames.length; i++) {
-
-		// Create the frame element
-		var frameDiv = document.createElement("span");
-		frameDiv.id = "frame" + i;
-		frameDiv.innerHTML = i;
-		if(currentObject.currentFrame == i) {
-			frameDiv.className = "timelineFrame active";
-		} else {
-			frameDiv.className = "timelineFrame";
+			// Add mousedown event to the frame element so we can go to that frame when its clicked
+			document.getElementById("frame" + i).addEventListener("mousedown", function(index) {
+				return function () {
+					wickEditor.gotoFrame(index);
+				};
+			}(i), false);
 		}
-		timeline.appendChild(frameDiv);
-
-		// Add mousedown event to the frame element so we can go to that frame when its clicked
-		document.getElementById("frame" + i).addEventListener("mousedown", function(index) {
-			return function () {
-				WickEditor.gotoFrame(index);
-			};
-		}(i), false);
 	}
+
+	this.updateGUI(wickEditor.currentObject);
 
 }

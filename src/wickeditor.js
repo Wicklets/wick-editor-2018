@@ -6,7 +6,7 @@ var WickEditor = function () {
 	
 	this.version = 'pre-alpha';
 
-	this.AUTO_LOAD_UNIT_TEST_PROJECT = true;
+	this.AUTO_LOAD_UNIT_TEST_PROJECT = false;
 	this.UNIT_TEST_PROJECT_PATH = "tests/simple.json";
 
 /*********************************
@@ -146,6 +146,7 @@ WickEditor.prototype.handleKeyboardInput = function (eventType, event) {
 
 WickEditor.prototype.handleCopyEvent = function (event) {
 	if(!this.scriptingIDE.open) {
+		this.currentObject.frames[this.currentObject.currentFrame].wickObjects = this.fabricCanvas.getWickObjectsInCanvas();
 		event.preventDefault();
 		WickObjectUtils.copyWickObjectJSONToClipboard(event.clipboardData, this.fabricCanvas, this.currentObject);
 	}
@@ -360,8 +361,7 @@ WickEditor.prototype.editSelectedObject = function () {
 }
 
 WickEditor.prototype.editScriptsOfSelectedObject = function () {
-	this.scriptingIDE.openScriptingGUI();
-	this.scriptingIDE.reloadScriptingGUITextArea(this.fabricCanvas.getActiveObject());
+	this.scriptingIDE.openScriptingGUI(this.fabricCanvas.getActiveObject());
 }
 
 WickEditor.prototype.finishEditingObject = function () {
@@ -430,7 +430,7 @@ WickEditor.prototype.importFilesPastedIntoEditor = function (event) {
 			var file = clipboardData.getData(items[i].type);
 
 			console.log("pasted filetype: " + fileType);
-			
+
 			if (fileType === 'image/png') {
 				var blob = items[i].getAsFile();
 				var URLObj = window.URL || window.webkitURL;

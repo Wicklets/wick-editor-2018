@@ -135,7 +135,7 @@ var FabricCanvas = function (wickEditor) {
 	});
 
 	canvas.on('object:selected', function (e) {
-		wickEditor.scriptingIDE.reloadScriptingGUITextArea(canvas.getActiveObject());
+		wickEditor.scriptingIDE.reloadScriptingGUI(canvas.getActiveObject());
 	});
 
 	canvas.on('selection:cleared', function (e) {

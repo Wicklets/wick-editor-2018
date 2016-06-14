@@ -15,17 +15,17 @@ var WickScriptingIDE = function (wickEditor) {
 
 	$("#onLoadButton").on("click", function (e) {
 		that.currentScript = 'onLoad';
-		that.reloadScriptingGUITextArea(wickEditor.fabricCanvas.getActiveObject());
+		that.reloadScriptingGUI(wickEditor.fabricCanvas.getActiveObject());
 	});
 
 	$("#onClickButton").on("click", function (e) {
 		that.currentScript = 'onClick';
-		that.reloadScriptingGUITextArea(wickEditor.fabricCanvas.getActiveObject());
+		that.reloadScriptingGUI(wickEditor.fabricCanvas.getActiveObject());
 	});
 
 	$("#onUpdateButton").on("click", function (e) {
 		that.currentScript = 'onUpdate';
-		that.reloadScriptingGUITextArea(wickEditor.fabricCanvas.getActiveObject());
+		that.reloadScriptingGUI(wickEditor.fabricCanvas.getActiveObject());
 	});
 
 	$("#closeScriptingGUIButton").on("click", function (e) {
@@ -39,8 +39,9 @@ var WickScriptingIDE = function (wickEditor) {
 
 }
 
-WickScriptingIDE.prototype.openScriptingGUI = function () {
+WickScriptingIDE.prototype.openScriptingGUI = function (activeObj) {
 	this.open = true;
+	this.reloadScriptingGUI(activeObj);
 	$("#scriptingGUI").css('visibility', 'visible');
 };
 
@@ -53,7 +54,13 @@ WickScriptingIDE.prototype.updateScriptsOnObject = function (activeObj) {
 	activeObj.wickObject.wickScripts[this.currentScript] = this.aceEditor.getValue();
 }
 
-WickScriptingIDE.prototype.reloadScriptingGUITextArea = function (activeObj) {
+WickScriptingIDE.prototype.reloadScriptingGUI = function (activeObj) {
+	
+	if(!activeObj.wickObject || !activeObj.wickObject.isSymbol) {
+		this.closeScriptingGUI();
+		return;
+	}
+
 	if(activeObj && activeObj.wickObject.wickScripts && activeObj.wickObject.wickScripts[this.currentScript]) {
 		var script = activeObj.wickObject.wickScripts[this.currentScript];
 		this.aceEditor.setValue(script, -1);
