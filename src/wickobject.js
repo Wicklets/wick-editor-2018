@@ -30,12 +30,42 @@ var WickObject = function () {
 
 WickObject.prototype.constructDefaultFontData = function (text) {
 
+	// See http://fabricjs.com/docs/fabric.IText.html for full fabric.js IText definition
+	// Note: We will probably want to change 'editable' in order to have dynamic text in the player, but this still needs more research
+
 	this.fontData = {
-		text: text,
-		fontFamily: 'arial black'
+		//backgroundColor: undefined,
+		//borderColor: undefined,
+		//borderDashArray: undefined,
+		//borderScaleFactor: undefined, 
+		//caching: true,
+		cursorColor: '#333',
+		cursorDelay: 1000,
+		cursorWidth: 2,
+		editable: true,
+		//editingBorderColor: undefined,
+		fontFamily: 'arial black',
+		fontSize: 40,
+		fontStyle: 'normal',
+		fontWeight: 'normal',
+		hasBorders: false,
+		lineHeight: 1.16,
+		//selectionColor: undefined,
+		//selectionEnd: undefined,
+		//selectionStart: undefined,
+		//shadow: undefined,
+		//stateProperties: undefined,
+		//stroke: undefined,
+		//styles: undefined, // Stores variable character styles
+		textAlign: 'left',
+		//textBackgroundColor: undefined,
+		textDecoration: "",
+		text: text
 	};
-	
+	console.log(this);
+
 }
+
 
 WickObject.prototype.setDefaultPositioningValues = function () {
 
