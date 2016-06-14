@@ -147,8 +147,6 @@
 
 	wickUtils.pasteWickObjectJSONFromClipboardIntoCanvas = function (fileType, clipboardData, fabricCanvas, currentObject) {
 
-		console.log("pasted filetype: " + fileType);
-
 		if(fileType === 'text/wickobjectjson') {
 
 			// Get JSON from clipboard, create wick object from it

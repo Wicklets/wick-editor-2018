@@ -60,6 +60,7 @@ var WickEditor = function () {
 
     	testPositiveInteger($('#projectSizeX').val(), function(n) {
     		that.project.resolution.x = n;
+    		that.resizeCanvasAndGUI();
     	});
 
 	});
@@ -68,6 +69,7 @@ var WickEditor = function () {
 
     	testPositiveInteger($('#projectSizeY').val(), function(n) {
     		that.project.resolution.y = n;
+    		that.resizeCanvasAndGUI();
     	});
 
 	});
@@ -149,35 +151,6 @@ WickEditor.prototype.handleCopyEvent = function (event) {
 	}
 }
 
-WickEditor.prototype.handlePasteEvent = function (event) {
-	if(!this.scriptingIDE.open) { 
-		event.preventDefault();
-
-		var clipboardData = event.clipboardData;
-		var items = clipboardData.items;
-
-		for (i=0; i<items.length; i++) {
-
-			var fileType = items[i].type;
-			var file = clipboardData.getData(items[i].type);
-
-			this.handlePastedItem(fileType, file);
-		}
-	}
-}
-
-WickEditor.prototype.handlePastedItem = function (fileType, file) {
-	if (fileType === 'image/png') {
-		var blob = items[i].getAsFile();
-		var URLObj = window.URL || window.webkitURL;
-		var source = URLObj.createObjectURL(blob);
-		this.importImage("File names for pasted images not set.", source);
-	} else if (fileType == 'text/wickobjectjson' ||
-		       fileType == 'text/wickobjectarrayjson') {
-		WickObjectUtils.pasteWickObjectJSONFromClipboardIntoCanvas(fileType, clipboardData, fabricCanvas, currentObject);
-	}	
-}
-
 /***********************************
   Timeline pleayhead moving methods
 ***********************************/
@@ -257,7 +230,7 @@ WickEditor.prototype.stopDrawingMode = function () {
 	this.fabricCanvas.stopDrawingMode();	
 }
 
-WickEditor.prototype.addNewText = function () {
+WickEditor.prototype.addNewText = function (text) {
 
 	var textWickObject = new WickObject();
 
@@ -268,7 +241,7 @@ WickEditor.prototype.addNewText = function () {
 	textWickObject.parentObject = this.currentObject;
 
 	textWickObject.fontData = {
-		text: 'Click to edit text',
+		text: text,
 		fontFamily: 'arial black'
 	};
 
@@ -448,6 +421,35 @@ WickEditor.prototype.updatePropertiesGUI = function(tab) {
        Import content
 *****************************/
 
+WickEditor.prototype.importFilesPastedIntoEditor = function (event) {
+	if(!this.scriptingIDE.open) { 
+		event.preventDefault();
+
+		var clipboardData = event.clipboardData;
+		var items = clipboardData.items;
+
+		for (i=0; i<items.length; i++) {
+
+			var fileType = items[i].type;
+			var file = clipboardData.getData(items[i].type);
+
+			console.log("pasted filetype: " + fileType);
+			
+			if (fileType === 'image/png') {
+				var blob = items[i].getAsFile();
+				var URLObj = window.URL || window.webkitURL;
+				var source = URLObj.createObjectURL(blob);
+				this.importImage("File names for pasted images not set.", source);
+			} else if (fileType == 'text/plain') {
+				this.addNewText(file)
+			} else if (fileType == 'text/wickobjectjson' ||
+				       fileType == 'text/wickobjectarrayjson') {
+				WickObjectUtils.pasteWickObjectJSONFromClipboardIntoCanvas(fileType, clipboardData, this.fabricCanvas, this.currentObject);
+			}	
+		}
+	}
+}
+
 WickEditor.prototype.importFilesDroppedIntoEditor = function(files) {
 	// Retrieve uploaded files data
 	for (var i = 0; i < files.length; i++) {
@@ -474,12 +476,13 @@ WickEditor.prototype.importImage = function (name, data) {
 		top = window.innerHeight/2;
 	}
 
+	var that = this;
 	WickObjectUtils.createWickObjectFromImage(
 		data, 
 		left, 
 		top, 
 		this.currentObject, 
-		function(o) { fabricCanvas.addWickObjectToCanvas(o); }
+		function(o) { that.fabricCanvas.addWickObjectToCanvas(o); }
 	);
 
 }
