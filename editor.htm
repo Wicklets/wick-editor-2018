@@ -152,16 +152,16 @@
 			<div class="button" id="paintbrushToolButton" onclick="wickEditor.startDrawingMode();">
 				<img src="resources/paintbrush.png" width="30"></img>
 			</div>
+			<div id="toolOptions">
+				Line Width: <input type="range" value="30" min="0" max="150" id="lineWidth"><br />
+				Line Color: <input type="color" value="#FFFF00" id="lineColor">
+			</div>
 			<hr />
 
 			<div class="button" id="textToolButton" onclick="wickEditor.addNewText('Click to edit text');">
 				<img src="resources/text.png" width="30"></img>
 			</div>
 
-			<div id="toolOptions">
-				Line Width: <input type="range" value="30" min="0" max="150" id="lineWidth"><br />
-				Line Color: <input type="color" value="#FFFF00" id="lineColor">
-			</div>
 		</div>
 
 	<!-- WickObject Scripting GUI, bottom left corner -->
