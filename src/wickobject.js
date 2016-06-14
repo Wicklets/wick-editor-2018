@@ -62,7 +62,6 @@ WickObject.prototype.constructDefaultFontData = function (text) {
 		textDecoration: "",
 		text: text
 	};
-	console.log(this);
 
 }
 
