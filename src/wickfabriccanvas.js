@@ -1,4 +1,4 @@
-var FabricCanvas = function () {
+var FabricCanvas = function (wickEditor) {
 
 	// When a fabric object is created from a wick object (and vice versa), 
 	// these properties must be set on the new object
@@ -86,6 +86,60 @@ var FabricCanvas = function () {
 	this.dragToImportFileText.evented = false;
 
 	this.canvas.add(this.dragToImportFileText);
+
+	$("#editorCanvasContainer").on('dragover', function(e) {
+		showDragToImportFileAlert();
+		return false;
+	});
+	$("#editorCanvasContainer").on('dragleave', function(e) {
+		hideDragToImportFileAlert();
+		return false;
+	});
+	$("#editorCanvasContainer").on('drop', function(e) {
+		hideDragToImportFileAlert();
+		return false;
+	});
+
+// Events
+
+	var that = this;
+	var canvas = this.canvas;
+
+	canvas.on('mouse:down', function(e) {
+		if(e.e.button == 2) {
+
+			if (e.target && e.target.wickObject) {
+				// Programatically set active object of fabric canvas
+				var id = canvas.getObjects().indexOf(e.target);
+				canvas.setActiveObject(canvas.item(id));
+			}
+
+			if(!e.target) {
+				// Didn't right click an object, deselect everything
+				canvas.deactivateAll().renderAll();
+			}
+			wickEditor.openRightClickMenu();
+
+		} else {
+			wickEditor.closeRightClickMenu();
+		}
+	});
+
+	canvas.on('object:added', function(e) {
+		if(e.target.type === "path") {
+			var path = e.target;
+			that.convertPathToWickObjectAndAddToCanvas(path, wickEditor.currentObject);
+			canvas.remove(path);
+		}
+	});
+
+	canvas.on('object:selected', function (e) {
+		wickEditor.scriptingIDE.reloadScriptingGUITextArea(canvas.getActiveObject());
+	});
+
+	canvas.on('selection:cleared', function (e) {
+		wickEditor.scriptingIDE.closeScriptingGUI();
+	});
 
 }
 
