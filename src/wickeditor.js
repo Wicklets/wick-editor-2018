@@ -217,6 +217,40 @@ var WickEditor = (function () {
 			return false;
 		});
 		
+	// Properties window events
+
+		var testPositiveInteger = function(n, setFunc) {
+			var num = Number(n);
+			if((typeof num === 'number') && (num % 1 == 0) && (num > 0)) {
+				setFunc(num);
+				console.log(project);
+			}
+		}
+
+	    $('#projectSizeX').on('input propertychange', function() {
+
+	    	testPositiveInteger($('#projectSizeX').val(), function(n) {
+	    		project.resolution.x = n;
+	    	});
+
+		});
+
+		$('#projectSizeY').on('input propertychange', function() {
+
+	    	testPositiveInteger($('#projectSizeY').val(), function(n) {
+	    		project.resolution.y = n;
+	    	});
+
+		});
+
+		$('#frameRate').on('input propertychange', function() {
+
+	    	testPositiveInteger($('#frameRate').val(), function(n) {
+	    		project.framerate = n;
+	    	});
+
+		});
+
 	// Setup leave page warning event
 
 		if(SHOW_PAGE_LEAVE_WARNING) {
