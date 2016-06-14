@@ -56,7 +56,7 @@ WickScriptingIDE.prototype.updateScriptsOnObject = function (activeObj) {
 
 WickScriptingIDE.prototype.reloadScriptingGUI = function (activeObj) {
 	
-	if(!activeObj.wickObject || !activeObj.wickObject.isSymbol) {
+	if(!activeObj || !activeObj.wickObject || !activeObj.wickObject.isSymbol) {
 		this.closeScriptingGUI();
 		return;
 	}
