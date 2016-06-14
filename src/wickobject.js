@@ -28,6 +28,15 @@ var WickObject = function () {
 
 };
 
+WickObject.prototype.constructDefaultFontData = function (text) {
+
+	this.fontData = {
+		text: text,
+		fontFamily: 'arial black'
+	};
+	
+}
+
 WickObject.prototype.setDefaultPositioningValues = function () {
 
 	this.scaleX = 1;

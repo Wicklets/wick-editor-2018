@@ -235,15 +235,11 @@ WickEditor.prototype.addNewText = function (text) {
 	var textWickObject = new WickObject();
 
 	textWickObject.setDefaultPositioningValues();
+	textWickObject.constructDefaultFontData(text);
 	textWickObject.left = window.innerWidth/2;
 	textWickObject.top = window.innerHeight/2;
 
 	textWickObject.parentObject = this.currentObject;
-
-	textWickObject.fontData = {
-		text: text,
-		fontFamily: 'arial black'
-	};
 
 	this.fabricCanvas.addWickObjectToCanvas(textWickObject);
 
@@ -454,6 +450,7 @@ WickEditor.prototype.importFilesDroppedIntoEditor = function(files) {
 	// Retrieve uploaded files data
 	for (var i = 0; i < files.length; i++) {
 		var file = files[i];
+		console.log(file);
 
 		// Read file as data URL
 		var reader = new FileReader();
