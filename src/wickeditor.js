@@ -216,10 +216,6 @@ var WickEditor = (function () {
 
 			return false;
 		});
-
-	// Setup properties UI events
-
-	updatePropertiesGUI('project');
 		
 	// Setup leave page warning event
 
