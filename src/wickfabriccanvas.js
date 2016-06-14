@@ -87,16 +87,17 @@ var FabricCanvas = function (wickEditor) {
 
 	this.canvas.add(this.dragToImportFileText);
 
+	var that = this;
 	$("#editorCanvasContainer").on('dragover', function(e) {
-		showDragToImportFileAlert();
+		that.showDragToImportFileAlert();
 		return false;
 	});
 	$("#editorCanvasContainer").on('dragleave', function(e) {
-		hideDragToImportFileAlert();
+		that.hideDragToImportFileAlert();
 		return false;
 	});
 	$("#editorCanvasContainer").on('drop', function(e) {
-		hideDragToImportFileAlert();
+		that.hideDragToImportFileAlert();
 		return false;
 	});
 
