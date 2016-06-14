@@ -44,6 +44,42 @@ var WickEditor = function () {
 		this.loadProjectFromJSON(devTestProjectJSON);
 	}
 
+// temporary!! should be somewhere else
+
+	var that = this;
+
+	var testPositiveInteger = function(n, setFunc) {
+		var num = Number(n);
+		if((typeof num === 'number') && (num % 1 == 0) && (num > 0)) {
+			setFunc(num);
+			console.log(that.project);
+		}
+	}
+
+    $('#projectSizeX').on('input propertychange', function() {
+
+    	testPositiveInteger($('#projectSizeX').val(), function(n) {
+    		that.project.resolution.x = n;
+    	});
+
+	});
+
+	$('#projectSizeY').on('input propertychange', function() {
+
+    	testPositiveInteger($('#projectSizeY').val(), function(n) {
+    		that.project.resolution.y = n;
+    	});
+
+	});
+
+	$('#frameRate').on('input propertychange', function() {
+
+    	testPositiveInteger($('#frameRate').val(), function(n) {
+    		that.project.framerate = n;
+    	});
+
+	});
+
 }
 
 /***********************************
