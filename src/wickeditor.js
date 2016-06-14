@@ -512,9 +512,10 @@ WickEditor.prototype.saveProject = function () {
 }
 
 WickEditor.prototype.openProject = function () {
+	var that = this;
 	WickFileUtils.readJSONFromFileChooser(
 		document.getElementById("importButton"), 
-		this.loadProjectFromJSON
+		function(p) { that.loadProjectFromJSON(p) }
 	);
 }
 
