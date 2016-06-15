@@ -121,6 +121,15 @@ hr {
 	float:left;
 }
 
+.frameContainer {
+	width: 20px;
+	height: 45px;
+	text-align: center;
+	margin-left: 3px;
+	margin-top: 3px;
+	float: left;
+}
+
 .timelineFrame {
 	width: 20px;
 	height: 30px;
@@ -140,6 +149,21 @@ hr {
 
 .timelineFrame.active {
 	background-color: yellow;
+}
+
+.breakpointButton {
+	width: 20px;
+	height: 10px;
+	background-color: white;
+	opacity: 0.5;
+	margin-left: 3px;
+	float: left;
+}
+.breakpointButton:hover {
+	background-color: orange;
+}
+.breakpointButton.enabled {
+	background-color: red;
 }
 
 #scriptEditor {

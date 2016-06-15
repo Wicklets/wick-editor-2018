@@ -116,24 +116,30 @@ WickEditor.prototype.handleKeyboardInput = function (eventType, event) {
 		var shiftKeyDown = this.keys[16];
 
 		// Control-shift-z: redo
-		if(event.keyCode == 90 && controlKeyDown && shiftKeyDown) {
+		if (event.keyCode == 90 && controlKeyDown && shiftKeyDown) {
 			this.actionHandler.redoAction();	
 		}
 		// Control-z: undo
-		else if(event.keyCode == 90 && controlKeyDown) {
+		else if (event.keyCode == 90 && controlKeyDown) {
 			this.actionHandler.undoAction();
 		}
 
-		// Backspace: delete selected objects
-		if(event.keyCode == 8) {
+		// Control-a: Select all
+		if (event.keyCode == 65 && controlKeyDown) {
 			event.preventDefault();
-			wickEditor.deleteSelectedObject();
+			this.fabricCanvas.selectAll();
+		}
+
+		// Backspace: delete selected objects
+		if (event.keyCode == 8) {
+			event.preventDefault();
+			this.actionHandler.doAction('delete', []);
 		}
 
 		// Tilde: log project state to canvas (for debugging)
-		if(event.keyCode == 192) {
-			console.log(project);
-			console.log(fabricCanvas);
+		if (event.keyCode == 192) {
+			console.log(this.project);
+			console.log(this.fabricCanvas);
 		}
 
 	} else if(eventType === "keyup") {
@@ -156,29 +162,13 @@ WickEditor.prototype.handleCopyEvent = function (event) {
   Timeline pleayhead moving methods
 ***********************************/
 
-// Moves playhead to specified frame and updates the canvas and project.
-WickEditor.prototype.gotoFrame = function (newFrameIndex) {
-
-	// Store changes made to current frame in the project
-	this.currentObject.frames[this.currentObject.currentFrame].wickObjects = this.fabricCanvas.getWickObjectsInCanvas();
-
-	// move playhead
-	this.currentObject.currentFrame = newFrameIndex;
-
-	// Load wickobjects in the frame we moved to into the canvas
-	this.fabricCanvas.storeObjectsIntoCanvas( this.currentObject.getCurrentFrame().wickObjects );
-
-	this.timelineController.updateGUI(this.currentObject);
-
-}
-
 WickEditor.prototype.addEmptyFrame = function () {
 
 	// Add an empty frame
 	this.currentObject.addEmptyFrame(this.currentObject.frames.length);
 
 	// Move to that new frame
-	this.gotoFrame(this.currentObject.frames.length-1);
+	this.actionHandler.doAction('gotoFrame', [this.currentObject.frames.length-1], true);
 
 	// Update GUI
 	this.resizeCanvasAndGUI();
@@ -244,7 +234,8 @@ WickEditor.prototype.addNewText = function (text) {
 
 	this.fabricCanvas.addWickObjectToCanvas(textWickObject);
 
-	this.gotoFrame(this.currentObject.currentFrame);
+	this.actionHandler.doAction('gotoFrame', [this.currentObject.currentFrame], true);
+
 }
 
 /***********************************
@@ -301,13 +292,9 @@ WickEditor.prototype.closeRightClickMenu = function () {
 	$("#frameButtons").css('display', 'none');
 }
 
-WickEditor.prototype.deleteSelectedObject = function () {
-
-	this.actionHandler.doAction('delete');
-
-}
-
 WickEditor.prototype.convertSelectedObjectToSymbol = function () {
+
+	this.currentObject.frames[this.currentObject.currentFrame].wickObjects = this.fabricCanvas.getWickObjectsInCanvas();
 
 	var symbol = new WickObject();
 
@@ -352,12 +339,12 @@ WickEditor.prototype.convertSelectedObjectToSymbol = function () {
 	// deselect everything
 	this.fabricCanvas.getCanvas().deactivateAll().renderAll();
 
-	this.gotoFrame(this.currentObject.currentFrame);
+	this.actionHandler.doAction('gotoFrame', [this.currentObject.currentFrame], true);
 
 }
 
 WickEditor.prototype.editSelectedObject = function () {
-	this.moveInsideObject(fabricCanvas.getActiveObject().wickObject);
+	this.moveInsideObject(this.fabricCanvas.getActiveObject().wickObject);
 }
 
 WickEditor.prototype.editScriptsOfSelectedObject = function () {

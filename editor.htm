@@ -40,11 +40,11 @@
 			event.preventDefault();
 		}, false);
 
-		document.getElementById("editorCanvasContainer").addEventListener("keydown", function (event) {
+		document.body.addEventListener("keydown", function (event) {
 			wickEditor.handleKeyboardInput("keydown", event);
 		});
 
-		document.getElementById("editorCanvasContainer").addEventListener("keyup", function (event) {
+		document.getElementById("editor").addEventListener("keyup", function (event) {
 			wickEditor.handleKeyboardInput("keyup", event);
 		});
 
@@ -153,8 +153,8 @@
 				<img src="resources/paintbrush.png" width="30"></img>
 			</div>
 			<div id="toolOptions">
-				Line Width: <input type="range" value="30" min="0" max="150" id="lineWidth"><br />
-				Line Color: <input type="color" value="#FFFF00" id="lineColor">
+				Line Width: <input type="range" value="8" min="0" max="150" id="lineWidth"><br />
+				Line Color: <input type="color" value="#b060b0" id="lineColor">
 			</div>
 			<hr />
 
@@ -214,7 +214,7 @@
 			<div id="commonObjectButtons">
 				<div class="button" onclick="wickEditor.closeRightClickMenu();wickEditor.sendSelectedObjectToBack();" >Send to Back</div>
 				<div class="button" onclick="wickEditor.closeRightClickMenu();wickEditor.bringSelectedObjectToFront();" >Bring to Front</div>
-				<div class="button" onclick="wickEditor.closeRightClickMenu();wickEditor.deleteSelectedObject();" >Delete</div>
+				<div class="button" onclick="wickEditor.closeRightClickMenu();wickEditor.actionHandler.doAction('delete', []);" >Delete</div>
 				<hr />
 			</div>
 			<div id="frameButtons">

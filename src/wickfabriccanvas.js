@@ -158,14 +158,30 @@ FabricCanvas.prototype.clearCanvas = function () {
 }
 
 FabricCanvas.prototype.getCanvas = function() {
-
 	return this.canvas;
-
 }
 
 FabricCanvas.prototype.getActiveObject = function () {
-
 	return this.canvas.getActiveObject();
+}
+
+FabricCanvas.prototype.selectAll = function () {
+
+	var objs = [];
+	this.canvas.getObjects().map(function(o) {
+		if(o.wickObject) {
+			return objs.push(o);
+		}
+	});
+
+	var group = new fabric.Group(objs, {
+		originX: 'center', 
+		originY: 'center'
+	});
+
+	this.canvas._activeObject = null;
+
+	this.canvas.setActiveGroup(group.setCoords()).renderAll();
 
 }
 

@@ -114,7 +114,7 @@ var WickPlayer = (function () {
 
 		// Stop this object
 		// (Note: objects should probably be playing instead of stopped initially)
-		wickObj.isPlaying = false;
+		wickObj.isPlaying = true;
 
 		// Set this object to need its onLoad script run
 		wickObj.onLoadScriptRan = false;
@@ -294,10 +294,7 @@ var WickPlayer = (function () {
 
 		// Run update script
 		if(obj && obj.wickScripts) {
-			//console.log(obj.wickScripts['onUpdate']);
 			evalScript(obj, obj.wickScripts.onUpdate);
-		} else {
-			//console.log("obj contains no wickScripts or update function");
 		}
 
 		// Recursively run all updates
@@ -334,7 +331,7 @@ var WickPlayer = (function () {
 			project.rootObject.isPlaying = false;
 		}
 
-		for(var i = 0; i < 100; i++){ // !!! why plseae dont do this
+		for(var i = 0; i < 100; i++) { // !!! why plseae dont do this
 			script = script.replace("this.","obj.");
 		}
 		eval(script);
@@ -347,9 +344,11 @@ var WickPlayer = (function () {
 		if(obj.isPlaying) {
 			obj.currentFrame++;
 			if(obj.currentFrame == obj.frames.length) {
-				//Disable looping animations for today's demo  
-				//obj.currentFrame = 0;
-				obj.currentFrame = obj.frames.length-1;
+				obj.currentFrame = 0;
+			}
+
+			if(obj.frames[obj.currentFrame].breakpoint) {
+				obj.isPlaying = false;
 			}
 
 			obj.onLoadScriptRan = false;

@@ -13,7 +13,7 @@ var WickActionHandler = function (wickEditor) {
 	this.doActions = {};
 	this.undoActions = {};
 
-	this.doActions['delete'] = function () {
+	this.doActions['delete'] = function (args) {
 
 		// Save object(/objects) that were deleted in the WickAction 
 		// object so we can restore it later in the undo function.
@@ -48,7 +48,7 @@ var WickActionHandler = function (wickEditor) {
 		}
 	};
 
-	this.undoActions['delete'] = function () {
+	this.undoActions['delete'] = function (args) {
 
 		// Restore the deleted object/s
 		// We stored them inside this WickAction object!
@@ -64,19 +64,54 @@ var WickActionHandler = function (wickEditor) {
 		}
 	};
 
+	this.doActions['gotoFrame'] = function (args) {
+
+		this.oldFrame = wickEditor.currentObject.currentFrame;
+
+		// Store changes made to current frame in the project
+		wickEditor.currentObject.frames[wickEditor.currentObject.currentFrame].wickObjects = wickEditor.fabricCanvas.getWickObjectsInCanvas();
+
+		// move playhead
+		var toFrame = args[0];
+		wickEditor.currentObject.currentFrame = toFrame;
+
+		// Load wickobjects in the frame we moved to into the canvas
+		wickEditor.fabricCanvas.storeObjectsIntoCanvas( wickEditor.currentObject.getCurrentFrame().wickObjects );
+
+		wickEditor.timelineController.updateGUI(wickEditor.currentObject);
+	}
+
+	this.undoActions['gotoFrame'] = function (args) {
+		// Store changes made to current frame in the project
+		wickEditor.currentObject.frames[wickEditor.currentObject.currentFrame].wickObjects = wickEditor.fabricCanvas.getWickObjectsInCanvas();
+
+		// move playhead
+		var toFrame = this.oldFrame;
+		wickEditor.currentObject.currentFrame = toFrame;
+
+		// Load wickobjects in the frame we moved to into the canvas
+		wickEditor.fabricCanvas.storeObjectsIntoCanvas( wickEditor.currentObject.getCurrentFrame().wickObjects );
+
+		wickEditor.timelineController.updateGUI(wickEditor.currentObject);
+	}
+
 }
 
-WickActionHandler.prototype.doAction = function (actionName) {
+WickActionHandler.prototype.doAction = function (actionName, args, dontAddToStack) {
 	
 	var action = new WickAction(
 		this.doActions[actionName],
 		this.undoActions[actionName] 
 	);
 
-	action.doAction();
-	this.undoStack.push(action); 
-	
-	this.redoStack = [];
+	action.args = args;
+	action.doAction(args);
+
+	if(!dontAddToStack) {
+		this.undoStack.push(action); 
+		this.redoStack = [];
+	}
+
 }
 
 WickActionHandler.prototype.undoAction = function () {
@@ -85,7 +120,7 @@ WickActionHandler.prototype.undoAction = function () {
 	} 
 
 	var action = this.undoStack.pop(); 
-	action.undoAction(); 
+	action.undoAction();
 	this.redoStack.push(action);
 }
 
@@ -95,7 +130,7 @@ WickActionHandler.prototype.redoAction = function () {
 	} 
 
 	var action = redoStack.pop(); 
-	action.doAction(); 
+	action.doAction(action.args); 
 	this.undoStack.push(action); 
 }
 
