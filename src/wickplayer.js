@@ -224,7 +224,7 @@ var WickPlayer = (function () {
 	}
 
 	var wickObjectIsClickable = function (wickObj) {
-		return wickObj.isSymbol && wickObj.wickScripts['onClick'];
+		return wickObj.wickScripts['onClick'];
 	}
 
 /*****************************

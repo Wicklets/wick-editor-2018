@@ -180,11 +180,15 @@ FabricCanvas.prototype.getActiveObject = function () {
 }
 
 FabricCanvas.prototype.sendSelectedObjectToBack = function () {
+	console.error("Don't forget to handle muliple objects here!");
+
 	this.getActiveObject().sendToBack();
 	this.frameInside.sendToBack();
 }
 
 FabricCanvas.prototype.bringSelectedObjectToFront = function () {
+	console.error("Don't forget to handle muliple objects here!");
+	
 	this.getActiveObject().bringToFront();
 }
 
