@@ -179,6 +179,15 @@ FabricCanvas.prototype.getActiveObject = function () {
 	return this.canvas.getActiveObject();
 }
 
+FabricCanvas.prototype.sendSelectedObjectToBack = function () {
+	this.getActiveObject().sendToBack();
+	this.frameInside.sendToBack();
+}
+
+FabricCanvas.prototype.bringSelectedObjectToFront = function () {
+	this.getActiveObject().bringToFront();
+}
+
 FabricCanvas.prototype.selectAll = function () {
 
 	var objs = [];
