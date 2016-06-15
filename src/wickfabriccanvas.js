@@ -140,10 +140,14 @@ var FabricCanvas = function (wickEditor) {
 
 		wickEditor.scriptingIDE.reloadScriptingGUI(newSelectedObject);
 
-		if(newSelectedObject.wickObject.fontData) {
-			wickEditor.updatePropertiesGUI('text');
+		if(newSelectedObject) {
+			if(newSelectedObject.wickObject.fontData) {
+				wickEditor.updatePropertiesGUI('text');
+			} else {
+				wickEditor.updatePropertiesGUI('symbol');
+			}
 		} else {
-			wickEditor.updatePropertiesGUI('symbol');
+			wickEditor.updatePropertiesGUI('project');
 		}
 	});
 
