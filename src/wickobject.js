@@ -4,31 +4,61 @@
 
 var WickObject = function () {
 
+// Internals
+
 	// Used for debugging.
 	this.objectName = undefined;
 
 	// Note that the root object is the only object with parentObject as null.
 	this.parentObject = null;
 
-	// Used to keep track of what frame is being edited
-	this.currentFrame = null;
+// Common
 
-	// See design docs for how objects and symbols work.
-	this.isSymbol = false;
+	// Dictionary mapping function names to WickScript object
+	this.wickScripts = {
+		"onLoad" : "// onLoad\n// This script runs once when this object enters the scene.\n",
+		"onClick" : "// onClick\n// This script runs when this object is clicked on.\n",
+		"onUpdate": "// onUpdate\n// This script runs repeatedly whenever this object is in the scene.\n"
+	};
+
+// Static
 
 	// Data, only used by static objects
 	this.imageData = undefined;
 	this.fontData = undefined;
 
+// Symbols
+
+	// See design docs for how objects and symbols work.
+	this.isSymbol = false;
+
+	// Used to keep track of what frame is being edited
+	this.currentFrame = null;
+
 	// List of frames, only used by symbols
 	this.frames = undefined;
 
-	// Dictionary mapping function names to WickScript object, only used by symbols
-	this.wickScripts = null;
-
 };
 
-WickObject.prototype.constructDefaultFontData = function (text) {
+WickObject.prototype.setDefaultPositioningValues = function () {
+
+	this.scaleX = 1;
+	this.scaleY = 1;
+	this.angle  = 0;
+	this.flipX  = false;
+	this.flipY  = false;
+
+}
+
+WickObject.prototype.setDefaultSymbolValues = function () {
+
+	this.isSymbol = true;
+	this.currentFrame = 0;
+	this.frames = [new WickFrame()];
+
+}
+
+WickObject.prototype.setDefaultFontValues = function (text) {
 
 	// See http://fabricjs.com/docs/fabric.IText.html for full fabric.js IText definition
 	// Note: We will probably want to change 'editable' in order to have dynamic text in the player, but this still needs more research
@@ -65,40 +95,12 @@ WickObject.prototype.constructDefaultFontData = function (text) {
 
 }
 
-
-WickObject.prototype.setDefaultPositioningValues = function () {
-
-	this.scaleX = 1;
-	this.scaleY = 1;
-	this.angle  = 0;
-	this.flipX  = false;
-	this.flipY  = false;
-
-}
-
-WickObject.prototype.setDefaultSymbolValues = function () {
-
-	this.isSymbol = true;
-	this.currentFrame = 0;
-	this.frames = [new WickFrame()];
-	this.wickScripts = {
-		"onLoad" : "// onLoad\n// This script runs once when this object enters the scene.\n",
-		"onClick" : "// onClick\n// This script runs when this object is clicked on.\n",
-		"onUpdate": "// onUpdate\n// This script runs repeatedly whenever this object is in the scene.\n"
-	};
-
-}
-
 WickObject.prototype.getCurrentFrame = function() {
-
 	return this.frames[this.currentFrame];
-
 }
 
 WickObject.prototype.addEmptyFrame = function(newFrameIndex) {
-
 	this.frames[newFrameIndex] = new WickFrame();
-
 }
 
 // Used to prepare project for JSONificaion. 
@@ -167,7 +169,6 @@ WickObject.prototype.getRelativePosition = function () {
 var WickFrame = function () {
 
 	this.wickObjects = [];
-
 	this.breakpoint = false;
 
 };

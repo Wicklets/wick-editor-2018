@@ -135,11 +135,21 @@ var FabricCanvas = function (wickEditor) {
 	});
 
 	canvas.on('object:selected', function (e) {
-		wickEditor.scriptingIDE.reloadScriptingGUI(canvas.getActiveObject());
+
+		var newSelectedObject = canvas.getActiveObject();
+
+		wickEditor.scriptingIDE.reloadScriptingGUI(newSelectedObject);
+
+		if(newSelectedObject.wickObject.fontData) {
+			wickEditor.updatePropertiesGUI('text');
+		} else {
+			wickEditor.updatePropertiesGUI('symbol');
+		}
 	});
 
 	canvas.on('selection:cleared', function (e) {
 		wickEditor.scriptingIDE.closeScriptingGUI();
+		wickEditor.updatePropertiesGUI('project');
 	});
 
 }
@@ -392,6 +402,19 @@ FabricCanvas.prototype.makeFabricObjectFromWickObject = function (wickObject, ca
 
 }
 
+FabricCanvas.prototype.storeObjectsIntoCanvas = function (wickObjects) {
+
+	var canvas = this.canvas;
+
+	this.clearCanvas();
+
+	// Add the requested wick objects the canvas
+	for(var i = 0; i < wickObjects.length; i++) {
+		this.addWickObjectToCanvas(wickObjects[i]);
+	}
+
+}
+
 FabricCanvas.prototype.addWickObjectToCanvas = function (wickObject) {
 
 	var canvas = this.canvas;
@@ -417,19 +440,6 @@ FabricCanvas.prototype.convertPathToWickObjectAndAddToCanvas = function (fabricP
 			function(obj) { that.addWickObjectToCanvas(obj) }
 		);
 	});
-}
-
-FabricCanvas.prototype.storeObjectsIntoCanvas = function (wickObjects) {
-
-	var canvas = this.canvas;
-
-	this.clearCanvas();
-
-	// Add the requested wick objects the canvas
-	for(var i = 0; i < wickObjects.length; i++) {
-		this.addWickObjectToCanvas(wickObjects[i]);
-	}
-
 }
 
 FabricCanvas.prototype.getWickObjectsInCanvas = function () {
@@ -463,7 +473,7 @@ FabricCanvas.prototype.getWickObjectsInCanvas = function () {
 				wickObject.left -= parentsPositionTotal.left;
 			}
 
-			wickObjects.push(wickObject);
+			wickObjects.unshift(wickObject);
 		}
 
 	});

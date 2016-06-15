@@ -6,8 +6,8 @@ var WickEditor = function () {
 	
 	this.version = 'pre-alpha';
 
-	this.AUTO_LOAD_UNIT_TEST_PROJECT = false;
-	this.UNIT_TEST_PROJECT_PATH = "tests/simple.json";
+	this.AUTO_LOAD_UNIT_TEST_PROJECT = true;
+	this.UNIT_TEST_PROJECT_PATH = "tests/order-testing.json";
 
 /*********************************
 	Initialize all editor vars
@@ -43,6 +43,9 @@ var WickEditor = function () {
 		var devTestProjectJSON = WickFileUtils.downloadFile(this.UNIT_TEST_PROJECT_PATH);
 		this.loadProjectFromJSON(devTestProjectJSON);
 	}
+
+	// Set properties window to project properties
+	this.updatePropertiesGUI('project');
 
 // temporary!! should be somewhere else
 
@@ -162,20 +165,6 @@ WickEditor.prototype.handleCopyEvent = function (event) {
   Timeline pleayhead moving methods
 ***********************************/
 
-WickEditor.prototype.addEmptyFrame = function () {
-
-	// Add an empty frame
-	this.currentObject.addEmptyFrame(this.currentObject.frames.length);
-
-	// Move to that new frame
-	this.actionHandler.doAction('gotoFrame', [this.currentObject.frames.length-1], true);
-
-	// Update GUI
-	this.resizeCanvasAndGUI();
-	this.timelineController.updateGUI(this.currentObject);
-
-}
-
 // 
 WickEditor.prototype.moveOutOfObject = function () {
 
@@ -226,13 +215,15 @@ WickEditor.prototype.addNewText = function (text) {
 	var textWickObject = new WickObject();
 
 	textWickObject.setDefaultPositioningValues();
-	textWickObject.constructDefaultFontData(text);
+	textWickObject.setDefaultFontValues(text);
 	textWickObject.left = window.innerWidth/2;
 	textWickObject.top = window.innerHeight/2;
 
 	textWickObject.parentObject = this.currentObject;
 
 	this.fabricCanvas.addWickObjectToCanvas(textWickObject);
+
+	console.error("Remeber to select new text here!")
 
 	this.actionHandler.doAction('gotoFrame', [this.currentObject.currentFrame], true);
 
@@ -339,7 +330,7 @@ WickEditor.prototype.convertSelectedObjectToSymbol = function () {
 	// deselect everything
 	this.fabricCanvas.getCanvas().deactivateAll().renderAll();
 
-	this.actionHandler.doAction('gotoFrame', [this.currentObject.currentFrame], true);
+	console.error("Remember to select the new symbol here!!!")
 
 }
 
@@ -379,22 +370,13 @@ WickEditor.prototype.updatePropertiesGUI = function(tab) {
 
 	switch(tab) {
 		case 'project':
-			$("#propertiesGUI").css('display', 'inline');
 			$("#projectProperties").css('display', 'inline');
 			break;
 		case 'symbol':
-			$("#propertiesGUI").css('display', 'inline');
 			$("#symbolProperties").css('display', 'inline');
 			break;
-		case 'edit':
-			$("#propertiesGUI").css('display', 'inline');
+		case 'text':
 			$("#textProperties").css('display', 'inline');
-			break;
-		case 'hide':
-			$("#propertiesGUI").css('display', 'none');
-			break;
-		case 'show':
-			$("#propertiesGUI").css('display', 'inline');
 			break;
 	}
 

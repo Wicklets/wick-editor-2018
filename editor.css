@@ -74,19 +74,6 @@ hr {
 	visibility: hidden;
 }
 
-#projectProperties { 
-	visibility: visible;
-	display: inline;
-}
-#symbolProperties {
-	visibility: hidden;
-	display: none;
-}
-#textProperties {
-	visibility: hidden;
-	display: none;
-}
-
 .button {
 	padding: 3px;
 }

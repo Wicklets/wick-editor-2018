@@ -95,6 +95,28 @@ var WickActionHandler = function (wickEditor) {
 		wickEditor.timelineController.updateGUI(wickEditor.currentObject);
 	}
 
+	this.doActions['addEmptyFrame'] = function (args) {
+		// Add an empty frame
+		wickEditor.currentObject.addEmptyFrame(wickEditor.currentObject.frames.length);
+
+		// Move to that new frame
+		wickEditor.actionHandler.doAction('gotoFrame', [wickEditor.currentObject.frames.length-1], true);
+
+		// Update GUI
+		wickEditor.resizeCanvasAndGUI();
+		wickEditor.timelineController.updateGUI(wickEditor.currentObject);
+	}
+
+	this.undoActions['addEmptyFrame'] = function (args) {
+		// Go to the second-to-last frame and remove the last frame
+		wickEditor.actionHandler.doAction('gotoFrame', [wickEditor.currentObject.frames.length-2], true);
+		wickEditor.currentObject.frames.pop();
+
+		// Update GUI
+		wickEditor.resizeCanvasAndGUI();
+		wickEditor.timelineController.updateGUI(wickEditor.currentObject);
+	}
+
 }
 
 WickActionHandler.prototype.doAction = function (actionName, args, dontAddToStack) {
