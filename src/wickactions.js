@@ -117,6 +117,10 @@ var WickActionHandler = function (wickEditor) {
 		wickEditor.timelineController.updateGUI(wickEditor.currentObject);
 	}
 
+	this.doActions['addWickObjectToFabricCanvas'] = function (args) {
+		
+	}
+
 }
 
 WickActionHandler.prototype.doAction = function (actionName, args, dontAddToStack) {

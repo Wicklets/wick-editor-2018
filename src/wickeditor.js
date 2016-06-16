@@ -6,7 +6,7 @@ var WickEditor = function () {
 	
 	this.version = 'pre-alpha';
 
-	this.AUTO_LOAD_UNIT_TEST_PROJECT = true;
+	this.AUTO_LOAD_UNIT_TEST_PROJECT = false;
 	this.UNIT_TEST_PROJECT_PATH = "tests/order-testing.json";
 
 /*********************************
@@ -416,6 +416,9 @@ WickEditor.prototype.importFilesPastedIntoEditor = function (event) {
 }
 
 WickEditor.prototype.importFilesDroppedIntoEditor = function(files) {
+
+	var that = this;
+
 	// Retrieve uploaded files data
 	for (var i = 0; i < files.length; i++) {
 		var file = files[i];
@@ -426,7 +429,7 @@ WickEditor.prototype.importFilesDroppedIntoEditor = function(files) {
 		reader.onload = (function(theFile) {
 			return function(e) {
 				// TODO: Check filetype for image/sound/video/etc.
-				this.importImage(theFile.name, e.target.result)
+				that.importImage(theFile.name, e.target.result)
 			};
 		})(file);
 		reader.readAsDataURL(file);

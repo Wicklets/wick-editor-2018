@@ -374,7 +374,12 @@ var WickPlayer = (function () {
 		context.clearRect(0, 0, canvas.width, canvas.height);
 
 		// Draw root object, this will recursively draw every object!
-		drawWickObject(project.rootObject);
+		context.save();
+			context.translate(
+				(window.innerWidth - project.resolution.x)  / 2, 
+				(window.innerHeight - project.resolution.y)  / 2);
+			drawWickObject(project.rootObject);
+		context.restore();
 
 		// Draw FPS counter
 		context.fillStyle = "Black";
