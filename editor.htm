@@ -34,7 +34,9 @@
 	$(document).ready(function() { 
 		wickEditor = new WickEditor();
 
-		document.addEventListener( 'mousemove', function(e) { wickEditor.updateMousePosition(e) }, false );
+		document.addEventListener( 'mousemove', function(e) { 
+			wickEditor.updateMousePosition(e) 
+		}, false );
 
 		document.addEventListener('contextmenu', function (event) { 
 			event.preventDefault();
@@ -48,12 +50,13 @@
 			wickEditor.handleKeyboardInput("keyup", event);
 		});
 
-		window.addEventListener('resize', function(e) { wickEditor.resizeCanvasAndGUI(e); }, false);
+		window.addEventListener('resize', function(e) {
+			wickEditor.resizeCanvasAndGUI(e); 
+		}, false);
 		wickEditor.resizeCanvasAndGUI();
 
 		window.addEventListener("beforeunload", function (event) {
 			var confirmationMessage = 'Warning: All unsaved changes will be lost!';
-
 			(event || window.event).returnValue = confirmationMessage; //Gecko + IE
 			return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
 		});

@@ -69,28 +69,28 @@ var WickActionHandler = function (wickEditor) {
 		this.oldFrame = wickEditor.currentObject.currentFrame;
 
 		// Store changes made to current frame in the project
-		wickEditor.currentObject.frames[wickEditor.currentObject.currentFrame].wickObjects = wickEditor.fabricCanvas.getWickObjectsInCanvas();
+		wickEditor.syncProjectWithFabricCanvas();
 
 		// move playhead
 		var toFrame = args[0];
 		wickEditor.currentObject.currentFrame = toFrame;
 
 		// Load wickobjects in the frame we moved to into the canvas
-		wickEditor.fabricCanvas.storeObjectsIntoCanvas( wickEditor.currentObject.getCurrentFrame().wickObjects );
+		wickEditor.syncFabricCanvasWithProject();
 
 		wickEditor.timelineController.updateGUI(wickEditor.currentObject);
 	}
 
 	this.undoActions['gotoFrame'] = function (args) {
 		// Store changes made to current frame in the project
-		wickEditor.currentObject.frames[wickEditor.currentObject.currentFrame].wickObjects = wickEditor.fabricCanvas.getWickObjectsInCanvas();
+		wickEditor.syncProjectWithFabricCanvas();
 
 		// move playhead
 		var toFrame = this.oldFrame;
 		wickEditor.currentObject.currentFrame = toFrame;
 
 		// Load wickobjects in the frame we moved to into the canvas
-		wickEditor.fabricCanvas.storeObjectsIntoCanvas( wickEditor.currentObject.getCurrentFrame().wickObjects );
+		wickEditor.syncFabricCanvasWithProject();
 
 		wickEditor.timelineController.updateGUI(wickEditor.currentObject);
 	}

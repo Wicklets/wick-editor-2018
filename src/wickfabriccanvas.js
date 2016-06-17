@@ -214,8 +214,21 @@ FabricCanvas.prototype.selectAll = function () {
 
 FabricCanvas.prototype.resize = function (projectWidth, projectHeight) {
 
+	// Reposition all fabric objects to use new wick canvas origin
+
+	var oldWidth = this.canvas.getWidth();
+	var oldHeight = this.canvas.getHeight();
+
 	this.canvas.setWidth ( window.innerWidth  );
 	this.canvas.setHeight( window.innerHeight );
+
+	var diffWidth = this.canvas.getWidth() - oldWidth;
+	var diffHeight = this.canvas.getHeight() - oldHeight;
+
+	this.canvas.forEachObject(function(fabricObj) {
+		fabricObj.left += diffWidth/2;
+		fabricObj.top += diffHeight/2;
+	});
 
 	// Re-center the import file alert text and fade
 
@@ -312,7 +325,7 @@ FabricCanvas.prototype.hideDragToImportFileAlert = function() {
 }
 
 /*******************************************
-	Fabric Canvas <-> Wick Project Utils 
+	Wick Objects -> Fabric Canvas
 ********************************************/
 
 FabricCanvas.prototype.makeFabricObjectFromWickObject = function (wickObject, callback) {
@@ -419,7 +432,7 @@ FabricCanvas.prototype.makeFabricObjectFromWickObject = function (wickObject, ca
 
 }
 
-FabricCanvas.prototype.storeObjectsIntoCanvas = function (wickObjects) {
+FabricCanvas.prototype.storeObjectsIntoCanvas = function (wickObjects, projectResolution) {
 
 	var canvas = this.canvas;
 
@@ -427,10 +440,18 @@ FabricCanvas.prototype.storeObjectsIntoCanvas = function (wickObjects) {
 
 	// Add the requested wick objects the canvas
 	for(var i = 0; i < wickObjects.length; i++) {
+		// Reposition the wickobject so that 0,0 is fabrics origin, not the wick frames origin
+		wickObjects[i].left += (window.innerWidth - projectResolution.x) / 2;
+		wickObjects[i].top += (window.innerHeight - projectResolution.y) / 2;
+
 		this.addWickObjectToCanvas(wickObjects[i]);
 	}
 
 }
+
+/*******************************************
+	Fabric Canvas -> Wick Objects
+********************************************/
 
 FabricCanvas.prototype.addWickObjectToCanvas = function (wickObject) {
 
@@ -459,7 +480,7 @@ FabricCanvas.prototype.convertPathToWickObjectAndAddToCanvas = function (fabricP
 	});
 }
 
-FabricCanvas.prototype.getWickObjectsInCanvas = function () {
+FabricCanvas.prototype.getWickObjectsInCanvas = function (projectResolution) {
 
 	var sharedFabricWickObjectProperties = this.sharedFabricWickObjectProperties;
 
@@ -486,9 +507,13 @@ FabricCanvas.prototype.getWickObjectsInCanvas = function () {
 
 			if(wickObject.parentObject) {
 				var parentsPositionTotal = wickObject.parentObject.getRelativePosition();
-				wickObject.top -= parentsPositionTotal.top;
 				wickObject.left -= parentsPositionTotal.left;
+				wickObject.top -= parentsPositionTotal.top;
 			}
+
+			// Reposition the wickobject so that 0,0 is the canvases origin, not fabric's origin.
+			wickObject.left -= (window.innerWidth - projectResolution.x) / 2;
+			wickObject.top -= (window.innerHeight - projectResolution.y) / 2;
 
 			wickObjects.unshift(wickObject);
 		}

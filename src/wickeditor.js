@@ -155,7 +155,7 @@ WickEditor.prototype.handleKeyboardInput = function (eventType, event) {
 
 WickEditor.prototype.handleCopyEvent = function (event) {
 	if(!this.scriptingIDE.open) {
-		this.currentObject.frames[this.currentObject.currentFrame].wickObjects = this.fabricCanvas.getWickObjectsInCanvas();
+		this.syncProjectWithFabricCanvas();
 		event.preventDefault();
 		WickObjectUtils.copyWickObjectJSONToClipboard(event.clipboardData, this.fabricCanvas, this.currentObject);
 	}
@@ -169,13 +169,13 @@ WickEditor.prototype.handleCopyEvent = function (event) {
 WickEditor.prototype.moveOutOfObject = function () {
 
 	// Store changes made to current frame in the project
-	this.currentObject.frames[this.currentObject.currentFrame].wickObjects = this.fabricCanvas.getWickObjectsInCanvas();
+	this.syncProjectWithFabricCanvas();
 
 	// Set the editor to be editing the parent object
 	this.currentObject = this.currentObject.parentObject;
 
 	// Load wickobjects in the frame we moved to into the canvas
-	this.fabricCanvas.storeObjectsIntoCanvas( this.currentObject.getCurrentFrame().wickObjects );
+	this.syncFabricCanvasWithProject();
 
 	this.timelineController.updateGUI(this.currentObject);
 
@@ -185,14 +185,14 @@ WickEditor.prototype.moveOutOfObject = function () {
 WickEditor.prototype.moveInsideObject = function (object) {
 
 	// Store changes made to current frame in the project
-	this.currentObject.frames[this.currentObject.currentFrame].wickObjects = this.fabricCanvas.getWickObjectsInCanvas();
+	this.syncProjectWithFabricCanvas();
 
 	// Set the editor to be editing this object at its first frame
 	this.currentObject = object;
 	this.currentObject.currentFrame = 0;
 
 	// Load wickobjects in the frame we moved to into the canvas
-	this.fabricCanvas.storeObjectsIntoCanvas( this.currentObject.getCurrentFrame().wickObjects );
+	this.syncFabricCanvasWithProject();
 
 	this.timelineController.updateGUI(this.currentObject);
 
@@ -285,7 +285,7 @@ WickEditor.prototype.closeRightClickMenu = function () {
 
 WickEditor.prototype.convertSelectedObjectToSymbol = function () {
 
-	this.currentObject.frames[this.currentObject.currentFrame].wickObjects = this.fabricCanvas.getWickObjectsInCanvas();
+	this.syncProjectWithFabricCanvas();
 
 	var symbol = new WickObject();
 
@@ -468,12 +468,20 @@ WickEditor.prototype.importVectors = function (name, data) {
   Project Open/Save/Import/Export
 **********************************/
 
+WickEditor.prototype.syncProjectWithFabricCanvas = function () {
+	this.currentObject.frames[this.currentObject.currentFrame].wickObjects = this.fabricCanvas.getWickObjectsInCanvas(this.project.resolution);
+}
+
+WickEditor.prototype.syncFabricCanvasWithProject = function () {
+	this.fabricCanvas.storeObjectsIntoCanvas( this.currentObject.getCurrentFrame().wickObjects, this.project.resolution );
+}
+
 WickEditor.prototype.newProject = function () {
 
 	if(confirm("Create a new project? All unsaved changes to the current project will be lost!")) {
 		this.project = new WickProject();
 		this.currentObject = this.project.rootObject;
-		this.fabricCanvas.storeObjectsIntoCanvas( this.currentObject.getCurrentFrame().wickObjects );
+		this.syncFabricCanvasWithProject();
 		this.timelineController.updateGUI(this.currentObject);
 	}
 
@@ -497,7 +505,7 @@ WickEditor.prototype.exportProject = function () {
 
 WickEditor.prototype.getProjectAsJSON = function () {
 	// Store changes made to current frame in the project
-	this.currentObject.frames[this.currentObject.currentFrame].wickObjects = this.fabricCanvas.getWickObjectsInCanvas();
+	this.syncProjectWithFabricCanvas();
 
 	// Remove parent object references 
 	// (can't JSONify objects with circular references, player doesn't need them anyway)
@@ -537,7 +545,7 @@ WickEditor.prototype.loadProjectFromJSON = function (jsonString) {
 	this.currentObject.currentFrame = 0;
 
 	// Load wickobjects in the frame we moved to into the canvas
-	this.fabricCanvas.storeObjectsIntoCanvas( this.currentObject.getCurrentFrame().wickObjects );
+	this.syncFabricCanvasWithProject();
 
 	this.timelineController.updateGUI(this.currentObject);
 }
