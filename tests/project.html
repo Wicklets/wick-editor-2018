@@ -1,4 +1,152 @@
-var WickPlayer = (function () {
+﻿<!-- This is the "empty" wick player - it doesn't do anything 
+     unless the editor bundles a project inside of it.  -->
+
+<head>
+    <title>Wick Player</title>
+
+    <style>
+        /* remove the top and left whitespace */
+    	* { margin:0; padding:0; }
+
+        /* just to be sure these are full screen */
+    	html, body { width:100%; height:100%; }
+
+        /* To remove the scrollbars */
+    	canvas { display:block; }
+    </style>
+</head>
+
+<body>
+	<div id="playerCanvasContainer">
+		<canvas id="playerCanvas"></canvas>
+	</div>
+</body>
+
+
+<script>// Framerate keeper 
+// http://www.html5gamedevs.com/topic/1828-how-to-calculate-fps-in-plain-javascript/
+var fps = { startTime : 0,
+	frameNumber : 0,
+	getFPS : function() {
+		this.frameNumber++;
+
+		var d = new Date().getTime();
+		var currentTime = ( d - this.startTime ) / 1000;
+		var result = Math.floor( ( this.frameNumber / currentTime ) );
+
+		if( currentTime > 1 ) {
+			this.startTime = new Date().getTime();
+			this.frameNumber = 0;
+		}
+
+		return result;
+	}   
+};</script>
+<script> var BrowserDetectionUtils = (function () {
+
+	var browserDetectionUtils = { };
+
+	browserDetectionUtils.isSafari = 
+	    navigator.appVersion.search('Safari') != -1 
+	 && navigator.appVersion.search('Chrome') == -1 
+	 && navigator.appVersion.search('CrMo') == -1 
+	 && navigator.appVersion.search('CriOS') == -1;
+
+	browserDetectionUtils.isIe = (
+	    navigator.userAgent.toLowerCase().indexOf("msie") != -1 
+	 || navigator.userAgent.toLowerCase().indexOf("trident") != -1 );
+
+	browserDetectionUtils.inMobileMode =
+		/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+	return browserDetectionUtils;
+	
+})();</script>
+<script>/* Util functions that both the player and the editor need */
+
+var WickSharedUtils = (function () {
+
+	var wickSharedUtils = { };
+
+	/* Call callback function for every child object in parentObj */
+	wickSharedUtils.forEachChildObject = function (parentObj, callback) {
+		for(var f = 0; f < parentObj.frames.length; f++) {
+			for(var o = 0; o < parentObj.frames[f].wickObjects.length; o++) {
+				callback(parentObj.frames[f].wickObjects[o]);
+			}
+		}
+	}
+
+	/* Call callback function for every child object in parentObj's current frame */
+	wickSharedUtils.forEachActiveChildObject = function (parentObj, callback) {
+		var currFrame = parentObj.currentFrame;
+		for(var o = 0; o < parentObj.frames[currFrame].wickObjects.length; o++) {
+			callback(parentObj.frames[currFrame].wickObjects[o]);
+		}
+	}
+
+	/* */
+	var encodeString = function (str) {
+		var newStr = str;
+		newStr = encodeURI(str);
+		newStr = newStr.replace(/'/g, "%27");
+		return newStr;
+	}
+
+	/* */
+	var decodeString = function (str) {
+		var newStr = str;
+		newStr = newStr.replace(/%27/g, "'");
+		newStr = decodeURI(str);
+		return newStr;
+	}
+
+	/* Encodes scripts to avoid JSON format problems */
+	wickSharedUtils.encodeScripts = function (wickObj) {
+
+		if(wickObj.wickScripts) {
+			for (var key in wickObj.wickScripts) {
+				wickObj.wickScripts[key] = encodeString(wickObj.wickScripts[key]);
+			}
+		}
+
+		if(wickObj.fontData) {
+			wickObj.fontData.text = encodeString(wickObj.fontData.text);
+		}
+
+		if(wickObj.isSymbol) {
+			wickSharedUtils.forEachChildObject(wickObj, function(currObj) {
+				wickSharedUtils.encodeScripts(currObj);
+			});
+		}
+
+	}
+
+	/* Decodes scripts back to human-readble and eval()-able format */
+	wickSharedUtils.decodeScripts = function (wickObj) {
+		
+		if(wickObj.wickScripts) {
+			for (var key in wickObj.wickScripts) {
+				wickObj.wickScripts[key] = decodeString(wickObj.wickScripts[key])
+			}
+		}
+
+		if(wickObj.fontData) {
+			wickObj.fontData.text = decodeString(wickObj.fontData.text);
+		}
+
+		if(wickObj.isSymbol) {
+			wickSharedUtils.forEachChildObject(wickObj, function(currObj) {
+				wickSharedUtils.decodeScripts(currObj);
+			});
+		}
+
+	}
+
+	return wickSharedUtils;
+
+})();</script>
+<script>var WickPlayer = (function () {
 
 	var wickPlayer = { };
 
@@ -442,4 +590,5 @@ var WickPlayer = (function () {
 
 	return wickPlayer;
 
-})();
+})();</script>
+<script>WickPlayer.runProject('{"rootObject":{"parentObject":null,"wickScripts":{"onLoad":"//%20onLoad%0A//%20This%20script%20runs%20once%20when%20this%20object%20enters%20the%20scene.%0A","onClick":"//%20onClick%0A//%20This%20script%20runs%20when%20this%20object%20is%20clicked%20on.%0A","onUpdate":"//%20onUpdate%0A//%20This%20script%20runs%20repeatedly%20whenever%20this%20object%20is%20in%20the%20scene.%0A"},"isSymbol":true,"currentFrame":0,"frames":[{"wickObjects":[{"parentObject":null,"wickScripts":{"onLoad":"//%20onLoad%0A//%20This%20script%20runs%20once%20when%20this%20object%20enters%20the%20scene.%0Aconsole.log(%22wow%27s%22);%0Aconsole.log(%27wow%22s%27);","onClick":"//%20onClick%0A//%20This%20script%20runs%20when%20this%20object%20is%20clicked%20on.%0A","onUpdate":"//%20onUpdate%0A//%20This%20script%20runs%20repeatedly%20whenever%20this%20object%20is%20in%20the%20scene.%0A"},"fontData":{"cursorColor":"#333","cursorDelay":1000,"cursorWidth":2,"editable":true,"fontFamily":"arial black","fontSize":40,"fontStyle":"normal","fontWeight":"normal","hasBorders":false,"lineHeight":1.16,"textAlign":"left","textDecoration":"","text":"%27%27%22%22%27%27%22%22%22%27%27%27()()(%7B%7D%7B%7D%7B%7D%7B"},"isSymbol":false,"currentFrame":null,"scaleX":1,"scaleY":1,"angle":0,"flipX":false,"flipY":false,"left":325,"top":250,"width":364.58984375,"height":52.431999999999995}],"breakpoint":false}],"isRoot":true},"resolution":{"x":650,"y":500},"backgroundColor":"#FFFFFF","framerate":12}');</script>

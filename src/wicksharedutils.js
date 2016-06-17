@@ -21,14 +21,36 @@ var WickSharedUtils = (function () {
 		}
 	}
 
+	/* */
+	var encodeString = function (str) {
+		var newStr = str;
+		newStr = encodeURI(str);
+		newStr = newStr.replace(/'/g, "%27");
+		return newStr;
+	}
+
+	/* */
+	var decodeString = function (str) {
+		var newStr = str;
+		newStr = newStr.replace(/%27/g, "'");
+		newStr = decodeURI(str);
+		return newStr;
+	}
+
 	/* Encodes scripts to avoid JSON format problems */
 	wickSharedUtils.encodeScripts = function (wickObj) {
 
-		if(wickObj.isSymbol) {
+		if(wickObj.wickScripts) {
 			for (var key in wickObj.wickScripts) {
-				wickObj.wickScripts[key] = encodeURI(wickObj.wickScripts[key]);
+				wickObj.wickScripts[key] = encodeString(wickObj.wickScripts[key]);
 			}
+		}
 
+		if(wickObj.fontData) {
+			wickObj.fontData.text = encodeString(wickObj.fontData.text);
+		}
+
+		if(wickObj.isSymbol) {
 			wickSharedUtils.forEachChildObject(wickObj, function(currObj) {
 				wickSharedUtils.encodeScripts(currObj);
 			});
@@ -39,11 +61,17 @@ var WickSharedUtils = (function () {
 	/* Decodes scripts back to human-readble and eval()-able format */
 	wickSharedUtils.decodeScripts = function (wickObj) {
 		
-		if(wickObj.isSymbol) {
+		if(wickObj.wickScripts) {
 			for (var key in wickObj.wickScripts) {
-				wickObj.wickScripts[key] = decodeURI(wickObj.wickScripts[key]);
+				wickObj.wickScripts[key] = decodeString(wickObj.wickScripts[key])
 			}
+		}
 
+		if(wickObj.fontData) {
+			wickObj.fontData.text = decodeString(wickObj.fontData.text);
+		}
+
+		if(wickObj.isSymbol) {
 			wickSharedUtils.forEachChildObject(wickObj, function(currObj) {
 				wickSharedUtils.decodeScripts(currObj);
 			});

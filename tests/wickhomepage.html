@@ -1,0 +1,566 @@
+﻿<!-- This is the "empty" wick player - it doesn't do anything 
+     unless the editor bundles a project inside of it.  -->
+
+<head>
+    <title>Wick Player</title>
+
+    <style>
+        /* remove the top and left whitespace */
+    	* { margin:0; padding:0; }
+
+        /* just to be sure these are full screen */
+    	html, body { width:100%; height:100%; }
+
+        /* To remove the scrollbars */
+    	canvas { display:block; }
+    </style>
+</head>
+
+<body>
+	<div id="playerCanvasContainer">
+		<canvas id="playerCanvas"></canvas>
+	</div>
+</body>
+
+
+<script>// Framerate keeper 
+// http://www.html5gamedevs.com/topic/1828-how-to-calculate-fps-in-plain-javascript/
+var fps = { startTime : 0,
+	frameNumber : 0,
+	getFPS : function() {
+		this.frameNumber++;
+
+		var d = new Date().getTime();
+		var currentTime = ( d - this.startTime ) / 1000;
+		var result = Math.floor( ( this.frameNumber / currentTime ) );
+
+		if( currentTime > 1 ) {
+			this.startTime = new Date().getTime();
+			this.frameNumber = 0;
+		}
+
+		return result;
+	}   
+};</script>
+<script> var BrowserDetectionUtils = (function () {
+
+	var browserDetectionUtils = { };
+
+	browserDetectionUtils.isSafari = 
+	    navigator.appVersion.search('Safari') != -1 
+	 && navigator.appVersion.search('Chrome') == -1 
+	 && navigator.appVersion.search('CrMo') == -1 
+	 && navigator.appVersion.search('CriOS') == -1;
+
+	browserDetectionUtils.isIe = (
+	    navigator.userAgent.toLowerCase().indexOf("msie") != -1 
+	 || navigator.userAgent.toLowerCase().indexOf("trident") != -1 );
+
+	browserDetectionUtils.inMobileMode =
+		/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+	return browserDetectionUtils;
+	
+})();</script>
+<script>/* Util functions that both the player and the editor need */
+
+var WickSharedUtils = (function () {
+
+	var wickSharedUtils = { };
+
+	/* Call callback function for every child object in parentObj */
+	wickSharedUtils.forEachChildObject = function (parentObj, callback) {
+		for(var f = 0; f < parentObj.frames.length; f++) {
+			for(var o = 0; o < parentObj.frames[f].wickObjects.length; o++) {
+				callback(parentObj.frames[f].wickObjects[o]);
+			}
+		}
+	}
+
+	/* Call callback function for every child object in parentObj's current frame */
+	wickSharedUtils.forEachActiveChildObject = function (parentObj, callback) {
+		var currFrame = parentObj.currentFrame;
+		for(var o = 0; o < parentObj.frames[currFrame].wickObjects.length; o++) {
+			callback(parentObj.frames[currFrame].wickObjects[o]);
+		}
+	}
+
+	/* Encodes scripts to avoid JSON format problems */
+	wickSharedUtils.encodeScripts = function (wickObj) {
+
+		if(wickObj.isSymbol) {
+			for (var key in wickObj.wickScripts) {
+				wickObj.wickScripts[key] = encodeURI(wickObj.wickScripts[key]);
+			}
+
+			wickSharedUtils.forEachChildObject(wickObj, function(currObj) {
+				wickSharedUtils.encodeScripts(currObj);
+			});
+		}
+
+	}
+
+	/* Decodes scripts back to human-readble and eval()-able format */
+	wickSharedUtils.decodeScripts = function (wickObj) {
+		
+		if(wickObj.isSymbol) {
+			for (var key in wickObj.wickScripts) {
+				wickObj.wickScripts[key] = decodeURI(wickObj.wickScripts[key]);
+			}
+
+			wickSharedUtils.forEachChildObject(wickObj, function(currObj) {
+				wickSharedUtils.decodeScripts(currObj);
+			});
+		}
+
+	}
+
+	return wickSharedUtils;
+
+})();</script>
+<script>var WickPlayer = (function () {
+
+	var wickPlayer = { };
+
+	// Current project being played by player
+	var project;
+
+	// Input vars for mouse and (later) keyboard and accelerometer
+	var mousePos;
+
+	// Canvas stuff
+	var canvas;
+	var context;
+
+	var canvasContainerEl;
+
+	// Flags for different player modes (phone or desktop)
+	var mobileMode;
+	var desktopMode;
+
+	// Set this to true to stop the next requestAnimationFrame
+	var stopDrawLoop;
+
+/*****************************
+	Page/DOM Utils
+*****************************/
+
+	var getMousePos = function (canvas, evt) {
+		var rect = canvas.getBoundingClientRect();
+		return {
+			x: evt.clientX - rect.left,
+			y: evt.clientY - rect.top
+		};
+	}
+
+	var getTouchPos = function (canvas, evt) {
+		var rect = canvas.getBoundingClientRect();
+		var touch = evt.targetTouches[0];
+		return {
+			x: touch.pageX,
+			y: touch.pageY
+		};
+	}
+
+/*****************************
+	Player Setup
+*****************************/
+
+	wickPlayer.runProject = function(projectJSON) {
+
+		stopDrawLoop = false;
+
+		// Setup canvas
+		canvas = document.getElementById("playerCanvas");
+		context = canvas.getContext('2d');
+
+		canvasContainerEl = document.getElementById("playerCanvasContainer");
+
+		// Check if we're on a mobile device or not
+		mobileMode = BrowserDetectionUtils.inMobileMode;
+		desktopMode = !mobileMode;
+
+		// Setup mouse events (desktop mode)
+		if(desktopMode) {
+			canvas.addEventListener('mousemove', onMouseMove, false);
+			canvasContainerEl.addEventListener("mousedown", onMouseDown, false);
+		}
+
+		// Setup touch events (mobile mode)
+		if(mobileMode) {
+			canvasContainerEl.addEventListener("touchstart", onTouchStart, false);
+		}
+
+		// update canvas size on window resize
+		window.addEventListener('resize', resizeCanvas, false);
+		resizeCanvas();
+
+		// Load the project!
+		loadJSONProject(projectJSON);
+
+	}
+
+	wickPlayer.stopRunningCurrentProject = function() {
+
+		stopDrawLoop = true;
+		canvasContainerEl.removeEventListener("mousedown", onMouseDown);
+		canvasContainerEl.removeEventListener("touchstart", onTouchStart);
+		window.removeEventListener('resize', resizeCanvas);
+
+	}
+
+/*****************************
+	Opening projects
+*****************************/
+
+	var loadJSONProject = function (proj) {
+		project = JSON.parse(proj);
+
+		console.log("Player loading project:")
+		console.log(project);
+		
+		WickSharedUtils.decodeScripts(project.rootObject);
+		resetAllPlayheads(project.rootObject);
+		loadImages(project.rootObject);
+
+		// Start draw/update loop
+		animate();
+	}
+
+	var resetAllPlayheads = function (wickObj) {
+
+		// Set this object to it's first frame
+		wickObj.currentFrame = 0;
+
+		// Stop this object
+		// (Note: objects should probably be playing instead of stopped initially)
+		wickObj.isPlaying = true;
+
+		// Set this object to need its onLoad script run
+		wickObj.onLoadScriptRan = false;
+
+		// Recursively set all timelines to first frame as well
+		WickSharedUtils.forEachChildObject(wickObj, function(subObj) {
+			if(subObj.isSymbol) {
+				resetAllPlayheads(subObj);
+			}
+		});
+
+	}
+
+	var loadImages = function (wickObj) {
+
+		// Recursively load images of wickObj
+		WickSharedUtils.forEachChildObject(wickObj, function(subObj) {
+			if(subObj.isSymbol) {
+				loadImages(subObj);
+			} else if(subObj.imageData) {
+				subObj.image = new Image();
+				subObj.image.src = subObj.imageData;
+				subObj.image.onload = function() {
+					// Scope issue - fix this, we need it for preloaders
+					//subObj.imageIsLoaded = true;
+				};
+			}
+		});
+	}
+
+/*****************************
+	Common event functions
+*****************************/
+
+	var resizeCanvas = function () {
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+	}
+
+/*****************************
+	Desktop event functions
+*****************************/
+
+	var onMouseMove = function (evt) {
+
+		mousePos = getMousePos(canvas, evt);
+
+		// Check if we're hovered over a clickable object...
+		var hoveredOverObj = false;
+		WickSharedUtils.forEachActiveChildObject(project.rootObject, function(currObj) {
+			if(pointInsideObj(currObj, mousePos) && wickObjectIsClickable(currObj)) {
+				hoveredOverObj = true;
+			}
+		});
+
+		//...and change the cursor if we are
+		if(hoveredOverObj) {
+			canvasContainerEl.style.cursor = "pointer";
+		} else {
+			canvasContainerEl.style.cursor = "default";
+		}
+
+	}
+
+	var onMouseDown = function (evt) {
+		
+		WickSharedUtils.forEachActiveChildObject(project.rootObject, function(currObj) {
+			if(pointInsideObj(currObj, mousePos) && wickObjectIsClickable(currObj)) {
+				runOnClickScript(currObj);
+			}
+		});
+
+	}
+
+/*****************************
+	Mobile event functions
+*****************************/
+
+	var onTouchStart = function (evt) {
+
+		var touchPos = getTouchPos(canvas, evt);
+
+		WickSharedUtils.forEachActiveChildObject(project.rootObject, function(currObj) {
+			if(pointInsideObj(currObj, touchPos) && wickObjectIsClickable(currObj)) {
+				runOnClickScript(currObj);
+			}
+		});
+
+	}
+
+/*****************************
+	Utils
+*****************************/
+
+	/* Probably broken right now !!! Needs to use parent's position !!! */
+	var pointInsideObj = function(obj, point) {
+
+		var scaledObjLeft = obj.left;
+		var scaledObjTop = obj.top;
+		var scaledObjWidth = obj.width*obj.scaleX;
+		var scaledObjHeight = obj.height*obj.scaleY;
+
+		var centeredCanvasOffsetX = (window.innerWidth - project.resolution.x) / 2;
+		var centeredCanvasOffsetY = (window.innerHeight - project.resolution.y) / 2;
+
+		return point.x >= scaledObjLeft + centeredCanvasOffsetX && 
+			   point.y >= scaledObjTop  + centeredCanvasOffsetY &&
+			   point.x <= scaledObjLeft + scaledObjWidth + centeredCanvasOffsetX && 
+			   point.y <= scaledObjTop  + scaledObjHeight + centeredCanvasOffsetY;
+	}
+
+	var wickObjectIsClickable = function (wickObj) {
+		return wickObj.wickScripts['onClick'];
+	}
+
+/*****************************
+	Draw/update loop
+*****************************/
+
+	var animate = function () {
+
+		setTimeout(function() {
+			if(!stopDrawLoop) {
+				requestAnimationFrame(animate);
+				update();
+				draw();
+			}
+		}, 1000 / project.framerate);
+
+	}
+
+/*****************************
+	Update/run scripts
+*****************************/
+
+	var update = function () {
+		
+		updateObj(project.rootObject);
+
+	}
+
+	var updateObj = function (obj) {
+
+		// Run obj's onLoad if necessary, then all subObj's
+		runOnLoadScript(obj);
+
+		// Run obj's update if necessary, then all subObj's
+		runUpdateScript(obj);
+
+		// Advance obj's timeline one frame, then subobj's timelines
+		advanceTimeline(obj);
+
+	}
+
+	var runOnLoadScript = function (obj) {
+
+		if(!obj.onLoadScriptRan) {
+
+			// Run onLoad script
+			if(obj && obj.wickScripts) {
+				//console.log(obj.wickScripts['onLoad']);
+				evalScript(obj, obj.wickScripts.onLoad);
+				obj.onLoadScriptRan = true;
+			} else {
+				//console.log("obj contains no wickScripts or onLoad function");
+			}
+
+			// Recursively run all onLoads
+			if(obj.isSymbol) {
+				WickSharedUtils.forEachActiveChildObject(obj, function(subObj) {
+					runOnLoadScript(subObj);
+				});
+			}
+
+		}
+
+	}
+
+	var runUpdateScript = function (obj) {
+
+		// Run update script
+		if(obj && obj.wickScripts) {
+			evalScript(obj, obj.wickScripts.onUpdate);
+		}
+
+		// Recursively run all updates
+		if(obj.isSymbol) {
+			WickSharedUtils.forEachActiveChildObject(obj, function(subObj) {
+				runUpdateScript(subObj);
+			});
+		}
+
+	}
+
+	var runOnClickScript = function (obj) {
+
+		if(obj.wickScripts.onClick) {
+			evalScript(obj, obj.wickScripts.onClick);
+		}
+
+	}
+
+	var evalScript = function (obj, script) {
+
+		var gotoAndPlay = function (frame) {
+			project.rootObject.currentFrame = frame;
+			project.rootObject.isPlaying = true;
+		}
+		var gotoAndStop = function (frame) {
+			project.rootObject.currentFrame = frame;
+			project.rootObject.isPlaying = false;
+		}
+		var play = function (frame) {
+			project.rootObject.isPlaying = true;
+		}
+		var stop = function (frame) {
+			project.rootObject.isPlaying = false;
+		}
+
+		for(var i = 0; i < 100; i++) { // !!! why plseae dont do this
+			script = script.replace("this.","obj.");
+		}
+		eval(script);
+
+	}
+
+	var advanceTimeline = function (obj) {
+
+		// Advance timeline for this object
+		if(obj.isPlaying) {
+			obj.currentFrame++;
+			if(obj.currentFrame == obj.frames.length) {
+				obj.currentFrame = 0;
+			}
+
+			if(obj.frames[obj.currentFrame].breakpoint) {
+				obj.isPlaying = false;
+			}
+
+			obj.onLoadScriptRan = false;
+		}
+
+		// Recusively advance timelines of all children
+		if(obj.isSymbol) {
+			WickSharedUtils.forEachActiveChildObject(obj, function(subObj) {
+				if(subObj.isSymbol) {
+					advanceTimeline(subObj);
+				}
+			});
+		}
+
+	}
+
+/*****************************
+	Draw
+*****************************/
+
+	var draw = function () {
+		// Clear canvas
+		context.clearRect(0, 0, canvas.width, canvas.height);
+
+		// Draw root object, this will recursively draw every object!
+		context.save();
+			context.translate(
+				(window.innerWidth - project.resolution.x)  / 2, 
+				(window.innerHeight - project.resolution.y)  / 2);
+			drawWickObject(project.rootObject);
+		context.restore();
+
+		// Draw FPS counter
+		context.fillStyle = "Black";
+		context.font      = "normal 14pt Arial";
+		context.fillText(fps.getFPS() + " FPS", canvas.width-80, 29);
+
+	}
+
+	var doRotationForObject = function (wickObject) {
+
+		context.translate(wickObject.width/2, wickObject.height/2);
+		context.rotate(wickObject.angle/360*2*3.14159);
+		context.translate(-wickObject.width/2, -wickObject.height/2);
+
+	}
+
+	var drawWickObject = function (obj) {
+
+		if(obj.isSymbol) {
+
+			// Recursively draw all sub objects.
+
+			context.save();
+			context.translate(obj.left, obj.top);
+			doRotationForObject(obj);
+			context.scale(obj.scaleX, obj.scaleY);
+
+				WickSharedUtils.forEachActiveChildObject(obj, function(subObj) {
+					drawWickObject(subObj);
+				});
+
+			context.restore();
+
+		} else {
+
+			// Draw the content of this static object.
+
+			context.save();
+
+				context.translate(obj.left, obj.top);
+				doRotationForObject(obj);
+				context.scale(obj.scaleX, obj.scaleY);
+
+				if(obj.imageData) {
+					context.drawImage(obj.image, 0, 0);
+				} else if(obj.fontData) {
+					context.fillStyle = "Black";
+					context.font      = "normal " + obj.fontData.fontSize + "px " + obj.fontData.fontFamily;
+					context.fillText(obj.fontData.text, 0, 0);
+				}
+
+			context.restore();
+			
+		}
+
+	}
+
+	return wickPlayer;
+
+})();</script>
+<script>WickPlayer.runProject('{"rootObject":{"parentObject":null,"wickScripts":{"onLoad":"//%20onLoad%0A//%20This%20script%20runs%20once%20when%20this%20object%20enters%20the%20scene.%0A","onClick":"//%20onClick%0A//%20This%20script%20runs%20when%20this%20object%20is%20clicked%20on.%0A","onUpdate":"//%20onUpdate%0A//%20This%20script%20runs%20repeatedly%20whenever%20this%20object%20is%20in%20the%20scene.%0A"},"isSymbol":true,"currentFrame":0,"frames":[{"wickObjects":[{"parentObject":null,"wickScripts":{"onLoad":"// onLoad\n// This script runs once when this object enters the scene.\nthis.timer = 0;","onClick":"// onClick\n// This script runs when this object is clicked on.\n","onUpdate":"// onUpdate\n// This script runs repeatedly whenever this object is in the scene.\nthis.angle = Math.sin(this.timer)*30\nthis.timer++;"},"fontData":{"cursorColor":"#333","cursorDelay":1000,"cursorWidth":2,"editable":true,"fontFamily":"arial black","fontSize":40,"fontStyle":"normal","fontWeight":"normal","hasBorders":false,"lineHeight":1.16,"textAlign":"left","textDecoration":"","text":"IT'S WICK!!!"},"isSymbol":false,"currentFrame":null,"scaleX":1,"scaleY":1,"angle":343.1050722452494,"flipX":false,"flipY":false,"left":209.81986105046747,"top":242.7522860053017,"width":257.75390625,"height":52.431999999999995},{"parentObject":null,"wickScripts":{"onLoad":"// onLoad\n// This script runs once when this object enters the scene.\nthis.timer = 0;","onClick":"// onClick\n// This script runs when this object is clicked on.\n","onUpdate":"// onUpdate\n// This script runs repeatedly whenever this object is in the scene.\nthis.angle += 20;"},"fontData":{"cursorColor":"#333","cursorDelay":1000,"cursorWidth":2,"editable":true,"fontFamily":"arial black","fontSize":40,"fontStyle":"normal","fontWeight":"normal","hasBorders":false,"lineHeight":1.16,"textAlign":"left","textDecoration":"","text":"AAAAAAAAAAAAAAAAAAAAAAAAAAA"},"isSymbol":false,"currentFrame":null,"scaleX":1,"scaleY":1,"angle":343.1050722452494,"flipX":false,"flipY":false,"left":117.31986105046747,"top":190.7522860053017,"width":840.05859375,"height":52.431999999999995},{"parentObject":null,"wickScripts":{"onLoad":"// onLoad\n// This script runs once when this object enters the scene.\n","onClick":"// onClick\n// This script runs when this object is clicked on.\n","onUpdate":"// onUpdate\n// This script runs repeatedly whenever this object is in the scene.\nthis.angle-=2;"},"imageData":"data:image/png;base64,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","isSymbol":false,"currentFrame":null,"scaleX":0.9696261682242991,"scaleY":1,"angle":0,"flipX":true,"flipY":false,"width":214,"height":194,"left":471.5,"top":131},{"parentObject":null,"wickScripts":{"onLoad":"// onLoad\n// This script runs once when this object enters the scene.\nproject.framerate = 30;","onClick":"// onClick\n// This script runs when this object is clicked on.\ngotoAndStop(1);","onUpdate":"// onUpdate\n// This script runs repeatedly whenever this object is in the scene.\nthis.angle+=30;"},"imageData":"data:image/png;base64,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","isSymbol":false,"currentFrame":null,"scaleX":1,"scaleY":1,"angle":0,"flipX":false,"flipY":false,"width":214,"height":194,"left":10,"top":119},{"parentObject":null,"wickScripts":{"onLoad":"// onLoad\n// This script runs once when this object enters the scene.\nproject.framerate = 30;","onClick":"// onClick\n// This script runs when this object is clicked on.\ngotoAndStop(1);","onUpdate":"// onUpdate\n// This script runs repeatedly whenever this object is in the scene.\nthis.top += 4;"},"imageData":"data:image/png;base64,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","isSymbol":false,"currentFrame":null,"scaleX":1,"scaleY":1,"angle":0,"flipX":false,"flipY":false,"width":214,"height":194,"left":231.5,"top":354}],"breakpoint":true},{"wickObjects":[{"parentObject":null,"wickScripts":{"onLoad":"// onLoad\n// This script runs once when this object enters the scene.\n","onClick":"// onClick\n// This script runs when this object is clicked on.\n","onUpdate":"// onUpdate\n// This script runs repeatedly whenever this object is in the scene.\n"},"fontData":{"cursorColor":"#333","cursorDelay":1000,"cursorWidth":2,"editable":true,"fontFamily":"arial black","fontSize":40,"fontStyle":"normal","fontWeight":"normal","hasBorders":false,"lineHeight":1.16,"textAlign":"left","textDecoration":"","text":"why did you click\n\non\nme \n?"},"isSymbol":false,"currentFrame":null,"scaleX":1,"scaleY":1,"angle":0,"flipX":false,"flipY":false,"left":325,"top":250,"width":380.0390625,"height":262.15999999999997}],"breakpoint":false}],"isRoot":true},"resolution":{"x":650,"y":500},"backgroundColor":"#FFFFFF","framerate":12}');</script>
