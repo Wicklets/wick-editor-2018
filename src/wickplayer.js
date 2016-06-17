@@ -134,7 +134,7 @@ var WickPlayer = (function () {
 		WickSharedUtils.forEachChildObject(wickObj, function(subObj) {
 			if(subObj.isSymbol) {
 				loadImages(subObj);
-			} else {
+			} else if(subObj.imageData) {
 				subObj.image = new Image();
 				subObj.image.src = subObj.imageData;
 				subObj.image.onload = function() {
@@ -422,7 +422,14 @@ var WickPlayer = (function () {
 				context.translate(obj.left, obj.top);
 				doRotationForObject(obj);
 				context.scale(obj.scaleX, obj.scaleY);
-				context.drawImage(obj.image, 0, 0);
+
+				if(obj.imageData) {
+					context.drawImage(obj.image, 0, 0);
+				} else if(obj.fontData) {
+					context.fillStyle = "Black";
+					context.font      = "normal " + obj.fontData.fontSize + "px " + obj.fontData.fontFamily;
+					context.fillText(obj.fontData.text, 0, 0);
+				}
 
 			context.restore();
 			
