@@ -101,12 +101,62 @@ var WickPlayer = (function () {
 
 		WickSharedUtils.decodeScripts(project.rootObject);
 		resetAllPlayheads(project.rootObject);
+		generateObjectNameReferences(project.rootObject);
+		generateObjectParentReferences(project.rootObject);
+		generateBuiltinWickFunctions(project.rootObject);
 		loadImages(project.rootObject);
 
 		// Start draw/update loop
 		animate();
 	}
 
+	/* Create variables inside each wickobject so we can say root.bogoObject.play(); and such */
+	var generateObjectNameReferences = function (wickObj) {
+		WickSharedUtils.forEachChildObject(wickObj, function(subObj) {
+			wickObj[subObj.name] = subObj;
+
+			if(subObj.isSymbol) {
+				generateObjectNameReferences(subObj);
+			}
+		});
+	}
+
+	/* We'll need these when evaling scripts */
+	var generateObjectParentReferences = function (wickObj) {
+		WickSharedUtils.forEachChildObject(wickObj, function(subObj) {
+			subObj.parentObj = wickObj;
+			if(subObj.isSymbol) {
+				generateObjectParentReferences(subObj);
+			}
+		});
+	}
+
+	/* */
+	var generateBuiltinWickFunctions = function (wickObj) {
+		if(wickObj.isSymbol) {
+			// Setup builtin wick scripting methods and objects
+			wickObj.gotoAndPlay = function (frame) {
+				wickObj.currentFrame = frame;
+				wickObj.isPlaying = true;
+			}
+			wickObj.gotoAndStop = function (frame) {
+				wickObj.currentFrame = frame;
+				wickObj.isPlaying = false;
+			}
+			wickObj.play = function (frame) {
+				wickObj.isPlaying = true;
+			}
+			wickObj.stop = function (frame) {
+				wickObj.isPlaying = false;
+			}
+
+			WickSharedUtils.forEachChildObject(wickObj, function(subObj) {
+				generateBuiltinWickFunctions(subObj);
+			});
+		}
+	}
+
+	/* Make sure all objects start at first frame and start playing */
 	var resetAllPlayheads = function (wickObj) {
 
 		// Set this object to it's first frame
@@ -128,9 +178,9 @@ var WickPlayer = (function () {
 
 	}
 
+	/* Recursively load images of wickObj */
 	var loadImages = function (wickObj) {
 
-		// Recursively load images of wickObj
 		WickSharedUtils.forEachChildObject(wickObj, function(subObj) {
 			if(subObj.isSymbol) {
 				loadImages(subObj);
@@ -274,7 +324,7 @@ var WickPlayer = (function () {
 		if(!obj.onLoadScriptRan) {
 
 			// Run onLoad script
-			if(obj && obj.wickScripts) {
+			if(obj && !obj.isRoot && obj.wickScripts) {
 				//console.log(obj.wickScripts['onLoad']);
 				evalScript(obj, obj.wickScripts.onLoad);
 				obj.onLoadScriptRan = true;
@@ -296,7 +346,7 @@ var WickPlayer = (function () {
 	var runUpdateScript = function (obj) {
 
 		// Run update script
-		if(obj && obj.wickScripts) {
+		if(obj && !obj.isRoot && obj.wickScripts) {
 			evalScript(obj, obj.wickScripts.onUpdate);
 		}
 
@@ -319,20 +369,26 @@ var WickPlayer = (function () {
 
 	var evalScript = function (obj, script) {
 
+		// Setup builtin wick scripting methods and objects
 		var gotoAndPlay = function (frame) {
-			project.rootObject.currentFrame = frame;
-			project.rootObject.isPlaying = true;
+			obj.parentObj.rootObject.currentFrame = frame;
+			obj.parentObj.rootObject.isPlaying = true;
 		}
 		var gotoAndStop = function (frame) {
-			project.rootObject.currentFrame = frame;
-			project.rootObject.isPlaying = false;
+			obj.parentObj.rootObject.currentFrame = frame;
+			obj.parentObj.rootObject.isPlaying = false;
 		}
 		var play = function (frame) {
-			project.rootObject.isPlaying = true;
+			obj.parentObj.rootObject.isPlaying = true;
 		}
 		var stop = function (frame) {
-			project.rootObject.isPlaying = false;
+			obj.parentObj.rootObject.isPlaying = false;
 		}
+		var root = project.rootObject;
+		var parent = obj.parentObj;
+		WickSharedUtils.forEachChildObject(obj.parentObj, function(subObj) {
+			window[subObj.name] = subObj;
+		});
 
 		for(var i = 0; i < 100; i++) { // !!! why plseae dont do this
 			script = script.replace("this.","obj.");

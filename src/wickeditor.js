@@ -90,6 +90,10 @@ var WickEditor = function () {
 		that.fabricCanvas.setBackgroundColor(this.value);
 	};
 
+	$('#objectName').on('input propertychange', function () {
+		that.fabricCanvas.getActiveObject().wickObject.name = $('#objectName').val();
+	});
+
 	document.getElementById('fontSelector').onchange = function () {
 		that.fabricCanvas.getActiveObject().fontFamily = document.getElementById('fontSelector').value;
 		that.fabricCanvas.getCanvas().renderAll();
@@ -154,9 +158,13 @@ WickEditor.prototype.handleKeyboardInput = function (eventType, event) {
 		}
 
 		// Backspace: delete selected objects
-		if (event.keyCode == 8) {
-			event.preventDefault();
-			this.actionHandler.doAction('delete', []);
+		if (document.activeElement.nodeName == 'TEXTAREA' || document.activeElement.nodeName == 'INPUT') {
+			// don't prevent default - we're editing a text box
+		} else {
+			if (event.keyCode == 8) {
+				event.preventDefault();
+				this.actionHandler.doAction('delete', []);
+			}	
 		}
 
 		// Tilde: log project state to canvas (for debugging)
@@ -394,6 +402,7 @@ WickEditor.prototype.updatePropertiesGUI = function(tab) {
 			$("#projectProperties").css('display', 'inline');
 			break;
 		case 'symbol':
+			document.getElementById('objectName').value = this.fabricCanvas.getActiveObject().wickObject.name;
 			$("#objectProperties").css('display', 'inline');
 			break;
 		case 'text':
