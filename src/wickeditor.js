@@ -339,6 +339,8 @@ WickEditor.prototype.convertSelectedObjectToSymbol = function () {
 			var childNewTop = childOldTop - symbol.top;
 			symbol.frames[0].wickObjects[i].left = childNewLeft;
 			symbol.frames[0].wickObjects[i].top = childNewTop;
+			/*symbol.frames[0].wickObjects[i].left = 0;
+			symbol.frames[0].wickObjects[i].top = 0;*/
 		}
 		while(selectedObject._objects.length > 0) {
 			selectedObject._objects[0].remove();
