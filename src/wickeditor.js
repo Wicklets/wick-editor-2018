@@ -59,31 +59,51 @@ var WickEditor = function () {
 		}
 	}
 
-    $('#projectSizeX').on('input propertychange', function() {
+	$('#projectSizeX').on('input propertychange', function () {
 
-    	testPositiveInteger($('#projectSizeX').val(), function(n) {
-    		that.project.resolution.x = n;
-    		that.resizeCanvasAndGUI();
-    	});
-
-	});
-
-	$('#projectSizeY').on('input propertychange', function() {
-
-    	testPositiveInteger($('#projectSizeY').val(), function(n) {
-    		that.project.resolution.y = n;
-    		that.resizeCanvasAndGUI();
-    	});
+		testPositiveInteger($('#projectSizeX').val(), function(n) {
+			that.project.resolution.x = n;
+			that.resizeCanvasAndGUI();
+		});
 
 	});
 
-	$('#frameRate').on('input propertychange', function() {
+	$('#projectSizeY').on('input propertychange', function () {
 
-    	testPositiveInteger($('#frameRate').val(), function(n) {
-    		that.project.framerate = n;
-    	});
+		testPositiveInteger($('#projectSizeY').val(), function(n) {
+			that.project.resolution.y = n;
+			that.resizeCanvasAndGUI();
+		});
 
 	});
+
+	$('#frameRate').on('input propertychange', function () {
+
+		testPositiveInteger($('#frameRate').val(), function(n) {
+			that.project.framerate = n;
+		});
+
+	});
+
+	document.getElementById('projectBgColor').onchange = function () {
+		that.project.backgroundColor = this.value;
+		that.fabricCanvas.setBackgroundColor(this.value);
+	};
+
+	document.getElementById('fontSelector').onchange = function () {
+		that.fabricCanvas.getActiveObject().fontFamily = document.getElementById('fontSelector').value;
+		that.fabricCanvas.getCanvas().renderAll();
+	}
+
+	document.getElementById('fontColor').onchange = function () {
+		that.fabricCanvas.getActiveObject().fill = this.value;
+		that.fabricCanvas.getCanvas().renderAll();
+	};
+
+	document.getElementById('fontSize').onchange = function () {
+		that.fabricCanvas.getActiveObject().fontSize = this.value;
+		that.fabricCanvas.getCanvas().renderAll();
+	};
 
 }
 
@@ -365,15 +385,16 @@ WickEditor.prototype.clearFrame = function () {
 WickEditor.prototype.updatePropertiesGUI = function(tab) {
 
 	$("#projectProperties").css('display', 'none');
-	$("#symbolProperties").css('display', 'none');
+	$("#objectProperties").css('display', 'none');
 	$("#textProperties").css('display', 'none');
 
 	switch(tab) {
 		case 'project':
+			document.getElementById('projectBgColor').value = this.project.backgroundColor;
 			$("#projectProperties").css('display', 'inline');
 			break;
 		case 'symbol':
-			$("#symbolProperties").css('display', 'inline');
+			$("#objectProperties").css('display', 'inline');
 			break;
 		case 'text':
 			$("#textProperties").css('display', 'inline');
@@ -544,10 +565,14 @@ WickEditor.prototype.loadProjectFromJSON = function (jsonString) {
 	this.currentObject = this.project.rootObject;
 	this.currentObject.currentFrame = 0;
 
+	// Reset bg color
+	this.fabricCanvas.setBackgroundColor(this.project.backgroundColor);
+
 	// Load wickobjects in the frame we moved to into the canvas
 	this.syncFabricCanvasWithProject();
 
 	this.timelineController.updateGUI(this.currentObject);
+	this.updatePropertiesGUI('project');
 }
 
 /*************************

@@ -98,7 +98,7 @@ var WickPlayer = (function () {
 
 		console.log("Player loading project:")
 		console.log(project);
-		
+
 		WickSharedUtils.decodeScripts(project.rootObject);
 		resetAllPlayheads(project.rootObject);
 		loadImages(project.rootObject);
@@ -376,11 +376,14 @@ var WickPlayer = (function () {
 		// Clear canvas
 		context.clearRect(0, 0, canvas.width, canvas.height);
 
+		context.fillStyle = project.backgroundColor;
+		context.fillRect(0,0, window.innerWidth,window.innerHeight);
+
 		// Draw root object, this will recursively draw every object!
 		context.save();
 			context.translate(
-				(window.innerWidth - project.resolution.x)  / 2, 
-				(window.innerHeight - project.resolution.y)  / 2);
+				(window.innerWidth - project.resolution.x) / 2, 
+				(window.innerHeight - project.resolution.y) / 2);
 			drawWickObject(project.rootObject);
 		context.restore();
 

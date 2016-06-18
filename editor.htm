@@ -184,18 +184,41 @@
 			<div id="projectProperties">
 				Project Properties
 				<hr />
-				Background color: <input type="color" value="#FFFFFF" id="canvasColor"><br />
-				Size: <input type="text" id="projectSizeX" size="4" value="650"> x <input type="text" id="projectSizeY" size="4" value="500"><br />
+				Background color: <input type="color" value="#FFFFFF" id="projectBgColor"><br />
+				Size: <input type="text" id="projectSizeX" size="4" value="650"> x 
+				      <input type="text" id="projectSizeY" size="4" value="500"><br />
 				Framerate: <input type="text" id="frameRate" size="4" value="12"><br />
 			</div>
-			<div id="symbolProperties">
-				Symbol Properties
+			<div id="objectProperties">
+				Object Properties
 				<hr />
+				Opacity: 
+				<br />
 				Name: <input type="text" name="symbolName"><br />
 			</div>
 			<div id="textProperties">
 				Text Properties
 				<hr />
+				Font: <select id="fontSelector">
+					<option value="Georgia">Georgia</option>
+					<option value="Palatino Linotype">Palatino Linotype</option>
+					<option value="Book Antiqua">Book Antiqua</option>
+					<option value="Times New Roman">Times New Roman</option>
+					<option value="Arial" selected>Arial</option>
+					<option value="Helvetica">Helvetica</option>
+					<option value="Arial Black">Arial Black</option>
+					<option value="Comic Sans MS">Comic Sans MS</option>
+					<option value="Impact">Impact</option>
+					<option value="Lucida Sans Unicode">Lucida Sans Unicode</option>
+					<option value="Tahoma">Tahoma</option>
+					<option value="Geneva">Geneva</option>
+					<option value="Trebuchet MS">Trebuchet MS</option>
+					<option value="Verdana">Verdana</option>
+					<option value="Courier New">Courier New</option>
+					<option value="Lucida Console">Lucida Console</option>
+				</select><br />
+				Color: <input type="color" value="#FFFFFF" id="fontColor"><br />
+				Size: <input type="range" value="40" min="2" max="150" id="fontSize"><br />
 			</div>
 		</div>
 

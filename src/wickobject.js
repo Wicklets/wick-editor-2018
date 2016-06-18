@@ -74,7 +74,7 @@ WickObject.prototype.setDefaultFontValues = function (text) {
 		cursorWidth: 2,
 		editable: true,
 		//editingBorderColor: undefined,
-		fontFamily: 'arial black',
+		fontFamily: 'arial',
 		fontSize: 40,
 		fontStyle: 'normal',
 		fontWeight: 'normal',

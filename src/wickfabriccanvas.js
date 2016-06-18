@@ -171,6 +171,11 @@ FabricCanvas.prototype.clearCanvas = function () {
 
 }
 
+FabricCanvas.prototype.setBackgroundColor = function (color) {
+	this.frameInside.fill = color;
+	this.canvas.renderAll();
+}
+
 FabricCanvas.prototype.getCanvas = function() {
 	return this.canvas;
 }
@@ -401,6 +406,7 @@ FabricCanvas.prototype.makeFabricObjectFromWickObject = function (wickObject, ca
 			// Set font properties
 			var newFabricText = new fabric.IText(wickObject.fontData.text, { 
 				fontFamily: wickObject.fontData.fontFamily,
+				fontSize: wickObject.fontData.fontSize,
 				text: wickObject.fontData.text
 			});
 
@@ -502,6 +508,7 @@ FabricCanvas.prototype.getWickObjectsInCanvas = function (projectResolution) {
 
 			if(wickObject.fontData) {
 				wickObject.fontData.text = fabricObj.text;
+				wickObject.fontData.fontSize = fabricObj.fontSize;
 				wickObject.fontData.fontFamily = fabricObj.fontFamily;
 			}
 
