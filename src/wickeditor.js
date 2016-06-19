@@ -133,7 +133,15 @@ WickEditor.prototype.updateMousePosition = function (event) {
 	this.mouse.y = event.clientY;
 }
 
+WickEditor.prototype.clearKeys = function () {
+	this.keys = [];
+}
+
 WickEditor.prototype.handleKeyboardInput = function (eventType, event) {
+
+	var that = this;
+
+	var forceControlKeyUp = function () { that.keys[90] = false; };
 
 	if(eventType === "keydown") {
 
@@ -144,20 +152,25 @@ WickEditor.prototype.handleKeyboardInput = function (eventType, event) {
 
 		// Control-shift-z: redo
 		if (event.keyCode == 90 && controlKeyDown && shiftKeyDown) {
+			forceControlKeyUp();
 			this.actionHandler.redoAction();	
 		}
 		// Control-z: undo
 		else if (event.keyCode == 90 && controlKeyDown) {
+			forceControlKeyUp();
 			this.actionHandler.undoAction();
 		}
 
 		// Control-s: save
 		else if (event.keyCode == 83 && controlKeyDown) {
-			console.error("Save not yet implemented")
+			forceControlKeyUp();
+			event.preventDefault();
+			this.saveProject();
 		}
 
 		// Control-a: Select all
 		if (event.keyCode == 65 && controlKeyDown) {
+			forceControlKeyUp();
 			event.preventDefault();
 			this.fabricCanvas.selectAll();
 		}
@@ -459,14 +472,20 @@ WickEditor.prototype.importFilesDroppedIntoEditor = function(files) {
 	// Retrieve uploaded files data
 	for (var i = 0; i < files.length; i++) {
 		var file = files[i];
-		console.log(file);
 
 		// Read file as data URL
 		var reader = new FileReader();
 		reader.onload = (function(theFile) {
 			return function(e) {
-				// TODO: Check filetype for image/sound/video/etc.
-				that.importImage(theFile.name, e.target.result)
+				if(file.type === 'image/png') {
+					that.importImage(theFile.name, e.target.result)
+				} else if(file.type === 'application/json') {
+					var reader = new FileReader();
+					reader.onloadend = function(e) {
+						that.loadProjectFromJSON(this.result);
+					};
+					reader.readAsText(file);
+				}
 			};
 		})(file);
 		reader.readAsDataURL(file);

@@ -73,11 +73,13 @@
 		document.addEventListener("copy", function(event) {
 			focusHiddenArea();
 			wickEditor.handleCopyEvent(event);
+			wickEditor.clearKeys();
 		});
 
 		document.addEventListener("paste", function(event) {
 			focusHiddenArea();
 			wickEditor.importFilesPastedIntoEditor(event);
+			wickEditor.clearKeys();
 		});
 
 		$("#editorCanvasContainer").on('drop', function(e) {
