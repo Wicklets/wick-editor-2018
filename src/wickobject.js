@@ -161,14 +161,3 @@ WickObject.prototype.getRelativePosition = function () {
 	}
 
 }
-
-/*****************************
-	Frames
-*****************************/
-
-var WickFrame = function () {
-
-	this.wickObjects = [];
-	this.breakpoint = false;
-
-};
