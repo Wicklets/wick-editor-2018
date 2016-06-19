@@ -149,7 +149,15 @@
 	<!-- Timeline GUI, centered at the top of the screen -->
 
 		<div id="timelineGUI" class="GUIBox">
-			<div class="button" id="addEmptyFrameButton" onclick="wickEditor.actionHandler.doAction('addEmptyFrame', []);">Add Empty Frame</div>
+			<div class="button" id="addEmptyFrameButton" onclick="wickEditor.actionHandler.doAction('addEmptyFrame', []);">
+				<img src="resources/ic_add_black.png" width="10" />
+			</div>
+			<div class="button" id="addEmptyFrameButton">
+				<img src="resources/ic_keyboard_arrow_left.png" width="10" />
+			</div>
+			<div class="button" id="addEmptyFrameButton">
+				<img src="resources/ic_keyboard_arrow_right.png" width="10" />
+			</div>
 			<div id="timelineScrollContainer">
 				<div id="timeline">
 					<!-- Populated with 'timelineFrame' divs by editor. -->
