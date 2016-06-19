@@ -109,6 +109,10 @@ var WickEditor = function () {
 		that.fabricCanvas.getCanvas().renderAll();
 	};
 
+	$('#htmlTextBox').on('input propertychange', function () {
+		that.fabricCanvas.getActiveObject().wickObject.htmlData = $('#htmlTextBox').val();
+	});
+
 }
 
 /***********************************
@@ -176,13 +180,9 @@ WickEditor.prototype.handleKeyboardInput = function (eventType, event) {
 		}
 
 		// Backspace: delete selected objects
-		if (document.activeElement.nodeName == 'TEXTAREA' || document.activeElement.nodeName == 'INPUT') {
-			// don't prevent default - we're editing a text box
-		} else {
-			if (event.keyCode == 8) {
-				event.preventDefault();
-				this.actionHandler.doAction('delete', []);
-			}	
+		if (event.keyCode == 8 && document.activeElement.nodeName != 'TEXTAREA') {
+			event.preventDefault();
+			this.actionHandler.doAction('delete', []);	
 		}
 
 		// Tilde: log project state to canvas (for debugging)
@@ -273,6 +273,25 @@ WickEditor.prototype.addNewText = function (text) {
 	this.fabricCanvas.addWickObjectToCanvas(textWickObject);
 
 	console.error("Remeber to select new text here!")
+
+	this.actionHandler.doAction('gotoFrame', [this.currentObject.currentFrame], true);
+
+}
+
+WickEditor.prototype.addNewHTMLSnippet = function () {
+
+	var htmlSnippetWickObject = new WickObject();
+
+	htmlSnippetWickObject.setDefaultPositioningValues();
+	htmlSnippetWickObject.htmlData = '<iframe width="560" height="315" src="https://www.youtube.com/embed/AxZ6RG5UeiU" frameborder="0" allowfullscreen></iframe>';
+	htmlSnippetWickObject.left = window.innerWidth/2;
+	htmlSnippetWickObject.top = window.innerHeight/2;
+
+	htmlSnippetWickObject.parentObject = this.currentObject;
+
+	this.fabricCanvas.addWickObjectToCanvas(htmlSnippetWickObject);
+
+	console.error("Remeber to select HTML snippet here!");
 
 	this.actionHandler.doAction('gotoFrame', [this.currentObject.currentFrame], true);
 
@@ -415,6 +434,7 @@ WickEditor.prototype.updatePropertiesGUI = function(tab) {
 	$("#projectProperties").css('display', 'none');
 	$("#objectProperties").css('display', 'none');
 	$("#textProperties").css('display', 'none');
+	$("#htmlSnippetProperties").css('display', 'none');
 
 	switch(tab) {
 		case 'project':
@@ -427,6 +447,9 @@ WickEditor.prototype.updatePropertiesGUI = function(tab) {
 			break;
 		case 'text':
 			$("#textProperties").css('display', 'inline');
+			break;
+		case 'htmlSnippet':
+			$("#htmlSnippetProperties").css('display', 'inline');
 			break;
 	}
 
@@ -454,7 +477,7 @@ WickEditor.prototype.importFilesPastedIntoEditor = function (event) {
 				var blob = items[i].getAsFile();
 				var URLObj = window.URL || window.webkitURL;
 				var source = URLObj.createObjectURL(blob);
-				this.importImage("File names for pasted images not set.", source);
+				this.importImageFile("File names for pasted images not set.", source);
 			} else if (fileType == 'text/plain') {
 				this.addNewText(file)
 			} else if (fileType == 'text/wickobjectjson' ||
@@ -477,14 +500,10 @@ WickEditor.prototype.importFilesDroppedIntoEditor = function(files) {
 		var reader = new FileReader();
 		reader.onload = (function(theFile) {
 			return function(e) {
-				if(file.type === 'image/png') {
-					that.importImage(theFile.name, e.target.result)
+				if(file.type === 'image/png' || file.type === 'image/jpeg') {
+					that.importImageFile(theFile.name, e.target.result)
 				} else if(file.type === 'application/json') {
-					var reader = new FileReader();
-					reader.onloadend = function(e) {
-						that.loadProjectFromJSON(this.result);
-					};
-					reader.readAsText(file);
+					that.importProjectFile(file);
 				}
 			};
 		})(file);
@@ -492,7 +511,17 @@ WickEditor.prototype.importFilesDroppedIntoEditor = function(files) {
 	}
 }
 
-WickEditor.prototype.importImage = function (name, data) {
+WickEditor.prototype.importProjectFile = function (file) {
+	var that = this;
+
+	var reader = new FileReader();
+	reader.onloadend = function(e) {
+		that.loadProjectFromJSON(this.result);
+	};
+	reader.readAsText(file);
+}
+
+WickEditor.prototype.importImageFile = function (name, data) {
 
 	var left = 0;
 	var top = 0;
@@ -512,11 +541,11 @@ WickEditor.prototype.importImage = function (name, data) {
 
 }
 
-WickEditor.prototype.importSound = function (name, data) {
+WickEditor.prototype.importSoundFile = function (name, data) {
 
 }
 
-WickEditor.prototype.importVectors = function (name, data) {
+WickEditor.prototype.importVectorFile = function (name, data) {
 
 }
 

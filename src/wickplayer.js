@@ -104,6 +104,7 @@ var WickPlayer = (function () {
 		generateObjectNameReferences(project.rootObject);
 		generateObjectParentReferences(project.rootObject);
 		generateBuiltinWickFunctions(project.rootObject);
+		generateHTMLSnippetDivs(project.rootObject);
 		loadImages(project.rootObject);
 
 		// Start draw/update loop
@@ -154,6 +155,28 @@ var WickPlayer = (function () {
 				generateBuiltinWickFunctions(subObj);
 			});
 		}
+	}
+
+	/* */
+	var generateHTMLSnippetDivs = function (wickObj) {
+
+		if (wickObj.htmlData) {
+			var snippetDiv = document.createElement("div");
+			snippetDiv.style.position = 'fixed';
+			snippetDiv.style.width = '600px';
+			snippetDiv.style.height = '600px';
+			snippetDiv.style.top = wickObj.top + 'px';
+			snippetDiv.style.left = wickObj.left + 'px';
+			snippetDiv.innerHTML = wickObj.htmlData;
+			document.getElementById('playerCanvasContainer').appendChild(snippetDiv);
+		}
+
+		if(wickObj.isSymbol) {
+			WickSharedUtils.forEachChildObject(wickObj, function(subObj) {
+				generateHTMLSnippetDivs(subObj);
+			});
+		}
+
 	}
 
 	/* Make sure all objects start at first frame and start playing */
@@ -391,18 +414,18 @@ var WickPlayer = (function () {
 
 		// Setup builtin wick scripting methods and objects
 		var gotoAndPlay = function (frame) {
-			obj.parentObj.rootObject.currentFrame = frame;
-			obj.parentObj.rootObject.isPlaying = true;
+			obj.parentObj.currentFrame = frame;
+			obj.parentObj.isPlaying = true;
 		}
 		var gotoAndStop = function (frame) {
-			obj.parentObj.rootObject.currentFrame = frame;
-			obj.parentObj.rootObject.isPlaying = false;
+			obj.parentObj.currentFrame = frame;
+			obj.parentObj.isPlaying = false;
 		}
 		var play = function (frame) {
-			obj.parentObj.rootObject.isPlaying = true;
+			obj.parentObj.isPlaying = true;
 		}
 		var stop = function (frame) {
-			obj.parentObj.rootObject.isPlaying = false;
+			obj.parentObj.isPlaying = false;
 		}
 		var root = project.rootObject;
 		var parent = obj.parentObj;

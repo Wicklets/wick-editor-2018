@@ -26,6 +26,7 @@ var WickObject = function () {
 	// Data, only used by static objects
 	this.imageData = undefined;
 	this.fontData = undefined;
+	this.htmlData = undefined;
 
 // Symbols
 
