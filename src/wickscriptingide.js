@@ -34,6 +34,35 @@ var WickScriptingIDE = function (wickEditor) {
 		that.closeScriptingGUI();
 	});
 
+	var addStringToScript = function(str) {
+		that.aceEditor.setValue(that.aceEditor.getValue() + str);
+	};
+
+	$("#refBtnPlay").on("click", function (e) {
+		addStringToScript('play();');
+	});
+
+	$("#refBtnStop").on("click", function (e) {
+		addStringToScript('stop();');
+	});
+
+	$("#refBtnGotoAndStop").on("click", function (e) {
+		addStringToScript('gotoAndStop();');
+	});
+
+	$("#refBtnGotoAndPlay").on("click", function (e) {
+		addStringToScript('gotoAndPlay();');
+	});
+
+	$("#refBtnHitTest").on("click", function (e) {
+		addStringToScript('hitTest();');
+	});
+
+	$("#refBtnRoot").on("click", function (e) {
+		addStringToScript('root');
+	});
+
+
 	// Update selected objects scripts when script editor text changes
 	this.aceEditor.getSession().on('change', function (e) {
 		that.updateScriptsOnObject(wickEditor.fabricCanvas.getActiveObject());
