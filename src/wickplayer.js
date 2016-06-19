@@ -488,7 +488,7 @@ var WickPlayer = (function () {
 				if(obj.imageData) {
 					context.drawImage(obj.image, 0, 0);
 				} else if(obj.fontData) {
-					context.fillStyle = "Black";
+					context.fillStyle = obj.fontData.fill;
 					context.font      = "normal " + obj.fontData.fontSize + "px " + obj.fontData.fontFamily;
 					context.fillText(obj.fontData.text, 0, 0);
 				}

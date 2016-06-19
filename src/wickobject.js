@@ -80,6 +80,7 @@ WickObject.prototype.setDefaultFontValues = function (text) {
 		fontWeight: 'normal',
 		hasBorders: false,
 		lineHeight: 1.16,
+		fill: '#000000',
 		//selectionColor: undefined,
 		//selectionEnd: undefined,
 		//selectionStart: undefined,

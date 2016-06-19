@@ -407,6 +407,7 @@ FabricCanvas.prototype.makeFabricObjectFromWickObject = function (wickObject, ca
 			var newFabricText = new fabric.IText(wickObject.fontData.text, { 
 				fontFamily: wickObject.fontData.fontFamily,
 				fontSize: wickObject.fontData.fontSize,
+				fill: wickObject.fontData.fill,
 				text: wickObject.fontData.text
 			});
 
@@ -508,6 +509,7 @@ FabricCanvas.prototype.getWickObjectsInCanvas = function (projectResolution) {
 
 			if(wickObject.fontData) {
 				wickObject.fontData.text = fabricObj.text;
+				wickObject.fontData.fill = fabricObj.fill;
 				wickObject.fontData.fontSize = fabricObj.fontSize;
 				wickObject.fontData.fontFamily = fabricObj.fontFamily;
 			}
