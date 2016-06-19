@@ -104,6 +104,7 @@ var WickPlayer = (function () {
 		generateObjectNameReferences(project.rootObject);
 		generateObjectParentReferences(project.rootObject);
 		generateBuiltinWickFunctions(project.rootObject);
+		generateHTMLSnippetDivs(project.rootObject);
 		loadImages(project.rootObject);
 
 		// Start draw/update loop
@@ -154,6 +155,28 @@ var WickPlayer = (function () {
 				generateBuiltinWickFunctions(subObj);
 			});
 		}
+	}
+
+	/* */
+	var generateHTMLSnippetDivs = function (wickObj) {
+
+		if (wickObj.htmlData) {
+			var snippetDiv = document.createElement("div");
+			snippetDiv.style.position = 'fixed';
+			snippetDiv.style.width = '600px';
+			snippetDiv.style.height = '600px';
+			snippetDiv.style.top = wickObj.top + 'px';
+			snippetDiv.style.left = wickObj.left + 'px';
+			snippetDiv.innerHTML = wickObj.htmlData;
+			document.getElementById('playerCanvasContainer').appendChild(snippetDiv);
+		}
+
+		if(wickObj.isSymbol) {
+			WickSharedUtils.forEachChildObject(wickObj, function(subObj) {
+				generateHTMLSnippetDivs(subObj);
+			});
+		}
+
 	}
 
 	/* Make sure all objects start at first frame and start playing */
@@ -262,18 +285,38 @@ var WickPlayer = (function () {
 	/* Probably broken right now !!! Needs to use parent's position !!! */
 	var pointInsideObj = function(obj, point) {
 
-		var scaledObjLeft = obj.left;
-		var scaledObjTop = obj.top;
-		var scaledObjWidth = obj.width*obj.scaleX;
-		var scaledObjHeight = obj.height*obj.scaleY;
+		if(obj.isSymbol) {
 
-		var centeredCanvasOffsetX = (window.innerWidth - project.resolution.x) / 2;
-		var centeredCanvasOffsetY = (window.innerHeight - project.resolution.y) / 2;
+			var pointInsideSymbol = false;
 
-		return point.x >= scaledObjLeft + centeredCanvasOffsetX && 
-			   point.y >= scaledObjTop  + centeredCanvasOffsetY &&
-			   point.x <= scaledObjLeft + scaledObjWidth + centeredCanvasOffsetX && 
-			   point.y <= scaledObjTop  + scaledObjHeight + centeredCanvasOffsetY;
+			WickSharedUtils.forEachActiveChildObject(obj, function (currObj) {
+				var subPoint = {
+					x : point.x + obj.left,
+					y : point.y + obj.top
+				};
+				if(pointInsideObj(currObj, subPoint)) {
+					pointInsideSymbol = true;
+				}
+			});
+
+			return pointInsideSymbol;
+
+		} else {
+
+			var scaledObjLeft = obj.left;
+			var scaledObjTop = obj.top;
+			var scaledObjWidth = obj.width*obj.scaleX;
+			var scaledObjHeight = obj.height*obj.scaleY;
+
+			var centeredCanvasOffsetX = (window.innerWidth - project.resolution.x) / 2;
+			var centeredCanvasOffsetY = (window.innerHeight - project.resolution.y) / 2;
+
+			return point.x >= scaledObjLeft + centeredCanvasOffsetX && 
+				   point.y >= scaledObjTop  + centeredCanvasOffsetY &&
+				   point.x <= scaledObjLeft + scaledObjWidth + centeredCanvasOffsetX && 
+				   point.y <= scaledObjTop  + scaledObjHeight + centeredCanvasOffsetY;
+
+		}
 	}
 
 	var wickObjectIsClickable = function (wickObj) {
@@ -371,18 +414,18 @@ var WickPlayer = (function () {
 
 		// Setup builtin wick scripting methods and objects
 		var gotoAndPlay = function (frame) {
-			obj.parentObj.rootObject.currentFrame = frame;
-			obj.parentObj.rootObject.isPlaying = true;
+			obj.parentObj.currentFrame = frame;
+			obj.parentObj.isPlaying = true;
 		}
 		var gotoAndStop = function (frame) {
-			obj.parentObj.rootObject.currentFrame = frame;
-			obj.parentObj.rootObject.isPlaying = false;
+			obj.parentObj.currentFrame = frame;
+			obj.parentObj.isPlaying = false;
 		}
 		var play = function (frame) {
-			obj.parentObj.rootObject.isPlaying = true;
+			obj.parentObj.isPlaying = true;
 		}
 		var stop = function (frame) {
-			obj.parentObj.rootObject.isPlaying = false;
+			obj.parentObj.isPlaying = false;
 		}
 		var root = project.rootObject;
 		var parent = obj.parentObj;
@@ -488,9 +531,12 @@ var WickPlayer = (function () {
 				if(obj.imageData) {
 					context.drawImage(obj.image, 0, 0);
 				} else if(obj.fontData) {
-					context.fillStyle = "Black";
-					context.font      = "normal " + obj.fontData.fontSize + "px " + obj.fontData.fontFamily;
-					context.fillText(obj.fontData.text, 0, 0);
+					context.save();
+						context.translate(0, obj.fontData.fontSize);
+						context.fillStyle = obj.fontData.fill;
+						context.font      = "normal " + obj.fontData.fontSize + "px " + obj.fontData.fontFamily;
+						context.fillText(obj.fontData.text, 0, 0);
+					context.restore();
 				}
 
 			context.restore();

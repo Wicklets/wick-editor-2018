@@ -26,6 +26,7 @@ var WickObject = function () {
 	// Data, only used by static objects
 	this.imageData = undefined;
 	this.fontData = undefined;
+	this.htmlData = undefined;
 
 // Symbols
 
@@ -80,6 +81,7 @@ WickObject.prototype.setDefaultFontValues = function (text) {
 		fontWeight: 'normal',
 		hasBorders: false,
 		lineHeight: 1.16,
+		fill: '#000000',
 		//selectionColor: undefined,
 		//selectionEnd: undefined,
 		//selectionStart: undefined,
@@ -161,3 +163,29 @@ WickObject.prototype.getRelativePosition = function () {
 	}
 
 }
+
+// 
+WickObject.prototype.fixNegativeSubObjectPositions = function () {
+	if(this.isSymbol) {
+		var leftmostLeft = null;
+		var topmostTop = null;
+
+		WickSharedUtils.forEachChildObject(this, function (currObj) {
+			if(!leftmostLeft || currObj.left < leftmostLeft) {
+				leftmostLeft = currObj.left;
+			}
+
+			if(!topmostTop || currObj.top < topmostTop) {
+				topmostTop = currObj.top;
+			}
+		});
+
+		WickSharedUtils.forEachChildObject(this, function (currObj) {
+			currObj.left += -leftmostLeft;
+			currObj.top += -topmostTop;
+		});
+		this.left += leftmostLeft;
+		this.top += topmostTop;
+	}
+}
+

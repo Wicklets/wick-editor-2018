@@ -109,6 +109,10 @@ var WickEditor = function () {
 		that.fabricCanvas.getCanvas().renderAll();
 	};
 
+	$('#htmlTextBox').on('input propertychange', function () {
+		that.fabricCanvas.getActiveObject().wickObject.htmlData = $('#htmlTextBox').val();
+	});
+
 }
 
 /***********************************
@@ -133,7 +137,15 @@ WickEditor.prototype.updateMousePosition = function (event) {
 	this.mouse.y = event.clientY;
 }
 
+WickEditor.prototype.clearKeys = function () {
+	this.keys = [];
+}
+
 WickEditor.prototype.handleKeyboardInput = function (eventType, event) {
+
+	var that = this;
+
+	var forceControlKeyUp = function () { that.keys[90] = false; };
 
 	if(eventType === "keydown") {
 
@@ -144,27 +156,33 @@ WickEditor.prototype.handleKeyboardInput = function (eventType, event) {
 
 		// Control-shift-z: redo
 		if (event.keyCode == 90 && controlKeyDown && shiftKeyDown) {
+			forceControlKeyUp();
 			this.actionHandler.redoAction();	
 		}
 		// Control-z: undo
 		else if (event.keyCode == 90 && controlKeyDown) {
+			forceControlKeyUp();
 			this.actionHandler.undoAction();
+		}
+
+		// Control-s: save
+		else if (event.keyCode == 83 && controlKeyDown) {
+			forceControlKeyUp();
+			event.preventDefault();
+			this.saveProject();
 		}
 
 		// Control-a: Select all
 		if (event.keyCode == 65 && controlKeyDown) {
+			forceControlKeyUp();
 			event.preventDefault();
 			this.fabricCanvas.selectAll();
 		}
 
 		// Backspace: delete selected objects
-		if (document.activeElement.nodeName == 'TEXTAREA' || document.activeElement.nodeName == 'INPUT') {
-			// don't prevent default - we're editing a text box
-		} else {
-			if (event.keyCode == 8) {
-				event.preventDefault();
-				this.actionHandler.doAction('delete', []);
-			}	
+		if (event.keyCode == 8 && document.activeElement.nodeName != 'TEXTAREA') {
+			event.preventDefault();
+			this.actionHandler.doAction('delete', []);	
 		}
 
 		// Tilde: log project state to canvas (for debugging)
@@ -198,6 +216,9 @@ WickEditor.prototype.moveOutOfObject = function () {
 
 	// Store changes made to current frame in the project
 	this.syncProjectWithFabricCanvas();
+
+	// Make sure no objects have negative positions
+	this.currentObject.fixNegativeSubObjectPositions();
 
 	// Set the editor to be editing the parent object
 	this.currentObject = this.currentObject.parentObject;
@@ -252,6 +273,25 @@ WickEditor.prototype.addNewText = function (text) {
 	this.fabricCanvas.addWickObjectToCanvas(textWickObject);
 
 	console.error("Remeber to select new text here!")
+
+	this.actionHandler.doAction('gotoFrame', [this.currentObject.currentFrame], true);
+
+}
+
+WickEditor.prototype.addNewHTMLSnippet = function () {
+
+	var htmlSnippetWickObject = new WickObject();
+
+	htmlSnippetWickObject.setDefaultPositioningValues();
+	htmlSnippetWickObject.htmlData = '<iframe width="560" height="315" src="https://www.youtube.com/embed/AxZ6RG5UeiU" frameborder="0" allowfullscreen></iframe>';
+	htmlSnippetWickObject.left = window.innerWidth/2;
+	htmlSnippetWickObject.top = window.innerHeight/2;
+
+	htmlSnippetWickObject.parentObject = this.currentObject;
+
+	this.fabricCanvas.addWickObjectToCanvas(htmlSnippetWickObject);
+
+	console.error("Remeber to select HTML snippet here!");
 
 	this.actionHandler.doAction('gotoFrame', [this.currentObject.currentFrame], true);
 
@@ -332,17 +372,14 @@ WickEditor.prototype.convertSelectedObjectToSymbol = function () {
 			symbol.frames[0].wickObjects[i] = selectedObject._objects[i].wickObject;
 			symbol.frames[0].wickObjects[i].parentObject = symbol;
 
-			// Position child objects relative to symbols position
-			var childOldLeft = symbol.frames[0].wickObjects[i].left;
-			var childOldTop = symbol.frames[0].wickObjects[i].top;
-			var childNewLeft = childOldLeft - symbol.left;
-			var childNewTop = childOldTop - symbol.top;
-			symbol.frames[0].wickObjects[i].left = childNewLeft;
-			symbol.frames[0].wickObjects[i].top = childNewTop;
-			/*symbol.frames[0].wickObjects[i].left = 0;
-			symbol.frames[0].wickObjects[i].top = 0;*/
+			symbol.frames[0].wickObjects[i].left = selectedObject._objects[i].left;
+			symbol.frames[0].wickObjects[i].top = selectedObject._objects[i].top;
 		}
+
+		symbol.fixNegativeSubObjectPositions();
+
 		while(selectedObject._objects.length > 0) {
+			console.error("Infinite loop is prob happening here");
 			selectedObject._objects[0].remove();
 		}
 	} else {
@@ -397,6 +434,7 @@ WickEditor.prototype.updatePropertiesGUI = function(tab) {
 	$("#projectProperties").css('display', 'none');
 	$("#objectProperties").css('display', 'none');
 	$("#textProperties").css('display', 'none');
+	$("#htmlSnippetProperties").css('display', 'none');
 
 	switch(tab) {
 		case 'project':
@@ -409,6 +447,9 @@ WickEditor.prototype.updatePropertiesGUI = function(tab) {
 			break;
 		case 'text':
 			$("#textProperties").css('display', 'inline');
+			break;
+		case 'htmlSnippet':
+			$("#htmlSnippetProperties").css('display', 'inline');
 			break;
 	}
 
@@ -436,7 +477,7 @@ WickEditor.prototype.importFilesPastedIntoEditor = function (event) {
 				var blob = items[i].getAsFile();
 				var URLObj = window.URL || window.webkitURL;
 				var source = URLObj.createObjectURL(blob);
-				this.importImage("File names for pasted images not set.", source);
+				this.importImageFile("File names for pasted images not set.", source);
 			} else if (fileType == 'text/plain') {
 				this.addNewText(file)
 			} else if (fileType == 'text/wickobjectjson' ||
@@ -454,21 +495,33 @@ WickEditor.prototype.importFilesDroppedIntoEditor = function(files) {
 	// Retrieve uploaded files data
 	for (var i = 0; i < files.length; i++) {
 		var file = files[i];
-		console.log(file);
 
 		// Read file as data URL
 		var reader = new FileReader();
 		reader.onload = (function(theFile) {
 			return function(e) {
-				// TODO: Check filetype for image/sound/video/etc.
-				that.importImage(theFile.name, e.target.result)
+				if(file.type === 'image/png' || file.type === 'image/jpeg') {
+					that.importImageFile(theFile.name, e.target.result)
+				} else if(file.type === 'application/json') {
+					that.importProjectFile(file);
+				}
 			};
 		})(file);
 		reader.readAsDataURL(file);
 	}
 }
 
-WickEditor.prototype.importImage = function (name, data) {
+WickEditor.prototype.importProjectFile = function (file) {
+	var that = this;
+
+	var reader = new FileReader();
+	reader.onloadend = function(e) {
+		that.loadProjectFromJSON(this.result);
+	};
+	reader.readAsText(file);
+}
+
+WickEditor.prototype.importImageFile = function (name, data) {
 
 	var left = 0;
 	var top = 0;
@@ -488,11 +541,11 @@ WickEditor.prototype.importImage = function (name, data) {
 
 }
 
-WickEditor.prototype.importSound = function (name, data) {
+WickEditor.prototype.importSoundFile = function (name, data) {
 
 }
 
-WickEditor.prototype.importVectors = function (name, data) {
+WickEditor.prototype.importVectorFile = function (name, data) {
 
 }
 
@@ -591,6 +644,11 @@ WickEditor.prototype.loadProjectFromJSON = function (jsonString) {
 *************************/
 
 WickEditor.prototype.runProject = function () {
+	if(this.scriptingIDE.projectHasErrors) {
+		if(!confirm("There are syntax errors in the project! Are you sure you want to run it?")) {
+			return;
+		}
+	}
 	// Hide the editor, show the player
 	document.getElementById("editor").style.display = "none";
 	document.getElementById("builtinPlayer").style.display = "block";

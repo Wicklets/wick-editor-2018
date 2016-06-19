@@ -18,6 +18,7 @@
 	<script src="src/wickfileutils.js"></script>
 	<script src="src/wickobjectutils.js"></script>
 	<script src="src/wicksharedutils.js"></script>
+	<script src="src/wickframe.js"></script>
 	<script src="src/wickobject.js"></script>
 	<script src="src/wickproject.js"></script>
 	<script src="src/wickfabriccanvas.js"></script>
@@ -70,13 +71,25 @@
 		}
 
 		document.addEventListener("copy", function(event) {
-			focusHiddenArea();
-			wickEditor.handleCopyEvent(event);
+
+			console.log(document.activeElement.nodeName)
+
+			if(document.activeElement.nodeName != 'TEXTAREA' ) {
+				focusHiddenArea();
+				wickEditor.handleCopyEvent(event);
+				wickEditor.clearKeys();
+			}
 		});
 
 		document.addEventListener("paste", function(event) {
-			focusHiddenArea();
-			wickEditor.importFilesPastedIntoEditor(event);
+
+			console.log(document.activeElement.nodeName)
+
+			if(document.activeElement.nodeName != 'TEXTAREA' ) {
+				focusHiddenArea();
+				wickEditor.importFilesPastedIntoEditor(event);
+				wickEditor.clearKeys();
+			}
 		});
 
 		$("#editorCanvasContainer").on('drop', function(e) {
@@ -164,18 +177,34 @@
 			<div class="button" id="textToolButton" onclick="wickEditor.addNewText('Click to edit text');">
 				<img src="resources/text.png" width="30"></img>
 			</div>
+			<hr />
+
+			<div class="button" id="htmlSnippetToolButton" onclick="wickEditor.addNewHTMLSnippet();">
+				<img src="resources/htmlsnippet.png" width="30"></img>
+			</div>
 
 		</div>
 
 	<!-- WickObject Scripting GUI, bottom left corner -->
 
 		<div id="scriptingGUI" class="GUIBox">
-			<div class="button buttonInRow" id="onLoadButton">onLoad</div>
-			<div class="button buttonInRow" id="onClickButton">onClick</div>
-			<div class="button buttonInRow" id="onUpdateButton">onUpdate</div>
-			<div class="button buttonInRow" id="closeScriptingGUIButton"><font color="red">Close</font></div>
-			<br />
-			<div id="scriptEditor"></div>
+			<div class="elemInRow">
+				<div class="button buttonInRow" id="onLoadButton">onLoad</div>
+				<div class="button buttonInRow" id="onClickButton">onClick</div>
+				<div class="button buttonInRow" id="onUpdateButton">onUpdate</div>
+				<div class="button buttonInRow" id="closeScriptingGUIButton"><font color="red">Close</font></div>
+				<br />
+				<div id="scriptEditor"></div>
+			</div>
+			<div class="elemInRow">
+				<u>Script References</u>
+				<div class="button" id="refBtnPlay">play</div>
+				<div class="button" id="refBtnStop">stop</div>
+				<div class="button" id="refBtnGotoAndStop">gotoAndStop</div>
+				<div class="button" id="refBtnGotoAndPlay">gotoAndPlay</div>
+				<div class="button" id="refBtnHitTest">hitTest</div>
+				<div class="button" id="refBtnRoot">root</div>
+			</div>
 		</div>
 
 	<!-- WickObject Properties GUI, bottom right corner -->
@@ -220,6 +249,11 @@
 				Color: <input type="color" value="#FFFFFF" id="fontColor"><br />
 				Size: <input type="range" value="40" min="2" max="150" id="fontSize"><br />
 			</div>
+			<div id="htmlSnippetProperties">
+				HTML Snippet Properties
+				<hr />
+				HTML: <textarea id="htmlTextBox"></textarea><br />
+			</div>
 		</div>
 
 	<!-- Right click menu, appears next to mouse on right click -->
@@ -228,8 +262,8 @@
 			<div id="commonObjectButtons">
 				<div class="button" onclick="wickEditor.closeRightClickMenu();wickEditor.editScriptsOfSelectedObject();" >Edit Scripts</div>
 				<hr />
-				<div class="button" onclick="wickEditor.closeRightClickMenu();wickEditor.sendSelectedObjectToBack();" >Send to Back</div>
 				<div class="button" onclick="wickEditor.closeRightClickMenu();wickEditor.bringSelectedObjectToFront();" >Bring to Front</div>
+				<div class="button" onclick="wickEditor.closeRightClickMenu();wickEditor.sendSelectedObjectToBack();" >Send to Back</div>
 				<div class="button" onclick="wickEditor.closeRightClickMenu();wickEditor.actionHandler.doAction('delete', []);" >Delete</div>
 				<hr />
 			</div>
