@@ -262,18 +262,38 @@ var WickPlayer = (function () {
 	/* Probably broken right now !!! Needs to use parent's position !!! */
 	var pointInsideObj = function(obj, point) {
 
-		var scaledObjLeft = obj.left;
-		var scaledObjTop = obj.top;
-		var scaledObjWidth = obj.width*obj.scaleX;
-		var scaledObjHeight = obj.height*obj.scaleY;
+		if(obj.isSymbol) {
 
-		var centeredCanvasOffsetX = (window.innerWidth - project.resolution.x) / 2;
-		var centeredCanvasOffsetY = (window.innerHeight - project.resolution.y) / 2;
+			var pointInsideSymbol = false;
 
-		return point.x >= scaledObjLeft + centeredCanvasOffsetX && 
-			   point.y >= scaledObjTop  + centeredCanvasOffsetY &&
-			   point.x <= scaledObjLeft + scaledObjWidth + centeredCanvasOffsetX && 
-			   point.y <= scaledObjTop  + scaledObjHeight + centeredCanvasOffsetY;
+			WickSharedUtils.forEachActiveChildObject(obj, function (currObj) {
+				var subPoint = {
+					x : point.x + obj.left,
+					y : point.y + obj.top
+				};
+				if(pointInsideObj(currObj, subPoint)) {
+					pointInsideSymbol = true;
+				}
+			});
+
+			return pointInsideSymbol;
+
+		} else {
+
+			var scaledObjLeft = obj.left;
+			var scaledObjTop = obj.top;
+			var scaledObjWidth = obj.width*obj.scaleX;
+			var scaledObjHeight = obj.height*obj.scaleY;
+
+			var centeredCanvasOffsetX = (window.innerWidth - project.resolution.x) / 2;
+			var centeredCanvasOffsetY = (window.innerHeight - project.resolution.y) / 2;
+
+			return point.x >= scaledObjLeft + centeredCanvasOffsetX && 
+				   point.y >= scaledObjTop  + centeredCanvasOffsetY &&
+				   point.x <= scaledObjLeft + scaledObjWidth + centeredCanvasOffsetX && 
+				   point.y <= scaledObjTop  + scaledObjHeight + centeredCanvasOffsetY;
+
+		}
 	}
 
 	var wickObjectIsClickable = function (wickObj) {
