@@ -272,8 +272,6 @@ WickEditor.prototype.addNewText = function (text) {
 
 	this.fabricCanvas.addWickObjectToCanvas(textWickObject);
 
-	console.error("Remeber to select new text here!")
-
 	this.actionHandler.doAction('gotoFrame', [this.currentObject.currentFrame], true);
 
 }
@@ -290,8 +288,6 @@ WickEditor.prototype.addNewHTMLSnippet = function () {
 	htmlSnippetWickObject.parentObject = this.currentObject;
 
 	this.fabricCanvas.addWickObjectToCanvas(htmlSnippetWickObject);
-
-	console.error("Remeber to select HTML snippet here!");
 
 	this.actionHandler.doAction('gotoFrame', [this.currentObject.currentFrame], true);
 
@@ -378,7 +374,9 @@ WickEditor.prototype.convertSelectedObjectToSymbol = function () {
 
 		symbol.fixNegativeSubObjectPositions();
 
-		while(selectedObject._objects.length > 0) {
+		var max = 0;
+		while(selectedObject._objects.length > 0 && max < 100) {
+			max++;
 			console.error("Infinite loop is prob happening here");
 			selectedObject._objects[0].remove();
 		}
@@ -393,11 +391,6 @@ WickEditor.prototype.convertSelectedObjectToSymbol = function () {
 	}
 
 	this.fabricCanvas.addWickObjectToCanvas(symbol);
-
-	// deselect everything
-	this.fabricCanvas.getCanvas().deactivateAll().renderAll();
-
-	console.error("Remember to select the new symbol here!!!")
 
 }
 

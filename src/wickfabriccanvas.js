@@ -494,6 +494,7 @@ FabricCanvas.prototype.addWickObjectToCanvas = function (wickObject) {
 	
 	this.makeFabricObjectFromWickObject(wickObject, function(fabricObject) {
 		canvas.add(fabricObject);
+		canvas.setActiveObject(fabricObject);
 	});
 
 }
