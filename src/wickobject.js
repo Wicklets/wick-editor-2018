@@ -166,9 +166,6 @@ WickObject.prototype.getRelativePosition = function () {
 // 
 WickObject.prototype.fixNegativeSubObjectPositions = function () {
 	if(this.isSymbol) {
-
-		console.log("BOGO!");
-
 		var leftmostLeft = null;
 		var topmostTop = null;
 
