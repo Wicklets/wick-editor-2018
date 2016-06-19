@@ -186,6 +186,8 @@ WickObject.prototype.fixNegativeSubObjectPositions = function () {
 			currObj.left += -leftmostLeft;
 			currObj.top += -topmostTop;
 		});
+		this.left += leftmostLeft;
+		this.top += topmostTop;
 	}
 }
 
