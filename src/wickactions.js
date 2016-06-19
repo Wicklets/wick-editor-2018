@@ -155,7 +155,7 @@ WickActionHandler.prototype.redoAction = function () {
 		return;
 	} 
 
-	var action = redoStack.pop(); 
+	var action = this.redoStack.pop(); 
 	action.doAction(action.args); 
 	this.undoStack.push(action); 
 }
