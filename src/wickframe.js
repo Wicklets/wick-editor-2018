@@ -20,5 +20,7 @@ var WickFrame = function () {
 
 	var shrink = function(length) {
 		this.frameLength -= length; 
+		if (this.frameLength <= 0):
+			this.frameLength = 1
 	}
 };
