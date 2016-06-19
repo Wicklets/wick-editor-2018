@@ -34,29 +34,34 @@ var WickScriptingIDE = function (wickEditor) {
 		that.closeScriptingGUI();
 	});
 
+	var addStringToScript = function(str) {
+		that.aceEditor.setValue(that.aceEditor.getValue() + str);
+	};
+
 	$("#refBtnPlay").on("click", function (e) {
-		console.log("refBtnPlay");
+		addStringToScript('play();');
 	});
 
 	$("#refBtnStop").on("click", function (e) {
-		console.log("refBtnStop");
+		addStringToScript('stop();');
 	});
 
 	$("#refBtnGotoAndStop").on("click", function (e) {
-		console.log("refBtnGotoAndStop");
+		addStringToScript('gotoAndStop();');
 	});
 
 	$("#refBtnGotoAndPlay").on("click", function (e) {
-		console.log("refBtnGotoAndPlay");
+		addStringToScript('gotoAndPlay();');
 	});
 
 	$("#refBtnHitTest").on("click", function (e) {
-		console.log("refBtnHitTest");
+		addStringToScript('hitTest();');
 	});
 
 	$("#refBtnRoot").on("click", function (e) {
-		console.log("refBtnRoot");
+		addStringToScript('root');
 	});
+
 
 	// Update selected objects scripts when script editor text changes
 	this.aceEditor.getSession().on('change', function (e) {
