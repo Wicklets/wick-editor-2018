@@ -93,6 +93,10 @@ hr {
 	float: left;
 }
 
+.elemInRow {
+	float: left;
+}
+
 #timelineGUI {
 	top: 0px;
 	left: 0px;
