@@ -151,6 +151,11 @@ WickEditor.prototype.handleKeyboardInput = function (eventType, event) {
 			this.actionHandler.undoAction();
 		}
 
+		// Control-s: save
+		else if (event.keyCode == 83 && controlKeyDown) {
+			console.error("Save not yet implemented")
+		}
+
 		// Control-a: Select all
 		if (event.keyCode == 65 && controlKeyDown) {
 			event.preventDefault();
@@ -198,6 +203,9 @@ WickEditor.prototype.moveOutOfObject = function () {
 
 	// Store changes made to current frame in the project
 	this.syncProjectWithFabricCanvas();
+
+	// Make sure no objects have negative positions
+	this.currentObject.fixNegativeSubObjectPositions();
 
 	// Set the editor to be editing the parent object
 	this.currentObject = this.currentObject.parentObject;
@@ -332,17 +340,14 @@ WickEditor.prototype.convertSelectedObjectToSymbol = function () {
 			symbol.frames[0].wickObjects[i] = selectedObject._objects[i].wickObject;
 			symbol.frames[0].wickObjects[i].parentObject = symbol;
 
-			// Position child objects relative to symbols position
-			var childOldLeft = symbol.frames[0].wickObjects[i].left;
-			var childOldTop = symbol.frames[0].wickObjects[i].top;
-			var childNewLeft = childOldLeft - symbol.left;
-			var childNewTop = childOldTop - symbol.top;
-			symbol.frames[0].wickObjects[i].left = childNewLeft;
-			symbol.frames[0].wickObjects[i].top = childNewTop;
-			/*symbol.frames[0].wickObjects[i].left = 0;
-			symbol.frames[0].wickObjects[i].top = 0;*/
+			symbol.frames[0].wickObjects[i].left = selectedObject._objects[i].left;
+			symbol.frames[0].wickObjects[i].top = selectedObject._objects[i].top;
 		}
+
+		symbol.fixNegativeSubObjectPositions();
+
 		while(selectedObject._objects.length > 0) {
+			console.error("Infinite loop is prob happening here");
 			selectedObject._objects[0].remove();
 		}
 	} else {

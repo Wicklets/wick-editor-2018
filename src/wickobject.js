@@ -162,6 +162,32 @@ WickObject.prototype.getRelativePosition = function () {
 
 }
 
+// 
+WickObject.prototype.fixNegativeSubObjectPositions = function () {
+	if(this.isSymbol) {
+
+		console.log("BOGO!");
+
+		var leftmostLeft = null;
+		var topmostTop = null;
+
+		WickSharedUtils.forEachChildObject(this, function (currObj) {
+			if(!leftmostLeft || currObj.left < leftmostLeft) {
+				leftmostLeft = currObj.left;
+			}
+
+			if(!topmostTop || currObj.top < topmostTop) {
+				topmostTop = currObj.top;
+			}
+		});
+
+		WickSharedUtils.forEachChildObject(this, function (currObj) {
+			currObj.left += -leftmostLeft;
+			currObj.top += -topmostTop;
+		});
+	}
+}
+
 /*****************************
 	Frames
 *****************************/
