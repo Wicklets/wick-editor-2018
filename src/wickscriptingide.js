@@ -9,6 +9,8 @@ var WickScriptingIDE = function (wickEditor) {
 
 	this.currentScript = 'onLoad';
 
+	this.projectHasErrors = false;
+
 // GUI/Event handlers
 
 	var that = this;
@@ -35,6 +37,22 @@ var WickScriptingIDE = function (wickEditor) {
 	// Update selected objects scripts when script editor text changes
 	this.aceEditor.getSession().on('change', function (e) {
 		that.updateScriptsOnObject(wickEditor.fabricCanvas.getActiveObject());
+	});
+
+	this.aceEditor.getSession().on("changeAnnotation", function(){
+		var annot = that.aceEditor.getSession().getAnnotations();
+
+		// Look for errors
+
+		that.projectHasErrors = false;
+		for (var key in annot){
+			if (annot.hasOwnProperty(key)) {
+				if(annot[key].type === 'error') {
+					// Oh no! There's an error. Set the projectHasErrors flag so the project won't run.
+					that.projectHasErrors = true;
+				}
+			}
+		}
 	});
 
 }

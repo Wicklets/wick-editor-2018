@@ -596,6 +596,11 @@ WickEditor.prototype.loadProjectFromJSON = function (jsonString) {
 *************************/
 
 WickEditor.prototype.runProject = function () {
+	if(this.scriptingIDE.projectHasErrors) {
+		if(!confirm("There are syntax errors in the project! Are you sure you want to run it?")) {
+			return;
+		}
+	}
 	// Hide the editor, show the player
 	document.getElementById("editor").style.display = "none";
 	document.getElementById("builtinPlayer").style.display = "block";
