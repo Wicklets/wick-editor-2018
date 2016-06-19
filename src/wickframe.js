@@ -3,7 +3,6 @@
 *****************************/
 
 var WickFrame = function () {
-
 	// Store all objects in frame. 
 	this.wickObjects = [];
 
@@ -12,6 +11,8 @@ var WickFrame = function () {
 
 	// Create multiframe support. 
 	this.frameLength = 1;
+
+	// A single frame contains no tweens.
 	this.tweenPoints = [];
 
 	var extend = function(length) {
