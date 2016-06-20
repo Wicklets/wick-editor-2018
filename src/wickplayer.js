@@ -120,6 +120,7 @@ var WickPlayer = (function () {
 		loadImages(project.rootObject);
 
 		// Start draw/update loop
+		draw();
 		animate();
 	}
 
@@ -490,14 +491,15 @@ var WickPlayer = (function () {
 	var advanceTimeline = function (obj) {
 
 		// Advance timeline for this object
+		if(obj.frames[obj.currentFrame].breakpoint) {
+			obj.isPlaying = false;
+		}
+
 		if(obj.isPlaying) {
+			// Advance timeline one frame
 			obj.currentFrame++;
 			if(obj.currentFrame == obj.frames.length) {
 				obj.currentFrame = 0;
-			}
-
-			if(obj.frames[obj.currentFrame].breakpoint) {
-				obj.isPlaying = false;
 			}
 
 			obj.onLoadScriptRan = false;
@@ -519,6 +521,7 @@ var WickPlayer = (function () {
 *****************************/
 
 	var draw = function () {
+
 		// Clear canvas
 		context.clearRect(0, 0, canvas.width, canvas.height);
 
