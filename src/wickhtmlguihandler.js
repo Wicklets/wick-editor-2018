@@ -38,7 +38,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
 			// Add mousedown event to the frame element so we can go to that frame when its clicked
 			frameDiv.addEventListener("mousedown", function(index) {
 				return function () {
-					wickEditor.actionHandler.doAction('gotoFrame', [index]);
+					wickEditor.actionHandler.doAction('gotoFrame', {toFrame : index});
 				};
 			}(i), false);
 

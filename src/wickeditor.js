@@ -197,7 +197,7 @@ WickEditor.prototype.addNewText = function (text) {
 
 	this.fabricCanvas.addWickObjectToCanvas(textWickObject);
 
-	this.actionHandler.doAction('gotoFrame', [this.currentObject.currentFrame], true);
+	this.actionHandler.doAction('gotoFrame', {toFrame: this.currentObject.currentFrame}, true);
 
 }
 
@@ -214,7 +214,7 @@ WickEditor.prototype.addNewHTMLSnippet = function () {
 
 	this.fabricCanvas.addWickObjectToCanvas(htmlSnippetWickObject);
 
-	this.actionHandler.doAction('gotoFrame', [this.currentObject.currentFrame], true);
+	this.actionHandler.doAction('gotoFrame', {toFrame: this.currentObject.currentFrame}, true);
 
 }
 
