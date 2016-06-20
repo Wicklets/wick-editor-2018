@@ -7,6 +7,7 @@ var WickPlayer = (function () {
 
 	// Input vars for mouse and (later) keyboard and accelerometer
 	var mousePos;
+	var keys;
 
 	// Canvas stuff
 	var canvas;
@@ -64,10 +65,20 @@ var WickPlayer = (function () {
 		mobileMode = BrowserDetectionUtils.inMobileMode;
 		desktopMode = !mobileMode;
 
+		keys = [];
+
 		// Setup mouse events (desktop mode)
 		if(desktopMode) {
 			canvas.addEventListener('mousemove', onMouseMove, false);
 			canvasContainerEl.addEventListener("mousedown", onMouseDown, false);
+			
+			document.body.addEventListener("keydown", function (event) {
+				handleKeyboardInput("keydown", event);
+			});
+
+			document.body.addEventListener("keyup", function (event) {
+				handleKeyboardInput("keyup", event);
+			});
 		}
 
 		// Setup touch events (mobile mode)
@@ -280,6 +291,22 @@ var WickPlayer = (function () {
 			}
 		});
 
+	}
+
+	var handleKeyboardInput = function (eventType, event) {
+
+		if(eventType === "keydown") {
+
+			keys[event.keyCode] = true;
+
+			var controlKeyDown = keys[91];
+			var shiftKeyDown = keys[16];
+
+		} else if(eventType === "keyup") {
+
+			keys[event.keyCode] = false;
+
+		}
 	}
 
 /*****************************
