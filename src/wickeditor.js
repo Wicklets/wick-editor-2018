@@ -147,8 +147,6 @@ WickEditor.prototype.handleKeyboardInput = function (eventType, event) {
 
 	if(eventType === "keydown") {
 
-		console.log("keydown" + event.keyCode)
-
 		this.keys[event.keyCode] = true;
 
 		var controlKeyDown = this.keys[91];
@@ -188,8 +186,6 @@ WickEditor.prototype.handleKeyboardInput = function (eventType, event) {
 		}
 
 	} else if(eventType === "keyup") {
-
-		console.log("keyup" + event.keyCode)
 
 		this.keys[event.keyCode] = false;
 

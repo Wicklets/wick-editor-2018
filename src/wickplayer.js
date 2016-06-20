@@ -27,9 +27,13 @@ var WickPlayer = (function () {
 
 	var getMousePos = function (canvas, evt) {
 		var rect = canvas.getBoundingClientRect();
+
+		var centeredCanvasOffsetX = (window.innerWidth - project.resolution.x) / 2;
+		var centeredCanvasOffsetY = (window.innerHeight - project.resolution.y) / 2;
+
 		return {
-			x: evt.clientX - rect.left,
-			y: evt.clientY - rect.top
+			x: evt.clientX - rect.left - centeredCanvasOffsetX,
+			y: evt.clientY - rect.top  - centeredCanvasOffsetY
 		};
 	}
 
@@ -324,13 +328,10 @@ var WickPlayer = (function () {
 			var scaledObjWidth = obj.width*obj.scaleX;
 			var scaledObjHeight = obj.height*obj.scaleY;
 
-			var centeredCanvasOffsetX = (window.innerWidth - project.resolution.x) / 2;
-			var centeredCanvasOffsetY = (window.innerHeight - project.resolution.y) / 2;
-
-			return point.x >= scaledObjLeft + centeredCanvasOffsetX && 
-				   point.y >= scaledObjTop  + centeredCanvasOffsetY &&
-				   point.x <= scaledObjLeft + scaledObjWidth + centeredCanvasOffsetX && 
-				   point.y <= scaledObjTop  + scaledObjHeight + centeredCanvasOffsetY;
+			return point.x >= scaledObjLeft && 
+				   point.y >= scaledObjTop  &&
+				   point.x <= scaledObjLeft + scaledObjWidth && 
+				   point.y <= scaledObjTop  + scaledObjHeight;
 
 		}
 	}
