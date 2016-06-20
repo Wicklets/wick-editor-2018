@@ -95,6 +95,7 @@ var WickActionHandler = function (wickEditor) {
 		wickEditor.timelineController.updateGUI(wickEditor.currentObject);
 	}
 
+
 	this.doActions['addEmptyFrame'] = function (args) {
 		// Add an empty frame
 		wickEditor.currentObject.addEmptyFrame(wickEditor.currentObject.frames.length);

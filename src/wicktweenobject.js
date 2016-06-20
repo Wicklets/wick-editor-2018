@@ -8,7 +8,7 @@
  * Tween objects can also recieve wickObjects and apply these 
  * transformations to the objects themselves. */ 
 
-var wickTween = function() {
+var WickTween = function() {
 	this.x = 0; 
 	this.y = 0; 
 	this.z = 0; 
