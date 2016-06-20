@@ -32,6 +32,11 @@ var WickScriptingIDE = function (wickEditor) {
 		that.reloadScriptingGUI(wickEditor.fabricCanvas.getActiveObject());
 	});
 
+	$("#onKeyDownButton").on("click", function (e) {
+		that.currentScript = 'onKeyDown';
+		that.reloadScriptingGUI(wickEditor.fabricCanvas.getActiveObject());
+	});
+
 	$("#closeScriptingGUIButton").on("click", function (e) {
 		that.closeScriptingGUI();
 	});
@@ -116,4 +121,5 @@ WickScriptingIDE.prototype.reloadScriptingGUI = function (activeObj) {
 	document.getElementById("onLoadButton").className = (this.currentScript == 'onLoad' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
 	document.getElementById("onUpdateButton").className = (this.currentScript == 'onUpdate' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
 	document.getElementById("onClickButton").className = (this.currentScript == 'onClick' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
+	document.getElementById("onKeyDownButton").className = (this.currentScript == 'onKeyDown' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
 };

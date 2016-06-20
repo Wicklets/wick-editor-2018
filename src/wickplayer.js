@@ -7,6 +7,7 @@ var WickPlayer = (function () {
 
 	// Input vars for mouse and (later) keyboard and accelerometer
 	var mouse;
+	var keys;
 
 	// Canvas stuff
 	var canvas;
@@ -64,11 +65,15 @@ var WickPlayer = (function () {
 		mobileMode = BrowserDetectionUtils.inMobileMode;
 		desktopMode = !mobileMode;
 
-		// Setup mouse events (desktop mode)
+		// Setup mouse and key events (desktop mode)
 		mouse = { x : 0, y : 0 };
+		keys = [];
 		if(desktopMode) {
 			canvas.addEventListener('mousemove', onMouseMove, false);
 			canvasContainerEl.addEventListener("mousedown", onMouseDown, false);
+
+			document.body.addEventListener("keydown", handleKeyDownInput);
+			document.body.addEventListener("keyup", handleKeyUpInput);
 		}
 
 		// Setup touch events (mobile mode)
@@ -90,6 +95,8 @@ var WickPlayer = (function () {
 		stopDrawLoop = true;
 		canvasContainerEl.removeEventListener("mousedown", onMouseDown);
 		canvasContainerEl.removeEventListener("touchstart", onTouchStart);
+		document.body.removeEventListener("keydown", handleKeyDownInput);
+		document.body.removeEventListener("keyup", handleKeyUpInput);
 		window.removeEventListener('resize', resizeCanvas);
 
 	}
@@ -283,6 +290,18 @@ var WickPlayer = (function () {
 
 	}
 
+	var handleKeyDownInput = function (event) {
+		keys[event.keyCode] = true;
+
+		WickSharedUtils.forEachActiveChildObject(project.rootObject, function(currObj) {
+			runKeyDownScript(currObj);
+		});
+	}
+
+	var handleKeyUpInput = function (event) {
+		keys[event.keyCode] = false;
+	}
+
 /*****************************
 	Mobile event functions
 *****************************/
@@ -424,6 +443,14 @@ var WickPlayer = (function () {
 
 		if(obj.wickScripts.onClick) {
 			evalScript(obj, obj.wickScripts.onClick);
+		}
+
+	}
+
+	var runKeyDownScript = function (obj) {
+
+		if(obj.wickScripts.onKeyDown) {
+			evalScript(obj, obj.wickScripts.onKeyDown);
 		}
 
 	}
