@@ -32,8 +32,8 @@ var WickEditor = function () {
 	// Setup scripting IDE
 	this.scriptingIDE = new WickScriptingIDE(this);
 
-	// Set the timeline controller GUI to an initial state
-	this.timelineController = new WickTimelineController(this);
+	// Setup timeline controller gui
+	this.htmlGUIHandler = new WickHTMLGUIHandler(this);
 
 	// Setup action handler
 	this.actionHandler = new WickActionHandler(this);
@@ -43,75 +43,6 @@ var WickEditor = function () {
 		var devTestProjectJSON = WickFileUtils.downloadFile(this.UNIT_TEST_PROJECT_PATH);
 		this.loadProjectFromJSON(devTestProjectJSON);
 	}
-
-	// Set properties window to project properties
-	this.updatePropertiesGUI('project');
-
-// temporary!! should be somewhere else
-
-	var that = this;
-
-	var testPositiveInteger = function(n, setFunc) {
-		var num = Number(n);
-		if((typeof num === 'number') && (num % 1 == 0) && (num > 0)) {
-			setFunc(num);
-			console.log(that.project);
-		}
-	}
-
-	$('#projectSizeX').on('input propertychange', function () {
-
-		testPositiveInteger($('#projectSizeX').val(), function(n) {
-			that.project.resolution.x = n;
-			that.resizeCanvasAndGUI();
-		});
-
-	});
-
-	$('#projectSizeY').on('input propertychange', function () {
-
-		testPositiveInteger($('#projectSizeY').val(), function(n) {
-			that.project.resolution.y = n;
-			that.resizeCanvasAndGUI();
-		});
-
-	});
-
-	$('#frameRate').on('input propertychange', function () {
-
-		testPositiveInteger($('#frameRate').val(), function(n) {
-			that.project.framerate = n;
-		});
-
-	});
-
-	document.getElementById('projectBgColor').onchange = function () {
-		that.project.backgroundColor = this.value;
-		that.fabricCanvas.setBackgroundColor(this.value);
-	};
-
-	$('#objectName').on('input propertychange', function () {
-		that.fabricCanvas.getActiveObject().wickObject.name = $('#objectName').val();
-	});
-
-	document.getElementById('fontSelector').onchange = function () {
-		that.fabricCanvas.getActiveObject().fontFamily = document.getElementById('fontSelector').value;
-		that.fabricCanvas.getCanvas().renderAll();
-	}
-
-	document.getElementById('fontColor').onchange = function () {
-		that.fabricCanvas.getActiveObject().fill = this.value;
-		that.fabricCanvas.getCanvas().renderAll();
-	};
-
-	document.getElementById('fontSize').onchange = function () {
-		that.fabricCanvas.getActiveObject().fontSize = this.value;
-		that.fabricCanvas.getCanvas().renderAll();
-	};
-
-	$('#htmlTextBox').on('input propertychange', function () {
-		that.fabricCanvas.getActiveObject().wickObject.htmlData = $('#htmlTextBox').val();
-	});
 
 }
 
@@ -201,9 +132,9 @@ WickEditor.prototype.handleCopyEvent = function (event) {
 	}
 }
 
-/***********************************
-  Timeline pleayhead moving methods
-***********************************/
+/****************************************
+    Timeline pleayhead moving methods
+****************************************/
 
 // 
 WickEditor.prototype.moveOutOfObject = function () {
@@ -291,56 +222,6 @@ WickEditor.prototype.addNewHTMLSnippet = function () {
       Right click menu methods
 ***********************************/
 
-WickEditor.prototype.openRightClickMenu = function () {
-
-	// Make rightclick menu visible
-	$("#rightClickMenu").css('visibility', 'visible');
-	// Attach it to the mouse
-	$("#rightClickMenu").css('top', this.mouse.y+'px');
-	$("#rightClickMenu").css('left', this.mouse.x+'px');
-
-	// Hide everything
-
-	$("#insideSymbolButtons").css('display', 'none');
-	$("#symbolButtons").css('display', 'none');
-	$("#staticObjectButtons").css('display', 'none');
-	$("#commonObjectButtons").css('display', 'none');
-	$("#frameButtons").css('display', 'none');
-
-	// Selectively show portions we need depending on editor state
-
-	var fabCanvas = this.fabricCanvas.getCanvas();
-	var selectedObject = fabCanvas.getActiveObject() || fabCanvas.getActiveGroup();
-
-	if(!this.currentObject.isRoot) {
-		$("#insideSymbolButtons").css('display', 'block');
-	}
-	if(selectedObject) {
-		if(selectedObject.wickObject && selectedObject.wickObject.isSymbol) {
-			$("#symbolButtons").css('display', 'block');
-		} else {
-			$("#staticObjectButtons").css('display', 'block');
-		}
-		$("#commonObjectButtons").css('display', 'block');
-		
-	} else {
-		$("#frameButtons").css('display', 'block');
-	}
-}
-
-WickEditor.prototype.closeRightClickMenu = function () {
-	// Hide rightclick menu
-	$("#rightClickMenu").css('visibility', 'hidden');
-	$("#rightClickMenu").css('top', '0px');
-	$("#rightClickMenu").css('left','0px');
-
-	// Hide all buttons inside rightclick menu
-	$("#symbolButtons").css('display', 'none');
-	$("#staticObjectButtons").css('display', 'none');
-	$("#commonObjectButtons").css('display', 'none');
-	$("#frameButtons").css('display', 'none');
-}
-
 WickEditor.prototype.convertSelectedObjectToSymbol = function () {
 
 	this.syncProjectWithFabricCanvas();
@@ -411,36 +292,6 @@ WickEditor.prototype.bringSelectedObjectToFront = function () {
 WickEditor.prototype.clearFrame = function () {
 	console.error("Not yet implemented");
 }
-
-/*****************************
-    Properties box methods
-*****************************/
-
-WickEditor.prototype.updatePropertiesGUI = function(tab) {
-
-	$("#projectProperties").css('display', 'none');
-	$("#objectProperties").css('display', 'none');
-	$("#textProperties").css('display', 'none');
-	$("#htmlSnippetProperties").css('display', 'none');
-
-	switch(tab) {
-		case 'project':
-			document.getElementById('projectBgColor').value = this.project.backgroundColor;
-			$("#projectProperties").css('display', 'inline');
-			break;
-		case 'symbol':
-			document.getElementById('objectName').value = this.fabricCanvas.getActiveObject().wickObject.name;
-			$("#objectProperties").css('display', 'inline');
-			break;
-		case 'text':
-			$("#textProperties").css('display', 'inline');
-			break;
-		case 'htmlSnippet':
-			$("#htmlSnippetProperties").css('display', 'inline');
-			break;
-	}
-
-};
 
 /*****************************
        Import content
@@ -627,7 +478,7 @@ WickEditor.prototype.loadProjectFromJSON = function (jsonString) {
 }
 
 /*************************
-    Builtin player GUI
+      Builtin player
 *************************/
 
 WickEditor.prototype.runProject = function () {
