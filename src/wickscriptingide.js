@@ -5,6 +5,8 @@ var WickScriptingIDE = function (wickEditor) {
 	this.aceEditor.getSession().setMode("ace/mode/javascript");
 	this.aceEditor.$blockScrolling = Infinity; // Makes that weird message go away
 
+	this.beautify = ace.require("ace/ext/beautify");
+
 	this.open = false;
 
 	this.currentScript = 'onLoad';
@@ -54,14 +56,12 @@ var WickScriptingIDE = function (wickEditor) {
 		addStringToScript('gotoAndPlay();');
 	});
 
-	$("#refBtnHitTest").on("click", function (e) {
-		addStringToScript('hitTest();');
-	});
 
-	$("#refBtnRoot").on("click", function (e) {
-		addStringToScript('root');
+	$("#beautifyButton").on("click", function (e) {
+		var val = that.aceEditor.session.getValue();
+		val = js_beautify(val);
+		that.aceEditor.session.setValue(val);
 	});
-
 
 	// Update selected objects scripts when script editor text changes
 	this.aceEditor.getSession().on('change', function (e) {
@@ -77,7 +77,7 @@ var WickScriptingIDE = function (wickEditor) {
 		for (var key in annot){
 			if (annot.hasOwnProperty(key)) {
 				if(annot[key].type === 'error') {
-					// Oh no! There's an error. Set the projectHasErrors flag so the project won't run.
+					// There's a syntax error. Set the projectHasErrors flag so the project won't run.
 					that.projectHasErrors = true;
 				}
 			}

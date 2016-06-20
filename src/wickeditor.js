@@ -151,7 +151,7 @@ WickEditor.prototype.moveOutOfObject = function () {
 	// Load wickobjects in the frame we moved to into the canvas
 	this.syncFabricCanvasWithProject();
 
-	this.timelineController.updateGUI(this.currentObject);
+	this.htmlGUIHandler.updateTimelineGUI(this.currentObject);
 
 }
 
@@ -168,7 +168,7 @@ WickEditor.prototype.moveInsideObject = function (object) {
 	// Load wickobjects in the frame we moved to into the canvas
 	this.syncFabricCanvasWithProject();
 
-	this.timelineController.updateGUI(this.currentObject);
+	this.htmlGUIHandler.updateTimelineGUI(this.currentObject);
 
 }
 
