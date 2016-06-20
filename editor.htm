@@ -47,7 +47,7 @@
 			wickEditor.handleKeyboardInput("keydown", event);
 		});
 
-		document.getElementById("editor").addEventListener("keyup", function (event) {
+		document.body.addEventListener("keyup", function (event) {
 			wickEditor.handleKeyboardInput("keyup", event);
 		});
 
@@ -72,23 +72,21 @@
 
 		document.addEventListener("copy", function(event) {
 
-			console.log(document.activeElement.nodeName)
+			wickEditor.clearKeys();
 
 			if(document.activeElement.nodeName != 'TEXTAREA' ) {
 				focusHiddenArea();
 				wickEditor.handleCopyEvent(event);
-				wickEditor.clearKeys();
 			}
 		});
 
 		document.addEventListener("paste", function(event) {
 
-			console.log(document.activeElement.nodeName)
+			wickEditor.clearKeys();
 
 			if(document.activeElement.nodeName != 'TEXTAREA' ) {
 				focusHiddenArea();
 				wickEditor.importFilesPastedIntoEditor(event);
-				wickEditor.clearKeys();
 			}
 		});
 

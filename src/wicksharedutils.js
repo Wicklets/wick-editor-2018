@@ -21,6 +21,13 @@ var WickSharedUtils = (function () {
 		}
 	}
 
+	/* Call callback function for every child object in parentObj's first frame */
+	wickSharedUtils.forEachFirstFrameChildObject = function (parentObj, callback) {
+		for(var o = 0; o < parentObj.frames[0].wickObjects.length; o++) {
+			callback(parentObj.frames[0].wickObjects[o]);
+		}
+	}
+
 	/* */
 	var encodeString = function (str) {
 		var newStr = str;

@@ -170,7 +170,7 @@ WickObject.prototype.fixNegativeSubObjectPositions = function () {
 		var leftmostLeft = null;
 		var topmostTop = null;
 
-		WickSharedUtils.forEachChildObject(this, function (currObj) {
+		WickSharedUtils.forEachFirstFrameChildObject(this, function (currObj) {
 			if(!leftmostLeft || currObj.left < leftmostLeft) {
 				leftmostLeft = currObj.left;
 			}

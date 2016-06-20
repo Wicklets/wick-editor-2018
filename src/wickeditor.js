@@ -145,9 +145,9 @@ WickEditor.prototype.handleKeyboardInput = function (eventType, event) {
 
 	var that = this;
 
-	var forceControlKeyUp = function () { that.keys[90] = false; };
-
 	if(eventType === "keydown") {
+
+		console.log("keydown" + event.keyCode)
 
 		this.keys[event.keyCode] = true;
 
@@ -156,25 +156,21 @@ WickEditor.prototype.handleKeyboardInput = function (eventType, event) {
 
 		// Control-shift-z: redo
 		if (event.keyCode == 90 && controlKeyDown && shiftKeyDown) {
-			forceControlKeyUp();
 			this.actionHandler.redoAction();	
 		}
 		// Control-z: undo
 		else if (event.keyCode == 90 && controlKeyDown) {
-			forceControlKeyUp();
 			this.actionHandler.undoAction();
 		}
 
 		// Control-s: save
 		else if (event.keyCode == 83 && controlKeyDown) {
-			forceControlKeyUp();
 			event.preventDefault();
 			this.saveProject();
 		}
 
 		// Control-a: Select all
 		if (event.keyCode == 65 && controlKeyDown) {
-			forceControlKeyUp();
 			event.preventDefault();
 			this.fabricCanvas.selectAll();
 		}
@@ -192,6 +188,8 @@ WickEditor.prototype.handleKeyboardInput = function (eventType, event) {
 		}
 
 	} else if(eventType === "keyup") {
+
+		console.log("keyup" + event.keyCode)
 
 		this.keys[event.keyCode] = false;
 

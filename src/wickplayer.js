@@ -134,6 +134,16 @@ var WickPlayer = (function () {
 
 	/* */
 	var generateBuiltinWickFunctions = function (wickObj) {
+
+		wickObj.hitTest = function (otherObj) {
+			// TODO: Use proper rectangle collision
+			var wickObjCentroid = {
+				x : wickObj.left + wickObj.width/2,
+				y : wickObj.top + wickObj.height/2
+			};
+			return pointInsideObj(otherObj, wickObjCentroid);
+		}
+
 		if(wickObj.isSymbol) {
 			// Setup builtin wick scripting methods and objects
 			wickObj.gotoAndPlay = function (frame) {
@@ -149,6 +159,12 @@ var WickPlayer = (function () {
 			}
 			wickObj.stop = function (frame) {
 				wickObj.isPlaying = false;
+			}
+			wickObj.nextFrame = function () {
+				wickObj.currentFrame ++;
+			}
+			wickObj.prevFrame = function () {
+				wickObj.currentFrame --;
 			}
 
 			WickSharedUtils.forEachChildObject(wickObj, function(subObj) {
@@ -282,7 +298,7 @@ var WickPlayer = (function () {
 	Utils
 *****************************/
 
-	/* Probably broken right now !!! Needs to use parent's position !!! */
+	/*  */
 	var pointInsideObj = function(obj, point) {
 
 		if(obj.isSymbol) {
