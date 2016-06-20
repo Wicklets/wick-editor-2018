@@ -64,7 +64,7 @@ var WickActionHandler = function (wickEditor) {
 		}
 	};
 
-	this.doActions['gotoFrame'] = function (args) {
+	this.doActions['gotoFrame'] = function (args) { console.log(args)
 
 		this.oldFrame = wickEditor.currentObject.currentFrame;
 
@@ -72,13 +72,12 @@ var WickActionHandler = function (wickEditor) {
 		wickEditor.syncProjectWithFabricCanvas();
 
 		// move playhead
-		var toFrame = args[0];
-		wickEditor.currentObject.currentFrame = toFrame;
+		wickEditor.currentObject.currentFrame = args.toFrame;
 
 		// Load wickobjects in the frame we moved to into the canvas
 		wickEditor.syncFabricCanvasWithProject();
 
-		wickEditor.timelineController.updateGUI(wickEditor.currentObject);
+		wickEditor.htmlGUIHandler.updateTimelineGUI(wickEditor.currentObject);
 	}
 
 	this.undoActions['gotoFrame'] = function (args) {
@@ -92,7 +91,7 @@ var WickActionHandler = function (wickEditor) {
 		// Load wickobjects in the frame we moved to into the canvas
 		wickEditor.syncFabricCanvasWithProject();
 
-		wickEditor.timelineController.updateGUI(wickEditor.currentObject);
+		wickEditor.htmlGUIHandler.updateTimelineGUI(wickEditor.currentObject);
 	}
 
 
@@ -101,21 +100,21 @@ var WickActionHandler = function (wickEditor) {
 		wickEditor.currentObject.addEmptyFrame(wickEditor.currentObject.frames.length);
 
 		// Move to that new frame
-		wickEditor.actionHandler.doAction('gotoFrame', [wickEditor.currentObject.frames.length-1], true);
+		wickEditor.actionHandler.doAction('gotoFrame', {toFrame:wickEditor.currentObject.frames.length-1}, true);
 
 		// Update GUI
 		wickEditor.resizeCanvasAndGUI();
-		wickEditor.timelineController.updateGUI(wickEditor.currentObject);
+		wickEditor.htmlGUIHandler.updateTimelineGUI(wickEditor.currentObject);
 	}
 
 	this.undoActions['addEmptyFrame'] = function (args) {
 		// Go to the second-to-last frame and remove the last frame
-		wickEditor.actionHandler.doAction('gotoFrame', [wickEditor.currentObject.frames.length-2], true);
+		wickEditor.actionHandler.doAction('gotoFrame', {toFrame:wickEditor.currentObject.frames.length-2}, true);
 		wickEditor.currentObject.frames.pop();
 
 		// Update GUI
 		wickEditor.resizeCanvasAndGUI();
-		wickEditor.timelineController.updateGUI(wickEditor.currentObject);
+		wickEditor.htmlGUIHandler.updateTimelineGUI(wickEditor.currentObject);
 	}
 
 	this.doActions['addWickObjectToFabricCanvas'] = function (args) {

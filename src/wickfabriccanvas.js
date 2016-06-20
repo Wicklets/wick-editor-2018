@@ -119,10 +119,10 @@ var FabricCanvas = function (wickEditor) {
 				// Didn't right click an object, deselect everything
 				canvas.deactivateAll().renderAll();
 			}
-			wickEditor.openRightClickMenu();
+			wickEditor.htmlGUIHandler.openRightClickMenu();
 
 		} else {
-			wickEditor.closeRightClickMenu();
+			wickEditor.htmlGUIHandler.closeRightClickMenu();
 		}
 	});
 
@@ -142,20 +142,20 @@ var FabricCanvas = function (wickEditor) {
 
 		if(newSelectedObject) {
 			if(newSelectedObject.wickObject.fontData) {
-				wickEditor.updatePropertiesGUI('text');
+				wickEditor.htmlGUIHandler.updatePropertiesGUI('text');
 			} else if (newSelectedObject.wickObject.htmlData) {
-				wickEditor.updatePropertiesGUI('htmlSnippet');
+				wickEditor.htmlGUIHandler.updatePropertiesGUI('htmlSnippet');
 			} else {
-				wickEditor.updatePropertiesGUI('symbol');
+				wickEditor.htmlGUIHandler.updatePropertiesGUI('symbol');
 			}
 		} else {
-			wickEditor.updatePropertiesGUI('project');
+			wickEditor.htmlGUIHandler.updatePropertiesGUI('project');
 		}
 	});
 
 	canvas.on('selection:cleared', function (e) {
 		wickEditor.scriptingIDE.closeScriptingGUI();
-		wickEditor.updatePropertiesGUI('project');
+		wickEditor.htmlGUIHandler.updatePropertiesGUI('project');
 	});
 
 }
@@ -375,30 +375,34 @@ FabricCanvas.prototype.makeFabricObjectFromWickObject = function (wickObject, ca
 
 	} else {
 
+		var setWickObjectPropertiesOnFabricObject = function(fabricObj, wickObj) {
+			// Set shared wick/fabric positioning properties
+			for(var i = 0; i < sharedFabricWickObjectProperties.length; i++) {
+				var prop = sharedFabricWickObjectProperties[i];
+				fabricObj[prop] = wickObj[prop];
+			}
+
+			// Position the fabric object relative to it's parents.
+			//var relativePosition = that.getRelativePosition(wickObject);
+			var relativePosition = wickObj.getRelativePosition();
+			fabricObj.top = relativePosition.top;
+			fabricObj.left = relativePosition.left;
+
+			// Set the fabric.js option to only select if the pixel you're over isn't transparent
+			fabricObj.perPixelTargetFind = true;
+			fabricObj.targetFindTolerance = 4;
+
+			// Store a reference to the wick object inside the fabric object
+			// to use when we put this object back into the project.
+			fabricObj.wickObject = wickObj;
+		}
+
 		var sharedFabricWickObjectProperties = this.sharedFabricWickObjectProperties;
 
 		if(wickObject.imageData) {
 
 			fabric.Image.fromURL(wickObject.imageData, function(newFabricImage) {
-				// Set shared wick/fabric positioning properties
-				for(var i = 0; i < sharedFabricWickObjectProperties.length; i++) {
-					var prop = sharedFabricWickObjectProperties[i];
-					newFabricImage[prop] = wickObject[prop];
-				}
-
-				// Position the fabric object relative to it's parents.
-				//var relativePosition = that.getRelativePosition(wickObject);
-				var relativePosition = wickObject.getRelativePosition();
-				newFabricImage.top = relativePosition.top;
-				newFabricImage.left = relativePosition.left;
-
-				// Set the fabric.js option to only select if the pixel you're over isn't transparent
-				newFabricImage.perPixelTargetFind = true;
-				newFabricImage.targetFindTolerance = 4;
-
-				// Store a reference to the wick object inside the fabric object
-				// to use when we put this object back into the project.
-				newFabricImage.wickObject = wickObject;
+				setWickObjectPropertiesOnFabricObject(newFabricImage, wickObject);
 
 				callback(newFabricImage);
 			});
@@ -413,25 +417,7 @@ FabricCanvas.prototype.makeFabricObjectFromWickObject = function (wickObject, ca
 				text: wickObject.fontData.text
 			});
 
-			// Set shared wick/fabric positioning properties
-			for(var i = 0; i < sharedFabricWickObjectProperties.length; i++) {
-				var prop = sharedFabricWickObjectProperties[i];
-				newFabricText[prop] = wickObject[prop];
-			}
-
-			// Position the fabric object relative to it's parents.
-			//var relativePosition = that.getRelativePosition(wickObject);
-			var relativePosition = wickObject.getRelativePosition();
-			newFabricText.top = relativePosition.top;
-			newFabricText.left = relativePosition.left;
-
-			// Set the fabric.js option to only select if the pixel you're over isn't transparent
-			newFabricText.perPixelTargetFind = true;
-			newFabricText.targetFindTolerance = 4;
-
-			// Store a reference to the wick object inside the fabric object
-			// to use when we put this object back into the project.
-			newFabricText.wickObject = wickObject;
+			setWickObjectPropertiesOnFabricObject(newFabricText, wickObject);
 
 			callback(newFabricText);
 
@@ -442,25 +428,7 @@ FabricCanvas.prototype.makeFabricObjectFromWickObject = function (wickObject, ca
 				wickObject.width = snippet.width / window.devicePixelRatio;
 				wickObject.height = snippet.height / window.devicePixelRatio;
 
-				// Set shared wick/fabric positioning properties
-				for(var i = 0; i < sharedFabricWickObjectProperties.length; i++) {
-					var prop = sharedFabricWickObjectProperties[i];
-					snippet[prop] = wickObject[prop];
-				}
-
-				// Position the fabric object relative to it's parents.
-				//var relativePosition = that.getRelativePosition(wickObject);
-				var relativePosition = wickObject.getRelativePosition();
-				snippet.top = relativePosition.top;
-				snippet.left = relativePosition.left;
-
-				// Set the fabric.js option to only select if the pixel you're over isn't transparent
-				snippet.perPixelTargetFind = true;
-				snippet.targetFindTolerance = 4;
-
-				// Store a reference to the wick object inside the fabric object
-				// to use when we put this object back into the project.
-				snippet.wickObject = wickObject;
+				setWickObjectPropertiesOnFabricObject(snippet, wickObject);
 
 				callback(snippet);
 			});
