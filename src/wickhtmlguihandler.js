@@ -57,7 +57,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
 				return function () {
 					var frame = wickEditor.currentObject.frames[index];
 					frame.breakpoint = !frame.breakpoint;
-					that.updateGUI(wickEditor.currentObject);
+					that.updateTimelineGUI(wickEditor.currentObject);
 				};
 			}(i), false);
 
