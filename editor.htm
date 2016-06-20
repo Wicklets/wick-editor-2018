@@ -214,23 +214,23 @@
 			</div>
 		</div>
 
-	<!-- WickObject Properties GUI, bottom right corner -->
+	<!-- Properties GUI, bottom right corner -->
 
 		<div id="propertiesGUI" class="GUIBox">
 			<div id="projectProperties">
 				Project Properties
 				<hr />
 				Background color: <input type="color" value="#FFFFFF" id="projectBgColor"><br />
-				Size: <input type="text" id="projectSizeX" size="4" value="650"> x 
-				      <input type="text" id="projectSizeY" size="4" value="500"><br />
-				Framerate: <input type="text" id="frameRate" size="4" value="12"><br />
+				Size: <textarea id="projectSizeX" cols="4" rows="1"></textarea> x 
+				      <textarea id="projectSizeY" cols="4" rows="1"></textarea><br />
+				Framerate: <textarea id="frameRate" cols="2" rows="1">bogo</textarea><br />
 			</div>
 			<div id="objectProperties">
 				Object Properties
 				<hr />
-				Opacity: 
+				Opacity: <input type="range" value="1" min="0" max="1" id="lineWidth">
 				<br />
-				Name: <input type="text" id="objectName"><br />
+				Name: <textarea id="objectName" cols="18" rows="1"></textarea><br />
 			</div>
 			<div id="textProperties">
 				Text Properties

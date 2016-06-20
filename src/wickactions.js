@@ -64,7 +64,7 @@ var WickActionHandler = function (wickEditor) {
 		}
 	};
 
-	this.doActions['gotoFrame'] = function (args) { console.log(args)
+	this.doActions['gotoFrame'] = function (args) {
 
 		this.oldFrame = wickEditor.currentObject.currentFrame;
 
