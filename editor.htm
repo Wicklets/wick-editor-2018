@@ -9,6 +9,7 @@
 	<script src="lib/jquery.min.js"></script>
 	<script src="lib/fabric.js"></script>
 	<script src="lib/fabric.canvasex.js"></script>
+	<script src="lib/verboselog.js"></script>
 	<script src="lib/beautify.js"></script>
 	<script src="lib/ace/ace.js" type="text/javascript" charset="utf-8"></script>
 	<script src="lib/paper-core.min.js" type="text/javascript"></script>
@@ -207,10 +208,12 @@
 			</div>
 			<div class="elemInRow">
 				<u>Script References</u>
-				<div class="button" id="refBtnPlay">play</div>
-				<div class="button" id="refBtnStop">stop</div>
-				<div class="button" id="refBtnGotoAndStop">gotoAndStop</div>
-				<div class="button" id="refBtnGotoAndPlay">gotoAndPlay</div>
+				<div class="button" draggable=true id="refBtnPlay">play</div>
+				<div class="button" draggable=true id="refBtnStop">stop</div>
+				<div class="button" draggable=true id="refBtnGotoAndStop">gotoAndStop</div>
+				<div class="button" draggable=true id="refBtnGotoAndPlay">gotoAndPlay</div>
+				<div class="button" draggable=true id="refBtnGotoNextFrame">gotoNextFrame</div>
+				<div class="button" draggable=true id="refBtnGotoPrevFrame">gotoPrevFrame</div>
 			</div>
 		</div>
 
@@ -271,7 +274,7 @@
 				<hr />
 				<div class="button" onclick="wickEditor.htmlGUIHandler.closeRightClickMenu();wickEditor.bringSelectedObjectToFront();" >Bring to Front</div>
 				<div class="button" onclick="wickEditor.htmlGUIHandler.closeRightClickMenu();wickEditor.sendSelectedObjectToBack();" >Send to Back</div>
-				<div class="button" onclick="wickEditor.htmlGUIHandler.closeRightClickMenu();wickEditor.actionHandler.doAction('delete', []);" >Delete</div>
+				<div class="button" onclick="wickEditor.htmlGUIHandler.closeRightClickMenu();wickEditor.deleteSelectedObjects();" >Delete</div>
 				<hr />
 			</div>
 			<div id="symbolButtons">

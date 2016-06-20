@@ -80,6 +80,10 @@ WickEditor.prototype.handleKeyboardInput = function (eventType, event) {
 
 		this.keys[event.keyCode] = true;
 
+		//VerboseLog.log("keydown");
+		//VerboseLog.log(event.keyCode);
+		//VerboseLog.log(this.keys);
+
 		var controlKeyDown = this.keys[91];
 		var shiftKeyDown = this.keys[16];
 
@@ -107,7 +111,7 @@ WickEditor.prototype.handleKeyboardInput = function (eventType, event) {
 		// Backspace: delete selected objects
 		if (event.keyCode == 8 && document.activeElement.nodeName != 'TEXTAREA') {
 			event.preventDefault();
-			this.actionHandler.doAction('delete', []);	
+			this.deleteSelectedObjects();	
 		}
 
 		// Tilde: log project state to canvas (for debugging)
@@ -119,6 +123,10 @@ WickEditor.prototype.handleKeyboardInput = function (eventType, event) {
 	} else if(eventType === "keyup") {
 
 		this.keys[event.keyCode] = false;
+
+		//VerboseLog.log("keyup");
+		//VerboseLog.log(event.keyCode);
+		//VerboseLog.log(this.keys);
 
 	}
 
@@ -269,6 +277,13 @@ WickEditor.prototype.convertSelectedObjectToSymbol = function () {
 
 }
 
+WickEditor.prototype.deleteSelectedObjects = function () {
+	this.actionHandler.doAction('delete', {
+		obj:   this.fabricCanvas.getCanvas().getActiveObject(),
+		group: this.fabricCanvas.getCanvas().getActiveGroup()
+	});
+}
+
 WickEditor.prototype.editSelectedObject = function () {
 	this.moveInsideObject(this.fabricCanvas.getActiveObject().wickObject);
 }
@@ -405,7 +420,7 @@ WickEditor.prototype.newProject = function () {
 		this.project = new WickProject();
 		this.currentObject = this.project.rootObject;
 		this.syncFabricCanvasWithProject();
-		this.timelineController.updateGUI(this.currentObject);
+		this.htmlGUIHandler.updateTimelineGUI(this.currentObject);
 	}
 
 }
@@ -473,8 +488,8 @@ WickEditor.prototype.loadProjectFromJSON = function (jsonString) {
 	// Load wickobjects in the frame we moved to into the canvas
 	this.syncFabricCanvasWithProject();
 
-	this.timelineController.updateGUI(this.currentObject);
-	this.updatePropertiesGUI('project');
+	this.htmlGUIHandler.updateTimelineGUI(this.currentObject);
+	this.htmlGUIHandler.updatePropertiesGUI('project');
 }
 
 /*************************

@@ -108,8 +108,8 @@ var WickPlayer = (function () {
 	var loadJSONProject = function (proj) {
 		project = JSON.parse(proj);
 
-		console.log("Player loading project:")
-		console.log(project);
+		VerboseLog.log("Player loading project:")
+		VerboseLog.log(project);
 
 		WickSharedUtils.decodeScripts(project.rootObject);
 		resetAllPlayheads(project.rootObject);
@@ -159,6 +159,12 @@ var WickPlayer = (function () {
 
 		if(wickObj.isSymbol) {
 			// Setup builtin wick scripting methods and objects
+			wickObj.play = function (frame) {
+				wickObj.isPlaying = true;
+			}
+			wickObj.stop = function (frame) {
+				wickObj.isPlaying = false;
+			}
 			wickObj.gotoAndPlay = function (frame) {
 				wickObj.currentFrame = frame;
 				wickObj.isPlaying = true;
@@ -167,16 +173,10 @@ var WickPlayer = (function () {
 				wickObj.currentFrame = frame;
 				wickObj.isPlaying = false;
 			}
-			wickObj.play = function (frame) {
-				wickObj.isPlaying = true;
-			}
-			wickObj.stop = function (frame) {
-				wickObj.isPlaying = false;
-			}
-			wickObj.nextFrame = function () {
+			wickObj.gotoNextFrame = function () {
 				wickObj.currentFrame ++;
 			}
-			wickObj.prevFrame = function () {
+			wickObj.gotoPrevFrame = function () {
 				wickObj.currentFrame --;
 			}
 
@@ -404,6 +404,11 @@ var WickPlayer = (function () {
 
 		if(!obj.onLoadScriptRan) {
 
+			// Check for breakpoint
+			if(obj.isSymbol && obj.frames[obj.currentFrame].breakpoint) {
+				obj.isPlaying = false;
+			}
+
 			// Run onLoad script
 			if(obj && !obj.isRoot && obj.wickScripts) {
 				//console.log(obj.wickScripts['onLoad']);
@@ -459,6 +464,12 @@ var WickPlayer = (function () {
 	var evalScript = function (obj, script) {
 
 		// Setup builtin wick scripting methods and objects
+		var play = function (frame) {
+			obj.parentObj.isPlaying = true;
+		}
+		var stop = function (frame) {
+			obj.parentObj.isPlaying = false;
+		}
 		var gotoAndPlay = function (frame) {
 			obj.parentObj.currentFrame = frame;
 			obj.parentObj.isPlaying = true;
@@ -467,10 +478,13 @@ var WickPlayer = (function () {
 			obj.parentObj.currentFrame = frame;
 			obj.parentObj.isPlaying = false;
 		}
-		var play = function (frame) {
-			obj.parentObj.isPlaying = true;
+		var gotoNextFrame = function (frame) {
+			console.log("bpgogogog")
+			obj.parentObj.currentFrame ++;
+			obj.parentObj.isPlaying = false;
 		}
-		var stop = function (frame) {
+		var gotoPrevFrame = function (frame) {
+			obj.parentObj.currentFrame --;
 			obj.parentObj.isPlaying = false;
 		}
 
@@ -491,10 +505,6 @@ var WickPlayer = (function () {
 	var advanceTimeline = function (obj) {
 
 		// Advance timeline for this object
-		if(obj.frames[obj.currentFrame].breakpoint) {
-			obj.isPlaying = false;
-		}
-
 		if(obj.isPlaying) {
 			// Advance timeline one frame
 			obj.currentFrame++;
