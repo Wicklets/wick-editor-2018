@@ -147,11 +147,15 @@ WickEditor.prototype.handleCopyEvent = function (event) {
 // 
 WickEditor.prototype.moveOutOfObject = function () {
 
+	this.fabricCanvas.deselectAll();
+
 	// Store changes made to current frame in the project
 	this.syncProjectWithFabricCanvas();
 
 	// Make sure no objects have negative positions
-	this.currentObject.fixNegativeSubObjectPositions();
+	if(this.currentObject.currentFrame == 0) {
+		this.currentObject.fixNegativeSubObjectPositions();
+	}
 
 	// Set the editor to be editing the parent object
 	this.currentObject = this.currentObject.parentObject;
@@ -165,6 +169,8 @@ WickEditor.prototype.moveOutOfObject = function () {
 
 // 
 WickEditor.prototype.moveInsideObject = function (object) {
+
+	this.fabricCanvas.deselectAll();
 
 	// Store changes made to current frame in the project
 	this.syncProjectWithFabricCanvas();
@@ -205,7 +211,8 @@ WickEditor.prototype.addNewText = function (text) {
 
 	this.fabricCanvas.addWickObjectToCanvas(textWickObject);
 
-	this.actionHandler.doAction('gotoFrame', {toFrame: this.currentObject.currentFrame}, true);
+	this.syncProjectWithFabricCanvas();
+	this.syncFabricCanvasWithProject();
 
 }
 
@@ -222,7 +229,8 @@ WickEditor.prototype.addNewHTMLSnippet = function () {
 
 	this.fabricCanvas.addWickObjectToCanvas(htmlSnippetWickObject);
 
-	this.actionHandler.doAction('gotoFrame', {toFrame: this.currentObject.currentFrame}, true);
+	this.syncProjectWithFabricCanvas();
+	this.syncFabricCanvasWithProject();
 
 }
 

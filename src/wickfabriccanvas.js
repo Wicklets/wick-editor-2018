@@ -173,6 +173,18 @@ FabricCanvas.prototype.clearCanvas = function () {
 
 }
 
+FabricCanvas.prototype.deselectAll = function () {
+
+	var activeGroup = this.canvas.getActiveGroup();
+	if(activeGroup) {
+		activeGroup.removeWithUpdate(activeGroup);
+		this.canvas.renderAll();
+	}
+
+	this.canvas.deactivateAll().renderAll();
+
+}
+
 FabricCanvas.prototype.setBackgroundColor = function (color) {
 	this.frameInside.fill = color;
 	this.canvas.renderAll();
@@ -462,7 +474,6 @@ FabricCanvas.prototype.addWickObjectToCanvas = function (wickObject) {
 	
 	this.makeFabricObjectFromWickObject(wickObject, function(fabricObject) {
 		canvas.add(fabricObject);
-		canvas.setActiveObject(fabricObject);
 	});
 
 }
@@ -472,8 +483,14 @@ FabricCanvas.prototype.convertPathToWickObjectAndAddToCanvas = function (fabricP
 
 	fabricPath.cloneAsImage(function(clone) {
 		var imgSrc = clone._element.currentSrc || clone._element.src;
+		
 		var left = fabricPath.left - clone.width/2/window.devicePixelRatio;
 		var top = fabricPath.top - clone.height/2/window.devicePixelRatio;
+
+		var parentPos = wickEditor.currentObject.getRelativePosition();
+		left -= parentPos.left;
+		top -= parentPos.top;
+
 		WickObjectUtils.createWickObjectFromImage(
 			imgSrc, 
 			left, 

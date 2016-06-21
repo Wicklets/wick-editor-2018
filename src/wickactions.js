@@ -39,7 +39,7 @@ var WickActionHandler = function (wickEditor) {
 			this.args.group.forEachObject(function(o) { 
 				fabCanvas.remove(o);
 			});
-			//fabCanvas.discardActiveGroup().renderAll();
+			fabCanvas.discardActiveGroup().renderAll(); // stops weird ghost group selection
 		} else {
 			fabCanvas.remove(this.args.obj);
 		}
@@ -58,10 +58,13 @@ var WickActionHandler = function (wickEditor) {
 			}
 		} else {
 			fabCanvas.add(this.args.obj);
+			fabCanvas.setActiveObject(this.args.obj);
 		}
 	};
 
 	this.doActions['gotoFrame'] = function () {
+
+		wickEditor.fabricCanvas.deselectAll();
 
 		this.oldFrame = wickEditor.currentObject.currentFrame;
 
@@ -78,6 +81,9 @@ var WickActionHandler = function (wickEditor) {
 	}
 
 	this.undoActions['gotoFrame'] = function () {
+
+		wickEditor.fabricCanvas.deselectAll();
+
 		// Store changes made to current frame in the project
 		wickEditor.syncProjectWithFabricCanvas();
 

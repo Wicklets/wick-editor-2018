@@ -495,10 +495,18 @@ var WickPlayer = (function () {
 			window[subObj.name] = subObj;
 		});
 
+		// Set x,y vars so user doesn't have to use top/left
+		obj.x = obj.left;
+		obj.y = obj.top;
+
 		for(var i = 0; i < 100; i++) { // !!! why plseae dont do this
 			script = script.replace("this.","obj.");
 		}
 		eval(script);
+
+		// Update top/left ... Note that this will squash top and left, so user can't use those!!
+		obj.left = obj.x;
+		obj.top = obj.y;
 
 	}
 
