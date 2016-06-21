@@ -118,6 +118,11 @@ var WickHTMLGUIHandler = function (wickEditor) {
 		}
 	});
 
+	document.getElementById('opacitySlider').onchange = function () {
+		wickEditor.fabricCanvas.getActiveObject().opacity = this.value/255;
+		wickEditor.fabricCanvas.getCanvas().renderAll();
+	};
+
 	document.getElementById('fontSelector').onchange = function () {
 		wickEditor.fabricCanvas.getActiveObject().fontFamily = document.getElementById('fontSelector').value;
 		wickEditor.fabricCanvas.getCanvas().renderAll();

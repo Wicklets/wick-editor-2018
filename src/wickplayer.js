@@ -320,6 +320,8 @@ var WickPlayer = (function () {
 
 	var onTouchStart = function (evt) {
 
+		evt.preventDefault();
+
 		var touchPos = getTouchPos(canvas, evt);
 
 		WickSharedUtils.forEachActiveChildObject(project.rootObject, function(currObj) {
@@ -576,6 +578,7 @@ var WickPlayer = (function () {
 
 		// Draw root object, this will recursively draw every object!
 		context.save();
+			context.globalAlpha = 1.0;
 			context.translate(
 				projectPositionX, 
 				projectPositionY);
@@ -614,40 +617,33 @@ var WickPlayer = (function () {
 
 	var drawWickObject = function (obj) {
 
+		var oldOpacity = context.globalAlpha;
+		context.globalAlpha = oldOpacity*obj.opacity;
+
+		context.save();
+
+		context.translate(obj.left, obj.top);
+		doRotationForObject(obj);
+		context.scale(obj.scaleX, obj.scaleY);
+
+		if(obj.flipX) {
+			canvasContext.translate(obj.width, 0);
+			canvasContext.scale(-1, 1);
+		}
+
 		if(obj.isSymbol) {
 
 			// Recursively draw all sub objects.
 
-			context.save();
-			context.translate(obj.left, obj.top);
-			doRotationForObject(obj);
-			context.scale(obj.scaleX, obj.scaleY);
-
-			if(obj.flipX) {
-				canvasContext.translate(obj.width, 0);
-				canvasContext.scale(-1, 1);
-			}
-
-				WickSharedUtils.forEachActiveChildObject(obj, function(subObj) {
-					drawWickObject(subObj);
-				});
-
-			context.restore();
+			WickSharedUtils.forEachActiveChildObject(obj, function(subObj) {
+				drawWickObject(subObj);
+			});
 
 		} else {
 
 			// Draw the content of this static object.
 
 			context.save();
-
-				context.translate(obj.left, obj.top);
-				doRotationForObject(obj);
-				context.scale(obj.scaleX, obj.scaleY);
-
-				if(obj.flipX) {
-					canvasContext.translate(obj.width, 0);
-					canvasContext.scale(-1, 1);
-				}
 
 				if(obj.imageData) {
 					context.drawImage(obj.image, 0, 0);
@@ -663,6 +659,10 @@ var WickPlayer = (function () {
 			context.restore();
 			
 		}
+
+		context.restore();
+
+		context.globalAlpha = oldOpacity;
 
 	}
 

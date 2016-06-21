@@ -13,7 +13,8 @@ var FabricCanvas = function (wickEditor) {
 		"scaleY",
 		"angle",
 		"flipX",
-		"flipY"
+		"flipY",
+		"opacity"
 	];
 
 // Setup fabric canvas
@@ -401,6 +402,7 @@ FabricCanvas.prototype.makeFabricObjectFromWickObject = function (wickObject, ca
 				// List fully populated
 				if(firstFrameFabricObjects.length == firstFrameObjects.length) {
 					var group = makeGroupOutOfFabricObjects(firstFrameFabricObjects);
+					group.opacity = wickObject.opacity;
 					that.canvas.add(group);
 				}
 			})
