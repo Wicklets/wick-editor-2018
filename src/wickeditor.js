@@ -56,6 +56,12 @@ WickEditor.prototype.resizeCanvasAndGUI = function () {
 		this.project.resolution.x, 
 		this.project.resolution.y
 	);
+	this.fabricCanvas.repositionOriginCrosshair(
+		this.project.resolution.x, 
+		this.project.resolution.y,
+		this.currentObject.left,
+		this.currentObject.top
+	);
 
 	// Also center timeline GUI
 	var GUIWidth = parseInt($("#timelineGUI").css("width")) / 2;
@@ -166,6 +172,13 @@ WickEditor.prototype.moveOutOfObject = function () {
 
 	this.htmlGUIHandler.updateTimelineGUI(this.currentObject);
 
+	this.fabricCanvas.repositionOriginCrosshair(
+		this.project.resolution.x, 
+		this.project.resolution.y,
+		this.currentObject.left,
+		this.currentObject.top
+	);
+
 }
 
 // 
@@ -184,6 +197,13 @@ WickEditor.prototype.moveInsideObject = function (object) {
 	this.syncFabricCanvasWithProject();
 
 	this.htmlGUIHandler.updateTimelineGUI(this.currentObject);
+
+	this.fabricCanvas.repositionOriginCrosshair(
+		this.project.resolution.x, 
+		this.project.resolution.y,
+		this.currentObject.left,
+		this.currentObject.top
+	);
 
 }
 

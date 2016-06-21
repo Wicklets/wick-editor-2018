@@ -49,7 +49,6 @@ var FabricCanvas = function (wickEditor) {
 	this.frameInside = new fabric.Rect({
 		fill: '#FFF',
 	});
-	this.frameInside.wickCanvasName = "frameInside";
 
 	this.frameInside.hasControls = false;
 	this.frameInside.selectable = false;
@@ -59,14 +58,17 @@ var FabricCanvas = function (wickEditor) {
 
 // Crosshair that shows where (0,0) of the current object is
 
-	fabric.Image.fromURL('resources/htmlsnippet.png', function(snippet) {
+	fabric.Image.fromURL('resources/origin.png', function(obj) {
+		that.originCrosshair = obj;
 
-		wickObject.width = snippet.width / window.devicePixelRatio;
-		wickObject.height = snippet.height / window.devicePixelRatio;
+		that.originCrosshair.left = (window.innerWidth -wickEditor.project.resolution.x)/2- that.originCrosshair.width/2;
+		that.originCrosshair.top  = (window.innerHeight-wickEditor.project.resolution.y)/2- that.originCrosshair.height/2;
 
-		setWickObjectPropertiesOnFabricObject(snippet, wickObject);
+		that.originCrosshair.hasControls = false;
+		that.originCrosshair.selectable = false;
+		that.originCrosshair.evented = false;
 
-		callback(snippet);
+		that.canvas.add(that.originCrosshair);
 	});
 
 // Text and fade that alerts the user to drop files into editor
@@ -77,7 +79,6 @@ var FabricCanvas = function (wickEditor) {
 		fill: '#000',
 		opacity: 0
 	});
-	this.dragToImportFileFade.wickCanvasName = "dragToImportFileFade";
 
 	this.dragToImportFileFade.hasControls = false;
 	this.dragToImportFileFade.selectable = false;
@@ -91,7 +92,6 @@ var FabricCanvas = function (wickEditor) {
 		fontFamily: 'arial',
 		opacity: 0
 	});
-	this.dragToImportFileText.wickCanvasName = "dragToImportFileText";
 
 	this.dragToImportFileText.hasControls = false;
 	this.dragToImportFileText.selectable = false;
@@ -178,7 +178,7 @@ FabricCanvas.prototype.clearCanvas = function () {
 
 	// Clear canvas except for wick GUI elements
 	this.canvas.forEachObject(function(fabricObj) {
-		if(!fabricObj.wickCanvasName) {
+		if(fabricObj.wickObject) {
 			canvas.remove(fabricObj);
 		} 
 	});
@@ -289,6 +289,16 @@ FabricCanvas.prototype.resize = function (projectWidth, projectHeight) {
 
 }
 
+FabricCanvas.prototype.repositionOriginCrosshair = function (projectWidth, projectHeight, currentObjectLeft, currentObjectTop) {
+	// Move the origin crosshair to the current origin
+	if(this.originCrosshair) { // window resize can happen before originCrosshair's image is loaded
+		this.originCrosshair.left = (window.innerWidth -projectWidth) /2 - this.originCrosshair.width/2;
+		this.originCrosshair.top  = (window.innerHeight-projectHeight)/2 - this.originCrosshair.height/2;
+		this.originCrosshair.left += currentObjectLeft;
+		this.originCrosshair.top += currentObjectTop;
+	}
+}
+
 /***************************************
 	Drawing mode
 ****************************************/
@@ -318,18 +328,13 @@ FabricCanvas.prototype.reloadPaperCanvas = function(paperCanvas) {
 
 	// Get rid of the old paper canvas object if it exists
 
-	this.canvas.forEachObject(function(fabricObj) {
-		if(fabricObj.wickCanvasName === "paperCanvas") {
-			that.canvas.remove(fabricObj);
-		} 
-	});
+	that.canvas.remove(that.paperCanvas)
 
 	// Add a new paper canvas
 
 	var paperCanvasDataURL = paperCanvas.toDataURL();
 
 	fabric.Image.fromURL(paperCanvasDataURL, function(oImg) {
-		oImg.wickCanvasName = "paperCanvas";
 		oImg.hasControls = false;
 		oImg.selectable = false;
 		oImg.evented = false;
