@@ -181,11 +181,11 @@ WickObject.prototype.fixSymbolPosition = function () {
 				topmostTop = currObj.top;
 			}
 		});
-		
-		if(leftmostLeft < 0 || topmostTop < 0) {
+
+		//if(leftmostLeft < 0 || topmostTop < 0) {
 			this.left -= leftmostLeft;
 			this.top -= topmostTop;
-		}
+		//}
 	}
 
 }
