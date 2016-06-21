@@ -153,9 +153,7 @@ WickEditor.prototype.moveOutOfObject = function () {
 	this.syncProjectWithFabricCanvas();
 
 	// Make sure no objects have negative positions
-	if(this.currentObject.currentFrame == 0) {
-		this.currentObject.fixNegativeSubObjectPositions();
-	}
+	//this.currentObject.fixSymbolPosition();
 
 	// Set the editor to be editing the parent object
 	this.currentObject = this.currentObject.parentObject;
@@ -263,7 +261,7 @@ WickEditor.prototype.convertSelectedObjectToSymbol = function () {
 			symbol.frames[0].wickObjects[i].top = selectedObject._objects[i].top;
 		}
 
-		symbol.fixNegativeSubObjectPositions();
+		//symbol.fixNegativeSubObjectPositions();
 
 		var max = 0;
 		while(selectedObject._objects.length > 0 && max < 100) {
@@ -282,6 +280,8 @@ WickEditor.prototype.convertSelectedObjectToSymbol = function () {
 	}
 
 	this.fabricCanvas.addWickObjectToCanvas(symbol);
+
+	this.fabricCanvas.deselectAll();
 
 }
 

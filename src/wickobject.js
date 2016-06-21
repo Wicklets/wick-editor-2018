@@ -166,7 +166,8 @@ WickObject.prototype.getRelativePosition = function () {
 }
 
 // 
-WickObject.prototype.fixNegativeSubObjectPositions = function () {
+WickObject.prototype.fixSymbolPosition = function () {
+
 	if(this.isSymbol) {
 		var leftmostLeft = null;
 		var topmostTop = null;
@@ -180,13 +181,12 @@ WickObject.prototype.fixNegativeSubObjectPositions = function () {
 				topmostTop = currObj.top;
 			}
 		});
-
-		WickSharedUtils.forEachChildObject(this, function (currObj) {
-			currObj.left += -leftmostLeft;
-			currObj.top += -topmostTop;
-		});
-		this.left += leftmostLeft;
-		this.top += topmostTop;
+		
+		if(leftmostLeft < 0 || topmostTop < 0) {
+			this.left -= leftmostLeft;
+			this.top -= topmostTop;
+		}
 	}
+
 }
 

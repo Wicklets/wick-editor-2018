@@ -364,7 +364,7 @@ FabricCanvas.prototype.makeFabricObjectFromWickObject = function (wickObject, ca
 			// Add that group to the fabric canvas
 			group.wickObject = wickObject;
 			group.isGroup = true;
-			that.canvas.add(group);
+			return group;
 		}
 
 		// Create a list of every object in the first frame of the symbol
@@ -379,7 +379,8 @@ FabricCanvas.prototype.makeFabricObjectFromWickObject = function (wickObject, ca
 
 				// List fully populated
 				if(firstFrameFabricObjects.length == firstFrameObjects.length) {
-					makeGroupOutOfFabricObjects(firstFrameFabricObjects);
+					var group = makeGroupOutOfFabricObjects(firstFrameFabricObjects);
+					that.canvas.add(group);
 				}
 			})
 
@@ -483,7 +484,7 @@ FabricCanvas.prototype.convertPathToWickObjectAndAddToCanvas = function (fabricP
 
 	fabricPath.cloneAsImage(function(clone) {
 		var imgSrc = clone._element.currentSrc || clone._element.src;
-		
+
 		var left = fabricPath.left - clone.width/2/window.devicePixelRatio;
 		var top = fabricPath.top - clone.height/2/window.devicePixelRatio;
 
@@ -536,6 +537,8 @@ FabricCanvas.prototype.getWickObjectsInCanvas = function (projectResolution) {
 				var parentsPositionTotal = wickObject.parentObject.getRelativePosition();
 				wickObject.left -= parentsPositionTotal.left;
 				wickObject.top -= parentsPositionTotal.top;
+
+				wickObject.fixSymbolPosition();
 			}
 
 			// Reposition the wickobject so that 0,0 is the canvases origin, not fabric's origin.
