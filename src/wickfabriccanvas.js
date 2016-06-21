@@ -173,6 +173,27 @@ FabricCanvas.prototype.clearCanvas = function () {
 
 }
 
+FabricCanvas.prototype.selectAll = function () {
+
+	var objs = [];
+	this.canvas.getObjects().map(function(o) {
+		if(o.wickObject) {
+			o.set('active', true);
+			return objs.push(o);
+		}
+	});
+
+	var group = new fabric.Group(objs, {
+		originX: 'left', 
+		originY: 'top'
+	});
+
+	this.canvas._activeObject = null;
+
+	this.canvas.setActiveGroup(group.setCoords()).renderAll();
+
+}
+
 FabricCanvas.prototype.deselectAll = function () {
 
 	var activeGroup = this.canvas.getActiveGroup();
@@ -209,26 +230,6 @@ FabricCanvas.prototype.bringSelectedObjectToFront = function () {
 	console.error("Don't forget to handle muliple objects here!");
 	
 	this.getActiveObject().bringToFront();
-}
-
-FabricCanvas.prototype.selectAll = function () {
-
-	var objs = [];
-	this.canvas.getObjects().map(function(o) {
-		if(o.wickObject) {
-			return objs.push(o);
-		}
-	});
-
-	var group = new fabric.Group(objs, {
-		originX: 'center', 
-		originY: 'center'
-	});
-
-	this.canvas._activeObject = null;
-
-	this.canvas.setActiveGroup(group.setCoords()).renderAll();
-
 }
 
 FabricCanvas.prototype.resize = function (projectWidth, projectHeight) {
@@ -497,7 +498,9 @@ FabricCanvas.prototype.convertPathToWickObjectAndAddToCanvas = function (fabricP
 			left, 
 			top, 
 			currentObject, 
-			function(obj) { that.addWickObjectToCanvas(obj) }
+			function(obj) { 
+				that.addWickObjectToCanvas(obj) 
+			}
 		);
 	});
 }

@@ -182,10 +182,11 @@ WickObject.prototype.fixSymbolPosition = function () {
 			}
 		});
 
-		//if(leftmostLeft < 0 || topmostTop < 0) {
+		// Only set left/top if there were actually children in the symbol
+		if(leftmostLeft && topmostTop) {
 			this.left -= leftmostLeft;
 			this.top -= topmostTop;
-		//}
+		}
 	}
 
 }

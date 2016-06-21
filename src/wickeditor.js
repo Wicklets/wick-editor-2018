@@ -152,9 +152,6 @@ WickEditor.prototype.moveOutOfObject = function () {
 	// Store changes made to current frame in the project
 	this.syncProjectWithFabricCanvas();
 
-	// Make sure no objects have negative positions
-	//this.currentObject.fixSymbolPosition();
-
 	// Set the editor to be editing the parent object
 	this.currentObject = this.currentObject.parentObject;
 
@@ -261,7 +258,7 @@ WickEditor.prototype.convertSelectedObjectToSymbol = function () {
 			symbol.frames[0].wickObjects[i].top = selectedObject._objects[i].top;
 		}
 
-		//symbol.fixNegativeSubObjectPositions();
+		symbol.fixSymbolPosition();
 
 		var max = 0;
 		while(selectedObject._objects.length > 0 && max < 100) {

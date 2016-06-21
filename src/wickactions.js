@@ -62,6 +62,14 @@ var WickActionHandler = function (wickEditor) {
 		}
 	};
 
+	this.doActions['addWickObjectToFabricCanvas'] = function () {
+
+	}
+
+	this.undoActions['addWickObjectToFabricCanvas'] = function () {
+		
+	}
+
 	this.doActions['gotoFrame'] = function () {
 
 		wickEditor.fabricCanvas.deselectAll();
