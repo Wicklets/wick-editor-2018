@@ -6,7 +6,7 @@ var WickEditor = function () {
 	
 	this.version = 'pre-alpha';
 
-	this.AUTO_LOAD_UNIT_TEST_PROJECT = true;
+	this.AUTO_LOAD_UNIT_TEST_PROJECT = false;
 	this.UNIT_TEST_PROJECT_PATH = "tests/fitcanvas.json";
 
 /*********************************
