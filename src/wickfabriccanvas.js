@@ -296,6 +296,7 @@ FabricCanvas.prototype.repositionOriginCrosshair = function (projectWidth, proje
 		this.originCrosshair.top  = (window.innerHeight-projectHeight)/2 - this.originCrosshair.height/2;
 		this.originCrosshair.left += currentObjectLeft;
 		this.originCrosshair.top += currentObjectTop;
+		this.canvas.renderAll();
 	}
 }
 

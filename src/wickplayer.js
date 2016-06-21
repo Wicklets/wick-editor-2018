@@ -78,7 +78,13 @@ var WickPlayer = (function () {
 
 		// Setup touch events (mobile mode)
 		if(mobileMode) {
+			// Touch event (one touch = like a mouse click)
 			canvasContainerEl.addEventListener("touchstart", onTouchStart, false);
+
+			// Squash gesture events
+			canvasContainerEl.addEventListener('gesturestart', function(e) {  e.preventDefault(); });
+			canvasContainerEl.addEventListener('gesturechange', function(e) {  e.preventDefault(); });
+			canvasContainerEl.addEventListener('gestureend', function(e) {  e.preventDefault(); });
 		}
 
 		// update canvas size on window resize
@@ -149,10 +155,15 @@ var WickPlayer = (function () {
 	var generateBuiltinWickFunctions = function (wickObj) {
 
 		wickObj.hitTest = function (otherObj) {
+
+			if(!otherObj) {
+				console.error('hitTest with invalid object as param!!')
+			}
+
 			// TODO: Use proper rectangle collision
 			var wickObjCentroid = {
-				x : wickObj.left + wickObj.width/2,
-				y : wickObj.top + wickObj.height/2
+				x : wickObj.left + wickObj.width*wickObj.scaleX/2,
+				y : wickObj.top + wickObj.height*wickObj.scaleY/2
 			};
 			return pointInsideObj(otherObj, wickObjCentroid);
 		}
@@ -505,6 +516,11 @@ var WickPlayer = (function () {
 		obj.left = obj.x;
 		obj.top = obj.y;
 
+		// Get rid of wickobject reference variables
+		WickSharedUtils.forEachChildObject(obj.parentObj, function(subObj) {
+			window[subObj.name] = undefined;
+		});
+
 	}
 
 	var advanceTimeline = function (obj) {
@@ -607,6 +623,11 @@ var WickPlayer = (function () {
 			doRotationForObject(obj);
 			context.scale(obj.scaleX, obj.scaleY);
 
+			if(obj.flipX) {
+				canvasContext.translate(obj.width, 0);
+				canvasContext.scale(-1, 1);
+			}
+
 				WickSharedUtils.forEachActiveChildObject(obj, function(subObj) {
 					drawWickObject(subObj);
 				});
@@ -622,6 +643,11 @@ var WickPlayer = (function () {
 				context.translate(obj.left, obj.top);
 				doRotationForObject(obj);
 				context.scale(obj.scaleX, obj.scaleY);
+
+				if(obj.flipX) {
+					canvasContext.translate(obj.width, 0);
+					canvasContext.scale(-1, 1);
+				}
 
 				if(obj.imageData) {
 					context.drawImage(obj.image, 0, 0);
