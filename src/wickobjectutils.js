@@ -39,11 +39,15 @@
 		return JSONWickObject;
 	}
 
-	wickUtils.getWickObjectArrayAsJSON = function (wickObjects, currentObject) {
+	wickUtils.getWickObjectArrayAsJSON = function (wickObjects, currentObject, groupLeft, groupTop) {
 		for(var i = 0; i < wickObjects.length; i++) {
 			// Remove parent object references 
 			// (can't JSONify objects with circular references, player doesn't need them anyway)
 			wickObjects[i].removeParentObjectRefences();
+
+			// Move object to group's relative position
+			wickObjects[i].left += groupLeft;
+			wickObjects[i].top += groupTop;
 
 			// Encode scripts to avoid JSON format problems
 			WickSharedUtils.encodeScripts(wickObjects[i]);
@@ -54,6 +58,10 @@
 		for(var i = 0; i < wickObjects.length; i++) {
 			// Put prototypes back on object ('class methods'), they don't get JSONified on project export.
 			wickUtils.putWickObjectPrototypeBackOnObject(wickObjects[i]);
+
+			// Reposition object back into place
+			wickObjects[i].left -= groupLeft;
+			wickObjects[i].top -= groupTop;
 
 			// Put parent object references back in all objects
 			wickObjects[i].parentObject = currentObject;
@@ -136,7 +144,7 @@
 			for(var i = 0; i < items.length; i++) {
 				groupObjs.push(items[i].wickObject);
 			}
-			var groupObjsJSON = WickObjectUtils.getWickObjectArrayAsJSON(groupObjs, currentObject);
+			var groupObjsJSON = WickObjectUtils.getWickObjectArrayAsJSON(groupObjs, currentObject, group.left, group.top);
 			clipboardData.setData('text/wickobjectarrayjson', groupObjsJSON);
 		} else {
 			var selectedWickObject = obj.wickObject;
@@ -164,8 +172,7 @@
 
 			var wickObjects = WickObjectUtils.getWickObjectArrayFromJSON(wickObjectJSON, currentObject);
 			for(var i = 0; i < wickObjects.length; i++) {
-				wickObjects[i].top += 55;
-				wickObjects[i].left += 55; // just to position it a bit over (temporary)
+				console.log(wickObjects)
 				fabricCanvas.addWickObjectToCanvas(wickObjects[i]);
 			}
 

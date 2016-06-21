@@ -1,5 +1,7 @@
 var FabricCanvas = function (wickEditor) {
 
+	var that = this;
+
 	// When a fabric object is created from a wick object (and vice versa), 
 	// these properties must be set on the new object
 	this.sharedFabricWickObjectProperties = [
@@ -29,8 +31,6 @@ var FabricCanvas = function (wickEditor) {
 	this.lineWidthEl = document.getElementById('lineWidth');
 	this.lineColorEl = document.getElementById('lineColor');
 
-	var that = this;
-
 	this.lineWidthEl.onchange = function() {
 		that.canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;
 		//this.previousSibling.innerHTML = this.value;
@@ -56,6 +56,18 @@ var FabricCanvas = function (wickEditor) {
 	this.frameInside.evented = false;
 
 	this.canvas.add(this.frameInside)
+
+// Crosshair that shows where (0,0) of the current object is
+
+	fabric.Image.fromURL('resources/htmlsnippet.png', function(snippet) {
+
+		wickObject.width = snippet.width / window.devicePixelRatio;
+		wickObject.height = snippet.height / window.devicePixelRatio;
+
+		setWickObjectPropertiesOnFabricObject(snippet, wickObject);
+
+		callback(snippet);
+	});
 
 // Text and fade that alerts the user to drop files into editor
 // Shows up when a file is dragged over the editor
@@ -195,6 +207,8 @@ FabricCanvas.prototype.selectAll = function () {
 }
 
 FabricCanvas.prototype.deselectAll = function () {
+
+	wickEditor.htmlGUIHandler.updatePropertiesGUI('project');
 
 	var activeGroup = this.canvas.getActiveGroup();
 	if(activeGroup) {

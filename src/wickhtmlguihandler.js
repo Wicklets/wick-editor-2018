@@ -202,7 +202,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
 			case 'project':
 				document.getElementById('projectBgColor').value   = wickEditor.project.backgroundColor;
 				document.getElementById('projectSizeX').innerHTML = wickEditor.project.resolution.x;
-				document.getElementById('projectSizeY').innerHTML = wickEditor.project.resolution.x;
+				document.getElementById('projectSizeY').innerHTML = wickEditor.project.resolution.y;
 				document.getElementById('frameRate').innerHTML    = wickEditor.project.framerate;
 				$("#projectProperties").css('display', 'inline');
 				break;
@@ -210,6 +210,8 @@ var WickHTMLGUIHandler = function (wickEditor) {
 				var name = wickEditor.fabricCanvas.getActiveObject().wickObject.name;
 				if(name) {
 					document.getElementById('objectName').value = name;
+				} else {
+					document.getElementById('objectName').value = '';
 				}
 				$("#objectProperties").css('display', 'inline');
 				break;

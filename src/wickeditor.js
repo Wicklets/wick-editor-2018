@@ -95,11 +95,17 @@ WickEditor.prototype.handleKeyboardInput = function (eventType, event) {
 		else if (event.keyCode == 90 && controlKeyDown) {
 			this.actionHandler.undoAction();
 		}
-
 		// Control-s: save
 		else if (event.keyCode == 83 && controlKeyDown) {
 			event.preventDefault();
+			this.clearKeys();
 			this.saveProject();
+		}
+		// Control-o: open
+		else if (event.keyCode == 79 && controlKeyDown) {
+			event.preventDefault();
+			this.clearKeys();
+			$('#importButton').click();
 		}
 
 		// Control-a: Select all

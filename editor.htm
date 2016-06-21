@@ -132,11 +132,11 @@
 			<div class="button buttonInRow" id="exportJSONButton" onclick="wickEditor.saveProject();">
 				<img src="resources/save.png" width="30" />
 			</div>
-			<div class="button buttonInRow" id="exportHTMLButton" onclick="wickEditor.exportProject();">
-				<img src="resources/export.png" width="30" />
-			</div>
 			<div class="button buttonInRow" id="openProjectButton" onclick="$('#importButton').click();">
 				<img src="resources/open-folder.png" width="30" />
+			</div>
+			<div class="button buttonInRow" id="exportHTMLButton" onclick="wickEditor.exportProject();">
+				<img src="resources/export.png" width="30" />
 			</div>
 			<div class="button buttonInRow" id="runButton" onclick="wickEditor.runProject();">
 				<img src="resources/play.png" width="30" />
@@ -226,7 +226,7 @@
 				Background color: <input type="color" value="#FFFFFF" id="projectBgColor"><br />
 				Size: <textarea id="projectSizeX" cols="4" rows="1"></textarea> x 
 				      <textarea id="projectSizeY" cols="4" rows="1"></textarea><br />
-				Framerate: <textarea id="frameRate" cols="2" rows="1">bogo</textarea><br />
+				Framerate: <textarea id="frameRate" cols="2" rows="1"></textarea><br />
 			</div>
 			<div id="objectProperties">
 				Object Properties

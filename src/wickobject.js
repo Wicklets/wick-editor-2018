@@ -127,7 +127,7 @@ WickObject.prototype.removeParentObjectRefences = function() {
 
 }
 
-// Used to put parent object references back after 
+// Used to put parent object references back after they are removed for JSONification
 WickObject.prototype.regenerateParentObjectReferences = function() {
 
 	var parentObject = this;
@@ -165,7 +165,10 @@ WickObject.prototype.getRelativePosition = function () {
 
 }
 
-// 
+/* Fabric js sets the position of the group to the positions of the leftmost+topmost objects 
+   by default. So if the leftmost/topmost objects are not at 0,0, this causes problems! 
+   fixSymbolPosition shifts everything over so that the symbol will always be at the 
+   same absolute position. */
 WickObject.prototype.fixSymbolPosition = function () {
 
 	if(this.isSymbol) {

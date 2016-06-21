@@ -332,8 +332,8 @@ var WickPlayer = (function () {
 
 			WickSharedUtils.forEachActiveChildObject(obj, function (currObj) {
 				var subPoint = {
-					x : point.x + obj.left,
-					y : point.y + obj.top
+					x : point.x - obj.left,
+					y : point.y - obj.top
 				};
 				if(pointInsideObj(currObj, subPoint)) {
 					pointInsideSymbol = true;
@@ -411,11 +411,8 @@ var WickPlayer = (function () {
 
 			// Run onLoad script
 			if(obj && !obj.isRoot && obj.wickScripts) {
-				//console.log(obj.wickScripts['onLoad']);
 				evalScript(obj, obj.wickScripts.onLoad);
 				obj.onLoadScriptRan = true;
-			} else {
-				//console.log("obj contains no wickScripts or onLoad function");
 			}
 
 			// Recursively run all onLoads
@@ -514,13 +511,20 @@ var WickPlayer = (function () {
 
 		// Advance timeline for this object
 		if(obj.isPlaying) {
+			/* Left the frame, all child objects are unloaded, make sure 
+			   they run onLoad again next time we come back to this frame */
+			WickSharedUtils.forEachActiveChildObject(obj, function(child) {
+				child.onLoadScriptRan = false;
+			});
+
 			// Advance timeline one frame
 			obj.currentFrame++;
 			if(obj.currentFrame == obj.frames.length) {
 				obj.currentFrame = 0;
 			}
 
-			obj.onLoadScriptRan = false;
+			//obj.onLoadScriptRan = false;
+			//console.log("ya")
 		}
 
 		// Recusively advance timelines of all children
@@ -540,22 +544,45 @@ var WickPlayer = (function () {
 
 	var draw = function () {
 
+		// Calculate centered project window position
+		var projectPositionX = (window.innerWidth - project.resolution.x) / 2;
+		var projectPositionY = (window.innerHeight - project.resolution.y) / 2;
+
 		// Clear canvas
 		context.clearRect(0, 0, canvas.width, canvas.height);
 
 		context.fillStyle = project.backgroundColor;
-		context.fillRect(0,0, window.innerWidth,window.innerHeight);
+		context.fillRect(
+			projectPositionX, 
+			projectPositionY, 
+			project.resolution.x, 
+			project.resolution.y);
 
 		// Draw root object, this will recursively draw every object!
 		context.save();
 			context.translate(
-				(window.innerWidth - project.resolution.x) / 2, 
-				(window.innerHeight - project.resolution.y) / 2);
+				projectPositionX, 
+				projectPositionY);
 			drawWickObject(project.rootObject);
 		context.restore();
 
+		// Draw border around project (to hide offscreen objects)
+		context.fillStyle = "#000000";
+		context.fillRect( // top side
+			0, 0, 
+			window.innerWidth, projectPositionY);
+		context.fillRect( // bottom side
+			0, projectPositionY + project.resolution.y, 
+			window.innerWidth, projectPositionY);
+		context.fillRect( // left side
+			0, projectPositionY, 
+			projectPositionX, project.resolution.y);
+		context.fillRect( // right side
+			projectPositionX+project.resolution.x, projectPositionY, 
+			projectPositionX, project.resolution.y);
+
 		// Draw FPS counter
-		context.fillStyle = "Black";
+		context.fillStyle = "White";
 		context.font      = "normal 14pt Arial";
 		context.fillText(fps.getFPS() + " FPS", canvas.width-80, 29);
 
