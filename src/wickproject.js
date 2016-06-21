@@ -25,4 +25,6 @@ var WickProject = function () {
 
 	this.framerate = 12;
 
+	this.fitScreen = true;
+
 };
