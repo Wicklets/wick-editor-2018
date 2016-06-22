@@ -1,5 +1,7 @@
 var FabricCanvas = function (wickEditor) {
 
+	var that = this;
+
 	// When a fabric object is created from a wick object (and vice versa), 
 	// these properties must be set on the new object
 	this.sharedFabricWickObjectProperties = [
@@ -11,7 +13,8 @@ var FabricCanvas = function (wickEditor) {
 		"scaleY",
 		"angle",
 		"flipX",
-		"flipY"
+		"flipY",
+		"opacity"
 	];
 
 // Setup fabric canvas
@@ -28,8 +31,6 @@ var FabricCanvas = function (wickEditor) {
 
 	this.lineWidthEl = document.getElementById('lineWidth');
 	this.lineColorEl = document.getElementById('lineColor');
-
-	var that = this;
 
 	this.lineWidthEl.onchange = function() {
 		that.canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;
@@ -49,13 +50,27 @@ var FabricCanvas = function (wickEditor) {
 	this.frameInside = new fabric.Rect({
 		fill: '#FFF',
 	});
-	this.frameInside.wickCanvasName = "frameInside";
 
 	this.frameInside.hasControls = false;
 	this.frameInside.selectable = false;
 	this.frameInside.evented = false;
 
 	this.canvas.add(this.frameInside)
+
+// Crosshair that shows where (0,0) of the current object is
+
+	fabric.Image.fromURL('resources/origin.png', function(obj) {
+		that.originCrosshair = obj;
+
+		that.originCrosshair.left = (window.innerWidth -wickEditor.project.resolution.x)/2- that.originCrosshair.width/2;
+		that.originCrosshair.top  = (window.innerHeight-wickEditor.project.resolution.y)/2- that.originCrosshair.height/2;
+
+		that.originCrosshair.hasControls = false;
+		that.originCrosshair.selectable = false;
+		that.originCrosshair.evented = false;
+
+		that.canvas.add(that.originCrosshair);
+	});
 
 // Text and fade that alerts the user to drop files into editor
 // Shows up when a file is dragged over the editor
@@ -65,7 +80,6 @@ var FabricCanvas = function (wickEditor) {
 		fill: '#000',
 		opacity: 0
 	});
-	this.dragToImportFileFade.wickCanvasName = "dragToImportFileFade";
 
 	this.dragToImportFileFade.hasControls = false;
 	this.dragToImportFileFade.selectable = false;
@@ -79,7 +93,6 @@ var FabricCanvas = function (wickEditor) {
 		fontFamily: 'arial',
 		opacity: 0
 	});
-	this.dragToImportFileText.wickCanvasName = "dragToImportFileText";
 
 	this.dragToImportFileText.hasControls = false;
 	this.dragToImportFileText.selectable = false;
@@ -166,10 +179,45 @@ FabricCanvas.prototype.clearCanvas = function () {
 
 	// Clear canvas except for wick GUI elements
 	this.canvas.forEachObject(function(fabricObj) {
-		if(!fabricObj.wickCanvasName) {
+		if(fabricObj.wickObject) {
 			canvas.remove(fabricObj);
 		} 
 	});
+
+}
+
+FabricCanvas.prototype.selectAll = function () {
+
+	var objs = [];
+	this.canvas.getObjects().map(function(o) {
+		if(o.wickObject) {
+			o.set('active', true);
+			return objs.push(o);
+		}
+	});
+
+	var group = new fabric.Group(objs, {
+		originX: 'left', 
+		originY: 'top'
+	});
+
+	this.canvas._activeObject = null;
+
+	this.canvas.setActiveGroup(group.setCoords()).renderAll();
+
+}
+
+FabricCanvas.prototype.deselectAll = function () {
+
+	wickEditor.htmlGUIHandler.updatePropertiesGUI('project');
+
+	var activeGroup = this.canvas.getActiveGroup();
+	if(activeGroup) {
+		activeGroup.removeWithUpdate(activeGroup);
+		this.canvas.renderAll();
+	}
+
+	this.canvas.deactivateAll().renderAll();
 
 }
 
@@ -197,26 +245,6 @@ FabricCanvas.prototype.bringSelectedObjectToFront = function () {
 	console.error("Don't forget to handle muliple objects here!");
 	
 	this.getActiveObject().bringToFront();
-}
-
-FabricCanvas.prototype.selectAll = function () {
-
-	var objs = [];
-	this.canvas.getObjects().map(function(o) {
-		if(o.wickObject) {
-			return objs.push(o);
-		}
-	});
-
-	var group = new fabric.Group(objs, {
-		originX: 'center', 
-		originY: 'center'
-	});
-
-	this.canvas._activeObject = null;
-
-	this.canvas.setActiveGroup(group.setCoords()).renderAll();
-
 }
 
 FabricCanvas.prototype.resize = function (projectWidth, projectHeight) {
@@ -262,6 +290,17 @@ FabricCanvas.prototype.resize = function (projectWidth, projectHeight) {
 
 }
 
+FabricCanvas.prototype.repositionOriginCrosshair = function (projectWidth, projectHeight, currentObjectLeft, currentObjectTop) {
+	// Move the origin crosshair to the current origin
+	if(this.originCrosshair) { // window resize can happen before originCrosshair's image is loaded
+		this.originCrosshair.left = (window.innerWidth -projectWidth) /2 - this.originCrosshair.width/2;
+		this.originCrosshair.top  = (window.innerHeight-projectHeight)/2 - this.originCrosshair.height/2;
+		this.originCrosshair.left += currentObjectLeft;
+		this.originCrosshair.top += currentObjectTop;
+		this.canvas.renderAll();
+	}
+}
+
 /***************************************
 	Drawing mode
 ****************************************/
@@ -291,18 +330,13 @@ FabricCanvas.prototype.reloadPaperCanvas = function(paperCanvas) {
 
 	// Get rid of the old paper canvas object if it exists
 
-	this.canvas.forEachObject(function(fabricObj) {
-		if(fabricObj.wickCanvasName === "paperCanvas") {
-			that.canvas.remove(fabricObj);
-		} 
-	});
+	that.canvas.remove(that.paperCanvas)
 
 	// Add a new paper canvas
 
 	var paperCanvasDataURL = paperCanvas.toDataURL();
 
 	fabric.Image.fromURL(paperCanvasDataURL, function(oImg) {
-		oImg.wickCanvasName = "paperCanvas";
 		oImg.hasControls = false;
 		oImg.selectable = false;
 		oImg.evented = false;
@@ -352,7 +386,7 @@ FabricCanvas.prototype.makeFabricObjectFromWickObject = function (wickObject, ca
 			// Add that group to the fabric canvas
 			group.wickObject = wickObject;
 			group.isGroup = true;
-			that.canvas.add(group);
+			return group;
 		}
 
 		// Create a list of every object in the first frame of the symbol
@@ -367,7 +401,9 @@ FabricCanvas.prototype.makeFabricObjectFromWickObject = function (wickObject, ca
 
 				// List fully populated
 				if(firstFrameFabricObjects.length == firstFrameObjects.length) {
-					makeGroupOutOfFabricObjects(firstFrameFabricObjects);
+					var group = makeGroupOutOfFabricObjects(firstFrameFabricObjects);
+					group.opacity = wickObject.opacity;
+					that.canvas.add(group);
 				}
 			})
 
@@ -462,7 +498,6 @@ FabricCanvas.prototype.addWickObjectToCanvas = function (wickObject) {
 	
 	this.makeFabricObjectFromWickObject(wickObject, function(fabricObject) {
 		canvas.add(fabricObject);
-		canvas.setActiveObject(fabricObject);
 	});
 
 }
@@ -472,14 +507,22 @@ FabricCanvas.prototype.convertPathToWickObjectAndAddToCanvas = function (fabricP
 
 	fabricPath.cloneAsImage(function(clone) {
 		var imgSrc = clone._element.currentSrc || clone._element.src;
+
 		var left = fabricPath.left - clone.width/2/window.devicePixelRatio;
 		var top = fabricPath.top - clone.height/2/window.devicePixelRatio;
+
+		var parentPos = wickEditor.currentObject.getRelativePosition();
+		left -= parentPos.left;
+		top -= parentPos.top;
+
 		WickObjectUtils.createWickObjectFromImage(
 			imgSrc, 
 			left, 
 			top, 
 			currentObject, 
-			function(obj) { that.addWickObjectToCanvas(obj) }
+			function(obj) { 
+				that.addWickObjectToCanvas(obj) 
+			}
 		);
 	});
 }
@@ -519,6 +562,8 @@ FabricCanvas.prototype.getWickObjectsInCanvas = function (projectResolution) {
 				var parentsPositionTotal = wickObject.parentObject.getRelativePosition();
 				wickObject.left -= parentsPositionTotal.left;
 				wickObject.top -= parentsPositionTotal.top;
+
+				wickObject.fixSymbolPosition();
 			}
 
 			// Reposition the wickobject so that 0,0 is the canvases origin, not fabric's origin.

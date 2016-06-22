@@ -15,6 +15,12 @@ var WickPlayer = (function () {
 
 	var canvasContainerEl;
 
+	// Screen fitting vars
+	var projectFitScreenScale;
+	var projectFitScreenTranslate;
+	var widthRatio;
+	var heightRatio;
+
 	// Flags for different player modes (phone or desktop)
 	var mobileMode;
 	var desktopMode;
@@ -61,6 +67,9 @@ var WickPlayer = (function () {
 
 		canvasContainerEl = document.getElementById("playerCanvasContainer");
 
+		projectFitScreenScale = 1.0;
+		projectFitScreenTranslate = {x : 0, y : 0};
+
 		// Check if we're on a mobile device or not
 		mobileMode = BrowserDetectionUtils.inMobileMode;
 		desktopMode = !mobileMode;
@@ -78,15 +87,21 @@ var WickPlayer = (function () {
 
 		// Setup touch events (mobile mode)
 		if(mobileMode) {
+			// Touch event (one touch = like a mouse click)
 			canvasContainerEl.addEventListener("touchstart", onTouchStart, false);
+
+			// Squash gesture events
+			canvasContainerEl.addEventListener('gesturestart', function(e) {  e.preventDefault(); });
+			canvasContainerEl.addEventListener('gesturechange', function(e) {  e.preventDefault(); });
+			canvasContainerEl.addEventListener('gestureend', function(e) {  e.preventDefault(); });
 		}
 
 		// update canvas size on window resize
 		window.addEventListener('resize', resizeCanvas, false);
-		resizeCanvas();
 
 		// Load the project!
 		loadJSONProject(projectJSON);
+		resizeCanvas();
 
 	}
 
@@ -106,13 +121,16 @@ var WickPlayer = (function () {
 *****************************/
 
 	var loadJSONProject = function (proj) {
+		// Parse dat project
 		project = JSON.parse(proj);
 
-		console.log("Player loading project:")
-		console.log(project);
+		VerboseLog.log("Player loading project:")
+		VerboseLog.log(project);
 
+		// Prepare all objects for playing
 		WickSharedUtils.decodeScripts(project.rootObject);
 		resetAllPlayheads(project.rootObject);
+		resetAllEventStates(project.rootObject);
 		generateObjectNameReferences(project.rootObject);
 		generateObjectParentReferences(project.rootObject);
 		generateBuiltinWickFunctions(project.rootObject);
@@ -120,6 +138,7 @@ var WickPlayer = (function () {
 		loadImages(project.rootObject);
 
 		// Start draw/update loop
+		draw();
 		animate();
 	}
 
@@ -148,16 +167,27 @@ var WickPlayer = (function () {
 	var generateBuiltinWickFunctions = function (wickObj) {
 
 		wickObj.hitTest = function (otherObj) {
+
+			if(!otherObj) {
+				console.error('hitTest with invalid object as param!!')
+			}
+
 			// TODO: Use proper rectangle collision
 			var wickObjCentroid = {
-				x : wickObj.left + wickObj.width/2,
-				y : wickObj.top + wickObj.height/2
+				x : wickObj.left + wickObj.width*wickObj.scaleX/2,
+				y : wickObj.top + wickObj.height*wickObj.scaleY/2
 			};
 			return pointInsideObj(otherObj, wickObjCentroid);
 		}
 
 		if(wickObj.isSymbol) {
 			// Setup builtin wick scripting methods and objects
+			wickObj.play = function (frame) {
+				wickObj.isPlaying = true;
+			}
+			wickObj.stop = function (frame) {
+				wickObj.isPlaying = false;
+			}
 			wickObj.gotoAndPlay = function (frame) {
 				wickObj.currentFrame = frame;
 				wickObj.isPlaying = true;
@@ -166,16 +196,10 @@ var WickPlayer = (function () {
 				wickObj.currentFrame = frame;
 				wickObj.isPlaying = false;
 			}
-			wickObj.play = function (frame) {
-				wickObj.isPlaying = true;
-			}
-			wickObj.stop = function (frame) {
-				wickObj.isPlaying = false;
-			}
-			wickObj.nextFrame = function () {
+			wickObj.gotoNextFrame = function () {
 				wickObj.currentFrame ++;
 			}
-			wickObj.prevFrame = function () {
+			wickObj.gotoPrevFrame = function () {
 				wickObj.currentFrame --;
 			}
 
@@ -229,6 +253,21 @@ var WickPlayer = (function () {
 
 	}
 
+	/* */
+	var resetAllEventStates = function (wickObj) {
+
+		// Reset the mouse hovered over state flag
+		wickObj.hoveredOver = false;
+
+		// Do the same for all this object's children
+		WickSharedUtils.forEachChildObject(wickObj, function(subObj) {
+			if(subObj.isSymbol) {
+				resetAllEventStates(subObj);
+			}
+		});
+
+	}
+
 	/* Recursively load images of wickObj */
 	var loadImages = function (wickObj) {
 
@@ -251,8 +290,33 @@ var WickPlayer = (function () {
 *****************************/
 
 	var resizeCanvas = function () {
+
+		// Update canvas size
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
+
+		if(project && project.fitScreen) {
+			// Calculate how much the project would have to scale to fit either dimension
+			widthRatio = window.innerWidth / project.resolution.x;
+			heightRatio = window.innerHeight / project.resolution.y;
+
+			// Fit only so much that stuff doesn't get cut off
+			if(widthRatio > heightRatio) {
+				projectFitScreenScale = heightRatio;
+			} else {
+				projectFitScreenScale = widthRatio;
+			}
+
+			if(widthRatio > heightRatio) {
+				projectFitScreenTranslate = {x : window.innerWidth / 2 - project.resolution.x * projectFitScreenScale / 2, y : 0};
+			} else {
+				projectFitScreenTranslate = {x : 0, y : window.innerHeight / 2 - project.resolution.y * projectFitScreenScale / 2 };
+			}
+		} else {
+			projectFitScreenScale = 1.0;
+			projectFitScreenTranslate = {x : 0, y : 0};
+		}
+
 	}
 
 /*****************************
@@ -267,7 +331,10 @@ var WickPlayer = (function () {
 		var hoveredOverObj = false;
 		WickSharedUtils.forEachActiveChildObject(project.rootObject, function(currObj) {
 			if(pointInsideObj(currObj, mouse) && wickObjectIsClickable(currObj)) {
+				currObj.hoveredOver = true;
 				hoveredOverObj = true;
+			} else {
+				currObj.hoveredOver = false;
 			}
 		});
 
@@ -308,6 +375,8 @@ var WickPlayer = (function () {
 
 	var onTouchStart = function (evt) {
 
+		evt.preventDefault();
+
 		var touchPos = getTouchPos(canvas, evt);
 
 		WickSharedUtils.forEachActiveChildObject(project.rootObject, function(currObj) {
@@ -331,8 +400,8 @@ var WickPlayer = (function () {
 
 			WickSharedUtils.forEachActiveChildObject(obj, function (currObj) {
 				var subPoint = {
-					x : point.x + obj.left,
-					y : point.y + obj.top
+					x : point.x - obj.left,
+					y : point.y - obj.top
 				};
 				if(pointInsideObj(currObj, subPoint)) {
 					pointInsideSymbol = true;
@@ -403,13 +472,15 @@ var WickPlayer = (function () {
 
 		if(!obj.onLoadScriptRan) {
 
+			// Check for breakpoint
+			if(obj.isSymbol && obj.frames[obj.currentFrame].breakpoint) {
+				obj.isPlaying = false;
+			}
+
 			// Run onLoad script
 			if(obj && !obj.isRoot && obj.wickScripts) {
-				//console.log(obj.wickScripts['onLoad']);
 				evalScript(obj, obj.wickScripts.onLoad);
 				obj.onLoadScriptRan = true;
-			} else {
-				//console.log("obj contains no wickScripts or onLoad function");
 			}
 
 			// Recursively run all onLoads
@@ -458,6 +529,12 @@ var WickPlayer = (function () {
 	var evalScript = function (obj, script) {
 
 		// Setup builtin wick scripting methods and objects
+		var play = function (frame) {
+			obj.parentObj.isPlaying = true;
+		}
+		var stop = function (frame) {
+			obj.parentObj.isPlaying = false;
+		}
 		var gotoAndPlay = function (frame) {
 			obj.parentObj.currentFrame = frame;
 			obj.parentObj.isPlaying = true;
@@ -466,10 +543,13 @@ var WickPlayer = (function () {
 			obj.parentObj.currentFrame = frame;
 			obj.parentObj.isPlaying = false;
 		}
-		var play = function (frame) {
-			obj.parentObj.isPlaying = true;
+		var gotoNextFrame = function (frame) {
+			console.log("bpgogogog")
+			obj.parentObj.currentFrame ++;
+			obj.parentObj.isPlaying = false;
 		}
-		var stop = function (frame) {
+		var gotoPrevFrame = function (frame) {
+			obj.parentObj.currentFrame --;
 			obj.parentObj.isPlaying = false;
 		}
 
@@ -480,10 +560,23 @@ var WickPlayer = (function () {
 			window[subObj.name] = subObj;
 		});
 
+		// Set x,y vars so user doesn't have to use top/left
+		obj.x = obj.left;
+		obj.y = obj.top;
+
 		for(var i = 0; i < 100; i++) { // !!! why plseae dont do this
 			script = script.replace("this.","obj.");
 		}
 		eval(script);
+
+		// Update top/left ... Note that this will squash top and left, so user can't use those!!
+		obj.left = obj.x;
+		obj.top = obj.y;
+
+		// Get rid of wickobject reference variables
+		WickSharedUtils.forEachChildObject(obj.parentObj, function(subObj) {
+			window[subObj.name] = undefined;
+		});
 
 	}
 
@@ -491,16 +584,20 @@ var WickPlayer = (function () {
 
 		// Advance timeline for this object
 		if(obj.isPlaying) {
+			/* Left the frame, all child objects are unloaded, make sure 
+			   they run onLoad again next time we come back to this frame */
+			WickSharedUtils.forEachActiveChildObject(obj, function(child) {
+				child.onLoadScriptRan = false;
+			});
+
+			// Advance timeline one frame
 			obj.currentFrame++;
 			if(obj.currentFrame == obj.frames.length) {
 				obj.currentFrame = 0;
 			}
 
-			if(obj.frames[obj.currentFrame].breakpoint) {
-				obj.isPlaying = false;
-			}
-
-			obj.onLoadScriptRan = false;
+			//obj.onLoadScriptRan = false;
+			//console.log("ya")
 		}
 
 		// Recusively advance timelines of all children
@@ -519,76 +616,123 @@ var WickPlayer = (function () {
 *****************************/
 
 	var draw = function () {
+
+		// Calculate centered project window position
+		var projectPositionX = (window.innerWidth - project.resolution.x) / 2;
+		var projectPositionY = (window.innerHeight - project.resolution.y) / 2;
+
+		// Scale to fit window
+		context.save();
+		context.translate(projectFitScreenTranslate.x, projectFitScreenTranslate.y);
+		context.scale(projectFitScreenScale, projectFitScreenScale);
+
 		// Clear canvas
 		context.clearRect(0, 0, canvas.width, canvas.height);
 
 		context.fillStyle = project.backgroundColor;
-		context.fillRect(0,0, window.innerWidth,window.innerHeight);
+		context.fillRect(
+			projectPositionX, 
+			projectPositionY, 
+			project.resolution.x, 
+			project.resolution.y);
 
 		// Draw root object, this will recursively draw every object!
 		context.save();
-			context.translate(
-				(window.innerWidth - project.resolution.x) / 2, 
-				(window.innerHeight - project.resolution.y) / 2);
+			context.globalAlpha = 1.0;
+			if(!project.fitScreen) {
+				context.translate(projectPositionX, projectPositionY);
+			}
 			drawWickObject(project.rootObject);
 		context.restore();
 
+		context.restore();
+
+		// Draw border around project (to hide offscreen objects)
+		if(!project.fitScreen) {
+			context.fillStyle = "#000000";
+			context.fillRect( // top side
+				0, 0, 
+				window.innerWidth, projectPositionY);
+			context.fillRect( // bottom side
+				0, projectPositionY + project.resolution.y, 
+				window.innerWidth, projectPositionY);
+			context.fillRect( // left side
+				0, projectPositionY, 
+				projectPositionX, project.resolution.y);
+			context.fillRect( // right side
+				projectPositionX+project.resolution.x, projectPositionY, 
+				projectPositionX, project.resolution.y);
+		}
+		
 		// Draw FPS counter
-		context.fillStyle = "Black";
+		context.fillStyle = "White";
 		context.font      = "normal 14pt Arial";
 		context.fillText(fps.getFPS() + " FPS", canvas.width-80, 29);
 
 	}
 
-	var doRotationForObject = function (wickObject) {
+	var doTransformationsForObject = function (wickObject) {
 
+		// Translation transforms
+		context.translate(wickObject.left, wickObject.top);
+
+		// Rotation transforms
 		context.translate(wickObject.width/2, wickObject.height/2);
 		context.rotate(wickObject.angle/360*2*3.14159);
 		context.translate(-wickObject.width/2, -wickObject.height/2);
+
+		// Scale transforms
+		context.scale(wickObject.scaleX, wickObject.scaleY);
+
+		// Horizontal/vertical flip transforms
+		if(wickObject.flipX) {
+			canvasContext.translate(wickObject.width, 0);
+			canvasContext.scale(-1, 1);
+		}
+		if(wickObject.flipY) {
+			canvasContext.translate(wickObject.width, 0);
+			canvasContext.scale(-1, 1);
+		}
 
 	}
 
 	var drawWickObject = function (obj) {
 
+		var oldOpacity = context.globalAlpha;
+		context.globalAlpha = oldOpacity*obj.opacity;
+
+		context.save();
+		doTransformationsForObject(obj);
+
 		if(obj.isSymbol) {
 
 			// Recursively draw all sub objects.
-
-			context.save();
-			context.translate(obj.left, obj.top);
-			doRotationForObject(obj);
-			context.scale(obj.scaleX, obj.scaleY);
-
-				WickSharedUtils.forEachActiveChildObject(obj, function(subObj) {
-					drawWickObject(subObj);
-				});
-
-			context.restore();
+			WickSharedUtils.forEachActiveChildObject(obj, function(subObj) {
+				drawWickObject(subObj);
+			});
 
 		} else {
 
 			// Draw the content of this static object.
+			if(obj.imageData) {
 
-			context.save();
+				context.drawImage(obj.image, 0, 0);
 
-				context.translate(obj.left, obj.top);
-				doRotationForObject(obj);
-				context.scale(obj.scaleX, obj.scaleY);
+			} else if(obj.fontData) {
 
-				if(obj.imageData) {
-					context.drawImage(obj.image, 0, 0);
-				} else if(obj.fontData) {
-					context.save();
-						context.translate(0, obj.fontData.fontSize);
-						context.fillStyle = obj.fontData.fill;
-						context.font      = "normal " + obj.fontData.fontSize + "px " + obj.fontData.fontFamily;
-						context.fillText(obj.fontData.text, 0, 0);
-					context.restore();
-				}
+				context.save();
+					context.translate(0, obj.fontData.fontSize);
+					context.fillStyle = obj.fontData.fill;
+					context.font      = "normal " + obj.fontData.fontSize + "px " + obj.fontData.fontFamily;
+					context.fillText(obj.fontData.text, 0, 0);
+				context.restore();
 
-			context.restore();
-			
+			}
 		}
+
+		context.restore();
+
+		context.globalAlpha = oldOpacity;
 
 	}
 

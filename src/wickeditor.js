@@ -7,7 +7,7 @@ var WickEditor = function () {
 	this.version = 'pre-alpha';
 
 	this.AUTO_LOAD_UNIT_TEST_PROJECT = false;
-	this.UNIT_TEST_PROJECT_PATH = "tests/order-testing.json";
+	this.UNIT_TEST_PROJECT_PATH = "tests/fitcanvas.json";
 
 /*********************************
 	Initialize all editor vars
@@ -38,6 +38,9 @@ var WickEditor = function () {
 	// Setup action handler
 	this.actionHandler = new WickActionHandler(this);
 
+	// Setup audio handler
+	audioContext = new AudioContext();
+
 	// Load the 'unit test' project
 	if(this.AUTO_LOAD_UNIT_TEST_PROJECT) {
 		var devTestProjectJSON = WickFileUtils.downloadFile(this.UNIT_TEST_PROJECT_PATH);
@@ -55,6 +58,12 @@ WickEditor.prototype.resizeCanvasAndGUI = function () {
 	this.fabricCanvas.resize(
 		this.project.resolution.x, 
 		this.project.resolution.y
+	);
+	this.fabricCanvas.repositionOriginCrosshair(
+		this.project.resolution.x, 
+		this.project.resolution.y,
+		this.currentObject.left,
+		this.currentObject.top
 	);
 
 	// Also center timeline GUI
@@ -80,6 +89,10 @@ WickEditor.prototype.handleKeyboardInput = function (eventType, event) {
 
 		this.keys[event.keyCode] = true;
 
+		//VerboseLog.log("keydown");
+		//VerboseLog.log(event.keyCode);
+		//VerboseLog.log(this.keys);
+
 		var controlKeyDown = this.keys[91];
 		var shiftKeyDown = this.keys[16];
 
@@ -91,11 +104,17 @@ WickEditor.prototype.handleKeyboardInput = function (eventType, event) {
 		else if (event.keyCode == 90 && controlKeyDown) {
 			this.actionHandler.undoAction();
 		}
-
 		// Control-s: save
 		else if (event.keyCode == 83 && controlKeyDown) {
 			event.preventDefault();
+			this.clearKeys();
 			this.saveProject();
+		}
+		// Control-o: open
+		else if (event.keyCode == 79 && controlKeyDown) {
+			event.preventDefault();
+			this.clearKeys();
+			$('#importButton').click();
 		}
 
 		// Control-a: Select all
@@ -107,7 +126,7 @@ WickEditor.prototype.handleKeyboardInput = function (eventType, event) {
 		// Backspace: delete selected objects
 		if (event.keyCode == 8 && document.activeElement.nodeName != 'TEXTAREA') {
 			event.preventDefault();
-			this.actionHandler.doAction('delete', []);	
+			this.deleteSelectedObjects();	
 		}
 
 		// Tilde: log project state to canvas (for debugging)
@@ -119,6 +138,10 @@ WickEditor.prototype.handleKeyboardInput = function (eventType, event) {
 	} else if(eventType === "keyup") {
 
 		this.keys[event.keyCode] = false;
+
+		//VerboseLog.log("keyup");
+		//VerboseLog.log(event.keyCode);
+		//VerboseLog.log(this.keys);
 
 	}
 
@@ -139,11 +162,10 @@ WickEditor.prototype.handleCopyEvent = function (event) {
 // 
 WickEditor.prototype.moveOutOfObject = function () {
 
+	this.fabricCanvas.deselectAll();
+
 	// Store changes made to current frame in the project
 	this.syncProjectWithFabricCanvas();
-
-	// Make sure no objects have negative positions
-	this.currentObject.fixNegativeSubObjectPositions();
 
 	// Set the editor to be editing the parent object
 	this.currentObject = this.currentObject.parentObject;
@@ -153,10 +175,19 @@ WickEditor.prototype.moveOutOfObject = function () {
 
 	this.htmlGUIHandler.updateTimelineGUI(this.currentObject);
 
+	this.fabricCanvas.repositionOriginCrosshair(
+		this.project.resolution.x, 
+		this.project.resolution.y,
+		this.currentObject.left,
+		this.currentObject.top
+	);
+
 }
 
 // 
 WickEditor.prototype.moveInsideObject = function (object) {
+
+	this.fabricCanvas.deselectAll();
 
 	// Store changes made to current frame in the project
 	this.syncProjectWithFabricCanvas();
@@ -169,6 +200,13 @@ WickEditor.prototype.moveInsideObject = function (object) {
 	this.syncFabricCanvasWithProject();
 
 	this.htmlGUIHandler.updateTimelineGUI(this.currentObject);
+
+	this.fabricCanvas.repositionOriginCrosshair(
+		this.project.resolution.x, 
+		this.project.resolution.y,
+		this.currentObject.left,
+		this.currentObject.top
+	);
 
 }
 
@@ -197,7 +235,8 @@ WickEditor.prototype.addNewText = function (text) {
 
 	this.fabricCanvas.addWickObjectToCanvas(textWickObject);
 
-	this.actionHandler.doAction('gotoFrame', {toFrame: this.currentObject.currentFrame}, true);
+	this.syncProjectWithFabricCanvas();
+	this.syncFabricCanvasWithProject();
 
 }
 
@@ -214,7 +253,8 @@ WickEditor.prototype.addNewHTMLSnippet = function () {
 
 	this.fabricCanvas.addWickObjectToCanvas(htmlSnippetWickObject);
 
-	this.actionHandler.doAction('gotoFrame', {toFrame: this.currentObject.currentFrame}, true);
+	this.syncProjectWithFabricCanvas();
+	this.syncFabricCanvasWithProject();
 
 }
 
@@ -247,7 +287,7 @@ WickEditor.prototype.convertSelectedObjectToSymbol = function () {
 			symbol.frames[0].wickObjects[i].top = selectedObject._objects[i].top;
 		}
 
-		symbol.fixNegativeSubObjectPositions();
+		symbol.fixSymbolPosition();
 
 		var max = 0;
 		while(selectedObject._objects.length > 0 && max < 100) {
@@ -267,6 +307,15 @@ WickEditor.prototype.convertSelectedObjectToSymbol = function () {
 
 	this.fabricCanvas.addWickObjectToCanvas(symbol);
 
+	this.fabricCanvas.deselectAll();
+
+}
+
+WickEditor.prototype.deleteSelectedObjects = function () {
+	this.actionHandler.doAction('delete', {
+		obj:   this.fabricCanvas.getCanvas().getActiveObject(),
+		group: this.fabricCanvas.getCanvas().getActiveGroup()
+	});
 }
 
 WickEditor.prototype.editSelectedObject = function () {
@@ -335,17 +384,36 @@ WickEditor.prototype.importFilesDroppedIntoEditor = function(files) {
 		var file = files[i];
 
 		// Read file as data URL
-		var reader = new FileReader();
-		reader.onload = (function(theFile) {
-			return function(e) {
-				if(file.type === 'image/png' || file.type === 'image/jpeg') {
-					that.importImageFile(theFile.name, e.target.result)
-				} else if(file.type === 'application/json') {
-					that.importProjectFile(file);
-				}
-			};
-		})(file);
-		reader.readAsDataURL(file);
+		var dataURLReader = new FileReader();
+		dataURLReader.onload = (function(theFile) { return function(e) {
+
+			VerboseLog.log("readAsDataURL():");
+			VerboseLog.log("Dropped file: " + theFile.name);
+			VerboseLog.log("Dropped filetype: " + file.type);
+
+			if (file.type === 'image/png' || file.type === 'image/jpeg') {
+				that.importImageFile(theFile.name, e.target.result)
+			} else if (file.type === 'application/json') {
+				that.importProjectFile(file);
+			}
+
+		}; })(file);
+		dataURLReader.readAsDataURL(file);
+
+		// Read file as array buffer
+		var arrayBufferReader = new FileReader();
+		arrayBufferReader.onload = (function(theFile) { return function(e) {
+
+			VerboseLog.log("readAsArrayBuffer():");
+			VerboseLog.log("Dropped file: " + theFile.name);
+			VerboseLog.log("Dropped filetype: " + file.type);
+
+			if (file.type === 'audio/mp3' || file.type === 'audio/wav' || file.type === 'audio/ogg') {
+				that.importAudioFile(theFile.name, e.target.result);
+			}
+
+		}; })(file);
+		arrayBufferReader.readAsArrayBuffer(file);
 	}
 }
 
@@ -379,7 +447,26 @@ WickEditor.prototype.importImageFile = function (name, data) {
 
 }
 
-WickEditor.prototype.importSoundFile = function (name, data) {
+WickEditor.prototype.importAudioFile = function (name, buffer) {
+
+	function playsound(raw) {
+	    console.log("now playing a sound, that starts with", new Uint8Array(raw.slice(0, 10)));
+	    audioContext.decodeAudioData(raw, function (buffer) {
+	        if (!buffer) {
+	            console.error("failed to decode:", "buffer null");
+	            return;
+	        }
+	        var source = audioContext.createBufferSource();
+	        source.buffer = buffer;
+	        source.connect(audioContext.destination);
+	        source.start(0);
+	        console.log("started...");
+	    }, function (error) {
+	        console.error("failed to decode:", error);
+	    });
+	}
+
+	playsound(buffer);
 
 }
 
@@ -405,7 +492,7 @@ WickEditor.prototype.newProject = function () {
 		this.project = new WickProject();
 		this.currentObject = this.project.rootObject;
 		this.syncFabricCanvasWithProject();
-		this.timelineController.updateGUI(this.currentObject);
+		this.htmlGUIHandler.updateTimelineGUI(this.currentObject);
 	}
 
 }
@@ -473,8 +560,8 @@ WickEditor.prototype.loadProjectFromJSON = function (jsonString) {
 	// Load wickobjects in the frame we moved to into the canvas
 	this.syncFabricCanvasWithProject();
 
-	this.timelineController.updateGUI(this.currentObject);
-	this.updatePropertiesGUI('project');
+	this.htmlGUIHandler.updateTimelineGUI(this.currentObject);
+	this.htmlGUIHandler.updatePropertiesGUI('project');
 }
 
 /*************************

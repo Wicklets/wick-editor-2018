@@ -1,5 +1,7 @@
 var WickScriptingIDE = function (wickEditor) {
 
+// Init
+
 	this.aceEditor = ace.edit("scriptEditor");
 	this.aceEditor.setTheme("ace/theme/chrome");
 	this.aceEditor.getSession().setMode("ace/mode/javascript");
@@ -16,6 +18,8 @@ var WickScriptingIDE = function (wickEditor) {
 // GUI/Event handlers
 
 	var that = this;
+
+// Editor Tabs
 
 	$("#onLoadButton").on("click", function (e) {
 		that.currentScript = 'onLoad';
@@ -41,26 +45,31 @@ var WickScriptingIDE = function (wickEditor) {
 		that.closeScriptingGUI();
 	});
 
-	var addStringToScript = function(str) {
-		that.aceEditor.setValue(that.aceEditor.getValue() + str);
-	};
+// Script refs
 
-	$("#refBtnPlay").on("click", function (e) {
-		addStringToScript('play();');
+	document.getElementById("refBtnPlay").addEventListener("dragstart", function(ev) {
+	    ev.dataTransfer.setData("text", "play();");
 	});
 
-	$("#refBtnStop").on("click", function (e) {
-		addStringToScript('stop();');
+	document.getElementById("refBtnStop").addEventListener("dragstart", function(ev) {
+	    ev.dataTransfer.setData("text", "stop();");
 	});
 
-	$("#refBtnGotoAndStop").on("click", function (e) {
-		addStringToScript('gotoAndStop();');
+	document.getElementById("refBtnGotoAndStop").addEventListener("dragstart", function(ev) {
+	    ev.dataTransfer.setData("text", "gotoAndStop(frame);");
 	});
 
-	$("#refBtnGotoAndPlay").on("click", function (e) {
-		addStringToScript('gotoAndPlay();');
+	document.getElementById("refBtnGotoAndPlay").addEventListener("dragstart", function(ev) {
+	    ev.dataTransfer.setData("text", "gotoAndPlay(frame);");
 	});
 
+	document.getElementById("refBtnGotoNextFrame").addEventListener("dragstart", function(ev) {
+	    ev.dataTransfer.setData("text", "gotoNextFrame();");
+	});
+
+	document.getElementById("refBtnGotoPrevFrame").addEventListener("dragstart", function(ev) {
+	    ev.dataTransfer.setData("text", "gotoPrevFrame();");
+	});
 
 	$("#beautifyButton").on("click", function (e) {
 		var val = that.aceEditor.session.getValue();

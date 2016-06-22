@@ -14,6 +14,8 @@ var WickProject = function () {
 	this.rootObject.isRoot = true;
 	this.rootObject.currentFrame = 0;
 	this.rootObject.frames = [new WickFrame()];
+	this.rootObject.left = 0;
+	this.rootObject.top = 0;
 	
 	this.resolution = {};
 	this.resolution.x = 650;
@@ -22,5 +24,7 @@ var WickProject = function () {
 	this.backgroundColor = "#FFFFFF";
 
 	this.framerate = 12;
+
+	this.fitScreen = true;
 
 };

@@ -104,14 +104,28 @@ var WickHTMLGUIHandler = function (wickEditor) {
 
 	});
 
+	document.getElementById('fitScreenCheckbox').onclick = function (e) {
+		wickEditor.project.fitScreen = this.checked;
+	}
+
 	document.getElementById('projectBgColor').onchange = function () {
 		wickEditor.project.backgroundColor = this.value;
 		wickEditor.fabricCanvas.setBackgroundColor(this.value);
 	};
 
 	$('#objectName').on('input propertychange', function () {
-		wickEditor.fabricCanvas.getActiveObject().wickObject.name = $('#objectName').val();
+		var newName = $('#objectName').val();
+		if(newName === '') {
+			wickEditor.fabricCanvas.getActiveObject().wickObject.name = undefined;
+		} else {
+			wickEditor.fabricCanvas.getActiveObject().wickObject.name = $('#objectName').val();
+		}
 	});
+
+	document.getElementById('opacitySlider').onchange = function () {
+		wickEditor.fabricCanvas.getActiveObject().opacity = this.value/255;
+		wickEditor.fabricCanvas.getCanvas().renderAll();
+	};
 
 	document.getElementById('fontSelector').onchange = function () {
 		wickEditor.fabricCanvas.getActiveObject().fontFamily = document.getElementById('fontSelector').value;
@@ -195,11 +209,20 @@ var WickHTMLGUIHandler = function (wickEditor) {
 
 		switch(tab) {
 			case 'project':
-				document.getElementById('projectBgColor').value = wickEditor.project.backgroundColor;
+				document.getElementById('projectBgColor').value      = wickEditor.project.backgroundColor;
+				document.getElementById('projectSizeX').innerHTML    = wickEditor.project.resolution.x;
+				document.getElementById('projectSizeY').innerHTML    = wickEditor.project.resolution.y;
+				document.getElementById('frameRate').innerHTML       = wickEditor.project.framerate;
+				document.getElementById('fitScreenCheckbox').checked = wickEditor.project.fitScreen;
 				$("#projectProperties").css('display', 'inline');
 				break;
 			case 'symbol':
-				document.getElementById('objectName').value = wickEditor.fabricCanvas.getActiveObject().wickObject.name;
+				var name = wickEditor.fabricCanvas.getActiveObject().wickObject.name;
+				if(name) {
+					document.getElementById('objectName').value = name;
+				} else {
+					document.getElementById('objectName').value = '';
+				}
 				$("#objectProperties").css('display', 'inline');
 				break;
 			case 'text':
