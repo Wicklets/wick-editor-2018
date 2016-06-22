@@ -163,23 +163,34 @@ var WickPlayer = (function () {
 			// Setup builtin wick scripting methods and objects
 			wickObj.play = function (frame) {
 				wickObj.isPlaying = true;
+
+				wickObj.currentFrame ++;
+				if(wickObj.currentFrame == wickObj.frames.length) {
+					wickObj.currentFrame = 0;
+				}
 			}
 			wickObj.stop = function (frame) {
 				wickObj.isPlaying = false;
 			}
 			wickObj.gotoAndPlay = function (frame) {
-				wickObj.currentFrame = frame;
 				wickObj.isPlaying = true;
+				wickObj.currentFrame = frame;
 			}
 			wickObj.gotoAndStop = function (frame) {
-				wickObj.currentFrame = frame;
 				wickObj.isPlaying = false;
+				wickObj.currentFrame = frame;
 			}
 			wickObj.gotoNextFrame = function () {
 				wickObj.currentFrame ++;
+				if(wickObj.currentFrame >= wickObj.frames.length) {
+					wickObj.currentFrame = wickObj.frames.length-1;
+				}
 			}
 			wickObj.gotoPrevFrame = function () {
 				wickObj.currentFrame --;
+				if(wickObj.currentFrame < 0) {
+					wickObj.currentFrame = 0;
+				}
 			}
 
 			WickSharedUtils.forEachChildObject(wickObj, function(subObj) {
@@ -564,29 +575,12 @@ var WickPlayer = (function () {
 	var evalScript = function (obj, script) {
 
 		// Setup builtin wick scripting methods and objects
-		var play = function (frame) {
-			obj.parentObj.isPlaying = true;
-		}
-		var stop = function (frame) {
-			obj.parentObj.isPlaying = false;
-		}
-		var gotoAndPlay = function (frame) {
-			obj.parentObj.currentFrame = frame;
-			obj.parentObj.isPlaying = true;
-		}
-		var gotoAndStop = function (frame) {
-			obj.parentObj.currentFrame = frame;
-			obj.parentObj.isPlaying = false;
-		}
-		var gotoNextFrame = function (frame) {
-			console.log("bpgogogog")
-			obj.parentObj.currentFrame ++;
-			obj.parentObj.isPlaying = false;
-		}
-		var gotoPrevFrame = function (frame) {
-			obj.parentObj.currentFrame --;
-			obj.parentObj.isPlaying = false;
-		}
+		var play          = function ()      { obj.parentObj.play(); }
+		var stop          = function ()      { obj.parentObj.stop(); }
+		var gotoAndPlay   = function (frame) { obj.parentObj.gotoAndPlay(frame); }
+		var gotoAndStop   = function (frame) { obj.parentObj.gotoAndStop(frame); }
+		var gotoNextFrame = function ()      { obj.parentObj.gotoNextFrame(); }
+		var gotoPrevFrame = function ()      { obj.parentObj.gotoPrevFrame(); }
 
 		// Setup wickobject reference variables
 		var root = project.rootObject;
