@@ -9,10 +9,9 @@ var WickPlayer = (function () {
 	var mouse;
 	var keys;
 
-	// Canvas stuff
+	// Canvas stuff (To be replaced with three/webgl/pixi)
 	var canvas;
 	var context;
-
 	var canvasContainerEl;
 
 	// Screen fitting vars
@@ -21,37 +20,15 @@ var WickPlayer = (function () {
 	var widthRatio;
 	var heightRatio;
 
+	// Audio stuff
+	var audioContext;
+
 	// Flags for different player modes (phone or desktop)
 	var mobileMode;
 	var desktopMode;
 
 	// Set this to true to stop the next requestAnimationFrame
 	var stopDrawLoop;
-
-/*****************************
-	Page/DOM Utils
-*****************************/
-
-	var getMousePos = function (canvas, evt) {
-		var rect = canvas.getBoundingClientRect();
-
-		var centeredCanvasOffsetX = (window.innerWidth - project.resolution.x) / 2;
-		var centeredCanvasOffsetY = (window.innerHeight - project.resolution.y) / 2;
-
-		return {
-			x: evt.clientX - rect.left - centeredCanvasOffsetX,
-			y: evt.clientY - rect.top  - centeredCanvasOffsetY
-		};
-	}
-
-	var getTouchPos = function (canvas, evt) {
-		var rect = canvas.getBoundingClientRect();
-		var touch = evt.targetTouches[0];
-		return {
-			x: touch.pageX,
-			y: touch.pageY
-		};
-	}
 
 /*****************************
 	Player Setup
@@ -64,11 +41,12 @@ var WickPlayer = (function () {
 		// Setup canvas
 		canvas = document.getElementById("playerCanvas");
 		context = canvas.getContext('2d');
-
 		canvasContainerEl = document.getElementById("playerCanvasContainer");
 
 		projectFitScreenScale = 1.0;
 		projectFitScreenTranslate = {x : 0, y : 0};
+
+		audioContext = new AudioContext();
 
 		// Check if we're on a mobile device or not
 		mobileMode = BrowserDetectionUtils.inMobileMode;
@@ -136,6 +114,7 @@ var WickPlayer = (function () {
 		generateBuiltinWickFunctions(project.rootObject);
 		generateHTMLSnippetDivs(project.rootObject);
 		loadImages(project.rootObject);
+		loadAudio(project.rootObject);
 
 		// Start draw/update loop
 		draw();
@@ -184,23 +163,34 @@ var WickPlayer = (function () {
 			// Setup builtin wick scripting methods and objects
 			wickObj.play = function (frame) {
 				wickObj.isPlaying = true;
+
+				wickObj.currentFrame ++;
+				if(wickObj.currentFrame == wickObj.frames.length) {
+					wickObj.currentFrame = 0;
+				}
 			}
 			wickObj.stop = function (frame) {
 				wickObj.isPlaying = false;
 			}
 			wickObj.gotoAndPlay = function (frame) {
-				wickObj.currentFrame = frame;
 				wickObj.isPlaying = true;
+				wickObj.currentFrame = frame;
 			}
 			wickObj.gotoAndStop = function (frame) {
-				wickObj.currentFrame = frame;
 				wickObj.isPlaying = false;
+				wickObj.currentFrame = frame;
 			}
 			wickObj.gotoNextFrame = function () {
 				wickObj.currentFrame ++;
+				if(wickObj.currentFrame >= wickObj.frames.length) {
+					wickObj.currentFrame = wickObj.frames.length-1;
+				}
 			}
 			wickObj.gotoPrevFrame = function () {
 				wickObj.currentFrame --;
+				if(wickObj.currentFrame < 0) {
+					wickObj.currentFrame = 0;
+				}
 			}
 
 			WickSharedUtils.forEachChildObject(wickObj, function(subObj) {
@@ -281,6 +271,19 @@ var WickPlayer = (function () {
 					// Scope issue - fix this, we need it for preloaders
 					//subObj.imageIsLoaded = true;
 				};
+			}
+		});
+	}
+
+	/* Recursively load audio of wickObj */
+	var loadAudio = function (wickObj) {
+		WickSharedUtils.forEachChildObject(wickObj, function(subObj) {
+			if(subObj.isSymbol) {
+				loadAudio(subObj);
+			} else if(subObj.audioData) {
+				var rawData = subObj.audioData.split(",")[1]; // cut off extra filetype/etc data
+				var rawBuffer = Base64ArrayBuffer.decode(rawData);
+				subObj.audioBuffer = rawBuffer;
 			}
 		});
 	}
@@ -388,7 +391,32 @@ var WickPlayer = (function () {
 	}
 
 /*****************************
-	Utils
+	Page/DOM Utils
+*****************************/
+
+	var getMousePos = function (canvas, evt) {
+		var rect = canvas.getBoundingClientRect();
+
+		var centeredCanvasOffsetX = (window.innerWidth - project.resolution.x) / 2;
+		var centeredCanvasOffsetY = (window.innerHeight - project.resolution.y) / 2;
+
+		return {
+			x: evt.clientX - rect.left - centeredCanvasOffsetX,
+			y: evt.clientY - rect.top  - centeredCanvasOffsetY
+		};
+	}
+
+	var getTouchPos = function (canvas, evt) {
+		var rect = canvas.getBoundingClientRect();
+		var touch = evt.targetTouches[0];
+		return {
+			x: touch.pageX,
+			y: touch.pageY
+		};
+	}
+
+/*****************************
+	WickObject Utils
 *****************************/
 
 	/*  */
@@ -481,6 +509,24 @@ var WickPlayer = (function () {
 			if(obj && !obj.isRoot && obj.wickScripts) {
 				evalScript(obj, obj.wickScripts.onLoad);
 				obj.onLoadScriptRan = true;
+
+				if(obj.audioBuffer) {
+					var rawBuffer = obj.audioBuffer;
+					console.log("now playing a sound, that starts with", new Uint8Array(rawBuffer.slice(0, 10)));
+					audioContext.decodeAudioData(rawBuffer, function (buffer) {
+					    if (!buffer) {
+					        console.error("failed to decode:", "buffer null");
+					        return;
+					    }
+					    var source = audioContext.createBufferSource();
+					    source.buffer = buffer;
+					    source.connect(audioContext.destination);
+					    source.start(0);
+					    console.log("started...");
+					}, function (error) {
+					    console.error("failed to decode:", error);
+					});
+				}
 			}
 
 			// Recursively run all onLoads
@@ -529,29 +575,12 @@ var WickPlayer = (function () {
 	var evalScript = function (obj, script) {
 
 		// Setup builtin wick scripting methods and objects
-		var play = function (frame) {
-			obj.parentObj.isPlaying = true;
-		}
-		var stop = function (frame) {
-			obj.parentObj.isPlaying = false;
-		}
-		var gotoAndPlay = function (frame) {
-			obj.parentObj.currentFrame = frame;
-			obj.parentObj.isPlaying = true;
-		}
-		var gotoAndStop = function (frame) {
-			obj.parentObj.currentFrame = frame;
-			obj.parentObj.isPlaying = false;
-		}
-		var gotoNextFrame = function (frame) {
-			console.log("bpgogogog")
-			obj.parentObj.currentFrame ++;
-			obj.parentObj.isPlaying = false;
-		}
-		var gotoPrevFrame = function (frame) {
-			obj.parentObj.currentFrame --;
-			obj.parentObj.isPlaying = false;
-		}
+		var play          = function ()      { obj.parentObj.play(); }
+		var stop          = function ()      { obj.parentObj.stop(); }
+		var gotoAndPlay   = function (frame) { obj.parentObj.gotoAndPlay(frame); }
+		var gotoAndStop   = function (frame) { obj.parentObj.gotoAndStop(frame); }
+		var gotoNextFrame = function ()      { obj.parentObj.gotoNextFrame(); }
+		var gotoPrevFrame = function ()      { obj.parentObj.gotoPrevFrame(); }
 
 		// Setup wickobject reference variables
 		var root = project.rootObject;
@@ -583,7 +612,7 @@ var WickPlayer = (function () {
 	var advanceTimeline = function (obj) {
 
 		// Advance timeline for this object
-		if(obj.isPlaying) {
+		if(obj.isPlaying && obj.frames.length > 1) {
 			/* Left the frame, all child objects are unloaded, make sure 
 			   they run onLoad again next time we come back to this frame */
 			WickSharedUtils.forEachActiveChildObject(obj, function(child) {
@@ -595,9 +624,6 @@ var WickPlayer = (function () {
 			if(obj.currentFrame == obj.frames.length) {
 				obj.currentFrame = 0;
 			}
-
-			//obj.onLoadScriptRan = false;
-			//console.log("ya")
 		}
 
 		// Recusively advance timelines of all children
