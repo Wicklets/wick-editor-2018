@@ -270,22 +270,9 @@ var WickPlayer = (function () {
 			if(subObj.isSymbol) {
 				loadAudio(subObj);
 			} else if(subObj.audioData) {
-				var raw = Base64ArrayBuffer.decode(subObj.audioData.split(",")[1]);
-				console.log("now playing a sound, that starts with", new Uint8Array(raw.slice(0, 10)));
-				var audioContext = new AudioContext();
-				audioContext.decodeAudioData(raw, function (buffer) {
-				    if (!buffer) {
-				        console.error("failed to decode:", "buffer null");
-				        return;
-				    }
-				    var source = audioContext.createBufferSource();
-				    source.buffer = buffer;
-				    source.connect(audioContext.destination);
-				    source.start(0);
-				    console.log("started...");
-				}, function (error) {
-				    console.error("failed to decode:", error);
-				});
+				var rawData = subObj.audioData.split(",")[1]; // cut off extra filetype/etc data
+				var rawBuffer = Base64ArrayBuffer.decode(rawData);
+				subObj.audioBuffer = rawBuffer;
 			}
 		});
 	}
@@ -511,6 +498,24 @@ var WickPlayer = (function () {
 			if(obj && !obj.isRoot && obj.wickScripts) {
 				evalScript(obj, obj.wickScripts.onLoad);
 				obj.onLoadScriptRan = true;
+
+				if(obj.audioBuffer) {
+					var rawBuffer = obj.audioBuffer;
+					console.log("now playing a sound, that starts with", new Uint8Array(rawBuffer.slice(0, 10)));
+					audioContext.decodeAudioData(rawBuffer, function (buffer) {
+					    if (!buffer) {
+					        console.error("failed to decode:", "buffer null");
+					        return;
+					    }
+					    var source = audioContext.createBufferSource();
+					    source.buffer = buffer;
+					    source.connect(audioContext.destination);
+					    source.start(0);
+					    console.log("started...");
+					}, function (error) {
+					    console.error("failed to decode:", error);
+					});
+				}
 			}
 
 			// Recursively run all onLoads
@@ -613,7 +618,7 @@ var WickPlayer = (function () {
 	var advanceTimeline = function (obj) {
 
 		// Advance timeline for this object
-		if(obj.isPlaying) {
+		if(obj.isPlaying && obj.frames.length > 1) {
 			/* Left the frame, all child objects are unloaded, make sure 
 			   they run onLoad again next time we come back to this frame */
 			WickSharedUtils.forEachActiveChildObject(obj, function(child) {

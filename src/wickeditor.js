@@ -388,11 +388,11 @@ WickEditor.prototype.importFilesDroppedIntoEditor = function(files) {
 			VerboseLog.log("Dropped file: " + theFile.name);
 			VerboseLog.log("Dropped filetype: " + file.type);
 
-			if (file.type === 'image/png' || file.type === 'image/jpeg') {
+			if (['image/png', 'image/jpeg', 'image/bmp'].indexOf(file.type) != -1) {
 				that.importImageFile(theFile.name, e.target.result)
-			} else if (file.type === 'audio/mp3' || file.type === 'audio/wav' || file.type === 'audio/ogg') {
+			} else if(['audio/mp3', 'audio/wav', 'audio/ogg'].indexOf(file.type) != -1) {
 				that.importAudioFile(theFile.name, e.target.result);
-			} else if (file.type === 'application/json') {
+			} else if(['application/json'].indexOf(file.type) != -1) {
 				that.importProjectFile(file);
 			}
 
