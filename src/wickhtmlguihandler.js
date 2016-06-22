@@ -159,7 +159,6 @@ var WickHTMLGUIHandler = function (wickEditor) {
 		$("#rightClickMenu").css('left', wickEditor.mouse.x+'px');
 
 		// Hide everything
-
 		$("#insideSymbolButtons").css('display', 'none');
 		$("#symbolButtons").css('display', 'none');
 		$("#staticObjectButtons").css('display', 'none');
