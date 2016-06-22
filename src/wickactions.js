@@ -128,6 +128,49 @@ var WickActionHandler = function (wickEditor) {
 		wickEditor.htmlGUIHandler.updateTimelineGUI(wickEditor.currentObject);
 	}
 
+	// Multiframe Manipulations 
+	this.doActions['extendFrame'] = function () {
+		// TODO : Get this value from the user. 
+		this.frameExtension = parseInt(prompt("Extend the frame by...", "1"));
+
+		// TODO : This seems like a generalizable method we should create... 
+		// Ensure we've been given good input. 
+		if (this.frameExtension == NaN) {
+			this.frameExtension = 0;
+			alert("Invalid Number!");
+			return;
+		} 
+
+		// Ensure we've been given a positive integer. 
+		if (this.frameExtension < 0) {
+			this.frameExtension = 0; 
+		}
+
+		this.frameNumber = wickEditor.currentObject.currentFrame;
+		this.frame = wickEditor.currentObject.frames[this.frameNumber];
+		this.frame.extend(this.frameExtension);
+		
+	}
+
+	this.undoActions['extendFrame'] = function () {
+		this.frame.shrink(this.frameExtension); 
+	}
+
+	this.doActions['shrinkFrame'] = function () {
+		// TODO : Get this value from the user. 
+		this.frameShrink = 1;
+		this.frameNumber = wickEditor.currentObject.currentFrame;
+		this.frame = wickEditor.currentObject.frames[this.frameNumber];
+		// Ensure we store the actually shrunk number.
+		this.actualFrameShrink = this.frame.shrink(this.frameShrink); 
+	}
+
+	this.undoActions['shrinkFrame'] = function () {
+		this.frame.extend(this.actualFrameShrink);
+	}
+
+
+    // Object operations 
 	this.doActions['addWickObjectToFabricCanvas'] = function () {
 		
 	}

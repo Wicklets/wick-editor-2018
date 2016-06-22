@@ -152,10 +152,12 @@
 			<div class="button buttonInRow" id="addEmptyFrameButton" onclick="wickEditor.actionHandler.doAction('addEmptyFrame', []);">
 				<img src="resources/ic_add_black.png" width="10" />
 			</div>
-			<div class="button buttonInRow" id="extendFrameButton">
+			<div class="button buttonInRow" id="extendFrameButton" onclick="
+			    wickEditor.actionHandler.doAction('shrinkFrame', []);">
 				<img src="resources/ic_keyboard_arrow_left.png" width="10" />
 			</div>
-			<div class="button buttonInRow" id="shrinkFrameButton">
+			<div class="button buttonInRow" id="shrinkFrameButton" onclick="
+			    wickEditor.actionHandler.doAction('extendFrame', []);">
 				<img src="resources/ic_keyboard_arrow_right.png" width="10" />
 			</div>
 			<div id="timelineScrollContainer">
