@@ -47,6 +47,13 @@ var WickEditor = function () {
 		this.loadProjectFromJSON(devTestProjectJSON);
 	}
 
+
+// move this code to wicktooltips.js
+
+	$('.tooltip').on("mouseover", function(e) {
+		console.log(e.currentTarget.attributes.alt.value);
+	});
+
 }
 
 /***********************************
