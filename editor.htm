@@ -126,19 +126,19 @@
 			<strong>Wick Editor</strong><br />
 
 			<hr />
-			<div class="button buttonInRow tooltip" id="newProjectButton" onclick="wickEditor.newProject();"  alt="New Project">
+			<div class="button buttonInRow tooltipElem" id="newProjectButton" onclick="wickEditor.newProject();"  alt="New Project">
 				<img src="resources/trashcan.png" width="30" />
 			</div>	
-			<div class="button buttonInRow tooltip" id="exportJSONButton" onclick="wickEditor.saveProject();"  alt="Save Project">
+			<div class="button buttonInRow tooltipElem" id="exportJSONButton" onclick="wickEditor.saveProject();"  alt="Save Project">
 				<img src="resources/save.png" width="30" />
 			</div>
-			<div class="button buttonInRow tooltip" id="openProjectButton" onclick="$('#importButton').click();"  alt="Open Project">
+			<div class="button buttonInRow tooltipElem" id="openProjectButton" onclick="$('#importButton').click();"  alt="Open Project">
 				<img src="resources/open-folder.png" width="30" />
 			</div>
-			<div class="button buttonInRow tooltip" id="exportHTMLButton" onclick="wickEditor.exportProject();"  alt="Export Project">
+			<div class="button buttonInRow tooltipElem" id="exportHTMLButton" onclick="wickEditor.exportProject();"  alt="Export Project">
 				<img src="resources/export.png" width="30" />
 			</div>
-			<div class="button buttonInRow tooltip" id="runButton" onclick="wickEditor.runProject();" alt="Run Project">
+			<div class="button buttonInRow tooltipElem" id="runButton" onclick="wickEditor.runProject();" alt="Run Project">
 				<img src="resources/play.png" width="30" />
 			</div>
 
@@ -269,6 +269,9 @@
 			</div>
 		</div>
 
+	<!-- Tooltip -->
+		<div id="tooltipGUI" class="GUIBox tooltip"></div>
+
 	<!-- Right click menu, appears next to mouse on right click -->
 
 		<div id="rightClickMenu" class="GUIBox">
@@ -295,7 +298,6 @@
 				<div class="button" onclick="wickEditor.htmlGUIHandler.closeRightClickMenu();wickEditor.clearFrame();" >Clear Frame</div>
 			</div>
 		</div>
-
 	</div>
 
 <!-- Builtin player, visible when a project is running -->

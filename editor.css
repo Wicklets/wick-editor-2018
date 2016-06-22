@@ -74,6 +74,14 @@ hr {
 	visibility: hidden;
 }
 
+#tooltip {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	background-color: #EEEEEE;
+	visibility: hidden;
+}
+
 .button {
 	padding: 3px;
 }
