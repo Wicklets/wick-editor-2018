@@ -126,16 +126,16 @@
 			<strong>Wick Editor</strong><br />
 
 			<hr />
-			<div class="button buttonInRow tooltipElem" id="newProjectButton" onclick="wickEditor.newProject();"  alt="New Project">
+			<div class="button buttonInRow tooltipElem" id="newProjectButton" onclick="wickEditor.newProject();" alt="New Project">
 				<img src="resources/trashcan.png" width="30" />
 			</div>	
-			<div class="button buttonInRow tooltipElem" id="exportJSONButton" onclick="wickEditor.saveProject();"  alt="Save Project">
+			<div class="button buttonInRow tooltipElem" id="exportJSONButton" onclick="wickEditor.saveProject();" alt="Save Project">
 				<img src="resources/save.png" width="30" />
 			</div>
-			<div class="button buttonInRow tooltipElem" id="openProjectButton" onclick="$('#importButton').click();"  alt="Open Project">
+			<div class="button buttonInRow tooltipElem" id="openProjectButton" onclick="$('#importButton').click();" alt="Open Project">
 				<img src="resources/open-folder.png" width="30" />
 			</div>
-			<div class="button buttonInRow tooltipElem" id="exportHTMLButton" onclick="wickEditor.exportProject();"  alt="Export Project">
+			<div class="button buttonInRow tooltipElem" id="exportHTMLButton" onclick="wickEditor.exportProject();" alt="Export Project">
 				<img src="resources/export.png" width="30" />
 			</div>
 			<div class="button buttonInRow tooltipElem" id="runButton" onclick="wickEditor.runProject();" alt="Run Project">
@@ -170,12 +170,12 @@
 	<!-- Toolbar GUI, centered at the left side of the screen -->
 
 		<div id="toolbarGUI" class="GUIBox">
-			<div class="button" id="mouseToolButton" onclick="wickEditor.stopDrawingMode();">
+			<div class="button tooltipElem" id="mouseToolButton" onclick="wickEditor.stopDrawingMode();" alt="Cursor">
 				<img src="resources/cursor.png" width="30"></img>
 			</div>
 			<hr />
 
-			<div class="button" id="paintbrushToolButton" onclick="wickEditor.startDrawingMode();">
+			<div class="button tooltipElem" id="paintbrushToolButton" onclick="wickEditor.startDrawingMode();" alt="Paintbrush">
 				<img src="resources/paintbrush.png" width="30"></img>
 			</div>
 			<div id="toolOptions">
@@ -184,12 +184,12 @@
 			</div>
 			<hr />
 
-			<div class="button" id="textToolButton" onclick="wickEditor.addNewText('Click to edit text');">
+			<div class="button tooltipElem" id="textToolButton" onclick="wickEditor.addNewText('Click to edit text');" alt="Text">
 				<img src="resources/text.png" width="30"></img>
 			</div>
 			<hr />
 
-			<div class="button" id="htmlSnippetToolButton" onclick="wickEditor.addNewHTMLSnippet();">
+			<div class="button tooltipElem" id="htmlSnippetToolButton" onclick="wickEditor.addNewHTMLSnippet();" alt="HTML Snippet">
 				<img src="resources/htmlsnippet.png" width="30"></img>
 			</div>
 
