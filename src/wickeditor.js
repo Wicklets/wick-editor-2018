@@ -38,9 +38,6 @@ var WickEditor = function () {
 	// Setup action handler
 	this.actionHandler = new WickActionHandler(this);
 
-	// Setup audio handler
-	audioContext = new AudioContext();
-
 	// Load the 'unit test' project
 	if(this.AUTO_LOAD_UNIT_TEST_PROJECT) {
 		var devTestProjectJSON = WickFileUtils.downloadFile(this.UNIT_TEST_PROJECT_PATH);
@@ -393,27 +390,14 @@ WickEditor.prototype.importFilesDroppedIntoEditor = function(files) {
 
 			if (file.type === 'image/png' || file.type === 'image/jpeg') {
 				that.importImageFile(theFile.name, e.target.result)
+			} else if (file.type === 'audio/mp3' || file.type === 'audio/wav' || file.type === 'audio/ogg') {
+				that.importAudioFile(theFile.name, e.target.result);
 			} else if (file.type === 'application/json') {
 				that.importProjectFile(file);
 			}
 
 		}; })(file);
 		dataURLReader.readAsDataURL(file);
-
-		// Read file as array buffer
-		var arrayBufferReader = new FileReader();
-		arrayBufferReader.onload = (function(theFile) { return function(e) {
-
-			VerboseLog.log("readAsArrayBuffer():");
-			VerboseLog.log("Dropped file: " + theFile.name);
-			VerboseLog.log("Dropped filetype: " + file.type);
-
-			if (file.type === 'audio/mp3' || file.type === 'audio/wav' || file.type === 'audio/ogg') {
-				that.importAudioFile(theFile.name, e.target.result);
-			}
-
-		}; })(file);
-		arrayBufferReader.readAsArrayBuffer(file);
 	}
 }
 
@@ -447,26 +431,21 @@ WickEditor.prototype.importImageFile = function (name, data) {
 
 }
 
-WickEditor.prototype.importAudioFile = function (name, buffer) {
+WickEditor.prototype.importAudioFile = function (name, data) {
 
-	function playsound(raw) {
-	    console.log("now playing a sound, that starts with", new Uint8Array(raw.slice(0, 10)));
-	    audioContext.decodeAudioData(raw, function (buffer) {
-	        if (!buffer) {
-	            console.error("failed to decode:", "buffer null");
-	            return;
-	        }
-	        var source = audioContext.createBufferSource();
-	        source.buffer = buffer;
-	        source.connect(audioContext.destination);
-	        source.start(0);
-	        console.log("started...");
-	    }, function (error) {
-	        console.error("failed to decode:", error);
-	    });
-	}
+	var audioWickObject = new WickObject();
 
-	playsound(buffer);
+	audioWickObject.setDefaultPositioningValues();
+	audioWickObject.audioData = data;
+	audioWickObject.left = window.innerWidth/2;
+	audioWickObject.top = window.innerHeight/2;
+
+	audioWickObject.parentObject = this.currentObject;
+
+	this.fabricCanvas.addWickObjectToCanvas(audioWickObject);
+
+	this.syncProjectWithFabricCanvas();
+	this.syncFabricCanvasWithProject();
 
 }
 

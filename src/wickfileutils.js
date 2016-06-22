@@ -27,6 +27,7 @@
 		fileOut += "<script>" + WickFileUtils.downloadFile("lib/fpscounter.js") + "</script>\n";
 		fileOut += "<script>" + WickFileUtils.downloadFile("lib/verboselog.js") + "</script>\n";
 		fileOut += "<script>" + WickFileUtils.downloadFile("lib/browserdetection.js") + "</script>\n";
+		fileOut += "<script>" + WickFileUtils.downloadFile("lib/base64-arraybuffer.js") + "</script>\n";
 
 		// Add the player (need to download the player code)
 		fileOut += "<script>" + WickFileUtils.downloadFile("src/wicksharedutils.js") + "</script>\n";

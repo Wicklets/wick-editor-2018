@@ -9,10 +9,9 @@ var WickPlayer = (function () {
 	var mouse;
 	var keys;
 
-	// Canvas stuff
+	// Canvas stuff (To be replaced with three/webgl/pixi)
 	var canvas;
 	var context;
-
 	var canvasContainerEl;
 
 	// Screen fitting vars
@@ -21,37 +20,15 @@ var WickPlayer = (function () {
 	var widthRatio;
 	var heightRatio;
 
+	// Audio stuff
+	var audioContext;
+
 	// Flags for different player modes (phone or desktop)
 	var mobileMode;
 	var desktopMode;
 
 	// Set this to true to stop the next requestAnimationFrame
 	var stopDrawLoop;
-
-/*****************************
-	Page/DOM Utils
-*****************************/
-
-	var getMousePos = function (canvas, evt) {
-		var rect = canvas.getBoundingClientRect();
-
-		var centeredCanvasOffsetX = (window.innerWidth - project.resolution.x) / 2;
-		var centeredCanvasOffsetY = (window.innerHeight - project.resolution.y) / 2;
-
-		return {
-			x: evt.clientX - rect.left - centeredCanvasOffsetX,
-			y: evt.clientY - rect.top  - centeredCanvasOffsetY
-		};
-	}
-
-	var getTouchPos = function (canvas, evt) {
-		var rect = canvas.getBoundingClientRect();
-		var touch = evt.targetTouches[0];
-		return {
-			x: touch.pageX,
-			y: touch.pageY
-		};
-	}
 
 /*****************************
 	Player Setup
@@ -64,11 +41,12 @@ var WickPlayer = (function () {
 		// Setup canvas
 		canvas = document.getElementById("playerCanvas");
 		context = canvas.getContext('2d');
-
 		canvasContainerEl = document.getElementById("playerCanvasContainer");
 
 		projectFitScreenScale = 1.0;
 		projectFitScreenTranslate = {x : 0, y : 0};
+
+		audioContext = new AudioContext();
 
 		// Check if we're on a mobile device or not
 		mobileMode = BrowserDetectionUtils.inMobileMode;
@@ -136,6 +114,7 @@ var WickPlayer = (function () {
 		generateBuiltinWickFunctions(project.rootObject);
 		generateHTMLSnippetDivs(project.rootObject);
 		loadImages(project.rootObject);
+		loadAudio(project.rootObject);
 
 		// Start draw/update loop
 		draw();
@@ -285,6 +264,32 @@ var WickPlayer = (function () {
 		});
 	}
 
+	/* Recursively load audio of wickObj */
+	var loadAudio = function (wickObj) {
+		WickSharedUtils.forEachChildObject(wickObj, function(subObj) {
+			if(subObj.isSymbol) {
+				loadAudio(subObj);
+			} else if(subObj.audioData) {
+				var raw = Base64ArrayBuffer.decode(subObj.audioData.split(",")[1]);
+				console.log("now playing a sound, that starts with", new Uint8Array(raw.slice(0, 10)));
+				var audioContext = new AudioContext();
+				audioContext.decodeAudioData(raw, function (buffer) {
+				    if (!buffer) {
+				        console.error("failed to decode:", "buffer null");
+				        return;
+				    }
+				    var source = audioContext.createBufferSource();
+				    source.buffer = buffer;
+				    source.connect(audioContext.destination);
+				    source.start(0);
+				    console.log("started...");
+				}, function (error) {
+				    console.error("failed to decode:", error);
+				});
+			}
+		});
+	}
+
 /*****************************
 	Common event functions
 *****************************/
@@ -388,7 +393,32 @@ var WickPlayer = (function () {
 	}
 
 /*****************************
-	Utils
+	Page/DOM Utils
+*****************************/
+
+	var getMousePos = function (canvas, evt) {
+		var rect = canvas.getBoundingClientRect();
+
+		var centeredCanvasOffsetX = (window.innerWidth - project.resolution.x) / 2;
+		var centeredCanvasOffsetY = (window.innerHeight - project.resolution.y) / 2;
+
+		return {
+			x: evt.clientX - rect.left - centeredCanvasOffsetX,
+			y: evt.clientY - rect.top  - centeredCanvasOffsetY
+		};
+	}
+
+	var getTouchPos = function (canvas, evt) {
+		var rect = canvas.getBoundingClientRect();
+		var touch = evt.targetTouches[0];
+		return {
+			x: touch.pageX,
+			y: touch.pageY
+		};
+	}
+
+/*****************************
+	WickObject Utils
 *****************************/
 
 	/*  */
@@ -595,9 +625,6 @@ var WickPlayer = (function () {
 			if(obj.currentFrame == obj.frames.length) {
 				obj.currentFrame = 0;
 			}
-
-			//obj.onLoadScriptRan = false;
-			//console.log("ya")
 		}
 
 		// Recusively advance timelines of all children

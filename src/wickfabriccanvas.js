@@ -459,14 +459,26 @@ FabricCanvas.prototype.makeFabricObjectFromWickObject = function (wickObject, ca
 
 		} else if(wickObject.htmlData) {
 
-			fabric.Image.fromURL('resources/htmlsnippet.png', function(snippet) {
+			fabric.Image.fromURL('resources/htmlsnippet.png', function(snippetFabricObject) {
 
-				wickObject.width = snippet.width / window.devicePixelRatio;
-				wickObject.height = snippet.height / window.devicePixelRatio;
+				wickObject.width = snippetFabricObject.width / window.devicePixelRatio;
+				wickObject.height = snippetFabricObject.height / window.devicePixelRatio;
 
-				setWickObjectPropertiesOnFabricObject(snippet, wickObject);
+				setWickObjectPropertiesOnFabricObject(snippetFabricObject, wickObject);
 
-				callback(snippet);
+				callback(snippetFabricObject);
+			});
+
+		} else if(wickObject.audioData) {
+
+			fabric.Image.fromURL('resources/audio.png', function(audioFabricObject) {
+
+				wickObject.width = audioFabricObject.width / window.devicePixelRatio;
+				wickObject.height = audioFabricObject.height / window.devicePixelRatio;
+
+				setWickObjectPropertiesOnFabricObject(audioFabricObject, wickObject);
+
+				callback(audioFabricObject);
 			});
 
 		}
