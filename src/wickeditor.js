@@ -44,6 +44,70 @@ var WickEditor = function () {
 		this.loadProjectFromJSON(devTestProjectJSON);
 	}
 
+
+// move this code to wicktooltips.js
+
+	$('.tooltipElem').on("mouseover", function(e) {
+		$("#tooltipGUI").css('visibility', 'visible');
+		$("#tooltipGUI").css('top', wickEditor.mouse.y+5+'px');
+		$("#tooltipGUI").css('left', wickEditor.mouse.x+5+'px');
+		document.getElementById('tooltipGUI').innerHTML = e.currentTarget.attributes.alt.value;
+	});
+
+	$('.tooltipElem').on("mouseout", function(e) {
+		$("#tooltipGUI").css('visibility', 'hidden');
+	});
+
+	this.openRightClickMenu = function () {
+
+		// Make rightclick menu visible
+		
+		// Attach it to the mouse
+		$("#rightClickMenu").css('top', wickEditor.mouse.y+'px');
+		$("#rightClickMenu").css('left', wickEditor.mouse.x+'px');
+
+		// Hide everything
+
+		$("#insideSymbolButtons").css('display', 'none');
+		$("#symbolButtons").css('display', 'none');
+		$("#staticObjectButtons").css('display', 'none');
+		$("#commonObjectButtons").css('display', 'none');
+		$("#frameButtons").css('display', 'none');
+
+		// Selectively show portions we need depending on editor state
+
+		var fabCanvas = wickEditor.fabricCanvas.getCanvas();
+		var selectedObject = fabCanvas.getActiveObject() || fabCanvas.getActiveGroup();
+
+		if(!wickEditor.currentObject.isRoot) {
+			$("#insideSymbolButtons").css('display', 'block');
+		}
+		if(selectedObject) {
+			if(selectedObject.wickObject && selectedObject.wickObject.isSymbol) {
+				$("#symbolButtons").css('display', 'block');
+			} else {
+				$("#staticObjectButtons").css('display', 'block');
+			}
+			$("#commonObjectButtons").css('display', 'block');
+			
+		} else {
+			$("#frameButtons").css('display', 'block');
+		}
+	}
+
+	this.closeRightClickMenu = function () {
+		// Hide rightclick menu
+		$("#rightClickMenu").css('visibility', 'hidden');
+		$("#rightClickMenu").css('top', '0px');
+		$("#rightClickMenu").css('left','0px');
+
+		// Hide all buttons inside rightclick menu
+		$("#symbolButtons").css('display', 'none');
+		$("#staticObjectButtons").css('display', 'none');
+		$("#commonObjectButtons").css('display', 'none');
+		$("#frameButtons").css('display', 'none');
+	}
+
 }
 
 /***********************************
