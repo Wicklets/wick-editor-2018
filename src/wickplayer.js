@@ -704,10 +704,10 @@ var WickPlayer = (function () {
 
 		context.fillStyle = project.backgroundColor;
 		context.fillRect(
-			projectPositionX, 
-			projectPositionY, 
-			project.resolution.x, 
-			project.resolution.y);
+			0, 
+			0, 
+			window.innerWidth, 
+			window.innerHeight);
 
 		// Draw root object, this will recursively draw every object!
 		context.save();

@@ -6,9 +6,6 @@ var WickEditor = function () {
 	
 	this.version = 'pre-alpha';
 
-	this.AUTO_LOAD_UNIT_TEST_PROJECT = false;
-	this.UNIT_TEST_PROJECT_PATH = "tests/sounds2.json";
-
 /*********************************
 	Initialize all editor vars
 *********************************/
@@ -41,15 +38,12 @@ var WickEditor = function () {
 	// Setup localstorage
 	this.localStorageHandler = new WickLocalStorageHandler(this);
 
-	// Load the 'unit test' project
-	if(this.AUTO_LOAD_UNIT_TEST_PROJECT) {
-		var devTestProjectJSON = WickFileUtils.downloadFile(this.UNIT_TEST_PROJECT_PATH);
-		this.loadProjectFromJSON(devTestProjectJSON);
+	// Load project from localstorage
+	var savedProject = this.localStorageHandler.getJSONProjectInLocalStorage();
+	if(savedProject) {
+		this.loadProjectFromJSON(savedProject);
 	} else {
-		var savedProject = this.localStorageHandler.getJSONProjectInLocalStorage();
-		if(savedProject) {
-			this.loadProjectFromJSON(savedProject);
-		}
+		VerboseLog.log("No project saved in LocalStorage.");
 	}
 
 
