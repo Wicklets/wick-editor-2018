@@ -1,4 +1,255 @@
-var WickPlayer = (function () {
+﻿<!-- This is the "empty" wick player - it doesn't do anything 
+     unless the editor bundles a project inside of it.  -->
+
+<head>
+    <title>Wick Player</title>
+
+    <style>
+        /* remove the top and left whitespace */
+    	* { margin:0; padding:0; }
+
+        /* just to be sure these are full screen */
+    	html, body { width:100%; height:100%; }
+
+        /* To remove the scrollbars */
+    	canvas { display:block; }
+    </style>
+</head>
+
+<body>
+	<div id="playerCanvasContainer">
+		<canvas id="playerCanvas"></canvas>
+	</div>
+</body>
+
+
+<script>// Framerate keeper 
+// http://www.html5gamedevs.com/topic/1828-how-to-calculate-fps-in-plain-javascript/
+var fps = { startTime : 0,
+	frameNumber : 0,
+	getFPS : function() {
+		this.frameNumber++;
+
+		var d = new Date().getTime();
+		var currentTime = ( d - this.startTime ) / 1000;
+		var result = Math.floor( ( this.frameNumber / currentTime ) );
+
+		if( currentTime > 1 ) {
+			this.startTime = new Date().getTime();
+			this.frameNumber = 0;
+		}
+
+		return result;
+	}   
+};</script>
+<script>var VerboseLog = (function () {
+
+	var verboseLog = { };
+
+	verboseLog.verbose = true;
+
+	verboseLog.log = function (str) {
+		if(verboseLog.verbose) {
+			console.log(str);
+		}
+	}
+
+	verboseLog.error = function (str) {
+		if(verboseLog.verbose) {
+			console.error(str);
+		}
+	}
+
+	verboseLog.log("Verbose console is enabled. Turn it off in verboselog.js if you want.")
+
+	return verboseLog;
+
+})();</script>
+<script> var BrowserDetectionUtils = (function () {
+
+	var browserDetectionUtils = { };
+
+	browserDetectionUtils.isSafari = 
+	    navigator.appVersion.search('Safari') != -1 
+	 && navigator.appVersion.search('Chrome') == -1 
+	 && navigator.appVersion.search('CrMo') == -1 
+	 && navigator.appVersion.search('CriOS') == -1;
+
+	browserDetectionUtils.isIe = (
+	    navigator.userAgent.toLowerCase().indexOf("msie") != -1 
+	 || navigator.userAgent.toLowerCase().indexOf("trident") != -1 );
+
+	browserDetectionUtils.inMobileMode =
+		/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+	return browserDetectionUtils;
+	
+})();</script>
+<script>/*
+ * base64-arraybuffer
+ * https://github.com/niklasvh/base64-arraybuffer
+ *
+ * Copyright (c) 2012 Niklas von Hertzen
+ * Licensed under the MIT license.
+ */
+var Base64ArrayBuffer = (function () {
+  "use strict";
+
+  var base64ArrayBuffer = { };
+
+  var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+  // Use a lookup table to find the index.
+  var lookup = new Uint8Array(256);
+  for (var i = 0; i < chars.length; i++) {
+    lookup[chars.charCodeAt(i)] = i;
+  }
+
+  base64ArrayBuffer.encode = function(arraybuffer) {
+    var bytes = new Uint8Array(arraybuffer),
+    i, len = bytes.length, base64 = "";
+
+    for (i = 0; i < len; i+=3) {
+      base64 += chars[bytes[i] >> 2];
+      base64 += chars[((bytes[i] & 3) << 4) | (bytes[i + 1] >> 4)];
+      base64 += chars[((bytes[i + 1] & 15) << 2) | (bytes[i + 2] >> 6)];
+      base64 += chars[bytes[i + 2] & 63];
+    }
+
+    if ((len % 3) === 2) {
+      base64 = base64.substring(0, base64.length - 1) + "=";
+    } else if (len % 3 === 1) {
+      base64 = base64.substring(0, base64.length - 2) + "==";
+    }
+
+    return base64;
+  };
+
+  base64ArrayBuffer.decode =  function(base64) {
+    var bufferLength = base64.length * 0.75,
+    len = base64.length, i, p = 0,
+    encoded1, encoded2, encoded3, encoded4;
+
+    if (base64[base64.length - 1] === "=") {
+      bufferLength--;
+      if (base64[base64.length - 2] === "=") {
+        bufferLength--;
+      }
+    }
+
+    var arraybuffer = new ArrayBuffer(bufferLength),
+    bytes = new Uint8Array(arraybuffer);
+
+    for (i = 0; i < len; i+=4) {
+      encoded1 = lookup[base64.charCodeAt(i)];
+      encoded2 = lookup[base64.charCodeAt(i+1)];
+      encoded3 = lookup[base64.charCodeAt(i+2)];
+      encoded4 = lookup[base64.charCodeAt(i+3)];
+
+      bytes[p++] = (encoded1 << 2) | (encoded2 >> 4);
+      bytes[p++] = ((encoded2 & 15) << 4) | (encoded3 >> 2);
+      bytes[p++] = ((encoded3 & 3) << 6) | (encoded4 & 63);
+    }
+
+    return arraybuffer;
+  };
+
+  return base64ArrayBuffer;
+
+})();
+</script>
+<script>/* Util functions that both the player and the editor need */
+
+var WickSharedUtils = (function () {
+
+	var wickSharedUtils = { };
+
+	/* Call callback function for every child object in parentObj */
+	wickSharedUtils.forEachChildObject = function (parentObj, callback) {
+		for(var f = 0; f < parentObj.frames.length; f++) {
+			for(var o = 0; o < parentObj.frames[f].wickObjects.length; o++) {
+				callback(parentObj.frames[f].wickObjects[o]);
+			}
+		}
+	}
+
+	/* Call callback function for every child object in parentObj's current frame */
+	wickSharedUtils.forEachActiveChildObject = function (parentObj, callback) {
+		var currFrame = parentObj.currentFrame;
+		for(var o = 0; o < parentObj.frames[currFrame].wickObjects.length; o++) {
+			callback(parentObj.frames[currFrame].wickObjects[o]);
+		}
+	}
+
+	/* Call callback function for every child object in parentObj's first frame */
+	wickSharedUtils.forEachFirstFrameChildObject = function (parentObj, callback) {
+		for(var o = 0; o < parentObj.frames[0].wickObjects.length; o++) {
+			callback(parentObj.frames[0].wickObjects[o]);
+		}
+	}
+
+	/* */
+	var encodeString = function (str) {
+		var newStr = str;
+		newStr = encodeURI(str);
+		newStr = newStr.replace(/'/g, "%27");
+		return newStr;
+	}
+
+	/* */
+	var decodeString = function (str) {
+		var newStr = str;
+		newStr = newStr.replace(/%27/g, "'");
+		newStr = decodeURI(str);
+		return newStr;
+	}
+
+	/* Encodes scripts to avoid JSON format problems */
+	wickSharedUtils.encodeScripts = function (wickObj) {
+
+		if(wickObj.wickScripts) {
+			for (var key in wickObj.wickScripts) {
+				wickObj.wickScripts[key] = encodeString(wickObj.wickScripts[key]);
+			}
+		}
+
+		if(wickObj.fontData) {
+			wickObj.fontData.text = encodeString(wickObj.fontData.text);
+		}
+
+		if(wickObj.isSymbol) {
+			wickSharedUtils.forEachChildObject(wickObj, function(currObj) {
+				wickSharedUtils.encodeScripts(currObj);
+			});
+		}
+
+	}
+
+	/* Decodes scripts back to human-readble and eval()-able format */
+	wickSharedUtils.decodeScripts = function (wickObj) {
+		
+		if(wickObj.wickScripts) {
+			for (var key in wickObj.wickScripts) {
+				wickObj.wickScripts[key] = decodeString(wickObj.wickScripts[key])
+			}
+		}
+
+		if(wickObj.fontData) {
+			wickObj.fontData.text = decodeString(wickObj.fontData.text);
+		}
+
+		if(wickObj.isSymbol) {
+			wickSharedUtils.forEachChildObject(wickObj, function(currObj) {
+				wickSharedUtils.decodeScripts(currObj);
+			});
+		}
+
+	}
+
+	return wickSharedUtils;
+
+})();</script>
+<script>var WickPlayer = (function () {
 
 	var wickPlayer = { };
 
@@ -284,11 +535,6 @@ var WickPlayer = (function () {
 
 		// Set this object to need its onLoad script run
 		wickObj.onLoadScriptRan = false;
-
-		// set all elapsedFrames to 0
-		for(var i = 0; i < wickObj.frames.length; i++) {
-			wickObj.frames[i].elapsedFrames = 0;
-		}
 
 		// Recursively set all timelines to first frame as well
 		WickSharedUtils.forEachChildObject(wickObj, function(subObj) {
@@ -638,10 +884,18 @@ var WickPlayer = (function () {
 			window[subObj.name] = subObj;
 		});
 
+		// Set x,y vars so user doesn't have to use top/left
+		obj.x = obj.left;
+		obj.y = obj.top;
+
 		for(var i = 0; i < 100; i++) { // !!! why plseae dont do this
 			script = script.replace("this.","obj.");
 		}
 		eval(script);
+
+		// Update top/left ... Note that this will squash top and left, so user can't use those!!
+		obj.left = obj.x;
+		obj.top = obj.y;
 
 		// Get rid of wickobject reference variables
 		WickSharedUtils.forEachChildObject(obj.parentObj, function(subObj) {
@@ -650,7 +904,8 @@ var WickPlayer = (function () {
 
 	}
 
-	var advanceTimeline = function (obj) { 
+	var advanceTimeline = function (obj) {
+
 		// Advance timeline for this object
 		if(obj.isPlaying && obj.frames.length > 1) {
 			/* Left the frame, all child objects are unloaded, make sure 
@@ -659,15 +914,8 @@ var WickPlayer = (function () {
 				child.onLoadScriptRan = false;
 			});
 
-			// Multiframes
-			var frame = obj.frames[obj.currentFrame];
-			if (frame.elapsedFrames == frame.frameLength) {
-				obj.currentFrame++;
-				frame.elapsedFrames = 0;
-			} else {
-				frame.elapsedFrames++;
-			}
-			
+			// Advance timeline one frame
+			obj.currentFrame++;
 			if(obj.currentFrame == obj.frames.length) {
 				obj.currentFrame = 0;
 			}
@@ -811,4 +1059,5 @@ var WickPlayer = (function () {
 
 	return wickPlayer;
 
-})();
+})();</script>
+<script>WickPlayer.runProject('{"rootObject":{"parentObject":null,"wickScripts":{"onLoad":"//%20onLoad%0A//%20This%20script%20runs%20once%20when%20this%20object%20enters%20the%20scene.%0A","onClick":"//%20onClick%0A//%20This%20script%20runs%20when%20this%20object%20is%20clicked%20on.%0A","onUpdate":"//%20onUpdate%0A//%20This%20script%20runs%20repeatedly%20whenever%20this%20object%20is%20in%20the%20scene.%0A","onKeyDown":"//%20onKeyDown%0A//%20This%20script%20runs%20whenever%20a%20key%20is%20pressed.%0A"},"isSymbol":true,"currentFrame":0,"frames":[{"wickObjects":[{"parentObject":null,"wickScripts":{"onLoad":"//%20onLoad%0A//%20This%20script%20runs%20once%20when%20this%20object%20enters%20the%20scene.%0A","onClick":"//%20onClick%0A//%20This%20script%20runs%20when%20this%20object%20is%20clicked%20on.%0A","onUpdate":"//%20onUpdate%0A//%20This%20script%20runs%20repeatedly%20whenever%20this%20object%20is%20in%20the%20scene.%0A","onKeyDown":"//%20onKeyDown%0A//%20This%20script%20runs%20whenever%20a%20key%20is%20pressed.%0A"},"fontData":{"cursorColor":"#333","cursorDelay":1000,"cursorWidth":2,"editable":true,"fontFamily":"arial","fontSize":40,"fontStyle":"normal","fontWeight":"normal","hasBorders":false,"lineHeight":1.16,"fill":"#000000","textAlign":"left","textDecoration":"","text":"REFRESH%20THE%20PAGE%20FOR%20"},"isSymbol":false,"currentFrame":null,"scaleX":1,"scaleY":1,"angle":0,"flipX":false,"flipY":false,"left":69,"top":168,"width":511.171875,"height":52.431999999999995},{"parentObject":null,"wickScripts":{"onLoad":"//%20onLoad%0A//%20This%20script%20runs%20once%20when%20this%20object%20enters%20the%20scene.%0A","onClick":"//%20onClick%0A//%20This%20script%20runs%20when%20this%20object%20is%20clicked%20on.%0A","onUpdate":"//%20onUpdate%0A//%20This%20script%20runs%20repeatedly%20whenever%20this%20object%20is%20in%20the%20scene.%0A","onKeyDown":"//%20onKeyDown%0A//%20This%20script%20runs%20whenever%20a%20key%20is%20pressed.%0A"},"fontData":{"cursorColor":"#333","cursorDelay":1000,"cursorWidth":2,"editable":true,"fontFamily":"arial","fontSize":"96","fontStyle":"normal","fontWeight":"normal","hasBorders":false,"lineHeight":1.16,"fill":"#000000","textAlign":"left","textDecoration":"","text":"MORE%20BEES"},"isSymbol":false,"currentFrame":null,"scaleX":1,"scaleY":1,"angle":0,"flipX":false,"flipY":false,"left":40,"top":214.00000000000006,"width":570.796875,"height":125.83679999999997},{"parentObject":null,"wickScripts":{"onLoad":"//%20onLoad%0A//%20This%20script%20runs%20once%20when%20this%20object%20enters%20the%20scene.%0Avar%20nBees%20=%20localStorage.getItem(%22nBees%22);%0A%0Aif(!nBees)%20%7B%0A%20%20%20%20nBees%20=%201;%0A%7D%0A%0Aalert(%22There%20are%20%22%20+%20nBees%20+%20%22%20bees!!!!%22);%0A%0AnBees%20*=%2010;%0A%0AlocalStorage.setItem(%22nBees%22,%20nBees)","onClick":"//%20onClick%0A//%20This%20script%20runs%20when%20this%20object%20is%20clicked%20on.%0A","onUpdate":"//%20onUpdate%0A//%20This%20script%20runs%20repeatedly%20whenever%20this%20object%20is%20in%20the%20scene.%0A","onKeyDown":"//%20onKeyDown%0A//%20This%20script%20runs%20whenever%20a%20key%20is%20pressed.%0A"},"imageData":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANIAAAAICAYAAACMPKELAAAAn0lEQVRYR+3YwQ2CQBBG4TcVSCl2gnSAFWgnagd0wNIBJViKVjAGEq+akL3x9rjJTDJfZi5/AEz9dEnyBByBZvnzKaDAT4EXMAcxt0P7iLEfr0HcRFNAgW0CSZ6j9CW3lVulgAJfAQ/JXVCggoCHVAHRFgp4SO6AAhUEDBsqINpi3wJr2LAQLMkdsMbfQRz2zeL0CvwXSPINPIHSDd39A01GJ0EokT+bAAAAAElFTkSuQmCC","isSymbol":false,"currentFrame":null,"scaleX":1,"scaleY":1,"angle":0,"flipX":false,"flipY":false,"width":210,"height":8,"left":275.25,"top":577}],"breakpoint":false,"frameLength":1,"tweenPoints":[]}],"isRoot":true,"left":0,"top":0},"resolution":{"x":650,"y":500},"backgroundColor":"#FFFFFF","framerate":12,"fitScreen":false}');</script>

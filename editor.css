@@ -184,6 +184,11 @@ input[type=file] {
 	display: none;
 }
 
+#gifImportDummyElem {
+	display: none;
+	visibility: hidden;
+}
+
 .hidden {
     position: absolute;
     bottom: 0;

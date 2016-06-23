@@ -17,6 +17,7 @@
 	<script src="lib/fpscounter.js"></script>
 	<script src="lib/browserdetection.js"></script>
 	<script src="lib/base64-arraybuffer.js"></script>
+	<script src="lib/libgif.js"></script>
 	
 	<script src="src/wickfileutils.js"></script>
 	<script src="src/wickobjectutils.js"></script>
@@ -30,6 +31,7 @@
 	<script src="src/wickscriptingide.js"></script>
 	<script src="src/wickactions.js"></script>
 	<script src="src/wicktweenobject.js"></script>
+	<script src="src/wicklocalstoragehandler.js"></script>
 
 	<script src="src/wickeditor.js"></script>
 	<script src="src/wickplayer.js"></script>
@@ -84,6 +86,16 @@
 			}
 		});
 
+		document.addEventListener("cut", function(event) {
+
+			wickEditor.clearKeys();
+
+			if(document.activeElement.nodeName != 'TEXTAREA' ) {
+				focusHiddenArea();
+				wickEditor.handleCutEvent(event);
+			}
+		});
+
 		document.addEventListener("paste", function(event) {
 
 			wickEditor.clearKeys();
@@ -114,6 +126,10 @@
 <!-- Hidden element to always be selected so browser always fires copy/paste events -->
 
 	<input id="hidden-input" class="hidden" type="text" value="" />
+
+<!-- Hidden element used for gif decoding + import -->
+
+	<img id="gifImportDummyElem" />
 
 <!-- Editor GUI, visible when a project is being edited & not running -->
 
@@ -231,7 +247,7 @@
 				Size: <textarea id="projectSizeX" cols="4" rows="1"></textarea> x 
 				      <textarea id="projectSizeY" cols="4" rows="1"></textarea><br />
 				Framerate: <textarea id="frameRate" cols="2" rows="1"></textarea><br />
-				<input type="checkbox" id="fitScreenCheckbox" checked> Fit to Screen Size
+				<input type="checkbox" id="fitScreenCheckbox"> Fit to Screen Size
 			</div>
 			<div id="objectProperties">
 				Object Properties
