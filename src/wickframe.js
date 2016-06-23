@@ -8,32 +8,11 @@ var WickFrame = function () {
 	// Should we stop on this frame? 
 	this.breakpoint = false;
 
-	// A single frame contains no tweens.
+	// A single frame contains no tweens. Note: Tweens not yet implemented
 	this.tweenPoints = [];
 
 	// Create multiframe support. 
 	this.frameLength = 1;
-
-	// How many frames have we gone through? 
-	this.framesElapsed = 0;
-
-	// We hide elapsing implementation details here in case
-	// we want to change them later. 
-	this.elapseFrame = function () {
-		if (this.framesElapsed < this.frameLength) {
-			this.framesElapsed += 1;
-		} else {
-			VerboseLog.log("Cannot elapse a frame which has been fully elapsed.");
-		}
-	} 
-
-	this.isElapsed = function () {
-		return this.framesElapsed === this.frameLength;
-	}
-
-	this.reset = function () {
-		this.framesElapsed = 0; 
-	}
 
 	// Extend our frame to encompass more frames. 
 	this.extend = function(length) {
