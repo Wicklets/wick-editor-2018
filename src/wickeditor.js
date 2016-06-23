@@ -127,7 +127,7 @@ WickEditor.prototype.resizeCanvasAndGUI = function () {
 		this.currentObject.top
 	);
 
-	$("#scriptEditor").css('width', window.innerWidth - 330);
+	//$("#scriptEditor").css('width', window.innerWidth - 330);
 
 	// Also center timeline GUI
 	var GUIWidth = parseInt($("#timelineGUI").css("width")) / 2;
