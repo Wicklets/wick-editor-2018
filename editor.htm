@@ -83,6 +83,16 @@
 			}
 		});
 
+		document.addEventListener("cut", function(event) {
+
+			wickEditor.clearKeys();
+
+			if(document.activeElement.nodeName != 'TEXTAREA' ) {
+				focusHiddenArea();
+				wickEditor.handleCutEvent(event);
+			}
+		});
+
 		document.addEventListener("paste", function(event) {
 
 			wickEditor.clearKeys();

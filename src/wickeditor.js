@@ -218,6 +218,15 @@ WickEditor.prototype.handleCopyEvent = function (event) {
 	}
 }
 
+WickEditor.prototype.handleCutEvent = function (event) {
+	if(!this.scriptingIDE.open) {
+		this.syncProjectWithFabricCanvas();
+		event.preventDefault();
+		WickObjectUtils.copyWickObjectJSONToClipboard(event.clipboardData, this.fabricCanvas, this.currentObject);
+		this.deleteSelectedObjects();
+	}
+}
+
 /****************************************
     Timeline pleayhead moving methods
 ****************************************/
