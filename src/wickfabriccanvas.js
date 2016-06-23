@@ -27,7 +27,7 @@ var FabricCanvas = function (wickEditor) {
 
 	this.canvas.on('path:created', function(e) {
 	    var your_path = e.path;
-
+	    console.log(your_path);
 	});
 
 	this.context = this.canvas.getContext('2d');
