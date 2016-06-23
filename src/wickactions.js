@@ -13,18 +13,18 @@ var WickActionHandler = function (wickEditor) {
 	this.doActions = {};
 	this.undoActions = {};
 
-	this.doActions['delete'] = function () {
+	this.doActions['delete'] = function (args) {
 
 		// Save object(/objects) that were deleted in the WickAction 
 		// object so we can restore it later in the undo function.
 
 		var fabCanvas = wickEditor.fabricCanvas.getCanvas();
 
-		if(this.args.group) {
+		if(args.group) {
 			this.groupObjs = [];
 
-			var items = this.args.group._objects;
-			this.args.group._restoreObjectsState();
+			var items = args.group._objects;
+			args.group._restoreObjectsState();
 
 			for(var i = 0; i < items.length; i++) {
 				this.groupObjs.push(items[i]);
@@ -35,42 +35,42 @@ var WickActionHandler = function (wickEditor) {
 
 		var fabCanvas = wickEditor.fabricCanvas.getCanvas();
 
-		if (this.args.group) {
-			this.args.group.forEachObject(function(o) { 
+		if (args.group) {
+			args.group.forEachObject(function(o) { 
 				fabCanvas.remove(o);
 			});
 			fabCanvas.discardActiveGroup().renderAll(); // stops weird ghost group selection
 		} else {
-			fabCanvas.remove(this.args.obj);
+			fabCanvas.remove(args.obj);
 		}
 	};
 
-	this.undoActions['delete'] = function () {
+	this.undoActions['delete'] = function (args) {
 
 		// Restore the deleted object/s
 		// We stored them inside this WickAction object!
 
 		var fabCanvas = wickEditor.fabricCanvas.getCanvas();
 
-		if(this.args.group) {
+		if(args.group) {
 			for(var i = 0; i < this.groupObjs.length; i++) {
 				fabCanvas.add(this.groupObjs[i]);
 			}
 		} else {
-			fabCanvas.add(this.args.obj);
-			fabCanvas.setActiveObject(this.args.obj);
+			fabCanvas.add(args.obj);
+			fabCanvas.setActiveObject(args.obj);
 		}
 	};
 
-	this.doActions['addWickObjectToFabricCanvas'] = function () {
+	this.doActions['addWickObjectToFabricCanvas'] = function (args) {
 
 	}
 
-	this.undoActions['addWickObjectToFabricCanvas'] = function () {
+	this.undoActions['addWickObjectToFabricCanvas'] = function (args) {
 		
 	}
 
-	this.doActions['gotoFrame'] = function () {
+	this.doActions['gotoFrame'] = function (args) {
 
 		wickEditor.fabricCanvas.deselectAll();
 
@@ -80,7 +80,7 @@ var WickActionHandler = function (wickEditor) {
 		wickEditor.syncProjectWithFabricCanvas();
 
 		// move playhead
-		wickEditor.currentObject.currentFrame = this.args.toFrame;
+		wickEditor.currentObject.currentFrame = args.toFrame;
 
 		// Load wickobjects in the frame we moved to into the canvas
 		wickEditor.syncFabricCanvasWithProject();
@@ -88,7 +88,7 @@ var WickActionHandler = function (wickEditor) {
 		wickEditor.htmlGUIHandler.updateTimelineGUI(wickEditor.currentObject);
 	}
 
-	this.undoActions['gotoFrame'] = function () {
+	this.undoActions['gotoFrame'] = function (args) {
 
 		wickEditor.fabricCanvas.deselectAll();
 
@@ -106,7 +106,7 @@ var WickActionHandler = function (wickEditor) {
 	}
 
 
-	    this.doActions['addEmptyFrame'] = function () {
+	    this.doActions['addEmptyFrame'] = function (args) {
 		// Add an empty frame
 		wickEditor.currentObject.addEmptyFrame(wickEditor.currentObject.frames.length);
 
@@ -118,7 +118,7 @@ var WickActionHandler = function (wickEditor) {
 		wickEditor.htmlGUIHandler.updateTimelineGUI(wickEditor.currentObject);
 	}
 
-	this.undoActions['addEmptyFrame'] = function () {
+	this.undoActions['addEmptyFrame'] = function (args) {
 		// Go to the second-to-last frame and remove the last frame
 		wickEditor.actionHandler.doAction('gotoFrame', {toFrame:wickEditor.currentObject.frames.length-2}, true);
 		wickEditor.currentObject.frames.pop();
@@ -129,7 +129,7 @@ var WickActionHandler = function (wickEditor) {
 	}
 
 	// Multiframe Manipulations 
-	this.doActions['extendFrame'] = function () {
+	this.doActions['extendFrame'] = function (args) {
 		// TODO : Get this value from the user. 
 		this.frameExtension = parseInt(prompt("Extend the frame by...", "1"));
 
@@ -152,11 +152,11 @@ var WickActionHandler = function (wickEditor) {
 		
 	}
 
-	this.undoActions['extendFrame'] = function () {
+	this.undoActions['extendFrame'] = function (args) {
 		this.frame.shrink(this.frameExtension); 
 	}
 
-	this.doActions['shrinkFrame'] = function () {
+	this.doActions['shrinkFrame'] = function (args) {
 		// TODO : Get this value from the user. 
 		this.frameShrink = 1;
 		this.frameNumber = wickEditor.currentObject.currentFrame;
@@ -165,25 +165,25 @@ var WickActionHandler = function (wickEditor) {
 		this.actualFrameShrink = this.frame.shrink(this.frameShrink); 
 	}
 
-	this.undoActions['shrinkFrame'] = function () {
+	this.undoActions['shrinkFrame'] = function (args) {
 		this.frame.extend(this.actualFrameShrink);
 	}
 
 
     // Object operations 
-	this.doActions['addWickObjectToFabricCanvas'] = function () {
+	this.doActions['addWickObjectToFabricCanvas'] = function (args) {
 		
 	}
 
-	this.undoActions['addWickObjectToFabricCanvas'] = function () {
+	this.undoActions['addWickObjectToFabricCanvas'] = function (args) {
 		
 	}
 
-	this.doActions['convertObjectsToSymbol'] = function () {
+	this.doActions['convertObjectsToSymbol'] = function (args) {
 		
 	}
 
-	this.undoActions['convertObjectsToSymbol'] = function () {
+	this.undoActions['convertObjectsToSymbol'] = function (args) {
 		
 	}
 
@@ -206,7 +206,7 @@ WickActionHandler.prototype.doAction = function (actionName, args, dontAddToStac
 
 	// Pass the arguments over to the WickAction and call its doAction function
 	action.args = args;
-	action.doAction();
+	action.doAction(action.args);
 
 	// Put the action on the undo stack to be undone later
 	if(!dontAddToStack) {
@@ -231,7 +231,7 @@ WickActionHandler.prototype.undoAction = function () {
 	VerboseLog.log(action.args)
 
 	// Do the action and put it on the redo stack to be redone later
-	action.undoAction();
+	action.undoAction(action.args);
 	this.redoStack.push(action);
 	
 }
@@ -251,7 +251,7 @@ WickActionHandler.prototype.redoAction = function () {
 	VerboseLog.log(action.args)
 
 	// Do the action and put it back onto the undo stack
-	action.doAction();
+	action.doAction(action.args);
 	this.undoStack.push(action);
 
 }
