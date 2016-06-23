@@ -683,11 +683,11 @@ var WickPlayer = (function () {
 				0, projectPositionY + project.resolution.y, 
 				window.innerWidth, projectPositionY);
 			context.fillRect( // left side
-				0, projectPositionY, 
-				projectPositionX, project.resolution.y);
+				0, 0, 
+				projectPositionX, window.innerHeight);
 			context.fillRect( // right side
-				projectPositionX+project.resolution.x, projectPositionY, 
-				projectPositionX, project.resolution.y);
+				projectPositionX+project.resolution.x, 0, 
+				projectPositionX, window.innerHeight);
 		}
 		
 		// Draw FPS counter
