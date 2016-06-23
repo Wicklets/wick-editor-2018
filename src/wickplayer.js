@@ -86,11 +86,16 @@ var WickPlayer = (function () {
 	wickPlayer.stopRunningCurrentProject = function() {
 
 		stopDrawLoop = true;
+
 		canvasContainerEl.removeEventListener("mousedown", onMouseDown);
 		canvasContainerEl.removeEventListener("touchstart", onTouchStart);
+
 		document.body.removeEventListener("keydown", handleKeyDownInput);
 		document.body.removeEventListener("keyup", handleKeyUpInput);
+
 		window.removeEventListener('resize', resizeCanvas);
+
+		audioContext.close();
 
 	}
 
