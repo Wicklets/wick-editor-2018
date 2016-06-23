@@ -456,6 +456,8 @@ WickEditor.prototype.importFilesDroppedIntoEditor = function(files) {
 
 			if (['image/png', 'image/jpeg', 'image/bmp'].indexOf(file.type) != -1) {
 				that.importImageFile(theFile.name, e.target.result)
+			} else if(['image/gif'].indexOf(file.type) != -1) {
+				that.importAnimatedGifFile(theFile.name, e.target.result);
 			} else if(['audio/mp3', 'audio/wav', 'audio/ogg'].indexOf(file.type) != -1) {
 				that.importAudioFile(theFile.name, e.target.result);
 			} else if(['application/json'].indexOf(file.type) != -1) {
@@ -479,21 +481,56 @@ WickEditor.prototype.importProjectFile = function (file) {
 
 WickEditor.prototype.importImageFile = function (name, data) {
 
-	var left = 0;
-	var top = 0;
-	if(this.currentObject.isRoot) {
-		left = window.innerWidth/2;
-		top = window.innerHeight/2;
-	}
-
 	var that = this;
 	WickObjectUtils.createWickObjectFromImage(
 		data, 
-		left, 
-		top, 
+		0, 
+		0, 
 		this.currentObject, 
 		function(o) { that.fabricCanvas.addWickObjectToCanvas(o); }
 	);
+
+}
+
+WickEditor.prototype.importAnimatedGifFile = function (name, data) {
+
+	var that = this;
+
+	var gifSymbol = new WickObject();
+	gifSymbol.parentObject = this.currentObject;
+	gifSymbol.left = 0;
+	gifSymbol.top = 0;
+	gifSymbol.setDefaultPositioningValues();
+	gifSymbol.setDefaultSymbolValues();
+
+	var gif=document.getElementById("gifImportDummyElem");
+	gif.setAttribute('src', data);
+	gif.setAttribute('height', '467px');
+	gif.setAttribute('width', '375px');
+
+	var superGif = new SuperGif({ gif: gif } );
+	superGif.load(function () {
+
+		var framesDataURLs = superGif.getFrameDataURLs();
+		for(var i = 0; i < framesDataURLs.length; i++) {
+
+			WickObjectUtils.createWickObjectFromImage(
+				framesDataURLs[i], 
+				0, 
+				0, 
+				that.currentObject, 
+				(function(frameIndex) { return function(o) {
+					//that.fabricCanvas.addWickObjectToCanvas(o); 
+					gifSymbol.addEmptyFrame(frameIndex);
+					gifSymbol.frames[frameIndex].wickObjects.push(o);
+
+					if(frameIndex == framesDataURLs.length-1) {
+						that.fabricCanvas.addWickObjectToCanvas(gifSymbol);
+					}
+				}; }) (i)
+			);
+		}
+	});
 
 }
 

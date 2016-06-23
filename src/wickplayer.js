@@ -130,7 +130,7 @@ var WickPlayer = (function () {
 		VerboseLog.log("now playing a sound, that starts with", new Uint8Array(rawBuffer.slice(0, 10))[0]);
 		audioContext.decodeAudioData(rawBuffer, function (buffer) {
 		    if (!buffer) {
-		        console.error("failed to decode:", "buffer null");
+		        VerboseLog.error("failed to decode:", "buffer null");
 		        return;
 		    }
 		    var source = audioContext.createBufferSource();

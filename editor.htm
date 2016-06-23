@@ -17,6 +17,7 @@
 	<script src="lib/fpscounter.js"></script>
 	<script src="lib/browserdetection.js"></script>
 	<script src="lib/base64-arraybuffer.js"></script>
+	<script src="lib/libgif.js"></script>
 	
 	<script src="src/wickfileutils.js"></script>
 	<script src="src/wickobjectutils.js"></script>
@@ -113,6 +114,10 @@
 <!-- Hidden element to always be selected so browser always fires copy/paste events -->
 
 	<input id="hidden-input" class="hidden" type="text" value="" />
+
+<!-- Hidden element used for gif decoding + import -->
+
+	<img id="gifImportDummyElem" />
 
 <!-- Editor GUI, visible when a project is being edited & not running -->
 
