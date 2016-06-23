@@ -22,6 +22,7 @@ var WickPlayer = (function () {
 
 	// Audio stuff
 	var audioContext;
+	var readyToStartWebAudioContext;
 
 	// Flags for different player modes (phone or desktop)
 	var mobileMode;
@@ -46,14 +47,14 @@ var WickPlayer = (function () {
 		projectFitScreenScale = 1.0;
 		projectFitScreenTranslate = {x : 0, y : 0};
 
-		var AudioContext = window.AudioContext // Default
-    					|| window.webkitAudioContext // Safari and old versions of Chrome
-    					|| false;
-		audioContext = new AudioContext();
-
 		// Check if we're on a mobile device or not
 		mobileMode = BrowserDetectionUtils.inMobileMode;
 		desktopMode = !mobileMode;
+
+		// Setup WebAudio context
+		if(!mobileMode) {
+			setupWebAudioContext();
+		}
 
 		// Setup mouse and key events (desktop mode)
 		mouse = { x : 0, y : 0 };
@@ -103,6 +104,46 @@ var WickPlayer = (function () {
 	}
 
 /*****************************
+	WebAudio Context
+*****************************/
+
+	var setupWebAudioContext = function () {
+		var AudioContext = window.AudioContext // Default
+						|| window.webkitAudioContext // Safari and old versions of Chrome
+						|| false;
+		audioContext = new AudioContext();
+
+		if(!audioContext) {
+			alert("WebAudio not supported! Sounds will not play.");
+			return;
+		}
+
+		// Setup dummy node and discard it to get webaudio context running
+		if(audioContext.createGainNode) {
+			audioContext.createGainNode();
+		} else {
+			audioContext.createGain();
+		}
+	}
+
+	var playSound = function (rawBuffer) {
+		VerboseLog.log("now playing a sound, that starts with", new Uint8Array(rawBuffer.slice(0, 10))[0]);
+		audioContext.decodeAudioData(rawBuffer, function (buffer) {
+		    if (!buffer) {
+		        console.error("failed to decode:", "buffer null");
+		        return;
+		    }
+		    var source = audioContext.createBufferSource();
+		    source.buffer = buffer;
+		    source.connect(audioContext.destination);
+		    source.start(0);
+		    VerboseLog.log("started...");
+		}, function (error) {
+		    VerboseLog.error("failed to decode:", error);
+		});
+	}
+
+/*****************************
 	Opening projects
 *****************************/
 
@@ -122,7 +163,9 @@ var WickPlayer = (function () {
 		generateBuiltinWickFunctions(project.rootObject);
 		generateHTMLSnippetDivs(project.rootObject);
 		loadImages(project.rootObject);
-		loadAudio(project.rootObject);
+		if(!mobileMode) {
+			loadAudio(project.rootObject);
+		}
 
 		// Start draw/update loop
 		draw();
@@ -290,7 +333,6 @@ var WickPlayer = (function () {
 				loadAudio(subObj);
 			} else if(subObj.audioData) {
 				var rawData = subObj.audioData.split(",")[1]; // cut off extra filetype/etc data
-				console.log(rawData)
 				var rawBuffer = Base64ArrayBuffer.decode(rawData);
 				subObj.audioBuffer = rawBuffer;
 			}
@@ -388,6 +430,12 @@ var WickPlayer = (function () {
 	var onTouchStart = function (evt) {
 
 		evt.preventDefault();
+
+		// on iOS, WebAudio context only gets 'unmuted' after first user interaction
+		if(!audioContext) {
+			setupWebAudioContext();
+			loadAudio(project.rootObject);
+		}
 
 		var touchPos = getTouchPos(canvas, evt);
 
@@ -519,22 +567,9 @@ var WickPlayer = (function () {
 				evalScript(obj, obj.wickScripts.onLoad);
 				obj.onLoadScriptRan = true;
 
-				if(obj.audioBuffer) {
-					var rawBuffer = obj.audioBuffer;
-					console.log("now playing a sound, that starts with", new Uint8Array(rawBuffer.slice(0, 10)));
-					audioContext.decodeAudioData(rawBuffer, function (buffer) {
-					    if (!buffer) {
-					        console.error("failed to decode:", "buffer null");
-					        return;
-					    }
-					    var source = audioContext.createBufferSource();
-					    source.buffer = buffer;
-					    source.connect(audioContext.destination);
-					    source.start(0);
-					    console.log("started...");
-					}, function (error) {
-					    console.error("failed to decode:", error);
-					});
+				// Play sound at the same time as when onLoad script runs
+				if(audioContext && obj.audioBuffer) {
+					playSound(obj.audioBuffer);
 				}
 			}
 
