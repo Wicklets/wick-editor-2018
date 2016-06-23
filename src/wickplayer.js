@@ -290,6 +290,7 @@ var WickPlayer = (function () {
 				loadAudio(subObj);
 			} else if(subObj.audioData) {
 				var rawData = subObj.audioData.split(",")[1]; // cut off extra filetype/etc data
+				console.log(rawData)
 				var rawBuffer = Base64ArrayBuffer.decode(rawData);
 				subObj.audioBuffer = rawBuffer;
 			}
