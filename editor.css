@@ -42,6 +42,11 @@ hr {
 	text-align: center;
 	visibility: hidden;
 }
+#scriptEditor {
+	width: 600px;
+	height: 200px;
+	text-align: left;
+}
 
 #propertiesGUI {
 	bottom: 10px;
@@ -163,12 +168,6 @@ hr {
 }
 .breakpointButton.enabled {
 	background-color: red;
-}
-
-#scriptEditor {
-	width: 600px;
-	height: 300px;
-	text-align: left;
 }
 
 #fileImportOverlay {
