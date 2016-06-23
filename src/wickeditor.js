@@ -578,6 +578,7 @@ WickEditor.prototype.importVectorFile = function (name, data) {
 **********************************/
 
 WickEditor.prototype.syncProjectWithFabricCanvas = function () {
+
 	this.currentObject.frames[this.currentObject.currentFrame].wickObjects = this.fabricCanvas.getWickObjectsInCanvas(this.project.resolution);
 }
 
@@ -599,9 +600,8 @@ WickEditor.prototype.newProject = function () {
 WickEditor.prototype.saveProject = function () {
 
 	var projectJSON = this.getProjectAsJSON();
-
 	WickFileUtils.saveProjectAsJSONFile(projectJSON);
-	this.localStorageHandler.saveJSONProjectInLocalStorage(projectJSON)
+
 }
 
 WickEditor.prototype.openProject = function () {
@@ -673,7 +673,7 @@ WickEditor.prototype.loadProjectFromJSON = function (jsonString) {
 
 WickEditor.prototype.runProject = function () {
 	if(this.scriptingIDE.projectHasErrors) {
-		if(!confirm("There are syntax errors in the project! Are you sure you want to run it?")) {
+		if(!confirm("There are syntax errors in the code of this project! Are you sure you want to run it?")) {
 			return;
 		}
 	}
@@ -681,8 +681,9 @@ WickEditor.prototype.runProject = function () {
 	document.getElementById("editor").style.display = "none";
 	document.getElementById("builtinPlayer").style.display = "block";
 
-	// JSONify the project and have the builtin player run it
+	// JSONify the project, autosave, and have the builtin player run it
 	var JSONProject = this.getProjectAsJSON();
+	this.localStorageHandler.saveJSONProjectInLocalStorage(JSONProject);
 	WickPlayer.runProject(JSONProject);
 }
 
