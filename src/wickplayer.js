@@ -609,8 +609,7 @@ var WickPlayer = (function () {
 
 	}
 
-	var advanceTimeline = function (obj) {
-
+	var advanceTimeline = function (obj) { 
 		// Advance timeline for this object
 		if(obj.isPlaying && obj.frames.length > 1) {
 			/* Left the frame, all child objects are unloaded, make sure 
@@ -619,8 +618,19 @@ var WickPlayer = (function () {
 				child.onLoadScriptRan = false;
 			});
 
-			// Advance timeline one frame
-			obj.currentFrame++;
+			// Multiframe support.
+			currentFrame = obj.frames[obj.currentFrame];
+			console.log(currentFrame);
+			currentFrame.elapseFrame(); 
+
+			if (currentFrame.isElapsed()) {
+				console.log(obj.currentFrame); 
+				console.log(currentFrame.frameLength);
+				// Advance timeline one frame
+				obj.currentFrame++;
+				currentFrame.reset(); 
+			} 
+			
 			if(obj.currentFrame == obj.frames.length) {
 				obj.currentFrame = 0;
 			}
