@@ -38,10 +38,18 @@ var WickEditor = function () {
 	// Setup action handler
 	this.actionHandler = new WickActionHandler(this);
 
+	// Setup localstorage
+	this.localStorageHandler = new WickLocalStorageHandler(this);
+
 	// Load the 'unit test' project
 	if(this.AUTO_LOAD_UNIT_TEST_PROJECT) {
 		var devTestProjectJSON = WickFileUtils.downloadFile(this.UNIT_TEST_PROJECT_PATH);
 		this.loadProjectFromJSON(devTestProjectJSON);
+	} else {
+		var savedProject = this.localStorageHandler.getJSONProjectInLocalStorage();
+		if(savedProject) {
+			this.loadProjectFromJSON(savedProject);
+		}
 	}
 
 
@@ -580,7 +588,11 @@ WickEditor.prototype.newProject = function () {
 }
 
 WickEditor.prototype.saveProject = function () {
-	WickFileUtils.saveProjectAsJSONFile(this.getProjectAsJSON());
+
+	var projectJSON = this.getProjectAsJSON();
+
+	WickFileUtils.saveProjectAsJSONFile(projectJSON);
+	this.localStorageHandler.saveJSONProjectInLocalStorage(projectJSON)
 }
 
 WickEditor.prototype.openProject = function () {
