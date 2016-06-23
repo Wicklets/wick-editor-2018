@@ -46,6 +46,9 @@ var WickPlayer = (function () {
 		projectFitScreenScale = 1.0;
 		projectFitScreenTranslate = {x : 0, y : 0};
 
+		var AudioContext = window.AudioContext // Default
+    					|| window.webkitAudioContext // Safari and old versions of Chrome
+    					|| false;
 		audioContext = new AudioContext();
 
 		// Check if we're on a mobile device or not
