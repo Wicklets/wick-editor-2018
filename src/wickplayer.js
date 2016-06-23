@@ -285,6 +285,11 @@ var WickPlayer = (function () {
 		// Set this object to need its onLoad script run
 		wickObj.onLoadScriptRan = false;
 
+		// set all elapsedFrames to 0
+		for(var i = 0; i < wickObj.frames.length; i++) {
+			wickObj.frames[i].elapsedFrames = 0;
+		}
+
 		// Recursively set all timelines to first frame as well
 		WickSharedUtils.forEachChildObject(wickObj, function(subObj) {
 			if(subObj.isSymbol) {
@@ -633,18 +638,10 @@ var WickPlayer = (function () {
 			window[subObj.name] = subObj;
 		});
 
-		// Set x,y vars so user doesn't have to use top/left
-		obj.x = obj.left;
-		obj.y = obj.top;
-
 		for(var i = 0; i < 100; i++) { // !!! why plseae dont do this
 			script = script.replace("this.","obj.");
 		}
 		eval(script);
-
-		// Update top/left ... Note that this will squash top and left, so user can't use those!!
-		obj.left = obj.x;
-		obj.top = obj.y;
 
 		// Get rid of wickobject reference variables
 		WickSharedUtils.forEachChildObject(obj.parentObj, function(subObj) {
@@ -653,8 +650,7 @@ var WickPlayer = (function () {
 
 	}
 
-	var advanceTimeline = function (obj) {
-
+	var advanceTimeline = function (obj) { 
 		// Advance timeline for this object
 		if(obj.isPlaying && obj.frames.length > 1) {
 			/* Left the frame, all child objects are unloaded, make sure 
@@ -663,8 +659,15 @@ var WickPlayer = (function () {
 				child.onLoadScriptRan = false;
 			});
 
-			// Advance timeline one frame
-			obj.currentFrame++;
+			// Multiframes
+			var frame = obj.frames[obj.currentFrame];
+			if (frame.elapsedFrames == frame.frameLength) {
+				obj.currentFrame++;
+				frame.elapsedFrames = 0;
+			} else {
+				frame.elapsedFrames++;
+			}
+			
 			if(obj.currentFrame == obj.frames.length) {
 				obj.currentFrame = 0;
 			}

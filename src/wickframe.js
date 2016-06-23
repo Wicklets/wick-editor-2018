@@ -8,11 +8,11 @@ var WickFrame = function () {
 	// Should we stop on this frame? 
 	this.breakpoint = false;
 
+	// A single frame contains no tweens. Note: Tweens not yet implemented
+	this.tweenPoints = [];
+
 	// Create multiframe support. 
 	this.frameLength = 1;
-
-	// A single frame contains no tweens.
-	this.tweenPoints = [];
 
 	// Extend our frame to encompass more frames. 
 	this.extend = function(length) {
@@ -21,7 +21,7 @@ var WickFrame = function () {
 
 	// Reduce the number of frames this WickFrame Occupies. 
 	this.shrink = function(length) {
-		// Never "shrink" a negative amount. 
+		// Never "shrink" by a negative amount. 
 		if (length <= 0) {
 			return; 
 		}
