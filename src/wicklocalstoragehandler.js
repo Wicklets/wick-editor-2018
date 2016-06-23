@@ -16,18 +16,26 @@ WickLocalStorageHandler.prototype.checkBrowserLocalStorageCompatibility = functi
 
 WickLocalStorageHandler.prototype.saveJSONProjectInLocalStorage = function (projectJSON) {
 	if(this.localStorageAvailable) {
-		localStorage.setItem('wickProject', projectJSON);
+		try {
+			VerboseLog.log("Saving project to local storage...");
+			localStorage.setItem('wickProject', projectJSON);
+		} catch (err) {
+			VerboseLog.error("LocalStorage could not save project, threw error:");
+			VerboseLog.log(err);
+		}
 	}
 }
 
 WickLocalStorageHandler.prototype.getJSONProjectInLocalStorage = function () {
 	if(this.localStorageAvailable) {
+		VerboseLog.log("Loading project from local storage...");
 		return localStorage.getItem('wickProject');
 	}
 }
 
 WickLocalStorageHandler.prototype.deleteJSONProjectInLocalStorage = function () {
 	if(this.localStorageAvailable) {
+		VerboseLog.log("Deleting project in local storage...");
 		return localStorage.removeItem('wickProject');
 	}
 }
