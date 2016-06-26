@@ -194,6 +194,12 @@ WickEditor.prototype.handleKeyboardInput = function (eventType, event) {
 			this.deleteSelectedObjects();	
 		}
 
+		// Delete: delete selected objects
+		if (event.keyCode == 46 && document.activeElement.nodeName != 'TEXTAREA') {
+			event.preventDefault();
+			this.deleteSelectedObjects();	
+		}
+
 		// Tilde: log project state to canvas (for debugging)
 		if (event.keyCode == 192) {
 			console.log(this.project);
