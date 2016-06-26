@@ -485,16 +485,13 @@ var WickPlayer = (function () {
 		var centeredCanvasOffsetX = (window.innerWidth - project.resolution.x) / 2;
 		var centeredCanvasOffsetY = (window.innerHeight - project.resolution.y) / 2;
 
-		//context.translate(projectFitScreenTranslate.x, projectFitScreenTranslate.y);
-		//context.scale(projectFitScreenScale, projectFitScreenScale);
-
 		var mouseX = evt.clientX;
 		var mouseY = evt.clientY;
 
 		mouseX -= canvasBoundingClientRect.left;
 		mouseY -= canvasBoundingClientRect.top;
 
-				mouseX -= projectFitScreenTranslate.x;
+		mouseX -= projectFitScreenTranslate.x;
 		mouseY -= projectFitScreenTranslate.y;
 
 		mouseX /=  projectFitScreenScale;
@@ -738,10 +735,6 @@ var WickPlayer = (function () {
 
 	var draw = function () {
 
-		// Calculate centered project window position
-		var projectPositionX = (window.innerWidth - project.resolution.x) / 2;
-		var projectPositionY = (window.innerHeight - project.resolution.y) / 2;
-
 		// Clear canvas
 		context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -754,23 +747,26 @@ var WickPlayer = (function () {
 
 		// Scale to fit window
 		context.save();
-		context.translate(projectFitScreenTranslate.x, projectFitScreenTranslate.y);
-		context.scale(projectFitScreenScale, projectFitScreenScale);
+			context.translate(projectFitScreenTranslate.x, projectFitScreenTranslate.y);
+			context.scale(projectFitScreenScale, projectFitScreenScale);
 
-		// Draw root object, this will recursively draw every object!
-		context.save();
-			context.globalAlpha = 1.0;
-			if(!project.fitScreen) {
-				context.translate(projectPositionX, projectPositionY);
-			}
-			drawWickObject(project.rootObject);
-		context.restore();
+			// Draw root object, this will recursively draw every object!
+			context.save();
+				context.globalAlpha = 1.0;
+				if(!project.fitScreen) {
+					// Calculate centered project window position
+					var projectPositionX = (window.innerWidth - project.resolution.x) / 2;
+					var projectPositionY = (window.innerHeight - project.resolution.y) / 2;
+					context.translate(projectPositionX, projectPositionY);
+				}
+				drawWickObject(project.rootObject);
+			context.restore();
 
 		context.restore();
 
 		// Draw border around project (to hide offscreen objects)
+		context.fillStyle = "#000000";
 		if(!project.fitScreen) {
-			context.fillStyle = "#000000";
 			context.fillRect( // top side
 				0, 0, 
 				window.innerWidth, projectPositionY);
@@ -783,6 +779,19 @@ var WickPlayer = (function () {
 			context.fillRect( // right side
 				projectPositionX+project.resolution.x, 0, 
 				projectPositionX, window.innerHeight);
+		} else {
+			context.fillRect( // left side
+				0, 0, 
+				projectFitScreenTranslate.x, window.innerHeight);
+			context.fillRect( // right side
+				projectFitScreenTranslate.x + project.resolution.x * projectFitScreenScale, 0,
+				projectFitScreenTranslate.x, window.innerHeight);
+			context.fillRect( // top side
+				0, 0, 
+				window.innerWidth, projectFitScreenTranslate.y);
+			context.fillRect( // bottom side
+				0, projectFitScreenTranslate.y + project.resolution.y * projectFitScreenScale,
+				window.innerWidth, projectFitScreenTranslate.y);
 		}
 		
 		// Draw FPS counter
