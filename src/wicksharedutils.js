@@ -45,7 +45,7 @@ var WickSharedUtils = (function () {
 	}
 
 	/* Encodes scripts to avoid JSON format problems */
-	wickSharedUtils.encodeScripts = function (wickObj) {
+	wickSharedUtils.encodeText = function (wickObj) {
 
 		if(wickObj.wickScripts) {
 			for (var key in wickObj.wickScripts) {
@@ -59,14 +59,14 @@ var WickSharedUtils = (function () {
 
 		if(wickObj.isSymbol) {
 			wickSharedUtils.forEachChildObject(wickObj, function(currObj) {
-				wickSharedUtils.encodeScripts(currObj);
+				wickSharedUtils.encodeText(currObj);
 			});
 		}
 
 	}
 
 	/* Decodes scripts back to human-readble and eval()-able format */
-	wickSharedUtils.decodeScripts = function (wickObj) {
+	wickSharedUtils.decodeText = function (wickObj) {
 		
 		if(wickObj.wickScripts) {
 			for (var key in wickObj.wickScripts) {
@@ -80,7 +80,7 @@ var WickSharedUtils = (function () {
 
 		if(wickObj.isSymbol) {
 			wickSharedUtils.forEachChildObject(wickObj, function(currObj) {
-				wickSharedUtils.decodeScripts(currObj);
+				wickSharedUtils.decodeText(currObj);
 			});
 		}
 

@@ -22,7 +22,7 @@
 		wickObject.removeParentObjectRefences();
 
 		// Encode scripts to avoid JSON format problems
-		WickSharedUtils.encodeScripts(wickObject);
+		WickSharedUtils.encodeText(wickObject);
 
 		var JSONWickObject = JSON.stringify(wickObject);
 
@@ -34,7 +34,7 @@
 		wickObject.regenerateParentObjectReferences();
 
 		// Decode scripts back to human-readble and eval()-able format
-		WickSharedUtils.decodeScripts(wickObject);
+		WickSharedUtils.decodeText(wickObject);
 
 		return JSONWickObject;
 	}
@@ -50,7 +50,7 @@
 			wickObjects[i].top += groupTop;
 
 			// Encode scripts to avoid JSON format problems
-			WickSharedUtils.encodeScripts(wickObjects[i]);
+			WickSharedUtils.encodeText(wickObjects[i]);
 		}
 
 		var JSONWickObjects = JSON.stringify(wickObjects);
@@ -68,7 +68,7 @@
 			wickObjects[i].regenerateParentObjectReferences();
 
 			// Decode scripts back to human-readble and eval()-able format
-			WickSharedUtils.decodeScripts(wickObjects[i]);
+			WickSharedUtils.decodeText(wickObjects[i]);
 		}
 
 		return JSONWickObjects;
@@ -87,7 +87,7 @@
 		newWickObject.regenerateParentObjectReferences();
 
 		// Decode scripts back to human-readble and eval()-able format
-		WickSharedUtils.decodeScripts(newWickObject);
+		WickSharedUtils.decodeText(newWickObject);
 
 		return newWickObject;
 	}
@@ -106,7 +106,7 @@
 			newWickObjects[i].regenerateParentObjectReferences();
 
 			// Decode scripts back to human-readble and eval()-able format
-			WickSharedUtils.decodeScripts(newWickObjects[i]);
+			WickSharedUtils.decodeText(newWickObjects[i]);
 		}
 
 		return newWickObjects;

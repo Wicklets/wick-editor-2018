@@ -256,6 +256,7 @@ FabricCanvas.prototype.resize = function (projectWidth, projectHeight) {
 
 	this.canvas.setWidth ( window.innerWidth  );
 	this.canvas.setHeight( window.innerHeight );
+	this.canvas.calcOffset();
 
 	var diffWidth = this.canvas.getWidth() - oldWidth;
 	var diffHeight = this.canvas.getHeight() - oldHeight;
@@ -263,6 +264,7 @@ FabricCanvas.prototype.resize = function (projectWidth, projectHeight) {
 	this.canvas.forEachObject(function(fabricObj) {
 		fabricObj.left += diffWidth/2;
 		fabricObj.top += diffHeight/2;
+		fabricObj.setCoords();
 	});
 
 	// Re-center the import file alert text and fade
@@ -286,7 +288,6 @@ FabricCanvas.prototype.resize = function (projectWidth, projectHeight) {
 	this.frameInside.setCoords();
 
 	this.canvas.renderAll();
-	this.canvas.calcOffset();
 
 }
 

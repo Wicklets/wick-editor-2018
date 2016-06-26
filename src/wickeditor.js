@@ -618,8 +618,8 @@ WickEditor.prototype.getProjectAsJSON = function () {
 	// (can't JSONify objects with circular references, player doesn't need them anyway)
 	this.project.rootObject.removeParentObjectRefences();
 
-	// Encode scripts to avoid JSON format problems
-	WickSharedUtils.encodeScripts(this.project.rootObject);
+	// Encode scripts/text to avoid JSON format problems
+	WickSharedUtils.encodeText(this.project.rootObject);
 
 	var JSONProject = JSON.stringify(this.project);
 
@@ -627,7 +627,7 @@ WickEditor.prototype.getProjectAsJSON = function () {
 	this.project.rootObject.regenerateParentObjectReferences();
 
 	// Decode scripts back to human-readble and eval()-able format
-	WickSharedUtils.decodeScripts(this.project.rootObject);
+	WickSharedUtils.decodeText(this.project.rootObject);
 
 	return JSONProject;
 }
@@ -644,7 +644,7 @@ WickEditor.prototype.loadProjectFromJSON = function (jsonString) {
 	this.project.rootObject.regenerateParentObjectReferences();
 
 	// Decode scripts back to human-readble and eval()-able format
-	WickSharedUtils.decodeScripts(this.project.rootObject);
+	WickSharedUtils.decodeText(this.project.rootObject);
 
 	// Start editing the first frame of root
 	// TODO: Projects should store the current place they were in when last saved
