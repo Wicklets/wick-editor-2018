@@ -14,6 +14,9 @@ var WickPlayer = (function () {
 	var renderer;
 	var stage;
 
+	var projectFitScreenScale;
+	var projectFitScreenTranslate;
+
 	// Audio stuff
 	var audioContext;
 	var readyToStartWebAudioContext;
@@ -58,6 +61,9 @@ var WickPlayer = (function () {
 		rendererContainerEl.appendChild(renderer.view);
 		renderer.view.id = "rendererCanvas";
 		stage = new PIXI.Container();
+
+		projectFitScreenScale = 1.0;
+		projectFitScreenTranslate = {x : 0, y : 0};
 
 		resizeCanvas();
 		animate();
@@ -343,22 +349,12 @@ var WickPlayer = (function () {
 				loadImages(subObj);
 			} else if (subObj.imageData) {
 				subObj.pixiSprite = PIXI.Sprite.fromImage(subObj.imageData);
-				var onDown = function (e) {
-					runOnClickScript(subObj);
-				}
 				subObj.pixiSprite.interactive = true;
-				subObj.pixiSprite.on('mousedown', onDown);
-				subObj.pixiSprite.on('touchstart', onDown);
+				subObj.buttonMode = true;
 			} else if (subObj.fontData) {
 				var style = {
 					font : "normal " + subObj.fontData.fontSize + "px " + subObj.fontData.fontFamily,
 					fill : subObj.fontData.fill,
-					//stroke : '#4a1850',
-					//strokeThickness : 5,
-					//dropShadow : true,
-					//dropShadowColor : '#000000',
-					//dropShadowAngle : Math.PI / 6,
-					//dropShadowDistance : 6,
 					wordWrap : true,
 					wordWrapWidth : 440
 				};
@@ -430,7 +426,7 @@ var WickPlayer = (function () {
 
 	var onMouseMove = function (evt) {
 
-		/*mouse = getMousePos(evt);
+		mouse = getMousePos(renderer.view, evt);
 
 		// Check if we're hovered over a clickable object...
 		var hoveredOverObj = false;
@@ -448,17 +444,17 @@ var WickPlayer = (function () {
 			rendererContainerEl.style.cursor = "pointer";
 		} else {
 			rendererContainerEl.style.cursor = "default";
-		}*/
+		}
 
 	}
 
 	var onMouseDown = function (evt) {
 		
-		/*WickSharedUtils.forEachActiveChildObject(project.rootObject, function(currObj) {
+		WickSharedUtils.forEachActiveChildObject(project.rootObject, function(currObj) {
 			if(pointInsideObj(currObj, mouse) && wickObjectIsClickable(currObj)) {
 				runOnClickScript(currObj);
 			}
-		});*/
+		});
 
 	}
 
@@ -502,12 +498,25 @@ var WickPlayer = (function () {
 	Page/DOM Utils
 *****************************/
 
-	var getMousePos = function (evt) {
+	var getMousePos = function (canvas, evt) {
+		var canvasBoundingClientRect = canvas.getBoundingClientRect();
+
 		var centeredCanvasOffsetX = (window.innerWidth - project.resolution.x) / 2;
 		var centeredCanvasOffsetY = (window.innerHeight - project.resolution.y) / 2;
 
 		var mouseX = evt.clientX;
 		var mouseY = evt.clientY;
+
+		if(project.fitScreen) {
+			mouseX -= canvasBoundingClientRect.left;
+			mouseY -= canvasBoundingClientRect.top;
+		}
+
+		mouseX -= projectFitScreenTranslate.x;
+		mouseY -= projectFitScreenTranslate.y;
+
+		mouseX /=  projectFitScreenScale;
+		mouseY /=  projectFitScreenScale;
 
 		if(!project.fitScreen) {
 			mouseX -= centeredCanvasOffsetX;
@@ -750,26 +759,61 @@ var WickPlayer = (function () {
 		graphics.endFill();
 		renderer.render(graphics);
 
-		drawWickObject(project.rootObject);
+		var baseTransform = {
+			x:       0,
+			y:       0,
+			angle:   0,
+			scaleX:  1.0,
+			scaleY:  1.0,
+			opacity: 1.0
+		};
+		drawWickObject(project.rootObject, baseTransform);
 
 	}
 
-	var drawWickObject = function (wickObj) {
+	var drawWickObject = function (wickObj, transform) {
+		// Apply transformation
+		if(!wickObj.isRoot) {
+			transform.x       += wickObj.x;
+			transform.y       += wickObj.y;
+			transform.angle   += wickObj.angle/360*2*3.14159;
+			transform.scaleX  *= wickObj.scaleX;
+			transform.scaleY  *= wickObj.scaleY;
+			if(wickObj.opacity) transform.opacity *= wickObj.opacity;
+		}
+
 		if(wickObj.isSymbol) {
 			WickSharedUtils.forEachActiveChildObject(wickObj, function(subObj) {
-				drawWickObject(subObj);
+				drawWickObject(subObj, transform);
 			});
 		} else {
 			if(wickObj.pixiSprite) {
-				wickObj.pixiSprite.x = wickObj.x;
-				wickObj.pixiSprite.y = wickObj.y;
-				wickObj.pixiSprite.rotation = wickObj.angle/360*2*3.14159;
-				wickObj.pixiSprite.scale.x = wickObj.scaleX;
-				wickObj.pixiSprite.scale.y = wickObj.scaleY;
+				wickObj.pixiSprite.x        = transform.x;
+				wickObj.pixiSprite.y        = transform.y;
+				wickObj.pixiSprite.rotation = transform.angle;
+				wickObj.pixiSprite.scale.x  = transform.scaleX;
+				wickObj.pixiSprite.scale.y  = transform.scaleY;
+				wickObj.pixiSprite.alpha    = transform.opacity;
 				renderer.render(wickObj.pixiSprite);
 			} else if(wickObj.pixiText) {
+				wickObj.pixiText.x        = transform.x;
+				wickObj.pixiText.y        = transform.y;
+				wickObj.pixiText.rotation = transform.angle;
+				wickObj.pixiText.scale.x  = transform.scaleX;
+				wickObj.pixiText.scale.y  = transform.scaleY;
+				wickObj.pixiText.alpha    = transform.opacity;
 				renderer.render(wickObj.pixiText);
 			}
+		}
+
+		// Undo transformation
+		if(!wickObj.isRoot) {
+			transform.x       -= wickObj.x;
+			transform.y       -= wickObj.y;
+			transform.angle   -= wickObj.angle;
+			transform.scaleX  /= wickObj.scaleX;
+			transform.scaleY  /= wickObj.scaleY;
+			if(wickObj.opacity) transform.opacity /= wickObj.opacity;
 		}
 	}
 
