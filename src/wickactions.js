@@ -85,7 +85,10 @@ var WickActionHandler = function (wickEditor) {
 		// Load wickobjects in the frame we moved to into the canvas
 		wickEditor.syncFabricCanvasWithProject();
 
+		// Reset GUI
 		wickEditor.htmlGUIHandler.updateTimelineGUI(wickEditor.currentObject);
+		wickEditor.htmlGUIHandler.updatePropertiesGUI('project');
+		wickEditor.scriptingIDE.closeScriptingGUI();
 	}
 
 	this.undoActions['gotoFrame'] = function (args) {
@@ -102,11 +105,14 @@ var WickActionHandler = function (wickEditor) {
 		// Load wickobjects in the frame we moved to into the canvas
 		wickEditor.syncFabricCanvasWithProject();
 
+		// Reset GUI
 		wickEditor.htmlGUIHandler.updateTimelineGUI(wickEditor.currentObject);
+		wickEditor.htmlGUIHandler.updatePropertiesGUI('project');
+		wickEditor.scriptingIDE.closeScriptingGUI();
 	}
 
 
-	    this.doActions['addEmptyFrame'] = function (args) {
+	this.doActions['addEmptyFrame'] = function (args) {
 		// Add an empty frame
 		wickEditor.currentObject.addEmptyFrame(wickEditor.currentObject.frames.length);
 

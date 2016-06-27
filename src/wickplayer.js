@@ -765,39 +765,46 @@ var WickPlayer = (function () {
 		context.restore();
 
 		// Draw border around project (to hide offscreen objects)
-		context.fillStyle = "#000000";
-		if(!project.fitScreen) {
-			context.fillRect( // top side
-				0, 0, 
-				window.innerWidth, projectPositionY);
-			context.fillRect( // bottom side
-				0, projectPositionY + project.resolution.y, 
-				window.innerWidth, projectPositionY);
-			context.fillRect( // left side
-				0, 0, 
-				projectPositionX, window.innerHeight);
-			context.fillRect( // right side
-				projectPositionX+project.resolution.x, 0, 
-				projectPositionX, window.innerHeight);
-		} else {
-			context.fillRect( // left side
-				0, 0, 
-				projectFitScreenTranslate.x, window.innerHeight);
-			context.fillRect( // right side
-				projectFitScreenTranslate.x + project.resolution.x * projectFitScreenScale, 0,
-				projectFitScreenTranslate.x, window.innerHeight);
-			context.fillRect( // top side
-				0, 0, 
-				window.innerWidth, projectFitScreenTranslate.y);
-			context.fillRect( // bottom side
-				0, projectFitScreenTranslate.y + project.resolution.y * projectFitScreenScale,
-				window.innerWidth, projectFitScreenTranslate.y);
+		if(project.drawBorders) {
+			context.fillStyle = project.borderColor;
+			if(!project.fitScreen) {
+				context.fillRect( // top side
+					0, 0, 
+					window.innerWidth, projectPositionY);
+				context.fillRect( // bottom side
+					0, projectPositionY + project.resolution.y, 
+					window.innerWidth, projectPositionY);
+				context.fillRect( // left side
+					0, 0, 
+					projectPositionX, window.innerHeight);
+				context.fillRect( // right side
+					projectPositionX+project.resolution.x, 0, 
+					projectPositionX, window.innerHeight);
+			} else {
+				context.fillRect( // left side
+					0, 0, 
+					projectFitScreenTranslate.x, window.innerHeight);
+				context.fillRect( // right side
+					projectFitScreenTranslate.x + project.resolution.x * projectFitScreenScale, 0,
+					projectFitScreenTranslate.x, window.innerHeight);
+				context.fillRect( // top side
+					0, 0, 
+					window.innerWidth, projectFitScreenTranslate.y);
+				context.fillRect( // bottom side
+					0, projectFitScreenTranslate.y + project.resolution.y * projectFitScreenScale,
+					window.innerWidth, projectFitScreenTranslate.y);
+			}
 		}
 		
 		// Draw FPS counter
-		context.fillStyle = "White";
+		var fpsString = fps.getFPS() + " FPS";
 		context.font      = "normal 14pt Arial";
-		context.fillText(fps.getFPS() + " FPS", canvas.width-80, 29);
+		context.fillStyle = "Black";
+		context.fillText(fpsString, canvas.width-81, 29);
+		context.fillText(fpsString, canvas.width-80, 29);
+		context.fillText(fpsString, canvas.width-79, 29);
+		context.fillStyle = "White";
+		context.fillText(fpsString, canvas.width-80, 29);
 
 	}
 

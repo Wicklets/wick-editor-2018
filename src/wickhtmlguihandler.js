@@ -108,6 +108,10 @@ var WickHTMLGUIHandler = function (wickEditor) {
 		wickEditor.project.fitScreen = this.checked;
 	}
 
+	document.getElementById('drawBordersCheckbox').onclick = function (e) {
+		wickEditor.project.drawBorders = this.checked;
+	}
+
 	document.getElementById('projectBgColor').onchange = function () {
 		wickEditor.project.backgroundColor = this.value;
 		wickEditor.fabricCanvas.setBackgroundColor(this.value);
@@ -199,6 +203,10 @@ var WickHTMLGUIHandler = function (wickEditor) {
 		$("#frameButtons").css('display', 'none');
 	}
 
+/************************
+    Properties menu
+************************/
+
 	this.updatePropertiesGUI = function(tab) {
 
 		$("#projectProperties").css('display', 'none');
@@ -208,11 +216,12 @@ var WickHTMLGUIHandler = function (wickEditor) {
 
 		switch(tab) {
 			case 'project':
-				document.getElementById('projectBgColor').value      = wickEditor.project.backgroundColor;
-				document.getElementById('projectSizeX').innerHTML    = wickEditor.project.resolution.x;
-				document.getElementById('projectSizeY').innerHTML    = wickEditor.project.resolution.y;
-				document.getElementById('frameRate').innerHTML       = wickEditor.project.framerate;
-				document.getElementById('fitScreenCheckbox').checked = wickEditor.project.fitScreen;
+				document.getElementById('projectBgColor').value        = wickEditor.project.backgroundColor;
+				document.getElementById('projectSizeX').value          = wickEditor.project.resolution.x;
+				document.getElementById('projectSizeY').value          = wickEditor.project.resolution.y;
+				document.getElementById('frameRate').innerHTML         = wickEditor.project.framerate;
+				document.getElementById('fitScreenCheckbox').checked   = wickEditor.project.fitScreen;
+				document.getElementById('drawBordersCheckbox').checked = wickEditor.project.drawBorders;
 				$("#projectProperties").css('display', 'inline');
 				break;
 			case 'symbol':

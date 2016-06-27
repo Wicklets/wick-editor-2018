@@ -236,7 +236,7 @@ WickEditor.prototype.handleCutEvent = function (event) {
 }
 
 /****************************************
-    Timeline pleayhead moving methods
+    Timeline playhead moving methods
 ****************************************/
 
 // 
@@ -578,11 +578,12 @@ WickEditor.prototype.importVectorFile = function (name, data) {
 **********************************/
 
 WickEditor.prototype.syncProjectWithFabricCanvas = function () {
-
 	this.currentObject.frames[this.currentObject.currentFrame].wickObjects = this.fabricCanvas.getWickObjectsInCanvas(this.project.resolution);
 }
 
 WickEditor.prototype.syncFabricCanvasWithProject = function () {
+	this.fabricCanvas.setBackgroundColor(this.project.backgroundColor);
+
 	this.fabricCanvas.storeObjectsIntoCanvas( this.currentObject.getCurrentFrame().wickObjects, this.project.resolution );
 }
 
@@ -591,8 +592,11 @@ WickEditor.prototype.newProject = function () {
 	if(confirm("Create a new project? All unsaved changes to the current project will be lost!")) {
 		this.project = new WickProject();
 		this.currentObject = this.project.rootObject;
+
 		this.syncFabricCanvasWithProject();
+		this.resizeCanvasAndGUI();
 		this.htmlGUIHandler.updateTimelineGUI(this.currentObject);
+		this.htmlGUIHandler.updatePropertiesGUI('project');
 	}
 
 }
