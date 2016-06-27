@@ -10,15 +10,9 @@ var WickPlayer = (function () {
 	var keys;
 
 	// Canvas stuff (To be replaced with three/webgl/pixi)
-	var canvas;
-	var context;
-	var canvasContainerEl;
-
-	// Screen fitting vars
-	var projectFitScreenScale;
-	var projectFitScreenTranslate;
-	var widthRatio;
-	var heightRatio;
+	var rendererContainerEl;
+	var renderer;
+	var stage;
 
 	// Audio stuff
 	var audioContext;
@@ -39,14 +33,6 @@ var WickPlayer = (function () {
 
 		stopDrawLoop = false;
 
-		// Setup canvas
-		canvas = document.getElementById("playerCanvas");
-		context = canvas.getContext('2d');
-		canvasContainerEl = document.getElementById("playerCanvasContainer");
-
-		projectFitScreenScale = 1.0;
-		projectFitScreenTranslate = {x : 0, y : 0};
-
 		// Check if we're on a mobile device or not
 		mobileMode = BrowserDetectionUtils.inMobileMode;
 		desktopMode = !mobileMode;
@@ -56,12 +42,30 @@ var WickPlayer = (function () {
 			setupWebAudioContext();
 		}
 
+		// Load the project!
+		loadJSONProject(projectJSON);
+		
+		rendererContainerEl = document.getElementById("playerCanvasContainer");
+		renderer = PIXI.autoDetectRenderer(project.resolution.x, project.resolution.y, {backgroundColor : 0x1099bb});
+		renderer.clearBeforeRender = false;
+		var oldRendererCanvas = document.getElementById("rendererCanvas");
+		if(oldRendererCanvas) {
+			rendererContainerEl.removeChild(rendererContainerEl.childNodes[0]);
+			//oldRendererCanvas.parentNode.removeChild(oldRendererCanvas);
+		}
+		rendererContainerEl.appendChild(renderer.view);
+		renderer.view.id = "rendererCanvas";
+		stage = new PIXI.Container();
+
+		resizeCanvas();
+		animate();
+
 		// Setup mouse and key events (desktop mode)
 		mouse = { x : 0, y : 0 };
 		keys = [];
 		if(desktopMode) {
-			canvas.addEventListener('mousemove', onMouseMove, false);
-			canvasContainerEl.addEventListener("mousedown", onMouseDown, false);
+			renderer.view.addEventListener('mousemove', onMouseMove, false);
+			rendererContainerEl.addEventListener("mousedown", onMouseDown, false);
 
 			document.body.addEventListener("keydown", handleKeyDownInput);
 			document.body.addEventListener("keyup", handleKeyUpInput);
@@ -70,20 +74,16 @@ var WickPlayer = (function () {
 		// Setup touch events (mobile mode)
 		if(mobileMode) {
 			// Touch event (one touch = like a mouse click)
-			canvasContainerEl.addEventListener("touchstart", onTouchStart, false);
+			rendererContainerEl.addEventListener("touchstart", onTouchStart, false);
 
 			// Squash gesture events
-			canvasContainerEl.addEventListener('gesturestart', function(e) {  e.preventDefault(); });
-			canvasContainerEl.addEventListener('gesturechange', function(e) {  e.preventDefault(); });
-			canvasContainerEl.addEventListener('gestureend', function(e) {  e.preventDefault(); });
+			rendererContainerEl.addEventListener('gesturestart', function(e) {  e.preventDefault(); });
+			rendererContainerEl.addEventListener('gesturechange', function(e) {  e.preventDefault(); });
+			rendererContainerEl.addEventListener('gestureend', function(e) {  e.preventDefault(); });
 		}
 
 		// update canvas size on window resize
 		window.addEventListener('resize', resizeCanvas, false);
-
-		// Load the project!
-		loadJSONProject(projectJSON);
-		resizeCanvas();
 
 	}
 
@@ -91,8 +91,8 @@ var WickPlayer = (function () {
 
 		stopDrawLoop = true;
 
-		canvasContainerEl.removeEventListener("mousedown", onMouseDown);
-		canvasContainerEl.removeEventListener("touchstart", onTouchStart);
+		rendererContainerEl.removeEventListener("mousedown", onMouseDown);
+		rendererContainerEl.removeEventListener("touchstart", onTouchStart);
 
 		document.body.removeEventListener("keydown", handleKeyDownInput);
 		document.body.removeEventListener("keyup", handleKeyUpInput);
@@ -173,10 +173,6 @@ var WickPlayer = (function () {
 		if(!mobileMode) {
 			loadAudio(project.rootObject);
 		}
-
-		// Start draw/update loop
-		draw();
-		animate();
 	}
 
 	/* Create variables inside each wickobject so we can say root.bogoObject.play(); and such */
@@ -341,15 +337,25 @@ var WickPlayer = (function () {
 	var loadImages = function (wickObj) {
 
 		WickSharedUtils.forEachChildObject(wickObj, function(subObj) {
-			if(subObj.isSymbol) {
+			if (subObj.isSymbol) {
 				loadImages(subObj);
-			} else if(subObj.imageData) {
-				subObj.image = new Image();
-				subObj.image.src = subObj.imageData;
-				subObj.image.onload = function() {
-					// Scope issue - fix this, we need it for preloaders
-					//subObj.imageIsLoaded = true;
+			} else if (subObj.imageData) {
+				subObj.pixiSprite = PIXI.Sprite.fromImage(subObj.imageData);
+			} else if (subObj) {
+				var style = {
+					font : 'bold italic 36px Arial',
+					fill : '#F7EDCA',
+					stroke : '#4a1850',
+					strokeThickness : 5,
+					dropShadow : true,
+					dropShadowColor : '#000000',
+					dropShadowAngle : Math.PI / 6,
+					dropShadowDistance : 6,
+					wordWrap : true,
+					wordWrapWidth : 440
 				};
+
+				subObj.pixiText = new PIXI.Text(subObj.fontData.text, style);
 			}
 		});
 	}
@@ -373,13 +379,9 @@ var WickPlayer = (function () {
 
 	var resizeCanvas = function () {
 
-		// Update canvas size
-		canvas.width = window.innerWidth;
-		canvas.height = window.innerHeight;
-
 		if(project && project.fitScreen) {
 			// Calculate how much the project would have to scale to fit either dimension
-			widthRatio = window.innerWidth / project.resolution.x;
+			widthRatio  = window.innerWidth  / project.resolution.x;
 			heightRatio = window.innerHeight / project.resolution.y;
 
 			// Fit only so much that stuff doesn't get cut off
@@ -389,14 +391,27 @@ var WickPlayer = (function () {
 				projectFitScreenScale = widthRatio;
 			}
 
+			renderer.view.style.width  = project.resolution.x * projectFitScreenScale + "px";
+			renderer.view.style.height = project.resolution.y * projectFitScreenScale + "px";
+
 			if(widthRatio > heightRatio) {
-				projectFitScreenTranslate = {x : window.innerWidth / 2 - project.resolution.x * projectFitScreenScale / 2, y : 0};
+				var offset = (window.innerWidth - project.resolution.x * projectFitScreenScale) / 2;
+				rendererContainerEl.style.marginLeft = offset + "px";
+				rendererContainerEl.style.paddingTop = "0px";
 			} else {
-				projectFitScreenTranslate = {x : 0, y : window.innerHeight / 2 - project.resolution.y * projectFitScreenScale / 2 };
+				var offset = (window.innerHeight - project.resolution.y * projectFitScreenScale) / 2;
+				rendererContainerEl.style.marginLeft = "0px";
+				rendererContainerEl.style.paddingTop = offset + "px";
 			}
 		} else {
-			projectFitScreenScale = 1.0;
-			projectFitScreenTranslate = {x : 0, y : 0};
+			renderer.view.style.width  = project.resolution.x + "px";
+			renderer.view.style.height = project.resolution.y + "px";
+
+			var offsetX = (window.innerWidth  - project.resolution.x) / 2;
+			var offsetY = (window.innerHeight - project.resolution.y) / 2;
+
+			rendererContainerEl.style.marginLeft = offsetX + "px";
+			rendererContainerEl.style.paddingTop = offsetY + "px";
 		}
 
 	}
@@ -407,7 +422,7 @@ var WickPlayer = (function () {
 
 	var onMouseMove = function (evt) {
 
-		mouse = getMousePos(canvas, evt);
+		mouse = getMousePos(evt);
 
 		// Check if we're hovered over a clickable object...
 		var hoveredOverObj = false;
@@ -422,9 +437,9 @@ var WickPlayer = (function () {
 
 		//...and change the cursor if we are
 		if(hoveredOverObj) {
-			canvasContainerEl.style.cursor = "pointer";
+			rendererContainerEl.style.cursor = "pointer";
 		} else {
-			canvasContainerEl.style.cursor = "default";
+			rendererContainerEl.style.cursor = "default";
 		}
 
 	}
@@ -465,7 +480,7 @@ var WickPlayer = (function () {
 			loadAudio(project.rootObject);
 		}
 
-		var touchPos = getTouchPos(canvas, evt);
+		var touchPos = getTouchPos(evt);
 
 		WickSharedUtils.forEachActiveChildObject(project.rootObject, function(currObj) {
 			if(pointInsideObj(currObj, touchPos) && wickObjectIsClickable(currObj)) {
@@ -479,23 +494,12 @@ var WickPlayer = (function () {
 	Page/DOM Utils
 *****************************/
 
-	var getMousePos = function (canvas, evt) {
-		var canvasBoundingClientRect = canvas.getBoundingClientRect();
-
+	var getMousePos = function (evt) {
 		var centeredCanvasOffsetX = (window.innerWidth - project.resolution.x) / 2;
 		var centeredCanvasOffsetY = (window.innerHeight - project.resolution.y) / 2;
 
 		var mouseX = evt.clientX;
 		var mouseY = evt.clientY;
-
-		mouseX -= canvasBoundingClientRect.left;
-		mouseY -= canvasBoundingClientRect.top;
-
-		mouseX -= projectFitScreenTranslate.x;
-		mouseY -= projectFitScreenTranslate.y;
-
-		mouseX /=  projectFitScreenScale;
-		mouseY /=  projectFitScreenScale;
 
 		if(!project.fitScreen) {
 			mouseX -= centeredCanvasOffsetX;
@@ -508,8 +512,7 @@ var WickPlayer = (function () {
 		};
 	}
 
-	var getTouchPos = function (canvas, evt) {
-		var rect = canvas.getBoundingClientRect();
+	var getTouchPos = function (evt) {
 		var touch = evt.targetTouches[0];
 		return {
 			x: touch.pageX,
@@ -565,13 +568,11 @@ var WickPlayer = (function () {
 
 	var animate = function () {
 
-		setTimeout(function() {
-			if(!stopDrawLoop) {
-				requestAnimationFrame(animate);
-				update();
-				draw();
-			}
-		}, 1000 / project.framerate);
+		if(!stopDrawLoop) {
+			requestAnimationFrame(animate);
+			update();
+			draw();
+		}
 
 	}
 
@@ -735,142 +736,33 @@ var WickPlayer = (function () {
 
 	var draw = function () {
 
-		// Clear canvas
-		context.clearRect(0, 0, canvas.width, canvas.height);
+		var graphics = new PIXI.Graphics();
+		graphics.beginFill(parseInt(project.backgroundColor.replace("#","0x")));
+		graphics.drawRect(0, 0, project.resolution.x, project.resolution.y)
+		graphics.endFill();
+		renderer.render(graphics);
 
-		context.fillStyle = project.backgroundColor;
-		context.fillRect(
-			0, 
-			0, 
-			window.innerWidth, 
-			window.innerHeight);
-
-		// Scale to fit window
-		context.save();
-			context.translate(projectFitScreenTranslate.x, projectFitScreenTranslate.y);
-			context.scale(projectFitScreenScale, projectFitScreenScale);
-
-			// Draw root object, this will recursively draw every object!
-			context.save();
-				context.globalAlpha = 1.0;
-				if(!project.fitScreen) {
-					// Calculate centered project window position
-					var projectPositionX = (window.innerWidth - project.resolution.x) / 2;
-					var projectPositionY = (window.innerHeight - project.resolution.y) / 2;
-					context.translate(projectPositionX, projectPositionY);
-				}
-				drawWickObject(project.rootObject);
-			context.restore();
-
-		context.restore();
-
-		// Draw border around project (to hide offscreen objects)
-		if(project.drawBorders) {
-			context.fillStyle = project.borderColor;
-			if(!project.fitScreen) {
-				context.fillRect( // top side
-					0, 0, 
-					window.innerWidth, projectPositionY);
-				context.fillRect( // bottom side
-					0, projectPositionY + project.resolution.y, 
-					window.innerWidth, projectPositionY);
-				context.fillRect( // left side
-					0, 0, 
-					projectPositionX, window.innerHeight);
-				context.fillRect( // right side
-					projectPositionX+project.resolution.x, 0, 
-					projectPositionX, window.innerHeight);
-			} else {
-				context.fillRect( // left side
-					0, 0, 
-					projectFitScreenTranslate.x, window.innerHeight);
-				context.fillRect( // right side
-					projectFitScreenTranslate.x + project.resolution.x * projectFitScreenScale, 0,
-					projectFitScreenTranslate.x, window.innerHeight);
-				context.fillRect( // top side
-					0, 0, 
-					window.innerWidth, projectFitScreenTranslate.y);
-				context.fillRect( // bottom side
-					0, projectFitScreenTranslate.y + project.resolution.y * projectFitScreenScale,
-					window.innerWidth, projectFitScreenTranslate.y);
-			}
-		}
-		
-		// Draw FPS counter
-		var fpsString = fps.getFPS() + " FPS";
-		context.font      = "normal 14pt Arial";
-		context.fillStyle = "Black";
-		context.fillText(fpsString, canvas.width-81, 29);
-		context.fillText(fpsString, canvas.width-80, 29);
-		context.fillText(fpsString, canvas.width-79, 29);
-		context.fillStyle = "White";
-		context.fillText(fpsString, canvas.width-80, 29);
+		drawWickObject(project.rootObject);
 
 	}
 
-	var doTransformationsForObject = function (wickObject) {
-
-		// Translation transforms
-		context.translate(wickObject.x, wickObject.y);
-
-		// Rotation transforms
-		context.translate(wickObject.width/2, wickObject.height/2);
-		context.rotate(wickObject.angle/360*2*3.14159);
-		context.translate(-wickObject.width/2, -wickObject.height/2);
-
-		// Scale transforms
-		context.scale(wickObject.scaleX, wickObject.scaleY);
-
-		// Horizontal/vertical flip transforms
-		if(wickObject.flipX) {
-			canvasContext.translate(wickObject.width, 0);
-			canvasContext.scale(-1, 1);
-		}
-		if(wickObject.flipY) {
-			canvasContext.translate(wickObject.width, 0);
-			canvasContext.scale(-1, 1);
-		}
-
-	}
-
-	var drawWickObject = function (obj) {
-
-		var oldOpacity = context.globalAlpha;
-		context.globalAlpha = oldOpacity*obj.opacity;
-
-		context.save();
-		doTransformationsForObject(obj);
-
-		if(obj.isSymbol) {
-
-			// Recursively draw all sub objects.
-			WickSharedUtils.forEachActiveChildObject(obj, function(subObj) {
+	var drawWickObject = function (wickObj) {
+		if(wickObj.isSymbol) {
+			WickSharedUtils.forEachActiveChildObject(wickObj, function(subObj) {
 				drawWickObject(subObj);
 			});
-
 		} else {
-
-			// Draw the content of this static object.
-			if(obj.imageData) {
-
-				context.drawImage(obj.image, 0, 0);
-
-			} else if(obj.fontData) {
-
-				context.save();
-					context.translate(0, obj.fontData.fontSize);
-					context.fillStyle = obj.fontData.fill;
-					context.font      = "normal " + obj.fontData.fontSize + "px " + obj.fontData.fontFamily;
-					context.fillText(obj.fontData.text, 0, 0);
-				context.restore();
-
+			if(wickObj.pixiSprite) {
+				wickObj.pixiSprite.x = wickObj.x;
+				wickObj.pixiSprite.y = wickObj.y;
+				wickObj.pixiSprite.rotation = wickObj.angle/360*2*3.14159;
+				wickObj.pixiSprite.scale.x = wickObj.scaleX;
+				wickObj.pixiSprite.scale.y = wickObj.scaleY;
+				renderer.render(wickObj.pixiSprite);
+			} else if(wickObj.pixiText) {
+				renderer.render(wickObj.pixiText);
 			}
 		}
-
-		context.restore();
-
-		context.globalAlpha = oldOpacity;
-
 	}
 
 	return wickPlayer;

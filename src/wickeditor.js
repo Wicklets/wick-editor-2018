@@ -23,9 +23,6 @@ var WickEditor = function () {
 	// Setup fabric
 	this.fabricCanvas = new FabricCanvas(this);
 
-	// Setup paper
-	this.paperCanvas = new PaperCanvas(this);
-
 	// Setup scripting IDE
 	this.scriptingIDE = new WickScriptingIDE(this);
 

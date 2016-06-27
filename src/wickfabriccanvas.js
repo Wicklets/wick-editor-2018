@@ -24,31 +24,23 @@ var FabricCanvas = function (wickEditor) {
 	this.canvas.selectionBorderColor = 'grey';
 	this.canvas.selectionLineWidth = 2;
 	this.canvas.backgroundColor = "#EEE";
-
-	this.canvas.on('path:created', function(e) {
-	    var your_path = e.path;
-	    console.log(your_path);
-	});
+	this.canvas.setWidth ( window.innerWidth  );
+	this.canvas.setHeight( window.innerHeight );
 
 	this.context = this.canvas.getContext('2d');
 
-// Setup drawing tool options GUI
+// Setup drawing tool options GUI events
 
 	this.lineWidthEl = document.getElementById('lineWidth');
 	this.lineColorEl = document.getElementById('lineColor');
 
 	this.lineWidthEl.onchange = function() {
 		that.canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;
-		//this.previousSibling.innerHTML = this.value;
 	};
 
 	this.lineColorEl.onchange = function() {
 		that.canvas.freeDrawingBrush.color = this.value;
 	};
-
-// Fabric object that holds the paper canvas (isn't set up yet - editor handles that)
-
-	this.paperCanvas = undefined;
 
 // White box that shows resolution/objects that will be on screen when project is exported
 
@@ -147,7 +139,10 @@ var FabricCanvas = function (wickEditor) {
 	canvas.on('object:added', function(e) {
 		if(e.target.type === "path") {
 			var path = e.target;
-			that.convertPathToWickObjectAndAddToCanvas(path, wickEditor.currentObject);
+			that.convertPathToWickObject(path, wickEditor.currentObject, function(wickObj) {
+				VerboseLog.error("Remember to use addWickObject action here for undoable paths!!!")
+				that.addWickObjectToCanvas(wickObj);
+			});
 			canvas.remove(path);
 		}
 	});
@@ -330,28 +325,6 @@ FabricCanvas.prototype.stopDrawingMode = function() {
 	Non-Wick Object fabric objects
 ****************************************/
 
-FabricCanvas.prototype.reloadPaperCanvas = function(paperCanvas) {
-
-	var that = this;
-
-	// Get rid of the old paper canvas object if it exists
-
-	that.canvas.remove(that.paperCanvas)
-
-	// Add a new paper canvas
-
-	var paperCanvasDataURL = paperCanvas.toDataURL();
-
-	fabric.Image.fromURL(paperCanvasDataURL, function(oImg) {
-		oImg.hasControls = false;
-		oImg.selectable = false;
-		oImg.evented = false;
-		that.paperCanvas = oImg;
-		that.canvas.add(oImg);
-	});
-
-}
-
 FabricCanvas.prototype.showDragToImportFileAlert = function() {
 
 	this.canvas.bringToFront(this.dragToImportFileFade);
@@ -520,27 +493,25 @@ FabricCanvas.prototype.addWickObjectToCanvas = function (wickObject) {
 
 }
 
-FabricCanvas.prototype.convertPathToWickObjectAndAddToCanvas = function (fabricPath, currentObject) {
+FabricCanvas.prototype.convertPathToWickObject = function (fabricPath, parentObject, callback) {
 	var that = this;
 
 	fabricPath.cloneAsImage(function(clone) {
 		var imgSrc = clone._element.currentSrc || clone._element.src;
 
 		var left = fabricPath.left - clone.width/2/window.devicePixelRatio;
-		var top = fabricPath.top - clone.height/2/window.devicePixelRatio;
+		var top  = fabricPath.top - clone.height/2/window.devicePixelRatio;
 
-		var parentPos = wickEditor.currentObject.getRelativePosition();
+		var parentPos = parentObject.getRelativePosition();
 		left -= parentPos.left;
-		top -= parentPos.top;
+		top  -= parentPos.top;
 
 		WickObjectUtils.createWickObjectFromImage(
 			imgSrc, 
 			left, 
 			top, 
-			currentObject, 
-			function(obj) { 
-				that.addWickObjectToCanvas(obj) 
-			}
+			parentObject, 
+			callback
 		);
 	});
 }

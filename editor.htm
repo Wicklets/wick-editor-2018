@@ -18,6 +18,7 @@
 	<script src="lib/browserdetection.js"></script>
 	<script src="lib/base64-arraybuffer.js"></script>
 	<script src="lib/libgif.js"></script>
+	<script src="lib/pixi.min.js"></script>
 	
 	<script src="src/wickfileutils.js"></script>
 	<script src="src/wickobjectutils.js"></script>
@@ -26,7 +27,6 @@
 	<script src="src/wickobject.js"></script>
 	<script src="src/wickproject.js"></script>
 	<script src="src/wickfabriccanvas.js"></script>
-	<script src="src/wickpapercanvas.js"></script>
 	<script src="src/wickhtmlguihandler.js"></script>
 	<script src="src/wickscriptingide.js"></script>
 	<script src="src/wickactions.js"></script>
@@ -247,6 +247,7 @@
 				Size: <textarea id="projectSizeX" cols="4" rows="1"></textarea> x 
 				      <textarea id="projectSizeY" cols="4" rows="1"></textarea><br />
 				Framerate: <textarea id="frameRate" cols="2" rows="1"></textarea><br />
+				<hr />
 				<input type="checkbox" id="fitScreenCheckbox"> Fit to Screen Size<br />
 				<input type="checkbox" id="drawBordersCheckbox"> Draw Borders
 			</div>
@@ -322,9 +323,7 @@
 <!-- Builtin player, visible when a project is running -->
 
 	<div id="builtinPlayer">
-		<div id="playerCanvasContainer">
-			<canvas id="playerCanvas"></canvas>
-		</div>
+		<div id="playerCanvasContainer"></div>
 
 		<div id="builtinPlayerGUI" class="GUIBox">
 			<strong>Builtin Player</strong><br />

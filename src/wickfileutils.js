@@ -24,6 +24,7 @@
 		fileOut += WickFileUtils.downloadFile("player.htm") + "\n";
 
 		// Add any libs that the player needs
+		fileOut += "<script>" + WickFileUtils.downloadFile("lib/pixi.min.js") + "</script>\n";
 		fileOut += "<script>" + WickFileUtils.downloadFile("lib/fpscounter.js") + "</script>\n";
 		fileOut += "<script>" + WickFileUtils.downloadFile("lib/verboselog.js") + "</script>\n";
 		fileOut += "<script>" + WickFileUtils.downloadFile("lib/browserdetection.js") + "</script>\n";
