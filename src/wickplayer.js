@@ -45,14 +45,16 @@ var WickPlayer = (function () {
 		// Load the project!
 		loadJSONProject(projectJSON);
 		
+		// Setup renderer
 		rendererContainerEl = document.getElementById("playerCanvasContainer");
 		renderer = PIXI.autoDetectRenderer(project.resolution.x, project.resolution.y, {backgroundColor : 0x1099bb});
 		renderer.clearBeforeRender = false;
+		// Get rid of old canvas (if it exists)
 		var oldRendererCanvas = document.getElementById("rendererCanvas");
 		if(oldRendererCanvas) {
 			rendererContainerEl.removeChild(rendererContainerEl.childNodes[0]);
-			//oldRendererCanvas.parentNode.removeChild(oldRendererCanvas);
 		}
+		// Add renderer canvas
 		rendererContainerEl.appendChild(renderer.view);
 		renderer.view.id = "rendererCanvas";
 		stage = new PIXI.Container();
@@ -341,6 +343,12 @@ var WickPlayer = (function () {
 				loadImages(subObj);
 			} else if (subObj.imageData) {
 				subObj.pixiSprite = PIXI.Sprite.fromImage(subObj.imageData);
+				var onDown = function (e) {
+					runOnClickScript(subObj);
+				}
+				subObj.pixiSprite.interactive = true;
+				subObj.pixiSprite.on('mousedown', onDown);
+				subObj.pixiSprite.on('touchstart', onDown);
 			} else if (subObj) {
 				var style = {
 					font : 'bold italic 36px Arial',
@@ -422,7 +430,7 @@ var WickPlayer = (function () {
 
 	var onMouseMove = function (evt) {
 
-		mouse = getMousePos(evt);
+		/*mouse = getMousePos(evt);
 
 		// Check if we're hovered over a clickable object...
 		var hoveredOverObj = false;
@@ -440,17 +448,17 @@ var WickPlayer = (function () {
 			rendererContainerEl.style.cursor = "pointer";
 		} else {
 			rendererContainerEl.style.cursor = "default";
-		}
+		}*/
 
 	}
 
 	var onMouseDown = function (evt) {
 		
-		WickSharedUtils.forEachActiveChildObject(project.rootObject, function(currObj) {
+		/*WickSharedUtils.forEachActiveChildObject(project.rootObject, function(currObj) {
 			if(pointInsideObj(currObj, mouse) && wickObjectIsClickable(currObj)) {
 				runOnClickScript(currObj);
 			}
-		});
+		});*/
 
 	}
 
