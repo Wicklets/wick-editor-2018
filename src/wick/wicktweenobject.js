@@ -1,5 +1,5 @@
 /*****************************
-	   Tween Objects
+       Tween Objects
 *****************************/
 
 /*
@@ -9,16 +9,16 @@
  * transformations to the objects themselves. */ 
 
 var WickTween = function() {
-	this.x = 0; 
-	this.y = 0; 
-	this.z = 0; 
+    this.x = 0; 
+    this.y = 0; 
+    this.z = 0; 
 
-	this.scale = 1; 
-	this.theta = 0; 
+    this.scale = 1; 
+    this.theta = 0; 
 
-	this.opacity = 1; //  0 to 1 
+    this.opacity = 1; //  0 to 1 
 
-	// Default to linear interpolation. 
-	this.interpolationStyle = "LINEAR"; 
+    // Default to linear interpolation. 
+    this.interpolationStyle = "LINEAR"; 
 }
 
