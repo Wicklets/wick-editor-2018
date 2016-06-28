@@ -29,6 +29,8 @@ var FabricCanvas = function (wickEditor) {
 
 	this.context = this.canvas.getContext('2d');
 
+	this.canvasPanPosition = {x:0,y:0};
+
 // Setup drawing tool options GUI events
 
 	this.lineWidthEl = document.getElementById('lineWidth');
@@ -249,7 +251,9 @@ FabricCanvas.prototype.bringSelectedObjectToFront = function () {
 
 FabricCanvas.prototype.resize = function (projectWidth, projectHeight) {
 
-	// Reposition all fabric objects to use new wick canvas origin
+	var that = this;
+
+	// Reposition all fabric objects to use new wick canvas origin and pan position
 
 	var oldWidth = this.canvas.getWidth();
 	var oldHeight = this.canvas.getHeight();
@@ -262,8 +266,8 @@ FabricCanvas.prototype.resize = function (projectWidth, projectHeight) {
 	var diffHeight = this.canvas.getHeight() - oldHeight;
 
 	this.canvas.forEachObject(function(fabricObj) {
-		fabricObj.left += diffWidth/2;
-		fabricObj.top += diffHeight/2;
+		fabricObj.left += diffWidth /2;
+		fabricObj.top  += diffHeight/2;
 		fabricObj.setCoords();
 	});
 
@@ -275,19 +279,41 @@ FabricCanvas.prototype.resize = function (projectWidth, projectHeight) {
 	this.dragToImportFileFade.top  = 0;
 	this.dragToImportFileFade.setCoords();
 
-	this.dragToImportFileText.left = window.innerWidth/2-this.dragToImportFileText.width/2;
-	this.dragToImportFileText.top  = window.innerHeight/2-this.dragToImportFileText.height/2;
+	this.dragToImportFileText.left = window.innerWidth /2-this.dragToImportFileText.width /2+this.canvasPanPosition.x;
+	this.dragToImportFileText.top  = window.innerHeight/2-this.dragToImportFileText.height/2+this.canvasPanPosition.y;
 	this.dragToImportFileText.setCoords();
 
 	// Re-center the white frame box
 
 	this.frameInside.width  = projectWidth;
 	this.frameInside.height = projectHeight;
-	this.frameInside.left = (window.innerWidth -projectWidth) /2;
-	this.frameInside.top  = (window.innerHeight-projectHeight)/2;
+	this.frameInside.left = (window.innerWidth -projectWidth) /2 + this.canvasPanPosition.x;
+	this.frameInside.top  = (window.innerHeight-projectHeight)/2 + this.canvasPanPosition.y;
 	this.frameInside.setCoords();
 
 	this.canvas.renderAll();
+
+}
+
+FabricCanvas.prototype.panTo = function (x,y) {
+
+	var oldPanPosition = {
+		x:this.canvasPanPosition.x,
+		y:this.canvasPanPosition.y
+	}
+
+	this.canvasPanPosition = {x:x,y:y};
+
+	var canvasPanDiff = {
+		x: this.canvasPanPosition.x - oldPanPosition.x,
+		y: this.canvasPanPosition.y - oldPanPosition.y
+	}
+
+	this.canvas.forEachObject(function(fabricObj) {
+		fabricObj.left += canvasPanDiff.x;
+		fabricObj.top  += canvasPanDiff.y;
+		fabricObj.setCoords();
+	});
 
 }
 
@@ -296,8 +322,13 @@ FabricCanvas.prototype.repositionOriginCrosshair = function (projectWidth, proje
 	if(this.originCrosshair) { // window resize can happen before originCrosshair's image is loaded
 		this.originCrosshair.left = (window.innerWidth -projectWidth) /2 - this.originCrosshair.width/2;
 		this.originCrosshair.top  = (window.innerHeight-projectHeight)/2 - this.originCrosshair.height/2;
+		
 		this.originCrosshair.left += currentObjectLeft;
 		this.originCrosshair.top += currentObjectTop;
+		
+		this.originCrosshair.left += this.canvasPanPosition.x;
+		this.originCrosshair.top  += this.canvasPanPosition.y;
+
 		this.canvas.renderAll();
 	}
 }
@@ -478,6 +509,10 @@ FabricCanvas.prototype.storeObjectsIntoCanvas = function (wickObjects, projectRe
 		wickObjects[i].left += (window.innerWidth - projectResolution.x) / 2;
 		wickObjects[i].top += (window.innerHeight - projectResolution.y) / 2;
 
+		// Add panning position
+		wickObjects[i].left += this.canvasPanPosition.x;
+		wickObjects[i].top += this.canvasPanPosition.y;
+
 		this.addWickObjectToCanvas(wickObjects[i]);
 	}
 
@@ -522,6 +557,8 @@ FabricCanvas.prototype.convertPathToWickObject = function (fabricPath, parentObj
 
 FabricCanvas.prototype.getWickObjectsInCanvas = function (projectResolution) {
 
+	var that = this;
+
 	var sharedFabricWickObjectProperties = this.sharedFabricWickObjectProperties;
 
 	var wickObjects = [];
@@ -558,6 +595,10 @@ FabricCanvas.prototype.getWickObjectsInCanvas = function (projectResolution) {
 			// Reposition the wickobject so that 0,0 is the canvases origin, not fabric's origin.
 			wickObject.left -= (window.innerWidth - projectResolution.x) / 2;
 			wickObject.top -= (window.innerHeight - projectResolution.y) / 2;
+
+			// Get rid of panning position
+			wickObject.left -= that.canvasPanPosition.x;
+			wickObject.top -= that.canvasPanPosition.y;
 
 			wickObjects.unshift(wickObject);
 		}

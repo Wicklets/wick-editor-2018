@@ -126,8 +126,6 @@ WickEditor.prototype.resizeCanvasAndGUI = function () {
 		this.currentObject.top
 	);
 
-	//$("#scriptEditor").css('width', window.innerWidth - 330);
-
 	// Also center timeline GUI
 	var GUIWidth = parseInt($("#timelineGUI").css("width")) / 2;
 	var timelineOffset = window.innerWidth/2 - GUIWidth;
@@ -194,7 +192,21 @@ WickEditor.prototype.handleKeyboardInput = function (eventType, event) {
 		// Delete: delete selected objects
 		if (event.keyCode == 46 && document.activeElement.nodeName != 'TEXTAREA') {
 			event.preventDefault();
-			this.deleteSelectedObjects();	
+			this.deleteSelectedObjects();
+		}
+
+		// Space: Pan viewport
+		if (event.keyCode == 32 && document.activeElement.nodeName != 'TEXTAREA') {
+			this.fabricCanvas.panTo(this.mouse.x - window.innerWidth/2, 
+									this.mouse.y - window.innerHeight/2);
+			this.fabricCanvas.repositionOriginCrosshair(
+				this.project.resolution.x, 
+				this.project.resolution.y,
+				this.currentObject.left,
+				this.currentObject.top
+			);
+			this.fabricCanvas.resize(this.project.resolution.x, 
+									 this.project.resolution.y);
 		}
 
 		// Tilde: log project state to canvas (for debugging)
@@ -580,7 +592,7 @@ WickEditor.prototype.syncProjectWithFabricCanvas = function () {
 
 WickEditor.prototype.syncFabricCanvasWithProject = function () {
 	this.fabricCanvas.setBackgroundColor(this.project.backgroundColor);
-
+	
 	this.fabricCanvas.storeObjectsIntoCanvas( this.currentObject.getCurrentFrame().wickObjects, this.project.resolution );
 }
 
