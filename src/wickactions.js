@@ -178,55 +178,49 @@ var WickActionHandler = function (wickEditor) {
 
     }
 
-    this.doActions['convertObjectsToSymbol'] = function (args) {
-        this.syncEditorWithFabricCanvas();
+    this.doActions['convertSelectionToSymbol'] = function (args) {
 
-        var symbol = new WickObject();
+        args.selectionWickObjects = [];
 
-        var fabCanvas = this.fabricCanvas.getCanvas();
-        var selectedObject = fabCanvas.getActiveObject() || fabCanvas.getActiveGroup();
-
-        symbol.parentObject = this.currentObject;
-        symbol.left = selectedObject.left;
-        symbol.top = selectedObject.top;
-        symbol.setDefaultPositioningValues();
-        symbol.setDefaultSymbolValues();
-
-        if (selectedObject._objects) {
+        if (args.selection._objects) {
             // Multiple objects are selected, put them all in the new symbol
-            for(var i = 0; i < selectedObject._objects.length; i++) {
-                symbol.frames[0].wickObjects[i] = selectedObject._objects[i].wickObject;
-                symbol.frames[0].wickObjects[i].parentObject = symbol;
-
-                symbol.frames[0].wickObjects[i].left = selectedObject._objects[i].left;
-                symbol.frames[0].wickObjects[i].top = selectedObject._objects[i].top;
-            }
-
-            symbol.fixSymbolPosition();
-
-            var max = 0;
-            while(selectedObject._objects.length > 0 && max < 100) {
-                max++;
-                console.error("Infinite loop is prob happening here");
-                selectedObject._objects[0].remove();
+            for(var i = 0; i < args.selection._objects.length; i++) {
+                args.selectionWickObjects.push(args.selection._objects[i].wickObject);
             }
         } else {
             // Only one object is selected
-            symbol.frames[0].wickObjects[0] = selectedObject.wickObject;
-            symbol.frames[0].wickObjects[0].parentObject = symbol;
-            symbol.frames[0].wickObjects[0].left = 0;
-            symbol.frames[0].wickObjects[0].top = 0;
-
-            selectedObject.remove();
+            args.selectionWickObjects.push(args.selection.wickObject);
         }
 
-        this.fabricCanvas.addWickObjectToCanvas(symbol);
+        var max = 0;
+        while(args.selection._objects.length > 0 && max < 100) {
+            max++;
+            console.error("Infinite loop is prob happening here");
+            args.selection._objects[0].remove();
+        }
 
-        this.fabricCanvas.deselectAll();
+        args.symbol = WickObject.createSymbolFromWickObjects(
+            args.selection.left, 
+            args.selection.top, 
+            args.selectionWickObjects, 
+            wickEditor.currentObject
+        );
+
+        wickEditor.fabricCanvas.makeFabricObjectFromWickObject(args.symbol, function(fabricObject) {
+            wickEditor.fabricCanvas.getCanvas().add(fabricObject);
+            args.fabricObjectToRemove = fabricObject;
+        });
     }
 
-    this.undoActions['convertObjectsToSymbol'] = function (args) {
+    this.undoActions['convertSelectionToSymbol'] = function (args) {
+        // add args.selectionWickObjects to fabric canvas
+        for(var i = 0; i < args.selectionWickObjects.length; i++) {
+            wickEditor.fabricCanvas.makeFabricObjectFromWickObject(args.selectionWickObjects[i], function(fabricObject) {
+                wickEditor.fabricCanvas.getCanvas().add(fabricObject);
+            });
+        }
         
+        wickEditor.fabricCanvas.getCanvas().remove(args.fabricObjectToRemove);
     }
 
     this.doActions['editObject'] = function (args) {

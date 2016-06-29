@@ -87,13 +87,13 @@
     <!-- Timeline GUI, centered at the top of the screen -->
 
         <div id="timelineGUI" class="GUIBox">
-            <div class="button buttonInRow" id="addEmptyFrameButton" onclick="wickEditor.actionHandler.doAction('addEmptyFrame', []);">
+            <div class="button buttonInRow" id="addEmptyFrameButton">
                 <img src="resources/ic_add_black.png" width="10" />
             </div>
-            <div class="button buttonInRow" id="extendFrameButton" onclick="wickEditor.actionHandler.doAction('shrinkFrame', []);">
+            <div class="button buttonInRow" id="extendFrameButton">
                 <img src="resources/ic_keyboard_arrow_left.png" width="10" />
             </div>
-            <div class="button buttonInRow" id="shrinkFrameButton" onclick="wickEditor.actionHandler.doAction('extendFrame', []);">
+            <div class="button buttonInRow" id="shrinkFrameButton">
                 <img src="resources/ic_keyboard_arrow_right.png" width="10" />
             </div>
             <div id="timelineScrollContainer">
@@ -106,12 +106,12 @@
     <!-- Toolbar GUI, centered at the left side of the screen -->
 
         <div id="toolbarGUI" class="GUIBox">
-            <div class="button tooltipElem" id="mouseToolButton" onclick="wickEditor.fabricCanvas.stopDrawingMode();" alt="Cursor">
+            <div class="button tooltipElem" id="mouseToolButton" alt="Cursor">
                 <img src="resources/cursor.png" width="30"></img>
             </div>
             <hr />
 
-            <div class="button tooltipElem" id="paintbrushToolButton" onclick="wickEditor.fabricCanvas.startDrawingMode();" alt="Paintbrush">
+            <div class="button tooltipElem" id="paintbrushToolButton" alt="Paintbrush">
                 <img src="resources/paintbrush.png" width="30"></img>
             </div>
             <div id="toolOptions">
@@ -120,12 +120,12 @@
             </div>
             <hr />
 
-            <div class="button tooltipElem" id="textToolButton" onclick="wickEditor.actionHandler.doAction('addNewText', {text:'Click to edit text'}, true);" alt="Text">
+            <div class="button tooltipElem" id="textToolButton" alt="Text">
                 <img src="resources/text.png" width="30"></img>
             </div>
             <hr />
 
-            <div class="button tooltipElem" id="htmlSnippetToolButton" onclick="wickEditor.actionHandler.doAction('addNewHTMLSnippet', {defaultCode:true}, true);" alt="HTML Snippet">
+            <div class="button tooltipElem" id="htmlSnippetToolButton" alt="HTML Snippet">
                 <img src="resources/htmlsnippet.png" width="30"></img>
             </div>
 
@@ -214,21 +214,21 @@
 
         <div id="rightClickMenu" class="GUIBox">
             <div id="commonObjectButtons">
-                <div class="button" onclick="wickEditor.htmlGUIHandler.closeRightClickMenu();wickEditor.editScriptsOfSelectedObject();" >Edit Scripts</div>
+                <div class="button" id="editScriptsButton">Edit Scripts</div>
                 <hr />
-                <div class="button" onclick="wickEditor.htmlGUIHandler.closeRightClickMenu();wickEditor.bringSelectedObjectToFront();" >Bring to Front</div>
-                <div class="button" onclick="wickEditor.htmlGUIHandler.closeRightClickMenu();wickEditor.sendSelectedObjectToBack();" >Send to Back</div>
-                <div class="button" onclick="wickEditor.htmlGUIHandler.closeRightClickMenu();wickEditor.deleteSelectedObjects();" >Delete</div>
+                <div class="button" id="bringToFrontButton">Bring to Front</div>
+                <div class="button" id="sendToBackButton">Send to Back</div>
+                <div class="button" id="deleteButton">Delete</div>
                 <hr />
             </div>
             <div id="symbolButtons">
-                <div class="button" onclick="wickEditor.htmlGUIHandler.closeRightClickMenu();wickEditor.editSelectedObject();" >Edit Object</div>
+                <div class="button" id="editObjectButton">Edit Object</div>
             </div>
             <div id="staticObjectButtons">
-                <div class="button" onclick="wickEditor.htmlGUIHandler.closeRightClickMenu();wickEditor.convertSelectedObjectToSymbol();" >Convert to Symbol</div>
+                <div class="button" id="convertToSymbolButton">Convert to Symbol</div>
             </div>
             <div id="insideSymbolButtons">
-                <div class="button" onclick="wickEditor.htmlGUIHandler.closeRightClickMenu();wickEditor.finishEditingObject();" >Finish Editing Object</div>
+                <div class="button" id="finishEditingObjectButton">Finish Editing Object</div>
             </div>
         </div>
     </div>
@@ -241,7 +241,7 @@
         <div id="builtinPlayerGUI" class="GUIBox">
             <strong>Builtin Player</strong><br />
             <hr />
-            <div class="button" id="closeBuiltinPlayerButton" onclick="wickEditor.closeBuiltinPlayer();">Close Player</div>
+            <div class="button" id="closeBuiltinPlayerButton">Close Player</div>
         </div>
     </div>
 

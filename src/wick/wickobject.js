@@ -4,7 +4,7 @@
 
 var WickObject = function (parentObject) {
 
-    if(!parentObject || parentObject !== 'ROOT_NO_PARENT') {
+    if(!parentObject) {
         VerboseLog.error("WOAH BUDDY ALL WICKOBJECTS NEED A PARENT. EXCEPT FOR ROOT.")
     }
 
@@ -160,11 +160,11 @@ WickObject.fromText = function (text, parentObject) {
     var textWickObject = new WickObject(parentObject);
 
     textWickObject.setDefaultPositioningValues();
-    textWickObject.setDefaultFontValues(args.text);
+    textWickObject.setDefaultFontValues(text);
     textWickObject.left = window.innerWidth /2;
     textWickObject.top  = window.innerHeight/2;
 
-    wickEditor.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:textWickObject});
+    return textWickObject;
 }
 
 WickObject.fromHTML = function (text, parentObject) {
@@ -197,6 +197,29 @@ WickObject.fromAudioFile = function (audioData, parentObject) {
 
     this.syncEditorWithFabricCanvas();
     this.syncFabricCanvasWithEditor();
+}
+
+WickObject.createSymbolFromWickObjects = function (left, top, wickObjects, parentObject) {
+    var symbol = new WickObject(parentObject);
+
+    symbol.left = left;
+    symbol.top = top;
+    symbol.setDefaultPositioningValues();
+    symbol.setDefaultSymbolValues();
+
+    // Multiple objects are selected, put them all in the new symbol
+    for(var i = 0; i < wickObjects.length; i++) {
+        symbol.frames[0].wickObjects[i] = wickObjects[i];
+        symbol.frames[0].wickObjects[i].parentObject = symbol;
+
+        symbol.frames[0].wickObjects[i].left = wickObjects[i].left;
+        symbol.frames[0].wickObjects[i].top  = wickObjects[i].top;
+    }
+
+    symbol.fixSymbolPosition();
+
+    return symbol;
+
 }
 
 WickObject.prototype.setDefaultPositioningValues = function () {

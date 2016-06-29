@@ -84,13 +84,10 @@ var WickEditor = function () {
         // Backspace: delete selected objects
         if (event.keyCode == 8 && document.activeElement.nodeName != 'TEXTAREA') {
             event.preventDefault();
-            that.deleteSelectedObjects();   
-        }
-
-        // Delete: delete selected objects
-        if (event.keyCode == 46 && document.activeElement.nodeName != 'TEXTAREA') {
-            event.preventDefault();
-            that.deleteSelectedObjects();
+            that.actionHandler.doAction('delete', {
+                obj:   that.fabricCanvas.getCanvas().getActiveObject(),
+                group: that.fabricCanvas.getCanvas().getActiveGroup()
+            });
         }
 
         // Space: Pan viewport
@@ -145,18 +142,46 @@ var WickEditor = function () {
 
         if(document.activeElement.nodeName != 'TEXTAREA' ) {
             focusHiddenArea();
-            wickEditor.handleCopyEvent(event);
+            if(!that.htmlGUIHandler.scriptingIDEopen) {
+                event.preventDefault();
+                that.syncEditorWithFabricCanvas();
+
+                var obj = that.fabricCanvas.getCanvas().getActiveObject() 
+                var group = that.fabricCanvas.getCanvas().getActiveGroup();
+
+                if(group) {
+                    var objectJSONs = [];
+                    //group._restoreObjectsState();
+                    for(var i = 0; i < group._objects.length; i++) {
+                        objectJSONs.push(group._objects[i].wickObject.getAsJSON());
+                    }
+                    event.clipboardData.setData('text/wickobjectsjson', JSON.stringify(objectJSONs));
+                } else {
+                    console.log("adssdadsa")
+
+                    var selectedWickObject = obj.wickObject;
+                    var objJSON = selectedWickObject.getAsJSON();
+                    event.clipboardData.setData('text/wickobjectsjson', JSON.stringify([objJSON]));
+                }
+            }
         }
     });
 
     document.addEventListener("cut", function(event) {
 
-        wickEditor.clearKeys();
+        VerboseLog.error('cut NYI');
+
+        /*wickEditor.clearKeys();
 
         if(document.activeElement.nodeName != 'TEXTAREA' ) {
             focusHiddenArea();
-            wickEditor.handleCutEvent(event);
-        }
+            if(!this.htmlGUIHandler.scriptingIDEopen) {
+                event.preventDefault();
+                this.syncEditorWithFabricCanvas();
+                this.copySelectedObjectsToClipboard();
+                this.deleteSelectedObjects(event.clipboardData);
+            }
+        }*/
     });
 
     document.addEventListener("paste", function(event) {
@@ -165,7 +190,35 @@ var WickEditor = function () {
 
         if(document.activeElement.nodeName != 'TEXTAREA' ) {
             focusHiddenArea();
-            wickEditor.handlePasteEvent(event);
+            if(!that.htmlGUIHandler.scriptingIDEopen) { 
+                event.preventDefault();
+
+                var clipboardData = event.clipboardData;
+                var items = clipboardData.items;
+
+                for (i=0; i<items.length; i++) {
+
+                    var fileType = items[i].type;
+                    var file = clipboardData.getData(items[i].type);
+
+                    console.log("pasted filetype: " + fileType);
+
+                    if (fileType === 'image/png') {
+                        var blob = items[i].getAsFile();
+                        var source = (window.URL || window.webkitURL).createObjectURL(blob);
+                        this.importImageFile("File names for pasted images not set.", source);
+                    } else if (fileType == 'text/plain') {
+                        var newWickObject = WickObject.fromText(file, that.currentObject);
+                        that.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:newWickObject});
+                    } else if (fileType == 'text/wickobjectsjson') {
+                        var wickObjectJSONArray = JSON.parse(clipboardData.getData('text/wickobjectsjson'));
+                        for (var i = 0; i < wickObjectJSONArray.length; i++) {
+                            var newWickObject = WickObject.fromJSON(wickObjectJSONArray[i], that.currentObject);
+                            that.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:newWickObject});
+                        }
+                    }   
+                }
+            }
         }
     });
 
@@ -174,244 +227,42 @@ var WickEditor = function () {
         e.stopPropagation();
         e.preventDefault();
 
-        wickEditor.handleDroppedFilesEvent(e);
+        var that = this;
+
+        var files = e.originalEvent.dataTransfer.files;
+
+        // Retrieve uploaded files data
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+
+            // Read file as data URL
+            var dataURLReader = new FileReader();
+            dataURLReader.onload = (function(theFile) { return function(e) {
+
+                VerboseLog.log("readAsDataURL():");
+                VerboseLog.log("Dropped file: " + theFile.name);
+                VerboseLog.log("Dropped filetype: " + file.type);
+
+                if (['image/png', 'image/jpeg', 'image/bmp'].indexOf(file.type) != -1) {
+                    that.importImageFile(theFile.name, e.target.result)
+                } else if(['image/gif'].indexOf(file.type) != -1) {
+                    that.importAnimatedGifFile(theFile.name, e.target.result);
+                } else if(['audio/mp3', 'audio/wav', 'audio/ogg'].indexOf(file.type) != -1) {
+                    that.importAudioFile(theFile.name, e.target.result);
+                } else if(['application/json'].indexOf(file.type) != -1) {
+                    WickProject.fromFile(file, function(p) {
+                        that.project = p;
+                    });
+                }
+
+            }; })(file);
+            dataURLReader.readAsDataURL(file);
+        }
 
         return false;
     });
 
-    document.getElementById('newProjectButton').onclick = function (e) {
-        that.newProject();
-    }
-
-    document.getElementById('exportJSONButton').onclick = function (e) {
-        that.saveProject();
-    }
-
-    document.getElementById('openProjectButton').onclick = function (e) {
-        $('#importButton').click();
-    }
-
-    document.getElementById('exportHTMLButton').onclick = function (e) {
-        that.exportProject();
-    }
-
-    document.getElementById('runButton').onclick = function (e) {
-        that.runProject();
-    }
-
-    document.getElementById('importButton').onchange = function (e) {
-        that.openProject();
-        var importButton = $("importButton");
-        importButton.replaceWith( importButton = importButton.clone( true ) );
-    }
-
 }
-
-WickEditor.prototype.copySelectedObjectsToClipboard = function (clipboardData) {
-
-    var obj = this.fabricCanvas.getCanvas().getActiveObject() 
-    var group = this.fabricCanvas.getCanvas().getActiveGroup();
-
-    if(group) {
-        var objectJSONs = [];
-        //group._restoreObjectsState();
-        for(var i = 0; i < group._objects.length; i++) {
-            objectJSONs.push(group._objects[i].wickObject.getAsJSON());
-        }
-        clipboardData.setData('text/wickobjectsjson', JSON.stringify(objectJSONs));
-    } else {
-        var selectedWickObject = obj.wickObject;
-        var objJSON = selectedWickObject.getAsJSON();
-        clipboardData.setData('text/wickobjectsjson', JSON.stringify([objJSON]));
-    }
-
-}
-
-WickEditor.prototype.handleCopyEvent = function (event) {
-    if(!this.htmlGUIHandler.scriptingIDEopen) {
-        event.preventDefault();
-        this.syncEditorWithFabricCanvas();
-        this.copySelectedObjectsToClipboard(event.clipboardData);
-    }
-}
-
-WickEditor.prototype.handleCutEvent = function (event) {
-    if(!this.htmlGUIHandler.scriptingIDEopen) {
-        event.preventDefault();
-        this.syncEditorWithFabricCanvas();
-        this.copySelectedObjectsToClipboard();
-        this.deleteSelectedObjects(event.clipboardData);
-    }
-}
-
-WickEditor.prototype.handlePasteEvent = function (event) {
-    if(!this.htmlGUIHandler.scriptingIDEopen) { 
-        event.preventDefault();
-
-        var clipboardData = event.clipboardData;
-        var items = clipboardData.items;
-
-        for (i=0; i<items.length; i++) {
-
-            var fileType = items[i].type;
-            var file = clipboardData.getData(items[i].type);
-
-            console.log("pasted filetype: " + fileType);
-
-            if (fileType === 'image/png') {
-                var blob = items[i].getAsFile();
-                var source = (window.URL || window.webkitURL).createObjectURL(blob);
-                this.importImageFile("File names for pasted images not set.", source);
-            } else if (fileType == 'text/plain') {
-                wickEditor.actionHandler.doAction('addNewText', {text:file}, true);
-            } else if (fileType == 'text/wickobjectsjson') {
-                var wickObjectJSONArray = JSON.parse(clipboardData.getData('text/wickobjectsjson'));
-                for (var i = 0; i < wickObjectJSONArray.length; i++) {
-                    var newWickObject = WickObject.fromJSON(wickObjectJSONArray[i], this.currentObject);
-                    this.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:newWickObject});
-                }
-            }   
-        }
-    }
-}
-
-WickEditor.prototype.handleDroppedFilesEvent = function(e) {
-
-    var that = this;
-
-    var files = e.originalEvent.dataTransfer.files;
-
-    // Retrieve uploaded files data
-    for (var i = 0; i < files.length; i++) {
-        var file = files[i];
-
-        // Read file as data URL
-        var dataURLReader = new FileReader();
-        dataURLReader.onload = (function(theFile) { return function(e) {
-
-            VerboseLog.log("readAsDataURL():");
-            VerboseLog.log("Dropped file: " + theFile.name);
-            VerboseLog.log("Dropped filetype: " + file.type);
-
-            if (['image/png', 'image/jpeg', 'image/bmp'].indexOf(file.type) != -1) {
-                that.importImageFile(theFile.name, e.target.result)
-            } else if(['image/gif'].indexOf(file.type) != -1) {
-                that.importAnimatedGifFile(theFile.name, e.target.result);
-            } else if(['audio/mp3', 'audio/wav', 'audio/ogg'].indexOf(file.type) != -1) {
-                that.importAudioFile(theFile.name, e.target.result);
-            } else if(['application/json'].indexOf(file.type) != -1) {
-                WickProject.fromFile(file, function(p) {
-                    that.project = p;
-                });
-            }
-
-        }; })(file);
-        dataURLReader.readAsDataURL(file);
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**********************************
-     Right click menu events
-**********************************/
-
-WickEditor.prototype.convertSelectedObjectToSymbol = function () {
-
-}
-
-WickEditor.prototype.deleteSelectedObjects = function () {
-    this.actionHandler.doAction('delete', {
-        obj:   this.fabricCanvas.getCanvas().getActiveObject(),
-        group: this.fabricCanvas.getCanvas().getActiveGroup()
-    });
-}
-
-WickEditor.prototype.editSelectedObject = function () {
-    //this.moveInsideObject(this.fabricCanvas.getActiveObject().wickObject);
-}
-
-WickEditor.prototype.editScriptsOfSelectedObject = function () {
-    this.htmlGUIHandler.openScriptingGUI(this.fabricCanvas.getActiveObject());
-}
-
-WickEditor.prototype.finishEditingObject = function () {
-    //this.moveOutOfObject();
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /**********************************
      Editor <-> Fabric Canvas
@@ -454,6 +305,7 @@ WickEditor.prototype.newProject = function () {
         this.currentObject = this.project.rootObject;
 
         this.syncFabricCanvasWithEditor();
+        this.htmlGUIHandler.syncWithEditor();
     }
 
 }

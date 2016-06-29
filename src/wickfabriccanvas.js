@@ -44,19 +44,6 @@ var FabricCanvas = function (wickEditor) {
         );
     }
 
-// Setup drawing tool options GUI events
-
-    this.lineWidthEl = document.getElementById('lineWidth');
-    this.lineColorEl = document.getElementById('lineColor');
-
-    this.lineWidthEl.onchange = function() {
-        that.canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;
-    };
-
-    this.lineColorEl.onchange = function() {
-        that.canvas.freeDrawingBrush.color = this.value;
-    };
-
 // White box that shows resolution/objects that will be on screen when project is exported
 
     this.frameInside = new fabric.Rect({
@@ -347,25 +334,6 @@ FabricCanvas.prototype.repositionOriginCrosshair = function (projectWidth, proje
 
         this.canvas.renderAll();
     }
-}
-
-/***************************************
-    Drawing mode
-****************************************/
-
-FabricCanvas.prototype.startDrawingMode = function() {
-    this.canvas.isDrawingMode = true;
-
-    document.getElementById('toolOptions').style.display = 'block';
-    this.canvas.freeDrawingBrush = new fabric['PencilBrush'](this.canvas);
-    this.canvas.freeDrawingBrush.color = this.lineColorEl.value;
-    this.canvas.freeDrawingBrush.width = parseInt(this.lineWidthEl.value, 10) || 1;
-}
-
-FabricCanvas.prototype.stopDrawingMode = function() {
-    this.canvas.isDrawingMode = false;
-
-    document.getElementById('toolOptions').style.display = 'none';
 }
 
 /*******************************************

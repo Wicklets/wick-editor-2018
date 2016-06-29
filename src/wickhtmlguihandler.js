@@ -12,6 +12,84 @@ var WickHTMLGUIHandler = function (wickEditor) {
     }
 
 /********************
+      Menu Bar
+********************/
+
+    document.getElementById('newProjectButton').onclick = function (e) {
+        wickEditor.newProject();
+    }
+
+    document.getElementById('exportJSONButton').onclick = function (e) {
+        wickEditor.saveProject();
+    }
+
+    document.getElementById('openProjectButton').onclick = function (e) {
+        $('#importButton').click();
+    }
+
+    document.getElementById('exportHTMLButton').onclick = function (e) {
+        wickEditor.exportProject();
+    }
+
+    document.getElementById('runButton').onclick = function (e) {
+        wickEditor.runProject();
+    }
+
+    document.getElementById('importButton').onchange = function (e) {
+        wickEditor.openProject();
+        var importButton = $("importButton");
+        importButton.replaceWith( importButton = importButton.clone( true ) );
+    }
+
+/********************
+       Toolbar
+********************/
+
+    $('#mouseToolButton').on('click', function(e) {
+        wickEditor.fabricCanvas.stopDrawingMode();
+    });
+
+    $('#paintbrushToolButton').on('click', function(e) {
+        wickEditor.fabricCanvas.startDrawingMode();
+    });
+
+    $('#textToolButton').on('click', function(e) {
+        var newWickObject = WickObject.fromText('Click to edit text', wickEditor.currentObject);
+        wickEditor.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:newWickObject});
+    });
+
+    $('#htmlSnippetToolButton').on('click', function(e) {
+        
+    });
+
+    var lineWidthEl = document.getElementById('lineWidth');
+    var lineColorEl = document.getElementById('lineColor');
+
+    FabricCanvas.prototype.startDrawingMode = function() {
+        document.getElementById('toolOptions').style.display = 'block';
+
+        wickEditor.fabricCanvas.getCanvas().isDrawingMode = true;
+
+        wickEditor.fabricCanvas.getCanvas().freeDrawingBrush = new fabric['PencilBrush'](wickEditor.fabricCanvas.getCanvas());
+        wickEditor.fabricCanvas.getCanvas().freeDrawingBrush.color = lineColorEl.value;
+        wickEditor.fabricCanvas.getCanvas().freeDrawingBrush.width = parseInt(lineWidthEl.value, 10) || 1;
+    }
+
+    FabricCanvas.prototype.stopDrawingMode = function() {
+        document.getElementById('toolOptions').style.display = 'none';
+
+        wickEditor.fabricCanvas.getCanvas().isDrawingMode = false;
+    }
+
+    lineWidthEl.onchange = function() {
+        wickEditor.fabricCanvas.getCanvas().freeDrawingBrush.width = parseInt(this.value, 10) || 1;
+    };
+
+    lineColorEl.onchange = function() {
+        wickEditor.fabricCanvas.getCanvas().freeDrawingBrush.color = this.value;
+    };
+
+/********************
     Scripting IDE
 ********************/
 
@@ -147,6 +225,18 @@ var WickHTMLGUIHandler = function (wickEditor) {
 /****************
     Timeline
 ****************/
+
+    $("#addEmptyFrameButton").on("click", function (e) {
+        wickEditor.actionHandler.doAction('addEmptyFrame', []);
+    });
+
+    $("#extendFrameButton").on("click", function (e) {
+        wickEditor.actionHandler.doAction('shrinkFrame', []);
+    });
+
+    $("#shrinkFrameButton").on("click", function (e) {
+        wickEditor.actionHandler.doAction('extendFrame', []);
+    });
 
     this.updateTimelineGUI = function () {
 
@@ -315,6 +405,51 @@ var WickHTMLGUIHandler = function (wickEditor) {
     Right click menu
 ************************/
 
+    $("#editScriptsButton").on("click", function (e) {
+        wickEditor.htmlGUIHandler.closeRightClickMenu();
+        wickEditor.htmlGUIHandler.openScriptingGUI(wickEditor.fabricCanvas.getActiveObject());
+    });
+
+    $("#bringToFrontButton").on("click", function (e) {
+        wickEditor.htmlGUIHandler.closeRightClickMenu();
+        wickEditor.bringSelectedObjectToFront();
+    });
+
+    $("#sendToBackButton").on("click", function (e) {
+        wickEditor.htmlGUIHandler.closeRightClickMenu();
+        wickEditor.sendSelectedObjectToBack();
+    });
+
+    $("#deleteButton").on("click", function (e) {
+        wickEditor.htmlGUIHandler.closeRightClickMenu();
+        wickEditor.actionHandler.doAction('delete', {
+            obj:   wickEditor.fabricCanvas.getCanvas().getActiveObject(),
+            group: wickEditor.fabricCanvas.getCanvas().getActiveGroup()
+        });
+    });
+
+    $("#editObjectButton").on("click", function (e) {
+        wickEditor.htmlGUIHandler.closeRightClickMenu();
+        wickEditor.editSelectedObject();
+    });
+
+    $("#convertToSymbolButton").on("click", function (e) {
+        wickEditor.htmlGUIHandler.closeRightClickMenu();
+
+        var fabCanvas = wickEditor.fabricCanvas.getCanvas();
+        wickEditor.actionHandler.doAction('convertSelectionToSymbol', 
+            {selection:fabCanvas.getActiveObject() || fabCanvas.getActiveGroup()});
+
+        /*var fabCanvas = wickEditor.fabricCanvas.getCanvas();
+        var symbol = WickObject.createSymbolFromSelection(fabCanvas.getActiveObject() || fabCanvas.getActiveGroup(), wickEditor.currentObject);
+        wickEditor.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:symbol}, true);*/
+    });
+
+    $("#finishEditingObjectButton").on("click", function (e) {
+        wickEditor.htmlGUIHandler.closeRightClickMenu();
+        wickEditor.finishEditingObject();
+    });
+
     this.openRightClickMenu = function () {
 
         // Make rightclick menu visible
@@ -420,5 +555,13 @@ var WickHTMLGUIHandler = function (wickEditor) {
     };
 
     this.updatePropertiesGUI('project');
+
+/************************
+      Builtin player
+************************/
+
+    $("#closeBuiltinPlayerButton").on("click", function (e) {
+        wickEditor.closeBuiltinPlayer();
+    });
 
 }
