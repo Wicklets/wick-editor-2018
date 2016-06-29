@@ -587,12 +587,14 @@ var WickPlayer = (function () {
 *****************************/
 
     var animate = function () {
-
-        if(!stopDrawLoop) {
-            requestAnimationFrame(animate);
-            update();
-            draw();
-        }
+        
+        setTimeout(function() {
+            if(!stopDrawLoop) {
+                requestAnimationFrame(animate);
+                update();
+                draw();
+            }
+        }, 1000 / project.framerate);
 
     }
 

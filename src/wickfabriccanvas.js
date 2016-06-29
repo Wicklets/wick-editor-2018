@@ -130,8 +130,8 @@ var FabricCanvas = function (wickEditor) {
     var canvas = this.canvas;
 
     canvas.on('object:modified', function(e) {
-        console.log("object modified event:")
-        console.log(e)
+        console.log("object modified event:");
+        console.log(e.target.originalState);
     });
 
     canvas.on('mouse:down', function(e) {

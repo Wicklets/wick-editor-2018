@@ -122,43 +122,18 @@ var WickActionHandler = function (wickEditor) {
 // Multiframe Manipulations 
 
     this.doActions['extendFrame'] = function (args) {
-        // TODO : Get this value from the user. 
-        this.frameExtension = parseInt(prompt("Extend the frame by...", "1"));
+        args.frameNumber = wickEditor.currentObject.currentFrame;
+        wickEditor.currentObject.frames[args.frameNumber];
+        wickEditor.currentObject.frames[args.frameNumber].__proto__ = WickFrame.prototype;
+        wickEditor.currentObject.frames[args.frameNumber].extend(args.nFramesToExtendBy);
 
-        // TODO : This seems like a generalizable method we should create... 
-        // Ensure we've been given good input. 
-        if (this.frameExtension == NaN) {
-            this.frameExtension = 0;
-            alert("Invalid Number!");
-            return;
-        } 
-
-        // Ensure we've been given a positive integer. 
-        if (this.frameExtension < 0) {
-            this.frameExtension = 0; 
-        }
-
-        this.frameNumber = wickEditor.currentObject.currentFrame;
-        this.frame = wickEditor.currentObject.frames[this.frameNumber];
-        this.frame.extend(this.frameExtension);
-        
+        wickEditor.htmlGUIHandler.syncWithEditor();
     }
 
     this.undoActions['extendFrame'] = function (args) {
-        this.frame.shrink(this.frameExtension); 
-    }
+        this.frame.shrink(this.nFramesToExtendBy); 
 
-    this.doActions['shrinkFrame'] = function (args) {
-        // TODO : Get this value from the user. 
-        this.frameShrink = 1;
-        this.frameNumber = wickEditor.currentObject.currentFrame;
-        this.frame = wickEditor.currentObject.frames[this.frameNumber];
-        // Ensure we store the actually shrunk number.
-        this.actualFrameShrink = this.frame.shrink(this.frameShrink); 
-    }
-
-    this.undoActions['shrinkFrame'] = function (args) {
-        this.frame.extend(this.actualFrameShrink);
+        wickEditor.htmlGUIHandler.syncWithEditor();
     }
 
 // Object operations 
@@ -231,13 +206,14 @@ var WickActionHandler = function (wickEditor) {
         wickEditor.syncEditorWithFabricCanvas();
 
         // Set the editor to be editing this object at its first frame
+        args.prevEditedObject = wickEditor.currentObject;
         wickEditor.currentObject = args.objectToEdit;
         wickEditor.currentObject.currentFrame = 0;
 
         // Load wickobjects in the frame we moved to into the canvas
         wickEditor.syncFabricCanvasWithEditor();
 
-        wickEditor.htmlGUIHandler.updateTimelineGUI(wickEditor.currentObject);
+        wickEditor.htmlGUIHandler.syncWithEditor();
 
         wickEditor.fabricCanvas.repositionOriginCrosshair(
             wickEditor.project.resolution.x, 
@@ -248,19 +224,21 @@ var WickActionHandler = function (wickEditor) {
 
     }
 
-    this.doActions['finishEditingObject'] = function (args) {
+    this.undoActions['editObject'] = function (args) {
+
         wickEditor.fabricCanvas.deselectAll();
 
         // Store changes made to current frame in the project
         wickEditor.syncEditorWithFabricCanvas();
 
-        // Set the editor to be editing the parent object
-        wickEditor.currentObject = args.objectToEdit.parentObject;
+        // Set the editor to be editing this object at its first frame
+        wickEditor.currentObject = args.prevEditedObject;
+        wickEditor.currentObject.currentFrame = 0;
 
         // Load wickobjects in the frame we moved to into the canvas
         wickEditor.syncFabricCanvasWithEditor();
 
-        wickEditor.htmlGUIHandler.updateTimelineGUI(wickEditor.currentObject);
+        wickEditor.htmlGUIHandler.syncWithEditor();
 
         wickEditor.fabricCanvas.repositionOriginCrosshair(
             wickEditor.project.resolution.x, 
@@ -268,6 +246,7 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.currentObject.left,
             wickEditor.currentObject.top
         );
+
     }
 
     this.doActions['sendSelectedObjectToBack'] = function (args) {

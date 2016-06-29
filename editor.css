@@ -113,11 +113,11 @@ hr {
 #timelineGUI {
 	top: 0px;
 	left: 0px;
-	width: 200px;
+	width: 400px;
 }
 
 #timelineScrollContainer {
-	width: 200px;
+	width: 400px;
 	overflow-x:scroll;
 }
 

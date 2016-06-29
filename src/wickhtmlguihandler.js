@@ -231,11 +231,11 @@ var WickHTMLGUIHandler = function (wickEditor) {
     });
 
     $("#extendFrameButton").on("click", function (e) {
-        wickEditor.actionHandler.doAction('shrinkFrame', []);
+        wickEditor.actionHandler.doAction('extendFrame', {nFramesToExtendBy:1});
     });
 
     $("#shrinkFrameButton").on("click", function (e) {
-        wickEditor.actionHandler.doAction('extendFrame', []);
+        wickEditor.actionHandler.doAction('extendFrame', {nFramesToExtendBy:-1});
     });
 
     this.updateTimelineGUI = function () {
@@ -245,17 +245,18 @@ var WickHTMLGUIHandler = function (wickEditor) {
         // Reset the timeline div
         var timeline = document.getElementById("timeline");
         timeline.innerHTML = "";
-        timeline.style.width = wickEditor.currentObject.frames.length*23 + 6 + "px";
+        timeline.style.width = 3000+'px';//wickEditor.currentObject.frames.length*100 + 6 + "px";
 
         for(var i = 0; i < wickEditor.currentObject.frames.length; i++) {
+
+            var frame = wickEditor.currentObject.frames[i];
 
         // Create the span that holds all the stuff for each frame
 
             var frameContainer = document.createElement("span");
             frameContainer.className = "frameContainer";
+            frameContainer.style.width = 20 * frame.frameLength + 'px';
             timeline.appendChild(frameContainer);
-
-            var timeline = document.getElementById("timeline");
 
         // Create the frame element
 
@@ -267,6 +268,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
             } else {
                 frameDiv.className = "timelineFrame";
             }
+            frameDiv.style.width = 20 * frame.frameLength + 'px';
             frameContainer.appendChild(frameDiv);
 
             // Add mousedown event to the frame element so we can go to that frame when its clicked
@@ -430,7 +432,9 @@ var WickHTMLGUIHandler = function (wickEditor) {
 
     $("#editObjectButton").on("click", function (e) {
         wickEditor.htmlGUIHandler.closeRightClickMenu();
-        wickEditor.editSelectedObject();
+
+        var objectToEdit = wickEditor.fabricCanvas.getActiveObject().wickObject;
+        wickEditor.actionHandler.doAction('editObject', {objectToEdit:objectToEdit});
     });
 
     $("#convertToSymbolButton").on("click", function (e) {
@@ -438,16 +442,15 @@ var WickHTMLGUIHandler = function (wickEditor) {
 
         var fabCanvas = wickEditor.fabricCanvas.getCanvas();
         wickEditor.actionHandler.doAction('convertSelectionToSymbol', 
-            {selection:fabCanvas.getActiveObject() || fabCanvas.getActiveGroup()});
-
-        /*var fabCanvas = wickEditor.fabricCanvas.getCanvas();
-        var symbol = WickObject.createSymbolFromSelection(fabCanvas.getActiveObject() || fabCanvas.getActiveGroup(), wickEditor.currentObject);
-        wickEditor.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:symbol}, true);*/
+            {selection:fabCanvas.getActiveObject() || fabCanvas.getActiveGroup()}
+        );
     });
 
     $("#finishEditingObjectButton").on("click", function (e) {
         wickEditor.htmlGUIHandler.closeRightClickMenu();
-        wickEditor.finishEditingObject();
+        
+        var objectToEdit = wickEditor.currentObject.parentObject;
+        wickEditor.actionHandler.doAction('editObject', {objectToEdit:objectToEdit});
     });
 
     this.openRightClickMenu = function () {
