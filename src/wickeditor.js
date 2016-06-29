@@ -295,7 +295,7 @@ WickEditor.prototype.tryToLoadAutosavedProject = function () {
         console.error("LocalStorage not available.")
     }
 
-    this.project = new Project();
+    this.project = new WickProject();
 }
 
 WickEditor.prototype.newProject = function () {
@@ -303,6 +303,8 @@ WickEditor.prototype.newProject = function () {
     if(confirm("Create a new project? All unsaved changes to the current project will be lost!")) {
         this.project = new WickProject();
         this.currentObject = this.project.rootObject;
+
+        this.fabricCanvas.deselectAll();
 
         this.syncFabricCanvasWithEditor();
         this.htmlGUIHandler.syncWithEditor();
