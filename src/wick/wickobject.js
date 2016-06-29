@@ -85,7 +85,7 @@ WickObject.fromAnimatedGIF = function (parentObject, gifData) {
     gifSymbol.setDefaultPositioningValues();
     gifSymbol.setDefaultSymbolValues();
 
-    var gif=document.getElementById("gifImportDummyElem");
+    var gif = document.getElementById("gifImportDummyElem");
     gif.setAttribute('src', data);
     gif.setAttribute('height', '467px');
     gif.setAttribute('width', '375px');

@@ -25,12 +25,14 @@
     <script src="src/wick/wickobject.js"></script>
     <script src="src/wick/wickproject.js"></script>
     <script src="src/wick/wicktweenobject.js"></script>
+
     <script src="src/wickfabriccanvas.js"></script>
     <script src="src/wickhtmlguihandler.js"></script>
     <script src="src/wickactions.js"></script>
 
     <script src="src/wickeditor.js"></script>
-    <script src="src/wickplayer.js"></script>
+
+    <script src="src/player/wickplayer.js"></script>
 
     <script>
     $(document).ready(function() { 
@@ -62,24 +64,24 @@
             <strong>Wick Editor</strong><br />
 
             <hr />
-            <div class="button buttonInRow tooltipElem" id="newProjectButton" onclick="wickEditor.newProject();" alt="New Project">
+            <div class="button buttonInRow tooltipElem" id="newProjectButton" alt="New Project">
                 <img src="resources/trashcan.png" width="30" />
             </div>  
-            <div class="button buttonInRow tooltipElem" id="exportJSONButton" onclick="wickEditor.saveProject();" alt="Save Project">
+            <div class="button buttonInRow tooltipElem" id="exportJSONButton" alt="Save Project">
                 <img src="resources/save.png" width="30" />
             </div>
-            <div class="button buttonInRow tooltipElem" id="openProjectButton" onclick="$('#importButton').click();" alt="Open Project">
+            <div class="button buttonInRow tooltipElem" id="openProjectButton" alt="Open Project">
                 <img src="resources/open-folder.png" width="30" />
             </div>
-            <div class="button buttonInRow tooltipElem" id="exportHTMLButton" onclick="wickEditor.exportProject();" alt="Export Project">
+            <div class="button buttonInRow tooltipElem" id="exportHTMLButton" alt="Export Project">
                 <img src="resources/export.png" width="30" />
             </div>
-            <div class="button buttonInRow tooltipElem" id="runButton" onclick="wickEditor.runProject();" alt="Run Project">
+            <div class="button buttonInRow tooltipElem" id="runButton" alt="Run Project">
                 <img src="resources/play.png" width="30" />
             </div>
 
             <!-- Hidden, gets clicked automatically by openProjectButton -->
-            <input type="file" id="importButton" onchange="wickEditor.openProject();" /> 
+            <input type="file" id="importButton" /> 
         </div>
 
     <!-- Timeline GUI, centered at the top of the screen -->

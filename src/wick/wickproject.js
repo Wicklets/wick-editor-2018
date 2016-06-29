@@ -55,7 +55,7 @@ WickProject.prototype.exportAsHTMLFile = function () {
     var fileOut = "";
 
     // Add the player webpage (need to download the empty player)
-    fileOut += FileDownloader.downloadFile("player.htm") + "\n";
+    fileOut += FileDownloader.downloadFile("src/player/emptyplayer.htm") + "\n";
 
     // Add any libs that the player needs
     fileOut += "<script>" + FileDownloader.downloadFile("lib/pixi.min.js") + "</script>\n";
@@ -65,8 +65,8 @@ WickProject.prototype.exportAsHTMLFile = function () {
     fileOut += "<script>" + FileDownloader.downloadFile("lib/base64-arraybuffer.js") + "</script>\n";
 
     // Add the player (need to download the player code)
-    fileOut += "<script>" + FileDownloader.downloadFile("src/util/wicksharedutils.js") + "</script>\n";
-    fileOut += "<script>" + FileDownloader.downloadFile("src/wickplayer.js") + "</script>\n";
+    fileOut += "<script>" + FileDownloader.downloadFile("src/wick/wickobject.js") + "</script>\n";
+    fileOut += "<script>" + FileDownloader.downloadFile("src/player/wickplayer.js") + "</script>\n";
 
     // Bundle the JSON project
     fileOut += "<script>WickPlayer.runProject('" + this.getAsJSON() + "');</script>" + "\n";

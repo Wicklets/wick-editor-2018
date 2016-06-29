@@ -12,54 +12,106 @@ var WickEditor = function () {
 
     console.log("WickEditor rev " + this.version);
 
-    // Create new project
-    this.project = new WickProject();
-
-    // Try to load autosaved project
-    if(localStorage) {
-        VerboseLog.log("Loading project from local storage...");
-        var autosavedProjectJSON = localStorage.getItem('wickProject');
-        if(autosavedProjectJSON) {
-            this.project = WickProject.fromJSON(autosavedProjectJSON);
-        } else {
-            VerboseLog.log("No autosaved project.")
-        }
-    } else {
-        console.error("LocalStorage not available.")
-    }
+    this.tryToLoadAutosavedProject();
 
     this.currentObject = this.project.rootObject;
     this.currentObject.currentFrame = 0;
 
-    // Input
     this.mouse = {};
     this.keys = [];
 
-    // Setup fabric
     this.fabricCanvas = new FabricCanvas(this);
-
-    // Setup timeline controller gui
     this.htmlGUIHandler = new WickHTMLGUIHandler(this);
 
-    // Setup action handler
     this.actionHandler = new WickActionHandler(this);
+
+/*********************************
+    Page events
+*********************************/
 
     var that = this;
 
     document.addEventListener('mousemove', function(e) { 
-        that.updateMousePosition(e) 
+        that.mouse.x = event.clientX;
+        that.mouse.y = event.clientY;
     }, false );
 
     document.addEventListener('contextmenu', function (event) { 
         event.preventDefault();
     }, false);
 
+    this.clearKeys = function () {
+        that.keys = [];
+    }
+
     document.body.addEventListener("keydown", function (event) {
-        that.handleKeyboardInput("keydown", event);
+        that.keys[event.keyCode] = true;
+
+        //VerboseLog.log("keydown");
+        //VerboseLog.log(event.keyCode);
+        //VerboseLog.log(this.keys);
+
+        var controlKeyDown = that.keys[91];
+        var shiftKeyDown = that.keys[16];
+
+        // Control-shift-z: redo
+        if (event.keyCode == 90 && controlKeyDown && shiftKeyDown) {
+            that.actionHandler.redoAction();    
+        }
+        // Control-z: undo
+        else if (event.keyCode == 90 && controlKeyDown) {
+            that.actionHandler.undoAction();
+        }
+        // Control-s: save
+        else if (event.keyCode == 83 && controlKeyDown) {
+            event.preventDefault();
+            that.clearKeys();
+            that.saveProject();
+        }
+        // Control-o: open
+        else if (event.keyCode == 79 && controlKeyDown) {
+            event.preventDefault();
+            that.clearKeys();
+            $('#importButton').click();
+        }
+
+        // Control-a: Select all
+        if (event.keyCode == 65 && controlKeyDown) {
+            event.preventDefault();
+            that.fabricCanvas.selectAll();
+        }
+
+        // Backspace: delete selected objects
+        if (event.keyCode == 8 && document.activeElement.nodeName != 'TEXTAREA') {
+            event.preventDefault();
+            that.deleteSelectedObjects();   
+        }
+
+        // Delete: delete selected objects
+        if (event.keyCode == 46 && document.activeElement.nodeName != 'TEXTAREA') {
+            event.preventDefault();
+            that.deleteSelectedObjects();
+        }
+
+        // Space: Pan viewport
+        if (event.keyCode == 32 && document.activeElement.nodeName != 'TEXTAREA') {
+            that.fabricCanvas.panTo(this.mouse.x - window.innerWidth/2, 
+                                    this.mouse.y - window.innerHeight/2);
+        }
+
+        // Tilde: log project state to canvas (for debugging)
+        if (event.keyCode == 192) {
+            console.log(that.project);
+            console.log(that.fabricCanvas);
+        }
     });
 
     document.body.addEventListener("keyup", function (event) {
-        that.handleKeyboardInput("keyup", event);
+        that.keys[event.keyCode] = false;
+
+        //VerboseLog.log("keyup");
+        //VerboseLog.log(event.keyCode);
+        //VerboseLog.log(this.keys);
     });
 
     window.addEventListener('resize', function(e) {
@@ -122,100 +174,35 @@ var WickEditor = function () {
         e.stopPropagation();
         e.preventDefault();
 
-        wickEditor.importFilesDroppedIntoEditor(e.originalEvent.dataTransfer.files);
+        wickEditor.handleDroppedFilesEvent(e);
 
         return false;
     });
 
-}
+    document.getElementById('newProjectButton').onclick = function (e) {
+        that.newProject();
+    }
 
-/***********************************
-    Event handlers
-***********************************/
+    document.getElementById('exportJSONButton').onclick = function (e) {
+        that.saveProject();
+    }
 
-WickEditor.prototype.updateMousePosition = function (event) {
-    this.mouse.x = event.clientX;
-    this.mouse.y = event.clientY;
-}
+    document.getElementById('openProjectButton').onclick = function (e) {
+        $('#importButton').click();
+    }
 
-WickEditor.prototype.clearKeys = function () {
-    this.keys = [];
-}
+    document.getElementById('exportHTMLButton').onclick = function (e) {
+        that.exportProject();
+    }
 
-WickEditor.prototype.handleKeyboardInput = function (eventType, event) {
+    document.getElementById('runButton').onclick = function (e) {
+        that.runProject();
+    }
 
-    var that = this;
-
-    if(eventType === "keydown") {
-
-        this.keys[event.keyCode] = true;
-
-        //VerboseLog.log("keydown");
-        //VerboseLog.log(event.keyCode);
-        //VerboseLog.log(this.keys);
-
-        var controlKeyDown = this.keys[91];
-        var shiftKeyDown = this.keys[16];
-
-        // Control-shift-z: redo
-        if (event.keyCode == 90 && controlKeyDown && shiftKeyDown) {
-            this.actionHandler.redoAction();    
-        }
-        // Control-z: undo
-        else if (event.keyCode == 90 && controlKeyDown) {
-            this.actionHandler.undoAction();
-        }
-        // Control-s: save
-        else if (event.keyCode == 83 && controlKeyDown) {
-            event.preventDefault();
-            this.clearKeys();
-            this.saveProject();
-        }
-        // Control-o: open
-        else if (event.keyCode == 79 && controlKeyDown) {
-            event.preventDefault();
-            this.clearKeys();
-            $('#importButton').click();
-        }
-
-        // Control-a: Select all
-        if (event.keyCode == 65 && controlKeyDown) {
-            event.preventDefault();
-            this.fabricCanvas.selectAll();
-        }
-
-        // Backspace: delete selected objects
-        if (event.keyCode == 8 && document.activeElement.nodeName != 'TEXTAREA') {
-            event.preventDefault();
-            this.deleteSelectedObjects();   
-        }
-
-        // Delete: delete selected objects
-        if (event.keyCode == 46 && document.activeElement.nodeName != 'TEXTAREA') {
-            event.preventDefault();
-            this.deleteSelectedObjects();
-        }
-
-        // Space: Pan viewport
-        if (event.keyCode == 32 && document.activeElement.nodeName != 'TEXTAREA') {
-            this.fabricCanvas.panTo(this.mouse.x - window.innerWidth/2, 
-                                    this.mouse.y - window.innerHeight/2);
-        }
-
-        // Tilde: log project state to canvas (for debugging)
-        if (event.keyCode == 192) {
-            console.log(this.project);
-            console.log(this.fabricCanvas);
-        }
-
-    } else if(eventType === "keyup") {
-
-        this.keys[event.keyCode] = false;
-
-        //VerboseLog.log("keyup");
-        //VerboseLog.log(event.keyCode);
-        //VerboseLog.log(this.keys);
-
+    document.getElementById('importButton').onchange = function (e) {
+        that.openProject();
+        var importButton = $("importButton");
+        importButton.replaceWith( importButton = importButton.clone( true ) );
     }
 
 }
@@ -278,6 +265,7 @@ WickEditor.prototype.handlePasteEvent = function (event) {
             } else if (fileType == 'text/plain') {
                 wickEditor.actionHandler.doAction('addNewText', {text:file}, true);
             } else if (fileType == 'text/wickobjectsjson') {
+                var wickObjectJSONArray = JSON.parse(clipboardData.getData('text/wickobjectsjson'));
                 for (var i = 0; i < wickObjectJSONArray.length; i++) {
                     var newWickObject = WickObject.fromJSON(wickObjectJSONArray[i], this.currentObject);
                     this.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:newWickObject});
@@ -287,40 +275,11 @@ WickEditor.prototype.handlePasteEvent = function (event) {
     }
 }
 
-/***********************************
-      Right click menu methods
-***********************************/
-
-WickEditor.prototype.convertSelectedObjectToSymbol = function () {
-
-}
-
-WickEditor.prototype.deleteSelectedObjects = function () {
-    this.actionHandler.doAction('delete', {
-        obj:   this.fabricCanvas.getCanvas().getActiveObject(),
-        group: this.fabricCanvas.getCanvas().getActiveGroup()
-    });
-}
-
-WickEditor.prototype.editSelectedObject = function () {
-    //this.moveInsideObject(this.fabricCanvas.getActiveObject().wickObject);
-}
-
-WickEditor.prototype.editScriptsOfSelectedObject = function () {
-    this.htmlGUIHandler.openScriptingGUI(this.fabricCanvas.getActiveObject());
-}
-
-WickEditor.prototype.finishEditingObject = function () {
-    //this.moveOutOfObject();
-}
-
-/*****************************
-       Import content
-*****************************/
-
-WickEditor.prototype.importFilesDroppedIntoEditor = function(files) {
+WickEditor.prototype.handleDroppedFilesEvent = function(e) {
 
     var that = this;
+
+    var files = e.originalEvent.dataTransfer.files;
 
     // Retrieve uploaded files data
     for (var i = 0; i < files.length; i++) {
@@ -351,8 +310,111 @@ WickEditor.prototype.importFilesDroppedIntoEditor = function(files) {
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /**********************************
-  Project Open/Save/Import/Export
+     Right click menu events
+**********************************/
+
+WickEditor.prototype.convertSelectedObjectToSymbol = function () {
+
+}
+
+WickEditor.prototype.deleteSelectedObjects = function () {
+    this.actionHandler.doAction('delete', {
+        obj:   this.fabricCanvas.getCanvas().getActiveObject(),
+        group: this.fabricCanvas.getCanvas().getActiveGroup()
+    });
+}
+
+WickEditor.prototype.editSelectedObject = function () {
+    //this.moveInsideObject(this.fabricCanvas.getActiveObject().wickObject);
+}
+
+WickEditor.prototype.editScriptsOfSelectedObject = function () {
+    this.htmlGUIHandler.openScriptingGUI(this.fabricCanvas.getActiveObject());
+}
+
+WickEditor.prototype.finishEditingObject = function () {
+    //this.moveOutOfObject();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**********************************
+     Editor <-> Fabric Canvas
 **********************************/
 
 WickEditor.prototype.syncEditorWithFabricCanvas = function () {
@@ -362,6 +424,27 @@ WickEditor.prototype.syncEditorWithFabricCanvas = function () {
 WickEditor.prototype.syncFabricCanvasWithEditor = function () {
     this.fabricCanvas.setBackgroundColor(this.project.backgroundColor);
     this.fabricCanvas.storeObjectsIntoCanvas( this.currentObject.getCurrentFrame().wickObjects, this.project.resolution );
+}
+
+/**********************************
+  Project Open/Save/Import/Export
+**********************************/
+
+WickEditor.prototype.tryToLoadAutosavedProject = function () {
+    if(localStorage) {
+        VerboseLog.log("Loading project from local storage...");
+        var autosavedProjectJSON = localStorage.getItem('wickProject');
+        if(autosavedProjectJSON) {
+            this.project = WickProject.fromJSON(autosavedProjectJSON);
+            return;
+        } else {
+            VerboseLog.log("No autosaved project.")
+        }
+    } else {
+        console.error("LocalStorage not available.")
+    }
+
+    this.project = new Project();
 }
 
 WickEditor.prototype.newProject = function () {
