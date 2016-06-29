@@ -187,16 +187,16 @@ var WickActionHandler = function (wickEditor) {
             for(var i = 0; i < args.selection._objects.length; i++) {
                 args.selectionWickObjects.push(args.selection._objects[i].wickObject);
             }
+
+            var max = 0;
+            while(args.selection._objects.length > 0 && max < 100) {
+                max++;
+                console.error("Infinite loop is prob happening here");
+                args.selection._objects[0].remove();
+            }
         } else {
             // Only one object is selected
             args.selectionWickObjects.push(args.selection.wickObject);
-        }
-
-        var max = 0;
-        while(args.selection._objects.length > 0 && max < 100) {
-            max++;
-            console.error("Infinite loop is prob happening here");
-            args.selection._objects[0].remove();
         }
 
         args.symbol = WickObject.createSymbolFromWickObjects(
