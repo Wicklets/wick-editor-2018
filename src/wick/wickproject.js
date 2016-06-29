@@ -43,14 +43,6 @@ WickProject.fromJSON = function (JSONString) {
     return projectFromJSON;
 }
 
-WickProject.fromFile = function (file, callback) {
-    var reader = new FileReader();
-    reader.onloadend = function(e) {
-        callback(WickProject.fromJSON(this.result));
-    };
-    reader.readAsText(file);
-}
-
 WickProject.prototype.exportAsHTMLFile = function () {
     var fileOut = "";
 

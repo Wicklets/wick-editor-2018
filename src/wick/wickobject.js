@@ -78,15 +78,14 @@ WickObject.fromImage = function (imgSrc, left, top, parentObject, callback) {
     }
 }
 
-WickObject.fromAnimatedGIF = function (parentObject, gifData) {
+WickObject.fromAnimatedGIF = function (gifData, parentObject, callback) {
 
     var gifSymbol = new WickObject(parentObject);
-    gifSymbol.parentObject = this.currentObject;
     gifSymbol.setDefaultPositioningValues();
     gifSymbol.setDefaultSymbolValues();
 
     var gif = document.getElementById("gifImportDummyElem");
-    gif.setAttribute('src', data);
+    gif.setAttribute('src', gifData);
     gif.setAttribute('height', '467px');
     gif.setAttribute('width', '375px');
 
@@ -96,11 +95,11 @@ WickObject.fromAnimatedGIF = function (parentObject, gifData) {
         var framesDataURLs = superGif.getFrameDataURLs();
         for(var i = 0; i < framesDataURLs.length; i++) {
 
-            WickObjectUtils.createWickObjectFromImage(
+            WickObject.fromImage(
                 framesDataURLs[i], 
                 0, 
                 0, 
-                that.currentObject, 
+                gifSymbol, 
                 (function(frameIndex) { return function(o) {
                     o.left = window.innerWidth/2;
                     o.top = window.innerHeight/2;
@@ -108,7 +107,7 @@ WickObject.fromAnimatedGIF = function (parentObject, gifData) {
                     gifSymbol.frames[frameIndex].wickObjects.push(o);
 
                     if(frameIndex == framesDataURLs.length-1) {
-                        that.fabricCanvas.addWickObjectToCanvas(gifSymbol);
+                        callback(gifSymbol);
                     }
                 }; }) (i)
             );
@@ -187,16 +186,11 @@ WickObject.fromAudioFile = function (audioData, parentObject) {
     var audioWickObject = new WickObject(parentObject);
 
     audioWickObject.setDefaultPositioningValues();
-    audioWickObject.audioData = data;
+    audioWickObject.audioData = audioData;
     audioWickObject.left = window.innerWidth/2;
     audioWickObject.top = window.innerHeight/2;
 
-    audioWickObject.parentObject = this.currentObject;
-
-    this.fabricCanvas.addWickObjectToCanvas(audioWickObject);
-
-    this.syncEditorWithFabricCanvas();
-    this.syncFabricCanvasWithEditor();
+    return audioWickObject;
 }
 
 WickObject.createSymbolFromWickObjects = function (left, top, wickObjects, parentObject) {

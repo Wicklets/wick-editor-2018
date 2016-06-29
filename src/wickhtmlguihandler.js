@@ -36,7 +36,17 @@ var WickHTMLGUIHandler = function (wickEditor) {
     }
 
     document.getElementById('importButton').onchange = function (e) {
-        wickEditor.openProject();
+        var that = this;
+
+        var filePath = document.getElementById("importButton");
+        if(filePath.files && filePath.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                wickEditor.openProject(e.target.result);
+            };
+            reader.readAsText(filePath.files[0]);
+        }
+
         var importButton = $("importButton");
         importButton.replaceWith( importButton = importButton.clone( true ) );
     }
@@ -319,6 +329,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
         testPositiveInteger($('#projectSizeX').val(), function(n) {
             wickEditor.syncEditorWithFabricCanvas();
             wickEditor.project.resolution.x = n;
+            wickEditor.fabricCanvas.resize();
             wickEditor.syncFabricCanvasWithEditor();
         });
 
@@ -329,6 +340,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
         testPositiveInteger($('#projectSizeY').val(), function(n) {
             wickEditor.syncEditorWithFabricCanvas();
             wickEditor.project.resolution.y = n;
+            wickEditor.fabricCanvas.resize();
             wickEditor.syncFabricCanvasWithEditor();
         });
 

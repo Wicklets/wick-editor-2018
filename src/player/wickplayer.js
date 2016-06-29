@@ -590,10 +590,11 @@ var WickPlayer = (function () {
         
         setTimeout(function() {
             if(!stopDrawLoop) {
-                //requestAnimationFrame(animate);
+                
                 update();
                 draw();
                 animate()
+                //requestAnimationFrame(animate);
             }
         }, 1000 / project.framerate);
 
