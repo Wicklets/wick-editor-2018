@@ -159,6 +159,9 @@ var WickActionHandler = function (wickEditor) {
         wickEditor.fabricCanvas.makeFabricObjectFromWickObject(args.wickObject, function(fabricObject) {
             wickEditor.fabricCanvas.getCanvas().add(fabricObject);
             args.fabricObjectToRemove = fabricObject;
+
+            wickEditor.syncEditorWithFabricCanvas();
+            wickEditor.syncFabricCanvasWithEditor();
         });
 
     }
