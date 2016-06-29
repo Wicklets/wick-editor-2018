@@ -131,7 +131,23 @@ var WickActionHandler = function (wickEditor) {
     }
 
     this.undoActions['extendFrame'] = function (args) {
-        this.frame.shrink(this.nFramesToExtendBy); 
+        wickEditor.currentObject.frames[args.frameNumber].extend(-args.nFramesToExtendBy); 
+
+        wickEditor.htmlGUIHandler.syncWithEditor();
+    }
+
+    this.doActions['shrinkFrame'] = function (args) {
+        args.frameNumber = wickEditor.currentObject.currentFrame;
+        wickEditor.currentObject.frames[args.frameNumber];
+        wickEditor.currentObject.frames[args.frameNumber].__proto__ = WickFrame.prototype;
+        wickEditor.currentObject.frames[args.frameNumber].shrink(args.nFramesToShrinkBy);
+
+        wickEditor.htmlGUIHandler.syncWithEditor();
+    }
+
+    this.undoActions['shrinkFrame'] = function (args) {
+        wickEditor.currentObject.frames[args.frameNumber].__proto__ = WickFrame.prototype;
+        wickEditor.currentObject.frames[args.frameNumber].shrink(-args.nFramesToShrinkBy); 
 
         wickEditor.htmlGUIHandler.syncWithEditor();
     }

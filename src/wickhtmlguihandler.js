@@ -235,7 +235,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
     });
 
     $("#shrinkFrameButton").on("click", function (e) {
-        wickEditor.actionHandler.doAction('extendFrame', {nFramesToExtendBy:-1});
+        wickEditor.actionHandler.doAction('shrinkFrame', {nFramesToShrinkBy:1});
     });
 
     this.updateTimelineGUI = function () {
