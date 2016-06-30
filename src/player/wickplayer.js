@@ -384,13 +384,15 @@ var WickPlayer = (function () {
     /* Recursively load images of wickObj */
     var loadImages = function (wickObj) {
 
+        wickObj.pixiContainer = new PIXI.Container();
+
         WickObjectUtils.forEachChildObject(wickObj, function(subObj) {
             if (subObj.isSymbol) {
                 loadImages(subObj);
+                wickObj.pixiContainer.addChild(subObj.pixiContainer);
             } else if (subObj.imageData) {
                 subObj.pixiSprite = PIXI.Sprite.fromImage(subObj.imageData);
-                subObj.pixiSprite.interactive = true;
-                subObj.buttonMode = true;
+                wickObj.pixiContainer.addChild(subObj.pixiSprite);
             } else if (subObj.fontData) {
                 var style = {
                     font : "normal " + subObj.fontData.fontSize + "px " + subObj.fontData.fontFamily,
@@ -398,8 +400,8 @@ var WickPlayer = (function () {
                     wordWrap : true,
                     wordWrapWidth : 440
                 };
-
                 subObj.pixiText = new PIXI.Text(subObj.fontData.text, style);
+                wickObj.pixiContainer.addChild(subObj.pixiText);
             }
         });
     }
@@ -844,62 +846,70 @@ var WickPlayer = (function () {
         graphics.endFill();
         renderer.render(graphics);
 
-        var baseTransform = {
-            x:       0,
-            y:       0,
-            angle:   0,
-            scaleX:  1.0,
-            scaleY:  1.0,
-            opacity: 1.0
-        };
-        drawWickObject(project.rootObject, baseTransform);
+        resetAllPixiObjects(project.rootObject);
+        updatePixiObjectTransforms(project.rootObject);
+        renderer.render(project.rootObject.pixiContainer);
+    }
+
+    var resetAllPixiObjects = function (wickObj) {
+
+        WickObjectUtils.forEachChildObject(wickObj, function(subObj) {
+            if(subObj.pixiSprite) {
+                subObj.pixiSprite.visible = false;
+            }
+            if(subObj.pixiText) {
+                subObj.pixiText.visible = false;
+            }
+            if(subObj.pixiContainer) {
+                subObj.pixiContainer.visible = false;
+            }
+
+            if(subObj.isSymbol) {
+                resetAllPixiObjects(subObj);
+            }
+        });
 
     }
 
-    var drawWickObject = function (wickObj, transform) {
-        // Apply transformation
-        if(!wickObj.isRoot) {
-            transform.x       += wickObj.x;
-            transform.y       += wickObj.y;
-            transform.angle   += wickObj.angle/360*2*3.14159;
-            transform.scaleX  *= wickObj.scaleX;
-            transform.scaleY  *= wickObj.scaleY;
-            transform.opacity *= wickObj.opacity;
-        }
+    var updatePixiObjectTransforms = function (wickObj) {
 
         if(wickObj.isSymbol) {
+            wickObj.pixiContainer.visible = true;
+            if(!wickObj.isRoot) {
+                wickObj.pixiContainer.pivot.x = wickObj.width/2;
+                wickObj.pixiContainer.pivot.y = wickObj.height/2;
+                wickObj.pixiContainer.position.x        = wickObj.x + wickObj.width/2;
+                wickObj.pixiContainer.position.y        = wickObj.y + wickObj.height/2;
+                wickObj.pixiContainer.rotation = wickObj.angle/360*2*3.14159;
+                wickObj.pixiContainer.scale.x  = wickObj.scaleX;
+                wickObj.pixiContainer.scale.y  = wickObj.scaleY;
+                wickObj.pixiContainer.alpha    = wickObj.opacity;
+            }
             WickObjectUtils.forEachActiveChildObject(wickObj, function(subObj) {
-                drawWickObject(subObj, transform);
+                updatePixiObjectTransforms(subObj);
             });
         } else {
             if(wickObj.pixiSprite) {
-                wickObj.pixiSprite.x        = transform.x;
-                wickObj.pixiSprite.y        = transform.y;
-                wickObj.pixiSprite.rotation = transform.angle;
-                wickObj.pixiSprite.scale.x  = transform.scaleX;
-                wickObj.pixiSprite.scale.y  = transform.scaleY;
-                wickObj.pixiSprite.alpha    = transform.opacity;
-                renderer.render(wickObj.pixiSprite);
+                wickObj.pixiSprite.visible = true;
+                wickObj.pixiSprite.anchor = new PIXI.Point(0.5, 0.5);
+                wickObj.pixiSprite.x        = wickObj.x + wickObj.width/2;
+                wickObj.pixiSprite.y        = wickObj.y + wickObj.height/2;
+                wickObj.pixiSprite.rotation = wickObj.angle/360*2*3.14159;
+                wickObj.pixiSprite.scale.x  = wickObj.scaleX;
+                wickObj.pixiSprite.scale.y  = wickObj.scaleY;
+                wickObj.pixiSprite.alpha    = wickObj.opacity;
             } else if(wickObj.pixiText) {
-                wickObj.pixiText.x        = transform.x;
-                wickObj.pixiText.y        = transform.y;
-                wickObj.pixiText.rotation = transform.angle;
-                wickObj.pixiText.scale.x  = transform.scaleX;
-                wickObj.pixiText.scale.y  = transform.scaleY;
-                wickObj.pixiText.alpha    = transform.opacity;
-                renderer.render(wickObj.pixiText);
+                wickObj.pixiText.visible = true;
+                wickObj.pixiText.anchor = new PIXI.Point(0.5, 0.5);
+                wickObj.pixiText.x        = wickObj.x;
+                wickObj.pixiText.y        = wickObj.y;
+                wickObj.pixiText.rotation = wickObj.angle/360*2*3.14159;
+                wickObj.pixiText.scale.x  = wickObj.scaleX;
+                wickObj.pixiText.scale.y  = wickObj.scaleY;
+                wickObj.pixiText.alpha    = wickObj.opacity;
             }
         }
 
-        // Undo transformation
-        if(!wickObj.isRoot) {
-            transform.x       -= wickObj.x;
-            transform.y       -= wickObj.y;
-            transform.angle   -= wickObj.angle/360*2*3.14159;
-            transform.scaleX  /= wickObj.scaleX;
-            transform.scaleY  /= wickObj.scaleY;
-            transform.opacity /= wickObj.opacity;
-        }
     }
 
     return wickPlayer;

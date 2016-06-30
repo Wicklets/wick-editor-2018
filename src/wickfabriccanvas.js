@@ -525,7 +525,12 @@ FabricCanvas.prototype.getWickObjectsInCanvas = function (projectResolution) {
                 wickObject.left -= parentsPositionTotal.left;
                 wickObject.top -= parentsPositionTotal.top;
 
-                wickObject.fixSymbolPosition();
+                //wickObject.fixSymbolPosition();
+                if(wickObject.isSymbol) {
+                    var trueSymbolOffset = wickObject.getSymbolTrueOffset();
+                    wickObject.left -= trueSymbolOffset.left;
+                    wickObject.top -= trueSymbolOffset.top;
+                }
             }
 
             // Reposition the wickobject so that 0,0 is the canvases origin, not fabric's origin.

@@ -213,11 +213,9 @@ WickObject.createSymbolFromWickObjects = function (left, top, wickObjects, paren
         symbol.frames[0].wickObjects[i] = wickObjects[i];
         symbol.frames[0].wickObjects[i].parentObject = symbol;
 
-        symbol.frames[0].wickObjects[i].left = wickObjects[i].left;
-        symbol.frames[0].wickObjects[i].top  = wickObjects[i].top;
+        symbol.frames[0].wickObjects[i].left = wickObjects[i].left - symbol.left;
+        symbol.frames[0].wickObjects[i].top  = wickObjects[i].top - symbol.top;
     }
-
-    symbol.fixSymbolPosition();
 
     return symbol;
 
@@ -349,30 +347,39 @@ WickObject.prototype.getRelativePosition = function () {
 
 /* Fabric js sets the position of the group to the positions of the leftmost+topmost objects 
    by default. So if the leftmost/topmost objects are not at 0,0, this causes problems! 
-   fixSymbolPosition shifts everything over so that the symbol will always be at the 
-   same absolute position. */
-WickObject.prototype.fixSymbolPosition = function () {
+   This function gives you the offset that must be accounted for so that objects don't shift around */
+WickObject.prototype.getSymbolTrueOffset = function () {
 
-    if(this.isSymbol) {
-        var leftmostLeft = null;
-        var topmostTop = null;
-
-        WickObjectUtils.forEachFirstFrameChildObject(this, function (currObj) {
-            if(!leftmostLeft || currObj.left < leftmostLeft) {
-                leftmostLeft = currObj.left;
-            }
-
-            if(!topmostTop || currObj.top < topmostTop) {
-                topmostTop = currObj.top;
-            }
-        });
-
-        // Only set left/top if there were actually children in the symbol
-        if(leftmostLeft && topmostTop) {
-            this.left -= leftmostLeft;
-            this.top -= topmostTop;
-        }
+    if(!this.isSymbol) {
+        VerboseLog.error("getSymbolTrueOffset called on non-symbol wickobject")
+        return null;
     }
+
+    var leftmostLeft = null;
+    var topmostTop = null;
+
+    WickObjectUtils.forEachFirstFrameChildObject(this, function (currObj) {
+        if(leftmostLeft === null || currObj.left < leftmostLeft) {
+            console.log(currObj.left)
+            leftmostLeft = currObj.left;
+        }
+
+        if(leftmostLeft === null || currObj.top < topmostTop) {
+            console.log(currObj.top)
+            topmostTop = currObj.top;
+        }
+    });
+
+    console.log('left ' + leftmostLeft);
+    console.log('top ' + topmostTop);
+
+    return {left:leftmostLeft, top:topmostTop};
+
+    // Only set left/top if there were actually children in the symbol
+    /*if(leftmostLeft && topmostTop) {
+        this.left -= leftmostLeft;
+        this.top -= topmostTop;
+    }*/
 
 }
 

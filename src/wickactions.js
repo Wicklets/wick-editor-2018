@@ -178,10 +178,28 @@ var WickActionHandler = function (wickEditor) {
 
         args.selectionWickObjects = [];
 
+        var symbolLeft = args.selection.left;
+        var symbolTop = args.selection.top;
+
         if (args.selection._objects) {
+            symbolLeft = args.selection._objects[0].wickObject.left;
+            symbolTop = args.selection._objects[0].wickObject.top;
+
             // Multiple objects are selected, put them all in the new symbol
             for(var i = 0; i < args.selection._objects.length; i++) {
+                if(args.selection._objects[i].wickObject.left < symbolLeft) {
+                    symbolLeft = args.selection._objects[i].wickObject.left;
+                }
+                if(args.selection._objects[i].wickObject.top < symbolTop) {
+                    symbolTop = args.selection._objects[i].wickObject.top;
+                }
+
                 args.selectionWickObjects.push(args.selection._objects[i].wickObject);
+            }
+
+            for(var i = 0; i < args.selectionWickObjects.length; i++) {
+                args.selectionWickObjects.left -= symbolLeft;
+                args.selectionWickObjects.top -= symbolTop;
             }
 
             var max = 0;
@@ -196,8 +214,8 @@ var WickActionHandler = function (wickEditor) {
         }
 
         args.symbol = WickObject.createSymbolFromWickObjects(
-            args.selection.left, 
-            args.selection.top, 
+            symbolLeft, 
+            symbolTop, 
             args.selectionWickObjects, 
             wickEditor.currentObject
         );
@@ -234,8 +252,8 @@ var WickActionHandler = function (wickEditor) {
         wickEditor.fabricCanvas.repositionOriginCrosshair(
             wickEditor.project.resolution.x, 
             wickEditor.project.resolution.y,
-            args.objectToEdit.left,
-            args.objectToEdit.top
+            wickEditor.currentObject.left,
+            wickEditor.currentObject.top
         );
 
         // Load wickobjects in the frame we moved to into the canvas
