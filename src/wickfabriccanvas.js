@@ -1,3 +1,5 @@
+/* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
+
 var FabricCanvas = function (wickEditor) {
 
     var that = this;

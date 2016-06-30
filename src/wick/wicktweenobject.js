@@ -1,9 +1,10 @@
+/* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
+
 /*****************************
        Tween Objects
 *****************************/
 
-/*
- * Defines a tween object class which stores all possible
+/* Defines a tween object class which stores all possible
  * manipulations that can be done on a series of wickObjects. 
  * Tween objects can also recieve wickObjects and apply these 
  * transformations to the objects themselves. */ 
