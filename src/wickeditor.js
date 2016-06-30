@@ -92,8 +92,8 @@ var WickEditor = function () {
 
         // Space: Pan viewport
         if (event.keyCode == 32 && document.activeElement.nodeName != 'TEXTAREA') {
-            that.fabricCanvas.panTo(this.mouse.x - window.innerWidth/2, 
-                                    this.mouse.y - window.innerHeight/2);
+            that.fabricCanvas.panTo(that.mouse.x - window.innerWidth/2, 
+                                    that.mouse.y - window.innerHeight/2);
         }
 
         // Tilde: log project state to canvas (for debugging)
@@ -207,23 +207,35 @@ var WickEditor = function () {
 
             if (['image/png', 'image/jpeg', 'image/bmp'].indexOf(fileType) != -1) {
 
-                WickObject.fromImage(
-                    e.target.result, 
-                    that.project.resolution.x/2, 
-                    that.project.resolution.y/2, 
-                    that.currentObject,
-                    function(newWickObject) {
-                        that.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:newWickObject});
-                    });
+                var data = items[i].getAsFile();
+                var fr = new FileReader;
+                fr.onloadend = function() {
+                    //alert(fr.result.substring(0, 100)); // fr.result is all data
+                    WickObject.fromImage(
+                        fr.result, 
+                        that.project.resolution.x/2, 
+                        that.project.resolution.y/2, 
+                        that.currentObject,
+                        function(newWickObject) {
+                            that.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:newWickObject});
+                        });
+                };
+                fr.readAsDataURL(data);
 
             } else if (fileType == 'image/gif') {
-                
-                WickObject.fromAnimatedGIF(
-                    e.target.result,
-                    that.currentObject,
-                    function(newWickObject) {
-                        that.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:newWickObject});
-                    });
+
+                var data = items[i].getAsFile();
+                var fr = new FileReader;
+                fr.onloadend = function() {
+                    //alert(fr.result.substring(0, 100)); // fr.result is all data
+                    WickObject.fromAnimatedGIF(
+                        fr.result,
+                        that.currentObject,
+                        function(newWickObject) {
+                            that.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:newWickObject});
+                        });
+                };
+                fr.readAsDataURL(data);
 
             } else if (fileType == 'text/plain') {
 
@@ -354,6 +366,7 @@ WickEditor.prototype.newProject = function () {
 
     this.fabricCanvas.deselectAll();
 
+    this.fabricCanvas.resize();
     this.syncFabricCanvasWithEditor();
     this.htmlGUIHandler.syncWithEditor();
 
@@ -379,6 +392,7 @@ WickEditor.prototype.openProject = function (projectJSON) {
 
 WickEditor.prototype.exportProject = function () {
     this.syncEditorWithFabricCanvas();
+    this.project.saveInLocalStorage();
     this.project.exportAsHTMLFile();
 }
 

@@ -445,7 +445,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
     $("#editObjectButton").on("click", function (e) {
         wickEditor.htmlGUIHandler.closeRightClickMenu();
 
-        var objectToEdit = wickEditor.fabricCanvas.getActiveObject().wickObject;
+        var objectToEdit = wickEditor.fabricCanvas.getActiveObject();
         wickEditor.actionHandler.doAction('editObject', {objectToEdit:objectToEdit});
     });
 
@@ -461,8 +461,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
     $("#finishEditingObjectButton").on("click", function (e) {
         wickEditor.htmlGUIHandler.closeRightClickMenu();
         
-        var objectToEdit = wickEditor.currentObject.parentObject;
-        wickEditor.actionHandler.doAction('editObject', {objectToEdit:objectToEdit});
+        wickEditor.actionHandler.doAction('finishEditingCurrentObject', {});
     });
 
     this.openRightClickMenu = function () {

@@ -54,6 +54,7 @@ WickObject.createNewRootObject = function () {
     rootObject.frames = [new WickFrame()];
     rootObject.left = 0;
     rootObject.top = 0;
+    rootObject.opacity = 1.0;
     return rootObject;
 }
 
@@ -82,9 +83,15 @@ WickObject.fromAnimatedGIF = function (gifData, parentObject, callback) {
 
     var gifSymbol = new WickObject(parentObject);
     gifSymbol.setDefaultPositioningValues();
+    gifSymbol.left = window.innerWidth /2;
+    gifSymbol.top  = window.innerHeight/2;
     gifSymbol.setDefaultSymbolValues();
 
-    var gif = document.getElementById("gifImportDummyElem");
+    //var gif = document.getElementById("gifImportDummyElem");
+    var newGifEl = document.createElement("img"); 
+    newGifEl.id = "gifImportDummyElem";
+    document.body.appendChild(newGifEl); 
+    var gif = document.getElementById('gifImportDummyElem')
     gif.setAttribute('src', gifData);
     gif.setAttribute('height', '467px');
     gif.setAttribute('width', '375px');
@@ -101,8 +108,6 @@ WickObject.fromAnimatedGIF = function (gifData, parentObject, callback) {
                 0, 
                 gifSymbol, 
                 (function(frameIndex) { return function(o) {
-                    o.left = window.innerWidth/2;
-                    o.top = window.innerHeight/2;
                     gifSymbol.addEmptyFrame(frameIndex);
                     gifSymbol.frames[frameIndex].wickObjects.push(o);
 
@@ -218,11 +223,12 @@ WickObject.createSymbolFromWickObjects = function (left, top, wickObjects, paren
 
 WickObject.prototype.setDefaultPositioningValues = function () {
 
-    this.scaleX = 1;
-    this.scaleY = 1;
-    this.angle  = 0;
-    this.flipX  = false;
-    this.flipY  = false;
+    this.scaleX =  1;
+    this.scaleY =  1;
+    this.angle  =  0;
+    this.flipX  =  false;
+    this.flipY  =  false;
+    this.opacity = 1;
 
 }
 

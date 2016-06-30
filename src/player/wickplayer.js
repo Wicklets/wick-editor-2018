@@ -82,12 +82,12 @@ var WickPlayer = (function () {
         // Setup touch events (mobile mode)
         if(mobileMode) {
             // Touch event (one touch = like a mouse click)
-            rendererContainerEl.addEventListener("touchstart", onTouchStart, false);
+            document.body.addEventListener("touchstart", onTouchStart, false);
 
             // Squash gesture events
-            rendererContainerEl.addEventListener('gesturestart', function(e) {  e.preventDefault(); });
-            rendererContainerEl.addEventListener('gesturechange', function(e) {  e.preventDefault(); });
-            rendererContainerEl.addEventListener('gestureend', function(e) {  e.preventDefault(); });
+            document.body.addEventListener('gesturestart',  function(e) { e.preventDefault(); });
+            document.body.addEventListener('gesturechange', function(e) { e.preventDefault(); });
+            document.body.addEventListener('gestureend',    function(e) { e.preventDefault(); });
         }
 
         // update canvas size on window resize
@@ -227,34 +227,69 @@ var WickPlayer = (function () {
         if(wickObj.isSymbol) {
             // Setup builtin wick scripting methods and objects
             wickObj.play = function (frame) {
+                var oldFrame = wickObj.currentFrame;
+
                 wickObj.isPlaying = true;
 
-                wickObj.currentFrame ++;
-                if(wickObj.currentFrame == wickObj.frames.length) {
-                    wickObj.currentFrame = 0;
+                if(oldFrame != wickObj.currentFrame) {
+                    WickObjectUtils.forEachActiveChildObject(wickObj, function(child) {
+                        child.onLoadScriptRan = false;
+                    });
                 }
             }
             wickObj.stop = function (frame) {
                 wickObj.isPlaying = false;
             }
             wickObj.gotoAndPlay = function (frame) {
+                var oldFrame = wickObj.currentFrame;
+
                 wickObj.isPlaying = true;
                 wickObj.currentFrame = frame;
+
+                if(oldFrame != wickObj.currentFrame) {
+                    WickObjectUtils.forEachActiveChildObject(wickObj, function(child) {
+                        child.onLoadScriptRan = false;
+                    });
+                }
             }
             wickObj.gotoAndStop = function (frame) {
+                var oldFrame = wickObj.currentFrame;
+
                 wickObj.isPlaying = false;
                 wickObj.currentFrame = frame;
+
+                if(oldFrame != wickObj.currentFrame) {
+                    WickObjectUtils.forEachActiveChildObject(wickObj, function(child) {
+                        child.onLoadScriptRan = false;
+                    });
+                }
             }
             wickObj.gotoNextFrame = function () {
+                var oldFrame = wickObj.currentFrame;
+
                 wickObj.currentFrame ++;
                 if(wickObj.currentFrame >= wickObj.frames.length) {
                     wickObj.currentFrame = wickObj.frames.length-1;
                 }
+
+                if(oldFrame != wickObj.currentFrame) {
+                    WickObjectUtils.forEachActiveChildObject(wickObj, function(child) {
+                        child.onLoadScriptRan = false;
+                    });
+                }
             }
             wickObj.gotoPrevFrame = function () {
+                var oldFrame = wickObj.currentFrame;
+
                 wickObj.currentFrame --;
                 if(wickObj.currentFrame < 0) {
                     wickObj.currentFrame = 0;
+                }
+
+                if(oldFrame != wickObj.currentFrame) {
+                    WickObjectUtils.forEachActiveChildObject(wickObj, function(child) {
+                        child.onLoadScriptRan = false;
+                    });
                 }
             }
 
@@ -403,12 +438,12 @@ var WickPlayer = (function () {
 
             if(widthRatio > heightRatio) {
                 var offset = (window.innerWidth - project.resolution.x * projectFitScreenScale) / 2;
-                rendererContainerEl.style.marginLeft = offset + "px";
-                rendererContainerEl.style.paddingTop = "0px";
+                rendererContainerEl.style.paddingLeft = offset + "px";
+                rendererContainerEl.style.paddingTop  = "0px";
             } else {
                 var offset = (window.innerHeight - project.resolution.y * projectFitScreenScale) / 2;
-                rendererContainerEl.style.marginLeft = "0px";
-                rendererContainerEl.style.paddingTop = offset + "px";
+                rendererContainerEl.style.paddingLeft = "0px";
+                rendererContainerEl.style.paddingTop  = offset + "px";
             }
         } else {
             renderer.view.style.width  = project.resolution.x + "px";
@@ -417,8 +452,10 @@ var WickPlayer = (function () {
             var offsetX = (window.innerWidth  - project.resolution.x) / 2;
             var offsetY = (window.innerHeight - project.resolution.y) / 2;
 
-            rendererContainerEl.style.marginLeft = offsetX + "px";
-            rendererContainerEl.style.paddingTop = offsetY + "px";
+            rendererContainerEl.style.paddingLeft   = offsetX + "px";
+            rendererContainerEl.style.paddingRight  = offsetX + "px";
+            rendererContainerEl.style.paddingTop    = offsetY + "px";
+            rendererContainerEl.style.paddingBottom = offsetY + "px";
         }
 
     }
@@ -487,7 +524,7 @@ var WickPlayer = (function () {
             loadAudio(project.rootObject);
         }
 
-        var touchPos = getTouchPos(evt);
+        var touchPos = getTouchPos(renderer.view, evt);
 
         WickObjectUtils.forEachActiveChildObject(project.rootObject, function(currObj) {
             if(pointInsideObj(currObj, touchPos) && wickObjectIsClickable(currObj)) {
@@ -504,9 +541,6 @@ var WickPlayer = (function () {
     var getMousePos = function (canvas, evt) {
         var canvasBoundingClientRect = canvas.getBoundingClientRect();
 
-        var centeredCanvasOffsetX = (window.innerWidth - project.resolution.x) / 2;
-        var centeredCanvasOffsetY = (window.innerHeight - project.resolution.y) / 2;
-
         var mouseX = evt.clientX;
         var mouseY = evt.clientY;
 
@@ -521,6 +555,9 @@ var WickPlayer = (function () {
         mouseX /=  projectFitScreenScale;
         mouseY /=  projectFitScreenScale;
 
+        var centeredCanvasOffsetX = (window.innerWidth - project.resolution.x) / 2;
+        var centeredCanvasOffsetY = (window.innerHeight - project.resolution.y) / 2;
+
         if(!project.fitScreen) {
             mouseX -= centeredCanvasOffsetX;
             mouseY -= centeredCanvasOffsetY;
@@ -532,11 +569,36 @@ var WickPlayer = (function () {
         };
     }
 
-    var getTouchPos = function (evt) {
+    var getTouchPos = function (canvas, evt) {
+        var canvasBoundingClientRect = canvas.getBoundingClientRect();
+
         var touch = evt.targetTouches[0];
+
+        var touchX = touch.pageX;
+        var touchY = touch.pageY;
+
+        if(project.fitScreen) {
+            touchX -= canvasBoundingClientRect.left;
+            touchY -= canvasBoundingClientRect.top;
+        }
+
+        touchX -= projectFitScreenTranslate.x;
+        touchY -= projectFitScreenTranslate.y;
+
+        touchX /=  projectFitScreenScale;
+        touchY /=  projectFitScreenScale;
+
+        var centeredCanvasOffsetX = (window.innerWidth - project.resolution.x) / 2;
+        var centeredCanvasOffsetY = (window.innerHeight - project.resolution.y) / 2;
+
+        if(!project.fitScreen) {
+            touchX -= centeredCanvasOffsetX;
+            touchY -= centeredCanvasOffsetY;
+        }
+
         return {
-            x: touch.pageX,
-            y: touch.pageY
+            x: touchX,
+            y: touchY
         };
     }
 
@@ -545,7 +607,14 @@ var WickPlayer = (function () {
 *****************************/
 
     /*  */
-    var pointInsideObj = function(obj, point) {
+    var pointInsideObj = function(obj, point, parentScaleX, parentScaleY) {
+
+        if(!parentScaleX) {
+            parentScaleX = 1.0;
+        }
+        if(!parentScaleY) {
+            parentScaleY = 1.0;
+        }
 
         if(obj.isSymbol) {
 
@@ -556,7 +625,7 @@ var WickPlayer = (function () {
                     x : point.x - obj.x,
                     y : point.y - obj.y
                 };
-                if(pointInsideObj(currObj, subPoint)) {
+                if(pointInsideObj(currObj, subPoint, obj.scaleX, obj.scaleY)) {
                     pointInsideSymbol = true;
                 }
             });
@@ -567,8 +636,8 @@ var WickPlayer = (function () {
 
             var scaledObjX = obj.x;
             var scaledObjY = obj.y;
-            var scaledObjWidth = obj.width*obj.scaleX;
-            var scaledObjHeight = obj.height*obj.scaleY;
+            var scaledObjWidth = obj.width*obj.scaleX*parentScaleX;
+            var scaledObjHeight = obj.height*obj.scaleY*parentScaleY;
 
             return point.x >= scaledObjX && 
                    point.y >= scaledObjY  &&
@@ -588,15 +657,22 @@ var WickPlayer = (function () {
 
     var animate = function () {
         
-        setTimeout(function() {
+        /*setTimeout(function() {
             if(!stopDrawLoop) {
                 
                 update();
                 draw();
-                animate()
+                //animate()
                 //requestAnimationFrame(animate);
             }
-        }, 1000 / project.framerate);
+        }, 1000 / project.framerate);*/
+
+        if(!stopDrawLoop) {
+            requestAnimationFrame(animate);
+        }
+
+        update();
+        draw();
 
     }
 
@@ -786,7 +862,7 @@ var WickPlayer = (function () {
             transform.angle   += wickObj.angle/360*2*3.14159;
             transform.scaleX  *= wickObj.scaleX;
             transform.scaleY  *= wickObj.scaleY;
-            if(wickObj.opacity) transform.opacity *= wickObj.opacity;
+            transform.opacity *= wickObj.opacity;
         }
 
         if(wickObj.isSymbol) {
@@ -820,7 +896,7 @@ var WickPlayer = (function () {
             transform.angle   -= wickObj.angle/360*2*3.14159;
             transform.scaleX  /= wickObj.scaleX;
             transform.scaleY  /= wickObj.scaleY;
-            if(wickObj.opacity) transform.opacity /= wickObj.opacity;
+            transform.opacity /= wickObj.opacity;
         }
     }
 

@@ -356,6 +356,10 @@ FabricCanvas.prototype.makeFabricObjectFromWickObject = function (wickObject, ca
 
             // Add that group to the fabric canvas
             group.wickObject = wickObject;
+            group.scaleX = group.wickObject.scaleX;
+            group.scaleY = group.wickObject.scaleY;
+            group.angle = group.wickObject.angle;
+
             group.isGroup = true;
             return group;
         }

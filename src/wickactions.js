@@ -226,26 +226,28 @@ var WickActionHandler = function (wickEditor) {
 
         // Set the editor to be editing this object at its first frame
         args.prevEditedObject = wickEditor.currentObject;
-        wickEditor.currentObject = args.objectToEdit;
+        wickEditor.currentObject = args.objectToEdit.wickObject;
         wickEditor.currentObject.currentFrame = 0;
+
+        wickEditor.fabricCanvas.repositionOriginCrosshair(
+            wickEditor.project.resolution.x, 
+            wickEditor.project.resolution.y,
+            args.objectToEdit.left,
+            args.objectToEdit.top
+        );
 
         // Load wickobjects in the frame we moved to into the canvas
         wickEditor.syncFabricCanvasWithEditor();
 
         wickEditor.htmlGUIHandler.syncWithEditor();
 
-        wickEditor.fabricCanvas.repositionOriginCrosshair(
-            wickEditor.project.resolution.x, 
-            wickEditor.project.resolution.y,
-            wickEditor.currentObject.left,
-            wickEditor.currentObject.top
-        );
-
     }
 
     this.undoActions['editObject'] = function (args) {
 
-        wickEditor.fabricCanvas.deselectAll();
+        VerboseLog.error("editobject undo NYI")
+
+        /*wickEditor.fabricCanvas.deselectAll();
 
         // Store changes made to current frame in the project
         wickEditor.syncEditorWithFabricCanvas();
@@ -264,7 +266,38 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.resolution.y,
             wickEditor.currentObject.left,
             wickEditor.currentObject.top
+        );*/
+
+    }
+
+    this.doActions['finishEditingCurrentObject'] = function (args) {
+
+        wickEditor.fabricCanvas.deselectAll();
+
+        // Store changes made to current frame in the project
+        wickEditor.syncEditorWithFabricCanvas();
+
+        // Set the editor to be editing this object at its first frame
+        args.prevEditedObject = wickEditor.currentObject;
+        wickEditor.currentObject = wickEditor.currentObject.parentObject;
+
+        wickEditor.fabricCanvas.repositionOriginCrosshair(
+            wickEditor.project.resolution.x, 
+            wickEditor.project.resolution.y,
+            wickEditor.currentObject.left,
+            wickEditor.currentObject.top
         );
+
+        // Load wickobjects in the frame we moved to into the canvas
+        wickEditor.syncFabricCanvasWithEditor();
+
+        wickEditor.htmlGUIHandler.syncWithEditor();
+
+    }
+
+    this.undoActions['finishEditingCurrentObject'] = function (args) {
+
+        VerboseLog.error("finishEditingCurrentObject undo NYI")
 
     }
 
