@@ -878,11 +878,13 @@ var WickPlayer = (function () {
             if(!wickObj.isRoot) {
                 wickObj.pixiContainer.pivot.x = wickObj.width/2;
                 wickObj.pixiContainer.pivot.y = wickObj.height/2;
-                wickObj.pixiContainer.position.x        = wickObj.x + wickObj.width/2;
-                wickObj.pixiContainer.position.y        = wickObj.y + wickObj.height/2;
+                wickObj.pixiContainer.position.x        = wickObj.x + wickObj.width /2*wickObj.scaleX;
+                wickObj.pixiContainer.position.y        = wickObj.y + wickObj.height/2*wickObj.scaleY;
                 wickObj.pixiContainer.rotation = wickObj.angle/360*2*3.14159;
                 wickObj.pixiContainer.scale.x  = wickObj.scaleX;
                 wickObj.pixiContainer.scale.y  = wickObj.scaleY;
+                if(wickObj.flipX) wickObj.pixiContainer.scale.x *= -1;
+                if(wickObj.flipY) wickObj.pixiContainer.scale.y *= -1;
                 wickObj.pixiContainer.alpha    = wickObj.opacity;
             }
             WickObjectUtils.forEachActiveChildObject(wickObj, function(subObj) {
@@ -892,20 +894,24 @@ var WickPlayer = (function () {
             if(wickObj.pixiSprite) {
                 wickObj.pixiSprite.visible = true;
                 wickObj.pixiSprite.anchor = new PIXI.Point(0.5, 0.5);
-                wickObj.pixiSprite.x        = wickObj.x + wickObj.width/2;
-                wickObj.pixiSprite.y        = wickObj.y + wickObj.height/2;
+                wickObj.pixiSprite.x        = wickObj.x + wickObj.width /2*wickObj.scaleX;
+                wickObj.pixiSprite.y        = wickObj.y + wickObj.height/2*wickObj.scaleY;
                 wickObj.pixiSprite.rotation = wickObj.angle/360*2*3.14159;
                 wickObj.pixiSprite.scale.x  = wickObj.scaleX;
                 wickObj.pixiSprite.scale.y  = wickObj.scaleY;
+                if(wickObj.flipX) wickObj.pixiSprite.scale.x *= -1;
+                if(wickObj.flipY) wickObj.pixiSprite.scale.y *= -1;
                 wickObj.pixiSprite.alpha    = wickObj.opacity;
             } else if(wickObj.pixiText) {
                 wickObj.pixiText.visible = true;
-                wickObj.pixiText.anchor = new PIXI.Point(0.5, 0.5);
+                //wickObj.pixiText.anchor = new PIXI.Point(0.5, 0.5);
                 wickObj.pixiText.x        = wickObj.x;
                 wickObj.pixiText.y        = wickObj.y;
                 wickObj.pixiText.rotation = wickObj.angle/360*2*3.14159;
                 wickObj.pixiText.scale.x  = wickObj.scaleX;
                 wickObj.pixiText.scale.y  = wickObj.scaleY;
+                if(wickObj.flipX) wickObj.pixiText.scale.x *= -1;
+                if(wickObj.flipY) wickObj.pixiText.scale.y *= -1;
                 wickObj.pixiText.alpha    = wickObj.opacity;
             }
         }

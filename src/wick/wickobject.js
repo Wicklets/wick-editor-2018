@@ -360,47 +360,27 @@ WickObject.prototype.getSymbolTrueOffset = function () {
 
     WickObjectUtils.forEachFirstFrameChildObject(this, function (currObj) {
         if(leftmostLeft === null || currObj.left < leftmostLeft) {
-            console.log(currObj.left)
             leftmostLeft = currObj.left;
         }
 
         if(leftmostLeft === null || currObj.top < topmostTop) {
-            console.log(currObj.top)
             topmostTop = currObj.top;
         }
     });
 
-    console.log('left ' + leftmostLeft);
-    console.log('top ' + topmostTop);
-
     return {left:leftmostLeft, top:topmostTop};
 
-    // Only set left/top if there were actually children in the symbol
-    /*if(leftmostLeft && topmostTop) {
-        this.left -= leftmostLeft;
-        this.top -= topmostTop;
-    }*/
-
-}
-
-/* */
-var encodeString = function (str) {
-    var newStr = str;
-    newStr = encodeURI(str);
-    newStr = newStr.replace(/'/g, "%27");
-    return newStr;
-}
-
-/* */
-var decodeString = function (str) {
-    var newStr = str;
-    newStr = newStr.replace(/%27/g, "'");
-    newStr = decodeURI(str);
-    return newStr;
 }
 
 /* Encodes scripts to avoid JSON format problems */
 WickObject.prototype.encodeStrings = function () {
+
+    var encodeString = function (str) {
+        var newStr = str;
+        newStr = encodeURI(str);
+        newStr = newStr.replace(/'/g, "%27");
+        return newStr;
+    }
 
     if(this.wickScripts) {
         for (var key in this.wickScripts) {
@@ -422,6 +402,13 @@ WickObject.prototype.encodeStrings = function () {
 
 /* Decodes scripts back to human-readble and eval()-able format */
 WickObject.prototype.decodeStrings = function () {
+    
+    var decodeString = function (str) {
+        var newStr = str;
+        newStr = newStr.replace(/%27/g, "'");
+        newStr = decodeURI(str);
+        return newStr;
+    }
     
     if(this.wickScripts) {
         for (var key in this.wickScripts) {

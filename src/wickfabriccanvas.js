@@ -360,6 +360,8 @@ FabricCanvas.prototype.makeFabricObjectFromWickObject = function (wickObject, ca
             group.wickObject = wickObject;
             group.scaleX = group.wickObject.scaleX;
             group.scaleY = group.wickObject.scaleY;
+            group.flipX = group.wickObject.flipX;
+            group.flipY = group.wickObject.flipY;
             group.angle = group.wickObject.angle;
 
             group.isGroup = true;
