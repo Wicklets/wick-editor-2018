@@ -437,9 +437,9 @@ var WickHTMLGUIHandler = function (wickEditor) {
                 if(id === "edit_scripts") {
                     wickEditor.htmlGUIHandler.openScriptingGUI(wickEditor.fabricCanvas.getActiveObject());
                 } else if (id == "bring_to_front") {
-                    VerboseLog("NYI");
+                    VerboseLog.error("NYI");
                 } else if (id == "send_to_back") {
-                    VerboseLog("NYI");
+                    VerboseLog.error("NYI");
                 } else if (id == "delete") {
                     wickEditor.actionHandler.doAction('delete', {
                         obj:   wickEditor.fabricCanvas.getCanvas().getActiveObject(),
@@ -458,7 +458,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
                 } else if (id == "finish_editing_object") {
                     wickEditor.actionHandler.doAction('finishEditingCurrentObject', {});
                 } else if (id == "create_movie_clip") {
-                    VerboseLog("NYI");
+                    VerboseLog.error("NYI");
                 }
             }
         },
