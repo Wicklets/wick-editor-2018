@@ -211,3 +211,9 @@ input[type=file] {
     user-select: text;
     /* Because for user-select:none, Safari won't allow input */
 }
+
+.webix_float_element {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}

@@ -17,7 +17,32 @@ var WickHTMLGUIHandler = function (wickEditor) {
       Menu Bar
 ********************/
 
-    document.getElementById('newProjectButton').onclick = function (e) {
+    webix.ui({
+        container:"editor",
+        view:"menu",
+        css:"webix_float_element",
+        data:[
+            { id:"1",value:"Translate...", submenu:[
+                "English", 
+                { value:"Slavic...", submenu:[
+                    "Belarusian", "Russian", "Ukrainian"
+                ]},
+                "German"
+            ]},
+            { id:"2",value:"Post...", submenu:[ "Facebook", "Google+", "Twitter" ]},
+            { id:"3",value:"Info" }
+        ],
+        on:{
+            onMenuItemClick:function(id){
+                webix.message("Click: "+this.getMenuItem(id).value);
+            }
+        },
+        type:{
+            subsign:true
+        }
+    }); 
+
+    /*document.getElementById('newProjectButton').onclick = function (e) {
         wickEditor.newProject();
     }
 
@@ -51,7 +76,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
 
         var importButton = $("importButton");
         importButton.replaceWith( importButton = importButton.clone( true ) );
-    }
+    }*/
 
 /********************
        Toolbar
