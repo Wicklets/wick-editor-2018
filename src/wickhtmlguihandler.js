@@ -417,49 +417,53 @@ var WickHTMLGUIHandler = function (wickEditor) {
     Context menu
 ************************/
 
+    var contextMenuItems = [
+        { value:"Edit Scripts", id:"edit_scripts" },
+        { value:"Bring to Front", id:"bring_to_front" },
+        { value:"Send to Back", id:"send_to_back" },
+        { value:"Delete", id:"delete" },
+        { value:"Edit Object", id:"edit_object" },
+        { value:"Convert to Symbol", id:"convert_to_symbol" },
+        { value:"Finish Editing Object", id:"finish_editing_object" },
+        { value:"Create MovieClip", id:"create_movie_clip" }
+    ]
+
+    var doContextMenuAction = function (id) {
+        if(id === "edit_scripts") {
+            wickEditor.htmlGUIHandler.openScriptingGUI(wickEditor.fabricCanvas.getActiveObject());
+        } else if (id == "bring_to_front") {
+            VerboseLog.error("NYI");
+        } else if (id == "send_to_back") {
+            VerboseLog.error("NYI");
+        } else if (id == "delete") {
+            wickEditor.actionHandler.doAction('delete', {
+                obj:   wickEditor.fabricCanvas.getCanvas().getActiveObject(),
+                group: wickEditor.fabricCanvas.getCanvas().getActiveGroup()
+            });
+        } else if (id == "edit_object") {
+            var objectToEdit = wickEditor.fabricCanvas.getActiveObject();
+            wickEditor.actionHandler.doAction('editObject', {objectToEdit:objectToEdit});
+        } else if (id == "convert_to_symbol") {
+            wickEditor.htmlGUIHandler.closeRightClickMenu();
+
+            var fabCanvas = wickEditor.fabricCanvas.getCanvas();
+            wickEditor.actionHandler.doAction('convertSelectionToSymbol', 
+                {selection:fabCanvas.getActiveObject() || fabCanvas.getActiveGroup()}
+            );
+        } else if (id == "finish_editing_object") {
+            wickEditor.actionHandler.doAction('finishEditingCurrentObject', {});
+        } else if (id == "create_movie_clip") {
+            VerboseLog.error("NYI");
+        }
+    }
+
     webix.ui({
         view:"contextmenu",
         id:"context_menu",
-        data:[
-            { value:"Edit Scripts", id:"edit_scripts" },
-            { value:"Bring to Front", id:"bring_to_front" },
-            { value:"Send to Back", id:"send_to_back" },
-            { value:"Delete", id:"delete" },
-            { value:"Edit Object", id:"edit_object" },
-            { value:"Convert to Symbol", id:"convert_to_symbol" },
-            { value:"Finish Editing Object", id:"finish_editing_object" },
-            { value:"Create MovieClip", id:"create_movie_clip" }
-        ],
+        data:contextMenuItems,
         on:{
             onItemClick:function(id){
-                //var menu = this.getMenu(id);
-                //webix.message(menu.getItem(id).value);
-                if(id === "edit_scripts") {
-                    wickEditor.htmlGUIHandler.openScriptingGUI(wickEditor.fabricCanvas.getActiveObject());
-                } else if (id == "bring_to_front") {
-                    VerboseLog.error("NYI");
-                } else if (id == "send_to_back") {
-                    VerboseLog.error("NYI");
-                } else if (id == "delete") {
-                    wickEditor.actionHandler.doAction('delete', {
-                        obj:   wickEditor.fabricCanvas.getCanvas().getActiveObject(),
-                        group: wickEditor.fabricCanvas.getCanvas().getActiveGroup()
-                    });
-                } else if (id == "edit_object") {
-                    var objectToEdit = wickEditor.fabricCanvas.getActiveObject();
-                    wickEditor.actionHandler.doAction('editObject', {objectToEdit:objectToEdit});
-                } else if (id == "convert_to_symbol") {
-                    wickEditor.htmlGUIHandler.closeRightClickMenu();
-
-                    var fabCanvas = wickEditor.fabricCanvas.getCanvas();
-                    wickEditor.actionHandler.doAction('convertSelectionToSymbol', 
-                        {selection:fabCanvas.getActiveObject() || fabCanvas.getActiveGroup()}
-                    );
-                } else if (id == "finish_editing_object") {
-                    wickEditor.actionHandler.doAction('finishEditingCurrentObject', {});
-                } else if (id == "create_movie_clip") {
-                    VerboseLog.error("NYI");
-                }
+                doContextMenuAction(id);
             }
         },
         master:"editor"
@@ -471,14 +475,9 @@ var WickHTMLGUIHandler = function (wickEditor) {
         var selectedObject = fabCanvas.getActiveObject() || fabCanvas.getActiveGroup();
 
         // Hide all items
-        contextMenu.hideItem("edit_scripts");
-        contextMenu.hideItem("bring_to_front");
-        contextMenu.hideItem("send_to_back");
-        contextMenu.hideItem("delete");
-        contextMenu.hideItem("edit_object");
-        contextMenu.hideItem("convert_to_symbol");
-        contextMenu.hideItem("finish_editing_object");
-        contextMenu.hideItem("create_movie_clip");
+        for(var i = 0; i < contextMenuItems.length; i++) {
+            contextMenu.hideItem(contextMenuItems[i].id);
+        }
 
         // Selectively show items depending on editor state
         if(!wickEditor.currentObject.isRoot) {
