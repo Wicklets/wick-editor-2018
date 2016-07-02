@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Autosizing custom rows</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Autosizing custom rows</div>
+		<div class='sample_comment'>The sample shows how you can set different heights for rows and resize the parent container to display all of them without horizontal and vertical scrolling.</div>
+		<div id="testA"></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	width:40,	header:"", css:"rank"},
+					{ id:"title",	width:80,	header:"Film title" },
+					{ id:"year",	width:160,	header:"Released"   },
+					{ id:"votes",	width:320,	header:"Votes"  	}
+				],
+				fixedRowHeight:false, autowidth:true, autoheight:true,
+				data:[
+					{ $height:20, id:1, title:"The Shawshank Redemption", year:1994, votes:678790, rating:9.2, rank:1},
+					{ $height:40, id:2, title:"The Godfather", year:1972, votes:511495, rating:9.2, rank:2},
+					{ $height:60, id:3, title:"The Godfather: Part II", year:1974, votes:319352, rating:9.0, rank:3},
+					{ $height:80, id:4, title:"The Good, the Bad and the Ugly", year:1966, votes:213030, rating:8.9, rank:4},
+					{ $height:100, id:5, title:"Pulp fiction", year:1994, votes:533848, rating:8.9, rank:5},
+					{ $height:120, id:6, title:"12 Angry Men", year:1957, votes:164558, rating:8.9, rank:6}
+				]
+			});
+		});
+		</script>
+	</body>
+</html>

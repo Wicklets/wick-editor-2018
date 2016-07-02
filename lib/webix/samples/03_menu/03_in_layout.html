@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA, #areaB{
+				margin: 50px;
+				width:700px; height:100px;
+			}
+		</style>
+		<title>Menu in Layout</title>
+	</head>
+	<body>
+<script type="text/javascript" charset="utf-8">
+	var  menu = {
+			view:"menu",
+			data:[
+				{ id:"1",value:"Translate...", submenu:[
+					"English", 
+					{ value:"Slavic...", submenu:[
+						"Belarusian", "Russian", "Ukrainian"
+					]},
+					"German"
+				]},
+				{ id:"2",value:"Post...", submenu:[ "Facebook", "Google+", "Twitter" ]},
+				{ id:"3",value:"Info" }
+			]
+		};
+
+	webix.ui({
+		type:"space", rows:[
+			{ type:"line", rows:[
+				webix.copy(menu),
+				{ view:"template" }
+			]},
+			{ type:"wide", rows:[
+				webix.copy(menu),
+				{ view:"template" }
+			]},
+			{ type:"space", rows:[
+				webix.copy(menu),
+				{ view:"template" }
+			]},
+			{ type:"clean", rows:[
+				webix.copy(menu),
+				{ view:"template" }
+			]}
+		]
+	})
+</script>
+	</body>
+</html>

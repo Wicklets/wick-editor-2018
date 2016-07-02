@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+		<title>Window with a Component Inside</title>
+	</head>
+<body>
+<script>
+
+webix.ui({
+	view:"window", move:true,
+    head:"DataTable", left:100, top:100,
+	body:{
+		view:"datatable",
+		columns:[
+			{ id:"rank",	header:"", css:"rank",  		width:50,	sort:"int"},
+			{ id:"title",	header:"Film title",width:200,	sort:"string"},
+			{ id:"year",	header:"Released" , width:80,	sort:"int"},
+			{ id:"votes",	header:"Votes", 	width:100,	sort:"int"}
+		],
+		select:"row",
+		autoheight:true,
+		autowidth:true,
+		data:small_film_set
+	}
+}).show();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Adding overlay text</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Adding overlay text</div>
+		<div class='sample_comment'>If a grid doesn't contain any data, it starts to display the overlay text. </div>
+		</br>
+		<div class='sample_comment'>Empty grid. </div>
+		<div id="testA"></div>
+		<hr>
+		<div class='sample_comment'>Grid with some data. </div>
+		<div id="testB"></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+
+				autoheight:true,
+				minHeight:50,
+				autowidth:true,
+
+				on:{
+					onAfterLoad:function(){
+						if (!this.count())
+							this.showOverlay("Sorry, there is no data");
+					}
+				},
+
+				url:"data/empty.json"
+			});	
+
+			grida = webix.ui({
+				container:"testB",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+
+				autoheight:true,
+				minHeight:50,
+				autowidth:true,
+
+				on:{
+					onAfterLoad:function(){
+						if (!this.count())
+							this.showOverlay("Sorry, there is no data");
+					}
+				},
+
+				url:"data/data.json"
+			});				
+
+		});
+		</script>
+	</body>
+</html>

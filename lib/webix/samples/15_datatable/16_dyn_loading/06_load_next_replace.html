@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Dynamic loading with removing the existing content</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Dynamic loading with removing the existing content</div>
+		<div class='sample_comment'>The sample shows how to dynamically load different record sets. Note, before new records are getting loaded, all existing records are deleted. </div>
+		<div class='sample_comment'>Click on some of the buttons below to invoke loading of the appropriate dataset.</div>
+		<div id="testA"></div>
+		<hr>
+		<input type='button' value='<< prev 10' onclick='loadPrev()' class='sample_button'>
+		<input type='button' value='next 10 >>' onclick='loadNext()' class='sample_button'>
+		
+		<script type="text/javascript" charset="utf-8">
+		var base = 0;
+
+		function loadNext(){
+			base += 10;
+			grida.loadNext(10, base);
+		}
+		function loadPrev(){
+			if (base<=0) return;
+			base -= 10;
+			grida.loadNext(10, base);
+		}
+
+        var grida = webix.ui({
+            container:"testA",
+            view:"datatable",
+            columns:[
+                { id:"id", header:"", css:{"text-align":"center"}, width:50 },
+                { id:"package",	header:"Name", 			width:200 },
+                { id:"section",	header:"Section",		width:120 },
+                { id:"size",	header:"Size" , 		width:80  },
+                { id:"architecture",	header:"PC", 	width:60  }
+            ],
+            on:{
+                //clear self before data loading
+                "data->onParse":function(){
+                    this.clearAll();
+                    this.data.url = "data/data.php";
+                }
+            },
+            yCount:10,
+            autowidth:true
+        });
+        grida.loadNext(10,0,null,"data/data_dyn.php");
+		</script>
+	</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../common/testdata.js"></script>
+		<style>
+			#areaA, #areaB {
+				margin: 50px 10px;
+				width:320px;
+				height:400px;
+				float: left;
+			}
+            
+		</style>
+		<title>Multiview: Basic Initialization</title>
+	</head>
+	<body>
+		<div id="areaA"></div>
+		<div id="areaB">
+		    <div style="padding:10px">
+                <input type="number" name="rank" /><br/>
+                <input type="text" name="title" value="" placeholder="Book title" /><br/>
+                <input type="text" name="year" value="" placeholder="Year" /><br/><br/>
+                <input type="button" name="submit" value="Submit" onclick='$$("formView").save()'/>
+
+		    </div>
+		</div>
+
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+			    container: "areaA",
+			    padding:8,
+                rows:[
+                    {
+                        rows:[
+                            {
+                               view:"segmented", id:'tabbar', value: 'listView', multiview:true, optionWidth:80,  align:"center", padding: 5, options: [
+                                    { value: 'List', id: 'listView'},
+                                    { value: 'Form', id: 'formView'},
+                                    { value: 'About', id: 'aboutView'}
+                                ]
+                            },
+                            {height: 5},
+                            {   id:"mymulti",
+                                cells:[
+                                    {
+                                        id:"listView",
+                                        view:"list",
+                                        template:"#rank#. #title# <div style='padding-left:18px'> Year:#year#, votes:#votes# </div>",
+                                        type:{
+                                            height:60
+                                        },
+                                        select:true,
+                                        data:big_film_set
+                                    },
+                                    {
+                                        id:"formView",
+                                        view:"htmlform",
+                                        content: "areaB",
+                                        rules:{
+                                            title: webix.rules.isNotEmpty,
+                                            year: webix.rules.isNumber,
+                                            rank: webix.rules.isNumber
+                                           }
+                                    },
+                                    {id:"aboutView", template:"<i>Select an item in List to edit it in Form</i>",padding:5}
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            });
+            $$('formView').bind($$('listView'));
+
+
+		</script>
+	</body>
+</html>

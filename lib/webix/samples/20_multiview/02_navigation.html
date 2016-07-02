@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+    <script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="../common/testdata.js"></script>
+    <style>
+        #areaA, #areaB {
+            margin: 50px 10px;
+            width:320px;
+            height:400px;
+            float: left;
+        }
+
+    </style>
+    <title>'Show/Back' Navigation</title>
+</head>
+<body>
+
+<div id="areaA"></div>
+
+
+<script type="text/javascript" charset="utf-8">
+    webix.ui({
+        container: "areaA",
+        padding:8,
+        id:"views",
+        cells:[
+            {
+                id:"listView",
+                view:"list",
+                template:"#rank#. #title# <div style='padding-left:18px'> Year:#year#, votes:#votes# </div>",
+                type:{
+                    height:60
+                },
+                select:true,
+                data:big_film_set
+            },
+            {
+                id:"formView",
+                view:"form",
+                scroll:false,
+                elements:[
+                    { view:"text", label:"Rank",  name:"rank", labelWidth: 70},
+                    { view:"text", label: "Title", name:"title" ,  placeholder:"Book title", labelWidth: 70},
+                    { view:"text", label: "Year",  name:"year",  placeholder:"Year", labelWidth: 70},
+                    { margin:5, cols:[
+                        { view:"button", value:"Cancel" , click:"cancel()" },
+                        { view:"button", value:"Save", type:"form", click:"save()" }
+                    ]},
+	                {}
+                ]
+            },
+            {id:"aboutView", template:"<i>Select an item in List to edit it in Form</i>",padding:5}
+        ]
+
+
+    });
+
+    /*
+     binds Form with List:
+     - selected item loaded in Form,
+     - updating data after form saving
+    */
+    $$('formView').bind($$('listView'));
+
+    /*
+        opening form on item selection
+    */
+    $$("listView").attachEvent("onItemClick",function(id){
+        $$('formView').show();
+    });
+
+    /*
+        data saving and opening previous view
+     */
+    function save(){
+        $$("formView").save();
+        $$("views").back();
+    }
+    /*
+        cancel editing
+    */
+    function cancel(){
+        $$("views").back();
+    }
+</script>
+</body>
+</html>

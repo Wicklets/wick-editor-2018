@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+	<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	<style>
+		#areaA{
+			margin: 30px;
+		}
+	</style>
+	<title>Input Description at the Bottom</title>
+</head>
+<body>
+
+<div id="areaA"></div>
+
+
+<script type="text/javascript" charset="utf-8">
+	webix.ui({
+		container:"areaA",
+		view:"form", scroll:false,
+		width:300,
+		elementsConfig: {
+			labelPosition: "top"
+		},
+		elements:[
+			{ view:"text", label:"Your name", placeholder: "(e.g. John Smith)"},
+			{ view:"text", label:"E-mail address", placeholder: "(e.g. john@some.com)"},
+			{ view:"text", type:"password", label:"Password", bottomPadding: 35, bottomLabel: "* The password must have at least 6 characters"},
+			{ view:"text", label:"Username", bottomLabel: "* spaces are allowed"},
+			{ view:"button", value:"Save", width:160, align:"center" }
+		]
+	});
+</script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<title>Complex Accordion</title>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				type:"wide", cols:[
+					{ width:30 },
+					{ type:"wide", rows: [
+						{ height: 30 },
+						{
+							multi:true,
+							view:"accordion", type:"wide",
+							rows:[
+								{ header:"col 1", body:"content 1", height:150},
+								{ body:"Content 2", height: 35},
+								{ 
+									collapsed:false, 
+									header:"col 3",
+									body:{
+										multi:true,
+										view:"accordion", type:"space",
+										cols:[
+											{ header:"col 1", body:"content 1", width:150},
+											{ body:"Content 2" },
+											{ 
+												collapsed:false, 
+												header:"col 3",
+												body:"content 3",
+												width:150
+											},
+											{ body:"Content 4" },
+											{ header:"col 5", body:"content 5", width:150}
+										]
+									},
+									height:150
+								},
+								{ body:"Content 4", height: 35 },
+								{ header:"col 5", body:"content 5", height:150}
+							]
+						},
+						{ height: 30},
+						{
+							multi:false,
+							view:"accordion", type:"wide",
+							cols:[
+								{ header:"col 1", body:"content 1", width:150 },
+								{ body:"Content 2"},
+								{ 
+									header:"col 3",
+									body:"content 3",
+									width:150
+								},
+								{ body:"Content 4" },
+								{ header:"col 5", body:"content 5", width:150}
+							]
+						},
+						{ height: 30 }
+					]},
+					{ width:30 }
+				]
+			});
+		</script>
+	</body>
+</html>

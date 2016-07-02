@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Custom Sorting</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+	</head>
+	<body>
+		<div class='header_comment'>Sorting. Using custom sorting functions</div>
+
+            <div id="testA" style='width:250px; height:250px;' ></div>
+
+            <hr>
+            <div style="margin-left: 20px">
+                <input type='button' value='Sort makes ASC' onclick='tree.sort(sortMakesAsc)'>
+                <input type='button' value='Sort makes DESC' onclick='tree.sort(sortMakesDesc)'>
+            </div>
+
+
+
+
+		<script src="../common/treedata.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			tree = webix.ui({
+				container:"testA",
+				view:"tree",
+				select:true,				
+				data: carsdata
+			});
+		});
+		function sortMakesAsc(a,b){
+        			if (a.$level == 2)
+        			{
+           				a = a.value;
+           				b = b.value;
+            				return a>b?1:(a<b?-1:0);
+        			}
+        			else{
+            				return 0;
+        			}
+			}
+		function sortMakesDesc(a,b){
+        			if (a.$level == 2)
+        			{
+           				a = a.value;
+           				b = b.value;
+            				return a>b?-1:(a<b?1:0);
+        			}
+        			else{
+            				return 0;
+        			}
+		}	
+
+		</script>
+
+
+	</body>
+</html>

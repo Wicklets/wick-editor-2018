@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA, #areaB{
+				margin: 30px;
+			}
+		</style>
+		<title>'onChange' Event</title>
+	</head>
+	<body>
+
+		<form>
+			<div id="areaA"></div>
+			<div id="areaB"></div>
+		</form>
+	
+
+		<script type="text/javascript" charset="utf-8">
+		var form1 = [
+			{ view:"text", label:'Login', name:"login", width:150, labelAlign:"right" },
+			{ view:"text", label:'Email', name:"email", width:200, labelAlign:"right" },
+			{ view:"button", value: "Submit", click:function(){
+				if (this.getParentView().validate())
+					webix.message("All is correct");
+				else
+					webix.message({ type:"error", text:"Form data is invalid" });
+			}}
+		];
+
+
+		webix.ui({
+			container:"areaA",
+			view:"form", id:"form1", scroll:false, width:300, 
+			elements: form1,
+			rules:{
+				"email":webix.rules.isEmail,
+				"login":webix.rules.isNotEmpty
+			}
+		});	
+
+		$$("form1").elements["login"].attachEvent("onChange", function(newv, oldv){
+			webix.message("Value changed from: "+oldv+" to: "+newv);
+		});
+
+		$$("form1").elements["email"].attachEvent("onChange", function(newv, oldv){
+			webix.message("Value changed from: "+oldv+" to: "+newv);
+		});
+		</script>
+	</body>
+</html>

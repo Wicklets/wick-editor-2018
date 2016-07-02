@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8" />
+	<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	<title>XML init : empty namespace</title>
+</head>
+<body>
+
+<div style='width:600px; height:250px;'>
+<ui>
+	<form id="log_form" width="300">
+		<text label="Email"></text>
+		<text label="Password"></text>
+		<cols margin="5">
+			<button value="Login" type="form"></button>
+			<button value="Cancel"></button>
+		</cols>
+	</form>
+</ui>
+</div>
+
+
+<script type="text/javascript">
+	webix.markup.namespace = "";
+	webix.markup.init();
+</script>
+</body>
+</html>

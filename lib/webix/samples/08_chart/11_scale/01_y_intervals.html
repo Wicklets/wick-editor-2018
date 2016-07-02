@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+	<title>Bar Chart: Custom Axes</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+	<script src="../../common/chartdata.js"></script>
+<body>
+    <div id="charts" style="width:800px;height:250px;margin:20px"></div>
+	<script>
+        webix.ui({
+            container:"charts",
+            rows:[
+                {
+                    cols:[
+                        {
+                            template: "<div style='padding-left:5px'>Default Y-Axis</div>",
+                            height:35
+                        },
+                        {
+                            template:"<div style='padding-left:5px'>Y-Axis with custom start, end and step</div>",
+                            height:35
+                        }
+                    ]
+                },
+                {
+                    cols:[
+                        {
+                            view:"chart",
+                            type:"bar",
+                            value:"#sales#",
+                            color:"#color#",
+                            barWidth:30,
+                            radius:0,
+                            tooltip:{
+                                template:"#sales#"
+                            },
+                            xAxis:{
+                                template:"'#year#",
+                                title:"Year"
+                            },
+                            yAxis:{
+                                title:"Profit"
+                            },
+                            data: dataset_colors
+                        },
+                        {
+                            view:"chart",
+                            type:"bar",
+                            value:"#sales#",
+                            color:"#color#",
+                            barWidth:30,
+                            radius:0,
+                            tooltip:{
+                                template:"#sales#"
+                            },
+                            xAxis:{
+                                template:"'#year#",
+                                title:"Year"
+                            },
+                            yAxis:{
+                                start:0,
+                                end:100,
+                                step:10,
+                                title:"Profit"
+                            },
+                            data: dataset_colors
+                        }
+                    ]
+                }
+            ]
+        });
+	</script>
+</body>
+</html>

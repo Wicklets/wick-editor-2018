@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Not-visible pager</title>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../15_datatable/common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Not-visible paging</div>
+		<div class='sample_comment'>Paging can be initialized without any visible UI.</div>
+		</br>
+		<div id="testA" style='height:100px; width:300px;'></div>
+		<div id="pagingA_here" class="paging"></div>
+		<hr>
+		<input type='button' value='get current page' onclick='get_page()'>
+		<br>
+		<input type='button' value='jump to start' onclick='first_page()'>
+		<input type='button' value='prev page' onclick='prev_page()'>
+		<input type='button' value='next page' onclick='next_page()'>
+		<input type='button' value='jump to end' onclick='last_page()'>
+		
+		<script type="text/javascript" charset="utf-8">
+
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"#", 		width:50,	sort:"int",	css:"rank"},
+					{ id:"title",	header:"Film title",width:200,	sort:"string"},
+					{ id:"year",	header:"Released" , width:80,	sort:"int"},
+					{ id:"votes",	header:"Votes", 	width:100,	sort:"int"}
+				],
+				autowidth:true,
+				pager:{
+					id:"pagerA",
+					apiOnly:true,
+					size:50,
+					group:5
+				},
+				data:big_film_set
+			});
+		});
+
+		function get_page(){
+			webix.message("Page "+ $$("pagerA").config.page);
+		}
+		function next_page(){
+			$$("pagerA").select("next");
+		}
+		function prev_page(){
+			$$("pagerA").select("prev");
+		}		
+		function first_page(){
+			$$("pagerA").select("first");
+		}
+		function last_page(){
+			$$("pagerA").select("last");
+		}
+
+		</script>
+	</body>
+</html>

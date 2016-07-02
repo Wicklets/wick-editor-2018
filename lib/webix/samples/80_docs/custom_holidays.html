@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+    <script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="../common/testdata.js"></script>
+
+    <title>Custom Holidays</title>
+</head>
+<body>
+<div id="listA" style="width:300px; height:500px; margin:20px;"></div>
+<script type="text/javascript" charset="utf-8">
+
+            webix.Date.isHoliday = function(day){ 
+                day = day.getDay();
+                if (day === 0 || day==5 || day == 6) return "webix_cal_event"; 
+            };
+
+            webix.ui({
+                container:"listA",
+                weekHeader:true,
+                date:new Date(2012,3,16),
+                view:"calendar",
+                events:webix.Date.isHoliday,
+                width:320,
+                height:250,
+            });
+</script>   
+</body>
+</html>

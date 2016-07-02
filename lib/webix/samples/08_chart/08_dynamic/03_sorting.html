@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+	<title>Chart: Sorting</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+	<script src="../../common/chartdata.js"></script>
+<body>
+    <div id="chartDiv" style="width:600px;height:250px;margin:20px"></div>
+    <div style='margin-left:20px'>
+        <input type="button" value="sort by sales, ASC" onclick="$$('chart').sort('#sales#','asc');">
+        <input type="button" value="sort by sales, DESC" onclick="$$('chart').sort('#sales#','desc');">
+        <input type="button" value="sort by year, ASC" onclick="$$('chart').sort('#year#','asc');">
+        <input type="button" value="sort by year, DESC" onclick="$$('chart').sort('#year#','desc');">
+    </div>
+	<script>
+        webix.ui({
+            id:"chart",
+            container:"chartDiv",
+            view:"chart",
+            type:"bar",
+            value:"#sales#",
+            label:"#sales#",
+            color:"#color#",
+            radius:0,
+            barWidth:40,
+            tooltip:{
+                template:"#sales#"
+            },
+            xAxis:{
+                title:"Sales per year",
+                template:"'#year#",
+                lines: false
+            },
+            padding:{
+                left:10,
+                right:10,
+                top:50
+            },
+            data: dataset_colors
+        });
+	</script>
+</body>
+</html>
+

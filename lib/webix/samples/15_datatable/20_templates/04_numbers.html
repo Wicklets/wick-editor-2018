@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Using number templates</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Using number templates</div>
+		<div id="testA"></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				scheme:{ $init:function(obj){ obj.votes = obj.votes/1.2547; } },
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"votes", width:150, sort:"int", header:"Raw" },
+					{ id:"votes", sort:"int", header:"Default", format:webix.i18n.numberFormat },
+
+					{ id:"votes",	sort:"int", header:"Custom 1",
+					format:webix.Number.numToStr({
+					    groupDelimiter:" ",
+    					groupSize:3,
+    					decimalDelimiter:",",
+    					decimalSize:2
+					})},
+
+					{ id:"votes", sort:"int", header:"Custom 2",
+					format:webix.Number.numToStr({
+					    groupDelimiter:" ",
+    					groupSize:4,
+    					decimalDelimiter:".",
+    					decimalSize:0
+					})},
+
+					{ id:"votes", sort:"int", header:"Custom 3",
+					format:webix.Number.numToStr({
+					    groupDelimiter:"",
+    					groupSize:0,
+    					decimalDelimiter:",",
+    					decimalSize:5	
+					})}
+
+				],
+				
+				autoheight:true,
+				autowidth:true,
+				data:small_film_set
+			});
+
+
+		});
+		</script>
+	</body>
+</html>

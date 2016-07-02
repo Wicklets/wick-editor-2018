@@ -1,0 +1,59 @@
+html, body{
+	overflow:hidden;
+}
+.rank .webix_cell, .rank.webix_hcell {
+	text-align:center;
+}
+.dummy_button{
+	margin-bottom:4px;
+	width:100%;
+}
+.sample_button{
+	width:250px;
+	display:block;
+	margin-left:20px;
+	margin-top:5px;
+}
+
+.padding_less .webix_cell{
+	padding:0px;
+	text-align:center;
+}
+.padding_less input{
+	height:20px;
+	width:80px;
+}
+.sample_comment{
+	font-family:Tahoma;
+	font-size:12px;
+	margin:10px;
+}
+.header_comment{
+	font-family:Tahoma;
+	font-weight:bold;
+	font-size:12px;
+	margin:10px 10px 20px 10px;
+}
+.right_area.webix_column>div:nth-child(even){
+	background-color:#ffffdd;
+}
+.right_area.webix_column>div:nth-child(odd){
+	background-color:#ffffee;
+}
+.left_area.webix_column>div:nth-child(even){
+	background-color:#ffffdd;
+}
+.left_area.webix_column>div:nth-child(odd){
+	background-color:#ffffee;
+}
+
+.log_record{
+	font-family:Tahoma;
+	font-size:12px;
+	margin:10px;	
+}
+
+#testA, #testB, #testC, #testD, #paging_here, #paging_here_too{
+	margin-left:20px;
+	margin-top:10px;
+}

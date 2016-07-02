@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA{
+				margin: 30px;
+			}
+		</style>
+		<title>Attributes</title>
+	</head>
+	<body>
+
+		<div id="areaA"></div>
+	
+
+		<script type="text/javascript" charset="utf-8">
+		var form1 = [
+			{ template:"Default", type:"header" },
+			{ view:"label", label:'Fill the form below to access <br>the main datacore.', height:30, align:"center" },
+			{ view:"text", value:'dummy@email.com', label:"Email"},
+			{ view:"text", type:'password', value:'123pass', label:"Password"},
+			{ view:"select", label:"Version", options:["1.0", "1.5", "2.0"] },
+			{ view:"button", label:"Continue", inputWidth:200, align:"center" }
+		];
+
+		var form2 = webix.copy(form1);
+		for (var i=0; i<form2.length; i++) form2[i].readonly = true;
+		form2[0].template = "Readonly"
+
+		var form3 = webix.copy(form1);
+		for (var i=0; i<form3.length; i++) form3[i].disabled = true;
+		form3[0].template = "Disabled"
+
+		webix.ui({
+			container:"areaA",
+			margin:30, cols:[
+				{ view:"form", elements:form1, scroll:false },
+				{ view:"form", elements:form2, scroll:false },
+				{ view:"form", elements:form3, scroll:false }
+			]
+		});
+		</script>
+	</body>
+</html>

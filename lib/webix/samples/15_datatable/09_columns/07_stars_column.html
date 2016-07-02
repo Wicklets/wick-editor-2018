@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Rating column</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			.rating_bar_element{
+				background-image: url(stars.gif);
+				width:80px;
+				height:16px;
+				margin-top:7px;
+				position:relative;
+			}
+			.rating_bar_element.star1 { background-position: 0 -16px; }
+			.rating_bar_element.star2 { background-position: 0 -32px; }
+			.rating_bar_element.star3 { background-position: 0 -48px; }
+			.rating_bar_element.star4 { background-position: 0 -64px; }
+			.rating_bar_element.star5 { background-position: 0 -80px; }
+
+			.rating_star:hover {
+				z-index:2; position: absolute;
+				width:80px;
+				height:16px;
+				overflow:hidden;
+				left:0px !important;
+				background-image: url(stars.gif);
+			}
+			.rating_star.star1:hover {background-position:0 -96px;}
+			.rating_star.star2:hover {background-position:0 -112px;}
+			.rating_star.star3:hover {background-position:0 -128px}
+			.rating_star.star4:hover {background-position:0 -144px}
+			.rating_star.star5:hover {background-position:0 -160px}
+
+			.rating_star{
+				z-index:3; position: absolute;
+				width:16px;
+				height:16px;
+				top:0px;
+				float:left;
+				cursor:pointer;
+			}
+		</style>
+	</head>
+	<body>
+		<div class='header_comment'>Static index column</div>
+		<div class='sample_comment'>Try to sort columns or drag rows</div>
+		<div id="testA"></div>
+		<hr>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"index", header:"", sort:"int", width:50},
+					{ id:"title",	header:"Film title", width:300,  sort:"string"},
+					{ id:"year",	header:"Year", sort:"int"},
+					{ id:"rating",	header:"Rating", sort:"int", width:100,
+						template:function(obj){
+							var html = "<div class='rating_bar_element star"+obj.rating+"'>";
+
+							for (var i=1; i<6; i++)
+								html+="<div title='"+i+"' class='rating_star star"+i+"' style='left:"+(i*16 - 16)+"px'></div>";
+
+							return html+"</div>";
+						}
+					}
+				],
+				onClick:{
+					rating_star:function(ev, id, html){
+						var value = (ev.target||ev.srcElement).getAttribute("title");
+						this.getItem(id.row)[id.column] = value;
+						this.updateItem(id.row);
+					}
+				},
+				scheme:{
+					$init:function(obj){ obj.index = this.count(); }
+				},
+				autoheight:true,
+				autowidth:true,
+
+				data:[
+	{ id:1, title:"The Shawshank Redemption", year:1994, rating:5, rank:1 },
+	{ id:2, title:"The Godfather", year:1972, rating:5, rank:2 },
+	{ id:3, title:"The Godfather: Part II", year:1974, rating:4, rank:3 },
+	{ id:4, title:"The Good, the Bad and the Ugly", year:1966, rating:2, rank:4 },
+	{ id:5, title:"Pulp fiction", year:1994, rating:0, rank:5 },
+	{ id:6, title:"12 Angry Men", year:1957, rating:1, rank:6 }
+				]
+			});
+		});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<title>Data Binding</title>
+	</head>
+	<body>
+		<div style="margin:20px">Select items from the list to edit them in the form. Pay attention to the changes in slave dataviews</div>
+		<div id='listA' style='width:1500; height:500px; margin:20px;'></div>
+		
+		<div id="areaB" style="width: 150px;, height: 50px; margin:40px;">
+			<input type="text" name="title" value="" placeholder="Film title" /><br/>
+			<input type="text" name="rank" value="" placeholder="Rank" /><br/>
+			<input type="text" name="year" value="" placeholder="Year" /><br/><br/>
+			<input type="button" value="Submit" onclick='$$("formView").save()'/>
+		</div>
+		<script type="text/javascript" charset="utf-8">
+		
+		var big_film_set = [{"id":1,"title":"The Shawshank Redemption","year":"1994","votes":"678,79","rating":"9,2","rank":"1"},{"id":2,"title":"The Godfather","year":"1972","votes":"511,495","rating":"9,2","rank":"2"},{"id":3,"title":"The Godfather: Part II","year":"1974","votes":"319,352","rating":"9","rank":"3"},{"id":4,"title":"The Good, the Bad and the Ugly","year":"1966","votes":"213,03","rating":"8,9","rank":"4"},{"id":5,"title":"My Fair Lady","year":"1964","votes":"533,848","rating":"8,9","rank":"5"},{"id":6,"title":"12 Angry Men","year":"1957","votes":"164,558","rating":"8,9","rank":"6"},{"id":7,"title":"Schindler's List","year":"1993","votes":"355,638","rating":"8,9","rank":"7"},{"id":8,"title":"One Flew Over the Cuckoo's Nest","year":"1975","votes":"283,176","rating":"8,8","rank":"8"},{"id":9,"title":"The Dark Knight","year":"2008","votes":"612,37","rating":"8,8","rank":"9"},{"id":10,"title":"The Lord of the Rings: The Return of the Kin","year":"2003","votes":"472,843","rating":"8,8","rank":"10"},{"id":11,"title":"Star Wars: Episode V - The Empire Strikes Bac","year":"1980","votes":"348,012","rating":"8,8","rank":"11"}, {"id":12,"title":"Inception","year":"2010","votes":"458,693","rating":"8,8","rank":"12"},{"id":13,"title":"Fight Club","year":"1999","votes":"507,723","rating":"8,8","rank":"13"},{"id":14,"title":"Seven Samurai","year":"1954","votes":"118,925","rating":"8,8","rank":"14"},{"id":15,"title":"Goodfellas","year":"1990","votes":"299,349","rating":"8,7","rank":"15"},{"id":16,"title":"The Lord of the Rings: The Fellowship of the Rin","year":"2001","votes":"494,003","rating":"8,7","rank":"16"},{"id":17,"title":"Star Wars","year":"1977","votes":"393,087","rating":"8,7","rank":"17"},{"id":18,"title":"City of God","year":"2002","votes":"222,818","rating":"8,7","rank":"18"},{"id":19,"title":"Casablanca","year":"1942","votes":"202,051","rating":"8,7","rank":"19"},{"id":20,"title":"Once Upon a Time in the West","year":"1968","votes":"97,931","rating":"8,7","rank":"20"},{"id":21,"title":"The Matrix","year":"1999","votes":"492,325","rating":"8,7","rank":"21"},{"id":22,"title":"Rear Window","year":"1954","votes":"148,162","rating":"8,7","rank":"22"},{"id":23,"title":"Raiders of the Lost Ark","year":"1981","votes":"300,252","rating":"8,7","rank":"23"},{"id":24,"title":"The Silence of the Lambs","year":"1991","votes":"324,419","rating":"8,7","rank":"24"},{"id":25,"title":"The Usual Suspects","year":"1995","votes":"331,99","rating":"8,7","rank":"25"},{"id":26,"title":"Psycho","year":"1960","votes":"182,319","rating":"8,6","rank":"26"},{"id":27,"title":"Se7en","year":"1995","votes":"380,479","rating":"8,6","rank":"27"},{"id":28,"title":"Forrest Gump","year":"1994","votes":"416,066","rating":"8,6","rank":"28"},{"id":29,"title":"The Lord of the Rings: The Two Towers","year":"2002","votes":"423,855","rating":"8,6","rank":"29"},{"id":30,"title":"It's a Wonderful Life","year":"1946","votes":"126,537","rating":"8,6","rank":"30"},{"id":31,"title":"Memento","year":"2000","votes":"358,354","rating":"8,6","rank":"31"},{"id":32,"title":"Leon: The Professional","year":"1994","votes":"274,245","rating":"8,6","rank":"32"},{"id":33,"title":"Sunset Blvd.","year":"1950","votes":"68,932","rating":"8,6","rank":"33"},{"id":34,"title":"Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb","year":"1964","votes":"185,368","rating":"8,6","rank":"34"},{"id":35,"title":"Apocalypse Now","year":"1979","votes":"214,205","rating":"8,6","rank":"35"},{"id":36,"title":"American History X","year":"1998","votes":"305,747","rating":"8,5","rank":"36"},{"id":37,"title":"North by Northwest","year":"1959","votes":"112,951","rating":"8,5","rank":"37"},{"id":38,"title":"Citizen Kane","year":"1941","votes":"163,906","rating":"8,5","rank":"38"},{"id":39,"title":"Terminator 2: Judgment Day","year":"1991","votes":"309,922","rating":"8,5","rank":"39"},{"id":40,"title":"Toy Story 3","year":"2010","votes":"173,833","rating":"8,5","rank":"40"},{"id":41,"title":"American Beauty","year":"1999","votes":"369,318","rating":"8,5","rank":"41"},{"id":42,"title":"Saving Private Ryan","year":"1998","votes":"349,866","rating":"8,5","rank":"42"},{"id":43,"title":"Taxi Driver","year":"1976","votes":"207,461","rating":"8,5","rank":"43"},{"id":44,"title":"Alien","year":"1979","votes":"227,723","rating":"8,5","rank":"44"},{"id":45,"title":"Spirited Away","year":"2001","votes":"142,366","rating":"8,5","rank":"45"},{"id":46,"title":"City Lights","year":"1931","votes":"38,898","rating":"8,5","rank":"46"},{"id":47,"title":"Vertigo","year":"1958","votes":"113,232","rating":"8,5","rank":"47"},{"id":48,"title":"The Shining","year":"1980","votes":"236,782","rating":"8,5","rank":"48"},{"id":49,"title":"Paths of Glory","year":"1957","votes":"56,418","rating":"8,5","rank":"49"},{"id":50,"title":"Am?lie","year":"2001","votes":"237,208","rating":"8,5","rank":"50"},{"id":51,"title":"The Pianist","year":"2002","votes":"181,523","rating":"8,5","rank":"51"},{"id":52,"title":"M","year":"1931","votes":"49,827","rating":"8,5","rank":"52"},{"id":53,"title":"WALLE","year":"2008","votes":"257,704","rating":"8,5","rank":"53"}];
+	
+	
+	webix.ui( {container:"listA", 
+		cols:[ {
+			rows:[
+			{type:"header", template:"Master List"},
+			{
+				//container:"listA",
+				id:"listA",
+				view:"list", 
+				type:{
+				width:"auto",
+				},
+				template:"#rank#. #title# - #year#",
+				select:true,
+				data:big_film_set
+			}
+			]
+			}, //1st col end
+			{rows:[ 
+				{type:"header", template:"Slave Dataview-1"},
+				{
+				view:"dataview",
+				//container:"dview1",
+				id:"dview1",
+				select:true,
+				width:300,
+				template:"#rank#. #title# - #year#",
+				data:""
+				},
+				{type:"header", template:"Slave Dataview-2 (Filtered)"},
+				{
+				view:"dataview",
+				//container:"dview2",
+				id:"dview2",
+				select:true,
+				template:"#rank#. #title# - #year#",
+				data:""
+				}
+				]
+			}, //2nd col end
+			{
+			rows:[
+			{type:"header", template:"Htmlform"},
+				{
+				id: "formView",
+				view:"htmlform",
+				width:300,
+				content: "areaB",
+				rules:{
+					title: webix.rules.isNotEmpty,
+					rank: webix.rules.isNumber}
+				}
+			]
+			}
+			]} //end of all cols
+		);
+
+
+
+			
+		$$('dview1').data.sync($$('listA'));
+			
+		$$('dview2').data.sync($$('listA'), function(){
+		this.filter(function(data){
+		return data.year > 1994;
+			});
+		}); 
+
+		$$('formView').bind($$('listA'));
+		
+		 $$("listA").attachEvent("onAfterSelect", function(id){
+			$$("dview2").select(id); 
+            $$("dview1").select(id); 
+		});
+			
+
+		</script>
+	</body>
+</html>

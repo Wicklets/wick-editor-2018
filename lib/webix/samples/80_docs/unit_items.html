@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+    <script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="../common/testdata.js"></script>
+
+    <title>Working with UnitList Items</title>
+</head>
+<body>
+<div id="list" style="width:300px; height:500px; margin:20px;"></div>
+<script>
+
+var set = [
+    { id:1, title:"The Shawshank Redemption", year:1994, votes:678790, rating:9.2, rank:1},
+    { id:2, title:"The Godfather", year:1972, votes:511495, rating:9.2, rank:2},
+    { id:3, title:"12 Angry Men", year:1974, votes:319352, rating:9.0, rank:3},
+    { id:4, title:"The Good, the Bad and the Ugly", year:1966, votes:213030, rating:8.9, rank:4},
+    { id:5, title:"My Fair Lady", year:1964, votes:533848, rating:8.9, rank:5},
+    { id:6, title:"The Godfather: Part II", year:1957, votes:164558, rating:8.9, rank:6},
+    { id:7, title:"Collector", year: 1987, voles:556884}
+];
+webix.ready(function(){
+webix.ui({
+    container:"list", margin:5, rows:[
+    {
+        view:"unitlist", 
+        id:"list",
+        container:"list",
+        select:true,
+        width:300,
+        padding:40,
+        sort:{
+            by:"#title#",
+            dir: 'desc'
+        },
+        uniteBy:function(obj){
+            return obj.title.substr(0,1);
+        },
+        template:"#title#</br>#year#<br/>#votes#",
+        data: set,
+        select:true
+        
+    },
+    {cols:[
+        {view:"combo", id:"unit", options:[]},
+        //{view: "button", value:"set", click:'set_combo()'},
+        {view: "button", id:"get", value:"Get Title"}
+        ]
+    },
+    {view:"textarea", id:"log", height:100}
+    ]
+});
+
+    
+    var units = $$('list').getUnits(); //js array of unit values
+    var units_arr=[];
+    for(var i=0; i<units.length; i++){
+        units_arr.push({ id:i, value: units[i] });
+    }
+    
+    $$("unit").getPopup().getBody().define({
+        datatype:"json",
+        template:"#value#",
+        data:units_arr
+    });
+
+
+$$("get").attachEvent('onItemClick', function(){
+
+    var unit = $$('unit').getInputNode().value;
+    var id_arr = $$("list").getUnitList(unit);  //id-s of the data records united by "unit" criterion
+    if(id_arr){
+        var result = [];
+        for (var i=0; i<id_arr.length; i++){
+            id = id_arr[i];
+            var title = $$("list").getItem(id).title;
+            result.push(title);
+        }
+        $$('log').setValue((result.join(",\n")));
+    }
+    else
+        $$('log').setValue(('No Such Items!'));
+});
+
+});
+</script>
+</body>
+</html>

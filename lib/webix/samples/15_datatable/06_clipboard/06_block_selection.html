@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> 'block' copying</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>'block' copying</div>
+		<div class='sample_comment'>The sample shows behavior of the 'block' clipboard (clipboard:'block' or clipboard:true), which can be characterized as follows:</div>
+		<div class='sample_comment'> 1) When the copy area is less than the one selected, copied cells are not repeated and fill only the related selected cells.</div>
+		<div class='sample_comment'> 2) When the copy area is greater than the one selected, copied cells fill not only the selected area but also the related cells nearby.</div>
+		<div class='sample_comment'>Click and drag to select. Use ctrl+c and ctrl+v to copy and paste block content.</div>
+		<div id="testA" style='display:inline-block'></div>
+		<textarea style='width:300px; height:180px' onclick='this.select();'></textarea>
+		<hr>
+		<div id="testB" class='sample_comment'></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+
+				select:"cell",
+				multiselect:true,
+				blockselect:true,
+
+				clipboard:"block",
+
+				autoheight:true,
+				autowidth:true,
+				
+
+				on:{
+					onSelectChange:function(){
+						var text = "Selected: "+grid.getSelectedId(true).join();
+						document.getElementById('testB').innerHTML = text;
+					}
+				},
+
+				data:small_film_set
+			});		
+		});
+		</script>
+	</body>
+</html>

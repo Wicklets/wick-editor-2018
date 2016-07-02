@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA, #areaB, #areaC, #areaD, #areaE{
+				margin: 30px;
+				width:700px; height:100px;
+			}
+		</style>
+		<title>Buttons: Type 'icon'</title>
+	</head>
+	<body>
+
+		<div id="areaA"></div>
+		<div id="areaB"></div>
+		<div id="areaC"></div>
+		<div id="areaD"></div>
+		<div id="areaE"></div>
+
+		<script type="text/javascript" charset="utf-8">
+
+			webix.ui({
+				container:"areaA",
+				view:"toolbar",
+				cols:[
+					{ gravity: 4},
+					{ view:"button", type:"icon", icon:"envelope", label:"Mail" },
+					{ view:"button", type:"icon", icon:"users", label:"Users" },
+					{ view:"button", type:"icon", icon:"cog", label:"Cog" }
+				]
+			});
+
+			webix.ui({
+				container:"areaB",
+				view:"toolbar", 
+				cols:[
+					{ gravity: 4},
+					{ view:"button", type:"iconButton", icon:"envelope", label:"Mail" },
+					{ view:"button", type:"iconButton", icon:"users", label:"Users" },
+					{ view:"button", type:"iconButton", icon:"cog", label:"Cog" }
+				]
+			});	
+
+
+			webix.ui({
+				container:"areaC",
+				view:"toolbar",
+				cols:[
+					{gravity: 4},
+					{ view:"icon", icon:"envelope", value:"Mail"},
+					{ view:"icon", icon:"users"},
+					{ view:"icon", icon:"cog"}
+				]
+			});	
+
+
+
+			webix.ui({
+				container:"areaD",
+				view:"toolbar", height:66,
+				cols:[
+					{ gravity: 4},
+					{ view:"button", type:"iconTop", icon:"envelope", label:"Mail" },
+					{ view:"button", type:"iconTop", icon:"users", label:"Users" },
+					{ view:"button", type:"iconTop", icon:"cog", label:"Cog" }
+				]
+			});
+
+			webix.ui({
+				container:"areaE",
+				view:"toolbar", height:66,
+				cols:[
+					{ gravity: 4},
+					{ view:"button", type:"iconButtonTop", icon:"envelope", label:"Mail" },
+					{ view:"button", type:"iconButtonTop", icon:"users", label:"Users" },
+					{ view:"button", type:"iconButtonTop", icon:"cog", label:"Cog" }
+				]
+			});	
+
+			
+	
+					
+		</script>
+	</body>
+</html>

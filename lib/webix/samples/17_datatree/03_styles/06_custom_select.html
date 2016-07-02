@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Custom Selection</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<script src="../common/treedata.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+	</head>
+	<body>
+		<div class='header_comment'>Stylized DataTree type</div>
+		<div id="testA" style='width:300px; height:250px; float:left'></div>
+		<div id="testB" style='width:300px; height:250px; float:left'></div>
+		
+		<style type="text/css">
+		/*selection mode for left tree*/
+		.sMode1 .webix_tree_item.webix_selected{
+			background: #ffdb8f;
+		}
+
+		/*selection mode for right tree*/
+		.sMode2 .webix_tree_item.webix_selected{
+			background: #ffdb8f;
+		}
+		.sMode2 .webix_tree_item.webix_selected span{
+			background: transparent !important;
+		}
+		.sMode2 .webix_tree_img{
+			background-color: transparent;
+		}
+		</style>
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+
+			tree = webix.ui({
+				container:"testA", css:"sMode1",
+				view:"tree",
+				type:"lineTree",
+				select:true,
+				template:"{common.icon()} {common.folder()} #value#",
+				ready:function(){
+					this.select("1.2");
+				},
+				data: webix.copy(smalltreedata)
+			});
+
+			tree = webix.ui({
+				container:"testB", css:"sMode2",
+				view:"tree",
+				type:"lineTree",
+				select:true,
+				template:"{common.icon()} {common.folder()} <span>#value#</span>",
+				ready:function(){
+					this.select("1.2");
+				},
+				data: webix.copy(smalltreedata)
+			});
+
+		});
+		</script>
+	</body>
+</html>

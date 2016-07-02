@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Sorting. Using built-in means</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Sorting by visible text</div>
+		<div id="testA"></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"id",	header:"ID", sort:"text" },
+					{ id:"title",	template:"#cat_id#", header:"Category ID", sort:"text" },
+					{ id:"cat_id",  fillspace:1, collection:[{ id:1, value:"Crime"}, { id:2, value:"Thriller" }, { id:3, value:"Absent" }],	 header:"Category",sort:"text" }
+				],
+				
+				editable:true,
+				autoheight:true,
+				autowidth:true,
+
+				data: [
+					{ id:1, cat_id:1 },
+					{ id:2, cat_id:2 },
+					{ id:3, cat_id:1 },
+					{ id:4, cat_id:1 },
+					{ id:5, cat_id:3 },
+					{ id:6, cat_id:2 },
+					{ id:7, cat_id:3 },
+					{ id:8, cat_id:1 },
+					
+				]
+			});	
+		});
+		</script>
+	</body>
+</html>

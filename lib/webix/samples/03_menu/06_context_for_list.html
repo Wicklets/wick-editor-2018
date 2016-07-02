@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+    <script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="../common/testdata.js"></script>
+    <style>
+        #lists{
+            margin:20px;
+
+        }
+    </style>
+    <title>Context Menu: Attaching to List</title>
+</head>
+<body>
+
+<div id="lists"></div>
+<div id="listB"></div>
+<script type="text/javascript" charset="utf-8">
+    webix.ui({
+        container: "lists",
+        height: 400,
+        width: 600,
+        rows:[
+            {
+               view:"label", label: "<i>Right click to show context menu</i>"
+
+            },
+            {
+                type:"space",
+                cols:[
+                    {
+                        view:"list",
+                        template:"#rank#. #title#",
+                        select:true,
+                        data:big_film_set,
+                        onContext:{} //required for context menu
+                    },
+                    {
+                        view:"list",
+                        template:"#rank#. #title#",
+                        select:true,
+                        data:big_film_set,
+                        onContext:{}  //required for context menu
+                    }
+                ]
+            }
+        ]
+    });
+
+    webix.ui({
+        view:"contextmenu",
+	    id:"cmenu",
+        data:["Add","Rename","Delete",{ $template:"Separator" },"Info"],
+        on:{
+            onItemClick:function(id){
+                var context = this.getContext();
+                var list = context.obj;
+                var listId = context.id;
+                webix.message("List item: <i>"+list.getItem(listId).title+"</i> <br/>Context menu item: <i>"+this.getItem(id).value+"</i>");
+            }
+        }
+    });
+
+    $$("cmenu").attachTo($$("$list1"));
+
+    $$("cmenu").attachTo($$("$list2"));
+</script>
+</body>
+</html>

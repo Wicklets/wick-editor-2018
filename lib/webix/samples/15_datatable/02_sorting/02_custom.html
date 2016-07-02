@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Sorting Datatable. Using custom sorting functions</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Sorting. Using custom sorting functions</div>
+		<div class='sample_comment'>Click on the 'Title' header, to sort the grid by length of the title.</div>
+		<div class='sample_comment'>Click on the 'Votes' header, to sort the grid by parameter 'rank'.</div>
+		<div id="testA"></div>
+
+
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			function textLength(a,b){
+				a = a.title.toString().length;
+				b = b.title.toString().length;
+				return a>b?1:(a<b?-1:0);
+			};
+
+			function sortByParam(a,b){
+				a = a.rank;
+				b = b.rank;
+				return a>b?1:(a<b?-1:0);
+			}
+
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"year",	header:"Released" , width:80 },
+					{ id:"title",	header:"Film title",width:200,	sort:textLength},
+					{ id:"votes",	header:"Votes", 	width:100,	sort:sortByParam}
+				],
+				autoheight:true,
+				autowidth:true,
+				data:small_film_set
+			});			
+
+			
+		});
+		</script>
+	</body>
+</html>

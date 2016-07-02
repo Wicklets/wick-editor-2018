@@ -1,0 +1,54 @@
+.myform{
+    padding: 5px 10px;
+}
+.myform div{
+    line-height:20px;
+}
+.myform fieldset{
+    border: 1px solid #d0d0d0;
+    width: 210px;
+    padding:0;
+    margin:0;
+}
+.myform fieldset div{
+    padding-left: 60px;
+}
+.myform .block{
+    padding-top: 5px;
+    width: 230px;
+}
+.myform .block div{
+    padding-top:4px;
+    display: inline-block;
+}
+.myform .block input{
+    width: 136px;
+}
+.myform .block .label{
+    width: 70px;
+
+}
+.myform .block_right{
+    padding-top:5px;
+    width: 215px;
+    text-align:right;
+}
+.myform textarea{
+    width:210px;
+}
+.myform .button{
+    padding-top:5px;
+    width:210px;
+    text-align: center;
+}
+.myform .button input{
+
+    width: 180px;
+}
+.myform .title{
+    padding-top:15px;
+    font-style: italic;
+}
+.myform .label{
+    color:#256187;
+}

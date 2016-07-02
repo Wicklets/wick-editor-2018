@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Math in TreeTable</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/mathdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Math in TreeTable</div>
+		<div id="testA"></div>
+	
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+
+			grid = webix.ui({
+				container:"testA",
+				view:"treetable",
+				columns:[
+					{ id:"id",	header:"", css:"rank",  		width:50},
+					{ id:"name", header:"Country", template:"{common.treetable()} #value#", width:200},
+					{ id:"rev",	header:"Revenue" , width:180},
+					{ id:"exp",	header:"Expenditures", 	width:180},
+					{ id:"dif", header: "Deficit/surplus", width: 180},
+					{ id:"dif", header: "By column", math:"[$r,:2] - [$r,:3]", width: 180},
+					
+				],
+				autoheight:true,
+				autowidth:true,
+				math: true,
+				ready:function(){ this.openAll(); },
+				data: budget_tree
+			});
+
+		});
+		</script>
+	</body>
+</html>

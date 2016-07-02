@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en" ng-app="webixApp">
+<head>
+  <meta charset="utf-8">
+  <title>Webix - Angular  : Grid</title>
+  <script src="js/angular.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="../../codebase/webix.css">
+  <script type="text/javascript" src="../../codebase/webix.js"></script>
+
+  <script type="text/javascript" src="js/dataApp.js"></script>
+  <style type="text/css">
+    .rating{
+      text-align: center;
+    }
+  </style>
+</head>
+<body ng-controller="webixTestController">
+
+<div style="width:750px;">
+  <div webix-ui view="datatable" webix-data="records" autoheight="true" select="row">
+    <div view="column" id="rating" sort="int" css="rating">Rating</div>
+    <div view="column" id="year"   sort="int">Year</div>
+    <div view="column" id="votes"  sort="int">Votes</div>
+    <div view="column" id="title"  sort="string" fillspace="1">Title</div>  
+  </div>
+</div>
+
+<br>
+<button ng-click="addRecord()">Add Row</button>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:x>
+<head>
+	<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8" />
+	<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	<title>XML initialization</title>
+	<script type="text/javascript">
+		webix.ready(function(){ webix.markup.init(); });
+	</script>
+</head>
+<body>
+	<x:ui>
+	<x:rows>
+		<x:template height="35">
+			My header
+		</x:template>
+		<x:toolbar>
+			<x:button width="150">Button</x:button>
+			<x:label>
+				Press the button to run App
+			</x:label>
+		</x:toolbar>
+		<x:cols>
+			<x:list url="data/data.json" select="true">
+				Package: #Package# (#Version#)
+			</x:list>
+			<x:template>
+				<form>
+					<input type="submit" />
+				</form>
+			</x:template>
+			<x:list width="320">
+				#id#: #value#
+		       <x:data>
+		             <li id="9998">Item 1</li>
+		             <li id="9999">Item 2</li>
+		       </x:data>
+			</x:list>
+		</x:cols>
+		<x:template height="35">
+			My footer
+		</x:template>
+    </x:rows>
+    </x:ui>
+</body>
+</html>

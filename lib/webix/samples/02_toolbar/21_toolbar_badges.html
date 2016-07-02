@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA, #areaB, #areaC, #areaD, #areaE{
+				margin: 30px;
+				width:700px; height:100px;
+			}
+		</style>
+		<title>Buttons: Type 'icon' with Badges</title>
+	</head>
+	<body>
+
+		<div id="areaA"></div>
+		<div id="areaB"></div>
+		<div id="areaC"></div>
+		<div id="areaD"></div>
+		<div id="areaE"></div>
+
+		<script type="text/javascript" charset="utf-8">
+
+			webix.ui({
+				container:"areaA",
+				view:"toolbar",
+				margin:50,
+				cols:[
+					{ gravity: 3},
+					{ view:"button", width:80, badge:1, type:"icon", icon:"envelope", label:"Mail" },
+					{ view:"button", width:80, badge:12, type:"icon", icon:"users", label:"Users" },
+					{ view:"button", width:80, badge:24, type:"icon", icon:"cog", label:"Cog" }
+				]
+			});
+
+			webix.ui({
+				container:"areaB",
+				view:"toolbar", 
+				margin:20,
+				cols:[
+					{ gravity: 3},
+					{ view:"button", width:110, badge:1, type:"iconButton", icon:"envelope", label:"Mail" },
+					{ view:"button", width:110, badge:12, type:"iconButton", icon:"users", label:"Users" },
+					{ view:"button", width:110, badge:24, type:"iconButton", icon:"cog", label:"Cog" }
+				]
+			});	
+
+
+			webix.ui({
+				container:"areaC",
+				view:"toolbar",
+				cols:[
+					{gravity: 4},
+					{ view:"icon", badge:1, icon:"envelope", value:"Mail", width:50},
+					{ view:"icon", badge:12, icon:"envelope", width:50},
+					{ view:"icon", badge:24, icon:"envelope", width:50}
+				]
+			});	
+
+
+
+			webix.ui({
+				container:"areaD",
+				view:"toolbar", height:66,
+				cols:[
+					{ gravity: 4},
+					{ view:"button", width:80, badge:1, type:"iconTop", icon:"envelope", label:"Mail" },
+					{ view:"button", width:80, badge:12, type:"iconTop", icon:"users", label:"Users" },
+					{ view:"button", width:80, badge:24, type:"iconTop", icon:"cog", label:"Cog" }
+				]
+			});
+
+			webix.ui({
+				container:"areaE",
+				view:"toolbar", height:66,
+				cols:[
+					{ gravity: 4},
+					{ view:"button", width:100,  badge:1, type:"iconButtonTop", icon:"envelope", label:"Mail" },
+					{ view:"button", width:100,  badge:12, type:"iconButtonTop", icon:"users", label:"Users" },
+					{ view:"button", width:100,  badge:24, type:"iconButtonTop", icon:"cog", label:"Cog" }
+				]
+			});	
+
+			
+	
+					
+		</script>
+	</body>
+</html>

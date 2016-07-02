@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script type="text/javascript" src="../common/testdata.js"></script>
+		<title>Day template</title>
+	</head>
+	<style type="text/css">
+        #listA{
+            float:left; margin:20px;
+        }
+		body{
+			background: #faf6ed;
+		}
+		.day{
+			line-height: 22px;
+			height: 19px;
+		}
+        .day_marker{
+	        background-color: #777;
+	        border-radius: 50%;
+	        height: 3px;
+	        margin: 0 auto 3px;
+	        width: 3px;
+        }
+        .webix_cal_select .day_marker{
+	        background-color: #fff !important;
+        }
+
+	</style>
+	<body>
+		<div id="listA"></div>
+		<script type="text/javascript" charset="utf-8">
+
+            webix.ui({
+                container:"listA",
+                weekHeader:true,
+                date:new Date(2014,0,16),
+                view:"calendar",
+                events:webix.Date.isHoliday,
+				dayTemplate: function(date){
+					var html = "<div class='day'>"+date.getDate()+"</div>";
+					if(date.getDay() == 5){
+						html += "<div class='day_marker'></div>";
+					}
+					return html;
+				}
+            });
+
+
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<head>
+    <title>Tree: JSON Dataset</title>
+    <link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+    <script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+    <link rel="stylesheet" type="text/css" href="../common/samples.css">
+</head>
+<body>
+<div class='header_comment'>Loading from a JSON data source</div>
+<div class='sample_comment'>
+    The sample demonstrates different ways you can load JSON data to DataTree:
+    <ol>
+        <li>Plain JSON data (based on objects)</li>
+        <li>Mixed JSON data (using strings instead of objects)</li>
+        <li>Applying a custom JSON format</li>
+        <li>Loading from a file</li>
+    </ol>
+</div>
+<div id="testA" style='width:250px; height:250px; float:left'></div>
+<div id="testB" style='width:250px; height:250px; float:left'></div>
+<div style='clear:both'>
+    <div id="testC" style='width:250px; height:250px; float:left'></div>
+    <div id="testD" style='width:250px; height:250px; float:left'></div>
+
+    <script type="text/javascript" charset="utf-8">
+
+
+        webix.ready(function(){
+            //plain json data, based on objects
+            treea = new webix.ui({
+                container:"testA",
+                view:"tree",
+                activeTitle:true,
+                data: [
+                    { id:"1", open:true, value:"The Shawshank Redemption", data:[
+                        { id:"1.1", value:"Part 1" },
+                        { id:"1.2", value:"Part 2" },
+                        { id:"1.3", value:"Part 3" }
+                    ]},
+                    { id:"2", value:"The Godfather", data:[
+                        { id:"2.1", value:"Part 1" },
+                        { id:"2.2", value:"Part 2" }
+                    ]}
+                ]
+            });
+
+
+            //mixed json data, using strings instead of objects
+            treeb = new webix.ui({
+                container:"testB",
+                view:"tree",
+
+	            data: [
+		            { id:"1", open:true, value:"The Shawshank Redemption", data:[
+			            { id:"1.1", value:"Part 1" },
+			            { id:"1.2", value:"Part 2" },
+			            { id:"1.3", value:"Part 3" }
+		            ]},
+		            { id:"2", value:"The Godfather", data:[
+			            { id:"2.1", value:"Part 1" },
+			            { id:"2.2", value:"Part 2" }
+		            ]}
+	            ]
+            });
+
+
+            var myjson = webix.DataDriver.myjson = webix.copy(webix.DataDriver.json);
+            myjson.child=function(obj){
+                if (obj.$level == 1)
+                    return obj.parts;
+                if (obj.$level == 2)
+                    return obj.pages;
+            };
+
+
+            //custom json format
+            treec = new webix.ui({
+                container:"testC",
+                view:"tree",
+
+                data: [
+                    { id:"1", value:"The Shawshank Redemption", open:true, parts:[
+                        { id:"1.1", value:"Part 1" },
+                        { id:"1.2", value:"Part 2", open:true, pages:[
+                            "page 1", "page 2"
+                        ]},
+                        { id:"1.3", value:"Part 3" }
+                    ]},
+                    { id:"2", value:"The Godfather", parts:[
+                        { id:"2.1", value:"Part 1" },
+                        { id:"2.2", value:"Part 2" }
+                    ]}
+                ],
+                datatype:"myjson"
+            });
+
+
+            //loading from file
+            treed = new webix.ui({
+                container:"testD",
+                view:"tree",
+                url:"data/data.json"
+            });
+
+
+        });
+    </script>
+</body>
+</html>

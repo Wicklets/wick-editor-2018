@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<!-- You can get these files from https://github.com/webix-hub/components -->
+		<script type="text/javascript">
+			webix.require.disabled = true;
+		</script>
+		<script src="http://cdn.webix.com/components/googlemap/googlemap.js"></script>
+
+
+		<title>Google Map</title>
+	</head>
+<body>
+
+<script>
+		webix.ui({ // creates window with map inside
+			view:"window", id:"mapwin",
+			body:{
+				view:"google-map",
+				id:"map",
+				zoom:6,
+				center:[ 48.724, 8.215 ]
+			},
+			head:{
+				view:"toolbar", elements:[
+					{ view:"label",  label: "Google Map", align:'left'}, 
+					{ view:'button', label: 'Close', width:120, click:function(){
+						$$("mapwin").close();
+					}}
+				]
+			},
+			top:50, left:50, width:600, height:500
+		}).show();
+</script>
+
+</body>
+</html>

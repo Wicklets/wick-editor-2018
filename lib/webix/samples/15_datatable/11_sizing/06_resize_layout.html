@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Resizing the parent Layout cell</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/bigtestdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			webix.ui({
+				rows:[{
+					cols:[{
+						view:"datatable",
+						columns:[
+							{ id:"rank",	header:"", css:"rank", width:50},
+							{ id:"title",	header:"Film title",width:200},
+							{ id:"year",	header:"Released" , width:80	},
+							{ id:"votes",	header:"Votes", 	width:100	},
+
+							{ id:"2008_1", header:"January"},
+							{ id:"2008_2", header: "February"},
+							{ id:"2008_3", header: "March"},
+							{ id:"2008_4", header: "April"},
+							{ id:"2008_5", header: "May"},
+							{ id:"2008_6", header: "June"},
+							{ id:"2008_7", header: "July"},
+							{ id:"2008_8", header: "August"},
+							{ id:"2008_9", header: "September"},
+							{ id:"2008_10", header: "October"},
+							{ id:"2008_11", header: "November"},
+							{ id:"2008_12", header: "December"}
+						],
+
+						data:big_wide_film_set
+					},{
+						header:"Click to resize grid",
+						body:"Dummy text"
+					}]
+				},{
+					header:"Click to resize grid",
+					body:"Dummy text"
+				}]
+			});
+		});
+		</script>
+	</body>
+</html>

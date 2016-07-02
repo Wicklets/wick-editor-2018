@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Opening multiple editors</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Opening multiple editors</div>
+		<div class='sample_comment'>Click on any cell to switch the whole row to the edit mode</div>
+		<div id="testA"></div>
+		<hr>
+		<div class='sample_comment'>Click on any cell to switch the whole column to the edit mode</div>
+		<div id="testB"></div>
+		<hr>
+		<div class='sample_comment'>Click on any cell to switch the whole row to the edit mode</div>
+		<div id="testC"></div>
+		<hr>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	editor:"text",		header:"", css:"rank",  		width:50},
+					{ id:"title",	editor:"text",		header:"Film title",width:200},
+					{ id:"year",	editor:"text",		header:"Released" , width:80},
+					{ id:"votes",	editor:"text",		header:"Votes", 	width:100}
+				],
+				
+				editable:true,
+				editaction:"custom",
+				autoheight:true,
+				autowidth:true,
+				
+				on:{
+					"onItemClick":function(id){
+						this.editRow(id);
+					}
+				},
+
+				data: small_wide_film_set
+			});
+
+
+			gridb = webix.ui({
+				container:"testB",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	editor:"text",		header:"", css:"rank",  		width:50},
+					{ id:"title",	editor:"text",		header:"Film title",width:200},
+					{ id:"year",	editor:"text",		header:"Released" , width:80},
+					{ id:"votes",	editor:"text",		header:"Votes", 	width:100}
+				],
+				
+				editable:true,
+				editaction:"custom",
+				autoheight:true,
+				autowidth:true,
+
+				on:{
+					"onItemClick":function(id){
+						this.editColumn(id);
+					}
+				},
+
+				data:small_wide_film_set
+			});	
+
+
+			gridc = webix.ui({
+				container:"testC",
+				view:"datatable",
+				leftSplit:2,
+				columns:[
+					{ id:"rank",	editor:"text",		header:"", css:"rank",  		width:50},
+					{ id:"title",	editor:"text",		header:"Film title",width:200},
+					{ id:"year",	editor:"text",		header:"Released" , width:80},
+					{ id:"votes",	editor:"text",		header:"Votes", 	width:100},
+
+					{ id:"2008_1", editor:"text",header:[{text:"2008", colspan:12}, "January"] },
+					{ id:"2008_2", editor:"text",header:[null, "February"] },
+					{ id:"2008_3", editor:"text",header:[null, "March"] },
+					{ id:"2008_4", editor:"text",header:[null, "April"] },
+					{ id:"2008_5", editor:"text",header:[null, "May"] },
+					{ id:"2008_6", editor:"text",header:[null, "June"] },
+					{ id:"2008_7", editor:"text",header:[null, "July"] },
+					{ id:"2008_8", editor:"text",header:[null, "August"] },
+					{ id:"2008_9", editor:"text",header:[null, "September"] },
+					{ id:"2008_10", editor:"text",header:[null, "October"] },
+					{ id:"2008_11", editor:"text",header:[null, "November"] },
+					{ id:"2008_12", editor:"text",header:[null, "December"] },
+
+					{ id:"2009_1", editor:"text",header:[{text:"2009", colspan:12}, "January"] },
+					{ id:"2009_2", editor:"text",header:[null, "February"] },
+					{ id:"2009_3", editor:"text",header:[null, "March"] },
+					{ id:"2009_4", editor:"text",header:[null, "April"] },
+					{ id:"2009_5", editor:"text",header:[null, "May"] },
+					{ id:"2009_6", editor:"text",header:[null, "June"] },
+					{ id:"2009_7", editor:"text",header:[null, "July"] },
+					{ id:"2009_8", editor:"text",header:[null, "August"] },
+					{ id:"2009_9", editor:"text",header:[null, "September"] },
+					{ id:"2009_10", editor:"text",header:[null, "October"] },
+					{ id:"2009_11", editor:"text",header:[null, "November"] },
+					{ id:"2009_12", editor:"text",header:[null, "December"] }
+
+				],
+				
+				editable:true,
+				editaction:"custom",
+				autoheight:true,
+				width:700,
+
+				on:{
+					"onItemClick":function(id){
+						this.editRow(id);
+						
+					}
+				},
+
+				data:small_wide_film_set
+			});	
+
+								
+		});
+		</script>
+	</body>
+</html>

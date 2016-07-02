@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Using different filtering rules</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Using different filtering rules</div>
+		<div class='sample_comment'>Type some value to filter the grid.</div>
+		</br>
+		<div class='sample_comment'>Filter - start letter.  The grid is filtered by the first letter(s) of the film title.</div>
+		<div id="testA"></div>
+		<hr>
+		<div class='sample_comment'>Filter - like. The grid is filtered by occurrence of the entered symbols in the film title.</div>
+		<div id="testB"></div>
+		<hr>
+		<div class='sample_comment'>Filter - strict compare. The grid displays just records that strictly conform to the entered value.</div>
+		<div id="testC"></div>
+		<hr>
+		<script type="text/javascript" charset="utf-8">
+		function exactCompare(value, filter){
+			value = value.toString().toLowerCase();
+			filter = filter.toString().toLowerCase();
+			
+			return value == filter;
+		}
+		function startCompare(value, filter){
+			value = value.toString().toLowerCase();
+			filter = filter.toString().toLowerCase();
+			
+			return value.indexOf(filter) === 0;
+		}
+		function likeCompare(value, filter){
+			value = value.toString().toLowerCase();
+			filter = filter.toString().toLowerCase();
+
+			return value.indexOf(filter) !== -1;
+		}
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  width:50,	sort:"int"},
+					{ id:"title",	header:["Film title",{content:"textFilter", compare:startCompare}],	width:200,	sort:"string"},
+					{ id:"year",	header:"Released",	width:80,	sort:"int"},
+					{ id:"votes",	header:"Votes", 		width:100,	sort:"int"}
+				],
+				autoheight:true,
+				autowidth:true,
+				data:small_film_set
+			});	
+		});
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testB",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  width:50,	sort:"int"},
+					{ id:"title",	header:["Film title",{content:"textFilter", compare:likeCompare}],	width:200,	sort:"string"},
+					{ id:"year",	header:"Released",	width:80,	sort:"int"},
+					{ id:"votes",	header:"Votes", 		width:100,	sort:"int"}
+				],
+				autoheight:true,
+				autowidth:true,
+				data:small_film_set
+			});	
+		});
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testC",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  width:50,	sort:"int"},
+					{ id:"title",	header:["Film title",{content:"textFilter", compare:exactCompare}],	width:200,	sort:"string"},
+					{ id:"year",	header:"Released",	width:80,	sort:"int"},
+					{ id:"votes",	header:"Votes", 		width:100,	sort:"int"}
+				],
+				autoheight:true,
+				autowidth:true,
+				data:small_film_set
+			});	
+		});				
+		</script>
+	</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Header configuration</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>	</head>
+	<body>
+		<div class='header_comment'>Header configuration</div>
+		<div class='sample_comment'>The header can take the titles by default:</div>
+		<div id="testA"></div>
+		<hr>
+		<div class='sample_comment'>Or you can set the titles manually:</div>
+		<div id="testB"></div>
+		<hr>
+		<div class='sample_comment'>If you need you can split the header into multiple subheaders:</div>
+		<div id="testC"></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	width:50, 	css:"rank"},
+					{ id:"title",	width:200},
+					{ id:"year",	width:80},
+					{ id:"votes",	width:100}
+				],
+				autoheight:true,
+				autowidth:true,
+				data:small_film_set
+			});
+
+			grid = webix.ui({
+				container:"testB",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", 		width:50, 	css:"rank"},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Year", 		width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+				autoheight:true,
+				autowidth:true,
+				data:small_film_set
+			});
+
+
+			grid = webix.ui({
+				container:"testC",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"",		width:50, 	css:"rank"},
+					{ id:"title",	header:["Film title", "Second line"],	width:200},
+					{ id:"year",	header:["Year", ""], 					width:80},
+					{ id:"votes",	header:["Votes", ""], 					width:100}
+				],
+				autoheight:true,
+				autowidth:true,
+				data:small_film_set
+			});
+
+			
+		});
+		</script>
+	</body>
+</html>

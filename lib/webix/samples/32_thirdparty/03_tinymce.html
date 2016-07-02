@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<!-- You can get these files from https://github.com/webix-hub/components -->
+		<script type="text/javascript">
+			webix.require.disabled = true;
+			webix.codebase = "http://cdn.webix.com/components/tinymce/";
+		</script>
+		<script src="http://cdn.webix.com/components/tinymce/tinymce.js"></script>
+		<script src="http://cdn.webix.com/components/tinymce/tinymce/tiny_mce.js"></script>
+
+		<title>TinyMCE text editor</title>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				type:"space", rows:[
+					{ id:'editor', view:"tinymce-editor"},
+					{ template:"TinyMCE editor", type:"header" },
+					{ id:'editor2', config:{ theme:"advanced" }, view:"tinymce-editor"}
+				]
+			});
+
+			$$("editor").setValue("TinyMCE is a platform independent web based Javascript HTML WYSIWYG editor control released as Open Source under LGPL by Moxiecode Systems AB.\n TinyMCE has the ability to convert HTML TEXTAREA fields or other HTML elements to editor instances. TinyMCE is very easy to integrate into other Content Management Systems.");
+			$$("editor").focus();
+
+			$$("editor2").setValue("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 	tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 	quis nostrud exercitation ullamco laboris nisi ut  aliquip ex ea commodo 	consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse 	cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non 	proident, sunt in culpa  qui officia deserunt mollit anim id est laborum.");
+		</script>
+	</body>
+
+	
+</html>

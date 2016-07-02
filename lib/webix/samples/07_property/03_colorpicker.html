@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+	<title>Property Sheet: Colorpicker </title>
+	<script src="../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="stylesheet" type="text/css" href="../../codebase/webix.css">
+
+<body>
+	<script>
+	var propertysheet_1 = {
+		view:"property",  id:"sets", width:300,
+		elements:[
+			{ label:"Layout" },
+			{ label:"Width", type:"text", id:"width"},
+			{ label:"Height", type:"text", id:"height"},
+			{ label:"Color" },
+			{ label:"Background", 	type:"color", id:"col", cols:20, rows:20},
+			{ label:"BorderColor", 	type:"color", id:"col2"},
+			{ label:"FontColor", 	type:"color", id:"col3", cols:5, rows:5}
+		]
+	};
+
+	webix.ui({
+		type:"space", cols:[
+			{ template:"left" },
+			{rows:[
+				propertysheet_1
+			]}
+		]
+	});
+
+	$$("sets").setValues({
+		width:250,
+		height:480,
+		url:"http://webix.com/data",
+		type:"json",
+		col1 : "#46C200",
+		col2 :"#07FF2A",
+		col3 :"#000000"
+	});
+		
+	</script>
+
+
+</body>
+</html>

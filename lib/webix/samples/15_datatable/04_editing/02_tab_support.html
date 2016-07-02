@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>The Tab key navigation </title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>The Tab key navigation</div>
+		<div class='sample_comment'>Click on any cell to start editing. Use the Tab/Shift+Tab keys to edit the next/previous cell</div>
+		<div id="testA"></div>
+		<hr>
+		<div class='sample_comment'>Only the 2nd and 4th columns are editable</div>
+		<div id="testB"></div>
+		<hr>
+		<div class='sample_comment'>Only the 2nd column is editable</div>
+		<div id="testC"></div>
+		<hr>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	editor:"text",		header:"", css:"rank",  		width:50},
+					{ id:"title",	editor:"text",		header:"Film title",width:200},
+					{ id:"year",	editor:"text",		header:"Released" , width:80},
+					{ id:"votes",	editor:"text",		header:"Votes", 	width:100}
+				],
+				editable:true,
+				autoheight:true,
+				autowidth:true,
+
+				data: [
+					{ id:1, title:"The Shawshank Redemption", year:1994, votes:678790, rating:9.2, rank:1},
+					{ id:2, title:"The Godfather", year:1972, votes:511495, rating:9.2, rank:2}
+				]
+			});
+
+
+			gridb = webix.ui({
+				container:"testB",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	editor:"text",		header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	editor:"text",		header:"Votes", 	width:100}
+				],
+				
+				editable:true,
+				autoheight:true,
+				autowidth:true,
+
+				data: [
+					{ id:1, title:"The Shawshank Redemption", year:1994, votes:678790, rating:9.2, rank:1},
+					{ id:2, title:"The Godfather", year:1972, votes:511495, rating:9.2, rank:2}
+				]
+			});	
+
+
+			gridc = webix.ui({
+				container:"testC",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	editor:"text",		header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+				
+				editable:true,
+				autoheight:true,
+				autowidth:true,
+
+				data: [
+					{ id:1, title:"The Shawshank Redemption", year:1994, votes:678790, rating:9.2, rank:1},
+					{ id:2, title:"The Godfather", year:1972, votes:511495, rating:9.2, rank:2}
+				]
+			});
+
+
+								
+		});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<title>Accordion</title>
+	</head>
+	<body>
+<div id='layout_div' style='width:800px; height:600px; margin:20px;'></div>
+<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				container:"layout_div",
+				view:"accordion",
+				rows:[
+					{ header:"Row 1", headerAlt:"Row 1 Closed", body:"Content 1"},
+					{ header:"Row 2", headerAlt:"Row2 Closed", body:"Content 2"},
+					{ header:"Row 3", headerAlt:"Row3 Closed", body:"Content 3"}
+				]
+			});
+</script>
+</body>
+</html>			

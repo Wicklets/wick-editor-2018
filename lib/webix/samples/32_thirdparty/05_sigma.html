@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<!-- You can get these files from https://github.com/webix-hub/components -->
+		<script type="text/javascript">
+			webix.require.disabled = true;
+			webix.codebase = "http://cdn.webix.com/components/sigma/";
+		</script>
+		<script src="http://cdn.webix.com/components/sigma/sigma.js"></script>
+		<script src="http://cdn.webix.com/components/sigma/sigma/sigma.js"></script>
+		<script src="http://cdn.webix.com/components/sigma/sigma/plugins/sigma.parseGexf.js"></script>
+		<script src="http://cdn.webix.com/components/sigma/sigma/plugins/sigma.fisheye.js"></script>
+
+		<title>Sigma Chart</title>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				type:"space", rows:[
+					{ template:"Sigma Chart", type:"header" },
+					{ view:"sigma-chart", 
+						url:"./data/les_miserables.gexf",
+						ready:function(){
+					
+					}}
+				]
+			});
+
+			
+
+		</script>
+	</body>
+
+
+	
+</html>

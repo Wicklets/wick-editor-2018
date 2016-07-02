@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+	<title>Radar Chart: Points</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+	<script src="../../common/chartdata.js"></script>
+<body>
+    <div id="chartDiv" style="width:300px;height:250px;margin:20px"></div>
+	<script>
+        webix.ui({
+            container:"chartDiv",
+            view:"chart",
+            type:"radar",
+			value:"#companyA#",
+            disableLines:true,
+			item:{
+                borderWidth:0,
+                radius:2,
+				color: "#6633ff"
+			},
+			xAxis:{
+				template:"#month#"
+			},
+			yAxis:{
+				lineShape:"arc",
+                bg:"#fff8ea"
+			},
+			data:companies
+        });
+	</script>
+</body>
+</html>

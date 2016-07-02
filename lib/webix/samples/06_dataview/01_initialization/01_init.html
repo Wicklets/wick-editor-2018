@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+	<title>DataView Basic Initialization</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+
+	<script src="../../common/testdata.js"></script>
+	<style type="text/css">
+		#dataA, #dataB{
+			margin:20px;
+			float:left;
+		}
+		#btnDiv{
+			margin-left:20px;
+		}
+		.webix_dataview_item .webix_strong{
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			overflow: hidden;
+		}
+	</style>
+<body>
+
+	<div id="btnDiv" style="width:500px;height:45px;"></div>
+	<hr>
+	<div id="dataA" style="width:500px;height:150px;"></div>
+
+	<div id="dataB" style="width:500px;height:300px;"></div>
+
+	<script>
+		webix.ready(function(){
+			webix.ui({
+				view: "button",
+				container: "btnDiv",
+				value: "Click me",
+				inputWidth: 120,
+				click:"$$('dataview2').select([2, 3, 4], false, true);"
+			});
+			webix.ui({
+				view:"dataview", 
+				id:"dataview1",
+				container:"dataA",
+				select:true,
+				type: {
+					height: 60
+				},
+				template:"<div class='webix_strong'>#title#</div> Year: #year#, rank: #rank#",
+				data:[
+					{ id:1, title:"The Shawshank Redemption", year:1994, votes:678790, rating:9.2, rank:1},
+					{ id:2, title:"The Godfather", year:1972, votes:511495, rating:9.2, rank:2},
+					{ id:3, title:"The Godfather: Part II", year:1974, votes:319352, rating:9.0, rank:3},
+					{ id:4, title:"The Good, the Bad and the Ugly", year:1966, votes:213030, rating:8.9, rank:4}
+				]
+			});
+			
+			webix.ui({
+				view:"dataview",
+				id:"dataview2",
+				type: {
+					height: 60
+				},
+				container:"dataB",
+				template:"<div class='webix_strong'>#title#</div> Year: #year#, rank: #rank#",
+				data:big_film_set
+			});
+
+			$$('dataview1').attachEvent('onSelectChange', function(id){
+				webix.message("Item "+id+" is selected!");
+			});
+		});
+
+	</script>
+
+
+</body>
+</html>

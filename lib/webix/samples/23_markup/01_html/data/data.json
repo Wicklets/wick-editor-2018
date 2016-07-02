@@ -1,0 +1,101 @@
+[{
+ "id":"1", "Package":"acx100-source", "Version":"20080210-1.1", "Maintainer":"Stefano Canepa <sc@linux.it>"
+},{
+ "id":"2", "Package":"alien-arena-browser", "Version":"7.0-1", "Maintainer":"Debian Games Team <pkg-games-devel@lists.alioth.debian.org>"
+},{
+ "id":"3", "Package":"alien-arena-server", "Version":"7.0-1", "Maintainer":"Debian Games Team <pkg-games-devel@lists.alioth.debian.org>"
+},{
+ "id":"4", "Package":"alien-arena", "Version":"7.0-1", "Maintainer":"Debian Games Team <pkg-games-devel@lists.alioth.debian.org>"
+},{
+ "id":"5", "Package":"alsa-firmware-loaders", "Version":"1.0.21-1", "Maintainer":"Debian ALSA Maintainers <pkg-alsa-devel@lists.alioth.debian.org>"
+},{
+ "id":"6", "Package":"amoeba", "Version":"1.1-20", "Maintainer":"Steinar H. Gunderson <sesse@debian.org>"
+},{
+ "id":"7", "Package":"atari800", "Version":"2.1.0-1", "Maintainer":"Antonin Kral <A.Kral@sh.cvut.cz>"
+},{
+ "id":"8", "Package":"avifile-divx-plugin", "Version":"1:0.7.48~20090503.ds-1", "Maintainer":"Debian QA Group <packages@qa.debian.org>"
+},{
+ "id":"9", "Package":"avifile-win32-plugin", "Version":"1:0.7.48~20090503.ds-1", "Maintainer":"Debian QA Group <packages@qa.debian.org>"
+},{
+ "id":"10", "Package":"avifile-xvid-plugin", "Version":"1:0.7.48~20090503.ds-1", "Maintainer":"Debian QA Group <packages@qa.debian.org>"
+},{
+ "id":"11", "Package":"b43-fwcutter", "Version":"1:012-1", "Maintainer":"Rene Engelhard <rene@debian.org>"
+},{
+ "id":"12", "Package":"bgoffice-dict-downloader", "Version":"0.03", "Maintainer":"Debian Add-ons Bulgaria Project <debian-addons-bg-maintainers@openfmi.net>"
+},{
+ "id":"13", "Package":"cbedic", "Version":"4.0-2+b3", "Maintainer":"Anton Zinoviev <zinoviev@debian.org>"
+},{
+ "id":"14", "Package":"chocolate-doom", "Version":"1.2.1-1", "Maintainer":"Debian Games Team <pkg-games-devel@lists.alioth.debian.org>"
+},{
+ "id":"15", "Package":"cl-sql-oracle", "Version":"4.1.1-1", "Maintainer":"Kevin M. Rosenberg <kmr@debian.org>"
+},{
+ "id":"16", "Package":"cl-umlisp-orf", "Version":"3.3.2-2", "Maintainer":"Kevin M. Rosenberg <kmr@debian.org>"
+},{
+ "id":"17", "Package":"cl-umlisp", "Version":"1:2007ac.2-5", "Maintainer":"Kevin M. Rosenberg <kmr@debian.org>"
+},{
+ "id":"18", "Package":"cltl", "Version":"1.0.26", "Maintainer":"Debian Common Lisp Team <pkg-common-lisp-devel@lists.alioth.debian.org>"
+},{
+ "id":"19", "Package":"crafty-books-medium", "Version":"1.0.debian1-1", "Maintainer":"Oliver Korff <ok@xynyx.de>"
+},{
+ "id":"20", "Package":"crafty-books-medtosmall", "Version":"1.0.debian1-1", "Maintainer":"Oliver Korff <ok@xynyx.de>"
+},{
+ "id":"21", "Package":"crafty-books-small", "Version":"1.0.debian1-1", "Maintainer":"Oliver Korff <ok@xynyx.de>"
+},{
+ "id":"22", "Package":"dosemu", "Version":"1.4.0+svn.1828-3", "Maintainer":"Bart Martens <bartm@debian.org>"
+},{
+ "id":"23", "Package":"dynagen", "Version":"0.11.0-4", "Maintainer":"Erik Wenzel <erik@debian.org>"
+},{
+ "id":"24", "Package":"dynare-matlab", "Version":"4.0.4-3", "Maintainer":"Debian Octave Group <pkg-octave-devel@lists.alioth.debian.org>"
+},{
+ "id":"25", "Package":"e-uae-dbg", "Version":"0.8.29-WIP4-7", "Maintainer":"Stephan Sürken <absurd@debian.org>"
+},{
+ "id":"26", "Package":"e-uae", "Version":"0.8.29-WIP4-7", "Maintainer":"Stephan Sürken <absurd@debian.org>"
+},{
+ "id":"27", "Package":"easyspice", "Version":"0.6.8-2", "Maintainer":"Gudjon I. Gudjonsson <gudjon@gudjon.org>"
+},{
+ "id":"28", "Package":"esix", "Version":"1-2", "Maintainer":"Vince Mulhollon <vlm@debian.org>"
+},{
+ "id":"29", "Package":"exult-studio", "Version":"1.2-13", "Maintainer":"Jordà Polo <jorda@ettin.org>"
+},{
+ "id":"30", "Package":"exult", "Version":"1.2-13", "Maintainer":"Jordà Polo <jorda@ettin.org>"
+},{
+ "id":"31", "Package":"festvox-don", "Version":"1.4.0-4", "Maintainer":"Matthias Urlichs <smurf@debian.org>"
+},{
+ "id":"32", "Package":"festvox-rablpc16k", "Version":"1.4.0-2", "Maintainer":"Matthias Urlichs <smurf@smurf.noris.de>"
+},{
+ "id":"33", "Package":"festvox-rablpc8k", "Version":"1.4.0-2", "Maintainer":"Matthias Urlichs <smurf@smurf.noris.de>"
+},{
+ "id":"34", "Package":"flashplugin-nonfree-extrasound", "Version":"0.0.svn2431-3", "Maintainer":"Petter Reinholdtsen <pere@debian.org>"
+},{
+ "id":"35", "Package":"flashplugin-nonfree", "Version":"1:2.8", "Maintainer":"Bart Martens <bartm@debian.org>"
+},{
+ "id":"36", "Package":"freemind", "Version":"0.7.1-6", "Maintainer":"Eric Lavarde <deb@zorglub.s.bawue.de>"
+},{
+ "id":"37", "Package":"funguloids", "Version":"1.06-8+b1", "Maintainer":"Debian Games Team <pkg-games-devel@lists.alioth.debian.org>"
+},{
+ "id":"38", "Package":"game-data-packager", "Version":"22", "Maintainer":"Debian Games Team <pkg-games-devel@lists.alioth.debian.org>"
+},{
+ "id":"39", "Package":"cpp-doc", "Version":"5:2", "Maintainer":"Debian GCC Maintainers <debian-gcc@lists.debian.org>"
+},{
+ "id":"40", "Package":"gcc-doc", "Version":"5:2", "Maintainer":"Debian GCC Maintainers <debian-gcc@lists.debian.org>"
+},{
+ "id":"41", "Package":"gcj-doc", "Version":"5:2", "Maintainer":"Debian GCC Maintainers <debian-gcc@lists.debian.org>"
+},{
+ "id":"42", "Package":"gfortran-doc", "Version":"5:2", "Maintainer":"Debian GCC Maintainers <debian-gcc@lists.debian.org>"
+},{
+ "id":"43", "Package":"gnat-doc", "Version":"5:2", "Maintainer":"Debian GCC Maintainers <debian-gcc@lists.debian.org>"
+},{
+ "id":"44", "Package":"glest", "Version":"3.2.2-1", "Maintainer":"Debian Games Team <pkg-games-devel@lists.alioth.debian.org>"
+},{
+ "id":"45", "Package":"gnome-speech-dectalk", "Version":"1:0.4.25-1", "Maintainer":"Mario Lang <mlang@debian.org>"
+},{
+ "id":"46", "Package":"gnome-speech-ibmtts", "Version":"1:0.4.25-1", "Maintainer":"Mario Lang <mlang@debian.org>"
+},{
+ "id":"47", "Package":"gnome-speech-swift", "Version":"1:0.4.25-1", "Maintainer":"Mario Lang <mlang@debian.org>"
+},{
+ "id":"48", "Package":"gnuboy-sdl", "Version":"1.0.3-5", "Maintainer":"Davide Puricelli (evo) <evo@debian.org>"
+},{
+ "id":"49", "Package":"gnuboy-svga", "Version":"1.0.3-5", "Maintainer":"Davide Puricelli (evo) <evo@debian.org>"
+},{
+ "id":"50", "Package":"gnuboy-x", "Version":"1.0.3-5", "Maintainer":"Davide Puricelli (evo) <evo@debian.org>"
+}]

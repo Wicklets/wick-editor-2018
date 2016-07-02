@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Basic Drag-and-Drop</title>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body class='webix_full_screen'>
+		<script type="text/javascript" charset="utf-8">
+		function tree2grid(data, id){
+			data.rank = data.rank || -1;
+			data.title = data.title || data.value;
+			return data;
+		}
+		function grid2tree(data, id){
+			data.value = data.value || data.title;
+			return data;
+		}
+
+		webix.ready(function(){
+			var grid = {
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"#", 		width:50 },
+					{ id:"title",	header:"Film title",width:200,  fillspace:true},
+					{ id:"votes",	header:"Votes", 	width:100 },
+					{ id:"year",	header:"Released" , width:80 }
+					
+				],
+				select:"multiselect",
+				drag:true, scrollX:false,
+
+				data:small_film_set,
+				externalData:tree2grid
+			};
+
+			var dataview = {
+				view:"dataview",
+				template:"#rank#. #title#",
+				drag:true, select:"multiselect",
+				data:big_film_set,
+				externalData:tree2grid
+			};
+			var tree = {
+				view:"tree", gravity:3,
+				width:320,
+				drag:true, select:true,
+				data:[
+					{ value:"Root", open:true, data:[
+						"Item 1",
+						{ value:"Item 2", open:true, data:["Sub 1","Sub 2","Sub 3","Sub 4"] },
+						{ value:"Item 3", data:["Sub 1","Sub 2","Sub 3","Sub 4"] },
+						"Item 4"
+					]}
+				],
+				externalData:grid2tree
+			};
+
+			var tree2 = {
+				view:"tree", gravity:2,
+				drag:true, select:true,
+				data:[
+					{ value:"Root", open:true, data:["Sub 1","Sub 2","Sub 3","Sub 4"] }
+				],
+				externalData:grid2tree
+			};
+
+			webix.ui({
+				cols:[
+					{ rows: [ tree, tree2 ] },
+					{ rows: [ dataview, grid ], type:"wide"}
+				]
+			});
+		});
+		</script>
+	</body>
+</html>

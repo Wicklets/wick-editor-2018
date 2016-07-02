@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta  name = "viewport" content = "initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no">
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			.my_control .item1,.my_control .item2,.my_control .item3{
+				float:left;
+			}
+			.my_control .item1{
+				background:#ccffff;
+				font-size:24pt;
+				text-align:center;
+
+			}
+			.my_control .item2{
+				background:#ffccff;
+				font-size:24pt;
+				text-align:center;
+			}
+			.my_control .item3{
+				background:#ccccff;
+				font-size:24pt;
+				text-align:center;
+			}
+		</style>
+		<title>Custom Component</title>
+	</head>
+<body>
+
+		<script>
+		
+		
+		var dataset = [
+	{ id:1, title:"The Shawshank Redemption", year:1994, votes:678790, rating:9.2, rank:1},
+	{ id:2, title:"The Godfather", year:1972, votes:511495, rating:9.2, rank:2},
+	{ id:3, title:"The Godfather: Part II", year:1974, votes:319352, rating:9.0, rank:3},
+	{ id:4, title:"The Good, the Bad and the Ugly", year:1966, votes:213030, rating:8.9, rank:4},
+	{ id:5, title:"My Fair Lady", year:1964, votes:533848, rating:8.9, rank:5},
+	{ id:6, title:"12 Angry Men", year:1957, votes:164558, rating:8.9, rank:6}
+];
+		
+		//webix.debug_size = true;
+		webix.protoUI({
+			name:"custom",
+			$init:function(config){
+				this.$view.className = "my_control";
+				this.$view.innerHTML = "<div class='item1'></div><div class='item2'></div><div class='item3'></div>";
+ 
+			},
+			defaults:{
+				controlHeight:50
+			},
+			item1_setter:function(value){
+				if(value)
+					this.$view.childNodes[0].innerHTML = value;
+ 
+				return value;
+			},
+			item2_setter:function(value){
+				if(value)
+					this.$view.childNodes[1].innerHTML = value;
+				return value;
+			},
+			item3_setter:function(value){
+				if(value)
+					this.$view.childNodes[2].innerHTML = value;
+				return value;
+			},
+			$getSize:function(){
+				return [1,100000,this.config.controlHeight,this.config.controlHeight,1];
+			},
+ 
+			$setSize:function(x,y){ 
+				if (webix.ui.view.prototype.$setSize.call(this,x,y)){
+					var itemWidth = Math.round(this.$width/3);
+					for(var i=0;i<3;i++){
+						this.$view.childNodes[i].style.width = (i==2?this.$width-(itemWidth*2):itemWidth) +"px";
+						this.$view.childNodes[i].style.height = this.$height+"px";
+					}
+				}
+			}, 
+			on: {'onItemClick': function(){alert('text');}},
+		}, webix.MouseEvents, webix.EventSystem, webix.ui.view);
+		
+		webix.protoUI({
+		name:"editlist",
+		}, webix.EditAbility, webix.ui.list);
+		
+		webix.ready(function(){
+			webix.ui({
+				
+
+						rows:[
+							{ width: 200, view:"custom", item1:"Reg Form", item2:"Film Set",item3:"Details", click: 'function()' },
+							{ cols:[
+								{view:"form", rows:[{view:"text", label:"Login", },
+													{view:"text", label:"Password", type:"password"},
+													{view:"button", value:"Login", inputWidth: 200}
+										]},
+								{view:"editlist", editable:true, editor:"text", editValue:"title", data: dataset, template:"#rank#.#title# - #year#", select:true},
+								{rows:[ 
+									{view:"toolbar", cols:[
+										{view:"button", value:"but1", inputWidth:60},
+										{view:"button", value:"but2", inputWidth:60},{},{}
+									]},
+									{view:"template", template:"Details"}]
+								}
+							]	
+							}
+						]
+ 
+			});
+			
+		});
+		</script>
+</body>
+</html>
+

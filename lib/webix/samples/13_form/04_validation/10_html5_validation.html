@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA{
+				margin: 30px;
+			}
+		</style>
+		<title>HTML5 Data Validation</title>
+	</head>
+	<body>
+
+		<form>
+			<div id="areaA"></div>
+		</form>
+	
+
+		<script type="text/javascript" charset="utf-8">
+		var form1 = [
+			{ view:"text", value:'admin', label:"Login"},
+			{ view:"text", type:"email", attributes:{
+				max:16,
+				required:"true",
+				title:"Email is required"
+			}, value:'', label:"Email"},
+			{ view:"text", type:"submit", value:"Login", css:"webix_el_formbutton",
+				width:200, align:"center", inputAlign:"center" }
+		];
+
+		
+		webix.ui({
+			container:"areaA",
+			view:"form", scroll:false, width:300, elements: form1 
+		});
+		</script>
+	</body>
+</html>

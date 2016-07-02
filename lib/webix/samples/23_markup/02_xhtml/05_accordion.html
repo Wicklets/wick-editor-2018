@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:x>
+<head>
+	<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8" />
+	<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	<title>XML initialization : Accordion</title>
+</head>
+<body>
+
+<div style='width:600px; height:300px;'>
+	<x:ui>
+	<x:accordion>
+		<x:body header="Section A">
+			<x:list width="320" url="data/data.json"> #id#: #Package# </x:list>
+		</x:body>
+		<x:body header="Section B">
+			<x:list width="320" url="data/data.json"> #id#: #Package# </x:list>
+		</x:body>
+	</div>
+	</x:ui>
+</div>
+
+<br>
+
+<div style='width:600px; height:300px;'>
+	<x:ui>
+	<x:headerlayout stack="cols">
+		<x:body header="Section A">
+			<x:list url="data/data.json"> #id#: #Package# </x:list>
+		</x:body>
+		<x:body header="Section B">
+			<x:list url="data/data.json"> #id#: #Package# </x:list>
+		</x:body>
+	</div>
+	</x:ui>
+</div>
+
+<script type="text/javascript">
+	webix.markup.init();
+</script>
+</body>
+</html>

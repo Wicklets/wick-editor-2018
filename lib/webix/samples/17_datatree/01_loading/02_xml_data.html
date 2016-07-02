@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Tree: XML Dataset </title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+	</head>
+	<body>
+		<div class='header_comment'>Loading from an XML data source</div>
+		<div class='sample_comment'>
+			The sample demonstrates different ways you can load XML data to DataTree:
+                        <ol>
+				<li>Plain XML data (based on <item> tags)</li>
+				<li>Mixed XML data (using custom tags)</li>
+				<li>Custom logic for parsing XML data</li>
+				<li>Loading from a file</li>
+			</ol>
+		</div>
+		<div id="testA" style='width:250px; height:250px; float:left'></div>
+		<div id="testB" style='width:250px; height:250px; float:left'></div>
+		<div style='clear:both'>
+		<div id="testC" style='width:250px; height:250px; float:left'></div>
+		<div id="testD" style='width:250px; height:250px; float:left'></div>	
+		
+<textarea id='data1' style='display:none;'>
+	<data>
+		<item value='The Shawshank Redemption' open='1'>
+			<item value='part1'></item>
+			<item value='part2'></item>
+		</item>
+	</data>
+</textarea>
+		<script type="text/javascript" charset="utf-8">
+			//inline xml data
+			treea = webix.ui({
+				container:"testA",
+				view:"tree",
+				scheme:{ $parseChild:"item" },
+
+				data: document.getElementById('data1').value,
+				datatype:"xml"
+			});	
+		</script>
+
+
+<textarea id='data2' style='display:none;'>
+	<response>
+		<book value='The Shawshank Redemption' open='1'>
+			<part value='part1'></part>
+			<part value='part2'></part>
+		</book>
+	</response>
+</textarea>
+		<script type="text/javascript" charset="utf-8">
+
+			var myxml = webix.DataDriver.myxml = webix.copy(webix.DataDriver.xml);
+			myxml.records = "/*/book";
+			myxml.child = "part";
+
+
+			//inline xml, custom tags
+			treea = webix.ui({
+				container:"testB",
+				view:"tree",
+				
+				data: document.getElementById('data2').value,
+				datatype:"myxml"
+			});
+			</script>
+
+
+
+<textarea id='data3' style='display:none;'>
+	<response>
+		<book value='The Shawshank Redemption' open='1'>
+			<part value='part1'>
+				<page>Page 15</page>
+				<page>Page 16</page>
+			</part>
+			<part value='part2'></part>
+		</book>
+	</response>
+</textarea>
+		<script type="text/javascript" charset="utf-8">
+
+			var myxml2 = webix.DataDriver.myxml2 = webix.copy(webix.DataDriver.xml);
+			myxml2.records = "/*/book";
+			myxml2.child = function(obj){
+				if (obj.$level == 1)
+					return obj.part;
+				if (obj.$level == 2)
+					return obj.page;
+			}
+
+
+			//inline xml, custom tags
+			treea = webix.ui({
+				container:"testC",
+				view:"tree",
+				
+				data: document.getElementById('data3').value,
+				datatype:"myxml2"
+			});			
+		
+
+
+
+			//loading from file
+			treed = webix.ui({
+				container:"testD",
+				view:"tree",
+
+				url:"data/data.xml",
+				datatype:"xml"
+			});	
+		</script>
+
+	</body>
+</html>
+
+	</body>
+</html>

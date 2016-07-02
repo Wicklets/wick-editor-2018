@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+	<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="../common/samples.css">
+	<title>Windows: Resize</title>
+	<style>
+		html, body{
+			height: 100%;
+			padding:0;
+			margin:0;
+		}
+	</style>
+</head>
+<body>
+
+<script type="text/javascript" charset="utf-8">
+	webix.ui({
+		view:"window",
+		height:250,
+		width:300,
+		left:50, top:50,
+		move:true,
+		resize: true,
+		head:"This window can be resized",
+		body:{
+			template:"Some text"
+		}
+	}).show();
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<data xmlns:x="http://webix.com/xml">
+	<x:ui>
+		<x:list select='true'>
+			<template>#value#</template>	
+			<x:data>
+				<li>One</li>
+				<li>Two</li>
+				<li>Three</li>
+			</x:data>
+			<on>
+				<onItemClick>
+					(function(id){
+						webix.message(id);
+					})
+				</onItemClick>
+			</on>
+		</x:list>
+	</x:ui>
+</data>

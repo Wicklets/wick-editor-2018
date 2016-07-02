@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../common/testdata.js"></script>
+		<title>List: Work with Clipboard</title>
+	</head>
+	<style type="text/css">
+		#listA, #listB, #listC{
+			float:left; margin:20px;
+		}
+		.mark{
+			width:100px;
+			text-align: center;
+			font-weight:bold;
+			float:right;
+			background-color:#444;
+			color:white;
+			border-radius:3px;
+			margin-top: 5px;
+		}
+		.newtime{
+			background-color:#DDFFDD;
+		}
+		.oldtime{
+			background-color:#DDDDFF;
+		}
+	</style>
+	<body>
+		<div id="listA"></div>
+		<div id="listB"></div>
+		<div id="listC"></div>
+
+
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				container:"listA",
+				view:"list", 
+				width:320,
+				height:300,
+				select:true,
+				clipboard: true,
+				data:small_film_values_set
+			});
+
+			webix.ui({
+				container:"listB",
+				view:"list", 
+				width:320,
+				height:300,
+				select:true,
+				clipboard: "insert",
+				data:small_film_values_set
+			});
+
+			webix.ui({
+				container:"listC", id:"listC",
+				view:"list", 
+				width:320,
+				height:300,
+
+				template:"<div class='mark'>#votes# </div> #rank#. #title#",
+				type:{
+					height:60
+				},
+				select:true,
+				clipboard: "custom",
+				data:webix.copy(big_film_set),
+				templateCopy: function(item) {
+					return [item.title, item.year, item.votes, item.rating, item.rank].join(" , ");
+				}
+			});
+			$$("listC").attachEvent("onPaste", function(text) {
+				text = text.split(" , ");
+				
+				var sel = this.getSelectedId(true);
+				for (var i = 0; i < sel.length; i++) {
+					var item = this.getItem(sel[i]);
+					item.title = text[0];
+					item.year = text[1];
+					item.votes = text[2];
+					item.rating = text[3];
+					item.rank = text[4];
+					this.refresh(sel[i]);
+				}
+
+			});
+			
+		</script>
+	</body>
+</html>

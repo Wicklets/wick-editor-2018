@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Different types of content in the header</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Different types of content in the header</div>
+		<div class='sample_comment'>The sample shows how to define different content in the header: images, html inputs, links and standard text labels.</div>
+		<div id="testA"></div>
+		<hr>
+		<div id="testB"></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				headerRowHeight:40,
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"<input type='button' value='Do something' class='dummy_button'>",width:200},
+					{ id:"year",	header:"Year" , width:80},
+					{ id:"votes",	header:"<a href='http://google.com'>Link</a>", 	width:100}
+				],
+				autoheight:true,
+				autowidth:true,
+				data:small_film_set
+			});
+		});
+
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testB",
+				view:"datatable",
+				headerRowHeight:55,
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  							width:50},
+					{ id:"title",	header:"<img src='../common/imdb.png'>",width:200},
+					{ id:"year",	header:"Year", 							width:80},
+					{ id:"votes",	header:"Votes", 						width:100}
+				],
+				autoheight:true,
+				autowidth:true,
+				data:small_film_set
+			});
+		});
+		</script>
+	</body>
+</html>

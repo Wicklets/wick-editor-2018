@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Loading from custom XML</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		
+		<div class='header_comment'>Loading from custom XML</div>
+		<div id="testA"></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+
+			webix.DataDriver.custom = webix.extend({
+				records:"/data/items/item",
+				getDetails:function(obj){
+					var res = {};
+					var cells = this.xpath(obj, "cell");
+					for (var i = 0; i < cells.length; i++)
+						res[cells[i].getAttribute("id")] = this.nodeValue(cells[i]);
+					return res;
+				}
+			}, webix.DataDriver.xml);
+
+
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				url:"data/custom.xml", 
+				datatype:"custom"
+			});
+							
+		});
+		</script>
+	</body>
+</html>

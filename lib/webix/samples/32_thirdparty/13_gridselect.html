@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<script type="text/javascript" src="http://cdn.webix.com/components/gridsuggest/gridsuggest.js"></script>
+
+		<title>Grid Suggest</title>
+	</head>
+	<body>
+
+	<script type="text/javascript" charset="utf-8">
+	webix.ready(function(){	
+
+		var options = [
+			{id:1, name:"One", year:1988, color:"Red"}, 
+			{id:2, name:"Two", year:1996, color:"Blue"},
+			{id:3, name:"Three", year:1997, color:"Green"}, 
+			{id:4, name:"Four", year:2011, color:"Orange"},
+			{id:5, name:"Five", year:2000, color:"Grey"}, 
+			{id:6, name:"Six", year: 1994, color:"Yellow"}
+		];
+
+		webix.ui({ type:"space", rows:[
+			{},
+
+			{
+				view:"toolbar", elements:[
+					{view:"label", label:"Select"},
+					{ view:"richselect", value:1, options:{
+						view:"gridsuggest",
+						data:options 
+					}},
+					{ view:"richselect", value:1, options:{
+						view:"gridsuggest",
+						template:function(item){
+							return item.name + " (" + item.color + ")";
+						},
+						data:options
+					}},
+					{ view:"richselect", value:1, options:{
+						view:"gridsuggest",
+						textValue:"color",
+						data:options
+					}},
+					{ view:"richselect", value:2, options:{
+						view:"gridsuggest",
+						width:350,
+						body:{
+							header:false, borderless:true,
+							autoConfig:true,
+							data: options
+						}
+					}},
+					{ view:"richselect", value:3, suggest:{
+						view:"gridsuggest",
+						width:450,
+						body:{
+							columns:[
+								{ id:"name" }, { id:"color" }
+							],
+							data:options
+						}
+					}},
+				]
+			}, {},
+
+			{
+				view:"toolbar", elements:[
+					{view:"label", label:"Combo"},
+					{ view:"combo", value:1, options:{
+						view:"gridsuggest",
+						data:options
+					}},
+					{ view:"combo", value:1, options:{
+						view:"gridsuggest",
+						template:function(item){
+							return item.name + " (" + item.color + ")";
+						},
+						data:options
+					}},
+					{ view:"combo", value:1, options:{
+						view:"gridsuggest",
+						textValue:"color",
+						data:options
+					}},
+					{ view:"combo", value:2, options:{
+						view:"gridsuggest",
+						width:350,
+						body:{
+							autoConfig:true,
+							header:false, borderless:true,
+							data: options
+						}
+					}},
+					{ view:"combo", value:3, suggest:{
+						view:"gridsuggest",
+						width:450,
+						body:{
+							columns:[
+								{ id:"name" }, { id:"color" }
+							],
+							data:options
+						}
+					}},
+				]
+			}, 
+
+			{ gravity:20 }
+
+		]});
+
+	});
+	</script>
+	</body>
+</html>

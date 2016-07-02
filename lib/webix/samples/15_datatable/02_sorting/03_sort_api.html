@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Sorting Datatable. Using sorting methods</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Sorting. Using sorting methods</div>
+		<div class='sample_comment'>Click on the "Title" column to sort the table by the title's length</div>
+		<div class='sample_comment'>Click on the "Votes" column to sort the table by the film rank</div>
+		<div class='sample_comment'>Click on one of buttons below to apply custom sorting rules</div>
+		<input type='button' class='sample_button' value='sort by title' onclick='sortTitle()'>
+		<input type='button' class='sample_button' value='sort by category and title' onclick='sortGroupTitle()'>
+		<div id="testA"></div>
+
+
+		<script type="text/javascript" charset="utf-8">
+		function sortTitle(){
+			grid.sort("#title#");
+			grid.markSorting("title", "asc");
+		}
+		function sortGroupTitle(){
+            grid.markSorting("group", "asc");
+            grid.sort(function(a,b){
+				if (a.group == b.group)
+					return (a.title>b.title)?1:-1;
+				else
+					return (a.group>b.group)?1:-1;
+			});
+		}
+		webix.ready(function(){
+			function textLength(a,b){
+				a = a.title.toString().length;
+				b = b.title.toString().length;
+				return a>b?1:(a<b?-1:0);
+			};
+
+			function sortByParam(a,b){
+				a = a.rank;
+				b = b.rank;
+				return a>b?1:(a<b?-1:0);
+			}
+
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"group",	header:"Category" , width:100 },
+					{ id:"title",	header:"Film title",width:200,	sort:textLength },
+					{ id:"year",	header:"Released" , width:100 },
+					{ id:"votes",	header:"Votes", 	width:100,	sort:sortByParam}
+				],
+				autoheight:true,
+				autowidth:true,
+				data:[
+					{ id:1, group:"A", title:"The Shawshank Redemption", year:1994, votes:678790, rating:9.2, rank:1},
+					{ id:2, group:"A", title:"The Godfather", year:1972, votes:511495, rating:9.2, rank:2},
+					{ id:3, group:"B", title:"The Godfather: Part II", year:1974, votes:319352, rating:9.0, rank:3},
+					{ id:4, group:"B", title:"The Good, the Bad and the Ugly", year:1966, votes:213030, rating:8.9, rank:4},
+					{ id:5, group:"A", title:"Pulp fiction", year:1994, votes:533848, rating:8.9, rank:5},
+					{ id:6, group:"B", title:"12 Angry Men", year:1957, votes:164558, rating:8.9, rank:6}
+				]
+			});			
+
+			
+		});
+		</script>
+	</body>
+</html>

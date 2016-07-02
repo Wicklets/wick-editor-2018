@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script type="text/javascript" src="../common/testdata.js"></script>
+		<title>Dynamic Adding/Deleting of Tabs in Tabbar</title>
+	</head>
+	<style type="text/css">
+		#listA{
+			width: 1000px;
+			margin:20px;
+		}
+	</style>
+	<body>
+		<div id="listA"></div>
+		
+		<script type="text/javascript" charset="utf-8">
+		
+		webix.ui({
+			container:"listA", type:"space",
+			rows:[	
+				{view:"toolbar", cols:[
+					{view:"button", value:"Add New Film", width:150, type:"form", align:"left", click:"add_new"},{},
+					{view:"button", value:"Delete Tab", width:150, type:"danger", align:"right", click:"del_tab"}
+					]
+				},
+				{ cols:[
+					{ view:"list", id:"list1",
+						template:"#title#",
+						width: 300,
+						height:400,
+						data: small_film_set,
+						select:true,
+						on:{
+							onItemClick:open_new_tab
+						}
+					},
+					{ type:"clean", rows:[
+						{ id:"tabs", view:"tabbar",  multiview:true, options:[], height:50},
+                        { id:"views", cells:[
+                            {view:"template", id:"tpl", template:"Pick a film from the list!"}
+                        ]}
+					]}
+				]}
+			]
+		});
+
+	
+		function open_new_tab(id){
+			var item = $$('list1').getItem(id);
+            //add tab
+            if(!$$(item.id)){
+                $$("views").addView({ view:"template", id:item.id, template:"Title:"+item.title+"<br>Year: "+item.year+"<br>Votes: "+item.votes });
+                $$("tabs").addOption(item.id, item.title, true);
+            }
+            //or show if already added
+            else
+                $$("tabs").setValue(item.id);
+		}
+			
+		function add_new(){
+			$$("list1").add({
+				title:"New title",
+				year:2000,
+				rating:5,
+				votes:1000
+			},0)
+		}
+		
+		function del_tab(){
+            var id = $$("tabs").getValue();
+            if(!id) return;
+            $$("tabs").removeOption(id);
+
+            //show default view if no tabs
+            if($$("tabs").config.options.length===0)
+                $$("tpl").show();
+
+            $$("views").removeView(id);
+            $$("list1").unselect(id);
+		}
+
+		
+		</script>
+	</body>
+</html>

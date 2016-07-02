@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Master Checkbox DataTable</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Using checkboxes and radio buttons in DataTable</div>
+		<div class='sample_comment'>Try to edit the first, second columns. Make a single click to check the control.</div>
+		<div id="testA"></div>
+		<hr>
+		<input type='button' value='Check Master' onclick='check()'>
+		<input type='button' value='UnCheck Master' onclick='uncheck()'>
+		<input type='button' value='Get Master State' onclick='isChecked()'>
+		<script type="text/javascript" charset="utf-8">
+		
+
+		function check(){
+			$$("dt").getHeaderContent("mc1").check();
+		};
+		function uncheck(){
+			$$("dt").getHeaderContent("mc1").uncheck();
+		};
+		function isChecked(){
+			var state = $$("dt").getHeaderContent("mc1").isChecked();
+			webix.message(state?"checked":"unchecked");
+		};
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable", id:"dt",
+				columns:[
+					{ id:"ch1", header:{ content:"masterCheckbox", contentId:"mc1" }, template:"{common.checkbox()}", width:40},
+					{ id:"title",	sort:"string", header:"Film title",width:200},
+					{ id:"year",	editor:"text",		header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+				
+				autoheight:true,
+				autowidth:true,
+				
+
+				data: webix.copy(small_wide_film_set)
+			});
+		});
+		</script>
+	</body>
+</html>

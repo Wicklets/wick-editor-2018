@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA{
+				margin: 30px;
+			}
+		</style>
+		<title>Hotkeys for buttons</title>
+	</head>
+	<body>
+
+		<div id="areaA"></div>
+	
+
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				container:"areaA",
+				view:"form", scroll:false,
+				width:300,
+
+				elements:[
+					{ borderless: true,template: "You can press 'enter' instead clicking Login button",height: 50},
+					{ view:"text", label:"Email"},
+					{ view:"text", label:"Password"},
+					{ margin:5, cols:[
+						{ view:"button", label:"Login" , type:"form", click: doOnClick, hotkey: "enter" },
+						{ view:"button", label:"Cancel" }
+					]}
+				]
+			});
+
+			function doOnClick(){
+
+				webix.alert("Login button clicked!")
+			}
+		</script>
+	</body>
+</html>

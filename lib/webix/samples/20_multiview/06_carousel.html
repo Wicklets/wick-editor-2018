@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../common/chartdata.js"></script>
+		<script src="./data/charts.js?8476855"></script>
+		<title>Carousel</title>
+
+	</head>
+	<body>
+		<div id='layout_div' style='width:600px; height:300px; margin:20px;'></div>
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				container:"layout_div",
+				css: "webix_dark",
+				view:"carousel",
+				id:"parts",
+				cols:[
+					achart, bchart, cchart
+				]
+			});
+		</script>
+	</body>
+</html>

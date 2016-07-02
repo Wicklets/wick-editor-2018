@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			body{
+				background: #faf6ed;
+			}
+		</style>
+		<title>Vertical Menu</title>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8">
+
+		var menu = {
+			view:"menu", id:"m1",
+			layout:"y", width:200,
+			select:true,
+			data:[
+				{ id:"1",value:"Translations"},
+				{ id:"2",value:"Posts" },
+				{ id:"3",value:"Info" }
+			],
+			on:{
+				onMenuItemClick:function(id){
+					$$("t1").setHTML("Click: "+this.getMenuItem(id).value);
+				}
+			}
+		};	
+
+		webix.ui({
+			type:"wide",
+			cols:[ menu, { id:"t1", template:" " }]
+		});
+
+		$$("m1").select(1);
+
+		</script>
+	</body>
+</html>

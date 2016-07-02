@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+        <title>Slider: Custom Step</title>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8">
+			var ui = webix.ui({
+				padding: 20,
+				cols:[
+					{},
+					{
+						width:450,
+						rows:[
+							{view:"form", id:"myform",   elements:[
+								{ view:"slider", label:"Step 5", value:"20", step:5, min: -20, max: -10,name:"s1"},
+								{ view:"slider", label:"Step 10", value:"50", step:10, name:"s2"},
+								{ view:"slider", label:"Step 20", value:"80", step:20, name:"s3"}
+							]},
+							{view:"form", id:"myform2", elements:[
+								{
+									type:"clean",
+									cols:[
+										{},
+										{ view:"button", type: "form", id:"slider_set", label:"Set values", click:"set()",  align:"right" },
+										{ view:"button", id:"slider_get", label:"Get values", click:"get()",  align:"left" }
+									]
+								},
+								{ view: "fieldset", label:"Data", body:{
+									//view:"form",
+									rows:[
+										{ view:"text", label:"Value 1", value:"0", name:"s1"},
+										{ view:"text", label:"Value 2", value:"100", name:"s2"},
+										{ view:"text", label:"Value 3", value:"12", name:"s3"}
+									]
+								}}
+							]}
+						]
+					},
+					{}
+				]
+
+			});
+			function set(){
+				var data = $$('myform2').getValues();
+				$$('myform').setValues(data);
+			};
+			function get(){
+				var data = $$('myform').getValues();
+				$$('myform2').setValues(data);
+			};
+		</script>
+		
+	</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+    <script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+    <title>Advanced options for select controls ('combo' and 'richselect')</title>
+    <style>
+        html, body{height:100%}
+        .testA, .testB, p{
+            margin-left:50px;
+        }
+    </style>
+</head>
+<body>
+<p>Customizing combo control</p>
+<div id="testA" style="margin:20px"></div>
+<p>Customizing richselect control</p>
+<div id="testB" style="margin:20px"></div>
+<script>
+
+    function parse_options(){
+        var list = $$("combo1").getPopup().getList();
+        var new_options = [
+            { id:1, name:"Germany"},
+            { id:2, name:"Great Britain"},
+            { id:3, name:"Australia"},
+            { id:4, name:"Belarus"}
+        ];
+        list.clearAll();
+        list.parse(new_options);
+    }
+
+    function reload_options(){
+        var list = $$("richselect2").getPopup().getList();
+        list.clearAll();
+        list.load("server/data.json");
+    }
+
+
+    webix.ui({
+        container:"testA",
+        view:"form", scroll:false,
+        rows:[
+            {
+                view:"combo", id:"combo1", width:400,label: 'Custom template & filter',  labelWidth:220, name:"fruit1",
+                value:1, options:{
+                filter:function(item, value){
+                    if(item.name.toString().toLowerCase().indexOf(value.toLowerCase())===0)
+                        return true;
+                    return false;
+                },
+                body:{
+                    template:"#name#",
+                    yCount:3,
+                    data:[
+                        { id:1, name:"Banana"},
+                        { id:2, name:"Papai"},
+                        { id:3, name:"Apple"},
+                        { id:4, name:"Mango"}
+                    ]
+                }
+            }},
+            {
+                view:"combo", width:400,label: 'Events::onItemClick',  labelWidth:220, name:"fruit2",
+                value:1, options:{
+                body:{
+                    data:[
+                        { id:1, value:"Banana"},
+                        { id:2, value:"Papai"},
+                        { id:3, value:"Apple"}
+                    ],
+                    on:{
+                        'onItemClick':function(id){
+                            webix.message("Clicked: "+this.getItem(id).value);
+                        }
+                    }
+                }
+            }},
+            {
+                view:"combo", width:400, labelWidth:220, label: 'Custom template',  name:"fruit3", value:2, options:{
+                template:"Extra #value#",
+                data:[
+                    { id:1, value:"Banana"   },
+                    { id:2, value:"Papai"   },
+                    { id:3, value:"Apple" }
+                ]
+            }},
+
+            {
+                view:"combo", width:400, labelWidth:220,
+                label: 'Serverside options',  name:"fruit4", value:"2", options: "server/data.json"
+            },
+            {view:"button",  type:"form",  value:"Parse new options for combo 1", click:parse_options}
+        ]
+    });
+
+    webix.ui({
+        container:"testB",
+        view:"form", scroll:false,
+        rows:[
+            {
+                view:"richselect", width:400,label: 'Custom template & item height',  labelWidth:220, name:"fruit5",
+                value:1, options:{
+                body:{
+                    template:"#name#",
+                    data:[
+                        { id:1, name:"Banana"},
+                        { id:2, name:"Papai"},
+                        { id:3, name:"Apple"}
+                    ],
+                    type:{
+                        height:50
+                    }
+                }}
+            },
+            {
+                view:"richselect", id:"richselect2", width:400, labelWidth:220, label: 'Custom template',  name:"fruit6", value:2, options:{
+                template:"Extra #value#",
+                data:[
+                    { id:1, value:"Germany"},
+                    { id:2, value:"Great Britain"},
+                    { id:3, value:"Australia"},
+                    { id:4, value:"Belarus"}
+                ]
+            }},
+            {
+                view:"richselect", width:400, labelWidth:220,
+                label: 'Serverside options',  name:"fruit7", value:"2", options: "server/data.json"
+            },
+            {view:"button", type:"form",  value:"Load new options for richselect2", click: reload_options}
+        ]
+    });
+
+</script>
+</body>
+</html>

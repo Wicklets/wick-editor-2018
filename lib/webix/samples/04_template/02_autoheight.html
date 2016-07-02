@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<title>Autosizing to Content</title>
+	</head>
+	<body>
+		<div id="my_box1" style='display:none;'>
+			Some text here
+		</div>
+		<div id="my_box2" style='display:none;'>
+			<p>Some text here</p>
+			<p>Some other text</p>
+		</div>
+		<div id="my_box3" style='display:none;'>
+			<ul>
+				<li>Some item</li>
+				<li>Some item</li>
+				<li>Some item</li>
+				<li>Some item</li>
+				<li>Some item</li>
+				<li>Some item</li>
+				<li>Some item</li>
+				<li>Some item</li>
+				<li>Some item</li>
+				<li>Some item</li>
+				<li>Some item</li>
+			</ul>
+		</div>
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				rows:[
+					{ template:"html->my_box1", autoheight:true},
+					{ template:"Area 1"},
+					{ template:"html->my_box2", autoheight:true},
+					{ template:"Area 2" },
+					{ template:"html->my_box3", autoheight:true}
+				]
+			}).show();
+		</script>
+	</body>
+</html>

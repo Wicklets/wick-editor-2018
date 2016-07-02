@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en" ng-app="webixApp">
+<head>
+  <meta charset="utf-8">
+  <title>Webix - Angular  : Initing from Config</title>
+  <script src="js/angular.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="../../codebase/webix.css">
+  <script type="text/javascript" src="../../codebase/webix.js"></script>
+
+  <script type="text/javascript" src="js/uiApp.js"></script>
+</head>
+<body ng-controller="webixTestController">
+
+
+<div webix-ui="config" webix-ready="doSome(root)" style="width:450px; height:300px;"></div>
+<br>
+<div webix-ui="config" webix-ready="doSome(root)" style="width:450px; height:300px;"></div>
+<br>
+
+<button ng-click="config = l_config"> Left - to - Right </button>
+<button ng-click="config = r_config"> Right - to - Left </button>
+
+</body>
+</html>

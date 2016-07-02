@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA, #areaB{
+				margin: 30px;
+			}
+		</style>
+		<title>Per Item Validation with Predefined Rules</title>
+	</head>
+	<body>
+
+		<form>
+			<div id="areaA"></div>
+			<div id="areaB"></div>
+		</form>
+	
+
+		<script type="text/javascript" charset="utf-8">
+		var form1 = [
+			{ view:"text", label:'Not empty', 
+				required:true, name:"text1" },
+			{ view:"text", label:'Is a Number', 
+				validate:webix.rules.isNumber, name:"text2" },
+			{ view:"text", label:'Is an Email', 
+				validate:webix.rules.isEmail, name:"text3" },
+			{view:"button", value:"Clear Validation", 
+				click:"$$('form1').clearValidation();"}
+		];
+
+
+		webix.ui({
+			container:"areaA",
+			view:"form",
+            id:"form1",
+            scroll:false,
+            width:300,
+			elements: form1,
+			elementsConfig:{
+				labelAlign:"right",
+                on:{
+                    'onChange':function(newv, oldv){
+                        this.validate();
+                    }
+                }
+			}
+		});	
+
+		</script>
+	</body>
+</html>

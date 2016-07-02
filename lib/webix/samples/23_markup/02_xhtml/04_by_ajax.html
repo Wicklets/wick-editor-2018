@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:x>
+<head>
+	<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8" />
+	<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	<title>Load UI by ajax</title>
+</head>
+<body>
+<input type="button" onclick="load()" value='load UI by ajax'>
+<script type="text/javascript">
+	function load(){
+		webix.ajax("data/config.xml?!", function(text, data){
+			var config = webix.markup.parse(text, "xml");
+			webix.ui(config);
+		});
+	}
+</script>
+</body>
+</html>

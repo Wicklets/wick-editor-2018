@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Drag-and-Drop from HTML</title>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body class='webix_full_screen'>
+		<div class='sample_comment'>Drag one of Marked divs into the Webix view</div>
+		<div id="testA" style='width:500px;'></div>
+		
+		<div style='padding:20px;'>
+		<div id="divA" style='float:left; padding:20px; background-color:#dff;'> A </div>
+		<div id="divB" style='float:left; padding:20px; background-color:#fdf;'> B </div>
+		<div id="divC" style='float:left; padding:20px; background-color:#ffd;'> C </div>
+		</div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			var grid = {
+				view:"datatable",
+				container:"testA",
+				columns:[
+					{ id:"rank",	header:"#", 		width:50 },
+					{ id:"title",	header:"Film title",width:200,  fillspace:true},
+					{ id:"votes",	header:"Votes", 	width:100 },
+					{ id:"year",	header:"Released" , width:80 }
+					
+				],
+				select:"multiselect",
+				drag:true, scrollX:false,
+
+				on:{
+					onBeforeDrop:function(context, e){
+						this.getItem(context.target).title = context.source.innerHTML;
+						this.refresh(context.target);
+						return false;
+					}
+				},
+				autoheight:true,
+				data:small_film_set
+			};
+
+			webix.ui( grid );
+		});
+
+		webix.DragControl.addDrag("divA");
+		webix.DragControl.addDrag("divB");
+		webix.DragControl.addDrag("divC");
+		</script>
+	</body>
+</html>

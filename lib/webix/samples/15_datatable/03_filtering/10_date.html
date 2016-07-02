@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Filtering. Built-in Date Filter</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Filtering. Using built-in means</div>
+		<div class='sample_comment'>Built-in: Type in the filter box: "&gt;1980", "&lt;1980", "&gt;01.1980", "&gt;01.01.1980"</div>
+		<div id="testA"></div>
+		<hr>
+
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				scheme:{
+					$init:function(obj){
+						//creating fake dates for the sample
+						obj.date = new Date(obj.year, obj.title.length, obj.votes[0]);
+					}
+				},
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50,	sort:"int"},
+					{ id:"title",	header:"Film title", width:100,	sort:"string"},
+					{ id:"date",	header:[
+						"Released",
+						{ content:"dateFilter" }
+						] , width:160,	format:webix.i18n.dateFormatStr,  sort:"int"},
+					{ id:"votes",	header:"Votes", 	width:100,	sort:"int"}
+				],
+				height:300,
+				autowidth:true,
+				data:big_film_set
+			});
+
+
+
+
+						
+		});
+		</script>
+	</body>
+</html>

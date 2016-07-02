@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<title>Full-screen Calendar</title>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				view:"window",
+				height:350,
+				width:400,
+				left:50, top:50,
+				move:true,
+				head:"Calendar",
+				body:{
+					weekHeader:true,
+					view:"calendar",
+					events:webix.Date.isHoliday,
+					width:0,
+					height:0,
+					monthSelect:false
+				}
+			}).show();
+
+		</script>
+	</body>
+</html>

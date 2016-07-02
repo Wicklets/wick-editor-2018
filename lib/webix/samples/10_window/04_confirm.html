@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Confirm message</title>
+	<script type="text/javascript" src='../../codebase/webix.js'></script>
+	<link rel="stylesheet" type="text/css" href="../../codebase/webix.css">
+	<style type="text/css">
+		body, html {
+			height:100%;
+		}
+	</style>
+</head>
+<body>
+	<script type="text/javascript">
+		webix.confirm("Lorem ipsum dolor sit amet, consectetur adipisicing elit", function(result){
+			webix.confirm({
+				title: "Title",
+				ok:"Yes", cancel:"No",
+
+				text:"Lorem ipsum dolor sit amet, consectetur adipisicing elit",
+				callback:function(){
+					webix.confirm({
+						type:"confirm-warning",
+						text:"Warning!<br/>Lorem ipsum dolor sit amet, consectetur adipisicing elit",
+						callback:function(){
+							webix.confirm({
+								type:"confirm-error",
+								text:"Error!<br/>Lorem ipsum dolor sit amet, consectetur adipisicing elit"
+							});
+						}
+					});
+				}
+			});
+		});
+	</script>	
+</body>
+</html>

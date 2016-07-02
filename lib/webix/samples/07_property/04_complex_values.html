@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+	<title>Property sheet::Data with complex properties</title>
+	<script src="../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="stylesheet" type="text/css" href="../../codebase/webix.css">
+
+<body>
+<script>
+
+	var color_options = [
+		{id:1, value:"red"},
+		{id:2, value:"blue"},
+		{id:3, value:"green"},
+		{id:4, value:"orange"},
+		{id:5, value:"grey"},
+		{id:6, value:"yellow"}
+	];
+
+	var position_options = [
+		{id:1, value:"left"},
+		{id:2, value:"right"},
+		{id:3, value:"top"},
+		{id:4, value:"bottom"}
+	];
+
+
+	var propertysheet_1 = {
+		view:"property",  id:"sets", width:300, complexData:true,
+		elements:[
+			{ label:"Layout", type:"label" },
+			{ label:"Width", type:"text", id:"layout.width", value: 250},
+			{ label:"Height", type:"text", id:"layout.height"},
+			{ label:"Data loading", type:"label" },
+			{ label:"Data url", type:"text", id:"data.url", value:"http://webix.com/data"},
+			{ label:"Type", type:"select", options:["json","xml","csv"], id:"data.type"},
+			{ label:"Password", type:"password", id:"data.pass"},
+			{ label:"Use JSONP", type:"checkbox", id:"data.jsonp"},
+			{ label:"Styling", type:"label" },
+			{ label:"Position", type:"select", options:position_options, id:"style.position"},
+			{ label:"Color", type:"combo", options:color_options, id:"style.color"}
+
+		]
+	};
+
+	webix.ui({
+		cols:[
+			{ template:"left", id:"left" },
+			{rows:[
+				propertysheet_1,
+				{ view:"button", value:"getValues", click:function(){
+					$$("left").setHTML("<pre>"+ JSON.stringify( $$("sets").getValues() , null, "\t") + "</pre>");
+				}}
+			]}
+		]
+	});
+
+	$$("sets").setValues({
+		layout:{
+			width:250,
+			height:480
+		},
+		data:{
+			url:"http://webix.com/data",
+			type:"json"
+		},
+		style:{
+			position:2,
+			color:1
+		}
+
+	});
+
+</script>
+
+
+</body>
+</html>

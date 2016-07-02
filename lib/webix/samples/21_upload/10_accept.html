@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <title>Uploader - configure to accept the filetype</title>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function() {
+			webix.ui({
+				maxWidth:800,
+				cols:[{
+					view:"form", rows: [
+						{ 
+							view: "uploader", value: 'Upload Images', 
+							name:"files", accept:"image/png, image/gif, image/jpg",
+							link:"mylist",  upload:"php/upload.php" 
+						},
+						{
+						 	view:"list",  id:"mylist", type:"uploader",
+							autoheight:true, borderless:true	
+						},
+						{}
+					]
+				},{
+					view:"form", rows: [
+						{ 
+							view: "uploader", value: 'Upload Texts', 
+							name:"files", accept:"text/plain, text/html, application/vnd.ms-excel",
+							link:"mylist2",  upload:"php/upload.php" 
+						},
+						{
+						 	view:"list",  id:"mylist2", type:"uploader",
+							autoheight:true, borderless:true	
+						},
+						{}
+					]
+				}]
+			});
+		});
+		</script>
+	</body>
+</html>

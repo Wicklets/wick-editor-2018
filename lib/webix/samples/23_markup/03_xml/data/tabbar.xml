@@ -1,0 +1,25 @@
+<data xmlns:x="http://webix.com/xml">
+	<x:ui>
+		<x:rows>
+			<x:multiview>
+				<x:list select='true' id="list_view">
+					<template>#value#</template>	
+					<x:data>
+						<li>One</li>
+						<li>Two</li>
+						<li>Three</li>
+					</x:data>
+				</x:list>
+				<x:template id="tmp_view">
+					Some test data
+				</x:template>
+			</x:multiview>
+			<x:tabbar type="bottom" value="list_view" multiview="1">
+				<options stack="1">
+					<option id="list_view" value="List" />
+					<option id="tmp_view" value="Templates" />
+				</options>
+			</x:tabbar>
+		</x:rows>
+	</x:ui>
+</data>

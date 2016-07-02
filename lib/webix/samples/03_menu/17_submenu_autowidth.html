@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+            body{
+                background: #faf6ed;
+            }
+			#areaA, #areaB{
+				margin: 50px;
+				width:700px; height:110px;
+			}
+		</style>
+		<title>Autowidth for Submenus</title>
+	</head>
+	<body>
+
+		<div id="areaA">
+			
+		</div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+			webix.ui({
+				container:"areaA",
+				view:"menu",
+				autowidth:true,
+                data:[
+					{ id:"1",value:"Short...",
+						submenu:[ "FB", "G+", "TW" ]},
+					{ id:"2",value:"Medium...",
+						submenu:[ "Facebook", "Google+", "Twitter" ]},
+					{ id:"3",value:"Long...",
+						submenu:[ "Facebook Site", "Google+ Site", "Twitter Site" ]},
+					{ id:"4",value:"Very long...",
+						submenu:[ "Facebook Site - Social Network", "Google+", "Twitter" ]}
+				],
+                type:{
+                    subsign:true
+                }
+			});
+
+        </script>
+	</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+	<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	<title>Disabled time</title>
+</head>
+<style type="text/css">
+	#listA, #listB, #listC{
+		float:left; margin:20px;
+	}
+	body{
+		background: #faf6ed;
+	}
+	.webix_view{
+		border-radius:3px;
+	}
+</style>
+<body>
+<div id="listA"></div>
+<div id="listB"></div>
+
+
+<script type="text/javascript" charset="utf-8">
+
+	var disabledTime = [new Date(2015,6,1,8,40), new Date(2015,6,1,9,10),new Date(2015,6,1,10,30)];
+	webix.ui({
+		container:"listA",
+		date:new Date(2015,6,1, 8, 30),
+		view:"calendar",
+		events:webix.Date.isHoliday,
+		timepicker:true,
+		minTime:'8:00',
+		maxTime:'18:30'
+	});
+
+
+	webix.ui({
+		container:"listB",
+		date:new Date(2015,6,1, 8, 30),
+		view:"calendar",
+		type:"time",
+		blockTime:function(date){
+			for(var i =0; i< disabledTime.length; i++){
+				if(disabledTime[i].valueOf() == date.valueOf())
+					return true
+			}
+			return false;
+		},
+		on:{
+			onDateSelect: function(date){
+				webix.message(webix.i18n.parseTimeFormatStr(date));
+			}
+		}
+	});
+
+
+
+</script>
+</body>
+</html>

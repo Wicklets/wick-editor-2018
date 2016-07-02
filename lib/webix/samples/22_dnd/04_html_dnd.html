@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Drag-and-Drop to HTML</title>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body class='webix_full_screen'>
+		<div class='sample_comment'>Drag any from grid's rows to the input</div>
+		<div id="testA" style='width:500px;'></div>
+		
+		<input type="text" placeholder="drop row here" id="mytext" style='margin:20px; font-size:16px;'>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			var grid = {
+				view:"datatable",
+				container:"testA",
+				columns:[
+					{ id:"rank",	header:"#", 		width:50 },
+					{ id:"title",	header:"Film title",width:200,  fillspace:true},
+					{ id:"votes",	header:"Votes", 	width:100 },
+					{ id:"year",	header:"Released" , width:80 }
+					
+				],
+				select:"multiselect",
+				drag:true, scrollX:false,
+
+				autoheight:true,
+				data:small_film_set
+			};
+
+			webix.ui( grid );
+		});
+		webix.DragControl.addDrop("mytext", {
+			$drop:function(source, target, event){
+				var dnd = webix.DragControl.getContext();
+				target.value = dnd.from.getItem(dnd.source[0]).title;
+			}
+		})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+    <title>Bar Chart: Custom xAxis</title>
+    <script src="../../../codebase/webix.js" type="text/javascript"></script>
+    <link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+    <script src="../../common/chartdata.js"></script>
+<body>
+<div id="chartDiv" style="width:650px;height:250px;margin:20px"></div>
+<script>
+    webix.ui({
+        container:"chartDiv",
+        view:"chart",
+        type:"bar",
+        value:"#sales#",
+        preset:"stick",
+        tooltip:{
+            template:"Date <span class='title'>#date#</span><br/>Value <span class='title'>#sales#</span>"
+        },
+        xAxis:{
+            template:function(obj){
+                return obj.$unit.getDate()==15?webix.Date.dateToStr("%F")(obj.$unit):""
+            },
+            lineColor:function(obj){
+                return obj.$unit.valueOf() == (new Date(2012,1,1)).valueOf()?"#737373":"#cfcfcf"
+            },
+            value:function(obj){
+                return webix.Date.strToDate("%d.%m.%Y")(obj.date);
+            },
+            units:{
+                start:new Date(2012,0,1),
+                end:new Date(2012,1,29),
+                next:function(d){
+                    return  webix.Date.add(d, 1, "day", true);
+                }
+            }
+        },
+        yAxis:{
+            start:0,
+            step:10,
+            end:100
+        },
+        data: dates_dataset
+    });
+</script>
+</body>
+</html>

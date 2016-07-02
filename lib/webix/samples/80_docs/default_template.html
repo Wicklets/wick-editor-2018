@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<title>Default Template</title>
+	</head>
+	<body>
+		<div id="mylayout" style="width:400px; height:150px; margin: 20px">
+		<div id="myDiv">Default Template with some text inside</div>
+		<script>
+			webix.ui({
+				container:"mylayout",
+				type:"space",
+				rows:[
+					{  template:"Default template with some text inside" }
+					]
+			});
+			
+			
+ 
+webix.ui({
+		type:"space",
+		width:400,
+		height:150,
+		rows:[
+        {view:"template",
+        content:"myDiv"}
+		]
+});
+		</script>
+	</body>
+</html>

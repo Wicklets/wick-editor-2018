@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Drag-and-Drop between Tree Nodes - Drop as Child</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+	</head>
+	<body class='webix_full_screen'>
+		<div class='header_comment'>Drag from first to second tree, only folders will accept drag</div>
+		
+		<div id="testA" style='width:300px; height:300px'></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+
+			grid = webix.ui({
+				container:"testA",
+				view:"treetable",
+				columns:[
+					{ id:"id",	header:"", css:{"text-align":"right"},  	width:50},
+					{ id:"value",	header:"Film title",	width:250,
+						template:"{common.treetable()} #value#" },
+					{ id:"state",	header:"State",	width:100},
+					{ id:"hours",	header:"Hours",	width:100}
+				],
+
+				drag:true,
+				autoheight:true,
+				autowidth:true,
+
+				on:{
+					onBeforeDragIn:function(context, ev){
+						if (!context.target) return false;	//block dnd on top level
+						//block dnd in leaf items
+						if (!this.getItem(context.target).$count) return false;
+					},
+					onBeforeDrop:function(context){
+						context.parent = context.target;	//drop as child
+						context.index = -1; 				//as last child
+					}
+				},
+
+				url: "data/data.php", datatype:"xml"
+			});
+
+		});	
+	
+		</script>
+	</body>
+</html>

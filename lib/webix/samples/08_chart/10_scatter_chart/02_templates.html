@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+    <title>Scatter Chart: Templates</title>
+    <script src="../../../codebase/webix.js" type="text/javascript"></script>
+    <link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+    <script src="../../common/chartdata.js"></script>
+<body>
+<div id="chartDiv" style="width:600px;height:250px;margin:20px"></div>
+<script>
+    var colors = {"Type A":"#69ba00", "Type B": "#4aa397", "Type C": "#de619c"};
+    var borders = {"Type A":"#447900", "Type B": "#0a796a", "Type C": "#b7286c"};
+
+    var legendValues = [];
+    for(var t in colors)
+        legendValues.push({text:t,color:colors[t]});
+    webix.ui({
+        container:"chartDiv",
+        view:"chart",
+        type:"scatter",
+        value:"#b#",
+        xValue: "#a#",
+        yAxis:{
+            title:"Value B"
+        },
+        xAxis:{
+            title:"Value A"
+        },
+        tooltip:{
+            template:"#a# - #b#"
+        },
+        item:{
+            radius:3,
+            type:"s",
+            borderColor:function(obj){
+                return borders[obj.type]
+            },
+            borderWidth:2,
+            color:function(obj){
+                return colors[obj.type]
+            }
+        },
+        legend:{
+            layout:"x",
+            width: 75,
+            align:"center",
+            valign:"top",
+            values:legendValues
+        },
+        data:scatter_dataset
+    });
+</script>
+</body>
+</html>

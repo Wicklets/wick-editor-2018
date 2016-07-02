@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8" />
+    <script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+    <title>HTML initialization::Menu</title>
+    <script type="text/javascript">
+        webix.ready(function(){ webix.markup.init(); });
+    </script>
+</head>
+<body>
+<!--submenus-->
+<div data-view="submenu" data-id="submenu1">
+    <ul data-view="data">
+        <li data-id="1.1" data-submenu="submenu3">Item 1.1</li>
+        <li data-id="1.2">Item 1.2</li>
+    </ul>
+</div>
+<div data-view="submenu" data-id="submenu2">
+    <ul data-view="data">
+        <li  data-id="2.1">Item 2.1</li>
+        <li  data-id="2.2">Item 2.2</li>
+    </ul>
+</div>
+<div data-view="submenu" data-id="submenu3">
+    <ul data-view="data">
+        <li  data-id="1.1.1">Item 1.1.1</li>
+        <li  data-id="1.1.2">Item 1.1.2</li>
+    </ul>
+</div>
+<!--menu and main content-->
+<div data-view="rows" data-padding="20" data-width="600">
+    <div data-view="menu" data-height="50">
+        <ul data-view="data">
+            <div data-view="menu">
+                <ul data-view="data">
+                    <li data-id="1" data-submenu="submenu1">Item 1</li>
+                    <li data-id="2" data-submenu="submenu2">Item 2</li>
+                </ul>
+            </div>
+            <li data-id="3">Item 3</li>
+        </ul>
+    </div>
+    <div data-view="template" data-height="350">
+        Main content
+    </div>
+</div>
+</body>
+</html>

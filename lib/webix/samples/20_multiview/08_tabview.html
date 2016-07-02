@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../common/testdata.js"></script>
+		<style>
+			#areaA, #areaB {
+				margin: 50px 10px;
+				width:320px;
+				height:400px;
+				float: left;
+			}
+			
+		</style>
+		<title>Tabview: Basic Initialization</title>
+	</head>
+	<body>
+		<div id="areaA"></div>
+
+		<script type="text/javascript" charset="utf-8">
+
+		var cells =[
+			{
+				header:"List",
+				body:{
+					view:"list",
+					template:"#rank#. #title# <div style='padding-left:18px'> Year:#year#, votes:#votes# </div>",
+					type:{
+						height:60
+					},
+					select:true,
+					data:big_film_set
+				}
+			},
+			{
+				header:"Form",
+				body:{
+					id:"formView",
+					template:"Place for the form control"
+				}
+			},
+			{
+				header:"About",
+				body:{
+			 		id:"aboutView",
+					template:"About the app"
+				}
+			}
+		];
+
+		webix.ui({
+			container: "areaA",
+			view:"tabview",
+			id:"tabview1",
+			animate:false,
+			cells:cells
+		});
+	
+		</script>
+	</body>
+</html>

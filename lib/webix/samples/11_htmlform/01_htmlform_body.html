@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" href="data/myform.css" type="text/css" media="screen" charset="utf-8">
+		<title>Initialization in Document Body</title>
+	</head>
+	<body>
+
+        <div class="myform">
+            <div class="block">
+                <div class="label"><label for="title">Book title</label></div><div><input type="text" name="title"  id="title" value="" placeholder="Title" /></div>
+                <div class="label"><label for="author">Author</label></div><div><input type="text" name="author" id="author" value="" placeholder="Author" /></div>
+            </div>
+            <div class="block_right">
+                <label for="in_store">In store</label><input type="checkbox" name="in_store" id="in_store" checked />
+            </div>
+            <fieldset>
+                <legend>Genre</legend>
+                <div>
+                    <input type="radio" name="genre" value="poetry" id="genre1" /><label for="genre1">Poetry</label>
+                </div>
+                <div>
+                    <input type="radio" name="genre" value="horror" id="genre2" checked /><label for="genre2">Horror</label>
+                </div>
+                <div>
+                    <input type="radio" name="genre" value="short_story" id="genre3" /><label for="genre3">Short Story</label>
+                </div>
+                <div>
+                    <input type="radio" name="genre" value="fantasy" id="genre4" /><label for="genre4">Fantasy</label><br/>
+                </div>
+                <div>
+                    <input type="radio" name="genre" value="drama" id="genre5" /><label for="genre5">Drama</label>
+                </div>
+                <div>
+                    <input type="radio" name="genre" value="tragedy" id="genre6" /><label for="genre6">Tragedy</label>
+                </div>
+
+            </fieldset>
+            <div class="block">
+                <div class="label"><label for="rank">Rank</label></div>
+                <select name="rank" id="rank">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <div class="block">
+                <div class="label"><label for="annotation">Annotation</label></div>
+                <textarea name="annotation" id="annotation">some book annotation is here</textarea>
+            </div>
+            <div class="title">choose an action and apply it to Form</div>
+            <div class="block">
+                <div class="label"><label for="rank">Action:</label></div>
+                <select name="action" id="action">
+                    <option value="set_form">Set data</option>
+                    <option value="load_form">Load form</option>
+                    <option value="get_form">Get data (console)</option>
+                    <option value="clear_form">Clear form</option>
+                    <option value="focus_form">Focus</option>
+                </select>
+            </div>
+            <div class="button">
+                <input type="button" value="Apply" onclick="apply_action()"/>
+            </div>
+        </div>
+
+
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				view:"htmlform", id:"formView",
+                padding:5,
+				content: document.body
+			});
+
+            function apply_action(){
+                var action = $$('formView').getValues()["action"];
+                webix.toFunctor(action)();
+            }
+			function set_form() {
+				$$('formView').setValues({
+					title: "Book title 1",
+					author: "Author test",
+					in_store: false,
+					rank: "4",
+					genre: "fantasy",
+					annotation: "some test",
+					submit: "Apply"
+				});
+			}
+
+			function get_form() {
+				var values = $$('formView').getValues();
+				console.log(values);
+			}
+			
+			function clear_form() {
+				$$('formView').clear();
+			}
+			
+			function focus_form(item) {
+				$$('formView').focus();
+			}
+		
+			function load_form() {
+				$$('formView').load("data/book.xml", "xml");
+			}
+		</script>
+	</body>
+</html>

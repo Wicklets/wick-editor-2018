@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+	<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	<title>RangeSlider</title>
+</head>
+<body>
+<script type="text/javascript" charset="utf-8">
+
+	var ui = webix.ui({
+		width:450,
+
+		view:"form",
+		id:"myform",
+
+		elements:[
+			{ view:"rangeslider",  label:"Level A", value: "50,70", name:"s1", on:{
+				onChange: function(value){
+					webix.message("Level A "+value[0]+" - "+value[1])
+				}
+			}},
+			{ view:"rangeslider", label:"Level B", value:[0,50], name:"s2", title:function(obj){
+				var v = obj.value;
+				return (v[0]==v[1]?v[0]: v[0]+" - "+v[1]);
+			}},
+			{ view:"rangeslider", label:"Level C", value:"10,100", name:"s3",title: webix.template("#value#")}
+		]
+	});
+
+</script>
+
+</body>
+</html>

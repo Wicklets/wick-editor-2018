@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> Using the 'select' editor</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Using the 'select' editor</div>
+		<div class='sample_comment'>Try to edit the 'Category' column.</div>
+		<div class='sample_comment'>Make a single click to open the cell editor:</div>
+		<div id="testA"></div>
+		<hr>
+		<div class='sample_comment'>Double click to open the cell editor:</div>
+		<div id="testB"></div>
+		<hr>
+		<div class='sample_comment'>Press the 'Enter' key to open the editor (init by hotkey):</div>
+		<div id="testC"></div>
+		<hr>
+		<div class='sample_comment'>Press any key to open the editor (init by hotkey):</div>
+		<div id="testD"></div>
+		<hr>
+
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	editor:"text",		header:"", css:"rank",  		width:50},
+					{ id:"title",	editor:"text",		header:"Film title",width:200},
+					{ id:"cat_id",  editor:"select",	options:["Crime", "Thriller"],	header:"Category" , width:80},
+					{ id:"votes",	editor:"text",		header:"Votes", 	width:100}
+				],
+				
+				editable:true,
+				autoheight:true,
+				autowidth:true,
+
+				data: [
+					{ id:1, title:"The Shawshank Redemption", cat_id:"Thriller", votes:678790, rating:9.2, rank:1},
+					{ id:2, title:"The Godfather", cat_id:"Crime", votes:511495, rating:9.2, rank:2}
+				]
+			});
+
+
+			gridb = webix.ui({
+				container:"testB",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	editor:"text",		header:"", css:"rank",  		width:50},
+					{ id:"title",	editor:"text",		header:"Film title",width:200},
+					{ id:"cat_id",  editor:"select",	options:["Crime", "Thriller"],	header:"Category" , width:80},
+					{ id:"votes",	editor:"text",		header:"Votes", 	width:100}
+				],
+				
+				editable:true,
+				editaction:"dblclick",
+				autoheight:true,
+				autowidth:true,
+
+				data: [
+					{ id:1, title:"The Shawshank Redemption", cat_id:"Thriller", votes:678790, rating:9.2, rank:1},
+					{ id:2, title:"The Godfather", cat_id:"Crime", votes:511495, rating:9.2, rank:2}
+				]
+			});	
+
+
+			gridc = webix.ui({
+				container:"testC",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	editor:"text",		header:"", css:"rank",  		width:50},
+					{ id:"title",	editor:"text",		header:"Film title",width:200},
+					{ id:"cat_id",  editor:"select",	options:["Crime", "Thriller"],	header:"Category" , width:80},
+					{ id:"votes",	editor:"text",		header:"Votes", 	width:100}
+				],
+				
+				editable:true,
+				editaction:"custom",
+				navigation:true,
+				select:"cell",
+
+				autoheight:true,
+				autowidth:true,
+
+				data: [
+					{ id:1, title:"The Shawshank Redemption", cat_id:"Thriller", votes:678790, rating:9.2, rank:1},
+					{ id:2, title:"The Godfather", cat_id:"Crime", votes:511495, rating:9.2, rank:2}
+				]
+			});
+
+			webix.UIManager.addHotKey("enter", function(view){
+				var pos = view.getSelectedId();
+				view.edit(pos);
+			}, gridc);
+
+
+			gridd = webix.ui({
+				container:"testD",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	editor:"text",		header:"", css:"rank",  		width:50},
+					{ id:"title",	editor:"text",		header:"Film title",width:200},
+					{ id:"cat_id",  editor:"select",	options:["Crime", "Thriller"],	header:"Category" , width:80},
+					{ id:"votes",	editor:"text",		header:"Votes", 	width:100}
+				],
+				
+				editable:true,
+				editaction:"custom",
+				navigation:true,
+				select:"cell",
+
+				autoheight:true,
+				autowidth:true,
+
+				data: [
+					{ id:1, title:"The Shawshank Redemption", cat_id:"Thriller", votes:678790, rating:9.2, rank:1},
+					{ id:2, title:"The Godfather", cat_id:"Crime", votes:511495, rating:9.2, rank:2}
+				]
+			});
+
+			webix.UIManager.addHotKey("any", function(view){
+				var pos = view.getSelectedId();
+				view.edit(pos);
+			}, gridd);
+
+		});	
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<title>Minimum Size for Layout's Cells</title>
+	</head>
+	<body>
+		<div id='layout_div' style='width:600px; height:600px; margin:20px;'></div>
+		<script type="text/javascript" charset="utf-8">
+		var set1 = [
+			{ rows:[
+				{ view:"template", minHeight:50 },
+				{ view:"template"},
+				{ view:"template", height: 50}
+			]},
+			{ rows:[
+				{ view:"template", minHeight:50 },
+				{ view:"template", height: 25 },
+				{ view:"template", height: 50}
+			]},
+			{ rows:[
+				{ view:"template", minHeight:50 },
+				{ view:"template", gravity:10 },
+				{ view:"template", height: 50}
+			]}
+		];
+
+		var set2 = [
+			{ rows:[
+				{ view:"template", height:50 },
+				{ view:"template"},
+				{ view:"template", height: 50}
+			]},
+			{ rows:[
+				{ view:"template", height:50 },
+				{ view:"template", height: 25 },
+				{ view:"template", height: 50}
+			]},
+			{ rows:[
+				{ view:"template", height:50 },
+				{ view:"template", gravity:10 },
+				{ view:"template", height: 50}
+			]}
+		];	
+
+		var set3 = [
+			{ rows:[
+				{ view:"template", maxHeight:50 },
+				{ view:"template"},
+				{ view:"template", height: 50}
+			]},
+			{ rows:[
+				{ view:"template", maxHeight:50 },
+				{ view:"template", height: 25 },
+				{ view:"template", height: 50}
+			]},
+			{ rows:[
+				{ view:"template", maxHeight:50 },
+				{ view:"template", gravity:10 },
+				{ view:"template", height: 50}
+			]}
+		];	
+
+			webix.ui({
+				container:"layout_div",
+				height:750,
+			    width:600, type:"wide",
+			    rows:[
+			    	{ template:"minHeight:50" },
+			    	{ cols:set1, height:200, type:"space"},
+			    	{ template:"maxHeight:50" },
+			    	{ cols:set3, height:200, type:"space"},
+			    	{ template:"height:50" },
+			    	{ cols:set2, height:200, type:"space" }
+			    ]
+			});
+		</script>
+	</body>
+</html>

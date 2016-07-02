@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dnd with Invisible Uploader</title>
+    <link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+    <script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<script>
+
+    webix.ui({
+        rows:[
+            { type:"header", template:"Drop files below" },
+            { view:"list", id:"mylist", type:"uploader",
+              height:600, width:320, scroll:false }
+        ]
+    })
+
+    webix.ui({
+        id:"uploadAPI",
+        view:"uploader",
+        upload:"php/upload.php",
+        on:{
+            onFileUpload:function(item){
+                webix.message("Done");
+            }
+        },
+        link:"mylist",
+        apiOnly:true
+    });
+
+    $$("uploadAPI").addDropZone( $$("mylist").$view, "Drop files here");
+</script>
+
+</body>
+</html>

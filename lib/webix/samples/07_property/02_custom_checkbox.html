@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+<head>
+	<title>Property Sheet: Custom Editors</title>
+	<script src="../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="stylesheet" type="text/css" href="../../codebase/webix.css">
+
+
+<body>
+	<script>
+	var propertysheet_1 = {
+		view:"property",  id:"sets", width:300,
+		elements:[
+			{ label:"Layout" },
+			{ label:"Width", 		type:"text", id:"width"},
+			{ label:"Height", 		type:"text", id:"height"},
+			{ label:"Data loading" },
+			{ label:"Data url", 	type:"text", id:"url"},
+			{ label:"Data type", 	type:"toggle", options:["json","xml"], id:"type"},
+			{ label:"Color front", 		type:"popup", 	 popup:"myColorF", id:"colorF" },
+			{ label:"Color back", 		type:"popup-ra", popup:"myColorB", id:"colorB" }
+		]
+	};
+
+	webix.ui({
+		type:"space", cols:[
+			{ template:"Try to edit the 'Data Type' " },
+			{rows:[
+				propertysheet_1
+			]}
+		]
+	});
+
+
+	webix.ui({
+		id:"myColorF",
+		view:"popup",
+		body:{ view:"textarea", width:300, height:100 }
+	});
+
+	webix.ui({
+		id:"myColorB",
+		view:"popup",
+		body:{ template:"Color #edit# is a constant", width:300, height:35 }
+	});
+
+	var prop = $$("sets");
+	prop.registerType("toggle",{
+		template:function(value, config){
+			return "<input type='button' class='webix_toggle_button_custom' value='"+value+"' style='margin:0px; 	width:95%; height:20px; font-size:12px; '>";
+		},
+		click:{
+			webix_toggle_button_custom:function(e, id){
+				var data = this.getItem(id);
+				if (data.options[0] == data.value)
+					data.value = data.options[1];
+				else
+					data.value = data.options[0];
+
+				this.editStop();
+				this.refresh(id);
+				this.callEvent("onCheck",[id, data.value]);
+			}
+		},
+		editor:"inline-text"
+	});
+
+
+
+	//default popup logic
+	prop.registerType("popup",{ 
+		editor:"popup"
+	});
+
+
+	//custom popup logic
+	webix.editors["popup-ra"] = webix.extend({
+		focus:function(){ },
+		getValue:function(node){ 
+			return this.getInputNode().data.edit; 
+		},
+		setValue:function(value){ 
+			this.getPopup().show(this.node);
+
+			this.getInputNode().data.edit = value;
+			this.getInputNode().refresh();
+		}
+	}, webix.editors["popup"]);
+	prop.registerType("popup-ra",{
+		editor:"popup-ra"
+	});
+
+
+	$$("sets").setValues({
+		width:250,
+		height:480,
+		url:"http://webix.com/data",
+		type:"json",
+		colorF:"#ff00ff",
+		colorB:"#45bb45"
+	});
+		
+	</script>
+
+
+</body>
+</html>

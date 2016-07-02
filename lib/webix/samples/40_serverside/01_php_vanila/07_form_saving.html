@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA{
+				margin: 30px;
+			}
+		</style>
+		<title>Form: Saving</title>
+	</head>
+	<body>
+
+		<div id="areaA"></div>
+
+
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				container:"areaA", id:"form1",
+				view:"form", scroll:false,
+				width:300,
+				elements:[
+					{ view:"text", name: "title", label:"Title"},
+					{ view:"text", name: "year", label:"Year"},
+					{ view:"counter", name: "votes", label:"Votes"},
+					{ margin:5, cols:[
+						{ view:"button", value:"Save", type:"form", click: save },
+						{ view:"button", value:"Cancel" }
+					]}
+				]
+			});
+			$$("form1").load("server/form.php?id=3");
+
+			function save() {
+				var values = $$("form1").getValues();
+				webix.ajax().post("server/form_save.php", values, function() {
+					webix.message({ type:"debug", text:"Film is saved", expire:-1});
+				});
+			}
+		</script>
+	</body>
+</html>

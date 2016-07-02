@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<link rel="stylesheet" type="text/css" href="../../common/samples.css">
+		<title>Suggest List for Input: Populating with  Server-side Data</title>
+		<style>
+			html, body{ height:100%; }
+			label.custom{
+				padding: 7px;
+			}
+		</style>
+	</head>
+<body>
+	<div class="sample_comment">Webix input, client side autosuggest</div>
+	<div id="data_container1" style="margin:20px"></div>
+	<div class="sample_comment">Webix input, server side autosuggest</div>
+	<div id="data_container2" style="margin:20px"></div>
+	<div class="sample_comment">HTML input, client side autosuggest</div>
+	<div id="data_container3" style="margin:20px; padding: 4px; border:1px solid #BFBFBF;width:300px;height: 76px;"></div>
+	<div class="sample_comment">HTML input, server side autosuggest</div>
+	<div id="data_container4" style="margin:20px; padding: 4px; border:1px solid #BFBFBF;width:300px;height: 76px;"></div>
+<script>
+
+	var countries = [
+		{id:1, value: "Albania"},
+		{id:2, value: "Bhutan"},
+		{id:3, value: "Colombia"},
+		{id:4, value: "Denmark"},
+		{id:5, value: "Germany"},
+		{id:6, value: "Moldova"}
+	];
+
+	var form1 = {
+		width: 300,
+		view:"form", scroll:false,
+		container:"data_container1",
+
+		rows:[
+			{ view:"text", name:"country", label:"Country", value:"Belarus", suggest:countries},
+			{ view:"button", type:"form", value:"Submit data", click:function(){
+				webix.message(JSON.stringify( this.getParentView().getValues()));
+			}}
+		]
+	};
+
+	var form2 = {
+		width: 300,
+		view:"form", scroll:false,
+		container:"data_container2",
+
+		rows:[
+			{ view:"text", name:"country", label:"Country", value:"Albania", suggest:"server/data.php"},
+			{ view:"button", type:"form", value:"Submit data", click:function(){
+				webix.message(JSON.stringify( this.getParentView().getValues()));
+			}}
+		]
+	};
+
+	var form3 = {
+		width: 300,
+		container:"data_container3",
+		rows: [
+			{ template:"<label class='custom' for='country3'>Country</label><input type='text' id='country3' value='Colombia' />", height: 36,borderless:true },
+			{ view:"button", type:"form", value:"Submit data", click:function(){
+				var values = { country: document.getElementById("country3").value };
+				webix.message(JSON.stringify( values ));
+			}}
+		]
+	};
+
+	var form4 = {
+	width: 300,
+		container:"data_container4",
+		rows: [
+			{ template:"<label class='custom' for='country4'>Country</label><input type='text' id='country4' value='Sweden' />", height: 36,borderless:true },
+			{ view:"button", type:"form", value:"Submit data", click:function(){
+				var values = { country: document.getElementById("country4").value };
+				webix.message(JSON.stringify( values ));
+			}}
+		]
+	};
+
+	webix.ui(form1);
+	webix.ui(form2);
+	webix.ui(form3);
+	webix.ui(form4);
+
+
+	webix.ui({
+		view: "suggest",
+		input: "country3",
+		data:countries
+	});
+	webix.ui({
+		view: "suggest",
+		input: document.getElementById("country4"),
+		body:{
+			dataFeed:"server/data.php"
+		}
+	});
+
+</script>
+</body>
+</html>

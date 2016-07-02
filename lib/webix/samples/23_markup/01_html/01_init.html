@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8" />
+	<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	<title>HTML initialization</title>
+	<style type="text/css">
+		.myitem{
+			background: #ff8;
+		}
+	</style>
+	<script type="text/javascript">
+		webix.ready(function(){ webix.markup.init(); });
+	</script>
+</head>
+<body>
+	<div data-view="rows">
+		<div data-view="template" data-height="35">
+			My header
+		</div>
+		<div data-view="toolbar">
+			<div data-view="button" data-width="150">Button</div>
+			<div data-view="label" data-label="Press the button to run App"></div>
+		</div>
+		<div data-view="cols">
+			<div data-view="list" data-url="data/data.json" data-select="true">
+				Package: #Package# (#Version#)
+			</div>
+			<div data-view="template">
+				<form>
+					<input type="submit" />
+				</form>
+			</div>
+			<div data-view="list" data-width="320">
+				#id#: #value#
+		       <ul data-view="data">
+		             <li id="9998">Item 1</li>
+		             <li id="9999" class='myitem'>Item 2</li>
+		       </ul>
+			</div>
+		</div>
+		<div data-view="template" data-height="35">
+			My footer
+		</div>
+    </div>
+</body>
+</html>

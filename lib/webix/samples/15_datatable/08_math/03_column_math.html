@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Applying formulas to an entire column</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/mathdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<style>
+	.index .webix_cell{
+		background-color:yellow;
+		text-align:center;
+	}
+	.center .webix_cell{
+		text-align:center;
+	}
+	</style>
+	<body>
+		<div class='header_comment'>Applying formulas to an entire column</div>
+		<div class='sample_comment'>If you have to apply the same formula to all cells of a column you may use the "math" option for column configuring:<br/> { id:"diff", header: "Deficit/surplus", width: 180, math:"[$r,:2] - [$r,exp]"}.<br/> Important! It's used without the "=" sign.<br/> You may use "$r" to link to the current row id and "$c" for the current column field name.<br/></div>
+		<div id="testA" style='width:800px; height:300px'></div>
+		<script type="text/javascript" charset="utf-8">
+
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"id",	header:"", css:"rank",  		width:50},
+					{ id:"name",	header:"Country",width:200},
+					{ id:"rev",	header:"Revenue" , width:180},
+					{ id:"exp",	header:"Expenditures", 	width:180},
+					{ id:"diff", header: "Deficit/surplus", width: 180, math:"[$r,:2] - [$r,exp]"},
+					{ id:"date", header: "Date", width: 80}
+				],
+				autoheight:true,
+				autowidth:true,
+				math: true,
+				data: budget
+			});
+
+		</script>
+	</body>
+</html>

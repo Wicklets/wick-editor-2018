@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Undo</title>
+	<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" charset="utf-8">
+	<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	<style>
+		.remove-icon{
+			color: #ccc;
+			float: right;
+			margin-top: 5px;
+			font-size: 15px;
+		}
+		.remove-icon:hover{
+			color: #888;
+		}
+		.webix_selected .remove-icon:hover{
+			color: #fff;
+		}
+	</style>
+
+</head>
+<body>
+<div id="testA" style="margin:20px;"></div>
+
+
+<script type="text/javascript" charset="utf-8">
+	webix.protoUI({
+		name:"editlist"
+	}, webix.EditAbility, webix.ui.list);
+
+	webix.ready(function(){
+		webix.ui({
+			container:"testA",
+			width: 400,
+			type: "clean",
+			rows:[
+
+				{
+					view:"editlist",
+					id: "list",
+					template:"#rank#. #title# <span class='webix_icon fa-times remove-icon' title='Remove'></span>",
+					undo: true,
+					drag: true,
+					select: true,
+					editor:"text",
+					editValue:"title",
+					editaction: "dblclick",
+					editable: true,
+					autoheight: true,
+					onClick:{
+						"remove-icon":function(ev, id){
+							console.log(arguments)
+							$$("list").remove(id);
+						}
+					},
+					data: [
+						{ id:1, title:"The Shawshank Redemption", year:1994, votes:678790, rating:9.2, rank:1},
+						{ id:2, title:"The Godfather", year:1972, votes:511495, rating:9.2, rank:2},
+						{ id:3, title:"The Godfather: Part II", year:1974, votes:319352, rating:9.0, rank:3},
+						{ id:4, title:"The Good, the Bad and the Ugly", year:1966, votes:213030, rating:8.9, rank:4},
+						{ id:5, title:"Pulp fiction", year:1994, votes:533848, rating:8.9, rank:5},
+						{ id:6, title:"12 Angry Men", year:1957, votes:164558, rating:8.9, rank:6}
+					]
+				},
+				{
+					view: "form",
+					padding: 7,
+					cols:[
+						{
+							view: "button", type: "form", label: "Add new", width: 105, click: function(){
+								$$("list").add({rank: 99,title: "New title"});
+							}
+						},
+						{},
+						{
+							view: "button", type: "iconButton", icon:"undo", width: 95, label: "Undo", click: function(){
+							$$("list").undo();
+						}
+						}
+					]
+				}
+			]
+
+		});
+
+
+
+
+	});
+</script>
+</body>
+</html>

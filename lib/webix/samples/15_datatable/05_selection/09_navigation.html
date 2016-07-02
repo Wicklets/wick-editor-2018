@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Navigation in DataTable</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Navigation in DataTable </div>
+		<div class='sample_comment'>Click on any cell to select it. Use the keyboard (arrow keys, Home, End, Page Up, Page Down) to move the selection. </div>
+		<br>
+		<div class='sample_comment'>Cell selection</div>
+		<div id="testA"></div>
+		<hr>
+		<div class='sample_comment'>Row selection</div>
+		<div id="testB"></div>
+		<hr>
+		<div class='sample_comment'>Column selection</div>
+		<div id="testC"></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+				select:"cell",
+				navigation:true,
+				autoheight:true,
+				autowidth:true,
+				data:webix.copy(small_film_set)
+			});	
+
+			grid = webix.ui({
+				container:"testB",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+				select:"row",
+				navigation:true,
+				autoheight:true,
+				autowidth:true,
+				data:webix.copy(small_film_set)
+			});	
+
+			grid = webix.ui({
+				container:"testC",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+				select:"column",
+				navigation:true,
+				autoheight:true,
+				autowidth:true,
+				data:webix.copy(small_film_set)
+			});	
+		});
+		</script>
+	</body>
+</html>

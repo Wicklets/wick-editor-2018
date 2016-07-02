@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<link rel="stylesheet" type="text/css" href="../../common/samples.css">
+		<style type="text/css">body, html{ height:100%;}</style>
+		<title>Attaching Suggest List to Input</title>
+		<style>
+			label {
+				padding: 7px;
+			}
+		</style>
+	</head>
+<body>
+	<div class="sample_comment">Attaching Suggest List to Input</div>
+	<div id="data_container1" style="margin:20px"></div>
+	
+<script>
+
+	var countries = [
+		{id:1, value: "Albania"},
+		{id:2, value: "Bhutan"},
+		{id:3, value: "Colombia"},
+		{id:4, value: "Denmark"},
+		{id:5, value: "Germany"},
+		{id:6, value: "Moldova"}
+	];
+
+	var form1 = {
+		width: 700, 
+		view:"form", scroll:false,
+		container:"data_container1",
+		padding:100,
+		rows:[
+			{ view:"text", name:"c1", label:"Bottom", value:"Belarus", suggest:countries},
+			{ view:"text", name:"c2", label:"Top", value:"", suggest:{
+				data:countries, relative:"top" 
+			}},
+			{ view:"text", name:"c3", label:"Left", value:"", suggest:{
+				data:countries, relative:"left" 
+			}},
+			{ view:"text", name:"c4", label:"Right", value:"", suggest:{
+				data:countries, relative:"right" 
+			}},
+			{ view:"button", type:"form", value:"Submit data", click:function(){
+				webix.message(JSON.stringify( this.getParentView().getValues()));
+			}}
+		]
+	};
+
+
+	webix.ui(form1);
+
+
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:x>
+<head>
+	<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8" />
+	<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	<title>HTML initialization : Nested layouts</title>
+</head>
+<body>
+
+	<div data-view="layout" data-stack="rows">
+		<div data-view="layout" data-stack="cols">
+			<div data-view="template">Cell 1.1</div>
+			<div data-view="template">Cell 1.2</div>
+		</div>
+		<div data-view="layout" data-stack="cols">
+			<div data-view="template">Cell 2.1</div>
+			<div data-view="template">Cell 2.2</div>
+		</div>
+	</div>
+
+
+<script type="text/javascript">
+	webix.markup.init();
+</script>
+</body>
+</html>

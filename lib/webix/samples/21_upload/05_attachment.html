@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <title>Attached Files</title>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function() {
+			var message_text = "First popularized in Asia, cat cafes are on their way west. The idea is simple - enjoy a coffee or tea like you might in your local cafe while hanging out with cats. Lauren Pears (a.k.a. Chief Crazy Cat Lady) is hoping to introduce one in London and give a little feline love to people whose busy schedules and tiny apartments prevent them from having pets!";
+
+			var compose_form = {
+				view:"form", rows: [
+					{ view:"textarea", value:message_text, label:"message", labelPosition:"top", height:200 },
+					{ type:"clean", cols:[
+						{ view: "uploader", value: 'Attach files', link:"mytemplate", 
+							upload:"php/upload.php", width:100,
+							name:"files", id:"files" },
+						{
+						 	id:"mytemplate", autoheight:true,
+							template:function(data){
+								var names = [];
+								if (data.each)
+									data.each(function(obj){  
+										if (obj.status == "server")
+											names.push("<a target='__blank' href='php/files/"+obj.name+"'>"+obj.name+"</a>");
+										else
+											names.push(obj.name);
+									});
+								return names.join(", &nbsp;&nbsp;&nbsp; ");
+							},
+							borderless:true 
+						}
+					]},
+					{ view:"button", value:"Send message" }
+				]
+			};
+			
+			webix.ui({
+				view:"window", body:compose_form, head:"Compose message",
+				width:600, id:"message_win",
+				left:100, top:100
+			}).show();
+			
+		});
+		</script>
+	</body>
+</html>

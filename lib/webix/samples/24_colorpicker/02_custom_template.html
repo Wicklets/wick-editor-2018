@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript" src="../../codebase/webix.js"></script>
+	<link href="../../codebase/webix.css" rel="stylesheet"/>
+	<title>Palette - Templates</title>
+	<style>
+		.webix_color_row div.value_cell{
+			border-right: 1px dotted #CFCFCF;
+			border-bottom: 1px dotted #CFCFCF;
+			padding: 5px;
+			color: #607890;
+			width:100%;
+			height: 100%;
+			box-sizing: border-box;
+			-moz-box-sizing:border-box;
+			text-align: center;
+
+		}
+		.value_cell div{
+			line-height:14px;
+			font-size:14px;
+			display:block;
+			width:100%;
+
+		}
+		.value_cell div.color_block{
+			border-radius: 6px;
+			height:80%;
+
+		}
+		.webix_color_selector{
+			border-color: #00f98e;
+		}
+	</style>
+</head>
+<body>
+	<div id="picker"></div>
+	<script>
+		webix.ui({
+			container:"picker",
+			view:"colorboard",
+			id:"color",
+			cols	:7,
+			rows	:4,
+			width	:600,
+			height	:370,
+			template:"<div class=\"value_cell\">" +
+						"<div>{obj.val}</div>" +
+						"<div class=\"color_block\" style=\"background:{obj.val};\"></div>" +
+					"</div>"
+
+
+		});
+
+		$$("color").attachEvent("onSelect", doLog);
+		function doLog(val, control, ev){
+			webix.message(this.config.id + " - " + val);
+		}
+
+	</script>
+</body>
+</html>
+

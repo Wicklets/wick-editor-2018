@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Dynamic loading in TreeTable</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+	</head>
+	<body>
+		<div class='header_comment'>TreeTable, dynamic loading during scrolling and for child items</div>
+		<div class='sample_comment'>Scroll tree to load more data</div>
+		<div id="test" style='width:450px; height:650px; float:left'></div>	
+
+		<script type="text/javascript" charset="utf-8">
+
+		var tree, state = null;
+		webix.ready(function(){
+
+			//loading from file
+			tree = webix.ui({
+				container:"test",
+				view:"treetable",
+				columns:[
+					{ id:"value", header:"Value", fillspace:true, template:"{common.treetable()} #value#" }
+				],
+				scrollX:false,
+				url:"data/data.php"
+			});
+		});
+
+		</script>
+	</body>
+</html>

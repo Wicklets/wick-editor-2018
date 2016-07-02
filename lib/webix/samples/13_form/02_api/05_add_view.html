@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA{
+				margin: 30px;
+			}
+		</style>
+		<title>Adding Views</title>
+	</head>
+	<body>
+
+		<div id="areaA"></div>
+	
+
+		<script type="text/javascript" charset="utf-8">
+			var counter = 0;
+			webix.ui({
+				container:"areaA",
+				view:"form", scroll:false,
+				width:600,
+
+				cols:[
+					{ rows:[
+						{ view:"button", value:"add many at once", click:function(){
+							webix.ui([
+								{ view:"text", value:"Extra 1", label:"Ex 1", name:"ex1" },
+								{ view:"text", value:"Extra 2", label:"Ex 2", name:"ex2" },
+								{ view:"text", value:"Extra 3", label:"Ex 3", name:"ex3" }
+							], this.getParentView());
+						}},
+					]}, 
+					{ rows:[
+						{ view:"button", value:"add one more input", click:function(){
+							counter++;
+							this.getParentView().addView({
+								view:"text", value:"Value "+counter, label:"Text "+counter, name:"text"+counter
+							});
+						}},
+						{ view:"button", value:"get values", click:function(){
+							webix.message(JSON.stringify( this.getFormView().getValues() ));
+						}},
+						{ view:"button", value:"remove last input", click:function(){
+							var form = this.getParentView();
+							var list = form.getChildViews();
+							form.removeView( list[list.length-1].config.id );
+						}}
+					]}
+				]
+			});
+		</script>
+	</body>
+</html>

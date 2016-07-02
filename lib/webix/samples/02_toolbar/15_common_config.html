@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA{
+				margin: 30px;
+				width: 800px;
+			}
+		</style>
+		<title>Toolbar: Common Configuration</title>
+	</head>
+<body>
+
+<div id="areaA" ></div>
+
+	
+
+<script type="text/javascript" charset="utf-8">
+
+
+
+webix.ui({
+		container:"areaA",
+		view:"toolbar",
+		elements: [
+				{ view:"button", width:100},
+				{ view:"segmented", width: 270, options:[
+					{id:"create", value:"Create"},
+					{id:"edit", value:"Edit"},
+					{id:"delete", value:"Delete"}
+					] 
+				},
+				{view:"text", label:"text"},
+				{view:"select", label:"Select", width:200, options:[
+					{id:"create", value:"Create New Tab"},
+					{id:"edit", value:"Edit Tab"},
+					{id:"delete", value:"Delete Tab"}
+					]
+				}
+			],
+		elementsConfig:{
+			width: 150,
+			labelAlign:"right",
+			value:"edit"}
+	});	
+
+</script>
+</body>
+</html>

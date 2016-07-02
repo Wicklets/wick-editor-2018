@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Checkbox and radio in DataTable</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Using checkboxes and radio buttons in DataTable</div>
+		<div class='sample_comment'>Try to edit the first, second columns. Make a single click to check the control.</div>
+		<div id="testA"></div>
+		<hr>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"ch1", header:{ content:"masterCheckbox" }, checkValue:'on', uncheckValue:'off', template:"{common.checkbox()}", width:40},
+					{ id:"ra1", header:"", checkValue:'on', uncheckValue:'off', template:"{common.radio()}", width:40},
+					{ id:"title",	sort:"string", header:"Film title",width:200},
+					{ id:"year",	editor:"text",		header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+				
+				autoheight:true,
+				autowidth:true,
+				
+
+				data: webix.copy(small_wide_film_set)
+			});
+
+
+			
+								
+		});
+		</script>
+	</body>
+</html>

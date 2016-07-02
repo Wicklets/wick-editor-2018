@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta  name = "viewport" content = "initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no">
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<title>Custom Text Editor</title>
+	</head>
+<body>
+<div id="testA" style="margin:20px;">
+	<script>
+	
+
+webix.editors.myeditor = webix.extend({
+			render:function(){
+			return webix.html.create("div", {
+				"class":"webix_dt_editor"
+			}, "<input type='email'>");
+		}}, webix.editors.text);
+
+webix.ui({
+		container:"testA",
+		view:"datatable",
+		columns:[
+				{ id:"id",	header:"", width:50},
+				{ id:"name",	header:"Name", editor:"text", width:200},
+				{ id:"age",	header:"Age" , width:80, template:"<input type='text' value='#age#' style='width:50px;'>", editor:"inline-text"},
+				{ id:"email",	header:"Email", editor:"myeditor",	width:150}
+				],
+			autoheight:true,
+		autowidth:true,
+		editable:true,
+		checkboxRefresh:true,
+		data: [
+					{ id:1, name:"Alex", age:"15", email:""},
+					{ id:2, name:"Jim", age:"41", email:"jimmy.gmail.com"},
+					{ id:3, name:"Hanna", age:"24", email:"hanka88@gmail.com"},
+					{ id:4, name:"Alice", age:"28", email:"lissy@mail.ru"},
+					{ id:5, name:"Fred", age:"45", email:""},
+					{ id:6, name:"Susanne", age:"18", email:""}
+				]
+			});	
+
+				
+	</script>
+</body>
+</html>

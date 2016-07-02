@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+    <script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="../common/testdata.js"></script>
+    <style>
+        #areaA {
+            margin: 50px 10px;
+            width:480px;
+            height:350px;
+            float: left;
+        }
+
+    </style>
+    <title>Nested Multiviews</title>
+</head>
+<body>
+
+<div id="areaA"></div>
+
+
+<script type="text/javascript" charset="utf-8">
+    webix.ui({
+        container: "areaA",
+        padding:8,
+        rows:[
+            {
+                id:"views",
+                cells:[
+                    {
+                        id:"listView",
+                        view:"list",
+                        template:"#rank#. #title# <div style='padding-left:18px'> Year:#year#, votes:#votes# </div>",
+                        type:{
+                            height:60
+                        },
+                        select:true,
+                        data:small_film_set
+                    },
+                    {
+                        id:"chartView",
+                        cells:[
+                            {
+                                view:"chart",
+                                type:"bar",
+                                value:"#votes#",
+                                color:"#58dccd",
+                                xAxis:{
+                                    template:"#rank#"
+                                },
+                                radius:0,
+                                gradient:"rising",
+                                yAxis:{
+                                    start:0,
+                                    step: 200000,
+                                    end:800000
+                                },
+	                            padding: {
+		                            left: 90
+	                            },
+                                data:small_film_set
+                            },
+                            {
+
+                                view:"chart",
+                                type:"donut",
+                                value:"#votes#",
+                                radius: 70,
+                                shadow:0,
+                                pieInnerText: "#rank#",
+                                data:small_film_set
+                            }
+                        ]
+
+                    }
+                ]
+            },
+            {
+                view:"toolbar", height:38, elements: [
+                    { view:"button",  label:"show nested multiview",  click:"$$('chartView').show()"},
+                    { view:"button",  label:"show chart 1",  click:"$$('$chart1').show()", width: 110},
+                    { view:"button",  label:"show chart 2",  click:"$$('$chart2').show()", width: 110}
+                ]
+
+            },
+
+            {
+                view:"toolbar", height:38, elements: [
+                    { view:"button",  label:"show chart 1 & parents",  click:"$$('$chart1').show(true)"},
+                    { view:"button",  label:"show chart 2 & parents",  click:"$$('$chart2').show(true)"}
+                ]
+
+            }
+        ]
+
+
+
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <title>Template Uploader</title>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div id="uploader_container" style="width: 600px; height: 200px; margin: 40px;"></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function() {
+			webix.ui({
+				container:"uploader_container",
+				view:"form", rows: [
+					{ 
+						view: "uploader", name:"records", 
+						value: 'Upload file', link:"mytemplate",
+						upload:"php/upload.php"
+					},
+					{
+					 	id:"mytemplate", autoheight:true,
+						template:function(data){
+							var names = [];
+							if (data.each)
+								data.each(function(obj){  names.push(obj.name);  });
+							return names.join(", ");
+						},
+						borderless:true 
+					},
+					{ view: "button", label: "Get value", click: function() {
+						var text = this.getParentView().getValues();
+						text = JSON.stringify(text, "\n");
+						webix.message("<pre>"+text+"</pre>");
+					}}
+				]
+			});
+		});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <title>Uploader and Form Integration</title>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function() {
+
+			function save_form(){
+				//send files to server side
+				$$("upl1").send(function(){
+					//getting file properties
+					$$('upl1').files.data.each(function(obj){
+						var status = obj.status;
+						var name = obj.name;
+							if(status=='server'){
+								var sname = obj.sname; //came from upload script
+								webix.message("Upload: "+status+" for "+ name+" stored as "+sname );
+							}
+							else{
+							webix.message("Upload: "+status+" for "+ name);
+						}
+				});
+
+					//after that send form
+					webix.ajax().post(
+						"php/saveform.php", 
+						$$("myform").getValues(), 
+						function(text){
+							//show server side response
+							webix.message(text);
+						}
+					);
+				});
+			}
+
+			webix.ui({
+				maxWidth:320,
+				view:"form", id:"myform",
+				elements:[
+					{ view:"text", label:"Title", labelPosition:"top", name:"title" },
+					{ view:"button", label:"Save", type:"form", click:save_form },
+					{
+						view:"uploader", upload:"php/upload.php",
+						id:"upl1", name:"files",
+						value:"Add documents", 
+						link:"doclist", autosend:false
+					},
+					{ view:"list", scroll:false, id:"doclist", type:"uploader" }
+				]
+			});
+
+			$$("$text1").focus();
+			
+		});
+		</script>
+	</body>
+</html>

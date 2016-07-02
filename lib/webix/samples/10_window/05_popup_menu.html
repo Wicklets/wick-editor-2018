@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<title>Popup Menu</title>
+	</head>
+<body>
+<div id="my_tool" style="width:400px; margin:30px;"></div>
+<script>
+
+webix.ui({        
+	container:"my_tool", rows:[
+	{view:"toolbar", elements:[
+		{view:"button", align:"left", label: 'Menu', width:100, popup:"my_pop" }
+	]},
+	{view:"template", template:"text", height:400}
+	]
+});
+
+webix.ui({
+	view:"popup",
+	id:"my_pop",
+    head:"Submenu",
+	width:300,
+	body:{
+		view:"list", 
+		data:[ {id:"1", name:"Zoo", location: "New York"},
+				{id:"2", name:"Coffeebar", location:"Salt Lake City"},
+				{id:"3", name:"Teeparty", location:"Alabama"}
+		],
+		datatype:"json",
+
+		template:"#name# - #location#",
+		autoheight:true,
+		select:true
+	}
+});
+</script>
+
+</body>
+</html>

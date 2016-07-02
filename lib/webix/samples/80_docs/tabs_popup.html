@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+	<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+	<title>Popup</title>
+	<script type="text/javascript" src="../common/testdata.js"></script>
+	<script type="text/javascript" src="../common/treedata.js"></script>
+
+</head>
+<body>
+
+<script type="text/javascript">
+
+var staff_data = [
+	{"id":"1","last_name":"Parra","name":"Ray M.","phone":"1-516-588-4014", "address":"38 Trebovir Road"},
+	{"id":"2","last_name":"Ritter","name":"Suellen G.","phone":"1-254-142-2718", "address":"14 Pembridge Square"},
+	{"id":"3","last_name":"Blunt","name":"Janelle P.","phone":"1-625-450-6164", "address":"85 Shepherds Bush Road"},
+	{"id":"4","last_name":"Acker","name":"Cristopher B.","phone":"1-168-882-3418", "address":"42, Adler Street "},
+	{"id":"5","last_name":"Dion","name":"Lane E.","phone":"1-999-444-8015", "address":"122 Church Road"},
+	{"id":"6","last_name":"Mcknight","name":"Rossana M.","phone":"1-925-700-6209", "address":"16 Leinster Square"},
+	{"id":"7","last_name":"Perryman","name":"Becki P.","phone":"1-879-598-4224", "address":"428 Woolwich Road"},
+	{"id":"8","last_name":"Sparks","name":"Jolie P.","phone":"1-639-297-3499", "address":"27 Revolutionary Road"},
+	{"id":"9","last_name":"Mattingly","name":"Shirley M.","phone":"1-856-490-2946", "address":"131 Beaconsfield Road, SE17 2BX"},
+	{"id":"10","last_name":"Mccracken","name":"Rosario H.","phone":"1-576-828-1193", "address":"194, Earls Court Road"},
+	{"id":"11","last_name":"Goldsmith","name":"Sudie M.","phone":"1-170-148-7838", "address":"7 Craven Road Paddington"},
+	{"id":"12","last_name":"Berryman","name":"Sherley D.","phone":"1-652-296-9698", "address":"22, Coventry Road, Ilford, Essex"},
+	{"id":"13","last_name":"Alley","name":"Romaine B.","phone":"1-312-951-9057", "address":"357 Green Lanes N4 1DZ"},
+	{"id":"14","last_name":"Weston","name":"Giovanni B.","phone":"1-333-753-7919", "address":"85, Yellow Bridge"}
+];
+
+var customers_data = [
+	{"id":"1","last_name":"Holcombe","name":"Virgen C.","phone":"1-166-931-4580", "orders":"125, 36, 145", "address":"65 Queen's Gate, SW7 5JS"},
+	{"id":"2","last_name":"Ventura","name":"Tory H.","phone":"1-232-669-1007", "orders":"12, 85, 3", "address":"30 Leicester Square"},
+	{"id":"3","last_name":"Coats","name":"Jacquline A.","phone":"1-107-591-2388", "orders":"5, 87, 69", "address":"261-263 Uxbridge Road"},
+	{"id":"4","last_name":"Mccallister","name":"Jamila N.","phone":"1-415-124-5100", "orders":"14, 27, 58, 46, 122", "address":"26 Upper Berkeley Street"},
+	{"id":"5","last_name":"Hermann","name":"Sabrina N.","phone":"1-399-579-7491", "orders":"56, 87", "address":"77 Warwick Way, Victoria"},
+	{"id":"6","last_name":"Mauro","name":"Bradly N.","phone":"1-850-878-3128", "orders":"23, 69, 114, 1", "address":"14 Barkston Gardens"},
+	{"id":"7","last_name":"Denham","name":"Ashleigh G.","phone":"1-731-475-1045", "orders":"89, 56, 14, 23", "address":"96 Redcliffe Gardens"},
+	{"id":"8","last_name":"Peachey","name":"Stephen H.","phone":"1-101-484-9998", "orders":"33, 46", "address":" 30 Norfolk Square Paddington"},
+	{"id":"9","last_name":"Cano","name":"Amado T.","phone":"1-344-305-4707", "orders":"89, 100, 9", "address":"38 Barkston Gardens"},
+	{"id":"10","last_name":"Whelan","name":"Olimpia C.","phone":"1-671-983-4003", "orders":"74, 43, 81, 21", "address":"11, Coventry Road, Ilford, Essex"},
+	{"id":"11","last_name":"Field","name":"Regine H.","phone":"1-517-525-7295", "orders":"10", "address":"14 Pembridge Square"},
+	{"id":"12","last_name":"Cass","name":"Roxanna C.","phone":"1-137-919-5626", "orders":"154, 88, 41", "address":"27 Trebovir Road"},
+	{"id":"13","last_name":"Casteel","name":"Reba H.","phone":"1-435-749-2686", "orders":"19, 23, 48", "address":"131 Beaconsfield Road, SE17 2BX"},
+	{"id":"14","last_name":"Whelan","name":"Jettie P.","phone":"1-486-931-8637", "orders":"12, 82", "address":"261 Uxbridge Road"},
+	{"id":"15","last_name":"Richards","name":"Sherry G.","phone":"1-463-443-6357", "orders":"104, 111, 47", "address":"327 Cranbrook Road"},
+	{"id":"16","last_name":"Chandler","name":"Stephane A.","phone":"1-960-146-7693", "orders":"26", "address":"207 Romford Road"},
+	{"id":"17","last_name":"Lilley","name":"Stepanie P.","phone":"1-518-311-1713", "orders":"112, 589, 46, 71, 80", "address":"47 Shernhall Street, Walthamstow"},
+	{"id":"17","last_name":"Marshall","name":"Amee A.","phone":"1-350-843-1951", "orders":"124, 4, 7, 79, 96", "address":"44 Shepherds Bush Road"}
+
+];
+
+var products_data = [
+	{"id":1,"code":"NWTB-1","name":"Webix Chai","cost":"13.50","price":"13.50"},
+	{"id":2,"code":"NWTCO-3","name":"Webix Syrup","cost":"7.50","price":"7.50"},
+	{"id":3,"code":"NWTCO-4","name":"Webix Cajun Seasoning","cost":"16.50","price":"16.50"},
+	{"id":4,"code":"NWTO-5","name":"Webix Olive Oil","cost":"16.01","price":"16.01"},
+	{"id":5,"code":"NWTJP-6","name":"Webix Boysenberry Spread","cost":"18.75","price":"18.75"},
+	{"id":6,"code":"NWTDFN-7","name":"Webix Dried Pears","cost":"22.50","price":"22.50"},
+	{"id":7,"code":"NWTS-8","name":"Webix Curry Sauce","cost":"30.00","price":"30.00"},
+	{"id":8,"code":"NWTDFN-14","name":"Webix Walnuts","cost":"17.44","price":"17.44"},
+	{"id":9,"code":"NWTCFV-17","name":"Webix Fruit Cocktail","cost":"29.25","price":"29.25"},
+	{"id":10,"code":"NWTBGM-19","name":"Webix Chocolate Biscuits Mix","cost":"6.90","price":"6.90"},
+	{"id":11,"code":"NWTJP-7","name":"Webix Marmalade","cost":"60.75","price":"60.75"},
+	{"id":12,"code":"NWTBGM-21","name":"Webix Scones","cost":"7.50","price":"7.50"},
+	{"id":13,"code":"NWTB-34","name":"Webix Beer","cost":"10.50","price":"10.50"},
+	{"id":14,"code":"NWTCM-40","name":"Webix Crab Meat","cost":"13.80","price":"13.80"},
+	{"id":15,"code":"NWTSO-41","name":"Webix Clam Chowder","cost":"7.24","price":"7.24"},
+	{"id":16,"code":"NWTB-43","name":"Webix Coffee","cost":"34.50","price":"34.50"},
+	{"id":17,"code":"NWTCA-48","name":"Webix Chocolate","cost":"9.56","price":"9.56"}
+];
+
+var orders_data = [
+	{"id":1,"date":"2012-12-20","employee":"Ray M. Parra","customer":"Sabrina N. Hermann","status":"new","fee":12.5,"taxes":23.028,"total":323.378,"shipping_company":"Shipping A","payment_method":"Credit card"},
+	{"id":2,"date":"2012-12-20","employee":"Lane E. Dion","customer":"Bradly N. Mauro","status":"new","fee":12,"taxes":6.528,"total":100.128,"shipping_company":"Shipping C","payment_method":"Wire transer"},
+	{"id":3,"date":"2012-12-20","employee":"Ray M. Parra","customer":"Stepanie P. Lilley","status":"ready","fee":25,"taxes":54,"total":1429,"shipping_company":"Shipping A","payment_method":"Credit card"},
+	{"id":4,"date":"2012-12-20","employee":"Sudie V. Goldsmith","customer":"Jettie P. Whelan","status":"cancelled","fee":10,"taxes":41.25,"total":1082.5,"shipping_company":"Shipping A","payment_method":"Credit card"},
+	{"id":5,"date":"2012-12-20","employee":"Romaine B. Alley","customer":"Amee A. Marshall","status":"new","fee":12,"taxes":9.1257,"total":203.6397,"shipping_company":"Shipping A","payment_method":"Wire transer"},
+	{"id":6,"date":"2012-12-20","employee":"Jolie P. Sparks","customer":"Roxanna C. Cass","status":"completed","fee":10,"taxes":2.671875,"total":119.546875,"shipping_company":"Shipping B","payment_method":"Wire transer"},
+	{"id":7,"date":"2012-12-20","employee":"Sherley D. Berryman","customer":"Ashleigh G. Denham","status":"completed","fee":26,"taxes":149.2638,"total":1419.1288,"shipping_company":"Shipping B","payment_method":"Credit card"},
+	{"id":8,"date":"2013-01-15","employee":"Lane E. Dion","customer":"Reba H. Casteel","status":"new","fee":33,"taxes":54.23,"total":1522.63,"shipping_company":"Shipping B","payment_method":"Cash"},
+	{"id":9,"date":"2013-01-16","employee":"Ray M. Parra","customer":"Stepanie P. Lilley","status":"ready","fee":56.2,"taxes":22.1,"total":854.3,"shipping_company":"Shipping D","payment_method":"Cash"},
+	{"id":10,"date":"2013-01-16","employee":"Sudie V. Goldsmith","customer":"Bradly N. Mauro","status":"new","fee":10,"taxes":12,"total":454,"shipping_company":"Shipping E","payment_method":"Credit Card"},
+	{"id":11,"date":"2013-01-16","employee":"Romaine B. Alley","customer":"Sabrina N. Hermann","status":"cancelled","fee":85,"taxes":42,"total":987,"shipping_company":"Shipping A","payment_method":"Wire Transfer"},
+	{"id":12,"date":"2013-01-16","employee":"Ray M. Parra","customer":"Roxanna C. Cass","status":"completed","fee":20,"taxes":8,"total":456,"shipping_company":"Shipping G","payment_method":"Credit Card"},
+	{"id":13,"date":"2013-07-11","employee":"Jolie P. Sparks","customer":"Bradly N. Mauro","status":"new","fee":13,"taxes":1,"total":255,"shipping_company":"Shipping A","payment_method":"Cash"},
+	{"id":14,"date":"2013-07-11","employee":"Sudie V. Goldsmith","customer":"Stephen H. Peachey","status":"new","fee":63,"taxes":12,"total":1522,"shipping_company":"Shipping B","payment_method":"Wire Transfer"},
+	{"id":15,"date":"2013-07-11","employee":"Sherley D. Berryman","customer":"Sabrina N. Hermann","status":"ready","fee":78,"taxes":45,"total":1788,"shipping_company":"Shipping A","payment_method":"Wire Transfer"},
+	{"id":16,"date":"2013-07-11","employee":"Ray M. Parra","customer":"Regine H.Field","status":"ready","fee":14,"taxes":4,"total":988,"shipping_company":"Shipping A","payment_method":"Cash"},
+	{"id":17,"date":"2013-07-11","employee":"Romaine B. Alley","customer":"Stephane A. Chandler","status":"completed","fee":0,"taxes":0,"total":0,"shipping_company":"Shipping C","payment_method":"Credit Card"},
+	{"id":18,"date":"2013-07-11","employee":"Jamila N. Mccallister","customer":"Olimpia C. Whelan","status":"new","fee":55,"taxes":13,"total":2100,"shipping_company":"Shipping E","payment_method":"Credit Card"},
+	{"id":19,"date":"2013-07-11","employee":"Romaine B. Alley","customer":"Jettie P. Whelan","status":"ready","fee":18,"taxes":8,"total":956,"shipping_company":"Shipping A","payment_method":"Wire Transfer"},
+	{"id":20,"date":"2013-07-11","employee":"Lane E. Dion","customer":"Stepanie P. Lilley","status":"completed","fee":133,"taxes":33,"total":754,"shipping_company":"Shipping D", "payment_method":"Cash"},
+	{"id":111,"date":"2012-12-20","employee":"Ray M. Parra","customer":"Sabrina N. Hermann","status":"new","fee":12.5,"taxes":23.028,"total":323.378,"shipping_company":"Shipping A","payment_method":"Credit card"},
+	{"id":112,"date":"2012-12-20","employee":"Lane E. Dion","customer":"Bradly N. Mauro","status":"new","fee":12,"taxes":6.528,"total":100.128,"shipping_company":"Shipping C","payment_method":"Wire transer"},
+	{"id":113,"date":"2012-12-20","employee":"Ray M. Parra","customer":"Stepanie P. Lilley","status":"ready","fee":25,"taxes":54,"total":1429,"shipping_company":"Shipping A","payment_method":"Credit card"},
+	{"id":114,"date":"2012-12-20","employee":"Sudie V. Goldsmith","customer":"Jettie P. Whelan","status":"cancelled","fee":10,"taxes":41.25,"total":1082.5,"shipping_company":"Shipping A","payment_method":"Credit card"},
+	{"id":115,"date":"2012-12-20","employee":"Romaine B. Alley","customer":"Amee A. Marshall","status":"new","fee":12,"taxes":9.1257,"total":203.6397,"shipping_company":"Shipping A","payment_method":"Wire transer"},
+	{"id":116,"date":"2012-12-20","employee":"Jolie P. Sparks","customer":"Roxanna C. Cass","status":"completed","fee":10,"taxes":2.671875,"total":119.546875,"shipping_company":"Shipping B","payment_method":"Wire transer"},
+	{"id":117,"date":"2012-12-20","employee":"Sherley D. Berryman","customer":"Ashleigh G. Denham","status":"completed","fee":26,"taxes":149.2638,"total":1419.1288,"shipping_company":"Shipping B","payment_method":"Credit card"},
+	{"id":118,"date":"2013-01-15","employee":"Lane E. Dion","customer":"Reba H. Casteel","status":"new","fee":33,"taxes":54.23,"total":1522.63,"shipping_company":"Shipping B","payment_method":"Cash"},
+	{"id":119,"date":"2013-01-16","employee":"Ray M. Parra","customer":"Stepanie P. Lilley","status":"ready","fee":56.2,"taxes":22.1,"total":854.3,"shipping_company":"Shipping D","payment_method":"Cash"},
+	{"id":1110,"date":"2013-01-16","employee":"Sudie V. Goldsmith","customer":"Bradly N. Mauro","status":"new","fee":10,"taxes":12,"total":454,"shipping_company":"Shipping E","payment_method":"Credit Card"},
+	{"id":1111,"date":"2013-01-16","employee":"Romaine B. Alley","customer":"Sabrina N. Hermann","status":"cancelled","fee":85,"taxes":42,"total":987,"shipping_company":"Shipping A","payment_method":"Wire Transfer"},
+	{"id":1112,"date":"2013-01-16","employee":"Ray M. Parra","customer":"Roxanna C. Cass","status":"completed","fee":20,"taxes":8,"total":456,"shipping_company":"Shipping G","payment_method":"Credit Card"},
+	{"id":1113,"date":"2013-07-11","employee":"Jolie P. Sparks","customer":"Bradly N. Mauro","status":"new","fee":13,"taxes":1,"total":255,"shipping_company":"Shipping A","payment_method":"Cash"},
+	{"id":1114,"date":"2013-07-11","employee":"Sudie V. Goldsmith","customer":"Stephen H. Peachey","status":"new","fee":63,"taxes":12,"total":1522,"shipping_company":"Shipping B","payment_method":"Wire Transfer"},
+	{"id":1115,"date":"2013-07-11","employee":"Sherley D. Berryman","customer":"Sabrina N. Hermann","status":"ready","fee":78,"taxes":45,"total":1788,"shipping_company":"Shipping A","payment_method":"Wire Transfer"},
+	{"id":1116,"date":"2013-07-11","employee":"Ray M. Parra","customer":"Regine H.Field","status":"ready","fee":14,"taxes":4,"total":988,"shipping_company":"Shipping A","payment_method":"Cash"},
+	{"id":1117,"date":"2013-07-11","employee":"Romaine B. Alley","customer":"Stephane A. Chandler","status":"completed","fee":0,"taxes":0,"total":0,"shipping_company":"Shipping C","payment_method":"Credit Card"},
+	{"id":1118,"date":"2013-07-11","employee":"Jamila N. Mccallister","customer":"Olimpia C. Whelan","status":"new","fee":55,"taxes":13,"total":2100,"shipping_company":"Shipping E","payment_method":"Credit Card"},
+	{"id":1119,"date":"2013-07-11","employee":"Romaine B. Alley","customer":"Jettie P. Whelan","status":"ready","fee":18,"taxes":8,"total":956,"shipping_company":"Shipping A","payment_method":"Wire Transfer"},
+	{"id":1120,"date":"2013-07-11","employee":"Lane E. Dion","customer":"Stepanie P. Lilley","status":"completed","fee":133,"taxes":33,"total":754,"shipping_company":"Shipping D", "payment_method":"Cash"},
+	{"id":127,"date":"2012-12-20","employee":"Sherley D. Berryman","customer":"Ashleigh G. Denham","status":"new","fee":26,"taxes":149.2638,"total":1419.1288,"shipping_company":"Shipping B","payment_method":"Credit card"},
+	{"id":128,"date":"2013-01-15","employee":"Lane E. Dion","customer":"Reba H. Casteel","status":"new","fee":33,"taxes":54.23,"total":1522.63,"shipping_company":"Shipping B","payment_method":"Cash"},
+	{"id":129,"date":"2013-01-16","employee":"Ray M. Parra","customer":"Stepanie P. Lilley","status":"new","fee":56.2,"taxes":22.1,"total":854.3,"shipping_company":"Shipping D","payment_method":"Cash"}
+];
+
+var remove = function(){
+	webix.confirm({
+		text:"Are you sure", ok:"Yes", cancel:"Cancel",
+		callback:function(res){
+			if(res)return false}
+	});
+	return false
+};
+
+var products = {
+	id:"products", scrollY:false,
+	view:"datatable", select:true, editable:true, editaction:"dblclick",
+	columns:[
+		{id:"id", header:"#", width:50},
+		{id:"code", header:"Code", width:220},
+		{id:"name", header:"name", fillspace: true, editor:"text"},
+		{id:"cost", header:"Cost", width:150, format:webix.i18n.priceFormat},
+		{id:"price", header:"Price", width:150, format:webix.i18n.priceFormat},
+		{id:"trash", header:"&nbsp;", width:25, template:"<span  style='color:#777777; cursor:pointer;' class='webix_icon fa-trash-o'></span>"}
+	],
+	data:products_data,
+	onClick:{
+		"webix_icon":remove
+	}
+};
+
+var orders = {
+	id:"orders",
+	view:"treetable", select:true, scrollY:false,
+	columns:[
+		{id:"id", header:"#", width:50},
+		{id:"customer", header:["Customer", {content:"selectFilter"} ], sort:"string", width:220},
+
+		{id:"status", header:"Status", sort:"string", width:90},
+		{id:"total", header:"Total", width:90, sort:"string", format:webix.i18n.priceFormat},
+		{id:"payment_method", header:"Payment method", width:130, sort:"string"},
+		{id:"date", header:"Date", sort:"string", fillspace:1},
+		{id:"trash", header:"&nbsp;", width:35, template:"<span  style='color:#777777; cursor:pointer;' class='webix_icon fa-trash-o'></span>"}
+	],
+	data:orders_data,
+	onClick:{
+		"webix_icon":remove
+	},
+	onContext:{}
+};
+
+var customers = {
+	id:"customers", scrollY:false,
+	view:"datatable", select:true, editable:true, editaction:"dblclick",
+	columns:[
+		{id:"id", header:"#", width:40},
+		{id:"last_name", header:"Name", sort:"string", template:function(obj){return obj.name+" "+obj.last_name}, editor:"text", fillspace: 1 },
+		{id:"phone", header:"Phone", sort:"string", width:150, editor:"text", fillspace: 1},
+		{id:"address", header:"Address", sort:"string", width:200, width:300, editor:"text", fillspace: 1},
+		{id:"email", header:"E-mail", sort:"string", fillspace: 1, template:function(obj){return obj.last_name+"@some.com"}, editor:"text", fillspace: 1 },
+
+		{id:"trash", header:"&nbsp;", align:"center", width:25, template:"<span style='color:#777777; cursor:pointer;' class='webix_icon fa-trash-o'></span>"}
+	],
+	data:customers_data,
+	onClick:{
+		"webix_icon":remove
+	}
+};
+
+var staff = {
+	id:"staff", scrollY:false,
+	view:"datatable", select:true, editable:true, editaction:"dblclick",
+	columns:[
+		{id:"id", header:"#", width:40},
+		{id:"last_name", header:"Name", sort:"string", template:function(obj){return obj.name+" "+obj.last_name}, editor:"text", fillspace: 1 },
+		{id:"phone", header:"Phone", sort:"string", width:150, editor:"text", fillspace: 1},
+		{id:"address", header:"Address", sort:"string", width:390, editor:"text"},
+		{id:"email", header:"E-mail", sort:"string", width: 200, template:function(obj){return obj.last_name+"@some.com"}, fillspace: 1 },
+		{id:"trash", header:"&nbsp;", align:"center", width:25, template:"<span  style='color:#777777; cursor:pointer;'  class='webix_icon fa-trash-o'></span>"}
+	],
+	data:staff_data,
+	onClick:{
+		"webix_icon":remove
+	}
+};
+
+
+
+var win = {
+	template:"order window"
+};
+
+var ui = {
+	type: "space",
+	rows:[
+		{
+			rows:[
+				{
+					type: "clean",
+					rows:[
+						{ view: "layout", type: "clean", paddingY:10, css: "transparent", cols: [
+							{ view: "label",label: "<span class='heading'>Try to resize the browser window</span>", width: 250},
+							{ }
+						]},
+						{view:"tabbar", tabOffset:0, id:"top-tabbar", multiview:true, borderless:true, options:[
+							{id:"orders", value:"Orders"},{id:"products", value:"Products"},
+							{id:"customers" , value:"Customers"}, {id:"staff", value:"Staff"}
+						]
+						}
+					]
+				},
+				{view:"multiview", animate: false, cells:[orders, products, customers, staff]}
+			]
+		}
+	]
+};
+
+
+
+
+
+
+
+
+
+webix.ready(function(){
+	webix.ui(ui);
+
+
+
+
+
+
+
+
+
+});
+
+</script>
+<body>
+</body>

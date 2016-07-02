@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<title>Datatable: Custom Handler</title>
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="header_comment">Using events</div>
+		<div class="sample_comment">The sample shows how to use events.</div>
+		<div class="sample_comment">Click anywhere in the table. Check the console, for more detailed log.</div>
+		<div id="testA"></div>
+		<div id="testB"></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100},
+					{ 	id:"", 
+						template:"<input class='delbtn' type='button' value='Delete'>",	
+						css:"padding_less",
+						width:100 },
+					{ 	id:"", 
+						template:"<input class='addbtn' type='button' value='Add'>",	
+						css:"padding_less",
+						width:100 }
+				],
+				select:"cell",
+				autoheight:true,
+				autowidth:true,
+				data:small_film_set,
+				on:{
+					"onItemClick":function(id, e, trg){
+						//id.column - column id
+						//id.row - row id
+						webix.message("Click on row: " + id.row+", column: " + id.column);
+					}
+				}
+			});		
+
+
+			grid.on_click.delbtn=function(e, id, trg){
+						//id.column - column id
+						//id.row - row id
+						webix.message("Delete row: "+id);
+						//block default onclick event
+						return false;
+			};
+			grid.on_click.addbtn=function(e, id, trg){
+						//id.column - column id
+						//id.row - row id
+						webix.message("Add row: "+ id);
+						//block default onclick event
+						return false;
+			};			
+		});
+		</script>
+	</body>
+</html>

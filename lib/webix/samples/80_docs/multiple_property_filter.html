@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA, #areaB{
+				margin: 10px;
+				width: 400px;
+				height: 300px;
+			}
+		</style>
+		<title>Multiple Filter</title>
+	</head>
+<body>
+
+<div id="areaA" ></div>
+<div id="areaB" ></div>
+
+	
+
+<script type="text/javascript" charset="utf-8">
+
+var small_film_set = [
+	{ id:1, title:"The Shawshank Redemption", year:1994, votes:678790, rating:9.2, rank:1, category:"Thriller"},
+	{ id:2, title:"The Godfather", year:1972, votes:511495, rating:9.2, rank:2, category:"Crime"},
+	{ id:3, title:"The Godfather: Part II", year:1974, votes:319352, rating:9.0, rank:3, category:"Crime"},
+	{ id:4, title:"The Good, the Bad and the Ugly", year:1966, votes:213030, rating:8.9, rank:4, category:"Western"},
+	{ id:5, title:"Pulp fiction", year:1994, votes:533848, rating:8.9, rank:5, category:"Crime"},
+	{ id:6, title:"12 Angry Men", year:1957, votes:164558, rating:8.9, rank:6, category:"Western"}
+];
+
+webix.ui({container:"areaA", rows:[
+		{
+		view:"datatable", id:"dtable",
+		columns:[
+			{ id:"rank",	header:"", css:"rank",  		width:50},
+			{ id:"title",	header:"Film title", template:"#title# - #rating#", width:250},
+			{ id:"year",	header:"Released" , width:80},
+			{ id:"category",	header:"Category", 	width:100}
+				],
+		autoheight:true,
+		autowidth:true,
+		data: small_film_set
+		},
+		{view:"text", label:"Filter:", labelAlign:"right", 
+			placeholder:"title, year, category", id:"filter-table" }
+		]
+			});	
+			
+webix.ui({container:"areaB", rows:[
+		{	id:"dlist",
+			view:"list", 
+			width:320,
+			height:600,
+			template:"#rank#. #title#. #year#<br/>#category#",
+			autoheight:true,
+			select:true,
+			type:{
+				height:50
+				},
+			data:small_film_set
+		},
+		{view:"text", label:"Filter:", labelAlign:"right", 
+			placeholder:"title, year, category", id:"filter-list" }
+		]
+			});	
+
+$$("filter-table").attachEvent("onTimedKeypress", function(){
+			var text = this.getValue().toString().toLowerCase();
+			//after text entering - filter related grid
+			$$("dtable").filter(function(obj){
+				//filter by multiple properties
+				var filter = [obj.title, obj.year, obj.category].join("|");
+				filter = filter.toString().toLowerCase();
+				return (filter.indexOf(text) != -1);
+			});
+		});
+		
+$$("filter-list").attachEvent("onTimedKeypress", function(){
+			var text = this.getValue().toString().toLowerCase();
+			//after text entering - filter related grid
+			$$("dlist").filter(function(obj){
+				//filter by multiple properties
+				var filter = [obj.title, obj.year, obj.category].join("|");
+				filter = filter.toString().toLowerCase();
+				return (filter.indexOf(text) != -1);
+			});
+		});
+
+
+</script>
+</body>
+</html>

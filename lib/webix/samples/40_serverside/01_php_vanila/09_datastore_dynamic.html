@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Using DataStore</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../../common/samples.css">
+		<style type="text/css">html, body{ height:100% }</style>
+	</head>
+	<body>
+		<input type='button' value='Show grid' onclick='showPopup()'>
+		<input type='button' value='Show form' onclick='showPopup2()'>
+		<br>
+		<input type='button' value='Add new row' onclick='store.add({ title : "new text" });'>
+		<br>
+		<input type='button' value='Fill form with data 1' onclick='store.setCursor(1);'>
+		<input type='button' value='Fill form with data 2' onclick='store.setCursor(2);'>
+		<div id='testA'></div>
+		<div id='testB'></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		function showPopup(){
+			var popup = webix.ui({
+				view:"window", position:"center", move:true,
+				head:{ template:"win", type:"header" },
+				body:{ rows:[{
+					view:"datatable", editable:true,
+					columns:[
+						{ id:"rank",	header:"", css:"rank",  	editor:"text", width:50},
+						{ id:"title",	header:"Film title",	editor:"text", width:200},
+						{ id:"year",	header:"Released" , 	editor:"text", width:80},
+						{ id:"votes",	header:"Votes", 		editor:"text", width:100}
+					],
+					autoheight:true,
+					autowidth:true,
+					select:"row"
+				},
+				{ view:"button", value:"close", click:function(){
+					this.getTopParentView().close();
+				}}]}
+			});
+
+			popup.getBody().getChildViews()[0].sync(store);
+			popup.show();
+		}
+
+		function showPopup2(){
+
+			var popup = webix.ui({
+				view:"window", position:"center", move:true,
+				head:{ template:"win", type:"header" },
+				body:{ rows:[{
+					view:"form",
+					elements:[
+						{ view:"text", name:"title", label:"Title"},
+						{ view:"textarea", name:"year", label:"Year" },
+						{ view:"textarea", name:"votes", label:"Votes" },
+
+						{ view:"button", value:"Save", click:function(){ 
+							this.getFormView().save()
+						}}
+					]
+				},
+				{ view:"button", value:"close", click:function(){
+					this.getTopParentView().close();
+				}}]}
+			});
+
+			popup.getBody().getChildViews()[0].bind(store);
+			popup.show();
+		}
+
+		webix.ready(function(){
+			store = new webix.DataCollection({
+				url:"server/datatable.php"
+				//save:"server/datatable_save.php"
+			});
+		});
+		</script>
+	</body>
+</html>

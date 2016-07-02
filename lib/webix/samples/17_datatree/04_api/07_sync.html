@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data sync</title>
+    <link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+    <script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../common/treedata.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../common/samples.css">
+</head>
+<body>
+<div class='header_comment'>Data sync</div>
+
+<input type="button" value="Add to top" onClick="addToTop()"/>
+<input type="button" value="Add to selected parent" onClick="addToParent()"/>
+<input type="button" value="Add as 2nd child of Shawshank Redemption" onClick="addAsChild()"/>
+<input type="button" value="Remove selected node"  onClick="removeSelected()"/>
+
+<script type="text/javascript" charset="utf-8">
+
+    var tree1 = {
+        view:"tree",
+        id:"tree",
+        select:true,
+        template:"{common.icon()} {common.folder()} <span>#value#</span>",
+        data: smalltreedata
+    };
+
+    var tree2 = {
+        view:"tree",
+        id:"tree2",
+        select:true,
+        template:"{common.icon()} {common.folder()} <span>#value#</span>"
+    };
+
+    var grid1 = {
+        view:"datatable",
+        id:"grid",
+        columns:[
+            { id:"id" },
+            { id:"value", fillspace:1, editor:"text" }
+        ], editable:true
+    };
+
+    webix.ui({
+        cols:[
+            { header:"Master Tree", body:tree1 },
+            { header:"Linked Grid", body:grid1 },
+            { header:"Linked Tree", body:tree2 }
+        ]
+    })
+
+    $$("grid").sync( $$("tree") );
+    $$("tree2").sync( $$("tree") );
+
+    function addToTop(){
+        $$("tree").add({ value:"New item"}, 0);
+    }
+
+    function addToParent(){
+        var parentId= $$("tree").getSelectedId();
+        if(parentId)
+            $$("tree").add( {value:"New item"}, 0, parentId);
+        else
+            webix.alert("Select node")
+    }
+
+    function addAsChild(){
+        $$("tree").select("1");
+        var parentId = $$("tree").getSelectedId();
+        var pos = $$("tree").getBranchIndex("1.2"); //'1.2' is the 'Part2' item's id
+        $$("tree").add( {value:"New item"}, pos, parentId);
+    }
+
+    function removeSelected(){
+        var nodeId = $$("tree").getSelectedId();
+        $$("tree").remove(nodeId);
+    }
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Using DataStore</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../../common/samples.css">
+	</head>
+	<body>
+		<div class='header_comment'>Loading</div>
+		<div id='testA'></div>
+		<div id='testB'></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			store = new webix.DataCollection({
+				url:"server/datatable.php",
+				save:"server/datatable_save.php"
+			});
+
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+
+				autoheight:true,
+				autowidth:true,
+				select:"row"
+			});	
+			grida.sync(store);
+
+
+			forma = webix.ui({
+				container:"testB", width:350,
+				view:"form", id:"form1", scroll:false,
+				elements:[
+					{ view:"text", name:"title", label:"Title" },
+					{ view:"textarea", name:"year", label:"Year" },
+					{ view:"textarea", name:"votes", label:"Votes" },
+
+					{ view:"button", value:"Save", click:'$$("form1").save()' }
+				]
+			});
+			forma.bind(grida);
+
+		});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Using string templates</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Using string templates</div>
+		<div id="testA"></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title", 
+						template:"<strong>#title#</strong>"
+					, width:200},
+					{ id:"year",	header:"Released" ,
+						template:"at #year#",
+					 width:80},
+					{ id:"votes",	header:"Votes",
+						template:function(obj){
+							if (obj.votes > 350000)
+								return "<span style='color:green;'>"+obj.votes+"</span>";
+							else
+								return "<span style='color:red;'>"+obj.votes+"</span>";
+						},
+					width:100}
+				],
+				
+				autoheight:true,
+				autowidth:true,
+				data:small_film_set
+			});
+
+
+		});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA, #areaB, #areaC, #areaD, #areaE{
+				margin: 30px 30px;
+				width:700px; height:50px;
+			}
+		</style>
+		<title>Buttons: Type 'imageButton'</title>
+	</head>
+	<body>
+
+		<div id="areaA"></div>
+		<div id="areaB"></div>
+		<div id="areaC"></div>
+		<div id="areaD"></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+			function buttons(size){
+				return  [
+					{ view:"button", type:"imageButton",
+						image:"../common/imgs/"+size+"/save.gif", width:size+12},
+					{ view:"button", type:"imageButton",
+						image:"../common/imgs/"+size+"/paste.gif", width:size+12},
+					{ view:"button", type:"imageButton",
+						image:"../common/imgs/"+size+"/copy.gif", width:size+12},
+					{ },
+					{ view:"button", type:"imageButton", label:"Save", 
+						image:"../common/imgs/"+size+"/save.gif", width:size+65},
+					{ view:"button", type:"imageButton", label:"Update", 
+						image:"../common/imgs/"+size+"/paste.gif", width:size+75},
+					{ view:"button", type:"imageButton", label:"Info",
+						image:"../common/imgs/"+size+"/copy.gif", width:size+60}
+				];
+			}
+			webix.ui({
+				container:"areaA",
+				view:"toolbar", paddingY:2, height:34,
+				cols: buttons(18)
+			});
+
+			webix.ui({
+				container:"areaB",
+				view:"toolbar", paddingY:2, height:42,
+				cols: buttons(24)
+			});
+
+
+			webix.ui({
+				container:"areaC",
+				view:"toolbar", paddingY:2, height:50,
+				cols: buttons(32)
+			});		
+
+
+			webix.ui({
+				container:"areaD",
+				view:"toolbar", paddingY:2, height:66,
+				cols: buttons(48)
+			});		
+
+			
+
+
+
+
+
+		
+
+					
+		</script>
+	</body>
+</html>

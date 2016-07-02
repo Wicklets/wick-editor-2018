@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+   <head>
+       <link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+       <script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+       <script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+       <title>Responsive Layout</title>
+   </head>
+   <body>
+       <script type="text/javascript" charset="utf-8">
+           webix.ui({
+               type:"space", id:"a1", rows:[{
+                 type:"space", padding:0, responsive:"a1", cols:[
+                     { view:"list", data:["Users", "Reports", "Settings"],
+                       ready:function(){ this.select(this.getFirstId()); },
+                       select:true, scroll:false, width:200 },
+                     { template:"column 2", width:200 },
+                     { view:"datatable", select:true, columns:[
+                        { id:"title", fillspace:1 }, { id:"votes"}
+                       ], data:small_film_set,
+                       minWidth:300 }
+                 ]}
+               ]
+           }).show();
+
+       </script>
+   </body>
+</html>

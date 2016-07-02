@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<title>Dataview Formatting</title>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+		#testA, #buttons{
+			margin-left:20px;
+			margin-top:10px;
+		}
+		html, body{
+			height: 100%;
+		}
+		</style>
+	</head>
+
+	<body>
+		<div id="buttons">
+			<input type='button' value='en-US' onclick='switchLocale(this.value)'>
+			<input type='button' value='fr-FR' onclick='switchLocale(this.value)'>
+		</div>
+		<div id="testA">
+		</div>
+	<script type="text/javascript" charset="utf-8">
+		//defining locales
+		webix.i18n.locales["en-US"]={
+			groupDelimiter:",",
+			groupSize:3,
+			decimalDelimiter:".",
+			decimalSize:2,
+
+			dateFormat:"%m/%d/%Y",
+			timeFormat:"%h:%i %A",
+			longDateFormat:"%d %F %Y",
+			fullDateFormat:"%m/%d/%Y %h:%i %A",
+
+			price:"${obj}",
+			calendar: {
+				monthFull:["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+				monthShort:["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+				dayFull:["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    			dayShort:["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    		}
+		};
+
+		webix.i18n.locales["fr-FR"]={
+			groupDelimiter:" ",
+			groupSize:3,
+			decimalDelimiter:",",
+			decimalSize:2,
+
+			dateFormat:"%d/%m/%Y",
+			timeFormat:"%H:%i",
+			longDateFormat:"%d %F %Y",
+			fullDateFormat:"%d.%m.%Y %H:%i",
+
+			price:"{obj} €",
+			calendar:{
+				monthFull:["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
+				monthShort:["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Aôu", "Sep", "Oct", "Nov", "Déc"],	
+				dayFull:["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"],
+    			dayShort:["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"]
+			}
+		};
+
+		var view;
+
+		function switchLocale(locale) {
+			webix.i18n.setLocale(locale);
+			recreate_view();
+		}
+		//customizing date editor
+		webix.editors.$popup = {
+        	date:{
+            	view:"popup",
+            	body:{ view:"calendar"},
+            width: 210, height:210
+        	}
+    	};	
+
+		function recreate_view(){
+			if (view)
+				view.destructor();
+
+			view = new	webix.ui({
+				view:"dataview_edit",
+				container:"testA",
+				type:{
+					height:70,
+					width: 250,
+					template:function(obj){ 
+					return obj.text + "<br/>"+ webix.i18n.longDateFormatStr(obj.start) +"<br/>" + webix.i18n.numberFormat(obj.number);
+					}
+				},
+				autoheight:true,
+				editable:true,
+				editor:"date",
+				editValue:"start",
+				xCount:2,
+				yCount:2,
+				data:[
+					{ text:"Joint 2", number:Math.PI*1243 },
+					{ text:"Finish", start:new Date(2012,11,12), number:Math.PI*2445 },
+					{ text:"Start", start:new Date(1988,1,29), number:Math.PI*4440 },
+					{ text:"Joint 1", start:new Date(2010,10,30), number:Math.PI*545 }
+				]
+			});	
+		};
+
+		webix.ready(function(){
+			webix.protoUI({name:"dataview_edit"}, webix.EditAbility, webix.ui.dataview);
+			recreate_view();
+		});
+
+</script>
+
+</body>
+</html>

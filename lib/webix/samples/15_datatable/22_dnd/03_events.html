@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Using events for customizing dnd</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Using events for customizing drag-and-drop behaviour</div>
+		<div class='sample_comment'>The sample shows 2 use cases:
+			<ol>
+				<li>Displaying the items titles while their dragging</li>
+				<li>Setting the 'copy' behaviour for d-n-d</li>
+			</ol>
+		</div>
+		<div id="testA"></div>
+		<hr>
+		<div id="testB"></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"id",	header:"", css:"rank",  		width:50},
+					{ id:"votes",	header:"Votes", 	width:100},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"title",	header:"Film title",width:200}
+				],
+				height:300, minHeight:100,
+				autowidth:true,
+				select:"multiselect",
+				drag:true,
+
+				data: webix.copy(big_film_set)
+			});	
+
+			gridb = webix.ui({
+				container:"testB",
+				view:"datatable",
+				columns:[
+					{ id:"id",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+				autoheight:true, minHeight:100,
+				autowidth:true,
+				select:true, multiselect:true,
+				drag:true,
+
+				data: webix.copy(small_film_set)
+			});
+
+			grida.attachEvent("onBeforeDrag", function(context, ev){
+				context.html = "<div style='padding:8px;'>";
+				for (var i=0; i< context.source.length; i++){
+					context.html += context.from.getItem(context.source[i]).title + "<br>" ;
+				}
+				context.html += "</div>";
+			});
+
+			gridb.attachEvent("onBeforeDrop", function(context, ev){
+				for (var i=0; i< context.source.length; i++){
+					context.from.copy(context.source[i],context.index,this,{newId:webix.uid()});
+				}
+				return false;
+
+			});
+		});		
+		</script>
+	</body>
+</html>

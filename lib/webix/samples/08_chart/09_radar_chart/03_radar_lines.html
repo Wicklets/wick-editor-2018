@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+	<title>Radar Chart: Lines</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+	<script src="../../common/chartdata.js"></script>
+<body>
+    <div id="chartDiv" style="width:400px;height:250px;margin:20px"></div>
+	<script>
+        webix.ui({
+            container:"chartDiv",
+            view:"chart",
+            type:"radar",
+			xAxis:{
+				template:"#month#"
+			},
+			yAxis:{
+                lineShape:"arc"
+            },
+			legend:{
+				layout:"y",
+				width: 110,
+				align:"right",
+				valign:"middle",
+				marker:{
+					type: "item"
+				},
+				values:[
+					{text:"Company A",color:"#3399ff"},
+					{text:"Company B",color:"#66cc00"}
+				]
+			},
+			series:[
+                {
+                    value:"#companyA#",
+                    tooltip:{
+                        template:"#companyA#"
+                    },
+                    line:{
+                        color:"#3590D0",
+                        width:2
+                    },
+                    item:{
+                        color:"#ffffff",
+                        borderColor:"#3399ff",
+                        radius:2,
+                        borderWidth:2,
+                        type:"d"
+                    }
+                },
+                {
+                    value:"#companyB#",
+                    tooltip:{
+                        template:"#companyB#"
+                    },
+                    line:{
+                        color:"#66cc00",
+                        width:2
+                    },
+                    item:{
+                        color:"#ffffff",
+                        borderColor:"#66cc00",
+                        radius:2,
+                        borderWidth:2,
+                        type:"s"
+                    }
+                }
+			],
+			data:companies
+        });
+	</script>
+</body>
+</html>

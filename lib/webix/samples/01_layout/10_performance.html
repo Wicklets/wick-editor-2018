@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+   <head>
+       <link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+       <script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+       <title>Complex Layout - Performance</title>
+   </head>
+   <body>
+       <script type="text/javascript" charset="utf-8">
+       var count = 0;
+       function config(obj, mode, level, size){
+          var set  = obj[mode] = [];
+          obj.margin = level*2;
+          var nextmode = (mode == "rows") ? "cols" : "rows";
+
+          for (var i = 0; i < size; i++) {
+            if (level) set[i] = config({ type:"wide" }, nextmode, level-1, size);
+            else set[i] = { template:"-" };
+          }
+          count += size;
+          return obj;
+       }
+
+       //high precision performance counters
+       var performance = window.performance || Date;
+
+       var ui = config({}, "rows", 10, 2)
+       var start = performance.now();
+       webix.ui(ui);
+       webix.delay(function(){
+        var end = performance.now();
+        webix.message(count + "views<br>" + Math.round((end-start)*100)/100+"ms")
+       })
+
+       </script>
+   </body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA{
+				margin: 30px;
+			}
+		</style>
+		<title>Multiple Fieldsets</title>
+	</head>
+	<body>
+
+		<div id="areaA"></div>
+		<script type="text/javascript" charset="utf-8">
+			var fields = [
+				{ view:"text", label:"Email"},
+				{ view:"text", label:"Password"}
+			];
+
+			webix.ui({
+				container:"areaA",
+				margin:50,
+				cols:[
+					{},
+					{ rows: webix.copy(fields), paddingY:25 },
+					{ view:"fieldset", label:"Additional", body:{
+						 rows: webix.copy(fields)
+					}},
+					{ rows:[
+						{ view:"text", label:"Email"},
+						{  view:"fieldset", label:"Additional", body:{
+						 	rows: webix.copy(fields)
+						}},
+						{ view:"text", label:"Password"}
+					]},
+					{}
+				]
+			});
+		</script>
+	</body>
+</html>

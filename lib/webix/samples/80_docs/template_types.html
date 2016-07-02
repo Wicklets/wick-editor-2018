@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<title>Template Types</title>
+        <style>
+            #mylayout1, #mylayout2, #mylayout3{
+                width:400px;
+                height:400px;
+                margin:20px;
+                margin-top:0px;
+                float:left;
+            }
+        </style>
+	</head>
+	<body>
+		<div id="mylayout1"></div>
+		<div id="mylayout2"></div>
+        <div id="mylayout3"></div>
+		<script>
+			webix.ui({
+				container:"mylayout1",
+				type:"line",
+				rows:[
+					{ view:"template", template:"Header template", type:"header" },
+					{ template:"App Body"}
+				]
+			}).show();
+			
+			webix.ui({
+				container:"mylayout2",
+				type:"line",
+				rows:[
+					{ view:"template", template:"Section template", type:"section" },
+					{template: "App Body"} 
+				]
+			}).show();
+
+            webix.ui({
+                container:"mylayout3",
+                type:"line",
+                rows:[
+                    { view:"template", template:"Clean template", type:"clean", height:50},
+                    {template: "App Body"}
+                ]
+            }).show();
+			
+			
+		</script>
+	</body>
+</html>

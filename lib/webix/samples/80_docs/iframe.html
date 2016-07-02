@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<title>IFrame</title>
+	</head>
+<body>
+<div id="frame" style="height:400px;width:400px; margin:10px;"></div>
+<script type="text/javascript" charset="utf-8">
+			webix.ready(function(){
+				webix.ui({
+					container:"frame",
+					rows:[
+						{ view:"toolbar" , id:"top", elements:[
+							{ view:"segmented", id:"control", options:[
+                                { id:"data/pageA.html", 	value:"pageA"},
+								{ id:"data/pageB.html", 	value:"pageB"}
+							]}
+						]},
+						{ 
+							view:"iframe", id:"frame-body", src:"data/pageA.html"
+						}
+					]
+				});
+ 
+				$$("control").attachEvent("onAfterTabClick",function(sid){
+					$$('frame-body').define("src", sid);
+				});
+			});
+</script>
+
+</body>
+</html>

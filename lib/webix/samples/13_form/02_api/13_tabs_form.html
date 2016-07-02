@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../common/testdata.js"></script>
+		<title>Form with Tabs</title>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				view:"form", elements:[
+					{
+						view:"tabview",
+						tabbar:{ options:["A","B","C"]}, animate:false,
+						cells:[
+							{ id:"A", rows:[
+								{ view:"text", name:"value1", label:"value1" },
+								{}
+							]},
+							{ id:"B", rows:[
+								{ view:"text", name:"value2", label:"value2" },
+								{}
+							]},
+							{ id:"C", rows:[
+								{ view:"text", name:"value3", label:"value3" },
+								{}
+							]}
+						]
+					},
+                    { cols:[
+                        {},
+                        { view:"button", value:"Get value", click:function(){
+                            webix.message("<pre>"+JSON.stringify($$("$form1").getValues(), 0, 1)+"</pre>");
+                        }},
+                        { view:"button", value:"Validate", click:function(){
+                        	//'true' forces validation of hidden fields
+                            $$("$form1").validate({hidden:true});
+                        }},
+                        {}
+                    ]},
+				],
+				rules:{
+					"value1":webix.rules.isNotEmpty,
+					"value2":webix.rules.isNumber,
+					"value3":webix.rules.isNotEmpty
+				},
+				on:{
+					onAfterValidation:function(result, value){
+						if (!result)
+							webix.message({type:"error", text:"Incorrect values"});
+						else
+							webix.message("Data is correct");
+					}
+				}
+			});
+
+			$$("$form1").setValues({
+				value1:"111",
+				value3:"333",
+			});
+		</script>
+	</body>
+</html>

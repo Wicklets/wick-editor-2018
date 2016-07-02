@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+	<title>Bar Chart: Styling</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+	<script src="../../common/chartdata.js"></script>
+<body>
+    <div id="charts" style="width:600px;height:500px;margin:20px"></div>
+	<script>
+        webix.ui({
+            container:"charts",
+            rows:[
+                {
+                    view:"chart",
+                    type:"bar",
+                    value:"#sales#",
+                    label:"#sales#",
+                    barWidth:30,
+                    color:"#7ed500",
+                    gradient:"rising",
+                    alpha:function(data){
+                        return data.sales/90;
+                    },
+                    tooltip:{
+                        template:"#sales#"
+                    },
+                    xAxis:{
+                        template:"'#year#"
+                    },
+                    yAxis:{
+                        start:0,
+                        end:100,
+                        step:10,
+                        template:function(obj){
+                            return (obj%20?"":obj)
+                        }
+                    },
+                    padding:{
+                        left: 30
+                    },
+                    border:0,
+                    data: dataset
+                },
+
+                {
+                    view:"chart",
+                    type:"bar",
+                    value:"#sales#",
+                    label:"#sales#",
+                    barWidth:45,
+                    color:"#color#",
+                    tooltip:{
+                        template:"#sales#"
+                    },
+                    xAxis:{
+                        template:"'#year#"
+                    },
+                    yAxis:{
+                        start:0,
+                        end:100,
+                        step:10,
+                        template:function(obj){
+                            return (obj%20?"":obj)
+                        }
+                    },
+                    padding:{
+                        left: 30
+                    },
+                    radius:0,
+                    data: dataset_colors
+                }
+            ]
+        });
+	</script>
+</body>
+</html>

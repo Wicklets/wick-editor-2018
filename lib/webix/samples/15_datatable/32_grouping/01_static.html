@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Static grouping</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Static grouping</div>
+		<div id="testA"></div>
+		<div id="testB"></div>
+		<div id="testC"></div>
+
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"treetable",
+				columns:[
+					{ id:"rank",	header:"", width:50},
+					{ id:"title",	header:"Film title",	width:250,
+						template:function(obj, common){
+							if (obj.$level == 1) return common.treetable(obj, common) + obj.value;
+							return obj.title;
+						}
+					},
+					{ id:"year",	header:"Year",	width:100}, 
+					{ id:"votes",	header:"Votes",	width:100}
+				],
+				scheme:{
+					$group:"year",
+					$sort:{ by:"value", dir:"desc" }
+				},
+				ready:function(){
+					this.open(this.getFirstId());
+				},
+				height:300,
+				autowidth:true,
+				data: big_film_set
+			});	
+		
+			gridb = webix.ui({
+				container:"testB",
+				view:"treetable",
+				columns:[
+					{ id:"rank",	header:"", width:50},
+					{ id:"title",	header:"Film title",	width:250, template:"{common.icon()} #title#" },
+					{ id:"year",	header:"Year",	width:100}, 
+					{ id:"votes",	header:"Votes",	width:100}
+				],
+				scheme:{
+					$group:{
+						by:function(obj){ return Math.floor(obj.year/10); },
+						map:{
+							title:[function(obj){ 
+								var min = obj.year - obj.year%10; 
+								return min + " - "+ (min+10) 
+							}]
+						}
+					},
+					$sort:"value"
+				},
+				ready:function(){
+					this.open(this.getFirstId());
+				},
+				height:300,
+				autowidth:true,
+				data: big_film_set
+			});	
+
+			gridc = webix.ui({
+				container:"testC",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", width:50},
+					{ id:"title",	header:"Film title",	width:250 },
+					{ id:"year",	header:"Year",	width:100}, 
+					{ id:"votes",	header:"Votes",	width:100}
+				],
+				height:300,
+				autowidth:true,
+				data: big_film_set
+			});	
+		});		
+		</script>
+	</body>
+</html>

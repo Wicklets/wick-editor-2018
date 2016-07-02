@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../common/testdata.js"></script>
+		<title>Tab Navigation</title>
+	</head>
+<body>
+<div id="container" style="width:700px;height:300px;margin:40px"></div>
+<script type="text/javascript" charset="utf-8">
+webix.ui({
+	container:"container",
+	cols:[
+		{view:"form", rows:[
+				{view:"text", label:"Name", width: 200},
+				{view:"text", label:"Last Name", width: 200},
+				{view:"select", label:"Gender", labelAlign:"left", options:[
+							{id:1, value:"Female"},{id:2, value:"Male"}
+						] 
+				},
+				{view:"button", value:"Submit", inputWidth:200}
+			]
+		},
+		{view:"form", rows:[
+				{view:"text", label:"Title", width: 200},
+				{view:"text", label:"Year", width: 200},
+				{view:"text", label:"Rank", width: 200},
+				{view:"button", value:"Add", inputWidth:200}
+			]
+		},
+		{rows:[
+			{view:"toolbar", cols:[
+					{view:"label", label:"Find the Film"}, 
+					{view:"text",  placeholder:"Filter..", width:160}]},
+			{view:"list", template:"#title# - #year# - #rank#", data:"big_film_set"}
+				
+			]
+		
+		}
+		]	
+});
+
+webix.UIManager.tabControl = true; 
+</script>
+
+</body>
+</html>

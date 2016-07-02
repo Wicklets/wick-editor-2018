@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+	<title>Donut Pie Chart</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+	<script src="../../common/chartdata.js"></script>
+<body>
+    <div id="chartDiv" style="width:400px;height:250px;margin:20px"></div>
+	<script>
+        webix.ui({
+            view: "chart",
+            type:"donut",
+            container:"chartDiv",
+            value:"#sales#",
+            color:"#color#",
+            legend:{
+                width: 75,
+                align:"right",
+                valign:"middle",
+                template:"#month#"
+            },
+            pieInnerText:"#sales#",
+            shadow:0,
+            gradient:true,
+            data:month_dataset
+        });
+	</script>
+</body>
+</html>

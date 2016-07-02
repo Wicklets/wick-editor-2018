@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" href="data/myform.css" type="text/css" media="screen" charset="utf-8">
+		<style>
+			#areaA {
+				margin: 50px;
+				width:700px;
+				height:410px;
+			}
+			
+			.controls {
+				margin: 50px;
+			}
+		</style>
+		<title>Using HTTP-template</title>
+	</head>
+	<body>
+
+		<div id="areaA"></div>
+
+		<div class="controls">
+			<input type="button" value="Set form" onclick="set_form();" />
+			<input type="button" value="Get form" onclick="get_form();" />
+			<input type="button" value="Clear form" onclick="clear_form();" />
+			<input type="button" value="Focus" onclick="focus_form();" />
+			<input type="button" value="Load form" onclick="load_form();" />
+		</div>
+
+
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				container: "areaA",
+				view: 'layout',
+				cols: [
+					{ template: "left bar" },
+					{
+						id: "formView",
+						view:"htmlform",
+						template: "http->data/form.html",
+						width: 500
+					},
+					{ template: "right bar" }
+				]
+			});
+
+			function set_form() {
+				$$('formView').setValues({
+					title: "Book title 1",
+					author: "Author test",
+					in_store: false,
+					rank: "4",
+					genre: "fantasy",
+					annotation: "some test",
+					submit: "Order"
+				});
+			}
+
+			function get_form() {
+				var values = $$('formView').getValues();
+				console.log(values);
+			}
+			
+			function clear_form() {
+				$$('formView').clear();
+			}
+			
+			function focus_form(item) {
+				$$('formView').focus();
+			}
+		
+			function load_form() {
+				$$('formView').load("./data/book.xml", "xml");
+			}
+		</script>
+	</body>
+</html>

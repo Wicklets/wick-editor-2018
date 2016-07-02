@@ -1,0 +1,26 @@
+<data xmlns:x="http://webix.com/xml">
+
+	<x:ui>
+		<x:form id="log_form" width="300">
+			<x:text label="Email"></x:text>
+			<x:text label="Password"></x:text>
+			<x:cols margin="5">
+				<x:button value="Login" type="form"></x:button>
+				<x:button value="Cancel"></x:button>
+			</x:cols>
+		</x:form>
+	</x:ui>
+
+	<x:ui>
+		<x:window id="win1" position="center">
+			<x:head>Test header</x:head>
+			<x:body>
+				<x:layout stack="cols">
+					<x:template>Cell 1.1</x:template>
+					<x:template>Cell 1.2</x:template>
+				</x:layout>
+			</x:body>
+		</x:window>
+	</x:ui>
+
+</data>

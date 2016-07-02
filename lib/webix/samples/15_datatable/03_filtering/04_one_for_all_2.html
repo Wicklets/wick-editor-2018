@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Custom filtering by multiple criteria entered via one input</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Filtering by multiple criteria entered via one input (implemented by the use of a custom function)</div>
+		<div class='sample_comment'>The sample filters the grid by the title or the released date subject to the entered value: if a letter(s) - by title, if a digit(s) - by released year.</div>
+		<div id="testA"></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:["#", {
+						content:"textFilter", placeholder:"Type here to filter the grid",
+						compare:oneForAll, colspan:4
+					}], width:50,	sort:"int"},
+					{ id:"title",	header:["Film title",null],	width:200,	sort:"string"},
+					{ id:"year",	header:["Released",null],	width:80,	sort:"int"},
+					{ id:"votes",	header:["Votes",null], 		width:100,	sort:"int"}
+				],
+				autoheight:true,
+				autowidth:true,
+				data:small_film_set
+			});	
+
+			function equals(a,b){
+				a = a.toString().toLowerCase();
+				return a.indexOf(b) !== -1;
+			}
+			function oneForAll(value, filter, obj){
+				if (equals(obj.year, filter)) return true;
+				if (equals(obj.title, filter)) return true;
+				return false;
+			};
+		});
+		</script>
+	</body>
+</html>

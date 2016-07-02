@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>List: Editing</title>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script type="text/javascript" src="../common/testdata.js"></script>
+		<style>
+			.webix_list_item{
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+
+		</style>
+	</head>
+	<body>
+		<div class='header_comment'>Editing in list</div>
+		<div class='sample_comment'>Make a single click to open the item editor</div>
+		<div id="listA" style="margin:20px;"></div>
+
+
+		<script type="text/javascript" charset="utf-8">
+			webix.protoUI({
+				name:"editlist"
+			}, webix.EditAbility, webix.ui.list);
+
+			webix.ui({
+				container:"listA",
+				view:"editlist", 
+				width:320,
+				height:600,
+
+				template:"#rank#. #title#",
+
+				editable:true,
+				editor:"text",
+				editValue:"title",
+
+				data:big_film_set
+			});
+
+
+			
+		</script>
+	</body>
+</html>

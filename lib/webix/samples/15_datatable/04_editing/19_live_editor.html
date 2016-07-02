@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Using 'live' editors</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<style type="text/css">
+		.max{ background: #f88 !important; }
+		</style>
+		<div class='header_comment'>Using the 'inline-text' and 'liveEdit' options</div>
+		<div class='sample_comment'>Try to edit the 'Count' column and to enter a big numeric value.</div>
+		<div id="testA"></div>
+		<script type="text/javascript" charset="utf-8">
+		
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"title",	sort:"string", header:"Film title",width:200},
+					{ id:"rating",	header:"Count",  editor:"text", liveEdit:true, width:150 },
+					{ template:"#rating#", width:150 }
+				],
+				
+				on:{
+					onLiveEdit:function(state, editor){
+						if (state.value > 100)
+							this.addRowCss(editor.row, "max");
+						else
+							this.removeRowCss(editor.row, "max");
+					}
+				},
+
+				autoheight:true,
+				autowidth:true,
+				editable:true,
+
+				data: webix.copy(small_wide_film_set)
+			});
+
+
+		</script>
+	</body>
+</html>

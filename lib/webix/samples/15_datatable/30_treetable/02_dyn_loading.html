@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Static and dynamic loading</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Static and dynamic loading</div>
+		<div class='sample_comment'>Static</div>
+		<div id="testA"></div>	
+		<hr>
+		<div class='sample_comment'>Dynamic</div>
+		<div id="testB"></div>	
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			var grida = webix.ui({
+				container:"testA",
+				view:"treetable",
+				columns:[
+					{ id:"id",	header:"", css:{"text-align":"right"},  	width:50},
+					{ id:"value",	header:"Title",	width:250,
+						template:"{common.treetable()} #value#" },
+					{ id:"state",	header:"State",	width:100},
+					{ id:"hours",	header:"Hours",	width:100}
+				],
+				autoheight:true,
+				autowidth:true,
+
+				url: "data/treedata.php", datatype:"xml"
+			});	
+			var gridb = webix.ui({
+				container:"testB",
+				view:"treetable",
+				columns:[
+					{ id:"id",	header:"", css:{"text-align":"right"}},
+					{ id:"value",	header:"Film title",
+						template:"{common.treetable()} #value#" },
+					{ id:"state",	header:"State"},
+					{ id:"hours",	header:"Hours"}
+				],
+				autoheight:true,
+				autowidth:true,
+
+				url: "data/treedata_dyn.php", datatype:"xml"
+			});
+		});		
+		</script>
+	</body>
+</html>

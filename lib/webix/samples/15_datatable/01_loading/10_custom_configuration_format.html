@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Loading configuration from server side</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Loading DataTable configuration from the server side</div>
+		<div id="testA"></div>
+		<hr>
+		<div id="testB"></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			webix.ajax("data/config.json", function(text){
+				var config = webix.DataDriver.json.toObject(text);
+				webix.ui({
+					container:"testA",
+					view:"datatable",
+					autoheight:true,
+					autowidth:true,
+
+					columns:config,
+					data: [
+						{ id:1, title:"The Shawshank Redemption", year:1994, votes:678790, rating:9.2, rank:1},
+						{ id:2, title:"The Godfather", year:1972, votes:511495, rating:9.2, rank:2}
+					]
+				});	
+			});
+
+			webix.ajax("data/configdata.json", function(text){
+				var obj = webix.DataDriver.json.toObject(text);
+				webix.ui({
+					container:"testB",
+					view:"datatable",
+					autoheight:true,
+					autowidth:true,
+
+					columns:obj.config,
+					data:obj.rows
+				});	
+			});
+			
+		});
+		</script>
+	</body>
+</html>

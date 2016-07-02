@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script type="text/javascript" src="../common/testdata.js"></script>
+		<title>Unitlist with paging</title>
+	</head>
+<body>
+
+<div id="list" style="width:300px; height:500px; margin: 40px;"></div>
+
+<script>
+
+var set = [
+	{ id:1, title:"The Shawshank Redemption", year:1994, votes:678790, rating:9.2, rank:1},
+	{ id:2, title:"The Godfather", year:1972, votes:511495, rating:9.2, rank:2},
+	{ id:3, title:"12 Angry Men", year:1974, votes:319352, rating:9.0, rank:3},
+	{ id:4, title:"The Good, the Bad and the Ugly", year:1966, votes:213030, rating:8.9, rank:4},
+	{ id:5, title:"My Fair Lady", year:1964, votes:533848, rating:8.9, rank:5},
+	{ id:6, title:"The Godfather: Part II", year:1957, votes:164558, rating:8.9, rank:6},
+	{ id:7, title:"Collector", year: 1987, voles:556884}
+];
+
+	var unitlist = {
+		view:"unitlist", 
+        select:true,
+		scroll:false,		
+        scheme:{
+	        $sort:{
+		        by:"title",
+		        dir: 'asc'
+	        }
+        },
+		uniteBy:function(obj){
+			return obj.title.substr(0,1);
+		},
+		template:"#title#</br>#year#<br/>#votes#",
+		data:webix.copy(big_film_set),
+		pager:"bPage"
+	};
+
+	webix.ui({ container:"list", rows:[
+		unitlist, 
+		{
+			view:"pager", id:"bPage", size:10, group:5
+		}
+	]});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+	<title>Editing on Mouse Click</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+
+	<script src="../../common/testdata.js"></script>
+<body>
+	<style type="text/css">
+		#dataA, #dataB{
+			margin:20px;
+		}
+	</style>
+	<div id="dataA" style="width:500px;height:150px;"></div>
+	
+	<script>
+		webix.protoUI({
+			name:"dataview_edit"
+		}, webix.EditAbility, webix.ui.dataview);
+
+		webix.ui({
+			view:"dataview_edit",
+			container:"dataA",
+			template:"<div class='webix_strong'>#title#</div> Year: #year#, rank: #rank#",
+			data:big_film_set,
+
+			editable:true,
+			editor:"text",
+			editValue:"title",
+			type: {
+				height: 60
+			}
+		});		
+	</script>
+
+
+</body>
+</html>

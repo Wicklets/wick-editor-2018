@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<!-- You can get these files from https://github.com/webix-hub/components -->
+		<script type="text/javascript">
+			webix.require.disabled = true;
+			webix.codebase = "http://cdn.webix.com/components/codemirror/";
+		</script>
+		<script src="http://cdn.webix.com/components/codemirror/codemirror.js"></script>
+		<script src="http://cdn.webix.com/components/codemirror/codemirror/lib/codemirror.js"></script>
+		<script src="http://cdn.webix.com/components/codemirror/codemirror/mode/javascript/javascript.js"></script>
+		<script src="http://cdn.webix.com/components/codemirror/codemirror/mode/xml/xml.js"></script>
+		<link rel="stylesheet" type="text/css" href="http://cdn.webix.com/components/codemirror/codemirror/lib/codemirror.css">
+
+		<title>Codemirror text editor</title>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8">
+			webix.ready(function(){
+
+				webix.ui({
+					type:"space", rows:[
+						{ id:'editor', view:"codemirror-editor"},
+						{ template:"CodeMirror Editor", type:"header" },
+						{ id:'editor2', mode:"xml", view:"codemirror-editor"}
+					]
+				});
+
+				$$("editor").setValue("webix.ui({\n		type:'space', rows:[\n			{ id:'editor', view:'codemirror-editor'},\n			{ height:250 },\n			{ id:'editor2', view:'codemirror-editor'}\n		]\n});");
+				$$("editor").focus();
+
+				$$("editor2").setValue("<data>\n\t<item id='1' title='The Shawshank Redemption' year='1994' votes='678790' rating='9.2' rank='1' />\n\t<item id='2' title='The Godfather' year='1972' votes='511495' rating='9.2' rank='2' />\n</data>");
+
+			});
+		</script>
+	</body>
+</html>

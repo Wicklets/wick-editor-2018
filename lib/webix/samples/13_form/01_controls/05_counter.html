@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA{
+				margin: 30px;
+			}
+		</style>
+		<title>Spin Box ('counter')</title>
+	</head>
+	<body>
+
+		<div id="areaA"></div>
+	
+
+		<script type="text/javascript" charset="utf-8">
+		var form1 = [
+			{ view:"counter", label:"First age"},
+			{ view:"counter", label:"Second age", width:200, align:"center", labelWidth: 85},
+			{ view:"counter", label:"Third age", width:200, align:"right"},
+			{ view:"button", value:"Confirm", width:200, align:"center" }
+		];
+
+
+		webix.ui({
+			container:"areaA",
+			margin:30, cols:[
+				{ view:"form", scroll:false, width:300, elements: form1 }
+			]
+		});
+		</script>
+	</body>
+</html>

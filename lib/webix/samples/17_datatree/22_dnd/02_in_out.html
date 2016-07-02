@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Custom Behaviour for DnD in DataTree</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/treedata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body class='webix_full_screen'>
+		<div class='header_comment'>Custom drag-and-drop behaviour</div>
+		
+		<div id="testA" style='width:300px; height:300px'></div>
+		<hr>
+		<div id="myDrag" style='width:200px; height:100px; border:2px outset silver;'>Drag me to the component</div><br>
+		<div id="myDrop" style='width:200px; height:100px; border:2px outset silver;'>Drag something from the component here</div>
+		
+
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			treea = webix.ui({
+				container:"testA",
+				view:"tree",
+
+				select:"multiselect",
+				drag:true,
+
+				data: webix.copy(smalltreedata)
+			});	
+
+			webix.DragControl.addDrag("myDrag",{
+				move:function(source, target, obj, details){
+					obj.add({
+						value:"new item"
+					}, target, details.parent);
+					obj.open(target);
+				}
+			});
+			webix.DragControl.addDrop("myDrop",{
+				$drop:function(source, target){
+					var dnd = webix.DragControl.getContext();
+					if (dnd.from.name){ //ignoring non-ui dnd
+						var value = dnd.from.getItem(dnd.source[0]).value;
+						target.innerHTML=value;
+					}
+				}
+			});
+		});		
+		</script>
+	</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Adjusting columns to the content</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Adjusting columns to the content</div>
+		<div class='sample_comment'>The sample shows the use of the 'adjust' property that adjusts column width to fit content.</div>
+		</br>
+		<div class='sample_comment'>Default sizing</div>
+		<div id="testA"></div>
+		<hr>
+
+		<div class='sample_comment'>With the 'adjust' property</div>
+		<div id="testB"></div>
+		<hr>
+
+		<div class='sample_comment'>'adjust' to Headers</div>
+		<div id="testC"></div>
+		<hr>
+
+		<div class='sample_comment'>'adjust' to Data</div>
+		<div id="testD"></div>
+		<hr>
+
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank" },
+					{ id:"title",	header:"Film title" },
+					{ id:"year",	header:"Year"},
+					{ id:"votes",	header:"Votes"}
+				],
+				autoheight:true,
+				autowidth:true,
+
+				data:small_film_set
+			});	
+
+			grid = webix.ui({
+				container:"testB",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  adjust:true },
+					{ id:"title",	header:"Film title", adjust:true },
+					{ id:"year",	header:"Year", adjust:true},
+					{ id:"votes",	header:"Long Votes", adjust:true}
+				],
+				autoheight:true,
+				autowidth:true,
+				
+				data:small_film_set
+			});	
+
+			grid = webix.ui({
+				container:"testC",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  adjust:"header" },
+					{ id:"title",	header:"Film title", adjust:"header" },
+					{ id:"year",	header:"Year", adjust:"header"},
+					{ id:"votes",	header:"Long Votes", adjust:"header"}
+				],
+				autoheight:true,
+				autowidth:true,
+				
+				data:small_film_set
+			});	
+
+			grid = webix.ui({
+				container:"testD",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  adjust:"data" },
+					{ id:"title",	header:"Film title", adjust:"data" },
+					{ id:"year",	header:"Year", adjust:"data"},
+					{ id:"votes",	header:"Long Votes", adjust:"data"}
+				],
+				autoheight:true,
+				autowidth:true,
+				
+				data:small_film_set
+			});	
+		});
+		</script>
+	</body>
+</html>

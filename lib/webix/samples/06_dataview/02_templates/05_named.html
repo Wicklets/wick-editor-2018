@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+	<title>Named Templates</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+	<script src="../../common/testdata.js"></script>
+    <link rel="STYLESHEET" type="text/css" href="dataview_styles.css">
+<body>
+	<div id="dataA" style="width:543px;height:270px;margin:20px"></div>
+    <div style="margin-left:20px">
+        <input type="button" name="" value="Template A" onclick="$$('movie').define('type','typeA');$$('movie').render();">
+	    <input type="button" name="" value="Template B" onclick="$$('movie').define('type','typeB');$$('movie').render();">
+    </div>
+
+	<script>
+        webix.type(webix.ui.dataview,{
+			name:"typeA",
+			template: "<div class='overall'><div class='rank'>#rank#.</div><div class='title'>#title#</div><div class='year'>#year# year</div> </div>",
+			width: 260,
+            height: 90
+		});
+
+		webix.type(webix.ui.dataview,{
+			name:"typeB",
+			template: "<div class='overall'><div class='rank'>#rank#.</div><div class='title_long'>#title#</div></div>",
+			width: 522,
+            height: 90
+		});
+
+        webix.ui({
+            id:"movie",
+			view:"dataview",
+			container:"dataA",
+            css: "movies",
+            type:"typeA",
+            data:big_film_set
+		});
+	</script>
+
+</body>
+</html>
+

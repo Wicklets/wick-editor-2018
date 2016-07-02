@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Static paging. Loading from an external data file</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Static paging. Loading from an external data file</div>
+		<div class='sample_comment'>Loading from DB (sqllite + php).</div>
+		<div class='sample_comment'>Use the page selector below to choose the desired page.</div>
+		</br>
+		<div id="testA" style='width:300px;'></div>
+		<div id="paging_here"></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"#", 		width:50,	sort:"int",	css:"rank"},
+					{ id:"title",	header:"Film title",width:200,	sort:"string"},
+					{ id:"year",	header:"Released" , width:80,	sort:"int"},
+					{ id:"votes",	header:"Votes", 	width:100,	sort:"int"}
+				],
+				select:"row",
+				autowidth:true,
+				yCount:10, scrollY:false,
+				navigation:"true",
+
+				pager:{
+					container:"paging_here",
+					size:10,
+					group:5
+				},
+				data:big_film_set
+			});	
+		});
+
+		</script>
+	</body>
+</html>

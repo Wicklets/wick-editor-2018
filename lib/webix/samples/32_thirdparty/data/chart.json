@@ -1,0 +1,5 @@
+{
+	"numbers": [null, null, null, null, 23, null, null, null, null, 40, null, 15, 10, null, 17, null, 14, 12, 20, 16, null, null, 5, 28, 35, 11, null, 2, 35, null, 22, null, null, 4, 3, null, 29, 5, 34, null, null, 26, null, null, null, null, 29, 8, null, 31, null, 19, 35, null, null, null, null, 1, 20, null, null, 21, 7, 5, 17, 23, 9, null, 6, null, 38, 27, 12, null, null, null, 37, 23, 17, null, 32, null, null, 7, null, null, 27, null, null, 18, null, 1, null, 39, 3, null, null, null, null, null, 17, 30, null, 2, 27, 22, null, null, null, null, 40, 38, 8, null, null, 8, null, 9, null, 38, null, null, 18, 15, 38, null, null, null, 24, null, 30, null, 10, null, null, null, 20, 30, null, null, 34, null, null, 30, null, 11, 30, null, null, 20, 3, null, null, null, 26, 3, 28, 23, null, null, null, 21, null, null, null, 20, null, null],
+	"axisx": ["12am", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12pm", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"],
+	"axisy": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+}

@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+	<title>Pie Chart: Basic Initialization</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+	<script src="../../common/chartdata.js"></script>
+<body>
+    <div id="charts" style="width:800px;height:250px;margin:20px"></div>
+	<script>
+        webix.ui({
+            container: "charts",
+            cols:[
+                {
+                    rows:[
+                        {
+                            template:"<div style='width:100%;text-align:center'>Auto size and position</div>",
+                            height:30
+                        },
+                        {
+                            view: "chart",
+                            type:"pie",
+                            value:"#sales#",
+                            color:"#color#",
+                            label:"#month#",
+                            pieInnerText:"#sales#",
+                            shadow:0,
+                            data:month_dataset
+                        }
+                    ]
+                },
+                {
+                    rows:[
+                        {
+                            template:"<div style='width:100%;text-align:center'>Custom size and position</div>",
+                            height:30
+                        },
+                        {
+                            view: "chart",
+                            type:"pie",
+
+                            value:"#sales#",
+                            color:"#color#",
+                            label:"#month#",
+                            pieInnerText:"#sales#",
+                            shadow:0,
+                            radius:65,
+                            x:280,
+                            y:120,
+                            data:month_dataset
+                        }
+                    ]
+                }
+            ]
+
+        });
+	</script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Dynamic grouping</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Dynamic grouping</div>
+		<div id="testA"></div>
+		<div id="testB"></div>
+
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+
+			grida = webix.ui({
+				container:"testA",
+				view:"treetable",
+				columns:[
+					{ id:"rank",	header:"", width:50},
+					{ id:"title",	header:"Film title",	width:250,
+						template:function(obj, common){
+							if (obj.$group) return common.treetable(obj, common) + obj.value;
+							return obj.title;
+						}
+					},
+					{ id:"year",	header:"Year",	width:100}, 
+					{ id:"votes",	header:"Votes",	width:100}
+				],
+				height:350,
+				autowidth:true,
+				data: big_film_set
+			});	
+		});
+
+		function gby(){
+			grida.ungroup();
+			grida.group({
+				by:"year"
+			});
+		}
+		function gbv(){
+			grida.ungroup();
+			grida.group({
+				by:function(obj){
+					if (obj.rank <= 100)
+						return "Rank 1 - 100";
+					if (obj.rank <= 200)
+						return "Rank 100 - 200";
+					return "Rank 200 - ...";
+				}
+			});
+		}
+		</script>
+		<input type="button" value="Group by Year" onclick='gby()'> 
+		<input type="button" value="Group by Rank" onclick='gbv()'><br>
+		<input type="button" value="Open all" onclick='grida.openAll()'>
+		<input type="button" value="Close all" onclick='grida.closeAll()'><br>
+	</body>
+</html>

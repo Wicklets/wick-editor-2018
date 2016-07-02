@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Custom Type</title>
+    <link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+    <script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="../common/treedata.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../common/samples.css">
+<style>
+    #testA, #testB, #testC, .sample_comment{
+        width:270px;
+        float:left
+    }
+</style>
+</head>
+
+<body>
+<div class='header_comment'>Stylized DataTree type</div>
+<div class='sample_comment'>Redefined type</div>
+<div class='sample_comment'>Named type</div>
+<div class='sample_comment'>Custom type</div>
+<div style='clear:both;'></div>
+<div id="testA"></div>
+<div id="testB"></div>
+<div id="testC"></div>
+
+
+<script type="text/javascript" charset="utf-8">
+
+    webix.ready(function(){
+
+        var tree1 = webix.ui({
+            view:"tree",
+            container:"testA",
+            type:{
+                folder:function(obj){
+                    if(obj.$level == 1)
+                        return "<span class='webix_icon fa-folder-open'></span>";
+                    if (obj.$level == 2)
+                        return "<span class='webix_icon fa-video-camera'></span>";
+                    return  "<span class='webix_icon fa-film'></span>";
+                }
+            },
+            data:webix.copy(smalltreedata)
+        });
+
+        webix.type(webix.ui.tree, {
+            name:"awesome",
+            folder:function(obj){
+                if(obj.$level == 1)
+                    return "<span class='webix_icon fa-folder-open'></span>";
+                if (obj.$level == 2)
+                    return "<span class='webix_icon fa-video-camera'></span>";
+                return  "<span class='webix_icon fa-film'></span>";
+            }
+        });
+
+        var tree2 = webix.ui({
+            view:"tree",
+            container:"testB",
+            type:"awesome",
+            data:webix.copy(smalltreedata)
+        });
+
+        var tree1 = webix.ui({
+            view:"tree",
+            container:"testC",
+            template:"{common.icon()} {common.my_folder()} <span>#value#</span>",
+            type:{
+                my_folder:function(obj){
+                    if(obj.$level == 1)
+                        return "<span class='webix_icon fa-folder-open'></span>";
+                    if (obj.$level == 2)
+                        return "<span class='webix_icon fa-video-camera'></span>";
+                    return  "<span class='webix_icon fa-film'></span>";
+                }
+            },
+            data:webix.copy(smalltreedata)
+        });
+
+
+
+    });
+</script>
+</body>
+</html>

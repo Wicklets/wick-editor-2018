@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <title>Progress bar</title>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			.overall{ height:100%; line-height: 26px;}
+			.name{ height:100%; float:left; overflow: hidden;}
+			.size{	padding: 0 10px; width: 100px; text-align: right; float: right;}
+			.remove_file{ float:right; width:15px; padding-left: 10px;}
+			.status{
+				float: right;
+				position: relative;
+				margin-top: 4px;
+				width: 80px;
+				height: 16px;
+				line-height: 16px;
+				border: 1px solid #A4BED4;
+				border-radius: 2px; -moz-border-radius: 2px; -webkit-border-radius: 2px;
+			}
+			.progress{ height: 100%; position: absolute; background-color: #b8e6ff;}
+			.message{ z-index: 1; width:100%; text-align:center; position: absolute;}
+			.message.error{ color: #e83b3b;}
+		</style>
+	</head>
+	<body>
+
+		<div id="uploader_container" style="width: 600px; height: 200px; margin: 40px;"></div>
+
+		<script type="text/javascript" charset="utf-8">
+
+			function uploadFiles(){
+				$$("upl1").send();
+			}
+			function cancel(){
+				var id= $$("upl1").files.getFirstId();
+				while(id){
+					$$("upl1").stopUpload(id);
+					id = $$("upl1").files.getNextId(id);
+				}
+			}
+			webix.ready(function() {
+
+				webix.type(webix.ui.list, {
+					name:"myUploader",
+					template:function(f,type){
+						var html = "<div class='overall'><div class='name'>"+f.name+"</div>";
+						html += "<div class='remove_file'><span style='color:#AAA' class='cancel_icon'></span></div>";
+						html += "<div class='status'>";
+						html += "<div class='progress "+f.status+"' style='width:"+(f.status == 'transfer'||f.status=="server"?f.percent+"%": "0px")+"'></div>";
+						html += "<div class='message "+ f.status+"'>"+type.status(f)+"</div>";
+						html +=	 "</div>";
+						html += "<div class='size'>"+ f.sizetext+"</div></div>";
+						return html;
+					 },
+					status:function(f){
+						var messages = {
+							server: "Done",
+							error: "Error",
+							client: "Ready",
+							transfer:  f.percent+"%"
+						};
+						return messages[f.status]
+
+					},
+					on_click:{
+						"remove_file":function(ev, id){
+							$$(this.config.uploader).files.remove(id);
+						}
+					},
+					height: 35
+				});
+
+				webix.ui({
+					container:"uploader_container",
+					padding: 5,
+					view: "form", type: "line", rows: [
+						{ view: "uploader", id:"upl1", height:37, align:"center", type:"iconButton", icon:"plus-circle", label:"Add files" ,autosend:false, link:"mylist",  upload:"php/upload.php"},
+						{
+							borderless: true,
+							view:"list",  id:"mylist", type:"myUploader",
+							autoheight:true, minHeight: 50
+						},
+						{
+							id: "uploadButtons",
+							cols:[
+								{view:"button", label: "Upload", type:"iconButton", icon: "upload", click: "uploadFiles()", align: "center"},
+								{width:5},
+								{view:"button", label: "Cancel", type:"iconButton", icon: "cancel-circle", click: "cancel()", align: "center"}
+
+							]
+						}
+					]
+				});
+			});
+		</script>
+	</body>
+</html>

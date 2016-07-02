@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>DataTable: Export Configuration (server)</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Export to PDF</div>
+		<div class='sample_comment'>Click on the button to start exporting data.</div>
+		<input type="button" value="Get as PDF" style='width:400px;margin:15px;' onclick="webix.toPDF(grid);"><br>
+		<input type="button" value="Get as PDF (ID, Year, Title)" style='width:400px;margin:15px;' onclick="export1()"><br>
+		<input type="button" value="Get as PDF with extra columns" style='width:400px;margin:15px;' onclick="export2()"><br>
+		<div id="testA" style='height:600px'></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+				autowidth:true,
+				data:big_film_set
+			});
+		});
+
+		function export1(){
+			webix.toPDF(grid, {
+				id:true, 
+				columns:{
+					year:true,
+					title:true
+				}
+			});
+		};
+		function export2(){
+			webix.toPDF(grid, {
+				id:true, 
+				columns:{ 
+					custom1:{
+						template:function(obj){
+							return "Year " + obj.year;
+						},
+						width:50,
+						header:[{ text:"Date" }]
+					},
+					title:true
+				}
+			});
+		}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+        <style>
+		html,body{
+            background-color:#ffffff;
+        }
+        </style>
+		<title>Autoplay</title>
+	</head>
+	<body>
+	
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ui({
+			view:"window",
+			body:{
+				view:"video",
+				src: [
+					"http://cdn.webix.com/demodata/movie.ogv",
+					"http://cdn.webix.com/demodata/movie.mp4"
+				],
+				autoplay: true
+			},
+			head:{
+				view:"toolbar",  elements:[
+					{view:"label", label: "Video", align:'left'}
+				]
+			},
+			top:150, 
+			left:300,
+			width:260,
+			height:240,
+			move:true
+		}).show();
+		
+		</script>
+	</body>
+</html>

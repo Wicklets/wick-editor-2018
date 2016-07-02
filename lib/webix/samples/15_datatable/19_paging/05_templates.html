@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Using templates for pagers</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Using templates for pagers</div>
+		<div class='sample_comment'>Loading from DB (sqllite + php).</div>
+		<div class='sample_comment'>Use one of the page selectors to choose the desired page.</div>
+		</br>
+		<div id="paging_here"></div>
+		<div id="testA" style='height:300px'></div>
+		<div id="paging_here_too"></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"package",	header:"Name", 			width:200 },
+					{ id:"section",	header:"Section",		width:120 },
+					{ id:"size",	header:"Size" , 		width:80  },
+					{ id:"architecture",	header:"PC", 	width:60  }
+				],
+				select:"cell",
+				autowidth:true,
+				pager:{
+					template:"{common.prev()} {common.pages()} {common.next()}",
+					container:"paging_here",
+					size:10,
+					group:5
+				},
+				url:"data/data.php"
+			});
+
+			grida.getPager().clone({
+				template:"{common.first()} {common.prev()} {common.pages()} {common.next()} {common.last()}",
+				container:"paging_here_too",
+				size:10,
+				group:5
+			});
+
+		});
+		</script>
+	</body>
+</html>

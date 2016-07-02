@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA{
+				margin: 30px;
+			}
+		</style>
+		<title>Form Basic Initialization</title>
+	</head>
+	<body>
+
+		<div id="areaA"></div>
+	
+
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				container:"areaA",
+				view:"form", scroll:false,
+				width:300,
+
+				elements:[
+					{ view:"text", label:"Email"},
+					{ view:"text", type:"password", label:"Password"},
+					{ margin:5, cols:[
+						{ view:"button", label:"Login" , type:"form" },
+						{ view:"button", label:"Cancel" }
+					]}
+				]
+			});
+		</script>
+	</body>
+</html>

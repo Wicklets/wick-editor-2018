@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Enabling Drag-and-drop in Tree</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/treedata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body class='webix_full_screen'>
+		<div class='header_comment'>Basic drag-and-drop in DataTree</div>
+		<div class='sample_comment'>Select multiple items (ctrl click) and drag them</div>
+
+		<div id="testA" style='width:300px; height:300px'></div>
+		<hr>
+		<div id="testB" style='width:300px; height:300px'></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			treea = webix.ui({
+				container:"testA",
+				view:"tree",
+
+				select:'multiselect',
+				drag:true,
+
+				data: bigtreedata
+			});	
+
+			treeb = webix.ui({
+				container:"testB",
+				view:"tree",
+
+				select:'multiselect',
+				drag:true,
+
+				data: smalltreedata
+			});	
+
+		});	
+	
+		</script>
+	</body>
+</html>

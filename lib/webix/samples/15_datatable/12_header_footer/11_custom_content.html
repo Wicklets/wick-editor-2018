@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Custom content for header and footer</title>
+    <link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+    <script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+    <link rel="stylesheet" type="text/css" href="../common/samples.css">
+    <script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<div class='header_comment'>Custom select for "year" column header and average value counter for "votes" column</div>
+<div id="testA" style='height:600px'></div>
+<hr>
+
+<script type="text/javascript" charset="utf-8">
+
+    webix.ready(function(){
+
+        webix.ui.datafilter.avgColumn = webix.extend({
+            refresh:function(master, node, value){
+                var result = 0;
+                master.mapCells(null, value.columnId, null, 1, function(value){
+                    value = value*1;
+                    if (!isNaN(value))
+                        result+=value;
+                    return value;
+                });
+
+                node.firstChild.innerHTML = Math.round(result/master.count());
+            }
+        }, webix.ui.datafilter.summColumn);
+
+        webix.ui.datafilter.customSelect = {
+            refresh: function(master, node, column){
+                node.onchange = function(){ };
+                node.onclick = function(){}
+            },
+            render:function(a, b){
+                return  "<select style='width:100%; height:25px; font-family:Verdana'; id="+b.columnId+">" +
+                        "<option>Old</option>" +
+                        "<option>New</option>" +
+                        "</select>";
+            }
+        };
+
+
+
+        grida = webix.ui({
+            container:"testA",
+            view:"datatable",
+            columns:[
+                { id:"rank",	header:"", 	footer:{text:"Average:", colspan:3}, width:40 },
+                { id:"title",	header:"Film title",width:200},
+                { id:"year",	header: {content:"customSelect"}, width:80},
+                { id:"votes",	header:"Votes", footer:{ content:"avgColumn" },	width:100}
+            ],
+            autowidth:true,
+            autoheight:true,
+            data:small_film_set,
+            footer:true
+        });
+
+
+    });
+</script>
+</body>
+</html>

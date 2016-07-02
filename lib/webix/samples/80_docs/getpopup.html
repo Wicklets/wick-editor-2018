@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script type="text/javascript" src="../common/testdata.js"></script>
+		<title>Get Popup View</title>
+	</head>
+	<style type="text/css">
+		#listA{
+			float:left; margin:20px;
+		}
+	</style>
+	<body>
+		<div id="listA"></div>
+
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				container:"listA",rows:[
+				{view:"list", id:"list1",
+				width:320,
+				height:300,
+				template:"#rank#. #title#",
+				select:true,
+				data:small_film_set},
+				{view:"combo", id:"my_combo", label: 'Combo', options:[]}
+			]
+			});
+
+			var list = $$("my_combo").getPopup().getList();
+			list.define("template", "#rank#. #title#");
+			list.sync($$("list1"));
+		</script>
+	</body>
+</html>

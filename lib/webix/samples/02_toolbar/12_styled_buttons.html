@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+		
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+         <title>Buttons: Styling</title>
+    </head>
+   
+
+    <div id="box" style="width:500px;height:100px;margin:50px"></div>
+    <style>
+		.bt_1 input{
+			background: #396D9E;
+			background: -moz-linear-gradient(top, #5D91C3 0% , #396D9E 100%);
+			background: -webkit-gradient(linear, left top, left bottom, color-stop(0,#5D91C3), color-stop(1, #396D9E));
+			border:1px solid #396D9E;
+			text-shadow: 0 -1px #134471;
+			box-shadow: inset 0px 1px 1px #8eb3d5;
+			-webkit-box-shadow: inset 0px 1px 1px #8eb3d5;
+			color:#FFFFFF;
+			font-size: 15px;
+		}
+		.bt_1 input:active{
+			background: #396D9E;
+		}
+
+	    .icon_btn .webix_icon{
+		    font-size: 24px;
+		    color: #555;
+	    }
+		.icon_btn .text{
+			color: #555;
+		}
+		.image_btn .image{
+			background-image: url(../common/imgs/24/save.gif);
+			background-repeat: no-repeat;
+			height: 26px;
+			width: 100%;
+			background-position: center center;
+		}
+
+		.icon_back_btn .webix_icon{
+			font-size: 25px;
+			width: 20px;
+			text-align: left;
+			vertical-align: middle;
+		}
+		.icon_back_btn .text{
+			width: 50px;
+			text-align: left;
+			display: inline-block;
+			vertical-align: middle;
+		}
+		.icon_back_btn button{
+			color: #65a0ff;
+			font-size: 17px;
+		}
+    </style>
+
+    <body>
+	
+		<script type="text/javascript" charset="utf-8">
+
+
+		webix.ui({
+			view:"toolbar",
+			container:"box",
+			height: 65,
+
+			cols: [
+				{ view:"button", type: "htmlbutton", css: "icon_back_btn", label: '<span class="webix_icon fa-angle-left"></span><span class="text">back</span>', inputWidth:100},
+				{ view:"button", value: "New Color", inputWidth:100, css:"bt_1"},
+				{ view:"button", type: "htmlbutton", css: "icon_btn", label: '<span class="webix_icon fa-icon fa-cog"></span><div class="text">Icon Button</div>', inputWidth:100},
+				{ view:"button", type: "htmlbutton", css: "image_btn", label: '<div class="image"></div><div class="text">Image</div>', inputWidth:100}
+
+			]
+		})
+		</script>
+
+     </body>
+</html>

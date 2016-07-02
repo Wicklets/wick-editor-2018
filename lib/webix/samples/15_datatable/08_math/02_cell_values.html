@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Using cell references in formulas</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/mathdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<style>
+	.index .webix_cell{
+		background-color:yellow;
+		text-align:center;
+	}
+	.center .webix_cell{
+		text-align:center;
+	}
+	</style>
+	<body>
+		<div class='header_comment'>Using cell references in formulas</div>
+		<div class='sample_comment'>Math feature supports using cell references inside formulas.</div>
+		<div class='sample_comment'>Syntax: </br> [id,field] - takes the value from the specified field of an item with the specified id.<br/>[:row_ind,:col_ind] - the index of the row and column beginning from 0.<br/> These two variants may be combined: [id,:col_ind] or [:row_ind,field].</div>
+		<div id="testA" style='width:800px; height:300px'></div>
+		<script type="text/javascript" charset="utf-8">
+
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"id",	header:"", css:"rank",  		width:50},
+					{ id:"name",	header:"Country",width:200},
+					{ id:"rev",	header:"Revenue" , width:180},
+					{ id:"exp",	header:"Expenditures", 	width:180},
+					{ id:"dif_math", header: "Deficit/surplus", width: 180},
+					{ id:"date", header: "Date", width: 80}
+				],
+				autoheight:true,
+				autowidth:true,
+				math: true,
+				data: budget
+			});
+
+		</script>
+	</body>
+</html>

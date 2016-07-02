@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Tree: Saving</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../../common/samples.css">
+	</head>
+	<body>
+		<div class='header_comment'>Saving</div>
+		<div class='sample_comment'>
+			The sample demonstrates saving tree after changes:<br>add/update/delete item, changing parent using drag-n-drop
+		</div>
+		<div id="testA" style='width:250px; height:250px; float:left'></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.protoUI({
+			name:"edittree"
+		}, webix.EditAbility, webix.ui.tree);
+
+		var tree = {
+			id: "datatree1",
+			view:"edittree",
+			template:"{common.icon()} {common.folder()} <span>#title#</span>",
+
+			editable:true,
+			editaction:"dblclick",
+			editor:"text",
+			editValue:"title",
+			
+			select:"multiselect",
+			drag:true,
+
+			url: "server/datatree.php",
+			save: "connector->server/datatree.php"
+		};
+
+		var buttons = {
+			view:"toolbar", elements:[
+				{ view:"button", value:"Add Row", click:function(){
+					var tree = $$('datatree1');
+					var parent = tree.getSelectedId()||0;
+					tree.add({ title:""}, 0, parent);
+					tree.open(parent);
+				}},
+				{ view:"button", value:"Delete Row", click:function(){
+					var tree = $$('datatree1');
+					var id = tree.getSelectedId();
+					if (id)
+						tree.remove(id);
+				}},
+				{}
+			]
+		};
+			
+		webix.ready(function(){
+			treea = webix.ui({
+				container:"testA",
+				rows:[
+					buttons, tree
+				]
+			});
+			$$("datatree1").attachEvent("onafterdrop", function(details){
+				this.updateItem(details.start);
+			});
+		});
+		</script>
+	</body>
+</html>

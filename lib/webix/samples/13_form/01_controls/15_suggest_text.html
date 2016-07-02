@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<link rel="stylesheet" type="text/css" href="../../common/samples.css">
+		<style type="text/css">body, html{ height:100%;}</style>
+		<title>Suggest List for Input: Populating with  Client-side Data</title>
+		<style>
+			label {
+				padding: 7px;
+			}
+		</style>
+	</head>
+<body>
+	<div class="sample_comment">Webix input, client side autosuggest</div>
+	<div id="data_container1" style="margin:20px"></div>
+	<div class="sample_comment">Two inputs share the same suggest object</div>
+	<div id="data_container2" style="margin:20px"></div>
+	
+<script>
+
+	var countries = [
+		{id:1, value: "Albania"},
+		{id:2, value: "Bhutan"},
+		{id:3, value: "Colombia"},
+		{id:4, value: "Denmark"},
+		{id:5, value: "Germany"},
+		{id:6, value: "Moldova"}
+	];
+
+	var form1 = {
+		width: 300, 
+		view:"form", scroll:false,
+		container:"data_container1",
+
+		rows:[
+			{ view:"text", name:"country", label:"Country", value:"Belarus", suggest:countries},
+			{ view:"button", type:"form", value:"Submit data", click:function(){
+				webix.message(JSON.stringify( this.getParentView().getValues()));
+			}}
+		]
+	};
+
+
+	webix.ui(form1);
+
+
+
+
+	webix.ui({
+		id:"mylist", view:"suggest", data:countries
+	});
+	var form2 = {
+		width: 300, 
+		view:"form", scroll:false,
+		container:"data_container2",
+
+		rows:[
+			{ view:"text", name:"c_a", label:"Country", value:"Germany", suggest:"mylist"},
+			{ view:"text", name:"c_b", label:"Country", value:"", suggest:"mylist"},
+			{ view:"button", type:"form", value:"Submit data", click:function(){
+				webix.message(JSON.stringify( this.getParentView().getValues()));
+			}}
+		]
+	};
+
+
+	webix.ui(form2);
+
+
+</script>
+</body>
+</html>

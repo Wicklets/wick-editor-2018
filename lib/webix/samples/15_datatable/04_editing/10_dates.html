@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Date Editor</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'> Date editors</div>
+		<div class='sample_comment'> Dates as plain text:</div>
+		<div id="testA"></div>
+		<hr>
+		<div class='sample_comment'> Dates as formatted date object:</div>
+		<div id="testB"></div>
+		<hr>
+		<div class='sample_comment'> DatePicker (date objects):</div>
+		<div id="testC"></div>
+		<hr>
+		<div class='sample_comment'> DatePicker (date strings):</div>
+		<div id="testD"></div>
+		<hr>
+
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"id",							header:"", css:"rank",  		width:50},
+					{ id:"title",	editor:"text",		header:"Film title",width:200},
+					{ id:"start",	editor:"text",		header:"Start date" , width:120},
+					{ id:"end",		editor:"text",		header:"End date", 	width:120}
+				],
+				
+				editable:true,
+				autoheight:true,
+				autowidth:true,
+
+				data: [
+					{ id:1, title:"The Shawshank Redemption", start:"16/08/2013", end:"24/09/2013" },
+					{ id:2, title:"The Godfather", start:"26/09/2013", end:"12/01/2014" }
+				]
+			});
+		
+		});
+
+
+
+
+
+		//format in editor
+		var show_editor = webix.Date.dateToStr("%Y / %m / %d");
+		var parse_editor = webix.Date.strToDate("%Y / %m / %d");
+		//format in grid
+		var show_date = webix.Date.dateToStr("%d %M %Y");
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testB",
+				view:"datatable",
+				columns:[
+					{ id:"id",							header:"", css:"rank",  		width:50},
+					{ id:"title",	editor:"text",		header:"Film title",width:200},
+					{ map:"(date)#start#", 	editor:"text",	header:"Start date" , width:120,
+						format:		show_date, 	
+						editFormat:	show_editor,
+						editParse:	parse_editor },
+					{ map:"(date)#end#", 	editor:"text",	header:"End date" , width:120,
+						format:		show_date, 	
+						editFormat:	show_editor,
+						editParse:	parse_editor }
+				],
+				
+				editable:true,
+				autoheight:true,
+				autowidth:true,
+
+				data: [
+					{ id:1, title:"The Shawshank Redemption", start:"2013-08-16", end:"2013-09-24" },
+					{ id:2, title:"The Godfather", start:"2013-09-26", end:"2014-01-12" }
+				]
+			});
+		
+		});
+
+
+
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testC",
+				view:"datatable",
+				columns:[
+					{ id:"id",							header:"", css:"rank",  		width:50},
+					{ id:"title",	editor:"text",		header:"Film title",width:200},
+					{ map:"(date)#start#",		editor:"date",		header:"Start date", 	width:120},
+					{ map:"(date)#end#",		editor:"date",		header:"End date", 		width:120}
+				],
+				
+				editable:true,
+				autoheight:true,
+				autowidth:true,
+
+				data: [
+					{ id:1, title:"The Shawshank Redemption", start:"2013-08-16", end:"2013-09-24" },
+					{ id:2, title:"The Godfather", start:"2013-09-26", end:"2014-01-12" }
+				]
+			});
+		
+		});
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testD",
+				view:"datatable",
+				columns:[
+					{ id:"id",							header:"", css:"rank",  		width:50},
+					{ id:"title", editor:"text", header:"Film title",	width:200},
+
+					{ id:"start", editor:"date", header:"Start date", width:120},
+					{ id:"end",   editor:"date", header:"End date",   width:120}
+				],
+				
+				editable:true,
+				autoheight:true,
+				autowidth:true,
+
+				data: [
+					{ id:1, title:"The Shawshank Redemption", start:"2013-08-16", end:"2013-09-24" },
+					{ id:2, title:"The Godfather" }
+				]
+			});
+		
+		});
+		</script>
+	</body>
+</html>

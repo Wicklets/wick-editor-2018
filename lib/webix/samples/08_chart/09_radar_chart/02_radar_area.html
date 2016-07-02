@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+	<title>Radar Chart: Areas</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+	<script src="../../common/chartdata.js"></script>
+<body>
+    <div id="chartDiv" style="width:400px;height:250px;margin:20px"></div>
+	<script>
+        webix.ui({
+            container:"chartDiv",
+            view:"chart",
+            type:"radar",
+			xAxis:{
+				template:"#month#"
+			},
+            disableItems:true,
+            alpha: 0.2,
+			legend:{
+				layout:"y",
+				width: 110,
+				align:"right",
+				valign:"middle",
+				marker:{
+					width:15,
+                    radius:3
+				},
+				values:[
+					{text:"company A",color:"#3399ff"},
+					{text:"company B",color:"#66cc00"}
+				]
+			},
+			series:[
+                {
+                    value:"#companyA#",
+                    tooltip:{
+                        template:"#companyA#"
+                    },
+                    color:"#3399ff",
+                    line:{
+                        color:"#3399ff",
+                        width:1
+                    },
+                    fill:"#3399ff"
+                },
+                {
+                    value:"#companyB#",
+                    tooltip:{
+                        template:"#companyB#"
+                    },
+                    fill:"#66cc00",
+                    line:{
+                        color:"#66cc00",
+                        width:1
+                    }
+                }
+			],
+			data:companies
+        });
+	</script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+    <title>Bar Chart: Different Types in One Chart</title>
+    <script src="../../../codebase/webix.js" type="text/javascript"></script>
+    <link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+    <script src="../../common/chartdata.js"></script>
+<body>
+<div id="chartDiv" style="width:750px;height:250px;margin:20px"></div>
+<script>
+    webix.ui({
+        container:"chartDiv",
+        view:"chart",
+        type:"bar",
+        barWidth:20,
+        radius:2,
+        alpha: 0.7,
+        gradient:"rising",
+        xAxis:{
+            template:"'#year#"
+        },
+        yAxis:{
+            start:0,
+            step:10,
+            end:100
+        },
+        legend:{
+            values:[{text:"Type A",color:"#4aa397"},{text:"Type B",color:"#69ba00"},{text:"Type C",color:"#de619c", markerType: "item"}],
+            valign:"middle",
+            align:"right",
+            width:90,
+            layout:"y"
+        },
+        series:[
+            {
+                value:"#sales#",
+                color: "#4aa397",
+                tooltip:{
+                    template:"#sales#"
+                }
+            },
+            {
+                value:"#sales2#",
+                color:"#69ba00",
+                tooltip:{
+                    template:"#sales2#"
+                }
+            },
+            {
+
+                type:"line",
+                value:"#sales3#",
+                color:"#36abee",
+
+                item:{
+                    borderColor: "#b7286c",
+                    color: "#de619c",
+                    type: "s"
+                },
+                line:{
+                    color:"#de619c",
+                    width:2
+                },
+				tooltip:{
+                    template:"#sales3#"
+                }
+            }
+        ],
+        data:multiple_dataset
+    });
+</script>
+</body>
+</html>

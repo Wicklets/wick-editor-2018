@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			.my_style  {
+				font-style: italic;
+						}
+		</style>
+		<title>Dataview Italic</title>
+	</head>
+<body>
+<div id="data" style="width:500px; height:250px; margin:50px"></div>
+<script type="text/javascript" charset="utf-8">
+webix.ui({
+    view:"dataview",
+	container:"data",
+	css:"my_style",
+    width: 520, // component's dimensions
+    height: 270,
+    template:"<div class='webix_strong'>#title# </br> #year#.</div> Rank: #rank#",
+    type:{ height: 90,  // dimensions of each dataview item
+            width: 250 
+    },
+    data:[
+            { id:1, title:"The Shawshank Redemption", year:1994, rank:1},
+            { id:2, title:"The Godfather", year:1972, rank:2},
+            { id:3, title:"The Godfather: Part II", year:1974, rank:3},
+            { id:4, title:"The Good, the Bad and the Ugly", year:1966, rank:4},
+            { id:5, title:"My Fair Lady", year:1964, rank:5},
+            { id:6, title:"12 Angry Men", year:1957, rank:6},
+            ],
+    datatype:"json"
+});
+</script>
+
+</body>
+</html>

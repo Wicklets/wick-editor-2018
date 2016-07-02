@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Filtering</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<script src="../common/treedata.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+	</head>
+	<body>
+		<div class='header_comment'>Filtering</div>
+
+		<div id="testA" style='width:800px; height:320px;margin-left:20px '></div>
+		
+		
+		<script type="text/javascript" charset="utf-8">
+
+			webix.ready(function(){
+
+				var set1 = {
+					rows:[
+						{
+							view:"text",
+							label:"Filter on all levels, show children",
+							labelPosition:"top"
+						},
+						{
+							view:"tree", borderless:true,
+							id:"tree1",
+							select:true,
+							data: webix.copy(carsdata)
+						}
+					]
+				};
+
+				var set2 = {
+					rows:[
+						{
+							view:"text",
+							label:"Filter on all levels, strict",
+							labelPosition:"top"
+						},
+						{
+							view:"tree", borderless:true,
+							id:"tree2",
+							filterMode:{
+								showSubItems:false
+							},
+							select:true,
+							data: webix.copy(carsdata)
+						}
+					]
+				};
+
+				var set3 = {
+					rows:[
+						{
+							view:"text",
+							label:"Filter items on 2rd level only",
+							labelPosition:"top"
+						},
+						{
+							view:"tree", borderless:true,
+							id:"tree3",
+							filterMode:{
+								showSubItems:false,
+								level:2
+							},
+							select:true,
+							data: webix.copy(carsdata)
+						}
+					]
+				};
+
+
+				webix.ui({
+					container:"testA",
+					padding:15, margin:10,
+					cols:[ set1, set2, set3 ]
+				});
+
+				$$("$text1").attachEvent("onTimedKeyPress",function(){
+					$$("tree1").filter("#value#",this.getValue());
+				})
+				$$("$text2").attachEvent("onTimedKeyPress",function(){
+					$$("tree2").filter("#value#",this.getValue());
+				})
+				$$("$text3").attachEvent("onTimedKeyPress",function(){
+					$$("tree3").filter("#value#",this.getValue());
+				})
+			});
+		</script>
+
+	</body>
+</html>

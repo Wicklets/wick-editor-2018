@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Creating a custom table</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Creating a custom table</div>
+		<div class='sample_comment'>The sample shows how you can create and instantiate a new class for the table.</div>
+		<div id="testA"></div>
+		<hr>
+		<div id="testB"></div>
+
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			webix.protoUI({
+				name:"mytable", 
+				$init:function(config){
+					config.autowidth = true;
+					config.autoheight = true;
+					config.minHeight =  50;
+					this.attachEvent("onAfterLoad", function(){
+						if (!this.count())
+							this.showOverlay("Sorry, there is no data");
+					});
+				}
+			}, webix.ui.datatable);
+
+			grida = webix.ui({
+				container:"testA",
+				view:"mytable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+				data:small_film_set
+			});	
+
+			gridb = webix.ui({
+				container:"testB",
+				view:"mytable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200}
+				],
+				data:[]
+			});				
+
+		});
+		</script>
+	</body>
+</html>

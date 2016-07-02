@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Drag-and-Drop support for columns</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Drag-and-Drop for columns</div>
+		<div class='sample_comment'>Click the header to drag a column.</div>
+		
+		<div id="testA"></div>
+		<hr>
+		<div id="testB"></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"votes",	header:"Votes", 	width:100},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"title",	header:"Film title",width:200}
+				],
+				height:300, minHeight:100,
+				autowidth:true,
+				select:"multiselect",
+				dragColumn:true,
+
+				data: webix.copy(big_film_set)
+			});	
+		});		
+		</script>
+	</body>
+</html>

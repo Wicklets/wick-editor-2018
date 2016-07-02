@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<title>Accordion and Resizer</title>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8">
+			var line = { cols:[
+					{ header:"col 1", body:"content 1", width:150},
+					{ body:"Content 2" },
+					{ view:"resizer" },
+					{ 
+						collapsed:false, 
+						header:"col 3",
+						body:"content 3",
+						width:150
+					},
+					{ view:"resizer" },
+					{ body:"Content 4" },
+					{ header:"col 5", body:"content 5", width:150}
+				]};
+			var line1 = webix.copy(line);
+				line1.type = "line";
+			var line2 = webix.copy(line);
+				line2.type = "wide";
+			var line3 = webix.copy(line);
+				line3.type = "space";
+
+			webix.ui({
+				view:"accordion", type:"space",
+				rows:[
+					line1,
+					line2,
+					line3
+				]
+				
+			});
+			
+		</script>
+	</body>
+</html>

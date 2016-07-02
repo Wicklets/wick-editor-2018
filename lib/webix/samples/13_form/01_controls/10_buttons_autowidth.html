@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<title>Buttons - AutoWidth</title>
+	</head>
+<body>	
+<script>
+
+var form1 = {
+	view:"toolbar",
+	elements:[
+		{ view:"button", label:"Short" },
+		{ view:"button", label:"Medium" },
+		{ view:"button", label:"Long text" },
+		{ view:"button", label:"Very long text" },
+		{}
+	]
+};
+
+var form2 = {
+	view:"toolbar",
+	cols:[
+		{ view:"button", label:"Short", autowidth:true },
+		{ view:"button", label:"Medium", autowidth:true },
+		{ view:"button", label:"Long text", autowidth:true },
+		{ view:"button", label:"Very long text", autowidth:true },
+		{}
+	]
+};
+
+var form3= {
+	view:"toolbar",
+	cols:[
+		{ view:"button", icon:"users", type:"icon", label:"Short", autowidth:true },
+		{ view:"button", icon:"users", type:"icon", label:"Medium", autowidth:true },
+		{ view:"button", icon:"users", type:"icon", label:"Long text", autowidth:true },
+		{ view:"button", icon:"users", type:"icon", label:"Very long text", autowidth:true },
+		{}
+	]
+};
+
+var form4= {
+	view:"toolbar",
+	cols:[
+		{ view:"button", icon:"users", type:"iconButton", label:"Short", autowidth:true },
+		{ view:"button", icon:"users", type:"iconButton", label:"Medium", autowidth:true },
+		{ view:"button", icon:"users", type:"iconButton", label:"Long text", autowidth:true },
+		{ view:"button", icon:"users", type:"iconButton", label:"Very long text", autowidth:true },
+		{}
+	]
+};
+
+webix.ui({
+	rows:[
+		{ template:"Default sizing", type:"header"},
+		{ height:20 },
+		form1,
+		{ height:60},
+		{ template:"Adjust to content", type:"header"},
+		{ height:20 },
+		form2,
+		{ height:20 },
+		form3,
+		{ height:20 },
+		form4,
+		{}
+	]
+});
+		
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+	<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	<style>
+		html,body{
+			background-color:#ffffff;
+		}
+		.image .webix_template{
+			padding:0px;
+		}
+	</style>
+	<title>Carousel Initialization</title>
+</head>
+
+<body>
+<script type="text/javascript" charset="utf-8">
+	webix.ui({
+		view:"window",
+		body:{
+			view:"carousel",
+			id:"carousel",
+			width:464, height:275, 
+			cols:[
+				{ css: "image", template:img, data:{src:"imgs/image001.jpg"} },
+				{ css: "image", template:img, data:{src:"imgs/image002.jpg"} },
+				{ css: "image", template:img, data:{src:"imgs/image003.jpg"} },
+				{ css: "image", template:img, data:{src:"imgs/image004.jpg"} },
+				{ css: "image", template:img, data:{src:"imgs/image005.jpg"} },
+				{ css: "image", template:img, data:{src:"imgs/image006.jpg"} }
+			]
+		},
+		head:{
+			view:"toolbar", type:"MainBar", elements:[
+				{view:"label", label: "Photobook", align:'left'}
+			]
+		},
+		top:150,
+		left:150
+	}).show();
+
+	function img(obj){
+		return '<img src="'+obj.src+'" class="content" ondragstart="return false"/>'
+	}
+
+</script>
+</body>
+</html>

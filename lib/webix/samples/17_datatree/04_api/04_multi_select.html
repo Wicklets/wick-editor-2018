@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Multiline Selection</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+	</head>
+	<body>
+		<div class='header_comment'>Multiple Selection</div>
+		
+		<div id="testA" style='width:300px; height:260px;'></div>
+		<div class='header_comment'>Multiple 'Level' Selection</div>
+		<div id="testB" style='width:300px; height:260px;'></div>
+		
+		<script src="../common/treedata.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="utf-8">
+
+
+
+treeB = webix.ui({
+				container:"testA",
+				view:"tree",
+				select:"multiselect",				
+
+				data: webix.copy(smalltreedata)
+			});
+
+treeB = webix.ui({
+				container:"testB",
+				view:"tree",
+				select:true,				
+				multiselect:'level',
+				data:webix.copy(smalltreedata)
+			});
+
+		</script>
+	</body>
+</html>

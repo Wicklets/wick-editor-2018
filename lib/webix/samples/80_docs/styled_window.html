@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title>Styled Window</title>
+	<script type="text/javascript" src='../../codebase/webix.js'></script>
+	<link rel="stylesheet" type="text/css" href="../../codebase/webix.css">
+</head>
+<body>
+<style type="text/css">
+	.mywin .webix_win_head .webix_template{
+		background: #444; color:#AFA;
+	}
+</style>
+<script>
+	webix.ui({
+		view:"window",
+		height:150,
+		width:200,
+		left:50, top:50,
+		css:"mywin",
+		head:"Header text",
+		body:{
+			template:"<span style='font-size:14px;font-style:italic'>Styled Window</span>"
+		}
+	}).show();
+			
+	webix.ui({
+		view:"window",
+		height:150,
+		width:200,
+		left:280, top:50,
+		head:"Header text",
+		body:{
+			template:"Standard Window"
+		}
+	}).show();
+</script>
+</body>
+</html>

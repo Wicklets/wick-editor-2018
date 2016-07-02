@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../common/testdata.js"></script>
+		<style>
+			#areaA, #areaB {
+				margin: 50px 10px;
+				width:320px;
+				height:400px;
+				float: left;
+			}
+			
+		</style>
+		<title>Tabview: Fit Active vs Fit Biggest</title>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8">
+
+		var cells =[
+			{
+				header:"Form",
+				body:{
+					template:"Place for the form control", height:300
+				}
+			},
+			{
+				header:"List",
+				body:{
+					view:"list",
+					template:"#rank#. #title# <div style='padding-left:18px'> Year:#year#, votes:#votes# </div>",
+					type:{
+						height:50
+					},
+					select:true,
+					data:big_film_set
+				}
+			},
+			{
+				header:"About",
+				body:{
+					template:"About the app", height:100
+				}
+			}
+		];
+
+		webix.ui({
+			type:"space", cols:[{
+				type:"wide", rows:[
+					{ type:"header", template:"Fit Active" },
+					{ view:"tabview", cells:webix.copy(cells) },
+					{ template:"Spare content" }
+
+				]
+			},
+			{
+				type:"wide", rows:[
+					{ type:"header", template:"Fit Biggest" },
+					{ view:"tabview", cells:webix.copy(cells), multiview:{ fitBiggest:true } },
+					{ template:"Spare content" }
+				]
+			}]
+		});
+	
+		</script>
+	</body>
+</html>

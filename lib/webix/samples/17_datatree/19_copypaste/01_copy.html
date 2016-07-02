@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Copying Items</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+	</head>
+	<body>
+		<div class='header_comment'>Copying DataTree items</div>
+		<div class='sample_comment'>Select an item and press ctrl+c (the item will be copied).<br> Set the cursor into the textarea and press ctrl+v (to paste the copied item).</div>
+		<div id="testA" style='width:250px; height:250px; float:left'></div>
+		<textarea placeholder="paste the copied text here" onblur="this.value=''" style="margin: 10px; width: 200px; height: 120px;"></textarea>
+			
+
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+
+			tree1 = webix.ui({
+				container:"testA",
+				view:"tree",
+				select: true,
+				clipboard: true,
+
+				data: [
+					{ id:"1", open:true, value:"The Shawshank Redemption", data:[
+						{ id:"1.1", value:"Part 1" },
+						{ id:"1.2", value:"Part 2" },
+						{ id:"1.3", value:"Part 3" }
+					]},
+					{ id:"2", value:"The Godfather", data:[
+						{ id:"2.1", value:"Part 1" },
+						{ id:"2.2", value:"Part 2" }
+					]}
+				]
+			});	
+		});
+		</script>
+	</body>
+</html>

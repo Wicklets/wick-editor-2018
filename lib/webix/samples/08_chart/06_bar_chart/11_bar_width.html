@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+	<title>Bar chart: Setting Width of Bars</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+	<script src="../../common/chartdata.js"></script>
+<body>
+	<div id="charts" style="width:900px;height:200px;margin:20px"></div>
+	<script>
+		webix.ui({
+			container:"charts",
+			rows:[
+				{ cols:[{
+					view:"chart",
+					type:"bar",
+					barWidth:1000,
+					value:"#sales#",
+					label:"#sales#",
+					radius:0,
+					gradient:"falling",
+					data: dataset,
+
+					width:300, height:200
+				}, {} ] },
+				{ cols:[{
+					view:"chart",
+					type:"bar",
+					barWidth:1000,
+					value:"#sales#",
+					label:"#sales#",
+					radius:0,
+					gradient:"falling",
+					data: dataset,
+
+					width:450, height:200
+				}, {} ] },
+				{ cols:[{
+					view:"chart",
+					type:"bar",
+					barWidth:1000,
+					value:"#sales#",
+					label:"#sales#",
+					radius:0,
+					gradient:"falling",
+					data: dataset,
+
+					width:600, height:200
+				}, {} ] },
+				{
+					view:"chart",
+					type:"bar",
+					barWidth:1000,
+					value:"#sales#",
+					label:"#sales#",
+					radius:0,
+					gradient:"falling",
+					data: dataset,
+
+					height:200
+				}
+			]
+		});
+	</script>
+</body>
+</html>

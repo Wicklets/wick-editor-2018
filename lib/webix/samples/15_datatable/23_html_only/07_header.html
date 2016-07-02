@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Loading from HTML table. Header</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Loading from HTML table</div>
+		<div class='sample_comment'>Click on any cell to select it. </div>
+		<div id="testA">
+		
+		<table  data-id="films" 
+				data-view="datatable" 
+				data-autoheight="true", 
+				data-autowidth="true">
+			<tr>
+				<th width="40" sort="string">id</th>
+				<th width="200" sort="string">Title
+					json://[{ "text":"Details" , "colspan":3}, "Title"]
+				</th>
+				<th width="80" sort="string"> Released
+					json://["", "Released"]
+				</th>
+				<th width="60" sort="string">Votes
+					json://["", "Votes"]
+				</th>
+				<th width="70" sort="string">Rating</th>
+				<th width="40" sort="string">Rank</th>
+			</tr>
+			<tr>
+				<td>1</td>
+				<td>The Shawshank Redemption</td>
+				<td>1994</td>
+				<td>678790</td>
+				<td>9.2</td>
+				<td>1</td>
+			</tr>
+			<tr>
+				<td>2</td>
+				<td>The Godfather</td>
+				<td>1972</td>
+				<td>511495</td>
+				<td>9.2</td>
+				<td>2</td>
+			</tr>
+			<tr>
+				<td>3</td>
+				<td>The Godfather: Part II</td>
+				<td>1974</td>
+				<td>319352</td>
+				<td>9.0</td>
+				<td>3</td>
+			</tr>
+			<tr>
+				<td>4</td>
+				<td>The Good, the Bad and the Ugly</td>
+				<td>1966</td>
+				<td>213030</td>
+				<td>8.9</td>
+				<td>4</td>
+			</tr>
+			<tr>
+				<td>5</td>
+				<td>Pulp fiction</td>
+				<td>1994</td>
+				<td>533848</td>
+				<td>8.9</td>
+				<td>5</td>
+			</tr>
+			<tr>
+				<td>6</td>
+				<td>12 Angry Men</td>
+				<td>1957</td>
+				<td>164558</td>
+				<td>8.9</td>
+				<td>6</td>
+			</tr>
+		</table>
+		</div>
+
+	<script type="text/javascript">webix.markup.init()</script>
+	</body>
+</html>

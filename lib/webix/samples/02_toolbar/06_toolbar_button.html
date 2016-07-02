@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA, #areaB, #areaC, #areaD{
+				margin: 30px;
+				width:700px; height:100px;
+			}
+		</style>
+		<title>Buttons: Different Sizes</title>
+	</head>
+	<body>
+
+		<div id="areaA"></div>
+		<div id="areaB"></div>
+		<div id="areaC"></div>
+		<div id="areaD"></div>
+
+		<script type="text/javascript" charset="utf-8">
+
+			webix.ui({
+				container:"areaA",
+				view:"toolbar", paddingY:2,
+				cols:[
+					{ view:"button", label:"Prev", type:"prev", width:100, height:20 },
+					{ view:"button", label:"Confirm" , inputWidth:100, align:"right" },
+					{ view:"button", label:"Cancel" , inputWidth:100 },
+					{ view:"button", label:"Next" , type:"next",  width:100 }
+				]
+			});
+
+			webix.ui({
+				container:"areaB",
+				view:"toolbar", paddingY:2,
+				cols:[
+					{ view:"button", label:"Prev", type:"prev", width:120, height:40 },
+					{ view:"button", label:"Confirm" , inputWidth:140, align:"right" },
+					{ view:"button", label:"Cancel" , inputWidth:140 },
+					{ view:"button", label:"Next" , type:"next",  width:120 }
+				]
+			});	
+
+
+			webix.ui({
+				container:"areaC",
+				view:"toolbar", paddingY:2,
+				cols:[
+					{ view:"button", label:"Prev", type:"prev", width:140, height:60 },
+					{ view:"button", label:"Confirm" , inputWidth:180, align:"right" },
+					{ view:"button", label:"Cancel" , inputWidth:180 },
+					{ view:"button", label:"Next" , type:"next",  width:140 }
+				]
+			});
+
+	
+					
+		</script>
+	</body>
+</html>

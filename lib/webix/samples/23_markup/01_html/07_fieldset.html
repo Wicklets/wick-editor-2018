@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8" />
+	<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	<title>HTML initialization : Fieldset</title>
+</head>
+<body>
+
+<div style='width:300px; height:500px;'>
+	<div data-view="rows">
+		<div data-view="text" data-label="Email"></div>
+		<div data-view="fieldset" data-label="Alternative contacts">
+			<div data-view="rows">
+				<div data-view="text" data-label="Phone"></div>
+				<div data-view="text" data-label="Skype"></div>
+			</div>
+		</div>
+		<div data-view="text" data-label="Password"></div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	webix.markup.init();
+</script>
+</body>
+</html>

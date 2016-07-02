@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+<head>
+	<title>Export to PNG</title>
+	<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+	<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+
+	<style type="text/css">
+		html,body{ height:100%; margin:0}
+		.webix_view.toolbar{
+			background: #fafafa;
+		}
+	</style>
+</head>
+<body>
+
+
+<div id="chartDiv" style="width:600px;height:270px;margin:20px"></div>
+
+<script>
+
+	webix.ui({
+		container:"chartDiv",
+
+		rows: [
+			{
+				view: "form",
+				css: "toolbar",
+				paddingY: 5,
+				paddingX: 10,
+				cols:[
+					{
+						view: "label", label: "Sales per Year"
+					},
+
+					{
+						view: "button", type: "iconButton", label: "Export to PNG", icon: "image", width: 140,
+						click:function(){
+							webix.toPNG($$("myChart"));
+						}
+					}
+				]
+
+			},
+			{
+				view:"chart",
+				id: "myChart",
+
+				type:"line",
+				value:"#sales#",
+				onContext:{},
+				item:{
+					borderColor: "#1293f8",
+					color: "#ffffff"
+				},
+				line:{
+					color:"#1293f8",
+					width:3
+				},
+				xAxis:{
+					template:"'#year#"
+				},
+				offset:0,
+				yAxis:{
+					start:0,
+					end:100,
+					step:10,
+					template:function(obj){
+						return (obj%20?"":obj)
+					}
+				},
+				data: [
+					{ id:1, sales:20, year:"06"},
+					{ id:2, sales:55, year:"07"},
+					{ id:3, sales:40, year:"08"},
+					{ id:4, sales:78, year:"09"},
+					{ id:5, sales:61, year:"10"},
+					{ id:6, sales:35, year:"11"},
+					{ id:7, sales:80, year:"12"},
+					{ id:8, sales:50, year:"13"},
+					{ id:9, sales:65, year:"14"},
+					{ id:10, sales:59, year:"15"}
+				]
+			}
+
+		]
+
+	});
+
+
+
+
+</script>
+</body>
+</html>

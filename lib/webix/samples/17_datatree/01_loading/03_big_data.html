@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Tree: Big Data</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+	</head>
+	<body>
+		<div class='header_comment'>Loading Big data from a JSON</div>
+		<div class='sample_comment'>
+			5 000 items
+			<input type='button' value='expand all' onclick='openAll()'>
+		</div>
+		<div id="testA" style='width:250px; height:650px; float:left'></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			//data
+			var first = { id:"-1", value:"Records", open:true, data:[] };
+			var data = [first];
+			var count = 1;
+			for (var i=0; i<99; i++){
+				var obj = { value:"l1 - "+count, id:"x"+i, data:[], open:false };
+				first.data.push(obj); count++;
+				for (var j = 0; j < 9; j++) {
+					sub = { value:"l2 - "+count, id:"x"+i+"-"+j, data:[], open:true };
+					obj.data.push(sub); count++;
+					for (var k = 0; k < 5; k++) {
+						child = { value:"l3 - "+count, id:"x"+i+"-"+j+"-"+k };
+						sub.data.push(child); count++;
+					}
+				}
+			}
+
+			//timer
+			var d1 = new Date();
+			
+			//loading data in the tree
+			tree = webix.ui({
+				container:"testA",
+				view:"tree",
+				data: data
+			});	
+
+			webix.delay(function(){
+				webix.message(tree.count() + " items rendered in " + Math.round((new Date())-d1) + "ms");
+			});
+
+
+			window.openAll = function(){
+				d1 = new Date();
+
+				tree.openAll()
+
+				webix.delay(function(){
+					webix.message(tree.count() + " items rendered in " + Math.round((new Date())-d1) + "ms");
+				});
+			}
+
+
+		});
+		</script>
+	</body>
+</html>

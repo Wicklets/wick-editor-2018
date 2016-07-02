@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../common/testdata.js"></script>
+		<title>Search Field</title>
+	</head>
+<body>
+
+<script type="text/javascript" charset="utf-8">
+webix.ui({
+	rows:[
+		{view:"toolbar", cols: [
+				{view:"search", align:"center", placeholder:"Search..", id:"search", width: 300}
+			]
+		},
+		{
+		view:"dataview",
+		id:"dview",
+		width: 500, //component's dimensions
+		height: 270,
+		template:"<div class='webix_strong'>#title# </br> #year#.</div> Rank: #rank#",
+		type:{ height: 90,
+				width: 250 //dimensions of each dataview item
+			},
+		data: big_film_set,
+		datatype:"json",
+		select:1
+		}
+	]
+});
+
+
+$$("search").attachEvent("onTimedKeyPress",function(){ 
+	//get user input value
+	var value = this.getValue().toLowerCase(); 
+	
+	$$("dview").filter(function(obj){ //here it filters data!
+		return obj.title.toLowerCase().indexOf(value)==0;
+	})
+});
+	
+</script>
+
+</body>
+</html>

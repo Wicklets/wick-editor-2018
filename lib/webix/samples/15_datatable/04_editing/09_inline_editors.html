@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Using 'inline' editors</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Using the 'inline-text' and 'inline-checkbox' editors</div>
+		<div class='sample_comment'>Try to edit the 'Category' column.</div>
+		<div class='sample_comment'>Make a single click to open the cell editor</div>
+		<div id="testA"></div>
+		<hr>
+		<div id="testB"></div>
+		<hr>
+		<div id="testC"></div>
+		<hr>
+		<script type="text/javascript" charset="utf-8">
+		bool_set = {
+			"true":"On",
+			"false":"Off",
+			"undefined":"Off"
+		};
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"ch1", header:"", template:"{common.checkbox()}", width:40},
+					{ id:"ra1", header:"", template:"{common.radio()}", width:40},
+					{ id:"title",	editor:"text", sort:"string", header:"Film title",width:200},
+					{ id:"category",  editor:"select", options:["","Thriller", "Crime"], header:"Category" , width:80},
+					{ id:"ch2",	header:"", template:"{common.checkbox()}", editor:"inline-checkbox", width:40 },
+					{ id:"ch3",	header:"", options:bool_set, template:"{common.checkbox()}", editor:"checkbox", width:40, css:{"text-align":"center"}}
+				],
+				
+				autoheight:true,
+				autowidth:true,
+				editable:true,
+
+				data: webix.copy(small_wide_film_set)
+			});
+
+
+			grida = webix.ui({
+				container:"testB",
+				view:"datatable",
+				columns:[
+					{ id:"title",	sort:"string", header:"Film title",width:200},
+					{ id:"category",  options:["","Thriller", "Crime"], header:"Category" , width:80},
+					{ id:"rating",	header:"", template:"<input type='text' value='#rating#' style='width:130px;'>", editor:"inline-text", width:150 },
+					{ header:"", template:"#rating#",  width:150 }
+				],
+				
+				autoheight:true,
+				autowidth:true,
+				editable:true,
+
+				data: webix.copy(small_wide_film_set)
+			});
+
+
+
+			grida = webix.ui({
+				container:"testC",
+				view:"datatable",
+				columns:[
+					{ id:"title",	sort:"string", header:"Film title",width:200},
+					{ id:"category",  options:["","Thriller", "Crime"], header:"Category" , width:80},
+					{ id:"rating",	header:"", editor:"text", width:150 },
+					{ header:"", template:"#rating#",  width:150 }
+				],
+				
+				autoheight:true,
+				autowidth:true,
+				editable:true,
+
+				data: webix.copy(small_wide_film_set),
+				ready:function(){
+					this.editColumn("rating");
+					this.attachEvent("onBeforeEditStop", function(){ return false; });
+					this.attachEvent("onEditorChange", function(id, value){
+						this.getItem(id.row)[id.column] = value;
+						this.refresh(id.row);
+					});
+				}
+			});			
+
+
+			
+								
+		});
+		</script>
+	</body>
+</html>

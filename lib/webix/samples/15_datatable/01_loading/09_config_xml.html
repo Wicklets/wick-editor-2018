@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Loading configuration from external url</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Loading from inline datasource</div>
+		<div class='sample_comment'>JSON file</div>
+		<div id="testA"></div>
+		<hr>
+		<div class='sample_comment'>XML file</div>
+		<div id="testB"></div>
+		<hr>
+		<div class='sample_comment'>JSON connector</div>
+		<div id="testC"></div>
+		<hr>
+		<div class='sample_comment'>XML connector</div>
+		<div id="testD"></div>
+		<hr>		
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			webix.ui({
+				container:"testA",
+				view:"datatable",
+				url:"data/data-config.json"
+			});
+
+			webix.ui({
+				container:"testC",
+				view:"datatable",
+				url:"data/data-config-json.php"
+			});
+
+			webix.ui({
+				container:"testB",
+				view:"datatable",
+
+				datatype:"xml",
+				url:"data/data-config.xml"
+			});
+
+			webix.ui({
+				container:"testD",
+				view:"datatable",
+
+				datatype:"xml",
+				url:"data/data-config-xml.php"
+			});
+		});
+		</script>
+	</body>
+</html>

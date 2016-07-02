@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Internationalization</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<script src="../../../codebase/i18n/ru.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../codebase/i18n/it.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../codebase/i18n/de.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../codebase/i18n/es.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../codebase/i18n/zh.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../codebase/i18n/fr.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../codebase/i18n/ja.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../codebase/i18n/be.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../codebase/i18n/en.js" type="text/javascript" charset="utf-8"></script>
+		
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Internationalization</div>
+		<div class='sample_comment'>Click one of the buttons to adapt data to the specific locale</div>
+		<div id="testA"></div>
+		<hr>
+		<input type='button' value='en-US' onclick='switchLocale(this.value)'>
+		<input type='button' value='ru-RU' onclick='switchLocale(this.value)'>
+		<input type='button' value='fr-FR' onclick='switchLocale(this.value)'>
+		<input type='button' value='ja-JP' onclick='switchLocale(this.value)'>
+		<input type='button' value='be-BY' onclick='switchLocale(this.value)'>
+		<input type='button' value='de-DE' onclick='switchLocale(this.value)'>
+		<input type='button' value='es-ES' onclick='switchLocale(this.value)'>
+		<input type='button' value='it-IT' onclick='switchLocale(this.value)'>
+		<input type='button' value='zh-CN' onclick='switchLocale(this.value)'>
+
+
+		<script type="text/javascript" charset="utf-8">
+		var grid;
+		function switchLocale(locale) {
+			webix.i18n.setLocale(locale);
+			recreate_grid();
+		}
+		function recreate_grid(){
+			if (grid)
+				grid.destructor();
+
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ header:"Point", template:"#text#"},
+					{ header:"Raw", width:170, template:function(obj){ return obj.start.toString(); } },
+
+					{ header:"Date",  id:"start", format:webix.i18n.dateFormatStr},
+					{ header:"LongDate", width:170,  id:"start", format:webix.i18n.longDateFormatStr},
+
+					{ header:"Number",  id:"number", format:webix.i18n.numberFormat },
+					{ header:"Price",  id:"number", format:webix.i18n.priceFormat }
+				],
+				
+				autoheight:true,
+				autowidth:true,
+				data:[
+					{ text:"Joint 2", start:new Date(2011,1,14), number:Math.PI*1243 },
+					{ text:"Finish", start:new Date(2012,11,12), number:Math.PI*2445 },
+					{ text:"Start", start:new Date(1988,1,29), number:Math.PI*4440 },
+					{ text:"Joint 1", start:new Date(2010,10,30), number:Math.PI*545 }
+				]
+			});
+
+		};
+		webix.ready(function(){
+			recreate_grid();
+		});
+		</script>
+	</body>
+</html>

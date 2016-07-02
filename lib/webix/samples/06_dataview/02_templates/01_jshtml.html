@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+	<title>Template as a String</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+	<script src="../../common/testdata.js"></script>
+    <link rel="STYLESHEET" type="text/css" href="dataview_styles.css">
+<body>
+	<div id="data" style="width:543px;height:270px;margin:20px"></div>
+	<script>
+        webix.ui({
+			view:"dataview",
+			container:"data",
+            css: "movies",
+            type:{
+                width: 260,
+                height: 90,
+                template:"<div class='overall'><div class='rank'>#rank#.</div><div class='title'>#title#</div><div class='year'>#year# year</div> </div>"
+            },
+            data:big_film_set
+		});
+	</script>
+
+</body>
+</html>
+

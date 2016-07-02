@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Two-area pager</title>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../15_datatable/common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Visible paging</div>
+		<div class='sample_comment'>Paging can be initialized as separate visible view.</div>
+		</br>
+		<div id="pagingA_here" class="paging"></div>
+		<div id="testA" style='height:100px; width:300px;'></div>
+		<div id="pagingB_here" class="paging"></div>
+	
+		
+		<script type="text/javascript" charset="utf-8">
+
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"#", 		width:50,	sort:"int",	css:"rank"},
+					{ id:"title",	header:"Film title",width:200,	sort:"string"},
+					{ id:"year",	header:"Released" , width:80,	sort:"int"},
+					{ id:"votes",	header:"Votes", 	width:100,	sort:"int"}
+				],
+				autowidth:true,
+				pager:{
+					id:"pagerA",
+					container:"pagingA_here",
+					size:50,
+					group:5
+				},
+				data:big_film_set
+			});
+
+			$$('pagerA').clone({
+				container:"pagingB_here",
+				size:50,
+				group:5
+			});
+		});
+
+		</script>
+	</body>
+</html>

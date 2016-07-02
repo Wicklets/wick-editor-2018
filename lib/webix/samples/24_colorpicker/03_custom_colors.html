@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript" src="../../codebase/webix.js"></script>
+	<link href="../../codebase/webix.css" rel="stylesheet"/>
+
+	<title>Colorboard - Colors</title>
+</head>
+<body>
+<div id="picker"></div>
+<script>
+
+	var colors = [
+					["#C6D9F0", "#8DB3E2", "#548DD4"],
+					["#F2DCDB", "#E5B9B7", "#D99694"],
+					["#EBF1DD", "#D7E3BC", "#C3D69B"]
+				];
+
+	webix.ui({
+		view:"popup", 
+		body:{
+			view:"colorboard",
+			id:"color",
+			width	:100,
+			height	:100,
+			palette:colors,
+			left:100, top:100
+		}
+	}).show({
+		x:199, 
+		y:199
+	});
+
+	$$("color").attachEvent("onSelect", function(val){
+		webix.message(this.config.id + " - " + val);
+	});
+</script>
+</body>
+</html>

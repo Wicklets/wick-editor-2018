@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<title>Windows: Basic Initialization</title>
+	</head>
+	<body>
+		<div class='header_comment'>Windows. Basic use </div>
+		<div id='layout_div' style='width:600px; height:600px; margin:20px;'></div>
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				view:"window",
+				height:250,
+			    width:300,
+			    left:50, top:50,
+				move:true,
+			    head:"This window can be moved",
+				body:{
+					template:"Some text"
+				}
+			}).show();
+
+			webix.ui({
+				view:"window",
+				height:250,
+			    width:300,
+			    left:250, top:250,
+			    head:false,
+				body:{
+					template:"Some text"
+				}
+			}).show();
+
+
+			webix.ui({
+				view:"window",
+				id:"win3",
+				height:250,
+			    width:350,
+			    left:450, top:50,
+			    head:{
+					view:"toolbar", cols:[
+						{view:"label", label: "This window can be closed" },
+						{ view:"button", label: 'Close Me', width: 100, align: 'right', click:"$$('win3').close();"}
+						]
+				}
+				,
+				body:{
+					template:"Some text"
+				}
+			}).show();
+		</script>
+	</body>
+</html>

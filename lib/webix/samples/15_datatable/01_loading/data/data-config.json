@@ -1,0 +1,20 @@
+{
+	"config":{
+		"columns":[
+			{ "id":"package",	"header":"Name", 		"width":200 },
+			{ "id":"section",	"header":"Section",		"width":120 },
+			{ "id":"size",		"header":"Size" , 		"width":80  },
+			{ "id":"architecture",	"header":"PC", 		"width":60  }
+		],
+		"height":100,
+		"autowidth":true
+	},
+
+	"data":[
+ 		{"id":"1","package":"acx100-source","size":"229468","architecture":"all","section":"contrib\/kernel"},
+ 		{"id":"2","package":"alien-arena-browser","size":"37128","architecture":"all","section":"contrib\/games"},
+ 		{"id":"3","package":"alien-arena-server","size":"130272","architecture":"i386","section":"contrib\/games"},
+		{"id":"4","package":"alien-arena","size":"579978","architecture":"i386","section":"contrib\/games"},
+	    {"id":"5","package":"alsa-firmware-loaders","size":"32758","architecture":"i386","section":"contrib\/sound"}
+	]
+}

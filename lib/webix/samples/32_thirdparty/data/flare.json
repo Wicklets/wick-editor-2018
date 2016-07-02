@@ -1,0 +1,134 @@
+{
+ "name": "flare",
+ "children": [
+	{
+	 "name": "analytics",
+	 "children": [
+		{
+		 "name": "cluster",
+		 "children": [
+			{"name": "AgglomerativeCluster", "size": 3938},
+			{"name": "CommunityStructure", "size": 3812},
+			{"name": "HierarchicalCluster", "size": 6714},
+			{"name": "MergeEdge", "size": 743}
+		 ]
+		},
+		{
+		 "name": "graph",
+		 "children": [
+			{"name": "BetweennessCentrality", "size": 3534},
+			{"name": "LinkDistance", "size": 5731},
+			{"name": "MaxFlowMinCut", "size": 7840},
+			{"name": "ShortestPaths", "size": 5914},
+			{"name": "SpanningTree", "size": 3416}
+		 ]
+		},
+		{
+		 "name": "optimization",
+		 "children": [
+			{"name": "AspectRatioBanker", "size": 7074}
+		 ]
+		}
+	 ]
+	},
+	{
+	 "name": "data",
+	 "children": [
+		{
+		 "name": "converters",
+		 "children": [
+			{"name": "Converters", "size": 721},
+			{"name": "DelimitedTextConverter", "size": 4294},
+			{"name": "GraphMLConverter", "size": 9800},
+			{"name": "IDataConverter", "size": 1314},
+			{"name": "JSONConverter", "size": 2220}
+		 ]
+		},
+		{"name": "DataField", "size": 1759},
+		{"name": "DataSchema", "size": 2165},
+		{"name": "DataSet", "size": 586},
+		{"name": "DataSource", "size": 3331},
+		{"name": "DataTable", "size": 772},
+		{"name": "DataUtil", "size": 3322}
+	 ]
+	},
+	{
+	 "name": "display",
+	 "children": [
+		{"name": "DirtySprite", "size": 8833},
+		{"name": "LineSprite", "size": 1732},
+		{"name": "RectSprite", "size": 3623},
+		{"name": "TextSprite", "size": 10066}
+	 ]
+	},
+	{
+	 "name": "flex",
+	 "children": [
+		{"name": "FlareVis", "size": 4116}
+	 ]
+	},
+	{
+	 "name": "physics",
+	 "children": [
+		{"name": "DragForce", "size": 1082},
+		{"name": "GravityForce", "size": 1336},
+		{"name": "IForce", "size": 319},
+		{"name": "NBodyForce", "size": 10498},
+		{"name": "Particle", "size": 2822},
+		{"name": "Simulation", "size": 9983},
+		{"name": "Spring", "size": 2213},
+		{"name": "SpringForce", "size": 1681}
+	 ]
+	},
+	{
+	 "name": "scale",
+	 "children": [
+		{"name": "IScaleMap", "size": 2105},
+		{"name": "LinearScale", "size": 1316},
+		{"name": "LogScale", "size": 3151},
+		{"name": "OrdinalScale", "size": 3770},
+		{"name": "QuantileScale", "size": 2435},
+		{"name": "QuantitativeScale", "size": 4839},
+		{"name": "RootScale", "size": 1756},
+		{"name": "Scale", "size": 4268},
+		{"name": "ScaleType", "size": 1821},
+		{"name": "TimeScale", "size": 5833}
+	 ]
+	},
+	{
+	 "name": "util",
+	 "children": [
+		{"name": "Arrays", "size": 8258},
+		{"name": "Colors", "size": 10001},
+		{"name": "Dates", "size": 8217},
+		{"name": "Displays", "size": 12555},
+		{"name": "Filter", "size": 2324},
+		{"name": "Geometry", "size": 10993},
+		{
+		 "name": "math",
+		 "children": [
+			{"name": "DenseMatrix", "size": 3165},
+			{"name": "IMatrix", "size": 2815},
+			{"name": "SparseMatrix", "size": 3366}
+		 ]
+		},
+		{"name": "Maths", "size": 17705},
+		{"name": "Orientation", "size": 1486},
+		{
+		 "name": "palette",
+		 "children": [
+			{"name": "ColorPalette", "size": 6367},
+			{"name": "Palette", "size": 1229},
+			{"name": "ShapePalette", "size": 2059},
+			{"name": "SizePalette", "size": 2291}
+		 ]
+		},
+		{"name": "Property", "size": 5559},
+		{"name": "Shapes", "size": 19118},
+		{"name": "Sort", "size": 6887},
+		{"name": "Stats", "size": 6557},
+		{"name": "Strings", "size": 22026}
+	 ]
+	}
+ ]
+}

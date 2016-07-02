@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="../common/samples.css">
+        <title>Server-side Integration:  Form</title>
+</head>
+	<body>
+
+		<div class='header_comment'>Server-side Integration</div>
+		<div class='sample_comment'>The sample shows the use of dataProcessor for 'communication' with server-side.</div>
+		
+		<div id="formA" style="width: 500px; height: 300px;padding: 20px;"></div>
+		<script type="text/javascript" charset="utf-8">
+
+			webix.ready(function(){
+				webix.ui({
+					view: "layout",
+					container:"formA",
+					cols: [
+						{
+							view: "layout",
+							rows: [{
+									id: "myform",
+									view:"form",
+									elements: [
+										{ view:"text", name:'title', id:'title', label: 'Title', value: ""},
+										{ view:"text", name:'rank', id:'votes', label: 'Votes', value: ""},
+										{ view:"text", name:'rating', id:'rating', label: 'Rating', value: ""},
+										{ view:"counter", id:'year', label: 'Year', value: ""}
+									]
+								},
+								{ view: "toolbar", elements: [
+									{ view:"button", id:'save', value: "Save", click: function() { $$('myform').save(); }}
+								]}
+							]
+						},
+						{
+							view:"list",
+							id:"mylist",
+							url:"./data/connector.php",
+							datatype: "xml",
+							type:{
+								width:"auto",
+								template:"#rank#. #title# (#rating#)"
+							},
+							select:"multiselect"
+						}
+					]
+				});
+				var form = $$('myform');
+				var list = $$('mylist');
+
+				form.bind(list);
+
+				var dp = new webix.DataProcessor({
+					master: list,
+					url: "connector->./data/connector.php"
+				});
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Editor Collection</title>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script src="../15_datatable/common/testdata.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+		.checked{
+			color:green;
+			font-weight: bold; cursor:pointer;
+		}
+		.notchecked{
+			color:red;
+			font-weight:bold; cursor: pointer;
+		}
+		#testA{
+			margin-left:20px;
+			margin-top:10px;
+		}
+		html, body{
+			height: 100%;
+		}
+		</style>
+	</head>
+	<body>
+		<div style="margin:20px;">Click each column to open different editors</div>
+		<div id="testA"></div>
+	<script type="text/javascript" charset="utf-8">  
+
+		webix.ready(function(){	
+
+            var bool_set = {
+                "true":"On",
+                "false":"Off",
+                "undefined":"Off"
+            };
+
+   			//if you need to redefine default settings
+			  webix.editors.$popup.text = {
+			    view:"popup", 
+			    body:{view:"textarea", width:250, height:50}
+			  };
+			  
+			  webix.editors.$popup.color = {
+			    view:"popup",
+			    body:{ view:"colorboard", width:200, height:200, rows:20, cols:20 }
+			  };
+			  
+			  webix.editors.$popup.date = {
+			    view:"popup",
+			    body:{ view:"calendar", width: 220, height:200}
+			  };
+			  
+			  webix.editors.$popup.richselect = {
+			  	view:"suggest",
+			    body:{ view:"list", select:true }
+			  };
+			  
+			function custom_checkbox(obj, common, value){
+				if (value)
+					return "<div class='webix_table_checkbox checked'> YES </div>";
+				else
+					return "<div class='webix_table_checkbox notchecked'> NO </div>";
+			}
+
+	
+			var tpl = "<span style='background-color:#color#; border-radius:4px; padding-right:10px;'>&nbsp</span> #color#";
+	
+			var categories = {
+				"1" : "Thriller",
+    			"2" : "Crime",
+    			"3" : "Western",
+				"4" : "Crime Fiction",
+				"5" : "Drama"
+			};
+	
+			var types = [
+				{id:1, value: "Film"},
+				{id:2, value:"Book"},
+				{id:3, value:"Musical"},
+				{id:4, value:"Fiction"}
+			];
+
+	
+			webix.ui({
+				view:"datatable",
+				container:"testA",
+				columns:[
+					{ id:"ch0", header:{ content:"masterCheckbox", contentId:"mc1" }, template:"{common.checkbox()}", width:40},
+					{ id:"rank", header:"Text", editor:"text", width:50},
+					{ id:"title", header:"Popup", editor:"popup", width:200},
+					{ id:"type1", header:"Combo", editor:"combo", collection:types, width: 100},
+                    { id:"type2", header:"Richselect", editor:"richselect", collection:types, width: 100},
+					{ id:"year", header:"Inline-text" , editor:"inline-text", width:80, template:"<input type='text' value='#year#' style='width:55px;'>" },
+					{ id:"ch1",	header:"Checkbox", options:bool_set, template:"{common.checkbox()}", editor:"checkbox", width:80},
+					{ id:"ch2",	header:"Checkbox", template:"{common.checkbox()}", editor:"checkbox", width:80 },
+					{ id:"ch3", header:"Inline-checkbox", template:custom_checkbox, width:120, editor:"inline-checkbox"},
+					{ id:"category", header:"Select", width:100, editor:"select", options:categories},
+					{ id:"startdate", editor:"date",	header:"Date", 	width:120, format:webix.Date.dateToStr("%m/%d/%Y")}, 
+					{ id:"color", header:"Color",	editor:"color", template:tpl, width:120}
+				],
+				autoheight:true,
+				autowidth:true,
+                select:"cell",
+                navigation:true,
+				editable:true,
+				checkboxRefresh:true,
+				data: [
+					{ id:1, title:"The Shawshank Redemption", year:1994, category:"4", rank:1, type1:1, type2:2, startdate:new Date(2013, 5, 2), color:"#FF00FF", ch1:true, ch2:0, ch3:1},
+					{ id:2, title:"The Godfather", year:1972, category:"5", rank:2, type1:1, type2:3, startdate:new Date(2012, 1, 15), color:"#FF1A1A", ch1:false, ch2:0, ch3:1},
+					{ id:3, title:"Lord of the Flies", year:1954, category:"5", rank:3, type1:2, type2:4, color:"#00FF00", ch2:1, ch3:0}
+				]
+			});	
+		});
+
+	</script>
+	</body>
+</html>

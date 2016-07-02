@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<title>Windows: Form inside</title>
+	</head>
+	<body>
+		<div class='header_comment'>Window with form inside</div>
+		<script type="text/javascript" charset="utf-8">
+
+		var form = {
+			view:"form",
+			borderless:true,
+			elements: [
+				{ view:"text", label:'Login', name:"login" },
+				{ view:"text", label:'Email', name:"email" },
+				{ view:"button", value: "Submit", click:function(){
+					if (this.getParentView().validate()){ //validate form
+                        webix.message("All is correct");
+                        this.getTopParentView().hide(); //hide window
+                    }
+					else
+						webix.message({ type:"error", text:"Form data is invalid" });
+				}}
+			],
+			rules:{
+				"email":webix.rules.isEmail,
+				"login":webix.rules.isNotEmpty
+			},
+			elementsConfig:{
+				labelPosition:"top",
+			}
+		};
+
+        webix.ui({
+            view:"popup",
+            id:"win1",
+            width:300,
+            head:false,
+            body:webix.copy(form)
+        });
+
+        webix.ui({
+            view:"window",
+            id:"win2",
+            width:300,
+            position:"center",
+            modal:true,
+            head:"User's data",
+            body:webix.copy(form)
+        });
+
+        function showForm(winId, node){
+            $$(winId).getBody().clear();
+            $$(winId).show(node);
+            $$(winId).getBody().focus();
+        }
+
+        webix.ui({
+            margin:10,
+            cols:[
+                { view:"button",
+                    width:300, value: 'Click to show modal window with a form',
+                    click:function(){ showForm("win2") }
+                },
+                { view:"button",
+                    width:300, value: 'Click to show a popup with a form',
+                    click:function(){ showForm("win1", this.$view) }
+                }
+            ]
+        });
+
+
+		</script>
+	</body>
+</html>
+
+			
+		

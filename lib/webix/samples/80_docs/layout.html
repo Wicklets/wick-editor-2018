@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<title>Layout</title>
+	</head>
+	<body>
+<script type="text/javascript" charset="utf-8">
+webix.ui({
+        rows:[
+                {template:"row 1"},
+				{template:"row 2"},
+                { // row 3
+					cols:[
+						{
+						template:"col 1"
+						},
+						{
+						template:"col 2"
+						}
+						]
+                }
+            ]
+            })
+</script>
+</body>
+</html>

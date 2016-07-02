@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<title>Creating Basic App. Step 1</title>
+	</head>
+<body>
+
+<script type="text/javascript" charset="utf-8">
+var filmset = [
+    { id:1, title:"The Shawshank Redemption", year:1994},
+    { id:2, title:"The Godfather", year:1972},
+    { id:3, title:"The Godfather: Part II", year:1974},
+    { id:4, title:"The Good, the Bad and the Ugly", year:1966},
+    { id:5, title:"My Fair Lady", year:1964},
+    { id:6, title:"12 Angry Men", year:1957}
+];
+webix.ui({
+	view:"layout", width:500, 
+    rows: [
+        { view:"toolbar", id:"mybar", elements:[
+            { view:"button", value:"Add", width:100 },
+            { view:"button", value:"Delete", width:100 }
+        ]},
+        { cols:[
+            { view:"form", width: 200, elements:[
+                { view:"text", placeholder:"Title"},  //1st column
+                { view:"text", placeholder:"Year"}
+            ]},
+		    { view:"list", 
+                template:"#title# - #year#",   //2nd column
+                select:true, //enables selection of list items
+                height:400,
+                data: filmset
+            }
+        ]}
+    ]
+});
+
+</script>
+</body>
+</html>

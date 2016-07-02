@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA, #areaB{
+				margin: 50px;
+				background-color:#ffffbb;
+				width:500px; height:300px;
+			}
+			html,body{
+				height:100%;
+			}
+		</style>
+		<title>Context Menu: HTML Content </title>
+	</head>
+	<body>
+
+		<div id="areaA">
+			Right click here
+		</div>
+
+		<div id="details">
+			Power of HTML5 <hr>
+			<img src='images/html5.png'>
+		</div>
+		
+		<script type="text/javascript" charset="utf-8">
+			var menu = webix.ui({
+				view:"context",
+				body:{ content:"details" },
+				padding: 20,
+				master:"areaA"
+			});
+		</script>
+	</body>
+</html>

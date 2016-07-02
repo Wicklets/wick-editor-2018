@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Loading big datasets</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Loading big datasets</div>
+		<div class='sample_comment'>Just big</div>
+		<div id="testA"></div>	
+		
+		<input type='button' value='open all' onclick='grida.openAll();'>
+		<input type='button' value='close all' onclick='grida.closeAll();'>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		var test_columns = [
+			{ id:"id",	header:"", css:{"text-align":"right"},  	width:50},
+			{ id:"value", sort:"string",	header:"Title",	width:250,
+				template:"{common.treetable()} #value#" }
+		];
+		for (var i=1; i<50; i++)
+			test_columns.push({ id:"data"+i, width:100, sort:"string" });
+
+		var test_data = [];
+		for (var i=1; i<101; i++){
+			var obj = { id:i, value:"Item at "+i }
+			var data = [];
+			for (var j=1; j<101; j++){
+				var sub = { id:i+"."+j,  value:"Sub-item at "+j };
+				for (var z = 1; z<50; z++)
+					sub["data"+z]=Math.floor(Math.random()*1000);
+				data.push(sub);
+			}
+			obj.data = data;
+			test_data.push(obj);
+		}
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"treetable",
+				leftSplit:2,
+				columns: test_columns,
+				width:800,
+				height:600,
+
+				data: test_data
+			});	
+		});		
+		</script>
+	</body>
+</html>

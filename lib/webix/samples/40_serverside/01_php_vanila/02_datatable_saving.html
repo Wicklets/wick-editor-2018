@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Datatable: Saving</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../../common/samples.css">
+	</head>
+	<body>
+		<div class='header_comment'>Loading</div>
+		<div id='testA'></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		var grid = {
+			view:"datatable",
+			columns:[
+				{ id:"rank",	editor:"text",  header:"", css:"rank",  width:50},
+				{ id:"title",	editor:"text",  header:"Film title",	width:200},
+				{ id:"year",	editor:"text",  header:"Released" , 	width:80},
+				{ id:"votes",	editor:"text",  header:"Votes", 		width:100}
+			],
+			autoheight:true,
+			autowidth:true,
+			select:"row", editable:true, editaction:"dblclick",
+
+			save: "server/datatable_save.php",
+			url: "server/datatable.php"
+		};
+
+
+		var buttons = {
+			view:"toolbar", elements:[
+				{ view:"button", value:"Add Row", click:function(){
+					$$('$datatable1').add({
+						rank:99,
+						title:"",
+						year:"2012",
+						votes:"100"
+					});
+				}},
+				{ view:"button", value:"Delete Row", click:function(){
+					var id = $$('$datatable1').getSelectedId();
+					if (id)
+						$$('$datatable1').remove(id);
+				}},
+				{}
+			]
+		};
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				rows:[
+					buttons, grid
+				]
+			});
+		});
+		</script>
+	</body>
+</html>

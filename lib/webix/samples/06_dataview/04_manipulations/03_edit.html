@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+	<title>Editing on Mouse Double Click</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+    <link rel="STYLESHEET" type="text/css" href="../02_templates/dataview_styles.css">
+    <script src="../../common/testdata.js"></script>
+    <style type="text/css" media="screen">
+		.item_editor{
+			width:230px;
+			height:60px;
+		}
+	</style>
+<body>
+    <p style='margin-left:20px'>Double click on an item to edit it</p>
+	<div id="data" style="width:543px;height:270px;margin:20px"></div>
+    
+	<script>
+        webix.protoUI({
+            name:"dataview_edit"
+        }, webix.EditAbility, webix.ui.dataview);
+
+        webix.ui({
+            view:"dataview_edit",
+			container:"data",
+            css: "movies",
+
+            editable:true,
+            editor:"text",
+            editValue:"title",
+            editaction:"dblclick",
+
+            type:{
+                width: 261,
+                height: 90,
+                template:"<div class='overall'><div class='title'>#title#</div><div class='year'>#year# year</div> </div>"
+            },
+            data:big_film_set
+		});
+	</script>
+</body>
+</html>

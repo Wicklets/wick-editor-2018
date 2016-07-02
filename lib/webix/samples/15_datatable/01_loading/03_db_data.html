@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Loading from DB</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Loading from DB (sqllite + php)</div>
+		<div id="testA" style='height:600px'></div>
+		<hr>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"package",	header:"Name", 			width:200 },
+					{ id:"section",	header:"Section",		width:120 },
+					{ id:"size",	header:"Size" , 		width:80  },
+					{ id:"architecture",	header:"PC", 	width:60  }
+				],
+				
+				autowidth:true,
+
+				url:"data/data.php"
+			});	
+		});
+		</script>
+	</body>
+</html>

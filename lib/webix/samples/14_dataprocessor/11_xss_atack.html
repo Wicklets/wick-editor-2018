@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" charset="utf-8">
+		<title>Preventing Cross Site Scripting Attacks</title>
+</head>
+	<body>
+		<div class='header_comment'>Server-side Integration</div>
+		<div class='sample_comment'>The sample shows the use of dataProcessor for 'communication' with server-side.</div>
+		
+		<div id="mylist" style="width: 400px; height: 300px; margin:20px"></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+
+			function test(value, url){
+				url = "./data/"+(url||"connector.php");
+				dp.define("url", url);
+
+				list.getItem(1).title = value;
+				list.updateItem(1);
+			};
+
+
+			webix.ready(function(){
+				list = webix.ui({
+					container: "mylist", 
+					view:"list",
+					id:"mylist",
+					url:"./data/connector.php",
+					datatype: "xml",
+					type:{
+						width:"auto",
+						template:"#rank#. #title# (#rating#)"
+					},
+					select:"multiselect"
+				});
+
+				dp = new webix.DataProcessor({
+					master: $$('mylist'),
+					url: "connector->./data/connector.php",
+					on:{
+						"onAfterSync":function(){
+							webix.ajax("./data/connector.php?action=get&id=1", function(text, xml){
+								var xml = webix.DataDriver.xml;
+								var data = xml.getDetails(xml.getRecords(xml.toObject(text, xml))[0]);
+
+								webix.message("Saved as: <xmp>"+data.title+"</xmp>");
+							});
+						}
+					}
+				});
+			});
+		</script>
+
+		<h3>Default behavior (webix_SECURITY_SAFETEXT)</h3>
+		<input type="button" value="The Shawshank Redemption" onclick="test(this.value)"> 
+		<input type="button" value="123 '' 123" onclick="test(this.value)"> 
+		<input type="button" value="123 <strong>321</strong>" onclick="test(this.value)"> <br>
+		<input type="button" value="123 <strong href='javascript:do_some();'>321</strong>" onclick="test(this.value)"> 
+		<input type="button" value="123 <script>do_some();</script>" onclick="test(this.value)"> 
+
+		<h3>webix_SECURITY_SAFEHTML</h3>
+		<input type="button" value="The Shawshank Redemption" onclick="test(this.value,'connector_safe.php')"> 
+		<input type="button" value="123 '' 123" onclick="test(this.value,'connector_safe.php')"> 
+		<input type="button" value="123 <strong>321</strong>" onclick="test(this.value,'connector_safe.php')"> <br>
+		<input type="button" value="123 <strong href='javascript:do_some();'>321</strong>" onclick="test(this.value,'connector_safe.php')"> 
+		<input type="button" value="123 <script>do_some();</script>" onclick="test(this.value,'connector_safe.php')"> 
+
+		<h3>webix_SECURITY_TRUSTED</h3>
+		<input type="button" value="The Shawshank Redemption" onclick="test(this.value,'connector_trusted.php')"> 
+		<input type="button" value="123 '' 123" onclick="test(this.value,'connector_trusted.php')"> 
+		<input type="button" value="123 <strong>321</strong>" onclick="test(this.value,'connector_trusted.php')"> <br>
+		<input type="button" value="123 <strong href='javascript:do_some();'>321</strong>" onclick="test(this.value,'connector_trusted.php')"> 
+		<input type="button" value="123 <script>do_some();</script>" onclick="test(this.value,'connector_trusted.php')"> 
+	</body>
+</html>

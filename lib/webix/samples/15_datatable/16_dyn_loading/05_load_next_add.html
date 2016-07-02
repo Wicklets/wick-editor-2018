@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Dynamic loading with appending content</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Dynamic loading with appending content</div>
+		<div class='sample_comment'>The sample shows the use of method 'loadNext()'. The method allows you to invoke loading of the specified number of records to DataTable.</div>
+		<div class='sample_comment'>Dynamic loading from DB (sqllite + php).</div>
+		<div id="testA"></div>
+		<hr>
+		<input type='button' value='load next 30 records' onclick='loadNext()' class='sample_button'>
+		<script type="text/javascript" charset="utf-8">
+
+		var pos = 30;
+		function loadNext(){
+			grida.loadNext(30, pos, function(){
+				this.showItemByIndex(pos);
+				pos += 30;
+			});
+		}
+
+        var grida = webix.ui({
+            container:"testA",
+            view:"datatable",
+            columns:[
+                { id:"id", header:"", css:{"text-align":"center"}, width:50 },
+                { id:"package",	header:"Name", 			width:200 },
+                { id:"section",	header:"Section",		width:120 },
+                { id:"size",	header:"Size" , 		width:80  },
+                { id:"architecture",	header:"PC", 		width:60  }
+            ],
+            yCount:10,
+            autowidth:true,
+            url:"data/data_dyn.php"
+        });
+
+		</script>
+	</body>
+</html>

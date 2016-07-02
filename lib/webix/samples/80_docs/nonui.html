@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../common/testdata.js"></script>
+		<title>DataCollection Syncing</title>
+	</head>
+	<body>
+		
+		<div id='dview' style='width:1050px; height:500px; margin:20px;'></div>
+		<div id="areaB">
+			<input type="text" id="title" name="title" value="" placeholder="Film title" /><br/>
+			<input type="text" id="rank" name="rank" value="" placeholder="Rank" /><br/>
+			<input type="text" id="year" name="year" value="" placeholder="Year" /><br/><br/>
+			<input type="button" name="Add New" value="Add New" onclick='addData()'/>
+			<input type="button" name="submit" value="Submit" onclick='$$("formView").save()'/>
+			<input type="button" name="get" value="Get" onclick='var id = data.getCursor(); webix.message(id) '/>
+		</div>
+		<script type="text/javascript" charset="utf-8">
+		
+	
+	
+	var data = new webix.DataCollection({ 
+		template:"#rank#. #title# - #year#",
+		data:big_film_set
+	});
+
+	webix.ui({
+		container:"dview",
+		rows:[
+			{cols:[ 
+				{rows:[
+					{
+						type:"header", template:"List"
+					},
+					{
+						view:"list",
+						id:"list",
+						height: 300,
+						type:{ 
+							width: 370
+						},
+						select:true,
+						template:"#rank#. #title# - #year#",
+						data:""
+					}]
+				},  
+				{rows:[
+					{
+						type:"header", template:"Dataview"
+					},
+					{
+						view:"dataview",
+						id:"dview",
+						select:true,
+						template:"#rank#. #title# - #year#",
+						data:""
+					}]
+				}
+			]},//end of 1st row
+			{	
+				type:"header", 
+				template:"With this form you can edit selected items or add new items to the components	"
+			},
+			{
+				id: "formView",
+				view:"htmlform",
+				content: "areaB",
+				rules:{
+					title: webix.rules.isNotEmpty,
+					rank: webix.rules.isNumber
+				}
+			}//end of 2nd row
+		]
+	});
+	
+
+	$$('list').data.sync(data);
+			
+			
+	$$('dview').data.sync(data, function(){
+	    this.filter(function(data){
+		return data.year > 1994;
+		});
+	}); 
+		
+	$$('list').attachEvent("onAfterSelect", function(id){  
+		data.setCursor(id); 
+	});
+
+	$$('formView').bind(data);
+	$$('formView').bind(data);
+		
+		
+	function addData() {
+    	data.add({
+    		title: document.getElementById("title").value, //data users enter into an input field
+    		year: document.getElementById("year").value,
+			rank:document.getElementById("rank").value
+		},0)
+    }
+		</script>
+	</body>
+</html>

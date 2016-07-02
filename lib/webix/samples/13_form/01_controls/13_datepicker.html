@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA, #areaB, #areaC, #areaD{
+				margin: 30px; float:left;
+			}
+		</style>
+		<title>Date Picker ('datepicker')</title>
+	</head>
+	<body>
+
+		<div id="areaA"></div>
+		<div id="areaB"></div>
+        <div style="clear:both;"></div>
+        <div id="areaC"></div>
+		<div id="areaD"></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ui({
+			container:"areaA", 
+			view:"form", scroll:false, width:320, elements:[
+				{ view:"text", label:"Label", name:"label", value:"text"},
+
+				{ view:"datepicker", label:"Start date", name:"start", stringResult:true },
+				{ view:"datepicker", label:"End date", name:"end", stringResult:true },
+
+				{ view:"button", type:"form", value:"Submit data", click:function(){
+					webix.message("<pre>"+JSON.stringify(this.getParentView().getValues(),0,1)+"</pre>");
+				}}
+			]
+		});
+
+		webix.ui({ 
+			container:"areaB", 
+			view:"form", scroll:false, id:"myform-2", width:320, elements:[
+				{ view:"text", label:"Label", name:"label", value:"text"},
+
+				{ view:"datepicker", label:"Start date", name:"start", stringResult:true, format:"%d  %M %Y" },
+				{ view:"datepicker", timepicker:true, label:"End date", name:"end", stringResult:true, format:"%d %M %Y at %H:%i" },
+
+				{ view:"button", type:"form", value:"Submit data", click:function(){
+					webix.message("<pre>"+JSON.stringify(this.getParentView().getValues(),0,1)+"</pre>");
+				}}
+			]
+		});
+
+        webix.ui({
+            container:"areaC",
+            view:"form", scroll:false, id:"myform-3", width:320, elements:[
+				{ view: "label", label: "'time'"},
+
+                { view:"datepicker", type:"time", label:"Start time", name:"start", value:"10:15", stringResult:true },
+                { view:"datepicker", type:"time", label:"End time", name:"end", stringResult:true },
+
+                { view:"button", type:"form", value:"Submit data", click:function(){
+                    webix.message("<pre>"+JSON.stringify(this.getParentView().getValues(),0,1)+"</pre>");
+                }}
+            ]
+        });
+
+		webix.ui({
+			container:"areaD",
+			view:"form", scroll:false, id:"myform-4", width:320, elements:[
+				{ view: "label", label: "'month'"},
+
+				{ view:"datepicker", type:"month", label:"Start", name:"start", value: new Date(2016,7), format: "%F %Y", stringResult: true },
+				{ view:"datepicker", type:"month", label:"Month", name:"end", value: "Jan 2017", format: "%M %Y", stringResult: true },
+
+				{ view:"button", type:"form", value:"Submit data", click:function(){
+					webix.message("<pre>"+JSON.stringify(this.getParentView().getValues(),0,1)+"</pre>");
+				}}
+			]
+		});
+		$$('myform-2').setValues({
+			start:"2015-02-01",
+			end:new Date(2015,1,3, 14, 20)
+		});
+
+
+
+		</script>
+	</body>
+</html>

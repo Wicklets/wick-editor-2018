@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript" src="../../codebase/webix.js"></script>
+	<link href="../../codebase/webix.css" rel="stylesheet"/>
+	<title>Colorboard</title>
+</head>
+<body>
+
+<script>
+	webix.ui({ type:"space", cols:[
+		{
+			view:"colorboard",
+			id:"color",
+			cols	:30,
+			rows	:30,
+			width	:400,
+			height	:400
+		},
+		{rows:[{
+			view:"colorboard",
+			id:"color2",
+			cols	:7,
+			rows	:9,
+			width	:8*25,
+			height	:8*25
+		},{}]},
+		{rows:[{
+			view:"colorboard",
+			id:"color3",
+			cols	:7,
+			rows	:9,
+			width	:120,
+			height	:120
+		},{}]}
+	]});
+		
+	
+
+	$$("color").attachEvent("onSelect", doLog);
+	$$("color2").attachEvent("onSelect", doLog);
+	$$("color3").attachEvent("onSelect", doLog);
+	function doLog(val, control, ev){
+		webix.message(this.config.id + " - " + val);
+	}
+</script>
+</body>
+</html>
+

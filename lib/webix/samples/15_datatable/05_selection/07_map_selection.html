@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Mapping selection</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Mapping selection</div>
+		<div class='sample_comment'>The sample shows the use of method mapSelection(). The method allows you to get the current value of the selected cell and return some other value for it. If multiple cells are selected, the method is called for each of them by turn. Note, to work with a certain cell you can use method mapCells(). </div>
+		<div class='sample_comment'>Click on any cell. Once some cell is selected, click on the related 'mirror' button.</div>
+		<hr>
+		<div class='sample_comment'>Cell selection</div>
+		<div id="testA"></div>
+		<input type='button' value='mirror selected cells' onclick='mirror(grida)'>
+		<hr>
+		<div class='sample_comment'>Row selection</div>
+		<div id="testB"></div>
+		<input type='button' value='mirror selected cells' onclick='mirror(gridb)'>
+		<hr>
+		<div class='sample_comment'>Block selection</div>
+		<div id="testC"></div>
+		<input type='button' value='mirror selected cells' onclick='mirror(gridc)'>
+		<hr>
+		
+		<script type="text/javascript" charset="utf-8">
+		function mirror(grid) {
+			grid.mapSelection(function(value){
+				return value.toString().split("").reverse().join("");
+			});
+			grid.render();
+		};
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+				select:"cell",
+				multiselect:true,
+				autoheight:true,
+				autowidth:true,
+
+				data:webix.copy(small_film_set)
+			});	
+			
+			gridb = webix.ui({
+				container:"testB",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+				select:"row",
+				multiselect:true,
+				autoheight:true,
+				autowidth:true,
+
+				data:webix.copy(small_film_set)
+			});	
+			
+			
+			gridc = webix.ui({
+				container:"testC",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+				select:"column",
+				multiselect:true,
+				autoheight:true,
+				autowidth:true,
+
+				data:webix.copy(small_film_set)
+			});								
+		});
+		</script>
+	</body>
+</html>

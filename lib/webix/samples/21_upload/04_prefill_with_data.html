@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <title>Adding files by API</title>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div id="uploader_container" style="width: 500px; height: 200px; margin: 40px;"></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function() {
+			webix.ui({
+				container:"uploader_container",
+				view:"form", rows: [
+					{ 
+						view: "uploader", value: 'Upload file', 
+						id:"records", name:"records",
+						link:"mylist",  upload:"php/upload.php" 
+					},
+					{
+					 	view:"list",  id:"mylist", type:"uploader",
+						autoheight:true, borderless:true
+					},
+					{ view: "button", label: "Get value", click: function() {
+						var text = this.getParentView().getValues();
+						text = JSON.stringify(text, "\n").replace(/,/g,",\n\t");
+						webix.message("<pre>"+text+"</pre>");
+					}}
+				]
+			});
+
+			$$("records").files.parse([
+				{ name:"cover.jpg", sizetext:"54kb", status:"server" },
+				{ name:"page01.jpg", sizetext:"122kb", status:"server" },
+				{ name:"page02.jpg", sizetext:"142kb", status:"server" }
+			]);
+
+		});
+		</script>
+	</body>
+</html>

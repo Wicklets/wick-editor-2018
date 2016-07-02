@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Custom clipboard (Datatable)</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Custom clipboard</div>
+		<div class='sample_comment'>The sample shows behavior of the 'custom' clipboard  which allow users to specify a custom logic for the insert operation. The mode can be characterized as follows:</div>
+		<div class='sample_comment'> 1) When you use ctrl+c , data is copied to the clipboard.</div>
+		<div class='sample_comment'> 2) When you use ctrl+v, dataTable invokes the onPaste event. You can handle this event to set a custom logic.</div>
+		<div class='sample_comment'> By default, the handler doesn't do anything.</div>
+ 		<div class='sample_comment'> Use ctrl+c and ctrl+v to copy and paste content.</div>
+		<div id="testA"></div>
+		<hr>
+		<div id="testB" class='sample_comment'></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+				select:"cell",
+				multiselect:true,
+
+				clipboard: "custom",
+
+				autoheight:true,
+				autowidth:true,
+				data:small_film_set
+			});
+			grid.attachEvent("onPaste", function(text) {
+				webix.message("Custom paste behavior: " + text);
+			});
+		});
+		</script>
+	</body>
+</html>

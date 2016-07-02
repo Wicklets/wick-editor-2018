@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Adjusting columns to the parent container</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Adjusting columns to the parent container</div>
+		<div class='sample_comment'>The sample shows the use of the 'fillspace' property that adjusts column width to fit the parent container.</div>
+		</br>
+		<div class='sample_comment'>Default sizing</div>
+		<div id="testA" style='width:600px'></div>
+		<hr>
+		<div class='sample_comment'> With the 'fillspace' property</div>
+		<div id="testB" style='width:600px'></div>
+		<div class='sample_comment'> With two 'fillspace' columns</div>
+		<div id="testC" style='width:600px'></div>
+		<div class='sample_comment'> Different 'fillspace' value</div>
+		<div id="testD" style='width:600px'></div>
+		<script type="text/javascript" charset="utf-8">
+		var small_data = small_film_set.slice(0,2);
+
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank" },
+					{ id:"title",	header:"Film title" },
+					{ id:"year",	header:"Year"},
+					{ id:"votes",	header:"Votes"}
+				],
+				autoheight:true,
+				scrollX:false,
+				data:small_data
+			});	
+
+			grid = webix.ui({
+				container:"testB",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank" },
+					{ id:"title",	header:"Film title", fillspace:true },
+					{ id:"year",	header:"Year"},
+					{ id:"votes",	header:"Votes"}
+				],
+
+				autoheight:true,
+				scrollX:false,
+				data:small_data
+			});		
+
+			grid = webix.ui({
+				container:"testC",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank" },
+					{ id:"title",	header:"Film title", fillspace:true },
+					{ id:"year",	header:"Year", fillspace:true },
+					{ id:"votes",	header:"Votes"}
+				],
+
+				autoheight:true,
+				scrollX:false,
+				data:small_data
+			});		
+
+			grid = webix.ui({
+				container:"testD",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank", fillspace:0.5 },
+					{ id:"title",	header:"Film title", fillspace:2 },
+					{ id:"year",	header:"Year", fillspace:1 },
+					{ id:"votes",	header:"Votes", fillspace:1 }
+				],
+
+				autoheight:true,
+				scrollX:false,
+				data:small_data
+			});		
+
+		});
+		</script>
+	</body>
+</html>

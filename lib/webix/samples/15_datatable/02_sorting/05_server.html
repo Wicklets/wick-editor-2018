@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Server side Sorting</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Server side Sorting</div>
+		<div class='sample_comment'>Click on any header to sort the grid.</div>
+		<div id="testA"></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"package",	header:"Name", 			width:200, sort:"server" },
+					{ id:"section",	header:"Section",		width:120, sort:"server" },
+					{ id:"size",	header:"Size" , 		width:80 , sort:"server" },
+					{ id:"architecture",	header:"PC", 	width:60 , sort:"server" }
+				],
+				autoheight:true,
+				autowidth:true,
+				url:"../01_loading/data/data.php"
+			});			
+		});
+		</script>
+	</body>
+</html>

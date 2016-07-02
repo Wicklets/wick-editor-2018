@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<title>Windows Icons</title>
+	</head>
+	<body>
+		<div class='header_comment'>Windows. Basic use </div>
+		<div id='layout_div' style='width:600px; height:600px; margin:20px;'></div>
+		<style type="text/css">
+		.alter .webix_icon_button{
+			color:#F84;
+		}
+		</style>
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				view:"window",
+				id:"win3",
+				height:250, width:350,
+			    left:50, top:50,
+			    head:{
+					view:"toolbar", margin:-4, cols:[
+						{view:"label", label: "This window can be closed" },
+						{ view:"icon", icon:"question-circle",
+							click:"webix.message('About pressed')"},
+						{ view:"icon", icon:"times-circle",
+							click:"$$('win3').close();"}
+						]
+				},
+				body:"Some text"
+			}).show();
+
+
+			webix.ui({
+				view:"window",
+				id:"win4",
+				height:250, width:350,
+			    left:150, top:150,
+			    head:{
+					view:"toolbar", margin:-4, cols:[
+						{view:"label", label: "This window can be closed" },
+						{ view:"icon", icon:"cog", css:"alter",
+							click:"webix.message('Cog pressed')"},
+						{ view:"icon", icon:"times-circle", css:"alter",
+							click:"$$('win4').close();"}
+						]
+				},
+				body:"Some text"
+			}).show();
+
+
+
+		</script>
+	</body>
+</html>

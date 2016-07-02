@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<title>Live validation in a form</title>
+		<style>
+			html, body{height:100%}
+		</style>
+	</head>
+<body>
+<script>
+
+	webix.ui({
+		cols:[
+			{ view:"form", elements:[
+				{ type:"header", template:"Validate on blur"},
+				{ view:"text", labelAlign:"right", 
+					name:"country", label:"Country",
+					validate:"isNotEmpty", validateEvent:"blur",
+					value:"Belarus" },
+				{ view:"text", labelPosition:"top", 
+					name:"city", label:"City",
+					validate:"isNotEmpty", validateEvent:"blur",
+					value:"" }, {}
+			]},
+			{ view:"form", elements:[
+				{ type:"header", template:"Validate on key"},
+				{ view:"text", labelAlign:"right", 
+					name:"country", label:"Country",
+					validate:"isNotEmpty", validateEvent:"key",
+					value:"Belarus" },
+				{ view:"text", labelPosition:"top", 
+					name:"city", label:"City",
+					validate:"isNotEmpty", validateEvent:"key",
+					value:"" }, {}
+			]},
+			{ view:"form", elements:[
+				{ type:"header", template:"Validate by API"},
+				{ view:"text", labelAlign:"right", 
+					name:"country", label:"Country",
+					validate:"isNotEmpty",
+					value:"Belarus" },
+				{ view:"text", labelPosition:"top", 
+					name:"city", label:"City",
+					validate:"isNotEmpty",
+					value:"" },
+				{ view:"button", type:"form", value:"Validate", click:function(){
+					webix.message( this.getFormView().validate() );
+				}}, {}
+			]}
+		]
+	});
+		
+</script>
+</body>
+</html>

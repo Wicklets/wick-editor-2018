@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:x>
+<head>
+	<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8" />
+	<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	<title>XML initialization : DataTable</title>
+	<script type="text/javascript">
+		webix.ready(function(){ webix.markup.init(); });
+	</script>
+</head>
+<body>
+	<x:ui>
+	<x:datatable autoheight="true" width="400">
+		<x:column width="150" id="firstname">
+			First Name
+		</x:column>
+		<x:column width="150" id="lastname">
+			Last Name
+		</x:column>
+		<x:column fillspace="true" template="{obj.value}">
+			Age
+		</x:column>
+
+        <x:data>
+            <li firstname="Alex" lastname="Wolski"> 55</li>
+            <li firstname="Rassel" lastname="Brown">42</li>
+	    </x:data>
+    </x:datatable>
+    </x:ui>
+
+</body>
+</html>

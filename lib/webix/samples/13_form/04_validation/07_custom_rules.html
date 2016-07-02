@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA, #areaB{
+				margin: 30px;
+			}
+		</style>
+		<title>Validation with Custom Rules</title>
+	</head>
+	<body>
+
+		<form>
+			<div id="areaA"></div>
+			<div id="areaB"></div>
+		</form>
+	
+
+		<script type="text/javascript" charset="utf-8">
+		var form1 = [
+			{ view:"text", label:'Must be > 100', name:"text1", value:10 },
+			{ view:"text", label:'Must be < 100', name:"text2", value:10 },
+			{ view:"text", label:'Must be Positive', name:"text3", value:-10 },
+			{ view:"button", value: "Submit", click:function(){
+					this.getParentView().validate(); //form.validate()
+				}
+			}
+		];
+		
+
+
+		webix.ui({
+			container:"areaA",
+			view:"form", scroll:false, width:300, 
+
+			elements: form1,
+			rules:{
+				text1:function(value){ return value > 100; },
+				text2:function(value){ return value < 100; },
+				text3:function(value){ return value > 0;}
+			},
+			elementsConfig:{
+				labelPosition:"top"
+			}
+		});	
+
+		</script>
+	</body>
+</html>

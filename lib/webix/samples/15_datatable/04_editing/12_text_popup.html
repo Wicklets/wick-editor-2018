@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Pop-up editors</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+	</head>
+	<body>
+		<div class='sample_comment'> Text popup:</div>
+		<div id="testA"></div>
+		<hr>
+
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"id",							header:"", css:"rank",  		width:50},
+					{ id:"title",	editor:"text",		header:"Film title",width:200},
+					{ id:"start",	editor:"popup",		header:"Color A",	width:120},
+					{ id:"end",		editor:"popup",		header:"Color B", 	width:120}
+				],
+				
+				editable:true,
+				autoheight:true,
+				autowidth:true,
+
+				data: [
+					{ id:1, title:"The Shawshank Redemption", start:"Some pretty long text here and there, here and there", end:"Short text" },
+					{ id:2, title:"The Godfather", start:"", end:"" }
+				]
+			});
+		
+		
+		});
+
+		</script>
+	</body>
+</html>

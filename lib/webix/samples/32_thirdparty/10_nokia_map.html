@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<!-- You can get these files from https://github.com/webix-hub/components -->
+		<script type="text/javascript">
+			webix.require.disabled = true;
+		</script>
+		<script src="http://cdn.webix.com/components/nokiamap/nokiamap.js"></script>
+		<script src="http://js.api.here.com/se/2.5.3/jsl.js" type="text/javascript" charset="utf-8"></script>
+
+		<title>Nokia Map</title>
+	</head>
+<body>
+
+<script>
+	webix.ready(function(){
+		webix.message({ text:"You need to set the API tokens first", expire:-1 });
+		//nokia.Settings.set( "appId", "XXXXXXXXXXXXXXX"); 
+		//nokia.Settings.set( "authenticationToken", "XXXXXXXXXXXXXXX");
+
+
+		webix.ui({ // creates window with map inside
+			view:"window", id:"mapwin",
+			body:{
+				view:"nokia-map",
+				id:"map",
+				zoom:6,
+				center:[ 48.724, 8.215 ]
+			},
+			head:{
+				view:"toolbar", elements:[
+					{ view:"label",  label: "Nokia Map", align:'left'}, 
+					{ view:'button', label: 'Close', width:120, click:function(){
+						$$("mapwin").close();
+					}}
+				]
+			},
+			top:50, left:50, width:600, height:500
+		}).show();
+	});
+</script>
+
+</body>
+</html>

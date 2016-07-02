@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA, #areaB, #areaC, #areaD, #areaE{
+				margin: 30px 30px;
+				width:700px;
+			}
+		</style>
+		<title>Toggle Buttons: Type 'imageTop'</title>
+	</head>
+	<body>
+
+		<div id="areaA"></div>
+		<div id="areaB"></div>
+		<div id="areaC"></div>
+		<div id="areaD"></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+			webix.ui({
+				container:"areaA",
+				view:"toolbar", paddingY:2, height:42,
+				cols: [
+					{ view:"toggle", type:"imageTop", label:"Save", 
+						image:"../common/imgs/18/save.gif", width:60},
+					{ view:"toggle", type:"imageTop", label:"Update", 
+						image:"../common/imgs/18/paste.gif", width:180},
+					{ view:"toggle", type:"imageTop", label:"Info",
+						image:"../common/imgs/18/copy.gif", width:60}
+				]
+			});
+
+			webix.ui({
+				container:"areaB",
+				view:"toolbar", paddingY:2, height:50,
+				cols: [
+					{ view:"toggle", type:"imageTop", label:"Save", 
+						image:"../common/imgs/24/save.gif", width:60},
+					{ view:"toggle", type:"imageTop", label:"Update", 
+						image:"../common/imgs/24/paste.gif", width:160},
+					{ view:"toggle", type:"imageTop", label:"Info",
+						image:"../common/imgs/24/copy.gif", width:60}
+				]
+			});
+
+
+			webix.ui({
+				container:"areaC",
+				view:"toolbar", paddingY:2, height:60,
+				cols: [
+					{ view:"toggle", type:"imageTop", label:"Save", 
+						image:"../common/imgs/32/save.gif", width:60},
+					{ view:"toggle", type:"imageTop", label:"Update", 
+						image:"../common/imgs/32/paste.gif", width:160},
+					{ view:"toggle", type:"imageTop", label:"Info",
+						image:"../common/imgs/32/copy.gif", width:60}
+				]
+			});		
+
+
+			webix.ui({
+				container:"areaD",
+				view:"toolbar", paddingY:2, height:75,
+				cols: [
+					{ view:"toggle", type:"imageTop", label:"Save", 
+						image:"../common/imgs/48/save.gif", width:60},
+					{ view:"toggle", type:"imageTop", label:"Update", 
+						image:"../common/imgs/48/paste.gif", width:160},
+					{ view:"toggle", type:"imageTop", label:"Info",
+						image:"../common/imgs/48/copy.gif", width:60}
+				]
+			});	
+
+			
+
+
+
+
+
+		
+
+					
+		</script>
+	</body>
+</html>

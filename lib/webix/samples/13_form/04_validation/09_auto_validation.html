@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA, #areaB{
+				margin: 30px;
+			}
+		</style>
+		<title>Auto Validation</title>
+	</head>
+	<body>
+
+		<form>
+			<div id="areaA"></div>
+			<div id="areaB"></div>
+		</form>
+	
+
+		<script type="text/javascript" charset="utf-8">
+		var form1 = [
+			{ view:"label", label: "Form validates self after each value change", align:"center" },
+
+			{ view:"text", label:'Not empty', name:"text1" },
+			{ view:"text", label:'Is a Number', name:"text2" },
+			{ view:"text", label:'Is an Email', name:"text3" }
+		];
+
+
+		webix.ui({
+			container:"areaA",
+			view:"form", scroll:false, width:300, 
+
+			elements: form1,
+			rules:{
+				"text1":webix.rules.isNotEmpty,
+				"text2":webix.rules.isNumber,
+				"text3":webix.rules.isEmail
+			},
+			elementsConfig:{
+				labelAlign:"right",
+				on:{
+					onChange:function(old_v, new_v){
+                        this.getParentView().validate();
+					}
+				}
+			}
+		});	
+
+		</script>
+	</body>
+</html>

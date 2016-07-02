@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Multiline header</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+
+	</head>
+	<body>
+	<div class='header_comment'>Multiline header</div>
+		<div class='sample_comment'>The sample shows how to configure a multiline header.</div>
+		<div class='sample_comment'>Basic configuration:</div>
+		<div id="testA"></div>
+		<hr>
+		<div class='sample_comment'>Using colspans and rowspans:</div>
+		<div id="testB"></div>
+		<hr>
+		<div class='sample_comment'>Splitting just one of the columns:</div>
+		<div id="testC"></div>
+	
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:["#", ""], 						width:50},
+					{ id:"title",	header:["Film title", "Second line"],	width:200},
+					{ id:"year",	header:["Year", ""], 					width:80},
+					{ id:"votes",	header:["Votes", ""], 					width:100}
+				],
+				autoheight:true,
+				autowidth:true,
+				data:small_film_set
+			});
+
+
+			grid = webix.ui({
+				container:"testB",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:{ text:"#", rowspan:2}, 							width:50},
+					{ id:"title",	header:["Film title", {text:"Second line", colspan:3}],	width:200},
+					{ id:"year",	header:["Year",""],										width:80},
+					{ id:"votes",	header:["Votes",""],									width:100}
+				],
+				autoheight:true,
+				autowidth:true,
+				data:small_film_set
+			});
+
+
+			grid = webix.ui({
+				container:"testC",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  							width:50},
+					{ id:"title",	header:["Film title", "Second line"],	width:200},
+					{ id:"year",	header:"Year",							width:80},
+					{ id:"votes",	header:"Votes",							width:100}
+				],
+				autoheight:true,
+				autowidth:true,
+				data:small_film_set
+			});
+
+
+			
+		});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Drag-and-Drop between Trees - Drop Next</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+	</head>
+	<body class='webix_full_screen'>
+		<div class='header_comment'>Drag from first to second tree</div>
+		
+		<div id="testA" style='width:300px; height:300px'></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+
+			grid = webix.ui({
+				container:"testA",
+				view:"treetable",
+				columns:[
+					{ id:"id",	header:"", css:{"text-align":"right"},  	width:50},
+					{ id:"value",	header:"Film title",	width:250,
+						template:"{common.treetable()} #value#" },
+					{ id:"state",	header:"State",	width:100},
+					{ id:"hours",	header:"Hours",	width:100}
+				],
+
+				drag:true,
+				autoheight:true,
+				autowidth:true,
+
+				on:{
+					onBeforeDrop:function(context){
+						if (this.getItem(context.target).$count && this.getItem(context.target).open){
+							//drop as first child
+							context.parent = context.target;
+							context.index = 0;
+						} else {
+							//drop next
+							context.index++;
+						}
+					}
+				},
+
+				url: "data/data.php", datatype:"xml"
+			});
+
+		});
+
+		</script>
+	</body>
+</html>

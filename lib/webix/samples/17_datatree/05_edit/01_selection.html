@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Editing in Tree</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../common/treedata.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+	</head>
+	<body>
+		<div class='header_comment'>Editable DataTree. Click on an item to edit it.</div>
+
+        <div style='float:left'>
+            <div class='sample comment' style='margin-left:20px;'>Select editor</div>
+		    <div id="testA" style='width:270px; height:260px;'></div>
+        </div>
+        <div style='float:left'>
+        <div class='sample comment' style='margin-left:20px;'>Select editor</div>
+            <div id="testB" style='width:270px; height:260px;'></div>
+        </div>
+		
+
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			webix.protoUI({
+				name:"edittree"
+			}, webix.EditAbility, webix.ui.tree);
+
+			var tree1 = webix.ui({
+				container:"testA",
+				view:"edittree",
+				
+				editable:true,
+				editor:"text",
+				editValue:"value",
+
+				data: webix.copy(smalltreedata)
+			});
+
+            var tree2 = webix.ui({
+                container:"testB",
+                view:"edittree",
+                editable:true,
+                editor:"select",
+                editValue:"value",
+                options:["The Shawshank Redemption", "The Godfather" ],
+                data: webix.copy(smalltreedata)
+            });
+
+        });
+		</script>
+	</body>
+</html>

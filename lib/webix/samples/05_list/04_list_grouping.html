@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../common/testdata.js"></script>
+		<title>List: Grouping</title>
+	</head>
+	<style type="text/css">
+		#listA, #listB, #listC{
+			float:left; margin:20px;
+		}
+		.mark{
+			width:100px;
+			text-align: center;
+			font-weight:bold;
+			float:right;
+			background-color:#444;
+			color:white;
+			border-radius:3px;
+		}
+		.newtime{
+			background-color:#DDFFDD;
+		}
+		.oldtime{
+			background-color:#DDDDFF;
+		}
+	</style>
+	<body>
+		<div id="listA"></div>
+		<div id="listB"></div>
+		<div id="listC"></div>
+
+
+		<script type="text/javascript" charset="utf-8">
+
+			webix.ui({
+				container:"listA",
+				view:"grouplist", 
+				width:320,
+				height:600,
+				templateBack:" Year #value#",
+				templateGroup:" Year #value#",
+				templateItem:"#rank#. #title#",
+				select:true,
+				scheme:{
+					$group:{
+						by:'year'
+					},
+					$sort:{ by:"value", dir:"desc" }
+				},
+
+				data:webix.copy(big_film_set)
+			});
+
+			webix.ui({
+				container:"listB",
+				view:"grouplist", 
+				width:320,
+				height:600,
+
+				scheme:{
+					$group:'year',
+					$sort:"value"
+				},
+
+				templateBack: "Year #value# <br> Results:#$count#",
+				templateGroup: "Year #value# <br> Results:#$count#",
+				templateItem:"#rank#. #title# <div style='padding-left:18px'> Year:#year#, votes:#votes# </div>",
+				type:{
+					height:60
+				},
+				select:true,
+
+				data:webix.copy(big_film_set)
+			});
+
+			webix.ui({
+				container:"listC",
+				view:"grouplist", 
+				id:"group",
+				height:600,
+
+				scheme:{
+					$init:function(obj){
+						if (obj.year>=2000) obj.$css = "newtime";
+						if (obj.year<=1970) obj.$css = "oldtime";
+					},
+					$group:function(obj){
+						return obj.year;
+					},
+					$sort:{ by:"value", dir:"desc" }
+				},
+
+				templateBack: "Year #value# <br> Results:#$count#",
+				templateGroup: "Year #value# <br> Results:#$count#",
+				templateItem:"<div class='mark'>#votes# </div> #rank#. #title#",
+				type:{
+					width:320,
+					height:"auto"
+				},
+				select:true,
+
+				data:webix.copy(big_film_set)
+		});		
+			
+		</script>
+	</body>
+</html>

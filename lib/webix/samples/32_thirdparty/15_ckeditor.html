@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+
+		<!-- You can get these files from https://github.com/webix-hub/components -->
+		<script type="text/javascript">
+			webix.require.disabled = true;
+			webix.codebase = "http://cdn.webix.com/components/ckeditor/";
+			window.CKEDITOR_BASEPATH = webix.codebase+"ckeditor/";
+		</script>
+		
+		<script src="http://cdn.webix.com/components/ckeditor/ckeditor.js"></script>
+		<script src="http://cdn.webix.com/components/ckeditor/ckeditor/ckeditor.js"></script>
+
+		<title>CKEditor text editor</title>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				type:"space", rows:[
+					{ id:'editor', view:"ckeditor"},
+					{ template:"CKEditor editor", type:"header" },
+					{ id:'editor2', view:"ckeditor"}
+				]
+			});
+
+			$$("editor").setValue("CKEditor is a ready-for-use HTML text editor designed to simplify web content creation. It's a WYSIWYG editor that brings common word processor features directly to your web pages. Enhance your website experience with our community maintained editor.");
+			$$("editor").focus();
+
+			$$("editor2").setValue("CKEditor is a ready-for-use HTML text editor designed to simplify web content creation. It's a WYSIWYG editor that brings common word processor features directly to your web pages. Enhance your website experience with our community maintained editor.");
+		</script>
+	</body>
+
+	
+</html>

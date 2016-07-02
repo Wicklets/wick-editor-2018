@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>3-state Checkboxes</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<script src="../common/treedata.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+	</head>
+	<body>
+		<div class='header_comment'>3-state checkboxes</div>
+		<div class='sample_comment'>The sample demonstrates use of 3-state (<i>the 1st tree</i>) and standard (2-state) checkboxes (<i>the 2nd tree</i>). </div>
+
+		<div id="testA" style='width:290px; height:260px; float:left'></div>
+		<div id="testB" style='width:290px; height:260px; float:left'></div>
+
+		
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			tree = webix.ui({
+				container:"testA",
+				view:"tree",
+				template:"{common.icon()} {common.checkbox()} {common.folder()} #value#",
+				threeState: true,
+
+				data: webix.copy(smalltreedata),
+				ready:function(){
+					this.openAll();
+					this.checkItem("1.2");
+				}
+			});
+
+			tree2 = webix.ui({
+				container:"testB",
+				view:"tree",
+				template:"{common.icon()} {common.checkbox()} {common.folder()} #value#",
+
+				data: webix.copy(smalltreedata),
+				ready:function(){
+					this.openAll();
+					this.checkItem("1.2");
+				}
+			});			
+		});
+		</script>
+	</body>
+</html>

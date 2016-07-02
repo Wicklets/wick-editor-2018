@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA{
+				margin: 30px;
+			}
+		</style>
+		<title>Splitting Form into Sections</title>
+	</head>
+	<body>
+
+		<div id="areaA"></div>
+	
+
+		<script type="text/javascript" charset="utf-8">
+		var form1 = [
+			{ view:"text", label:"Alpha 1", value:'' },
+			{ view:"text", label:"Alpha 2", value:'' },
+			{ view:"text", label:"Alpha 3", value:'' },
+
+			{ view:"text", label:"Beta 1", value:'' },
+			{ view:"text", label:"Beta 2", value:'' },
+			{ view:"text", label:"Beta 3", value:'' },
+
+			{ view:"text", label:"Gamma 1", value:'' },
+			{ view:"text", label:"Gamma 2", value:'' },
+			{ view:"text", label:"Gamma 3", value:'' }
+		];
+
+		var form2 = [
+			{ rows:[ 
+				{ template:"Alpha fields", type:"section"},
+				{ view:"text", label:"Alpha 1", value:'' },
+				{ view:"text", label:"Alpha 2", value:'' },
+				{ view:"text", label:"Alpha 3", value:'' }
+			]},
+			{ rows:[ 
+				{ template:"Beta fields", type:"section"},
+				{ view:"text", label:"Beta 1", value:'' },
+				{ view:"text", label:"Beta 2", value:'' },
+				{ view:"text", label:"Beta 3", value:'' }
+			]},
+			{ rows:[ 
+				{ template:"Gamma fields", type:"section"},
+				{ view:"text", label:"Gamma 1", value:'' },
+				{ view:"text", label:"Gamma 2", value:'' },
+				{ view:"text", label:"Gamma 3", value:'' }
+			]}
+		];
+
+		webix.ui({
+			container:"areaA",
+			margin:30, cols:[
+				{ view:"form", elements:form1,
+					elementsConfig:{ "labelAlign":"right" }},
+				{ view:"form", elements:form2, margin:30,
+					elementsConfig:{ "labelAlign":"right" }}
+			]
+		});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" charset="utf-8">
+		<title>Server-side Integration: Tree</title>
+</head>
+	<body>
+		<div class='header_comment'>Server-side Integration</div>
+		<div class='sample_comment'>The sample shows the use of dataProcessor for 'communication' with server-side.</div>
+		
+		<div id="treeA" style="width: 400px; height: 300px;padding: 20px;"></div>
+		<div style="padding: 20px;">
+			<input type="text" id="value" style='width:300px' value="new value" />
+			<input type="button" value="update selected" onclick="update_item()" /><br>
+			<input type="button" style='width:148px' value="add new item" onclick="add_item()" />
+			<input type="button" style='width:148px' value="remove selected item" onclick="remove_item()" />
+		</div>
+		<script type="text/javascript" charset="utf-8">
+
+			var tree;
+			function add_item(){
+				var item = { value: "New film" };
+				tree.add(item, null, tree.getSelectedId() || 0);
+			};
+
+			function remove_item(){
+				var sel = tree.getSelectedId(true);
+				if (!sel) return;
+				for (var i = 0; i < sel.length; i++)
+					tree.remove(sel[i]);
+			};
+
+			function update_item() {
+				var sel = tree.getSelectedId(true);
+				if (!sel) return;
+
+				var value = document.getElementById("value").value;
+				for (var i = 0; i < sel.length; i++) {
+					var item = tree.getItem(sel[i]);
+					item.value = value;
+					tree.updateItem(sel[i], item);
+				}
+			}
+			webix.ready(function(){
+				var myxml = webix.DataDriver.myxml = webix.copy(webix.DataDriver.xml);
+				myxml.records = "/*/book";
+				myxml.child = "part";
+
+				//inline xml, custom tags
+				tree = webix.ui({
+					container:"treeA",
+					view:"tree",
+					url:"./data/connector_tree.php",
+					datatype:"xml",
+					select: true,
+                    drag:true
+				});
+
+				tree.attachEvent("onItemClick", function(id) {
+					var value = this.getItem(id).value;
+					document.getElementById("value").value = value;
+				});
+
+
+				var dp = new webix.DataProcessor({
+					master: tree,
+					url: "connector->./data/connector_tree.php",
+                    trackMove:true
+				});
+
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+	<title>Area Chart: Custom xAxis</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+
+<body>
+<div id="chartDiv" style="width:600px;height:250px;margin:20px"></div>
+
+
+<script>
+    var dataset = [
+	    { id:1, sales:40, date:"01.01.2012", color: "#ee9336"},
+	    { id:2, sales:72, date:"25.01.2012", color: "#ee4339"},
+	    { id:3, sales:45, date:"15.02.2012", color: "#eed236"},
+	    { id:4, sales:21, date:"10.01.2012", color: "#d3ee36"},
+	    { id:5, sales:57, date:"25.02.2012", color: "#a7ee70"},
+	    { id:6, sales:55, date:"20.02.2012", color: "#58dccd"},
+	    { id:7, sales:45, date:"16.01.2012", color: "#36abee"},
+	    { id:8, sales:20, date:"09.01.2012", color: "#476cee"},
+	    { id:9, sales:50, date:"10.02.2012", color: "#a244ea"},
+	    { id:10, sales:60, date:"20.01.2012", color: "#e33fc7"},
+	    { id:11, sales:41, date:"15.01.2013", color: "#e33fc7"},
+	    { id:12, sales:60, date:"01.03.2012", color: "#a7ee70"}
+    ];
+
+    webix.ui({
+	    view:"chart",
+	    type:"area",
+	    container:"chartDiv",
+	    value:"#sales#",
+	    color: "#e9dc55",
+	    alpha:0.4,
+	    tooltip:{
+		    template:"#sales#"
+	    },
+	    xAxis:{
+		    template:function(obj){
+			    return obj.$unit.getDate()==15?webix.Date.dateToStr("%F")(obj.$unit):""
+		    },
+		    lineColor:function(obj){
+			    return obj.$unit.getDate()==1?"#737373":"#cfcfcf"
+		    },
+		    value:function(obj){
+			    return webix.Date.strToDate("%d.%m.%Y")(obj.date);
+		    },
+		    units:{
+			    start:new Date(2012,0,1),
+			    end:new Date(2012,2,1),
+			    next:function(d){
+				    return  webix.Date.add(d, 1, "day",true);
+			    }
+		    }
+	    },
+	    yAxis:{
+		    start:0,
+		    step:10,
+		    end:100
+	    },
+	    data: dataset
+    });
+
+</script>
+
+</body>
+</html>

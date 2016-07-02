@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Setting the default scheme for data</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+
+		<div class='header_comment'>Setting the default scheme for data</div>
+		<div class='sample_comment'>The sample shows how to set the default scheme for the table values.</div>
+		<div id="testA"></div>
+		<input type='button' value='Add row' onclick='grid.add({})' class='sample_button'>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				scheme:{
+					a:100, b:42,
+					$init:function(obj){
+						obj["a+b"]   = obj.a + obj.b;
+						obj["a*b"] = obj.a * obj.b;
+						obj["a/b"]   = obj.a / obj.b;
+					}
+				},
+				columns:[
+					{ id:"a" },
+					{ id:"b" },
+					{ id:"a+b" },
+					{ id:"a*b" },
+					{ id:"a/b", format:webix.i18n.numberFormat }
+				],
+				
+				autoheight:true,
+				autowidth:true,
+				data:[
+					{ a:212, b:156 },
+					{ a:312, b:545 },
+					{ a:623, b:983 },
+					{ a:727, b:539 }
+				]
+			});
+
+
+		});
+		</script>
+	</body>
+</html>

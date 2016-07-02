@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+<head>
+    <title>Scatter Chart: Several Graphs in One Chart</title>
+    <script src="../../../codebase/webix.js" type="text/javascript"></script>
+    <link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+    <script src="../../common/chartdata.js"></script>
+<body>
+<div id="chartDiv" style="width:600px;height:250px;margin:20px"></div>
+<script>
+    var colors = {"a":"#69ba00", "b": "#4aa397", "c": "#de619c"};
+    var borders = {"a":"#447900", "b": "#0a796a", "c": "#b7286c"};
+
+    var legendValues = [];
+    for(var t in colors)
+        legendValues.push({text:"Type "+t.toUpperCase(),color:colors[t]});
+
+    webix.ui({
+        container:"chartDiv",
+        view:"chart",
+        type:"scatter",
+        xValue: "#a#",
+        yAxis:{
+            title:"Value B"
+        },
+        xAxis:{
+            title:"Value A"
+        },
+        item:{
+            radius:3,
+            type:"s",
+            borderColor:function(obj){
+                return borders[obj.type]
+            },
+            borderWidth:2,
+            color:function(obj){
+                return colors[obj.type]
+            }
+        },
+        legend:{
+            layout:"y",
+            width: 75,
+            margin:5,
+            marker:{
+              type:"item"
+            },
+            align:"right",
+            valign:"middle",
+            values:legendValues
+        },
+        series:[
+            {
+                value:"#b1#",
+                item:{
+                    radius:3,
+                    type:"s",
+                    borderColor:function(obj){
+                        return borders["a"]
+                    },
+                    borderWidth:2,
+                    color:function(obj){
+                        return colors["a"]
+                    }
+                }
+            },
+            {
+                value:"#b2#",
+                item:{
+                    radius:3,
+                    type:"s",
+                    borderColor:function(obj){
+                        return borders["b"]
+                    },
+                    borderWidth:2,
+                    color:function(obj){
+                        return colors["b"]
+                    }
+                }
+            },
+            {
+                value:"#b3#",
+                item:{
+                    radius:3,
+                    type:"s",
+                    borderColor:function(obj){
+                        return borders["c"]
+                    },
+                    borderWidth:2,
+                    color:function(obj){
+                        return colors["c"]
+                    }
+                }
+            }
+        ],
+        data:scatter_dataset2
+    });
+</script>
+</body>
+</html>

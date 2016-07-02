@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Initially Hidden Columns</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Initially Hidden Columns</div>
+		<div class='sample_comment'>The sample shows how you can hide and then show columns programmatically.</div>
+		<div id="testA"></div>
+		<hr>
+		<input type='button' value='show All' onclick='doShowAll()'> 
+		<script type="text/javascript">
+		webix.ready(function(){
+
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title", fillspace:true },
+					{ id:"year",  hidden:true,	header:"Released" , width:80},
+					{ id:"votes", hidden:true, header:"Votes", 	width:100}
+				],
+
+				width:500, scroll:false, autoheight:true,
+				data:small_film_set
+			});	
+
+		});
+
+		function doShowAll(){
+			grida.showColumn("year");
+			grida.showColumn("votes");
+		}
+		</script>
+	</body>
+</html>

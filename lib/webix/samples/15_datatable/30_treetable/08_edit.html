@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Editing data in TreeTable</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Editing data in TreeTable</div>
+		<div id="testA"></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"treetable",
+				columns:[
+					{ id:"id",	editor:"text", header:"", css:{"text-align":"right"},  	width:50},
+					{ id:"value",	editor:"text", header:"Title",	width:250,
+						template:"{common.treetable()} #value#" },
+					{ id:"state",	editor:"text", header:"State",	width:100},
+					{ id:"hours",	editor:"text", header:"Hours",	width:100}
+				],
+
+				editable:true,
+				autoheight:true,
+				autowidth:true,
+				url: "data/treedata.php", datatype:"xml"
+			});
+		});
+		</script>
+	</body>
+</html>

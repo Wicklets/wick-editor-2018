@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Datatable: Offline mode</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../../common/samples.css">
+	</head>
+	<body>
+		<div class='header_comment'>Loading :: Offline mode</div>
+		<div id='testA'></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		var grid = {
+			view:"datatable",	id:"mytable",
+			columns:[
+				{ id:"rank",	editor:"text",  header:"", css:"rank",  width:50},
+				{ id:"title",	editor:"text",  header:"Film title",	width:200},
+				{ id:"year",	editor:"text",  header:"Released" , 	width:80},
+				{ id:"votes",	editor:"text",  header:"Votes", 		width:100}
+			],
+			autoheight:true,
+			autowidth:true,
+			select:"row", editable:true, editaction:"dblclick",
+
+			save: "offline->server/datatable.php",
+			url: "offline->server/datatable.php"
+		};
+
+
+		var buttons = {
+			view:"toolbar", elements:[
+				{ view:"button", value:"Add Row", click:function(){
+					$$('mytable').add({
+						rank:99,
+						title:"",
+						year:"2012",
+						votes:"100"
+					});
+				}},
+				{ view:"button", value:"Delete Row", click:function(){
+					var id = $$('mytable').getSelectedId();
+					if (id)
+						$$('mytable').remove(id);
+				}},
+				{}
+			]
+		};
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				rows:[
+					buttons, grid
+				]
+			});
+		});
+		</script>
+	</body>
+</html>

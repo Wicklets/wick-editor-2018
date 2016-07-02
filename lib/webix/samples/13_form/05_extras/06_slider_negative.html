@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+        <title>Slider: Negative Values</title>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8">
+		
+		
+		var ui = webix.ui({
+			view:"form", id:"myform", elements:[
+				{ view:"slider", label:"Level", min:-50, max:50,  value:-20, title:webix.template("Selected: #value#"), name:"s1"},
+				{ view:"slider", label:"Level", min:-50, max:50,  value:"0", title:webix.template("Selected: #value#"), name:"s2"},
+				{ view:"slider", label:"Level", min:-50, max:50,  value:20, title:webix.template("Selected: #value#"), name:"s3"},
+                {
+                    type:"clean",
+                    cols:[
+                        { view:"button", id:"slider_set", label:"Set", click:"set()", inputWidth: 200, align:"right" },
+                        { view:"button", id:"slider_get", label:"Get", click:"get()", inputWidth: 200, align:"left" }
+                    ]
+                }
+			]
+		});
+
+		function set(){
+			$$('myform').setValues({
+				s1:-10, s2:10, s3:0
+			});
+		};
+		function get(){
+			var data = $$('myform').getValues();
+			webix.message(data.s1);
+			webix.message(data.s2);
+			webix.message(data.s3);
+		};
+		</script>
+		
+	</body>
+</html>

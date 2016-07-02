@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+	<title>Selection</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+    <link rel="STYLESHEET" type="text/css" href="../02_templates/dataview_styles.css">
+    <script src="../../common/testdata.js"></script>
+<body>
+
+	<div id="data" style="width:545px;height:270px;margin:20px"></div>
+
+    <div style="margin-left:20px">
+        <input type="button" name="some_name" value="Select the first item" onclick="$$('data').select($$('data').getFirstId())"><input type="button" name="some_name" value="Select the last item" onclick="$$('data').select($$('data').getLastId())">
+        <input type="button" name="some_name" value="Select all" onclick="$$('data').select()">
+        <br><br>
+        <input type="button" name="some_name" value="Show the first item" onclick="$$('data').showItem($$('data').getFirstId())">
+        <input type="button" name="some_name" value="Show the last item" onclick="$$('data').showItem($$('data').getLastId())">
+    </div>
+	<script>
+        webix.ui({
+            id:"data",
+			view:"dataview",
+			container:"data",
+            select:1,
+            css: "movies",
+            type:{
+                width: 261,
+                height: 90,
+                template:"<div class='overall'><div class='title'>#title#</div><div class='year'>#year# year</div> </div>"
+            },
+            data:big_film_set
+		});
+	</script>
+
+</body>
+</html>
+
+
+

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Drag-and-Drop between tables in DataTable</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Drag-and-Drop between tables</div>
+		
+		<div id="testA"></div>
+		<hr>
+		<div id="testB"></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"votes",	header:"Votes", 	width:100},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"title",	header:"Film title",width:200}
+				],
+				height:300, minHeight:100,
+				autowidth:true,
+				select:"multiselect",
+				drag:true,
+
+				data: webix.copy(big_film_set)
+			});	
+
+			gridb = webix.ui({
+				container:"testB",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+				autoheight:true, minHeight:100,
+				autowidth:true,
+				select:true, multiselect:true,
+				drag:true,
+
+				data: webix.copy(small_film_set)
+			});		
+		});		
+		</script>
+	</body>
+</html>

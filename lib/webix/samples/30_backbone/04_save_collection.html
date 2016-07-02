@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="./common/underscore.js"></script>
+		<script type="text/javascript" src="./common/backbone.js"></script>
+
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<title>Backbone Integration. Saving data from collection.</title>
+	</head>
+	<body>
+		<div style="height:300px" class="app1_here"></div>
+		
+		<br>
+		<div id="controls">
+			<input type="button" value="Add" onclick='$$("mylist").add({ title:"New Item" }, 1)'>
+			<input type="button" value="Delete first" onclick='$$("mylist").remove($$("mylist").getFirstId())'>
+		</div>
+
+		<script type="text/javascript" charset="utf-8">
+			$(".app1_here").webix_list({
+				id:"mylist", width:200,
+				template:"#title#", select:true
+			});
+
+			FilmRecord = Backbone.Model.extend({});
+			FilmList = Backbone.Collection.extend({
+				model: FilmRecord,
+				url:"./common/data.json",
+			});
+
+			films = new FilmList();
+			films.fetch();
+			films.on("webix:add webix:change", function(model){
+				model.save();
+			});
+			films.on("webix:remove", function(model){
+				model.destroy();
+			});
+
+			$$("mylist").sync(films);
+		</script>
+	</body>
+</html>

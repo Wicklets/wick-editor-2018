@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>The 'order' mode for columns</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>The 'order' dnd mode for columns</div>
+		<div class='sample_comment'>The main peculiarity of the 'order' mode is that columns can't be dragged out of the table boundaries.</div>
+		<div id="testA"></div>
+		<hr>
+		<div id="testB"></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"votes",	header:"Votes", 	width:100},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"title",	header:"Film title",width:200}
+				],
+				height:300, minHeight:100,
+				autowidth:true,
+				select:"multiselect",
+				dragColumn:"order",
+
+				data: webix.copy(big_film_set)
+			});	
+		});		
+		</script>
+	</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<title>Select Boxes</title>
+		<style>
+			html, body{height:100%}
+		</style>
+	</head>
+<body>
+	<div id="data_container" style="width:200px;height:100px;margin:20px"></div>
+
+	<div id="data_container2" style="width:200px;height:120px;margin:20px"></div>
+
+	<div id="data_container3" style="width:200px;height:200px;margin:20px"></div>
+<script>
+	webix.ui({
+		container:"data_container",
+		view:"toolbar",
+		cols:[
+			{ 
+				view:"richselect", width:300,
+				label: 'Richselect', labelAlign:"right",
+				value:1, options:[
+					{ id:1, value:"Banana"   }, 
+					{ id:2, value:"Papaya"   }, 
+					{ id:3, value:"Apple" }
+				]
+			},
+			{ 
+				view:"select", width:300,
+				label: 'Select', labelAlign:"right",
+				value:1, options:[
+					{ id:1, value:"Banana"   }, 
+					{ id:2, value:"Papaya"   }, 
+					{ id:3, value:"Apple" }
+				]
+			},
+			{ 
+				view:"combo", width:300,
+				label: 'Combo', labelAlign:"right",
+				value:1, options:[
+					{ id:1, value:"Banana"   }, 
+					{ id:2, value:"Papaya"   }, 
+					{ id:3, value:"Apple" }
+				]
+			}
+		]
+	});
+
+	webix.ui({
+		container:"data_container2",
+		view:"toolbar", height:50,
+		cols:[
+			{ 
+				view:"richselect", width:300,
+				label: 'RichSelect', labelAlign:"right",
+				value:1, options:[
+					{ id:1, value:"Banana"   }, 
+					{ id:2, value:"Papaya"   }, 
+					{ id:3, value:"Apple" }
+				]
+			},
+			{ 
+				view:"select", width:300,
+				label: 'Select', labelAlign:"right",
+				value:1, options:[
+					{ id:1, value:"Banana"   }, 
+					{ id:2, value:"Papaya"   }, 
+					{ id:3, value:"Apple" }
+				]
+			},
+			{ 
+				view:"combo", width:300,
+				label: 'Combo', labelAlign:"right",
+				value:1, options:[
+					{ id:1, value:"Banana"   }, 
+					{ id:2, value:"Papaya"   }, 
+					{ id:3, value:"Apple" }
+				]
+			}
+		]
+	});
+
+	webix.ui({
+		container:"data_container3",
+		view:"toolbar", height:100,
+		cols:[
+			{ 
+				view:"richselect", width:300,
+				label: 'RichSelect', labelAlign:"right",
+				value:1, options:[
+					{ id:1, value:"Here can be some long multi line content <ul><li>item1 <li> item 2</ul>"   }, 
+					{ id:2, value:"Papaya"   }, 
+					{ id:3, value:"Apple" }
+				]
+			},
+			{ 
+				view:"select", width:300,
+				label: 'Select', labelAlign:"right",
+				value:1, options:[
+					{ id:1, value:"Here can be some long multi line content <ul><li>item1 <li> item 2</ul>"   }, 
+					{ id:2, value:"Papaya"   }, 
+					{ id:3, value:"Apple" }
+				]
+			},
+			{ 
+				view:"combo", width:300,
+				label: 'Combo', labelAlign:"right",
+				value:1, options:[
+					{ id:1, value:"Here can be some long multi line content <ul><li>item1 <li> item 2</ul>"   }, 
+					{ id:2, value:"Papaya"   }, 
+					{ id:3, value:"Apple" }
+				]
+			}
+		]
+	});	
+</script>
+</body>
+</html>

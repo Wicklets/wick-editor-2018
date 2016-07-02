@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<script type="text/javascript" src="../common/testdata.js"></script>
+		<title>List in Layout</title>
+		<style type="text/css">
+			html, body{
+				height:100%; overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				rows:[
+					{ template:"header", height:50 },
+					{
+						cols:[
+							{ 
+							header:"Left list", body:
+								{
+								view:"list", 
+								width:320,
+								template:"#rank#. #title#",
+								data:big_film_set 
+								}
+							},
+
+							{ },
+							{ view:"resizer" },
+
+							{ 
+							view:"list", 
+							width:320,
+							template:"#rank#. #title#",
+							data:big_film_set 
+							}
+						]
+					},
+					{ template:"footer", height:50 }
+				]
+			});
+			
+		</script>
+	</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Horizontal List</title>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script type="text/javascript" src="../common/testdata.js"></script>
+
+	</head>
+	<style type="text/css">
+		#listA, #listB, #listC{
+			margin:20px;
+		}
+		.newtime{
+			background-color:#DDFFDD;
+		}
+		.oldtime{
+			background-color:#DDDDFF;
+		}
+	</style>
+	<body>
+		<div class='header_comment'>Horizontal lists</div>
+		<div class='sample_comment'>A list with the fixed width</div>
+		<div id="listA"></div>
+		<div class='sample_comment'>A list with the fixed items' width</div>
+		<div id="listB"></div>
+		<div class='sample_comment'>A list with a custom data scheme</div>
+		<div id="listC"></div>
+
+
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				container:"listA",
+				view:"list", 
+				width:700,
+				scroll:"x",
+				layout:"x",
+				select:true,
+				type:{
+					width:"auto",
+					height:"auto"
+				},
+				template:"#rank#. #title#",
+				data:big_film_set
+			});
+
+			webix.ui({
+				container:"listB",
+				view:"list", 
+				xCount:4,
+				scroll:"x",
+				layout:"x",
+				select:true,
+				type:{
+					width:170,
+					height:60
+				},
+				template:"#rank#. #year# <div>#title#</div>",
+				data:big_film_set
+			});	
+
+			var list3 = webix.ui({
+				container:"listC",
+				view:"list", 
+				xCount:6,
+				scroll:"x",
+				layout:"x",
+				select:true,
+				scheme:{
+					$init:function(obj){
+						if (obj.year>=2000) obj.$css = "newtime";
+						if (obj.year<=1970) obj.$css = "oldtime";
+					}
+				},
+				type:{
+					width:110,
+					height:60
+				},
+				template:"#rank#. #year# <div> Votes: #votes#</div>",
+
+				data:big_film_set
+			});			
+			list3.showItem(6);
+			
+		</script>
+	</body>
+</html>

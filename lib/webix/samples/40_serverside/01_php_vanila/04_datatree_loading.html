@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Tree: Loading</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../../common/samples.css">
+	</head>
+	<body>
+		<div class='header_comment'>Loading</div>
+		<div id="testA" style='width:250px; height:250px; float:left'></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			//plain json data, based on objects
+			treea = webix.ui({
+				container:"testA",
+				view:"tree",
+				template:"{common.icon()} {common.folder()} #title#",
+				url: "server/datatree.php"
+			});	
+
+		});
+		</script>
+	</body>
+</html>

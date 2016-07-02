@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Custom radio and checkbox in DataTable </title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Custom radio and checkbox in DataTable</div>
+		<div class='sample_comment'>Take a look at the first and second columns of the table.</div>
+		<div class='sample_comment'>The first column contains custom checkboxes, the second column - custom radio buttons. </div>
+		<div id="testA"></div>
+		<hr>
+
+		<style type="text/css">
+		.checked{
+			color:green;
+			font-weight: bold; cursor:pointer;
+		}
+		.notchecked{
+			color:red;
+			font-weight:bold; cursor: pointer;
+		}
+
+		.webix_table_radio.checked{
+			background:green;
+			width:16px; height:16px; margin-top:8px;
+		}
+		.webix_table_radio.notchecked{
+			background:orange;
+			width:16px; height:16px; margin-top:8px;
+		}
+		</style>
+		<script type="text/javascript" charset="utf-8">
+
+		function custom_checkbox(obj, common, value){
+			if (value)
+				return "<div class='webix_table_checkbox checked'> YES </div>";
+			else
+				return "<div class='webix_table_checkbox notchecked'> NO </div>";
+		}
+
+		function custom_radio(obj, common, value){
+			if (value)
+				return "<div class='webix_table_radio checked'></div>";
+			else
+				return "<div class='webix_table_radio notchecked'></div>";
+		}
+
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"ch1", header:"", template:custom_checkbox, width:40},
+					{ id:"ra1", header:"", template:custom_radio, width:40},
+					{ id:"title",	sort:"string", header:"Film title",width:200},
+					{ id:"category",  header:"Category" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+
+				autoheight:true,
+				autowidth:true,
+				editable:true,
+				checkboxRefresh:true, 
+				
+				data: webix.copy(small_wide_film_set)
+			});
+
+
+			
+								
+		});
+		</script>
+	</body>
+</html>

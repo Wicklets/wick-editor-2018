@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Different scrolling behaviours </title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Different scrolling behaviours</div>
+		<div class='sample_comment'>Default scrolling</div>
+		<div id="testA" style='width:200px; height:100px'></div>
+		<hr>
+		<div class='sample_comment'>X-scrolling is disabled</div>
+		<div id="testB" style='width:200px; height:100px'></div>
+		<hr>
+		<div class='sample_comment'>Y-scrolling is disabled</div>
+		<div id="testC" style='width:200px; height:100px'></div>
+		<hr>
+		<div class='sample_comment'>Both scrolling directions are disabled.</div>
+		<div id="testD" style='width:200px; height:100px'></div>
+
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank" },
+					{ id:"title",	header:"Film title" },
+					{ id:"year",	header:"Year"},
+					{ id:"votes",	header:"Votes"}
+				],
+				data:small_film_set
+			});	
+
+			grid = webix.ui({
+				container:"testB",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank" },
+					{ id:"title",	header:"Film title" },
+					{ id:"year",	header:"Year"},
+					{ id:"votes",	header:"Votes"}
+				],
+
+				scrollX:false,
+				data:small_film_set
+			});	
+			
+			grid = webix.ui({
+				container:"testC",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank" },
+					{ id:"title",	header:"Film title" },
+					{ id:"year",	header:"Year"},
+					{ id:"votes",	header:"Votes"}
+				],
+
+				scrollY:false,
+				data:small_film_set
+			});	
+			
+			grid = webix.ui({
+				container:"testD",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank" },
+					{ id:"title",	header:"Film title" },
+					{ id:"year",	header:"Year"},
+					{ id:"votes",	header:"Votes"}
+				],
+
+				scrollX:false, scrollY:false,
+				data:small_film_set
+			});													
+		});
+		</script>
+	</body>
+</html>

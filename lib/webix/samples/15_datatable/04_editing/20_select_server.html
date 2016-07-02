@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> Loading data in the 'select' editor</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='sample_comment'>Select and options</div>
+		<div id="testA"></div>
+		<hr>
+		<div class='sample_comment'>RichSelect and options</div>
+		<div id="testB"></div>
+		<hr>
+		<div class='sample_comment'>Select and collection</div>
+		<div id="testC"></div>
+		<hr>
+		<div class='sample_comment'>RichSelect and collection</div>
+		<div id="testD"></div>
+		<hr>
+
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	editor:"text",		header:"", css:"rank",  		width:50},
+					{ id:"title",	editor:"text",		header:"Film title",width:200},
+					{ id:"cat_id",  editor:"select",	options:"data/options.json",
+						header:"Category" , width:110 },
+					{ id:"votes",	editor:"text",		header:"Votes", 	width:100}
+				],
+				
+				editable:true,
+				autoheight:true,
+				autowidth:true,
+
+				data: [
+					{ id:1, title:"The Shawshank Redemption", cat_id:"1", votes:678790, rating:9.2, rank:1},
+					{ id:2, title:"The Godfather", cat_id:"2", votes:511495, rating:9.2, rank:2}
+				]
+			});
+
+
+			gridb = webix.ui({
+				container:"testC",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	editor:"text",		header:"", css:"rank",  		width:50},
+					{ id:"title",	editor:"text",		header:"Film title",width:200},
+					{ id:"cat_id",  editor:"select",	collection:"data/options.json",	header:"Category" , width:110},
+					{ id:"votes",	editor:"text",		header:"Votes", 	width:100}
+				],
+				
+				editable:true,
+				autoheight:true,
+				autowidth:true,
+
+				data: [
+					{ id:1, title:"The Shawshank Redemption", cat_id:"1", votes:678790, rating:9.2, rank:1},
+					{ id:2, title:"The Godfather", cat_id:"2", votes:511495, rating:9.2, rank:2}
+				]
+			});	
+
+
+			grida = webix.ui({
+				container:"testB",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	editor:"text",		header:"", css:"rank",  		width:50},
+					{ id:"title",	editor:"text",		header:"Film title",width:200},
+					{ id:"cat_id",  editor:"richselect",	options:"data/options.json",
+						header:"Category" , width:110 },
+					{ id:"votes",	editor:"text",		header:"Votes", 	width:100}
+				],
+				
+				editable:true,
+				autoheight:true,
+				autowidth:true,
+
+				data: [
+					{ id:1, title:"The Shawshank Redemption", cat_id:"1", votes:678790, rating:9.2, rank:1},
+					{ id:2, title:"The Godfather", cat_id:"2", votes:511495, rating:9.2, rank:2}
+				]
+			});
+
+
+			gridb = webix.ui({
+				container:"testD",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	editor:"text",		header:"", css:"rank",  		width:50},
+					{ id:"title",	editor:"text",		header:"Film title",width:200},
+					{ id:"cat_id",  editor:"richselect",	collection:"data/options.json",	header:"Category" , width:110},
+					{ id:"votes",	editor:"text",		header:"Votes", 	width:100}
+				],
+				
+				editable:true,
+				autoheight:true,
+				autowidth:true,
+
+				data: [
+					{ id:1, title:"The Shawshank Redemption", cat_id:"2", votes:678790, rating:9.2, rank:1},
+					{ id:2, title:"The Godfather", cat_id:"2", votes:511495, rating:9.2, rank:2}
+				]
+			});	
+
+
+			
+		});	
+
+		</script>
+	</body>
+</html>

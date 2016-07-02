@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Custom Target Drag Marker</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/treedata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<style type="text/css">
+		#testA, #testB, #testC{
+			width:300px; height:300px;
+			margin:50px; float:left;
+		}
+	</style>
+	<style type="text/css">
+		/*custom style for treeA*/
+		.my_line_mark{
+			border-top:1px dashed orange;
+			width:100%; height:1px;
+			position:absolute;
+			left:0px;
+			display:none;
+		}
+		
+		/*custom style for treeB*/
+		.my_custom_mark:before{
+			content:" << drop item here >> ";
+			display:block;
+			position:relative; top:-1px;
+			height:20px; width:100%;
+			background: orange;
+		}
+
+		/*custom style for treeC*/
+		.webix_drag_over{
+			border-top:1px dashed orange;
+			position:relative;
+			top:-1px; height:19px;
+		}
+	</style>
+	<body class='webix_full_screen'>
+		<div class='header_comment'>Custom target drag marker</div>
+		<div class='sample_comment'>Drag items from the 1st to 2nd tree.</div>
+		
+		<div id="testA"></div>
+		
+		<div id="testB"></div>
+
+		<div id="testC"></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			treea = webix.ui({
+				container:"testA",
+				view:"tree",
+
+				select:true,
+				drag:true,
+
+				data: bigtreedata
+			});
+
+			var marker = webix.html.create("div", {
+				"class":"my_line_mark"
+			},"&nbsp");
+			document.body.appendChild(marker);
+			webix.extend(treea, {
+				$dragMark:function(context, ev){
+					marker.style.display = 'none';
+
+					if (context.target){
+						var pos = webix.html.offset(ev.target);
+						var box = webix.html.offset(this.$view);
+
+						marker.style.display = 'block';
+						marker.style.top = pos.y+"px";
+						marker.style.left = box.x+"px";
+						marker.style.width = this.$view.offsetWidth+"px";
+					}	
+				}
+			}, true);	
+
+
+
+
+
+			treeb = webix.ui({
+				container:"testB",
+				view:"tree",
+
+				select:true,
+				drag:true,
+
+				data: webix.copy(smalltreedata)
+			});	
+			webix.extend(treeb, {
+				$dragMark:function(context, ev){
+					if (this.my_marked && this.my_marked != context.target){
+						this.removeCss(this.my_marked, "my_custom_mark");
+						this.my_marked = null;
+					}
+					if (context.target){
+						this.my_marked = context.target;
+						this.addCss(context.target, "my_custom_mark");
+					}	
+				}
+			}, true);
+
+		});	
+	
+
+		webix.ready(function(){
+			treea = webix.ui({
+				container:"testC",
+				view:"tree",
+
+				select:true,
+				drag:true,
+
+				data: webix.copy(smalltreedata)
+			});
+		});
+
+		</script>
+	</body>
+</html>

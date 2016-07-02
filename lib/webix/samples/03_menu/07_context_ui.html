@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA{
+				margin: 50px;
+				background-color:#ffffbb;
+				width:500px; height:300px;
+                border:1px #ededed solid;
+                padding:5px;
+			}
+		</style>
+		<title>Context Menu: UI Components Inside</title>
+	</head>
+	<body>
+
+		<div id="areaA">
+			Right click here
+		</div>
+
+		
+	<script type="text/javascript" charset="utf-8">
+			var menu = webix.ui({
+				view:"context",
+				body:
+					{view: "toolbar", cols:[
+					{view:"button", value:"Button1", width: 100},
+					{view:"button", value:"Button2", width: 100}
+					]
+					}, 
+				width: 300, 
+				master:"areaA"
+			});
+
+		</script>
+	</body>
+</html>

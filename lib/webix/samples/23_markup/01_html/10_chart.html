@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8" />
+	<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	<title>HTML initialization</title>
+	<script type="text/javascript">
+		webix.ready(function(){ webix.markup.init(); });
+	</script>
+</head>
+<body>
+	<div data-view="chart" data-type="stackedArea" data-alpha="0.7" data-eventRadius="5" data-url="data/chart.json">
+		<config name="xAxis" template="#year#"></config>
+		<config name="yAxis"></config>
+		<config stack='series'>
+			<config  value="#sales#" color="#58dccd">
+				<config name="tooltip" template="#bottom#"></config>
+			</config>
+			<config  value="#sales2#" color="#dc58cd">
+				<config name="tooltip" template="#bottom#"></config>
+			</config>
+			<config  value="#sales3#" color="#dccd58">
+				<config name="tooltip" template="#bottom#"></config>
+			</config>
+		</config>
+	</div>
+</body>
+</html>

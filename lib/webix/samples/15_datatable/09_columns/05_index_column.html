@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Index column</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Static index column</div>
+		<div class='sample_comment'>Try to sort columns or drag rows</div>
+		<div id="testA"></div>
+		<hr>
+		<div class='header_comment'>Dynamic index column</div>
+		<div class='sample_comment'>Try to sort columns or drag rows</div>
+		<div id="testB"></div>
+		<hr>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"index", header:"", sort:"int", width:50},
+					{ id:"title",	header:"Film title", sort:"string"},
+					{ id:"year",	header:"Year", sort:"int"},
+					{ id:"votes",	header:"Votes", sort:"int"}
+				],
+				scheme:{
+					$init:function(obj){ obj.index = this.count(); }
+				},
+				autoheight:true,
+				autowidth:true,
+				drag:true,
+
+				data:webix.copy(small_film_set)
+			});	
+
+			grid = webix.ui({
+				container:"testB",
+				view:"datatable",
+				columns:[
+					{ id:"index", header:"", width:50 },
+					{ id:"title",	header:"Film title", sort:"string"},
+					{ id:"year",	header:"Year", sort:"int"},
+					{ id:"votes",	header:"Votes", sort:"int"}
+				],
+				on:{
+					"data->onStoreUpdated":function(){
+						this.data.each(function(obj, i){
+							obj.index = i+1;
+						})
+					}
+				},
+				autoheight:true,
+				autowidth:true,
+				drag:true,
+
+				data:webix.copy(small_film_set)
+			});	
+		});
+		</script>
+	</body>
+</html>

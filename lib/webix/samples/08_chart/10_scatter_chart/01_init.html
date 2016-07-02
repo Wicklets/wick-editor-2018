@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+	<title>Scatter Chart: Basic Initialization</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+	<script src="../../common/chartdata.js"></script>
+<body>
+    <div id="chartDiv" style="width:600px;height:250px;margin:20px"></div>
+	<script>
+        webix.ui({
+            container:"chartDiv",
+            view:"chart",
+            type:"scatter",
+			value:"#b#",
+			xValue: "#a#",
+            yAxis:{
+                title:"Value B"
+            },
+            xAxis:{
+                title:"Value A"
+            },
+            item:{
+                radius:5,
+                borderColor:"#f38f00",
+                borderWidth:1,
+                color:"#ff9600",
+                type:"d",
+                shadow:true
+            },
+            data:scatter_dataset
+        });
+	</script>
+</body>
+</html>

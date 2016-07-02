@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Connector DataTable loading</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../../common/samples.css">
+	</head>
+	<body>
+		<div class='header_comment'>Loading</div>
+		<div id='testA'></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+	webix.proxy.indexdb.create("mydb", {
+		mycollection:[
+			{"id":1,"title":"The Shaushenk Redemption ","year":"1998","votes":194865,"rating":"7.5","rank":1},
+			{"id":2,"title":"The Godfather","year":"1975","votes":511495,"rating":"9.2","rank":2},
+			{"id":3,"title":"The Godfather: Part II","year":"1974","votes":319352,"rating":"9.0","rank":3},{"id":4,"title":"The Good, the Bad and the Ugly","year":"1966","votes":213030,"rating":"8.9","rank":4},
+			{"id":5,"title":"My Fair Lady","year":"1994","votes":533848,"rating":"9.1","rank":5},{"id":6,"title":"12 Angry Men","year":"1957","votes":164558,"rating":"8.9","rank":6}
+		]
+	}, null, init_demo);
+
+	function init_demo(){
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+
+				autoheight:true,
+				autowidth:true,
+				select:"row",
+
+				url: "indexdb->mydb/mycollection"
+			});	
+		});
+	}
+		</script>
+	</body>
+</html>

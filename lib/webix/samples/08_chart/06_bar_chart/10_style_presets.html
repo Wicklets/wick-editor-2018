@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+	<title>Bar Chart: Style Presets</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+	<script src="../../common/chartdata.js"></script>
+<body>
+    <div id="charts" style="width:600px;height:700px;margin:20px"></div>
+	<script>
+	    var baseConfig =  {
+            view:"chart",
+            type:"bar",
+            value:"#sales#",
+            yAxis:{
+                start:0,
+                step:10,
+                end:100,
+                template:function(value){
+                    return (value%20?"":value);
+                }
+            },
+            xAxis:{
+                template: "#year#"
+            }
+        };
+        
+        var chart1 = {
+            preset: "column",
+            data: dataset
+        };
+        webix.extend(chart1,baseConfig);
+
+        var chart2 = {
+            preset: "stick",
+            data: dataset
+        };
+        webix.extend(chart2,baseConfig);
+
+        var chart3 = {
+            preset: "alpha",
+            data: small_dataset
+        };
+        webix.extend(chart3,baseConfig);
+
+        webix.ui({
+            container:"charts",
+            rows:[
+                {
+                    template:"<div style='font-weight:bold;padding-left:10px'>Column</div>",
+                    height:40
+                },
+                chart1,
+                {
+                    template:"<div style='font-weight:bold;padding-left:10px'>Stick</div>",
+                    height:40
+                },
+                chart2,
+                {
+                    template:"<div style='font-weight:bold;padding-left:10px'>Alpha</div>",
+                    height:40
+                },
+                chart3
+            ]
+        });
+	</script>
+</body>
+</html>

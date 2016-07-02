@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../common/treedata.js" type="text/javascript" charset="utf-8"></script>
+		<title>Simple App</title>
+		<style>
+			#app_here{
+				width:1000px;
+				height:400px;
+				margin:20px;
+			}
+		</style>
+	</head>
+<body>
+<div id="app_here"></div>
+<script type="text/javascript" charset="utf-8">
+	webix.ready(function(){
+		webix.ui({
+		  container:"app_here",
+		  rows:[
+		    { type:"header", template:"My App!" },
+		    { cols:[
+		      { view:"tree", id:"mytree",  gravity:0.3, select:true, data:tree_data, datatype:"json" },
+		      { view:"resizer" },
+		      { view:"datatable", id:"mydatatable", autoConfig:true, data:small_film_set, datatype:"json"}
+		    ]}
+		  ]
+		});
+
+		$$("mytree").open(1);
+		$$("mytree").open(2);
+
+		$$("mydatatable").select(1);
+	});
+</script>
+
+</body>
+</html>

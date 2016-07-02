@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<title>Creating Basic App. Step 3</title>
+	</head>
+<body>
+
+<script type="text/javascript" charset="utf-8">
+webix.ui({
+	width:520, 
+    rows: [
+   		{ view:"toolbar", id:"mybar", elements:[
+            { view:"button", value:"Add", width:70, click:"add_row"},
+            { view:"button", value:"Update", width:70, click:"$$('myform').save()"},
+            { view:"button", value:"Delete", width:70, click:"delete_row"},
+            { view:"button", value:"Clear Form", width:100, click:"$$('myform').clear()"}
+        ]},
+    	{ cols:[
+        	{ view:"form", id:"myform", width: 200, elements:[
+                { view:"text", name:"title", placeholder:"Title"},
+                { view:"text", name:"year", placeholder:"Year"}
+            ]},
+			{ view:"list", id:"mylist",
+                template:"#title# - #year#",
+                select:true, //enable selection of list items
+                height:400,
+                url: "./data/connector.php",
+                datatype:"xml"
+        	}
+        ]}
+    ]
+});
+
+$$("myform").bind($$("mylist"));
+
+var dp = new webix.DataProcessor({
+    master: $$('mylist'),
+    url: "./data/connector.php"
+});
+
+function add_row() {
+    $$("mylist").add({
+        title: $$("title").getValue(),
+        year: $$("year").getValue()
+    });
+}
+		
+function delete_row() {
+var id = $$("mylist").getSelectedId();
+	webix.confirm({
+		title: "Delete",// the text of the box header
+		text: "Are you sure you want to delete the selected item?",// the text of the body
+		callback: function(result) { //callback function that will be called on the button click. The result is true or false subject to the clicked button.
+			if (result) {
+				$$("mylist").remove(id);
+            }
+        }
+    });
+}
+
+</script>
+</body>
+</html>

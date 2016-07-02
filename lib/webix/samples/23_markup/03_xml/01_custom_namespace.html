@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:wx>
+<head>
+	<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8" />
+	<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	<title>XML init : custom namespace</title>
+</head>
+<body>
+
+<div style='width:600px; height:250px;'>
+<wx:ui>
+	<wx:form id="log_form" width="300">
+		<wx:text label="Email"></wx:text>
+		<wx:text label="Password"></wx:text>
+		<wx:cols margin="5">
+			<wx:button value="Login" type="form"></wx:button>
+			<wx:button value="Cancel"></wx:button>
+		</wx:cols>
+	</wx:form>
+</wx:ui>
+</div>
+
+
+<script type="text/javascript">
+	webix.markup.namespace = "wx";
+	webix.markup.init();
+</script>
+</body>
+</html>

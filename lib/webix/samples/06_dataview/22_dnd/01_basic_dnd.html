@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Enabling Drag-and-drop in Dataview</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../../common/samples.css">
+		<script src="../../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Basic drag-and-drop</div>
+		<div class='sample_comment'>Drag-and-drop data items between views.</div>
+		<br>
+		
+		<div id="testA"></div>
+		<hr>
+		<div id="testB"></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"dataview",
+				template:"#rank#. #title#",
+				xCount:3, yCount:3,
+				select:"multiselect",
+				drag:true,
+
+				data: webix.copy(big_film_set)
+			});	
+
+			gridb = webix.ui({
+				container:"testB",
+				view:"dataview",
+				template:"#rank#. #title#",
+				xCount:3, yCount:3,
+				select:"multiselect",
+				drag:true,
+
+				data: webix.copy(small_film_set)
+			});		
+		});		
+		</script>
+	</body>
+</html>

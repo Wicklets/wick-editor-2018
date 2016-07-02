@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Custom Clipboard Operations</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+	</head>
+	<body>
+		<div class='header_comment'>Custom clipboard</div>
+		<div class='sample_comment'>The sample shows behavior of the 'custom' clipboard  which allow users to specify a custom logic for the insert operation. The mode can be characterized as follows:</div>
+		<div class='sample_comment'> 1) When you use ctrl+c , data is copied to the clipboard.</div>
+		<div class='sample_comment'> 2) When you use ctrl+v, DataTree invokes the onPaste event. You can handle this event to set a custom logic.</div>
+		<div class='sample_comment'> By default, the handler doesn't do anything</div>
+		<br>
+ 		<div class='sample_comment'> Press CTRL+C to copy an item from the textarea. Then, select some node in DataTree and press Ctrl+V (note, in the current sample the onPaste handler just alerts messages and doesn't change DataTree items). </div>
+
+		<div id="testA" style='width:250px; height:250px; float:left'></div>
+		<textarea onblur="this.value=''" style="margin: 10px; width: 200px; height: 120px;">New tree item</textarea>
+			
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+
+			tree1 = webix.ui({
+				container:"testA",
+				view:"tree",
+				select: true,
+				clipboard: "custom",
+
+				data: [
+					{ id:"1", open:true, value:"The Shawshank Redemption", data:[
+						{ id:"1.1", value:"Part 1" },
+						{ id:"1.2", value:"Part 2" },
+						{ id:"1.3", value:"Part 3" }
+					]},
+					{ id:"2", value:"The Godfather", data:[
+						{ id:"2.1", value:"Part 1" },
+						{ id:"2.2", value:"Part 2" }
+					]}
+				]
+			});	
+			tree1.attachEvent("onPaste", function(text) {
+				webix.message("Node is pasted: " + text);
+			});
+		});
+		</script>
+	</body>
+</html>

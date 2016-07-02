@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA, #areaB{
+				margin: 50px;
+				width:700px; height:100px;
+			}
+			html, body { height: 100%;}
+		</style>
+		<title>HTML Elements as Menu Items</title>
+	</head>
+	<body>
+
+		<div id="areaA">
+			
+		</div>
+		
+		<div id="html1">
+			Power of HTML4 <hr>
+			<img src='./images/html4.png'>
+		</div>
+
+		<div id="html2">
+			Power of HTML5 <hr>
+			<img src='./images/html5.png'>
+		</div>
+
+
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				id:"details1",
+				view:"context",		width:300, height:200,
+				body:{ content:"html1" }
+			});
+			webix.ui({
+				id:"details2",
+				view:"context",		width:300, height:200,
+				body:{ content:"html2" }
+			});
+
+			webix.ui({
+				container:"areaA",
+				view:"menu",
+				data:[
+					{ value:"HTML 4", submenu:"details1" },
+					{ value:"HTML 5", submenu:"details2" }
+				],
+				on:{
+					onItemClick:function(id){
+						var menu = this.getMenu(id);
+						webix.message("Click: "+menu.getItem(id).value);
+					}
+				}
+			});	
+		</script>
+	</body>
+</html>

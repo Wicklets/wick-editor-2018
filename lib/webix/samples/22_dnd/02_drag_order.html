@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script type="text/javascript" src="../common/testdata.js"></script>
+		<title>DnD with List Items</title>
+	</head>
+	<style type="text/css">
+		#listA, #listB, #listC{
+			float:left; margin:20px;
+		}
+		.mark{
+			width:100px;
+			text-align: center;
+			font-weight:bold;
+			float:right;
+			background-color:#444;
+			color:white;
+			border-radius:3px;
+		}
+	</style>
+	<body>
+		<div id="listA"></div>
+		<div id="listB"></div>
+
+
+
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				container:"listA",
+				view:"list", 
+				width:320,
+				height:600,
+
+				template:"<div class='mark'>#votes# </div> #rank#. #title#",
+				type:{
+					height:50, width:320
+				},
+				select:true, drag:true,
+
+				data:webix.copy(big_film_set)
+			});	
+
+			webix.ui({
+				container:"listB",
+				view:"list", 
+				width:320,
+				height:600,
+
+				template:"<div class='mark'>#votes# </div> #rank#. #title#",
+				type:{
+					height:50, width:320
+				},
+				select:true, drag:"order",
+
+				data:webix.copy(big_film_set)
+			});	
+			
+		</script>
+	</body>
+</html>

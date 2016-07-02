@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA{
+				margin: 30px;
+			}
+			html, body{ height:100%; }
+		</style>
+		<title>Colorpicker in Form</title>
+	</head>
+	<body>
+
+		<div id="areaA"></div>
+	
+
+		<script type="text/javascript" charset="utf-8">
+		webix.ui({ 
+			container:"areaA", 
+			view:"form", scroll:false, autowidth:true, elements:[
+				{ view:"text", label:"Front label", name:"label", value:"Some text", width:250},
+
+				{ view:"colorpicker", label:"Color", name:"color", value:"#ffaadd" },
+				{ view:"button", type:"form", value:"Submit data", click:function(){
+					webix.message(JSON.stringify( this.getParentView().getValues()));
+				}}
+			]
+		});
+
+		</script>
+	</body>
+</html>

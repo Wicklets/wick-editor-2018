@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Limiting the draggable area for items (dragging columns)</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Limiting the draggable area for items (dragging columns)</div>
+		<div class='sample_comment'>Use the icon in the header to drag a column</div>
+		
+		<div id="testA"></div>
+		<hr>
+		<div id="testB"></div>
+
+		<style type="text/css">
+			.webix_drag_handle{
+				background-image:url(./handle.png);
+				background-repeat: no-repeat;
+				background-position: -2px 3px;
+				width:20px;
+				height:20px;
+				cursor:e-resize;
+				float:right;
+			}
+		</style>		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			var handle = "<div class='webix_drag_handle'></div>";
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"votes",	header:handle+"Votes", 			width:120},
+					{ id:"year",	header:handle+"Released",		width:120},
+					{ id:"title",	header:handle+"Film title",		width:200}
+				],
+				height:300, minHeight:100,
+				autowidth:true,
+				select:"multiselect",
+				dragColumn:true,
+
+				on:{
+					onBeforeColumnDrag:function(data, e){
+						return (e.target||e.srcElement).className == "webix_drag_handle";
+					}
+				},
+
+				data: webix.copy(big_film_set)
+			});	
+		});		
+		</script>
+	</body>
+</html>

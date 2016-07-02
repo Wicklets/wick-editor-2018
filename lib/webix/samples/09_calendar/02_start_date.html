@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script type="text/javascript" src="../common/testdata.js"></script>
+		<title>Calendar: Start on Monday</title>
+	</head>
+	<style type="text/css">
+		#listA, #listB, #listC, #listD{
+			float:left; margin:20px;
+		}
+	</style>
+	<body>
+		<div id="listA"></div>
+		<div id="listB"></div>
+		<div id="listC"></div>
+		<div id="listD"></div>
+
+		<script type="text/javascript" charset="utf-8">
+			webix.Date.startOnMonday = true;
+
+			webix.ui({
+				container:"listA",
+				weekHeader:true,
+				date:new Date(2012,3,16),
+				view:"calendar",
+				events:webix.Date.isHoliday,
+				width:320,
+				height:250
+			});
+
+			webix.ui({
+				container:"listB",
+				weekHeader:true, 
+				weekNumber:true,
+				date:new Date(2012,3,16),
+				view:"calendar",
+				events:webix.Date.isHoliday,
+				width:320,
+				height:250
+			});
+
+		
+		</script>
+	</body>
+</html>

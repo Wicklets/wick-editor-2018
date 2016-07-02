@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<title>Required inputs in a form</title>
+		<style>
+			html, body{height:100%}
+		</style>
+	</head>
+<body>
+	<div id="data_container" style="width:200px;height:200px;margin:20px"></div>
+<script>
+
+	webix.ui({
+		container:"data_container",
+		view:"form", scroll:false,
+		
+		rows:[
+			{ view:"text", labelAlign:"right", 
+				name:"country", label:"Country", required:true, value:"Belarus" },
+			{ view:"text", labelPosition:"top", 
+				name:"city", label:"City", required:true, value:"" },
+			{ view:"button", type:"form", value:"Validate", click:function(){
+				webix.message( this.getFormView().validate() );
+			}}
+		]
+	});
+		
+</script>
+</body>
+</html>

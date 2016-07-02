@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+	<title>Export to Excel</title>
+    <link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+    <script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+    <link rel="stylesheet" type="text/css" href="../common/samples.css">
+	<script type="text/javascript" src="../common/testdata.js"></script>
+    <style type="text/css">
+	    html,body{ height:100%;margin:0}
+        .webix_view.toolbar{
+	        background: #fafafa;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="dataDiv"></div>
+
+	<script>
+
+		webix.ui({
+			container:"dataDiv",
+
+			padding: 20,
+			rows: [
+
+				{
+					view:"list",
+					id: "mylist",
+					width:450,
+					height:400,
+					template:"#rank#. #title#",
+					select:"multiselect",
+					data:big_film_set
+				},
+				{
+					view: "form",
+					css: "toolbar",
+					paddingY: 5,
+					paddingX: 10,
+					cols:[
+						{
+							view: "label", label: "Export Data", width: 100
+						},
+						{
+							view: "button", label: "All Fields", click:function(){
+								webix.toExcel($$("mylist"));
+							}
+						},
+						{
+							view: "button", label: "'Rank' and 'Title'", click:function(){
+								webix.toExcel($$("mylist"), {
+									filename: "films",
+									name: "Ranks",
+									columns:{
+										"rank":{header: "Rank", width: 50},
+										"title":{header: "Title", width: 200}
+									}
+								});
+							}
+						}
+					]
+
+				}
+			]
+		});
+	</script>
+</body>
+</html>

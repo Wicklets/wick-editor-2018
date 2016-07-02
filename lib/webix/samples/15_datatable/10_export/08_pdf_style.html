@@ -1,0 +1,73 @@
+<!doctype html>
+<head>
+	<meta charset="utf-8">
+	<title>DataTable Export to PDF: extended configuration</title>
+
+	<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+	<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+
+	<link rel="stylesheet" type="text/css" href="../common/samples.css">
+	<script type="text/javascript" src="../../common/testdata.js"></script>
+
+
+</head>
+<body>
+	<div id="testA"></div>
+	<script type="text/javascript" charset="utf-8">
+
+		function exportToPdf(){
+			webix.toPDF($$("$datatable1"), {
+				docHeader:{
+					text: "Datatable with custom styling",
+					textAlign:"center",
+					color:0x663399
+				},
+				header:{
+					textAlign:"center",
+					fontSize:13,
+					backgroundColor:0x3498DB,
+					color:0xFFFFFF
+				},
+				table:{
+					textAlign:"center",
+				},
+				footer:{
+					fontSize:9,
+					height:20,
+					textAlign:"right"
+				}
+			});
+		}
+
+		grid = webix.ui({
+			container:"testA",
+			margin:5, 
+			rows:[
+				{
+					view:"datatable",
+					columns:[
+						{ id:"rank",	header:"", css:"rank",  		width:50,	sort:"int",
+							footer:{text:"Total:", colspan:3}
+						},
+						{ id:"title",	header:webix.i18n.controls.select, width:200 },
+						{ id:"year",	header:"Released" , width:80,	sort:"int"},
+						{ id:"votes",	header:"Votes", 	width:100,	sort:"int",
+							footer:{ content:"summColumn" }
+						}
+					],
+					autoheight:true,
+					autowidth:true,
+					data:small_film_set,
+					footer:true
+				},
+				{ view:"button", value:"Export with custom styles", inputWidth:200, click:exportToPdf}
+			]
+			
+		});		
+
+
+		</script>
+
+</body>
+</html>

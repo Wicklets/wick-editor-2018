@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+            body{
+                background: #faf6ed;
+            }
+			#areaA, #areaB{
+				margin: 50px;
+				width:700px; height:110px;
+			}
+		</style>
+		<title>Configuring Submenus</title>
+	</head>
+	<body>
+
+		<div id="areaA">
+			
+		</div>
+		<br><hr><br>
+		<div id="areaB">
+			
+		</div>
+
+		<script type="text/javascript" charset="utf-8">
+
+			webix.ui({
+				container:"areaA",
+				view:"menu",
+                data:[
+					{ id:"1",value:"Default...",
+						submenu:[ "Facebook", "Google+", "Twitter" ]},
+					{ id:"2",value:"Own custom config...",
+						config:{
+							width:500,
+							on: { onItemClick:function(id){
+								webix.message("Submenu click: "+id);
+							}}
+						},
+						submenu:[ "Facebook", "Google+", "Twitter" ]}
+				],
+				on:{
+					onMenuItemClick:function(id){
+						webix.message("Global click: "+this.getMenuItem(id).value);
+					}
+				},
+                type:{
+                    subsign:true
+                }
+			});
+
+            webix.ui({
+                container:"areaB",
+                view:"menu",
+                submenuConfig:{
+                  width:400
+                },
+                data:[
+                    { id:"1",value:"Submenu custom config...",
+                        submenu:[ "Facebook", "Google+", "Twitter" ]},
+                    { id:"2",value:"Own custom config..", config:{  width:500  },
+                        submenu:[ "Facebook", "Google+", "Twitter" ]
+                    }
+                ],
+                type:{
+                    subsign:true
+                }
+            });
+
+
+        </script>
+	</body>
+</html>

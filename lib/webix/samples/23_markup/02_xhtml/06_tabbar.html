@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:x>
+<head>
+	<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8" />
+	<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	<title>XML initialization : Tabbar</title>
+</head>
+<body>
+
+<div style='width:300px; height:500px;'>
+	<x:ui>
+	<x:tabview>
+		<x:body header="List 1">
+			<x:list url="data/data.json"> #id#: #Package# </x:list>
+		</x:body>
+		<x:body header="Text 2">
+			<x:template>Just some text here</x:template>
+		</x:body>
+		<x:body header="List 3">
+			<x:list url="data/data.json"> #Package# : #id# </x:list>
+		</x:body>
+	</x:tabview>
+	</x:ui>
+</div>
+
+
+<script type="text/javascript">
+	webix.markup.init();
+</script>
+</body>
+</html>

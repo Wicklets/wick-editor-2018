@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA{
+				margin: 30px;
+			}
+		</style>
+		<title>Auxiliary Controls </title>
+	</head>
+	<body>
+
+		<div id="areaA"></div>
+	
+
+		<script type="text/javascript" charset="utf-8">
+		
+
+		webix.ui({
+			container:"areaA",
+			view:"form", height:210, scroll:false,
+			type:"space",
+			elements:[
+				{ },
+				{ margin:30, cols:[
+					{ view:"counter", label:"Count", width:200 },
+					{ view:"text", label:"Name" },
+					{ view:"button", value:"Save", width:200}
+				] },
+				{ },
+				{ margin:30, height:60, cols:[
+					{ view:"counter", width:100,  label:"Count", labelPosition:"top" },
+					{ view:"text", label:"Name", labelPosition:"top" },
+					{ view:"button", value:"Save", width:200 }
+				] },
+				{ }
+			]
+		});
+		</script>
+	</body>
+</html>

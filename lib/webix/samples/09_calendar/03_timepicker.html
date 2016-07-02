@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<title>Timepicker in Calendar</title>
+	</head>
+	<style type="text/css">
+		#listA, #listB, #listC{
+			float:left; margin:20px;
+		}
+		body{
+			background: #faf6ed;
+		}
+		.webix_view{
+			border-radius:3px;
+		}
+	</style>
+	<body>
+		<div id="listA"></div>
+		<div id="listB"></div>
+		<div id="listC"></div>
+		<div id="listD"></div>
+
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				container:"listA",
+				date:new Date(2012,1,16),
+				view:"calendar",
+				events:webix.Date.isHoliday,
+				timepicker:true
+			});
+
+			webix.ui({
+				container:"listB",
+				date:new Date(2012,3,16, 8, 10),
+				view:"calendar",
+				events:webix.Date.isHoliday,
+				minuteStep: 10,
+				timepicker:true
+			});
+
+			webix.ui({
+				container:"listC",
+				date:new Date(2012,3,16, 8, 35),
+				view:"calendar",
+				type:"time"
+			});
+
+
+
+		</script>
+	</body>
+</html>

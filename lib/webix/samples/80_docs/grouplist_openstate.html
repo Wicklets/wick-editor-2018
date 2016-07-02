@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+      <script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+      <script type="text/javascript" src="../common/testdata.js"></script>
+      <script type="text/javascript" src="../common/treedata.js"></script>
+      <title>Getting Grouplist State</title>
+   </head>
+   <body>
+   <style type="text/css">
+      #listA, #listB, #listC{
+         float:left; 
+         margin:20px;
+         width:350px;
+      }
+   </style>
+   
+     <div id="listA"></div>
+     <div id="listB"></div>
+     <div id="listC"></div>
+   
+   <script type="text/javascript" charset="utf-8">
+  
+         list1 = webix.ui({
+            container:"listA",
+            view:"grouplist", 
+            height:400,
+            templateBack:" Year #value#",
+            templateGroup:" Year #value#",
+            templateItem:"#rank#. #title#",
+            select:true,
+            scheme:{
+               $group:function(obj){
+                  return obj.year;
+               },
+               $sort:{ by:"value", dir:"desc" }
+            },
+            data:webix.copy(big_film_set)
+         });
+
+         list2 = webix.ui({
+            container:"listB",
+            view:"grouplist", 
+            height:400,
+            data:smalltreedata
+         });
+
+   template = webix.ui({
+      container:"listC",
+      rows:[
+         {view:"toolbar", elements:
+            [
+            {view:"select", id:"select1", label:"Grouplist", options:[
+               {id:1, value:'1'}, {id:2, value:'2'}
+               ]
+            },
+            {view:"button", value:'Get Open State', click:'get_items()'}
+            ]
+         },
+         {
+          view:"textarea", id:"log", height: 358
+         }   
+      ]
+   });
+
+   function get_items(){
+      var lid = $$("select1").getValue();
+      if(lid==1)
+         {state = list1.getOpenState();}
+      else
+         {state = list2.getOpenState();}
+      
+      if(state){
+         result = JSON.stringify(state, null, 2);
+         $$('log').setValue(result);
+      }
+   };
+
+</script>
+</body>
+</html>

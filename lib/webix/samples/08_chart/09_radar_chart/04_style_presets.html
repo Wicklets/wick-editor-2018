@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head>
+	<title>Radar Chart: Style Presets</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+	<script src="../../common/chartdata.js"></script>
+<body>
+    <div id="charts" style="width:800px;height:250px;margin:20px"></div>
+	<script>
+        webix.ui({
+            container:"charts",
+            cols:[
+                {
+                    rows:[
+                        {
+                            template:"<div style='font-weight:bold;padding-left:10px'>area</div>",
+                            height:40
+                        },
+                        {
+                            view:"chart",
+                            type:"radar",
+
+                            value:"#companyA#",
+                            preset:"area",
+                            xAxis:{
+                                template:"#month#",
+                                lineColor:"#A5A5A5"
+                            },
+                            data:companies
+                        }
+                    ]
+                },
+                {
+                    rows:[
+                        {
+                            template:"<div style='font-weight:bold;padding-left:10px'>line</div>",
+                            height:40
+                        },
+                        {
+                            view:"chart",
+                            type:"radar",
+                            value:"#companyA#",
+                            preset:"line",
+                            xAxis:{
+                                template:"#month#",
+                                lineColor:"#A5A5A5"
+                            },
+                            data:companies
+                        }
+
+                    ]
+                },
+                {
+                    rows:[
+                        {
+                            template:"<div style='font-weight:bold;padding-left:10px'>point</div>",
+                            height:40
+                        },
+                        {
+                            view:"chart",
+                            type:"radar",
+                            value:"#companyA#",
+                            preset:"point",
+                            xAxis:{
+                                template:"#month#",
+                                lineColor:"#A5A5A5"
+                            },
+                            yAxis:{
+                                lineShape:"arc"
+                            },
+
+                            data:companies
+                        }
+                    ]
+                }
+            ]
+        });
+	</script>
+</body>
+</html>
+

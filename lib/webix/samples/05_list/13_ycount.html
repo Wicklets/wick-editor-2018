@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script type="text/javascript" src="../common/testdata.js"></script>
+		<title>List: Controlling a Number of Displayed Items</title>
+	</head>
+	<style type="text/css">
+		#listA, #listB, #listC, #listD, #listE{
+			float:left; margin:20px;
+		}
+	</style>
+	<body>
+		<div id="listA"></div>
+		<div id="listB"></div>
+		<div id="listC"></div>
+		<hr style='clear:both'>
+		<div id="listD"></div>
+		<div id="listE"></div>
+
+
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				container:"listA",
+				view:"list", 
+				width:320,
+				height:300,
+
+				template:"#rank#. #title#", select:true,
+
+				data:small_film_set
+			});
+
+			webix.ui({
+				container:"listB",
+				view:"list", 
+				width:320,
+				
+				template:"#rank#. #title#", select:true,
+				yCount:4,
+
+				data:small_film_set
+			});
+
+			webix.ui({
+				container:"listC",
+				view:"list", 
+				width:320,
+				
+				template:"#rank#. #title#", select:true,
+				autoheight:true,
+
+				data:small_film_set
+			});
+
+			webix.ui({
+				container:"listD",
+				view:"list", 
+				width:320,
+				
+				template:"#rank#. #title#", select:true,
+				autoheight:true, yCount:10,
+
+				data:small_film_set
+			});
+
+			webix.ui({
+				container:"listE",
+				view:"list", 
+				width:320,
+				
+				template:"#rank#. #title#", select:true,
+				autoheight:true, yCount:10,
+
+				data:big_film_set
+			});
+
+		</script>
+	</body>
+</html>

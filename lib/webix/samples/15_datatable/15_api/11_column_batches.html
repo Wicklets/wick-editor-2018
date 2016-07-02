@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Column Batches</title>
+    <link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+    <script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+    <link rel="stylesheet" type="text/css" href="../common/samples.css">
+    <script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+    <style>
+        #testA, #testB{
+            margin:20px;
+            float:left;
+        }
+        li{
+            list-style-type: none;
+            margin-left:-40px;
+        }
+    </style>
+</head>
+<body>
+<div class='header_comment'>Managing Visibility of Groups of Columns</div>
+<div class='sample_comment'>The sample shows how you can hide and show columns in groups.</div>
+<div id="testA"></div>
+<div id="testB">
+    Show Batch
+    <select onChange='showBatch(this)'>
+        <option value='1' selected>1</option>
+        <option value='2'>2</option>
+        <option value='3'>3</option>
+    </select>
+    <ul>
+        <li>1 - Released, Category</li>
+        <li>2 - Id, Rank</li>
+        <li>3 - Votes, Rating</li>
+        <li><b>Title</b> column is always visible (batch not defined)</li>
+    </ul>
+</div>
+<script type="text/javascript">
+    webix.ready(function(){
+        webix.ui({
+            id:"grid",
+            container:"testA",
+            view:"datatable",
+            visibleBatch:1,
+            columns:[
+                { id:"id",	header:"#", css:"rank",  batch:2,	width:50},
+                { id:"title", header:"Film title", fillspace:true },
+                { id:"year",  batch:1,	header:"Released" , width:80},
+                { id:"category", header:"Category", batch:1},
+                { id:"votes", batch:3, header:"Votes", 	width:100},
+                { id:"rating", batch:3, header:"Rating", width:100},
+                { id:"rank", header:"Rank", css:"rank",  batch:2,width:50}
+            ],
+
+            width:500,
+            scroll:false,
+            autoheight:true,
+            data:small_film_set
+        });
+    });
+
+    function showBatch(input){
+        $$("grid").showColumnBatch(input.value);
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA{
+				margin: 30px;
+			}
+		</style>
+		<title>Hidden Inputs</title>
+	</head>
+	<body>
+
+		<form>
+			<div id="areaA"></div>
+		</form>
+	
+
+		<script type="text/javascript" charset="utf-8">
+		
+	
+
+	webix.ui({container:"areaA", 
+		rows:[
+			{
+			id:"my_form",
+			view:"form", scroll:false, width:300, 
+			elements: [
+				{ view:"text", label:'Login', name:"field_a", width:150, labelAlign:"right" },
+				{ view:"text", label:'Email', name:"field_b", width:200, labelAlign:"right" },
+				{ view:"text", label:'Phone', name:"field_c", width:200, labelAlign:"right"},
+				{ view:"button", value: "Submit", width:100, align:"center", click:function(){
+					values = JSON.stringify($$('my_form').getValues(), null, 2);
+					$$('log').setValue(values);}
+				}
+					]
+			},
+			{
+			view:"textarea", id:"log", height: 100
+			}
+		]
+		});	
+		
+		$$('my_form').setValues(
+			{ field_d:"Hidden Info"}
+		); 
+		</script>
+	</body>
+</html>

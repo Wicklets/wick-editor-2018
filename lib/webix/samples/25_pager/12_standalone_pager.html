@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Standalone pager</title>
+    <link rel="stylesheet" href="../../codebase/webix.css" type="text/css" charset="utf-8">
+    <script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../common/samples.css">
+</head>
+<body>
+<div class='header_comment'>Standalone pager</div>
+<div class='sample_comment'>Pager can be initialized without a master component.</div>
+</br>
+<div id="testA" style='margin:10px;'></div>
+
+<script type="text/javascript" charset="utf-8">
+
+    webix.ui({
+        container:"testA",
+        rows:[
+            { view: 'pager', master:false, size: 15, group: 3, count:150,
+                template: '{common.first()} {common.prev()} {common.pages()} {common.next()} {common.last()}',
+                on: {
+                    onItemClick: function(id, e, node) {
+                        $$("text").setValue("Item <b>"+id+"</b>");
+                    }
+                }
+            },
+            {view:"label", id:"text", height:50}
+        ]
+    });
+
+</script>
+</body>
+</html>

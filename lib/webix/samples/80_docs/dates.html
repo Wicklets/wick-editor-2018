@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Using date templates</title>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Using date templates</div>
+		<div id="testA"></div>
+		<div>
+			<input type='button' class='sample_button' value='Sort "Asc"' onclick='grid.sort("#start#", "asc", "date");'>
+			<input type='button' class='sample_button' value='Sort "Desc"' onclick='grid.sort("#start#", "desc", "date");'>
+		</div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ header:"Point", template:"#text#"},
+					{ header:"Raw", width:170, template:function(obj){  return obj.start.toString(); } },
+
+					{ header:"Date", sort:"date", id:"start", format:webix.i18n.dateFormatStr},
+					{ header:"LongDate", width:170, sort:"date", id:"start", format:webix.i18n.longDateFormatStr},
+
+					{ header:"Y-m-d", sort:"date", id:"start", format:webix.Date.dateToStr("%Y-%m-%d")},
+					{ header:"m/d/Y", sort:"date", id:"start", format:webix.Date.dateToStr("%m/%d/%y")},
+					{ header:"M y", sort:"date", id:"start", format:webix.Date.dateToStr("%M %y")},
+					{ header:"W day", sort:"date", id:"start", format:webix.Date.dateToStr("W:%W %D")}
+				],
+				
+				autoheight:true,
+				autowidth:true,
+				data:[
+					{ text:"Joint 2", start:new Date(2011,1,14) },
+					{ text:"Finish", start:new Date(2012,11,12) },
+					{ text:"Start", start:new Date(1988,1,29) },
+					{ text:"Joint 1", start:new Date(2010,10,30) }
+				]
+			});
+
+
+		});
+		</script>
+	</body>
+</html>

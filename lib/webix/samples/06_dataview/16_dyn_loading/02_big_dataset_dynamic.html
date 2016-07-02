@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+    <link rel="stylesheet" type="text/css" href="../../common/samples.css">
+	<title>Big Dataset. Dynamic Loading</title>
+</head>
+<body>
+	<div class="header_comment">Dynamic loading</div>
+	<div id="data_container" style="height:400px;margin:20px"></div>
+
+	<script>
+		webix.ui({
+			view:"dataview",
+			container:"data_container",
+			template:"<span class='webix_strong'>#maintainer#</span>#package# <span class='webix_light'>#version#</span>",
+			type: {
+				height: 60
+			},
+			xCount:4,
+			url:"data/data_dyn.php"
+		});
+	</script>
+</body>
+</html>
+

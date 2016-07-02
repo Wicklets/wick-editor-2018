@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" charset="utf-8">
+		<title>Preventing Cross Site Request Forgery Attacks</title>
+</head>
+	<body>
+		<div class='header_comment'>Server-side Integration</div>
+		<div class='sample_comment'>The sample shows the use of dataProcessor for 'communication' with server-side.</div>
+		
+		<div id="mylist" style="width: 400px; height: 300px; margin:20px"></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+
+			function test(value){
+				list.getItem(1).title = value;
+				list.updateItem(1);
+			};
+
+			function check_result(){
+				webix.ajax("./data/connector.php?action=get&id=1", function(text, xml){
+					var xml = webix.DataDriver.xml;
+					var data = xml.getDetails(xml.getRecords(xml.toObject(text, xml))[0]);
+
+					webix.message("Saved as: <br/>"+data.title);
+				});
+			}
+
+			function attack(value, url){
+				var script = "./data/"+url+"?editing=true";
+				webix.ajax().post(script, {
+					ids:"1",
+					"1_id":"1",
+					"1_title":value,
+					"1_!nativeeditor_status":"update"
+				});
+				check_result();
+			}
+
+			webix.ready(function(){
+				list = webix.ui({
+					container: "mylist",
+					view:"list",
+					id:"mylist",
+					url: "./data/connector_csrf.php",
+					datatype: "xml",
+					type:{
+						width:"auto",
+						template:"#title#"
+					},
+					select:"multiselect"
+				});
+
+				dp = new webix.DataProcessor({
+					master: $$('mylist'),
+					url: "connector->./data/connector_csrf.php",
+					on:{ "onAfterSync":check_result }
+				});
+
+
+			});
+		</script>
+
+		<h3>Valid data saving</h3>
+		<input type="button" value="The Godfather1" onclick="test(this.value)"> 
+		<input type="button" value="Some value1" onclick="test(this.value)"> 
+
+		<h3>Attack on not protected script</h3>
+		<input type="button" value="The Godfather2" onclick="attack(this.value, 'connector.php')"> 
+		<input type="button" value="Some value2" onclick="attack(this.value, 'connector.php')"> 
+
+		<h3>Attack on protected script</h3>
+		<input type="button" value="The Godfather3" onclick="attack(this.value, 'connector_csrf.php')"> 
+		<input type="button" value="Some value3" onclick="attack(this.value, 'connector_csrf.php')"> 
+		
+	</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../common/testdata.js"></script>
+		<style>
+			#areaA, #areaB, .header_comment {
+				margin: 20px 10px;
+				width:320px;
+				height:400px;
+				float: left;
+			}
+            .header_comment{
+                height:20px;
+            }
+		</style>
+		<title>Multiview Tabbar with Icons</title>
+	</head>
+	<body>
+        <div class="header_comment">Bottom Tabbar and Multiview</div>
+        <div class="header_comment">Tabview</div>
+        <div style="clear:both;"></div>
+		<div id="areaA"></div>
+        <div id="areaB"></div>
+
+		<script type="text/javascript" charset="utf-8">
+
+		var tabbar = {
+		   view:"tabbar", type:"bottom", multiview:true, options: [
+				{ value: "<span class='webix_icon fa-film'></span><span style='padding-left: 4px'>List</span>", id: 'listView' },
+				{ value: "<span class='webix_icon fa-comments'></span><span style='padding-left: 4px'>Form</span>", id: 'formView' },
+				{ value: "<span class='webix_icon fa-info'></span><span style='padding-left: 1px'>About</span>", id: 'aboutView' }
+			],height:50
+		};
+		var data = {
+			cells:[
+				{
+					id:"listView",
+					view:"list",
+					template:"#rank#. #title# <div style='padding-left:18px'> Year:#year#, votes:#votes# </div>",
+					type:{
+						height:60
+					},
+					select:true,
+					data:big_film_set
+				},
+				{
+					id:"formView",
+					template:"Place for the form control"
+				},
+				{
+				 	id:"aboutView",
+					template:"About the app"
+				}
+			]
+		};
+
+		webix.ui({
+			container: "areaA",
+			rows:[
+				data,
+				tabbar
+			]
+		});
+
+        var cells = [
+            { header:"<span class='webix_icon fa-film'></span>List", body:{
+                view:"list",
+                template:"#rank#. #title# <div style='padding-left:18px'> Year:#year#, votes:#votes# </div>",
+                type:{
+                    height:60
+                },
+                select:true,
+                data:big_film_set
+            }},
+            { header:"<span class='webix_icon fa-comments'></span>Form", body:{
+                template:"Place for the form control"
+            }},
+            { header:"<span class='webix_icon fa-info'></span>About", body:{
+                template:"About the app"
+            }}
+        ];
+
+        webix.ui({
+            container:"areaB",
+            view:"tabview",
+            cells:cells
+        });
+
+		</script>
+	</body>
+</html>

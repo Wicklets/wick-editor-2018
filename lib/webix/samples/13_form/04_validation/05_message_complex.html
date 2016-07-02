@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA, #areaB{
+				margin: 30px;
+			}
+		</style>
+		<title>'onAfterValidation' Event</title>
+	</head>
+	<body>
+
+		<form>
+			<div id="areaA"></div>
+			<div id="areaB"></div>
+		</form>
+	
+
+		<script type="text/javascript" charset="utf-8">
+		var form1 = [
+			{ view:"text", label:'Login', name:"login" },
+			{ view:"text", label:'Email', name:"email" },
+			{ view:"button", value: "Submit", click:function(){
+					this.getParentView().validate(); //form.validate()
+				}
+			}
+		];
+
+
+		webix.ui({
+			container:"areaA",
+			view:"form", scroll:false, width:300, 
+
+			elements: form1,
+			rules:{
+				"email":webix.rules.isEmail,
+				"login":webix.rules.isNotEmpty
+			},
+			elementsConfig:{
+				labelPosition:"top"
+			},
+			on:{
+				onAfterValidation:function(result, value){
+					if (!result){
+						var text = [];
+						for (var key in value){
+							if (key == "login")
+								text.push("Login can't be empty");
+							if (key == "email")
+								text.push("Invalid Email");
+						}
+						webix.message({ type:"error", text:text.join("<br>") });
+					}
+				}
+			}
+		});	
+
+		</script>
+	</body>
+</html>

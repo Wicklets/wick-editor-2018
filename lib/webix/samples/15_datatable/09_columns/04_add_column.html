@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Adding/removing columns</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Adding/removing columns</div>
+		<div class='sample_comment'>Click on the buttons below to add/remove columns or fully reset the header</div>
+		<div id="testA"></div>
+		<input type='button' class="sample_button" value='add column' onclick='add_column()'>
+		<input type='button' class="sample_button" value='remove column' onclick='remove_column()'>
+		<input type='button' class="sample_button" value='reset columns' onclick="reset_columns()">
+		<script type="text/javascript" charset="utf-8">
+
+		function add_column(){
+			var columns = webix.toArray(grid.config.columns);
+			columns.insertAt({
+				id:"c"+webix.uid(),
+				header:"New column"
+			},2);
+			grid.refreshColumns();
+		}
+
+		function remove_column(){
+			var columns = webix.toArray(grid.config.columns);
+			columns.removeAt(2);
+			grid.refreshColumns();
+		}
+
+
+		function reset_columns(){
+			grid.config.columns = [
+				{ id:"rank",	header:"", css:"rank" },
+				{ id:"title",	header:"Film title" },
+				{ id:"year",	header:"Year"},
+				{ id:"votes",	header:"Votes"}
+			];
+
+			grid.refreshColumns();
+		}		
+
+
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank" },
+					{ id:"title",	header:"Film title" },
+					{ id:"year",	header:"Year"},
+					{ id:"votes",	header:"Votes"}
+				],
+
+				autowidth:true, 
+				autoheight:true, 
+
+				data:small_film_set
+			});	
+
+						
+		});
+		</script>
+	</body>
+</html>

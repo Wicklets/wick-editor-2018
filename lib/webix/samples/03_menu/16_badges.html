@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			body{
+				background: #faf6ed;
+			}
+		</style>
+		<title>Menu with Badges</title>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8">
+
+		var topmenu = {
+			view:"menu",
+			data:[
+				{ id:"1",value:"Translate...", submenu:[
+					"English", 
+					{ value:"Slavic...", submenu:[
+						"Belarusian", "Russian", "Ukrainian"
+					]},
+					"German"
+				]},
+				{ id:"2",value:"Posts", badge:12, submenu:[ 
+					{ value:"Facebook", badge:7 },
+					{ value:"Google+", badge:2 },
+					{ value:"Twitter", badge:3 }
+				]},
+				{ id:"3",value:"Info" }
+			]
+		};	
+
+
+		var menu = {
+			view:"menu", id:"m1",
+			layout:"y", width:200,
+			select:true,
+			data:[
+				{ id:"1",value:"Translations", badge:"1"},
+				{ id:"2",value:"Posts", badge:"12" },
+				{ id:"3",value:"Info", badge:"24" }
+			],
+			on:{
+				onMenuItemClick:function(id){
+					$$("t1").setHTML("Click: "+this.getMenuItem(id).value);
+				}
+			}
+		};	
+
+		webix.ui({
+			type:"space",
+			rows:[
+				topmenu,
+				{ cols:[ menu, { id:"t1", template:" " }] }
+			]
+		});
+
+		$$("m1").select(1);
+
+		</script>
+	</body>
+</html>

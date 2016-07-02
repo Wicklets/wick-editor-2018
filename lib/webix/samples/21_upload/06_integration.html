@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <title>Invisible Uploader for Datatable</title>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function() {
+
+			var photo = function(obj){
+				if (obj.photo) 
+					return "<img src='php/photos/"+obj.photo+"' style='cursor:pointer; width:80px; height:80px;'>";
+				return "";
+			};
+
+			webix.ui({
+				type:"space", rows:[{
+					template:"<p>Click on any photo to change it</p>", height:50
+				},
+				{
+					view:"datatable", id:"people",
+					columns:[
+						{ id:"photo",	header:"",  template:photo, width:100},
+						{ id:"name",	header:"Employee name",width:200},
+						{ id:"job",	header:"Job title" , width:200}
+					],
+					autoheight:true,
+					autowidth:true,
+					rowHeight:80,
+					data: [
+						{ id:1, name:"Alex Bret", job:"Manager", photo:"2.png"},
+						{ id:2, name:"Ruby Goldberg", job:"Lead developer", photo:"1.png"}
+					],
+					on:{
+						onItemClick:function(id){
+							if (id.column == "photo")
+								$$("uploadAPI").fileDialog({ rowid : id.row });
+						}
+					}
+				}]
+			});
+
+			webix.ui({
+				id:"uploadAPI",
+				view:"uploader",
+				upload:"php/photo.php",
+				on:{
+					onBeforeFileAdd:function(item){
+						var type = item.type.toLowerCase();
+						if (type != "jpg" && type != "png"){
+							webix.message("Only PNG or JPG images are supported");
+							return false;
+						}
+					},
+					onFileUpload:function(item){
+						var id = item.context.rowid;
+                        var row = $$("people").getItem(id);
+
+                        row.photo = item.sname;
+						$$("people").updateItem(id, row);
+					},
+                    onFileUploadError:function(item){
+                        webix.alert("Error during file upload");
+                    }
+				},
+				apiOnly:true
+			});
+
+		});
+		</script>
+	</body>
+</html>

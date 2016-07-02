@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Custom Text of the Dragging Items</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/treedata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body class='webix_full_screen'>
+		<div class='header_comment'>Custom text of the dragging items</div>
+		<div class='sample_comment'>Select multiple items (ctrl click) and start to drag. The tooltip will display the total number of the dragging items</div>
+
+		<div id="testA" style='width:300px; height:300px'></div>
+		<hr>
+		<div id="testB" style='width:300px; height:300px'></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			treea = webix.ui({
+				container:"testA",
+				view:"tree",
+
+				select:true,
+				multiselect:"level",
+				drag:true,
+
+				data: bigtreedata
+			});	
+
+			treeb = webix.ui({
+				container:"testB",
+				view:"tree",
+
+				select:true,
+				multiselect:"level",
+				drag:true,
+
+				data: smalltreedata
+			});	
+
+			treea.attachEvent("onBeforeDrag", function(context, ev){
+				context.html = "&nbsp;&nbsp;"+context.source.length+" item(s)";
+			});
+			treeb.attachEvent("onBeforeDrag", function(context, ev){
+				context.html = "&nbsp;&nbsp;"+context.source.length+" item(s)";
+			});
+		});	
+	
+		</script>
+	</body>
+</html>

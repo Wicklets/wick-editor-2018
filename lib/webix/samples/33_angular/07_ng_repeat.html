@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en" ng-app="webixApp">
+<head>
+  <meta charset="utf-8">
+  <title>Webix - Angular : Using ng-repeat</title>
+  <script src="js/angular.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="../../codebase/webix.css">
+  <script type="text/javascript" src="../../codebase/webix.js"></script>
+
+  <script type="text/javascript" src="js/chartApp.js"></script>
+  <style type="text/css">
+    html, body { height:100%;}
+  </style>
+</head>
+<body ng-controller="webixChartController">
+
+
+  <div webix-ui>
+    <div ng-repeat="chart in charts" view="chart" type="stackedArea"
+      alpha="0.7" eventRadius="5" webix-data="chart.data">
+      <config name="xAxis" template="#year#"></config>
+      <config name="yAxis"></config>
+      <config stack='series'>
+        <config ng-repeat="serie in chart.series"  value="#{{serie.template}}#" color="{{serie.color}}">
+          <config name="tooltip" template="#{{serie.template}}#"></config>
+        </config>
+      </config>
+    </div>
+  </div>
+    
+
+
+</body>
+</html>

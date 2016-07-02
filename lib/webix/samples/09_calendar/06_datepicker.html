@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<title>Date picker in Calendar</title>
+		<style>
+			html,body{
+				height:100%;
+			}
+		</style>
+	</head>
+<body>
+<div id="toolbar" style="width:300px; height: 50px; margin:30px"></div>
+<script type="text/javascript" charset="utf-8">
+webix.ui(
+	{view:"toolbar", 
+		container:"toolbar",
+		elements:[
+	    	{view:"datepicker", 
+			align: "right",
+	        label: 'Select Date',
+			labelWidth:150
+
+			} 
+	        ]});
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="./common/underscore.js"></script>
+		<script type="text/javascript" src="./common/backbone.js"></script>
+
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<title>Backbone Integration. Loading data from Collection</title>
+	</head>
+	<body>
+		<div style="height:300px" class="app1_here"></div>
+		
+		<br>
+		<div id="controls">
+			<input type="button" value="Add" onclick='films.addSample()'>
+			<input type="button" value="Delete first" onclick='films.deleteFirst()'>
+		</div>
+
+		<script type="text/javascript" charset="utf-8">
+			$(".app1_here").webix_list({
+				id:"mylist", width:200,
+				template:"#title#", select:true
+			});
+
+			FilmRecord = Backbone.Model.extend({});
+			FilmList = Backbone.Collection.extend({
+				model: FilmRecord,
+				url:"./common/data.json",
+
+				//necessary for test buttons only
+				addSample:function(){
+					this.add(new FilmRecord({
+						title:"New Record"
+					}));
+				},
+				deleteFirst:function(){
+					this.remove(this.first().cid);
+				}
+			});
+
+			films = new FilmList();
+			films.fetch();
+
+			$$("mylist").sync(films);
+		</script>
+	</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="http://code.jquery.com/jquery-1.7.1.min.js" type="text/javascript" charset="utf-8"></script>
+
+
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<script type="text/javascript" src="../common/testdata.js"></script>
+		<title>Jquery List from HTML table</title>
+	</head>
+	<style type="text/css">
+		#listA, #listB, #listC{
+			margin:20px;
+		}
+		.mark{
+			width:100px;
+			text-align: center;
+			font-weight:bold;
+			float:right;
+			background-color:#444;
+			color:white;
+			border-radius:3px;
+		}
+	</style>
+	<body>
+		<input type="button" value='Get records count' onclick="get_count()">
+		<table id="listA">
+			<tr><td>1</td><td>Record #102</td><td>5406</td></tr>
+			<tr><td>2</td><td>Record #108</td><td>3260</td></tr>
+			<tr><td>3</td><td>Record #112</td><td>3404</td></tr>
+		</table>
+		
+
+		<script type="text/javascript" charset="utf-8">
+			$("#listA").webix_list({
+				width:320, autoheight:true, 
+				scroll:false,
+				template:"<div class='mark'>#data2# </div> #data0#. #data1#",
+				type:{ height:50 },
+				select:true
+			});
+
+			function get_count(){
+				webix.message(
+					$('#listA').webix_list().count()
+				);
+			}
+		</script>
+	</body>
+</html>

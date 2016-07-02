@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Data aggregation in Custom Format</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='sample_comment'>Original</div>
+		<div id="testA"></div>
+		<hr>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			var myformat = webix.i18n.numberFormat;
+
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", format:webix.i18n.numberFormat, width:100}
+				],
+				autowidth:true,
+				height:300,
+
+				data: big_film_set
+			});	
+			
+		});
+
+		function group_year(){
+			grida.group({
+				by:"year",
+				map:{
+					"year":["year",  "any"],
+					"votes":["votes", "sum"]
+				},
+				row:function(obj){
+					return "Year "+obj.year+", total votes: "+webix.i18n.numberFormat(obj.votes);
+				}
+			});
+			grida.sort({ by:"title" });
+		};
+
+		function group_year_10(){
+			grida.group({
+				by:function(obj){ return Math.floor(obj.year/10); },
+				map:{
+					"title":[function(obj){ 
+						var min = obj.year - obj.year%10; 
+						return min + " - "+ (min+10) 
+					}],
+					"votes":["votes", "sum"]
+				},
+				row:"title"
+			});
+			grida.sort({ by:"title" });
+		};
+
+		function ungroup(){
+			grida.ungroup();
+			grida.sort({ by:"rank", as:"int" });
+		};
+		</script>
+		<input type="button" value='Group by year' onclick='group_year()'>
+		<input type="button" value='Group by 10 years' onclick='group_year_10()'>
+		<input type="button" value='Ungroup' onclick='ungroup();'>
+	</body>
+</html>

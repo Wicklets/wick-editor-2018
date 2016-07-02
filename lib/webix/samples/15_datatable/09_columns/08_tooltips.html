@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Tooltips</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Tooltips</div>
+		<div class='sample_comment'>Hover mouse over data to see the tooltip</div>
+		<div id="testA"></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",  tooltip:false, width:50, header:"", css:"rank" },
+					{ id:"title", tooltip:"Title: #title#<br>Rating: #rating#", width:200, header:"Film title" },
+					{ id:"year",	header:"Year"},
+					{ id:"votes",	header:"Votes"}
+				],
+				tooltip:true,
+				autoheight:true,
+				autowidth:true,
+
+				data:small_film_set
+			});	
+		});
+		</script>
+	</body>
+</html>

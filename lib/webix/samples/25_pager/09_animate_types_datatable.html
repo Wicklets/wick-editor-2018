@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>DataTable paging animation types</title>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../15_datatable/common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Visible paging</div>
+		<div class='sample_comment'>Paging can be initialized as separate visible view.</div>
+		</br>
+		<div id="testA" style='height:600px; width:600px;'></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+
+var col1 = {margin: 5, rows:[
+	{
+		view:"pager", id:"pagerA",
+		animate:{
+			direction:"top"
+		},
+		size:8,
+		group:5
+	},
+	{	
+		view:"datatable",
+		columns:[
+			{ id:"rank",	header:"#", 		width:50,	sort:"int",	css:"rank"},
+			{ id:"title",	header:"Film title",width:200,	sort:"string"},
+			{ id:"year",	header:"Released" , width:80,	sort:"int"},
+			{ id:"votes",	header:"Votes", 	width:100,	sort:"int"}
+		],
+		pager:"pagerA",
+		select:true,
+		autowidth:true,
+		data:big_film_set
+	},
+	{},
+	{
+		view:"pager", id:"pagerB",
+		animate:{
+			type:"flip"
+		},
+		size:8,
+		group:5
+	},
+	{	
+		view:"datatable",
+		columns:[
+			{ id:"rank",	header:"#", 		width:50,	sort:"int",	css:"rank"},
+			{ id:"title",	header:"Film title",width:200,	sort:"string"},
+			{ id:"year",	header:"Released" , width:80,	sort:"int"},
+			{ id:"votes",	header:"Votes", 	width:100,	sort:"int"}
+		],
+		pager:"pagerB",
+		select:true,
+		autowidth:true,
+		data:big_film_set
+	}
+]};
+
+
+var col2 = { margin: 5,rows:[
+	{
+		view:"pager", id:"pagerC",
+		animate:{
+			subtype:"out"
+		},
+		size:8,
+		group:5
+	},
+	{	
+		view:"datatable",
+		columns:[
+			{ id:"rank",	header:"#", 		width:50,	sort:"int",	css:"rank"},
+			{ id:"title",	header:"Film title",width:200,	sort:"string"},
+			{ id:"year",	header:"Released" , width:80,	sort:"int"},
+			{ id:"votes",	header:"Votes", 	width:100,	sort:"int"}
+		],
+		pager:"pagerC",
+		select:true,
+		autowidth:true,
+		data:big_film_set
+	},
+	{},
+	{
+		view:"pager", id:"pagerD",
+		animate:{
+			subtype:"in"
+		},
+		size:8,
+		group:5
+	},
+	{	
+		view:"datatable",
+		columns:[
+			{ id:"rank",	header:"#", 		width:50,	sort:"int",	css:"rank"},
+			{ id:"title",	header:"Film title",width:200,	sort:"string"},
+			{ id:"year",	header:"Released" , width:80,	sort:"int"},
+			{ id:"votes",	header:"Votes", 	width:100,	sort:"int"}
+		],
+		pager:"pagerD",
+		select:true,
+		autowidth:true,
+		data:big_film_set
+	}
+]};
+
+
+
+		webix.ui({
+			container:"testA",
+			margin:8,
+			cols:[ col1, col2 ]
+		});
+
+
+
+		</script>
+	</body>
+</html>

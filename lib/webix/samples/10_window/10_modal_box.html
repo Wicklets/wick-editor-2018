@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Modal box</title>
+	<script type="text/javascript" src='../../codebase/webix.js'></script>
+	<link rel="stylesheet" type="text/css" href="../../codebase/webix.css">
+	<style type="text/css">
+		body, html {
+			height:100%; padding:0px; margin:0px;
+		}
+	</style>
+</head>
+<body>
+	<script type="text/javascript">
+	webix.modalbox({
+		title:"Custom title",
+		buttons:["Yes", "No", "Maybe"],
+		width:"500px",
+		text:"Any html content here",
+		callback:function(result){ alert("Result "+result)}
+	});
+	</script>	
+</body>
+</html>

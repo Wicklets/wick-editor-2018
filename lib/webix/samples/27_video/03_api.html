@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+	<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	<style>
+		html,body{
+			background-color:#ffffff;
+		}
+	</style>
+	<title>Video API</title>
+</head>
+<body>
+
+<script type="text/javascript" charset="utf-8">
+
+	webix.ui({
+		view:"window",
+		body:{
+			view:"video",
+			id: "video1",
+			src: [
+				"http://cdn.webix.com/demodata/movie.ogv",
+				"http://cdn.webix.com/demodata/movie.mp4"
+			],
+			controls: false
+		},
+		head:{
+			view:"toolbar", elements:[
+				{view:"label", label: "Video", align:'left'},
+				{view: "button", id: "playButton", width: 100, value: "Play", click: playPause}
+			]
+		},
+		top:150,
+		left:300,
+		width:260,
+		height:240,
+		move:true
+	}).show();
+
+	function playPause(){
+		var video = $$("video1").getVideo();
+
+		if (video.paused){
+			video.play();
+			$$("playButton").setValue("Pause")
+		}
+
+		else{
+			video.pause();
+			$$("playButton").setValue("Play")
+		}
+
+	}
+</script>
+</body>
+</html>

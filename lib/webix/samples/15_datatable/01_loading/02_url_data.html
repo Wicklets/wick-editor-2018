@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Loading from an external data file</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Loading from an external data file (xml, json etc.)</div>
+		<div class='sample_comment'>JSON</div>
+		<div id="testA"></div>
+		<hr>
+		<div class='sample_comment'>XML</div>
+		<div id="testB"></div>
+		<hr>
+		<div class='sample_comment'>CSV</div>
+		<div id="testC"></div>
+		<hr>
+		<div class='sample_comment'>jsArray</div>
+		<div id="testD"></div>
+		<hr>		
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+				autoheight:true,
+				autowidth:true,
+				url:"data/data.json"
+			});	
+
+			gridb = webix.ui({
+				container:"testB",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+				autoheight:true,
+				autowidth:true,
+
+				datatype:"xml",
+				url:'data/data.xml'
+
+			});	
+			
+			
+			gridc = webix.ui({
+				container:"testC",
+				view:"datatable",
+				columns:[
+					{ id:"data5",	header:"", css:"rank",  		width:50},
+					{ id:"data1",	header:"Film title",width:200},
+					{ id:"data2",	header:"Released" , width:80},
+					{ id:"data3",	header:"Votes", 	width:100}
+				],
+				autoheight:true,
+				autowidth:true,
+
+				datatype:"csv",
+				url:'data/data.csv'
+			});	
+			
+			gridd = webix.ui({
+				container:"testD",
+				view:"datatable",
+				columns:[
+					{ id:"data5",	header:"", css:"rank",  		width:50},
+					{ id:"data1",	header:"Film title",width:200},
+					{ id:"data2",	header:"Released" , width:80},
+					{ id:"data3",	header:"Votes", 	width:100}
+				],
+				autoheight:true,
+				autowidth:true,
+
+				datatype:"jsarray",
+				url:'data/data.js'
+			});
+		});
+		</script>
+	</body>
+</html>

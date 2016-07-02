@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+    <title>Customizing Pager Controls</title>
+	<style type="text/css">
+	.paging_text{
+		font-family: Tahoma;
+		font-size: 10pt;
+		float: left;
+		padding: 3px 10px 0px 10px;
+	}
+	</style>
+</head>
+<body>
+	<h1>Customizing pager controls</h1>
+	<div id="data_container" style="width:710px;height:392px;margin:20px"></div>
+	<div id="paging_here" style='margin:20px;'></div>
+	<br>
+	<script>
+		webix.ui({
+			view:"dataview",
+			container:"data_container",
+			template:"<span class='webix_strong'>#maintainer#</span>#package# <span class='webix_light'>#version#</span>",
+			type: {
+				height: 60
+			},
+			xCount:4,
+			url:"data/data_dyn.php",
+
+			pager:{
+				id:"pager",
+				container:"paging_here",
+				size:40
+			}
+		});
+
+		function setType(mode){
+			var new_one = "";
+			switch(mode){
+				case "a":
+					new_one="{common.pages()}";
+					break;
+				case "b":
+					new_one="{common.first()}{common.pages()}{common.last()}";
+					break;
+				case "c":
+					new_one="{common.prev()}<div class='paging_text'>Page {common.page()} from #limit#</div>{common.next()}";
+					break;
+			}
+			
+			$$('pager').define("template",new_one);
+			$$('pager').render();
+		}
+	</script>
+
+<input type='button' onclick='setType("a");' value='Paging template A'>
+<input type='button' onclick='setType("b");' value='Paging template B'>
+<input type='button' onclick='setType("c");' value='Paging template C'>
+
+
+</body>
+</html>

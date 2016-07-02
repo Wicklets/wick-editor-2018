@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../codebase/i18n/fr.js" type="text/javascript" charset="utf-8"></script>
+		<title>Localized Calendar</title>
+	</head>
+	<style type="text/css">
+		#listA, #listB, #listC, #listD{
+			float:left; margin:20px;
+		}
+		body{
+			background: #faf6ed;
+		}
+		.webix_view{
+			border-radius:3px;
+		}
+	</style>
+	<body>
+		
+		<div id="listB">
+		<input type='button' value='fr-FR' onclick='switchLocale(this.value)'>
+		<input type='button' value='en-US' onclick='switchLocale(this.value)'>
+		</div>
+		<div id="listA"></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+			var cal;
+
+			function switchLocale(locale) {
+				webix.i18n.setLocale(locale);
+				createCal();
+			}
+
+			function createCal(){
+				if (cal){
+					var value = cal.getValue();
+					cal.destructor();
+				}
+				cal = webix.ui({
+					container:"listA",
+					weekHeader:true,
+					view:"calendar",
+					events:webix.Date.isHoliday
+				});
+
+				if(value){
+					cal.setValue(value);
+				}
+				else 
+					cal.setValue(new Date(2012,3,30));
+			};
+			webix.i18n.setLocale("en-US");
+			createCal();
+
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../common/testdata.js"></script>
+		<style>
+			#areaA, #areaB {
+				margin: 50px 10px;
+				width:320px;
+				height:400px;
+				float: left;
+			}
+            .bg{
+                background-color: #faf6ed;
+            }
+
+		</style>
+		<title>Animated Multiview</title>
+</head>
+<body>
+		<div id="areaA"></div>
+		<div id="areaC"></div>
+		<div id="areaB">
+		    <div style="padding:10px">
+                <input type="number" name="rank" /><br/>
+                <input type="text" name="title" value="" placeholder="Book title" /><br/>
+                <input type="date" name="year" value="" placeholder="Year" /><br/><br/>
+                <input type="button" name="submit" value="Submit" onclick='$$("formView").save()'/>
+		    </div>
+		</div>
+		
+<script type="text/javascript" charset="utf-8">
+			webix.ui({
+			    container: "areaA",
+			    type:"space", padding:8,
+
+                rows:[
+                    {
+                        type:"clean",
+                        rows:[
+
+                            {
+                                borderless:true, view:"tabbar", css:"bg", id:'tabbar', selected: 'listView', multiview:true, inputWidth:250, options: [
+                                    { value: 'List', id: 'listView'},
+                                    { value: 'Form', id: 'formView'},
+                                    { value: 'Empty', id: 'emptyView'}
+                                ]
+                            },
+                            {	animate:
+								{type:"flip", 
+								subtype:"vertical"},
+                                cells:[
+                                    {
+                                        id:"listView",
+                                        view:"list",
+                                        template:"#rank#. #title# <div style='padding-left:18px'> Year:#year#, votes:#votes# </div>",
+                                        type:{
+                                            height:50
+                                        },
+                                        select:true,
+
+                                        data:big_film_set
+                                    },
+                                    {
+                                        id:"formView",
+                                        view:"htmlform",
+                                        content: "areaB",
+                                        rules:{
+                                            title: webix.rules.isNotEmpty,
+                                            year: webix.rules.isNumber,
+                                            rank: webix.rules.isNumber
+                                        }
+                                    },
+                                    {id:"emptyView"}
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            });
+            $$('formView').bind($$('listView'));
+			
+
+		</script>
+	</body>
+</html>

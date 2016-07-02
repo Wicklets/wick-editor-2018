@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Row auto-height</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Row auto height</div>
+		<div id="testA" style='width:450px; height:300px;'></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.debug = true;
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	width:40,	header:"", css:"rank"},
+					{ id:"title",	width:380,	header:"Film title" },
+					{ id:"year",	width:160,	header:"Released"   },
+					{ id:"votes",	width:120,	header:"Votes"  	}
+				], 
+				fixedRowHeight:false,  rowLineHeight:25, rowHeight:25,
+				autowidth:true,
+				data:[
+					{ id:"empty", title:"", year:1994, votes:678790, rating:9.2, rank:0},
+					{ id:1, title:"The Shawshank Redemption ", year:1994, votes:678790, rating:9.2, rank:1},
+					{ id:2, title:"The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption ", year:1972, votes:511495, rating:9.2, rank:2},
+					{ id:3, title:"The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption ", year:1974, votes:319352, rating:9.0, rank:3},
+					{ id:4, title:"The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption ", year:1966, votes:213030, rating:8.9, rank:4},
+					{ id:5, title:"The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption ", year:1994, votes:533848, rating:8.9, rank:5},
+					{ id:6, title:"The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption The Shawshank Redemption ", year:1957, votes:164558, rating:8.9, rank:6}
+				], on:{
+						"onresize":webix.once(function(){ 
+							this.adjustRowHeight("title", true); 
+						})
+					}
+			});
+		});
+		</script>
+	</body>
+</html>

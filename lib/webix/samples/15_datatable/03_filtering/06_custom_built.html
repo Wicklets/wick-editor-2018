@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Filtering by multiple criteria</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Filtering by multiple criteria entered via separate and built-in input elements</div>
+		<div class='sample_comment'>Type some text in the input below, click button 'Filter' and then, select some option in the 'Released' header. The grid will contain records that meet both criteria at once.</div>
+		<input type="text" id='myfilter'><input type="button" value='filter' onclick='filterText(this);'>
+		
+		<div id="testA"></div>
+		<script type="text/javascript" charset="utf-8">
+		function filterText(node){
+			grid.filterByAll();
+		}
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  width:50,	sort:"int"},
+					{ id:"title",	header:"Film title",	width:200,	sort:"string"},
+					{ id:"year",	header:["Released",{content:"selectFilter"}],	width:80,	sort:"int"},
+					{ id:"votes",	header:"Votes", 		width:100,	sort:"int"}
+				],
+				autoheight:true,
+				autowidth:true,
+				data:small_film_set
+			});	
+			grid.registerFilter(document.getElementById("myfilter"), 
+				{ columnId:"title" },
+				{
+					getValue:function(node){
+						return node.value;
+					},
+					setValue:function(node, value){
+						node.value = value;
+					}
+				});
+		});
+		</script>
+	</body>
+</html>

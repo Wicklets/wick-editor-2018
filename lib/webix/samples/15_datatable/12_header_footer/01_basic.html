@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Standard header(footer) implementation  </title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+	<style>
+	.webix_dtable .webix_ss_header{
+		color:red;
+	}
+	</style>
+		<div class='header_comment'>Standard header(footer) implementation</div>
+		<div class='sample_comment'>Header</div>
+		<div id="testA"></div>
+		<hr>
+		<div class='sample_comment'>Footer</div>
+		<div id="testB"></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+				autoheight:true,
+				autowidth:true,
+				data:small_film_set
+			});
+
+			grid = webix.ui({
+				container:"testB",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	footer:"#", 		width:50},
+					{ id:"title",	footer:"Film title",width:200},
+					{ id:"year",	footer:"Released" , width:80},
+					{ id:"votes",	footer:"Votes", 	width:100}
+				],
+				footer:true, header:false,
+				autoheight:true,
+				autowidth:true,
+				data:small_film_set
+			});
+
+			
+		});
+		</script>
+	</body>
+</html>

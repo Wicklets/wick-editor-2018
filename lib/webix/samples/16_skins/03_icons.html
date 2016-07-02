@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<title>Icons</title>
+		<script type="text/javascript" src="../common/testdata.js"></script>
+		<script type="text/javascript" src="../common/treedata.js"></script>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8">
+			var toolbar = { view:"toolbar", paddingY:1, height:40, elements:[
+				{ view:"label", label:"Toolbar" },
+				{ gravity:2 },
+				{ view:"button", type:"icon", icon:"envelope", label:"Mail", width:80 },
+				{ view:"button", type:"icon", icon:"user", label:"Users", width:80 },
+				{ view:"button", type:"icon", icon:"cog", label:"Cog", width:80 },
+				{},
+				{ view:"icon", icon:"envelope"},{ view:"icon", icon:"user"},{ view:"icon", icon:"cog"}
+			]};
+			var sections = { multi:false, rows:[
+				{ header:"<span class='webix_icon fa-envelope'></span>Mail", body:"mail data" },
+				{ header:"<span class='webix_icon fa-user'></span>Contacts", body:"contacts data" },
+				{ header:"<span class='webix_icon fa-cog'></span>Filter", body:"filters data" }
+			]};
+			var list = {
+				view:"list", select:true, 
+				template:"<span class='webix_icon fa-#icon#'></span> #name# ",
+				data:[ { icon:"envelope", name:"Mail"}, { icon:"user", name:"Users"}, {icon:"cog", name:"cog" }]
+			}
+			var offers = [
+				{id:1, direction:"<b>Tallin</b> EE - <b>Berlin</b> Tegel DE", date:new Date(2014,7,25), price:"450", save:"45", places:21},
+				{id:2, direction:"<b>Moscow</b> Vnukovo RU - <b>Kiev</b> Borispol UA", date: new Date(2014,7,28), price:"160", save:"65", places:5},
+				{id:3, direction:"<b>Riga</b> International LV - <b>Warsaw</b> Modlin", date: new Date(2014,7,16), price:"220", save:"110", places:2},
+				{id:4, direction:"<b>Vilnius</b> LT - <b>Kiev</b> Zhulhany UA", date: new Date(2014,8,1), price:"140", save:"40", places:35},
+				{id:5, direction:"<b>Minsk</b> International 2 BY- <b>Berlin</b> Schoenefeld DE", date: new Date(2014,8,6), price:"378", save:"35", places:25},
+				{id:6, direction:"<b>St. Petersburg</b> Pulkovo - <b>Tallin</b> Estonia", date: new Date(2014,7,31), price:"90", save:"82", places:11},
+				{id:7, direction:"<b>Kiev</b> Zhulhany UA - <b>Moscow</b> Vnukovo RU", date: new Date(2014,8,15), price:"220", save:"30", places:41},
+				{id:8, direction:"<b>Moscow</b> Sheremetyevo RU - <b>Vilnius</b> LT", date: new Date(2014,8,11), price:"321", save:"44", places:32},
+				{id:9, direction:"<b>Warsaw</b> PL - <b>Minsk</b> International 2 BY", date: new Date(2014,8,5), price:"256", save:"32", places:55},
+				{id:10, direction:"<b>Prague</b> CZ - <b>St. Petersburg</b> Pulkovo", date: new Date(2014,7,30), price:"311", save:"63", places:15},
+				{id:11, direction:"<b>Tallin</b> EE - <b>Berlin</b> Tegel DE", date:new Date(2014,8,25), price:"450", save:"45", places:35},
+				{id:12, direction:"<b>Moscow</b> Vnukovo RU - <b>Kiev</b> Borispol UA", date: new Date(2014,8,28), price:"160", save:"65", places:20},
+				{id:13, direction:"<b>Riga</b> International LV - <b>Warsaw</b> Modlin", date: new Date(2014,8,16), price:"220", save:"110", places:22},
+				{id:14, direction:"<b>Vilnius</b> LT - <b>Kiev</b> Zhulhany UA", date: new Date(2014,9,1), price:"140", save:"40", places:20},
+				{id:15, direction:"<b>Minsk</b> International 2 BY- <b>Berlin</b> Schoenefeld DE", date: new Date(2014,9,6), price:"378", save:"35", places:11},
+				{id:16, direction:"<b>St. Petersburg</b> Pulkovo - <b>Tallin</b> Estonia", date: new Date(2014,9,31), price:"90", save:"82", places:21},
+				{id:17, direction:"<b>Kiev</b> Zhulhany UA - <b>Moscow</b> Vnukovo RU", date: new Date(2014,10,15), price:"220", save:"30", places:53},
+				{id:18, direction:"<b>Moscow</b> Sheremetyevo RU - <b>Vilnius</b> LT", date: new Date(2014,11,11), price:"321", save:"44", places:42},
+				{id:19, direction:"<b>Warsaw</b> PL - <b>Minsk</b> International 2 BY", date: new Date(2014,12,5), price:"256", save:"32", places:30},
+				{id:20, direction:"<b>Prague</b> CZ - <b>St. Petersburg</b> Pulkovo", date: new Date(2014,12,14), price:"311", save:"63", places:2},
+				{id:21, direction:"<b>Minsk</b> International 2 BY - <b>Berlin</b> Tegel DE", date: new Date(2014,12,20), price:"256", save:"32", places:10},
+				{id:22, direction:"<b>Vilnius</b> LT - <b>Berlin</b> Tegel DE", date: new Date(2014,12,21), price:"311", save:"63", places:11}
+			];
+			var calendar = {
+				view: "datatable", select:true,
+				columns:[
+					{id:"id", header:"#", width:40},
+					{id:"direction", header:"Direction", fillspace:true},
+					{id:"date", header:"Date", width:150, sort:"date", format:webix.i18n.longDateFormatStr},
+					{id:"price", header:"Price", width:95, sort:"int", format:webix.i18n.priceFormat},
+					{id:"save", header:"You save", width:95, sort:"int", format:webix.i18n.priceFormat},
+					{id:"places", header:"Tickets", width:65, sort:"int"},
+					{id:"book", header:"Booking", css:"webix_el_button", width:100, template:"<a href='javascript:void(0)' class='check_flight'>Book now</a>"}
+				],
+				data:offers,
+				onClick:{
+					"check_flight":function(){
+						return false;
+					}
+				}
+			};
+
+			var tabbar = { rows:[
+				list,
+				{ view:"tabbar", type:"bottom", height:38, selected:"user", options:[
+					{ id:"mail",  value:"<span class='webix_icon fa-envelope'></span>Mail" },
+					{ id:"users", value:"<span class='webix_icon fa-user'></span>Users" },
+					{ id:"cog", 	 value:"<span class='webix_icon fa-cog'></span>cog" }
+				]}
+			]};
+			var form = { view:"form", width:320, scroll:false, elements:[
+				{ view:"toolbar", elements:[
+					{ view:"button", type:"icon", icon:"envelope", label:"Mail" },
+					{ view:"button", type:"icon", icon:"user", label:"Users" },
+					{ view:"button", type:"icon", icon:"cog", label:"Cog" }
+				]},
+				{ type:"section", template:"Icon buttons" },
+				{ margin:10, cols:[
+					{ view:"button", type:"iconButton", icon:"envelope", label:"Mail", width:75 },
+					{ view:"button", type:"iconButton", icon:"user", label:"Users", width:85 },
+					{ view:"button", type:"iconButton", icon:"cog", label:"Cog", width:80 }
+				]},
+				{ type:"section", template:"Icon buttons Top" },
+				{ margin:10, height:60, cols:[
+					{ view:"button", type:"iconButtonTop", icon:"envelope", label:"Mail" },
+					{ view:"button", type:"iconButtonTop", icon:"user", label:"Users" },
+					{ view:"button", type:"iconButtonTop", icon:"cog", label:"Cog" }
+				]},
+				{ type:"section", template:"Icons" },
+				{ margin:10, cols:[
+					{}, { view:"icon", icon:"envelope"},{ view:"icon", icon:"users"},{ view:"icon", icon:"cog"}
+				]},
+				{},
+				{ view:"toolbar", padding:0, height:60, elements:[
+					{ view:"button", type:"iconTop", icon:"envelope", label:"Mail" },
+					{ view:"button", type:"iconTop", icon:"user", label:"Users" },
+					{ view:"button", type:"iconTop", icon:"cog", label:"Cog" }
+				]}
+			]}; 
+
+			var app = {
+				rows:[ toolbar, {
+					type:"space", cols:[
+						{ type:"wide", rows:[ sections, calendar ] },
+						tabbar,
+						form
+					]
+				}]
+			};
+
+			webix.ui(app);
+			
+		</script>
+	</body>
+</html>

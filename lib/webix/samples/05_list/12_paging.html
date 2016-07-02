@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+ 		<script src="../common/testdata.js"></script>
+
+		<title>List: Pagination</title>
+	</head>
+	<body>
+		<div id='layout_div1' style='width:600px;margin:20px;'></div>
+		<div id='layout_div2' style='margin:20px;'></div>
+		
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				container:"layout_div1",
+				type:"space",
+				rows:[
+					{cols:[
+						{ view:"button", value:"prev", 
+							click:function(){ $$('pager1').select("prev"); } },
+						{},
+						{ view:"button", value:"next",
+							click:function(){ $$('pager1').select("next"); } }
+					]},
+					{ view:"list", data:big_film_set, yCount:5,
+						type:{
+			                width: 261,
+			                height: 65,
+			                template:"<div class='overall'><div class='title'>#title#</div><div class='year'>#year# year</div> </div>"
+		            	},
+		            	pager:{
+		            		apiOnly:true, id:"pager1", size:5, animate:{
+		            			direction:"top"
+		            		}
+		            	}
+		            }
+				]
+			});
+
+
+			webix.ui({
+				container:"layout_div2",
+				type:"space",
+				rows:[
+					{ cols:[
+						{ view:"button", value:"prev", 
+							click:function(){ $$('pager2').select("prev"); } },
+						{ width: 400 },
+						{ view:"button", value:"next",
+							click:function(){ $$('pager2').select("next"); } }
+					]},
+					{
+						 view:"list", data:big_film_set, xCount: 3,
+							type:{
+				                width: 261,
+				                height: 65,
+				                template:"<div class='overall'><div class='title'>#title#</div><div class='year'>#year# year</div> </div>"
+			            	},
+			            	layout:"x",
+			            	pager:{
+			            		apiOnly:true, id:"pager2", size:3, animate:{
+			            			direction:"left"
+			            		}
+			            	}
+
+                     }
+				]
+			});
+		</script>
+	</body>
+</html>

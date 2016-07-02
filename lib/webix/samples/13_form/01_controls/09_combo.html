@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<title>Editable Combo Box ('combo')</title>
+        <style>
+			html, body{height:100%}
+        </style>
+	</head>
+<body>
+	<div id="data_container" style="margin:20px"></div>
+<script>
+
+	webix.ui({
+		container:"data_container",
+		view:"form", scroll:false,
+		
+		rows:[
+			{ view:"text", name:"country", label:"Country", value:"Belarus" },
+			{ 
+				view:"combo", width:300,
+				label: 'Fruit',  name:"fruit",
+				value:1, options:[ 
+					{ id:1, value:"Banana"   },
+					{ id:2, value:"Papaya"   }, 
+					{ id:3, value:"Apple" }
+				]
+			},
+			{ view:"button", type:"form", value:"Submit data", click:function(){
+				webix.message(JSON.stringify( this.getParentView().getValues()));
+			}}
+		]
+	});
+		
+</script>
+</body>
+</html>

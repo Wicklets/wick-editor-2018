@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> Aggregating data while grouping</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'> Aggregating data while grouping</div>
+		<div id="testA"></div>
+		<div id="testB"></div>
+
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+
+			grida = webix.ui({
+				container:"testA",
+				view:"treetable",
+				columns:[
+					{ id:"rank",	header:"", width:50},
+					{ id:"title",	header:"Film title", sort:"string", width:250,
+						template:function(obj, common){
+							if (obj.$group) return common.treetable(obj, common) + obj.title;
+							return obj.title;
+						}
+					},
+					{ id:"year",	header:"Year",	width:100}, 
+					{ id:"votes",	header:"Votes", sort:"int",	width:100, 
+						css:{"text-align":"right"}, format:webix.i18n.numberFormat }
+				],
+				scheme:{
+					$group:{
+						by:"year",
+						map:{
+							votes:["votes", "sum"],
+							title:["year"]
+						}
+					},
+					$sort:{ by:"votes", as:"int", dir:"desc" }
+				},
+				height:350,
+				autowidth:true,
+				data: big_film_set
+			});	
+		});
+
+		
+		</script>
+	</body>
+</html>

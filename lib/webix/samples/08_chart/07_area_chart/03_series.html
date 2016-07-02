@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+	<title>Area Chart: Several Graphs in One Chart</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+	<script src="../../common/chartdata.js"></script>
+<body>
+    <div id="chartDiv" style="width:600px;height:250px;margin:20px"></div>
+	<script>
+        webix.ui({
+            container:"chartDiv",
+            view:"chart",
+            type:"area",
+			xAxis:{
+				template:"'#year#"
+			},
+			yAxis:{
+			    start:0,
+			    step:10,
+			    end:100
+			},
+			legend:{
+				values:[{text:"Type A",color:"#58dccd"},{text:"Type B",color:"#914ad8"},{text:"Type C",color:"#36abee"}],
+				valign:"middle",
+				align:"right",
+				width:90,
+				layout:"y"
+            },
+            eventRadius: 5,
+			series:[
+                {
+                    alpha:0.7,
+                    value:"#sales#",
+			        color: "#58dccd",
+			        tooltip:{
+                         template:"type: A<br/>value: #sales#"
+                    }
+			    },
+                {
+                    alpha:0.5,
+                    value:"#sales2#",
+                    color:"#914ad8",
+                    tooltip:{
+                       template:"type: B<br/>value: #sales2#"
+                    }
+                },
+                {
+                    alpha:0.5,
+                    value:"#sales3#",
+                    color:"#36abee",
+                    tooltip:{
+                        template:"type: C<br/>value: #sales3#"
+                    }
+                }
+			],
+			data:multiple_dataset
+        });
+	</script>
+</body>
+</html>

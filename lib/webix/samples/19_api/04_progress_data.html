@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+    <script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="../common/testdata.js"></script>
+    <title>Progress Bar::Data</title>
+
+</head>
+<body>
+<div id='layout_div' style='margin:20px; width:700px; height:400px; float:left;'></div>
+
+<script>
+    webix.ui({
+        container:"layout_div",
+        margin:5,
+        rows:[
+            { type:"header", template:"My app!"},
+            {
+                view:"datatable",
+                id:"data",
+                autoConfig:true,
+                data: small_film_set,
+                scrollX:false
+            },
+            {height:48},
+            { cols:[
+                { view:"button", value:"Reload with Progress Bar", click:function(){ show_progress_bar(2000); }},
+                { view:"button", value:"Reload with Progress Icon", click:function(){ show_progress_icon(2000); }}
+            ]}
+        ]
+    });
+    //adding ProgressBar functionality to datatable
+    webix.extend($$("data"), webix.ProgressBar);
+
+
+
+    function show_progress_bar(delay){
+        $$("data").clearAll();
+        $$("data").showProgress({
+            type:"bottom",
+            delay:delay,
+            hide:true
+        });
+        setTimeout(function(){
+            $$("data").parse(small_film_set);
+        }, delay);
+    }
+
+    function show_progress_icon(delay){
+        $$("data").clearAll();
+        $$("data").showProgress({
+            delay:delay,
+            hide:true
+        });
+        setTimeout(function(){
+            $$("data").parse(small_film_set);
+        }, delay);
+    }
+
+</script>
+</body>
+</html>

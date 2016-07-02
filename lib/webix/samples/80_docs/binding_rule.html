@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+    <script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+    <script type="text/javascript" src="../common/testdata.js"></script>
+    <title>List Data Bound to Richselect</title>
+    <style type="text/css">
+        #listA{
+            margin:20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="listA"></div>
+    <script type="text/javascript" charset="utf-8">
+
+        var film_set = [
+            { id:1, title:"The Shawshank Redemption", year:1994, votes:678790, category:1, rank:1},
+            { id:2, title:"The Godfather", year:1972, votes:511495, category:2, rank:2},
+            { id:3, title:"The Godfather: Part II", year:1974, votes:319352, category:3, rank:3},
+            { id:4, title:"The Good, the Bad and the Ugly", year:1966, votes:213030, category:1, rank:4},
+            { id:5, title:"My Fair Lady", year:1964, votes:533848, category:2, rank:5},
+            { id:6, title:"12 Angry Men", year:1957, votes:164558, category:3, rank:6},
+            {id:7, title:"City of God", year:2002,votes:222818, category:1,rank:7},
+            {id:8, title:"Casablanca", year: 1942, votes:202051, category:2,rank:8},
+            {id:9, title:"Once Upon a Time in the West", year:1968, votes:97931, category:3, rank:9},
+            {id:10, title:"The Matrix", year: 1999, votes: 492325, category:1, rank:10},
+            {id:11, title:"Gone with the  Wind", year:2002,votes:222818,category:1,rank:11},
+            {id:12, title:"Three Brave Men", year: 1942, votes:202051, category:2,rank:12},
+            {id:13, title:"Into the Wind", year:1968, votes:97931, category:3, rank:13},
+            {id:14, title:"Ashes and Snow", year: 1999, votes: 492325, category:1, rank:14},
+            {id:15, title:"Europe", year: 1999, votes: 492325, category:3, rank:15}
+        ];
+
+        var sel = [
+            {id: 1, value:"Favourite"},
+            {id: 2, value:"Unseen"},
+            {id: 3, value:"Other"}
+        ];
+
+        webix.ui({
+            container: "listA",
+            rows: [{
+                view: "toolbar",
+                elements: [{
+                    view: "richselect",
+                    id: "category",
+                    value: 1,
+                    inputWidth: 100,
+                    label: "Category",
+                    labelPosition: "top",
+                    options: sel
+                }]
+            }, {
+                view: "list",
+                id: "list1",
+                width: 250,
+                height: 300,
+                template: "#rank#. #title#",
+                select: true,
+                data: film_set
+            }]
+        });
+
+        $$('list1').bind($$('category'), function(obj, filter){
+            return obj.category == filter; //note is the list data obj (table name on the server side)
+        });
+
+    </script>
+</body>
+</html>

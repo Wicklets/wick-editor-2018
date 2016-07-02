@@ -1,0 +1,64 @@
+<!doctype html>
+<head>
+	<meta charset="utf-8">
+	<title>DataTable Export to PDF: Custom configuration</title>
+
+	<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+	<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+	<link rel="stylesheet" type="text/css" href="../common/samples.css">
+	<script type="text/javascript" src="../../common/testdata.js"></script>
+
+
+</head>
+<body>
+	<div id="dataDiv"></div>
+	<script type="text/javascript" charset="utf-8">
+
+	webix.ui({
+		container:"dataDiv",
+		margin:10,
+		rows:[
+			{ view:"datatable", data:big_film_set, height:600, width:500, columns:[
+				{ id:"rank",	header:"", css:"rank", width:50},
+				{ id:"title",	header:["Film title", "Second line"],	fillspace:true },
+				{ id:"year",	header:"Year", width:80},
+				{ id:"votes",	header:"Votes",	width:100}
+			]},
+			{ margin:5, cols:[
+				{ view:"button", value:"Export with custom column configuration", autowidth:true, click:function(){
+					webix.toPDF($$("$datatable1"), {
+						columns:{
+							rank:{ header:"Id "},
+							title:{ header: "My title", width: 200, template: webix.template("#id#.#title#")},
+							year:{ header:"Year", width:150, template:webix.template("Shot in #year#")}
+						}
+					});
+				}},
+				{ view:"button", value:"Export with landscape orientation", autowidth:true, click:function(){
+					webix.toPDF($$("$datatable1"), {
+						orientation:"landscape"
+					});
+				}},
+
+			]},
+			{ margin:5, cols:[
+				{ view:"button", value:"Export with page header", autowidth:true, click:function(){
+					webix.toPDF($$("$datatable1"), {
+						docHeader:"This document was made with Webix library. http://webix.com",
+					});
+				}},
+				{ view:"button", value:"Export with page image header", autowidth:true, click:function(){
+					webix.toPDF($$("$datatable1"), {
+						docHeaderImage:"../common/logo.jpg",
+					});
+				}}
+			]}
+			
+		]
+	});
+
+	</script>
+
+</body>
+</html>

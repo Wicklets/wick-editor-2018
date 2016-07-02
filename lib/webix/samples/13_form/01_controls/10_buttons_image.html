@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<title>Image Button ('button')</title>
+	</head>
+<body>
+	<div id="data_container" style="width:800px;height:200px;margin:20px"></div>
+<script>
+
+var path = "../../common/imgs/18/";
+var path2 = "../../common/imgs/48/";
+
+var form1 = {
+	view:"form", width:120, scroll:false,
+	elements:[
+		{ view:"button", type:"image", label:"Save",		image:path+"save.gif" },
+		{ view:"button", type:"image", label:"Update",		image:path+"paste.gif"},
+		{ view:"button", type:"image", label:"Info",		image:path+"copy.gif" },
+		{ view:"button", type:"image", label:"Save",		image:path2+"save.gif",  height:60},
+		{ view:"button", type:"image", label:"Update",		image:path2+"paste.gif", height:60},
+		{ view:"button", type:"image", label:"Info",		image:path2+"copy.gif",  height:60}
+	]
+};
+
+var form11 = {
+	view:"form", width:36, scroll:false,
+	elements:[
+		{ view:"button", type:"imageButton", image:path+"save.gif" },
+		{ view:"button", type:"imageButton", image:path+"paste.gif"},
+		{ view:"button", type:"imageButton", image:path+"copy.gif" },
+
+		{ view:"button", type:"image", image:path+"save.gif" },
+		{ view:"button", type:"image", image:path+"paste.gif"},
+		{ view:"button", type:"image", image:path+"copy.gif" }
+		
+	]
+}
+
+var form2 = {
+	view:"form", width:120, scroll:false,
+	elements:[
+		{ view:"button", type:"imageTop", label:"Save",		image:path+"save.gif",  height:45 },
+		{ view:"button", type:"imageTop", label:"Update",	image:path+"paste.gif", height:45 },
+		{ view:"button", type:"imageTop", label:"Info",		image:path+"copy.gif",  height:45 },
+		{ view:"button", type:"imageTop", label:"Save",		image:path2+"save.gif", height:75 },
+		{ view:"button", type:"imageTop", label:"Update",	image:path2+"paste.gif", height:75 },
+		{ view:"button", type:"imageTop", label:"Info",		image:path2+"copy.gif", height:75 }
+	]
+};
+
+var form3 = {
+	view:"form", width:130, scroll:false,
+	elements:[
+		{ view:"button", type:"imageButton", label:"Save",		image:path+"save.gif" },
+		{ view:"button", type:"imageButton", label:"Update",		image:path+"paste.gif"},
+		{ view:"button", type:"imageButton", label:"Info",		image:path+"copy.gif"},
+		{ view:"button", type:"imageButton", label:"Save",		image:path2+"save.gif",			height:60},
+		{ view:"button", type:"imageButton", label:"Update",		image:path2+"paste.gif",	height:60},
+		{ view:"button", type:"imageButton", label:"Info",		image:path2+"copy.gif",			height:60}
+	]
+};
+
+var form31 = {
+	view:"form", width:90, scroll:false,
+	elements:[
+		{ view:"button", type:"imageButton", image:path2+"save.gif",		height:60},
+		{ view:"button", type:"imageButton", image:path2+"paste.gif",		height:60},
+		{ view:"button", type:"imageButton", image:path2+"copy.gif",		height:60},
+		{ view:"button", type:"image", image:path2+"save.gif",		height:60},
+		{ view:"button", type:"image", image:path2+"paste.gif",		height:60},
+		{ view:"button", type:"image", image:path2+"copy.gif",		height:60}
+		
+	]
+};
+var form4 = {
+	view:"form", width:120, scroll:false,
+	elements:[
+		{ view:"button", type:"imageButtonTop", label:"Save",		image:path+"save.gif", height:55 },
+		{ view:"button", type:"imageButtonTop", label:"Update",	image:path+"paste.gif", height:55 },
+		{ view:"button", type:"imageButtonTop", label:"Info",		image:path+"copy.gif", height:55 },
+		{ view:"button", type:"imageButtonTop", label:"Save",		image:path2+"save.gif", height:84 },
+		{ view:"button", type:"imageButtonTop", label:"Update",	image:path2+"paste.gif", height:84 },
+		{ view:"button", type:"imageButtonTop", label:"Info",		image:path2+"copy.gif", height:84 }
+	]
+};
+
+
+
+webix.ui({
+	container:"data_container",
+	cols:[
+		form1, form11, form3, form31, form2, form4
+	]
+});
+		
+</script>
+</body>
+</html>

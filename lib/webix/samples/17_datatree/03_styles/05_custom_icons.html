@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Custom Icons</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<script src="../common/treedata.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+	</head>
+	<body>
+		<div class='header_comment'>Stylized DataTree type</div>
+		<div id="testA" style='width:250px; height:250px; float:left'></div>
+		<div id="testB" style='width:250px; height:250px; float:left'></div>
+		<div id="testC" style='width:250px; height:250px; float:left'></div>
+		
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+
+			var data_with_icon = [
+				{ id:"root", value:"Films data", image:"home", open:true, data:[
+					{ id:"1", open:true, image:"rss", value:"The Shawshank", data:[
+						{ id:"1.1", image:"puzzle", value:"Part 1" }
+					]}
+				]}
+			];
+
+			tree = webix.ui({
+				container:"testA",
+				view:"tree",
+				type:"lineTree",
+				select:true,
+				template:"{common.icon()} <img src='icons/#image#.png' style='float:left; margin:3px 4px 0px 1px;'> #value#",
+				data: webix.copy(data_with_icon)
+			});	
+
+
+
+			tree = webix.ui({
+				container:"testB",
+				view:"tree",
+				type:"lineTree",
+				select:true,
+				template:"{common.icon()} {common.folder()}<img src='icons/#image#.png' style='float:right; margin:3px 4px 0px 1px;'> #value#",
+				data: webix.copy(data_with_icon)
+			});	
+
+			tree = webix.ui({
+				container:"testC",
+				view:"tree",
+				type:"lineTree",
+				select:true,
+				template:function(obj, com){
+					var icon = obj.$count ? com.folder(obj, com) : ("<img src='icons/"+obj.image+".png' style='float:left; margin:3px 4px 0px 1px;'>");
+					return com.icon(obj, com) + icon + obj.value;
+				},
+				data: webix.copy(data_with_icon)
+			});				
+
+		});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+    <script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+    <script type="text/javascript" src="../common/testdata.js"></script>
+    <script type="text/javascript" src="../common/treedata.js"></script>
+    <title>List: Filtering</title>
+</head>
+<style type="text/css">
+    #listA, #listB, #listC{
+        float:left; margin:20px;
+    }
+    .mark{
+        width:100px;
+        text-align: center;
+        font-weight:bold;
+        float:right;
+        background-color:#444;
+        color:white;
+        border-radius:3px;
+    }
+    .newtime{
+        background-color:#DDFFDD;
+    }
+    .oldtime{
+        background-color:#DDDDFF;
+    }
+    .fltr{
+        background-color: transparent;
+    }
+	.webix_inp_label{
+		padding-top: 1px;
+	}
+</style>
+<body>
+<div id="listA"></div>
+<div id="listB"></div>
+<div id="listC"></div>
+
+
+<script type="text/javascript" charset="utf-8">
+    webix.ui({
+        container:"listA",
+        width:320,
+        height:600,
+        rows:[
+            {
+                height: 35,
+                view:"toolbar",
+                elements:[
+                    {view:"text", id:"list_input",label:"Filter list by a movie title",css:"fltr", labelWidth:170}
+                ]
+            },
+            {
+                view:"list",
+                id:"list",
+
+                template:"#rank#. #title#",
+                select:true,
+
+                data:big_film_set
+            }
+        ]
+
+    });
+
+    webix.ui({
+        container:"listB",
+        width:320,
+        height:600,
+        rows:[
+            {
+                height:35,
+                view:"toolbar",
+                elements:[
+                    {view:"text", id:"unitlist_input",label:"Filter list by a movie title",css:"fltr", labelWidth:170}
+                ]
+            },
+            {
+                view:"unitlist",
+                id:"unitlist",
+                uniteBy:function(obj){
+                    return obj.year;
+                },
+                template:"#title# <div style='padding-left:18px'> Year:#year#, votes:#votes# </div>",
+                type:{
+                    height:60
+                },
+                select:true,
+                scheme:{
+                    $sort:{
+                        by:"year",
+                        dir:"asc"
+                    }
+                },
+                data:big_film_set
+            }
+        ]
+
+    });
+
+    webix.ui({
+        container:"listC",
+        width:320,
+        height:600,
+        rows:[
+            {
+                height: 35,
+                view:"toolbar",
+                elements:[
+                    {view:"text", id:"grouplist_input",label:"Filter list by a record title",css:"fltr", labelWidth:170}
+                ]
+            },
+            {
+                view:"grouplist",
+                id:"grouplist",
+                filterMode:{
+                  level:0,
+                    showSubItems:1
+                },
+                select:true,
+                data:webix.copy(tree_data)
+            }
+        ]
+
+    });
+
+    $$("list_input").attachEvent("onTimedKeyPress",function(){
+        var value = this.getValue().toLowerCase();
+        $$("list").filter(function(obj){
+            return obj.title.toLowerCase().indexOf(value)==0;
+        })
+    });
+    $$("unitlist_input").attachEvent("onTimedKeyPress",function(){
+        var value = this.getValue().toLowerCase();
+        $$("unitlist").filter(function(obj){
+            return obj.title.toLowerCase().indexOf(value)==0;
+        })
+    });
+    $$("grouplist_input").attachEvent("onTimedKeyPress",function(){
+        var value = this.getValue().toLowerCase();
+        $$("grouplist").filter(function(obj){
+            return obj.value.toLowerCase().indexOf(value)==0;
+        })
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Custom Behaviour for DnD in DataView</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../../common/samples.css">
+		<script src="../../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body class='webix_full_screen'>
+		<div class='header_comment'>Custom dnd behaviour</div>
+		
+		<div id="testA" style='width:300px; height:300px'></div>
+		<hr>
+		<div id="myDrag" style='width:200px; height:100px; border:2px outset silver;'>Drag me to the component</div><br>
+		<div id="myDrop" style='width:200px; height:100px; border:2px outset silver;'>Drag something from the component here</div>
+		
+
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"dataview",
+				template:"#rank#. #title#",
+				xCount:3, yCount:3,
+				select:"multiselect",
+				drag:true,
+
+				data: webix.copy(small_film_set)
+			});
+
+			webix.DragControl.addDrag("myDrag",{
+				move:function(source, target, obj){
+					var index = -1;
+					if (target) index = obj.getIndexById(target);
+					obj.add({
+						title:"new item",
+						rank: "0"
+					}, index);
+				}
+			});
+			webix.DragControl.addDrop("myDrop",{
+				$drop:function(source, target){
+					var dnd = webix.DragControl.getContext();
+					if (dnd.from.name){ //ignoring non-ui dnd
+						var value = dnd.from.getItem(dnd.source[0]).title;
+						target.innerHTML=value;
+					}
+				}
+			});
+		});		
+		</script>
+	</body>
+</html>

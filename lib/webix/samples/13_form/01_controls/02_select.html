@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA{
+				margin: 30px;
+			}
+		</style>
+		<title>Select Box ('select')</title>
+	</head>
+	<body>
+
+		<div id="areaA"></div>
+	
+
+		<script type="text/javascript" charset="utf-8">
+		var form1 = [
+			{ view:"select", label:"Version", options:["1.0", "1.5", "2.0"] },
+			{ view:"select", value: 2, label:"Branch", options:[
+				{ value:"Master", id:1 },
+				{ value:"Release", id:2 }
+			] },
+			{ view:"button", value:"Confirm", align:"center", width:200 }
+		];
+
+		var form2 = [
+			{ view:"select", label:"Version", options:["1.0", "1.5", "2.0"], labelAlign:'right' },
+			{ view:"select", label:"Branch", options:[
+				{ value:"Master", id:1 },
+				{ value:"Release", id:2 }
+			], labelAlign:'right' },
+			{ view:"button", value:"Confirm", align:"center", width:200 }
+		];
+
+
+		var form3 = [
+			{ view:"select", label:"Version", options:["1.0", "1.5", "2.0"], inputAlign:"right" },
+			{ view:"select", label:"Branch", options:[
+				{ value:"Master", id:1 },
+				{ value:"Release", id:2 }
+			], inputAlign:"right" },
+			{ view:"button", value:"Confirm", align:"center", width:200 }
+		];
+
+
+		var form4 = [
+			{ view:"select", label:"Version", options:["1.0", "1.5", "2.0"], labelAlign:'right', inputAlign:"right" },
+			{ view:"select", label:"Branch", options:[
+				{ value:"Master", id:1 },
+				{ value:"Release", id:2 }
+			], labelAlign:'right', inputAlign:"right" },
+			{ view:"button", value:"Confirm", align:"center", width:200 }
+		];
+
+
+		var form5 = [
+			{ view:"select", label:"Very-very long label for a Version field", labelPosition:"top",
+				options:["1.0", "1.5", "2.0"], labelWidth:130 },
+			{ view:"select", label:"Branch", labelAlign:"right", options:[
+				{ value:"Master", id:1 },
+				{ value:"Release", id:2 }
+			], labelWidth:130 },
+			{ view:"button", value:"Confirm", align:"center", width:200 }
+		];
+
+		var form6 = [
+			{ view:"label", label:"Very-very long label for a Version field" },
+			{ view:"select", options:["1.0", "1.5", "2.0"] },
+			{ view:"label", label:"Branch" },
+			{ view:"select", options:[
+				{ value:"Master", id:1 },
+				{ value:"Release", id:2 }
+			] },
+			{ view:"button", value:"Confirm", width:200, align:"center" }
+		];
+
+        var form7 = [
+            { view:"label", label:"Serverside options" },
+            { view:"select", options:"server/data.json", label:"Fruit", value:2 },
+            { view:"select", options:"server/data.php", label:"Countries" },
+            { view:"button", value:"Confirm", width:200, align:"center" }
+        ];
+
+		webix.ui({
+			container:"areaA",
+			margin:30, cols:[
+				{ margin:30, rows:[
+					{ view:"form", scroll:false, width:300, elements: form1 },
+					{ view:"form", scroll:false, width:300, elements: form2 },
+					{ view:"form", scroll:false, width:300, elements: form5 }
+				]},
+				{ margin:30, rows:[
+					{ view:"form", scroll:false, width:300, elements: form3 },
+					{ view:"form", scroll:false, width:300, elements: form4 },
+					{ view:"form", scroll:false, width:300, elements: form6 }
+				]},
+                {margin:30, rows:[
+                    { view:"form", scroll:false, width:250, elements: form7}
+                ]}
+			]
+		});
+
+		</script>
+	</body>
+</html>

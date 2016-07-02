@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Tree: Plain JSON Data with Client-side Grouping</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+	</head>
+	<body>
+		<div class='header_comment'>Loading plain ('one-level') JSON data and grouping in nodes on the client side</div>
+		<div id="testA" style='width:250px; height:250px; float:left'></div>
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			//plain json data, based on objects
+			treea = webix.ui({
+				container:"testA",
+				view:"tree",
+				scheme:{
+					$group:"year",
+					$sort:"value"
+				},
+
+				data: [
+					{ id:1, value:"The Shawshank Redemption", year:1994, votes:678790, rating:9.2, rank:1},
+					{ id:2, value:"The Godfather", year:1972, votes:511495, rating:9.2, rank:2},
+					{ id:3, value:"The Godfather: Part II", year:1974, votes:319352, rating:9.0, rank:3},
+					{ id:4, value:"The Good, the Bad and the Ugly", year:1966, votes:213030, rating:8.9, rank:4},
+					{ id:5, value:"Pulp fiction", year:1994, votes:533848, rating:8.9, rank:5},
+					{ id:6, value:"12 Angry Men", year:1957, votes:164558, rating:8.9, rank:6}
+				]
+			});	
+
+		});
+		</script>
+	</body>
+</html>

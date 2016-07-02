@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA, #areaB{
+				margin: 30px;
+			}
+		</style>
+		<title>Aligning Inputs and Labels</title>
+	</head>
+	<body>
+
+		<form>
+			<div id="areaA"></div>
+			<div id="areaB"></div>
+		</form>
+	
+
+		<script type="text/javascript" charset="utf-8">
+		var form1 = [
+			{ view:"text", value:'admin', width:150 },
+			{ view:"text", value:'admin', width:200 },
+			{ view:"text", value:'admin', width:250 },
+			{ view:"text", value:'admin'}
+		];
+
+		var form2 = [
+			{ view:"text", value:'admin', width:150, align:"center" },
+			{ view:"text", value:'admin', width:200, align:"center" },
+			{ view:"text", value:'admin', width:250, align:"center" },
+			{ view:"text", value:'admin', align:"center" }			
+		];
+
+		var form3 = [
+			{ view:"text", value:'admin', width:150, align:"right" },
+			{ view:"text", value:'admin', width:200, align:"right" },
+			{ view:"text", value:'admin', width:250, align:"right" },
+			{ view:"text", value:'admin', align:"right" }
+		];
+
+		
+
+
+
+		var form4 = [
+			{ view:"button", value:'admin', width:150 },
+			{ view:"button", value:'admin', width:200 },
+			{ view:"button", value:'admin', width:250 },
+			{ view:"button", value:'admin' }
+		];
+
+		var form5 = [
+			{ view:"button", value:'admin', width:150, align:"center" },
+			{ view:"button", value:'admin', width:200, align:"center" },
+			{ view:"button", value:'admin', width:250, align:"center" },
+			{ view:"button", value:'admin', align:"center" }
+		];
+
+		var form6 = [
+			{ view:"button", value:'admin', width:150, align:"right" },
+			{ view:"button", value:'admin', width:200, align:"right" },
+			{ view:"button", value:'admin', width:250, align:"right" },
+			{ view:"button", value:'admin', align:"right" }
+			
+		];
+
+		
+
+
+		webix.ui({
+			container:"areaA",
+			cols:[
+				{ rows:[
+					{ view:"form", scroll:false, width:300, elements: form1 },
+					{ view:"form", scroll:false, width:300, elements: form2 },
+					{ view:"form", scroll:false, width:300, elements: form3 }
+				]}, 
+				{ rows:[
+					{ view:"form", scroll:false, width:300, elements: form4 },
+					{ view:"form", scroll:false, width:300, elements: form5 },
+					{ view:"form", scroll:false, width:300, elements: form6 }
+				]}
+			]
+			
+		});	
+		</script>
+	</body>
+</html>

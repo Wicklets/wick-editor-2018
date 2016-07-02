@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <title>Basic List Uploader</title>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div id="uploader_container" style="width: 500px; height: 200px; margin: 40px;"></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function() {
+			webix.ui({
+				container:"uploader_container",
+				view:"form", rows: [
+					{ 
+						view: "uploader", value: 'Upload file', 
+						name:"files",
+						link:"mylist",  upload:"php/upload.php" 
+					},
+					{
+					 	view:"list",  id:"mylist", type:"uploader",
+						autoheight:true, borderless:true	
+					},
+					{ view: "button", label: "Get value", click: function() {
+						var text = this.getParentView().getValues();
+						text = JSON.stringify(text, "\n");
+						webix.message("<pre>"+text+"</pre>");
+					}}
+				]
+			});
+		});
+		</script>
+	</body>
+</html>

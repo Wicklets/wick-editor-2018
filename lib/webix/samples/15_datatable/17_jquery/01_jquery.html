@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> Integration with jQuery</title>
+		<script src="http://code.jquery.com/jquery-1.7.1.min.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Integration with jQuery </div>
+		<div class='sample_comment'>Click on any cell to select it. </div>
+		<div id="testA" class="cont"></div>
+		<hr>
+		<div id="testB" class="cont"></div>
+		<script type="text/javascript" charset="utf-8">
+		$(document).ready(function() {
+			$(".cont").webix_datatable({
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+				select:"cell",
+				autoheight:true,
+				autowidth:true,
+				data:small_film_set
+			});
+		});
+		</script>
+	</body>
+</html>

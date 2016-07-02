@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+	<title>Pure HTML Template: Referring to External HTML</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+	<script src="../../common/testdata.js"></script>
+    <link rel="STYLESHEET" type="text/css" href="dataview_styles.css">
+<body>
+	<div id="dataA" style="width:543px;height:270px;margin:20px"></div>
+	<script>
+        webix.ui({
+			view:"dataview",
+			container:"dataA",
+            css: "movies",
+            type:{
+                width: 260,
+                height: 90,
+                template:"http->template.html"
+            },
+            data:big_film_set
+		});
+	</script>
+
+</body>
+</html>
+
+

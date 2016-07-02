@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<title>Scrollview in the Window</title>
+		<style type="text/css">
+			html, body{
+				height:100%; margin:0px;
+			}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				view:"window", width:300, height:150, id:"topwin",
+				head:"Scrollview in the window",
+				body:{
+            		view:"scrollview", body:{
+            			rows:[
+            				{ template:"Row 1, more below...", height:100 },
+            				{ template:"Row 2, more below...", height:100 },
+            				{ template:"Row 3, more below...", height:100 },
+            				{ template:"Row 4, more below...", height:100 },
+            				{ template:"Row 5, this is the end.", height:100 }
+            			]
+            		}
+            	}
+            }).show({ x:100, y:100 });
+		</script>
+	</body>
+</html>

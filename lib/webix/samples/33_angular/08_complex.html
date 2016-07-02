@@ -1,0 +1,87 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8">
+  <title>Webix - Angular  : Complex Init</title>
+  <script src="js/angular.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="../../codebase/webix.css">
+  <script type="text/javascript" src="../../codebase/webix.js"></script>
+
+  <script type="text/javascript" src="js/complexApp.js"></script>
+  <style>html,body{ height:100%; padding:0px; margin:0px;}</style>  
+</head>
+<body>
+<div ng-app="webixApp" ng-controller="webixCtrl" class="webix_full_screen" style='height:100%; width:100%'>
+
+<div webix-ui type="line" style="height:100%;width:100%;" id="topview">
+    <div view="accordion" type="line">
+        <div type="header">
+            The top nav bar goes here
+        </div>
+        <div height="55">
+            <p>Fixed Height Row Goes Here</p>
+        </div>
+        <div view="body" header="Single item Accordion Goes Here">
+          <div  autoheight="true" view="template">
+          The Charts Go Here
+          </div>
+        </div>
+        
+        <!--The main Workbench Columns Go Here-->
+        <!--It should autosize the height to so that the app fills the entire screen -->
+        
+        <div view="cols" type="line">
+          
+          <div view="toolbar"  autoheight="false" stack="rows">
+            <div view="button" type="icon" icon="cog" width="30" webix-event="onItemClick = showDetails(id)"></div>
+            <div view="button" type="icon" icon="envelope"></div>
+            <div view="button" type="icon" icon="users" width="30"></div>
+          </div>                
+          
+          <div width="250">
+            <p>Fixed Width vertical accordion</p>
+          </div>
+          
+          <div view="form">
+            <div type="header" autoheight="true">The inputs go here<br/>in an accordion
+            </div>
+            <div ng-repeat="myInput in myInputs"  >
+              <span view="{{myInput.view}}" label="{{myInput.label}}"  value="{{myInput.value}}" icon="cog" webix-data='{{myInput.options}}'></span>
+            </div>
+            <div view='spacer'></div>
+          </div>
+          
+          
+          
+          <!-- Param List || Tabs View Resizer  -->
+          <div view="resizer"></div>
+          
+          
+          <div view="tabview" gravity="2">
+            <div header="Charts">
+              <div view=rows>
+                <div type="header"> Each chart in a accordion body</div>
+                <div ng-repeat="chart in charts"  view="chart" type="stackedArea"
+                alpha="0.7" eventRadius="5" webix-data="chart.data">
+                  <config name="xAxis" template="#year#"></config>
+                  <config name="yAxis"></config>
+                  <config stack='series'>
+                    <config ng-repeat="serie in chart.series"  value="#{{serie.template}}#" color="{{serie.color}}">
+                      <config name="tooltip" template="#{{serie.template}}#"></config>
+                    </config>
+                  </config>
+                </div>
+              </div>
+            </div>
+            <div header="Carousel">
+              2. Some content goes here.
+            </div>
+          </div>
+        </div>
+      
+        <div height="20" >
+            <div style="font-size: 0.8em">The footer Goes Here</div>
+        </div>
+    </div>
+</div>
+</body>

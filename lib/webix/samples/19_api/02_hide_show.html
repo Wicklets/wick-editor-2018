@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../common/testdata.js"></script>
+		<title>Hide and Show Components</title>
+	</head>
+	<body>
+		<div id='layout_div1' style='margin:20px;'></div>
+		<div id='layout_div2' style='margin:20px;'></div>
+		<div id='layout_div3' style='margin:20px;'></div>
+
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				container:"layout_div1",
+				rows:[
+					{
+						cols:[
+							{ view:"button", value:"Show first", click:function(){
+								$$("dt1").show();
+							}},
+							{ view:"button", value:"Hide first", click:function(){
+								$$("dt1").hide();
+							}},
+							{ view:"button", value:"Show second", click:function(){
+								$$("dt2").show();
+							}},
+							{ view:"button", value:"Hide second", click:function(){
+								$$("dt2").hide();
+							}}
+						]
+					}
+				]
+			});
+
+			webix.ui({
+				container:"layout_div2", id:"dt1", hidden:true,
+				view:"datatable", autoConfig:true,
+				autoheight:true,
+				data:small_film_set
+			});
+
+			webix.ui({
+				container:"layout_div3", id:"dt2", hidden:true,
+				view:"tabview",
+				cells:[{
+					header:"DataTable",
+					view:"datatable", autoConfig:true,
+					autoheight:true,
+					data:small_film_set
+				},{
+					header:"Form",
+					view:"form",
+					elements:[
+						{ view:"text", label:"First name" },
+						{ view:"text", label:"Second name" },
+						{ view:"button", label:"Save" }
+					]
+				}]
+			});
+		</script>
+	</body>
+</html>

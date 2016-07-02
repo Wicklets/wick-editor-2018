@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Row selection</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Row selection </div>
+		<div class='sample_comment'>Click on any row to select it. </div>
+		<div id="testA"></div>
+		<hr>
+		<div id="testB" class='sample_comment'></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+				select:"row",
+				autoheight:true,
+				autowidth:true,
+
+				on:{
+					onSelectChange:function(){
+						var text = "Selected: "+grid.getSelectedId(true).join();
+						document.getElementById('testB').innerHTML = text;
+					}
+				},
+
+				data:small_film_set
+			});		
+		});
+		</script>
+	</body>
+</html>

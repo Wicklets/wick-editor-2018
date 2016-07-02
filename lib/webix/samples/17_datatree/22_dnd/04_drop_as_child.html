@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Custom Dropping Behaviour. Denying Dropping</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/treedata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body class='webix_full_screen'>
+		<div class='header_comment'>Custom dropping behaviour</div>
+		<div class='sample_comment'>Drag items from the 1st to 2nd tree. <br> Note, only folders can accept drag and dragging items are inserted as childs of the target folder.</div>
+		
+		<div id="testA" style='width:300px; height:300px'></div>
+		<hr>
+		<div id="testB" style='width:300px; height:300px'></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			treea = webix.ui({
+				container:"testA",
+				view:"tree",
+
+				select:true,
+				drag:"source",
+
+				data: bigtreedata
+			});	
+
+			treeb = webix.ui({
+				container:"testB",
+				view:"tree",
+
+				select:true,
+				drag:"target",
+
+				on:{
+					onBeforeDragIn:function(context, e){
+						if (!context.target) return false;	//block dnd on top level
+						//block dnd in leaf items
+						if (!this.getItem(context.target).$count) return false;	
+					},
+					onBeforeDrop:function(context){
+						context.parent = context.target;	//drop as child
+						context.index = -1; 				//as last child
+					}
+				},
+
+				data: smalltreedata
+			});	
+
+		});	
+	
+		</script>
+	</body>
+</html>

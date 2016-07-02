@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Static paging. Loading from DB</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Static paging. Loading from DB(sqllite + php)</div>
+		<div class='sample_comment'>Use the page selector below to choose the desired page.</div>
+		<div id="testA" style='height:300px'></div>
+		<div id="paging_here"></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"package",	header:"Name", 			width:200 },
+					{ id:"section",	header:"Section",		width:120 },
+					{ id:"size",	header:"Size" , 		width:80  },
+					{ id:"architecture",	header:"PC", 	width:60  }
+				],
+				select:"cell",
+				autowidth:true,
+				pager:{
+					container:"paging_here",
+					size:10,
+					group:5
+				},
+				url:"data/data.php"
+			});	
+		});
+		</script>
+	</body>
+</html>

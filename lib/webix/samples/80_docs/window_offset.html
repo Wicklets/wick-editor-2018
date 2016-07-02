@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title>Window Offset</title>
+	<script type="text/javascript" src='../../codebase/webix.js'></script>
+	<link rel="stylesheet" type="text/css" href="../../codebase/webix.css">
+</head>
+<body>
+<script>
+webix.ui ({
+	view:"window",
+	width: 300,
+	height:300,
+	head:"My Window",
+	autofit:false,
+	body:{
+          template:"Window Position:<br/><br/> Left Offset is 300px, <br/> Top offset is 50px"
+         }
+	}).show({
+		x: 300, //left offset from the right side
+		y: 150 //top offset
+	});
+
+		
+webix.ui ({
+	view:"popup",
+	width: 300,
+	height:300,
+	autofit:false,
+	body:{
+          template:"Popup Position:<br/><br/> Left Offset is 650px,<br/> Top offset is 50px"
+         }
+	}).show({
+		x: 650, //left offset from the right side
+		y: 150 //top offset
+	});
+
+</script>
+</body>
+</html>

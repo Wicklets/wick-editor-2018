@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>DataTable 3-state checkboxes</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>3-state checkboxes</div>
+		<div id="testA"></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"treetable",
+				columns:[
+					{ id:"id",	header:"", css:{"text-align":"right"},  	width:50},
+					{ id:"value",	header:"Title",	width:250,
+						template:"{common.space()}{common.icon()}{common.treecheckbox()}{common.folder()}#value#" },
+					{ id:"state",	header:"State",	width:100},
+					{ id:"hours",	header:"Hours",	width:100}
+				],
+
+				threeState: true,
+				editable:true,
+				autoheight:true,
+				autowidth:true,
+				url: "data/treedata.php", datatype:"xml"
+			});
+		});
+		</script>
+	</body>
+</html>

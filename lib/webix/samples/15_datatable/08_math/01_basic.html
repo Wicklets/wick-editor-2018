@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Using formulas</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/mathdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<style>
+	.index .webix_cell{
+		background-color:yellow;
+		text-align:center;
+	}
+	.center .webix_cell{
+		text-align:center;
+	}
+	</style>
+	<body>
+		<div class='header_comment'>Using formulas</div>
+		<div class='sample_comment'>Using math feature gives you ability to use mathematical expressions into cells.</div>
+		<div class='sample_comment'>Expressions will be parsed and calculated and users will see the calculation result.</div>
+		<div id="testA" style='width:800px; height:300px'></div>
+		<script type="text/javascript" charset="utf-8">
+
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"id",	header:"", css:"rank",  		width:50},
+					{ id:"name",	header:"Country",width:200},
+					{ id:"rev",	header:"Revenue" , width:180},
+					{ id:"exp",	header:"Expenditures", 	width:180},
+					{ id:"dif", header: "Deficit/surplus", width: 180},
+					{ id:"date", header: "Date", width: 80}
+				],
+				autoheight:true,
+				autowidth:true,
+				math: true,
+				data: budget
+			});
+
+		</script>
+	</body>
+</html>

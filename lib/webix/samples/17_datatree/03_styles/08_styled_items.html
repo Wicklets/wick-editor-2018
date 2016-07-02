@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Styled Tree Items</title>
+    <link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+    <script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="../common/treedata.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../common/samples.css">
+    <style>
+        .my_style  {
+            font-style: italic;
+            color:blue;
+        }
+        #testA, #testB, #testC, #testD{
+            width:300px;
+            height:250px;
+            float:left;
+        }
+    </style>
+</head>
+<body>
+<div class='header_comment'>Stylized DataTree items</div>
+<div class='sample_comment'>
+    <ol>
+        <li>Stanbard styling</li>
+        <li>Level-based styling (>2nd)</li>
+        <li>Applying CSS to the whole tree</li>
+        <li>Applying CSS to specified data items</li>
+    </ol>
+</div>
+<div id="testA"></div>
+<div id="testB"></div>
+<div style='clear:both;'></div>
+<div id="testC"></div>
+<div id="testD"></div>
+
+
+<script type="text/javascript" charset="utf-8">
+
+    webix.ready(function(){
+
+        var tree1 = webix.ui({
+            container:"testA",
+            view:"tree",
+            select:true,
+            data: webix.copy(smalltreedata)
+        });
+
+        var tree2 = webix.ui({
+            container:"testB",
+            view:"tree",
+            select:true,
+            template: function(obj, common){
+                if (obj.$level>2) {
+                    return common.icon(obj,common)+common.folder(obj,common)+"<i>"+obj.value+"</i>";
+                } else {
+                    return  common.icon(obj,common)+common.folder(obj,common)+obj.value;
+                }
+            },
+            data: webix.copy(smalltreedata)
+        });
+
+        var tree3 = webix.ui({
+            container:"testC",
+            view:"tree",
+            css:"my_style",
+            select:true,
+            data: webix.copy(smalltreedata)
+        });
+
+        var tree4= webix.ui({
+            container:"testD",
+            view:"tree",
+            data: [
+                {id:"root", value:"Films data", open:true, data:[
+                    { id:"1", open:true, value:"The Shawshank Redemption", data:[
+                        { id:"1.1", value:"Part 1" },
+                        { id:"1.2", value:"Part 2", $css:"my_style" },
+                        { id:"1.3", value:"Part 3" }
+                    ]},
+                    { id:"2", value:"The Godfather", open:true, data:[
+                        { id:"2.1", value:"Part 1" },
+                        { id:"2.2", value:"Part 2", $css:"my_style" }
+                    ]}
+                ]}
+            ]
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Custom pagers</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Custom pagers</div>
+		<div class='sample_comment'>The sample shows how to use templates for creating custom pagers.</div>
+		<div class='sample_comment'>Loading from DB (sqllite + php).</div>
+		</br>
+		<div id="paging_here"></div>
+		<div id="testA" style='height:300px'></div>
+		<div id="paging_here_too"></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			grida = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"package",	header:"Name", 			width:200 },
+					{ id:"section",	header:"Section",		width:120 },
+					{ id:"size",	header:"Size" , 		width:80  },
+					{ id:"architecture",	header:"PC", 	width:60  }
+				],
+				select:"cell",
+				autowidth:true,
+				pager:{ //upper pager
+					template:function(data, common){
+						var current = data.page + 1;
+						var html = "<select onchange='grida.setPage(this.value)' style='text-align:center; width:150px'>";
+						for (var i=1; i<=data.limit; i++)
+							html+="<option "+(i == current?"selected='true'":"")+">"+i+"</option>";
+						html+="</select> from "+data.limit;
+						return html;
+					},
+					container:"paging_here",
+					size:10,
+					group:5
+				},
+				url:"data/data.php"
+			}); 
+
+			grida.getPager().clone({
+				template:function(data, common){
+					var start = data.page * data.size;
+					var end = start + data.size;
+					var html = " <div style='width:405px; text-align:center; line-height:20px; font-size:10pt; float:left'> Rows "+(start+1)+" - "+end+" </div> ";
+					return common.prev()+html+common.next();
+				},
+				container:"paging_here_too",
+				size:10,
+				group:5
+			});
+
+		});
+		</script>
+	</body>
+</html>

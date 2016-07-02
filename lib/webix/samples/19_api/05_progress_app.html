@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+    <script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="../common/testdata.js"></script>
+    <title>Progress Bars::Layout</title>
+
+</head>
+<body>
+<div id='layout_div' style='margin:20px; width:700px; height:400px; float:left;'></div>
+
+<script>
+
+    webix.ui({
+        container:"layout_div",
+        id:"app",
+        margin:5,
+        rows:[
+            { type:"header", template:"My Form"},
+            {view:"segmented", options:["Add", "Delete", "Mark"]},
+            {
+                view:"form",
+                id:"myform",
+                elements:[
+                    {view:"richselect", name:"rank", options:["1", "2", "3"]},
+                    {view:"text", name:"title"},
+                    {view:"text", name:"year"},
+                    {view:"text", name:"votes"},
+                    {view:"counter", name:"rating"},
+                ],
+                data:small_film_set[0]
+            },
+            {height:45},
+            { cols:[
+                { view:"button", value:"Reload with Progress Bar", click:function(){ show_progress_bar(2000); }},
+                { view:"button", value:"Reload with Progress Icon", click:function(){ show_progress_icon(2000); }}
+            ]}
+        ]
+
+    });
+
+    //adding ProgressBar functionality to layout
+    webix.extend($$("app"), webix.ProgressBar);
+
+
+    function show_progress_bar(delay){
+        $$("app").disable();
+        $$("app").showProgress({
+            type:"top",
+            delay:delay,
+            hide:true
+        });
+        setTimeout(function(){
+            $$("myform").parse(small_film_set[1]);
+            $$("app").enable();
+        }, delay);
+    }
+
+    function show_progress_icon(delay){
+        $$("app").disable();
+        $$("app").showProgress({
+            type:"icon",
+            delay:delay
+        });
+        setTimeout(function(){
+            $$("myform").parse(small_film_set[2]);
+            $$("app").enable();
+            $$("app").hideProgress();
+        }, delay);
+    }
+
+</script>
+</body>
+</html>

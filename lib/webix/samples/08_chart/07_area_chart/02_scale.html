@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+	<title>Area Chart: Axes</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+	<script src="../../common/chartdata.js"></script>
+<body>
+    <div id="charts" style="width:800px;height:250px;margin:20px"></div>
+	<script>
+        webix.ui({
+            container:"charts",
+            rows:[
+                {
+                    cols:[
+                        {
+                            template: "<div style='padding-left:5px'>Default</div>",
+                            height:40
+                        },
+                        {
+                            template:"<div style='padding-left:5px'>Custom scales</div>",
+                            height:40
+                        }
+                    ]
+                },
+                {
+                    cols:[
+                        {
+                            view:"chart",
+                            type:"area",
+                            value:"#sales#",
+                            alpha:0.8,
+                            color:"#36abee",
+                            xAxis:{
+                                template:"'#year#"
+                            },
+                            yAxis:{
+                            },
+                            data: dataset
+                        },
+                        {
+                            view:"chart",
+                            type:"area",
+                            color:"#58dccd",
+                            alpha:0.8,
+                            value:"#sales#",
+                            tooltip:{
+                                template:"#sales#"
+                            },
+                            xAxis:{
+                                template:"'#year#",
+                                title:"Year"
+                            },
+                            yAxis:{
+                                start:0,
+                                step:10,
+                                end:100,
+                                template:function(value){
+                                    return value%20?"":value
+                                },
+                                title:"Sales"
+                            },
+                            data: dataset
+                        }
+                    ]
+                }
+            ]
+        });
+	</script>
+</body>
+</html>
+	
+	

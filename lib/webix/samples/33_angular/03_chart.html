@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en" ng-app="webixApp">
+<head>
+  <meta charset="utf-8">
+  <title>Webix - Angular : Chart</title>
+  <script src="js/angular.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="../../codebase/webix.css">
+  <script type="text/javascript" src="../../codebase/webix.js"></script>
+
+  <script type="text/javascript" src="js/dataApp.js"></script>
+</head>
+<body ng-controller="webixTestController">
+
+<div style="width:500px; height:200px;">
+  <div webix-ui view="chart" id="mychart" webix-data="lines" type="bar" value="#sales#" borderless="true"></div>
+</div>
+
+<br>
+<button ng-click="changeLine('line')">Show Line Chart</button>
+<button ng-click="changeLine('bar')">Show Bar Chart</button>
+</body>
+</html>

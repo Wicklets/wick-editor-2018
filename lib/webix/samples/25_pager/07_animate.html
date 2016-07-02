@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Paging animation</title>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../15_datatable/common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Visible paging</div>
+		<div class='sample_comment'>Paging can be initialized as separate visible view.</div>
+		</br>
+		<div id="testA" style='height:600px; width:300px;'></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ui({
+			container:"testA",
+			margin:10,
+			rows:[
+				{
+					view:"pager", id:"pagerA",
+					animate:true,
+					size:10,
+					group:5
+				},
+				{	
+					view:"datatable",
+					scrollY:false,
+					columns:[
+						{ id:"rank",	header:"#", 		width:50,	sort:"int",	css:"rank"},
+						{ id:"title",	header:"Film title",width:200,	sort:"string"},
+						{ id:"year",	header:"Released" , width:80,	sort:"int"},
+						{ id:"votes",	header:"Votes", 	width:100,	sort:"int"}
+					],
+					pager:"pagerA",
+					select:true,
+					autowidth:true,
+					height:285,
+					data:big_film_set
+				},
+				{},
+				{
+					view:"pager", id:"pagerB",
+					animate:true,
+					size:10,
+					group:5
+				},
+				{
+					view:"list",
+					height:280,
+					template:"#rank#. #title#, #year#",
+					select:true,
+					scroll:false,
+					pager:"pagerB",
+					data:big_film_set
+				}
+			]
+		});
+
+
+
+		</script>
+	</body>
+</html>

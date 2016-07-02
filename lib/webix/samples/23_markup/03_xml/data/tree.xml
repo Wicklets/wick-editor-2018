@@ -1,0 +1,20 @@
+<data xmlns:x="http://webix.com/xml">
+	<x:ui>
+		<x:tree>
+			<x:data>
+				<li>Item 1</li>
+				<li>Item 2</li>
+				<li open="1">
+					<value>Item 3</value>
+					<data stack="1">
+						<li>Item 2.1</li>
+						<li>Item 2.2</li>
+						<li>Item 2.3</li>
+						<li>Item 2.4</li>
+					</data>
+				</li>
+				<li>Item 4</li>
+			</x:data>
+		</x:tree>
+	</x:ui>
+</data>

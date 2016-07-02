@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+	<title>Loading Data from URL</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+<body>
+	<style type="text/css">
+		#dataA, #dataB{
+			margin:20px;
+		}
+	</style>
+	<div id="dataA" style="width:500px;height:300px;"></div>
+	<hr>
+	<div id="dataB" style="width:500px;height:300px;"></div>
+
+	<script>
+		webix.ui({
+			view:"dataview",
+			container:"dataA",
+			template:"<div class='webix_strong'>#package#</div> <span class='webix_light'>#maintainer#</span>",
+			url:"data/data_json.php",
+			type:{
+				height: 60
+			}
+		});
+
+		webix.ui({
+			view:"dataview",
+			container:"dataB",
+			template:"<div class='webix_strong'>#package#</div> <span class='webix_light'>#maintainer#</span>",
+			url:"data/data_xml.php",
+			datatype:"xml",
+			type:{
+				height: 60
+			}
+		});		
+	</script>
+
+
+</body>
+</html>

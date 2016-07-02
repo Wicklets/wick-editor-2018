@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Adjusting to the parent container</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Adjusting to the parent container</div>
+		<div class='sample_comment'>The sample shows how, by default, datatable takes the size of the parent html element.</div>
+		<div id="testA" style='width:500px; height:300px;'></div>
+		<hr>	
+		<div id="testB" style='width:250px; height:300px;'></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200,	fillspace:true},
+					{ id:"year",	header:"Released" , width:80	},
+					{ id:"votes",	header:"Votes", 	width:100	}
+				],
+				data:small_film_set,
+				scrollY:false
+			});			
+		});
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testB",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200   },
+					{ id:"year",	header:"Released" , width:80	},
+					{ id:"votes",	header:"Votes", 	width:100	}
+				],
+				data:small_film_set,
+				scrollY:false
+			});			
+		});
+		</script>
+	</body>
+</html>

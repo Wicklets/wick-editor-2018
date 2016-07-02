@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script type="text/javascript" src="../common/testdata.js"></script>
+		<style>
+			#areaA, #areaB, #areaC, #areaD {
+				margin:20px 10px;;
+				width:320px;
+				height:200px;
+				float: left;
+			}
+			
+		</style>
+		<title>Tabview: Close tab button</title>
+	</head>
+	<body>
+    <div class="header_comment">Tabview</div>
+		<div id="areaA"></div>
+		<div id="areaB"></div>
+        <div class="header_comment" style="clear:both;">Tabbar</div>
+        <div id="areaC"></div>
+        <div id="areaD"></div>
+
+		<script type="text/javascript" charset="utf-8">
+
+
+		var cellsA =[
+			{
+				header:"List",
+				body:{ template:"All tabs can be closed" }
+			},
+			{
+				header:"Form",
+				body:{ template:"demo tab 2" }
+			},
+			{
+				header:"About",
+				body:{ template:"demo tab 3" }
+			}
+		];
+
+		webix.ui({
+			container: "areaA",
+			view:"tabview",
+			animate:false,
+			tabbar:{
+				close:true
+			},
+			cells:cellsA
+		});
+
+
+		var cellsB =[
+			{
+				header:"List",
+				body:{ template:"This tab can't be closed" }
+			},
+			{
+				header:"Form",
+				close:true,
+				body:{ template:"demo tab 2" }
+			},
+			{
+				header:"About",
+				close:true,
+				body:{ template:"demo tab 3" }
+			}
+		];
+
+		webix.ui({
+			container: "areaB",
+			view:"tabview",
+			animate:false,
+			cells:cellsB
+		});
+
+        var tabsC = [
+            { id:"tab1", value:"List" },
+            { id:"tab2", value:"Form" },
+            { id:"tab3", value:"About" }
+        ];
+
+        var cellsC =[
+            { id:"tab1", template:"All tabs can be closed" },
+            { id:"tab2", template:"demo tab 2" },
+            { id:"tab3", template:"demo tab 3" }
+        ];
+
+        webix.ui({
+            container:"areaC",
+            rows:[
+                {view:"tabbar", options:tabsC, close:true},
+                {cells:cellsC}
+            ]
+
+        });
+
+        var tabsD = [
+            { id:"t1", value:"List"},
+            { id:"t2", value:"Form", close:true },
+            { id:"t3", value:"About", close:true }
+        ]
+
+        var cellsD =[
+            { id:"t1", template:"This tabs can't be closed" },
+            { id:"t2", template:"demo tab 2" },
+            { id:"t3", template:"demo tab 3" }
+        ];
+
+        webix.ui({
+            container:"areaD",
+            rows:[
+                {view:"tabbar", options:tabsD},
+                {cells:cellsD}
+            ]
+        });
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Datatable: Reordering</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../../common/samples.css">
+	</head>
+	<body>
+		<div class='header_comment'>Reorder rows - it will be autosaved to database</div>
+		<div id='testA'></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		var grid = {
+			view:"datatable", id:"mygrid",
+			columns:[
+			{id:"rank"},
+				{ id:"title",	editor:"text",  header:"Film title",	width:200},
+				{ id:"year",	editor:"text",  header:"Released" , 	width:80},
+				{ id:"votes",	editor:"text",  header:"Votes", 		width:100}
+			],
+			autoheight:true,
+			autowidth:true,
+			drag:"order",
+
+			save: "server/datatable_save_order.php",
+			url: "server/datatable_order.php"
+		};
+
+
+		
+		webix.ready(function(){
+			webix.ui({
+				container:"testA",
+				rows:[
+					grid
+				]
+			});
+			$$("mygrid").attachEvent("onafterdroporder", function(id){
+				var item = this.getItem(id);
+				var index = this.getIndexById(id)+1;
+
+				if (item.rank == index) return; //position was not changed
+
+				item.old_rank = item.rank;
+				for (var i=this.count()-1; i>=0; i--)
+					this.getItem(this.getIdByIndex(i)).rank = i+1;
+				
+				this.updateItem(id);
+			});
+		});
+		</script>
+	</body>
+</html>

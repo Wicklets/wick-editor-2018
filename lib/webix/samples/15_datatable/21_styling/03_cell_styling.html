@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Cells styling</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Cells styling </div>
+		<div class='sample_comment'>Standard DataTable</div>
+		<div id="testA"></div>
+		<hr>	
+		<div class='sample_comment'>Styling by format rules</div>
+		<div id="testB"></div>
+		<hr>	
+		<div class='sample_comment'>Styling from the data</div>
+		<div id="testC"></div>
+
+		<style>
+		.highlight{
+			background-color:#FFAAAA;
+		}
+		</style>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+				data:small_film_set,
+				autowidth:true,
+				autoheight:true
+			});
+		})
+		
+		webix.ready(function(){
+
+			//named css
+			function mark_old(value){
+				if (value > 1980)
+					return "highlight";
+			}
+			//object css
+			function mark_votes(value, config){
+				if (value > 400000)
+					return { "text-align":"right" };
+			}
+
+			grid = webix.ui({
+				container:"testB",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80,  cssFormat:mark_old },
+					{ id:"votes",	header:"Votes", 	width:100, cssFormat:mark_votes }
+				],
+				data:small_film_set,
+				autowidth:true,
+				autoheight:true
+			});			
+		});
+
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testC",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		 width:50  },
+					{ id:"title",	header:"Film title", width:200 },
+					{ id:"year",	header:"Released",   width:80},
+					{ id:"votes",	header:"Votes", 	 width:100}
+				],
+				data:[
+					{ id:1,
+					  title:"The Shawshank Redemption",
+					  year:1994,
+					  votes:678790,
+					  rating:9.2, 
+					  rank:1,
+					  $cellCss:{
+						  year:"highlight"
+					  }
+					},
+					{ id:2,
+					  title:"The Godfather",
+					  year:1972,
+					  votes:511495,
+					  rating:9.2,
+					  rank:2,
+					  $cellCss:{
+						  votes:{ "text-align":"right" }
+					  }
+					}
+				],
+				autowidth:true,
+				autoheight:true
+			});			
+		});		
+		</script>
+	</body>
+</html>

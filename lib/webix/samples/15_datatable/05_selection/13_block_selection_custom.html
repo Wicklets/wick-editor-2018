@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Custom Block Selection</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Block selection </div>
+		<div class='sample_comment'>Click on any cell to select it. </div>
+		<div class='sample_comment'>Right click the mouse and drag to select an area.</div>
+		<div class='sample_comment'>Start drag from the first column if you want to select a whole raw.</div>
+		<div id="testA"></div>
+		<hr>
+		<div id="testB" class='sample_comment'></div>
+		<style type="text/css">
+			.webix_block_selection{
+				background:rgba(67,149,75,0.5);
+			}
+		</style>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:120}
+				],
+				select:"cell",
+				multiselect:true,
+				blockselect:true,
+				autowidth:true,
+				autoheight:true,
+				
+				on:{
+					onBeforeBlockSelect:function(start, end, fin){
+						if (start.column === "rank")
+							end.column = "votes";
+
+						if (fin && start.column == "rank"){
+							var mode = this.isSelected(start) ? -1 : 1;
+							this.selectRange(
+								start.row, start.column, end.row, end.column,
+								mode
+							);
+							return false;
+						}
+					}
+				},
+
+
+
+				data:small_film_set
+			});		
+		});
+		</script>
+	</body>
+</html>

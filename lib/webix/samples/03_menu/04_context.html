@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA, #areaB{
+				margin: 50px;
+				background-color:#ffffbb;
+				width:500px; height:300px;
+			}
+		</style>
+		<title>Context Menu</title>
+	</head>
+	<body>
+
+		<div id="areaA">
+			Right click here
+		</div>
+		<br><hr><br>
+		<div id="areaB">
+			Right click here
+		</div>
+
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				view:"contextmenu",
+				data:["Add","Rename","Delete",{ $template:"Separator" },"Info"],
+				master:"areaA",
+				on:{
+					onItemClick:function(id){
+						webix.message(this.getItem(id).value);
+					}
+				}
+			});
+
+			webix.ui({
+				view:"contextmenu",
+				data:[
+					{ value:"Translate...", submenu:[ 
+						"English", 
+						{ value:"Slavic...", submenu:[
+							"Belarusian", "Russian", "Ukrainian"
+						]},
+						"German"
+					]},
+					{ value:"Post...", submenu:[ "Facebook", "Google+", "Twitter" ]},
+					{ value:"Info" }
+				],
+				on:{
+					onItemClick:function(id){
+						var menu = this.getMenu(id);
+						webix.message(menu.getItem(id).value);
+					}
+				},
+				master:"areaB"
+			});			
+
+			
+		</script>
+	</body>
+</html>

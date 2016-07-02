@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="./common/underscore.js"></script>
+		<script type="text/javascript" src="./common/backbone.js"></script>
+
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<title>Routes. The Webix way.</title>
+	</head>
+	<body>
+		<div style="height:300px; width:200px" id="app1_here"></div>
+		
+		
+		<script type="text/javascript" charset="utf-8">
+			var routes = new (Backbone.Router.extend({
+				routes:{
+					"":"index", 
+					"films/:id":"details"
+				},
+				details:function(id){
+					$$("details").show();
+					//$$("details").parse(borgs.get(id).attributes);
+				},
+				index:function(){
+					$$("mylist").show();
+				}
+			}));
+
+
+			webix.ui({
+				container:"app1_here", rows:[
+					{ template:"Click on item", type:"header" },
+					{
+						cells:[
+							{ view:"list", url:"common/data.json", template:"#title#", select:true, id:"mylist"},
+							{ template:"Details page<br>not implemented :)<br><button onclick='history.back()'>Back</button>", id:"details" }
+						]
+					}
+				]
+			});
+
+			$$("mylist").attachEvent("onAfterSelect", function(id){
+				routes.navigate("films/"+id, { trigger:true });
+			});
+
+
+			Backbone.history.start();
+			
+		</script>
+	</body>
+</html>

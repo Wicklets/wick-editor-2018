@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+	<title>Dataview: XML Dataset</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+    <link rel="STYLESHEET" type="text/css" href="../02_templates/dataview_styles.css">
+<body>
+	<div id="data" style="width:545px;height:270px;margin:20px"></div>
+   <input type="button" value="Reload from XML String" onclick="parse()" style='margin-left:20px'/>
+	<script>
+        webix.ui({
+            id:"data",
+			view:"dataview",
+			container:"data",
+            css: "movies",
+            type:{
+                width: 261,
+                height: 90,
+                template:"<div class='overall'><div class='rank'>#rank#.</div><div class='title'>#title#</div><div class='year'>#year# year</div> </div>"
+            },
+            datatype:"xml",
+            url:"movies.xml"
+		});
+        function parse(){
+            var str = "<data><item id='10'><title>The Lord of the Rings: The Return of the King</title> <year>2003</year><rank>10</rank></item>";
+            str += "<item id='11'><title>Star Wars: Episode V - The Empire Strikes Bac</title> <year>1980</year><rank>11</rank> </item></data>";
+            $$("data").clearAll();
+            $$("data").parse(str,"xml");
+        }
+	</script>
+
+</body>
+</html>
+
+

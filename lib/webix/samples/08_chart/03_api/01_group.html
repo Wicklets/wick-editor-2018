@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+<head>
+	<title>Grouping</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+	<script src="../../common/chartdata.js"></script>
+<body>
+	<div id="chartDiv" style="width:600px;height:250px;margin:20px"></div>
+	<div  style="margin-left:20px">
+		<input type="button" name="some_name" value="Group by" onclick="window['group'+document.getElementById('groupby').value]()">
+		<select name="groupby" id="groupby">
+			<option value="A">company</option>
+			<option value="B" SELECTED>year (total sales)</option>
+			<option value="C">year (max sales)</option>
+			<option value="D">year (min sales)</option>
+			<option value="E">year (average sales)</option>
+		</select>
+	</div>
+
+	<script>
+		webix.ui({
+			view:"chart",
+			id:"mychart",
+			container:"chartDiv",
+			type:"bar",
+			value:"#sales#",
+			preset: "alpha",
+			xAxis:{
+				template:"#id#"
+			},
+			yAxis:{
+			},
+			scheme:{
+				$sort:{
+					by:"id",
+					as:"string",
+					dir:"asc"
+				},
+				$group:{
+					by:"year",
+					map:{
+						sales:["sales","sum"]
+					}	
+				}
+			},
+			data: groupdata
+		});
+
+		function  groupA(){
+			$$("mychart").group({
+				by:"company",
+				map:{
+					sales:["sales","sum"]
+				}
+			});
+			$$("mychart").sort("id","asc","string");
+		}
+
+		function  groupB(){
+			$$("mychart").group({
+				by:"year",
+				map:{
+					sales:["sales","sum"]
+				}
+			});
+			$$("mychart").sort("id","asc","string");
+		}
+
+		function  groupC(){
+			$$("mychart").group({
+				by:"year",
+				map:{
+					sales:["sales","max"]
+				}
+			});
+			$$("mychart").sort("id","asc","string");
+		}
+
+		function  groupD(){
+			$$("mychart").group({
+				by:"year",
+				map:{
+					sales:["sales","min"]
+				}
+			});
+		}
+
+		function getAverage(prop, data){
+    		if (!data.length) return 0;
+				var summ = 0;
+				for (var i = data.length - 1; i >= 0; i--) {
+					summ += prop(data[i])*1;
+				};
+				return summ/data.length;
+		}
+
+		function  groupE(){
+			$$("mychart").group({
+				by:"year",
+				map:{
+					sales:["sales", getAverage]
+				}
+			});
+		}
+
+	</script>
+</body>
+</html>

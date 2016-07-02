@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:x>
+<head>
+	<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8" />
+	<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	<title>XML init : multiple separate components</title>
+	<style type="text/css">
+		html, body{
+			height:100%;
+		}
+	</style>
+</head>
+<body>
+<script type="text/javascript">
+	webix.ajax("data/complex.xml", function(text, data){
+		webix.markup.init(data.rawxml(), document.body);
+		$$("win1").show();
+	});
+</script>
+</body>
+</html>

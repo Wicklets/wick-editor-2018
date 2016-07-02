@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<title>HTML initialization : HTML form</title>
+		<style type="text/css">
+			textarea, input{
+				min-width:200px;
+				padding:5px;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<div style='margin:50px; width:300px; height:200px;'>
+			<form data-view="htmlform" data-id="formView">
+				<input type="text" name="title" value="" placeholder="Book title" /><br/>
+				<input type="text" name="author" value="" placeholder="Author" /><br/>
+				<textarea name="annotation" id="annotation" rows="4">some book annotation is here</textarea><br/>
+				<input type="button" name="submit" value="Submit" />
+			</form>
+		</div>
+
+		<div style='margin-left:50px'>
+			<input type="button" value="Set form" onclick="set_form();" />
+			<input type="button" value="Get form" onclick="get_form();" />
+			<input type="button" value="Clear form" onclick="clear_form();" />
+			<input type="button" value="Load form" onclick="load_form();" />
+		</div>
+
+
+		<script type="text/javascript" charset="utf-8">
+			function set_form() {
+				$$('formView').setValues({
+					title: "Book title 1",
+					author: "Author test",
+					in_store: false,
+					rank: "4",
+					genre: "fantasy",
+					annotation: "some test",
+					submit: "Order"
+				});
+			}
+
+			function get_form() {
+				var values = $$('formView').getValues();
+				webix.message("<pre>"+JSON.stringify(values,0,1)+"</pre>");
+			}
+			
+			function clear_form() {
+				$$('formView').clear();
+			}
+			
+			function load_form() {
+				$$('formView').load("./data/book.xml", "xml");
+			}
+
+			webix.ready(function(){
+				webix.markup.init(document);
+			});
+		</script>
+	</body>
+</html>

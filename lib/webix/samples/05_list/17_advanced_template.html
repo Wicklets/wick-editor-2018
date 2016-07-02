@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+    <script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+    <title>List::Advanced Template</title>
+    <script type="text/javascript" src="../common/testdata.js"></script>
+    <style>
+        #listA, #listB{
+            float:left; margin:20px;
+        }
+        .custom_item{
+            width:300px;
+            height:55px;
+            border:1px solid #009966;
+            border-radius:4px;
+            margin:10px 5px;
+            overflow:hidden;
+            background-color:#ffffee;
+            padding:10px;
+        }
+        .newtime{
+            background-color:#DDFFDD;
+        }
+        .oldtime{
+            background-color:#DDDDFF;
+        }
+        .oldtime, .newtime{
+            border-radius:4px;
+        }
+    </style>
+</head>
+    <div id="listA"></div>
+    <div id="listB"></div>
+<body>
+    <script>
+
+        webix.ui({
+            view:"list",
+            container:"listA",
+            width:300,
+            height:600,
+            template:"{common.itemIcon} #rank#. #title#. {common.itemYear()}",
+            type:{
+                itemIcon:"<span class='webix_icon fa-film'></span>",
+                itemYear:function(obj){
+                    if(obj.year>=2000){
+                        return "<span class='newtime'>"+obj.year+"</span>";
+                    } else if(obj.year<1970){
+                        return "<span class='oldtime'>"+obj.year+"</span>";
+                    } else
+                        return obj.year;
+                }
+            },
+            select:true,
+            data:webix.copy(big_film_set)
+        });
+
+        webix.ui({
+            view:"list",
+            container:"listB",
+            height:600,
+            type:{
+                templateStart:"<div item_id='id' class='custom_item'>",
+                template:"#rank#. #title#<br><div style='text-align:right;'>#year#</div>",
+                templateEnd:"</div>"
+            },
+            data:big_film_set
+
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+﻿<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA {
+				margin: 50px;
+				width:300px;
+				height:230px;
+			}
+
+			.invalid {
+				border-color: #ff0000;
+				color: #ff0000;
+			}
+			.controls {
+				margin: 50px;
+			}
+		</style>
+		<title>HTML-form validation, Predefined Rules</title>
+	</head>
+	<body>
+
+		<div id="areaA">
+			<label><input type="text" name="title" value="" placeholder="Book title" />Must Be Filled</label><br/>
+			<input type="text" name="author" value="" placeholder="Author" /><br/>
+			<label><input type="text" name="sale" value="" placeholder="Sale" />Numbers Only</label><br/>
+			<input type="checkbox" name="in_store" id="in_store" checked /><label for="in_store">In store</label><br/><br/>
+
+		</div>
+
+		<div class="controls">
+			<input type="button" value="Clear form" onclick="clear_form();" />
+			<input type="button" value="Validate" onclick="validate();" />
+		</div>
+
+
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				container: "areaA",
+				view:"htmlform", id:"formView",
+				content: "areaA",
+				rules:{
+					title: webix.rules.isNotEmpty,
+					sale: webix.rules.isNumber,
+				}
+
+			});
+			
+			function clear_form() {
+				$$('formView').clear();
+			}
+
+			function validate() {
+				$$('formView').validate();
+			}
+		</script>
+	</body>
+</html>

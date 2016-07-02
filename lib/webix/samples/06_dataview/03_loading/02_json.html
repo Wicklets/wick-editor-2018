@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+	<title>Dataview: JSON Dataset</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+    <link rel="STYLESHEET" type="text/css" href="../02_templates/dataview_styles.css">
+<body>
+	<div id="data" style="width:545px;height:270px;margin:20px"></div>
+    <input type="button" value="Reload from JSON array" onclick="parse()" style='margin-left:20px'/>
+	<script>
+        webix.ui({
+            id:"data",
+			view:"dataview",
+			container:"data",
+            css: "movies",
+            type:{
+                width: 261,
+                height: 90,
+                template:"<div class='overall'><div class='rank'>#rank#.</div><div class='title'>#title#</div><div class='year'>#year# year</div> </div>"
+            },
+            url:"movies.json"
+		});
+        function parse(){
+            var obj = [{"id":1,"title":"The Shawshank Redemption","year":"1994","votes":"678,79","rating":"9,2","rank":"1"},{"id":2,"title":"The Godfather","year":"1972","votes":"511,495","rating":"9,2","rank":"2"}];
+            $$("data").clearAll();
+            $$("data").parse(obj);
+        }
+	</script>
+
+</body>
+</html>
+

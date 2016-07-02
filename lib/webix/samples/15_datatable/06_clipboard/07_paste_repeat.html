@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>'repeat' copying</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>'repeat' copying</div>
+		<div class='sample_comment'>The sample shows behavior of the 'repeat' clipboard (clipboard:'repeat'), which can be characterized as follows:</div>
+		<div class='sample_comment'> 1) When the copy area is less than the one selected, copied cells are repeated a specific number of times to fill the selected cells.</div>
+		<div class='sample_comment'> 2) When the copy area is greater than the one selected, copied cells fill only the selected area and don't 'touch' the cells nearby.</div>
+ 		<div class='sample_comment'> Use ctrl+c and ctrl+v to copy and paste content.</div>
+		<div id="testA"></div>
+		<hr>
+		<div id="testB" class='sample_comment'></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+				select:"cell",
+				multiselect:true,
+
+				clipboard:"repeat",
+
+				autoheight:true,
+				autowidth:true,
+				data:small_film_set
+			});
+		});
+		</script>
+	</body>
+</html>

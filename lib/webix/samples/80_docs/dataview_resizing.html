@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+	<title>Resizing</title>
+	<script src="../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../codebase/webix.css">
+    <link rel="STYLESHEET" type="text/css" href="../06_dataview/02_templates/dataview_styles.css">
+    <script src="../common/testdata.js"></script>
+<body>
+    <div style="margin-left:20px">
+        <input type="button" name="some_name" value="Resize container" onclick="resize_container()">
+        <input type="button" name="some_name" value="Resize Component" onclick="resize_component()">
+    </div>
+	<div id="testA" style="width:545px; height:270px;margin:20px"></div>
+    
+	<script>
+        webix.ui({
+            id:"dview",
+			view:"dataview",
+			container:"testA",
+            select:1,
+            css: "movies",
+            type:{
+                width: 261,
+                height: 90,
+                template:"<div class='overall'><div class='title'>#title#</div><div class='year'>#year# year</div> </div>"
+            },
+            data:big_film_set
+		});
+
+    function resize_container(){
+        document.getElementById('testA').style.height="455px";
+        $$("dview").adjust();
+
+    }
+
+    function resize_component(){
+        $$("dview").config.width = 261;
+        $$("dview").config.height = 700;
+        $$("dview").resize();
+    }
+	</script>
+
+</body>
+</html>
+

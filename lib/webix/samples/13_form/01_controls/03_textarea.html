@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA{
+				margin: 30px;
+			}
+		</style>
+		<title>Multiline Text Input('textarea')</title>
+	</head>
+	<body>
+
+		<div id="areaA"></div>
+	
+
+		<script type="text/javascript" charset="utf-8">
+		var form1 = [
+			{ view:"textarea", label:"Note", labelAlign:"right"},
+			{ view:"textarea" , height:200, label:"Second note", labelPosition:"top" },
+			{ view:"button", value:"Confirm", width:200, align:"center" }
+		];
+
+	
+		webix.ui({
+			container:"areaA",
+			margin:30, cols:[
+				{ margin:30, rows:[
+					{ view:"form", scroll:false, width:300, elements: form1 }
+				]}
+			]
+		});
+		</script>
+	</body>
+</html>

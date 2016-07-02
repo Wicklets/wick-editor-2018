@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<title>Accordionitem</title>
+	</head>
+	<body>
+<div id='div_accordion' style='width:800px; height:600px; margin:20px;'></div>
+<script type="text/javascript" charset="utf-8">
+webix.ui({ 
+	container:"div_accordion",
+    view:"accordion",
+    rows:[ 
+       	{
+        	view:"accordionitem",
+       		header:"Pane 1",
+            headerHeight:50, 
+            headerAlt:"Pane 1 Closed", 
+            body:{ } //ui component
+        },
+        { 
+        	view:"accordionitem",
+            header:"Pane 2",
+            headerAlt:"Pane 2 Closed",
+            body:"This is Pane 2 body", //just text
+            collapsed: true
+        }]
+})
+</script>
+</body>
+</html>			

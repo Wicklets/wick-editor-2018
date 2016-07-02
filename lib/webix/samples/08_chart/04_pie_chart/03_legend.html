@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+	<title>Pie Chart: Basic and Custom Legend</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+	<script src="../../common/chartdata.js"></script>
+<body>
+    <div id="charts" style="width:800px;height:250px;margin:20px"></div>
+	<script>
+        webix.ui({
+            container: "charts",
+            cols:[
+                {
+                    rows:[
+                        {
+                            template:"<div style='width:100%;text-align:center'>Default legend</div>",
+                            height:40
+                        },
+                        {
+                            view: "chart",
+                            type:"pie",
+                            value:"#sales#",
+                            color:"#color#",
+                            legend:"#month#",
+                            pieInnerText:"#sales#",
+                            shadow:0,
+                            data:month_dataset
+                        }
+                    ]
+                },
+                {
+                    rows:[
+                        {
+                            template:"<div style='width:100%;text-align:center'>Custom legend</div>",
+                            height:40
+                        },
+                        {
+                            view: "chart",
+                            type:"pie",
+                            value:"#sales#",
+                            color:"#color#",
+                           	pieInnerText:"#sales#",
+                           	legend:{
+                           	    width:75,
+                                align:"right",
+                                valign:"middle",
+                                template:"#month#"
+                            },
+                            shadow:0,
+                            x:180,
+                            y:120,
+                            data:month_dataset
+                        }
+                    ]
+                }
+            ]
+
+        });
+	</script>
+</body>
+</html>
+	

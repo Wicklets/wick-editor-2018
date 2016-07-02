@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+	<title>Chart: CSV Dataset</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+	<script src="../../common/chartdata.js"></script>
+<body>
+    <div id="chartDiv" style="width:600px;height:250px;margin:20px"></div>
+	<script>
+	    var data = "\
+          20, 02\n\
+          55, 03\n\
+          40, 04\n\
+          78, 05\n\
+          61, 06\n\
+          53, 07\n\
+          80, 08\n\
+          50, 09\n\
+          65, 10\n\
+          59, 11";
+        webix.ui({
+            view:"chart",
+            container:"chartDiv",
+            type:"bar",
+            value:"#data0#",
+            radius:0,
+            border:true,
+            xAxis:{
+                template:"#data1#"
+            },
+            yAxis:{
+                start:0,
+                end:100,
+                step:10,
+                template:function(obj){
+
+                    return (obj%20?"":obj)
+                }
+            },
+            datatype:"csv",
+            data: data
+        });
+	</script>
+
+
+</body>
+</html>

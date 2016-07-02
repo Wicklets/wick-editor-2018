@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<script type="text/javascript" src="http://cdn.webix.com/components/datasuggest/datasuggest.js"></script>
+
+		<title>Data Suggest</title>
+	</head>
+	<body>
+
+	<script type="text/javascript" charset="utf-8">
+	webix.ready(function(){	
+
+		var options = [
+			{id:1, value:"One", year:1988, color:"Red"}, 
+			{id:2, value:"Two", year:1996, color:"Blue"},
+			{id:3, value:"Three", year:1997, color:"Green"}, 
+			{id:4, value:"Four", year:2011, color:"Orange"},
+			{id:5, value:"Five", year:2000, color:"Grey"}, 
+			{id:6, value:"Six", year: 1994, color:"Yellow"}
+		];
+
+		webix.ui({ type:"space", rows:[
+			{},
+
+			{
+				view:"toolbar", elements:[
+					{view:"label", label:"Select"},
+					{ view:"richselect", value:1, options:{
+						view:"datasuggest", 
+						data:options 
+					}},
+					{ view:"richselect", value:1, options:{
+						view:"datasuggest", 
+						template:"#value# (#color#)",
+						data:options
+					}},
+					{ view:"richselect", value:1, options:{
+						view:"datasuggest",
+						textValue:"value",
+						body:{
+						 	template:function(obj){
+								return obj.value + "<img src='data/image00"+obj.id+".jpg'>";
+						 	},
+						 	type:{
+						 		width:270, height:180
+						 	},
+					 		data:options
+					 	}
+					}},
+					{ view:"richselect", value:2, options:{
+						view:"datasuggest",
+						body:{
+							xCount:2, yCount:2, autoheight:0
+						},
+						data:options
+					}},
+				]
+			}, {},
+
+			{
+				view:"toolbar", elements:[
+					{view:"label", label:"Combo"},
+					{ view:"combo", value:1, options:{
+						view:"datasuggest",
+						data:options 
+					}},
+					{ view:"combo", value:1, options:{
+						view:"datasuggest",
+						template:"#value# (#color#)",
+						data:options
+					}},
+					{ view:"combo", value:1, options:{
+						view:"datasuggest",
+						textValue:"value",
+						body:{
+						 	template:function(obj){
+								return obj.value + "<img src='data/image00"+obj.id+".jpg'>";
+						 	},
+						 	type:{
+						 		width:270, height:180
+						 	},
+					 		data:options
+					 	}
+					}},
+					{ view:"combo", value:2, options:{
+						view:"datasuggest",
+						body:{
+							xCount:2, yCount:2, autoheight:false
+						},
+						data:options
+					}},
+				]
+			}, {}, 
+			{
+				view:"toolbar", elements:[
+					{ view:"richselect", value:1, height:180, width:300, options:{
+						view:"datasuggest",
+						template:function(obj){
+							return "<img src='data/image00"+obj.id+".jpg' style='margin:13px 5px'>";
+						},
+						body:{
+						 	template:function(obj){
+								return obj.value + "<img src='data/image00"+obj.id+".jpg'>";
+						 	},
+						 	type:{
+						 		width:270, height:180
+						 	},
+					 		data:options
+					 	}
+					}}, {}
+				]
+			}, 
+
+			{ gravity:20 }
+
+		]});
+
+	});
+	</script>
+	</body>
+</html>

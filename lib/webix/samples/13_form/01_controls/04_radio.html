@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA{
+				margin: 30px;
+			}
+		</style>
+		<title>Radio Button ('radio')</title>
+	</head>
+	<body>
+
+		<div id="areaA"></div>
+	
+
+		<script type="text/javascript" charset="utf-8">
+		var form1 = [
+			{ view:"radio", name:"gr1", label:"Version", options:["1.0", "1.5", "2.0"] },
+			{ view:"radio", name:"gr1x", label:"Branch", value:2, options:[
+				{ value:"Master", id:1 },
+				{ value:"Branch", id:2 }
+			] },
+			{ view:"button", value:"Confirm", width:200, align:"center" }
+		];
+
+		var form2 = [
+			{ view:"radio", name:"gr2", options:["1.0", "1.5", "2.0"], align:"center", width:180 },
+			{ view:"radio", name:"gr2x", options:[
+				{ value:"Master", id:1 },
+				{ value:"Branch", id:2 }
+			] , width:180, align:"center"},
+			{ view:"button", value:"Confirm", width:200, align:"center" }
+		];
+
+
+		var form3 = [
+			{ view:"radio", name:"gr3", label:"Version", vertical:true, options:["1.0", "1.5", "2.0"] },
+			{ view:"radio", name:"gr3x", label:"Branch", vertical:true, options:[
+				{ value:"Master", id:1 },
+				{ value:"Branch", id:2 }
+			] },
+			{ view:"button", value:"Confirm", width:200, align:"center" }
+		];
+
+		var form4 = [
+			{ view:"radio", name:"gr4", options:["1.0", "1.5", "2.0"], align:"center", width:100 , vertical:true},
+			{ view:"radio", name:"gr4x", options:[
+				{ value:"Master", id:1 },
+				{ value:"Branch", id:2 }
+			] , width:100, align:"center", vertical:true},
+			{ view:"button", value:"Confirm", width:200, align:"center" }
+		];
+
+
+		webix.ui({
+			container:"areaA",
+			margin:30, cols:[
+				{ margin:30, rows:[
+					{ view:"form", scroll:false, width:300, elements: form1 },
+					{ view:"form", scroll:false, width:300, elements: form2 }
+				]},
+				{ margin:30, rows:[
+					{ view:"form", scroll:false, width:300, elements: form3 },
+					{ view:"form", scroll:false, width:300, elements: form4 }
+				]}
+			]
+		});
+		</script>
+	</body>
+</html>

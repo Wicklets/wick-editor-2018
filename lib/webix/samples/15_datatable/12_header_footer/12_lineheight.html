@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Custom height for header lines</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Custom height for header lines</div>
+		<div id="testA"></div>
+		<div id="testB"></div>
+		<style type="text/css">
+		.multiline{
+			line-height: 30px !important;
+		}
+		</style>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50,	sort:"int"},
+					{ id:"title",	header:[{ text:"Film title", height:25 },{ content:"textFilter"}], width:200 },
+					{ id:"year",	header:"Released" , width:180,	sort:"int"},
+					{ id:"votes",	header:"Votes", 	width:100,	sort:"int"}
+				],
+				autoheight:true,
+				autowidth:true,
+				data:small_film_set
+			});
+
+			webix.ui({
+				container:"testB",
+				view:"datatable",
+				columns:[
+					{ id:"title",	header:{
+						text:"A multiline header for a film title column containing two or three lines, or more, but does it really matter?",
+						height:120,
+						css:"multiline"
+					}, footer:[
+						{ height:20, text:"20px footer", colspan:3 },
+						{ height:40, text:"40px footer", colspan:3 },
+						{ height:80, text:"80px footer", colspan:3 }
+					], width:220 },
+					{ id:"year",	header:"Released" , width:180,	sort:"int"},
+					{ id:"votes",	header:"Votes", 	width:100,	sort:"int"}
+				],
+				footer:true,
+				autoheight:true,
+				autowidth:true,
+				data:small_film_set
+			});	
+		});		
+		</script>
+	</body>
+</html>

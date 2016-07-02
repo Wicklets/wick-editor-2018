@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Customizing automatic options</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Customizing automatic options</div>
+		<div class='sample_comment'>Default options</div>
+		<div id="testA"></div>
+		<hr>
+		<div class='sample_comment'>Custom onCollectValues handler</div>
+		<div id="testB"></div>
+		<script type="text/javascript" charset="utf-8">
+		webix.ready(function(){
+			webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50,	sort:"int"},
+					{ id:"title",	header:["Film title", {content:"selectFilter" }],width:200,	sort:"string"},
+					{ id:"year",	header:"Released" , width:80,	sort:"int",tooltip: ""},
+					{ id:"votes",	header:"Votes", 	width:100,	sort:"int"}
+				],
+				autoheight:true,
+				autowidth:true,
+				data:small_film_set
+			});	
+			
+			webix.ui({
+				container:"testB",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"", css:"rank",  		width:50,	sort:"int"},
+					{ id:"title",	header:["Film title", {content:"selectFilter" }],width:200,	sort:"string"},
+					{ id:"year",	header:"Released" , width:80,	sort:"int"},
+					{ id:"votes",	header:"Votes", 	width:100,	sort:"int"}
+				],
+				on:{
+					onCollectValues:function(id, req){
+						if (req.values[0].value == "")
+							req.values[0].value = "Select something";
+					}
+				},
+				autoheight:true,
+				autowidth:true,
+				data:small_film_set
+			});						
+		});
+		</script>
+	</body>
+</html>

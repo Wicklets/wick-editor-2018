@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+	<title>Bar Chart: Several Graphs in One Chart</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+	<script src="../../common/chartdata.js"></script>
+<body>
+    <div id="chartDiv" style="width:900px;height:250px;margin:20px"></div>
+	<script>
+        webix.ui({
+            container:"chartDiv",
+            view:"chart",
+            type:"bar",
+			barWidth:60,
+			radius:2,
+		    gradient:"rising",
+			xAxis:{
+				template:"'#year#"
+			},
+			yAxis:{
+			    start:0,
+			    step:10,
+			    end:100
+			},
+			legend:{
+				values:[{text:"Type A",color:"#58dccd"},{text:"Type B",color:"#a7ee70"},{text:"Type C",color:"#36abee"}],
+				valign:"middle",
+				align:"right",
+				width:90,
+				layout:"y"
+            },
+			series:[
+                {
+                    value:"#sales#",
+			        color: "#58dccd",
+			        tooltip:{
+                        template:"#sales#"
+                    }
+			    },
+                {
+                    value:"#sales2#",
+                    color:"#a7ee70",
+                    tooltip:{
+                        template:"#sales2#"
+                    }
+                },
+                {
+                    value:"#sales3#",
+                    color:"#36abee",
+                    tooltip:{
+                        template:"#sales3#"
+                    }
+                }
+			],
+			data:multiple_dataset
+        });
+	</script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<title>Button ('button')</title>
+	</head>
+<body>
+	<div id="data_container" style="width:600px;height:200px;margin:20px"></div>
+<script>
+
+var form1 = {
+	view:"form", width:250, scroll:false,
+	elements:[
+		{ view:"button", label:"Standard" },
+		{ view:"button", label:"Form", type:"form" },
+		{ view:"button", label:"Danger", type:"danger" },
+		{ view:"button", label:"Prev", type:"prev" },
+		{ view:"button", label:"Next", type:"next" }
+	]
+};
+
+var form2 = {
+	view:"form", width:100, scroll:false,
+	elements:[
+		{ view:"button", value:"Standard", height:50 }, 
+		{ view:"button", value:"Form", type:"form", height:50 }, 
+		{ view:"button", value:"Danger", type:"danger", height:50 }, 
+		{ view:"button", label:"Prev", type:"prev", height:50 },
+		{ view:"button", label:"Next", type:"next", height:50 }
+	]
+};
+
+var form3 = { 
+	view:"form", width:200, scroll:false,
+	elements:[
+		{ view:"button", label:"Standard", height:50, width:100 },
+		{ view:"button", label:"Form", type:"form", height:50, width:100, align:"center" },
+		{ view:"button", label:"Danger", type:"danger", height:50, width:100, align:"right" },
+		{ view:"button", label:"Prev", type:"prev", height:50, width:100, align:"center"},
+		{ view:"button", label:"Next", type:"next", height:50, width:100, align:"right"}
+	]
+}
+
+webix.ui({
+	container:"data_container",
+	cols:[
+		form1, form2, form3
+	]
+});
+		
+</script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+	<script src="../../common/chartdata.js"></script>
+	<title>Line Chart: Axes</title>
+</head>
+<body>
+    <div id="charts" style="width:800px;height:250px;margin:20px"></div>
+	<script>
+        webix.ui({
+            container:"charts",
+            rows:[
+                {
+                    cols:[
+                        {
+                            template: "<div style='padding-left:5px'>Default</div>",
+                            height:40
+                        },
+                        {
+                            template:"<div style='padding-left:5px'>Custom scales</div>",
+                            height:40
+                        }
+                    ]
+                },
+                {
+                    cols:[
+                        {
+                            view:"chart",
+                            type:"line",
+                            value:"#sales#",
+                            preset:"plot",
+                            xAxis:{
+                                template:"'#year#"
+                            },
+                            yAxis:{
+                            },
+                            data: dataset
+                        },
+                        {
+                            view:"chart",
+                            type:"line",
+                            value:"#sales#",
+                            tooltip:{
+                                template:"#sales#"
+                            },
+                            xAxis:{
+                                template:"'#year#",
+                                title:"Year"
+                            },
+                            yAxis:{
+                                start:0,
+                                step:10,
+                                end:100,
+                                template:function(value){
+                                    return value%20?"":value
+                                },
+                                title:"Sales"
+                            },
+                            /*first item position*/
+                            offset:false,
+                            preset:"plot",
+                            data: dataset
+                        }
+                    ]
+                }
+            ]
+        });
+	</script>
+</body>
+</html>

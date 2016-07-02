@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Custom Dropping Behaviour</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/treedata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body class='webix_full_screen'>
+		<div class='header_comment'>Custom dropping behaviour</div>
+		<div class='sample_comment'>Drag items from the 1st to 2nd tree. <br> - When you drag an item to the closed folder, the item is inserted as a subling;<br>- When you drag an item to the opened folder, the item is inserted as a child.</div>
+		
+		<div id="testA" style='width:300px; height:300px'></div>
+		<hr>
+		<div id="testB" style='width:300px; height:300px'></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+			treea = webix.ui({
+				container:"testA",
+				view:"tree",
+
+				select:true,
+				drag:"source",
+
+				data: bigtreedata
+			});	
+
+			treeb = webix.ui({
+				container:"testB",
+				view:"tree",
+
+				select:true,
+				drag:"target",
+
+				on:{
+					onBeforeDrop:function(context){
+						
+						if (this.getItem(context.target).$count && this.getItem(context.target).open){
+							//drop as the first child
+							context.parent = context.target;
+							context.index = 0;
+						} else {
+							//drop the next sibling
+							context.index++;
+						}
+					}
+				},
+
+				data: smalltreedata
+			});	
+
+		});	
+	
+		</script>
+	</body>
+</html>

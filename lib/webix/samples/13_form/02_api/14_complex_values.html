@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+	<title>Form:Data with complex properties</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="stylesheet" type="text/css" href="../../../codebase/webix.css">
+
+<body>
+<script>
+
+	var color_options = [
+		{id:1, value:"red"},
+		{id:2, value:"blue"},
+		{id:3, value:"green"},
+		{id:4, value:"orange"},
+		{id:5, value:"grey"},
+		{id:6, value:"yellow"}
+	];
+
+	var position_options = [
+		{id:1, value:"left"},
+		{id:2, value:"right"},
+		{id:3, value:"top"},
+		{id:4, value:"bottom"}
+	];
+
+
+	var form = {
+		view:"form",  id:"sets", width:300, complexData:true,
+		elements:[
+			{ label:"Layout", view:"label" },
+			{ label:"Width", view:"text", name:"layout.width", value: 250},
+			{ label:"Height", view:"text", name:"layout.height"},
+			{ label:"Data loading", view:"label" },
+			{ label:"Data url", view:"text", name:"data.url", value:"http://webix.com/data"},
+			{ label:"Type", view:"richselect", options:["json","xml","csv"], name:"data.type"},
+			{ label:"Use JSONP", view:"checkbox", name:"data.jsonp"},
+			{ label:"Styling", view:"label" },
+			{ label:"Position", view:"richselect", options:position_options, name:"style.position"},
+			{ label:"Color", view:"combo", options:color_options, name:"style.color"}
+
+		]
+	};
+
+	webix.ui({
+		cols:[
+			{ template:"left", id:"left" },
+			{rows:[
+				form,
+				{ view:"button", value:"getValues", click:function(){
+					$$("left").setHTML("<pre>"+ JSON.stringify( $$("sets").getValues() , null, "\t") + "</pre>");
+				}}
+			]}
+		]
+	});
+
+	$$("sets").setValues({
+		layout:{
+			width:250,
+			height:480
+		},
+		data:{
+			url:"http://webix.com/data",
+			type:"json"
+		},
+		style:{
+			position:2,
+			color:1
+		}
+
+	});
+
+</script>
+
+
+</body>
+</html>

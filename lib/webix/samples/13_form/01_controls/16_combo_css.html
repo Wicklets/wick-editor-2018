@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<title>Styling Combo Icons</title>
+	</head>
+	<style type="text/css">
+        .webix_input_icon.fa-angle-down:before{
+            content:"";
+            background-image: url("search.png");
+            width:20px;
+            height:20px;
+            display:block;
+        }
+        .webix_el_combo span.webix_input_icon{
+            background-color:transparent;
+            padding-right:10px;
+        }
+	</style>
+	<body>
+		<div id="test" style="width:300px;"></div>
+	<script type="text/javascript" charset="utf-8">
+
+    var options = [
+        { id:1, value:"Banana"   },
+        { id:2, value:"Papai"   },
+        { id:3, value:"Apple" }
+    ];
+
+	webix.ui({
+		view:"form", width:400, container:"test", elements:[
+            {view:"richselect", label: 'Other FontAwesome Icon', value:1, options:options, icon:"caret-down"},
+    		{view:"combo", label: 'Custom Icon', value:1, options:options}
+    	],
+        elementsConfig:{
+            labelWidth:180
+        }
+	});
+	</script>
+	</body>
+</html>

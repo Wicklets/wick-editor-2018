@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script type="text/javascript" src="../common/testdata.js"></script>
+		<title>Empty list</title>
+	</head>
+	<style type="text/css">
+		#listA, #listB, #listC{
+			float:left; margin:20px;
+		}
+	</style>
+	<body>
+		<div id="listA"></div>
+		
+
+		<script type="text/javascript" charset="utf-8">
+			var list = webix.ui({
+				container:"listA",
+				view:"list", 
+				width:320,
+				height:600,
+
+				template:"#rank#. #title#",
+				select:true,
+
+				ready:function(){
+					if (!this.count()){
+						webix.extend(this, webix.OverlayBox);
+						this.showOverlay("<div style='margin:75px; font-size:20px;'>There is no data</div>");
+					}
+				},
+
+				url:"data/empty.json"
+			});
+		</script>
+	</body>
+</html>

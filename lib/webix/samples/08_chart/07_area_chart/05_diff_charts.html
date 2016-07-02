@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+<head>
+	<title>Area Chart: Different Types in One Chart</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+
+<body>
+    <div id="chartDiv" style="width:600px;height:250px;margin:20px"></div>
+	
+	
+	<script>
+		var dataset = [
+			{ sales:3.0, sales2:12.0, year:"2003" },
+			{ sales:3.0, sales2:10.0, year:"2004" },
+			{ sales:3.4, sales2:9.0, year:"2005" },
+			{ sales:4.1, sales2:8.0, year:"2006" },
+			{ sales:4.3, sales2:9.0, year:"2007" },
+			{ sales:7.6, sales2:11.0, year:"2008" },
+			{ sales:7.8, sales2:13.0, year:"2009" },
+			{ sales:7.2, sales2:10.0, year:"2010" },
+			{ sales:5.3, sales2:14.0, year:"20011" },
+			{ sales:4.8, sales2:12.0, year:"2012" }
+		];
+		webix.ui({
+			view:"chart",
+			type: "bar",
+			container:"chartDiv",
+
+			padding:{
+				left:30,
+				bottom: 50
+			},
+			radius:0,
+			yAxis:{
+			},
+			xAxis:{
+				lines:true,
+				title:"Sales per year",
+				template:"#id#"
+			},
+			legend:{
+					layout:"y",
+					width:100,
+					align:"right",
+					valign:"middle",
+					values:[
+						{text:"Company A",color:"#00ccff"},
+						{text:"Company B",color:"#e9df40"},
+						{text:"Average", toggle:true,markerType: "item"}
+					]
+				},
+			scheme:{
+				$group: {
+					by:"year",
+					map:{
+						salesA:["sales2","any"],
+						salesB:["sales","any"],
+						salesAverage:["sales",getAverage]
+					}
+				}
+			},
+			series:[
+				{
+					value:"#salesA#",
+					color:"#00ccff",
+					barWidth: 32,
+					gradient: "falling",
+					alpha: 0.8
+				},
+				{
+					type:"area",
+					alpha:0.4,
+					value:"#salesB#",
+					color:"#e9df40"
+				},
+				{
+					type:"line",
+					value:"#salesAverage#",
+					item:{
+						radius:2,
+						borderColor: "#7fa505"
+					},
+					line:{
+						color:"#7fa505",
+						width:2
+					}
+				}
+			],
+			data: dataset
+		});
+		function getAverage(property,data){
+			var summ = 0;
+			for(var i = 0; i < data.length; i++){
+				summ += (parseFloat(data[i].sales)||0);
+				summ += (parseFloat(data[i].sales2)||0);
+			}
+			return data.length?summ/(data.length*2):0;
+		}
+	</script>
+			
+</body>
+</html>

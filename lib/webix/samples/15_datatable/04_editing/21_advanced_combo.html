@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Datatable: Advanced Combo Editor</title>
+    <link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+    <script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+    <link rel="stylesheet" type="text/css" href="../common/samples.css">
+    <script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<div class='header_comment'> Editor with autosuggest</div>
+<div class='sample_comment'>Using Combo editor in grid</div>
+<div id="testA"></div>
+
+<script type="text/javascript" charset="utf-8">
+
+    webix.ready(function(){
+        var years = [];
+        for (var i = 1970; i < 2015; i++)
+            years.push({ id:i, value: i+" (a)" });
+
+        grida = webix.ui({
+            container:"testA",
+            view:"datatable",
+            columns:[
+                { id:"rank",	header:"", css:"rank", width:50 },
+                { id:"title",	editor:"text",		header:"Film title",width:200},
+                { id:"year",	editor:"combo", header:"Released" , width:120, options:years, suggest:{
+                    template:'#value#', //template of the input when editor is opened, default
+                    filter:function(item,value){ //redefines default webix combo filter
+                        if (item.value.toString().toLowerCase().indexOf(value.toLowerCase())===0) return true;
+                        return false;
+                    },
+                    body:{
+                        template:'Year #value#', //template of list items
+                        yCount:7, //10 by default
+                        on:{
+                            onItemClick:function(id){
+                                console.log(this.getItem(id).value);
+                            }
+                        }
+                    }}
+                },
+                { id:"votes",	editor:"text",		header:"Votes", 	width:100}
+            ],
+
+            editable:true,
+            autoheight:true,
+            autowidth:true,
+
+            data: [
+                { id:1, title:"The Shawshank Redemption", year:1994, votes:678790, rating:9.2, rank:1},
+                { id:2, title:"The Godfather", year:1972, votes:511495, rating:9.2, rank:2}
+            ]
+        });
+
+    });
+</script>
+</body>
+</html>

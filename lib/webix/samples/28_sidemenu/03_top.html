@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta  name = "viewport" content = "initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no">
+	<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+	<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../common/chartdata.js"></script>
+	<title>Top position</title>
+	<style>
+		.my_menu .webix_view{
+			background-color: #ECEFF1;
+		}
+		.my_menu .webix_list_item{
+			line-height: 35px;
+			border-bottom-color: #ddd;
+		}
+
+
+	</style>
+</head>
+<body>
+
+
+<script type="text/javascript" charset="utf-8">
+	webix.ready(function(){
+
+
+		webix.ui({
+			rows:[
+				{
+					view:"toolbar", id: "toolbar", padding: 5, cols:[
+						{
+
+							view: "button", value: "Show top menu", width: 200, type: "form",
+							click:function(){
+								if( $$("menu").config.hidden){
+									$$("menu").show();
+								}
+								else
+									$$("menu").hide();
+							}
+						},
+						{}
+					]
+				},
+				{ template: "Click button to show menu"},
+			]
+		});
+
+		webix.ui({
+			view: "sidemenu",
+			id: "menu",
+			width: 200,
+			position: "top",
+			state:function(state){
+				state.top = $$("toolbar").$height;
+			},
+			css: "my_menu",
+			body:{
+				borderless:true,
+				margin: 5,
+				cols:[
+					{
+						view:"list",
+						scroll: false,
+						layout: "x",
+
+						template: "<span class='webix_icon fa-#icon#'></span> #value#",
+						data:[
+							{id: 1, value: "Customers", icon: "user"},
+							{id: 2, value: "Products", icon: "cube"},
+							{id: 3, value: "Reports", icon: "line-chart"},
+							{id: 4, value: "Archives", icon: "database"},
+							{id: 5, value: "Settings", icon: "cog"}
+						],
+						select:true,
+						type:{
+							width: "auto",
+							height: 40
+						}
+					}
+				]
+			}
+		});
+
+	});
+
+
+
+
+</script>
+
+
+</body>
+</html>

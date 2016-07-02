@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+	<title>Chart: Logarithmic Scale</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+	<script src="../../common/chartdata.js"></script>
+<body>
+    <div id="chartDiv" style="width:700px;height:250px;margin:20px"></div>
+	<script>
+        webix.ui({
+	        container:"chartDiv",
+	        view:"chart",
+	        type:"bar",
+	        barWidth:20,
+	        radius:2,
+	        border:0,
+	        scale: "logarithmic",
+	        xAxis:{
+		        template:"'#year#"
+	        },
+	        yAxis:{
+		        /*start: 1,
+		        end: 4,
+		        step: 1*/
+	        },
+	        legend:{
+		        values:[{text:"Min value",color:"#36abee"},{text:"Max value",color:"#476cee"}],
+		        valign:"bottom",
+		        align:"center",
+		        layout:"x"
+	        },
+	        series:[
+		        {
+			        value:"#sales2#",
+			        color: "#36abee",
+			        tooltip:{
+				        template:"#sales2#"
+			        }
+		        },
+		        {
+			        value:"#sales#",
+			        color:"#476cee",
+			        tooltip:{
+				        template:"#sales#"
+			        }
+		        }
+	        ],
+            data: dataset_min_max
+        });
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+	<title>Bar Chart: Basic Initialization</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+	<script src="../../common/chartdata.js"></script>
+<body>
+    <div id="charts" style="width:900px;height:200px;margin:20px"></div>
+	<script>
+        webix.ui({
+            container:"charts",
+            rows:[
+                {
+                    cols:[
+                        {
+                            view:"chart",
+                            type:"bar",
+                            value:"#sales#",
+                            label:"#sales#",
+                            barWidth:35,
+                            radius:0,
+                            gradient:"falling",
+                            data: dataset
+                        },
+                        {
+                            view:"chart",
+                            type:"bar",
+                            value:"#sales#",
+                            label:"#year#",
+                            color:"#66ccff",
+                            gradient:"falling",
+                            barWidth:25,
+                            padding:{
+                                top:50,
+                                bottom:0,
+                                right:50,
+                                left:50
+                            },
+                            data: dataset
+                        }
+                    ]
+                }
+            ]
+        });
+	</script>
+</body>
+</html>

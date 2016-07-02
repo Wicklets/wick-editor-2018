@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+<head>
+	<title>Line Chart: Styling</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+	<script src="../../common/chartdata.js"></script>
+<body>
+    <div id="charts" style="width:800px;height:500px;margin:20px"></div>
+	<script>
+        webix.ui({
+            container:"charts",
+            rows:[
+                {
+                    cols:[
+                        {
+                            view:"chart",
+                            type:"line",
+                            value:"#sales#",
+                            item:{
+                                borderColor: "#ffffff",
+                                color: "#2b7100"
+
+                            },
+                            tooltip:{
+                                template:"#sales#"
+                            },
+                            line:{
+                                color:"#8ecf03",
+                                width:2,
+                                shadow:true
+                            },
+
+                            xAxis:{
+                                template:"'#year#"
+                            },
+                            yAxis:{
+                                start:0,
+                                step:10,
+                                end:100,
+                                template:function(value){
+                                    return value%20?"":value
+                                }
+                            },
+                            data: dataset
+                        },
+                        {
+                            view:"chart",
+                            type:"line",
+                            value:"#sales#",
+                            tooltip:{
+                                template:"#sales#"
+                            },
+                            item:{
+                                borderColor:"#ff9000",
+                                color: "#ff9000",
+                                shadow: true
+                            },
+                            line:{
+                                color:"#ff9409",
+                                width:2,
+                                shadow:false
+                            },
+                            xAxis:{
+                                template:"'#year#"
+                            },
+                            yAxis:{
+                                start:0,
+                                step:10,
+                                end:100,
+                                template:function(value){
+                                    return value%20?"":value
+                                }
+                            },
+                            data: dataset
+                        }
+                    ]
+                },
+                {
+                     cols:[
+                        {
+                            view:"chart",
+                            type:"line",
+                            value:"#sales#",
+                            item:{
+                                radius:0
+                            },
+                            line:{
+                                color:"#b25151",
+                                width:3
+                            },
+                            xAxis:{
+                                template:"'#year#"
+                            },
+                            yAxis:{
+                                start:0,
+                                step:10,
+                                end:100,
+                                template:function(value){
+                                    return value%20?"":value
+                                }
+                            },
+                            data: dataset
+                        },
+                        {
+                            view:"chart",
+                            type:"line",
+                            value:"#sales#",
+                            tooltip:{
+                                template:"#sales#"
+                            },
+                            xAxis:{
+                                template:"'#year#"
+                            },
+                            yAxis:{
+                                start:0,
+                                step:10,
+                                end:100,
+                                template:function(value){
+                                    return value%20?"":value
+                                }
+                            },
+                            item:{
+                                borderColor:"#b64040",
+                                color: "#b64040",
+                                type:"d",
+                                radius:3,
+                                borderWidth:1,
+                                shadow:true
+                            },
+                            line:{
+                                color:"#ff9000",
+                                width:2
+                            },
+                            data: dataset
+                        }
+                    ]
+                }
+            ]
+        });
+	</script>
+</body>
+</html>

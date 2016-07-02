@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<title>Toggle Button ('toggle')</title>
+	</head>
+<body>
+	<div id="data_container" style="width:600px;height:200px;margin:20px"></div>
+<script>
+
+var form1 = {
+	view:"form", width:200, scroll:false,
+	elements:[
+		{ view:"toggle", name:"s1", label:"Default", icon:"" },
+		{ view:"toggle", type:"iconButton", name:"s2", icon:"users", label:"Pressed", value:1 },
+		{ view:"toggle", name:"s3", offLabel:"Click me", onLabel:"I'm pressed" },
+		{ view:"toggle", type:"iconButton", name:"s4", 
+			offIcon:"pause", 
+			onIcon:"play",
+			offLabel:"Disabled", onLabel:"Enabled" },
+		{ view:"button", label:"get results", click:function(){
+			var data = this.getParentView().getValues();
+			webix.message( JSON.stringify(data));
+		}}
+	]
+};
+
+webix.ui({
+	container:"data_container",
+	cols:[
+		form1
+	]
+});
+		
+</script>
+</body>
+</html>

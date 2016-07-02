@@ -36,6 +36,10 @@ var WickEditor = function () {
     document.addEventListener('mousemove', function(e) { 
         that.mouse.x = event.clientX;
         that.mouse.y = event.clientY;
+        if(that.keys[32]) {
+            that.fabricCanvas.panTo(that.mouse.x - window.innerWidth/2, 
+                                    that.mouse.y - window.innerHeight/2);
+        }
     }, false );
 
     document.addEventListener('contextmenu', function (event) { 
@@ -80,6 +84,7 @@ var WickEditor = function () {
         // Control-a: Select all
         if (event.keyCode == 65 && controlKeyDown) {
             event.preventDefault();
+            that.fabricCanvas.deselectAll();
             that.fabricCanvas.selectAll();
         }
 
@@ -90,12 +95,6 @@ var WickEditor = function () {
                 obj:   that.fabricCanvas.getCanvas().getActiveObject(),
                 group: that.fabricCanvas.getCanvas().getActiveGroup()
             });
-        }
-
-        // Space: Pan viewport
-        if (event.keyCode == 32 && document.activeElement.nodeName != 'TEXTAREA') {
-            that.fabricCanvas.panTo(that.mouse.x - window.innerWidth/2, 
-                                    that.mouse.y - window.innerHeight/2);
         }
 
         // Tilde: log project state to canvas (for debugging)

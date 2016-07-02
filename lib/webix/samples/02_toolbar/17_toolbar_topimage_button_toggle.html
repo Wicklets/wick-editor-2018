@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA, #areaB, #areaC, #areaD, #areaE{
+				margin: 30px 30px;
+				width:700px; height:50px;
+			}
+		</style>
+		<title>Toggle Buttons: Type 'imageButtonTop'</title>
+	</head>
+	<body>
+
+		<div id="areaA"></div>
+		<div id="areaB"></div>
+		<div id="areaC"></div>
+		<div id="areaD"></div>
+		
+		<script type="text/javascript" charset="utf-8">
+
+			webix.ui({
+				container:"areaA",
+				view:"toolbar", padding:2, height:60,
+				cols: [
+					{ view:"toggle", type:"imageButtonTop", label:"Save", 
+						image:"../common/imgs/18/save.gif", width:60},
+					{ view:"toggle", type:"imageButtonTop", label:"Update", 
+						image:"../common/imgs/18/paste.gif", width:160},
+					{ view:"toggle", type:"imageButtonTop", label:"Info",
+						image:"../common/imgs/18/copy.gif", width:60}
+				]
+			});
+
+
+			webix.ui({
+				container:"areaB",
+				view:"toolbar", padding:2, height:66,
+				cols: [
+					{ view:"toggle", type:"imageButtonTop", label:"Save", 
+						image:"../common/imgs/24/save.gif", width:60},
+					{ view:"toggle", type:"imageButtonTop", label:"Update", 
+						image:"../common/imgs/24/paste.gif", width:160},
+					{ view:"toggle", type:"imageButtonTop", label:"Info",
+						image:"../common/imgs/24/copy.gif", width:60}
+				]
+			});
+
+
+			webix.ui({
+				container:"areaC",
+				view:"toolbar", paddingY:2, height:74,
+				cols: [
+					{ view:"toggle", type:"imageButtonTop", label:"Save", 
+						image:"../common/imgs/32/save.gif", width:80},
+					{ view:"toggle", type:"imageButtonTop", label:"Update", 
+						image:"../common/imgs/32/paste.gif", width:160},
+					{ view:"toggle", type:"imageButtonTop", label:"Info",
+						image:"../common/imgs/32/copy.gif", width:80}
+				]
+			});		
+
+
+			webix.ui({
+				container:"areaD",
+				view:"toolbar", paddingY:2, height:84,
+				cols: [
+					{ view:"toggle", type:"imageButtonTop", label:"Save", 
+						image:"../common/imgs/48/save.gif", width:80},
+					{ view:"toggle", type:"imageButtonTop", label:"Update", 
+						image:"../common/imgs/48/paste.gif", width:160},
+					{ view:"toggle", type:"imageButtonTop", label:"Info",
+						image:"../common/imgs/48/copy.gif", width:80}
+				]
+			});	
+
+
+
+			
+
+
+
+
+
+		
+
+					
+		</script>
+	</body>
+</html>

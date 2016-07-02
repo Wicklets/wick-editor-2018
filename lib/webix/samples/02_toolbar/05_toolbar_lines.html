@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA, #areaB, #areaC, #areaD{
+				margin: 30px;
+				width:700px; height:100px;
+			}
+		</style>
+		<title>Toolbar: Multiple Rows</title>
+	</head>
+	<body>
+
+		<div id="areaA"></div>
+		<div id="areaB"></div>
+		<div id="areaC"></div>
+		<div id="areaD"></div>
+
+		<script type="text/javascript" charset="utf-8">
+
+			webix.ui({
+				container:"areaA",
+				view:"toolbar", paddingY:2,
+				cols:[
+					{ view:"button", value:"Load",  width:100 },
+					{},
+					{ view:"button", value:"Save" , width:100 },
+					{ view:"button", value:"Info" , width:100 }
+				]
+			});
+
+			webix.ui({
+				container:"areaB",
+				view:"toolbar",
+				cols:[
+					{ view:"button", value:"Load", height:100 },
+					{ view:"button", value:"Save", inputHeight:50 },
+					{ view:"button", value:"Info", inputHeight:25 }
+				]
+			});
+
+			webix.ui({
+				container:"areaC",
+				view:"toolbar", 
+				cols:[
+					{ view:"button", value:"Load", height:-1, width:200 },
+					{  margin:4, borderless:true, rows:[
+						{ view:"button", value:"Save", height:-1, gravity:2 },
+						{ view:"button", value:"Save", height:-1 }
+					]},
+					{ 	margin:4, borderless:true, rows:[
+						{ view:"button", value:"Info", height:33, width:100 },
+						{ view:"button", value:"Info", height:33 },
+						{ view:"button", value:"Info", height:33 }
+					]}
+				]
+			});
+	
+					
+		</script>
+	</body>
+</html>

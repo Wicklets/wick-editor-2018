@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+	<title>Autosizing Items to Content</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+
+	<script src="../../common/testdata.js"></script>
+<body>
+	<style type="text/css">
+		#dataA, #dataB{
+			margin:20px;
+		}
+	</style>
+	<div id="dataA" style='width:500px; height:300px;'></div>
+	<hr>
+	<div id="dataB" style='width:500px; height:300px;'></div>
+	
+	<script>
+		webix.ui({
+			view:"dataview",
+			container:"dataA",
+			data:big_film_set,
+
+			template:"<div style='width:240px; height:60px;'><div class='webix_strong'>#title#</div> Year: #year#, rank: #rank#</div>",
+			sizeToContent:true
+		});
+
+		webix.ui({
+			view:"dataview",
+			container:"dataB",
+			data:big_film_set,
+			
+			template:"<div style='width:120px; height:60px;'><div class='webix_strong'>#title#</div> Year: #year#, rank: #rank#</div>",
+			sizeToContent:true
+		});
+	</script>
+
+
+</body>
+</html>

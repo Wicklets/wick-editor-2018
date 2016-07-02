@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<!-- You can get these files from https://github.com/webix-hub/components -->
+		<script src="http://cdn.webix.com/components/mercury/mercury.js"></script>
+		<script type="text/javascript">
+			webix.codebase = "http://cdn.webix.com/components/mercury/"
+		</script>
+
+		<title>Mercury text editor</title>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				type:"space", rows:[
+					{ id:'editor', view:"mercury-editor"},
+					{ template:"Mercury Editor", type:"header" },
+					{ id:'editor2', view:"mercury-editor"}
+				]
+			});
+
+			$$("editor").setValue("Mercury Editor is a fully featured editor much like TinyMCE or CKEditor, but with a different usage paradigm. It expects that an entire page is something that can be editable, and allows different types of editable regions to be specified. It displays a single toolbar for every region on the page, and uses the HTML5 contentEditable features on block elements, instead of iframes, which allows for CSS to be applied in ways that many other editors can't handle.");
+			$$("editor").focus();
+
+			$$("editor2").setValue("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 	tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 	quis nostrud exercitation ullamco laboris nisi ut  aliquip ex ea commodo 	consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse 	cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non 	proident, sunt in culpa  qui officia deserunt mollit anim id est laborum.");
+		</script>
+	</body>
+</html>

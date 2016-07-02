@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Sorting</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../common/treedata.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+	</head>
+	<body>
+		<div class='header_comment'>Sorting. Using sorting methods</div>
+
+            <div id="testA" style='width:300px; height:250px;' ></div>
+
+            <hr>
+            <div style="margin-left: 20px">
+                Sort by value <br/>
+                <input type='button' value='sort ASC' onclick='tree.sort("#value#","asc")'>
+                <input type='button' value='sort DESC' onclick='tree.sort("#value#","desc")'>
+            </div>
+
+
+
+
+
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+
+			tree = webix.ui({
+				container:"testA",
+				view:"tree",
+				select:true,				
+
+				data: webix.copy(smalltreedata)
+			});	
+
+		});
+		</script>
+
+
+	</body>
+</html>

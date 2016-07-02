@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<title>Non-editable Combo Box ('richselect')</title>
+		<style>
+			html, body{height:100%}
+		</style>
+	</head>
+<body>
+	<div id="data_container" style="width:200px;height:200px;margin:20px"></div>
+<script>
+
+	webix.ui({
+		container:"data_container",
+		view:"form", scroll:false,
+		
+		rows:[
+			{ view:"text", name:"country", label:"Country", value:"Belarus" },
+			{ 
+				view:"richselect", width:300, yCount:2,
+				label: 'Fruit',  name:"fruit1",
+				value:1, options:[
+					{ id:1, value:"Banana"   }, 
+					{ id:2, value:"Papaya"   }, 
+					{ id:3, value:"Apple" }
+				]
+			},
+			{ 
+				view:"richselect", width:300,
+				label: 'Extra',  name:"fruit2",  options:{
+					template:"Extra #value#",
+					data:[
+						{ id:1, value:"Banana"   },
+						{ id:2, value:"Papaya"   }, 
+						{ id:3, value:"Apple" }
+					]
+				}
+			},	
+			{ 
+				view:"richselect", width:300,
+				label: 'Extra',  name:"fruit3", value:"1", options: "server/data.json"
+			},	
+			{ view:"button", type:"form", value:"Submit data", click:function(){
+				webix.message("<pre>"+JSON.stringify( this.getParentView().getValues() ,0,1)+"</pre>");
+			}}
+		]
+	});
+		
+</script>
+</body>
+</html>

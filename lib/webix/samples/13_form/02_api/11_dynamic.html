@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA{
+				margin: 30px;
+			}
+		</style>
+		<title>Automatic form reconfiguration</title>
+	</head>
+	<body>
+
+		<script type="text/javascript" charset="utf-8">
+
+	webix.ui({
+		rows:[{
+		cols:[
+			{ view:"form", elements:[
+				{ type:"header", template:"Show on select"},
+				{ view:"richselect", label:"Country", options:["Russia", "Germany"],
+					relatedView:"sub1", relatedAction:"snow" },
+				{ view:"text", id:"sub1", label:"City", hidden:true }, {}
+			]},
+			{ view:"form", elements:[
+				{ type:"header", template:"Enable on select"},
+				{ view:"richselect", label:"Country", options:["Russia", "Germany"],
+					relatedView:"sub2", relatedAction:"enable" },
+				{ view:"text", id:"sub2", label:"City", disabled:true }, {}
+			]}
+		]},{
+		cols:[
+			{ view:"form", elements:[
+				{ type:"header", template:"Show on not empty"},
+				{ view:"text", label:"Country",
+					relatedView:"sub3", relatedAction:"snow" },
+				{ view:"text", id:"sub3", label:"City", hidden:true }, {}
+			]},
+			{ view:"form", elements:[
+				{ type:"header", template:"Enable on not empty"},
+				{ view:"text", label:"Country",
+					relatedView:"sub4", relatedAction:"enable" },
+				{ view:"text", id:"sub4", label:"City", disabled:true }, {}
+			]}
+		]},{
+		cols:[
+			{ view:"form", elements:[
+				{ type:"header", template:"Show on checked"},
+				{ view:"checkbox", label:"Country",
+					relatedView:"sub5", relatedAction:"snow" },
+				{ view:"text", id:"sub5", label:"City", hidden:true }, {}
+			]},
+			{ view:"form", elements:[
+				{ type:"header", template:"Enable on checked"},
+				{ view:"checkbox", label:"Country",
+					relatedView:"sub6", relatedAction:"enable" },
+				{ view:"text", id:"sub6", label:"City", disabled:true }, {}
+			]}
+		]}]
+	});
+
+		</script>
+	</body>
+</html>

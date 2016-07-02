@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		
+		<!-- You can get these files from https://github.com/webix-hub/components -->
+		<script type="text/javascript">
+			webix.require.disabled = true;
+			webix.codebase = "http://cdn.webix.com/components/raphael/";
+		</script>
+		<script src="http://cdn.webix.com/components/raphael/raphael.js"></script>
+		<script src="http://cdn.webix.com/components/raphael/raphael/raphael.js"></script>
+
+		<title>Raphael Chart</title>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8">
+			webix.ui({
+				type:"space", rows:[
+					{ template:"Raphael Chart", type:"header" },
+					{ view:"raphael-chart", 
+						resize:true,
+						url:"./data/chart.json",
+						ready:function(){
+							// Grab the data
+
+							var data = this.data.numbers;
+							var axisx = this.data.axisx;
+							var axisy = this.data.axisy;
+							var r = this.raphael;
+
+							var width = this.$width;
+							var height = this.$height;
+							var leftgutter = 30;
+							var bottomgutter = 20;
+
+							var txt = {"font": '10px Fontin-Sans, Arial', stroke: "none", fill: "#000"};
+							var X = (width - leftgutter) / axisx.length;
+							var Y = (height - bottomgutter) / axisy.length;
+
+							var max = Math.round(X / 2) - 1;
+
+							for (var i = 0, ii = axisx.length; i < ii; i++) {
+								r.text(leftgutter + X * (i + .5), height - 15 , axisx[i]).attr(txt);
+							}
+							for (var i = 0, ii = axisy.length; i < ii; i++) {
+								r.text(15, Y * (i + .5), axisy[i]).attr(txt);
+							}
+
+							var o = 0;
+							for (var i = 0, ii = axisy.length; i < ii; i++) {
+								for (var j = 0, jj = axisx.length; j < jj; j++) {
+									var R = data[o] && Math.min(Math.round(Math.sqrt(data[o] / Math.PI) * 4), max);
+									if (R) {
+										(function (dx, dy, R, value) {
+											var color = "hsb(" + [(1 - R / 15) * .5, 1, .75] + ")";
+											var dt = r.circle(dx + 60 + R, dy + 10, R).attr({stroke: "none", fill: color});
+											if (R < 6) {
+												var bg = r.circle(dx + 60 + R, dy + 10, 6).attr({stroke: "none", fill: "#000", opacity: .4}).hide();
+											}
+											var lbl = r.text(dx + 60 + R, dy + 10, data[o])
+													.attr({"font": '10px Fontin-Sans, Arial', stroke: "none", fill: "#fff"}).hide();
+											var dot = r.circle(dx + 60 + R, dy + 10, max).attr({stroke: "none", fill: "#000", opacity: 0});
+											dot[0].onmouseover = function () {
+												if (bg) {
+													bg.show();
+												} else {
+													var clr = Raphael.rgb2hsb(color);
+													clr.b = .5;
+													dt.attr("fill", Raphael.hsb2rgb(clr).hex);
+												}
+												lbl.show();
+											};
+											dot[0].onmouseout = function () {
+												if (bg) {
+													bg.hide();
+												} else {
+													dt.attr("fill", color);
+												}
+												lbl.hide();
+											};
+										})(leftgutter + X * (j + .5) - 60 - R, Y * (i + .5) - 10, R, data[o]);
+									}
+									o++;
+								}
+							}
+
+
+					}}
+				]
+			});
+
+			
+
+		</script>
+	</body>
+
+
+	
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA{
+				margin: 30px;
+			}
+		</style>
+		<title>Check Box ('checkbox')</title>
+	</head>
+	<body>
+
+		<div id="areaA"></div>
+	
+
+		<script type="text/javascript" charset="utf-8">
+		var form1 = [
+			{ view:"checkbox", label:"First age",on:{
+				onChange: function(){
+					console.log(this.getValue())
+				}
+			} },
+			{ view:"checkbox", label:"Second age", value:1 },
+			{ view:"checkbox", labelRight:"Third age" },
+			{ cols:[
+				{ view:"checkbox", label:"val A", labelWidth:40 },
+				{ view:"checkbox", label:"val B", labelWidth:40, value:1,
+					uncheckValue:"off", checkValue:"on"
+				},
+				{ view:"checkbox", label:"val C", labelWidth:40 }
+			]},
+
+			{ view:"button", value:"Confirm", width:200, align:"center" }
+		];
+
+
+		webix.ui({
+			container:"areaA",
+			margin:30, cols:[
+				{ view:"form", scroll:false, width:300, elements: form1 }
+			]
+		});
+		</script>
+	</body>
+</html>

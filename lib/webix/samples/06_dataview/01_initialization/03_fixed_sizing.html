@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+	<title>Controlling a Number of Displayed Items</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+
+	<script src="../../common/testdata.js"></script>
+<body>
+	<style type="text/css">
+		#dataA, #dataB{
+			margin:20px;
+		}
+	</style>
+	<div id="dataA"></div>
+	<hr>
+	<div id="dataB"></div>
+	
+	<script>
+		webix.ui({
+			view:"dataview",
+			container:"dataA",
+			template:"<div class='webix_strong'>#title#</div> Year: #year#, rank: #rank#",
+			data:big_film_set,
+			xCount:3, yCount:4,
+			type:{
+				height: 60
+			}
+		});
+
+		webix.ui({
+			view:"dataview",
+			container:"dataB",
+			template:"<div class='webix_strong'>#title#</div> Year: #year#, rank: #rank#",
+			data:big_film_set,
+			xCount:4, yCount:2,
+			type:{
+				height: 60
+			}
+		});
+	</script>
+
+
+</body>
+</html>

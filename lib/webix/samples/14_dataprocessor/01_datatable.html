@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Server-side Integration: Datatable</title>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+		<script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class='header_comment'>Server-side Integration for Datatable</div>
+		<div class='sample_comment'>The sample shows the use of dataProcessor for 'communication' with server-side.</div>
+		
+		<div id="testA" style="padding: 20px;"></div>
+		<hr>
+		<div style="padding: 20px;">
+			<input type="text" id="value" style='width:300px' value="new value" />
+			<input type="button" value="update selected" onclick="update()" /><br>
+			<input type="button" style='width:180px' value="add new row" onclick="add()" />
+			<input type="button" style='width:180px' value="remove selected row" onclick="remove_row()" />
+		</div>
+		<script type="text/javascript" charset="utf-8">
+		var grid, dp;
+		webix.ready(function(){
+			grid = webix.ui({
+				container:"testA",
+				view:"datatable",
+				columns:[
+					{ id:"rank",	header:"#", 		width:50,	css:"rank"},
+					{ id:"title",	header:"Film title",width:200},
+					{ id:"year",	header:"Released" , width:80},
+					{ id:"votes",	header:"Votes", 	width:100}
+				],
+				select:"cell",
+				autowidth:true,
+				autoheight:true,
+				on:{
+					"onAfterSelect":function(id){
+						document.getElementById("value").value = this.getItem(id.row)[id.column];
+					}
+				}
+			});
+			grid.load("./data/connector.php", "xml");
+			dp = new webix.DataProcessor({
+				url: "connector->./data/connector.php",
+				master: grid
+			});
+
+		});
+		
+		function update() {
+			var sel = grid.getSelectedId();
+			if (!sel) return;
+
+			var value = document.getElementById("value").value;
+			var row = grid.getItem(sel.row);
+			row[sel.column] = value;
+			grid.updateItem(sel.row, row);
+		}
+		
+		function add() {
+			var data = {
+				title: "",
+				year: "1998",
+				votes: 194865,
+				rating: "7.5",
+				rank: 12
+			};
+			grid.add(data);
+		}
+		
+		function remove_row() {
+			var sel = grid.getSelectedId(true);
+			if (!sel) return;
+			for (var i = 0; i < sel.length; i++)
+				grid.remove(sel[i].row);
+		}
+		</script>
+	</body>
+</html>

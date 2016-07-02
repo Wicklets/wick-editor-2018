@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+	<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+	<style>
+		html,body{
+			background-color:#ffffff;
+		}
+		.content {
+			width:100%;
+			height:100%;
+		}
+		.image .webix_template{
+			padding: 0px;
+		}
+		.nav_list .webix_dataview_item{
+			background-color: #aaa;
+			border-color: #bbb;
+		}
+		.nav_list .webix_dataview_item.webix_selected{
+			background-color: #eee;
+		}
+	</style>
+	<title>List navigation</title>
+</head>
+
+<body>
+<script type="text/javascript" charset="utf-8">
+
+	// datasource
+	var images = [
+		{id:1, src:"imgs/image001.jpg", title: "Image 1"},
+		{id:2, src:"imgs/image002.jpg", title: "Image 2"},
+		{id:3, src:"imgs/image003.jpg", title: "Image 3"},
+		{id:4, src:"imgs/image004.jpg", title: "Image 4"},
+		{id:5, src:"imgs/image005.jpg", title: "Image 5"},
+		{id:6, src:"imgs/image006.jpg", title: "Image 6"}
+	];
+
+	// create an array with carousel views
+	var viewsArray = [];
+	for(var i = 0; i < images.length; i++){
+		viewsArray.push({
+			id: images[i].id,
+			css: "image",
+			template:img,
+			data: webix.copy(images[i])
+		});
+	}
+
+	webix.ui({
+		view: "window",
+		body:{
+			rows:[
+				{
+					view: "carousel",
+					id: "carousel",
+					cols: viewsArray,
+					navigation: {
+						type: "side",
+						items: false
+					}
+				},
+				{
+					view: "dataview",
+					id: "imageList",
+					css: "nav_list",
+					yCount: 1,
+					select: true,
+					scroll: false,
+					type: {
+						width: 100,
+						height: 65
+					},
+					template: img,
+					data: images
+				}
+			]
+
+		},
+		head: false,
+		top:100,
+		left:100,
+		width:600,
+		height:500
+	}).show();
+
+	function img(obj){
+		return '<img src="'+obj.src+'" class="content" ondragstart="return false"/>'
+	}
+
+	$$("imageList").attachEvent("onItemClick",function(id){
+		$$(id).show();
+	});
+
+	$$("carousel").attachEvent("onShow",function(id){
+		$$("imageList").select(id);
+	});
+</script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+	<title>Scatter Chart:  Style Presets</title>
+	<script src="../../../codebase/webix.js" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css">
+	<script src="../../common/chartdata.js"></script>
+<body>
+     <div style="padding: 10px 20px;">
+        <b>Preset:</b>
+        <select id="preset" onchange="applyPreset()">
+            <option value="round" selected>round</option>
+            <option value="square">square</option>
+            <option value="diamond">diamond</option>
+        </select>
+    </div>
+    <div id="chartDiv" style="width:600px;height:250px;margin:20px"></div>
+	<script>
+	    drawChart("round");
+        function drawChart(preset){
+            webix.ui({
+                view:"chart",
+                container:"chartDiv",
+                id:"chart",
+                type:"scatter",
+                value:"#b#",
+                xValue: "#a#",
+                yAxis:{
+                    title:"Value Y"
+                },
+                xAxis:{
+                    title:"Value X"
+                },
+                preset:preset,
+                data: scatter_dataset
+            });
+        }
+        function applyPreset(){
+            var preset = document.getElementById("preset").value;
+            $$("chart").destructor();
+            drawChart(preset);
+        }
+	</script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Dataview Type Styling</title>
+	<script type="text/javascript" src='../../codebase/webix.js'></script>
+	<link rel="stylesheet" type="text/css" href="../../codebase/webix.css">
+    <script src="../common/testdata.js" type="text/javascript" charset="utf-8"></script>    
+</head>
+<body>
+<div id="dataA" style="width:500px; margin:30px"></div>
+<div id="dataB" style="width:500px; margin:30px"></div>
+<script>
+
+
+webix.ui ({
+        view:"dataview", 
+		container:"dataA",
+        yCount:2,
+        type:{
+            template:"<span style='color:#352E6F; font-style:italic'>#title#<br/>#year#</span>",
+            height:75,             
+			},
+        data:small_film_set
+})
+
+webix.type(webix.ui.dataview,{
+    name:"custom",
+        template:"<span style='color:#352E6F; font-style:italic'>#title#<br/>#year#</span>",
+        height:75
+
+});
+ 
+webix.ui ({
+        view:"dataview", 
+		container:"dataB",
+        yCount:2,
+        type: "custom",
+        data:small_film_set
+});
+</script>
+</body>
+</html>

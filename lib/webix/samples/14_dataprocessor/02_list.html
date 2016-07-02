@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" charset="utf-8">
+		<title>Server-side Integration:  List</title>
+</head>
+	<body>
+		<div class='header_comment'>Server-side Integration</div>
+		<div class='sample_comment'>The sample shows the use of dataProcessor for 'communication' with server-side.</div>
+		
+		<div id="mylist" style="width: 400px; height: 300px;padding: 20px;"></div>
+		<div style="padding: 20px;">
+			<input type="text" id="value" style='width:300px' value="new value" />
+			<input type="button" value="update selected" onclick="update_item()" /><br>
+			<input type="button" style='width:148px' value="add new item" onclick="add_item()" />
+			<input type="button" style='width:148px' value="remove selected item" onclick="remove_item()" />
+		</div>
+		<script type="text/javascript" charset="utf-8">
+
+			function add_item(){
+				var list = $$('mylist');
+				var data = {
+					title: "New film",
+					year: "1998",
+					votes: 194865,
+					rating: "7.5",
+					rank: list.count() + 1
+				};
+				list.add(data);
+			};
+
+			function remove_item(){
+				var list = $$('mylist');
+				var sel = list.getSelectedId(true);
+				if (!sel) return;
+				for (var i = 0; i < sel.length; i++)
+					list.remove(sel[i]);
+			};
+
+			function update_item() {
+				var list = $$('mylist');
+				var sel = list.getSelectedId(true);
+				if (!sel) return;
+
+				var value = document.getElementById("value").value;
+				for (var i = 0; i < sel.length; i++) {
+					var item = list.getItem(sel[i]);
+					item.title = value;
+					list.updateItem(sel[i], item);
+				}
+			}
+			webix.ready(function(){
+				webix.ui({
+					container: "mylist",
+					view:"list",
+					id:"mylist",
+					url:"./data/connector.php",
+					datatype: "xml",
+					type:{
+						width:"auto",
+						template:"#rank#. #title# (#rating#)"
+					},
+					select:"multiselect"
+				});
+				
+				$$('mylist').attachEvent("onAfterSelect", function(id) {
+					var value = this.getItem(id).title;
+					document.getElementById("value").value = value;
+				});
+
+				var dp = new webix.DataProcessor({
+					master: $$('mylist'),
+					url: "connector->./data/connector.php"
+				});
+			});
+		</script>
+	</body>
+</html>

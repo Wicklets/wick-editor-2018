@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Icons</title>
+		<link rel="stylesheet" href="../../../codebase/webix.css" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+
+		<script src="../common/treedata.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../common/samples.css">
+	</head>
+	<body>
+		<div class='header_comment'>Stylized DataTree type</div>
+		<div id="testA" style='width:250px; height:250px; float:left'></div>
+		<div id="testB" style='width:250px; height:250px; float:left'></div>
+		<div id="testC" style='width:250px; height:250px; float:left'></div>
+		
+		<style type="text/css">
+			.webix_tree_home{
+				background-image: url(icons/home.png)
+			}
+			.webix_tree_puzzle{
+				background-image: url(icons/puzzle.png)
+			}
+		</style>
+		<script type="text/javascript" charset="utf-8">
+
+		webix.ready(function(){
+
+			var data_with_icon = [
+				{ id:"root", value:"Films data", icon:"home", open:true, data:[
+					{ id:"1", open:true, value:"The Shawshank", data:[
+						{ id:"1.1", icon:"puzzle", value:"Part 1" }
+					]}
+				]}
+			];
+
+			tree = webix.ui({
+				container:"testA",
+				view:"tree",
+				type:"lineTree",
+				select:true,
+				data: data_with_icon
+			});	
+
+		});
+		</script>
+	</body>
+</html>

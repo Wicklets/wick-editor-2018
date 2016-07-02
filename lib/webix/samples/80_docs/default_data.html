@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+    <script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="../common/testdata.js"></script>
+
+    <title>Default Data</title>
+</head>
+<body>
+<div id="listA" style="width:300px; height:500px; margin:20px;"></div>
+<script type="text/javascript" charset="utf-8">
+	webix.ui({ 
+		container:"listA",
+		rows:[
+			{
+				view:"list", id:"list1",
+    			template:"#rank#.#title#",
+        		data:small_film_set,
+        		select:true,
+        		defaultData:{
+        			rank:"0",
+            		title:"Default Item"
+        		}
+        	},
+        	{
+        		view:"template", id:"template1",
+        		template:"#rank#.#title#"
+    		}
+    ]
+});
+
+$$("template1").bind($$("list1"));
+
+</script>
+</body>
+</html>

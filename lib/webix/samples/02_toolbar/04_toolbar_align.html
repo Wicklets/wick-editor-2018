@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+		<script src="../../codebase/webix.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA, #areaB, #areaC, #areaD{
+				margin: 30px;
+				width:700px; height:100px;
+			}
+		</style>
+		<title>Buttons: Alignment</title>
+	</head>
+	<body>
+
+		<div id="areaA"></div>
+		<div id="areaB"></div>
+		<div id="areaC"></div>
+		<div id="areaD"></div>
+
+		<script type="text/javascript" charset="utf-8">
+
+			webix.ui({
+				container:"areaA",
+				view:"toolbar", paddingY:2,
+				cols:[
+					{ view:"button", value:"Load" },
+					{ view:"button", value:"Save" },
+					{ view:"button", value:"Info" }
+				]
+			});
+			webix.ui({
+				container:"areaA",
+				view:"toolbar", paddingY:2,
+				cols:[
+					{ view:"button", value:"Load", width:100 },
+					{ view:"button", value:"Save" },
+					{ view:"button", value:"Info", width:100 }
+				]
+			});		
+
+			webix.ui({
+				container:"areaB",
+				view:"toolbar", paddingY:2,
+				cols:[
+					{ view:"button", value:"Load", inputWidth:150, align:'left'},
+					{ view:"button", value:"Save", inputWidth:150, align:'center'},
+					{ view:"button", value:"Info", inputWidth:150, align:'right' }
+				]
+			});
+			webix.ui({
+				container:"areaB",
+				view:"toolbar", paddingY:2,
+				cols:[
+					{ view:"button", value:"Load", width:150 },
+					{},
+					{ view:"button", value:"Save", width:150 },
+					{},
+					{ view:"button", value:"Info", width:150 }
+				]
+			});
+
+	
+
+			webix.ui({
+				container:"areaC",
+				view:"toolbar", paddingY:2,
+				cols:[
+					{ view:"button", value:"Load", width:100 },
+					{ view:"button", value:"Save", width:100 },
+					{ view:"button", value:"Info", width:100, align:"right" }
+				]
+			});		
+			webix.ui({
+				container:"areaC",
+				view:"toolbar", paddingY:2,
+				cols:[
+					{},
+					{ view:"button", value:"Load", width:100 },
+					{ view:"button", value:"Save", width:100 },
+					{ view:"button", value:"Info", width:100 }
+				]
+			});		
+	
+					
+		</script>
+	</body>
+</html>
