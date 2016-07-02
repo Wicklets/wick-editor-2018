@@ -86,6 +86,7 @@ var WickActionHandler = function (wickEditor) {
 
         wickEditor.htmlGUIHandler.syncWithEditor();
         wickEditor.htmlGUIHandler.closeScriptingGUI();
+        wickEditor.htmlGUIHandler.closeContextMenu();
     }
 
     this.undoActions['gotoFrame'] = function (args) {
@@ -99,6 +100,7 @@ var WickActionHandler = function (wickEditor) {
 
         wickEditor.htmlGUIHandler.syncWithEditor();
         wickEditor.htmlGUIHandler.closeScriptingGUI();
+        wickEditor.htmlGUIHandler.closeContextMenu();
     }
 
 

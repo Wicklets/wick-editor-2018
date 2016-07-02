@@ -414,106 +414,93 @@ var WickHTMLGUIHandler = function (wickEditor) {
     });
 
 /************************
-    Right click menu
+    Context menu
 ************************/
 
-    /*
+    webix.ui({
+        view:"contextmenu",
+        id:"context_menu",
+        data:[
+            { value:"Edit Scripts", id:"edit_scripts" },
+            { value:"Bring to Front", id:"bring_to_front" },
+            { value:"Send to Back", id:"send_to_back" },
+            { value:"Delete", id:"delete" },
+            { value:"Edit Object", id:"edit_object" },
+            { value:"Convert to Symbol", id:"convert_to_symbol" },
+            { value:"Finish Editing Object", id:"finish_editing_object" },
+            { value:"Create MovieClip", id:"create_movie_clip" }
+        ],
+        on:{
+            onItemClick:function(id){
+                //var menu = this.getMenu(id);
+                //webix.message(menu.getItem(id).value);
+                if(id === "edit_scripts") {
+                    wickEditor.htmlGUIHandler.openScriptingGUI(wickEditor.fabricCanvas.getActiveObject());
+                } else if (id == "bring_to_front") {
+                    VerboseLog("NYI");
+                } else if (id == "send_to_back") {
+                    VerboseLog("NYI");
+                } else if (id == "delete") {
+                    wickEditor.actionHandler.doAction('delete', {
+                        obj:   wickEditor.fabricCanvas.getCanvas().getActiveObject(),
+                        group: wickEditor.fabricCanvas.getCanvas().getActiveGroup()
+                    });
+                } else if (id == "edit_object") {
+                    var objectToEdit = wickEditor.fabricCanvas.getActiveObject();
+                    wickEditor.actionHandler.doAction('editObject', {objectToEdit:objectToEdit});
+                } else if (id == "convert_to_symbol") {
+                    wickEditor.htmlGUIHandler.closeRightClickMenu();
 
-    $("#editScriptsButton").on("click", function (e) {
-        wickEditor.htmlGUIHandler.closeRightClickMenu();
-        wickEditor.htmlGUIHandler.openScriptingGUI(wickEditor.fabricCanvas.getActiveObject());
+                    var fabCanvas = wickEditor.fabricCanvas.getCanvas();
+                    wickEditor.actionHandler.doAction('convertSelectionToSymbol', 
+                        {selection:fabCanvas.getActiveObject() || fabCanvas.getActiveGroup()}
+                    );
+                } else if (id == "finish_editing_object") {
+                    wickEditor.actionHandler.doAction('finishEditingCurrentObject', {});
+                } else if (id == "create_movie_clip") {
+                    VerboseLog("NYI");
+                }
+            }
+        },
+        master:"editor"
     });
+    var contextMenu = $$("context_menu");
 
-    $("#bringToFrontButton").on("click", function (e) {
-        wickEditor.htmlGUIHandler.closeRightClickMenu();
-        wickEditor.bringSelectedObjectToFront();
-    });
-
-    $("#sendToBackButton").on("click", function (e) {
-        wickEditor.htmlGUIHandler.closeRightClickMenu();
-        wickEditor.sendSelectedObjectToBack();
-    });
-
-    $("#deleteButton").on("click", function (e) {
-        wickEditor.htmlGUIHandler.closeRightClickMenu();
-        wickEditor.actionHandler.doAction('delete', {
-            obj:   wickEditor.fabricCanvas.getCanvas().getActiveObject(),
-            group: wickEditor.fabricCanvas.getCanvas().getActiveGroup()
-        });
-    });
-
-    $("#editObjectButton").on("click", function (e) {
-        wickEditor.htmlGUIHandler.closeRightClickMenu();
-
-        var objectToEdit = wickEditor.fabricCanvas.getActiveObject();
-        wickEditor.actionHandler.doAction('editObject', {objectToEdit:objectToEdit});
-    });
-
-    $("#convertToSymbolButton").on("click", function (e) {
-        wickEditor.htmlGUIHandler.closeRightClickMenu();
-
-        var fabCanvas = wickEditor.fabricCanvas.getCanvas();
-        wickEditor.actionHandler.doAction('convertSelectionToSymbol', 
-            {selection:fabCanvas.getActiveObject() || fabCanvas.getActiveGroup()}
-        );
-    });
-
-    $("#finishEditingObjectButton").on("click", function (e) {
-        wickEditor.htmlGUIHandler.closeRightClickMenu();
-        
-        wickEditor.actionHandler.doAction('finishEditingCurrentObject', {});
-    });
-
-    this.openRightClickMenu = function () {
-
-        // Make rightclick menu visible
-        $("#rightClickMenu").css('visibility', 'visible');
-        // Attach it to the mouse
-        $("#rightClickMenu").css('top', wickEditor.mouse.y+'px');
-        $("#rightClickMenu").css('left', wickEditor.mouse.x+'px');
-
-        // Hide everything
-        $("#insideSymbolButtons").css('display', 'none');
-        $("#symbolButtons").css('display', 'none');
-        $("#staticObjectButtons").css('display', 'none');
-        $("#commonObjectButtons").css('display', 'none');
-        $("#frameButtons").css('display', 'none');
-
-        // Selectively show portions we need depending on editor state
-
+    this.updateContextMenu = function () {
         var fabCanvas = wickEditor.fabricCanvas.getCanvas();
         var selectedObject = fabCanvas.getActiveObject() || fabCanvas.getActiveGroup();
 
+        // Hide all items
+        contextMenu.hideItem("edit_scripts");
+        contextMenu.hideItem("bring_to_front");
+        contextMenu.hideItem("send_to_back");
+        contextMenu.hideItem("delete");
+        contextMenu.hideItem("edit_object");
+        contextMenu.hideItem("convert_to_symbol");
+        contextMenu.hideItem("finish_editing_object");
+        contextMenu.hideItem("create_movie_clip");
+
+        // Selectively show items depending on editor state
         if(!wickEditor.currentObject.isRoot) {
-            $("#insideSymbolButtons").css('display', 'block');
+            contextMenu.showItem("finish_editing_object");
         }
         if(selectedObject) {
             if(selectedObject.wickObject && selectedObject.wickObject.isSymbol) {
-                $("#symbolButtons").css('display', 'block');
+                contextMenu.showItem("edit_object");
             } else {
-                $("#staticObjectButtons").css('display', 'block');
+                contextMenu.showItem("convert_to_movie_clip");
             }
-            $("#commonObjectButtons").css('display', 'block');
-            
+           contextMenu.showItem("bring_to_front");
+           contextMenu.showItem("send_to_back");
+           contextMenu.showItem("delete");
         } else {
-            $("#frameButtons").css('display', 'block');
+            contextMenu.showItem("create_movie_clip");
         }
     }
 
-    this.closeRightClickMenu = function () {
-        // Hide rightclick menu
-        $("#rightClickMenu").css('visibility', 'hidden');
-        $("#rightClickMenu").css('top', '0px');
-        $("#rightClickMenu").css('left','0px');
-
-        // Hide all buttons inside rightclick menu
-        $("#symbolButtons").css('display', 'none');
-        $("#staticObjectButtons").css('display', 'none');
-        $("#commonObjectButtons").css('display', 'none');
-        $("#frameButtons").css('display', 'none');
+    this.closeContextMenu = function () {
+        contextMenu.hide();
     }
-
-    */
 
 /************************
     Properties menu
