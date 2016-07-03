@@ -212,18 +212,52 @@ var WickPlayer = (function () {
     /* */
     var generateBuiltinWickFunctions = function (wickObj) {
 
-        wickObj.hitTest = function (otherObj) {
+        HitTest = {
+            Rectangles : "rectangles",
+            Circles : "circles",
+            PerPixel : "perpixel"
+        }
+
+        wickObj.hitTest = function (otherObj, hitTestType) {
+
 
             if(!otherObj) {
-                console.error('hitTest with invalid object as param!!')
+                console.error('hitTest with invalid object as param!!');
+                return;
             }
 
-            // TODO: Use proper rectangle collision
-            var wickObjCentroid = {
-                x : wickObj.x + wickObj.width*wickObj.scaleX/2,
-                y : wickObj.y + wickObj.height*wickObj.scaleY/2
-            };
-            return pointInsideObj(otherObj, wickObjCentroid);
+            // Default to rectangles. 
+            if (hitTestType === undefined) {
+                hitTestType = HitTest.Rectangles; 
+            }
+
+            if (hitTestType === HitTest.Rectangles) {
+                wickObjWidth = wickObj.width * wickObj.scaleX;
+                wickObjHeight = wickObj.height * wickObj.scaleY;
+
+                otherObjWidth = otherObj.width * otherObj.scaleX;
+                otherObjHeight = otherObj.height * otherObj.scaleY;
+
+                left = wickObj.x < (otherObj.x + otherObjWidth);
+                right = (wickObj.x + wickObjWidth) > otherObj.x; 
+                top = wickObj.y < (otherObj.y + otherObjHeight);
+                bottom = (wickObj.y + wickObjHeight) > otherObj.y;
+
+                if (left && right && top && bottom) {
+                    return true;
+                } else {
+                    return false; 
+                }
+            }
+
+            if (hitTestType === HitTest.Circles) {
+                var wickObjCentroid = {
+                    x : wickObj.x + wickObj.width*wickObj.scaleX/2,
+                    y : wickObj.y + wickObj.height*wickObj.scaleY/2
+                };
+                return pointInsideObj(otherObj, wickObjCentroid);
+            }
+            
         }
 
         if(wickObj.isSymbol) {
