@@ -33,6 +33,15 @@ var FabricCanvas = function (wickEditor) {
 
     this.canvasPanPosition = {x:0,y:0};
 
+    this.syncWithEditor = function () {
+        this.setBackgroundColor(wickEditor.project.backgroundColor);
+        this.storeObjectsIntoCanvas( 
+            wickEditor.currentObject.getCurrentFrame().wickObjects, 
+            wickEditor.project.resolution 
+        );
+        this.resize();
+    }
+
 // White box that shows resolution/objects that will be on screen when project is exported
 
     this.frameInside = new fabric.Rect({

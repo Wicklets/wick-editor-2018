@@ -332,7 +332,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
             wickEditor.syncEditorWithFabricCanvas();
             wickEditor.project.resolution.x = n;
             wickEditor.fabricCanvas.resize();
-            wickEditor.syncFabricCanvasWithEditor();
+            wickEditor.fabricCanvas.syncWithEditor();
         });
 
     });
@@ -343,7 +343,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
             wickEditor.syncEditorWithFabricCanvas();
             wickEditor.project.resolution.y = n;
             wickEditor.fabricCanvas.resize();
-            wickEditor.syncFabricCanvasWithEditor();
+            wickEditor.fabricCanvas.syncWithEditor();
         });
 
     });

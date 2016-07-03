@@ -82,7 +82,7 @@ var WickActionHandler = function (wickEditor) {
         // Go to the specified frame
         wickEditor.syncEditorWithFabricCanvas();
         wickEditor.currentObject.currentFrame = args.toFrame;
-        wickEditor.syncFabricCanvasWithEditor();
+        wickEditor.fabricCanvas.syncWithEditor();
 
         wickEditor.htmlGUIHandler.syncWithEditor();
         wickEditor.htmlGUIHandler.closeScriptingGUI();
@@ -95,7 +95,7 @@ var WickActionHandler = function (wickEditor) {
         // Go back to the old frame
         wickEditor.syncEditorWithFabricCanvas();
         wickEditor.currentObject.currentFrame = args.oldFrame;
-        wickEditor.syncFabricCanvasWithEditor();
+        wickEditor.fabricCanvas.syncWithEditor();
 
         wickEditor.htmlGUIHandler.syncWithEditor();
         wickEditor.htmlGUIHandler.closeScriptingGUI();
@@ -163,7 +163,7 @@ var WickActionHandler = function (wickEditor) {
             args.fabricObjectToRemove = fabricObject;
 
             wickEditor.syncEditorWithFabricCanvas();
-            wickEditor.syncFabricCanvasWithEditor();
+            wickEditor.fabricCanvas.syncWithEditor();
         });
 
     }
@@ -249,11 +249,8 @@ var WickActionHandler = function (wickEditor) {
         wickEditor.currentObject = args.objectToEdit.wickObject;
         wickEditor.currentObject.currentFrame = 0;
 
-        wickEditor.fabricCanvas.repositionOriginCrosshair();
-
         // Load wickobjects in the frame we moved to into the canvas
-        wickEditor.syncFabricCanvasWithEditor();
-        wickEditor.fabricCanvas.updateCanvasResolution();
+        wickEditor.fabricCanvas.syncWithEditor();
 
         wickEditor.htmlGUIHandler.syncWithEditor();
 
@@ -273,7 +270,7 @@ var WickActionHandler = function (wickEditor) {
         wickEditor.currentObject.currentFrame = 0;
 
         // Load wickobjects in the frame we moved to into the canvas
-        wickEditor.syncFabricCanvasWithEditor();
+        wickEditor.fabricCanvas.syncWithEditor();
 
         wickEditor.htmlGUIHandler.syncWithEditor();
 
@@ -297,12 +294,9 @@ var WickActionHandler = function (wickEditor) {
         args.prevEditedObject = wickEditor.currentObject;
         wickEditor.currentObject = wickEditor.currentObject.parentObject;
 
-        wickEditor.fabricCanvas.repositionOriginCrosshair();
-
         // Load wickobjects in the frame we moved to into the canvas
-        wickEditor.syncFabricCanvasWithEditor();
-        wickEditor.fabricCanvas.updateCanvasResolution();
-
+        wickEditor.fabricCanvas.syncWithEditor();
+        
         wickEditor.htmlGUIHandler.syncWithEditor();
 
     }

@@ -174,7 +174,8 @@ WickObject.fromText = function (text, parentObject) {
 }
 
 WickObject.fromHTML = function (text, parentObject) {
-    var htmlSnippetWickObject = new WickObject(parentObject);
+    VerboseLog.error("WickObject.fromHTML not updated yet...");
+    /*var htmlSnippetWickObject = new WickObject(parentObject);
 
     htmlSnippetWickObject.setDefaultPositioningValues();
     htmlSnippetWickObject.htmlData = '<iframe width="560" height="315" src="https://www.youtube.com/embed/AxZ6RG5UeiU" frameborder="0" allowfullscreen></iframe>';
@@ -186,7 +187,7 @@ WickObject.fromHTML = function (text, parentObject) {
     this.fabricCanvas.addWickObjectToCanvas(htmlSnippetWickObject);
 
     this.syncEditorWithFabricCanvas();
-    this.syncFabricCanvasWithEditor();
+    this.fabricCanvas.syncWithEditor();*/
 }
 
 WickObject.fromAudioFile = function (audioData, parentObject) {

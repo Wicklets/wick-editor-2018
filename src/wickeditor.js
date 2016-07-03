@@ -121,7 +121,7 @@ var WickEditor = function () {
     this.htmlGUIHandler.syncWithEditor();
 
     // Sync fabric and html gui
-    this.syncFabricCanvasWithEditor();
+    this.fabricCanvas.syncWithEditor();
     this.htmlGUIHandler.syncWithEditor();
 
     window.addEventListener("beforeunload", function (event) {
@@ -327,11 +327,6 @@ WickEditor.prototype.syncEditorWithFabricCanvas = function () {
     this.currentObject.frames[this.currentObject.currentFrame].wickObjects = this.fabricCanvas.getWickObjectsInCanvas(this.project.resolution);
 }
 
-WickEditor.prototype.syncFabricCanvasWithEditor = function () {
-    this.fabricCanvas.setBackgroundColor(this.project.backgroundColor);
-    this.fabricCanvas.storeObjectsIntoCanvas( this.currentObject.getCurrentFrame().wickObjects, this.project.resolution );
-}
-
 /**********************************
   Project Open/Save/Import/Export
 **********************************/
@@ -369,7 +364,7 @@ WickEditor.prototype.newProject = function () {
     this.fabricCanvas.deselectAll();
 
     this.fabricCanvas.resize();
-    this.syncFabricCanvasWithEditor();
+    this.fabricCanvas.syncWithEditor();
     this.htmlGUIHandler.syncWithEditor();
 
 }
@@ -387,7 +382,7 @@ WickEditor.prototype.openProject = function (projectJSON) {
     this.currentObject = this.project.rootObject;
     this.currentObject.currentFrame = 0;
     this.fabricCanvas.resize();
-    this.syncFabricCanvasWithEditor();
+    this.fabricCanvas.syncWithEditor();
     this.htmlGUIHandler.syncWithEditor();
 
 }
