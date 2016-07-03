@@ -22,7 +22,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
     }
 
     document.getElementById('exportJSONButton').onclick = function (e) {
-        wickEditor.saveProject();
+        wickEditor.exportProjectAsJSON();
     }
 
     document.getElementById('openProjectButton').onclick = function (e) {
@@ -30,7 +30,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
     }
 
     document.getElementById('exportHTMLButton').onclick = function (e) {
-        wickEditor.exportProject();
+        wickEditor.exportProjectAsWebpage();
     }
 
     document.getElementById('runButton').onclick = function (e) {

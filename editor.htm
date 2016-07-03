@@ -65,13 +65,13 @@
             <div class="button buttonInRow tooltipElem" id="newProjectButton" alt="New Project">
                 <img src="resources/trashcan.png" width="30" />
             </div>  
-            <div class="button buttonInRow tooltipElem" id="exportJSONButton" alt="Save Project">
-                <img src="resources/save.png" width="30" />
-            </div>
             <div class="button buttonInRow tooltipElem" id="openProjectButton" alt="Open Project">
                 <img src="resources/open-folder.png" width="30" />
             </div>
-            <div class="button buttonInRow tooltipElem" id="exportHTMLButton" alt="Export Project">
+            <div class="button buttonInRow tooltipElem" id="exportJSONButton" alt="Export Project (JSON)">
+                <img src="resources/save.png" width="30" />
+            </div>
+            <div class="button buttonInRow tooltipElem" id="exportHTMLButton" alt="Export Project (Webpage)">
                 <img src="resources/export.png" width="30" />
             </div>
             <div class="button buttonInRow tooltipElem" id="runButton" alt="Run Project">
@@ -208,6 +208,9 @@
     <!-- Right click menu, appears next to mouse on right click -->
 
         <div id="rightClickMenu" class="GUIBox">
+            <div id="symbolButtons">
+                <div class="button" id="editObjectButton">Edit Object</div>
+            </div>
             <div id="commonObjectButtons">
                 <div class="button" id="editScriptsButton">Edit Scripts</div>
                 <hr />
@@ -215,9 +218,6 @@
                 <div class="button" id="sendToBackButton">Send to Back</div>
                 <div class="button" id="deleteButton">Delete</div>
                 <hr />
-            </div>
-            <div id="symbolButtons">
-                <div class="button" id="editObjectButton">Edit Object</div>
             </div>
             <div id="staticObjectButtons">
                 <div class="button" id="convertToSymbolButton">Convert to Symbol</div>

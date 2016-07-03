@@ -68,7 +68,8 @@ var WickEditor = function () {
         else if (event.keyCode == 83 && controlKeyDown) {
             event.preventDefault();
             that.clearKeys();
-            that.saveProject();
+            that.syncEditorWithFabricCanvas();
+            that.project.saveInLocalStorage();
         }
         // Control-o: open
         else if (event.keyCode == 79 && controlKeyDown) {
@@ -80,6 +81,7 @@ var WickEditor = function () {
         // Control-a: Select all
         if (event.keyCode == 65 && controlKeyDown) {
             event.preventDefault();
+            that.fabricCanvas.deselectAll();
             that.fabricCanvas.selectAll();
         }
 
@@ -369,13 +371,6 @@ WickEditor.prototype.newProject = function () {
 
 }
 
-WickEditor.prototype.saveProject = function () {
-
-    this.syncEditorWithFabricCanvas();
-    this.project.exportAsJSONFile();
-
-}
-
 WickEditor.prototype.openProject = function (projectJSON) {
 
     this.project = WickProject.fromJSON(projectJSON);
@@ -387,7 +382,14 @@ WickEditor.prototype.openProject = function (projectJSON) {
 
 }
 
-WickEditor.prototype.exportProject = function () {
+WickEditor.prototype.exportProjectAsJSON = function () {
+
+    this.syncEditorWithFabricCanvas();
+    this.project.exportAsJSONFile();
+
+}
+
+WickEditor.prototype.exportProjectAsWebpage = function () {
     this.syncEditorWithFabricCanvas();
     this.project.saveInLocalStorage();
     this.project.exportAsHTMLFile();
