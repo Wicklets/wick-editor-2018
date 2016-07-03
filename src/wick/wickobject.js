@@ -363,7 +363,7 @@ WickObject.prototype.getSymbolTrueOffset = function () {
             leftmostLeft = currObj.left;
         }
 
-        if(leftmostLeft === null || currObj.top < topmostTop) {
+        if(topmostTop === null || currObj.top < topmostTop) {
             topmostTop = currObj.top;
         }
     });

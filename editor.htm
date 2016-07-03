@@ -37,9 +37,9 @@
     <script src="src/player/wickplayer.js"></script>
 
     <script>
-    $(document).ready(function() { 
-        wickEditor = new WickEditor();
-    });
+        $(document).ready(function() { 
+            wickEditor = new WickEditor();
+        });
     </script>
 </head>
 
@@ -48,10 +48,6 @@
 <!-- Hidden element to always be selected so browser always fires copy/paste events -->
 
     <input id="hidden-input" class="hidden" type="text" value="" />
-
-<!-- Hidden element used for gif decoding + import -->
-
-    <!-- <img id="gifImportDummyElem" /> -->
 
 <!-- Editor GUI, visible when a project is being edited & not running -->
 
@@ -209,9 +205,6 @@
             </div>
         </div>
 
-    <!-- Tooltip -->
-        <div id="tooltipGUI" class="GUIBox tooltip"></div>
-
     <!-- Right click menu, appears next to mouse on right click -->
 
         <div id="rightClickMenu" class="GUIBox">
@@ -233,6 +226,11 @@
                 <div class="button" id="finishEditingObjectButton">Finish Editing Object</div>
             </div>
         </div>
+
+<!-- Tooltip -->
+
+        <div id="tooltipGUI" class="GUIBox tooltip"></div>
+
     </div>
 
 <!-- Builtin player, visible when a project is running -->

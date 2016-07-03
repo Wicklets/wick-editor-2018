@@ -34,8 +34,8 @@ var WickEditor = function () {
     var that = this;
 
     document.addEventListener('mousemove', function(e) { 
-        that.mouse.x = event.clientX;
-        that.mouse.y = event.clientY;
+        that.mouse.x = e.clientX;
+        that.mouse.y = e.clientY;
     }, false );
 
     document.addEventListener('contextmenu', function (event) { 

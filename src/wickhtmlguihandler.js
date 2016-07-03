@@ -407,14 +407,14 @@ var WickHTMLGUIHandler = function (wickEditor) {
 ************************/
 
     $('.tooltipElem').on("mouseover", function(e) {
-        $("#tooltipGUI").css('visibility', 'visible');
+        $("#tooltipGUI").css('display', 'block');
         $("#tooltipGUI").css('top', wickEditor.mouse.y+5+'px');
         $("#tooltipGUI").css('left', wickEditor.mouse.x+5+'px');
         document.getElementById('tooltipGUI').innerHTML = e.currentTarget.attributes.alt.value;
     });
 
     $('.tooltipElem').on("mouseout", function(e) {
-        $("#tooltipGUI").css('visibility', 'hidden');
+        $("#tooltipGUI").css('display', 'none');
     });
 
 /************************

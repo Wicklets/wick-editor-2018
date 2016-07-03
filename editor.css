@@ -84,7 +84,7 @@ hr {
 	top: 0px;
 	left: 0px;
 	background-color: #EEEEEE;
-	visibility: hidden;
+	display: none;
 }
 
 .button {
