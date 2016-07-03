@@ -211,6 +211,7 @@ var WickActionHandler = function (wickEditor) {
         } else {
             // Only one object is selected
             args.selectionWickObjects.push(args.selection.wickObject);
+            args.selection.remove();
         }
 
         args.symbol = WickObject.createSymbolFromWickObjects(
