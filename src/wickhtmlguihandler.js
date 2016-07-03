@@ -418,6 +418,12 @@ var WickHTMLGUIHandler = function (wickEditor) {
     });
 
 /************************
+      Popup Window
+************************/
+
+    //this.
+
+/************************
     Right click menu
 ************************/
 
