@@ -17,32 +17,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
       Menu Bar
 ********************/
 
-    webix.ui({
-        container:"editor",
-        view:"menu",
-        css:"webix_float_element",
-        data:[
-            { id:"1",value:"Translate...", submenu:[
-                "English", 
-                { value:"Slavic...", submenu:[
-                    "Belarusian", "Russian", "Ukrainian"
-                ]},
-                "German"
-            ]},
-            { id:"2",value:"Post...", submenu:[ "Facebook", "Google+", "Twitter" ]},
-            { id:"3",value:"Info" }
-        ],
-        on:{
-            onMenuItemClick:function(id){
-                webix.message("Click: "+this.getMenuItem(id).value);
-            }
-        },
-        type:{
-            subsign:true
-        }
-    }); 
-
-    /*document.getElementById('newProjectButton').onclick = function (e) {
+    document.getElementById('newProjectButton').onclick = function (e) {
         wickEditor.newProject();
     }
 
@@ -76,7 +51,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
 
         var importButton = $("importButton");
         importButton.replaceWith( importButton = importButton.clone( true ) );
-    }*/
+    }
 
 /********************
        Toolbar
@@ -385,6 +360,10 @@ var WickHTMLGUIHandler = function (wickEditor) {
         wickEditor.project.fitScreen = this.checked;
     }
 
+    document.getElementById('drawBordersCheckbox').onclick = function (e) {
+        wickEditor.project.drawBorders = this.checked;
+    }
+
     document.getElementById('projectBgColor').onchange = function () {
         wickEditor.project.backgroundColor = this.value;
         wickEditor.fabricCanvas.setBackgroundColor(this.value);
@@ -439,91 +418,101 @@ var WickHTMLGUIHandler = function (wickEditor) {
     });
 
 /************************
-    Context menu
+    Right click menu
 ************************/
 
-    var contextMenuItems = [
-        { value:"Edit Scripts", id:"edit_scripts" },
-        { value:"Bring to Front", id:"bring_to_front" },
-        { value:"Send to Back", id:"send_to_back" },
-        { value:"Delete", id:"delete" },
-        { value:"Edit Object", id:"edit_object" },
-        { value:"Convert to Symbol", id:"convert_to_symbol" },
-        { value:"Finish Editing Object", id:"finish_editing_object" },
-        { value:"Create MovieClip", id:"create_movie_clip" }
-    ]
-
-    var doContextMenuAction = function (id) {
-        if(id === "edit_scripts") {
-            wickEditor.htmlGUIHandler.openScriptingGUI(wickEditor.fabricCanvas.getActiveObject());
-        } else if (id == "bring_to_front") {
-            VerboseLog.error("NYI");
-        } else if (id == "send_to_back") {
-            VerboseLog.error("NYI");
-        } else if (id == "delete") {
-            wickEditor.actionHandler.doAction('delete', {
-                obj:   wickEditor.fabricCanvas.getCanvas().getActiveObject(),
-                group: wickEditor.fabricCanvas.getCanvas().getActiveGroup()
-            });
-        } else if (id == "edit_object") {
-            var objectToEdit = wickEditor.fabricCanvas.getActiveObject();
-            wickEditor.actionHandler.doAction('editObject', {objectToEdit:objectToEdit});
-        } else if (id == "convert_to_symbol") {
-            wickEditor.htmlGUIHandler.closeRightClickMenu();
-
-            var fabCanvas = wickEditor.fabricCanvas.getCanvas();
-            wickEditor.actionHandler.doAction('convertSelectionToSymbol', 
-                {selection:fabCanvas.getActiveObject() || fabCanvas.getActiveGroup()}
-            );
-        } else if (id == "finish_editing_object") {
-            wickEditor.actionHandler.doAction('finishEditingCurrentObject', {});
-        } else if (id == "create_movie_clip") {
-            VerboseLog.error("NYI");
-        }
-    }
-
-    webix.ui({
-        view:"contextmenu",
-        id:"context_menu",
-        data:contextMenuItems,
-        on:{
-            onItemClick:function(id){
-                doContextMenuAction(id);
-            }
-        },
-        master:"editor"
+    $("#editScriptsButton").on("click", function (e) {
+        wickEditor.htmlGUIHandler.closeRightClickMenu();
+        wickEditor.htmlGUIHandler.openScriptingGUI(wickEditor.fabricCanvas.getActiveObject());
     });
-    var contextMenu = $$("context_menu");
 
-    this.updateContextMenu = function () {
+    $("#bringToFrontButton").on("click", function (e) {
+        wickEditor.htmlGUIHandler.closeRightClickMenu();
+        wickEditor.bringSelectedObjectToFront();
+    });
+
+    $("#sendToBackButton").on("click", function (e) {
+        wickEditor.htmlGUIHandler.closeRightClickMenu();
+        wickEditor.sendSelectedObjectToBack();
+    });
+
+    $("#deleteButton").on("click", function (e) {
+        wickEditor.htmlGUIHandler.closeRightClickMenu();
+        wickEditor.actionHandler.doAction('delete', {
+            obj:   wickEditor.fabricCanvas.getCanvas().getActiveObject(),
+            group: wickEditor.fabricCanvas.getCanvas().getActiveGroup()
+        });
+    });
+
+    $("#editObjectButton").on("click", function (e) {
+        wickEditor.htmlGUIHandler.closeRightClickMenu();
+
+        var objectToEdit = wickEditor.fabricCanvas.getActiveObject();
+        wickEditor.actionHandler.doAction('editObject', {objectToEdit:objectToEdit});
+    });
+
+    $("#convertToSymbolButton").on("click", function (e) {
+        wickEditor.htmlGUIHandler.closeRightClickMenu();
+
+        var fabCanvas = wickEditor.fabricCanvas.getCanvas();
+        wickEditor.actionHandler.doAction('convertSelectionToSymbol', 
+            {selection:fabCanvas.getActiveObject() || fabCanvas.getActiveGroup()}
+        );
+    });
+
+    $("#finishEditingObjectButton").on("click", function (e) {
+        wickEditor.htmlGUIHandler.closeRightClickMenu();
+        
+        wickEditor.actionHandler.doAction('finishEditingCurrentObject', {});
+    });
+
+    this.openRightClickMenu = function () {
+
+        // Make rightclick menu visible
+        $("#rightClickMenu").css('visibility', 'visible');
+        // Attach it to the mouse
+        $("#rightClickMenu").css('top', wickEditor.mouse.y+'px');
+        $("#rightClickMenu").css('left', wickEditor.mouse.x+'px');
+
+        // Hide everything
+        $("#insideSymbolButtons").css('display', 'none');
+        $("#symbolButtons").css('display', 'none');
+        $("#staticObjectButtons").css('display', 'none');
+        $("#commonObjectButtons").css('display', 'none');
+        $("#frameButtons").css('display', 'none');
+
+        // Selectively show portions we need depending on editor state
+
         var fabCanvas = wickEditor.fabricCanvas.getCanvas();
         var selectedObject = fabCanvas.getActiveObject() || fabCanvas.getActiveGroup();
 
-        // Hide all items
-        for(var i = 0; i < contextMenuItems.length; i++) {
-            contextMenu.hideItem(contextMenuItems[i].id);
-        }
-
-        // Selectively show items depending on editor state
         if(!wickEditor.currentObject.isRoot) {
-            contextMenu.showItem("finish_editing_object");
+            $("#insideSymbolButtons").css('display', 'block');
         }
         if(selectedObject) {
             if(selectedObject.wickObject && selectedObject.wickObject.isSymbol) {
-                contextMenu.showItem("edit_object");
+                $("#symbolButtons").css('display', 'block');
             } else {
-                contextMenu.showItem("convert_to_movie_clip");
+                $("#staticObjectButtons").css('display', 'block');
             }
-           contextMenu.showItem("bring_to_front");
-           contextMenu.showItem("send_to_back");
-           contextMenu.showItem("delete");
+            $("#commonObjectButtons").css('display', 'block');
+            
         } else {
-            contextMenu.showItem("create_movie_clip");
+            $("#frameButtons").css('display', 'block');
         }
     }
 
-    this.closeContextMenu = function () {
-        contextMenu.hide();
+    this.closeRightClickMenu = function () {
+        // Hide rightclick menu
+        $("#rightClickMenu").css('visibility', 'hidden');
+        $("#rightClickMenu").css('top', '0px');
+        $("#rightClickMenu").css('left','0px');
+
+        // Hide all buttons inside rightclick menu
+        $("#symbolButtons").css('display', 'none');
+        $("#staticObjectButtons").css('display', 'none');
+        $("#commonObjectButtons").css('display', 'none');
+        $("#frameButtons").css('display', 'none');
     }
 
 /************************
@@ -557,6 +546,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
                 document.getElementById('projectSizeY').value          = wickEditor.project.resolution.y;
                 document.getElementById('frameRate').innerHTML         = wickEditor.project.framerate;
                 document.getElementById('fitScreenCheckbox').checked   = wickEditor.project.fitScreen;
+                document.getElementById('drawBordersCheckbox').checked = wickEditor.project.drawBorders;
                 $("#projectProperties").css('display', 'inline');
                 break;
             case 'symbol':

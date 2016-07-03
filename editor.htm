@@ -8,9 +8,6 @@
 
     <link rel="stylesheet" type="text/css" href="editor.css">
 
-    <link rel="stylesheet" href="lib/webix/codebase/webix.css" type="text/css" media="screen" charset="utf-8">
-    <script src="lib/webix/codebase/webix.js" type="text/javascript" charset="utf-8"></script>
-
     <script src="lib/jquery.min.js"></script>
     <script src="lib/fabric.js"></script>
     <script src="lib/fabric.canvasex.js"></script>
@@ -65,9 +62,6 @@
 
     <!-- Main menu GUI, top left corner -->
 
-    <!-- Old, being replaced... -->
-
-    <!--
         <div id="menuBarGUI" class="GUIBox">
             <strong>Wick Editor</strong><br />
 
@@ -88,9 +82,9 @@
                 <img src="resources/play.png" width="30" />
             </div>
 
+            <!-- Hidden, gets clicked automatically by openProjectButton -->
             <input type="file" id="importButton" /> 
         </div>
-    -->
 
     <!-- Timeline GUI, centered at the top of the screen -->
 
@@ -173,7 +167,9 @@
                 Size: <textarea id="projectSizeX" cols="4" rows="1"></textarea> x 
                       <textarea id="projectSizeY" cols="4" rows="1"></textarea><br />
                 Framerate: <textarea id="frameRate" cols="2" rows="1"></textarea><br />
+                <hr />
                 <input type="checkbox" id="fitScreenCheckbox"> Fit to Screen Size<br />
+                <input type="checkbox" id="drawBordersCheckbox"> Draw Borders
             </div>
             <div id="objectProperties">
                 Object Properties
@@ -218,9 +214,6 @@
 
     <!-- Right click menu, appears next to mouse on right click -->
 
-    <!-- Old, being replaced... -->
-
-    <!--
         <div id="rightClickMenu" class="GUIBox">
             <div id="commonObjectButtons">
                 <div class="button" id="editScriptsButton">Edit Scripts</div>
@@ -240,7 +233,6 @@
                 <div class="button" id="finishEditingObjectButton">Finish Editing Object</div>
             </div>
         </div>
-    -->
     </div>
 
 <!-- Builtin player, visible when a project is running -->

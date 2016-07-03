@@ -35,7 +35,6 @@ var FabricCanvas = function (wickEditor) {
 
     this.resize = function () {
         this.updateCanvasResolution(
-            wickEditor.currentObject.isRoot,
             wickEditor.project.resolution.x, 
             wickEditor.project.resolution.y
         );
@@ -132,19 +131,14 @@ var FabricCanvas = function (wickEditor) {
     var that = this;
     var canvas = this.canvas;
 
-    // Listen for object modified events so we can intercept 
-    // them and add the transformation to the undo/redo stack.
     canvas.on('object:modified', function(e) {
         console.log("object modified event:");
         console.log(e.target.originalState);
     });
 
-    // Fabric.js by default doesn't select objects with right click.
-    // So we have to set this up manually.
     canvas.on('mouse:down', function(e) {
         if(e.e.button == 2) {
-            wickEditor.htmlGUIHandler.updateContextMenu();
-
+            
             if (e.target && e.target.wickObject) {
                 // Set active object of fabric canvas
                 var id = canvas.getObjects().indexOf(e.target);
@@ -155,12 +149,13 @@ var FabricCanvas = function (wickEditor) {
                 // Didn't right click an object, deselect everything
                 canvas.deactivateAll().renderAll();
             }
+            wickEditor.htmlGUIHandler.openRightClickMenu();
 
+        } else {
+            wickEditor.htmlGUIHandler.closeRightClickMenu();
         }
     });
 
-    // Paths are added internally inside fabric.
-    // We have to intercept the event when a path is added and convert it into a wickobject.
     canvas.on('object:added', function(e) {
         if(e.target.type === "path") {
             var path = e.target;
@@ -171,11 +166,11 @@ var FabricCanvas = function (wickEditor) {
         }
     });
 
-    // Keep the scripting IDE up to date with the selected object.
     canvas.on('object:selected', function (e) {
         wickEditor.htmlGUIHandler.reloadScriptingGUI();
         wickEditor.htmlGUIHandler.updatePropertiesGUI();
     });
+
     canvas.on('selection:cleared', function (e) {
         wickEditor.htmlGUIHandler.closeScriptingGUI();
         wickEditor.htmlGUIHandler.updatePropertiesGUI('project');
@@ -257,7 +252,7 @@ FabricCanvas.prototype.bringSelectedObjectToFront = function () {
     this.getActiveObject().bringToFront();
 }
 
-FabricCanvas.prototype.updateCanvasResolution = function (inRoot, projectWidth, projectHeight) {
+FabricCanvas.prototype.updateCanvasResolution = function (projectWidth, projectHeight) {
 
     var that = this;
 
@@ -291,21 +286,13 @@ FabricCanvas.prototype.updateCanvasResolution = function (inRoot, projectWidth, 
     this.dragToImportFileText.top  = window.innerHeight/2-this.dragToImportFileText.height/2+this.canvasPanPosition.y;
     this.dragToImportFileText.setCoords();
 
-    if(inRoot) {
-        // Editing root object, re-center the white frame box
-        this.frameInside.width  = projectWidth;
-        this.frameInside.height = projectHeight;
-        this.frameInside.left = (window.innerWidth -projectWidth) /2 + this.canvasPanPosition.x;
-        this.frameInside.top  = (window.innerHeight-projectHeight)/2 + this.canvasPanPosition.y;
-        this.frameInside.setCoords();
-    } else {
-        // Not in root, frame box takes up whole screen
-        this.frameInside.width  = window.innerWidth;
-        this.frameInside.height = window.innerHeight;
-        this.frameInside.left = 0;
-        this.frameInside.top  = 0;
-        this.frameInside.setCoords();
-    }
+    // Re-center the white frame box
+
+    this.frameInside.width  = projectWidth;
+    this.frameInside.height = projectHeight;
+    this.frameInside.left = (window.innerWidth -projectWidth) /2 + this.canvasPanPosition.x;
+    this.frameInside.top  = (window.innerHeight-projectHeight)/2 + this.canvasPanPosition.y;
+    this.frameInside.setCoords();
 
     this.canvas.renderAll();
 

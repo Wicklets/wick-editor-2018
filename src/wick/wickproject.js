@@ -22,6 +22,7 @@ var WickProject = function () {
     this.framerate = 12;
 
     this.fitScreen = false;
+    this.drawBorders = true;
     this.borderColor = "#FFFFFF";
 
 };
