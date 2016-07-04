@@ -434,12 +434,30 @@ var WickHTMLGUIHandler = function (wickEditor) {
 
     $("#bringToFrontButton").on("click", function (e) {
         wickEditor.htmlGUIHandler.closeRightClickMenu();
-        wickEditor.bringSelectedObjectToFront();
+        
+        var obj   = wickEditor.fabricCanvas.getCanvas().getActiveObject();
+        var group = wickEditor.fabricCanvas.getCanvas().getActiveGroup();
+
+        if(!obj && !group) {
+            VerboseLog.log("Nothing to delete.");
+            return;
+        }
+
+        wickEditor.actionHandler.doAction('bringObjectToFront', { obj:obj, group:group });
     });
 
     $("#sendToBackButton").on("click", function (e) {
         wickEditor.htmlGUIHandler.closeRightClickMenu();
-        wickEditor.sendSelectedObjectToBack();
+
+        var obj   = wickEditor.fabricCanvas.getCanvas().getActiveObject();
+        var group = wickEditor.fabricCanvas.getCanvas().getActiveGroup();
+
+        if(!obj && !group) {
+            VerboseLog.log("Nothing to delete.");
+            return;
+        }
+
+        wickEditor.actionHandler.doAction('sendObjectToBack', { obj:obj, group:group });
     });
 
     $("#deleteButton").on("click", function (e) {

@@ -415,20 +415,56 @@ var WickActionHandler = function (wickEditor) {
             VerboseLog.error("finishEditingCurrentObject undo NYI")
         });
 
-    this.registerAction('sendSelectedObjectToBack', 
+    this.registerAction('sendObjectToBack', 
         function (args) {
-            console.log("sendSelectedObjectToBack");
-        },
-        function (args) {
+            var fabCanvas = wickEditor.fabricCanvas.getCanvas();
 
+            if(args.group) {
+                for(var i = args.group._objects.length-1; i >= 0; i--) {
+                    args.originalZIndex = fabCanvas.getObjects().indexOf(args.group._objects[i]);
+                    fabCanvas.moveTo(args.group._objects[i], 2);
+                }
+            } else {
+                args.originalZIndex = fabCanvas.getObjects().indexOf(args.obj);
+                fabCanvas.moveTo(args.obj, 2);
+            }
+        },
+        function (args) {  
+            var fabCanvas = wickEditor.fabricCanvas.getCanvas();
+
+            if(args.group) {
+                for(var i = args.group._objects.length-1; i >= 0; i--) {
+                    fabCanvas.moveTo(args.group._objects[i], args.originalZIndex);
+                }
+            } else {
+                fabCanvas.moveTo(args.obj, args.originalZIndex);
+            }
         });
 
-    this.registerAction('bringSelectedObjectToFront', 
+    this.registerAction('bringObjectToFront', 
         function (args) {
-            console.log("bringSelectedObjectToFront");
-        },
-        function (args) {
+            var fabCanvas = wickEditor.fabricCanvas.getCanvas();
 
+            if(args.group) {
+                for(var i = args.group._objects.length-1; i >= 0; i--) {
+                    args.originalZIndex = fabCanvas.getObjects().indexOf(args.group._objects[i]);
+                    fabCanvas.moveTo(args.group._objects[i], 99);
+                }
+            } else {
+                args.originalZIndex = fabCanvas.getObjects().indexOf(args.obj);
+                fabCanvas.moveTo(args.obj, 99);
+            }
+        },
+        function (args) {  
+            var fabCanvas = wickEditor.fabricCanvas.getCanvas();
+            
+            if(args.group) {
+                for(var i = args.group._objects.length-1; i >= 0; i--) {
+                    fabCanvas.moveTo(args.group._objects[i], args.originalZIndex);
+                }
+            } else {
+                fabCanvas.moveTo(args.obj, args.originalZIndex);
+            }
         });
 
 }

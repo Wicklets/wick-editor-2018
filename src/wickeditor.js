@@ -103,10 +103,7 @@ var WickEditor = function () {
                 return;
             }
 
-            that.actionHandler.doAction('delete', {
-                obj:   obj,
-                group: group
-            });
+            that.actionHandler.doAction('delete', { obj:obj, group:group });
         }
 
         // Space: Pan viewport
