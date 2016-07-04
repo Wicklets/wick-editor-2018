@@ -94,9 +94,18 @@ var WickEditor = function () {
         // Backspace: delete selected objects
         if (event.keyCode == 8 && !editingTextBox) {
             event.preventDefault();
+
+            var obj   = that.fabricCanvas.getCanvas().getActiveObject();
+            var group = that.fabricCanvas.getCanvas().getActiveGroup();
+
+            if(!obj && !group) {
+                VerboseLog.log("Nothing to delete.");
+                return;
+            }
+
             that.actionHandler.doAction('delete', {
-                obj:   that.fabricCanvas.getCanvas().getActiveObject(),
-                group: that.fabricCanvas.getCanvas().getActiveGroup()
+                obj:   obj,
+                group: group
             });
         }
 
