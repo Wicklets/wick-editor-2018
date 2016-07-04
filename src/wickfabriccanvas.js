@@ -128,8 +128,10 @@ var FabricCanvas = function (wickEditor) {
     var canvas = this.canvas;
 
     canvas.on('object:modified', function(e) {
-        console.log("object modified event:");
-        console.log(e.target.originalState);
+        wickEditor.actionHandler.doAction('transformFabricCanvasObject', 
+            {object:e.target,
+             originalState:e.target.originalState}
+        );
     });
 
     // Fabric doesn't select things with right clicks.
@@ -303,6 +305,15 @@ FabricCanvas.prototype.clearCanvas = function () {
         } 
     });
 
+}
+
+FabricCanvas.prototype.removeLastObject = function () {
+    var canvas_objects = this.canvas._objects;
+    if(canvas_objects.length !== 0){
+        var last = canvas_objects[canvas_objects.length -1]; //Get last object   
+        this.canvas.remove(last);
+        this.canvas.renderAll();
+    } 
 }
 
 FabricCanvas.prototype.setBackgroundColor = function (color) {

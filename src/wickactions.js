@@ -1,333 +1,25 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-/* General Logic for how undo and redo is handled in the Wick editor. All inputs
-   to a WickActionStack instance should be valid WickActions or the behavior is undefined */
+/* wickactions.js - General Logic for how undo and redo is handled in the Wick editor. */
 
 var WickActionHandler = function (wickEditor) {
 
-// Initialize action handler vars
+// Undo/redo action stacks
 
     this.undoStack = []; 
     this.redoStack = [];
 
-// Define all actions
+// doActions and undoActions, dicts that store functions for doing and undoing all actions
 
     this.doActions = {};
     this.undoActions = {};
 
-    this.doActions['delete'] = function (args) {
-
-        // Save object(/objects) that were deleted in the WickAction 
-        // object so we can restore it later in the undo function.
-
-        var fabCanvas = wickEditor.fabricCanvas.getCanvas();
-
-        if(args.group) {
-            this.groupObjs = [];
-
-            var items = args.group._objects;
-            args.group._restoreObjectsState();
-
-            for(var i = 0; i < items.length; i++) {
-                this.groupObjs.push(items[i]);
-            }
-        }
-
-        // Delete the selected object
-
-        var fabCanvas = wickEditor.fabricCanvas.getCanvas();
-
-        if (args.group) {
-            args.group.forEachObject(function(o) { 
-                fabCanvas.remove(o);
-            });
-            fabCanvas.discardActiveGroup().renderAll(); // stops weird ghost group selection
-        } else {
-            fabCanvas.remove(args.obj);
-        }
-    };
-
-    this.undoActions['delete'] = function (args) {
-
-        // Restore the deleted object/s
-        // We stored them inside this WickAction object!
-
-        var fabCanvas = wickEditor.fabricCanvas.getCanvas();
-
-        if(args.group) {
-            for(var i = 0; i < this.groupObjs.length; i++) {
-                fabCanvas.add(this.groupObjs[i]);
-            }
-        } else {
-            fabCanvas.add(args.obj);
-            fabCanvas.setActiveObject(args.obj);
-        }
-    };
-
-    this.doActions['transformFabricCanvasObject'] = function (args) {
-        
+    /* Call this to define a new action! */
+    this.registerAction = function(name, doFunction, undoFunction) {
+        this.doActions[name] = doFunction;
+        this.undoActions[name] = undoFunction;
     }
 
-    this.undoActions['transformFabricCanvasObject'] = function (args) {
-        
-    }
-
-    this.doActions['gotoFrame'] = function (args) {
-
-        wickEditor.fabricCanvas.deselectAll();
-
-        // Save current frame
-        args.oldFrame = wickEditor.currentObject.currentFrame;
-
-        // Go to the specified frame
-        wickEditor.syncEditorWithFabricCanvas();
-        wickEditor.currentObject.currentFrame = args.toFrame;
-        wickEditor.fabricCanvas.syncWithEditor();
-
-        wickEditor.htmlGUIHandler.syncWithEditor();
-        wickEditor.htmlGUIHandler.closeScriptingGUI();
-    }
-
-    this.undoActions['gotoFrame'] = function (args) {
-
-        wickEditor.fabricCanvas.deselectAll();
-
-        // Go back to the old frame
-        wickEditor.syncEditorWithFabricCanvas();
-        wickEditor.currentObject.currentFrame = args.oldFrame;
-        wickEditor.fabricCanvas.syncWithEditor();
-
-        wickEditor.htmlGUIHandler.syncWithEditor();
-        wickEditor.htmlGUIHandler.closeScriptingGUI();
-    }
-
-
-    this.doActions['addEmptyFrame'] = function (args) {
-        // Add an empty frame
-        wickEditor.currentObject.addEmptyFrame(wickEditor.currentObject.frames.length);
-
-        // Move to that new frame
-        wickEditor.actionHandler.doAction('gotoFrame', {toFrame:wickEditor.currentObject.frames.length-1}, true);
-
-        wickEditor.htmlGUIHandler.syncWithEditor();
-    }
-
-    this.undoActions['addEmptyFrame'] = function (args) {
-        // Go to the second-to-last frame and remove the last frame
-        wickEditor.actionHandler.doAction('gotoFrame', {toFrame:wickEditor.currentObject.frames.length-2}, true);
-        wickEditor.currentObject.frames.pop();
-
-        // Update GUI
-        wickEditor.htmlGUIHandler.syncWithEditor();
-    }
-
-// Multiframe Manipulations 
-
-    this.doActions['extendFrame'] = function (args) {
-        args.frameNumber = wickEditor.currentObject.currentFrame;
-        wickEditor.currentObject.frames[args.frameNumber];
-        wickEditor.currentObject.frames[args.frameNumber].__proto__ = WickFrame.prototype;
-        wickEditor.currentObject.frames[args.frameNumber].extend(args.nFramesToExtendBy);
-
-        wickEditor.htmlGUIHandler.syncWithEditor();
-    }
-
-    this.undoActions['extendFrame'] = function (args) {
-        wickEditor.currentObject.frames[args.frameNumber].extend(-args.nFramesToExtendBy); 
-
-        wickEditor.htmlGUIHandler.syncWithEditor();
-    }
-
-    this.doActions['shrinkFrame'] = function (args) {
-        args.frameNumber = wickEditor.currentObject.currentFrame;
-        wickEditor.currentObject.frames[args.frameNumber];
-        wickEditor.currentObject.frames[args.frameNumber].__proto__ = WickFrame.prototype;
-        wickEditor.currentObject.frames[args.frameNumber].shrink(args.nFramesToShrinkBy);
-
-        wickEditor.htmlGUIHandler.syncWithEditor();
-    }
-
-    this.undoActions['shrinkFrame'] = function (args) {
-        wickEditor.currentObject.frames[args.frameNumber].__proto__ = WickFrame.prototype;
-        wickEditor.currentObject.frames[args.frameNumber].shrink(-args.nFramesToShrinkBy); 
-
-        wickEditor.htmlGUIHandler.syncWithEditor();
-    }
-
-// Object operations 
-
-    this.doActions['addWickObjectToFabricCanvas'] = function (args) {
-
-        wickEditor.fabricCanvas.makeFabricObjectFromWickObject(args.wickObject, function(fabricObject) {
-            wickEditor.fabricCanvas.getCanvas().add(fabricObject);
-            args.fabricObjectToRemove = fabricObject;
-
-            wickEditor.fabricCanvas.deselectAll();
-
-            wickEditor.syncEditorWithFabricCanvas();
-            wickEditor.fabricCanvas.syncWithEditor();
-        });
-
-    }
-
-    this.undoActions['addWickObjectToFabricCanvas'] = function (args) {
-        
-        //wickEditor.fabricCanvas.getCanvas().remove(args.fabricObjectToRemove);
-        args.fabricObjectToRemove.remove();
-
-    }
-
-    this.doActions['convertSelectionToSymbol'] = function (args) {
-
-        args.selectionWickObjects = [];
-
-        var symbolLeft = args.selection.left;
-        var symbolTop = args.selection.top;
-
-        if (args.selection._objects) {
-            symbolLeft = args.selection._objects[0].wickObject.left;
-            symbolTop = args.selection._objects[0].wickObject.top;
-
-            // Multiple objects are selected, put them all in the new symbol
-            for(var i = 0; i < args.selection._objects.length; i++) {
-                if(args.selection._objects[i].wickObject.left < symbolLeft) {
-                    symbolLeft = args.selection._objects[i].wickObject.left;
-                }
-                if(args.selection._objects[i].wickObject.top < symbolTop) {
-                    symbolTop = args.selection._objects[i].wickObject.top;
-                }
-
-                args.selectionWickObjects.push(args.selection._objects[i].wickObject);
-            }
-
-            for(var i = 0; i < args.selectionWickObjects.length; i++) {
-                args.selectionWickObjects.left -= symbolLeft;
-                args.selectionWickObjects.top -= symbolTop;
-            }
-
-            var max = 0;
-            while(args.selection._objects.length > 0 && max < 100) {
-                max++;
-                console.error("Infinite loop is prob happening here");
-                args.selection._objects[0].remove();
-            }
-        } else {
-            // Only one object is selected
-            args.selectionWickObjects.push(args.selection.wickObject);
-            args.selection.remove();
-        }
-
-        args.symbol = WickObject.createSymbolFromWickObjects(
-            symbolLeft, 
-            symbolTop, 
-            args.selectionWickObjects, 
-            wickEditor.currentObject
-        );
-
-        wickEditor.fabricCanvas.makeFabricObjectFromWickObject(args.symbol, function(fabricObject) {
-            wickEditor.fabricCanvas.getCanvas().add(fabricObject);
-            args.fabricObjectToRemove = fabricObject;
-        });
-    }
-
-    this.undoActions['convertSelectionToSymbol'] = function (args) {
-        // add args.selectionWickObjects to fabric canvas
-        for(var i = 0; i < args.selectionWickObjects.length; i++) {
-            wickEditor.fabricCanvas.makeFabricObjectFromWickObject(args.selectionWickObjects[i], function(fabricObject) {
-                wickEditor.fabricCanvas.getCanvas().add(fabricObject);
-            });
-        }
-        
-        wickEditor.fabricCanvas.getCanvas().remove(args.fabricObjectToRemove);
-    }
-
-    this.doActions['editObject'] = function (args) {
-
-        wickEditor.fabricCanvas.deselectAll();
-
-        // Store changes made to current frame in the project
-        wickEditor.syncEditorWithFabricCanvas();
-
-        // Set the editor to be editing this object at its first frame
-        args.prevEditedObject = wickEditor.currentObject;
-        wickEditor.currentObject = args.objectToEdit.wickObject;
-        wickEditor.currentObject.currentFrame = 0;
-
-        // Load wickobjects in the frame we moved to into the canvas
-        wickEditor.fabricCanvas.syncWithEditor();
-
-        wickEditor.htmlGUIHandler.syncWithEditor();
-
-    }
-
-    this.undoActions['editObject'] = function (args) {
-
-        VerboseLog.error("editobject undo NYI")
-
-        /*wickEditor.fabricCanvas.deselectAll();
-
-        // Store changes made to current frame in the project
-        wickEditor.syncEditorWithFabricCanvas();
-
-        // Set the editor to be editing this object at its first frame
-        wickEditor.currentObject = args.prevEditedObject;
-        wickEditor.currentObject.currentFrame = 0;
-
-        // Load wickobjects in the frame we moved to into the canvas
-        wickEditor.fabricCanvas.syncWithEditor();
-
-        wickEditor.htmlGUIHandler.syncWithEditor();
-
-        wickEditor.fabricCanvas.repositionOriginCrosshair(
-            wickEditor.project.resolution.x, 
-            wickEditor.project.resolution.y,
-            wickEditor.currentObject.left,
-            wickEditor.currentObject.top
-        );*/
-
-    }
-
-    this.doActions['finishEditingCurrentObject'] = function (args) {
-
-        wickEditor.fabricCanvas.deselectAll();
-
-        // Store changes made to current frame in the project
-        wickEditor.syncEditorWithFabricCanvas();
-
-        // Set the editor to be editing this object at its first frame
-        args.prevEditedObject = wickEditor.currentObject;
-        wickEditor.currentObject = wickEditor.currentObject.parentObject;
-
-        // Load wickobjects in the frame we moved to into the canvas
-        wickEditor.fabricCanvas.syncWithEditor();
-        
-        wickEditor.htmlGUIHandler.syncWithEditor();
-
-    }
-
-    this.undoActions['finishEditingCurrentObject'] = function (args) {
-
-        VerboseLog.error("finishEditingCurrentObject undo NYI")
-
-    }
-
-    this.doActions['sendSelectedObjectToBack'] = function (args) {
-
-    }
-
-    this.undoActions['sendSelectedObjectToBack'] = function (args) {
-        
-    }
-
-    this.doActions['bringSelectedObjectToFront'] = function (args) {
-
-    }
-
-    this.undoActions['bringSelectedObjectToFront'] = function (args) {
-        
-    }
-
-    /* doAction */
     /* - note that dontAddToStack is optional and only to be used for when actions
        call other actions! */
     this.doAction = function (actionName, args, dontAddToStack) {
@@ -399,6 +91,337 @@ var WickActionHandler = function (wickEditor) {
         this.undoStack.push(action);
 
     }
+
+// Register all actions
+
+    this.registerAction('delete', 
+        function (args) {
+            // Save object(/objects) that were deleted in the WickAction 
+            // object so we can restore it later in the undo function.
+
+            var fabCanvas = wickEditor.fabricCanvas.getCanvas();
+
+            if(args.group) {
+                this.groupObjs = [];
+
+                var items = args.group._objects;
+                args.group._restoreObjectsState();
+
+                for(var i = 0; i < items.length; i++) {
+                    this.groupObjs.push(items[i]);
+                }
+            }
+
+            // Delete the selected object
+
+            var fabCanvas = wickEditor.fabricCanvas.getCanvas();
+
+            if (args.group) {
+                args.group.forEachObject(function(o) { 
+                    fabCanvas.remove(o);
+                });
+                fabCanvas.discardActiveGroup().renderAll(); // stops weird ghost group selection
+            } else {
+                fabCanvas.remove(args.obj);
+            }
+        },
+        function (args) {
+            // Restore the deleted object/s
+            // We stored them inside this WickAction object!
+
+            var fabCanvas = wickEditor.fabricCanvas.getCanvas();
+
+            if(args.group) {
+                for(var i = 0; i < this.groupObjs.length; i++) {
+                    fabCanvas.add(this.groupObjs[i]);
+                }
+            } else {
+                fabCanvas.add(args.obj);
+                fabCanvas.setActiveObject(args.obj);
+            }
+        });
+
+    this.registerAction('transformFabricCanvasObject', 
+        function (args) {
+            if(args.transformedState) {
+                // Set object back to it's state post-transformation
+                // This only happens on Redo. Fabric js does the original transformation!
+                args.object.top    = args.transformedState.top;
+                args.object.left   = args.transformedState.left;
+                args.object.scaleX = args.transformedState.scaleX;
+                args.object.scaleY = args.transformedState.scaleY;
+                args.object.angle  = args.transformedState.angle;
+                if(args.object.text) {
+                    args.object.text = args.transformedState.text;
+                }
+
+                args.object.setCoords();
+                wickEditor.fabricCanvas.getCanvas().renderAll();
+            }
+        },
+        function (args) {
+            console.log(args.object)
+
+            // Save the original transformed state for redo
+            args.transformedState = {
+                top:    args.object.top,
+                left:   args.object.left,
+                scaleX: args.object.scaleX,
+                scaleY: args.object.scaleY,
+                angle:  args.object.angle,
+                text:   args.object.text
+            };
+
+            // Revert the object's state to it's original pre-transformation state
+            args.object.top    = args.originalState.top;
+            args.object.left   = args.originalState.left;
+            args.object.scaleX = args.originalState.scaleX;
+            args.object.scaleY = args.originalState.scaleY;
+            args.object.angle  = args.originalState.angle;
+            if(args.object.text) {
+                args.object.text = args.originalState.text;
+            }
+
+            args.object.setCoords();
+            wickEditor.fabricCanvas.getCanvas().renderAll();
+        });
+
+    this.registerAction('gotoFrame', 
+        function (args) {
+            wickEditor.fabricCanvas.deselectAll();
+
+            // Save current frame
+            args.oldFrame = wickEditor.currentObject.currentFrame;
+
+            // Go to the specified frame
+            wickEditor.syncEditorWithFabricCanvas();
+            wickEditor.currentObject.currentFrame = args.toFrame;
+            wickEditor.fabricCanvas.syncWithEditor();
+
+            wickEditor.htmlGUIHandler.syncWithEditor();
+            wickEditor.htmlGUIHandler.closeScriptingGUI();
+        },
+        function (args) {
+            wickEditor.fabricCanvas.deselectAll();
+
+            // Go back to the old frame
+            wickEditor.syncEditorWithFabricCanvas();
+            wickEditor.currentObject.currentFrame = args.oldFrame;
+            wickEditor.fabricCanvas.syncWithEditor();
+
+            wickEditor.htmlGUIHandler.syncWithEditor();
+            wickEditor.htmlGUIHandler.closeScriptingGUI();
+        });
+
+    this.registerAction('addEmptyFrame', 
+        function (args) {
+            // Add an empty frame
+            wickEditor.currentObject.addEmptyFrame(wickEditor.currentObject.frames.length);
+
+            // Move to that new frame
+            wickEditor.actionHandler.doAction('gotoFrame', {toFrame:wickEditor.currentObject.frames.length-1}, true);
+
+            wickEditor.htmlGUIHandler.syncWithEditor();
+        },
+        function (args) {
+            // Go to the second-to-last frame and remove the last frame
+            wickEditor.actionHandler.doAction('gotoFrame', {toFrame:wickEditor.currentObject.frames.length-2}, true);
+            wickEditor.currentObject.frames.pop();
+
+            // Update GUI
+            wickEditor.htmlGUIHandler.syncWithEditor();
+        });
+
+    this.registerAction('extendFrame', 
+        function (args) {
+            args.frameNumber = wickEditor.currentObject.currentFrame;
+            wickEditor.currentObject.frames[args.frameNumber];
+            wickEditor.currentObject.frames[args.frameNumber].__proto__ = WickFrame.prototype;
+            wickEditor.currentObject.frames[args.frameNumber].extend(args.nFramesToExtendBy);
+
+            wickEditor.htmlGUIHandler.syncWithEditor();
+        },
+        function (args) {
+            wickEditor.currentObject.frames[args.frameNumber].extend(-args.nFramesToExtendBy); 
+            wickEditor.htmlGUIHandler.syncWithEditor();
+        });
+
+    this.registerAction('shrinkFrame', 
+        function (args) {
+            args.frameNumber = wickEditor.currentObject.currentFrame;
+            wickEditor.currentObject.frames[args.frameNumber];
+            wickEditor.currentObject.frames[args.frameNumber].__proto__ = WickFrame.prototype;
+            wickEditor.currentObject.frames[args.frameNumber].shrink(args.nFramesToShrinkBy);
+
+            wickEditor.htmlGUIHandler.syncWithEditor();
+        },
+        function (args) {
+            wickEditor.currentObject.frames[args.frameNumber].__proto__ = WickFrame.prototype;
+            wickEditor.currentObject.frames[args.frameNumber].shrink(-args.nFramesToShrinkBy); 
+
+            wickEditor.htmlGUIHandler.syncWithEditor();
+        });
+
+    this.registerAction('addWickObjectToFabricCanvas', 
+        function (args) {
+            wickEditor.fabricCanvas.makeFabricObjectFromWickObject(args.wickObject, function(fabricObject) {
+                wickEditor.fabricCanvas.getCanvas().add(fabricObject);
+
+                wickEditor.fabricCanvas.deselectAll();
+
+                wickEditor.syncEditorWithFabricCanvas();
+                wickEditor.fabricCanvas.syncWithEditor();
+            });
+        },
+        function (args) {
+            wickEditor.fabricCanvas.deselectAll();
+            wickEditor.fabricCanvas.removeLastObject();
+        });
+
+    this.registerAction('convertSelectionToSymbol', 
+        function (args) {
+            args.selectionWickObjects = [];
+
+            var symbolLeft = args.selection.left;
+            var symbolTop = args.selection.top;
+
+            if (args.selection._objects) {
+                symbolLeft = args.selection._objects[0].wickObject.left;
+                symbolTop = args.selection._objects[0].wickObject.top;
+
+                // Multiple objects are selected, put them all in the new symbol
+                for(var i = 0; i < args.selection._objects.length; i++) {
+                    if(args.selection._objects[i].wickObject.left < symbolLeft) {
+                        symbolLeft = args.selection._objects[i].wickObject.left;
+                    }
+                    if(args.selection._objects[i].wickObject.top < symbolTop) {
+                        symbolTop = args.selection._objects[i].wickObject.top;
+                    }
+
+                    args.selectionWickObjects.push(args.selection._objects[i].wickObject);
+                }
+
+                for(var i = 0; i < args.selectionWickObjects.length; i++) {
+                    args.selectionWickObjects.left -= symbolLeft;
+                    args.selectionWickObjects.top -= symbolTop;
+                }
+
+                var max = 0;
+                while(args.selection._objects.length > 0 && max < 100) {
+                    max++;
+                    console.error("Infinite loop is prob happening here");
+                    args.selection._objects[0].remove();
+                }
+            } else {
+                // Only one object is selected
+                args.selectionWickObjects.push(args.selection.wickObject);
+                args.selection.remove();
+            }
+
+            args.symbol = WickObject.createSymbolFromWickObjects(
+                symbolLeft, 
+                symbolTop, 
+                args.selectionWickObjects, 
+                wickEditor.currentObject
+            );
+
+            wickEditor.fabricCanvas.makeFabricObjectFromWickObject(args.symbol, function(fabricObject) {
+                wickEditor.fabricCanvas.getCanvas().add(fabricObject);
+                args.fabricObjectToRemove = fabricObject;
+            });
+
+            wickEditor.htmlGUIHandler.closeScriptingGUI();
+        },
+        function (args) {
+            wickEditor.fabricCanvas.deselectAll();
+            wickEditor.fabricCanvas.removeLastObject();
+
+            // add args.selectionWickObjects to fabric canvas
+            for(var i = 0; i < args.selectionWickObjects.length; i++) {
+                wickEditor.fabricCanvas.makeFabricObjectFromWickObject(args.selectionWickObjects[i], function(fabricObject) {
+                    wickEditor.fabricCanvas.getCanvas().add(fabricObject);
+                });
+            }
+        });
+
+    this.registerAction('editObject', 
+        function (args) {
+            wickEditor.fabricCanvas.deselectAll();
+
+            // Store changes made to current frame in the project
+            wickEditor.syncEditorWithFabricCanvas();
+
+            // Set the editor to be editing this object at its first frame
+            args.prevEditedObject = wickEditor.currentObject;
+            wickEditor.currentObject = args.objectToEdit.wickObject;
+            wickEditor.currentObject.currentFrame = 0;
+
+            // Load wickobjects in the frame we moved to into the canvas
+            wickEditor.fabricCanvas.syncWithEditor();
+
+            wickEditor.htmlGUIHandler.closeScriptingGUI();
+            wickEditor.htmlGUIHandler.syncWithEditor();
+        },
+        function (args) {
+            VerboseLog.error("editobject undo NYI")
+
+            /*wickEditor.fabricCanvas.deselectAll();
+
+            // Store changes made to current frame in the project
+            wickEditor.syncEditorWithFabricCanvas();
+
+            // Set the editor to be editing this object at its first frame
+            wickEditor.currentObject = args.prevEditedObject;
+            wickEditor.currentObject.currentFrame = 0;
+
+            // Load wickobjects in the frame we moved to into the canvas
+            wickEditor.fabricCanvas.syncWithEditor();
+
+            wickEditor.htmlGUIHandler.syncWithEditor();
+
+            wickEditor.fabricCanvas.repositionOriginCrosshair(
+                wickEditor.project.resolution.x, 
+                wickEditor.project.resolution.y,
+                wickEditor.currentObject.left,
+                wickEditor.currentObject.top
+            );*/
+        });
+
+    this.registerAction('finishEditingCurrentObject', 
+        function (args) {
+            wickEditor.fabricCanvas.deselectAll();
+
+            // Store changes made to current frame in the project
+            wickEditor.syncEditorWithFabricCanvas();
+
+            // Set the editor to be editing this object at its first frame
+            args.prevEditedObject = wickEditor.currentObject;
+            wickEditor.currentObject = wickEditor.currentObject.parentObject;
+
+            // Load wickobjects in the frame we moved to into the canvas
+            wickEditor.fabricCanvas.syncWithEditor();
+            
+            wickEditor.htmlGUIHandler.syncWithEditor();
+        },
+        function (args) {
+            VerboseLog.error("finishEditingCurrentObject undo NYI")
+        });
+
+    this.registerAction('sendSelectedObjectToBack', 
+        function (args) {
+            console.log("sendSelectedObjectToBack");
+        },
+        function (args) {
+
+        });
+
+    this.registerAction('bringSelectedObjectToFront', 
+        function (args) {
+            console.log("bringSelectedObjectToFront");
+        },
+        function (args) {
+
+        });
 
 }
 

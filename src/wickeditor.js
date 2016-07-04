@@ -56,16 +56,22 @@ var WickEditor = function () {
         var controlKeyDown = that.keys[91];
         var shiftKeyDown = that.keys[16];
 
-        // Control-shift-z: redo
-        if (event.keyCode == 90 && controlKeyDown && shiftKeyDown) {
-            that.actionHandler.redoAction();    
+        var editingTextBox = document.activeElement.nodeName == 'TEXTAREA'
+                          || document.activeElement.nodeName == 'INPUT';
+
+        if(!editingTextBox) {
+            // Control-shift-z: redo
+            if (event.keyCode == 90 && controlKeyDown && shiftKeyDown) {
+                that.actionHandler.redoAction();    
+            }
+            // Control-z: undo
+            else if (event.keyCode == 90 && controlKeyDown) {
+                that.actionHandler.undoAction();
+            }
         }
-        // Control-z: undo
-        else if (event.keyCode == 90 && controlKeyDown) {
-            that.actionHandler.undoAction();
-        }
+
         // Control-s: save
-        else if (event.keyCode == 83 && controlKeyDown) {
+        if (event.keyCode == 83 && controlKeyDown) {
             event.preventDefault();
             that.clearKeys();
             that.syncEditorWithFabricCanvas();
@@ -86,7 +92,7 @@ var WickEditor = function () {
         }
 
         // Backspace: delete selected objects
-        if (event.keyCode == 8 && document.activeElement.nodeName != 'TEXTAREA') {
+        if (event.keyCode == 8 && !editingTextBox) {
             event.preventDefault();
             that.actionHandler.doAction('delete', {
                 obj:   that.fabricCanvas.getCanvas().getActiveObject(),
@@ -95,7 +101,7 @@ var WickEditor = function () {
         }
 
         // Space: Pan viewport
-        if (event.keyCode == 32 && document.activeElement.nodeName != 'TEXTAREA') {
+        if (event.keyCode == 32 && !editingTextBox) {
             that.fabricCanvas.panTo(that.mouse.x - window.innerWidth/2, 
                                     that.mouse.y - window.innerHeight/2);
         }

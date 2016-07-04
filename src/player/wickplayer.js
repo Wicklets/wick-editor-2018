@@ -8,8 +8,8 @@ var WickPlayer = (function () {
     var project;
 
     // Input vars for mouse and (later) keyboard and accelerometer
-    var mouse;
-    var keys;
+    var mouse = {x:0, y:0};
+    var keys = [];
 
     // Canvas stuff (To be replaced with three/webgl/pixi)
     var rendererContainerEl;
@@ -214,8 +214,7 @@ var WickPlayer = (function () {
 
         HitTest = {
             Rectangles : "rectangles",
-            Circles : "circles",
-            PerPixel : "perpixel"
+            Point : "point"
         }
 
         wickObj.hitTest = function (otherObj, hitTestType) {
@@ -232,25 +231,21 @@ var WickPlayer = (function () {
             }
 
             if (hitTestType === HitTest.Rectangles) {
-                wickObjWidth = wickObj.width * wickObj.scaleX;
-                wickObjHeight = wickObj.height * wickObj.scaleY;
+                var wickObjWidth = wickObj.width * wickObj.scaleX;
+                var wickObjHeight = wickObj.height * wickObj.scaleY;
 
-                otherObjWidth = otherObj.width * otherObj.scaleX;
-                otherObjHeight = otherObj.height * otherObj.scaleY;
+                var otherObjWidth = otherObj.width * otherObj.scaleX;
+                var otherObjHeight = otherObj.height * otherObj.scaleY;
 
-                left = wickObj.x < (otherObj.x + otherObjWidth);
-                right = (wickObj.x + wickObjWidth) > otherObj.x; 
-                top = wickObj.y < (otherObj.y + otherObjHeight);
-                bottom = (wickObj.y + wickObjHeight) > otherObj.y;
+                var left = wickObj.x < (otherObj.x + otherObjWidth);
+                var right = (wickObj.x + wickObjWidth) > otherObj.x; 
+                var top = wickObj.y < (otherObj.y + otherObjHeight);
+                var bottom = (wickObj.y + wickObjHeight) > otherObj.y;
 
-                if (left && right && top && bottom) {
-                    return true;
-                } else {
-                    return false; 
-                }
+                return left && right && top && bottom;
             }
 
-            if (hitTestType === HitTest.Circles) {
+            if (hitTestType === HitTest.Point) {
                 var wickObjCentroid = {
                     x : wickObj.x + wickObj.width*wickObj.scaleX/2,
                     y : wickObj.y + wickObj.height*wickObj.scaleY/2

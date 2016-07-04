@@ -550,7 +550,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
                 document.getElementById('projectBgColor').value        = wickEditor.project.backgroundColor;
                 document.getElementById('projectSizeX').value          = wickEditor.project.resolution.x;
                 document.getElementById('projectSizeY').value          = wickEditor.project.resolution.y;
-                document.getElementById('frameRate').innerHTML         = wickEditor.project.framerate;
+                document.getElementById('frameRate').value             = wickEditor.project.framerate;
                 document.getElementById('fitScreenCheckbox').checked   = wickEditor.project.fitScreen;
                 document.getElementById('drawBordersCheckbox').checked = wickEditor.project.drawBorders;
                 $("#projectProperties").css('display', 'inline');
@@ -565,11 +565,9 @@ var WickHTMLGUIHandler = function (wickEditor) {
                 $("#objectProperties").css('display', 'inline');
                 break;
             case 'text':
-
                 $("#textProperties").css('display', 'inline');
                 break;
             case 'htmlSnippet':
-
                 $("#htmlSnippetProperties").css('display', 'inline');
                 break;
         }
