@@ -219,12 +219,6 @@ var WickPlayer = (function () {
 
         wickObj.hitTest = function (otherObj, hitTestType) {
 
-
-            if(!otherObj) {
-                console.error('hitTest with invalid object as param!!');
-                return;
-            }
-
             // Default to rectangles. 
             if (hitTestType === undefined) {
                 hitTestType = HitTest.Rectangles; 

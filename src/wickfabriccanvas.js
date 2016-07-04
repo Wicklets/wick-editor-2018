@@ -128,9 +128,20 @@ var FabricCanvas = function (wickEditor) {
     var canvas = this.canvas;
 
     canvas.on('object:modified', function(e) {
+
+        var originalState = {
+            left   : e.target.originalState.left,
+            top    : e.target.originalState.top,
+            scaleX : e.target.originalState.scaleX,
+            scaleY : e.target.originalState.scaleY,
+            angle  : e.target.originalState.angle,
+            text   : e.target.originalState.text
+        }
+        var id = that.canvas.getObjects().indexOf(e.target);
+
         wickEditor.actionHandler.doAction('transformFabricCanvasObject', 
-            {object:e.target,
-             originalState:e.target.originalState}
+            {id: id,
+             originalState: originalState}
         );
     });
 

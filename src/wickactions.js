@@ -144,15 +144,17 @@ var WickActionHandler = function (wickEditor) {
     this.registerAction('transformFabricCanvasObject', 
         function (args) {
             if(args.transformedState) {
+                var fabricObject = wickEditor.fabricCanvas.getCanvas().item(args.id);
+
                 // Set object back to it's state post-transformation
                 // This only happens on Redo. Fabric js does the original transformation!
-                args.object.top    = args.transformedState.top;
-                args.object.left   = args.transformedState.left;
-                args.object.scaleX = args.transformedState.scaleX;
-                args.object.scaleY = args.transformedState.scaleY;
-                args.object.angle  = args.transformedState.angle;
-                if(args.object.text) {
-                    args.object.text = args.transformedState.text;
+                fabricObject.top    = args.transformedState.top;
+                fabricObject.left   = args.transformedState.left;
+                fabricObject.scaleX = args.transformedState.scaleX;
+                fabricObject.scaleY = args.transformedState.scaleY;
+                fabricObject.angle  = args.transformedState.angle;
+                if(fabricObject.text) {
+                    fabricObject.text = args.transformedState.text;
                 }
 
                 args.object.setCoords();
@@ -160,29 +162,29 @@ var WickActionHandler = function (wickEditor) {
             }
         },
         function (args) {
-            console.log(args.object)
+            var fabricObject = wickEditor.fabricCanvas.getCanvas().item(args.id);
 
             // Save the original transformed state for redo
             args.transformedState = {
-                top:    args.object.top,
-                left:   args.object.left,
-                scaleX: args.object.scaleX,
-                scaleY: args.object.scaleY,
-                angle:  args.object.angle,
-                text:   args.object.text
+                top:    fabricObject.top,
+                left:   fabricObject.left,
+                scaleX: fabricObject.scaleX,
+                scaleY: fabricObject.scaleY,
+                angle:  fabricObject.angle,
+                text:   fabricObject.text
             };
 
             // Revert the object's state to it's original pre-transformation state
-            args.object.top    = args.originalState.top;
-            args.object.left   = args.originalState.left;
-            args.object.scaleX = args.originalState.scaleX;
-            args.object.scaleY = args.originalState.scaleY;
-            args.object.angle  = args.originalState.angle;
-            if(args.object.text) {
-                args.object.text = args.originalState.text;
+            fabricObject.top    = args.originalState.top;
+            fabricObject.left   = args.originalState.left;
+            fabricObject.scaleX = args.originalState.scaleX;
+            fabricObject.scaleY = args.originalState.scaleY;
+            fabricObject.angle  = args.originalState.angle;
+            if(fabricObject.text) {
+                fabricObject.text = args.originalState.text;
             }
 
-            args.object.setCoords();
+            fabricObject.setCoords();
             wickEditor.fabricCanvas.getCanvas().renderAll();
         });
 
