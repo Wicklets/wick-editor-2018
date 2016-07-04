@@ -136,6 +136,8 @@ var WickActionHandler = function (wickEditor) {
             if(args.group) {
                 for(var i = 0; i < this.groupObjs.length; i++) {
                     fabCanvas.add(this.groupObjs[i]);
+                }
+                for(var i = this.groupObjs.length-1; i >= 0; i--) {
                     fabCanvas.moveTo(this.groupObjs[i], args.originalZIndex);
                 }
             } else {
