@@ -169,11 +169,20 @@ var WickEditor = function () {
             for(var i = 0; i < group._objects.length; i++) {
                 objectJSONs.push(group._objects[i].wickObject.getAsJSON());
             }
-            event.clipboardData.setData('text/wickobjectsjson', JSON.stringify(objectJSONs));
+            var clipboardObject = {
+                position: {top  : group.top  + group.height/2, 
+                           left : group.left + group.width/2},
+                wickObjectArray: objectJSONs
+            }
+            event.clipboardData.setData('text/wickobjectsjson', JSON.stringify(clipboardObject));
         } else {
             var selectedWickObject = obj.wickObject;
             var objJSON = selectedWickObject.getAsJSON();
-            event.clipboardData.setData('text/wickobjectsjson', JSON.stringify([objJSON]));
+            var clipboardObject = {
+                position: {top:0, left:0},
+                wickObjectArray: [objJSON]
+            }
+            event.clipboardData.setData('text/wickobjectsjson', JSON.stringify(clipboardObject));
         }
     });
 
@@ -254,9 +263,20 @@ var WickEditor = function () {
 
             } else if (fileType == 'text/wickobjectsjson') {
 
-                var wickObjectJSONArray = JSON.parse(clipboardData.getData('text/wickobjectsjson'));
+                var clipboardObject = JSON.parse(clipboardData.getData('text/wickobjectsjson'));
+                var wickObjectJSONArray = clipboardObject.wickObjectArray;
+                var position = wickObjectJSONArray.position;
                 for (var i = 0; i < wickObjectJSONArray.length; i++) {
+                    
                     var newWickObject = WickObject.fromJSON(wickObjectJSONArray[i], that.currentObject);
+                    
+                    newWickObject.left += window.innerWidth/2  - that.project.resolution.x/2;
+                    newWickObject.top  += window.innerHeight/2 - that.project.resolution.y/2;
+                    if(wickObjectJSONArray.length > 1) {
+                        newWickObject.left += clipboardObject.position.left;
+                        newWickObject.top  += clipboardObject.position.top;
+                    }
+                    
                     that.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:newWickObject});
                 }
 
