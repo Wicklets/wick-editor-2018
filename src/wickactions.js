@@ -118,10 +118,12 @@ var WickActionHandler = function (wickEditor) {
 
             if (args.group) {
                 args.group.forEachObject(function(o) { 
+                    args.originalZIndex = fabCanvas.getObjects().indexOf(o);
                     fabCanvas.remove(o);
                 });
                 fabCanvas.discardActiveGroup().renderAll(); // stops weird ghost group selection
             } else {
+                args.originalZIndex = fabCanvas.getObjects().indexOf(args.obj);
                 fabCanvas.remove(args.obj);
             }
         },
@@ -134,9 +136,11 @@ var WickActionHandler = function (wickEditor) {
             if(args.group) {
                 for(var i = 0; i < this.groupObjs.length; i++) {
                     fabCanvas.add(this.groupObjs[i]);
+                    fabCanvas.moveTo(this.groupObjs[i], args.originalZIndex);
                 }
             } else {
                 fabCanvas.add(args.obj);
+                fabCanvas.moveTo(args.obj, args.originalZIndex);
                 fabCanvas.setActiveObject(args.obj);
             }
         });

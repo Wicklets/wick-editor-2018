@@ -160,6 +160,8 @@ var WickEditor = function () {
 
         that.syncEditorWithFabricCanvas();
 
+        var clipboardObjectJSON;
+
         var obj = that.fabricCanvas.getCanvas().getActiveObject() 
         var group = that.fabricCanvas.getCanvas().getActiveGroup();
 
@@ -174,7 +176,7 @@ var WickEditor = function () {
                            left : group.left + group.width/2},
                 wickObjectArray: objectJSONs
             }
-            event.clipboardData.setData('text/wickobjectsjson', JSON.stringify(clipboardObject));
+            clipboardObjectJSON = JSON.stringify(clipboardObject);
         } else {
             var selectedWickObject = obj.wickObject;
             var objJSON = selectedWickObject.getAsJSON();
@@ -182,25 +184,14 @@ var WickEditor = function () {
                 position: {top:0, left:0},
                 wickObjectArray: [objJSON]
             }
-            event.clipboardData.setData('text/wickobjectsjson', JSON.stringify(clipboardObject));
+            clipboardObjectJSON = JSON.stringify(clipboardObject);
         }
+
+        event.clipboardData.setData('text/wickobjectsjson', clipboardObjectJSON);
     });
 
     document.addEventListener("cut", function(event) {
-
         VerboseLog.error('cut NYI');
-
-        /*wickEditor.clearKeys();
-
-        if(document.activeElement.nodeName != 'TEXTAREA' ) {
-            focusHiddenArea();
-            if(!this.htmlGUIHandler.scriptingIDEopen) {
-                event.preventDefault();
-                this.syncEditorWithFabricCanvas();
-                this.copySelectedObjectsToClipboard();
-                this.deleteSelectedObjects(event.clipboardData);
-            }
-        }*/
     });
 
     document.addEventListener("paste", function(event) {
@@ -276,7 +267,7 @@ var WickEditor = function () {
                         newWickObject.left += clipboardObject.position.left;
                         newWickObject.top  += clipboardObject.position.top;
                     }
-                    
+
                     that.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:newWickObject});
                 }
 
