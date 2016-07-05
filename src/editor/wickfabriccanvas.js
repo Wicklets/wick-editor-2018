@@ -142,6 +142,7 @@ var FabricCanvas = function (wickEditor) {
 
         // Automatically delete text boxes with no text in 'em.
         if (e.target.text === '') {
+            // Make sure the original text comes back on undo
             e.target.text = e.target.originalState.text;
             wickEditor.actionHandler.doAction('delete', { obj:e.target, group:null });
             return;

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Hit Testing</title>
+    <title>Paper.js Vector Paintbrush Tool Tests</title>
     <link rel="stylesheet" href="lib/paper/css/style.css">
     <script type="text/javascript" src="lib/paper/paper-full.js"></script>
     <script type="text/paperscript" canvas="canvas">
@@ -23,7 +23,7 @@
                 return;
             }
 
-            console.log(d)
+            console.log(d);
 
             for(var i = 0; i < item.children.length; i++) {
                 console.log(item.children[i]);
@@ -42,7 +42,7 @@
                     project.importSVG(file, function(item) {
                         console.log(item)
                         //removeChildrenRecursively(item);
-                        //iterateOverAllChildren(item, 0)
+                        iterateOverAllChildren(item, 0)
                     });
                 }
             }
@@ -93,38 +93,112 @@
             return path;
         }
 
+        var recursiveHitOptions = {
+            segments: true,
+            stroke: true,
+            fill: true,
+            tolerance: 0
+        }
+
+        function tryFillHole(item, point, d) {
+
+            if(!item.children) {
+                return;
+            }
+
+            for(var i = 0; i < item.children.length; i++) {
+                var child = item.children[i];
+
+                //console.log(child);
+                if(child instanceof Path) {
+                    var hitResult = child.hitTest(point, recursiveHitOptions);
+                    if(hitResult && hitResult.item.clockwise) {
+                        // hole
+                        //var itemNoChildren = item.removeChildren();
+                        //item.parent.insertChildren(item.index, itemNoChildren);
+                        //item.remove();
+                        var clone = hitResult.item.clone();
+                        clone.fillColor = "#ff0000";
+                        project.activeLayer.addChild(clone);
+                        return true;
+                    }
+                }
+
+                if(tryFillHole(child, point, d+1)) {
+                    return true;
+                }
+            }
+
+            return false;
+
+        }
+
+        function tryFillPath(item, point, d) {
+
+            if(!item.children) {
+                return;
+            }
+
+            for(var i = 0; i < item.children.length; i++) {
+                var child = item.children[i];
+
+                //console.log(child);
+                if(child instanceof Path) {
+                    var hitResult = child.hitTest(point, recursiveHitOptions);
+                    if(hitResult && !hitResult.item.clockwise) {
+                        console.log(hitResult.item);
+                        item.fillColor = "#ff0000";
+                    }
+                }
+
+                tryFillPath(child, point, d+1);
+            }
+
+        }
+
         var segment, path;
         var movePath = false;
         function onMouseDown(event) {
-            
-            iterateOverAllChildren(project.activeLayer, 0);
 
-            segment = path = null;
-            var hitResult = project.hitTest(event.point, hitOptions);
-            if (!hitResult)
-                return;
+            if (currentTool == "FillBucket") {
 
-            if (event.modifiers.shift) {
-                if (hitResult.type == 'segment') {
-                    hitResult.segment.remove();
-                };
-                return;
-            }
-
-            if (hitResult) {
-                path = hitResult.item;
-
-                if (hitResult.type == 'segment') {
-                    segment = hitResult.segment;
-                } else if (hitResult.type == 'stroke') {
-                    var location = hitResult.location;
-                    segment = path.insert(location.index + 1, event.point);
-                    //path.smooth();
+                console.log("recursiveHitTest:")
+                if(!tryFillHole(project.activeLayer, event.point, 0)) {
+                    tryFillPath(project.activeLayer, event.point, 0);
                 }
+
             }
-            movePath = hitResult.type == 'fill';
-            if (movePath)
-                project.activeLayer.addChild(hitResult.item);
+
+            else if (currentTool == "Cursor") {
+
+                segment = path = null;
+                var hitResult = project.hitTest(event.point, hitOptions);
+                if (!hitResult)
+                    return;
+
+                if (event.modifiers.shift) {
+                    if (hitResult.type == 'segment') {
+                        hitResult.segment.remove();
+                    };
+                    return;
+                }
+
+                if (hitResult) {
+                    path = hitResult.item;
+
+                    if (hitResult.type == 'segment') {
+                        segment = hitResult.segment;
+                    } else if (hitResult.type == 'stroke') {
+                        var location = hitResult.location;
+                        segment = path.insert(location.index + 1, event.point);
+                        //path.smooth();
+                    }
+                }
+                movePath = hitResult.type == 'fill';
+                if (movePath)
+                    project.activeLayer.addChild(hitResult.item);
+            }
+
         }
 
         function onMouseMove(event) {
@@ -148,6 +222,8 @@
     <form>
     <input type="file" id="file">
     </form>
+    <input type="button" value="Cursor" onclick="currentTool='Cursor';">
+    <input type="button" value="Fill Bucket" onclick="currentTool='FillBucket';">
     <canvas id="canvas" resize style="background:white"></canvas>
 </body>
 </html>
