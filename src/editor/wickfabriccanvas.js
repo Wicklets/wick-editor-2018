@@ -127,6 +127,7 @@ var FabricCanvas = function (wickEditor) {
     var that = this;
     var canvas = this.canvas;
 
+    // Listen for objects being changed so we can undo them in the action handler.
     canvas.on('object:modified', function(e) {
 
         var originalState = {
@@ -138,6 +139,13 @@ var FabricCanvas = function (wickEditor) {
             text   : e.target.originalState.text
         }
         var id = that.canvas.getObjects().indexOf(e.target);
+
+        // Automatically delete text boxes with no text in 'em.
+        if (e.target.text === '') {
+            e.target.text = e.target.originalState.text;
+            wickEditor.actionHandler.doAction('delete', { obj:e.target, group:null });
+            return;
+        }
 
         wickEditor.actionHandler.doAction('transformFabricCanvasObject', 
             {id: id,
