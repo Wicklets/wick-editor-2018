@@ -59,7 +59,7 @@ WickProject.prototype.exportAsHTMLFile = function () {
     fileOut += "<script>" + FileDownloader.downloadFile("lib/base64-arraybuffer.js") + "</script>\n";
 
     // Add the player (need to download the player code)
-    fileOut += "<script>" + FileDownloader.downloadFile("src/wick/wickobject.js") + "</script>\n";
+    fileOut += "<script>" + FileDownloader.downloadFile("src/project/wickobject.js") + "</script>\n";
     fileOut += "<script>" + FileDownloader.downloadFile("src/player/wickplayer.js") + "</script>\n";
 
     // Bundle the JSON project
