@@ -122,9 +122,9 @@ var FabricCanvas = function (wickEditor) {
         return false;
     });
 
-// Paper.js canvas
+// Paper.js canvas display
 
-    this.paperCanvas = 
+    this.paperCanvas = document.getElementById("paperCanvas");
 
 // Events
 
@@ -203,6 +203,8 @@ var FabricCanvas = function (wickEditor) {
     });
 
     this.resize = function () {
+        this.paperCanvas.width = window.innerWidth;
+        this.paperCanvas.height = window.innerHeight;
         this.updateCanvasResolution();
         this.repositionOriginCrosshair();
     }
@@ -264,6 +266,30 @@ var FabricCanvas = function (wickEditor) {
 
     }
 
+    this.reloadPaperCanvas = function() {
+
+        var that = this;
+
+        // Get rid of the old paper canvas object if it exists
+
+        if(that.paperCanvas) {
+            that.canvas.remove(that.paperCanvas);
+        }
+
+        // Add a new paper canvas
+
+        var paperCanvasDataURL = paperCanvas.toDataURL();
+
+        fabric.Image.fromURL(paperCanvasDataURL, function(oImg) {
+            oImg.hasControls = false;
+            oImg.selectable = false;
+            oImg.evented = false;
+            that.paperCanvas = oImg;
+            that.canvas.add(oImg);
+        });
+
+    }
+
     this.panTo = function (x,y) {
 
         var that = this;
@@ -294,7 +320,7 @@ var FabricCanvas = function (wickEditor) {
 
     }
 
-    FabricCanvas.prototype.repositionOriginCrosshair = function () {
+    this.repositionOriginCrosshair = function () {
         var projectWidth  = wickEditor.project.resolution.x;
         var projectHeight = wickEditor.project.resolution.y;
         var currentObjectLeft = wickEditor.currentObject.left;

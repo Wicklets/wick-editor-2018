@@ -195,6 +195,7 @@ WickObject.fromAudioFile = function (audioData, parentObject) {
 
     audioWickObject.setDefaultPositioningValues();
     audioWickObject.audioData = audioData;
+    audioWickObject.autoplaySound = true;
     audioWickObject.left = window.innerWidth/2;
     audioWickObject.top = window.innerHeight/2;
 

@@ -249,6 +249,12 @@ var WickPlayer = (function () {
             
         }
 
+        if(wickObj.audioData) {
+            wickObj.playSound = function () {
+                playSound(wickObj.audioBuffer);
+            }
+        }
+
         if(wickObj.isSymbol) {
             // Setup builtin wick scripting methods and objects
             wickObj.play = function (frame) {
@@ -683,23 +689,23 @@ var WickPlayer = (function () {
 *****************************/
 
     var animate = function () {
-        
-        /*setTimeout(function() {
+
+        setTimeout(function() {
             if(!stopDrawLoop) {
                 
                 update();
                 draw();
-                //animate()
+                animate();
                 //requestAnimationFrame(animate);
             }
-        }, 1000 / project.framerate);*/
+        }, 1000 / project.framerate);
 
-        if(!stopDrawLoop) {
+        /*if(!stopDrawLoop) {
             requestAnimationFrame(animate);
         }
 
         update();
-        draw();
+        draw();*/
 
     }
 
@@ -741,8 +747,8 @@ var WickPlayer = (function () {
                 obj.onLoadScriptRan = true;
 
                 // Play sound at the same time as when onLoad script runs
-                if(audioContext && obj.audioBuffer) {
-                    playSound(obj.audioBuffer);
+                if(audioContext && obj.audioBuffer && obj.autoplaySound) {
+                    obj.playSound();
                 }
             }
 
@@ -865,7 +871,7 @@ var WickPlayer = (function () {
 
         var graphics = new PIXI.Graphics();
         graphics.beginFill(parseInt(project.backgroundColor.replace("#","0x")));
-        graphics.drawRect(0, 0, project.resolution.x, project.resolution.y)
+        graphics.drawRect(0, 0, project.resolution.x, project.resolution.y);
         graphics.endFill();
         renderer.render(graphics);
 

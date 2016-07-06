@@ -23,6 +23,8 @@
     <script src="lib/pixi.min.js"></script>
     <script src="lib/filedownloader.js"></script>
     
+    <script type="text/paperscript" src="src/editor/PaperVectorDrawingTool.js" canvas="paperCanvas"></script>
+    
     <script src="src/project/wickframe.js"></script>
     <script src="src/project/wickobject.js"></script>
     <script src="src/project/wickproject.js"></script>
@@ -47,6 +49,10 @@
 <!-- Hidden element to always be selected so browser always fires copy/paste events -->
 
     <input id="hidden-input" class="hidden" type="text" value="" />
+
+<!-- Hidden paper.js canvas, we don't render it on the webpage, we handle that through the fabric.js canvas -->
+    
+    <canvas id="paperCanvas" resize style="background:white"></canvas>
 
 <!-- Editor GUI, visible when a project is being edited & not running -->
 
@@ -78,7 +84,7 @@
             </div>
 
             <!-- Hidden, gets clicked automatically by openProjectButton -->
-            <input type="file" id="importButton" /> 
+            <input type="file" class="hidden" id="importButton" /> 
         </div>
 
     <!-- Timeline GUI, centered at the top of the screen -->
@@ -250,6 +256,13 @@
         <div id="popupGUI" class="GUIBox"></div>
 
     </div>
+
+<!-- Temporary buttons to test the vector paintbrush. -->
+<!-- Get rid of this later if I forgot!!! -->
+
+    <form><input type="file" id="file"></form>
+    <input type="button" value="Cursor" onclick="currentTool='Cursor';">
+    <input type="button" value="Fill Bucket" onclick="currentTool='FillBucket';">
 
 <!-- Builtin player, visible when a project is running -->
 

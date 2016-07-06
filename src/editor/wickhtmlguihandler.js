@@ -350,6 +350,9 @@ var WickHTMLGUIHandler = function (wickEditor) {
 
     $('#frameRate').on('input propertychange', function () {
 
+
+        console.log($('#frameRate').val())
+
         testPositiveInteger($('#frameRate').val(), function(n) {
             wickEditor.project.framerate = n;
         });

@@ -129,6 +129,7 @@ var WickEditor = function () {
 
     window.addEventListener('resize', function(e) {
         that.fabricCanvas.resize();
+        that.fabricCanvas.reloadPaperCanvas();
         that.htmlGUIHandler.syncWithEditor();
     }, false);
     that.fabricCanvas.resize();

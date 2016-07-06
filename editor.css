@@ -190,10 +190,6 @@ hr {
 	top: 50%;
 }
 
-input[type=file] { 
-	display: none;
-}
-
 #gifImportDummyElem {
 	display: none;
 	visibility: hidden;
@@ -218,4 +214,8 @@ input[type=file] {
     -webkit-user-select: text;
     user-select: text;
     /* Because for user-select:none, Safari won't allow input */
+}
+
+#paperCanvas {
+	display: none;
 }
