@@ -122,6 +122,10 @@ var FabricCanvas = function (wickEditor) {
         return false;
     });
 
+// Paper.js canvas
+
+    this.paperCanvas = 
+
 // Events
 
     var that = this;

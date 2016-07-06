@@ -548,6 +548,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
         $("#projectProperties").css('display', 'none');
         $("#objectProperties").css('display', 'none');
         $("#textProperties").css('display', 'none');
+        $("#soundProperties").css('display', 'none');
         $("#htmlSnippetProperties").css('display', 'none');
 
         var tab = 'project';
@@ -556,6 +557,8 @@ var WickHTMLGUIHandler = function (wickEditor) {
         if(newSelectedObject) {
             if(newSelectedObject.wickObject.fontData) {
                 tab = 'text';
+            } else if (newSelectedObject.wickObject.audioData) {
+                tab = 'sound';
             } else if (newSelectedObject.wickObject.htmlData) {
                 tab = 'htmlSnippet';
             } else {
@@ -583,9 +586,15 @@ var WickHTMLGUIHandler = function (wickEditor) {
                 $("#objectProperties").css('display', 'inline');
                 break;
             case 'text':
+                $("#objectProperties").css('display', 'inline');
                 $("#textProperties").css('display', 'inline');
                 break;
+            case 'sound':
+                $("#objectProperties").css('display', 'inline');
+                $("#soundProperties").css('display', 'inline');
+                break;
             case 'htmlSnippet':
+                $("#objectProperties").css('display', 'inline');
                 $("#htmlSnippetProperties").css('display', 'inline');
                 break;
         }
