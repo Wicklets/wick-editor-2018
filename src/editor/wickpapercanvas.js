@@ -2,17 +2,21 @@
 
 var PaperCanvas = function (wickEditor) {
 
+    var that = this;
+
     this.canvas = document.getElementById('paperCanvas');
     paper.setup(this.canvas);
 
-    
+
+
+
 
     this.redraw = function () {
         paper.view.draw();
     }
 
     this.resize = function () {
-        console.log("yes")
+        console.log("PaperCanvas resize")
         this.canvas.style.width  = window.innerWidth  + "px";
         this.canvas.style.height = window.innerHeight + "px";
         this.canvas.width  = window.innerWidth;
@@ -44,7 +48,18 @@ var PaperCanvas = function (wickEditor) {
 
     }
 
-    var that = this;
+    this.importAnSVG = function (file) {
+        console.log("importAnSVG")
+
+        paper.project.importSVG(file, function(item) {
+            console.log(item)
+            //removeChildrenRecursively(item);
+            iterateOverAllChildren(item, 0)
+            that.resize();
+            paper.view.draw();
+            wickEditor.fabricCanvas.reloadPaperCanvas();
+        });
+    }
 
     var file = document.getElementById('file');
     file.addEventListener('change', function (event) {
@@ -52,18 +67,34 @@ var PaperCanvas = function (wickEditor) {
         for (var i = 0; i < files.length; i++) {
             var file = files[i];
             if (file.type.match('svg')) {
+
+                console.log("importSVG (file):" )
+                console.log(file)
                 
-                paper.project.importSVG(file, function(item) {
-                    console.log(item)
-                    //removeChildrenRecursively(item);
-                    iterateOverAllChildren(item, 0)
-                    that.resize();
-                    paper.view.draw();
-                    wickEditor.fabricCanvas.reloadPaperCanvas();
+                that.importAnSVG(file)
+            } else {
+                Potrace.loadImageFromFile(file);
+                console.log(file)
+                Potrace.process(function(){
+                    var svg = Potrace.getSVG(1);
+                    var svgfile = new File([svg], "filename");
+                    that.importAnSVG(svgfile)
                 });
             }
         }
     });
+
+    this.addSVG = function(file) {
+
+        Potrace.loadImageFromFile(file);
+        console.log(file)
+        Potrace.process(function(){
+            var svg = Potrace.getSVG(1);
+            var svgfile = new File([svg], "filename");
+            importAnSVG(svgfile)
+        });
+
+    }
 
     var values = {
         paths: 50,
@@ -127,7 +158,7 @@ var PaperCanvas = function (wickEditor) {
             var child = item.children[i];
 
             //console.log(child);
-            if(child instanceof Path) {
+            if(child instanceof paper.Path) {
                 var hitResult = child.hitTest(point, recursiveHitOptions);
                 if(hitResult && hitResult.item.clockwise) {
                     // hole
@@ -136,7 +167,7 @@ var PaperCanvas = function (wickEditor) {
                     //item.remove();
                     var clone = hitResult.item.clone();
                     clone.fillColor = "#ff0000";
-                    project.activeLayer.addChild(clone);
+                    paper.project.activeLayer.addChild(clone);
                     return true;
                 }
             }
@@ -160,10 +191,14 @@ var PaperCanvas = function (wickEditor) {
             var child = item.children[i];
 
             //console.log(child);
-            if(child instanceof Path) {
+            if(child instanceof paper.Path) {
                 var hitResult = child.hitTest(point, recursiveHitOptions);
+                console.log("tryFillPath hitResult: ")
+                console.log(hitResult)
                 if(hitResult && !hitResult.item.clockwise) {
+                    console.log("filling!")
                     console.log(hitResult.item);
+                    console.log(i)
                     item.fillColor = "#ff0000";
                 }
             }
@@ -175,13 +210,17 @@ var PaperCanvas = function (wickEditor) {
 
     var segment, path;
     var movePath = false;
-    var onMouseDown = function(event) {
+    this.canvas.addEventListener("mousedown", function(event) {
+
+        console.log(event)
+
+        currentTool = "FillBucket"
 
         if (currentTool == "FillBucket") {
 
             console.log("recursiveHitTest:")
-            if(!tryFillHole(project.activeLayer, event.point, 0)) {
-                tryFillPath(project.activeLayer, event.point, 0);
+            if(!tryFillHole(paper.project.activeLayer, new paper.Point(event.offsetX, event.offsetY), 0)) {
+                tryFillPath(paper.project.activeLayer, new paper.Point(event.offsetX, event.offsetY), 0);
             }
 
         }
@@ -189,7 +228,7 @@ var PaperCanvas = function (wickEditor) {
         else if (currentTool == "Cursor") {
 
             segment = path = null;
-            var hitResult = project.hitTest(event.point, hitOptions);
+            var hitResult = paper.project.hitTest(new Point(event.offsetX, event.offsetY), hitOptions);
             if (!hitResult)
                 return;
 
@@ -213,10 +252,10 @@ var PaperCanvas = function (wickEditor) {
             }
             movePath = hitResult.type == 'fill';
             if (movePath)
-                project.activeLayer.addChild(hitResult.item);
+                paper.project.activeLayer.addChild(hitResult.item);
         }
 
-    }
+    });
 
     var onMouseMove = function (event) {
         project.activeLayer.selected = false;

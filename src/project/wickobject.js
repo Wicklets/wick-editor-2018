@@ -455,6 +455,10 @@ WickObject.prototype.getAsJSON = function () {
     return JSONWickObject;
 }
 
+WickObject.prototype.getAsFile = function () {
+    VerboseLog.error("NYI");
+}
+
 var WickObjectUtils = (function () {
 
     var utils = { };

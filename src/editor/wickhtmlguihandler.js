@@ -493,6 +493,10 @@ var WickHTMLGUIHandler = function (wickEditor) {
         wickEditor.actionHandler.doAction('finishEditingCurrentObject', {});
     });
 
+    $("#downloadButton").on("click", function (e) {
+        wickEditor.currentObject.getAsFile();
+    });
+
     this.openRightClickMenu = function () {
 
         // Make rightclick menu visible

@@ -690,22 +690,27 @@ var WickPlayer = (function () {
 
     var animate = function () {
 
-        setTimeout(function() {
-            if(!stopDrawLoop) {
+        if(project.framerate < 60) {
+            setTimeout(function() {
                 
-                update();
-                draw();
-                animate();
-                //requestAnimationFrame(animate);
+                if(!stopDrawLoop) {
+                    
+                    update();
+                    draw();
+                    animate();
+                    //requestAnimationFrame(animate);
+                }
+            }, 1000 / project.framerate);
+
+        } else {
+
+            if(!stopDrawLoop) {
+                requestAnimationFrame(animate);
             }
-        }, 1000 / project.framerate);
+            update();
+            draw();
 
-        /*if(!stopDrawLoop) {
-            requestAnimationFrame(animate);
         }
-
-        update();
-        draw();*/
 
     }
 

@@ -11,6 +11,7 @@
     <script src="lib/jquery.min.js"></script>
     <script src="lib/fabric/fabric.js"></script>
     <script src="lib/fabric/fabric.canvasex.js"></script>
+    <script src="lib/potrace.js"></script>
     <script src="lib/paper/paper-full.js"></script>
     <script src="lib/verboselog.js"></script>
     <script src="lib/beautify.js"></script>
@@ -48,10 +49,6 @@
 <!-- Hidden element to always be selected so browser always fires copy/paste events -->
 
     <input id="hidden-input" class="hidden" type="text" value="" />
-
-<!-- Hidden paper.js canvas, we don't render it on the webpage, we handle that through the fabric.js canvas -->
-    
-    <canvas id="paperCanvas" resize style="background:white"></canvas>
 
 <!-- Editor GUI, visible when a project is being edited & not running -->
 
@@ -244,6 +241,8 @@
                 <div class="button" id="sendToBackButton">Send to Back</div>
                 <div class="button" id="deleteButton">Delete</div>
                 <hr />
+                <div class="button" id="downloadButton">Download</div>
+                <hr />
             </div>
             <div id="staticObjectButtons">
                 <div class="button" id="convertToSymbolButton">Convert to Symbol</div>
@@ -262,6 +261,11 @@
         <div id="popupGUI" class="GUIBox"></div>
 
     </div>
+
+
+<!-- Hidden paper.js canvas, we don't render it on the webpage, we handle that through the fabric.js canvas -->
+    
+    <canvas id="paperCanvas" resize style="background:white"></canvas>
 
 <!-- Builtin player, visible when a project is running -->
 
