@@ -217,5 +217,6 @@ hr {
 }
 
 #paperCanvas {
-	display: none;
+	position: absolute;
+	opacity: 0;
 }

@@ -22,14 +22,13 @@
     <script src="lib/libgif.js"></script>
     <script src="lib/pixi.min.js"></script>
     <script src="lib/filedownloader.js"></script>
-    
-    <script type="text/paperscript" src="src/editor/PaperVectorDrawingTool.js" canvas="paperCanvas"></script>
-    
+
     <script src="src/project/wickframe.js"></script>
     <script src="src/project/wickobject.js"></script>
     <script src="src/project/wickproject.js"></script>
     <script src="src/project/wicktweenobject.js"></script>
 
+    <script src="src/editor/wickpapercanvas.js"></script>
     <script src="src/editor/wickfabriccanvas.js"></script>
     <script src="src/editor/wickhtmlguihandler.js"></script>
     <script src="src/editor/wickactions.js"></script>
@@ -39,7 +38,7 @@
 
     <script>
         $(document).ready(function() { 
-            wickEditor = new WickEditor();
+            var wickEditor = new WickEditor();
         });
     </script>
 </head>
@@ -171,6 +170,13 @@
                 <hr />
                 <input type="checkbox" id="fitScreenCheckbox"> Fit to Screen Size<br />
                 <input type="checkbox" id="drawBordersCheckbox"> Draw Borders
+
+                <!-- Temporary buttons to test the vector paintbrush. -->
+                <!-- Get rid of this later if I forgot!!! -->
+
+                    <form><input type="file" id="file"></form>
+                    <input type="button" value="Cursor" onclick="currentTool='Cursor';">
+                    <input type="button" value="Fill Bucket" onclick="currentTool='FillBucket';">
             </div>
             <div id="objectProperties">
                 Object Properties
@@ -256,13 +262,6 @@
         <div id="popupGUI" class="GUIBox"></div>
 
     </div>
-
-<!-- Temporary buttons to test the vector paintbrush. -->
-<!-- Get rid of this later if I forgot!!! -->
-
-    <form><input type="file" id="file"></form>
-    <input type="button" value="Cursor" onclick="currentTool='Cursor';">
-    <input type="button" value="Fill Bucket" onclick="currentTool='FillBucket';">
 
 <!-- Builtin player, visible when a project is running -->
 
