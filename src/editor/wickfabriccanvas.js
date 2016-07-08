@@ -185,48 +185,22 @@ var FabricCanvas = function (wickEditor) {
     // intercept the paths and convert them to wickobjects
     canvas.on('object:added', function(e) {
         if(e.target.type === "path") {
-            /*var path = e.target;
+            var path = e.target;
             WickObject.fromFabricPath(path, wickEditor.currentObject, function(wickObj) {
                 wickEditor.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:wickObj});
             });
-            canvas.remove(path);*/
+            canvas.remove(path);
 
-
-            e.target.cloneAsImage(function(clone) {
+            /*e.target.cloneAsImage(function(clone) {
                 var imgSrc = clone._element.currentSrc || clone._element.src;
-                //console.log(imgSrc);
-
-                var myBlob = new Blob([imgSrc], {type : "text/jpeg"});
-                var myReader = new FileReader();
-
-                var pathFile = myBlob;
-
-                //Potrace.loadImageFromDataURL(imgSrc);
-                console.log(imgSrc)
-                //var file = new File([imgSrc], "filename.png", {type: "image/png"});
 
                 Potrace.loadImageFromDataURL(imgSrc);
-                //console.log(file)
                 Potrace.process(function(){
                     var svg = Potrace.getSVG(1);
                     var svgfile = new File([svg], "filename");
                     that.paperCanvas.importAnSVG(svgfile)
                 });
-
-
-                //that.paperCanvas.addSVG(file);
-
-                /*myReader.addEventListener("loadend", function(e){
-                    console.log(e.srcElement);
-
-                    var pathFile = e.srcElement;
-                    Potrace.loadImageFromFile(pathFile);
-                    Potrace.process(function(){
-                        console.log(Potrace.getSVG(1));
-                    });
-                });
-                myReader.readAsText(myBlob);*/
-            });
+            });*/
 
             canvas.remove(e.target);
         }

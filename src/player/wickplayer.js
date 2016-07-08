@@ -692,7 +692,7 @@ var WickPlayer = (function () {
 
         if(project.framerate < 60) {
             setTimeout(function() {
-                
+
                 if(!stopDrawLoop) {
                     
                     update();
@@ -837,15 +837,17 @@ var WickPlayer = (function () {
     var advanceTimeline = function (obj) { 
         // Advance timeline for this object
         if(obj.isPlaying && obj.frames.length > 1) {
-            /* Left the frame, all child objects are unloaded, make sure 
-               they run onLoad again next time we come back to this frame */
-            WickObjectUtils.forEachActiveChildObject(obj, function(child) {
-                child.onLoadScriptRan = false;
-            });
 
             // Multiframes
             var frame = obj.frames[obj.currentFrame];
             if (frame.elapsedFrames == frame.frameLength) {
+
+                /* Leaving the frame, all child objects are unloaded, make sure 
+                   they run onLoad again next time we come back to this frame */
+                WickObjectUtils.forEachActiveChildObject(obj, function(child) {
+                    child.onLoadScriptRan = false;
+                });
+
                 obj.currentFrame++;
                 frame.elapsedFrames = 0;
             } else {

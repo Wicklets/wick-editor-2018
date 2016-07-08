@@ -50,6 +50,10 @@
 
     <input id="hidden-input" class="hidden" type="text" value="" />
 
+<!-- Hidden paper.js canvas, we don't render it on the webpage, we handle that through the fabric.js canvas -->
+    
+    <canvas id="paperCanvas" resize style="background:white"></canvas>
+
 <!-- Editor GUI, visible when a project is being edited & not running -->
 
     <div id="editor">
@@ -261,11 +265,6 @@
         <div id="popupGUI" class="GUIBox"></div>
 
     </div>
-
-
-<!-- Hidden paper.js canvas, we don't render it on the webpage, we handle that through the fabric.js canvas -->
-    
-    <canvas id="paperCanvas" resize style="background:white"></canvas>
 
 <!-- Builtin player, visible when a project is running -->
 
