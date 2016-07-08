@@ -562,8 +562,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
 ************************/
     
     var updateObjectPropertiesGUI = function() {
-        console.log("dsadsakjhbakjsvs")
-
+        
         // Display Object properties tab
         $("#objectProperties").css('display', 'inline');
 
