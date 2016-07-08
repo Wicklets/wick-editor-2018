@@ -218,16 +218,16 @@ var PaperCanvas = function (wickEditor) {
         else if (currentTool == "cursor") {
 
             segment = path = null;
-            var hitResult = paper.project.hitTest(new Point(event.offsetX, event.offsetY), hitOptions);
+            var hitResult = paper.project.hitTest(new paper.Point(event.offsetX, event.offsetY), hitOptions);
             if (!hitResult)
                 return;
 
-            if (event.modifiers.shift) {
+            /*if (event.modifiers.shift) {
                 if (hitResult.type == 'segment') {
                     hitResult.segment.remove();
                 };
                 return;
-            }
+            }*/
 
             if (hitResult) {
                 path = hitResult.item;
