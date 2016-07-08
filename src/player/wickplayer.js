@@ -255,6 +255,65 @@ var WickPlayer = (function () {
             }
         }
 
+        function testNonNegativeInteger(n) {
+            var num = Number(n);
+            return ((typeof num === 'number') && (num % 1 == 0) && (num >= 0));
+        }
+
+        function testString(str) {
+            return (typeof str === 'string')
+        }
+
+        function tryNavigateToFrame (frame, setPlayFunction) {
+
+            if (testNonNegativeInteger(frame)) {
+
+                // Only navigate to an integer frame if it is nonnegative and a valid frame
+                if(frame < wickObj.frames.length)
+                    navigateToFrame(frame, setPlayFunction);
+                else
+                    console.log("Failed to navigate to frame \'" + frame + "\': is not a valid frame.");
+
+            } else if (testString(frame)) {
+
+                // Search for the frame with the correct identifier and navigate if found
+                navigateToFrameByIdentifier(frame, setPlayFunction);
+
+            } else {
+
+                console.log("Failed to navigate to frame \'" + frame + "\': is neither a string nor a nonnegative integer");
+
+            }
+        }
+
+        function navigateToFrameByIdentifier(frameID, setPlayFunction) {
+
+            for (var f = 0; f < wickObj.frames.length; f++) {
+
+                if(frameID === wickObj.frames[f].identifier) {
+                    navigateToFrame(f, setPlayFunction);
+                    return;
+                }
+            }
+
+            console.log("Failed to navigate to frame \'" + frameID + "\': is neither a string nor a nonnegative integer");
+        }
+
+        function navigateToFrame (frame, setPlayFunction) {
+            
+            var oldFrame = wickObj.currentFrame;
+
+            wickObj.currentFrame = frame;
+
+            if(oldFrame != wickObj.currentFrame) {
+                WickObjectUtils.forEachActiveChildObject(wickObj, function(child) {
+                    child.onLoadScriptRan = false;
+                });
+            }
+
+            setPlayFunction();
+        }
+
         if(wickObj.isSymbol) {
             // Setup builtin wick scripting methods and objects
             wickObj.play = function (frame) {
@@ -272,28 +331,18 @@ var WickPlayer = (function () {
                 wickObj.isPlaying = false;
             }
             wickObj.gotoAndPlay = function (frame) {
-                var oldFrame = wickObj.currentFrame;
 
-                wickObj.isPlaying = true;
-                wickObj.currentFrame = frame;
-
-                if(oldFrame != wickObj.currentFrame) {
-                    WickObjectUtils.forEachActiveChildObject(wickObj, function(child) {
-                        child.onLoadScriptRan = false;
-                    });
-                }
+                tryNavigateToFrame(frame, function() {
+                    wickObj.isPlaying = true;
+                });
+                
             }
             wickObj.gotoAndStop = function (frame) {
-                var oldFrame = wickObj.currentFrame;
+                
+                tryNavigateToFrame(frame, function() {
+                    wickObj.isPlaying = false;
+                });
 
-                wickObj.isPlaying = false;
-                wickObj.currentFrame = frame;
-
-                if(oldFrame != wickObj.currentFrame) {
-                    WickObjectUtils.forEachActiveChildObject(wickObj, function(child) {
-                        child.onLoadScriptRan = false;
-                    });
-                }
             }
             wickObj.gotoNextFrame = function () {
                 var oldFrame = wickObj.currentFrame;
