@@ -325,6 +325,12 @@ var WickHTMLGUIHandler = function (wickEditor) {
         }
     }
 
+    var testString = function(frameID, setFunc) {
+        if(typeof frameID === 'string') {
+            setFunc(frameID);
+        }
+    }
+
     $('#projectSizeX').on('input propertychange', function () {
 
         testPositiveInteger($('#projectSizeX').val(), function(n) {
@@ -349,11 +355,16 @@ var WickHTMLGUIHandler = function (wickEditor) {
 
     $('#frameRate').on('input propertychange', function () {
 
-
-        console.log($('#frameRate').val())
-
         testPositiveInteger($('#frameRate').val(), function(n) {
             wickEditor.project.framerate = n;
+        });
+
+    });
+
+    $('#frameIdentifier').on('input propertychange', function () {
+
+        testString($('#frameIdentifier').val(), function(frameID) {
+            wickEditor.currentObject.frames[wickEditor.currentObject.currentFrame].identifier = frameID;
         });
 
     });
@@ -562,7 +573,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
 ************************/
     
     var updateObjectPropertiesGUI = function() {
-        
+
         // Display Object properties tab
         $("#objectProperties").css('display', 'inline');
 
