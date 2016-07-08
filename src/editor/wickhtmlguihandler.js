@@ -325,9 +325,9 @@ var WickHTMLGUIHandler = function (wickEditor) {
         }
     }
 
-    var testString = function(frameID, setFunc) {
-        if(typeof frameID === 'string') {
-            setFunc(frameID);
+    var testString = function(str, setFunc) {
+        if(typeof str === 'string') {
+            setFunc(str);
         }
     }
 
