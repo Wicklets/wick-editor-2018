@@ -162,6 +162,8 @@ var FabricCanvas = function (wickEditor) {
     // Fabric doesn't select things with right clicks.
     // We have to do that manually
     canvas.on('mouse:down', function(e) {
+        that.paperCanvas.mouseDown(e.e);
+
         if(e.e.button == 2) {
             
             if (e.target && e.target.wickObject) {
@@ -185,20 +187,24 @@ var FabricCanvas = function (wickEditor) {
     // intercept the paths and convert them to wickobjects
     canvas.on('object:added', function(e) {
         if(e.target.type === "path") {
+            // Old straight-to-rasterized brush
             var path = e.target;
             WickObject.fromFabricPath(path, wickEditor.currentObject, function(wickObj) {
                 wickEditor.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:wickObj});
             });
             canvas.remove(path);
 
-            /*e.target.cloneAsImage(function(clone) {
+            // New send to paper.js brush
+            /*var path = e.target;
+
+            path.cloneAsImage(function(clone) {
                 var imgSrc = clone._element.currentSrc || clone._element.src;
 
                 Potrace.loadImageFromDataURL(imgSrc);
                 Potrace.process(function(){
                     var svg = Potrace.getSVG(1);
                     var svgfile = new File([svg], "filename");
-                    that.paperCanvas.importAnSVG(svgfile)
+                    that.paperCanvas.importAnSVG(svgfile, path.left, path.top);
                 });
             });*/
 

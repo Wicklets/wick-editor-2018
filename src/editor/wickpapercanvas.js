@@ -16,7 +16,6 @@ var PaperCanvas = function (wickEditor) {
     }
 
     this.resize = function () {
-        console.log("PaperCanvas resize")
         this.canvas.style.width  = window.innerWidth  + "px";
         this.canvas.style.height = window.innerHeight + "px";
         this.canvas.width  = window.innerWidth;
@@ -48,20 +47,19 @@ var PaperCanvas = function (wickEditor) {
 
     }
 
-    this.importAnSVG = function (file) {
-        console.log("importAnSVG")
-
+    this.importAnSVG = function (file, x, y) {
         paper.project.importSVG(file, function(item) {
-            console.log(item)
+            //console.log(item)
             //removeChildrenRecursively(item);
-            iterateOverAllChildren(item, 0)
+            item.position = new paper.Point(x, y);
+            //iterateOverAllChildren(item, 0);
             that.resize();
             paper.view.draw();
             wickEditor.fabricCanvas.reloadPaperCanvas();
         });
     }
 
-    var file = document.getElementById('file');
+    /*var file = document.getElementById('file');
     file.addEventListener('change', function (event) {
         var files = event.target.files;
         for (var i = 0; i < files.length; i++) {
@@ -82,19 +80,7 @@ var PaperCanvas = function (wickEditor) {
                 });
             }
         }
-    });
-
-    this.addSVG = function(file) {
-
-        Potrace.loadImageFromFile(file);
-        console.log(file)
-        Potrace.process(function(){
-            var svg = Potrace.getSVG(1);
-            var svgfile = new File([svg], "filename");
-            importAnSVG(svgfile)
-        });
-
-    }
+    });*/
 
     var values = {
         paths: 50,
@@ -210,9 +196,7 @@ var PaperCanvas = function (wickEditor) {
 
     var segment, path;
     var movePath = false;
-    this.canvas.addEventListener("mousedown", function(event) {
-
-        console.log(event)
+    this.mouseDown = function (event) {
 
         currentTool = "FillBucket"
 
@@ -255,7 +239,7 @@ var PaperCanvas = function (wickEditor) {
                 paper.project.activeLayer.addChild(hitResult.item);
         }
 
-    });
+    };
 
     var onMouseMove = function (event) {
         project.activeLayer.selected = false;
