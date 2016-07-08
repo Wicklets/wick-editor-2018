@@ -149,6 +149,8 @@ var WickActionHandler = function (wickEditor) {
 
     this.registerAction('transformFabricCanvasObject', 
         function (args) {
+            wickEditor.syncEditorWithFabricCanvas();
+
             if(args.transformedState) {
                 var fabricObject = wickEditor.fabricCanvas.getCanvas().item(args.id);
 
@@ -166,8 +168,12 @@ var WickActionHandler = function (wickEditor) {
                 args.object.setCoords();
                 wickEditor.fabricCanvas.getCanvas().renderAll();
             }
+
+            wickEditor.htmlGUIHandler.syncWithEditor();
         },
         function (args) {
+            wickEditor.syncEditorWithFabricCanvas();
+
             var fabricObject = wickEditor.fabricCanvas.getCanvas().item(args.id);
 
             // Save the original transformed state for redo
@@ -192,6 +198,8 @@ var WickActionHandler = function (wickEditor) {
 
             fabricObject.setCoords();
             wickEditor.fabricCanvas.getCanvas().renderAll();
+
+            wickEditor.htmlGUIHandler.syncWithEditor();
         });
 
     this.registerAction('gotoFrame', 

@@ -322,7 +322,6 @@ var WickHTMLGUIHandler = function (wickEditor) {
         var num = Number(n);
         if((typeof num === 'number') && (num % 1 == 0) && (num > 0)) {
             setFunc(num);
-            console.log(wickEditor.project);
         }
     }
 
@@ -379,6 +378,18 @@ var WickHTMLGUIHandler = function (wickEditor) {
         } else {
             wickEditor.fabricCanvas.getActiveObject().wickObject.name = $('#objectName').val();
         }
+    });
+
+    $('#objectPositionX').on('input propertychange', function () {
+
+        wickEditor.fabricCanvas.getActiveObject().wickObject.left = $('#objectPositionX').val();
+
+    });
+
+    $('#objectPositionY').on('input propertychange', function () {
+
+        wickEditor.fabricCanvas.getActiveObject().wickObject.top = $('#objectPositionY').val();
+
     });
 
     document.getElementById('opacitySlider').onchange = function () {
@@ -549,6 +560,27 @@ var WickHTMLGUIHandler = function (wickEditor) {
 /************************
     Properties menu
 ************************/
+    
+    var updateObjectPropertiesGUI = function() {
+        console.log("dsadsakjhbakjsvs")
+
+        // Display Object properties tab
+        $("#objectProperties").css('display', 'inline');
+
+        // Set object properties GUI name 
+        var name = wickEditor.fabricCanvas.getActiveObject().wickObject.name;
+        if(name) {
+            document.getElementById('objectName').value = name;
+        } else {
+            document.getElementById('objectName').value = '';
+        }
+        
+        // Set object properties GUI position
+        var objx = wickEditor.fabricCanvas.getActiveObject().wickObject.left;
+        var objy = wickEditor.fabricCanvas.getActiveObject().wickObject.top;
+        document.getElementById('objectPositionX').value = objx;
+        document.getElementById('objectPositionY').value = objy;
+    };
 
     this.updatePropertiesGUI = function() {
 
@@ -584,28 +616,21 @@ var WickHTMLGUIHandler = function (wickEditor) {
                 $("#projectProperties").css('display', 'inline');
                 break;
             case 'symbol':
-                var name = wickEditor.fabricCanvas.getActiveObject().wickObject.name;
-                if(name) {
-                    document.getElementById('objectName').value = name;
-                } else {
-                    document.getElementById('objectName').value = '';
-                }
-                $("#objectProperties").css('display', 'inline');
+                updateObjectPropertiesGUI();
                 break;
             case 'text':
-                $("#objectProperties").css('display', 'inline');
+                updateObjectPropertiesGUI();
                 $("#textProperties").css('display', 'inline');
                 break;
             case 'sound':
-                $("#objectProperties").css('display', 'inline');
+                updateObjectPropertiesGUI();
                 $("#soundProperties").css('display', 'inline');
                 break;
             case 'htmlSnippet':
-                $("#objectProperties").css('display', 'inline');
+                updateObjectPropertiesGUI();
                 $("#htmlSnippetProperties").css('display', 'inline');
                 break;
         }
-
     };
 
     this.updatePropertiesGUI('project');
