@@ -562,6 +562,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
     Properties menu
 ************************/
     
+    // Lil helper function because these properties must get updated for every type of object
     var updateObjectPropertiesGUI = function() {
         console.log("dsadsakjhbakjsvs")
 

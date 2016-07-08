@@ -165,9 +165,6 @@ var FabricCanvas = function (wickEditor) {
     // We have to do that manually
     canvas.on('mouse:down', function(e) {
 
-        e.e.tool = that.currentTool;
-        that.paperCanvas.mouseDown(e.e);
-
         if(e.e.button == 2) {
             
             if (e.target && e.target.wickObject) {
@@ -185,6 +182,16 @@ var FabricCanvas = function (wickEditor) {
         } else {
             wickEditor.htmlGUIHandler.closeRightClickMenu();
         }
+    });
+
+    // Make sure the paper.js canvas is getting the same mouse events as the fabric canvas.
+    canvas.on('mouse:down', function(e) {
+        e.e.tool = that.currentTool;
+        that.paperCanvas.mouseDown(e.e);
+    });
+    canvas.on('mouse:move', function(e) {
+        e.e.tool = that.currentTool;
+        that.paperCanvas.mouseMove(e.e);
     });
 
     // Paths are handled internally by fabric so we have to 
@@ -208,7 +215,7 @@ var FabricCanvas = function (wickEditor) {
                 Potrace.process(function(){
                     var svg = Potrace.getSVG(1);
                     var svgfile = new File([svg], "filename");
-                    that.paperCanvas.importAnSVG(svgfile, path.left, path.top);
+                    that.paperCanvas.addSVG(svgfile, path.left, path.top);
                 });
             });
 

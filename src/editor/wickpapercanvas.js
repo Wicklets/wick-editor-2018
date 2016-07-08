@@ -2,14 +2,18 @@
 
 var PaperCanvas = function (wickEditor) {
 
+/*************
+    Setup
+**************/
+
     var that = this;
 
     this.canvas = document.getElementById('paperCanvas');
     paper.setup(this.canvas);
 
-
-
-
+/*********************
+    Refresh methods
+**********************/
 
     this.redraw = function () {
         paper.view.draw();
@@ -22,117 +26,36 @@ var PaperCanvas = function (wickEditor) {
         this.canvas.height = window.innerHeight;
     }
 
-    function removeChildrenRecursively(item) {
-        if(item.children && item.children.length > 0) {
-            var itemNoChildren = item.removeChildren();
-            item.parent.insertChildren(item.index, itemNoChildren);
-            item.remove();
-
-            removeChildrenRecursively(itemNoChildren[0]);
-        }
+    this.refresh = function () {
+        that.resize();
+        paper.view.draw();
+        wickEditor.fabricCanvas.reloadPaperCanvas();
     }
 
-    function iterateOverAllChildren(item, d) {
+/*********************
+    Import content
+**********************/
 
-        if(!item.children) {
-            return;
-        }
-
-        console.log(d);
-
-        for(var i = 0; i < item.children.length; i++) {
-            console.log(item.children[i]);
-            iterateOverAllChildren(item.children[i], d+1);
-        }
-
-    }
-
-    this.importAnSVG = function (file, x, y) {
+    this.addSVG = function (file, x, y) {
         paper.project.importSVG(file, function(item) {
-            //console.log(item)
-            //removeChildrenRecursively(item);
             item.position = new paper.Point(x, y);
-            //iterateOverAllChildren(item, 0);
-            that.resize();
-            paper.view.draw();
-            wickEditor.fabricCanvas.reloadPaperCanvas();
+            // For each item I in canvas:
+            //   If there are any intersections between I and item:
+            //     let B = Boolean OR of the paths, remove I and item, add B
+            that.refresh();
         });
     }
 
-    /*var file = document.getElementById('file');
-    file.addEventListener('change', function (event) {
-        var files = event.target.files;
-        for (var i = 0; i < files.length; i++) {
-            var file = files[i];
-            if (file.type.match('svg')) {
-
-                console.log("importSVG (file):" )
-                console.log(file)
-                
-                that.importAnSVG(file)
-            } else {
-                Potrace.loadImageFromFile(file);
-                console.log(file)
-                Potrace.process(function(){
-                    var svg = Potrace.getSVG(1);
-                    var svgfile = new File([svg], "filename");
-                    that.importAnSVG(svgfile)
-                });
-            }
-        }
-    });*/
-
-    var values = {
-        paths: 50,
-        minPoints: 5,
-        maxPoints: 15,
-        minRadius: 30,
-        maxRadius: 90
-    };
+/*********************
+      Fill tool
+**********************/
 
     var hitOptions = {
         segments: true,
         stroke: true,
         fill: true,
-        tolerance: 5
-    };
-
-    //createPaths();
-
-    function createPaths() {
-        var radiusDelta = values.maxRadius - values.minRadius;
-        var pointsDelta = values.maxPoints - values.minPoints;
-        for (var i = 0; i < values.paths; i++) {
-            var radius = values.minRadius + Math.random() * radiusDelta;
-            var points = values.minPoints + Math.floor(Math.random() * pointsDelta);
-            var path = createBlob(view.size * Point.random(), radius, points);
-            var lightness = (Math.random() - 0.5) * 0.4 + 0.4;
-            var hue = Math.random() * 360;
-            path.fillColor = { hue: hue, saturation: 1, lightness: lightness };
-            path.strokeColor = 'black';
-        };
-    }
-
-    function createBlob(center, maxRadius, points) {
-        var path = new Path();
-        path.closed = true;
-        for (var i = 0; i < points; i++) {
-            var delta = new Point({
-                length: (maxRadius * 0.5) + (Math.random() * maxRadius * 0.5),
-                angle: (360 / points) * i
-            });
-            path.add(center + delta);
-        }
-        path.smooth();
-        return path;
-    }
-
-    var recursiveHitOptions = {
-        segments: true,
-        stroke: true,
-        fill: true,
         tolerance: 0
-    }
+    };
 
     function tryFillHole(item, point, d) {
 
@@ -143,14 +66,11 @@ var PaperCanvas = function (wickEditor) {
         for(var i = 0; i < item.children.length; i++) {
             var child = item.children[i];
 
-            //console.log(child);
             if(child instanceof paper.Path) {
-                var hitResult = child.hitTest(point, recursiveHitOptions);
+                var hitResult = child.hitTest(point, hitOptions);
+                VerboseLog.log("tryFillHole hitResult: ")
+                VerboseLog.log(hitResult)
                 if(hitResult && hitResult.item.clockwise) {
-                    // hole
-                    //var itemNoChildren = item.removeChildren();
-                    //item.parent.insertChildren(item.index, itemNoChildren);
-                    //item.remove();
                     var clone = hitResult.item.clone();
                     clone.fillColor = "#ff0000";
                     paper.project.activeLayer.addChild(clone);
@@ -176,11 +96,10 @@ var PaperCanvas = function (wickEditor) {
         for(var i = 0; i < item.children.length; i++) {
             var child = item.children[i];
 
-            //console.log(child);
             if(child instanceof paper.Path) {
-                var hitResult = child.hitTest(point, recursiveHitOptions);
-                console.log("tryFillPath hitResult: ")
-                console.log(hitResult)
+                var hitResult = child.hitTest(point, hitOptions);
+                VerboseLog.log("tryFillPath hitResult: ")
+                VerboseLog.log(hitResult)
                 if(hitResult && !hitResult.item.clockwise) {
                     console.log("filling!")
                     console.log(hitResult.item);
@@ -194,24 +113,31 @@ var PaperCanvas = function (wickEditor) {
 
     }
 
-    var segment, path;
-    var movePath = false;
+/***************************
+    Interactivity events
+***************************/
+
     this.mouseDown = function (event) {
 
-        console.log("paper canvas mouseDown with tool: " + event.tool);
-
         currentTool = event.tool;
+
+        VerboseLog.log("paper canvas mouseDown with tool: " + event.tool);
 
         if (currentTool == "fillbucket") {
 
             console.log("recursiveHitTest:")
-            if(!tryFillHole(paper.project.activeLayer, new paper.Point(event.offsetX, event.offsetY), 0)) {
-                tryFillPath(paper.project.activeLayer, new paper.Point(event.offsetX, event.offsetY), 0);
-            }
 
-            that.resize();
-            paper.view.draw();
-            wickEditor.fabricCanvas.reloadPaperCanvas();
+            var holeFilled = tryFillHole(paper.project.activeLayer, new paper.Point(event.offsetX, event.offsetY), 0);
+            if (holeFilled) {
+                that.refresh();
+                return;
+            }
+            
+            var pathFilled = tryFillPath(paper.project.activeLayer, new paper.Point(event.offsetX, event.offsetY), 0);
+            if (pathFilled) {
+                that.refresh();
+                return;
+            }
 
         }
 
@@ -247,20 +173,43 @@ var PaperCanvas = function (wickEditor) {
 
     };
 
-    var onMouseMove = function (event) {
-        project.activeLayer.selected = false;
-        if (event.item) {
-            event.item.selected = true;
+    this.mouseMove = function (event) {
+        /*
+        paper.project.activeLayer.selected = false;
+        //if (event.item) {
+        //    event.item.selected = true;
+        //}
+
+        var hitResult = paper.project.hitTest(new paper.Point(event.offsetX, event.offsetY), hitOptions);
+        if (!hitResult) return;
+
+        hitResult.item.selected = true;
+
+        that.resize();
+        paper.view.draw();
+        wickEditor.fabricCanvas.reloadPaperCanvas();
+
+
+        if (hitResult.type == 'segment') {
+            //segment = hitResult.segment;
+        } else if (hitResult.type == 'stroke') {
+            //var location = hitResult.location;
+            //segment = path.insert(location.index + 1, event.point);
+            //path.smooth();
+
         }
+        */
     }
 
-    var onMouseDrag = function (event) {
+    this.mouseDrag = function (event) {
+        /*
         if (segment) {
             segment.point += event.delta;
             //path.smooth();
         } else if (path) {
             path.position += event.delta;
         }
+        */
     }
     
 }
