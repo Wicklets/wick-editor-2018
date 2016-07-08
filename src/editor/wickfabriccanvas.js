@@ -33,6 +33,8 @@ var FabricCanvas = function (wickEditor) {
 
     this.canvasPanPosition = {x:0,y:0};
 
+    this.currentTool = "cursor";
+
     this.syncWithEditor = function () {
         this.setBackgroundColor(wickEditor.project.backgroundColor);
         this.storeObjectsIntoCanvas( 
@@ -162,6 +164,8 @@ var FabricCanvas = function (wickEditor) {
     // Fabric doesn't select things with right clicks.
     // We have to do that manually
     canvas.on('mouse:down', function(e) {
+
+        e.e.tool = that.currentTool;
         that.paperCanvas.mouseDown(e.e);
 
         if(e.e.button == 2) {
@@ -188,14 +192,14 @@ var FabricCanvas = function (wickEditor) {
     canvas.on('object:added', function(e) {
         if(e.target.type === "path") {
             // Old straight-to-rasterized brush
-            var path = e.target;
+            /*var path = e.target;
             WickObject.fromFabricPath(path, wickEditor.currentObject, function(wickObj) {
                 wickEditor.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:wickObj});
             });
-            canvas.remove(path);
+            canvas.remove(path);*/
 
-            // New send to paper.js brush
-            /*var path = e.target;
+            // New send-to-paper.js brush
+            var path = e.target;
 
             path.cloneAsImage(function(clone) {
                 var imgSrc = clone._element.currentSrc || clone._element.src;
@@ -206,7 +210,7 @@ var FabricCanvas = function (wickEditor) {
                     var svgfile = new File([svg], "filename");
                     that.paperCanvas.importAnSVG(svgfile, path.left, path.top);
                 });
-            });*/
+            });
 
             canvas.remove(e.target);
         }

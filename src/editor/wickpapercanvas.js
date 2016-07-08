@@ -198,18 +198,24 @@ var PaperCanvas = function (wickEditor) {
     var movePath = false;
     this.mouseDown = function (event) {
 
-        currentTool = "FillBucket"
+        console.log("paper canvas mouseDown with tool: " + event.tool);
 
-        if (currentTool == "FillBucket") {
+        currentTool = event.tool;
+
+        if (currentTool == "fillbucket") {
 
             console.log("recursiveHitTest:")
             if(!tryFillHole(paper.project.activeLayer, new paper.Point(event.offsetX, event.offsetY), 0)) {
                 tryFillPath(paper.project.activeLayer, new paper.Point(event.offsetX, event.offsetY), 0);
             }
 
+            that.resize();
+            paper.view.draw();
+            wickEditor.fabricCanvas.reloadPaperCanvas();
+
         }
 
-        else if (currentTool == "Cursor") {
+        else if (currentTool == "cursor") {
 
             segment = path = null;
             var hitResult = paper.project.hitTest(new Point(event.offsetX, event.offsetY), hitOptions);

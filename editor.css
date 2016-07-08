@@ -67,8 +67,11 @@ hr {
 	text-align: left;
 }
 
-#toolOptions {
+#toolOptionsGUI {
 	display: none;
+	top: 300px;
+	left: 0px;
+	text-align: left;
 }
 
 #rightClickMenu {

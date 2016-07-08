@@ -58,11 +58,28 @@ var WickHTMLGUIHandler = function (wickEditor) {
 ********************/
 
     $('#mouseToolButton').on('click', function(e) {
-        wickEditor.fabricCanvas.stopDrawingMode();
+        document.getElementById('toolOptionsGUI').style.display = 'none';
+
+        wickEditor.fabricCanvas.getCanvas().isDrawingMode = false;
+        wickEditor.fabricCanvas.currentTool = "cursor";
     });
 
     $('#paintbrushToolButton').on('click', function(e) {
-        wickEditor.fabricCanvas.startDrawingMode();
+        document.getElementById('toolOptionsGUI').style.display = 'block';
+
+        wickEditor.fabricCanvas.getCanvas().isDrawingMode = true;
+        wickEditor.fabricCanvas.currentTool = "paintbrush";
+
+        wickEditor.fabricCanvas.getCanvas().freeDrawingBrush = new fabric['PencilBrush'](wickEditor.fabricCanvas.getCanvas());
+        wickEditor.fabricCanvas.getCanvas().freeDrawingBrush.color = lineColorEl.value;
+        wickEditor.fabricCanvas.getCanvas().freeDrawingBrush.width = parseInt(lineWidthEl.value, 10) || 1;
+    });
+
+    $('#fillBucketToolButton').on('click', function(e) {
+        document.getElementById('toolOptionsGUI').style.display = 'none';
+
+        wickEditor.fabricCanvas.getCanvas().isDrawingMode = false;
+        wickEditor.fabricCanvas.currentTool = "fillbucket";
     });
 
     $('#textToolButton').on('click', function(e) {
@@ -76,22 +93,6 @@ var WickHTMLGUIHandler = function (wickEditor) {
 
     var lineWidthEl = document.getElementById('lineWidth');
     var lineColorEl = document.getElementById('lineColor');
-
-    FabricCanvas.prototype.startDrawingMode = function() {
-        document.getElementById('toolOptions').style.display = 'block';
-
-        wickEditor.fabricCanvas.getCanvas().isDrawingMode = true;
-
-        wickEditor.fabricCanvas.getCanvas().freeDrawingBrush = new fabric['PencilBrush'](wickEditor.fabricCanvas.getCanvas());
-        wickEditor.fabricCanvas.getCanvas().freeDrawingBrush.color = lineColorEl.value;
-        wickEditor.fabricCanvas.getCanvas().freeDrawingBrush.width = parseInt(lineWidthEl.value, 10) || 1;
-    }
-
-    FabricCanvas.prototype.stopDrawingMode = function() {
-        document.getElementById('toolOptions').style.display = 'none';
-
-        wickEditor.fabricCanvas.getCanvas().isDrawingMode = false;
-    }
 
     lineWidthEl.onchange = function() {
         wickEditor.fabricCanvas.getCanvas().freeDrawingBrush.width = parseInt(this.value, 10) || 1;
