@@ -4,7 +4,7 @@
 	Frames
 *****************************/
 var WickFrame = function () {
-	// Identifier (set in editor, not changeable during runtime)
+	// Identifier so we can do e.g. gotoAndStop("menu") 
 	this.identifier = null;
 
 	// Store all objects in frame. 

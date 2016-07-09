@@ -78,6 +78,11 @@ var PaperCanvas = function (wickEditor) {
 
             child.position = new paper.Point(child.handleBounds.width/2,child.handleBounds.height/2);
             var childSVG = child.exportSVG({asString: true});
+
+            if(!childSVG.startsWith("<g")) {
+                childSVG = "<g>" + childSVG + "</g>";
+            }
+
             allSVGs.push({
                 svgString: childSVG, 
                 width:     width, 
