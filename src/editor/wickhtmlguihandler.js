@@ -339,6 +339,12 @@ var WickHTMLGUIHandler = function (wickEditor) {
         }
     }
 
+    var testString = function(str, setFunc) {
+        if(typeof str === 'string') {
+            setFunc(str);
+        }
+    }
+
     $('#projectSizeX').on('input propertychange', function () {
 
         testPositiveInteger($('#projectSizeX').val(), function(n) {
@@ -365,6 +371,14 @@ var WickHTMLGUIHandler = function (wickEditor) {
 
         testPositiveInteger($('#frameRate').val(), function(n) {
             wickEditor.project.framerate = n;
+        });
+
+    });
+
+    $('#frameIdentifier').on('input propertychange', function () {
+
+        testString($('#frameIdentifier').val(), function(frameID) {
+            wickEditor.currentObject.frames[wickEditor.currentObject.currentFrame].identifier = frameID;
         });
 
     });

@@ -4,6 +4,9 @@
 	Frames
 *****************************/
 var WickFrame = function () {
+	// Identifier (set in editor, not changeable during runtime)
+	this.identifier = null;
+
 	// Store all objects in frame. 
 	this.wickObjects = [];
 
