@@ -41,7 +41,6 @@ var PaperCanvas = function (wickEditor) {
         paper.project.importSVG(file, function(item) {
             item.position = new paper.Point(x, y);
             // Set item's fill (need to take extra param)
-            // Do smoothing on item (need to take extra param)
             // For each item I in canvas:
             //   If there are any intersections between I and item AND I and item have the same fill color:
             //     let B = Boolean OR of the paths, remove I and item, add B to canvas
@@ -49,7 +48,7 @@ var PaperCanvas = function (wickEditor) {
         });
     }
 
-    /* Use to add a new path that acts as an eraser */
+    /* Use to add a path that acts as an eraser */
     this.addEraserSVG = function (file, x, y) {
         paper.project.importSVG(file, function(item) {
             item.position = new paper.Point(x, y);
@@ -79,8 +78,9 @@ var PaperCanvas = function (wickEditor) {
             child.position = new paper.Point(child.handleBounds.width/2,child.handleBounds.height/2);
             var childSVG = child.exportSVG({asString: true});
 
+            // quick fix for holes turned into their own paths
             if(!childSVG.startsWith("<g")) {
-                childSVG = "<g>" + childSVG + "</g>";
+                childSVG = '<g xmlns="http://www.w3.org/2000/svg" id="svg" fill="#000000" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="4" stroke-dasharray="" stroke-dashoffset="0" font-family="Times" font-weight="normal" font-size="16" text-anchor="start" mix-blend-mode="normal">' + childSVG + "</g>";
             }
 
             allSVGs.push({
@@ -96,11 +96,6 @@ var PaperCanvas = function (wickEditor) {
         this.refresh();
 
         return allSVGs;
-    }
-
-    /* Use to put SVGs from the fabric.js canvas back into the paper.js canvas. */
-    this.addSVG = function () {
-
     }
 
 /*********************
@@ -130,6 +125,7 @@ var PaperCanvas = function (wickEditor) {
                 if(hitResult && hitResult.item.clockwise) {
                     var clone = hitResult.item.clone();
                     clone.fillColor = "#ff0000";
+                    that.refresh();
                     paper.project.activeLayer.addChild(clone);
                     return true;
                 }
@@ -162,6 +158,7 @@ var PaperCanvas = function (wickEditor) {
                     console.log(hitResult.item);
                     console.log(i);
                     item.fillColor = "#ff0000";
+                    that.refresh();
                 }
             }
 

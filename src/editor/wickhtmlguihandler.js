@@ -63,7 +63,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
         wickEditor.fabricCanvas.getCanvas().isDrawingMode = false;
         wickEditor.fabricCanvas.currentTool = "cursor";
 
-        wickEditor.fabricCanvas.convertPaperSVGsToFabricObjects();
+        wickEditor.fabricCanvas.addPaperSVGsToFabricCanvas();
     });
 
     $('#paintbrushToolButton').on('click', function(e) {
@@ -75,6 +75,8 @@ var WickHTMLGUIHandler = function (wickEditor) {
         wickEditor.fabricCanvas.getCanvas().freeDrawingBrush = new fabric['PencilBrush'](wickEditor.fabricCanvas.getCanvas());
         wickEditor.fabricCanvas.getCanvas().freeDrawingBrush.color = lineColorEl.value;
         wickEditor.fabricCanvas.getCanvas().freeDrawingBrush.width = parseInt(lineWidthEl.value, 10) || 1;
+
+        wickEditor.fabricCanvas.addFabricSVGsToPaperCanvas();
     });
 
     $('#eraserToolButton').on('click', function(e) {

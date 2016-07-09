@@ -53,6 +53,7 @@ var FabricCanvas = function (wickEditor) {
     this.frameInside.hasControls = false;
     this.frameInside.selectable = false;
     this.frameInside.evented = false;
+    this.frameInside.identifier = "frameInside";
 
     this.canvas.add(this.frameInside)
 
@@ -67,6 +68,7 @@ var FabricCanvas = function (wickEditor) {
         that.originCrosshair.hasControls = false;
         that.originCrosshair.selectable = false;
         that.originCrosshair.evented = false;
+        that.originCrosshair.identifier = "originCrosshair";
 
         that.canvas.add(that.originCrosshair);
     });
@@ -83,6 +85,7 @@ var FabricCanvas = function (wickEditor) {
     this.dragToImportFileFade.hasControls = false;
     this.dragToImportFileFade.selectable = false;
     this.dragToImportFileFade.evented = false;
+    this.dragToImportFileFade.identifier = "dragToImportFileFade";
 
     this.canvas.add(this.dragToImportFileFade);
 
@@ -96,6 +99,7 @@ var FabricCanvas = function (wickEditor) {
     this.dragToImportFileText.hasControls = false;
     this.dragToImportFileText.selectable = false;
     this.dragToImportFileText.evented = false;
+    this.dragToImportFileText.identifier = "dragToImportFileText";
 
     this.canvas.add(this.dragToImportFileText);
 
@@ -234,7 +238,7 @@ var FabricCanvas = function (wickEditor) {
     });
 
     this.resize = function () {
-        //this.paperCanvas.resize();
+        this.paperCanvas.resize();
         this.updateCanvasResolution();
         this.repositionOriginCrosshair();
     }
@@ -300,28 +304,29 @@ var FabricCanvas = function (wickEditor) {
 
         var that = this;
 
-        // Get rid of the old paper canvas object if it exists
-
         if(that.paperCanvasFabricObject) {
-            that.canvas.remove(that.paperCanvasFabricObject);
+            var paperCanvasDataURL = this.paperCanvas.canvas.toDataURL();
+
+            that.paperCanvasFabricObject.setSrc(paperCanvasDataURL, function () {
+                that.canvas.renderAll();
+            });
+        } else {
+            var paperCanvasDataURL = this.paperCanvas.canvas.toDataURL();
+
+            fabric.Image.fromURL(paperCanvasDataURL, function(oImg) {
+                oImg.hasControls = false;
+                oImg.selectable = false;
+                oImg.evented = false;
+
+                that.paperCanvasFabricObject = oImg;
+                that.paperCanvasFabricObject.identifier = "paperCanvas";
+                that.canvas.add(that.paperCanvasFabricObject);
+            });   
         }
-
-        // Add a new paper canvas
-
-        var paperCanvasDataURL = this.paperCanvas.canvas.toDataURL();
-
-        fabric.Image.fromURL(paperCanvasDataURL, function(oImg) {
-            oImg.hasControls = false;
-            oImg.selectable = false;
-            oImg.evented = false;
-
-            that.paperCanvasFabricObject = oImg;
-            that.canvas.add(that.paperCanvasFabricObject);
-        });
 
     }
 
-    this.convertPaperSVGsToFabricObjects = function () {
+    this.addPaperSVGsToFabricCanvas = function () {
         var paperSVGs = this.paperCanvas.getAllSVGs();
 
         for(var i = 0; i < paperSVGs.length; i++) {
@@ -329,22 +334,22 @@ var FabricCanvas = function (wickEditor) {
 
             var svgWickObj = WickObject.fromSVG(svgData, wickEditor.currentObject);
             wickEditor.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:svgWickObj});
-
-            //var path = fabric.loadSVGFromString(svgStr,function(objects, options) {
-                /*var obj = fabric.util.groupSVGElements(objects, options);
-                obj.scaleToHeight(canvas.height-10)
-                   .set({ left: canvas.width/2, top: canvas.height/2 })
-                   .setCoords();
-
-                that.canvas.add(obj).renderAll();*/
-
-                /*var svgGroup = fabric.util.groupSVGElements(objects, options);
-                WickObject.fromSVG(svgGroup, wickEditor.currentObject, function(wickObj) {
-                    wickEditor.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:wickObj});
-                });*/
-
-            //});
         }
+    }
+
+    this.addFabricSVGsToPaperCanvas = function () {
+        var that = this;
+
+        this.canvas.forEachObject(function(fabricObj) {
+            if(fabricObj.wickObject && fabricObj.wickObject.svgData) {
+                var svgFile = new File([fabricObj.wickObject.svgData], "filename");
+                that.paperCanvas.addPathSVG(
+                    svgFile, 
+                    fabricObj.left + fabricObj.width /2, 
+                    fabricObj.top  + fabricObj.height/2);
+                that.canvas.remove(fabricObj);
+            }
+        });
     }
 
     this.panTo = function (x,y) {
