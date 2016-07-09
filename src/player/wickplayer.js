@@ -255,18 +255,9 @@ var WickPlayer = (function () {
             }
         }
 
-        function testNonNegativeInteger(n) {
-            var num = Number(n);
-            return ((typeof num === 'number') && (num % 1 == 0) && (num >= 0));
-        }
-
-        function testString(str) {
-            return (typeof str === 'string')
-        }
-
         function tryNavigateToFrame (frame, setPlayFunction) {
 
-            if (testNonNegativeInteger(frame)) {
+            if (CheckInput.testNonNegativeInteger(frame)) {
 
                 // Only navigate to an integer frame if it is nonnegative and a valid frame
                 if(frame < wickObj.frames.length)
@@ -274,7 +265,7 @@ var WickPlayer = (function () {
                 else
                     console.log("Failed to navigate to frame \'" + frame + "\': is not a valid frame.");
 
-            } else if (testString(frame)) {
+            } else if (CheckInput.testString(frame)) {
 
                 // Search for the frame with the correct identifier and navigate if found
                 navigateToFrameByIdentifier(frame, setPlayFunction);
