@@ -363,6 +363,9 @@ var WickHTMLGUIHandler = function (wickEditor) {
 
     $('#frameRate').on('input propertychange', function () {
 
+
+        console.log($('#frameRate').val())
+
         testPositiveInteger($('#frameRate').val(), function(n) {
             wickEditor.project.framerate = n;
         });
@@ -446,7 +449,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
       Popup Window
 ************************/
 
-    // TODO
+    
 
 /************************
     Right click menu
@@ -645,25 +648,12 @@ var WickHTMLGUIHandler = function (wickEditor) {
 
     this.updatePropertiesGUI('project');
 
-    this.showBuiltinPlayer = function () {
-        document.getElementById("editor").style.display = "none";
-        document.getElementById("builtinPlayer").style.display = "block";
-        document.getElementById("paperCanvas").style.display = "block";
-    }
-
-    this.hideBuiltinPlayer = function () {
-        document.getElementById("builtinPlayer").style.display = "none";
-        document.getElementById("editor").style.display = "block";
-        document.getElementById("paperCanvas").style.display = "none";
-    }
-
 /************************
       Builtin player
 ************************/
 
     $("#closeBuiltinPlayerButton").on("click", function (e) {
-        that.hideBuiltinPlayer();
-        WickPlayer.stopRunningCurrentProject();
+        wickEditor.closeBuiltinPlayer();
     });
 
 }

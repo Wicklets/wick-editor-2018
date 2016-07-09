@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<!-- saved from url=(0031)http://bogohost:8888/editor.htm -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <title>Wick Editor</title>
+
+    <link rel="stylesheet" type="text/css" href="./Wick Editor_files/editor.css">
+
+    <script src="./Wick Editor_files/jquery.min.js"></script>
+    <script src="./Wick Editor_files/fabric.js"></script>
+    <script src="./Wick Editor_files/fabric.canvasex.js"></script>
+    <script src="./Wick Editor_files/potrace.js"></script>
+    <script src="./Wick Editor_files/paper-full.js"></script>
+    <script src="./Wick Editor_files/verboselog.js"></script>
+    <script src="./Wick Editor_files/beautify.js"></script>
+    <script src="./Wick Editor_files/ace.js" type="text/javascript" charset="utf-8"></script><style id="ace_editor.css">.ace_editor {position: relative;overflow: hidden;font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;direction: ltr;}.ace_scroller {position: absolute;overflow: hidden;top: 0;bottom: 0;background-color: inherit;-ms-user-select: none;-moz-user-select: none;-webkit-user-select: none;user-select: none;cursor: text;}.ace_content {position: absolute;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;min-width: 100%;}.ace_dragging .ace_scroller:before{position: absolute;top: 0;left: 0;right: 0;bottom: 0;content: '';background: rgba(250, 250, 250, 0.01);z-index: 1000;}.ace_dragging.ace_dark .ace_scroller:before{background: rgba(0, 0, 0, 0.01);}.ace_selecting, .ace_selecting * {cursor: text !important;}.ace_gutter {position: absolute;overflow : hidden;width: auto;top: 0;bottom: 0;left: 0;cursor: default;z-index: 4;-ms-user-select: none;-moz-user-select: none;-webkit-user-select: none;user-select: none;}.ace_gutter-active-line {position: absolute;left: 0;right: 0;}.ace_scroller.ace_scroll-left {box-shadow: 17px 0 16px -16px rgba(0, 0, 0, 0.4) inset;}.ace_gutter-cell {padding-left: 19px;padding-right: 6px;background-repeat: no-repeat;}.ace_gutter-cell.ace_error {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAABOFBMVEX/////////QRswFAb/Ui4wFAYwFAYwFAaWGAfDRymzOSH/PxswFAb/SiUwFAYwFAbUPRvjQiDllog5HhHdRybsTi3/Tyv9Tir+Syj/UC3////XurebMBIwFAb/RSHbPx/gUzfdwL3kzMivKBAwFAbbvbnhPx66NhowFAYwFAaZJg8wFAaxKBDZurf/RB6mMxb/SCMwFAYwFAbxQB3+RB4wFAb/Qhy4Oh+4QifbNRcwFAYwFAYwFAb/QRzdNhgwFAYwFAbav7v/Uy7oaE68MBK5LxLewr/r2NXewLswFAaxJw4wFAbkPRy2PyYwFAaxKhLm1tMwFAazPiQwFAaUGAb/QBrfOx3bvrv/VC/maE4wFAbRPBq6MRO8Qynew8Dp2tjfwb0wFAbx6eju5+by6uns4uH9/f36+vr/GkHjAAAAYnRSTlMAGt+64rnWu/bo8eAA4InH3+DwoN7j4eLi4xP99Nfg4+b+/u9B/eDs1MD1mO7+4PHg2MXa347g7vDizMLN4eG+Pv7i5evs/v79yu7S3/DV7/498Yv24eH+4ufQ3Ozu/v7+y13sRqwAAADLSURBVHjaZc/XDsFgGIBhtDrshlitmk2IrbHFqL2pvXf/+78DPokj7+Fz9qpU/9UXJIlhmPaTaQ6QPaz0mm+5gwkgovcV6GZzd5JtCQwgsxoHOvJO15kleRLAnMgHFIESUEPmawB9ngmelTtipwwfASilxOLyiV5UVUyVAfbG0cCPHig+GBkzAENHS0AstVF6bacZIOzgLmxsHbt2OecNgJC83JERmePUYq8ARGkJx6XtFsdddBQgZE2nPR6CICZhawjA4Fb/chv+399kfR+MMMDGOQAAAABJRU5ErkJggg==");background-repeat: no-repeat;background-position: 2px center;}.ace_gutter-cell.ace_warning {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAmVBMVEX///8AAAD///8AAAAAAABPSzb/5sAAAAB/blH/73z/ulkAAAAAAAD85pkAAAAAAAACAgP/vGz/rkDerGbGrV7/pkQICAf////e0IsAAAD/oED/qTvhrnUAAAD/yHD/njcAAADuv2r/nz//oTj/p064oGf/zHAAAAA9Nir/tFIAAAD/tlTiuWf/tkIAAACynXEAAAAAAAAtIRW7zBpBAAAAM3RSTlMAABR1m7RXO8Ln31Z36zT+neXe5OzooRDfn+TZ4p3h2hTf4t3k3ucyrN1K5+Xaks52Sfs9CXgrAAAAjklEQVR42o3PbQ+CIBQFYEwboPhSYgoYunIqqLn6/z8uYdH8Vmdnu9vz4WwXgN/xTPRD2+sgOcZjsge/whXZgUaYYvT8QnuJaUrjrHUQreGczuEafQCO/SJTufTbroWsPgsllVhq3wJEk2jUSzX3CUEDJC84707djRc5MTAQxoLgupWRwW6UB5fS++NV8AbOZgnsC7BpEAAAAABJRU5ErkJggg==");background-position: 2px center;}.ace_gutter-cell.ace_info {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAAAAAA6mKC9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAJ0Uk5TAAB2k804AAAAPklEQVQY02NgIB68QuO3tiLznjAwpKTgNyDbMegwisCHZUETUZV0ZqOquBpXj2rtnpSJT1AEnnRmL2OgGgAAIKkRQap2htgAAAAASUVORK5CYII=");background-position: 2px center;}.ace_dark .ace_gutter-cell.ace_info {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAJFBMVEUAAAChoaGAgIAqKiq+vr6tra1ZWVmUlJSbm5s8PDxubm56enrdgzg3AAAAAXRSTlMAQObYZgAAAClJREFUeNpjYMAPdsMYHegyJZFQBlsUlMFVCWUYKkAZMxZAGdxlDMQBAG+TBP4B6RyJAAAAAElFTkSuQmCC");}.ace_scrollbar {position: absolute;right: 0;bottom: 0;z-index: 6;}.ace_scrollbar-inner {position: absolute;cursor: text;left: 0;top: 0;}.ace_scrollbar-v{overflow-x: hidden;overflow-y: scroll;top: 0;}.ace_scrollbar-h {overflow-x: scroll;overflow-y: hidden;left: 0;}.ace_print-margin {position: absolute;height: 100%;}.ace_text-input {position: absolute;z-index: 0;width: 0.5em;height: 1em;opacity: 0;background: transparent;-moz-appearance: none;appearance: none;border: none;resize: none;outline: none;overflow: hidden;font: inherit;padding: 0 1px;margin: 0 -1px;text-indent: -1em;-ms-user-select: text;-moz-user-select: text;-webkit-user-select: text;user-select: text;white-space: pre!important;}.ace_text-input.ace_composition {background: inherit;color: inherit;z-index: 1000;opacity: 1;text-indent: 0;}.ace_layer {z-index: 1;position: absolute;overflow: hidden;word-wrap: normal;white-space: pre;height: 100%;width: 100%;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;pointer-events: none;}.ace_gutter-layer {position: relative;width: auto;text-align: right;pointer-events: auto;}.ace_text-layer {font: inherit !important;}.ace_cjk {display: inline-block;text-align: center;}.ace_cursor-layer {z-index: 4;}.ace_cursor {z-index: 4;position: absolute;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;border-left: 2px solid;transform: translatez(0);}.ace_slim-cursors .ace_cursor {border-left-width: 1px;}.ace_overwrite-cursors .ace_cursor {border-left-width: 0;border-bottom: 1px solid;}.ace_hidden-cursors .ace_cursor {opacity: 0.2;}.ace_smooth-blinking .ace_cursor {-webkit-transition: opacity 0.18s;transition: opacity 0.18s;}.ace_editor.ace_multiselect .ace_cursor {border-left-width: 1px;}.ace_marker-layer .ace_step, .ace_marker-layer .ace_stack {position: absolute;z-index: 3;}.ace_marker-layer .ace_selection {position: absolute;z-index: 5;}.ace_marker-layer .ace_bracket {position: absolute;z-index: 6;}.ace_marker-layer .ace_active-line {position: absolute;z-index: 2;}.ace_marker-layer .ace_selected-word {position: absolute;z-index: 4;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;}.ace_line .ace_fold {-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;display: inline-block;height: 11px;margin-top: -2px;vertical-align: middle;background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAJCAYAAADU6McMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJpJREFUeNpi/P//PwOlgAXGYGRklAVSokD8GmjwY1wasKljQpYACtpCFeADcHVQfQyMQAwzwAZI3wJKvCLkfKBaMSClBlR7BOQikCFGQEErIH0VqkabiGCAqwUadAzZJRxQr/0gwiXIal8zQQPnNVTgJ1TdawL0T5gBIP1MUJNhBv2HKoQHHjqNrA4WO4zY0glyNKLT2KIfIMAAQsdgGiXvgnYAAAAASUVORK5CYII="),url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAA3CAYAAADNNiA5AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAACJJREFUeNpi+P//fxgTAwPDBxDxD078RSX+YeEyDFMCIMAAI3INmXiwf2YAAAAASUVORK5CYII=");background-repeat: no-repeat, repeat-x;background-position: center center, top left;color: transparent;border: 1px solid black;border-radius: 2px;cursor: pointer;pointer-events: auto;}.ace_dark .ace_fold {}.ace_fold:hover{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAJCAYAAADU6McMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJpJREFUeNpi/P//PwOlgAXGYGRklAVSokD8GmjwY1wasKljQpYACtpCFeADcHVQfQyMQAwzwAZI3wJKvCLkfKBaMSClBlR7BOQikCFGQEErIH0VqkabiGCAqwUadAzZJRxQr/0gwiXIal8zQQPnNVTgJ1TdawL0T5gBIP1MUJNhBv2HKoQHHjqNrA4WO4zY0glyNKLT2KIfIMAAQsdgGiXvgnYAAAAASUVORK5CYII="),url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAA3CAYAAADNNiA5AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAACBJREFUeNpi+P//fz4TAwPDZxDxD5X4i5fLMEwJgAADAEPVDbjNw87ZAAAAAElFTkSuQmCC");}.ace_tooltip {background-color: #FFF;background-image: -webkit-linear-gradient(top, transparent, rgba(0, 0, 0, 0.1));background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.1));border: 1px solid gray;border-radius: 1px;box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);color: black;max-width: 100%;padding: 3px 4px;position: fixed;z-index: 999999;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;cursor: default;white-space: pre;word-wrap: break-word;line-height: normal;font-style: normal;font-weight: normal;letter-spacing: normal;pointer-events: none;}.ace_folding-enabled > .ace_gutter-cell {padding-right: 13px;}.ace_fold-widget {-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;margin: 0 -12px 0 1px;display: none;width: 11px;vertical-align: top;background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAANElEQVR42mWKsQ0AMAzC8ixLlrzQjzmBiEjp0A6WwBCSPgKAXoLkqSot7nN3yMwR7pZ32NzpKkVoDBUxKAAAAABJRU5ErkJggg==");background-repeat: no-repeat;background-position: center;border-radius: 3px;border: 1px solid transparent;cursor: pointer;}.ace_folding-enabled .ace_fold-widget {display: inline-block;   }.ace_fold-widget.ace_end {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAANElEQVR42m3HwQkAMAhD0YzsRchFKI7sAikeWkrxwScEB0nh5e7KTPWimZki4tYfVbX+MNl4pyZXejUO1QAAAABJRU5ErkJggg==");}.ace_fold-widget.ace_closed {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAGCAYAAAAG5SQMAAAAOUlEQVR42jXKwQkAMAgDwKwqKD4EwQ26sSOkVWjgIIHAzPiCgaqiqnJHZnKICBERHN194O5b9vbLuAVRL+l0YWnZAAAAAElFTkSuQmCCXA==");}.ace_fold-widget:hover {border: 1px solid rgba(0, 0, 0, 0.3);background-color: rgba(255, 255, 255, 0.2);box-shadow: 0 1px 1px rgba(255, 255, 255, 0.7);}.ace_fold-widget:active {border: 1px solid rgba(0, 0, 0, 0.4);background-color: rgba(0, 0, 0, 0.05);box-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);}.ace_dark .ace_fold-widget {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHklEQVQIW2P4//8/AzoGEQ7oGCaLLAhWiSwB146BAQCSTPYocqT0AAAAAElFTkSuQmCC");}.ace_dark .ace_fold-widget.ace_end {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAH0lEQVQIW2P4//8/AxQ7wNjIAjDMgC4AxjCVKBirIAAF0kz2rlhxpAAAAABJRU5ErkJggg==");}.ace_dark .ace_fold-widget.ace_closed {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAFCAYAAACAcVaiAAAAHElEQVQIW2P4//+/AxAzgDADlOOAznHAKgPWAwARji8UIDTfQQAAAABJRU5ErkJggg==");}.ace_dark .ace_fold-widget:hover {box-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);background-color: rgba(255, 255, 255, 0.1);}.ace_dark .ace_fold-widget:active {box-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);}.ace_fold-widget.ace_invalid {background-color: #FFB4B4;border-color: #DE5555;}.ace_fade-fold-widgets .ace_fold-widget {-webkit-transition: opacity 0.4s ease 0.05s;transition: opacity 0.4s ease 0.05s;opacity: 0;}.ace_fade-fold-widgets:hover .ace_fold-widget {-webkit-transition: opacity 0.05s ease 0.05s;transition: opacity 0.05s ease 0.05s;opacity:1;}.ace_underline {text-decoration: underline;}.ace_bold {font-weight: bold;}.ace_nobold .ace_bold {font-weight: normal;}.ace_italic {font-style: italic;}.ace_error-marker {background-color: rgba(255, 0, 0,0.2);position: absolute;z-index: 9;}.ace_highlight-marker {background-color: rgba(255, 255, 0,0.2);position: absolute;z-index: 8;}.ace_br1 {border-top-left-radius    : 3px;}.ace_br2 {border-top-right-radius   : 3px;}.ace_br3 {border-top-left-radius    : 3px; border-top-right-radius:    3px;}.ace_br4 {border-bottom-right-radius: 3px;}.ace_br5 {border-top-left-radius    : 3px; border-bottom-right-radius: 3px;}.ace_br6 {border-top-right-radius   : 3px; border-bottom-right-radius: 3px;}.ace_br7 {border-top-left-radius    : 3px; border-top-right-radius:    3px; border-bottom-right-radius: 3px;}.ace_br8 {border-bottom-left-radius : 3px;}.ace_br9 {border-top-left-radius    : 3px; border-bottom-left-radius:  3px;}.ace_br10{border-top-right-radius   : 3px; border-bottom-left-radius:  3px;}.ace_br11{border-top-left-radius    : 3px; border-top-right-radius:    3px; border-bottom-left-radius:  3px;}.ace_br12{border-bottom-right-radius: 3px; border-bottom-left-radius:  3px;}.ace_br13{border-top-left-radius    : 3px; border-bottom-right-radius: 3px; border-bottom-left-radius:  3px;}.ace_br14{border-top-right-radius   : 3px; border-bottom-right-radius: 3px; border-bottom-left-radius:  3px;}.ace_br15{border-top-left-radius    : 3px; border-top-right-radius:    3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px;}
+/*# sourceURL=ace/css/ace_editor.css */</style><style id="ace-tm">.ace-tm .ace_gutter {background: #f0f0f0;color: #333;}.ace-tm .ace_print-margin {width: 1px;background: #e8e8e8;}.ace-tm .ace_fold {background-color: #6B72E6;}.ace-tm {background-color: #FFFFFF;color: black;}.ace-tm .ace_cursor {color: black;}.ace-tm .ace_invisible {color: rgb(191, 191, 191);}.ace-tm .ace_storage,.ace-tm .ace_keyword {color: blue;}.ace-tm .ace_constant {color: rgb(197, 6, 11);}.ace-tm .ace_constant.ace_buildin {color: rgb(88, 72, 246);}.ace-tm .ace_constant.ace_language {color: rgb(88, 92, 246);}.ace-tm .ace_constant.ace_library {color: rgb(6, 150, 14);}.ace-tm .ace_invalid {background-color: rgba(255, 0, 0, 0.1);color: red;}.ace-tm .ace_support.ace_function {color: rgb(60, 76, 114);}.ace-tm .ace_support.ace_constant {color: rgb(6, 150, 14);}.ace-tm .ace_support.ace_type,.ace-tm .ace_support.ace_class {color: rgb(109, 121, 222);}.ace-tm .ace_keyword.ace_operator {color: rgb(104, 118, 135);}.ace-tm .ace_string {color: rgb(3, 106, 7);}.ace-tm .ace_comment {color: rgb(76, 136, 107);}.ace-tm .ace_comment.ace_doc {color: rgb(0, 102, 255);}.ace-tm .ace_comment.ace_doc.ace_tag {color: rgb(128, 159, 191);}.ace-tm .ace_constant.ace_numeric {color: rgb(0, 0, 205);}.ace-tm .ace_variable {color: rgb(49, 132, 149);}.ace-tm .ace_xml-pe {color: rgb(104, 104, 91);}.ace-tm .ace_entity.ace_name.ace_function {color: #0000A2;}.ace-tm .ace_heading {color: rgb(12, 7, 255);}.ace-tm .ace_list {color:rgb(185, 6, 144);}.ace-tm .ace_meta.ace_tag {color:rgb(0, 22, 142);}.ace-tm .ace_string.ace_regex {color: rgb(255, 0, 0)}.ace-tm .ace_marker-layer .ace_selection {background: rgb(181, 213, 255);}.ace-tm.ace_multiselect .ace_selection.ace_start {box-shadow: 0 0 3px 0px white;}.ace-tm .ace_marker-layer .ace_step {background: rgb(252, 255, 0);}.ace-tm .ace_marker-layer .ace_stack {background: rgb(164, 229, 101);}.ace-tm .ace_marker-layer .ace_bracket {margin: -1px 0 0 -1px;border: 1px solid rgb(192, 192, 192);}.ace-tm .ace_marker-layer .ace_active-line {background: rgba(0, 0, 0, 0.07);}.ace-tm .ace_gutter-active-line {background-color : #dcdcdc;}.ace-tm .ace_marker-layer .ace_selected-word {background: rgb(250, 250, 255);border: 1px solid rgb(200, 200, 250);}.ace-tm .ace_indent-guide {background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAE0lEQVQImWP4////f4bLly//BwAmVgd1/w11/gAAAABJRU5ErkJggg==") right repeat-y;}
+/*# sourceURL=ace/css/ace-tm */</style><style>    .error_widget_wrapper {        background: inherit;        color: inherit;        border:none    }    .error_widget {        border-top: solid 2px;        border-bottom: solid 2px;        margin: 5px 0;        padding: 10px 40px;        white-space: pre-wrap;    }    .error_widget.ace_error, .error_widget_arrow.ace_error{        border-color: #ff5a5a    }    .error_widget.ace_warning, .error_widget_arrow.ace_warning{        border-color: #F1D817    }    .error_widget.ace_info, .error_widget_arrow.ace_info{        border-color: #5a5a5a    }    .error_widget.ace_ok, .error_widget_arrow.ace_ok{        border-color: #5aaa5a    }    .error_widget_arrow {        position: absolute;        border: solid 5px;        border-top-color: transparent!important;        border-right-color: transparent!important;        border-left-color: transparent!important;        top: -5px;    }</style>
+    <script src="./Wick Editor_files/FileSaver.min.js"></script>
+    <script src="./Wick Editor_files/fpscounter.js"></script>
+    <script src="./Wick Editor_files/browserdetection.js"></script>
+    <script src="./Wick Editor_files/base64-arraybuffer.js"></script>
+    <script src="./Wick Editor_files/libgif.js"></script>
+    <script src="./Wick Editor_files/pixi.min.js"></script>
+    <script src="./Wick Editor_files/filedownloader.js"></script>
+
+    <script src="./Wick Editor_files/wickframe.js"></script>
+    <script src="./Wick Editor_files/wickobject.js"></script>
+    <script src="./Wick Editor_files/wickproject.js"></script>
+    <script src="./Wick Editor_files/wicktweenobject.js"></script>
+
+    <script src="./Wick Editor_files/wickpapercanvas.js"></script>
+    <script src="./Wick Editor_files/wickfabriccanvas.js"></script>
+    <script src="./Wick Editor_files/wickhtmlguihandler.js"></script>
+    <script src="./Wick Editor_files/wickactions.js"></script>
+    <script src="./Wick Editor_files/wickeditor.js"></script>
+
+    <script src="./Wick Editor_files/wickplayer.js"></script>
+
+    <script>
+        $(document).ready(function() { 
+            var wickEditor = new WickEditor();
+        });
+    </script>
+<script src="./Wick Editor_files/theme-chrome.js"></script><script src="./Wick Editor_files/mode-javascript.js"></script><style id="ace-chrome">.ace-chrome .ace_gutter {background: #ebebeb;color: #333;overflow : hidden;}.ace-chrome .ace_print-margin {width: 1px;background: #e8e8e8;}.ace-chrome {background-color: #FFFFFF;color: black;}.ace-chrome .ace_cursor {color: black;}.ace-chrome .ace_invisible {color: rgb(191, 191, 191);}.ace-chrome .ace_constant.ace_buildin {color: rgb(88, 72, 246);}.ace-chrome .ace_constant.ace_language {color: rgb(88, 92, 246);}.ace-chrome .ace_constant.ace_library {color: rgb(6, 150, 14);}.ace-chrome .ace_invalid {background-color: rgb(153, 0, 0);color: white;}.ace-chrome .ace_fold {}.ace-chrome .ace_support.ace_function {color: rgb(60, 76, 114);}.ace-chrome .ace_support.ace_constant {color: rgb(6, 150, 14);}.ace-chrome .ace_support.ace_type,.ace-chrome .ace_support.ace_class.ace-chrome .ace_support.ace_other {color: rgb(109, 121, 222);}.ace-chrome .ace_variable.ace_parameter {font-style:italic;color:#FD971F;}.ace-chrome .ace_keyword.ace_operator {color: rgb(104, 118, 135);}.ace-chrome .ace_comment {color: #236e24;}.ace-chrome .ace_comment.ace_doc {color: #236e24;}.ace-chrome .ace_comment.ace_doc.ace_tag {color: #236e24;}.ace-chrome .ace_constant.ace_numeric {color: rgb(0, 0, 205);}.ace-chrome .ace_variable {color: rgb(49, 132, 149);}.ace-chrome .ace_xml-pe {color: rgb(104, 104, 91);}.ace-chrome .ace_entity.ace_name.ace_function {color: #0000A2;}.ace-chrome .ace_heading {color: rgb(12, 7, 255);}.ace-chrome .ace_list {color:rgb(185, 6, 144);}.ace-chrome .ace_marker-layer .ace_selection {background: rgb(181, 213, 255);}.ace-chrome .ace_marker-layer .ace_step {background: rgb(252, 255, 0);}.ace-chrome .ace_marker-layer .ace_stack {background: rgb(164, 229, 101);}.ace-chrome .ace_marker-layer .ace_bracket {margin: -1px 0 0 -1px;border: 1px solid rgb(192, 192, 192);}.ace-chrome .ace_marker-layer .ace_active-line {background: rgba(0, 0, 0, 0.07);}.ace-chrome .ace_gutter-active-line {background-color : #dcdcdc;}.ace-chrome .ace_marker-layer .ace_selected-word {background: rgb(250, 250, 255);border: 1px solid rgb(200, 200, 250);}.ace-chrome .ace_storage,.ace-chrome .ace_keyword,.ace-chrome .ace_meta.ace_tag {color: rgb(147, 15, 128);}.ace-chrome .ace_string.ace_regex {color: rgb(255, 0, 0)}.ace-chrome .ace_string {color: #1A1AA6;}.ace-chrome .ace_entity.ace_other.ace_attribute-name {color: #994409;}.ace-chrome .ace_indent-guide {background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAE0lEQVQImWP4////f4bLly//BwAmVgd1/w11/gAAAABJRU5ErkJggg==") right repeat-y;}
+/*# sourceURL=ace/css/ace-chrome */</style></head>
+
+<body>
+
+<!-- Hidden element to always be selected so browser always fires copy/paste events -->
+
+    <input id="hidden-input" class="hidden" type="text" value="">
+
+<!-- Hidden paper.js canvas, we don't render it on the webpage, we handle that through the fabric.js canvas -->
+    
+    <canvas id="paperCanvas" resize="" style="-webkit-user-select: none; touch-action: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); width: 979px; height: 801px; background: white;" width="979" height="801"></canvas>
+
+<!-- Editor GUI, visible when a project is being edited & not running -->
+
+    <div id="editor">
+        <div tabindex="1" id="editorCanvasContainer">
+            <div class="canvas-container" style="width: 979px; height: 757px; position: relative; -webkit-user-select: none;"><canvas id="editorCanvas" class="lower-canvas" width="979" height="757" style="position: absolute; width: 979px; height: 757px; left: 0px; top: 0px; -webkit-user-select: none;"></canvas><canvas class="upper-canvas " width="979" height="757" style="position: absolute; width: 979px; height: 757px; left: 0px; top: 0px; -webkit-user-select: none; cursor: crosshair;"></canvas></div>
+        </div>
+
+    <!-- Main menu GUI, top left corner -->
+
+        <div id="menuBarGUI" class="GUIBox">
+            <strong>Wick Editor</strong><br>
+
+            <hr>
+            <div class="button buttonInRow tooltipElem" id="newProjectButton" alt="New Project">
+                <img src="./Wick Editor_files/trashcan.png" width="30">
+            </div>  
+            <div class="button buttonInRow tooltipElem" id="openProjectButton" alt="Open Project">
+                <img src="./Wick Editor_files/open-folder.png" width="30">
+            </div>
+            <div class="button buttonInRow tooltipElem" id="exportJSONButton" alt="Export Project (JSON)">
+                <img src="./Wick Editor_files/save.png" width="30">
+            </div>
+            <div class="button buttonInRow tooltipElem" id="exportHTMLButton" alt="Export Project (Webpage)">
+                <img src="./Wick Editor_files/export.png" width="30">
+            </div>
+            <div class="button buttonInRow tooltipElem" id="runButton" alt="Run Project">
+                <img src="./Wick Editor_files/play.png" width="30">
+            </div>
+
+            <!-- Hidden, gets clicked automatically by openProjectButton -->
+            <input type="file" class="hidden" id="importButton"> 
+        </div>
+
+    <!-- Timeline GUI, centered at the top of the screen -->
+
+        <div id="timelineGUI" class="GUIBox" style="left: 289.5px;">
+            <div class="button buttonInRow" id="addEmptyFrameButton">
+                <img src="./Wick Editor_files/ic_add_black.png" width="10">
+            </div>
+            <div class="button buttonInRow" id="shrinkFrameButton">
+                <img src="./Wick Editor_files/ic_keyboard_arrow_left.png" width="10">
+            </div>
+            <div class="button buttonInRow" id="extendFrameButton">
+                <img src="./Wick Editor_files/ic_keyboard_arrow_right.png" width="10">
+            </div>
+            <div id="timelineScrollContainer">
+                <div id="timeline" style="width: 3000px;"><span class="frameContainer" style="width: 20px;"><span id="frame0" class="timelineFrame active" style="width: 20px;">0</span><span class="breakpointButton"></span></span></div>
+            </div>
+        </div>
+
+    <!-- Toolbar GUI, centered at the left side of the screen -->
+
+        <div id="toolbarGUI" class="GUIBox">
+            <div class="button tooltipElem" id="mouseToolButton" alt="Cursor">
+                <img src="./Wick Editor_files/cursor.png" width="30">
+            </div>
+            <hr>
+
+            <div class="button tooltipElem" id="paintbrushToolButton" alt="Paintbrush">
+                <img src="./Wick Editor_files/paintbrush.png" width="30">
+            </div>
+            <hr>
+
+            <div class="button tooltipElem" id="eraserToolButton" alt="Eraser">
+                <img src="./Wick Editor_files/eraser.png" width="30">
+            </div>
+            <hr>
+
+            <div class="button tooltipElem" id="fillBucketToolButton" alt="Fill Bucket">
+                <img src="./Wick Editor_files/fill-bucket.png" width="30">
+            </div>
+            <hr>
+
+            <div class="button tooltipElem" id="textToolButton" alt="Text">
+                <img src="./Wick Editor_files/text.png" width="30">
+            </div>
+            <!-- <hr />
+
+            <div class="button tooltipElem" id="htmlSnippetToolButton" alt="HTML Snippet">
+                <img src="resources/htmlsnippet.png" width="30"></img>
+            </div> -->
+
+        </div>
+
+    <!-- Tool options GUI, below toolbar gui -->
+
+        <div id="toolOptionsGUI" class="GUIBox" style="display: block;">
+            Line Width: <input type="range" value="8" min="0" max="150" id="lineWidth"><br>
+            Line Color: <input type="color" value="#b060b0" id="lineColor">
+        </div>
+
+    <!-- WickObject Scripting GUI, bottom left corner -->
+
+        <div id="scriptingGUI" class="GUIBox" style="visibility: hidden;">
+            <div class="elemInRow">
+                <div class="button buttonInRow" id="onLoadButton">onLoad</div>
+                <div class="button buttonInRow" id="onClickButton">onClick</div>
+                <div class="button buttonInRow" id="onUpdateButton">onUpdate</div>
+                <div class="button buttonInRow" id="onKeyDownButton">onKeyDown</div>
+                <div class="button buttonInRow" id="beautifyButton"><font color="orange">Beautify</font></div>
+                <div class="button buttonInRow" id="closeScriptingGUIButton"><font color="red">Close</font></div>
+                <br>
+                <div id="scriptEditor" class=" ace_editor ace-chrome"><textarea class="ace_text-input" wrap="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="opacity: 0; height: 16px; width: 7.20125px; left: 45px; top: 0px;"></textarea><div class="ace_gutter"><div class="ace_layer ace_gutter-layer ace_folding-enabled" style="margin-top: 0px; height: 232px; width: 41px;"><div class="ace_gutter-cell " style="height: 16px;">1</div></div><div class="ace_gutter-active-line" style="top: 0px; height: 16px;"></div></div><div class="ace_scroller" style="left: 41px; right: 0px; bottom: 0px;"><div class="ace_content" style="margin-top: 0px; width: 559px; height: 232px; margin-left: 0px;"><div class="ace_layer ace_print-margin-layer"><div class="ace_print-margin" style="left: 580.1px; visibility: visible;"></div></div><div class="ace_layer ace_marker-layer"><div class="ace_active-line" style="height:16px;top:0px;left:0;right:0;"></div></div><div class="ace_layer ace_text-layer" style="padding: 0px 4px;"><div class="ace_line" style="height:16px"></div></div><div class="ace_layer ace_marker-layer"></div><div class="ace_layer ace_cursor-layer ace_hidden-cursors"><div class="ace_cursor" style="left: 4px; top: 0px; width: 7.20125px; height: 16px;"></div></div></div></div><div class="ace_scrollbar ace_scrollbar-v" style="display: none; width: 20px; bottom: 0px;"><div class="ace_scrollbar-inner" style="width: 20px; height: 16px;"></div></div><div class="ace_scrollbar ace_scrollbar-h" style="display: none; height: 20px; left: 41px; right: 0px;"><div class="ace_scrollbar-inner" style="height: 20px; width: 600px;"></div></div><div style="height: auto; width: auto; top: 0px; left: 0px; visibility: hidden; position: absolute; white-space: pre; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: inherit; line-height: inherit; font-family: inherit; overflow: hidden;"><div style="height: auto; width: auto; top: 0px; left: 0px; visibility: hidden; position: absolute; white-space: pre; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: inherit; line-height: inherit; font-family: inherit; overflow: visible;"></div><div style="height: auto; width: auto; top: 0px; left: 0px; visibility: hidden; position: absolute; white-space: pre; font-style: inherit; font-variant: inherit; font-stretch: inherit; font-size: inherit; line-height: inherit; font-family: inherit; overflow: visible;">XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</div></div></div>
+            </div>
+            <div class="elemInRow">
+                <u>Script References</u>
+                <div class="button" draggable="true" id="refBtnPlay">play</div>
+                <div class="button" draggable="true" id="refBtnStop">stop</div>
+                <div class="button" draggable="true" id="refBtnGotoAndStop">gotoAndStop</div>
+                <div class="button" draggable="true" id="refBtnGotoAndPlay">gotoAndPlay</div>
+                <div class="button" draggable="true" id="refBtnGotoNextFrame">gotoNextFrame</div>
+                <div class="button" draggable="true" id="refBtnGotoPrevFrame">gotoPrevFrame</div>
+            </div>
+        </div>
+
+    <!-- Properties GUI, bottom right corner -->
+
+        <div id="propertiesGUI" class="GUIBox">
+            <div id="projectProperties" style="display: inline;">
+                Project Properties
+                <hr>
+                Background color: <input type="color" value="#FFFFFF" id="projectBgColor"><br>
+                Size: <input type="text" id="projectSizeX" maxlength="4" size="4"> x 
+                      <input type="text" id="projectSizeY" maxlength="4" size="4"><br>
+                Framerate: <input type="text" id="frameRate" maxlength="2" size="2"><br>
+                <hr>
+                <input type="checkbox" id="fitScreenCheckbox"> Fit to Screen Size<br>
+                <input type="checkbox" id="drawBordersCheckbox"> Draw Borders
+            </div>
+            <div id="objectProperties" style="display: none;">
+                Object Properties
+                <hr>
+                x: <input type="text" id="objectPositionX" maxlength="4" size="4">
+                y: <input type="text" id="objectPositionY" maxlength="4" size="4">
+                <br>
+                Opacity: <input type="range" value="255" min="0" max="255" id="opacitySlider">
+                <br>
+                Name: <input type="text" id="objectName" size="15"><br>
+                <div id="textProperties" style="display: none;">
+                    <br>
+                    Text Properties
+                    <hr>
+                    Font: <select id="fontSelector">
+                        <option value="Georgia">Georgia</option>
+                        <option value="Palatino Linotype">Palatino Linotype</option>
+                        <option value="Book Antiqua">Book Antiqua</option>
+                        <option value="Times New Roman">Times New Roman</option>
+                        <option value="Arial" selected="">Arial</option>
+                        <option value="Helvetica">Helvetica</option>
+                        <option value="Arial Black">Arial Black</option>
+                        <option value="Comic Sans MS">Comic Sans MS</option>
+                        <option value="Impact">Impact</option>
+                        <option value="Lucida Sans Unicode">Lucida Sans Unicode</option>
+                        <option value="Tahoma">Tahoma</option>
+                        <option value="Geneva">Geneva</option>
+                        <option value="Trebuchet MS">Trebuchet MS</option>
+                        <option value="Verdana">Verdana</option>
+                        <option value="Courier New">Courier New</option>
+                        <option value="Lucida Console">Lucida Console</option>
+                    </select><br>
+                    Color: <input type="color" value="#FFFFFF" id="fontColor"><br>
+                    Size: <input type="range" value="40" min="2" max="150" id="fontSize"><br>
+                    <input type="checkbox" id="boldCheckbox"> Bold
+                    <input type="checkbox" id="italicCheckbox"> Italic
+                    <input type="checkbox" id="underlinedCheckbox"> Underlined<br>
+                </div>
+                <div id="soundProperties" style="display: none;">
+                    <br>
+                    Sound Properties
+                    <hr>
+                    <input type="checkbox" id="autoplayCheckbox"> Autoplay<br>
+                    <input type="checkbox" id="loopCheckbox"> Loop<br>
+                </div>
+                <div id="htmlSnippetProperties" style="display: none;">
+                    <br>
+                    HTML Snippet Properties
+                    <hr>
+                    HTML: <textarea id="htmlTextBox"></textarea><br>
+                </div>
+            </div>
+        </div>
+
+    <!-- Right click menu, appears next to mouse on right click -->
+
+        <div id="rightClickMenu" class="GUIBox" style="visibility: hidden; top: 0px; left: 0px;">
+            <div id="symbolButtons" style="display: none;">
+                <div class="button" id="editObjectButton">Edit Object</div>
+            </div>
+            <div id="commonObjectButtons" style="display: none;">
+                <div class="button" id="editScriptsButton">Edit Scripts</div>
+                <hr>
+                <div class="button" id="bringToFrontButton">Bring to Front</div>
+                <div class="button" id="sendToBackButton">Send to Back</div>
+                <div class="button" id="deleteButton">Delete</div>
+                <hr>
+                <div class="button" id="downloadButton">Download</div>
+                <hr>
+            </div>
+            <div id="staticObjectButtons" style="display: none;">
+                <div class="button" id="convertToSymbolButton">Convert to Symbol</div>
+            </div>
+            <div id="insideSymbolButtons">
+                <div class="button" id="finishEditingObjectButton">Finish Editing Object</div>
+            </div>
+        </div>
+
+<!-- Tooltips -->
+
+        <div id="tooltipGUI" class="GUIBox tooltip" style="display: none; top: 48px; left: 171px;">Run Project</div>
+
+<!-- Popups -->
+
+        <div id="popupGUI" class="GUIBox"></div>
+
+    </div>
+
+<!-- Builtin player, visible when a project is running -->
+
+    <div id="builtinPlayer">
+        <div id="playerCanvasContainer"></div>
+
+        <div id="builtinPlayerGUI" class="GUIBox">
+            <strong>Builtin Player</strong><br>
+            <hr>
+            <div class="button" id="closeBuiltinPlayerButton">Close Player</div>
+        </div>
+    </div>
+
+
+
+
+</body></html>

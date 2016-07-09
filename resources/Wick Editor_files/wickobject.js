@@ -361,24 +361,18 @@ WickObject.prototype.generateSVGCacheImages = function (callback) {
         });
 
     } else if(this.isSymbol) {
-
         var childrenConverted = 0;
         var nChildren = WickObjectUtils.getTotalNumChildren(that);
-
-        if(nChildren == 0) {
-            callback();
-        }
 
         WickObjectUtils.forEachChildObject(this, function(currObj) {
             currObj.generateSVGCacheImages(function () {
                 childrenConverted++;
                 if(childrenConverted == nChildren) {
+                    console.log(childrenConverted)
                     callback();
                 }
             });
         });
-    } else {
-        callback();
     }
 
 }
@@ -448,10 +442,6 @@ WickObject.prototype.encodeStrings = function () {
         this.fontData.text = encodeString(this.fontData.text);
     }
 
-    if(this.svgData) {
-        this.svgData = encodeString(this.svgData);
-    }
-
     if(this.isSymbol) {
         WickObjectUtils.forEachChildObject(this, function(currObj) {
             currObj.encodeStrings();
@@ -478,10 +468,6 @@ WickObject.prototype.decodeStrings = function () {
 
     if(this.fontData) {
         this.fontData.text = decodeString(this.fontData.text);
-    }
-
-    if(this.svgData) {
-        this.svgData = decodeString(this.svgData);
     }
 
     if(this.isSymbol) {

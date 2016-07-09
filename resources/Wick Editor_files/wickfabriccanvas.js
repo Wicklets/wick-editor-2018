@@ -298,11 +298,14 @@ var FabricCanvas = function (wickEditor) {
 
     this.reloadPaperCanvas = function() {
 
+        console.log("reloadPaperCanvas")
+
         var that = this;
 
         // Get rid of the old paper canvas object if it exists
 
         if(that.paperCanvasFabricObject) {
+            console.log("that.canvas.remove(that.paperCanvasFabricObject);")
             that.canvas.remove(that.paperCanvasFabricObject);
         }
 
@@ -335,6 +338,8 @@ var FabricCanvas = function (wickEditor) {
                 obj.scaleToHeight(canvas.height-10)
                    .set({ left: canvas.width/2, top: canvas.height/2 })
                    .setCoords();
+
+                   console.log(obj);
 
                 that.canvas.add(obj).renderAll();*/
 
@@ -607,8 +612,11 @@ FabricCanvas.prototype.makeFabricObjectFromWickObject = function (wickObject, ca
 
         } else if(wickObject.svgData) {
 
+            console.log("yup");
+
             fabric.loadSVGFromString(wickObject.svgData, function(objects, options) {
                 var svgFabricObject = fabric.util.groupSVGElements(objects, options);
+                console.log(svgFabricObject)
 
                 setWickObjectPropertiesOnFabricObject(svgFabricObject, wickObject);
 

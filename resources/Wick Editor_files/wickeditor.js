@@ -220,7 +220,7 @@ var WickEditor = function () {
             var fileType = items[i].type;
             var file = clipboardData.getData(items[i].type);
 
-            VerboseLog.log("Pasted filetype: " + fileType);
+            console.log("pasted filetype: " + fileType);
 
             if (['image/png', 'image/jpeg', 'image/bmp'].indexOf(fileType) != -1) {
 
@@ -350,8 +350,7 @@ var WickEditor = function () {
 **********************************/
 
 WickEditor.prototype.syncEditorWithFabricCanvas = function () {
-    var wickObjectsFromFabricCanvas = this.fabricCanvas.getWickObjectsInCanvas(this.project.resolution);
-    this.currentObject.frames[this.currentObject.currentFrame].wickObjects = wickObjectsFromFabricCanvas;
+    this.currentObject.frames[this.currentObject.currentFrame].wickObjects = this.fabricCanvas.getWickObjectsInCanvas(this.project.resolution);
 }
 
 /**********************************
@@ -426,8 +425,6 @@ WickEditor.prototype.exportProjectAsWebpage = function () {
 *************************/
 
 WickEditor.prototype.runProject = function () {
-    var that = this;
-
     if(this.htmlGUIHandler.projectHasErrors) {
         if(!confirm("There are syntax errors in the code of this project! Are you sure you want to run it?")) {
             return;
@@ -437,8 +434,20 @@ WickEditor.prototype.runProject = function () {
     // JSONify the project, autosave, and have the builtin player run it
     this.syncEditorWithFabricCanvas();
     this.project.getAsJSON(function (JSONProject) {
-        that.htmlGUIHandler.showBuiltinPlayer();
+        // Hide the editor, show the player
+        document.getElementById("editor").style.display = "none";
+        document.getElementById("builtinPlayer").style.display = "block";
+
+        console.log(JSONProject)
         WickPlayer.runProject(JSONProject);
     });
 }
 
+WickEditor.prototype.closeBuiltinPlayer = function() {
+    // Show the editor, hide the player
+    document.getElementById("builtinPlayer").style.display = "none";
+    document.getElementById("editor").style.display = "block";
+
+    // Clean up player
+    WickPlayer.stopRunningCurrentProject();
+}

@@ -81,16 +81,17 @@ WickProject.prototype.exportAsJSONFile = function () {
 }
 
 WickProject.prototype.getAsJSON = function (callback) {
+    // Remove parent object references 
+    // (can't JSONify objects with circular references, player doesn't need them anyway)
+    this.rootObject.removeParentObjectRefences();
+
+    // Encode scripts/text to avoid JSON format problems
+    this.rootObject.encodeStrings();
 
     // Rasterize SVGs
     var that = this;
     this.rootObject.generateSVGCacheImages(function () {
-        // Remove parent object references 
-        // (can't JSONify objects with circular references, player doesn't need them anyway)
-        that.rootObject.removeParentObjectRefences();
-
-        // Encode scripts/text to avoid JSON format problems
-        that.rootObject.encodeStrings();
+        console.log(that.rootObject.frames[0].wickObjects[0])
 
         var JSONProject = JSON.stringify(that);
 

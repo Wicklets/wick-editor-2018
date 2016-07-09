@@ -150,12 +150,12 @@ var PaperCanvas = function (wickEditor) {
 
             if(child instanceof paper.Path) {
                 var hitResult = child.hitTest(point, hitOptions);
-                console.log("tryFillPath hitResult: ");
-                console.log(hitResult);
+                VerboseLog.log("tryFillPath hitResult: ")
+                VerboseLog.log(hitResult)
                 if(hitResult && !hitResult.item.clockwise) {
-                    console.log("filling!");
+                    console.log("filling!")
                     console.log(hitResult.item);
-                    console.log(i);
+                    console.log(i)
                     item.fillColor = "#ff0000";
                 }
             }
@@ -176,6 +176,8 @@ var PaperCanvas = function (wickEditor) {
         VerboseLog.log("paper canvas mouseDown with tool: " + event.tool);
 
         if (currentTool == "fillbucket") {
+
+            console.log("recursiveHitTest:")
 
             var holeFilled = tryFillHole(paper.project.activeLayer, new paper.Point(event.offsetX, event.offsetY), 0);
             if (holeFilled) {
