@@ -334,22 +334,9 @@ var WickHTMLGUIHandler = function (wickEditor) {
     Properties Box
 *********************/
 
-    var testPositiveInteger = function(n, setFunc) {
-        var num = Number(n);
-        if((typeof num === 'number') && (num % 1 == 0) && (num > 0)) {
-            setFunc(num);
-        }
-    }
-
-    var testString = function(str, setFunc) {
-        if(typeof str === 'string') {
-            setFunc(str);
-        }
-    }
-
     $('#projectSizeX').on('input propertychange', function () {
 
-        testPositiveInteger($('#projectSizeX').val(), function(n) {
+        CheckInput.callIfPositiveInteger($('#projectSizeX').val(), function(n) {
             wickEditor.syncEditorWithFabricCanvas();
             wickEditor.project.resolution.x = n;
             wickEditor.fabricCanvas.resize();
@@ -360,7 +347,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
 
     $('#projectSizeY').on('input propertychange', function () {
 
-        testPositiveInteger($('#projectSizeY').val(), function(n) {
+        CheckInput.callIfPositiveInteger($('#projectSizeY').val(), function(n) {
             wickEditor.syncEditorWithFabricCanvas();
             wickEditor.project.resolution.y = n;
             wickEditor.fabricCanvas.resize();
@@ -371,7 +358,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
 
     $('#frameRate').on('input propertychange', function () {
 
-        testPositiveInteger($('#frameRate').val(), function(n) {
+        CheckInput.callIfPositiveInteger($('#frameRate').val(), function(n) {
             wickEditor.project.framerate = n;
         });
 
@@ -379,7 +366,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
 
     $('#frameIdentifier').on('input propertychange', function () {
 
-        testString($('#frameIdentifier').val(), function(frameID) {
+         CheckInput.callIfString($('#frameIdentifier').val(), function(frameID) {
             wickEditor.currentObject.frames[wickEditor.currentObject.currentFrame].identifier = frameID;
         });
 
