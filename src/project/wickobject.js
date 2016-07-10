@@ -521,6 +521,59 @@ WickObject.prototype.getAsFile = function () {
     VerboseLog.error("NYI");
 }
 
+/* Determine if two wick objects collide using rectangular hit detection on their
+   farthest border */ 
+function rectangularHitDetection(objA, objB) {
+    var objAWidth = objA.width * objA.scaleX;
+    var objAHeight = objAHeight * objA.scaleY; 
+
+    var objBWidth = objB.width * objB.scaleX; 
+    var objBHeight = objB.height * objB.scaleY; 
+
+    var left = objA.x < (objB.x + objBWidth); 
+    var right = (objA.x + objAWidth) > objB.x; 
+    var top = objA.y < (objB.y + objBHeight); 
+    var bottom = (objA.y + objA.height) > objB.y; 
+
+    return left && right && top && bottom;
+}
+
+/* Returns a boolean alerting whether or not this object or any of it's children in frame, 
+   have collided with the given object or any of it's children in frame. */
+WickObject.prototype.hitTest = function (otherObj, hitTestType) {
+    if (otherObj === undefined) {
+        return false; 
+    }
+
+    var otherObjChildren = WickObjectUtils.getAllActiveChildObjects(otherObj);
+    var thisObjChildren = WickObjectUtils.getAllActiveChildObjects(this);
+
+    var checkMethod = rectangularHitDetection; 
+
+    switch (hitTestType) {
+        case "rectangles":
+            checkMethod = rectangularHitDetection; 
+            break; 
+        case "point":
+            console.log("Nope!"); 
+            break;
+    }
+
+    otherObjChildren.push(otherObj); 
+    thisObjChildren.push(this); 
+
+    for (var i = 0; i < otherObjChildren.length; i++) {
+        for (var j = 0; j <thisObjChildren.length; j++) {
+            if (checkMethod(otherObjChildren[i], thisObjChildren[j])) {
+                return true; 
+            }
+        }
+    }
+
+    return false; 
+
+}
+
 var WickObjectUtils = (function () {
 
     var utils = { };
@@ -541,10 +594,15 @@ var WickObjectUtils = (function () {
 
     /* Return all child objects of a parent object */
     utils.getAllChildObjects = function (parentObj) {
+
+        if (!parentObj.isSymbol) {
+            return []; 
+        }
+
         var children = [];
         for (var f = 0; f < parentObj.frames.length; f++) {
             for (var o = 0; o < parentObj.frames[f].wickObjects.length; o++) {
-                children.append(parentObj.frames[f].wickObjects[o])
+                children.push(parentObj.frames[f].wickObjects[o])
             }
         }
         return children;
@@ -552,10 +610,15 @@ var WickObjectUtils = (function () {
 
     /* Return all child objects in the parent objects current frame. */
     utils.getAllActiveChildObjects = function (parentObj) {
+
+        if (!parentObj.isSymbol) {
+            return []; 
+        }
+
         var children = [];
         var currFrame = parentObj.currentFrame;
         for (var o = 0; o < parentObj.frames[currFrame].wickObjects.length; o++) {
-            children.append(parentObj.frames[currFrame].wickObjects[o]);
+            children.push(parentObj.frames[currFrame].wickObjects[o]);
         }
         return children; 
     }

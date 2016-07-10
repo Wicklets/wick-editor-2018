@@ -63,7 +63,7 @@ WickProject.prototype.exportAsHTMLFile = function () {
     // Player code. 
     requiredPlayerFiles =[
         "src/project/wickobject.js",
-        "src/player/wickplayer.js"
+        "src/player/wickplayer.js",
     ];
 
     for (var libIndex = 0; libIndex < requiredLibFiles.length; libIndex++) {
