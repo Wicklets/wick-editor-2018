@@ -539,6 +539,27 @@ var WickObjectUtils = (function () {
         }
     }
 
+    /* Return all child objects of a parent object */
+    utils.getAllChildObjects = function (parentObj) {
+        var children = [];
+        for (var f = 0; f < parentObj.frames.length; f++) {
+            for (var o = 0; o < parentObj.frames[f].wickObjects.length; o++) {
+                children.append(parentObj.frames[f].wickObjects[o])
+            }
+        }
+        return children;
+    }
+
+    /* Return all child objects in the parent objects current frame. */
+    utils.getAllActiveChildObjects = function (parentObj) {
+        var children = [];
+        var currFrame = parentObj.currentFrame;
+        for (var o = 0; o < parentObj.frames[currFrame].wickObjects.length; o++) {
+            children.append(parentObj.frames[currFrame].wickObjects[o]);
+        }
+        return children; 
+    }
+
     /* Call callback function for every child object in parentObj */
     utils.forEachChildObject = function (parentObj, callback) {
         for(var f = 0; f < parentObj.frames.length; f++) {
