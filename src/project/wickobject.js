@@ -554,6 +554,28 @@ function rectangularHitDetection(objA, objB) {
     return left && right && top && bottom;
 }
 
+/* Determine if two wickObjects Collide using circular hit detection from their
+   centroid using their full width and height. */ 
+
+function circularHitDetection(objA, objB) {
+    var objAAbsPos = objA.getAbsolutePosition();
+    var objBAbsPos = objB.getAbsolutePosition();
+
+    var dx = objAAbsPos.x - objBAbsPos.x; 
+    var dy = objAAbsPos.y - objBAbsPos.y;
+
+    var objAWidth = objA.width * objA.scaleX;
+    var objAHeight = objAHeight * objA.scaleY; 
+
+    var distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (distance < ((objAWidth/2) + (objBWidth/2))) {
+        return true;
+    }
+
+    return false; 
+}
+
 /* Returns a boolean alerting whether or not this object or any of it's children in frame, 
    have collided with the given object or any of it's children in frame. */
 WickObject.prototype.hitTest = function (otherObj, hitTestType) {
@@ -564,15 +586,20 @@ WickObject.prototype.hitTest = function (otherObj, hitTestType) {
     var otherObjChildren = WickObjectUtils.getAllActiveChildObjects(otherObj);
     var thisObjChildren = WickObjectUtils.getAllActiveChildObjects(this);
 
-    var checkMethod = rectangularHitDetection; 
+    var checkMethod;
 
     switch (hitTestType) {
         case "rectangles":
             checkMethod = rectangularHitDetection; 
             break; 
         case "point":
-            console.log("Nope!"); 
+            console.log("NYI"); 
             break;
+        case "circles":
+            checkMethod = circularHitDetection;
+            break;
+        default:
+            checkMethod = rectangularHitDetection; 
     }
 
     if(!otherObj.isSymbol) {
