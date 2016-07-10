@@ -181,6 +181,8 @@ var WickPlayer = (function () {
         generateBuiltinWickFunctions(project.rootObject);
         generateHTMLSnippetDivs(project.rootObject);
 
+        project.rootObject.regenerateParentObjectReferences();
+
         // Convert base 64 data into content
         loadImages(project.rootObject);
         if(!mobileMode) {

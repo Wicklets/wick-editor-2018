@@ -428,6 +428,19 @@ WickObject.prototype.getSymbolTrueOffset = function () {
 
 }
 
+WickObject.prototype.getAbsolutePosition = function () {
+    if(this.isRoot) {
+        return {
+            x: 0, 
+            y: 0};
+    } else {
+        var parentPosition = this.parentObject.getAbsolutePosition();
+        return {
+            x: this.x + parentPosition.x, 
+            y: this.y + parentPosition.y};
+    }
+}
+
 /* Encodes scripts to avoid JSON format problems */
 WickObject.prototype.encodeStrings = function () {
 
@@ -524,16 +537,19 @@ WickObject.prototype.getAsFile = function () {
 /* Determine if two wick objects collide using rectangular hit detection on their
    farthest border */ 
 function rectangularHitDetection(objA, objB) {
+    var objAAbsPos = objA.getAbsolutePosition();
+    var objBAbsPos = objB.getAbsolutePosition();
+
     var objAWidth = objA.width * objA.scaleX;
     var objAHeight = objAHeight * objA.scaleY; 
 
     var objBWidth = objB.width * objB.scaleX; 
     var objBHeight = objB.height * objB.scaleY; 
 
-    var left = objA.x < (objB.x + objBWidth); 
-    var right = (objA.x + objAWidth) > objB.x; 
-    var top = objA.y < (objB.y + objBHeight); 
-    var bottom = (objA.y + objA.height) > objB.y; 
+    var left = objAAbsPos.x < (objBAbsPos.x + objBWidth); 
+    var right = (objAAbsPos.x + objAWidth) > objBAbsPos.x; 
+    var top = objAAbsPos.y < (objBAbsPos.y + objBHeight); 
+    var bottom = (objAAbsPos.y + objA.height) > objBAbsPos.y; 
 
     return left && right && top && bottom;
 }
@@ -559,11 +575,17 @@ WickObject.prototype.hitTest = function (otherObj, hitTestType) {
             break;
     }
 
-    otherObjChildren.push(otherObj); 
-    thisObjChildren.push(this); 
+    if(!otherObj.isSymbol) {
+        otherObjChildren.push(otherObj);
+    }
+    if(!this.isSymbol) {
+        thisObjChildren.push(this); 
+    }
 
     for (var i = 0; i < otherObjChildren.length; i++) {
         for (var j = 0; j <thisObjChildren.length; j++) {
+            console.log(otherObjChildren[i])
+            console.log(thisObjChildren[j])
             if (checkMethod(otherObjChildren[i], thisObjChildren[j])) {
                 return true; 
             }
