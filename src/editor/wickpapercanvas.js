@@ -75,7 +75,11 @@ var PaperCanvas = function (wickEditor) {
 
         var group = paper.project.importSVG(doc);
         var path1 = group.removeChildren(0, 1)[0];
+        path1.style.fillColor = fillColor;
+        path1.closePath();
         path1.position = new paper.Point(x,y);
+
+        var intersectsWithOthers = false;
 
         for(var i = 0; i < paper.project.activeLayer._children.length; i++) {
             var path2 = paper.project.activeLayer._children[i];
@@ -85,13 +89,7 @@ var PaperCanvas = function (wickEditor) {
                 var intersections = path1.getIntersections(path2);
                 if(intersections.length > 0) {
 
-                    var pathStyleBoolean = {
-                        strokeColor: new paper.Color(0.8),
-                        fillColor: new paper.Color(0, 0, 0, 0.0),
-                        strokeWidth: 1
-                    };
-                    path1.style = path2.style = pathStyleBoolean;
-
+                    intersectsWithOthers = true;
                     console.log("intersection:");
                     console.log(path1);
                     console.log(path2);
@@ -99,13 +97,17 @@ var PaperCanvas = function (wickEditor) {
                     var union = path1.unite(path2);
                     console.log("unite result:");
                     console.log(union);
-                    paper.project.addChild(union)
+                    paper.project.activeLayer.addChild(union);
+                    path1.remove();
+                    path2.remove();
                     break;
                 }
             }
         }
 
-        paper.project.activeLayer.addChild(path1);
+        if(!intersectsWithOthers) {
+            paper.project.activeLayer.addChild(path1);
+        }
 
         that.refresh();
 

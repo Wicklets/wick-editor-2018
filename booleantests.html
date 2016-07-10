@@ -12,8 +12,7 @@
         var path3 = paper.project.importSVG(document.getElementById('path3')).removeChildren(0, 1)[0];
         var path4 = paper.project.importSVG(document.getElementById('path4')).removeChildren(0, 1)[0];
 
-        var pathEX = paper.project.importSVG(document.getElementById('path3')).removeChildren(0, 1)[0];
-        pathEX.translate([50,0]);
+        //var pathEX = paper.project.importSVG(document.getElementById('pathEX')).removeChildren(0, 1)[0];
 
         console.log(path1)
         console.log(path2)
@@ -26,11 +25,22 @@
         paper.project.activeLayer.addChild(united)
         paper.view.draw();
 
-        var united2 = pathEX.unite(path3);
+        //paper.project.activeLayer.addChild(path3);
+        //path3.selected = true;
+
+        path3.closePath();
+
+        var united2 = path1.unite(path3);
         united2.strokeColor = 'black';
         united2.fillColor = 'yellow';
         paper.project.activeLayer.addChild(united2)
         paper.view.draw();
+
+        /*var united2 = pathEX.unite(path3);
+        united2.strokeColor = 'black';
+        united2.fillColor = 'yellow';
+        paper.project.activeLayer.addChild(united2)
+        paper.view.draw();*/
     };
     </script>
 </head>
