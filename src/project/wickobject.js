@@ -584,8 +584,6 @@ WickObject.prototype.hitTest = function (otherObj, hitTestType) {
 
     for (var i = 0; i < otherObjChildren.length; i++) {
         for (var j = 0; j <thisObjChildren.length; j++) {
-            console.log(otherObjChildren[i])
-            console.log(thisObjChildren[j])
             if (checkMethod(otherObjChildren[i], thisObjChildren[j])) {
                 return true; 
             }

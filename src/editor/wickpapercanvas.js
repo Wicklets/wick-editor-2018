@@ -13,11 +13,15 @@ var PaperCanvas = function (wickEditor) {
 
     /*console.log(document.getElementById('path1'))
 
+    console.log(document.getElementById('path1'))
+
     var path1 = paper.project.importSVG(document.getElementById('path1')).removeChildren(0, 1)[0];
-    var path2 = paper.project.importSVG(document.getElementById('path2')).removeChildren(0, 1)[0];
+    var path2 = paper.project.importSVG(document.getElementById('path1')).removeChildren(0, 1)[0];
 
     console.log(path1)
     console.log(path2)
+
+    path2.translate([50,0])
 
     var pathStyleBoolean = {
         strokeColor: new paper.Color(0.8),
@@ -61,9 +65,13 @@ var PaperCanvas = function (wickEditor) {
     /* Use to add a new path */
     this.addPathSVG = function (svgString, x, y, fillColor) {
 
+        console.log(svgString)
+
         var xmlString = svgString
           , parser = new DOMParser()
           , doc = parser.parseFromString(xmlString, "text/xml");
+
+        //console.log(doc.childNodes)
 
         var group = paper.project.importSVG(doc);
         var path1 = group.removeChildren(0, 1)[0];
@@ -91,6 +99,8 @@ var PaperCanvas = function (wickEditor) {
                     var union = path1.unite(path2);
                     console.log("unite result:");
                     console.log(union);
+                    paper.project.addChild(union)
+                    break;
                 }
             }
         }
