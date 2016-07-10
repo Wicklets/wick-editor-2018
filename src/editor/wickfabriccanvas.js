@@ -207,14 +207,14 @@ var FabricCanvas = function (wickEditor) {
     canvas.on('object:added', function(e) {
         if(e.target.type === "path") {
             // Old straight-to-rasterized brush
-            /*var path = e.target;
+            var path = e.target;
             WickObject.fromFabricPath(path, wickEditor.currentObject, function(wickObj) {
                 wickEditor.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:wickObj});
             });
-            canvas.remove(path);*/
+            canvas.remove(path);
 
             // New send-to-paper.js brush
-            var path = e.target;
+            /*var path = e.target;
 
             path.cloneAsImage(function(clone) {
                 var imgSrc = clone._element.currentSrc || clone._element.src;
@@ -227,7 +227,7 @@ var FabricCanvas = function (wickEditor) {
                 });
             });
 
-            canvas.remove(e.target);
+            canvas.remove(e.target);*/
         }
     });
 
