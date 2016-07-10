@@ -51,16 +51,30 @@ WickProject.prototype.exportAsHTMLFile = function () {
     // Add the player webpage (need to download the empty player)
     fileOut += FileDownloader.downloadFile("src/player/emptyplayer.htm") + "\n";
 
-    // Add any libs that the player needs
-    fileOut += "<script>" + FileDownloader.downloadFile("lib/pixi.min.js") + "</script>\n";
-    fileOut += "<script>" + FileDownloader.downloadFile("lib/fpscounter.js") + "</script>\n";
-    fileOut += "<script>" + FileDownloader.downloadFile("lib/verboselog.js") + "</script>\n";
-    fileOut += "<script>" + FileDownloader.downloadFile("lib/browserdetection.js") + "</script>\n";
-    fileOut += "<script>" + FileDownloader.downloadFile("lib/base64-arraybuffer.js") + "</script>\n";
+    // All libs needed by the player. 
+    requiredLibFiles = [
+        "lib/pixi.min.js",
+        "lib/fpscounter.js",
+        "lib/verboselog.js",
+        "lib/browserdetection.js",
+        "lib/base64-arraybuffer.js",
+    ];
 
-    // Add the player (need to download the player code)
-    fileOut += "<script>" + FileDownloader.downloadFile("src/project/wickobject.js") + "</script>\n";
-    fileOut += "<script>" + FileDownloader.downloadFile("src/player/wickplayer.js") + "</script>\n";
+    // Player code. 
+    requiredPlayerFiles =[
+        "src/project/wickobject.js",
+        "src/player/wickplayer.js",
+    ];
+
+    for (var libIndex = 0; libIndex < requiredLibFiles.length; libIndex++) {
+        file = requiredLibFiles[libIndex];
+        fileOut += "<script>" + FileDownloader.downloadFile(file) + "</script>\n";
+    }
+
+    for (var srcIndex = 0; srcIndex < requiredPlayerFiles.length; srcIndex++) {
+        file = requiredPlayerFiles[srcIndex];
+        fileOut += "<script>" + FileDownloader.downloadFile(file) + "</script>\n";
+    }
 
     // Bundle the JSON project
     this.getAsJSON(function (JSONProject) {

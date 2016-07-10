@@ -212,43 +212,6 @@ var WickPlayer = (function () {
     /* */
     var generateBuiltinWickFunctions = function (wickObj) {
 
-        HitTest = {
-            Rectangles : "rectangles",
-            Point : "point"
-        }
-
-        wickObj.hitTest = function (otherObj, hitTestType) {
-
-            // Default to rectangles. 
-            if (hitTestType === undefined) {
-                hitTestType = HitTest.Rectangles; 
-            }
-
-            if (hitTestType === HitTest.Rectangles) {
-                var wickObjWidth = wickObj.width * wickObj.scaleX;
-                var wickObjHeight = wickObj.height * wickObj.scaleY;
-
-                var otherObjWidth = otherObj.width * otherObj.scaleX;
-                var otherObjHeight = otherObj.height * otherObj.scaleY;
-
-                var left = wickObj.x < (otherObj.x + otherObjWidth);
-                var right = (wickObj.x + wickObjWidth) > otherObj.x; 
-                var top = wickObj.y < (otherObj.y + otherObjHeight);
-                var bottom = (wickObj.y + wickObjHeight) > otherObj.y;
-
-                return left && right && top && bottom;
-            }
-
-            if (hitTestType === HitTest.Point) {
-                var wickObjCentroid = {
-                    x : wickObj.x + wickObj.width*wickObj.scaleX/2,
-                    y : wickObj.y + wickObj.height*wickObj.scaleY/2
-                };
-                return pointInsideObj(otherObj, wickObjCentroid);
-            }
-            
-        }
-
         if(wickObj.audioData) {
             wickObj.playSound = function () {
                 playSound(wickObj.audioBuffer);
