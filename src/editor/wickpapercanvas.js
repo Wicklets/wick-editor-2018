@@ -11,6 +11,28 @@ var PaperCanvas = function (wickEditor) {
     this.canvas = document.getElementById('paperCanvas');
     paper.setup(this.canvas);
 
+    /*console.log(document.getElementById('path1'))
+
+    var path1 = paper.project.importSVG(document.getElementById('path1')).removeChildren(0, 1)[0];
+    var path2 = paper.project.importSVG(document.getElementById('path2')).removeChildren(0, 1)[0];
+
+    console.log(path1)
+    console.log(path2)
+
+    var pathStyleBoolean = {
+        strokeColor: new paper.Color(0.8),
+        fillColor: new paper.Color(0, 0, 0, 0.0),
+        strokeWidth: 1
+    };
+    path1.style = path2.style = pathStyleBoolean;
+
+    var united = path2.unite(path1);
+    united.strokeColor = 'black';
+    united.fillColor = 'yellow';
+    paper.project.activeLayer.addChild(united)
+    console.log(united)
+    paper.view.draw();*/
+
 /*********************
     Refresh methods
 **********************/
@@ -37,15 +59,85 @@ var PaperCanvas = function (wickEditor) {
 **************************/
     
     /* Use to add a new path */
-    this.addPathSVG = function (file, x, y) {
-        paper.project.importSVG(file, function(item) {
+    this.addPathSVG = function (svgString, x, y, fillColor) {
+
+        var xmlString = svgString
+          , parser = new DOMParser()
+          , doc = parser.parseFromString(xmlString, "text/xml");
+
+        var group = paper.project.importSVG(doc);
+        var path1 = group.removeChildren(0, 1)[0];
+        path1.position = new paper.Point(x,y);
+
+        for(var i = 0; i < paper.project.activeLayer._children.length; i++) {
+            var path2 = paper.project.activeLayer._children[i];
+
+            var isGroup = path2 instanceof paper.Group;
+            if(!isGroup) {
+                var intersections = path1.getIntersections(path2);
+                if(intersections.length > 0) {
+
+                    var pathStyleBoolean = {
+                        strokeColor: new paper.Color(0.8),
+                        fillColor: new paper.Color(0, 0, 0, 0.0),
+                        strokeWidth: 1
+                    };
+                    path1.style = path2.style = pathStyleBoolean;
+
+                    console.log("intersection:");
+                    console.log(path1);
+                    console.log(path2);
+
+                    var union = path1.unite(path2);
+                    console.log("unite result:");
+                    console.log(union);
+                }
+            }
+        }
+
+        paper.project.activeLayer.addChild(path1);
+
+        that.refresh();
+
+        /*paper.project.importSVG(file, function(item) {
             item.position = new paper.Point(x, y);
-            // Set item's fill (need to take extra param)
+            item.fillColor = fillColor;
             // For each item I in canvas:
             //   If there are any intersections between I and item AND I and item have the same fill color:
             //     let B = Boolean OR of the paths, remove I and item, add B to canvas
+
+            var activeLayerChildren = paper.project.activeLayer._children;
+            for(var i = 0; i < activeLayerChildren.length; i++) {
+                var child = activeLayerChildren[i];
+
+                if(child !== item) {
+                    console.log("checking for intersections between:")
+                    console.log(child);
+                    console.log(item);
+                    var intersections = item._children[0].getIntersections(child._children[0]);
+                    if(intersections.length > 0) {
+                        console.log("intersection!!:");
+
+                        var path1 = item.removeChildren(0, 1)[0];
+                        var path2 = child.removeChildren(0, 1)[0];
+
+                        var boolPathU = path1.unite(path2);
+                        if(boolPathU) {
+                            console.log(boolPathU);
+                            boolPathU.style = {
+                                fillColor: new paper.Color(1, 0, 0, 0.5),
+                                strokeColor: new paper.Color(0, 0, 0),
+                                strokeWidth: 0
+                            };
+                            paper.project.activeLayer.addChild(boolPathU);
+                            i = 99999;
+                        }
+                    }
+                }
+            }
+
             that.refresh();
-        });
+        });*/
     }
 
     /* Use to add a path that acts as an eraser */
@@ -69,27 +161,31 @@ var PaperCanvas = function (wickEditor) {
         for(var i = 0; i < activeLayer.children.length; i++) {
             var child = activeLayer.children[i];
 
-            var width = child.handleBounds.width;
-            var height = child.handleBounds.height;
+            var isGroup = child instanceof paper.Group;
+            if(!isGroup) {
 
-            var left = child.handleBounds.x;
-            var top  = child.handleBounds.y;
+                var width = child.handleBounds.width;
+                var height = child.handleBounds.height;
 
-            child.position = new paper.Point(child.handleBounds.width/2,child.handleBounds.height/2);
-            var childSVG = child.exportSVG({asString: true});
+                var left = child.handleBounds.x;
+                var top  = child.handleBounds.y;
 
-            // quick fix for holes turned into their own paths
-            if(!childSVG.startsWith("<g")) {
-                childSVG = '<g xmlns="http://www.w3.org/2000/svg" id="svg" fill="#000000" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="4" stroke-dasharray="" stroke-dashoffset="0" font-family="Times" font-weight="normal" font-size="16" text-anchor="start" mix-blend-mode="normal">' + childSVG + "</g>";
+                child.position = new paper.Point(child.handleBounds.width/2,child.handleBounds.height/2);
+                var childSVG = child.exportSVG({asString: true});
+
+                // quick fix for holes turned into their own paths
+                if(!childSVG.startsWith("<g")) {
+                    childSVG = '<g xmlns="http://www.w3.org/2000/svg" id="svg" fill="#000000" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="4" stroke-dasharray="" stroke-dashoffset="0" font-family="Times" font-weight="normal" font-size="16" text-anchor="start" mix-blend-mode="normal">' + childSVG + "</g>";
+                }
+
+                allSVGs.push({
+                    svgString: childSVG, 
+                    width:     width, 
+                    height:    height,
+                    left:      left,
+                    top:       top
+                });
             }
-
-            allSVGs.push({
-                svgString: childSVG, 
-                width:     width, 
-                height:    height,
-                left:      left,
-                top:       top
-            });
         }
 
         paper.project.activeLayer.removeChildren();
@@ -171,7 +267,11 @@ var PaperCanvas = function (wickEditor) {
     Interactivity events
 ***************************/
 
+    that.mouseIsDown = false;
+
     this.mouseDown = function (event) {
+
+        that.mouseIsDown = true;
 
         currentTool = event.tool;
 
@@ -225,29 +325,33 @@ var PaperCanvas = function (wickEditor) {
 
     };
 
+    this.mouseUp = function (event) {
+        that.mouseIsDown = false;
+    }
+
     this.mouseMove = function (event) {
-        /*
-        paper.project.activeLayer.selected = false;
-        //if (event.item) {
-        //    event.item.selected = true;
-        //}
+    /*        
+        if(!that.mouseIsDown) {
 
-        var hitResult = paper.project.hitTest(new paper.Point(event.offsetX, event.offsetY), hitOptions);
-        if (!hitResult) return;
+            //paper.project.activeLayer.selected = true;
 
-        hitResult.item.selected = true;
+            var hitResult = paper.project.hitTest(new paper.Point(event.offsetX, event.offsetY), hitOptions);
 
-        that.resize();
-        paper.view.draw();
-        wickEditor.fabricCanvas.reloadPaperCanvas();
+            if (!hitResult) {
+                //paper.project.deselectAll();
+                //that.refresh();
+                return;
+            }
 
+            hitResult.item.selected = true;
 
-        if (hitResult.type == 'segment') {
-            //segment = hitResult.segment;
-        } else if (hitResult.type == 'stroke') {
-            //var location = hitResult.location;
-            //segment = path.insert(location.index + 1, event.point);
-            //path.smooth();
+            if (hitResult.type == 'segment') {
+                //segment = hitResult.segment;
+            } else if (hitResult.type == 'stroke') {
+                //var location = hitResult.location;
+                //segment = path.insert(location.index + 1, event.point);
+                //path.smooth();
+            }
 
         }
         */

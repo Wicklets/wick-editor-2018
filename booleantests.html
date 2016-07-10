@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="lib/paper/paper-full.js"></script>
+    <script type="text/javascript">
+    window.onload = function () {
+    var canvas = document.getElementById('myCanvas');
+    paper.setup(canvas);
+
+    var path1 = paper.project.importSVG(document.getElementById('path1')).removeChildren(0, 1)[0];
+    var path2 = paper.project.importSVG(document.getElementById('path2')).removeChildren(0, 1)[0];
+
+    console.log(path1)
+    console.log(path2)
+
+    var united = path2.unite(path1);
+    united.strokeColor = 'black';
+    united.fillColor = 'yellow';
+    paper.project.activeLayer.addChild(united)
+    paper.view.draw();
+    };
+    </script>
+</head>
+<body>
+<canvas id="myCanvas" width="1000" height = "1000"></canvas>
+
+
+<svg id="path1" xmlns:svg="http://www.w3.org/2000/svg"
+     xmlns="http://www.w3.org/2000/svg"
+     version="1.0">
+    <polygon points="486,88.5713 10,10 486,112.42089" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="sans-serif" font-weight="normal" font-size="12" text-anchor="start" mix-blend-mode="normal"></polygon>
+</svg>
+
+<svg id="path2" xmlns:svg="http://www.w3.org/2000/svg"
+     xmlns="http://www.w3.org/2000/svg"
+     version="1.0">
+    <path x="0" y="0" d="M373.19331,121.80669L486,156.53349L486,180.38308L379.48903,142.25773L391.72796,182.01471L486,224.49569L486,248.34528L398.6888,204.62635L412.25607,248.69831L486,292.45788L486,316.30747L419.9933,273.83196L485,485L406.24644,264.98581L377.52981,246.50657L485,485L299.0168,195.9832L10,10L248.49343,117.47019L230.01419,88.75356L10,10L221.16804,75.0067L178.69253,9L202.54212,9L246.30169,82.74393L290.37365,96.3112L246.65472,9L270.50431,9L312.98529,103.27204L352.74227,115.51097L314.61692,9L338.46651,9z M485,485L359.89947,235.16139L322.44322,211.05818z M397.22332,239.7779L381.57322,196.05614L346.99323,178.74106L366.20293,221.37043z M373.62755,173.85828L359.79257,135.20743L321.14172,121.37245L337.44593,157.55407z M10,10L283.94182,172.55678L259.83861,135.10053z M347.41006,210.21876L326.51361,168.48639L284.78124,147.58994L308.10489,186.89511z M298.94386,113.42678L255.2221,97.77668L273.62957,128.79707L316.25894,148.00677z"></path>
+</svg>
+
+
+</body>
+</html>

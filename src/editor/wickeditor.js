@@ -155,7 +155,7 @@ var WickEditor = function () {
 
     document.addEventListener("copy", function(event) {
 
-        wickEditor.clearKeys();
+        that.clearKeys();
 
         // Don't try to copy from the fabric canvas if user is editing text
         if(document.activeElement.nodeName == 'TEXTAREA' || that.htmlGUIHandler.scriptingIDEopen) {
@@ -203,7 +203,7 @@ var WickEditor = function () {
 
     document.addEventListener("paste", function(event) {
 
-        wickEditor.clearKeys();
+        that.clearKeys();
 
         if(document.activeElement.nodeName === 'TEXTAREA' || that.htmlGUIHandler.scriptingIDEopen) {
             return;

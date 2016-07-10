@@ -193,6 +193,10 @@ var FabricCanvas = function (wickEditor) {
         e.e.tool = that.currentTool;
         that.paperCanvas.mouseDown(e.e);
     });
+    canvas.on('mouse:up', function(e) {
+        e.e.tool = that.currentTool;
+        that.paperCanvas.mouseUp(e.e);
+    });
     canvas.on('mouse:move', function(e) {
         e.e.tool = that.currentTool;
         that.paperCanvas.mouseMove(e.e);
@@ -203,14 +207,14 @@ var FabricCanvas = function (wickEditor) {
     canvas.on('object:added', function(e) {
         if(e.target.type === "path") {
             // Old straight-to-rasterized brush
-            /*var path = e.target;
+            var path = e.target;
             WickObject.fromFabricPath(path, wickEditor.currentObject, function(wickObj) {
                 wickEditor.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:wickObj});
             });
-            canvas.remove(path);*/
+            canvas.remove(path);
 
             // New send-to-paper.js brush
-            var path = e.target;
+            /*var path = e.target;
 
             path.cloneAsImage(function(clone) {
                 var imgSrc = clone._element.currentSrc || clone._element.src;
@@ -218,12 +222,12 @@ var FabricCanvas = function (wickEditor) {
                 Potrace.loadImageFromDataURL(imgSrc);
                 Potrace.process(function(){
                     var svg = Potrace.getSVG(1);
-                    var svgfile = new File([svg], "filename");
-                    that.paperCanvas.addPathSVG(svgfile, path.left, path.top);
+                    //var svgfile = new File([svg], "filename");
+                    that.paperCanvas.addPathSVG(svg, path.left, path.top, that.canvas.freeDrawingBrush.color);
                 });
             });
 
-            canvas.remove(e.target);
+            canvas.remove(e.target);*/
         }
     });
 
@@ -342,11 +346,11 @@ var FabricCanvas = function (wickEditor) {
 
         this.canvas.forEachObject(function(fabricObj) {
             if(fabricObj.wickObject && fabricObj.wickObject.svgData) {
-                var svgFile = new File([fabricObj.wickObject.svgData], "filename");
                 that.paperCanvas.addPathSVG(
-                    svgFile, 
+                    fabricObj.wickObject.svgData, 
                     fabricObj.left + fabricObj.width /2, 
-                    fabricObj.top  + fabricObj.height/2);
+                    fabricObj.top  + fabricObj.height/2,
+                    fabricObj.paths[0].fill);
                 that.canvas.remove(fabricObj);
             }
         });
