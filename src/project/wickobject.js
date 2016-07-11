@@ -1,9 +1,5 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-/*****************************
-    Object 
-*****************************/
-
 var WickObject = function (parentObject) {
 
     if(!parentObject) {
@@ -344,7 +340,7 @@ WickObject.prototype.regenerateParentObjectReferences = function() {
 
 }
 
-// Used so that if the renderer
+// Used so that if the renderer can't render SVGs it has an image to fallback to
 WickObject.prototype.generateSVGCacheImages = function (callback) {
 
     var that = this;
@@ -363,13 +359,13 @@ WickObject.prototype.generateSVGCacheImages = function (callback) {
     } else if(this.isSymbol) {
 
         var childrenConverted = 0;
-        var nChildren = WickObjectUtils.getTotalNumChildren(that);
+        var nChildren = that.getTotalNumChildren();
 
         if(nChildren == 0) {
             callback();
         }
 
-        WickObjectUtils.forEachChildObject(this, function(currObj) {
+        this.forEachChildObject(function(currObj) {
             currObj.generateSVGCacheImages(function () {
                 childrenConverted++;
                 if(childrenConverted == nChildren) {
@@ -414,7 +410,7 @@ WickObject.prototype.getSymbolTrueOffset = function () {
     var leftmostLeft = null;
     var topmostTop = null;
 
-    WickObjectUtils.forEachFirstFrameChildObject(this, function (currObj) {
+    this.forEachFirstFrameChildObject(function (currObj) {
         if(leftmostLeft === null || currObj.left < leftmostLeft) {
             leftmostLeft = currObj.left;
         }
@@ -466,7 +462,7 @@ WickObject.prototype.encodeStrings = function () {
     }
 
     if(this.isSymbol) {
-        WickObjectUtils.forEachChildObject(this, function(currObj) {
+        this.forEachChildObject(function(currObj) {
             currObj.encodeStrings();
         });
     }
@@ -498,7 +494,7 @@ WickObject.prototype.decodeStrings = function () {
     }
 
     if(this.isSymbol) {
-        WickObjectUtils.forEachChildObject(this, function(currObj) {
+        this.forEachChildObject(function(currObj) {
             currObj.decodeStrings();
         });
     }
@@ -556,7 +552,6 @@ function rectangularHitDetection(objA, objB) {
 
 /* Determine if two wickObjects Collide using circular hit detection from their
    centroid using their full width and height. */ 
-
 function circularHitDetection(objA, objB) {
     var objAAbsPos = objA.getAbsolutePosition();
     var objBAbsPos = objB.getAbsolutePosition();
@@ -583,8 +578,15 @@ WickObject.prototype.hitTest = function (otherObj, hitTestType) {
         return false; 
     }
 
-    var otherObjChildren = WickObjectUtils.getAllActiveChildObjects(otherObj);
-    var thisObjChildren = WickObjectUtils.getAllActiveChildObjects(this);
+    var otherObjChildren = otherObj.getAllActiveChildObjects();
+    if(!otherObj.isSymbol) {
+        otherObjChildren.push(otherObj);
+    }
+
+    var thisObjChildren = this.getAllActiveChildObjects();
+    if(!this.isSymbol) {
+        thisObjChildren.push(this); 
+    }
 
     var checkMethod;
 
@@ -602,13 +604,6 @@ WickObject.prototype.hitTest = function (otherObj, hitTestType) {
             checkMethod = rectangularHitDetection; 
     }
 
-    if(!otherObj.isSymbol) {
-        otherObjChildren.push(otherObj);
-    }
-    if(!this.isSymbol) {
-        thisObjChildren.push(this); 
-    }
-
     for (var i = 0; i < otherObjChildren.length; i++) {
         for (var j = 0; j <thisObjChildren.length; j++) {
             if (checkMethod(otherObjChildren[i], thisObjChildren[j])) {
@@ -619,6 +614,223 @@ WickObject.prototype.hitTest = function (otherObj, hitTestType) {
 
     return false; 
 
+}
+
+WickObject.prototype.tryNavigateToFrame = function (frame, callback) {
+
+    if (CheckInput.testNonNegativeInteger(frame)) {
+
+        // Only navigate to an integer frame if it is nonnegative and a valid frame
+        if(frame < this.frames.length)
+            this.navigateToFrame(frame, callback);
+        else
+            console.log("Failed to navigate to frame \'" + frame + "\': is not a valid frame.");
+
+    } else if (CheckInput.testString(frame)) {
+
+        // Search for the frame with the correct identifier and navigate if found
+        this.navigateToFrameByIdentifier(frame, callback);
+
+    } else {
+
+        console.log("Failed to navigate to frame \'" + frame + "\': is neither a string nor a nonnegative integer");
+
+    }
+}
+
+WickObject.prototype.navigateToFrameByIdentifier = function(frameID, callback) {
+
+    for (var f = 0; f < this.frames.length; f++) {
+
+        if(frameID === this.frames[f].identifier) {
+            this.navigateToFrame(f, callback);
+            return;
+        }
+    }
+
+    console.log("Failed to navigate to frame \'" + frameID + "\': is neither a string nor a nonnegative integer");
+}
+
+WickObject.prototype.navigateToFrame = function (frame, callback) {
+
+    if(!this.isSymbol) {
+        VerboseLog.error("gotoPrevFrame called on wickobject that isn't a symbol!")
+        return;
+    }
+    
+    var oldFrame = this.currentFrame;
+
+    this.currentFrame = frame;
+
+    if(oldFrame != this.currentFrame) {
+        this.forEachActiveChildObject(function(child) {
+            child.onLoadScriptRan = false;
+        });
+    }
+
+    callback();
+}
+
+WickObject.prototype.play = function (frame) {
+
+    if(!this.isSymbol) {
+        VerboseLog.error("play called on wickobject that isn't a symbol!")
+        return;
+    }
+
+    var oldFrame = this.currentFrame;
+
+    this.isPlaying = true;
+
+    if(oldFrame != this.currentFrame) {
+        this.forEachActiveChildObject(function(child) {
+            child.onLoadScriptRan = false;
+        });
+    }
+}
+
+WickObject.prototype.stop = function (frame) {
+
+    if(!this.isSymbol) {
+        VerboseLog.error("stop called on wickobject that isn't a symbol!")
+        return;
+    }
+
+    this.isPlaying = false;
+}
+
+WickObject.prototype.gotoAndPlay = function (frame) {
+
+    if(!this.isSymbol) {
+        VerboseLog.error("gotoAndPlay called on wickobject that isn't a symbol!")
+        return;
+    }
+
+    this.tryNavigateToFrame(frame, function() {
+        this.isPlaying = true;
+    });
+    
+}
+
+WickObject.prototype.gotoAndStop = function (frame) {
+
+    if(!this.isSymbol) {
+        VerboseLog.error("gotoAndStop called on wickobject that isn't a symbol!")
+        return;
+    }
+    
+    this.tryNavigateToFrame(frame, function() {
+        this.isPlaying = false;
+    });
+
+}
+
+WickObject.prototype.gotoNextFrame = function () {
+
+    if(!this.isSymbol) {
+        VerboseLog.error("gotoNextFrame called on wickobject that isn't a symbol!")
+        return;
+    }
+
+    var oldFrame = this.currentFrame;
+
+    this.currentFrame ++;
+    if(this.currentFrame >= this.frames.length) {
+        this.currentFrame = this.frames.length-1;
+    }
+
+    if(oldFrame != this.currentFrame) {
+        this.forEachActiveChildObject(function(child) {
+            child.onLoadScriptRan = false;
+        });
+    }
+}
+
+WickObject.prototype.gotoPrevFrame = function () {
+
+    if(!this.isSymbol) {
+        VerboseLog.error("gotoPrevFrame called on wickobject that isn't a symbol!")
+        return;
+    }
+
+    var oldFrame = this.currentFrame;
+
+    this.currentFrame --;
+    if(this.currentFrame < 0) {
+        this.currentFrame = 0;
+    }
+
+    if(oldFrame != this.currentFrame) {
+        this.forEachActiveChildObject(function(child) {
+            child.onLoadScriptRan = false;
+        });
+    }
+}
+
+/* Return all child objects of a parent object */
+WickObject.prototype.getAllChildObjects = function () {
+
+    if (!this.isSymbol) {
+        return []; 
+    }
+
+    var children = [];
+    for (var f = 0; f < this.frames.length; f++) {
+        for (var o = 0; o < this.frames[f].wickObjects.length; o++) {
+            children.push(this.frames[f].wickObjects[o])
+        }
+    }
+    return children;
+}
+
+/* Return all child objects in the parent objects current frame. */
+WickObject.prototype.getAllActiveChildObjects = function () {
+
+    if (!this.isSymbol) {
+        return []; 
+    }
+
+    var children = [];
+    var currFrame = this.currentFrame;
+    for (var o = 0; o < this.frames[currFrame].wickObjects.length; o++) {
+        children.push(this.frames[currFrame].wickObjects[o]);
+    }
+    return children; 
+}
+
+/* Call callback function for every child object in this object */
+WickObject.prototype.forEachChildObject = function (callback) {
+    for(var f = 0; f < this.frames.length; f++) {
+        for(var o = 0; o < this.frames[f].wickObjects.length; o++) {
+            callback(this.frames[f].wickObjects[o]);
+        }
+    }
+}
+
+/* Call callback function for every child object in this object's current frame */
+WickObject.prototype.forEachActiveChildObject = function (callback) {
+    var currFrame = this.currentFrame;
+    for(var o = 0; o < this.frames[currFrame].wickObjects.length; o++) {
+        callback(this.frames[currFrame].wickObjects[o]);
+    }
+}
+
+/* Call callback function for every child object in this object's first frame */
+WickObject.prototype.forEachFirstFrameChildObject = function (callback) {
+    for(var o = 0; o < this.frames[0].wickObjects.length; o++) {
+        callback(this.frames[0].wickObjects[o]);
+    }
+}
+
+/* Excludes children of children */
+WickObject.prototype.getTotalNumChildren = function () {
+    var count = 0;
+    for(var f = 0; f < this.frames.length; f++) {
+        for(var o = 0; o < this.frames[f].wickObjects.length; o++) {
+            count++;
+        }
+    }
+    return count;
 }
 
 var WickObjectUtils = (function () {
@@ -633,76 +845,10 @@ var WickObjectUtils = (function () {
 
         // Recursively put the prototypes back on the children objects
         if(obj.isSymbol) {
-            WickObjectUtils.forEachChildObject(obj, function(currObj) {
+            obj.forEachChildObject(function(currObj) {
                 utils.putWickObjectPrototypeBackOnObject(currObj);
             });
         }
-    }
-
-    /* Return all child objects of a parent object */
-    utils.getAllChildObjects = function (parentObj) {
-
-        if (!parentObj.isSymbol) {
-            return []; 
-        }
-
-        var children = [];
-        for (var f = 0; f < parentObj.frames.length; f++) {
-            for (var o = 0; o < parentObj.frames[f].wickObjects.length; o++) {
-                children.push(parentObj.frames[f].wickObjects[o])
-            }
-        }
-        return children;
-    }
-
-    /* Return all child objects in the parent objects current frame. */
-    utils.getAllActiveChildObjects = function (parentObj) {
-
-        if (!parentObj.isSymbol) {
-            return []; 
-        }
-
-        var children = [];
-        var currFrame = parentObj.currentFrame;
-        for (var o = 0; o < parentObj.frames[currFrame].wickObjects.length; o++) {
-            children.push(parentObj.frames[currFrame].wickObjects[o]);
-        }
-        return children; 
-    }
-
-    /* Call callback function for every child object in parentObj */
-    utils.forEachChildObject = function (parentObj, callback) {
-        for(var f = 0; f < parentObj.frames.length; f++) {
-            for(var o = 0; o < parentObj.frames[f].wickObjects.length; o++) {
-                callback(parentObj.frames[f].wickObjects[o]);
-            }
-        }
-    }
-
-    /* Call callback function for every child object in parentObj's current frame */
-    utils.forEachActiveChildObject = function (parentObj, callback) {
-        var currFrame = parentObj.currentFrame;
-        for(var o = 0; o < parentObj.frames[currFrame].wickObjects.length; o++) {
-            callback(parentObj.frames[currFrame].wickObjects[o]);
-        }
-    }
-
-    /* Call callback function for every child object in parentObj's first frame */
-    utils.forEachFirstFrameChildObject = function (parentObj, callback) {
-        for(var o = 0; o < parentObj.frames[0].wickObjects.length; o++) {
-            callback(parentObj.frames[0].wickObjects[o]);
-        }
-    }
-
-    /* Excludes children of children */
-    utils.getTotalNumChildren = function (parentObj) {
-        var count = 0;
-        for(var f = 0; f < parentObj.frames.length; f++) {
-            for(var o = 0; o < parentObj.frames[f].wickObjects.length; o++) {
-                count++;
-            }
-        }
-        return count;
     }
 
     return utils;

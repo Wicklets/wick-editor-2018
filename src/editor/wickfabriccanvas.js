@@ -204,31 +204,41 @@ var FabricCanvas = function (wickEditor) {
 
     // Paths are handled internally by fabric so we have to 
     // intercept the paths and convert them to wickobjects
+
+    var rasterizePath = function (pathFabricObject) {
+        // Old straight-to-rasterized brush
+        WickObject.fromFabricPath(pathFabricObject, wickEditor.currentObject, function(wickObj) {
+            wickEditor.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:wickObj});
+        });
+    }
+
+    var potracePath = function (pathFabricObject) {
+        // New potrace-and-send-to-paper.js brush
+        pathFabricObject.cloneAsImage(function(clone) {
+            var imgSrc = clone._element.currentSrc || clone._element.src;
+
+            Potrace.loadImageFromDataURL(imgSrc);
+            Potrace.process(function(){
+                var svg = Potrace.getSVG(1);
+                that.paperCanvas.addPathSVG(
+                    svg, 
+                    pathFabricObject.left, 
+                    pathFabricObject.top, 
+                    that.canvas.freeDrawingBrush.color);
+            });
+        }); 
+    }
+
     canvas.on('object:added', function(e) {
-        if(e.target.type === "path") {
-            // Old straight-to-rasterized brush
-            var path = e.target;
-            WickObject.fromFabricPath(path, wickEditor.currentObject, function(wickObj) {
-                wickEditor.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:wickObj});
-            });
-            canvas.remove(path);
-
-            // New send-to-paper.js brush
-            /*var path = e.target;
-
-            path.cloneAsImage(function(clone) {
-                var imgSrc = clone._element.currentSrc || clone._element.src;
-
-                Potrace.loadImageFromDataURL(imgSrc);
-                Potrace.process(function(){
-                    var svg = Potrace.getSVG(1);
-                    //var svgfile = new File([svg], "filename");
-                    that.paperCanvas.addPathSVG(svg, path.left, path.top, that.canvas.freeDrawingBrush.color);
-                });
-            });
-
-            canvas.remove(e.target);*/
+        if(e.target.type !== "path") {
+            return;
         }
+
+        var path = e.target;
+        // rasterizePath(path);
+        potracePath(path);
+        canvas.remove(e.target);
+
     });
 
     canvas.on('object:selected', function (e) {

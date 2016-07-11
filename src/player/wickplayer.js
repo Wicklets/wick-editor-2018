@@ -49,16 +49,21 @@ var WickPlayer = (function () {
 
         // Load the project!
         loadJSONProject(projectJSON);
-        
+
         // Setup renderer
         rendererContainerEl = document.getElementById("playerCanvasContainer");
-        renderer = PIXI.autoDetectRenderer(project.resolution.x, project.resolution.y, {backgroundColor : 0x1099bb});
+        var rendererOptions = {
+            backgroundColor : 0x1099bb, 
+            resolution: window.devicePixelRatio };
+        renderer = PIXI.autoDetectRenderer(project.resolution.x, project.resolution.y, rendererOptions);
         renderer.clearBeforeRender = false;
+
         // Get rid of old canvas (if it exists)
         var oldRendererCanvas = document.getElementById("rendererCanvas");
         if(oldRendererCanvas) {
             rendererContainerEl.removeChild(rendererContainerEl.childNodes[0]);
         }
+
         // Add renderer canvas
         rendererContainerEl.appendChild(renderer.view);
         renderer.view.id = "rendererCanvas";
@@ -178,7 +183,6 @@ var WickPlayer = (function () {
         // Regenerate WickObject stuff that we lost when the projects was JSONified
         generateObjectNameReferences(project.rootObject);
         generateObjectParentReferences(project.rootObject);
-        generateBuiltinWickFunctions(project.rootObject);
         generateHTMLSnippetDivs(project.rootObject);
 
         project.rootObject.regenerateParentObjectReferences();
@@ -192,7 +196,7 @@ var WickPlayer = (function () {
 
     /* Create variables inside each wickobject so we can say root.bogoObject.play(); and such */
     var generateObjectNameReferences = function (wickObj) {
-        WickObjectUtils.forEachChildObject(wickObj, function(subObj) {
+        wickObj.forEachChildObject(function(subObj) {
             wickObj[subObj.name] = subObj;
 
             if(subObj.isSymbol) {
@@ -203,136 +207,12 @@ var WickPlayer = (function () {
 
     /* We'll need these when evaling scripts */
     var generateObjectParentReferences = function (wickObj) {
-        WickObjectUtils.forEachChildObject(wickObj, function(subObj) {
+        wickObj.forEachChildObject(function(subObj) {
             subObj.parentObj = wickObj;
             if(subObj.isSymbol) {
                 generateObjectParentReferences(subObj);
             }
         });
-    }
-
-    /* */
-    var generateBuiltinWickFunctions = function (wickObj) {
-
-        if(wickObj.audioData) {
-            wickObj.playSound = function () {
-                playSound(wickObj.audioBuffer);
-            }
-        }
-
-        function tryNavigateToFrame (frame, setPlayFunction) {
-
-            if (CheckInput.testNonNegativeInteger(frame)) {
-
-                // Only navigate to an integer frame if it is nonnegative and a valid frame
-                if(frame < wickObj.frames.length)
-                    navigateToFrame(frame, setPlayFunction);
-                else
-                    console.log("Failed to navigate to frame \'" + frame + "\': is not a valid frame.");
-
-            } else if (CheckInput.testString(frame)) {
-
-                // Search for the frame with the correct identifier and navigate if found
-                navigateToFrameByIdentifier(frame, setPlayFunction);
-
-            } else {
-
-                console.log("Failed to navigate to frame \'" + frame + "\': is neither a string nor a nonnegative integer");
-
-            }
-        }
-
-        function navigateToFrameByIdentifier(frameID, setPlayFunction) {
-
-            for (var f = 0; f < wickObj.frames.length; f++) {
-
-                if(frameID === wickObj.frames[f].identifier) {
-                    navigateToFrame(f, setPlayFunction);
-                    return;
-                }
-            }
-
-            console.log("Failed to navigate to frame \'" + frameID + "\': is neither a string nor a nonnegative integer");
-        }
-
-        function navigateToFrame (frame, setPlayFunction) {
-            
-            var oldFrame = wickObj.currentFrame;
-
-            wickObj.currentFrame = frame;
-
-            if(oldFrame != wickObj.currentFrame) {
-                WickObjectUtils.forEachActiveChildObject(wickObj, function(child) {
-                    child.onLoadScriptRan = false;
-                });
-            }
-
-            setPlayFunction();
-        }
-
-        if(wickObj.isSymbol) {
-            // Setup builtin wick scripting methods and objects
-            wickObj.play = function (frame) {
-                var oldFrame = wickObj.currentFrame;
-
-                wickObj.isPlaying = true;
-
-                if(oldFrame != wickObj.currentFrame) {
-                    WickObjectUtils.forEachActiveChildObject(wickObj, function(child) {
-                        child.onLoadScriptRan = false;
-                    });
-                }
-            }
-            wickObj.stop = function (frame) {
-                wickObj.isPlaying = false;
-            }
-            wickObj.gotoAndPlay = function (frame) {
-
-                tryNavigateToFrame(frame, function() {
-                    wickObj.isPlaying = true;
-                });
-                
-            }
-            wickObj.gotoAndStop = function (frame) {
-                
-                tryNavigateToFrame(frame, function() {
-                    wickObj.isPlaying = false;
-                });
-
-            }
-            wickObj.gotoNextFrame = function () {
-                var oldFrame = wickObj.currentFrame;
-
-                wickObj.currentFrame ++;
-                if(wickObj.currentFrame >= wickObj.frames.length) {
-                    wickObj.currentFrame = wickObj.frames.length-1;
-                }
-
-                if(oldFrame != wickObj.currentFrame) {
-                    WickObjectUtils.forEachActiveChildObject(wickObj, function(child) {
-                        child.onLoadScriptRan = false;
-                    });
-                }
-            }
-            wickObj.gotoPrevFrame = function () {
-                var oldFrame = wickObj.currentFrame;
-
-                wickObj.currentFrame --;
-                if(wickObj.currentFrame < 0) {
-                    wickObj.currentFrame = 0;
-                }
-
-                if(oldFrame != wickObj.currentFrame) {
-                    WickObjectUtils.forEachActiveChildObject(wickObj, function(child) {
-                        child.onLoadScriptRan = false;
-                    });
-                }
-            }
-
-            WickObjectUtils.forEachChildObject(wickObj, function(subObj) {
-                generateBuiltinWickFunctions(subObj);
-            });
-        }
     }
 
     /* */
@@ -350,7 +230,7 @@ var WickPlayer = (function () {
         }
 
         if(wickObj.isSymbol) {
-            WickObjectUtils.forEachChildObject(wickObj, function(subObj) {
+            wickObj.forEachChildObject(function(subObj) {
                 generateHTMLSnippetDivs(subObj);
             });
         }
@@ -375,7 +255,7 @@ var WickPlayer = (function () {
             wickObj.isPlaying = true;
 
             // Recursively set all playhead vars of children
-            WickObjectUtils.forEachChildObject(wickObj, function(subObj) {
+            wickObj.forEachChildObject(function(subObj) {
                 resetAllPlayheads(subObj);
             });
         }
@@ -392,7 +272,7 @@ var WickPlayer = (function () {
 
         // Do the same for all this object's children
         if(wickObj.isSymbol) {
-            WickObjectUtils.forEachChildObject(wickObj, function(subObj) {
+            wickObj.forEachChildObject(function(subObj) {
                 resetAllEventStates(subObj);
             });
         }
@@ -408,7 +288,7 @@ var WickPlayer = (function () {
 
         // Do the same for all this object's children
         if(wickObj.isSymbol) {
-            WickObjectUtils.forEachChildObject(wickObj, function(subObj) {
+            wickObj.forEachChildObject(function(subObj) {
                 resetAllPositioningVariables(subObj);
             });
         }
@@ -420,7 +300,7 @@ var WickPlayer = (function () {
 
         wickObj.pixiContainer = new PIXI.Container();
 
-        WickObjectUtils.forEachChildObject(wickObj, function(subObj) {
+        wickObj.forEachChildObject(function(subObj) {
             if (subObj.isSymbol) {
                 loadImages(subObj);
                 wickObj.pixiContainer.addChild(subObj.pixiContainer);
@@ -445,15 +325,22 @@ var WickPlayer = (function () {
 
     /* Recursively load audio of wickObj */
     var loadAudio = function (wickObj) {
-        WickObjectUtils.forEachChildObject(wickObj, function(subObj) {
-            if(subObj.isSymbol) {
-                loadAudio(subObj);
-            } else if(subObj.audioData) {
-                var rawData = subObj.audioData.split(",")[1]; // cut off extra filetype/etc data
-                var rawBuffer = Base64ArrayBuffer.decode(rawData);
-                subObj.audioBuffer = rawBuffer;
+
+        if(wickObj.audioData) {
+            var rawData = wickObj.audioData.split(",")[1]; // cut off extra filetype/etc data
+            var rawBuffer = Base64ArrayBuffer.decode(rawData);
+            wickObj.audioBuffer = rawBuffer;
+
+            wickObj.playSound = function () {
+                playSound(wickObj.audioBuffer);
             }
-        });
+        }
+
+        if(wickObj.isSymbol) {
+            wickObj.forEachChildObject(function(subObj) {
+                loadAudio(subObj);
+            });
+        }
     }
 
 /*****************************
@@ -511,7 +398,7 @@ var WickPlayer = (function () {
 
         // Check if we're hovered over a clickable object...
         var hoveredOverObj = false;
-        WickObjectUtils.forEachActiveChildObject(project.rootObject, function(currObj) {
+        project.rootObject.forEachActiveChildObject(function(currObj) {
             if(pointInsideObj(currObj, mouse) && wickObjectIsClickable(currObj)) {
                 currObj.hoveredOver = true;
                 hoveredOverObj = true;
@@ -531,7 +418,7 @@ var WickPlayer = (function () {
 
     var onMouseDown = function (evt) {
         
-        WickObjectUtils.forEachActiveChildObject(project.rootObject, function(currObj) {
+        project.rootObject.forEachActiveChildObject(function(currObj) {
             if(pointInsideObj(currObj, mouse) && wickObjectIsClickable(currObj)) {
                 runOnClickScript(currObj);
             }
@@ -542,7 +429,7 @@ var WickPlayer = (function () {
     var handleKeyDownInput = function (event) {
         keys[event.keyCode] = true;
 
-        WickObjectUtils.forEachActiveChildObject(project.rootObject, function(currObj) {
+        project.rootObject.forEachActiveChildObject(function(currObj) {
             runKeyDownScript(currObj);
         });
     }
@@ -567,7 +454,7 @@ var WickPlayer = (function () {
 
         var touchPos = getTouchPos(renderer.view, evt);
 
-        WickObjectUtils.forEachActiveChildObject(project.rootObject, function(currObj) {
+        project.rootObject.forEachActiveChildObject(function(currObj) {
             if(pointInsideObj(currObj, touchPos) && wickObjectIsClickable(currObj)) {
                 runOnClickScript(currObj);
             }
@@ -661,7 +548,7 @@ var WickPlayer = (function () {
 
             var pointInsideSymbol = false;
 
-            WickObjectUtils.forEachActiveChildObject(obj, function (currObj) {
+            obj.forEachActiveChildObject(function (currObj) {
                 var subPoint = {
                     x : point.x - obj.x,
                     y : point.y - obj.y
@@ -767,7 +654,7 @@ var WickPlayer = (function () {
 
             // Recursively run all onLoads
             if(obj.isSymbol) {
-                WickObjectUtils.forEachActiveChildObject(obj, function(subObj) {
+                obj.forEachActiveChildObject(function(subObj) {
                     runOnLoadScript(subObj);
                 });
             }
@@ -785,7 +672,7 @@ var WickPlayer = (function () {
 
         // Recursively run all updates
         if(obj.isSymbol) {
-            WickObjectUtils.forEachActiveChildObject(obj, function(subObj) {
+            obj.forEachActiveChildObject(function(subObj) {
                 runUpdateScript(subObj);
             });
         }
@@ -823,7 +710,7 @@ var WickPlayer = (function () {
         var parent = obj.parentObj;
 
         // WickObjects in same frame (scope) are accessable without using root./parent.
-        WickObjectUtils.forEachChildObject(obj.parentObj, function(subObj) {
+        obj.parentObj.forEachChildObject(function(subObj) {
             window[subObj.name] = subObj;
         });
 
@@ -836,7 +723,7 @@ var WickPlayer = (function () {
         eval(script);
 
         // Get rid of wickobject reference variables
-        WickObjectUtils.forEachChildObject(obj.parentObj, function(subObj) {
+        obj.parentObj.forEachChildObject(function(subObj) {
             window[subObj.name] = undefined;
         });
 
@@ -852,7 +739,7 @@ var WickPlayer = (function () {
 
                 /* Leaving the frame, all child objects are unloaded, make sure 
                    they run onLoad again next time we come back to this frame */
-                WickObjectUtils.forEachActiveChildObject(obj, function(child) {
+                obj.forEachActiveChildObject(function(child) {
                     child.onLoadScriptRan = false;
                 });
 
@@ -869,7 +756,7 @@ var WickPlayer = (function () {
 
         // Recusively advance timelines of all children
         if(obj.isSymbol) {
-            WickObjectUtils.forEachActiveChildObject(obj, function(subObj) {
+            obj.forEachActiveChildObject(function(subObj) {
                 if(subObj.isSymbol) {
                     advanceTimeline(subObj);
                 }
@@ -897,7 +784,7 @@ var WickPlayer = (function () {
 
     var resetAllPixiObjects = function (wickObj) {
 
-        WickObjectUtils.forEachChildObject(wickObj, function(subObj) {
+        wickObj.forEachChildObject(function(subObj) {
             if(subObj.pixiSprite) {
                 subObj.pixiSprite.visible = false;
             }
@@ -931,7 +818,7 @@ var WickPlayer = (function () {
                 if(wickObj.flipY) wickObj.pixiContainer.scale.y *= -1;
                 wickObj.pixiContainer.alpha    = wickObj.opacity;
             }
-            WickObjectUtils.forEachActiveChildObject(wickObj, function(subObj) {
+            wickObj.forEachActiveChildObject(function(subObj) {
                 updatePixiObjectTransforms(subObj);
             });
         } else {
