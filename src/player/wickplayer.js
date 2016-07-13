@@ -178,7 +178,6 @@ var WickPlayer = (function () {
         // Prepare all objects for being played/drawn
         resetAllPlayheads(project.rootObject);
         resetAllEventStates(project.rootObject);
-        resetAllPositioningVariables(project.rootObject);
 
         // Regenerate WickObject stuff that we lost when the projects was JSONified
         generateObjectNameReferences(project.rootObject);
@@ -274,22 +273,6 @@ var WickPlayer = (function () {
         if(wickObj.isSymbol) {
             wickObj.forEachChildObject(function(subObj) {
                 resetAllEventStates(subObj);
-            });
-        }
-
-    }
-
-    /* */
-    var resetAllPositioningVariables = function (wickObj) {
-
-        // Set x,y to top and left, top and left are only used to save the initial position
-        wickObj.x = wickObj.left;
-        wickObj.y = wickObj.top;
-
-        // Do the same for all this object's children
-        if(wickObj.isSymbol) {
-            wickObj.forEachChildObject(function(subObj) {
-                resetAllPositioningVariables(subObj);
             });
         }
 

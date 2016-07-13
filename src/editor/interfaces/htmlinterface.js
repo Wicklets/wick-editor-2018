@@ -1,12 +1,13 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-var WickHTMLGUIHandler = function (wickEditor) {
+var HTMLInterface = function (wickEditor) {
 
-    this.syncWithEditor = function () {
-
+    this.resize = function () {
         var GUIWidth = parseInt($("#timelineGUI").css("width")) / 2;
-        var timelineOffset = window.innerWidth/2 - GUIWidth;
-        $("#timelineGUI").css('left', timelineOffset+'px');
+        $("#timelineGUI").css('left', (window.innerWidth/2 - GUIWidth)+'px');
+    }
+
+    this.syncWithEditorState = function () {
 
         this.updateTimelineGUI();
         this.updatePropertiesGUI();
@@ -60,46 +61,44 @@ var WickHTMLGUIHandler = function (wickEditor) {
     $('#mouseToolButton').on('click', function(e) {
         document.getElementById('toolOptionsGUI').style.display = 'none';
 
-        wickEditor.fabricCanvas.getCanvas().isDrawingMode = false;
-        wickEditor.fabricCanvas.currentTool = "cursor";
+        wickEditor.fabricInterface.canvas.isDrawingMode = false;
+        wickEditor.fabricInterface.currentTool = "cursor";
 
-        wickEditor.fabricCanvas.addPaperSVGsToFabricCanvas();
+        wickEditor.fabricInterface.addPaperSVGsTofabricInterface();
     });
 
     $('#paintbrushToolButton').on('click', function(e) {
         document.getElementById('toolOptionsGUI').style.display = 'block';
 
-        wickEditor.fabricCanvas.getCanvas().isDrawingMode = true;
-        wickEditor.fabricCanvas.currentTool = "paintbrush";
+        wickEditor.fabricInterface.canvas.isDrawingMode = true;
+        wickEditor.fabricInterface.currentTool = "paintbrush";
 
-        wickEditor.fabricCanvas.getCanvas().freeDrawingBrush = new fabric['PencilBrush'](wickEditor.fabricCanvas.getCanvas());
-        wickEditor.fabricCanvas.getCanvas().freeDrawingBrush.color = lineColorEl.value;
-        wickEditor.fabricCanvas.getCanvas().freeDrawingBrush.width = parseInt(lineWidthEl.value, 10) || 1;
-
-        wickEditor.fabricCanvas.addFabricSVGsToPaperCanvas();
+        wickEditor.fabricInterface.canvas.freeDrawingBrush = new fabric['PencilBrush'](wickEditor.fabricInterface.canvas);
+        wickEditor.fabricInterface.canvas.freeDrawingBrush.color = lineColorEl.value;
+        wickEditor.fabricInterface.canvas.freeDrawingBrush.width = parseInt(lineWidthEl.value, 10) || 1;
     });
 
     $('#eraserToolButton').on('click', function(e) {
         document.getElementById('toolOptionsGUI').style.display = 'block';
 
-        wickEditor.fabricCanvas.getCanvas().isDrawingMode = true;
-        wickEditor.fabricCanvas.currentTool = "eraser";
+        wickEditor.fabricInterface.canvas.isDrawingMode = true;
+        wickEditor.fabricInterface.currentTool = "eraser";
 
-        wickEditor.fabricCanvas.getCanvas().freeDrawingBrush = new fabric['PencilBrush'](wickEditor.fabricCanvas.getCanvas());
-        wickEditor.fabricCanvas.getCanvas().freeDrawingBrush.color = lineColorEl.value;
-        wickEditor.fabricCanvas.getCanvas().freeDrawingBrush.width = parseInt(lineWidthEl.value, 10) || 1;
+        wickEditor.fabricInterface.canvas.freeDrawingBrush = new fabric['PencilBrush'](wickEditor.fabricInterface.canvas);
+        wickEditor.fabricInterface.canvas.freeDrawingBrush.color = lineColorEl.value;
+        wickEditor.fabricInterface.canvas.freeDrawingBrush.width = parseInt(lineWidthEl.value, 10) || 1;
     });
 
     $('#fillBucketToolButton').on('click', function(e) {
         document.getElementById('toolOptionsGUI').style.display = 'none';
 
-        wickEditor.fabricCanvas.getCanvas().isDrawingMode = false;
-        wickEditor.fabricCanvas.currentTool = "fillbucket";
+        wickEditor.fabricInterface.canvas.isDrawingMode = false;
+        wickEditor.fabricInterface.currentTool = "fillbucket";
     });
 
     $('#textToolButton').on('click', function(e) {
         var newWickObject = WickObject.fromText('Click to edit text', wickEditor.currentObject);
-        wickEditor.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:newWickObject});
+        wickEditor.actionHandler.doAction('addWickObjectTofabricInterface', {wickObject:newWickObject});
     });
 
     $('#htmlSnippetToolButton').on('click', function(e) {
@@ -110,11 +109,11 @@ var WickHTMLGUIHandler = function (wickEditor) {
     var lineColorEl = document.getElementById('lineColor');
 
     lineWidthEl.onchange = function() {
-        wickEditor.fabricCanvas.getCanvas().freeDrawingBrush.width = parseInt(this.value, 10) || 1;
+        wickEditor.fabricInterface.canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;
     };
 
     lineColorEl.onchange = function() {
-        wickEditor.fabricCanvas.getCanvas().freeDrawingBrush.color = this.value;
+        wickEditor.fabricInterface.canvas.freeDrawingBrush.color = this.value;
     };
 
 /********************
@@ -140,22 +139,22 @@ var WickHTMLGUIHandler = function (wickEditor) {
 
     $("#onLoadButton").on("click", function (e) {
         that.currentScript = 'onLoad';
-        that.reloadScriptingGUI(wickEditor.fabricCanvas.getActiveObject());
+        that.reloadScriptingGUI(wickEditor.fabricInterface.getActiveObject());
     });
 
     $("#onClickButton").on("click", function (e) {
         that.currentScript = 'onClick';
-        that.reloadScriptingGUI(wickEditor.fabricCanvas.getActiveObject());
+        that.reloadScriptingGUI(wickEditor.fabricInterface.getActiveObject());
     });
 
     $("#onUpdateButton").on("click", function (e) {
         that.currentScript = 'onUpdate';
-        that.reloadScriptingGUI(wickEditor.fabricCanvas.getActiveObject());
+        that.reloadScriptingGUI(wickEditor.fabricInterface.getActiveObject());
     });
 
     $("#onKeyDownButton").on("click", function (e) {
         that.currentScript = 'onKeyDown';
-        that.reloadScriptingGUI(wickEditor.fabricCanvas.getActiveObject());
+        that.reloadScriptingGUI(wickEditor.fabricInterface.getActiveObject());
     });
 
     $("#closeScriptingGUIButton").on("click", function (e) {
@@ -196,7 +195,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
 
     // Update selected objects scripts when script editor text changes
     this.aceEditor.getSession().on('change', function (e) {
-        that.updateScriptsOnObject(wickEditor.fabricCanvas.getActiveObject());
+        that.updateScriptsOnObject(wickEditor.fabricInterface.getActiveObject());
     });
 
     this.aceEditor.getSession().on("changeAnnotation", function(){
@@ -232,7 +231,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
 
     this.reloadScriptingGUI = function () {
         
-        var activeObj = wickEditor.fabricCanvas.getCanvas().getActiveObject();
+        var activeObj = wickEditor.fabricInterface.canvas.getActiveObject();
 
         if(!activeObj || !activeObj.wickObject) {
             this.closeScriptingGUI();
@@ -275,9 +274,11 @@ var WickHTMLGUIHandler = function (wickEditor) {
         timeline.innerHTML = "";
         timeline.style.width = 3000+'px';//wickEditor.currentObject.frames.length*100 + 6 + "px";
 
-        for(var i = 0; i < wickEditor.currentObject.frames.length; i++) {
+        var currentObject = wickEditor.project.getCurrentObject();
+        console.log(currentObject)
+        for(var i = 0; i < currentObject; i++) {
 
-            var frame = wickEditor.currentObject.frames[i];
+            var frame = currentObject.frames[i];
 
         // Create the span that holds all the stuff for each frame
 
@@ -291,7 +292,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
             var frameDiv = document.createElement("span");
             frameDiv.id = "frame" + i;
             frameDiv.innerHTML = i;
-            if(wickEditor.currentObject.currentFrame == i) {
+            if(currentObject.currentFrame == i) {
                 frameDiv.className = "timelineFrame active";
             } else {
                 frameDiv.className = "timelineFrame";
@@ -309,7 +310,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
         // Create the breakpoint toggle element
 
             var breakpointDiv = document.createElement("span");
-            if(wickEditor.currentObject.frames[i].breakpoint) {
+            if(currentObject.frames[i].breakpoint) {
                 breakpointDiv.className = "breakpointButton enabled";
             } else {
                 breakpointDiv.className = "breakpointButton";
@@ -319,16 +320,16 @@ var WickHTMLGUIHandler = function (wickEditor) {
             // Add mousedown event to the breakpoint element so we toggle a breakpoint on that frame
             breakpointDiv.addEventListener("mousedown", function(index) {
                 return function () {
-                    var frame = wickEditor.currentObject.frames[index];
+                    var frame = currentObject.frames[index];
                     frame.breakpoint = !frame.breakpoint;
-                    that.updateTimelineGUI(wickEditor.currentObject);
+                    that.updateTimelineGUI(currentObject);
                 };
             }(i), false);
 
         }
     }
     
-    this.updateTimelineGUI(wickEditor.currentObject);
+    this.updateTimelineGUI();
 
 /*********************
     Properties Box
@@ -337,10 +338,10 @@ var WickHTMLGUIHandler = function (wickEditor) {
     $('#projectSizeX').on('input propertychange', function () {
 
         CheckInput.callIfPositiveInteger($('#projectSizeX').val(), function(n) {
-            wickEditor.syncEditorWithFabricCanvas();
+            wickEditor.syncEditorWithfabricInterface();
             wickEditor.project.resolution.x = n;
-            wickEditor.fabricCanvas.resize();
-            wickEditor.fabricCanvas.syncWithEditor();
+            wickEditor.fabricInterface.resize();
+            wickEditor.fabricInterface.syncWithEditor();
         });
 
     });
@@ -348,10 +349,10 @@ var WickHTMLGUIHandler = function (wickEditor) {
     $('#projectSizeY').on('input propertychange', function () {
 
         CheckInput.callIfPositiveInteger($('#projectSizeY').val(), function(n) {
-            wickEditor.syncEditorWithFabricCanvas();
+            wickEditor.syncEditorWithfabricInterface();
             wickEditor.project.resolution.y = n;
-            wickEditor.fabricCanvas.resize();
-            wickEditor.fabricCanvas.syncWithEditor();
+            wickEditor.fabricInterface.resize();
+            wickEditor.fabricInterface.syncWithEditor();
         });
 
     });
@@ -382,52 +383,52 @@ var WickHTMLGUIHandler = function (wickEditor) {
 
     document.getElementById('projectBgColor').onchange = function () {
         wickEditor.project.backgroundColor = this.value;
-        wickEditor.fabricCanvas.setBackgroundColor(this.value);
+        wickEditor.fabricInterface.syncWithEditorState();
     };
 
     $('#objectName').on('input propertychange', function () {
         var newName = $('#objectName').val();
         if(newName === '') {
-            wickEditor.fabricCanvas.getActiveObject().wickObject.name = undefined;
+            wickEditor.fabricInterface.getActiveObject().wickObject.name = undefined;
         } else {
-            wickEditor.fabricCanvas.getActiveObject().wickObject.name = $('#objectName').val();
+            wickEditor.fabricInterface.getActiveObject().wickObject.name = $('#objectName').val();
         }
     });
 
     $('#objectPositionX').on('input propertychange', function () {
 
-        wickEditor.fabricCanvas.getActiveObject().wickObject.left = $('#objectPositionX').val();
+        wickEditor.fabricInterface.getActiveObject().wickObject.left = $('#objectPositionX').val();
 
     });
 
     $('#objectPositionY').on('input propertychange', function () {
 
-        wickEditor.fabricCanvas.getActiveObject().wickObject.top = $('#objectPositionY').val();
+        wickEditor.fabricInterface.getActiveObject().wickObject.top = $('#objectPositionY').val();
 
     });
 
     document.getElementById('opacitySlider').onchange = function () {
-        wickEditor.fabricCanvas.getActiveObject().opacity = this.value/255;
-        wickEditor.fabricCanvas.getCanvas().renderAll();
+        wickEditor.fabricInterface.getActiveObject().opacity = this.value/255;
+        wickEditor.fabricInterface.canvas.renderAll();
     };
 
     document.getElementById('fontSelector').onchange = function () {
-        wickEditor.fabricCanvas.getActiveObject().fontFamily = document.getElementById('fontSelector').value;
-        wickEditor.fabricCanvas.getCanvas().renderAll();
+        wickEditor.fabricInterface.getActiveObject().fontFamily = document.getElementById('fontSelector').value;
+        wickEditor.fabricInterface.canvas.renderAll();
     }
 
     document.getElementById('fontColor').onchange = function () {
-        wickEditor.fabricCanvas.getActiveObject().fill = this.value;
-        wickEditor.fabricCanvas.getCanvas().renderAll();
+        wickEditor.fabricInterface.getActiveObject().fill = this.value;
+        wickEditor.fabricInterface.canvas.renderAll();
     };
 
     document.getElementById('fontSize').onchange = function () {
-        wickEditor.fabricCanvas.getActiveObject().fontSize = this.value;
-        wickEditor.fabricCanvas.getCanvas().renderAll();
+        wickEditor.fabricInterface.getActiveObject().fontSize = this.value;
+        wickEditor.fabricInterface.canvas.renderAll();
     };
 
     $('#htmlTextBox').on('input propertychange', function () {
-        wickEditor.fabricCanvas.getActiveObject().wickObject.htmlData = $('#htmlTextBox').val();
+        wickEditor.fabricInterface.getActiveObject().wickObject.htmlData = $('#htmlTextBox').val();
     });
 
 /************************
@@ -456,15 +457,15 @@ var WickHTMLGUIHandler = function (wickEditor) {
 ************************/
 
     $("#editScriptsButton").on("click", function (e) {
-        wickEditor.htmlGUIHandler.closeRightClickMenu();
-        wickEditor.htmlGUIHandler.openScriptingGUI(wickEditor.fabricCanvas.getActiveObject());
+        wickEditor.htmlInterface.closeRightClickMenu();
+        wickEditor.htmlInterface.openScriptingGUI(wickEditor.fabricInterface.getActiveObject());
     });
 
     $("#bringToFrontButton").on("click", function (e) {
-        wickEditor.htmlGUIHandler.closeRightClickMenu();
+        wickEditor.htmlInterface.closeRightClickMenu();
         
-        var obj   = wickEditor.fabricCanvas.getCanvas().getActiveObject();
-        var group = wickEditor.fabricCanvas.getCanvas().getActiveGroup();
+        var obj   = wickEditor.fabricInterface.canvas.getActiveObject();
+        var group = wickEditor.fabricInterface.canvas.getActiveGroup();
 
         if(!obj && !group) {
             VerboseLog.log("Nothing to delete.");
@@ -475,10 +476,10 @@ var WickHTMLGUIHandler = function (wickEditor) {
     });
 
     $("#sendToBackButton").on("click", function (e) {
-        wickEditor.htmlGUIHandler.closeRightClickMenu();
+        wickEditor.htmlInterface.closeRightClickMenu();
 
-        var obj   = wickEditor.fabricCanvas.getCanvas().getActiveObject();
-        var group = wickEditor.fabricCanvas.getCanvas().getActiveGroup();
+        var obj   = wickEditor.fabricInterface.canvas.getActiveObject();
+        var group = wickEditor.fabricInterface.canvas.getActiveGroup();
 
         if(!obj && !group) {
             VerboseLog.log("Nothing to delete.");
@@ -489,31 +490,31 @@ var WickHTMLGUIHandler = function (wickEditor) {
     });
 
     $("#deleteButton").on("click", function (e) {
-        wickEditor.htmlGUIHandler.closeRightClickMenu();
+        wickEditor.htmlInterface.closeRightClickMenu();
         wickEditor.actionHandler.doAction('delete', {
-            obj:   wickEditor.fabricCanvas.getCanvas().getActiveObject(),
-            group: wickEditor.fabricCanvas.getCanvas().getActiveGroup()
+            obj:   wickEditor.fabricInterface.canvas.getActiveObject(),
+            group: wickEditor.fabricInterface.canvas.getActiveGroup()
         });
     });
 
     $("#editObjectButton").on("click", function (e) {
-        wickEditor.htmlGUIHandler.closeRightClickMenu();
+        wickEditor.htmlInterface.closeRightClickMenu();
 
-        var objectToEdit = wickEditor.fabricCanvas.getActiveObject();
+        var objectToEdit = wickEditor.fabricInterface.getActiveObject();
         wickEditor.actionHandler.doAction('editObject', {objectToEdit:objectToEdit});
     });
 
     $("#convertToSymbolButton").on("click", function (e) {
-        wickEditor.htmlGUIHandler.closeRightClickMenu();
+        wickEditor.htmlInterface.closeRightClickMenu();
 
-        var fabCanvas = wickEditor.fabricCanvas.getCanvas();
+        var fabCanvas = wickEditor.fabricInterface.canvas;
         wickEditor.actionHandler.doAction('convertSelectionToSymbol', 
             {selection:fabCanvas.getActiveObject() || fabCanvas.getActiveGroup()}
         );
     });
 
     $("#finishEditingObjectButton").on("click", function (e) {
-        wickEditor.htmlGUIHandler.closeRightClickMenu();
+        wickEditor.htmlInterface.closeRightClickMenu();
         
         wickEditor.actionHandler.doAction('finishEditingCurrentObject', {});
     });
@@ -539,7 +540,7 @@ var WickHTMLGUIHandler = function (wickEditor) {
 
         // Selectively show portions we need depending on editor state
 
-        var fabCanvas = wickEditor.fabricCanvas.getCanvas();
+        var fabCanvas = wickEditor.fabricInterface.canvas;
         var selectedObject = fabCanvas.getActiveObject() || fabCanvas.getActiveGroup();
 
         if(!wickEditor.currentObject.isRoot) {
@@ -576,23 +577,20 @@ var WickHTMLGUIHandler = function (wickEditor) {
 ************************/
     
     // Lil' helper function because these properties must get updated for every type of object
-    var updateObjectPropertiesGUI = function() {
+    var updateObjectPropertiesGUI = function(selectedObj) {
         // Display Object properties tab
         $("#objectProperties").css('display', 'inline');
 
         // Set object properties GUI name 
-        var name = wickEditor.fabricCanvas.getActiveObject().wickObject.name;
-        if(name) {
-            document.getElementById('objectName').value = name;
+        if(selectedObj.name) {
+            document.getElementById('objectName').value = selectedObj.name;
         } else {
             document.getElementById('objectName').value = '';
         }
         
         // Set object properties GUI position
-        var objx = wickEditor.fabricCanvas.getActiveObject().wickObject.left;
-        var objy = wickEditor.fabricCanvas.getActiveObject().wickObject.top;
-        document.getElementById('objectPositionX').value = objx;
-        document.getElementById('objectPositionY').value = objy;
+        document.getElementById('objectPositionX').value = selectedObj.x;
+        document.getElementById('objectPositionY').value = selectedObj.y;
     };
 
     this.updatePropertiesGUI = function() {
@@ -605,13 +603,14 @@ var WickHTMLGUIHandler = function (wickEditor) {
 
         var tab = 'project';
 
-        var newSelectedObject = wickEditor.fabricCanvas.getActiveObject();
-        if(newSelectedObject) {
-            if(newSelectedObject.wickObject.fontData) {
+        var selectedObjIDs = wickEditor.fabricInterface.getSelectedObjectIDs();
+        if(selectedObjIDs.length == 1) {
+            var selectedObj = wickEditor.project.getCurrentObject().getChildByID(selectedObjIDs[0]);
+            if(selectedObj.fontData) {
                 tab = 'text';
-            } else if (newSelectedObject.wickObject.audioData) {
+            } else if (selectedObj.audioData) {
                 tab = 'sound';
-            } else if (newSelectedObject.wickObject.htmlData) {
+            } else if (selectedObj.htmlData) {
                 tab = 'htmlSnippet';
             } else {
                 tab = 'symbol';
@@ -629,18 +628,18 @@ var WickHTMLGUIHandler = function (wickEditor) {
                 $("#projectProperties").css('display', 'inline');
                 break;
             case 'symbol':
-                updateObjectPropertiesGUI();
+                updateObjectPropertiesGUI(selectedObj);
                 break;
             case 'text':
-                updateObjectPropertiesGUI();
+                updateObjectPropertiesGUI(selectedObj);
                 $("#textProperties").css('display', 'inline');
                 break;
             case 'sound':
-                updateObjectPropertiesGUI();
+                updateObjectPropertiesGUI(selectedObj);
                 $("#soundProperties").css('display', 'inline');
                 break;
             case 'htmlSnippet':
-                updateObjectPropertiesGUI();
+                updateObjectPropertiesGUI(selectedObj);
                 $("#htmlSnippetProperties").css('display', 'inline');
                 break;
         }

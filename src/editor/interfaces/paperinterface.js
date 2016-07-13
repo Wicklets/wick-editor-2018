@@ -1,6 +1,6 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-var PaperCanvas = function (wickEditor) {
+var PaperInterface = function (wickEditor) {
 
 /*************
     Setup
@@ -11,51 +11,24 @@ var PaperCanvas = function (wickEditor) {
     this.canvas = document.getElementById('paperCanvas');
     paper.setup(this.canvas);
 
-    /*console.log(document.getElementById('path1'))
-
-    console.log(document.getElementById('path1'))
-
-    var path1 = paper.project.importSVG(document.getElementById('path1')).removeChildren(0, 1)[0];
-    var path2 = paper.project.importSVG(document.getElementById('path1')).removeChildren(0, 1)[0];
-
-    console.log(path1)
-    console.log(path2)
-
-    path2.translate([50,0])
-
-    var pathStyleBoolean = {
-        strokeColor: new paper.Color(0.8),
-        fillColor: new paper.Color(0, 0, 0, 0.0),
-        strokeWidth: 1
-    };
-    path1.style = path2.style = pathStyleBoolean;
-
-    var united = path2.unite(path1);
-    united.strokeColor = 'black';
-    united.fillColor = 'yellow';
-    paper.project.activeLayer.addChild(united)
-    console.log(united)
-    paper.view.draw();*/
-
 /*********************
     Refresh methods
 **********************/
-
-    this.redraw = function () {
-        paper.view.draw();
-    }
 
     this.resize = function () {
         this.canvas.style.width  = window.innerWidth  + "px";
         this.canvas.style.height = window.innerHeight + "px";
         this.canvas.width  = window.innerWidth;
         this.canvas.height = window.innerHeight;
+        paper.view.draw();
     }
 
-    this.refresh = function () {
-        that.resize();
+    this.syncWithEditorState = function () {
+        // for each child object in project.getCurrentObject():
+        //    if it belongs in paper (if its an SVG)
+        //      make fabric object with child's data and dont forget to set wickObjectID!
+
         paper.view.draw();
-        wickEditor.fabricCanvas.reloadPaperCanvas();
     }
 
 /**************************
@@ -109,8 +82,6 @@ var PaperCanvas = function (wickEditor) {
             paper.project.activeLayer.addChild(path1);
         }
 
-        that.refresh();
-
         /*paper.project.importSVG(file, function(item) {
             item.position = new paper.Point(x, y);
             item.fillColor = fillColor;
@@ -156,9 +127,8 @@ var PaperCanvas = function (wickEditor) {
     this.addEraserSVG = function (file, x, y) {
         paper.project.importSVG(file, function(item) {
             item.position = new paper.Point(x, y);
-            // Do smoothing on item (need to take extra param)
             // For each item I in canvas:
-            //   let B = boolean NOT (i think it's NOT? might be xor?) bewteen I and item, add B to canvas
+            //   let B = boolean NOT (i think it's boolean NOT?) bewteen I and item, add B to canvas
             that.refresh();
         });
     }

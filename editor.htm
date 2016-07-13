@@ -30,9 +30,10 @@
     <script src="src/project/wickproject.js"></script>
     <script src="src/project/wicktweenobject.js"></script>
 
-    <script src="src/editor/wickpapercanvas.js"></script>
-    <script src="src/editor/wickfabriccanvas.js"></script>
-    <script src="src/editor/wickhtmlguihandler.js"></script>
+    <script src="src/editor/interfaces/paperinterface.js"></script>
+    <script src="src/editor/interfaces/fabricinterface.js"></script>
+    <script src="src/editor/interfaces/htmlinterface.js"></script>
+
     <script src="src/editor/wickactions.js"></script>
     <script src="src/editor/wickeditor.js"></script>
 
@@ -51,16 +52,13 @@
 
     <input id="hidden-input" class="hidden" type="text" value="" />
 
-<!-- Hidden paper.js canvas, we don't render it on the webpage, we handle that through the fabric.js canvas -->
-    
-    <canvas id="paperCanvas" resize style="background:white"></canvas>
-
 <!-- Editor GUI, visible when a project is being edited & not running -->
 
     <div id="editor">
         <div tabindex="1" id="editorCanvasContainer">
-            <canvas id="editorCanvas"></canvas>
+            <canvas id="fabricCanvas"></canvas>
         </div>
+        <canvas id="paperCanvas" resize></canvas>
 
     <!-- Main menu GUI, top left corner -->
 

@@ -14,16 +14,15 @@ var WickEditor = function () {
 
     console.log("WickEditor rev " + this.version);
 
-    this.tryToLoadAutosavedProject();
-
-    this.currentObject = this.project.rootObject;
-    this.currentObject.currentFrame = 0;
+    //this.tryToLoadAutosavedProject();
+    this.project = new WickProject();
 
     this.mouse = {};
     this.keys = [];
 
-    this.fabricCanvas = new FabricCanvas(this);
-    this.htmlGUIHandler = new WickHTMLGUIHandler(this);
+    this.fabricInterface = new FabricInterface(this);
+    this.paperInterface = new PaperInterface(this);
+    this.htmlInterface = new HTMLInterface(this);
 
     this.actionHandler = new WickActionHandler(this);
 
@@ -37,6 +36,8 @@ var WickEditor = function () {
         that.mouse.x = e.clientX;
         that.mouse.y = e.clientY;
     }, false );
+
+    VerboseLog.error("Send mouse events to fabric and paper here. Editor will prob have to store current tool to send events to proper places.");
 
     document.addEventListener('contextmenu', function (event) { 
         event.preventDefault();
@@ -74,7 +75,7 @@ var WickEditor = function () {
         if (event.keyCode == 83 && controlKeyDown) {
             event.preventDefault();
             that.clearKeys();
-            that.syncEditorWithFabricCanvas();
+            that.syncEditorWithfabricInterface();
             that.project.saveInLocalStorage();
         }
         // Control-o: open
@@ -87,35 +88,33 @@ var WickEditor = function () {
         // Control-a: Select all
         if (event.keyCode == 65 && controlKeyDown) {
             event.preventDefault();
-            that.fabricCanvas.deselectAll();
-            that.fabricCanvas.selectAll();
+            that.fabricInterface.deselectAll();
+            that.fabricInterface.selectAll();
         }
 
         // Backspace: delete selected objects
         if (event.keyCode == 8 && !editingTextBox) {
             event.preventDefault();
 
-            var obj   = that.fabricCanvas.getCanvas().getActiveObject();
-            var group = that.fabricCanvas.getCanvas().getActiveGroup();
-
-            if(!obj && !group) {
+            var ids = that.fabricInterface.getSelectedObjectIDs();
+            if(ids.length == 0) {
                 VerboseLog.log("Nothing to delete.");
                 return;
             }
 
-            that.actionHandler.doAction('delete', { obj:obj, group:group });
+            that.actionHandler.doAction('deleteObjects', { ids:ids });
         }
 
         // Space: Pan viewport
         if (event.keyCode == 32 && !editingTextBox) {
-            that.fabricCanvas.panTo(that.mouse.x - window.innerWidth/2, 
+            that.fabricInterface.panTo(that.mouse.x - window.innerWidth/2, 
                                     that.mouse.y - window.innerHeight/2);
         }
 
         // Tilde: log project state to canvas (for debugging)
         if (event.keyCode == 192) {
             console.log(that.project);
-            console.log(that.fabricCanvas);
+            console.log(that.fabricInterface);
         }
     });
 
@@ -128,25 +127,28 @@ var WickEditor = function () {
     });
 
     window.addEventListener('resize', function(e) {
-        that.fabricCanvas.resize();
-        that.fabricCanvas.reloadPaperCanvas();
-        that.htmlGUIHandler.syncWithEditor();
+        that.fabricInterface.resize();
+        that.paperInterface.resize();
+        that.htmlInterface.resize();
     }, false);
-    that.fabricCanvas.resize();
-    this.htmlGUIHandler.syncWithEditor();
+    that.fabricInterface.resize();
+    that.paperInterface.resize();
+    that.htmlInterface.resize();
 
-    // Sync fabric and html gui
-    this.fabricCanvas.syncWithEditor();
-    this.htmlGUIHandler.syncWithEditor();
+    // Sync interfaces
+    this.fabricInterface.syncWithEditorState();
+    this.htmlInterface.syncWithEditorState();
+    this.paperInterface.syncWithEditorState();
 
+    // Setup leave page warning
     window.addEventListener("beforeunload", function (event) {
         var confirmationMessage = 'Warning: All unsaved changes will be lost!';
         (event || window.event).returnValue = confirmationMessage; //Gecko + IE
         return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
     });
 
+    // In order to ensure that the browser will fire clipboard events, we always need to have something selected
     var focusHiddenArea = function () {
-        // In order to ensure that the browser will fire clipboard events, we always need to have something selected
         if($("#scriptingGUI").css('visibility') === 'hidden') {
             $("#hidden-input").val(' ');
             $("#hidden-input").focus().select();
@@ -158,19 +160,19 @@ var WickEditor = function () {
         that.clearKeys();
 
         // Don't try to copy from the fabric canvas if user is editing text
-        if(document.activeElement.nodeName == 'TEXTAREA' || that.htmlGUIHandler.scriptingIDEopen) {
+        if(document.activeElement.nodeName == 'TEXTAREA' || that.htmlInterface.scriptingIDEopen) {
             return;
         }
 
         event.preventDefault();
         focusHiddenArea();
 
-        that.syncEditorWithFabricCanvas();
+        that.syncEditorWithfabricInterface();
 
         var clipboardObjectJSON;
 
-        var obj = that.fabricCanvas.getCanvas().getActiveObject() 
-        var group = that.fabricCanvas.getCanvas().getActiveGroup();
+        var obj = that.fabricInterface.canvas.getActiveObject() 
+        var group = that.fabricInterface.canvas.getActiveGroup();
 
         if(group) {
             var objectJSONs = [];
@@ -205,7 +207,7 @@ var WickEditor = function () {
 
         that.clearKeys();
 
-        if(document.activeElement.nodeName === 'TEXTAREA' || that.htmlGUIHandler.scriptingIDEopen) {
+        if(document.activeElement.nodeName === 'TEXTAREA' || that.htmlInterface.scriptingIDEopen) {
             return;
         }
 
@@ -227,14 +229,12 @@ var WickEditor = function () {
                 var data = items[i].getAsFile();
                 var fr = new FileReader;
                 fr.onloadend = function() {
-                    //alert(fr.result.substring(0, 100)); // fr.result is all data
                     WickObject.fromImage(
                         fr.result, 
-                        that.project.resolution.x/2, 
-                        that.project.resolution.y/2, 
-                        that.currentObject,
                         function(newWickObject) {
-                            that.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:newWickObject});
+                            newWickObject.x = that.project.resolution.x/2 - newWickObject.width /2;
+                            newWickObject.y = that.project.resolution.y/2 - newWickObject.height/2;
+                            that.actionHandler.doAction('addObject', {wickObject:newWickObject});
                         });
                 };
                 fr.readAsDataURL(data);
@@ -244,12 +244,11 @@ var WickEditor = function () {
                 var data = items[i].getAsFile();
                 var fr = new FileReader;
                 fr.onloadend = function() {
-                    //alert(fr.result.substring(0, 100)); // fr.result is all data
                     WickObject.fromAnimatedGIF(
                         fr.result,
                         that.currentObject,
                         function(newWickObject) {
-                            that.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:newWickObject});
+                            that.actionHandler.doAction('addWickObjectTofabricInterface', {wickObject:newWickObject});
                         });
                 };
                 fr.readAsDataURL(data);
@@ -257,7 +256,7 @@ var WickEditor = function () {
             } else if (fileType == 'text/plain') {
 
                 var newWickObject = WickObject.fromText(file, that.currentObject);
-                that.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:newWickObject});
+                that.actionHandler.doAction('addWickObjectTofabricInterface', {wickObject:newWickObject});
 
             } else if (fileType == 'text/wickobjectsjson') {
 
@@ -275,7 +274,7 @@ var WickEditor = function () {
                         newWickObject.top  += clipboardObject.position.top;
                     }
 
-                    that.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:newWickObject});
+                    that.actionHandler.doAction('addWickObjectTofabricInterface', {wickObject:newWickObject});
                 }
 
             }
@@ -305,11 +304,10 @@ var WickEditor = function () {
 
                     WickObject.fromImage(
                         e.target.result, 
-                        that.project.resolution.x/2, 
-                        that.project.resolution.y/2, 
-                        that.currentObject,
                         function(newWickObject) {
-                            that.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:newWickObject});
+                            newWickObject.x = that.project.resolution.x/2 - newWickObject.width /2;
+                            newWickObject.y = that.project.resolution.y/2 - newWickObject.height/2;
+                            that.actionHandler.doAction('addObjects', {wickObjects:[newWickObject]});
                         });
 
                 } else if(['image/gif'].indexOf(file.type) != -1) {
@@ -318,13 +316,13 @@ var WickEditor = function () {
                     e.target.result,
                     that.currentObject,
                     function(newWickObject) {
-                        that.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:newWickObject});
+                        that.actionHandler.doAction('addWickObjectTofabricInterface', {wickObject:newWickObject});
                     });
 
                 } else if(['audio/mp3', 'audio/wav', 'audio/ogg'].indexOf(file.type) != -1) {
 
                     var newWickObject = WickObject.fromAudioFile(e.target.result, that.currentObject);
-                    that.actionHandler.doAction('addWickObjectToFabricCanvas', {wickObject:newWickObject});
+                    that.actionHandler.doAction('addWickObjectTofabricInterface', {wickObject:newWickObject});
 
                 } else if(['application/json'].indexOf(file.type) != -1) {
 
@@ -346,12 +344,12 @@ var WickEditor = function () {
 }
 
 /**********************************
-     Editor <-> Fabric Canvas
+  Interfaces
 **********************************/
 
-WickEditor.prototype.syncEditorWithFabricCanvas = function () {
-    var wickObjectsFromFabricCanvas = this.fabricCanvas.getWickObjectsInCanvas(this.project.resolution);
-    this.currentObject.frames[this.currentObject.currentFrame].wickObjects = wickObjectsFromFabricCanvas;
+WickEditor.prototype.syncInterfaces = function () {
+    this.paperInterface.syncWithEditorState();
+    this.fabricInterface.syncWithEditorState();
 }
 
 /**********************************
@@ -388,11 +386,11 @@ WickEditor.prototype.newProject = function () {
     this.project = new WickProject();
     this.currentObject = this.project.rootObject;
 
-    this.fabricCanvas.deselectAll();
+    this.fabricInterface.deselectAll();
 
-    this.fabricCanvas.resize();
-    this.fabricCanvas.syncWithEditor();
-    this.htmlGUIHandler.syncWithEditor();
+    this.fabricInterface.resize();
+    this.fabricInterface.syncWithEditor();
+    this.htmlInterface.syncWithEditor();
 
 }
 
@@ -401,22 +399,22 @@ WickEditor.prototype.openProject = function (projectJSON) {
     this.project = WickProject.fromJSON(projectJSON);
     this.currentObject = this.project.rootObject;
     this.currentObject.currentFrame = 0;
-    this.fabricCanvas.resize();
-    this.fabricCanvas.syncWithEditor();
-    this.htmlGUIHandler.syncWithEditor();
+    this.fabricInterface.resize();
+    this.fabricInterface.syncWithEditor();
+    this.htmlInterface.syncWithEditor();
 
 }
 
 WickEditor.prototype.exportProjectAsJSON = function () {
 
-    this.syncEditorWithFabricCanvas();
+    this.syncEditorWithfabricInterface();
     this.project.exportAsJSONFile();
 
 }
 
 WickEditor.prototype.exportProjectAsWebpage = function () {
 
-    this.syncEditorWithFabricCanvas();
+    this.syncEditorWithfabricInterface();
     this.project.exportAsHTMLFile();
 
 }
@@ -428,16 +426,16 @@ WickEditor.prototype.exportProjectAsWebpage = function () {
 WickEditor.prototype.runProject = function () {
     var that = this;
 
-    if(this.htmlGUIHandler.projectHasErrors) {
+    if(this.htmlInterface.projectHasErrors) {
         if(!confirm("There are syntax errors in the code of this project! Are you sure you want to run it?")) {
             return;
         }
     }
 
     // JSONify the project, autosave, and have the builtin player run it
-    this.syncEditorWithFabricCanvas();
+    this.syncEditorWithfabricInterface();
     this.project.getAsJSON(function (JSONProject) {
-        that.htmlGUIHandler.showBuiltinPlayer();
+        that.htmlInterface.showBuiltinPlayer();
         WickPlayer.runProject(JSONProject);
     });
 }

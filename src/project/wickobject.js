@@ -1,18 +1,27 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-var WickObject = function (parentObject) {
-
-    if(!parentObject) {
-        VerboseLog.error("WOAH BUDDY ALL WICKOBJECTS NEED A PARENT. EXCEPT FOR ROOT.")
-    }
+var WickObject = function () {
 
 // Internals
 
-    // Used for debugging.
+    // Unique ID. Must never change after object is first created.
+    this.id = null;
+
+    // Identifier
     this.objectName = undefined;
 
-    // Note that the root object is the only object with parentObject as null.
-    this.parentObject = parentObject;
+// Positioning
+
+    this.x = 0;
+    this.y = 0;
+    this.width = undefined;
+    this.height = undefined;
+    this.scaleX = 1;
+    this.scaleY = 1;
+    this.angle = 0;
+    this.flipX = false;
+    this.flipY = false;
+    this.opacity = 1;
 
 // Common
 
@@ -47,6 +56,7 @@ var WickObject = function (parentObject) {
 
 WickObject.createNewRootObject = function () {
     var rootObject = new WickObject("ROOT_NO_PARENT");
+    rootObject.id = 0;
     rootObject.isSymbol = true;
     rootObject.isRoot = true;
     rootObject.currentFrame = 0;
@@ -57,25 +67,23 @@ WickObject.createNewRootObject = function () {
     return rootObject;
 }
 
-WickObject.fromImage = function (imgSrc, left, top, parentObject, callback) {
+WickObject.fromImage = function (imgSrc, callback) {
+
     var fileImage = new Image();
     fileImage.src = imgSrc;
 
     fileImage.onload = function() {
 
-        var newWickObject = new WickObject(parentObject);
+        var newWickObject = new WickObject();
 
         newWickObject.setDefaultPositioningValues();
         newWickObject.width = fileImage.width / window.devicePixelRatio;
         newWickObject.height = fileImage.height / window.devicePixelRatio;
-        newWickObject.left = left;
-        newWickObject.top = top;
-
-        newWickObject.parentObject = parentObject;
         newWickObject.imageData = fileImage.src;
 
         callback(newWickObject);
     }
+
 }
 
 WickObject.fromAnimatedGIF = function (gifData, parentObject, callback) {
@@ -195,10 +203,10 @@ WickObject.fromHTML = function (text, parentObject) {
 
     htmlSnippetWickObject.parentObject = this.currentObject;
 
-    this.fabricCanvas.addWickObjectToCanvas(htmlSnippetWickObject);
+    this.fabricInterface.addWickObjectToCanvas(htmlSnippetWickObject);
 
-    this.syncEditorWithFabricCanvas();
-    this.fabricCanvas.syncWithEditor();*/
+    this.syncEditorWithfabricInterface();
+    this.fabricInterface.syncWithEditor();*/
 }
 
 WickObject.fromAudioFile = function (audioData, parentObject) {
@@ -832,6 +840,63 @@ WickObject.prototype.getTotalNumChildren = function () {
     }
     return count;
 }
+
+WickObject.prototype.getChildByID = function (id) {
+    var foundChild = null;
+
+    this.forEachChildObject(function(child) {
+        if(child.id == id) {
+            foundChild = child;
+        } else {
+            foundChild = child.getChildByID(id);
+        }
+    }); 
+
+    return foundChild;
+}
+
+WickObject.prototype.removeChildByID = function (id) {
+    var foundChild = null;
+
+    this.forEachChildObject(function(child) {
+        if(child.id == id) {
+            VerboseLog.error("remove object from list here.")
+        }
+        child.removeChildByID(id);
+    }); 
+
+    return foundChild;
+}
+
+WickObject.prototype.getLargestID = function (id) {
+    var largestID = 0;
+
+    this.forEachChildObject(function(child) {
+        if(child.id > largestID) {
+            largestID = child.id;
+        }
+        var subLargestID = child.getLargestID();
+        if(subLargestID > largestID) {
+            largestID = subLargestID;
+        }
+    }); 
+
+    return largestID;
+}
+
+WickObject.prototype.hasChildWithID = function (id) {
+
+    var match = false;
+
+    this.forEachChildObject(function(child) {
+        if(child.id == id) {
+            match = true;
+        }
+    });
+
+    return match;
+
+}   
 
 var WickObjectUtils = (function () {
 

@@ -1,17 +1,14 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-/*****************************
-    Projects
-*****************************/
-
-// Holds the root object and some project settings.
-
 var WickProject = function () {
 
-    // Create the root object.
-    // The editor is always editing the root object or its sub-objects and 
-    // cannot ever leave the root object.
+    // Create the root object. The editor is always editing the root 
+    // object or its sub-objects and cannot ever leave the root object.
     this.rootObject = WickObject.createNewRootObject();
+
+    // Only used by the editor. Keeps track of current object editor is editing.
+    this.currentObjectID = this.rootObject.id;
+    this.rootObject.currentFrame = 0;
     
     this.resolution = {};
     this.resolution.x = 650;
@@ -26,6 +23,10 @@ var WickProject = function () {
     this.borderColor = "#FFFFFF";
 
 };
+
+/*****************************
+    Import/Export
+*****************************/
 
 WickProject.fromJSON = function (JSONString) {
     // Replace current project with project in JSON
@@ -133,4 +134,34 @@ WickProject.prototype.saveInLocalStorage = function () {
     } else {
         console.error("LocalStorage not available.")
     }
+}
+
+/*********************************
+    Access project wickobjects
+*********************************/
+
+WickProject.prototype.addObject = function (wickObject) {
+
+    if(!wickObject.id) {
+        wickObject.id = this.rootObject.getLargestID() + 1;
+    }
+
+    this.getCurrentObject().getCurrentFrame().wickObjects.push(wickObject);
+
+}
+
+WickProject.prototype.getObjectByID = function (id) {
+
+    if(id == 0) {
+        return this.rootObject;
+    }
+
+    return this.rootObject.getChildByID(id);
+
+}
+
+WickProject.prototype.getCurrentObject = function () {
+
+    return this.getObjectByID(this.currentObjectID);
+
 }
