@@ -12,3 +12,7 @@ Try a simple game made with the editor [here](http://zrispo.co/wick/examples/gam
 * Clone or download and unzip this repo
 * Open terminal in the newly made `wick` folder and start an HTTP server: `npm install http-server -g`, `http-server -p 8000`
 * Open a browser window, and go to `http://localhost:8000/`
+
+Notes on Branch Management:
+
+"Master" is currently the experimental branch of Wick. The "gh-pages" branch contains the current stable release of Wick which is displayed at [wick.online](http://wick.online)! 
