@@ -4,9 +4,7 @@ Wick is a multipurpose creation environment that allows anyone to build a wide r
 
 Wick allows easier access to new web technologies through a visual editor, a timeline system, and a scripting system that makes learning and writing javascript easier. Wick also exports projects as standalone webpages or embeddable HTML5 canvases - no external players or runtimes necessary!
 
-Try the editor [here](http://zrispo.co/wick/editor.htm)!
-
-Try a simple game made with the editor [here](http://zrispo.co/wick/examples/game.html)!
+Try the editor [here](http://wick.online/)!
 
 ### How to run the editor/player locally for development
 * Clone or download and unzip this repo
@@ -15,4 +13,4 @@ Try a simple game made with the editor [here](http://zrispo.co/wick/examples/gam
 
 Notes on Branch Management:
 
-"Master" is currently the experimental branch of Wick. The "gh-pages" branch contains the current stable release of Wick which is displayed at [wick.online](http://wick.online)! 
+"Master" is currently the experimental branch of Wick. The "gh-pages" branch contains the current stable release of Wick which is displayed at [wick.online](http://wick.online).
