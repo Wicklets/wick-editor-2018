@@ -67,6 +67,85 @@ WickObject.createNewRootObject = function () {
     return rootObject;
 }
 
+WickObject.fromJSON = function (jsonString) {
+    // Parse JSON
+    var newWickObject = JSON.parse(jsonString);
+
+    // Put prototypes back on object ('class methods'), they don't get JSONified on project export.
+    WickObjectUtils.putWickObjectPrototypeBackOnObject(newWickObject);
+
+    // Decode scripts back to human-readble and eval()-able format
+    newWickObject.decodeStrings();
+
+    return newWickObject;
+}
+
+WickObject.fromJSONArray = function (jsonArrayObject, callback) {
+    var newWickObjects = [];
+
+    var wickObjectJSONArray = jsonArrayObject.wickObjectArray;
+    for (var i = 0; i < wickObjectJSONArray.length; i++) {
+        
+        var newWickObject = WickObject.fromJSON(wickObjectJSONArray[i]);
+        
+        if(wickObjectJSONArray.length > 1) {
+            newWickObject.left += jsonArrayObject.groupPosition.x;
+            newWickObject.top  += jsonArrayObject.groupPosition.y;
+        }
+
+        newWickObjects.push(newWickObject);
+    }
+
+    callback(newWickObjects);
+}
+
+WickObject.fromFile = function (file, fileType, callback) {
+
+    if (['image/png', 'image/jpeg', 'image/bmp'].indexOf(fileType) != -1) {
+
+        var data = file;
+        var fr = new FileReader;
+        fr.onloadend = function() {
+            WickObject.fromImage(
+                fr.result, 
+                function(newWickObject) {
+                    callback(newWickObject);
+                });
+        };
+        fr.readAsDataURL(data);
+
+    } else if (fileType == 'image/gif') {
+
+        var data = file;
+        var fr = new FileReader;
+        fr.onloadend = function() {
+            WickObject.fromAnimatedGIF(
+                fr.result,
+                function(newWickObject) { callback(newWickObject) });
+        };
+        fr.readAsDataURL(data);
+
+    } else if (fileType == 'text/plain') {
+
+        var newWickObject = WickObject.fromText(file);
+        callback(newWickObject);
+
+    } else if(['audio/mp3', 'audio/wav', 'audio/ogg'].indexOf(file.type) != -1) {
+
+        var dataURLReader = new FileReader();
+        dataURLReader.onload = (function(theFile) { return function(e) {
+
+            var newWickObject = WickObject.fromAudioFile(e.target.result);
+            newWickObject.width = 100;
+            newWickObject.height = 100;
+            callback(newWickObject);
+
+        }; })(file);
+        dataURLReader.readAsDataURL(file);
+
+    }
+}
+
 WickObject.fromImage = function (imgSrc, callback) {
 
     var fileImage = new Image();
@@ -74,25 +153,28 @@ WickObject.fromImage = function (imgSrc, callback) {
 
     fileImage.onload = function() {
 
-        var newWickObject = new WickObject();
+        var obj = new WickObject();
 
-        newWickObject.setDefaultPositioningValues();
-        newWickObject.width = fileImage.width / window.devicePixelRatio;
-        newWickObject.height = fileImage.height / window.devicePixelRatio;
-        newWickObject.imageData = fileImage.src;
+        obj.setDefaultPositioningValues();
+        obj.width = fileImage.width / window.devicePixelRatio;
+        obj.height = fileImage.height / window.devicePixelRatio;
+        obj.imageData = fileImage.src;
 
-        callback(newWickObject);
+        callback(obj);
     }
 
 }
 
-WickObject.fromAnimatedGIF = function (gifData, parentObject, callback) {
+WickObject.fromAnimatedGIF = function (gifData, callback) {
 
-    var gifSymbol = new WickObject(parentObject);
+    var gifSymbol = new WickObject();
     gifSymbol.setDefaultPositioningValues();
     gifSymbol.left = window.innerWidth /2;
     gifSymbol.top  = window.innerHeight/2;
     gifSymbol.setDefaultSymbolValues();
+
+    gifSymbol.width = 100;
+    gifSymbol.height = 100;
 
     //var gif = document.getElementById("gifImportDummyElem");
     var newGifEl = document.createElement("img"); 
@@ -111,9 +193,6 @@ WickObject.fromAnimatedGIF = function (gifData, parentObject, callback) {
 
             WickObject.fromImage(
                 framesDataURLs[i], 
-                0, 
-                0, 
-                gifSymbol, 
                 (function(frameIndex) { return function(o) {
                     gifSymbol.addEmptyFrame(frameIndex);
                     gifSymbol.frames[frameIndex].wickObjects.push(o);
@@ -128,8 +207,8 @@ WickObject.fromAnimatedGIF = function (gifData, parentObject, callback) {
 
 }
 
-WickObject.fromSVG = function (svgData, parentObject) {
-    var svgWickObject = new WickObject(parentObject);
+WickObject.fromSVG = function (svgData) {
+    var svgWickObject = new WickObject();
 
     svgWickObject.setDefaultPositioningValues();
     svgWickObject.svgData = svgData.svgString;
@@ -142,131 +221,28 @@ WickObject.fromSVG = function (svgData, parentObject) {
 }
 
 // Used for old straight-to-rasterized paintbrush
-WickObject.fromFabricPath = function (fabricPath, parentObject, callback) {
+WickObject.fromFabricPath = function (fabricPath, callback) {
     fabricPath.cloneAsImage(function(clone) {
         var imgSrc = clone._element.currentSrc || clone._element.src;
 
         var left = fabricPath.left - clone.width/2/window.devicePixelRatio;
         var top  = fabricPath.top - clone.height/2/window.devicePixelRatio;
 
-        var parentPos = parentObject.getRelativePosition();
-        left -= parentPos.left;
-        top  -= parentPos.top;
-
         WickObject.fromImage(
             imgSrc, 
             left, 
             top, 
-            parentObject, 
             callback
         );
     });
 }
 
-WickObject.fromJSON = function (jsonString, parentObject) {
-    // Parse JSON
-    var newWickObject = JSON.parse(jsonString);
+WickObject.fromText = function (text) {
+    var obj = new WickObject();
 
-    // Put prototypes back on object ('class methods'), they don't get JSONified on project export.
-    WickObjectUtils.putWickObjectPrototypeBackOnObject(newWickObject);
+    obj.setDefaultPositioningValues();
 
-    // Regenerate parent object references
-    // These were removed earlier because JSON can't handle infinitely recursive objects (duh)
-    newWickObject.parentObject = parentObject;
-    newWickObject.regenerateParentObjectReferences();
-
-    // Decode scripts back to human-readble and eval()-able format
-    newWickObject.decodeStrings();
-
-    return newWickObject;
-}
-
-WickObject.fromText = function (text, parentObject) {
-    var textWickObject = new WickObject(parentObject);
-
-    textWickObject.setDefaultPositioningValues();
-    textWickObject.setDefaultFontValues(text);
-    textWickObject.left = window.innerWidth /2;
-    textWickObject.top  = window.innerHeight/2;
-
-    return textWickObject;
-}
-
-WickObject.fromHTML = function (text, parentObject) {
-    VerboseLog.error("WickObject.fromHTML not updated yet...");
-    /*var htmlSnippetWickObject = new WickObject(parentObject);
-
-    htmlSnippetWickObject.setDefaultPositioningValues();
-    htmlSnippetWickObject.htmlData = '<iframe width="560" height="315" src="https://www.youtube.com/embed/AxZ6RG5UeiU" frameborder="0" allowfullscreen></iframe>';
-    htmlSnippetWickObject.left = window.innerWidth/2;
-    htmlSnippetWickObject.top = window.innerHeight/2;
-
-    htmlSnippetWickObject.parentObject = this.currentObject;
-
-    this.fabricInterface.addWickObjectToCanvas(htmlSnippetWickObject);
-
-    this.syncEditorWithfabricInterface();
-    this.fabricInterface.syncWithEditor();*/
-}
-
-WickObject.fromAudioFile = function (audioData, parentObject) {
-    var audioWickObject = new WickObject(parentObject);
-
-    audioWickObject.setDefaultPositioningValues();
-    audioWickObject.audioData = audioData;
-    audioWickObject.autoplaySound = true;
-    audioWickObject.left = window.innerWidth/2;
-    audioWickObject.top = window.innerHeight/2;
-
-    return audioWickObject;
-}
-
-WickObject.createSymbolFromWickObjects = function (left, top, wickObjects, parentObject) {
-    var symbol = new WickObject(parentObject);
-
-    symbol.left = left;
-    symbol.top = top;
-    symbol.setDefaultPositioningValues();
-    symbol.setDefaultSymbolValues();
-
-    // Multiple objects are selected, put them all in the new symbol
-    for(var i = 0; i < wickObjects.length; i++) {
-        symbol.frames[0].wickObjects[i] = wickObjects[i];
-        symbol.frames[0].wickObjects[i].parentObject = symbol;
-
-        symbol.frames[0].wickObjects[i].left = wickObjects[i].left - symbol.left;
-        symbol.frames[0].wickObjects[i].top  = wickObjects[i].top - symbol.top;
-    }
-
-    return symbol;
-
-}
-
-WickObject.prototype.setDefaultPositioningValues = function () {
-
-    this.scaleX =  1;
-    this.scaleY =  1;
-    this.angle  =  0;
-    this.flipX  =  false;
-    this.flipY  =  false;
-    this.opacity = 1;
-
-}
-
-WickObject.prototype.setDefaultSymbolValues = function () {
-
-    this.isSymbol = true;
-    this.currentFrame = 0;
-    this.frames = [new WickFrame()];
-
-}
-
-WickObject.prototype.setDefaultFontValues = function (text) {
-
-    // See http://fabricjs.com/docs/fabric.IText.html for full fabric.js IText definition
-    // Note: We will probably want to change 'editable' in order to have dynamic text in the player, but this still needs more research
-
-    this.fontData = {
+    obj.fontData = {
         //backgroundColor: undefined,
         //borderColor: undefined,
         //borderDashArray: undefined,
@@ -297,6 +273,80 @@ WickObject.prototype.setDefaultFontValues = function (text) {
         text: text
     };
 
+    var fabricReferenceText = new fabric.Text(obj.fontData.text, obj.fontData);
+
+    obj.width = fabricReferenceText.width;
+    obj.height = fabricReferenceText.height;
+
+    return obj;
+}
+
+WickObject.fromHTML = function (text) {
+    VerboseLog.error("WickObject.fromHTML not updated yet...");
+    /*var htmlSnippetWickObject = new WickObject(parentObject);
+
+    htmlSnippetWickObject.setDefaultPositioningValues();
+    htmlSnippetWickObject.htmlData = '<iframe width="560" height="315" src="https://www.youtube.com/embed/AxZ6RG5UeiU" frameborder="0" allowfullscreen></iframe>';
+    htmlSnippetWickObject.left = window.innerWidth/2;
+    htmlSnippetWickObject.top = window.innerHeight/2;
+
+    htmlSnippetWickObject.parentObject = this.currentObject;
+
+    this.fabricInterface.addWickObjectToCanvas(htmlSnippetWickObject);
+
+    this.syncEditorWithfabricInterface();
+    this.fabricInterface.syncWithEditor();*/
+}
+
+WickObject.fromAudioFile = function (audioData) {
+    var audioWickObject = new WickObject();
+
+    audioWickObject.setDefaultPositioningValues();
+    audioWickObject.audioData = audioData;
+    audioWickObject.autoplaySound = true;
+    audioWickObject.left = window.innerWidth/2;
+    audioWickObject.top = window.innerHeight/2;
+
+    return audioWickObject;
+}
+
+WickObject.createSymbolFromWickObjects = function (left, top, wickObjects) {
+    var symbol = new WickObject();
+
+    symbol.left = left;
+    symbol.top = top;
+    symbol.setDefaultPositioningValues();
+    symbol.setDefaultSymbolValues();
+
+    // Multiple objects are selected, put them all in the new symbol
+    for(var i = 0; i < wickObjects.length; i++) {
+        symbol.frames[0].wickObjects[i] = wickObjects[i];
+
+        symbol.frames[0].wickObjects[i].left = wickObjects[i].left - symbol.left;
+        symbol.frames[0].wickObjects[i].top  = wickObjects[i].top - symbol.top;
+    }
+
+    return symbol;
+
+}
+
+WickObject.prototype.setDefaultPositioningValues = function () {
+
+    this.scaleX =  1;
+    this.scaleY =  1;
+    this.angle  =  0;
+    this.flipX  =  false;
+    this.flipY  =  false;
+    this.opacity = 1;
+
+}
+
+WickObject.prototype.setDefaultSymbolValues = function () {
+
+    this.isSymbol = true;
+    this.currentFrame = 0;
+    this.frames = [new WickFrame()];
+
 }
 
 WickObject.prototype.getCurrentFrame = function() {
@@ -305,47 +355,6 @@ WickObject.prototype.getCurrentFrame = function() {
 
 WickObject.prototype.addEmptyFrame = function(newFrameIndex) {
     this.frames[newFrameIndex] = new WickFrame();
-}
-
-// Used to prepare project for JSONificaion. 
-// (JSON files can't have objects with circular references)
-WickObject.prototype.removeParentObjectRefences = function() {
-
-    this.parentObject = null;
-
-    if(this.isSymbol) {
-
-        // Recursively remove parent object references of all objects inside this symbol.
-
-        for(var f = 0; f < this.frames.length; f++) {
-            var frame = this.frames[f];
-            for (var o = 0; o < frame.wickObjects.length; o++) {
-                var wickObject = frame.wickObjects[o];
-                wickObject.removeParentObjectRefences();
-            }
-        }
-    }
-
-}
-
-// Used to put parent object references back after they are removed for JSONification
-WickObject.prototype.regenerateParentObjectReferences = function() {
-
-    var parentObject = this;
-
-    if(this.isSymbol) {
-
-        // Recursively remove parent object references of all objects inside this symbol.
-
-        for(var f = 0; f < this.frames.length; f++) {
-            var frame = this.frames[f];
-            for (var o = 0; o < frame.wickObjects.length; o++) {
-                frame.wickObjects[o].parentObject = parentObject;
-                frame.wickObjects[o].regenerateParentObjectReferences();
-            }
-        }
-    }
-
 }
 
 // Used so that if the renderer can't render SVGs it has an image to fallback to
@@ -510,11 +519,9 @@ WickObject.prototype.decodeStrings = function () {
 }
 
 WickObject.prototype.getAsJSON = function () {
-    var oldParentReference = this.parentObject;
-
-    // Remove parent object references 
-    // (can't JSONify objects with circular references, player doesn't need them anyway)
-    this.removeParentObjectRefences();
+    // Get rid of the ID because the JSON data of this object doesn't exist in the project.
+    var oldID = this.id;
+    this.id = undefined;
 
     // Encode scripts to avoid JSON format problems
     this.encodeStrings();
@@ -524,12 +531,11 @@ WickObject.prototype.getAsJSON = function () {
     // Put prototypes back on object ('class methods'), they don't get JSONified on project export.
     WickObjectUtils.putWickObjectPrototypeBackOnObject(this);
 
-    // Put parent object references back in all objects
-    this.parentObject = oldParentReference;
-    this.regenerateParentObjectReferences();
-
     // Decode scripts back to human-readble and eval()-able format
     this.decodeStrings();
+
+    // Put ID back on
+    this.id = oldID;
 
     return JSONWickObject;
 }
@@ -842,13 +848,22 @@ WickObject.prototype.getTotalNumChildren = function () {
 }
 
 WickObject.prototype.getChildByID = function (id) {
+
+    if(!this.isSymbol) {
+        if(this.id == id) {
+            return this;
+        } else {
+            return null;
+        }
+    }
+
     var foundChild = null;
 
     this.forEachChildObject(function(child) {
         if(child.id == id) {
-            foundChild = child;
+            if(!foundChild) foundChild = child;
         } else {
-            foundChild = child.getChildByID(id);
+            if(!foundChild) foundChild = child.getChildByID(id);
         }
     }); 
 
@@ -856,26 +871,31 @@ WickObject.prototype.getChildByID = function (id) {
 }
 
 WickObject.prototype.removeChildByID = function (id) {
-    var foundChild = null;
 
-    this.forEachChildObject(function(child) {
+    if(!this.isSymbol) {
+        return;
+    }
+
+    var that = this;
+    this.forEachActiveChildObject(function(child) {
         if(child.id == id) {
-            VerboseLog.error("remove object from list here.")
+            var index = that.getCurrentFrame().wickObjects.indexOf(child);
+            that.getCurrentFrame().wickObjects.splice(index, 1);
         }
         child.removeChildByID(id);
     }); 
-
-    return foundChild;
 }
 
 WickObject.prototype.getLargestID = function (id) {
+    if(!this.isSymbol) {
+        return this.id;
+    }
+
     var largestID = 0;
 
     this.forEachChildObject(function(child) {
-        if(child.id > largestID) {
-            largestID = child.id;
-        }
         var subLargestID = child.getLargestID();
+
         if(subLargestID > largestID) {
             largestID = subLargestID;
         }
@@ -884,11 +904,11 @@ WickObject.prototype.getLargestID = function (id) {
     return largestID;
 }
 
-WickObject.prototype.hasChildWithID = function (id) {
+WickObject.prototype.childWithIDIsActive = function (id) {
 
     var match = false;
 
-    this.forEachChildObject(function(child) {
+    this.forEachActiveChildObject(function(child) {
         if(child.id == id) {
             match = true;
         }
@@ -897,6 +917,25 @@ WickObject.prototype.hasChildWithID = function (id) {
     return match;
 
 }   
+
+WickObject.prototype.regenerateParentObjectReferences = function() {
+
+    var parentObject = this;
+
+    if(this.isSymbol) {
+
+        // Recursively remove parent object references of all objects inside this symbol.
+
+        for(var f = 0; f < this.frames.length; f++) {
+            var frame = this.frames[f];
+            for (var o = 0; o < frame.wickObjects.length; o++) {
+                frame.wickObjects[o].parentObject = parentObject;
+                frame.wickObjects[o].regenerateParentObjectReferences();
+            }
+        }
+    }
+
+}
 
 var WickObjectUtils = (function () {
 

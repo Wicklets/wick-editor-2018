@@ -55,8 +55,25 @@ var FabricInterface = function (wickEditor) {
             });
         }
 
+        if(wickObj.fontData) {
+            var newFabricText = new fabric.Text(wickObj.fontData.text, wickObj.fontData);
+            that.syncObject(wickObj, newFabricText);
+            callback(newFabricText);
+        }
+
+        if(wickObj.audioData) {
+            fabric.Image.fromURL('resources/audio.png', function(audioFabricObject) {
+                that.syncObject(wickObj, audioFabricObject);
+                callback(audioFabricObject);
+            });
+        }
+
         if (wickObj.isSymbol) {
-            // hoo boy
+            console.error("alright lets do it");
+            fabric.Image.fromURL(wickObj.frames[0].wickObjects[0].imageData, function(newFabricImage) {
+                that.syncObject(wickObj, newFabricImage);
+                callback(newFabricImage);
+            });
         }
 
     }
@@ -78,11 +95,15 @@ var FabricInterface = function (wickEditor) {
 
         var currentObject = wickEditor.project.getCurrentObject();
 
+        // Make sure everything is deselected, mulitple selected objects cause positioning problems.
+        var selectedObjectIDs = that.getSelectedObjectIDs();
+        that.deselectAll();
+
         // Remove objects that don't exist anymore
         this.canvas.forEachObject(function(fabricObj) {
             if(!fabricObj.wickObjectID) return;
 
-            if(!currentObject.hasChildWithID(fabricObj.wickObjectID)) {
+            if(!currentObject.childWithIDIsActive(fabricObj.wickObjectID)) {
                 // Object doesn't exist in the current object anymore, remove it's fabric object.
                 fabricObj.remove();
             } else {
@@ -91,15 +112,28 @@ var FabricInterface = function (wickEditor) {
             }
         });
 
-        // Add new objects
-        currentObject.forEachChildObject(function (child) {
-            if(that.objectWithIDExistsInCanvas(child.id)) return;
+        // Add new objects and update zIndices
+        currentObject.forEachActiveChildObject(function (child) {
 
-            that.createFabricObjectFromWickObject(child, function (newFabricObj) {
-                newFabricObj.wickObjectID = child.id;
-                canvas.add(newFabricObj);
-            });
+            if(that.objectWithIDExistsInCanvas(child.id)) { 
+                that.canvas.forEachObject(function(fabricObj) {
+                    if(fabricObj.wickObjectID === child.id) {
+                        var wickProjectIndex = currentObject.getCurrentFrame().wickObjects.indexOf(child);
+                        that.canvas.moveTo(fabricObj, wickProjectIndex+3);
+                    }
+                });
+            } else {
+                that.createFabricObjectFromWickObject(child, function (newFabricObj) {
+                    newFabricObj.wickObjectID = child.id;
+                    canvas.add(newFabricObj);
+                    var wickProjectIndex = currentObject.getCurrentFrame().wickObjects.indexOf(child);
+                    that.canvas.moveTo(newFabricObj, wickProjectIndex+3);
+                });
+            }
         });
+
+        // Reselect objects that were selected before sync
+        if(selectedObjectIDs.length > 0) that.selectByIDs(selectedObjectIDs);
 
         this.canvas.renderAll();
     }
@@ -196,26 +230,7 @@ var FabricInterface = function (wickEditor) {
     // Listen for objects being changed so we can undo them in the action handler.
     canvas.on('object:modified', function(e) {
 
-        var frameOffset = that.getFrameOffset();
-
-        var originalState = {
-            left   : e.target.originalState.left - frameOffset.x,
-            top    : e.target.originalState.top  - frameOffset.y,
-            scaleX : e.target.originalState.scaleX,
-            scaleY : e.target.originalState.scaleY,
-            angle  : e.target.originalState.angle,
-            text   : e.target.originalState.text
-        }
-        var modifiedState = {
-            left   : e.target.left - frameOffset.x,
-            top    : e.target.top  - frameOffset.y,
-            scaleX : e.target.scaleX,
-            scaleY : e.target.scaleY,
-            angle  : e.target.angle,
-            text   : e.target.text
-        }
-
-        // Automatically delete text boxes with no text in 'em.
+        // Delete text boxes with no text in 'em.
         if (e.target.text === '') {
             var wickObj = wickEditor.project.getChildByID(e.target.wickObjectID);
             // Make sure the original text comes back on undo
@@ -224,10 +239,40 @@ var FabricInterface = function (wickEditor) {
             return;
         }
 
-        wickEditor.actionHandler.doAction('modifyObject', 
-            {id: e.target.wickObjectID,
-             originalState: originalState,
-             modifiedState: modifiedState}
+        var frameOffset = that.getFrameOffset();
+
+        var modifiedStates = [];
+        var ids  = [];
+        if(e.target.type === "group") {
+            var group = e.target;
+            for(var i = 0; i < group._objects.length; i++) {
+                var obj = group._objects[i];
+                ids[i] = obj.wickObjectID;
+                modifiedStates[i] = {
+                    x      : group.left + group.width /2 + obj.left - frameOffset.x,
+                    y      : group.top  + group.height/2 + obj.top  - frameOffset.y,
+                    scaleX : obj.scaleX,
+                    scaleY : obj.scaleY,
+                    angle  : obj.angle,
+                    text   : obj.text
+                };
+            }
+        } else {
+            var obj = e.target;
+            ids[0] = obj.wickObjectID;
+            modifiedStates[0] = {
+                x      : obj.left - frameOffset.x,
+                y      : obj.top  - frameOffset.y,
+                scaleX : obj.scaleX,
+                scaleY : obj.scaleY,
+                angle  : obj.angle,
+                text   : obj.text
+            };
+        }
+
+        wickEditor.actionHandler.doAction('modifyObjects', 
+            {ids: ids,
+             modifiedStates: modifiedStates}
         );
     });
 
@@ -237,19 +282,22 @@ var FabricInterface = function (wickEditor) {
 
         if(e.e.button == 2) {
             
-            if (e.target && e.target.wickObject) {
+            if (e.target && e.target.wickObjectID) {
                 // Set active object of fabric canvas
                 var id = canvas.getObjects().indexOf(e.target);
-                canvas.setActiveObject(canvas.item(id));
+                canvas.setActiveObject(canvas.item(id)).renderAll();
             }
 
             if(!e.target) {
                 // Didn't right click an object, deselect everything
                 canvas.deactivateAll().renderAll();
+                wickEditor.htmlInterface.closeScriptingGUI();
             }
+            wickEditor.htmlInterface.syncWithEditorState();
             wickEditor.htmlInterface.openRightClickMenu();
 
         } else {
+            wickEditor.htmlInterface.syncWithEditorState();
             wickEditor.htmlInterface.closeRightClickMenu();
         }
     });
@@ -413,11 +461,32 @@ var FabricInterface = function (wickEditor) {
 
 // Interactivity utils
 
+    this.selectByIDs = function (ids) {
+
+        var objs = [];
+        this.canvas.getObjects().map(function(o) {
+            if(ids.indexOf(o.wickObjectID) != -1) {
+                o.set('active', true);
+                return objs.push(o);
+            }
+        });
+
+        var group = new fabric.Group(objs, {
+            originX: 'left', 
+            originY: 'top'
+        });
+
+        this.canvas._activeObject = null;
+
+        this.canvas.setActiveGroup(group.setCoords()).renderAll();
+
+    }
+
     this.selectAll = function () {
 
         var objs = [];
         this.canvas.getObjects().map(function(o) {
-            if(o.wickObject) {
+            if(o.wickObjectID) {
                 o.set('active', true);
                 return objs.push(o);
             }
@@ -435,8 +504,6 @@ var FabricInterface = function (wickEditor) {
     }
 
     this.deselectAll = function () {
-
-        wickEditor.htmlInterface.updatePropertiesGUI('project');
 
         var activeGroup = this.canvas.getActiveGroup();
         if(activeGroup) {
@@ -481,25 +548,12 @@ var FabricInterface = function (wickEditor) {
         }
 
         if(group) {
-            console.error("yo yo ... fix it")
-            console.log(group)
+            for(var i = 0; i < group._objects.length; i++) {
+                ids.push(group._objects[i].wickObjectID);
+            }
         }
 
         return ids;
     }
-
-    this.sendSelectedObjectToBack = function () {
-        console.error("Don't forget to handle muliple objects here!");
-
-        this.getActiveObject().sendToBack();
-        this.frameInside.sendToBack();
-    }
-
-    this.bringSelectedObjectToFront = function () {
-        console.error("Don't forget to handle muliple objects here!");
-        
-        this.getActiveObject().bringToFront();
-    }
-
 }
 

@@ -14,11 +14,7 @@ var WickEditor = function () {
 
     console.log("WickEditor rev " + this.version);
 
-    //this.tryToLoadAutosavedProject();
-    this.project = new WickProject();
-
-    this.mouse = {};
-    this.keys = [];
+    this.tryToLoadAutosavedProject();
 
     this.fabricInterface = new FabricInterface(this);
     this.paperInterface = new PaperInterface(this);
@@ -26,321 +22,44 @@ var WickEditor = function () {
 
     this.actionHandler = new WickActionHandler(this);
 
+}
+
 /*********************************
-    Page events
+    
 *********************************/
 
-    var that = this;
-
-    document.addEventListener('mousemove', function(e) { 
-        that.mouse.x = e.clientX;
-        that.mouse.y = e.clientY;
-    }, false );
-
-    VerboseLog.error("Send mouse events to fabric and paper here. Editor will prob have to store current tool to send events to proper places.");
-
-    document.addEventListener('contextmenu', function (event) { 
-        event.preventDefault();
-    }, false);
-
-    this.clearKeys = function () {
-        that.keys = [];
+WickEditor.prototype.getSelectedWickObject = function () {
+    var ids = this.fabricInterface.getSelectedObjectIDs();
+    if(ids.length == 1) {
+        return this.project.getObjectByID(ids[0]);
+    } else {
+        return null;
     }
+}
 
-    document.body.addEventListener("keydown", function (event) {
-        that.keys[event.keyCode] = true;
-
-        //VerboseLog.log("keydown");
-        //VerboseLog.log(event.keyCode);
-        //VerboseLog.log(this.keys);
-
-        var controlKeyDown = that.keys[91];
-        var shiftKeyDown = that.keys[16];
-
-        var editingTextBox = document.activeElement.nodeName == 'TEXTAREA'
-                          || document.activeElement.nodeName == 'INPUT';
-
-        if(!editingTextBox) {
-            // Control-shift-z: redo
-            if (event.keyCode == 90 && controlKeyDown && shiftKeyDown) {
-                that.actionHandler.redoAction();    
-            }
-            // Control-z: undo
-            else if (event.keyCode == 90 && controlKeyDown) {
-                that.actionHandler.undoAction();
-            }
-        }
-
-        // Control-s: save
-        if (event.keyCode == 83 && controlKeyDown) {
-            event.preventDefault();
-            that.clearKeys();
-            that.syncEditorWithfabricInterface();
-            that.project.saveInLocalStorage();
-        }
-        // Control-o: open
-        else if (event.keyCode == 79 && controlKeyDown) {
-            event.preventDefault();
-            that.clearKeys();
-            $('#importButton').click();
-        }
-
-        // Control-a: Select all
-        if (event.keyCode == 65 && controlKeyDown) {
-            event.preventDefault();
-            that.fabricInterface.deselectAll();
-            that.fabricInterface.selectAll();
-        }
-
-        // Backspace: delete selected objects
-        if (event.keyCode == 8 && !editingTextBox) {
-            event.preventDefault();
-
-            var ids = that.fabricInterface.getSelectedObjectIDs();
-            if(ids.length == 0) {
-                VerboseLog.log("Nothing to delete.");
-                return;
-            }
-
-            that.actionHandler.doAction('deleteObjects', { ids:ids });
-        }
-
-        // Space: Pan viewport
-        if (event.keyCode == 32 && !editingTextBox) {
-            that.fabricInterface.panTo(that.mouse.x - window.innerWidth/2, 
-                                    that.mouse.y - window.innerHeight/2);
-        }
-
-        // Tilde: log project state to canvas (for debugging)
-        if (event.keyCode == 192) {
-            console.log(that.project);
-            console.log(that.fabricInterface);
-        }
-    });
-
-    document.body.addEventListener("keyup", function (event) {
-        that.keys[event.keyCode] = false;
-
-        //VerboseLog.log("keyup");
-        //VerboseLog.log(event.keyCode);
-        //VerboseLog.log(this.keys);
-    });
-
-    window.addEventListener('resize', function(e) {
-        that.fabricInterface.resize();
-        that.paperInterface.resize();
-        that.htmlInterface.resize();
-    }, false);
-    that.fabricInterface.resize();
-    that.paperInterface.resize();
-    that.htmlInterface.resize();
-
-    // Sync interfaces
-    this.fabricInterface.syncWithEditorState();
-    this.htmlInterface.syncWithEditorState();
-    this.paperInterface.syncWithEditorState();
-
-    // Setup leave page warning
-    window.addEventListener("beforeunload", function (event) {
-        var confirmationMessage = 'Warning: All unsaved changes will be lost!';
-        (event || window.event).returnValue = confirmationMessage; //Gecko + IE
-        return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
-    });
-
-    // In order to ensure that the browser will fire clipboard events, we always need to have something selected
-    var focusHiddenArea = function () {
-        if($("#scriptingGUI").css('visibility') === 'hidden') {
-            $("#hidden-input").val(' ');
-            $("#hidden-input").focus().select();
-        }
+WickEditor.prototype.getSelectedWickObjects = function () {
+    var ids = this.fabricInterface.getSelectedObjectIDs();
+    var wickObjects = [];
+    for(var i = 0; i < ids.length; i++) {
+        wickObjects.push(this.project.getObjectByID(ids[0]));
     }
+    return wickObjects;
+}
 
-    document.addEventListener("copy", function(event) {
-
-        that.clearKeys();
-
-        // Don't try to copy from the fabric canvas if user is editing text
-        if(document.activeElement.nodeName == 'TEXTAREA' || that.htmlInterface.scriptingIDEopen) {
-            return;
-        }
-
-        event.preventDefault();
-        focusHiddenArea();
-
-        that.syncEditorWithfabricInterface();
-
-        var clipboardObjectJSON;
-
-        var obj = that.fabricInterface.canvas.getActiveObject() 
-        var group = that.fabricInterface.canvas.getActiveGroup();
-
-        if(group) {
-            var objectJSONs = [];
-            //group._restoreObjectsState();
-            for(var i = 0; i < group._objects.length; i++) {
-                objectJSONs.push(group._objects[i].wickObject.getAsJSON());
-            }
-            var clipboardObject = {
-                position: {top  : group.top  + group.height/2, 
-                           left : group.left + group.width/2},
-                wickObjectArray: objectJSONs
-            }
-            clipboardObjectJSON = JSON.stringify(clipboardObject);
-        } else {
-            var selectedWickObject = obj.wickObject;
-            var objJSON = selectedWickObject.getAsJSON();
-            var clipboardObject = {
-                position: {top:0, left:0},
-                wickObjectArray: [objJSON]
-            }
-            clipboardObjectJSON = JSON.stringify(clipboardObject);
-        }
-
-        event.clipboardData.setData('text/wickobjectsjson', clipboardObjectJSON);
-    });
-
-    document.addEventListener("cut", function(event) {
-        VerboseLog.error('cut NYI');
-    });
-
-    document.addEventListener("paste", function(event) {
-
-        that.clearKeys();
-
-        if(document.activeElement.nodeName === 'TEXTAREA' || that.htmlInterface.scriptingIDEopen) {
-            return;
-        }
-
-        event.preventDefault();
-        focusHiddenArea();
-        
-        var clipboardData = event.clipboardData;
-        var items = clipboardData.items;
-
-        for (i=0; i<items.length; i++) {
-
-            var fileType = items[i].type;
-            var file = clipboardData.getData(items[i].type);
-
-            VerboseLog.log("Pasted filetype: " + fileType);
-
-            if (['image/png', 'image/jpeg', 'image/bmp'].indexOf(fileType) != -1) {
-
-                var data = items[i].getAsFile();
-                var fr = new FileReader;
-                fr.onloadend = function() {
-                    WickObject.fromImage(
-                        fr.result, 
-                        function(newWickObject) {
-                            newWickObject.x = that.project.resolution.x/2 - newWickObject.width /2;
-                            newWickObject.y = that.project.resolution.y/2 - newWickObject.height/2;
-                            that.actionHandler.doAction('addObject', {wickObject:newWickObject});
-                        });
-                };
-                fr.readAsDataURL(data);
-
-            } else if (fileType == 'image/gif') {
-
-                var data = items[i].getAsFile();
-                var fr = new FileReader;
-                fr.onloadend = function() {
-                    WickObject.fromAnimatedGIF(
-                        fr.result,
-                        that.currentObject,
-                        function(newWickObject) {
-                            that.actionHandler.doAction('addWickObjectTofabricInterface', {wickObject:newWickObject});
-                        });
-                };
-                fr.readAsDataURL(data);
-
-            } else if (fileType == 'text/plain') {
-
-                var newWickObject = WickObject.fromText(file, that.currentObject);
-                that.actionHandler.doAction('addWickObjectTofabricInterface', {wickObject:newWickObject});
-
-            } else if (fileType == 'text/wickobjectsjson') {
-
-                var clipboardObject = JSON.parse(clipboardData.getData('text/wickobjectsjson'));
-                var wickObjectJSONArray = clipboardObject.wickObjectArray;
-                var position = wickObjectJSONArray.position;
-                for (var i = 0; i < wickObjectJSONArray.length; i++) {
-                    
-                    var newWickObject = WickObject.fromJSON(wickObjectJSONArray[i], that.currentObject);
-                    
-                    newWickObject.left += window.innerWidth/2  - that.project.resolution.x/2;
-                    newWickObject.top  += window.innerHeight/2 - that.project.resolution.y/2;
-                    if(wickObjectJSONArray.length > 1) {
-                        newWickObject.left += clipboardObject.position.left;
-                        newWickObject.top  += clipboardObject.position.top;
-                    }
-
-                    that.actionHandler.doAction('addWickObjectTofabricInterface', {wickObject:newWickObject});
-                }
-
-            }
-        }
-    });
-
-    $("#editorCanvasContainer").on('drop', function(e) {
-        // prevent browser from opening the file
-        e.stopPropagation();
-        e.preventDefault();
-
-        var files = e.originalEvent.dataTransfer.files;
-
-        // Retrieve uploaded files data
-        for (var i = 0; i < files.length; i++) {
-            var file = files[i];
-
-            // Read file as data URL
-            var dataURLReader = new FileReader();
-            dataURLReader.onload = (function(theFile) { return function(e) {
-
-                VerboseLog.log("readAsDataURL():");
-                VerboseLog.log("Dropped file: " + theFile.name);
-                VerboseLog.log("Dropped filetype: " + file.type);
-
-                if (['image/png', 'image/jpeg', 'image/bmp'].indexOf(file.type) != -1) {
-
-                    WickObject.fromImage(
-                        e.target.result, 
-                        function(newWickObject) {
-                            newWickObject.x = that.project.resolution.x/2 - newWickObject.width /2;
-                            newWickObject.y = that.project.resolution.y/2 - newWickObject.height/2;
-                            that.actionHandler.doAction('addObjects', {wickObjects:[newWickObject]});
-                        });
-
-                } else if(['image/gif'].indexOf(file.type) != -1) {
-
-                    WickObject.fromAnimatedGIF(
-                    e.target.result,
-                    that.currentObject,
-                    function(newWickObject) {
-                        that.actionHandler.doAction('addWickObjectTofabricInterface', {wickObject:newWickObject});
-                    });
-
-                } else if(['audio/mp3', 'audio/wav', 'audio/ogg'].indexOf(file.type) != -1) {
-
-                    var newWickObject = WickObject.fromAudioFile(e.target.result, that.currentObject);
-                    that.actionHandler.doAction('addWickObjectTofabricInterface', {wickObject:newWickObject});
-
-                } else if(['application/json'].indexOf(file.type) != -1) {
-
-                    var reader = new FileReader();
-                    reader.onloadend = function(e) {
-                        that.openProject(this.result);
-                    };
-                    reader.readAsText(file);
-
-                }
-
-            }; })(file);
-            dataURLReader.readAsDataURL(file);
-        }
-
-        return false;
-    });
-
+WickEditor.prototype.getCopyData  = function () {
+    var ids = this.fabricInterface.getSelectedObjectIDs();
+    var objectJSONs = [];
+    for(var i = 0; i < ids.length; i++) {
+        objectJSONs.push(this.project.getObjectByID(ids[i]).getAsJSON());
+    }
+    var clipboardObject = {
+        /*position: {top  : group.top  + group.height/2, 
+                   left : group.left + group.width/2},*/
+        groupPosition: {x : 0, 
+                        y : 0},
+        wickObjectArray: objectJSONs
+    }
+    return JSON.stringify(clipboardObject);
 }
 
 /**********************************
@@ -350,6 +69,7 @@ var WickEditor = function () {
 WickEditor.prototype.syncInterfaces = function () {
     this.paperInterface.syncWithEditorState();
     this.fabricInterface.syncWithEditorState();
+    this.htmlInterface.syncWithEditorState();
 }
 
 /**********************************
@@ -389,8 +109,9 @@ WickEditor.prototype.newProject = function () {
     this.fabricInterface.deselectAll();
 
     this.fabricInterface.resize();
-    this.fabricInterface.syncWithEditor();
-    this.htmlInterface.syncWithEditor();
+    this.fabricInterface.syncWithEditorState();
+    this.paperInterface.syncWithEditorState();
+    this.htmlInterface.syncWithEditorState();
 
 }
 
@@ -433,7 +154,6 @@ WickEditor.prototype.runProject = function () {
     }
 
     // JSONify the project, autosave, and have the builtin player run it
-    this.syncEditorWithfabricInterface();
     this.project.getAsJSON(function (JSONProject) {
         that.htmlInterface.showBuiltinPlayer();
         WickPlayer.runProject(JSONProject);

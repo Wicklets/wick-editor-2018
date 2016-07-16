@@ -2,6 +2,9 @@
 
 var HTMLInterface = function (wickEditor) {
 
+    this.mouse = {};
+    this.keys = [];
+
     this.resize = function () {
         var GUIWidth = parseInt($("#timelineGUI").css("width")) / 2;
         $("#timelineGUI").css('left', (window.innerWidth/2 - GUIWidth)+'px');
@@ -11,8 +14,196 @@ var HTMLInterface = function (wickEditor) {
 
         this.updateTimelineGUI();
         this.updatePropertiesGUI();
+        this.updateRightClickMenuGUI();
 
     }
+
+/********************
+       Events
+********************/
+
+    var that = this;
+
+    document.addEventListener('mousemove', function(e) { 
+        that.mouse.x = e.clientX;
+        that.mouse.y = e.clientY;
+    }, false );
+
+    VerboseLog.error("Send mouse events to fabric and paper here. Editor will prob have to store current tool to send events to proper places.");
+
+    document.addEventListener('contextmenu', function (event) { 
+        event.preventDefault();
+    }, false);
+
+    this.clearKeys = function () {
+        that.keys = [];
+    }
+
+    document.body.addEventListener("keydown", function (event) {
+        that.keys[event.keyCode] = true;
+
+        var controlKeyDown = that.keys[91];
+        var shiftKeyDown = that.keys[16];
+
+        var editingTextBox = document.activeElement.nodeName == 'TEXTAREA'
+                          || document.activeElement.nodeName == 'INPUT';
+
+        if(!editingTextBox) {
+            // Control-shift-z: redo
+            if (event.keyCode == 90 && controlKeyDown && shiftKeyDown) {
+                wickEditor.actionHandler.redoAction();    
+            }
+            // Control-z: undo
+            else if (event.keyCode == 90 && controlKeyDown) {
+                wickEditor.actionHandler.undoAction();
+            }
+        }
+
+        // Control-s: save
+        if (event.keyCode == 83 && controlKeyDown) {
+            event.preventDefault();
+            that.clearKeys();
+            wickEditor.project.saveInLocalStorage();
+        }
+        // Control-o: open
+        else if (event.keyCode == 79 && controlKeyDown) {
+            event.preventDefault();
+            that.clearKeys();
+            $('#importButton').click();
+        }
+
+        // Control-a: Select all
+        if (event.keyCode == 65 && controlKeyDown) {
+            event.preventDefault();
+            wickEditor.fabricInterface.deselectAll();
+            wickEditor.fabricInterface.selectAll();
+        }
+
+        // Backspace: delete selected objects
+        if (event.keyCode == 8 && !editingTextBox) {
+            event.preventDefault();
+
+            var ids = wickEditor.fabricInterface.getSelectedObjectIDs();
+            if(ids.length == 0) {
+                VerboseLog.log("Nothing to delete.");
+                return;
+            }
+
+            wickEditor.actionHandler.doAction('deleteObjects', { ids:ids });
+        }
+
+        // Space: Pan viewport
+        if (event.keyCode == 32 && !editingTextBox) {
+            wickEditor.fabricInterface.panTo(
+                that.mouse.x - window.innerWidth/2, 
+                that.mouse.y - window.innerHeight/2);
+        }
+
+        // Tilde: log project state to canvas (for debugging)
+        if (event.keyCode == 192) {
+            console.log(wickEditor.project);
+            console.log(wickEditor.project.rootObject);
+            console.log(wickEditor.project.rootObject.frames[0].wickObjects);
+            console.log(wickEditor.fabricInterface);
+        }
+    });
+
+    document.body.addEventListener("keyup", function (event) {
+        that.keys[event.keyCode] = false;
+    });
+
+    window.addEventListener('resize', function(e) {
+        wickEditor.fabricInterface.resize();
+        wickEditor.htmlInterface.resize();
+        wickEditor.paperInterface.resize();
+    }, false);
+
+    // Setup leave page warning
+    window.addEventListener("beforeunload", function (event) {
+        var confirmationMessage = 'Warning: All unsaved changes will be lost!';
+        (event || window.event).returnValue = confirmationMessage; //Gecko + IE
+        return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+    });
+
+    // In order to ensure that the browser will fire clipboard events, we always need to have something selected
+    var focusHiddenArea = function () {
+        if($("#scriptingGUI").css('visibility') === 'hidden') {
+            $("#hidden-input").val(' ');
+            $("#hidden-input").focus().select();
+        }
+    }
+
+    document.addEventListener("copy", function(event) {
+
+        that.clearKeys();
+
+        // Don't try to copy from the fabric canvas if user is editing text
+        if(document.activeElement.nodeName == 'TEXTAREA' || wickEditor.htmlInterface.scriptingIDEopen) {
+            return;
+        }
+
+        // Make sure an element is focused so that copy event fires properly
+        event.preventDefault();
+        //focusHiddenArea();
+
+        event.clipboardData.setData('text/wickobjectsjson', wickEditor.getCopyData());
+    });
+
+    document.addEventListener("cut", function(event) {
+        VerboseLog.error('cut NYI');
+    });
+
+    document.addEventListener("paste", function(event) {
+
+        that.clearKeys();
+
+        if(document.activeElement.nodeName === 'TEXTAREA' || wickEditor.htmlInterface.scriptingIDEopen) {
+            return;
+        }
+
+        event.preventDefault();
+        //focusHiddenArea();
+        
+        var clipboardData = event.clipboardData;
+        var items = clipboardData.items;
+
+        for (i=0; i<items.length; i++) {
+
+            var fileType = items[i].type;
+            var file = clipboardData.getData(items[i].type);
+
+            if(fileType === 'text/wickobjectsjson') {
+                var fileWickObject = WickObject.fromJSONArray(JSON.parse(file), function(objs) {
+                    wickEditor.actionHandler.doAction('addObjects', {wickObjects:objs});
+                });
+            } else {
+                var fileWickObject = WickObject.fromFile(file, fileType, function(obj) {
+                    wickEditor.actionHandler.doAction('addObjects', {wickObjects:[obj]});
+                });
+            }
+
+        }
+    });
+
+    $("#editorCanvasContainer").on('drop', function(e) {
+        // prevent browser from opening the file
+        e.stopPropagation();
+        e.preventDefault();
+
+        var files = e.originalEvent.dataTransfer.files;
+
+        // Retrieve uploaded files data
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            var fileType = file.type;
+
+            var fileWickObject = WickObject.fromFile(file, fileType, function(obj) {
+                wickEditor.actionHandler.doAction('addObjects', {wickObjects:[obj]});
+            });
+        }
+
+        return false;
+    });
 
 /********************
       Menu Bar
@@ -97,8 +288,10 @@ var HTMLInterface = function (wickEditor) {
     });
 
     $('#textToolButton').on('click', function(e) {
-        var newWickObject = WickObject.fromText('Click to edit text', wickEditor.currentObject);
-        wickEditor.actionHandler.doAction('addWickObjectTofabricInterface', {wickObject:newWickObject});
+        var newWickObject = WickObject.fromText('Click to edit text');
+        newWickObject.x = wickEditor.project.resolution.x/2 - newWickObject.width /2;
+        newWickObject.y = wickEditor.project.resolution.y/2 - newWickObject.height/2;
+        wickEditor.actionHandler.doAction('addObjects', {wickObjects:[newWickObject]});
     });
 
     $('#htmlSnippetToolButton').on('click', function(e) {
@@ -139,22 +332,22 @@ var HTMLInterface = function (wickEditor) {
 
     $("#onLoadButton").on("click", function (e) {
         that.currentScript = 'onLoad';
-        that.reloadScriptingGUI(wickEditor.fabricInterface.getActiveObject());
+        that.reloadScriptingGUI();
     });
 
     $("#onClickButton").on("click", function (e) {
         that.currentScript = 'onClick';
-        that.reloadScriptingGUI(wickEditor.fabricInterface.getActiveObject());
+        that.reloadScriptingGUI();
     });
 
     $("#onUpdateButton").on("click", function (e) {
         that.currentScript = 'onUpdate';
-        that.reloadScriptingGUI(wickEditor.fabricInterface.getActiveObject());
+        that.reloadScriptingGUI();
     });
 
     $("#onKeyDownButton").on("click", function (e) {
         that.currentScript = 'onKeyDown';
-        that.reloadScriptingGUI(wickEditor.fabricInterface.getActiveObject());
+        that.reloadScriptingGUI();
     });
 
     $("#closeScriptingGUIButton").on("click", function (e) {
@@ -195,7 +388,7 @@ var HTMLInterface = function (wickEditor) {
 
     // Update selected objects scripts when script editor text changes
     this.aceEditor.getSession().on('change', function (e) {
-        that.updateScriptsOnObject(wickEditor.fabricInterface.getActiveObject());
+        wickEditor.getSelectedWickObject().wickScripts[that.currentScript] = that.aceEditor.getValue();
     });
 
     this.aceEditor.getSession().on("changeAnnotation", function(){
@@ -214,9 +407,9 @@ var HTMLInterface = function (wickEditor) {
         }
     });
 
-    this.openScriptingGUI = function (activeObj) {
+    this.openScriptingGUI = function () {
         this.scriptingIDEopen = true;
-        this.reloadScriptingGUI(activeObj);
+        this.reloadScriptingGUI();
         $("#scriptingGUI").css('visibility', 'visible');
     };
 
@@ -225,21 +418,17 @@ var HTMLInterface = function (wickEditor) {
         $("#scriptingGUI").css('visibility', 'hidden');
     };
 
-    this.updateScriptsOnObject = function (activeObj) {
-        activeObj.wickObject.wickScripts[this.currentScript] = this.aceEditor.getValue();
-    }
-
     this.reloadScriptingGUI = function () {
         
-        var activeObj = wickEditor.fabricInterface.canvas.getActiveObject();
+        var selectedObj = wickEditor.getSelectedWickObject();
 
-        if(!activeObj || !activeObj.wickObject) {
+        if(!selectedObj) {
             this.closeScriptingGUI();
             return;
         }
 
-        if(activeObj && activeObj.wickObject.wickScripts && activeObj.wickObject.wickScripts[this.currentScript]) {
-            var script = activeObj.wickObject.wickScripts[this.currentScript];
+        if(selectedObj.wickScripts[this.currentScript]) {
+            var script = selectedObj.wickScripts[this.currentScript];
             this.aceEditor.setValue(script, -1);
         }
 
@@ -275,8 +464,7 @@ var HTMLInterface = function (wickEditor) {
         timeline.style.width = 3000+'px';//wickEditor.currentObject.frames.length*100 + 6 + "px";
 
         var currentObject = wickEditor.project.getCurrentObject();
-        console.log(currentObject)
-        for(var i = 0; i < currentObject; i++) {
+        for(var i = 0; i < currentObject.frames.length; i++) {
 
             var frame = currentObject.frames[i];
 
@@ -328,8 +516,6 @@ var HTMLInterface = function (wickEditor) {
 
         }
     }
-    
-    this.updateTimelineGUI();
 
 /*********************
     Properties Box
@@ -375,10 +561,6 @@ var HTMLInterface = function (wickEditor) {
 
     document.getElementById('fitScreenCheckbox').onclick = function (e) {
         wickEditor.project.fitScreen = this.checked;
-    }
-
-    document.getElementById('drawBordersCheckbox').onclick = function (e) {
-        wickEditor.project.drawBorders = this.checked;
     }
 
     document.getElementById('projectBgColor').onchange = function () {
@@ -437,8 +619,8 @@ var HTMLInterface = function (wickEditor) {
 
     $('.tooltipElem').on("mouseover", function(e) {
         $("#tooltipGUI").css('display', 'block');
-        $("#tooltipGUI").css('top', wickEditor.mouse.y+5+'px');
-        $("#tooltipGUI").css('left', wickEditor.mouse.x+5+'px');
+        $("#tooltipGUI").css('top', that.mouse.y+5+'px');
+        $("#tooltipGUI").css('left', that.mouse.x+5+'px');
         document.getElementById('tooltipGUI').innerHTML = e.currentTarget.attributes.alt.value;
     });
 
@@ -458,7 +640,7 @@ var HTMLInterface = function (wickEditor) {
 
     $("#editScriptsButton").on("click", function (e) {
         wickEditor.htmlInterface.closeRightClickMenu();
-        wickEditor.htmlInterface.openScriptingGUI(wickEditor.fabricInterface.getActiveObject());
+        wickEditor.htmlInterface.openScriptingGUI();
     });
 
     $("#bringToFrontButton").on("click", function (e) {
@@ -500,8 +682,8 @@ var HTMLInterface = function (wickEditor) {
     $("#editObjectButton").on("click", function (e) {
         wickEditor.htmlInterface.closeRightClickMenu();
 
-        var objectToEdit = wickEditor.fabricInterface.getActiveObject();
-        wickEditor.actionHandler.doAction('editObject', {objectToEdit:objectToEdit});
+        var selectedObject = wickEditor.getSelectedWickObject();
+        wickEditor.actionHandler.doAction('editObject', {objectToEdit:selectedObject});
     });
 
     $("#convertToSymbolButton").on("click", function (e) {
@@ -526,10 +708,21 @@ var HTMLInterface = function (wickEditor) {
     this.openRightClickMenu = function () {
 
         // Make rightclick menu visible
-        $("#rightClickMenu").css('visibility', 'visible');
+        $("#rightClickMenu").css('display', 'block');
         // Attach it to the mouse
-        $("#rightClickMenu").css('top', wickEditor.mouse.y+'px');
-        $("#rightClickMenu").css('left', wickEditor.mouse.x+'px');
+        $("#rightClickMenu").css('top', that.mouse.y+'px');
+        $("#rightClickMenu").css('left', that.mouse.x+'px');
+
+    }
+
+    this.closeRightClickMenu = function () {
+        // Hide rightclick menu
+        $("#rightClickMenu").css('display', 'none');
+        $("#rightClickMenu").css('top', '0px');
+        $("#rightClickMenu").css('left','0px');
+    }
+
+    this.updateRightClickMenuGUI = function () {
 
         // Hide everything
         $("#insideSymbolButtons").css('display', 'none');
@@ -540,36 +733,22 @@ var HTMLInterface = function (wickEditor) {
 
         // Selectively show portions we need depending on editor state
 
-        var fabCanvas = wickEditor.fabricInterface.canvas;
-        var selectedObject = fabCanvas.getActiveObject() || fabCanvas.getActiveGroup();
+        var selectedObject = wickEditor.getSelectedWickObject();
 
-        if(!wickEditor.currentObject.isRoot) {
-            $("#insideSymbolButtons").css('display', 'block');
-        }
         if(selectedObject) {
-            if(selectedObject.wickObject && selectedObject.wickObject.isSymbol) {
+            if(!selectedObject.isRoot) {
+                $("#insideSymbolButtons").css('display', 'block');
+            }
+            if(selectedObject.isSymbol) {
                 $("#symbolButtons").css('display', 'block');
             } else {
                 $("#staticObjectButtons").css('display', 'block');
             }
             $("#commonObjectButtons").css('display', 'block');
-            
         } else {
             $("#frameButtons").css('display', 'block');
         }
-    }
 
-    this.closeRightClickMenu = function () {
-        // Hide rightclick menu
-        $("#rightClickMenu").css('visibility', 'hidden');
-        $("#rightClickMenu").css('top', '0px');
-        $("#rightClickMenu").css('left','0px');
-
-        // Hide all buttons inside rightclick menu
-        $("#symbolButtons").css('display', 'none');
-        $("#staticObjectButtons").css('display', 'none');
-        $("#commonObjectButtons").css('display', 'none');
-        $("#frameButtons").css('display', 'none');
     }
 
 /************************
@@ -603,9 +782,8 @@ var HTMLInterface = function (wickEditor) {
 
         var tab = 'project';
 
-        var selectedObjIDs = wickEditor.fabricInterface.getSelectedObjectIDs();
-        if(selectedObjIDs.length == 1) {
-            var selectedObj = wickEditor.project.getCurrentObject().getChildByID(selectedObjIDs[0]);
+        var selectedObj = wickEditor.getSelectedWickObject();
+        if(selectedObj) {
             if(selectedObj.fontData) {
                 tab = 'text';
             } else if (selectedObj.audioData) {
@@ -624,7 +802,6 @@ var HTMLInterface = function (wickEditor) {
                 document.getElementById('projectSizeY').value          = wickEditor.project.resolution.y;
                 document.getElementById('frameRate').value             = wickEditor.project.framerate;
                 document.getElementById('fitScreenCheckbox').checked   = wickEditor.project.fitScreen;
-                document.getElementById('drawBordersCheckbox').checked = wickEditor.project.drawBorders;
                 $("#projectProperties").css('display', 'inline');
                 break;
             case 'symbol':
@@ -667,5 +844,17 @@ var HTMLInterface = function (wickEditor) {
         that.hideBuiltinPlayer();
         WickPlayer.stopRunningCurrentProject();
     });
+
+/************************
+      Init sync
+************************/
+
+    wickEditor.fabricInterface.resize();
+    this.resize();
+    wickEditor.paperInterface.resize();
+    
+    wickEditor.fabricInterface.syncWithEditorState();
+    this.syncWithEditorState();
+    wickEditor.paperInterface.syncWithEditorState();
 
 }

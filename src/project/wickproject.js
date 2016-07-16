@@ -19,7 +19,6 @@ var WickProject = function () {
     this.framerate = 12;
 
     this.fitScreen = false;
-    this.drawBorders = true;
     this.borderColor = "#FFFFFF";
 
 };
@@ -35,10 +34,6 @@ WickProject.fromJSON = function (JSONString) {
     // Put prototypes back on object ('class methods'), they don't get JSONified on project export.
     projectFromJSON.__proto__ = WickProject.prototype;
     WickObjectUtils.putWickObjectPrototypeBackOnObject(projectFromJSON.rootObject);
-
-    // Regenerate parent object references
-    // These were removed earlier because JSON can't handle infinitely recursive objects (duh)
-    projectFromJSON.rootObject.regenerateParentObjectReferences();
 
     // Decode scripts back to human-readble and eval()-able format
     projectFromJSON.rootObject.decodeStrings();
@@ -100,18 +95,11 @@ WickProject.prototype.getAsJSON = function (callback) {
     // Rasterize SVGs
     var that = this;
     this.rootObject.generateSVGCacheImages(function () {
-        // Remove parent object references 
-        // (can't JSONify objects with circular references, player doesn't need them anyway)
-        that.rootObject.removeParentObjectRefences();
-
         // Encode scripts/text to avoid JSON format problems
         that.rootObject.encodeStrings();
 
         var JSONProject = JSON.stringify(that);
-
-        // Put parent object references back in all objects
-        that.rootObject.regenerateParentObjectReferences();
-
+        
         // Decode scripts back to human-readble and eval()-able format
         that.rootObject.decodeStrings();
 
@@ -140,13 +128,17 @@ WickProject.prototype.saveInLocalStorage = function () {
     Access project wickobjects
 *********************************/
 
-WickProject.prototype.addObject = function (wickObject) {
+WickProject.prototype.addObject = function (wickObject, zIndex) {
 
     if(!wickObject.id) {
         wickObject.id = this.rootObject.getLargestID() + 1;
     }
 
-    this.getCurrentObject().getCurrentFrame().wickObjects.push(wickObject);
+    if(zIndex === undefined) {
+        this.getCurrentObject().getCurrentFrame().wickObjects.push(wickObject);
+    } else {
+        this.getCurrentObject().getCurrentFrame().wickObjects.splice(zIndex, 0, wickObject);
+    }
 
 }
 
