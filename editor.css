@@ -22,10 +22,14 @@ hr {
 	font-size: 12px;
 	font-family: "Open Sans", "Arial", sans-serif;
 	background-color: #EEEEEE;
+
 	padding-top: 5px;
 	padding-bottom: 5px;
 	padding-left: 5px;
 	padding-right: 5px;
+
+	margin: 5px;
+
 	border: 1px solid #999999;
 }
 
@@ -49,8 +53,8 @@ hr {
 }
 
 #propertiesGUI {
-	bottom: 10px;
-	right: 10px;
+	right: 0px;
+	bottom: 0px;
 	text-align: center;
 	display: inline;
 }
@@ -122,7 +126,7 @@ hr {
 }
 
 #timelineGUI {
-	top: 0px;
+	bottom: 0px;
 	left: 0px;
 	width: 400px;
 }
