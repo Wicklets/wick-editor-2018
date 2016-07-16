@@ -305,6 +305,16 @@ var FabricInterface = function (wickEditor) {
     // Paths are handled internally by fabric so we have to 
     // intercept the paths and convert them to wickobjects
 
+    var rasterizePath = function (pathFabricObject) {
+        // Old straight-to-rasterized brush
+        pathFabricObject.left -= that.getFrameOffset().x;
+        pathFabricObject.top  -= that.getFrameOffset().y;
+        
+        WickObject.fromFabricPath(pathFabricObject, function(wickObj) {
+            wickEditor.actionHandler.doAction('addObjects', {wickObjects:[wickObj]});
+        });
+    }
+
     var potracePath = function (pathFabricObject) {
         // New potrace-and-send-to-paper.js brush
         pathFabricObject.cloneAsImage(function(clone) {
@@ -329,7 +339,8 @@ var FabricInterface = function (wickEditor) {
         }
 
         var path = e.target;
-        potracePath(path);
+        //potracePath(path);
+        rasterizePath(path);
         canvas.remove(e.target);
 
     });

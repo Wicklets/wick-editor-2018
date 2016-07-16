@@ -352,17 +352,9 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             wickEditor.fabricInterface.deselectAll();
 
-            // Store changes made to current frame in the project
-            wickEditor.syncEditorWithfabricInterface();
-
             // Set the editor to be editing this object at its first frame
-            args.prevEditedObject = wickEditor.currentObject;
-            wickEditor.currentObject = wickEditor.currentObject.parentObject;
-
-            // Load wickobjects in the frame we moved to into the canvas
-            wickEditor.fabricInterface.syncWithEditor();
-            
-            wickEditor.htmlInterface.syncWithEditor();
+            args.prevEditedObjectID = wickEditor.project.getCurrentObject().id;
+            wickEditor.project.currentObjectID = 0; console.error("This needs to get the parent, right now it goes straight to root")
         },
         function (args) {
             VerboseLog.error("finishEditingCurrentObject undo NYI")

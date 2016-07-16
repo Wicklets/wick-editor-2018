@@ -230,9 +230,11 @@ WickObject.fromFabricPath = function (fabricPath, callback) {
 
         WickObject.fromImage(
             imgSrc, 
-            left, 
-            top, 
-            callback
+            function (obj) {
+                obj.x = left;
+                obj.y = top;
+                callback(obj)
+            }
         );
     });
 }
@@ -893,6 +895,9 @@ WickObject.prototype.getLargestID = function (id) {
 
     var largestID = 0;
 
+    if(this.id > largestID) {
+        largestID = this.id;
+    }
     this.forEachChildObject(function(child) {
         var subLargestID = child.getLargestID();
 

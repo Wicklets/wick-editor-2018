@@ -734,11 +734,13 @@ var HTMLInterface = function (wickEditor) {
         // Selectively show portions we need depending on editor state
 
         var selectedObject = wickEditor.getSelectedWickObject();
+        var currentObject = wickEditor.project.getCurrentObject();
+
+        if(!currentObject.isRoot) {
+            $("#insideSymbolButtons").css('display', 'block');
+        }
 
         if(selectedObject) {
-            if(!selectedObject.isRoot) {
-                $("#insideSymbolButtons").css('display', 'block');
-            }
             if(selectedObject.isSymbol) {
                 $("#symbolButtons").css('display', 'block');
             } else {

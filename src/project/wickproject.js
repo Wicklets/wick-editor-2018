@@ -128,17 +128,29 @@ WickProject.prototype.saveInLocalStorage = function () {
     Access project wickobjects
 *********************************/
 
-WickProject.prototype.addObject = function (wickObject, zIndex) {
+WickProject.prototype.regenerateUniqueIDs = function (wickObject) {
+    var that = this;
 
     if(!wickObject.id) {
         wickObject.id = this.rootObject.getLargestID() + 1;
     }
+
+    if(wickObject.isSymbol) {
+        wickObject.forEachChildObject(function (child) {
+            that.regenerateUniqueIDs(child);
+        });
+    }
+}
+
+WickProject.prototype.addObject = function (wickObject, zIndex) {
 
     if(zIndex === undefined) {
         this.getCurrentObject().getCurrentFrame().wickObjects.push(wickObject);
     } else {
         this.getCurrentObject().getCurrentFrame().wickObjects.splice(zIndex, 0, wickObject);
     }
+
+    this.regenerateUniqueIDs(this.rootObject);
 
 }
 
