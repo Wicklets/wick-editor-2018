@@ -728,20 +728,25 @@ var HTMLInterface = function (wickEditor) {
         $("#insideSymbolButtons").css('display', 'none');
         $("#symbolButtons").css('display', 'none');
         $("#staticObjectButtons").css('display', 'none');
+        $("#singleObjectButtons").css('display', 'none');
         $("#commonObjectButtons").css('display', 'none');
         $("#frameButtons").css('display', 'none');
 
         // Selectively show portions we need depending on editor state
 
-        var selectedObject = wickEditor.getSelectedWickObject();
+        var selectedSingleObject = wickEditor.getSelectedWickObject();
         var currentObject = wickEditor.project.getCurrentObject();
+
+        var multiObjectSelection = wickEditor.fabricInterface.getSelectedObjectIDs().length > 1;
 
         if(!currentObject.isRoot) {
             $("#insideSymbolButtons").css('display', 'block');
         }
 
-        if(selectedObject) {
-            if(selectedObject.isSymbol) {
+        if(selectedSingleObject) {
+            $("#singleObjectButtons").css('display', 'block');
+
+            if(selectedSingleObject.isSymbol) {
                 $("#symbolButtons").css('display', 'block');
             } else {
                 $("#staticObjectButtons").css('display', 'block');
@@ -749,6 +754,10 @@ var HTMLInterface = function (wickEditor) {
             $("#commonObjectButtons").css('display', 'block');
         } else {
             $("#frameButtons").css('display', 'block');
+        }
+
+        if(multiObjectSelection) {
+            $("#staticObjectButtons").css('display', 'block');
         }
 
     }
