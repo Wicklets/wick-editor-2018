@@ -70,6 +70,8 @@ WickEditor.prototype.syncInterfaces = function () {
     this.paperInterface.syncWithEditorState();
     this.fabricInterface.syncWithEditorState();
     this.htmlInterface.syncWithEditorState();
+
+    this.fabricInterface.resize();
 }
 
 /**********************************

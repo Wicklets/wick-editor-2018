@@ -173,9 +173,6 @@ WickObject.fromAnimatedGIF = function (gifData, callback) {
     gifSymbol.top  = window.innerHeight/2;
     gifSymbol.setDefaultSymbolValues();
 
-    gifSymbol.width = 100;
-    gifSymbol.height = 100;
-
     //var gif = document.getElementById("gifImportDummyElem");
     var newGifEl = document.createElement("img"); 
     newGifEl.id = "gifImportDummyElem";
@@ -198,6 +195,8 @@ WickObject.fromAnimatedGIF = function (gifData, callback) {
                     gifSymbol.frames[frameIndex].wickObjects.push(o);
 
                     if(frameIndex == framesDataURLs.length-1) {
+                        gifSymbol.width  = gifSymbol.frames[0].wickObjects[0].width;
+                        gifSymbol.height = gifSymbol.frames[0].wickObjects[0].height;
                         callback(gifSymbol);
                     }
                 }; }) (i)
