@@ -15,15 +15,12 @@ var PaperInterface = function (wickEditor) {
     Refresh methods
 **********************/
 
-    this.resize = function () {
+    this.syncWithEditorState = function () {
         this.canvas.style.width  = window.innerWidth  + "px";
         this.canvas.style.height = window.innerHeight + "px";
         this.canvas.width  = window.innerWidth;
         this.canvas.height = window.innerHeight;
-        paper.view.draw();
-    }
-
-    this.syncWithEditorState = function () {
+        
         // for each child object in project.getCurrentObject():
         //    if it belongs in paper (if its an SVG)
         //      make fabric object with child's data and dont forget to set wickObjectID!

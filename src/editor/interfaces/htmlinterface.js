@@ -5,12 +5,10 @@ var HTMLInterface = function (wickEditor) {
     this.mouse = {};
     this.keys = [];
 
-    this.resize = function () {
+    this.syncWithEditorState = function () {
+
         var GUIWidth = parseInt($("#timelineGUI").css("width")) / 2;
         $("#timelineGUI").css('left', (window.innerWidth/2 - GUIWidth)+'px');
-    }
-
-    this.syncWithEditorState = function () {
 
         this.updateTimelineGUI();
         this.updatePropertiesGUI();
@@ -29,7 +27,9 @@ var HTMLInterface = function (wickEditor) {
         that.mouse.y = e.clientY;
     }, false );
 
-    VerboseLog.error("Send mouse events to fabric and paper here. Editor will prob have to store current tool to send events to proper places.");
+    document.addEventListener('mousedown', function(e) { 
+        //wickEditor.
+    }, false );
 
     document.addEventListener('contextmenu', function (event) { 
         event.preventDefault();
@@ -94,9 +94,23 @@ var HTMLInterface = function (wickEditor) {
 
         // Space: Pan viewport
         if (event.keyCode == 32 && !editingTextBox) {
+            var oldPanPosition = {
+                x:wickEditor.panPosition.x,
+                y:wickEditor.panPosition.y
+            }
+
+            wickEditor.panPosition = {x:x,y:y};
+
+            var canvasPanDiff = {
+                x: wickEditor.panPosition.x - oldPanPosition.x,
+                y: wickEditor.panPosition.y - oldPanPosition.y
+            }
+
             wickEditor.fabricInterface.panTo(
                 that.mouse.x - window.innerWidth/2, 
-                that.mouse.y - window.innerHeight/2);
+                that.mouse.y - window.innerHeight/2,
+                canvasPanDiff.x,
+                canvasPanDiff.y);
         }
 
         // Tilde: log project state to canvas (for debugging)
@@ -113,9 +127,7 @@ var HTMLInterface = function (wickEditor) {
     });
 
     window.addEventListener('resize', function(e) {
-        wickEditor.fabricInterface.resize();
-        wickEditor.htmlInterface.resize();
-        wickEditor.paperInterface.resize();
+        wickEditor.syncInterfaces();
     }, false);
 
     // Setup leave page warning
@@ -185,7 +197,17 @@ var HTMLInterface = function (wickEditor) {
         }
     });
 
-    $("#editorCanvasContainer").on('drop', function(e) {
+    $("#editor").on('dragover', function(e) {
+        document.getElementById('dropToUploadFileAlert').style.display = 'block';
+        return false;
+    });
+    $("#editor").on('dragleave', function(e) {
+        document.getElementById('dropToUploadFileAlert').style.display = 'none';
+        return false;
+    });
+    $("#editor").on('drop', function(e) {
+        document.getElementById('dropToUploadFileAlert').style.display = 'none';
+
         // prevent browser from opening the file
         e.stopPropagation();
         e.preventDefault();
@@ -214,7 +236,7 @@ var HTMLInterface = function (wickEditor) {
     }
 
     document.getElementById('exportJSONButton').onclick = function (e) {
-        wickEditor.exportProjectAsJSON();
+        wickEditor.project.exportAsJSONFile();
     }
 
     document.getElementById('openProjectButton').onclick = function (e) {
@@ -222,7 +244,7 @@ var HTMLInterface = function (wickEditor) {
     }
 
     document.getElementById('exportHTMLButton').onclick = function (e) {
-        wickEditor.exportProjectAsWebpage();
+        wickEditor.project.exportAsHTMLFile();
     }
 
     document.getElementById('runButton').onclick = function (e) {
@@ -254,8 +276,6 @@ var HTMLInterface = function (wickEditor) {
 
         wickEditor.fabricInterface.canvas.isDrawingMode = false;
         wickEditor.fabricInterface.currentTool = "cursor";
-
-        wickEditor.fabricInterface.addPaperSVGsTofabricInterface();
     });
 
     $('#paintbrushToolButton').on('click', function(e) {
@@ -273,18 +293,12 @@ var HTMLInterface = function (wickEditor) {
         document.getElementById('toolOptionsGUI').style.display = 'block';
 
         wickEditor.fabricInterface.canvas.isDrawingMode = true;
-        wickEditor.fabricInterface.currentTool = "eraser";
-
-        wickEditor.fabricInterface.canvas.freeDrawingBrush = new fabric['PencilBrush'](wickEditor.fabricInterface.canvas);
-        wickEditor.fabricInterface.canvas.freeDrawingBrush.color = lineColorEl.value;
-        wickEditor.fabricInterface.canvas.freeDrawingBrush.width = parseInt(lineWidthEl.value, 10) || 1;
     });
 
     $('#fillBucketToolButton').on('click', function(e) {
         document.getElementById('toolOptionsGUI').style.display = 'none';
 
         wickEditor.fabricInterface.canvas.isDrawingMode = false;
-        wickEditor.fabricInterface.currentTool = "fillbucket";
     });
 
     $('#textToolButton').on('click', function(e) {
@@ -302,11 +316,11 @@ var HTMLInterface = function (wickEditor) {
     var lineColorEl = document.getElementById('lineColor');
 
     lineWidthEl.onchange = function() {
-        wickEditor.fabricInterface.canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;
+        //wickEditor.fabricInterface.canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;
     };
 
     lineColorEl.onchange = function() {
-        wickEditor.fabricInterface.canvas.freeDrawingBrush.color = this.value;
+        //wickEditor.fabricInterface.canvas.freeDrawingBrush.color = this.value;
     };
 
 /********************
@@ -526,7 +540,6 @@ var HTMLInterface = function (wickEditor) {
         CheckInput.callIfPositiveInteger($('#projectSizeX').val(), function(n) {
             wickEditor.syncEditorWithfabricInterface();
             wickEditor.project.resolution.x = n;
-            wickEditor.fabricInterface.resize();
             wickEditor.fabricInterface.syncWithEditor();
         });
 
@@ -537,7 +550,6 @@ var HTMLInterface = function (wickEditor) {
         CheckInput.callIfPositiveInteger($('#projectSizeY').val(), function(n) {
             wickEditor.syncEditorWithfabricInterface();
             wickEditor.project.resolution.y = n;
-            wickEditor.fabricInterface.resize();
             wickEditor.fabricInterface.syncWithEditor();
         });
 
@@ -565,7 +577,7 @@ var HTMLInterface = function (wickEditor) {
 
     document.getElementById('projectBgColor').onchange = function () {
         wickEditor.project.backgroundColor = this.value;
-        wickEditor.fabricInterface.syncWithEditorState();
+        wickEditor.syncInterfaces();
     };
 
     $('#objectName').on('input propertychange', function () {
@@ -645,30 +657,18 @@ var HTMLInterface = function (wickEditor) {
 
     $("#bringToFrontButton").on("click", function (e) {
         wickEditor.htmlInterface.closeRightClickMenu();
-        
-        var obj   = wickEditor.fabricInterface.canvas.getActiveObject();
-        var group = wickEditor.fabricInterface.canvas.getActiveGroup();
-
-        if(!obj && !group) {
-            VerboseLog.log("Nothing to delete.");
-            return;
-        }
-
-        wickEditor.actionHandler.doAction('bringObjectToFront', { obj:obj, group:group });
+        wickEditor.actionHandler.doAction('moveObjectToZIndex', { 
+            ids: wickEditor.fabricInterface.getSelectedObjectIDs(),
+            newZIndex: wickEditor.getCurrentObject().getCurrentFrame().wickObjects.length
+        });
     });
 
     $("#sendToBackButton").on("click", function (e) {
         wickEditor.htmlInterface.closeRightClickMenu();
-
-        var obj   = wickEditor.fabricInterface.canvas.getActiveObject();
-        var group = wickEditor.fabricInterface.canvas.getActiveGroup();
-
-        if(!obj && !group) {
-            VerboseLog.log("Nothing to delete.");
-            return;
-        }
-
-        wickEditor.actionHandler.doAction('sendObjectToBack', { obj:obj, group:group });
+        wickEditor.actionHandler.doAction('moveObjectToZIndex', { 
+            ids: wickEditor.fabricInterface.getSelectedObjectIDs(),
+            newZIndex: 0
+        });
     });
 
     $("#deleteButton").on("click", function (e) {
@@ -855,17 +855,5 @@ var HTMLInterface = function (wickEditor) {
         that.hideBuiltinPlayer();
         WickPlayer.stopRunningCurrentProject();
     });
-
-/************************
-      Init sync
-************************/
-
-    wickEditor.fabricInterface.resize();
-    this.resize();
-    wickEditor.paperInterface.resize();
-    
-    wickEditor.fabricInterface.syncWithEditorState();
-    this.syncWithEditorState();
-    wickEditor.paperInterface.syncWithEditorState();
 
 }

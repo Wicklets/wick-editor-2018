@@ -12,23 +12,43 @@ var WickEditor = function () {
     Initialize all editor vars
 *********************************/
 
+    this.project = null;
+    this.panPosition = {x:0,y:0};
+
     console.log("WickEditor rev " + this.version);
 
-    this.tryToLoadAutosavedProject();
+    //this.tryToLoadAutosavedProject();
+    this.project = new WickProject();
 
     this.fabricInterface = new FabricInterface(this);
-    this.paperInterface = new PaperInterface(this);
+    //this.paperInterface = new PaperInterface(this);
     this.htmlInterface = new HTMLInterface(this);
+    //this.baseCanvasInterface = new BaseCanvasInterface();
+
+    this.syncInterfaces();
 
     this.actionHandler = new WickActionHandler(this);
 
 }
 
+/**********************************
+  Interfaces
+**********************************/
+
+WickEditor.prototype.syncInterfaces = function () {
+    //this.paperInterface.syncWithEditorState();
+    this.fabricInterface.syncWithEditorState();
+    this.htmlInterface.syncWithEditorState();
+    //this.baseCanvasInterface.syncWithEditorState();
+}
+
 /*********************************
-    
+    WickObjects
 *********************************/
 
 WickEditor.prototype.getSelectedWickObject = function () {
+    // Gonna have to also deal with paper.js selections as well.
+
     var ids = this.fabricInterface.getSelectedObjectIDs();
     if(ids.length == 1) {
         return this.project.getObjectByID(ids[0]);
@@ -38,15 +58,19 @@ WickEditor.prototype.getSelectedWickObject = function () {
 }
 
 WickEditor.prototype.getSelectedWickObjects = function () {
+    // Gonna have to also deal with paper.js selections as well.
+
     var ids = this.fabricInterface.getSelectedObjectIDs();
     var wickObjects = [];
     for(var i = 0; i < ids.length; i++) {
-        wickObjects.push(this.project.getObjectByID(ids[0]));
+        wickObjects.push(this.project.getObjectByID(ids[i]));
     }
     return wickObjects;
 }
 
 WickEditor.prototype.getCopyData  = function () {
+    // Gonna have to also deal with paper.js selections as well.
+
     var ids = this.fabricInterface.getSelectedObjectIDs();
     var objectJSONs = [];
     for(var i = 0; i < ids.length; i++) {
@@ -60,18 +84,6 @@ WickEditor.prototype.getCopyData  = function () {
         wickObjectArray: objectJSONs
     }
     return JSON.stringify(clipboardObject);
-}
-
-/**********************************
-  Interfaces
-**********************************/
-
-WickEditor.prototype.syncInterfaces = function () {
-    this.paperInterface.syncWithEditorState();
-    this.fabricInterface.syncWithEditorState();
-    this.htmlInterface.syncWithEditorState();
-
-    this.fabricInterface.resize();
 }
 
 /**********************************
@@ -110,10 +122,7 @@ WickEditor.prototype.newProject = function () {
 
     this.fabricInterface.deselectAll();
 
-    this.fabricInterface.resize();
-    this.fabricInterface.syncWithEditorState();
-    this.paperInterface.syncWithEditorState();
-    this.htmlInterface.syncWithEditorState();
+    this.syncInterfaces();
 
 }
 
@@ -122,23 +131,8 @@ WickEditor.prototype.openProject = function (projectJSON) {
     this.project = WickProject.fromJSON(projectJSON);
     this.currentObject = this.project.rootObject;
     this.currentObject.currentFrame = 0;
-    this.fabricInterface.resize();
-    this.fabricInterface.syncWithEditor();
-    this.htmlInterface.syncWithEditor();
-
-}
-
-WickEditor.prototype.exportProjectAsJSON = function () {
-
-    this.syncEditorWithfabricInterface();
-    this.project.exportAsJSONFile();
-
-}
-
-WickEditor.prototype.exportProjectAsWebpage = function () {
-
-    this.syncEditorWithfabricInterface();
-    this.project.exportAsHTMLFile();
+    
+    this.syncInterfaces();
 
 }
 

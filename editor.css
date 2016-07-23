@@ -31,6 +31,7 @@ hr {
 	margin: 5px;
 
 	border: 1px solid #999999;
+	border-radius: 2px;
 }
 
 #menuBarGUI {
@@ -73,8 +74,8 @@ hr {
 
 #toolOptionsGUI {
 	display: none;
-	bottom: 30px;
-	left: 30px;
+	bottom: 0px;
+	left: 0px;
 	text-align: left;
 }
 
@@ -126,7 +127,7 @@ hr {
 }
 
 #timelineGUI {
-	bottom: 0px;
+	top: 0px;
 	left: 0px;
 	width: 400px;
 }
@@ -224,7 +225,16 @@ hr {
 }
 
 #paperCanvas {
-	/*position: absolute;
-	top: 0; left: 0;*/
+	position: absolute;
+	top: 0; left: 0;
+	/*display: none;*/
+}
+
+#dropToUploadFileAlert {
+	width: 100%;
+	height: 100%;
+	opacity: 0.5;
+	background-color: red;
+	position: absolute;
 	display: none;
 }

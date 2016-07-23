@@ -16,16 +16,12 @@ var FabricInterface = function (wickEditor) {
 
     this.context = this.canvas.getContext('2d');
 
-    this.canvasPanPosition = {x:0,y:0};
-
-    this.currentTool = "cursor";
-
 // Editor state syncing
 
     this.getFrameOffset = function () {
         return {
-            x: (window.innerWidth  - wickEditor.project.resolution.x)/2 + that.canvasPanPosition.x,
-            y: (window.innerHeight - wickEditor.project.resolution.y)/2 + that.canvasPanPosition.y
+            x: (window.innerWidth  - wickEditor.project.resolution.x)/2 + wickEditor.panPosition.x,
+            y: (window.innerHeight - wickEditor.project.resolution.y)/2 + wickEditor.panPosition.y
         }
     }
 
@@ -56,7 +52,7 @@ var FabricInterface = function (wickEditor) {
         }
 
         if(wickObj.fontData) {
-            var newFabricText = new fabric.Text(wickObj.fontData.text, wickObj.fontData);
+            var newFabricText = new fabric.IText(wickObj.fontData.text, wickObj.fontData);
             that.syncObject(wickObj, newFabricText);
             callback(newFabricText);
         }
@@ -91,7 +87,65 @@ var FabricInterface = function (wickEditor) {
     }
 
     this.syncWithEditorState = function () {
+
+        // resize
+
+        var projectWidth = wickEditor.project.resolution.x;
+        var projectHeight = wickEditor.project.resolution.y;
+
+        // Reposition all fabric objects to use new wick canvas origin and pan position
+
+        var oldWidth = this.canvas.getWidth();
+        var oldHeight = this.canvas.getHeight();
+
+        this.canvas.setWidth ( window.innerWidth  );
+        this.canvas.setHeight( window.innerHeight );
+        this.canvas.calcOffset();
+
+        var diffWidth = this.canvas.getWidth() - oldWidth;
+        var diffHeight = this.canvas.getHeight() - oldHeight;
+
+        this.canvas.forEachObject(function(fabricObj) {
+            fabricObj.left += diffWidth /2;
+            fabricObj.top  += diffHeight/2;
+            fabricObj.setCoords();
+        });
+
+        // Frame
+
         this.frameInside.fill = wickEditor.project.backgroundColor;
+        //if(wickEditor.project.getCurrentObject().isRoot) {
+            // In root object, frame box gets centered
+            this.frameInside.width  = projectWidth;
+            this.frameInside.height = projectHeight;
+            this.frameInside.left = (window.innerWidth -projectWidth) /2 + wickEditor.panPosition.x;
+            this.frameInside.top  = (window.innerHeight-projectHeight)/2 + wickEditor.panPosition.y;
+            this.frameInside.setCoords();
+        /*} else {
+            // Not in root, frame box takes up whole screen
+            this.frameInside.width  = window.innerWidth;
+            this.frameInside.height = window.innerHeight;
+            this.frameInside.left = 0;
+            this.frameInside.top  = 0;
+            this.frameInside.setCoords();
+        }*/
+
+        var currentObjectLeft = wickEditor.project.getCurrentObject().left;
+        var currentObjectTop  = wickEditor.project.getCurrentObject().top;
+
+        // Move the origin crosshair to the current origin
+        if(this.originCrosshair) { // window resize can happen before originCrosshair's image is loaded
+            this.originCrosshair.left = (window.innerWidth -projectWidth) /2 - this.originCrosshair.width/2;
+            this.originCrosshair.top  = (window.innerHeight-projectHeight)/2 - this.originCrosshair.height/2;
+            
+            this.originCrosshair.left += currentObjectLeft;
+            this.originCrosshair.top += currentObjectTop;
+            
+            this.originCrosshair.left += wickEditor.panPosition.x;
+            this.originCrosshair.top  += wickEditor.panPosition.y;
+
+            this.canvas.renderAll();
+        }
 
         var currentObject = wickEditor.project.getCurrentObject();
 
@@ -167,61 +221,6 @@ var FabricInterface = function (wickEditor) {
         that.canvas.add(that.originCrosshair);
     });
 
-// Text and fade that alerts the user to drop files into editor
-// Shows up when a file is dragged over the editor
-
-    // Fade
-    this.dragToImportFileFade = new fabric.Rect({
-        fill: '#000',
-        opacity: 0
-    });
-
-    this.dragToImportFileFade.hasControls = false;
-    this.dragToImportFileFade.selectable = false;
-    this.dragToImportFileFade.evented = false;
-    this.dragToImportFileFade.identifier = "dragToImportFileFade";
-
-    this.canvas.add(this.dragToImportFileFade);
-
-    // Text
-    this.dragToImportFileText = new fabric.Text('Drop file to import', {
-        fill: '#000',
-        fontFamily: 'arial',
-        opacity: 0
-    });
-
-    this.dragToImportFileText.hasControls = false;
-    this.dragToImportFileText.selectable = false;
-    this.dragToImportFileText.evented = false;
-    this.dragToImportFileText.identifier = "dragToImportFileText";
-
-    this.canvas.add(this.dragToImportFileText);
-
-    var showDragToImportFileAlert = function() {
-        that.canvas.bringToFront(this.dragToImportFileFade);
-        that.canvas.bringToFront(this.dragToImportFileText);
-        that.dragToImportFileFade.opacity = 0.3;
-        that.dragToImportFileText.opacity = 1.0;
-        that.canvas.renderAll();
-    }
-    var hideDragToImportFileAlert = function() {
-        that.dragToImportFileFade.opacity = 0;
-        that.dragToImportFileText.opacity = 0;
-        that.canvas.renderAll();
-    }
-    $("#editorCanvasContainer").on('dragover', function(e) {
-        showDragToImportFileAlert();
-        return false;
-    });
-    $("#editorCanvasContainer").on('dragleave', function(e) {
-        hideDragToImportFileAlert();
-        return false;
-    });
-    $("#editorCanvasContainer").on('drop', function(e) {
-        hideDragToImportFileAlert();
-        return false;
-    });
-
 // Events
 
     var that = this;
@@ -251,9 +250,9 @@ var FabricInterface = function (wickEditor) {
                 modifiedStates[i] = {
                     x      : group.left + group.width /2 + obj.left - frameOffset.x,
                     y      : group.top  + group.height/2 + obj.top  - frameOffset.y,
-                    scaleX : obj.scaleX,
-                    scaleY : obj.scaleY,
-                    angle  : obj.angle,
+                    scaleX : group.scaleX * obj.scaleX,
+                    scaleY : group.scaleY * obj.scaleY,
+                    angle  : group.angle + obj.angle,
                     text   : obj.text
                 };
             }
@@ -279,7 +278,6 @@ var FabricInterface = function (wickEditor) {
     // Fabric doesn't select things with right clicks.
     // We have to do that manually
     canvas.on('mouse:down', function(e) {
-
         if(e.e.button == 2) {
             
             if (e.target && e.target.wickObjectID) {
@@ -293,11 +291,10 @@ var FabricInterface = function (wickEditor) {
                 canvas.deactivateAll().renderAll();
                 wickEditor.htmlInterface.closeScriptingGUI();
             }
-            wickEditor.htmlInterface.syncWithEditorState();
+            wickEditor.syncInterfaces();
             wickEditor.htmlInterface.openRightClickMenu();
 
         } else {
-            wickEditor.htmlInterface.syncWithEditorState();
             wickEditor.htmlInterface.closeRightClickMenu();
         }
     });
@@ -323,12 +320,12 @@ var FabricInterface = function (wickEditor) {
             Potrace.loadImageFromDataURL(imgSrc);
             Potrace.process(function(){
                 var svg = Potrace.getSVG(1);
-                wickEditor.paperInterface.addPathSVG(
+                /*wickEditor.paperInterface.addPathSVG(
                     svg, 
                     pathFabricObject.left, 
                     pathFabricObject.top, 
-                    that.canvas.freeDrawingBrush.color);
-
+                    that.canvas.freeDrawingBrush.color);*/
+                console.log(svg);
             });
         }); 
     }
@@ -357,139 +354,47 @@ var FabricInterface = function (wickEditor) {
 
 // GUI 
 
-    this.resize = function () {
-        this.updateCanvasResolution();
-        this.repositionOriginCrosshair();
-    }
-
-    this.updateCanvasResolution = function () {
-
-        var projectWidth = wickEditor.project.resolution.x;
-        var projectHeight = wickEditor.project.resolution.y;
+    this.panTo = function (x,y,dx,dy) {
 
         var that = this;
 
-        // Reposition all fabric objects to use new wick canvas origin and pan position
-
-        var oldWidth = this.canvas.getWidth();
-        var oldHeight = this.canvas.getHeight();
-
-        this.canvas.setWidth ( window.innerWidth  );
-        this.canvas.setHeight( window.innerHeight );
-        this.canvas.calcOffset();
-
-        var diffWidth = this.canvas.getWidth() - oldWidth;
-        var diffHeight = this.canvas.getHeight() - oldHeight;
-
         this.canvas.forEachObject(function(fabricObj) {
-            fabricObj.left += diffWidth /2;
-            fabricObj.top  += diffHeight/2;
+            fabricObj.left += canvasPanDiff.x;
+            fabricObj.top  += canvasPanDiff.y;
             fabricObj.setCoords();
         });
 
-        // Re-center the import file alert text and fade
-
-        this.dragToImportFileFade.width = window.innerWidth;
-        this.dragToImportFileFade.height = window.innerWidth;
-        this.dragToImportFileFade.left = 0;
-        this.dragToImportFileFade.top  = 0;
-        this.dragToImportFileFade.setCoords();
-
-        this.dragToImportFileText.left = window.innerWidth /2-this.dragToImportFileText.width /2+this.canvasPanPosition.x;
-        this.dragToImportFileText.top  = window.innerHeight/2-this.dragToImportFileText.height/2+this.canvasPanPosition.y;
-        this.dragToImportFileText.setCoords();
-
-        if(wickEditor.project.getCurrentObject().isRoot) {
-            // In root object, frame box gets centered
-            this.frameInside.width  = projectWidth;
-            this.frameInside.height = projectHeight;
-            this.frameInside.left = (window.innerWidth -projectWidth) /2 + this.canvasPanPosition.x;
-            this.frameInside.top  = (window.innerHeight-projectHeight)/2 + this.canvasPanPosition.y;
-            this.frameInside.setCoords();
-        } else {
-            // Not in root, frame box takes up whole screen
-            this.frameInside.width  = window.innerWidth;
-            this.frameInside.height = window.innerHeight;
-            this.frameInside.left = 0;
-            this.frameInside.top  = 0;
-            this.frameInside.setCoords();
-        }
-
         this.canvas.renderAll();
 
-    }
-
-    this.panTo = function (x,y) {
-
-        var that = this;
-
-        var oldPanPosition = {
-            x:this.canvasPanPosition.x,
-            y:this.canvasPanPosition.y
-        }
-
-        this.canvasPanPosition = {x:x,y:y};
-
-        var canvasPanDiff = {
-            x: this.canvasPanPosition.x - oldPanPosition.x,
-            y: this.canvasPanPosition.y - oldPanPosition.y
-        }
-
-        this.canvas.forEachObject(function(fabricObj) {
-            // Make sure to only move the frame if we're editing the root object
-            // (While editing objects, the frame takes up the whole window.)
-            if(fabricObj !== that.frameInside || wickEditor.project.getCurrentObject().isRoot) {
-                fabricObj.left += canvasPanDiff.x;
-                fabricObj.top  += canvasPanDiff.y;
-                fabricObj.setCoords();
-            }
-        });
-
-        this.canvas.renderAll();
-
-    }
-
-    this.repositionOriginCrosshair = function () {
-        var projectWidth  = wickEditor.project.resolution.x;
-        var projectHeight = wickEditor.project.resolution.y;
-        var currentObjectLeft = wickEditor.project.getCurrentObject().left;
-        var currentObjectTop  = wickEditor.project.getCurrentObject().top;
-
-        // Move the origin crosshair to the current origin
-        if(this.originCrosshair) { // window resize can happen before originCrosshair's image is loaded
-            this.originCrosshair.left = (window.innerWidth -projectWidth) /2 - this.originCrosshair.width/2;
-            this.originCrosshair.top  = (window.innerHeight-projectHeight)/2 - this.originCrosshair.height/2;
-            
-            this.originCrosshair.left += currentObjectLeft;
-            this.originCrosshair.top += currentObjectTop;
-            
-            this.originCrosshair.left += this.canvasPanPosition.x;
-            this.originCrosshair.top  += this.canvasPanPosition.y;
-
-            this.canvas.renderAll();
-        }
     }
 
 // Interactivity utils
 
     this.selectByIDs = function (ids) {
 
-        var objs = [];
-        this.canvas.getObjects().map(function(o) {
-            if(ids.indexOf(o.wickObjectID) != -1) {
-                o.set('active', true);
-                return objs.push(o);
+        if(ids.length == 0) {
+            return;
+        }
+
+        var selectedObjs = []; 
+        this.canvas.forEachObject(function(fabricObj) {
+            if(ids.indexOf(fabricObj.wickObjectID) != -1) {
+                fabricObj.set('active', true);
+                selectedObjs.push(fabricObj);
             }
         });
 
-        var group = new fabric.Group(objs, {
-            originX: 'left', 
-            originY: 'top'
-        });
+        if(ids.length <= 1) {
+            that.canvas._activeObject = selectedObjs[0];
+        } else {
+            var group = new fabric.Group(selectedObjs, {
+                originX: 'left', 
+                originY: 'top'
+            });
 
-        this.canvas._activeObject = null;
-
-        this.canvas.setActiveGroup(group.setCoords()).renderAll();
+            this.canvas._activeObject = null;
+            this.canvas.setActiveGroup(group.setCoords()).renderAll();
+        }
 
     }
 

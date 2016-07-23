@@ -122,17 +122,23 @@ var WickActionHandler = function (wickEditor) {
             args.restoredWickObjects = []
             args.oldZIndices = [];
 
+            // Store the old z index vars for each object. 
+            // Must do this before removing them all.
             for(var i = 0; i < args.ids.length; i++) {
                 var obj = wickEditor.project.getCurrentObject().getChildByID(args.ids[i]);
                 var zIndex = wickEditor.project.getCurrentObject().getCurrentFrame().wickObjects.indexOf(obj);
                 args.oldZIndices.push(zIndex);
+            }
+
+            // Now remove them
+            for(var i = 0; i < args.ids.length; i++) {
+                var obj = wickEditor.project.getCurrentObject().getChildByID(args.ids[i]);
                 args.restoredWickObjects.push(obj);
                 wickEditor.project.getCurrentObject().removeChildByID(args.ids[i]);
             }
         },
         function (args) {
             for(var i = 0; i < args.restoredWickObjects.length; i++) {
-                console.log(args.oldZIndices[i]);
                 wickEditor.project.addObject(args.restoredWickObjects[i], args.oldZIndices[i]);
             }
         });
@@ -248,68 +254,25 @@ var WickActionHandler = function (wickEditor) {
 
     this.registerAction('convertSelectionToSymbol', 
         function (args) {
-            args.selectionWickObjects = [];
+            var symbol = new WickObject();
+            symbol.setDefaultPositioningValues();
+            symbol.left = window.innerWidth /2;
+            symbol.top  = window.innerHeight/2;
+            symbol.setDefaultSymbolValues();
 
-            var symbolLeft = args.selection.left;
-            var symbolTop = args.selection.top;
-
-            if (args.selection._objects) {
-                symbolLeft = args.selection._objects[0].wickObject.left;
-                symbolTop = args.selection._objects[0].wickObject.top;
-
-                // Multiple objects are selected, put them all in the new symbol
-                for(var i = 0; i < args.selection._objects.length; i++) {
-                    if(args.selection._objects[i].wickObject.left < symbolLeft) {
-                        symbolLeft = args.selection._objects[i].wickObject.left;
-                    }
-                    if(args.selection._objects[i].wickObject.top < symbolTop) {
-                        symbolTop = args.selection._objects[i].wickObject.top;
-                    }
-
-                    args.selectionWickObjects.push(args.selection._objects[i].wickObject);
-                }
-
-                for(var i = 0; i < args.selectionWickObjects.length; i++) {
-                    args.selectionWickObjects.left -= symbolLeft;
-                    args.selectionWickObjects.top -= symbolTop;
-                }
-
-                var max = 0;
-                while(args.selection._objects.length > 0 && max < 100) {
-                    max++;
-                    console.error("Infinite loop is prob happening here");
-                    args.selection._objects[0].remove();
-                }
-            } else {
-                // Only one object is selected
-                args.selectionWickObjects.push(args.selection.wickObject);
-                args.selection.remove();
+            var selectedObjects = wickEditor.getSelectedWickObjects();
+            for(var i = 0; i < selectedObjects.length; i++) {
+                symbol.frames[0].wickObjects.push(selectedObjects[i]);
+                wickEditor.project.getCurrentObject().removeChildByID(selectedObjects[i].id);
             }
 
-            args.symbol = WickObject.createSymbolFromWickObjects(
-                symbolLeft, 
-                symbolTop, 
-                args.selectionWickObjects, 
-                wickEditor.currentObject
-            );
+            symbol.width  = symbol.frames[0].wickObjects[0].width;
+            symbol.height = symbol.frames[0].wickObjects[0].height;
 
-            wickEditor.fabricInterface.makeFabricObjectFromWickObject(args.symbol, function(fabricObject) {
-                wickEditor.fabricInterface.canvas.add(fabricObject);
-                args.fabricObjectToRemove = fabricObject;
-            });
-
-            wickEditor.htmlInterface.closeScriptingGUI();
+            wickEditor.project.addObject(symbol);
         },
         function (args) {
-            wickEditor.fabricInterface.deselectAll();
-            wickEditor.fabricInterface.removeLastObject();
-
-            // add args.selectionWickObjects to fabric canvas
-            for(var i = 0; i < args.selectionWickObjects.length; i++) {
-                wickEditor.fabricInterface.makeFabricObjectFromWickObject(args.selectionWickObjects[i], function(fabricObject) {
-                    wickEditor.fabricInterface.canvas.add(fabricObject);
-                });
-            }
+            
         });
 
     this.registerAction('editObject', 
@@ -325,27 +288,6 @@ var WickActionHandler = function (wickEditor) {
         },
         function (args) {
             VerboseLog.error("editobject undo NYI")
-
-            /*wickEditor.fabricInterface.deselectAll();
-
-            // Store changes made to current frame in the project
-            wickEditor.syncEditorWithfabricInterface();
-
-            // Set the editor to be editing this object at its first frame
-            wickEditor.currentObject = args.prevEditedObject;
-            wickEditor.currentObject.currentFrame = 0;
-
-            // Load wickobjects in the frame we moved to into the canvas
-            wickEditor.fabricInterface.syncWithEditor();
-
-            wickEditor.htmlInterface.syncWithEditor();
-
-            wickEditor.fabricInterface.repositionOriginCrosshair(
-                wickEditor.project.resolution.x, 
-                wickEditor.project.resolution.y,
-                wickEditor.currentObject.left,
-                wickEditor.currentObject.top
-            );*/
         });
 
     this.registerAction('finishEditingCurrentObject', 
@@ -354,26 +296,31 @@ var WickActionHandler = function (wickEditor) {
 
             // Set the editor to be editing this object at its first frame
             args.prevEditedObjectID = wickEditor.project.getCurrentObject().id;
-            wickEditor.project.currentObjectID = 0; console.error("This needs to get the parent, right now it goes straight to root")
+            wickEditor.project.currentObjectID = 0; console.error("This needs to get the parent, right now it goes straight to root");
         },
         function (args) {
-            VerboseLog.error("finishEditingCurrentObject undo NYI")
+            VerboseLog.error("finishEditingCurrentObject undo NYI");
         });
 
-    this.registerAction('sendObjectToBack', 
+    this.registerAction('moveObjectToZIndex', 
         function (args) {
-            
+            args.oldZIndexes = [];
+            for(var i = 0; i < args.ids.length; i++) {
+                var obj = wickEditor.project.getCurrentObject().getChildByID(args.ids[i]);
+                args.oldZIndexes.push(wickEditor.project.getCurrentObject().getCurrentFrame().wickObjects.indexOf(obj));
+            }
+            for(var i = 0; i < args.ids.length; i++) {
+                var obj = wickEditor.project.getCurrentObject().getChildByID(args.ids[i]);
+                wickEditor.project.getCurrentObject().getCurrentFrame().wickObjects.splice(args.oldZIndexes[i], 1);
+                wickEditor.project.getCurrentObject().getCurrentFrame().wickObjects.splice(args.newZIndex, 0, obj);
+            }
         },
         function (args) {  
-            
-        });
-
-    this.registerAction('bringObjectToFront', 
-        function (args) {
-            
-        },
-        function (args) {  
-            
+            for(var i = 0; i < args.ids.length; i++) {
+                var obj = wickEditor.project.getCurrentObject().getChildByID(args.ids[i]);
+                wickEditor.project.getCurrentObject().removeChildByID(args.ids[i]);
+                wickEditor.project.getCurrentObject().getCurrentFrame().wickObjects.splice(args.oldZIndexes[i], 0, obj);
+            }
         });
 
 }
