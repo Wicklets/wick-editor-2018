@@ -6,7 +6,7 @@ Wick allows easier access to new web technologies through a visual editor, a tim
 
 Try the editor [here](http://wick.online/)!
 
-### How to run the editor/player locally for development
+### How to run the editor locally for development
 * Clone or download and unzip this repo
 * Open terminal in the newly made `wick` folder and start an HTTP server: `npm install http-server -g`, `http-server -p 8000`
 * Open a browser window, and go to `http://localhost:8000/`
