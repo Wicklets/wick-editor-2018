@@ -206,17 +206,18 @@ WickObject.fromAnimatedGIF = function (gifData, callback) {
 
 }
 
-WickObject.fromSVG = function (svgData) {
+WickObject.fromSVG = function (svgString, callback) {
     var svgWickObject = new WickObject();
 
     svgWickObject.setDefaultPositioningValues();
-    svgWickObject.svgData = svgData.svgString;
-    svgWickObject.width  = svgData.width;
-    svgWickObject.height = svgData.height;
-    svgWickObject.left = svgData.left;
-    svgWickObject.top  = svgData.top;
+    svgWickObject.svgData = svgString;
 
-    return svgWickObject;
+    fabric.loadSVGFromString(svgString, function(objects, options) {
+        var referencePathFabricObj = objects[0];
+        svgWickObject.width = referencePathFabricObj.width;
+        svgWickObject.height = referencePathFabricObj.height;
+        callback(svgWickObject);
+    });
 }
 
 // Used for old straight-to-rasterized paintbrush

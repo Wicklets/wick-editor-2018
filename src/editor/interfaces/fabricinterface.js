@@ -25,7 +25,7 @@ var FabricInterface = function (wickEditor) {
         }
     }
 
-    this.syncObject = function (wickObj, fabricObj) {
+    this.syncObjects = function (wickObj, fabricObj) {
 
         fabricObj.left    = wickObj.x + this.getFrameOffset().x;
         fabricObj.top     = wickObj.y + this.getFrameOffset().y;
@@ -46,28 +46,37 @@ var FabricInterface = function (wickEditor) {
 
         if(wickObj.imageData) {
             fabric.Image.fromURL(wickObj.imageData, function(newFabricImage) {
-                that.syncObject(wickObj, newFabricImage);
+                that.syncObjects(wickObj, newFabricImage);
                 callback(newFabricImage);
             });
         }
 
         if(wickObj.fontData) {
             var newFabricText = new fabric.IText(wickObj.fontData.text, wickObj.fontData);
-            that.syncObject(wickObj, newFabricText);
+            that.syncObjects(wickObj, newFabricText);
             callback(newFabricText);
         }
 
         if(wickObj.audioData) {
             fabric.Image.fromURL('resources/audio.png', function(audioFabricObject) {
-                that.syncObject(wickObj, audioFabricObject);
+                that.syncObjects(wickObj, audioFabricObject);
                 callback(audioFabricObject);
+            });
+        }
+
+        if(wickObj.svgData) {
+            fabric.loadSVGFromString(wickObj.svgData, function(objects, options) {
+                var pathFabricObj = objects[0];
+                console.log(pathFabricObj);
+                that.syncObjects(wickObj, pathFabricObj);
+                callback(pathFabricObj);
             });
         }
 
         if (wickObj.isSymbol) {
             console.error("alright lets do it");
             fabric.Image.fromURL(wickObj.frames[0].wickObjects[0].imageData, function(newFabricImage) {
-                that.syncObject(wickObj, newFabricImage);
+                that.syncObjects(wickObj, newFabricImage);
                 callback(newFabricImage);
             });
         }
@@ -162,7 +171,7 @@ var FabricInterface = function (wickEditor) {
                 fabricObj.remove();
             } else {
                 // Object still exists in current object, update it
-                that.syncObject(currentObject.getChildByID(fabricObj.wickObjectID), fabricObj);
+                that.syncObjects(currentObject.getChildByID(fabricObj.wickObjectID), fabricObj);
             }
         });
 
@@ -319,25 +328,23 @@ var FabricInterface = function (wickEditor) {
 
             Potrace.loadImageFromDataURL(imgSrc);
             Potrace.process(function(){
-                var svg = Potrace.getSVG(1);
-                /*wickEditor.paperInterface.addPathSVG(
-                    svg, 
-                    pathFabricObject.left, 
-                    pathFabricObject.top, 
-                    that.canvas.freeDrawingBrush.color);*/
-                console.log(svg);
+                WickObject.fromSVG(Potrace.getSVG(1), function(wickObj) {
+                    wickObj.x = pathFabricObject.left - that.getFrameOffset().x - pathFabricObject.width/2  - 5;
+                    wickObj.y = pathFabricObject.top  - that.getFrameOffset().y - pathFabricObject.height/2 - 4;
+                    wickEditor.actionHandler.doAction('addObjects', {wickObjects:[wickObj]})
+                });
             });
         }); 
     }
 
     canvas.on('object:added', function(e) {
-        if(e.target.type !== "path") {
+        if(e.target.type !== "path" || e.target.wickObjectID) {
             return;
         }
 
         var path = e.target;
-        //potracePath(path);
-        rasterizePath(path);
+        potracePath(path);
+        //rasterizePath(path);
         canvas.remove(e.target);
 
     });

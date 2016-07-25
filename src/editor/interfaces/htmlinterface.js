@@ -838,13 +838,11 @@ var HTMLInterface = function (wickEditor) {
     this.showBuiltinPlayer = function () {
         document.getElementById("editor").style.display = "none";
         document.getElementById("builtinPlayer").style.display = "block";
-        document.getElementById("paperCanvas").style.display = "block";
     }
 
     this.hideBuiltinPlayer = function () {
         document.getElementById("builtinPlayer").style.display = "none";
         document.getElementById("editor").style.display = "block";
-        document.getElementById("paperCanvas").style.display = "none";
     }
 
 /************************
