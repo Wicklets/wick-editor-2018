@@ -206,13 +206,16 @@ WickObject.fromAnimatedGIF = function (gifData, callback) {
 
 }
 
-WickObject.fromSVG = function (svgString, callback) {
+WickObject.fromSVG = function (svgData, callback) {
     var svgWickObject = new WickObject();
 
     svgWickObject.setDefaultPositioningValues();
-    svgWickObject.svgData = svgString;
 
-    fabric.loadSVGFromString(svgString, function(objects, options) {
+    svgWickObject.svgData = {};
+    svgWickObject.svgData.svgString = svgData.svgString;
+    svgWickObject.svgData.fillColor = svgData.fillColor;
+
+    fabric.loadSVGFromString(svgData.svgString, function(objects, options) {
         var referencePathFabricObj = objects[0];
         svgWickObject.width = referencePathFabricObj.width;
         svgWickObject.height = referencePathFabricObj.height;
@@ -366,7 +369,8 @@ WickObject.prototype.generateSVGCacheImages = function (callback) {
 
     if(this.svgData) {
 
-        fabric.loadSVGFromString(this.svgData, function(objects, options) {
+        fabric.loadSVGFromString(this.svgData.svgString, function(objects, options) {
+            objects[0].fill = that.svgData.fillColor;
             var svgFabricObject = fabric.util.groupSVGElements(objects, options);
             svgFabricObject.cloneAsImage(function(clone) {
                 var imgSrc = clone._element.currentSrc || clone._element.src;
@@ -477,7 +481,7 @@ WickObject.prototype.encodeStrings = function () {
     }
 
     if(this.svgData) {
-        this.svgData = encodeString(this.svgData);
+        this.svgData.svgString = encodeString(this.svgData.svgString);
     }
 
     if(this.isSymbol) {
@@ -509,7 +513,7 @@ WickObject.prototype.decodeStrings = function () {
     }
 
     if(this.svgData) {
-        this.svgData = decodeString(this.svgData);
+        this.svgData.svgString = decodeString(this.svgData.svgString);
     }
 
     if(this.isSymbol) {

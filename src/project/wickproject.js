@@ -107,23 +107,6 @@ WickProject.prototype.getAsJSON = function (callback) {
     });
 
 }
-
-WickProject.prototype.saveInLocalStorage = function () {
-    if(localStorage) {
-        try {
-            VerboseLog.log("Saving project to local storage...");
-            this.getAsJSON(function (JSONProject) {
-                localStorage.setItem('wickProject', JSONProject);
-            });
-        } catch (err) {
-            VerboseLog.error("LocalStorage could not save project, threw error:");
-            VerboseLog.log(err);
-        }
-    } else {
-        console.error("LocalStorage not available.")
-    }
-}
-
 /*********************************
     Access project wickobjects
 *********************************/

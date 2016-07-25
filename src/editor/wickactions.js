@@ -156,14 +156,20 @@ var WickActionHandler = function (wickEditor) {
                 args.originalStates[i].scaleX = wickObj.scaleX;
                 args.originalStates[i].scaleY = wickObj.scaleY;
                 args.originalStates[i].angle  = wickObj.angle;
-                if(wickObj.textData) args.originalStates[i].text = wickObj.textData;
 
-                wickObj.x      = args.modifiedStates[i].x;
-                wickObj.y      = args.modifiedStates[i].y;
-                wickObj.scaleX = args.modifiedStates[i].scaleX;
-                wickObj.scaleY = args.modifiedStates[i].scaleY;
-                wickObj.angle  = args.modifiedStates[i].angle;
-                if(wickObj.textData) wickObj.text = args.modifiedStates[i].text;
+                if(wickObj.fontData) {
+                    args.originalStates[i].text   = wickObj.fontData.text;
+                }
+
+                if(args.modifiedStates[i].x !== undefined)      wickObj.x        = args.modifiedStates[i].x;
+                if(args.modifiedStates[i].y !== undefined)      wickObj.y        = args.modifiedStates[i].y;
+                if(args.modifiedStates[i].scaleX !== undefined) wickObj.scaleX   = args.modifiedStates[i].scaleX;
+                if(args.modifiedStates[i].scaleY !== undefined) wickObj.scaleY   = args.modifiedStates[i].scaleY;
+                if(args.modifiedStates[i].angle !== undefined)  wickObj.angle    = args.modifiedStates[i].angle;
+
+                if(wickObj.fontData) {
+                    if(args.modifiedStates[i].text)   wickObj.fontData.text = args.modifiedStates[i].text;
+                }
             }
         },
         function (args) {
@@ -171,13 +177,14 @@ var WickActionHandler = function (wickEditor) {
                 var wickObj = wickEditor.project.getCurrentObject().getChildByID(args.ids[i]);
 
                 // Revert the object's state to it's original pre-transformation state
-                wickObj.x      = args.originalStates[i].x;
-                wickObj.y      = args.originalStates[i].y;
-                wickObj.scaleX = args.originalStates[i].scaleX;
-                wickObj.scaleY = args.originalStates[i].scaleY;
-                wickObj.angle  = args.originalStates[i].angle;
-                if(wickObj.textData) {
-                    wickObj.textData.text = args.originalStates[i].text;
+                if(args.originalStates[i].x !== undefined)      wickObj.x        = args.originalStates[i].x;
+                if(args.originalStates[i].y !== undefined)      wickObj.y        = args.originalStates[i].y;
+                if(args.originalStates[i].scaleX !== undefined) wickObj.scaleX   = args.originalStates[i].scaleX;
+                if(args.originalStates[i].scaleY !== undefined) wickObj.scaleY   = args.originalStates[i].scaleY;
+                if(args.originalStates[i].angle !== undefined)  wickObj.angle    = args.originalStates[i].angle;
+
+                if(wickObj.fontData) {
+                    wickObj.fontData.text = args.originalStates[i].text;
                 }
             }
         });

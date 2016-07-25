@@ -16,6 +16,9 @@ var FabricInterface = function (wickEditor) {
 
     this.context = this.canvas.getContext('2d');
 
+    this.paperCanvas = document.createElement('canvas');
+    paper.setup(this.canvas);
+
 // Editor state syncing
 
     this.getFrameOffset = function () {
@@ -37,6 +40,10 @@ var FabricInterface = function (wickEditor) {
         fabricObj.flipX   = wickObj.flipX;
         fabricObj.flipY   = wickObj.flipY;
         fabricObj.opacity = wickObj.opacity;
+
+        if(wickObj.fontData) {
+            fabricObj.text = wickObj.fontData.text;
+        }
 
         fabricObj.setCoords();
 
@@ -65,20 +72,36 @@ var FabricInterface = function (wickEditor) {
         }
 
         if(wickObj.svgData) {
-            fabric.loadSVGFromString(wickObj.svgData, function(objects, options) {
+
+            fabric.loadSVGFromString(wickObj.svgData.svgString, function(objects, options) {
                 var pathFabricObj = objects[0];
-                console.log(pathFabricObj);
+
                 that.syncObjects(wickObj, pathFabricObj);
+                pathFabricObj.fill = wickObj.svgData.fillColor;
                 callback(pathFabricObj);
             });
         }
 
         if (wickObj.isSymbol) {
-            console.error("alright lets do it");
-            fabric.Image.fromURL(wickObj.frames[0].wickObjects[0].imageData, function(newFabricImage) {
+            /*fabric.Image.fromURL(wickObj.frames[0].wickObjects[0].imageData, function(newFabricImage) {
                 that.syncObjects(wickObj, newFabricImage);
                 callback(newFabricImage);
-            });
+            });*/
+            var children = wickObj.getAllActiveChildObjects();
+            var group = new fabric.Group();
+            for(var i = 0; i < children.length; i++) {
+                that.createFabricObjectFromWickObject(children[i], function(fabricObj) {
+                    group.addWithUpdate(fabricObj);
+                    if(group._objects.length == children.length) {
+                        wickObj.width = group.width;
+                        wickObj.height = group.height;
+                        group.x = wickObj.x;
+                        group.y = wickObj.y;
+                        that.syncObjects(wickObj, group);
+                        callback(group);
+                    }
+                });
+            }
         }
 
     }
@@ -120,24 +143,13 @@ var FabricInterface = function (wickEditor) {
             fabricObj.setCoords();
         });
 
-        // Frame
-
+        // Update frame
         this.frameInside.fill = wickEditor.project.backgroundColor;
-        //if(wickEditor.project.getCurrentObject().isRoot) {
-            // In root object, frame box gets centered
-            this.frameInside.width  = projectWidth;
-            this.frameInside.height = projectHeight;
-            this.frameInside.left = (window.innerWidth -projectWidth) /2 + wickEditor.panPosition.x;
-            this.frameInside.top  = (window.innerHeight-projectHeight)/2 + wickEditor.panPosition.y;
-            this.frameInside.setCoords();
-        /*} else {
-            // Not in root, frame box takes up whole screen
-            this.frameInside.width  = window.innerWidth;
-            this.frameInside.height = window.innerHeight;
-            this.frameInside.left = 0;
-            this.frameInside.top  = 0;
-            this.frameInside.setCoords();
-        }*/
+        this.frameInside.width  = projectWidth;
+        this.frameInside.height = projectHeight;
+        this.frameInside.left = (window.innerWidth -projectWidth) /2 + wickEditor.panPosition.x;
+        this.frameInside.top  = (window.innerHeight-projectHeight)/2 + wickEditor.panPosition.y;
+        this.frameInside.setCoords();
 
         var currentObjectLeft = wickEditor.project.getCurrentObject().left;
         var currentObjectTop  = wickEditor.project.getCurrentObject().top;
@@ -168,7 +180,12 @@ var FabricInterface = function (wickEditor) {
 
             if(!currentObject.childWithIDIsActive(fabricObj.wickObjectID)) {
                 // Object doesn't exist in the current object anymore, remove it's fabric object.
-                fabricObj.remove();
+                if(fabricObj.type === "group") {
+                    fabricObj.forEachObject(function(o){ fabricObj.remove(o) });
+                    that.canvas.remove(fabricObj);
+                } else {
+                    fabricObj.remove();
+                }
             } else {
                 // Object still exists in current object, update it
                 that.syncObjects(currentObject.getChildByID(fabricObj.wickObjectID), fabricObj);
@@ -193,6 +210,31 @@ var FabricInterface = function (wickEditor) {
                     that.canvas.moveTo(newFabricObj, wickProjectIndex+3);
                 });
             }
+        });
+
+        // Make sure all path objects have paper path data 
+        this.canvas.forEachObject(function(fabricObj) {
+            if(fabricObj.type !== "path") {
+                return;
+            }
+
+            if(!fabricObj.paperPath) {
+                var wickObj = wickEditor.project.getCurrentObject().getChildByID(fabricObj.wickObjectID);
+                var xmlString = wickObj.svgData.svgString
+                  , parser = new DOMParser()
+                  , doc = parser.parseFromString(xmlString, "text/xml");
+                var paperGroup = paper.project.importSVG(doc);
+                var paperPath = paperGroup.removeChildren(0, 1)[0];
+                //paperPath.style.fillColor = fillColor;
+                paperPath.closePath();
+                paperPath.position = new paper.Point(wickObj.x, wickObj.y);
+                fabricObj.paperPath = paperPath;
+            }
+        });
+
+        // Check for intersections between paths and unite them if they do
+        this.canvas.forEachObject(function(fabricObj) {
+
         });
 
         // Reselect objects that were selected before sync
@@ -251,7 +293,7 @@ var FabricInterface = function (wickEditor) {
 
         var modifiedStates = [];
         var ids  = [];
-        if(e.target.type === "group") {
+        if(e.target.type === "group" && !e.target.wickObjectID) {
             var group = e.target;
             for(var i = 0; i < group._objects.length; i++) {
                 var obj = group._objects[i];
@@ -328,7 +370,8 @@ var FabricInterface = function (wickEditor) {
 
             Potrace.loadImageFromDataURL(imgSrc);
             Potrace.process(function(){
-                WickObject.fromSVG(Potrace.getSVG(1), function(wickObj) {
+                var svgData = {svgString:Potrace.getSVG(1), fillColor:that.canvas.freeDrawingBrush.color}
+                WickObject.fromSVG(svgData, function(wickObj) {
                     wickObj.x = pathFabricObject.left - that.getFrameOffset().x - pathFabricObject.width/2  - 5;
                     wickObj.y = pathFabricObject.top  - that.getFrameOffset().y - pathFabricObject.height/2 - 4;
                     wickEditor.actionHandler.doAction('addObjects', {wickObjects:[wickObj]})

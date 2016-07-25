@@ -63,7 +63,7 @@ var HTMLInterface = function (wickEditor) {
         if (event.keyCode == 83 && controlKeyDown) {
             event.preventDefault();
             that.clearKeys();
-            wickEditor.project.saveInLocalStorage();
+            wickEditor.saveProject();
         }
         // Control-o: open
         else if (event.keyCode == 79 && controlKeyDown) {
@@ -538,9 +538,8 @@ var HTMLInterface = function (wickEditor) {
     $('#projectSizeX').on('input propertychange', function () {
 
         CheckInput.callIfPositiveInteger($('#projectSizeX').val(), function(n) {
-            wickEditor.syncEditorWithfabricInterface();
             wickEditor.project.resolution.x = n;
-            wickEditor.fabricInterface.syncWithEditor();
+            wickEditor.syncInterfaces();
         });
 
     });
@@ -548,9 +547,8 @@ var HTMLInterface = function (wickEditor) {
     $('#projectSizeY').on('input propertychange', function () {
 
         CheckInput.callIfPositiveInteger($('#projectSizeY').val(), function(n) {
-            wickEditor.syncEditorWithfabricInterface();
             wickEditor.project.resolution.y = n;
-            wickEditor.fabricInterface.syncWithEditor();
+            wickEditor.syncInterfaces();
         });
 
     });
@@ -591,13 +589,21 @@ var HTMLInterface = function (wickEditor) {
 
     $('#objectPositionX').on('input propertychange', function () {
 
-        wickEditor.fabricInterface.getActiveObject().wickObject.left = $('#objectPositionX').val();
+        CheckInput.callIfNumber($('#objectPositionX').val(), function(n) {
+            var id = wickEditor.fabricInterface.getSelectedObjectIDs()[0];
+            var modifiedState = { x : n };
+            wickEditor.actionHandler.doAction('modifyObjects', { ids: [id], modifiedStates: [modifiedState] });
+        });
 
     });
 
     $('#objectPositionY').on('input propertychange', function () {
 
-        wickEditor.fabricInterface.getActiveObject().wickObject.top = $('#objectPositionY').val();
+        CheckInput.callIfNumber($('#objectPositionY').val(), function(n) {
+            var id = wickEditor.fabricInterface.getSelectedObjectIDs()[0];
+            var modifiedState = { y : n };
+            wickEditor.actionHandler.doAction('modifyObjects', { ids: [id], modifiedStates: [modifiedState] });
+        });
 
     });
 

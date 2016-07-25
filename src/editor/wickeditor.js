@@ -17,8 +17,8 @@ var WickEditor = function () {
 
     console.log("WickEditor rev " + this.version);
 
-    //this.tryToLoadAutosavedProject();
-    this.project = new WickProject();
+    this.tryToLoadAutosavedProject();
+    //this.project = new WickProject();
 
     this.fabricInterface = new FabricInterface(this);
     //this.paperInterface = new PaperInterface(this);
@@ -109,6 +109,22 @@ WickEditor.prototype.tryToLoadAutosavedProject = function () {
 
     this.project = WickProject.fromJSON(autosavedProjectJSON);
 
+}
+
+WickEditor.prototype.saveProject = function () {
+    if(localStorage) {
+        try {
+            VerboseLog.log("Saving project to local storage...");
+            this.project.getAsJSON(function (JSONProject) {
+                localStorage.setItem('wickProject', JSONProject);
+            });
+        } catch (err) {
+            VerboseLog.error("LocalStorage could not save project, threw error:");
+            VerboseLog.log(err);
+        }
+    } else {
+        console.error("LocalStorage not available.")
+    }
 }
 
 WickEditor.prototype.newProject = function () {
