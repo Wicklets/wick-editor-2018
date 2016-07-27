@@ -43,6 +43,21 @@ var FabricInterface = function (wickEditor) {
 
         if(wickObj.fontData) {
             fabricObj.text = wickObj.fontData.text;
+            fabricObj.fontFamily = wickObj.fontData.fontFamily;
+            fabricObj.fontColor = wickObj.fontData.fontColor;
+            fabricObj.fontSize = wickObj.fontData.fontSize;
+        }
+
+        if(wickObj.svgData) {
+            var xmlString = wickObj.svgData.svgString
+              , parser = new DOMParser()
+              , doc = parser.parseFromString(xmlString, "text/xml");
+            var paperGroup = paper.project.importSVG(doc);
+            var paperPath = paperGroup.removeChildren(0, 1)[0];
+            //paperPath.style.fillColor = fillColor;
+            paperPath.closePath();
+            paperPath.position = new paper.Point(wickObj.x, wickObj.y);
+            fabricObj.paperPath = paperPath;
         }
 
         fabricObj.setCoords();
@@ -104,18 +119,6 @@ var FabricInterface = function (wickEditor) {
             }
         }
 
-    }
-
-    this.objectWithIDExistsInCanvas = function (id) {
-        var found = false;
-
-        this.canvas.forEachObject(function(fabricObj) {
-            if(fabricObj.wickObjectID == id) {
-                found = true;
-            }
-        });
-
-        return found;
     }
 
     this.syncWithEditorState = function () {
@@ -209,26 +212,6 @@ var FabricInterface = function (wickEditor) {
                     var wickProjectIndex = currentObject.getCurrentFrame().wickObjects.indexOf(child);
                     that.canvas.moveTo(newFabricObj, wickProjectIndex+3);
                 });
-            }
-        });
-
-        // Make sure all path objects have paper path data 
-        this.canvas.forEachObject(function(fabricObj) {
-            if(fabricObj.type !== "path") {
-                return;
-            }
-
-            if(!fabricObj.paperPath) {
-                var wickObj = wickEditor.project.getCurrentObject().getChildByID(fabricObj.wickObjectID);
-                var xmlString = wickObj.svgData.svgString
-                  , parser = new DOMParser()
-                  , doc = parser.parseFromString(xmlString, "text/xml");
-                var paperGroup = paper.project.importSVG(doc);
-                var paperPath = paperGroup.removeChildren(0, 1)[0];
-                //paperPath.style.fillColor = fillColor;
-                paperPath.closePath();
-                paperPath.position = new paper.Point(wickObj.x, wickObj.y);
-                fabricObj.paperPath = paperPath;
             }
         });
 
@@ -347,8 +330,67 @@ var FabricInterface = function (wickEditor) {
 
         } else {
             wickEditor.htmlInterface.closeRightClickMenu();
+
+            if(wickEditor.currentTool == "fillBucket") {
+                that.deselectAll();
+
+                that.canvas.forEachObject(function(fabricObj) {
+                    if(fabricObj.paperPath) {
+                        var mousePoint = new paper.Point(
+                            e.e.offsetX - fabricObj.width/2  - that.getFrameOffset().x, 
+                            e.e.offsetY - fabricObj.height/2 - that.getFrameOffset().y);
+                        console.log(fabricObj.paperPath)
+                        //var mousePoint = new paper.Point( e.e.offsetX, e.e.offsetY);
+                        if(tryFillPath(fabricObj.paperPath, mousePoint)) {
+                            // remove id with fabricObject.wickObjectID
+                        }
+                    }
+                });
+            }
         }
     });
+
+    var tryFillPath = function (item, point) {
+
+        if(!item.children) {
+            return;
+        }
+
+        var hitOptions = {
+            segments: true,
+            stroke: true,
+            fill: true,
+            tolerance: 0
+        };
+
+        for(var i = 0; i < item.children.length; i++) {
+            var child = item.children[i];
+
+            if(child instanceof paper.Path) {
+                var hitResult = child.hitTest(point, hitOptions);
+
+                console.log(hitResult)
+
+                if(hitResult) {
+
+                    // make new wick object
+
+                    console.log(i)
+                    /*console.log("filling!");
+                    console.log(hitResult.item);
+                    console.log(i);
+                    item.fillColor = "#ff0000";*/
+
+                    var elem = document.createElement('svg');
+                    elem.innerHTML = '<svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="588px" height="588px" viewBox="20.267 102.757 588 588" enable-background="new 20.267 102.757 588 588" xml:space="preserve">'+hitResult.item.exportSVG({asString:true})+'</svg>';
+                    document.body.appendChild(elem)
+
+                }
+            }
+
+            tryFillPath(child, point);
+        }
+    }
 
     // Paths are handled internally by fabric so we have to 
     // intercept the paths and convert them to wickobjects
@@ -409,8 +451,8 @@ var FabricInterface = function (wickEditor) {
         var that = this;
 
         this.canvas.forEachObject(function(fabricObj) {
-            fabricObj.left += canvasPanDiff.x;
-            fabricObj.top  += canvasPanDiff.y;
+            fabricObj.left += dx;
+            fabricObj.top  += dy;
             fabricObj.setCoords();
         });
 
@@ -419,6 +461,18 @@ var FabricInterface = function (wickEditor) {
     }
 
 // Interactivity utils
+
+    this.objectWithIDExistsInCanvas = function (id) {
+        var found = false;
+
+        this.canvas.forEachObject(function(fabricObj) {
+            if(fabricObj.wickObjectID == id) {
+                found = true;
+            }
+        });
+
+        return found;
+    }
 
     this.selectByIDs = function (ids) {
 
@@ -479,28 +533,6 @@ var FabricInterface = function (wickEditor) {
 
         this.canvas.deactivateAll().renderAll();
 
-    }
-
-    this.clearCanvas = function () {
-
-        var canvas = this.canvas;
-
-        // Clear canvas except for wick GUI elements
-        this.canvas.forEachObject(function(fabricObj) {
-            if(fabricObj.wickObject) {
-                canvas.remove(fabricObj);
-            } 
-        });
-
-    }
-
-    this.removeLastObject = function () {
-        var canvas_objects = this.canvas._objects;
-        if(canvas_objects.length !== 0){
-            var last = canvas_objects[canvas_objects.length -1]; //Get last object   
-            this.canvas.remove(last);
-            this.canvas.renderAll();
-        } 
     }
 
     this.getSelectedObjectIDs = function () {

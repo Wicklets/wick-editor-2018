@@ -143,6 +143,8 @@ var WickActionHandler = function (wickEditor) {
             }
         });
 
+    var modifyableAttributes = ["x","y","scaleX","scaleY","angle","opacity"];
+
     this.registerAction('modifyObjects', 
         function (args) {
             args.originalStates = [];
@@ -151,24 +153,30 @@ var WickActionHandler = function (wickEditor) {
                 var wickObj = wickEditor.project.getCurrentObject().getChildByID(args.ids[i]);
 
                 args.originalStates[i] = {};
-                args.originalStates[i].x      = wickObj.x;
-                args.originalStates[i].y      = wickObj.y;
-                args.originalStates[i].scaleX = wickObj.scaleX;
-                args.originalStates[i].scaleY = wickObj.scaleY;
-                args.originalStates[i].angle  = wickObj.angle;
+                modifyableAttributes.forEach(function(attrib) {
+                    args.originalStates[i][attrib] = wickObj[attrib];
+                });
 
+                // This is silly what's a better way ???
                 if(wickObj.fontData) {
-                    args.originalStates[i].text   = wickObj.fontData.text;
+                    args.originalStates[i].text = wickObj.fontData.text;
+                    args.originalStates[i].fontFamily = wickObj.fontData.fontFamily;
+                    args.originalStates[i].fontSize = wickObj.fontData.fontSize;
+                    args.originalStates[i].fontColor = wickObj.fontData.fontColor;
                 }
 
-                if(args.modifiedStates[i].x !== undefined)      wickObj.x        = args.modifiedStates[i].x;
-                if(args.modifiedStates[i].y !== undefined)      wickObj.y        = args.modifiedStates[i].y;
-                if(args.modifiedStates[i].scaleX !== undefined) wickObj.scaleX   = args.modifiedStates[i].scaleX;
-                if(args.modifiedStates[i].scaleY !== undefined) wickObj.scaleY   = args.modifiedStates[i].scaleY;
-                if(args.modifiedStates[i].angle !== undefined)  wickObj.angle    = args.modifiedStates[i].angle;
+                modifyableAttributes.forEach(function(attrib) {
+                    if(args.modifiedStates[i][attrib] !== undefined) {
+                        wickObj[attrib] = args.modifiedStates[i][attrib];
+                    }
+                });
 
+                // This is silly what's a better way ???
                 if(wickObj.fontData) {
-                    if(args.modifiedStates[i].text)   wickObj.fontData.text = args.modifiedStates[i].text;
+                    if(args.modifiedStates[i].text) wickObj.fontData.text = args.modifiedStates[i].text;
+                    if(args.modifiedStates[i].fontFamily) wickObj.fontData.fontFamily = args.modifiedStates[i].fontFamily;
+                    if(args.modifiedStates[i].fontSize) wickObj.fontData.fontSize = args.modifiedStates[i].fontSize;
+                    if(args.modifiedStates[i].fontColor) wickObj.fontData.fontColor = args.modifiedStates[i].fontColor;
                 }
             }
         },
@@ -177,14 +185,18 @@ var WickActionHandler = function (wickEditor) {
                 var wickObj = wickEditor.project.getCurrentObject().getChildByID(args.ids[i]);
 
                 // Revert the object's state to it's original pre-transformation state
-                if(args.originalStates[i].x !== undefined)      wickObj.x        = args.originalStates[i].x;
-                if(args.originalStates[i].y !== undefined)      wickObj.y        = args.originalStates[i].y;
-                if(args.originalStates[i].scaleX !== undefined) wickObj.scaleX   = args.originalStates[i].scaleX;
-                if(args.originalStates[i].scaleY !== undefined) wickObj.scaleY   = args.originalStates[i].scaleY;
-                if(args.originalStates[i].angle !== undefined)  wickObj.angle    = args.originalStates[i].angle;
+                modifyableAttributes.forEach(function(attrib) {
+                    if(args.originalStates[i][attrib] !== undefined) {
+                        wickObj[attrib] = args.originalStates[i][attrib];
+                    }
+                });
 
+                // This is silly what's a better way ???
                 if(wickObj.fontData) {
                     wickObj.fontData.text = args.originalStates[i].text;
+                    wickObj.fontData.fontFamily = args.originalStates[i].fontFamily;
+                    wickObj.fontData.fontSize = args.originalStates[i].fontSize;
+                    wickObj.fontData.fontColor = args.originalStates[i].fontColor;
                 }
             }
         });

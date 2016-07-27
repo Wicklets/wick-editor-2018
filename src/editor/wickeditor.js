@@ -15,15 +15,15 @@ var WickEditor = function () {
     this.project = null;
     this.panPosition = {x:0,y:0};
 
+    this.currentTool = "cursor";
+
     console.log("WickEditor rev " + this.version);
 
     this.tryToLoadAutosavedProject();
     //this.project = new WickProject();
 
     this.fabricInterface = new FabricInterface(this);
-    //this.paperInterface = new PaperInterface(this);
     this.htmlInterface = new HTMLInterface(this);
-    //this.baseCanvasInterface = new BaseCanvasInterface();
 
     this.syncInterfaces();
 

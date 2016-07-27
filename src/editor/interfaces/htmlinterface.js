@@ -99,7 +99,7 @@ var HTMLInterface = function (wickEditor) {
                 y:wickEditor.panPosition.y
             }
 
-            wickEditor.panPosition = {x:x,y:y};
+            wickEditor.panPosition = {x:that.mouse.x, y:that.mouse.y};
 
             var canvasPanDiff = {
                 x: wickEditor.panPosition.x - oldPanPosition.x,
@@ -293,12 +293,14 @@ var HTMLInterface = function (wickEditor) {
         document.getElementById('toolOptionsGUI').style.display = 'block';
 
         wickEditor.fabricInterface.canvas.isDrawingMode = true;
+        wickEditor.fabricInterface.currentTool = "eraser";
     });
 
     $('#fillBucketToolButton').on('click', function(e) {
         document.getElementById('toolOptionsGUI').style.display = 'none';
 
         wickEditor.fabricInterface.canvas.isDrawingMode = false;
+        wickEditor.currentTool = "fillBucket";
     });
 
     $('#textToolButton').on('click', function(e) {
@@ -608,23 +610,31 @@ var HTMLInterface = function (wickEditor) {
     });
 
     document.getElementById('opacitySlider').onchange = function () {
-        wickEditor.fabricInterface.getActiveObject().opacity = this.value/255;
-        wickEditor.fabricInterface.canvas.renderAll();
+        wickEditor.actionHandler.doAction('modifyObjects', { 
+            ids: [wickEditor.fabricInterface.getSelectedObjectIDs()[0]], 
+            modifiedStates: [{ opacity : this.value/255 }] 
+        });
     };
 
     document.getElementById('fontSelector').onchange = function () {
-        wickEditor.fabricInterface.getActiveObject().fontFamily = document.getElementById('fontSelector').value;
-        wickEditor.fabricInterface.canvas.renderAll();
+        wickEditor.actionHandler.doAction('modifyObjects', { 
+            ids: [wickEditor.fabricInterface.getSelectedObjectIDs()[0]], 
+            modifiedStates: [{ fontFamily : document.getElementById('fontSelector').value }] 
+        });
     }
 
     document.getElementById('fontColor').onchange = function () {
-        wickEditor.fabricInterface.getActiveObject().fill = this.value;
-        wickEditor.fabricInterface.canvas.renderAll();
+        wickEditor.actionHandler.doAction('modifyObjects', { 
+            ids: [wickEditor.fabricInterface.getSelectedObjectIDs()[0]], 
+            modifiedStates: [{ fontColor : this.value }] 
+        });
     };
 
     document.getElementById('fontSize').onchange = function () {
-        wickEditor.fabricInterface.getActiveObject().fontSize = this.value;
-        wickEditor.fabricInterface.canvas.renderAll();
+        wickEditor.actionHandler.doAction('modifyObjects', { 
+            ids: [wickEditor.fabricInterface.getSelectedObjectIDs()[0]], 
+            modifiedStates: [{ fontSize : this.value }] 
+        });
     };
 
     $('#htmlTextBox').on('input propertychange', function () {

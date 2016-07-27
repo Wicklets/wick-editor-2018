@@ -32,6 +32,8 @@ hr {
 
 	border: 1px solid #999999;
 	border-radius: 2px;
+
+	box-shadow: 3px 3px 3px #888888;
 }
 
 #menuBarGUI {
@@ -145,8 +147,6 @@ hr {
 	width: 20px;
 	height: 45px;
 	text-align: center;
-	margin-left: 3px;
-	margin-top: 3px;
 	float: left;
 }
 
