@@ -162,7 +162,7 @@ var WickActionHandler = function (wickEditor) {
                     args.originalStates[i].text = wickObj.fontData.text;
                     args.originalStates[i].fontFamily = wickObj.fontData.fontFamily;
                     args.originalStates[i].fontSize = wickObj.fontData.fontSize;
-                    args.originalStates[i].fontColor = wickObj.fontData.fontColor;
+                    args.originalStates[i].fill = wickObj.fontData.fill;
                 }
 
                 modifyableAttributes.forEach(function(attrib) {
@@ -176,7 +176,7 @@ var WickActionHandler = function (wickEditor) {
                     if(args.modifiedStates[i].text) wickObj.fontData.text = args.modifiedStates[i].text;
                     if(args.modifiedStates[i].fontFamily) wickObj.fontData.fontFamily = args.modifiedStates[i].fontFamily;
                     if(args.modifiedStates[i].fontSize) wickObj.fontData.fontSize = args.modifiedStates[i].fontSize;
-                    if(args.modifiedStates[i].fontColor) wickObj.fontData.fontColor = args.modifiedStates[i].fontColor;
+                    if(args.modifiedStates[i].fill) wickObj.fontData.fill = args.modifiedStates[i].fill;
                 }
             }
         },
@@ -196,7 +196,7 @@ var WickActionHandler = function (wickEditor) {
                     wickObj.fontData.text = args.originalStates[i].text;
                     wickObj.fontData.fontFamily = args.originalStates[i].fontFamily;
                     wickObj.fontData.fontSize = args.originalStates[i].fontSize;
-                    wickObj.fontData.fontColor = args.originalStates[i].fontColor;
+                    wickObj.fontData.fill = args.originalStates[i].fill;
                 }
             }
         });

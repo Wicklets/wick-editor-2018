@@ -275,14 +275,14 @@ var HTMLInterface = function (wickEditor) {
         document.getElementById('toolOptionsGUI').style.display = 'none';
 
         wickEditor.fabricInterface.canvas.isDrawingMode = false;
-        wickEditor.fabricInterface.currentTool = "cursor";
+        wickEditor.currentTool = "cursor";
     });
 
     $('#paintbrushToolButton').on('click', function(e) {
         document.getElementById('toolOptionsGUI').style.display = 'block';
 
         wickEditor.fabricInterface.canvas.isDrawingMode = true;
-        wickEditor.fabricInterface.currentTool = "paintbrush";
+        wickEditor.currentTool = "paintbrush";
 
         wickEditor.fabricInterface.canvas.freeDrawingBrush = new fabric['PencilBrush'](wickEditor.fabricInterface.canvas);
         wickEditor.fabricInterface.canvas.freeDrawingBrush.color = lineColorEl.value;
@@ -293,14 +293,17 @@ var HTMLInterface = function (wickEditor) {
         document.getElementById('toolOptionsGUI').style.display = 'block';
 
         wickEditor.fabricInterface.canvas.isDrawingMode = true;
-        wickEditor.fabricInterface.currentTool = "eraser";
+        wickEditor.currentTool = "eraser";
     });
 
     $('#fillBucketToolButton').on('click', function(e) {
-        document.getElementById('toolOptionsGUI').style.display = 'none';
+        document.getElementById('toolOptionsGUI').style.display = 'block';
 
         wickEditor.fabricInterface.canvas.isDrawingMode = false;
         wickEditor.currentTool = "fillBucket";
+
+        wickEditor.fabricInterface.canvas.freeDrawingBrush = new fabric['PencilBrush'](wickEditor.fabricInterface.canvas);
+        wickEditor.fabricInterface.canvas.freeDrawingBrush.color = lineColorEl.value;
     });
 
     $('#textToolButton').on('click', function(e) {
@@ -318,11 +321,12 @@ var HTMLInterface = function (wickEditor) {
     var lineColorEl = document.getElementById('lineColor');
 
     lineWidthEl.onchange = function() {
-        //wickEditor.fabricInterface.canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;
+        wickEditor.fabricInterface.canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;
     };
 
     lineColorEl.onchange = function() {
-        //wickEditor.fabricInterface.canvas.freeDrawingBrush.color = this.value;
+        wickEditor.fabricInterface.canvas.freeDrawingBrush.color = this.value;
+        wickEditor.fabricInterface.canvas.freeDrawingBrush.width = parseInt(lineWidthEl.value, 10) || 1;
     };
 
 /********************
@@ -626,7 +630,7 @@ var HTMLInterface = function (wickEditor) {
     document.getElementById('fontColor').onchange = function () {
         wickEditor.actionHandler.doAction('modifyObjects', { 
             ids: [wickEditor.fabricInterface.getSelectedObjectIDs()[0]], 
-            modifiedStates: [{ fontColor : this.value }] 
+            modifiedStates: [{ fill : this.value }] 
         });
     };
 

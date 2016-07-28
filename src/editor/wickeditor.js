@@ -47,8 +47,6 @@ WickEditor.prototype.syncInterfaces = function () {
 *********************************/
 
 WickEditor.prototype.getSelectedWickObject = function () {
-    // Gonna have to also deal with paper.js selections as well.
-
     var ids = this.fabricInterface.getSelectedObjectIDs();
     if(ids.length == 1) {
         return this.project.getObjectByID(ids[0]);
@@ -58,8 +56,6 @@ WickEditor.prototype.getSelectedWickObject = function () {
 }
 
 WickEditor.prototype.getSelectedWickObjects = function () {
-    // Gonna have to also deal with paper.js selections as well.
-
     var ids = this.fabricInterface.getSelectedObjectIDs();
     var wickObjects = [];
     for(var i = 0; i < ids.length; i++) {
@@ -69,8 +65,6 @@ WickEditor.prototype.getSelectedWickObjects = function () {
 }
 
 WickEditor.prototype.getCopyData  = function () {
-    // Gonna have to also deal with paper.js selections as well.
-
     var ids = this.fabricInterface.getSelectedObjectIDs();
     var objectJSONs = [];
     for(var i = 0; i < ids.length; i++) {

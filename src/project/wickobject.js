@@ -279,7 +279,6 @@ WickObject.fromText = function (text) {
     };
 
     var fabricReferenceText = new fabric.Text(obj.fontData.text, obj.fontData);
-
     obj.width = fabricReferenceText.width;
     obj.height = fabricReferenceText.height;
 

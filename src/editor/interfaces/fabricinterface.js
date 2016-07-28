@@ -44,8 +44,11 @@ var FabricInterface = function (wickEditor) {
         if(wickObj.fontData) {
             fabricObj.text = wickObj.fontData.text;
             fabricObj.fontFamily = wickObj.fontData.fontFamily;
-            fabricObj.fontColor = wickObj.fontData.fontColor;
+            fabricObj.fill = wickObj.fontData.fill;
             fabricObj.fontSize = wickObj.fontData.fontSize;
+        } else {
+            fabricObj.perPixelTargetFind = true;
+            fabricObj.targetFindTolerance = 4;
         }
 
         if(wickObj.svgData) {
@@ -55,7 +58,9 @@ var FabricInterface = function (wickEditor) {
             var paperGroup = paper.project.importSVG(doc);
             var paperPath = paperGroup.removeChildren(0, 1)[0];
             //paperPath.style.fillColor = fillColor;
-            paperPath.closePath();
+            if(paperPath.closePath) {
+                paperPath.closePath();
+            }
             paperPath.position = new paper.Point(wickObj.x, wickObj.y);
             fabricObj.paperPath = paperPath;
         }
@@ -196,9 +201,21 @@ var FabricInterface = function (wickEditor) {
         });
 
         // Add new objects and update zIndices
+        var objectWithIDExistsInCanvas = function (id) {
+            var found = false;
+
+            that.canvas.forEachObject(function(fabricObj) {
+                if(fabricObj.wickObjectID == id) {
+                    found = true;
+                }
+            });
+
+            return found;
+        }
+
         currentObject.forEachActiveChildObject(function (child) {
 
-            if(that.objectWithIDExistsInCanvas(child.id)) { 
+            if(objectWithIDExistsInCanvas(child.id)) { 
                 that.canvas.forEachObject(function(fabricObj) {
                     if(fabricObj.wickObjectID === child.id) {
                         var wickProjectIndex = currentObject.getCurrentFrame().wickObjects.indexOf(child);
@@ -381,9 +398,19 @@ var FabricInterface = function (wickEditor) {
                     console.log(i);
                     item.fillColor = "#ff0000";*/
 
-                    var elem = document.createElement('svg');
+                    /*var elem = document.createElement('svg');
                     elem.innerHTML = '<svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="588px" height="588px" viewBox="20.267 102.757 588 588" enable-background="new 20.267 102.757 588 588" xml:space="preserve">'+hitResult.item.exportSVG({asString:true})+'</svg>';
-                    document.body.appendChild(elem)
+                    document.body.appendChild(elem)*/
+
+                    var svgString = '<svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="588px" height="588px" viewBox="20.267 102.757 588 588" enable-background="new 20.267 102.757 588 588" xml:space="preserve">'+hitResult.item.exportSVG({asString:true})+'</svg>';
+                    var svgData = {svgString:svgString, fillColor:that.canvas.freeDrawingBrush.color}
+                    WickObject.fromSVG(svgData, function(wickObj) {
+                        //wickObj.x = pathFabricObject.left - that.getFrameOffset().x - pathFabricObject.width/2  - that.canvas.freeDrawingBrush.width/2;
+                        //wickObj.y = pathFabricObject.top  - that.getFrameOffset().y - pathFabricObject.height/2 - that.canvas.freeDrawingBrush.width/2;
+                        wickObj.x = 0;
+                        wickObj.y = 0;
+                        wickEditor.actionHandler.doAction('addObjects', {wickObjects:[wickObj]})
+                    });
 
                 }
             }
@@ -414,8 +441,8 @@ var FabricInterface = function (wickEditor) {
             Potrace.process(function(){
                 var svgData = {svgString:Potrace.getSVG(1), fillColor:that.canvas.freeDrawingBrush.color}
                 WickObject.fromSVG(svgData, function(wickObj) {
-                    wickObj.x = pathFabricObject.left - that.getFrameOffset().x - pathFabricObject.width/2  - 5;
-                    wickObj.y = pathFabricObject.top  - that.getFrameOffset().y - pathFabricObject.height/2 - 4;
+                    wickObj.x = pathFabricObject.left - that.getFrameOffset().x - pathFabricObject.width/2  - that.canvas.freeDrawingBrush.width/2;
+                    wickObj.y = pathFabricObject.top  - that.getFrameOffset().y - pathFabricObject.height/2 - that.canvas.freeDrawingBrush.width/2;
                     wickEditor.actionHandler.doAction('addObjects', {wickObjects:[wickObj]})
                 });
             });
@@ -460,19 +487,7 @@ var FabricInterface = function (wickEditor) {
 
     }
 
-// Interactivity utils
-
-    this.objectWithIDExistsInCanvas = function (id) {
-        var found = false;
-
-        this.canvas.forEachObject(function(fabricObj) {
-            if(fabricObj.wickObjectID == id) {
-                found = true;
-            }
-        });
-
-        return found;
-    }
+// Selection utils
 
     this.selectByIDs = function (ids) {
 
