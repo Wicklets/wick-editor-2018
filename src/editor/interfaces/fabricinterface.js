@@ -159,16 +159,13 @@ var FabricInterface = function (wickEditor) {
         this.frameInside.top  = (window.innerHeight-projectHeight)/2 + wickEditor.panPosition.y;
         this.frameInside.setCoords();
 
-        var currentObjectLeft = wickEditor.project.getCurrentObject().left;
-        var currentObjectTop  = wickEditor.project.getCurrentObject().top;
-
         // Move the origin crosshair to the current origin
         if(this.originCrosshair) { // window resize can happen before originCrosshair's image is loaded
             this.originCrosshair.left = (window.innerWidth -projectWidth) /2 - this.originCrosshair.width/2;
             this.originCrosshair.top  = (window.innerHeight-projectHeight)/2 - this.originCrosshair.height/2;
             
-            this.originCrosshair.left += currentObjectLeft;
-            this.originCrosshair.top += currentObjectTop;
+            this.originCrosshair.left += wickEditor.project.getCurrentObject().x;
+            this.originCrosshair.top  += wickEditor.project.getCurrentObject().y;
             
             this.originCrosshair.left += wickEditor.panPosition.x;
             this.originCrosshair.top  += wickEditor.panPosition.y;
