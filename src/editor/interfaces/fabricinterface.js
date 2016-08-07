@@ -32,8 +32,8 @@ var FabricInterface = function (wickEditor) {
 
     this.syncObjects = function (wickObj, fabricObj) {
 
-        fabricObj.left    = wickObj.x + this.getFrameOffset().x;
-        fabricObj.top     = wickObj.y + this.getFrameOffset().y;
+        fabricObj.left    = wickObj.getAbsolutePosition().x + this.getFrameOffset().x;
+        fabricObj.top     = wickObj.getAbsolutePosition().y + this.getFrameOffset().y;
         fabricObj.width   = wickObj.width;
         fabricObj.height  = wickObj.height;
         fabricObj.scaleX  = wickObj.scaleX;
@@ -45,7 +45,6 @@ var FabricInterface = function (wickEditor) {
 
         if(wickObj.isSymbol) {
             var cornerPosition = wickObj.getSymbolCornerPosition();
-            console.log(cornerPosition)
             fabricObj.left += cornerPosition.x;
             fabricObj.top += cornerPosition.y;
         }

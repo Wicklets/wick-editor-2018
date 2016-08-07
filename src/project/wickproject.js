@@ -38,6 +38,8 @@ WickProject.fromJSON = function (JSONString) {
     // Decode scripts back to human-readble and eval()-able format
     projectFromJSON.rootObject.decodeStrings();
 
+    projectFromJSON.rootObject.regenerateParentObjectReferences();
+
     return projectFromJSON;
 }
 
