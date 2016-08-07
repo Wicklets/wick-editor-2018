@@ -43,6 +43,13 @@ var FabricInterface = function (wickEditor) {
         fabricObj.flipY   = wickObj.flipY;
         fabricObj.opacity = wickObj.opacity;
 
+        if(wickObj.isSymbol) {
+            var cornerPosition = wickObj.getSymbolCornerPosition();
+            console.log(cornerPosition)
+            fabricObj.left += cornerPosition.x;
+            fabricObj.top += cornerPosition.y;
+        }
+
         if(wickObj.fontData) {
             fabricObj.text = wickObj.fontData.text;
             fabricObj.fontFamily = wickObj.fontData.fontFamily;
@@ -117,8 +124,6 @@ var FabricInterface = function (wickEditor) {
                     if(group._objects.length == children.length) {
                         wickObj.width = group.width;
                         wickObj.height = group.height;
-                        group.x = wickObj.x;
-                        group.y = wickObj.y;
                         that.syncObjects(wickObj, group);
                         callback(group);
                     }

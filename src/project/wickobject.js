@@ -401,31 +401,11 @@ WickObject.prototype.generateSVGCacheImages = function (callback) {
 
 }
 
-// Uses all parent's positions to calculate correct position on canvas
-WickObject.prototype.getRelativePosition = function () {
-
-    if(this.isRoot) {
-        return {
-            top: 0,
-            left: 0
-        };
-    } else {
-        var parentPosition = this.parentObject.getRelativePosition();
-        return {
-            top: this.top + parentPosition.top,
-            left: this.left + parentPosition.left
-        };
-    }
-
-}
-
-/* Fabric js sets the position of the group to the positions of the leftmost+topmost objects 
-   by default. So if the leftmost/topmost objects are not at 0,0, this causes problems! 
-   This function gives you the offset that must be accounted for so that objects don't shift around */
-WickObject.prototype.getSymbolTrueOffset = function () {
+/* Used to properly position symbols in fabric */
+WickObject.prototype.getSymbolCornerPosition = function () {
 
     if(!this.isSymbol) {
-        VerboseLog.error("getSymbolTrueOffset called on non-symbol wickobject")
+        VerboseLog.error("getSymbolCornerPosition() called on non-symbol")
         return null;
     }
 
@@ -433,16 +413,16 @@ WickObject.prototype.getSymbolTrueOffset = function () {
     var topmostTop = null;
 
     this.forEachFirstFrameChildObject(function (currObj) {
-        if(leftmostLeft === null || currObj.left < leftmostLeft) {
-            leftmostLeft = currObj.left;
+        if(leftmostLeft === null || currObj.x < leftmostLeft) {
+            leftmostLeft = currObj.x;
         }
 
-        if(topmostTop === null || currObj.top < topmostTop) {
-            topmostTop = currObj.top;
+        if(topmostTop === null || currObj.y < topmostTop) {
+            topmostTop = currObj.y;
         }
     });
 
-    return {left:leftmostLeft, top:topmostTop};
+    return {x:leftmostLeft, y:topmostTop};
 
 }
 
@@ -862,6 +842,12 @@ WickObject.prototype.getChildByID = function (id) {
         }
     }
 
+    if(this.isSymbol) {
+        if(this.id == id) {
+            return this;
+        }
+    }
+
     var foundChild = null;
 
     this.forEachChildObject(function(child) {
@@ -932,13 +918,31 @@ WickObject.prototype.regenerateParentObjectReferences = function() {
 
     if(this.isSymbol) {
 
-        // Recursively remove parent object references of all objects inside this symbol.
+        // Recursively regenerate parent object references of all objects inside this symbol.
 
         for(var f = 0; f < this.frames.length; f++) {
             var frame = this.frames[f];
             for (var o = 0; o < frame.wickObjects.length; o++) {
                 frame.wickObjects[o].parentObject = parentObject;
                 frame.wickObjects[o].regenerateParentObjectReferences();
+            }
+        }
+    }
+
+}
+
+WickObject.prototype.removeParentObjectReferences = function() {
+
+    this.parentObject = undefined;
+
+    if(this.isSymbol) {
+
+        // Recursively remove parent object references of all objects inside this symbol.
+
+        for(var f = 0; f < this.frames.length; f++) {
+            var frame = this.frames[f];
+            for (var o = 0; o < frame.wickObjects.length; o++) {
+                frame.wickObjects[o].removeParentObjectReferences();
             }
         }
     }

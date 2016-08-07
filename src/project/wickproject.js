@@ -99,10 +99,14 @@ WickProject.prototype.getAsJSON = function (callback) {
         // Encode scripts/text to avoid JSON format problems
         that.rootObject.encodeStrings();
 
+        that.rootObject.removeParentObjectReferences();
+
         var JSONProject = JSON.stringify(that);
         
         // Decode scripts back to human-readble and eval()-able format
         that.rootObject.decodeStrings();
+
+        that.rootObject.regenerateParentObjectReferences();
 
         callback(JSONProject);
     });
@@ -115,7 +119,7 @@ WickProject.prototype.getAsJSON = function (callback) {
 WickProject.prototype.regenerateUniqueIDs = function (wickObject) {
     var that = this;
 
-    if(!wickObject.id) {
+    if(!wickObject.id && wickObject.id!=0) {
         wickObject.id = this.rootObject.getLargestID() + 1;
     }
 
@@ -139,10 +143,6 @@ WickProject.prototype.addObject = function (wickObject, zIndex) {
 }
 
 WickProject.prototype.getObjectByID = function (id) {
-
-    if(id == 0) {
-        return this.rootObject;
-    }
 
     return this.rootObject.getChildByID(id);
 

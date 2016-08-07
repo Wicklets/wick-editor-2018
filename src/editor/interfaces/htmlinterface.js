@@ -94,6 +94,8 @@ var HTMLInterface = function (wickEditor) {
 
         // Space: Pan viewport
         if (event.keyCode == 32 && !editingTextBox) {
+            event.preventDefault();
+
             var oldPanPosition = {
                 x:wickEditor.panPosition.x,
                 y:wickEditor.panPosition.y
@@ -111,14 +113,6 @@ var HTMLInterface = function (wickEditor) {
                 that.mouse.y - window.innerHeight/2,
                 canvasPanDiff.x,
                 canvasPanDiff.y);
-        }
-
-        // Tilde: log project state to canvas (for debugging)
-        if (event.keyCode == 192) {
-            console.log(wickEditor.project);
-            console.log(wickEditor.project.rootObject);
-            console.log(wickEditor.project.rootObject.frames[0].wickObjects);
-            console.log(wickEditor.fabricInterface);
         }
     });
 
