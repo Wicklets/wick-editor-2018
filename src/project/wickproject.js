@@ -54,6 +54,7 @@ WickProject.prototype.exportAsHTMLFile = function () {
         "lib/verboselog.js",
         "lib/browserdetection.js",
         "lib/base64-arraybuffer.js",
+        "lib/utils/checkInput.js",
     ];
 
     // Player code. 
