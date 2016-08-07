@@ -19,7 +19,9 @@ var FabricInterface = function (wickEditor) {
     this.paperCanvas = document.createElement('canvas');
     paper.setup(this.canvas);
 
-// Editor state syncing
+/********************************
+       Editor state syncing
+********************************/
 
     this.getFrameOffset = function () {
         return {
@@ -240,6 +242,10 @@ var FabricInterface = function (wickEditor) {
         this.canvas.renderAll();
     }
 
+/********************************
+         GUI Elements
+********************************/
+
 // White box that shows resolution/objects that will be on screen when project is exported
 
     this.frameInside = new fabric.Rect({
@@ -269,7 +275,9 @@ var FabricInterface = function (wickEditor) {
         that.canvas.add(that.originCrosshair);
     });
 
-// Events
+/********************************
+  Objects modified by fabric.js
+********************************/
 
     var that = this;
     var canvas = this.canvas;
@@ -323,52 +331,85 @@ var FabricInterface = function (wickEditor) {
         );
     });
 
-    // Fabric doesn't select things with right clicks.
-    // We have to do that manually
+/********************************
+       Drawing tool stuff
+********************************/
+
+    // Left click events
     canvas.on('mouse:down', function(e) {
-        if(e.e.button == 2) {
-            
-            if (e.target && e.target.wickObjectID) {
-                // Set active object of fabric canvas
-                var id = canvas.getObjects().indexOf(e.target);
-                canvas.setActiveObject(canvas.item(id)).renderAll();
-            }
-
-            if(!e.target) {
-                // Didn't right click an object, deselect everything
-                canvas.deactivateAll().renderAll();
-                wickEditor.htmlInterface.closeScriptingGUI();
-            }
-            wickEditor.syncInterfaces();
-            wickEditor.htmlInterface.openRightClickMenu();
-
-        } else {
-            wickEditor.htmlInterface.closeRightClickMenu();
-
-            if(wickEditor.currentTool == "fillBucket") {
-                that.deselectAll();
-
-                that.canvas.forEachObject(function(fabricObj) {
-                    if(fabricObj.paperPath) {
-                        var mousePoint = new paper.Point(
-                            e.e.offsetX - fabricObj.width/2  - that.getFrameOffset().x, 
-                            e.e.offsetY - fabricObj.height/2 - that.getFrameOffset().y);
-                        console.log(fabricObj.paperPath)
-                        //var mousePoint = new paper.Point( e.e.offsetX, e.e.offsetY);
-                        if(tryFillPath(fabricObj.paperPath, mousePoint)) {
-                            // remove id with fabricObject.wickObjectID
-                        }
-                    }
-                });
-            }
-        }
+        if(e.e.button != 0) return;
+        wickEditor.htmlInterface.closeRightClickMenu();
+        leftClickEventHandlers[wickEditor.currentTool](e);
     });
 
-    var tryFillPath = function (item, point) {
+    var leftClickEventHandlers = {
+        "cursor" : (function (e) {
 
-        if(!item.children) {
-            return;
-        }
+        }),
+        "paintbrush" : (function (e) {
+            // Note: fabric.js handles the actual drawing.
+        }),
+        "eraser" : (function (e) {
+            // Note: fabric.js handles the actual drawing.
+        }),
+        "fillBucket" : (function (e) {
+            that.deselectAll();
+
+            that.canvas.forEachObject(function(fabricObj) {
+                if(fabricObj.paperPath) {
+                    var mousePoint = new paper.Point(
+                        e.e.offsetX - fabricObj.width/2  - that.getFrameOffset().x, 
+                        e.e.offsetY - fabricObj.height/2 - that.getFrameOffset().y);
+
+                    var filledObject = tryFillPaperObject(fabricObj.paperPath, mousePoint, true);
+                    if(!filledObject) {
+                        filledObject = tryFillPaperObject(fabricObj.paperPath, mousePoint, false);
+                    }
+
+                    if(!filledObject) return;
+
+                    if(filledObject.clockwise) {
+                        console.log("hole filled");
+                        // Hole filled:
+                        // If the fill color is the same color as the hole's path:
+                        //     Simply delete the hole.
+                        // If they are different colors:
+                        //     Delete the hole, but also make a copy of it with fillColor.
+                    } else {
+                        // Path filled: Change the color of that path.
+                        console.log("path filled");
+                    }
+
+                    // make new wick object
+
+                    //console.log(i)
+                    /*console.log("filling!");
+                    console.log(hitResult.item);
+                    console.log(i);
+                    item.fillColor = "#ff0000";*/
+
+                    //console.log(hitResult.item);
+
+                    /*var elem = document.createElement('svg');
+                    elem.innerHTML = '<svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="588px" height="588px" viewBox="20.267 102.757 588 588" enable-background="new 20.267 102.757 588 588" xml:space="preserve">'+hitResult.item.exportSVG({asString:true})+'</svg>';
+                    document.body.appendChild(elem)*/
+
+                    /*var svgString = '<svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="588px" height="588px" viewBox="20.267 102.757 588 588" enable-background="new 20.267 102.757 588 588" xml:space="preserve">'+hitResult.item.exportSVG({asString:true})+'</svg>';
+                    var svgData = {svgString:svgString, fillColor:that.canvas.freeDrawingBrush.color}
+                    WickObject.fromSVG(svgData, function(wickObj) {
+                        //wickObj.x = pathFabricObject.left - that.getFrameOffset().x - pathFabricObject.width/2  - that.canvas.freeDrawingBrush.width/2;
+                        //wickObj.y = pathFabricObject.top  - that.getFrameOffset().y - pathFabricObject.height/2 - that.canvas.freeDrawingBrush.width/2;
+                        wickObj.x = 0;
+                        wickObj.y = 0;
+                        wickEditor.actionHandler.doAction('addObjects', {wickObjects:[wickObj]})
+                    });*/
+
+                }
+            });
+        })
+    }
+
+    var tryFillPaperObject = function (item, point, fillClockwise) {
 
         var hitOptions = {
             segments: true,
@@ -377,43 +418,23 @@ var FabricInterface = function (wickEditor) {
             tolerance: 0
         };
 
-        for(var i = 0; i < item.children.length; i++) {
-            var child = item.children[i];
-
-            if(child instanceof paper.Path) {
-                var hitResult = child.hitTest(point, hitOptions);
-
-                console.log(hitResult)
-
-                if(hitResult) {
-
-                    // make new wick object
-
-                    console.log(i)
-                    /*console.log("filling!");
-                    console.log(hitResult.item);
-                    console.log(i);
-                    item.fillColor = "#ff0000";*/
-
-                    /*var elem = document.createElement('svg');
-                    elem.innerHTML = '<svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="588px" height="588px" viewBox="20.267 102.757 588 588" enable-background="new 20.267 102.757 588 588" xml:space="preserve">'+hitResult.item.exportSVG({asString:true})+'</svg>';
-                    document.body.appendChild(elem)*/
-
-                    var svgString = '<svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="588px" height="588px" viewBox="20.267 102.757 588 588" enable-background="new 20.267 102.757 588 588" xml:space="preserve">'+hitResult.item.exportSVG({asString:true})+'</svg>';
-                    var svgData = {svgString:svgString, fillColor:that.canvas.freeDrawingBrush.color}
-                    WickObject.fromSVG(svgData, function(wickObj) {
-                        //wickObj.x = pathFabricObject.left - that.getFrameOffset().x - pathFabricObject.width/2  - that.canvas.freeDrawingBrush.width/2;
-                        //wickObj.y = pathFabricObject.top  - that.getFrameOffset().y - pathFabricObject.height/2 - that.canvas.freeDrawingBrush.width/2;
-                        wickObj.x = 0;
-                        wickObj.y = 0;
-                        wickEditor.actionHandler.doAction('addObjects', {wickObjects:[wickObj]})
-                    });
-
-                }
-            }
-
-            tryFillPath(child, point);
+        // Look for a hit on item
+        var hitResult = item.hitTest(point, hitOptions);
+        if(hitResult && hitResult.item.clockwise == fillClockwise) {
+            return hitResult.item;
         }
+
+        // Didn't find what we were looking for, so look for a hit on item's children
+        if(!item.children) return null;
+
+        for(var i = 0; i < item.children.length; i++) {
+            var filledSVG = tryFillPaperObject(item.children[i], point, fillClockwise);
+            if(filledSVG) {
+                return filledSVG;
+            }
+        }
+
+        return null;
     }
 
     // Paths are handled internally by fabric so we have to 
@@ -458,18 +479,44 @@ var FabricInterface = function (wickEditor) {
 
     });
 
+/********************************
+           GUI Stuff
+********************************/
+
+    // Update the scripting GUI when the selected object changes
     canvas.on('object:selected', function (e) {
         wickEditor.htmlInterface.reloadScriptingGUI();
         wickEditor.htmlInterface.updatePropertiesGUI();
     });
-
     canvas.on('selection:cleared', function (e) {
         wickEditor.htmlInterface.closeScriptingGUI();
         wickEditor.htmlInterface.updatePropertiesGUI('project');
     });
 
-// GUI 
+    // Hack: Select objects on right click (fabric.js doesn't do this by default >.>)
+    canvas.on('mouse:down', function(e) {
+        if(e.e.button == 2) {
+            
+            if (e.target && e.target.wickObjectID) {
+                // Set active object of fabric canvas
+                var id = canvas.getObjects().indexOf(e.target);
+                canvas.setActiveObject(canvas.item(id)).renderAll();
+            }
 
+            if(!e.target) {
+                // Didn't right click an object, deselect everything
+                canvas.deactivateAll().renderAll();
+                wickEditor.htmlInterface.closeScriptingGUI();
+            }
+            wickEditor.syncInterfaces();
+            wickEditor.htmlInterface.openRightClickMenu();
+
+        }
+    });
+
+// Pan tool
+
+    // Yuck, weird code, get this out of here.
     this.panTo = function (x,y,dx,dy) {
 
         var that = this;
