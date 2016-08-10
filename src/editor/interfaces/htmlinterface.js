@@ -5,6 +5,8 @@ var HTMLInterface = function (wickEditor) {
     this.mouse = {};
     this.keys = [];
 
+    this.editingTextBox = false;
+
     this.syncWithEditorState = function () {
 
         var GUIWidth = parseInt($("#timelineGUI").css("width")) / 2;
@@ -28,7 +30,7 @@ var HTMLInterface = function (wickEditor) {
     }, false );
 
     document.addEventListener('mousedown', function(e) { 
-        //wickEditor.
+        that.mouse.down = true;
     }, false );
 
     document.addEventListener('contextmenu', function (event) { 
@@ -45,10 +47,10 @@ var HTMLInterface = function (wickEditor) {
         var controlKeyDown = that.keys[91];
         var shiftKeyDown = that.keys[16];
 
-        var editingTextBox = document.activeElement.nodeName == 'TEXTAREA'
-                          || document.activeElement.nodeName == 'INPUT';
+        this.editingTextBox = document.activeElement.nodeName == 'TEXTAREA'
+                           || document.activeElement.nodeName == 'INPUT';
 
-        if(!editingTextBox) {
+        if(!this.editingTextBox) {
             // Control-shift-z: redo
             if (event.keyCode == 90 && controlKeyDown && shiftKeyDown) {
                 wickEditor.actionHandler.redoAction();    
@@ -80,7 +82,7 @@ var HTMLInterface = function (wickEditor) {
         }
 
         // Backspace: delete selected objects
-        if (event.keyCode == 8 && !editingTextBox) {
+        if (event.keyCode == 8 && !this.editingTextBox) {
             event.preventDefault();
 
             var ids = wickEditor.fabricInterface.getSelectedObjectIDs();
@@ -92,27 +94,10 @@ var HTMLInterface = function (wickEditor) {
             wickEditor.actionHandler.doAction('deleteObjects', { ids:ids });
         }
 
-        // Space: Pan viewport
-        if (event.keyCode == 32 && !editingTextBox) {
-            event.preventDefault();
-
-            var oldPanPosition = {
-                x:wickEditor.panPosition.x,
-                y:wickEditor.panPosition.y
-            }
-
-            wickEditor.panPosition = {x:that.mouse.x, y:that.mouse.y};
-
-            var canvasPanDiff = {
-                x: wickEditor.panPosition.x - oldPanPosition.x,
-                y: wickEditor.panPosition.y - oldPanPosition.y
-            }
-
-            wickEditor.fabricInterface.panTo(
-                that.mouse.x - window.innerWidth/2, 
-                that.mouse.y - window.innerHeight/2,
-                canvasPanDiff.x,
-                canvasPanDiff.y);
+        // z: Set zoom
+        if(event.keyCode == 90 && !this.editingTextBox) {
+            wickEditor.zoom = parseInt(prompt("zoom?"));
+            wickEditor.syncInterfaces();
         }
     });
 

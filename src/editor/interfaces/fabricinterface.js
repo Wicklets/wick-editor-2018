@@ -23,17 +23,25 @@ var FabricInterface = function (wickEditor) {
        Editor state syncing
 ********************************/
 
-    this.getFrameOffset = function () {
+    this.getCenteredFrameOffset = function () {
         return {
-            x: (window.innerWidth  - wickEditor.project.resolution.x)/2 + wickEditor.panPosition.x,
-            y: (window.innerHeight - wickEditor.project.resolution.y)/2 + wickEditor.panPosition.y
+            x: (window.innerWidth  - wickEditor.project.resolution.x)/2,
+            y: (window.innerHeight - wickEditor.project.resolution.y)/2
+        }
+    }
+
+    this.transformCoordinatesToFabricCanvasSpace = function (x,y) {
+        console.error("transformCoordinatesToFabricCanvasSpace NYI");
+        return {
+            x: x,
+            y: y
         }
     }
 
     this.syncObjects = function (wickObj, fabricObj) {
 
-        fabricObj.left    = wickObj.getAbsolutePosition().x + this.getFrameOffset().x;
-        fabricObj.top     = wickObj.getAbsolutePosition().y + this.getFrameOffset().y;
+        fabricObj.left    = wickObj.getAbsolutePosition().x + this.getCenteredFrameOffset().x;
+        fabricObj.top     = wickObj.getAbsolutePosition().y + this.getCenteredFrameOffset().y;
         fabricObj.width   = wickObj.width;
         fabricObj.height  = wickObj.height;
         fabricObj.scaleX  = wickObj.scaleX;
@@ -55,6 +63,7 @@ var FabricInterface = function (wickEditor) {
             fabricObj.fill = wickObj.fontData.fill;
             fabricObj.fontSize = wickObj.fontData.fontSize;
         } else {
+            // I think this may be bugged.
             fabricObj.perPixelTargetFind = true;
             fabricObj.targetFindTolerance = 4;
         }
@@ -108,6 +117,14 @@ var FabricInterface = function (wickEditor) {
                 pathFabricObj.fill = wickObj.svgData.fillColor;
                 callback(pathFabricObj);
             });
+            /*fabric.loadSVGFromString(wickObj.svgData.svgString, function(objects, options) {
+                objects[0].fill = wickObj.svgData.fillColor;
+                var svgFabricObject = fabric.util.groupSVGElements(objects, options);
+                svgFabricObject.cloneAsImage(function(clone) {
+                    that.syncObjects(wickObj, clone);
+                    callback(clone);
+                });
+            });*/
         }
 
         if (wickObj.isSymbol) {
@@ -139,7 +156,7 @@ var FabricInterface = function (wickEditor) {
         var projectWidth = wickEditor.project.resolution.x;
         var projectHeight = wickEditor.project.resolution.y;
 
-        // Reposition all fabric objects to use new wick canvas origin and pan position
+        // Reposition all fabric objects to use new wick canvas origin
 
         var oldWidth = this.canvas.getWidth();
         var oldHeight = this.canvas.getHeight();
@@ -158,25 +175,13 @@ var FabricInterface = function (wickEditor) {
         });
 
         // Update frame
-        this.frameInside.fill = wickEditor.project.backgroundColor;
-        this.frameInside.width  = projectWidth;
-        this.frameInside.height = projectHeight;
-        this.frameInside.left = (window.innerWidth -projectWidth) /2 + wickEditor.panPosition.x;
-        this.frameInside.top  = (window.innerHeight-projectHeight)/2 + wickEditor.panPosition.y;
-        this.frameInside.setCoords();
+        if(this.frameInside) { // window resize can happen before frameInside's image is loaded
+            repositionFrame();
+        }
 
         // Move the origin crosshair to the current origin
         if(this.originCrosshair) { // window resize can happen before originCrosshair's image is loaded
-            this.originCrosshair.left = (window.innerWidth -projectWidth) /2 - this.originCrosshair.width/2;
-            this.originCrosshair.top  = (window.innerHeight-projectHeight)/2 - this.originCrosshair.height/2;
-            
-            this.originCrosshair.left += wickEditor.project.getCurrentObject().x;
-            this.originCrosshair.top  += wickEditor.project.getCurrentObject().y;
-            
-            this.originCrosshair.left += wickEditor.panPosition.x;
-            this.originCrosshair.top  += wickEditor.panPosition.y;
-
-            this.canvas.renderAll();
+            repositionOriginCrosshair();
         }
 
         var currentObject = wickEditor.project.getCurrentObject();
@@ -236,9 +241,10 @@ var FabricInterface = function (wickEditor) {
         });
 
         // Check for intersections between paths and unite them if they do
-        this.canvas.forEachObject(function(fabricObj) {
+        uniteIntersectingPaths();
 
-        });
+        // Split apart paths that are actually two paths
+        splitPathsWithMultiplePieces();
 
         // Reselect objects that were selected before sync
         if(selectedObjectIDs.length > 0) that.selectByIDs(selectedObjectIDs);
@@ -252,6 +258,15 @@ var FabricInterface = function (wickEditor) {
 
 // White box that shows resolution/objects that will be on screen when project is exported
 
+    var repositionFrame = function () {
+        that.frameInside.fill = wickEditor.project.backgroundColor;
+        that.frameInside.width  = wickEditor.project.resolution.x;
+        that.frameInside.height = wickEditor.project.resolution.y;
+        that.frameInside.left = that.getCenteredFrameOffset().x;
+        that.frameInside.top  = that.getCenteredFrameOffset().y;
+        that.frameInside.setCoords();
+    }
+
     this.frameInside = new fabric.Rect({
         fill: '#FFF',
     });
@@ -260,16 +275,24 @@ var FabricInterface = function (wickEditor) {
     this.frameInside.selectable = false;
     this.frameInside.evented = false;
     this.frameInside.identifier = "frameInside";
+    repositionFrame();
 
     this.canvas.add(this.frameInside)
 
 // Crosshair that shows where (0,0) of the current object is
 
+    var repositionOriginCrosshair = function () {
+        that.originCrosshair.left = that.getCenteredFrameOffset().x - that.originCrosshair.width/2;
+        that.originCrosshair.top  = that.getCenteredFrameOffset().y - that.originCrosshair.height/2;
+        
+        that.originCrosshair.left += wickEditor.project.getCurrentObject().x;
+        that.originCrosshair.top  += wickEditor.project.getCurrentObject().y;
+
+        that.canvas.renderAll();
+    }
+
     fabric.Image.fromURL('resources/origin.png', function(obj) {
         that.originCrosshair = obj;
-
-        that.originCrosshair.left = (window.innerWidth -wickEditor.project.resolution.x)/2- that.originCrosshair.width/2;
-        that.originCrosshair.top  = (window.innerHeight-wickEditor.project.resolution.y)/2- that.originCrosshair.height/2;
 
         that.originCrosshair.hasControls = false;
         that.originCrosshair.selectable = false;
@@ -277,6 +300,8 @@ var FabricInterface = function (wickEditor) {
         that.originCrosshair.identifier = "originCrosshair";
 
         that.canvas.add(that.originCrosshair);
+
+        repositionOriginCrosshair();
     });
 
 /********************************
@@ -298,7 +323,7 @@ var FabricInterface = function (wickEditor) {
             return;
         }
 
-        var frameOffset = that.getFrameOffset();
+        var frameOffset = that.getCenteredFrameOffset();
 
         var modifiedStates = [];
         var ids  = [];
@@ -362,12 +387,12 @@ var FabricInterface = function (wickEditor) {
             that.canvas.forEachObject(function(fabricObj) {
                 if(fabricObj.paperPath) {
                     var mousePoint = new paper.Point(
-                        e.e.offsetX - fabricObj.width/2  - that.getFrameOffset().x, 
-                        e.e.offsetY - fabricObj.height/2 - that.getFrameOffset().y);
+                        e.e.offsetX - fabricObj.width/2  - that.getCenteredFrameOffset().x, 
+                        e.e.offsetY - fabricObj.height/2 - that.getCenteredFrameOffset().y);
 
-                    var filledObject = tryFillPaperObject(fabricObj.paperPath, mousePoint, true);
+                    var filledObject = getPaperObjectIntersectingWithPoint(fabricObj.paperPath, mousePoint, true);
                     if(!filledObject) {
-                        filledObject = tryFillPaperObject(fabricObj.paperPath, mousePoint, false);
+                        filledObject = getPaperObjectIntersectingWithPoint(fabricObj.paperPath, mousePoint, false);
                     }
 
                     if(!filledObject) return;
@@ -401,8 +426,8 @@ var FabricInterface = function (wickEditor) {
                     /*var svgString = '<svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="588px" height="588px" viewBox="20.267 102.757 588 588" enable-background="new 20.267 102.757 588 588" xml:space="preserve">'+hitResult.item.exportSVG({asString:true})+'</svg>';
                     var svgData = {svgString:svgString, fillColor:that.canvas.freeDrawingBrush.color}
                     WickObject.fromSVG(svgData, function(wickObj) {
-                        //wickObj.x = pathFabricObject.left - that.getFrameOffset().x - pathFabricObject.width/2  - that.canvas.freeDrawingBrush.width/2;
-                        //wickObj.y = pathFabricObject.top  - that.getFrameOffset().y - pathFabricObject.height/2 - that.canvas.freeDrawingBrush.width/2;
+                        //wickObj.x = pathFabricObject.left - that.getCenteredFrameOffset().x - pathFabricObject.width/2  - that.canvas.freeDrawingBrush.width/2;
+                        //wickObj.y = pathFabricObject.top  - that.getCenteredFrameOffset().y - pathFabricObject.height/2 - that.canvas.freeDrawingBrush.width/2;
                         wickObj.x = 0;
                         wickObj.y = 0;
                         wickEditor.actionHandler.doAction('addObjects', {wickObjects:[wickObj]})
@@ -413,7 +438,7 @@ var FabricInterface = function (wickEditor) {
         })
     }
 
-    var tryFillPaperObject = function (item, point, fillClockwise) {
+    var getPaperObjectIntersectingWithPoint = function (item, point, fillClockwise) {
 
         var hitOptions = {
             segments: true,
@@ -432,27 +457,33 @@ var FabricInterface = function (wickEditor) {
         if(!item.children) return null;
 
         for(var i = 0; i < item.children.length; i++) {
-            var filledSVG = tryFillPaperObject(item.children[i], point, fillClockwise);
-            if(filledSVG) {
-                return filledSVG;
+            var hitSVG = getPaperObjectIntersectingWithPoint(item.children[i], point, fillClockwise);
+            if(hitSVG) {
+                return hitSVG;
             }
         }
 
         return null;
     }
 
-    // Paths are handled internally by fabric so we have to 
-    // intercept the paths and convert them to wickobjects
-
-    var rasterizePath = function (pathFabricObject) {
-        // Old straight-to-rasterized brush
-        pathFabricObject.left -= that.getFrameOffset().x;
-        pathFabricObject.top  -= that.getFrameOffset().y;
-        
-        WickObject.fromFabricPath(pathFabricObject, function(wickObj) {
-            wickEditor.actionHandler.doAction('addObjects', {wickObjects:[wickObj]});
-        });
+    var uniteIntersectingPaths = function () {
+        console.error("uniteIntersectingPaths NYI");
     }
+
+    var splitPathsWithMultiplePieces = function () {
+        console.error("splitPathsWithMultiplePieces NYI");
+    }
+
+    // Paths are handled internally by fabric so we have to intercept the paths and convert them to wickobjects
+    canvas.on('object:added', function(e) {
+        if(e.target.type !== "path" || e.target.wickObjectID) {
+            return;
+        }
+
+        potracePath(e.target);
+        canvas.remove(e.target);
+
+    });
 
     var potracePath = function (pathFabricObject) {
         // New potrace-and-send-to-paper.js brush
@@ -463,29 +494,50 @@ var FabricInterface = function (wickEditor) {
             Potrace.process(function(){
                 var svgData = {svgString:Potrace.getSVG(1), fillColor:that.canvas.freeDrawingBrush.color}
                 WickObject.fromSVG(svgData, function(wickObj) {
-                    wickObj.x = pathFabricObject.left - that.getFrameOffset().x - pathFabricObject.width/2  - that.canvas.freeDrawingBrush.width/2;
-                    wickObj.y = pathFabricObject.top  - that.getFrameOffset().y - pathFabricObject.height/2 - that.canvas.freeDrawingBrush.width/2;
+                    wickObj.x = pathFabricObject.left - that.getCenteredFrameOffset().x - pathFabricObject.width/2  - that.canvas.freeDrawingBrush.width/2;
+                    wickObj.y = pathFabricObject.top  - that.getCenteredFrameOffset().y - pathFabricObject.height/2 - that.canvas.freeDrawingBrush.width/2;
                     wickEditor.actionHandler.doAction('addObjects', {wickObjects:[wickObj]})
                 });
             });
         }); 
     }
 
-    canvas.on('object:added', function(e) {
-        if(e.target.type !== "path" || e.target.wickObjectID) {
-            return;
-        }
-
-        var path = e.target;
-        potracePath(path);
-        //rasterizePath(path);
-        canvas.remove(e.target);
-
-    });
-
 /********************************
            GUI Stuff
 ********************************/
+
+    // Zoom
+
+    this.zoomIn = function () {
+        that.canvas.setZoom(that.canvas.getZoom() * 1.1);
+        that.canvas.renderAll();
+    }
+
+    this.zoomOut = function () {
+        that.canvas.setZoom(that.canvas.getZoom() / 1.1);
+        that.canvas.renderAll();
+    }
+
+    // Pan
+
+    var panning = false;
+    canvas.on('mouse:up', function (e) {
+        panning = false;
+        that.canvas.selection = true;
+    });
+
+    canvas.on('mouse:down', function (e) {
+        if(wickEditor.htmlInterface.keys[32]) {
+            panning = true;
+            that.canvas.selection = false;
+        }
+    });
+    canvas.on('mouse:move', function (e) {
+        if (panning && e && e.e) {
+            var delta = new fabric.Point(e.e.movementX, e.e.movementY);
+            that.canvas.relativePan(delta);
+        }
+    });
 
     // Update the scripting GUI when the selected object changes
     canvas.on('object:selected', function (e) {
@@ -517,23 +569,6 @@ var FabricInterface = function (wickEditor) {
 
         }
     });
-
-// Pan tool
-
-    // Yuck, weird code, get this out of here.
-    this.panTo = function (x,y,dx,dy) {
-
-        var that = this;
-
-        this.canvas.forEachObject(function(fabricObj) {
-            fabricObj.left += dx;
-            fabricObj.top  += dy;
-            fabricObj.setCoords();
-        });
-
-        this.canvas.renderAll();
-
-    }
 
 // Selection utils
 

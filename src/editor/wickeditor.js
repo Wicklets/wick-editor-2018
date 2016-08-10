@@ -13,7 +13,6 @@ var WickEditor = function () {
 *********************************/
 
     this.project = null;
-    this.panPosition = {x:0,y:0};
 
     this.currentTool = "cursor";
 
