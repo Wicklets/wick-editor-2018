@@ -511,7 +511,7 @@ WickObject.prototype.getAsJSON = function () {
     // Encode scripts to avoid JSON format problems
     this.encodeStrings();
 
-    var JSONWickObject = JSON.stringify(this);
+    var JSONWickObject = JSON.stringify(this, WickObjectUtils.JSONReplacer);
 
     // Put prototypes back on object ('class methods'), they don't get JSONified on project export.
     WickObjectUtils.putWickObjectPrototypeBackOnObject(this);
@@ -525,8 +525,21 @@ WickObject.prototype.getAsJSON = function () {
     return JSONWickObject;
 }
 
-WickObject.prototype.getAsFile = function () {
-    VerboseLog.error("NYI");
+WickObject.prototype.exportAsFile = function () {
+
+    if(this.isSymbol) {
+        var blob = new Blob([this.getAsJSON()], {type: "text/plain;charset=utf-8"});
+        saveAs(blob, "wickobject.json");
+        console.log("note: we don't have wickobject import yet.")
+        return;
+    }
+
+    if(this.imageData) {
+        
+    }
+
+    console.error("export not supported for this type of wickobject yet");
+
 }
 
 /* Determine if two wick objects collide using rectangular hit detection on their
@@ -964,6 +977,15 @@ var WickObjectUtils = (function () {
             obj.forEachChildObject(function(currObj) {
                 utils.putWickObjectPrototypeBackOnObject(currObj);
             });
+        }
+    }
+
+    // Use to avoid JSON.stringify()ing circular objects
+    utils.JSONReplacer = function(key, value) {
+      if (key=="parentObject") {
+          return undefined;
+      } else {
+        return value;
         }
     }
 

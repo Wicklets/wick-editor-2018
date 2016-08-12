@@ -100,15 +100,11 @@ WickProject.prototype.getAsJSON = function (callback) {
     this.rootObject.generateSVGCacheImages(function () {
         // Encode scripts/text to avoid JSON format problems
         that.rootObject.encodeStrings();
-
-        that.rootObject.removeParentObjectReferences();
-
-        var JSONProject = JSON.stringify(that);
+        
+        var JSONProject = JSON.stringify(that, WickObjectUtils.JSONReplacer);
         
         // Decode scripts back to human-readble and eval()-able format
         that.rootObject.decodeStrings();
-
-        that.rootObject.regenerateParentObjectReferences();
 
         callback(JSONProject);
     });

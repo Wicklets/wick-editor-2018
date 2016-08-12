@@ -296,6 +296,14 @@ var HTMLInterface = function (wickEditor) {
         
     });
 
+    $('#zoomInToolButton').on('click', function(e) {
+        wickEditor.fabricInterface.zoomIn();
+    });
+
+    $('#zoomOutToolButton').on('click', function(e) {
+        wickEditor.fabricInterface.zoomOut();
+    });
+
     var lineWidthEl = document.getElementById('lineWidth');
     var lineColorEl = document.getElementById('lineColor');
 
@@ -701,7 +709,7 @@ var HTMLInterface = function (wickEditor) {
     });
 
     $("#downloadButton").on("click", function (e) {
-        wickEditor.currentObject.getAsFile();
+        wickEditor.getSelectedWickObject().exportAsFile();
     });
 
     this.openRightClickMenu = function () {
