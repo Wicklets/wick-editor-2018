@@ -19,135 +19,21 @@ var FabricInterface = function (wickEditor) {
     this.paperCanvas = document.createElement('canvas');
     paper.setup(this.canvas);
 
+    var lineWidthEl = document.getElementById('lineWidth');
+    var lineColorEl = document.getElementById('lineColor');
+
+    lineWidthEl.onchange = function() {
+        that.canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;
+    };
+
+    lineColorEl.onchange = function() {
+        that.canvas.freeDrawingBrush.color = this.value;
+        that.canvas.freeDrawingBrush.width = parseInt(lineWidthEl.value, 10) || 1;
+    };
+
 /********************************
        Editor state syncing
 ********************************/
-
-    this.getCenteredFrameOffset = function () {
-        return {
-            x: (window.innerWidth  - wickEditor.project.resolution.x)/2,
-            y: (window.innerHeight - wickEditor.project.resolution.y)/2
-        }
-    }
-
-    this.transformCoordinatesToFabricCanvasSpace = function (x,y) {
-        console.error("transformCoordinatesToFabricCanvasSpace NYI");
-        return {
-            x: x,
-            y: y
-        }
-    }
-
-    this.syncObjects = function (wickObj, fabricObj) {
-
-        fabricObj.left    = wickObj.getAbsolutePosition().x + this.getCenteredFrameOffset().x;
-        fabricObj.top     = wickObj.getAbsolutePosition().y + this.getCenteredFrameOffset().y;
-        fabricObj.width   = wickObj.width;
-        fabricObj.height  = wickObj.height;
-        fabricObj.scaleX  = wickObj.scaleX;
-        fabricObj.scaleY  = wickObj.scaleY;
-        fabricObj.angle   = wickObj.angle;
-        fabricObj.flipX   = wickObj.flipX;
-        fabricObj.flipY   = wickObj.flipY;
-        fabricObj.opacity = wickObj.opacity;
-
-        if(wickObj.isSymbol) {
-            var cornerPosition = wickObj.getSymbolCornerPosition();
-            fabricObj.left += cornerPosition.x;
-            fabricObj.top += cornerPosition.y;
-        }
-
-        if(wickObj.fontData) {
-            fabricObj.text = wickObj.fontData.text;
-            fabricObj.fontFamily = wickObj.fontData.fontFamily;
-            fabricObj.fill = wickObj.fontData.fill;
-            fabricObj.fontSize = wickObj.fontData.fontSize;
-        } else {
-            // I think this may be bugged.
-            fabricObj.perPixelTargetFind = true;
-            fabricObj.targetFindTolerance = 4;
-        }
-
-        if(wickObj.svgData) {
-            var xmlString = wickObj.svgData.svgString
-              , parser = new DOMParser()
-              , doc = parser.parseFromString(xmlString, "text/xml");
-            var paperGroup = paper.project.importSVG(doc);
-            var paperPath = paperGroup.removeChildren(0, 1)[0];
-            //paperPath.style.fillColor = fillColor;
-            if(paperPath.closePath) {
-                paperPath.closePath();
-            }
-            paperPath.position = new paper.Point(wickObj.x, wickObj.y);
-            fabricObj.paperPath = paperPath;
-        }
-
-        fabricObj.setCoords();
-
-    }
-
-    this.createFabricObjectFromWickObject = function (wickObj, callback) {
-
-        if(wickObj.imageData) {
-            fabric.Image.fromURL(wickObj.imageData, function(newFabricImage) {
-                that.syncObjects(wickObj, newFabricImage);
-                callback(newFabricImage);
-            });
-        }
-
-        if(wickObj.fontData) {
-            var newFabricText = new fabric.IText(wickObj.fontData.text, wickObj.fontData);
-            that.syncObjects(wickObj, newFabricText);
-            callback(newFabricText);
-        }
-
-        if(wickObj.audioData) {
-            fabric.Image.fromURL('resources/audio.png', function(audioFabricObject) {
-                that.syncObjects(wickObj, audioFabricObject);
-                callback(audioFabricObject);
-            });
-        }
-
-        if(wickObj.svgData) {
-
-            fabric.loadSVGFromString(wickObj.svgData.svgString, function(objects, options) {
-                var pathFabricObj = objects[0];
-
-                that.syncObjects(wickObj, pathFabricObj);
-                pathFabricObj.fill = wickObj.svgData.fillColor;
-                callback(pathFabricObj);
-            });
-            /*fabric.loadSVGFromString(wickObj.svgData.svgString, function(objects, options) {
-                objects[0].fill = wickObj.svgData.fillColor;
-                var svgFabricObject = fabric.util.groupSVGElements(objects, options);
-                svgFabricObject.cloneAsImage(function(clone) {
-                    that.syncObjects(wickObj, clone);
-                    callback(clone);
-                });
-            });*/
-        }
-
-        if (wickObj.isSymbol) {
-            /*fabric.Image.fromURL(wickObj.frames[0].wickObjects[0].imageData, function(newFabricImage) {
-                that.syncObjects(wickObj, newFabricImage);
-                callback(newFabricImage);
-            });*/
-            var children = wickObj.getAllActiveChildObjects();
-            var group = new fabric.Group();
-            for(var i = 0; i < children.length; i++) {
-                that.createFabricObjectFromWickObject(children[i], function(fabricObj) {
-                    group.addWithUpdate(fabricObj);
-                    if(group._objects.length == children.length) {
-                        wickObj.width = group.width;
-                        wickObj.height = group.height;
-                        that.syncObjects(wickObj, group);
-                        callback(group);
-                    }
-                });
-            }
-        }
-
-    }
 
     this.syncWithEditorState = function () {
 
@@ -249,7 +135,142 @@ var FabricInterface = function (wickEditor) {
         // Reselect objects that were selected before sync
         if(selectedObjectIDs.length > 0) that.selectByIDs(selectedObjectIDs);
 
+        // Update tool stuff
+        this.canvas.isDrawingMode = wickEditor.currentTool == "eraser" || wickEditor.currentTool == "paintbrush";
+        this.canvas.freeDrawingBrush = new fabric['PencilBrush'](this.canvas);
+        this.canvas.freeDrawingBrush.color = lineColorEl.value;
+        this.canvas.freeDrawingBrush.width = parseInt(lineWidthEl.value, 10) || 1;
+
         this.canvas.renderAll();
+    }
+
+    this.getCenteredFrameOffset = function () {
+        return {
+            x: (window.innerWidth  - wickEditor.project.resolution.x)/2,
+            y: (window.innerHeight - wickEditor.project.resolution.y)/2
+        }
+    }
+
+    this.transformCoordinatesToFabricCanvasSpace = function (x,y) {
+        //console.error("transformCoordinatesToFabricCanvasSpace NYI");
+        return {
+            x: x,
+            y: y
+        }
+    }
+
+    this.syncObjects = function (wickObj, fabricObj) {
+
+        // Some wick objects don't have a defined width/height until rendered by fabric. (e.g. paths and text)
+        if(!wickObj.width) wickObj.width = fabricObj.width;
+        if(!wickObj.height) wickObj.height = fabricObj.height;
+
+        fabricObj.left    = wickObj.getAbsolutePosition().x + this.getCenteredFrameOffset().x;
+        fabricObj.top     = wickObj.getAbsolutePosition().y + this.getCenteredFrameOffset().y;
+        fabricObj.width   = wickObj.width;
+        fabricObj.height  = wickObj.height;
+        fabricObj.scaleX  = wickObj.scaleX;
+        fabricObj.scaleY  = wickObj.scaleY;
+        fabricObj.angle   = wickObj.angle;
+        fabricObj.flipX   = wickObj.flipX;
+        fabricObj.flipY   = wickObj.flipY;
+        fabricObj.opacity = wickObj.opacity;
+
+        if(wickObj.isSymbol) {
+            var cornerPosition = wickObj.getSymbolCornerPosition();
+            fabricObj.left += cornerPosition.x;
+            fabricObj.top += cornerPosition.y;
+        }
+
+        if(wickObj.fontData) {
+            fabricObj.text = wickObj.fontData.text;
+            fabricObj.fontFamily = wickObj.fontData.fontFamily;
+            fabricObj.fill = wickObj.fontData.fill;
+            fabricObj.fontSize = wickObj.fontData.fontSize;
+        } else {
+            fabricObj.perPixelTargetFind = true;
+            fabricObj.targetFindTolerance = 4;
+        }
+
+        if(wickObj.svgData) {
+            var xmlString = wickObj.svgData.svgString
+              , parser = new DOMParser()
+              , doc = parser.parseFromString(xmlString, "text/xml");
+            var paperGroup = paper.project.importSVG(doc);
+            var paperPath = paperGroup.removeChildren(0, 1)[0];
+            //paperPath.style.fillColor = fillColor;
+            if(paperPath.closePath) {
+                paperPath.closePath();
+            }
+            paperPath.position = new paper.Point(wickObj.x, wickObj.y);
+            fabricObj.paperPath = paperPath;
+        }
+
+        fabricObj.setCoords();
+
+    }
+
+    this.createFabricObjectFromWickObject = function (wickObj, callback) {
+
+        if(wickObj.imageData) {
+            fabric.Image.fromURL(wickObj.imageData, function(newFabricImage) {
+                that.syncObjects(wickObj, newFabricImage);
+                callback(newFabricImage);
+            });
+        }
+
+        if(wickObj.fontData) {
+            var newFabricText = new fabric.IText(wickObj.fontData.text, wickObj.fontData);
+            that.syncObjects(wickObj, newFabricText);
+            callback(newFabricText);
+        }
+
+        if(wickObj.audioData) {
+            fabric.Image.fromURL('resources/audio.png', function(audioFabricObject) {
+                that.syncObjects(wickObj, audioFabricObject);
+                callback(audioFabricObject);
+            });
+        }
+
+        if(wickObj.svgData) {
+
+            fabric.loadSVGFromString(wickObj.svgData.svgString, function(objects, options) {
+                var pathFabricObj = objects[0];
+
+                that.syncObjects(wickObj, pathFabricObj);
+                pathFabricObj.fill = wickObj.svgData.fillColor;
+                callback(pathFabricObj);
+            });
+            /*fabric.loadSVGFromString(wickObj.svgData.svgString, function(objects, options) {
+                objects[0].fill = wickObj.svgData.fillColor;
+                var svgFabricObject = fabric.util.groupSVGElements(objects, options);
+                svgFabricObject.cloneAsImage(function(clone) {
+                    that.syncObjects(wickObj, clone);
+                    callback(clone);
+                });
+            });*/
+        }
+
+        if (wickObj.isSymbol) {
+            /*fabric.Image.fromURL(wickObj.frames[0].wickObjects[0].imageData, function(newFabricImage) {
+                that.syncObjects(wickObj, newFabricImage);
+                callback(newFabricImage);
+            });*/
+            var children = wickObj.getAllActiveChildObjects();
+            var group = new fabric.Group();
+            for(var i = 0; i < children.length; i++) {
+                that.createFabricObjectFromWickObject(children[i], function(fabricObj) {
+                    group.addWithUpdate(fabricObj);
+                    if(group._objects.length == children.length) {
+                        wickObj.width = group.width;
+                        wickObj.height = group.height;
+                        that.syncObjects(wickObj, group);
+                        callback(group);
+                    }
+                });
+            }
+        }
+
     }
 
 /********************************
@@ -367,7 +388,7 @@ var FabricInterface = function (wickEditor) {
     // Left click events
     canvas.on('mouse:down', function(e) {
         if(e.e.button != 0) return;
-        wickEditor.htmlInterface.closeRightClickMenu();
+        wickEditor.interfaces['rightclickmenu'].open = false;
         leftClickEventHandlers[wickEditor.currentTool](e);
     });
 
@@ -435,7 +456,10 @@ var FabricInterface = function (wickEditor) {
 
                 }
             });
-        })
+        }),
+        "pan" : (function (e) {
+            // Note: We handle pan down there  vvvvvvv
+        }),
     }
 
     var getPaperObjectIntersectingWithPoint = function (item, point, fillClockwise) {
@@ -467,11 +491,11 @@ var FabricInterface = function (wickEditor) {
     }
 
     var uniteIntersectingPaths = function () {
-        console.error("uniteIntersectingPaths NYI");
+        //console.error("uniteIntersectingPaths NYI");
     }
 
     var splitPathsWithMultiplePieces = function () {
-        console.error("splitPathsWithMultiplePieces NYI");
+        //console.error("splitPathsWithMultiplePieces NYI");
     }
 
     // Paths are handled internally by fabric so we have to intercept the paths and convert them to wickobjects
@@ -527,7 +551,7 @@ var FabricInterface = function (wickEditor) {
     });
 
     canvas.on('mouse:down', function (e) {
-        if(wickEditor.htmlInterface.keys[32]) {
+        if(wickEditor.inputHandler.keys[32] || wickEditor.currentTool == "pan") {
             panning = true;
             that.canvas.selection = false;
         }
@@ -541,18 +565,15 @@ var FabricInterface = function (wickEditor) {
 
     // Update the scripting GUI when the selected object changes
     canvas.on('object:selected', function (e) {
-        wickEditor.htmlInterface.reloadScriptingGUI();
-        wickEditor.htmlInterface.updatePropertiesGUI();
+        //wickEditor.syncInterfaces();
     });
     canvas.on('selection:cleared', function (e) {
-        wickEditor.htmlInterface.closeScriptingGUI();
-        wickEditor.htmlInterface.updatePropertiesGUI('project');
+        //wickEditor.syncInterfaces();
     });
 
     // Hack: Select objects on right click (fabric.js doesn't do this by default >.>)
     canvas.on('mouse:down', function(e) {
         if(e.e.button == 2) {
-            
             if (e.target && e.target.wickObjectID) {
                 // Set active object of fabric canvas
                 var id = canvas.getObjects().indexOf(e.target);
@@ -562,12 +583,10 @@ var FabricInterface = function (wickEditor) {
             if(!e.target) {
                 // Didn't right click an object, deselect everything
                 canvas.deactivateAll().renderAll();
-                wickEditor.htmlInterface.closeScriptingGUI();
             }
-            wickEditor.syncInterfaces();
-            wickEditor.htmlInterface.openRightClickMenu();
-
         }
+
+        wickEditor.syncInterfaces();
     });
 
 // Selection utils

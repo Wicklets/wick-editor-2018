@@ -215,12 +215,7 @@ WickObject.fromSVG = function (svgData, callback) {
     svgWickObject.svgData.svgString = svgData.svgString;
     svgWickObject.svgData.fillColor = svgData.fillColor;
 
-    fabric.loadSVGFromString(svgData.svgString, function(objects, options) {
-        var referencePathFabricObj = objects[0];
-        svgWickObject.width = referencePathFabricObj.width;
-        svgWickObject.height = referencePathFabricObj.height;
-        callback(svgWickObject);
-    });
+    callback(svgWickObject);
 }
 
 // Used for old straight-to-rasterized paintbrush
@@ -277,10 +272,6 @@ WickObject.fromText = function (text) {
         textDecoration: "",
         text: text
     };
-
-    var fabricReferenceText = new fabric.Text(obj.fontData.text, obj.fontData);
-    obj.width = fabricReferenceText.width;
-    obj.height = fabricReferenceText.height;
 
     return obj;
 }
@@ -535,7 +526,7 @@ WickObject.prototype.exportAsFile = function () {
     }
 
     if(this.imageData) {
-        
+
     }
 
     console.error("export not supported for this type of wickobject yet");
@@ -787,11 +778,9 @@ WickObject.prototype.getAllChildObjects = function () {
     }
 
     var children = [];
-    for (var f = 0; f < this.frames.length; f++) {
-        for (var o = 0; o < this.frames[f].wickObjects.length; o++) {
-            children.push(this.frames[f].wickObjects[o])
-        }
-    }
+    this.forEachChildObject(function(child) {
+        children.push(child)
+    });
     return children;
 }
 
@@ -803,10 +792,9 @@ WickObject.prototype.getAllActiveChildObjects = function () {
     }
 
     var children = [];
-    var currFrame = this.currentFrame;
-    for (var o = 0; o < this.frames[currFrame].wickObjects.length; o++) {
-        children.push(this.frames[currFrame].wickObjects[o]);
-    }
+    this.forEachActiveChildObject(function(child){
+        children.push(child);
+    });
     return children; 
 }
 
@@ -932,14 +920,10 @@ WickObject.prototype.regenerateParentObjectReferences = function() {
     if(this.isSymbol) {
 
         // Recursively regenerate parent object references of all objects inside this symbol.
-
-        for(var f = 0; f < this.frames.length; f++) {
-            var frame = this.frames[f];
-            for (var o = 0; o < frame.wickObjects.length; o++) {
-                frame.wickObjects[o].parentObject = parentObject;
-                frame.wickObjects[o].regenerateParentObjectReferences();
-            }
-        }
+        this.forEachChildObject(function(child) {
+            child.parentObject = parentObject;
+            child.regenerateParentObjectReferences();
+        });
     }
 
 }
@@ -951,13 +935,9 @@ WickObject.prototype.removeParentObjectReferences = function() {
     if(this.isSymbol) {
 
         // Recursively remove parent object references of all objects inside this symbol.
-
-        for(var f = 0; f < this.frames.length; f++) {
-            var frame = this.frames[f];
-            for (var o = 0; o < frame.wickObjects.length; o++) {
-                frame.wickObjects[o].removeParentObjectReferences();
-            }
-        }
+        this.forEachChildObject(function(child) {
+            child.removeParentObjectReferences();
+        });
     }
 
 }

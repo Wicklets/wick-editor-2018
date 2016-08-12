@@ -4,6 +4,25 @@
 
 var WickActionHandler = function (wickEditor) {
 
+    /* WickAction definition. All user actions are expected to be well defined by
+   this structure in order to properly be done and undone. */
+
+    var WickAction = function (doAction, undoAction) {
+
+        /* To be called when an action is committed by the user. */
+        this.doAction = doAction;
+
+        /* To be called when this the user undoes this action. This should revert
+           the state of the wickEditor or wickObject back to its original state. */
+        this.undoAction = undoAction;
+
+        /* This saves anything that the undo will use later
+           For example, to undo a delete we need to bring back that deleted object...
+           In this case the object that gets deleted gets stored in args! */
+        this.args = {};
+
+    }
+
 // Undo/redo action stacks
 
     this.undoStack = [];
@@ -206,23 +225,19 @@ var WickActionHandler = function (wickEditor) {
 
     this.registerAction('gotoFrame', 
         function (args) {
-            wickEditor.fabricInterface.deselectAll();
+            wickEditor.interfaces['fabric'].deselectAll();
 
             // Save current frame
             args.oldFrame = wickEditor.project.getCurrentObject().currentFrame;
 
             // Go to the specified frame
             wickEditor.project.getCurrentObject().currentFrame = args.toFrame;
-
-            wickEditor.htmlInterface.closeScriptingGUI();
         },
         function (args) {
-            wickEditor.fabricInterface.deselectAll();
+            wickEditor.interfaces['fabric'].deselectAll();
 
             // Go back to the old frame
             wickEditor.project.getCurrentObject().currentFrame = args.oldFrame;
-
-            wickEditor.htmlInterface.closeScriptingGUI();
         });
 
     this.registerAction('addEmptyFrame', 
@@ -297,14 +312,12 @@ var WickActionHandler = function (wickEditor) {
 
     this.registerAction('editObject', 
         function (args) {
-            wickEditor.fabricInterface.deselectAll();
+            wickEditor.interfaces['fabric'].deselectAll();
 
             // Set the editor to be editing this object at its first frame
             args.prevEditedObjectID = wickEditor.project.getCurrentObject().id;
             wickEditor.project.currentObjectID = args.objectToEdit.id;
             wickEditor.project.getCurrentObject().currentFrame = 0;
-
-            wickEditor.htmlInterface.closeScriptingGUI();
         },
         function (args) {
             VerboseLog.error("editobject undo NYI")
@@ -312,7 +325,7 @@ var WickActionHandler = function (wickEditor) {
 
     this.registerAction('finishEditingCurrentObject', 
         function (args) {
-            wickEditor.fabricInterface.deselectAll();
+            wickEditor.interfaces['fabric'].deselectAll();
             
             args.prevEditedObjectID = wickEditor.project.getCurrentObject().id;
             wickEditor.project.currentObjectID = wickEditor.project.getCurrentObject().parentObject.id;
@@ -341,24 +354,5 @@ var WickActionHandler = function (wickEditor) {
                 wickEditor.project.getCurrentObject().getCurrentFrame().wickObjects.splice(args.oldZIndexes[i], 0, obj);
             }
         });
-
-}
-
-/* WickAction definition. All user actions are expected to be well defined by
-   this structure in order to properly be done and undone. */
-
-var WickAction = function (doAction, undoAction) {
-
-    /* To be called when an action is committed by the user. */
-    this.doAction = doAction;
-
-    /* To be called when this the user undoes this action. This should revert
-       the state of the wickEditor or wickObject back to its original state. */
-    this.undoAction = undoAction;
-
-    /* This saves anything that the undo will use later
-       For example, to undo a delete we need to bring back that deleted object...
-       In this case the object that gets deleted gets stored in args! */
-    this.args = {};
 
 }
