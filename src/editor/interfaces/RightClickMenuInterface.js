@@ -136,7 +136,9 @@ var RightClickMenuInterface = function (wickEditor) {
     $("#downloadButton").on("click", function (e) {
         that.open = false;
 
-        wickEditor.getSelectedWickObject().exportAsFile();
+        var fileData = wickEditor.getSelectedWickObject().exportAsFile();
+        var blob = new Blob([fileData], {type: "text/plain;charset=utf-8"});
+        saveAs(blob, "wickobject.json");
 
         wickEditor.syncInterfaces();
     });

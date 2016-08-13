@@ -11,7 +11,10 @@ var MenuBarInterface = function (wickEditor) {
     }
 
     document.getElementById('exportJSONButton').onclick = function (e) {
-        wickEditor.project.exportAsJSONFile();
+        wickEditor.project.getAsJSON(function(JSONProject) {
+            var blob = new Blob([JSONProject], {type: "text/plain;charset=utf-8"});
+            saveAs(blob, "project.json");
+        });
     }
 
     document.getElementById('openProjectButton').onclick = function (e) {
@@ -19,7 +22,7 @@ var MenuBarInterface = function (wickEditor) {
     }
 
     document.getElementById('exportHTMLButton').onclick = function (e) {
-        wickEditor.project.exportAsHTMLFile();
+        ProjectExporter.exportProject(wickEditor.project);
     }
 
     document.getElementById('runButton').onclick = function (e) {

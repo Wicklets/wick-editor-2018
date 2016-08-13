@@ -54,6 +54,25 @@ var WickObject = function () {
 
 };
 
+WickObject.prototype.setDefaultPositioningValues = function () {
+
+    this.scaleX =  1;
+    this.scaleY =  1;
+    this.angle  =  0;
+    this.flipX  =  false;
+    this.flipY  =  false;
+    this.opacity = 1;
+
+}
+
+WickObject.prototype.setDefaultSymbolValues = function () {
+
+    this.isSymbol = true;
+    this.currentFrame = 0;
+    this.frames = [new WickFrame()];
+
+}
+
 WickObject.createNewRootObject = function () {
     var rootObject = new WickObject("ROOT_NO_PARENT");
     rootObject.id = 0;
@@ -218,25 +237,6 @@ WickObject.fromSVG = function (svgData, callback) {
     callback(svgWickObject);
 }
 
-// Used for old straight-to-rasterized paintbrush
-WickObject.fromFabricPath = function (fabricPath, callback) {
-    fabricPath.cloneAsImage(function(clone) {
-        var imgSrc = clone._element.currentSrc || clone._element.src;
-
-        var left = fabricPath.left - clone.width/2/window.devicePixelRatio;
-        var top  = fabricPath.top - clone.height/2/window.devicePixelRatio;
-
-        WickObject.fromImage(
-            imgSrc, 
-            function (obj) {
-                obj.x = left;
-                obj.y = top;
-                callback(obj)
-            }
-        );
-    });
-}
-
 WickObject.fromText = function (text) {
     var obj = new WickObject();
 
@@ -322,25 +322,6 @@ WickObject.createSymbolFromWickObjects = function (left, top, wickObjects) {
     }
 
     return symbol;
-
-}
-
-WickObject.prototype.setDefaultPositioningValues = function () {
-
-    this.scaleX =  1;
-    this.scaleY =  1;
-    this.angle  =  0;
-    this.flipX  =  false;
-    this.flipY  =  false;
-    this.opacity = 1;
-
-}
-
-WickObject.prototype.setDefaultSymbolValues = function () {
-
-    this.isSymbol = true;
-    this.currentFrame = 0;
-    this.frames = [new WickFrame()];
 
 }
 
@@ -516,11 +497,10 @@ WickObject.prototype.getAsJSON = function () {
     return JSONWickObject;
 }
 
-WickObject.prototype.exportAsFile = function () {
+WickObject.prototype.getAsFile = function () {
 
     if(this.isSymbol) {
-        var blob = new Blob([this.getAsJSON()], {type: "text/plain;charset=utf-8"});
-        saveAs(blob, "wickobject.json");
+        return this.getAsJSON();
         console.log("note: we don't have wickobject import yet.")
         return;
     }
@@ -927,49 +907,3 @@ WickObject.prototype.regenerateParentObjectReferences = function() {
     }
 
 }
-
-WickObject.prototype.removeParentObjectReferences = function() {
-
-    this.parentObject = undefined;
-
-    if(this.isSymbol) {
-
-        // Recursively remove parent object references of all objects inside this symbol.
-        this.forEachChildObject(function(child) {
-            child.removeParentObjectReferences();
-        });
-    }
-
-}
-
-var WickObjectUtils = (function () {
-
-    var utils = { };
-
-    // This is supposedly a nasty thing to do - think about possible alternatives for IE and stuff
-    utils.putWickObjectPrototypeBackOnObject = function (obj) {
-
-        // Put the prototype back on this object
-        obj.__proto__ = WickObject.prototype;
-
-        // Recursively put the prototypes back on the children objects
-        if(obj.isSymbol) {
-            obj.forEachChildObject(function(currObj) {
-                utils.putWickObjectPrototypeBackOnObject(currObj);
-            });
-        }
-    }
-
-    // Use to avoid JSON.stringify()ing circular objects
-    utils.JSONReplacer = function(key, value) {
-      if (key=="parentObject") {
-          return undefined;
-      } else {
-        return value;
-        }
-    }
-
-    return utils;
-
-})();
-

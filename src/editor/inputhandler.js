@@ -88,10 +88,6 @@ var InputHandler = function (wickEditor) {
         that.keys[event.keyCode] = false;
     });
 
-    window.addEventListener('resize', function(e) {
-        wickEditor.syncInterfaces();
-    }, false);
-
     // Setup leave page warning
     window.addEventListener("beforeunload", function (event) {
         var confirmationMessage = 'Warning: All unsaved changes will be lost!';

@@ -25,29 +25,6 @@ var FabricInterface = function (wickEditor) {
 
     this.syncWithEditorState = function () {
 
-        // resize
-
-        var projectWidth = wickEditor.project.resolution.x;
-        var projectHeight = wickEditor.project.resolution.y;
-
-        // Reposition all fabric objects to use new wick canvas origin
-
-        var oldWidth = this.canvas.getWidth();
-        var oldHeight = this.canvas.getHeight();
-
-        this.canvas.setWidth ( window.innerWidth  );
-        this.canvas.setHeight( window.innerHeight );
-        this.canvas.calcOffset();
-
-        var diffWidth = this.canvas.getWidth() - oldWidth;
-        var diffHeight = this.canvas.getHeight() - oldHeight;
-
-        this.canvas.forEachObject(function(fabricObj) {
-            fabricObj.left += diffWidth /2;
-            fabricObj.top  += diffHeight/2;
-            fabricObj.setCoords();
-        });
-
         // Update frame
         if(this.frameInside) { // window resize can happen before frameInside's image is loaded
             repositionFrame();
@@ -306,6 +283,26 @@ var FabricInterface = function (wickEditor) {
 
         repositionOriginCrosshair();
     });
+
+    window.addEventListener('resize', function(e) {
+        // Reposition all fabric objects to use new wick canvas origin
+
+        var oldWidth = that.canvas.getWidth();
+        var oldHeight = that.canvas.getHeight();
+
+        that.canvas.setWidth ( window.innerWidth  );
+        that.canvas.setHeight( window.innerHeight );
+        that.canvas.calcOffset();
+
+        var diffWidth = that.canvas.getWidth() - oldWidth;
+        var diffHeight = that.canvas.getHeight() - oldHeight;
+
+        that.canvas.forEachObject(function(fabricObj) {
+            fabricObj.left += diffWidth /2;
+            fabricObj.top  += diffHeight/2;
+            fabricObj.setCoords();
+        });
+    }, false);
 
 /********************************
   Objects modified by fabric.js

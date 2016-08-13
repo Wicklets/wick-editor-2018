@@ -43,56 +43,6 @@ WickProject.fromJSON = function (JSONString) {
     return projectFromJSON;
 }
 
-WickProject.prototype.exportAsHTMLFile = function () {
-    var fileOut = "";
-
-    // Add the player webpage (need to download the empty player)
-    fileOut += FileDownloader.downloadFile("src/player/emptyplayer.htm") + "\n";
-
-    // All libs needed by the player. 
-    requiredLibFiles = [
-        "lib/pixi.min.js",
-        "lib/fpscounter.js",
-        "lib/verboselog.js",
-        "lib/browserdetection.js",
-        "lib/base64-arraybuffer.js",
-        "lib/utils/checkInput.js",
-    ];
-
-    // Player code. 
-    requiredPlayerFiles =[
-        "src/project/wickobject.js",
-        "src/player/wickplayer.js",
-    ];
-
-    for (var libIndex = 0; libIndex < requiredLibFiles.length; libIndex++) {
-        file = requiredLibFiles[libIndex];
-        fileOut += "<script>" + FileDownloader.downloadFile(file) + "</script>\n";
-    }
-
-    for (var srcIndex = 0; srcIndex < requiredPlayerFiles.length; srcIndex++) {
-        file = requiredPlayerFiles[srcIndex];
-        fileOut += "<script>" + FileDownloader.downloadFile(file) + "</script>\n";
-    }
-
-    // Bundle the JSON project
-    this.getAsJSON(function (JSONProject) {
-        fileOut += "<script>WickPlayer.runProject('" + JSONProject + "');</script>" + "\n";
-
-        // Save whole thing as html file
-        var blob = new Blob([fileOut], {type: "text/plain;charset=utf-8"});
-        saveAs(blob, "project.html");
-    });
-}
-
-WickProject.prototype.exportAsJSONFile = function () {
-    // Save JSON project and have user download it
-    this.getAsJSON(function (JSONProject) {
-        var blob = new Blob([JSONProject], {type: "text/plain;charset=utf-8"});
-        saveAs(blob, "project.json");
-    });
-}
-
 WickProject.prototype.getAsJSON = function (callback) {
 
     // Rasterize SVGs
