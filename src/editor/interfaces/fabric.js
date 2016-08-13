@@ -9,7 +9,7 @@ var FabricInterface = function (wickEditor) {
     this.canvas = new fabric.CanvasEx('fabricCanvas');
     this.canvas.selectionColor = 'rgba(0,0,5,0.1)';
     this.canvas.selectionBorderColor = 'grey';
-    this.canvas.selectionLineWidth = 2;
+    //this.canvas.selectionLineWidth = 2;
     this.canvas.backgroundColor = "#EEE";
     this.canvas.setWidth ( window.innerWidth  );
     this.canvas.setHeight( window.innerHeight );
@@ -18,18 +18,6 @@ var FabricInterface = function (wickEditor) {
 
     this.paperCanvas = document.createElement('canvas');
     paper.setup(this.canvas);
-
-    var lineWidthEl = document.getElementById('lineWidth');
-    var lineColorEl = document.getElementById('lineColor');
-
-    lineWidthEl.onchange = function() {
-        that.canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;
-    };
-
-    lineColorEl.onchange = function() {
-        that.canvas.freeDrawingBrush.color = this.value;
-        that.canvas.freeDrawingBrush.width = parseInt(lineWidthEl.value, 10) || 1;
-    };
 
 /********************************
        Editor state syncing
@@ -134,12 +122,6 @@ var FabricInterface = function (wickEditor) {
 
         // Reselect objects that were selected before sync
         if(selectedObjectIDs.length > 0) that.selectByIDs(selectedObjectIDs);
-
-        // Update tool stuff
-        this.canvas.isDrawingMode = wickEditor.currentTool == "eraser" || wickEditor.currentTool == "paintbrush";
-        this.canvas.freeDrawingBrush = new fabric['PencilBrush'](this.canvas);
-        this.canvas.freeDrawingBrush.color = lineColorEl.value;
-        this.canvas.freeDrawingBrush.width = parseInt(lineWidthEl.value, 10) || 1;
 
         this.canvas.renderAll();
     }
@@ -429,31 +411,6 @@ var FabricInterface = function (wickEditor) {
                         // Path filled: Change the color of that path.
                         console.log("path filled");
                     }
-
-                    // make new wick object
-
-                    //console.log(i)
-                    /*console.log("filling!");
-                    console.log(hitResult.item);
-                    console.log(i);
-                    item.fillColor = "#ff0000";*/
-
-                    //console.log(hitResult.item);
-
-                    /*var elem = document.createElement('svg');
-                    elem.innerHTML = '<svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="588px" height="588px" viewBox="20.267 102.757 588 588" enable-background="new 20.267 102.757 588 588" xml:space="preserve">'+hitResult.item.exportSVG({asString:true})+'</svg>';
-                    document.body.appendChild(elem)*/
-
-                    /*var svgString = '<svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="588px" height="588px" viewBox="20.267 102.757 588 588" enable-background="new 20.267 102.757 588 588" xml:space="preserve">'+hitResult.item.exportSVG({asString:true})+'</svg>';
-                    var svgData = {svgString:svgString, fillColor:that.canvas.freeDrawingBrush.color}
-                    WickObject.fromSVG(svgData, function(wickObj) {
-                        //wickObj.x = pathFabricObject.left - that.getCenteredFrameOffset().x - pathFabricObject.width/2  - that.canvas.freeDrawingBrush.width/2;
-                        //wickObj.y = pathFabricObject.top  - that.getCenteredFrameOffset().y - pathFabricObject.height/2 - that.canvas.freeDrawingBrush.width/2;
-                        wickObj.x = 0;
-                        wickObj.y = 0;
-                        wickEditor.actionHandler.doAction('addObjects', {wickObjects:[wickObj]})
-                    });*/
-
                 }
             });
         }),

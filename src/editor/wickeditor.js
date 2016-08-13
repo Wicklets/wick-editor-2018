@@ -14,7 +14,6 @@ var WickEditor = function () {
     this.runningProject = false;
 
     this.interfaces = {
-        "fabric" : new FabricInterface(this),
         "builtinplayer" : new BuiltinPlayerInterface(this),
         "tooltips" : new TooltipsInterface(this),
         "rightclickmenu" : new RightClickMenuInterface(this),
@@ -22,7 +21,8 @@ var WickEditor = function () {
         "timeline" : new TimelineInterface(this),
         "toolbar" : new ToolbarInterface(this),
         "menubar" : new MenuBarInterface(this),
-        "properties" : new PropertiesInterface(this)
+        "properties" : new PropertiesInterface(this),
+        "fabric" : new FabricInterface(this)
     };
 
     this.syncInterfaces();
@@ -130,7 +130,7 @@ WickEditor.prototype.newProject = function () {
     this.project = new WickProject();
     this.currentObject = this.project.rootObject;
 
-    this.fabricInterface.deselectAll();
+    this.interfaces['fabric'].deselectAll();
 
     this.syncInterfaces();
 

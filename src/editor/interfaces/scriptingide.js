@@ -2,6 +2,12 @@
 
 var ScriptingIDEInterface = function (wickEditor) {
 
+    var that = this;
+
+    this.open = false;
+    this.currentScript = 'onLoad';
+    this.projectHasErrors = false;
+
     this.aceEditor = ace.edit("scriptEditor");
     this.aceEditor.setTheme("ace/theme/chrome");
     this.aceEditor.getSession().setMode("ace/mode/javascript");
@@ -9,61 +15,64 @@ var ScriptingIDEInterface = function (wickEditor) {
 
     this.beautify = ace.require("ace/ext/beautify");
 
-    this.open = false;
-    this.currentScript = 'onLoad';
-    this.projectHasErrors = false;
-
     this.syncWithEditorState = function () {
         if(this.open) {
-            var selectedObj = wickEditor.getSelectedWickObject();
-
-            if(!selectedObj) {
-                this.closeScriptingGUI();
-                return;
-            }
-
-            if(selectedObj.wickScripts[this.currentScript]) {
-                var script = selectedObj.wickScripts[this.currentScript];
-                this.aceEditor.setValue(script, -1);
-            }
-
-            document.getElementById("onLoadButton").className = (this.currentScript == 'onLoad' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
-            document.getElementById("onUpdateButton").className = (this.currentScript == 'onUpdate' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
-            document.getElementById("onClickButton").className = (this.currentScript == 'onClick' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
-            document.getElementById("onKeyDownButton").className = (this.currentScript == 'onKeyDown' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
-        
-            $("#scriptingGUI").css('visibility', 'visible');
+            openScriptingGUI();
         } else {
-            $("#scriptingGUI").css('visibility', 'hidden');
+            closeScriptingGUI();
         }
+    }
+
+    var closeScriptingGUI = function () {
+        $("#scriptingGUI").css('visibility', 'hidden');
+    }
+
+    var openScriptingGUI = function () {
+        var selectedObj = wickEditor.getSelectedWickObject();
+
+        if(!selectedObj) {
+            closeScriptingGUI();
+            return;
+        }
+
+        if(selectedObj.wickScripts[that.currentScript]) {
+            var script = selectedObj.wickScripts[that.currentScript];
+            that.aceEditor.setValue(script, -1);
+        }
+
+        document.getElementById("onLoadButton").className = (that.currentScript == 'onLoad' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
+        document.getElementById("onUpdateButton").className = (that.currentScript == 'onUpdate' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
+        document.getElementById("onClickButton").className = (that.currentScript == 'onClick' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
+        document.getElementById("onKeyDownButton").className = (that.currentScript == 'onKeyDown' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
+    
+        $("#scriptingGUI").css('visibility', 'visible');
     }
 
 // GUI/Event handlers
 
-    var that = this;
-
     $("#onLoadButton").on("click", function (e) {
         that.currentScript = 'onLoad';
-        that.reloadScriptingGUI();
+        wickEditor.syncInterfaces();
     });
 
     $("#onClickButton").on("click", function (e) {
         that.currentScript = 'onClick';
-        that.reloadScriptingGUI();
+        wickEditor.syncInterfaces();
     });
 
     $("#onUpdateButton").on("click", function (e) {
         that.currentScript = 'onUpdate';
-        that.reloadScriptingGUI();
+        wickEditor.syncInterfaces();
     });
 
     $("#onKeyDownButton").on("click", function (e) {
         that.currentScript = 'onKeyDown';
-        that.reloadScriptingGUI();
+        wickEditor.syncInterfaces();
     });
 
     $("#closeScriptingGUIButton").on("click", function (e) {
-        that.closeScriptingGUI();
+        closeScriptingGUI();
+        wickEditor.syncInterfaces();
     });
 
 // Script refs

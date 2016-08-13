@@ -82,12 +82,6 @@ var InputHandler = function (wickEditor) {
 
             wickEditor.actionHandler.doAction('deleteObjects', { ids:ids });
         }
-
-        // z: Set zoom
-        if(event.keyCode == 90 && !this.editingTextBox) {
-            wickEditor.zoom = parseInt(prompt("zoom?"));
-            wickEditor.syncInterfaces();
-        }
     });
 
     document.body.addEventListener("keyup", function (event) {
