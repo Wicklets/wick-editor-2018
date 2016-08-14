@@ -12,6 +12,21 @@ var ToolbarInterface = function (wickEditor) {
         lineSmoothnessEl.value = wickEditor.currentTool.brushSmoothing;
     }
 
+    lineWidthEl.onchange = function() {
+        wickEditor.currentTool.brushSize = parseInt(this.value, 10) || 1;
+        wickEditor.syncInterfaces();
+    };
+
+    lineColorEl.onchange = function() {
+        wickEditor.currentTool.color = this.value;
+        wickEditor.syncInterfaces();
+    };
+
+    lineSmoothnessEl.onchange = function() {
+        wickEditor.currentTool.brushSmoothing = this.value;
+        wickEditor.syncInterfaces();
+    };
+
     $('#mouseToolButton').on('click', function(e) {
         document.getElementById('toolOptionsGUI').style.display = 'none';
         wickEditor.currentTool.type = "cursor";
@@ -50,18 +65,6 @@ var ToolbarInterface = function (wickEditor) {
     $('#zoomOutToolButton').on('click', function(e) {
         wickEditor.interfaces['fabric'].zoomOut();
     });
-
-    lineWidthEl.onchange = function() {
-        wickEditor.currentTool.brushSize = parseInt(this.value, 10) || 1;
-    };
-
-    lineColorEl.onchange = function() {
-        wickEditor.currentTool.color = this.value;
-    };
-
-    lineSmoothnessEl.onchange = function() {
-        wickEditor.currentTool.brushSmoothing = this.value;
-    };
 
     $('#panToolButton').on('click', function(e) {
         wickEditor.currentTool.type = "pan";
