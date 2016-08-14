@@ -25,6 +25,15 @@ var FabricInterface = function (wickEditor) {
 
     this.syncWithEditorState = function () {
 
+        // Update tool state
+        if(wickEditor.currentTool.type == "paintbrush" || wickEditor.currentTool.type == "eraser") {
+            this.canvas.isDrawingMode = true;
+            this.canvas.freeDrawingBrush.width = wickEditor.currentTool.brushSize;
+            this.canvas.freeDrawingBrush.color = wickEditor.currentTool.color;
+        } else {
+            this.canvas.isDrawingMode = false;
+        }
+
         // Update frame
         if(this.frameInside) { // window resize can happen before frameInside's image is loaded
             repositionFrame();
@@ -368,7 +377,7 @@ var FabricInterface = function (wickEditor) {
     canvas.on('mouse:down', function(e) {
         if(e.e.button != 0) return;
         wickEditor.interfaces['rightclickmenu'].open = false;
-        leftClickEventHandlers[wickEditor.currentTool](e);
+        leftClickEventHandlers[wickEditor.currentTool.type](e);
     });
 
     var leftClickEventHandlers = {
@@ -505,7 +514,7 @@ var FabricInterface = function (wickEditor) {
     });
 
     canvas.on('mouse:down', function (e) {
-        if(wickEditor.inputHandler.keys[32] || wickEditor.currentTool == "pan") {
+        if(wickEditor.inputHandler.keys[32] || wickEditor.currentTool.type == "pan") {
             panning = true;
             that.canvas.selection = false;
         }

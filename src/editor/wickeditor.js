@@ -6,7 +6,8 @@ var WickEditor = function () {
     Initialize all editor vars
 *********************************/
 
-    this.currentTool = "cursor";
+    this.currentTool = new WickTool();
+    this.currentTool.type = "cursor";
 
     this.project = null;
     this.tryToLoadAutosavedProject();
