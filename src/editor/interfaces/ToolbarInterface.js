@@ -3,11 +3,13 @@
 var ToolbarInterface = function (wickEditor) {
 
     var lineWidthEl = document.getElementById('lineWidth');
+    var lineSmoothnessEl = document.getElementById('lineSmoothness');
     var lineColorEl = document.getElementById('lineColor');
 
     this.syncWithEditorState = function () {
         lineWidthEl.value = wickEditor.currentTool.brushSize;
         lineColorEl.value = wickEditor.currentTool.color;
+        lineSmoothnessEl.value = wickEditor.currentTool.brushSmoothing;
     }
 
     $('#mouseToolButton').on('click', function(e) {
@@ -55,6 +57,10 @@ var ToolbarInterface = function (wickEditor) {
 
     lineColorEl.onchange = function() {
         wickEditor.currentTool.color = this.value;
+    };
+
+    lineSmoothnessEl.onchange = function() {
+        wickEditor.currentTool.brushSmoothing = this.value;
     };
 
     $('#panToolButton').on('click', function(e) {

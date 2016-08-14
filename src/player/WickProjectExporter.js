@@ -1,9 +1,9 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-/* ProjectExporter */
+/* WickProjectExporter */
 /* Bundles WickProjects with the WickPlayer in a single HTML file. */
 
-var ProjectExporter = (function () {
+var WickProjectExporter = (function () {
 
     var projectExporter = { };
 

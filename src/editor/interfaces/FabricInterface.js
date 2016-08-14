@@ -478,6 +478,7 @@ var FabricInterface = function (wickEditor) {
             var imgSrc = clone._element.currentSrc || clone._element.src;
 
             Potrace.loadImageFromDataURL(imgSrc);
+            Potrace.setParameter({optcurve: true, opttolerance: wickEditor.currentTool.brushSmoothing});
             Potrace.process(function(){
                 var svgData = {svgString:Potrace.getSVG(1), fillColor:that.canvas.freeDrawingBrush.color}
                 WickObject.fromSVG(svgData, function(wickObj) {

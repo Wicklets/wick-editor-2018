@@ -22,7 +22,7 @@ var MenuBarInterface = function (wickEditor) {
     }
 
     document.getElementById('exportHTMLButton').onclick = function (e) {
-        ProjectExporter.exportProject(wickEditor.project);
+        WickProjectExporter.exportProject(wickEditor.project);
     }
 
     document.getElementById('runButton').onclick = function (e) {

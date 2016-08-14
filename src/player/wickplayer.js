@@ -703,7 +703,20 @@ var WickPlayer = (function () {
         }
         
         // Run da script!!
-        eval(script);
+        try {
+            eval(script);
+        } catch (e) {
+            if(window.wickEditor) {
+                console.error("Exeption thrown while running script of WickObject with ID " + obj.id)
+                console.error(e);
+                wickEditor.runningProject = false;
+                WickPlayer.stopRunningCurrentProject();
+                wickEditor.syncInterfaces();
+            } else {
+                alert("An exception was thrown while running a WickObject script. See console!");
+                console.error(e);
+            }
+        }
 
         // Get rid of wickobject reference variables
         obj.parentObj.forEachChildObject(function(subObj) {
