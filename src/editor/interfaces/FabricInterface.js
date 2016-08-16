@@ -427,6 +427,7 @@ var FabricInterface = function (wickEditor) {
                         // Path filled: Change the color of that path.
 
                         pathObj.svgData.fillColor = wickEditor.currentTool.color;
+                        that.canvas.remove(fabricObj);
 
                         wickEditor.syncInterfaces();
                     }
@@ -562,8 +563,6 @@ var FabricInterface = function (wickEditor) {
                 canvas.deactivateAll().renderAll();
             }
         }
-
-        //wickEditor.syncInterfaces();
     });
 
 // Selection utils
