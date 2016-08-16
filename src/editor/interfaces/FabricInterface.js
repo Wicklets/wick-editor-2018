@@ -84,6 +84,7 @@ var FabricInterface = function (wickEditor) {
         currentObject.forEachActiveChildObject(function (child) {
 
             if(objectWithIDExistsInCanvas(child.id)) { 
+                // Update existing object
                 that.canvas.forEachObject(function(fabricObj) {
                     if(fabricObj.wickObjectID === child.id) {
                         var wickProjectIndex = currentObject.getCurrentFrame().wickObjects.indexOf(child);
@@ -91,6 +92,7 @@ var FabricInterface = function (wickEditor) {
                     }
                 });
             } else {
+                // Add new object
                 that.createFabricObjectFromWickObject(child, function (newFabricObj) {
                     newFabricObj.wickObjectID = child.id;
                     canvas.add(newFabricObj);
@@ -382,7 +384,7 @@ var FabricInterface = function (wickEditor) {
 
     var leftClickEventHandlers = {
         "cursor" : (function (e) {
-
+            // Note: fabric.js handles selection and such
         }),
         "paintbrush" : (function (e) {
             // Note: fabric.js handles the actual drawing.
@@ -390,7 +392,7 @@ var FabricInterface = function (wickEditor) {
         "eraser" : (function (e) {
             // Note: fabric.js handles the actual drawing.
         }),
-        "fillBucket" : (function (e) {
+        "fillbucket" : (function (e) {
             that.deselectAll();
 
             that.canvas.forEachObject(function(fabricObj) {
@@ -406,22 +408,32 @@ var FabricInterface = function (wickEditor) {
 
                     if(!filledObject) return;
 
+                    var pathObj = wickEditor.getWickObjectByID(fabricObj.wickObjectID);
+
                     if(filledObject.clockwise) {
                         console.log("hole filled");
-                        // Hole filled:
-                        // If the fill color is the same color as the hole's path:
-                        //     Simply delete the hole.
-                        // If they are different colors:
-                        //     Delete the hole, but also make a copy of it with fillColor.
+                        
+                        if(pathObj.svgData.fillColor == wickEditor.currentTool.color) {
+                            // Delete the hole
+                        } else {
+                            // If they are different colors:
+                            //     Delete the hole, but also make a copy of it with wickEditor.currentTool.color.
+                        }
+
+                        wickEditor.syncInterfaces();
                     } else {
-                        // Path filled: Change the color of that path.
                         console.log("path filled");
+                        // Path filled: Change the color of that path.
+
+                        pathObj.svgData.fillColor = wickEditor.currentTool.color;
+
+                        wickEditor.syncInterfaces();
                     }
                 }
             });
         }),
         "pan" : (function (e) {
-            // Note: We handle pan down there  vvvvvvv
+            // Note: We handle pan with the other mouse events
         }),
     }
 

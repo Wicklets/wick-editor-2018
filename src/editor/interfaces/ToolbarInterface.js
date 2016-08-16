@@ -46,7 +46,7 @@ var ToolbarInterface = function (wickEditor) {
     });
 
     $('#fillBucketToolButton').on('click', function(e) {
-        document.getElementById('toolOptionsGUI').style.display = 'none';
+        document.getElementById('toolOptionsGUI').style.display = 'block';
         wickEditor.currentTool.type = "fillbucket";
         wickEditor.syncInterfaces();
     });

@@ -65,6 +65,10 @@ WickEditor.prototype.getSelectedWickObjects = function () {
     return wickObjects;
 }
 
+WickEditor.prototype.getWickObjectByID = function (id) {
+    return this.project.rootObject.getChildByID(id);
+}
+
 WickEditor.prototype.getCopyData  = function () {
     var ids = this.interfaces['fabric'].getSelectedObjectIDs();
     var objectJSONs = [];
