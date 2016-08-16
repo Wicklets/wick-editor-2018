@@ -72,7 +72,8 @@ var RightClickMenuInterface = function (wickEditor) {
         } else {
             that.open = false;
         }
-        wickEditor.syncInterfaces();
+
+        that.syncWithEditorState();
     });
 
     $("#editScriptsButton").on("click", function (e) {

@@ -355,6 +355,7 @@ var FabricInterface = function (wickEditor) {
         } else {
             var obj = e.target;
             ids[0] = obj.wickObjectID;
+
             modifiedStates[0] = {
                 x      : obj.left - frameOffset.x,
                 y      : obj.top  - frameOffset.y,
@@ -412,7 +413,7 @@ var FabricInterface = function (wickEditor) {
 
                     if(filledObject.clockwise) {
                         console.log("hole filled");
-                        
+
                         if(pathObj.svgData.fillColor == wickEditor.currentTool.color) {
                             // Delete the hole
                         } else {
@@ -562,7 +563,7 @@ var FabricInterface = function (wickEditor) {
             }
         }
 
-        wickEditor.syncInterfaces();
+        //wickEditor.syncInterfaces();
     });
 
 // Selection utils

@@ -71,8 +71,9 @@ var ScriptingIDEInterface = function (wickEditor) {
     });
 
     $("#closeScriptingGUIButton").on("click", function (e) {
+        that.open = false;
         closeScriptingGUI();
-        wickEditor.syncInterfaces();
+        that.syncWithEditorState();
     });
 
 // Script refs

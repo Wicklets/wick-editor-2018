@@ -41,6 +41,7 @@ WickEditor.prototype.syncInterfaces = function () {
     for (var key in this.interfaces) {
         this.interfaces[key].syncWithEditorState();
     }
+    console.log("intafacesss synnc")
 }
 
 /*********************************
