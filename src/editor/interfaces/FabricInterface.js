@@ -418,7 +418,7 @@ var FabricInterface = function (wickEditor) {
                             // Delete the hole
                         } else {
                             // If they are different colors:
-                            //     Delete the hole, but also make a copy of it with wickEditor.currentTool.color.
+                            //     Delete the hole, but also make an in-place copy of it with wickEditor.currentTool.color.
                         }
 
                         wickEditor.syncInterfaces();
@@ -481,12 +481,25 @@ var FabricInterface = function (wickEditor) {
             return;
         }
 
-        potracePath(e.target);
-        canvas.remove(e.target);
+        var pathFabricObject = e.target;
+
+        potracePath(e.target, function(SVGData) {
+            if(wickEditor.currentTool.type == "paintbrush") {
+                WickObject.fromSVG(SVGData, function(wickObj) {
+                    wickObj.x = pathFabricObject.left - that.getCenteredFrameOffset().x - pathFabricObject.width/2  - that.canvas.freeDrawingBrush.width/2;
+                    wickObj.y = pathFabricObject.top  - that.getCenteredFrameOffset().y - pathFabricObject.height/2 - that.canvas.freeDrawingBrush.width/2;
+                    wickEditor.actionHandler.doAction('addObjects', {wickObjects:[wickObj]})
+                });
+            } else if(wickEditor.currentTool.type == "eraser") {
+                eraseUsingSVG(SVGData);
+            }
+
+            canvas.remove(e.target);
+        });
 
     });
 
-    var potracePath = function (pathFabricObject) {
+    var potracePath = function (pathFabricObject, callback) {
         // New potrace-and-send-to-paper.js brush
         pathFabricObject.cloneAsImage(function(clone) {
             var imgSrc = clone._element.currentSrc || clone._element.src;
@@ -494,14 +507,14 @@ var FabricInterface = function (wickEditor) {
             Potrace.loadImageFromDataURL(imgSrc);
             Potrace.setParameter({optcurve: true, opttolerance: wickEditor.currentTool.brushSmoothing});
             Potrace.process(function(){
-                var svgData = {svgString:Potrace.getSVG(1), fillColor:that.canvas.freeDrawingBrush.color}
-                WickObject.fromSVG(svgData, function(wickObj) {
-                    wickObj.x = pathFabricObject.left - that.getCenteredFrameOffset().x - pathFabricObject.width/2  - that.canvas.freeDrawingBrush.width/2;
-                    wickObj.y = pathFabricObject.top  - that.getCenteredFrameOffset().y - pathFabricObject.height/2 - that.canvas.freeDrawingBrush.width/2;
-                    wickEditor.actionHandler.doAction('addObjects', {wickObjects:[wickObj]})
-                });
+                var SVGData = {svgString:Potrace.getSVG(1), fillColor:that.canvas.freeDrawingBrush.color}
+                callback(SVGData);
             });
         }); 
+    }
+
+    var eraseUsingSVG = function (SVGData) {
+        console.error("eraseUsingSVG NYI")
     }
 
 /********************************
