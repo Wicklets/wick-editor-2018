@@ -402,23 +402,50 @@ var FabricInterface = function (wickEditor) {
                         e.e.offsetX - fabricObj.width/2  - that.getCenteredFrameOffset().x, 
                         e.e.offsetY - fabricObj.height/2 - that.getCenteredFrameOffset().y);
 
-                    var filledObject = getPaperObjectIntersectingWithPoint(fabricObj.paperPath, mousePoint, true);
-                    if(!filledObject) {
-                        filledObject = getPaperObjectIntersectingWithPoint(fabricObj.paperPath, mousePoint, false);
+                    // Find paths before attempting to find holes
+                    var intersectedPath = getPaperObjectIntersectingWithPoint(fabricObj.paperPath, mousePoint, true);
+                    if(!intersectedPath) {
+                        intersectedPath = getPaperObjectIntersectingWithPoint(fabricObj.paperPath, mousePoint, false);
                     }
 
-                    if(!filledObject) return;
+                    if(!intersectedPath) return;
 
                     var pathObj = wickEditor.getWickObjectByID(fabricObj.wickObjectID);
 
-                    if(filledObject.clockwise) {
+                    if(intersectedPath.clockwise) {
                         console.log("hole filled");
 
                         if(pathObj.svgData.fillColor == wickEditor.currentTool.color) {
                             // Delete the hole
+
+                            var intersectedEntirePath = intersectedPath._parent.children[0];
+
+                            var exportedSVGData = intersectedEntirePath.exportSVG({asString:true});
+                            var svgString = '<svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="588px" height="588px" viewBox="20.267 102.757 588 588" enable-background="new 20.267 102.757 588 588" xml:space="preserve">'+exportedSVGData+'</svg>';
+                            var svgData = {svgString:svgString, fillColor:wickEditor.currentTool.color}
+                            WickObject.fromSVG(svgData, function(wickObj) {
+                                //wickObj.x = pathFabricObject.left - that.getFrameOffset().x - pathFabricObject.width/2  - that.canvas.freeDrawingBrush.width/2;
+                                //wickObj.y = pathFabricObject.top  - that.getFrameOffset().y - pathFabricObject.height/2 - that.canvas.freeDrawingBrush.width/2;
+                                wickObj.x = 0;
+                                wickObj.y = 0;
+                                wickEditor.actionHandler.doAction('addObjects', {wickObjects:[wickObj]})
+                            });
+
+                            wickEditor.actionHandler.doAction('deleteObjects', { ids:[pathObj.id] });
                         } else {
                             // If they are different colors:
                             //     Delete the hole, but also make an in-place copy of it with wickEditor.currentTool.color.
+
+                            var exportedSVGData = intersectedPath.exportSVG({asString:true});
+                            var svgString = '<svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="588px" height="588px" viewBox="20.267 102.757 588 588" enable-background="new 20.267 102.757 588 588" xml:space="preserve">'+exportedSVGData+'</svg>';
+                            var svgData = {svgString:svgString, fillColor:wickEditor.currentTool.color}
+                            WickObject.fromSVG(svgData, function(wickObj) {
+                                //wickObj.x = pathFabricObject.left - that.getFrameOffset().x - pathFabricObject.width/2  - that.canvas.freeDrawingBrush.width/2;
+                                //wickObj.y = pathFabricObject.top  - that.getFrameOffset().y - pathFabricObject.height/2 - that.canvas.freeDrawingBrush.width/2;
+                                wickObj.x = 0;
+                                wickObj.y = 0;
+                                wickEditor.actionHandler.doAction('addObjects', {wickObjects:[wickObj]})
+                            });
                         }
 
                         wickEditor.syncInterfaces();
