@@ -172,7 +172,10 @@ var FabricInterface = function (wickEditor) {
             if(paperPath.closePath) {
                 paperPath.closePath();
             }
-            paperPath.position = new paper.Point(wickObj.x, wickObj.y);
+            
+            paperPath.position.x += wickObj.x;
+            paperPath.position.y += wickObj.y;
+
             fabricObj.paperPath = paperPath;
         }
 
@@ -504,8 +507,8 @@ var FabricInterface = function (wickEditor) {
                 if (bothFabObjsArePaths && notSameObject && bothHaveWickObjectIDs) {
                     var pathA = fabObjA.paperPath;
                     var pathB = fabObjB.paperPath;
-                    console.log(pathA);
-                    console.log(pathB);
+                    //console.log(pathA);
+                    //console.log(pathB);
                     var intersections = pathA.getIntersections(pathB);
                     if(intersections.length > 0) {
                         console.log("wheeee! there be an intersection...");
