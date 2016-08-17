@@ -421,13 +421,13 @@ var FabricInterface = function (wickEditor) {
                             var intersectedEntirePath = intersectedPath._parent.children[0];
 
                             var exportedSVGData = intersectedEntirePath.exportSVG({asString:true});
-                            var svgString = '<svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="588px" height="588px" viewBox="20.267 102.757 588 588" enable-background="new 20.267 102.757 588 588" xml:space="preserve">'+exportedSVGData+'</svg>';
+                            var svgString = '<svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="588px" height="588px" enable-background="new 20.267 102.757 588 588" xml:space="preserve">'+exportedSVGData+'</svg>';
                             var svgData = {svgString:svgString, fillColor:wickEditor.currentTool.color}
                             WickObject.fromSVG(svgData, function(wickObj) {
                                 //wickObj.x = pathFabricObject.left - that.getFrameOffset().x - pathFabricObject.width/2  - that.canvas.freeDrawingBrush.width/2;
                                 //wickObj.y = pathFabricObject.top  - that.getFrameOffset().y - pathFabricObject.height/2 - that.canvas.freeDrawingBrush.width/2;
-                                wickObj.x = 0;
-                                wickObj.y = 0;
+                                wickObj.x = pathObj.x;
+                                wickObj.y = pathObj.y;
                                 wickEditor.actionHandler.doAction('addObjects', {wickObjects:[wickObj]})
                             });
 
@@ -437,7 +437,7 @@ var FabricInterface = function (wickEditor) {
                             //     Delete the hole, but also make an in-place copy of it with wickEditor.currentTool.color.
 
                             var exportedSVGData = intersectedPath.exportSVG({asString:true});
-                            var svgString = '<svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="588px" height="588px" viewBox="20.267 102.757 588 588" enable-background="new 20.267 102.757 588 588" xml:space="preserve">'+exportedSVGData+'</svg>';
+                            var svgString = '<svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="588px" height="588px" enable-background="new 20.267 102.757 588 588" xml:space="preserve">'+exportedSVGData+'</svg>';
                             var svgData = {svgString:svgString, fillColor:wickEditor.currentTool.color}
                             WickObject.fromSVG(svgData, function(wickObj) {
                                 //wickObj.x = pathFabricObject.left - that.getFrameOffset().x - pathFabricObject.width/2  - that.canvas.freeDrawingBrush.width/2;
@@ -495,7 +495,30 @@ var FabricInterface = function (wickEditor) {
     }
 
     var uniteIntersectingPaths = function () {
-        //console.error("uniteIntersectingPaths NYI");
+
+        that.canvas.forEachObject(function(fabObjA) {
+            that.canvas.forEachObject(function(fabObjB) {
+                var bothFabObjsArePaths = fabObjA.type === "path" && fabObjB.type === "path";
+                var notSameObject = fabObjA.wickObjectID != fabObjB.wickObjectID;
+                var bothHaveWickObjectIDs = fabObjA.wickObjectID && fabObjB.wickObjectID;
+                if (bothFabObjsArePaths && notSameObject && bothHaveWickObjectIDs) {
+                    var pathA = fabObjA.paperPath;
+                    var pathB = fabObjB.paperPath;
+                    console.log(pathA);
+                    console.log(pathB);
+                    var intersections = pathA.getIntersections(pathB);
+                    if(intersections.length > 0) {
+                        console.log("wheeee! there be an intersection...");
+                        //console.log(intersections[0])
+                        //that.originCrosshair.left = intersections[0].point.x-that.originCrosshair.width+that.getCenteredFrameOffset().x;
+                        //that.originCrosshair.top = intersections[0].point.y-that.originCrosshair.height+that.getCenteredFrameOffset().y;
+                        // Same color: union
+                        // Different colors: path with higer z index subtracts from other path 
+                    }
+                }
+            });
+        });
+
     }
 
     var splitPathsWithMultiplePieces = function () {
