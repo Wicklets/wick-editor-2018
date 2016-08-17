@@ -172,7 +172,7 @@ var FabricInterface = function (wickEditor) {
             if(paperPath.closePath) {
                 paperPath.closePath();
             }
-            
+
             paperPath.position.x += wickObj.x;
             paperPath.position.y += wickObj.y;
 
@@ -402,8 +402,8 @@ var FabricInterface = function (wickEditor) {
             that.canvas.forEachObject(function(fabricObj) {
                 if(fabricObj.paperPath) {
                     var mousePoint = new paper.Point(
-                        e.e.offsetX - fabricObj.width/2  - that.getCenteredFrameOffset().x, 
-                        e.e.offsetY - fabricObj.height/2 - that.getCenteredFrameOffset().y);
+                        e.e.offsetX - that.getCenteredFrameOffset().x, 
+                        e.e.offsetY - that.getCenteredFrameOffset().y);
 
                     // Find paths before attempting to find holes
                     var intersectedPath = getPaperObjectIntersectingWithPoint(fabricObj.paperPath, mousePoint, true);
@@ -439,16 +439,6 @@ var FabricInterface = function (wickEditor) {
                             // If they are different colors:
                             //     Delete the hole, but also make an in-place copy of it with wickEditor.currentTool.color.
 
-                            var exportedSVGData = intersectedPath.exportSVG({asString:true});
-                            var svgString = '<svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="588px" height="588px" enable-background="new 20.267 102.757 588 588" xml:space="preserve">'+exportedSVGData+'</svg>';
-                            var svgData = {svgString:svgString, fillColor:wickEditor.currentTool.color}
-                            WickObject.fromSVG(svgData, function(wickObj) {
-                                //wickObj.x = pathFabricObject.left - that.getFrameOffset().x - pathFabricObject.width/2  - that.canvas.freeDrawingBrush.width/2;
-                                //wickObj.y = pathFabricObject.top  - that.getFrameOffset().y - pathFabricObject.height/2 - that.canvas.freeDrawingBrush.width/2;
-                                wickObj.x = 0;
-                                wickObj.y = 0;
-                                wickEditor.actionHandler.doAction('addObjects', {wickObjects:[wickObj]})
-                            });
                         }
 
                         wickEditor.syncInterfaces();
@@ -526,6 +516,12 @@ var FabricInterface = function (wickEditor) {
 
     var splitPathsWithMultiplePieces = function () {
         //console.error("splitPathsWithMultiplePieces NYI");
+        that.canvas.forEachObject(function(fabObj) {
+            if(fabObj.type === "path" && fabObj.wickObjectID) {
+                var path = fabObj.paperPath;
+                // Not sure how to check if the path is multiple pieces...
+            }
+        });
     }
 
     // Paths are handled internally by fabric so we have to intercept the paths and convert them to wickobjects

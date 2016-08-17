@@ -2,12 +2,11 @@
 
 var TimelineInterface = function (wickEditor) {
 
-    this.syncWithEditorState = function () {
-        
-        var GUIWidth = parseInt($("#timelineGUI").css("width")) / 2;
-        $("#timelineGUI").css('left', (window.innerWidth/2 - GUIWidth)+'px');
+    var that = this;
 
-        var that = this;
+    this.syncWithEditorState = function () {
+
+        that.resize();
 
         // Reset the timeline div
         var timeline = document.getElementById("timeline");
@@ -67,6 +66,15 @@ var TimelineInterface = function (wickEditor) {
 
         }
     }
+
+    this.resize = function () {
+        var GUIWidth = parseInt($("#timelineGUI").css("width")) / 2;
+        $("#timelineGUI").css('left', (window.innerWidth/2 - GUIWidth)+'px');
+    }
+
+    window.addEventListener('resize', function(e) {
+        that.resize();
+    });
 
     $("#addEmptyFrameButton").on("click", function (e) {
         wickEditor.actionHandler.doAction('addEmptyFrame', []);
