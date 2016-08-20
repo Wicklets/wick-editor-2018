@@ -15,6 +15,11 @@ var WickObjectUtils = (function () {
 
         // Recursively put the prototypes back on the children objects
         if(obj.isSymbol) {
+            // Put the layer prototype on on this objects layers
+            obj.layers.forEach(function (layer) {
+                layer.__proto__ = WickLayer.prototype;
+            });
+
             obj.forEachChildObject(function(currObj) {
                 utils.putWickObjectPrototypeBackOnObject(currObj);
             });

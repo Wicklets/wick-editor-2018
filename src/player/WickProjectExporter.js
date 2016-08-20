@@ -22,6 +22,7 @@ var WickProjectExporter = (function () {
     // Player code. 
     var requiredPlayerFiles =[
         "src/project/WickObjectUtils.js",
+        "src/WickLayer.js",
         "src/project/WickObject.js",
         "src/player/WickPlayer.js",
     ];

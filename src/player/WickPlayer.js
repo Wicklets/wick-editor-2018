@@ -243,9 +243,11 @@ var WickPlayer = (function () {
         if(wickObj.isSymbol) {
 
             // set all elapsedFrames to 0
-            for(var i = 0; i < wickObj.frames.length; i++) {
-                wickObj.frames[i].elapsedFrames = 0;
-            }
+            wickObj.layers.forEach(function(layer) {
+                layer.frames.forEach(function(frame) {
+                    frame.elapsedFrames = 0;
+                });
+            });
 
             // Set this object to it's first frame
             wickObj.currentFrame = 0;
@@ -619,11 +621,6 @@ var WickPlayer = (function () {
 
         if(!obj.onLoadScriptRan) {
 
-            // Check for breakpoint
-            if(obj.isSymbol && obj.frames[obj.currentFrame].breakpoint) {
-                obj.isPlaying = false;
-            }
-
             // Run onLoad script
             if(obj && !obj.isRoot && obj.wickScripts) {
                 evalScript(obj, obj.wickScripts.onLoad);
@@ -727,26 +724,13 @@ var WickPlayer = (function () {
 
     var advanceTimeline = function (obj) { 
         // Advance timeline for this object
-        if(obj.isPlaying && obj.frames.length > 1) {
+        if(obj.isPlaying) {
 
-            // Multiframes
-            var frame = obj.frames[obj.currentFrame];
-            if (frame.elapsedFrames == frame.frameLength) {
+            obj.playheadPosition ++;
 
-                /* Leaving the frame, all child objects are unloaded, make sure 
-                   they run onLoad again next time we come back to this frame */
-                obj.forEachActiveChildObject(function(child) {
-                    child.onLoadScriptRan = false;
-                });
-
-                obj.currentFrame++;
-                frame.elapsedFrames = 0;
-            } else {
-                frame.elapsedFrames++;
-            }
-            
-            if(obj.currentFrame == obj.frames.length) {
-                obj.currentFrame = 0;
+            // If we reached the end, go back to the beginning 
+            if(obj.playheadPosition > obj.getTotalTimelineLength()) {
+                obj.playheadPosition = 0;
             }
         }
 

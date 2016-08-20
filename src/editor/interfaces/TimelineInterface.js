@@ -6,17 +6,17 @@ var TimelineInterface = function (wickEditor) {
 
     this.syncWithEditorState = function () {
 
-        that.resize();
-
         // Reset the timeline div
         var timeline = document.getElementById("timeline");
         timeline.innerHTML = "";
         timeline.style.width = 3000+'px';//wickEditor.currentObject.frames.length*100 + 6 + "px";
 
         var currentObject = wickEditor.project.getCurrentObject();
-        for(var i = 0; i < currentObject.frames.length; i++) {
+        var layer = currentObject.layers[currentObject.currentLayer];
 
-            var frame = currentObject.frames[i];
+        for(var i = 0; i < layer.frames.length; i++) {
+
+            var frame = layer.frames[i];
 
         // Create the span that holds all the stuff for each frame
 
@@ -30,7 +30,7 @@ var TimelineInterface = function (wickEditor) {
             var frameDiv = document.createElement("span");
             frameDiv.id = "frame" + i;
             frameDiv.innerHTML = i;
-            if(currentObject.currentFrame == i) {
+            if(currentObject.playheadPosition == i) {
                 frameDiv.className = "timelineFrame active";
             } else {
                 frameDiv.className = "timelineFrame";
@@ -42,25 +42,6 @@ var TimelineInterface = function (wickEditor) {
             frameDiv.addEventListener("mousedown", function(index) {
                 return function () {
                     wickEditor.actionHandler.doAction('gotoFrame', {toFrame : index});
-                };
-            }(i), false);
-
-        // Create the breakpoint toggle element
-
-            var breakpointDiv = document.createElement("span");
-            if(currentObject.frames[i].breakpoint) {
-                breakpointDiv.className = "breakpointButton enabled";
-            } else {
-                breakpointDiv.className = "breakpointButton";
-            }
-            frameContainer.appendChild(breakpointDiv);
-
-            // Add mousedown event to the breakpoint element so we toggle a breakpoint on that frame
-            breakpointDiv.addEventListener("mousedown", function(index) {
-                return function () {
-                    var frame = currentObject.frames[index];
-                    frame.breakpoint = !frame.breakpoint;
-                    that.updateTimelineGUI(currentObject);
                 };
             }(i), false);
 

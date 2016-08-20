@@ -10,9 +10,6 @@ var WickFrame = function () {
 	// Store all objects in frame. 
 	this.wickObjects = [];
 
-	// Should we stop on this frame? 
-	this.breakpoint = false;
-
 	// A single frame contains no tweens. Note: Tweens not yet implemented
 	this.tweenPoints = [];
 

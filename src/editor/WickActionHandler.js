@@ -245,7 +245,7 @@ var WickActionHandler = function (wickEditor) {
             var currentObject = wickEditor.project.getCurrentObject();
 
             // Add an empty frame
-            currentObject.addEmptyFrame(currentObject.frames.length);
+            currentObject.addEmptyFrame(currentObject.layer[currentObject.currentLayer].frames.length);
 
             // Move to that new frame
             wickEditor.actionHandler.doAction('gotoFrame', {toFrame:currentObject.frames.length-1}, true);

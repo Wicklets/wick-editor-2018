@@ -47,10 +47,11 @@ var WickObject = function () {
     this.isSymbol = false;
 
     // Used to keep track of what frame is being edited
-    this.currentFrame = null;
+    this.playheadPosition = null;
+    this.currentLayer = null;
 
-    // List of frames, only used by symbols
-    this.frames = undefined;
+    // List of layers, only used by symbols
+    this.layers = undefined;
 
 };
 
@@ -68,8 +69,9 @@ WickObject.prototype.setDefaultPositioningValues = function () {
 WickObject.prototype.setDefaultSymbolValues = function () {
 
     this.isSymbol = true;
-    this.currentFrame = 0;
-    this.frames = [new WickFrame()];
+    this.playheadPosition = 0;
+    this.currentLayer = 0;
+    this.layers = [new WickLayer()];
 
 }
 
@@ -78,8 +80,9 @@ WickObject.createNewRootObject = function () {
     rootObject.id = 0;
     rootObject.isSymbol = true;
     rootObject.isRoot = true;
-    rootObject.currentFrame = 0;
-    rootObject.frames = [new WickFrame()];
+    rootObject.playheadPosition = 0;
+    rootObject.currentLayer = 0;
+    rootObject.layers = [new WickLayer()];
     rootObject.left = 0;
     rootObject.top = 0;
     rootObject.opacity = 1.0;
@@ -211,11 +214,11 @@ WickObject.fromAnimatedGIF = function (gifData, callback) {
                 framesDataURLs[i], 
                 (function(frameIndex) { return function(o) {
                     gifSymbol.addEmptyFrame(frameIndex);
-                    gifSymbol.frames[frameIndex].wickObjects.push(o);
+                    gifSymbol.layers[0].frames[frameIndex].wickObjects.push(o);
 
                     if(frameIndex == framesDataURLs.length-1) {
-                        gifSymbol.width  = gifSymbol.frames[0].wickObjects[0].width;
-                        gifSymbol.height = gifSymbol.frames[0].wickObjects[0].height;
+                        gifSymbol.width  = gifSymbol.layers[0].frames[0].wickObjects[0].width;
+                        gifSymbol.height = gifSymbol.layers[0].frames[0].wickObjects[0].height;
                         callback(gifSymbol);
                     }
                 }; }) (i)
@@ -315,10 +318,10 @@ WickObject.createSymbolFromWickObjects = function (left, top, wickObjects) {
 
     // Multiple objects are selected, put them all in the new symbol
     for(var i = 0; i < wickObjects.length; i++) {
-        symbol.frames[0].wickObjects[i] = wickObjects[i];
+        symbol.layers[0].frames[0].wickObjects[i] = wickObjects[i];
 
-        symbol.frames[0].wickObjects[i].left = wickObjects[i].left - symbol.left;
-        symbol.frames[0].wickObjects[i].top  = wickObjects[i].top - symbol.top;
+        symbol.layers[0].frames[0].wickObjects[i].left = wickObjects[i].left - symbol.left;
+        symbol.layers[0].frames[0].wickObjects[i].top  = wickObjects[i].top - symbol.top;
     }
 
     return symbol;
@@ -326,11 +329,23 @@ WickObject.createSymbolFromWickObjects = function (left, top, wickObjects) {
 }
 
 WickObject.prototype.getCurrentFrame = function() {
-    return this.frames[this.currentFrame];
-}
 
-WickObject.prototype.addEmptyFrame = function(newFrameIndex) {
-    this.frames[newFrameIndex] = new WickFrame();
+    var layer = this.layers[this.currentLayer];
+    var counter = 0;
+
+    for(var f = 0; f < layer.frames.length; f++) {
+        var frame = layer.frames[f];
+        for(var i = 0; i <= frame.frameLength; i++) {
+            if(counter == this.playheadPosition) {
+                return frame;
+            }
+            counter++;
+        }
+    }
+
+    VerboseLog.error("Warning: getCurrentFrame() returning null, playheadPosition may be invalid!");
+    return null;
+
 }
 
 // Used so that if the renderer can't render SVGs it has an image to fallback to
@@ -599,80 +614,31 @@ WickObject.prototype.hitTest = function (otherObj, hitTestType) {
 
 }
 
-WickObject.prototype.tryNavigateToFrame = function (frame, callback) {
+WickObject.prototype.getTotalTimelineLength = function () {
+    var longestLayerLength = 0;
 
-    if (CheckInput.testNonNegativeInteger(frame)) {
-
-        // Only navigate to an integer frame if it is nonnegative and a valid frame
-        if(frame < this.frames.length)
-            this.navigateToFrame(frame, callback);
-        else
-            console.log("Failed to navigate to frame \'" + frame + "\': is not a valid frame.");
-
-    } else if (CheckInput.testString(frame)) {
-
-        // Search for the frame with the correct identifier and navigate if found
-        this.navigateToFrameByIdentifier(frame, callback);
-
-    } else {
-
-        console.log("Failed to navigate to frame \'" + frame + "\': is neither a string nor a nonnegative integer");
-
-    }
-}
-
-WickObject.prototype.navigateToFrameByIdentifier = function(frameID, callback) {
-
-    for (var f = 0; f < this.frames.length; f++) {
-
-        if(frameID === this.frames[f].identifier) {
-            this.navigateToFrame(f, callback);
-            return;
+    this.layers.forEach(function (layer) {
+        var layerLength = layer.getTotalLength();
+        if(layerLength > longestLayerLength) {
+            longestLayerLength = layerLength;
         }
-    }
+    });
 
-    console.log("Failed to navigate to frame \'" + frameID + "\': is neither a string nor a nonnegative integer");
+    return longestLayerLength;
+
 }
 
-WickObject.prototype.navigateToFrame = function (frame, callback) {
-
-    if(!this.isSymbol) {
-        VerboseLog.error("gotoPrevFrame called on wickobject that isn't a symbol!")
-        return;
-    }
-    
-    var oldFrame = this.currentFrame;
-
-    this.currentFrame = frame;
-
-    if(oldFrame != this.currentFrame) {
-        this.forEachActiveChildObject(function(child) {
-            child.onLoadScriptRan = false;
-        });
-    }
-
-    callback();
-}
-
-WickObject.prototype.play = function (frame) {
+WickObject.prototype.play = function () {
 
     if(!this.isSymbol) {
         VerboseLog.error("play called on wickobject that isn't a symbol!")
         return;
     }
 
-    var oldFrame = this.currentFrame;
-
     this.isPlaying = true;
-
-    if(oldFrame != this.currentFrame) {
-        this.forEachActiveChildObject(function(child) {
-            child.onLoadScriptRan = false;
-        });
-    }
 }
 
-WickObject.prototype.stop = function (frame) {
+WickObject.prototype.stop = function () {
 
     if(!this.isSymbol) {
         VerboseLog.error("stop called on wickobject that isn't a symbol!")
@@ -682,6 +648,59 @@ WickObject.prototype.stop = function (frame) {
     this.isPlaying = false;
 }
 
+WickObject.prototype.getFrameByIdentifier = function (id) {
+
+    for (var l = 0; l < this.layers.length; l++) {
+
+        var counter = 0;
+
+        var layer = this.layers[l];
+        for (var f = 0; f < layer.frames.length; f++) {
+
+            var frame = layer.frames[f];
+            if(frame.identifier === id) {
+                return {
+                    frame : frame,
+                    index : f,
+                    playheadLocation : counter
+                }
+            }
+            counter += frame.frameLength;
+
+        }
+
+    }
+
+    return undefined;
+
+}
+
+WickObject.prototype.gotoFrame = function (frame) {
+    if (CheckInput.testNonNegativeInteger(frame)) {
+
+        // Only navigate to an integer frame if it is nonnegative and a valid frame
+        if(frame < this.frames.length)
+            this.playheadPosition = frame;
+        else
+            throw "Failed to navigate to frame \'" + frame + "\': is not a valid frame.";
+
+    } else if (CheckInput.testString(frame)) {
+
+        // Search for the frame with the correct identifier and navigate if found
+        var frame = this.getFrameByIdentifier(frame);
+
+        if(frame)
+            this.playheadPosition = frame.playheadLocation;
+        else
+            throw "Failed to navigate to frame \'" + frame + "\': is not a valid frame.";
+
+    } else {
+
+        throw "Failed to navigate to frame \'" + frame + "\': is neither a string nor a nonnegative integer";
+
+    }
+}
+
 WickObject.prototype.gotoAndPlay = function (frame) {
 
     if(!this.isSymbol) {
@@ -689,9 +708,8 @@ WickObject.prototype.gotoAndPlay = function (frame) {
         return;
     }
 
-    this.tryNavigateToFrame(frame, function() {
-        this.isPlaying = true;
-    });
+    this.gotoFrame(frame);
+    this.isPlaying = true;
     
 }
 
@@ -702,9 +720,8 @@ WickObject.prototype.gotoAndStop = function (frame) {
         return;
     }
     
-    this.tryNavigateToFrame(frame, function() {
-        this.isPlaying = false;
-    });
+    this.gotoFrame(frame);
+    this.isPlaying = false;
 
 }
 
@@ -715,18 +732,12 @@ WickObject.prototype.gotoNextFrame = function () {
         return;
     }
 
-    var oldFrame = this.currentFrame;
-
-    this.currentFrame ++;
-    if(this.currentFrame >= this.frames.length) {
-        this.currentFrame = this.frames.length-1;
+    this.playheadPosition ++;
+    var totalLength = this.layers[this.currentLayer.getTotalLength];
+    if(this.playheadPosition >= totalLength) {
+        this.playheadPosition = totalLength-1;
     }
 
-    if(oldFrame != this.currentFrame) {
-        this.forEachActiveChildObject(function(child) {
-            child.onLoadScriptRan = false;
-        });
-    }
 }
 
 WickObject.prototype.gotoPrevFrame = function () {
@@ -736,17 +747,9 @@ WickObject.prototype.gotoPrevFrame = function () {
         return;
     }
 
-    var oldFrame = this.currentFrame;
-
-    this.currentFrame --;
-    if(this.currentFrame < 0) {
-        this.currentFrame = 0;
-    }
-
-    if(oldFrame != this.currentFrame) {
-        this.forEachActiveChildObject(function(child) {
-            child.onLoadScriptRan = false;
-        });
+    this.playheadPosition --;
+    if(this.playheadPosition < 0) {
+        this.playheadPosition = 0;
     }
 }
 
@@ -780,34 +783,40 @@ WickObject.prototype.getAllActiveChildObjects = function () {
 
 /* Call callback function for every child object in this object */
 WickObject.prototype.forEachChildObject = function (callback) {
-    for(var f = 0; f < this.frames.length; f++) {
-        for(var o = 0; o < this.frames[f].wickObjects.length; o++) {
-            callback(this.frames[f].wickObjects[o]);
+    for(var l = 0; l < this.layers.length; l++) {
+        var layer = this.layers[l];
+        for(var f = 0; f < layer.frames.length; f++) {
+            var frame = layer.frames[f];
+            for(var o = 0; o < frame.wickObjects.length; o++) {
+                callback(frame.wickObjects[o]);
+            }
         }
     }
 }
 
 /* Call callback function for every child object in this object's current frame */
 WickObject.prototype.forEachActiveChildObject = function (callback) {
-    var currFrame = this.currentFrame;
-    for(var o = 0; o < this.frames[currFrame].wickObjects.length; o++) {
-        callback(this.frames[currFrame].wickObjects[o]);
+    var currentFrame = this.getCurrentFrame();
+    for(var o = 0; o < currentFrame.wickObjects.length; o++) {
+        callback(currentFrame.wickObjects[o]);
     }
 }
 
 /* Call callback function for every child object in this object's first frame */
 WickObject.prototype.forEachFirstFrameChildObject = function (callback) {
-    for(var o = 0; o < this.frames[0].wickObjects.length; o++) {
-        callback(this.frames[0].wickObjects[o]);
+    for(var o = 0; o < this.layers[this.currentLayer].frames[0].wickObjects.length; o++) {
+        callback(this.layers[this.currentLayer].frames[0].wickObjects[o]);
     }
 }
 
 /* Excludes children of children */
 WickObject.prototype.getTotalNumChildren = function () {
     var count = 0;
-    for(var f = 0; f < this.frames.length; f++) {
-        for(var o = 0; o < this.frames[f].wickObjects.length; o++) {
-            count++;
+    for(var l = 0; l < this.layers.length; l++) {
+        for(var f = 0; f < this.layers[l].frames.length; f++) {
+            for(var o = 0; o < this.layers[l].frames[f].wickObjects.length; o++) {
+                count++;
+            }
         }
     }
     return count;
