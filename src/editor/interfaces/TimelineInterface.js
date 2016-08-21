@@ -7,7 +7,24 @@ var TimelineInterface = function (wickEditor) {
     var canvas = document.getElementById("timelineCanvas");
     var ctx = canvas.getContext("2d");
 
+    var frameWidth = 24;
+    var frameHeight = 32;
+
+    var playheadX = frameWidth / 2;
+
+    var mouse = {x:0,y:0,down:false};
+
     this.syncWithEditorState = function () {
+
+        var currentObject = wickEditor.project.getCurrentObject();
+
+        var oldPlayheadPosition = currentObject.playheadPosition;
+        var newPlayheadPosition = Math.floor(playheadX/frameWidth);
+
+        if(newPlayheadPosition != oldPlayheadPosition) {
+            currentObject.playheadPosition = newPlayheadPosition;
+            wickEditor.syncInterfaces();
+        }
 
         that.redraw();
 
@@ -32,32 +49,29 @@ var TimelineInterface = function (wickEditor) {
 
         var currentObject = wickEditor.project.getCurrentObject();
 
-        var frameWidth = 24;
-        var frameHeight = 32;
-
         var layerCount = 0;
         currentObject.layers.forEach(function (layer) {
             var frameCount = 0;
             layer.frames.forEach(function (frame) {
                 
-                if (layerCount == currentObject.currentLayer) {
-                    ctx.fillStyle = "#FF0000";
-                } else {
-                    ctx.fillStyle = "#FF6622";
+                ctx.fillStyle = "#BBBBBB";
+                if (frameCount == currentObject.playheadPosition && layerCount == currentObject.currentLayer) {
+                    ctx.fillStyle = "#DDDDDD";
                 }
 
                 ctx.fillRect(
                     frameCount*frameWidth, layerCount*frameHeight,
-                    frameWidth, frameHeight);
-                frameCount++;
+                    frameWidth*frame.frameLength, frameHeight);
+
+                frameCount += frame.frameLength;
             });
             layerCount++;
         });
 
         ctx.fillStyle = "#000000";
         ctx.beginPath();
-        ctx.moveTo(currentObject.playheadPosition*frameWidth+frameWidth/2,0);
-        ctx.lineTo(currentObject.playheadPosition*frameWidth+frameWidth/2,canvas.height);
+        ctx.moveTo(playheadX,0);
+        ctx.lineTo(playheadX,canvas.height);
         ctx.stroke();
 
     }
@@ -66,6 +80,24 @@ var TimelineInterface = function (wickEditor) {
         that.resize();
     });
     this.resize();
+
+    canvas.addEventListener('mousedown', function(e) {
+        mouse.down = true;
+        playheadX = e.offsetX;
+        that.syncWithEditorState();
+        that.redraw();
+    });
+    canvas.addEventListener('mouseup', function(e) {
+        mouse.down = false;
+        that.redraw();
+    });
+    canvas.addEventListener('mousemove', function(e) {
+        if(mouse.down) {
+            playheadX = e.offsetX;
+        }
+        that.syncWithEditorState();
+        that.redraw();
+    });
 
     $("#addNewFrameButton").on("click", function (e) {
         wickEditor.actionHandler.doAction('addNewFrame');
