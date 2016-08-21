@@ -223,70 +223,85 @@ var WickActionHandler = function (wickEditor) {
             }
         });
 
-    this.registerAction('gotoFrame', 
+    this.registerAction('movePlayhead', 
         function (args) {
             wickEditor.interfaces['fabric'].deselectAll();
 
             // Save current frame
-            args.oldFrame = wickEditor.project.getCurrentObject().currentFrame;
+            args.oldPlayheadPosition = wickEditor.project.getCurrentObject().playheadPosition;
 
             // Go to the specified frame
-            wickEditor.project.getCurrentObject().currentFrame = args.toFrame;
+            wickEditor.project.getCurrentObject().playheadPosition = args.newPlayheadPosition;
         },
         function (args) {
             wickEditor.interfaces['fabric'].deselectAll();
 
             // Go back to the old frame
-            wickEditor.project.getCurrentObject().currentFrame = args.oldFrame;
+            wickEditor.project.getCurrentObject().playheadPosition = args.oldPlayheadPosition;
         });
 
-    this.registerAction('addEmptyFrame', 
+    this.registerAction('addNewFrame', 
         function (args) {
             var currentObject = wickEditor.project.getCurrentObject();
 
             // Add an empty frame
-            currentObject.addEmptyFrame(currentObject.layer[currentObject.currentLayer].frames.length);
+            currentObject.getCurrentLayer().addNewFrame();
 
             // Move to that new frame
-            wickEditor.actionHandler.doAction('gotoFrame', {toFrame:currentObject.frames.length-1}, true);
+            wickEditor.actionHandler.doAction('movePlayhead', {
+                newPlayheadPosition:currentObject.getCurrentLayer().frames.length-1
+            }, true);
         },
         function (args) {
             var currentObject = wickEditor.project.getCurrentObject();
 
             // Go to the second-to-last frame and remove the last frame
-            wickEditor.actionHandler.doAction('gotoFrame', {toFrame:currentObject.frames.length-2}, true);
-            currentObject.frames.pop();
+            wickEditor.actionHandler.doAction('movePlayhead', {
+                newPlayheadPosition:currentObject.getCurrentLayer().frames.length-2
+            }, true);
+            currentObject.getCurrentLayer().frames.pop();
+        });
+
+    this.registerAction('addNewLayer', 
+        function (args) {
+            var currentObject = wickEditor.project.getCurrentObject();
+
+            // Add an empty frame
+            currentObject.addNewLayer();
+
+            // Go to last added layer
+            currentObject.currentLayer = currentObject.layers.length-1;
+
+            console.log(currentObject.currentLayer)
+        },
+        function (args) {
+            var currentObject = wickEditor.project.getCurrentObject();
+
+            // Remove last layer added
+            currentObject.layers.pop();
+
+            // Go to last added layer
+            currentObject.currentLayer = currentObject.layers.length-1;
         });
 
     this.registerAction('extendFrame', 
         function (args) {
             var currentObject = wickEditor.project.getCurrentObject();
-
-            args.frameNumber = currentObject.currentFrame;
-            currentObject.frames[args.frameNumber];
-            currentObject.frames[args.frameNumber].__proto__ = WickFrame.prototype;
-            currentObject.frames[args.frameNumber].extend(args.nFramesToExtendBy);
+            currentObject.getCurrentFrame().extend(args.nFramesToExtendBy);
         },
         function (args) {
             var currentObject = wickEditor.project.getCurrentObject();
-
-            currentObject.frames[args.frameNumber].extend(-args.nFramesToExtendBy); 
+            currentObject.getCurrentFrame().shrink(args.nFramesToExtendBy); 
         });
 
     this.registerAction('shrinkFrame', 
         function (args) {
             var currentObject = wickEditor.project.getCurrentObject();
-
-            args.frameNumber = currentObject.currentFrame;
-            currentObject.frames[args.frameNumber];
-            currentObject.frames[args.frameNumber].__proto__ = WickFrame.prototype;
-            currentObject.frames[args.frameNumber].shrink(args.nFramesToShrinkBy);
+            currentObject.getCurrentFrame().shrink(args.nFramesToShrinkBy);
         },
         function (args) {
             var currentObject = wickEditor.project.getCurrentObject();
-
-            currentObject.frames[args.frameNumber].__proto__ = WickFrame.prototype;
-            currentObject.frames[args.frameNumber].shrink(-args.nFramesToShrinkBy); 
+            currentObject.getCurrentFrame().extend(args.nFramesToShrinkBy); 
         });
 
     this.registerAction('convertSelectionToSymbol', 

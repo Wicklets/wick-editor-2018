@@ -26,7 +26,7 @@ WickFrame.prototype.extend = function(length) {
 WickFrame.prototype.shrink = function(length) {
 	// Never "shrink" by a negative amount. 
 	if (length <= 0) {
-		return; 
+		return;
 	}
 
 	originalLength = this.frameLength; 

@@ -213,7 +213,7 @@ WickObject.fromAnimatedGIF = function (gifData, callback) {
             WickObject.fromImage(
                 framesDataURLs[i], 
                 (function(frameIndex) { return function(o) {
-                    gifSymbol.addEmptyFrame(frameIndex);
+                    gifSymbol.addNewFrame();
                     gifSymbol.layers[0].frames[frameIndex].wickObjects.push(o);
 
                     if(frameIndex == framesDataURLs.length-1) {
@@ -346,6 +346,10 @@ WickObject.prototype.getCurrentFrame = function() {
     VerboseLog.error("Warning: getCurrentFrame() returning null, playheadPosition may be invalid!");
     return null;
 
+}
+
+WickObject.prototype.getCurrentLayer = function() {
+    return this.layers[this.currentLayer];
 }
 
 // Used so that if the renderer can't render SVGs it has an image to fallback to
@@ -603,7 +607,7 @@ WickObject.prototype.hitTest = function (otherObj, hitTestType) {
     }
 
     for (var i = 0; i < otherObjChildren.length; i++) {
-        for (var j = 0; j <thisObjChildren.length; j++) {
+        for (var j = 0; j < thisObjChildren.length; j++) {
             if (checkMethod(otherObjChildren[i], thisObjChildren[j])) {
                 return true; 
             }
@@ -612,6 +616,10 @@ WickObject.prototype.hitTest = function (otherObj, hitTestType) {
 
     return false; 
 
+}
+
+WickObject.prototype.addNewLayer = function () {
+    this.layers.push(new WickLayer());
 }
 
 WickObject.prototype.getTotalTimelineLength = function () {

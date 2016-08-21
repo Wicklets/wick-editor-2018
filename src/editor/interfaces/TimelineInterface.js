@@ -4,61 +4,71 @@ var TimelineInterface = function (wickEditor) {
 
     var that = this;
 
+    var canvas = document.getElementById("timelineCanvas");
+    var ctx = canvas.getContext("2d");
+
     this.syncWithEditorState = function () {
 
-        // Reset the timeline div
-        var timeline = document.getElementById("timeline");
-        timeline.innerHTML = "";
-        timeline.style.width = 3000+'px';//wickEditor.currentObject.frames.length*100 + 6 + "px";
+        that.redraw();
 
-        var currentObject = wickEditor.project.getCurrentObject();
-        var layer = currentObject.layers[currentObject.currentLayer];
-
-        for(var i = 0; i < layer.frames.length; i++) {
-
-            var frame = layer.frames[i];
-
-        // Create the span that holds all the stuff for each frame
-
-            var frameContainer = document.createElement("span");
-            frameContainer.className = "frameContainer";
-            frameContainer.style.width = 20 * frame.frameLength + 'px';
-            timeline.appendChild(frameContainer);
-
-        // Create the frame element
-
-            var frameDiv = document.createElement("span");
-            frameDiv.id = "frame" + i;
-            frameDiv.innerHTML = i;
-            if(currentObject.playheadPosition == i) {
-                frameDiv.className = "timelineFrame active";
-            } else {
-                frameDiv.className = "timelineFrame";
-            }
-            frameDiv.style.width = 20 * frame.frameLength + 'px';
-            frameContainer.appendChild(frameDiv);
-
-            // Add mousedown event to the frame element so we can go to that frame when its clicked
-            frameDiv.addEventListener("mousedown", function(index) {
-                return function () {
-                    wickEditor.actionHandler.doAction('gotoFrame', {toFrame : index});
-                };
-            }(i), false);
-
-        }
     }
 
     this.resize = function () {
         var GUIWidth = parseInt($("#timelineGUI").css("width")) / 2;
         $("#timelineGUI").css('left', (window.innerWidth/2 - GUIWidth)+'px');
+
+        canvas.width = GUIWidth;
+        canvas.height = 75;
+
+        that.redraw();
+    }
+
+    this.redraw = function () {
+
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+
+        var currentObject = wickEditor.project.getCurrentObject();
+
+        var frameWidth = 24;
+        var frameHeight = 32;
+
+        var layerCount = 0;
+        currentObject.layers.forEach(function (layer) {
+            var frameCount = 0;
+            layer.frames.forEach(function (frame) {
+                
+                if (layerCount == currentObject.currentLayer) {
+                    ctx.fillStyle = "#FF0000";
+                } else {
+                    ctx.fillStyle = "#FF6622";
+                }
+
+                ctx.fillRect(
+                    frameCount*frameWidth, layerCount*frameHeight,
+                    frameWidth, frameHeight);
+                frameCount++;
+            });
+            layerCount++;
+        });
+
+        ctx.fillStyle = "#000000";
+        ctx.beginPath();
+        ctx.moveTo(currentObject.playheadPosition*frameWidth+frameWidth/2,0);
+        ctx.lineTo(currentObject.playheadPosition*frameWidth+frameWidth/2,canvas.height);
+        ctx.stroke();
+
     }
 
     window.addEventListener('resize', function(e) {
         that.resize();
     });
+    this.resize();
 
-    $("#addEmptyFrameButton").on("click", function (e) {
-        wickEditor.actionHandler.doAction('addEmptyFrame', []);
+    $("#addNewFrameButton").on("click", function (e) {
+        wickEditor.actionHandler.doAction('addNewFrame');
     });
 
     $("#extendFrameButton").on("click", function (e) {

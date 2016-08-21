@@ -100,20 +100,7 @@
     <!-- Timeline GUI, centered at the top of the screen -->
 
         <div id="timelineGUI" class="GUIBox">
-            <div class="button buttonInRow" id="addEmptyFrameButton">
-                <img src="resources/ic_add_black.png" width="10" />
-            </div>
-            <div class="button buttonInRow" id="shrinkFrameButton">
-                <img src="resources/ic_keyboard_arrow_left.png" width="10" />
-            </div>
-            <div class="button buttonInRow" id="extendFrameButton">
-                <img src="resources/ic_keyboard_arrow_right.png" width="10" />
-            </div>
-            <div id="timelineScrollContainer">
-                <div id="timeline">
-                    <!-- Populated with 'timelineFrame' divs by editor. -->
-                </div>
-            </div>
+            <canvas id="timelineCanvas"></canvas>
         </div>
 
     <!-- Toolbar GUI, centered at the left side of the screen -->
