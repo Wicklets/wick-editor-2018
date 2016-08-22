@@ -59,23 +59,16 @@ var WickObject = function () {
 
 };
 
-WickObject.prototype.setDefaultPositioningValues = function () {
+WickObject.prototype.createNewSymbol = function () {
 
-    this.scaleX =  1;
-    this.scaleY =  1;
-    this.angle  =  0;
-    this.flipX  =  false;
-    this.flipY  =  false;
-    this.opacity = 1;
+    var symbol = new WickObject();
 
-}
+    symbol.isSymbol = true;
+    symbol.playheadPosition = 0;
+    symbol.currentLayer = 0;
+    symbol.layers = [new WickLayer()];
 
-WickObject.prototype.setDefaultSymbolValues = function () {
-
-    this.isSymbol = true;
-    this.playheadPosition = 0;
-    this.currentLayer = 0;
-    this.layers = [new WickLayer()];
+    return symbol;
 
 }
 
@@ -87,8 +80,8 @@ WickObject.createNewRootObject = function () {
     rootObject.playheadPosition = 0;
     rootObject.currentLayer = 0;
     rootObject.layers = [new WickLayer()];
-    rootObject.left = 0;
-    rootObject.top = 0;
+    rootObject.x = 0;
+    rootObject.y = 0;
     rootObject.opacity = 1.0;
     return rootObject;
 }
@@ -115,8 +108,8 @@ WickObject.fromJSONArray = function (jsonArrayObject, callback) {
         var newWickObject = WickObject.fromJSON(wickObjectJSONArray[i]);
         
         if(wickObjectJSONArray.length > 1) {
-            newWickObject.left += jsonArrayObject.groupPosition.x;
-            newWickObject.top  += jsonArrayObject.groupPosition.y;
+            newWickObject.x += jsonArrayObject.groupPosition.x;
+            newWickObject.y += jsonArrayObject.groupPosition.y;
         }
 
         newWickObjects.push(newWickObject);
@@ -181,7 +174,6 @@ WickObject.fromImage = function (imgSrc, callback) {
 
         var obj = new WickObject();
 
-        obj.setDefaultPositioningValues();
         obj.width = fileImage.width / window.devicePixelRatio;
         obj.height = fileImage.height / window.devicePixelRatio;
         obj.imageData = fileImage.src;
@@ -193,11 +185,9 @@ WickObject.fromImage = function (imgSrc, callback) {
 
 WickObject.fromAnimatedGIF = function (gifData, callback) {
 
-    var gifSymbol = new WickObject();
-    gifSymbol.setDefaultPositioningValues();
-    gifSymbol.left = window.innerWidth /2;
-    gifSymbol.top  = window.innerHeight/2;
-    gifSymbol.setDefaultSymbolValues();
+    var gifSymbol = WickObject.createNewSymbol();
+    gifSymbol.x = window.innerWidth /2;
+    gifSymbol.y  = window.innerHeight/2;
 
     //var gif = document.getElementById("gifImportDummyElem");
     var newGifEl = document.createElement("img"); 
@@ -235,8 +225,6 @@ WickObject.fromAnimatedGIF = function (gifData, callback) {
 WickObject.fromSVG = function (svgData, callback) {
     var svgWickObject = new WickObject();
 
-    svgWickObject.setDefaultPositioningValues();
-
     svgWickObject.svgData = {};
     svgWickObject.svgData.svgString = svgData.svgString;
     svgWickObject.svgData.fillColor = svgData.fillColor;
@@ -246,8 +234,6 @@ WickObject.fromSVG = function (svgData, callback) {
 
 WickObject.fromText = function (text) {
     var obj = new WickObject();
-
-    obj.setDefaultPositioningValues();
 
     obj.fontData = {
         //backgroundColor: undefined,
@@ -287,7 +273,6 @@ WickObject.fromHTML = function (text) {
     VerboseLog.error("WickObject.fromHTML not updated yet...");
     /*var htmlSnippetWickObject = new WickObject(parentObject);
 
-    htmlSnippetWickObject.setDefaultPositioningValues();
     htmlSnippetWickObject.htmlData = '<iframe width="560" height="315" src="https://www.youtube.com/embed/AxZ6RG5UeiU" frameborder="0" allowfullscreen></iframe>';
     htmlSnippetWickObject.left = window.innerWidth/2;
     htmlSnippetWickObject.top = window.innerHeight/2;
@@ -303,29 +288,22 @@ WickObject.fromHTML = function (text) {
 WickObject.fromAudioFile = function (audioData) {
     var audioWickObject = new WickObject();
 
-    audioWickObject.setDefaultPositioningValues();
     audioWickObject.audioData = audioData;
     audioWickObject.autoplaySound = true;
-    audioWickObject.left = window.innerWidth/2;
-    audioWickObject.top = window.innerHeight/2;
+    audioWickObject.x = window.innerWidth/2;
+    audioWickObject.y = window.innerHeight/2;
 
     return audioWickObject;
 }
 
-WickObject.createSymbolFromWickObjects = function (left, top, wickObjects) {
-    var symbol = new WickObject();
+WickObject.createSymbolFromWickObjects = function (wickObjects) {
+    var symbol = WickObject.createNewSymbol();
 
-    symbol.left = left;
-    symbol.top = top;
-    symbol.setDefaultPositioningValues();
-    symbol.setDefaultSymbolValues();
-
-    // Multiple objects are selected, put them all in the new symbol
     for(var i = 0; i < wickObjects.length; i++) {
         symbol.layers[0].frames[0].wickObjects[i] = wickObjects[i];
 
-        symbol.layers[0].frames[0].wickObjects[i].left = wickObjects[i].left - symbol.left;
-        symbol.layers[0].frames[0].wickObjects[i].top  = wickObjects[i].top - symbol.top;
+        symbol.layers[0].frames[0].wickObjects[i].x = wickObjects[i].x - symbol.x;
+        symbol.layers[0].frames[0].wickObjects[i].y = wickObjects[i].y - symbol.y;
     }
 
     return symbol;
@@ -708,6 +686,7 @@ WickObject.prototype.getSymbolCornerPosition = function () {
 
 }
 
+/* Get the absolute position of this object (i.e., the position not relative to the parents) */
 WickObject.prototype.getAbsolutePosition = function () {
     if(this.isRoot) {
         return {

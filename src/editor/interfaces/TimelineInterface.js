@@ -52,15 +52,20 @@ var TimelineInterface = function (wickEditor) {
         currentObject.layers.forEach(function (layer) {
             var frameCount = 0;
             layer.frames.forEach(function (frame) {
+
+                ctx.fillStyle = "#000000";
+                ctx.fillRect(
+                    frameCount*frameWidth, layerCount*frameHeight,
+                    frameWidth*frame.frameLength, frameHeight);
                 
                 ctx.fillStyle = "#BBBBBB";
-                if (frameCount == currentObject.playheadPosition && layerCount == currentObject.currentLayer) {
+                if (frame == currentObject.getCurrentFrame() && layerCount == currentObject.currentLayer) {
                     ctx.fillStyle = "#DDDDDD";
                 }
 
                 ctx.fillRect(
-                    frameCount*frameWidth, layerCount*frameHeight,
-                    frameWidth*frame.frameLength, frameHeight);
+                    frameCount*frameWidth + 1, layerCount*frameHeight + 1,
+                    frameWidth*frame.frameLength - 2, frameHeight - 2);
 
                 frameCount += frame.frameLength;
             });

@@ -306,9 +306,7 @@ var WickActionHandler = function (wickEditor) {
 
     this.registerAction('convertSelectionToSymbol', 
         function (args) {
-            var symbol = new WickObject();
-            symbol.setDefaultPositioningValues();
-            symbol.setDefaultSymbolValues();
+            var symbol = new WickObject.createNewSymbol();
 
             var selectedObjects = wickEditor.getSelectedWickObjects();
             for(var i = 0; i < selectedObjects.length; i++) {

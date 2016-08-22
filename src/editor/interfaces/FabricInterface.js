@@ -343,6 +343,9 @@ var FabricInterface = function (wickEditor) {
         var ids  = [];
         if(e.target.type === "group" && !e.target.wickObjectID) {
             var group = e.target;
+
+            // May need to ungroup the group, deselect all, get transforms for each object, and reselect group for this to work properly.
+
             for(var i = 0; i < group._objects.length; i++) {
                 var obj = group._objects[i];
                 ids[i] = obj.wickObjectID;
@@ -515,7 +518,6 @@ var FabricInterface = function (wickEditor) {
     }
 
     var splitPathsWithMultiplePieces = function () {
-        //console.error("splitPathsWithMultiplePieces NYI");
         that.canvas.forEachObject(function(fabObj) {
             if(fabObj.type === "path" && fabObj.wickObjectID) {
                 var path = fabObj.paperPath;
@@ -524,7 +526,7 @@ var FabricInterface = function (wickEditor) {
         });
     }
 
-    // Paths are handled internally by fabric so we have to intercept the paths and convert them to wickobjects
+    // Paths are handled internally by fabric so we have to intercept them as they are added by fabric
     canvas.on('object:added', function(e) {
         if(e.target.type !== "path" || e.target.wickObjectID) {
             return;
@@ -534,11 +536,7 @@ var FabricInterface = function (wickEditor) {
 
         potracePath(e.target, function(SVGData) {
             if(wickEditor.currentTool.type == "paintbrush") {
-                WickObject.fromSVG(SVGData, function(wickObj) {
-                    wickObj.x = pathFabricObject.left - that.getCenteredFrameOffset().x - pathFabricObject.width/2  - that.canvas.freeDrawingBrush.width/2;
-                    wickObj.y = pathFabricObject.top  - that.getCenteredFrameOffset().y - pathFabricObject.height/2 - that.canvas.freeDrawingBrush.width/2;
-                    wickEditor.actionHandler.doAction('addObjects', {wickObjects:[wickObj]})
-                });
+                convertPathToWickObject(SVGData, pathFabricObject)
             } else if(wickEditor.currentTool.type == "eraser") {
                 eraseUsingSVG(SVGData);
             }
@@ -562,6 +560,14 @@ var FabricInterface = function (wickEditor) {
         }); 
     }
 
+    var convertPathToWickObject = function (SVGData, pathFabricObject) {
+        WickObject.fromSVG(SVGData, function(wickObj) {
+            wickObj.x = pathFabricObject.left - that.getCenteredFrameOffset().x - pathFabricObject.width/2  - that.canvas.freeDrawingBrush.width/2;
+            wickObj.y = pathFabricObject.top  - that.getCenteredFrameOffset().y - pathFabricObject.height/2 - that.canvas.freeDrawingBrush.width/2;
+            wickEditor.actionHandler.doAction('addObjects', {wickObjects:[wickObj]})
+        });
+    }
+
     var eraseUsingSVG = function (SVGData) {
         console.error("eraseUsingSVG NYI")
     }
@@ -570,7 +576,7 @@ var FabricInterface = function (wickEditor) {
            GUI Stuff
 ********************************/
 
-    // Zoom
+// Zoom
 
     this.zoomIn = function () {
         that.canvas.setZoom(that.canvas.getZoom() * 1.1);
@@ -582,7 +588,7 @@ var FabricInterface = function (wickEditor) {
         that.canvas.renderAll();
     }
 
-    // Pan
+// Pan
 
     var panning = false;
     canvas.on('mouse:up', function (e) {
