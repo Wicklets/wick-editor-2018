@@ -12,18 +12,17 @@ var TimelineInterface = function (wickEditor) {
 
     var playheadX = frameWidth / 2;
 
-    var mouse = {x:0,y:0,down:false};
+    var mouse = {x:0, y:0, down:false};
 
     this.syncWithEditorState = function () {
 
         var currentObject = wickEditor.project.getCurrentObject();
 
-        var oldPlayheadPosition = currentObject.playheadPosition;
-        var newPlayheadPosition = Math.floor(playheadX/frameWidth);
+        var playheadPosition = currentObject.playheadPosition;
+        var interfacePlayheadPosition = Math.floor(playheadX/frameWidth);
 
-        if(newPlayheadPosition != oldPlayheadPosition) {
-            currentObject.playheadPosition = newPlayheadPosition;
-            wickEditor.syncInterfaces();
+        if(playheadPosition != interfacePlayheadPosition) {
+            playheadX = playheadPosition * frameWidth + frameWidth/2;
         }
 
         that.redraw();
@@ -31,8 +30,8 @@ var TimelineInterface = function (wickEditor) {
     }
 
     this.resize = function () {
-        var GUIWidth = parseInt($("#timelineGUI").css("width")) / 2;
-        $("#timelineGUI").css('left', (window.innerWidth/2 - GUIWidth)+'px');
+        var GUIWidth = parseInt($("#timelineGUI").css("width"));
+        $("#timelineGUI").css('left', (window.innerWidth/2 - GUIWidth/2)+'px');
 
         canvas.width = GUIWidth;
         canvas.height = 75;
@@ -81,25 +80,38 @@ var TimelineInterface = function (wickEditor) {
     });
     this.resize();
 
+    this.updatePlayheadPosition = function (x) {
+        playheadX = x;
+
+        var currentObject = wickEditor.project.getCurrentObject();
+
+        var oldPlayheadPosition = currentObject.playheadPosition;
+        var newPlayheadPosition = Math.floor(playheadX/frameWidth);
+
+        if(newPlayheadPosition != oldPlayheadPosition) {
+            currentObject.playheadPosition = newPlayheadPosition;
+            wickEditor.syncInterfaces();
+        }
+    }
+
     canvas.addEventListener('mousedown', function(e) {
         mouse.down = true;
-        playheadX = e.offsetX;
-        that.syncWithEditorState();
+        that.updatePlayheadPosition(e.offsetX);
         that.redraw();
     });
     canvas.addEventListener('mouseup', function(e) {
         mouse.down = false;
+        that.updatePlayheadPosition(e.offsetX);
         that.redraw();
     });
     canvas.addEventListener('mousemove', function(e) {
         if(mouse.down) {
-            playheadX = e.offsetX;
+            that.updatePlayheadPosition(e.offsetX);
         }
-        that.syncWithEditorState();
         that.redraw();
     });
 
-    $("#addNewFrameButton").on("click", function (e) {
+    /*$("#addNewFrameButton").on("click", function (e) {
         wickEditor.actionHandler.doAction('addNewFrame');
     });
 
@@ -109,6 +121,6 @@ var TimelineInterface = function (wickEditor) {
 
     $("#shrinkFrameButton").on("click", function (e) {
         wickEditor.actionHandler.doAction('shrinkFrame', {nFramesToShrinkBy:1});
-    });
+    });*/
 
 }

@@ -7,11 +7,11 @@ var InputHandler = function (wickEditor) {
 
     this.editingTextBox = false;
 
-/********************
-     DOM Events
-********************/
-
     var that = this;
+
+/*************************
+     Mouse
+*************************/
 
     document.addEventListener('mousemove', function(e) { 
         that.mouse.x = e.clientX;
@@ -25,6 +25,10 @@ var InputHandler = function (wickEditor) {
     document.addEventListener('contextmenu', function (event) { 
         event.preventDefault();
     }, false);
+
+/*************************
+     Keys
+*************************/
 
     this.clearKeys = function () {
         that.keys = [];
@@ -88,12 +92,20 @@ var InputHandler = function (wickEditor) {
         that.keys[event.keyCode] = false;
     });
 
+/*************************
+    Leave page warning
+*************************/
+
     // Setup leave page warning
     window.addEventListener("beforeunload", function (event) {
         var confirmationMessage = 'Warning: All unsaved changes will be lost!';
         (event || window.event).returnValue = confirmationMessage; //Gecko + IE
         return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
     });
+
+/*************************
+     Copy/Paste
+*************************/
 
     // In order to ensure that the browser will fire clipboard events, we always need to have something selected
     var focusHiddenArea = function () {
@@ -154,6 +166,10 @@ var InputHandler = function (wickEditor) {
 
         }
     });
+
+/*************************
+     Drag-to-upload
+*************************/
 
     $("#editor").on('dragover', function(e) {
         document.getElementById('dropToUploadFileAlert').style.display = 'block';

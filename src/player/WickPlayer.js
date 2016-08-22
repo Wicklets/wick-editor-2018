@@ -729,7 +729,7 @@ var WickPlayer = (function () {
             obj.playheadPosition ++;
 
             // If we reached the end, go back to the beginning 
-            if(obj.playheadPosition > obj.getTotalTimelineLength()) {
+            if(obj.playheadPosition >= obj.getTotalTimelineLength()) {
                 obj.playheadPosition = 0;
             }
         }

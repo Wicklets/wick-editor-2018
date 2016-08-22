@@ -1,8 +1,5 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-/*****************************
-	Frames
-*****************************/
 var WickFrame = function () {
 	// Identifier so we can do e.g. gotoAndStop("menu") 
 	this.identifier = null;

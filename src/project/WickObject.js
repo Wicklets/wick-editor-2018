@@ -1,5 +1,9 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
+/*************************
+     Constructors
+*************************/
+
 var WickObject = function () {
 
 // Internals
@@ -328,250 +332,9 @@ WickObject.createSymbolFromWickObjects = function (left, top, wickObjects) {
 
 }
 
-WickObject.prototype.getCurrentFrame = function() {
-
-    var layer = this.layers[this.currentLayer];
-    var counter = 0;
-
-    for(var f = 0; f < layer.frames.length; f++) {
-        var frame = layer.frames[f];
-        for(var i = 0; i <= frame.frameLength; i++) {
-            if(counter == this.playheadPosition) {
-                return frame;
-            }
-            counter++;
-        }
-    }
-
-    VerboseLog.error("Warning: getCurrentFrame() returning null, playheadPosition may be invalid!");
-    return null;
-
-}
-
-WickObject.prototype.getCurrentLayer = function() {
-    return this.layers[this.currentLayer];
-}
-
-// Used so that if the renderer can't render SVGs it has an image to fallback to
-WickObject.prototype.generateSVGCacheImages = function (callback) {
-
-    var that = this;
-
-    if(this.svgData) {
-
-        fabric.loadSVGFromString(this.svgData.svgString, function(objects, options) {
-            objects[0].fill = that.svgData.fillColor;
-            var svgFabricObject = fabric.util.groupSVGElements(objects, options);
-            svgFabricObject.cloneAsImage(function(clone) {
-                var imgSrc = clone._element.currentSrc || clone._element.src;
-                that.svgCacheImageData = imgSrc;
-                callback();
-            });
-        });
-
-    } else if(this.isSymbol) {
-
-        var childrenConverted = 0;
-        var nChildren = that.getTotalNumChildren();
-
-        if(nChildren == 0) {
-            callback();
-        }
-
-        this.forEachChildObject(function(currObj) {
-            currObj.generateSVGCacheImages(function () {
-                childrenConverted++;
-                if(childrenConverted == nChildren) {
-                    callback();
-                }
-            });
-        });
-    } else {
-        callback();
-    }
-
-}
-
-/* Used to properly position symbols in fabric */
-WickObject.prototype.getSymbolCornerPosition = function () {
-
-    if(!this.isSymbol) {
-        VerboseLog.error("getSymbolCornerPosition() called on non-symbol")
-        return null;
-    }
-
-    var leftmostLeft = null;
-    var topmostTop = null;
-
-    this.forEachFirstFrameChildObject(function (currObj) {
-        if(leftmostLeft === null || currObj.x < leftmostLeft) {
-            leftmostLeft = currObj.x;
-        }
-
-        if(topmostTop === null || currObj.y < topmostTop) {
-            topmostTop = currObj.y;
-        }
-    });
-
-    return {x:leftmostLeft, y:topmostTop};
-
-}
-
-WickObject.prototype.getAbsolutePosition = function () {
-    if(this.isRoot) {
-        return {
-            x: 0, 
-            y: 0};
-    } else {
-        var parentPosition = this.parentObject.getAbsolutePosition();
-        return {
-            x: this.x + parentPosition.x, 
-            y: this.y + parentPosition.y};
-    }
-}
-
-/* Encodes scripts to avoid JSON format problems */
-WickObject.prototype.encodeStrings = function () {
-
-    var encodeString = function (str) {
-        var newStr = str;
-        newStr = encodeURI(str);
-        newStr = newStr.replace(/'/g, "%27");
-        return newStr;
-    }
-
-    if(this.wickScripts) {
-        for (var key in this.wickScripts) {
-            this.wickScripts[key] = encodeString(this.wickScripts[key]);
-        }
-    }
-
-    if(this.fontData) {
-        this.fontData.text = encodeString(this.fontData.text);
-    }
-
-    if(this.svgData) {
-        this.svgData.svgString = encodeString(this.svgData.svgString);
-    }
-
-    if(this.isSymbol) {
-        this.forEachChildObject(function(currObj) {
-            currObj.encodeStrings();
-        });
-    }
-
-}
-
-/* Decodes scripts back to human-readble and eval()-able format */
-WickObject.prototype.decodeStrings = function () {
-    
-    var decodeString = function (str) {
-        var newStr = str;
-        newStr = newStr.replace(/%27/g, "'");
-        newStr = decodeURI(str);
-        return newStr;
-    }
-    
-    if(this.wickScripts) {
-        for (var key in this.wickScripts) {
-            this.wickScripts[key] = decodeString(this.wickScripts[key])
-        }
-    }
-
-    if(this.fontData) {
-        this.fontData.text = decodeString(this.fontData.text);
-    }
-
-    if(this.svgData) {
-        this.svgData.svgString = decodeString(this.svgData.svgString);
-    }
-
-    if(this.isSymbol) {
-        this.forEachChildObject(function(currObj) {
-            currObj.decodeStrings();
-        });
-    }
-
-}
-
-WickObject.prototype.getAsJSON = function () {
-    // Get rid of the ID because the JSON data of this object doesn't exist in the project.
-    var oldID = this.id;
-    this.id = undefined;
-
-    // Encode scripts to avoid JSON format problems
-    this.encodeStrings();
-
-    var JSONWickObject = JSON.stringify(this, WickObjectUtils.JSONReplacer);
-
-    // Put prototypes back on object ('class methods'), they don't get JSONified on project export.
-    WickObjectUtils.putWickObjectPrototypeBackOnObject(this);
-
-    // Decode scripts back to human-readble and eval()-able format
-    this.decodeStrings();
-
-    // Put ID back on
-    this.id = oldID;
-
-    return JSONWickObject;
-}
-
-WickObject.prototype.getAsFile = function () {
-
-    if(this.isSymbol) {
-        return this.getAsJSON();
-        console.log("note: we don't have wickobject import yet.")
-        return;
-    }
-
-    if(this.imageData) {
-
-    }
-
-    console.error("export not supported for this type of wickobject yet");
-
-}
-
-/* Determine if two wick objects collide using rectangular hit detection on their
-   farthest border */ 
-function rectangularHitDetection(objA, objB) {
-    var objAAbsPos = objA.getAbsolutePosition();
-    var objBAbsPos = objB.getAbsolutePosition();
-
-    var objAWidth = objA.width * objA.scaleX;
-    var objAHeight = objAHeight * objA.scaleY; 
-
-    var objBWidth = objB.width * objB.scaleX; 
-    var objBHeight = objB.height * objB.scaleY; 
-
-    var left = objAAbsPos.x < (objBAbsPos.x + objBWidth); 
-    var right = (objAAbsPos.x + objAWidth) > objBAbsPos.x; 
-    var top = objAAbsPos.y < (objBAbsPos.y + objBHeight); 
-    var bottom = (objAAbsPos.y + objA.height) > objBAbsPos.y; 
-
-    return left && right && top && bottom;
-}
-
-/* Determine if two wickObjects Collide using circular hit detection from their
-   centroid using their full width and height. */ 
-function circularHitDetection(objA, objB) {
-    var objAAbsPos = objA.getAbsolutePosition();
-    var objBAbsPos = objB.getAbsolutePosition();
-
-    var dx = objAAbsPos.x - objBAbsPos.x; 
-    var dy = objAAbsPos.y - objBAbsPos.y;
-
-    var objAWidth = objA.width * objA.scaleX;
-    var objAHeight = objAHeight * objA.scaleY; 
-
-    var distance = Math.sqrt(dx * dx + dy * dy);
-
-    if (distance < ((objAWidth/2) + (objBWidth/2))) {
-        return true;
-    }
-
-    return false; 
-}
+/*************************
+     Collision Detection
+*************************/
 
 /* Returns a boolean alerting whether or not this object or any of it's children in frame, 
    have collided with the given object or any of it's children in frame. */
@@ -579,6 +342,8 @@ WickObject.prototype.hitTest = function (otherObj, hitTestType) {
     if (otherObj === undefined) {
         return false; 
     }
+
+    // Generate lists of all children of both objects
 
     var otherObjChildren = otherObj.getAllActiveChildObjects();
     if(!otherObj.isSymbol) {
@@ -590,21 +355,17 @@ WickObject.prototype.hitTest = function (otherObj, hitTestType) {
         thisObjChildren.push(this); 
     }
 
-    var checkMethod;
+    // Load the collition detection function for the type of collision we want to check for
 
-    switch (hitTestType) {
-        case "rectangles":
-            checkMethod = rectangularHitDetection; 
-            break; 
-        case "point":
-            console.log("NYI"); 
-            break;
-        case "circles":
-            checkMethod = circularHitDetection;
-            break;
-        default:
-            checkMethod = rectangularHitDetection; 
+    var checkMethod;
+    if(!hitTestType) {
+        // Use default (rectangular hittest) if no hitTestType is provided
+        checkMethod = WickObjectCollisionDetection["rectangles"];
+    } else {
+        checkMethod = WickObjectCollisionDetection[hitTestType];
     }
+
+    // Ready to go! Check for collisions!!
 
     for (var i = 0; i < otherObjChildren.length; i++) {
         for (var j = 0; j < thisObjChildren.length; j++) {
@@ -618,8 +379,32 @@ WickObject.prototype.hitTest = function (otherObj, hitTestType) {
 
 }
 
-WickObject.prototype.addNewLayer = function () {
-    this.layers.push(new WickLayer());
+/*************************
+     Timeline Control
+*************************/
+
+WickObject.prototype.getCurrentFrame = function() {
+
+    var layer = this.layers[this.currentLayer];
+    var counter = 0;
+
+    for(var f = 0; f < layer.frames.length; f++) {
+        var frame = layer.frames[f];
+        for(var i = 0; i < frame.frameLength; i++) {
+            if(counter == this.playheadPosition) {
+                return frame;
+            }
+            counter++;
+        }
+    }
+
+    // Playhead isn't over a frame on the current layer.
+    return null;
+
+}
+
+WickObject.prototype.getCurrentLayer = function() {
+    return this.layers[this.currentLayer];
 }
 
 WickObject.prototype.getTotalTimelineLength = function () {
@@ -636,10 +421,14 @@ WickObject.prototype.getTotalTimelineLength = function () {
 
 }
 
+WickObject.prototype.addNewLayer = function () {
+    this.layers.push(new WickLayer());
+}
+
 WickObject.prototype.play = function () {
 
     if(!this.isSymbol) {
-        VerboseLog.error("play called on wickobject that isn't a symbol!")
+        throw "play called on wickobject that isn't a symbol!";
         return;
     }
 
@@ -649,38 +438,11 @@ WickObject.prototype.play = function () {
 WickObject.prototype.stop = function () {
 
     if(!this.isSymbol) {
-        VerboseLog.error("stop called on wickobject that isn't a symbol!")
+        throw "stop called on wickobject that isn't a symbol!";
         return;
     }
 
     this.isPlaying = false;
-}
-
-WickObject.prototype.getFrameByIdentifier = function (id) {
-
-    for (var l = 0; l < this.layers.length; l++) {
-
-        var counter = 0;
-
-        var layer = this.layers[l];
-        for (var f = 0; f < layer.frames.length; f++) {
-
-            var frame = layer.frames[f];
-            if(frame.identifier === id) {
-                return {
-                    frame : frame,
-                    index : f,
-                    playheadLocation : counter
-                }
-            }
-            counter += frame.frameLength;
-
-        }
-
-    }
-
-    return undefined;
-
 }
 
 WickObject.prototype.gotoFrame = function (frame) {
@@ -712,7 +474,7 @@ WickObject.prototype.gotoFrame = function (frame) {
 WickObject.prototype.gotoAndPlay = function (frame) {
 
     if(!this.isSymbol) {
-        VerboseLog.error("gotoAndPlay called on wickobject that isn't a symbol!")
+        throw "gotoAndPlay called on wickobject that isn't a symbol!";
         return;
     }
 
@@ -724,7 +486,7 @@ WickObject.prototype.gotoAndPlay = function (frame) {
 WickObject.prototype.gotoAndStop = function (frame) {
 
     if(!this.isSymbol) {
-        VerboseLog.error("gotoAndStop called on wickobject that isn't a symbol!")
+        throw "gotoAndStop called on wickobject that isn't a symbol!";
         return;
     }
     
@@ -736,7 +498,7 @@ WickObject.prototype.gotoAndStop = function (frame) {
 WickObject.prototype.gotoNextFrame = function () {
 
     if(!this.isSymbol) {
-        VerboseLog.error("gotoNextFrame called on wickobject that isn't a symbol!")
+        throw "gotoNextFrame called on wickobject that isn't a symbol!";
         return;
     }
 
@@ -751,7 +513,7 @@ WickObject.prototype.gotoNextFrame = function () {
 WickObject.prototype.gotoPrevFrame = function () {
 
     if(!this.isSymbol) {
-        VerboseLog.error("gotoPrevFrame called on wickobject that isn't a symbol!")
+        throw "gotoPrevFrame called on wickobject that isn't a symbol!";
         return;
     }
 
@@ -760,6 +522,10 @@ WickObject.prototype.gotoPrevFrame = function () {
         this.playheadPosition = 0;
     }
 }
+
+/*************************
+     Children utils
+*************************/
 
 /* Return all child objects of a parent object */
 WickObject.prototype.getAllChildObjects = function () {
@@ -805,8 +571,10 @@ WickObject.prototype.forEachChildObject = function (callback) {
 /* Call callback function for every child object in this object's current frame */
 WickObject.prototype.forEachActiveChildObject = function (callback) {
     var currentFrame = this.getCurrentFrame();
-    for(var o = 0; o < currentFrame.wickObjects.length; o++) {
-        callback(currentFrame.wickObjects[o]);
+    if(currentFrame) {
+        for(var o = 0; o < currentFrame.wickObjects.length; o++) {
+            callback(currentFrame.wickObjects[o]);
+        }
     }
 }
 
@@ -875,6 +643,7 @@ WickObject.prototype.removeChildByID = function (id) {
     }); 
 }
 
+/* Used to generate a unique ID for new WickObjects */
 WickObject.prototype.getLargestID = function (id) {
     if(!this.isSymbol) {
         return this.id;
@@ -910,6 +679,154 @@ WickObject.prototype.childWithIDIsActive = function (id) {
 
 }   
 
+/*************************
+     Positioning stuff
+*************************/
+
+/* Used to properly position symbols in fabric */
+WickObject.prototype.getSymbolCornerPosition = function () {
+
+    if(!this.isSymbol) {
+        VerboseLog.error("getSymbolCornerPosition() called on non-symbol")
+        return null;
+    }
+
+    var leftmostLeft = null;
+    var topmostTop = null;
+
+    this.forEachFirstFrameChildObject(function (currObj) {
+        if(leftmostLeft === null || currObj.x < leftmostLeft) {
+            leftmostLeft = currObj.x;
+        }
+
+        if(topmostTop === null || currObj.y < topmostTop) {
+            topmostTop = currObj.y;
+        }
+    });
+
+    return {x:leftmostLeft, y:topmostTop};
+
+}
+
+WickObject.prototype.getAbsolutePosition = function () {
+    if(this.isRoot) {
+        return {
+            x: 0, 
+            y: 0};
+    } else {
+        var parentPosition = this.parentObject.getAbsolutePosition();
+        return {
+            x: this.x + parentPosition.x, 
+            y: this.y + parentPosition.y};
+    }
+}
+
+/*************************
+     Export
+*************************/
+
+WickObject.prototype.getAsJSON = function () {
+    // Get rid of the ID because the JSON data of this object doesn't exist in the project.
+    var oldID = this.id;
+    this.id = undefined;
+
+    // Encode scripts to avoid JSON format problems
+    this.encodeStrings();
+
+    var JSONWickObject = JSON.stringify(this, WickObjectUtils.JSONReplacer);
+
+    // Put prototypes back on object ('class methods'), they don't get JSONified on project export.
+    WickObjectUtils.putWickObjectPrototypeBackOnObject(this);
+
+    // Decode scripts back to human-readble and eval()-able format
+    this.decodeStrings();
+
+    // Put ID back on
+    this.id = oldID;
+
+    return JSONWickObject;
+}
+
+WickObject.prototype.getAsFile = function () {
+
+    if(this.isSymbol) {
+        return this.getAsJSON();
+        console.log("note: we don't have wickobject import yet.")
+        return;
+    }
+
+    if(this.imageData) {
+
+    }
+
+    console.error("export not supported for this type of wickobject yet");
+
+}
+
+/* Encodes scripts and strings to avoid JSON format problems */
+WickObject.prototype.encodeStrings = function () {
+
+    var encodeString = function (str) {
+        var newStr = str;
+        newStr = encodeURI(str);
+        newStr = newStr.replace(/'/g, "%27");
+        return newStr;
+    }
+
+    if(this.wickScripts) {
+        for (var key in this.wickScripts) {
+            this.wickScripts[key] = encodeString(this.wickScripts[key]);
+        }
+    }
+
+    if(this.fontData) {
+        this.fontData.text = encodeString(this.fontData.text);
+    }
+
+    if(this.svgData) {
+        this.svgData.svgString = encodeString(this.svgData.svgString);
+    }
+
+    if(this.isSymbol) {
+        this.forEachChildObject(function(currObj) {
+            currObj.encodeStrings();
+        });
+    }
+
+}
+
+/* Decodes scripts and strings back to human-readble and eval()-able format */
+WickObject.prototype.decodeStrings = function () {
+    
+    var decodeString = function (str) {
+        var newStr = str;
+        newStr = newStr.replace(/%27/g, "'");
+        newStr = decodeURI(str);
+        return newStr;
+    }
+    
+    if(this.wickScripts) {
+        for (var key in this.wickScripts) {
+            this.wickScripts[key] = decodeString(this.wickScripts[key])
+        }
+    }
+
+    if(this.fontData) {
+        this.fontData.text = decodeString(this.fontData.text);
+    }
+
+    if(this.svgData) {
+        this.svgData.svgString = decodeString(this.svgData.svgString);
+    }
+
+    if(this.isSymbol) {
+        this.forEachChildObject(function(currObj) {
+            currObj.decodeStrings();
+        });
+    }
+
+}
+
 WickObject.prototype.regenerateParentObjectReferences = function() {
 
     var parentObject = this;
@@ -921,6 +838,46 @@ WickObject.prototype.regenerateParentObjectReferences = function() {
             child.parentObject = parentObject;
             child.regenerateParentObjectReferences();
         });
+    }
+
+}
+
+// Used so that if the renderer can't render SVGs it has an image to fallback to
+WickObject.prototype.generateSVGCacheImages = function (callback) {
+
+    var that = this;
+
+    if(this.svgData) {
+
+        fabric.loadSVGFromString(this.svgData.svgString, function(objects, options) {
+            objects[0].fill = that.svgData.fillColor;
+            var svgFabricObject = fabric.util.groupSVGElements(objects, options);
+            svgFabricObject.cloneAsImage(function(clone) {
+                var imgSrc = clone._element.currentSrc || clone._element.src;
+                that.svgCacheImageData = imgSrc;
+                callback();
+            });
+        });
+
+    } else if(this.isSymbol) {
+
+        var childrenConverted = 0;
+        var nChildren = that.getTotalNumChildren();
+
+        if(nChildren == 0) {
+            callback();
+        }
+
+        this.forEachChildObject(function(currObj) {
+            currObj.generateSVGCacheImages(function () {
+                childrenConverted++;
+                if(childrenConverted == nChildren) {
+                    callback();
+                }
+            });
+        });
+    } else {
+        callback();
     }
 
 }
