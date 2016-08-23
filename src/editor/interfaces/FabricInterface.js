@@ -611,10 +611,10 @@ var FabricInterface = function (wickEditor) {
 
     // Update the scripting GUI when the selected object changes
     canvas.on('object:selected', function (e) {
-        //wickEditor.syncInterfaces();
+        wickEditor.syncInterfaces();
     });
     canvas.on('selection:cleared', function (e) {
-        //wickEditor.syncInterfaces();
+        wickEditor.syncInterfaces();
     });
 
     // Hack: Select objects on right click (fabric.js doesn't do this by default >.>)
