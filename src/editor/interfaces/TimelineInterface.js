@@ -43,7 +43,7 @@ var TimelineInterface = function (wickEditor) {
 
         ctx.clearRect(0,0,canvas.width,canvas.height);
 
-        ctx.fillStyle = "#FFFFFF";
+        ctx.fillStyle = "#EEEEEE";
         ctx.fillRect(0,0,canvas.width,canvas.height);
 
         var currentObject = wickEditor.project.getCurrentObject();
@@ -53,7 +53,7 @@ var TimelineInterface = function (wickEditor) {
         for(var l = 0; l < currentObject.layers.length; l++) {
             //for(var f = 0; f < currentObject.getTotalTimelineLength(); f++) {
             for(var f = 0; f < currentObject.getTotalTimelineLength(); f++) {
-                ctx.fillStyle = "#BBBBBB";
+                ctx.fillStyle = "#EEEEEE";
                 ctx.fillRect(
                     f*frameWidth, l*frameHeight,
                     frameWidth, frameHeight);
