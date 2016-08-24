@@ -38,6 +38,7 @@ var WickEditor = function () {
 **********************************/
 
 WickEditor.prototype.syncInterfaces = function () {
+    console.log("syncInterfaces() called")
     for (var key in this.interfaces) {
         this.interfaces[key].syncWithEditorState();
     }

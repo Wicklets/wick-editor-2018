@@ -41,6 +41,7 @@ var RightClickMenuInterface = function (wickEditor) {
             hideButtonGroup("#timelineButtons");
             hideButtonGroup("#noFrameExistsButtons");
             hideButtonGroup("#frameExistsButtons");
+            hideButtonGroup("#commonTimelineButtons");
 
             // Selectively show portions we need depending on editor state
             showButtonsForMode[that.mode]();
@@ -96,6 +97,8 @@ var RightClickMenuInterface = function (wickEditor) {
 
     showButtonsForMode["timeline"] = function () {
         showButtonGroup("#timelineButtons");
+
+        showButtonGroup("#commonTimelineButtons");
 
         if(!wickEditor.project.getCurrentObject().getCurrentFrame()) {
             showButtonGroup("#noFrameExistsButtons");
@@ -195,15 +198,15 @@ var RightClickMenuInterface = function (wickEditor) {
     });
 
     bindActionToButton("#extendFrameButton", function () {
-        alert("extend")
+        wickEditor.actionHandler.doAction('extendFrame', {nFramesToExtendBy:1});
     });
 
     bindActionToButton("#shrinkFrameButton", function () {
-        alert("shrink")
+        wickEditor.actionHandler.doAction('shrinkFrame', {nFramesToShrinkBy:1});
     });
 
     bindActionToButton("#addLayerButton", function () {
-        alert("add layer")
+        wickEditor.actionHandler.doAction('addNewLayer');
     });
 
 }

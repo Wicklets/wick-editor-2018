@@ -137,6 +137,12 @@ var FabricInterface = function (wickEditor) {
         if(!wickObj.width) wickObj.width = fabricObj.width;
         if(!wickObj.height) wickObj.height = fabricObj.height;
 
+        // Always use length of text from fabric
+        if(fabricObj.type === "i-text") {
+            wickObj.width   = fabricObj.width;
+            wickObj.height  = fabricObj.height;
+        }
+
         fabricObj.left    = wickObj.getAbsolutePosition().x + this.getCenteredFrameOffset().x;
         fabricObj.top     = wickObj.getAbsolutePosition().y + this.getCenteredFrameOffset().y;
         fabricObj.width   = wickObj.width;
@@ -330,6 +336,8 @@ var FabricInterface = function (wickEditor) {
     // Listen for objects being changed so we can undo them in the action handler.
     canvas.on('object:modified', function(e) {
 
+        console.log("object:modified");
+
         // Delete text boxes with no text in 'em.
         if (e.target.text === '') {
             var wickObj = wickEditor.project.getChildByID(e.target.wickObjectID);
@@ -343,6 +351,7 @@ var FabricInterface = function (wickEditor) {
 
         var modifiedStates = [];
         var ids  = [];
+
         if(e.target.type === "group" && !e.target.wickObjectID) {
             var group = e.target;
 
@@ -611,14 +620,14 @@ var FabricInterface = function (wickEditor) {
         }
     });
 
-    // Update the scripting GUI when the selected object changes
+    // Update the scripting GUI/properties box when the selected object changes
     canvas.on('object:selected', function (e) {
-        if(that.notCreatingSelection)
-            wickEditor.syncInterfaces();
+        wickEditor.interfaces['scriptingide'].syncWithEditorState();
+        wickEditor.interfaces['properties'].syncWithEditorState();
     });
     canvas.on('selection:cleared', function (e) {
-        if(that.notCreatingSelection)
-            wickEditor.syncInterfaces();
+        wickEditor.interfaces['scriptingide'].syncWithEditorState();
+        wickEditor.interfaces['properties'].syncWithEditorState();
     });
 
     // Hack: Select objects on right click (fabric.js doesn't do this by default >.>)
