@@ -39,13 +39,10 @@ var WickActionHandler = function (wickEditor) {
         this.undoActions[name] = undoFunction;
     }
 
-    /* - note that dontAddToStack is optional and only to be used for when actions
-       call other actions! */
-    this.doAction = function (actionName, args, dontAddToStack) {
+    this.doAction = function (actionName, args) {
         
         VerboseLog.log("doAction: " + actionName);
         VerboseLog.log(args)
-        VerboseLog.log("dontAddToStack: " + dontAddToStack);
 
         // Create a new WickAction object
         var action = new WickAction(
@@ -64,7 +61,7 @@ var WickActionHandler = function (wickEditor) {
         action.doAction(action.args);
 
         // Put the action on the undo stack to be undone later
-        if(!dontAddToStack) {
+        if(args && !args.dontAddToStack) {
             this.undoStack.push(action); 
             this.redoStack = [];
         }
@@ -127,6 +124,12 @@ var WickActionHandler = function (wickEditor) {
 
     this.registerAction('addObjects', 
         function (args) {
+            // Make a new frame if one doesn't exist at the playhead position
+            if(!wickEditor.project.getCurrentObject().getCurrentFrame()) {
+                wickEditor.actionHandler.doAction('addNewFrame', {dontAddToStack:true});
+            }
+
+            // Add those boys and save their IDs so we can remove them on undo
             args.addedObjectIDs = [];
             for(var i = 0; i < args.wickObjects.length; i++) {
                 wickEditor.project.addObject(args.wickObjects[i]);
@@ -134,6 +137,7 @@ var WickActionHandler = function (wickEditor) {
             }
         },
         function (args) {
+            // Remove objects we added
             for(var i = 0; i < args.wickObjects.length; i++) {
                 wickEditor.project.getCurrentObject().removeChildByID(args.addedObjectIDs[i]);
             }
@@ -249,16 +253,18 @@ var WickActionHandler = function (wickEditor) {
 
             // Move to that new frame
             wickEditor.actionHandler.doAction('movePlayhead', {
-                newPlayheadPosition:currentObject.getCurrentLayer().frames.length-1
-            }, true);
+                newPlayheadPosition:currentObject.getCurrentLayer().frames.length-1,
+                dontAddToStack:true
+            });
         },
         function (args) {
             var currentObject = wickEditor.project.getCurrentObject();
 
             // Go to the second-to-last frame and remove the last frame
             wickEditor.actionHandler.doAction('movePlayhead', {
-                newPlayheadPosition:currentObject.getCurrentLayer().frames.length-2
-            }, true);
+                newPlayheadPosition:currentObject.getCurrentLayer().frames.length-2,
+                dontAddToStack:true
+            });
             currentObject.getCurrentLayer().frames.pop();
         });
 
