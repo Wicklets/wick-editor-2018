@@ -7,7 +7,7 @@ var TimelineInterface = function (wickEditor) {
     var canvas = document.getElementById("timelineCanvas");
     var ctx = canvas.getContext("2d");
 
-    var frameWidth = 24;
+    var frameWidth = 20;
     var frameHeight = 32;
 
     var playheadX = frameWidth / 2;
@@ -48,6 +48,24 @@ var TimelineInterface = function (wickEditor) {
 
         var currentObject = wickEditor.project.getCurrentObject();
 
+    // Draw grid
+
+        for(var l = 0; l < currentObject.layers.length; l++) {
+            //for(var f = 0; f < currentObject.getTotalTimelineLength(); f++) {
+            for(var f = 0; f < currentObject.getTotalTimelineLength(); f++) {
+                ctx.fillStyle = "#BBBBBB";
+                ctx.fillRect(
+                    f*frameWidth, l*frameHeight,
+                    frameWidth, frameHeight);
+                ctx.fillStyle = "#FFFFFF";
+                ctx.fillRect(
+                    f*frameWidth + 1, l*frameHeight + 1,
+                    frameWidth - 2, frameHeight - 2);
+            }
+        }
+
+    // Draw frames
+
         var layerCount = 0;
         currentObject.layers.forEach(function (layer) {
             var frameCount = 0;
@@ -71,6 +89,8 @@ var TimelineInterface = function (wickEditor) {
             });
             layerCount++;
         });
+
+    // Draw playhead
 
         ctx.fillStyle = "#000000";
         ctx.beginPath();

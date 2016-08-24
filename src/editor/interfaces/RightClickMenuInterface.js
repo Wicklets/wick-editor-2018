@@ -191,7 +191,19 @@ var RightClickMenuInterface = function (wickEditor) {
     });
 
     bindActionToButton("#removeFrameButton", function () {
-        alert("oarnoe")
+        alert("remove")
+    });
+
+    bindActionToButton("#extendFrameButton", function () {
+        alert("extend")
+    });
+
+    bindActionToButton("#shrinkFrameButton", function () {
+        alert("shrink")
+    });
+
+    bindActionToButton("#addLayerButton", function () {
+        alert("add layer")
     });
 
 }

@@ -19,6 +19,8 @@ var FabricInterface = function (wickEditor) {
     this.paperCanvas = document.createElement('canvas');
     paper.setup(this.canvas);
 
+    this.notCreatingSelection = true;
+
 /********************************
        Editor state syncing
 ********************************/
@@ -611,10 +613,12 @@ var FabricInterface = function (wickEditor) {
 
     // Update the scripting GUI when the selected object changes
     canvas.on('object:selected', function (e) {
-        wickEditor.syncInterfaces();
+        if(that.notCreatingSelection)
+            wickEditor.syncInterfaces();
     });
     canvas.on('selection:cleared', function (e) {
-        wickEditor.syncInterfaces();
+        if(that.notCreatingSelection)
+            wickEditor.syncInterfaces();
     });
 
     // Hack: Select objects on right click (fabric.js doesn't do this by default >.>)
@@ -636,6 +640,8 @@ var FabricInterface = function (wickEditor) {
 // Selection utils
 
     this.selectByIDs = function (ids) {
+
+        that.notCreatingSelection = false;
 
         if(ids.length == 0) {
             return;
@@ -661,9 +667,13 @@ var FabricInterface = function (wickEditor) {
             this.canvas.setActiveGroup(group.setCoords()).renderAll();
         }
 
+        that.notCreatingSelection = true;
+
     }
 
     this.selectAll = function () {
+
+        that.notCreatingSelection = false;
 
         var objs = [];
         this.canvas.getObjects().map(function(o) {
@@ -682,9 +692,13 @@ var FabricInterface = function (wickEditor) {
 
         this.canvas.setActiveGroup(group.setCoords()).renderAll();
 
+        that.notCreatingSelection = true;
+
     }
 
     this.deselectAll = function () {
+
+        that.notCreatingSelection = true;
 
         var activeGroup = this.canvas.getActiveGroup();
         if(activeGroup) {
@@ -693,6 +707,8 @@ var FabricInterface = function (wickEditor) {
         }
 
         this.canvas.deactivateAll().renderAll();
+
+        that.notCreatingSelection = false;
 
     }
 
