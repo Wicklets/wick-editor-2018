@@ -64,9 +64,6 @@ var FabricInterface = function (wickEditor) {
                 } else {
                     fabricObj.remove();
                 }
-            } else {
-                // Object still exists in current object, update it
-                that.syncObjects(currentObject.getChildByID(fabricObj.wickObjectID), fabricObj);
             }
         });
 
@@ -74,7 +71,7 @@ var FabricInterface = function (wickEditor) {
         var objectWithIDExistsInCanvas = function (id) {
             var found = false;
 
-            that.canvas.forEachObject(function(fabricObj) {
+            that.canvas._objects.forEach(function(fabricObj) {
                 if(fabricObj.wickObjectID == id) {
                     found = true;
                 }
@@ -89,17 +86,18 @@ var FabricInterface = function (wickEditor) {
                 // Update existing object
                 that.canvas.forEachObject(function(fabricObj) {
                     if(fabricObj.wickObjectID === child.id) {
+                        that.syncObjects(child, fabricObj);
                         var wickProjectIndex = currentObject.getCurrentFrame().wickObjects.indexOf(child);
-                        that.canvas.moveTo(fabricObj, wickProjectIndex+3);
+                        that.canvas.moveTo(fabricObj, wickProjectIndex+2);
                     }
                 });
             } else {
                 // Add new object
                 that.createFabricObjectFromWickObject(child, function (newFabricObj) {
                     newFabricObj.wickObjectID = child.id;
-                    canvas.add(newFabricObj);
+                    that.canvas.add(newFabricObj);
                     var wickProjectIndex = currentObject.getCurrentFrame().wickObjects.indexOf(child);
-                    that.canvas.moveTo(newFabricObj, wickProjectIndex+3);
+                    that.canvas.moveTo(newFabricObj, wickProjectIndex+2);
                 });
             }
         });
@@ -392,25 +390,11 @@ var FabricInterface = function (wickEditor) {
 /********************************
        Drawing tool stuff
 ********************************/
-
-    // Left click events
+    
     canvas.on('mouse:down', function(e) {
         if(e.e.button != 0) return;
         wickEditor.interfaces['rightclickmenu'].open = false;
-        leftClickEventHandlers[wickEditor.currentTool.type](e);
-    });
-
-    var leftClickEventHandlers = {
-        "cursor" : (function (e) {
-            // Note: fabric.js handles selection and such
-        }),
-        "paintbrush" : (function (e) {
-            // Note: fabric.js handles the actual drawing.
-        }),
-        "eraser" : (function (e) {
-            // Note: fabric.js handles the actual drawing.
-        }),
-        "fillbucket" : (function (e) {
+        if(wickEditor.currentTool.type == 'fillbucket') {
             that.deselectAll();
 
             that.canvas.forEachObject(function(fabricObj) {
@@ -445,33 +429,29 @@ var FabricInterface = function (wickEditor) {
                                 //wickObj.y = pathFabricObject.top  - that.getFrameOffset().y - pathFabricObject.height/2 - that.canvas.freeDrawingBrush.width/2;
                                 wickObj.x = pathObj.x;
                                 wickObj.y = pathObj.y;
-                                wickEditor.actionHandler.doAction('addObjects', {wickObjects:[wickObj]})
+                                // Note: if add is called before delete, delete will fire off before add and during state sync an extra object will be added.
+                                // Add functionaitly to FabricInterface to handle these weird async issues!
+                                wickEditor.actionHandler.doAction('deleteObjects', { ids:[pathObj.id] });
+                                wickEditor.actionHandler.doAction('addObjects', { wickObjects:[wickObj] });
                             });
-
-                            wickEditor.actionHandler.doAction('deleteObjects', { ids:[pathObj.id] });
                         } else {
                             // If they are different colors:
                             //     Delete the hole, but also make an in-place copy of it with wickEditor.currentTool.color.
 
                         }
-
-                        wickEditor.syncInterfaces();
                     } else {
                         console.log("path filled");
                         // Path filled: Change the color of that path.
 
                         pathObj.svgData.fillColor = wickEditor.currentTool.color;
-                        that.canvas.remove(fabricObj);
+                        that.canvas.remove(fabricObj); // to force regeneration of fabric path object
 
                         wickEditor.syncInterfaces();
                     }
                 }
             });
-        }),
-        "pan" : (function (e) {
-            // Note: We handle pan with the other mouse events
-        }),
-    }
+        }
+    });
 
     var getPaperObjectIntersectingWithPoint = function (item, point, fillClockwise) {
 
@@ -505,24 +485,24 @@ var FabricInterface = function (wickEditor) {
 
         that.canvas.forEachObject(function(fabObjA) {
             that.canvas.forEachObject(function(fabObjB) {
+
                 var bothFabObjsArePaths = fabObjA.type === "path" && fabObjB.type === "path";
                 var notSameObject = fabObjA.wickObjectID != fabObjB.wickObjectID;
                 var bothHaveWickObjectIDs = fabObjA.wickObjectID && fabObjB.wickObjectID;
+
                 if (bothFabObjsArePaths && notSameObject && bothHaveWickObjectIDs) {
                     var pathA = fabObjA.paperPath;
                     var pathB = fabObjB.paperPath;
-                    //console.log(pathA);
-                    //console.log(pathB);
                     var intersections = pathA.getIntersections(pathB);
                     if(intersections.length > 0) {
-                        console.log("wheeee! there be an intersection...");
-                        //console.log(intersections[0])
-                        //that.originCrosshair.left = intersections[0].point.x-that.originCrosshair.width+that.getCenteredFrameOffset().x;
-                        //that.originCrosshair.top = intersections[0].point.y-that.originCrosshair.height+that.getCenteredFrameOffset().y;
-                        // Same color: union
-                        // Different colors: path with higer z index subtracts from other path 
+                        if(fabObjA.fill === fabObjB.fill) {
+                            // Same color: union
+                        } else {
+                            // Different colors: path with higer z index subtracts from other path 
+                        }
                     }
                 }
+
             });
         });
 

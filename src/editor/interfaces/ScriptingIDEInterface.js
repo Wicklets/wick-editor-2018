@@ -48,7 +48,7 @@ var ScriptingIDEInterface = function (wickEditor) {
         $("#scriptingGUI").css('visibility', 'visible');
     }
 
-// GUI/Event handlers
+// Script buttons
 
     $("#onLoadButton").on("click", function (e) {
         that.currentScript = 'onLoad';
@@ -70,13 +70,7 @@ var ScriptingIDEInterface = function (wickEditor) {
         wickEditor.syncInterfaces();
     });
 
-    $("#closeScriptingGUIButton").on("click", function (e) {
-        that.open = false;
-        closeScriptingGUI();
-        that.syncWithEditorState();
-    });
-
-// Script refs
+// Builtin docs buttons
 
     document.getElementById("refBtnPlay").addEventListener("dragstart", function(ev) {
         ev.dataTransfer.setData("text", "play();");
@@ -102,11 +96,21 @@ var ScriptingIDEInterface = function (wickEditor) {
         ev.dataTransfer.setData("text", "gotoPrevFrame();");
     });
 
+// Other buttons
+
+    $("#closeScriptingGUIButton").on("click", function (e) {
+        that.open = false;
+        closeScriptingGUI();
+        that.syncWithEditorState();
+    });
+
     $("#beautifyButton").on("click", function (e) {
         var val = that.aceEditor.session.getValue();
         val = js_beautify(val);
         that.aceEditor.session.setValue(val);
     });
+
+// Ace events
 
     // Update selected objects scripts when script editor text changes
     this.aceEditor.getSession().on('change', function (e) {

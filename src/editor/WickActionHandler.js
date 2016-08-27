@@ -277,8 +277,6 @@ var WickActionHandler = function (wickEditor) {
 
             // Go to last added layer
             currentObject.currentLayer = currentObject.layers.length-1;
-
-            console.log(currentObject.currentLayer)
         },
         function (args) {
             var currentObject = wickEditor.project.getCurrentObject();

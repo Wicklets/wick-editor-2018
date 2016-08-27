@@ -51,7 +51,6 @@ var TimelineInterface = function (wickEditor) {
     // Draw grid
 
         for(var l = 0; l < currentObject.layers.length; l++) {
-            //for(var f = 0; f < currentObject.getTotalTimelineLength(); f++) {
             for(var f = 0; f < currentObject.getTotalTimelineLength(); f++) {
                 ctx.fillStyle = "#EEEEEE";
                 ctx.fillRect(

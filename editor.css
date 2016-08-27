@@ -44,8 +44,8 @@ hr {
 }
 
 #scriptingGUI {
-	bottom: 10px;
-	left: 10px;
+	bottom: 0px;
+	left: 0px;
 	text-align: center;
 	visibility: hidden;
 }
