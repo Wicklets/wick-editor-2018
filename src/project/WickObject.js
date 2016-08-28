@@ -59,7 +59,7 @@ var WickObject = function () {
 
 };
 
-WickObject.prototype.createNewSymbol = function () {
+WickObject.createNewSymbol = function () {
 
     var symbol = new WickObject();
 

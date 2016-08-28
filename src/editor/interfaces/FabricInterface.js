@@ -19,7 +19,8 @@ var FabricInterface = function (wickEditor) {
     this.paperCanvas = document.createElement('canvas');
     paper.setup(this.canvas);
 
-    this.notCreatingSelection = true;
+    this.creatingSelection = false;
+    this.objectIDsInCanvas = [];
 
 /********************************
        Editor state syncing
@@ -57,6 +58,7 @@ var FabricInterface = function (wickEditor) {
             if(!fabricObj.wickObjectID) return;
 
             if(!currentObject.childWithIDIsActive(fabricObj.wickObjectID)) {
+                that.objectIDsInCanvas[fabricObj.wickObjectID] = false;
                 // Object doesn't exist in the current object anymore, remove it's fabric object.
                 if(fabricObj.type === "group") {
                     fabricObj.forEachObject(function(o){ fabricObj.remove(o) });
@@ -67,22 +69,9 @@ var FabricInterface = function (wickEditor) {
             }
         });
 
-        // Add new objects and update zIndices
-        var objectWithIDExistsInCanvas = function (id) {
-            var found = false;
-
-            that.canvas._objects.forEach(function(fabricObj) {
-                if(fabricObj.wickObjectID == id) {
-                    found = true;
-                }
-            });
-
-            return found;
-        }
-
+        // Add new objects and update existing objects
         currentObject.forEachActiveChildObject(function (child) {
-
-            if(objectWithIDExistsInCanvas(child.id)) { 
+            if(that.objectIDsInCanvas[child.id]) {
                 // Update existing object
                 that.canvas.forEachObject(function(fabricObj) {
                     if(fabricObj.wickObjectID === child.id) {
@@ -93,6 +82,7 @@ var FabricInterface = function (wickEditor) {
                 });
             } else {
                 // Add new object
+                that.objectIDsInCanvas[child.id] = true;
                 that.createFabricObjectFromWickObject(child, function (newFabricObj) {
                     newFabricObj.wickObjectID = child.id;
                     that.canvas.add(newFabricObj);
@@ -630,7 +620,7 @@ var FabricInterface = function (wickEditor) {
 
     this.selectByIDs = function (ids) {
 
-        that.notCreatingSelection = false;
+        that.creatingSelection = true;
 
         if(ids.length == 0) {
             return;
@@ -656,13 +646,13 @@ var FabricInterface = function (wickEditor) {
             this.canvas.setActiveGroup(group.setCoords()).renderAll();
         }
 
-        that.notCreatingSelection = true;
+        that.creatingSelection = false;
 
     }
 
     this.selectAll = function () {
 
-        that.notCreatingSelection = false;
+        that.creatingSelection = true;
 
         var objs = [];
         this.canvas.getObjects().map(function(o) {
@@ -681,13 +671,13 @@ var FabricInterface = function (wickEditor) {
 
         this.canvas.setActiveGroup(group.setCoords()).renderAll();
 
-        that.notCreatingSelection = true;
+        that.creatingSelection = false;
 
     }
 
     this.deselectAll = function () {
 
-        that.notCreatingSelection = true;
+        that.creatingSelection = false;
 
         var activeGroup = this.canvas.getActiveGroup();
         if(activeGroup) {
@@ -697,7 +687,7 @@ var FabricInterface = function (wickEditor) {
 
         this.canvas.deactivateAll().renderAll();
 
-        that.notCreatingSelection = false;
+        that.creatingSelection = true;
 
     }
 

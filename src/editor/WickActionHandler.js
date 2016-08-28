@@ -314,12 +314,12 @@ var WickActionHandler = function (wickEditor) {
 
             var selectedObjects = wickEditor.getSelectedWickObjects();
             for(var i = 0; i < selectedObjects.length; i++) {
-                symbol.frames[0].wickObjects.push(selectedObjects[i]);
+                symbol.layers[0].frames[0].wickObjects.push(selectedObjects[i]);
                 wickEditor.project.getCurrentObject().removeChildByID(selectedObjects[i].id);
             }
 
-            symbol.width  = symbol.frames[0].wickObjects[0].width;
-            symbol.height = symbol.frames[0].wickObjects[0].height;
+            symbol.width  = symbol.layers[0].frames[0].wickObjects[0].width;
+            symbol.height = symbol.layers[0].frames[0].wickObjects[0].height;
 
             wickEditor.project.addObject(symbol);
         },
