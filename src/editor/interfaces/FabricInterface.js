@@ -324,11 +324,9 @@ var FabricInterface = function (wickEditor) {
     // Listen for objects being changed so we can undo them in the action handler.
     canvas.on('object:modified', function(e) {
 
-        console.log("object:modified");
-
         // Delete text boxes with no text in 'em.
         if (e.target.text === '') {
-            var wickObj = wickEditor.project.getChildByID(e.target.wickObjectID);
+            var wickObj = wickEditor.project.getCurrentObject().getChildByID(e.target.wickObjectID);
             // Make sure the original text comes back on undo
             wickObj.text = e.target.originalState.text;
             wickEditor.actionHandler.doAction('deleteObject', { ids:[e.target.wickObjectID] });
@@ -358,16 +356,24 @@ var FabricInterface = function (wickEditor) {
                 };
             }
         } else {
-            var obj = e.target;
-            ids[0] = obj.wickObjectID;
+            var fabObj = e.target;
+            var wickObjID = fabObj.wickObjectID;
+            var wickObj = wickEditor.project.getCurrentObject().getChildByID(wickObjID);
 
+            console.log("bees.")
+
+            var insideSymbolReposition = {
+                x: wickObj.x-wickObj.getAbsolutePosition().x,
+                y: wickObj.y-wickObj.getAbsolutePosition().y }
+
+            ids[0] = wickObjID;
             modifiedStates[0] = {
-                x      : obj.left - frameOffset.x,
-                y      : obj.top  - frameOffset.y,
-                scaleX : obj.scaleX,
-                scaleY : obj.scaleY,
-                angle  : obj.angle,
-                text   : obj.text
+                x      : fabObj.left - frameOffset.x + insideSymbolReposition.x - wickObj.getSymbolCornerPosition().x,
+                y      : fabObj.top  - frameOffset.y + insideSymbolReposition.y - wickObj.getSymbolCornerPosition().y,
+                scaleX : fabObj.scaleX,
+                scaleY : fabObj.scaleY,
+                angle  : fabObj.angle,
+                text   : fabObj.text
             };
         }
 

@@ -665,8 +665,7 @@ WickObject.prototype.childWithIDIsActive = function (id) {
 WickObject.prototype.getSymbolCornerPosition = function () {
 
     if(!this.isSymbol) {
-        VerboseLog.error("getSymbolCornerPosition() called on non-symbol")
-        return null;
+        return {x:0, y:0};
     }
 
     var leftmostLeft = null;
@@ -691,12 +690,14 @@ WickObject.prototype.getAbsolutePosition = function () {
     if(this.isRoot) {
         return {
             x: 0, 
-            y: 0};
+            y: 0
+        };
     } else {
         var parentPosition = this.parentObject.getAbsolutePosition();
         return {
             x: this.x + parentPosition.x, 
-            y: this.y + parentPosition.y};
+            y: this.y + parentPosition.y
+        };
     }
 }
 
