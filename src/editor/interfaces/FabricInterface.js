@@ -538,12 +538,23 @@ var FabricInterface = function (wickEditor) {
         pathFabricObject.cloneAsImage(function(clone) {
             var imgSrc = clone._element.currentSrc || clone._element.src;
 
-            Potrace.loadImageFromDataURL(imgSrc);
-            Potrace.setParameter({optcurve: true, opttolerance: wickEditor.currentTool.brushSmoothing});
-            Potrace.process(function(){
-                var SVGData = {svgString:Potrace.getSVG(1), fillColor:that.canvas.freeDrawingBrush.color}
-                callback(SVGData);
-            });
+            var img = new Image();
+            img.onload = function () {
+                // Scale the image before we pass it to potrace (fixes retina display bugs!)
+                var dummyCanvas = document.createElement('canvas');
+                var dummyContext = dummyCanvas.getContext('2d');
+                dummyCanvas.width = img.width/window.devicePixelRatio;
+                dummyCanvas.height = img.height/window.devicePixelRatio;
+                dummyContext.drawImage(img, 0,0, img.width,img.height, 0,0, dummyCanvas.width,dummyCanvas.height);
+                
+                Potrace.loadImageFromDataURL(dummyCanvas.toDataURL());
+                Potrace.setParameter({optcurve: true, opttolerance: wickEditor.currentTool.brushSmoothing});
+                Potrace.process(function(){
+                    var SVGData = {svgString:Potrace.getSVG(1), fillColor:that.canvas.freeDrawingBrush.color}
+                    callback(SVGData);
+                });
+            }
+            img.src = imgSrc;
         }); 
     }
 
