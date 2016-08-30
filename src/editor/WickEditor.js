@@ -9,10 +9,19 @@ var WickEditor = function () {
     this.currentTool = new WickTool();
     this.currentTool.type = "cursor";
 
-    this.project = null;
-    this.tryToLoadAutosavedProject();
+    this.mode = "normal";
 
-    this.runningProject = false;
+    // Check to see if we need to load a project from GitHub's Clubhouse
+    var githubClubhouseProjectID = URLParameterUtils.getParameterByName("project");
+    if (githubClubhouseProjectID) {
+        console.log("Wick is in GitHub Clubhouse mode!");
+        console.log("githubClubhouseProjectID: " + githubClubhouseProjectID);
+        this.mode = "github-clubhouse";
+    }
+
+    this.project = WickProject.fromLocalStorage();
+
+    this.runningBuiltinPlayer = false;
 
     this.interfaces = {
         "builtinplayer" : new BuiltinPlayerInterface(this),
@@ -33,10 +42,6 @@ var WickEditor = function () {
 
 }
 
-/**********************************
-  Interfaces
-**********************************/
-
 WickEditor.prototype.syncInterfaces = function () {
     for (var key in this.interfaces) {
         this.interfaces[key].syncWithEditorState();
@@ -46,6 +51,8 @@ WickEditor.prototype.syncInterfaces = function () {
 /*********************************
     WickObjects
 *********************************/
+
+// This should be in FabricInterface, dummy!
 
 WickEditor.prototype.getSelectedWickObject = function () {
     var ids = this.interfaces['fabric'].getSelectedObjectIDs();
@@ -83,92 +90,5 @@ WickEditor.prototype.getCopyData  = function () {
         wickObjectArray: objectJSONs
     }
     return JSON.stringify(clipboardObject);
-}
-
-/**********************************
-  Project Open/Save/Import/Export
-**********************************/
-
-WickEditor.prototype.tryToLoadAutosavedProject = function () {
-
-    if(!localStorage) {
-        console.error("LocalStorage not available. Loading blank project");
-        this.project = new WickProject();
-        return;
-    }
-
-    VerboseLog.log("Loading project from local storage...");
-    var autosavedProjectJSON = localStorage.getItem('wickProject');
-
-    if(!autosavedProjectJSON) {
-        VerboseLog.log("No autosaved project. Loading blank project.");
-        this.project = new WickProject();
-        return;
-    }
-
-    this.project = WickProject.fromJSON(autosavedProjectJSON);
-
-}
-
-WickEditor.prototype.saveProject = function () {
-    if(localStorage) {
-        try {
-            VerboseLog.log("Saving project to local storage...");
-            this.project.getAsJSON(function (JSONProject) {
-                localStorage.setItem('wickProject', JSONProject);
-            });
-        } catch (err) {
-            VerboseLog.error("LocalStorage could not save project, threw error:");
-            VerboseLog.log(err);
-        }
-    } else {
-        console.error("LocalStorage not available.")
-    }
-}
-
-WickEditor.prototype.newProject = function () {
-
-    if(!confirm("Create a new project? All unsaved changes to the current project will be lost!")) {
-        return;
-    }
-
-    this.project = new WickProject();
-    this.currentObject = this.project.rootObject;
-
-    this.interfaces['fabric'].deselectAll();
-
-    this.syncInterfaces();
-
-}
-
-WickEditor.prototype.openProject = function (projectJSON) {
-
-    this.project = WickProject.fromJSON(projectJSON);
-    this.currentObject = this.project.rootObject;
-    this.currentObject.currentFrame = 0;
-    
-    this.syncInterfaces();
-
-}
-
-/*************************
-      Builtin player
-*************************/
-
-WickEditor.prototype.runProject = function () {
-    var that = this;
-
-    if(this.interfaces['scriptingide'].projectHasErrors) {
-        if(!confirm("There are syntax errors in the code of this project! Are you sure you want to run it?")) {
-            return;
-        }
-    }
-
-    // JSONify the project, autosave, and have the builtin player run it
-    this.project.getAsJSON(function (JSONProject) {
-        that.runningProject = true;
-        WickPlayer.runProject(JSONProject);
-        that.syncInterfaces();
-    });
 }
 

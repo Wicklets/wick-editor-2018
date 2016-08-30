@@ -706,7 +706,7 @@ var WickPlayer = (function () {
             if(window.wickEditor) {
                 console.error("Exeption thrown while running script of WickObject with ID " + obj.id)
                 console.error(e);
-                wickEditor.runningProject = false;
+                wickEditor.runningBuiltinPlayer = false;
                 WickPlayer.stopRunningCurrentProject();
                 wickEditor.syncInterfaces();
             } else {

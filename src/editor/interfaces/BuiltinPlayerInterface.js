@@ -3,7 +3,7 @@
 var BuiltinPlayerInterface = function (wickEditor) {
 
     this.syncWithEditorState = function () {
-        if(wickEditor.runningProject) {
+        if(wickEditor.runningBuiltinPlayer) {
             showBuiltinPlayer();
         } else {
             hideBuiltinPlayer();
@@ -12,7 +12,7 @@ var BuiltinPlayerInterface = function (wickEditor) {
 
     $("#closeBuiltinPlayerButton").on("click", function (e) {
         hideBuiltinPlayer();
-        wickEditor.runningProject = false;
+        wickEditor.runningBuiltinPlayer = false;
         WickPlayer.stopRunningCurrentProject();
     });
 
@@ -24,6 +24,21 @@ var BuiltinPlayerInterface = function (wickEditor) {
     var hideBuiltinPlayer = function () {
         document.getElementById("builtinPlayer").style.display = "none";
         document.getElementById("editor").style.display = "block";
+    }
+
+    this.runProject = function () {
+        if(wickEditor.interfaces['scriptingide'].projectHasErrors) {
+            if(!confirm("There are syntax errors in the code of this project! Are you sure you want to run it?")) {
+                return;
+            }
+        }
+
+        // JSONify the project, autosave, and have the builtin player run it
+        wickEditor.project.getAsJSON(function (JSONProject) {
+            wickEditor.runningProject = true;
+            WickPlayer.runningBuiltinPlayer(JSONProject);
+            wickEditor.syncInterfaces();
+        });
     }
 
 }

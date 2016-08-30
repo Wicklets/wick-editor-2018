@@ -58,7 +58,7 @@ var InputHandler = function (wickEditor) {
         if (event.keyCode == 83 && controlKeyDown) {
             event.preventDefault();
             that.clearKeys();
-            wickEditor.saveProject();
+            wickEditor.project.saveInLocalStorage();
         }
         // Control-o: open
         else if (event.keyCode == 79 && controlKeyDown) {

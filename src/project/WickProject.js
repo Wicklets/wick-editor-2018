@@ -43,6 +43,25 @@ WickProject.fromJSON = function (JSONString) {
     return projectFromJSON;
 }
 
+WickProject.fromLocalStorage = function () {
+
+    if(!localStorage) {
+        console.error("LocalStorage not available. Loading blank project");
+        return new WickProject();
+    }
+
+    VerboseLog.log("Loading project from local storage...");
+    var autosavedProjectJSON = localStorage.getItem('wickProject');
+
+    if(!autosavedProjectJSON) {
+        VerboseLog.log("No autosaved project. Loading blank project.");
+        return new WickProject();
+    }
+
+    return WickProject.fromJSON(autosavedProjectJSON);
+
+}
+
 WickProject.prototype.getAsJSON = function (callback) {
 
     // Rasterize SVGs
@@ -60,6 +79,23 @@ WickProject.prototype.getAsJSON = function (callback) {
     });
 
 }
+
+WickProject.prototype.saveInLocalStorage = function () {
+    if(localStorage) {
+        try {
+            VerboseLog.log("Saving project to local storage...");
+            this.getAsJSON(function (JSONProject) {
+                localStorage.setItem('wickProject', JSONProject);
+            });
+        } catch (err) {
+            VerboseLog.error("LocalStorage could not save project, threw error:");
+            VerboseLog.log(err);
+        }
+    } else {
+        console.error("LocalStorage not available.")
+    }
+}
+
 /*********************************
     Access project wickobjects
 *********************************/
