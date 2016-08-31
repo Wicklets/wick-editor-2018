@@ -17,9 +17,10 @@ var WickEditor = function () {
         console.log("Wick is in GitHub Clubhouse mode!");
         console.log("githubClubhouseProjectID: " + githubClubhouseProjectID);
         this.mode = "github-clubhouse";
+        this.project = new WickProject(); // TODO: load project from github clubhouse server
+    } else {
+        this.project = WickProject.fromLocalStorage();
     }
-
-    this.project = WickProject.fromLocalStorage();
 
     this.runningBuiltinPlayer = false;
 

@@ -27,6 +27,12 @@ var WickProject = function () {
     Import/Export
 *****************************/
 
+WickProject.fromWebpage = function (webpageString) {
+    // find line that starts with <script>wickplayer .loadproject or whatev
+    // snip off the stuff we don't need
+    // send dat string to fromJSON()
+}
+
 WickProject.fromJSON = function (JSONString) {
     // Replace current project with project in JSON
     var projectFromJSON = JSON.parse(JSONString);

@@ -193,6 +193,12 @@ var InputHandler = function (wickEditor) {
             var file = files[i];
             var fileType = file.type;
 
+            // if filetype is json:
+            //     check to see if it's a wickproject. if it is, load it up! (and make sure to return!!)
+            // if filetype is html:
+            //     if its a project, load it up!
+            // all other filetypes/json+html files that aren't projects get handled by WickObject:
+
             var fileWickObject = WickObject.fromFile(file, fileType, function(obj) {
                 wickEditor.actionHandler.doAction('addObjects', {wickObjects:[obj]});
             });

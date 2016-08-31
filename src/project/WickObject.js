@@ -162,6 +162,10 @@ WickObject.fromFile = function (file, fileType, callback) {
         }; })(file);
         dataURLReader.readAsDataURL(file);
 
+    } else {
+
+        VerboseLog.error("Unsupported filetype in WickObject.fromFile(): " + file.type);
+
     }
 }
 

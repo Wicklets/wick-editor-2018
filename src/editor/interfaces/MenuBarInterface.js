@@ -42,8 +42,15 @@ var MenuBarInterface = function (wickEditor) {
         var filePath = document.getElementById("importButton");
         if(filePath.files && filePath.files[0]) {
             var reader = new FileReader();
+            var filetype = filePath.files[0].type;
             reader.onload = function (e) {
-                wickEditor.project = WickProject.fromJSON(e.target.result);
+                if (filetype === "text/html") {
+                    wickEditor.project = WickProject.fromWebpage(e.target.result);
+                } else if (filetype === "application/json") {
+                    wickEditor.project = WickProject.fromJSON(e.target.result);
+                } else {
+                    VerboseLog.error("Unsupported filetype for opening projects: " + filetype);
+                }
                 wickEditor.syncInterfaces();
             };
             reader.readAsText(filePath.files[0]);
