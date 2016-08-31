@@ -4,6 +4,7 @@ var PropertiesInterface = function (wickEditor) {
 
     this.syncWithEditorState = function () {
         $("#projectProperties").css('display', 'none');
+        $("#frameProperties").css('display', 'none');
         $("#objectProperties").css('display', 'none');
         $("#textProperties").css('display', 'none');
         $("#soundProperties").css('display', 'none');
@@ -31,6 +32,11 @@ var PropertiesInterface = function (wickEditor) {
                 document.getElementById('projectSizeY').value          = wickEditor.project.resolution.y;
                 document.getElementById('frameRate').value             = wickEditor.project.framerate;
                 document.getElementById('fitScreenCheckbox').checked   = wickEditor.project.fitScreen;
+
+                if(wickEditor.project.getCurrentObject().getCurrentFrame()) {
+                    document.getElementById('frameIdentifier').value = wickEditor.project.getCurrentObject().getCurrentFrame().identifier;
+                    $("#frameProperties").css('display', 'inline');
+                }
                 $("#projectProperties").css('display', 'inline');
                 break;
             case 'symbol':
@@ -98,8 +104,8 @@ var PropertiesInterface = function (wickEditor) {
 
     $('#frameIdentifier').on('input propertychange', function () {
 
-         CheckInput.callIfString($('#frameIdentifier').val(), function(frameID) {
-            wickEditor.currentObject.frames[wickEditor.currentObject.currentFrame].identifier = frameID;
+        CheckInput.callIfString($('#frameIdentifier').val(), function(frameID) {
+            wickEditor.project.getCurrentObject().getCurrentFrame().identifier = frameID;
         });
 
     });

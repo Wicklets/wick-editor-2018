@@ -365,9 +365,29 @@ WickObject.prototype.hitTest = function (otherObj, hitTestType) {
      Timeline Control
 *************************/
 
+// If the frame's length > 1, always return the playhead position of at the frame's beginning
+WickObject.prototype.getPlayheadPositionAtFrame = function (frame) {
+
+    var playheadPositionAtFrame = null;
+    var frameCounter = 0;
+
+    this.layers.forEach(function (l) {
+        frameCounter = 0;
+        l.frames.forEach(function (f) {
+            if(f === frame) {
+                playheadPositionAtFrame = frameCounter;
+            }
+            frameCounter += f.frameLength;
+        });
+    });
+
+    return playheadPositionAtFrame;
+
+}
+
 WickObject.prototype.getCurrentFrame = function() {
 
-    var layer = this.layers[this.currentLayer];
+    var layer = this.getCurrentLayer();
     var counter = 0;
 
     for(var f = 0; f < layer.frames.length; f++) {
@@ -387,6 +407,22 @@ WickObject.prototype.getCurrentFrame = function() {
 
 WickObject.prototype.getCurrentLayer = function() {
     return this.layers[this.currentLayer];
+}
+
+WickObject.prototype.getFrameByIdentifier = function (id) {
+
+    var foundFrame = null;
+
+    this.layers.forEach(function (layer) {
+        layer.frames.forEach(function (frame) {
+            if(frame.identifier === id) {
+                foundFrame = frame;
+            }
+        });
+    });
+
+    return foundFrame;
+
 }
 
 WickObject.prototype.getTotalTimelineLength = function () {
@@ -439,10 +475,10 @@ WickObject.prototype.gotoFrame = function (frame) {
     } else if (CheckInput.testString(frame)) {
 
         // Search for the frame with the correct identifier and navigate if found
-        var frame = this.getFrameByIdentifier(frame);
+        var newFrame = this.getFrameByIdentifier(frame);
 
-        if(frame)
-            this.playheadPosition = frame.playheadLocation;
+        if(newFrame)
+            this.playheadPosition = this.getPlayheadPositionAtFrame(newFrame);
         else
             throw "Failed to navigate to frame \'" + frame + "\': is not a valid frame.";
 
