@@ -35,8 +35,8 @@ var BuiltinPlayerInterface = function (wickEditor) {
 
         // JSONify the project, autosave, and have the builtin player run it
         wickEditor.project.getAsJSON(function (JSONProject) {
-            wickEditor.runningProject = true;
-            WickPlayer.runningBuiltinPlayer(JSONProject);
+            wickEditor.runningBuiltinPlayer = true;
+            WickPlayer.runProject(JSONProject);
             wickEditor.syncInterfaces();
         });
     }

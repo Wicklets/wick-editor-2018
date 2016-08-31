@@ -46,10 +46,12 @@ var InputHandler = function (wickEditor) {
         if(!this.editingTextBox) {
             // Control-shift-z: redo
             if (event.keyCode == 90 && controlKeyDown && shiftKeyDown) {
+                event.preventDefault();
                 wickEditor.actionHandler.redoAction();    
             }
             // Control-z: undo
             else if (event.keyCode == 90 && controlKeyDown) {
+                event.preventDefault();
                 wickEditor.actionHandler.undoAction();
             }
         }
