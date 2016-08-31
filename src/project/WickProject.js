@@ -28,9 +28,25 @@ var WickProject = function () {
 *****************************/
 
 WickProject.fromWebpage = function (webpageString) {
-    // find line that starts with <script>wickplayer .loadproject or whatev
-    // snip off the stuff we don't need
-    // send dat string to fromJSON()
+
+    var extractedProjectJSON;
+
+    // Format of the line we're looking for: <script>WickPlayer.runProject('<<JSON PROJECT IS HERE>>');</script>
+    var webpageStringLines = webpageString.split('\n');
+    webpageStringLines.forEach(function (line) {
+        if(line.startsWith("<script>WickPlayer.runProject(")) {
+            extractedProjectJSON = line.split("'")[1];
+        }
+    });
+
+    if(!extractedProjectJSON) {
+        // Oh no, something went wrong
+        VerboseLog.error("Bundled JSON project not found in specified HTML file (webpageString). The HTML supplied might not be a Wick project, or zach might have changed the way projects are bundled. See WickProjectExporter.js!");
+        return null;
+    } else {
+        // Found a bundled project's JSON, let's load it!
+        return WickProject.fromJSON(extractedProjectJSON);
+    }
 }
 
 WickProject.fromJSON = function (JSONString) {
