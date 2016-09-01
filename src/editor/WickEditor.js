@@ -28,6 +28,7 @@ var WickEditor = function () {
         "builtinplayer" : new BuiltinPlayerInterface(this),
         "tooltips" : new TooltipsInterface(this),
         "rightclickmenu" : new RightClickMenuInterface(this),
+        "splashscreen" : new SplashScreenInterface(this),
         "scriptingide" : new ScriptingIDEInterface(this),
         "timeline" : new TimelineInterface(this),
         "toolbar" : new ToolbarInterface(this),

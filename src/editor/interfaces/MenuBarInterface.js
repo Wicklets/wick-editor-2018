@@ -3,8 +3,19 @@
 var MenuBarInterface = function (wickEditor) {
 
     this.syncWithEditorState = function () {
+        document.getElementById("backToClubhouseButton").style.display = "none";
+        document.getElementById("githubClubhouseButton").style.display = "none";
+        document.getElementById("newProjectButton").style.display = "none";
+        document.getElementById("openProjectButton").style.display = "none";
+        document.getElementById("exportHTMLButton").style.display = "none";
+
         if(wickEditor.mode === "normal") {
-            document.getElementById("githubClubhouseButton").style.display = "none";
+            document.getElementById("newProjectButton").style.display = "block";
+            document.getElementById("openProjectButton").style.display = "block";
+            document.getElementById("exportHTMLButton").style.display = "block";
+        } else if (wickEditor.mode === "github-clubhouse") {
+            document.getElementById("backToClubhouseButton").style.display = "block";
+            document.getElementById("githubClubhouseButton").style.display = "block";
         }
     }
 
@@ -17,15 +28,15 @@ var MenuBarInterface = function (wickEditor) {
         wickEditor.syncInterfaces();
     }
 
-    document.getElementById('exportJSONButton').onclick = function (e) {
+    /*document.getElementById('exportJSONButton').onclick = function (e) {
         wickEditor.project.getAsJSON(function(JSONProject) {
             var blob = new Blob([JSONProject], {type: "text/plain;charset=utf-8"});
             saveAs(blob, "project.json");
         });
-    }
+    }*/
 
     document.getElementById('openProjectButton').onclick = function (e) {
-        $('#importButton').click();
+        $('#importButton').click(); // File import is handled in InputHandler.js
     }
 
     document.getElementById('exportHTMLButton').onclick = function (e) {
@@ -34,30 +45,6 @@ var MenuBarInterface = function (wickEditor) {
 
     document.getElementById('runButton').onclick = function (e) {
         wickEditor.interfaces["builtinplayer"].runProject();
-    }
-
-    document.getElementById('importButton').onchange = function (e) {
-        var that = this;
-
-        var filePath = document.getElementById("importButton");
-        if(filePath.files && filePath.files[0]) {
-            var reader = new FileReader();
-            var filetype = filePath.files[0].type;
-            reader.onload = function (e) {
-                if (filetype === "text/html") {
-                    wickEditor.project = WickProject.fromWebpage(e.target.result);
-                } else if (filetype === "application/json") {
-                    wickEditor.project = WickProject.fromJSON(e.target.result);
-                } else {
-                    VerboseLog.error("Unsupported filetype for opening projects: " + filetype);
-                }
-                wickEditor.syncInterfaces();
-            };
-            reader.readAsText(filePath.files[0]);
-        }
-
-        var importButton = $("importButton");
-        importButton.replaceWith( importButton = importButton.clone( true ) );
     }
 
 }

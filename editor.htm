@@ -43,6 +43,7 @@
     <script src="src/editor/interfaces/ToolbarInterface.js"></script>
     <script src="src/editor/interfaces/MenuBarInterface.js"></script>
     <script src="src/editor/interfaces/PropertiesInterface.js"></script>
+    <script src="src/editor/interfaces/SplashScreenInterface.js"></script>
 
     <script src="src/editor/WickActionHandler.js"></script>
     <script src="src/editor/WickEditor.js"></script>
@@ -66,6 +67,10 @@
 
     <input id="hidden-input" class="hidden" type="text" value="" />
 
+<!-- Hidden element that gets clicked by other divs to open file dialog -->
+    
+    <input type="file" class="hidden" id="importButton" /> 
+
 <!-- Editor GUI, visible when a project is being edited & not running -->
 
     <div id="editor">
@@ -75,31 +80,33 @@
 
     <!-- Main menu GUI, top left corner -->
 
+        <div id="splashScreenGUI" class="GUIBox">
+            <p><img src="testcontent/SUPERDUMB.png"></p>
+            <p>Omg it's Wick pre-alpha ~~~</p>
+        </div>
+
         <div id="menuBarGUI" class="GUIBox">
             <strong>Wick Editor</strong><br />
 
             <hr />
+            <div class="button buttonInRow tooltipElem" id="backToClubhouseButton" alt="Back to Clubhouse">
+                <img src="resources/github.png" width="30" />
+            </div> 
             <div class="button buttonInRow tooltipElem" id="newProjectButton" alt="New Project">
                 <img src="resources/trashcan.png" width="30" />
             </div>  
             <div class="button buttonInRow tooltipElem" id="openProjectButton" alt="Open Project">
                 <img src="resources/open-folder.png" width="30" />
             </div>
-            <div class="button buttonInRow tooltipElem" id="exportJSONButton" alt="Export Project (JSON)">
-                <img src="resources/save.png" width="30" />
-            </div>
-            <div class="button buttonInRow tooltipElem" id="exportHTMLButton" alt="Export Project (Webpage)">
+            <div class="button buttonInRow tooltipElem" id="exportHTMLButton" alt="Export Project">
                 <img src="resources/export.png" width="30" />
+            </div>
+            <div class="button buttonInRow tooltipElem" id="githubClubhouseButton" alt="Save Project">
+                <img src="resources/save.png" width="30" />
             </div>
             <div class="button buttonInRow tooltipElem" id="runButton" alt="Run Project">
                 <img src="resources/play.png" width="30" />
             </div>
-            <div class="button buttonInRow tooltipElem" id="githubClubhouseButton" alt="Save Project (GitHub Clubhouse)">
-                <img src="resources/github.png" width="30" />
-            </div>
-
-            <!-- Hidden, gets clicked automatically by openProjectButton -->
-            <input type="file" class="hidden" id="importButton" /> 
         </div>
 
     <!-- Timeline GUI, centered at the top of the screen -->

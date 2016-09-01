@@ -359,9 +359,7 @@ var FabricInterface = function (wickEditor) {
             var fabObj = e.target;
             var wickObjID = fabObj.wickObjectID;
             var wickObj = wickEditor.project.getCurrentObject().getChildByID(wickObjID);
-
-            console.log("bees.")
-
+            
             var insideSymbolReposition = {
                 x: wickObj.x-wickObj.getAbsolutePosition().x,
                 y: wickObj.y-wickObj.getAbsolutePosition().y }

@@ -43,6 +43,15 @@ hr {
 	display: block;
 }
 
+#splashScreenGUI {
+	width: 500px;
+	height: 250px;
+	top: 0px;
+	left: 0px;
+	text-align: center;
+	display: block;
+}
+
 #scriptingGUI {
 	bottom: 0px;
 	left: 0px;
