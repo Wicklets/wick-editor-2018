@@ -44,6 +44,7 @@
     <script src="src/editor/interfaces/MenuBarInterface.js"></script>
     <script src="src/editor/interfaces/PropertiesInterface.js"></script>
     <script src="src/editor/interfaces/SplashScreenInterface.js"></script>
+    <script src="src/editor/interfaces/SettingsInterface.js"></script>
 
     <script src="src/editor/WickActionHandler.js"></script>
     <script src="src/editor/WickEditor.js"></script>
@@ -78,12 +79,31 @@
             <canvas id="fabricCanvas"></canvas>
         </div>
 
-    <!-- Main menu GUI, top left corner -->
+    <!-- Splash Screen -->
 
         <div id="splashScreenGUI" class="GUIBox">
             <p><img src="testcontent/SUPERDUMB.png"></p>
             <p>Omg it's Wick pre-alpha ~~~</p>
         </div>
+
+    <!-- Settings window -->
+
+        <div id="settingsGUI" class="GUIBox">
+            <div id="projectProperties">
+                Project Properties
+                <hr />
+                Background color: <input type="color" value="#FFFFFF" id="projectBgColor"><br />
+                Size: <input type="text" id="projectSizeX" maxlength="4" size="4"> x 
+                      <input type="text" id="projectSizeY" maxlength="4" size="4"><br />
+                Framerate: <input type="text" id="frameRate" maxlength="2" size="2"><br />
+                <input type="checkbox" id="fitScreenCheckbox"> Fit to Screen Size<br />
+            </div>
+
+            <hr />
+            <div class="button" id="closeSettingsWindowButton">Close</div>
+        </div>
+
+    <!-- Main menu GUI, top left corner -->
 
         <div id="menuBarGUI" class="GUIBox">
             <strong>Wick Editor</strong><br />
@@ -92,8 +112,8 @@
             <div class="button buttonInRow tooltipElem" id="backToClubhouseButton" alt="Back to Clubhouse">
                 <img src="resources/github.png" width="30" />
             </div> 
-            <div class="button buttonInRow tooltipElem" id="newProjectButton" alt="New Project">
-                <img src="resources/trashcan.png" width="30" />
+            <div class="button buttonInRow tooltipElem" id="settingsButton" alt="Settings">
+                <img src="resources/settings.png" width="30" />
             </div>  
             <div class="button buttonInRow tooltipElem" id="openProjectButton" alt="Open Project">
                 <img src="resources/open-folder.png" width="30" />
@@ -177,20 +197,10 @@
     <!-- Properties GUI, bottom right corner -->
 
         <div id="propertiesGUI" class="GUIBox">
-            <div id="projectProperties">
-                Project Properties
-                <hr />
-                Background color: <input type="color" value="#FFFFFF" id="projectBgColor"><br />
-                Size: <input type="text" id="projectSizeX" maxlength="4" size="4"> x 
-                      <input type="text" id="projectSizeY" maxlength="4" size="4"><br />
-                Framerate: <input type="text" id="frameRate" maxlength="2" size="2"><br />
-                <input type="checkbox" id="fitScreenCheckbox"> Fit to Screen Size<br />
-                <div id="frameProperties">
-                <hr />
+            <div id="frameProperties">
                 Frame Properties
-                    <hr />
-                    Identifier: <input type="text" id="frameIdentifier" maxlength="16" size="16">
-                </div>
+                <hr />
+                Identifier: <input type="text" id="frameIdentifier" maxlength="16" size="16">
             </div>
 
             <div id="objectProperties">

@@ -5,12 +5,10 @@ var MenuBarInterface = function (wickEditor) {
     this.syncWithEditorState = function () {
         document.getElementById("backToClubhouseButton").style.display = "none";
         document.getElementById("githubClubhouseButton").style.display = "none";
-        document.getElementById("newProjectButton").style.display = "none";
         document.getElementById("openProjectButton").style.display = "none";
         document.getElementById("exportHTMLButton").style.display = "none";
 
         if(wickEditor.mode === "normal") {
-            document.getElementById("newProjectButton").style.display = "block";
             document.getElementById("openProjectButton").style.display = "block";
             document.getElementById("exportHTMLButton").style.display = "block";
         } else if (wickEditor.mode === "github-clubhouse") {
@@ -19,14 +17,14 @@ var MenuBarInterface = function (wickEditor) {
         }
     }
 
-    document.getElementById('newProjectButton').onclick = function (e) {
+    /*document.getElementById('newProjectButton').onclick = function (e) {
         if(!confirm("Create a new project? All unsaved changes to the current project will be lost!")) {
             return;
         }
 
         wickEditor.project = new WickProject();
         wickEditor.syncInterfaces();
-    }
+    }*/
 
     /*document.getElementById('exportJSONButton').onclick = function (e) {
         wickEditor.project.getAsJSON(function(JSONProject) {
@@ -35,8 +33,17 @@ var MenuBarInterface = function (wickEditor) {
         });
     }*/
 
+    document.getElementById('settingsButton').onclick = function (e) {
+        wickEditor.interfaces["settings"].open = true;
+        wickEditor.syncInterfaces();
+    }
+
+    document.getElementById('backToClubhouseButton').onclick = function (e) {
+        alert("NYI")
+    }
+
     document.getElementById('openProjectButton').onclick = function (e) {
-        $('#importButton').click(); // File import is handled in InputHandler.js
+        $('#importButton').click(); // This just opens the file dialog, file import is handled in InputHandler.js
     }
 
     document.getElementById('exportHTMLButton').onclick = function (e) {

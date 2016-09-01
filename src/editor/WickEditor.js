@@ -34,6 +34,7 @@ var WickEditor = function () {
         "toolbar" : new ToolbarInterface(this),
         "menubar" : new MenuBarInterface(this),
         "properties" : new PropertiesInterface(this),
+        "settings" : new SettingsInterface(this),
         "fabric" : new FabricInterface(this)
     };
 

@@ -27,12 +27,6 @@ var PropertiesInterface = function (wickEditor) {
 
         switch(tab) {
             case 'project':
-                document.getElementById('projectBgColor').value        = wickEditor.project.backgroundColor;
-                document.getElementById('projectSizeX').value          = wickEditor.project.resolution.x;
-                document.getElementById('projectSizeY').value          = wickEditor.project.resolution.y;
-                document.getElementById('frameRate').value             = wickEditor.project.framerate;
-                document.getElementById('fitScreenCheckbox').checked   = wickEditor.project.fitScreen;
-
                 if(wickEditor.project.getCurrentObject().getCurrentFrame()) {
                     document.getElementById('frameIdentifier').value = wickEditor.project.getCurrentObject().getCurrentFrame().identifier;
                     $("#frameProperties").css('display', 'inline');
@@ -75,49 +69,6 @@ var PropertiesInterface = function (wickEditor) {
     };
 
 // Buttons and text boxes and stuff
-
-    $('#projectSizeX').on('input propertychange', function () {
-
-        CheckInput.callIfPositiveInteger($('#projectSizeX').val(), function(n) {
-            wickEditor.project.resolution.x = n;
-            wickEditor.syncInterfaces();
-        });
-
-    });
-
-    $('#projectSizeY').on('input propertychange', function () {
-
-        CheckInput.callIfPositiveInteger($('#projectSizeY').val(), function(n) {
-            wickEditor.project.resolution.y = n;
-            wickEditor.syncInterfaces();
-        });
-
-    });
-
-    $('#frameRate').on('input propertychange', function () {
-
-        CheckInput.callIfPositiveInteger($('#frameRate').val(), function(n) {
-            wickEditor.project.framerate = n;
-        });
-
-    });
-
-    $('#frameIdentifier').on('input propertychange', function () {
-
-        CheckInput.callIfString($('#frameIdentifier').val(), function(frameID) {
-            wickEditor.project.getCurrentObject().getCurrentFrame().identifier = frameID;
-        });
-
-    });
-
-    document.getElementById('fitScreenCheckbox').onclick = function (e) {
-        wickEditor.project.fitScreen = this.checked;
-    }
-
-    document.getElementById('projectBgColor').onchange = function () {
-        wickEditor.project.backgroundColor = this.value;
-        wickEditor.syncInterfaces();
-    };
 
     $('#objectName').on('input propertychange', function () {
         var newName = $('#objectName').val();
