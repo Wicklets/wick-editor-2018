@@ -80,6 +80,16 @@ var SettingsInterface = function (wickEditor) {
         wickEditor.syncInterfaces();
     };
 
+// Advanced options buttons
+
+    document.getElementById('exportProjectAsJSONButton').onclick = function (e) {
+        WickProjectExporter.exportProject(wickEditor.project);
+    }
+
+    document.getElementById('saveProjectToLocalStorageButton').onclick = function (e) {
+        wickEditor.project.saveInLocalStorage();
+    }
+
 // Close button
 
     document.getElementById('closeSettingsWindowButton').onclick = function (e) {

@@ -89,15 +89,17 @@
     <!-- Settings window -->
 
         <div id="settingsGUI" class="GUIBox">
-            <div id="projectProperties">
-                Project Properties
-                <hr />
-                Background color: <input type="color" value="#FFFFFF" id="projectBgColor"><br />
-                Size: <input type="text" id="projectSizeX" maxlength="4" size="4"> x 
-                      <input type="text" id="projectSizeY" maxlength="4" size="4"><br />
-                Framerate: <input type="text" id="frameRate" maxlength="2" size="2"><br />
-                <input type="checkbox" id="fitScreenCheckbox"> Fit to Screen Size<br />
-            </div>
+            Project Properties
+            <hr />
+            Background color: <input type="color" value="#FFFFFF" id="projectBgColor"><br />
+            Size: <input type="text" id="projectSizeX" maxlength="4" size="4"> x 
+                  <input type="text" id="projectSizeY" maxlength="4" size="4"><br />
+            Framerate: <input type="text" id="frameRate" maxlength="2" size="2"><br />
+            <input type="checkbox" id="fitScreenCheckbox"> Fit to Screen Size<br />
+            <hr />
+            Advanced
+            <div class="button" id="exportProjectAsJSONButton">Export project as JSON</div>
+            <div class="button" id="saveProjectToLocalStorageButton">Save project to LocalStorage</div>
 
             <hr />
             <div class="button" id="closeSettingsWindowButton">Close</div>
