@@ -17,22 +17,6 @@ var MenuBarInterface = function (wickEditor) {
         }
     }
 
-    /*document.getElementById('newProjectButton').onclick = function (e) {
-        if(!confirm("Create a new project? All unsaved changes to the current project will be lost!")) {
-            return;
-        }
-
-        wickEditor.project = new WickProject();
-        wickEditor.syncInterfaces();
-    }*/
-
-    /*document.getElementById('exportJSONButton').onclick = function (e) {
-        wickEditor.project.getAsJSON(function(JSONProject) {
-            var blob = new Blob([JSONProject], {type: "text/plain;charset=utf-8"});
-            saveAs(blob, "project.json");
-        });
-    }*/
-
     document.getElementById('settingsButton').onclick = function (e) {
         wickEditor.interfaces["settings"].open = true;
         wickEditor.syncInterfaces();
