@@ -56,6 +56,12 @@ var InputHandler = function (wickEditor) {
             }
         }
 
+        //Enter: run
+        if(event.keyCode == 13) {
+            that.clearKeys();
+            wickEditor.interfaces["builtinplayer"].runProject();
+        }
+
         // Control-s: save
         if (event.keyCode == 83 && controlKeyDown) {
             event.preventDefault();
