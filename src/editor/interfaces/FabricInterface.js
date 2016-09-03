@@ -329,7 +329,7 @@ var FabricInterface = function (wickEditor) {
             var wickObj = wickEditor.project.getCurrentObject().getChildByID(e.target.wickObjectID);
             // Make sure the original text comes back on undo
             wickObj.text = e.target.originalState.text;
-            wickEditor.actionHandler.doAction('deleteObject', { ids:[e.target.wickObjectID] });
+            wickEditor.actionHandler.doAction('deleteObjects', { ids:[e.target.wickObjectID] });
             return;
         }
 
@@ -574,15 +574,28 @@ var FabricInterface = function (wickEditor) {
 
 // Zoom
 
-    this.zoomIn = function () {
-        that.canvas.setZoom(that.canvas.getZoom() * 1.1);
+    this.zoom = function (zoomAmount) {
+        that.canvas.setZoom(that.canvas.getZoom() + zoomAmount);
         that.canvas.renderAll();
     }
 
-    this.zoomOut = function () {
-        that.canvas.setZoom(that.canvas.getZoom() / 1.1);
-        that.canvas.renderAll();
+// Scroll-to-zoom
+
+    function MouseWheelHandler(e) {
+        // cross-browser wheel delta
+        e.preventDefault()
+        var e = window.event || e;
+        var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+        that.zoom(delta*0.1)
+
+        return false;
     }
+    var sq = document.getElementById("editor");
+    if (sq.addEventListener) {
+        sq.addEventListener("mousewheel", MouseWheelHandler, false);
+        sq.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
+    }
+    else sq.attachEvent("onmousewheel", MouseWheelHandler);
 
 // Pan
 
