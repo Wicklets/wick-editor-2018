@@ -56,7 +56,7 @@ var InputHandler = function (wickEditor) {
             }
         }
 
-        //Enter: run
+        // Enter: run
         if(event.keyCode == 13) {
             that.clearKeys();
             wickEditor.interfaces["builtinplayer"].runProject();
@@ -82,6 +82,18 @@ var InputHandler = function (wickEditor) {
             wickEditor.interfaces['fabric'].selectAll();
         }
 
+        // Left arrow key: Move playhead left
+        if(event.keyCode == 37) {
+            wickEditor.project.getCurrentObject().playheadPosition -= (wickEditor.project.getCurrentObject().playheadPosition > 0 ? 1 : 0);
+            wickEditor.syncInterfaces();
+        }
+
+        // Right arrow key: Move playhead right
+        if(event.keyCode == 39) {
+            wickEditor.project.getCurrentObject().playheadPosition ++;
+            wickEditor.syncInterfaces();
+        }
+
         // Backspace: delete selected objects
         if (event.keyCode == 8 && !this.editingTextBox) {
             event.preventDefault();
@@ -94,6 +106,8 @@ var InputHandler = function (wickEditor) {
 
             wickEditor.actionHandler.doAction('deleteObjects', { ids:ids });
         }
+
+        // 
     });
 
     document.body.addEventListener("keyup", function (event) {
