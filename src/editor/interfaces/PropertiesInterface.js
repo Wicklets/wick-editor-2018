@@ -10,67 +10,42 @@ var PropertiesInterface = function (wickEditor) {
         $("#soundProperties").css('display', 'none');
         $("#htmlSnippetProperties").css('display', 'none');
 
-        var tab = 'project';
-
         var selectedObj = wickEditor.getSelectedWickObject();
         if(selectedObj) {
-            if(selectedObj.fontData) {
-                tab = 'text';
-            } else if (selectedObj.audioData) {
-                tab = 'sound';
-            } else if (selectedObj.htmlData) {
-                tab = 'htmlSnippet';
+            // Display Object properties tab
+            $("#objectProperties").css('display', 'inline');
+
+            // Set object properties GUI name 
+            if(selectedObj.name) {
+                document.getElementById('objectName').value = selectedObj.name;
             } else {
-                tab = 'symbol';
+                document.getElementById('objectName').value = '';
             }
-        }
+            
+            // Set object properties GUI position
+            document.getElementById('objectPositionX').value = selectedObj.x;
+            document.getElementById('objectPositionY').value = selectedObj.y;
 
-        switch(tab) {
-            case 'project':
-                if(wickEditor.project.getCurrentObject().getCurrentFrame()) {
-                    document.getElementById('frameIdentifier').value = wickEditor.project.getCurrentObject().getCurrentFrame().identifier;
-                    $("#frameProperties").css('display', 'inline');
-                }
-                $("#projectProperties").css('display', 'inline');
-                break;
-            case 'symbol':
-                updateObjectPropertiesGUI(selectedObj);
-                break;
-            case 'text':
-                updateObjectPropertiesGUI(selectedObj);
+            if(selectedObj.fontData) {
                 $("#textProperties").css('display', 'inline');
-                break;
-            case 'sound':
-                updateObjectPropertiesGUI(selectedObj);
-
+            } else if (selectedObj.audioData) {
                 document.getElementById('loopCheckbox').checked = wickEditor.getSelectedWickObject().loopSound;
                 document.getElementById('autoplayCheckbox').checked = wickEditor.getSelectedWickObject().autoplaySound;
-
                 $("#soundProperties").css('display', 'inline');
-                break;
-            case 'htmlSnippet':
-                updateObjectPropertiesGUI(selectedObj);
+            } else if (selectedObj.htmlData) {
                 $("#htmlSnippetProperties").css('display', 'inline');
-                break;
+            } else {
+                
+            }
+        } else {
+            //Nothing selected, show project properties
+            if(wickEditor.project.getCurrentObject().getCurrentFrame()) {
+                document.getElementById('frameIdentifier').value = wickEditor.project.getCurrentObject().getCurrentFrame().identifier;
+                $("#frameProperties").css('display', 'inline');
+            }
+            $("#projectProperties").css('display', 'inline');
         }
     }
-
-    // Lil' helper function because these properties must get updated for every type of object
-    var updateObjectPropertiesGUI = function(selectedObj) {
-        // Display Object properties tab
-        $("#objectProperties").css('display', 'inline');
-
-        // Set object properties GUI name 
-        if(selectedObj.name) {
-            document.getElementById('objectName').value = selectedObj.name;
-        } else {
-            document.getElementById('objectName').value = '';
-        }
-        
-        // Set object properties GUI position
-        document.getElementById('objectPositionX').value = selectedObj.x;
-        document.getElementById('objectPositionY').value = selectedObj.y;
-    };
 
 // Buttons and text boxes and stuff
 
