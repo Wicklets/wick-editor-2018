@@ -14,9 +14,6 @@ var RightClickMenuInterface = function (wickEditor) {
     var openRightClickMenuDiv = function () {
         // Make rightclick menu visible
         $("#rightClickMenu").css('display', 'block');
-        // Attach it to the mouse
-        $("#rightClickMenu").css('top', wickEditor.inputHandler.mouse.y+'px');
-        $("#rightClickMenu").css('left', wickEditor.inputHandler.mouse.x+'px');
     }
 
     var closeRightClickMenuDiv = function () {
@@ -119,6 +116,9 @@ var RightClickMenuInterface = function (wickEditor) {
             that.open = false;
         }
 
+        $("#rightClickMenu").css('top', wickEditor.inputHandler.mouse.y+'px');
+        $("#rightClickMenu").css('left', wickEditor.inputHandler.mouse.x+'px');
+
         that.syncWithEditorState();
     });
 
@@ -129,6 +129,9 @@ var RightClickMenuInterface = function (wickEditor) {
         } else {
             that.open = false;
         }
+
+        $("#rightClickMenu").css('top', wickEditor.inputHandler.mouse.y+'px');
+        $("#rightClickMenu").css('left', wickEditor.inputHandler.mouse.x+'px');
 
         that.syncWithEditorState();
     });
