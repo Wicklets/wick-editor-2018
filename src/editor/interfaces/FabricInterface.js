@@ -575,7 +575,21 @@ var FabricInterface = function (wickEditor) {
 // Zoom
 
     this.zoom = function (zoomAmount) {
-        that.canvas.setZoom(that.canvas.getZoom() + zoomAmount);
+        var oldZoom = that.canvas.getZoom();
+        var newZoom = that.canvas.getZoom() * zoomAmount;
+        if(newZoom < 1) newZoom = 1;
+
+        var oldWidth = window.innerWidth / oldZoom;
+        var oldHeight = window.innerHeight / oldZoom;
+
+        var newWidth = window.innerWidth / newZoom;
+        var newHeight = window.innerHeight / newZoom;
+
+        var panAdjustX = (newWidth - oldWidth) / 2;
+        var panAdjustY = (newHeight - oldHeight) / 2;
+
+        that.canvas.setZoom(newZoom);
+        that.canvas.relativePan(new fabric.Point(panAdjustX,panAdjustY));
         that.canvas.renderAll();
     }
 
@@ -586,7 +600,7 @@ var FabricInterface = function (wickEditor) {
         e.preventDefault()
         var e = window.event || e;
         var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-        that.zoom(delta*0.1)
+        that.zoom(1.0 + delta*.1);
 
         return false;
     }

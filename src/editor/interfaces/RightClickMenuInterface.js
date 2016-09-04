@@ -14,9 +14,6 @@ var RightClickMenuInterface = function (wickEditor) {
     var openRightClickMenuDiv = function () {
         // Make rightclick menu visible
         $("#rightClickMenu").css('display', 'block');
-        // Attach it to the mouse
-        $("#rightClickMenu").css('top', wickEditor.inputHandler.mouse.y+'px');
-        $("#rightClickMenu").css('left', wickEditor.inputHandler.mouse.x+'px');
     }
 
     var closeRightClickMenuDiv = function () {
@@ -119,6 +116,9 @@ var RightClickMenuInterface = function (wickEditor) {
             that.open = false;
         }
 
+        $("#rightClickMenu").css('top', wickEditor.inputHandler.mouse.y+'px');
+        $("#rightClickMenu").css('left', wickEditor.inputHandler.mouse.x+'px');
+
         that.syncWithEditorState();
     });
 
@@ -129,6 +129,9 @@ var RightClickMenuInterface = function (wickEditor) {
         } else {
             that.open = false;
         }
+
+        $("#rightClickMenu").css('top', wickEditor.inputHandler.mouse.y+'px');
+        $("#rightClickMenu").css('left', wickEditor.inputHandler.mouse.x+'px');
 
         that.syncWithEditorState();
     });
@@ -147,24 +150,27 @@ var RightClickMenuInterface = function (wickEditor) {
     
     bindActionToButton("#editScriptsButton", function () {
         wickEditor.interfaces['scriptingide'].open = true;
+        wickEditor.syncInterfaces();
     });
 
     bindActionToButton("#bringToFrontButton", function () {
         wickEditor.actionHandler.doAction('moveObjectToZIndex', { 
-            ids: wickEditor.getSelectedObjectIDs(),
+            ids: wickEditor.interfaces["fabric"].getSelectedObjectIDs(),
             newZIndex: wickEditor.getCurrentObject().getCurrentFrame().wickObjects.length
         });
+        wickEditor.interfaces['fabric'].deselectAll();
     });
 
     bindActionToButton("#sendToBackButton", function () {
         wickEditor.actionHandler.doAction('moveObjectToZIndex', { 
-            ids: wickEditor.getSelectedObjectIDs(),
+            ids: wickEditor.interfaces["fabric"].getSelectedObjectIDs(),
             newZIndex: 0
         });
+        wickEditor.interfaces['fabric'].deselectAll();
     });
 
     bindActionToButton("#deleteButton", function () {
-        console.error("whoops forgot to update this")
+        wickEditor.actionHandler.doAction('deleteObjects', { ids:wickEditor.interfaces['fabric'].getSelectedObjectIDs() });
     });
 
     bindActionToButton("#editObjectButton", function () {
