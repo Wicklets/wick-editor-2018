@@ -101,17 +101,8 @@ var InputHandler = function (wickEditor) {
         // Backspace: delete selected objects
         if (event.keyCode == 8 && !this.editingTextBox) {
             event.preventDefault();
-
-            var ids = wickEditor.interfaces['fabric'].getSelectedObjectIDs();
-            if(ids.length == 0) {
-                VerboseLog.log("Nothing to delete.");
-                return;
-            }
-
-            wickEditor.actionHandler.doAction('deleteObjects', { ids:ids });
+            wickEditor.actionHandler.doAction('deleteObjects', { ids:wickEditor.interfaces['fabric'].getSelectedObjectIDs() });
         }
-
-        // 
     });
 
     document.body.addEventListener("keyup", function (event) {

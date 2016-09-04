@@ -155,20 +155,22 @@ var RightClickMenuInterface = function (wickEditor) {
 
     bindActionToButton("#bringToFrontButton", function () {
         wickEditor.actionHandler.doAction('moveObjectToZIndex', { 
-            ids: wickEditor.getSelectedObjectIDs(),
+            ids: wickEditor.interfaces["fabric"].getSelectedObjectIDs(),
             newZIndex: wickEditor.getCurrentObject().getCurrentFrame().wickObjects.length
         });
+        wickEditor.interfaces['fabric'].deselectAll();
     });
 
     bindActionToButton("#sendToBackButton", function () {
         wickEditor.actionHandler.doAction('moveObjectToZIndex', { 
-            ids: wickEditor.getSelectedObjectIDs(),
+            ids: wickEditor.interfaces["fabric"].getSelectedObjectIDs(),
             newZIndex: 0
         });
+        wickEditor.interfaces['fabric'].deselectAll();
     });
 
     bindActionToButton("#deleteButton", function () {
-        console.error("whoops forgot to update this")
+        wickEditor.actionHandler.doAction('deleteObjects', { ids:wickEditor.interfaces['fabric'].getSelectedObjectIDs() });
     });
 
     bindActionToButton("#editObjectButton", function () {
