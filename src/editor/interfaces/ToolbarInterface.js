@@ -59,11 +59,11 @@ var ToolbarInterface = function (wickEditor) {
     });
 
     $('#zoomInToolButton').on('click', function(e) {
-        wickEditor.interfaces['fabric'].zoom(0.2);
+        wickEditor.interfaces['fabric'].zoom(1.1);
     });
 
     $('#zoomOutToolButton').on('click', function(e) {
-        wickEditor.interfaces['fabric'].zoom(-0.2);
+        wickEditor.interfaces['fabric'].zoom(0.9);
     });
 
     $('#panToolButton').on('click', function(e) {

@@ -262,25 +262,21 @@
     <!-- WickObject Scripting GUI, bottom left corner -->
 
         <div id="scriptingGUI" class="GUIBox">
-            <div class="elemInRow">
-                <div class="button buttonInRow" id="onLoadButton">onLoad</div>
-                <div class="button buttonInRow" id="onClickButton">onClick</div>
-                <div class="button buttonInRow" id="onUpdateButton">onUpdate</div>
-                <div class="button buttonInRow" id="onKeyDownButton">onKeyDown</div>
-                <div class="button buttonInRow" id="beautifyButton"><font color="orange">Beautify</font></div>
-                <div class="button buttonInRow" id="closeScriptingGUIButton"><font color="red">Close</font></div>
-                <br />
-                <div id="scriptEditor"></div>
+            <div id="scriptObjectDiv">
+                <div class="elemInRow">
+                    <div class="button buttonInRow" id="onLoadButton">onLoad</div>
+                    <div class="button buttonInRow" id="onClickButton">onClick</div>
+                    <div class="button buttonInRow" id="onUpdateButton">onUpdate</div>
+                    <div class="button buttonInRow" id="onKeyDownButton">onKeyDown</div>
+                    <div class="button buttonInRow" id="beautifyButton"><font color="orange">Beautify</font></div>
+                    <br />
+                    <div id="scriptEditor"></div>
+                </div>
             </div>
-            <div class="elemInRow">
-                <u>Script References</u>
-                <div class="button" draggable=true id="refBtnPlay">play</div>
-                <div class="button" draggable=true id="refBtnStop">stop</div>
-                <div class="button" draggable=true id="refBtnGotoAndStop">gotoAndStop</div>
-                <div class="button" draggable=true id="refBtnGotoAndPlay">gotoAndPlay</div>
-                <div class="button" draggable=true id="refBtnGotoNextFrame">gotoNextFrame</div>
-                <div class="button" draggable=true id="refBtnGotoPrevFrame">gotoPrevFrame</div>
+            <div id="noSelectionDiv">
+                Nothing is selected hah
             </div>
+            <div class="button buttonInRow" id="closeScriptingGUIButton"><font color="red">Close</font></div>
         </div>
 
     <!-- Right click menu, appears next to mouse on right click -->

@@ -17,37 +17,29 @@ var ScriptingIDEInterface = function (wickEditor) {
 
     this.syncWithEditorState = function () {
         if(this.open) {
-            openScriptingGUI();
+            $("#scriptingGUI").css('display', 'block');
+
+            var selectedObj = wickEditor.getSelectedWickObject();
+
+            if(!selectedObj) {
+                $("#noSelectionDiv").css('display', 'block');
+                $("#scriptObjectDiv").css('display', 'none');
+            } else if(selectedObj.wickScripts[that.currentScript] !== undefined) {
+                $("#noSelectionDiv").css('display', 'none');
+                $("#scriptObjectDiv").css('display', 'block');
+
+                var script = selectedObj.wickScripts[that.currentScript];
+                that.aceEditor.setValue(script, -1);
+
+                document.getElementById("onLoadButton").className = (that.currentScript == 'onLoad' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
+                document.getElementById("onUpdateButton").className = (that.currentScript == 'onUpdate' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
+                document.getElementById("onClickButton").className = (that.currentScript == 'onClick' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
+                document.getElementById("onKeyDownButton").className = (that.currentScript == 'onKeyDown' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
+            }
         } else {
-            closeScriptingGUI();
+            $("#scriptingGUI").css('display', 'none');
         }
     }
-
-    var closeScriptingGUI = function () {
-        $("#scriptingGUI").css('visibility', 'hidden');
-    }
-
-    var openScriptingGUI = function () {
-        var selectedObj = wickEditor.getSelectedWickObject();
-
-        if(!selectedObj) {
-            closeScriptingGUI();
-            return;
-        }
-
-        if(selectedObj.wickScripts[that.currentScript]) {
-            var script = selectedObj.wickScripts[that.currentScript];
-            that.aceEditor.setValue(script, -1);
-        }
-
-        document.getElementById("onLoadButton").className = (that.currentScript == 'onLoad' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
-        document.getElementById("onUpdateButton").className = (that.currentScript == 'onUpdate' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
-        document.getElementById("onClickButton").className = (that.currentScript == 'onClick' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
-        document.getElementById("onKeyDownButton").className = (that.currentScript == 'onKeyDown' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
-    
-        $("#scriptingGUI").css('visibility', 'visible');
-    }
-
 // Script buttons
 
     $("#onLoadButton").on("click", function (e) {
@@ -70,37 +62,10 @@ var ScriptingIDEInterface = function (wickEditor) {
         wickEditor.syncInterfaces();
     });
 
-// Builtin docs buttons
-
-    document.getElementById("refBtnPlay").addEventListener("dragstart", function(ev) {
-        ev.dataTransfer.setData("text", "play();");
-    });
-
-    document.getElementById("refBtnStop").addEventListener("dragstart", function(ev) {
-        ev.dataTransfer.setData("text", "stop();");
-    });
-
-    document.getElementById("refBtnGotoAndStop").addEventListener("dragstart", function(ev) {
-        ev.dataTransfer.setData("text", "gotoAndStop(frame);");
-    });
-
-    document.getElementById("refBtnGotoAndPlay").addEventListener("dragstart", function(ev) {
-        ev.dataTransfer.setData("text", "gotoAndPlay(frame);");
-    });
-
-    document.getElementById("refBtnGotoNextFrame").addEventListener("dragstart", function(ev) {
-        ev.dataTransfer.setData("text", "gotoNextFrame();");
-    });
-
-    document.getElementById("refBtnGotoPrevFrame").addEventListener("dragstart", function(ev) {
-        ev.dataTransfer.setData("text", "gotoPrevFrame();");
-    });
-
 // Other buttons
 
     $("#closeScriptingGUIButton").on("click", function (e) {
         that.open = false;
-        closeScriptingGUI();
         that.syncWithEditorState();
     });
 

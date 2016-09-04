@@ -65,7 +65,9 @@ hr {
 	bottom: 0px;
 	left: 0px;
 	text-align: center;
-	visibility: hidden;
+	display: none;
+	width: 605px;
+	height: 230px;
 }
 #scriptEditor {
 	width: 600px;
@@ -78,6 +80,12 @@ hr {
 	bottom: 0px;
 	text-align: center;
 	display: inline;
+}
+
+#closeScriptingGUIButton {
+	right: 5px;
+	top: 5px;
+	position: absolute;
 }
 
 #builtinPlayerGUI {

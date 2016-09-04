@@ -22,6 +22,10 @@ var InputHandler = function (wickEditor) {
         that.mouse.down = true;
     }, false );
 
+    document.addEventListener('mouseup', function(e) { 
+        that.mouse.down = false;
+    }, false );
+
     document.addEventListener('contextmenu', function (event) { 
         event.preventDefault();
     }, false);

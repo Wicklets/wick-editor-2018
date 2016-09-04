@@ -147,6 +147,7 @@ var RightClickMenuInterface = function (wickEditor) {
     
     bindActionToButton("#editScriptsButton", function () {
         wickEditor.interfaces['scriptingide'].open = true;
+        wickEditor.syncInterfaces();
     });
 
     bindActionToButton("#bringToFrontButton", function () {

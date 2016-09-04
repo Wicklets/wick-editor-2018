@@ -467,7 +467,7 @@ WickObject.prototype.gotoFrame = function (frame) {
     if (CheckInput.testNonNegativeInteger(frame)) {
 
         // Only navigate to an integer frame if it is nonnegative and a valid frame
-        if(frame < this.frames.length)
+        if(frame < this.getCurrentLayer().frames.length)
             this.playheadPosition = frame;
         else
             throw "Failed to navigate to frame \'" + frame + "\': is not a valid frame.";

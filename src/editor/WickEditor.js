@@ -6,6 +6,8 @@ var WickEditor = function () {
     Initialize all editor vars
 *********************************/
 
+    console.log("WickEditor Pre-Alpha");
+
     this.currentTool = new WickTool();
     this.currentTool.type = "cursor";
 
