@@ -42,6 +42,10 @@ var PropertiesInterface = function (wickEditor) {
                 break;
             case 'sound':
                 updateObjectPropertiesGUI(selectedObj);
+
+                document.getElementById('loopCheckbox').checked = wickEditor.getSelectedWickObject().loopSound;
+                document.getElementById('autoplayCheckbox').checked = wickEditor.getSelectedWickObject().autoplaySound;
+
                 $("#soundProperties").css('display', 'inline');
                 break;
             case 'htmlSnippet':
@@ -125,6 +129,16 @@ var PropertiesInterface = function (wickEditor) {
             ids: [wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0]], 
             modifiedStates: [{ fontSize : this.value }] 
         });
+    };
+
+    // Loop Checkbox: Toggle sound loop
+    document.getElementById('loopCheckbox').onchange = function () {
+        wickEditor.getSelectedWickObject().loopSound = this.checked;
+    };
+
+    // Autoplay Checkbox: Toggle sound autoplay
+    document.getElementById('autoplayCheckbox').onchange = function () {
+        wickEditor.getSelectedWickObject().autoplaySound = this.checked;
     };
 
     $('#htmlTextBox').on('input propertychange', function () {

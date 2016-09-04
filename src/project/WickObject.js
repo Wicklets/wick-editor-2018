@@ -294,6 +294,7 @@ WickObject.fromAudioFile = function (audioData) {
 
     audioWickObject.audioData = audioData;
     audioWickObject.autoplaySound = true;
+    audioWickObject.loopSound = false;
     audioWickObject.x = window.innerWidth/2;
     audioWickObject.y = window.innerHeight/2;
 
