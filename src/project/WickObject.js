@@ -162,6 +162,11 @@ WickObject.fromFile = function (file, fileType, callback) {
         }; })(file);
         dataURLReader.readAsDataURL(file);
 
+    } else if (fileType == 'text/html') {
+
+        var newWickObject = WickObject.fromHTML(file);
+        callback(newWickObject);
+
     } else {
 
         console.error("Unsupported filetype in WickObject.fromFile(): " + file.type);
@@ -274,19 +279,14 @@ WickObject.fromText = function (text) {
 }
 
 WickObject.fromHTML = function (text) {
-    console.error("WickObject.fromHTML not updated yet...");
-    /*var htmlSnippetWickObject = new WickObject(parentObject);
+    
+    var htmlSnippetWickObject = new WickObject();
 
     htmlSnippetWickObject.htmlData = '<iframe width="560" height="315" src="https://www.youtube.com/embed/AxZ6RG5UeiU" frameborder="0" allowfullscreen></iframe>';
-    htmlSnippetWickObject.left = window.innerWidth/2;
-    htmlSnippetWickObject.top = window.innerHeight/2;
+    htmlSnippetWickObject.x = window.innerWidth/2;
+    htmlSnippetWickObject.y = window.innerHeight/2;
 
-    htmlSnippetWickObject.parentObject = this.currentObject;
-
-    this.fabricInterface.addWickObjectToCanvas(htmlSnippetWickObject);
-
-    this.syncEditorWithfabricInterface();
-    this.fabricInterface.syncWithEditor();*/
+    return htmlSnippetWickObject;
 }
 
 WickObject.fromAudioFile = function (audioData) {

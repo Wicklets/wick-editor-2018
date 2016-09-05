@@ -206,6 +206,13 @@ var FabricInterface = function (wickEditor) {
             });
         }
 
+        if(wickObj.htmlData) {
+            fabric.Image.fromURL('resources/htmlsnippet.png', function(htmlFabricObject) {
+                that.syncObjects(wickObj, htmlFabricObject);
+                callback(htmlFabricObject);
+            });
+        }
+
         if(wickObj.svgData) {
 
             fabric.loadSVGFromString(wickObj.svgData.svgString, function(objects, options) {
