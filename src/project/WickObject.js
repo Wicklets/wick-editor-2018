@@ -12,7 +12,7 @@ var WickObject = function () {
     this.id = null;
 
     // Identifier
-    this.objectName = undefined;
+    this.name = undefined;
 
 // Positioning
 
@@ -597,8 +597,6 @@ WickObject.prototype.getAllInactiveSiblings = function () {
     var that = this;
     var siblings = [];
     this.parentObject.getAllActiveChildObjects().forEach(function (child) {
-        console.log(child)
-        console.log(that.id)
         if(child.id !== that.id) {
             siblings.push(child);
         }
@@ -701,20 +699,6 @@ WickObject.prototype.getLargestID = function (id) {
 
     return largestID;
 }
-
-WickObject.prototype.childWithIDIsActive = function (id) {
-
-    var match = false;
-
-    this.getAllActiveChildObjects().forEach(function(child) {
-        if(child.id == id) {
-            match = true;
-        }
-    });
-
-    return match;
-
-}   
 
 /*************************
      Positioning stuff

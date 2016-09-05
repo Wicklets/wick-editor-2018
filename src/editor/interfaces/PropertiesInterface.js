@@ -47,9 +47,9 @@ var PropertiesInterface = function (wickEditor) {
     $('#objectName').on('input propertychange', function () {
         var newName = $('#objectName').val();
         if(newName === '') {
-            wickEditor.fabricInterface.getActiveObject().wickObject.name = undefined;
+            wickEditor.getSelectedWickObject().name = undefined;
         } else {
-            wickEditor.fabricInterface.getActiveObject().wickObject.name = $('#objectName').val();
+            wickEditor.getSelectedWickObject().name = newName;
         }
     });
 
