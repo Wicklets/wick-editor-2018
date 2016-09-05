@@ -22,6 +22,8 @@ var FabricInterface = function (wickEditor) {
     this.creatingSelection = false;
     this.objectIDsInCanvas = [];
 
+    this.fabricVectorPaintbrush = new FabricVectorPaintbrush(this, wickEditor);
+
 /********************************
        Editor state syncing
 ********************************/
@@ -70,7 +72,11 @@ var FabricInterface = function (wickEditor) {
         });
 
         // Add new objects and update existing objects
-        currentObject.forEachActiveChildObject(function (child) {
+        var activeObjects = currentObject.getAllActiveChildObjects();
+        var inactiveObjects = currentObject.getAllInactiveSiblings();
+        var allObjects = activeObjects.concat(inactiveObjects);
+
+        allObjects.forEach(function (child) {
             if(that.objectIDsInCanvas[child.id]) {
                 // Update existing object
                 that.canvas.forEachObject(function(fabricObj) {
@@ -88,15 +94,22 @@ var FabricInterface = function (wickEditor) {
                     that.canvas.add(newFabricObj);
                     var wickProjectIndex = currentObject.getCurrentFrame().wickObjects.indexOf(child);
                     that.canvas.moveTo(newFabricObj, wickProjectIndex+2);
+
+                    if(inactiveObjects.indexOf(child) != -1) {
+                        newFabricObj.opacity = 0.5;
+                        newFabricObj.hasControls = false;
+                        newFabricObj.selectable = false;
+                        newFabricObj.evented = false;
+                    }
                 });
             }
         });
 
         // Check for intersections between paths and unite them if they do
-        uniteIntersectingPaths();
+        this.fabricVectorPaintbrush.uniteIntersectingPaths();
 
         // Split apart paths that are actually two paths
-        splitPathsWithMultiplePieces();
+        this.fabricVectorPaintbrush.splitPathsWithMultiplePieces();
 
         // Reselect objects that were selected before sync
         if(selectedObjectIDs.length > 0) that.selectByIDs(selectedObjectIDs);
@@ -108,14 +121,6 @@ var FabricInterface = function (wickEditor) {
         return {
             x: (window.innerWidth  - wickEditor.project.resolution.x)/2,
             y: (window.innerHeight - wickEditor.project.resolution.y)/2
-        }
-    }
-
-    this.transformCoordinatesToFabricCanvasSpace = function (x,y) {
-        //console.error("transformCoordinatesToFabricCanvasSpace NYI");
-        return {
-            x: x,
-            y: y
         }
     }
 
@@ -382,193 +387,6 @@ var FabricInterface = function (wickEditor) {
     });
 
 /********************************
-       Drawing tool stuff
-********************************/
-    
-    canvas.on('mouse:down', function(e) {
-        if(e.e.button != 0) return;
-        wickEditor.interfaces['rightclickmenu'].open = false;
-        if(wickEditor.currentTool.type == 'fillbucket') {
-            that.deselectAll();
-
-            that.canvas.forEachObject(function(fabricObj) {
-                if(fabricObj.paperPath) {
-                    var mousePoint = new paper.Point(
-                        e.e.offsetX - that.getCenteredFrameOffset().x, 
-                        e.e.offsetY - that.getCenteredFrameOffset().y);
-
-                    // Find paths before attempting to find holes
-                    var intersectedPath = getPaperObjectIntersectingWithPoint(fabricObj.paperPath, mousePoint, true);
-                    if(!intersectedPath) {
-                        intersectedPath = getPaperObjectIntersectingWithPoint(fabricObj.paperPath, mousePoint, false);
-                    }
-
-                    if(!intersectedPath) return;
-
-                    var pathObj = wickEditor.getWickObjectByID(fabricObj.wickObjectID);
-
-                    if(intersectedPath.clockwise) {
-                        console.log("hole filled");
-
-                        if(pathObj.svgData.fillColor == wickEditor.currentTool.color) {
-                            // Delete the hole
-
-                            var intersectedEntirePath = intersectedPath._parent.children[0];
-
-                            var exportedSVGData = intersectedEntirePath.exportSVG({asString:true});
-                            var svgString = '<svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="588px" height="588px" enable-background="new 20.267 102.757 588 588" xml:space="preserve">'+exportedSVGData+'</svg>';
-                            var svgData = {svgString:svgString, fillColor:wickEditor.currentTool.color}
-                            WickObject.fromSVG(svgData, function(wickObj) {
-                                //wickObj.x = pathFabricObject.left - that.getFrameOffset().x - pathFabricObject.width/2  - that.canvas.freeDrawingBrush.width/2;
-                                //wickObj.y = pathFabricObject.top  - that.getFrameOffset().y - pathFabricObject.height/2 - that.canvas.freeDrawingBrush.width/2;
-                                wickObj.x = pathObj.x;
-                                wickObj.y = pathObj.y;
-                                // Note: if add is called before delete, delete will fire off before add and during state sync an extra object will be added.
-                                // Add functionaitly to FabricInterface to handle these weird async issues!
-                                wickEditor.actionHandler.doAction('deleteObjects', { ids:[pathObj.id] });
-                                wickEditor.actionHandler.doAction('addObjects', { wickObjects:[wickObj] });
-                            });
-                        } else {
-                            // If they are different colors:
-                            //     Delete the hole, but also make an in-place copy of it with wickEditor.currentTool.color.
-
-                        }
-                    } else {
-                        console.log("path filled");
-                        // Path filled: Change the color of that path.
-
-                        pathObj.svgData.fillColor = wickEditor.currentTool.color;
-                        that.canvas.remove(fabricObj); // to force regeneration of fabric path object
-
-                        wickEditor.syncInterfaces();
-                    }
-                }
-            });
-        }
-    });
-
-    var getPaperObjectIntersectingWithPoint = function (item, point, fillClockwise) {
-
-        var hitOptions = {
-            segments: true,
-            stroke: true,
-            fill: true,
-            tolerance: 0
-        };
-
-        // Look for a hit on item
-        var hitResult = item.hitTest(point, hitOptions);
-        if(hitResult && hitResult.item.clockwise == fillClockwise) {
-            return hitResult.item;
-        }
-
-        // Didn't find what we were looking for, so look for a hit on item's children
-        if(!item.children) return null;
-
-        for(var i = 0; i < item.children.length; i++) {
-            var hitSVG = getPaperObjectIntersectingWithPoint(item.children[i], point, fillClockwise);
-            if(hitSVG) {
-                return hitSVG;
-            }
-        }
-
-        return null;
-    }
-
-    var uniteIntersectingPaths = function () {
-
-        that.canvas.forEachObject(function(fabObjA) {
-            that.canvas.forEachObject(function(fabObjB) {
-
-                var bothFabObjsArePaths = fabObjA.type === "path" && fabObjB.type === "path";
-                var notSameObject = fabObjA.wickObjectID != fabObjB.wickObjectID;
-                var bothHaveWickObjectIDs = fabObjA.wickObjectID && fabObjB.wickObjectID;
-
-                if (bothFabObjsArePaths && notSameObject && bothHaveWickObjectIDs) {
-                    var pathA = fabObjA.paperPath;
-                    var pathB = fabObjB.paperPath;
-                    var intersections = pathA.getIntersections(pathB);
-                    if(intersections.length > 0) {
-                        if(fabObjA.fill === fabObjB.fill) {
-                            // Same color: union
-                        } else {
-                            // Different colors: path with higer z index subtracts from other path 
-                        }
-                    }
-                }
-
-            });
-        });
-
-    }
-
-    var splitPathsWithMultiplePieces = function () {
-        that.canvas.forEachObject(function(fabObj) {
-            if(fabObj.type === "path" && fabObj.wickObjectID) {
-                var path = fabObj.paperPath;
-                // Not sure how to check if the path is multiple pieces...
-            }
-        });
-    }
-
-    // Paths are handled internally by fabric so we have to intercept them as they are added by fabric
-    canvas.on('object:added', function(e) {
-        if(e.target.type !== "path" || e.target.wickObjectID) {
-            return;
-        }
-
-        var pathFabricObject = e.target;
-
-        potracePath(e.target, function(SVGData) {
-            if(wickEditor.currentTool.type == "paintbrush") {
-                convertPathToWickObject(SVGData, pathFabricObject)
-            } else if(wickEditor.currentTool.type == "eraser") {
-                eraseUsingSVG(SVGData);
-            }
-
-            canvas.remove(e.target);
-        });
-
-    });
-
-    var potracePath = function (pathFabricObject, callback) {
-        // New potrace-and-send-to-paper.js brush
-        pathFabricObject.cloneAsImage(function(clone) {
-            var imgSrc = clone._element.currentSrc || clone._element.src;
-
-            var img = new Image();
-            img.onload = function () {
-                // Scale the image before we pass it to potrace (fixes retina display bugs!)
-                var dummyCanvas = document.createElement('canvas');
-                var dummyContext = dummyCanvas.getContext('2d');
-                dummyCanvas.width = img.width/window.devicePixelRatio;
-                dummyCanvas.height = img.height/window.devicePixelRatio;
-                dummyContext.drawImage(img, 0,0, img.width,img.height, 0,0, dummyCanvas.width,dummyCanvas.height);
-                
-                Potrace.loadImageFromDataURL(dummyCanvas.toDataURL());
-                Potrace.setParameter({optcurve: true, opttolerance: wickEditor.currentTool.brushSmoothing});
-                Potrace.process(function(){
-                    var SVGData = {svgString:Potrace.getSVG(1), fillColor:that.canvas.freeDrawingBrush.color}
-                    callback(SVGData);
-                });
-            }
-            img.src = imgSrc;
-        }); 
-    }
-
-    var convertPathToWickObject = function (SVGData, pathFabricObject) {
-        WickObject.fromSVG(SVGData, function(wickObj) {
-            wickObj.x = pathFabricObject.left - that.getCenteredFrameOffset().x - pathFabricObject.width/2  - that.canvas.freeDrawingBrush.width/2;
-            wickObj.y = pathFabricObject.top  - that.getCenteredFrameOffset().y - pathFabricObject.height/2 - that.canvas.freeDrawingBrush.width/2;
-            wickEditor.actionHandler.doAction('addObjects', {wickObjects:[wickObj]})
-        });
-    }
-
-    var eraseUsingSVG = function (SVGData) {
-        console.error("eraseUsingSVG NYI")
-    }
-
-/********************************
            GUI Stuff
 ********************************/
 
@@ -631,6 +449,8 @@ var FabricInterface = function (wickEditor) {
             that.canvas.relativePan(delta);
         }
     });
+
+// Selection stuff
 
     // Update the scripting GUI/properties box when the selected object changes
     canvas.on('object:selected', function (e) {

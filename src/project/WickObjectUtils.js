@@ -20,7 +20,7 @@ var WickObjectUtils = (function () {
                 layer.__proto__ = WickLayer.prototype;
             });
 
-            obj.forEachChildObject(function(currObj) {
+            obj.getAllChildObjects().forEach(function(currObj) {
                 utils.putWickObjectPrototypeBackOnObject(currObj);
             });
         }

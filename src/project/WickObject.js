@@ -558,9 +558,15 @@ WickObject.prototype.getAllChildObjects = function () {
     }
 
     var children = [];
-    this.forEachChildObject(function(child) {
-        children.push(child)
-    });
+    for(var l = 0; l < this.layers.length; l++) {
+        var layer = this.layers[l];
+        for(var f = 0; f < layer.frames.length; f++) {
+            var frame = layer.frames[f];
+            for(var o = 0; o < frame.wickObjects.length; o++) {
+                children.push(frame.wickObjects[o]);
+            }
+        }
+    }
     return children;
 }
 
@@ -572,40 +578,46 @@ WickObject.prototype.getAllActiveChildObjects = function () {
     }
 
     var children = [];
-    this.forEachActiveChildObject(function(child){
-        children.push(child);
-    });
-    return children; 
-}
-
-/* Call callback function for every child object in this object */
-WickObject.prototype.forEachChildObject = function (callback) {
-    for(var l = 0; l < this.layers.length; l++) {
-        var layer = this.layers[l];
-        for(var f = 0; f < layer.frames.length; f++) {
-            var frame = layer.frames[f];
-            for(var o = 0; o < frame.wickObjects.length; o++) {
-                callback(frame.wickObjects[o]);
-            }
-        }
-    }
-}
-
-/* Call callback function for every child object in this object's current frame */
-WickObject.prototype.forEachActiveChildObject = function (callback) {
     var currentFrame = this.getCurrentFrame();
     if(currentFrame) {
         for(var o = 0; o < currentFrame.wickObjects.length; o++) {
-            callback(currentFrame.wickObjects[o]);
+            children.push(currentFrame.wickObjects[o]);
         }
     }
+    return children; 
 }
 
-/* Call callback function for every child object in this object's first frame */
-WickObject.prototype.forEachFirstFrameChildObject = function (callback) {
-    for(var o = 0; o < this.layers[this.currentLayer].frames[0].wickObjects.length; o++) {
-        callback(this.layers[this.currentLayer].frames[0].wickObjects[o]);
+// Use this to render unselectable objects in Fabric
+WickObject.prototype.getAllInactiveSiblings = function () {
+
+    if(!this.parentObject) {
+        return [];
     }
+
+    var that = this;
+    var siblings = [];
+    this.parentObject.getAllActiveChildObjects().forEach(function (child) {
+        if(child.id !== that.id) {
+            siblings.push(child);
+        }
+    });
+    siblings.concat(this.parentObject.getAllInactiveSiblings());
+
+    return siblings;
+
+}
+
+//
+WickObject.prototype.getObjectsOnFirstFrame = function () {
+
+    var objectsOnFirstFrame = [];
+
+    for(var o = 0; o < this.layers[this.currentLayer].frames[0].wickObjects.length; o++) {
+        objectsOnFirstFrame.push(this.layers[this.currentLayer].frames[0].wickObjects[o]);
+    }
+
+    return objectsOnFirstFrame;
+
 }
 
 /* Excludes children of children */
@@ -639,7 +651,7 @@ WickObject.prototype.getChildByID = function (id) {
 
     var foundChild = null;
 
-    this.forEachChildObject(function(child) {
+    this.getAllChildObjects().forEach(function(child) {
         if(child.id == id) {
             if(!foundChild) foundChild = child;
         } else {
@@ -657,7 +669,7 @@ WickObject.prototype.removeChildByID = function (id) {
     }
 
     var that = this;
-    this.forEachActiveChildObject(function(child) {
+    this.getAllActiveChildObjects().forEach(function(child) {
         if(child.id == id) {
             var index = that.getCurrentFrame().wickObjects.indexOf(child);
             that.getCurrentFrame().wickObjects.splice(index, 1);
@@ -677,7 +689,7 @@ WickObject.prototype.getLargestID = function (id) {
     if(this.id > largestID) {
         largestID = this.id;
     }
-    this.forEachChildObject(function(child) {
+    this.getAllChildObjects().forEach(function(child) {
         var subLargestID = child.getLargestID();
 
         if(subLargestID > largestID) {
@@ -692,7 +704,7 @@ WickObject.prototype.childWithIDIsActive = function (id) {
 
     var match = false;
 
-    this.forEachActiveChildObject(function(child) {
+    this.getAllActiveChildObjects().forEach(function(child) {
         if(child.id == id) {
             match = true;
         }
@@ -717,7 +729,7 @@ WickObject.prototype.getSymbolCornerPosition = function () {
     var leftmostLeft = null;
     var topmostTop = null;
 
-    this.forEachFirstFrameChildObject(function (child) {
+    this.getObjectsOnFirstFrame().forEach(function (child) {
         var checkX, checkY;
 
         if(child.isSymbol) {
@@ -825,8 +837,8 @@ WickObject.prototype.encodeStrings = function () {
     }
 
     if(this.isSymbol) {
-        this.forEachChildObject(function(currObj) {
-            currObj.encodeStrings();
+        this.getAllChildObjects().forEach(function(child) {
+            child.encodeStrings();
         });
     }
 
@@ -857,8 +869,8 @@ WickObject.prototype.decodeStrings = function () {
     }
 
     if(this.isSymbol) {
-        this.forEachChildObject(function(currObj) {
-            currObj.decodeStrings();
+        this.getAllChildObjects().forEach(function(child) {
+            child.decodeStrings();
         });
     }
 
@@ -871,7 +883,7 @@ WickObject.prototype.regenerateParentObjectReferences = function() {
     if(this.isSymbol) {
 
         // Recursively regenerate parent object references of all objects inside this symbol.
-        this.forEachChildObject(function(child) {
+        this.getAllChildObjects().forEach(function(child) {
             child.parentObject = parentObject;
             child.regenerateParentObjectReferences();
         });
@@ -905,7 +917,7 @@ WickObject.prototype.generateSVGCacheImages = function (callback) {
             callback();
         }
 
-        this.forEachChildObject(function(currObj) {
+        this.getAllChildObjects().forEach(function(currObj) {
             currObj.generateSVGCacheImages(function () {
                 childrenConverted++;
                 if(childrenConverted == nChildren) {
