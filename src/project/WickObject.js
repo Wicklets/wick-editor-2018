@@ -597,11 +597,13 @@ WickObject.prototype.getAllInactiveSiblings = function () {
     var that = this;
     var siblings = [];
     this.parentObject.getAllActiveChildObjects().forEach(function (child) {
+        console.log(child)
+        console.log(that.id)
         if(child.id !== that.id) {
             siblings.push(child);
         }
     });
-    siblings.concat(this.parentObject.getAllInactiveSiblings());
+    siblings = siblings.concat(this.parentObject.getAllInactiveSiblings());
 
     return siblings;
 

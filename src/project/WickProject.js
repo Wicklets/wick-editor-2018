@@ -130,7 +130,7 @@ WickProject.prototype.regenerateUniqueIDs = function (wickObject) {
     }
 
     if(wickObject.isSymbol) {
-        wickObject.forEachChildObject(function (child) {
+        wickObject.getAllChildObjects().forEach(function (child) {
             that.regenerateUniqueIDs(child);
         });
     }
