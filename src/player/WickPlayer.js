@@ -38,6 +38,9 @@ var WickPlayer = (function () {
 
         stopDrawLoop = false;
 
+        // go to the first frame of the root object, zj!
+        console.error("fix this")
+
         // Check if we're on a mobile device or not
         mobileMode = BrowserDetectionUtils.inMobileMode;
         desktopMode = !mobileMode;
@@ -270,6 +273,7 @@ var WickPlayer = (function () {
 
         // All WickObjects are ready to play their sounds, run their onLoad scripts, etc.
         wickObj.justEnteredFrame = true;
+        wickObj.onNewFrame = true;
 
         // Do the same for all this object's children
         if(wickObj.isSymbol) {
@@ -606,16 +610,21 @@ var WickPlayer = (function () {
 
     var updateObj = function (obj) {
 
+        if(obj.onNewFrame) {
+            if(obj.isSymbol && !obj.getCurrentFrame().autoplay) {
+                obj.isPlaying = false;
+                console.log("das")
+            }
+
+            obj.onNewFrame = false;
+        }
+
         if(obj.justEnteredFrame) {
 
             runOnLoadScript(obj);
             
             if(audioContext && obj.audioBuffer && obj.autoplaySound) {
                 obj.playSound();
-            }
-
-            if(obj.isSymbol && !obj.getCurrentFrame().autoplay) {
-                obj.isPlaying = false;
             }
 
             obj.justEnteredFrame = false;
@@ -731,6 +740,7 @@ var WickPlayer = (function () {
             var newFrame = obj.getCurrentFrame();
 
             if(oldFrame !== newFrame) {
+                obj.onNewFrame = true;
                 obj.forEachActiveChildObject(function (child) {
                     child.justEnteredFrame = true;
                 });
