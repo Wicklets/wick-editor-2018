@@ -199,8 +199,8 @@ var RightClickMenuInterface = function (wickEditor) {
         wickEditor.actionHandler.doAction('addNewFrame');
     });
 
-    bindActionToButton("#removeFrameButton", function () {
-        alert("remove")
+    bindActionToButton("#deleteFrameButton", function () {
+        wickEditor.actionHandler.doAction('deleteCurrentFrame');
     });
 
     bindActionToButton("#extendFrameButton", function () {

@@ -268,8 +268,8 @@ var WickPlayer = (function () {
         // Reset the mouse hovered over state flag
         wickObj.hoveredOver = false;
 
-        // Set this object to need its onLoad script run
-        wickObj.onLoadScriptRan = false;
+        // All WickObjects are ready to play their sounds, run their onLoad scripts, etc.
+        wickObj.justEnteredFrame = true;
 
         // Do the same for all this object's children
         if(wickObj.isSymbol) {
@@ -606,39 +606,40 @@ var WickPlayer = (function () {
 
     var updateObj = function (obj) {
 
-        // Run obj's onLoad if necessary, then all subObj's
-        runOnLoadScript(obj);
+        if(obj.justEnteredFrame) {
 
-        // Run obj's update if necessary, then all subObj's
+            runOnLoadScript(obj);
+            
+            if(audioContext && obj.audioBuffer && obj.autoplaySound) {
+                obj.playSound();
+            }
+
+            if(obj.isSymbol && !obj.getCurrentFrame().autoplay) {
+                obj.isPlaying = false;
+            }
+
+            obj.justEnteredFrame = false;
+        }
+
         runUpdateScript(obj);
 
-        // Advance obj's timeline one frame, then subobj's timelines
-        advanceTimeline(obj);
+        if(obj.isSymbol) {
+            advanceTimeline(obj);
+
+            obj.forEachActiveChildObject(function(subObj) {
+                updateObj(subObj);
+            });
+        }
+
+        obj.readyToAdvance = true;
 
     }
 
     var runOnLoadScript = function (obj) {
 
-        if(!obj.onLoadScriptRan) {
-
-            // Run onLoad script
-            if(obj && !obj.isRoot && obj.wickScripts) {
-                evalScript(obj, obj.wickScripts.onLoad);
-                obj.onLoadScriptRan = true;
-
-                // Play sound at the same time as when onLoad script runs
-                if(audioContext && obj.audioBuffer && obj.autoplaySound) {
-                    obj.playSound();
-                }
-            }
-
-            // Recursively run all onLoads
-            if(obj.isSymbol) {
-                obj.forEachActiveChildObject(function(subObj) {
-                    runOnLoadScript(subObj);
-                });
-            }
-
+        // Run onLoad script
+        if(obj && !obj.isRoot && obj.wickScripts) {
+            evalScript(obj, obj.wickScripts.onLoad);
         }
 
     }
@@ -648,13 +649,6 @@ var WickPlayer = (function () {
         // Run update script
         if(obj && !obj.isRoot && obj.wickScripts) {
             evalScript(obj, obj.wickScripts.onUpdate);
-        }
-
-        // Recursively run all updates
-        if(obj.isSymbol) {
-            obj.forEachActiveChildObject(function(subObj) {
-                runUpdateScript(subObj);
-            });
         }
 
     }
@@ -705,13 +699,13 @@ var WickPlayer = (function () {
         } catch (e) {
             if(window.wickEditor) {
                 console.error("Exeption thrown while running script of WickObject with ID " + obj.id)
-                console.error(e);
+                console.log(e);
                 wickEditor.runningBuiltinPlayer = false;
                 WickPlayer.stopRunningCurrentProject();
                 wickEditor.syncInterfaces();
             } else {
                 alert("An exception was thrown while running a WickObject script. See console!");
-                console.error(e);
+                console.log(e);
             }
         }
 
@@ -724,23 +718,23 @@ var WickPlayer = (function () {
 
     var advanceTimeline = function (obj) { 
         // Advance timeline for this object
-        if(obj.isPlaying) {
+        if(obj.isPlaying && obj.readyToAdvance) {
 
+            var oldFrame = obj.getCurrentFrame();
             obj.playheadPosition ++;
 
             // If we reached the end, go back to the beginning 
             if(obj.playheadPosition >= obj.getTotalTimelineLength()) {
                 obj.playheadPosition = 0;
             }
-        }
 
-        // Recusively advance timelines of all children
-        if(obj.isSymbol) {
-            obj.forEachActiveChildObject(function(subObj) {
-                if(subObj.isSymbol) {
-                    advanceTimeline(subObj);
-                }
-            });
+            var newFrame = obj.getCurrentFrame();
+
+            if(oldFrame !== newFrame) {
+                obj.forEachActiveChildObject(function (child) {
+                    child.justEnteredFrame = true;
+                });
+            }
         }
 
     }

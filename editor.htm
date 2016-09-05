@@ -136,6 +136,11 @@
 
         <div id="timelineGUI" class="GUIBox">
             <canvas id="timelineCanvas"></canvas>
+
+            <div id="frameProperties">
+                <input type="checkbox" id="frameAutoplayCheckbox"> Autoplay<br />
+                <input type="text" id="frameIdentifier" maxlength="16" size="16">
+            </div>
         </div>
 
     <!-- Toolbar GUI, centered at the left side of the screen -->
@@ -207,12 +212,6 @@
     <!-- Properties GUI, bottom right corner -->
 
         <div id="propertiesGUI" class="GUIBox">
-            <div id="frameProperties">
-                Frame Properties
-                <hr />
-                Identifier: <input type="text" id="frameIdentifier" maxlength="16" size="16">
-            </div>
-
             <div id="objectProperties">
                 Object Properties
                 <hr />
@@ -316,7 +315,7 @@
                 <div id="frameExistsButtons">
                     <div class="button" id="extendFrameButton">Extend Frame</div>
                     <div class="button" id="shrinkFrameButton">Shrink Frame</div>
-                    <div class="button" id="removeFrameButton">Remove Frame</div>
+                    <div class="button" id="deleteFrameButton">Delete Frame</div>
                 </div>
                 <div id="noFrameExistsButtons">
                     <div class="button" id="addFrameButton">Add Frame</div>

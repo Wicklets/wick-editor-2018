@@ -61,7 +61,7 @@ var InputHandler = function (wickEditor) {
         }
 
         // Enter: run
-        if(event.keyCode == 13) {
+        if(event.keyCode == 13 && !this.editingTextBox) {
             that.clearKeys();
             wickEditor.interfaces["builtinplayer"].runProject();
         }

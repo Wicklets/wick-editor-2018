@@ -386,15 +386,14 @@ WickObject.prototype.getPlayheadPositionAtFrame = function (frame) {
 
 }
 
-WickObject.prototype.getCurrentFrame = function() {
-
+WickObject.prototype.getFrameAtPlayheadPosition = function(pos) {
     var layer = this.getCurrentLayer();
     var counter = 0;
 
     for(var f = 0; f < layer.frames.length; f++) {
         var frame = layer.frames[f];
         for(var i = 0; i < frame.frameLength; i++) {
-            if(counter == this.playheadPosition) {
+            if(counter == pos) {
                 return frame;
             }
             counter++;
@@ -403,6 +402,11 @@ WickObject.prototype.getCurrentFrame = function() {
 
     // Playhead isn't over a frame on the current layer.
     return null;
+}
+
+WickObject.prototype.getCurrentFrame = function() {
+
+    return this.getFrameAtPlayheadPosition(this.playheadPosition);
 
 }
 

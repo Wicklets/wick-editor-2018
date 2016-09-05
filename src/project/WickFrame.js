@@ -12,6 +12,9 @@ var WickFrame = function () {
 
 	// Create multiframe support. 
 	this.frameLength = 1;
+
+	// Should we stop when we get to this frame?
+	this.autoplay = true;
 };
 
 // Extend our frame to encompass more frames. 

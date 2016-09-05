@@ -4,7 +4,6 @@ var PropertiesInterface = function (wickEditor) {
 
     this.syncWithEditorState = function () {
         $("#projectProperties").css('display', 'none');
-        $("#frameProperties").css('display', 'none');
         $("#objectProperties").css('display', 'none');
         $("#textProperties").css('display', 'none');
         $("#soundProperties").css('display', 'none');
@@ -39,10 +38,6 @@ var PropertiesInterface = function (wickEditor) {
             }
         } else {
             //Nothing selected, show project properties
-            if(wickEditor.project.getCurrentObject().getCurrentFrame()) {
-                document.getElementById('frameIdentifier').value = wickEditor.project.getCurrentObject().getCurrentFrame().identifier;
-                $("#frameProperties").css('display', 'inline');
-            }
             $("#projectProperties").css('display', 'inline');
         }
     }

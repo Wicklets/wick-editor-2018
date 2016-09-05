@@ -268,6 +268,17 @@ var WickActionHandler = function (wickEditor) {
             currentObject.getCurrentLayer().frames.pop();
         });
 
+    this.registerAction('deleteCurrentFrame', 
+        function (args) {
+            var currentObject = wickEditor.project.getCurrentObject();
+
+            // Add an empty frame
+            currentObject.getCurrentLayer().deleteFrame(currentObject.getCurrentFrame());
+        },
+        function (args) {
+            console.error("deleteCurrentFrame undo NYI");
+        });
+
     this.registerAction('addNewLayer', 
         function (args) {
             var currentObject = wickEditor.project.getCurrentObject();

@@ -17,6 +17,7 @@ var TimelineInterface = function (wickEditor) {
     this.syncWithEditorState = function () {
 
         var currentObject = wickEditor.project.getCurrentObject();
+        var currentFrame = currentObject.getCurrentFrame();
 
         var playheadPosition = currentObject.playheadPosition;
         var interfacePlayheadPosition = Math.floor(playheadX/frameWidth);
@@ -27,6 +28,14 @@ var TimelineInterface = function (wickEditor) {
 
         that.redraw();
 
+        if(currentFrame) {
+            document.getElementById('frameProperties').style.display = "block";
+            document.getElementById('frameIdentifier').value = currentFrame.identifier;
+            document.getElementById('frameAutoplayCheckbox').checked = currentFrame.autoplay;
+        } else {
+            document.getElementById('frameProperties').style.display = "none"
+        }
+
     }
 
     this.resize = function () {
@@ -34,7 +43,7 @@ var TimelineInterface = function (wickEditor) {
         $("#timelineGUI").css('left', (window.innerWidth/2 - GUIWidth/2)+'px');
 
         canvas.width = GUIWidth;
-        canvas.height = 75;
+        canvas.height = 38;
 
         that.redraw();
     }
@@ -97,6 +106,12 @@ var TimelineInterface = function (wickEditor) {
         ctx.lineTo(playheadX,canvas.height);
         ctx.stroke();
 
+        ctx.beginPath();
+        ctx.moveTo(playheadX-5,canvas.height);
+        ctx.lineTo(playheadX+5,canvas.height);
+        ctx.lineTo(playheadX,  canvas.height-5);
+        ctx.fill();
+
     }
 
     window.addEventListener('resize', function(e) {
@@ -134,5 +149,10 @@ var TimelineInterface = function (wickEditor) {
         }
         that.redraw();
     });
+
+    // 
+    document.getElementById('frameAutoplayCheckbox').onchange = function () {
+        wickEditor.project.getCurrentObject().getCurrentFrame().autoplay = this.checked;
+    };
 
 }
