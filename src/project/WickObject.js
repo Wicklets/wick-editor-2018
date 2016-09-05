@@ -164,7 +164,7 @@ WickObject.fromFile = function (file, fileType, callback) {
 
     } else {
 
-        VerboseLog.error("Unsupported filetype in WickObject.fromFile(): " + file.type);
+        console.error("Unsupported filetype in WickObject.fromFile(): " + file.type);
 
     }
 }
@@ -274,7 +274,7 @@ WickObject.fromText = function (text) {
 }
 
 WickObject.fromHTML = function (text) {
-    VerboseLog.error("WickObject.fromHTML not updated yet...");
+    console.error("WickObject.fromHTML not updated yet...");
     /*var htmlSnippetWickObject = new WickObject(parentObject);
 
     htmlSnippetWickObject.htmlData = '<iframe width="560" height="315" src="https://www.youtube.com/embed/AxZ6RG5UeiU" frameborder="0" allowfullscreen></iframe>';
@@ -710,19 +710,31 @@ WickObject.prototype.childWithIDIsActive = function (id) {
 WickObject.prototype.getSymbolCornerPosition = function () {
 
     if(!this.isSymbol) {
+        console.log("whoops!")
         return {x:0, y:0};
     }
 
     var leftmostLeft = null;
     var topmostTop = null;
 
-    this.forEachFirstFrameChildObject(function (currObj) {
-        if(leftmostLeft === null || currObj.x < leftmostLeft) {
-            leftmostLeft = currObj.x;
+    this.forEachFirstFrameChildObject(function (child) {
+        var checkX, checkY;
+
+        if(child.isSymbol) {
+            var symCorner = child.getSymbolCornerPosition();
+            checkX = child.x+symCorner.x;
+            checkY = child.y+symCorner.y;
+        } else {
+            checkX = child.x;
+            checkY = child.y;
         }
 
-        if(topmostTop === null || currObj.y < topmostTop) {
-            topmostTop = currObj.y;
+        if(leftmostLeft === null || checkX < leftmostLeft) {
+            leftmostLeft = checkX;
+        }
+
+        if(topmostTop === null || checkY < topmostTop) {
+            topmostTop = checkY;
         }
     });
 

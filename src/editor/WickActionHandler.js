@@ -41,8 +41,8 @@ var WickActionHandler = function (wickEditor) {
 
     this.doAction = function (actionName, args) {
         
-        VerboseLog.log("doAction: " + actionName);
-        VerboseLog.log(args)
+        console.log("doAction: " + actionName);
+        console.log(args)
 
         // Create a new WickAction object
         var action = new WickAction(
@@ -50,10 +50,10 @@ var WickActionHandler = function (wickEditor) {
             this.undoActions[actionName] 
         );
         if(!action.doAction) {
-            VerboseLog.error(actionName + " is not a defined do action!");
+            console.error(actionName + " is not a defined do action!");
         }
         if(!action.undoAction) {
-            VerboseLog.error(actionName + " is not a defined undo action!");
+            console.error(actionName + " is not a defined undo action!");
         }
 
         // Pass the arguments over to the WickAction and call its doAction function
@@ -78,15 +78,15 @@ var WickActionHandler = function (wickEditor) {
 
         // Nothing to undo!
         if (this.undoStack.length == 0) {
-            VerboseLog.log("undoAction(): No actions on the undo stack.");
+            console.log("undoAction(): No actions on the undo stack.");
             return; 
         } 
 
         // Get last action on the undo stack
         var action = this.undoStack.pop(); 
 
-        VerboseLog.log("undoAction(): " + action);
-        VerboseLog.log(action.args)
+        console.log("undoAction(): " + action);
+        console.log(action.args)
 
         // Do the action and put it on the redo stack to be redone later
         action.undoAction(action.args);
@@ -101,15 +101,15 @@ var WickActionHandler = function (wickEditor) {
 
         // Nothing to redo!
         if (this.redoStack.length == 0) {
-            VerboseLog.log("redoAction(): No actions on the redo stack.");
+            console.log("redoAction(): No actions on the redo stack.");
             return;
         } 
 
         // Get last action on the redo stack
         var action = this.redoStack.pop();
 
-        VerboseLog.log("redoAction: " + action);
-        VerboseLog.log(action.args)
+        console.log("redoAction: " + action);
+        console.log(action.args)
 
         // Do the action and put it back onto the undo stack
         action.doAction(action.args);
@@ -348,7 +348,7 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.getCurrentObject().currentFrame = 0;
         },
         function (args) {
-            VerboseLog.error("editobject undo NYI")
+            console.error("editobject undo NYI")
         });
 
     this.registerAction('finishEditingCurrentObject', 
@@ -360,7 +360,7 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.currentObjectID = wickEditor.project.getCurrentObject().parentObject.id;
         },
         function (args) {
-            VerboseLog.error("finishEditingCurrentObject undo NYI");
+            console.error("finishEditingCurrentObject undo NYI");
         });
 
     this.registerAction('moveObjectToZIndex', 

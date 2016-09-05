@@ -149,7 +149,7 @@ var InputHandler = function (wickEditor) {
     });
 
     document.addEventListener("cut", function(event) {
-        VerboseLog.error('cut NYI');
+        console.error('cut NYI');
     });
 
     document.addEventListener("paste", function(event) {
@@ -239,7 +239,7 @@ var InputHandler = function (wickEditor) {
                 } else if (filetype === "application/json") {
                     wickEditor.project = WickProject.fromJSON(e.target.result);
                 } else {
-                    VerboseLog.error("Unsupported filetype for opening projects: " + filetype);
+                    console.error("Unsupported filetype for opening projects: " + filetype);
                 }
                 wickEditor.syncInterfaces();
             };

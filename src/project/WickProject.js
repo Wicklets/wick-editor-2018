@@ -41,7 +41,7 @@ WickProject.fromWebpage = function (webpageString) {
 
     if(!extractedProjectJSON) {
         // Oh no, something went wrong
-        VerboseLog.error("Bundled JSON project not found in specified HTML file (webpageString). The HTML supplied might not be a Wick project, or zach might have changed the way projects are bundled. See WickProjectExporter.js!");
+        console.error("Bundled JSON project not found in specified HTML file (webpageString). The HTML supplied might not be a Wick project, or zach might have changed the way projects are bundled. See WickProjectExporter.js!");
         return null;
     } else {
         // Found a bundled project's JSON, let's load it!
@@ -72,11 +72,11 @@ WickProject.fromLocalStorage = function () {
         return new WickProject();
     }
 
-    VerboseLog.log("Loading project from local storage...");
+    console.log("Loading project from local storage...");
     var autosavedProjectJSON = localStorage.getItem('wickProject');
 
     if(!autosavedProjectJSON) {
-        VerboseLog.log("No autosaved project. Loading blank project.");
+        console.log("No autosaved project. Loading blank project.");
         return new WickProject();
     }
 
@@ -105,13 +105,13 @@ WickProject.prototype.getAsJSON = function (callback) {
 WickProject.prototype.saveInLocalStorage = function () {
     if(localStorage) {
         try {
-            VerboseLog.log("Saving project to local storage...");
+            console.log("Saving project to local storage...");
             this.getAsJSON(function (JSONProject) {
                 localStorage.setItem('wickProject', JSONProject);
             });
         } catch (err) {
-            VerboseLog.error("LocalStorage could not save project, threw error:");
-            VerboseLog.log(err);
+            console.error("LocalStorage could not save project, threw error:");
+            console.log(err);
         }
     } else {
         console.error("LocalStorage not available.")

@@ -145,19 +145,19 @@ var WickPlayer = (function () {
     }
 
     var playSound = function (rawBuffer) {
-        VerboseLog.log("now playing a sound, that starts with", new Uint8Array(rawBuffer.slice(0, 10))[0]);
+        console.log("now playing a sound, that starts with", new Uint8Array(rawBuffer.slice(0, 10))[0]);
         audioContext.decodeAudioData(rawBuffer, function (buffer) {
             if (!buffer) {
-                VerboseLog.error("failed to decode:", "buffer null");
+                console.error("failed to decode:", "buffer null");
                 return;
             }
             var source = audioContext.createBufferSource();
             source.buffer = buffer;
             source.connect(audioContext.destination);
             source.start(0);
-            VerboseLog.log("started...");
+            console.log("started...");
         }, function (error) {
-            VerboseLog.error("failed to decode:", error);
+            console.error("failed to decode:", error);
         });
     }
 
@@ -169,8 +169,8 @@ var WickPlayer = (function () {
         // Parse dat project
         project = JSON.parse(proj);
 
-        VerboseLog.log("Player loading project:")
-        VerboseLog.log(project);
+        console.log("Player loading project:")
+        console.log(project);
 
         // Put prototypes back on WickObjects
         WickObjectUtils.putWickObjectPrototypeBackOnObject(project.rootObject);
@@ -613,7 +613,6 @@ var WickPlayer = (function () {
         if(obj.onNewFrame) {
             if(obj.isSymbol && !obj.getCurrentFrame().autoplay) {
                 obj.isPlaying = false;
-                console.log("das")
             }
 
             obj.onNewFrame = false;
