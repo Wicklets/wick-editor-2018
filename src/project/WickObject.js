@@ -164,8 +164,13 @@ WickObject.fromFile = function (file, fileType, callback) {
 
     } else if (fileType == 'text/html') {
 
-        var newWickObject = WickObject.fromHTML(file);
-        callback(newWickObject);
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            var newWickObject = WickObject.fromHTML(event.target.result);
+            callback(newWickObject);
+        };
+
+        reader.readAsText(file);
 
     } else {
 
@@ -282,7 +287,7 @@ WickObject.fromHTML = function (text) {
     
     var htmlSnippetWickObject = new WickObject();
 
-    htmlSnippetWickObject.htmlData = '<iframe width="560" height="315" src="https://www.youtube.com/embed/AxZ6RG5UeiU" frameborder="0" allowfullscreen></iframe>';
+    htmlSnippetWickObject.htmlData = text;
     htmlSnippetWickObject.x = window.innerWidth/2;
     htmlSnippetWickObject.y = window.innerHeight/2;
 
