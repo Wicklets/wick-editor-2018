@@ -374,9 +374,15 @@ var FabricInterface = function (wickEditor) {
             for(var i = 0; i < group._objects.length; i++) {
                 var obj = group._objects[i];
                 ids[i] = obj.wickObjectID;
+                    
+                var wickObj = wickEditor.project.getCurrentObject().getChildByID(obj.wickObjectID);
+                var insideSymbolReposition = {
+                    x: wickObj.x-wickObj.getAbsolutePosition().x,
+                    y: wickObj.y-wickObj.getAbsolutePosition().y }
+
                 modifiedStates[i] = {
-                    x      : group.left + group.width /2 + obj.left - frameOffset.x,
-                    y      : group.top  + group.height/2 + obj.top  - frameOffset.y,
+                    x      : group.left + group.width /2 + obj.left - frameOffset.x + insideSymbolReposition.x,
+                    y      : group.top  + group.height/2 + obj.top  - frameOffset.y + insideSymbolReposition.y,
                     scaleX : group.scaleX * obj.scaleX,
                     scaleY : group.scaleY * obj.scaleY,
                     angle  : group.angle + obj.angle,
@@ -509,7 +515,9 @@ var FabricInterface = function (wickEditor) {
             if(lastDoubleClickTime !== null && currentTime-lastDoubleClickTime < 350) {
                 var selectedObject = wickEditor.getSelectedWickObject();
                 if(selectedObject) {
-                    wickEditor.actionHandler.doAction('editObject', {objectToEdit:selectedObject});
+                    if(selectedObject.isSymbol) {
+                        wickEditor.actionHandler.doAction('editObject', {objectToEdit:selectedObject});
+                    }
                 } else {
                     if(!wickEditor.project.getCurrentObject().isRoot) {
                         wickEditor.actionHandler.doAction('finishEditingCurrentObject', {});
