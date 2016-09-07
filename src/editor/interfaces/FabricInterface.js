@@ -501,6 +501,25 @@ var FabricInterface = function (wickEditor) {
         }
     });
 
+    // Hack: Double click functionality to edit symbols
+    var lastDoubleClickTime = null;
+    canvas.on('mouse:down', function(e) {
+        if(e.e.button == 0) {
+            var currentTime = new Date().getTime();
+            if(lastDoubleClickTime !== null && currentTime-lastDoubleClickTime < 350) {
+                var selectedObject = wickEditor.getSelectedWickObject();
+                if(selectedObject) {
+                    wickEditor.actionHandler.doAction('editObject', {objectToEdit:selectedObject});
+                } else {
+                    if(!wickEditor.project.getCurrentObject().isRoot) {
+                        wickEditor.actionHandler.doAction('finishEditingCurrentObject', {});
+                    }
+                }
+            }
+            lastDoubleClickTime = currentTime;
+        }
+    });
+
 // Selection utils
 
     this.selectByIDs = function (ids) {
