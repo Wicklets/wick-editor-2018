@@ -38,9 +38,6 @@ var WickPlayer = (function () {
 
         stopDrawLoop = false;
 
-        // go to the first frame of the root object, zj!
-        console.error("fix this")
-
         // Check if we're on a mobile device or not
         mobileMode = BrowserDetectionUtils.inMobileMode;
         desktopMode = !mobileMode;
@@ -52,6 +49,9 @@ var WickPlayer = (function () {
 
         // Load the project!
         loadJSONProject(projectJSON);
+
+        // Make sure we're in the rootObject (the editor can save what object was last edited)
+        project.currentObjectID = project.rootObject.id;
 
         // Setup renderer
         rendererContainerEl = document.getElementById("playerCanvasContainer");
@@ -244,16 +244,8 @@ var WickPlayer = (function () {
 
         // Set all playhead vars
         if(wickObj.isSymbol) {
-
-            // set all elapsedFrames to 0
-            wickObj.layers.forEach(function(layer) {
-                layer.frames.forEach(function(frame) {
-                    frame.elapsedFrames = 0;
-                });
-            });
-
             // Set this object to it's first frame
-            wickObj.currentFrame = 0;
+            wickObj.playheadPosition = 0;
 
             // Start the object playing
             wickObj.isPlaying = true;
