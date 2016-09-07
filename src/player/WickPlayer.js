@@ -56,7 +56,7 @@ var WickPlayer = (function () {
         // Setup renderer
         rendererContainerEl = document.getElementById("playerCanvasContainer");
         var rendererOptions = {
-            backgroundColor : 0x1099bb, 
+            backgroundColor : "#DDDDDD", 
             resolution: window.devicePixelRatio };
         renderer = PIXI.autoDetectRenderer(project.resolution.x, project.resolution.y, rendererOptions);
         renderer.clearBeforeRender = false;
