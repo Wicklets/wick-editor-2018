@@ -374,7 +374,7 @@ var FabricInterface = function (wickEditor) {
             for(var i = 0; i < group._objects.length; i++) {
                 var obj = group._objects[i];
                 ids[i] = obj.wickObjectID;
-                    
+
                 var wickObj = wickEditor.project.getCurrentObject().getChildByID(obj.wickObjectID);
                 var insideSymbolReposition = {
                     x: wickObj.x-wickObj.getAbsolutePosition().x,
@@ -568,7 +568,7 @@ var FabricInterface = function (wickEditor) {
 
         var objs = [];
         this.canvas.getObjects().map(function(o) {
-            if(o.wickObjectID) {
+            if(o.wickObjectID && o.selectable) {
                 o.set('active', true);
                 return objs.push(o);
             }
