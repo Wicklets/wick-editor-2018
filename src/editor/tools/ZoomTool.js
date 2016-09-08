@@ -45,7 +45,7 @@ var ZoomTool = function (wickEditor) {
         e.preventDefault()
         var e = window.event || e;
         var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-        that.zoom(1.0 + delta*.1);
+        zoom(1.0 + delta*.1);
 
         return false;
     }
