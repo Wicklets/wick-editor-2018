@@ -65,8 +65,8 @@ var RightClickMenuInterface = function (wickEditor) {
     showButtonsForMode["fabric"] = function () {
         showButtonGroup("#fabricButtons");
 
-        var selectedSingleObject = wickEditor.getSelectedWickObject();
-        var currentObject = wickEditor.project.getCurrentObject();
+        var selectedSingleObject = wickEditor.interfaces['fabric'].getSelectedWickObject();
+        var currentObject = wickEditor.interfaces['fabric'].project.getCurrentObject();
 
         var multiObjectSelection = wickEditor.interfaces['fabric'].getSelectedObjectIDs().length > 1;
 
@@ -174,7 +174,7 @@ var RightClickMenuInterface = function (wickEditor) {
     });
 
     bindActionToButton("#editObjectButton", function () {
-        var selectedObject = wickEditor.getSelectedWickObject();
+        var selectedObject = wickEditor.interfaces['fabric'].getSelectedWickObject();
         wickEditor.actionHandler.doAction('editObject', {objectToEdit:selectedObject});
     });
 
@@ -190,7 +190,7 @@ var RightClickMenuInterface = function (wickEditor) {
     });
 
     bindActionToButton("#downloadButton", function () {
-        var fileData = wickEditor.getSelectedWickObject().exportAsFile();
+        var fileData = wickEditor.interfaces['fabric'].getSelectedWickObject().exportAsFile();
         var blob = new Blob([fileData], {type: "text/plain;charset=utf-8"});
         saveAs(blob, "wickobject.json");
     });

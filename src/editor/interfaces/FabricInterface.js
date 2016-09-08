@@ -22,8 +22,6 @@ var FabricInterface = function (wickEditor) {
     this.creatingSelection = false;
     this.objectIDsInCanvas = [];
 
-    this.fabricVectorPaintbrush = new FabricVectorPaintbrush(this, wickEditor);
-
 /********************************
        Editor state syncing
 ********************************/
@@ -31,7 +29,7 @@ var FabricInterface = function (wickEditor) {
     this.syncWithEditorState = function () {
 
         // Update tool state
-        if(wickEditor.currentTool.type == "paintbrush" || wickEditor.currentTool.type == "eraser") {
+        if(wickEditor.currentTool instanceof PaintbrushTool /*|| that.currentTool.instanceof EraserTool*/) {
             this.canvas.isDrawingMode = true;
             this.canvas.freeDrawingBrush.width = wickEditor.currentTool.brushSize;
             this.canvas.freeDrawingBrush.color = wickEditor.currentTool.color;
@@ -122,10 +120,10 @@ var FabricInterface = function (wickEditor) {
         });
 
         // Check for intersections between paths and unite them if they do
-        this.fabricVectorPaintbrush.uniteIntersectingPaths();
+        wickEditor.tools['paintbrush'].uniteIntersectingPaths();
 
         // Split apart paths that are actually two paths
-        this.fabricVectorPaintbrush.splitPathsWithMultiplePieces();
+        wickEditor.tools['paintbrush'].splitPathsWithMultiplePieces();
 
         // Reselect objects that were selected before sync
         if(selectedObjectIDs.length > 0) that.selectByIDs(selectedObjectIDs);
@@ -416,119 +414,8 @@ var FabricInterface = function (wickEditor) {
     });
 
 /********************************
-           GUI Stuff
+        Selection Utils
 ********************************/
-
-// Zoom
-
-    this.zoom = function (zoomAmount) {
-        var oldZoom = that.canvas.getZoom();
-        var newZoom = that.canvas.getZoom() * zoomAmount;
-        if(newZoom < 1) newZoom = 1;
-
-        var oldWidth = window.innerWidth / oldZoom;
-        var oldHeight = window.innerHeight / oldZoom;
-
-        var newWidth = window.innerWidth / newZoom;
-        var newHeight = window.innerHeight / newZoom;
-
-        var panAdjustX = (newWidth - oldWidth) / 2;
-        var panAdjustY = (newHeight - oldHeight) / 2;
-
-        that.canvas.setZoom(newZoom);
-        that.canvas.relativePan(new fabric.Point(panAdjustX,panAdjustY));
-        that.canvas.renderAll();
-    }
-
-// Scroll-to-zoom
-
-    function MouseWheelHandler(e) {
-        // cross-browser wheel delta
-        e.preventDefault()
-        var e = window.event || e;
-        var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-        that.zoom(1.0 + delta*.1);
-
-        return false;
-    }
-    var sq = document.getElementById("editor");
-    if (sq.addEventListener) {
-        sq.addEventListener("mousewheel", MouseWheelHandler, false);
-        sq.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
-    }
-    else sq.attachEvent("onmousewheel", MouseWheelHandler);
-
-// Pan
-
-    var panning = false;
-    canvas.on('mouse:up', function (e) {
-        panning = false;
-        that.canvas.selection = true;
-    });
-
-    canvas.on('mouse:down', function (e) {
-        if(wickEditor.inputHandler.keys[32] || wickEditor.currentTool.type == "pan") {
-            panning = true;
-            that.canvas.selection = false;
-        }
-    });
-    canvas.on('mouse:move', function (e) {
-        if (panning && e && e.e) {
-            var delta = new fabric.Point(e.e.movementX, e.e.movementY);
-            that.canvas.relativePan(delta);
-        }
-    });
-
-// Selection stuff
-
-    // Update the scripting GUI/properties box when the selected object changes
-    canvas.on('object:selected', function (e) {
-        wickEditor.interfaces['scriptingide'].syncWithEditorState();
-        wickEditor.interfaces['properties'].syncWithEditorState();
-    });
-    canvas.on('selection:cleared', function (e) {
-        wickEditor.interfaces['scriptingide'].syncWithEditorState();
-        wickEditor.interfaces['properties'].syncWithEditorState();
-    });
-
-    // Hack: Select objects on right click (fabric.js doesn't do this by default >.>)
-    canvas.on('mouse:down', function(e) {
-        if(e.e.button == 2) {
-            if (e.target && e.target.wickObjectID) {
-                // Set active object of fabric canvas
-                var id = canvas.getObjects().indexOf(e.target);
-                canvas.setActiveObject(canvas.item(id)).renderAll();
-            }
-
-            if(!e.target) {
-                // Didn't right click an object, deselect everything
-                canvas.deactivateAll().renderAll();
-            }
-        }
-    });
-
-    // Hack: Double click functionality to edit symbols
-    var lastDoubleClickTime = null;
-    canvas.on('mouse:down', function(e) {
-        if(e.e.button == 0) {
-            var currentTime = new Date().getTime();
-            if(lastDoubleClickTime !== null && currentTime-lastDoubleClickTime < 350) {
-                var selectedObject = wickEditor.getSelectedWickObject();
-                if(selectedObject) {
-                    if(selectedObject.isSymbol) {
-                        wickEditor.actionHandler.doAction('editObject', {objectToEdit:selectedObject});
-                    }
-                } else {
-                    if(!wickEditor.project.getCurrentObject().isRoot) {
-                        wickEditor.actionHandler.doAction('finishEditingCurrentObject', {});
-                    }
-                }
-            }
-            lastDoubleClickTime = currentTime;
-        }
-    });
-
-// Selection utils
 
     this.selectByIDs = function (ids) {
 
@@ -621,5 +508,26 @@ var FabricInterface = function (wickEditor) {
 
         return ids;
     }
+
+// Convenience methods for gettin selected WickObjects
+
+    this.getSelectedWickObject = function () {
+        var ids = wickEditor.interfaces['fabric'].getSelectedObjectIDs();
+        if(ids.length == 1) {
+            return wickEditor.project.getObjectByID(ids[0]);
+        } else {
+            return null;
+        }
+    }
+
+    this.getSelectedWickObjects = function () {
+        var ids = wickEditor.interfaces['fabric'].getSelectedObjectIDs();
+        var wickObjects = [];
+        for(var i = 0; i < ids.length; i++) {
+            wickObjects.push(wickEditor.project.getObjectByID(ids[i]));
+        }
+        return wickObjects;
+    }
+
 }
 

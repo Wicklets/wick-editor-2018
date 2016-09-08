@@ -9,7 +9,7 @@ var PropertiesInterface = function (wickEditor) {
         $("#soundProperties").css('display', 'none');
         $("#htmlSnippetProperties").css('display', 'none');
 
-        var selectedObj = wickEditor.getSelectedWickObject();
+        var selectedObj = wickEditor.interfaces['fabric'].getSelectedWickObject();
         if(selectedObj) {
             // Display Object properties tab
             $("#objectProperties").css('display', 'inline');
@@ -28,8 +28,8 @@ var PropertiesInterface = function (wickEditor) {
             if(selectedObj.fontData) {
                 $("#textProperties").css('display', 'inline');
             } else if (selectedObj.audioData) {
-                document.getElementById('loopCheckbox').checked = wickEditor.getSelectedWickObject().loopSound;
-                document.getElementById('autoplayCheckbox').checked = wickEditor.getSelectedWickObject().autoplaySound;
+                document.getElementById('loopCheckbox').checked = wickEditor.interfaces['fabric'].getSelectedWickObject().loopSound;
+                document.getElementById('autoplayCheckbox').checked = wickEditor.interfaces['fabric'].getSelectedWickObject().autoplaySound;
                 $("#soundProperties").css('display', 'inline');
             } else if (selectedObj.htmlData) {
                 $("#htmlSnippetProperties").css('display', 'inline');
@@ -47,9 +47,9 @@ var PropertiesInterface = function (wickEditor) {
     $('#objectName').on('input propertychange', function () {
         var newName = $('#objectName').val();
         if(newName === '') {
-            wickEditor.getSelectedWickObject().name = undefined;
+            wickEditor.interfaces['fabric'].getSelectedWickObject().name = undefined;
         } else {
-            wickEditor.getSelectedWickObject().name = newName;
+            wickEditor.interfaces['fabric'].getSelectedWickObject().name = newName;
         }
     });
 
@@ -103,12 +103,12 @@ var PropertiesInterface = function (wickEditor) {
 
     // Loop Checkbox: Toggle sound loop
     document.getElementById('loopCheckbox').onchange = function () {
-        wickEditor.getSelectedWickObject().loopSound = this.checked;
+        wickEditor.interfaces['fabric'].getSelectedWickObject().loopSound = this.checked;
     };
 
     // Autoplay Checkbox: Toggle sound autoplay
     document.getElementById('autoplayCheckbox').onchange = function () {
-        wickEditor.getSelectedWickObject().autoplaySound = this.checked;
+        wickEditor.interfaces['fabric'].getSelectedWickObject().autoplaySound = this.checked;
     };
 
     $('#htmlTextBox').on('input propertychange', function () {

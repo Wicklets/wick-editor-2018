@@ -7,67 +7,87 @@ var ToolbarInterface = function (wickEditor) {
     var lineColorEl = document.getElementById('lineColor');
 
     this.syncWithEditorState = function () {
-        lineWidthEl.value = wickEditor.currentTool.brushSize;
-        lineColorEl.value = wickEditor.currentTool.color;
-        lineSmoothnessEl.value = wickEditor.currentTool.brushSmoothing;
+        lineWidthEl.value = wickEditor.tools['paintbrush'].brushSize;
+        lineColorEl.value = wickEditor.tools['paintbrush'].color;
+        lineSmoothnessEl.value = wickEditor.tools['paintbrush'].brushSmoothing;
+    }
+
+// Tool options window
+
+    var showToolOptionsWindow = function () {
+        document.getElementById('toolOptionsGUI').style.display = 'block';
+    }
+
+    var hideToolOptionsWindow = function () {
+        document.getElementById('toolOptionsGUI').style.display = 'none';
     }
 
     lineWidthEl.onchange = function() {
-        wickEditor.currentTool.brushSize = parseInt(this.value, 10) || 1;
+        wickEditor.tools['paintbrush'].brushSize = parseInt(this.value, 10) || 1;
         wickEditor.syncInterfaces();
     };
 
     lineColorEl.onchange = function() {
-        wickEditor.currentTool.color = this.value;
+        wickEditor.tools['paintbrush'].color = this.value;
         wickEditor.syncInterfaces();
     };
 
     lineSmoothnessEl.onchange = function() {
-        wickEditor.currentTool.brushSmoothing = this.value;
+        wickEditor.tools['paintbrush'].brushSmoothing = this.value;
         wickEditor.syncInterfaces();
     };
 
+// Buttons
+
     $('#mouseToolButton').on('click', function(e) {
-        document.getElementById('toolOptionsGUI').style.display = 'none';
-        wickEditor.currentTool.type = "cursor";
+        hideToolOptionsWindow();
+        wickEditor.currentTool = wickEditor.tools['cursor']
         wickEditor.syncInterfaces();
     });
 
     $('#paintbrushToolButton').on('click', function(e) {
-        document.getElementById('toolOptionsGUI').style.display = 'block';
-        wickEditor.currentTool.type = "paintbrush";
+        showToolOptionsWindow();
+        wickEditor.currentTool = wickEditor.tools['paintbrush']
         wickEditor.syncInterfaces();
     });
 
-    $('#eraserToolButton').on('click', function(e) {
+    // Disabled for now...
+    /*$('#eraserToolButton').on('click', function(e) {
         document.getElementById('toolOptionsGUI').style.display = 'block';
         wickEditor.currentTool.type = "eraser";
         wickEditor.syncInterfaces();
-    });
+    });*/
 
-    $('#fillBucketToolButton').on('click', function(e) {
+    // Disabled for now...
+    /*$('#fillBucketToolButton').on('click', function(e) {
         document.getElementById('toolOptionsGUI').style.display = 'block';
         wickEditor.currentTool.type = "fillbucket";
         wickEditor.syncInterfaces();
-    });
+    });*/
 
     $('#textToolButton').on('click', function(e) {
-        var newWickObject = WickObject.fromText('Click to edit text');
-        newWickObject.x = wickEditor.project.resolution.x/2;
-        newWickObject.y = wickEditor.project.resolution.y/2;
-        wickEditor.actionHandler.doAction('addObjects', {wickObjects:[newWickObject]});
+        hideToolOptionsWindow();
+        wickEditor.currentTool = wickEditor.tools['text'];
+        wickEditor.syncInterfaces();
     });
 
     $('#zoomInToolButton').on('click', function(e) {
-        wickEditor.interfaces['fabric'].zoom(1.1);
+        hideToolOptionsWindow();
+        wickEditor.currentTool = wickEditor.tools['zoom'];
+        wickEditor.tools['zoom'].zoomMode = "zoomIn";
+        wickEditor.syncInterfaces();
     });
 
     $('#zoomOutToolButton').on('click', function(e) {
-        wickEditor.interfaces['fabric'].zoom(0.9);
+        hideToolOptionsWindow();
+        wickEditor.currentTool = wickEditor.tools['zoom'];
+        wickEditor.tools['zoom'].zoomMode = "zoomOut";
+        wickEditor.syncInterfaces();
     });
 
     $('#panToolButton').on('click', function(e) {
-        wickEditor.currentTool.type = "pan";
+        hideToolOptionsWindow();
+        wickEditor.currentTool = wickEditor.tools['pan'];
         wickEditor.syncInterfaces();
     });
 

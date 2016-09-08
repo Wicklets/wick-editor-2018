@@ -141,11 +141,28 @@ var InputHandler = function (wickEditor) {
             return;
         }
 
-        // Make sure an element is focused so that copy event fires properly
         event.preventDefault();
+        
+        // Make sure an element is focused so that copy event fires properly
         //focusHiddenArea();
 
-        event.clipboardData.setData('text/wickobjectsjson', wickEditor.getCopyData());
+        // Generate clipboard data
+        var ids = wickEditor.interfaces['fabric'].getSelectedObjectIDs();
+        var objectJSONs = [];
+        for(var i = 0; i < ids.length; i++) {
+            objectJSONs.push(wickEditor.project.getObjectByID(ids[i]).getAsJSON());
+        }
+        var clipboardObject = {
+            /*position: {top  : group.top  + group.height/2, 
+                       left : group.left + group.width/2},*/
+            groupPosition: {x : 0, 
+                            y : 0},
+            wickObjectArray: objectJSONs
+        }
+        var copyData =  JSON.stringify(clipboardObject);
+
+        // Send the clipboard data to the clipboard!
+        event.clipboardData.setData('text/wickobjectsjson', copyData);
     });
 
     document.addEventListener("cut", function(event) {

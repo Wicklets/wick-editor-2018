@@ -19,7 +19,7 @@ var ScriptingIDEInterface = function (wickEditor) {
         if(this.open) {
             $("#scriptingGUI").css('display', 'block');
 
-            var selectedObj = wickEditor.getSelectedWickObject();
+            var selectedObj = wickEditor.interfaces['fabric'].getSelectedWickObject();
 
             if(!selectedObj) {
                 $("#noSelectionDiv").css('display', 'block');
@@ -79,7 +79,7 @@ var ScriptingIDEInterface = function (wickEditor) {
 
     // Update selected objects scripts when script editor text changes
     this.aceEditor.getSession().on('change', function (e) {
-        wickEditor.getSelectedWickObject().wickScripts[that.currentScript] = that.aceEditor.getValue();
+        wickEditor.interfaces['fabric'].getSelectedWickObject().wickScripts[that.currentScript] = that.aceEditor.getValue();
     });
 
     this.aceEditor.getSession().on("changeAnnotation", function(){

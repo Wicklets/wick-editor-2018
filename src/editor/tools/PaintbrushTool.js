@@ -1,13 +1,18 @@
-var FabricVectorPaintbrush = function (fabricInterface, wickEditor) {
+var PaintbrushTool = function (wickEditor) {
 
     var that = this;
 
+    var fabricInterface = wickEditor.interfaces['fabric'];
     var canvas = fabricInterface.canvas;
+
+    this.brushSize = 5;
+    this.brushSmoothing = 2.0;
+    this.color = "#B00600";
 
     canvas.on('mouse:down', function(e) {
         if(e.e.button != 0) return;
         wickEditor.interfaces['rightclickmenu'].open = false;
-        if(wickEditor.currentTool.type == 'fillbucket') {
+        if(wickEditor.currentTool instanceof PaintbrushTool) {
             fabricInterface.deselectAll();
 
             canvas.forEachObject(function(fabricObj) {
@@ -24,7 +29,7 @@ var FabricVectorPaintbrush = function (fabricInterface, wickEditor) {
 
                     if(!intersectedPath) return;
 
-                    var pathObj = wickEditor.getWickObjectByID(fabricObj.wickObjectID);
+                    var pathObj = wickEditor.project.rootObject.getChildByID(fabricObj.wickObjectID);
 
                     if(intersectedPath.clockwise) {
                         console.log("hole filled");
@@ -139,11 +144,13 @@ var FabricVectorPaintbrush = function (fabricInterface, wickEditor) {
         var pathFabricObject = e.target;
 
         that.potracePath(e.target, function(SVGData) {
-            if(wickEditor.currentTool.type == "paintbrush") {
+            /*if(wickEditor.currentTool.type == "paintbrush") {
                 that.convertPathToWickObject(SVGData, pathFabricObject)
             } else if(wickEditor.currentTool.type == "eraser") {
                 that.eraseUsingSVG(SVGData);
-            }
+            }*/
+
+            that.convertPathToWickObject(SVGData, pathFabricObject);
 
             canvas.remove(e.target);
         });
