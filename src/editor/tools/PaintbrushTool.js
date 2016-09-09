@@ -71,7 +71,7 @@ var PaintbrushTool = function (wickEditor) {
         }
     });
 
-    this.getPaperObjectIntersectingWithPoint = function (item, point, fillClockwise) {
+    var getPaperObjectIntersectingWithPoint = function (item, point, fillClockwise) {
 
         var hitOptions = {
             segments: true,
@@ -90,7 +90,7 @@ var PaintbrushTool = function (wickEditor) {
         if(!item.children) return null;
 
         for(var i = 0; i < item.children.length; i++) {
-            var hitSVG = that.getPaperObjectIntersectingWithPoint(item.children[i], point, fillClockwise);
+            var hitSVG = getPaperObjectIntersectingWithPoint(item.children[i], point, fillClockwise);
             if(hitSVG) {
                 return hitSVG;
             }
