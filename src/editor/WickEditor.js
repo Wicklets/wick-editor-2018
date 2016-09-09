@@ -11,10 +11,10 @@ var WickEditor = function () {
     this.mode = "normal";
 
     // Check to see if we need to load a project from GitHub's Clubhouse
-    var githubClubhouseProjectID = URLParameterUtils.getParameterByName("project");
-    if (githubClubhouseProjectID) {
+    this.githubClubhouseProjectID = URLParameterUtils.getParameterByName("project");
+    if (this.githubClubhouseProjectID) {
         console.log("Wick is in GitHub Clubhouse mode!");
-        console.log("githubClubhouseProjectID: " + githubClubhouseProjectID);
+        console.log("githubClubhouseProjectID: " + this.githubClubhouseProjectID);
         this.mode = "github-clubhouse";
         this.project = new WickProject(); // TODO: load project from github clubhouse server
     } else {

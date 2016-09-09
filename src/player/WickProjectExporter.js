@@ -28,7 +28,8 @@ var WickProjectExporter = (function () {
         "src/player/WickPlayer.js",
     ];
 
-    projectExporter.exportProject = function (wickProject) {
+    projectExporter.bundleProjectToHTML = function (wickProject, callback) {
+
         var fileOut = "";
 
         // Add the player webpage (need to download the empty player)
@@ -47,11 +48,18 @@ var WickProjectExporter = (function () {
         // Bundle the JSON project
         wickProject.getAsJSON(function (JSONProject) {
             fileOut += "<script>WickPlayer.runProject('" + JSONProject + "');</script>" + "\n";
+            callback(fileOut);
+        });
 
-            // Save whole thing as html file
+    }
+
+    projectExporter.exportProject = function (wickProject) {
+
+        projectExporter.bundleProjectToHTML(wickProject, function(fileOut) {
             var blob = new Blob([fileOut], {type: "text/plain;charset=utf-8"});
             saveAs(blob, "project.html");
         });
+
     }
 
     return projectExporter;

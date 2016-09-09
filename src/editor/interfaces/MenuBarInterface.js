@@ -4,7 +4,7 @@ var MenuBarInterface = function (wickEditor) {
 
     this.syncWithEditorState = function () {
         document.getElementById("backToClubhouseButton").style.display = "none";
-        document.getElementById("githubClubhouseButton").style.display = "none";
+        document.getElementById("saveToGithubClubhouseButton").style.display = "none";
         document.getElementById("openProjectButton").style.display = "none";
         document.getElementById("exportHTMLButton").style.display = "none";
 
@@ -13,17 +13,15 @@ var MenuBarInterface = function (wickEditor) {
             document.getElementById("exportHTMLButton").style.display = "block";
         } else if (wickEditor.mode === "github-clubhouse") {
             document.getElementById("backToClubhouseButton").style.display = "block";
-            document.getElementById("githubClubhouseButton").style.display = "block";
+            document.getElementById("saveToGithubClubhouseButton").style.display = "block";
         }
     }
+
+// Common buttons
 
     document.getElementById('settingsButton').onclick = function (e) {
         wickEditor.interfaces["settings"].open = true;
         wickEditor.syncInterfaces();
-    }
-
-    document.getElementById('backToClubhouseButton').onclick = function (e) {
-        alert("NYI")
     }
 
     document.getElementById('openProjectButton').onclick = function (e) {
@@ -36,6 +34,26 @@ var MenuBarInterface = function (wickEditor) {
 
     document.getElementById('runButton').onclick = function (e) {
         wickEditor.interfaces["builtinplayer"].runProject();
+    }
+
+// Github Clubhouse buttons
+
+    document.getElementById('backToClubhouseButton').onclick = function (e) {
+        window.location.href = "https://githubs-clubhouse.herokuapp.com/projects";
+    }
+
+    document.getElementById('saveToGithubClubhouseButton').onclick = function (e) {
+        WickProjectExporter.bundleProjectToHTML(wickEditor.project, function(fileOut) {
+            $.ajax({
+                url: 'https://githubs-clubhouse.herokuapp.com/projects/1',
+                type: 'PUT',
+                data: { file:fileOut },
+                success: function(data) {
+                    console.log("success:");
+                    console.log(data);
+                }
+            });
+        });
     }
 
 }
