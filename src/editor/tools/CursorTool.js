@@ -4,7 +4,7 @@ var CursorTool = function (wickEditor) {
 
     var canvas = wickEditor.interfaces['fabric'].canvas;
 
-    // Hack: Select objects on right click (fabric.js doesn't do this by default >.>)
+    // Select objects on right click (fabric.js doesn't do this by default >.>)
     canvas.on('mouse:down', function(e) {
         if(e.e.button == 2) {
             if (e.target && e.target.wickObjectID) {
@@ -20,7 +20,7 @@ var CursorTool = function (wickEditor) {
         }
     });
 
-    // Hack: Double click functionality to edit symbols
+    // Double click functionality to edit symbols
     var lastDoubleClickTime = null;
     canvas.on('mouse:down', function(e) {
         if(e.e.button == 0) {

@@ -340,15 +340,22 @@ var FabricInterface = function (wickEditor) {
         });
     }, false);
 
+    // Update the scripting GUI/properties box when the selected object changes
+    that.canvas.on('object:selected', function (e) {
+        wickEditor.interfaces['scriptingide'].syncWithEditorState();
+        wickEditor.interfaces['properties'].syncWithEditorState();
+    });
+    that.canvas.on('selection:cleared', function (e) {
+        wickEditor.interfaces['scriptingide'].syncWithEditorState();
+        wickEditor.interfaces['properties'].syncWithEditorState();
+    });
+
 /********************************
   Objects modified by fabric.js
 ********************************/
 
-    var that = this;
-    var canvas = this.canvas;
-
     // Listen for objects being changed so we can undo them in the action handler.
-    canvas.on('object:modified', function(e) {
+    that.canvas.on('object:modified', function(e) {
 
         // Delete text boxes with no text in 'em.
         if (e.target.text === '') {

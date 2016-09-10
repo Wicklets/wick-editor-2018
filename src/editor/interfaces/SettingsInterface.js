@@ -40,7 +40,7 @@ var SettingsInterface = function (wickEditor) {
     $('#projectSizeX').on('input propertychange', function () {
 
         if(CheckInput.isPositiveInteger($('#projectSizeX').val())) {
-            wickEditor.project.resolution.x = n;
+            wickEditor.project.resolution.x = parseInt($('#projectSizeX').val());
             wickEditor.syncInterfaces();
         };
 
@@ -49,7 +49,7 @@ var SettingsInterface = function (wickEditor) {
     $('#projectSizeY').on('input propertychange', function () {
 
         if(CheckInput.isPositiveInteger($('#projectSizeY').val())) {
-            wickEditor.project.resolution.y = n;
+            wickEditor.project.resolution.y = parseInt($('#projectSizeY').val());
             wickEditor.syncInterfaces();
         }
 
@@ -58,7 +58,7 @@ var SettingsInterface = function (wickEditor) {
     $('#frameRate').on('input propertychange', function () {
 
         if(CheckInput.isPositiveInteger($('#frameRate').val())) {
-            wickEditor.project.framerate = n;
+            wickEditor.project.framerate = parseInt($('#frameRate').val());
         }
 
     });
@@ -66,7 +66,7 @@ var SettingsInterface = function (wickEditor) {
     $('#frameIdentifier').on('input propertychange', function () {
 
         if(CheckInput.isString($('#frameIdentifier').val())) {
-            wickEditor.project.getCurrentObject().getCurrentFrame().identifier = frameID;
+            wickEditor.project.getCurrentObject().getCurrentFrame().identifier = parseInt($('#frameIdentifier').val());
         };
 
     });

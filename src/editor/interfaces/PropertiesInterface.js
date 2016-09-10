@@ -57,7 +57,7 @@ var PropertiesInterface = function (wickEditor) {
 
         if(CheckInput.isNumber($('#objectPositionX').val())) {
             var id = wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0];
-            var modifiedState = { x : n };
+            var modifiedState = { x : parseInt($('#objectPositionX').val()) };
             wickEditor.actionHandler.doAction('modifyObjects', { ids: [id], modifiedStates: [modifiedState] });
         }
 
@@ -67,7 +67,7 @@ var PropertiesInterface = function (wickEditor) {
 
         if(CheckInput.isNumber($('#objectPositionY').val())) {
             var id = wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0];
-            var modifiedState = { y : n };
+            var modifiedState = { y : parseInt($('#objectPositionY').val()) };
             wickEditor.actionHandler.doAction('modifyObjects', { ids: [id], modifiedStates: [modifiedState] });
         }
 
