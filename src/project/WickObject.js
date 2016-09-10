@@ -474,7 +474,7 @@ WickObject.prototype.stop = function () {
 }
 
 WickObject.prototype.gotoFrame = function (frame) {
-    if (CheckInput.testNonNegativeInteger(frame)) {
+    if (CheckInput.isNonNegativeInteger(frame)) {
 
         // Only navigate to an integer frame if it is nonnegative and a valid frame
         if(frame < this.getCurrentLayer().frames.length)
@@ -482,7 +482,7 @@ WickObject.prototype.gotoFrame = function (frame) {
         else
             throw "Failed to navigate to frame \'" + frame + "\': is not a valid frame.";
 
-    } else if (CheckInput.testString(frame)) {
+    } else if (CheckInput.isString(frame)) {
 
         // Search for the frame with the correct identifier and navigate if found
         var newFrame = this.getFrameByIdentifier(frame);

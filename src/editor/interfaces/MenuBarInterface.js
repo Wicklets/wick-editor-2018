@@ -42,18 +42,32 @@ var MenuBarInterface = function (wickEditor) {
         window.location.href = "https://githubs-clubhouse.herokuapp.com/projects";
     }
 
-    document.getElementById('saveToGithubClubhouseButton').onclick = function (e) {
-        WickProjectExporter.bundleProjectToHTML(wickEditor.project, function(fileOut) {
+    // var btn = document.createElement("button"); btn.id = "saveToGithubClubhouseButton"; document.body.appendChild(btn); 
+    $(document).on('click','#saveToGithubClubhouseButton',function(e){
+        e.stopPropagation();
+        e.preventDefault();
+        //WickProjectExporter.bundleProjectToHTML(wickEditor.project, function(fileOut) {
             $.ajax({
                 url: 'https://githubs-clubhouse.herokuapp.com/projects/1',
                 type: 'PUT',
-                data: { file:fileOut },
+                data: { file:/*fileOut*/"Test project" },
+                //dataType: "JSONP",
+                //jsonp : false,
+                //jsonpCallback: 'jsonCallback',
                 success: function(data) {
                     console.log("success:");
                     console.log(data);
+                },
+                error: function () {
+                    console.log("error??")
+                },
+                complete: function(response, textStatus) {
+                    console.log(response)
+                    console.log(textStatus)
                 }
             });
-        });
-    }
+        //});
+        return false;
+    });
 
 }

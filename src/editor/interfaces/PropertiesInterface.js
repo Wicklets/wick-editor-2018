@@ -55,21 +55,21 @@ var PropertiesInterface = function (wickEditor) {
 
     $('#objectPositionX').on('input propertychange', function () {
 
-        CheckInput.callIfNumber($('#objectPositionX').val(), function(n) {
+        if(CheckInput.isNumber($('#objectPositionX').val())) {
             var id = wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0];
             var modifiedState = { x : n };
             wickEditor.actionHandler.doAction('modifyObjects', { ids: [id], modifiedStates: [modifiedState] });
-        });
+        }
 
     });
 
     $('#objectPositionY').on('input propertychange', function () {
 
-        CheckInput.callIfNumber($('#objectPositionY').val(), function(n) {
+        if(CheckInput.isNumber($('#objectPositionY').val())) {
             var id = wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0];
             var modifiedState = { y : n };
             wickEditor.actionHandler.doAction('modifyObjects', { ids: [id], modifiedStates: [modifiedState] });
-        });
+        }
 
     });
 

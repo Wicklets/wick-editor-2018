@@ -39,35 +39,35 @@ var SettingsInterface = function (wickEditor) {
 
     $('#projectSizeX').on('input propertychange', function () {
 
-        CheckInput.callIfPositiveInteger($('#projectSizeX').val(), function(n) {
+        if(CheckInput.isPositiveInteger($('#projectSizeX').val())) {
             wickEditor.project.resolution.x = n;
             wickEditor.syncInterfaces();
-        });
+        };
 
     });
 
     $('#projectSizeY').on('input propertychange', function () {
 
-        CheckInput.callIfPositiveInteger($('#projectSizeY').val(), function(n) {
+        if(CheckInput.isPositiveInteger($('#projectSizeY').val())) {
             wickEditor.project.resolution.y = n;
             wickEditor.syncInterfaces();
-        });
+        }
 
     });
 
     $('#frameRate').on('input propertychange', function () {
 
-        CheckInput.callIfPositiveInteger($('#frameRate').val(), function(n) {
+        if(CheckInput.isPositiveInteger($('#frameRate').val())) {
             wickEditor.project.framerate = n;
-        });
+        }
 
     });
 
     $('#frameIdentifier').on('input propertychange', function () {
 
-        CheckInput.callIfString($('#frameIdentifier').val(), function(frameID) {
+        if(CheckInput.isString($('#frameIdentifier').val())) {
             wickEditor.project.getCurrentObject().getCurrentFrame().identifier = frameID;
-        });
+        };
 
     });
 
