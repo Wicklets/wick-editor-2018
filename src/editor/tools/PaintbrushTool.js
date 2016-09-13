@@ -12,7 +12,7 @@ var PaintbrushTool = function (wickEditor) {
     canvas.on('mouse:down', function(e) {
         if(e.e.button != 0) return;
         wickEditor.interfaces['rightclickmenu'].open = false;
-        if(wickEditor.currentTool instanceof PaintbrushTool) {
+        if(wickEditor.currentTool instanceof FillBucketTool) {
             fabricInterface.deselectAll();
 
             canvas.forEachObject(function(fabricObj) {
