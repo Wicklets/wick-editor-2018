@@ -46,11 +46,11 @@ var MenuBarInterface = function (wickEditor) {
     $(document).on('click','#saveToGithubClubhouseButton',function(e){
         e.stopPropagation();
         e.preventDefault();
-        //WickProjectExporter.bundleProjectToHTML(wickEditor.project, function(fileOut) {
+        WickProjectExporter.bundleProjectToHTML(wickEditor.project, function(fileOut) {
             $.ajax({
                 url: '/projects/1',
                 type: 'PUT',
-                data: { file:/*fileOut*/"Test project" },
+                data: { file:fileOut },
                 //dataType: "JSONP",
                 //jsonp : false,
                 //jsonpCallback: 'jsonCallback',
@@ -67,7 +67,7 @@ var MenuBarInterface = function (wickEditor) {
                     console.log(textStatus)
                 }
             });
-        //});
+        });
         return false;
     });
 
