@@ -39,7 +39,7 @@ var MenuBarInterface = function (wickEditor) {
 // Github Clubhouse buttons
 
     document.getElementById('backToClubhouseButton').onclick = function (e) {
-        window.location.href = "https://githubs-clubhouse.herokuapp.com/projects";
+        window.location.href = "/projects";
     }
 
     // var btn = document.createElement("button"); btn.id = "saveToGithubClubhouseButton"; document.body.appendChild(btn); 
@@ -48,20 +48,21 @@ var MenuBarInterface = function (wickEditor) {
         e.preventDefault();
         //WickProjectExporter.bundleProjectToHTML(wickEditor.project, function(fileOut) {
             $.ajax({
-                url: 'https://githubs-clubhouse.herokuapp.com/projects/1',
+                url: '/projects/1',
                 type: 'PUT',
                 data: { file:/*fileOut*/"Test project" },
                 //dataType: "JSONP",
                 //jsonp : false,
                 //jsonpCallback: 'jsonCallback',
                 success: function(data) {
-                    console.log("success:");
+                    console.log("ajax: success:");
                     console.log(data);
                 },
                 error: function () {
-                    console.log("error??")
+                    console.log("ajax: error")
                 },
                 complete: function(response, textStatus) {
+                    console.log("ajax: complete:")
                     console.log(response)
                     console.log(textStatus)
                 }
