@@ -50,10 +50,7 @@ var MenuBarInterface = function (wickEditor) {
             $.ajax({
                 url: '/projects/1',
                 type: 'PUT',
-                data: { file:fileOut },
-                //dataType: "JSONP",
-                //jsonp : false,
-                //jsonpCallback: 'jsonCallback',
+                data: { file:fileOut, name:wickEditor.githubClubhouseProjectName, id:wickEditor.githubClubhouseProjectID },
                 success: function(data) {
                     console.log("ajax: success:");
                     console.log(data);

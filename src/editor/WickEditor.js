@@ -12,6 +12,7 @@ var WickEditor = function () {
 
     // Check to see if we need to load a project from GitHub's Clubhouse
     this.githubClubhouseProjectID = URLParameterUtils.getParameterByName("id");
+    this.githubClubhouseProjectName = URLParameterUtils.getParameterByName("project");
     if (this.githubClubhouseProjectID) {
         console.log("Wick is in GitHub Clubhouse mode!");
         console.log("githubClubhouseProjectID: " + this.githubClubhouseProjectID);
@@ -20,6 +21,23 @@ var WickEditor = function () {
     } else {
         this.project = WickProject.fromLocalStorage();
     }
+
+    $.ajax({
+        url: 'index.html',
+        type: 'GET',
+        success: function(data) {
+            console.log("ajax: success");
+            console.log(data);
+        },
+        error: function () {
+            console.log("ajax: error")
+        },
+        complete: function(response, textStatus) {
+            console.log("ajax: complete")
+            console.log(response)
+            console.log(textStatus)
+        }
+    });
 
     this.runningBuiltinPlayer = false;
 
