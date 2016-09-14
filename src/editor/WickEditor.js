@@ -29,30 +29,10 @@ var WickEditor = function () {
         type: 'GET',
         success: function(data) {
             console.log("ajax: success");
-            //console.log(data);
-            var dataLines = data.split("\n");
-            dataLines.forEach(function(line) {
-                if(line.includes("WICK_FILE")) {
-                    var projURL = line.split(">WICK_FILE")[0].split("=")[1];
-
-                    $.ajax({
-                        url: projURL,
-                        type: 'GET',
-                        success: function(data) {
-                            console.log("ajax: success");
-                            that.project = WickProject.fromWebpage(projURL);
-                        },
-                        error: function () {
-                            console.log("ajax: error")
-                        },
-                        complete: function(response, textStatus) {
-                            console.log("ajax: complete")
-                            console.log(response)
-                            console.log(textStatus)
-                        }
-                    });
-                }
-            });
+            var base64WickProject = data.split('<div id="wick_project">')[1].split('</div>')[0];
+            var decodedProject = atob(base64WickProject);
+            console.log(decodedProject)
+            that.project = WickProject.fromWebpage(decodedProject);
         },
         error: function () {
             console.log("ajax: error")
