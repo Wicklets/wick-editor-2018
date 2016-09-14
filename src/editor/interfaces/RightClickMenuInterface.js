@@ -66,7 +66,7 @@ var RightClickMenuInterface = function (wickEditor) {
         showButtonGroup("#fabricButtons");
 
         var selectedSingleObject = wickEditor.interfaces['fabric'].getSelectedWickObject();
-        var currentObject = wickEditor.interfaces['fabric'].project.getCurrentObject();
+        var currentObject = wickEditor.project.getCurrentObject();
 
         var multiObjectSelection = wickEditor.interfaces['fabric'].getSelectedObjectIDs().length > 1;
 

@@ -12,6 +12,8 @@ var WickEditor = function () {
 
     this.mode = "normal";
 
+    // Should move all the clubhouse to a backend system, this will also make it easy for other people to add their own backends.
+
     // Check to see if we need to load a project from GitHub's Clubhouse
     this.githubClubhouseProjectID = URLParameterUtils.getParameterByName("id");
     this.githubClubhouseProjectName = URLParameterUtils.getParameterByName("project");
@@ -19,30 +21,30 @@ var WickEditor = function () {
         console.log("Wick is in GitHub Clubhouse mode!");
         console.log("githubClubhouseProjectID: " + this.githubClubhouseProjectID);
         this.mode = "github-clubhouse";
-        this.project = new WickProject(); // TODO: load project from github clubhouse server
+
+        // Load project from github clubhouse server
+        $.ajax({
+            url: "/projects/1",
+            type: 'GET',
+            success: function(data) {
+                console.log("ajax: success");
+                var base64WickProject = data.split('<div id="wick_project">')[1].split('</div>')[0];
+                var decodedProject = atob(base64WickProject);
+                that.project = WickProject.fromWebpage(decodedProject);
+                that.syncInterfaces();
+            },
+            error: function () {
+                console.log("ajax: error")
+            },
+            complete: function(response, textStatus) {
+                console.log("ajax: complete")
+                console.log(response)
+                console.log(textStatus)
+            }
+        });
     } else {
         this.project = WickProject.fromLocalStorage();
     }
-
-    $.ajax({
-        url: "/projects/1",
-        type: 'GET',
-        success: function(data) {
-            console.log("ajax: success");
-            var base64WickProject = data.split('<div id="wick_project">')[1].split('</div>')[0];
-            var decodedProject = atob(base64WickProject);
-            that.project = WickProject.fromWebpage(decodedProject);
-            that.syncInterfaces();
-        },
-        error: function () {
-            console.log("ajax: error")
-        },
-        complete: function(response, textStatus) {
-            console.log("ajax: complete")
-            console.log(response)
-            console.log(textStatus)
-        }
-    });
 
     this.runningBuiltinPlayer = false;
 
