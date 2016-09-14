@@ -25,7 +25,7 @@ var WickEditor = function () {
     }
 
     $.ajax({
-        url: "https://githubs-clubhouse.herokuapp.com/projects/1",
+        url: "/projects/1",
         type: 'GET',
         success: function(data) {
             console.log("ajax: success");
