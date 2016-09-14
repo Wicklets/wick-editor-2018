@@ -31,8 +31,8 @@ var WickEditor = function () {
             console.log("ajax: success");
             var base64WickProject = data.split('<div id="wick_project">')[1].split('</div>')[0];
             var decodedProject = atob(base64WickProject);
-            console.log(decodedProject)
             that.project = WickProject.fromWebpage(decodedProject);
+            that.syncInterfaces();
         },
         error: function () {
             console.log("ajax: error")
