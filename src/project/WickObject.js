@@ -221,7 +221,7 @@ WickObject.fromAnimatedGIF = function (gifData, callback) {
             WickObject.fromImage(
                 framesDataURLs[i], 
                 (function(frameIndex) { return function(o) {
-                    gifSymbol.addNewFrame();
+                    gifSymbol.layers[0].addNewFrame();
                     gifSymbol.layers[0].frames[frameIndex].wickObjects.push(o);
 
                     if(frameIndex == framesDataURLs.length-1) {
