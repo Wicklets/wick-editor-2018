@@ -172,6 +172,7 @@ var PaintbrushTool = function (wickEditor) {
                 dummyContext.drawImage(img, 0,0, img.width,img.height, 0,0, dummyCanvas.width,dummyCanvas.height);
                 
                 Potrace.loadImageFromDataURL(dummyCanvas.toDataURL());
+                console.log(wickEditor.currentTool.brushSmoothing)
                 Potrace.setParameter({optcurve: true, opttolerance: wickEditor.currentTool.brushSmoothing});
                 Potrace.process(function(){
                     var SVGData = {svgString:Potrace.getSVG(1), fillColor:canvas.freeDrawingBrush.color}

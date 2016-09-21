@@ -56,10 +56,11 @@ var WickEditor = function () {
         "scriptingide" : new ScriptingIDEInterface(this),
         "timeline" : new TimelineInterface(this),
         "toolbar" : new ToolbarInterface(this),
+        "toolOptions" : new ToolOptionsInterface(this),
         "menubar" : new MenuBarInterface(this),
         "properties" : new PropertiesInterface(this),
         "settings" : new SettingsInterface(this),
-        "fabric" : new FabricInterface(this)
+        "fabric" : new FabricInterface(this),
     };
 
     this.tools = {
