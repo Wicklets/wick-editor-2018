@@ -20,6 +20,7 @@
     <script src="lib/ace/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="lib/FileSaver/FileSaver.min.js"></script>
     <script src="lib/util/fpscounter.js"></script>
+    <script src="lib/jscolor/jscolor.min.js"></script>
     <script src="lib/util/browserdetection.js"></script>
     <script src="lib/util/base64-arraybuffer.js"></script>
     <script src="lib/libgif/libgif.js"></script>
@@ -97,7 +98,7 @@
         <div id="settingsGUI" class="GUIBox">
             <strong>Settings</strong>
             <hr />
-            Background color: <input type="color" value="#FFFFFF" id="projectBgColor"><br />
+            Background color: <input class="jscolor" value="#FFFFFF" id="projectBgColor"><br />
             Size: <input type="text" id="projectSizeX" maxlength="4" size="4"> x 
                   <input type="text" id="projectSizeY" maxlength="4" size="4"><br />
             Framerate: <input type="text" id="frameRate" maxlength="2" size="2"><br />
@@ -214,7 +215,7 @@
         <div id="toolOptionsGUI" class="GUIBox">
             Line Width: <input type="range" min="0" max="50" id="lineWidth"><br />
             Line Smoothness: <input type="range" min="0" max="10" id="lineSmoothness"><br />
-            Line Color: <input type="color" id="lineColor">
+            Line Color: <input class="jscolor" id="lineColor">
         </div>
 
     <!-- Properties GUI, bottom right corner -->
@@ -251,7 +252,7 @@
                         <option value="Courier New">Courier New</option>
                         <option value="Lucida Console">Lucida Console</option>
                     </select><br />
-                    Color: <input type="color" value="#FFFFFF" id="fontColor"><br />
+                    Color: <input class="jscolor" value="FFFFFF" id="fontColor"><br />
                     Size: <input type="range" value="40" min="2" max="150" id="fontSize"><br />
                     <input type="checkbox" id="boldCheckbox"> Bold
                     <input type="checkbox" id="italicCheckbox"> Italic
