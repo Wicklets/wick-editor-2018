@@ -10,16 +10,14 @@ var ToolOptionsInterface = function (wickEditor) {
         lineWidthEl.value = wickEditor.tools['paintbrush'].brushSize;
         lineColorEl.value = wickEditor.tools['paintbrush'].color;
         lineSmoothnessEl.value = wickEditor.tools['paintbrush'].brushSmoothing;
-    }
 
-    this.show = function () {
-        document.getElementById('toolOptionsGUI').style.display = 'block';
+        if(wickEditor.currentTool instanceof PaintbrushTool) {
+            document.getElementById('toolOptionsGUI').style.display = 'block';
+        } else {
+            document.getElementById('toolOptionsGUI').style.display = 'none';
+        }
     }
-
-    this.hide = function () {
-        document.getElementById('toolOptionsGUI').style.display = 'none';
-    }
-
+    
     lineWidthEl.onchange = function() {
         wickEditor.tools['paintbrush'].brushSize = parseInt(this.value, 10) || 1;
         wickEditor.syncInterfaces();
