@@ -29,7 +29,6 @@ var FabricInterface = function (wickEditor) {
     this.syncWithEditorState = function () {
 
         // Update tool state
-        console.log(this.canvas)
         this.canvas.defaultCursor = wickEditor.currentTool.getCursorImage();
         this.canvas.freeDrawingCursor = wickEditor.currentTool.getCursorImage();
 
