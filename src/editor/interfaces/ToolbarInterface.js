@@ -2,53 +2,27 @@
 
 var ToolbarInterface = function (wickEditor) {
 
+    var toolbarTools = [ 'cursor',
+                         'paintbrush',
+                         'text',
+                         'zoom',
+                         'pan' ]; 
+
     this.syncWithEditorState = function () {
         
     }
 
-    $('#mouseToolButton').on('click', function(e) {
-        wickEditor.interfaces['toolOptions'].hide();
-        wickEditor.currentTool = wickEditor.tools['cursor']
-        wickEditor.syncInterfaces();
-    });
+    this.loadTools = function () {
+        
+        toolbarTools.forEach( function(toolName) {
+            var tool = wickEditor.tools[toolName];
+            var buttonClassName = '#' + toolName + 'ToolButton';
 
-    $('#paintbrushToolButton').on('click', function(e) {
-        wickEditor.interfaces['toolOptions'].show();
-        wickEditor.currentTool = wickEditor.tools['paintbrush']
-        wickEditor.syncInterfaces();
-    });
-
-    // Disabled for now...
-    /*$('#eraserToolButton').on('click', function(e) {
-        document.getElementById('toolOptionsGUI').style.display = 'block';
-        wickEditor.currentTool.type = "eraser";
-        wickEditor.syncInterfaces();
-    });*/
-
-    // Disabled for now...
-    /*$('#fillBucketToolButton').on('click', function(e) {
-        document.getElementById('toolOptionsGUI').style.display = 'block';
-        wickEditor.currentTool.type = "fillbucket";
-        wickEditor.syncInterfaces();
-    });*/
-
-    $('#textToolButton').on('click', function(e) {
-        wickEditor.interfaces['toolOptions'].hide();
-        wickEditor.currentTool = wickEditor.tools['text'];
-        wickEditor.syncInterfaces();
-    });
-
-    $('#zoomToolButton').on('click', function(e) {
-        wickEditor.interfaces['toolOptions'].hide();
-        wickEditor.currentTool = wickEditor.tools['zoom'];
-        wickEditor.tools['zoom'].zoomMode = "zoomIn";
-        wickEditor.syncInterfaces();
-    });
-
-    $('#panToolButton').on('click', function(e) {
-        wickEditor.interfaces['toolOptions'].hide();
-        wickEditor.currentTool = wickEditor.tools['pan'];
-        wickEditor.syncInterfaces();
-    });
+            $(buttonClassName).on('click', function(e) {
+                wickEditor.currentTool = tool;
+                wickEditor.syncInterfaces();
+            });
+        });
+    }
 
 }

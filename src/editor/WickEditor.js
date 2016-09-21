@@ -70,6 +70,9 @@ var WickEditor = function () {
         "zoom" : new ZoomTool(this),
         "pan" : new PanTool(this)
     }
+
+    this.interfaces.toolbar.loadTools();
+    
     this.currentTool = this.tools['cursor'];
 
     this.syncInterfaces();
