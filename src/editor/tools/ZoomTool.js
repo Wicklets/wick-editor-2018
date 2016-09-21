@@ -8,10 +8,11 @@ var ZoomTool = function (wickEditor) {
 
     canvas.on('mouse:down', function (e) {
     	if(wickEditor.currentTool instanceof ZoomTool) {
-    		if (that.zoomMode === "zoomIn") {
-    			zoom(1.1)
-    		} else if (that.zoomMode === "zoomOut") {
+    		if (wickEditor.inputHandler.keys[18]) {
+                // alt-click zooms out
     			zoom(0.9)
+    		} else {
+    			zoom(1.1)
     		}
 	    }
     });
