@@ -2,6 +2,10 @@ var PaintbrushTool = function (wickEditor) {
 
     var that = this;
 
+    this.getCursorImage = function () {
+        return 'url(resources/paintbrush-cursor.png) 64 64,default';
+    }
+
     var fabricInterface = wickEditor.interfaces['fabric'];
     var canvas = fabricInterface.canvas;
 

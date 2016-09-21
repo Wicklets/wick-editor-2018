@@ -4,6 +4,10 @@ var PanTool = function (wickEditor) {
 
     var canvas = wickEditor.interfaces['fabric'].canvas;
 
+    this.getCursorImage = function () {
+        return "move";
+    }
+
     var panning = false;
     canvas.on('mouse:up', function (e) {
         panning = false;

@@ -4,6 +4,10 @@ var CursorTool = function (wickEditor) {
 
     var canvas = wickEditor.interfaces['fabric'].canvas;
 
+    this.getCursorImage = function () {
+        return "default";
+    }
+
     // Select objects on right click (fabric.js doesn't do this by default >.>)
     canvas.on('mouse:down', function(e) {
         if(e.e.button == 2) {

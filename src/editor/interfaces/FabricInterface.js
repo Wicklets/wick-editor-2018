@@ -22,8 +22,6 @@ var FabricInterface = function (wickEditor) {
     this.creatingSelection = false;
     this.objectIDsInCanvas = [];
 
-    //this.canvas.defaultCursor='url(http://www.javascriptkit.com/dhtmltutors/cursor-hand.gif),default';
-
 /********************************
        Editor state syncing
 ********************************/
@@ -31,6 +29,10 @@ var FabricInterface = function (wickEditor) {
     this.syncWithEditorState = function () {
 
         // Update tool state
+        console.log(this.canvas)
+        this.canvas.defaultCursor = wickEditor.currentTool.getCursorImage();
+        this.canvas.freeDrawingCursor = wickEditor.currentTool.getCursorImage();
+
         if(wickEditor.currentTool instanceof PaintbrushTool /*|| that.currentTool.instanceof EraserTool*/) {
             this.canvas.isDrawingMode = true;
             this.canvas.freeDrawingBrush.width = wickEditor.currentTool.brushSize;
@@ -39,6 +41,7 @@ var FabricInterface = function (wickEditor) {
             this.canvas.isDrawingMode = false;
         }
 
+        // Reposition GUI element positions
         repositionFrame();
         repositionOriginCrosshair();
         repositionInactiveFrame();

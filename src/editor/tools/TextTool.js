@@ -4,6 +4,10 @@ var TextTool = function (wickEditor) {
 
     var canvas = wickEditor.interfaces['fabric'].canvas;
 
+    this.getCursorImage = function () {
+        return "text";
+    }
+
     canvas.on('mouse:down', function (e) {
     	if(wickEditor.currentTool instanceof TextTool) {
 	    	addText();

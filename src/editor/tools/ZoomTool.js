@@ -4,8 +4,10 @@ var ZoomTool = function (wickEditor) {
 
     var canvas = wickEditor.interfaces['fabric'].canvas;
 
-    this.zoomMode = "zoomIn";
-
+    this.getCursorImage = function () {
+        return "zoom-in";
+    }
+    
     canvas.on('mouse:down', function (e) {
     	if(wickEditor.currentTool instanceof ZoomTool) {
     		if (wickEditor.inputHandler.keys[18]) {
