@@ -84,7 +84,7 @@ var FabricInterface = function (wickEditor) {
                             fabricObj.hasControls = false;
                             fabricObj.selectable = false;
                             fabricObj.evented = false;
-                            that.canvas.moveTo(fabricObj, activeObjects.length - 1);
+                            that.canvas.moveTo(fabricObj, activeObjects.length - 0);
                         } else {
                             fabricObj.hasControls = true;
                             fabricObj.selectable = true;
@@ -107,7 +107,7 @@ var FabricInterface = function (wickEditor) {
                         fabricObj.hasControls = false;
                         fabricObj.selectable = false;
                         fabricObj.evented = false;
-                        that.canvas.moveTo(fabricObj, activeObjects.length - 1);
+                        that.canvas.moveTo(fabricObj, activeObjects.length - 0);
                     } else {
                         fabricObj.hasControls = true;
                         fabricObj.selectable = true;
@@ -128,8 +128,8 @@ var FabricInterface = function (wickEditor) {
         if(selectedObjectIDs.length > 0) that.selectByIDs(selectedObjectIDs);
 
         // Update inactive object overlay
-        that.canvas.moveTo(that.inactiveFrame, inactiveObjects.length+2);
-        this.inactiveFrame.opacity = currentObject.isRoot ? 0.0 : 0.15;
+        that.canvas.moveTo(that.inactiveFrame, inactiveObjects.length+1);
+        this.inactiveFrame.opacity = currentObject.isRoot ? 0.0 : 0.8;
 
         this.canvas.renderAll();
     }
