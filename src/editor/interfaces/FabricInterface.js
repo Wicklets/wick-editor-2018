@@ -22,6 +22,8 @@ var FabricInterface = function (wickEditor) {
     this.creatingSelection = false;
     this.objectIDsInCanvas = [];
 
+    //this.canvas.defaultCursor='url(http://www.javascriptkit.com/dhtmltutors/cursor-hand.gif),default';
+
 /********************************
        Editor state syncing
 ********************************/
@@ -78,18 +80,14 @@ var FabricInterface = function (wickEditor) {
                     if(fabricObj.wickObjectID === child.id) {
 
                         that.syncObjects(child, fabricObj);
-                        var wickProjectIndex = currentObject.getCurrentFrame().wickObjects.indexOf(child);
 
-                        if(inactiveObjects.indexOf(child) != -1) {
-                            fabricObj.hasControls = false;
-                            fabricObj.selectable = false;
-                            fabricObj.evented = false;
-                            that.canvas.moveTo(fabricObj, activeObjects.length - 0);
+                        fabricObj.trueZIndex = currentObject.getCurrentFrame().wickObjects.indexOf(child);
+                        fabricObj.isActive = inactiveObjects.indexOf(child) == -1;
+
+                        if(fabricObj.isActive) {
+                            that.canvas.moveTo(fabricObj, fabricObj.trueZIndex+2 + activeObjects.length);
                         } else {
-                            fabricObj.hasControls = true;
-                            fabricObj.selectable = true;
-                            fabricObj.evented = true;
-                            that.canvas.moveTo(fabricObj, wickProjectIndex+2 + activeObjects.length);
+                            that.canvas.moveTo(fabricObj, activeObjects.length);
                         }
                     }
                 });
@@ -101,20 +99,34 @@ var FabricInterface = function (wickEditor) {
                     newFabricObj.wickObjectID = child.id;
                     that.canvas.add(newFabricObj);
 
-                    var wickProjectIndex = currentObject.getCurrentFrame().wickObjects.indexOf(child);
-                    
-                    if(inactiveObjects.indexOf(child) != -1) {
-                        newFabricObj.hasControls = false;
-                        newFabricObj.selectable = false;
-                        newFabricObj.evented = false;
-                        that.canvas.moveTo(newFabricObj, activeObjects.length - 0);
+                    newFabricObj.trueZIndex = currentObject.getCurrentFrame().wickObjects.indexOf(child);
+                    newFabricObj.isActive = inactiveObjects.indexOf(child) == -1;
+
+                    if(newFabricObj.isActive) {
+                        that.canvas.moveTo(newFabricObj, newFabricObj.trueZIndex+2 + activeObjects.length);
                     } else {
-                        newFabricObj.hasControls = true;
-                        newFabricObj.selectable = true;
-                        newFabricObj.evented = true;
-                        that.canvas.moveTo(newFabricObj, wickProjectIndex+2 + activeObjects.length);
+                        that.canvas.moveTo(newFabricObj, activeObjects.length);
                     }
                 });
+            }
+        });
+
+        // Make sure things are unselectable if need be...
+        that.canvas.forEachObject(function(fabricObj) {
+            if(!(wickEditor.currentTool instanceof CursorTool)) {
+                fabricObj.hasControls = false;
+                fabricObj.selectable = false;
+                fabricObj.evented = false;
+            } else {
+                if (fabricObj.isActive) {
+                    fabricObj.hasControls = true;
+                    fabricObj.selectable = true;
+                    fabricObj.evented = true;
+                } else {
+                    fabricObj.hasControls = false;
+                    fabricObj.selectable = false;
+                    fabricObj.evented = false;
+                }
             }
         });
 

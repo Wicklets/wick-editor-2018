@@ -12,8 +12,9 @@ var TextTool = function (wickEditor) {
 
     var addText = function () {
     	var newWickObject = WickObject.fromText('Click to edit text');
-        newWickObject.x = wickEditor.project.resolution.x/2;
-        newWickObject.y = wickEditor.project.resolution.y/2;
+        var frameOffset = wickEditor.interfaces.fabric.getCenteredFrameOffset();
+        newWickObject.x = wickEditor.inputHandler.mouse.x - frameOffset.x;
+        newWickObject.y = wickEditor.inputHandler.mouse.y - frameOffset.y;
         wickEditor.actionHandler.doAction('addObjects', {wickObjects:[newWickObject]});
     }
 

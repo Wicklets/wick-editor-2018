@@ -26,12 +26,22 @@ var SplashScreenInterface = function (wickEditor) {
 // Close splash screen if we click (almost) anywhere
 
     this.closeSplashScreen = function () {
+        // Save if user doesn't need to see splash screen again...
+        if($('#dontShowSplashScreenAgainCheckbox').is(':checked')) {
+            localStorage.dontShowSplashScreen = false;
+        }
+
         document.getElementById("splashScreenGUI").style.display = "none";
     }
-    this.closeSplashScreen(); // temporary
 
     document.getElementById("editorCanvasContainer").onclick = that.closeSplashScreen;
     document.getElementById("timelineCanvas").onclick = that.closeSplashScreen;
     document.getElementById('splashScreenGUI').onclick = that.closeSplashScreen;
+
+// Auto-close splash screen if user wants it to be hidden
+
+    if(localStorage.dontShowSplashScreen) {
+        this.closeSplashScreen();
+    }
 
 }
