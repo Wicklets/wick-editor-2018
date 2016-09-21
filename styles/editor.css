@@ -143,6 +143,10 @@ hr {
 	cursor: pointer;
 	background-color: #A0A0A0;
 }
+.button:selected {
+	cursor: pointer;
+	background-color: #A1A1A1;
+}
 .activeScriptButton {
 	background-color: #FFFFFF;
 }
