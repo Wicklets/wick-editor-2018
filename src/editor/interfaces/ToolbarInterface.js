@@ -2,6 +2,7 @@
 
 var ToolbarInterface = function (wickEditor) {
 
+    /* Define tools in toolbar */ 
     var toolbarTools = [ 'cursor',
                          'paintbrush',
                          'text',
@@ -9,11 +10,22 @@ var ToolbarInterface = function (wickEditor) {
                          'pan' ]; 
 
     this.syncWithEditorState = function () {
+
+        /* Highlight select tool, unhighlight all other tools */
+        toolbarTools.forEach( function(toolName) {
+            var buttonClassName = '#' + toolName + 'ToolButton';
+            if (wickEditor.tools[toolName] === wickEditor.currentTool) {
+                $(buttonClassName).css('background-color', '#A1A1A1');
+            } else {
+                $(buttonClassName).css('background-color', '');
+            }
+        });
         
     }
 
     this.loadTools = function () {
         
+        /* Define "clicked" state for tools */ 
         toolbarTools.forEach( function(toolName) {
             var tool = wickEditor.tools[toolName];
             var buttonClassName = '#' + toolName + 'ToolButton';
