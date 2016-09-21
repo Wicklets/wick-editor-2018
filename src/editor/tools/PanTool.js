@@ -20,6 +20,10 @@ var PanTool = function (wickEditor) {
         if (panning && e && e.e) {
             var delta = new fabric.Point(e.e.movementX, e.e.movementY);
             canvas.relativePan(delta);
+
+            wickEditor.interfaces['fabric'].inactiveFrame.left -= delta.x;
+            wickEditor.interfaces['fabric'].inactiveFrame.top -= delta.y;
+            wickEditor.interfaces['fabric'].inactiveFrame.setCoords();
         }
     });
 

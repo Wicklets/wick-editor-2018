@@ -129,7 +129,7 @@ var FabricInterface = function (wickEditor) {
 
         // Update inactive object overlay
         that.canvas.moveTo(that.inactiveFrame, inactiveObjects.length+2);
-        this.inactiveFrame.opacity = currentObject.isRoot ? 0.0 : 0.4;
+        this.inactiveFrame.opacity = currentObject.isRoot ? 0.0 : 0.15;
 
         this.canvas.renderAll();
     }
