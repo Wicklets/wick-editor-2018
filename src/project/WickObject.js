@@ -183,7 +183,7 @@ WickObject.fromImage = function (imgSrc, callback) {
 
     var fileImage = new Image();
     fileImage.src = imgSrc;
-
+    
     fileImage.onload = function() {
 
         var obj = new WickObject();
@@ -713,7 +713,6 @@ WickObject.prototype.getLargestID = function (id) {
 WickObject.prototype.getSymbolCornerPosition = function () {
 
     if(!this.isSymbol) {
-        console.log("whoops!")
         return {x:0, y:0};
     }
 
