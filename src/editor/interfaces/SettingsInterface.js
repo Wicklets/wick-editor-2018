@@ -76,7 +76,7 @@ var SettingsInterface = function (wickEditor) {
     }
 
     document.getElementById('projectBgColor').onchange = function () {
-        wickEditor.project.backgroundColor = this.value;
+        wickEditor.project.backgroundColor = "#" + this.value;
         wickEditor.syncInterfaces();
     };
 
