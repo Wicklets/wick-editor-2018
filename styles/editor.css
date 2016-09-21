@@ -89,6 +89,12 @@ hr {
 	position: absolute;
 }
 
+#closeSplashScreenButton {
+	right: 5px;
+	top: 5px;
+	position: absolute;
+}
+
 #builtinPlayerGUI {
 	top: 0px;
 	left: 0px;

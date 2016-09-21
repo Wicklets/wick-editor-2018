@@ -36,7 +36,12 @@ var SplashScreenInterface = function (wickEditor) {
 
     document.getElementById("editorCanvasContainer").onclick = that.closeSplashScreen;
     document.getElementById("timelineCanvas").onclick = that.closeSplashScreen;
-    document.getElementById('splashScreenGUI').onclick = that.closeSplashScreen;
+
+// 
+
+    document.getElementById('closeSplashScreenButton').onclick = function (e) {
+        that.closeSplashScreen();
+    }
 
 // Auto-close splash screen if user wants it to be hidden
 
