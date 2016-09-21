@@ -10,9 +10,9 @@ var ZoomTool = function (wickEditor) {
     	if(wickEditor.currentTool instanceof ZoomTool) {
     		if (wickEditor.inputHandler.keys[18]) {
                 // alt-click zooms out
-    			zoom(0.9)
+    			zoom(0.9);
     		} else {
-    			zoom(1.1)
+    			zoom(1.1);
     		}
 	    }
     });
