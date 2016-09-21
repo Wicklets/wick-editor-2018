@@ -38,17 +38,10 @@ var ToolbarInterface = function (wickEditor) {
         wickEditor.syncInterfaces();
     });
 
-    $('#zoomInToolButton').on('click', function(e) {
+    $('#zoomToolButton').on('click', function(e) {
         wickEditor.interfaces['toolOptions'].hide();
         wickEditor.currentTool = wickEditor.tools['zoom'];
         wickEditor.tools['zoom'].zoomMode = "zoomIn";
-        wickEditor.syncInterfaces();
-    });
-
-    $('#zoomOutToolButton').on('click', function(e) {
-        wickEditor.interfaces['toolOptions'].hide();
-        wickEditor.currentTool = wickEditor.tools['zoom'];
-        wickEditor.tools['zoom'].zoomMode = "zoomOut";
         wickEditor.syncInterfaces();
     });
 
