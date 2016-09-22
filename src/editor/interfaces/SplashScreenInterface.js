@@ -36,8 +36,13 @@ var SplashScreenInterface = function (wickEditor) {
 
     document.getElementById("editorCanvasContainer").onclick = that.closeSplashScreen;
     document.getElementById("timelineCanvas").onclick = that.closeSplashScreen;
+    document.getElementById("settingsGUI").onclick = that.closeSplashScreen;
+    document.getElementById("menuBarGUI").onclick = that.closeSplashScreen;
+    document.getElementById("timelineGUI").onclick = that.closeSplashScreen;
+    document.getElementById("toolbarGUI").onclick = that.closeSplashScreen;
+    document.getElementById("settingsGUI").onclick = that.closeSplashScreen;
 
-// 
+// Close button
 
     document.getElementById('closeSplashScreenButton').onclick = function (e) {
         that.closeSplashScreen();
