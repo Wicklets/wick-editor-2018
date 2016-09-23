@@ -7,44 +7,12 @@ var WickEditor = function () {
 /*********************************
     Initialize all editor vars
 *********************************/
+    
+    console.log('%cWelcome to the javascript console! ', 'color: #ff4400; font-size: 16px;');
+    console.log('%cYou are free to change any of the internal editor stuff from here. Try typing "wickEditor" into the console and have a look around!', 'color: #ff4400; font-size: 12px;');
 
-    console.log("WickEditor Pre-Alpha");
-
-    this.mode = "normal";
-
-    // Should move all the clubhouse to a backend system, this will also make it easy for other people to add their own backends.
-
-    // Check to see if we need to load a project from GitHub's Clubhouse
-    this.githubClubhouseProjectID = URLParameterUtils.getParameterByName("id");
-    this.githubClubhouseProjectName = URLParameterUtils.getParameterByName("project");
-    if (this.githubClubhouseProjectID) {
-        console.log("Wick is in GitHub Clubhouse mode!");
-        console.log("githubClubhouseProjectID: " + this.githubClubhouseProjectID);
-        this.mode = "github-clubhouse";
-
-        // Load project from github clubhouse server
-        $.ajax({
-            url: "/projects/1",
-            type: 'GET',
-            success: function(data) {
-                console.log("ajax: success");
-                var base64WickProject = data.split('<div id="wick_project">')[1].split('</div>')[0];
-                var decodedProject = atob(base64WickProject);
-                that.project = WickProject.fromWebpage(decodedProject);
-                that.syncInterfaces();
-            },
-            error: function () {
-                console.log("ajax: error")
-            },
-            complete: function(response, textStatus) {
-                console.log("ajax: complete")
-                console.log(response)
-                console.log(textStatus)
-            }
-        });
-    } else {
-        this.project = WickProject.fromLocalStorage();
-    }
+    this.backend = new GithubsClubhouseBackend(this);
+    this.project = WickProject.fromLocalStorage();
 
     this.runningBuiltinPlayer = false;
 
@@ -72,7 +40,6 @@ var WickEditor = function () {
     }
 
     this.interfaces.toolbar.loadTools();
-    
     this.currentTool = this.tools['cursor'];
 
     this.syncInterfaces();

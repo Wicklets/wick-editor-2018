@@ -82,6 +82,9 @@ var InputHandler = function (wickEditor) {
         // Control-a: Select all
         if (event.keyCode == 65 && controlKeyDown) {
             event.preventDefault();
+            // Switch to cursor tool (shouldn't be able to select stuff with other tools)
+            wickEditor.currentTool = wickEditor.tools.cursor;
+            wickEditor.syncInterfaces();
             wickEditor.interfaces['fabric'].deselectAll();
             wickEditor.interfaces['fabric'].selectAll();
         }

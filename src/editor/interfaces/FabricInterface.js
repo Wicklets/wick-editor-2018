@@ -132,12 +132,6 @@ var FabricInterface = function (wickEditor) {
             }
         });
 
-        // Check for intersections between paths and unite them if they do
-        wickEditor.tools['paintbrush'].uniteIntersectingPaths();
-
-        // Split apart paths that are actually two paths
-        wickEditor.tools['paintbrush'].splitPathsWithMultiplePieces();
-
         // Reselect objects that were selected before sync
         if(selectedObjectIDs.length > 0) that.selectByIDs(selectedObjectIDs);
 
@@ -192,23 +186,6 @@ var FabricInterface = function (wickEditor) {
         } else {
             fabricObj.perPixelTargetFind = true;
             fabricObj.targetFindTolerance = 4;
-        }
-
-        if(wickObj.svgData) {
-            var xmlString = wickObj.svgData.svgString
-              , parser = new DOMParser()
-              , doc = parser.parseFromString(xmlString, "text/xml");
-            var paperGroup = paper.project.importSVG(doc);
-            var paperPath = paperGroup.removeChildren(0, 1)[0];
-            //paperPath.style.fillColor = fillColor;
-            if(paperPath.closePath) {
-                paperPath.closePath();
-            }
-
-            paperPath.position.x += wickObj.x;
-            paperPath.position.y += wickObj.y;
-
-            fabricObj.paperPath = paperPath;
         }
 
         fabricObj.setCoords();
@@ -580,6 +557,50 @@ var FabricInterface = function (wickEditor) {
         }
         return wickObjects;
     }
+
+/********************************
+         Vector stuff
+********************************/
+
+    /*this.eraseUsingSVG = function (SVGData) {
+        console.error("eraseUsingSVG NYI")
+    }
+
+    this.uniteIntersectingPaths = function () {
+
+        that.canvas.forEachObject(function(fabObjA) {
+            that.canvas.forEachObject(function(fabObjB) {
+
+                var bothFabObjsArePaths = fabObjA.type === "path" && fabObjB.type === "path";
+                var notSameObject = fabObjA.wickObjectID != fabObjB.wickObjectID;
+                var bothHaveWickObjectIDs = fabObjA.wickObjectID && fabObjB.wickObjectID;
+
+                if (bothFabObjsArePaths && notSameObject && bothHaveWickObjectIDs) {
+                    var pathA = fabObjA.paperPath;
+                    var pathB = fabObjB.paperPath;
+                    var intersections = pathA.getIntersections(pathB);
+                    if(intersections.length > 0) {
+                        if(fabObjA.fill === fabObjB.fill) {
+                            // Same color: union
+                        } else {
+                            // Different colors: path with higer z index subtracts from other path 
+                        }
+                    }
+                }
+
+            });
+        });
+
+    }
+
+    this.splitPathsWithMultiplePieces = function () {
+        that.canvas.forEachObject(function(fabObj) {
+            if(fabObj.type === "path" && fabObj.wickObjectID) {
+                var path = fabObj.paperPath;
+                // Not sure how to check if the path is multiple pieces...
+            }
+        });
+    }*/
 
 }
 

@@ -53,7 +53,8 @@
     <script src="src/editor/tools/TextTool.js"></script>
     <script src="src/editor/tools/ZoomTool.js"></script>
     <script src="src/editor/tools/PanTool.js"></script>
-    <script src="src/editor/tools/FillBucketTool.js"></script>
+
+    <script src="src/editor/backends/GithubsClubhouseBackend.js"></script>
 
     <script src="src/editor/WickActionHandler.js"></script>
     <script src="src/editor/WickEditor.js"></script>
@@ -95,8 +96,8 @@
             <br /><hr /><br />
             <p><strong>It's Wick Pre-Alpha!</strong></p>
             <br />
-            <p>Have any questions? Contact me at <a href="http://www.zrispo.co">zach.rispoli@gmail.com</a></p>
-            <p>You can visit Wick <a href="https://github.com/zrispo/wick">on Github!</a></p>
+            <p>Have any questions? Contact me at <a target="_blank" href="http://www.zrispo.co">zach.rispoli@gmail.com</a></p>
+            <p>You can visit Wick <a target="_blank" href="https://github.com/zrispo/wick">on Github!</a></p>
             <br />
             <p><input type="checkbox" id="dontShowSplashScreenAgainCheckbox"> Don't show this window again</input></p>
 
@@ -129,23 +130,20 @@
             <strong>Wick Editor</strong><br />
 
             <hr />
-            <div class="button buttonInRow tooltipElem" id="backToClubhouseButton" alt="Back to Clubhouse">
-                <img src="resources/github.png" width="30" />
-            </div> 
-            <div class="button buttonInRow tooltipElem" id="settingsButton" alt="Settings">
-                <img src="resources/settings.png" width="30" />
-            </div>  
-            <div class="button buttonInRow tooltipElem" id="openProjectButton" alt="Open Project">
-                <img src="resources/open-folder.png" width="30" />
-            </div>
-            <div class="button buttonInRow tooltipElem" id="exportHTMLButton" alt="Export Project">
-                <img src="resources/export.png" width="30" />
-            </div>
-            <div class="button buttonInRow tooltipElem" id="saveToGithubClubhouseButton" alt="Save Project">
-                <img src="resources/save.png" width="30" />
-            </div>
-            <div class="button buttonInRow tooltipElem" id="runButton" alt="Run Project">
-                <img src="resources/play.png" width="30" />
+
+            <div id="menuBarButtons">
+                <div class="button buttonInRow tooltipElem" id="settingsButton" alt="Settings">
+                    <img src="resources/settings.png" width="30" />
+                </div>  
+                <div class="button buttonInRow tooltipElem" id="openProjectButton" alt="Open Project">
+                    <img src="resources/open-folder.png" width="30" />
+                </div>
+                <div class="button buttonInRow tooltipElem" id="exportHTMLButton" alt="Export Project">
+                    <img src="resources/export.png" width="30" />
+                </div>
+                <div class="button buttonInRow tooltipElem" id="runButton" alt="Run Project">
+                    <img src="resources/play.png" width="30" />
+                </div>
             </div>
         </div>
 

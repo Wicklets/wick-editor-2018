@@ -1,14 +1,19 @@
+/* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
+
 var PanTool = function (wickEditor) {
 
     var that = this;
-
-    var canvas = wickEditor.interfaces['fabric'].canvas;
 
     this.getCursorImage = function () {
         return "move";
     }
 
     var panning = false;
+
+// Panning the fabric canvas
+
+    var canvas = wickEditor.interfaces['fabric'].canvas;
+    
     canvas.on('mouse:up', function (e) {
         panning = false;
         canvas.selection = true;

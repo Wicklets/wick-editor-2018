@@ -1,3 +1,5 @@
+/* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
+
 var ZoomTool = function (wickEditor) {
 
     var that = this;

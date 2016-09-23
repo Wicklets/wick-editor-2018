@@ -16,7 +16,8 @@ var WickActionHandler = function (wickEditor) {
            the state of the wickEditor or wickObject back to its original state. */
         this.undoAction = undoAction;
 
-        /* This saves anything that the undo will use later
+        /* 'args' is used to pass any data that the action needs.
+           'args' also saves anything that the undo will use later,
            For example, to undo a delete we need to bring back that deleted object...
            In this case the object that gets deleted gets stored in args! */
         this.args = {};
@@ -41,9 +42,6 @@ var WickActionHandler = function (wickEditor) {
 
     this.doAction = function (actionName, args) {
         
-        console.log("doAction: " + actionName);
-        console.log(args)
-
         // Create a new WickAction object
         var action = new WickAction(
             this.doActions[actionName],
