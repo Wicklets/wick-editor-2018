@@ -15,7 +15,7 @@ var ToolbarInterface = function (wickEditor) {
         toolbarTools.forEach( function(toolName) {
             var buttonClassName = '#' + toolName + 'ToolButton';
             if (wickEditor.tools[toolName] === wickEditor.currentTool) {
-                $(buttonClassName).css('background-color', '#A1A1A1');
+                $(buttonClassName).css('background-color', '#ccc');
             } else {
                 $(buttonClassName).css('background-color', '');
             }

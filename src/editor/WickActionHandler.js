@@ -82,8 +82,6 @@ var WickActionHandler = function (wickEditor) {
 
         // Get last action on the undo stack
         var action = this.undoStack.pop(); 
-        console.log("undo")
-        console.log(action)
 
         // Do the action and put it on the redo stack to be redone later
         action.undoAction(action.args);
@@ -140,6 +138,11 @@ var WickActionHandler = function (wickEditor) {
                 wickEditor.project.addObject(args.wickObjects[i]);
                 args.addedObjectIDs.push(args.wickObjects[i].id);
             }
+
+            // Update vectors
+            wickEditor.actionHandler.doAction('updateOnscreenVectors', {
+                partOfChain:true
+            });
         },
         function (args) {
             // Remove objects we added
@@ -210,6 +213,11 @@ var WickActionHandler = function (wickEditor) {
                     if(args.modifiedStates[i].fill) wickObj.fontData.fill = args.modifiedStates[i].fill;
                 }
             }
+
+            // Update vectors
+            wickEditor.actionHandler.doAction('updateOnscreenVectors', {
+                partOfChain:true
+            });
         },
         function (args) {
             for(var i = 0; i < args.ids.length; i++) {
@@ -259,17 +267,11 @@ var WickActionHandler = function (wickEditor) {
             // Move to that new frame
             wickEditor.actionHandler.doAction('movePlayhead', {
                 newPlayheadPosition:currentObject.getCurrentLayer().frames.length-1,
-                dontAddToStack:true
+                partOfChain:true
             });
         },
         function (args) {
             var currentObject = wickEditor.project.getCurrentObject();
-
-            // Go to the second-to-last frame and remove the last frame
-            wickEditor.actionHandler.doAction('movePlayhead', {
-                newPlayheadPosition:currentObject.getCurrentLayer().frames.length-2,
-                dontAddToStack:true
-            });
             currentObject.getCurrentLayer().frames.pop();
         });
 
@@ -389,8 +391,10 @@ var WickActionHandler = function (wickEditor) {
             }
         });
     
-    this.registerAction('updateVectors', 
+    this.registerAction('updateOnscreenVectors', 
         function (args) {
+            console.log("update vectoooooors")
+
             // (1) Make sure all vector WickObjects have updated paper objects
 
             // (2) Unite intersecting paths with same color / Subtract intersecting points with diff. colors
