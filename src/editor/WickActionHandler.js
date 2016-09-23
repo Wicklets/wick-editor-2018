@@ -59,7 +59,7 @@ var WickActionHandler = function (wickEditor) {
         action.doAction(action.args);
 
         // Put the action on the undo stack to be undone later
-        if(args && !args.dontAddToStack) {
+        if(!args || !args.dontAddToStack) {
             this.undoStack.push(action); 
             this.redoStack = [];
         }
@@ -82,12 +82,16 @@ var WickActionHandler = function (wickEditor) {
 
         // Get last action on the undo stack
         var action = this.undoStack.pop(); 
+        console.log("undo")
+        console.log(action)
 
         // Do the action and put it on the redo stack to be redone later
         action.undoAction(action.args);
         this.redoStack.push(action);
 
-        if(action.args && action.args.partOfChain) {
+        // Also undo actions part of a chain
+        var nextUndoAction = this.undoStack[this.undoStack.length - 1];
+        if(nextUndoAction && nextUndoAction.args && nextUndoAction.args.partOfChain) {
             this.undoAction();
         }
 
@@ -111,8 +115,8 @@ var WickActionHandler = function (wickEditor) {
         action.doAction(action.args);
         this.undoStack.push(action);
 
-        var nextRedoAction = this.redoStack[this.redoStack.length - 1];
-        if(nextRedoAction && nextRedoAction.args && nextRedoAction.args.partOfChain) {
+        // Also redo actions part of a chain
+        if(action.args && action.args.partOfChain) {
             this.redoAction();
         }
 
@@ -127,7 +131,7 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             // Make a new frame if one doesn't exist at the playhead position
             if(!wickEditor.project.getCurrentObject().getCurrentFrame()) {
-                wickEditor.actionHandler.doAction('addNewFrame', {dontAddToStack:true});
+                wickEditor.actionHandler.doAction('addNewFrame', {partOfChain:true});
             }
 
             // Add those boys and save their IDs so we can remove them on undo
