@@ -13,12 +13,14 @@ var MenuBarInterface = function (wickEditor) {
         wickEditor.syncInterfaces();
     }
 
+    // This button can be replaced by backend plugins, so make sure it exists
     if(document.getElementById('openProjectButton')) {
         document.getElementById('openProjectButton').onclick = function (e) {
             $('#importButton').click(); // This just opens the file dialog, file import is handled in InputHandler.js
         }
     }
 
+    // This button can be replaced by backend plugins, so make sure it exists
     if(document.getElementById('exportHTMLButton')) {
         document.getElementById('exportHTMLButton').onclick = function (e) {
             WickProjectExporter.exportProject(wickEditor.project);
