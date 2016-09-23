@@ -88,7 +88,7 @@ var WickActionHandler = function (wickEditor) {
         this.redoStack.push(action);
 
         if(action.args && action.args.partOfChain) {
-            that.undoAction();
+            this.undoAction();
         }
 
         // Sync interfaces
@@ -111,9 +111,9 @@ var WickActionHandler = function (wickEditor) {
         action.doAction(action.args);
         this.undoStack.push(action);
 
-        var nextRedoAction = that.redoStack[that.redoStack.length - 1];
-        if(nextRedoAction.args && nextRedoAction.args.partOfChain) {
-            that.redoAction();
+        var nextRedoAction = this.redoStack[this.redoStack.length - 1];
+        if(nextRedoAction && nextRedoAction.args && nextRedoAction.args.partOfChain) {
+            this.redoAction();
         }
 
         // Sync interfaces
