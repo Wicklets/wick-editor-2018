@@ -221,13 +221,14 @@ WickObject.fromAnimatedGIF = function (gifData, callback) {
             WickObject.fromImage(
                 framesDataURLs[i], 
                 (function(frameIndex) { return function(o) {
-                    gifSymbol.layers[0].addNewFrame();
                     gifSymbol.layers[0].frames[frameIndex].wickObjects.push(o);
-
+                    
                     if(frameIndex == framesDataURLs.length-1) {
                         gifSymbol.width  = gifSymbol.layers[0].frames[0].wickObjects[0].width;
                         gifSymbol.height = gifSymbol.layers[0].frames[0].wickObjects[0].height;
                         callback(gifSymbol);
+                    } else {
+                        gifSymbol.layers[0].addNewFrame();
                     }
                 }; }) (i)
             );

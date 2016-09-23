@@ -72,23 +72,4 @@ var PaintbrushTool = function (wickEditor) {
         });
     };
 
-/*
-var xmlString = wickObj.svgData.svgString
-              , parser = new DOMParser()
-              , doc = parser.parseFromString(xmlString, "text/xml");
-            var paperGroup = paper.project.importSVG(doc);
-            var paperPath = paperGroup.removeChildren(0, 1)[0];
-            //paperPath.style.fillColor = fillColor;
-            if(paperPath.closePath) {
-                paperPath.closePath();
-            }
-
-            paperPath.position.x += wickObj.x;
-            paperPath.position.y += wickObj.y;
-
-            fabricObj.paperPath = paperPath;
-            */
-
-
-
 }

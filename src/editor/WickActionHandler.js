@@ -397,10 +397,36 @@ var WickActionHandler = function (wickEditor) {
 
             // (1) Make sure all vector WickObjects have updated paper objects
 
+            var onscreenObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
+
+            onscreenObjects.forEach(function (child) {
+                if(child.svgData) {
+                    var xmlString = child.svgData.svgString
+                      , parser = new DOMParser()
+                      , doc = parser.parseFromString(xmlString, "text/xml");
+                    var paperGroup = paper.project.importSVG(doc);
+                    var paperPath = paperGroup.removeChildren(0, 1)[0];
+                    //paperPath.style.fillColor = fillColor;
+                    if(paperPath.closePath) {
+                        paperPath.closePath();
+                    }
+
+                    paperPath.position.x += child.x;
+                    paperPath.position.y += child.y;
+
+                    child.paperPath = paperPath;
+                }
+            });
+
             // (2) Unite intersecting paths with same color / Subtract intersecting points with diff. colors
 
+
+
             // (3) Split apart paths with multiple pieces
-        },
+
+            
+
+        },  
         function (args) {  
             
         });
