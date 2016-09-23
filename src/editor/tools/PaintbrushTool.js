@@ -10,7 +10,7 @@ var PaintbrushTool = function (wickEditor) {
     var canvas = fabricInterface.canvas;
 
     this.brushSize = 5;
-    this.brushSmoothing = 2.0;
+    this.brushSmoothing = 10.0;
     this.color = "#B00600";
 
     canvas.on('mouse:down', function(e) {
@@ -176,8 +176,7 @@ var PaintbrushTool = function (wickEditor) {
                 dummyContext.drawImage(img, 0,0, img.width,img.height, 0,0, dummyCanvas.width,dummyCanvas.height);
                 
                 Potrace.loadImageFromDataURL(dummyCanvas.toDataURL());
-                console.log(wickEditor.currentTool.brushSmoothing)
-                Potrace.setParameter({optcurve: true, opttolerance: wickEditor.currentTool.brushSmoothing});
+                Potrace.setParameter({optcurve: true, alphamax:wickEditor.currentTool.brushSmoothing/10});
                 Potrace.process(function(){
                     var SVGData = {svgString:Potrace.getSVG(1), fillColor:canvas.freeDrawingBrush.color}
                     callback(SVGData);
