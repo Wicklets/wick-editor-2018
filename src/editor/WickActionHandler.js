@@ -77,18 +77,19 @@ var WickActionHandler = function (wickEditor) {
         // Nothing to undo!
         if (this.undoStack.length == 0) {
             console.log("undoAction(): No actions on the undo stack.");
-            return; 
+            return;
         } 
 
         // Get last action on the undo stack
         var action = this.undoStack.pop(); 
 
-        console.log("undoAction(): " + action);
-        console.log(action.args)
-
         // Do the action and put it on the redo stack to be redone later
         action.undoAction(action.args);
         this.redoStack.push(action);
+
+        if(action.args && action.args.partOfChain) {
+            that.undoAction();
+        }
 
         // Sync interfaces
         wickEditor.syncInterfaces();
@@ -106,12 +107,14 @@ var WickActionHandler = function (wickEditor) {
         // Get last action on the redo stack
         var action = this.redoStack.pop();
 
-        console.log("redoAction: " + action);
-        console.log(action.args)
-
         // Do the action and put it back onto the undo stack
         action.doAction(action.args);
         this.undoStack.push(action);
+
+        var nextRedoAction = that.redoStack[that.redoStack.length - 1];
+        if(nextRedoAction.args && nextRedoAction.args.partOfChain) {
+            that.redoAction();
+        }
 
         // Sync interfaces
         wickEditor.syncInterfaces();
@@ -380,6 +383,18 @@ var WickActionHandler = function (wickEditor) {
                 wickEditor.project.getCurrentObject().removeChildByID(args.ids[i]);
                 wickEditor.project.getCurrentObject().getCurrentFrame().wickObjects.splice(args.oldZIndexes[i], 0, obj);
             }
+        });
+    
+    this.registerAction('updateVectors', 
+        function (args) {
+            // (1) Make sure all vector WickObjects have updated paper objects
+
+            // (2) Unite intersecting paths with same color / Subtract intersecting points with diff. colors
+
+            // (3) Split apart paths with multiple pieces
+        },
+        function (args) {  
+            
         });
 
 }

@@ -72,12 +72,6 @@ var PaintbrushTool = function (wickEditor) {
         });
     };
 
-// Update onscreen paths
-
-    this.updatePathsInFrame = function (frame) {
-        
-    };
-
 /*
 var xmlString = wickObj.svgData.svgString
               , parser = new DOMParser()

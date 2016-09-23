@@ -71,8 +71,7 @@ WickProject.fromLocalStorage = function () {
         console.error("LocalStorage not available. Loading blank project");
         return new WickProject();
     }
-
-    console.log("Loading project from local storage...");
+    
     var autosavedProjectJSON = localStorage.getItem('wickProject');
 
     if(!autosavedProjectJSON) {
@@ -80,6 +79,7 @@ WickProject.fromLocalStorage = function () {
         return new WickProject();
     }
 
+    console.log("Loading project from local storage...");
     return WickProject.fromJSON(autosavedProjectJSON);
 
 }
