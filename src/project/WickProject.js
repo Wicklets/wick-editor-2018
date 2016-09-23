@@ -105,9 +105,9 @@ WickProject.prototype.getAsJSON = function (callback) {
 WickProject.prototype.saveInLocalStorage = function () {
     if(localStorage) {
         try {
-            console.log("Saving project to local storage...");
             this.getAsJSON(function (JSONProject) {
                 localStorage.setItem('wickProject', JSONProject);
+                console.log("Project saved to local storage.");
             });
         } catch (err) {
             console.error("LocalStorage could not save project, threw error:");
