@@ -122,6 +122,13 @@ var WickActionHandler = function (wickEditor) {
 
     }
 
+// Util functions
+
+    // Makes any actions with partOfChain=true added after calling chainLastCommand part of the same chain.
+    this.chainLastCommand = function () {
+        this.undoStack[this.undoStack.length-1].args.partOfChain = true;
+    }
+
 // Register all actions
 
     this.registerAction('addObjects', 
