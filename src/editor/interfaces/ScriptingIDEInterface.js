@@ -24,9 +24,11 @@ var ScriptingIDEInterface = function (wickEditor) {
             if(!selectedObj) {
                 $("#noSelectionDiv").css('display', 'block');
                 $("#scriptObjectDiv").css('display', 'none');
+                $("#scriptingGUI").css('height', '20px');
             } else if(selectedObj.wickScripts[that.currentScript] !== undefined) {
                 $("#noSelectionDiv").css('display', 'none');
                 $("#scriptObjectDiv").css('display', 'block');
+                $("#scriptingGUI").css('height', '230px');
 
                 var script = selectedObj.wickScripts[that.currentScript];
                 that.aceEditor.setValue(script, -1);

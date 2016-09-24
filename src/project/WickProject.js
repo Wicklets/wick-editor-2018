@@ -27,6 +27,20 @@ var WickProject = function () {
     Import/Export
 *****************************/
 
+WickProject.fromFile = function (file, callback) {
+
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        if (file.type === "text/html") {
+            callback(WickProject.fromWebpage(e.target.result));
+        } else if (file.type === "application/json") {
+            callback(WickProject.fromJSON(e.target.result));
+        }
+    };
+    reader.readAsText(file);
+
+}
+
 WickProject.fromWebpage = function (webpageString) {
 
     var extractedProjectJSON;

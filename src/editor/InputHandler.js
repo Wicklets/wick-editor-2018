@@ -236,15 +236,16 @@ var InputHandler = function (wickEditor) {
             var file = files[i];
             var fileType = file.type;
 
-            // if filetype is json:
-            //     check to see if it's a wickproject. if it is, load it up! (and make sure to return!!)
-            // if filetype is html:
-            //     if its a project, load it up!
-            // all other filetypes/json+html files that aren't projects get handled by WickObject:
-
-            var fileWickObject = WickObject.fromFile(file, fileType, function(obj) {
-                wickEditor.actionHandler.doAction('addObjects', {wickObjects:[obj]});
-            });
+            if (fileType === 'application/json' || fileType === 'text/html') {
+                WickProject.fromFile(file, function(project) {
+                    wickEditor.project = project;
+                    wickEditor.syncInterfaces();
+                });
+            } else {
+                var fileWickObject = WickObject.fromFile(file, fileType, function(obj) {
+                    wickEditor.actionHandler.doAction('addObjects', {wickObjects:[obj]});
+                });
+            }
         }
 
         return false;
@@ -258,18 +259,12 @@ var InputHandler = function (wickEditor) {
         var filePath = document.getElementById("importButton");
         if(filePath.files && filePath.files[0]) {
             var reader = new FileReader();
-            var filetype = filePath.files[0].type;
-            reader.onload = function (e) {
-                if (filetype === "text/html") {
-                    wickEditor.project = WickProject.fromWebpage(e.target.result);
-                } else if (filetype === "application/json") {
-                    wickEditor.project = WickProject.fromJSON(e.target.result);
-                } else {
-                    console.error("Unsupported filetype for opening projects: " + filetype);
-                }
+            var file = filePath.files[0];
+
+            WickProject.fromFile(file, function(project) {
+                wickEditor.project = project;
                 wickEditor.syncInterfaces();
-            };
-            reader.readAsText(filePath.files[0]);
+            });
         }
 
         var importButton = $("importButton");

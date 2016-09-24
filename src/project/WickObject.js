@@ -133,6 +133,10 @@ WickObject.fromFile = function (file, fileType, callback) {
         };
         fr.readAsDataURL(data);
 
+    } else if (fileType == 'application/json') {
+
+        // TODO
+
     } else if (fileType == 'image/gif') {
 
         var data = file;
