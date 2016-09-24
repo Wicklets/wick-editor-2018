@@ -237,14 +237,14 @@ WickObject.fromAnimatedGIF = function (gifData, callback) {
 
 }
 
-WickObject.fromSVG = function (svgData, callback) {
+WickObject.fromSVG = function (svgData) {
     var svgWickObject = new WickObject();
 
     svgWickObject.svgData = {};
     svgWickObject.svgData.svgString = svgData.svgString;
     svgWickObject.svgData.fillColor = svgData.fillColor;
 
-    callback(svgWickObject);
+    return svgWickObject;
 }
 
 WickObject.fromText = function (text) {

@@ -41,12 +41,13 @@ var WickActionHandler = function (wickEditor) {
     }
 
     this.doAction = function (actionName, args) {
-        
+
         // Create a new WickAction object
         var action = new WickAction(
             this.doActions[actionName],
             this.undoActions[actionName] 
         );
+        action.fname = actionName;
         if(!action.doAction) {
             console.error(actionName + " is not a defined do action!");
         }
@@ -140,9 +141,9 @@ var WickActionHandler = function (wickEditor) {
             }
 
             // Update vectors
-            wickEditor.actionHandler.doAction('updateOnscreenVectors', {
-                partOfChain:true
-            });
+            if(!args.dontUpdateVectors) {
+                wickEditor.tools.paintbrush.updateOnscreenVectors();
+            }
         },
         function (args) {
             // Remove objects we added
@@ -215,9 +216,7 @@ var WickActionHandler = function (wickEditor) {
             }
 
             // Update vectors
-            wickEditor.actionHandler.doAction('updateOnscreenVectors', {
-                partOfChain:true
-            });
+            wickEditor.tools.paintbrush.updateOnscreenVectors();
         },
         function (args) {
             for(var i = 0; i < args.ids.length; i++) {
@@ -389,46 +388,6 @@ var WickActionHandler = function (wickEditor) {
                 wickEditor.project.getCurrentObject().removeChildByID(args.ids[i]);
                 wickEditor.project.getCurrentObject().getCurrentFrame().wickObjects.splice(args.oldZIndexes[i], 0, obj);
             }
-        });
-    
-    this.registerAction('updateOnscreenVectors', 
-        function (args) {
-            console.log("update vectoooooors")
-
-            // (1) Make sure all vector WickObjects have updated paper objects
-
-            var onscreenObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
-
-            onscreenObjects.forEach(function (child) {
-                if(child.svgData) {
-                    var xmlString = child.svgData.svgString
-                      , parser = new DOMParser()
-                      , doc = parser.parseFromString(xmlString, "text/xml");
-                    var paperGroup = paper.project.importSVG(doc);
-                    var paperPath = paperGroup.removeChildren(0, 1)[0];
-                    //paperPath.style.fillColor = fillColor;
-                    if(paperPath.closePath) {
-                        paperPath.closePath();
-                    }
-
-                    paperPath.position.x += child.x;
-                    paperPath.position.y += child.y;
-
-                    child.paperPath = paperPath;
-                }
-            });
-
-            // (2) Unite intersecting paths with same color / Subtract intersecting points with diff. colors
-
-
-
-            // (3) Split apart paths with multiple pieces
-
-            
-
-        },  
-        function (args) {  
-            
         });
 
 }
