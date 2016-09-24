@@ -14,9 +14,7 @@ var WickEditor = function () {
 
     this.backend = new GithubsClubhouseBackend(this);
     this.project = WickProject.fromLocalStorage();
-
-    this.runningBuiltinPlayer = false;
-
+    
     this.interfaces = {
         "builtinplayer" : new BuiltinPlayerInterface(this),
         "tooltips" : new TooltipsInterface(this),

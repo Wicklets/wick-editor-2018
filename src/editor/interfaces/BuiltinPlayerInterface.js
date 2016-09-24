@@ -2,28 +2,16 @@
 
 var BuiltinPlayerInterface = function (wickEditor) {
 
+    var that = this;
+
+    this.running = false;
+
     this.syncWithEditorState = function () {
-        if(wickEditor.runningBuiltinPlayer) {
+        if(this.running) {
             showBuiltinPlayer();
         } else {
             hideBuiltinPlayer();
         }
-    }
-
-    $("#closeBuiltinPlayerButton").on("click", function (e) {
-        hideBuiltinPlayer();
-        wickEditor.runningBuiltinPlayer = false;
-        WickPlayer.stopRunningCurrentProject();
-    });
-
-    var showBuiltinPlayer = function () {
-        document.getElementById("editor").style.display = "none";
-        document.getElementById("builtinPlayer").style.display = "block";
-    }
-
-    var hideBuiltinPlayer = function () {
-        document.getElementById("builtinPlayer").style.display = "none";
-        document.getElementById("editor").style.display = "block";
     }
 
     this.runProject = function () {
@@ -38,10 +26,34 @@ var BuiltinPlayerInterface = function (wickEditor) {
 
         // JSONify the project, autosave, and have the builtin player run it
         wickEditor.project.getAsJSON(function (JSONProject) {
-            wickEditor.runningBuiltinPlayer = true;
+            that.running = true;
             WickPlayer.runProject(JSONProject);
             wickEditor.syncInterfaces();
         });
     }
+
+    this.stopRunningProject = function () {
+        hideBuiltinPlayer();
+        that.running = false;
+        WickPlayer.stopRunningCurrentProject();
+    }
+
+// Internal utils
+
+    var showBuiltinPlayer = function () {
+        document.getElementById("editor").style.display = "none";
+        document.getElementById("builtinPlayer").style.display = "block";
+    }
+
+    var hideBuiltinPlayer = function () {
+        document.getElementById("builtinPlayer").style.display = "none";
+        document.getElementById("editor").style.display = "block";
+    }
+
+// Button events
+
+    $("#closeBuiltinPlayerButton").on("click", function (e) {
+        that.stopRunningProject();
+    });
 
 }

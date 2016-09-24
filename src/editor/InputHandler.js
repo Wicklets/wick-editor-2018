@@ -60,10 +60,16 @@ var InputHandler = function (wickEditor) {
             }
         }
 
-        // Enter: run
+        // Enter: Run project in builtin player
         if(event.keyCode == 13 && !this.editingTextBox) {
             that.clearKeys();
-            wickEditor.interfaces["builtinplayer"].runProject();
+            wickEditor.interfaces.builtinplayer.runProject();
+        }
+
+        // Escape: Stop running project
+        if(event.keyCode == 27 && !this.editingTextBox) {
+            that.clearKeys();
+            wickEditor.interfaces.builtinplayer.stopRunningProject();
         }
 
         // Control-s: save
