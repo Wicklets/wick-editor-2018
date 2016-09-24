@@ -326,21 +326,17 @@ var WickActionHandler = function (wickEditor) {
 
     this.registerAction('convertSelectionToSymbol', 
         function (args) {
-            var symbol = new WickObject.createNewSymbol();
-
             var selectedObjects = wickEditor.interfaces['fabric'].getSelectedWickObjects();
-            for(var i = 0; i < selectedObjects.length; i++) {
-                symbol.layers[0].frames[0].wickObjects.push(selectedObjects[i]);
-                wickEditor.project.getCurrentObject().removeChildByID(selectedObjects[i].id);
-            }
 
-            symbol.width  = symbol.layers[0].frames[0].wickObjects[0].width;
-            symbol.height = symbol.layers[0].frames[0].wickObjects[0].height;
+            selectedObjects.forEach(function (obj) {
+                wickEditor.project.getCurrentObject().removeChildByID(obj.id);
+            });
 
+            var symbol = new WickObject.createSymbolFromWickObjects(selectedObjects);
             wickEditor.project.addObject(symbol);
         },
         function (args) {
-            
+            console.error("convertSelectionToSymbol undo NYI")
         });
 
     this.registerAction('editObject', 

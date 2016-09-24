@@ -312,6 +312,9 @@ WickObject.fromAudioFile = function (audioData) {
 }
 
 WickObject.createSymbolFromWickObjects = function (wickObjects) {
+
+    // Create a new symbol and add every object in wickObjects as children
+
     var symbol = WickObject.createNewSymbol();
 
     for(var i = 0; i < wickObjects.length; i++) {
@@ -320,6 +323,21 @@ WickObject.createSymbolFromWickObjects = function (wickObjects) {
         symbol.layers[0].frames[0].wickObjects[i].x = wickObjects[i].x - symbol.x;
         symbol.layers[0].frames[0].wickObjects[i].y = wickObjects[i].y - symbol.y;
     }
+
+    symbol.width  = symbol.layers[0].frames[0].wickObjects[0].width;
+    symbol.height = symbol.layers[0].frames[0].wickObjects[0].height;
+
+    // Adjust symbol position and children positions such that the origin of the symbol is the top-left corner of the symbol
+
+    var corner = symbol.getSymbolCornerPosition();
+
+    symbol.layers[0].frames[0].wickObjects.forEach(function (obj) {
+        obj.x -= corner.x;
+        obj.y -= corner.y;
+    });
+
+    symbol.x += corner.x;
+    symbol.y += corner.y;
 
     return symbol;
 
