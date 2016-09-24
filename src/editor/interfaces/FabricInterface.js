@@ -430,6 +430,8 @@ var FabricInterface = function (wickEditor) {
             {ids: ids,
              modifiedStates: modifiedStates}
         );
+
+        wickEditor.tools.paintbrush.updateOnscreenVectors();
     });
 
 /********************************

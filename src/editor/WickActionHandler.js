@@ -60,10 +60,8 @@ var WickActionHandler = function (wickEditor) {
         action.doAction(action.args);
 
         // Put the action on the undo stack to be undone later
-        if(!args || !args.dontAddToStack) {
-            this.undoStack.push(action); 
-            this.redoStack = [];
-        }
+        this.undoStack.push(action); 
+        this.redoStack = [];
 
         // Regen parent refs
         wickEditor.project.rootObject.regenerateParentObjectReferences();
@@ -128,9 +126,14 @@ var WickActionHandler = function (wickEditor) {
 
     this.registerAction('addObjects', 
         function (args) {
+            console.log("add objs:");
+            console.log(args.wickObjects);
+
             // Make a new frame if one doesn't exist at the playhead position
             if(!wickEditor.project.getCurrentObject().getCurrentFrame()) {
-                wickEditor.actionHandler.doAction('addNewFrame', {partOfChain:true});
+                wickEditor.actionHandler.doAction('addNewFrame', {
+                    partOfChain:true
+                });
             }
 
             // Add those boys and save their IDs so we can remove them on undo
@@ -139,13 +142,11 @@ var WickActionHandler = function (wickEditor) {
                 wickEditor.project.addObject(args.wickObjects[i]);
                 args.addedObjectIDs.push(args.wickObjects[i].id);
             }
-
-            // Update vectors
-            if(!args.dontUpdateVectors) {
-                wickEditor.tools.paintbrush.updateOnscreenVectors();
-            }
         },
         function (args) {
+            console.log("undo add objs: ")
+            console.log(args.addedObjectIDs)
+
             // Remove objects we added
             for(var i = 0; i < args.wickObjects.length; i++) {
                 wickEditor.project.getCurrentObject().removeChildByID(args.addedObjectIDs[i]);
@@ -154,6 +155,9 @@ var WickActionHandler = function (wickEditor) {
 
     this.registerAction('deleteObjects', 
         function (args) {
+            console.log("delete objs: ")
+            console.log(args.ids)
+
             args.restoredWickObjects = []
             args.oldZIndices = [];
 
@@ -173,6 +177,9 @@ var WickActionHandler = function (wickEditor) {
             }
         },
         function (args) {
+            console.log("undo delete objs: ")
+            console.log(args.restoredWickObjects)
+
             for(var i = 0; i < args.restoredWickObjects.length; i++) {
                 wickEditor.project.addObject(args.restoredWickObjects[i], args.oldZIndices[i]);
             }
@@ -214,9 +221,6 @@ var WickActionHandler = function (wickEditor) {
                     if(args.modifiedStates[i].fill) wickObj.fontData.fill = args.modifiedStates[i].fill;
                 }
             }
-
-            // Update vectors
-            wickEditor.tools.paintbrush.updateOnscreenVectors();
         },
         function (args) {
             for(var i = 0; i < args.ids.length; i++) {
