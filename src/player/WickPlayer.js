@@ -679,6 +679,9 @@ var WickPlayer = (function () {
         var gotoNextFrame = function ()      { obj.parentObj.gotoNextFrame(); }
         var gotoPrevFrame = function ()      { obj.parentObj.gotoPrevFrame(); }
 
+        // Setup keycode shortcuts
+        var isKeyDown = function (keyString) { return keys[keyCharToCode[keyString]]; };
+
         // Setup wickobject reference variables
         var root = project.rootObject;
         var parent = obj.parentObj;
