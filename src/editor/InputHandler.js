@@ -7,6 +7,8 @@ var InputHandler = function (wickEditor) {
 
     this.editingTextBox = false;
 
+    var oldTool = null;
+
     var that = this;
 
 /*************************
@@ -107,6 +109,14 @@ var InputHandler = function (wickEditor) {
             wickEditor.syncInterfaces();
         }
 
+        // Space: start panning
+        if(event.keyCode == 32 && !(wickEditor.currentTool instanceof PanTool)) {
+            oldTool = wickEditor.currentTool;
+            wickEditor.currentTool = wickEditor.tools.pan;
+            console.log(wickEditor.tools.pan)
+            wickEditor.syncInterfaces();
+        }
+
         // Backspace: delete selected objects
         if (event.keyCode == 8 && !this.editingTextBox) {
             event.preventDefault();
@@ -115,6 +125,11 @@ var InputHandler = function (wickEditor) {
     });
 
     document.body.addEventListener("keyup", function (event) {
+        if(event.keyCode == 32) {
+            wickEditor.currentTool = oldTool;
+            wickEditor.syncInterfaces();
+        }
+
         that.keys[event.keyCode] = false;
     });
 
