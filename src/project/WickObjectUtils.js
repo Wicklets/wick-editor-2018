@@ -18,6 +18,9 @@ var WickObjectUtils = (function () {
             // Put the layer prototype on on this objects layers
             obj.layers.forEach(function (layer) {
                 layer.__proto__ = WickLayer.prototype;
+                layer.frames.forEach(function(frame) {
+                    frame.__proto__ = WickFrame.prototype;
+                });
             });
 
             obj.getAllChildObjects().forEach(function(currObj) {
