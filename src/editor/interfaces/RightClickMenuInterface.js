@@ -204,11 +204,19 @@ var RightClickMenuInterface = function (wickEditor) {
     });
 
     bindActionToButton("#extendFrameButton", function () {
-        wickEditor.actionHandler.doAction('extendFrame', {nFramesToExtendBy:1});
+        wickEditor.actionHandler.doAction('extendFrame', 
+            {
+                nFramesToExtendBy:1,
+                frame: wickEditor.project.getCurrentObject().getCurrentFrame()
+            });
     });
 
     bindActionToButton("#shrinkFrameButton", function () {
-        wickEditor.actionHandler.doAction('shrinkFrame', {nFramesToShrinkBy:1});
+        wickEditor.actionHandler.doAction('shrinkFrame', 
+            {   
+                nFramesToShrinkBy:1, 
+                frame: wickEditor.project.getCurrentObject().getCurrentFrame() 
+            });
     });
 
     bindActionToButton("#addLayerButton", function () {

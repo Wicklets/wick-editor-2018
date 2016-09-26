@@ -306,22 +306,18 @@ var WickActionHandler = function (wickEditor) {
 
     this.registerAction('extendFrame', 
         function (args) {
-            var currentObject = wickEditor.project.getCurrentObject();
-            currentObject.getCurrentFrame().extend(args.nFramesToExtendBy);
+            args.frame.extend(args.nFramesToExtendBy);
         },
         function (args) {
-            var currentObject = wickEditor.project.getCurrentObject();
-            currentObject.getCurrentFrame().shrink(args.nFramesToExtendBy); 
+            args.frame.shrink(args.nFramesToExtendBy); 
         });
 
     this.registerAction('shrinkFrame', 
         function (args) {
-            var currentObject = wickEditor.project.getCurrentObject();
-            currentObject.getCurrentFrame().shrink(args.nFramesToShrinkBy);
+            args.frame.shrink(args.nFramesToShrinkBy);
         },
         function (args) {
-            var currentObject = wickEditor.project.getCurrentObject();
-            currentObject.getCurrentFrame().extend(args.nFramesToShrinkBy); 
+            args.frame.extend(args.nFramesToShrinkBy); 
         });
 
     this.registerAction('convertSelectionToSymbol', 
