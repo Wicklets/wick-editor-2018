@@ -21,9 +21,13 @@ var PropertiesInterface = function (wickEditor) {
                 document.getElementById('objectName').value = '';
             }
             
-            // Set object properties GUI position
+            // Set object properties GUI position/rotation
             document.getElementById('objectPositionX').value = selectedObj.x;
             document.getElementById('objectPositionY').value = selectedObj.y;
+            document.getElementById('objectRotation').value = selectedObj.angle;
+
+            // Update ID display
+            document.getElementById('objectID').innerHTML = selectedObj.id;
 
             if(selectedObj.fontData) {
                 $("#textProperties").css('display', 'inline');
@@ -68,6 +72,16 @@ var PropertiesInterface = function (wickEditor) {
         if(CheckInput.isNumber($('#objectPositionY').val())) {
             var id = wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0];
             var modifiedState = { y : parseInt($('#objectPositionY').val()) };
+            wickEditor.actionHandler.doAction('modifyObjects', { ids: [id], modifiedStates: [modifiedState] });
+        }
+
+    });
+
+    $('#objectRotation').on('input propertychange', function () {
+
+        if(CheckInput.isNumber($('#objectRotation').val())) {
+            var id = wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0];
+            var modifiedState = { angle : parseInt($('#objectRotation').val()) };
             wickEditor.actionHandler.doAction('modifyObjects', { ids: [id], modifiedStates: [modifiedState] });
         }
 

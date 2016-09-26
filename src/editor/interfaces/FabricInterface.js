@@ -448,7 +448,6 @@ var FabricInterface = function (wickEditor) {
         var foundFabricObject = null;
 
         this.canvas.forEachObject(function(fabricObject) {
-            console.log(fabricObject.wickObjectID)
             if(fabricObject.wickObjectID === wickObjID) {
                 foundFabricObject = fabricObject;
             }

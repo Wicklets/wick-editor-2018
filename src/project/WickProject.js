@@ -141,7 +141,6 @@ WickProject.prototype.regenerateUniqueIDs = function (wickObject) {
 
     if(!wickObject.id && wickObject.id!=0) {
         wickObject.id = this.rootObject.getLargestID() + 1;
-        wickObject.id = new Date().getTime();
     }
 
     if(wickObject.isSymbol) {
