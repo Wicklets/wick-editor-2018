@@ -383,48 +383,41 @@ var FabricInterface = function (wickEditor) {
         var modifiedStates = [];
         var ids  = [];
 
+        // Get ids of all selected objects
         if(e.target.type === "group" && !e.target.wickObjectID) {
-            var group = e.target;
-
-            // May need to ungroup the group, deselect all, get transforms for each object, and reselect group for this to work properly.
-
-            for(var i = 0; i < group._objects.length; i++) {
-                var obj = group._objects[i];
-                ids[i] = obj.wickObjectID;
-
-                var wickObj = wickEditor.project.getCurrentObject().getChildByID(obj.wickObjectID);
-                var insideSymbolReposition = {
-                    x: wickObj.x-wickObj.getAbsolutePosition().x,
-                    y: wickObj.y-wickObj.getAbsolutePosition().y }
-
-                modifiedStates[i] = {
-                    x      : group.left + group.width /2 + obj.left - frameOffset.x + insideSymbolReposition.x,
-                    y      : group.top  + group.height/2 + obj.top  - frameOffset.y + insideSymbolReposition.y,
-                    scaleX : group.scaleX * obj.scaleX,
-                    scaleY : group.scaleY * obj.scaleY,
-                    angle  : group.angle + obj.angle,
-                    text   : obj.text
-                };
-            }
+            // Selection is a group of objects all selected, not a symbol
+            var objects = e.target.getObjects();
+            objects.forEach(function (obj) {
+                ids.push(obj.wickObjectID);
+            });
         } else {
-            var fabObj = e.target;
-            var wickObjID = fabObj.wickObjectID;
-            var wickObj = wickEditor.project.getCurrentObject().getChildByID(wickObjID);
-            
+            // Only one object selected
+            ids = [e.target.wickObjectID];
+        }
+
+        // Deselect everything (will ungroup any groups)
+        that.deselectAll();
+
+        // Foe each modified fabric objects (get them by wickobject):
+        //    Add new state of that fabric object to modified states
+        ids.forEach(function (id) {
+            var fabricObj = that.getObjectByWickObjectID(id);
+            var wickObj = wickEditor.project.getObjectByID(id);
             var insideSymbolReposition = {
                 x: wickObj.x-wickObj.getAbsolutePosition().x,
-                y: wickObj.y-wickObj.getAbsolutePosition().y }
-
-            ids[0] = wickObjID;
-            modifiedStates[0] = {
-                x      : fabObj.left - frameOffset.x + insideSymbolReposition.x - wickObj.getSymbolCornerPosition().x,
-                y      : fabObj.top  - frameOffset.y + insideSymbolReposition.y - wickObj.getSymbolCornerPosition().y,
-                scaleX : fabObj.scaleX,
-                scaleY : fabObj.scaleY,
-                angle  : fabObj.angle,
-                text   : fabObj.text
+                y: wickObj.y-wickObj.getAbsolutePosition().y 
             };
-        }
+            modifiedStates.push({
+                x      : fabricObj.left - frameOffset.x + insideSymbolReposition.x - wickObj.getSymbolCornerPosition().x,
+                y      : fabricObj.top  - frameOffset.y + insideSymbolReposition.y - wickObj.getSymbolCornerPosition().y,
+                scaleX : fabricObj.scaleX,
+                scaleY : fabricObj.scaleY,
+                angle  : fabricObj.angle,
+                text   : fabricObj.text
+            });
+        });
+
+        that.selectByIDs(ids);
 
         wickEditor.actionHandler.doAction('modifyObjects', 
             {ids: ids,
@@ -447,6 +440,24 @@ var FabricInterface = function (wickEditor) {
         wickEditor.interfaces['scriptingide'].syncWithEditorState();
         wickEditor.interfaces['properties'].syncWithEditorState();
     });
+
+    this.getObjectByWickObjectID = function (wickObjID) {
+        var foundFabricObject = null;
+
+        this.canvas.forEachObject(function(fabricObject) {
+            console.log(fabricObject.wickObjectID)
+            if(fabricObject.wickObjectID === wickObjID) {
+                foundFabricObject = fabricObject;
+            }
+        });
+
+        if(foundFabricObject) {
+            return foundFabricObject;
+        } else {
+            console.error("getObjectByWickObjectID(): No object in fabric canvas with ID " + wickObjID);
+            return null;
+        }
+    }
 
     this.selectByIDs = function (ids) {
 
