@@ -106,7 +106,7 @@ WickProject.prototype.getAsJSON = function (callback) {
         // Encode scripts/text to avoid JSON format problems
         that.rootObject.encodeStrings();
         
-        var JSONProject = JSON.stringify(that, WickObject.JSONReplacer);
+        var JSONProject = JSON.stringify(that, WickProjectExporter.JSONReplacer);
         
         // Decode scripts back to human-readble and eval()-able format
         that.rootObject.decodeStrings();

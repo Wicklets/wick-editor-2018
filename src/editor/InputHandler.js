@@ -5,7 +5,7 @@ var InputHandler = function (wickEditor) {
     this.mouse = {};
     this.keys = [];
 
-    this.editingTextBox = false;
+    var editingTextBox = false;
 
     var oldTool = null;
 
@@ -46,10 +46,10 @@ var InputHandler = function (wickEditor) {
         var controlKeyDown = that.keys[91];
         var shiftKeyDown = that.keys[16];
 
-        this.editingTextBox = document.activeElement.nodeName == 'TEXTAREA'
-                           || document.activeElement.nodeName == 'INPUT';
+        var activeElem = document.activeElement.nodeName;
+        editingTextBox = activeElem == 'TEXTAREA' || activeElem == 'INPUT';
 
-        if(!this.editingTextBox) {
+        if(!editingTextBox) {
             // Control-shift-z: redo
             if (event.keyCode == 90 && controlKeyDown && shiftKeyDown) {
                 event.preventDefault();
@@ -63,13 +63,13 @@ var InputHandler = function (wickEditor) {
         }
 
         // Enter: Run project in builtin player
-        if(event.keyCode == 13 && !this.editingTextBox) {
+        if(event.keyCode == 13 && !editingTextBox) {
             that.clearKeys();
             wickEditor.interfaces.builtinplayer.runProject();
         }
 
         // Escape: Stop running project
-        if(event.keyCode == 27 && !this.editingTextBox) {
+        if(event.keyCode == 27 && !editingTextBox) {
             that.clearKeys();
             wickEditor.interfaces.builtinplayer.stopRunningProject();
         }
@@ -110,7 +110,7 @@ var InputHandler = function (wickEditor) {
         }
 
         // Space: start panning
-        if(event.keyCode == 32 && !(wickEditor.currentTool instanceof PanTool)) {
+        if(event.keyCode == 32 && !editingTextBox && !(wickEditor.currentTool instanceof PanTool)) {
             oldTool = wickEditor.currentTool;
             wickEditor.currentTool = wickEditor.tools.pan;
             console.log(wickEditor.tools.pan)
@@ -118,14 +118,14 @@ var InputHandler = function (wickEditor) {
         }
 
         // Backspace: delete selected objects
-        if (event.keyCode == 8 && !this.editingTextBox) {
+        if (event.keyCode == 8 && !editingTextBox) {
             event.preventDefault();
             wickEditor.actionHandler.doAction('deleteObjects', { ids:wickEditor.interfaces['fabric'].getSelectedObjectIDs() });
         }
     });
 
     document.body.addEventListener("keyup", function (event) {
-        if(event.keyCode == 32) {
+        if(event.keyCode == 32 && !editingTextBox) {
             wickEditor.currentTool = oldTool;
             wickEditor.syncInterfaces();
         }

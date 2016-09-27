@@ -144,21 +144,15 @@ var WickPlayer = (function () {
         }
     }
 
-    var playSound = function (rawBuffer) {
-        console.log("now playing a sound, that starts with", new Uint8Array(rawBuffer.slice(0, 10))[0]);
-        audioContext.decodeAudioData(rawBuffer, function (buffer) {
-            if (!buffer) {
-                console.error("failed to decode:", "buffer null");
-                return;
-            }
+    var playSound = function (buffer, loop) {
+        if(!project.muted) {
             var source = audioContext.createBufferSource();
             source.buffer = buffer;
             source.connect(audioContext.destination);
+            source.loop = loop;
             source.start(0);
             console.log("started...");
-        }, function (error) {
-            console.error("failed to decode:", error);
-        });
+        }
     }
 
 /*****************************
@@ -310,11 +304,19 @@ var WickPlayer = (function () {
         if(wickObj.audioData) {
             var rawData = wickObj.audioData.split(",")[1]; // cut off extra filetype/etc data
             var rawBuffer = Base64ArrayBuffer.decode(rawData);
-            wickObj.audioBuffer = rawBuffer;
-
-            wickObj.playSound = function () {
-                playSound(wickObj.audioBuffer);
-            }
+            //wickObj.audioBuffer = rawBuffer;
+            audioContext.decodeAudioData(rawBuffer, function (buffer) {
+                if (!buffer) {
+                    console.error("failed to decode:", "buffer null");
+                    return;
+                }
+                wickObj.audioBuffer = buffer
+                wickObj.playSound = function () {
+                    playSound(wickObj.audioBuffer, wickObj.loopSound);
+                }
+            }, function (error) {
+                console.error("failed to decode:", error);
+            });
         }
 
         if(wickObj.isSymbol) {
