@@ -1,5 +1,7 @@
 ![Wick](resources/wicklogo.png)
 
+![Wick editor screenshot](resources/editor.png)
+
 Wick is a multipurpose creation environment that allows anyone to build a wide range of easily sharable internet games, animations and interactive doohickies for both phones and desktops - all in the browser.
 
 Wick allows easier access to new web technologies through a visual editor, a timeline system, and a scripting system that makes learning and writing javascript easier. Wick also exports projects as standalone webpages or embeddable HTML5 canvases - no external players or runtimes necessary!
