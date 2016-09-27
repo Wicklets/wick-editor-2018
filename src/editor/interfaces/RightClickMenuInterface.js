@@ -33,11 +33,11 @@ var RightClickMenuInterface = function (wickEditor) {
             hideButtonGroup("#staticObjectButtons");
             hideButtonGroup("#singleObjectButtons");
             hideButtonGroup("#commonObjectButtons");
-            hideButtonGroup("#frameButtons");
-
-            hideButtonGroup("#timelineButtons");
-            hideButtonGroup("#noFrameExistsButtons");
-            hideButtonGroup("#frameExistsButtons");
+            hideButtonGroup("#clickedFrameExists");
+            hideButtonGroup("#clickedOffFrameButtons");
+            hideButtonGroup("#clickedOffFrameButtons");
+            hideButtonGroup("#noFramesExistButtons");
+            hideButtonGroup("#clickedOnFrameButtons");
             hideButtonGroup("#commonTimelineButtons");
 
             // Selectively show portions we need depending on editor state
@@ -97,10 +97,14 @@ var RightClickMenuInterface = function (wickEditor) {
 
         showButtonGroup("#commonTimelineButtons");
 
-        if(!wickEditor.project.getCurrentObject().getCurrentFrame()) {
-            showButtonGroup("#noFrameExistsButtons");
+        if(wickEditor.project.getCurrentObject().getCurrentFrame()) {
+            showButtonGroup("#clickedOnFrameButtons");
         } else {
-            showButtonGroup("#frameExistsButtons");
+            showButtonGroup("#clickedOffFrameButtons");
+        }
+
+        if(wickEditor.project.getCurrentObject().getCurrentLayer().frames.length > 0) {
+            showButtonGroup("#clickedFrameExists");
         }
     }
 
@@ -206,6 +210,10 @@ var RightClickMenuInterface = function (wickEditor) {
     bindActionToButton("#extendFrameButton", function () {
   
         var frame = wickEditor.project.getCurrentObject().getCurrentFrame();
+        if(!frame) {
+            var frames = wickEditor.project.getCurrentObject().getCurrentLayer().frames;
+            frame = frames[frames.length - 1];
+        }
 
         var frameEndingIndex = wickEditor.project.getCurrentObject().getPlayheadPositionAtFrame(
             frame
@@ -216,7 +224,7 @@ var RightClickMenuInterface = function (wickEditor) {
         wickEditor.actionHandler.doAction('extendFrame', 
             {
                 nFramesToExtendBy: Math.max(1, framesToExtend),
-                frame: wickEditor.project.getCurrentObject().getCurrentFrame()
+                frame: frame
             });
     });
 
@@ -233,7 +241,7 @@ var RightClickMenuInterface = function (wickEditor) {
         wickEditor.actionHandler.doAction('shrinkFrame', 
             {   
                 nFramesToShrinkBy: Math.max(1, framesToShrink), 
-                frame: wickEditor.project.getCurrentObject().getCurrentFrame() 
+                frame: frame
             });
     });
 
