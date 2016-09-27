@@ -359,7 +359,7 @@ WickObject.addPrototypes = function (obj) {
         });
 
         obj.getAllChildObjects().forEach(function(currObj) {
-            utils.addPrototypes(currObj);
+            WickObject.addPrototypes(currObj);
         });
     }
 }
@@ -816,7 +816,7 @@ WickObject.prototype.getAsJSON = function () {
     // Encode scripts to avoid JSON format problems
     this.encodeStrings();
 
-    var JSONWickObject = JSON.stringify(this, WickObject.JSONReplacer);
+    var JSONWickObject = JSON.stringify(this, WickProjectExporter.JSONReplacer);
 
     // Put prototypes back on object ('class methods'), they don't get JSONified on project export.
     WickObject.addPrototypes(this);

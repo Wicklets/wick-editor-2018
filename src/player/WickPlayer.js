@@ -144,21 +144,24 @@ var WickPlayer = (function () {
         }
     }
 
-    var playSound = function (rawBuffer) {
-        console.log("now playing a sound, that starts with", new Uint8Array(rawBuffer.slice(0, 10))[0]);
-        audioContext.decodeAudioData(rawBuffer, function (buffer) {
-            if (!buffer) {
-                console.error("failed to decode:", "buffer null");
-                return;
-            }
-            var source = audioContext.createBufferSource();
-            source.buffer = buffer;
-            source.connect(audioContext.destination);
-            source.start(0);
-            console.log("started...");
-        }, function (error) {
-            console.error("failed to decode:", error);
-        });
+    var playSound = function (rawBuffer, loop) {
+        if(!project.muted) {
+            console.log("now playing a sound, that starts with", new Uint8Array(rawBuffer.slice(0, 10))[0]);
+            audioContext.decodeAudioData(rawBuffer, function (buffer) {
+                if (!buffer) {
+                    console.error("failed to decode:", "buffer null");
+                    return;
+                }
+                var source = audioContext.createBufferSource();
+                source.buffer = buffer;
+                source.connect(audioContext.destination);
+                source.loop = loop;
+                source.start(0);
+                console.log("started...");
+            }, function (error) {
+                console.error("failed to decode:", error);
+            });
+        }
     }
 
 /*****************************
@@ -313,7 +316,7 @@ var WickPlayer = (function () {
             wickObj.audioBuffer = rawBuffer;
 
             wickObj.playSound = function () {
-                playSound(wickObj.audioBuffer);
+                playSound(wickObj.audioBuffer, wickObj.loopSound);
             }
         }
 

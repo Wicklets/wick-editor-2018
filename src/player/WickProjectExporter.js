@@ -61,6 +61,14 @@ var WickProjectExporter = (function () {
 
     }
 
+    projectExporter.JSONReplacer = function(key, value) {
+        if (key=="parentObject") {
+            return undefined;
+        } else {
+            return value;
+        }
+    }
+
     return projectExporter;
 
 })();
