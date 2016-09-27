@@ -204,17 +204,35 @@ var RightClickMenuInterface = function (wickEditor) {
     });
 
     bindActionToButton("#extendFrameButton", function () {
+  
+        var frame = wickEditor.project.getCurrentObject().getCurrentFrame();
+
+        var frameEndingIndex = wickEditor.project.getCurrentObject().getPlayheadPositionAtFrame(
+            frame
+        ) + frame.frameLength - 1;
+
+        var framesToExtend = wickEditor.project.getCurrentObject().playheadPosition - frameEndingIndex;
+
         wickEditor.actionHandler.doAction('extendFrame', 
             {
-                nFramesToExtendBy:1,
+                nFramesToExtendBy: Math.max(1, framesToExtend),
                 frame: wickEditor.project.getCurrentObject().getCurrentFrame()
             });
     });
 
     bindActionToButton("#shrinkFrameButton", function () {
+
+        var frame = wickEditor.project.getCurrentObject().getCurrentFrame();
+
+        var frameEndingIndex = wickEditor.project.getCurrentObject().getPlayheadPositionAtFrame(
+            frame
+        ) + frame.frameLength - 1;
+
+        var framesToShrink = frameEndingIndex - wickEditor.project.getCurrentObject().playheadPosition;
+
         wickEditor.actionHandler.doAction('shrinkFrame', 
             {   
-                nFramesToShrinkBy:1, 
+                nFramesToShrinkBy: Math.max(1, framesToShrink), 
                 frame: wickEditor.project.getCurrentObject().getCurrentFrame() 
             });
     });
