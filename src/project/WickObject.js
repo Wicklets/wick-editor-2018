@@ -91,7 +91,7 @@ WickObject.fromJSON = function (jsonString) {
     var newWickObject = JSON.parse(jsonString);
 
     // Put prototypes back on object ('class methods'), they don't get JSONified on project export.
-    WickObjectUtils.putWickObjectPrototypeBackOnObject(newWickObject);
+    WickObject.addPrototypes(newWickObject);
 
     // Decode scripts back to human-readble and eval()-able format
     newWickObject.decodeStrings();
@@ -341,6 +341,27 @@ WickObject.createSymbolFromWickObjects = function (wickObjects) {
 
     return symbol;
 
+}
+
+WickObject.addPrototypes = function (obj) {
+
+    // Put the prototype back on this object
+    obj.__proto__ = WickObject.prototype;
+
+    // Recursively put the prototypes back on the children objects
+    if(obj.isSymbol) {
+        // Put the layer prototype on on this objects layers
+        obj.layers.forEach(function (layer) {
+            layer.__proto__ = WickLayer.prototype;
+            layer.frames.forEach(function(frame) {
+                frame.__proto__ = WickFrame.prototype;
+            });
+        });
+
+        obj.getAllChildObjects().forEach(function(currObj) {
+            utils.addPrototypes(currObj);
+        });
+    }
 }
 
 /*************************
@@ -795,10 +816,10 @@ WickObject.prototype.getAsJSON = function () {
     // Encode scripts to avoid JSON format problems
     this.encodeStrings();
 
-    var JSONWickObject = JSON.stringify(this, WickObjectUtils.JSONReplacer);
+    var JSONWickObject = JSON.stringify(this, WickObject.JSONReplacer);
 
     // Put prototypes back on object ('class methods'), they don't get JSONified on project export.
-    WickObjectUtils.putWickObjectPrototypeBackOnObject(this);
+    WickObject.addPrototypes(this);
 
     // Decode scripts back to human-readble and eval()-able format
     this.decodeStrings();

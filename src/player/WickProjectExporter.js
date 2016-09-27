@@ -23,7 +23,6 @@ var WickProjectExporter = (function () {
     var requiredPlayerFiles =[
         "src/project/WickLayer.js",
         "src/player/WickObjectCollisionDetection.js",
-        "src/project/WickObjectUtils.js",
         "src/project/WickObject.js",
         "src/player/WickPlayer.js",
     ];

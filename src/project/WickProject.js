@@ -69,7 +69,7 @@ WickProject.fromJSON = function (JSONString) {
 
     // Put prototypes back on object ('class methods'), they don't get JSONified on project export.
     projectFromJSON.__proto__ = WickProject.prototype;
-    WickObjectUtils.putWickObjectPrototypeBackOnObject(projectFromJSON.rootObject);
+    WickObject.addPrototypes(projectFromJSON.rootObject);
 
     // Decode scripts back to human-readble and eval()-able format
     projectFromJSON.rootObject.decodeStrings();
@@ -106,7 +106,7 @@ WickProject.prototype.getAsJSON = function (callback) {
         // Encode scripts/text to avoid JSON format problems
         that.rootObject.encodeStrings();
         
-        var JSONProject = JSON.stringify(that, WickObjectUtils.JSONReplacer);
+        var JSONProject = JSON.stringify(that, WickObject.JSONReplacer);
         
         // Decode scripts back to human-readble and eval()-able format
         that.rootObject.decodeStrings();

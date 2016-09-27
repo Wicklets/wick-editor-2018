@@ -32,9 +32,9 @@ var PropertiesInterface = function (wickEditor) {
             if(selectedObj.fontData) {
                 $("#textProperties").css('display', 'inline');
             } else if (selectedObj.audioData) {
-                document.getElementById('loopCheckbox').checked = wickEditor.interfaces['fabric'].getSelectedWickObject().loopSound;
-                document.getElementById('autoplayCheckbox').checked = wickEditor.interfaces['fabric'].getSelectedWickObject().autoplaySound;
                 $("#soundProperties").css('display', 'inline');
+                //document.getElementById('loopCheckbox').checked = wickEditor.interfaces['fabric'].getSelectedWickObject().loopSound;
+                //document.getElementById('autoplayCheckbox').checked = wickEditor.interfaces['fabric'].getSelectedWickObject().autoplaySound;
             } else if (selectedObj.htmlData) {
                 $("#htmlSnippetProperties").css('display', 'inline');
             } else {

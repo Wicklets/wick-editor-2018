@@ -173,7 +173,7 @@ var WickPlayer = (function () {
         console.log(project);
 
         // Put prototypes back on WickObjects
-        WickObjectUtils.putWickObjectPrototypeBackOnObject(project.rootObject);
+        WickObject.addPrototypes(project.rootObject);
 
         // Decode scripts/text from json-safe format
         project.rootObject.decodeStrings();
