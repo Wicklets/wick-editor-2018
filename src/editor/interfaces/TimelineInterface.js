@@ -87,7 +87,7 @@ var TimelineInterface = function (wickEditor) {
             var frameCount = 0;
             layer.frames.forEach(function (frame) {
 
-                ctx.fillStyle = "#555555";
+                ctx.fillStyle = "#999999";
                 ctx.fillRect(
                     frameCount*frameWidth, layerCount*frameHeight,
                     frameWidth*frame.frameLength, frameHeight);
