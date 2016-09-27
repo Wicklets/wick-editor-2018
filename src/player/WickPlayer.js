@@ -7,11 +7,11 @@ var WickPlayer = (function () {
     // Current project being played by player
     var project;
 
-    // Input vars for mouse and (later) keyboard and accelerometer
+    // Input vars for mouse and keyboard
     var mouse = {x:0, y:0};
     var keys = [];
 
-    // Canvas stuff (To be replaced with three/webgl/pixi)
+    // Renderer
     var rendererContainerEl;
     var renderer;
     var stage;

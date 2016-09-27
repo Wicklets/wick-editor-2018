@@ -26,9 +26,6 @@ var PropertiesInterface = function (wickEditor) {
             document.getElementById('objectPositionY').value = selectedObj.y;
             document.getElementById('objectRotation').value = selectedObj.angle;
 
-            // Update ID display
-            document.getElementById('objectID').innerHTML = selectedObj.id;
-
             if(selectedObj.fontData) {
                 $("#textProperties").css('display', 'inline');
             } else if (selectedObj.audioData) {

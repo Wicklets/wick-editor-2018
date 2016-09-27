@@ -98,6 +98,10 @@ var FabricInterface = function (wickEditor) {
                 that.objectIDsInCanvas[child.id] = true;
                 that.createFabricObjectFromWickObject(child, function (newFabricObj) {
 
+                    // The object may have been deleted while we were generating the fabric object. 
+                    // Make sure we don't add it if so.
+                    if(!wickEditor.project.rootObject.getChildByID(child.id)) return;
+
                     newFabricObj.wickObjectID = child.id;
                     that.canvas.add(newFabricObj);
 

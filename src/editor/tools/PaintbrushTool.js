@@ -77,7 +77,7 @@ var PaintbrushTool = function (wickEditor) {
 
     this.updateOnscreenVectors = function () {
 
-        return; //not quite ready
+        return; // not quite ready yet...
 
     // (1) Make sure all vector WickObjects have updated paper objects
 
