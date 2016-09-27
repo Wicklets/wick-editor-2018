@@ -264,7 +264,7 @@ var WickActionHandler = function (wickEditor) {
 
             // Move to that new frame
             wickEditor.actionHandler.doAction('movePlayhead', {
-                newPlayheadPosition:currentObject.getCurrentLayer().frames.length-1,
+                newPlayheadPosition:currentObject.getCurrentLayer().getTotalLength()-1,
                 partOfChain:true
             });
         },
