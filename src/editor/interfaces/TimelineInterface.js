@@ -43,7 +43,7 @@ var TimelineInterface = function (wickEditor) {
         $("#timelineGUI").css('left', (window.innerWidth/2 - GUIWidth/2)+'px');
 
         canvas.width = GUIWidth;
-        canvas.height = 38;
+        canvas.height = 43;
 
         that.redraw();
     }
@@ -60,11 +60,19 @@ var TimelineInterface = function (wickEditor) {
     // Draw grid
 
         for(var l = 0; l < currentObject.layers.length; l++) {
-            for(var f = 0; f < currentObject.getTotalTimelineLength(); f++) {
-                ctx.fillStyle = "#EEEEEE";
+            for(var f = 0; f < /*currentObject.getTotalTimelineLength()*/ 40; f++) {
+                ctx.fillStyle = "#AAAAAA";
+                ctx.font = "10px sans-serif";
+                ctx.fillText(f, f*frameWidth+2, frameHeight+10);
+
+                ctx.fillStyle = "#DDDDDD";
                 ctx.fillRect(
                     f*frameWidth, l*frameHeight,
                     frameWidth, frameHeight);
+                ctx.fillRect(
+                    f*frameWidth-1, l*frameHeight,
+                    2, frameHeight+10);
+
                 ctx.fillStyle = "#FFFFFF";
                 ctx.fillRect(
                     f*frameWidth + 1, l*frameHeight + 1,
@@ -92,6 +100,13 @@ var TimelineInterface = function (wickEditor) {
                 ctx.fillRect(
                     frameCount*frameWidth + 1, layerCount*frameHeight + 1,
                     frameWidth*frame.frameLength - 2, frameHeight - 2);
+
+                /*for(var f = 1; f < frame.frameLength; f++) {
+                    ctx.fillStyle = "#CCCCCC";
+                    ctx.fillRect(
+                        (frameCount+f)*frameWidth, layerCount*frameHeight + 1,
+                        1, frameHeight - 2);
+                }*/
 
                 frameCount += frame.frameLength;
             });
