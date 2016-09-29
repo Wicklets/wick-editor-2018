@@ -15,13 +15,11 @@ var PaintbrushTool = function (wickEditor) {
     this.color = "#B00600";
 
     this.updateOnscreenVectors = function (newPath) {
-
-        return; //not quite ready yet
+        return;//we aint done yet here
 
         uniteIntersectingPaths(newPath);
         subtractIntersectingPaths(newPath);
         splitApartPathsWithMultiplePieces();
-
     }
 
 // Path vectorization
@@ -224,13 +222,12 @@ var PaintbrushTool = function (wickEditor) {
 
                 var SVGData = {
                     svgString: createSVGFromPaths(splitPath.exportSVG({asString:true})),
-                    fillColor: '#000000'
+                    fillColor: allWickObjectsIntersecting[id].svgData.fillColor
                 }
 
-                // Create a WickObject with the SVG we made from the union
                 var wickObj = WickObject.fromSVG(SVGData);
-                wickObj.x = 0//pathPosition._x - splitPath.bounds._width/2;
-                wickObj.y = 0//pathPosition._y - splitPath.bounds._height/2;
+                wickObj.x = splitPath.position._x - splitPath.bounds._width/2;
+                wickObj.y = splitPath.position._y - splitPath.bounds._height/2;
                 wickEditor.actionHandler.doAction('addObjects', {
                     wickObjects: [wickObj],
                     partOfChain: true
@@ -238,9 +235,17 @@ var PaintbrushTool = function (wickEditor) {
             }
         }
 
+        var splitApartPathIDs = [];
+        allWickObjectsIntersectingIDs.forEach(function (id) {
+            if(id != newPath.id) {
+                console.log(id)
+                splitApartPathIDs.push(id);
+            }
+        });
+
         //wickEditor.actionHandler.chainLastCommand();
         wickEditor.actionHandler.doAction('deleteObjects', {
-            ids: allWickObjectsIntersectingIDs,
+            ids: splitApartPathIDs,
             partOfChain: true
         });
 
@@ -248,11 +253,44 @@ var PaintbrushTool = function (wickEditor) {
 
     var splitApartPathsWithMultiplePieces = function () {
         var onscreenObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
+        updatePaperDataOnVectorWickObjects(onscreenObjects);
 
         onscreenObjects.forEach(function (wickPath) {
             if (!wickPath.svgData) return;
 
-            // if its a compound path and there are no intersections, split it into separate wickobjects.
+            var children = wickPath.paperPath.children;
+
+            if(!children) return;
+
+            console.log("calc isIsland --------------")
+
+            console.log(children)
+
+            children.forEach(function (childA) {
+                childA._parent = null;
+                console.log("check for child")
+                childIsIsland = true;
+                console.log(children)
+                children.forEach(function (childB) {
+                    if(childA === childB) return;
+
+                    childB._parent = null;
+
+                    //console.log(childA)
+                    //console.log(childB)
+
+                    //console.log("do check")
+
+                    var intersec = childA.intersect(childB)
+
+                    console.log(intersec)
+
+                    // i think if its a Group or null its not an island.
+                });
+                //console.log(childIsIsland)
+            });
+
+            //
         });
     }
 
