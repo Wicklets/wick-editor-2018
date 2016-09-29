@@ -87,6 +87,7 @@ var SettingsInterface = function (wickEditor) {
             return;
         }
         wickEditor.project = new WickProject();
+        localStorage.removeItem("wickProject");
         wickEditor.syncInterfaces();
     }
 

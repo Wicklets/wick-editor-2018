@@ -431,7 +431,10 @@ var FabricInterface = function (wickEditor) {
                  modifiedStates: modifiedStates}
             );
 
-            wickEditor.tools.paintbrush.updateOnscreenVectors();
+            ids.forEach(function (id) {
+                var wickObj = wickEditor.project.getCurrentObject().getChildByID(id);
+                wickEditor.tools.paintbrush.updateOnscreenVectors(wickObj);
+            });
         }
     });
 
