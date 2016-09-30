@@ -403,7 +403,7 @@ var PaintbrushTool = function (wickEditor) {
                 if(holesOfThisPath.length > 0) {
                     path._parent = null;
                     var compoundPath = new paper.CompoundPath({
-                        children: holesOfThisPath.concat([path]),
+                        children: [path].concat(holesOfThisPath),
                         fillColor: path.fillColor
                     });
                     path = compoundPath;
