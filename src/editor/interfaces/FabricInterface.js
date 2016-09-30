@@ -32,7 +32,8 @@ var FabricInterface = function (wickEditor) {
         this.canvas.defaultCursor = wickEditor.currentTool.getCursorImage();
         this.canvas.freeDrawingCursor = wickEditor.currentTool.getCursorImage();
 
-        if(wickEditor.currentTool instanceof PaintbrushTool /*|| that.currentTool.instanceof EraserTool*/) {
+        if(wickEditor.currentTool instanceof PaintbrushTool
+           /* || wickEditor.currentTool.instanceof EraserTool*/) {
             this.canvas.isDrawingMode = true;
             this.canvas.freeDrawingBrush.width = wickEditor.currentTool.brushSize;
             this.canvas.freeDrawingBrush.color = wickEditor.currentTool.color;
@@ -104,6 +105,12 @@ var FabricInterface = function (wickEditor) {
 
                     newFabricObj.wickObjectID = child.id;
                     that.canvas.add(newFabricObj);
+                    if(child.doneFunction) child.doneFunction();
+                    that.canvas.forEachObject(function(path) {
+                        if(path.isTemporaryDrawingPath) {
+                            that.canvas.remove(path);
+                        }
+                    });
 
                     newFabricObj.trueZIndex = currentObject.getCurrentFrame().wickObjects.indexOf(child);
                     newFabricObj.isActive = inactiveObjects.indexOf(child) == -1;

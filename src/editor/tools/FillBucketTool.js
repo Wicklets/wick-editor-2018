@@ -7,8 +7,14 @@ var FillBucketTool = function (wickEditor) {
     var canvas = wickEditor.interfaces['fabric'].canvas;
 
     this.getCursorImage = function () {
-        return "default";
+        return 'url(resources/fillbucket-cursor.png) 64 64,default';
     }
+
+    canvas.on('mouse:down', function(e) {
+        if(e.e.button != 0) return;
+
+        
+    });
     
 	/*canvas.on('mouse:down', function(e) {
         if(e.e.button != 0) return;

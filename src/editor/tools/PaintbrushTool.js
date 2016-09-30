@@ -31,11 +31,14 @@ var PaintbrushTool = function (wickEditor) {
             return;
         }
 
+        fabricPath.isTemporaryDrawingPath = true;
+
         // Vectorize the path and create a WickObject out of it
         potraceFabricPath(fabricPath, function(SVGData) {
             var wickObj = WickObject.fromSVG(SVGData);
             wickObj.x = fabricPath.left - wickEditor.interfaces.fabric.getCenteredFrameOffset().x - fabricPath.width/2  - that.brushSize/2;
             wickObj.y = fabricPath.top  - wickEditor.interfaces.fabric.getCenteredFrameOffset().y - fabricPath.height/2 - that.brushSize/2;
+            //wickObj.doneFunction = function () { wickEditor.interfaces.fabric.canvas.remove(e.target); }
             wickEditor.actionHandler.doAction('addObjects', {
                 wickObjects: [wickObj]
             });
@@ -44,7 +47,7 @@ var PaintbrushTool = function (wickEditor) {
         });
 
         // Get rid of original fabric path object
-        wickEditor.interfaces.fabric.canvas.remove(e.target);
+        //wickEditor.interfaces.fabric.canvas.remove(e.target);
     });
 
     var potraceFabricPath = function (pathFabricObject, callback) {
@@ -133,6 +136,7 @@ var PaintbrushTool = function (wickEditor) {
 
         wickObjects.forEach(function (path) {
             if(path === newPath) return;
+            //console.log(path)
             var paperPathA = path.paperPath;
             var paperPathB = newPath.paperPath;
             var intersections = paperPathA.getIntersections(paperPathB);
@@ -423,7 +427,7 @@ var PaintbrushTool = function (wickEditor) {
                     compoundPath.children.forEach(function(compoundPathChild) {
                         compoundPathChild.clockwise = !compoundPathChild.clockwise;
                     });
-                    console.log(compoundPath)
+                    //console.log(compoundPath)
 
                     /*console.log(compoundPath)
                     compoundPath.children.forEach(function(child) {
@@ -451,7 +455,7 @@ var PaintbrushTool = function (wickEditor) {
                 newWickObjects.push(wickObj);
             });
             
-            console.log(newWickObjects)
+            //console.log(newWickObjects)
             wickEditor.actionHandler.doAction('addObjects', {
                 wickObjects: newWickObjects,
                 partOfChain: true
