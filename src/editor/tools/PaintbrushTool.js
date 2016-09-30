@@ -282,48 +282,161 @@ var PaintbrushTool = function (wickEditor) {
     }
 
     var splitApartPathsWithMultiplePieces = function () {
-        var onscreenObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
+        /*var onscreenObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
         updatePaperDataOnVectorWickObjects(onscreenObjects);
-
         
         onscreenObjects.forEach(function (wickPath) {
+
             if (!wickPath.svgData) return;
 
             var children = wickPath.paperPath.children;
-
             if(!children) return;
 
-            //console.log("calc isIsland --------------")
+            var splitObject = false;
 
-            //console.log(children)
+            console.log(children)
+            var cutObjects = []
 
             children.forEach(function (childA) {
-                childA._parent = null;
-                //console.log("check for child")
-                childIsIsland = true;
-                //console.log(children)
                 children.forEach(function (childB) {
                     if(childA === childB) return;
-
+                    if(cutObjects.indexOf(childA) !== -1 || cutObjects.indexOf(childB) !== -1)
                     if(childA.clockwise || childB.clockwise) return;
 
+                    var oldParent = childA._parent;
+                    childA._parent = null;
                     childB._parent = null;
 
-                    //console.log(childA)
-                    //console.log(childB)
+                    splitObject = true;
 
-                    //console.log("do check")
+                    [childA, childB].forEach(function (path) {
+                        var pathPosition = path.position;
+                        var pathBoundsX = path.bounds._width;
+                        var pathBoundsY = path.bounds._height;
 
-                    var intersec = childA.intersect(childB)
+                        repositionPaperSVG(path, -(pathPosition._x - pathBoundsX/2), -(pathPosition._y - pathBoundsY/2));
 
-                    //console.log(intersec)
+                        var SVGData = {
+                            svgString: createSVGFromPaths(path.exportSVG({asString:true}), pathBoundsX, pathBoundsY),
+                            fillColor: wickPath.svgData.fillColor
+                        }
 
-                    // i think if its a Group or null its not an island.
+                        console.log("add")
+                        var wickObj = WickObject.fromSVG(SVGData);
+                        wickObj.x = pathPosition._x - path.bounds._width/2;
+                        wickObj.y = pathPosition._y - path.bounds._height/2;
+                        wickEditor.actionHandler.doAction('addObjects', {
+                            wickObjects: [wickObj],
+                            partOfChain: true
+                        });
+                    });
+
+                    childA._parent = oldParent;
+                    childB._parent = oldParent;
+
+                    cutObjects.push(childA);
+                    cutObjects.push(childB);
                 });
-                //console.log(childIsIsland)
             });
 
-            //
+            if(splitObject) {
+                wickEditor.actionHandler.doAction('deleteObjects', {
+                    ids: [wickPath.id],
+                    partOfChain: true
+                });
+            }
+
+        });*/
+
+        onscreenObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
+        updatePaperDataOnVectorWickObjects(onscreenObjects);
+
+        onscreenObjects.forEach(function (wickPath) {
+
+            if (!wickPath.svgData) return;
+
+            // No children: doesn't need to be split, is already a single object
+            var children = wickPath.paperPath.children;
+            if(!children) return;
+
+            // >1 counter-clockwise paths: Must be split apart
+            // (i.e., there are two distinct pieces that are not 'holes')
+            var solidChildren = [];
+            var holeChildren = [];
+            children.forEach(function (path) {
+                if(!path.clockwise) {
+                    solidChildren.push(path);
+                } else {
+                    holeChildren.push(path);
+                }
+            });
+            if(solidChildren.length <= 1) return;
+
+            console.log("splitting path apart")
+
+            var newWickObjects = [];
+
+            children.forEach(function (path) {
+                if(path.clockwise) return;
+
+                // Find all 'holes' that this child contains
+                // Create a CompoundPath with all those holes plus the path itself combined
+                console.log(holeChildren.length + " holes to check...")
+                var holesOfThisPath = [];
+                holeChildren.forEach(function(hole) {
+                    var pathOwnsThisHole = true;
+                    hole.segments.forEach(function(segment) {
+                        if(pathOwnsThisHole && !path.contains(segment.point)) {
+                            pathOwnsThisHole = false;
+                        }
+                    });
+                    if(pathOwnsThisHole) {
+                        console.log("owns dis hole")
+                        holesOfThisPath.push(hole);
+                    }
+                });
+                holesOfThisPath.forEach(function (hole) {
+                    var i = holeChildren.indexOf(hole);
+                    holeChildren.splice(i, 1);
+                });
+
+                if(holesOfThisPath.length > 0) {
+                    path._parent = null;
+                    var compoundPath = new paper.CompoundPath({
+                        children: holesOfThisPath.concat([path]),
+                        fillColor: path.fillColor
+                    });
+                    path = compoundPath;
+                }
+
+                var pathPosition = path.position;
+                var pathBoundsX = path.bounds._width;
+                var pathBoundsY = path.bounds._height;
+
+                repositionPaperSVG(path, -(pathPosition._x - pathBoundsX/2), -(pathPosition._y - pathBoundsY/2));
+
+                var SVGData = {
+                    svgString: createSVGFromPaths(path.exportSVG({asString:true}), pathBoundsX, pathBoundsY),
+                    fillColor: wickPath.svgData.fillColor
+                }
+
+                var wickObj = WickObject.fromSVG(SVGData);
+                wickObj.x = pathPosition._x - path.bounds._width/2;
+                wickObj.y = pathPosition._y - path.bounds._height/2;
+                newWickObjects.push(wickObj);
+            });
+            
+            console.log(newWickObjects)
+            wickEditor.actionHandler.doAction('addObjects', {
+                wickObjects: newWickObjects,
+                partOfChain: true
+            });
+
+            wickEditor.actionHandler.doAction('deleteObjects', {
+                ids: [wickPath.id],
+                partOfChain: true
+            });
+
         });
 
     }

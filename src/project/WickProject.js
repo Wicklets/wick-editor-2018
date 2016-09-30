@@ -143,7 +143,7 @@ WickProject.prototype.regenerateUniqueIDs = function (wickObject) {
         //wickObject.id = this.rootObject.getLargestID() + 1; // Currently broken
         // This is silly, but the actionhandler freaks out if it has to add an object 
         // right after deleting another (those objects would have the same id.)
-        wickObject.id = new Date().getTime();
+        wickObject.id = new Date().getTime() + this.rootObject.getLargestID();
     }
 
     if(wickObject.isSymbol) {
