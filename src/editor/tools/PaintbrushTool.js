@@ -15,8 +15,6 @@ var PaintbrushTool = function (wickEditor) {
     this.color = "#B00600";
 
     this.updateOnscreenVectors = function (newPath) {
-        return;//we aint done yet here
-
         uniteIntersectingPaths(newPath);
         subtractIntersectingPaths(newPath);
         splitApartPathsWithMultiplePieces();
@@ -34,7 +32,7 @@ var PaintbrushTool = function (wickEditor) {
         }
 
         // Vectorize the path and create a WickObject out of it
-        that.potraceFabricPath(fabricPath, function(SVGData) {
+        potraceFabricPath(fabricPath, function(SVGData) {
             var wickObj = WickObject.fromSVG(SVGData);
             wickObj.x = fabricPath.left - wickEditor.interfaces.fabric.getCenteredFrameOffset().x - fabricPath.width/2  - that.brushSize/2;
             wickObj.y = fabricPath.top  - wickEditor.interfaces.fabric.getCenteredFrameOffset().y - fabricPath.height/2 - that.brushSize/2;
@@ -49,17 +47,17 @@ var PaintbrushTool = function (wickEditor) {
         wickEditor.interfaces.fabric.canvas.remove(e.target);
     });
 
-    this.potraceFabricPath = function (pathFabricObject, callback) {
+    var potraceFabricPath = function (pathFabricObject, callback) {
         pathFabricObject.cloneAsImage(function(clone) {
             var img = new Image();
             img.onload = function () {
-                that.potraceImage(img, callback);
+                potraceImage(img, callback);
             };
             img.src = clone._element.currentSrc || clone._element.src;
         });
     };
 
-    this.potraceImage = function (img, callback) {
+    var potraceImage = function (img, callback) {
 
         // Scale the image before we pass it to potrace (fixes retina display bugs!)
         var dummyCanvas = document.createElement('canvas');
@@ -85,8 +83,8 @@ var PaintbrushTool = function (wickEditor) {
 
 // On-canvas vector utils
 
-    var createSVGFromPaths = function (pathString) {
-        return '<svg id="svg" x="0" y="0" version="1.1" width="88" height="102" xmlns="http://www.w3.org/2000/svg">' + pathString + '</svg>';
+    var createSVGFromPaths = function (pathString, width, height) {
+        return '<svg id="svg" x="0" y="0" version="1.1" width="'+width+'" height="'+height+'" xmlns="http://www.w3.org/2000/svg">' + pathString + '</svg>';
     } 
 
     var updatePaperDataOnVectorWickObjects = function (wickObjects) {
@@ -107,8 +105,9 @@ var PaintbrushTool = function (wickEditor) {
         });
     }
 
-    var getAllWickObjectsIntersecting = function (wickObjects) {
-        var allWickObjectsIntersecting = {};
+    var getAllWickObjectsIntersecting = function (wickObjects, newPath) {
+        // Generates a list of all objects with any kind of intersection (this ain't what we want anymore)
+        /*var allWickObjectsIntersecting = {};
 
         wickObjects.forEach(function (wickPathA) {
             if (!wickPathA.svgData) return;
@@ -128,6 +127,18 @@ var PaintbrushTool = function (wickEditor) {
             });
         });
 
+        return allWickObjectsIntersecting;*/
+
+        var allWickObjectsIntersecting = {};
+
+        wickObjects.forEach(function (path) {
+            if(path === newPath) return;
+            var paperPathA = path.paperPath;
+            var paperPathB = newPath.paperPath;
+            var intersections = paperPathA.getIntersections(paperPathB);
+            if(intersections.length > 0) allWickObjectsIntersecting[path.id] = path;
+        });
+
         return allWickObjectsIntersecting;
     }
 
@@ -141,6 +152,27 @@ var PaintbrushTool = function (wickEditor) {
         return allWickObjectsIntersectingIDs;
     }
 
+    var repositionPaperSVG = function (paperObject, x, y) {
+        var pathSegments = [];
+        if(paperObject.children) {
+            paperObject.children.forEach(function (child) {
+                child.getSegments().forEach(function (segment) {
+                    pathSegments.push(segment);
+                });
+            });
+        } else {
+            pathSegments = paperObject.getSegments();
+        }
+        pathSegments.forEach(function (segment) {
+            var oldPoint = segment.getPoint();
+            var newPoint = new paper.Point(
+                oldPoint.x + x, 
+                oldPoint.y + y
+            );
+            segment.setPoint(newPoint);
+        });
+    }
+
 // On-canvas vector updates
 
     // Unite intersecting paths with same fill color
@@ -148,8 +180,10 @@ var PaintbrushTool = function (wickEditor) {
 
         var onscreenObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
         updatePaperDataOnVectorWickObjects(onscreenObjects);
-        var allWickObjectsIntersecting = getAllWickObjectsIntersecting(onscreenObjects);
+        var allWickObjectsIntersecting = getAllWickObjectsIntersecting(onscreenObjects, newPath);
         var allWickObjectsIntersectingIDs = getIDsOfWickObjectsIntersecting(allWickObjectsIntersecting);
+
+        var allPathIDsUnited = [];
 
         // Create the union of all the paths
         var superPath = undefined;
@@ -158,8 +192,12 @@ var PaintbrushTool = function (wickEditor) {
             var path = allWickObjectsIntersecting[id];
 
             if(path.id !== newPath.id && path.svgData.fillColor == newPath.svgData.fillColor) {
-                if(!superPath) superPath = newPath.paperPath;
-                console.log("uniting a path")
+                if(!superPath) { 
+                    superPath = newPath.paperPath;
+                    allPathIDsUnited.push(newPath.id);
+                }
+                console.log("uniting a path");
+                allPathIDsUnited.push(id);
                 superPath = superPath.unite(allWickObjectsIntersecting[id].paperPath);
             }
         }
@@ -168,7 +206,7 @@ var PaintbrushTool = function (wickEditor) {
             // Delete the paths that became united
             //wickEditor.actionHandler.chainLastCommand();
             wickEditor.actionHandler.doAction('deleteObjects', {
-                ids: allWickObjectsIntersectingIDs,
+                ids: allPathIDsUnited,
                 partOfChain: true
             });
 
@@ -177,20 +215,10 @@ var PaintbrushTool = function (wickEditor) {
             var superPathBoundsX = superPath.bounds._width;
             var superPathBoundsY = superPath.bounds._height;
 
-            // reposition path such that origin is (0,0)
-            var superPathSegments = superPath.getSegments();
-            // get array of all da segments if its a compaundpath
-            superPathSegments.forEach(function (segment) {
-                var oldPoint = segment.getPoint();
-                var newPoint = new paper.Point(
-                    oldPoint.x - (pathPosition._x - superPathBoundsX/2), 
-                    oldPoint.y - (pathPosition._y - superPathBoundsY/2)
-                );
-                segment.setPoint(newPoint);
-            });
+            repositionPaperSVG(superPath, -(pathPosition._x - superPathBoundsX/2), -(pathPosition._y - superPathBoundsY/2));
 
             var SVGData = {
-                svgString: createSVGFromPaths(superPath.exportSVG({asString:true})),
+                svgString: createSVGFromPaths(superPath.exportSVG({asString:true}), superPathBoundsX, superPathBoundsY),
                 fillColor: newPath.svgData.fillColor
             }
 
@@ -210,38 +238,40 @@ var PaintbrushTool = function (wickEditor) {
 
         var onscreenObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
         updatePaperDataOnVectorWickObjects(onscreenObjects);
-        var allWickObjectsIntersecting = getAllWickObjectsIntersecting(onscreenObjects);
+        var allWickObjectsIntersecting = getAllWickObjectsIntersecting(onscreenObjects, newPath);
         var allWickObjectsIntersectingIDs = getIDsOfWickObjectsIntersecting(allWickObjectsIntersecting);
+
+        var splitApartPathIDs = [];
 
         for (var id in allWickObjectsIntersecting) {
             if(id !== newPath.id && allWickObjectsIntersecting[id].svgData.fillColor !== newPath.svgData.fillColor) {
                 console.log("subtracting a path")
 
+                splitApartPathIDs.push(id)
+
                 var path = allWickObjectsIntersecting[id].paperPath;
                 var splitPath = allWickObjectsIntersecting[id].paperPath.subtract(newPath.paperPath);
 
+                var pathPosition = splitPath.position;
+                var pathBoundsX = splitPath.bounds._width;
+                var pathBoundsY = splitPath.bounds._height;
+
+                repositionPaperSVG(splitPath, -(pathPosition._x - pathBoundsX/2), -(pathPosition._y - pathBoundsY/2));
+
                 var SVGData = {
-                    svgString: createSVGFromPaths(splitPath.exportSVG({asString:true})),
+                    svgString: createSVGFromPaths(splitPath.exportSVG({asString:true}), pathBoundsX, pathBoundsY),
                     fillColor: allWickObjectsIntersecting[id].svgData.fillColor
                 }
 
                 var wickObj = WickObject.fromSVG(SVGData);
-                wickObj.x = splitPath.position._x - splitPath.bounds._width/2;
-                wickObj.y = splitPath.position._y - splitPath.bounds._height/2;
+                wickObj.x = pathPosition._x - splitPath.bounds._width/2;
+                wickObj.y = pathPosition._y - splitPath.bounds._height/2;
                 wickEditor.actionHandler.doAction('addObjects', {
                     wickObjects: [wickObj],
                     partOfChain: true
                 });
             }
         }
-
-        var splitApartPathIDs = [];
-        allWickObjectsIntersectingIDs.forEach(function (id) {
-            if(id != newPath.id) {
-                console.log(id)
-                splitApartPathIDs.push(id);
-            }
-        });
 
         //wickEditor.actionHandler.chainLastCommand();
         wickEditor.actionHandler.doAction('deleteObjects', {
@@ -255,6 +285,7 @@ var PaintbrushTool = function (wickEditor) {
         var onscreenObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
         updatePaperDataOnVectorWickObjects(onscreenObjects);
 
+        
         onscreenObjects.forEach(function (wickPath) {
             if (!wickPath.svgData) return;
 
@@ -262,17 +293,19 @@ var PaintbrushTool = function (wickEditor) {
 
             if(!children) return;
 
-            console.log("calc isIsland --------------")
+            //console.log("calc isIsland --------------")
 
-            console.log(children)
+            //console.log(children)
 
             children.forEach(function (childA) {
                 childA._parent = null;
-                console.log("check for child")
+                //console.log("check for child")
                 childIsIsland = true;
-                console.log(children)
+                //console.log(children)
                 children.forEach(function (childB) {
                     if(childA === childB) return;
+
+                    if(childA.clockwise || childB.clockwise) return;
 
                     childB._parent = null;
 
@@ -283,7 +316,7 @@ var PaintbrushTool = function (wickEditor) {
 
                     var intersec = childA.intersect(childB)
 
-                    console.log(intersec)
+                    //console.log(intersec)
 
                     // i think if its a Group or null its not an island.
                 });
@@ -292,6 +325,7 @@ var PaintbrushTool = function (wickEditor) {
 
             //
         });
+
     }
 
 }
