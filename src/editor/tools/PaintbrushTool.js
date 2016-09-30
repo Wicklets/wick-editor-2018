@@ -376,8 +376,14 @@ var PaintbrushTool = function (wickEditor) {
 
             var newWickObjects = [];
 
-            children.forEach(function (path) {
-                if(path.clockwise) return;
+            children.forEach(function(child) {
+                console.log(child.clockwise)
+            }); 
+
+            //console.log(wickPath.paperPath);return;
+
+            children.forEach(function (child) {
+                if(child.clockwise) return;
 
                 // Find all 'holes' that this child contains
                 // Create a CompoundPath with all those holes plus the path itself combined
@@ -386,7 +392,7 @@ var PaintbrushTool = function (wickEditor) {
                 holeChildren.forEach(function(hole) {
                     var pathOwnsThisHole = true;
                     hole.segments.forEach(function(segment) {
-                        if(pathOwnsThisHole && !path.contains(segment.point)) {
+                        if(pathOwnsThisHole && !child.contains(segment.point)) {
                             pathOwnsThisHole = false;
                         }
                     });
@@ -401,28 +407,47 @@ var PaintbrushTool = function (wickEditor) {
                 });
 
                 if(holesOfThisPath.length > 0) {
-                    path._parent = null;
+                    child._parent = null;
+
+                    /*var newCompoundPathChildren = holesOfThisPath.concat([child]);
                     var compoundPath = new paper.CompoundPath({
-                        children: [path].concat(holesOfThisPath),
-                        fillColor: path.fillColor
+                        children: newCompoundPathChildren,
+                        fillColor: child.fillColor
+                    */
+                    var compoundPath = wickPath.paperPath.clone({insert:false});
+                    compoundPath.removeChildren();
+                    compoundPath.addChild(child.clone({insert:false}))
+                    holesOfThisPath.forEach(function (hole) {
+                        compoundPath.addChild(hole.clone({insert:false}));
                     });
-                    path = compoundPath;
+                    compoundPath.children.forEach(function(compoundPathChild) {
+                        compoundPathChild.clockwise = !compoundPathChild.clockwise;
+                    });
+                    console.log(compoundPath)
+
+                    /*console.log(compoundPath)
+                    compoundPath.children.forEach(function(child) {
+                        child.clockwise = !child.clockwise;
+                        console.log(child.clockwise)
+                    });*/
+
+                    child = compoundPath;
                 }
 
-                var pathPosition = path.position;
-                var pathBoundsX = path.bounds._width;
-                var pathBoundsY = path.bounds._height;
+                var pathPosition = child.position;
+                var pathBoundsX = child.bounds._width;
+                var pathBoundsY = child.bounds._height;
 
-                repositionPaperSVG(path, -(pathPosition._x - pathBoundsX/2), -(pathPosition._y - pathBoundsY/2));
+                repositionPaperSVG(child, -(pathPosition._x - pathBoundsX/2), -(pathPosition._y - pathBoundsY/2));
 
                 var SVGData = {
-                    svgString: createSVGFromPaths(path.exportSVG({asString:true}), pathBoundsX, pathBoundsY),
+                    svgString: createSVGFromPaths(child.exportSVG({asString:true}), pathBoundsX, pathBoundsY),
                     fillColor: wickPath.svgData.fillColor
                 }
 
                 var wickObj = WickObject.fromSVG(SVGData);
-                wickObj.x = pathPosition._x - path.bounds._width/2;
-                wickObj.y = pathPosition._y - path.bounds._height/2;
+                wickObj.x = pathPosition._x - child.bounds._width/2;
+                wickObj.y = pathPosition._y - child.bounds._height/2;
                 newWickObjects.push(wickObj);
             });
             
