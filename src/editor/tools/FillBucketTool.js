@@ -34,19 +34,20 @@ var FillBucketTool = function (wickEditor) {
         var onscreenObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
         updatePaperDataOnVectorWickObjects(onscreenObjects);
 
+        var mouseX = e.e.offsetX - wickEditor.interfaces.fabric.getCenteredFrameOffset().x
+        var mouseY = e.e.offsetY - wickEditor.interfaces.fabric.getCenteredFrameOffset().y
+        var mousePoint = new paper.Point(mouseX, mouseY);
+
         // Try filling paths
         var filledPath = false;
         onscreenObjects.forEach(function (wickPath) {
 
-            if(filledPath) return;
+            if (filledPath) return;
             if (!wickPath.svgData) return;
 
-            var mouseX = e.e.offsetX - wickEditor.interfaces.fabric.getCenteredFrameOffset().x
-            var mouseY = e.e.offsetY - wickEditor.interfaces.fabric.getCenteredFrameOffset().y
-            var mousePoint = new paper.Point(mouseX, mouseY);
-
             if(wickPath.paperPath.contains(mousePoint)) {
-                console.log("filled a path")
+                console.log("fill path")
+                filledPath = true;
                 // do the thing
             }
 
@@ -55,6 +56,26 @@ var FillBucketTool = function (wickEditor) {
         if(filledPath) return;
 
         // Try filling holes
+
+        var mousePointInHole = false;
+        onscreenObjects.forEach(function (wickPath) {
+            if (!wickPath.svgData) return;
+            if (!wickPath.paperPath.children) return;
+
+            wickPath.paperPath.children.forEach(function (child) {
+                if(!child.closed && child.contains(mousePoint)) {
+                    console.log("fill hole");
+                }
+            });
+        });
+
+        onscreenObjects.forEach(function (wickPath) {
+            if (!wickPath.svgData) return;
+
+            var path = wickPath.paperPath.clone({insert:false});
+
+
+        });
 
         // 1 Generate holes
         // 2 Try Fill a hole (make big square, subtract all paths from it, find holes (by making sure mousePoint is inside a path))
