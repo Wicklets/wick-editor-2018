@@ -10,10 +10,33 @@ var FillBucketTool = function (wickEditor) {
         return 'url(resources/fillbucket-cursor.png) 64 64,default';
     }
 
+    var updatePaperDataOnVectorWickObjects = function (wickObjects) {
+        wickObjects.forEach(function (child) {
+            if(!child.svgData) return;
+
+            var xmlString = child.svgData.svgString
+              , parser = new DOMParser()
+              , doc = parser.parseFromString(xmlString, "text/xml");
+            var paperGroup = paper.project.importSVG(doc);
+            var paperPath = paperGroup.removeChildren(0, 1)[0];
+
+            if(paperPath.closePath) paperPath.closePath();
+            paperPath.position.x += child.x;
+            paperPath.position.y += child.y;
+
+            child.paperPath = paperPath;
+        });
+    }
+
     canvas.on('mouse:down', function(e) {
         if(e.e.button != 0) return;
 
+        var onscreenObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
+        updatePaperDataOnVectorWickObjects(onscreenObjects);
+
         
+
+
     });
     
 	/*canvas.on('mouse:down', function(e) {

@@ -21,6 +21,7 @@ var WickProjectExporter = (function () {
 
     // Player code. 
     var requiredPlayerFiles =[
+        "src/project/WickFrame.js",
         "src/project/WickLayer.js",
         "src/player/WickObjectCollisionDetection.js",
         "src/project/WickObject.js",
