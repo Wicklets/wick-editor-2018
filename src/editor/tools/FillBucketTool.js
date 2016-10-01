@@ -53,6 +53,23 @@ var FillBucketTool = function (wickEditor) {
         });
     }
 
+    var createSVGWickObject = function (paperPath, fillColor) {
+        var pathPosition = paperPath.position;
+        var pathBoundsX = paperPath.bounds._width;
+        var pathBoundsY = paperPath.bounds._height;
+
+        repositionPaperSVG(paperPath, -(pathPosition._x - pathBoundsX/2), -(pathPosition._y - pathBoundsY/2));
+
+        var SVGData = {
+            svgString: createSVGFromPaths(paperPath.exportSVG({asString:true}), pathBoundsX, pathBoundsY),
+            fillColor: fillColor
+        }
+        var wickObj = WickObject.fromSVG(SVGData);
+        wickObj.x = pathPosition._x - paperPath.bounds._width/2;
+        wickObj.y = pathPosition._y - paperPath.bounds._height/2;
+        return wickObj;
+    }
+
     canvas.on('mouse:down', function(e) {
         if(e.e.button != 0) return;
         if(!(wickEditor.currentTool instanceof FillBucketTool)) return;
@@ -74,7 +91,15 @@ var FillBucketTool = function (wickEditor) {
             if(wickPath.paperPath.contains(mousePoint)) {
                 console.log("fill path")
                 filledPath = true;
-                // do the thing
+                
+                wickEditor.actionHandler.doAction('deleteObjects', {
+                    ids: [wickPath.id],
+                    partOfChain: true
+                });
+                wickEditor.actionHandler.doAction('addObjects', {
+                    wickObjects: [createSVGWickObject(wickPath.paperPath, wickEditor.tools.paintbrush.color)],
+                    partOfChain: true
+                });
             }
 
         });
@@ -103,80 +128,19 @@ var FillBucketTool = function (wickEditor) {
         var hugeRectangle = new paper.Path.Rectangle(new paper.Point(-1000,-1000), new paper.Size(2000,2000));
         var negativeSpace = hugeRectangle.subtract(allPathsUnion);
 
-        /*var pathPosition = negativeSpace.position;
-        var pathBoundsX = negativeSpace.bounds._width;
-        var pathBoundsY = negativeSpace.bounds._height;
-
-        repositionPaperSVG(negativeSpace, -(pathPosition._x - pathBoundsX/2), -(pathPosition._y - pathBoundsY/2));
-
-        var SVGData = {
-            svgString: createSVGFromPaths(negativeSpace.exportSVG({asString:true}), pathBoundsX, pathBoundsY),
-            fillColor: '#000000'
-        }
-        var wickObj = WickObject.fromSVG(SVGData);
-        wickObj.x = pathPosition._x - negativeSpace.bounds._width/2;
-        wickObj.y = pathPosition._y - negativeSpace.bounds._height/2;
-        wickEditor.actionHandler.doAction('addObjects', {
-            wickObjects: [wickObj],
-            partOfChain: true
-        });*/
-
-        console.log(negativeSpace)
-
         // Find a piece containing the mouse point that also has a coresponding hole with closed==false
         negativeSpace.children.forEach(function (negativeSpaceChild) {
             if(!negativeSpaceChild.clockwise) return;
             if(!negativeSpaceChild.contains(mousePoint)) return;
             if(negativeSpaceChild.area === 4000000) return; /* **** SICK MATH HACK **** DEFCON BEWARE **** */
 
-            var pathPosition = negativeSpaceChild.position;
-            var pathBoundsX = negativeSpaceChild.bounds._width;
-            var pathBoundsY = negativeSpaceChild.bounds._height;
+            negativeSpaceChild.clockwise = false;
 
-            repositionPaperSVG(negativeSpaceChild, -(pathPosition._x - pathBoundsX/2), -(pathPosition._y - pathBoundsY/2));
-
-            var SVGData = {
-                svgString: createSVGFromPaths(negativeSpaceChild.exportSVG({asString:true}), pathBoundsX, pathBoundsY),
-                fillColor: '#000000'
-            }
-            var wickObj = WickObject.fromSVG(SVGData);
-            wickObj.x = pathPosition._x - negativeSpaceChild.bounds._width/2;
-            wickObj.y = pathPosition._y - negativeSpaceChild.bounds._height/2;
             wickEditor.actionHandler.doAction('addObjects', {
-                wickObjects: [wickObj],
+                wickObjects: [createSVGWickObject(negativeSpaceChild, wickEditor.tools.paintbrush.color)],
                 partOfChain: true
             });
-
-            //console.log(negativeSpaceChild.clockwise)
-            //console.log(negativeSpaceChild.contains(mousePoint))
-
-            //console.log("yeah but is it a hole??")
-
-            /*var negativeSpaceIsHole = false;
-            allPathsUnion.children.forEach(function (unionChild) {
-                if(negativeSpaceIsHole) return;
-                if(!unionChild.closed && unionChild.contains(mousePoint)) {
-                    console.log("sddas")
-                    negativeSpaceIsHole = true;
-                }
-            });
-            if(!negativeSpaceIsHole) return;
-
-            console.log("it's a hole!")*/
         });
-
-        /*var mousePointInHole = false;
-        onscreenObjects.forEach(function (wickPath) {
-            if (!wickPath.svgData) return;
-            if (!wickPath.paperPath.children) return;
-
-            wickPath.paperPath.children.forEach(function (child) {
-                if(!child.closed && child.contains(mousePoint)) {
-                    console.log("fill hole");
-                }
-            });
-        });
-        */
     });
     
 	/*canvas.on('mouse:down', function(e) {

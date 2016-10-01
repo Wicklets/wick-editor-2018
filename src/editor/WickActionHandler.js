@@ -238,23 +238,6 @@ var WickActionHandler = function (wickEditor) {
             }
         });
 
-    this.registerAction('movePlayhead', 
-        function (args) {
-            wickEditor.interfaces['fabric'].deselectAll();
-
-            // Save current frame
-            args.oldPlayheadPosition = wickEditor.project.getCurrentObject().playheadPosition;
-
-            // Go to the specified frame
-            wickEditor.project.getCurrentObject().playheadPosition = args.newPlayheadPosition;
-        },
-        function (args) {
-            wickEditor.interfaces['fabric'].deselectAll();
-
-            // Go back to the old frame
-            wickEditor.project.getCurrentObject().playheadPosition = args.oldPlayheadPosition;
-        });
-
     this.registerAction('addNewFrame', 
         function (args) {
             var currentObject = wickEditor.project.getCurrentObject();
@@ -264,6 +247,7 @@ var WickActionHandler = function (wickEditor) {
 
             // Move to that new frame
             wickEditor.actionHandler.doAction('movePlayhead', {
+                obj:currentObject,
                 newPlayheadPosition:currentObject.getCurrentLayer().getTotalLength()-1,
                 partOfChain:true
             });
@@ -318,6 +302,31 @@ var WickActionHandler = function (wickEditor) {
         },
         function (args) {
             args.frame.extend(args.nFramesToShrinkBy); 
+        });
+
+    this.registerAction('movePlayhead',
+        function (args) {
+            wickEditor.interfaces['fabric'].deselectAll();
+
+            args.oldPlayheadPosition = args.obj.playheadPosition;
+
+            if(args.moveAmount) {
+
+                args.obj.playheadPosition += args.moveAmount;
+                if(args.obj.playheadPosition < 0) args.obj.playheadPosition = 0;
+
+            } else if (args.newPlayheadPosition) {
+
+                args.oldPlayheadPosition = args.obj.playheadPosition;
+                args.obj.playheadPosition = args.newPlayheadPosition;
+
+            }
+            
+        },
+        function (args) {
+            wickEditor.interfaces['fabric'].deselectAll();
+
+            args.obj.playheadPosition = args.oldPlayheadPosition;
         });
 
     this.registerAction('convertSelectionToSymbol', 

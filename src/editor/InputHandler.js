@@ -99,13 +99,19 @@ var InputHandler = function (wickEditor) {
 
         // Left arrow key: Move playhead left
         if(event.keyCode == 37) {
-            wickEditor.project.getCurrentObject().playheadPosition -= (wickEditor.project.getCurrentObject().playheadPosition > 0 ? 1 : 0);
+            wickEditor.actionHandler.doAction("movePlayhead", {
+                obj: wickEditor.project.getCurrentObject(),
+                moveAmount: -1
+            })
             wickEditor.syncInterfaces();
         }
 
         // Right arrow key: Move playhead right
         if(event.keyCode == 39) {
-            wickEditor.project.getCurrentObject().playheadPosition ++;
+            wickEditor.actionHandler.doAction("movePlayhead", {
+                obj: wickEditor.project.getCurrentObject(),
+                moveAmount: 1
+            })
             wickEditor.syncInterfaces();
         }
 
