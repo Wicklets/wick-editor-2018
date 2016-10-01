@@ -31,30 +31,29 @@ var PaintbrushTool = function (wickEditor) {
             return;
         }
 
-        fabricPath.isTemporaryDrawingPath = true;
+        fabricPath.isTemporaryDrawingPath = true; // So that fabric can remove it when it's time to add paths to the project as wickobjects
 
         // Vectorize the path and create a WickObject out of it
         potraceFabricPath(fabricPath, function(SVGData) {
             var wickObj = WickObject.fromSVG(SVGData);
             wickObj.x = fabricPath.left - wickEditor.interfaces.fabric.getCenteredFrameOffset().x - fabricPath.width/2  - that.brushSize/2;
             wickObj.y = fabricPath.top  - wickEditor.interfaces.fabric.getCenteredFrameOffset().y - fabricPath.height/2 - that.brushSize/2;
-            //wickObj.doneFunction = function () { wickEditor.interfaces.fabric.canvas.remove(e.target); }
             wickEditor.actionHandler.doAction('addObjects', {
                 wickObjects: [wickObj]
             });
 
+            // Possible optimization: Only do this on tool changes.
             wickEditor.tools.paintbrush.updateOnscreenVectors(wickObj);
         });
-
-        // Get rid of original fabric path object
-        //wickEditor.interfaces.fabric.canvas.remove(e.target);
     });
 
     var potraceFabricPath = function (pathFabricObject, callback) {
         pathFabricObject.cloneAsImage(function(clone) {
             var img = new Image();
             img.onload = function () {
+                console.log("potrace start")
                 potraceImage(img, callback);
+                console.log("potrace end")
             };
             img.src = clone._element.currentSrc || clone._element.src;
         });

@@ -128,16 +128,56 @@ var FillBucketTool = function (wickEditor) {
         var hugeRectangle = new paper.Path.Rectangle(new paper.Point(-1000,-1000), new paper.Size(2000,2000));
         var negativeSpace = hugeRectangle.subtract(allPathsUnion);
 
-        // Find a piece containing the mouse point that also has a coresponding hole with closed==false
-        negativeSpace.children.forEach(function (negativeSpaceChild) {
-            if(!negativeSpaceChild.clockwise) return;
-            if(!negativeSpaceChild.contains(mousePoint)) return;
-            if(negativeSpaceChild.area === 4000000) return; /* **** SICK MATH HACK **** DEFCON BEWARE **** */
+        var holes = [];
 
-            negativeSpaceChild.clockwise = false;
+        // Generate holes
+        negativeSpace.children.forEach(function (negativeSpaceChildA) {
+            if(!negativeSpaceChildA.clockwise) return;
+            if(negativeSpaceChildA.area === 4000000) return;
+
+            var pathsContained = [];
+            negativeSpace.children.forEach(function (negativeSpaceChildB) {
+                if(negativeSpaceChildA === negativeSpaceChildB) return;
+                if(!negativeSpaceChildB.clockwise) return;
+                if(negativeSpaceChildB.area === 4000000) return;
+
+                var pathOwnsThisHole = true;
+                negativeSpaceChildB.segments.forEach(function(segment) {
+                    if(!negativeSpaceChildA.contains(segment.point)) {
+                        pathOwnsThisHole = false;
+                    }
+                });
+                if(pathOwnsThisHole) {
+                    pathsContained.push(negativeSpaceChildB);
+                }
+            });
+
+            if(pathsContained.length > 0) {
+                var compoundPath = new paper.CompoundPath();
+                compoundPath.removeChildren();
+                compoundPath.addChild(negativeSpaceChildA.clone({insert:false}))
+                pathsContained.forEach(function (hole) {
+                    compoundPath.addChild(hole.clone({insert:false}));
+                });
+                holes.push(compoundPath);
+
+                compoundPath.children.forEach(function (child) {
+                    child.clockwise = !child.clockwise;
+                });
+            } else {
+                holes.push(negativeSpaceChildA.clone({insert:false}));
+            }
+
+        });
+
+        console.log(holes)
+
+        // Find a piece containing the mouse point that also has a coresponding hole with closed==false
+        holes.forEach(function (hole) {
+            if(!hole.contains(mousePoint)) return;
 
             wickEditor.actionHandler.doAction('addObjects', {
-                wickObjects: [createSVGWickObject(negativeSpaceChild, wickEditor.tools.paintbrush.color)],
+                wickObjects: [createSVGWickObject(hole, wickEditor.tools.paintbrush.color)],
                 partOfChain: true
             });
         });
