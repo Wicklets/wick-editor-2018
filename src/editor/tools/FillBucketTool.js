@@ -34,8 +34,30 @@ var FillBucketTool = function (wickEditor) {
         var onscreenObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
         updatePaperDataOnVectorWickObjects(onscreenObjects);
 
-        
+        // Try filling paths
+        var filledPath = false;
+        onscreenObjects.forEach(function (wickPath) {
 
+            if(filledPath) return;
+            if (!wickPath.svgData) return;
+
+            var mouseX = e.e.offsetX - wickEditor.interfaces.fabric.getCenteredFrameOffset().x
+            var mouseY = e.e.offsetY - wickEditor.interfaces.fabric.getCenteredFrameOffset().y
+            var mousePoint = new paper.Point(mouseX, mouseY);
+
+            if(wickPath.paperPath.contains(mousePoint)) {
+                console.log("filled a path")
+                // do the thing
+            }
+
+        });
+
+        if(filledPath) return;
+
+        // Try filling holes
+
+        // 1 Generate holes
+        // 2 Try Fill a hole (make big square, subtract all paths from it, find holes (by making sure mousePoint is inside a path))
 
     });
     
