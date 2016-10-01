@@ -28,8 +28,34 @@ var FillBucketTool = function (wickEditor) {
         });
     }
 
+    var createSVGFromPaths = function (pathString, width, height) {
+        return '<svg id="svg" x="0" y="0" version="1.1" width="'+width+'" height="'+height+'" xmlns="http://www.w3.org/2000/svg">' + pathString + '</svg>';
+    } 
+
+    var repositionPaperSVG = function (paperObject, x, y) {
+        var pathSegments = [];
+        if(paperObject.children) {
+            paperObject.children.forEach(function (child) {
+                child.getSegments().forEach(function (segment) {
+                    pathSegments.push(segment);
+                });
+            });
+        } else {
+            pathSegments = paperObject.getSegments();
+        }
+        pathSegments.forEach(function (segment) {
+            var oldPoint = segment.getPoint();
+            var newPoint = new paper.Point(
+                oldPoint.x + x, 
+                oldPoint.y + y
+            );
+            segment.setPoint(newPoint);
+        });
+    }
+
     canvas.on('mouse:down', function(e) {
         if(e.e.button != 0) return;
+        if(!(wickEditor.currentTool instanceof FillBucketTool)) return;
 
         var onscreenObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
         updatePaperDataOnVectorWickObjects(onscreenObjects);
@@ -57,7 +83,89 @@ var FillBucketTool = function (wickEditor) {
 
         // Try filling holes
 
-        var mousePointInHole = false;
+        // Unite all on-screen paths 
+        var allPathsUnion = undefined;
+        onscreenObjects.forEach(function (wickPath) {
+            if (!wickPath.svgData) return;
+
+            var path = wickPath.paperPath.clone({insert:false});
+
+            if(!allPathsUnion) {
+                allPathsUnion = path;
+            } else {
+                allPathsUnion = allPathsUnion.unite(path);
+            }
+        });
+
+        if(!allPathsUnion) return;
+
+        // Subtract union of all paths from huge rectangle
+        var hugeRectangle = new paper.Path.Rectangle(new paper.Point(-1000,-1000), new paper.Size(2000,2000));
+        var negativeSpace = hugeRectangle.subtract(allPathsUnion);
+
+        /*var pathPosition = negativeSpace.position;
+        var pathBoundsX = negativeSpace.bounds._width;
+        var pathBoundsY = negativeSpace.bounds._height;
+
+        repositionPaperSVG(negativeSpace, -(pathPosition._x - pathBoundsX/2), -(pathPosition._y - pathBoundsY/2));
+
+        var SVGData = {
+            svgString: createSVGFromPaths(negativeSpace.exportSVG({asString:true}), pathBoundsX, pathBoundsY),
+            fillColor: '#000000'
+        }
+        var wickObj = WickObject.fromSVG(SVGData);
+        wickObj.x = pathPosition._x - negativeSpace.bounds._width/2;
+        wickObj.y = pathPosition._y - negativeSpace.bounds._height/2;
+        wickEditor.actionHandler.doAction('addObjects', {
+            wickObjects: [wickObj],
+            partOfChain: true
+        });*/
+
+        console.log(negativeSpace)
+
+        // Find a piece containing the mouse point that also has a coresponding hole with closed==false
+        negativeSpace.children.forEach(function (negativeSpaceChild) {
+            if(!negativeSpaceChild.clockwise) return;
+            if(!negativeSpaceChild.contains(mousePoint)) return;
+            if(negativeSpaceChild.area === 4000000) return; /* **** SICK MATH HACK **** DEFCON BEWARE **** */
+
+            var pathPosition = negativeSpaceChild.position;
+            var pathBoundsX = negativeSpaceChild.bounds._width;
+            var pathBoundsY = negativeSpaceChild.bounds._height;
+
+            repositionPaperSVG(negativeSpaceChild, -(pathPosition._x - pathBoundsX/2), -(pathPosition._y - pathBoundsY/2));
+
+            var SVGData = {
+                svgString: createSVGFromPaths(negativeSpaceChild.exportSVG({asString:true}), pathBoundsX, pathBoundsY),
+                fillColor: '#000000'
+            }
+            var wickObj = WickObject.fromSVG(SVGData);
+            wickObj.x = pathPosition._x - negativeSpaceChild.bounds._width/2;
+            wickObj.y = pathPosition._y - negativeSpaceChild.bounds._height/2;
+            wickEditor.actionHandler.doAction('addObjects', {
+                wickObjects: [wickObj],
+                partOfChain: true
+            });
+
+            //console.log(negativeSpaceChild.clockwise)
+            //console.log(negativeSpaceChild.contains(mousePoint))
+
+            //console.log("yeah but is it a hole??")
+
+            /*var negativeSpaceIsHole = false;
+            allPathsUnion.children.forEach(function (unionChild) {
+                if(negativeSpaceIsHole) return;
+                if(!unionChild.closed && unionChild.contains(mousePoint)) {
+                    console.log("sddas")
+                    negativeSpaceIsHole = true;
+                }
+            });
+            if(!negativeSpaceIsHole) return;
+
+            console.log("it's a hole!")*/
+        });
+
+        /*var mousePointInHole = false;
         onscreenObjects.forEach(function (wickPath) {
             if (!wickPath.svgData) return;
             if (!wickPath.paperPath.children) return;
@@ -68,18 +176,7 @@ var FillBucketTool = function (wickEditor) {
                 }
             });
         });
-
-        onscreenObjects.forEach(function (wickPath) {
-            if (!wickPath.svgData) return;
-
-            var path = wickPath.paperPath.clone({insert:false});
-
-
-        });
-
-        // 1 Generate holes
-        // 2 Try Fill a hole (make big square, subtract all paths from it, find holes (by making sure mousePoint is inside a path))
-
+        */
     });
     
 	/*canvas.on('mouse:down', function(e) {
