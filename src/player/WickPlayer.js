@@ -290,7 +290,6 @@ var WickPlayer = (function () {
                     canvas.width = w;
                     var ctx = canvas.getContext('2d');
                     ctx.drawImage( image, 0, 0, w, h );
-                    document.body.appendChild(canvas)
                     var imgdata = ctx.getImageData(0,0,w,h);
                     console.log(imgdata)
                     var rgba = imgdata.data;
@@ -303,17 +302,7 @@ var WickPlayer = (function () {
                             subObj.alphaMask[alphaMaskIndex] = rgba[alphaMaskIndex*4+3] === 0;
                         }
                     }
-                    //console.log(subObj.alphaMask)
-                    //console.log(Math.floor(subObj.width) * Math.floor(subObj.height));
-                    //console.log(subObj.alphaMask.length)
 
-                    console.log("---")
-                    console.log(w)
-                    console.log(h)
-                    console.log(image.width)
-                    console.log(image.height)
-                    console.log(w*h)
-                    console.log(subObj.alphaMask.length)
                 }
                 image.src = subObj.imageData || subObj.svgCacheImageData;
 

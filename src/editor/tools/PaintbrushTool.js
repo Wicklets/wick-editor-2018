@@ -134,7 +134,7 @@ var PaintbrushTool = function (wickEditor) {
         var allWickObjectsIntersecting = {};
 
         wickObjects.forEach(function (path) {
-            if(path === newPath) return;
+            if(path === newPath || !path.svgData) return;
             //console.log(path)
             var paperPathA = path.paperPath;
             var paperPathB = newPath.paperPath;
