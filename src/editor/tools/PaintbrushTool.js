@@ -51,9 +51,7 @@ var PaintbrushTool = function (wickEditor) {
         pathFabricObject.cloneAsImage(function(clone) {
             var img = new Image();
             img.onload = function () {
-                console.log("potrace start")
                 potraceImage(img, callback);
-                console.log("potrace end")
             };
             img.src = clone._element.currentSrc || clone._element.src;
         });

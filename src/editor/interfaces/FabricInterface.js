@@ -53,8 +53,9 @@ var FabricInterface = function (wickEditor) {
         that.deselectAll();
 
         var activeObjects = currentObject.getAllActiveChildObjects();
-        var inactiveObjects = currentObject.getAllInactiveSiblings();
-        var allObjects = activeObjects.concat(inactiveObjects);
+        var siblingObjects = currentObject.getAllInactiveSiblings();
+        var nearbyObjects = wickEditor.project.onionSkinning ? currentObject.getNearbyObjects(3,3) : [];
+        var allObjects = activeObjects.concat(siblingObjects.concat(nearbyObjects));
 
         var allObjectsIDs = []; 
         allObjects.forEach(function(obj) { allObjectsIDs.push(obj.id) });
@@ -75,71 +76,54 @@ var FabricInterface = function (wickEditor) {
             }
         });
 
+        var updateFabObj = function (fabricObj, wickObj) {
+            if(activeObjects.indexOf(wickObj) !== -1) {
+                fabricObj.hasControls = true;
+                fabricObj.selectable = true;
+                fabricObj.evented = true;
+                fabricObj.trueZIndex = currentObject.getCurrentFrame().wickObjects.indexOf(wickObj);
+                that.canvas.moveTo(fabricObj, fabricObj.trueZIndex+2 + activeObjects.length+3);
+            } else {
+                fabricObj.hasControls = false;
+                fabricObj.selectable = false;
+                fabricObj.evented = false;
+                that.canvas.moveTo(fabricObj, activeObjects.length+3);
+
+                var framePlayheadPosition = currentObject.getPlayheadPositionAtFrame(currentObject.getFrameWithChild(wickObj));
+                fabricObj.opacity = (wickObj.opacity * (1-(Math.abs(framePlayheadPosition-currentObject.playheadPosition)/4)))/3;
+                that.canvas.renderAll();
+            }
+        }
+
         // Add new objects and update existing objects
         allObjects.forEach(function (child) {
             if(that.objectIDsInCanvas[child.id]) {
                 // Update existing object
                 that.canvas.forEachObject(function(fabricObj) {
                     if(fabricObj.wickObjectID === child.id) {
-
                         that.syncObjects(child, fabricObj);
-
-                        fabricObj.trueZIndex = currentObject.getCurrentFrame().wickObjects.indexOf(child);
-                        fabricObj.isActive = inactiveObjects.indexOf(child) == -1;
-
-                        if(fabricObj.isActive) {
-                            that.canvas.moveTo(fabricObj, fabricObj.trueZIndex+2 + activeObjects.length);
-                        } else {
-                            that.canvas.moveTo(fabricObj, activeObjects.length);
-                        }
+                        updateFabObj(fabricObj, child);
                     }
                 });
             } else {
                 // Add new object
                 that.objectIDsInCanvas[child.id] = true;
-                that.createFabricObjectFromWickObject(child, function (newFabricObj) {
+                that.createFabricObjectFromWickObject(child, function (fabricObj) {
 
-                    // The object may have been deleted while we were generating the fabric object. 
-                    // Make sure we don't add it if so.
-                    if(!wickEditor.project.rootObject.getChildByID(child.id)) return;
-
-                    newFabricObj.wickObjectID = child.id;
-                    that.canvas.add(newFabricObj);
-                    if(child.doneFunction) child.doneFunction();
                     that.canvas.forEachObject(function(path) {
                         if(path.isTemporaryDrawingPath) {
                             that.canvas.remove(path);
                         }
                     });
 
-                    newFabricObj.trueZIndex = currentObject.getCurrentFrame().wickObjects.indexOf(child);
-                    newFabricObj.isActive = inactiveObjects.indexOf(child) == -1;
+                    // The object may have been deleted while we were generating the fabric object. 
+                    // Make sure we don't add it if so.
+                    if(!wickEditor.project.rootObject.getChildByID(child.id)) return;
 
-                    if(newFabricObj.isActive) {
-                        that.canvas.moveTo(newFabricObj, newFabricObj.trueZIndex+2 + activeObjects.length);
-                    } else {
-                        that.canvas.moveTo(newFabricObj, activeObjects.length);
-                    }
+                    fabricObj.wickObjectID = child.id;
+                    that.canvas.add(fabricObj);
+                    updateFabObj(fabricObj, child);
                 });
-            }
-        });
-
-        // Make sure things are unselectable if need be...
-        that.canvas.forEachObject(function(fabricObj) {
-            if(!(wickEditor.currentTool instanceof CursorTool)) {
-                fabricObj.hasControls = false;
-                fabricObj.selectable = false;
-                fabricObj.evented = false;
-            } else {
-                if (fabricObj.isActive) {
-                    fabricObj.hasControls = true;
-                    fabricObj.selectable = true;
-                    fabricObj.evented = true;
-                } else {
-                    fabricObj.hasControls = false;
-                    fabricObj.selectable = false;
-                    fabricObj.evented = false;
-                }
             }
         });
 
@@ -147,7 +131,7 @@ var FabricInterface = function (wickEditor) {
         if(selectedObjectIDs.length > 0) that.selectByIDs(selectedObjectIDs);
 
         // Update inactive object overlay
-        that.canvas.moveTo(that.inactiveFrame, inactiveObjects.length+1);
+        that.canvas.moveTo(that.inactiveFrame, siblingObjects.length+1);
         this.inactiveFrame.opacity = currentObject.isRoot ? 0.0 : 0.1;
 
         this.canvas.renderAll();

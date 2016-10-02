@@ -500,7 +500,7 @@ WickObject.prototype.addNewLayer = function () {
 WickObject.prototype.play = function () {
 
     if(!this.isSymbol) {
-        throw "play called on wickobject that isn't a symbol!";
+        throw "play() called on wickobject that isn't a symbol!";
         return;
     }
 
@@ -510,7 +510,7 @@ WickObject.prototype.play = function () {
 WickObject.prototype.stop = function () {
 
     if(!this.isSymbol) {
-        throw "stop called on wickobject that isn't a symbol!";
+        throw "stop() called on wickobject that isn't a symbol!";
         return;
     }
 
@@ -546,7 +546,7 @@ WickObject.prototype.gotoFrame = function (frame) {
 WickObject.prototype.gotoAndPlay = function (frame) {
 
     if(!this.isSymbol) {
-        throw "gotoAndPlay called on wickobject that isn't a symbol!";
+        throw "gotoAndPlay() called on wickobject that isn't a symbol!";
         return;
     }
 
@@ -558,7 +558,7 @@ WickObject.prototype.gotoAndPlay = function (frame) {
 WickObject.prototype.gotoAndStop = function (frame) {
 
     if(!this.isSymbol) {
-        throw "gotoAndStop called on wickobject that isn't a symbol!";
+        throw "gotoAndStop() called on wickobject that isn't a symbol!";
         return;
     }
     
@@ -570,7 +570,7 @@ WickObject.prototype.gotoAndStop = function (frame) {
 WickObject.prototype.gotoNextFrame = function () {
 
     if(!this.isSymbol) {
-        throw "gotoNextFrame called on wickobject that isn't a symbol!";
+        throw "gotoNextFrame() called on wickobject that isn't a symbol!";
         return;
     }
 
@@ -585,7 +585,7 @@ WickObject.prototype.gotoNextFrame = function () {
 WickObject.prototype.gotoPrevFrame = function () {
 
     if(!this.isSymbol) {
-        throw "gotoPrevFrame called on wickobject that isn't a symbol!";
+        throw "gotoPrevFrame() called on wickobject that isn't a symbol!";
         return;
     }
 
@@ -656,6 +656,39 @@ WickObject.prototype.getAllInactiveSiblings = function () {
 
 }
 
+// Use this for onion skinning
+WickObject.prototype.getNearbyObjects = function (numFramesBack, numFramesForward) {
+
+    // Get nearby frames
+
+    var nearbyFrames = [];
+
+    var startPlayheadPosition = Math.max(0, this.playheadPosition - numFramesBack);
+    var endPlayheadPosition = this.playheadPosition + numFramesForward;
+    var tempPlayheadPosition = startPlayheadPosition;
+
+    while(tempPlayheadPosition <= endPlayheadPosition) {
+        var frame = this.getFrameAtPlayheadPosition(tempPlayheadPosition);
+
+        if(frame && tempPlayheadPosition !== this.playheadPosition && nearbyFrames.indexOf(frame) == -1) {
+            nearbyFrames.push(frame);
+        }
+        
+        tempPlayheadPosition ++;
+    }
+
+    // Get objects in nearby frames
+
+    var nearbyObjects = [];
+
+    nearbyFrames.forEach(function(frame) {
+        nearbyObjects = nearbyObjects.concat(frame.wickObjects);
+    });
+
+    return nearbyObjects;
+
+}
+
 //
 WickObject.prototype.getObjectsOnFirstFrame = function () {
 
@@ -709,6 +742,21 @@ WickObject.prototype.getChildByID = function (id) {
     }); 
 
     return foundChild;
+}
+
+WickObject.prototype.getFrameWithChild = function (child) {
+
+    var foundFrame = null;
+
+    this.layers.forEach(function (layer) {
+        layer.frames.forEach(function (frame) {
+            if(frame.wickObjects.indexOf(child) !== -1) {
+                foundFrame = frame;
+            }
+        });
+    });
+
+    return foundFrame;
 }
 
 WickObject.prototype.removeChildByID = function (id) {

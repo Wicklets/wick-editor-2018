@@ -9,6 +9,8 @@ var WickProject = function () {
     // Only used by the editor. Keeps track of current object editor is editing.
     this.currentObjectID = this.rootObject.id;
     this.rootObject.currentFrame = 0;
+
+    this.onionSkinning = false;
     
     this.resolution = {};
     this.resolution.x = 650;
