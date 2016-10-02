@@ -11,6 +11,7 @@ var WickProjectExporter = (function () {
 
     // All libs needed by the player. 
     var requiredLibFiles = [
+        "lib/util/keyCharToCode.js",
         "lib/pixi/pixi.min.js",
         "lib/util/fpscounter.js",
         "lib/util/verboselog.js",
