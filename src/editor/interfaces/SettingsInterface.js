@@ -63,14 +63,6 @@ var SettingsInterface = function (wickEditor) {
 
     });
 
-    $('#frameIdentifier').on('input propertychange', function () {
-
-        if(CheckInput.isString($('#frameIdentifier').val())) {
-            wickEditor.project.getCurrentObject().getCurrentFrame().identifier = parseInt($('#frameIdentifier').val());
-        };
-
-    });
-
     document.getElementById('fitScreenCheckbox').onclick = function (e) {
         wickEditor.project.fitScreen = this.checked;
     }

@@ -291,7 +291,6 @@ var WickPlayer = (function () {
                     var ctx = canvas.getContext('2d');
                     ctx.drawImage( image, 0, 0, w, h );
                     var imgdata = ctx.getImageData(0,0,w,h);
-                    console.log(imgdata)
                     var rgba = imgdata.data;
 
                     subObj.alphaMask = [];
@@ -579,8 +578,6 @@ var WickPlayer = (function () {
                  point.y <= scaledObjY  + scaledObjHeight ) {
 
                 if(!obj.alphaMask) return true;
-
-                console.log("check alpha mask")
 
                 var objectRelativePointX = point.x - scaledObjX;
                 var objectRelativePointY = point.y - scaledObjY;

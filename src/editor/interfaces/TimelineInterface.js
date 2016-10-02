@@ -30,7 +30,7 @@ var TimelineInterface = function (wickEditor) {
 
         if(currentFrame) {
             document.getElementById('frameProperties').style.display = "block";
-            document.getElementById('frameIdentifier').value = currentFrame.identifier;
+            document.getElementById('frameIdentifier').value = (currentFrame.identifier) ? currentFrame.identifier : "";
             document.getElementById('frameAutoplayCheckbox').checked = currentFrame.autoplay;
         } else {
             document.getElementById('frameProperties').style.display = "none"
@@ -169,5 +169,19 @@ var TimelineInterface = function (wickEditor) {
     document.getElementById('frameAutoplayCheckbox').onchange = function () {
         wickEditor.project.getCurrentObject().getCurrentFrame().autoplay = this.checked;
     };
+
+    $('#frameIdentifier').on('input propertychange', function () {
+        var currentObject = wickEditor.project.getCurrentObject();
+        var currentFrame = currentObject.getCurrentFrame();
+
+        var newName = $('#frameIdentifier').val();
+        if(newName === '') {
+            currentFrame.identifier = undefined;
+        } else {
+            currentFrame.identifier = newName;
+        }
+
+        console.log(currentFrame.identifier)
+    });
 
 }

@@ -41,6 +41,8 @@ var InputHandler = function (wickEditor) {
     }
 
     document.body.addEventListener("keydown", function (event) {
+        if (wickEditor.interfaces.builtinplayer.running) return;
+
         that.keys[event.keyCode] = true;
 
         var controlKeyDown = that.keys[91];
