@@ -424,7 +424,9 @@ var FabricInterface = function (wickEditor) {
 
             ids.forEach(function (id) {
                 var wickObj = wickEditor.project.getCurrentObject().getChildByID(id);
-                wickEditor.tools.paintbrush.updateOnscreenVectors(wickObj);
+                if(wickObj.svgData) {
+                    wickEditor.tools.paintbrush.updateOnscreenVectors(wickObj);
+                }
             });
         }
     });

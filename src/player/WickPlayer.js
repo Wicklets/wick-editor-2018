@@ -279,11 +279,45 @@ var WickPlayer = (function () {
             if (subObj.isSymbol) {
                 loadImages(subObj);
                 wickObj.pixiContainer.addChild(subObj.pixiContainer);
-            } else if (subObj.imageData) {
-                subObj.pixiSprite = PIXI.Sprite.fromImage(subObj.imageData);
-                wickObj.pixiContainer.addChild(subObj.pixiSprite);
-            } else if (subObj.svgData) {
-                subObj.pixiSprite = PIXI.Sprite.fromImage(subObj.svgCacheImageData);
+            } else if (subObj.imageData || subObj.svgCacheImageData) {
+                // Generate alpha mask for per-pixel hit detection
+                var image = new Image();
+                image.onload = function () {
+                    var canvas = document.createElement('canvas');
+                    var w = Math.floor(subObj.width);
+                    var h = Math.floor(subObj.height);
+                    canvas.height = h;
+                    canvas.width = w;
+                    var ctx = canvas.getContext('2d');
+                    ctx.drawImage( image, 0, 0, w, h );
+                    document.body.appendChild(canvas)
+                    var imgdata = ctx.getImageData(0,0,w,h);
+                    console.log(imgdata)
+                    var rgba = imgdata.data;
+
+                    subObj.alphaMask = [];
+                    for (var y = 0; y < h; y ++) {
+                        for (var x = 0; x < w; x ++) {
+                            var alphaMaskIndex = x+y*w;
+                            //console.log(alphaMaskIndex)
+                            subObj.alphaMask[alphaMaskIndex] = rgba[alphaMaskIndex*4+3] === 0;
+                        }
+                    }
+                    //console.log(subObj.alphaMask)
+                    //console.log(Math.floor(subObj.width) * Math.floor(subObj.height));
+                    //console.log(subObj.alphaMask.length)
+
+                    console.log("---")
+                    console.log(w)
+                    console.log(h)
+                    console.log(image.width)
+                    console.log(image.height)
+                    console.log(w*h)
+                    console.log(subObj.alphaMask.length)
+                }
+                image.src = subObj.imageData || subObj.svgCacheImageData;
+
+                subObj.pixiSprite = PIXI.Sprite.fromImage(subObj.imageData || subObj.svgCacheImageData);
                 wickObj.pixiContainer.addChild(subObj.pixiSprite);
             } else if (subObj.fontData) {
                 var style = {
@@ -550,10 +584,23 @@ var WickPlayer = (function () {
             var scaledObjWidth = obj.width*obj.scaleX*parentScaleX;
             var scaledObjHeight = obj.height*obj.scaleY*parentScaleY;
 
-            return point.x >= scaledObjX && 
-                   point.y >= scaledObjY  &&
-                   point.x <= scaledObjX + scaledObjWidth && 
-                   point.y <= scaledObjY  + scaledObjHeight;
+            if ( point.x >= scaledObjX && 
+                 point.y >= scaledObjY  &&
+                 point.x <= scaledObjX + scaledObjWidth && 
+                 point.y <= scaledObjY  + scaledObjHeight ) {
+
+                if(!obj.alphaMask) return true;
+
+                console.log("check alpha mask")
+
+                var objectRelativePointX = point.x - scaledObjX;
+                var objectRelativePointY = point.y - scaledObjY;
+                var objectAlphaMaskIndex = (Math.floor(objectRelativePointX)%Math.floor(obj.width))+(Math.floor(objectRelativePointY)*Math.floor(obj.width));
+                return !obj.alphaMask[(objectAlphaMaskIndex)];
+
+            }
+
+            return false;
 
         }
     }

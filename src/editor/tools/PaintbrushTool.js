@@ -31,6 +31,8 @@ var PaintbrushTool = function (wickEditor) {
             return;
         }
 
+        console.log("added")
+
         fabricPath.isTemporaryDrawingPath = true; // So that fabric can remove it when it's time to add paths to the project as wickobjects
 
         // Vectorize the path and create a WickObject out of it
