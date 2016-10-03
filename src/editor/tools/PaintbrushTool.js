@@ -31,8 +31,6 @@ var PaintbrushTool = function (wickEditor) {
             return;
         }
 
-        console.log("added")
-
         fabricPath.isTemporaryDrawingPath = true; // So that fabric can remove it when it's time to add paths to the project as wickobjects
 
         // Vectorize the path and create a WickObject out of it
@@ -40,11 +38,11 @@ var PaintbrushTool = function (wickEditor) {
             var wickObj = WickObject.fromSVG(SVGData);
             wickObj.x = fabricPath.left - wickEditor.interfaces.fabric.getCenteredFrameOffset().x - fabricPath.width/2  - that.brushSize/2;
             wickObj.y = fabricPath.top  - wickEditor.interfaces.fabric.getCenteredFrameOffset().y - fabricPath.height/2 - that.brushSize/2;
+
             wickEditor.actionHandler.doAction('addObjects', {
                 wickObjects: [wickObj]
             });
 
-            // Possible optimization: Only do this on tool changes.
             wickEditor.tools.paintbrush.updateOnscreenVectors(wickObj);
         });
     });
