@@ -1,6 +1,6 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-/* wickactions.js - General Logic for how undo and redo is handled in the Wick editor. */
+/* WickActionHandler.js - General Logic for how undo and redo is handled in the Wick editor. */
 
 var WickActionHandler = function (wickEditor) {
 
