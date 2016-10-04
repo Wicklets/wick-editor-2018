@@ -27,6 +27,8 @@ var WickObject = function () {
     this.flipY = false;
     this.opacity = 1;
 
+    this.tweens = [];
+
 // Common
 
     // Dictionary mapping function names to WickScript object
@@ -1010,5 +1012,88 @@ WickObject.prototype.generateSVGCacheImages = function (callback) {
     } else {
         callback();
     }
+
+}
+
+/*************************
+     Tween stuff
+*************************/
+
+WickObject.prototype.getRelativePlayheadPosition = function (wickObj, args) {
+    var frame = this.getFrameWithChild(wickObj);
+    var frameStartPlayheadPosition = this.getPlayheadPositionAtFrame(frame);
+    var playheadRelativePosition = this.playheadPosition - frameStartPlayheadPosition;
+
+    if(args && args.normalized) playheadRelativePosition /= frame.frameLength-1;
+
+    return playheadRelativePosition;
+}
+
+WickObject.prototype.getFromTween = function () {
+    var foundTween = null;
+
+    var relativePlayheadPosition = this.parentObject.getRelativePlayheadPosition(this);
+
+    var seekPlayheadPosition = relativePlayheadPosition;
+    while (!foundTween && seekPlayheadPosition >= 0) {
+        this.tweens.forEach(function (tween) {
+            if(tween.frame === seekPlayheadPosition) {
+                foundTween = tween;
+            }
+        });
+        seekPlayheadPosition--;
+    }
+
+    return foundTween;
+}
+
+WickObject.prototype.getToTween = function () {
+    var foundTween = null;
+
+    var relativePlayheadPosition = this.parentObject.getRelativePlayheadPosition(this);
+
+    var seekPlayheadPosition = relativePlayheadPosition;
+    var parentFrameLength = this.parentObject.getFrameWithChild(this).frameLength;
+    while (!foundTween && seekPlayheadPosition < parentFrameLength) {
+        this.tweens.forEach(function (tween) {
+            if(tween.frame === seekPlayheadPosition) {
+                foundTween = tween;
+            }
+        });
+        seekPlayheadPosition++;
+    }
+
+    return foundTween;
+}   
+
+WickObject.prototype.applyTweens = function () {
+
+    var that = this;
+
+    if (!this.isRoot && this.tweens.length > 0) {
+        if(this.tweens.length === 1) {
+            console.log("it's got 1 tween")
+            this.tweens[0].applyTweenToWickObject(that);
+        } else {
+            console.log("it's got >1 tweens")
+            var tweenFrom = that.getFromTween();
+            var tweenTo = that.getToTween();
+            console.log(tweenFrom)
+            console.log(tweenTo)
+            var interpFunc = eval("("+tweenFrom.interpFunc+")")
+            console.log(interpFunc)
+            var t = that.parentObject.getRelativePlayheadPosition(that, {normalized:true});
+            var interpolatedTween = WickTween.interpolateTweens(tweenFrom, tweenTo, t, interpFunc);
+            interpolatedTween.applyTweenToWickObject(that);
+        }
+    } else {
+        console.log("no tweens, or root!!!")
+    }
+
+    if (!this.isSymbol) return;
+
+    this.getAllChildObjects().forEach(function (child) {
+        child.applyTweens();
+    });
 
 }

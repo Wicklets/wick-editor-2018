@@ -180,7 +180,7 @@ var WickActionHandler = function (wickEditor) {
             }
         });
 
-    var modifyableAttributes = ["x","y","scaleX","scaleY","angle","opacity","flipY","flipX"];
+    var modifyableAttributes = ["x","y","scaleX","scaleY","angle","opacity","flipX","flipY"];// get rid of these .....
 
     this.registerAction('modifyObjects', 
         function (args) {
