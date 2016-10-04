@@ -39,7 +39,7 @@ var CursorTool = function (wickEditor) {
             var selectedObject = wickEditor.interfaces['fabric'].getSelectedWickObject();
             if(selectedObject && selectedObject.isSymbol) {
                 wickEditor.actionHandler.doAction('editObject', {objectToEdit:selectedObject});
-            } else if (selectedObject && !wickEditor.project.getCurrentObject().isRoot) {
+            } else if (!wickEditor.project.getCurrentObject().isRoot) {
                 wickEditor.actionHandler.doAction('finishEditingCurrentObject', {});
             }
         }

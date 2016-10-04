@@ -95,6 +95,12 @@ var FabricInterface = function (wickEditor) {
                 fabricObj.opacity = (wickObj.opacity * (1-(Math.abs(framePlayheadPosition-currentObject.playheadPosition)/4)))/3;
                 that.canvas.renderAll();
             }
+
+            if (!(wickEditor.currentTool instanceof CursorTool)) {
+                fabricObj.hasControls = false;
+                fabricObj.selectable = false;
+                fabricObj.evented = false;
+            }
         }
 
         // Add new objects and update existing objects

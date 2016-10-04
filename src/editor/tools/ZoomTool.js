@@ -1,7 +1,7 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
 var ZoomTool = function (wickEditor) {
-
+/*
     var that = this;
 
     var canvas = wickEditor.interfaces['fabric'].canvas;
@@ -60,5 +60,6 @@ var ZoomTool = function (wickEditor) {
         sq.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
     }
     else sq.attachEvent("onmousewheel", MouseWheelHandler);
+*/
 
 }

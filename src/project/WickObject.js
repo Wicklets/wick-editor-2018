@@ -352,13 +352,17 @@ WickObject.addPrototypes = function (obj) {
 
     // Recursively put the prototypes back on the children objects
     if(obj.isSymbol) {
-        // Put the layer prototype on on this objects layers
         obj.layers.forEach(function (layer) {
             layer.__proto__ = WickLayer.prototype;
             layer.frames.forEach(function(frame) {
                 frame.__proto__ = WickFrame.prototype;
             });
         });
+        if(obj.tweens) { // Rescues old projects created before tweens came out
+            obj.tweens.forEach(function (tween) {
+                tween.__proto__ = WickTween.prototype;
+            });
+        }
 
         obj.getAllChildObjects().forEach(function(currObj) {
             WickObject.addPrototypes(currObj);
@@ -1070,24 +1074,19 @@ WickObject.prototype.applyTweens = function () {
 
     var that = this;
 
+    if(!this.tweens) this.tweens = []; // Rescue old projects created before tweens came out
+
     if (!this.isRoot && this.tweens.length > 0) {
         if(this.tweens.length === 1) {
-            console.log("it's got 1 tween")
             this.tweens[0].applyTweenToWickObject(that);
         } else {
-            console.log("it's got >1 tweens")
             var tweenFrom = that.getFromTween();
             var tweenTo = that.getToTween();
-            console.log(tweenFrom)
-            console.log(tweenTo)
             var interpFunc = eval("("+tweenFrom.interpFunc+")")
-            console.log(interpFunc)
             var t = that.parentObject.getRelativePlayheadPosition(that, {normalized:true});
             var interpolatedTween = WickTween.interpolateTweens(tweenFrom, tweenTo, t, interpFunc);
             interpolatedTween.applyTweenToWickObject(that);
         }
-    } else {
-        console.log("no tweens, or root!!!")
     }
 
     if (!this.isSymbol) return;
