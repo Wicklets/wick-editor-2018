@@ -409,6 +409,8 @@ var FabricInterface = function (wickEditor) {
                     y      : fabricObj.top  - frameOffset.y + insideSymbolReposition.y - wickObj.getSymbolCornerPosition().y,
                     scaleX : fabricObj.scaleX,
                     scaleY : fabricObj.scaleY,
+                    flipX  : fabricObj.flipX,
+                    flipY  : fabricObj.flipY,
                     angle  : fabricObj.angle,
                     text   : fabricObj.text
                 });

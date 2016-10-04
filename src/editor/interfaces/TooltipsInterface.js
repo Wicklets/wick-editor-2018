@@ -3,7 +3,7 @@
 var TooltipsInterface = function (wickEditor) {
 
     this.syncWithEditorState = function () {
-
+        
     }
 
     $('.tooltipElem').on("mouseover", function(e) {

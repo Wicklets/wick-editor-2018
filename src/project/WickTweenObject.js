@@ -14,8 +14,8 @@ var WickTween = function() {
     this.y = 0; 
     this.z = 0; 
 
-    this.scale = 1; 
-    this.theta = 0; 
+    this.scale = 1;
+    this.theta = 0;
 
     this.opacity = 1; //  0 to 1 
 
