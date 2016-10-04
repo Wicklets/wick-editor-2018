@@ -989,7 +989,7 @@ WickObject.prototype.generateSVGCacheImages = function (callback) {
                 var imgSrc = clone._element.currentSrc || clone._element.src;
                 that.svgCacheImageData = imgSrc;
                 callback();
-            });
+            }, {enableRetinaScaling:true});
         });
 
     } else if(this.isSymbol) {
