@@ -180,7 +180,7 @@ var WickActionHandler = function (wickEditor) {
             }
         });
 
-    var modifyableAttributes = ["x","y","scaleX","scaleY","angle","opacity"];
+    var modifyableAttributes = ["x","y","scaleX","scaleY","angle","opacity","flipY","flipX"];
 
     this.registerAction('modifyObjects', 
         function (args) {
