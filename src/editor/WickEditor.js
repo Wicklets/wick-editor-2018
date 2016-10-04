@@ -46,6 +46,7 @@ var WickEditor = function () {
 
     this.inputHandler = new InputHandler(this);
     this.actionHandler = new WickActionHandler(this);
+    this.guiActionHandler = new GuiActionHandler(this);
 
 }
 
