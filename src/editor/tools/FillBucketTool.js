@@ -19,8 +19,9 @@ var FillBucketTool = function (wickEditor) {
 
         var frameOffset = wickEditor.interfaces.fabric.getCenteredFrameOffset();
         var panOffset = wickEditor.interfaces.fabric.getPanOffset();
-        var mouseX = e.e.offsetX - frameOffset.x - panOffset.x;
-        var mouseY = e.e.offsetY - frameOffset.y - panOffset.y;
+        var symbolOffset = wickEditor.project.getCurrentObject().getAbsolutePosition();
+        var mouseX = e.e.offsetX - frameOffset.x - panOffset.x - symbolOffset.x;
+        var mouseY = e.e.offsetY - frameOffset.y - panOffset.y - symbolOffset.y;
         var mousePoint = new paper.Point(mouseX, mouseY);
 
         // Try filling paths

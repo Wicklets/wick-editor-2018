@@ -161,8 +161,10 @@ var FabricInterface = function (wickEditor) {
 
     this.getPanOffset = function () {
         return {
-            x:-(that.canvas.getVpCenter().x-that.canvas.getCenter().left), 
-            y:-(that.canvas.getVpCenter().y-that.canvas.getCenter().top)
+            //x:-(that.canvas.getVpCenter().x-that.canvas.getCenter().left), 
+            //y:-(that.canvas.getVpCenter().y-that.canvas.getCenter().top)
+            x: that.canvas.viewportTransform[5],
+            x: that.canvas.viewportTransform[6],
         }
     }
 

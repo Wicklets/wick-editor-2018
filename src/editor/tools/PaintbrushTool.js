@@ -29,6 +29,9 @@ var PaintbrushTool = function (wickEditor) {
 
         // Vectorize the path and create a WickObject out of it
         potraceFabricPath(fabricPath, function(SVGData) {
+
+            console.log(fabricPath)
+
             var wickObj = WickObject.fromSVG(SVGData);
 
             wickObj.x = fabricPath.left;
@@ -50,6 +53,14 @@ var PaintbrushTool = function (wickEditor) {
             });
 
             updateOnscreenVectors(wickObj);
+
+            
+
+            /*wickEditor.actionHandler.doAction('addObjects', {
+                wickObjects: [createSVGWickObject(hole, wickEditor.tools.paintbrush.color)],
+                partOfChain: true
+            });*/
+
         });
     });
 

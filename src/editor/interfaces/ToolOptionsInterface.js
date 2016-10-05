@@ -11,7 +11,7 @@ var ToolOptionsInterface = function (wickEditor) {
         lineColorEl.value = wickEditor.tools['paintbrush'].color;
         lineSmoothnessEl.value = wickEditor.tools['paintbrush'].brushSmoothing;
 
-        if(wickEditor.currentTool instanceof PaintbrushTool) {
+        if(wickEditor.currentTool instanceof PaintbrushTool || wickEditor.currentTool instanceof FillBucketTool) {
             document.getElementById('toolOptionsGUI').style.display = 'block';
         } else {
             document.getElementById('toolOptionsGUI').style.display = 'none';

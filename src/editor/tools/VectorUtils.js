@@ -1,5 +1,7 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
+var svgExportPrecision = 5;
+
 var updateOnscreenVectors = function (newPath) {
     uniteIntersectingPaths(newPath);
     subtractIntersectingPaths(newPath);
@@ -46,10 +48,13 @@ var uniteIntersectingPaths = function (newPath) {
         var superPathBoundsX = superPath.bounds._width;
         var superPathBoundsY = superPath.bounds._height;
 
-        repositionPaperSVG(superPath, -(pathPosition._x - superPathBoundsX/2), -(pathPosition._y - superPathBoundsY/2));
+        repositionPaperSVG(
+            superPath, 
+            -(pathPosition._x - superPathBoundsX/2), 
+            -(pathPosition._y - superPathBoundsY/2));
 
         var SVGData = {
-            svgString: createSVGFromPaths(superPath.exportSVG({precision:1,asString:true}), superPathBoundsX, superPathBoundsY),
+            svgString: createSVGFromPaths(superPath.exportSVG({precision:svgExportPrecision,asString:true}), superPathBoundsX, superPathBoundsY),
             fillColor: newPath.svgData.fillColor
         }
 
@@ -90,7 +95,7 @@ var subtractIntersectingPaths = function (newPath) {
             repositionPaperSVG(splitPath, -(pathPosition._x - pathBoundsX/2), -(pathPosition._y - pathBoundsY/2));
 
             var SVGData = {
-                svgString: createSVGFromPaths(splitPath.exportSVG({precision:1,asString:true}), pathBoundsX, pathBoundsY),
+                svgString: createSVGFromPaths(splitPath.exportSVG({precision:svgExportPrecision,asString:true}), pathBoundsX, pathBoundsY),
                 fillColor: allWickObjectsIntersecting[id].svgData.fillColor
             }
 
@@ -148,7 +153,7 @@ var splitApartPathsWithMultiplePieces = function () {
                     repositionPaperSVG(path, -(pathPosition._x - pathBoundsX/2), -(pathPosition._y - pathBoundsY/2));
 
                     var SVGData = {
-                        svgString: createSVGFromPaths(path.exportSVG({precision:1,asString:true}), pathBoundsX, pathBoundsY),
+                        svgString: createSVGFromPaths(path.exportSVG({precision:svgExportPrecision,asString:true}), pathBoundsX, pathBoundsY),
                         fillColor: wickPath.svgData.fillColor
                     }
 
@@ -272,7 +277,7 @@ var splitApartPathsWithMultiplePieces = function () {
             repositionPaperSVG(child, -(pathPosition._x - pathBoundsX/2), -(pathPosition._y - pathBoundsY/2));
 
             var SVGData = {
-                svgString: createSVGFromPaths(child.exportSVG({precision:1,asString:true}), pathBoundsX, pathBoundsY),
+                svgString: createSVGFromPaths(child.exportSVG({precision:svgExportPrecision,asString:true}), pathBoundsX, pathBoundsY),
                 fillColor: wickPath.svgData.fillColor
             }
 
@@ -305,7 +310,7 @@ var createSVGWickObject = function (paperPath, fillColor) {
     repositionPaperSVG(paperPath, -(pathPosition._x - pathBoundsX/2), -(pathPosition._y - pathBoundsY/2));
 
     var SVGData = {
-        svgString: createSVGFromPaths(paperPath.exportSVG({precision:1,asString:true}), pathBoundsX, pathBoundsY),
+        svgString: createSVGFromPaths(paperPath.exportSVG({precision:svgExportPrecision,asString:true}), pathBoundsX, pathBoundsY),
         fillColor: fillColor
     }
     var wickObj = WickObject.fromSVG(SVGData);
@@ -354,8 +359,12 @@ var updatePaperDataOnVectorWickObjects = function (wickObjects) {
         } else {
 
             if(paperPath.closePath) paperPath.closePath();
-            paperPath.position.x += wickObject.x;
-            paperPath.position.y += wickObject.y;
+            paperPath.applyMatrix = true;
+            //paperPath.position.x += wickObject.x;
+            //paperPath.position.y += wickObject.y;
+            paperPath.translate(new paper.Point(wickObject.x,wickObject.y));
+
+            console.log(paperPath)
 
             wickObject.paperPath = paperPath;
         }
@@ -411,7 +420,7 @@ var getIDsOfWickObjectsIntersecting = function (intersectingWickObjects) {
 }
 
 var repositionPaperSVG = function (paperObject, x, y) {
-    var pathSegments = [];
+    /*var pathSegments = [];
     if(paperObject.children) {
         paperObject.children.forEach(function (child) {
             child.getSegments().forEach(function (segment) {
@@ -428,5 +437,7 @@ var repositionPaperSVG = function (paperObject, x, y) {
             oldPoint.y + y
         );
         segment.setPoint(newPoint);
-    });
+    });*/
+    paperObject.applyMatrix = true;
+    paperObject.translate(new paper.Point(x,y));
 }

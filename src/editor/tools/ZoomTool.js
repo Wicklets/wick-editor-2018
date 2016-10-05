@@ -1,7 +1,7 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
 var ZoomTool = function (wickEditor) {
-/*
+
     var that = this;
 
     var canvas = wickEditor.interfaces['fabric'].canvas;
@@ -25,7 +25,7 @@ var ZoomTool = function (wickEditor) {
         // Calculate new zoom amount
         var oldZoom = canvas.getZoom();
         var newZoom = canvas.getZoom() * zoomAmount;
-        if(newZoom < 1) newZoom = 1;
+        //if(newZoom < 1) newZoom = 1;
 
         // Make sure we zoom into the center of the screen, not the corner...
         var oldWidth = window.innerWidth / oldZoom;
@@ -39,7 +39,7 @@ var ZoomTool = function (wickEditor) {
 
         // Do da zoom!
         canvas.setZoom(newZoom);
-        canvas.relativePan(new fabric.Point(panAdjustX,panAdjustY));
+        //canvas.relativePan(new fabric.Point(panAdjustX,panAdjustY));
         canvas.renderAll();
     }
 
@@ -60,6 +60,6 @@ var ZoomTool = function (wickEditor) {
         sq.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
     }
     else sq.attachEvent("onmousewheel", MouseWheelHandler);
-*/
+
 
 }
