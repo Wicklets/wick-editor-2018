@@ -344,6 +344,23 @@ var WickActionHandler = function (wickEditor) {
             console.error("convertSelectionToSymbol undo NYI")
         });
 
+    this.registerAction('breakApartSymbol', 
+        function (args) {
+            var symbol = wickEditor.project.rootObject.getChildByID(args.id);
+
+            var children = symbol.getObjectsOnFirstFrame();
+            children.forEach(function (child) {
+                child.x += symbol.x;
+                child.y += symbol.y;
+                wickEditor.project.addObject(child);
+            });
+
+            wickEditor.project.getCurrentObject().removeChildByID(args.id);
+        },
+        function (args) {
+            console.error("breakApartSymbol undo NYI")
+        });
+
     this.registerAction('editObject', 
         function (args) {
             wickEditor.interfaces['fabric'].deselectAll();

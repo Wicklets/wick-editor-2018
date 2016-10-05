@@ -189,6 +189,11 @@ var RightClickMenuInterface = function (wickEditor) {
         );
     });
 
+    bindActionToButton("#breakApartButton", function () {
+        var selectedObjectIDs = wickEditor.interfaces.fabric.getSelectedObjectIDs();
+        wickEditor.actionHandler.doAction('breakApartSymbol', {id:selectedObjectIDs[0]} );
+    });
+
     bindActionToButton("#finishEditingObjectButton", function () {
         wickEditor.actionHandler.doAction('finishEditingCurrentObject', {});
     });
