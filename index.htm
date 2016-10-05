@@ -278,10 +278,10 @@
         <div id="scriptingGUI" class="GUIBox">
             <div id="scriptObjectDiv">
                 <div class="elemInRow">
-                    <div class="button buttonInRow" id="onLoadButton">onLoad</div>
-                    <div class="button buttonInRow" id="onClickButton">onClick</div>
-                    <div class="button buttonInRow" id="onUpdateButton">onUpdate</div>
-                    <div class="button buttonInRow" id="onKeyDownButton">onKeyDown</div>
+                    <div class="button buttonInRow" id="onLoadButton">Load</div>
+                    <div class="button buttonInRow" id="onClickButton">Click</div>
+                    <div class="button buttonInRow" id="onUpdateButton">Update</div>
+                    <div class="button buttonInRow" id="onKeyDownButton">Key Pressed</div>
                     <div class="button buttonInRow" id="beautifyButton"><font color="orange">Beautify</font></div>
                     <br />
                     <div id="scriptEditor"></div>
@@ -346,10 +346,6 @@
             </div>
         </div>
 
-<!-- Tooltips -->
-
-        <div id="tooltipGUI" class="GUIBox tooltip"></div>
-
 <!-- Drop file message -->
 
         <div id="dropToUploadFileAlert"></div>
@@ -362,11 +358,17 @@
         <div id="playerCanvasContainer"></div>
 
         <div id="builtinPlayerGUI" class="GUIBox">
-            <strong>Builtin Player</strong><br />
+            <strong>Wick Player</strong><br />
             <hr />
-            <div class="button" id="closeBuiltinPlayerButton">Close Player</div>
+            <div class="button buttonInRow tooltipElem" id="closeBuiltinPlayerButton" alt="Close player">
+                <img src="resources/back.png" width="30" />
+            </div>
         </div>
     </div>
+
+<!-- Tooltips -->
+
+        <div id="tooltipGUI" class="GUIBox tooltip"></div>
 
 </body>
 
