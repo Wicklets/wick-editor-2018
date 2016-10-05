@@ -52,26 +52,24 @@ var PaintbrushTool = function (wickEditor) {
                 wickObjects: [wickObj]
             });
 
-            updateOnscreenVectors(wickObj);
-
-            
-
-            /*wickEditor.actionHandler.doAction('addObjects', {
-                wickObjects: [createSVGWickObject(hole, wickEditor.tools.paintbrush.color)],
-                partOfChain: true
-            });*/
-
         });
     });
 
     var potraceFabricPath = function (pathFabricObject, callback) {
+        // I there's a bug in cloneAsImage when zoom != 1, this is a hack
+        var oldZoom = wickEditor.interfaces.fabric.canvas.getZoom()
+        wickEditor.interfaces.fabric.canvas.setZoom(1)
+
         pathFabricObject.cloneAsImage(function(clone) {
+            console.log(clone)
             var img = new Image();
             img.onload = function () {
                 potraceImage(img, callback);
             };
             img.src = clone._element.currentSrc || clone._element.src;
         });
+
+        wickEditor.interfaces.fabric.canvas.setZoom(oldZoom)
     };
 
     var potraceImage = function (img, callback) {
@@ -79,9 +77,12 @@ var PaintbrushTool = function (wickEditor) {
         // Scale the image before we pass it to potrace (fixes retina display bugs!)
         var dummyCanvas = document.createElement('canvas');
         var dummyContext = dummyCanvas.getContext('2d');
+        //var zoom = wickEditor.interfaces.fabric.canvas.getZoom();
         dummyCanvas.width = img.width/window.devicePixelRatio;
         dummyCanvas.height = img.height/window.devicePixelRatio;
-        dummyContext.drawImage(img, 0,0, img.width,img.height, 0,0, dummyCanvas.width,dummyCanvas.height);
+        console.log(img.src)
+        document.body.appendChild(dummyCanvas)
+        dummyContext.drawImage(img, 0,0, img.width,img.height, 0,0, img.width,img.height);
         
         // Send settings and the image data to potrace to vectorize it!
         Potrace.loadImageFromDataURL(dummyCanvas.toDataURL());

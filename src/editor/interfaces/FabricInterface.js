@@ -447,14 +447,7 @@ var FabricInterface = function (wickEditor) {
                 ids = [e.target.wickObjectID];
             }
 
-            modifyObjects(ids)
-
-            ids.forEach(function (id) {
-                var wickObj = wickEditor.project.getCurrentObject().getChildByID(id);
-                if(wickObj.svgData) {
-                    updateOnscreenVectors(wickObj);
-                }
-            });
+            modifyObjects(ids);
 
             // Reselect everything
             that.selectByIDs(ids);

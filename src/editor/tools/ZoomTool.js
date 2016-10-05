@@ -39,7 +39,7 @@ var ZoomTool = function (wickEditor) {
 
         // Do da zoom!
         canvas.setZoom(newZoom);
-        //canvas.relativePan(new fabric.Point(panAdjustX,panAdjustY));
+        canvas.relativePan(new fabric.Point(panAdjustX,panAdjustY));
         canvas.renderAll();
     }
 
