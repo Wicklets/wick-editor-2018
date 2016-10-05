@@ -152,6 +152,13 @@ var FabricInterface = function (wickEditor) {
         }
     }
 
+    this.getPanOffset = function () {
+        return {
+            x:-(that.canvas.getVpCenter().x-that.canvas.getCenter().left), 
+            y:-(that.canvas.getVpCenter().y-that.canvas.getCenter().top)
+        }
+    }
+
     this.syncObjects = function (wickObj, fabricObj) {
 
         // Some wick objects don't have a defined width/height until rendered by fabric. (e.g. paths and text)
@@ -435,7 +442,7 @@ var FabricInterface = function (wickEditor) {
             ids.forEach(function (id) {
                 var wickObj = wickEditor.project.getCurrentObject().getChildByID(id);
                 if(wickObj.svgData) {
-                    wickEditor.tools.paintbrush.updateOnscreenVectors(wickObj);
+                    updateOnscreenVectors(wickObj);
                 }
             });
         }

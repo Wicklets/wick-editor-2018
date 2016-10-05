@@ -13,6 +13,8 @@ var TextTool = function (wickEditor) {
     canvas.on('mouse:down', function (e) {
     	if(wickEditor.currentTool instanceof TextTool) {
 	    	addText();
+            wickEditor.currentTool = wickEditor.tools.cursor;
+            wickEditor.syncInterfaces();
 	    }
     });
 

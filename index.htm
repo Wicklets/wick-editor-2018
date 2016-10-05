@@ -56,6 +56,7 @@
     <script src="src/editor/tools/TextTool.js"></script>
     <script src="src/editor/tools/ZoomTool.js"></script>
     <script src="src/editor/tools/PanTool.js"></script>
+    <script src="src/editor/tools/VectorUtils.js"></script>
 
     <script src="src/editor/backends/GithubsClubhouseBackend.js"></script>
 
@@ -297,10 +298,14 @@
         <div id="rightClickMenu" class="GUIBox">
             <div id="fabricButtons">
                 <div id="symbolButtons">
+                    <hr />
                     <div class="button" id="editObjectButton">Edit Object</div>
                     <hr />
                 </div>
                 <div id="singleObjectButtons">
+                    <div class="button" id="whatButton">Copy</div>
+                    <div class="button" id="whatButton">Cut</div>
+                    <div class="button" id="whatButton">Paste</div>
                     <div class="button" id="editScriptsButton">Edit Scripts</div>
                     <div class="button" id="downloadButton">Download</div>
                     <hr />
@@ -313,10 +318,14 @@
                 </div>
                 <div id="staticObjectButtons">
                     <div class="button" id="convertToSymbolButton">Convert to Symbol</div>
+                    <hr />
                 </div>
                 <div id="insideSymbolButtons">
                     <div class="button" id="finishEditingObjectButton">Finish Editing Object</div>
+                    <hr />
                 </div>
+                <div class="button" id="whatButton">Undo</div>
+                <div class="button" id="whatButton">Redo</div>
             </div>
             <div id="timelineButtons">
                 <div id="clickedOnFrameButtons">

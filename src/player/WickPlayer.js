@@ -315,6 +315,7 @@ var WickPlayer = (function () {
                     wordWrapWidth : 440
                 };
                 subObj.pixiText = new PIXI.Text(subObj.fontData.text, style);
+                subObj.setText = function (text) { subObj.pixiText.setText(text); };
                 wickObj.pixiContainer.addChild(subObj.pixiText);
             }
         });

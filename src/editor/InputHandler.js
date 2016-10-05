@@ -45,12 +45,8 @@ var InputHandler = function (wickEditor) {
 
         that.keys[event.keyCode] = true;
 
-        console.log(event.keyCode)
-
         var controlKeyDown = that.keys[91] || that.keys[224];
         var shiftKeyDown = that.keys[16];
-
-        console.log(controlKeyDown)
 
         var activeElem = document.activeElement.nodeName;
         editingTextBox = activeElem == 'TEXTAREA' || activeElem == 'INPUT';
@@ -136,6 +132,8 @@ var InputHandler = function (wickEditor) {
     });
 
     document.body.addEventListener("keyup", function (event) {
+        if (wickEditor.interfaces.builtinplayer.running) return;
+        
         if(event.keyCode == 32 && !editingTextBox) {
             wickEditor.currentTool = oldTool;
             wickEditor.syncInterfaces();
