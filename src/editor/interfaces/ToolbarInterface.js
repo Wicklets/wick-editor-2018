@@ -33,6 +33,8 @@ var ToolbarInterface = function (wickEditor) {
 
             $(buttonClassName).on('click', function(e) {
                 wickEditor.currentTool = tool;
+                wickEditor.interfaces.fabric.forceModifyObjects();
+                wickEditor.interfaces.fabric.deselectAll();
                 wickEditor.syncInterfaces();
             });
         });

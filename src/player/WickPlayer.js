@@ -10,6 +10,7 @@ var WickPlayer = (function () {
     // Input vars for mouse and keyboard
     var mouse = {x:0, y:0};
     var keys = [];
+    var key; // last key pressed
 
     // Renderer
     var rendererContainerEl;
@@ -434,6 +435,7 @@ var WickPlayer = (function () {
 
     var handleKeyDownInput = function (event) {
         keys[event.keyCode] = true;
+        key = codeToKeyChar[event.keyCode];
 
         project.rootObject.getAllActiveChildObjects().forEach(function(currObj) {
             runKeyDownScript(currObj);
@@ -593,7 +595,18 @@ var WickPlayer = (function () {
     }
 
     var wickObjectIsClickable = function (wickObj) {
-        return wickObj.wickScripts['onClick'];
+        var isClickable = false;
+
+        wickObj.wickScripts['onClick'].split("\n").forEach(function (line) {
+            if(isClickable) return;
+            console.log(line)
+            line = line.trim();
+            if(!line.startsWith("//") && line !== "") {
+                isClickable = true;
+            }
+        });
+
+        return isClickable
     }
 
 /*****************************
@@ -821,10 +834,9 @@ var WickPlayer = (function () {
         if(wickObj.isSymbol) {
             wickObj.pixiContainer.visible = true;
             if(!wickObj.isRoot) {
-                wickObj.pixiContainer.pivot.x = wickObj.width/2;
-                wickObj.pixiContainer.pivot.y = wickObj.height/2;
-                wickObj.pixiContainer.position.x        = wickObj.x + wickObj.width /2*wickObj.scaleX;
-                wickObj.pixiContainer.position.y        = wickObj.y + wickObj.height/2*wickObj.scaleY;
+                wickObj.pixiContainer.anchor = new PIXI.Point(0.5, 0.5);
+                wickObj.pixiContainer.position.x        = wickObj.x;
+                wickObj.pixiContainer.position.y        = wickObj.y;
                 wickObj.pixiContainer.rotation = wickObj.angle/360*2*3.14159;
                 wickObj.pixiContainer.scale.x  = wickObj.scaleX;
                 wickObj.pixiContainer.scale.y  = wickObj.scaleY;

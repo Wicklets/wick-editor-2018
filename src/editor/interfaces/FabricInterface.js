@@ -376,6 +376,45 @@ var FabricInterface = function (wickEditor) {
   Objects modified by fabric.js
 ********************************/
 
+    this.forceModifyObjects = function () {
+        var wickObj = that.getSelectedWickObject();
+        if(wickObj && wickObj.fontData) {
+            modifyObjects([wickObj.id]);
+        }
+    }
+
+    var modifyObjects = function (ids) {
+        var modifiedStates = [];
+
+        var frameOffset = that.getCenteredFrameOffset();
+
+        // For each modified fabric objects (get them by wickobject):
+        //    Add new state of that fabric object to modified states
+        ids.forEach(function (id) {
+            var fabricObj = that.getObjectByWickObjectID(id);
+            var wickObj = wickEditor.project.getObjectByID(id);
+            var insideSymbolReposition = {
+                x: wickObj.x-wickObj.getAbsolutePosition().x,
+                y: wickObj.y-wickObj.getAbsolutePosition().y 
+            };
+            modifiedStates.push({
+                x      : fabricObj.left - frameOffset.x + insideSymbolReposition.x - wickObj.getSymbolCornerPosition().x,
+                y      : fabricObj.top  - frameOffset.y + insideSymbolReposition.y - wickObj.getSymbolCornerPosition().y,
+                scaleX : fabricObj.scaleX,
+                scaleY : fabricObj.scaleY,
+                flipX  : fabricObj.flipX,
+                flipY  : fabricObj.flipY,
+                angle  : fabricObj.angle,
+                text   : fabricObj.text
+            });
+        });
+
+        wickEditor.actionHandler.doAction('modifyObjects', 
+            {ids: ids,
+             modifiedStates: modifiedStates}
+        );
+    }
+
     // Listen for objects being changed so we can undo them in the action handler.
     that.canvas.on('object:modified', function(e) {
 
@@ -390,12 +429,8 @@ var FabricInterface = function (wickEditor) {
                 return;
             }
 
-            var frameOffset = that.getCenteredFrameOffset();
-
-            var modifiedStates = [];
-            var ids  = [];
-
             // Get ids of all selected objects
+            var ids = [];
             if(e.target.type === "group" && !e.target.wickObjectID) {
                 // Selection is a group of objects all selected, not a symbol
                 var objects = e.target.getObjects();
@@ -407,37 +442,7 @@ var FabricInterface = function (wickEditor) {
                 ids = [e.target.wickObjectID];
             }
 
-            // Deselect everything (will ungroup any groups)
-            that.deselectAll();
-
-            // Foe each modified fabric objects (get them by wickobject):
-            //    Add new state of that fabric object to modified states
-            ids.forEach(function (id) {
-                var fabricObj = that.getObjectByWickObjectID(id);
-                var wickObj = wickEditor.project.getObjectByID(id);
-                var insideSymbolReposition = {
-                    x: wickObj.x-wickObj.getAbsolutePosition().x,
-                    y: wickObj.y-wickObj.getAbsolutePosition().y 
-                };
-                modifiedStates.push({
-                    x      : fabricObj.left - frameOffset.x + insideSymbolReposition.x - wickObj.getSymbolCornerPosition().x,
-                    y      : fabricObj.top  - frameOffset.y + insideSymbolReposition.y - wickObj.getSymbolCornerPosition().y,
-                    scaleX : fabricObj.scaleX,
-                    scaleY : fabricObj.scaleY,
-                    flipX  : fabricObj.flipX,
-                    flipY  : fabricObj.flipY,
-                    angle  : fabricObj.angle,
-                    text   : fabricObj.text
-                });
-            });
-
-            // Reselect everything
-            that.selectByIDs(ids);
-
-            wickEditor.actionHandler.doAction('modifyObjects', 
-                {ids: ids,
-                 modifiedStates: modifiedStates}
-            );
+            modifyObjects(ids)
 
             ids.forEach(function (id) {
                 var wickObj = wickEditor.project.getCurrentObject().getChildByID(id);
@@ -445,6 +450,9 @@ var FabricInterface = function (wickEditor) {
                     updateOnscreenVectors(wickObj);
                 }
             });
+
+            // Reselect everything
+            that.selectByIDs(ids);
         }
     });
 
