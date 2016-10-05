@@ -124,6 +124,8 @@ WickObject.fromFile = function (file, fileType, callback) {
 
     if (['image/png', 'image/jpeg', 'image/bmp'].indexOf(fileType) != -1) {
 
+        console.log(file)
+
         var data = file;
         var fr = new FileReader;
         fr.onloadend = function() {
@@ -135,10 +137,6 @@ WickObject.fromFile = function (file, fileType, callback) {
         };
         fr.readAsDataURL(data);
 
-    } else if (fileType == 'application/json') {
-
-        // TODO
-
     } else if (fileType == 'image/gif') {
 
         var data = file;
@@ -149,11 +147,6 @@ WickObject.fromFile = function (file, fileType, callback) {
                 function(newWickObject) { callback(newWickObject) });
         };
         fr.readAsDataURL(data);
-
-    } else if (fileType == 'text/plain') {
-
-        var newWickObject = WickObject.fromText(file);
-        callback(newWickObject);
 
     } else if(['audio/mp3', 'audio/wav', 'audio/ogg'].indexOf(file.type) != -1) {
 
@@ -887,9 +880,8 @@ WickObject.prototype.getAsJSON = function () {
 WickObject.prototype.getAsFile = function () {
 
     if(this.isSymbol) {
-        return this.getAsJSON();
         console.log("note: we don't have wickobject import yet.")
-        return;
+        return this.getAsJSON();
     }
 
     if(this.imageData) {

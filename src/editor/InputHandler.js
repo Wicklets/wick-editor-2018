@@ -45,8 +45,12 @@ var InputHandler = function (wickEditor) {
 
         that.keys[event.keyCode] = true;
 
-        var controlKeyDown = that.keys[91];
+        console.log(event.keyCode)
+
+        var controlKeyDown = that.keys[91] || that.keys[224];
         var shiftKeyDown = that.keys[16];
+
+        console.log(controlKeyDown)
 
         var activeElem = document.activeElement.nodeName;
         editingTextBox = activeElem == 'TEXTAREA' || activeElem == 'INPUT';
@@ -55,7 +59,7 @@ var InputHandler = function (wickEditor) {
             // Control-shift-z: redo
             if (event.keyCode == 90 && controlKeyDown && shiftKeyDown) {
                 event.preventDefault();
-                wickEditor.actionHandler.redoAction();    
+                wickEditor.actionHandler.redoAction();
             }
             // Control-z: undo
             else if (event.keyCode == 90 && controlKeyDown) {
@@ -121,7 +125,6 @@ var InputHandler = function (wickEditor) {
         if(event.keyCode == 32 && !editingTextBox && !(wickEditor.currentTool instanceof PanTool)) {
             oldTool = wickEditor.currentTool;
             wickEditor.currentTool = wickEditor.tools.pan;
-            console.log(wickEditor.tools.pan)
             wickEditor.syncInterfaces();
         }
 
@@ -211,21 +214,25 @@ var InputHandler = function (wickEditor) {
 
         event.preventDefault();
         //focusHiddenArea();
-        
+
         var clipboardData = event.clipboardData;
-        var items = clipboardData.items;
+        var items = clipboardData.items || clipboardData.types;
 
         for (i=0; i<items.length; i++) {
 
-            var fileType = items[i].type;
-            var file = clipboardData.getData(items[i].type);
+            var fileType = items[i].type || items[i];
+            var file = clipboardData.getData(fileType);
 
             if(fileType === 'text/wickobjectsjson') {
                 var fileWickObject = WickObject.fromJSONArray(JSON.parse(file), function(objs) {
                     wickEditor.actionHandler.doAction('addObjects', {wickObjects:objs});
                 });
+            } else if (fileType === 'text/plain') {
+                console.log("uesesses")
+                wickEditor.actionHandler.doAction('addObjects', {wickObjects:[WickObject.fromText(file)]});
             } else {
-                var fileWickObject = WickObject.fromFile(file, fileType, function(obj) {
+                console.log(file)
+                var fileWickObject = WickObject.fromFile(items[i].getAsFile(), fileType, function(obj) {
                     wickEditor.actionHandler.doAction('addObjects', {wickObjects:[obj]});
                 });
             }
