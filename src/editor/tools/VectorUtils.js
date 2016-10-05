@@ -90,7 +90,7 @@ var subtractIntersectingPaths = function (newPath) {
             repositionPaperSVG(splitPath, -(pathPosition._x - pathBoundsX/2), -(pathPosition._y - pathBoundsY/2));
 
             var SVGData = {
-                svgString: createSVGFromPaths(splitPath.exportSVG({asString:true}), pathBoundsX, pathBoundsY),
+                svgString: createSVGFromPaths(splitPath.exportSVG({precision:1,asString:true}), pathBoundsX, pathBoundsY),
                 fillColor: allWickObjectsIntersecting[id].svgData.fillColor
             }
 
@@ -148,7 +148,7 @@ var splitApartPathsWithMultiplePieces = function () {
                     repositionPaperSVG(path, -(pathPosition._x - pathBoundsX/2), -(pathPosition._y - pathBoundsY/2));
 
                     var SVGData = {
-                        svgString: createSVGFromPaths(path.exportSVG({asString:true}), pathBoundsX, pathBoundsY),
+                        svgString: createSVGFromPaths(path.exportSVG({precision:1,asString:true}), pathBoundsX, pathBoundsY),
                         fillColor: wickPath.svgData.fillColor
                     }
 
@@ -272,7 +272,7 @@ var splitApartPathsWithMultiplePieces = function () {
             repositionPaperSVG(child, -(pathPosition._x - pathBoundsX/2), -(pathPosition._y - pathBoundsY/2));
 
             var SVGData = {
-                svgString: createSVGFromPaths(child.exportSVG({asString:true}), pathBoundsX, pathBoundsY),
+                svgString: createSVGFromPaths(child.exportSVG({precision:1,asString:true}), pathBoundsX, pathBoundsY),
                 fillColor: wickPath.svgData.fillColor
             }
 
@@ -305,7 +305,7 @@ var createSVGWickObject = function (paperPath, fillColor) {
     repositionPaperSVG(paperPath, -(pathPosition._x - pathBoundsX/2), -(pathPosition._y - pathBoundsY/2));
 
     var SVGData = {
-        svgString: createSVGFromPaths(paperPath.exportSVG({asString:true}), pathBoundsX, pathBoundsY),
+        svgString: createSVGFromPaths(paperPath.exportSVG({precision:1,asString:true}), pathBoundsX, pathBoundsY),
         fillColor: fillColor
     }
     var wickObj = WickObject.fromSVG(SVGData);

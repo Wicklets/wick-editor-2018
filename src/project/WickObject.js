@@ -44,7 +44,6 @@ var WickObject = function () {
     // Data, only used by static objects
     this.imageData = undefined;
     this.fontData  = undefined;
-    this.htmlData  = undefined;
     this.svgData   = undefined;
 
 // Symbols
@@ -60,33 +59,6 @@ var WickObject = function () {
     this.layers = undefined;
 
 };
-
-WickObject.createNewSymbol = function () {
-
-    var symbol = new WickObject();
-
-    symbol.isSymbol = true;
-    symbol.playheadPosition = 0;
-    symbol.currentLayer = 0;
-    symbol.layers = [new WickLayer()];
-
-    return symbol;
-
-}
-
-WickObject.createNewRootObject = function () {
-    var rootObject = new WickObject("ROOT_NO_PARENT");
-    rootObject.id = 0;
-    rootObject.isSymbol = true;
-    rootObject.isRoot = true;
-    rootObject.playheadPosition = 0;
-    rootObject.currentLayer = 0;
-    rootObject.layers = [new WickLayer()];
-    rootObject.x = 0;
-    rootObject.y = 0;
-    rootObject.opacity = 1.0;
-    return rootObject;
-}
 
 WickObject.fromJSON = function (jsonString) {
     // Parse JSON
@@ -118,64 +90,6 @@ WickObject.fromJSONArray = function (jsonArrayObject, callback) {
     }
 
     callback(newWickObjects);
-}
-
-WickObject.fromFile = function (file, fileType, callback) {
-
-    if (['image/png', 'image/jpeg', 'image/bmp'].indexOf(fileType) != -1) {
-
-        console.log(file)
-
-        var data = file;
-        var fr = new FileReader;
-        fr.onloadend = function() {
-            WickObject.fromImage(
-                fr.result, 
-                function(newWickObject) {
-                    callback(newWickObject);
-                });
-        };
-        fr.readAsDataURL(data);
-
-    } else if (fileType == 'image/gif') {
-
-        var data = file;
-        var fr = new FileReader;
-        fr.onloadend = function() {
-            WickObject.fromAnimatedGIF(
-                fr.result,
-                function(newWickObject) { callback(newWickObject) });
-        };
-        fr.readAsDataURL(data);
-
-    } else if(['audio/mp3', 'audio/wav', 'audio/ogg'].indexOf(file.type) != -1) {
-
-        var dataURLReader = new FileReader();
-        dataURLReader.onload = (function(theFile) { return function(e) {
-
-            var newWickObject = WickObject.fromAudioFile(e.target.result);
-            newWickObject.width = 100;
-            newWickObject.height = 100;
-            callback(newWickObject);
-
-        }; })(file);
-        dataURLReader.readAsDataURL(file);
-
-    } else if (fileType == 'text/html') {
-
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            var newWickObject = WickObject.fromHTML(event.target.result);
-            callback(newWickObject);
-        };
-
-        reader.readAsText(file);
-
-    } else {
-
-        console.error("Unsupported filetype in WickObject.fromFile(): " + file.type);
-
-    }
 }
 
 WickObject.fromImage = function (imgSrc, callback) {
@@ -283,18 +197,7 @@ WickObject.fromText = function (text) {
     return obj;
 }
 
-WickObject.fromHTML = function (text) {
-    
-    var htmlSnippetWickObject = new WickObject();
-
-    htmlSnippetWickObject.htmlData = text;
-    htmlSnippetWickObject.x = window.innerWidth/2;
-    htmlSnippetWickObject.y = window.innerHeight/2;
-
-    return htmlSnippetWickObject;
-}
-
-WickObject.fromAudioFile = function (audioData) {
+WickObject.fromAudioFile = function (audioData, callback) {
     var audioWickObject = new WickObject();
 
     audioWickObject.audioData = audioData;
@@ -302,8 +205,23 @@ WickObject.fromAudioFile = function (audioData) {
     audioWickObject.loopSound = false;
     audioWickObject.x = window.innerWidth/2;
     audioWickObject.y = window.innerHeight/2;
+    audioWickObject.width = 100;
+    audioWickObject.height = 100;
 
-    return audioWickObject;
+    callback(audioWickObject);
+}
+
+WickObject.createNewSymbol = function () {
+
+    var symbol = new WickObject();
+
+    symbol.isSymbol = true;
+    symbol.playheadPosition = 0;
+    symbol.currentLayer = 0;
+    symbol.layers = [new WickLayer()];
+
+    return symbol;
+
 }
 
 WickObject.createSymbolFromWickObjects = function (wickObjects) {
@@ -338,81 +256,39 @@ WickObject.createSymbolFromWickObjects = function (wickObjects) {
 
 }
 
-WickObject.addPrototypes = function (obj) {
-
-    // Put the prototype back on this object
-    obj.__proto__ = WickObject.prototype;
-
-    // Recursively put the prototypes back on the children objects
-    if(obj.isSymbol) {
-        obj.layers.forEach(function (layer) {
-            layer.__proto__ = WickLayer.prototype;
-            layer.frames.forEach(function(frame) {
-                frame.__proto__ = WickFrame.prototype;
-            });
-        });
-        if(obj.tweens) { // Rescues old projects created before tweens came out
-            obj.tweens.forEach(function (tween) {
-                tween.__proto__ = WickTween.prototype;
-            });
-        }
-
-        obj.getAllChildObjects().forEach(function(currObj) {
-            WickObject.addPrototypes(currObj);
-        });
-    }
-}
-
-/*************************
-     Collision Detection
-*************************/
-
-/* Returns a boolean alerting whether or not this object or any of it's children in frame, 
-   have collided with the given object or any of it's children in frame. */
-WickObject.prototype.hitTest = function (otherObj, hitTestType) {
-    if (otherObj === undefined) {
-        return false; 
-    }
-
-    // Generate lists of all children of both objects
-
-    var otherObjChildren = otherObj.getAllActiveChildObjects();
-    if(!otherObj.isSymbol) {
-        otherObjChildren.push(otherObj);
-    }
-
-    var thisObjChildren = this.getAllActiveChildObjects();
-    if(!this.isSymbol) {
-        thisObjChildren.push(this); 
-    }
-
-    // Load the collition detection function for the type of collision we want to check for
-
-    var checkMethod;
-    if(!hitTestType) {
-        // Use default (rectangular hittest) if no hitTestType is provided
-        checkMethod = WickObjectCollisionDetection["rectangles"];
-    } else {
-        checkMethod = WickObjectCollisionDetection[hitTestType];
-    }
-
-    // Ready to go! Check for collisions!!
-
-    for (var i = 0; i < otherObjChildren.length; i++) {
-        for (var j = 0; j < thisObjChildren.length; j++) {
-            if (checkMethod(otherObjChildren[i], thisObjChildren[j])) {
-                return true; 
-            }
-        }
-    }
-
-    return false; 
-
-}
-
 /*************************
      Timeline Control
 *************************/
+
+WickObject.prototype.getCurrentFrame = function() {
+
+    return this.getFrameAtPlayheadPosition(this.playheadPosition);
+
+}
+
+WickObject.prototype.getCurrentLayer = function() {
+    return this.layers[this.currentLayer];
+}
+
+WickObject.prototype.addNewLayer = function () {
+    this.layers.push(new WickLayer());
+}
+
+WickObject.prototype.getFrameByIdentifier = function (id) {
+
+    var foundFrame = null;
+
+    this.layers.forEach(function (layer) {
+        layer.frames.forEach(function (frame) {
+            if(frame.identifier === id) {
+                foundFrame = frame;
+            }
+        });
+    });
+
+    return foundFrame;
+
+}
 
 // If the frame's length > 1, always return the playhead position of at the frame's beginning
 WickObject.prototype.getPlayheadPositionAtFrame = function (frame) {
@@ -434,6 +310,16 @@ WickObject.prototype.getPlayheadPositionAtFrame = function (frame) {
 
 }
 
+WickObject.prototype.getRelativePlayheadPosition = function (wickObj, args) {
+    var frame = this.getFrameWithChild(wickObj);
+    var frameStartPlayheadPosition = this.getPlayheadPositionAtFrame(frame);
+    var playheadRelativePosition = this.playheadPosition - frameStartPlayheadPosition;
+
+    if(args && args.normalized) playheadRelativePosition /= frame.frameLength-1;
+
+    return playheadRelativePosition;
+}
+
 WickObject.prototype.getFrameAtPlayheadPosition = function(pos) {
     var layer = this.getCurrentLayer();
     var counter = 0;
@@ -452,32 +338,6 @@ WickObject.prototype.getFrameAtPlayheadPosition = function(pos) {
     return null;
 }
 
-WickObject.prototype.getCurrentFrame = function() {
-
-    return this.getFrameAtPlayheadPosition(this.playheadPosition);
-
-}
-
-WickObject.prototype.getCurrentLayer = function() {
-    return this.layers[this.currentLayer];
-}
-
-WickObject.prototype.getFrameByIdentifier = function (id) {
-
-    var foundFrame = null;
-
-    this.layers.forEach(function (layer) {
-        layer.frames.forEach(function (frame) {
-            if(frame.identifier === id) {
-                foundFrame = frame;
-            }
-        });
-    });
-
-    return foundFrame;
-
-}
-
 WickObject.prototype.getTotalTimelineLength = function () {
     var longestLayerLength = 0;
 
@@ -490,108 +350,6 @@ WickObject.prototype.getTotalTimelineLength = function () {
 
     return longestLayerLength;
 
-}
-
-WickObject.prototype.addNewLayer = function () {
-    this.layers.push(new WickLayer());
-}
-
-WickObject.prototype.play = function () {
-
-    if(!this.isSymbol) {
-        throw "play() called on wickobject that isn't a symbol!";
-        return;
-    }
-
-    this.isPlaying = true;
-}
-
-WickObject.prototype.stop = function () {
-
-    if(!this.isSymbol) {
-        throw "stop() called on wickobject that isn't a symbol!";
-        return;
-    }
-
-    this.isPlaying = false;
-}
-
-WickObject.prototype.gotoFrame = function (frame) {
-    if (CheckInput.isNonNegativeInteger(frame)) {
-
-        // Only navigate to an integer frame if it is nonnegative and a valid frame
-        if(frame < this.getCurrentLayer().frames.length)
-            this.playheadPosition = frame;
-        else
-            throw "Failed to navigate to frame \'" + frame + "\': is not a valid frame.";
-
-    } else if (CheckInput.isString(frame)) {
-
-        // Search for the frame with the correct identifier and navigate if found
-        var newFrame = this.getFrameByIdentifier(frame);
-
-        if(newFrame)
-            this.playheadPosition = this.getPlayheadPositionAtFrame(newFrame);
-        else
-            throw "Failed to navigate to frame \'" + frame + "\': is not a valid frame.";
-
-    } else {
-
-        throw "Failed to navigate to frame \'" + frame + "\': is neither a string nor a nonnegative integer";
-
-    }
-}
-
-WickObject.prototype.gotoAndPlay = function (frame) {
-
-    if(!this.isSymbol) {
-        throw "gotoAndPlay() called on wickobject that isn't a symbol!";
-        return;
-    }
-
-    this.gotoFrame(frame);
-    this.isPlaying = true;
-    
-}
-
-WickObject.prototype.gotoAndStop = function (frame) {
-
-    if(!this.isSymbol) {
-        throw "gotoAndStop() called on wickobject that isn't a symbol!";
-        return;
-    }
-    
-    this.gotoFrame(frame);
-    this.isPlaying = false;
-
-}
-
-WickObject.prototype.gotoNextFrame = function () {
-
-    if(!this.isSymbol) {
-        throw "gotoNextFrame() called on wickobject that isn't a symbol!";
-        return;
-    }
-
-    this.playheadPosition ++;
-    var totalLength = this.layers[this.currentLayer.getTotalLength];
-    if(this.playheadPosition >= totalLength) {
-        this.playheadPosition = totalLength-1;
-    }
-
-}
-
-WickObject.prototype.gotoPrevFrame = function () {
-
-    if(!this.isSymbol) {
-        throw "gotoPrevFrame() called on wickobject that isn't a symbol!";
-        return;
-    }
-
-    this.playheadPosition --;
-    if(this.playheadPosition < 0) {
-        this.playheadPosition = 0;
-    }
 }
 
 /*************************
@@ -892,6 +650,31 @@ WickObject.prototype.getAsFile = function () {
 
 }
 
+WickObject.addPrototypes = function (obj) {
+
+    // Put the prototype back on this object
+    obj.__proto__ = WickObject.prototype;
+
+    // Recursively put the prototypes back on the children objects
+    if(obj.isSymbol) {
+        obj.layers.forEach(function (layer) {
+            layer.__proto__ = WickLayer.prototype;
+            layer.frames.forEach(function(frame) {
+                frame.__proto__ = WickFrame.prototype;
+            });
+        });
+        if(obj.tweens) { // Rescues old projects created before tweens came out
+            obj.tweens.forEach(function (tween) {
+                tween.__proto__ = WickTween.prototype;
+            });
+        }
+
+        obj.getAllChildObjects().forEach(function(currObj) {
+            WickObject.addPrototypes(currObj);
+        });
+    }
+}
+
 /* Encodes scripts and strings to avoid JSON format problems */
 WickObject.prototype.encodeStrings = function () {
 
@@ -1015,16 +798,6 @@ WickObject.prototype.generateSVGCacheImages = function (callback) {
      Tween stuff
 *************************/
 
-WickObject.prototype.getRelativePlayheadPosition = function (wickObj, args) {
-    var frame = this.getFrameWithChild(wickObj);
-    var frameStartPlayheadPosition = this.getPlayheadPositionAtFrame(frame);
-    var playheadRelativePosition = this.playheadPosition - frameStartPlayheadPosition;
-
-    if(args && args.normalized) playheadRelativePosition /= frame.frameLength-1;
-
-    return playheadRelativePosition;
-}
-
 WickObject.prototype.getFromTween = function () {
     var foundTween = null;
 
@@ -1086,5 +859,150 @@ WickObject.prototype.applyTweens = function () {
     this.getAllChildObjects().forEach(function (child) {
         child.applyTweens();
     });
+
+}
+
+/*************************
+     Scripting methods
+*************************/
+
+WickObject.prototype.play = function () {
+
+    if(!this.isSymbol) {
+        throw "play() called on wickobject that isn't a symbol!";
+        return;
+    }
+
+    this.isPlaying = true;
+}
+
+WickObject.prototype.stop = function () {
+
+    if(!this.isSymbol) {
+        throw "stop() called on wickobject that isn't a symbol!";
+        return;
+    }
+
+    this.isPlaying = false;
+}
+
+WickObject.prototype.gotoFrame = function (frame) {
+    if (CheckInput.isNonNegativeInteger(frame)) {
+
+        // Only navigate to an integer frame if it is nonnegative and a valid frame
+        if(frame < this.getCurrentLayer().frames.length)
+            this.playheadPosition = frame;
+        else
+            throw "Failed to navigate to frame \'" + frame + "\': is not a valid frame.";
+
+    } else if (CheckInput.isString(frame)) {
+
+        // Search for the frame with the correct identifier and navigate if found
+        var newFrame = this.getFrameByIdentifier(frame);
+
+        if(newFrame)
+            this.playheadPosition = this.getPlayheadPositionAtFrame(newFrame);
+        else
+            throw "Failed to navigate to frame \'" + frame + "\': is not a valid frame.";
+
+    } else {
+
+        throw "Failed to navigate to frame \'" + frame + "\': is neither a string nor a nonnegative integer";
+
+    }
+}
+
+WickObject.prototype.gotoAndPlay = function (frame) {
+
+    if(!this.isSymbol) {
+        throw "gotoAndPlay() called on wickobject that isn't a symbol!";
+        return;
+    }
+
+    this.gotoFrame(frame);
+    this.isPlaying = true;
+    
+}
+
+WickObject.prototype.gotoAndStop = function (frame) {
+
+    if(!this.isSymbol) {
+        throw "gotoAndStop() called on wickobject that isn't a symbol!";
+        return;
+    }
+    
+    this.gotoFrame(frame);
+    this.isPlaying = false;
+
+}
+
+WickObject.prototype.gotoNextFrame = function () {
+
+    if(!this.isSymbol) {
+        throw "gotoNextFrame() called on wickobject that isn't a symbol!";
+        return;
+    }
+
+    this.playheadPosition ++;
+    var totalLength = this.layers[this.currentLayer.getTotalLength];
+    if(this.playheadPosition >= totalLength) {
+        this.playheadPosition = totalLength-1;
+    }
+
+}
+
+WickObject.prototype.gotoPrevFrame = function () {
+
+    if(!this.isSymbol) {
+        throw "gotoPrevFrame() called on wickobject that isn't a symbol!";
+        return;
+    }
+
+    this.playheadPosition --;
+    if(this.playheadPosition < 0) {
+        this.playheadPosition = 0;
+    }
+}
+
+/* Returns a boolean alerting whether or not this object or any of it's children in frame, 
+   have collided with the given object or any of it's children in frame. */
+WickObject.prototype.hitTest = function (otherObj, hitTestType) {
+    if (otherObj === undefined) {
+        return false;
+    }
+
+    // Generate lists of all children of both objects
+
+    var otherObjChildren = otherObj.getAllActiveChildObjects();
+    if(!otherObj.isSymbol) {
+        otherObjChildren.push(otherObj);
+    }
+
+    var thisObjChildren = this.getAllActiveChildObjects();
+    if(!this.isSymbol) {
+        thisObjChildren.push(this); 
+    }
+
+    // Load the collition detection function for the type of collision we want to check for
+
+    var checkMethod;
+    if(!hitTestType) {
+        // Use default (rectangular hittest) if no hitTestType is provided
+        checkMethod = WickObjectCollisionDetection["rectangles"];
+    } else {
+        checkMethod = WickObjectCollisionDetection[hitTestType];
+    }
+
+    // Ready to go! Check for collisions!!
+
+    for (var i = 0; i < otherObjChildren.length; i++) {
+        for (var j = 0; j < thisObjChildren.length; j++) {
+            if (checkMethod(otherObjChildren[i], thisObjChildren[j])) {
+                return true; 
+            }
+        }
+    }
+
+    return false; 
 
 }

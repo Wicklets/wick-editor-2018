@@ -4,7 +4,7 @@ var WickProject = function () {
 
     // Create the root object. The editor is always editing the root 
     // object or its sub-objects and cannot ever leave the root object.
-    this.rootObject = WickObject.createNewRootObject();
+    this.createNewRootObject();
 
     // Only used by the editor. Keeps track of current object editor is editing.
     this.currentObjectID = this.rootObject.id;
@@ -24,6 +24,20 @@ var WickProject = function () {
     this.borderColor = "#FFFFFF";
 
 };
+
+WickProject.prototype.createNewRootObject = function () {
+    var rootObject = new WickObject();
+    rootObject.id = 0;
+    rootObject.isSymbol = true;
+    rootObject.isRoot = true;
+    rootObject.playheadPosition = 0;
+    rootObject.currentLayer = 0;
+    rootObject.layers = [new WickLayer()];
+    rootObject.x = 0;
+    rootObject.y = 0;
+    rootObject.opacity = 1.0;
+    this.rootObject = rootObject;
+}
 
 /*****************************
     Import/Export
@@ -144,7 +158,7 @@ WickProject.prototype.regenerateUniqueIDs = function (wickObject) {
     if(!wickObject.id && wickObject.id!=0) {
         //wickObject.id = this.rootObject.getLargestID() + 1; // Currently broken
         // This is silly, but the actionhandler freaks out if it has to add an object 
-        // right after deleting another (those objects would have the same id.)
+        // right after deleting another (those objects would have the same id.) (pls fix)
         wickObject.id = new Date().getTime() + this.rootObject.getLargestID();
     }
 

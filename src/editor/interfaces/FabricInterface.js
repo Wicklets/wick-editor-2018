@@ -83,17 +83,23 @@ var FabricInterface = function (wickEditor) {
                 fabricObj.hasControls = true;
                 fabricObj.selectable = true;
                 fabricObj.evented = true;
+
+                // OPTIMIZATION WORK: get ridda this
                 fabricObj.trueZIndex = currentObject.getCurrentFrame().wickObjects.indexOf(wickObj);
                 that.canvas.moveTo(fabricObj, fabricObj.trueZIndex+2 + activeObjects.length+3);
             } else {
                 fabricObj.hasControls = false;
                 fabricObj.selectable = false;
                 fabricObj.evented = false;
+
+                // OPTIMIZATION WORK: get ridda this
                 that.canvas.moveTo(fabricObj, activeObjects.length+3);
 
-                var framePlayheadPosition = currentObject.getPlayheadPositionAtFrame(currentObject.getFrameWithChild(wickObj));
-                fabricObj.opacity = (wickObj.opacity * (1-(Math.abs(framePlayheadPosition-currentObject.playheadPosition)/4)))/3;
-                that.canvas.renderAll();
+                if(nearbyObjects.indexOf(wickObj) !== -1) {
+                    var framePlayheadPosition = currentObject.getPlayheadPositionAtFrame(currentObject.getFrameWithChild(wickObj));
+                    fabricObj.opacity = (wickObj.opacity * (1-(Math.abs(framePlayheadPosition-currentObject.playheadPosition)/4)))/3;
+                    that.canvas.renderAll();
+                }
             }
 
             if (!(wickEditor.currentTool instanceof CursorTool)) {
@@ -139,8 +145,9 @@ var FabricInterface = function (wickEditor) {
         if(selectedObjectIDs.length > 0) that.selectByIDs(selectedObjectIDs);
 
         // Update inactive object overlay
+        // OPTIMIZATION WORK: get ridda this
         that.canvas.moveTo(that.inactiveFrame, siblingObjects.length+1);
-        this.inactiveFrame.opacity = currentObject.isRoot ? 0.0 : 0.1;
+        this.inactiveFrame.opacity = currentObject.isRoot ? 0.0 : 0.4;
 
         this.canvas.renderAll();
     }
@@ -221,13 +228,6 @@ var FabricInterface = function (wickEditor) {
             fabric.Image.fromURL('resources/audio.png', function(audioFabricObject) {
                 that.syncObjects(wickObj, audioFabricObject);
                 callback(audioFabricObject);
-            });
-        }
-
-        if(wickObj.htmlData) {
-            fabric.Image.fromURL('resources/htmlsnippet.png', function(htmlFabricObject) {
-                that.syncObjects(wickObj, htmlFabricObject);
-                callback(htmlFabricObject);
             });
         }
 
@@ -376,13 +376,6 @@ var FabricInterface = function (wickEditor) {
   Objects modified by fabric.js
 ********************************/
 
-    this.forceModifyObjects = function () {
-        var wickObj = that.getSelectedWickObject();
-        if(wickObj && wickObj.fontData) {
-            modifyObjects([wickObj.id]);
-        }
-    }
-
     var modifyObjects = function (ids) {
         var modifiedStates = [];
 
@@ -415,10 +408,20 @@ var FabricInterface = function (wickEditor) {
         );
     }
 
+    this.forceModifySelectedObjects = function () {
+        var wickObj = that.getSelectedWickObject();
+        if(wickObj && wickObj.fontData) {
+            modifyObjects([wickObj.id]);
+        }
+    }
+
     // Listen for objects being changed so we can undo them in the action handler.
     that.canvas.on('object:modified', function(e) {
 
         if(that.getObjectByWickObjectID(e.target.wickObjectID)) {
+
+            // Deselect everything
+            that.deselectAll();
 
             // Delete text boxes with no text in 'em.
             if (e.target.text === '') {
@@ -574,8 +577,6 @@ var FabricInterface = function (wickEditor) {
         return ids;
     }
 
-// Convenience methods for gettin selected WickObjects
-
     this.getSelectedWickObject = function () {
         var ids = wickEditor.interfaces['fabric'].getSelectedObjectIDs();
         if(ids.length == 1) {
@@ -593,50 +594,4 @@ var FabricInterface = function (wickEditor) {
         }
         return wickObjects;
     }
-
-/********************************
-         Vector stuff
-********************************/
-
-    /*this.eraseUsingSVG = function (SVGData) {
-        console.error("eraseUsingSVG NYI")
-    }
-
-    this.uniteIntersectingPaths = function () {
-
-        that.canvas.forEachObject(function(fabObjA) {
-            that.canvas.forEachObject(function(fabObjB) {
-
-                var bothFabObjsArePaths = fabObjA.type === "path" && fabObjB.type === "path";
-                var notSameObject = fabObjA.wickObjectID != fabObjB.wickObjectID;
-                var bothHaveWickObjectIDs = fabObjA.wickObjectID && fabObjB.wickObjectID;
-
-                if (bothFabObjsArePaths && notSameObject && bothHaveWickObjectIDs) {
-                    var pathA = fabObjA.paperPath;
-                    var pathB = fabObjB.paperPath;
-                    var intersections = pathA.getIntersections(pathB);
-                    if(intersections.length > 0) {
-                        if(fabObjA.fill === fabObjB.fill) {
-                            // Same color: union
-                        } else {
-                            // Different colors: path with higer z index subtracts from other path 
-                        }
-                    }
-                }
-
-            });
-        });
-
-    }
-
-    this.splitPathsWithMultiplePieces = function () {
-        that.canvas.forEachObject(function(fabObj) {
-            if(fabObj.type === "path" && fabObj.wickObjectID) {
-                var path = fabObj.paperPath;
-                // Not sure how to check if the path is multiple pieces...
-            }
-        });
-    }*/
-
 }
-

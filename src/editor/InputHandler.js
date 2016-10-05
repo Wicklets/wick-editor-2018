@@ -226,13 +226,9 @@ var InputHandler = function (wickEditor) {
                     wickEditor.actionHandler.doAction('addObjects', {wickObjects:objs});
                 });
             } else if (fileType === 'text/plain') {
-                console.log("uesesses")
                 wickEditor.actionHandler.doAction('addObjects', {wickObjects:[WickObject.fromText(file)]});
             } else {
-                console.log(file)
-                var fileWickObject = WickObject.fromFile(items[i].getAsFile(), fileType, function(obj) {
-                    wickEditor.actionHandler.doAction('addObjects', {wickObjects:[obj]});
-                });
+                console.error("Pasting files with type " + fileType + "NYI.")
             }
 
         }
@@ -270,9 +266,25 @@ var InputHandler = function (wickEditor) {
                     wickEditor.syncInterfaces();
                 });
             } else {
-                var fileWickObject = WickObject.fromFile(file, fileType, function(obj) {
-                    wickEditor.actionHandler.doAction('addObjects', {wickObjects:[obj]});
-                });
+
+                var fromContstructors = {
+                    'image/png'  : WickObject.fromImage,
+                    'image/jpeg' : WickObject.fromImage,
+                    'image/bmp'  : WickObject.fromImage,
+                    'image/gif'  : WickObject.fromAnimatedGIF,
+                    'audio/mp3'  : WickObject.fromAudioFile,
+                    'audio/wav'  : WickObject.fromAudioFile,
+                    'audio/ogg'  : WickObject.fromAudioFile
+                }
+                
+                var fr = new FileReader;
+                fr.onloadend = function() {
+                    fromContstructors[fileType](fr.result, function (newWickObject) {
+                        wickEditor.actionHandler.doAction('addObjects', {wickObjects:[newWickObject]});
+                    })
+                };
+                fr.readAsDataURL(file);
+
             }
         }
 

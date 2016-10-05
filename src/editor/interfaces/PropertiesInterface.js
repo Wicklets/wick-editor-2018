@@ -7,7 +7,6 @@ var PropertiesInterface = function (wickEditor) {
         $("#objectProperties").css('display', 'none');
         $("#textProperties").css('display', 'none');
         $("#soundProperties").css('display', 'none');
-        $("#htmlSnippetProperties").css('display', 'none');
 
         var selectedObj = wickEditor.interfaces['fabric'].getSelectedWickObject();
         if(selectedObj) {
@@ -32,10 +31,6 @@ var PropertiesInterface = function (wickEditor) {
                 $("#soundProperties").css('display', 'inline');
                 document.getElementById('loopCheckbox').checked = wickEditor.interfaces['fabric'].getSelectedWickObject().loopSound;
                 document.getElementById('autoplayCheckbox').checked = wickEditor.interfaces['fabric'].getSelectedWickObject().autoplaySound;
-            } else if (selectedObj.htmlData) {
-                $("#htmlSnippetProperties").css('display', 'inline');
-            } else {
-                
             }
         } else {
             //Nothing selected, show project properties
@@ -121,9 +116,5 @@ var PropertiesInterface = function (wickEditor) {
     document.getElementById('autoplayCheckbox').onchange = function () {
         wickEditor.interfaces['fabric'].getSelectedWickObject().autoplaySound = this.checked;
     };
-
-    $('#htmlTextBox').on('input propertychange', function () {
-        wickEditor.interfaces['fabric'].getActiveObject().wickObject.htmlData = $('#htmlTextBox').val();
-    });
 
 }

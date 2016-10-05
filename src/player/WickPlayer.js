@@ -180,7 +180,6 @@ var WickPlayer = (function () {
         // Regenerate WickObject stuff that we lost when the projects was JSONified
         generateObjectNameReferences(project.rootObject);
         generateObjectParentReferences(project.rootObject);
-        generateHTMLSnippetDivs(project.rootObject);
 
         project.rootObject.regenerateParentObjectReferences();
 
@@ -210,28 +209,6 @@ var WickPlayer = (function () {
                 generateObjectParentReferences(subObj);
             }
         });
-    }
-
-    /* */
-    var generateHTMLSnippetDivs = function (wickObj) {
-
-        if (wickObj.htmlData) {
-            var snippetDiv = document.createElement("div");
-            snippetDiv.style.position = 'fixed';
-            snippetDiv.style.width = '600px';
-            snippetDiv.style.height = '600px';
-            snippetDiv.style.left = wickObj.x + 'px';
-            snippetDiv.style.top = wickObj.y + 'px';
-            snippetDiv.innerHTML = wickObj.htmlData;
-            document.getElementById('playerCanvasContainer').appendChild(snippetDiv);
-        }
-
-        if(wickObj.isSymbol) {
-            wickObj.getAllChildObjects().forEach(function(subObj) {
-                generateHTMLSnippetDivs(subObj);
-            });
-        }
-
     }
 
     /* Make sure all objects start at first frame and start playing */
@@ -599,7 +576,6 @@ var WickPlayer = (function () {
 
         wickObj.wickScripts['onClick'].split("\n").forEach(function (line) {
             if(isClickable) return;
-            console.log(line)
             line = line.trim();
             if(!line.startsWith("//") && line !== "") {
                 isClickable = true;
