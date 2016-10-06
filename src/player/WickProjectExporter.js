@@ -64,7 +64,7 @@ var WickProjectExporter = (function () {
     }
 
     projectExporter.JSONReplacer = function(key, value) {
-        if (key=="parentObject") {
+        if (key=="parentObject" || key=="cachedFabricObject") {
             return undefined;
         } else {
             return value;

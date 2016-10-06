@@ -232,6 +232,11 @@ var FabricInterface = function (wickEditor) {
 
     this.createFabricObjectFromWickObject = function (wickObj, callback) {
 
+        if(wickObj.cachedFabricObject) {
+            callback(wickObj.cachedFabricObject);
+            return;
+        }
+
         if(wickObj.imageData) {
             fabric.Image.fromURL(wickObj.imageData, function(newFabricImage) {
                 that.syncObjects(wickObj, newFabricImage);
@@ -259,6 +264,9 @@ var FabricInterface = function (wickEditor) {
 
                 that.syncObjects(wickObj, pathFabricObj);
                 pathFabricObj.fill = wickObj.svgData.fillColor;
+
+                wickObj.cachedFabricObject = pathFabricObj;
+
                 callback(pathFabricObj);
             });
         }
