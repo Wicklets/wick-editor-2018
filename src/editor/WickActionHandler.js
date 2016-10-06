@@ -243,7 +243,7 @@ var WickActionHandler = function (wickEditor) {
             var currentObject = wickEditor.project.getCurrentObject();
 
             // Add an empty frame
-            currentObject.getCurrentLayer().addNewFrame();
+            currentObject.getCurrentLayer().addFrame(new WickFrame());
 
             // Move to that new frame
             wickEditor.actionHandler.doAction('movePlayhead', {

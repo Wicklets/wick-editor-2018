@@ -56,9 +56,9 @@ var PaintbrushTool = function (wickEditor) {
     });
 
     var potraceFabricPath = function (pathFabricObject, callback) {
-        // I there's a bug in cloneAsImage when zoom != 1, this is a hack
-        var oldZoom = wickEditor.interfaces.fabric.canvas.getZoom()
-        wickEditor.interfaces.fabric.canvas.setZoom(1)
+        // I think there's a bug in cloneAsImage when zoom != 1, this is a hack
+        var oldZoom = wickEditor.interfaces.fabric.canvas.getZoom();
+        wickEditor.interfaces.fabric.canvas.setZoom(1);
 
         pathFabricObject.cloneAsImage(function(clone) {
             console.log(clone)
@@ -69,7 +69,8 @@ var PaintbrushTool = function (wickEditor) {
             img.src = clone._element.currentSrc || clone._element.src;
         });
 
-        wickEditor.interfaces.fabric.canvas.setZoom(oldZoom)
+        // Put zoom back to where it was before
+        wickEditor.interfaces.fabric.canvas.setZoom(oldZoom);
     };
 
     var potraceImage = function (img, callback) {
@@ -80,8 +81,6 @@ var PaintbrushTool = function (wickEditor) {
         //var zoom = wickEditor.interfaces.fabric.canvas.getZoom();
         dummyCanvas.width = img.width/window.devicePixelRatio;
         dummyCanvas.height = img.height/window.devicePixelRatio;
-        console.log(img.src)
-        document.body.appendChild(dummyCanvas)
         dummyContext.drawImage(img, 0,0, img.width,img.height, 0,0, img.width,img.height);
         
         // Send settings and the image data to potrace to vectorize it!

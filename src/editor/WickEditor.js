@@ -33,7 +33,6 @@ var WickEditor = function () {
     this.tools = {
         "cursor" : new CursorTool(this),
         "paintbrush" : new PaintbrushTool(this),
-        "fillbucket" : new FillBucketTool(this),
         "text" : new TextTool(this),
         "zoom" : new ZoomTool(this),
         "pan" : new PanTool(this)

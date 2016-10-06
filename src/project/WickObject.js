@@ -141,7 +141,7 @@ WickObject.fromAnimatedGIF = function (gifData, callback) {
                         gifSymbol.height = gifSymbol.layers[0].frames[0].wickObjects[0].height;
                         callback(gifSymbol);
                     } else {
-                        gifSymbol.layers[0].addNewFrame();
+                        gifSymbol.layers[0].addFrame(new WickFrame);
                     }
                 }; }) (i)
             );
@@ -320,8 +320,8 @@ WickObject.prototype.getRelativePlayheadPosition = function (wickObj, args) {
     return playheadRelativePosition;
 }
 
-WickObject.prototype.getFrameAtPlayheadPosition = function(pos) {
-    var layer = this.getCurrentLayer();
+WickObject.prototype.getFrameAtPlayheadPosition = function(pos, layerToSearch) {
+    var layer = layerToSearch || this.getCurrentLayer();
     var counter = 0;
 
     for(var f = 0; f < layer.frames.length; f++) {
@@ -364,7 +364,7 @@ WickObject.prototype.getAllChildObjects = function () {
     }
 
     var children = [];
-    for(var l = 0; l < this.layers.length; l++) {
+    for(var l = this.layers.length-1; l >= 0; l--) {
         var layer = this.layers[l];
         for(var f = 0; f < layer.frames.length; f++) {
             var frame = layer.frames[f];
@@ -384,10 +384,12 @@ WickObject.prototype.getAllActiveChildObjects = function () {
     }
 
     var children = [];
-    var currentFrame = this.getCurrentFrame();
-    if(currentFrame) {
-        for(var o = 0; o < currentFrame.wickObjects.length; o++) {
-            children.push(currentFrame.wickObjects[o]);
+    for (var l = this.layers.length-1; l >= 0; l--) {
+        var frame = this.getFrameAtPlayheadPosition(this.playheadPosition, this.layers[l]);
+        if(frame) {
+            frame.wickObjects.forEach(function (obj) {
+                children.push(obj);
+            });
         }
     }
     return children; 
@@ -516,6 +518,21 @@ WickObject.prototype.getFrameWithChild = function (child) {
     return foundFrame;
 }
 
+WickObject.prototype.getLayerWithChild = function (child) {
+
+    var foundLayer = null;
+
+    this.layers.forEach(function (layer) {
+        layer.frames.forEach(function (frame) {
+            if(frame.wickObjects.indexOf(child) !== -1) {
+                foundLayer = layer;
+            }
+        });
+    });
+
+    return foundLayer;
+}
+
 WickObject.prototype.removeChildByID = function (id) {
 
     if(!this.isSymbol) {
@@ -607,6 +624,12 @@ WickObject.prototype.getAbsolutePosition = function () {
             y: this.y + parentPosition.y
         };
     }
+}
+
+WickObject.prototype.isOnActiveLayer = function () {
+
+    return this.parentObject.getLayerWithChild(this) === this.parentObject.getCurrentLayer();
+
 }
 
 /*************************

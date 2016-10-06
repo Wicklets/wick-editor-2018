@@ -107,6 +107,12 @@ var FabricInterface = function (wickEditor) {
                 fabricObj.selectable = false;
                 fabricObj.evented = false;
             }
+
+            if (!wickObj.isOnActiveLayer()) {
+                fabricObj.hasControls = false;
+                fabricObj.selectable = false;
+                fabricObj.evented = false;
+            }
         }
 
         // Add new objects and update existing objects

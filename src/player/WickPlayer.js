@@ -816,8 +816,8 @@ var WickPlayer = (function () {
                 wickObj.pixiContainer.rotation = wickObj.angle/360*2*3.14159;
                 wickObj.pixiContainer.scale.x  = wickObj.scaleX;
                 wickObj.pixiContainer.scale.y  = wickObj.scaleY;
-                if(wickObj.flipX) wickObj.pixiContainer.scale.x *= -1;
-                if(wickObj.flipY) wickObj.pixiContainer.scale.y *= -1;
+                if(wickObj.flipX) { wickObj.pixiContainer.scale.x *= -1; wickObj.pixiContainer.position.x += wickObj.width }
+                if(wickObj.flipY) { wickObj.pixiContainer.scale.y *= -1; wickObj.pixiContainer.position.y += wickObj.height }
                 wickObj.pixiContainer.alpha    = wickObj.opacity;
             }
             wickObj.getAllActiveChildObjects().forEach(function(subObj) {

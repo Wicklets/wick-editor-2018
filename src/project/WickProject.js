@@ -171,10 +171,11 @@ WickProject.prototype.regenerateUniqueIDs = function (wickObject) {
 
 WickProject.prototype.addObject = function (wickObject, zIndex) {
 
+    var frame = this.getCurrentObject().getCurrentFrame();
     if(zIndex === undefined) {
-        this.getCurrentObject().getCurrentFrame().wickObjects.push(wickObject);
+        frame.wickObjects.push(wickObject);
     } else {
-        this.getCurrentObject().getCurrentFrame().wickObjects.splice(zIndex, 0, wickObject);
+        frame.wickObjects.splice(zIndex, 0, wickObject);
     }
 
     this.regenerateUniqueIDs(this.rootObject);

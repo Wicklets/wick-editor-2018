@@ -51,8 +51,6 @@
 
     <script src="src/editor/tools/CursorTool.js"></script>
     <script src="src/editor/tools/PaintbrushTool.js"></script>
-    <script src="src/editor/tools/FillBucketTool.js"></script>
-    <script src="src/editor/tools/EraserTool.js"></script>
     <script src="src/editor/tools/TextTool.js"></script>
     <script src="src/editor/tools/ZoomTool.js"></script>
     <script src="src/editor/tools/PanTool.js"></script>
@@ -176,20 +174,6 @@
                 <img src="resources/paintbrush.png" width="30"></img>
             </div>
             <hr />
-            
-            <!--
-            <div class="button tooltipElem" id="eraserToolButton" alt="Eraser">
-                <img src="resources/eraser.png" width="30"></img>
-            </div>
-            <hr />
-            -->
-
-            <!--
-            <div class="button tooltipElem" id="fillbucketToolButton" alt="Fill Bucket">
-                <img src="resources/fill-bucket.png" width="30"></img>
-            </div>
-            <hr />
-            -->
 
             <div class="button tooltipElem" id="textToolButton" alt="Text">
                 <img src="resources/text.png" width="30"></img>
@@ -204,7 +188,6 @@
             <div class="button tooltipElem" id="panToolButton" alt="Pan">
                 <img src="resources/pan.png" width="30"></img>
             </div>
-
         </div>
 
     <!-- Tool options GUI, below toolbar gui -->
@@ -333,9 +316,8 @@
                     <div class="button" id="extendFrameButton">Extend Frame</div>
                 </div>
                 <div id="commonTimelineButtons">
-                    <!-- Disabled, layers aren't ready yet. -->
-                    <!--<hr />
-                    <div class="button" id="addLayerButton">Add Layer</div>-->
+                    <hr />
+                    <div class="button" id="addLayerButton">Add Layer</div>
                 </div>
             </div>
         </div>

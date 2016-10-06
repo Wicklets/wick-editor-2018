@@ -43,7 +43,6 @@ var TimelineInterface = function (wickEditor) {
         $("#timelineGUI").css('left', (window.innerWidth/2 - GUIWidth/2)+'px');
 
         canvas.width = GUIWidth;
-        canvas.height = 43;
 
         that.redraw();
     }
@@ -57,13 +56,17 @@ var TimelineInterface = function (wickEditor) {
 
         var currentObject = wickEditor.project.getCurrentObject();
 
+    // Update canvas size
+
+        canvas.height = 12 + frameHeight*currentObject.layers.length;
+
     // Draw grid
 
         for(var l = 0; l < currentObject.layers.length; l++) {
             for(var f = 0; f < /*currentObject.getTotalTimelineLength()*/ 40; f++) {
                 ctx.fillStyle = "#AAAAAA";
                 ctx.font = "10px sans-serif";
-                ctx.fillText(f, f*frameWidth+2, frameHeight+10);
+                ctx.fillText(f, f*frameWidth+2, frameHeight*currentObject.layers.length+10);
 
                 ctx.fillStyle = "#DDDDDD";
                 ctx.fillRect(
@@ -134,7 +137,7 @@ var TimelineInterface = function (wickEditor) {
     });
     this.resize();
 
-    this.updatePlayheadPosition = function (x) {
+    this.updatePlayheadPosition = function (x,y) {
         playheadX = x;
 
         var currentObject = wickEditor.project.getCurrentObject();
@@ -142,25 +145,29 @@ var TimelineInterface = function (wickEditor) {
         var oldPlayheadPosition = currentObject.playheadPosition;
         var newPlayheadPosition = Math.floor(playheadX/frameWidth);
 
-        if(newPlayheadPosition != oldPlayheadPosition) {
+        var oldLayer = currentObject.currentLayer;
+        var newLayer = Math.floor(y/frameHeight);
+        
+        if(newPlayheadPosition != oldPlayheadPosition || newLayer != oldLayer) {
             currentObject.playheadPosition = newPlayheadPosition;
+            currentObject.currentLayer = newLayer;
             wickEditor.syncInterfaces();
         }
     }
 
     canvas.addEventListener('mousedown', function(e) {
         mouseDown = true;
-        that.updatePlayheadPosition(e.offsetX);
+        that.updatePlayheadPosition(e.offsetX,e.offsetY);
         that.redraw();
     });
     canvas.addEventListener('mouseup', function(e) {
         mouseDown = false;
-        that.updatePlayheadPosition(e.offsetX);
+        that.updatePlayheadPosition(e.offsetX,e.offsetY);
         that.redraw();
     });
     canvas.addEventListener('mousemove', function(e) {
         if(mouseDown) {
-            that.updatePlayheadPosition(e.offsetX);
+            that.updatePlayheadPosition(e.offsetX,e.offsetY);
         }
         that.redraw();
     });

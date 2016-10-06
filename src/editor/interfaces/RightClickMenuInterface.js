@@ -160,7 +160,7 @@ var RightClickMenuInterface = function (wickEditor) {
     bindActionToButton("#bringToFrontButton", function () {
         wickEditor.actionHandler.doAction('moveObjectToZIndex', { 
             ids: wickEditor.interfaces["fabric"].getSelectedObjectIDs(),
-            newZIndex: wickEditor.getCurrentObject().getCurrentFrame().wickObjects.length
+            newZIndex: wickEditor.project.getCurrentObject().getCurrentFrame().wickObjects.length
         });
         wickEditor.interfaces['fabric'].deselectAll();
     });
@@ -174,7 +174,9 @@ var RightClickMenuInterface = function (wickEditor) {
     });
 
     bindActionToButton("#deleteButton", function () {
-        wickEditor.actionHandler.doAction('deleteObjects', { ids:wickEditor.interfaces['fabric'].getSelectedObjectIDs() });
+        wickEditor.actionHandler.doAction('deleteObjects', { 
+            ids:wickEditor.interfaces['fabric'].getSelectedObjectIDs() 
+        });
     });
 
     bindActionToButton("#editObjectButton", function () {

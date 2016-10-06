@@ -14,8 +14,8 @@ WickLayer.prototype.getTotalLength = function () {
 	return length;
 }
 
-WickLayer.prototype.addNewFrame = function() {
-    this.frames.push(new WickFrame());
+WickLayer.prototype.addFrame = function(newFrame) {
+    this.frames.push(newFrame);
 }
 
 WickLayer.prototype.deleteFrame = function(frame) {
