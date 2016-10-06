@@ -147,7 +147,7 @@ var TimelineInterface = function (wickEditor) {
 
         var oldLayer = currentObject.currentLayer;
         var newLayer = Math.floor(y/frameHeight);
-        
+
         if(newPlayheadPosition != oldPlayheadPosition || newLayer != oldLayer) {
             currentObject.playheadPosition = newPlayheadPosition;
             currentObject.currentLayer = newLayer;

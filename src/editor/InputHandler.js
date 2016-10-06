@@ -81,6 +81,7 @@ var InputHandler = function (wickEditor) {
             event.preventDefault();
             that.clearKeys();
             wickEditor.project.saveInLocalStorage();
+            WickProjectExporter.exportProject(wickEditor.project);
         }
         // Control-o: open
         else if (event.keyCode == 79 && controlKeyDown) {
@@ -114,6 +115,20 @@ var InputHandler = function (wickEditor) {
                 obj: wickEditor.project.getCurrentObject(),
                 moveAmount: 1
             })
+            wickEditor.syncInterfaces();
+        }
+
+        // Up arrow key: Move to above layer
+        if(event.keyCode == 38) {
+            if(wickEditor.project.getCurrentObject().currentLayer > 0)
+                wickEditor.project.getCurrentObject().currentLayer --;
+            wickEditor.syncInterfaces();
+        }
+
+        // Down arrow key: Move to layer below
+        if(event.keyCode == 40) {
+            if(wickEditor.project.getCurrentObject().currentLayer < wickEditor.project.getCurrentObject().layers.length-1)
+                wickEditor.project.getCurrentObject().currentLayer ++;
             wickEditor.syncInterfaces();
         }
 

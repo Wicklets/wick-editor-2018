@@ -28,6 +28,9 @@ var FabricInterface = function (wickEditor) {
 
     this.syncWithEditorState = function () {
 
+        //console.log("-------------------")
+        //startTiming();
+
         wickEditor.project.rootObject.applyTweens();
 
         // Update tool state
@@ -48,6 +51,8 @@ var FabricInterface = function (wickEditor) {
         repositionOriginCrosshair();
         repositionInactiveFrame();
 
+        //stopTiming("init");
+
         var currentObject = wickEditor.project.getCurrentObject();
 
         // Make sure everything is deselected, mulitple selected objects cause positioning problems.
@@ -61,6 +66,8 @@ var FabricInterface = function (wickEditor) {
 
         var allObjectsIDs = []; 
         allObjects.forEach(function(obj) { allObjectsIDs.push(obj.id) });
+
+        //stopTiming("object list generation");
 
         // Remove objects that don't exist anymore
         this.canvas.forEachObject(function(fabricObj) {
@@ -78,6 +85,8 @@ var FabricInterface = function (wickEditor) {
             }
         });
 
+        //stopTiming("remove objects");
+
         var updateFabObj = function (fabricObj, wickObj) {
             if(activeObjects.indexOf(wickObj) !== -1) {
                 fabricObj.hasControls = true;
@@ -85,15 +94,15 @@ var FabricInterface = function (wickEditor) {
                 fabricObj.evented = true;
 
                 // OPTIMIZATION WORK: get ridda this
-                fabricObj.trueZIndex = currentObject.getCurrentFrame().wickObjects.indexOf(wickObj);
-                that.canvas.moveTo(fabricObj, fabricObj.trueZIndex+2 + activeObjects.length+3);
+                //fabricObj.trueZIndex = currentObject.getCurrentFrame().wickObjects.indexOf(wickObj);
+                //that.canvas.moveTo(fabricObj, fabricObj.trueZIndex+2 + activeObjects.length+3);
             } else {
                 fabricObj.hasControls = false;
                 fabricObj.selectable = false;
                 fabricObj.evented = false;
 
                 // OPTIMIZATION WORK: get ridda this
-                that.canvas.moveTo(fabricObj, activeObjects.length+3);
+                //that.canvas.moveTo(fabricObj, activeObjects.length+3);
 
                 if(nearbyObjects.indexOf(wickObj) !== -1) {
                     var framePlayheadPosition = currentObject.getPlayheadPositionAtFrame(currentObject.getFrameWithChild(wickObj));
@@ -130,12 +139,6 @@ var FabricInterface = function (wickEditor) {
                 that.objectIDsInCanvas[child.id] = true;
                 that.createFabricObjectFromWickObject(child, function (fabricObj) {
 
-                    that.canvas.forEachObject(function(path) {
-                        if(path.isTemporaryDrawingPath) {
-                            that.canvas.remove(path);
-                        }
-                    });
-
                     // The object may have been deleted while we were generating the fabric object. 
                     // Make sure we don't add it if so.
                     if(!wickEditor.project.rootObject.getChildByID(child.id)) return;
@@ -147,13 +150,23 @@ var FabricInterface = function (wickEditor) {
             }
         });
 
+        that.canvas.forEachObject(function(path) {
+            if(path.isTemporaryDrawingPath) {
+                that.canvas.remove(path);
+            }
+        });
+
+        //stopTiming("add/update objects");
+
         // Reselect objects that were selected before sync
         if(selectedObjectIDs.length > 0) that.selectByIDs(selectedObjectIDs);
 
         // Update inactive object overlay
         // OPTIMIZATION WORK: get ridda this
-        that.canvas.moveTo(that.inactiveFrame, siblingObjects.length+1);
+        //that.canvas.moveTo(that.inactiveFrame, siblingObjects.length+1);
         this.inactiveFrame.opacity = currentObject.isRoot ? 0.0 : 0.4;
+
+        //stopTiming("reselect/cleanup");
 
         this.canvas.renderAll();
     }
@@ -248,21 +261,9 @@ var FabricInterface = function (wickEditor) {
                 pathFabricObj.fill = wickObj.svgData.fillColor;
                 callback(pathFabricObj);
             });
-            /*fabric.loadSVGFromString(wickObj.svgData.svgString, function(objects, options) {
-                objects[0].fill = wickObj.svgData.fillColor;
-                var svgFabricObject = fabric.util.groupSVGElements(objects, options);
-                svgFabricObject.cloneAsImage(function(clone) {
-                    that.syncObjects(wickObj, clone);
-                    callback(clone);
-                });
-            });*/
         }
 
         if (wickObj.isSymbol) {
-            /*fabric.Image.fromURL(wickObj.frames[0].wickObjects[0].imageData, function(newFabricImage) {
-                that.syncObjects(wickObj, newFabricImage);
-                callback(newFabricImage);
-            });*/
             var children = wickObj.getAllActiveChildObjects();
             var group = new fabric.Group();
             for(var i = 0; i < children.length; i++) {
