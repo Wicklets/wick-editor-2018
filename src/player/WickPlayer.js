@@ -118,6 +118,8 @@ var WickPlayer = (function () {
 
         window.removeEventListener('resize', resizeCanvas);
 
+        // todo: important! shut down renderer here too!
+
         audioContext.close();
 
     }
@@ -162,16 +164,10 @@ var WickPlayer = (function () {
 
     var loadJSONProject = function (proj) {
         // Parse dat project
-        project = JSON.parse(proj);
+        project = WickProject.fromJSON(proj)
 
         console.log("Player loading project:")
         console.log(project);
-
-        // Put prototypes back on WickObjects
-        WickObject.addPrototypes(project.rootObject);
-
-        // Decode scripts/text from json-safe format
-        project.rootObject.decodeStrings();
 
         // Prepare all objects for being played/drawn
         resetAllPlayheads(project.rootObject);
@@ -180,8 +176,6 @@ var WickPlayer = (function () {
         // Regenerate WickObject stuff that we lost when the projects was JSONified
         generateObjectNameReferences(project.rootObject);
         generateObjectParentReferences(project.rootObject);
-
-        project.rootObject.regenerateParentObjectReferences();
 
         // Convert base 64 data into content
         loadImages(project.rootObject);
