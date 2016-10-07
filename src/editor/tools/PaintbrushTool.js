@@ -37,10 +37,6 @@ var PaintbrushTool = function (wickEditor) {
             wickObj.x = fabricPath.left;
             wickObj.y = fabricPath.top;
 
-            var frameOffset = wickEditor.interfaces.fabric.getCenteredFrameOffset();
-            wickObj.x -= frameOffset.x;
-            wickObj.y -= frameOffset.y;
-
             var symbolOffset = wickEditor.project.getCurrentObject().getAbsolutePosition();
             wickObj.x -= symbolOffset.x;
             wickObj.y -= symbolOffset.y;

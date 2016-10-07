@@ -8,31 +8,21 @@ var PanTool = function (wickEditor) {
         return "move";
     }
 
-    this.panning = false;
-
 // Panning the fabric canvas
-
-    var canvas = wickEditor.interfaces['fabric'].canvas;
     
-    canvas.on('mouse:up', function (e) {
-        that.panning = false;
-        canvas.selection = true;
+    wickEditor.interfaces.fabric.canvas.on('mouse:up', function (e) {
+        wickEditor.interfaces.fabric.stopPan();
     });
 
-    canvas.on('mouse:down', function (e) {
+    wickEditor.interfaces.fabric.canvas.on('mouse:down', function (e) {
         if(wickEditor.currentTool instanceof PanTool) {
-            that.panning = true;
-            canvas.selection = false;
+            wickEditor.interfaces.fabric.startPan();
         }
     });
-    canvas.on('mouse:move', function (e) {
-        if (that.panning && e && e.e) {
-            var delta = new fabric.Point(e.e.movementX, e.e.movementY);
-            canvas.relativePan(delta);
-
-            wickEditor.interfaces['fabric'].inactiveFrame.left -= delta.x;
-            wickEditor.interfaces['fabric'].inactiveFrame.top -= delta.y;
-            wickEditor.interfaces['fabric'].inactiveFrame.setCoords();
+    
+    wickEditor.interfaces.fabric.canvas.on('mouse:move', function (e) {
+        if (wickEditor.interfaces.fabric.panning && e && e.e) {
+            wickEditor.interfaces.fabric.relativePan(e.e.movementX, e.e.movementY)
         }
     });
 

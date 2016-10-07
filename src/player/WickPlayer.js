@@ -190,27 +190,6 @@ var WickPlayer = (function () {
         }
     }
 
-    /* Create variables inside each wickobject so we can say root.bogoObject.play(); and such */
-    var generateObjectNameReferences = function (wickObj) {
-        wickObj.getAllChildObjects().forEach(function(subObj) {
-            wickObj[subObj.name] = subObj;
-
-            if(subObj.isSymbol) {
-                generateObjectNameReferences(subObj);
-            }
-        });
-    }
-
-    /* We'll need these when evaling scripts */
-    var generateObjectParentReferences = function (wickObj) {
-        wickObj.getAllChildObjects().forEach(function(subObj) {
-            subObj.parentObj = wickObj;
-            if(subObj.isSymbol) {
-                generateObjectParentReferences(subObj);
-            }
-        });
-    }
-
     /* Make sure all objects start at first frame and start playing */
     var resetAllPlayheads = function (wickObj) {
 
@@ -258,31 +237,6 @@ var WickPlayer = (function () {
                 loadImages(subObj);
                 wickObj.pixiContainer.addChild(subObj.pixiContainer);
             } else if (subObj.imageData || subObj.svgCacheImageData) {
-                // Generate alpha mask for per-pixel hit detection
-                var image = new Image();
-                image.onload = function () {
-                    var canvas = document.createElement('canvas');
-                    var w = Math.floor(subObj.width);
-                    var h = Math.floor(subObj.height);
-                    canvas.height = h;
-                    canvas.width = w;
-                    var ctx = canvas.getContext('2d');
-                    ctx.drawImage( image, 0, 0, w, h );
-                    var imgdata = ctx.getImageData(0,0,w,h);
-                    var rgba = imgdata.data;
-
-                    subObj.alphaMask = [];
-                    for (var y = 0; y < h; y ++) {
-                        for (var x = 0; x < w; x ++) {
-                            var alphaMaskIndex = x+y*w;
-                            //console.log(alphaMaskIndex)
-                            subObj.alphaMask[alphaMaskIndex] = rgba[alphaMaskIndex*4+3] === 0;
-                        }
-                    }
-
-                }
-                image.src = subObj.imageData || subObj.svgCacheImageData;
-
                 subObj.pixiSprite = PIXI.Sprite.fromImage(subObj.imageData || subObj.svgCacheImageData);
                 wickObj.pixiContainer.addChild(subObj.pixiSprite);
             } else if (subObj.fontData) {
@@ -513,76 +467,6 @@ var WickPlayer = (function () {
             x: touchX,
             y: touchY
         };
-    }
-
-/*****************************
-    WickObject Utils
-*****************************/
-
-    /*  */
-    var pointInsideObj = function(obj, point, parentScaleX, parentScaleY) {
-
-        if(!parentScaleX) {
-            parentScaleX = 1.0;
-        }
-        if(!parentScaleY) {
-            parentScaleY = 1.0;
-        }
-
-        if(obj.isSymbol) {
-
-            var pointInsideSymbol = false;
-
-            obj.getAllActiveChildObjects().forEach(function (currObj) {
-                var subPoint = {
-                    x : point.x - obj.x,
-                    y : point.y - obj.y
-                };
-                if(pointInsideObj(currObj, subPoint, obj.scaleX, obj.scaleY)) {
-                    pointInsideSymbol = true;
-                }
-            });
-
-            return pointInsideSymbol;
-
-        } else {
-
-            var scaledObjX = obj.x;
-            var scaledObjY = obj.y;
-            var scaledObjWidth = obj.width*obj.scaleX*parentScaleX;
-            var scaledObjHeight = obj.height*obj.scaleY*parentScaleY;
-
-            if ( point.x >= scaledObjX && 
-                 point.y >= scaledObjY  &&
-                 point.x <= scaledObjX + scaledObjWidth && 
-                 point.y <= scaledObjY  + scaledObjHeight ) {
-
-                if(!obj.alphaMask) return true;
-
-                var objectRelativePointX = point.x - scaledObjX;
-                var objectRelativePointY = point.y - scaledObjY;
-                var objectAlphaMaskIndex = (Math.floor(objectRelativePointX)%Math.floor(obj.width))+(Math.floor(objectRelativePointY)*Math.floor(obj.width));
-                return !obj.alphaMask[(objectAlphaMaskIndex)];
-
-            }
-
-            return false;
-
-        }
-    }
-
-    var wickObjectIsClickable = function (wickObj) {
-        var isClickable = false;
-
-        wickObj.wickScripts['onClick'].split("\n").forEach(function (line) {
-            if(isClickable) return;
-            line = line.trim();
-            if(!line.startsWith("//") && line !== "") {
-                isClickable = true;
-            }
-        });
-
-        return isClickable
     }
 
 /*****************************

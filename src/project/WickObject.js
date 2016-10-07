@@ -777,6 +777,16 @@ WickObject.prototype.regenerateParentObjectReferences = function() {
 
 }
 
+WickObject.prototype.generateObjectNameReferences = function () {
+        wickObj.getAllChildObjects().forEach(function(subObj) {
+            wickObj[subObj.name] = subObj;
+
+            if(subObj.isSymbol) {
+                generateObjectNameReferences(subObj);
+            }
+        });
+    }
+
 // Used so that if the renderer can't render SVGs it has an image to fallback to
 WickObject.prototype.generateSVGCacheImages = function (callback) {
 
@@ -886,6 +896,101 @@ WickObject.prototype.applyTweens = function () {
 }
 
 /*************************
+     
+*************************/
+
+var wickObjectIsClickable = function (wickObj) {
+        var isClickable = false;
+
+        wickObj.wickScripts['onClick'].split("\n").forEach(function (line) {
+            if(isClickable) return;
+            line = line.trim();
+            if(!line.startsWith("//") && line !== "") {
+                isClickable = true;
+            }
+        });
+
+        return isClickable
+    }
+
+    /*  */
+    var pointInsideObj = function(obj, point, parentScaleX, parentScaleY) {
+
+        if(!parentScaleX) {
+            parentScaleX = 1.0;
+        }
+        if(!parentScaleY) {
+            parentScaleY = 1.0;
+        }
+
+        if(obj.isSymbol) {
+
+            var pointInsideSymbol = false;
+
+            obj.getAllActiveChildObjects().forEach(function (currObj) {
+                var subPoint = {
+                    x : point.x - obj.x,
+                    y : point.y - obj.y
+                };
+                if(pointInsideObj(currObj, subPoint, obj.scaleX, obj.scaleY)) {
+                    pointInsideSymbol = true;
+                }
+            });
+
+            return pointInsideSymbol;
+
+        } else {
+
+            var scaledObjX = obj.x;
+            var scaledObjY = obj.y;
+            var scaledObjWidth = obj.width*obj.scaleX*parentScaleX;
+            var scaledObjHeight = obj.height*obj.scaleY*parentScaleY;
+
+            if ( point.x >= scaledObjX && 
+                 point.y >= scaledObjY  &&
+                 point.x <= scaledObjX + scaledObjWidth && 
+                 point.y <= scaledObjY  + scaledObjHeight ) {
+
+                if(!obj.alphaMask) return true;
+
+                var objectRelativePointX = point.x - scaledObjX;
+                var objectRelativePointY = point.y - scaledObjY;
+                var objectAlphaMaskIndex = (Math.floor(objectRelativePointX)%Math.floor(obj.width))+(Math.floor(objectRelativePointY)*Math.floor(obj.width));
+                return !obj.alphaMask[(objectAlphaMaskIndex)];
+
+            }
+
+            return false;
+
+        }
+    }
+
+    // Generate alpha mask for per-pixel hit detection
+                var image = new Image();
+                image.onload = function () {
+                    var canvas = document.createElement('canvas');
+                    var w = Math.floor(subObj.width);
+                    var h = Math.floor(subObj.height);
+                    canvas.height = h;
+                    canvas.width = w;
+                    var ctx = canvas.getContext('2d');
+                    ctx.drawImage( image, 0, 0, w, h );
+                    var imgdata = ctx.getImageData(0,0,w,h);
+                    var rgba = imgdata.data;
+
+                    subObj.alphaMask = [];
+                    for (var y = 0; y < h; y ++) {
+                        for (var x = 0; x < w; x ++) {
+                            var alphaMaskIndex = x+y*w;
+                            //console.log(alphaMaskIndex)
+                            subObj.alphaMask[alphaMaskIndex] = rgba[alphaMaskIndex*4+3] === 0;
+                        }
+                    }
+
+                }
+                image.src = subObj.imageData || subObj.svgCacheImageData;
+
+/*************************
      Scripting methods
 *************************/
 
@@ -986,6 +1091,47 @@ WickObject.prototype.gotoPrevFrame = function () {
         this.playheadPosition = 0;
     }
 }
+
+/* Determine if two wick objects collide using rectangular hit detection on their
+       farthest border */ 
+    that["rectangles"] = function (objA, objB) {
+        var objAAbsPos = objA.getAbsolutePosition();
+        var objBAbsPos = objB.getAbsolutePosition();
+
+        var objAWidth = objA.width * objA.scaleX;
+        var objAHeight = objAHeight * objA.scaleY; 
+
+        var objBWidth = objB.width * objB.scaleX; 
+        var objBHeight = objB.height * objB.scaleY; 
+
+        var left = objAAbsPos.x < (objBAbsPos.x + objBWidth); 
+        var right = (objAAbsPos.x + objAWidth) > objBAbsPos.x; 
+        var top = objAAbsPos.y < (objBAbsPos.y + objBHeight); 
+        var bottom = (objAAbsPos.y + objA.height) > objBAbsPos.y; 
+
+        return left && right && top && bottom;
+    }
+
+    /* Determine if two wickObjects Collide using circular hit detection from their
+       centroid using their full width and height. */ 
+    that["circles"] = function (objA, objB) {
+        var objAAbsPos = objA.getAbsolutePosition();
+        var objBAbsPos = objB.getAbsolutePosition();
+
+        var dx = objAAbsPos.x - objBAbsPos.x; 
+        var dy = objAAbsPos.y - objBAbsPos.y;
+
+        var objAWidth = objA.width * objA.scaleX;
+        var objAHeight = objAHeight * objA.scaleY; 
+
+        var distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < ((objAWidth/2) + (objBWidth/2))) {
+            return true;
+        }
+
+        return false; 
+    }
 
 /* Returns a boolean alerting whether or not this object or any of it's children in frame, 
    have collided with the given object or any of it's children in frame. */

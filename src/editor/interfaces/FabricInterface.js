@@ -9,22 +9,170 @@ var FabricInterface = function (wickEditor) {
     this.canvas = new fabric.CanvasEx('fabricCanvas');
     this.canvas.selectionColor = 'rgba(0,0,5,0.1)';
     this.canvas.selectionBorderColor = 'grey';
-    //this.canvas.selectionLineWidth = 2;
     this.canvas.backgroundColor = "#EEE";
     this.canvas.setWidth ( window.innerWidth  );
     this.canvas.setHeight( window.innerHeight );
 
     this.context = this.canvas.getContext('2d');
 
-    this.paperCanvas = document.createElement('canvas');
-    paper.setup(this.canvas);
-
     this.creatingSelection = false;
     this.objectIDsInCanvas = [];
+
+    this.panning = false;
+
+// White box that shows resolution & objects that will be on screen when project is exported
+
+    var frameInside = new fabric.Rect({
+        fill: '#FFF',
+    });
+
+    frameInside.hasControls = false;
+    frameInside.selectable = false;
+    frameInside.evented = false;
+    frameInside.identifier = "frameInside";
+    frameInside.left = 0;
+    frameInside.top = 0;
+
+    this.canvas.add(frameInside)
+
+// Fade that grays out inactive objects (the objects in the parent objects frame)
+
+    var inactiveFrame = new fabric.Rect({
+        fill: '#000',
+    });
+
+    inactiveFrame.hasControls = false;
+    inactiveFrame.selectable = false;
+    inactiveFrame.evented = false;
+    inactiveFrame.identifier = "inactiveFrame";
+    inactiveFrame.width  = window.innerWidth;
+    inactiveFrame.height = window.innerHeight;
+    inactiveFrame.left = 0;
+    inactiveFrame.top = 0;
+
+    this.canvas.add(inactiveFrame)
+
+// Crosshair that shows where (0,0) of the current object is
+
+    var originCrosshair;
+
+    fabric.Image.fromURL('resources/origin.png', function(obj) {
+        originCrosshair = obj;
+
+        originCrosshair.hasControls = false;
+        originCrosshair.selectable = false;
+        originCrosshair.evented = false;
+        originCrosshair.identifier = "originCrosshair";
+
+        that.canvas.add(originCrosshair);
+
+        that.repositionGUIElements();
+    });
 
 /********************************
        Editor state syncing
 ********************************/
+
+    this.resize = function () {
+
+        var oldWidth = that.canvas.getWidth();
+        var oldHeight = that.canvas.getHeight();
+
+        that.canvas.setWidth ( window.innerWidth  );
+        that.canvas.setHeight( window.innerHeight );
+        that.canvas.calcOffset();
+
+        var diffWidth = that.canvas.getWidth() - oldWidth;
+        var diffHeight = that.canvas.getHeight() - oldHeight;
+
+        that.canvas.relativePan(new fabric.Point(diffWidth/2,diffHeight/2));
+
+    }
+
+    this.recenterCanvas = function () {
+        var centerX = -(window.innerWidth -wickEditor.project.resolution.x)/2;
+        var centerY = -(window.innerHeight-wickEditor.project.resolution.y)/2;
+        that.canvas.setZoom(1.0);
+        that.canvas.absolutePan(new fabric.Point(centerX,centerY));
+        that.canvas.renderAll();
+    }
+
+    this.relativePan = function (x,y) {
+        var delta = new fabric.Point(x,y);
+        that.canvas.relativePan(delta)
+        that.repositionGUIElements();
+    }
+
+    this.absolutePan = function (x,y) {
+        var delta = new fabric.Point(x,y);
+        that.canvas.absolutePan(delta)
+        that.repositionGUIElements();
+    }
+
+    this.startPan = function () {
+        that.panning = true;
+        that.canvas.selection = false;
+    }
+
+    this.stopPan = function () {
+        that.panning = false;
+        that.canvas.selection = true;
+    }
+
+    this.getPan = function () {
+        return {
+            x: that.canvas.viewportTransform[4],
+            y: that.canvas.viewportTransform[5]
+        }
+    }
+
+    this.zoom = function (zoomAmount) {
+        // Calculate new zoom amount
+        var oldZoom = that.canvas.getZoom();
+        var newZoom = that.canvas.getZoom() * zoomAmount;
+
+        // Make sure we zoom into the center of the screen, not the corner...
+        // THIS MATH IS WRONG
+        var oldWidth = window.innerWidth / oldZoom;
+        var oldHeight = window.innerHeight / oldZoom;
+
+        var newWidth = window.innerWidth / newZoom;
+        var newHeight = window.innerHeight / newZoom;
+
+        var panAdjustX = (newWidth - oldWidth) / 2;
+        var panAdjustY = (newHeight - oldHeight) / 2;
+
+        // Do da zoom!
+        that.canvas.setZoom(newZoom);
+        that.canvas.relativePan(new fabric.Point(panAdjustX,panAdjustY));
+        that.canvas.renderAll();
+
+        that.repositionGUIElements();
+    }
+
+    this.repositionGUIElements = function () {
+        frameInside.fill = wickEditor.project.backgroundColor;
+        frameInside.width  = wickEditor.project.resolution.x;
+        frameInside.height = wickEditor.project.resolution.y;
+        frameInside.setCoords();
+
+        if(originCrosshair) {
+            originCrosshair.left = -originCrosshair.width/2;
+            originCrosshair.top  = -originCrosshair.height/2;
+            
+            originCrosshair.left += wickEditor.project.getCurrentObject().x;
+            originCrosshair.top  += wickEditor.project.getCurrentObject().y;
+
+            that.canvas.renderAll();
+        }
+
+        var pan = that.getPan();
+        var zoom = that.canvas.getZoom();
+        inactiveFrame.width  = window.innerWidth  / zoom;
+        inactiveFrame.height = window.innerHeight / zoom;
+        inactiveFrame.left = -pan.x / zoom;
+        inactiveFrame.top  = -pan.y / zoom;
+    }
 
     this.syncWithEditorState = function () {
 
@@ -32,6 +180,8 @@ var FabricInterface = function (wickEditor) {
         //startTiming();
 
         wickEditor.project.rootObject.applyTweens();
+
+        that.repositionGUIElements();
 
         // Update tool state
         this.canvas.defaultCursor = wickEditor.currentTool.getCursorImage();
@@ -45,11 +195,6 @@ var FabricInterface = function (wickEditor) {
         } else {
             this.canvas.isDrawingMode = false;
         }
-
-        // Reposition GUI element positions
-        repositionFrame();
-        repositionOriginCrosshair();
-        repositionInactiveFrame();
 
         //stopTiming("init");
 
@@ -164,27 +309,11 @@ var FabricInterface = function (wickEditor) {
         // Update inactive object overlay
         // OPTIMIZATION WORK: get ridda this
         //that.canvas.moveTo(that.inactiveFrame, siblingObjects.length+1);
-        this.inactiveFrame.opacity = currentObject.isRoot ? 0.0 : 0.4;
+        inactiveFrame.opacity = currentObject.isRoot ? 0.0 : 0.4;
 
         //stopTiming("reselect/cleanup");
 
         this.canvas.renderAll();
-    }
-
-    this.getCenteredFrameOffset = function () {
-        return {
-            x: (window.innerWidth  - wickEditor.project.resolution.x)/2,
-            y: (window.innerHeight - wickEditor.project.resolution.y)/2
-        }
-    }
-
-    this.getPanOffset = function () {
-        return {
-            //x:-(that.canvas.getVpCenter().x-that.canvas.getCenter().left), 
-            //y:-(that.canvas.getVpCenter().y-that.canvas.getCenter().top)
-            x: that.canvas.viewportTransform[5],
-            x: that.canvas.viewportTransform[6],
-        }
     }
 
     this.syncObjects = function (wickObj, fabricObj) {
@@ -199,8 +328,8 @@ var FabricInterface = function (wickEditor) {
             wickObj.height  = fabricObj.height;
         }
 
-        fabricObj.left    = wickObj.getAbsolutePosition().x + this.getCenteredFrameOffset().x;
-        fabricObj.top     = wickObj.getAbsolutePosition().y + this.getCenteredFrameOffset().y;
+        fabricObj.left    = wickObj.getAbsolutePosition().x;
+        fabricObj.top     = wickObj.getAbsolutePosition().y;
         fabricObj.width   = wickObj.width;
         fabricObj.height  = wickObj.height;
         fabricObj.scaleX  = wickObj.scaleX;
@@ -233,8 +362,8 @@ var FabricInterface = function (wickEditor) {
     this.createFabricObjectFromWickObject = function (wickObj, callback) {
 
         if(wickObj.cachedFabricObject) {
-            callback(wickObj.cachedFabricObject);
-            return;
+            //callback(wickObj.cachedFabricObject);
+            //return;
         }
 
         if(wickObj.imageData) {
@@ -290,113 +419,11 @@ var FabricInterface = function (wickEditor) {
     }
 
 /********************************
-         GUI Elements
-********************************/
-
-// White box that shows resolution & objects that will be on screen when project is exported
-
-    var repositionFrame = function () {
-        that.frameInside.fill = wickEditor.project.backgroundColor;
-        that.frameInside.width  = wickEditor.project.resolution.x;
-        that.frameInside.height = wickEditor.project.resolution.y;
-        that.frameInside.left = that.getCenteredFrameOffset().x;
-        that.frameInside.top  = that.getCenteredFrameOffset().y;
-        that.frameInside.setCoords();
-    }
-
-    this.frameInside = new fabric.Rect({
-        fill: '#FFF',
-    });
-
-    this.frameInside.hasControls = false;
-    this.frameInside.selectable = false;
-    this.frameInside.evented = false;
-    this.frameInside.identifier = "frameInside";
-    repositionFrame();
-
-    this.canvas.add(this.frameInside)
-
-// Fade that grays out inactive objects (the objects in the parent objects frame)
-
-    var repositionInactiveFrame = function () {
-        that.inactiveFrame.width  = window.innerWidth;
-        that.inactiveFrame.height = window.innerHeight;
-        that.inactiveFrame.left = 0;
-        that.inactiveFrame.top  = 0;
-        that.frameInside.setCoords();
-    }
-
-    this.inactiveFrame = new fabric.Rect({
-        fill: '#000',
-    });
-
-    this.inactiveFrame.hasControls = false;
-    this.inactiveFrame.selectable = false;
-    this.inactiveFrame.evented = false;
-    this.inactiveFrame.identifier = "inactiveFrame";
-    repositionInactiveFrame();
-
-    this.canvas.add(this.inactiveFrame)
-
-// Crosshair that shows where (0,0) of the current object is
-
-    var repositionOriginCrosshair = function () {
-        if(that.originCrosshair) {
-            that.originCrosshair.left = that.getCenteredFrameOffset().x - that.originCrosshair.width/2;
-            that.originCrosshair.top  = that.getCenteredFrameOffset().y - that.originCrosshair.height/2;
-            
-            that.originCrosshair.left += wickEditor.project.getCurrentObject().x;
-            that.originCrosshair.top  += wickEditor.project.getCurrentObject().y;
-
-            that.canvas.renderAll();
-        }
-    }
-
-    fabric.Image.fromURL('resources/origin.png', function(obj) {
-        that.originCrosshair = obj;
-
-        that.originCrosshair.hasControls = false;
-        that.originCrosshair.selectable = false;
-        that.originCrosshair.evented = false;
-        that.originCrosshair.identifier = "originCrosshair";
-
-        that.canvas.add(that.originCrosshair);
-
-        repositionOriginCrosshair();
-    });
-
-    window.addEventListener('resize', function(e) {
-        // Reposition all fabric objects to use new wick canvas origin
-
-        var oldWidth = that.canvas.getWidth();
-        var oldHeight = that.canvas.getHeight();
-
-        that.canvas.setWidth ( window.innerWidth  );
-        that.canvas.setHeight( window.innerHeight );
-        that.canvas.calcOffset();
-
-        var diffWidth = that.canvas.getWidth() - oldWidth;
-        var diffHeight = that.canvas.getHeight() - oldHeight;
-
-        that.canvas.forEachObject(function(fabricObj) {
-            fabricObj.left += diffWidth /2;
-            fabricObj.top  += diffHeight/2;
-            fabricObj.setCoords();
-        });
-
-        repositionFrame();
-        repositionOriginCrosshair();
-        repositionInactiveFrame();
-    }, false);
-
-/********************************
   Objects modified by fabric.js
 ********************************/
 
     var modifyObjects = function (ids) {
         var modifiedStates = [];
-
-        var frameOffset = that.getCenteredFrameOffset();
 
         // For each modified fabric objects (get them by wickobject):
         //    Add new state of that fabric object to modified states
@@ -408,8 +435,8 @@ var FabricInterface = function (wickEditor) {
                 y: wickObj.y-wickObj.getAbsolutePosition().y 
             };
             modifiedStates.push({
-                x      : fabricObj.left - frameOffset.x + insideSymbolReposition.x - wickObj.getSymbolCornerPosition().x,
-                y      : fabricObj.top  - frameOffset.y + insideSymbolReposition.y - wickObj.getSymbolCornerPosition().y,
+                x      : fabricObj.left + insideSymbolReposition.x - wickObj.getSymbolCornerPosition().x,
+                y      : fabricObj.top  + insideSymbolReposition.y - wickObj.getSymbolCornerPosition().y,
                 scaleX : fabricObj.scaleX,
                 scaleY : fabricObj.scaleY,
                 flipX  : fabricObj.flipX,
@@ -604,4 +631,8 @@ var FabricInterface = function (wickEditor) {
         }
         return wickObjects;
     }
+
+    this.recenterCanvas();
+    this.repositionGUIElements();
+    window.addEventListener('resize', this.resize, false);
 }

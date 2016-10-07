@@ -41,7 +41,6 @@ var InputHandler = function (wickEditor) {
     }
 
     document.body.addEventListener("keydown", function (event) {
-        if (wickEditor.interfaces.builtinplayer.running) return;
 
         that.keys[event.keyCode] = true;
 
@@ -50,6 +49,14 @@ var InputHandler = function (wickEditor) {
 
         var activeElem = document.activeElement.nodeName;
         editingTextBox = activeElem == 'TEXTAREA' || activeElem == 'INPUT';
+
+        // Escape: Stop running project
+        if(event.keyCode == 27 && !editingTextBox) {
+            that.clearKeys();
+            wickEditor.interfaces.builtinplayer.stopRunningProject();
+        }
+
+        if (wickEditor.interfaces.builtinplayer.running) return;
 
         if(!editingTextBox) {
             // Control-shift-z: redo
@@ -64,16 +71,15 @@ var InputHandler = function (wickEditor) {
             }
         }
 
-        // Enter: Run project in builtin player
-        if(event.keyCode == 13 && !editingTextBox) {
+        // Control-Enter: Run project in builtin player
+        if(controlKeyDown && event.keyCode == 13 && !editingTextBox) {
             that.clearKeys();
             wickEditor.interfaces.builtinplayer.runProject();
         }
 
-        // Escape: Stop running project
-        if(event.keyCode == 27 && !editingTextBox) {
-            that.clearKeys();
-            wickEditor.interfaces.builtinplayer.stopRunningProject();
+        // Control-0: recenter
+        if(controlKeyDown && event.keyCode == 48 && !editingTextBox) {
+            wickEditor.interfaces.fabric.recenterCanvas();
         }
 
         // Control-s: save
