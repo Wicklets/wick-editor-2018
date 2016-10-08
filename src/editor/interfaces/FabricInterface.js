@@ -493,6 +493,8 @@ var FabricInterface = function (wickEditor) {
 
             // Reselect everything
             that.selectByIDs(ids);
+
+            wickEditor.syncInterfaces();
         }
     });
 
