@@ -7,6 +7,13 @@ var GuiActionHandler = function (wickEditor) {
 
     var that = this;
 
+    /* Set up vars needed for input listening. */
+    this.keys = [];
+    var editingTextBox = false;
+
+    /* Initialize list of GuiActions. */
+    var guiActions = [];
+
     /* GuiAction definition. All possible actions performable through interacting 
     with the Wick Editor GUI are expected to be well defined by this structure .*/
     var GuiAction = function (hotkeys, elementIds, action) {
@@ -19,45 +26,54 @@ var GuiActionHandler = function (wickEditor) {
 
         /* Function to be called when either a hotkey or element fires. */
         this.action = action;
-
+        this.runAction = function(args) { action(args); }
     }
 
-    /* Dictionary mapping Hotkeys (arrays of key strings) to actions (functions) */
-    var actionsByHotkeys = {};
-    /* Dictionary mapping ElementIds (arrays of id strings) to actions (functions) */
-    var actionsByElementIds = {};
-
-    /* Call this to register a new GuiAction! */
+    /* Add testin */
     this.registerGuiAction = function(guiAction) {
 
-        guiAction.hotkeys.forEach(function(hotkey) {
-            if(undefined === actionsByHotkeys[hotkey]) {
-                actionsByHotkeys[hotkey] = guiAction.action;
-            } else {
-                console.log('Error registering guiAction- hotkey already registered');
+        guiActions.push(guiAction);
+    };
+
+    /* I aint done this yet */
+    this.unregisterGuiAction = function(guiAction) {
+
+    };
+
+    document.body.addEventListener("keydown", function (event) {
+        /* Set event keyCode in keys dictionary to true. */
+        that.keys[event.keyCode] = true;
+
+        /* Determine controlKeyDown and shiftKeyDown. */
+        var controlKeyDown = that.keys[91] || that.keys[224];
+        var shiftKeyDown = that.keys[16];
+
+        /* Determine if Text is currently being edited. */
+        var activeElem = document.activeElement.nodeName;
+        editingTextBox = activeElem == 'TEXTAREA' || activeElem == 'INPUT';
+
+        guiActions.forEach(function(guiAction) {
+
+            var stringkeys = [];
+            for (var numkey in that.keys) {
+                if (that.keys.hasOwnProperty(numkey)) {
+                    stringkeys.push(codeToKeyChar[numkey]);
+                }
+            }
+
+            if(JSON.stringify(guiAction.hotkeys) == JSON.stringify(stringkeys)) {
+                var args = {};
+                guiAction.runAction(args);
             }
         });
+    });
 
-        guiAction.elementIds.forEach(function(elementId) {
-            if(undefined === actionsByElementIds[elementId]) {
-                actionsByElementIds[elementId] = guiAction.action;
-            } else {
-                console.log('Error registering guiAction- elementId already registered');
-            }
-        });
-    }
+    document.body.addEventListener("keyup", function (event) {
+        
+    });
 
-    this.doActionByHotkey = function (hotkey, args) {
-        actionsByHotkeys[hotkey](args);
-    }
-
-    this.doActionByElementId = function(elementId, args) {
-        actionsByElementIds[elementId](args);
-    }
-
-    var testAction = new GuiAction(['space'], [], function(){
-        console.log("boo ya");
+    var testAction = new GuiAction(['Space'], [], function(args) {
+        console.log(args);
     });
     this.registerGuiAction(testAction);
-    this.doActionByHotkey('space', []);
 }

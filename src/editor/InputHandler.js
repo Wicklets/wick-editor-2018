@@ -40,6 +40,7 @@ var InputHandler = function (wickEditor) {
         that.keys = [];
     }
 
+    /*
     document.body.addEventListener("keydown", function (event) {
         if (wickEditor.interfaces.builtinplayer.running) return;
 
@@ -156,6 +157,7 @@ var InputHandler = function (wickEditor) {
 
         that.keys[event.keyCode] = false;
     });
+    */
 
 /*************************
     Leave page warning
