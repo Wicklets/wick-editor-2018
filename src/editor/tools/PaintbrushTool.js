@@ -77,7 +77,7 @@ var PaintbrushTool = function (wickEditor) {
         //var zoom = wickEditor.interfaces.fabric.canvas.getZoom();
         dummyCanvas.width = img.width/window.devicePixelRatio;
         dummyCanvas.height = img.height/window.devicePixelRatio;
-        dummyContext.drawImage(img, 0,0, img.width,img.height, 0,0, img.width,img.height);
+        dummyContext.drawImage(img, 0,0, img.width,img.height, 0,0, img.width/window.devicePixelRatio,img.height/window.devicePixelRatio);
         
         // Send settings and the image data to potrace to vectorize it!
         Potrace.loadImageFromDataURL(dummyCanvas.toDataURL());
