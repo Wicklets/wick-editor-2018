@@ -23,6 +23,9 @@ var WickProject = function () {
     this.fitScreen = false;
     this.borderColor = "#FFFFFF";
 
+    this.renderer = "WickPixiRenderer";
+    this.audioPlayer = "WickWebAudioPlayer";
+
 };
 
 WickProject.prototype.createNewRootObject = function () {
@@ -61,7 +64,6 @@ WickProject.fromWebpage = function (webpageString) {
 
     var extractedProjectJSON;
 
-    // Format of the line we're looking for: <script>WickPlayer.runProject('<<JSON PROJECT IS HERE>>');</script>
     var webpageStringLines = webpageString.split('\n');
     webpageStringLines.forEach(function (line) {
         if(line.startsWith("<script>WickPlayer.runProject(")) {
@@ -90,7 +92,7 @@ WickProject.fromJSON = function (JSONString) {
     // Decode scripts back to human-readble and eval()-able format
     projectFromJSON.rootObject.decodeStrings();
 
-    projectFromJSON.rootObject.regenerateParentObjectReferences();
+    projectFromJSON.rootObject.generateParentObjectReferences();
 
     return projectFromJSON;
 }
