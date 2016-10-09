@@ -47,12 +47,11 @@ var GuiActionHandler = function (wickEditor) {
         that.keys[event.keyCode] = true;
 
         /* Determine controlKeyDown and shiftKeyDown. */
-        var controlKeyDown = that.keys[91] || that.keys[224];
-        var shiftKeyDown = that.keys[16];
+        var controlKeyDown = that.keys[91] || that.keys[224]; // ?
 
         /* Determine if Text is currently being edited. */
         var activeElem = document.activeElement.nodeName;
-        editingTextBox = activeElem == 'TEXTAREA' || activeElem == 'INPUT';
+        var editingTextBox = activeElem == 'TEXTAREA' || activeElem == 'INPUT';
 
         guiActions.forEach(function(guiAction) {
 
@@ -64,7 +63,9 @@ var GuiActionHandler = function (wickEditor) {
             }
 
             if(JSON.stringify(guiAction.hotkeys) == JSON.stringify(stringkeys)) {
-                var args = { stringkeys: stringkeys };
+                var args = { 
+                    editingTextBox: editingTextBox
+                };
                 guiAction.runAction(args);
             }
         });
@@ -85,71 +86,109 @@ var GuiActionHandler = function (wickEditor) {
 
     // Space
     var spaceAction = new GuiAction(['Space'], [], function(args) {
-        console.log(args);
+        if(!args.editingTextBox) {
+            oldTool = wickEditor.currentTool;
+            wickEditor.currentTool = wickEditor.tools.pan;
+            wickEditor.syncInterfaces();
+        }
     });
 
     // Esc
     var escAction = new GuiAction(['Esc'], [], function(args) {
-        console.log(args);
+        wickEditor.interfaces.builtinplayer.stopRunningProject();
     });
 
     // Control + Shift + Z
     var ctrlShiftZAction = new GuiAction(['Ctrl','Shift','Z'], [], function(args) {
-        console.log(args);
+        if(!args.editingTextBox) {
+            event.preventDefault();
+            wickEditor.actionHandler.redoAction();
+            console.log("penis time")
+        }
     });
 
     // Control + Z
     var ctrlZAction = new GuiAction(['Ctrl','Z'], [], function(args) {
-        console.log(args);
+        if(!args.editingTextBox) {
+            event.preventDefault();
+            wickEditor.actionHandler.undoAction();
+        }
     });
 
     // Control + Enter
     var ctrlEnterAction = new GuiAction(['Ctrl','Enter'], [], function(args) {
-        console.log(args);
+        if(!args.editingTextBox) {
+            that.clearKeys();
+            wickEditor.interfaces.builtinplayer.runProject();
+        }
     });
 
     // Control + 0
     var ctrl0Action = new GuiAction(['Ctrl','0'], [], function(args) {
-        console.log(args);
+        if(!args.editingTextBox) {
+            wickEditor.interfaces.fabric.recenterCanvas();
+        }
     });
 
     // Control + S
     var ctrlSAction = new GuiAction(['Ctrl','S'], [], function(args) {
-        console.log(args);
+        event.preventDefault();
+        that.clearKeys();
+        wickEditor.project.saveInLocalStorage();
+        WickProjectExporter.exportProject(wickEditor.project);
     });
 
     // Control + O
     var ctrlOAction = new GuiAction(['Ctrl','O'], [], function(args) {
-        console.log(args);
+        event.preventDefault();
+        that.clearKeys();
+        $('#importButton').click();
     });
 
     // Control + A
     var ctrlAAction = new GuiAction(['Ctrl','A'], [], function(args) {
-        console.log(args);
+        event.preventDefault();
+        wickEditor.currentTool = wickEditor.tools.cursor;
+        wickEditor.syncInterfaces();
+        wickEditor.interfaces['fabric'].deselectAll();
+        wickEditor.interfaces['fabric'].selectAll();
     });
 
     // Up
     var upAction = new GuiAction(['Up'], [], function(args) {
-        console.log(args);
+        if(wickEditor.project.getCurrentObject().currentLayer > 0)
+            wickEditor.project.getCurrentObject().currentLayer --;
+        wickEditor.syncInterfaces();
     });
 
     // Left
     var leftAction = new GuiAction(['Left'], [], function(args) {
-        console.log(args);
+        wickEditor.actionHandler.doAction("movePlayhead", {
+            obj: wickEditor.project.getCurrentObject(),
+            moveAmount: -1
+        })
+        wickEditor.syncInterfaces();
     });
 
     // Right
     var rightAction = new GuiAction(['Right'], [], function(args) {
-        console.log(args);
+        wickEditor.actionHandler.doAction("movePlayhead", {
+            obj: wickEditor.project.getCurrentObject(),
+            moveAmount: 1
+        })
+        wickEditor.syncInterfaces();
     });
 
     // Down
     var downAction = new GuiAction(['Down'], [], function(args) {
-        console.log(args);
+        if(wickEditor.project.getCurrentObject().currentLayer < wickEditor.project.getCurrentObject().layers.length-1)
+            wickEditor.project.getCurrentObject().currentLayer ++;
+        wickEditor.syncInterfaces();
     });
 
     // Backspace
     var backSpace = new GuiAction(['Backspace'], [], function(args) {
-        console.log(args);
+        event.preventDefault();
+        wickEditor.actionHandler.doAction('deleteObjects', { ids:wickEditor.interfaces['fabric'].getSelectedObjectIDs() });
     });
 }
