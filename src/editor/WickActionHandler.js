@@ -64,7 +64,7 @@ var WickActionHandler = function (wickEditor) {
         this.redoStack = [];
 
         // Regen parent refs
-        wickEditor.project.rootObject.regenerateParentObjectReferences();
+        wickEditor.project.rootObject.generateParentObjectReferences();
 
         // Sync interfaces
         wickEditor.syncInterfaces();

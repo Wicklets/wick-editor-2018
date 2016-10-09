@@ -762,7 +762,7 @@ WickObject.prototype.decodeStrings = function () {
 
 }
 
-WickObject.prototype.regenerateParentObjectReferences = function() {
+WickObject.prototype.generateParentObjectReferences = function() {
 
     var parentObject = this;
 
@@ -771,21 +771,25 @@ WickObject.prototype.regenerateParentObjectReferences = function() {
         // Recursively regenerate parent object references of all objects inside this symbol.
         this.getAllChildObjects().forEach(function(child) {
             child.parentObject = parentObject;
-            child.regenerateParentObjectReferences();
+            child.generateParentObjectReferences();
         });
     }
 
 }
 
 WickObject.prototype.generateObjectNameReferences = function () {
-        wickObj.getAllChildObjects().forEach(function(subObj) {
-            wickObj[subObj.name] = subObj;
 
-            if(subObj.isSymbol) {
-                generateObjectNameReferences(subObj);
-            }
-        });
-    }
+    var that = this;
+
+    this.getAllChildObjects().forEach(function(child) {
+        that[child.name] = child;
+
+        if(child.isSymbol) {
+            child.generateObjectNameReferences();
+        }
+    });
+
+}
 
 // Used so that if the renderer can't render SVGs it has an image to fallback to
 WickObject.prototype.generateSVGCacheImages = function (callback) {
@@ -899,100 +903,219 @@ WickObject.prototype.applyTweens = function () {
      
 *************************/
 
-var wickObjectIsClickable = function (wickObj) {
-        var isClickable = false;
+WickObject.prototype.isClickable = function () {
+    var isClickable = false;
 
-        wickObj.wickScripts['onClick'].split("\n").forEach(function (line) {
-            if(isClickable) return;
-            line = line.trim();
-            if(!line.startsWith("//") && line !== "") {
-                isClickable = true;
+    this.wickScripts['onClick'].split("\n").forEach(function (line) {
+        if(isClickable) return;
+        line = line.trim();
+        if(!line.startsWith("//") && line !== "") {
+            isClickable = true;
+        }
+    });
+
+    return isClickable
+}
+
+WickObject.prototype.isPointInside = function(point, parentScaleX, parentScaleY) {
+
+    var that = this;
+
+    if(!parentScaleX) {
+        parentScaleX = 1.0;
+    }
+    if(!parentScaleY) {
+        parentScaleY = 1.0;
+    }
+
+    if(that.isSymbol) {
+
+        var pointInsideSymbol = false;
+
+        that.getAllActiveChildObjects().forEach(function (child) {
+            var subPoint = {
+                x : point.x - that.x,
+                y : point.y - that.y
+            };
+            if(child.isPointInside(subPoint, that.scaleX, that.scaleY)) {
+                pointInsideSymbol = true;
             }
         });
 
-        return isClickable
+        return pointInsideSymbol;
+
+    } else {
+
+        var scaledObjX = that.x;
+        var scaledObjY = that.y;
+        var scaledObjWidth = that.width*that.scaleX*parentScaleX;
+        var scaledObjHeight = that.height*that.scaleY*parentScaleY;
+
+        if ( point.x >= scaledObjX && 
+             point.y >= scaledObjY  &&
+             point.x <= scaledObjX + scaledObjWidth && 
+             point.y <= scaledObjY  + scaledObjHeight ) {
+
+            if(!that.alphaMask) return true;
+
+            var objectRelativePointX = point.x - scaledObjX;
+            var objectRelativePointY = point.y - scaledObjY;
+            var objectAlphaMaskIndex = (Math.floor(objectRelativePointX)%Math.floor(that.width))+(Math.floor(objectRelativePointY)*Math.floor(that.width));
+            return !that.alphaMask[(objectAlphaMaskIndex)];
+
+        }
+
+        return false;
+
     }
+}
 
-    /*  */
-    var pointInsideObj = function(obj, point, parentScaleX, parentScaleY) {
+/* Generate alpha mask for per-pixel hit detection */
+WickObject.prototype.generateAlphaMask = function () {
 
-        if(!parentScaleX) {
-            parentScaleX = 1.0;
-        }
-        if(!parentScaleY) {
-            parentScaleY = 1.0;
-        }
+    var that = this;
 
-        if(obj.isSymbol) {
+    var image = new Image();
+    image.onload = function () {
+        var canvas = document.createElement('canvas');
+        var w = Math.floor(that.width);
+        var h = Math.floor(that.height);
+        canvas.height = h;
+        canvas.width = w;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage( image, 0, 0, w, h );
+        var imgdata = ctx.getImageData(0,0,w,h);
+        var rgba = imgdata.data;
 
-            var pointInsideSymbol = false;
-
-            obj.getAllActiveChildObjects().forEach(function (currObj) {
-                var subPoint = {
-                    x : point.x - obj.x,
-                    y : point.y - obj.y
-                };
-                if(pointInsideObj(currObj, subPoint, obj.scaleX, obj.scaleY)) {
-                    pointInsideSymbol = true;
-                }
-            });
-
-            return pointInsideSymbol;
-
-        } else {
-
-            var scaledObjX = obj.x;
-            var scaledObjY = obj.y;
-            var scaledObjWidth = obj.width*obj.scaleX*parentScaleX;
-            var scaledObjHeight = obj.height*obj.scaleY*parentScaleY;
-
-            if ( point.x >= scaledObjX && 
-                 point.y >= scaledObjY  &&
-                 point.x <= scaledObjX + scaledObjWidth && 
-                 point.y <= scaledObjY  + scaledObjHeight ) {
-
-                if(!obj.alphaMask) return true;
-
-                var objectRelativePointX = point.x - scaledObjX;
-                var objectRelativePointY = point.y - scaledObjY;
-                var objectAlphaMaskIndex = (Math.floor(objectRelativePointX)%Math.floor(obj.width))+(Math.floor(objectRelativePointY)*Math.floor(obj.width));
-                return !obj.alphaMask[(objectAlphaMaskIndex)];
-
+        that.alphaMask = [];
+        for (var y = 0; y < h; y ++) {
+            for (var x = 0; x < w; x ++) {
+                var alphaMaskIndex = x+y*w;
+                //console.log(alphaMaskIndex)
+                that.alphaMask[alphaMaskIndex] = rgba[alphaMaskIndex*4+3] === 0;
             }
-
-            return false;
-
         }
+
     }
+    image.src = that.imageData || that.svgCacheImageData;
 
-    // Generate alpha mask for per-pixel hit detection
-                var image = new Image();
-                image.onload = function () {
-                    var canvas = document.createElement('canvas');
-                    var w = Math.floor(subObj.width);
-                    var h = Math.floor(subObj.height);
-                    canvas.height = h;
-                    canvas.width = w;
-                    var ctx = canvas.getContext('2d');
-                    ctx.drawImage( image, 0, 0, w, h );
-                    var imgdata = ctx.getImageData(0,0,w,h);
-                    var rgba = imgdata.data;
-
-                    subObj.alphaMask = [];
-                    for (var y = 0; y < h; y ++) {
-                        for (var x = 0; x < w; x ++) {
-                            var alphaMaskIndex = x+y*w;
-                            //console.log(alphaMaskIndex)
-                            subObj.alphaMask[alphaMaskIndex] = rgba[alphaMaskIndex*4+3] === 0;
-                        }
-                    }
-
-                }
-                image.src = subObj.imageData || subObj.svgCacheImageData;
+}
 
 /*************************
      Scripting methods
 *************************/
+
+WickObject.prototype.update = function () {
+
+    if(this.onNewFrame) {
+        if(this.isSymbol && !this.getCurrentFrame().autoplay) {
+            this.isPlaying = false;
+        }
+
+        this.onNewFrame = false;
+    }
+
+    if(this.justEnteredFrame) {
+
+        this.runScript(this.wickScripts['onLoad']);
+        
+        if(audioContext && this.audioBuffer && this.autoplaySound) {
+            this.playSound();
+        }
+
+        this.justEnteredFrame = false;
+    }
+
+    this.runScript(this.wickScripts['onUpdate']);
+
+    if(this.isSymbol) {
+        this.advanceTimeline();
+
+        this.getAllActiveChildObjects().forEach(function(child) {
+            child.update();
+        });
+    }
+
+    this.readyToAdvance = true;
+
+}
+
+WickObject.prototype.runScript = function (script) {
+
+    // Setup wickobject reference variables
+    var project = WickPlayer.getProject() || wickEditor.project;
+    var root = project.rootObject;
+    var parent = this.parentObject;
+    var mouse = WickPlayer.getMouse();
+    var keys = WickPlayer.getKeys();
+    var key = WickPlayer.getLastKeyPressed();
+
+    // Setup builtin wick scripting methods and objects
+    var play          = function ()      { this.parentObject.play(); }
+    var stop          = function ()      { this.parentObject.stop(); }
+    var gotoAndPlay   = function (frame) { this.parentObject.gotoAndPlay(frame); }
+    var gotoAndStop   = function (frame) { this.parentObject.gotoAndStop(frame); }
+    var gotoNextFrame = function ()      { this.parentObject.gotoNextFrame(); }
+    var gotoPrevFrame = function ()      { this.parentObject.gotoPrevFrame(); }
+
+    // Setup keycode shortcuts
+    var isKeyDown = function (keyString) { return keys[keyCharToCode[keyString]]; };
+
+    // WickObjects in same frame (scope) are accessable without using root./parent.
+    if(!this.isRoot) {
+        this.parentObject.getAllChildObjects().forEach(function(child) {
+            if(child.name) window[child.name] = child;
+        });
+    }
+    
+    // Run da script!!
+    try {
+        eval(script);
+    } catch (e) {
+        if(window.wickEditor) {
+            console.error("Exeption thrown while running script of WickObject with ID " + this.id)
+            console.log(e);
+            wickEditor.interfaces.builtinplayer.running = false;
+            WickPlayer.stopRunningCurrentProject();
+            wickEditor.syncInterfaces();
+        } else {
+            alert("An exception was thrown while running a WickObject script. See console!");
+            console.log(e);
+        }
+    }
+
+    // Get rid of wickobject reference variables
+    if(!this.isRoot) {
+        this.parentObject.getAllChildObjects().forEach(function(child) {
+            if(child.name) window[child.name] = undefined;
+        });
+    }
+
+}
+
+WickObject.prototype.advanceTimeline = function () { 
+    // Advance timeline for this object
+    if(this.isPlaying && this.readyToAdvance) {
+
+        var oldFrame = this.getCurrentFrame();
+        this.playheadPosition ++;
+
+        // If we reached the end, go back to the beginning 
+        if(this.playheadPosition >= this.getTotalTimelineLength()) {
+            this.playheadPosition = 0;
+        }
+
+        var newFrame = this.getCurrentFrame();
+
+        if(oldFrame !== newFrame) {
+            this.onNewFrame = true;
+            this.getAllActiveChildObjects().forEach(function (child) {
+                child.justEnteredFrame = true;
+            });
+        }
+    }
+
+}
 
 WickObject.prototype.play = function () {
 
@@ -1094,44 +1217,50 @@ WickObject.prototype.gotoPrevFrame = function () {
 
 /* Determine if two wick objects collide using rectangular hit detection on their
        farthest border */ 
-    that["rectangles"] = function (objA, objB) {
-        var objAAbsPos = objA.getAbsolutePosition();
-        var objBAbsPos = objB.getAbsolutePosition();
+WickObject.prototype.hitTestRectangles = function (otherObj) {
+    var objA = this;
+    var objB = otherObj;
 
-        var objAWidth = objA.width * objA.scaleX;
-        var objAHeight = objAHeight * objA.scaleY; 
+    var objAAbsPos = objA.getAbsolutePosition();
+    var objBAbsPos = objB.getAbsolutePosition();
 
-        var objBWidth = objB.width * objB.scaleX; 
-        var objBHeight = objB.height * objB.scaleY; 
+    var objAWidth = objA.width * objA.scaleX;
+    var objAHeight = objAHeight * objA.scaleY; 
 
-        var left = objAAbsPos.x < (objBAbsPos.x + objBWidth); 
-        var right = (objAAbsPos.x + objAWidth) > objBAbsPos.x; 
-        var top = objAAbsPos.y < (objBAbsPos.y + objBHeight); 
-        var bottom = (objAAbsPos.y + objA.height) > objBAbsPos.y; 
+    var objBWidth = objB.width * objB.scaleX; 
+    var objBHeight = objB.height * objB.scaleY; 
 
-        return left && right && top && bottom;
+    var left = objAAbsPos.x < (objBAbsPos.x + objBWidth); 
+    var right = (objAAbsPos.x + objAWidth) > objBAbsPos.x; 
+    var top = objAAbsPos.y < (objBAbsPos.y + objBHeight); 
+    var bottom = (objAAbsPos.y + objA.height) > objBAbsPos.y; 
+
+    return left && right && top && bottom;
+}
+
+/* Determine if two wickObjects Collide using circular hit detection from their
+   centroid using their full width and height. */ 
+WickObject.prototype.hitTestCircles = function (otherObj) {
+    var objA = this;
+    var objB = otherObj;
+    
+    var objAAbsPos = objA.getAbsolutePosition();
+    var objBAbsPos = objB.getAbsolutePosition();
+
+    var dx = objAAbsPos.x - objBAbsPos.x; 
+    var dy = objAAbsPos.y - objBAbsPos.y;
+
+    var objAWidth = objA.width * objA.scaleX;
+    var objAHeight = objAHeight * objA.scaleY; 
+
+    var distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (distance < ((objAWidth/2) + (objBWidth/2))) {
+        return true;
     }
 
-    /* Determine if two wickObjects Collide using circular hit detection from their
-       centroid using their full width and height. */ 
-    that["circles"] = function (objA, objB) {
-        var objAAbsPos = objA.getAbsolutePosition();
-        var objBAbsPos = objB.getAbsolutePosition();
-
-        var dx = objAAbsPos.x - objBAbsPos.x; 
-        var dy = objAAbsPos.y - objBAbsPos.y;
-
-        var objAWidth = objA.width * objA.scaleX;
-        var objAHeight = objAHeight * objA.scaleY; 
-
-        var distance = Math.sqrt(dx * dx + dy * dy);
-
-        if (distance < ((objAWidth/2) + (objBWidth/2))) {
-            return true;
-        }
-
-        return false; 
-    }
+    return false; 
+}
 
 /* Returns a boolean alerting whether or not this object or any of it's children in frame, 
    have collided with the given object or any of it's children in frame. */
@@ -1157,9 +1286,16 @@ WickObject.prototype.hitTest = function (otherObj, hitTestType) {
     var checkMethod;
     if(!hitTestType) {
         // Use default (rectangular hittest) if no hitTestType is provided
-        checkMethod = WickObjectCollisionDetection["rectangles"];
+        checkMethod = this.hitTestRectangles;
     } else {
-        checkMethod = WickObjectCollisionDetection[hitTestType];
+        var hitTestMethods = {
+            "rectangles" : this.hitTestRectangles,
+            "circles" : this.hitTestCircles
+        }
+        checkMethod = hitTestMethods[hitTestType];
+        if(!checkMethod) {
+            throw "Invalid hitTest collision type: " + hitTestType;
+        }
     }
 
     // Ready to go! Check for collisions!!

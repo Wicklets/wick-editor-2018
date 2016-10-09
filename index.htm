@@ -60,11 +60,12 @@
     <script src="src/editor/WickActionHandler.js"></script>
     <script src="src/editor/GuiActionHandler.js"></script>
     <script src="src/editor/WickEditor.js"></script>
-    <script src="src/editor/InputHandler.js"></script>
+    <script src="src/editor/InputHandler.js"></script>  
+    <script src="src/editor/WickProjectExporter.js"></script>
 
-    <script src="src/player/WickObjectCollisionDetection.js"></script>
-    <script src="src/player/WickProjectExporter.js"></script>
     <script src="src/player/WickPlayer.js"></script>
+    <script src="src/player/renderers/WickPixiRenderer.js"></script>
+    <script src="src/player/audioplayers/WickWebAudioPlayer.js"></script>
 
     <script>
         $(document).ready(function() { 
@@ -331,7 +332,7 @@
 <!-- Builtin player, visible when a project is running -->
 
     <div id="builtinPlayer">
-        <div id="playerCanvasContainer"></div>
+        <div id="playerCanvasContainer" contenteditable="true" tabindex="0"></div>
 
         <div id="builtinPlayerGUI" class="GUIBox">
             <strong>Wick Player</strong><br />
