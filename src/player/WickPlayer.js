@@ -54,6 +54,11 @@ var WickPlayer = (function () {
         // Load the project!
         loadJSONProject(projectJSON);
 
+        var allObjects = project.rootObject.getAllChildObjectsRecursive();
+        allObjects.forEach(function (child) {
+            child.generateAlphaMask();
+        });
+
         if(!project.renderer) project.renderer = "WickPixiRenderer"; // Patch old projects
         renderer = new window[project.renderer](project);
         //audioPlayer = new window[project.audioPlayer](project);

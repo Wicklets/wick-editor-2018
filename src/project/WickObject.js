@@ -356,6 +356,27 @@ WickObject.prototype.getTotalTimelineLength = function () {
      Children utils
 *************************/
 
+/* Return all child objects of a parent object (and their children) */
+WickObject.prototype.getAllChildObjectsRecursive = function () {
+
+    if (!this.isSymbol) {
+        return []; 
+    }
+
+    var children = [];
+    for(var l = this.layers.length-1; l >= 0; l--) {
+        var layer = this.layers[l];
+        for(var f = 0; f < layer.frames.length; f++) {
+            var frame = layer.frames[f];
+            for(var o = 0; o < frame.wickObjects.length; o++) {
+                children.push(frame.wickObjects[o]);
+                children = children.concat(frame.wickObjects[o].getAllChildObjectsRecursive());
+            }
+        }
+    }
+    return children;
+}
+
 /* Return all child objects of a parent object */
 WickObject.prototype.getAllChildObjects = function () {
 
@@ -831,6 +852,40 @@ WickObject.prototype.generateSVGCacheImages = function (callback) {
 
 }
 
+/* Generate alpha mask for per-pixel hit detection */
+WickObject.prototype.generateAlphaMask = function () {
+
+    var that = this;
+
+    var alphaMaskSrc = that.imageData || that.svgCacheImageData;
+    if(!alphaMaskSrc) return;
+
+    var image = new Image();
+    image.onload = function () {
+        var canvas = document.createElement('canvas');
+        var w = Math.floor(that.width);
+        var h = Math.floor(that.height);
+        canvas.height = h;
+        canvas.width = w;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage( image, 0, 0, w, h );
+        var imgdata = ctx.getImageData(0,0,w,h);
+        var rgba = imgdata.data;
+
+        that.alphaMask = [];
+        for (var y = 0; y < h; y ++) {
+            for (var x = 0; x < w; x ++) {
+                var alphaMaskIndex = x+y*w;
+                //console.log(alphaMaskIndex)
+                that.alphaMask[alphaMaskIndex] = rgba[alphaMaskIndex*4+3] === 0;
+            }
+        }
+
+    }
+    image.src = alphaMaskSrc;
+
+}
+
 /*************************
      Tween stuff
 *************************/
@@ -968,37 +1023,6 @@ WickObject.prototype.isPointInside = function(point, parentScaleX, parentScaleY)
         return false;
 
     }
-}
-
-/* Generate alpha mask for per-pixel hit detection */
-WickObject.prototype.generateAlphaMask = function () {
-
-    var that = this;
-
-    var image = new Image();
-    image.onload = function () {
-        var canvas = document.createElement('canvas');
-        var w = Math.floor(that.width);
-        var h = Math.floor(that.height);
-        canvas.height = h;
-        canvas.width = w;
-        var ctx = canvas.getContext('2d');
-        ctx.drawImage( image, 0, 0, w, h );
-        var imgdata = ctx.getImageData(0,0,w,h);
-        var rgba = imgdata.data;
-
-        that.alphaMask = [];
-        for (var y = 0; y < h; y ++) {
-            for (var x = 0; x < w; x ++) {
-                var alphaMaskIndex = x+y*w;
-                //console.log(alphaMaskIndex)
-                that.alphaMask[alphaMaskIndex] = rgba[alphaMaskIndex*4+3] === 0;
-            }
-        }
-
-    }
-    image.src = that.imageData || that.svgCacheImageData;
-
 }
 
 /*************************
