@@ -27,6 +27,8 @@ var GuiActionHandler = function (wickEditor) {
         /* Function to be called when either a hotkey or element fires. */
         this.action = action;
         this.runAction = function(args) { action(args); }
+
+        that.registerGuiAction(this);
     }
 
     /* Add testin */
@@ -56,24 +58,98 @@ var GuiActionHandler = function (wickEditor) {
 
             var stringkeys = [];
             for (var numkey in that.keys) {
-                if (that.keys.hasOwnProperty(numkey)) {
+                if (that.keys.hasOwnProperty(numkey) && that.keys[numkey]) {
                     stringkeys.push(codeToKeyChar[numkey]);
                 }
             }
 
             if(JSON.stringify(guiAction.hotkeys) == JSON.stringify(stringkeys)) {
-                var args = {};
+                var args = { stringkeys: stringkeys };
                 guiAction.runAction(args);
             }
         });
     });
 
     document.body.addEventListener("keyup", function (event) {
+
+        if (wickEditor.interfaces.builtinplayer.running) return;
         
+        /*
+        if(event.keyCode == 32 && !editingTextBox) {
+            wickEditor.currentTool = oldTool;
+            wickEditor.syncInterfaces();
+        }*/
+
+        that.keys[event.keyCode] = false;
     });
 
-    var testAction = new GuiAction(['Space'], [], function(args) {
+    // Space
+    var spaceAction = new GuiAction(['Space'], [], function(args) {
         console.log(args);
     });
-    this.registerGuiAction(testAction);
+
+    // Esc
+    var escAction = new GuiAction(['Esc'], [], function(args) {
+        console.log(args);
+    });
+
+    // Control + Shift + Z
+    var ctrlShiftZAction = new GuiAction(['Ctrl','Shift','Z'], [], function(args) {
+        console.log(args);
+    });
+
+    // Control + Z
+    var ctrlZAction = new GuiAction(['Ctrl','Z'], [], function(args) {
+        console.log(args);
+    });
+
+    // Control + Enter
+    var ctrlEnterAction = new GuiAction(['Ctrl','Enter'], [], function(args) {
+        console.log(args);
+    });
+
+    // Control + 0
+    var ctrl0Action = new GuiAction(['Ctrl','0'], [], function(args) {
+        console.log(args);
+    });
+
+    // Control + S
+    var ctrlSAction = new GuiAction(['Ctrl','S'], [], function(args) {
+        console.log(args);
+    });
+
+    // Control + O
+    var ctrlOAction = new GuiAction(['Ctrl','O'], [], function(args) {
+        console.log(args);
+    });
+
+    // Control + A
+    var ctrlAAction = new GuiAction(['Ctrl','A'], [], function(args) {
+        console.log(args);
+    });
+
+    // Up
+    var upAction = new GuiAction(['Up'], [], function(args) {
+        console.log(args);
+    });
+
+    // Left
+    var leftAction = new GuiAction(['Left'], [], function(args) {
+        console.log(args);
+    });
+
+    // Right
+    var rightAction = new GuiAction(['Right'], [], function(args) {
+        console.log(args);
+    });
+
+    // Down
+    var downAction = new GuiAction(['Down'], [], function(args) {
+        console.log(args);
+    });
+
+    // Backspace
+    var backSpace = new GuiAction(['Backspace'], [], function(args) {
+        console.log(args);
+    });
 }
