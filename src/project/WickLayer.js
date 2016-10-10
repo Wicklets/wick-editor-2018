@@ -21,3 +21,16 @@ WickLayer.prototype.addFrame = function(newFrame) {
 WickLayer.prototype.deleteFrame = function(frame) {
     this.frames.splice(this.frames.indexOf(frame), 1);
 }
+
+WickLayer.prototype.copy = function () {
+
+	var copiedLayer = new WickLayer();
+	copiedLayer.frames = [];
+
+	this.frames.forEach(function (frame) {
+		copiedLayer.frames.push(frame.copy());
+	})
+
+	return copiedLayer;
+
+}

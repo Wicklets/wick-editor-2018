@@ -261,17 +261,24 @@ WickObject.createSymbolFromWickObjects = function (wickObjects) {
 *************************/
 
 WickObject.prototype.getCurrentFrame = function() {
-
     return this.getFrameAtPlayheadPosition(this.playheadPosition);
-
 }
 
 WickObject.prototype.getCurrentLayer = function() {
     return this.layers[this.currentLayer];
 }
 
-WickObject.prototype.addNewLayer = function () {
-    this.layers.push(new WickLayer());
+WickObject.prototype.addLayer = function (layer) {
+    this.layers.push(layer);
+}
+
+WickObject.prototype.removeLayer = function (layer) {
+    var that = this;
+    this.layers.forEach(function (currLayer) {
+        if(layer === currLayer) {
+            that.layers.splice(that.layers.indexOf(layer), 1);
+        }
+    });
 }
 
 WickObject.prototype.getFrameByIdentifier = function (id) {
@@ -969,7 +976,15 @@ WickObject.prototype.isClickable = function () {
         }
     });
 
-    return isClickable
+    if(!isClickable) {
+        this.getAllActiveChildObjects().forEach(function (child) {
+            if(child.isClickable) {
+                isClickable = true;
+            }
+        });
+    }
+
+    return isClickable;
 }
 
 WickObject.prototype.isPointInside = function(point, parentScaleX, parentScaleY) {
@@ -1041,7 +1056,7 @@ WickObject.prototype.update = function () {
 
     if(this.justEnteredFrame) {
 
-        this.runScript(this.wickScripts['onLoad']);
+        this.runScript('onLoad');
         
         if(audioContext && this.audioBuffer && this.autoplaySound) {
             this.playSound();
@@ -1050,7 +1065,7 @@ WickObject.prototype.update = function () {
         this.justEnteredFrame = false;
     }
 
-    this.runScript(this.wickScripts['onUpdate']);
+    this.runScript('onUpdate');
 
     if(this.isSymbol) {
         this.advanceTimeline();
@@ -1064,7 +1079,11 @@ WickObject.prototype.update = function () {
 
 }
 
-WickObject.prototype.runScript = function (script) {
+WickObject.prototype.runScript = function (scriptType) {
+
+    var that = this;
+
+    var script = this.wickScripts[scriptType];
 
     // Setup wickobject reference variables
     var project = WickPlayer.getProject() || wickEditor.project;
@@ -1075,12 +1094,12 @@ WickObject.prototype.runScript = function (script) {
     var key = WickPlayer.getLastKeyPressed();
 
     // Setup builtin wick scripting methods and objects
-    var play          = function ()      { this.parentObject.play(); }
-    var stop          = function ()      { this.parentObject.stop(); }
-    var gotoAndPlay   = function (frame) { this.parentObject.gotoAndPlay(frame); }
-    var gotoAndStop   = function (frame) { this.parentObject.gotoAndStop(frame); }
-    var gotoNextFrame = function ()      { this.parentObject.gotoNextFrame(); }
-    var gotoPrevFrame = function ()      { this.parentObject.gotoPrevFrame(); }
+    var play          = function ()      { that.parentObject.play(); }
+    var stop          = function ()      { that.parentObject.stop(); }
+    var gotoAndPlay   = function (frame) { that.parentObject.gotoAndPlay(frame); }
+    var gotoAndStop   = function (frame) { that.parentObject.gotoAndStop(frame); }
+    var gotoNextFrame = function ()      { that.parentObject.gotoNextFrame(); }
+    var gotoPrevFrame = function ()      { that.parentObject.gotoPrevFrame(); }
 
     // Setup keycode shortcuts
     var isKeyDown = function (keyString) { return keys[keyCharToCode[keyString]]; };
@@ -1094,19 +1113,33 @@ WickObject.prototype.runScript = function (script) {
     
     // Run da script!!
     try {
-        eval(script);
+        //eval(script);
+        eval("try{" + script + "}catch (e) { throw (e); }");
     } catch (e) {
-        if(window.wickEditor) {
-            console.error("Exeption thrown while running script of WickObject with ID " + this.id)
-            console.log(e);
-            wickEditor.interfaces.builtinplayer.running = false;
-            WickPlayer.stopRunningCurrentProject();
-            wickEditor.syncInterfaces();
+        if (window.wickEditor) {
+            if(!wickEditor.interfaces.builtinplayer.running) return;
+
+            console.log("Exeption thrown while running script of WickObject with ID " + this.id);
+            console.log(e)
+            var lineNumber = null;
+            e.stack.split('\n').forEach(function (line) {
+                if(lineNumber) return;
+                if(!line.includes("<anonymous>:")) return;
+
+                lineNumber = parseInt(line.split("<anonymous>:")[1].split(":")[0]);
+                console.log(lineNumber)
+
+            })
+
+            //console.log(e.stack.split("\n")[1].split('<anonymous>:')[1].split(":")[0]);
+            //console.log(e.stack.split("\n"))
+            wickEditor.interfaces.scriptingide.showError(this.id, scriptType, lineNumber, e);
         } else {
             alert("An exception was thrown while running a WickObject script. See console!");
             console.log(e);
         }
     }
+    //eval("try{" + script + "}catch (e) { console.log(e); }");
 
     // Get rid of wickobject reference variables
     if(!this.isRoot) {
@@ -1165,10 +1198,12 @@ WickObject.prototype.gotoFrame = function (frame) {
     if (CheckInput.isNonNegativeInteger(frame)) {
 
         // Only navigate to an integer frame if it is nonnegative and a valid frame
-        if(frame < this.getCurrentLayer().frames.length)
+        if(frame < this.getCurrentLayer().frames.length) {
             this.playheadPosition = frame;
-        else
-            throw "Failed to navigate to frame \'" + frame + "\': is not a valid frame.";
+        } else {
+            throw (new Error());
+            //throw "Failed to navigate to frame \'" + frame + "\': is not a valid frame.";
+        }
 
     } else if (CheckInput.isString(frame)) {
 
@@ -1307,7 +1342,7 @@ WickObject.prototype.hitTest = function (otherObj, hitTestType) {
 
     // Load the collition detection function for the type of collision we want to check for
 
-    var checkMethod;
+    /*var checkMethod;
     if(!hitTestType) {
         // Use default (rectangular hittest) if no hitTestType is provided
         checkMethod = this.hitTestRectangles;
@@ -1320,18 +1355,32 @@ WickObject.prototype.hitTest = function (otherObj, hitTestType) {
         if(!checkMethod) {
             throw "Invalid hitTest collision type: " + hitTestType;
         }
-    }
+    }*/
 
     // Ready to go! Check for collisions!!
 
     for (var i = 0; i < otherObjChildren.length; i++) {
         for (var j = 0; j < thisObjChildren.length; j++) {
-            if (checkMethod(otherObjChildren[i], thisObjChildren[j])) {
+            if (thisObjChildren[j][hitTestType](otherObjChildren[i])) {
                 return true; 
             }
         }
     }
 
     return false; 
+
+}
+
+WickObject.prototype.copy = function () {
+
+    var copiedObject = new WickObject();
+
+    // set usual vars here (ooooo)
+
+    this.layers.forEach(function (layer) {
+        copiedObject.layers.push(layer.copy());
+    })
+
+    return copiedObject;
 
 }

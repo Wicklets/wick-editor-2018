@@ -24,6 +24,26 @@ var WickPlayer = (function () {
     var stopDrawLoop;
 
 /*****************************
+    experimenting ........
+*****************************/
+
+    wickPlayer.cloneObject = function (wickObj) {
+        var clone = wickObj.copy();
+
+        // pixi stuff
+        WickPixiRenderer.generatePixiScene(clone);
+        wickObj.parentObject.pixiContainer.addChild(clone.pixiContainer || clone.pixiSprite || clone.pixiText)
+
+        // player stuff
+        resetAllPlayheads(clone);
+        resetAllEventStates(clone);
+
+        project.addObject(clone);
+
+        return clone;
+    }
+
+/*****************************
     Player Setup
 *****************************/
 
@@ -199,7 +219,7 @@ var WickPlayer = (function () {
         
         project.rootObject.getAllActiveChildObjects().forEach(function(child) {
             if(child.isPointInside(mouse) && child.isClickable) {
-                child.runScript(child.wickScripts["onClick"]);
+                child.runScript("onClick");
             }
         });
 
@@ -211,7 +231,7 @@ var WickPlayer = (function () {
         lastKeyPressed = codeToKeyChar[event.keyCode];
 
         project.rootObject.getAllActiveChildObjects().forEach(function(child) {
-            child.runScript(child.wickScripts["onKeyDown"]);
+            child.runScript("onKeyDown");
         });
     }
 
@@ -237,7 +257,7 @@ var WickPlayer = (function () {
 
         project.rootObject.getAllActiveChildObjects().forEach(function(child) {
             if(child.isPointInside(touchPos) && child.isClickable()) {
-                child.runScript(child.wickScripts["onClick"]);
+                child.runScript("onClick");
             }
         });
 

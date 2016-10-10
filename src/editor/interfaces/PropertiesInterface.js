@@ -23,6 +23,8 @@ var PropertiesInterface = function (wickEditor) {
             // Set object properties GUI position/rotation
             document.getElementById('objectPositionX').value = selectedObj.x;
             document.getElementById('objectPositionY').value = selectedObj.y;
+            document.getElementById('objectWidth').value = selectedObj.width * selectedObj.scaleX;
+            document.getElementById('objectHeight').value = selectedObj.height * selectedObj.scaleY;
             document.getElementById('objectRotation').value = selectedObj.angle;
 
             if(selectedObj.fontData) {
@@ -64,6 +66,28 @@ var PropertiesInterface = function (wickEditor) {
         if(CheckInput.isNumber($('#objectPositionY').val())) {
             var id = wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0];
             var modifiedState = { y : parseInt($('#objectPositionY').val()) };
+            wickEditor.actionHandler.doAction('modifyObjects', { ids: [id], modifiedStates: [modifiedState] });
+        }
+
+    });
+
+    $('#objectWidth').on('input propertychange', function () {
+
+        if(CheckInput.isNumber($('#objectWidth').val())) {
+            var id = wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0];
+            var obj = wickEditor.project.rootObject.getChildByID(id);
+            var modifiedState = { scaleX : parseInt($('#objectWidth').val()) / obj.width };
+            wickEditor.actionHandler.doAction('modifyObjects', { ids: [id], modifiedStates: [modifiedState] });
+        }
+
+    });
+
+    $('#objectHeight').on('input propertychange', function () {
+
+        if(CheckInput.isNumber($('#objectHeight').val())) {
+            var id = wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0];
+            var obj = wickEditor.project.rootObject.getChildByID(id);
+            var modifiedState = { scalyY : parseInt($('#objectHeight').val()) / obj.height };
             wickEditor.actionHandler.doAction('modifyObjects', { ids: [id], modifiedStates: [modifiedState] });
         }
 

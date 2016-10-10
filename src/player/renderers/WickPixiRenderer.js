@@ -11,13 +11,13 @@ var projectFitScreenTranslate;
 var WickPixiRenderer = function (project) {
 
 	/* Recursively load images of wickObj */
-    var loadImages = function (wickObj) {
+    var generatePixiScene = function (wickObj) {
 
         wickObj.pixiContainer = new PIXI.Container();
 
         wickObj.getAllChildObjects().forEach(function(subObj) {
             if (subObj.isSymbol) {
-                loadImages(subObj);
+                generatePixiScene(subObj);
                 wickObj.pixiContainer.addChild(subObj.pixiContainer);
             } else if (subObj.imageData || subObj.svgCacheImageData) {
                 subObj.pixiSprite = PIXI.Sprite.fromImage(subObj.imageData || subObj.svgCacheImageData);
@@ -105,7 +105,7 @@ var WickPixiRenderer = function (project) {
 
 	    resizeCanvas();
 
-	    loadImages(project.rootObject);
+	    generatePixiScene(project.rootObject);
 
 	}
 

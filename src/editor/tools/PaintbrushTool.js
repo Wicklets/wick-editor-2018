@@ -7,7 +7,20 @@ var PaintbrushTool = function (wickEditor) {
     var that = this;
 
     this.getCursorImage = function () {
-        return 'url(resources/paintbrush-cursor.png) 64 64,default';
+        var canvas = document.createElement("canvas");
+        canvas.width = 128;
+        canvas.height = 128;
+        var context = canvas.getContext('2d');
+        var centerX = canvas.width / 2;
+        var centerY = canvas.height / 2;
+        var radius = that.brushSize/2;
+
+        context.beginPath();
+        context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+        context.fillStyle = 'black';
+        context.fill();
+
+        return 'url(' + canvas.toDataURL() + ') 64 64,default';
     };
 
     this.brushSize = 5;
@@ -29,8 +42,6 @@ var PaintbrushTool = function (wickEditor) {
 
         // Vectorize the path and create a WickObject out of it
         potraceFabricPath(fabricPath, function(SVGData) {
-
-            console.log(fabricPath)
 
             var wickObj = WickObject.fromSVG(SVGData);
 
@@ -57,7 +68,6 @@ var PaintbrushTool = function (wickEditor) {
         wickEditor.interfaces.fabric.canvas.setZoom(1);
 
         pathFabricObject.cloneAsImage(function(clone) {
-            console.log(clone)
             var img = new Image();
             img.onload = function () {
                 potraceImage(img, callback);

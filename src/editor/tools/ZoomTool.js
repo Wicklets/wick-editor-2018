@@ -4,17 +4,22 @@ var ZoomTool = function (wickEditor) {
 
     var that = this;
 
+    this.zoomType = "in";
+
     this.getCursorImage = function () {
-        return "zoom-in";
+        if(this.zoomType === "in")
+            return "zoom-in";
+        else
+            return "zoom-out";
     }
     
     wickEditor.interfaces.fabric.canvas.on('mouse:down', function (e) {
     	if(wickEditor.currentTool instanceof ZoomTool) {
-    		if (wickEditor.inputHandler.keys[18]) {
-                // alt-click zooms out
-    			wickEditor.interfaces.fabric.zoom(0.9);
-    		} else {
+            console.log(that.zoomType)
+    		if (that.zoomType === "in") {
     			wickEditor.interfaces.fabric.zoom(1.1);
+    		} else if (that.zoomType === "out") {
+    			wickEditor.interfaces.fabric.zoom(0.9);
     		}
 	    }
     });

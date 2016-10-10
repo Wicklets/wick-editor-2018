@@ -33,6 +33,7 @@ var WickEditor = function () {
     this.tools = {
         "cursor" : new CursorTool(this),
         "paintbrush" : new PaintbrushTool(this),
+        "dropper" : new DropperTool(this),
         "text" : new TextTool(this),
         "zoom" : new ZoomTool(this),
         "pan" : new PanTool(this)
@@ -40,6 +41,7 @@ var WickEditor = function () {
 
     this.interfaces.toolbar.loadTools();
     this.currentTool = this.tools['cursor'];
+    this.lastTool = this.currentTool;
 
     this.syncInterfaces();
 

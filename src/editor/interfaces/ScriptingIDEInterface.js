@@ -24,11 +24,12 @@ var ScriptingIDEInterface = function (wickEditor) {
             if(!selectedObj) {
                 $("#noSelectionDiv").css('display', 'block');
                 $("#scriptObjectDiv").css('display', 'none');
-                $("#scriptingGUI").css('height', '20px');
+                document.getElementById("errorMessage").style.display = "none";
+                //$("#scriptingGUI").css('height', '20px');
             } else if(selectedObj.wickScripts[that.currentScript] !== undefined) {
                 $("#noSelectionDiv").css('display', 'none');
                 $("#scriptObjectDiv").css('display', 'block');
-                $("#scriptingGUI").css('height', '230px');
+                //$("#scriptingGUI").css('height', '230px');
 
                 var script = selectedObj.wickScripts[that.currentScript];
                 that.aceEditor.setValue(script, -1);
@@ -42,6 +43,20 @@ var ScriptingIDEInterface = function (wickEditor) {
             $("#scriptingGUI").css('display', 'none');
         }
     }
+
+    this.showError = function (id, scriptType, lineNumber, errorMessage) {
+        wickEditor.interfaces.builtinplayer.running = false;
+        WickPlayer.stopRunningCurrentProject();
+        wickEditor.project.jumpToObject(id);
+        wickEditor.interfaces.fabric.selectByIDs([id]);
+        wickEditor.interfaces.scriptingide.open = true;
+        wickEditor.interfaces.scriptingide.currentScript = scriptType;
+        document.getElementById("errorMessage").innerHTML = errorMessage;
+        if(lineNumber) document.getElementById("errorMessage").innerHTML += ", line " + lineNumber;
+        document.getElementById("errorMessage").style.display = "block";
+        wickEditor.syncInterfaces();
+    }
+
 // Script buttons
 
     $("#onLoadButton").on("click", function (e) {
@@ -68,6 +83,7 @@ var ScriptingIDEInterface = function (wickEditor) {
 
     $("#closeScriptingGUIButton").on("click", function (e) {
         that.open = false;
+        document.getElementById("errorMessage").style.display = "none";
         that.syncWithEditorState();
     });
 

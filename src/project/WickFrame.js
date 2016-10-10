@@ -37,3 +37,19 @@ WickFrame.prototype.shrink = function(length) {
 		return length; 
 	}
 }
+
+WickFrame.prototype.copy = function () {
+
+	var copiedFrame = new WickFrame();
+
+	copiedFrame.identifier = this.identifier;
+	copiedFrame.frameLength = this.frameLength;
+	copiedFrame.autoplay = this.autoplay;
+
+	this.wickObjects.forEach(function (wickObject) {
+		copiedFrame.wickObjects.push(wickObject.copy());
+	})
+
+	return copiedFrame;
+
+}

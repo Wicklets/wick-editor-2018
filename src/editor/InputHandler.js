@@ -50,13 +50,15 @@ var InputHandler = function (wickEditor) {
         var activeElem = document.activeElement.nodeName;
         editingTextBox = activeElem == 'TEXTAREA' || activeElem == 'INPUT';
 
-        // Escape: Stop running project
-        if(event.keyCode == 27 && !editingTextBox) {
-            that.clearKeys();
-            wickEditor.interfaces.builtinplayer.stopRunningProject();
-        }
+        if (wickEditor.interfaces.builtinplayer.running) {
+            // Escape: Stop running project
+            if(event.keyCode == 27 && !editingTextBox) {
+                that.clearKeys();
+                wickEditor.interfaces.builtinplayer.stopRunningProject();
+            }
 
-        if (wickEditor.interfaces.builtinplayer.running) return;
+            return;
+        }
 
         if(!editingTextBox) {
             // Control-shift-z: redo
@@ -69,6 +71,12 @@ var InputHandler = function (wickEditor) {
                 event.preventDefault();
                 wickEditor.actionHandler.undoAction();
             }
+        }
+
+        // Alt: change zoom to zoom out
+        if (wickEditor.inputHandler.keys[18]) {
+            wickEditor.tools.zoom.zoomType = "out";
+            wickEditor.syncInterfaces();
         }
 
         // Control-Enter: Run project in builtin player
@@ -157,6 +165,11 @@ var InputHandler = function (wickEditor) {
         
         if(event.keyCode == 32 && !editingTextBox) {
             wickEditor.currentTool = oldTool;
+            wickEditor.syncInterfaces();
+        }
+
+        if (event.keyCode === 18) {
+            wickEditor.tools.zoom.zoomType = "in";
             wickEditor.syncInterfaces();
         }
 

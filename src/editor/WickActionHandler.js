@@ -273,7 +273,7 @@ var WickActionHandler = function (wickEditor) {
             var currentObject = wickEditor.project.getCurrentObject();
 
             // Add an empty frame
-            currentObject.addNewLayer();
+            currentObject.addLayer(new WickLayer());
 
             // Go to last added layer
             currentObject.currentLayer = currentObject.layers.length-1;
@@ -286,6 +286,38 @@ var WickActionHandler = function (wickEditor) {
 
             // Go to last added layer
             currentObject.currentLayer = currentObject.layers.length-1;
+        });
+
+    this.registerAction('removeLayer', 
+        function (args) {
+            var currentObject = wickEditor.project.getCurrentObject();
+
+            // Add an empty frame
+            currentObject.removeLayer(currentObject.getCurrentLayer());
+
+            // Go to last added layer
+            currentObject.currentLayer = currentObject.layers.length-1;
+        },
+        function (args) {
+            console.error("removeLayer undo NYI")
+        });
+
+    this.registerAction('addBreakpoint', 
+        function (args) {
+            args.oldAutoplayState = args.frame.autoplay;
+            args.frame.autoplay = false;
+        },
+        function (args) {
+            args.frame.autoplay = args.oldAutoplayState;
+        });
+
+    this.registerAction('removeBreakpoint', 
+        function (args) {
+            args.oldAutoplayState = args.frame.autoplay;
+            args.frame.autoplay = true;
+        },
+        function (args) {
+            args.frame.autoplay = args.oldAutoplayState;
         });
 
     this.registerAction('extendFrame', 

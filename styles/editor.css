@@ -78,6 +78,11 @@ hr {
 	height: 200px;
 	text-align: left;
 }
+#errorMessage {
+	background-color: white;
+	color: red;
+	display:hidden;
+}
 
 #propertiesGUI {
 	right: 0px;

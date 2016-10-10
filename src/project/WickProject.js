@@ -195,3 +195,13 @@ WickProject.prototype.getCurrentObject = function () {
     return this.getObjectByID(this.currentObjectID);
 
 }
+
+WickProject.prototype.jumpToObject = function (id) {
+
+    this.rootObject.getAllChildObjectsRecursive().forEach(function (child) {
+        if(child.id === id) {
+            wickEditor.project.currentObjectID = child.parentObject.id;
+        }
+    });
+
+}

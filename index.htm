@@ -20,15 +20,17 @@
     <script src="lib/ace/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="lib/FileSaver/FileSaver.min.js"></script>
     <script src="lib/util/fpscounter.js"></script>
-    <script src="lib/jscolor/jscolor.min.js"></script>
+    <script src="lib/jscolor/jscolor.js"></script>
     <script src="lib/util/browserdetection.js"></script>
     <script src="lib/util/base64-arraybuffer.js"></script>
     <script src="lib/libgif/libgif.js"></script>
     <script src="lib/pixi/pixi.min.js"></script>
+    <script src="lib/stacktrace-js/stacktrace.min.js"></script>
     <script src="lib/util/filedownloader.js"></script>
     <script src="lib/util/URLParameterUtils.js"></script>
     <script src="lib/util/keyCharToCode.js"></script>
     <script src="lib/util/timer.js"></script>
+    <script src="lib/util/GetColorAtCoords.js"></script>
 
     <script src="src/project/WickFrame.js"></script>
     <script src="src/project/WickLayer.js"></script>
@@ -51,6 +53,7 @@
 
     <script src="src/editor/tools/CursorTool.js"></script>
     <script src="src/editor/tools/PaintbrushTool.js"></script>
+    <script src="src/editor/tools/DropperTool.js"></script>
     <script src="src/editor/tools/TextTool.js"></script>
     <script src="src/editor/tools/ZoomTool.js"></script>
     <script src="src/editor/tools/PanTool.js"></script>
@@ -158,7 +161,6 @@
             <hr />
 
             <div id="frameProperties">
-                Autoplay Frame: <input type="checkbox" id="frameAutoplayCheckbox"> | 
                 Frame Name: <input type="text" id="frameIdentifier" maxlength="16" size="16">
             </div>
         </div>
@@ -173,6 +175,11 @@
 
             <div class="button tooltipElem" id="paintbrushToolButton" alt="Paintbrush">
                 <img src="resources/paintbrush.png" width="30"></img>
+            </div>
+            <hr />
+
+            <div class="button tooltipElem" id="dropperToolButton" alt="Eyedropper">
+                <img src="resources/eyedropper.png" width="30"></img>
             </div>
             <hr />
 
@@ -207,6 +214,9 @@
                 <hr />
                 x: <input type="text" id="objectPositionX" maxlength="4" size="4">
                 y: <input type="text" id="objectPositionY" maxlength="4" size="4">
+                <br />
+                width: <input type="text" id="objectWidth" maxlength="4" size="4">
+                height: <input type="text" id="objectHeight" maxlength="4" size="4">
                 <br />
                 rotation: <input type="text" id="objectRotation" maxlength="4" size="4">
                 <br />
@@ -255,6 +265,7 @@
 
         <div id="scriptingGUI" class="GUIBox">
             <div id="scriptObjectDiv">
+                <div id="errorMessage"></div>
                 <div class="elemInRow">
                     <div class="button buttonInRow" id="onLoadButton">Load</div>
                     <div class="button buttonInRow" id="onClickButton">Click</div>
@@ -309,16 +320,21 @@
                 <div id="clickedOnFrameButtons">
                     <div class="button" id="shrinkFrameButton">Shrink Frame</div>
                     <div class="button" id="deleteFrameButton">Delete Frame</div>
+                    <div id="noBreakpointExists">
+                        <div class="button" id="addBreakpointButton">Add Breakpoint</div>
+                    </div>
+                    <div id="breakpointExists">
+                        <div class="button" id="removeBreakpointButton">Remove Breakpoint</div>
+                    </div>
                 </div>
                 <div id="clickedOffFrameButtons">
                     <div class="button" id="addFrameButton">Add Frame</div>
                 </div>
-                <div id="clickedFrameExists">
-                    <div class="button" id="extendFrameButton">Extend Frame</div>
-                </div>
                 <div id="commonTimelineButtons">
                     <hr />
+                    <div class="button" id="extendFrameButton">Extend Frame</div>
                     <div class="button" id="addLayerButton">Add Layer</div>
+                    <div class="button" id="removeLayerButton">Remove Layer</div>
                 </div>
             </div>
         </div>

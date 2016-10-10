@@ -184,8 +184,9 @@ var FabricInterface = function (wickEditor) {
         that.repositionGUIElements();
 
         // Update tool state
-        this.canvas.defaultCursor = wickEditor.currentTool.getCursorImage();
-        this.canvas.freeDrawingCursor = wickEditor.currentTool.getCursorImage();
+        var cursorImg = wickEditor.currentTool.getCursorImage();
+        this.canvas.defaultCursor = cursorImg;
+        this.canvas.freeDrawingCursor = cursorImg;
 
         if(wickEditor.currentTool instanceof PaintbrushTool
            /* || wickEditor.currentTool.instanceof EraserTool*/) {

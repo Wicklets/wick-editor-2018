@@ -29,15 +29,17 @@ var RightClickMenuInterface = function (wickEditor) {
             // Hide everything
             hideButtonGroup("#fabricButtons");
             hideButtonGroup("#insideSymbolButtons");
-            hideButtonGroup("#symbolButtons");;
+            hideButtonGroup("#symbolButtons");
             hideButtonGroup("#staticObjectButtons");
             hideButtonGroup("#singleObjectButtons");
             hideButtonGroup("#commonObjectButtons");
             hideButtonGroup("#clickedFrameExists");
             hideButtonGroup("#clickedOffFrameButtons");
             hideButtonGroup("#noFramesExistButtons");
-            hideButtonGroup("#clickedOnFrameButtons");
+            hideButtonGroup("#breakpointExists");
+            hideButtonGroup("#noBreakpointExists");
             hideButtonGroup("#commonTimelineButtons");
+            hideButtonGroup("#clickedOnFrameButtons");
 
             // Selectively show portions we need depending on editor state
             showButtonsForMode[that.mode]();
@@ -96,14 +98,16 @@ var RightClickMenuInterface = function (wickEditor) {
 
         showButtonGroup("#commonTimelineButtons");
 
-        if(wickEditor.project.getCurrentObject().getCurrentFrame()) {
+        var frame = wickEditor.project.getCurrentObject().getCurrentFrame();
+        if(frame) {
             showButtonGroup("#clickedOnFrameButtons");
+            if(frame.autoplay) {
+                showButtonGroup("#noBreakpointExists");
+            } else {
+                showButtonGroup("#breakpointExists");
+            }
         } else {
             showButtonGroup("#clickedOffFrameButtons");
-        }
-
-        if(wickEditor.project.getCurrentObject().getCurrentLayer().frames.length > 0) {
-            showButtonGroup("#clickedFrameExists");
         }
     }
 
@@ -253,6 +257,22 @@ var RightClickMenuInterface = function (wickEditor) {
 
     bindActionToButton("#addLayerButton", function () {
         wickEditor.actionHandler.doAction('addNewLayer');
+    });
+
+    bindActionToButton("#removeLayerButton", function () {
+        wickEditor.actionHandler.doAction('removeLayer');
+    });
+
+    bindActionToButton("#addBreakpointButton", function () {
+        wickEditor.actionHandler.doAction('addBreakpoint', {
+            frame: wickEditor.project.getCurrentObject().getCurrentFrame()
+        });
+    });
+
+    bindActionToButton("#removeBreakpointButton", function () {
+        wickEditor.actionHandler.doAction('removeBreakpoint', {
+            frame: wickEditor.project.getCurrentObject().getCurrentFrame()
+        });
     });
 
 }

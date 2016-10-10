@@ -5,6 +5,7 @@ var ToolbarInterface = function (wickEditor) {
     /* Define tools in toolbar */ 
     var toolbarTools = [ 'cursor',
                          'paintbrush',
+                         'dropper',
                          'fillbucket',
                          'text',
                          'zoom',
@@ -32,6 +33,7 @@ var ToolbarInterface = function (wickEditor) {
             var buttonClassName = '#' + toolName + 'ToolButton';
 
             $(buttonClassName).on('click', function(e) {
+                wickEditor.lastTool = wickEditor.currentTool;
                 wickEditor.currentTool = tool;
                 wickEditor.interfaces.fabric.forceModifySelectedObjects();
                 wickEditor.interfaces.fabric.deselectAll();
