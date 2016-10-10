@@ -43,15 +43,23 @@ var GuiActionHandler = function (wickEditor) {
         that.registerGuiAction(this);
     }
 
-    /* Add testin */
-    this.registerGuiAction = function(guiAction) {
-
-        guiActions.push(guiAction);
-    };
-
-    /* I aint done this yet */
-    this.unregisterGuiAction = function(guiAction) {
-
+    /* Adds GuiAction to guiActions (after testing). */
+    this.registerGuiAction = function(newGuiAction) {
+        guiActions.forEach(function(guiAction) {
+            if(JSON.stringify(guiAction.hotkeys) == JSON.stringify(newGuiAction.hotkeys)) {
+                console.log('error!  guiAction already exists with hotkeys:');
+                console.log(guiAction.hotkeys);
+                return;
+            }
+            for(var i = 0; i < guiAction.elementIds.length; i++) {
+                if(newGuiAction.elementIds.contains(guiAction.elementIds[i])) {
+                    console.log('error!  guiAction already exists with elementId:');
+                    console.log(guiAction.elementIds[i]);
+                    return;
+                }
+            }
+        });
+        guiActions.push(newGuiAction);
     };
 
     /* Reset keys array to the empty array. */
