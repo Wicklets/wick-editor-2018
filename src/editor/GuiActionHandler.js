@@ -16,7 +16,7 @@ var GuiActionHandler = function (wickEditor) {
 
     /* GuiAction definition. All possible actions performable through interacting 
     with the Wick Editor GUI are expected to be well defined by this structure .*/
-    var GuiAction = function (hotkeys, elementIds, action) {
+    var GuiAction = function (hotkeys, elementIds, requiredParams, action) {
 
         /* Array of key strings which trigger the action function. */
         this.hotkeys = hotkeys;
@@ -24,9 +24,21 @@ var GuiActionHandler = function (wickEditor) {
         /* Array of Wick Editor element ID's which trigger the action function. */
         this.elementIds = elementIds;
 
+        /* Dictionary of required params and their values. */
+        this.requiredParams = requiredParams;
+
         /* Function to be called when either a hotkey or element fires. */
         this.action = action;
-        this.runAction = function(args) { action(args); }
+
+        /* Function which runs action if args' parameters match requiredParams. */
+        this.runAction = function(args) {
+
+            for (var param in requiredParams) {
+                if (requiredParams.hasOwnProperty(param) && requiredParams[param] != args[param])
+                    return;
+            }
+            action(args);
+        }
 
         that.registerGuiAction(this);
     }
@@ -41,6 +53,10 @@ var GuiActionHandler = function (wickEditor) {
     this.unregisterGuiAction = function(guiAction) {
 
     };
+
+    this.clearKeys = function () {
+        that.keys = [];
+    }
 
     document.body.addEventListener("keydown", function (event) {
         /* Set event keyCode in keys dictionary to true. */
@@ -85,53 +101,42 @@ var GuiActionHandler = function (wickEditor) {
     });
 
     // Space
-    var spaceAction = new GuiAction(['Space'], [], function(args) {
-        if(!args.editingTextBox) {
-            oldTool = wickEditor.currentTool;
-            wickEditor.currentTool = wickEditor.tools.pan;
-            wickEditor.syncInterfaces();
-        }
+    var spaceAction = new GuiAction(['Space'], [], { editingTextBox: false }, function(args) {
+        oldTool = wickEditor.currentTool;
+        wickEditor.currentTool = wickEditor.tools.pan;
+        wickEditor.syncInterfaces();
     });
 
     // Esc
-    var escAction = new GuiAction(['Esc'], [], function(args) {
+    var escAction = new GuiAction(['Esc'], [], {}, function(args) {
         wickEditor.interfaces.builtinplayer.stopRunningProject();
     });
 
     // Control + Shift + Z
-    var ctrlShiftZAction = new GuiAction(['Ctrl','Shift','Z'], [], function(args) {
-        if(!args.editingTextBox) {
-            event.preventDefault();
-            wickEditor.actionHandler.redoAction();
-            console.log("penis time")
-        }
+    var ctrlShiftZAction = new GuiAction(['Ctrl','Shift','Z'], [], { editingTextBox: false }, function(args) {
+        event.preventDefault();
+        wickEditor.actionHandler.redoAction();
     });
 
     // Control + Z
-    var ctrlZAction = new GuiAction(['Ctrl','Z'], [], function(args) {
-        if(!args.editingTextBox) {
-            event.preventDefault();
-            wickEditor.actionHandler.undoAction();
-        }
+    var ctrlZAction = new GuiAction(['Ctrl','Z'], [], { editingTextBox: false }, function(args) {
+        event.preventDefault();
+        wickEditor.actionHandler.undoAction();
     });
 
     // Control + Enter
-    var ctrlEnterAction = new GuiAction(['Ctrl','Enter'], [], function(args) {
-        if(!args.editingTextBox) {
-            that.clearKeys();
-            wickEditor.interfaces.builtinplayer.runProject();
-        }
+    var ctrlEnterAction = new GuiAction(['Ctrl','Enter'], [], { editingTextBox: false }, function(args) {
+        that.clearKeys();
+        wickEditor.interfaces.builtinplayer.runProject();
     });
 
     // Control + 0
-    var ctrl0Action = new GuiAction(['Ctrl','0'], [], function(args) {
-        if(!args.editingTextBox) {
-            wickEditor.interfaces.fabric.recenterCanvas();
-        }
+    var ctrl0Action = new GuiAction(['Ctrl','0'], [], { editingTextBox: false }, function(args) {
+        wickEditor.interfaces.fabric.recenterCanvas();
     });
 
     // Control + S
-    var ctrlSAction = new GuiAction(['Ctrl','S'], [], function(args) {
+    var ctrlSAction = new GuiAction(['Ctrl','S'], [], {}, function(args) {
         event.preventDefault();
         that.clearKeys();
         wickEditor.project.saveInLocalStorage();
@@ -139,14 +144,14 @@ var GuiActionHandler = function (wickEditor) {
     });
 
     // Control + O
-    var ctrlOAction = new GuiAction(['Ctrl','O'], [], function(args) {
+    var ctrlOAction = new GuiAction(['Ctrl','O'], [], {}, function(args) {
         event.preventDefault();
         that.clearKeys();
         $('#importButton').click();
     });
 
     // Control + A
-    var ctrlAAction = new GuiAction(['Ctrl','A'], [], function(args) {
+    var ctrlAAction = new GuiAction(['Ctrl','A'], [], { editingTextBox: false }, function(args) {
         event.preventDefault();
         wickEditor.currentTool = wickEditor.tools.cursor;
         wickEditor.syncInterfaces();
@@ -155,14 +160,14 @@ var GuiActionHandler = function (wickEditor) {
     });
 
     // Up
-    var upAction = new GuiAction(['Up'], [], function(args) {
+    var upAction = new GuiAction(['Up'], [], {}, function(args) {
         if(wickEditor.project.getCurrentObject().currentLayer > 0)
             wickEditor.project.getCurrentObject().currentLayer --;
         wickEditor.syncInterfaces();
     });
 
     // Left
-    var leftAction = new GuiAction(['Left'], [], function(args) {
+    var leftAction = new GuiAction(['Left'], [], {}, function(args) {
         wickEditor.actionHandler.doAction("movePlayhead", {
             obj: wickEditor.project.getCurrentObject(),
             moveAmount: -1
@@ -171,7 +176,7 @@ var GuiActionHandler = function (wickEditor) {
     });
 
     // Right
-    var rightAction = new GuiAction(['Right'], [], function(args) {
+    var rightAction = new GuiAction(['Right'], [], {}, function(args) {
         wickEditor.actionHandler.doAction("movePlayhead", {
             obj: wickEditor.project.getCurrentObject(),
             moveAmount: 1
@@ -180,14 +185,14 @@ var GuiActionHandler = function (wickEditor) {
     });
 
     // Down
-    var downAction = new GuiAction(['Down'], [], function(args) {
+    var downAction = new GuiAction(['Down'], [], {}, function(args) {
         if(wickEditor.project.getCurrentObject().currentLayer < wickEditor.project.getCurrentObject().layers.length-1)
             wickEditor.project.getCurrentObject().currentLayer ++;
         wickEditor.syncInterfaces();
     });
 
     // Backspace
-    var backSpace = new GuiAction(['Backspace'], [], function(args) {
+    var backSpace = new GuiAction(['Backspace'], [], {}, function(args) {
         event.preventDefault();
         wickEditor.actionHandler.doAction('deleteObjects', { ids:wickEditor.interfaces['fabric'].getSelectedObjectIDs() });
     });
