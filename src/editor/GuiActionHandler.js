@@ -88,14 +88,16 @@ var GuiActionHandler = function (wickEditor) {
     });
 
     document.body.addEventListener("keyup", function (event) {
-
         if (wickEditor.interfaces.builtinplayer.running) return;
         
-        /*
+        /* Determine if Text is currently being edited. */
+        var activeElem = document.activeElement.nodeName;
+        var editingTextBox = activeElem == 'TEXTAREA' || activeElem == 'INPUT';
+
         if(event.keyCode == 32 && !editingTextBox) {
             wickEditor.currentTool = oldTool;
             wickEditor.syncInterfaces();
-        }*/
+        }
 
         that.keys[event.keyCode] = false;
     });
