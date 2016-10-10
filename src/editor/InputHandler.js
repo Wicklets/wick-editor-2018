@@ -33,17 +33,6 @@ var InputHandler = function (wickEditor) {
     }, false);
 
 /*************************
-    Leave page warning
-*************************/
-
-    // Setup leave page warning
-    window.addEventListener("beforeunload", function (event) {
-        var confirmationMessage = 'Warning: All unsaved changes will be lost!';
-        (event || window.event).returnValue = confirmationMessage; //Gecko + IE
-        return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
-    });
-
-/*************************
      Copy/Paste
 *************************/
 

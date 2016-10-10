@@ -126,7 +126,10 @@ var GuiActionHandler = function (wickEditor) {
         that.keys[event.keyCode] = false;
     });
 
+    /* GuiAction definitions. */
+
     // Space
+    // Open Pan Tool
     new GuiAction(['Space'], [], { editingTextBox: false }, function(args) {
         oldTool = wickEditor.currentTool;
         wickEditor.currentTool = wickEditor.tools.pan;
@@ -134,34 +137,40 @@ var GuiActionHandler = function (wickEditor) {
     });
 
     // Esc
+    // Stop Running Project
     new GuiAction(['Esc'], [], {}, function(args) {
         wickEditor.interfaces.builtinplayer.stopRunningProject();
     });
 
     // Control + Y
+    // Redo Action
     new GuiAction(['Ctrl','Y'], [], { editingTextBox: false }, function(args) {
         event.preventDefault();
         wickEditor.actionHandler.redoAction();
     });
 
     // Control + Z
+    // Undo Action
     new GuiAction(['Ctrl','Z'], [], { editingTextBox: false }, function(args) {
         event.preventDefault();
         wickEditor.actionHandler.undoAction();
     });
 
     // Control + Enter
+    // Run Project
     new GuiAction(['Ctrl','Enter'], [], { editingTextBox: false }, function(args) {
         that.clearKeys();
         wickEditor.interfaces.builtinplayer.runProject();
     });
 
     // Control + 0
+    // Recenter Canvas
     new GuiAction(['Ctrl','0'], [], { editingTextBox: false }, function(args) {
         wickEditor.interfaces.fabric.recenterCanvas();
     });
 
     // Control + S
+    // Save Project
     new GuiAction(['Ctrl','S'], [], {}, function(args) {
         event.preventDefault();
         that.clearKeys();
@@ -170,6 +179,7 @@ var GuiActionHandler = function (wickEditor) {
     });
 
     // Control + O
+    // Open File
     new GuiAction(['Ctrl','O'], [], {}, function(args) {
         event.preventDefault();
         that.clearKeys();
@@ -177,6 +187,7 @@ var GuiActionHandler = function (wickEditor) {
     });
 
     // Control + A
+    // Select All
     new GuiAction(['Ctrl','A'], [], { editingTextBox: false }, function(args) {
         event.preventDefault();
         wickEditor.currentTool = wickEditor.tools.cursor;
@@ -186,6 +197,7 @@ var GuiActionHandler = function (wickEditor) {
     });
 
     // Up
+    // Move Current Object Up Layer
     new GuiAction(['Up'], [], {}, function(args) {
         if(wickEditor.project.getCurrentObject().currentLayer > 0)
             wickEditor.project.getCurrentObject().currentLayer --;
@@ -193,6 +205,7 @@ var GuiActionHandler = function (wickEditor) {
     });
 
     // Left
+    // Move Playhead Left
     new GuiAction(['Left'], [], {}, function(args) {
         wickEditor.actionHandler.doAction("movePlayhead", {
             obj: wickEditor.project.getCurrentObject(),
@@ -202,6 +215,7 @@ var GuiActionHandler = function (wickEditor) {
     });
 
     // Right
+    // Move Playhead Right
     new GuiAction(['Right'], [], {}, function(args) {
         wickEditor.actionHandler.doAction("movePlayhead", {
             obj: wickEditor.project.getCurrentObject(),
@@ -211,6 +225,7 @@ var GuiActionHandler = function (wickEditor) {
     });
 
     // Down
+    // Move Current Object Down Layer
     new GuiAction(['Down'], [], {}, function(args) {
         if(wickEditor.project.getCurrentObject().currentLayer < wickEditor.project.getCurrentObject().layers.length-1)
             wickEditor.project.getCurrentObject().currentLayer ++;
@@ -218,8 +233,15 @@ var GuiActionHandler = function (wickEditor) {
     });
 
     // Backspace
+    // Delete Selected Objects
     new GuiAction(['Backspace'], [], {}, function(args) {
         event.preventDefault();
         wickEditor.actionHandler.doAction('deleteObjects', { ids:wickEditor.interfaces['fabric'].getSelectedObjectIDs() });
+    });
+
+    // closeBuildInPlayerButton
+    // Stop Running Project
+    new GuiAction([], ['closeBuiltinPlayerButton'], {}, function(args) {
+        wickEditor.builtinPlayerInterface.stopRunningProject();
     });
 }
