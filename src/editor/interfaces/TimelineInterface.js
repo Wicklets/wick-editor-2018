@@ -14,7 +14,10 @@ var TimelineInterface = function (wickEditor) {
 
     var mouseDown = false;
 
-    var scrollbarX = 0; this.setScrollbarX = function (x) { scrollbarX = x; };
+    var scrollbarX = 0;
+
+    var scrollbarHeadWidth = 40;
+    var scrollbarHeight = 20;
 
     this.syncWithEditorState = function () {
 
@@ -59,7 +62,7 @@ var TimelineInterface = function (wickEditor) {
 
     // Update canvas size
 
-        canvas.height = 24 + frameHeight*currentObject.layers.length;
+        canvas.height = 15 + scrollbarHeight + frameHeight*currentObject.layers.length;
 
     // Translate whole canvas content for scrollbar
 
@@ -134,7 +137,7 @@ var TimelineInterface = function (wickEditor) {
         ctx.fillStyle = "#000000";
         ctx.beginPath();
         ctx.moveTo(playheadX,0);
-        ctx.lineTo(playheadX,canvas.height-12);
+        ctx.lineTo(playheadX,canvas.height-12 - scrollbarHeight);
         ctx.stroke();
 
         ctx.beginPath();
@@ -151,15 +154,13 @@ var TimelineInterface = function (wickEditor) {
         ctx.restore();
 
         // scrollbar container
-        var scrollbarHeight = 10;
-        ctx.fillStyle = "#FFF";
+        ctx.fillStyle = "#E6E6E6";
         ctx.fillRect(
             0, canvas.height - scrollbarHeight,
             canvas.width, scrollbarHeight);
 
         // scrollbar head
-        var scrollbarHeadWidth = 30;
-        ctx.fillStyle = "#BBB";
+        ctx.fillStyle = "#AAA";
         ctx.fillRect(
             scrollbarX, canvas.height - scrollbarHeight,
             scrollbarHeadWidth, scrollbarHeight);
@@ -175,7 +176,7 @@ var TimelineInterface = function (wickEditor) {
         var currentObject = wickEditor.project.getCurrentObject();
 
         if(y >= currentObject.layers.length*frameHeight) {
-            scrollbarX = x - 15;
+            scrollbarX = x - scrollbarHeadWidth/2;
         } else {
             playheadX = x + scrollbarX*5;
 

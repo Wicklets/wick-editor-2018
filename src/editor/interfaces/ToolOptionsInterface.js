@@ -23,7 +23,7 @@ var ToolOptionsInterface = function (wickEditor) {
         wickEditor.syncInterfaces();
     };
 
-    lineColorEl.onFineChange = function() {
+    lineColorEl.onchange = function() {
         wickEditor.tools['paintbrush'].color = '#' + this.value;
         wickEditor.syncInterfaces();
     };
