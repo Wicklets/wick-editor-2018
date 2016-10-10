@@ -10,24 +10,6 @@ var projectFitScreenTranslate;
 
 var WickPixiRenderer = function (project) {
 
-	this.refreshPixiSceneForObject = function (wickObj) {
-		//generatePixiScene(wickObj);
-		if (wickObj.imageData || wickObj.svgCacheImageData) {
-            wickObj.pixiSprite = PIXI.Sprite.fromImage(wickObj.imageData || wickObj.svgCacheImageData);
-            wickObj.parentObject.pixiContainer.addChild(wickObj.pixiSprite);
-        } else if (wickObj.fontData) {
-            var style = {
-                font : "normal " + wickObj.fontData.fontSize + "px " + wickObj.fontData.fontFamily,
-                fill : wickObj.fontData.fill,
-                wordWrap : true,
-                wordWrapWidth : 440
-            };
-            wickObj.pixiText = new PIXI.Text(wickObj.fontData.text, style);
-            wickObj.setText = function (text) { wickObj.pixiText.setText(text); };
-            wickObj.parentObject.pixiContainer.addChild(wickObj.pixiText);
-        }
-	}
-
 	/* Recursively load images of wickObj */
     var generatePixiScene = function (wickObj) {
 

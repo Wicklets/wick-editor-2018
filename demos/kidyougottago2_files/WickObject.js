@@ -1101,9 +1101,6 @@ WickObject.prototype.runScript = function (scriptType) {
     var gotoNextFrame = function ()      { that.parentObject.gotoNextFrame(); }
     var gotoPrevFrame = function ()      { that.parentObject.gotoPrevFrame(); }
 
-    // Clone wrapper
-    this.clone = function () { return WickPlayer.cloneObject(this); };
-
     // Setup keycode shortcuts
     var isKeyDown = function (keyString) { return keys[keyCharToCode[keyString]]; };
 
@@ -1117,7 +1114,7 @@ WickObject.prototype.runScript = function (scriptType) {
     // Run da script!!
     try {
         //eval(script);
-        eval("try{" + script + "\n}catch (e) { throw (e); }");
+        eval("try{" + script + "}catch (e) { throw (e); }");
     } catch (e) {
         if (window.wickEditor) {
             if(!wickEditor.interfaces.builtinplayer.running) return;
@@ -1343,28 +1340,28 @@ WickObject.prototype.hitTest = function (otherObj, hitTestType) {
         thisObjChildren.push(this); 
     }
 
-    // Load the collision detection function for the type of collision we want to check for
+    // Load the collition detection function for the type of collision we want to check for
 
-    var checkMethod;
+    /*var checkMethod;
     if(!hitTestType) {
         // Use default (rectangular hittest) if no hitTestType is provided
         checkMethod = this.hitTestRectangles;
     } else {
         var hitTestMethods = {
-            "rectangles" : "hitTestRectangles",
-            "circles" : "hitTestCircles"
+            "rectangles" : this.hitTestRectangles,
+            "circles" : this.hitTestCircles
         }
         checkMethod = hitTestMethods[hitTestType];
         if(!checkMethod) {
             throw "Invalid hitTest collision type: " + hitTestType;
         }
-    }
+    }*/
 
     // Ready to go! Check for collisions!!
 
     for (var i = 0; i < otherObjChildren.length; i++) {
         for (var j = 0; j < thisObjChildren.length; j++) {
-            if (thisObjChildren[j][checkMethod](otherObjChildren[i])) {
+            if (thisObjChildren[j][hitTestType](otherObjChildren[i])) {
                 return true; 
             }
         }
@@ -1378,43 +1375,11 @@ WickObject.prototype.copy = function () {
 
     var copiedObject = new WickObject();
 
-    this.name = undefined; // ???? SHould we generate a name based on the object being copied?
+    // set usual vars here (ooooo)
 
-    copiedObject.x = this.x;
-    copiedObject.y = this.y;
-    copiedObject.width = this.width;
-    copiedObject.height = this.height;
-    copiedObject.scaleX = this.scaleX;
-    copiedObject.scaleY = this.scaleY;
-    copiedObject.angle = this.angle;
-    copiedObject.flipX = this.flipX;
-    copiedObject.flipY = this.flipY;
-    copiedObject.opacity = this.opacity;
-
-    //copiedObject.tweens = ; // TODO: Copy tweens!!!
-
-    copiedObject.wickScripts = {};
-    copiedObject.wickScripts.onLoad = this.wickScripts.onLoad;
-    copiedObject.wickScripts.onClick = this.wickScripts.onClick;
-    copiedObject.wickScripts.onUpdate = this.wickScripts.onUpdate;
-    copiedObject.wickScripts.onKeyDown = this.wickScripts.onKeyDown;
-
-    if(this.isSymbol) {
-        copiedObject.isSymbol = true;
-
-        copiedObject.playheadPosition = 0;
-        copiedObject.currentLayer = 0;
-
-        this.layers.forEach(function (layer) {
-            copiedObject.layers.push(layer.copy());
-        })
-    } else {
-        copiedObject.isSymbol = false;
-
-        copiedObject.imageData = this.imageData;
-        copiedObject.fontData = this.fontData;
-        copiedObject.svgData = this.svgData;
-    }
+    this.layers.forEach(function (layer) {
+        copiedObject.layers.push(layer.copy());
+    })
 
     return copiedObject;
 

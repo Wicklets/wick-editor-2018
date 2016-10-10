@@ -31,21 +31,14 @@ var WickPlayer = (function () {
         var clone = wickObj.copy();
 
         // pixi stuff
-        //renderer.refreshPixiSceneForObject(clone);
-        //wickObj.parentObject.pixiContainer.addChild(clone.pixiContainer || clone.pixiSprite || clone.pixiText)
+        WickPixiRenderer.generatePixiScene(clone);
+        wickObj.parentObject.pixiContainer.addChild(clone.pixiContainer || clone.pixiSprite || clone.pixiText)
 
         // player stuff
         resetAllPlayheads(clone);
         resetAllEventStates(clone);
 
-        clone.parentObject = project.rootObject;
         project.addObject(clone);
-        renderer.refreshPixiSceneForObject(clone);
-
-        //project.addObject(clone);
-        //clone.parentObject = project.rootObject;
-        //wickObj.parentObject.addChild
-        //project.regenerateUniqueIDs(project.rootObject);
 
         return clone;
     }
@@ -129,8 +122,8 @@ var WickPlayer = (function () {
         rendererContainerEl.removeEventListener("mousedown", onMouseDown);
         rendererContainerEl.removeEventListener("touchstart", onTouchStart);
 
-        document.removeEventListener("keydown", handleKeyDownInput);
-        document.removeEventListener("keyup", handleKeyUpInput);
+        playerCanvasContainer.removeEventListener("keydown", handleKeyDownInput);
+        playerCanvasContainer.removeEventListener("keyup", handleKeyUpInput);
 
     }
 
