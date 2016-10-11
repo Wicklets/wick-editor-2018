@@ -175,8 +175,9 @@ var TimelineInterface = function (wickEditor) {
     this.updatePlayheadPosition = function (x,y) {
         var currentObject = wickEditor.project.getCurrentObject();
 
-        if(y >= currentObject.layers.length*frameHeight) {
+        if(y >= canvas.height - scrollbarHeight) {
             scrollbarX = x - scrollbarHeadWidth/2;
+            scrollbarX = Math.max(scrollbarX, 0);
         } else {
             playheadX = x + scrollbarX*5;
 
@@ -185,6 +186,8 @@ var TimelineInterface = function (wickEditor) {
 
             var oldLayer = currentObject.currentLayer;
             var newLayer = Math.floor(y/frameHeight);
+            newLayer = Math.min(currentObject.layers.length-1, newLayer);
+            console.log(newLayer)
 
             if(newPlayheadPosition != oldPlayheadPosition || newLayer != oldLayer) {
                 currentObject.playheadPosition = newPlayheadPosition;
@@ -209,6 +212,9 @@ var TimelineInterface = function (wickEditor) {
             that.updatePlayheadPosition(e.offsetX,e.offsetY);
         }
         that.redraw();
+    });
+    canvas.addEventListener('mouseout', function(e) {
+        mouseDown = false;
     });
 
     $('#frameIdentifier').on('input propertychange', function () {

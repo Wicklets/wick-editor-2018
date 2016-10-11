@@ -131,16 +131,9 @@ var FabricInterface = function (wickEditor) {
         var oldZoom = that.canvas.getZoom();
         var newZoom = that.canvas.getZoom() * zoomAmount;
 
-        // Make sure we zoom into the center of the screen, not the corner...
-        // THIS MATH IS WRONG
-        var oldWidth = window.innerWidth / oldZoom;
-        var oldHeight = window.innerHeight / oldZoom;
-
-        var newWidth = window.innerWidth / newZoom;
-        var newHeight = window.innerHeight / newZoom;
-
-        var panAdjustX = (newWidth - oldWidth) / 2;
-        var panAdjustY = (newHeight - oldHeight) / 2;
+        // Calculate pan position adjustment so we zoom into the mouse's position
+        var panAdjustX = (wickEditor.inputHandler.mouse.x) * (1-zoomAmount);
+        var panAdjustY = (wickEditor.inputHandler.mouse.y) * (1-zoomAmount);
 
         // Do da zoom!
         that.canvas.setZoom(newZoom);

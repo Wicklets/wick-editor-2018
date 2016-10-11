@@ -28,7 +28,7 @@ var MenuBarInterface = function (wickEditor) {
     }
 
     document.getElementById('runButton').onclick = function (e) {
-        wickEditor.interfaces["builtinplayer"].runProject();
+        wickEditor.interfaces.builtinplayer.runProject();
     }
 
 }

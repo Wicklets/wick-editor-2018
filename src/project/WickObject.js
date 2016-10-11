@@ -897,6 +897,19 @@ WickObject.prototype.generateAlphaMask = function () {
      Tween stuff
 *************************/
 
+WickObject.prototype.addTween = function (tween) {
+    this.tweens.push(tween);
+}
+
+WickObject.prototype.hasTweenAtFrame = function (frame) {
+    var foundTween = false
+    this.tweens.forEach(function (tween) {
+        if(foundTween) return;
+        if(tween.frame === frame) foundTween = true;
+    })
+    return foundTween;
+}
+
 WickObject.prototype.getFromTween = function () {
     var foundTween = null;
 

@@ -40,6 +40,8 @@ var RightClickMenuInterface = function (wickEditor) {
             hideButtonGroup("#noBreakpointExists");
             hideButtonGroup("#commonTimelineButtons");
             hideButtonGroup("#clickedOnFrameButtons");
+            hideButtonGroup("#noKeyframeExists");
+            hideButtonGroup("#keyframeExists");
 
             // Selectively show portions we need depending on editor state
             showButtonsForMode[that.mode]();
@@ -84,6 +86,13 @@ var RightClickMenuInterface = function (wickEditor) {
                 showButtonGroup("#staticObjectButtons");
             }
             showButtonGroup("#commonObjectButtons");
+
+            var relPlayheadPos = selectedSingleObject.parentObject.getRelativePlayheadPosition(selectedSingleObject);
+            if(selectedSingleObject.hasTweenAtFrame(relPlayheadPos)) {
+                showButtonGroup("#keyframeExists");
+            } else {
+                showButtonGroup("#noKeyframeExists");
+            }
         } else {
             showButtonGroup("#frameButtons");
         }
@@ -273,6 +282,17 @@ var RightClickMenuInterface = function (wickEditor) {
         wickEditor.actionHandler.doAction('removeBreakpoint', {
             frame: wickEditor.project.getCurrentObject().getCurrentFrame()
         });
+    });
+
+    bindActionToButton("#addKeyframeButton", function () {
+        var selectedObj = wickEditor.interfaces.fabric.getSelectedWickObject();
+        var tween = WickTween.fromWickObjectState(selectedObj);
+        tween.frame = selectedObj.parentObject.getRelativePlayheadPosition(selectedObj);
+        selectedObj.tweens.push(tween);
+    });
+
+    bindActionToButton("#removeKeyframeButton", function () {
+        console.error("removeKeyframeButton action NYI")
     });
 
 }

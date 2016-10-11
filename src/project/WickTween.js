@@ -2,7 +2,6 @@
 
 var tweenValueNames = ["x","y","z","scale","angle","opacity"];
 
-
 //https://github.com/mattdesl/lerp/blob/master/index.js
 var lerp = "function (v0, v1, t) { return v0*(1-t)+v1*t; }"
 
@@ -16,6 +15,16 @@ var WickTween = function() {
 
     this.frame = 0;
     this.interpFunc = lerp;
+}
+
+WickTween.fromWickObjectState = function (wickObject) {
+	var tween = new WickTween();
+
+	tweenValueNames.forEach(function (name) {
+		tween[name] = wickObject[name];
+	});
+
+	return tween;
 }
 
 WickTween.prototype.applyTweenToWickObject = function(wickObject) {

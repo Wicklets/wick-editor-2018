@@ -86,12 +86,6 @@ var WickActionHandler = function (wickEditor) {
         action.undoAction(action.args);
         this.redoStack.push(action);
 
-        // Also undo actions part of a chain
-        var nextUndoAction = this.undoStack[this.undoStack.length - 1];
-        if(nextUndoAction && nextUndoAction.args && nextUndoAction.args.partOfChain) {
-            this.undoAction();
-        }
-
         // Sync interfaces
         wickEditor.syncInterfaces();
         
@@ -112,21 +106,9 @@ var WickActionHandler = function (wickEditor) {
         action.doAction(action.args);
         this.undoStack.push(action);
 
-        // Also redo actions part of a chain
-        if(action.args && action.args.partOfChain) {
-            this.redoAction();
-        }
-
         // Sync interfaces
         wickEditor.syncInterfaces();
 
-    }
-
-// Util functions
-
-    // Makes any actions with partOfChain=true added after calling chainLastCommand part of the same chain.
-    this.chainLastCommand = function () {
-        this.undoStack[this.undoStack.length-1].args.partOfChain = true;
     }
 
 // Register all actions
@@ -135,9 +117,7 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             // Make a new frame if one doesn't exist at the playhead position
             if(!wickEditor.project.getCurrentObject().getCurrentFrame()) {
-                wickEditor.actionHandler.doAction('addNewFrame', {
-                    partOfChain:true
-                });
+                wickEditor.actionHandler.doAction('addNewFrame');
             }
 
             // Add those boys and save their IDs so we can remove them on undo
@@ -215,6 +195,14 @@ var WickActionHandler = function (wickEditor) {
                     if(args.modifiedStates[i].fontSize) wickObj.fontData.fontSize = args.modifiedStates[i].fontSize;
                     if(args.modifiedStates[i].fill) wickObj.fontData.fill = args.modifiedStates[i].fill;
                 }
+
+                // This is silly what's a better way ???
+                if(wickObj.tweens.length === 1) {
+                    console.log(wickObj.angle)
+                    var tween = WickTween.fromWickObjectState(wickObj);
+                    tween.frame = wickObj.parentObject.getRelativePlayheadPosition(wickObj);
+                    wickObj.tweens.push(tween);
+                }
             }
         },
         function (args) {
@@ -248,8 +236,7 @@ var WickActionHandler = function (wickEditor) {
             // Move to that new frame
             wickEditor.actionHandler.doAction('movePlayhead', {
                 obj:currentObject,
-                newPlayheadPosition:currentObject.getCurrentLayer().getTotalLength()-1,
-                partOfChain:true
+                newPlayheadPosition:currentObject.getCurrentLayer().getTotalLength()-1
             });
         },
         function (args) {
