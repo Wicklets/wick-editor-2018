@@ -54,7 +54,8 @@ var GuiActionHandler = function (wickEditor) {
 *************************/
 
     document.body.addEventListener("keydown", function (event) {
-
+        if (wickEditor.interfaces.builtinplayer.running) return;
+        
         var activeElem = document.activeElement.nodeName;
         editingTextBox = activeElem == 'TEXTAREA' || activeElem == 'INPUT';
         if(editingTextBox) return;
