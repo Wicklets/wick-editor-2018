@@ -77,297 +77,297 @@
 </head>
 
 <body>
+    <div class="noselect">
+    <!-- Hidden element to always be selected so browser always fires copy/paste events -->
 
-<!-- Hidden element to always be selected so browser always fires copy/paste events -->
+        <input id="hidden-input" class="hidden" type="text" value="" />
 
-    <input id="hidden-input" class="hidden" type="text" value="" />
+    <!-- Hidden element that gets clicked by other divs to open file dialog -->
+        
+        <input type="file" class="hidden" id="importButton" /> 
 
-<!-- Hidden element that gets clicked by other divs to open file dialog -->
-    
-    <input type="file" class="hidden" id="importButton" /> 
+    <!-- Editor GUI, visible when a project is being edited & not running -->
 
-<!-- Editor GUI, visible when a project is being edited & not running -->
-
-    <div id="editor">
-        <div tabindex="1" id="editorCanvasContainer">
-            <canvas id="fabricCanvas"></canvas>
-        </div>
-
-    <!-- Splash Screen -->
-
-        <div id="splashScreenGUI" class="GUIBox">
-            <br />
-            <p><img src="resources/wicklogo.png"></p>
-            <br /><hr /><br />
-            <p><strong>It's Wick Pre-Alpha!</strong></p>
-            <br />
-            <p>Have any questions? Contact me at <a target="_blank" href="http://www.zrispo.co">zach.rispoli@gmail.com</a></p>
-            <p>You can also visit Wick <a target="_blank" href="https://github.com/zrispo/wick">on Github!</a></p>
-            <br />
-            <p><input type="checkbox" id="dontShowSplashScreenAgainCheckbox"> Don't show this window again</input></p>
-
-            <div class="button buttonInRow" id="closeSplashScreenButton"><font color="red">Close</font></div>
-        </div>
-
-    <!-- Settings window -->
-
-        <div id="settingsGUI" class="GUIBox">
-            <strong>Settings</strong>
-            <hr />
-            Background color: <input class="jscolor" value="#FFFFFF" id="projectBgColor"><br />
-            Size: <input type="text" id="projectSizeX" maxlength="4" size="4"> x 
-                  <input type="text" id="projectSizeY" maxlength="4" size="4"><br />
-            Framerate: <input type="text" id="frameRate" maxlength="2" size="2"><br />
-            <input type="checkbox" id="fitScreenCheckbox"> Fit to Screen Size<br />
-            <div class="button" id="newProjectButton">New Project</div>
-            <hr />
-            <strong>Advanced</strong>
-            <div class="button" id="exportProjectAsJSONButton">Export project as JSON</div>
-            <div class="button" id="saveProjectToLocalStorageButton">Save project to LocalStorage</div>
-
-            <hr />
-            <div class="button" id="closeSettingsWindowButton"><em>Close</em></div>
-        </div>
-
-    <!-- Main menu GUI, top left corner -->
-
-        <div id="menuBarGUI" class="GUIBox">
-            <strong>Wick Editor</strong><br />
-
-            <hr />
-
-            <div id="menuBarButtons">
-                <div class="button buttonInRow tooltipElem" id="settingsButton" alt="Settings">
-                    <img src="resources/settings.png" width="30" />
-                </div>  
-                <div class="button buttonInRow tooltipElem" id="openProjectButton" alt="Open Project">
-                    <img src="resources/open-folder.png" width="30" />
-                </div>
-                <div class="button buttonInRow tooltipElem" id="exportHTMLButton" alt="Export Project">
-                    <img src="resources/export.png" width="30" />
-                </div>
-                <div class="button buttonInRow tooltipElem" id="runButton" alt="Run Project">
-                    <img src="resources/play.png" width="30" />
-                </div>
+        <div id="editor">
+            <div tabindex="1" id="editorCanvasContainer">
+                <canvas id="fabricCanvas"></canvas>
             </div>
-        </div>
 
-    <!-- Timeline GUI, centered at the top of the screen -->
+        <!-- Splash Screen -->
 
-        <div id="timelineGUI" class="GUIBox">
-            <canvas id="timelineCanvas"></canvas>
+            <div id="splashScreenGUI" class="GUIBox">
+                <br />
+                <p><img src="resources/wicklogo.png"></p>
+                <br /><hr /><br />
+                <p><strong>It's Wick Pre-Alpha!</strong></p>
+                <br />
+                <p>Have any questions? Contact me at <a target="_blank" href="http://www.zrispo.co">zach.rispoli@gmail.com</a></p>
+                <p>You can also visit Wick <a target="_blank" href="https://github.com/zrispo/wick">on Github!</a></p>
+                <br />
+                <p><input type="checkbox" id="dontShowSplashScreenAgainCheckbox"> Don't show this window again</input></p>
 
-            <hr />
-
-            <div id="frameProperties">
-                Frame Name: <input type="text" id="frameIdentifier" maxlength="16" size="16">
+                <div class="button buttonInRow" id="closeSplashScreenButton"><font color="red">Close</font></div>
             </div>
-        </div>
 
-    <!-- Toolbar GUI, centered at the left side of the screen -->
+        <!-- Settings window -->
 
-        <div id="toolbarGUI" class="GUIBox">
-            <div class="button tooltipElem" id="cursorToolButton" alt="Cursor">
-                <img src="resources/cursor.png" width="30"></img>
-            </div>
-            <hr />
-
-            <div class="button tooltipElem" id="paintbrushToolButton" alt="Paintbrush">
-                <img src="resources/paintbrush.png" width="30"></img>
-            </div>
-            <hr />
-
-            <div class="button tooltipElem" id="dropperToolButton" alt="Eyedropper">
-                <img src="resources/eyedropper.png" width="30"></img>
-            </div>
-            <hr />
-
-            <div class="button tooltipElem" id="textToolButton" alt="Text">
-                <img src="resources/text.png" width="30"></img>
-            </div>
-            <hr />
-
-            <div class="button tooltipElem" id="zoomToolButton" alt="Zoom In">
-                <img src="resources/zoom.png" width="30"></img>
-            </div>
-            <hr />
-
-            <div class="button tooltipElem" id="panToolButton" alt="Pan">
-                <img src="resources/pan.png" width="30"></img>
-            </div>
-        </div>
-
-    <!-- Tool options GUI, below toolbar gui -->
-
-        <div id="toolOptionsGUI" class="GUIBox">
-            Line Width: <input type="range" min="0" max="50" id="lineWidth"><br />
-            Line Smoothness: <input type="range" min="0" max="10" id="lineSmoothness"><br />
-            Line Color: <input class="jscolor" id="lineColor">
-        </div>
-
-    <!-- Properties GUI, bottom right corner -->
-
-        <div id="propertiesGUI" class="GUIBox">
-            <div id="objectProperties">
-                Object Properties
+            <div id="settingsGUI" class="GUIBox">
+                <strong>Settings</strong>
                 <hr />
-                x: <input type="text" id="objectPositionX" maxlength="4" size="4">
-                y: <input type="text" id="objectPositionY" maxlength="4" size="4">
-                <br />
-                width: <input type="text" id="objectWidth" maxlength="4" size="4">
-                height: <input type="text" id="objectHeight" maxlength="4" size="4">
-                <br />
-                rotation: <input type="text" id="objectRotation" maxlength="4" size="4">
-                <br />
-                Opacity: <input type="range" value="255" min="0" max="255" id="opacitySlider">
-                <br />
-                Name: <input type="text" id="objectName" size="15"><br />
-            </div>
-            <div id="textProperties">
-                <br />
-                Text Properties
+                Background color: <input class="jscolor" value="#FFFFFF" id="projectBgColor"><br />
+                Size: <input type="text" id="projectSizeX" maxlength="4" size="4"> x 
+                      <input type="text" id="projectSizeY" maxlength="4" size="4"><br />
+                Framerate: <input type="text" id="frameRate" maxlength="2" size="2"><br />
+                <input type="checkbox" id="fitScreenCheckbox"> Fit to Screen Size<br />
+                <div class="button" id="newProjectButton">New Project</div>
                 <hr />
-                Font: <select id="fontSelector">
-                    <option value="Georgia">Georgia</option>
-                    <option value="Palatino Linotype">Palatino Linotype</option>
-                    <option value="Book Antiqua">Book Antiqua</option>
-                    <option value="Times New Roman">Times New Roman</option>
-                    <option value="Arial" selected>Arial</option>
-                    <option value="Helvetica">Helvetica</option>
-                    <option value="Arial Black">Arial Black</option>
-                    <option value="Comic Sans MS">Comic Sans MS</option>
-                    <option value="Impact">Impact</option>
-                    <option value="Lucida Sans Unicode">Lucida Sans Unicode</option>
-                    <option value="Tahoma">Tahoma</option>
-                    <option value="Geneva">Geneva</option>
-                    <option value="Trebuchet MS">Trebuchet MS</option>
-                    <option value="Verdana">Verdana</option>
-                    <option value="Courier New">Courier New</option>
-                    <option value="Lucida Console">Lucida Console</option>
-                </select><br />
-                Color: <input class="jscolor" value="FFFFFF" id="fontColor"><br />
-                Size: <input type="range" value="40" min="2" max="150" id="fontSize"><br />
-                <input type="checkbox" id="boldCheckbox"> Bold
-                <input type="checkbox" id="italicCheckbox"> Italic
-                <input type="checkbox" id="underlinedCheckbox"> Underlined<br />
-            </div>
-            <div id="soundProperties">
-                <br />
-                Sound Properties
+                <strong>Advanced</strong>
+                <div class="button" id="exportProjectAsJSONButton">Export project as JSON</div>
+                <div class="button" id="saveProjectToLocalStorageButton">Save project to LocalStorage</div>
+
                 <hr />
-                <input type="checkbox" id="autoplayCheckbox"> Autoplay<br />
-                <input type="checkbox" id="loopCheckbox"> Loop<br />
+                <div class="button" id="closeSettingsWindowButton"><em>Close</em></div>
             </div>
-        </div>
 
-    <!-- WickObject Scripting GUI, bottom left corner -->
+        <!-- Main menu GUI, top left corner -->
 
-        <div id="scriptingGUI" class="GUIBox">
-            <div id="scriptObjectDiv">
-                <div id="errorMessage"></div>
-                <div class="elemInRow">
-                    <div class="button buttonInRow" id="onLoadButton">Load</div>
-                    <div class="button buttonInRow" id="onClickButton">Click</div>
-                    <div class="button buttonInRow" id="onUpdateButton">Update</div>
-                    <div class="button buttonInRow" id="onKeyDownButton">Key Pressed</div>
-                    <div class="button buttonInRow" id="beautifyButton"><font color="orange">Beautify</font></div>
+            <div id="menuBarGUI" class="GUIBox">
+                <strong>Wick Editor</strong><br />
+
+                <hr />
+
+                <div id="menuBarButtons">
+                    <div class="button buttonInRow tooltipElem" id="settingsButton" alt="Settings">
+                        <img src="resources/settings.png" width="30" />
+                    </div>  
+                    <div class="button buttonInRow tooltipElem" id="openProjectButton" alt="Open Project">
+                        <img src="resources/open-folder.png" width="30" />
+                    </div>
+                    <div class="button buttonInRow tooltipElem" id="exportHTMLButton" alt="Export Project">
+                        <img src="resources/export.png" width="30" />
+                    </div>
+                    <div class="button buttonInRow tooltipElem" id="runButton" alt="Run Project">
+                        <img src="resources/play.png" width="30" />
+                    </div>
+                </div>
+            </div>
+
+        <!-- Timeline GUI, centered at the top of the screen -->
+
+            <div id="timelineGUI" class="GUIBox">
+                <canvas id="timelineCanvas"></canvas>
+
+                <hr />
+
+                <div id="frameProperties">
+                    Frame Name: <input type="text" id="frameIdentifier" maxlength="16" size="16">
+                </div>
+            </div>
+
+        <!-- Toolbar GUI, centered at the left side of the screen -->
+
+            <div id="toolbarGUI" class="GUIBox">
+                <div class="button tooltipElem" id="cursorToolButton" alt="Cursor">
+                    <img src="resources/cursor.png" width="30"></img>
+                </div>
+                <hr />
+
+                <div class="button tooltipElem" id="paintbrushToolButton" alt="Paintbrush">
+                    <img src="resources/paintbrush.png" width="30"></img>
+                </div>
+                <hr />
+
+                <div class="button tooltipElem" id="dropperToolButton" alt="Eyedropper">
+                    <img src="resources/eyedropper.png" width="30"></img>
+                </div>
+                <hr />
+
+                <div class="button tooltipElem" id="textToolButton" alt="Text">
+                    <img src="resources/text.png" width="30"></img>
+                </div>
+                <hr />
+
+                <div class="button tooltipElem" id="zoomToolButton" alt="Zoom In">
+                    <img src="resources/zoom.png" width="30"></img>
+                </div>
+                <hr />
+
+                <div class="button tooltipElem" id="panToolButton" alt="Pan">
+                    <img src="resources/pan.png" width="30"></img>
+                </div>
+            </div>
+
+        <!-- Tool options GUI, below toolbar gui -->
+
+            <div id="toolOptionsGUI" class="GUIBox">
+                Line Width: <input type="range" min="0" max="50" id="lineWidth"><br />
+                Line Smoothness: <input type="range" min="0" max="10" id="lineSmoothness"><br />
+                Line Color: <input class="jscolor" id="lineColor">
+            </div>
+
+        <!-- Properties GUI, bottom right corner -->
+
+            <div id="propertiesGUI" class="GUIBox">
+                <div id="objectProperties">
+                    Object Properties
+                    <hr />
+                    x: <input type="text" id="objectPositionX" maxlength="4" size="4">
+                    y: <input type="text" id="objectPositionY" maxlength="4" size="4">
                     <br />
-                    <div id="scriptEditor"></div>
+                    width: <input type="text" id="objectWidth" maxlength="4" size="4">
+                    height: <input type="text" id="objectHeight" maxlength="4" size="4">
+                    <br />
+                    rotation: <input type="text" id="objectRotation" maxlength="4" size="4">
+                    <br />
+                    Opacity: <input type="range" value="255" min="0" max="255" id="opacitySlider">
+                    <br />
+                    Name: <input type="text" id="objectName" size="15"><br />
+                </div>
+                <div id="textProperties">
+                    <br />
+                    Text Properties
+                    <hr />
+                    Font: <select id="fontSelector">
+                        <option value="Georgia">Georgia</option>
+                        <option value="Palatino Linotype">Palatino Linotype</option>
+                        <option value="Book Antiqua">Book Antiqua</option>
+                        <option value="Times New Roman">Times New Roman</option>
+                        <option value="Arial" selected>Arial</option>
+                        <option value="Helvetica">Helvetica</option>
+                        <option value="Arial Black">Arial Black</option>
+                        <option value="Comic Sans MS">Comic Sans MS</option>
+                        <option value="Impact">Impact</option>
+                        <option value="Lucida Sans Unicode">Lucida Sans Unicode</option>
+                        <option value="Tahoma">Tahoma</option>
+                        <option value="Geneva">Geneva</option>
+                        <option value="Trebuchet MS">Trebuchet MS</option>
+                        <option value="Verdana">Verdana</option>
+                        <option value="Courier New">Courier New</option>
+                        <option value="Lucida Console">Lucida Console</option>
+                    </select><br />
+                    Color: <input class="jscolor" value="FFFFFF" id="fontColor"><br />
+                    Size: <input type="range" value="40" min="2" max="150" id="fontSize"><br />
+                    <input type="checkbox" id="boldCheckbox"> Bold
+                    <input type="checkbox" id="italicCheckbox"> Italic
+                    <input type="checkbox" id="underlinedCheckbox"> Underlined<br />
+                </div>
+                <div id="soundProperties">
+                    <br />
+                    Sound Properties
+                    <hr />
+                    <input type="checkbox" id="autoplayCheckbox"> Autoplay<br />
+                    <input type="checkbox" id="loopCheckbox"> Loop<br />
                 </div>
             </div>
-            <div id="noSelectionDiv">
-                Nothing to edit!
+
+        <!-- WickObject Scripting GUI, bottom left corner -->
+
+            <div id="scriptingGUI" class="GUIBox">
+                <div id="scriptObjectDiv">
+                    <div id="errorMessage"></div>
+                    <div class="elemInRow">
+                        <div class="button buttonInRow" id="onLoadButton">Load</div>
+                        <div class="button buttonInRow" id="onClickButton">Click</div>
+                        <div class="button buttonInRow" id="onUpdateButton">Update</div>
+                        <div class="button buttonInRow" id="onKeyDownButton">Key Pressed</div>
+                        <div class="button buttonInRow" id="beautifyButton"><font color="orange">Beautify</font></div>
+                        <br />
+                        <div id="scriptEditor"></div>
+                    </div>
+                </div>
+                <div id="noSelectionDiv">
+                    Nothing to edit!
+                </div>
+                <div class="button buttonInRow" id="closeScriptingGUIButton"><font color="red">Close</font></div>
             </div>
-            <div class="button buttonInRow" id="closeScriptingGUIButton"><font color="red">Close</font></div>
+
+        <!-- Right click menu, appears next to mouse on right click -->
+
+            <div id="rightClickMenu" class="GUIBox">
+                <div id="fabricButtons">
+                    <div id="symbolButtons">
+                        <div class="button" id="editObjectButton">Edit Object</div>
+                        <div class="button" id="breakApartButton">Break Apart</div>
+                        <hr />
+                    </div>
+                    <div id="singleObjectButtons">
+                        <div class="button" id="whatButton">Copy</div>
+                        <div class="button" id="whatButton">Cut</div>
+                        <div class="button" id="whatButton">Paste</div>
+                        <div class="button" id="editScriptsButton">Edit Scripts</div>
+                        <div class="button" id="downloadButton">Download</div>
+                        <div id="noKeyframeExists">
+                            <div class="button" id="addKeyframeButton">Add Keyframe</div>
+                        </div>
+                        <div id="keyframeExists">
+                            <div class="button" id="removeKeyframeButton">Remove Keyframe</div>
+                        </div>
+                        <hr />
+                    </div>
+                    <div id="commonObjectButtons">
+                        <div class="button" id="bringToFrontButton">Bring to Front</div>
+                        <div class="button" id="sendToBackButton">Send to Back</div>
+                        <div class="button" id="deleteButton">Delete</div>
+                        <hr />
+                    </div>
+                    <div id="staticObjectButtons">
+                        <div class="button" id="convertToSymbolButton">Convert to Symbol</div>
+                        <hr />
+                    </div>
+                    <div id="insideSymbolButtons">
+                        <div class="button" id="finishEditingObjectButton">Finish Editing Object</div>
+                        <hr />
+                    </div>
+                    <div class="button" id="whatButton">Undo</div>
+                    <div class="button" id="whatButton">Redo</div>
+                </div>
+                <div id="timelineButtons">
+                    <div id="clickedOnFrameButtons">
+                        <div class="button" id="shrinkFrameButton">Shrink Frame</div>
+                        <div class="button" id="deleteFrameButton">Delete Frame</div>
+                        <div id="noBreakpointExists">
+                            <div class="button" id="addBreakpointButton">Add Breakpoint</div>
+                        </div>
+                        <div id="breakpointExists">
+                            <div class="button" id="removeBreakpointButton">Remove Breakpoint</div>
+                        </div>
+                    </div>
+                    <div id="clickedOffFrameButtons">
+                        <div class="button" id="addFrameButton">Add Frame</div>
+                    </div>
+                    <div id="commonTimelineButtons">
+                        <hr />
+                        <div class="button" id="extendFrameButton">Extend Frame</div>
+                        <div class="button" id="addLayerButton">Add Layer</div>
+                        <div class="button" id="removeLayerButton">Remove Layer</div>
+                    </div>
+                </div>
+            </div>
+
+    <!-- Drop file message -->
+
+            <div id="dropToUploadFileAlert"></div>
+
         </div>
 
-    <!-- Right click menu, appears next to mouse on right click -->
+    <!-- Builtin player, visible when a project is running -->
 
-        <div id="rightClickMenu" class="GUIBox">
-            <div id="fabricButtons">
-                <div id="symbolButtons">
-                    <div class="button" id="editObjectButton">Edit Object</div>
-                    <div class="button" id="breakApartButton">Break Apart</div>
-                    <hr />
-                </div>
-                <div id="singleObjectButtons">
-                    <div class="button" id="whatButton">Copy</div>
-                    <div class="button" id="whatButton">Cut</div>
-                    <div class="button" id="whatButton">Paste</div>
-                    <div class="button" id="editScriptsButton">Edit Scripts</div>
-                    <div class="button" id="downloadButton">Download</div>
-                    <div id="noKeyframeExists">
-                        <div class="button" id="addKeyframeButton">Add Keyframe</div>
-                    </div>
-                    <div id="keyframeExists">
-                        <div class="button" id="removeKeyframeButton">Remove Keyframe</div>
-                    </div>
-                    <hr />
-                </div>
-                <div id="commonObjectButtons">
-                    <div class="button" id="bringToFrontButton">Bring to Front</div>
-                    <div class="button" id="sendToBackButton">Send to Back</div>
-                    <div class="button" id="deleteButton">Delete</div>
-                    <hr />
-                </div>
-                <div id="staticObjectButtons">
-                    <div class="button" id="convertToSymbolButton">Convert to Symbol</div>
-                    <hr />
-                </div>
-                <div id="insideSymbolButtons">
-                    <div class="button" id="finishEditingObjectButton">Finish Editing Object</div>
-                    <hr />
-                </div>
-                <div class="button" id="whatButton">Undo</div>
-                <div class="button" id="whatButton">Redo</div>
-            </div>
-            <div id="timelineButtons">
-                <div id="clickedOnFrameButtons">
-                    <div class="button" id="shrinkFrameButton">Shrink Frame</div>
-                    <div class="button" id="deleteFrameButton">Delete Frame</div>
-                    <div id="noBreakpointExists">
-                        <div class="button" id="addBreakpointButton">Add Breakpoint</div>
-                    </div>
-                    <div id="breakpointExists">
-                        <div class="button" id="removeBreakpointButton">Remove Breakpoint</div>
-                    </div>
-                </div>
-                <div id="clickedOffFrameButtons">
-                    <div class="button" id="addFrameButton">Add Frame</div>
-                </div>
-                <div id="commonTimelineButtons">
-                    <hr />
-                    <div class="button" id="extendFrameButton">Extend Frame</div>
-                    <div class="button" id="addLayerButton">Add Layer</div>
-                    <div class="button" id="removeLayerButton">Remove Layer</div>
+        <div id="builtinPlayer">
+            <div id="playerCanvasContainer" contenteditable="true" tabindex="0"></div>
+
+            <div id="builtinPlayerGUI" class="GUIBox">
+                <strong>Wick Player</strong><br />
+                <hr />
+                <div class="button buttonInRow tooltipElem" id="closeBuiltinPlayerButton" alt="Close player">
+                    <img src="resources/back.png" width="30" />
                 </div>
             </div>
         </div>
 
-<!-- Drop file message -->
+    <!-- Tooltips -->
 
-        <div id="dropToUploadFileAlert"></div>
-
+            <div id="tooltipGUI" class="GUIBox tooltip"></div>
     </div>
-
-<!-- Builtin player, visible when a project is running -->
-
-    <div id="builtinPlayer">
-        <div id="playerCanvasContainer" contenteditable="true" tabindex="0"></div>
-
-        <div id="builtinPlayerGUI" class="GUIBox">
-            <strong>Wick Player</strong><br />
-            <hr />
-            <div class="button buttonInRow tooltipElem" id="closeBuiltinPlayerButton" alt="Close player">
-                <img src="resources/back.png" width="30" />
-            </div>
-        </div>
-    </div>
-
-<!-- Tooltips -->
-
-        <div id="tooltipGUI" class="GUIBox tooltip"></div>
-
 </body>
 
 </html>
