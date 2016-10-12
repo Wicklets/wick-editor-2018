@@ -164,9 +164,12 @@ var WickPixiRenderer = function (project) {
 	    if(wickObj.isSymbol) {
 	        wickObj.pixiContainer.visible = true;
 	        if(!wickObj.isRoot) {
-	            wickObj.pixiContainer.anchor = new PIXI.Point(0.0, 0.0);
-	            wickObj.pixiContainer.position.x        = wickObj.x;
-	            wickObj.pixiContainer.position.y        = wickObj.y;
+	        	console.log("sadsa")
+	            wickObj.pixiContainer.anchor = new PIXI.Point(0.5, 0.5);
+	            console.log(wickObj.width)
+	            console.log(wickObj.height)
+	            wickObj.pixiContainer.position.x        = wickObj.x// + wickObj.width/2  * wickObj.scaleX;
+	            wickObj.pixiContainer.position.y        = wickObj.y// + wickObj.height/2 * wickObj.scaleY;
 	            wickObj.pixiContainer.rotation = wickObj.angle/360*2*3.14159;
 	            wickObj.pixiContainer.scale.x  = wickObj.scaleX;
 	            wickObj.pixiContainer.scale.y  = wickObj.scaleY;
@@ -180,9 +183,9 @@ var WickPixiRenderer = function (project) {
 	    } else {
 	        if(wickObj.pixiSprite) {
 	            wickObj.pixiSprite.visible = true;
-	            wickObj.pixiSprite.anchor = new PIXI.Point(0.0, 0.0);
-	            wickObj.pixiSprite.x        = wickObj.x// + wickObj.width /2*wickObj.scaleX;
-	            wickObj.pixiSprite.y        = wickObj.y// + wickObj.height/2*wickObj.scaleY;
+	            wickObj.pixiSprite.anchor = new PIXI.Point(0.5, 0.5);
+	            wickObj.pixiSprite.x        = wickObj.x + wickObj.width /2*wickObj.scaleX;
+	            wickObj.pixiSprite.y        = wickObj.y + wickObj.height/2*wickObj.scaleY;
 	            wickObj.pixiSprite.rotation = wickObj.angle/360*2*3.14159;
 	            wickObj.pixiSprite.scale.x  = wickObj.scaleX / window.devicePixelRatio;
 	            wickObj.pixiSprite.scale.y  = wickObj.scaleY / window.devicePixelRatio;

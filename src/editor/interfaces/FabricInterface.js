@@ -65,7 +65,7 @@ var FabricInterface = function (wickEditor) {
         originCrosshair.evented = false;
         originCrosshair.identifier = "originCrosshair";
 
-        that.canvas.add(originCrosshair);
+        //that.canvas.add(originCrosshair);
 
         that.repositionGUIElements();
     });
@@ -74,26 +74,25 @@ var FabricInterface = function (wickEditor) {
 
   that.canvas.on('after:render', function() {
     
-
     that.canvas.forEachObject(function(obj) {
       var wickObj = wickEditor.project.rootObject.getChildByID(obj.wickObjectID);
       if(wickObj && wickObj.isSymbol) {
 
-      var bound = obj.getBoundingRect();
+          var bound = obj.getBoundingRect();
 
-      if(!wickObj.hasSyntaxErrors && !wickObj.causedAnException) {
-        that.canvas.contextContainer.strokeStyle = '#0B0';
-      } else {
-        that.canvas.contextContainer.strokeStyle = '#F00';
+          if(!wickObj.hasSyntaxErrors && !wickObj.causedAnException) {
+            that.canvas.contextContainer.strokeStyle = '#0B0';
+          } else {
+            that.canvas.contextContainer.strokeStyle = '#F00';
+          }
+          
+          that.canvas.contextContainer.strokeRect(
+            bound.left + 0.5,
+            bound.top + 0.5,
+            bound.width,
+            bound.height
+          );
       }
-      
-      that.canvas.contextContainer.strokeRect(
-        bound.left + 0.5,
-        bound.top + 0.5,
-        bound.width,
-        bound.height
-      );
-  }
     })
   });
 
@@ -117,6 +116,7 @@ var FabricInterface = function (wickEditor) {
         var panAdjustY = Math.floor(diffHeight/2);
 
         that.canvas.relativePan(new fabric.Point(panAdjustX,panAdjustY));
+        that.canvas.renderAll();
 
     }
 

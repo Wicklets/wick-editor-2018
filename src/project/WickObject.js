@@ -638,6 +638,7 @@ WickObject.prototype.getSymbolCornerPosition = function () {
 
 }
 
+// used as a hack to get around fabric.js lack of rotation around anchorpoint
 WickObject.prototype.fixOriginPoint = function () {
     var symbolCornerPosition = this.getSymbolCornerPosition();
     this.getAllChildObjects().forEach(function (child) {
