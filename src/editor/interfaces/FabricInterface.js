@@ -6,12 +6,13 @@ var FabricInterface = function (wickEditor) {
 
 // Setup fabric canvas
 
-    this.canvas = new fabric.CanvasEx('fabricCanvas');
+    this.canvas = new fabric.CanvasEx('fabricCanvas',  {imageSmoothingEnabled:false});
     this.canvas.selectionColor = 'rgba(0,0,5,0.1)';
     this.canvas.selectionBorderColor = 'grey';
     this.canvas.backgroundColor = "#EEE";
     this.canvas.setWidth ( window.innerWidth  );
     this.canvas.setHeight( window.innerHeight );
+    this.canvas.imageSmoothingEnabled = false;
 
     this.context = this.canvas.getContext('2d');
 
@@ -112,26 +113,29 @@ var FabricInterface = function (wickEditor) {
         var diffWidth = that.canvas.getWidth() - oldWidth;
         var diffHeight = that.canvas.getHeight() - oldHeight;
 
-        that.canvas.relativePan(new fabric.Point(diffWidth/2,diffHeight/2));
+        var panAdjustX = Math.floor(diffWidth/2);
+        var panAdjustY = Math.floor(diffHeight/2);
+
+        that.canvas.relativePan(new fabric.Point(panAdjustX,panAdjustY));
 
     }
 
     this.recenterCanvas = function () {
-        var centerX = -(window.innerWidth -wickEditor.project.resolution.x)/2;
-        var centerY = -(window.innerHeight-wickEditor.project.resolution.y)/2;
+        var centerX = Math.floor(-(window.innerWidth -wickEditor.project.resolution.x)/2);
+        var centerY = Math.floor(-(window.innerHeight-wickEditor.project.resolution.y)/2);
         that.canvas.setZoom(1.0);
         that.canvas.absolutePan(new fabric.Point(centerX,centerY));
         that.canvas.renderAll();
     }
 
     this.relativePan = function (x,y) {
-        var delta = new fabric.Point(x,y);
+        var delta = new fabric.Point(Math.floor(x),Math.floor(y));
         that.canvas.relativePan(delta)
         that.repositionGUIElements();
     }
 
     this.absolutePan = function (x,y) {
-        var delta = new fabric.Point(x,y);
+        var delta = new fabric.Point(Math.floor(x),Math.floor(y));
         that.canvas.absolutePan(delta)
         that.repositionGUIElements();
     }
@@ -468,9 +472,19 @@ var FabricInterface = function (wickEditor) {
                 x: wickObj.x-wickObj.getAbsolutePosition().x,
                 y: wickObj.y-wickObj.getAbsolutePosition().y 
             };
+
+            var newX = fabricObj.left + insideSymbolReposition.x - wickObj.getSymbolCornerPosition().x;
+            var newY = fabricObj.top  + insideSymbolReposition.y - wickObj.getSymbolCornerPosition().y;
+
+            // To get pixel-perfect positioning to avoid blurry images (this happens when an image has a fractional position)
+            if(wickObj.imageData) {
+                newX = Math.round(newX);
+                newY = Math.round(newY);
+            }
+
             modifiedStates.push({
-                x      : fabricObj.left + insideSymbolReposition.x - wickObj.getSymbolCornerPosition().x,
-                y      : fabricObj.top  + insideSymbolReposition.y - wickObj.getSymbolCornerPosition().y,
+                x      : newX,
+                y      : newY,
                 scaleX : fabricObj.scaleX,
                 scaleY : fabricObj.scaleY,
                 flipX  : fabricObj.flipX,

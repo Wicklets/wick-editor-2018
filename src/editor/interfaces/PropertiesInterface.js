@@ -87,7 +87,7 @@ var PropertiesInterface = function (wickEditor) {
         if(CheckInput.isNumber($('#objectHeight').val())) {
             var id = wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0];
             var obj = wickEditor.project.rootObject.getChildByID(id);
-            var modifiedState = { scalyY : parseInt($('#objectHeight').val()) / obj.height };
+            var modifiedState = { scaleY : parseInt($('#objectHeight').val()) / obj.height };
             wickEditor.actionHandler.doAction('modifyObjects', { ids: [id], modifiedStates: [modifiedState] });
         }
 

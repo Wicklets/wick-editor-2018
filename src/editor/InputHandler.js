@@ -126,11 +126,7 @@ var InputHandler = function (wickEditor) {
 
         var files = e.originalEvent.dataTransfer.files;
 
-        // Retrieve uploaded files data
-        for (var i = 0; i < files.length; i++) {
-            var file = files[i];
-            var fileType = file.type;
-
+        var loadFileIntoWickObject = function (file,fileType) {
             if (fileType === 'application/json' || fileType === 'text/html') {
                 WickProject.fromFile(file, function(project) {
                     wickEditor.project = project;
@@ -148,15 +144,31 @@ var InputHandler = function (wickEditor) {
                     'audio/ogg'  : WickObject.fromAudioFile
                 }
                 
-                var fr = new FileReader;
+                var fr = new FileReader();
                 fr.onloadend = function() {
+                    if(!fromContstructors[fileType]) { 
+                        console.error(fileType + " has no WickObject constructor!")
+                        return;
+                    }
+
                     fromContstructors[fileType](fr.result, function (newWickObject) {
+                        console.log(newWickObject)
                         wickEditor.actionHandler.doAction('addObjects', {wickObjects:[newWickObject]});
                     })
                 };
                 fr.readAsDataURL(file);
 
             }
+        }
+
+        // Retrieve uploaded files data
+        for (var i = 0; i < files.length; i++) {
+
+            var file = files[i];
+            var fileType = file.type;
+
+            loadFileIntoWickObject(file,fileType);
+
         }
 
         return false;

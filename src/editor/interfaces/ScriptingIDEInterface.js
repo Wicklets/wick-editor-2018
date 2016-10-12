@@ -104,13 +104,16 @@ var ScriptingIDEInterface = function (wickEditor) {
 
         // Look for errors
 
-        wickEditor.interfaces.fabric.getSelectedWickObject().hasSyntaxErrors = false;
+        var selectedObj = wickEditor.interfaces.fabric.getSelectedWickObject()
+        if(!selectedObj) return;
+
+        selectedObj.hasSyntaxErrors = false;
         for (var key in annot){
             if (annot.hasOwnProperty(key)) {
                 if(annot[key].type === 'error') {
                     // There's a syntax error. Set the projectHasErrors flag so the project won't run.
                     //that.projectHasErrors = true;
-                    wickEditor.interfaces.fabric.getSelectedWickObject().hasSyntaxErrors = true;
+                    selectedObj.hasSyntaxErrors = true;
                 }
             }
         }
