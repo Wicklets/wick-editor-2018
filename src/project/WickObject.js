@@ -1143,8 +1143,6 @@ WickObject.prototype.runScript = function (scriptType) {
                 if(!line.includes("<anonymous>:")) return;
 
                 lineNumber = parseInt(line.split("<anonymous>:")[1].split(":")[0]);
-                console.log(lineNumber)
-
             })
 
             //console.log(e.stack.split("\n")[1].split('<anonymous>:')[1].split(":")[0]);
@@ -1359,14 +1357,14 @@ WickObject.prototype.hitTest = function (otherObj, hitTestType) {
     // Load the collision detection function for the type of collision we want to check for
 
     var checkMethod;
+    var hitTestMethods = {
+        "rectangles" : "hitTestRectangles",
+        "circles" : "hitTestCircles"
+    }
     if(!hitTestType) {
         // Use default (rectangular hittest) if no hitTestType is provided
-        checkMethod = this.hitTestRectangles;
+        checkMethod = hitTestMethods["rectangles"];
     } else {
-        var hitTestMethods = {
-            "rectangles" : "hitTestRectangles",
-            "circles" : "hitTestCircles"
-        }
         checkMethod = hitTestMethods[hitTestType];
         if(!checkMethod) {
             throw "Invalid hitTest collision type: " + hitTestType;

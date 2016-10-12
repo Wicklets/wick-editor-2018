@@ -14,6 +14,16 @@ var ScriptingIDEInterface = function (wickEditor) {
 
     this.beautify = ace.require("ace/ext/beautify");
 
+    var erroneousLine;
+    function unhighlightError(){
+      that.aceEditor.getSession().removeMarker(erroneousLine);
+    }
+    function highlightError(lineNumber) {
+      unhighlightError();
+      var Range = ace.require("ace/range").Range
+      erroneousLine = that.aceEditor.session.addMarker(new Range(lineNumber, 0, lineNumber, 144), "errorHighlight", "fullLine");
+    }
+
     this.syncWithEditorState = function () {
         if(this.open) {
             $("#scriptingGUI").css('display', 'block');
@@ -50,9 +60,16 @@ var ScriptingIDEInterface = function (wickEditor) {
         wickEditor.interfaces.fabric.selectByIDs([id]);
         wickEditor.interfaces.scriptingide.open = true;
         wickEditor.interfaces.scriptingide.currentScript = scriptType;
+
+        wickEditor.interfaces.fabric.getSelectedWickObject().causedAnException = true;
+
         document.getElementById("errorMessage").innerHTML = errorMessage;
         if(lineNumber) document.getElementById("errorMessage").innerHTML += ", line " + lineNumber;
         document.getElementById("errorMessage").style.display = "block";
+
+        erroneousLine = lineNumber-1;
+        highlightError(erroneousLine);
+
         wickEditor.syncInterfaces();
     }
 

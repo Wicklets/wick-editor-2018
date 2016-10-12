@@ -81,7 +81,7 @@ var FabricInterface = function (wickEditor) {
 
       var bound = obj.getBoundingRect();
 
-      if(!wickObj.hasSyntaxErrors) {
+      if(!wickObj.hasSyntaxErrors && !wickObj.causedAnException) {
         that.canvas.contextContainer.strokeStyle = '#0B0';
       } else {
         that.canvas.contextContainer.strokeStyle = '#F00';
