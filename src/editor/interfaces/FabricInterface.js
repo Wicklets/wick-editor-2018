@@ -282,6 +282,9 @@ var FabricInterface = function (wickEditor) {
                     // Make sure we don't add it if so.
                     if(!wickEditor.project.rootObject.getChildByID(child.id)) return;
 
+                    //fabricObj.originX = 'center';
+                    //fabricObj.originY = 'center';
+
                     fabricObj.wickObjectID = child.id;
                     that.canvas.add(fabricObj);
                     updateFabObj(fabricObj, child);
