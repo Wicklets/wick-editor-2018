@@ -31,6 +31,7 @@ var ScriptingIDEInterface = function (wickEditor) {
             var selectedObj = wickEditor.interfaces['fabric'].getSelectedWickObject();
 
             if(!selectedObj) {
+                that.clearError();
                 $("#noSelectionDiv").css('display', 'block');
                 $("#scriptObjectDiv").css('display', 'none');
                 document.getElementById("errorMessage").style.display = "none";
@@ -49,6 +50,7 @@ var ScriptingIDEInterface = function (wickEditor) {
                 document.getElementById("onKeyDownButton").className = (that.currentScript == 'onKeyDown' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
             }
         } else {
+            that.clearError();
             $("#scriptingGUI").css('display', 'none');
         }
     }
@@ -73,25 +75,35 @@ var ScriptingIDEInterface = function (wickEditor) {
         wickEditor.syncInterfaces();
     }
 
+    this.clearError = function () {
+        unhighlightError();
+        document.getElementById("errorMessage").innerHTML = "";
+        document.getElementById("errorMessage").style.display = "none";
+    }
+
 // Script buttons
 
     $("#onLoadButton").on("click", function (e) {
         that.currentScript = 'onLoad';
+        unhighlightError();
         wickEditor.syncInterfaces();
     });
 
     $("#onClickButton").on("click", function (e) {
         that.currentScript = 'onClick';
+        unhighlightError();
         wickEditor.syncInterfaces();
     });
 
     $("#onUpdateButton").on("click", function (e) {
         that.currentScript = 'onUpdate';
+        unhighlightError();
         wickEditor.syncInterfaces();
     });
 
     $("#onKeyDownButton").on("click", function (e) {
         that.currentScript = 'onKeyDown';
+        unhighlightError();
         wickEditor.syncInterfaces();
     });
 
@@ -99,7 +111,7 @@ var ScriptingIDEInterface = function (wickEditor) {
 
     $("#closeScriptingGUIButton").on("click", function (e) {
         that.open = false;
-        document.getElementById("errorMessage").style.display = "none";
+        that.clearError();
         that.syncWithEditorState();
     });
 

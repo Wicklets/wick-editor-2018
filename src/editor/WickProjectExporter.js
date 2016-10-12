@@ -66,7 +66,9 @@ var WickProjectExporter = (function () {
     }
 
     projectExporter.JSONReplacer = function(key, value) {
-        if (key=="parentObject" || key=="cachedFabricObject") {
+        var dontJSONVars = ["parentObject","causedAnException"];
+
+        if (dontJSONVars.indexOf(key) !== -1) {
             return undefined;
         } else {
             return value;

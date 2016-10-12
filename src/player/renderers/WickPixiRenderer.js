@@ -164,10 +164,7 @@ var WickPixiRenderer = function (project) {
 	    if(wickObj.isSymbol) {
 	        wickObj.pixiContainer.visible = true;
 	        if(!wickObj.isRoot) {
-	        	console.log("sadsa")
 	            wickObj.pixiContainer.anchor = new PIXI.Point(0.5, 0.5);
-	            console.log(wickObj.width)
-	            console.log(wickObj.height)
 	            wickObj.pixiContainer.position.x        = wickObj.x// + wickObj.width/2  * wickObj.scaleX;
 	            wickObj.pixiContainer.position.y        = wickObj.y// + wickObj.height/2 * wickObj.scaleY;
 	            wickObj.pixiContainer.rotation = wickObj.angle/360*2*3.14159;

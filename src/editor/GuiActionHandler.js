@@ -162,6 +162,7 @@ var GuiActionHandler = function (wickEditor) {
         event.preventDefault();
         that.clearKeys();
         that.specialKeys = [];
+        wickEditor.interfaces.scriptingide.clearError();
         wickEditor.interfaces.builtinplayer.runProject();
     });
 
