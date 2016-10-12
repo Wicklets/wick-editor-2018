@@ -190,9 +190,13 @@ hr {
 	text-align: right;
 }
 
-#timelineScrollContainer {
-	width: 400px;
+#timelineScrollbar {
 	overflow-x:scroll;
+}
+
+#timelineScrollbarFiller {
+	width:3000px;
+	height:1px;
 }
 
 #timeline {
