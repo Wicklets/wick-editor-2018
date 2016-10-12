@@ -397,6 +397,7 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             wickEditor.interfaces['fabric'].deselectAll();
             
+            wickEditor.project.getCurrentObject().fixOriginPoint();
             wickEditor.project.getCurrentObject().playheadPosition = 0;
             args.prevEditedObjectID = wickEditor.project.getCurrentObject().id;
             wickEditor.project.currentObjectID = wickEditor.project.getCurrentObject().parentObject.id;

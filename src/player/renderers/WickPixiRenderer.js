@@ -18,7 +18,7 @@ var WickPixiRenderer = function (project) {
             var style = {
                 font : "normal " + wickObj.fontData.fontSize + "px " + wickObj.fontData.fontFamily,
                 fill : wickObj.fontData.fill,
-                wordWrap : true,
+                wordWrap : false,
                 wordWrapWidth : 440
             };
             wickObj.pixiText = new PIXI.Text(wickObj.fontData.text, style);
@@ -44,7 +44,7 @@ var WickPixiRenderer = function (project) {
                     font : "normal " + subObj.fontData.fontSize + "px " + subObj.fontData.fontFamily,
                     fill : subObj.fontData.fill,
                     wordWrap : true,
-                    wordWrapWidth : 440
+                    wordWrapWidth : 1440
                 };
                 subObj.pixiText = new PIXI.Text(subObj.fontData.text, style);
                 subObj.setText = function (text) { subObj.pixiText.setText(text); };

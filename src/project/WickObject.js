@@ -638,6 +638,16 @@ WickObject.prototype.getSymbolCornerPosition = function () {
 
 }
 
+WickObject.prototype.fixOriginPoint = function () {
+    var symbolCornerPosition = this.getSymbolCornerPosition();
+    this.getAllChildObjects().forEach(function (child) {
+        child.x -= symbolCornerPosition.x;
+        child.y -= symbolCornerPosition.y;
+    });
+    this.x += symbolCornerPosition.x;
+    this.y += symbolCornerPosition.y;
+}
+
 /* Get the absolute position of this object (i.e., the position not relative to the parents) */
 WickObject.prototype.getAbsolutePosition = function () {
     if(this.isRoot) {
