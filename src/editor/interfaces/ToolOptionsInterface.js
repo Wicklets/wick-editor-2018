@@ -19,7 +19,7 @@ var ToolOptionsInterface = function (wickEditor) {
     }
     
     lineWidthEl.onchange = function() {
-        wickEditor.tools['paintbrush'].brushSize = parseInt(this.value, 10) || 1;
+        wickEditor.tools['paintbrush'].brushSize = parseInt(this.value, 10) || 2;
         wickEditor.syncInterfaces();
     };
 

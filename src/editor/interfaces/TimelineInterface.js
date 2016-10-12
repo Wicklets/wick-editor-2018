@@ -16,8 +16,7 @@ var TimelineInterface = function (wickEditor) {
 
     var scrollbarX = 0;
 
-    var scrollbarHeadWidth = 40;
-    var scrollbarHeight = 20;
+    document.getElementById("timelineScrollbar").onscroll = function () {that.syncWithEditorState()};
 
     this.syncWithEditorState = function () {
 
@@ -30,6 +29,8 @@ var TimelineInterface = function (wickEditor) {
         if(playheadPosition != interfacePlayheadPosition) {
             playheadX = playheadPosition * frameWidth + frameWidth/2;
         }
+
+        scrollbarX = document.getElementById("timelineScrollbar").scrollLeft/5;
 
         that.redraw();
 
@@ -62,7 +63,7 @@ var TimelineInterface = function (wickEditor) {
 
     // Update canvas size
 
-        canvas.height = 15 + scrollbarHeight + frameHeight*currentObject.layers.length;
+        canvas.height = 15 + frameHeight*currentObject.layers.length;
 
     // Translate whole canvas content for scrollbar
 
@@ -137,7 +138,7 @@ var TimelineInterface = function (wickEditor) {
         ctx.fillStyle = "#000000";
         ctx.beginPath();
         ctx.moveTo(playheadX,0);
-        ctx.lineTo(playheadX,canvas.height-12 - scrollbarHeight);
+        ctx.lineTo(playheadX,canvas.height-12);
         ctx.stroke();
 
         ctx.beginPath();
@@ -153,18 +154,6 @@ var TimelineInterface = function (wickEditor) {
 
         ctx.restore();
 
-        // scrollbar container
-        ctx.fillStyle = "#E6E6E6";
-        ctx.fillRect(
-            0, canvas.height - scrollbarHeight,
-            canvas.width, scrollbarHeight);
-
-        // scrollbar head
-        ctx.fillStyle = "#AAA";
-        ctx.fillRect(
-            scrollbarX, canvas.height - scrollbarHeight,
-            scrollbarHeadWidth, scrollbarHeight);
-
     }
 
     window.addEventListener('resize', function(e) {
@@ -175,25 +164,19 @@ var TimelineInterface = function (wickEditor) {
     this.updatePlayheadPosition = function (x,y) {
         var currentObject = wickEditor.project.getCurrentObject();
 
-        if(y >= canvas.height - scrollbarHeight) {
-            scrollbarX = x - scrollbarHeadWidth/2;
-            scrollbarX = Math.max(scrollbarX, 0);
-        } else {
-            playheadX = x + scrollbarX*5;
+        playheadX = x + scrollbarX*5;
 
-            var oldPlayheadPosition = currentObject.playheadPosition;
-            var newPlayheadPosition = Math.floor(playheadX/frameWidth);
+        var oldPlayheadPosition = currentObject.playheadPosition;
+        var newPlayheadPosition = Math.floor(playheadX/frameWidth);
 
-            var oldLayer = currentObject.currentLayer;
-            var newLayer = Math.floor(y/frameHeight);
-            newLayer = Math.min(currentObject.layers.length-1, newLayer);
-            console.log(newLayer)
+        var oldLayer = currentObject.currentLayer;
+        var newLayer = Math.floor(y/frameHeight);
+        newLayer = Math.min(currentObject.layers.length-1, newLayer);
 
-            if(newPlayheadPosition != oldPlayheadPosition || newLayer != oldLayer) {
-                currentObject.playheadPosition = newPlayheadPosition;
-                currentObject.currentLayer = newLayer;
-                wickEditor.syncInterfaces();
-            }
+        if(newPlayheadPosition != oldPlayheadPosition || newLayer != oldLayer) {
+            currentObject.playheadPosition = newPlayheadPosition;
+            currentObject.currentLayer = newLayer;
+            wickEditor.syncInterfaces();
         }
     }
 
@@ -227,8 +210,6 @@ var TimelineInterface = function (wickEditor) {
         } else {
             currentFrame.identifier = newName;
         }
-
-        console.log(currentFrame.identifier)
     });
 
 }
