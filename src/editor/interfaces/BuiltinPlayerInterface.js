@@ -15,7 +15,7 @@ var BuiltinPlayerInterface = function (wickEditor) {
     }
 
     this.runProject = function () {
-        if(wickEditor.interfaces['scriptingide'].projectHasErrors) {
+        if(wickEditor.project.hasSyntaxErrors()) {
             if(!confirm("There are syntax errors in the code of this project! Are you sure you want to run it?")) {
                 return;
             }

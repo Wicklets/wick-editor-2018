@@ -69,6 +69,33 @@ var FabricInterface = function (wickEditor) {
         that.repositionGUIElements();
     });
 
+// Borders for symbols
+
+  that.canvas.on('after:render', function() {
+    
+
+    that.canvas.forEachObject(function(obj) {
+      var wickObj = wickEditor.project.rootObject.getChildByID(obj.wickObjectID);
+      if(wickObj && wickObj.isSymbol) {
+
+      var bound = obj.getBoundingRect();
+
+      if(!wickObj.hasSyntaxErrors) {
+        that.canvas.contextContainer.strokeStyle = '#0B0';
+      } else {
+        that.canvas.contextContainer.strokeStyle = '#F00';
+      }
+      
+      that.canvas.contextContainer.strokeRect(
+        bound.left + 0.5,
+        bound.top + 0.5,
+        bound.width,
+        bound.height
+      );
+  }
+    })
+  });
+
 /********************************
        Editor state syncing
 ********************************/
@@ -311,6 +338,16 @@ var FabricInterface = function (wickEditor) {
         //stopTiming("reselect/cleanup");
 
         this.canvas.renderAll();
+
+        // Make sure bounding boxes update
+        this.canvas.forEachObject(function(obj) {
+          var setCoords = obj.setCoords.bind(obj);
+          obj.on({
+            moving: setCoords,
+            scaling: setCoords,
+            rotating: setCoords
+          });
+        })
     }
 
     this.syncObjects = function (wickObj, fabricObj) {

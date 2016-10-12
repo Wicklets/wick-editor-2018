@@ -6,7 +6,6 @@ var ScriptingIDEInterface = function (wickEditor) {
 
     this.open = false;
     this.currentScript = 'onLoad';
-    this.projectHasErrors = false;
 
     this.aceEditor = ace.edit("scriptEditor");
     this.aceEditor.setTheme("ace/theme/chrome");
@@ -105,12 +104,13 @@ var ScriptingIDEInterface = function (wickEditor) {
 
         // Look for errors
 
-        that.projectHasErrors = false;
+        wickEditor.interfaces.fabric.getSelectedWickObject().hasSyntaxErrors = false;
         for (var key in annot){
             if (annot.hasOwnProperty(key)) {
                 if(annot[key].type === 'error') {
                     // There's a syntax error. Set the projectHasErrors flag so the project won't run.
-                    that.projectHasErrors = true;
+                    //that.projectHasErrors = true;
+                    wickEditor.interfaces.fabric.getSelectedWickObject().hasSyntaxErrors = true;
                 }
             }
         }

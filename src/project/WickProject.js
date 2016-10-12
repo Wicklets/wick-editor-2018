@@ -205,3 +205,18 @@ WickProject.prototype.jumpToObject = function (id) {
     });
 
 }
+
+WickProject.prototype.hasSyntaxErrors = function () {
+
+    var projectHasSyntaxErrors = false;
+
+    this.rootObject.getAllChildObjectsRecursive().forEach(function (child) {
+        if(child.hasSyntaxErrors) {
+            projectHasSyntaxErrors = true;
+        }
+    }); 
+
+    return projectHasSyntaxErrors;
+
+}
+
