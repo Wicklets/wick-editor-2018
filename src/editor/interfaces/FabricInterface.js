@@ -547,6 +547,132 @@ var FabricInterface = function (wickEditor) {
     });
 
 /********************************
+          Shape drawing
+********************************/
+
+    var drawingShape = null;
+
+    var mouseToScreenSpace = function (x,y) {
+        var pan = that.getPan();
+        return {
+            x: x - pan.x,
+            y: y - pan.y
+        }
+    }
+
+    this.startDrawingShape = function (shapeType, x, y) {
+
+        that.canvas.selection = false;
+
+        var screenXY = mouseToScreenSpace(x,y)
+
+        if(shapeType === 'rectangle') {
+            drawingShape = new fabric.Rect({
+                top : screenXY.y,
+                left : screenXY.x,
+                width : 1,
+                height : 1,
+                fill : wickEditor.tools.paintbrush.color
+            });
+        } else if (shapeType === 'ellipse') {
+            drawingShape = new fabric.Ellipse({
+                originX: 'centerX',
+                originY: 'centerY',
+                top : screenXY.y,
+                left : screenXY.x,
+                width : 1,
+                height : 1,
+                fill : wickEditor.tools.paintbrush.color
+            });
+        }
+
+        that.canvas.add(drawingShape);
+
+    }
+
+    this.updateDrawingShape = function (x,y) {
+        if(drawingShape) {
+            var screenXY = mouseToScreenSpace(x,y);
+
+            if(drawingShape.type === 'rect') {
+                drawingShape.width  = Math.abs(drawingShape.left - screenXY.x);
+                drawingShape.height = Math.abs(drawingShape.top  - screenXY.y);            
+            } else if(drawingShape.type === 'ellipse') {
+                drawingShape.width  = Math.abs(drawingShape.left - screenXY.x);
+                drawingShape.height = Math.abs(drawingShape.top  - screenXY.y);    
+                drawingShape.rx  = Math.abs(drawingShape.left - screenXY.x);
+                drawingShape.ry = Math.abs(drawingShape.top  - screenXY.y);
+            }
+            that.canvas.renderAll();
+        }
+    }
+
+    this.stopDrawingShape = function () {
+
+        that.canvas.selection = true;
+
+        if(!drawingShape) return;
+
+        if(drawingShape.type === 'rect') {
+            var origX = drawingShape.left;
+            var origY = drawingShape.top;
+            drawingShape.left = 0;
+            drawingShape.top = 0;
+            drawingShape.setCoords();
+            var svg = '<rect width="'+drawingShape.width+'" height="'+drawingShape.height+'" style="fill:rgb(0,0,255);" />'
+            var SVGData = {
+                svgString: '<svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>', 
+                fillColor: wickEditor.tools.paintbrush.color
+            }
+            var wickObj = WickObject.fromSVG(SVGData);
+
+            that.canvas.remove(drawingShape);
+            wickEditor.syncInterfaces();
+
+            wickObj.x = origX;
+            wickObj.y = origY;
+
+            wickEditor.actionHandler.doAction('addObjects', {
+                wickObjects: [wickObj]
+            });
+        } else if (drawingShape.type === 'ellipse') {
+            var origX = drawingShape.left;
+            var origY = drawingShape.top;
+            drawingShape.left = 0;
+            drawingShape.top = 0;
+            drawingShape.setCoords();
+            var svg = '<ellipse cx="'+drawingShape.width+'" cy="'+drawingShape.height+'" rx="'+drawingShape.width+'" ry="'+drawingShape.height+'"/>'
+            var SVGData = {
+                svgString: '<svg width="'+drawingShape.width*2+'" height="'+drawingShape.height*2+'"  id="svg" version="1.0" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>', 
+                fillColor: wickEditor.tools.paintbrush.color
+            }
+            console.log(SVGData)
+            var wickObj = WickObject.fromSVG(SVGData);
+
+            that.canvas.remove(drawingShape);
+            wickEditor.syncInterfaces();
+
+            wickObj.x = origX - drawingShape.width;
+            wickObj.y = origY - drawingShape.height;
+
+            wickEditor.actionHandler.doAction('addObjects', {
+                wickObjects: [wickObj]
+            });
+        }
+
+        drawingShape = null;
+
+    }
+
+    that.canvas.on('mouse:move', function (e) {
+        that.updateDrawingShape(e.e.offsetX,e.e.offsetY);
+    });
+
+    that.canvas.on('mouse:up', function (e) {
+        that.stopDrawingShape();
+    });
+
+/********************************
         Selection Utils
 ********************************/
 

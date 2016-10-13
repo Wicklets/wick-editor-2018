@@ -17,7 +17,7 @@ var PaintbrushTool = function (wickEditor) {
 
         context.beginPath();
         context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-        context.fillStyle = 'black';
+        context.fillStyle = that.color;
         context.fill();
 
         return 'url(' + canvas.toDataURL() + ') 64 64,default';
@@ -96,6 +96,7 @@ var PaintbrushTool = function (wickEditor) {
             alphamax: that.brushSmoothing/10
         });
         Potrace.process(function(){
+            console.log(Potrace.getSVG(1))
             var SVGData = {
                 svgString: Potrace.getSVG(1), 
                 fillColor: that.color
