@@ -198,11 +198,18 @@ WickProject.prototype.getCurrentObject = function () {
 
 WickProject.prototype.jumpToObject = function (id) {
 
+    var that = this;
+
     this.rootObject.getAllChildObjectsRecursive().forEach(function (child) {
         if(child.id === id) {
-            wickEditor.project.currentObjectID = child.parentObject.id;
+            that.currentObjectID = child.parentObject.id;
         }
     });
+
+    var currentObject = this.getCurrentObject();
+    var frameWithChild = currentObject.getFrameWithChild(this.rootObject.getChildByID(id));
+    var playheadPositionWithChild = currentObject.getPlayheadPositionAtFrame(frameWithChild);
+    currentObject.playheadPosition = playheadPositionWithChild;
 
 }
 

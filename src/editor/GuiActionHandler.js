@@ -23,6 +23,11 @@ var GuiActionHandler = function (wickEditor) {
     with the Wick Editor GUI are expected to be well defined by this structure .*/
     var GuiAction = function (hotkeys, elementIds, requiredParams, action) {
 
+        var that = this;
+
+        /* Function to be called when either a hotkey or element fires. */
+        this.doAction = action;
+
         /* Array of key strings which trigger the action function. */
         this.hotkeys = hotkeys;
         this.specialKeys = [];
@@ -37,14 +42,11 @@ var GuiActionHandler = function (wickEditor) {
 
         /* Array of Wick Editor element ID's which trigger the action function. */
         this.elementIds = elementIds;
-
-        /* Function to be called when either a hotkey or element fires. */
-        this.action = action;
-
-        /* Function which runs action  */
-        this.runAction = function() {
-            action();
-        }
+        this.elementIds.forEach(function (elementID) {
+            document.getElementById(elementID).onclick = function (e) {
+                that.doAction();
+            }
+        })
 
         guiActions.push(this);
     }
@@ -90,7 +92,7 @@ var GuiActionHandler = function (wickEditor) {
             var hotkeysMatch = cmpArrays(guiAction.hotkeys, stringkeys)
             var specialKeysMatch = cmpArrays(guiAction.specialKeys, stringspecialkeys);
             if ( hotkeysMatch && specialKeysMatch ) {
-                guiAction.runAction();
+                guiAction.doAction();
                 that.keys = [];
             }
         });
@@ -158,10 +160,13 @@ var GuiActionHandler = function (wickEditor) {
 
     // Control + Enter
     // Run Project
-    new GuiAction(['Modifier','Enter'], [], { editingTextBox: false }, function(args) {
+    new GuiAction(['Modifier','Enter'], ['runButton'], { editingTextBox: false }, function(args) {
         event.preventDefault();
         that.clearKeys();
         that.specialKeys = [];
+        wickEditor.project.rootObject.getAllChildObjectsRecursive().forEach(function (child) {
+            child.causedAnException = false;
+        })
         wickEditor.interfaces.scriptingide.clearError();
         wickEditor.interfaces.builtinplayer.runProject();
     });

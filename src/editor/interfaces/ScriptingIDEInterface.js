@@ -59,20 +59,23 @@ var ScriptingIDEInterface = function (wickEditor) {
         wickEditor.interfaces.builtinplayer.running = false;
         WickPlayer.stopRunningCurrentProject();
         wickEditor.project.jumpToObject(id);
-        wickEditor.interfaces.fabric.selectByIDs([id]);
-        wickEditor.interfaces.scriptingide.open = true;
-        wickEditor.interfaces.scriptingide.currentScript = scriptType;
-
-        wickEditor.interfaces.fabric.getSelectedWickObject().causedAnException = true;
-
-        document.getElementById("errorMessage").innerHTML = errorMessage;
-        if(lineNumber) document.getElementById("errorMessage").innerHTML += ", line " + lineNumber;
-        document.getElementById("errorMessage").style.display = "block";
-
-        erroneousLine = lineNumber-1;
-        highlightError(erroneousLine);
-
         wickEditor.syncInterfaces();
+        setTimeout(function () {
+            wickEditor.interfaces.fabric.selectByIDs([id]);
+            wickEditor.interfaces.scriptingide.open = true;
+            wickEditor.interfaces.scriptingide.currentScript = scriptType;
+
+            wickEditor.project.rootObject.getChildByID(id).causedAnException = true;
+
+            document.getElementById("errorMessage").innerHTML = errorMessage;
+            if(lineNumber) document.getElementById("errorMessage").innerHTML += ", line " + lineNumber;
+            document.getElementById("errorMessage").style.display = "block";
+
+            erroneousLine = lineNumber-1;
+            highlightError(erroneousLine);
+
+            wickEditor.syncInterfaces();
+        }, 100);
     }
 
     this.clearError = function () {
