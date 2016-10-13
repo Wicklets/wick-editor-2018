@@ -646,7 +646,6 @@ var FabricInterface = function (wickEditor) {
                 svgString: '<svg width="'+drawingShape.width*2+'" height="'+drawingShape.height*2+'"  id="svg" version="1.0" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>', 
                 fillColor: wickEditor.tools.paintbrush.color
             }
-            console.log(SVGData)
             var wickObj = WickObject.fromSVG(SVGData);
 
             that.canvas.remove(drawingShape);

@@ -843,8 +843,6 @@ WickObject.prototype.generateSVGCacheImages = function (callback) {
             svgFabricObject.cloneAsImage(function(clone) {
                 var imgSrc = clone._element.currentSrc || clone._element.src;
                 that.svgCacheImageData = imgSrc;
-                var i = document.createElement('img');i.src = imgSrc
-                document.body.appendChild(i)
                 callback();
             }, {enableRetinaScaling:true});
         });
