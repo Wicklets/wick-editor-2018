@@ -197,6 +197,7 @@ var RightClickMenuInterface = function (wickEditor) {
     });
 
     bindActionToButton("#convertToSymbolButton", function () {
+        wickEditor.interfaces.scriptingide.open = true;
         var fabCanvas = wickEditor.interfaces['fabric'].canvas;
         wickEditor.actionHandler.doAction('convertSelectionToSymbol', 
             {selection:fabCanvas.getActiveObject() || fabCanvas.getActiveGroup()}

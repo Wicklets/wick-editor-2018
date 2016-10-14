@@ -75,29 +75,44 @@ var FabricInterface = function (wickEditor) {
 
 // Borders for symbols
 
-  that.canvas.on('after:render', function() {
-    
-    that.canvas.forEachObject(function(obj) {
-      var wickObj = wickEditor.project.rootObject.getChildByID(obj.wickObjectID);
-      if(wickObj && wickObj.isSymbol) {
+    var createSymbolButton = document.getElementById('createSymbolButton');
 
-          var bound = obj.getBoundingRect();
+    that.canvas.on('after:render', function() {
+        var symbolIsSelected = false;
 
-          if(!wickObj.hasSyntaxErrors && !wickObj.causedAnException) {
-            that.canvas.contextContainer.strokeStyle = '#0B0';
-          } else {
-            that.canvas.contextContainer.strokeStyle = '#F00';
-          }
-          
-          that.canvas.contextContainer.strokeRect(
-            bound.left + 0.5,
-            bound.top + 0.5,
-            bound.width,
-            bound.height
-          );
-      }
-    })
-  });
+        that.canvas.forEachObject(function(obj) {
+            var wickObj = wickEditor.project.rootObject.getChildByID(obj.wickObjectID);
+            if(!wickObj || !wickObj.isSymbol) return;
+
+            var bound = obj.getBoundingRect();
+
+            if(!wickObj.hasSyntaxErrors && !wickObj.causedAnException) {
+                that.canvas.contextContainer.strokeStyle = '#0B0';
+            } else {
+                that.canvas.contextContainer.strokeStyle = '#F00';
+            }
+
+            that.canvas.contextContainer.strokeRect(
+                bound.left + 0.5,
+                bound.top + 0.5,
+                bound.width,
+                bound.height
+            );
+
+            if(that.getSelectedWickObject() === wickObj) {
+                symbolIsSelected = true;
+                var pan = that.getPan();
+                createSymbolButton.style.left = (bound.left+bound.width) + 'px';
+                createSymbolButton.style.top  = (bound.top)  + 'px';
+                createSymbolButton.style.display = "block";
+            }
+            
+        });
+
+        if(!symbolIsSelected) {
+            createSymbolButton.style.display = "none";
+        }
+    });
 
 /********************************
        Editor state syncing
@@ -266,6 +281,14 @@ var FabricInterface = function (wickEditor) {
         //stopTiming("remove objects");
 
         var updateFabObj = function (fabricObj, wickObj) {
+
+            var setCoords = fabricObj.setCoords.bind(fabricObj);
+              fabricObj.on({
+                moving: setCoords,
+                scaling: setCoords,
+                rotating: setCoords
+              });
+            
             if(activeObjects.indexOf(wickObj) !== -1) {
                 fabricObj.hasControls = true;
                 fabricObj.selectable = true;
@@ -350,16 +373,6 @@ var FabricInterface = function (wickEditor) {
         //stopTiming("reselect/cleanup");
 
         this.canvas.renderAll();
-
-        // Make sure bounding boxes update
-        this.canvas.forEachObject(function(obj) {
-          var setCoords = obj.setCoords.bind(obj);
-          obj.on({
-            moving: setCoords,
-            scaling: setCoords,
-            rotating: setCoords
-          });
-        })
     }
 
     this.syncObjects = function (wickObj, fabricObj) {

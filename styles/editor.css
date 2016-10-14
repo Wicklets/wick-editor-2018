@@ -185,6 +185,32 @@ hr {
 	float: left;
 }
 
+.fabricButton {
+	position: fixed;
+	display: block;
+	width: 32px;
+	height: 32px;
+
+	top: 0px;
+	left: 0px;
+	text-align: center;
+	display: block;
+
+	background-color: #EEEEEE;
+
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
+
+	margin: 5px;
+
+	border: 1px solid #bbb;
+	border-radius: 2px;
+
+	box-shadow: 2px 2px 2px #AAA;
+}
+
 .elemInRow {
 	float: left;
 }
