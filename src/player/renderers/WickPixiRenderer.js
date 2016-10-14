@@ -165,8 +165,8 @@ var WickPixiRenderer = function (project) {
 	        wickObj.pixiContainer.visible = true;
 	        if(!wickObj.isRoot) {
 	            wickObj.pixiContainer.anchor = new PIXI.Point(0.0, 0.0);
-	            wickObj.pixiContainer.position.x = wickObj.x// + wickObj.width/2  * wickObj.scaleX;
-	            wickObj.pixiContainer.position.y = wickObj.y// + wickObj.height/2 * wickObj.scaleY;
+	            wickObj.pixiContainer.position.x = Math.round(wickObj.x)// + wickObj.width/2  * wickObj.scaleX;
+	            wickObj.pixiContainer.position.y = Math.round(wickObj.y)// + wickObj.height/2 * wickObj.scaleY;
 	            wickObj.pixiContainer.rotation = wickObj.angle/360*2*3.14159;
 	            wickObj.pixiContainer.scale.x  = wickObj.scaleX;
 	            wickObj.pixiContainer.scale.y  = wickObj.scaleY;
@@ -181,8 +181,8 @@ var WickPixiRenderer = function (project) {
 	        if(wickObj.pixiSprite) {
 	            wickObj.pixiSprite.visible = true;
 	            wickObj.pixiSprite.anchor = new PIXI.Point(0.0, 0.0);
-	            wickObj.pixiSprite.position.x = wickObj.x// + wickObj.width /2*wickObj.scaleX;
-	            wickObj.pixiSprite.position.y = wickObj.y// + wickObj.height/2*wickObj.scaleY;
+	            wickObj.pixiSprite.position.x = Math.round(wickObj.x)// + wickObj.width /2*wickObj.scaleX;
+	            wickObj.pixiSprite.position.y = Math.round(wickObj.y)// + wickObj.height/2*wickObj.scaleY;
 	            wickObj.pixiSprite.rotation = wickObj.angle/360*2*3.14159;
 	            wickObj.pixiSprite.scale.x  = wickObj.scaleX / window.devicePixelRatio;
 	            wickObj.pixiSprite.scale.y  = wickObj.scaleY / window.devicePixelRatio;
@@ -192,8 +192,8 @@ var WickPixiRenderer = function (project) {
 	        } else if(wickObj.pixiText) {
 	            wickObj.pixiText.visible = true;
 	            //wickObj.pixiText.anchor = new PIXI.Point(0.5, 0.5);
-	            wickObj.pixiText.x        = wickObj.x;
-	            wickObj.pixiText.y        = wickObj.y;
+	            wickObj.pixiText.x        = Math.round(wickObj.x);
+	            wickObj.pixiText.y        = Math.round(wickObj.y);
 	            wickObj.pixiText.rotation = wickObj.angle/360*2*3.14159;
 	            wickObj.pixiText.scale.x  = wickObj.scaleX;
 	            wickObj.pixiText.scale.y  = wickObj.scaleY;

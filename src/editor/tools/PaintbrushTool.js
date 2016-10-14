@@ -13,7 +13,7 @@ var PaintbrushTool = function (wickEditor) {
         var context = canvas.getContext('2d');
         var centerX = canvas.width / 2;
         var centerY = canvas.height / 2;
-        var radius = that.brushSize/2;
+        var radius = that.brushSize/2 * wickEditor.interfaces.fabric.canvas.getZoom();
 
         context.beginPath();
         context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
@@ -96,7 +96,6 @@ var PaintbrushTool = function (wickEditor) {
             alphamax: that.brushSmoothing/10
         });
         Potrace.process(function(){
-            console.log(Potrace.getSVG(1))
             var SVGData = {
                 svgString: Potrace.getSVG(1), 
                 fillColor: that.color

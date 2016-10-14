@@ -16,6 +16,9 @@ var FabricInterface = function (wickEditor) {
 
     this.context = this.canvas.getContext('2d');
 
+    this.paperCanvas = document.createElement('canvas');
+    paper.setup(this.canvas);
+
     this.creatingSelection = false;
     this.objectIDsInCanvas = [];
 
@@ -172,6 +175,8 @@ var FabricInterface = function (wickEditor) {
         that.canvas.renderAll();
 
         that.repositionGUIElements();
+
+        wickEditor.syncInterfaces();
     }
 
     this.repositionGUIElements = function () {
@@ -239,11 +244,14 @@ var FabricInterface = function (wickEditor) {
 
         //stopTiming("object list generation");
 
-        // Remove objects that don't exist anymore
+        // Remove objects that don't exist anymore or need to be regenerated
         this.canvas.forEachObject(function(fabricObj) {
             if(!fabricObj.wickObjectID) return;
 
-            if(allObjectsIDs.indexOf(fabricObj.wickObjectID) == -1) {
+            var wickObj = wickEditor.project.rootObject.getChildByID(fabricObj.wickObjectID);
+
+            if(allObjectsIDs.indexOf(fabricObj.wickObjectID) == -1 || (wickObj && wickObj.forceFabricCanvasRegen)) {
+                if(wickObj) wickObj.forceFabricCanvasRegen = false;
                 that.objectIDsInCanvas[fabricObj.wickObjectID] = false;
                 // Object doesn't exist in the current object anymore, remove it's fabric object.
                 if(fabricObj.type === "group") {
@@ -391,6 +399,10 @@ var FabricInterface = function (wickEditor) {
         } else {
             fabricObj.perPixelTargetFind = true;
             fabricObj.targetFindTolerance = 4;
+        }
+
+        if(wickObj.svgData) {
+            fabricObj.fill = wickObj.svgData.fillColor;
         }
 
         fabricObj.setCoords();
@@ -549,6 +561,8 @@ var FabricInterface = function (wickEditor) {
 /********************************
           Shape drawing
 ********************************/
+
+// This code should be in the shape drawing tool objects >.<
 
     var drawingShape = null;
 

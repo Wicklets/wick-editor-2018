@@ -196,6 +196,11 @@ var WickActionHandler = function (wickEditor) {
                     if(args.modifiedStates[i].fill) wickObj.fontData.fill = args.modifiedStates[i].fill;
                 }
 
+                if(args.modifiedStates[i].svgFillColor) {
+                    args.originalStates[i].svgFillColor = wickObj.svgData.fillColor;
+                    wickObj.svgData.fillColor = args.modifiedStates[i].svgFillColor;
+                }
+
                 // This is silly what's a better way ???
                 if(wickObj.tweens.length === 1) {
                     console.log(wickObj.angle)
@@ -222,6 +227,10 @@ var WickActionHandler = function (wickEditor) {
                     wickObj.fontData.fontFamily = args.originalStates[i].fontFamily;
                     wickObj.fontData.fontSize = args.originalStates[i].fontSize;
                     wickObj.fontData.fill = args.originalStates[i].fill;
+                }
+
+                if(args.originalStates[i].svgFillColor) {
+                    wickObj.svgData.fillColor = args.originalStates[i].svgFillColor;
                 }
             }
         });

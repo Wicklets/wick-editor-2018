@@ -42,6 +42,8 @@ var InputHandler = function (wickEditor) {
 
     document.addEventListener("copy", function(event) {
 
+        wickEditor.guiActionHandler.clearKeys();
+
         // Don't try to copy from the fabric canvas if user is editing text
         if(document.activeElement.nodeName === 'INPUT' || document.activeElement.nodeName == 'TEXTAREA' || wickEditor.interfaces['scriptingide'].scriptingIDEopen) {
             return;
@@ -72,10 +74,13 @@ var InputHandler = function (wickEditor) {
     });
 
     document.addEventListener("cut", function(event) {
+        wickEditor.guiActionHandler.clearKeys();
         console.error('cut NYI');
     });
 
     document.addEventListener("paste", function(event) {
+
+        wickEditor.guiActionHandler.clearKeys();
 
         if(document.activeElement.nodeName === 'INPUT' || document.activeElement.nodeName === 'TEXTAREA' || wickEditor.interfaces['scriptingide'].scriptingIDEopen) {
             return;

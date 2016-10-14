@@ -134,6 +134,7 @@ var GuiActionHandler = function (wickEditor) {
     // Open Pan Tool
     new GuiAction(['Space'], [], { editingTextBox: false }, function(args) {
         if(wickEditor.currentTool !== wickEditor.tools.pan) {
+            wickEditor.lastTool = wickEditor.currentTool;
             wickEditor.currentTool = wickEditor.tools.pan;
             wickEditor.syncInterfaces();
         }
