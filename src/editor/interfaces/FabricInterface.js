@@ -77,8 +77,29 @@ var FabricInterface = function (wickEditor) {
 
     var createSymbolButton = document.getElementById('createSymbolButton');
     var editSymbolButton = document.getElementById('editSymbolButton');
+    var editSymbolScriptsButton = document.getElementById('editSymbolScriptsButton');
+
+    createSymbolButton.onclick = function () {
+        wickEditor.interfaces.scriptingide.open = true;
+        var fabCanvas = wickEditor.interfaces['fabric'].canvas;
+        wickEditor.actionHandler.doAction('convertSelectionToSymbol', 
+            {selection:fabCanvas.getActiveObject() || fabCanvas.getActiveGroup()}
+        );
+    }
+    editSymbolButton.onclick = function () {
+        var selectedObject = wickEditor.interfaces['fabric'].getSelectedWickObject();
+        wickEditor.actionHandler.doAction('editObject', {objectToEdit:selectedObject});
+    }
+    editSymbolScriptsButton.onclick = function () {
+        wickEditor.interfaces['scriptingide'].open = true;
+        wickEditor.syncInterfaces();
+    }
 
     that.canvas.on('after:render', function() {
+
+        createSymbolButton.style.display = "none";
+        editSymbolButton.style.display = "none";
+        editSymbolScriptsButton.style.display = "none";
 
         var selection = that.canvas.getActiveObject() || that.canvas.getActiveGroup();
         if(selection) {
@@ -88,15 +109,27 @@ var FabricInterface = function (wickEditor) {
                 x : bound.left+bound.width,
                 y : bound.top 
             }
-            createSymbolButton.style.left = corner.x + 'px';
-            createSymbolButton.style.top = corner.y  + 'px';
-            createSymbolButton.style.display = "block";
-            editSymbolButton.style.left = corner.x + 'px';
-            editSymbolButton.style.top = corner.y + 50  + 'px';
-            editSymbolButton.style.display = "block";
-        } else {
-            createSymbolButton.style.display = "none";
-            editSymbolButton.style.display = "none";
+
+            var objIsSymbol = false;
+            if(selection && selection.wickObjectID) {
+                var wickObj = wickEditor.project.rootObject.getChildByID(selection.wickObjectID);
+                if(wickObj.isSymbol) {
+                    objIsSymbol = true;
+                }
+            }
+
+            if(objIsSymbol) {
+                editSymbolButton.style.left = corner.x + 'px';
+                editSymbolButton.style.top = corner.y  + 'px';
+                editSymbolButton.style.display = "block";
+                editSymbolScriptsButton.style.left = corner.x + 'px';
+                editSymbolScriptsButton.style.top = corner.y + 35  + 'px';
+                editSymbolScriptsButton.style.display = "block";
+            } else {
+                createSymbolButton.style.left = corner.x + 'px';
+                createSymbolButton.style.top = corner.y  + 'px';
+                createSymbolButton.style.display = "block";
+            }
         }
 
         that.canvas.forEachObject(function(obj) {

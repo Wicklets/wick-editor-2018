@@ -1154,7 +1154,7 @@ WickObject.prototype.runScript = function (scriptType) {
                 if(!line.includes("<anonymous>:")) return;
 
                 lineNumber = parseInt(line.split("<anonymous>:")[1].split(":")[0]);
-            })
+            });
 
             //console.log(e.stack.split("\n")[1].split('<anonymous>:')[1].split(":")[0]);
             //console.log(e.stack.split("\n"))

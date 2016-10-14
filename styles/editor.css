@@ -188,8 +188,8 @@ hr {
 .fabricButton {
 	position: fixed;
 	display: block;
-	width: 32px;
-	height: 32px;
+	width: 16px;
+	height: 16px;
 
 	top: 0px;
 	left: 0px;
