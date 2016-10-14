@@ -88,10 +88,10 @@ var WickPlayer = (function () {
 
         if(!project.renderer) project.renderer = "WickPixiRenderer"; // Patch old projects
         renderer = new window[project.renderer](project);
-        //audioPlayer = new window[project.audioPlayer](project);
+        audioPlayer = new window[project.audioPlayer](project);
 
         if(!mobileMode) {
-            //audioPlayer.setup();
+            audioPlayer.setup();
         }
         renderer.setup();
         var playerCanvasContainer = document.getElementById("playerCanvasContainer");
@@ -131,6 +131,9 @@ var WickPlayer = (function () {
 
         document.removeEventListener("keydown", handleKeyDownInput);
         document.removeEventListener("keyup", handleKeyUpInput);
+
+        audioPlayer.cleanup();
+        renderer.cleanup();
 
     }
 

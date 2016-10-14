@@ -146,7 +146,8 @@ var InputHandler = function (wickEditor) {
                     'image/gif'  : WickObject.fromAnimatedGIF,
                     'audio/mp3'  : WickObject.fromAudioFile,
                     'audio/wav'  : WickObject.fromAudioFile,
-                    'audio/ogg'  : WickObject.fromAudioFile
+                    'audio/ogg'  : WickObject.fromAudioFile,
+                    "audio/x-m4a" : WickObject.fromAudioFile
                 }
                 
                 var fr = new FileReader();

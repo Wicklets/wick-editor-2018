@@ -113,7 +113,7 @@ var FabricInterface = function (wickEditor) {
             var objIsSymbol = false;
             if(selection && selection.wickObjectID) {
                 var wickObj = wickEditor.project.rootObject.getChildByID(selection.wickObjectID);
-                if(wickObj.isSymbol) {
+                if(wickObj && wickObj.isSymbol) {
                     objIsSymbol = true;
                 }
             }
@@ -398,6 +398,9 @@ var FabricInterface = function (wickEditor) {
                     fabricObj.wickObjectID = child.id;
                     that.canvas.add(fabricObj);
                     updateFabObj(fabricObj, child);
+
+                    fabricObj.trueZIndex = currentObject.getCurrentFrame().wickObjects.indexOf(child);
+                    that.canvas.moveTo(fabricObj, fabricObj.trueZIndex+2 + activeObjects.length+3);
                 });
             }
         });

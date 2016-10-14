@@ -207,5 +207,6 @@ var WickPixiRenderer = function (project) {
 
 	this.cleanup = function() {
 		window.removeEventListener('resize', resizeCanvas);
+		
 	}
 };
