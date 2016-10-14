@@ -76,9 +76,28 @@ var FabricInterface = function (wickEditor) {
 // Borders for symbols
 
     var createSymbolButton = document.getElementById('createSymbolButton');
+    var editSymbolButton = document.getElementById('editSymbolButton');
 
     that.canvas.on('after:render', function() {
-        var symbolIsSelected = false;
+
+        var selection = that.canvas.getActiveObject() || that.canvas.getActiveGroup();
+        if(selection) {
+            var bound = selection.getBoundingRect();
+            var pan = that.getPan();
+            var corner = {
+                x : bound.left+bound.width,
+                y : bound.top 
+            }
+            createSymbolButton.style.left = corner.x + 'px';
+            createSymbolButton.style.top = corner.y  + 'px';
+            createSymbolButton.style.display = "block";
+            editSymbolButton.style.left = corner.x + 'px';
+            editSymbolButton.style.top = corner.y + 50  + 'px';
+            editSymbolButton.style.display = "block";
+        } else {
+            createSymbolButton.style.display = "none";
+            editSymbolButton.style.display = "none";
+        }
 
         that.canvas.forEachObject(function(obj) {
             var wickObj = wickEditor.project.rootObject.getChildByID(obj.wickObjectID);
@@ -99,19 +118,15 @@ var FabricInterface = function (wickEditor) {
                 bound.height
             );
 
-            if(that.getSelectedWickObject() === wickObj) {
+            /*if(that.getSelectedWickObject() === wickObj) {
                 symbolIsSelected = true;
                 var pan = that.getPan();
                 createSymbolButton.style.left = (bound.left+bound.width) + 'px';
                 createSymbolButton.style.top  = (bound.top)  + 'px';
                 createSymbolButton.style.display = "block";
-            }
+            }*/
             
         });
-
-        if(!symbolIsSelected) {
-            createSymbolButton.style.display = "none";
-        }
     });
 
 /********************************
@@ -288,7 +303,7 @@ var FabricInterface = function (wickEditor) {
                 scaling: setCoords,
                 rotating: setCoords
               });
-            
+
             if(activeObjects.indexOf(wickObj) !== -1) {
                 fabricObj.hasControls = true;
                 fabricObj.selectable = true;
