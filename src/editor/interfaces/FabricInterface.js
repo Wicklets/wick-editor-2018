@@ -399,8 +399,8 @@ var FabricInterface = function (wickEditor) {
                     that.canvas.add(fabricObj);
                     updateFabObj(fabricObj, child);
 
-                    fabricObj.trueZIndex = currentObject.getCurrentFrame().wickObjects.indexOf(child);
-                    that.canvas.moveTo(fabricObj, fabricObj.trueZIndex+2 + activeObjects.length+3);
+                    //fabricObj.trueZIndex = currentObject.getCurrentFrame().wickObjects.indexOf(child);
+                    //that.canvas.moveTo(fabricObj, fabricObj.trueZIndex+2 + activeObjects.length+3);
                 });
             }
         });

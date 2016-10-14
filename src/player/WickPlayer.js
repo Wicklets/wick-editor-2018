@@ -86,6 +86,7 @@ var WickPlayer = (function () {
             child.generateAlphaMask();
         });
 
+        if(!project.audioPlayer) project.audioPlayer = "WickWebAudioPlayer"; // Patch old projects
         if(!project.renderer) project.renderer = "WickPixiRenderer"; // Patch old projects
         renderer = new window[project.renderer](project);
         audioPlayer = new window[project.audioPlayer](project);
