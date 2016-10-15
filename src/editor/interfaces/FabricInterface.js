@@ -6,7 +6,10 @@ var FabricInterface = function (wickEditor) {
 
 // Setup fabric canvas
 
-    this.canvas = new fabric.CanvasEx('fabricCanvas',  {imageSmoothingEnabled:false});
+    this.canvas = new fabric.CanvasEx('fabricCanvas', {
+        imageSmoothingEnabled:false,
+        preserveObjectStacking:true,
+    });
     this.canvas.selectionColor = 'rgba(0,0,5,0.1)';
     this.canvas.selectionBorderColor = 'grey';
     this.canvas.backgroundColor = "#EEE";
@@ -388,6 +391,12 @@ var FabricInterface = function (wickEditor) {
                 that.objectIDsInCanvas[child.id] = true;
                 that.createFabricObjectFromWickObject(child, function (fabricObj) {
 
+                    that.canvas.forEachObject(function(path) {
+                        if(path.isTemporaryDrawingPath) {
+                            that.canvas.remove(path);
+                        }
+                    });
+
                     // The object may have been deleted while we were generating the fabric object. 
                     // Make sure we don't add it if so.
                     if(!wickEditor.project.rootObject.getChildByID(child.id)) return;
@@ -402,12 +411,6 @@ var FabricInterface = function (wickEditor) {
                     //fabricObj.trueZIndex = currentObject.getCurrentFrame().wickObjects.indexOf(child);
                     //that.canvas.moveTo(fabricObj, fabricObj.trueZIndex+2 + activeObjects.length+3);
                 });
-            }
-        });
-
-        that.canvas.forEachObject(function(path) {
-            if(path.isTemporaryDrawingPath) {
-                that.canvas.remove(path);
             }
         });
 

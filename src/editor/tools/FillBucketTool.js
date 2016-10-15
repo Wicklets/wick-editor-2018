@@ -30,7 +30,6 @@ var FillBucketTool = function (wickEditor) {
             if (!wickPath.svgData) return;
 
             if(wickPath.paperPath.contains(mousePoint)) {
-                console.log("fill path")
                 filledPath = true;
                 
                 wickEditor.actionHandler.doAction('modifyObjects', { 
@@ -107,8 +106,6 @@ var FillBucketTool = function (wickEditor) {
 
         });
 
-        console.log(holes)
-
         // Find a piece containing the mouse point that also has a coresponding hole with closed==false
         holes.forEach(function (hole) {
             if(!hole.contains(mousePoint)) return;
@@ -121,7 +118,6 @@ var FillBucketTool = function (wickEditor) {
     });
 
     var updatePaperDataOnVectorWickObjects = function (wickObjects) {
-        console.log("updatePaperDataOnVectorWickObjects")
         paper.project.activeLayer.removeChildren();
 
         wickObjects.forEach(function (wickObject) {
