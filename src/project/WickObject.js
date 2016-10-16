@@ -840,11 +840,14 @@ WickObject.prototype.generateSVGCacheImages = function (callback) {
         fabric.loadSVGFromString(this.svgData.svgString, function(objects, options) {
             objects[0].fill = that.svgData.fillColor;
             var svgFabricObject = fabric.util.groupSVGElements(objects, options);
+            svgFabricObject.scaleX /= window.devicePixelRatio;
+            svgFabricObject.scaleY /= window.devicePixelRatio;
+            svgFabricObject.setCoords();
             svgFabricObject.cloneAsImage(function(clone) {
                 var imgSrc = clone._element.currentSrc || clone._element.src;
                 that.svgCacheImageData = imgSrc;
                 callback();
-            }, {enableRetinaScaling:true});
+            }, {enableRetinaScaling:false});
         });
 
     } else if(this.isSymbol) {

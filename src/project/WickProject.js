@@ -13,8 +13,8 @@ var WickProject = function () {
     this.onionSkinning = false;
     
     this.resolution = {};
-    this.resolution.x = 650;
-    this.resolution.y = 500;
+    this.resolution.x = 720;
+    this.resolution.y = 480;
 
     this.backgroundColor = "#FFFFFF";
 

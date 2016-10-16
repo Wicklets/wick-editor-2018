@@ -28,21 +28,4 @@ var ToolbarInterface = function (wickEditor) {
         
     }
 
-    this.loadTools = function () {
-        
-        /* Define "clicked" state for tools */ 
-        toolbarTools.forEach( function(toolName) {
-            var tool = wickEditor.tools[toolName];
-            var buttonClassName = '#' + toolName + 'ToolButton';
-
-            $(buttonClassName).on('click', function(e) {
-                wickEditor.lastTool = wickEditor.currentTool;
-                wickEditor.currentTool = tool;
-                wickEditor.interfaces.fabric.forceModifySelectedObjects();
-                wickEditor.interfaces.fabric.deselectAll();
-                wickEditor.syncInterfaces();
-            });
-        });
-    }
-
 }

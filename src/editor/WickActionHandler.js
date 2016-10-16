@@ -367,7 +367,6 @@ var WickActionHandler = function (wickEditor) {
 
             var symbol = new WickObject.createSymbolFromWickObjects(selectedObjects);
             wickEditor.project.addObject(symbol);
-            symbol.selectOnAddToFabricCanvas = true;
         },
         function (args) {
             console.error("convertSelectionToSymbol undo NYI")

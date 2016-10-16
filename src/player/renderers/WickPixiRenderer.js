@@ -184,8 +184,8 @@ var WickPixiRenderer = function (project) {
 	            wickObj.pixiSprite.position.x = Math.round(wickObj.x)// + wickObj.width /2*wickObj.scaleX;
 	            wickObj.pixiSprite.position.y = Math.round(wickObj.y)// + wickObj.height/2*wickObj.scaleY;
 	            wickObj.pixiSprite.rotation = wickObj.angle/360*2*3.14159;
-	            wickObj.pixiSprite.scale.x  = wickObj.scaleX / window.devicePixelRatio;
-	            wickObj.pixiSprite.scale.y  = wickObj.scaleY / window.devicePixelRatio;
+	            wickObj.pixiSprite.scale.x  = wickObj.scaleX// / window.devicePixelRatio;
+	            wickObj.pixiSprite.scale.y  = wickObj.scaleY// / window.devicePixelRatio;
 	            if(wickObj.flipX) wickObj.pixiSprite.scale.x *= -1;
 	            if(wickObj.flipY) wickObj.pixiSprite.scale.y *= -1;
 	            wickObj.pixiSprite.alpha    = wickObj.opacity;
@@ -207,6 +207,6 @@ var WickPixiRenderer = function (project) {
 
 	this.cleanup = function() {
 		window.removeEventListener('resize', resizeCanvas);
-		
+
 	}
 };

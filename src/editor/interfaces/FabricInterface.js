@@ -888,6 +888,22 @@ var FabricInterface = function (wickEditor) {
         return wickObjects;
     }
 
+    this.moveSelection = function (x,y) {
+        var modifiedStates = [];
+        that.getSelectedObjectIDs().forEach(function (id) {
+            var wickObj = wickEditor.project.rootObject.getChildByID(id);
+            modifiedStates.push({
+                x : wickObj.x + x,
+                y : wickObj.y + y,
+            });
+        });
+
+        wickEditor.actionHandler.doAction('modifyObjects', { 
+            ids: that.getSelectedObjectIDs(), 
+            modifiedStates: modifiedStates 
+        });
+    }
+
     this.recenterCanvas();
     this.repositionGUIElements();
     window.addEventListener('resize', this.resize, false);

@@ -27,87 +27,18 @@ var InputHandler = function (wickEditor) {
         event.preventDefault();
     }, false);
 
-
 /*************************
-    Browser Copy/Paste
+     Tooltips
 *************************/
 
-    // In order to ensure that the browser will fire clipboard events, we always need to have something selected
-    var focusHiddenArea = function () {
-        if($("#scriptingGUI").css('visibility') === 'hidden') {
-            $("#hidden-input").val(' ');
-            $("#hidden-input").focus().select();
-        }
-    }
-
-    document.addEventListener("copy", function(event) {
-
-        wickEditor.guiActionHandler.clearKeys();
-
-        // Don't try to copy from the fabric canvas if user is editing text
-        if(document.activeElement.nodeName === 'INPUT' || document.activeElement.nodeName == 'TEXTAREA' || wickEditor.interfaces['scriptingide'].scriptingIDEopen) {
-            return;
-        }
-
-        event.preventDefault();
-        
-        // Make sure an element is focused so that copy event fires properly
-        //focusHiddenArea();
-
-        // Generate clipboard data
-        var ids = wickEditor.interfaces['fabric'].getSelectedObjectIDs();
-        var objectJSONs = [];
-        for(var i = 0; i < ids.length; i++) {
-            objectJSONs.push(wickEditor.project.getObjectByID(ids[i]).getAsJSON());
-        }
-        var clipboardObject = {
-            /*position: {top  : group.top  + group.height/2, 
-                       left : group.left + group.width/2},*/
-            groupPosition: {x : 0, 
-                            y : 0},
-            wickObjectArray: objectJSONs
-        }
-        var copyData =  JSON.stringify(clipboardObject);
-
-        // Send the clipboard data to the clipboard!
-        event.clipboardData.setData('text/wickobjectsjson', copyData);
+    $('.tooltipElem').on("mouseover", function(e) {
+        $("#tooltipGUI").css('display', 'block');
+        $("#tooltipGUI").css('top', wickEditor.inputHandler.mouse.y+5+'px');
+        $("#tooltipGUI").css('left', wickEditor.inputHandler.mouse.x+5+'px');
+        document.getElementById('tooltipGUI').innerHTML = e.currentTarget.attributes.alt.value;
     });
-
-    document.addEventListener("cut", function(event) {
-        wickEditor.guiActionHandler.clearKeys();
-        console.error('cut NYI');
-    });
-
-    document.addEventListener("paste", function(event) {
-
-        wickEditor.guiActionHandler.clearKeys();
-
-        if(document.activeElement.nodeName === 'INPUT' || document.activeElement.nodeName === 'TEXTAREA' || wickEditor.interfaces['scriptingide'].scriptingIDEopen) {
-            return;
-        }
-
-        event.preventDefault();
-        //focusHiddenArea();
-
-        var clipboardData = event.clipboardData;
-        var items = clipboardData.items || clipboardData.types;
-
-        for (i=0; i<items.length; i++) {
-
-            var fileType = items[i].type || items[i];
-            var file = clipboardData.getData(fileType);
-
-            if(fileType === 'text/wickobjectsjson') {
-                var fileWickObject = WickObject.fromJSONArray(JSON.parse(file), function(objs) {
-                    wickEditor.actionHandler.doAction('addObjects', {wickObjects:objs});
-                });
-            } else if (fileType === 'text/plain') {
-                wickEditor.actionHandler.doAction('addObjects', {wickObjects:[WickObject.fromText(file)]});
-            } else {
-                console.error("Pasting files with type " + fileType + "NYI.")
-            }
-
-        }
+    $('.tooltipElem').on("mouseout", function(e) {
+        $("#tooltipGUI").css('display', 'none');
     });
 
 /*************************

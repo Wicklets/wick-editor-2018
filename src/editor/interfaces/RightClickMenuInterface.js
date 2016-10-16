@@ -163,61 +163,6 @@ var RightClickMenuInterface = function (wickEditor) {
             wickEditor.syncInterfaces();
         });
     }
-    
-    bindActionToButton("#editScriptsButton", function () {
-        wickEditor.interfaces['scriptingide'].open = true;
-        wickEditor.syncInterfaces();
-    });
-
-    bindActionToButton("#bringToFrontButton", function () {
-        wickEditor.actionHandler.doAction('moveObjectToZIndex', { 
-            ids: wickEditor.interfaces["fabric"].getSelectedObjectIDs(),
-            newZIndex: wickEditor.project.getCurrentObject().getCurrentFrame().wickObjects.length
-        });
-        wickEditor.interfaces['fabric'].deselectAll();
-    });
-
-    bindActionToButton("#sendToBackButton", function () {
-        wickEditor.actionHandler.doAction('moveObjectToZIndex', { 
-            ids: wickEditor.interfaces["fabric"].getSelectedObjectIDs(),
-            newZIndex: 0
-        });
-        wickEditor.interfaces['fabric'].deselectAll();
-    });
-
-    bindActionToButton("#deleteButton", function () {
-        wickEditor.actionHandler.doAction('deleteObjects', { 
-            ids:wickEditor.interfaces['fabric'].getSelectedObjectIDs() 
-        });
-    });
-
-    bindActionToButton("#editObjectButton", function () {
-        var selectedObject = wickEditor.interfaces['fabric'].getSelectedWickObject();
-        wickEditor.actionHandler.doAction('editObject', {objectToEdit:selectedObject});
-    });
-
-    bindActionToButton("#convertToSymbolButton", function () {
-        wickEditor.interfaces.scriptingide.open = true;
-        var fabCanvas = wickEditor.interfaces['fabric'].canvas;
-        wickEditor.actionHandler.doAction('convertSelectionToSymbol', 
-            {selection:fabCanvas.getActiveObject() || fabCanvas.getActiveGroup()}
-        );
-    });
-
-    bindActionToButton("#breakApartButton", function () {
-        var selectedObjectIDs = wickEditor.interfaces.fabric.getSelectedObjectIDs();
-        wickEditor.actionHandler.doAction('breakApartSymbol', {id:selectedObjectIDs[0]} );
-    });
-
-    bindActionToButton("#finishEditingObjectButton", function () {
-        wickEditor.actionHandler.doAction('finishEditingCurrentObject', {});
-    });
-
-    bindActionToButton("#downloadButton", function () {
-        var fileData = wickEditor.interfaces['fabric'].getSelectedWickObject().exportAsFile();
-        var blob = new Blob([fileData], {type: "text/plain;charset=utf-8"});
-        saveAs(blob, "wickobject.json");
-    });
 
     bindActionToButton("#addFrameButton", function () {
         wickEditor.actionHandler.doAction('addNewFrame');

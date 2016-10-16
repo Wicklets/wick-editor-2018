@@ -72,30 +72,6 @@ var SettingsInterface = function (wickEditor) {
         wickEditor.syncInterfaces();
     };
 
-// New project button
-
-    document.getElementById('newProjectButton').onclick = function (e) {
-        if(!confirm("Create a new project? All unsaved changes to the current project will be lost!")) {
-            return;
-        }
-        wickEditor.project = new WickProject();
-        localStorage.removeItem("wickProject");
-        wickEditor.syncInterfaces();
-    }
-
-// Advanced options buttons
-
-    document.getElementById('exportProjectAsJSONButton').onclick = function (e) {
-        wickEditor.project.getAsJSON(function(JSONProject) {
-            var blob = new Blob([JSONProject], {type: "text/plain;charset=utf-8"});
-            saveAs(blob, "project.json");
-        });
-    }
-
-    document.getElementById('saveProjectToLocalStorageButton').onclick = function (e) {
-        wickEditor.project.saveInLocalStorage();
-    }
-
 // Close button
 
     document.getElementById('closeSettingsWindowButton').onclick = function (e) {

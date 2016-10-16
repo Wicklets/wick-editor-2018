@@ -17,14 +17,12 @@ var WickEditor = function () {
     
     this.interfaces = {
         "builtinplayer" : new BuiltinPlayerInterface(this),
-        "tooltips" : new TooltipsInterface(this),
         "rightclickmenu" : new RightClickMenuInterface(this),
         "splashscreen" : new SplashScreenInterface(this),
         "scriptingide" : new ScriptingIDEInterface(this),
         "timeline" : new TimelineInterface(this),
         "toolbar" : new ToolbarInterface(this),
         "toolOptions" : new ToolOptionsInterface(this),
-        "menubar" : new MenuBarInterface(this),
         "properties" : new PropertiesInterface(this),
         "settings" : new SettingsInterface(this),
         "fabric" : new FabricInterface(this),
@@ -42,7 +40,14 @@ var WickEditor = function () {
         "pan" : new PanTool(this)
     }
 
-    this.interfaces.toolbar.loadTools();
+    this.changeTool = function (newTool) {
+        that.lastTool = that.currentTool;
+        that.currentTool = newTool;
+        that.interfaces.fabric.forceModifySelectedObjects();
+        that.interfaces.fabric.deselectAll();
+        that.syncInterfaces();
+    }
+
     this.currentTool = this.tools['cursor'];
     this.lastTool = this.currentTool;
 
