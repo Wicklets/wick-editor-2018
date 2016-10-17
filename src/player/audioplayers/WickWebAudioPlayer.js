@@ -18,7 +18,10 @@ var WickWebAudioPlayer = function (project) {
                 }
                 wickObj.audioBuffer = buffer
                 wickObj.playSound = function () {
-                    that.playSound(wickObj.audioBuffer, wickObj.loopSound);
+                    that.playSound(wickObj.id, wickObj.audioBuffer, wickObj.loopSound);
+                }
+                wickObj.stopSound = function () {
+                    that.stopSound(wickObj.id, wickObj.audioBuffer, wickObj.loopSound);
                 }
             }, function (error) {
                 console.error("failed to decode:", error);
@@ -63,26 +66,32 @@ var WickWebAudioPlayer = function (project) {
         
     }
 
-    this.playSound = function (buffer, loop) {
+    var allPlayingSounds = [];
+
+    this.playSound = function (wickObjID, buffer, loop) {
         if(!project.muted) {
             var source = audioContext.createBufferSource();
             source.buffer = buffer;
             source.connect(audioContext.destination);
             source.loop = loop;
             source.start(0);
-            setTimeout(function () {
-                source.stop();
-            }, 1000)
+            allPlayingSounds.push({source:source, id:wickObjID});
             console.log("started...");
         }
     }
 
-    this.stopSound = function () {
-
+    this.stopSound = function (wickObjID) {
+        allPlayingSounds.forEach(function (sound) {
+            if(sound.id === wickObjID) {
+                sound.source.stop();
+            }
+        })
     }
 
     this.stopAllSounds = function () {
-
+        allPlayingSounds.forEach(function (sound) {
+            sound.source.stop();
+        })
     }
 
     this.cleanup = function() {

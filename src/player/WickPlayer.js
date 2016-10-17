@@ -50,6 +50,14 @@ var WickPlayer = (function () {
         return clone;
     }
 
+    wickPlayer.getAudioPlayer = function () {
+        return audioPlayer;
+    }
+
+    wickPlayer.getRenderer = function () {
+        return renderer;
+    }
+
 /*****************************
     Player Setup
 *****************************/

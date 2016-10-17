@@ -1122,6 +1122,9 @@ WickObject.prototype.runScript = function (scriptType) {
     var gotoNextFrame = function ()      { that.parentObject.gotoNextFrame(); }
     var gotoPrevFrame = function ()      { that.parentObject.gotoPrevFrame(); }
 
+    // stop all sounds wrapper
+    var stopAllSounds = function () { WickPlayer.getAudioPlayer().stopAllSounds(); };
+
     // Clone wrapper
     this.clone = function () { return WickPlayer.cloneObject(this); };
 
@@ -1148,14 +1151,16 @@ WickObject.prototype.runScript = function (scriptType) {
             if(!wickEditor.interfaces.builtinplayer.running) return;
 
             console.error("Exception thrown while running script of WickObject with ID " + this.id);
-            console.error(e)
+            console.error(e);
             var lineNumber = null;
-            e.stack.split('\n').forEach(function (line) {
-                if(lineNumber) return;
-                if(!line.includes("<anonymous>:")) return;
+            if(e.stack) {
+                e.stack.split('\n').forEach(function (line) {
+                    if(lineNumber) return;
+                    if(!line.includes("<anonymous>:")) return;
 
-                lineNumber = parseInt(line.split("<anonymous>:")[1].split(":")[0]);
-            });
+                    lineNumber = parseInt(line.split("<anonymous>:")[1].split(":")[0]);
+                });
+            }
 
             //console.log(e.stack.split("\n")[1].split('<anonymous>:')[1].split(":")[0]);
             //console.log(e.stack.split("\n"))
