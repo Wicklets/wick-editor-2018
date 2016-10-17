@@ -16,12 +16,12 @@ var ScriptingIDEInterface = function (wickEditor) {
 
     var erroneousLine;
     function unhighlightError(){
-      that.aceEditor.getSession().removeMarker(erroneousLine);
+        that.aceEditor.getSession().removeMarker(erroneousLine);
     }
     function highlightError(lineNumber) {
-      unhighlightError();
-      var Range = ace.require("ace/range").Range
-      erroneousLine = that.aceEditor.session.addMarker(new Range(lineNumber, 0, lineNumber, 144), "errorHighlight", "fullLine");
+        unhighlightError();
+        var Range = ace.require("ace/range").Range
+        erroneousLine = that.aceEditor.session.addMarker(new Range(lineNumber, 0, lineNumber, 144), "errorHighlight", "fullLine");
     }
 
     this.syncWithEditorState = function () {

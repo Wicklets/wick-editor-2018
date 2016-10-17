@@ -25,7 +25,7 @@ var PaintbrushTool = function (wickEditor) {
 
     this.brushSize = 5;
     this.brushSmoothing = 10.0;
-    this.color = "#B00600";
+    this.color = "#000000";
 
 // Path vectorization
 

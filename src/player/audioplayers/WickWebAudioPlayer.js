@@ -70,8 +70,19 @@ var WickWebAudioPlayer = function (project) {
             source.connect(audioContext.destination);
             source.loop = loop;
             source.start(0);
+            setTimeout(function () {
+                source.stop();
+            }, 1000)
             console.log("started...");
         }
+    }
+
+    this.stopSound = function () {
+
+    }
+
+    this.stopAllSounds = function () {
+
     }
 
     this.cleanup = function() {

@@ -12,6 +12,10 @@ var ToolOptionsInterface = function (wickEditor) {
 
         if(lineColorEl.jscolor) {
             lineColorEl.jscolor.fromString(wickEditor.tools['paintbrush'].color);
+        } else {
+            setTimeout(function () {
+                lineColorEl.jscolor.fromString(wickEditor.tools['paintbrush'].color);
+            })
         }
 
         /*if(wickEditor.currentTool instanceof PaintbrushTool) {

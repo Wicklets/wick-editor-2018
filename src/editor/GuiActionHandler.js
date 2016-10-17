@@ -19,6 +19,12 @@ var GuiActionHandler = function (wickEditor) {
     /* Initialize list of GuiActions. */
     var guiActions = [];
 
+    var activeElemIsTextBox = function () {
+        var activeElem = document.activeElement.nodeName;
+        editingTextBox = activeElem == 'TEXTAREA' || activeElem == 'INPUT';
+        return editingTextBox;
+    }
+
     /* GuiAction definition. All possible actions performable through interacting 
     with the Wick Editor GUI are expected to be well defined by this structure .*/
     var GuiAction = function (hotkeys, elementIds, requiredParams, action) {
@@ -55,6 +61,7 @@ var GuiActionHandler = function (wickEditor) {
         /* Check for DOMEvent in requiredParam */
         if(requiredParams.DOMEvent) {
             document.addEventListener(requiredParams.DOMEvent, function(event) {
+                if(activeElemIsTextBox()) return;
                 wickEditor.interfaces.rightclickmenu.open = false;
                 console.log(event)
                 that.doAction({e:event});
@@ -77,9 +84,7 @@ var GuiActionHandler = function (wickEditor) {
 
     var handleKeyEvent = function (event, eventType) {
         
-        var activeElem = document.activeElement.nodeName;
-        editingTextBox = activeElem == 'TEXTAREA' || activeElem == 'INPUT';
-        if (editingTextBox) return;
+        if(activeElemIsTextBox()) return;
 
         var keyChar = codeToKeyChar[event.keyCode];
         var keyDownEvent = eventType === 'keydown';
@@ -477,6 +482,7 @@ var GuiActionHandler = function (wickEditor) {
         }
         wickEditor.project = new WickProject();
         localStorage.removeItem("wickProject");
+        wickEditor.interfaces.fabric.recenterCanvas();
         wickEditor.syncInterfaces();
     });
 
@@ -573,7 +579,7 @@ var GuiActionHandler = function (wickEditor) {
 
     new GuiAction(
         [], 
-        ['editScriptsButton'], 
+        ['editScriptsButton', 'editSymbolScriptsButton'], 
         {}, 
         function(args) {
             wickEditor.interfaces['scriptingide'].open = true;
@@ -606,7 +612,7 @@ var GuiActionHandler = function (wickEditor) {
 
     new GuiAction(
         [], 
-        ['editObjectButton'], 
+        ['editObjectButton', 'editSymbolButton'], 
         {}, 
         function(args) {
             var selectedObject = wickEditor.interfaces['fabric'].getSelectedWickObject();
@@ -615,7 +621,7 @@ var GuiActionHandler = function (wickEditor) {
 
     new GuiAction(
         [], 
-        ['convertToSymbolButton'], 
+        ['convertToSymbolButton', 'createSymbolButton'], 
         {}, 
         function(args) {
             wickEditor.interfaces.scriptingide.open = true;

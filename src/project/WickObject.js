@@ -101,8 +101,8 @@ WickObject.fromImage = function (imgSrc, callback) {
 
         var obj = new WickObject();
 
-        obj.width = fileImage.width / window.devicePixelRatio;
-        obj.height = fileImage.height / window.devicePixelRatio;
+        obj.width = fileImage.width;
+        obj.height = fileImage.height;
         obj.imageData = fileImage.src;
 
         callback(obj);
@@ -481,9 +481,11 @@ WickObject.prototype.getObjectsOnFirstFrame = function () {
 
     var objectsOnFirstFrame = [];
 
-    for(var o = 0; o < this.layers[this.currentLayer].frames[0].wickObjects.length; o++) {
-        objectsOnFirstFrame.push(this.layers[this.currentLayer].frames[0].wickObjects[o]);
-    }
+    this.layers.forEach(function (layer) {
+        layer.frames[0].wickObjects.forEach(function (wickObj) {
+            objectsOnFirstFrame.push(wickObj);
+        });
+    });
 
     return objectsOnFirstFrame;
 
@@ -1003,14 +1005,6 @@ WickObject.prototype.isClickable = function () {
         }
     });
 
-    if(!isClickable) {
-        this.getAllActiveChildObjects().forEach(function (child) {
-            if(child.isClickable) {
-                isClickable = true;
-            }
-        });
-    }
-
     return isClickable;
 }
 
@@ -1153,8 +1147,8 @@ WickObject.prototype.runScript = function (scriptType) {
         if (window.wickEditor) {
             if(!wickEditor.interfaces.builtinplayer.running) return;
 
-            console.log("Exeption thrown while running script of WickObject with ID " + this.id);
-            console.log(e)
+            console.error("Exception thrown while running script of WickObject with ID " + this.id);
+            console.error(e)
             var lineNumber = null;
             e.stack.split('\n').forEach(function (line) {
                 if(lineNumber) return;
@@ -1236,8 +1230,7 @@ WickObject.prototype.gotoFrame = function (frame) {
         if(frame < this.getCurrentLayer().frames.length) {
             this.playheadPosition = frame;
         } else {
-            throw (new Error());
-            //throw "Failed to navigate to frame \'" + frame + "\': is not a valid frame.";
+            throw (new Error("Failed to navigate to frame \'" + frame + "\': is not a valid frame."));
         }
 
     } else if (CheckInput.isString(frame)) {
