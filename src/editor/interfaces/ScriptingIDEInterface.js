@@ -30,7 +30,7 @@ var ScriptingIDEInterface = function (wickEditor) {
 
             var selectedObj = wickEditor.interfaces['fabric'].getSelectedWickObject();
 
-            if(!selectedObj) {
+            if(!selectedObj || !selectedObj.isSymbol) {
                 that.clearError();
                 $("#noSelectionDiv").css('display', 'block');
                 $("#scriptObjectDiv").css('display', 'none');
