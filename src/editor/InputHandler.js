@@ -73,6 +73,7 @@ var InputHandler = function (wickEditor) {
                 var fromContstructors = {
                     'image/png'  : WickObject.fromImage,
                     'image/jpeg' : WickObject.fromImage,
+                    'application/jpg' : WickObject.fromImage,
                     'image/bmp'  : WickObject.fromImage,
                     'image/gif'  : WickObject.fromAnimatedGIF,
                     'audio/mp3'  : WickObject.fromAudioFile,

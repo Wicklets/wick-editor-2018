@@ -1,12 +1,15 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-var audioContext;
+var audioContext = null;
     var readyToStartWebAudioContext;
 
 var WickWebAudioPlayer = function (project) {
     var that = this; 
 
     this.loadAudio = function(wickObj) {
+
+        if(!audioContext) return;
+
         if(wickObj.audioData) {
             var rawData = wickObj.audioData.split(",")[1]; // cut off extra filetype/etc data
             var rawBuffer = Base64ArrayBuffer.decode(rawData);
@@ -42,12 +45,13 @@ var WickWebAudioPlayer = function (project) {
         var AudioContext = window.AudioContext // Default
                         || window.webkitAudioContext // Safari and old versions of Chrome
                         || false;
-        audioContext = new AudioContext();
 
-        if(!audioContext) {
-            alert("WebAudio not supported! Sounds will not play.");
+        if(!AudioContext) {
+            console.log("WebAudio not supported! Sounds will not play.");
             return;
         }
+
+        audioContext = new AudioContext();
 
         // Setup dummy node and discard it to get webaudio context running
         if(audioContext.createGainNode) {
@@ -65,12 +69,14 @@ var WickWebAudioPlayer = function (project) {
     }
 
     this.update = function() {
-        
+        if(!audioContext) return
     }
 
     var allPlayingSounds = [];
 
     this.playSound = function (wickObjID, buffer, loop, volume) {
+        if(!audioContext) return;
+
         if(!project.muted) {
             var gainNode = audioContext.createGain();
             var source = audioContext.createBufferSource();
@@ -101,6 +107,8 @@ var WickWebAudioPlayer = function (project) {
     }
 
     this.cleanup = function() {
+        if(!audioContext) return
+
         audioContext.close();
     }
 
