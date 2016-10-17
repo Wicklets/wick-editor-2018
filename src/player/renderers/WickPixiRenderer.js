@@ -39,7 +39,6 @@ var WickPixiRenderer = function (project) {
             } else if (subObj.imageData || subObj.svgCacheImageData) {
                 subObj.pixiSprite = PIXI.Sprite.fromImage(subObj.imageData || subObj.svgCacheImageData);
                 wickObj.pixiContainer.addChild(subObj.pixiSprite);
-                console.log(subObj.pixiSprite)
             } else if (subObj.fontData) {
                 var style = {
                     font : "normal " + subObj.fontData.fontSize + "px " + subObj.fontData.fontFamily,

@@ -846,7 +846,8 @@ WickObject.prototype.generateSVGCacheImages = function (callback) {
             svgFabricObject.scaleY /= window.devicePixelRatio;
             svgFabricObject.setCoords();
             svgFabricObject.cloneAsImage(function(clone) {
-                var imgSrc = clone._element.currentSrc || clone._element.src;
+                var element = clone.getElement();
+                var imgSrc = element.src;
                 that.svgCacheImageData = imgSrc;
                 callback();
             }, {enableRetinaScaling:false});
