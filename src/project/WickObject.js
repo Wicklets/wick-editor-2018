@@ -1451,3 +1451,132 @@ WickObject.prototype.copy = function () {
     return copiedObject;
 
 }
+
+/*****************************
+ *      Object Movement      *
+ *****************************/
+
+WickObject.prototype.moveUp = function(delta) {
+    if (delta === undefined) {
+        delta = 1; 
+    }
+
+    if (typeof delta != "number") {
+        WickError.error("Invalid Input: moveUp() can only take numbers!");
+    }
+
+    this.y -= delta; 
+}
+
+WickObject.prototype.moveDown = function(delta) {
+    if (delta === undefined) {
+        delta = 1; 
+    }
+
+    if (typeof delta != "number") {
+        WickError.error("Invalid Input: moveDown() can only take numbers!");
+    }
+
+    this.y += delta; 
+}
+
+WickObject.prototype.moveLeft = function(delta) {
+    if (delta === undefined) {
+        delta = 1; 
+    }
+
+    if (typeof delta != "number") {
+        WickError.error("Invalid Input: moveLeft() can only take numbers!");
+    }
+
+    this.x -= delta; 
+}
+
+WickObject.prototype.moveRight = function(delta) {
+    if (delta === undefined) {
+        delta = 1; 
+    }
+
+    if (typeof delta != "number") {
+        WickError.error("Invalid Input: moveRight() can only take numbers!");
+    }
+
+    this.x += delta;
+}
+
+WickObject.prototype.rotateCW = function(theta) {
+    if (theta === undefined) {
+        theta = 1;
+    }
+
+    if (typeof theta != "number") {
+        WickError.error("Invalid Input: rotateCW() can only take numbers!");
+    }
+
+    this.angle += theta; 
+}
+
+WickObject.prototype.rotateCCW = function(theta) {
+    if (theta === undefined) {
+        theta = 1;
+    }
+
+    if (typeof theta != "number") {
+        WickError.error("Invalid Input: rotateCCW() can only take numbers!");
+    }
+
+    this.angle -= theta; 
+}
+
+WickObject.prototype.scale = function(scaleFactor) {
+    if (scaleFactor === undefined) {
+        scaleFactor = 1; 
+    }
+
+    if (typeof scaleFactor != "number") {
+        WickError.error("Invalid Input: scale() can only take numbers!");
+    }
+
+    this.scaleX = scaleFactor; 
+    this.scaleY = scaleFactor; 
+}
+
+WickObject.prototype.scaleWidth = function(scaleFactor) {
+    if (scaleFactor === undefined) {
+        scaleFactor = 1; 
+    }
+
+    if (typeof scaleFactor != "number") {
+        WickError.error("Invalid Input: scaleWidth() can only take numbers!");
+    }
+
+    this.scaleX = scaleFactor; 
+}
+
+WickObject.prototype.scaleHeight = function(scaleFactor) {
+    if (scaleFactor === undefined) {
+        scaleFactor = 1; 
+    }
+
+    if (typeof scaleFactor != "number") {
+        WickError.error("Invalid Input: scaleHeight() can only take numbers!");
+    }
+
+    this.scaleY = scaleFactor; 
+}
+
+WickObject.prototype.flipHorizontal = function() {
+    this.flipX = !this.flipX; 
+}
+
+WickObject.prototype.flipVertical = function() {
+    this.flipY = !this.flipY; 
+}
+
+WickObject.prototype.setOpacity = function(opacityVal) {
+    if (typeof opacityVal != "number") {
+        WickError.error("Invalid Input: setOpacity() can only take numbers!");
+    }
+
+    this.opacity = Math.min(Math.max(opacityVal, 0), 1);
+}
