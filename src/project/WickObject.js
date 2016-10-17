@@ -678,10 +678,6 @@ WickObject.prototype.isOnActiveLayer = function () {
 *************************/
 
 WickObject.prototype.getAsJSON = function () {
-    // Get rid of the ID because the JSON data of this object doesn't exist in the project.
-    var oldID = this.id;
-    this.id = undefined;
-
     // Encode scripts to avoid JSON format problems
     this.encodeStrings();
 
@@ -692,9 +688,6 @@ WickObject.prototype.getAsJSON = function () {
 
     // Decode scripts back to human-readble and eval()-able format
     this.decodeStrings();
-
-    // Put ID back on
-    this.id = oldID;
 
     return JSONWickObject;
 }
