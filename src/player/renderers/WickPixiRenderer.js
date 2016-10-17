@@ -170,8 +170,8 @@ var WickPixiRenderer = function (project) {
 	            wickObj.pixiContainer.rotation = wickObj.angle/360*2*3.14159;
 	            wickObj.pixiContainer.scale.x  = wickObj.scaleX;
 	            wickObj.pixiContainer.scale.y  = wickObj.scaleY;
-	            if(wickObj.flipX) { wickObj.pixiContainer.scale.x *= -1; wickObj.pixiContainer.position.x += wickObj.width }
-	            if(wickObj.flipY) { wickObj.pixiContainer.scale.y *= -1; wickObj.pixiContainer.position.y += wickObj.height }
+	            if(wickObj.flipX) { wickObj.pixiContainer.scale.x *= -1; wickObj.pixiContainer.position.x += wickObj.width*wickObj.scaleX }
+	            if(wickObj.flipY) { wickObj.pixiContainer.scale.y *= -1; wickObj.pixiContainer.position.y += wickObj.height*wickObj.scaleY }
 	            wickObj.pixiContainer.alpha    = wickObj.opacity;
 	        }
 	        wickObj.getAllActiveChildObjects().forEach(function(subObj) {
@@ -186,8 +186,10 @@ var WickPixiRenderer = function (project) {
 	            wickObj.pixiSprite.rotation = wickObj.angle/360*2*3.14159;
 	            wickObj.pixiSprite.scale.x  = wickObj.scaleX// / window.devicePixelRatio;
 	            wickObj.pixiSprite.scale.y  = wickObj.scaleY// / window.devicePixelRatio;
-	            if(wickObj.flipX) wickObj.pixiSprite.scale.x *= -1;
-	            if(wickObj.flipY) wickObj.pixiSprite.scale.y *= -1;
+	            //if(wickObj.flipX) wickObj.pixiSprite.scale.x *= -1;
+	            //if(wickObj.flipY) wickObj.pixiSprite.scale.y *= -1;
+	            if(wickObj.flipX) { wickObj.pixiSprite.scale.x *= -1; wickObj.pixiSprite.position.x += wickObj.width*wickObj.scaleX }
+	            if(wickObj.flipY) { wickObj.pixiSprite.scale.y *= -1; wickObj.pixiSprite.position.y += wickObj.height*wickObj.scaleY }
 	            wickObj.pixiSprite.alpha    = wickObj.opacity;
 	        } else if(wickObj.pixiText) {
 	            wickObj.pixiText.visible = true;
