@@ -156,6 +156,7 @@ var WickPlayer = (function () {
 
         // Make sure we are always in the root (the player never 'goes inside' objects like the editor does.)
         project.currentObjectID = project.rootObject.id;
+        project.rootObject.currentLayer = 0;
 
         console.log("Player loading project:")
         console.log(project);
