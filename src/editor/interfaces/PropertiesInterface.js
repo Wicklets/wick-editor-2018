@@ -21,11 +21,11 @@ var PropertiesInterface = function (wickEditor) {
             }
             
             // Set object properties GUI position/rotation
-            document.getElementById('objectPositionX').value = selectedObj.x;
-            document.getElementById('objectPositionY').value = selectedObj.y;
-            document.getElementById('objectWidth').value = selectedObj.width * selectedObj.scaleX;
-            document.getElementById('objectHeight').value = selectedObj.height * selectedObj.scaleY;
-            document.getElementById('objectRotation').value = selectedObj.angle;
+            document.getElementById('objectPositionX').value = Math.round(selectedObj.x);
+            document.getElementById('objectPositionY').value = Math.round(selectedObj.y);
+            document.getElementById('objectWidth')    .value = Math.round(selectedObj.width * selectedObj.scaleX);
+            document.getElementById('objectHeight')   .value = Math.round(selectedObj.height * selectedObj.scaleY);
+            document.getElementById('objectRotation') .value = Math.round(selectedObj.angle);
 
             if(selectedObj.fontData) {
                 $("#textProperties").css('display', 'inline');

@@ -391,6 +391,20 @@ var GuiActionHandler = function (wickEditor) {
             });
         });
 
+    // Delete
+    // Delete Selected Objects
+    new GuiAction(
+        ['Delete'], 
+        ['deleteButton'], 
+        {}, 
+        function(args) {
+            event.preventDefault();
+            wickEditor.actionHandler.doAction('deleteObjects', { 
+                ids:wickEditor.interfaces['fabric'].getSelectedObjectIDs() 
+            });
+        });
+
+
     new GuiAction([], [], { DOMEvent: 'copy' }, function(args) {
         that.keys = [];
 
