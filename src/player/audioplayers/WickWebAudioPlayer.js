@@ -17,11 +17,13 @@ var WickWebAudioPlayer = function (project) {
                     return;
                 }
                 wickObj.audioBuffer = buffer
-                wickObj.playSound = function () {
-                    that.playSound(wickObj.id, wickObj.audioBuffer, wickObj.loopSound);
+                wickObj.playSound = function (volume) {
+                    var actualVolume = volume;
+                    if(!volume) actualVolume = 1.0;
+                    that.playSound(wickObj.id, wickObj.audioBuffer, wickObj.loopSound, actualVolume);
                 }
                 wickObj.stopSound = function () {
-                    that.stopSound(wickObj.id, wickObj.audioBuffer, wickObj.loopSound);
+                    that.stopSound(wickObj.id);
                 }
             }, function (error) {
                 console.error("failed to decode:", error);
@@ -68,11 +70,15 @@ var WickWebAudioPlayer = function (project) {
 
     var allPlayingSounds = [];
 
-    this.playSound = function (wickObjID, buffer, loop) {
+    this.playSound = function (wickObjID, buffer, loop, volume) {
         if(!project.muted) {
+            var gainNode = audioContext.createGain();
             var source = audioContext.createBufferSource();
             source.buffer = buffer;
             source.connect(audioContext.destination);
+            source.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            gainNode.gain.value = volume;
             source.loop = loop;
             source.start(0);
             allPlayingSounds.push({source:source, id:wickObjID});
@@ -85,13 +91,13 @@ var WickWebAudioPlayer = function (project) {
             if(sound.id === wickObjID) {
                 sound.source.stop();
             }
-        })
+        });
     }
 
     this.stopAllSounds = function () {
         allPlayingSounds.forEach(function (sound) {
             sound.source.stop();
-        })
+        });
     }
 
     this.cleanup = function() {
