@@ -24,7 +24,6 @@ var PaintbrushTool = function (wickEditor) {
     };
 
     this.brushSize = 5;
-    this.brushSmoothing = 10.0;
     this.color = "#000000";
 
 // Path vectorization
@@ -93,7 +92,7 @@ var PaintbrushTool = function (wickEditor) {
         Potrace.loadImageFromDataURL(dummyCanvas.toDataURL());
         Potrace.setParameter({
             optcurve: true, 
-            alphamax: that.brushSmoothing/10
+            alphamax: 1.0
         });
         Potrace.process(function(){
             var SVGData = {

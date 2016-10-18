@@ -8,7 +8,6 @@ var ToolOptionsInterface = function (wickEditor) {
 
     this.syncWithEditorState = function () {
         lineWidthEl.value = wickEditor.tools['paintbrush'].brushSize;
-        lineSmoothnessEl.value = wickEditor.tools['paintbrush'].brushSmoothing;
 
         if(lineColorEl.jscolor) {
             lineColorEl.jscolor.fromString(wickEditor.tools['paintbrush'].color);
@@ -28,11 +27,6 @@ var ToolOptionsInterface = function (wickEditor) {
     
     lineWidthEl.onchange = function() {
         wickEditor.tools['paintbrush'].brushSize = parseInt(this.value, 10) || 2;
-        wickEditor.syncInterfaces();
-    };
-
-    lineSmoothnessEl.onchange = function() {
-        wickEditor.tools['paintbrush'].brushSmoothing = this.value;
         wickEditor.syncInterfaces();
     };
 

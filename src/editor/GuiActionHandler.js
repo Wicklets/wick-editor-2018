@@ -474,6 +474,12 @@ var GuiActionHandler = function (wickEditor) {
 
             if(fileType === 'text/wickobjectsjson') {
                 var fileWickObject = WickObject.fromJSONArray(JSON.parse(file), function(objs) {
+                    objs.forEach(function (obj) {
+                        obj.id=null;
+                        obj.getAllChildObjectsRecursive().forEach(function (child) {
+                            child.id = null;
+                        });
+                    })
                     wickEditor.actionHandler.doAction('addObjects', {wickObjects:objs});
                 });
             } else if (fileType === 'text/plain') {

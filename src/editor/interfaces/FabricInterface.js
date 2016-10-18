@@ -309,6 +309,7 @@ var FabricInterface = function (wickEditor) {
                     that.canvas.remove(fabricObj);
                 } else {
                     fabricObj.remove();
+                    that.repositionGUIElements()
                 }
             }
         });
