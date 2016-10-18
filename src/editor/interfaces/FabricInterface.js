@@ -309,7 +309,6 @@ var FabricInterface = function (wickEditor) {
                     that.canvas.remove(fabricObj);
                 } else {
                     fabricObj.remove();
-                    that.repositionGUIElements()
                 }
             }
         });
@@ -755,6 +754,9 @@ var FabricInterface = function (wickEditor) {
     that.canvas.on('selection:cleared', function (e) {
         wickEditor.interfaces['scriptingide'].syncWithEditorState();
         wickEditor.interfaces['properties'].syncWithEditorState();
+    });
+    that.canvas.on('selection:changed', function (e) {
+        that.repositionGUIElements();
     });
 
     this.getObjectByWickObjectID = function (wickObjID) {

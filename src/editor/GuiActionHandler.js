@@ -474,6 +474,7 @@ var GuiActionHandler = function (wickEditor) {
 
             if(fileType === 'text/wickobjectsjson') {
                 var fileWickObject = WickObject.fromJSONArray(JSON.parse(file), function(objs) {
+                    // get rid of IDs (IDs from same/other projects might cause collisions)
                     objs.forEach(function (obj) {
                         obj.id=null;
                         obj.getAllChildObjectsRecursive().forEach(function (child) {
