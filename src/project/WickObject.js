@@ -644,12 +644,6 @@ WickObject.prototype.getBoundingBoxPoints = function () {
 
     var origin = {x:points.topLeftPoint.x, y:points.topLeftPoint.y};
 
-    console.log(points.topLeftPoint)
-    console.log(points.topRightPoint)
-    console.log(points.bottomRightPoint)
-    console.log(points.bottomLeftPoint)
-    console.log("~~")
-
     points.topLeftPoint     = rotate(origin, points.topLeftPoint, -this.angle);
     points.topRightPoint    = rotate(origin, points.topRightPoint, -this.angle);
     points.bottomRightPoint = rotate(origin, points.bottomRightPoint, -this.angle);
@@ -676,10 +670,6 @@ WickObject.prototype.getBoundingBoxCorner = function () {
         boundingBoxPoints.bottomRightPoint.y
     ].sort(function (a, b) { return a-b; });
 
-    console.log(boundingBoxPoints)
-    console.log(allPointsX)
-    console.log(allPointsY)
-
     return {x:allPointsX[0],y:allPointsY[0]};
 
 }
@@ -700,9 +690,6 @@ WickObject.prototype.getSymbolBoundingBoxCorner = function () {
 
     allBoundingBoxCornersX.sort(function (a, b) { return a-b; });
     allBoundingBoxCornersY.sort(function (a, b) { return a-b; });
-
-    console.log(allBoundingBoxCornersX[0])
-    console.log(allBoundingBoxCornersY[0])
 
     return {x:allBoundingBoxCornersX[0], y:allBoundingBoxCornersY[0]};
 

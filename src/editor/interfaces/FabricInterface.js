@@ -449,7 +449,6 @@ var FabricInterface = function (wickEditor) {
 
         if(wickObj.isSymbol) {
             var cornerPosition = wickObj.getSymbolBoundingBoxCorner();
-            console.log(cornerPosition)
             fabricObj.left += cornerPosition.x;
             fabricObj.top += cornerPosition.y;
         }
@@ -479,13 +478,14 @@ var FabricInterface = function (wickEditor) {
     this.createFabricObjectFromWickObject = function (wickObj, callback) {
 
         if(wickObj.cachedFabricObject) {
-            //callback(wickObj.cachedFabricObject);
-            //return;
+            callback(wickObj.cachedFabricObject);
+            return;
         }
 
         if(wickObj.imageData) {
             fabric.Image.fromURL(wickObj.imageData, function(newFabricImage) {
                 that.syncObjects(wickObj, newFabricImage);
+                wickObj.cachedFabricObject = newFabricImage;
                 callback(newFabricImage);
             });
         }
