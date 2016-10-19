@@ -446,7 +446,7 @@ var FabricInterface = function (wickEditor) {
         fabricObj.flipX   = wickObj.flipX;
         fabricObj.flipY   = wickObj.flipY;
         fabricObj.opacity = wickObj.opacity;
-
+        
         if(wickObj.isSymbol) {
             var cornerPosition = wickObj.getSymbolBoundingBoxCorner();
             fabricObj.left += cornerPosition.x;
@@ -478,6 +478,7 @@ var FabricInterface = function (wickEditor) {
     this.createFabricObjectFromWickObject = function (wickObj, callback) {
 
         if(wickObj.cachedFabricObject) {
+            that.syncObjects(wickObj, wickObj.cachedFabricObject);
             callback(wickObj.cachedFabricObject);
             return;
         }
