@@ -423,6 +423,24 @@ WickObject.prototype.getAllActiveChildObjects = function () {
     return children; 
 }
 
+/* Return all child objects in the parent objects current layer. */
+WickObject.prototype.getAllActiveLayerChildObjects = function () {
+
+    if (!this.isSymbol) {
+        return []; 
+    }
+
+    var children = [];
+    var layer = this.getCurrentLayer();
+    var frame = this.getFrameAtPlayheadPosition(this.playheadPosition, layer);
+    if(frame) {
+        frame.wickObjects.forEach(function (obj) {
+            children.push(obj);
+        });
+    }
+    return children; 
+}
+
 // Use this to render unselectable objects in Fabric
 WickObject.prototype.getAllInactiveSiblings = function () {
 
@@ -605,6 +623,91 @@ WickObject.prototype.getLargestID = function (id) {
      Positioning stuff
 *************************/
 
+/*  */
+WickObject.prototype.getBoundingBoxPoints = function () {
+    // http://stackoverflow.com/questions/17410809/how-to-calculate-rotation-in-2d-in-javascript
+    function rotate(centerPoint, pointToRotate, angle) {
+        var radians = (Math.PI / 180) * angle,
+            cos = Math.cos(radians),
+            sin = Math.sin(radians),
+            nx = (cos * (pointToRotate.x - centerPoint.x)) + (sin * (pointToRotate.y - centerPoint.y)) + centerPoint.x,
+            ny = (cos * (pointToRotate.y - centerPoint.y)) - (sin * (pointToRotate.x - centerPoint.x)) + centerPoint.y;
+        return {x:nx, y:ny};
+    }
+
+    var points = {
+        topLeftPoint     : { x : this.x,              y : this.y               },
+        topRightPoint    : { x : this.x + this.width, y : this.y               },
+        bottomLeftPoint  : { x : this.x,              y : this.y + this.height },
+        bottomRightPoint : { x : this.x + this.width, y : this.y + this.height },
+    };
+
+    var origin = {x:points.topLeftPoint.x, y:points.topLeftPoint.y};
+
+    console.log(points.topLeftPoint)
+    console.log(points.topRightPoint)
+    console.log(points.bottomRightPoint)
+    console.log(points.bottomLeftPoint)
+    console.log("~~")
+
+    points.topLeftPoint     = rotate(origin, points.topLeftPoint, -this.angle);
+    points.topRightPoint    = rotate(origin, points.topRightPoint, -this.angle);
+    points.bottomRightPoint = rotate(origin, points.bottomRightPoint, -this.angle);
+    points.bottomLeftPoint  = rotate(origin, points.bottomLeftPoint, -this.angle);
+
+    return points;
+
+}
+
+/*  */
+WickObject.prototype.getBoundingBoxCorner = function () {
+    
+    var boundingBoxPoints = this.getBoundingBoxPoints();
+    var allPointsX = [
+        boundingBoxPoints.topLeftPoint.x,
+        boundingBoxPoints.topRightPoint.x,
+        boundingBoxPoints.bottomLeftPoint.x,
+        boundingBoxPoints.bottomRightPoint.x
+    ].sort(function (a, b) { return a-b; });
+    var allPointsY = [
+        boundingBoxPoints.topLeftPoint.y,
+        boundingBoxPoints.topRightPoint.y,
+        boundingBoxPoints.bottomLeftPoint.y,
+        boundingBoxPoints.bottomRightPoint.y
+    ].sort(function (a, b) { return a-b; });
+
+    console.log(boundingBoxPoints)
+    console.log(allPointsX)
+    console.log(allPointsY)
+
+    return {x:allPointsX[0],y:allPointsY[0]};
+
+}
+
+/*  */
+WickObject.prototype.getSymbolBoundingBoxCorner = function () {
+
+    if(!this.isSymbol) return this.getBoundingBoxCorner();
+
+    var allBoundingBoxCornersX = [];
+    var allBoundingBoxCornersY = [];
+
+    this.getObjectsOnFirstFrame().forEach(function (child) {
+        var bboxCorner = child.getSymbolBoundingBoxCorner();
+        allBoundingBoxCornersX.push(bboxCorner.x);
+        allBoundingBoxCornersY.push(bboxCorner.y);
+    });
+
+    allBoundingBoxCornersX.sort(function (a, b) { return a-b; });
+    allBoundingBoxCornersY.sort(function (a, b) { return a-b; });
+
+    console.log(allBoundingBoxCornersX[0])
+    console.log(allBoundingBoxCornersY[0])
+
+    return {x:allBoundingBoxCornersX[0], y:allBoundingBoxCornersY[0]};
+
+}
+
 /* Used to properly position symbols in fabric */
 WickObject.prototype.getSymbolCornerPosition = function () {
 
@@ -678,6 +781,12 @@ WickObject.prototype.isOnActiveLayer = function () {
 *************************/
 
 WickObject.prototype.getAsJSON = function () {
+    var oldX = this.x;
+    var oldY = this.y;
+    var absPos = this.getAbsolutePosition();
+    this.x = absPos.x;
+    this.y = absPos.y;
+
     // Encode scripts to avoid JSON format problems
     this.encodeStrings();
 
@@ -688,6 +797,9 @@ WickObject.prototype.getAsJSON = function () {
 
     // Decode scripts back to human-readble and eval()-able format
     this.decodeStrings();
+
+    this.x = oldY;
+    this.x = oldX;
 
     return JSONWickObject;
 }
@@ -1062,7 +1174,7 @@ WickObject.prototype.isPointInside = function(point, parentScaleX, parentScaleY)
 WickObject.prototype.update = function () {
 
     if(this.onNewFrame) {
-        if(this.isSymbol && !this.getCurrentFrame().autoplay) {
+        if(this.isSymbol && this.getCurrentFrame() && !this.getCurrentFrame().autoplay) {
             this.isPlaying = false;
         }
 

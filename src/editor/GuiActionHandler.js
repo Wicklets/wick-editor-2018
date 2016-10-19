@@ -63,7 +63,6 @@ var GuiActionHandler = function (wickEditor) {
             document.addEventListener(requiredParams.DOMEvent, function(event) {
                 if(activeElemIsTextBox()) return;
                 wickEditor.interfaces.rightclickmenu.open = false;
-                console.log(event)
                 that.doAction({e:event});
             });
         }
@@ -223,12 +222,24 @@ var GuiActionHandler = function (wickEditor) {
     // Save Project
     new GuiAction(
         ['Modifier','S'], 
+        [], 
+        {}, 
+        function(args) {
+            event.preventDefault();
+            that.keys = [];
+            that.specialKeys = [];
+            wickEditor.project.saveInLocalStorage();
+        });
+
+    // Export Project
+    new GuiAction(
+        ['Modifier','Shift','S'], 
         ['exportHTMLButton'], 
         {}, 
         function(args) {
             event.preventDefault();
             that.keys = [];
-            wickEditor.project.saveInLocalStorage();
+            that.specialKeys = [];
             WickProjectExporter.exportProject(wickEditor.project);
         });
 
