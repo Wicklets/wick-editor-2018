@@ -59,9 +59,17 @@ var WickEditor = function () {
 
 }
 
-WickEditor.prototype.syncInterfaces = function () {
-    for (var key in this.interfaces) {
-        this.interfaces[key].syncWithEditorState();
+WickEditor.prototype.syncInterfaces = function (interfacesToSync) {
+    var that = this;
+
+    if(interfacesToSync) {
+        interfacesToSync.forEach(function (interfaceName) {
+            that.interfaces[interfaceName].syncWithEditorState();
+        });
+    } else {
+        for (var key in this.interfaces) {
+            this.interfaces[key].syncWithEditorState();
+        }
     }
 }
 

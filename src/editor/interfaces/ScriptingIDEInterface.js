@@ -151,4 +151,14 @@ var ScriptingIDEInterface = function (wickEditor) {
         }
     });
 
+    this.resize = function () {
+        var GUIWidth = parseInt($("#scriptingGUI").css("width"));
+        $("#scriptingGUI").css('left', (window.innerWidth/2 - GUIWidth/2)+'px');
+    }
+
+    window.addEventListener('resize', function(e) {
+        that.resize();
+    });
+    this.resize();
+
 }

@@ -82,8 +82,6 @@ var GuiActionHandler = function (wickEditor) {
     });
 
     var handleKeyEvent = function (event, eventType) {
-        
-        if(activeElemIsTextBox()) return;
 
         var keyChar = codeToKeyChar[event.keyCode];
         var keyDownEvent = eventType === 'keydown';
@@ -124,11 +122,14 @@ var GuiActionHandler = function (wickEditor) {
 
             var hotkeysMatch = cmpArrays(guiAction.hotkeys, stringkeys)
             var specialKeysMatch = cmpArrays(guiAction.specialKeys, stringspecialkeys);
-            if ( guiAction.hotkeys.length > 0 && hotkeysMatch && specialKeysMatch ) {
-                wickEditor.interfaces.rightclickmenu.open = false;
-                guiAction.doAction();
-                that.keys = [];
-            }
+
+            if(!hotkeysMatch || !specialKeysMatch) return;
+            if(guiAction.hotkeys.length === 0) return;
+            if(activeElemIsTextBox() && !guiAction.requiredParams.usableInTextBoxes) return;
+
+            wickEditor.interfaces.rightclickmenu.open = false;
+            guiAction.doAction();
+            that.keys = [];
         });
     };
 
@@ -206,6 +207,7 @@ var GuiActionHandler = function (wickEditor) {
             })
             wickEditor.interfaces.scriptingide.clearError();
             wickEditor.project.getAsJSON(function (JSONProject) {
+                WickProject.saveProjectJSONInLocalStorage(JSONProject);
                 wickEditor.interfaces.builtinplayer.runProject(JSONProject);
             })
         });
@@ -225,7 +227,7 @@ var GuiActionHandler = function (wickEditor) {
     new GuiAction(
         ['Modifier','S'], 
         [], 
-        {}, 
+        {usableInTextBoxes:true}, 
         function(args) {
             event.preventDefault();
             that.keys = [];
@@ -237,7 +239,7 @@ var GuiActionHandler = function (wickEditor) {
     new GuiAction(
         ['Modifier','Shift','S'], 
         ['exportHTMLButton'], 
-        {}, 
+        {usableInTextBoxes:true}, 
         function(args) {
             event.preventDefault();
             that.keys = [];

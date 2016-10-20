@@ -33,10 +33,10 @@ var WickObject = function () {
 
     // Dictionary mapping function names to WickScript object
     this.wickScripts = {
-        "onLoad" : "// Load\n// This script runs once when this object enters the scene.\n",
-        "onClick" : "// Click\n// This script runs when this object is clicked on.\n",
+        "onLoad" : "// Setup\n// This script runs once when this object enters the scene.\n",
+        "onClick" : "// On Click\n// This script runs when this object is clicked on.\n",
         "onUpdate": "// Update\n// This script runs repeatedly whenever this object is in the scene.\n",
-        "onKeyDown": "// Key Pressed\n// This script runs whenever a key is pressed.\n"
+        "onKeyDown": "// On Key Pressed\n// This script runs whenever a key is pressed.\n"
     };
 
 // Static
@@ -1142,8 +1142,8 @@ WickObject.prototype.isPointInside = function(point, parentScaleX, parentScaleY)
 
             if(!that.alphaMask) return true;
 
-            var objectRelativePointX = point.x - scaledObjX;
-            var objectRelativePointY = point.y - scaledObjY;
+            var objectRelativePointX = (point.x - scaledObjX);
+            var objectRelativePointY = (point.y - scaledObjY);
             var objectAlphaMaskIndex = (Math.floor(objectRelativePointX)%Math.floor(that.width))+(Math.floor(objectRelativePointY)*Math.floor(that.width));
             return !that.alphaMask[(objectAlphaMaskIndex)];
 

@@ -156,7 +156,7 @@ var FabricInterface = function (wickEditor) {
     });
 
 /********************************
-       Editor state syncing
+       
 ********************************/
 
     this.resize = function () {
@@ -178,6 +178,7 @@ var FabricInterface = function (wickEditor) {
         that.canvas.renderAll();
 
     }
+    window.addEventListener('resize', this.resize, false);
 
     this.recenterCanvas = function () {
         var centerX = Math.floor(-(window.innerWidth -wickEditor.project.resolution.x)/2);
@@ -236,6 +237,10 @@ var FabricInterface = function (wickEditor) {
         wickEditor.syncInterfaces();
     }
 
+/********************************
+       Editor state syncing
+********************************/
+
     this.repositionGUIElements = function () {
         frameInside.fill = wickEditor.project.backgroundColor;
         frameInside.width  = wickEditor.project.resolution.x;
@@ -279,6 +284,12 @@ var FabricInterface = function (wickEditor) {
             this.canvas.freeDrawingBrush.color = wickEditor.currentTool.color;
         } else {
             this.canvas.isDrawingMode = false;
+        }
+
+        if(wickEditor.currentTool instanceof CursorTool) {
+            that.canvas.selection = true;
+        } else {
+            that.canvas.selection = false;
         }
 
         //stopTiming("init");
@@ -408,8 +419,8 @@ var FabricInterface = function (wickEditor) {
                     updateFabObj(fabricObj, child);
 
                     if(child.selectOnAddToFabric) {
-                        that.selectByIDs([child.id]);
-                        wickEditor.syncInterfaces()
+                        //that.selectByIDs([child.id]);
+                        selectedObjectIDs = [child.id];
                         child.selectOnAddToFabric = false;
                     }
 
@@ -433,7 +444,7 @@ var FabricInterface = function (wickEditor) {
 
         //stopTiming("reselect/cleanup");
 
-        //this.canvas.renderAll();
+        this.canvas.renderAll();
     }
 
     this.syncObjects = function (wickObj, fabricObj) {
@@ -595,9 +606,9 @@ var FabricInterface = function (wickEditor) {
             });
         });
 
-        wickEditor.actionHandler.doAction('modifyObjects', 
-            {ids: ids,
-             modifiedStates: modifiedStates}
+        wickEditor.actionHandler.doAction('modifyObjects', {
+            ids: ids,
+            modifiedStates: modifiedStates}
         );
     }
 
@@ -780,15 +791,14 @@ var FabricInterface = function (wickEditor) {
 
     // Update the scripting GUI/properties box when the selected object changes
     that.canvas.on('object:selected', function (e) {
-        wickEditor.interfaces['scriptingide'].syncWithEditorState();
-        wickEditor.interfaces['properties'].syncWithEditorState();
+        wickEditor.syncInterfaces(['scriptingide','properties']);
     });
     that.canvas.on('selection:cleared', function (e) {
-        wickEditor.interfaces['scriptingide'].syncWithEditorState();
-        wickEditor.interfaces['properties'].syncWithEditorState();
+        wickEditor.syncInterfaces(['scriptingide','properties']);
     });
     that.canvas.on('selection:changed', function (e) {
         that.repositionGUIElements();
+        wickEditor.syncInterfaces(['scriptingide','properties']);
     });
 
     this.getObjectByWickObjectID = function (wickObjID) {
@@ -833,6 +843,9 @@ var FabricInterface = function (wickEditor) {
 
         that.creatingSelection = false;
 
+        that.repositionGUIElements();
+        wickEditor.syncInterfaces(['scriptingide','properties']);
+
     }
 
     this.selectAll = function () {
@@ -858,6 +871,9 @@ var FabricInterface = function (wickEditor) {
 
         that.creatingSelection = false;
 
+        that.repositionGUIElements();
+        wickEditor.syncInterfaces(['scriptingide','properties']);
+
     }
 
     this.deselectAll = function () {
@@ -873,6 +889,9 @@ var FabricInterface = function (wickEditor) {
         this.canvas.deactivateAll().renderAll();
 
         that.creatingSelection = true;
+
+        that.repositionGUIElements();
+        wickEditor.syncInterfaces(['scriptingide','properties']);
 
     }
 
@@ -931,5 +950,5 @@ var FabricInterface = function (wickEditor) {
 
     this.recenterCanvas();
     this.repositionGUIElements();
-    window.addEventListener('resize', this.resize, false);
+    
 }
