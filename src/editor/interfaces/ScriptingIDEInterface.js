@@ -11,6 +11,7 @@ var ScriptingIDEInterface = function (wickEditor) {
     this.aceEditor.setTheme("ace/theme/chrome");
     this.aceEditor.getSession().setMode("ace/mode/javascript");
     this.aceEditor.$blockScrolling = Infinity; // Makes that weird message go away
+    this.aceEditor.setAutoScrollEditorIntoView(true);
 
     this.beautify = ace.require("ace/ext/beautify");
 
@@ -154,6 +155,7 @@ var ScriptingIDEInterface = function (wickEditor) {
     this.resize = function () {
         var GUIWidth = parseInt($("#scriptingGUI").css("width"));
         $("#scriptingGUI").css('left', (window.innerWidth/2 - GUIWidth/2)+'px');
+        this.aceEditor.resize();
     }
 
     window.addEventListener('resize', function(e) {
