@@ -9,6 +9,8 @@ var FabricInterface = function (wickEditor) {
     this.canvas = new fabric.CanvasEx('fabricCanvas', {
         imageSmoothingEnabled:false,
         preserveObjectStacking:true,
+        //renderOnAddRemove:false,
+        stateful:false,
     });
     this.canvas.selectionColor = 'rgba(0,0,5,0.1)';
     this.canvas.selectionBorderColor = 'grey';
@@ -363,6 +365,9 @@ var FabricInterface = function (wickEditor) {
             }
         }
 
+        var objectsToUpdate = {};
+        var objectsToAdd = {};
+
         // Add new objects and update existing objects
         allObjects.forEach(function (child) {
             if(that.objectIDsInCanvas[child.id]) {
@@ -373,6 +378,13 @@ var FabricInterface = function (wickEditor) {
                         updateFabObj(fabricObj, child);
                     }
                 });
+                /*var fabricObj;
+                that.canvas.forEachObject(function(fabricObj) {
+                    if(fabricObj.wickObjectID === child.id) {
+                        fabricObj = fabricObj;
+                    }
+                });
+                objectsToUpdate.push({wickObj:child,fabricObj:getObjectByID(child.id)});*/
             } else {
                 // Add new object
                 that.objectIDsInCanvas[child.id] = true;
@@ -421,7 +433,7 @@ var FabricInterface = function (wickEditor) {
 
         //stopTiming("reselect/cleanup");
 
-        this.canvas.renderAll();
+        //this.canvas.renderAll();
     }
 
     this.syncObjects = function (wickObj, fabricObj) {
@@ -446,7 +458,7 @@ var FabricInterface = function (wickEditor) {
         fabricObj.flipX   = wickObj.flipX;
         fabricObj.flipY   = wickObj.flipY;
         fabricObj.opacity = wickObj.opacity;
-        
+
         if(wickObj.isSymbol) {
             var cornerPosition = wickObj.getSymbolBoundingBoxCorner();
             fabricObj.left += cornerPosition.x;

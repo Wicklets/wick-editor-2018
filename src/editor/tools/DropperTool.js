@@ -19,9 +19,7 @@ var DropperTool = function (wickEditor) {
                 wickEditor.syncInterfaces();
             };
             image.src = wickEditor.interfaces.fabric.canvas.toDataURL();
-
-            document.body.appendChild(image);
-
+            
             wickEditor.syncInterfaces();
         }
     });

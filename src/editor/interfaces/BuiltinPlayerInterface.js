@@ -14,22 +14,16 @@ var BuiltinPlayerInterface = function (wickEditor) {
         }
     }
 
-    this.runProject = function () {
+    this.runProject = function (JSONProject) {
         if(wickEditor.project.hasSyntaxErrors()) {
             if(!confirm("There are syntax errors in the code of this project! Are you sure you want to run it?")) {
                 return;
             }
         }
 
-        // Autosave the project
-        wickEditor.project.saveInLocalStorage();
-
-        // JSONify the project, autosave, and have the builtin player run it
-        wickEditor.project.getAsJSON(function (JSONProject) {
-            that.running = true;
-            WickPlayer.runProject(JSONProject);
-            wickEditor.syncInterfaces();
-        });
+        that.running = true;
+        WickPlayer.runProject(JSONProject);
+        wickEditor.syncInterfaces();
     }
 
     this.stopRunningProject = function () {

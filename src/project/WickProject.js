@@ -118,6 +118,8 @@ WickProject.fromLocalStorage = function () {
 
 WickProject.prototype.getAsJSON = function (callback) {
 
+    console.log("Generating project JSON...")
+
     // Rasterize SVGs
     var that = this;
     this.rootObject.generateSVGCacheImages(function () {
@@ -128,6 +130,8 @@ WickProject.prototype.getAsJSON = function (callback) {
         
         // Decode scripts back to human-readble and eval()-able format
         that.rootObject.decodeStrings();
+
+        console.log("Done!")
 
         callback(JSONProject);
     });
