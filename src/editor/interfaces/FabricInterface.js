@@ -88,6 +88,7 @@ var FabricInterface = function (wickEditor) {
         editSymbolButton.style.display = "none";
         editSymbolScriptsButton.style.display = "none";
 
+        // Reposition buttons
         var selection = that.canvas.getActiveObject() || that.canvas.getActiveGroup();
         if(selection) {
             var bound = selection.getBoundingRect();
@@ -119,32 +120,35 @@ var FabricInterface = function (wickEditor) {
             }
         }
 
+        // Render bounding boxes for symbols
+        var selectedIDs = that.getSelectedObjectIDs();
         that.canvas.forEachObject(function(obj) {
             var wickObj = wickEditor.project.rootObject.getChildByID(obj.wickObjectID);
-            if(!wickObj || !wickObj.isSymbol) return;
+            var activeLayerObjects = wickEditor.project.getCurrentObject().getAllActiveLayerChildObjects();
+            if(!wickObj || !wickObj.isSymbol || activeLayerObjects.indexOf(wickObj) === -1) return;
 
-            var bound = obj.getBoundingRect();
-
+            // Color the border differently depending if the object has errors
             if(!wickObj.hasSyntaxErrors && !wickObj.causedAnException) {
                 that.canvas.contextContainer.strokeStyle = '#0B0';
             } else {
                 that.canvas.contextContainer.strokeStyle = '#F00';
             }
 
+            // We need to calculate an offset because of this bug: https://github.com/kangax/fabric.js/issues/1941
+            var groupOffset = {x:0,y:0};
+            if(selectedIDs.length > 1 && selectedIDs.indexOf(wickObj.id) !== -1) {
+                var activeGroup = that.canvas.getActiveGroup();
+                groupOffset.x = (activeGroup.left + activeGroup.width/2)*that.canvas.getZoom();
+                groupOffset.y = (activeGroup.top + activeGroup.height/2)*that.canvas.getZoom();
+            }
+
+            var bound = obj.getBoundingRect();
             that.canvas.contextContainer.strokeRect(
-                bound.left + 0.5,
-                bound.top + 0.5,
+                bound.left + 0.5 + groupOffset.x,
+                bound.top + 0.5 + groupOffset.y,
                 bound.width,
                 bound.height
             );
-
-            /*if(that.getSelectedWickObject() === wickObj) {
-                symbolIsSelected = true;
-                var pan = that.getPan();
-                createSymbolButton.style.left = (bound.left+bound.width) + 'px';
-                createSymbolButton.style.top  = (bound.top)  + 'px';
-                createSymbolButton.style.display = "block";
-            }*/
             
         });
     });
@@ -179,6 +183,7 @@ var FabricInterface = function (wickEditor) {
         that.canvas.setZoom(1.0);
         that.canvas.absolutePan(new fabric.Point(centerX,centerY));
         that.canvas.renderAll();
+        wickEditor.syncInterfaces();
     }
 
     this.relativePan = function (x,y) {
@@ -259,8 +264,6 @@ var FabricInterface = function (wickEditor) {
         //startTiming();
 
         wickEditor.project.rootObject.applyTweens();
-
-        that.repositionGUIElements();
 
         // Update tool state
         var cursorImg = wickEditor.currentTool.getCursorImage();
@@ -409,6 +412,8 @@ var FabricInterface = function (wickEditor) {
         // Reselect objects that were selected before sync
         if(selectedObjectIDs.length > 0) that.selectByIDs(selectedObjectIDs);
 
+        that.repositionGUIElements();
+
         // Update inactive object overlay
         // OPTIMIZATION WORK: get ridda this
         //that.canvas.moveTo(that.inactiveFrame, siblingObjects.length+1);
@@ -441,9 +446,9 @@ var FabricInterface = function (wickEditor) {
         fabricObj.flipX   = wickObj.flipX;
         fabricObj.flipY   = wickObj.flipY;
         fabricObj.opacity = wickObj.opacity;
-
+        
         if(wickObj.isSymbol) {
-            var cornerPosition = wickObj.getSymbolCornerPosition();
+            var cornerPosition = wickObj.getSymbolBoundingBoxCorner();
             fabricObj.left += cornerPosition.x;
             fabricObj.top += cornerPosition.y;
         }
@@ -454,8 +459,12 @@ var FabricInterface = function (wickEditor) {
             fabricObj.fill = wickObj.fontData.fill;
             fabricObj.fontSize = wickObj.fontData.fontSize;
         } else {
-            fabricObj.perPixelTargetFind = true;
-            fabricObj.targetFindTolerance = 4;
+            if(wickObj.opacity > 0) {
+                fabricObj.perPixelTargetFind = true;
+                fabricObj.targetFindTolerance = 4;
+            } else {
+                fabricObj.perPixelTargetFind = false;
+            }
         }
 
         if(wickObj.svgData) {
@@ -469,13 +478,15 @@ var FabricInterface = function (wickEditor) {
     this.createFabricObjectFromWickObject = function (wickObj, callback) {
 
         if(wickObj.cachedFabricObject) {
-            //callback(wickObj.cachedFabricObject);
-            //return;
+            that.syncObjects(wickObj, wickObj.cachedFabricObject);
+            callback(wickObj.cachedFabricObject);
+            return;
         }
 
         if(wickObj.imageData) {
             fabric.Image.fromURL(wickObj.imageData, function(newFabricImage) {
                 that.syncObjects(wickObj, newFabricImage);
+                wickObj.cachedFabricObject = newFabricImage;
                 callback(newFabricImage);
             });
         }
@@ -542,8 +553,17 @@ var FabricInterface = function (wickEditor) {
                 y: wickObj.y-wickObj.getAbsolutePosition().y 
             };
 
-            var newX = fabricObj.left + insideSymbolReposition.x - wickObj.getSymbolCornerPosition().x;
-            var newY = fabricObj.top  + insideSymbolReposition.y - wickObj.getSymbolCornerPosition().y;
+            var cornerOffset = {
+                x:0,
+                y:0
+            }
+            if(wickObj.isSymbol) {
+                cornerOffset.x = wickObj.getSymbolBoundingBoxCorner().x;
+                cornerOffset.y = wickObj.getSymbolBoundingBoxCorner().y;
+            }
+
+            var newX = fabricObj.left + insideSymbolReposition.x - cornerOffset.x;
+            var newY = fabricObj.top  + insideSymbolReposition.y - cornerOffset.y;
 
             // To get pixel-perfect positioning to avoid blurry images (this happens when an image has a fractional position)
             if(wickObj.imageData) {

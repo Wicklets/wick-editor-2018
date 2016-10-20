@@ -14,13 +14,14 @@ var DropperTool = function (wickEditor) {
             var image = new Image();
             image.onload = function () {
                 var mouse = wickEditor.inputHandler.mouse;
-                var color = GetColorAtCoords(image, mouse.x, mouse.y, "hex");
+                var color = GetColorAtCoords(image, mouse.x*window.devicePixelRatio, mouse.y*window.devicePixelRatio, "hex");
                 wickEditor.tools.paintbrush.color = color;
                 wickEditor.syncInterfaces();
             };
             image.src = wickEditor.interfaces.fabric.canvas.toDataURL();
 
-            wickEditor.currentTool = wickEditor.lastTool;
+            document.body.appendChild(image);
+
             wickEditor.syncInterfaces();
         }
     });

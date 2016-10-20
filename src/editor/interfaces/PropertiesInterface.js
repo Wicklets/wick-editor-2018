@@ -26,6 +26,7 @@ var PropertiesInterface = function (wickEditor) {
             document.getElementById('objectWidth')    .value = Math.round(selectedObj.width * selectedObj.scaleX);
             document.getElementById('objectHeight')   .value = Math.round(selectedObj.height * selectedObj.scaleY);
             document.getElementById('objectRotation') .value = Math.round(selectedObj.angle);
+            document.getElementById('opacitySlider')  .value = selectedObj.opacity*255
 
             if(selectedObj.fontData) {
                 $("#textProperties").css('display', 'inline');
