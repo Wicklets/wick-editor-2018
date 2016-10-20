@@ -205,7 +205,9 @@ var GuiActionHandler = function (wickEditor) {
                 child.causedAnException = false;
             })
             wickEditor.interfaces.scriptingide.clearError();
-            wickEditor.interfaces.builtinplayer.runProject();
+            wickEditor.project.getAsJSON(function (JSONProject) {
+                wickEditor.interfaces.builtinplayer.runProject(JSONProject);
+            })
         });
 
     // Control + 0

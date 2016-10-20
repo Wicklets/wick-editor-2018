@@ -406,6 +406,8 @@ var WickActionHandler = function (wickEditor) {
     this.registerAction('finishEditingCurrentObject', 
         function (args) {
             wickEditor.interfaces['fabric'].deselectAll();
+
+            wickEditor.project.onionSkinning = false;
             
             wickEditor.project.getCurrentObject().fixOriginPoint(); // hack to get around fabric.js lack of rotation around anchorpoint
             wickEditor.project.getCurrentObject().playheadPosition = 0;
