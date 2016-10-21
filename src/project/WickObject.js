@@ -1002,6 +1002,26 @@ WickObject.prototype.generateAlphaMask = function () {
 
 }
 
+WickObject.prototype.removeBackground = function (x,y) {
+
+    var image = new Image();
+    image.onload = function () {
+        var canvas = document.createElement('canvas');
+        var w = image.width;
+        var h = image.height;
+        canvas.height = h;
+        canvas.width = w;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage( image, 0, 0, w, h );
+
+        Floodfill(0,0,{r:255,g:255,b:255,a:1},ctx,w,h,100);
+
+        document.body.appendChild(canvas);
+    };
+    image.src = this.imageData;
+
+}
+
 /*************************
      Tween stuff
 *************************/

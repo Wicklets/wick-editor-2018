@@ -94,7 +94,7 @@ var GuiActionHandler = function (wickEditor) {
         }
 
         // get this outta here
-        if(event.keyCode == 32 && eventType === 'keyup') {
+        if(event.keyCode == 32 && eventType === 'keyup' && !activeElemIsTextBox()) {
             wickEditor.currentTool = wickEditor.lastTool;
             wickEditor.syncInterfaces();
         }
@@ -152,6 +152,7 @@ var GuiActionHandler = function (wickEditor) {
         [], 
         {}, 
         function(args) {
+            console.log("WAT")
             if(wickEditor.currentTool !== wickEditor.tools.pan) {
                 wickEditor.lastTool = wickEditor.currentTool;
                 wickEditor.currentTool = wickEditor.tools.pan;
