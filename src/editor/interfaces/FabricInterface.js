@@ -9,7 +9,7 @@ var FabricInterface = function (wickEditor) {
     this.canvas = new fabric.CanvasEx('fabricCanvas', {
         imageSmoothingEnabled:false,
         preserveObjectStacking:true,
-        //renderOnAddRemove:false,
+        renderOnAddRemove:false,
         stateful:false,
     });
     this.canvas.selectionColor = 'rgba(0,0,5,0.1)';
@@ -376,8 +376,7 @@ var FabricInterface = function (wickEditor) {
             }
         }
 
-        var objectsToUpdate = {};
-        var objectsToAdd = {};
+        var objectsToAdd = [];
 
         // Add new objects and update existing objects
         allObjects.forEach(function (child) {
@@ -399,36 +398,46 @@ var FabricInterface = function (wickEditor) {
             } else {
                 // Add new object
                 that.objectIDsInCanvas[child.id] = true;
-                that.createFabricObjectFromWickObject(child, function (fabricObj) {
-
-                    that.canvas.forEachObject(function(path) {
-                        if(path.isTemporaryDrawingPath) {
-                            that.canvas.remove(path);
-                        }
-                    });
-
-                    // The object may have been deleted while we were generating the fabric object. 
-                    // Make sure we don't add it if so.
-                    if(!wickEditor.project.rootObject.getChildByID(child.id)) return;
-
-                    //fabricObj.originX = 'center';
-                    //fabricObj.originY = 'center';
-
-                    fabricObj.wickObjectID = child.id;
-                    that.canvas.add(fabricObj);
-                    updateFabObj(fabricObj, child);
-
-                    if(child.selectOnAddToFabric) {
-                        //that.selectByIDs([child.id]);
-                        selectedObjectIDs = [child.id];
-                        child.selectOnAddToFabric = false;
-                    }
-
-                    //fabricObj.trueZIndex = currentObject.getCurrentFrame().wickObjects.indexOf(child);
-                    //that.canvas.moveTo(fabricObj, fabricObj.trueZIndex+2 + activeObjects.length+3);
-                });
+                objectsToAdd.push(child);
             }
         });
+
+        var numObjectsAdded = 0;
+        objectsToAdd.forEach(function (objectToAdd) {
+            that.createFabricObjectFromWickObject(objectToAdd, function (fabricObj) {
+
+                that.canvas.forEachObject(function(path) {
+                    if(path.isTemporaryDrawingPath) {
+                        that.canvas.remove(path);
+                    }
+                });
+
+                // The object may have been deleted while we were generating the fabric object. 
+                // Make sure we don't add it if so.
+                if(!wickEditor.project.rootObject.getChildByID(objectToAdd.id)) return;
+
+                //fabricObj.originX = 'center';
+                //fabricObj.originY = 'center';
+
+                fabricObj.wickObjectID = objectToAdd.id;
+                that.canvas.add(fabricObj);
+                updateFabObj(fabricObj, objectToAdd);
+
+                if(objectToAdd.selectOnAddToFabric) {
+                    //that.selectByIDs([child.id]);
+                    selectedObjectIDs = [objectToAdd.id];
+                    objectToAdd.selectOnAddToFabric = false;
+                }
+
+                numObjectsAdded++;
+                if(numObjectsAdded === objectsToAdd.length) {
+                    that.canvas.renderAll();
+                }
+
+                //fabricObj.trueZIndex = currentObject.getCurrentFrame().wickObjects.indexOf(child);
+                //that.canvas.moveTo(fabricObj, fabricObj.trueZIndex+2 + activeObjects.length+3);
+            });
+        })
 
         //stopTiming("add/update objects");
 
