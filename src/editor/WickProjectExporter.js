@@ -11,8 +11,9 @@ var WickProjectExporter = (function () {
 
     // All libs needed by the player. 
     var requiredLibFiles = [
-        "lib/util/keyCharToCode.js",
         "lib/pixi/pixi.min.js",
+        "lib/lz-string/lz-string.min.js",
+        "lib/util/keyCharToCode.js",
         "lib/util/fpscounter.js",
         "lib/util/verboselog.js",
         "lib/util/browserdetection.js",
@@ -50,7 +51,9 @@ var WickProjectExporter = (function () {
 
         // Bundle the JSON project
         wickProject.getAsJSON(function (JSONProject) {
-            fileOut += "<script>WickPlayer.runProject('" + JSONProject + "');</script>" + "\n";
+            var compressedJSONProject = WickProjectCompressor.compressProject(JSONProject, "LZSTRING-BASE64");
+
+            fileOut += "<script>WickPlayer.runProject('" + compressedJSONProject + "');</script>" + "\n";
             callback(fileOut);
         });
 

@@ -81,7 +81,10 @@ WickProject.fromWebpage = function (webpageString) {
     }
 }
 
-WickProject.fromJSON = function (JSONString) {
+WickProject.fromJSON = function (rawJSONProject) {
+
+    var JSONString = WickProjectCompressor.decompressProject(rawJSONProject);
+
     // Replace current project with project in JSON
     var projectFromJSON = JSON.parse(JSONString);
 
@@ -116,9 +119,9 @@ WickProject.fromLocalStorage = function () {
 
 }
 
-WickProject.prototype.getAsJSON = function (callback) {
+WickProject.prototype.getAsJSON = function (callback, args) {
 
-    console.log("Generating project JSON...")
+    console.log("Generating project JSON...");
 
     // Rasterize SVGs
     var that = this;
@@ -131,16 +134,17 @@ WickProject.prototype.getAsJSON = function (callback) {
         // Decode scripts back to human-readble and eval()-able format
         that.rootObject.decodeStrings();
 
-        console.log("Done!")
+        console.log("Done!");
 
-        callback(JSONProject);
+        callback(JSONProject)
     });
 
 }
 
 WickProject.prototype.saveInLocalStorage = function () {
     this.getAsJSON(function (JSONProject) {
-        WickProject.saveProjectJSONInLocalStorage(JSONProject);
+        var compressedJSONProject = WickProjectCompressor.compressProject(JSONProject, "LZSTRING-UTF16");
+        WickProject.saveProjectJSONInLocalStorage(compressedJSONProject);
     });
 }
 
