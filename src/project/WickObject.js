@@ -975,7 +975,7 @@ WickObject.prototype.generateAlphaMask = function () {
 
     var alphaMaskSrc = that.imageData || that.svgCacheImageData;
     if(!alphaMaskSrc) return;
-    
+
     ImageToCanvas(alphaMaskSrc, function (canvas,ctx) {
         var w = canvas.width;
         var h = canvas.height;
@@ -996,7 +996,6 @@ WickObject.prototype.removeBackground = function (x,y) {
     ImageToCanvas(this.imageData, function (canvas,ctx) {
         var fillColor = {r:255,g:255,b:255,a:1};
         Floodfill(x, y, fillColor, ctx, canvas.width, canvas.height, 100);
-        document.body.appendChild(canvas);
     });
 
 }
