@@ -32,10 +32,8 @@ var ScriptingIDEInterface = function (wickEditor) {
             var selectedObj = wickEditor.interfaces['fabric'].getSelectedWickObject();
 
             if(!selectedObj || !selectedObj.isSymbol) {
-                that.clearError();
                 $("#noSelectionDiv").css('display', 'block');
                 $("#scriptObjectDiv").css('display', 'none');
-                document.getElementById("errorMessage").style.display = "none";
                 //$("#scriptingGUI").css('height', '20px');
             } else if(selectedObj.wickScripts[that.currentScript] !== undefined) {
                 $("#noSelectionDiv").css('display', 'none');
@@ -51,7 +49,6 @@ var ScriptingIDEInterface = function (wickEditor) {
                 document.getElementById("onKeyDownButton").className = (that.currentScript == 'onKeyDown' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
             }
         } else {
-            that.clearError();
             $("#scriptingGUI").css('display', 'none');
         }
     }
@@ -82,7 +79,7 @@ var ScriptingIDEInterface = function (wickEditor) {
     this.clearError = function () {
         unhighlightError();
         document.getElementById("errorMessage").innerHTML = "";
-        document.getElementById("errorMessage").style.display = "none";
+        document.getElementById("errorMessage").style.display = "hidden";
     }
 
 // Script buttons
@@ -91,24 +88,28 @@ var ScriptingIDEInterface = function (wickEditor) {
         that.currentScript = 'onLoad';
         unhighlightError();
         wickEditor.syncInterfaces();
+        that.clearError();
     });
 
     $("#onClickButton").on("click", function (e) {
         that.currentScript = 'onClick';
         unhighlightError();
         wickEditor.syncInterfaces();
+        that.clearError();
     });
 
     $("#onUpdateButton").on("click", function (e) {
         that.currentScript = 'onUpdate';
         unhighlightError();
         wickEditor.syncInterfaces();
+        that.clearError();
     });
 
     $("#onKeyDownButton").on("click", function (e) {
         that.currentScript = 'onKeyDown';
         unhighlightError();
         wickEditor.syncInterfaces();
+        that.clearError();
     });
 
 // Other buttons

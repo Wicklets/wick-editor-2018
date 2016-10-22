@@ -18,16 +18,6 @@
   background-color:#F4B9B7;
 }
 
-#scriptObjectDiv {
-    width: 100%;
-    height: 100%;
-}
-#scriptEditor {
-	text-align: left;
-    width: 100%;
-    height: 90%;
-}
-
 html, body { width:100%; height:100%; } /* just to be sure these are full screen*/
 
 canvas { display:block; } /* To remove the scrollbars */
@@ -104,6 +94,15 @@ hr {
 	background-color: white;
 	color: red;
 	display:hidden;
+}
+#scriptObjectDiv {
+    width: 100%;
+    height: 100%;
+}
+#scriptEditor {
+	text-align: left;
+    width: 100%;
+    height: 80%;
 }
 
 #propertiesGUI {
