@@ -975,50 +975,29 @@ WickObject.prototype.generateAlphaMask = function () {
 
     var alphaMaskSrc = that.imageData || that.svgCacheImageData;
     if(!alphaMaskSrc) return;
-
-    var image = new Image();
-    image.onload = function () {
-        var canvas = document.createElement('canvas');
-        var w = Math.floor(that.width);
-        var h = Math.floor(that.height);
-        canvas.height = h;
-        canvas.width = w;
-        var ctx = canvas.getContext('2d');
-        ctx.drawImage( image, 0, 0, w, h );
-        var imgdata = ctx.getImageData(0,0,w,h);
-        var rgba = imgdata.data;
-
+    
+    ImageToCanvas(alphaMaskSrc, function (canvas,ctx) {
+        var w = canvas.width;
+        var h = canvas.height;
+        var rgba = ctx.getImageData(0,0,w,h).data;
         that.alphaMask = [];
         for (var y = 0; y < h; y ++) {
             for (var x = 0; x < w; x ++) {
                 var alphaMaskIndex = x+y*w;
-                //console.log(alphaMaskIndex)
                 that.alphaMask[alphaMaskIndex] = rgba[alphaMaskIndex*4+3] === 0;
             }
         }
-
-    }
-    image.src = alphaMaskSrc;
+    }, {width:Math.floor(that.width), height:Math.floor(that.height)} );
 
 }
 
 WickObject.prototype.removeBackground = function (x,y) {
 
-    var image = new Image();
-    image.onload = function () {
-        var canvas = document.createElement('canvas');
-        var w = image.width;
-        var h = image.height;
-        canvas.height = h;
-        canvas.width = w;
-        var ctx = canvas.getContext('2d');
-        ctx.drawImage( image, 0, 0, w, h );
-
-        Floodfill(0,0,{r:255,g:255,b:255,a:1},ctx,w,h,100);
-
+    ImageToCanvas(this.imageData, function (canvas,ctx) {
+        var fillColor = {r:255,g:255,b:255,a:1};
+        Floodfill(x, y, fillColor, ctx, canvas.width, canvas.height, 100);
         document.body.appendChild(canvas);
-    };
-    image.src = this.imageData;
+    });
 
 }
 
