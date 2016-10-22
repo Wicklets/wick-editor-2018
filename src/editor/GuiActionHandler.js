@@ -152,7 +152,6 @@ var GuiActionHandler = function (wickEditor) {
         [], 
         {}, 
         function(args) {
-            console.log("WAT")
             if(wickEditor.currentTool !== wickEditor.tools.pan) {
                 wickEditor.lastTool = wickEditor.currentTool;
                 wickEditor.currentTool = wickEditor.tools.pan;
@@ -205,7 +204,7 @@ var GuiActionHandler = function (wickEditor) {
             that.specialKeys = [];
             wickEditor.project.rootObject.getAllChildObjectsRecursive().forEach(function (child) {
                 child.causedAnException = false;
-            })
+            });
             wickEditor.interfaces.scriptingide.clearError();
             wickEditor.project.getAsJSON(function (JSONProject) {
                 WickProject.saveProjectJSONInLocalStorage(JSONProject);
