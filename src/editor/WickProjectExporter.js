@@ -13,6 +13,7 @@ var WickProjectExporter = (function () {
     var requiredLibFiles = [
         "lib/pixi/pixi.min.js",
         "lib/lz-string/lz-string.min.js",
+        "lib/util/polyfills.js",
         "lib/util/keyCharToCode.js",
         "lib/util/fpscounter.js",
         "lib/util/verboselog.js",
@@ -27,6 +28,7 @@ var WickProjectExporter = (function () {
         "src/project/WickLayer.js",
         "src/project/WickObject.js",
         "src/project/WickProject.js",
+        "src/editor/WickProjectCompressor.js",
         "src/player/renderers/WickPixiRenderer.js",
         "src/player/audioplayers/WickWebAudioPlayer.js",
         "src/player/WickPlayer.js",

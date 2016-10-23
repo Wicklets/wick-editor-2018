@@ -340,6 +340,16 @@ var FabricInterface = function (wickEditor) {
                 rotating: setCoords
               });
 
+            if(wickObj.imageDirty) {
+                var img=new Image();
+                img.onload=function(){
+                    fabricObj.setElement(img);
+                    that.canvas.renderAll();
+                }
+                img.src=wickObj.imageData;
+                wickObj.imageDirty = false;
+            }
+
             if(activeObjects.indexOf(wickObj) !== -1) {
                 fabricObj.hasControls = true;
                 fabricObj.selectable = true;
@@ -377,6 +387,7 @@ var FabricInterface = function (wickEditor) {
         }
 
         var objectsToAdd = [];
+        var selectionChanged = false;
 
         // Add new objects and update existing objects
         allObjects.forEach(function (child) {
@@ -424,8 +435,11 @@ var FabricInterface = function (wickEditor) {
                 updateFabObj(fabricObj, objectToAdd);
 
                 if(objectToAdd.selectOnAddToFabric) {
-                    //that.selectByIDs([child.id]);
-                    selectedObjectIDs = [objectToAdd.id];
+                    if(!selectionChanged) {
+                        selectionChanged = true;
+                        selectedObjectIDs = [];
+                    }
+                    selectedObjectIDs.push(objectToAdd.id);
                     objectToAdd.selectOnAddToFabric = false;
                 }
 

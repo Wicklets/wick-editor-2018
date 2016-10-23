@@ -785,8 +785,8 @@ WickObject.prototype.getAsJSON = function () {
     // Decode scripts back to human-readble and eval()-able format
     this.decodeStrings();
 
-    this.x = oldY;
     this.x = oldX;
+    this.y = oldY;
 
     return JSONWickObject;
 }
@@ -984,7 +984,7 @@ WickObject.prototype.generateAlphaMask = function () {
         for (var y = 0; y < h; y ++) {
             for (var x = 0; x < w; x ++) {
                 var alphaMaskIndex = x+y*w;
-                that.alphaMask[alphaMaskIndex] = rgba[alphaMaskIndex*4+3] === 0;
+                that.alphaMask[alphaMaskIndex] = rgba[alphaMaskIndex*4+3] <= 10;
             }
         }
     }, {width:Math.floor(that.width), height:Math.floor(that.height)} );
@@ -993,9 +993,17 @@ WickObject.prototype.generateAlphaMask = function () {
 
 WickObject.prototype.removeBackground = function (x,y) {
 
+    var that = this;
+
     ImageToCanvas(this.imageData, function (canvas,ctx) {
-        var fillColor = {r:255,g:255,b:255,a:1};
-        Floodfill(x, y, fillColor, ctx, canvas.width, canvas.height, 100);
+        /*var fillColor = {r:255,g:255,b:255,a:1};
+        Floodfill(x, y, fillColor, ctx, canvas.width, canvas.height, 1);
+        that.imageData = canvas.toDataURL();
+        that.imageDirty = true;*/
+        ctx.fillStyle = "rgba(0,0,0,0)";
+        ctx.fillFlood(x,y);
+        that.imageData = canvas.toDataURL();
+        that.imageDirty = true;
     });
 
 }

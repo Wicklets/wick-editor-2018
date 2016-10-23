@@ -186,6 +186,11 @@ WickProject.prototype.regenerateUniqueIDs = function (wickObject) {
 WickProject.prototype.addObject = function (wickObject, zIndex) {
 
     var frame = this.getCurrentObject().getCurrentFrame();
+
+    var insideSymbolOffset = this.getCurrentObject().getAbsolutePosition();
+    wickObject.x -= insideSymbolOffset.x;
+    wickObject.y -= insideSymbolOffset.y;
+    
     if(zIndex === undefined) {
         frame.wickObjects.push(wickObject);
     } else {

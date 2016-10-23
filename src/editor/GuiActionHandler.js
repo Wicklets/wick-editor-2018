@@ -491,15 +491,22 @@ var GuiActionHandler = function (wickEditor) {
                 var fileWickObject = WickObject.fromJSONArray(JSON.parse(file), function(objs) {
                     // get rid of IDs (IDs from same/other projects might cause collisions)
                     objs.forEach(function (obj) {
+                        obj.selectOnAddToFabric = true;
                         obj.id=null;
                         obj.getAllChildObjectsRecursive().forEach(function (child) {
                             child.id = null;
                         });
                     })
-                    wickEditor.actionHandler.doAction('addObjects', {wickObjects:objs});
+                    wickEditor.actionHandler.doAction('addObjects', {
+                        wickObjects:objs
+                    });
                 });
             } else if (fileType === 'text/plain') {
-                wickEditor.actionHandler.doAction('addObjects', {wickObjects:[WickObject.fromText(file)]});
+                var newObj = WickObject.fromText(file);
+                newObj.selectOnAddToFabric = true;
+                wickEditor.actionHandler.doAction('addObjects', {
+                    wickObjects:[newObj]
+                });
             } else {
                 console.error("Pasting files with type " + fileType + "NYI.")
             }
