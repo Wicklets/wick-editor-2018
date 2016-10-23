@@ -52,6 +52,20 @@ var RightClickMenuInterface = function (wickEditor) {
 
     }
 
+    this.repositionMenu = function () {
+        var menuElem = document.getElementById('rightClickMenu');
+        var newX = wickEditor.inputHandler.mouse.x;
+        var newY = wickEditor.inputHandler.mouse.y;
+        if(newX+menuElem.offsetWidth > window.innerWidth) {
+            newX = window.innerWidth - menuElem.offsetWidth;
+        }
+        if(newY+menuElem.offsetHeight > window.innerHeight) {
+            newY = window.innerHeight - menuElem.offsetHeight;
+        }
+        menuElem.style.left = newX+'px';
+        menuElem.style.top  = newY+'px';
+    }
+
 /***********************************
     Show/hide relevant buttons
 ***********************************/
@@ -132,10 +146,8 @@ var RightClickMenuInterface = function (wickEditor) {
             that.open = false;
         }
 
-        $("#rightClickMenu").css('top', wickEditor.inputHandler.mouse.y+'px');
-        $("#rightClickMenu").css('left', wickEditor.inputHandler.mouse.x+'px');
-
         that.syncWithEditorState();
+        that.repositionMenu();
     });
 
     document.getElementById("timelineCanvas").addEventListener('mousedown', function(e) { 
@@ -146,10 +158,8 @@ var RightClickMenuInterface = function (wickEditor) {
             that.open = false;
         }
 
-        $("#rightClickMenu").css('top', wickEditor.inputHandler.mouse.y+'px');
-        $("#rightClickMenu").css('left', wickEditor.inputHandler.mouse.x+'px');
-
         that.syncWithEditorState();
+        that.repositionMenu();
     });
 
 /*************************
