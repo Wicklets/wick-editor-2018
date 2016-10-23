@@ -23,6 +23,7 @@ var WickEditor = function () {
         "timeline" : new TimelineInterface(this),
         "toolbar" : new ToolbarInterface(this),
         "toolOptions" : new ToolOptionsInterface(this),
+        "statusbar" : new StatusBarInterface(this),
         "properties" : new PropertiesInterface(this),
         "settings" : new SettingsInterface(this),
         "fabric" : new FabricInterface(this),

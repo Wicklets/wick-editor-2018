@@ -121,11 +121,12 @@ WickProject.fromLocalStorage = function () {
 
 WickProject.prototype.getAsJSON = function (callback, args) {
 
+    var that = this;
+
     console.log("Generating project JSON...");
 
     // Rasterize SVGs
-    var that = this;
-    this.rootObject.generateSVGCacheImages(function () {
+    that.rootObject.generateSVGCacheImages(function () {
         // Encode scripts/text to avoid JSON format problems
         that.rootObject.encodeStrings();
         
@@ -142,9 +143,11 @@ WickProject.prototype.getAsJSON = function (callback, args) {
 }
 
 WickProject.prototype.saveInLocalStorage = function () {
+    wickEditor.interfaces.statusbar.setState('saving');
     this.getAsJSON(function (JSONProject) {
         var compressedJSONProject = WickProjectCompressor.compressProject(JSONProject, "LZSTRING-UTF16");
         WickProject.saveProjectJSONInLocalStorage(compressedJSONProject);
+        wickEditor.interfaces.statusbar.setState('done');
     });
 }
 

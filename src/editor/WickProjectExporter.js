@@ -63,9 +63,12 @@ var WickProjectExporter = (function () {
 
     projectExporter.exportProject = function (wickProject) {
 
+        wickEditor.interfaces.statusbar.setState('exporting');
+
         projectExporter.bundleProjectToHTML(wickProject, function(fileOut) {
             var blob = new Blob([fileOut], {type: "text/plain;charset=utf-8"});
             saveAs(blob, "project.html");
+            wickEditor.interfaces.statusbar.setState('done');
         });
 
     }

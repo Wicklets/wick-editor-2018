@@ -202,6 +202,9 @@ var GuiActionHandler = function (wickEditor) {
             event.preventDefault();
             that.keys = [];
             that.specialKeys = [];
+
+            wickEditor.interfaces.statusbar.setState('saving');
+
             wickEditor.project.rootObject.getAllChildObjectsRecursive().forEach(function (child) {
                 child.causedAnException = false;
             });
@@ -209,6 +212,7 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.project.getAsJSON(function (JSONProject) {
                 WickProject.saveProjectJSONInLocalStorage(JSONProject);
                 wickEditor.interfaces.builtinplayer.runProject(JSONProject);
+                wickEditor.interfaces.statusbar.setState('done');
             })
         });
 

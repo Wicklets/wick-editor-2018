@@ -50,6 +50,7 @@
     <script src="src/editor/interfaces/PropertiesInterface.js"></script>
     <script src="src/editor/interfaces/SplashScreenInterface.js"></script>
     <script src="src/editor/interfaces/SettingsInterface.js"></script>
+    <script src="src/editor/interfaces/StatusBarInterface.js"></script>
 
     <script src="src/editor/tools/CursorTool.js"></script>
     <script src="src/editor/tools/FillBucketTool.js"></script>
@@ -157,6 +158,21 @@
                     <div class="button buttonInRow tooltipElem" id="runButton" alt="Run Project">
                         <img src="resources/play.png" width="25" />
                     </div>
+                </div>
+            </div>
+
+        <!-- Status menu GUI, top right corner -->
+
+            <div id="statusBarGUI" class="GUIBox">
+                <div id="statusBarGUInone"></div>
+                <div id="statusBarGUIsaving">
+                    Saving...
+                </div>
+                <div id="statusBarGUIdone">
+                    Save successful!
+                </div>
+                <div id="statusBarGUIexporting">
+                    Exporting...
                 </div>
             </div>
 
