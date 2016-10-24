@@ -697,11 +697,15 @@ var FabricInterface = function (wickEditor) {
         }
     }
 
+    var shapeStartPos = {x:0,y:0};
+
     this.startDrawingShape = function (shapeType, x, y) {
 
         that.canvas.selection = false;
 
         var screenXY = mouseToScreenSpace(x,y)
+
+        shapeStartPos = {x:screenXY.x,y:screenXY.y};
 
         if(shapeType === 'rectangle') {
             drawingShape = new fabric.Rect({
@@ -732,12 +736,14 @@ var FabricInterface = function (wickEditor) {
             var screenXY = mouseToScreenSpace(x,y);
 
             if(drawingShape.type === 'rect') {
-                drawingShape.width  = Math.abs(drawingShape.left - screenXY.x);
-                drawingShape.height = Math.abs(drawingShape.top  - screenXY.y);            
+                if(screenXY.x < shapeStartPos.x) drawingShape.left = screenXY.x;
+                if(screenXY.y < shapeStartPos.y) drawingShape.top  = screenXY.y;
+                drawingShape.width  = Math.abs(shapeStartPos.x - screenXY.x);
+                drawingShape.height = Math.abs(shapeStartPos.y - screenXY.y);            
             } else if(drawingShape.type === 'ellipse') {
                 drawingShape.width  = Math.abs(drawingShape.left - screenXY.x);
                 drawingShape.height = Math.abs(drawingShape.top  - screenXY.y);    
-                drawingShape.rx  = Math.abs(drawingShape.left - screenXY.x);
+                drawingShape.rx = Math.abs(drawingShape.left - screenXY.x);
                 drawingShape.ry = Math.abs(drawingShape.top  - screenXY.y);
             }
             that.canvas.renderAll();
