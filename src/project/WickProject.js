@@ -16,6 +16,7 @@ var WickProject = function () {
     this.resolution.x = 720;
     this.resolution.y = 480;
 
+    this.borderColor = "#DDDDDD";
     this.backgroundColor = "#FFFFFF";
 
     this.framerate = 12;

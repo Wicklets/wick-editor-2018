@@ -26,7 +26,7 @@ var StatusBarInterface = function (wickEditor) {
         if(state === 'done') {
             setTimeout(function () {
                 that.setState('none');
-            }, 5000);
+            }, 4000);
         }
 
         states.forEach(function (s) {

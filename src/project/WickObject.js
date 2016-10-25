@@ -1178,7 +1178,7 @@ WickObject.prototype.update = function () {
 
         this.runScript('onLoad');
         
-        if(audioContext && this.audioBuffer && this.autoplaySound) {
+        if(this.autoplaySound) {
             this.playSound();
         }
 
@@ -1677,3 +1677,16 @@ WickObject.prototype.setOpacity = function(opacityVal) {
 
     this.opacity = Math.min(Math.max(opacityVal, 0), 1);
 }
+
+WickObject.prototype.playSound = function (volume) { 
+
+    WickPlayer.getAudioPlayer().playSound(this.id, this.loopSound, volume || 1.0); 
+
+}
+
+WickObject.prototype.stopSound = function () { 
+
+    WickPlayer.getAudioPlayer().stopSound(this.id); 
+
+}
+

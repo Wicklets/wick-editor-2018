@@ -14,12 +14,18 @@ WickLayer.prototype.getTotalLength = function () {
 	return length;
 }
 
-WickLayer.prototype.addFrame = function(newFrame) {
-    this.frames.push(newFrame);
+WickLayer.prototype.addFrame = function(newFrame, i) {
+	if(i === null || i === undefined) {
+    	this.frames.push(newFrame);
+    } else {
+		this.frames.splice(i, 0, newFrame);
+	}
 }
 
 WickLayer.prototype.deleteFrame = function(frame) {
-    this.frames.splice(this.frames.indexOf(frame), 1);
+	var i = this.frames.indexOf(frame);
+    this.frames.splice(i, 1);
+    return {i:i,frame:frame};
 }
 
 WickLayer.prototype.copy = function () {

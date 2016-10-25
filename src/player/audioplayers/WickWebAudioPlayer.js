@@ -1,7 +1,9 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
 var audioContext = null;
-    var readyToStartWebAudioContext;
+var readyToStartWebAudioContext;
+
+var audioBuffers = {};
 
 var WickWebAudioPlayer = function (project) {
     var that = this; 
@@ -19,15 +21,8 @@ var WickWebAudioPlayer = function (project) {
                     console.error("failed to decode:", "buffer null");
                     return;
                 }
-                wickObj.audioBuffer = buffer
-                wickObj.playSound = function (volume) {
-                    var actualVolume = volume;
-                    if(!volume) actualVolume = 1.0;
-                    that.playSound(wickObj.id, wickObj.audioBuffer, wickObj.loopSound, actualVolume);
-                }
-                wickObj.stopSound = function () {
-                    that.stopSound(wickObj.id);
-                }
+                audioBuffers[wickObj.id] = buffer;
+                console.log("loaded sound")
             }, function (error) {
                 console.error("failed to decode:", error);
             });
@@ -74,27 +69,29 @@ var WickWebAudioPlayer = function (project) {
 
     var allPlayingSounds = [];
 
-    this.playSound = function (wickObjID, buffer, loop, volume) {
+    this.playSound = function (id, loop, volume) {
         if(!audioContext) return;
 
         if(!project.muted) {
             var gainNode = audioContext.createGain();
             var source = audioContext.createBufferSource();
-            source.buffer = buffer;
+            var buff = audioBuffers[id];
+            if(!buff) return;
+            source.buffer = buff;
             source.connect(audioContext.destination);
             source.connect(gainNode);
             gainNode.connect(audioContext.destination);
             gainNode.gain.value = volume;
             source.loop = loop;
             source.start(0);
-            allPlayingSounds.push({source:source, id:wickObjID});
+            allPlayingSounds.push({source:source, id:id});
             console.log("started...");
         }
     }
 
-    this.stopSound = function (wickObjID) {
+    this.stopSound = function (id) {
         allPlayingSounds.forEach(function (sound) {
-            if(sound.id === wickObjID) {
+            if(sound.id === id) {
                 sound.source.stop();
             }
         });

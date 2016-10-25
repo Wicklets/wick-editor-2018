@@ -3095,6 +3095,7 @@ var WickPlayer = (function () {
     }
 
     var getTouchPos = function (canvas, evt) {
+        console.log(canvas)
         var canvasBoundingClientRect = canvas.getBoundingClientRect();
 
         var touch = evt.targetTouches[0];

@@ -170,11 +170,11 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.interfaces.builtinplayer.stopRunningProject();
         });
 
-    // Control + Y
+    // Control + Shift + Z
     // Redo Action
     new GuiAction(
         ['Modifier','Shift','Z'], 
-        [], 
+        ['redoButton'], 
         {}, 
         function(args) {
             event.preventDefault();
@@ -185,7 +185,7 @@ var GuiActionHandler = function (wickEditor) {
     // Undo Action
     new GuiAction(
         ['Modifier','Z'], 
-        [], 
+        ['undoButton'], 
         {}, 
         function(args) {
             event.preventDefault();

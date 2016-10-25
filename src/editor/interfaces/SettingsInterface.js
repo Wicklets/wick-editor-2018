@@ -9,8 +9,12 @@ var SettingsInterface = function (wickEditor) {
     this.syncWithEditorState = function () {
         if(this.open) {
             document.getElementById("settingsGUI").style.display = "block";
+            
+            var projectBgColorElem = document.getElementById('projectBgColor');
+            var projectBorderColorElem = document.getElementById('projectBorderColor');
+            if(projectBgColorElem.jscolor) projectBgColorElem.jscolor.fromString(wickEditor.project.backgroundColor);
+            if(projectBorderColorElem.jscolor) projectBorderColorElem.jscolor.fromString(wickEditor.project.borderColor);
 
-            document.getElementById('projectBgColor').value        = wickEditor.project.backgroundColor;
             document.getElementById('projectSizeX').value          = wickEditor.project.resolution.x;
             document.getElementById('projectSizeY').value          = wickEditor.project.resolution.y;
             document.getElementById('frameRate').value             = wickEditor.project.framerate;
@@ -69,6 +73,11 @@ var SettingsInterface = function (wickEditor) {
 
     document.getElementById('projectBgColor').onchange = function () {
         wickEditor.project.backgroundColor = "#" + this.value;
+        wickEditor.syncInterfaces();
+    };
+
+    document.getElementById('projectBorderColor').onchange = function () {
+        wickEditor.project.borderColor = "#" + this.value;
         wickEditor.syncInterfaces();
     };
 

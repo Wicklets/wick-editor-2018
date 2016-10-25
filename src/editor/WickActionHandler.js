@@ -253,15 +253,16 @@ var WickActionHandler = function (wickEditor) {
             currentObject.getCurrentLayer().frames.pop();
         });
 
-    this.registerAction('deleteCurrentFrame', 
+    this.registerAction('deleteFrame', 
         function (args) {
-            var currentObject = wickEditor.project.getCurrentObject();
-
             // Add an empty frame
-            currentObject.getCurrentLayer().deleteFrame(currentObject.getCurrentFrame());
+            var frameRemovedData = args.layer.deleteFrame(args.frame);
+
+            args.frameRemoved = frameRemovedData.frame;
+            args.frameRemovedIndex = frameRemovedData.i;
         },
         function (args) {
-            console.error("deleteCurrentFrame undo NYI");
+            args.layer.addFrame(args.frameRemoved, args.frameRemovedIndex);
         });
 
     this.registerAction('addNewLayer', 
@@ -295,7 +296,7 @@ var WickActionHandler = function (wickEditor) {
             currentObject.currentLayer = currentObject.layers.length-1;
         },
         function (args) {
-            console.error("removeLayer undo NYI")
+            console.error("removeLayer undo NYI");
         });
 
     this.registerAction('addBreakpoint', 
@@ -375,19 +376,24 @@ var WickActionHandler = function (wickEditor) {
 
     this.registerAction('breakApartSymbol', 
         function (args) {
-            var symbol = wickEditor.project.rootObject.getChildByID(args.id);
+            args.symbol = wickEditor.project.rootObject.getChildByID(args.id);
 
-            var children = symbol.getObjectsOnFirstFrame();
-            children.forEach(function (child) {
-                child.x += symbol.x;
-                child.y += symbol.y;
+            args.children = args.symbol.getObjectsOnFirstFrame();
+            args.children.forEach(function (child) {
+                child.x += args.symbol.x;
+                child.y += args.symbol.y;
                 wickEditor.project.addObject(child);
             });
 
             wickEditor.project.getCurrentObject().removeChildByID(args.id);
         },
         function (args) {
-            console.error("breakApartSymbol undo NYI")
+            args.children.forEach(function (child) {
+                child.x -= args.symbol.x;
+                child.y -= args.symbol.y;
+                wickEditor.project.getCurrentObject().removeChildByID(child.id);
+            });
+            wickEditor.project.addObject(args.symbol);
         });
 
     this.registerAction('editObject', 
@@ -400,22 +406,31 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.getCurrentObject().currentFrame = 0;
         },
         function (args) {
-            console.error("editobject undo NYI")
+            wickEditor.interfaces['fabric'].deselectAll();
+            wickEditor.project.onionSkinning = false;
+            wickEditor.project.getCurrentObject().fixOriginPoint(); // hack to get around fabric.js lack of rotation around anchorpoint
+            
+            wickEditor.project.getCurrentObject().playheadPosition = 0;
+            wickEditor.project.currentObjectID = args.prevEditedObjectID;
         });
 
     this.registerAction('finishEditingCurrentObject', 
         function (args) {
             wickEditor.interfaces['fabric'].deselectAll();
-
             wickEditor.project.onionSkinning = false;
-            
             wickEditor.project.getCurrentObject().fixOriginPoint(); // hack to get around fabric.js lack of rotation around anchorpoint
+
             wickEditor.project.getCurrentObject().playheadPosition = 0;
             args.prevEditedObjectID = wickEditor.project.getCurrentObject().id;
             wickEditor.project.currentObjectID = wickEditor.project.getCurrentObject().parentObject.id;
         },
         function (args) {
-            console.error("finishEditingCurrentObject undo NYI");
+            wickEditor.interfaces['fabric'].deselectAll();
+            wickEditor.project.onionSkinning = false;
+            wickEditor.project.getCurrentObject().fixOriginPoint(); // hack to get around fabric.js lack of rotation around anchorpoint
+            
+            wickEditor.project.getCurrentObject().playheadPosition = 0;
+            wickEditor.project.currentObjectID = args.prevEditedObjectID;
         });
 
     this.registerAction('moveObjectToZIndex', 

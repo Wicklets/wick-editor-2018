@@ -89,6 +89,12 @@ var WickPlayer = (function () {
         // Load the project!
         loadJSONProject(projectJSON);
 
+        if(window.wickEditor) {
+            if(project.borderColor) document.getElementById('builtinPlayer').style.backgroundColor = project.borderColor;
+        } else {
+            if(project.borderColor) document.body.style.backgroundColor = project.borderColor;
+        }
+
         var allObjects = project.rootObject.getAllChildObjectsRecursive();
         allObjects.forEach(function (child) {
             child.generateAlphaMask();
@@ -269,11 +275,10 @@ var WickPlayer = (function () {
 
         // on iOS, WebAudio context only gets 'unmuted' after first user interaction
         if(!audioContext) {
-            setupWebAudioContext();
-            loadAudio(project.rootObject);
+            audioPlayer.setup(project);
         }
 
-        var touchPos = getTouchPos(renderer.view, evt);
+        var touchPos = getTouchPos(document.getElementById("rendererCanvas"), evt);
 
         project.rootObject.getAllActiveChildObjects().forEach(function(child) {
             if(child.isPointInside(touchPos) && child.isClickable()) {

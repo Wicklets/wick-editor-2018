@@ -3049,7 +3049,7 @@ var WickPlayer = (function () {
             audioPlayer.setup(project);
         }
 
-        var touchPos = getTouchPos(renderer.view, evt);
+        var touchPos = getTouchPos(document.getElementById("rendererCanvas"), evt);
 
         project.rootObject.getAllActiveChildObjects().forEach(function(child) {
             if(child.isPointInside(touchPos) && child.isClickable()) {

@@ -9,13 +9,7 @@ var ToolOptionsInterface = function (wickEditor) {
     this.syncWithEditorState = function () {
         lineWidthEl.value = wickEditor.tools['paintbrush'].brushSize;
 
-        if(lineColorEl.jscolor) {
-            lineColorEl.jscolor.fromString(wickEditor.tools['paintbrush'].color);
-        } else {
-            setTimeout(function () {
-                lineColorEl.jscolor.fromString(wickEditor.tools['paintbrush'].color);
-            })
-        }
+        if(lineColorEl.jscolor) lineColorEl.jscolor.fromString(wickEditor.tools['paintbrush'].color);
 
         /*if(wickEditor.currentTool instanceof PaintbrushTool) {
             document.getElementById('toolOptionsGUI').style.display = 'block';

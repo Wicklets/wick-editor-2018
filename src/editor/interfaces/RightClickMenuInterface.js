@@ -179,7 +179,13 @@ var RightClickMenuInterface = function (wickEditor) {
     });
 
     bindActionToButton("#deleteFrameButton", function () {
-        wickEditor.actionHandler.doAction('deleteCurrentFrame');
+        var currentObject = wickEditor.project.getCurrentObject();
+        var frame = currentObject.getCurrentFrame();
+        var layer = currentObject.getCurrentLayer();
+        wickEditor.actionHandler.doAction('deleteFrame', {
+            frame: frame,
+            layer: layer
+        });
     });
 
     bindActionToButton("#extendFrameButton", function () {
