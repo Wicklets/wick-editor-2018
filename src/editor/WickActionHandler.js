@@ -410,7 +410,6 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.onionSkinning = false;
             wickEditor.project.getCurrentObject().fixOriginPoint(); // hack to get around fabric.js lack of rotation around anchorpoint
             
-            wickEditor.project.getCurrentObject().playheadPosition = 0;
             wickEditor.project.currentObjectID = args.prevEditedObjectID;
         });
 
@@ -429,7 +428,6 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.onionSkinning = false;
             wickEditor.project.getCurrentObject().fixOriginPoint(); // hack to get around fabric.js lack of rotation around anchorpoint
             
-            wickEditor.project.getCurrentObject().playheadPosition = 0;
             wickEditor.project.currentObjectID = args.prevEditedObjectID;
         });
 

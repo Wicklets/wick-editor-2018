@@ -6,7 +6,7 @@ var readyToStartWebAudioContext;
 var audioBuffers = {};
 
 var WickWebAudioPlayer = function (project) {
-    var that = this; 
+    var that = this;
 
     this.loadAudio = function(wickObj) {
 
