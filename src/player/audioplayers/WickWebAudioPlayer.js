@@ -70,13 +70,21 @@ var WickWebAudioPlayer = function (project) {
     var allPlayingSounds = [];
 
     this.playSound = function (id, loop, volume) {
+        var that = this;
+
         if(!audioContext) return;
 
         if(!project.muted) {
+            var buff = audioBuffers[id];
+            if(!buff) {
+                console.log("sound not loaded.")
+                setTimeout(function () {
+                    that.playSound(id,loop,volume);
+                }, 100);
+                return;
+            }
             var gainNode = audioContext.createGain();
             var source = audioContext.createBufferSource();
-            var buff = audioBuffers[id];
-            if(!buff) return;
             source.buffer = buff;
             source.connect(audioContext.destination);
             source.connect(gainNode);

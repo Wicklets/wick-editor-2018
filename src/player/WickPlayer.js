@@ -24,59 +24,8 @@ var WickPlayer = (function () {
     var stopDrawLoop;
 
 /*****************************
-    experimenting ........
-*****************************/
-
-    wickPlayer.cloneObject = function (wickObj) {
-        var clone = wickObj.copy();
-
-        // pixi stuff
-        //renderer.refreshPixiSceneForObject(clone);
-        //wickObj.parentObject.pixiContainer.addChild(clone.pixiContainer || clone.pixiSprite || clone.pixiText)
-
-        // player stuff
-        resetAllPlayheads(clone);
-        resetAllEventStates(clone);
-
-        clone.parentObject = project.rootObject;
-        project.addObject(clone);
-        renderer.refreshPixiSceneForObject(clone);
-
-        //project.addObject(clone);
-        //clone.parentObject = project.rootObject;
-        //wickObj.parentObject.addChild
-        //project.regenerateUniqueIDs(project.rootObject);
-
-        return clone;
-    }
-
-    wickPlayer.getAudioPlayer = function () {
-        return audioPlayer;
-    }
-
-    wickPlayer.getRenderer = function () {
-        return renderer;
-    }
-
-/*****************************
     Player Setup
 *****************************/
-
-    wickPlayer.getMouse = function () {
-        return mouse;
-    }
-
-    wickPlayer.getKeys = function () {
-        return keys;
-    }
-
-    wickPlayer.getLastKeyPressed = function () {
-        return lastKeyPressed;
-    }
-
-    wickPlayer.getProject = function () {
-        return project;
-    }
 
     wickPlayer.runProject = function(projectJSON) {
 
@@ -150,6 +99,30 @@ var WickPlayer = (function () {
         audioPlayer.cleanup();
         renderer.cleanup();
 
+    }
+
+    wickPlayer.getMouse = function () {
+        return mouse;
+    }
+
+    wickPlayer.getKeys = function () {
+        return keys;
+    }
+
+    wickPlayer.getLastKeyPressed = function () {
+        return lastKeyPressed;
+    }
+
+    wickPlayer.getProject = function () {
+        return project;
+    }
+
+    wickPlayer.getAudioPlayer = function () {
+        return audioPlayer;
+    }
+
+    wickPlayer.getRenderer = function () {
+        return renderer;
     }
 
 /*****************************
@@ -387,5 +360,33 @@ var WickPlayer = (function () {
     }
 
     return wickPlayer;
+
+
+/*****************************
+    experimenting ........
+*****************************/
+
+    wickPlayer.cloneObject = function (wickObj) {
+        var clone = wickObj.copy();
+
+        // pixi stuff
+        //renderer.refreshPixiSceneForObject(clone);
+        //wickObj.parentObject.pixiContainer.addChild(clone.pixiContainer || clone.pixiSprite || clone.pixiText)
+
+        // player stuff
+        resetAllPlayheads(clone);
+        resetAllEventStates(clone);
+
+        clone.parentObject = project.rootObject;
+        project.addObject(clone);
+        renderer.refreshPixiSceneForObject(clone);
+
+        //project.addObject(clone);
+        //clone.parentObject = project.rootObject;
+        //wickObj.parentObject.addChild
+        //project.regenerateUniqueIDs(project.rootObject);
+
+        return clone;
+    }
 
 })();

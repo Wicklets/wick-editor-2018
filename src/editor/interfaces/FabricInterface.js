@@ -861,10 +861,14 @@ var FabricInterface = function (wickEditor) {
         if(ids.length <= 1) {
             that.canvas._activeObject = selectedObjs[0];
         } else {
-            var group = new fabric.Group(selectedObjs, {
+            var group = new fabric.Group([], {
                 originX: 'left', 
                 originY: 'top'
             });
+            for(var i = 0; i < selectedObjs.length; i++) {
+                group.canvas = this.canvas // WHAT ??????????????? WHY
+                group.addWithUpdate(selectedObjs[i]);
+            }
 
             this.canvas._activeObject = null;
             this.canvas.setActiveGroup(group.setCoords()).renderAll();
@@ -878,31 +882,13 @@ var FabricInterface = function (wickEditor) {
     }
 
     this.selectAll = function () {
-
-        that.creatingSelection = true;
-
-        var objs = [];
-        this.canvas.getObjects().map(function(o) {
+        var ids = [];
+        this.canvas.forEachObject(function (o) {
             if(o.wickObjectID && o.selectable) {
-                o.set('active', true);
-                return objs.push(o);
+                ids.push(o.wickObjectID);
             }
         });
-
-        var group = new fabric.Group(objs, {
-            originX: 'left', 
-            originY: 'top'
-        });
-
-        this.canvas._activeObject = null;
-
-        this.canvas.setActiveGroup(group.setCoords()).renderAll();
-
-        that.creatingSelection = false;
-
-        that.repositionGUIElements();
-        wickEditor.syncInterfaces(['scriptingide','properties']);
-
+        this.selectByIDs(ids);
     }
 
     this.deselectAll = function () {
