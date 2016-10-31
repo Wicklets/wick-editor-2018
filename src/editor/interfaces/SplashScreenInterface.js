@@ -4,8 +4,15 @@ var SplashScreenInterface = function (wickEditor) {
 
     var that = this;
 
+    var mode = "Main"
+
     this.syncWithEditorState = function () {
-        
+        document.getElementById("splashScreenMain").style.display = "none";
+        document.getElementById("splashScreenCredits").style.display = "none";
+
+        document.getElementById("splashScreen"+mode).style.display = "block";
+
+        that.resize();
     }
 
 // Center splash screen on resize
@@ -14,14 +21,13 @@ var SplashScreenInterface = function (wickEditor) {
         var splashScreenWidth = parseInt($("#splashScreenGUI").css("width"));
         $("#splashScreenGUI").css('left', (window.innerWidth/2 - splashScreenWidth/2)+'px');
 
-        var splashScreenHeight = parseInt($("#splashScreenGUI").css("height"));
+        var splashScreenHeight = document.getElementById("splashScreenGUI").offsetHeight;
         $("#splashScreenGUI").css('top', (window.innerHeight/2 - splashScreenHeight/2)+'px');
     }
 
     window.addEventListener('resize', function(e) {
         that.resize();
     });
-    this.resize();
 
 // Close splash screen if we click (almost) anywhere
 
@@ -42,10 +48,20 @@ var SplashScreenInterface = function (wickEditor) {
     document.getElementById("toolbarGUI").onclick = that.closeSplashScreen;
     document.getElementById("settingsGUI").onclick = that.closeSplashScreen;
 
-// Close button
+// Buttons
 
     document.getElementById('closeSplashScreenButton').onclick = function (e) {
         that.closeSplashScreen();
+    }
+
+    document.getElementById('splashScreenCreditsButton').onclick = function (e) {
+        mode = "Credits";
+        that.syncWithEditorState();
+    }
+
+    document.getElementById('splashScreenBackButton').onclick = function (e) {
+        mode = "Main";
+        that.syncWithEditorState();
     }
 
 // Auto-close splash screen if user wants it to be hidden

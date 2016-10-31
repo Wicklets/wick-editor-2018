@@ -10,7 +10,7 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 
     <script src="lib/jquery/jquery.min.js"></script>
-    <script src="lib/fabric/fabric.js"></script>
+    <script src="lib/fabric/fabric.min.js"></script>
     <script src="lib/fabric/fabric.canvasex.js"></script>
     <script src="lib/potrace/potrace.js"></script>
     <script src="lib/paper/paper-full.js"></script>
@@ -104,17 +104,29 @@
         <!-- Splash Screen -->
 
             <div id="splashScreenGUI" class="GUIBox">
-                <br />
-                <p><img src="resources/wicklogo.png"></p>
-                <br /><hr /><br />
-                <p><strong>It's Wick Pre-Alpha!</strong></p>
-                <br />
-                <p>Have any questions? Contact me at <a target="_blank" href="http://www.zrispo.co">zach.rispoli@gmail.com</a></p>
-                <p>You can also visit Wick <a target="_blank" href="https://github.com/zrispo/wick">on Github!</a></p>
-                <br />
-                <p><input type="checkbox" id="dontShowSplashScreenAgainCheckbox"> Don't show this window again</input></p>
+                <div id="splashScreenMain">
+                    <br />
+                    <p><img src="resources/wicklogo.png"></p>
+                    <strong>Pre-Alpha</strong>
+                    <br /><br />
+                    <hr />
+                    <br />
+                    <p>Have any questions? Contact me at <a target="_blank" href="http://www.zrispo.co">zach.rispoli@gmail.com</a></p>
+                    <p>You can also visit Wick <a target="_blank" href="https://github.com/zrispo/wick">on Github!</a></p>
+                    <br />
+                    <input type="button" id="splashScreenCreditsButton" value="Credits"></button>
+                    <br />
+                    <br />
+                    <p><input type="checkbox" id="dontShowSplashScreenAgainCheckbox"> Don't show this window again</input></p>
 
-                <div class="button buttonInRow" id="closeSplashScreenButton"><font color="red">Close</font></div>
+                    <div class="button buttonInRow" id="closeSplashScreenButton"><font color="red">Close</font></div>
+                    <br />
+                </div>
+                <div id="splashScreenCredits">
+                    here be credits
+                    <br />
+                    <input type="button" id="splashScreenBackButton" value="Back"></button>
+                </div>
             </div>
 
         <!-- Settings window -->

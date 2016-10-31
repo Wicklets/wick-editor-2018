@@ -267,6 +267,8 @@ var FabricInterface = function (wickEditor) {
 
     this.syncWithEditorState = function () {
 
+        console.log("sync");
+
         //console.log("-------------------")
         //startTiming();
 
@@ -299,6 +301,7 @@ var FabricInterface = function (wickEditor) {
         // Make sure everything is deselected, mulitple selected objects cause positioning problems.
         var selectedObjectIDs = that.getSelectedObjectIDs();
         that.deselectAll();
+        console.log(that.canvas._objects.length)
 
         var activeObjects = currentObject.getAllActiveChildObjects();
         var siblingObjects = currentObject.getAllInactiveSiblings();
@@ -312,7 +315,7 @@ var FabricInterface = function (wickEditor) {
 
         // Remove objects that don't exist anymore or need to be regenerated
         this.canvas.forEachObject(function(fabricObj) {
-            if(!fabricObj.wickObjectID) return;
+            if(!fabricObj || !fabricObj.wickObjectID) return;
 
             var wickObj = wickEditor.project.rootObject.getChildByID(fabricObj.wickObjectID);
 
@@ -321,10 +324,13 @@ var FabricInterface = function (wickEditor) {
                 that.objectIDsInCanvas[fabricObj.wickObjectID] = false;
                 // Object doesn't exist in the current object anymore, remove it's fabric object.
                 if(fabricObj.type === "group") {
-                    fabricObj.forEachObject(function(o){ fabricObj.remove(o) });
+                    console.log("remove group")
+                    fabricObj.forEachObject(function(o){ fabricObj.removeWithUpdate(o) });
                     that.canvas.remove(fabricObj);
+                    that.canvas.renderAll();
                 } else {
                     fabricObj.remove();
+                    console.log("remove obj")
                 }
             }
         });
@@ -893,7 +899,7 @@ var FabricInterface = function (wickEditor) {
 
     this.deselectAll = function () {
 
-        that.creatingSelection = false;
+        that.creatingSelection = true;
 
         var activeGroup = this.canvas.getActiveGroup();
         if(activeGroup) {
@@ -903,7 +909,7 @@ var FabricInterface = function (wickEditor) {
 
         this.canvas.deactivateAll().renderAll();
 
-        that.creatingSelection = true;
+        that.creatingSelection = false;
 
         that.repositionGUIElements();
         wickEditor.syncInterfaces(['scriptingide','properties']);
