@@ -52,11 +52,11 @@ var WickEditor = function () {
     this.currentTool = this.tools['cursor'];
     this.lastTool = this.currentTool;
 
-    this.syncInterfaces();
-
     this.inputHandler = new InputHandler(this);
     this.actionHandler = new WickActionHandler(this);
     this.guiActionHandler = new GuiActionHandler(this);
+
+    this.syncInterfaces();
 
 }
 
