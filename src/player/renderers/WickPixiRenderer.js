@@ -112,7 +112,9 @@ var WickPixiRenderer = function (project) {
 	    rendererContainerEl = document.getElementById("playerCanvasContainer");
 	    var rendererOptions = {
 	        backgroundColor : "#DDDDDD", 
-	        resolution: window.devicePixelRatio };
+	        resolution: window.devicePixelRatio,
+	        antialias: true
+	    };
 	    renderer = PIXI.autoDetectRenderer(project.resolution.x, project.resolution.y, rendererOptions);
 	    renderer.clearBeforeRender = false;
 
@@ -175,14 +177,27 @@ var WickPixiRenderer = function (project) {
 	        wickObj.pixiContainer.visible = true;
 	        if(!wickObj.isRoot) {
 	            wickObj.pixiContainer.anchor = new PIXI.Point(0.0, 0.0);
-	            wickObj.pixiContainer.position.x = Math.round(wickObj.x)// + wickObj.width/2  * wickObj.scaleX;
-	            wickObj.pixiContainer.position.y = Math.round(wickObj.y)// + wickObj.height/2 * wickObj.scaleY;
+	            wickObj.pixiContainer.position.x = Math.round(wickObj.x);
+	            wickObj.pixiContainer.position.y = Math.round(wickObj.y);
 	            wickObj.pixiContainer.rotation = wickObj.angle/360*2*3.14159;
-	            wickObj.pixiContainer.scale.x  = wickObj.scaleX;
-	            wickObj.pixiContainer.scale.y  = wickObj.scaleY;
-	            if(wickObj.flipX) { wickObj.pixiContainer.scale.x *= -1; wickObj.pixiContainer.position.x += wickObj.width*wickObj.scaleX }
-	            if(wickObj.flipY) { wickObj.pixiContainer.scale.y *= -1; wickObj.pixiContainer.position.y += wickObj.height*wickObj.scaleY }
-	            wickObj.pixiContainer.alpha    = wickObj.opacity;
+	            wickObj.pixiContainer.scale.x = wickObj.scaleX;
+	            wickObj.pixiContainer.scale.y = wickObj.scaleY;
+	            wickObj.pixiContainer.alpha = wickObj.opacity;
+	            
+	            if(wickObj.flipX) { 
+	            	wickObj.pixiContainer.scale.x *= -1;
+	            	var m = {x:wickObj.width*wickObj.scaleX, y:0};
+	            	var r = rotate({x:0,y:0},m,-wickObj.angle);
+	            	wickObj.pixiContainer.position.x += r.x;
+	            	wickObj.pixiContainer.position.y += r.y;
+	            }
+	            if(wickObj.flipY) { 
+	            	wickObj.pixiContainer.scale.y *= -1;
+	            	var m = {x:0, y:wickObj.height*wickObj.scaleY};
+	            	var r = rotate({x:0,y:0},m,-wickObj.angle);
+	            	wickObj.pixiContainer.position.x += r.x;
+	            	wickObj.pixiContainer.position.y += r.y;
+	            }
 	        }
 	        wickObj.getAllActiveChildObjects().forEach(function(subObj) {
 	            updatePixiObjectTransforms(subObj);
@@ -194,9 +209,9 @@ var WickPixiRenderer = function (project) {
 	            wickObj.pixiSprite.position.x = Math.round(wickObj.x);
 	            wickObj.pixiSprite.position.y = Math.round(wickObj.y);
 	            wickObj.pixiSprite.rotation = wickObj.angle/360*2*3.14159;
-	            wickObj.pixiSprite.scale.x  = wickObj.scaleX;
-	            wickObj.pixiSprite.scale.y  = wickObj.scaleY;
-	            wickObj.pixiSprite.alpha    = wickObj.opacity;
+	            wickObj.pixiSprite.scale.x = wickObj.scaleX;
+	            wickObj.pixiSprite.scale.y = wickObj.scaleY;
+	            wickObj.pixiSprite.alpha = wickObj.opacity;
 
 	            if(wickObj.flipX) { 
 	            	wickObj.pixiSprite.scale.x *= -1;

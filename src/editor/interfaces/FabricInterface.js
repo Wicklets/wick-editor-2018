@@ -715,11 +715,12 @@ var FabricInterface = function (wickEditor) {
 
     var drawingShape = null;
 
-    var mouseToScreenSpace = function (x,y) {
+    this.mouseToScreenSpace = function (x,y) {
         var pan = that.getPan();
+        var zoom = that.canvas.getZoom();
         return {
-            x: x - pan.x,
-            y: y - pan.y
+            x: (x - pan.x)/zoom,
+            y: (y - pan.y)/zoom
         }
     }
 
@@ -729,7 +730,7 @@ var FabricInterface = function (wickEditor) {
 
         that.canvas.selection = false;
 
-        var screenXY = mouseToScreenSpace(x,y)
+        var screenXY = that.mouseToScreenSpace(x,y)
 
         shapeStartPos = {x:screenXY.x,y:screenXY.y};
 
@@ -759,7 +760,7 @@ var FabricInterface = function (wickEditor) {
 
     this.updateDrawingShape = function (x,y) {
         if(drawingShape) {
-            var screenXY = mouseToScreenSpace(x,y);
+            var screenXY = that.mouseToScreenSpace(x,y);
 
             if(drawingShape.type === 'rect') {
                 if(screenXY.x < shapeStartPos.x) drawingShape.left = screenXY.x;

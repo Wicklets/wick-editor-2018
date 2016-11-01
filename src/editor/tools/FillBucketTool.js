@@ -17,10 +17,8 @@ var FillBucketTool = function (wickEditor) {
         var onscreenObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
         updatePaperDataOnVectorWickObjects(onscreenObjects);
 
-        var panOffset = wickEditor.interfaces.fabric.getPan();
-        var mouseX = e.e.offsetX - panOffset.x;
-        var mouseY = e.e.offsetY - panOffset.y;
-        var mousePoint = new paper.Point(mouseX, mouseY);
+        var mouseScreenSpace = wickEditor.interfaces.fabric.mouseToScreenSpace(e.e.offsetX, e.e.offsetY);
+        var mousePoint = new paper.Point(mouseScreenSpace.x, mouseScreenSpace.y);
 
         // Try filling paths
         var filledPath = false;
