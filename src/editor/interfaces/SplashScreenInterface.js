@@ -14,7 +14,7 @@ var SplashScreenInterface = function (wickEditor) {
 
         setTimeout(function () {
             that.resize();
-        }, 50)
+        }, 50);
     }
 
 // Center splash screen on resize

@@ -169,6 +169,16 @@ var WickActionHandler = function (wickEditor) {
             for(var i = 0; i < args.ids.length; i++) {
                 var wickObj = wickEditor.project.getCurrentObject().getChildByID(args.ids[i]);
 
+                // Fix weird neagtive scale bug
+                /*if(args.modifiedStates[i].scaleX < 0) {
+                    args.modifiedStates[i].scaleX *= -1;
+                    args.modifiedStates[i].flipX = !args.modifiedStates[i].flipX;
+                }
+                if(args.modifiedStates[i].scaleY < 0) {
+                    args.modifiedStates[i].scaleY *= -1;
+                    args.modifiedStates[i].flipY = !args.modifiedStates[i].flipY;
+                }*/
+
                 args.originalStates[i] = {};
                 modifyableAttributes.forEach(function(attrib) {
                     args.originalStates[i][attrib] = wickObj[attrib];

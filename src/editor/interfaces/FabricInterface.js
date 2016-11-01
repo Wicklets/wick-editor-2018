@@ -556,7 +556,7 @@ var FabricInterface = function (wickEditor) {
             fabric.loadSVGFromString(wickObj.svgData.svgString, function(objects, options) {
                 var pathFabricObj = objects[0];
 
-                that.syncObjects(wickObj, pathFabricObj);
+                //that.syncObjects(wickObj, pathFabricObj);
                 pathFabricObj.fill = wickObj.svgData.fillColor;
 
                 /*fabric.loadSVGFromString(this.svgData.svgString, function(objects, options) {
