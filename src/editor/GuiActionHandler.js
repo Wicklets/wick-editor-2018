@@ -13,7 +13,7 @@ var GuiActionHandler = function (wickEditor) {
     var editingTextBox = false;
 
     /* Define special keys */
-    var modifierKeys = ["Windows","Command","Ctrl"];
+    var modifierKeys = ["Windows","Command","FirefoxCommand","Ctrl"];
     var shiftKeys = ["Shift"];
 
     /* Initialize list of GuiActions. */
@@ -54,7 +54,7 @@ var GuiActionHandler = function (wickEditor) {
         this.elementIds.forEach(function (elementID) {
             document.getElementById(elementID).onclick = function (e) {
                 wickEditor.interfaces.rightclickmenu.open = false;
-                that.doAction();
+                that.doAction({});
             }
         });
 
@@ -63,7 +63,9 @@ var GuiActionHandler = function (wickEditor) {
             document.addEventListener(requiredParams.DOMEvent, function(event) {
                 if(activeElemIsTextBox()) return;
                 wickEditor.interfaces.rightclickmenu.open = false;
-                that.doAction({e:event});
+                event.preventDefault();
+                focusHiddenArea();
+                that.doAction({clipboardData:event.clipboardData});
             });
         }
 
@@ -82,7 +84,7 @@ var GuiActionHandler = function (wickEditor) {
     });
 
     var handleKeyEvent = function (event, eventType) {
-
+        
         var keyChar = codeToKeyChar[event.keyCode];
         var keyDownEvent = eventType === 'keydown';
         if (modifierKeys.indexOf(keyChar) !== -1) {
@@ -128,7 +130,8 @@ var GuiActionHandler = function (wickEditor) {
             if(activeElemIsTextBox() && !guiAction.requiredParams.usableInTextBoxes) return;
 
             wickEditor.interfaces.rightclickmenu.open = false;
-            guiAction.doAction();
+            event.preventDefault();
+            guiAction.doAction({});
             that.keys = [];
         });
     };
@@ -177,7 +180,6 @@ var GuiActionHandler = function (wickEditor) {
         ['redoButton'], 
         {}, 
         function(args) {
-            event.preventDefault();
             wickEditor.actionHandler.redoAction();
         });
 
@@ -188,7 +190,6 @@ var GuiActionHandler = function (wickEditor) {
         ['undoButton'], 
         {}, 
         function(args) {
-            event.preventDefault();
             wickEditor.actionHandler.undoAction();
         });
 
@@ -199,7 +200,6 @@ var GuiActionHandler = function (wickEditor) {
         ['runButton'], 
         {}, 
         function(args) {
-            event.preventDefault();
             that.keys = [];
             that.specialKeys = [];
 
@@ -233,7 +233,6 @@ var GuiActionHandler = function (wickEditor) {
         [], 
         {usableInTextBoxes:true}, 
         function(args) {
-            event.preventDefault();
             that.keys = [];
             that.specialKeys = [];
             wickEditor.project.saveInLocalStorage();
@@ -245,7 +244,6 @@ var GuiActionHandler = function (wickEditor) {
         ['exportHTMLButton'], 
         {usableInTextBoxes:true}, 
         function(args) {
-            event.preventDefault();
             that.keys = [];
             that.specialKeys = [];
             WickProjectExporter.exportProject(wickEditor.project);
@@ -258,7 +256,6 @@ var GuiActionHandler = function (wickEditor) {
         ['openProjectButton'], 
         {}, 
         function(args) {
-            event.preventDefault();
             that.keys = [];
             $('#importButton').click();
         });
@@ -270,7 +267,6 @@ var GuiActionHandler = function (wickEditor) {
         [], 
         {}, 
         function(args) {
-            event.preventDefault();
             wickEditor.currentTool = wickEditor.tools.cursor;
             wickEditor.syncInterfaces();
             wickEditor.interfaces['fabric'].deselectAll();
@@ -404,7 +400,6 @@ var GuiActionHandler = function (wickEditor) {
         ['deleteButton'], 
         {}, 
         function(args) {
-            event.preventDefault();
             wickEditor.actionHandler.doAction('deleteObjects', { 
                 ids:wickEditor.interfaces['fabric'].getSelectedObjectIDs() 
             });
@@ -417,121 +412,109 @@ var GuiActionHandler = function (wickEditor) {
         ['deleteButton'], 
         {}, 
         function(args) {
-            event.preventDefault();
             wickEditor.actionHandler.doAction('deleteObjects', { 
                 ids:wickEditor.interfaces['fabric'].getSelectedObjectIDs() 
             });
         });
 
 
-    new GuiAction([], [], { DOMEvent: 'copy' }, function(args) {
-        that.keys = [];
+    new GuiAction(
+        ['Modifier',"C"], 
+        ['copyButton'], 
+        {}, 
+        function(args) {
+            wickEditor.interfaces.rightclickmenu.open = false;
+            that.keys = [];
 
-        console.log(args)
-        args.e.preventDefault();
-        focusHiddenArea();
-
-        // Generate clipboard data
-        var ids = wickEditor.interfaces['fabric'].getSelectedObjectIDs();
-        var objectJSONs = [];
-        for(var i = 0; i < ids.length; i++) {
-            objectJSONs.push(wickEditor.project.getObjectByID(ids[i]).getAsJSON());
-        }
-        var clipboardObject = {
-            /*position: {top  : group.top  + group.height/2, 
-                       left : group.left + group.width/2},*/
-            groupPosition: {x : 0, 
-                            y : 0},
-            wickObjectArray: objectJSONs
-        }
-        var copyData =  JSON.stringify(clipboardObject);
-
-        // Send the clipboard data to the clipboard!
-        args.e.clipboardData.setData('text/wickobjectsjson', copyData);
-    });
-
-    new GuiAction([], [], { DOMEvent: 'cut' }, function(args) {
-        that.keys = [];
-
-        args.e.preventDefault();
-        focusHiddenArea();
-
-        // Generate clipboard data
-        var ids = wickEditor.interfaces['fabric'].getSelectedObjectIDs();
-        var objectJSONs = [];
-        for(var i = 0; i < ids.length; i++) {
-            objectJSONs.push(wickEditor.project.getObjectByID(ids[i]).getAsJSON());
-        }
-        var clipboardObject = {
-            /*position: {top  : group.top  + group.height/2, 
-                       left : group.left + group.width/2},*/
-            groupPosition: {x : 0, 
-                            y : 0},
-            wickObjectArray: objectJSONs
-        }
-        var copyData =  JSON.stringify(clipboardObject);
-
-        // Send the clipboard data to the clipboard!
-        args.e.clipboardData.setData('text/wickobjectsjson', copyData);
-
-        wickEditor.actionHandler.doAction('deleteObjects', { ids:ids });
-    });
-
-    new GuiAction([], [], { DOMEvent: 'paste' }, function(args) {
-        that.keys = [];
-
-        args.e.preventDefault();
-        focusHiddenArea();
-
-        var clipboardData = args.e.clipboardData;
-        var items = clipboardData.items || clipboardData.types;
-
-        for (i=0; i<items.length; i++) {
-
-            var fileType = items[i].type || items[i];
-            var file = clipboardData.getData(fileType);
-
-            if(fileType === 'text/wickobjectsjson') {
-                var fileWickObject = WickObject.fromJSONArray(JSON.parse(file), function(objs) {
-                    // get rid of IDs (IDs from same/other projects might cause collisions)
-                    objs.forEach(function (obj) {
-                        obj.selectOnAddToFabric = true;
-                        obj.id=null;
-                        obj.getAllChildObjectsRecursive().forEach(function (child) {
-                            child.id = null;
-                        });
-                    })
-                    wickEditor.actionHandler.doAction('addObjects', {
-                        wickObjects:objs
-                    });
-                });
-            } else if (fileType === 'text/plain') {
-                var newObj = WickObject.fromText(file);
-                newObj.selectOnAddToFabric = true;
-                wickEditor.actionHandler.doAction('addObjects', {
-                    wickObjects:[newObj]
-                });
-            } else {
-                console.error("Pasting files with type " + fileType + "NYI.")
+            var clipboardData = window.polyfillClipboardData//(window.polyfillClipboardData || args.clipboardData);
+            if(clipboardData) {
+                clipboardData.setData('text/wickobjectsjson', wickEditor.project.getCopyData(wickEditor.interfaces['fabric'].getSelectedObjectIDs()));
             }
+        });
 
-        }
-    });
+    new GuiAction(
+        ['Modifier',"X"], 
+        ['cutButton'], 
+        {}, 
+        function(args) {
+            wickEditor.interfaces.rightclickmenu.open = false;
+            that.keys = [];
 
-    new GuiAction([], ['settingsButton'], {}, function(args) {
-        wickEditor.interfaces["settings"].open = true;
-        wickEditor.syncInterfaces();
-    });
+            var clipboardData = window.polyfillClipboardData//(window.polyfillClipboardData || args.clipboardData);
+            if(clipboardData) {
+                clipboardData.setData('text/wickobjectsjson', wickEditor.project.getCopyData(wickEditor.interfaces['fabric'].getSelectedObjectIDs()));
+                wickEditor.actionHandler.doAction('deleteObjects', { ids:wickEditor.interfaces['fabric'].getSelectedObjectIDs() });
+            }
+        });
 
-    new GuiAction([], ['newProjectButton'], {}, function(args) {
-        if(!confirm("Create a new project? All unsaved changes to the current project will be lost!")) {
-            return;
-        }
-        wickEditor.project = new WickProject();
-        localStorage.removeItem("wickProject");
-        wickEditor.interfaces.fabric.recenterCanvas();
-        wickEditor.syncInterfaces();
-    });
+    new GuiAction(
+        ['Modifier',"V"], 
+        ['pasteButton'], 
+        {},
+        function(args) {
+            wickEditor.interfaces.rightclickmenu.open = false;
+            that.keys = [];
+
+            var clipboardData = window.polyfillClipboardData//(window.polyfillClipboardData || args.clipboardData);
+            if(!clipboardData) return;
+            var items = clipboardData.items || clipboardData.types;
+
+            for (i=0; i<items.length; i++) {
+
+                var fileType = items[i].type || items[i];
+                var file = clipboardData.getData(fileType);
+
+                if(fileType === 'text/wickobjectsjson') {
+                    var fileWickObject = WickObject.fromJSONArray(JSON.parse(file), function(objs) {
+                        // get rid of IDs (IDs from same/other projects might cause collisions)
+                        objs.forEach(function (obj) {
+                            obj.selectOnAddToFabric = true;
+                            obj.id=null;
+                            obj.getAllChildObjectsRecursive().forEach(function (child) {
+                                child.id = null;
+                            });
+                            obj.x += 50;
+                            obj.y += 50;
+                        })
+                        wickEditor.actionHandler.doAction('addObjects', {
+                            wickObjects:objs
+                        });
+                    });
+                } else if (fileType === 'text/plain') {
+                    var newObj = WickObject.fromText(file);
+                    newObj.selectOnAddToFabric = true;
+                    wickEditor.actionHandler.doAction('addObjects', {
+                        wickObjects:[newObj]
+                    });
+                } else {
+                    console.error("Pasting files with type " + fileType + "NYI.")
+                }
+
+            }
+        });
+
+    new GuiAction(
+        [], 
+        ['settingsButton'], 
+        {}, 
+        function(args) {
+            wickEditor.interfaces["settings"].open = true;
+            wickEditor.syncInterfaces();
+        });
+
+    new GuiAction(
+        [], 
+        ['newProjectButton'], 
+        {}, 
+        function(args) {
+            if(!confirm("Create a new project? All unsaved changes to the current project will be lost!")) {
+                return;
+            }
+            wickEditor.project = new WickProject();
+            localStorage.removeItem("wickProject");
+            wickEditor.interfaces.fabric.recenterCanvas();
+            wickEditor.syncInterfaces();
+        });
 
     new GuiAction(
         [], 

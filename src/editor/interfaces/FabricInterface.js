@@ -267,8 +267,6 @@ var FabricInterface = function (wickEditor) {
 
     this.syncWithEditorState = function () {
 
-        console.log("sync");
-
         //console.log("-------------------")
         //startTiming();
 
@@ -301,14 +299,13 @@ var FabricInterface = function (wickEditor) {
         // Make sure everything is deselected, mulitple selected objects cause positioning problems.
         var selectedObjectIDs = that.getSelectedObjectIDs();
         that.deselectAll();
-        console.log(that.canvas._objects.length)
 
         var activeObjects = currentObject.getAllActiveChildObjects();
         var siblingObjects = currentObject.getAllInactiveSiblings();
         var nearbyObjects = wickEditor.project.onionSkinning ? currentObject.getNearbyObjects(3,3) : [];
         var allObjects = activeObjects.concat(siblingObjects.concat(nearbyObjects));
 
-        var allObjectsIDs = []; 
+        var allObjectsIDs = [];
         allObjects.forEach(function(obj) { allObjectsIDs.push(obj.id) });
 
         //stopTiming("object list generation");
@@ -324,13 +321,11 @@ var FabricInterface = function (wickEditor) {
                 that.objectIDsInCanvas[fabricObj.wickObjectID] = false;
                 // Object doesn't exist in the current object anymore, remove it's fabric object.
                 if(fabricObj.type === "group") {
-                    console.log("remove group")
                     fabricObj.forEachObject(function(o){ fabricObj.removeWithUpdate(o) });
                     that.canvas.remove(fabricObj);
                     that.canvas.renderAll();
                 } else {
                     fabricObj.remove();
-                    console.log("remove obj")
                 }
             }
         });
@@ -564,9 +559,34 @@ var FabricInterface = function (wickEditor) {
                 that.syncObjects(wickObj, pathFabricObj);
                 pathFabricObj.fill = wickObj.svgData.fillColor;
 
-                wickObj.cachedFabricObject = pathFabricObj;
+                /*fabric.loadSVGFromString(this.svgData.svgString, function(objects, options) {
+                    objects[0].fill = that.svgData.fillColor;
+                    var svgFabricObject = fabric.util.groupSVGElements(objects, options);
+                    svgFabricObject.scaleX /= window.devicePixelRatio;
+                    svgFabricObject.scaleY /= window.devicePixelRatio;
+                    svgFabricObject.setCoords();
+                    svgFabricObject.cloneAsImage(function(clone) {
+                        var element = clone.getElement();
+                        var imgSrc = element.src;
+                        that.svgCacheImageData = imgSrc;
+                        callback();
+                    }, {enableRetinaScaling:false});
+                });*/
+                
+                pathFabricObj.cloneAsImage(function(clone) {
+                    var element = clone.getElement();
+                    var imgSrc = element.src;
+                    //that.svgCacheImageData = imgSrc;
+                    fabric.Image.fromURL(imgSrc, function(newFabricImage) {
+                        that.syncObjects(wickObj, newFabricImage);
+                        wickObj.cachedFabricObject = newFabricImage;
+                        callback(newFabricImage);
+                    });
+                }, {enableRetinaScaling:false});
 
-                callback(pathFabricObj);
+                //wickObj.cachedFabricObject = pathFabricObj;
+
+                //callback(pathFabricObj);
             });
         }
 

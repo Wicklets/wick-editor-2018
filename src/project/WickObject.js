@@ -1150,7 +1150,9 @@ WickObject.prototype.isPointInside = function(point, parentScaleX, parentScaleY)
 
             var objectRelativePointX = (point.x - scaledObjX);
             var objectRelativePointY = (point.y - scaledObjY);
-            var objectAlphaMaskIndex = (Math.floor(objectRelativePointX)%Math.floor(that.width))+(Math.floor(objectRelativePointY)*Math.floor(that.width));
+            var objectAlphaMaskIndex = 
+                (Math.floor(objectRelativePointX/that.scaleX/parentScaleX)%Math.floor(that.width)) +
+                (Math.floor(objectRelativePointY/that.scaleY/parentScaleY)*Math.floor(that.width));
             return !that.alphaMask[(objectAlphaMaskIndex)];
 
         }

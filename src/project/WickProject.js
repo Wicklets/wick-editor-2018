@@ -166,6 +166,21 @@ WickProject.saveProjectJSONInLocalStorage = function (projectJSON) {
     }
 }
 
+WickProject.prototype.getCopyData = function (ids) {
+    var objectJSONs = [];
+    for(var i = 0; i < ids.length; i++) {
+        objectJSONs.push(wickEditor.project.getObjectByID(ids[i]).getAsJSON());
+    }
+    var clipboardObject = {
+        /*position: {top  : group.top  + group.height/2, 
+                   left : group.left + group.width/2},*/
+        groupPosition: {x : 0, 
+                        y : 0},
+        wickObjectArray: objectJSONs
+    }
+    return JSON.stringify(clipboardObject);
+}
+
 /*********************************
     Access project wickobjects
 *********************************/

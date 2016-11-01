@@ -71,15 +71,15 @@ var InputHandler = function (wickEditor) {
             } else {
 
                 var fromContstructors = {
-                    'image/png'  : WickObject.fromImage,
-                    'image/jpeg' : WickObject.fromImage,
+                    'image/png'       : WickObject.fromImage,
+                    'image/jpeg'      : WickObject.fromImage,
                     'application/jpg' : WickObject.fromImage,
-                    'image/bmp'  : WickObject.fromImage,
-                    'image/gif'  : WickObject.fromAnimatedGIF,
-                    'audio/mp3'  : WickObject.fromAudioFile,
-                    'audio/wav'  : WickObject.fromAudioFile,
-                    'audio/ogg'  : WickObject.fromAudioFile,
-                    "audio/x-m4a" : WickObject.fromAudioFile
+                    'image/bmp'       : WickObject.fromImage,
+                    'image/gif'       : WickObject.fromAnimatedGIF,
+                    'audio/mp3'       : WickObject.fromAudioFile,
+                    'audio/wav'       : WickObject.fromAudioFile,
+                    'audio/ogg'       : WickObject.fromAudioFile,
+                    "audio/x-m4a"     : WickObject.fromAudioFile
                 }
                 
                 var fr = new FileReader();
