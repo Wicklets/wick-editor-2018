@@ -10,6 +10,8 @@ var WickProject = function () {
     this.currentObjectID = this.rootObject.id;
     this.rootObject.currentFrame = 0;
 
+    this.name = "NewProject";
+
     this.onionSkinning = false;
     
     this.resolution = {};

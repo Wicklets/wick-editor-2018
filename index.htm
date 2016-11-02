@@ -97,6 +97,9 @@
     <!-- Editor GUI, visible when a project is being edited & not running -->
 
         <div id="editor">
+
+        <!-- Fabric.js canvas -->
+
             <div tabindex="1" id="editorCanvasContainer">
                 <canvas id="fabricCanvas"></canvas>
             </div>
@@ -143,6 +146,7 @@
             <div id="settingsGUI" class="GUIBox">
                 <strong>Settings</strong>
                 <hr />
+                Project Name: <input type="text" id="projectName" size="15"><br />
                 Background color: <input class="jscolor" value="#FFFFFF" id="projectBgColor"><br />
                 Border color: <input class="jscolor" value="#FFFFFF" id="projectBorderColor"><br />
                 Size: <input type="text" id="projectSizeX" maxlength="4" size="4"> x 
@@ -424,10 +428,6 @@
                     </div>
                 </div>
             </div>
-
-    <!-- Drop file message -->
-
-            <div id="dropToUploadFileAlert"></div>
 
         </div>
 

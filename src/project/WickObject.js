@@ -60,7 +60,11 @@ var WickObject = function () {
 
 };
 
-WickObject.fromJSON = function (jsonString) {
+WickObject.fromJSONFile = function (file, callback) {
+    callback(WickObject.fromJSONString(file));
+}
+
+WickObject.fromJSONString = function (jsonString) {
     // Parse JSON
     var newWickObject = JSON.parse(jsonString);
 
@@ -79,7 +83,7 @@ WickObject.fromJSONArray = function (jsonArrayObject, callback) {
     var wickObjectJSONArray = jsonArrayObject.wickObjectArray;
     for (var i = 0; i < wickObjectJSONArray.length; i++) {
         
-        var newWickObject = WickObject.fromJSON(wickObjectJSONArray[i]);
+        var newWickObject = WickObject.fromJSONString(wickObjectJSONArray[i]);
         
         if(wickObjectJSONArray.length > 1) {
             newWickObject.x += jsonArrayObject.groupPosition.x;
@@ -767,6 +771,16 @@ WickObject.prototype.isOnActiveLayer = function () {
      Export
 *************************/
 
+WickObject.JSONReplacer = function(key, value) {
+    var dontJSONVars = ["id","parentObject","causedAnException","paperData","cachedFabricObject"];
+
+    if (dontJSONVars.indexOf(key) !== -1) {
+        return undefined;
+    } else {
+        return value;
+    }
+}
+
 WickObject.prototype.getAsJSON = function () {
     var oldX = this.x;
     var oldY = this.y;
@@ -777,7 +791,7 @@ WickObject.prototype.getAsJSON = function () {
     // Encode scripts to avoid JSON format problems
     this.encodeStrings();
 
-    var JSONWickObject = JSON.stringify(this, WickProjectExporter.JSONReplacer);
+    var JSONWickObject = JSON.stringify(this, WickObject.JSONReplacer);
 
     // Put prototypes back on object ('class methods'), they don't get JSONified on project export.
     WickObject.addPrototypes(this);
@@ -791,15 +805,54 @@ WickObject.prototype.getAsJSON = function () {
     return JSONWickObject;
 }
 
-WickObject.prototype.getAsFile = function () {
+WickObject.prototype.downloadAsFile = function () {
+
+    var filename = this.name || "wickobject";
 
     if(this.isSymbol) {
-        console.log("note: we don't have wickobject import yet.")
-        return this.getAsJSON();
+        var blob = new Blob([this.getAsJSON()], {type: "text/plain;charset=utf-8"});
+        saveAs(blob, filename+".json");
+        return;
+    }
+
+    function dataURItoBlob(dataURI) {
+      // convert base64 to raw binary data held in a string
+      // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+      var byteString = atob(dataURI.split(',')[1]);
+
+      // separate out the mime component
+      var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+      // write the bytes of the string to an ArrayBuffer
+      var ab = new ArrayBuffer(byteString.length);
+      var ia = new Uint8Array(ab);
+      for (var i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
+      }
+
+      // write the ArrayBuffer to a blob, and you're done
+      var blob = new Blob([ab], {type: mimeString});
+      return blob;
+
+      // Old code
+      // var bb = new BlobBuilder();
+      // bb.append(ab);
+      // return bb.getBlob(mimeString);
     }
 
     if(this.imageData) {
+        saveAs(dataURItoBlob(this.imageData), filename+".png");
+        return;
+    }
 
+    if(this.svgCacheImageData) {
+        saveAs(dataURItoBlob(this.svgCacheImageData), filename+".png");
+        return;
+    }
+
+    if(this.audioData) {
+        saveAs(dataURItoBlob(this.audioData), filename+".wav");
+        return;
     }
 
     console.error("export not supported for this type of wickobject yet");

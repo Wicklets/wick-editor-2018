@@ -67,7 +67,8 @@ var WickProjectExporter = (function () {
 
         projectExporter.bundleProjectToHTML(wickProject, function(fileOut) {
             var blob = new Blob([fileOut], {type: "text/plain;charset=utf-8"});
-            saveAs(blob, "project.html");
+            var filename = wickProject.name || "project";
+            saveAs(blob, filename+".html");
             wickEditor.interfaces.statusbar.setState('done');
         });
 

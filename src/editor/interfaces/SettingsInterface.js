@@ -19,6 +19,7 @@ var SettingsInterface = function (wickEditor) {
             document.getElementById('projectSizeY').value          = wickEditor.project.resolution.y;
             document.getElementById('frameRate').value             = wickEditor.project.framerate;
             document.getElementById('fitScreenCheckbox').checked   = wickEditor.project.fitScreen;
+            document.getElementById('projectName').value           = wickEditor.project.name;
         } else {
             document.getElementById("settingsGUI").style.display = "none";
         }
@@ -40,6 +41,15 @@ var SettingsInterface = function (wickEditor) {
     this.resize();
 
 // Bind GUI elements to vars in project
+
+    $('#projectName').on('input propertychange', function () {
+        var newName = $('#projectName').val();
+        if(newName === '') {
+            wickEditor.project.name = undefined;
+        } else {
+            wickEditor.project.name = newName;
+        }
+    });
 
     $('#projectSizeX').on('input propertychange', function () {
 

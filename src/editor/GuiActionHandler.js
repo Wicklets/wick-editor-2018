@@ -466,10 +466,8 @@ var GuiActionHandler = function (wickEditor) {
 
                 if(fileType === 'text/wickobjectsjson') {
                     var fileWickObject = WickObject.fromJSONArray(JSON.parse(file), function(objs) {
-                        // get rid of IDs (IDs from same/other projects might cause collisions)
                         objs.forEach(function (obj) {
                             obj.selectOnAddToFabric = true;
-                            obj.id=null;
                             obj.getAllChildObjectsRecursive().forEach(function (child) {
                                 child.id = null;
                             });
@@ -683,9 +681,7 @@ var GuiActionHandler = function (wickEditor) {
         ['downloadButton'], 
         {}, 
         function(args) {
-            var fileData = wickEditor.interfaces['fabric'].getSelectedWickObject().exportAsFile();
-            var blob = new Blob([fileData], {type: "text/plain;charset=utf-8"});
-            saveAs(blob, "wickobject.json");
+            wickEditor.interfaces['fabric'].getSelectedWickObject().downloadAsFile();
         });
 
 }

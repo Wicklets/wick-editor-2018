@@ -42,62 +42,63 @@ var InputHandler = function (wickEditor) {
     });
 
 /*************************
-     Drag-to-upload
+     File Import
 *************************/
 
+    var loadFileIntoWickObject = function (file,fileType) {
+
+        if (fileType === 'text/html') {
+            WickProject.fromFile(file, function(project) {
+                wickEditor.project = project;
+                wickEditor.syncInterfaces();
+            });
+        } else {
+
+            var fromContstructors = {
+                'image/png'        : WickObject.fromImage,
+                'image/jpeg'       : WickObject.fromImage,
+                'application/jpg'  : WickObject.fromImage,
+                'image/bmp'        : WickObject.fromImage,
+                'image/gif'        : WickObject.fromAnimatedGIF,
+                'audio/mp3'        : WickObject.fromAudioFile,
+                'audio/wav'        : WickObject.fromAudioFile,
+                'audio/ogg'        : WickObject.fromAudioFile,
+                "audio/x-m4a"      : WickObject.fromAudioFile,
+                "application/json" : WickObject.fromJSONFile
+            }
+            
+            var fr = new FileReader();
+            fr.onloadend = function() {
+                if(!fromContstructors[fileType]) { 
+                    console.error(fileType + " has no WickObject constructor!");
+                    return;
+                }
+
+                fromContstructors[fileType](fr.result, function (newWickObject) {
+                    wickEditor.actionHandler.doAction('addObjects', {wickObjects:[newWickObject]});
+                })
+            };
+            if(fileType === "application/json") fr.readAsText(file); else fr.readAsDataURL(file);
+        }
+    }
+
+/*************************
+     Drag-to-upload
+*************************/
+    
     $("#editor").on('dragover', function(e) {
-        document.getElementById('dropToUploadFileAlert').style.display = 'block';
         return false;
     });
     $("#editor").on('dragleave', function(e) {
-        document.getElementById('dropToUploadFileAlert').style.display = 'none';
         return false;
     });
     $("#editor").on('drop', function(e) {
-        document.getElementById('dropToUploadFileAlert').style.display = 'none';
 
         // prevent browser from opening the file
         e.stopPropagation();
         e.preventDefault();
 
         var files = e.originalEvent.dataTransfer.files;
-
-        var loadFileIntoWickObject = function (file,fileType) {
-            if (fileType === 'application/json' || fileType === 'text/html') {
-                WickProject.fromFile(file, function(project) {
-                    wickEditor.project = project;
-                    wickEditor.syncInterfaces();
-                });
-            } else {
-
-                var fromContstructors = {
-                    'image/png'       : WickObject.fromImage,
-                    'image/jpeg'      : WickObject.fromImage,
-                    'application/jpg' : WickObject.fromImage,
-                    'image/bmp'       : WickObject.fromImage,
-                    'image/gif'       : WickObject.fromAnimatedGIF,
-                    'audio/mp3'       : WickObject.fromAudioFile,
-                    'audio/wav'       : WickObject.fromAudioFile,
-                    'audio/ogg'       : WickObject.fromAudioFile,
-                    "audio/x-m4a"     : WickObject.fromAudioFile
-                }
-                
-                var fr = new FileReader();
-                fr.onloadend = function() {
-                    if(!fromContstructors[fileType]) { 
-                        console.error(fileType + " has no WickObject constructor!")
-                        return;
-                    }
-
-                    fromContstructors[fileType](fr.result, function (newWickObject) {
-                        console.log(newWickObject)
-                        wickEditor.actionHandler.doAction('addObjects', {wickObjects:[newWickObject]});
-                    })
-                };
-                fr.readAsDataURL(file);
-
-            }
-        }
 
         // Retrieve uploaded files data
         for (var i = 0; i < files.length; i++) {
@@ -121,11 +122,9 @@ var InputHandler = function (wickEditor) {
         if(filePath.files && filePath.files[0]) {
             var reader = new FileReader();
             var file = filePath.files[0];
+            var fileType = file.type;
 
-            WickProject.fromFile(file, function(project) {
-                wickEditor.project = project;
-                wickEditor.syncInterfaces();
-            });
+            loadFileIntoWickObject(file,fileType);
         }
 
         var importButton = $("importButton");
