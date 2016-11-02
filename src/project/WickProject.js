@@ -21,7 +21,7 @@ var WickProject = function () {
     this.borderColor = "#DDDDDD";
     this.backgroundColor = "#FFFFFF";
 
-    this.framerate = 12;
+    this.framerate = 6;
 
     this.fitScreen = false;
     this.borderColor = "#FFFFFF";

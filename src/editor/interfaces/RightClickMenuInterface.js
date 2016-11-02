@@ -178,6 +178,10 @@ var RightClickMenuInterface = function (wickEditor) {
         wickEditor.actionHandler.doAction('addNewFrame');
     });
 
+    bindActionToButton("#cloneFrameButton", function () {
+        alert("clone")
+    });
+
     bindActionToButton("#deleteFrameButton", function () {
         var currentObject = wickEditor.project.getCurrentObject();
         var frame = currentObject.getCurrentFrame();
