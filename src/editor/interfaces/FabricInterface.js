@@ -577,6 +577,7 @@ var FabricInterface = function (wickEditor) {
                 pathFabricObj.scaleY /= window.devicePixelRatio;
                 pathFabricObj.cloneAsImage(function(clone) {
                     var element = clone.getElement();
+                    if(!element) return;
                     var imgSrc = element.src;
                     //that.svgCacheImageData = imgSrc;
                     fabric.Image.fromURL(imgSrc, function(newFabricImage) {
