@@ -298,12 +298,13 @@ var WickActionHandler = function (wickEditor) {
     this.registerAction('removeLayer', 
         function (args) {
             var currentObject = wickEditor.project.getCurrentObject();
+            if(currentObject.layers.length > 1) {
+                // Add an empty frame
+                currentObject.removeLayer(currentObject.getCurrentLayer());
 
-            // Add an empty frame
-            currentObject.removeLayer(currentObject.getCurrentLayer());
-
-            // Go to last added layer
-            currentObject.currentLayer = currentObject.layers.length-1;
+                // Go to last added layer
+                currentObject.currentLayer = currentObject.layers.length-1;
+            }
         },
         function (args) {
             console.error("removeLayer undo NYI");
