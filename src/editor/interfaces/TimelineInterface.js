@@ -46,8 +46,11 @@ var TimelineInterface = function (wickEditor) {
         if(currentFrame) {
             document.getElementById('frameProperties').style.display = "block";
             document.getElementById('frameIdentifier').value = (currentFrame.identifier) ? currentFrame.identifier : "";
+            $('#frameIdentifier').prop('disabled', false);
         } else {
-            document.getElementById('frameProperties').style.display = "none"
+            document.getElementById('frameProperties').style.display = "block";
+            document.getElementById('frameIdentifier').value = "";
+            $('#frameIdentifier').prop('disabled', true);
         }
 
         if(wickEditor.project.onionSkinning) {
