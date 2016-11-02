@@ -302,7 +302,7 @@ var FabricInterface = function (wickEditor) {
 
         var activeObjects = currentObject.getAllActiveChildObjects();
         var siblingObjects = currentObject.getAllInactiveSiblings();
-        var nearbyObjects = wickEditor.project.onionSkinning ? currentObject.getNearbyObjects(3,3) : [];
+        var nearbyObjects = wickEditor.project.onionSkinning ? currentObject.getNearbyObjects(1,0) : [];
         var allObjects = activeObjects.concat(siblingObjects.concat(nearbyObjects));
 
         var allObjectsIDs = [];
