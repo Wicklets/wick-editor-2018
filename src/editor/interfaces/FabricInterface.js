@@ -577,7 +577,6 @@ var FabricInterface = function (wickEditor) {
                 pathFabricObj.scaleY /= window.devicePixelRatio;
                 pathFabricObj.cloneAsImage(function(clone) {
                     var element = clone.getElement();
-                    if(!element) return;
                     var imgSrc = element.src;
                     //that.svgCacheImageData = imgSrc;
                     fabric.Image.fromURL(imgSrc, function(newFabricImage) {
@@ -787,6 +786,8 @@ var FabricInterface = function (wickEditor) {
         if(!drawingShape) return;
 
         if(drawingShape.type === 'rect') {
+            if(drawingShape.width <= 0 || drawingShape.height <= 0) return;
+            
             var origX = drawingShape.left;
             var origY = drawingShape.top;
             drawingShape.left = 0;
@@ -809,6 +810,8 @@ var FabricInterface = function (wickEditor) {
                 wickObjects: [wickObj]
             });
         } else if (drawingShape.type === 'ellipse') {
+            if(drawingShape.width <= 0 || drawingShape.height <= 0) return;
+
             var origX = drawingShape.left;
             var origY = drawingShape.top;
             drawingShape.left = 0;
