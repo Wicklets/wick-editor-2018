@@ -48,8 +48,8 @@ var PaintbrushTool = function (wickEditor) {
             wickObj.y = fabricPath.top;
 
             var symbolOffset = wickEditor.project.getCurrentObject().getAbsolutePosition();
-            wickObj.x -= symbolOffset.x;
-            wickObj.y -= symbolOffset.y;
+            //wickObj.x -= symbolOffset.x;
+            //wickObj.y -= symbolOffset.y;
 
             wickObj.x -= fabricPath.width/2  + that.brushSize/2;
             wickObj.y -= fabricPath.height/2 + that.brushSize/2;
