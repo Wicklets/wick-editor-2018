@@ -784,10 +784,12 @@ var FabricInterface = function (wickEditor) {
         that.canvas.selection = true;
 
         if(!drawingShape) return;
+        if(drawingShape.width <= 0 || drawingShape.height <= 0) {
+            drawingShape = null;
+            return;
+        }
 
         if(drawingShape.type === 'rect') {
-            if(drawingShape.width <= 0 || drawingShape.height <= 0) return;
-            
             var origX = drawingShape.left;
             var origY = drawingShape.top;
             drawingShape.left = 0;
@@ -810,8 +812,6 @@ var FabricInterface = function (wickEditor) {
                 wickObjects: [wickObj]
             });
         } else if (drawingShape.type === 'ellipse') {
-            if(drawingShape.width <= 0 || drawingShape.height <= 0) return;
-
             var origX = drawingShape.left;
             var origY = drawingShape.top;
             drawingShape.left = 0;
