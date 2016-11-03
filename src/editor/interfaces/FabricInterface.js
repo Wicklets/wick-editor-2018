@@ -29,6 +29,8 @@ var FabricInterface = function (wickEditor) {
 
     this.panning = false;
 
+    this.inNewFrame = true;
+
 // White box that shows resolution & objects that will be on screen when project is exported
 
     var frameInside = new fabric.Rect({
@@ -267,8 +269,8 @@ var FabricInterface = function (wickEditor) {
 
     this.syncWithEditorState = function () {
 
-        //console.log("-------------------")
-        //startTiming();
+        console.log("-------------------")
+        startTiming();
 
         wickEditor.project.rootObject.applyTweens();
 
@@ -292,7 +294,7 @@ var FabricInterface = function (wickEditor) {
             that.canvas.selection = false;
         }
 
-        //stopTiming("init");
+        stopTiming("init");
 
         var currentObject = wickEditor.project.getCurrentObject();
 
@@ -308,7 +310,7 @@ var FabricInterface = function (wickEditor) {
         var allObjectsIDs = [];
         allObjects.forEach(function(obj) { allObjectsIDs.push(obj.id) });
 
-        //stopTiming("object list generation");
+        stopTiming("object list generation");
 
         // Remove objects that don't exist anymore or need to be regenerated
         this.canvas.forEachObject(function(fabricObj) {
@@ -330,7 +332,7 @@ var FabricInterface = function (wickEditor) {
             }
         });
 
-        //stopTiming("remove objects");
+        stopTiming("remove objects");
 
         var updateFabObj = function (fabricObj, wickObj) {
 
@@ -356,9 +358,8 @@ var FabricInterface = function (wickEditor) {
                 fabricObj.selectable = true;
                 fabricObj.evented = true;
 
-                // OPTIMIZATION WORK: get ridda this
                 //fabricObj.trueZIndex = currentObject.getCurrentFrame().wickObjects.indexOf(wickObj);
-                //that.canvas.moveTo(fabricObj, fabricObj.trueZIndex+2 + activeObjects.length+3);
+                //that.canvas.moveTo(fabricObj, fabricObj.trueZIndex+3 + activeObjects.length+3);
             } else {
                 fabricObj.hasControls = false;
                 fabricObj.selectable = false;
@@ -454,7 +455,7 @@ var FabricInterface = function (wickEditor) {
             });
         })
 
-        //stopTiming("add/update objects");
+        stopTiming("add & update objects");
 
         // Reselect objects that were selected before sync
         if(selectedObjectIDs.length > 0) that.selectByIDs(selectedObjectIDs);
@@ -466,7 +467,9 @@ var FabricInterface = function (wickEditor) {
         //that.canvas.moveTo(that.inactiveFrame, siblingObjects.length+1);
         inactiveFrame.opacity = currentObject.isRoot ? 0.0 : 0.4;
 
-        //stopTiming("reselect/cleanup");
+        stopTiming("reselect/cleanup");
+
+        this.inNewFrame = false;
 
         this.canvas.renderAll();
     }
@@ -785,6 +788,7 @@ var FabricInterface = function (wickEditor) {
 
         if(!drawingShape) return;
         if(drawingShape.width <= 0 || drawingShape.height <= 0) {
+            that.canvas.remove(drawingShape);
             drawingShape = null;
             return;
         }

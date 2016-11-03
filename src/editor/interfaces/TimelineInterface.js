@@ -196,6 +196,7 @@ var TimelineInterface = function (wickEditor) {
         if(newPlayheadPosition != oldPlayheadPosition || newLayer != oldLayer) {
             currentObject.playheadPosition = newPlayheadPosition;
             currentObject.currentLayer = newLayer;
+            wickEditor.interfaces.fabric.inNewFrame = true;
             wickEditor.syncInterfaces();
         }
     }
