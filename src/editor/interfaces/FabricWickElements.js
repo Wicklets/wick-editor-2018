@@ -13,7 +13,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
         // Make sure everything is deselected, mulitple selected objects cause positioning problems.
         var selectedObjectIDs = fabricInterface.getSelectedObjectIDs();
-        //fabricInterface.deselectAll();
+        fabricInterface.deselectAll();
 
         var activeObjects = currentObject.getAllActiveChildObjects();
         var siblingObjects = currentObject.getAllInactiveSiblings();
@@ -73,6 +73,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
                 //fabricObj.trueZIndex = currentObject.getCurrentFrame().wickObjects.indexOf(wickObj);
                 //that.canvas.moveTo(fabricObj, fabricObj.trueZIndex+3 + activeObjects.length+3);
+                fabricObj.trueZIndex = allObjects.indexOf(wickObj);
+                fabricInterface.canvas.moveTo(fabricObj, fabricObj.trueZIndex+3 + activeObjects.length);
             } else {
                 fabricObj.hasControls = false;
                 fabricObj.selectable = false;
@@ -115,13 +117,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                         updateFabObj(fabricObj, child);
                     }
                 });
-                /*var fabricObj;
-                that.canvas.forEachObject(function(fabricObj) {
-                    if(fabricObj.wickObjectID === child.id) {
-                        fabricObj = fabricObj;
-                    }
-                });
-                objectsToUpdate.push({wickObj:child,fabricObj:getObjectByID(child.id)});*/
+                
             } else {
                 // Add new object
                 fabricInterface.objectIDsInCanvas[child.id] = true;
@@ -172,7 +168,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         stopTiming("add & update objects");
 
         // Reselect objects that were selected before sync
-        //if(selectedObjectIDs.length > 0) fabricInterface.selectByIDs(selectedObjectIDs);
+        if(selectedObjectIDs.length > 0) fabricInterface.selectByIDs(selectedObjectIDs);
 
         stopTiming("reselect");
     }
