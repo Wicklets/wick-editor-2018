@@ -209,6 +209,7 @@ var WickActionHandler = function (wickEditor) {
                 if(args.modifiedStates[i].svgFillColor) {
                     args.originalStates[i].svgFillColor = wickObj.svgData.fillColor;
                     wickObj.svgData.fillColor = args.modifiedStates[i].svgFillColor;
+                    wickObj.forceFabricCanvasRegen = true;
                 }
 
                 // This is silly what's a better way ???

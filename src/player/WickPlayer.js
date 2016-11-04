@@ -343,6 +343,7 @@ var WickPlayer = (function () {
                 if(!stopDrawLoop) {
                     
                     project.rootObject.update();
+                    project.rootObject.applyTweens();
                     renderer.render();
                     animate();
                     //requestAnimationFrame(animate);

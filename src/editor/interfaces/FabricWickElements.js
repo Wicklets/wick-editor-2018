@@ -36,7 +36,10 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             var wickObj = wickEditor.project.rootObject.getChildByID(fabricObj.wickObjectID);
 
             if(allObjectsIDs.indexOf(fabricObj.wickObjectID) == -1 || (wickObj && wickObj.forceFabricCanvasRegen)) {
-                if(wickObj) wickObj.forceFabricCanvasRegen = false;
+                if(wickObj) {
+                    wickObj.forceFabricCanvasRegen = false;
+                    wickObj.cachedFabricObject = null;
+                }
                 objectIDsInCanvas[fabricObj.wickObjectID] = false;
                 // Object doesn't exist in the current object anymore, remove it's fabric object.
                 if(fabricObj.type === "group") {
