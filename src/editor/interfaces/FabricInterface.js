@@ -25,9 +25,6 @@ var FabricInterface = function (wickEditor) {
         this.canvas.setHeight( window.innerHeight );
         this.canvas.imageSmoothingEnabled = false;
 
-        this.creatingSelection = false;
-        this.objectIDsInCanvas = [];
-
         this.shapeDrawer = new ShapeDrawer(wickEditor, this);
         this.guiElements = new FabricGUIElements(wickEditor, this);
         this.wickElements = new FabricWickElements(wickEditor, this);
@@ -230,8 +227,6 @@ var FabricInterface = function (wickEditor) {
 
     this.selectByIDs = function (ids) {
 
-        that.creatingSelection = true;
-
         if(ids.length == 0) {
             return;
         }
@@ -265,8 +260,6 @@ var FabricInterface = function (wickEditor) {
             this.canvas.setActiveGroup(group.setCoords()).renderAll();
         }
 
-        that.creatingSelection = false;
-
         that.guiElements.update();
         wickEditor.syncInterfaces(['scriptingide','properties']);
 
@@ -284,8 +277,6 @@ var FabricInterface = function (wickEditor) {
 
     this.deselectAll = function () {
 
-        that.creatingSelection = true;
-
         var activeGroup = this.canvas.getActiveGroup();
         if(activeGroup) {
             activeGroup.removeWithUpdate(activeGroup);
@@ -293,8 +284,6 @@ var FabricInterface = function (wickEditor) {
         }
 
         this.canvas.deactivateAll().renderAll();
-
-        that.creatingSelection = false;
 
         that.guiElements.update();
         wickEditor.syncInterfaces(['scriptingide','properties']);

@@ -160,4 +160,8 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
         var currentObject = wickEditor.project.getCurrentObject();
         inactiveFrame.opacity = currentObject.isRoot ? 0.0 : 0.4;
     }
+
+    this.setInactiveFramePosition = function (i) {
+        fabricInterface.canvas.moveTo(inactiveFrame, i);
+    }
 }
