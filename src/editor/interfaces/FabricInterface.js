@@ -53,7 +53,7 @@ var FabricInterface = function (wickEditor) {
                 moving: e.target.setCoords,
                 scaling: e.target.setCoords,
                 rotating: e.target.setCoords
-              });
+            });
         });
         that.canvas.on('selection:cleared', function (e) {
             wickEditor.syncInterfaces(['scriptingide','properties']);

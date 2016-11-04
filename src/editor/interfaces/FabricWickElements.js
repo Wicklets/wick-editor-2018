@@ -7,9 +7,11 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
     var objectIDsInCanvas = [];
 
     this.update = function () {
-        console.log("-------------------");
-        startTiming();
-        stopTiming("init");
+        var enablePerfTests = false;
+
+        if(enablePerfTests) console.log("-------------------");
+        if(enablePerfTests) startTiming();
+        if(enablePerfTests) stopTiming("init");
 
         var currentObject = wickEditor.project.getCurrentObject();
 
@@ -25,7 +27,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         var allObjectsIDs = [];
         allObjects.forEach(function(obj) { allObjectsIDs.push(obj.id) });
 
-        stopTiming("object list generation");
+        if(enablePerfTests) stopTiming("object list generation");
 
         // Remove objects that don't exist anymore or need to be regenerated
         fabricInterface.canvas.forEachObject(function(fabricObj) {
@@ -47,7 +49,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             }
         });
 
-        stopTiming("remove objects");
+        if(enablePerfTests) stopTiming("remove objects");
 
         var objectsToAdd = [];
         var selectionChanged = false;
@@ -113,7 +115,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             });
         });
 
-        stopTiming("add & update objects");
+        if(enablePerfTests) stopTiming("add & update objects");
 
         //update z-indices
         fabricInterface.canvas.forEachObject(function(fabricObj) {
@@ -129,12 +131,12 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         });
         fabricInterface.guiElements.setInactiveFramePosition(siblingObjects.length+1);
 
-        stopTiming("update z-indices");
+        if(enablePerfTests) stopTiming("update z-indices");
 
         // Reselect objects that were selected before sync
         if(selectedObjectIDs.length > 0) fabricInterface.selectByIDs(selectedObjectIDs);
 
-        stopTiming("reselect");
+        if(enablePerfTests) stopTiming("reselect");
     }
 
     var createFabricObjectFromWickObject = function (wickObj, callback) {
