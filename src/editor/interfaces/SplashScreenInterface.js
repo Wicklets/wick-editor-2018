@@ -4,6 +4,10 @@ var SplashScreenInterface = function (wickEditor) {
 
     var that = this;
 
+    this.setup = function () {
+        
+    }
+
     var mode = "Main"
 
     this.syncWithEditorState = function () {

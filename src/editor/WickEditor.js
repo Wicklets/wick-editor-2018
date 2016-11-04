@@ -27,30 +27,11 @@ var WickEditor = function () {
         "properties" : new PropertiesInterface(this),
         "settings" : new SettingsInterface(this),
         "fabric" : new FabricInterface(this),
+        "paper" : new PaperInterface(this),
     };
-
-    this.tools = {
-        "cursor" : new CursorTool(this),
-        "paintbrush" : new PaintbrushTool(this),
-        "fillbucket" : new FillBucketTool(this),
-        "rectangle" : new RectangleTool(this),
-        "ellipse" : new EllipseTool(this),
-        "dropper" : new DropperTool(this),
-        "text" : new TextTool(this),
-        "zoom" : new ZoomTool(this),
-        "pan" : new PanTool(this)
+    for (var key in this.interfaces) {
+        this.interfaces[key].setup();
     }
-
-    this.changeTool = function (newTool) {
-        that.lastTool = that.currentTool;
-        that.currentTool = newTool;
-        that.interfaces.fabric.forceModifySelectedObjects();
-        that.interfaces.fabric.deselectAll();
-        that.syncInterfaces();
-    }
-
-    this.currentTool = this.tools['cursor'];
-    this.lastTool = this.currentTool;
 
     this.inputHandler = new InputHandler(this);
     this.actionHandler = new WickActionHandler(this);

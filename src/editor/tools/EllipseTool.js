@@ -8,11 +8,12 @@ var EllipseTool = function (wickEditor) {
         return "crosshair"
     };
 
-    var canvas = wickEditor.interfaces.fabric.canvas;
+    var fabric = wickEditor.interfaces.fabric;
 
-    canvas.on('mouse:down', function (e) {
-        if(wickEditor.currentTool instanceof EllipseTool)
-            wickEditor.interfaces.fabric.startDrawingShape('ellipse', e.e.offsetX, e.e.offsetY);
+    fabric.canvas.on('mouse:down', function (e) {
+        if(!(fabric.currentTool instanceof EllipseTool)) return;
+
+        fabric.shapeDrawer.startDrawingShape('ellipse', e.e.offsetX, e.e.offsetY);
     });
 
 }

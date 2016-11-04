@@ -4,16 +4,54 @@ var ScriptingIDEInterface = function (wickEditor) {
 
     var that = this;
 
-    this.open = false;
-    this.currentScript = 'onLoad';
+    this.setup = function () {
+        this.open = false;
+        this.currentScript = 'onLoad';
 
-    this.aceEditor = ace.edit("scriptEditor");
-    this.aceEditor.setTheme("ace/theme/chrome");
-    this.aceEditor.getSession().setMode("ace/mode/javascript");
-    this.aceEditor.$blockScrolling = Infinity; // Makes that weird message go away
-    this.aceEditor.setAutoScrollEditorIntoView(true);
+        this.aceEditor = ace.edit("scriptEditor");
+        this.aceEditor.setTheme("ace/theme/chrome");
+        this.aceEditor.getSession().setMode("ace/mode/javascript");
+        this.aceEditor.$blockScrolling = Infinity; // Makes that weird message go away
+        this.aceEditor.setAutoScrollEditorIntoView(true);
 
-    this.beautify = ace.require("ace/ext/beautify");
+        this.beautify = ace.require("ace/ext/beautify");
+
+        // Update selected objects scripts when script editor text changes
+        this.aceEditor.getSession().on('change', function (e) {
+            wickEditor.interfaces['fabric'].getSelectedWickObject().wickScripts[that.currentScript] = that.aceEditor.getValue();
+        });
+
+        this.aceEditor.getSession().on("changeAnnotation", function(){
+            var annot = that.aceEditor.getSession().getAnnotations();
+
+            // Look for errors
+
+            var selectedObj = wickEditor.interfaces.fabric.getSelectedWickObject()
+            if(!selectedObj) return;
+
+            selectedObj.hasSyntaxErrors = false;
+            for (var key in annot){
+                if (annot.hasOwnProperty(key)) {
+                    if(annot[key].type === 'error') {
+                        // There's a syntax error. Set the projectHasErrors flag so the project won't run.
+                        //that.projectHasErrors = true;
+                        selectedObj.hasSyntaxErrors = true;
+                    }
+                }
+            }
+        });
+
+        this.resize = function () {
+            var GUIWidth = parseInt($("#scriptingGUI").css("width"));
+            $("#scriptingGUI").css('left', (window.innerWidth/2 - GUIWidth/2)+'px');
+            this.aceEditor.resize();
+        }
+
+        window.addEventListener('resize', function(e) {
+            that.resize();
+        });
+        this.resize();
+    }
 
     var erroneousLine;
     function unhighlightError(){
@@ -125,43 +163,5 @@ var ScriptingIDEInterface = function (wickEditor) {
         val = js_beautify(val);
         that.aceEditor.session.setValue(val);
     });
-
-// Ace events
-
-    // Update selected objects scripts when script editor text changes
-    this.aceEditor.getSession().on('change', function (e) {
-        wickEditor.interfaces['fabric'].getSelectedWickObject().wickScripts[that.currentScript] = that.aceEditor.getValue();
-    });
-
-    this.aceEditor.getSession().on("changeAnnotation", function(){
-        var annot = that.aceEditor.getSession().getAnnotations();
-
-        // Look for errors
-
-        var selectedObj = wickEditor.interfaces.fabric.getSelectedWickObject()
-        if(!selectedObj) return;
-
-        selectedObj.hasSyntaxErrors = false;
-        for (var key in annot){
-            if (annot.hasOwnProperty(key)) {
-                if(annot[key].type === 'error') {
-                    // There's a syntax error. Set the projectHasErrors flag so the project won't run.
-                    //that.projectHasErrors = true;
-                    selectedObj.hasSyntaxErrors = true;
-                }
-            }
-        }
-    });
-
-    this.resize = function () {
-        var GUIWidth = parseInt($("#scriptingGUI").css("width"));
-        $("#scriptingGUI").css('left', (window.innerWidth/2 - GUIWidth/2)+'px');
-        this.aceEditor.resize();
-    }
-
-    window.addEventListener('resize', function(e) {
-        that.resize();
-    });
-    this.resize();
 
 }

@@ -9,13 +9,13 @@ var DropperTool = function (wickEditor) {
     }
 
     wickEditor.interfaces.fabric.canvas.on('mouse:down', function (e) {
-        if(wickEditor.currentTool instanceof DropperTool) {
+        if(wickEditor.interfaces.fabric.currentTool instanceof DropperTool) {
             
             var image = new Image();
             image.onload = function () {
                 var mouse = wickEditor.inputHandler.mouse;
                 var color = GetColorAtCoords(image, mouse.x*window.devicePixelRatio, mouse.y*window.devicePixelRatio, "hex");
-                wickEditor.tools.paintbrush.color = color;
+                wickEditor.interfaces.fabric.tools.paintbrush.color = color;
                 wickEditor.syncInterfaces();
             };
             image.src = wickEditor.interfaces.fabric.canvas.toDataURL();

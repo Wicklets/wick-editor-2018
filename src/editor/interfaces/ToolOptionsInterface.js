@@ -6,16 +6,15 @@ var ToolOptionsInterface = function (wickEditor) {
     var lineSmoothnessEl = document.getElementById('lineSmoothness');
     var lineColorEl = document.getElementById('lineColor');
 
+    this.setup = function () {
+        
+    }
+
     this.syncWithEditorState = function () {
-        lineWidthEl.value = wickEditor.tools['paintbrush'].brushSize;
+        lineWidthEl.value = wickEditor.interfaces.fabric.tools['paintbrush'].brushSize;
 
-        if(lineColorEl.jscolor) lineColorEl.jscolor.fromString(wickEditor.tools['paintbrush'].color);
-
-        /*if(wickEditor.currentTool instanceof PaintbrushTool) {
-            document.getElementById('toolOptionsGUI').style.display = 'block';
-        } else {
-            document.getElementById('toolOptionsGUI').style.display = 'none';
-        }*/
+        if(lineColorEl.jscolor) lineColorEl.jscolor.fromString(wickEditor.interfaces.fabric.tools['paintbrush'].color);
+        
         document.getElementById('toolOptionsGUI').style.display = 'block';
     }
     

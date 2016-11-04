@@ -11,9 +11,9 @@ var TextTool = function (wickEditor) {
     }
 
     canvas.on('mouse:down', function (e) {
-    	if(wickEditor.currentTool instanceof TextTool) {
+    	if(wickEditor.interfaces.fabric.currentTool instanceof TextTool) {
 	    	addText();
-            wickEditor.currentTool = wickEditor.tools.cursor;
+            wickEditor.interfaces.fabric.currentTool = wickEditor.interfaces.fabric.tools.cursor;
             wickEditor.syncInterfaces();
 	    }
     });

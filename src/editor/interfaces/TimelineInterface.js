@@ -27,6 +27,10 @@ var TimelineInterface = function (wickEditor) {
         wickEditor.syncInterfaces();
     }
 
+    this.setup = function () {
+        
+    }
+
     this.syncWithEditorState = function () {
 
         var currentObject = wickEditor.project.getCurrentObject();

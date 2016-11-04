@@ -15,7 +15,7 @@ var PanTool = function (wickEditor) {
     });
 
     wickEditor.interfaces.fabric.canvas.on('mouse:down', function (e) {
-        if(wickEditor.currentTool instanceof PanTool) {
+        if(wickEditor.interfaces.fabric.currentTool instanceof PanTool) {
             wickEditor.interfaces.fabric.startPan();
         }
     });

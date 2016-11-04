@@ -12,12 +12,12 @@ var FillBucketTool = function (wickEditor) {
 
     canvas.on('mouse:down', function (e) {
         if(e.e.button != 0) return;
-        if(!(wickEditor.currentTool instanceof FillBucketTool)) return;
+        if(!(wickEditor.interfaces.fabric.currentTool instanceof FillBucketTool)) return;
 
         var onscreenObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
         updatePaperDataOnVectorWickObjects(onscreenObjects);
 
-        var mouseScreenSpace = wickEditor.interfaces.fabric.mouseToScreenSpace(e.e.offsetX, e.e.offsetY);
+        var mouseScreenSpace = wickEditor.interfaces.fabric.screenToCanvasSpace(e.e.offsetX, e.e.offsetY);
         var mousePoint = new paper.Point(mouseScreenSpace.x, mouseScreenSpace.y);
 
         // Try filling paths
@@ -32,7 +32,7 @@ var FillBucketTool = function (wickEditor) {
                 
                 wickEditor.actionHandler.doAction('modifyObjects', { 
                     ids: [wickPath.id], 
-                    modifiedStates: [{ svgFillColor : wickEditor.tools.paintbrush.color }] 
+                    modifiedStates: [{ svgFillColor : wickEditor.interfaces.fabric.tools.paintbrush.color }] 
                 });
             }
 
@@ -109,7 +109,7 @@ var FillBucketTool = function (wickEditor) {
             if(!hole.contains(mousePoint)) return;
 
             wickEditor.actionHandler.doAction('addObjects', {
-                wickObjects: [createSVGWickObject(hole, wickEditor.tools.paintbrush.color)],
+                wickObjects: [createSVGWickObject(hole, wickEditor.interfaces.fabric.tools.paintbrush.color)],
                 partOfChain: true
             });
         });

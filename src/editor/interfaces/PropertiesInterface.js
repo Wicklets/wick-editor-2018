@@ -2,6 +2,10 @@
 
 var PropertiesInterface = function (wickEditor) {
 
+    this.setup = function () {
+        
+    }
+
     this.syncWithEditorState = function () {
         $("#projectProperties").css('display', 'none');
         $("#objectProperties").css('display', 'none');

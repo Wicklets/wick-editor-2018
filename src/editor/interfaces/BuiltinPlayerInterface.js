@@ -4,7 +4,9 @@ var BuiltinPlayerInterface = function (wickEditor) {
 
     var that = this;
 
-    this.running = false;
+    this.setup = function () {
+        this.running = false;
+    }
 
     this.syncWithEditorState = function () {
         if(this.running) {

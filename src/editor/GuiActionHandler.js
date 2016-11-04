@@ -97,7 +97,7 @@ var GuiActionHandler = function (wickEditor) {
 
         // get this outta here
         if(event.keyCode == 32 && eventType === 'keyup' && !activeElemIsTextBox()) {
-            wickEditor.currentTool = wickEditor.lastTool;
+            wickEditor.interfaces.fabric.useLastUsedTool();
             wickEditor.syncInterfaces();
         }
 
@@ -155,9 +155,9 @@ var GuiActionHandler = function (wickEditor) {
         [], 
         {}, 
         function(args) {
-            if(wickEditor.currentTool !== wickEditor.tools.pan) {
-                wickEditor.lastTool = wickEditor.currentTool;
-                wickEditor.currentTool = wickEditor.tools.pan;
+            if(!(wickEditor.interfaces.fabric.currentTool instanceof PanTool)) {
+                wickEditor.interfaces.fabric.lastTool = wickEditor.interfaces.fabric.currentTool;
+                wickEditor.interfaces.fabric.currentTool = wickEditor.interfaces.fabric.tools.pan;
                 wickEditor.syncInterfaces();
             }
         });
@@ -267,7 +267,7 @@ var GuiActionHandler = function (wickEditor) {
         [], 
         {}, 
         function(args) {
-            wickEditor.currentTool = wickEditor.tools.cursor;
+            wickEditor.interfaces.fabric.currentTool = wickEditor.interfaces.fabric.tools.cursor;
             wickEditor.syncInterfaces();
             wickEditor.interfaces['fabric'].deselectAll();
             wickEditor.interfaces['fabric'].selectAll();
@@ -471,8 +471,8 @@ var GuiActionHandler = function (wickEditor) {
                             obj.getAllChildObjectsRecursive().forEach(function (child) {
                                 child.id = null;
                             });
-                            obj.x += 50;
-                            obj.y += 50;
+                            //obj.x += 50;
+                            //obj.y += 50;
                         })
                         wickEditor.actionHandler.doAction('addObjects', {
                             wickObjects:objs
@@ -538,7 +538,7 @@ var GuiActionHandler = function (wickEditor) {
         ['cursorToolButton'], 
         {}, 
         function(args) {
-            wickEditor.changeTool(wickEditor.tools.cursor);
+            wickEditor.interfaces.fabric.changeTool(wickEditor.interfaces.fabric.tools.cursor);
         });
 
     new GuiAction(
@@ -546,7 +546,7 @@ var GuiActionHandler = function (wickEditor) {
         ['paintbrushToolButton'], 
         {}, 
         function(args) {
-            wickEditor.changeTool(wickEditor.tools.paintbrush);
+            wickEditor.interfaces.fabric.changeTool(wickEditor.interfaces.fabric.tools.paintbrush);
         });
 
     new GuiAction(
@@ -554,7 +554,7 @@ var GuiActionHandler = function (wickEditor) {
         ['fillbucketToolButton'], 
         {}, 
         function(args) {
-            wickEditor.changeTool(wickEditor.tools.fillbucket);
+            wickEditor.interfaces.fabric.changeTool(wickEditor.interfaces.fabric.tools.fillbucket);
         });
 
     new GuiAction(
@@ -562,7 +562,7 @@ var GuiActionHandler = function (wickEditor) {
         ['rectangleToolButton'], 
         {}, 
         function(args) {
-            wickEditor.changeTool(wickEditor.tools.rectangle);
+            wickEditor.interfaces.fabric.changeTool(wickEditor.interfaces.fabric.tools.rectangle);
         });
 
     new GuiAction(
@@ -570,7 +570,7 @@ var GuiActionHandler = function (wickEditor) {
         ['ellipseToolButton'], 
         {}, 
         function(args) {
-            wickEditor.changeTool(wickEditor.tools.ellipse);
+            wickEditor.interfaces.fabric.changeTool(wickEditor.interfaces.fabric.tools.ellipse);
         });
 
     new GuiAction(
@@ -578,7 +578,7 @@ var GuiActionHandler = function (wickEditor) {
         ['dropperToolButton'], 
         {}, 
         function(args) {
-            wickEditor.changeTool(wickEditor.tools.dropper);
+            wickEditor.interfaces.fabric.changeTool(wickEditor.interfaces.fabric.tools.dropper);
         });
 
     new GuiAction(
@@ -586,7 +586,7 @@ var GuiActionHandler = function (wickEditor) {
         ['textToolButton'], 
         {}, 
         function(args) {
-            wickEditor.changeTool(wickEditor.tools.text);
+            wickEditor.interfaces.fabric.changeTool(wickEditor.interfaces.fabric.tools.text);
         });
 
     new GuiAction(
@@ -594,7 +594,7 @@ var GuiActionHandler = function (wickEditor) {
         ['zoomToolButton'], 
         {}, 
         function(args) {
-            wickEditor.changeTool(wickEditor.tools.zoom);
+            wickEditor.interfaces.fabric.changeTool(wickEditor.interfaces.fabric.tools.zoom);
         });
 
     new GuiAction(
@@ -602,7 +602,7 @@ var GuiActionHandler = function (wickEditor) {
         ['panToolButton'], 
         {}, 
         function(args) {
-            wickEditor.changeTool(wickEditor.tools.pan);
+            wickEditor.interfaces.fabric.changeTool(wickEditor.interfaces.fabric.tools.pan);
         });
 
     new GuiAction(

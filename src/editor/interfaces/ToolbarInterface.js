@@ -14,12 +14,16 @@ var ToolbarInterface = function (wickEditor) {
                          'zoom',
                          'pan' ]; 
 
+    this.setup = function () {
+        
+    }
+
     this.syncWithEditorState = function () {
 
         /* Highlight select tool, unhighlight all other tools */
         toolbarTools.forEach( function(toolName) {
             var buttonClassName = '#' + toolName + 'ToolButton';
-            if (wickEditor.tools[toolName] === wickEditor.currentTool) {
+            if (wickEditor.interfaces.fabric.tools[toolName] === wickEditor.interfaces.fabric.currentTool) {
                 $(buttonClassName).css('background-color', '#ccc');
             } else {
                 $(buttonClassName).css('background-color', '');

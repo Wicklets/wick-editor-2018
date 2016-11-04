@@ -4,7 +4,10 @@ var SettingsInterface = function (wickEditor) {
 
     var that = this;
 
-    this.open = false;
+    this.setup = function () {
+        this.open = false;
+    }
+    
 
     this.syncWithEditorState = function () {
         if(this.open) {

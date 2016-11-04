@@ -8,11 +8,12 @@ var RectangleTool = function (wickEditor) {
         return "crosshair"
     };
 
-    var canvas = wickEditor.interfaces.fabric.canvas;
+    var fabric = wickEditor.interfaces.fabric;
 
-    canvas.on('mouse:down', function (e) {
-        if(wickEditor.currentTool instanceof RectangleTool)
-            wickEditor.interfaces.fabric.startDrawingShape('rectangle', e.e.offsetX, e.e.offsetY);
+    fabric.canvas.on('mouse:down', function (e) {
+        if(!(fabric.currentTool instanceof RectangleTool)) return;
+
+        fabric.shapeDrawer.startDrawingShape('rectangle', e.e.offsetX, e.e.offsetY);
     });
 
 }

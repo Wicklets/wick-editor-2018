@@ -4,12 +4,10 @@ var RightClickMenuInterface = function (wickEditor) {
 
     var that = this;
 
-    this.open = false;
-    this.mode = undefined;
-
-/***********************************
-    State sync with model
-***********************************/
+    this.setup = function () {
+        this.open = false;
+        this.mode = undefined;
+    }
 
     var openRightClickMenuDiv = function () {
         // Make rightclick menu visible

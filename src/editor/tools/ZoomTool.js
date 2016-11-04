@@ -14,7 +14,7 @@ var ZoomTool = function (wickEditor) {
     }
     
     wickEditor.interfaces.fabric.canvas.on('mouse:down', function (e) {
-    	if(wickEditor.currentTool instanceof ZoomTool) {
+    	if(wickEditor.interfaces.fabric.currentTool instanceof ZoomTool) {
     		if (that.zoomType === "in") {
     			wickEditor.interfaces.fabric.zoom(1.1);
     		} else if (that.zoomType === "out") {

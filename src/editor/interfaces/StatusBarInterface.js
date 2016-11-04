@@ -14,6 +14,10 @@ var StatusBarInterface = function (wickEditor) {
         this.syncWithEditorState();
     }
 
+    this.setup = function () {
+        
+    }
+
     this.syncWithEditorState = function () {
         var that = this;
 
