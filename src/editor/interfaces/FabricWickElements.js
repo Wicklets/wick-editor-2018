@@ -5,7 +5,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 	var that = this;
 
     this.update = function () {
-        console.log("-------------------")
+        console.log("-------------------");
         startTiming();
         stopTiming("init");
 
@@ -49,6 +49,9 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
         var updateFabObj = function (fabricObj, wickObj) {
 
+            fabricObj.trueZIndex = allObjects.indexOf(wickObj);
+            fabricInterface.canvas.moveTo(fabricObj, fabricObj.trueZIndex+3 + activeObjects.length);
+
             var setCoords = fabricObj.setCoords.bind(fabricObj);
               fabricObj.on({
                 moving: setCoords,
@@ -73,8 +76,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
                 //fabricObj.trueZIndex = currentObject.getCurrentFrame().wickObjects.indexOf(wickObj);
                 //that.canvas.moveTo(fabricObj, fabricObj.trueZIndex+3 + activeObjects.length+3);
-                fabricObj.trueZIndex = allObjects.indexOf(wickObj);
-                fabricInterface.canvas.moveTo(fabricObj, fabricObj.trueZIndex+3 + activeObjects.length);
             } else {
                 fabricObj.hasControls = false;
                 fabricObj.selectable = false;

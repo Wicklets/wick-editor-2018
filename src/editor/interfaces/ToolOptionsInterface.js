@@ -19,13 +19,13 @@ var ToolOptionsInterface = function (wickEditor) {
     }
     
     lineWidthEl.onchange = function() {
-        wickEditor.tools['paintbrush'].brushSize = parseInt(this.value, 10) || 2;
+        wickEditor.interfaces.fabric.tools['paintbrush'].brushSize = parseInt(this.value, 10) || 2;
         wickEditor.syncInterfaces();
     };
 
     lineColorEl.onchange = function() {
         var newColor = '#' + this.value;
-        wickEditor.tools['paintbrush'].color = newColor;
+        wickEditor.interfaces.fabric.tools['paintbrush'].color = newColor;
 
         var selectedObjects = wickEditor.interfaces.fabric.getSelectedWickObjects();
         if(selectedObjects) {

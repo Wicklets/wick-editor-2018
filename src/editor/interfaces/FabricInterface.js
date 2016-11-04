@@ -52,6 +52,11 @@ var FabricInterface = function (wickEditor) {
     // Update the scripting GUI/properties box when the selected object changes
         that.canvas.on('object:selected', function (e) {
             wickEditor.syncInterfaces(['scriptingide','properties']);
+            e.target.on({
+                moving: e.target.setCoords,
+                scaling: e.target.setCoords,
+                rotating: e.target.setCoords
+              });
         });
         that.canvas.on('selection:cleared', function (e) {
             wickEditor.syncInterfaces(['scriptingide','properties']);
@@ -246,6 +251,11 @@ var FabricInterface = function (wickEditor) {
                 originX: 'left',
                 originY: 'top'
             });
+            group.on({
+                moving: group.setCoords,
+                scaling: group.setCoords,
+                rotating: group.setCoords
+              });
             for(var i = 0; i < selectedObjs.length; i++) {
                 group.canvas = this.canvas // WHAT ??????????????? WHY
                 group.addWithUpdate(selectedObjs[i]);
