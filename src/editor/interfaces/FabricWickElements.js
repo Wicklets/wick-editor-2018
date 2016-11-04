@@ -119,9 +119,13 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         fabricInterface.canvas.forEachObject(function(fabricObj) {
             if(!fabricObj.wickObjectID) return;
 
+            var fabricZIndex = fabricInterface.canvas._objects.indexOf(fabricObj);
+
             var wickObj = wickEditor.project.rootObject.getChildByID(fabricObj.wickObjectID);
             var trueZIndex = allObjects.indexOf(wickObj);
-            fabricInterface.canvas.moveTo(fabricObj, trueZIndex+2);
+
+            if(fabricZIndex-2 !== trueZIndex)
+                fabricInterface.canvas.moveTo(fabricObj, trueZIndex+2);
         });
         fabricInterface.guiElements.setInactiveFramePosition(siblingObjects.length+1);
 
