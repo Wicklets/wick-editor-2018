@@ -190,7 +190,7 @@ var WickPixiRenderer = function (project) {
 	            	wickObj.pixiContainer.position.x += r.x;
 	            	wickObj.pixiContainer.position.y += r.y;*/
 	            }
-	            if(wickObj.flipY) { 
+	            if(wickObj.flipY) {
 	            	wickObj.pixiContainer.scale.y *= -1;
 	            	/*var m = {x:0, y:wickObj.height*wickObj.scaleY};
 	            	var r = rotate({x:0,y:0},m,-wickObj.angle);

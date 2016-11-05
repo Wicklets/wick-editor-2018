@@ -780,6 +780,21 @@ WickObject.prototype.getAbsolutePosition = function () {
     }
 }
 
+WickObject.prototype.getAbsoluteScale = function () {
+    if(this.isRoot) {
+        return {
+            x: 1.0, 
+            y: 1.0
+        };
+    } else {
+        var parentScale = this.parentObject.getAbsoluteScale();
+        return {
+            x: this.scaleX * parentScale.x, 
+            y: this.scaleY * parentScale.y
+        };
+    }
+}
+
 WickObject.prototype.isOnActiveLayer = function () {
 
     return this.parentObject.getLayerWithChild(this) === this.parentObject.getCurrentLayer();
@@ -1213,6 +1228,9 @@ WickObject.prototype.isPointInside = function(point, parentScaleX, parentScaleY)
         var scaledObjWidth = that.width*that.scaleX*parentScaleX;
         var scaledObjHeight = that.height*that.scaleY*parentScaleY;
 
+        scaledObjX -= that.width*that.scaleX/2;
+        scaledObjY -= that.height*that.scaleY/2;
+
         if ( point.x >= scaledObjX && 
              point.y >= scaledObjY  &&
              point.x <= scaledObjX + scaledObjWidth && 
@@ -1286,6 +1304,9 @@ WickObject.prototype.runScript = function (scriptType) {
     var mouse = WickPlayer.getMouse();
     var keys = WickPlayer.getKeys();
     var key = WickPlayer.getLastKeyPressed();
+
+    project.width = project.resolution.x;
+    project.height = project.resolution.y;
 
     // Setup builtin wick scripting methods and objects
     var play          = function ()      { that.parentObject.play(); }
@@ -1489,11 +1510,17 @@ WickObject.prototype.hitTestRectangles = function (otherObj) {
     var objAAbsPos = objA.getAbsolutePosition();
     var objBAbsPos = objB.getAbsolutePosition();
 
-    var objAWidth = objA.width * objA.scaleX;
-    var objAHeight = objAHeight * objA.scaleY; 
+    var objAScale = objA.getAbsoluteScale();
+    var objAWidth = objA.width * objAScale.x;
+    var objAHeight = objAHeight * objAScale.y;
+    objAAbsPos.x -= objA.width*objAScale.x/2;
+    objAAbsPos.y -= objA.width*objAScale.y/2;
 
-    var objBWidth = objB.width * objB.scaleX; 
-    var objBHeight = objB.height * objB.scaleY; 
+    var objBScale = objB.getAbsoluteScale();
+    var objBWidth = objB.width * objBScale.x; 
+    var objBHeight = objB.height * objBScale.y;
+    objBAbsPos.x -= objB.width*objBScale.x/2;
+    objBAbsPos.y -= objB.width*objBScale.y/2; 
 
     var left = objAAbsPos.x < (objBAbsPos.x + objBWidth); 
     var right = (objAAbsPos.x + objAWidth) > objBAbsPos.x; 
