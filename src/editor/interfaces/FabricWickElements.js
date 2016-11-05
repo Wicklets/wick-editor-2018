@@ -89,8 +89,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 // Make sure we don't add it if that happened.
                 if(!wickEditor.project.rootObject.getChildByID(objectToAdd.id)) return;
 
-                //fabricObj.originX = 'center';
-                //fabricObj.originY = 'center';
+                fabricObj.originX = 'center';
+                fabricObj.originY = 'center';
 
                 fabricObj.wickObjectID = objectToAdd.id;
                 fabricInterface.canvas.add(fabricObj);
@@ -212,13 +212,16 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             var group = new fabric.Group();
             for(var i = 0; i < children.length; i++) {
                 var dothing = function (wo) {
-                console.log(children[wo])
                 createFabricObjectFromWickObject(children[wo], function(fabricObj) {
+                    fabricObj.originX = 'centerX';
+                    fabricObj.originY = 'centerY';
+                    
                     updateFabObj(fabricObj, children[wo]);
                     group.addWithUpdate(fabricObj);
                     if(group._objects.length == children.length) {
                         wickObj.width = group.width;
                         wickObj.height = group.height;
+                        console.log(group)
                         callback(group);
                     }
                 });
@@ -254,8 +257,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
         if(wickObj.isSymbol) {
             var cornerPosition = wickObj.getSymbolBoundingBoxCorner();
-            fabricObj.left += cornerPosition.x;
-            fabricObj.top += cornerPosition.y;
+            //fabricObj.left += cornerPosition.x;
+            //fabricObj.top += cornerPosition.y;
         }
 
         if(wickObj.fontData) {

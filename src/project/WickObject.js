@@ -249,12 +249,12 @@ WickObject.createSymbolFromWickObjects = function (wickObjects) {
     var corner = symbol.getSymbolCornerPosition();
 
     symbol.layers[0].frames[0].wickObjects.forEach(function (obj) {
-        obj.x -= corner.x;
-        obj.y -= corner.y;
+        //obj.x -= corner.x;
+        //obj.y -= corner.y;
     });
 
-    symbol.x += corner.x;
-    symbol.y += corner.y;
+    //symbol.x += corner.x;
+    //symbol.y += corner.y;
 
     return symbol;
 
@@ -734,9 +734,28 @@ WickObject.prototype.getSymbolCornerPosition = function () {
 
 }
 
+WickObject.prototype.getSymbolCenterPosition = function () {
+
+    var avgLeft = 0;
+    var avgTop = 0;
+    var childCount = 0;
+
+    this.getObjectsOnFirstFrame().forEach(function (child) {
+        avgLeft += child.x;
+        avgTop += child.y;
+        childCount++;
+    });
+
+    avgLeft /= childCount;
+    avgTop /= childCount;
+
+    return {x:avgLeft, y:avgTop};
+}
+
 // used as a hack to get around fabric.js lack of rotation around anchorpoint
 WickObject.prototype.fixOriginPoint = function () {
-    var symbolCornerPosition = this.getSymbolCornerPosition();
+    //var symbolCornerPosition = this.getSymbolCornerPosition();
+    var symbolCornerPosition = this.getSymbolCenterPosition();
     this.getAllChildObjects().forEach(function (child) {
         child.x -= symbolCornerPosition.x;
         child.y -= symbolCornerPosition.y;

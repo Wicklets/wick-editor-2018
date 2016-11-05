@@ -92,8 +92,8 @@ var ShapeDrawer = function (wickEditor, fabricInterface) {
             fabricInterface.canvas.remove(drawingShape);
             wickEditor.syncInterfaces();
 
-            wickObj.x = origX;
-            wickObj.y = origY;
+            wickObj.x = origX + drawingShape.width/2;
+            wickObj.y = origY + drawingShape.height/2;
 
             wickEditor.actionHandler.doAction('addObjects', {
                 wickObjects: [wickObj]
@@ -114,8 +114,8 @@ var ShapeDrawer = function (wickEditor, fabricInterface) {
             fabricInterface.canvas.remove(drawingShape);
             wickEditor.syncInterfaces();
 
-            wickObj.x = origX - drawingShape.width;
-            wickObj.y = origY - drawingShape.height;
+            wickObj.x = origX// + drawingShape.width;
+            wickObj.y = origY //+ drawingShape.height;
 
             wickEditor.actionHandler.doAction('addObjects', {
                 wickObjects: [wickObj]

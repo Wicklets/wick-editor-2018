@@ -151,8 +151,8 @@ var FillBucketTool = function (wickEditor) {
             } else {*/
 
                 if(paperPath.closePath) paperPath.closePath();
-                paperPath.position.x += wickObject.x;
-                paperPath.position.y += wickObject.y;
+                paperPath.position.x += wickObject.x - wickObject.width/2;
+                paperPath.position.y += wickObject.y - wickObject.height/2;
 
                 wickObject.paperPath = paperPath;
             //}
@@ -171,8 +171,8 @@ var FillBucketTool = function (wickEditor) {
             fillColor: fillColor
         }
         var wickObj = WickObject.fromSVG(SVGData);
-        wickObj.x = pathPosition._x - paperPath.bounds._width/2;
-        wickObj.y = pathPosition._y - paperPath.bounds._height/2;
+        wickObj.x = pathPosition._x// - paperPath.bounds._width/2;
+        wickObj.y = pathPosition._y// - paperPath.bounds._height/2;
         return wickObj;
     }
 

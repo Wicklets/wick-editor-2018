@@ -214,7 +214,6 @@ var WickActionHandler = function (wickEditor) {
 
                 // This is silly what's a better way ???
                 if(wickObj.tweens.length === 1) {
-                    console.log(wickObj.angle)
                     var tween = WickTween.fromWickObjectState(wickObj);
                     tween.frame = wickObj.parentObject.getRelativePlayheadPosition(wickObj);
                     wickObj.tweens.push(tween);

@@ -14,11 +14,11 @@ var FabricInterface = function (wickEditor) {
 
         this.canvas = new fabric.CanvasEx('fabricCanvas', {
             imageSmoothingEnabled:false,
-            preserveObjectStacking:true,
+            //preserveObjectStacking:true,
             renderOnAddRemove:false,
             stateful:false,
         });
-        this.canvas.selectionColor = 'rgba(0,0,5,0.1)';
+        this.canvas.selectionColor = 'rgba(110, 110, 115, 0.1)';
         this.canvas.selectionBorderColor = 'grey';
         this.canvas.backgroundColor = "#EEE";
         this.canvas.setWidth ( window.innerWidth  );
@@ -361,8 +361,8 @@ var FabricInterface = function (wickEditor) {
                 y:0
             }
             if(wickObj.isSymbol) {
-                cornerOffset.x = wickObj.getSymbolBoundingBoxCorner().x;
-                cornerOffset.y = wickObj.getSymbolBoundingBoxCorner().y;
+                //cornerOffset.x = wickObj.getSymbolBoundingBoxCorner().x;
+                //cornerOffset.y = wickObj.getSymbolBoundingBoxCorner().y;
             }
 
             var newX = fabricObj.left + insideSymbolReposition.x - cornerOffset.x;

@@ -175,7 +175,7 @@ var WickPixiRenderer = function (project) {
 	    if(wickObj.isSymbol) {
 	        wickObj.pixiContainer.visible = true;
 	        if(!wickObj.isRoot) {
-	            wickObj.pixiContainer.anchor = new PIXI.Point(0.0, 0.0);
+	            wickObj.pixiContainer.anchor = new PIXI.Point(0.5, 0.5);
 	            wickObj.pixiContainer.position.x = Math.round(wickObj.x);
 	            wickObj.pixiContainer.position.y = Math.round(wickObj.y);
 	            wickObj.pixiContainer.rotation = wickObj.angle/360*2*3.14159;
@@ -185,17 +185,17 @@ var WickPixiRenderer = function (project) {
 	            
 	            if(wickObj.flipX) { 
 	            	wickObj.pixiContainer.scale.x *= -1;
-	            	var m = {x:wickObj.width*wickObj.scaleX, y:0};
+	            	/*var m = {x:wickObj.width*wickObj.scaleX, y:0};
 	            	var r = rotate({x:0,y:0},m,-wickObj.angle);
 	            	wickObj.pixiContainer.position.x += r.x;
-	            	wickObj.pixiContainer.position.y += r.y;
+	            	wickObj.pixiContainer.position.y += r.y;*/
 	            }
 	            if(wickObj.flipY) { 
 	            	wickObj.pixiContainer.scale.y *= -1;
-	            	var m = {x:0, y:wickObj.height*wickObj.scaleY};
+	            	/*var m = {x:0, y:wickObj.height*wickObj.scaleY};
 	            	var r = rotate({x:0,y:0},m,-wickObj.angle);
 	            	wickObj.pixiContainer.position.x += r.x;
-	            	wickObj.pixiContainer.position.y += r.y;
+	            	wickObj.pixiContainer.position.y += r.y;*/
 	            }
 	        }
 	        wickObj.getAllActiveChildObjects().forEach(function(subObj) {
@@ -204,7 +204,7 @@ var WickPixiRenderer = function (project) {
 	    } else {
 	        if(wickObj.pixiSprite) {
 	            wickObj.pixiSprite.visible = true;
-	            wickObj.pixiSprite.anchor = new PIXI.Point(0.0, 0.0);
+	            wickObj.pixiSprite.anchor = new PIXI.Point(0.5, 0.5);
 	            wickObj.pixiSprite.position.x = Math.round(wickObj.x);
 	            wickObj.pixiSprite.position.y = Math.round(wickObj.y);
 	            wickObj.pixiSprite.rotation = wickObj.angle/360*2*3.14159;
@@ -214,21 +214,21 @@ var WickPixiRenderer = function (project) {
 
 	            if(wickObj.flipX) { 
 	            	wickObj.pixiSprite.scale.x *= -1;
-	            	var m = {x:wickObj.width*wickObj.scaleX, y:0};
+	            	/*var m = {x:wickObj.width*wickObj.scaleX, y:0};
 	            	var r = rotate({x:0,y:0},m,-wickObj.angle);
 	            	wickObj.pixiSprite.position.x += r.x;
-	            	wickObj.pixiSprite.position.y += r.y;
+	            	wickObj.pixiSprite.position.y += r.y;*/
 	            }
 	            if(wickObj.flipY) { 
 	            	wickObj.pixiSprite.scale.y *= -1;
-	            	var m = {x:0, y:wickObj.height*wickObj.scaleY};
+	            	/*var m = {x:0, y:wickObj.height*wickObj.scaleY};
 	            	var r = rotate({x:0,y:0},m,-wickObj.angle);
 	            	wickObj.pixiSprite.position.x += r.x;
-	            	wickObj.pixiSprite.position.y += r.y;
+	            	wickObj.pixiSprite.position.y += r.y;*/
 	            }
 	        } else if(wickObj.pixiText) {
 	            wickObj.pixiText.visible = true;
-	            //wickObj.pixiText.anchor = new PIXI.Point(0.5, 0.5);
+	            wickObj.pixiText.anchor = new PIXI.Point(0.5, 0.5);
 	            wickObj.pixiText.x        = Math.round(wickObj.x);
 	            wickObj.pixiText.y        = Math.round(wickObj.y);
 	            wickObj.pixiText.rotation = wickObj.angle/360*2*3.14159;
