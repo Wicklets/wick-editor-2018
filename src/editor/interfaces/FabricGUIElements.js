@@ -5,60 +5,73 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
 	var that = this;
 	var canvas = fabricInterface.canvas;
 
-	var frameInside;
-    var inactiveFrame
-    var originCrosshair;
+    var elements = [];
 
-    // White box that shows resolution & objects that will be on screen when project is exported
+    var addElement = function (obj) {
+        obj.hasControls = false;
+        obj.selectable = false;
+        obj.evented = false;
+        obj.left = 0;
+        obj.top = 0;
+        elements.push(obj);
+        canvas.add(obj);
+    }
 
-    frameInside = new fabric.Rect({
+// White box that shows resolution & objects that will be on screen when project is exported
+
+    var frameInside = new fabric.Rect({
         fill: '#FFF',
     });
 
-    frameInside.hasControls = false;
-    frameInside.selectable = false;
-    frameInside.evented = false;
     frameInside.identifier = "frameInside";
-    frameInside.left = 0;
-    frameInside.top = 0;
-
-    canvas.add(frameInside)
+    frameInside.updateGUIState = function () {
+        frameInside.fill = wickEditor.project.backgroundColor;
+        frameInside.width  = wickEditor.project.resolution.x;
+        frameInside.height = wickEditor.project.resolution.y;
+        frameInside.setCoords();
+    }
+    addElement(frameInside);
 
 // Fade that grays out inactive objects (the objects in the parent objects frame)
 
-    inactiveFrame = new fabric.Rect({
+    var inactiveFrame = new fabric.Rect({
         fill: '#000',
     });
 
-    inactiveFrame.hasControls = false;
-    inactiveFrame.selectable = false;
-    inactiveFrame.evented = false;
     inactiveFrame.identifier = "inactiveFrame";
     inactiveFrame.width  = window.innerWidth;
     inactiveFrame.height = window.innerHeight;
-    inactiveFrame.left = 0;
-    inactiveFrame.top = 0;
-
-    canvas.add(inactiveFrame)
+    inactiveFrame.updateGUIState = function () {
+        var pan = fabricInterface.getPan();
+        var zoom = canvas.getZoom();
+        inactiveFrame.width  = window.innerWidth  / zoom;
+        inactiveFrame.height = window.innerHeight / zoom;
+        inactiveFrame.left = -pan.x / zoom;
+        inactiveFrame.top  = -pan.y / zoom;
+        var currentObject = wickEditor.project.getCurrentObject();
+        inactiveFrame.opacity = currentObject.isRoot ? 0.0 : 0.2;
+    }
+    addElement(inactiveFrame);
 
 // Crosshair that shows where (0,0) of the current object is
 
     fabric.Image.fromURL('resources/origin.png', function(obj) {
-        originCrosshair = obj;
+        var originCrosshair = obj;
 
-        originCrosshair.hasControls = false;
-        originCrosshair.selectable = false;
-        originCrosshair.evented = false;
         originCrosshair.identifier = "originCrosshair";
 
-        canvas.add(originCrosshair);
+        originCrosshair.updateGUIState = function () {
+            originCrosshair.left = -originCrosshair.width/2;
+            originCrosshair.top  = -originCrosshair.height/2;
+            
+            var newOriginPos = wickEditor.project.getCurrentObject().getAbsolutePosition();
+            originCrosshair.left += newOriginPos.x;
+            originCrosshair.top  += newOriginPos.y;
+        }
+        addElement(originCrosshair);
 
         that.update();
     });
-
-    this.getNumGUIElements = function () {
-        return 3;
-    }
 
 // Borders for symbols
 
@@ -106,30 +119,16 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
     });
 
     this.update = function () {
-        frameInside.fill = wickEditor.project.backgroundColor;
-        frameInside.width  = wickEditor.project.resolution.x;
-        frameInside.height = wickEditor.project.resolution.y;
-        frameInside.setCoords();
 
-        if(originCrosshair) {
-            originCrosshair.left = -originCrosshair.width/2;
-            originCrosshair.top  = -originCrosshair.height/2;
-            
-            var newOriginPos = wickEditor.project.getCurrentObject().getAbsolutePosition();
-            originCrosshair.left += newOriginPos.x;
-            originCrosshair.top  += newOriginPos.y;
-        }
-
-        var pan = fabricInterface.getPan();
-        var zoom = canvas.getZoom();
-        inactiveFrame.width  = window.innerWidth  / zoom;
-        inactiveFrame.height = window.innerHeight / zoom;
-        inactiveFrame.left = -pan.x / zoom;
-        inactiveFrame.top  = -pan.y / zoom;
-        var currentObject = wickEditor.project.getCurrentObject();
-        inactiveFrame.opacity = currentObject.isRoot ? 0.0 : 0.2;
+        elements.forEach(function (elem) {
+            elem.updateGUIState();
+        });
 
         canvas.renderAll();
+    }
+
+    this.getNumGUIElements = function () {
+        return 3;
     }
 
     this.setInactiveFramePosition = function (i) {
