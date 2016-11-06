@@ -38,9 +38,9 @@ var CursorTool = function (wickEditor) {
         if(lastDoubleClickTime !== null && currentTime-lastDoubleClickTime < 350) {
             var selectedObject = wickEditor.interfaces['fabric'].getSelectedWickObject();
             if(selectedObject && selectedObject.isSymbol) {
-                wickEditor.actionHandler.doAction('editObject', {objectToEdit:selectedObject});
+                wickEditor.guiActionHandler.pressButton("editSymbolButton");
             } else if (!wickEditor.project.getCurrentObject().isRoot) {
-                wickEditor.actionHandler.doAction('finishEditingCurrentObject', {});
+                wickEditor.guiActionHandler.pressButton("finishEditingObjectButton");
             }
         }
         lastDoubleClickTime = currentTime;

@@ -72,6 +72,15 @@ var GuiActionHandler = function (wickEditor) {
         guiActions.push(this);
     }
 
+    /* For calling GUI actions manually */
+    this.pressButton = function (id) {
+        guiActions.forEach(function(guiAction) {
+            if(guiAction.elementIds.indexOf(id) !== -1) {
+                guiAction.doAction({});
+            }
+        });
+    }
+
 /*************************
     Key listeners
 *************************/
@@ -643,8 +652,17 @@ var GuiActionHandler = function (wickEditor) {
         ['editObjectButton', 'editSymbolButton'], 
         {}, 
         function(args) {
-            var selectedObject = wickEditor.interfaces['fabric'].getSelectedWickObject();
-            wickEditor.actionHandler.doAction('editObject', {objectToEdit:selectedObject});
+            var selectedObject = wickEditor.interfaces.fabric.getSelectedWickObject();
+            wickEditor.interfaces.fabric.symbolBorders.startEditObjectAnimation(selectedObject);
+        });
+
+    new GuiAction(
+        [], 
+        ['finishEditingObjectButton'], 
+        {}, 
+        function(args) {
+            var currObj = wickEditor.project.getCurrentObject();
+            wickEditor.interfaces.fabric.symbolBorders.startLeaveObjectAnimation(currObj);
         });
 
     new GuiAction(
@@ -670,18 +688,137 @@ var GuiActionHandler = function (wickEditor) {
 
     new GuiAction(
         [], 
-        ['finishEditingObjectButton'], 
-        {}, 
-        function(args) {
-            wickEditor.actionHandler.doAction('finishEditingCurrentObject', {});
-        });
-
-    new GuiAction(
-        [], 
         ['downloadButton'], 
         {}, 
         function(args) {
             wickEditor.interfaces['fabric'].getSelectedWickObject().downloadAsFile();
+        });
+
+    new GuiAction(
+        [], 
+        ['addFrameButton'], 
+        {}, 
+        function(args) {
+            wickEditor.actionHandler.doAction('addNewFrame');
+        });
+
+    new GuiAction(
+        [], 
+        ['cloneFrameButton'], 
+        {}, 
+        function(args) {
+            alert('clone')
+        });
+
+    new GuiAction(
+        [], 
+        ['deleteFrameButton'], 
+        {}, 
+        function(args) {
+            var currentObject = wickEditor.project.getCurrentObject();
+            var frame = currentObject.getCurrentFrame();
+            var layer = currentObject.getCurrentLayer();
+            wickEditor.actionHandler.doAction('deleteFrame', {
+                frame: frame,
+                layer: layer
+            });
+        });
+
+    new GuiAction(
+        [], 
+        ['extendFrameButton'], 
+        {}, 
+        function(args) {
+            var frame = wickEditor.project.getCurrentObject().getCurrentFrame();
+            if(!frame) {
+                var frames = wickEditor.project.getCurrentObject().getCurrentLayer().frames;
+                frame = frames[frames.length - 1];
+            }
+
+            var frameEndingIndex = wickEditor.project.getCurrentObject().getPlayheadPositionAtFrame(
+                frame
+            ) + frame.frameLength - 1;
+
+            var framesToExtend = wickEditor.project.getCurrentObject().playheadPosition - frameEndingIndex;
+
+            wickEditor.actionHandler.doAction('extendFrame', {
+                nFramesToExtendBy: Math.max(1, framesToExtend),
+                frame: frame
+            });
+        });
+
+    new GuiAction(
+        [], 
+        ['shrinkFrameButton'], 
+        {}, 
+        function(args) {
+            var frame = wickEditor.project.getCurrentObject().getCurrentFrame();
+
+            var frameEndingIndex = wickEditor.project.getCurrentObject().getPlayheadPositionAtFrame(
+                frame
+            ) + frame.frameLength - 1;
+
+            var framesToShrink = frameEndingIndex - wickEditor.project.getCurrentObject().playheadPosition;
+
+            wickEditor.actionHandler.doAction('shrinkFrame', {   
+                nFramesToShrinkBy: Math.max(1, framesToShrink), 
+                frame: frame
+            });
+        });
+
+    new GuiAction(
+        [], 
+        ['addLayerButton'], 
+        {}, 
+        function(args) {
+            wickEditor.actionHandler.doAction('addNewLayer');
+        });
+
+    new GuiAction(
+        [], 
+        ['removeLayerButton'], 
+        {}, 
+        function(args) {
+            wickEditor.actionHandler.doAction('removeLayer');
+        });
+
+    new GuiAction(
+        [], 
+        ['addBreakpointButton'], 
+        {}, 
+        function(args) {
+            wickEditor.actionHandler.doAction('addBreakpoint', {
+                frame: wickEditor.project.getCurrentObject().getCurrentFrame()
+            });
+        });
+
+    new GuiAction(
+        [], 
+        ['removeBreakpointButton'], 
+        {}, 
+        function(args) {
+            wickEditor.actionHandler.doAction('removeBreakpoint', {
+                frame: wickEditor.project.getCurrentObject().getCurrentFrame()
+            });
+        });
+
+    new GuiAction(
+        [], 
+        ['addKeyframeButton'], 
+        {}, 
+        function(args) {
+            var selectedObj = wickEditor.interfaces.fabric.getSelectedWickObject();
+            var tween = WickTween.fromWickObjectState(selectedObj);
+            tween.frame = selectedObj.parentObject.getRelativePlayheadPosition(selectedObj);
+            selectedObj.tweens.push(tween);
+        });
+
+    new GuiAction(
+        [], 
+        ['removeKeyframeButton'], 
+        {}, 
+        function(args) {
+            console.error("removeKeyframeButton action NYI")
         });
 
 }

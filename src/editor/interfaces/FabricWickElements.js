@@ -221,7 +221,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                     if(group._objects.length == children.length) {
                         wickObj.width = group.width;
                         wickObj.height = group.height;
-                        console.log(group)
                         callback(group);
                     }
                 });

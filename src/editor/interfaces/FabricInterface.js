@@ -28,6 +28,7 @@ var FabricInterface = function (wickEditor) {
         this.shapeDrawer = new ShapeDrawer(wickEditor, this);
         this.guiElements = new FabricGUIElements(wickEditor, this);
         this.wickElements = new FabricWickElements(wickEditor, this);
+        this.symbolBorders = new FabricSymbolBorders(wickEditor, this);
 
         this.panning = false;
 

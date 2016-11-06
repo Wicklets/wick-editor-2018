@@ -3,7 +3,6 @@
 var FabricGUIElements = function (wickEditor, fabricInterface) {
 
 	var that = this;
-
 	var canvas = fabricInterface.canvas;
 
 	var frameInside;
@@ -101,38 +100,6 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
                 createSymbolButton.style.display = "block";
             }
         }
-
-        // Render bounding boxes for symbols
-        var selectedIDs = fabricInterface.getSelectedObjectIDs();
-        canvas.forEachObject(function(obj) {
-            var wickObj = wickEditor.project.rootObject.getChildByID(obj.wickObjectID);
-            var activeLayerObjects = wickEditor.project.getCurrentObject().getAllActiveLayerChildObjects();
-            if(!wickObj || !wickObj.isSymbol || activeLayerObjects.indexOf(wickObj) === -1) return;
-
-            // Color the border differently depending if the object has errors
-            if(!wickObj.hasSyntaxErrors && !wickObj.causedAnException) {
-                canvas.contextContainer.strokeStyle = '#0B0';
-            } else {
-                canvas.contextContainer.strokeStyle = '#F00';
-            }
-
-            // We need to calculate an offset because of this bug: https://github.com/kangax/fabric.js/issues/1941
-            var groupOffset = {x:0,y:0};
-            if(selectedIDs.length > 1 && selectedIDs.indexOf(wickObj.id) !== -1) {
-                var activeGroup = canvas.getActiveGroup();
-                groupOffset.x = (activeGroup.left + activeGroup.width/2)*canvas.getZoom();
-                groupOffset.y = (activeGroup.top + activeGroup.height/2)*canvas.getZoom();
-            }
-
-            var bound = obj.getBoundingRect();
-            canvas.contextContainer.strokeRect(
-                bound.left + 0.5 + groupOffset.x,
-                bound.top + 0.5 + groupOffset.y,
-                bound.width,
-                bound.height
-            );
-            
-        });
     });
 
     this.update = function () {
@@ -164,4 +131,5 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
     this.setInactiveFramePosition = function (i) {
         fabricInterface.canvas.moveTo(inactiveFrame, i);
     }
+
 }
