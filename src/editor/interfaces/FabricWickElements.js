@@ -97,7 +97,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 updateFabObj(fabricObj, objectToAdd, activeObjects);
 
                 var trueZIndex = allObjects.indexOf(objectToAdd);
-                fabricInterface.canvas.moveTo(fabricObj, trueZIndex+2);
+                fabricInterface.canvas.moveTo(fabricObj, trueZIndex+fabricInterface.guiElements.getNumGUIElements());
 
                 if(objectToAdd.selectOnAddToFabric) {
                     if(!selectionChanged) {
@@ -129,8 +129,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             var wickObj = wickEditor.project.rootObject.getChildByID(fabricObj.wickObjectID);
             var trueZIndex = allObjects.indexOf(wickObj);
 
-            if(fabricZIndex-2 !== trueZIndex)
-                fabricInterface.canvas.moveTo(fabricObj, trueZIndex+2);
+            if(fabricZIndex-fabricInterface.guiElements.getNumGUIElements() !== trueZIndex)
+                fabricInterface.canvas.moveTo(fabricObj, trueZIndex+fabricInterface.guiElements.getNumGUIElements());
         });
         fabricInterface.guiElements.setInactiveFramePosition(siblingObjects.length+1);
 

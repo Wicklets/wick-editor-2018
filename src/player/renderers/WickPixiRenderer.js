@@ -116,6 +116,7 @@ var WickPixiRenderer = function (project) {
 	    };
 	    renderer = PIXI.autoDetectRenderer(project.resolution.x, project.resolution.y, rendererOptions);
 	    renderer.clearBeforeRender = false;
+	    renderer.roundPixels = true;
 
 	    // Get rid of old canvas (if it exists)
 	    var oldRendererCanvas = document.getElementById("rendererCanvas");
@@ -176,8 +177,8 @@ var WickPixiRenderer = function (project) {
 	        wickObj.pixiContainer.visible = true;
 	        if(!wickObj.isRoot) {
 	            wickObj.pixiContainer.anchor = new PIXI.Point(0.5, 0.5);
-	            wickObj.pixiContainer.position.x = Math.round(wickObj.x);
-	            wickObj.pixiContainer.position.y = Math.round(wickObj.y);
+	            wickObj.pixiContainer.position.x = wickObj.x//Math.round(wickObj.x);
+	            wickObj.pixiContainer.position.y = wickObj.y//Math.round(wickObj.y);
 	            wickObj.pixiContainer.rotation = wickObj.angle/360*2*3.14159;
 	            wickObj.pixiContainer.scale.x = wickObj.scaleX;
 	            wickObj.pixiContainer.scale.y = wickObj.scaleY;
@@ -205,8 +206,8 @@ var WickPixiRenderer = function (project) {
 	        if(wickObj.pixiSprite) {
 	            wickObj.pixiSprite.visible = true;
 	            wickObj.pixiSprite.anchor = new PIXI.Point(0.5, 0.5);
-	            wickObj.pixiSprite.position.x = Math.round(wickObj.x);
-	            wickObj.pixiSprite.position.y = Math.round(wickObj.y);
+	            wickObj.pixiSprite.position.x = wickObj.x//Math.round(wickObj.x);
+	            wickObj.pixiSprite.position.y = wickObj.y//Math.round(wickObj.y);
 	            wickObj.pixiSprite.rotation = wickObj.angle/360*2*3.14159;
 	            wickObj.pixiSprite.scale.x = wickObj.scaleX;
 	            wickObj.pixiSprite.scale.y = wickObj.scaleY;

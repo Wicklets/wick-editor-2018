@@ -193,7 +193,6 @@ var FabricInterface = function (wickEditor) {
         //that.canvas.renderAll();
 
         that.guiElements.update();
-
         that.updateCursor();
 
         //wickEditor.syncInterfaces();

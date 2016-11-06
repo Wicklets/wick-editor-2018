@@ -41,12 +41,15 @@ var FabricSymbolBorders = function (wickEditor, fabricInterface) {
 
             var bound = obj.getBoundingRect();
             var boxGrowOffset = boxAnimationTimer;
+            canvas.contextContainer.lineWidth = 2;
+            canvas.contextContainer.globalAlpha = 0.5;
             canvas.contextContainer.strokeRect(
                 bound.left + 0.5 + groupOffset.x - boxGrowOffset/2,
                 bound.top + 0.5 + groupOffset.y - boxGrowOffset/2,
                 bound.width + boxGrowOffset,
                 bound.height + boxGrowOffset
             );
+            canvas.contextContainer.globalAlpha = 1.0;
             
         });
     });
@@ -64,8 +67,8 @@ var FabricSymbolBorders = function (wickEditor, fabricInterface) {
             boxAnimationTimer = 0;
             wickEditor.actionHandler.doAction('editObject', { objectToEdit: obj });
             clearTimeout(f);
-            canvas.renderAll();
             boxAnimationActive = false;
+            canvas.renderAll();
         } else {
             boxAnimationTimer += boxSpeed;
             canvas.renderAll();

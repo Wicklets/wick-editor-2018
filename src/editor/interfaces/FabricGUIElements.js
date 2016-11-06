@@ -51,11 +51,14 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
         originCrosshair.evented = false;
         originCrosshair.identifier = "originCrosshair";
 
-        //that.canvas.add(originCrosshair);
+        canvas.add(originCrosshair);
 
         that.update();
     });
 
+    this.getNumGUIElements = function () {
+        return 3;
+    }
 
 // Borders for symbols
 
@@ -112,10 +115,9 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
             originCrosshair.left = -originCrosshair.width/2;
             originCrosshair.top  = -originCrosshair.height/2;
             
-            originCrosshair.left += wickEditor.project.getCurrentObject().x;
-            originCrosshair.top  += wickEditor.project.getCurrentObject().y;
-
-            canvas.renderAll();
+            var newOriginPos = wickEditor.project.getCurrentObject().getAbsolutePosition();
+            originCrosshair.left += newOriginPos.x;
+            originCrosshair.top  += newOriginPos.y;
         }
 
         var pan = fabricInterface.getPan();
@@ -125,7 +127,9 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
         inactiveFrame.left = -pan.x / zoom;
         inactiveFrame.top  = -pan.y / zoom;
         var currentObject = wickEditor.project.getCurrentObject();
-        inactiveFrame.opacity = currentObject.isRoot ? 0.0 : 0.4;
+        inactiveFrame.opacity = currentObject.isRoot ? 0.0 : 0.2;
+
+        canvas.renderAll();
     }
 
     this.setInactiveFramePosition = function (i) {
