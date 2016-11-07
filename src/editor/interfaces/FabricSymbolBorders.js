@@ -10,7 +10,7 @@ var FabricSymbolBorders = function (wickEditor, fabricInterface) {
     var boxAnimationID = null;
 
     var animationFramerate = 60;
-    var boxSpeed = 0.08;
+    var boxSpeed = 0.06;
 
     canvas.on('after:render', function() {
 

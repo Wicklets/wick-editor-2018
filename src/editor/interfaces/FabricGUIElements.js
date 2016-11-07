@@ -132,7 +132,7 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
     }
 
     this.setInactiveFramePosition = function (i) {
-        fabricInterface.canvas.moveTo(inactiveFrame, i);
+        fabricInterface.canvas.moveTo(inactiveFrame, i+this.getNumGUIElements()-1);
     }
 
 }

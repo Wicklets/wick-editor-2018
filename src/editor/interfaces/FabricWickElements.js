@@ -132,7 +132,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             if(fabricZIndex-fabricInterface.guiElements.getNumGUIElements() !== trueZIndex)
                 fabricInterface.canvas.moveTo(fabricObj, trueZIndex+fabricInterface.guiElements.getNumGUIElements());
         });
-        fabricInterface.guiElements.setInactiveFramePosition(siblingObjects.length+1);
+        fabricInterface.guiElements.setInactiveFramePosition(siblingObjects.length);
 
         if(enablePerfTests) stopTiming("update z-indices");
 
