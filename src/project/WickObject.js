@@ -627,11 +627,9 @@ WickObject.prototype.fixOriginPoint = function () {
         this.getAllChildObjects().forEach(function (child) {
             ids.push(child.id);
         });
-        wickEditor.interfaces.fabric.deselectAll();
+        wickEditor.interfaces.fabric.deselectAll(); // to get correct ungrouped object positions
         bbox = wickEditor.interfaces.fabric.getBoundingBoxOfObjects(ids);
-        console.log(bbox);
     }
-    console.log(bbox);
     var bboxCenter = {x:bbox.left + bbox.width/2, y:bbox.top + bbox.height/2};
 
     var symbolCornerPosition = {x:this.x-bboxCenter.x ,y:this.y-bboxCenter.y}
