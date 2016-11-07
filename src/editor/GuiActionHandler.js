@@ -701,15 +701,7 @@ var GuiActionHandler = function (wickEditor) {
         function(args) {
             wickEditor.actionHandler.doAction('addNewFrame');
         });
-
-    new GuiAction(
-        [], 
-        ['cloneFrameButton'], 
-        {}, 
-        function(args) {
-            alert('clone')
-        });
-
+    
     new GuiAction(
         [], 
         ['deleteFrameButton'], 

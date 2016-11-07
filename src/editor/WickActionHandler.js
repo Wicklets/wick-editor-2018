@@ -372,6 +372,7 @@ var WickActionHandler = function (wickEditor) {
     this.registerAction('convertSelectionToSymbol', 
         function (args) {
             var selectedObjects = wickEditor.interfaces['fabric'].getSelectedWickObjects();
+            
 
             selectedObjects.forEach(function (obj) {
                 wickEditor.project.getCurrentObject().removeChildByID(obj.id);
@@ -380,7 +381,6 @@ var WickActionHandler = function (wickEditor) {
             var symbol = new WickObject.createSymbolFromWickObjects(selectedObjects);
             wickEditor.project.addObject(symbol);
             symbol.selectOnAddToFabric = true;
-            symbol.fixOriginPoint();
         },
         function (args) {
             console.error("convertSelectionToSymbol undo NYI")
