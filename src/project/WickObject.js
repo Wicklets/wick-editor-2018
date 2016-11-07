@@ -638,8 +638,8 @@ WickObject.prototype.fixOriginPoint = function () {
         child.x += symbolCornerPosition.x;
         child.y += symbolCornerPosition.y;
     });
-    this.x += symbolCornerPosition.x;
-    this.y += symbolCornerPosition.y;
+    this.x -= symbolCornerPosition.x;
+    this.y -= symbolCornerPosition.y;
 }
 
 /* Get the absolute position of this object (i.e., the position not relative to the parents) */
