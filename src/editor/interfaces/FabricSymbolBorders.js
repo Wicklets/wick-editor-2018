@@ -10,8 +10,7 @@ var FabricSymbolBorders = function (wickEditor, fabricInterface) {
     var boxAnimationID = null;
 
     var animationFramerate = 60;
-    var boxSpeed = 40;
-    var boxMax = 500;
+    var boxSpeed = 0.08;
 
     canvas.on('after:render', function() {
 
@@ -39,16 +38,28 @@ var FabricSymbolBorders = function (wickEditor, fabricInterface) {
                 groupOffset.y = (activeGroup.top + activeGroup.height/2)*canvas.getZoom();
             }
 
-            var bound = obj.getBoundingRect();
+            var boundStart = obj.getBoundingRect();
+            boundStart.left += groupOffset.x;
+            boundStart.top += groupOffset.y;
+            var boundEnd = {
+                left: 0,
+                top: 0,
+                width: window.innerWidth,
+                height: window.innerHeight
+            };
+            var t = boxAnimationTimer;
+            var ti = 1-boxAnimationTimer;
+            var bound = {
+                left:   boundStart.left  *ti + boundEnd.left  *t,
+                top:    boundStart.top   *ti + boundEnd.top   *t,
+                width:  boundStart.width *ti + boundEnd.width *t,
+                height: boundStart.height*ti + boundEnd.height*t,
+            }
+
             var boxGrowOffset = boxAnimationTimer;
             canvas.contextContainer.lineWidth = 4;
             canvas.contextContainer.globalAlpha = 0.5;
-            canvas.contextContainer.strokeRect(
-                bound.left + 0.5 + groupOffset.x - boxGrowOffset/2,
-                bound.top + 0.5 + groupOffset.y - boxGrowOffset/2,
-                bound.width + boxGrowOffset,
-                bound.height + boxGrowOffset
-            );
+            canvas.contextContainer.strokeRect(bound.left, bound.top, bound.width, bound.height);
             canvas.contextContainer.globalAlpha = 1.0;
             
         });
@@ -63,7 +74,7 @@ var FabricSymbolBorders = function (wickEditor, fabricInterface) {
     }
 
     this.updateEditObjectAnimation = function (obj, f) {
-        if(boxAnimationTimer > boxMax) {
+        if(boxAnimationTimer > 1) {
             boxAnimationTimer = 0;
             wickEditor.actionHandler.doAction('editObject', { objectToEdit: obj });
             clearTimeout(f);
@@ -78,7 +89,7 @@ var FabricSymbolBorders = function (wickEditor, fabricInterface) {
     this.startLeaveObjectAnimation = function (obj) {
         boxAnimationActive = true;
         boxAnimationID = obj.id;
-        boxAnimationTimer = boxMax;
+        boxAnimationTimer = 1;
         wickEditor.actionHandler.doAction('finishEditingCurrentObject', {});
         var f = setInterval(function () {
             that.updateLeaveObjectAnimation(obj, f);
