@@ -627,138 +627,16 @@ WickObject.prototype.getLargestID = function (id) {
      Positioning stuff
 *************************/
 
-/*  */
-WickObject.prototype.getBoundingBoxPoints = function () {
-    // http://stackoverflow.com/questions/17410809/how-to-calculate-rotation-in-2d-in-javascript
-    function rotate(centerPoint, pointToRotate, angle) {
-        var radians = (Math.PI / 180) * angle,
-            cos = Math.cos(radians),
-            sin = Math.sin(radians),
-            nx = (cos * (pointToRotate.x - centerPoint.x)) + (sin * (pointToRotate.y - centerPoint.y)) + centerPoint.x,
-            ny = (cos * (pointToRotate.y - centerPoint.y)) - (sin * (pointToRotate.x - centerPoint.x)) + centerPoint.y;
-        return {x:nx, y:ny};
-    }
-
-    var points = {
-        topLeftPoint     : { x : this.x,              y : this.y               },
-        topRightPoint    : { x : this.x + this.width, y : this.y               },
-        bottomLeftPoint  : { x : this.x,              y : this.y + this.height },
-        bottomRightPoint : { x : this.x + this.width, y : this.y + this.height },
-    };
-
-    var origin = {x:points.topLeftPoint.x, y:points.topLeftPoint.y};
-
-    points.topLeftPoint     = rotate(origin, points.topLeftPoint, -this.angle);
-    points.topRightPoint    = rotate(origin, points.topRightPoint, -this.angle);
-    points.bottomRightPoint = rotate(origin, points.bottomRightPoint, -this.angle);
-    points.bottomLeftPoint  = rotate(origin, points.bottomLeftPoint, -this.angle);
-
-    return points;
-
-}
-
-/*  */
-WickObject.prototype.getBoundingBoxCorner = function () {
-    
-    var boundingBoxPoints = this.getBoundingBoxPoints();
-    var allPointsX = [
-        boundingBoxPoints.topLeftPoint.x,
-        boundingBoxPoints.topRightPoint.x,
-        boundingBoxPoints.bottomLeftPoint.x,
-        boundingBoxPoints.bottomRightPoint.x
-    ].sort(function (a, b) { return a-b; });
-    var allPointsY = [
-        boundingBoxPoints.topLeftPoint.y,
-        boundingBoxPoints.topRightPoint.y,
-        boundingBoxPoints.bottomLeftPoint.y,
-        boundingBoxPoints.bottomRightPoint.y
-    ].sort(function (a, b) { return a-b; });
-
-    return {x:allPointsX[0],y:allPointsY[0]};
-
-}
-
-/*  */
-WickObject.prototype.getSymbolBoundingBoxCorner = function () {
-
-    if(!this.isSymbol) return this.getBoundingBoxCorner();
-
-    var allBoundingBoxCornersX = [];
-    var allBoundingBoxCornersY = [];
-
-    this.getObjectsOnFirstFrame().forEach(function (child) {
-        var bboxCorner = child.getSymbolBoundingBoxCorner();
-        allBoundingBoxCornersX.push(bboxCorner.x);
-        allBoundingBoxCornersY.push(bboxCorner.y);
-    });
-
-    allBoundingBoxCornersX.sort(function (a, b) { return a-b; });
-    allBoundingBoxCornersY.sort(function (a, b) { return a-b; });
-
-    return {x:allBoundingBoxCornersX[0], y:allBoundingBoxCornersY[0]};
-
-}
-
-/* Used to properly position symbols in fabric */
-WickObject.prototype.getSymbolCornerPosition = function () {
-
-    if(!this.isSymbol) {
-        return {x:0, y:0};
-    }
-
-    var leftmostLeft = null;
-    var topmostTop = null;
-
-    this.getObjectsOnFirstFrame().forEach(function (child) {
-        var checkX, checkY;
-
-        if(child.isSymbol) {
-            var symCorner = child.getSymbolCornerPosition();
-            checkX = child.x+symCorner.x;
-            checkY = child.y+symCorner.y;
-        } else {
-            checkX = child.x;
-            checkY = child.y;
-        }
-
-        if(leftmostLeft === null || checkX < leftmostLeft) {
-            leftmostLeft = checkX;
-        }
-
-        if(topmostTop === null || checkY < topmostTop) {
-            topmostTop = checkY;
-        }
-    });
-
-    return {x:leftmostLeft, y:topmostTop};
-
-}
-
-WickObject.prototype.getSymbolCenterPosition = function () {
-
-    var avgLeft = 0;
-    var avgTop = 0;
-    var childCount = 0;
-
-    this.getObjectsOnFirstFrame().forEach(function (child) {
-        avgLeft += child.x;
-        avgTop += child.y;
-        childCount++;
-    });
-
-    avgLeft /= childCount;
-    avgTop /= childCount;
-
-    return {x:avgLeft, y:avgTop};
-}
-
 // used as a hack to get around fabric.js lack of rotation around anchorpoint
 WickObject.prototype.fixOriginPoint = function () {
-    //var symbolCornerPosition = this.getSymbolCornerPosition();
-    var symbolCornerPosition = this.getSymbolCenterPosition();
+    var bbox = wickEditor.interfaces.fabric.getBoundingBoxOfAllObjects();
+    var bboxCenter = {x:bbox.left + bbox.width/2, y:bbox.top + bbox.height/2};
+
+    var symbolCornerPosition = {x:this.x-bboxCenter.x ,y:this.y-bboxCenter.y}
+
     this.getAllChildObjects().forEach(function (child) {
-        child.x -= symbolCornerPosition.x;
-        child.y -= symbolCornerPosition.y;
+        child.x += symbolCornerPosition.x;
+        child.y += symbolCornerPosition.y;
     });
     this.x += symbolCornerPosition.x;
     this.y += symbolCornerPosition.y;

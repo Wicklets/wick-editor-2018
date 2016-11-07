@@ -207,6 +207,14 @@ var FabricInterface = function (wickEditor) {
         }
     }
 
+    this.screenToCanvasSize = function (x,y) {
+        var zoom = that.canvas.getZoom();
+        return {
+            x: x/zoom,
+            y: y/zoom
+        }
+    }
+
     this.updateCursor = function () {
         var cursorImg = that.currentTool.getCursorImage();
         this.canvas.defaultCursor = cursorImg;
@@ -223,6 +231,51 @@ var FabricInterface = function (wickEditor) {
         });
 
         return foundFabricObject;
+    }
+
+    this.getBoundingBoxOfObjects = function (ids) {
+        var group = new fabric.Group([], {
+            originX: 'left',
+            originY: 'top'
+        });
+
+        var boundingBoxObjects = []; 
+        this.canvas.forEachObject(function(fabricObj) {
+            if(ids.indexOf(fabricObj.wickObjectID) !== -1) {
+                boundingBoxObjects.push(fabricObj);
+            }
+        });
+        for(var i = 0; i < boundingBoxObjects.length; i++) {
+            group.canvas = this.canvas // WHAT ??????????????? WHY
+            group.addWithUpdate(boundingBoxObjects[i]);
+        }
+
+        group.setCoords();
+        var bbox = group.getBoundingRect();
+        for(var i = 0; i < boundingBoxObjects.length; i++) {
+            group.canvas = this.canvas // WHAT ??????????????? WHY
+            group.removeWithUpdate(boundingBoxObjects[i]);
+        }
+
+        var bboxXY = that.screenToCanvasSpace(bbox.left, bbox.top);
+        var bboxSize = that.screenToCanvasSize(bbox.width, bbox.height);
+
+        bbox.left = bboxXY.x;
+        bbox.top = bboxXY.y;
+        bbox.width = bboxSize.x;
+        bbox.height = bboxSize.y;
+
+        return bbox;
+    }
+
+    this.getBoundingBoxOfAllObjects = function () {
+        var ids = [];
+        this.canvas.forEachObject(function (o) {
+            if(o.wickObjectID && o.selectable) {
+                ids.push(o.wickObjectID);
+            }
+        });
+        return that.getBoundingBoxOfObjects(ids);
     }
 
     this.selectByIDs = function (ids) {
