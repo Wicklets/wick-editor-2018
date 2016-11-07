@@ -244,8 +244,6 @@ WickObject.createSymbolFromWickObjects = function (wickObjects) {
     symbol.width  = symbol.layers[0].frames[0].wickObjects[0].width;
     symbol.height = symbol.layers[0].frames[0].wickObjects[0].height;
 
-    symbol.fixOriginPoint();
-
     return symbol;
 
 }
@@ -618,7 +616,7 @@ WickObject.prototype.getLargestID = function (id) {
 *************************/
 
 // used as a hack to get around fabric.js lack of rotation around anchorpoint
-WickObject.prototype.fixOriginPoint = function () {
+WickObject.prototype.fixOriginPoint = function (newSymbol) {
     var bbox;
     if (wickEditor.project.getCurrentObject() === this) {
         bbox = wickEditor.interfaces.fabric.getBoundingBoxOfAllObjects();
@@ -631,17 +629,22 @@ WickObject.prototype.fixOriginPoint = function () {
         bbox = wickEditor.interfaces.fabric.getBoundingBoxOfObjects(ids);
     }
     var bboxCenter = {x:bbox.left + bbox.width/2, y:bbox.top + bbox.height/2};
+    console.log(bboxCenter)
 
-    var symbolCornerPosition = {x:this.x-bboxCenter.x ,y:this.y-bboxCenter.y}
+    var symbolCornerPosition = {x:this.x-bboxCenter.x, y:this.y-bboxCenter.y};
 
-    var symbolAbsPos = this.parentObject.getAbsolutePosition()
-
+    var symbolAbsPos = this.parentObject.getAbsolutePosition();
     symbolCornerPosition.x += symbolAbsPos.x;
     symbolCornerPosition.y += symbolAbsPos.y;
 
+    var that = this;
     this.getAllChildObjects().forEach(function (child) {
         child.x += symbolCornerPosition.x;
         child.y += symbolCornerPosition.y;
+        if(!that.parentObject.isRoot && newSymbol) {
+            child.x += bboxCenter.x;
+            child.y += bboxCenter.y;   
+        }
     });
     this.x -= symbolCornerPosition.x;
     this.y -= symbolCornerPosition.y;

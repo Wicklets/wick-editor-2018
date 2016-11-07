@@ -219,6 +219,7 @@ WickProject.prototype.addObject = function (wickObject, zIndex) {
     }
 
     this.regenerateUniqueIDs(this.rootObject);
+    this.rootObject.generateParentObjectReferences();
 
 }
 

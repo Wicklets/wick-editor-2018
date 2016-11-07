@@ -373,13 +373,13 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             var selectedObjects = wickEditor.interfaces['fabric'].getSelectedWickObjects();
             
-
             selectedObjects.forEach(function (obj) {
                 wickEditor.project.getCurrentObject().removeChildByID(obj.id);
             });
 
             var symbol = new WickObject.createSymbolFromWickObjects(selectedObjects);
             wickEditor.project.addObject(symbol);
+            symbol.fixOriginPoint(true);
             symbol.selectOnAddToFabric = true;
         },
         function (args) {
