@@ -264,7 +264,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         if(wickObj.fontData) {
             fabricObj.text = wickObj.fontData.text;
             fabricObj.fontFamily = wickObj.fontData.fontFamily;
-            fabricObj.fill = wickObj.fontData.fill;
+            fabricObj.fill = "#"+wickObj.fontData.fill;
             fabricObj.fontSize = wickObj.fontData.fontSize;
         } else {
             if(wickObj.opacity > 0) {
