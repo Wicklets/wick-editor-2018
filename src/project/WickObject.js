@@ -634,6 +634,11 @@ WickObject.prototype.fixOriginPoint = function () {
 
     var symbolCornerPosition = {x:this.x-bboxCenter.x ,y:this.y-bboxCenter.y}
 
+    var symbolAbsPos = this.parentObject.getAbsolutePosition()
+
+    symbolCornerPosition.x += symbolAbsPos.x;
+    symbolCornerPosition.y += symbolAbsPos.y;
+
     this.getAllChildObjects().forEach(function (child) {
         child.x += symbolCornerPosition.x;
         child.y += symbolCornerPosition.y;
