@@ -41,7 +41,7 @@ var FabricSymbolBorders = function (wickEditor, fabricInterface) {
 
             var bound = obj.getBoundingRect();
             var boxGrowOffset = boxAnimationTimer;
-            canvas.contextContainer.lineWidth = 2;
+            canvas.contextContainer.lineWidth = 4;
             canvas.contextContainer.globalAlpha = 0.5;
             canvas.contextContainer.strokeRect(
                 bound.left + 0.5 + groupOffset.x - boxGrowOffset/2,
