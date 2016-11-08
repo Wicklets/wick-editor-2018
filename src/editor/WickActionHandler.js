@@ -241,6 +241,7 @@ var WickActionHandler = function (wickEditor) {
 
                 if(args.originalStates[i].svgFillColor) {
                     wickObj.svgData.fillColor = args.originalStates[i].svgFillColor;
+                    wickObj.forceFabricCanvasRegen = true;
                 }
             }
         });
