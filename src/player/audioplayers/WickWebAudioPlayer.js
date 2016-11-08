@@ -93,7 +93,7 @@ var WickWebAudioPlayer = function (project) {
             source.loop = loop;
             source.start(0);
             allPlayingSounds.push({source:source, id:id});
-            console.log("started...");
+            //console.log("started...");
         }
     }
 

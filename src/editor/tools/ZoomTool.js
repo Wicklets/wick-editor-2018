@@ -28,9 +28,11 @@ var ZoomTool = function (wickEditor) {
     function MouseWheelHandler(e) {
         // cross-browser wheel delta
         e.preventDefault()
-        var e = window.event || e;
-        var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-        wickEditor.interfaces.fabric.zoom(1.0 + delta*.1);
+        if(wickEditor.guiActionHandler.specialKeys["Modifier"]) {
+            var e = window.event || e;
+            var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+            wickEditor.interfaces.fabric.zoom(1.0 + delta*.1);
+        }
 
         return false;
     }

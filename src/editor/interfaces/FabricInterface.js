@@ -14,7 +14,7 @@ var FabricInterface = function (wickEditor) {
 
         this.canvas = new fabric.CanvasEx('fabricCanvas', {
             imageSmoothingEnabled:false,
-            //preserveObjectStacking:true,
+            preserveObjectStacking:true,
             renderOnAddRemove:false,
             //stateful:false,
         });

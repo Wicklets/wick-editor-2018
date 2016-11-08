@@ -106,15 +106,13 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                     }
                     selectedObjectIDs.push(objectToAdd.id);
                     objectToAdd.selectOnAddToFabric = false;
+                    fabricInterface.selectByIDs(selectedObjectIDs);
                 }
 
                 numObjectsAdded++;
                 if(numObjectsAdded === objectsToAdd.length) {
                     fabricInterface.canvas.renderAll();
                 }
-
-                //fabricObj.trueZIndex = currentObject.getCurrentFrame().wickObjects.indexOf(child);
-                //that.canvas.moveTo(fabricObj, fabricObj.trueZIndex+2 + activeObjects.length+3);
             });
         });
 
@@ -264,7 +262,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         if(wickObj.fontData) {
             fabricObj.text = wickObj.fontData.text;
             fabricObj.fontFamily = wickObj.fontData.fontFamily;
-            fabricObj.fill = "#"+wickObj.fontData.fill;
+            fabricObj.fill = wickObj.fontData.fill;
             fabricObj.fontSize = wickObj.fontData.fontSize;
         } else {
             if(wickObj.opacity > 0) {
@@ -306,22 +304,10 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 fabricObj.hasControls = true;
                 fabricObj.selectable = true;
                 fabricObj.evented = true;
-
-                //fabricObj.trueZIndex = currentObject.getCurrentFrame().wickObjects.indexOf(wickObj);
-                //that.canvas.moveTo(fabricObj, fabricObj.trueZIndex+3 + activeObjects.length+3);
             } else {
                 fabricObj.hasControls = false;
                 fabricObj.selectable = false;
                 fabricObj.evented = false;
-
-                // OPTIMIZATION WORK: get ridda this
-                //that.canvas.moveTo(fabricObj, activeObjects.length+3);
-
-                /*if(nearbyObjects.indexOf(wickObj) !== -1) {
-                    var framePlayheadPosition = currentObject.getPlayheadPositionAtFrame(currentObject.getFrameWithChild(wickObj));
-                    fabricObj.opacity = (wickObj.opacity * (1-(Math.abs(framePlayheadPosition-currentObject.playheadPosition)/4)))/3;
-                    fabricInterface.canvas.renderAll();
-                }*/
             }
 
             if (!(fabricInterface.currentTool instanceof CursorTool)) {

@@ -20,6 +20,7 @@ var TextTool = function (wickEditor) {
 
     var addText = function () {
     	var newWickObject = WickObject.fromText('Click to edit text');
+        newWickObject.fontData.fill = wickEditor.interfaces.fabric.tools.paintbrush.color;
         newWickObject.x = wickEditor.inputHandler.mouse.x - wickEditor.interfaces.fabric.getPan().x;
         newWickObject.y = wickEditor.inputHandler.mouse.y - wickEditor.interfaces.fabric.getPan().x;
         wickEditor.actionHandler.doAction('addObjects', {wickObjects:[newWickObject]});

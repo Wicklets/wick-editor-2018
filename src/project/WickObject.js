@@ -629,7 +629,6 @@ WickObject.prototype.fixOriginPoint = function (newSymbol) {
         bbox = wickEditor.interfaces.fabric.getBoundingBoxOfObjects(ids);
     }
     var bboxCenter = {x:bbox.left + bbox.width/2, y:bbox.top + bbox.height/2};
-    console.log(bboxCenter)
 
     var symbolCornerPosition = {x:this.x-bboxCenter.x, y:this.y-bboxCenter.y};
 

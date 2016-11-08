@@ -125,7 +125,7 @@ var PropertiesInterface = function (wickEditor) {
     document.getElementById('fontColor').onchange = function () {
         wickEditor.actionHandler.doAction('modifyObjects', { 
             ids: [wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0]], 
-            modifiedStates: [{ fill : this.value }] 
+            modifiedStates: [{ fill : "#"+this.value }] 
         });
     };
 
