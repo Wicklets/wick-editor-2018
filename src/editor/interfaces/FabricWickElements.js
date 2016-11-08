@@ -157,6 +157,9 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
         if(wickObj.fontData) {
             var newFabricText = new fabric.IText(wickObj.fontData.text, wickObj.fontData);
+            newFabricText.on('text:changed', function(e) {
+                wickEditor.interfaces.fabric.forceModifySelectedObjects();
+            });
             callback(newFabricText);
         }
 

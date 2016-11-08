@@ -30,12 +30,7 @@ var FabricInterface = function (wickEditor) {
         this.symbolBorders = new FabricSymbolBorders(wickEditor, this);
 
         this.panning = false;
-
-        // Prevents syncs that squash changes to ITexts
-        document.getElementById('editor').addEventListener("keydown", function (event) {
-            that.forceModifySelectedObjects();
-        });
-
+        
         this.tools = {
             "cursor" : new CursorTool(wickEditor),
             "paintbrush" : new PaintbrushTool(wickEditor),
@@ -491,6 +486,7 @@ var FabricInterface = function (wickEditor) {
         if(wickObj && wickObj.fontData) {
             that.modifyObjects([wickObj.id]);
         }
+        wickEditor.syncInterfaces();
     }
     
 }

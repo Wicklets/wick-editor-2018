@@ -50,7 +50,6 @@ var WickPixiRenderer = function (project) {
                 subObj.pixiSprite = PIXI.Sprite.fromImage(subObj.imageData || subObj.svgCacheImageData);
                 wickObj.pixiContainer.addChild(subObj.pixiSprite);
             } else if (subObj.fontData) {
-            	console.log(subObj.fontData.fill)
                 var style = {
                     font : "normal " + subObj.fontData.fontSize + "px " + subObj.fontData.fontFamily,
                     fill : "#"+subObj.fontData.fill,

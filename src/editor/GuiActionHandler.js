@@ -85,7 +85,7 @@ var GuiActionHandler = function (wickEditor) {
     Key listeners
 *************************/
 
-    // 
+    // Fixes hotkey breaking bug
     $(window).focus(function() {
         that.keys = [];
         that.specialKeys = [];
@@ -95,10 +95,10 @@ var GuiActionHandler = function (wickEditor) {
         that.specialKeys = [];
     });
 
-    document.getElementById('editor').addEventListener("keydown", function (event) {
+    document.body.addEventListener("keydown", function (event) {
         handleKeyEvent(event, "keydown");
     });
-    document.getElementById('editor').addEventListener("keyup", function (event) {
+    document.body.addEventListener("keyup", function (event) {
         handleKeyEvent(event, "keyup");
     });
 
