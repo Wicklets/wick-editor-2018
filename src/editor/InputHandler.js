@@ -45,7 +45,7 @@ var InputHandler = function (wickEditor) {
      File Import
 *************************/
 
-    var loadFileIntoWickObject = function (file,fileType) {
+    var loadFileIntoWickObject = function (e,file,fileType) {
 
         if (fileType === 'text/html') {
             WickProject.fromFile(file, function(project) {
@@ -80,6 +80,14 @@ var InputHandler = function (wickEditor) {
                 }
 
                 fromContstructors[fileType](fr.result, function (newWickObject) {
+                    var m
+                    if(e && e.originalEvent && e.originalEvent.clientX) {
+                        m = wickEditor.interfaces.fabric.screenToCanvasSpace(e.originalEvent.clientX, e.originalEvent.clientY);
+                    } else {
+                        m = wickEditor.interfaces.fabric.screenToCanvasSpace(window.innerWidth/2, window/innerHeight/2);
+                    }
+                    newWickObject.x = m.x;
+                    newWickObject.y = m.y;
                     wickEditor.actionHandler.doAction('addObjects', {wickObjects:[newWickObject]});
                 })
             };
@@ -111,7 +119,7 @@ var InputHandler = function (wickEditor) {
             var file = files[i];
             var fileType = file.type;
 
-            loadFileIntoWickObject(file,fileType);
+            loadFileIntoWickObject(e,file,fileType);
 
         }
 
@@ -129,7 +137,7 @@ var InputHandler = function (wickEditor) {
             var file = filePath.files[0];
             var fileType = file.type;
 
-            loadFileIntoWickObject(file,fileType);
+            loadFileIntoWickObject(null,file,fileType);
         }
 
         var importButton = $("importButton");

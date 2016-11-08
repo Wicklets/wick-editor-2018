@@ -102,7 +102,7 @@ var TimelineInterface = function (wickEditor) {
             for(var f = 0; f < /*currentObject.getTotalTimelineLength()*/ 500; f++) {
                 ctx.fillStyle = "#AAAAAA";
                 ctx.font = "10px sans-serif";
-                ctx.fillText(f, f*frameWidth+2, frameHeight*currentObject.layers.length+10);
+                ctx.fillText(f+1, f*frameWidth+2, frameHeight*currentObject.layers.length+10);
 
                 ctx.fillStyle = "#DDDDDD";
                 ctx.fillRect(

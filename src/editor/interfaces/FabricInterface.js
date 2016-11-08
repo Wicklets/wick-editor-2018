@@ -14,7 +14,7 @@ var FabricInterface = function (wickEditor) {
 
         this.canvas = new fabric.CanvasEx('fabricCanvas', {
             imageSmoothingEnabled:false,
-            preserveObjectStacking:true,
+            //preserveObjectStacking:true,
             renderOnAddRemove:false,
         });
         this.canvas.selectionColor = 'rgba(110, 110, 115, 0.1)';
@@ -66,6 +66,9 @@ var FabricInterface = function (wickEditor) {
         // Listen for objects being changed so we can undo them in the action handler.
         that.canvas.on('object:modified', function(e) {
             that.modifyChangedObjects(e);
+        });
+        that.canvas.on('text:changed', function (e) {
+            wickEditor.interfaces.fabric.forceModifySelectedObjects();
         });
 
         this.recenterCanvas();

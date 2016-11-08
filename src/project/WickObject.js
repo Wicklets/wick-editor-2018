@@ -1312,7 +1312,7 @@ WickObject.prototype.gotoFrame = function (frame) {
 
         // Only navigate to an integer frame if it is nonnegative and a valid frame
         if(frame < this.getCurrentLayer().frames.length) {
-            this.playheadPosition = frame;
+            this.playheadPosition = frame-1; // Frames are zero-indexed internally but start at one in the editor GUI
         } else {
             throw (new Error("Failed to navigate to frame \'" + frame + "\': is not a valid frame."));
         }

@@ -28,18 +28,22 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         allObjects.forEach(function(obj) { allObjectsIDs.push(obj.id) });
 
         var refreshZIndices = function () {
+            //console.log("updating z indices of " + fabricInterface.canvas._objects.length + " objects")
+            fabricInterface.guiElements.setInactiveFramePosition(siblingObjects.length);
             fabricInterface.canvas.forEachObject(function(fabricObj) {
                 if(!fabricObj.wickObjectID) return;
 
-                var fabricZIndex = fabricInterface.canvas._objects.indexOf(fabricObj);
+                var fabricZIndex = fabricInterface.canvas._objects.indexOf(fabricObj)-fabricInterface.guiElements.getNumGUIElements()+1;
 
                 var wickObj = wickEditor.project.rootObject.getChildByID(fabricObj.wickObjectID);
                 var trueZIndex = allObjects.indexOf(wickObj);
+                if(fabricZIndex > siblingObjects.length) fabricZIndex-=1;
 
-                if(fabricZIndex-fabricInterface.guiElements.getNumGUIElements() !== trueZIndex)
+                //console.log("FZI: " + fabricZIndex + " TZI: " + trueZIndex)
+                if(fabricZIndex !== trueZIndex) {
                     fabricInterface.canvas.moveTo(fabricObj, trueZIndex+fabricInterface.guiElements.getNumGUIElements());
+                }
             });
-            fabricInterface.guiElements.setInactiveFramePosition(siblingObjects.length);
         }
 
         if(enablePerfTests) stopTiming("object list generation");
@@ -128,9 +132,9 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 numObjectsAdded++;
                 if(numObjectsAdded === objectsToAdd.length) {
                     fabricInterface.canvas.renderAll();
-
                     refreshZIndices();
                 }
+                refreshZIndices();
             });
         });
 
@@ -162,9 +166,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
         if(wickObj.fontData) {
             var newFabricText = new fabric.IText(wickObj.fontData.text, wickObj.fontData);
-            newFabricText.on('text:changed', function(e) {
-                wickEditor.interfaces.fabric.forceModifySelectedObjects();
-            });
             callback(newFabricText);
         }
 
