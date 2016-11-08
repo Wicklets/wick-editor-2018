@@ -106,6 +106,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                     }
                     selectedObjectIDs.push(objectToAdd.id);
                     objectToAdd.selectOnAddToFabric = false;
+                    fabricInterface.deselectAll();
                     fabricInterface.selectByIDs(selectedObjectIDs);
                 }
 

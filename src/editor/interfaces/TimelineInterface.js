@@ -57,13 +57,15 @@ var TimelineInterface = function (wickEditor) {
             $('#frameIdentifier').prop('disabled', true);
         }
 
-        if(wickEditor.project.onionSkinning) {
+        /*if(wickEditor.project.onionSkinning) {
             document.getElementById("enableOnionSkinningButton").style.display = "none";
             document.getElementById("disableOnionSkinningButton").style.display = "inline";
         } else {
             document.getElementById("enableOnionSkinningButton").style.display = "inline";
             document.getElementById("disableOnionSkinningButton").style.display = "none";
-        }
+        }*/
+        document.getElementById("enableOnionSkinningButton").style.display = "none";
+        document.getElementById("disableOnionSkinningButton").style.display = "none";
 
     }
 
