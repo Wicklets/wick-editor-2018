@@ -19,6 +19,9 @@ var FillBucketTool = function (wickEditor) {
 
         var mouseScreenSpace = wickEditor.interfaces.fabric.screenToCanvasSpace(e.e.offsetX, e.e.offsetY);
         var mousePoint = new paper.Point(mouseScreenSpace.x, mouseScreenSpace.y);
+        var insideSymbolOffset = wickEditor.project.getCurrentObject();
+        mousePoint.x -= insideSymbolOffset.x;
+        mousePoint.y -= insideSymbolOffset.y;
 
         // Try filling paths
         var filledPath = false;
@@ -173,6 +176,8 @@ var FillBucketTool = function (wickEditor) {
         var wickObj = WickObject.fromSVG(SVGData);
         wickObj.x = pathPosition._x// - paperPath.bounds._width/2;
         wickObj.y = pathPosition._y// - paperPath.bounds._height/2;
+        wickObj.x += wickEditor.project.getCurrentObject().x;
+        wickObj.y += wickEditor.project.getCurrentObject().y;
         return wickObj;
     }
 
