@@ -27,6 +27,21 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         var allObjectsIDs = [];
         allObjects.forEach(function(obj) { allObjectsIDs.push(obj.id) });
 
+        var refreshZIndices = function () {
+            fabricInterface.canvas.forEachObject(function(fabricObj) {
+                if(!fabricObj.wickObjectID) return;
+
+                var fabricZIndex = fabricInterface.canvas._objects.indexOf(fabricObj);
+
+                var wickObj = wickEditor.project.rootObject.getChildByID(fabricObj.wickObjectID);
+                var trueZIndex = allObjects.indexOf(wickObj);
+
+                if(fabricZIndex-fabricInterface.guiElements.getNumGUIElements() !== trueZIndex)
+                    fabricInterface.canvas.moveTo(fabricObj, trueZIndex+fabricInterface.guiElements.getNumGUIElements());
+            });
+            fabricInterface.guiElements.setInactiveFramePosition(siblingObjects.length);
+        }
+
         if(enablePerfTests) stopTiming("object list generation");
 
         // Remove objects that don't exist anymore or need to be regenerated
@@ -96,8 +111,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 fabricInterface.canvas.add(fabricObj);
                 updateFabObj(fabricObj, objectToAdd, activeObjects);
 
-                var trueZIndex = allObjects.indexOf(objectToAdd);
-                fabricInterface.canvas.moveTo(fabricObj, trueZIndex+fabricInterface.guiElements.getNumGUIElements());
+                //var trueZIndex = allObjects.indexOf(objectToAdd);
+                //fabricInterface.canvas.moveTo(fabricObj, trueZIndex+fabricInterface.guiElements.getNumGUIElements());
 
                 if(objectToAdd.selectOnAddToFabric) {
                     if(!selectionChanged) {
@@ -113,25 +128,15 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 numObjectsAdded++;
                 if(numObjectsAdded === objectsToAdd.length) {
                     fabricInterface.canvas.renderAll();
+
+                    refreshZIndices();
                 }
             });
         });
 
         if(enablePerfTests) stopTiming("add & update objects");
 
-        //update z-indices
-        fabricInterface.canvas.forEachObject(function(fabricObj) {
-            if(!fabricObj.wickObjectID) return;
-
-            var fabricZIndex = fabricInterface.canvas._objects.indexOf(fabricObj);
-
-            var wickObj = wickEditor.project.rootObject.getChildByID(fabricObj.wickObjectID);
-            var trueZIndex = allObjects.indexOf(wickObj);
-
-            if(fabricZIndex-fabricInterface.guiElements.getNumGUIElements() !== trueZIndex)
-                fabricInterface.canvas.moveTo(fabricObj, trueZIndex+fabricInterface.guiElements.getNumGUIElements());
-        });
-        fabricInterface.guiElements.setInactiveFramePosition(siblingObjects.length);
+        refreshZIndices();
 
         if(enablePerfTests) stopTiming("update z-indices");
 
