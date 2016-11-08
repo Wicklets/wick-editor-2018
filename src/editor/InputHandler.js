@@ -62,7 +62,12 @@ var InputHandler = function (wickEditor) {
                 'image/gif'        : WickObject.fromAnimatedGIF,
                 'audio/mp3'        : WickObject.fromAudioFile,
                 'audio/wav'        : WickObject.fromAudioFile,
+                'audio/wave'       : WickObject.fromAudioFile,
+                'audio/x-wav'      : WickObject.fromAudioFile,
+                'audio/x-pn-wav'   : WickObject.fromAudioFile,
                 'audio/ogg'        : WickObject.fromAudioFile,
+                'audio/flac'       : WickObject.fromAudioFile,
+                'audio/x-flac'     : WickObject.fromAudioFile,
                 "audio/x-m4a"      : WickObject.fromAudioFile,
                 "application/json" : WickObject.fromJSONFile
             }

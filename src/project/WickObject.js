@@ -687,7 +687,7 @@ WickObject.prototype.isOnActiveLayer = function () {
 }
 
 /*************************
-     Export
+    Export
 *************************/
 
 WickObject.JSONReplacer = function(key, value) {

@@ -31,6 +31,11 @@ var FabricInterface = function (wickEditor) {
 
         this.panning = false;
 
+        // Prevents syncs that squash changes to ITexts
+        document.getElementById('editor').addEventListener("keydown", function (event) {
+            that.forceModifySelectedObjects();
+        });
+
         this.tools = {
             "cursor" : new CursorTool(wickEditor),
             "paintbrush" : new PaintbrushTool(wickEditor),
