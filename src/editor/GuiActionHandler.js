@@ -85,21 +85,23 @@ var GuiActionHandler = function (wickEditor) {
     Key listeners
 *************************/
 
-    document.body.addEventListener("keydown", function (event) {
+    document.getElementById('editor').addEventListener("keydown", function (event) {
         handleKeyEvent(event, "keydown");
     });
-    document.body.addEventListener("keyup", function (event) {
+    document.getElementById('editor').addEventListener("keyup", function (event) {
         handleKeyEvent(event, "keyup");
     });
 
     var handleKeyEvent = function (event, eventType) {
-        
+
         var keyChar = codeToKeyChar[event.keyCode];
         var keyDownEvent = eventType === 'keydown';
         if (modifierKeys.indexOf(keyChar) !== -1) {
             that.specialKeys["Modifier"] = keyDownEvent;
+            that.keys = [];
         } else if (shiftKeys.indexOf(keyChar) !== -1) {
             that.specialKeys["Shift"] = keyDownEvent;
+            that.keys = [];
         } else {
             that.keys[event.keyCode] = keyDownEvent;
         }
