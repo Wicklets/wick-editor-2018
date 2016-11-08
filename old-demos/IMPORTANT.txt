@@ -1,0 +1,3 @@
+These are old demos from the pre-alpha of Wick.
+
+You can open them in a browser and play them, but trying to edit them in Wick will probably not work.

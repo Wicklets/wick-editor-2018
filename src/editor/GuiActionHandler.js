@@ -85,6 +85,16 @@ var GuiActionHandler = function (wickEditor) {
     Key listeners
 *************************/
 
+    // 
+    $(window).focus(function() {
+        that.keys = [];
+        that.specialKeys = [];
+    });
+    $(window).blur(function() {
+        that.keys = [];
+        that.specialKeys = [];
+    });
+
     document.getElementById('editor').addEventListener("keydown", function (event) {
         handleKeyEvent(event, "keydown");
     });

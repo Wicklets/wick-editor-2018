@@ -16,7 +16,6 @@ var FabricInterface = function (wickEditor) {
             imageSmoothingEnabled:false,
             preserveObjectStacking:true,
             renderOnAddRemove:false,
-            //stateful:false,
         });
         this.canvas.selectionColor = 'rgba(110, 110, 115, 0.1)';
         this.canvas.selectionBorderColor = 'grey';
