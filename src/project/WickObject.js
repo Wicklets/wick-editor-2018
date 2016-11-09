@@ -182,6 +182,7 @@ WickObject.fromText = function (text) {
         fontSize: 40,
         fontStyle: 'normal',
         fontWeight: 'normal',
+        textDecoration: '',
         hasBorders: false,
         lineHeight: 1.16,
         fill: '#000000',
@@ -1308,13 +1309,16 @@ WickObject.prototype.stop = function () {
 }
 
 WickObject.prototype.gotoFrame = function (frame) {
-    if (CheckInput.isNonNegativeInteger(frame)) {
+
+    // Frames are zero-indexed internally but start at one in the editor GUI, so you gotta subtract 1.
+    var actualFrame = frame-1;
+    if (CheckInput.isNonNegativeInteger(actualFrame)) {
 
         // Only navigate to an integer frame if it is nonnegative and a valid frame
-        if(frame < this.getCurrentLayer().frames.length) {
-            this.playheadPosition = frame-1; // Frames are zero-indexed internally but start at one in the editor GUI
+        if(actualFrame < this.getCurrentLayer().frames.length) {
+            this.playheadPosition = actualFrame;
         } else {
-            throw (new Error("Failed to navigate to frame \'" + frame + "\': is not a valid frame."));
+            throw (new Error("Failed to navigate to frame \'" + actualFrame + "\': is not a valid frame."));
         }
 
     } else if (CheckInput.isString(frame)) {

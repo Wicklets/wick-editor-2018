@@ -25,11 +25,12 @@ var WickPixiRenderer = function (project) {
             wickObj.pixiSprite = PIXI.Sprite.fromImage(wickObj.imageData || wickObj.svgCacheImageData);
             wickObj.parentObject.pixiContainer.addChild(wickObj.pixiSprite);
         } else if (wickObj.fontData) {
+        	console.log(fontStyle)
             var style = {
-                font : "normal " + wickObj.fontData.fontSize + "px " + wickObj.fontData.fontFamily,
-                fill : wickObj.fontData.fill,
-                wordWrap : false,
-                wordWrapWidth : 440
+                font : subObj.fontData.fontWeight + " " + subObj.fontData.fontStyle + " " + subObj.fontData.fontSize + "px " + subObj.fontData.fontFamily,
+                fill : "#"+subObj.fontData.fill,
+                wordWrap : true,
+                wordWrapWidth : 1440,
             };
             wickObj.pixiText = new PIXI.Text(wickObj.fontData.text, style);
             wickObj.setText = function (text) { wickObj.pixiText.setText(text); };
@@ -51,10 +52,10 @@ var WickPixiRenderer = function (project) {
                 wickObj.pixiContainer.addChild(subObj.pixiSprite);
             } else if (subObj.fontData) {
                 var style = {
-                    font : "normal " + subObj.fontData.fontSize + "px " + subObj.fontData.fontFamily,
+                    font : subObj.fontData.fontWeight + " " + subObj.fontData.fontStyle + " " + subObj.fontData.fontSize + "px " + subObj.fontData.fontFamily,
                     fill : "#"+subObj.fontData.fill,
                     wordWrap : true,
-                    wordWrapWidth : 1440
+                    wordWrapWidth : 1440,
                 };
                 subObj.pixiText = new PIXI.Text(subObj.fontData.text, style);
                 subObj.setText = function (text) { subObj.pixiText.setText(text); };

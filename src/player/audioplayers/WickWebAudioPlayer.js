@@ -1,5 +1,10 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
+
+// GET RIDDA THIS AND USE A PROPER LIBRARY WIT FALLBACKS TO FLASH AND SHTUFF!!!!!!!!!!!!!!!!!
+
+
+
 var audioContext = null;
 var readyToStartWebAudioContext;
 
@@ -22,7 +27,7 @@ var WickWebAudioPlayer = function (project) {
                     return;
                 }
                 audioBuffers[wickObj.id] = buffer;
-                console.log("loaded sound")
+                //console.log("loaded sound")
             }, function (error) {
                 console.error("failed to decode:", error);
             });
@@ -77,7 +82,7 @@ var WickWebAudioPlayer = function (project) {
         if(!project.muted) {
             var buff = audioBuffers[id];
             if(!buff) {
-                console.log("sound not loaded.")
+                //console.log("sound not loaded.")
                 setTimeout(function () {
                     that.playSound(id,loop,volume);
                 }, 100);

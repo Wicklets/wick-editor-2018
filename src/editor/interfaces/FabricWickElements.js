@@ -84,6 +84,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                     if(fabricObj.group) return;
                     if(fabricObj.wickObjectID === child.id) {
                         updateFabObj(fabricObj, child, activeObjects);
+                        refreshZIndices();
                     }
                 });
                 
@@ -218,21 +219,37 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         if (wickObj.isSymbol) {
             var children = wickObj.getAllActiveChildObjects();
             var group = new fabric.Group();
+            var wos = {};
             for(var i = 0; i < children.length; i++) {
-                var dothing = function (wo) {
-                createFabricObjectFromWickObject(children[wo], function(fabricObj) {
-                    fabricObj.originX = 'centerX';
-                    fabricObj.originY = 'centerY';
-                    
-                    updateFabObj(fabricObj, children[wo]);
-                    group.addWithUpdate(fabricObj);
-                    if(group._objects.length == children.length) {
-                        wickObj.width = group.width;
-                        wickObj.height = group.height;
-                        wickObj.symbolFabricObject = group;
-                        callback(group);
+                
+                var setupSymbol = function () {
+                    //wos.forEach(function (pair) {
+                    for(var i = 0; i < Object.keys(wos).length; i++) {
+                        var pair = wos[i]
+                        var fabricObj = pair.fo;
+                        var child = pair.wo;
+
+                        fabricObj.originX = 'centerX';
+                        fabricObj.originY = 'centerY';
+                        
+                        updateFabObj(fabricObj, child);
+                        group.addWithUpdate(fabricObj);
                     }
-                });
+                    //if(group._objects.length == children.length) {
+                            wickObj.width = group.width;
+                            wickObj.height = group.height;
+                            wickObj.symbolFabricObject = group;
+                            callback(group);
+                        //}
+                }
+                var dothing = function (wo) {
+                    createFabricObjectFromWickObject(children[wo], function(fabricObj) {
+                        wos[wo] = ({fo:fabricObj,wo:children[wo]});
+
+                        if(Object.keys(wos).length == children.length) {
+                            setupSymbol();
+                        }
+                    });
                 }
                 dothing(i);
             }
@@ -274,6 +291,9 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             fabricObj.fontFamily = wickObj.fontData.fontFamily;
             fabricObj.fill = wickObj.fontData.fill;
             fabricObj.fontSize = wickObj.fontData.fontSize;
+            fabricObj.fontStyle = wickObj.fontData.fontStyle;
+            fabricObj.fontWeight = wickObj.fontData.fontWeight;
+            fabricObj.textDecoration = wickObj.fontData.textDecoration;
         } else {
             if(wickObj.opacity > 0) {
                 fabricObj.perPixelTargetFind = true;

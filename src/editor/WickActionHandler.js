@@ -189,6 +189,9 @@ var WickActionHandler = function (wickEditor) {
                     args.originalStates[i].text = wickObj.fontData.text;
                     args.originalStates[i].fontFamily = wickObj.fontData.fontFamily;
                     args.originalStates[i].fontSize = wickObj.fontData.fontSize;
+                    args.originalStates[i].fontWeight = wickObj.fontData.fontWeight;
+                    args.originalStates[i].fontStyle = wickObj.fontData.fontStyle;
+                    args.originalStates[i].textDecoration = wickObj.fontData.textDecoration;
                     args.originalStates[i].fill = wickObj.fontData.fill;
                 }
 
@@ -203,6 +206,9 @@ var WickActionHandler = function (wickEditor) {
                     if(args.modifiedStates[i].text) wickObj.fontData.text = args.modifiedStates[i].text;
                     if(args.modifiedStates[i].fontFamily) wickObj.fontData.fontFamily = args.modifiedStates[i].fontFamily;
                     if(args.modifiedStates[i].fontSize) wickObj.fontData.fontSize = args.modifiedStates[i].fontSize;
+                    if(args.modifiedStates[i].fontWeight) wickObj.fontData.fontWeight = args.modifiedStates[i].fontWeight;
+                    if(args.modifiedStates[i].fontStyle) wickObj.fontData.fontStyle = args.modifiedStates[i].fontStyle;
+                    if(args.modifiedStates[i].textDecoration) wickObj.fontData.textDecoration = args.modifiedStates[i].textDecoration;
                     if(args.modifiedStates[i].fill) wickObj.fontData.fill = args.modifiedStates[i].fill;
                 }
 
@@ -236,6 +242,9 @@ var WickActionHandler = function (wickEditor) {
                     wickObj.fontData.text = args.originalStates[i].text;
                     wickObj.fontData.fontFamily = args.originalStates[i].fontFamily;
                     wickObj.fontData.fontSize = args.originalStates[i].fontSize;
+                    wickObj.fontData.fontStyle = args.originalStates[i].fontStyle;
+                    wickObj.fontData.fontWeight = args.originalStates[i].fontWeight;
+                    wickObj.fontData.textDecoration = args.originalStates[i].textDecoration;
                     wickObj.fontData.fill = args.originalStates[i].fill;
                 }
 

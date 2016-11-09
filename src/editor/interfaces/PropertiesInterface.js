@@ -34,10 +34,14 @@ var PropertiesInterface = function (wickEditor) {
 
             if(selectedObj.fontData) {
                 $("#textProperties").css('display', 'inline');
+                console.log(selectedObj.fontData.fontWeight)
+                document.getElementById('boldCheckbox').checked = selectedObj.fontData.fontWeight === "bold";
+                document.getElementById('italicCheckbox').checked = selectedObj.fontData.fontStyle === "italic";
+                //document.getElementById('underlinedCheckbox').checked = selectedObj.fontData.textDecoration === "underline";
             } else if (selectedObj.audioData) {
                 $("#soundProperties").css('display', 'inline');
-                document.getElementById('loopCheckbox').checked = wickEditor.interfaces['fabric'].getSelectedWickObject().loopSound;
-                document.getElementById('autoplayCheckbox').checked = wickEditor.interfaces['fabric'].getSelectedWickObject().autoplaySound;
+                document.getElementById('loopCheckbox').checked = selectedObj.loopSound;
+                document.getElementById('autoplayCheckbox').checked = selectedObj.autoplaySound;
             }
         } else {
             //Nothing selected, show project properties
@@ -145,5 +149,26 @@ var PropertiesInterface = function (wickEditor) {
     document.getElementById('autoplayCheckbox').onchange = function () {
         wickEditor.interfaces['fabric'].getSelectedWickObject().autoplaySound = this.checked;
     };
+
+
+    document.getElementById('boldCheckbox').onchange = function () {
+        console.log((this.checked ? "bold" : "normal"))
+        wickEditor.actionHandler.doAction('modifyObjects', { 
+            ids: [wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0]], 
+            modifiedStates: [{ fontWeight : (this.checked ? "bold" : "normal") }] 
+        });
+    };
+    document.getElementById('italicCheckbox').onchange = function () {
+        wickEditor.actionHandler.doAction('modifyObjects', { 
+            ids: [wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0]], 
+            modifiedStates: [{ fontStyle : (this.checked ? "italic" : "normal") }] 
+        });
+    };
+    /*document.getElementById('underlinedCheckbox').onchange = function () {
+        wickEditor.actionHandler.doAction('modifyObjects', { 
+            ids: [wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0]], 
+            modifiedStates: [{ textDecoration : (this.checked ? "underline" : "none") }] 
+        });
+    };*/
 
 }
