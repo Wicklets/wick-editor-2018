@@ -7,7 +7,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
     var objectIDsInCanvas = [];
 
     this.update = function () {
-        var enablePerfTests = true;
+        var enablePerfTests = false;
 
         if(enablePerfTests) console.log("-------------------");
         if(enablePerfTests) startTiming();
