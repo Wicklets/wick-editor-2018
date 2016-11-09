@@ -7,7 +7,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
     var objectIDsInCanvas = [];
 
     this.update = function () {
-        var enablePerfTests = false;
+        var enablePerfTests = true;
 
         if(enablePerfTests) console.log("-------------------");
         if(enablePerfTests) startTiming();
@@ -24,16 +24,22 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         //var nearbyObjects = wickEditor.project.onionSkinning ? currentObject.getNearbyObjects(1,0) : [];
         var allObjects = siblingObjects.concat(activeObjects);
 
+        if (fabricInterface.canvas._objects.indexOf(fabricInterface.guiElements.getInactiveFrame()) !== siblingObjects.length) {
+            fabricInterface.guiElements.setInactiveFramePosition(siblingObjects.length);
+        }
+
         var allObjectsIDs = [];
         allObjects.forEach(function(obj) { allObjectsIDs.push(obj.id) });
 
         var refreshZIndices = function () {
             //console.log("updating z indices of " + fabricInterface.canvas._objects.length + " objects")
-            fabricInterface.guiElements.setInactiveFramePosition(siblingObjects.length);
+            
+            var i = 0;
             fabricInterface.canvas.forEachObject(function(fabricObj) {
                 if(!fabricObj.wickObjectID) return;
 
-                var fabricZIndex = fabricInterface.canvas._objects.indexOf(fabricObj)-fabricInterface.guiElements.getNumGUIElements()+1;
+                //var fabricZIndex = fabricInterface.canvas._objects.indexOf(fabricObj)-fabricInterface.guiElements.getNumGUIElements()+1;
+                var fabricZIndex = i-fabricInterface.guiElements.getNumGUIElements()+1;
 
                 var wickObj = wickEditor.project.rootObject.getChildByID(fabricObj.wickObjectID);
                 var trueZIndex = allObjects.indexOf(wickObj);
@@ -41,8 +47,10 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
                 //console.log("FZI: " + fabricZIndex + " TZI: " + trueZIndex)
                 if(fabricZIndex !== trueZIndex) {
-                    fabricInterface.canvas.moveTo(fabricObj, trueZIndex+fabricInterface.guiElements.getNumGUIElements());
+                    //console.log("object move")
+                    //fabricInterface.canvas.moveTo(fabricObj, trueZIndex+fabricInterface.guiElements.getNumGUIElements());
                 }
+                i++;
             });
         }
 
@@ -139,11 +147,9 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             });
         });
 
-        if(enablePerfTests) stopTiming("add & update objects");
-
         refreshZIndices();
 
-        if(enablePerfTests) stopTiming("update z-indices");
+        if(enablePerfTests) stopTiming("add & update objects");
 
         // Reselect objects that were selected before sync
         if(selectedObjectIDs.length > 0) fabricInterface.selectByIDs(selectedObjectIDs);
