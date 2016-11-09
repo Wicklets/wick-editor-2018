@@ -201,7 +201,7 @@ var WickPlayer = (function () {
         project.rootObject.getAllActiveChildObjects().forEach(function(child) {
             if(child.isPointInside(mouse) && child.isClickable()) {
                 child.hoveredOver = true;
-                hoveredOverObj = true;
+                hoveredOverObj = child;
             } else {
                 child.hoveredOver = false;
             }
@@ -209,7 +209,7 @@ var WickPlayer = (function () {
 
         //...and change the cursor if we are
         if(hoveredOverObj) {
-            rendererContainerEl.style.cursor = "pointer";
+            rendererContainerEl.style.cursor = hoveredOverObj.hoverCursor || "pointer";
         } else {
             rendererContainerEl.style.cursor = "default";
         }
