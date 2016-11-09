@@ -1345,6 +1345,7 @@ WickObject.prototype.gotoAndPlay = function (frame) {
         return;
     }
 
+    this.readyToAdvance = false;
     this.gotoFrame(frame);
     this.isPlaying = true;
     
