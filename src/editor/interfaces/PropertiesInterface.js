@@ -34,7 +34,6 @@ var PropertiesInterface = function (wickEditor) {
 
             if(selectedObj.fontData) {
                 $("#textProperties").css('display', 'inline');
-                console.log(selectedObj.fontData.fontWeight)
                 document.getElementById('boldCheckbox').checked = selectedObj.fontData.fontWeight === "bold";
                 document.getElementById('italicCheckbox').checked = selectedObj.fontData.fontStyle === "italic";
                 //document.getElementById('underlinedCheckbox').checked = selectedObj.fontData.textDecoration === "underline";
@@ -150,9 +149,7 @@ var PropertiesInterface = function (wickEditor) {
         wickEditor.interfaces['fabric'].getSelectedWickObject().autoplaySound = this.checked;
     };
 
-
     document.getElementById('boldCheckbox').onchange = function () {
-        console.log((this.checked ? "bold" : "normal"))
         wickEditor.actionHandler.doAction('modifyObjects', { 
             ids: [wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0]], 
             modifiedStates: [{ fontWeight : (this.checked ? "bold" : "normal") }] 

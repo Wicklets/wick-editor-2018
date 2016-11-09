@@ -24,16 +24,16 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         //var nearbyObjects = wickEditor.project.onionSkinning ? currentObject.getNearbyObjects(1,0) : [];
         var allObjects = siblingObjects.concat(activeObjects);
 
+        var allObjectsIDs = [];
+        allObjects.forEach(function(obj) { allObjectsIDs.push(obj.id) });
+
         if (fabricInterface.canvas._objects.indexOf(fabricInterface.guiElements.getInactiveFrame()) !== siblingObjects.length) {
             fabricInterface.guiElements.setInactiveFramePosition(siblingObjects.length);
         }
 
-        var allObjectsIDs = [];
-        allObjects.forEach(function(obj) { allObjectsIDs.push(obj.id) });
-
         var refreshZIndices = function () {
             //console.log("updating z indices of " + fabricInterface.canvas._objects.length + " objects")
-            
+
             var i = 0;
             fabricInterface.canvas.forEachObject(function(fabricObj) {
                 if(!fabricObj.wickObjectID) return;
@@ -48,7 +48,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 //console.log("FZI: " + fabricZIndex + " TZI: " + trueZIndex)
                 if(fabricZIndex !== trueZIndex) {
                     //console.log("object move")
-                    //fabricInterface.canvas.moveTo(fabricObj, trueZIndex+fabricInterface.guiElements.getNumGUIElements());
+                    fabricInterface.canvas.moveTo(fabricObj, trueZIndex+fabricInterface.guiElements.getNumGUIElements());
                 }
                 i++;
             });
