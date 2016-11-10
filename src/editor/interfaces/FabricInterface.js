@@ -491,5 +491,15 @@ var FabricInterface = function (wickEditor) {
         }
         wickEditor.syncInterfaces();
     }
+
+    this.getSelectionObjectsImage = function () {
+        that.canvas.getActiveGroup().cloneAsImage(function (img) { 
+            var image = new Image(); 
+            image.onload = function () { 
+                document.body.appendChild(image);
+            };
+            image.src = img.getElement().src;
+        })
+    }
     
 }

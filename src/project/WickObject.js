@@ -1311,8 +1311,9 @@ WickObject.prototype.stop = function () {
 WickObject.prototype.gotoFrame = function (frame) {
 
     // Frames are zero-indexed internally but start at one in the editor GUI, so you gotta subtract 1.
-    var actualFrame = frame-1;
-    if (CheckInput.isNonNegativeInteger(actualFrame)) {
+    if (CheckInput.isNonNegativeInteger(frame)) {
+
+        var actualFrame = frame-1;
 
         // Only navigate to an integer frame if it is nonnegative and a valid frame
         if(actualFrame < this.getCurrentLayer().frames.length) {

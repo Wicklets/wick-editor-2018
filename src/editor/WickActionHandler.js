@@ -462,6 +462,7 @@ var WickActionHandler = function (wickEditor) {
             }
             for(var i = 0; i < args.ids.length; i++) {
                 var obj = wickEditor.project.getCurrentObject().getChildByID(args.ids[i]);
+                obj.zIndicesDirty = true;
                 wickEditor.project.getCurrentObject().getCurrentFrame().wickObjects.splice(args.oldZIndexes[i], 1);
                 wickEditor.project.getCurrentObject().getCurrentFrame().wickObjects.splice(args.newZIndex, 0, obj);
             }
@@ -469,6 +470,7 @@ var WickActionHandler = function (wickEditor) {
         function (args) {  
             for(var i = 0; i < args.ids.length; i++) {
                 var obj = wickEditor.project.getCurrentObject().getChildByID(args.ids[i]);
+                obj.zIndicesDirty = true;
                 wickEditor.project.getCurrentObject().removeChildByID(args.ids[i]);
                 wickEditor.project.getCurrentObject().getCurrentFrame().wickObjects.splice(args.oldZIndexes[i], 0, obj);
             }

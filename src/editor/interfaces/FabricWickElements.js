@@ -7,7 +7,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
     var objectIDsInCanvas = [];
 
     this.update = function () {
-        var enablePerfTests = false;
+        var enablePerfTests = true;
 
         if(enablePerfTests) console.log("-------------------");
         if(enablePerfTests) startTiming();
@@ -27,31 +27,52 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         var allObjectsIDs = [];
         allObjects.forEach(function(obj) { allObjectsIDs.push(obj.id) });
 
-        if (fabricInterface.canvas._objects.indexOf(fabricInterface.guiElements.getInactiveFrame()) !== siblingObjects.length) {
-            fabricInterface.guiElements.setInactiveFramePosition(siblingObjects.length);
-        }
+        //fabricInterface.guiElements.setInactiveFramePosition(2);
 
-        var refreshZIndices = function () {
+        var refreshZIndices = function (force) {
             //console.log("updating z indices of " + fabricInterface.canvas._objects.length + " objects")
 
-            var i = 0;
+            if (force && fabricInterface.canvas._objects.indexOf(fabricInterface.guiElements.getInactiveFrame()) !== siblingObjects.length) {
+                fabricInterface.guiElements.setInactiveFramePosition(siblingObjects.length);
+            }
+
             fabricInterface.canvas.forEachObject(function(fabricObj) {
                 if(!fabricObj.wickObjectID) return;
 
-                //var fabricZIndex = fabricInterface.canvas._objects.indexOf(fabricObj)-fabricInterface.guiElements.getNumGUIElements()+1;
-                var fabricZIndex = i-fabricInterface.guiElements.getNumGUIElements()+1;
+                //var wickObj = wickEditor.project.rootObject.getChildByID(fabricObj.wickObjectID);
+                wickObj = fabricObj.wickObjReference;
 
-                var wickObj = wickEditor.project.rootObject.getChildByID(fabricObj.wickObjectID);
-                var trueZIndex = allObjects.indexOf(wickObj);
-                if(fabricZIndex > siblingObjects.length) fabricZIndex-=1;
+                
+                //console.log("FZI: " + fabricZIndex + " TZI: " + trueZIndex)
+                if(wickObj.zIndicesDirty || force) {
+
+                    var fabricZIndex = fabricInterface.canvas._objects.indexOf(fabricObj);
+                    var trueZIndex = allObjects.indexOf(wickObj) + fabricInterface.guiElements.getNumGUIElements();
+
+
+                    //console.log("FZI: " + fabricZIndex + " TZI: " + trueZIndex)
+                    console.log("object move")
+                    fabricInterface.canvas.moveTo(fabricObj, trueZIndex);
+                    wickObj.zIndicesDirty = false;
+                }
+            });
+
+            /*fabricInterface.canvas.forEachObject(function(fabricObj) {
+                if(!fabricObj.wickObjectID) return;
+
+                //var wickObj = wickEditor.project.rootObject.getChildByID(fabricObj.wickObjectID);
+                wickObj = fabricObj.wickObjReference;
+
+                var fabricZIndex = fabricInterface.canvas._objects.indexOf(fabricObj);
+                var trueZIndex = allObjects.indexOf(wickObj) + fabricInterface.guiElements.getNumGUIElements();
 
                 //console.log("FZI: " + fabricZIndex + " TZI: " + trueZIndex)
                 if(fabricZIndex !== trueZIndex) {
-                    //console.log("object move")
-                    fabricInterface.canvas.moveTo(fabricObj, trueZIndex+fabricInterface.guiElements.getNumGUIElements());
+                    console.log("FZI: " + fabricZIndex + " TZI: " + trueZIndex)
+                    console.log("object move")
+                    fabricInterface.canvas.moveTo(fabricObj, trueZIndex);
                 }
-                i++;
-            });
+            });*/
         }
 
         if(enablePerfTests) stopTiming("object list generation");
@@ -167,17 +188,20 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         if(wickObj.imageData) {
             fabric.Image.fromURL(wickObj.imageData, function(newFabricImage) {
                 wickObj.cachedFabricObject = newFabricImage;
+                newFabricImage.wickObjReference = wickObj;
                 callback(newFabricImage);
             });
         }
 
         if(wickObj.fontData) {
             var newFabricText = new fabric.IText(wickObj.fontData.text, wickObj.fontData);
+            newFabricText.wickObjReference = wickObj;
             callback(newFabricText);
         }
 
         if(wickObj.audioData) {
             fabric.Image.fromURL('resources/audio.png', function(audioFabricObject) {
+                audioFabricObject.wickObjReference = wickObj;
                 callback(audioFabricObject);
             });
         }
@@ -212,6 +236,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                     //that.svgCacheImageData = imgSrc;
                     fabric.Image.fromURL(imgSrc, function(newFabricImage) {
                         wickObj.cachedFabricObject = newFabricImage;
+                        newFabricImage.wickObjReference = wickObj;
                         callback(newFabricImage);
                     });
                 }, {enableRetinaScaling:false});
@@ -245,6 +270,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                             wickObj.width = group.width;
                             wickObj.height = group.height;
                             wickObj.symbolFabricObject = group;
+                            group.wickObjReference = wickObj;
                             callback(group);
                         //}
                 }
