@@ -197,14 +197,21 @@ var TimelineInterface = function (wickEditor) {
         var newLayer = Math.floor(y/frameHeight);
         newLayer = Math.min(currentObject.layers.length-1, newLayer);
 
-        if(newPlayheadPosition != oldPlayheadPosition || newLayer != oldLayer) {
+        if(newPlayheadPosition != oldPlayheadPosition) {
             wickEditor.interfaces.fabric.getSelectionObjectsImage(function (imgData) {
-                if(imgData) currentObject.getCurrentFrame().cachedImageData = imgData;
+                var currentFrame = currentObject.getCurrentFrame();
+                if(imgData && currentFrame) currentFrame.cachedImageData = imgData;
 
                 currentObject.playheadPosition = newPlayheadPosition;
                 currentObject.currentLayer = newLayer;
                 wickEditor.syncInterfaces();
             });
+        }
+
+        if(newLayer != oldLayer) {
+            currentObject.playheadPosition = newPlayheadPosition;
+            currentObject.currentLayer = newLayer;
+            wickEditor.syncInterfaces();
         }
     }
 
