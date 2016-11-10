@@ -257,6 +257,14 @@ WickObject.prototype.getCurrentFrame = function() {
     return this.getFrameAtPlayheadPosition(this.playheadPosition);
 }
 
+WickObject.prototype.getPrevFrame = function() {
+    return this.getFrameAtPlayheadPosition(this.playheadPosition-1);
+}
+
+WickObject.prototype.getNextFrame = function() {
+    return this.getFrameAtPlayheadPosition(this.playheadPosition+1);
+}
+
 WickObject.prototype.getCurrentLayer = function() {
     return this.layers[this.currentLayer];
 }
@@ -320,8 +328,14 @@ WickObject.prototype.getRelativePlayheadPosition = function (wickObj, args) {
     return playheadRelativePosition;
 }
 
-WickObject.prototype.getFrameAtPlayheadPosition = function(pos, layerToSearch) {
-    var layer = layerToSearch || this.getCurrentLayer();
+WickObject.prototype.getFrameAtPlayheadPosition = function(pos, args) {
+    var layer;
+    if(args && args.layerToSearch) {
+        layer = args.layerToSearch;
+    } else {
+        layer = this.getCurrentLayer();
+    }
+
     var counter = 0;
 
     for(var f = 0; f < layer.frames.length; f++) {
@@ -406,7 +420,7 @@ WickObject.prototype.getAllActiveChildObjects = function () {
 
     var children = [];
     for (var l = this.layers.length-1; l >= 0; l--) {
-        var frame = this.getFrameAtPlayheadPosition(this.playheadPosition, this.layers[l]);
+        var frame = this.getFrameAtPlayheadPosition(this.playheadPosition, {layerToSearch:this.layers[l]});
         if(frame) {
             frame.wickObjects.forEach(function (obj) {
                 children.push(obj);
@@ -425,7 +439,7 @@ WickObject.prototype.getAllActiveLayerChildObjects = function () {
 
     var children = [];
     var layer = this.getCurrentLayer();
-    var frame = this.getFrameAtPlayheadPosition(this.playheadPosition, layer);
+    var frame = this.getFrameAtPlayheadPosition(this.playheadPosition, {layerToSearch:layer});
     if(frame) {
         frame.wickObjects.forEach(function (obj) {
             children.push(obj);

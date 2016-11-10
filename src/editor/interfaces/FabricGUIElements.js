@@ -35,8 +35,45 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
 
 // Onion skinning objects
 
-    var onionSkinPast;
-    var onionSkinNext;
+    var updateOnionSkinObject = function () {
+        var that = this;
+        
+        if(wickEditor.project.onionSkinning) {
+            that.opacity = 0.3;
+        } else {
+            that.opacity = 0.0;
+            return;
+        }
+
+        var frame = that.getFrameFunc();
+
+        if(!frame) return;
+        var data = frame.cachedImageData;
+
+        if(!data) return;
+        that.left = data.x;
+        that.top = data.y;
+        that.setCoords();
+
+        var img = new Image();
+        img.onload=function(){
+            that.setElement(img);
+            fabricInterface.canvas.renderAll();
+        }
+        img.src = data.src;
+    };
+
+    var onionSkinPast = new fabric.Image();
+    onionSkinPast.identifier = "onionSkinPast";
+    onionSkinPast.getFrameFunc = function () { return wickEditor.project.getCurrentObject().getPrevFrame() };
+    onionSkinPast.updateGUIState = updateOnionSkinObject;
+    addElement(onionSkinPast);
+
+    /*var onionSkinNext = new fabric.Image();
+    onionSkinNext.identifier = "onionSkinNext";
+    onionSkinNext.getFrameFunc = function () { wickEditor.project.getCurrentObject().getNextFrame() };
+    onionSkinNext.updateGUIState = updateOnionSkinObject;
+    addElement(onionSkinNext);*/
 
 // Fade that grays out inactive objects (the objects in the parent objects frame)
 

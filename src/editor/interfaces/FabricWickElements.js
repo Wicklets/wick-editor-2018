@@ -7,7 +7,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
     var objectIDsInCanvas = [];
 
     this.update = function () {
-        var enablePerfTests = true;
+        var enablePerfTests = false;
 
         if(enablePerfTests) console.log("-------------------");
         if(enablePerfTests) startTiming();
@@ -32,7 +32,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         var refreshZIndices = function (force) {
             //console.log("updating z indices of " + fabricInterface.canvas._objects.length + " objects")
 
-            if (force && fabricInterface.canvas._objects.indexOf(fabricInterface.guiElements.getInactiveFrame()) !== siblingObjects.length) {
+            if (force || fabricInterface.canvas._objects.indexOf(fabricInterface.guiElements.getInactiveFrame()) !== siblingObjects.length) {
                 fabricInterface.guiElements.setInactiveFramePosition(siblingObjects.length);
             }
 

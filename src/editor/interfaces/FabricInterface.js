@@ -502,8 +502,9 @@ var FabricInterface = function (wickEditor) {
             }
         });
 
-        if(selectedObjs.length <= 1) {
+        if(selectedObjs.length < 1) {
             //that.canvas._activeObject = selectedObjs[0];
+            callback(null);
         } else {
             var group = new fabric.Group([], {
                 originX: 'left',
@@ -516,30 +517,32 @@ var FabricInterface = function (wickEditor) {
               });
             for(var i = 0; i < selectedObjs.length; i++) {
                 group.canvas = this.canvas // WHAT ??????????????? WHY
-                group.addWithUpdate(selectedObjs[i]);
-                that.canvas.remove(selectedObjs[i])
+                var clone = fabric.util.object.clone(selectedObjs[i]);
+                group.addWithUpdate(clone);
+                //that.canvas.remove(selectedObjs[i])
             }
 
             //this.canvas._activeObject = null;
             //this.canvas.setActiveGroup(group.setCoords()).renderAll();
 
-            console.log(group)
             group.setCoords();
+
+            var cloneLeft = (group.left)
+            var cloneTop = (group.top)
 
             //var object = fabric.util.object.clone(group);
             group.cloneAsImage(function (img) { 
-                var image = new Image(); 
-                image.onload = function () { 
-                    callback(image);
-                };
-                image.src = img.getElement().src;
+                callback({
+                    x:cloneLeft,
+                    y:cloneTop,
+                    src:img.getElement().src,
+                });
             })
 
             group.forEachObject(function(o){ group.removeWithUpdate(o) });
             that.canvas.remove(group);
             that.canvas.renderAll();
 
-            console.log(that.canvas._objects);
         }
 
         

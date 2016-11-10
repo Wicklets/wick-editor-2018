@@ -57,15 +57,13 @@ var TimelineInterface = function (wickEditor) {
             $('#frameIdentifier').prop('disabled', true);
         }
 
-        /*if(wickEditor.project.onionSkinning) {
+        if(wickEditor.project.onionSkinning) {
             document.getElementById("enableOnionSkinningButton").style.display = "none";
             document.getElementById("disableOnionSkinningButton").style.display = "inline";
         } else {
             document.getElementById("enableOnionSkinningButton").style.display = "inline";
             document.getElementById("disableOnionSkinningButton").style.display = "none";
-        }*/
-        document.getElementById("enableOnionSkinningButton").style.display = "none";
-        document.getElementById("disableOnionSkinningButton").style.display = "none";
+        }
 
     }
 
@@ -200,8 +198,8 @@ var TimelineInterface = function (wickEditor) {
         newLayer = Math.min(currentObject.layers.length-1, newLayer);
 
         if(newPlayheadPosition != oldPlayheadPosition || newLayer != oldLayer) {
-            wickEditor.interfaces.fabric.getSelectionObjectsImage(function (img) {
-                //document.body.appendChild(img);
+            wickEditor.interfaces.fabric.getSelectionObjectsImage(function (imgData) {
+                if(imgData) currentObject.getCurrentFrame().cachedImageData = imgData;
 
                 currentObject.playheadPosition = newPlayheadPosition;
                 currentObject.currentLayer = newLayer;
