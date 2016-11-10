@@ -13,6 +13,7 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
         obj.evented = false;
         obj.left = 0;
         obj.top = 0;
+        obj.isWickGUIElement = true;
         elements.push(obj);
         canvas.add(obj);
     }
@@ -31,6 +32,11 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
         frameInside.setCoords();
     }
     addElement(frameInside);
+
+// Onion skinning objects
+
+    var onionSkinPast;
+    var onionSkinNext;
 
 // Fade that grays out inactive objects (the objects in the parent objects frame)
 

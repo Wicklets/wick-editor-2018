@@ -200,10 +200,13 @@ var TimelineInterface = function (wickEditor) {
         newLayer = Math.min(currentObject.layers.length-1, newLayer);
 
         if(newPlayheadPosition != oldPlayheadPosition || newLayer != oldLayer) {
-            currentObject.playheadPosition = newPlayheadPosition;
-            currentObject.currentLayer = newLayer;
-            wickEditor.interfaces.fabric.inNewFrame = true;
-            wickEditor.syncInterfaces();
+            wickEditor.interfaces.fabric.getSelectionObjectsImage(function (img) {
+                //document.body.appendChild(img);
+
+                currentObject.playheadPosition = newPlayheadPosition;
+                currentObject.currentLayer = newLayer;
+                wickEditor.syncInterfaces();
+            });
         }
     }
 

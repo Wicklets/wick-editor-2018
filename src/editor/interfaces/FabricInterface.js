@@ -492,14 +492,57 @@ var FabricInterface = function (wickEditor) {
         wickEditor.syncInterfaces();
     }
 
-    this.getSelectionObjectsImage = function () {
-        that.canvas.getActiveGroup().cloneAsImage(function (img) { 
-            var image = new Image(); 
-            image.onload = function () { 
-                document.body.appendChild(image);
-            };
-            image.src = img.getElement().src;
-        })
+    this.getSelectionObjectsImage = function (callback) {
+
+        var selectedObjs = []; 
+        this.canvas.forEachObject(function(fabricObj) {
+            if(fabricObj.wickObjectID && !fabricObj.isWickGUIElement) {
+                fabricObj.set('active', true);
+                selectedObjs.push(fabricObj);
+            }
+        });
+
+        if(selectedObjs.length <= 1) {
+            //that.canvas._activeObject = selectedObjs[0];
+        } else {
+            var group = new fabric.Group([], {
+                originX: 'left',
+                originY: 'top'
+            });
+            group.on({
+                moving: group.setCoords,
+                scaling: group.setCoords,
+                rotating: group.setCoords
+              });
+            for(var i = 0; i < selectedObjs.length; i++) {
+                group.canvas = this.canvas // WHAT ??????????????? WHY
+                group.addWithUpdate(selectedObjs[i]);
+                that.canvas.remove(selectedObjs[i])
+            }
+
+            //this.canvas._activeObject = null;
+            //this.canvas.setActiveGroup(group.setCoords()).renderAll();
+
+            console.log(group)
+            group.setCoords();
+
+            //var object = fabric.util.object.clone(group);
+            group.cloneAsImage(function (img) { 
+                var image = new Image(); 
+                image.onload = function () { 
+                    callback(image);
+                };
+                image.src = img.getElement().src;
+            })
+
+            group.forEachObject(function(o){ group.removeWithUpdate(o) });
+            that.canvas.remove(group);
+            that.canvas.renderAll();
+
+            console.log(that.canvas._objects);
+        }
+
+        
     }
     
 }
