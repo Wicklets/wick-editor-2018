@@ -2,9 +2,9 @@
 
 var WickHostBackend = function () {
 
-    var projectName = URLParameterUtils.getParameterByName("project");
+    var projectID = URLParameterUtils.getParameterByName("project");
 
-    if (!projectName) {
+    if (!projectID) {
         return;
     }
 
@@ -17,19 +17,20 @@ var WickHostBackend = function () {
     parent.removeChild(child1);
     parent.removeChild(child2);
 
-    console.log("Trying to load project from Github's Clubhouse");
-    console.log("githubClubhouseProjectID: " + projectName);
+    console.log("Trying to load project from WickHost:");
+    console.log("projectID: " + projectID);
 
     // Load project from github clubhouse server
     $.ajax({
-        url: "/projects/1",
+        url: "/project/" + projectID,
         type: 'GET',
+        data: { 
+            projectID : projectID
+        },
         success: function(data) {
             console.log("ajax: success");
-            var base64WickProject = data.split('<div id="wick_project">')[1].split('</div>')[0];
-            var decodedProject = atob(base64WickProject);
-            that.project = WickProject.fromWebpage(decodedProject);
-            that.syncInterfaces();
+            wickEditor.project = WickProject.fromWebpage(data);
+            wickEditor.syncInterfaces();
         },
         error: function () {
             console.log("ajax: error")
@@ -51,12 +52,11 @@ var WickHostBackend = function () {
         e.preventDefault();
         WickProjectExporter.bundleProjectToHTML(wickEditor.project, function(fileOut) {
             $.ajax({
-                url: '/projects/1',
-                type: 'PUT',
+                url: '/home',
+                type: 'POST',
                 data: { 
-                    file:fileOut, 
-                    name: githubClubhouseProjectName, 
-                    id: githubClubhouseProjectID 
+                    projectData: fileOut, 
+                    projectID : projectID
                 },
 
                 success: function(data) {

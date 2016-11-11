@@ -52,6 +52,7 @@ var GuiActionHandler = function (wickEditor) {
         /* Array of Wick Editor element ID's which trigger the action function. */
         this.elementIds = elementIds;
         this.elementIds.forEach(function (elementID) {
+            if(!document.getElementById(elementID)) return;
             document.getElementById(elementID).onclick = function (e) {
                 wickEditor.interfaces.rightclickmenu.open = false;
                 that.doAction({});
