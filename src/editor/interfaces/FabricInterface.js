@@ -492,12 +492,14 @@ var FabricInterface = function (wickEditor) {
         wickEditor.syncInterfaces();
     }
 
-    this.getSelectionObjectsImage = function (callback) {
+    this.getObjectsImage = function (callback, args) {
 
         var selectedObjs = []; 
         this.canvas.forEachObject(function(fabricObj) {
+            if(args && args.ids && args.ids.indexOf(fabricObj.wickObjectID) === -1) return;
+
             if(fabricObj.wickObjectID && !fabricObj.isWickGUIElement) {
-                fabricObj.set('active', true);
+                //fabricObj.set('active', true);
                 selectedObjs.push(fabricObj);
             }
         });
@@ -510,20 +512,11 @@ var FabricInterface = function (wickEditor) {
                 originX: 'left',
                 originY: 'top'
             });
-            group.on({
-                moving: group.setCoords,
-                scaling: group.setCoords,
-                rotating: group.setCoords
-              });
             for(var i = 0; i < selectedObjs.length; i++) {
                 group.canvas = this.canvas // WHAT ??????????????? WHY
                 var clone = fabric.util.object.clone(selectedObjs[i]);
                 group.addWithUpdate(clone);
-                //that.canvas.remove(selectedObjs[i])
             }
-
-            //this.canvas._activeObject = null;
-            //this.canvas.setActiveGroup(group.setCoords()).renderAll();
 
             group.setCoords();
 

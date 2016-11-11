@@ -169,16 +169,6 @@ var WickActionHandler = function (wickEditor) {
             for(var i = 0; i < args.ids.length; i++) {
                 var wickObj = wickEditor.project.getCurrentObject().getChildByID(args.ids[i]);
 
-                // Fix weird neagtive scale bug
-                /*if(args.modifiedStates[i].scaleX < 0) {
-                    args.modifiedStates[i].scaleX *= -1;
-                    args.modifiedStates[i].flipX = !args.modifiedStates[i].flipX;
-                }
-                if(args.modifiedStates[i].scaleY < 0) {
-                    args.modifiedStates[i].scaleY *= -1;
-                    args.modifiedStates[i].flipY = !args.modifiedStates[i].flipY;
-                }*/
-
                 args.originalStates[i] = {};
                 modifyableAttributes.forEach(function(attrib) {
                     args.originalStates[i][attrib] = wickObj[attrib];
@@ -216,6 +206,30 @@ var WickActionHandler = function (wickEditor) {
                     args.originalStates[i].svgFillColor = wickObj.svgData.fillColor;
                     wickObj.svgData.fillColor = args.modifiedStates[i].svgFillColor;
                     wickObj.forceFabricCanvasRegen = true;
+                }
+
+                if(args.modifiedStates[i].angle !== 0 || args.modifiedStates[i].scaleX !== 1 || args.modifiedStates[i].scaleY !== 1) {
+                    VectorToolUtils.updatePaperDataOnVectorWickObjects([wickObj]);
+                    var paperPath = wickObj.paperPath;
+
+                    paperPath.applyMatrix = true;
+                    paperPath.scale(wickObj.scaleX,wickObj.scaleY);
+                    paperPath.rotate(wickObj.angle);
+
+                    var updatedSVGWickObject = createSVGWickObject(paperPath, wickObj.svgData.fillColor);
+                    updatedSVGWickObject.x += wickEditor.project.getCurrentObject().getAbsolutePosition().x;
+                    updatedSVGWickObject.y += wickEditor.project.getCurrentObject().getAbsolutePosition().y;
+
+                    wickObj.paperPath = paperPath;
+
+                    wickObj.cachedFabricObject = null;
+                    wickObj.svgData = updatedSVGWickObject.svgData;
+                    wickObj.forceFabricCanvasRegen = true;
+                    wickObj.angle = 0;
+                    wickObj.scaleX = 1;
+                    wickObj.scaleY = 1;
+                    wickObj.width = null;
+                    wickObj.height = null;
                 }
 
                 // This is silly what's a better way ???

@@ -198,7 +198,7 @@ var TimelineInterface = function (wickEditor) {
         newLayer = Math.min(currentObject.layers.length-1, newLayer);
 
         if(newPlayheadPosition != oldPlayheadPosition) {
-            wickEditor.interfaces.fabric.getSelectionObjectsImage(function (imgData) {
+            wickEditor.interfaces.fabric.getObjectsImage(function (imgData) {
                 var currentFrame = currentObject.getCurrentFrame();
                 if(imgData && currentFrame) currentFrame.cachedImageData = imgData;
 
