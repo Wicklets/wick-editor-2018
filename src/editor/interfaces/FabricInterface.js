@@ -512,7 +512,7 @@ var FabricInterface = function (wickEditor) {
                 originX: 'left',
                 originY: 'top'
             });
-            for(var i = 0; i < selectedObjs.length; i++) {
+            for(var i = selectedObjs.length-1; i >= 0; i--) {
                 group.canvas = this.canvas // WHAT ??????????????? WHY
                 var clone = fabric.util.object.clone(selectedObjs[i]);
                 group.addWithUpdate(clone);
