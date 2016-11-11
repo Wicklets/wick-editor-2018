@@ -2,9 +2,9 @@
 
 var WickHostBackend = function () {
 
-    var projectID = URLParameterUtils.getParameterByName("project");
+    var projectName = URLParameterUtils.getParameterByName("project");
 
-    if (!projectID) {
+    if (!projectName) {
         return;
     }
 
@@ -18,18 +18,19 @@ var WickHostBackend = function () {
     parent.removeChild(child2);
 
     console.log("Trying to load project from WickHost:");
-    console.log("projectID: " + projectID);
+    console.log("projectName: " + projectName);
 
     // Load project from github clubhouse server
     $.ajax({
-        url: "/project/" + projectID,
+        url: "/project/" + projectName,
         type: 'GET',
         data: { 
-            projectID : projectID
+            projectName : projectName
         },
         success: function(data) {
             console.log("ajax: success");
             wickEditor.project = WickProject.fromWebpage(data);
+            wickEditor.project.name = projectName;
             wickEditor.syncInterfaces();
         },
         error: function () {
@@ -56,7 +57,7 @@ var WickHostBackend = function () {
                 type: 'POST',
                 data: { 
                     projectData: fileOut, 
-                    projectID : projectID
+                    projectName : projectName
                 },
 
                 success: function(data) {
