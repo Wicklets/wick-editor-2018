@@ -22,7 +22,6 @@ var WickHostBackend = function (wickEditor) {
     console.log("Trying to load project from WickHost:");
     console.log("projectName: " + projectName);
 
-    // Load project from github clubhouse server
     $.ajax({
         url: "/project/" + projectName,
         type: 'GET',
@@ -31,8 +30,11 @@ var WickHostBackend = function (wickEditor) {
         },
         success: function(data) {
             console.log("ajax: success");
-            wickEditor.project = WickProject.fromWebpage(data);
-            wickEditor.project.name = projectName;
+            if(data === "NEW_PROJECT") {
+                wickEditor.project = new WickProject();
+            } else {
+                wickEditor.project = WickProject.fromWebpage(data);
+            }
             wickEditor.syncInterfaces();
         },
         error: function () {
