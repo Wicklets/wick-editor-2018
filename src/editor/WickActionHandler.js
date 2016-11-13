@@ -208,7 +208,11 @@ var WickActionHandler = function (wickEditor) {
                     wickObj.forceFabricCanvasRegen = true;
                 }
 
-                if(wickObj.svgData && (args.modifiedStates[i].angle !== 0 || args.modifiedStates[i].scaleX !== 1 || args.modifiedStates[i].scaleY !== 1)) {
+                var SVGNeedsRefresh = 
+                    (args.modifiedStates[i].angle !== undefined && args.modifiedStates[i].angle !== 0) || 
+                    (args.modifiedStates[i].scaleX !== undefined && args.modifiedStates[i].scaleX !== 1) || 
+                    (args.modifiedStates[i].scaleY !== undefined && args.modifiedStates[i].scaleY !== 1)
+                if(wickObj.svgData && SVGNeedsRefresh) {
                     VectorToolUtils.updatePaperDataOnVectorWickObjects([wickObj]);
                     var paperPath = wickObj.paperPath;
 

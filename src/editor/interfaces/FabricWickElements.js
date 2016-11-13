@@ -162,7 +162,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 numObjectsAdded++;
                 if(numObjectsAdded === objectsToAdd.length) {
                     fabricInterface.canvas.renderAll();
-                    refreshZIndices();
+                    refreshZIndices(true);
                 }
                 refreshZIndices();
             });
