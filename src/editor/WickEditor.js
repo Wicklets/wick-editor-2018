@@ -13,10 +13,11 @@ var WickEditor = function () {
     console.log('%cYou are free to change any of the internal editor stuff from here. Try typing "wickEditor" into the console and have a look around!', 'color: #bb4477; font-size: 12px;');
 
     this.backend = new WickHostBackend(this);
-    if(!this.backend.active) 
+    if(!this.backend.active) {
         this.project = WickProject.fromLocalStorage();
-    else 
+    } else { 
         this.project = new WickProject();
+    }
     
     this.interfaces = {
         "builtinplayer" : new BuiltinPlayerInterface(this),

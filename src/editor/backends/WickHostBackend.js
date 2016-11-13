@@ -39,6 +39,7 @@ var WickHostBackend = function (wickEditor) {
             console.log("ajax: error")
             console.log("loading project from localstorage instead of backend.")
             wickEditor.project = WickProject.fromLocalStorage();
+            wickEditor.syncInterfaces();
         },
         complete: function(response, textStatus) {
             console.log("ajax: complete")
