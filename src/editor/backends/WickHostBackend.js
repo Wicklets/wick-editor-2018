@@ -1,12 +1,14 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-var WickHostBackend = function () {
+var WickHostBackend = function (wickEditor) {
 
     var projectName = URLParameterUtils.getParameterByName("project");
 
     if (!projectName) {
         return;
     }
+
+    this.active = true;
 
     document.getElementById("menuBarButtons").innerHTML = '<div class="button buttonInRow tooltipElem" id="saveToGithubClubhouseButton" alt="Save Project"><img src="resources/save.png" width="25" /></div>' + document.getElementById("menuBarButtons").innerHTML;
     document.getElementById("menuBarButtons").innerHTML = '<div class="button buttonInRow tooltipElem" id="backToMyProjectsButton" alt="Back to My Projects"><img src="resources/back.png" width="25" /></div>' + document.getElementById("menuBarButtons").innerHTML;
@@ -35,6 +37,8 @@ var WickHostBackend = function () {
         },
         error: function () {
             console.log("ajax: error")
+            console.log("loading project from localstorage instead of backend.")
+            wickEditor.project = WickProject.fromLocalStorage();
         },
         complete: function(response, textStatus) {
             console.log("ajax: complete")
