@@ -44,13 +44,14 @@ var WickHostBackend = function () {
     });
 
     document.getElementById('backToMyProjectsButton').onclick = function (e) {
-        window.location.href = "/projects";
+        window.location.href = "/myprojects";
     }
 
     // var btn = document.createElement("button"); btn.id = "saveToGithubClubhouseButton"; document.body.appendChild(btn); 
     $(document).on('click','#saveToGithubClubhouseButton',function(e){
         e.stopPropagation();
         e.preventDefault();
+        wickEditor.interfaces.statusbar.setState('uploading');
         WickProjectExporter.bundleProjectToHTML(wickEditor.project, function(fileOut) {
             $.ajax({
                 url: '/home',
@@ -63,9 +64,11 @@ var WickHostBackend = function () {
                 success: function(data) {
                     console.log("ajax: success:");
                     console.log(data);
+                    wickEditor.interfaces.statusbar.setState('done');
                 },
                 error: function () {
                     console.log("ajax: error")
+                    wickEditor.interfaces.statusbar.setState('error');
                 },
                 complete: function(response, textStatus) {
                     console.log("ajax: complete:")

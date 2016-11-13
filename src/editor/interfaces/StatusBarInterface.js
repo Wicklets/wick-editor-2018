@@ -4,7 +4,7 @@ var StatusBarInterface = function (wickEditor) {
 
     var that = this;
 
-    var states = ['none','saving','done','exporting']
+    var states = ['none','saving','done','exporting', 'uploading', 'error']
     var state = 'none';
 
     var statusBarElem = document.getElementById("statusBarGUI");
@@ -28,6 +28,12 @@ var StatusBarInterface = function (wickEditor) {
         }
 
         if(state === 'done') {
+            setTimeout(function () {
+                that.setState('none');
+            }, 4000);
+        }
+
+        if(state === 'error') {
             setTimeout(function () {
                 that.setState('none');
             }, 4000);
