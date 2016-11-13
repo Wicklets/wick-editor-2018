@@ -8,8 +8,8 @@ var WickHostBackend = function () {
         return;
     }
 
-    document.getElementById("menuBarButtons").innerHTML = '<div class="button buttonInRow tooltipElem" id="backToClubhouseButton" alt="Back to Clubhouse"><img src="resources/github.png" width="25" /></div>' + document.getElementById("menuBarButtons").innerHTML;
     document.getElementById("menuBarButtons").innerHTML = '<div class="button buttonInRow tooltipElem" id="saveToGithubClubhouseButton" alt="Save Project"><img src="resources/save.png" width="25" /></div>' + document.getElementById("menuBarButtons").innerHTML;
+    document.getElementById("menuBarButtons").innerHTML = '<div class="button buttonInRow tooltipElem" id="backToMyProjectsButton" alt="Back to My Projects"><img src="resources/back.png" width="25" /></div>' + document.getElementById("menuBarButtons").innerHTML;
 
     var parent = document.getElementById("menuBarButtons");
     var child1 = document.getElementById("openProjectButton");
@@ -43,7 +43,7 @@ var WickHostBackend = function () {
         }
     });
 
-    document.getElementById('backToClubhouseButton').onclick = function (e) {
+    document.getElementById('backToMyProjectsButton').onclick = function (e) {
         window.location.href = "/projects";
     }
 

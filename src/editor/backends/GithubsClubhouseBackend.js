@@ -10,7 +10,7 @@ var GithubsClubhouseBackend = function () {
         return;
     }   
 
-    document.getElementById("menuBarButtons").innerHTML += '<div class="button buttonInRow tooltipElem" id="backToClubhouseButton" alt="Back to Clubhouse"><img src="resources/github.png" width="30" /></div>'
+    document.getElementById("menuBarButtons").innerHTML += '<div class="button buttonInRow tooltipElem" id="backToClubhouseButton" alt="Back to Clubhouse"><img src="resources/back.png" width="30" /></div>'
     document.getElementById("menuBarButtons").innerHTML += '<div class="button buttonInRow tooltipElem" id="saveToGithubClubhouseButton" alt="Save Project"><img src="resources/save.png" width="30" /></div>'
 
     var parent = document.getElementById("menuBarButtons");
