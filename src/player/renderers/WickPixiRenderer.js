@@ -50,9 +50,11 @@ var WickPixiRenderer = function (project) {
                 subObj.pixiSprite = PIXI.Sprite.fromImage(subObj.imageData || subObj.svgCacheImageData);
                 wickObj.pixiContainer.addChild(subObj.pixiSprite);
             } else if (subObj.fontData) {
-            	console.log((subObj.fontData.fontWeight + " " + subObj.fontData.fontStyle + " " + subObj.fontData.fontSize + "px " + subObj.fontData.fontFamily))
+            	var fontString = subObj.fontData.fontSize + "px " + subObj.fontData.fontFamily;
+            	if(subObj.fontData.fontWeight !== 'normal') fontString = subObj.fontData.fontWeight+" " + fontString;
+            	if(subObj.fontData.fontStyle !== 'normal') fontString = subObj.fontData.fontStyle+" " + fontString;
                 var style = {
-                    font : subObj.fontData.fontWeight + " " + subObj.fontData.fontStyle + " " + subObj.fontData.fontSize + "px " + subObj.fontData.fontFamily,
+                    font : fontString,
                     fill : "#"+subObj.fontData.fill,
                     wordWrap : true,
                     wordWrapWidth : 1440,

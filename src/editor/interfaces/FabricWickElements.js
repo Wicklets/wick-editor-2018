@@ -7,7 +7,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
     var objectIDsInCanvas = [];
 
     this.update = function () {
-        var enablePerfTests = false;
+        var enablePerfTests = true;
 
         if(enablePerfTests) console.log("-------------------");
         if(enablePerfTests) startTiming();
@@ -32,47 +32,51 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         var refreshZIndices = function (force) {
             //console.log("updating z indices of " + fabricInterface.canvas._objects.length + " objects")
 
-            if (force || fabricInterface.canvas._objects.indexOf(fabricInterface.guiElements.getInactiveFrame()) !== siblingObjects.length) {
-                fabricInterface.guiElements.setInactiveFramePosition(siblingObjects.length);
-            }
-
-            fabricInterface.canvas.forEachObject(function(fabricObj) {
-                if(!fabricObj.wickObjectID) return;
-
-                //var wickObj = wickEditor.project.rootObject.getChildByID(fabricObj.wickObjectID);
-                wickObj = fabricObj.wickObjReference;
-
-                
-                //console.log("FZI: " + fabricZIndex + " TZI: " + trueZIndex)
-                if(wickObj.zIndicesDirty || force) {
-
-                    var fabricZIndex = fabricInterface.canvas._objects.indexOf(fabricObj);
-                    var trueZIndex = allObjects.indexOf(wickObj) + fabricInterface.guiElements.getNumGUIElements();
-
-
-                    //console.log("FZI: " + fabricZIndex + " TZI: " + trueZIndex)
-                    console.log("object move")
-                    fabricInterface.canvas.moveTo(fabricObj, trueZIndex);
-                    wickObj.zIndicesDirty = false;
-                }
-            });
-
+            // Old routine - update in order on fabric canvas
             /*fabricInterface.canvas.forEachObject(function(fabricObj) {
                 if(!fabricObj.wickObjectID) return;
 
                 //var wickObj = wickEditor.project.rootObject.getChildByID(fabricObj.wickObjectID);
                 wickObj = fabricObj.wickObjReference;
 
-                var fabricZIndex = fabricInterface.canvas._objects.indexOf(fabricObj);
-                var trueZIndex = allObjects.indexOf(wickObj) + fabricInterface.guiElements.getNumGUIElements();
+                if(wickObj.zIndicesDirty || force) {
 
-                //console.log("FZI: " + fabricZIndex + " TZI: " + trueZIndex)
-                if(fabricZIndex !== trueZIndex) {
+                    var fabricZIndex = fabricInterface.canvas._objects.indexOf(fabricObj);
+                    var trueZIndex = allObjects.indexOf(wickObj) + fabricInterface.guiElements.getNumGUIElements();
                     console.log("FZI: " + fabricZIndex + " TZI: " + trueZIndex)
+
+                    //console.log("FZI: " + fabricZIndex + " TZI: " + trueZIndex)
                     console.log("object move")
                     fabricInterface.canvas.moveTo(fabricObj, trueZIndex);
+                    wickObj.zIndicesDirty = false;
                 }
             });*/
+
+            // Update z-indices in order of their true positions
+            allObjects.forEach(function(wickObj) {
+                //if(!fabricObj.wickObjectID) return;
+
+                //var wickObj = wickEditor.project.rootObject.getChildByID(fabricObj.wickObjectID);
+                //var wickObj = fabricObj.wickObjReference;
+
+                var fabricObj = wickObj.fabricObjectReference;
+
+                if(wickObj.zIndicesDirty || force) {
+                    var fabricZIndex = fabricInterface.canvas._objects.indexOf(fabricObj);
+                    var trueZIndex = allObjects.indexOf(wickObj) + fabricInterface.guiElements.getNumGUIElements();
+                    //console.log("FZI: " + fabricZIndex + " TZI: " + trueZIndex)
+
+                    //console.log("FZI: " + fabricZIndex + " TZI: " + trueZIndex)
+                    //console.log("object move")
+                    fabricInterface.canvas.moveTo(fabricObj, trueZIndex);
+                    wickObj.zIndicesDirty = false;
+                }
+            });
+
+            var frameZIndex = siblingObjects.length
+            if (force || fabricInterface.canvas._objects.indexOf(fabricInterface.guiElements.getInactiveFrame()) !== frameZIndex) {
+                fabricInterface.guiElements.setInactiveFramePosition(frameZIndex);
+            }
         }
 
         if(enablePerfTests) stopTiming("object list generation");
@@ -113,7 +117,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                     if(fabricObj.group) return;
                     if(fabricObj.wickObjectID === child.id) {
                         updateFabObj(fabricObj, child, activeObjects);
-                        refreshZIndices();
+                        //refreshZIndices();
                     }
                 });
                 
@@ -127,6 +131,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         var numObjectsAdded = 0;
         objectsToAdd.forEach(function (objectToAdd) {
             createFabricObjectFromWickObject(objectToAdd, function (fabricObj) {
+
+                objectToAdd.fabricObjectReference = fabricObj
 
                 fabricInterface.canvas.forEachObject(function(path) {
                     if(path.isTemporaryDrawingPath) {
@@ -162,13 +168,17 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 numObjectsAdded++;
                 if(numObjectsAdded === objectsToAdd.length) {
                     fabricInterface.canvas.renderAll();
-                    refreshZIndices(true);
+                    //console.log("force z index update");
+                    refreshZIndices(false);
                 }
-                refreshZIndices();
+                //refreshZIndices();
             });
         });
 
-        refreshZIndices();
+        if(objectsToAdd.length === 0) {
+            //console.log("no objectsToAdd, unforced zindex update");
+            refreshZIndices(false);
+        }
 
         if(enablePerfTests) stopTiming("add & update objects");
 
