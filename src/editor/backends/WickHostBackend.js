@@ -58,7 +58,7 @@ var WickHostBackend = function (wickEditor) {
         wickEditor.interfaces.statusbar.setState('uploading');
         WickProjectExporter.bundleProjectToHTML(wickEditor.project, function(fileOut) {
             $.ajax({
-                url: '/home',
+                url: '/updateproject',
                 type: 'POST',
                 data: { 
                     projectData: fileOut, 
