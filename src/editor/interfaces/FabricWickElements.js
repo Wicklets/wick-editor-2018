@@ -7,7 +7,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
     var objectIDsInCanvas = [];
 
     this.update = function () {
-        var enablePerfTests = true;
+        var enablePerfTests = false;
 
         if(enablePerfTests) console.log("-------------------");
         if(enablePerfTests) startTiming();
@@ -52,6 +52,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 }
             });*/
 
+            var frameZIndex = siblingObjects.length
+
             // Update z-indices in order of their true positions
             allObjects.forEach(function(wickObj) {
                 //if(!fabricObj.wickObjectID) return;
@@ -61,19 +63,19 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
                 var fabricObj = wickObj.fabricObjectReference;
 
-                if(wickObj.zIndicesDirty || force) {
+                if(wickObj.zIndicesDirty || force || true) {
                     var fabricZIndex = fabricInterface.canvas._objects.indexOf(fabricObj);
+                    if(fabricZIndex === -1) return;
+                    if(fabricZIndex > frameZIndex) fabricZIndex -= 1;
                     var trueZIndex = allObjects.indexOf(wickObj) + fabricInterface.guiElements.getNumGUIElements();
-                    //console.log("FZI: " + fabricZIndex + " TZI: " + trueZIndex)
 
-                    //console.log("FZI: " + fabricZIndex + " TZI: " + trueZIndex)
-                    //console.log("object move")
+                    console.log("FZI: " + fabricZIndex + " TZI: " + trueZIndex)
+                    console.log("object move")
                     fabricInterface.canvas.moveTo(fabricObj, trueZIndex);
                     wickObj.zIndicesDirty = false;
                 }
             });
 
-            var frameZIndex = siblingObjects.length
             if (force || fabricInterface.canvas._objects.indexOf(fabricInterface.guiElements.getInactiveFrame()) !== frameZIndex) {
                 fabricInterface.guiElements.setInactiveFramePosition(frameZIndex);
             }
@@ -167,9 +169,9 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
                 numObjectsAdded++;
                 if(numObjectsAdded === objectsToAdd.length) {
-                    fabricInterface.canvas.renderAll();
                     //console.log("force z index update");
                     refreshZIndices(false);
+                    fabricInterface.canvas.renderAll()
                 }
                 //refreshZIndices();
             });
