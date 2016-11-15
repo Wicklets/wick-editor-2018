@@ -21,6 +21,7 @@ var WickEditor = function () {
     
     this.interfaces = {
         "builtinplayer" : new BuiltinPlayerInterface(this),
+        "cropImage" : new CropImageInterface(this),
         "rightclickmenu" : new RightClickMenuInterface(this),
         "splashscreen" : new SplashScreenInterface(this),
         "scriptingide" : new ScriptingIDEInterface(this),

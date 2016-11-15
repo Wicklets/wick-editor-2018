@@ -809,6 +809,15 @@ var GuiActionHandler = function (wickEditor) {
 
     new GuiAction(
         [], 
+        ['cropImageButton'], 
+        {}, 
+        function(args) {
+            wickEditor.interfaces['cropImageInterface'].open = true;
+            wickEditor.syncInterfaces();
+        });
+
+    new GuiAction(
+        [], 
         ['addKeyframeButton'], 
         {}, 
         function(args) {
