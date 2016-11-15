@@ -63,14 +63,14 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
                 var fabricObj = wickObj.fabricObjectReference;
 
-                if(wickObj.zIndicesDirty || force || true) {
+                if(wickObj.zIndicesDirty || force) {
                     var fabricZIndex = fabricInterface.canvas._objects.indexOf(fabricObj);
                     if(fabricZIndex === -1) return;
                     if(fabricZIndex > frameZIndex) fabricZIndex -= 1;
                     var trueZIndex = allObjects.indexOf(wickObj) + fabricInterface.guiElements.getNumGUIElements();
 
-                    console.log("FZI: " + fabricZIndex + " TZI: " + trueZIndex)
-                    console.log("object move")
+                    //console.log("FZI: " + fabricZIndex + " TZI: " + trueZIndex)
+                    //console.log("object move")
                     fabricInterface.canvas.moveTo(fabricObj, trueZIndex);
                     wickObj.zIndicesDirty = false;
                 }
@@ -142,6 +142,10 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                     }
                 });
 
+                if(objectToAdd.svgData) {
+                    VectorToolUtils.updatePaperDataOnVectorWickObjects([objectToAdd]);
+                }
+
                 // The object may have been deleted while we were generating the fabric object. 
                 // Make sure we don't add it if that happened.
                 if(!wickEditor.project.rootObject.getChildByID(objectToAdd.id)) return;
@@ -170,7 +174,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 numObjectsAdded++;
                 if(numObjectsAdded === objectsToAdd.length) {
                     //console.log("force z index update");
-                    refreshZIndices(false);
+                    refreshZIndices(true);
                     fabricInterface.canvas.renderAll()
                 }
                 //refreshZIndices();
@@ -245,7 +249,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 pathFabricObj.cloneAsImage(function(clone) {
                     var element = clone.getElement();
                     var imgSrc = element.src;
-                    //that.svgCacheImageData = imgSrc;
+                    wickObj.svgCacheImageData = imgSrc;
                     fabric.Image.fromURL(imgSrc, function(newFabricImage) {
                         wickObj.cachedFabricObject = newFabricImage;
                         newFabricImage.wickObjReference = wickObj;

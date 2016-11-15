@@ -123,8 +123,10 @@ var WickActionHandler = function (wickEditor) {
             // Add those boys and save their IDs so we can remove them on undo
             args.addedObjectIDs = [];
             for(var i = 0; i < args.wickObjects.length; i++) {
-                wickEditor.project.addObject(args.wickObjects[i]);
-                args.addedObjectIDs.push(args.wickObjects[i].id);
+                var wickObj = args.wickObjects[i];
+
+                wickEditor.project.addObject(wickObj);
+                args.addedObjectIDs.push(wickObj.id);
             }
         },
         function (args) {
@@ -208,12 +210,12 @@ var WickActionHandler = function (wickEditor) {
                     wickObj.forceFabricCanvasRegen = true;
                 }
 
+                if(wickObj.svgData) VectorToolUtils.updatePaperDataOnVectorWickObjects([wickObj]);
                 var SVGNeedsRefresh = 
                     (args.modifiedStates[i].angle !== undefined && args.modifiedStates[i].angle !== 0) || 
                     (args.modifiedStates[i].scaleX !== undefined && args.modifiedStates[i].scaleX !== 1) || 
                     (args.modifiedStates[i].scaleY !== undefined && args.modifiedStates[i].scaleY !== 1)
                 if(wickObj.svgData && SVGNeedsRefresh) {
-                    VectorToolUtils.updatePaperDataOnVectorWickObjects([wickObj]);
                     var paperPath = wickObj.paperPath;
 
                     paperPath.applyMatrix = true;
@@ -235,7 +237,7 @@ var WickActionHandler = function (wickEditor) {
                     wickObj.width = null;
                     wickObj.height = null;
                 }
-
+                
                 // This is silly what's a better way ???
                 if(wickObj.tweens.length === 1) {
                     var tween = WickTween.fromWickObjectState(wickObj);

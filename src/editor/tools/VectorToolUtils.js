@@ -67,6 +67,28 @@ var VectorToolUtils = (function () {
         return '<svg id="svg" x="0" y="0" version="1.1" width="'+width+'" height="'+height+'" xmlns="http://www.w3.org/2000/svg">' + pathString + '</svg>';
     } 
 
+    this.getIntersectedObjects = function (wickObj, targetObjects) {
+        var pathA = wickObj.paperPath;
+
+        var intersectedObjects = [];
+        targetObjects.forEach(function (targetWickObj) {
+            if(!targetWickObj.paperPath) return;
+            if(targetWickObj.id === wickObj.id) return;
+
+            var pathB = targetWickObj.paperPath;
+
+            console.log(pathA)
+            console.log(pathB)
+            var intersections = pathA.getIntersections(pathB);
+            if(intersections.length > 0) {
+                intersectedObjects.push(pathB);
+            } else {
+                console.log("nope")
+            }
+        });
+        return intersectedObjects;
+    }
+
     return that;
 
 })();
