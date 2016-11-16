@@ -202,6 +202,14 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         }
 
         if(wickObj.imageData) {
+            // To get pixel-perfect positioning to avoid blurry images (this happens when an image has a fractional position)
+            if(wickObj.imageData) {
+                wickObj.x = Math.round(wickObj.x);
+                wickObj.y = Math.round(wickObj.y);
+                if(wickObj.width % 2 === 1) wickObj.x += 0.5;
+                if(wickObj.height % 2 === 1) wickObj.y += 0.5;
+            }
+
             fabric.Image.fromURL(wickObj.imageData, function(newFabricImage) {
                 wickObj.cachedFabricObject = newFabricImage;
                 newFabricImage.wickObjReference = wickObj;

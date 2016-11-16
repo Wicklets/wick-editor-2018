@@ -13,7 +13,7 @@ var FabricInterface = function (wickEditor) {
     this.setup = function () {
 
         this.canvas = new fabric.CanvasEx('fabricCanvas', {
-            imageSmoothingEnabled:false,
+            //imageSmoothingEnabled:false,
             preserveObjectStacking:true,
             renderOnAddRemove:false,
         });
@@ -147,7 +147,7 @@ var FabricInterface = function (wickEditor) {
     this.recenterCanvas = function () {
         var centerX = Math.floor(-(window.innerWidth -wickEditor.project.resolution.x)/2);
         var centerY = Math.floor(-(window.innerHeight-wickEditor.project.resolution.y)/2);
-        that.canvas.setZoom(1.001); // This is odd but it seems to fix the blurred edges of rasterized SVGs.
+        that.canvas.setZoom(1); // This is odd but it seems to fix the blurred edges of rasterized SVGs.
         that.canvas.absolutePan(new fabric.Point(centerX,centerY));
         that.canvas.renderAll();
         wickEditor.syncInterfaces();
@@ -426,12 +426,6 @@ var FabricInterface = function (wickEditor) {
             var newX = fabricObj.left + insideSymbolReposition.x - cornerOffset.x;
             var newY = fabricObj.top  + insideSymbolReposition.y - cornerOffset.y;
 
-            // To get pixel-perfect positioning to avoid blurry images (this happens when an image has a fractional position)
-            if(wickObj.imageData) {
-                newX = Math.round(newX);
-                newY = Math.round(newY);
-            }
-
             modifiedStates.push({
                 x      : newX,
                 y      : newY,
@@ -521,6 +515,8 @@ var FabricInterface = function (wickEditor) {
                 group.addWithUpdate(clone);
             }
 
+            //group.left = Math.round(group.left)
+            //group.top = Math.round(group.top)
             group.setCoords();
 
             var cloneLeft = (group.left)

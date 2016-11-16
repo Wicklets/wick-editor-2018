@@ -20,16 +20,15 @@ var CropTool = function (wickEditor) {
         fabricInterface.canvas.remove(drawingShape);
         wickEditor.syncInterfaces();
 
-        var cropPos = {x: drawingShape.left, y: drawingShape.top};
-
         wickEditor.interfaces.fabric.getObjectsImage(function (data) { 
             CropImage(data.src, function (src) {
                 var wickObj = WickObject.fromImage(src, function (wickObj) {
+                    console.log(wickObj)
                     wickEditor.actionHandler.doAction('addObjects', {wickObjects:[wickObj]});
                 });
             }, {
-                x : cropPos.x-data.x,
-                y : cropPos.y-data.y,
+                x : drawingShape.left-data.x,
+                y : drawingShape.top-data.y,
                 width : drawingShape.width,
                 height : drawingShape.height
             })
