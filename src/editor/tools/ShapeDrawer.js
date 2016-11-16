@@ -6,6 +6,7 @@ var ShapeDrawer = function (wickEditor, fabricInterface) {
 
     var drawingShape = null;
     var doneFunc = null;
+    var crop;
 
     fabricInterface.canvas.on('mouse:move', function (e) {
         that.updateDrawingShape(e.e.offsetX,e.e.offsetY);
@@ -18,6 +19,7 @@ var ShapeDrawer = function (wickEditor, fabricInterface) {
     this.startDrawingShape = function (shapeType, x, y, callback, args) {
 
         doneFunc = callback;
+        crop = args && args.crop;
 
         fabricInterface.canvas.selection = false;
 
@@ -34,10 +36,10 @@ var ShapeDrawer = function (wickEditor, fabricInterface) {
                 fill : fabricInterface.tools.paintbrush.color
             });
 
-            if(args && args.crop) {
+            if(crop) {
                 drawingShape.stroke = 'white';
                 drawingShape.strokeWidth = 1;
-                drawingShape.fill ='rgba(0,0,0,0)';
+                drawingShape.fill ='rgba(0,0,0,0.3)';
             }
         } else if (shapeType === 'ellipse') {
             drawingShape = new fabric.Ellipse({
@@ -63,7 +65,13 @@ var ShapeDrawer = function (wickEditor, fabricInterface) {
                 if(screenXY.x < shapeStartPos.x) drawingShape.left = screenXY.x;
                 if(screenXY.y < shapeStartPos.y) drawingShape.top  = screenXY.y;
                 drawingShape.width  = Math.abs(shapeStartPos.x - screenXY.x);
-                drawingShape.height = Math.abs(shapeStartPos.y - screenXY.y);            
+                drawingShape.height = Math.abs(shapeStartPos.y - screenXY.y);    
+                if(crop) {
+                    drawingShape.left = Math.round(drawingShape.left);
+                    drawingShape.top = Math.round(drawingShape.top);
+                    drawingShape.width = Math.round(drawingShape.width);
+                    drawingShape.height = Math.round(drawingShape.height);
+                }        
             } else if(drawingShape.type === 'ellipse') {
                 drawingShape.width  = Math.abs(drawingShape.left - screenXY.x);
                 drawingShape.height = Math.abs(drawingShape.top  - screenXY.y);    
