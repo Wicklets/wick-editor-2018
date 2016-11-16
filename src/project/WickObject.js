@@ -236,10 +236,12 @@ WickObject.createSymbolFromWickObjects = function (wickObjects) {
     var symbol = WickObject.createNewSymbol();
 
     for(var i = 0; i < wickObjects.length; i++) {
-        symbol.layers[0].frames[0].wickObjects[i] = wickObjects[i];
+        var ii = wickObjects.length-1-i; // So objects are properly ordered in symbol
 
-        symbol.layers[0].frames[0].wickObjects[i].x = wickObjects[i].x - symbol.x;
-        symbol.layers[0].frames[0].wickObjects[i].y = wickObjects[i].y - symbol.y;
+        symbol.layers[0].frames[0].wickObjects[ii] = wickObjects[i];
+
+        symbol.layers[0].frames[0].wickObjects[ii].x = wickObjects[i].x - symbol.x;
+        symbol.layers[0].frames[0].wickObjects[ii].y = wickObjects[i].y - symbol.y;
     }
 
     symbol.width  = symbol.layers[0].frames[0].wickObjects[0].width;
