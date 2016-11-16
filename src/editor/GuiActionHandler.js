@@ -629,6 +629,22 @@ var GuiActionHandler = function (wickEditor) {
 
     new GuiAction(
         [], 
+        ['cropToolButton'], 
+        {}, 
+        function(args) {
+            wickEditor.interfaces.fabric.changeTool(wickEditor.interfaces.fabric.tools.crop);
+        });
+
+    new GuiAction(
+        [], 
+        ['backgroundremoveToolButton'], 
+        {}, 
+        function(args) {
+            wickEditor.interfaces.fabric.changeTool(wickEditor.interfaces.fabric.tools.backgroundremove);
+        });
+
+    new GuiAction(
+        [], 
         ['editScriptsButton', 'editSymbolScriptsButton'], 
         {}, 
         function(args) {

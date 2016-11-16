@@ -171,7 +171,7 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
     }
 
     this.getNumGUIElements = function () {
-        return 3;
+        return elements.length;
     }
 
     this.setInactiveFramePosition = function (i) {

@@ -5,6 +5,7 @@ var ShapeDrawer = function (wickEditor, fabricInterface) {
     var that = this;
 
     var drawingShape = null;
+    var doneFunc = null;
 
     fabricInterface.canvas.on('mouse:move', function (e) {
         that.updateDrawingShape(e.e.offsetX,e.e.offsetY);
@@ -14,7 +15,9 @@ var ShapeDrawer = function (wickEditor, fabricInterface) {
         that.stopDrawingShape();
     });
 
-    this.startDrawingShape = function (shapeType, x, y) {
+    this.startDrawingShape = function (shapeType, x, y, callback, args) {
+
+        doneFunc = callback;
 
         fabricInterface.canvas.selection = false;
 
@@ -30,6 +33,12 @@ var ShapeDrawer = function (wickEditor, fabricInterface) {
                 height : 1,
                 fill : fabricInterface.tools.paintbrush.color
             });
+
+            if(args && args.crop) {
+                drawingShape.stroke = 'white';
+                drawingShape.strokeWidth = 1;
+                drawingShape.fill ='rgba(0,0,0,0)';
+            }
         } else if (shapeType === 'ellipse') {
             drawingShape = new fabric.Ellipse({
                 originX: 'centerX',
@@ -76,51 +85,7 @@ var ShapeDrawer = function (wickEditor, fabricInterface) {
             return;
         }
 
-        if(drawingShape.type === 'rect') {
-            var origX = drawingShape.left;
-            var origY = drawingShape.top;
-            drawingShape.left = 0;
-            drawingShape.top = 0;
-            drawingShape.setCoords();
-            var svg = '<rect width="'+drawingShape.width+'" height="'+drawingShape.height+'" style="fill:rgb(0,0,255);" />'
-            var SVGData = {
-                svgString: '<svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>', 
-                fillColor: fabricInterface.tools.paintbrush.color
-            }
-            var wickObj = WickObject.fromSVG(SVGData);
-
-            fabricInterface.canvas.remove(drawingShape);
-            wickEditor.syncInterfaces();
-
-            wickObj.x = origX + drawingShape.width/2;
-            wickObj.y = origY + drawingShape.height/2;
-
-            wickEditor.actionHandler.doAction('addObjects', {
-                wickObjects: [wickObj]
-            });
-        } else if (drawingShape.type === 'ellipse') {
-            var origX = drawingShape.left;
-            var origY = drawingShape.top;
-            drawingShape.left = 0;
-            drawingShape.top = 0;
-            drawingShape.setCoords();
-            var svg = '<ellipse cx="'+drawingShape.width+'" cy="'+drawingShape.height+'" rx="'+drawingShape.width+'" ry="'+drawingShape.height+'"/>'
-            var SVGData = {
-                svgString: '<svg width="'+drawingShape.width*2+'" height="'+drawingShape.height*2+'"  id="svg" version="1.0" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>', 
-                fillColor: fabricInterface.tools.paintbrush.color
-            }
-            var wickObj = WickObject.fromSVG(SVGData);
-
-            fabricInterface.canvas.remove(drawingShape);
-            wickEditor.syncInterfaces();
-
-            wickObj.x = origX// + drawingShape.width;
-            wickObj.y = origY //+ drawingShape.height;
-
-            wickEditor.actionHandler.doAction('addObjects', {
-                wickObjects: [wickObj]
-            });
-        }
+        doneFunc(drawingShape);
 
         drawingShape = null;
     }

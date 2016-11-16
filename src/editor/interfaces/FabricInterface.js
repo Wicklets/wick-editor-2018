@@ -40,7 +40,9 @@ var FabricInterface = function (wickEditor) {
             "dropper" : new DropperTool(wickEditor),
             "text" : new TextTool(wickEditor),
             "zoom" : new ZoomTool(wickEditor),
-            "pan" : new PanTool(wickEditor)
+            "pan" : new PanTool(wickEditor),
+            "backgroundremove" : new BackgroundRemoveTool(wickEditor),
+            "crop" : new CropTool(wickEditor)
         }
 
         this.currentTool = this.tools['cursor'];
@@ -524,12 +526,20 @@ var FabricInterface = function (wickEditor) {
             var cloneTop = (group.top)
 
             //var object = fabric.util.object.clone(group);
+            var oldZoom = that.canvas.getZoom();
+            that.canvas.setZoom(1)
+            //that.canvas.renderAll();
+            group.setCoords();
             group.cloneAsImage(function (img) { 
+                console.log(img)
                 callback({
                     x:cloneLeft,
                     y:cloneTop,
                     src:img.getElement().src,
                 });
+                that.canvas.setZoom(oldZoom)
+                //that.canvas.renderAll();
+                group.setCoords();
             })
 
             group.forEachObject(function(o){ group.removeWithUpdate(o) });

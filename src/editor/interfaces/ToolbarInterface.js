@@ -12,7 +12,9 @@ var ToolbarInterface = function (wickEditor) {
                          'fillbucket',
                          'text',
                          'zoom',
-                         'pan' ]; 
+                         'pan',
+                         'crop',
+                         'backgroundremove' ]; 
 
     this.setup = function () {
         

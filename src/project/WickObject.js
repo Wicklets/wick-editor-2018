@@ -978,23 +978,6 @@ WickObject.prototype.generateAlphaMask = function () {
 
 }
 
-WickObject.prototype.removeBackground = function (x,y) {
-
-    var that = this;
-
-    ImageToCanvas(this.imageData, function (canvas,ctx) {
-        /*var fillColor = {r:255,g:255,b:255,a:1};
-        Floodfill(x, y, fillColor, ctx, canvas.width, canvas.height, 1);
-        that.imageData = canvas.toDataURL();
-        that.imageDirty = true;*/
-        ctx.fillStyle = "rgba(0,0,0,0)";
-        ctx.fillFlood(x,y);
-        that.imageData = canvas.toDataURL();
-        that.imageDirty = true;
-    });
-
-}
-
 /*************************
      Tween stuff
 *************************/

@@ -15,7 +15,7 @@ var CursorTool = function (wickEditor) {
     // Select objects on right click (fabric.js doesn't do this by default >.>)
     canvas.on('mouse:down', function(e) {
         if(e.e.button !== 2) return;
-        if(!(wickEditor.interfaces.fabric.currentTool instanceof CursorTool)) return;
+        //if(!(wickEditor.interfaces.fabric.currentTool instanceof CursorTool)) return;
 
         if (e.target && e.target.wickObjectID) {
             // Set active object of fabric canvas
@@ -39,7 +39,7 @@ var CursorTool = function (wickEditor) {
             var selectedObject = wickEditor.interfaces['fabric'].getSelectedWickObject();
             if(selectedObject && selectedObject.isSymbol) {
                 wickEditor.guiActionHandler.pressButton("editSymbolButton");
-            } else if (!wickEditor.project.getCurrentObject().isRoot) {
+            } else if (!selectedObject && !wickEditor.project.getCurrentObject().isRoot) {
                 wickEditor.guiActionHandler.pressButton("finishEditingObjectButton");
             }
         }
