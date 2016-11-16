@@ -295,6 +295,7 @@ var FabricInterface = function (wickEditor) {
                 selectedObjs.push(fabricObj);
             }
         });
+        selectedObjs.reverse()
 
         if(ids.length <= 1) {
             that.canvas._activeObject = selectedObjs[0];
@@ -350,7 +351,7 @@ var FabricInterface = function (wickEditor) {
     this.getSelectedObjectIDs = function () {
         var ids = [];
 
-        var obj   = this.canvas.getActiveObject();
+        var obj = this.canvas.getActiveObject();
         var group = this.canvas.getActiveGroup();
 
         if(obj) {
