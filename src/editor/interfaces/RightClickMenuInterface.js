@@ -38,6 +38,7 @@ var RightClickMenuInterface = function (wickEditor) {
             hideButtonGroup("#noBreakpointExists");
             hideButtonGroup("#commonTimelineButtons");
             hideButtonGroup("#clickedOnFrameButtons");
+            hideButtonGroup("#isImage");
             hideButtonGroup("#noKeyframeExists");
             hideButtonGroup("#keyframeExists");
 
@@ -98,6 +99,10 @@ var RightClickMenuInterface = function (wickEditor) {
                 showButtonGroup("#staticObjectButtons");
             }
             showButtonGroup("#commonObjectButtons");
+
+            if(selectedSingleObject.imageData) {
+                showButtonGroup("#isImage");
+            }
 
             var relPlayheadPos = selectedSingleObject.parentObject.getRelativePlayheadPosition(selectedSingleObject);
             if(selectedSingleObject.hasTweenAtFrame(relPlayheadPos)) {
