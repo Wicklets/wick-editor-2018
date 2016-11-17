@@ -1206,10 +1206,7 @@ WickObject.prototype.runScript = function (scriptType) {
     var gotoPrevFrame = function ()      { that.parentObject.gotoPrevFrame(); }
 
     // stop all sounds wrapper
-    var stopAllSounds = function () { WickPlayer.getAudioPlayer().stopAllSounds(); };
-
-    // Clone wrapper
-    this.clone = function () { return WickPlayer.cloneObject(this); };
+    var stopAllSounds = function () { console.log(WickPlayer); WickPlayer.getAudioPlayer().stopAllSounds(); };
 
     // Setup keycode shortcuts
     var isKeyDown = function (keyString) { return keys[keyCharToCode[keyString]]; };
@@ -1529,6 +1526,7 @@ WickObject.prototype.copy = function () {
         copiedObject.playheadPosition = 0;
         copiedObject.currentLayer = 0;
 
+        copiedObject.layers = [];
         this.layers.forEach(function (layer) {
             copiedObject.layers.push(layer.copy());
         })
@@ -1538,6 +1536,7 @@ WickObject.prototype.copy = function () {
         copiedObject.imageData = this.imageData;
         copiedObject.fontData = this.fontData;
         copiedObject.svgData = this.svgData;
+        copiedObject.svgCacheImageData = this.svgCacheImageData;
     }
 
     return copiedObject;
@@ -1684,4 +1683,10 @@ WickObject.prototype.stopSound = function () {
     WickPlayer.getAudioPlayer().stopSound(this.id); 
 
 }
+
+WickObject.prototype.clone = function () { 
+
+    return WickPlayer.cloneObject(this); 
+
+};
 

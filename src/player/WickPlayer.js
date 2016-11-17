@@ -362,9 +362,6 @@ var WickPlayer = (function () {
 
     }
 
-    return wickPlayer;
-
-
 /*****************************
     experimenting ........
 *****************************/
@@ -391,5 +388,7 @@ var WickPlayer = (function () {
 
         return clone;
     }
+
+    return wickPlayer;
 
 })();

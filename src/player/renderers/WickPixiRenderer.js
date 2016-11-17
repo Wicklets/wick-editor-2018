@@ -21,7 +21,14 @@ var WickPixiRenderer = function (project) {
 
 	this.refreshPixiSceneForObject = function (wickObj) {
 		//generatePixiScene(wickObj);
-		if (wickObj.imageData || wickObj.svgCacheImageData) {
+		if (wickObj.isSymbol) {
+			console.log("???")
+			generatePixiScene(wickObj);
+            wickObj.parentObject.pixiContainer.addChild(wickObj.pixiContainer);
+            console.log(wickObj)
+            console.log(wickObj.parentObject)
+            console.log(wickObj.pixiContainer)
+		} else if (wickObj.imageData || wickObj.svgCacheImageData) {
             wickObj.pixiSprite = PIXI.Sprite.fromImage(wickObj.imageData || wickObj.svgCacheImageData);
             wickObj.parentObject.pixiContainer.addChild(wickObj.pixiSprite);
         } else if (wickObj.fontData) {

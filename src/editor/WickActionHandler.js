@@ -402,13 +402,21 @@ var WickActionHandler = function (wickEditor) {
     this.registerAction('convertSelectionToSymbol', 
         function (args) {
             var selectedObjects = wickEditor.interfaces['fabric'].getSelectedWickObjects();
+
+            var symbolZIndex = null;
+            selectedObjects.forEach(function (obj) {
+                var objZIndex = wickEditor.project.getCurrentObject().getCurrentFrame().wickObjects.indexOf(obj);
+                if(symbolZIndex === null || objZIndex < symbolZIndex) {
+                    symbolZIndex = objZIndex;
+                }
+            });
             
             selectedObjects.forEach(function (obj) {
                 wickEditor.project.getCurrentObject().removeChildByID(obj.id);
             });
 
             var symbol = new WickObject.createSymbolFromWickObjects(selectedObjects);
-            wickEditor.project.addObject(symbol);
+            wickEditor.project.addObject(symbol, symbolZIndex);
             symbol.fixOriginPoint(true);
             symbol.selectOnAddToFabric = true;
         },
