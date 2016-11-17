@@ -534,7 +534,7 @@ var FabricInterface = function (wickEditor) {
                     src:img.getElement().src,
                 });
                 that.canvas.setZoom(oldZoom)
-                //that.canvas.renderAll();
+                that.canvas.renderAll();
                 group.setCoords();
             })
 

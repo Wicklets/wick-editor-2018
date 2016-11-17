@@ -202,14 +202,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         }
 
         if(wickObj.imageData) {
-            // To get pixel-perfect positioning to avoid blurry images (this happens when an image has a fractional position)
-            if(wickObj.imageData) {
-                wickObj.x = Math.round(wickObj.x);
-                wickObj.y = Math.round(wickObj.y);
-                if(wickObj.width % 2 === 1) wickObj.x += 0.5;
-                if(wickObj.height % 2 === 1) wickObj.y += 0.5;
-            }
-
             fabric.Image.fromURL(wickObj.imageData, function(newFabricImage) {
                 wickObj.cachedFabricObject = newFabricImage;
                 newFabricImage.wickObjReference = wickObj;
@@ -315,6 +307,12 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
     var updateFabObj = function (fabricObj, wickObj, activeObjects) {
 
+        // To get pixel-perfect positioning to avoid blurry images (this happens when an image has a fractional position)
+        if(wickObj.imageData) {
+            wickObj.x = Math.round(wickObj.x);
+            wickObj.y = Math.round(wickObj.y);
+        }
+
         // Some wick objects don't have a defined width/height until rendered by fabric. (e.g. paths and text)
         if(!wickObj.width) wickObj.width = fabricObj.width;
         if(!wickObj.height) wickObj.height = fabricObj.height;
@@ -335,6 +333,11 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         fabricObj.flipX   = wickObj.flipX;
         fabricObj.flipY   = wickObj.flipY;
         fabricObj.opacity = wickObj.opacity;
+
+        if(wickObj.imageData) {
+            if(wickObj.width % 2 === 1 && fabricObj.left % 1 === 0) fabricObj.left -= 0.5;
+            if(wickObj.height % 2 === 1 && fabricObj.top % 1 === 0) fabricObj.top -= 0.5;
+        }
 
         if(wickObj.isSymbol) {
             //var cornerPosition = wickObj.getSymbolBoundingBoxCorner();

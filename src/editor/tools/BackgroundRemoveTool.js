@@ -18,12 +18,12 @@ var BackgroundRemoveTool = function (wickEditor) {
         var objs = canvas.getObjects();
         var topmost = new Object();
 
-       jQuery.each(objs,function(index,val){
+        jQuery.each(objs,function(index,val){
             if( val.containsPoint(position) && !(canvas.isTargetTransparent(val, position.x, position.y))){
                 topmost = val;
             }
-       });
-        if(topmost != undefined && topmost.wickObjectID){
+        });
+        if(topmost != undefined && topmost.wickObjectID) {
             var wickObj = topmost.wickObjReference;
 
             var mouseScreenSpace = wickEditor.interfaces.fabric.screenToCanvasSpace(e.e.offsetX, e.e.offsetY);
@@ -39,7 +39,7 @@ var BackgroundRemoveTool = function (wickEditor) {
             /* YA GOTTA PUT THIS IN ACTIONHANDLER SO IT CAN BE UNDONE! */
             ImageToCanvas(wickObj.imageData, function (canvas,ctx) {
                 ctx.fillStyle = "rgba(0,0,0,0)";
-                ctx.fillFlood(mousePoint.x, mousePoint.y);
+                ctx.fillFlood(mousePoint.x, mousePoint.y, 0);
                 wickObj.imageData = canvas.toDataURL();
                 wickObj.imageDirty = true;
                 wickEditor.syncInterfaces();
