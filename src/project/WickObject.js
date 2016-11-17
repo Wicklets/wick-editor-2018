@@ -632,20 +632,24 @@ WickObject.prototype.getLargestID = function (id) {
      Positioning stuff
 *************************/
 
-// used as a hack to get around fabric.js lack of rotation around anchorpoint
-WickObject.prototype.fixOriginPoint = function (newSymbol) {
-    var bbox;
+WickObject.prototype.regenBoundingBox = function () {
     if (wickEditor.project.getCurrentObject() === this) {
-        bbox = wickEditor.interfaces.fabric.getBoundingBoxOfAllObjects();
+        this.bbox = wickEditor.interfaces.fabric.getBoundingBoxOfAllObjects();
     } else {
         var ids = [];
         this.getAllChildObjects().forEach(function (child) {
             ids.push(child.id);
         });
         wickEditor.interfaces.fabric.deselectAll(); // to get correct ungrouped object positions
-        bbox = wickEditor.interfaces.fabric.getBoundingBoxOfObjects(ids);
+        this.bbox = wickEditor.interfaces.fabric.getBoundingBoxOfObjects(ids);
     }
-    var bboxCenter = {x:bbox.left + bbox.width/2, y:bbox.top + bbox.height/2};
+}
+
+// used as a hack to get around fabric.js lack of rotation around anchorpoint
+WickObject.prototype.fixOriginPoint = function (newSymbol) {
+    if(this.playheadPosition === 0) this.regenBoundingBox();
+
+    var bboxCenter = {x:this.bbox.left + this.bbox.width/2, y:this.bbox.top + this.bbox.height/2};
 
     var symbolCornerPosition = {x:this.x-bboxCenter.x, y:this.y-bboxCenter.y};
 

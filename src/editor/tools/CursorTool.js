@@ -42,8 +42,10 @@ var CursorTool = function (wickEditor) {
             } else if (!selectedObject && !wickEditor.project.getCurrentObject().isRoot) {
                 wickEditor.guiActionHandler.pressButton("finishEditingObjectButton");
             }
+            lastDoubleClickTime = null;
+        } else {
+            lastDoubleClickTime = currentTime;
         }
-        lastDoubleClickTime = currentTime;
     });
 
 }

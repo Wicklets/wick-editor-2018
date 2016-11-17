@@ -192,7 +192,7 @@ var WickActionHandler = function (wickEditor) {
                         wickObj[attrib] = args.modifiedStates[i][attrib];
                     }
                 });
-
+                
                 // This is silly what's a better way ???
                 if(wickObj.fontData) {
                     if(args.modifiedStates[i].text) wickObj.fontData.text = args.modifiedStates[i].text;

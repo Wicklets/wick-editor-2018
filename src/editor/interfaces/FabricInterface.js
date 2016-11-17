@@ -528,7 +528,6 @@ var FabricInterface = function (wickEditor) {
             //that.canvas.renderAll();
             group.setCoords();
             group.cloneAsImage(function (img) { 
-                console.log(img)
                 callback({
                     x:cloneLeft,
                     y:cloneTop,

@@ -23,7 +23,6 @@ var CropTool = function (wickEditor) {
         wickEditor.interfaces.fabric.getObjectsImage(function (data) { 
             CropImage(data.src, function (src) {
                 var wickObj = WickObject.fromImage(src, function (wickObj) {
-                    console.log(wickObj)
                     wickEditor.actionHandler.doAction('addObjects', {wickObjects:[wickObj]});
                 });
             }, {

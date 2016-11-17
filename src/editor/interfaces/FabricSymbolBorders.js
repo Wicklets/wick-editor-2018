@@ -66,6 +66,7 @@ var FabricSymbolBorders = function (wickEditor, fabricInterface) {
     });
 
     this.startEditObjectAnimation = function (obj) {
+        console.log('startEditObjectAnimation')
         boxAnimationID = obj.id;
         boxAnimationActive = true;
         var f = setInterval(function () {
@@ -74,6 +75,7 @@ var FabricSymbolBorders = function (wickEditor, fabricInterface) {
     }
 
     this.updateEditObjectAnimation = function (obj, f) {
+        //console.log('updateEditObjectAnimation')
         if(boxAnimationTimer > 1) {
             boxAnimationTimer = 0;
             wickEditor.actionHandler.doAction('editObject', { objectToEdit: obj });
@@ -87,6 +89,7 @@ var FabricSymbolBorders = function (wickEditor, fabricInterface) {
     }
 
     this.startLeaveObjectAnimation = function (obj) {
+        console.log('startLeaveObjectAnimation')
         boxAnimationActive = true;
         boxAnimationID = obj.id;
         boxAnimationTimer = 1;
@@ -97,6 +100,7 @@ var FabricSymbolBorders = function (wickEditor, fabricInterface) {
     }
 
     this.updateLeaveObjectAnimation = function (obj, f) {
+        //console.log('updateLeaveObjectAnimation')
         if(boxAnimationTimer <= 0) {
             boxAnimationTimer = 0;
             clearTimeout(f);

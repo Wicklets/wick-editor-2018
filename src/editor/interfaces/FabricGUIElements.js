@@ -47,10 +47,16 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
 
         var frame = that.getFrameFunc();
 
-        if(!frame) return;
+        if(!frame) {
+            that.opacity = 0.0;
+            return;
+        }
         var data = frame.cachedImageData;
 
-        if(!data) return;
+        if(!data) {
+            that.opacity = 0.0;
+            return;
+        }
         that.left = data.x;
         that.top = data.y;
         that.setCoords();
