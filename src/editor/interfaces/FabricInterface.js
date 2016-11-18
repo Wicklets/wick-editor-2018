@@ -13,8 +13,8 @@ var FabricInterface = function (wickEditor) {
     this.setup = function () {
 
         this.canvas = new fabric.CanvasEx('fabricCanvas', {
-            //imageSmoothingEnabled:false,
-            preserveObjectStacking:true,
+            imageSmoothingEnabled:false,
+            //preserveObjectStacking:true,
             renderOnAddRemove:false,
         });
         this.canvas.selectionColor = 'rgba(110, 110, 115, 0.1)';
@@ -30,6 +30,8 @@ var FabricInterface = function (wickEditor) {
         this.symbolBorders = new FabricSymbolBorders(wickEditor, this);
 
         this.panning = false;
+
+        this.onionSkinsDirty = false;
         
         this.tools = {
             "cursor" : new CursorTool(wickEditor),
@@ -42,7 +44,7 @@ var FabricInterface = function (wickEditor) {
             "zoom" : new ZoomTool(wickEditor),
             "pan" : new PanTool(wickEditor),
             "backgroundremove" : new BackgroundRemoveTool(wickEditor),
-            "crop" : new CropTool(wickEditor)
+            "crop" : new CropTool(wickEditor),
         }
 
         this.currentTool = this.tools['cursor'];
@@ -527,20 +529,22 @@ var FabricInterface = function (wickEditor) {
             that.canvas.setZoom(1)
             //that.canvas.renderAll();
             group.setCoords();
+
             group.cloneAsImage(function (img) { 
+                that.canvas.setZoom(oldZoom)
+                that.canvas.renderAll();
+                group.setCoords();
+
+                group.forEachObject(function(o){ group.removeWithUpdate(o) });
+                that.canvas.remove(group);
+                that.canvas.renderAll();
+
                 callback({
                     x:cloneLeft,
                     y:cloneTop,
                     src:img.getElement().src,
                 });
-                that.canvas.setZoom(oldZoom)
-                that.canvas.renderAll();
-                group.setCoords();
             })
-
-            group.forEachObject(function(o){ group.removeWithUpdate(o) });
-            that.canvas.remove(group);
-            that.canvas.renderAll();
 
         }
 

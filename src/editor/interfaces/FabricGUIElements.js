@@ -38,25 +38,26 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
     var updateOnionSkinObject = function () {
         var that = this;
         
-        if(wickEditor.project.onionSkinning) {
-            that.opacity = 0.3;
-        } else {
+        if(!wickEditor.project.onionSkinning) {
             that.opacity = 0.0;
             return;
         }
 
-        var frame = that.getFrameFunc();
+        if(!fabricInterface.onionSkinsDirty) return;
 
+        var frame = that.getFrameFunc();
         if(!frame) {
             that.opacity = 0.0;
             return;
         }
-        var data = frame.cachedImageData;
 
+        var data = frame.cachedImageData;
         if(!data) {
             that.opacity = 0.0;
             return;
         }
+
+        that.opacity = 0.3;
         that.left = data.x;
         that.top = data.y;
         that.setCoords();
@@ -172,6 +173,8 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
         elements.forEach(function (elem) {
             elem.updateGUIState();
         });
+
+        fabricInterface.onionSkinsDirty = false;
 
         canvas.renderAll();
     }

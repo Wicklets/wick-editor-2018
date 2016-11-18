@@ -681,7 +681,6 @@ var GuiActionHandler = function (wickEditor) {
         ['editObjectButton', 'editSymbolButton'], 
         {}, 
         function(args) {
-            console.log('editObjectButton')
             var selectedObject = wickEditor.interfaces.fabric.getSelectedWickObject();
             wickEditor.interfaces.fabric.symbolBorders.startEditObjectAnimation(selectedObject);
         });
