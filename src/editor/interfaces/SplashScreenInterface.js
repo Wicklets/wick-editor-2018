@@ -37,13 +37,10 @@ var SplashScreenInterface = function (wickEditor) {
     });
 
     this.openSplashScreen = function () {
-        console.log('open')
         document.getElementById("splashScreenGUI").style.display = "inline";
     }
 
     this.closeSplashScreen = function () {
-        console.log('close')
-
         // Save if user doesn't need to see splash screen again...
         if($('#dontShowSplashScreenAgainCheckbox').is(':checked')) {
             localStorage.dontShowSplashScreen = false;

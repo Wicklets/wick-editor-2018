@@ -68,10 +68,10 @@ var TimelineInterface = function (wickEditor) {
     }
 
     this.resize = function () {
-        var GUIWidth = (window.innerWidth-250);
+        var GUIWidth = (window.innerWidth-250*2);
 
         document.getElementById('timelineGUI').style.width = GUIWidth + 'px';
-        //$("#timelineGUI").css('left', (window.innerWidth/2 - GUIWidth/2)+'px');
+        $("#timelineGUI").css('left', (window.innerWidth/2 - GUIWidth/2)+'px');
         $("#timelineGUI").css('left', 200+'px');
         canvas.width = GUIWidth;
 
