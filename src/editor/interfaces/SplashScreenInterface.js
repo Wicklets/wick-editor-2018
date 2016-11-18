@@ -36,9 +36,14 @@ var SplashScreenInterface = function (wickEditor) {
         that.resize();
     });
 
-// Close splash screen if we click (almost) anywhere
+    this.openSplashScreen = function () {
+        console.log('open')
+        document.getElementById("splashScreenGUI").style.display = "inline";
+    }
 
     this.closeSplashScreen = function () {
+        console.log('close')
+
         // Save if user doesn't need to see splash screen again...
         if($('#dontShowSplashScreenAgainCheckbox').is(':checked')) {
             localStorage.dontShowSplashScreen = false;
@@ -46,14 +51,6 @@ var SplashScreenInterface = function (wickEditor) {
 
         document.getElementById("splashScreenGUI").style.display = "none";
     }
-
-    document.getElementById("editorCanvasContainer").onclick = that.closeSplashScreen;
-    document.getElementById("timelineCanvas").onclick = that.closeSplashScreen;
-    document.getElementById("settingsGUI").onclick = that.closeSplashScreen;
-    document.getElementById("menuBarGUI").onclick = that.closeSplashScreen;
-    document.getElementById("timelineGUI").onclick = that.closeSplashScreen;
-    document.getElementById("toolbarGUI").onclick = that.closeSplashScreen;
-    document.getElementById("settingsGUI").onclick = that.closeSplashScreen;
 
 // Buttons
 

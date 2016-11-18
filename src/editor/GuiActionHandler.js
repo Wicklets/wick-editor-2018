@@ -215,6 +215,16 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.actionHandler.undoAction();
         });
 
+    // Title
+    // Open splash screen
+    new GuiAction(
+        [], 
+        ['editorTitle'], 
+        {}, 
+        function(args) {
+            wickEditor.interfaces.splashscreen.openSplashScreen();
+        });
+
     // Control + Enter
     // Run Project
     new GuiAction(

@@ -7,7 +7,7 @@ var PropertiesInterface = function (wickEditor) {
     }
 
     this.syncWithEditorState = function () {
-        $("#projectProperties").css('display', 'none');
+        $("#frameProperties").css('display', 'none');
         $("#objectProperties").css('display', 'none');
         $("#textProperties").css('display', 'none');
         $("#soundProperties").css('display', 'none');
@@ -43,8 +43,8 @@ var PropertiesInterface = function (wickEditor) {
                 document.getElementById('autoplayCheckbox').checked = selectedObj.autoplaySound;
             }
         } else {
-            //Nothing selected, show project properties
-            $("#projectProperties").css('display', 'inline');
+            //Nothing selected, show frame properties
+            $("#frameProperties").css('display', 'inline');
         }
     }
 

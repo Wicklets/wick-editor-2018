@@ -7,7 +7,7 @@ var TimelineInterface = function (wickEditor) {
     var canvas = document.getElementById("timelineCanvas");
     var ctx = canvas.getContext("2d");
 
-    var frameWidth = 20;
+    var frameWidth = 18;
     var frameHeight = 32;
 
     var playheadX = frameWidth / 2;
@@ -68,9 +68,11 @@ var TimelineInterface = function (wickEditor) {
     }
 
     this.resize = function () {
-        var GUIWidth = parseInt($("#timelineGUI").css("width"));
-        $("#timelineGUI").css('left', (window.innerWidth/2 - GUIWidth/2)+'px');
+        var GUIWidth = (window.innerWidth-250);
 
+        document.getElementById('timelineGUI').style.width = GUIWidth + 'px';
+        //$("#timelineGUI").css('left', (window.innerWidth/2 - GUIWidth/2)+'px');
+        $("#timelineGUI").css('left', 200+'px');
         canvas.width = GUIWidth;
 
         that.redraw();

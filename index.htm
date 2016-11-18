@@ -198,7 +198,7 @@
         <!-- Main menu GUI, top left corner -->
 
             <div id="menuBarGUI" class="GUIBox">
-                <strong>Wick Editor</strong><br />
+                <strong id ="editorTitle">Wick Editor</strong><br />
 
                 <hr />
 
@@ -250,11 +250,6 @@
                 <div id="timelineScrollbar"><div id="timelineScrollbarFiller"></div></div>
 
                 <hr />
-
-                <div id="frameProperties">
-                    <input type="button" value="Enable Onion Skinning" id="enableOnionSkinningButton"></input><input type="button" value="Disable Onion Skinning" id="disableOnionSkinningButton"></input>
-                    | Frame Name: <input type="text" id="frameIdentifier" maxlength="16" size="16"> 
-                </div>
             </div>
 
         <!-- Toolbar GUI, centered at the left side of the screen -->
@@ -325,6 +320,10 @@
         <!-- Properties GUI, bottom right corner -->
 
             <div id="propertiesGUI" class="GUIBox">
+                <div id="frameProperties">
+                    <input type="button" value="Enable Onion Skinning" id="enableOnionSkinningButton"></input><input type="button" value="Disable Onion Skinning" id="disableOnionSkinningButton"></input>
+                    | Frame Name: <input type="text" id="frameIdentifier" maxlength="16" size="16"> 
+                </div>
                 <div id="objectProperties">
                     Object Properties
                     <hr />
