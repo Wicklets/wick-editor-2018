@@ -143,7 +143,7 @@
 				position: absolute;
 				left: 0;
 				top: 0;
-				height: 480px;
+				height: 100%;
 				width: 100%;
 				right: 0;
 				z-index: 100;
@@ -159,6 +159,8 @@
 				font-size: 17px;
 				line-height: 22px;
 				overflow: auto;
+				width: 100%;
+				height: 100%;
 			}
 			#viewer{
 				position: absolute;
@@ -179,7 +181,7 @@
 			font-style: italic;
 			font-size: 16px;
 			text-align: center;
-			width: 100%;
+			display: inline;
 		}
 
 	</style>
@@ -192,14 +194,29 @@
 			<span></span>
 		</a>
 		<div id="content">
-			<img src="resources/wicklogo.png" /><br />
-			<span class="catchy">The Internet's free and open-source creation suite</span>
+			<center>
+				<img src="resources/wicklogo.png" /><br />
+				<div class="catchy">The Internet's free and open-source creation suite</div>
+			</center>
 			<hr />
 			<a class="link" onclick="load('sitepages/about.html')">About</a>
 			<a class="link" onclick="load('sitepages/tutorials.html')">Tutorials</a>
 			<a class="link" onclick="load('sitepages/demos.html')">Demos</a>
 			<a class="link" href="https://github.com/WickOnline/wick">Source</a>
 			<strong><a class="link" href="editor.html">Launch Editor</a></strong>
+			<hr />
+			<center>
+			<img src="resources/testcontent/cozycoupe.gif" width="75" height="75"/>
+			<img src="resources/testcontent/clippy.png" width="75" height="75"/>
+			<br />
+			<img src="resources/testcontent/funnyben.jpg" width="75" height="75"/>
+			<img src="resources/testcontent/SUPERDUMB.png" width="75" height="75"/>
+			<br />
+			<img src="resources/testcontent/duck.bmp" width="75" height="75"/>
+			<img src="resources/testcontent/SUPERDUMBgreenBG.png" width="75" height="75"/>
+			</center>
+			<br />
+			<span class="catchy">by <a href="https://www.twitter.com/zrispo">zrispo</a></span>
 		</div>
 	</div>
 	<iframe id="viewer" allowfullscreen onmousewheel=""></iframe>
