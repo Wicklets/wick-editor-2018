@@ -33,6 +33,7 @@ var WickEditor = function () {
         "settings" : new SettingsInterface(this),
         "fabric" : new FabricInterface(this),
         "paper" : new PaperInterface(this),
+        "editbar" : new EditbarInterface(this),
     };
     for (var key in this.interfaces) {
         this.interfaces[key].setup();

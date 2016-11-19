@@ -11,6 +11,8 @@ var SettingsInterface = function (wickEditor) {
 
     this.syncWithEditorState = function () {
         if(this.open) {
+            this.resize();
+
             document.getElementById("settingsGUI").style.display = "block";
             
             var projectBgColorElem = document.getElementById('projectBgColor');
@@ -31,6 +33,8 @@ var SettingsInterface = function (wickEditor) {
 // Center settings window on resize
 
     this.resize = function () {
+        if(!this.open) return;
+
         var settingsWidth = parseInt($("#settingsGUI").css("width"));
         $("#settingsGUI").css('left', (window.innerWidth/2 - settingsWidth/2)+'px');
 

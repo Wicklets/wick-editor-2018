@@ -68,6 +68,7 @@
     <script src="src/editor/interfaces/SplashScreenInterface.js"></script>
     <script src="src/editor/interfaces/SettingsInterface.js"></script>
     <script src="src/editor/interfaces/StatusBarInterface.js"></script>
+    <script src="src/editor/interfaces/EditBarInterface.js"></script>
 
     <script src="src/editor/tools/CursorTool.js"></script>
     <script src="src/editor/tools/FillBucketTool.js"></script>
@@ -198,7 +199,7 @@
         <!-- Main menu GUI, top left corner -->
 
             <div id="menuBarGUI" class="GUIBox">
-                <strong id ="editorTitle">Wick Editor</strong><br />
+                <strong id="editorTitle" style="cursor:pointer">Wick Editor</strong><br />
 
                 <hr />
 
@@ -251,6 +252,14 @@
 
                 <hr />
             </div>
+
+        <!-- Edit bar -->
+
+            <!--<div id="editBarGUI" class="GUIBox">
+                <div class="button tooltipElem" id="cursorToolButton" alt="Undo">
+                    <img src="resources/undo.png" width="20"></img>
+                </div>
+            </div>-->
 
         <!-- Toolbar GUI, centered at the left side of the screen -->
 

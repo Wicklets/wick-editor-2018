@@ -1,0 +1,223 @@
+<!-- The layout for this site is taken directly from the example's page for three.js -->
+<!--  You can find it here: https://github.com/mrdoob/three.js/tree/master/examples  -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>It's Wick!</title>
+	<link href='https://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<style>
+
+		* { box-sizing: border-box; }
+
+		html { height: 100%; }
+
+		body {
+			background-color: #ffffff;
+			margin: 0px;
+			height: 100%;
+			color: #555;
+			font-family: 'PT Sans', sans-serif;
+			font-size: 18px;
+			line-height: 26px;
+			overflow: hidden;
+		}
+
+		h1 {
+			margin-top: 30px;
+			margin-bottom: 20px;
+			margin-left: 20px;
+			font-size: 25px;
+			font-weight: normal;
+		}
+
+		h2 {
+			font-size: 24px;
+			font-weight: normal;
+		}
+
+		a {
+			color: #2194CE;
+			text-decoration: none;
+		}
+
+		hr {
+		    border: 0;
+		    height: 1px;
+		    margin-top: 25px;
+		    margin-bottom: 25px;
+		    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+		}
+
+		.link {
+			margin-left: 15px;
+		}
+
+		#panel {
+			position: fixed;
+			left: 0px;
+			width: 250px;
+			height: 100%;
+			overflow: auto;
+			background: #fafafa;
+		}
+
+		#panel #content {
+			padding: 20px 20px 20px 20px;
+		}
+
+		#panel #content .link {
+			color: #2194CE;
+			text-decoration: none;
+			cursor: pointer;
+			display: block;
+		}
+
+		#panel #content .selected {
+			color: #ff0000;
+		}
+
+		#panel #content .link:hover {
+			text-decoration: underline;
+		}
+
+		#viewer {
+			position: absolute;
+			border: 0px;
+			left: 250px;
+			width: calc(100% - 250px);
+			height: 100%;
+			overflow: auto;
+		}
+
+		#linkOrbs {
+			margin-left: 20px;
+			bottom:0px;
+			width: 100%;
+		}
+
+		.filtered {
+			display: none !important;
+		}
+
+		#panel li b {
+			font-weight: bold;
+		}
+
+		/* mobile */
+
+		#expandButton {
+			display: none;
+			position: absolute;
+			right: 20px;
+			top: 12px;
+			width: 32px;
+			height: 32px;
+		}
+
+		#expandButton span {
+			height: 2px;
+			background-color: #2194CE;
+			width: 16px;
+			position: absolute;
+			left: 8px;
+			top: 10px;
+		}
+
+		#expandButton span:nth-child(1) {
+			top: 16px;
+		}
+
+		#expandButton span:nth-child(2) {
+			top: 22px;
+		}
+
+		@media all and ( max-width: 640px ) {
+			h1{
+				margin-top: 20px;
+				margin-bottom: 20px;
+			}
+			#panel{
+				position: absolute;
+				left: 0;
+				top: 0;
+				height: 480px;
+				width: 100%;
+				right: 0;
+				z-index: 100;
+				overflow: hidden;
+				border-bottom: 1px solid #dedede;
+			}
+			#content{
+				position: absolute;
+				left: 0;
+				top: 90px;
+				right: 0;
+				bottom: 0;
+				font-size: 17px;
+				line-height: 22px;
+				overflow: auto;
+			}
+			#viewer{
+				position: absolute;
+				left: 0;
+				top: 56px;
+				width: 100%;
+				height: calc(100% - 56px);
+			}
+			#expandButton{
+				display: block;
+			}
+			#panel.collapsed{
+				height: 56px;
+			}
+		}
+
+		.catchy {
+			font-style: italic;
+			font-size: 16px;
+			text-align: center;
+			width: 100%;
+		}
+
+	</style>
+</head>
+<body>
+	<div id="panel" class="collapsed">
+		<a id="expandButton" href="#">
+			<span></span>
+			<span></span>
+			<span></span>
+		</a>
+		<div id="content">
+			<img src="resources/wicklogo.png" /><br />
+			<span class="catchy">The Internet's free and open-source creation suite</span>
+			<hr />
+			<a class="link" onclick="load('sitepages/about.html')">About</a>
+			<a class="link" onclick="load('sitepages/tutorials.html')">Tutorials</a>
+			<a class="link" onclick="load('sitepages/demos.html')">Demos</a>
+			<a class="link" href="https://github.com/WickOnline/wick">Source</a>
+			<strong><a class="link" href="editor.html">Launch Editor</a></strong>
+		</div>
+	</div>
+	<iframe id="viewer" allowfullscreen onmousewheel=""></iframe>
+
+	<script>
+		var load = function ( file ) {
+			window.location.hash = file;
+			viewer.src = file;
+			viewer.focus();
+		};
+
+		if ( window.location.hash !== '' ) {
+			var pageName = window.location.hash.substring(1);
+			load( pageName );
+		}else {
+			viewer.src = 'demos/FragileGhost.html';
+		}
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+body {
+	background-color: #ffffff;
+	font-family: 'PT Sans', sans-serif;
+	font-size: 15px;
+	line-height: 18px;
+	overflow: hidden;
+	margin-top: 75px;
+}
+h1 {
+	margin-left: 50px;
+	margin-bottom: 50px;
+	/*font-weight: normal;*/
+}
+h2 {
+	font-size: 20px;
+	margin-left: 75px;
+	/*font-weight: normal;*/
+}
+.blurb {
+	margin-left: 100px;
+}

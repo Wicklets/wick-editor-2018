@@ -10,7 +10,9 @@ var SplashScreenInterface = function (wickEditor) {
 
     var mode = "Main"
 
-    this.syncWithEditorState = function () {
+    var open = true;
+
+    this.syncWithEditorState = function () { 
         document.getElementById("splashScreenMain").style.display = "none";
         document.getElementById("splashScreenCredits").style.display = "none";
 
@@ -25,6 +27,8 @@ var SplashScreenInterface = function (wickEditor) {
 // Center splash screen on resize
 
     this.resize = function () {
+        if(!open) return
+
         var splashScreenWidth = parseInt($("#splashScreenGUI").css("width"));
         $("#splashScreenGUI").css('left', (window.innerWidth/2 - splashScreenWidth/2)+'px');
 
@@ -38,6 +42,7 @@ var SplashScreenInterface = function (wickEditor) {
 
     this.openSplashScreen = function () {
         document.getElementById("splashScreenGUI").style.display = "inline";
+        open  =true;
     }
 
     this.closeSplashScreen = function () {
@@ -47,6 +52,8 @@ var SplashScreenInterface = function (wickEditor) {
         }
 
         document.getElementById("splashScreenGUI").style.display = "none";
+
+        open = false;
     }
 
 // Buttons
