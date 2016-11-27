@@ -195,7 +195,7 @@
 		</a>
 		<div id="content">
 			<center>
-				<img src="resources/wicklogo.png" /><br />
+				<a href="/index.html"><img src="resources/wicklogo.png" /></a><br />
 				<div class="catchy">The Internet's free and open-source creation suite</div>
 			</center>
 			<hr />
@@ -219,9 +219,11 @@
 			<span class="catchy">by <a href="https://www.twitter.com/zrispo">zrispo</a></span>
 		</div>
 	</div>
-	<iframe id="viewer" allowfullscreen onmousewheel=""></iframe>
+	<iframe id="viewer"></iframe>
 
 	<script>
+		var viewer = document.getElementById("viewer");
+
 		var load = function ( file ) {
 			window.location.hash = file;
 			viewer.src = file;
@@ -232,7 +234,7 @@
 			var pageName = window.location.hash.substring(1);
 			load( pageName );
 		}else {
-			viewer.src = 'demos/FragileGhost.html';
+			viewer.src = 'examples/old-examples/seinfeld-guy.html';
 		}
 	</script>
 

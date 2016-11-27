@@ -39,9 +39,13 @@ hr {
 	background-color: #DDDDDD;
 }
 
+input {
+	font-size: 14px;
+}
+
 .GUIBox {
 	position: absolute;
-	font-size: 12px;
+	font-size: 14px;
 	font-family: "Open Sans", "Arial", sans-serif;
 	background-color: #EEEEEE;
 
@@ -53,9 +57,9 @@ hr {
 	margin: 5px;
 
 	border: 1px solid #bbb;
-	border-radius: 2px;
+	/*border-radius: 2px;*/
 
-	box-shadow: 2px 2px 2px #AAA;
+	/*box-shadow: 2px 2px 2px #AAA;*/
 }
 
 #menuBarGUI {

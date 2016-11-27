@@ -144,4 +144,15 @@ var InputHandler = function (wickEditor) {
         importButton.replaceWith( importButton = importButton.clone( true ) );
     }
 
+/*************************
+    Leave page warning
+*************************/
+
+    window.addEventListener("beforeunload", function (event) {
+        if(wickEditor.actionHandler.undoStack.length === 0) return;
+        var confirmationMessage = 'Warning: All unsaved changes will be lost!';
+        (event || window.event).returnValue = confirmationMessage; //Gecko + IE
+        return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+    });
+
 }

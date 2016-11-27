@@ -12,7 +12,7 @@ var WickEditor = function () {
     console.log('%cWelcome to the javascript console! ', 'color: #ff99bb; font-size: 20px; font-weight: bold; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;');
     console.log('%cYou are free to change any of the internal editor stuff from here. Try typing "wickEditor" into the console and have a look around!', 'color: #bb4477; font-size: 12px;');
 
-    this.backend = new WickHostBackend(this);
+    this.backend = new WickDemoLoader(this);
     if(!this.backend.active) {
         this.project = WickProject.fromLocalStorage();
     } else { 
@@ -60,11 +60,4 @@ WickEditor.prototype.syncInterfaces = function (interfacesToSync) {
         }
     }
 }
-
-// Setup leave page warning
-window.addEventListener("beforeunload", function (event) {
-    var confirmationMessage = 'Warning: All unsaved changes will be lost!';
-    (event || window.event).returnValue = confirmationMessage; //Gecko + IE
-    return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
-});
 

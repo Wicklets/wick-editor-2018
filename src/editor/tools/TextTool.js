@@ -18,7 +18,7 @@ var TextTool = function (wickEditor) {
 	    }
     });
 
-    var addText = function () {
+    var addText = function () {                                                     
     	var newWickObject = WickObject.fromText('Click to edit text');
         newWickObject.fontData.fill = wickEditor.interfaces.fabric.tools.paintbrush.color;
         var mouseCanvasSpace = wickEditor.interfaces.fabric.screenToCanvasSpace(wickEditor.inputHandler.mouse.x, wickEditor.inputHandler.mouse.y)

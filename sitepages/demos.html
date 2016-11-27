@@ -5,8 +5,93 @@
 	<link href='https://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
 	<link href='style.css' rel='stylesheet' type='text/css'>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<script src="../lib/jquery/jquery.min.js"></script>
+	<script src="../lib/FileSaver/FileSaver.min.js"></script>
 </head>
 <body>
-	<h1>Demos Here</h1>
+	<h1>Demos</h1>
+	<h2>
+		<div id="demoViewerContainer">
+			<iframe style="margin-bottom:20px;" width="720" height="480" id="demoViewer"></iframe>
+			<span class="btn" onclick="downloadDemo()">Download Project</span>
+			<span class="btn" onclick="openInEditor()">Open in Editor</span>
+		</div>
+	</h2>
+
+	<h2>Basics</h2>
+		
+	<h3>
+		<span id="demoRow" style="display: inline-block; margin-right:20px;">
+			- <a onclick="loadDemo('.html')">Timeline Control</a><br />
+			- <a onclick="loadDemo('.html')">Mouse Position</a><br />
+			- <a onclick="loadDemo('.html')">Keyboard Controls</a><br />
+			- <a onclick="loadDemo('.html')">Dynamic Text</a><br />
+			- <a onclick="loadDemo('.html')">Collision Detection</a><br />
+			- <a onclick="loadDemo('.html')">Object Transformations</a><br />
+			- <a onclick="loadDemo('.html')">Object Cloning</a><br />
+		</span>
+		<span id="demoRow" style="display: inline-block; margin-right:20px;">
+			- <a onclick="loadDemo('.html')">Sound Buttons</a><br />
+			- <a onclick="loadDemo('.html')">Responsive Buttons</a><br />
+			- <a onclick="loadDemo('.html')">Camera Controls</a><br />
+			- <a onclick="loadDemo('.html')">Custom Cursors</a><br />
+			- <a onclick="loadDemo('.html')">Drag and Drop</a><br />
+			- <a onclick="loadDemo('.html')">Fade to Frame</a><br />
+			- <a onclick="loadDemo('.html')">Particle System</a><br />
+		</span>
+	</h3>
+
+	<h2>Browser Tech</h2>
+		
+	<h3>
+		<span id="demoRow" style="display: inline-block; margin-right:20px;">
+			- <a onclick="loadDemo('.html')">Hyperlinks</a><br />
+			- <a onclick="loadDemo('.html')">Alert and Prompt</a><br />
+			- <a onclick="loadDemo('.html')">System Clock</a><br />
+			- <a onclick="loadDemo('.html')">Local Storage</a><br />
+			- <a onclick="loadDemo('.html')">File Saving</a><br />
+			- <a onclick="loadDemo('.html')">GPS Location</a><br />
+			- <a onclick="loadDemo('.html')">Device Orientation</a><br />
+		</span>
+	</h3>
+
+	<br /><br /><br /><br />
+
+	<script>
+		var viewer = document.getElementById("demoViewer");
+		var currentDemo;
+
+		var loadDemo = function (file) {
+			currentDemo = file;
+			viewer.src = "../demos/" + file;
+			viewer.focus();
+		};
+
+		var openInEditor = function () {
+			window.location.href= "../editor.html?demo=" + currentDemo;
+		}
+
+		var downloadDemo = function () {
+			$.ajax({
+		        url: "../demos/" + currentDemo,
+		        type: 'GET',
+		        data: {},
+		        success: function(data) {
+		            var blob = new Blob([data], {type: "text/plain;charset=utf-8"});
+		            saveAs(blob, currentDemo);
+		        },
+		        error: function () {
+		            console.log("ajax: error")
+		        },
+		        complete: function(response, textStatus) {
+		            console.log("ajax: complete")
+		            console.log(response)
+		            console.log(textStatus)
+		        }
+		    });
+		}
+
+		loadDemo('HitTestDemo.html');
+
+	</script>
 </body>
