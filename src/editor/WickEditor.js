@@ -34,6 +34,7 @@ var WickEditor = function () {
         "fabric" : new FabricInterface(this),
         "paper" : new PaperInterface(this),
         "editbar" : new EditbarInterface(this),
+        "menubar" : new MenuBarInterface(this),
     };
     for (var key in this.interfaces) {
         this.interfaces[key].setup();

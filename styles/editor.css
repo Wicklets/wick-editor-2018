@@ -18,7 +18,7 @@
 	background-color:#F4B9B7;
 }
 
-html, body { width:100%; height:100%; } /* just to be sure these are full screen*/
+html, body { width:100%; height:100%; overflow: hidden; } /* just to be sure these are full screen*/
 
 canvas { display:block; } /* To remove the scrollbars */
 
@@ -32,6 +32,8 @@ hr {
 
 #editor {
 	display: block;
+	width: 100%;
+	height: 100%;
 }
 
 #builtinPlayer {
@@ -40,21 +42,16 @@ hr {
 }
 
 input {
-	font-size: 14px;
+	font-size: 16px;
+	color: #666;
 }
 
 .GUIBox {
 	position: absolute;
-	font-size: 14px;
+	font-size: 16px;
 	font-family: "Open Sans", "Arial", sans-serif;
+	color: #666;
 	background-color: #EEEEEE;
-
-	padding-top: 4px;
-	padding-bottom: 4px;
-	padding-left: 4px;
-	padding-right: 4px;
-
-	margin: 5px;
 
 	border: 1px solid #bbb;
 	/*border-radius: 2px;*/
@@ -65,13 +62,30 @@ input {
 #menuBarGUI {
 	top: 0px;
 	left: 0px;
-	text-align: center;
-	display: block;
+	height: 30px;
+	width: calc(100% - 2px);
+}
+.menubarTab {
+	float:left;
+	margin-top: 3px;
+	margin-left: 15px;
+	margin-right: 15px;
+	cursor: pointer;
+}
+.menubarMenu {
+	top: 31px;
+	left: 0px;
+	line-height: 30px;
+	padding: 5px;
+	border-top:none;
+}
+.menubarButton {
+	cursor: pointer;
 }
 
 #statusBarGUI {
-	top: 10px;
-	right: 10px;
+	top: 0px;
+	right: 0px;
 	text-align: center;
 	display: block;
 	width: 160px;
@@ -97,10 +111,10 @@ input {
 
 #scriptingGUI {
 	bottom: 0px;
-	left: 0px;
+	left: 33px;
 	text-align: center;
 	display: none;
-	width: 650px;
+	width: calc(100% - 286px);
 	height:250px;
 }
 #errorMessage {
@@ -120,9 +134,27 @@ input {
 
 #propertiesGUI {
 	right: 0px;
-	bottom: 0px;
-	text-align: center;
+	top: 0px;
+	margin-top: 30px;
+	height: calc(100% - 25px);
+	width: 250px;
 	display: inline;
+	overflow: hidden;
+}
+.propertiesTab {
+	border-bottom: 1px solid #bbb;
+	border-right: 1px solid #bbb;
+	padding: 5px;
+	padding-left: 14px;
+	padding-right: 14px;
+	font-size: 18px;
+	background-color: #DDD;
+	display: table-cell;
+	cursor: pointer;
+}
+.propertiesTabActive {
+	border-bottom: none;
+	background-color: #EEE;
 }
 
 #closeScriptingGUIButton {
@@ -144,9 +176,11 @@ input {
 }
 
 #toolbarGUI {
-	top: 100px;
+	top: 30px;
 	left: 0px;
+	height: calc(100%);
 	text-align: left;
+	padding: 3px;
 }
 
 #toolOptionsGUI {
@@ -234,10 +268,19 @@ input {
 }
 
 #timelineGUI {
-	top: 0px;
-	left: 0px;
-	width: 400px;
-	text-align: right;
+	top: 31px;
+	left: 33px;
+	padding: 10px;
+	width: calc(100% - 300px);
+	background-color: #E6E6E6;
+}
+
+#layersGUI {
+	top: 31px;
+	left: 33px;
+	width: 130px;
+	height: 63px;
+	display: none;
 }
 
 #timelineScrollbar {
@@ -247,65 +290,6 @@ input {
 #timelineScrollbarFiller {
 	width:3000px;
 	height:1px;
-}
-
-#timeline {
-	float:left;
-}
-
-.frameContainer {
-	width: 20px;
-	height: 45px;
-	text-align: center;
-	float: left;
-}
-
-.timelineFrame {
-	width: 20px;
-	height: 30px;
-	background-color: white;
-	text-align: center;
-	margin-left: 3px;
-	margin-top: 3px;
-	float: left;
-	box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    border: 1px solid black;
-}
-.timelineFrame:hover {
-	cursor: pointer;
-	background-color: white;
-	border: 2px solid black;
-}
-
-.timelineFrame.active {
-	border: 3px solid black;
-}
-
-.breakpointButton {
-	width: 20px;
-	height: 10px;
-	background-color: white;
-	opacity: 0.5;
-	margin-left: 3px;
-	float: left;
-}
-.breakpointButton:hover {
-	background-color: orange;
-}
-.breakpointButton.enabled {
-	background-color: red;
-}
-
-#fileImportOverlay {
-	visibility: hidden;
-	position: absolute;
-	width: 100px;
-	height: 100px;
-	background-color: red;
-	left: 50%;
-	top: 50%;
 }
 
 #gifImportDummyElem {
@@ -332,11 +316,5 @@ input {
     -webkit-user-select: text;
     user-select: text;
     /* Because for user-select:none, Safari won't allow input */
-}
-
-#paperCanvas {
-	position: absolute;
-	top: 0; left: 0;
-	/*display: none;*/
 }
 

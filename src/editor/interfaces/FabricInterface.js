@@ -147,8 +147,8 @@ var FabricInterface = function (wickEditor) {
     }
 
     this.recenterCanvas = function () {
-        var centerX = Math.floor(-(window.innerWidth -wickEditor.project.resolution.x)/2);
-        var centerY = Math.floor(-(window.innerHeight-wickEditor.project.resolution.y)/2);
+        var centerX = Math.floor(-(window.innerWidth -wickEditor.project.resolution.x)/2 - 33/2 + 210/2);
+        var centerY = Math.floor(-(window.innerHeight-wickEditor.project.resolution.y)/2 - 80/2);
         that.canvas.setZoom(1); // This is odd but it seems to fix the blurred edges of rasterized SVGs.
         that.canvas.absolutePan(new fabric.Point(centerX,centerY));
         that.canvas.renderAll();

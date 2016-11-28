@@ -111,6 +111,9 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
         originCrosshair.identifier = "originCrosshair";
 
         originCrosshair.updateGUIState = function () {
+            var currentObject = wickEditor.project.getCurrentObject();
+            originCrosshair.opacity = currentObject.isRoot ? 0.0 : 1.0;
+
             originCrosshair.left = -originCrosshair.width/2;
             originCrosshair.top  = -originCrosshair.height/2;
             
