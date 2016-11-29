@@ -77,6 +77,8 @@ input {
 	left: 0px;
 	line-height: 30px;
 	padding: 5px;
+	padding-left: 15px;
+	padding-right: 15px;
 	border-top:none;
 }
 .menubarButton {
@@ -155,6 +157,9 @@ input {
 .propertiesTabActive {
 	border-bottom: none;
 	background-color: #EEE;
+}
+.propertiesGUIContent {
+	padding: 10px;
 }
 
 #closeScriptingGUIButton {

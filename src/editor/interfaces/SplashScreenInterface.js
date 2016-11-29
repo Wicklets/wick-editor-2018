@@ -77,5 +77,6 @@ var SplashScreenInterface = function (wickEditor) {
     if(localStorage.dontShowSplashScreen) {
         this.closeSplashScreen();
     }
+    this.closeSplashScreen();
 
 }

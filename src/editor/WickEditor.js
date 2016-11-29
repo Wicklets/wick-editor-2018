@@ -21,7 +21,6 @@ var WickEditor = function () {
     
     this.interfaces = {
         "builtinplayer" : new BuiltinPlayerInterface(this),
-        "cropImage" : new CropImageInterface(this),
         "rightclickmenu" : new RightClickMenuInterface(this),
         "splashscreen" : new SplashScreenInterface(this),
         "scriptingide" : new ScriptingIDEInterface(this),
@@ -30,10 +29,8 @@ var WickEditor = function () {
         "toolOptions" : new ToolOptionsInterface(this),
         "statusbar" : new StatusBarInterface(this),
         "properties" : new PropertiesInterface(this),
-        "settings" : new SettingsInterface(this),
         "fabric" : new FabricInterface(this),
         "paper" : new PaperInterface(this),
-        "editbar" : new EditbarInterface(this),
         "menubar" : new MenuBarInterface(this),
     };
     for (var key in this.interfaces) {

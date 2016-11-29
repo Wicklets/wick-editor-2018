@@ -2,49 +2,94 @@
 
 var PropertiesInterface = function (wickEditor) {
 
+    var currentTab = 'object'
+
     this.setup = function () {
-        
-    }
+        document.getElementById('objectPropertiesTabButton').onclick = function () {
+            currentTab = 'object';
+            wickEditor.syncInterfaces();
+        };
+        document.getElementById('framePropertiesTabButton').onclick = function () {
+            currentTab = 'frame';
+            wickEditor.syncInterfaces();
+        };
+        document.getElementById('projectPropertiesTabButton').onclick = function () {
+            currentTab = 'project';
+            wickEditor.syncInterfaces();
+        };
+    }   
 
     this.syncWithEditorState = function () {
         $("#frameProperties").css('display', 'none');
         $("#objectProperties").css('display', 'none');
-        $("#textProperties").css('display', 'none');
-        $("#soundProperties").css('display', 'none');
+        $("#projectProperties").css('display', 'none');
 
-        var selectedObj = wickEditor.interfaces['fabric'].getSelectedWickObject();
-        if(selectedObj) {
-            // Display Object properties tab
-            $("#objectProperties").css('display', 'inline');
+        document.getElementById('objectPropertiesTabButton').className = 'propertiesTab';
+        document.getElementById('framePropertiesTabButton').className = 'propertiesTab';
+        document.getElementById('projectPropertiesTabButton').className = 'propertiesTab';
+        document.getElementById(currentTab + 'PropertiesTabButton').className = 'propertiesTab propertiesTabActive';
 
-            // Set object properties GUI name 
-            if(selectedObj.name) {
-                document.getElementById('objectName').value = selectedObj.name;
+        if(currentTab === 'object') {
+            var selectedObj = wickEditor.interfaces['fabric'].getSelectedWickObject();
+            if(selectedObj) {
+                // Display Object properties tab
+                $("#objectProperties").css('display', 'block');
+                $("#textProperties").css('display', 'none');
+                $("#soundProperties").css('display', 'none');
+
+                // Set object properties GUI name 
+                if(selectedObj.name) {
+                    document.getElementById('objectName').value = selectedObj.name;
+                } else {
+                    document.getElementById('objectName').value = '';
+                }
+                
+                // Set object properties GUI position/rotation
+                document.getElementById('objectPositionX').value = Math.round(selectedObj.x);
+                document.getElementById('objectPositionY').value = Math.round(selectedObj.y);
+                document.getElementById('objectWidth')    .value = Math.round(selectedObj.width * selectedObj.scaleX);
+                document.getElementById('objectHeight')   .value = Math.round(selectedObj.height * selectedObj.scaleY);
+                document.getElementById('objectRotation') .value = Math.round(selectedObj.angle);
+                document.getElementById('opacitySlider')  .value = selectedObj.opacity*255
+
+                if(selectedObj.fontData) {
+                    $("#textProperties").css('display', 'block');
+                    document.getElementById('boldCheckbox').checked = selectedObj.fontData.fontWeight === "bold";
+                    document.getElementById('italicCheckbox').checked = selectedObj.fontData.fontStyle === "italic";
+                    //document.getElementById('underlinedCheckbox').checked = selectedObj.fontData.textDecoration === "underline";
+                } else if (selectedObj.audioData) {
+                    $("#soundProperties").css('display', 'block');
+                    document.getElementById('loopCheckbox').checked = selectedObj.loopSound;
+                    document.getElementById('autoplayCheckbox').checked = selectedObj.autoplaySound;
+                }
             } else {
-                document.getElementById('objectName').value = '';
+                
+                
             }
-            
-            // Set object properties GUI position/rotation
-            document.getElementById('objectPositionX').value = Math.round(selectedObj.x);
-            document.getElementById('objectPositionY').value = Math.round(selectedObj.y);
-            document.getElementById('objectWidth')    .value = Math.round(selectedObj.width * selectedObj.scaleX);
-            document.getElementById('objectHeight')   .value = Math.round(selectedObj.height * selectedObj.scaleY);
-            document.getElementById('objectRotation') .value = Math.round(selectedObj.angle);
-            document.getElementById('opacitySlider')  .value = selectedObj.opacity*255
+        } else if(currentTab === 'frame') {
+            var currentObject = wickEditor.project.getCurrentObject();
+            var currentFrame = currentObject.getCurrentFrame();
+            if(!currentFrame) {
+                $("#frameProperties").css('display', 'none');
+                return;
+            }
 
-            if(selectedObj.fontData) {
-                $("#textProperties").css('display', 'inline');
-                document.getElementById('boldCheckbox').checked = selectedObj.fontData.fontWeight === "bold";
-                document.getElementById('italicCheckbox').checked = selectedObj.fontData.fontStyle === "italic";
-                //document.getElementById('underlinedCheckbox').checked = selectedObj.fontData.textDecoration === "underline";
-            } else if (selectedObj.audioData) {
-                $("#soundProperties").css('display', 'inline');
-                document.getElementById('loopCheckbox').checked = selectedObj.loopSound;
-                document.getElementById('autoplayCheckbox').checked = selectedObj.autoplaySound;
-            }
-        } else {
-            //Nothing selected, show frame properties
-            $("#frameProperties").css('display', 'inline');
+            $("#frameProperties").css('display', 'block');
+            document.getElementById('frameIdentifier').value = (currentFrame.identifier) ? currentFrame.identifier : "";
+            $('#frameIdentifier').prop('disabled', false);
+        } else if(currentTab === 'project') {
+            $("#projectProperties").css('display', 'block');
+
+            var projectBgColorElem = document.getElementById('projectBgColor');
+            var projectBorderColorElem = document.getElementById('projectBorderColor');
+            if(projectBgColorElem.jscolor) projectBgColorElem.jscolor.fromString(wickEditor.project.backgroundColor);
+            if(projectBorderColorElem.jscolor) projectBorderColorElem.jscolor.fromString(wickEditor.project.borderColor);
+
+            document.getElementById('projectSizeX').value          = wickEditor.project.resolution.x;
+            document.getElementById('projectSizeY').value          = wickEditor.project.resolution.y;
+            document.getElementById('frameRate').value             = wickEditor.project.framerate;
+            document.getElementById('fitScreenCheckbox').checked   = wickEditor.project.fitScreen;
+            document.getElementById('projectName').value           = wickEditor.project.name;
         }
     }
 
@@ -167,5 +212,66 @@ var PropertiesInterface = function (wickEditor) {
             modifiedStates: [{ textDecoration : (this.checked ? "underline" : "none") }] 
         });
     };*/
+
+    $('#frameIdentifier').on('input propertychange', function () {
+        var currentObject = wickEditor.project.getCurrentObject();
+        var currentFrame = currentObject.getCurrentFrame();
+
+        var newName = $('#frameIdentifier').val();
+        if(newName === '') {
+            currentFrame.identifier = undefined;
+        } else {
+            currentFrame.identifier = newName;
+        }
+    });
+
+    $('#projectName').on('input propertychange', function () {
+        var newName = $('#projectName').val();
+        if(newName === '') {
+            wickEditor.project.name = undefined;
+        } else {
+            wickEditor.project.name = newName;
+        }
+    });
+
+    $('#projectSizeX').on('input propertychange', function () {
+
+        if(CheckInput.isPositiveInteger($('#projectSizeX').val())) {
+            wickEditor.project.resolution.x = parseInt($('#projectSizeX').val());
+            wickEditor.syncInterfaces();
+        };
+
+    });
+
+    $('#projectSizeY').on('input propertychange', function () {
+
+        if(CheckInput.isPositiveInteger($('#projectSizeY').val())) {
+            wickEditor.project.resolution.y = parseInt($('#projectSizeY').val());
+            wickEditor.syncInterfaces();
+        }
+
+    });
+
+    $('#frameRate').on('input propertychange', function () {
+
+        if(CheckInput.isPositiveInteger($('#frameRate').val())) {
+            wickEditor.project.framerate = parseInt($('#frameRate').val());
+        }
+
+    });
+
+    document.getElementById('fitScreenCheckbox').onclick = function (e) {
+        wickEditor.project.fitScreen = this.checked;
+    }
+
+    document.getElementById('projectBgColor').onchange = function () {
+        wickEditor.project.backgroundColor = "#" + this.value;
+        wickEditor.syncInterfaces();
+    };
+
+    document.getElementById('projectBorderColor').onchange = function () {
+        wickEditor.project.borderColor = "#" + this.value;
+        wickEditor.syncInterfaces();
+    };
 
 }

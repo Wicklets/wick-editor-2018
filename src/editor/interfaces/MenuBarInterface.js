@@ -5,6 +5,8 @@ var MenuBarInterface = function (wickEditor) {
     var editorElem = document.getElementById('editor');
     var menuElem = document.getElementById('menuBarGUI');
 
+    var tabs;
+
 	var Tab = function (name, buttons) {
         this.buttons = buttons;
         this.name = name;
@@ -17,7 +19,7 @@ var MenuBarInterface = function (wickEditor) {
             tabElem.id = 'menubarMenu' + this.name;
             tabElem.innerHTML = this.name;
             tabElem.onclick = function () {
-                console.log("mouseover")
+                closeAllMenus();
                 self.elem.style.display = "block";
                 self.elem.style.left = (tabElem.offsetLeft-15) + 'px';
             }
@@ -45,33 +47,78 @@ var MenuBarInterface = function (wickEditor) {
             this.elem.className ='menubarButton';
             this.elem.id = 'menubarMenu' + this.name;
             this.elem.innerHTML = this.name;
-            this.elem.onclick = func;
+            this.elem.onclick = function () {
+                closeAllMenus();
+                func();
+            }
         }
     }
 
     this.setup = function () {
-        this.tabs = [];
+        tabs = [];
 
-        this.addTab('File', [
+        addTab('File', [
+            new TabButton('New Project', function () {
+                wickEditor.guiActionHandler.doAction("newProject");
+            }),
+            new TabButton('Save', function () {
+                wickEditor.guiActionHandler.doAction("saveProject");
+            }),
             new TabButton('Open', function () {
-                alert("Open clicked!");
+                wickEditor.guiActionHandler.doAction("openFile");
             }),
             new TabButton('Export', function () {
-                alert("Export clicked!");
+                wickEditor.guiActionHandler.doAction("exportProject");
             }),
         ]);
 
-        this.addTab('Edit', [
-            new TabButton('Open2', function () {
-                alert("Open clicked!");
+        addTab('Edit', [
+            new TabButton('Undo', function () {
+                wickEditor.guiActionHandler.doAction("undo")
+            }),
+            new TabButton('Redo', function () {
+                wickEditor.guiActionHandler.doAction("redo")
+            }),
+            new TabButton('Delete', function () {
+                wickEditor.guiActionHandler.doAction("deleteSelectedObjects")
+            }),
+            new TabButton('Clear History', function () {
+                wickEditor.guiActionHandler.doAction("clearHistory")
+            }),
+        ]);
+
+        addTab('Import', [
+            new TabButton('File', function () {
+                wickEditor.guiActionHandler.doAction("openFile");
+            }),
+        ]);
+
+        addTab('Run', [
+            new TabButton('Run project', function () {
+                wickEditor.guiActionHandler.doAction("runProject");
+            }),
+        ]);
+
+        addTab('About', [
+            new TabButton('Splash screen', function () {
+                wickEditor.guiActionHandler.doAction("openSplashScreen");
+            }),
+            new TabButton('Source code', function () {
+                window.open('https://www.github.com/zrispo/wick/');
             }),
         ]);
     }
 
-    this.addTab = function (name, buttons) {
+    var addTab = function (name, buttons) {
         var tab = new Tab(name, buttons);
         tab.generateElem();
-        this.tabs.push(tab);
+        tabs.push(tab);
+    }
+
+    var closeAllMenus = function () {
+        tabs.forEach(function (tab) {
+            tab.elem.style.display = "none";
+        })
     }
 
     this.syncWithEditorState = function () {

@@ -47,16 +47,6 @@ var TimelineInterface = function (wickEditor) {
 
         that.redraw();
 
-        if(currentFrame) {
-            document.getElementById('frameProperties').style.display = "block";
-            document.getElementById('frameIdentifier').value = (currentFrame.identifier) ? currentFrame.identifier : "";
-            $('#frameIdentifier').prop('disabled', false);
-        } else {
-            document.getElementById('frameProperties').style.display = "block";
-            document.getElementById('frameIdentifier').value = "";
-            $('#frameIdentifier').prop('disabled', true);
-        }
-
         if(wickEditor.project.onionSkinning) {
             document.getElementById("enableOnionSkinningButton").style.display = "none";
             document.getElementById("disableOnionSkinningButton").style.display = "inline";
@@ -237,18 +227,6 @@ var TimelineInterface = function (wickEditor) {
     });
     canvas.addEventListener('mouseout', function(e) {
         mouseDown = false;
-    });
-
-    $('#frameIdentifier').on('input propertychange', function () {
-        var currentObject = wickEditor.project.getCurrentObject();
-        var currentFrame = currentObject.getCurrentFrame();
-
-        var newName = $('#frameIdentifier').val();
-        if(newName === '') {
-            currentFrame.identifier = undefined;
-        } else {
-            currentFrame.identifier = newName;
-        }
     });
 
 }
