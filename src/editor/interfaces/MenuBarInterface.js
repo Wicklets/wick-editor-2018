@@ -7,7 +7,7 @@ var MenuBarInterface = function (wickEditor) {
 
     var tabs;
 
-	var Tab = function (name, buttons) {
+	var Tab = function (name, buttons, func) {
         this.buttons = buttons;
         this.name = name;
 
@@ -19,6 +19,11 @@ var MenuBarInterface = function (wickEditor) {
             tabElem.id = 'menubarMenu' + this.name;
             tabElem.innerHTML = this.name;
             tabElem.onclick = function () {
+                if(func) {
+                    console.log("lsjdnasdjsan")
+                    func();
+                    return;
+                }
                 closeAllMenus();
                 self.elem.style.display = "block";
                 self.elem.style.left = (tabElem.offsetLeft-15) + 'px';
@@ -93,11 +98,9 @@ var MenuBarInterface = function (wickEditor) {
             }),
         ]);
 
-        addTab('Run', [
-            new TabButton('Run project', function () {
-                wickEditor.guiActionHandler.doAction("runProject");
-            }),
-        ]);
+        addTab('Run', [], function () {
+            wickEditor.guiActionHandler.doAction("runProject");
+        });
 
         addTab('About', [
             new TabButton('Wickeditor.com', function () {
@@ -109,8 +112,8 @@ var MenuBarInterface = function (wickEditor) {
         ]);
     }
 
-    var addTab = function (name, buttons) {
-        var tab = new Tab(name, buttons);
+    var addTab = function (name, buttons, func) {
+        var tab = new Tab(name, buttons, func);
         tab.generateElem();
         tabs.push(tab);
     }
