@@ -100,8 +100,8 @@ var MenuBarInterface = function (wickEditor) {
         ]);
 
         addTab('About', [
-            new TabButton('Splash screen', function () {
-                wickEditor.guiActionHandler.doAction("openSplashScreen");
+            new TabButton('Wickeditor.com', function () {
+                window.open('http://www.wickeditor.com/');
             }),
             new TabButton('Source code', function () {
                 window.open('https://www.github.com/zrispo/wick/');
