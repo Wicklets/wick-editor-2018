@@ -86,13 +86,14 @@ input {
 }
 
 #statusBarGUI {
-	top: 0px;
+	top: 1px;
 	right: 0px;
 	text-align: center;
 	display: block;
 	width: 160px;
-	height: 35px;
+	height: 30px;
 	font-size: 20px;
+	border: none;
 }
 
 #splashScreenGUI {
