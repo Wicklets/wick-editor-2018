@@ -24,7 +24,10 @@ var CropTool = function (wickEditor) {
             if(!data) return;
             CropImage(data.src, function (src) {
                 var wickObj = WickObject.fromImage(src, function (wickObj) {
-                    wickEditor.actionHandler.doAction('addObjects', {wickObjects:[wickObj]});
+                    wickObj.x = drawingShape.left + drawingShape.width/2;
+                    wickObj.y = drawingShape.top + drawingShape.height/2;
+                    wickObj.selectOnAddToFabric = true
+                    wickEditor.actionHandler.doAction('addObjects', {wickObjects:[wickObj], });
                 });
             }, {
                 x : drawingShape.left-data.x,
