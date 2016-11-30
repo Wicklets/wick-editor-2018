@@ -126,7 +126,7 @@ var WickPixiRenderer = function (project) {
 	    };
 	    renderer = PIXI.autoDetectRenderer(project.resolution.x, project.resolution.y, rendererOptions);
 	    renderer.clearBeforeRender = false;
-	    //renderer.roundPixels = true;
+	    renderer.roundPixels = true;
 
 	    // Get rid of old canvas (if it exists)
 	    var oldRendererCanvas = document.getElementById("rendererCanvas");
