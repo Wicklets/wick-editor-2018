@@ -59,8 +59,18 @@ var MenuBarInterface = function (wickEditor) {
         }
     }
 
+    var TabSpacer = function () {
+        this.generateElem = function () {
+            this.elem = document.createElement('hr');
+        }
+    }
+
     this.setup = function () {
         tabs = [];
+
+        wickEditor.interfaces.fabric.canvas.on('mouse:down', function (e) {
+            closeAllMenus();
+        })
 
         addTab('File', [
             new TabButton('New Project', function () {
@@ -72,8 +82,12 @@ var MenuBarInterface = function (wickEditor) {
             new TabButton('Open', function () {
                 wickEditor.guiActionHandler.doAction("openFile");
             }),
-            new TabButton('Export', function () {
+            new TabSpacer(),
+            new TabButton('Export as webpage', function () {
                 wickEditor.guiActionHandler.doAction("exportProject");
+            }),
+            new TabButton('Export as zip file', function () {
+                
             }),
         ]);
 
@@ -84,11 +98,51 @@ var MenuBarInterface = function (wickEditor) {
             new TabButton('Redo', function () {
                 wickEditor.guiActionHandler.doAction("redo")
             }),
+            new TabButton('Clear History', function () {
+                wickEditor.guiActionHandler.doAction("clearHistory")
+            }),
+            new TabSpacer(),
+            new TabButton('Copy', function () {
+                wickEditor.guiActionHandler.doAction("undo")
+            }),
+            new TabButton('Cut', function () {
+                
+            }),
+            new TabButton('Paste', function () {
+                
+            }),
+        ]);
+
+        addTab('Selection', [
+            new TabButton('Flip horizontally', function () {
+                
+            }),
+            new TabButton('Flip vertically', function () {
+                
+            }),
+            new TabButton('Bring to Front', function () {
+                
+            }),
+            new TabButton('Send to Back', function () {
+                
+            }),
             new TabButton('Delete', function () {
                 wickEditor.guiActionHandler.doAction("deleteSelectedObjects")
             }),
-            new TabButton('Clear History', function () {
-                wickEditor.guiActionHandler.doAction("clearHistory")
+            new TabSpacer(),
+            new TabButton('Convert to Symbol', function () {
+                
+            }),
+            new TabButton('Break apart', function () {
+                
+            }),
+            new TabSpacer(),
+            new TabButton('Edit Scripts', function () {
+                
+            }),
+            new TabSpacer(),
+            new TabButton('Export', function () {
+                
             }),
         ]);
 
