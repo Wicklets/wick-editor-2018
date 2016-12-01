@@ -176,7 +176,7 @@ var ScriptingIDEInterface = function (wickEditor) {
     });
 
     $("#expandScriptingGUIButton").on("click", function (e) {
-        document.getElementById('scriptingGUI').style.height = 'calc(100% - 117px)';
+        document.getElementById('scriptingGUI').style.height = 'calc(100% - 33px)';
         maximized = true;
         that.syncWithEditorState();
     });

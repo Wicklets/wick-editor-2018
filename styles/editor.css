@@ -284,18 +284,18 @@ input {
 
 #timelineGUI {
 	top: 31px;
-	left: 33px;
+	left: 69px;
 	padding: 10px;
-	width: calc(100% - 300px);
+	width: calc(100% - 342px);
 	background-color: #E6E6E6;
 }
 
 #layersGUI {
-	top: 31px;
-	left: 33px;
-	width: 130px;
-	height: 63px;
-	display: none;
+	top: 30px;
+	left: 35px;
+	width: 33px;
+	height: 84px;
+	background-color: #E6E6E6;
 }
 
 #timelineScrollbar {
