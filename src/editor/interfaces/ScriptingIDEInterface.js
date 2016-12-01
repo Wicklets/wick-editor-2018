@@ -4,6 +4,8 @@ var ScriptingIDEInterface = function (wickEditor) {
 
     var that = this;
 
+    var maximized = false;
+
     this.setup = function () {
         this.open = false;
         this.currentScript = 'onLoad';
@@ -68,6 +70,15 @@ var ScriptingIDEInterface = function (wickEditor) {
             $("#scriptingGUI").css('display', 'block');
 
             var selectedObj = wickEditor.interfaces['fabric'].getSelectedWickObject();
+
+            this.aceEditor.resize();
+            if(maximized) {
+                document.getElementById('expandScriptingGUIButton').style.display = 'none';
+                document.getElementById('minimizeScriptingGUIButton').style.display = 'block';
+            } else {
+                document.getElementById('expandScriptingGUIButton').style.display = 'block';
+                document.getElementById('minimizeScriptingGUIButton').style.display = 'none';
+            }
 
             if(!selectedObj || !selectedObj.isSymbol) {
                 $("#noSelectionDiv").css('display', 'block');
@@ -162,6 +173,17 @@ var ScriptingIDEInterface = function (wickEditor) {
         var val = that.aceEditor.session.getValue();
         val = js_beautify(val);
         that.aceEditor.session.setValue(val);
+    });
+
+    $("#expandScriptingGUIButton").on("click", function (e) {
+        document.getElementById('scriptingGUI').style.height = 'calc(100% - 117px)';
+        maximized = true;
+        that.syncWithEditorState();
+    });
+    $("#minimizeScriptingGUIButton").on("click", function (e) {
+        document.getElementById('scriptingGUI').style.height = '300px';
+        maximized = false;
+        that.syncWithEditorState();
     });
 
 }

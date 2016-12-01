@@ -22,7 +22,6 @@ var WickPixiRenderer = function (project) {
 	this.refreshPixiSceneForObject = function (wickObj) {
 		//generatePixiScene(wickObj);
 		if (wickObj.isSymbol) {
-			console.log("???")
 			generatePixiScene(wickObj);
             wickObj.parentObject.pixiContainer.addChild(wickObj.pixiContainer);
             console.log(wickObj)
@@ -34,7 +33,7 @@ var WickPixiRenderer = function (project) {
         } else if (wickObj.fontData) {
         	var style = {
                 font : subObj.fontData.fontWeight + " " + subObj.fontData.fontStyle + " " + subObj.fontData.fontSize + "px " + subObj.fontData.fontFamily,
-                fill : "#"+subObj.fontData.fill,
+                fill : subObj.fontData.fill,
                 wordWrap : true,
                 wordWrapWidth : 1440,
             };
@@ -60,9 +59,10 @@ var WickPixiRenderer = function (project) {
             	var fontString = subObj.fontData.fontSize + "px " + subObj.fontData.fontFamily;
             	if(subObj.fontData.fontWeight !== 'normal') fontString = subObj.fontData.fontWeight+" " + fontString;
             	if(subObj.fontData.fontStyle !== 'normal') fontString = subObj.fontData.fontStyle+" " + fontString;
+                console.log(subObj.fontData.fill)
                 var style = {
                     font : fontString,
-                    fill : "#"+subObj.fontData.fill,
+                    fill : subObj.fontData.fill,
                     wordWrap : true,
                     wordWrapWidth : 1440,
                 };

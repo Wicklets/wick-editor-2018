@@ -1252,11 +1252,7 @@ WickObject.prototype.runScript = function (scriptType) {
     //eval("try{" + script + "}catch (e) { console.log(e); }");
 
     // Shortcut for text
-    if(this.pixiText) {
-        console.log(this.text)
-        this.pixiText.text = this.text;
-        console.log(this.pixiText.text);
-    }
+    if(this.pixiText) this.pixiText.text = this.text;
 
     // Get rid of wickobject reference variables
     if(!this.isRoot) {

@@ -114,11 +114,11 @@ input {
 
 #scriptingGUI {
 	bottom: 0px;
-	left: 33px;
+	left: 35px;
 	text-align: center;
 	display: none;
-	width: calc(100% - 286px);
-	height:250px;
+	width: calc(100% - 288px);
+	height: 300px;
 }
 #errorMessage {
 	background-color: white;
@@ -132,7 +132,22 @@ input {
 #scriptEditor {
 	text-align: left;
     width: 100%;
-    height: 80%;
+    height: calc(100% - 50px);
+}
+#closeScriptingGUIButton {
+	right: 5px;
+	top: 0px;
+	position: absolute;
+}
+#expandScriptingGUIButton {
+	right: 55px;
+	top: 2px;
+	position: absolute;
+}
+#minimizeScriptingGUIButton {
+	right: 55px;
+	top: 2px;
+	position: absolute;
 }
 
 #propertiesGUI {
@@ -161,12 +176,6 @@ input {
 }
 .propertiesGUIContent {
 	padding: 10px;
-}
-
-#closeScriptingGUIButton {
-	right: 5px;
-	top: 5px;
-	position: absolute;
 }
 
 #closeSplashScreenButton {

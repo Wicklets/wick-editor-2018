@@ -226,9 +226,9 @@
                     <img src="resources/magicwand.png" width="20"></img>
                 </div>-->
 
-                <!--<div class="button tooltipElem" id="cropToolButton" alt="Crop">
+                <div class="button tooltipElem" id="cropToolButton" alt="Crop">
                     <img src="resources/camera.png" width="20"></img>
-                </div>-->
+                </div>
 
                 <div class="button tooltipElem" id="zoomToolButton" alt="Zoom In">
                     <img src="resources/zoom.png" width="20"></img>
@@ -259,9 +259,11 @@
 
                 <div id="objectProperties" class="propertiesGUIContent">
                     x: <input type="text" id="objectPositionX" maxlength="4" size="4">
+                    <br />
                     y: <input type="text" id="objectPositionY" maxlength="4" size="4">
                     <br />
                     width: <input type="text" id="objectWidth" maxlength="4" size="4">
+                    <br />
                     height: <input type="text" id="objectHeight" maxlength="4" size="4">
                     <br />
                     rotation: <input type="text" id="objectRotation" maxlength="4" size="4">
@@ -336,7 +338,11 @@
                 <div id="noSelectionDiv">
                     No scriptable object selected!
                 </div>
-                <div class="button buttonInRow" id="closeScriptingGUIButton"><font color="red">Close</font></div>
+                <div class="elemInRow">
+                    <div class="button buttonInRow" id="expandScriptingGUIButton"><img src="resources/fullscreen.png"></div>
+                    <div class="button buttonInRow" id="minimizeScriptingGUIButton"><img src="resources/unfullscreen.png"></div>
+                    <div class="button buttonInRow" id="closeScriptingGUIButton"><font color="red">Close</font></div>
+                </div>
             </div>
 
         <!-- Right click menu, appears next to mouse on right click -->
