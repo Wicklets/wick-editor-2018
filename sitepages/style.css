@@ -23,7 +23,10 @@ h3 {
 	/*font-weight: normal;*/
 }
 .blurb {
-	margin-left: 100px;
+	padding-left: 100px;
+	width: 70%;
+	text-indent: 50px;
+	font-size: 16px;
 }
 
 #demoViewerContainer {

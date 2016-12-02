@@ -24,9 +24,6 @@ var WickPixiRenderer = function (project) {
 		if (wickObj.isSymbol) {
 			generatePixiScene(wickObj);
             wickObj.parentObject.pixiContainer.addChild(wickObj.pixiContainer);
-            console.log(wickObj)
-            console.log(wickObj.parentObject)
-            console.log(wickObj.pixiContainer)
 		} else if (wickObj.imageData || wickObj.svgCacheImageData) {
             wickObj.pixiSprite = PIXI.Sprite.fromImage(wickObj.imageData || wickObj.svgCacheImageData);
             wickObj.parentObject.pixiContainer.addChild(wickObj.pixiSprite);
@@ -59,7 +56,6 @@ var WickPixiRenderer = function (project) {
             	var fontString = subObj.fontData.fontSize + "px " + subObj.fontData.fontFamily;
             	if(subObj.fontData.fontWeight !== 'normal') fontString = subObj.fontData.fontWeight+" " + fontString;
             	if(subObj.fontData.fontStyle !== 'normal') fontString = subObj.fontData.fontStyle+" " + fontString;
-                console.log(subObj.fontData.fill)
                 var style = {
                     font : fontString,
                     fill : subObj.fontData.fill,
