@@ -20,7 +20,6 @@ var MenuBarInterface = function (wickEditor) {
             tabElem.innerHTML = this.name;
             tabElem.onclick = function () {
                 if(func) {
-                    console.log("lsjdnasdjsan")
                     func();
                     return;
                 }

@@ -163,18 +163,6 @@
 				overflow: hidden;
 				border-bottom: 1px solid #dedede;
 			}
-			#content{
-				position: absolute;
-				left: 0;
-				top: 90px;
-				right: 0;
-				bottom: 0;
-				font-size: 17px;
-				line-height: 22px;
-				overflow: auto;
-				width: 100%;
-				height: 100%;
-			}
 			#viewer{
 				position: absolute;
 				left: 0;
@@ -190,11 +178,30 @@
 			}
 		}
 
+		#content{
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			font-size: 17px;
+			line-height: 22px;
+			overflow: auto;
+			width: 100%;
+			height: 100%;
+		}
+
 		.catchy {
 			font-style: italic;
 			font-size: 16px;
 			text-align: center;
 			display: inline;
+		}
+		.bottomText {
+			font-style: italic;
+			font-size: 16px;
+			display: inline;
+			position: absolute;
+			bottom: 30px;
 		}
 
 	</style>
@@ -219,17 +226,22 @@
 			<a class="link" onclick="load('sitepages/about.html')">About</a>
 			<hr />
 			<center>
-<!-- 			<img src="resources/testcontent/cozycoupe.gif" width="75" height="75"/>
-			<img src="resources/testcontent/clippy.png" width="75" height="75"/> -->
+			<!--
+ 			<img src="resources/testcontent/cozycoupe.gif" width="75" height="75"/>
+			<img src="resources/testcontent/clippy.png" width="75" height="75"/>
 			<br />
-<!-- 			<img src="resources/testcontent/funnyben.jpg" width="75" height="75"/>
-			<img src="resources/testcontent/SUPERDUMB.png" width="75" height="75"/> -->
+ 			<img src="resources/testcontent/funnyben.jpg" width="75" height="75"/>
+			<img src="resources/testcontent/SUPERDUMB.png" width="75" height="75"/>
 			<br />
-		<!-- 	<img src="resources/testcontent/duck.bmp" width="75" height="75"/>
-			<img src="resources/testcontent/SUPERDUMBgreenBG.png" width="75" height="75"/> -->
+		 	<img src="resources/testcontent/duck.bmp" width="75" height="75"/>
+			<img src="resources/testcontent/SUPERDUMBgreenBG.png" width="75" height="75"/>
+			-->
 			</center>
 			<br />
-			<span class="catchy">by <a href="https://www.twitter.com/zrispo">zrispo</a></span>
+			<span class="bottomText">
+				by <a href="https://www.twitter.com/zrispo">zrispo</a> &
+				<a href="https://twitter.com/lucapodular">lucapodular</a>
+			</span>
 		</div>
 	</div>
 	<iframe id="viewer"></iframe>

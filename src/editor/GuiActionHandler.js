@@ -707,7 +707,7 @@ var GuiActionHandler = function (wickEditor) {
         ['convertToSymbolButton', 'createSymbolButton'], 
         {}, 
         function(args) {
-            wickEditor.interfaces.scriptingide.open = true;
+            //wickEditor.interfaces.scriptingide.open = true;
             var fabCanvas = wickEditor.interfaces['fabric'].canvas;
             wickEditor.actionHandler.doAction('convertSelectionToSymbol', 
                 {selection:fabCanvas.getActiveObject() || fabCanvas.getActiveGroup()}
@@ -754,7 +754,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('extendFrame',
-        [], 
+        ['Shift', '.'], 
         ['extendFrameButton'], 
         {}, 
         function(args) {
@@ -777,7 +777,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('shrinkFrame',
-        [], 
+        ['Shift', ','], 
         ['shrinkFrameButton'], 
         {}, 
         function(args) {

@@ -19,6 +19,10 @@ function rotate(centerPoint, pointToRotate, angle) {
 
 var WickPixiRenderer = function (project) {
 
+	this.getRendererElem = function () {
+		return renderer.view;
+	}
+
 	this.refreshPixiSceneForObject = function (wickObj) {
 		//generatePixiScene(wickObj);
 		if (wickObj.isSymbol) {
