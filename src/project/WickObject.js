@@ -1402,20 +1402,20 @@ WickObject.prototype.hitTestRectangles = function (otherObj) {
 
     var objAScale = objA.getAbsoluteScale();
     var objAWidth = objA.width * objAScale.x;
-    var objAHeight = objAHeight * objAScale.y;
+    var objAHeight = objA.height * objAScale.y;
     objAAbsPos.x -= objA.width*objAScale.x/2;
-    objAAbsPos.y -= objA.width*objAScale.y/2;
+    objAAbsPos.y -= objA.height*objAScale.y/2;
 
     var objBScale = objB.getAbsoluteScale();
     var objBWidth = objB.width * objBScale.x; 
     var objBHeight = objB.height * objBScale.y;
     objBAbsPos.x -= objB.width*objBScale.x/2;
-    objBAbsPos.y -= objB.width*objBScale.y/2; 
+    objBAbsPos.y -= objB.height*objBScale.y/2; 
 
     var left = objAAbsPos.x < (objBAbsPos.x + objBWidth); 
     var right = (objAAbsPos.x + objAWidth) > objBAbsPos.x; 
     var top = objAAbsPos.y < (objBAbsPos.y + objBHeight); 
-    var bottom = (objAAbsPos.y + objA.height) > objBAbsPos.y; 
+    var bottom = (objAAbsPos.y + objAHeight) > objBAbsPos.y; 
 
     return left && right && top && bottom;
 }
