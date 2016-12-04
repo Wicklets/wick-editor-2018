@@ -88,7 +88,6 @@ var PropertiesInterface = function (wickEditor) {
             document.getElementById('projectSizeX').value          = wickEditor.project.resolution.x;
             document.getElementById('projectSizeY').value          = wickEditor.project.resolution.y;
             document.getElementById('frameRate').value             = wickEditor.project.framerate;
-            document.getElementById('fitScreenCheckbox').checked   = wickEditor.project.fitScreen;
             document.getElementById('projectName').value           = wickEditor.project.name;
         }
     }
@@ -260,8 +259,11 @@ var PropertiesInterface = function (wickEditor) {
 
     });
 
-    document.getElementById('fitScreenCheckbox').onclick = function (e) {
-        wickEditor.project.fitScreen = this.checked;
+    document.getElementById('experimentalToolsCheckbox').onclick = function (e) {
+        var self = this;
+        ['paintbrush', 'fillbucket', 'rectangle', 'ellipse', 'dropper'].forEach(function (toolName) {
+            document.getElementById(toolName+'ToolButton').style.display = self.checked ? 'block' : 'none';
+        });
     }
 
     document.getElementById('projectBgColor').onchange = function () {
