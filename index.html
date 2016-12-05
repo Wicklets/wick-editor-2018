@@ -190,6 +190,19 @@
 			height: 100%;
 		}
 
+		.logo {
+			padding: 5px;
+			
+		}
+		.logoFont {
+			font-size: 56px;
+			color: #000;
+		}
+		.ghostlogo {
+			position: relative;
+			top: 10px;
+			margin-right: 10px;
+		}
 		.catchy {
 			font-style: italic;
 			font-size: 16px;
@@ -215,15 +228,15 @@
 		</a>
 		<div id="content">
 			<center>
-				<a href="/index.html"><img src="resources/wicklogo.png" /></a><br />
+				<div class="logo"><a class="logoFont" href="/index.html"><img class="ghostlogo" src="resources/wicklogo.png">Wick</a></div><br />
 				<div class="catchy">The Internet's free and open-source creation suite</div>
 			</center>
 			<hr />
 			<strong><a class="link" href="editor.html">Launch Editor</a></strong>
 			<a class="link" onclick="load('sitepages/demos.html')">Demos</a>
 			<a class="link" onclick="load('sitepages/tutorials.html')">Tutorials</a>
-			<a class="link" href="https://github.com/WickOnline/wick">Source Code</a>
-			<a class="link" onclick="load('sitepages/about.html')">About</a>
+			<a class="link" href="https://github.com/zrispo/wick">Source Code</a>
+			<!--<a class="link" onclick="load('sitepages/about.html')">About</a>-->
 			<hr />
 			<center>
 			<!--

@@ -36,6 +36,7 @@ var RightClickMenuInterface = function (wickEditor) {
             hideButtonGroup("#noFramesExistButtons");
             hideButtonGroup("#breakpointExists");
             hideButtonGroup("#noBreakpointExists");
+            hideButtonGroup("#timelineButtons");
             hideButtonGroup("#commonTimelineButtons");
             hideButtonGroup("#clickedOnFrameButtons");
             hideButtonGroup("#isImage");

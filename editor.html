@@ -363,15 +363,15 @@
                         <div class="button" id="copyButton">Copy</div>
                         <div class="button" id="cutButton">Cut</div>
                         <div class="button" id="editScriptsButton">Edit Scripts</div>
-                        <div class="button" id="downloadButton">Download</div>
+                        <div class="button" id="downloadButton">Export</div>
                         <div id="isImage">
                             
                         </div>
                         <div id="noKeyframeExists">
-                            <div class="button" id="addKeyframeButton">Add Keyframe</div>
+                            <!--<div class="button" id="addKeyframeButton">Add Keyframe</div>-->
                         </div>
                         <div id="keyframeExists">
-                            <div class="button" id="removeKeyframeButton">Remove Keyframe</div>
+                            <!--<div class="button" id="removeKeyframeButton">Remove Keyframe</div>-->
                         </div>
                         <hr />
                     </div>
@@ -394,25 +394,14 @@
                     <div class="button" id="pasteButton">Paste</div>
                 </div>
                 <div id="timelineButtons">
-                    <div id="clickedOnFrameButtons">
-                        <div class="button" id="shrinkFrameButton">Shrink Frame</div>
-                        <div class="button" id="deleteFrameButton">Delete Frame</div>
-                        <div id="noBreakpointExists">
-                            <div class="button" id="addBreakpointButton">Add Breakpoint</div>
-                        </div>
-                        <div id="breakpointExists">
-                            <div class="button" id="removeBreakpointButton">Remove Breakpoint</div>
-                        </div>
-                    </div>
-                    <div id="clickedOffFrameButtons">
-                        <div class="button" id="addFrameButton">Add Frame</div>
-                    </div>
-                    <div id="commonTimelineButtons">
-                        <hr />
-                        <div class="button" id="extendFrameButton">Extend Frame</div>
-                        <div class="button" id="addLayerButton">Add Layer</div>
-                        <div class="button" id="removeLayerButton">Remove Layer</div>
-                    </div>
+                    <div class="button" id="addFrameButton">Add Frame <em>(Shift +)</em></div>
+                    <div class="button" id="deleteFrameButton">Delete Frame <em>(Shift -)</em></div>
+                    <hr />
+                    <div class="button" id="shrinkFrameButton">Shrink Frame <em>(Shift <)</em></div>
+                    <div class="button" id="extendFrameButton">Extend Frame <em>(Shift >)</em></div>
+                    <hr />
+                    <div class="button" id="addLayerButton">Add Layer</div>
+                    <div class="button" id="removeLayerButton">Remove Layer</div>
                 </div>
             </div>
 

@@ -684,6 +684,50 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.interfaces['fabric'].deselectAll();
         });
 
+    registerAction('flipHorizontally',
+        [], 
+        [], 
+        {}, 
+        function(args) {
+            var selectedObjects = wickEditor.interfaces.fabric.getSelectedWickObjects();
+            var selectedObjectIDs = [];
+            var modifiedStates = [];
+
+            selectedObjects.forEach(function (obj) {
+                selectedObjectIDs.push(obj.id);
+                modifiedStates.push({ 
+                    flipX : !obj.flipX
+                });
+            });
+
+            wickEditor.actionHandler.doAction('modifyObjects', { 
+                ids: selectedObjectIDs, 
+                modifiedStates: modifiedStates 
+            });
+        });
+
+    registerAction('flipVertically',
+        [], 
+        [], 
+        {}, 
+        function(args) {
+            var selectedObjects = wickEditor.interfaces.fabric.getSelectedWickObjects();
+            var selectedObjectIDs = [];
+            var modifiedStates = [];
+
+            selectedObjects.forEach(function (obj) {
+                selectedObjectIDs.push(obj.id);
+                modifiedStates.push({ 
+                    flipY : !obj.flipY
+                });
+            });
+            
+            wickEditor.actionHandler.doAction('modifyObjects', { 
+                ids: selectedObjectIDs, 
+                modifiedStates: modifiedStates 
+            });
+        });
+
     registerAction('editObject',
         [], 
         ['editObjectButton', 'editSymbolButton'], 
@@ -732,7 +776,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('addFrame',
-        [], 
+        ['Shift', '='], 
         ['addFrameButton'], 
         {}, 
         function(args) {
@@ -740,7 +784,7 @@ var GuiActionHandler = function (wickEditor) {
         });
     
     registerAction('deleteFrame',
-        [], 
+        ['Shift', '-'], 
         ['deleteFrameButton'], 
         {}, 
         function(args) {
@@ -783,14 +827,12 @@ var GuiActionHandler = function (wickEditor) {
         function(args) {
             var frame = wickEditor.project.getCurrentObject().getCurrentFrame();
 
-            var frameEndingIndex = wickEditor.project.getCurrentObject().getPlayheadPositionAtFrame(
-                frame
-            ) + frame.frameLength - 1;
-
-            var framesToShrink = frameEndingIndex - wickEditor.project.getCurrentObject().playheadPosition;
+            //var frameEndingIndex = wickEditor.project.getCurrentObject().getPlayheadPositionAtFrame(frame) + frame.frameLength - 1;
+            //var framesToShrink = frameEndingIndex - wickEditor.project.getCurrentObject().playheadPosition;
+            //framesToShrink = Math.max(1, framesToShrink)
 
             wickEditor.actionHandler.doAction('shrinkFrame', {   
-                nFramesToShrinkBy: Math.max(1, framesToShrink), 
+                nFramesToShrinkBy: 1, 
                 frame: frame
             });
         });

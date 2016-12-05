@@ -97,51 +97,48 @@ var MenuBarInterface = function (wickEditor) {
             new TabButton('Redo', function () {
                 wickEditor.guiActionHandler.doAction("redo")
             }),
-            new TabButton('Clear History', function () {
-                wickEditor.guiActionHandler.doAction("clearHistory")
-            }),
             new TabSpacer(),
             new TabButton('Copy', function () {
-                wickEditor.guiActionHandler.doAction("undo")
+                wickEditor.guiActionHandler.doAction("copy")
             }),
             new TabButton('Cut', function () {
-                
+                wickEditor.guiActionHandler.doAction("cut")
             }),
             new TabButton('Paste', function () {
-                
+                wickEditor.guiActionHandler.doAction("paste")
+            }),
+            new TabButton('Delete', function () {
+                wickEditor.guiActionHandler.doAction("deleteSelectedObjects")
             }),
         ]);
 
         addTab('Selection', [
             new TabButton('Flip horizontally', function () {
-                
+                wickEditor.guiActionHandler.doAction("flipHorizontally")
             }),
             new TabButton('Flip vertically', function () {
-                
+                wickEditor.guiActionHandler.doAction("flipVertically")
             }),
             new TabButton('Bring to Front', function () {
-                
+                wickEditor.guiActionHandler.doAction("bringToFront")
             }),
             new TabButton('Send to Back', function () {
-                
-            }),
-            new TabButton('Delete', function () {
-                wickEditor.guiActionHandler.doAction("deleteSelectedObjects")
+                wickEditor.guiActionHandler.doAction("sendToBack")
             }),
             new TabSpacer(),
             new TabButton('Convert to Symbol', function () {
-                
+                wickEditor.guiActionHandler.doAction("convertToSymbol")
             }),
             new TabButton('Break apart', function () {
-                
+                wickEditor.guiActionHandler.doAction("breakApart")
             }),
             new TabSpacer(),
             new TabButton('Edit Scripts', function () {
-                
+                wickEditor.guiActionHandler.doAction("editScripts")
             }),
             new TabSpacer(),
             new TabButton('Export', function () {
-                
+                wickEditor.guiActionHandler.doAction("downloadObject")
             }),
         ]);
 
