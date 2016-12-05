@@ -1,4 +1,4 @@
-![Wick](resources/wicklogo.png)
+# Wick
 
 ![Wick editor screenshot](resources/editor.png)
 
