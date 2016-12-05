@@ -18,15 +18,6 @@ var TimelineInterface = function (wickEditor) {
 
     document.getElementById("timelineScrollbar").onscroll = function () {that.syncWithEditorState()};
 
-    document.getElementById("enableOnionSkinningButton").onclick = function () {
-        wickEditor.project.onionSkinning = true;
-        wickEditor.syncInterfaces();
-    }
-    document.getElementById("disableOnionSkinningButton").onclick = function () {
-        wickEditor.project.onionSkinning = false;
-        wickEditor.syncInterfaces();
-    }
-
     this.setup = function () {
         
     }
@@ -47,18 +38,10 @@ var TimelineInterface = function (wickEditor) {
 
         that.redraw();
 
-        if(wickEditor.project.onionSkinning) {
-            document.getElementById("enableOnionSkinningButton").style.display = "none";
-            document.getElementById("disableOnionSkinningButton").style.display = "inline";
-        } else {
-            document.getElementById("enableOnionSkinningButton").style.display = "inline";
-            document.getElementById("disableOnionSkinningButton").style.display = "none";
-        }
-
     }
 
     this.resize = function () {
-        var GUIWidth = (window.innerWidth-343);
+        var GUIWidth = (window.innerWidth-343+34);
 
         //document.getElementById('timelineGUI').style.width = GUIWidth + 'px';
         //$("#timelineGUI").css('left', (window.innerWidth/2 - GUIWidth/2)+'px');

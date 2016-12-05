@@ -1400,17 +1400,17 @@ WickObject.prototype.hitTestRectangles = function (otherObj) {
     var objAAbsPos = objA.getAbsolutePosition();
     var objBAbsPos = objB.getAbsolutePosition();
 
-    var objAScale = objA.getAbsoluteScale();
-    var objAWidth = objA.width * objAScale.x;
+    var objAScale  = objA.getAbsoluteScale();
+    var objAWidth  = objA.width  * objAScale.x;
     var objAHeight = objA.height * objAScale.y;
-    objAAbsPos.x -= objA.width*objAScale.x/2;
-    objAAbsPos.y -= objA.height*objAScale.y/2;
+    objAAbsPos.x  -= objA.width  * objAScale.x/2;
+    objAAbsPos.y  -= objA.height * objAScale.y/2;
 
-    var objBScale = objB.getAbsoluteScale();
-    var objBWidth = objB.width * objBScale.x; 
+    var objBScale  = objB.getAbsoluteScale();
+    var objBWidth  = objB.width  * objBScale.x; 
     var objBHeight = objB.height * objBScale.y;
-    objBAbsPos.x -= objB.width*objBScale.x/2;
-    objBAbsPos.y -= objB.height*objBScale.y/2; 
+    objBAbsPos.x  -= objB.width  * objBScale.x/2;
+    objBAbsPos.y  -= objB.height * objBScale.y/2; 
 
     var left = objAAbsPos.x < (objBAbsPos.x + objBWidth); 
     var right = (objAAbsPos.x + objAWidth) > objBAbsPos.x; 

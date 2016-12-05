@@ -41,9 +41,19 @@ hr {
 	background-color: #DDDDDD;
 }
 
+.jscolor {
+	width: 80px;
+}
 input {
 	font-size: 16px;
 	color: #666;
+	text-align: center;
+}
+select {
+	font-size: 16px;
+	color: #666;
+	text-align: center;
+	width: 80px;
 }
 
 .GUIBox {
@@ -133,6 +143,7 @@ input {
 	text-align: left;
     width: 100%;
     height: calc(100% - 50px);
+    font-size: 16px;
 }
 #closeScriptingGUIButton {
 	right: 5px;
@@ -284,9 +295,9 @@ input {
 
 #timelineGUI {
 	top: 31px;
-	left: 69px;
+	left: 35px;
 	padding: 10px;
-	width: calc(100% - 342px);
+	width: calc(100% - 308px);
 	background-color: #E6E6E6;
 }
 

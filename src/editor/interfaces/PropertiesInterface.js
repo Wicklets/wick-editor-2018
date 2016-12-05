@@ -89,6 +89,8 @@ var PropertiesInterface = function (wickEditor) {
             document.getElementById('projectSizeY').value          = wickEditor.project.resolution.y;
             document.getElementById('frameRate').value             = wickEditor.project.framerate;
             document.getElementById('projectName').value           = wickEditor.project.name;
+
+            document.getElementById("onionSkinningCheckbox").checked = wickEditor.project.onionSkinning;
         }
     }
 
@@ -264,6 +266,11 @@ var PropertiesInterface = function (wickEditor) {
         ['paintbrush', 'fillbucket', 'rectangle', 'ellipse', 'dropper'].forEach(function (toolName) {
             document.getElementById(toolName+'ToolButton').style.display = self.checked ? 'block' : 'none';
         });
+    }
+
+    document.getElementById('onionSkinningCheckbox').onclick = function (e) {
+        wickEditor.project.onionSkinning = this.checked;
+        wickEditor.syncInterfaces();
     }
 
     document.getElementById('projectBgColor').onchange = function () {
