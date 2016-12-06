@@ -56,6 +56,7 @@ var PropertiesInterface = function (wickEditor) {
                     $("#textProperties").css('display', 'block');
                     document.getElementById('boldCheckbox').checked = selectedObj.fontData.fontWeight === "bold";
                     document.getElementById('italicCheckbox').checked = selectedObj.fontData.fontStyle === "italic";
+                    document.getElementById('fontSize').value = selectedObj.fontData.fontSize;
                     //document.getElementById('underlinedCheckbox').checked = selectedObj.fontData.textDecoration === "underline";
                 } else if (selectedObj.audioData) {
                     $("#soundProperties").css('display', 'block');
@@ -178,12 +179,27 @@ var PropertiesInterface = function (wickEditor) {
         });
     };
 
-    document.getElementById('fontSize').onchange = function () {
+    /*document.getElementById('fontSize').onchange = function () {
         wickEditor.actionHandler.doAction('modifyObjects', { 
             ids: [wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0]], 
             modifiedStates: [{ fontSize : this.value }] 
         });
-    };
+    };*/
+    $('#fontSize').on('input propertychange', function () {
+
+        if(CheckInput.isNumber($('#fontSize').val())) {
+            var id = wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0];
+            var obj = wickEditor.project.rootObject.getChildByID(id);
+            var modifiedState = { 
+                fontSize : parseInt($('#fontSize').val()) 
+            };
+            wickEditor.actionHandler.doAction('modifyObjects', { 
+                ids: [id], 
+                modifiedStates: [modifiedState] 
+            });
+        }
+
+    });
 
     // Loop Checkbox: Toggle sound loop
     document.getElementById('loopCheckbox').onchange = function () {

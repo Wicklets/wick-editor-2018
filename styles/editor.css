@@ -41,18 +41,14 @@ hr {
 	background-color: #DDDDDD;
 }
 
-.jscolor {
-	width: 80px;
-}
 input {
 	font-size: 16px;
 	color: #666;
-	text-align: center;
+	border: none;
 }
 select {
 	font-size: 16px;
 	color: #666;
-	text-align: center;
 	width: 80px;
 }
 

@@ -71,9 +71,6 @@ var FabricInterface = function (wickEditor) {
         that.canvas.on('object:modified', function(e) {
             that.modifyChangedObjects(e);
         });
-        that.canvas.on('text:changed', function (e) {
-            wickEditor.interfaces.fabric.forceModifySelectedObjects();
-        });
 
         this.recenterCanvas();
         this.guiElements.update();

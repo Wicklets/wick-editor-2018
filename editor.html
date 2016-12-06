@@ -257,23 +257,23 @@
                 <div id="projectPropertiesTabButton" class="propertiesTab">Project</div>
 
                 <div id="frameProperties" class="propertiesGUIContent">
-                    Frame Name: <input type="text" id="frameIdentifier" maxlength="16" size="16">
+                    Name <input style="width:130px; float:right;" type="text" id="frameIdentifier">
                 </div>
 
-                <div style="line-height: 25px;" id="objectProperties" class="propertiesGUIContent">
-                    Position: <div style="float:right;">x: <input type="text" id="objectPositionX" maxlength="4" size="4"> y: <input type="text" id="objectPositionY" maxlength="4" size="4"></div>
+                <div id="objectProperties" class="propertiesGUIContent">
+                    Name <input style="float:right; width:130px" type="text" id="objectName">
                     <br />
-                    Size: <div style="float:right;">w: <input type="text" id="objectWidth" maxlength="4" size="4"> h: <input type="text" id="objectHeight" maxlength="4" size="4"></div>
+                    Position  <input style="float:right; width:61px;" type="text" id="objectPositionY"><span style="float:right;">x</span><input style="width:61px; float:right;" type="text" id="objectPositionX">
                     <br />
-                    Rotation: <div style="margin-right:65px; float:right;"><input type="text" id="objectRotation" maxlength="4" size="4"></div>
+                    Size  <input style="float:right; width:61px;" type="text" id="objectHeight"><span style="float:right;">x</span><input style="width:61px; float:right;" type="text" id="objectWidth">
                     <br />
-                    Opacity: <div style="float:right;"><input type="range" value="255" min="0" max="255" id="opacitySlider"></div>
+                    Rotation <input style="float:right; width:130px"  type="text" id="objectRotation">
                     <br />
-                    Name: <div style="float:right;"><input type="text" id="objectName" size="15"></div>
+                    Opacity <input style="float:right; width:130px" type="range" value="255" min="0" max="255" id="opacitySlider">
+                    <br />
                     <br />
                     <div id="textProperties">
-                        <br />
-                        Font: <div style="float:right;"><select style="width:120px;" id="fontSelector">
+                        Font <select style="float:right; width:130px;" id="fontSelector">
                             <option value="Georgia">Georgia</option>
                             <option value="Palatino Linotype">Palatino Linotype</option>
                             <option value="Book Antiqua">Book Antiqua</option>
@@ -290,36 +290,35 @@
                             <option value="Verdana">Verdana</option>
                             <option value="Courier New">Courier New</option>
                             <option value="Lucida Console">Lucida Console</option>
-                        </select></div>
+                        </select>
+                        <br /><br />
+                        Color <input style="width:130px; float:right;" class="jscolor" value="FFFFFF" id="fontColor">
                         <br />
-                        Color: <div style="margin-right:20px; float:right;"><input class="jscolor" value="FFFFFF" id="fontColor"></div>
-                        <br />
-                        Size: <div style="float:right;"><input type="range" value="40" min="2" max="150" id="fontSize"></div>
-                        <br />
-                        <div style="float:right;"><input type="checkbox" id="boldCheckbox"> Bold </div>
-                        <div style="margin-right:10px; float:right;"><input type="checkbox" id="italicCheckbox"> Italic</div>
-                        <!--<input type="checkbox" id="underlinedCheckbox"> Underlined<br />-->
+                        Size <input style="width:130px; float:right;" type="text" id="fontSize">
+                        <br /><br />
+                        <input type="checkbox" id="boldCheckbox"> Bold<br />
+                        <input type="checkbox" id="italicCheckbox"> Italic
                     </div>
                     <div id="soundProperties">
-                        <br />
                         <input type="checkbox" id="autoplayCheckbox"> Autoplay<br />
                         <input type="checkbox" id="loopCheckbox"> Loop<br />
                     </div>
                 </div>
 
                 <div id="projectProperties" class="propertiesGUIContent">
-                    Project Name: <input type="text" id="projectName" size="15"><br />
+                    Name <input style="float:right; width:130px;" type="text" id="projectName">
                     <br />
-                    Background color: <div style="float:right;"><input class="jscolor" value="#FFFFFF" id="projectBgColor"></div>
+                    Background <input style="width:130px; float:right;" class="jscolor" value="#FFFFFF" id="projectBgColor">
                     <br />
-                    Border color: <div style="float:right;"><input class="jscolor" value="#FFFFFF" id="projectBorderColor"></div>
+                    Border <input style="width:130px; float:right;" class="jscolor" value="#FFFFFF" id="projectBorderColor">
                     <br />
+                    Size  <input style="float:right; width:61px;" type="text" id="projectSizeY"><span style="float:right;">x</span><input style="width:61px; float:right;" type="text" id="projectSizeX">
                     <br />
-                    Size: <input type="text" id="projectSizeX" maxlength="4" size="4"> x 
-                          <input type="text" id="projectSizeY" maxlength="4" size="4"><br />
-                    Framerate: <input type="text" id="frameRate" maxlength="2" size="2"><br />
+                    Framerate <input style="float:right; width:130px;"type="text" id="frameRate">
+                    <br />
                     <br />
                     <input type="checkbox" id="experimentalToolsCheckbox"> Enable experimental tools
+                    <br />
                     <input type="checkbox" id="onionSkinningCheckbox"> Enable onion skinning
                     <br />
                 </div>

@@ -23,10 +23,6 @@ var InputHandler = function (wickEditor) {
         that.mouse.down = false;
     }, false );
 
-    document.addEventListener('contextmenu', function (event) { 
-        event.preventDefault();
-    }, false);
-
 /*************************
      Tooltips
 *************************/
