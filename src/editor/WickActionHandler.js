@@ -295,6 +295,8 @@ var WickActionHandler = function (wickEditor) {
 
     this.registerAction('deleteFrame', 
         function (args) {
+            if(!args.frame) return;
+
             // Add an empty frame
             var frameRemovedData = args.layer.deleteFrame(args.frame);
 

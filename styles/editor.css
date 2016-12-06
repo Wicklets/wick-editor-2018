@@ -291,9 +291,9 @@ select {
 
 #timelineGUI {
 	top: 31px;
-	left: 35px;
+	left: 69px;
 	padding: 10px;
-	width: calc(100% - 308px);
+	width: calc(100% - 338px);
 	background-color: #E6E6E6;
 }
 

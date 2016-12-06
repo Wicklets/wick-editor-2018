@@ -41,7 +41,7 @@ var TimelineInterface = function (wickEditor) {
     }
 
     this.resize = function () {
-        var GUIWidth = (window.innerWidth-343+34);
+        var GUIWidth = document.getElementById("timelineGUI").offsetWidth - 22;
 
         //document.getElementById('timelineGUI').style.width = GUIWidth + 'px';
         //$("#timelineGUI").css('left', (window.innerWidth/2 - GUIWidth/2)+'px');
@@ -73,9 +73,11 @@ var TimelineInterface = function (wickEditor) {
 
         for(var l = 0; l < currentObject.layers.length; l++) {
             for(var f = 0; f < /*currentObject.getTotalTimelineLength()*/ 500; f++) {
-                ctx.fillStyle = "#AAAAAA";
-                ctx.font = "10px sans-serif";
-                ctx.fillText(f+1, f*frameWidth+2, frameHeight*currentObject.layers.length+10);
+                if(l === 0) {
+                    ctx.fillStyle = "#AAAAAA";
+                    ctx.font = "10px sans-serif";
+                    ctx.fillText(f+1, f*frameWidth+2, frameHeight*currentObject.layers.length+10);
+                }
 
                 ctx.fillStyle = "#DDDDDD";
                 ctx.fillRect(
@@ -85,7 +87,8 @@ var TimelineInterface = function (wickEditor) {
                     f*frameWidth-1, l*frameHeight,
                     2, frameHeight+10);
 
-                ctx.fillStyle = "#FFFFFF";
+                var isActiveLayer = currentObject.getCurrentLayer() === currentObject.layers[l];
+                ctx.fillStyle = isActiveLayer ? "#FFFFFF" : "#F6F6F6";
                 ctx.fillRect(
                     f*frameWidth + 1, l*frameHeight + 1,
                     frameWidth - 2, frameHeight - 2);
