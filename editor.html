@@ -261,6 +261,8 @@
 
                 <div id="frameProperties" class="propertiesGUIContent">
                     Name <input style="width:130px; float:right;" type="text" id="frameIdentifier">
+                    <br />
+                    <input type="checkbox" id="frameAutoplayCheckbox"> Always stop on this frame<br />
                 </div>
 
                 <div id="objectProperties" class="propertiesGUIContent">
@@ -325,6 +327,7 @@
                     <br />
                     <input type="checkbox" id="experimentalToolsCheckbox"> Enable experimental tools
                     <br />
+                    <div id="experimentalWarning" style="color:red;display:none;">Warning: these tools are buggy and may break your project</div>
                     <input type="checkbox" id="onionSkinningCheckbox"> Enable onion skinning
                     <br />
                 </div>

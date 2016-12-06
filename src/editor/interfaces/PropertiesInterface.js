@@ -91,6 +91,7 @@ var PropertiesInterface = function (wickEditor) {
                 
             }
         } else if(currentTab === 'frame') {
+
             var currentObject = wickEditor.project.getCurrentObject();
             var currentFrame = currentObject.getCurrentFrame();
             if(!currentFrame) {
@@ -101,7 +102,11 @@ var PropertiesInterface = function (wickEditor) {
             $("#frameProperties").css('display', 'block');
             document.getElementById('frameIdentifier').value = (currentFrame.identifier) ? currentFrame.identifier : "";
             $('#frameIdentifier').prop('disabled', false);
+
+            document.getElementById('frameAutoplayCheckbox').checked = !wickEditor.project.getCurrentObject().getCurrentFrame().autoplay;
+
         } else if(currentTab === 'project') {
+
             $("#projectProperties").css('display', 'block');
 
             var projectBgColorElem = document.getElementById('projectBgColor');
@@ -115,6 +120,7 @@ var PropertiesInterface = function (wickEditor) {
             document.getElementById('projectName').value           = wickEditor.project.name;
 
             document.getElementById("onionSkinningCheckbox").checked = wickEditor.project.onionSkinning;
+
         }
     }
 
@@ -305,6 +311,7 @@ var PropertiesInterface = function (wickEditor) {
         ['paintbrush', 'fillbucket', 'rectangle', 'ellipse', 'dropper'].forEach(function (toolName) {
             document.getElementById(toolName+'ToolButton').style.display = self.checked ? 'block' : 'none';
         });
+        document.getElementById('experimentalWarning').style.display = self.checked ? 'block' : 'none';
     }
 
     document.getElementById('onionSkinningCheckbox').onclick = function (e) {
@@ -321,5 +328,10 @@ var PropertiesInterface = function (wickEditor) {
         wickEditor.project.borderColor = "#" + this.value;
         wickEditor.syncInterfaces();
     };
+
+    document.getElementById('frameAutoplayCheckbox').onclick = function (e) {
+        wickEditor.project.getCurrentObject().getCurrentFrame().autoplay = !this.checked;
+        wickEditor.syncInterfaces();
+    }
 
 }
