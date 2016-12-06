@@ -52,16 +52,39 @@ var PropertiesInterface = function (wickEditor) {
                 document.getElementById('objectRotation') .value = Math.round(selectedObj.angle);
                 document.getElementById('opacitySlider')  .value = selectedObj.opacity*255
 
-                if(selectedObj.fontData) {
+                var objectTypeIcon = document.getElementById('objectTypeIcon');
+                var objectTypeName = document.getElementById('objectTypeName');
+
+                if(selectedObj.isSymbol) {
+
+                    objectTypeIcon.src = 'resources/gearbox.png';
+                    objectTypeName.innerHTML = 'Symbol';
+                
+                } else if(selectedObj.fontData) {
+                
                     $("#textProperties").css('display', 'block');
                     document.getElementById('boldCheckbox').checked = selectedObj.fontData.fontWeight === "bold";
                     document.getElementById('italicCheckbox').checked = selectedObj.fontData.fontStyle === "italic";
                     document.getElementById('fontSize').value = selectedObj.fontData.fontSize;
                     //document.getElementById('underlinedCheckbox').checked = selectedObj.fontData.textDecoration === "underline";
+                
+                    objectTypeIcon.src = 'resources/text.png';
+                    objectTypeName.innerHTML = 'Text';
+                
                 } else if (selectedObj.audioData) {
+                
                     $("#soundProperties").css('display', 'block');
                     document.getElementById('loopCheckbox').checked = selectedObj.loopSound;
                     document.getElementById('autoplayCheckbox').checked = selectedObj.autoplaySound;
+                
+                    objectTypeIcon.src = 'resources/audioicon.png';
+                    objectTypeName.innerHTML = 'Sound';
+                
+                } else if (selectedObj.imageData) {
+                
+                    objectTypeIcon.src = 'resources/image.png';
+                    objectTypeName.innerHTML = 'Image';
+                
                 }
             } else {
                 
