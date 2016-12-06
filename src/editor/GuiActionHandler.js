@@ -739,7 +739,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('finishEditingObject',
         [], 
-        ['finishEditingObjectButton'], 
+        ['finishEditingObjectButton', 'finishEditingObjectFabricButton'], 
         {}, 
         function(args) {
             var currObj = wickEditor.project.getCurrentObject();

@@ -149,8 +149,8 @@ var RightClickMenuInterface = function (wickEditor) {
 
     document.getElementById("editorCanvasContainer").addEventListener('mousedown', function(e) { 
         if(e.button == 2) {
-            //that.open = true;
-            //that.mode = "fabric";
+            that.open = true;
+            that.mode = "fabric";
         } else {
             that.open = false;
         }

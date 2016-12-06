@@ -126,48 +126,56 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
         that.update();
     });
 
-// Borders for symbols
 
     var createSymbolButton = document.getElementById('createSymbolButton');
     var editSymbolButton = document.getElementById('editSymbolButton');
     var editSymbolScriptsButton = document.getElementById('editSymbolScriptsButton');
+    var finishEditingObjectFabricButton = document.getElementById('finishEditingObjectFabricButton');
     
     canvas.on('after:render', function() {
 
         createSymbolButton.style.display = "none";
         editSymbolButton.style.display = "none";
         editSymbolScriptsButton.style.display = "none";
+        finishEditingObjectFabricButton.style.display = "none";
 
         // Reposition buttons
+
+        if(!wickEditor.project.getCurrentObject().isRoot) {
+            finishEditingObjectFabricButton.style.display = "block";
+            finishEditingObjectFabricButton.style.left = 40 + 'px';
+            finishEditingObjectFabricButton.style.top = 120 + 'px';
+        }
+
         var selection = canvas.getActiveObject() || canvas.getActiveGroup();
-        if(selection) {
-            var bound = selection.getBoundingRect();
-            var pan = fabricInterface.getPan();
-            var corner = {
-                x : bound.left+bound.width,
-                y : bound.top 
-            }
+        if(!selection) return;
 
-            var objIsSymbol = false;
-            if(selection && selection.wickObjectID) {
-                var wickObj = wickEditor.project.rootObject.getChildByID(selection.wickObjectID);
-                if(wickObj && wickObj.isSymbol) {
-                    objIsSymbol = true;
-                }
-            }
+        var bound = selection.getBoundingRect();
+        var pan = fabricInterface.getPan();
+        var corner = {
+            x : bound.left+bound.width,
+            y : bound.top 
+        }
 
-            if(objIsSymbol) {
-                editSymbolButton.style.left = corner.x + 'px';
-                editSymbolButton.style.top = corner.y + 35 + 'px';
-                editSymbolButton.style.display = "block";
-                editSymbolScriptsButton.style.left = corner.x + 'px';
-                editSymbolScriptsButton.style.top = corner.y + 'px';
-                editSymbolScriptsButton.style.display = "block";
-            } else {
-                createSymbolButton.style.left = corner.x + 'px';
-                createSymbolButton.style.top = corner.y + 'px';
-                createSymbolButton.style.display = "block";
+        var objIsSymbol = false;
+        if(selection && selection.wickObjectID) {
+            var wickObj = wickEditor.project.rootObject.getChildByID(selection.wickObjectID);
+            if(wickObj && wickObj.isSymbol) {
+                objIsSymbol = true;
             }
+        }
+
+        if(objIsSymbol) {
+            editSymbolButton.style.left = corner.x + 'px';
+            editSymbolButton.style.top = corner.y + 35 + 'px';
+            editSymbolButton.style.display = "block";
+            editSymbolScriptsButton.style.left = corner.x + 'px';
+            editSymbolScriptsButton.style.top = corner.y + 'px';
+            editSymbolScriptsButton.style.display = "block";
+        } else {
+            createSymbolButton.style.left = corner.x + 'px';
+            createSymbolButton.style.top = corner.y + 'px';
+            createSymbolButton.style.display = "block";
         }
     });
 

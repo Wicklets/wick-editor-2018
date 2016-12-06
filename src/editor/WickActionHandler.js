@@ -66,8 +66,9 @@ var WickActionHandler = function (wickEditor) {
         // Regen parent refs
         wickEditor.project.rootObject.generateParentObjectReferences();
 
-        // Sync interfaces
+        // Sync interfaces / render canvas
         wickEditor.syncInterfaces();
+        wickEditor.interfaces.fabric.canvas.renderAll();
 
     }
 

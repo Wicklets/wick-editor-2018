@@ -20,13 +20,22 @@ var FabricSymbolBorders = function (wickEditor, fabricInterface) {
             var wickObj = wickEditor.project.rootObject.getChildByID(obj.wickObjectID);
             var activeLayerObjects = wickEditor.project.getCurrentObject().getAllActiveLayerChildObjects();
 
-            if(!wickObj || !wickObj.isSymbol || activeLayerObjects.indexOf(wickObj) === -1) return;
-            if(boxAnimationActive && boxAnimationID !== wickObj.id) {return;}
+            if(!wickObj || activeLayerObjects.indexOf(wickObj) === -1) return;
+            if(selectedIDs.indexOf(wickObj.id) === -1 && !wickObj.isSymbol) return
+            if(boxAnimationActive && boxAnimationID !== wickObj.id) return;
 
             // Color the border differently depending if the object has errors
-            if(!wickObj.hasSyntaxErrors && !wickObj.causedAnException) {
+            if(!wickObj.isSymbol) {
+                canvas.contextContainer.lineWidth = 1.0;
+                canvas.contextContainer.globalAlpha = 1.0;
+                canvas.contextContainer.strokeStyle = '#92B7FF';
+            } else if(!wickObj.hasSyntaxErrors && !wickObj.causedAnException) {
+                canvas.contextContainer.lineWidth = 4;
+                canvas.contextContainer.globalAlpha = 0.5;
                 canvas.contextContainer.strokeStyle = '#0B0';
             } else {
+                canvas.contextContainer.lineWidth = 4;
+                canvas.contextContainer.globalAlpha = 0.5;
                 canvas.contextContainer.strokeStyle = '#F00';
             }
 
@@ -57,8 +66,6 @@ var FabricSymbolBorders = function (wickEditor, fabricInterface) {
             }
 
             var boxGrowOffset = boxAnimationTimer;
-            canvas.contextContainer.lineWidth = 4;
-            canvas.contextContainer.globalAlpha = 0.5;
             canvas.contextContainer.strokeRect(bound.left, bound.top, bound.width, bound.height);
             canvas.contextContainer.globalAlpha = 1.0;
             
