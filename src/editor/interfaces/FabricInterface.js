@@ -450,13 +450,13 @@ var FabricInterface = function (wickEditor) {
             that.deselectAll();
 
             // Delete text boxes with no text in 'em.
-            if (e.target.text === '') {
-                var wickObj = wickEditor.project.getCurrentObject().getChildByID(e.target.wickObjectID);
-                // Make sure the original text comes back on undo
-                wickObj.text = e.target.originalState.text;
-                wickEditor.actionHandler.doAction('deleteObjects', { ids:[e.target.wickObjectID] });
-                return;
-            }
+            // if (e.target.text === '') {
+            //     var wickObj = wickEditor.project.getCurrentObject().getChildByID(e.target.wickObjectID);
+            //     // Make sure the original text comes back on undo
+            //     wickObj.text = e.target.originalState.text;
+            //     wickEditor.actionHandler.doAction('deleteObjects', { ids:[e.target.wickObjectID] });
+            //     return;
+            // }
 
             // Get ids of all selected objects
             var ids = [];
