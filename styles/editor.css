@@ -139,7 +139,7 @@ select {
 	text-align: left;
     width: 100%;
     height: calc(100% - 50px);
-    font-size: 16px;
+    font-size: 12px;
 }
 #closeScriptingGUIButton {
 	right: 5px;
