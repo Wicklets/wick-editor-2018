@@ -78,6 +78,10 @@ select {
 	margin-right: 15px;
 	cursor: pointer;
 }
+.menubarTab:hover {
+	cursor: pointer;
+	background-color: #DDD;
+}
 .menubarMenu {
 	top: 31px;
 	left: 0px;
@@ -89,6 +93,10 @@ select {
 }
 .menubarButton {
 	cursor: pointer;
+}
+.menubarButton:hover {
+	cursor: pointer;
+	background-color: #DDD;
 }
 
 #statusBarGUI {

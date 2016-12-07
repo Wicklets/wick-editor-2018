@@ -653,7 +653,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('editScripts',
         [], 
-        ['editScriptsButton', 'editSymbolScriptsButton'], 
+        ['editScriptsButton', 'editSymbolScriptsButton', 'editScriptsButtonProperties'], 
         {}, 
         function(args) {
             wickEditor.interfaces['scriptingide'].open = true;
