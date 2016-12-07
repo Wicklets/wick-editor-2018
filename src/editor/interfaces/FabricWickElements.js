@@ -232,7 +232,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 var pathFabricObj = objects[0];
 
                 //that.syncObjects(wickObj, pathFabricObj);
-                pathFabricObj.fill = wickObj.svgData.fillColor;
+                pathFabricObj.setColor(wickObj.svgData.fillColor);
 
                 /*fabric.loadSVGFromString(this.svgData.svgString, function(objects, options) {
                     objects[0].fill = that.svgData.fillColor;
@@ -352,7 +352,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         if(wickObj.fontData) {
             fabricObj.text = wickObj.fontData.text;
             fabricObj.fontFamily = wickObj.fontData.fontFamily;
-            fabricObj.fill = wickObj.fontData.fill;
+            fabricObj.setColor(wickObj.fontData.fill);
             fabricObj.fontSize = wickObj.fontData.fontSize;
             fabricObj.fontStyle = wickObj.fontData.fontStyle;
             fabricObj.fontWeight = wickObj.fontData.fontWeight;
@@ -367,7 +367,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         }
 
         if(wickObj.svgData) {
-            fabricObj.fill = wickObj.svgData.fillColor;
+            fabricObj.setColor(wickObj.svgData.fillColor);
         }
 
         fabricObj.setCoords();

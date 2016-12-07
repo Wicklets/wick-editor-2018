@@ -26,7 +26,7 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
 
     frameInside.identifier = "frameInside";
     frameInside.updateGUIState = function () {
-        frameInside.fill = wickEditor.project.backgroundColor;
+        frameInside.setColor(wickEditor.project.backgroundColor)
         frameInside.width  = wickEditor.project.resolution.x;
         frameInside.height = wickEditor.project.resolution.y;
         frameInside.setCoords();
