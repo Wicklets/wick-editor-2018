@@ -87,8 +87,7 @@ select {
 	left: 0px;
 	line-height: 30px;
 	padding: 5px;
-	padding-left: 15px;
-	padding-right: 15px;
+	min-width: 70px;
 	border-top:none;
 }
 .menubarButton {

@@ -25,7 +25,7 @@ var MenuBarInterface = function (wickEditor) {
                 }
                 closeAllMenus();
                 self.elem.style.display = "block";
-                self.elem.style.left = (tabElem.offsetLeft-15) + 'px';
+                self.elem.style.left = (tabElem.offsetLeft-5) + 'px';
             }
             menuElem.appendChild(tabElem);
 
