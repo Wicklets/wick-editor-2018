@@ -84,7 +84,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         if(enablePerfTests) stopTiming("object list generation");
 
         // Remove objects that don't exist anymore or need to be regenerated
-        fabricInterface.canvas.forEachObject(function(fabricObj) {
+        var removeTheseObjs = [];
+        fabricInterface.canvas._objects.forEach(function(fabricObj) {
             if(!fabricObj || !fabricObj.wickObjectID) return;
 
             var wickObj = wickEditor.project.rootObject.getChildByID(fabricObj.wickObjectID);
@@ -96,15 +97,18 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 }
                 objectIDsInCanvas[fabricObj.wickObjectID] = false;
                 // Object doesn't exist in the current object anymore, remove it's fabric object.
-                if(fabricObj.type === "group") {
-                    fabricObj.forEachObject(function(o){ fabricObj.removeWithUpdate(o) });
-                    fabricInterface.canvas.remove(fabricObj);
-                    fabricInterface.canvas.renderAll();
-                } else {
-                    fabricObj.remove();
-                }
+                removeTheseObjs.push(fabricObj);
             }
         });
+        removeTheseObjs.forEach(function (fabricObj) {
+            if(fabricObj.type === "group") {
+                fabricObj.forEachObject(function(o){ fabricObj.removeWithUpdate(o) });
+                fabricInterface.canvas.remove(fabricObj);
+                fabricInterface.canvas.renderAll();
+            } else {
+                fabricObj.remove();
+            }
+        })
 
         if(enablePerfTests) stopTiming("remove objects");
 

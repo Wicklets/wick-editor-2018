@@ -36,6 +36,7 @@ var PropertiesInterface = function (wickEditor) {
                 $("#objectProperties").css('display', 'block');
                 $("#textProperties").css('display', 'none');
                 $("#soundProperties").css('display', 'none');
+                $("#symbolProperties").css('display', 'none');
 
                 // Set object properties GUI name 
                 if(selectedObj.name) {
@@ -57,12 +58,15 @@ var PropertiesInterface = function (wickEditor) {
 
                 if(selectedObj.isSymbol) {
 
+                    $("#symbolProperties").css('display', 'block');
+
                     objectTypeIcon.src = 'resources/gearbox.png';
                     objectTypeName.innerHTML = 'Symbol';
                 
                 } else if(selectedObj.fontData) {
                 
                     $("#textProperties").css('display', 'block');
+
                     document.getElementById('boldCheckbox').checked = selectedObj.fontData.fontWeight === "bold";
                     document.getElementById('italicCheckbox').checked = selectedObj.fontData.fontStyle === "italic";
                     document.getElementById('fontSize').value = selectedObj.fontData.fontSize;
@@ -74,6 +78,7 @@ var PropertiesInterface = function (wickEditor) {
                 } else if (selectedObj.audioData) {
                 
                     $("#soundProperties").css('display', 'block');
+                    
                     document.getElementById('loopCheckbox').checked = selectedObj.loopSound;
                     document.getElementById('autoplayCheckbox').checked = selectedObj.autoplaySound;
                 
@@ -86,6 +91,7 @@ var PropertiesInterface = function (wickEditor) {
                     objectTypeName.innerHTML = 'Image';
                 
                 }
+
             } else {
                 
                 

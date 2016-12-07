@@ -14,7 +14,7 @@ var FabricInterface = function (wickEditor) {
 
         this.canvas = new fabric.CanvasEx('fabricCanvas', {
             imageSmoothingEnabled:false,
-            //preserveObjectStacking:true,
+            preserveObjectStacking:true,
             renderOnAddRemove:false,
         });
         this.canvas.selectionColor = 'rgba(110, 110, 115, 0.1)';
