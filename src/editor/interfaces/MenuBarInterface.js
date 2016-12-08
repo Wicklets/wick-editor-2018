@@ -23,8 +23,13 @@ var MenuBarInterface = function (wickEditor) {
                     func();
                     return;
                 }
+                var visible = self.elem.style.display === "block";
                 closeAllMenus();
-                self.elem.style.display = "block";
+                if(visible) {
+                    self.elem.style.display = "none";
+                } else {
+                    self.elem.style.display = "block";
+                }
                 self.elem.style.left = (tabElem.offsetLeft-5) + 'px';
             }
             menuElem.appendChild(tabElem);

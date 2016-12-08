@@ -7,6 +7,9 @@ var WickPlayer = (function () {
     // Current project being played by player
     var project;
 
+    // Ghost project used to restore original states of objects
+    var initialStateProject;
+
     // Input vars for mouse and keyboard
     var mouse = {x:0, y:0};
     var keys = [];
@@ -36,7 +39,8 @@ var WickPlayer = (function () {
         desktopMode = !mobileMode;
 
         // Load the project!
-        loadJSONProject(projectJSON);
+        project = loadJSONProject(projectJSON);
+        initialStateProject = loadJSONProject(projectJSON);
 
         if(window.wickEditor) {
             if(project.borderColor) document.getElementById('builtinPlayer').style.backgroundColor = project.borderColor;
@@ -127,28 +131,90 @@ var WickPlayer = (function () {
         return renderer;
     }
 
+    wickPlayer.cloneObject = function (wickObj) {
+        var clone = wickObj.copy();
+
+        // pixi stuff
+        //renderer.refreshPixiSceneForObject(clone);
+        //wickObj.parentObject.pixiContainer.addChild(clone.pixiContainer || clone.pixiSprite || clone.pixiText)
+
+        // player stuff
+        resetAllPlayheads(clone);
+        resetAllEventStates(clone);
+
+        clone.parentObject = project.rootObject;
+        project.addObject(clone);
+        renderer.refreshPixiSceneForObject(clone);
+
+        //project.addObject(clone);
+        //clone.parentObject = project.rootObject;
+        //wickObj.parentObject.addChild
+        //project.regenerateUniqueIDs(project.rootObject);
+
+        return clone;
+    }
+
+    wickPlayer.resetStateOfObject = function (wickObject) {
+
+        // Clones go away because they have no original state! :O
+        if(wickObject.isClone) {
+            project.getCurrentObject().removeChildByID(wickObject.id);
+            return;
+        }
+
+        var initialStateObject = initialStateProject.getObjectByID(wickObject.id);
+        if(!initialStateObject) return;
+
+        // TOXXXIC
+        //console.log("-------------");
+        var blacklist = ['alphaMask', 'pixiSprite', 'pixiContainer', 'pixiText', 'imageData', 'audioData', 'wickScripts', 'parentObject', 'layers'];
+        for (var name in wickObject) {
+            if (name !== 'undefined' && wickObject.hasOwnProperty(name) && blacklist.indexOf(name) === -1) {
+                if(initialStateObject[name] !== wickObject[name]) {
+                    //console.log(name)
+                    //console.log(wickObject[name] + " // " + initialStateObject[name])
+                    wickObject[name] = initialStateObject[name];
+                }
+            }
+        }
+
+        wickObject.hoveredOver = false;
+        wickObject.justEnteredFrame = true;
+        wickObject.onNewFrame = true;
+        wickObject.onLoadScriptRan = false;
+        wickObject.playheadPosition = 0;
+        wickObject.isPlaying = true;
+
+        // Don't forget to reset the childrens states
+        if(wickObject.isSymbol) {
+            wickObject.getAllChildObjects().forEach(function (child) {
+                wickPlayer.resetStateOfObject(child);
+            });
+        }
+
+    }
+
 /*****************************
     Opening projects
 *****************************/
 
     var loadJSONProject = function (proj) {
         // Parse dat project
-        project = WickProject.fromJSON(proj)
+        var newProject = WickProject.fromJSON(proj);
 
         // Make sure we are always in the root (the player never 'goes inside' objects like the editor does.)
-        project.currentObjectID = project.rootObject.id;
-        project.rootObject.currentLayer = 0;
-
-        console.log("Player loading project:")
-        console.log(project);
+        newProject.currentObjectID = newProject.rootObject.id;
+        newProject.rootObject.currentLayer = 0;
 
         // Prepare all objects for being played/drawn
-        resetAllPlayheads(project.rootObject);
-        resetAllEventStates(project.rootObject);
+        resetAllPlayheads(newProject.rootObject);
+        resetAllEventStates(newProject.rootObject);
 
         // Regenerate WickObject stuff that we lost when the projects was JSONified
-        project.rootObject.generateObjectNameReferences(project.rootObject);
-        project.rootObject.generateParentObjectReferences(project.rootObject);
+        newProject.rootObject.generateObjectNameReferences(newProject.rootObject);
+        newProject.rootObject.generateParentObjectReferences(newProject.rootObject);
+
+        return newProject;
     }
 
     /* Make sure all objects start at first frame and start playing */
@@ -178,6 +244,7 @@ var WickPlayer = (function () {
         // All WickObjects are ready to play their sounds, run their onLoad scripts, etc.
         wickObj.justEnteredFrame = true;
         wickObj.onNewFrame = true;
+        wickObj.onLoadScriptRan = false;
 
         // Do the same for all this object's children
         if(wickObj.isSymbol) {
@@ -360,33 +427,6 @@ var WickPlayer = (function () {
 
         }
 
-    }
-
-/*****************************
-    experimenting ........
-*****************************/
-
-    wickPlayer.cloneObject = function (wickObj) {
-        var clone = wickObj.copy();
-
-        // pixi stuff
-        //renderer.refreshPixiSceneForObject(clone);
-        //wickObj.parentObject.pixiContainer.addChild(clone.pixiContainer || clone.pixiSprite || clone.pixiText)
-
-        // player stuff
-        resetAllPlayheads(clone);
-        resetAllEventStates(clone);
-
-        clone.parentObject = project.rootObject;
-        project.addObject(clone);
-        renderer.refreshPixiSceneForObject(clone);
-
-        //project.addObject(clone);
-        //clone.parentObject = project.rootObject;
-        //wickObj.parentObject.addChild
-        //project.regenerateUniqueIDs(project.rootObject);
-
-        return clone;
     }
 
     return wickPlayer;

@@ -45,8 +45,16 @@ var WickObject = function () {
     this.imageData = undefined;
     this.fontData  = undefined;
     this.svgData   = undefined;
+    this.audioData = undefined;
 
 // Symbols
+
+    // Player vars, only ever used when in the player.
+    this.isPlaying = undefined;
+    this.hoveredOver = undefined;
+    this.justEnteredFrame = undefined;
+    this.onNewFrame = undefined;
+    this.onLoadScriptRan = undefined;
 
     // See design docs for how objects and symbols work.
     this.isSymbol = false;
@@ -1150,11 +1158,19 @@ WickObject.prototype.update = function () {
     if(this.onNewFrame) {
 
         if(this.isSymbol) {
-            this.runScript(this.getCurrentFrame().wickScripts['onLoad'], this);
-        }
+            var currentFrame = this.getCurrentFrame();
 
-        if(this.isSymbol && this.getCurrentFrame() && !this.getCurrentFrame().autoplay) {
-            this.isPlaying = false;
+            if(!currentFrame.alwaysSaveState) {
+                this.getAllActiveChildObjects().forEach(function (child) {
+                    WickPlayer.resetStateOfObject(child);
+                });
+            }
+
+            if(currentFrame && !currentFrame.autoplay) {
+                this.isPlaying = false;
+            }
+
+            this.runScript(currentFrame.wickScripts['onLoad'], this);
         }
 
         this.onNewFrame = false;
@@ -1162,7 +1178,10 @@ WickObject.prototype.update = function () {
 
     if(this.justEnteredFrame) {
 
-        this.runScript(this.wickScripts['onLoad']);
+        if(!this.onLoadScriptRan) {
+            this.runScript(this.wickScripts['onLoad']);
+            this.onLoadScriptRan = true;
+        }
 
         if(this.autoplaySound) {
             this.playSound();
@@ -1216,7 +1235,7 @@ WickObject.prototype.runScript = function (script, objectScope) {
     var gotoPrevFrame = function ()      { objectScope.gotoPrevFrame(); }
 
     // stop all sounds wrapper
-    var stopAllSounds = function () { console.log(WickPlayer); WickPlayer.getAudioPlayer().stopAllSounds(); };
+    var stopAllSounds = function () { WickPlayer.getAudioPlayer().stopAllSounds(); };
 
     // Setup keycode shortcuts
     var isKeyDown = function (keyString) { return keys[keyCharToCode[keyString]]; };
@@ -1351,7 +1370,12 @@ WickObject.prototype.gotoFrame = function (frame) {
 
     var newFrame = this.getCurrentFrame();
 
-    if(newFrame !== oldFrame) this.onNewFrame = true;
+    if(newFrame !== oldFrame) {
+        this.onNewFrame = true;
+        this.getAllActiveChildObjects().forEach(function (child) {
+            child.justEnteredFrame = true;
+        });
+    }
 
 }
 

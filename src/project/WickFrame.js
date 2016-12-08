@@ -7,13 +7,16 @@ var WickFrame = function () {
 	// Store all objects in frame. 
 	this.wickObjects = [];
 
-	// Create multiframe support. 
+	// Frame length for long frames
 	this.frameLength = 1;
 
 	// Should we stop when we get to this frame?
 	this.autoplay = true;
 
-	// Setup all scripts to defaults
+	// Should the frame reset on being entered?
+	this.alwaysSaveState = false;
+
+	// Set all scripts to defaults
 	this.wickScripts = {
         "onLoad" : "",
         "onUpdate": ""

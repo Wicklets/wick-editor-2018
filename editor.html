@@ -94,6 +94,7 @@
 </head>
 
 <body>
+<div class="noselect">
     <!-- Hidden element to always be selected so browser always fires copy/paste events -->
 
         <input id="hidden-input" class="hidden" type="text" value="" />
@@ -264,7 +265,7 @@
                     <br />
                     <br />
                     <input type="checkbox" id="frameAutoplayCheckbox"> Always stop on this frame<br />
-                    <input type="checkbox" id="frameSaveStateCheckbox"> Always save state<br />
+                    <input type="checkbox" id="frameSaveStateCheckbox"> Always save frame state<br />
                     <br />
                     <div class="button buttonInRow" style="border: 1px solid;" id="editFrameScriptsButton">Edit frame scripts</div>
                 </div>
@@ -314,6 +315,8 @@
                     <div id="soundProperties">
                         <input type="checkbox" id="autoplayCheckbox"> Autoplay<br />
                         <input type="checkbox" id="loopCheckbox"> Loop<br />
+                        <br />
+                        Volume <input style="float:right; width:130px" type="range" value="100" min="0" max="100" id="volumeSlider">
                     </div>
                     <div id="symbolProperties">
                         <div class="button buttonInRow" style="border: 1px solid;" id="editScriptsButtonProperties">Edit object scripts</div>
@@ -474,6 +477,7 @@
 
         <div id="tooltipGUI" class="GUIBox tooltip"></div>
 
+</div>
 </body>
 
 </html>

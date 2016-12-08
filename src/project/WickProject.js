@@ -101,7 +101,7 @@ WickProject.fromJSON = function (rawJSONProject) {
     // Add references to wickobject's parents (optimization)
     projectFromJSON.rootObject.generateParentObjectReferences();
 
-    // Backwards compatibility for old Wick projects: Add scripts to frames if they dont' have any
+    // Backwards compatibility for old Wick projects
     var allObjectsInProject = projectFromJSON.rootObject.getAllChildObjectsRecursive();
     allObjectsInProject.push(projectFromJSON.rootObject);
     allObjectsInProject.forEach(function (wickObj) {
@@ -109,12 +109,15 @@ WickProject.fromJSON = function (rawJSONProject) {
 
         wickObj.layers.forEach(function (layer) {
             layer.frames.forEach(function (frame) {
+                // Add scripts (old projects didn't have frame scripts)
                 if(!frame.wickScripts) {
                     frame.wickScripts = {
                         "onLoad" : "",
                         "onUpdate" : ""
                     }
                 }
+                // Add frame save state option (old projects always implicitly saved frame state)
+                if(!frame.alwaysSaveState) frame.alwaysSaveState = false;
             })
         });
     });
