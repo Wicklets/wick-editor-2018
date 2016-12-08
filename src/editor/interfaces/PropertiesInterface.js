@@ -109,7 +109,8 @@ var PropertiesInterface = function (wickEditor) {
             document.getElementById('frameIdentifier').value = (currentFrame.identifier) ? currentFrame.identifier : "";
             $('#frameIdentifier').prop('disabled', false);
 
-            document.getElementById('frameAutoplayCheckbox').checked = !wickEditor.project.getCurrentObject().getCurrentFrame().autoplay;
+            document.getElementById('frameAutoplayCheckbox').checked = !currentFrame.autoplay;
+            document.getElementById('frameSaveStateCheckbox').checked = currentFrame.alwaysSaveState;
 
         } else if(currentTab === 'project') {
 
@@ -337,6 +338,10 @@ var PropertiesInterface = function (wickEditor) {
 
     document.getElementById('frameAutoplayCheckbox').onclick = function (e) {
         wickEditor.project.getCurrentObject().getCurrentFrame().autoplay = !this.checked;
+        wickEditor.syncInterfaces();
+    }
+    document.getElementById('frameSaveStateCheckbox').onclick = function (e) {
+        wickEditor.project.getCurrentObject().getCurrentFrame().alwaysSaveState = this.checked;
         wickEditor.syncInterfaces();
     }
 

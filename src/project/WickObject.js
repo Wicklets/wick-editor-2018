@@ -55,6 +55,7 @@ var WickObject = function () {
     this.justEnteredFrame = undefined;
     this.onNewFrame = undefined;
     this.onLoadScriptRan = undefined;
+    this.deleted = undefined;
 
     // See design docs for how objects and symbols work.
     this.isSymbol = false;
@@ -1155,6 +1156,8 @@ WickObject.prototype.isPointInside = function(point, parentScaleX, parentScaleY)
 
 WickObject.prototype.update = function () {
 
+    if(this.deleted) return;
+
     if(this.onNewFrame) {
 
         if(this.isSymbol) {
@@ -1727,6 +1730,12 @@ WickObject.prototype.stopSound = function () {
 WickObject.prototype.clone = function () { 
 
     return WickPlayer.cloneObject(this); 
+
+};
+
+WickObject.prototype.delete = function () { 
+
+    return WickPlayer.deleteObject(this); 
 
 };
 

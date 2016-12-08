@@ -154,6 +154,17 @@ var WickPlayer = (function () {
         return clone;
     }
 
+    wickPlayer.deleteObject = function (wickObj) {
+        //project.getCurrentObject().removeChildByID(wickObj.id);
+        // So for now don't actually delete it, just make it go away somehow cos i'm lazy
+        wickObj.deleted = true;
+        // JUST GET IT OUTTA HERE I DONT CARE ................. 
+        // it's like 8am pls forgive me for this
+        wickObj.x = 80608060 + Math.random()*10000;
+        wickObj.y = 80608060 + Math.random()*10000;
+        wickObj.name = undefined;
+    }
+
     wickPlayer.resetStateOfObject = function (wickObject) {
 
         // Clones go away because they have no original state! :O

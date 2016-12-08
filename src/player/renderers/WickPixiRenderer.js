@@ -161,6 +161,13 @@ var WickPixiRenderer = function (project) {
 	    renderer.render(project.rootObject.pixiContainer);
 	}
 
+	this.deleteObject = function (wickObj) {
+		var pixiObj = wickObj.pixiContainer || wickObj.pixiText || wickObj.pixiSprite;
+		//wickObj.parentObject.pixiContainer.removeChild(pixiObj);
+		// No easy way to bring it back so just hide it for now
+		pixiObj.visible = false;
+	}
+
 	var resetAllPixiObjects = function (wickObj) {
 
 	    wickObj.getAllChildObjects().forEach(function(subObj) {
