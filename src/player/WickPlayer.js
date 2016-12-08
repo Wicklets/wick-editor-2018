@@ -220,7 +220,7 @@ var WickPlayer = (function () {
         
         project.rootObject.getAllActiveChildObjects().forEach(function(child) {
             if(child.isPointInside(mouse) && child.isClickable) {
-                child.runScript("onClick");
+                child.runScript(child.wickScripts["onClick"]);
             }
         });
 
@@ -232,7 +232,7 @@ var WickPlayer = (function () {
         lastKeyPressed = codeToKeyChar[event.keyCode];
 
         project.rootObject.getAllActiveChildObjects().forEach(function(child) {
-            child.runScript("onKeyDown");
+            child.runScript(child.wickScripts["onKeyDown"]);
         });
     }
 
@@ -257,7 +257,7 @@ var WickPlayer = (function () {
 
         project.rootObject.getAllActiveChildObjects().forEach(function(child) {
             if(child.isPointInside(touchPos) && child.isClickable()) {
-                child.runScript("onClick");
+                child.runScript(child.wickScripts["onClick"]);
             }
         });
 

@@ -664,7 +664,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('editFrameScripts',
         [], 
-        ['editFrameScriptsButton'], 
+        ['editFrameScriptsButton', 'editFrameScriptsRightClick'], 
         {}, 
         function(args) {
             wickEditor.interfaces.fabric.deselectAll();

@@ -1148,6 +1148,11 @@ WickObject.prototype.isPointInside = function(point, parentScaleX, parentScaleY)
 WickObject.prototype.update = function () {
 
     if(this.onNewFrame) {
+
+        if(this.isSymbol) {
+            this.runScript(this.getCurrentFrame().wickScripts['onLoad'], this);
+        }
+
         if(this.isSymbol && this.getCurrentFrame() && !this.getCurrentFrame().autoplay) {
             this.isPlaying = false;
         }
@@ -1157,10 +1162,8 @@ WickObject.prototype.update = function () {
 
     if(this.justEnteredFrame) {
 
-        console.log("just entered frame")
+        this.runScript(this.wickScripts['onLoad']);
 
-        this.runScript('onLoad');
-        
         if(this.autoplaySound) {
             this.playSound();
         }
@@ -1168,10 +1171,15 @@ WickObject.prototype.update = function () {
         this.justEnteredFrame = false;
     }
 
-    this.runScript('onUpdate');
+    this.runScript(this.wickScripts['onUpdate']);
 
     if(this.isSymbol) {
         this.advanceTimeline();
+
+        // For now, the WickObject that owns the frame runs the frame's scripts.
+        // So, play(), stop() etc refers to the timeline that the frame is in.
+        // The 'this' keyword is borked though, since it still will refer to the WickObject.
+        this.runScript(this.getCurrentFrame().wickScripts['onUpdate'], this);
 
         this.getAllActiveChildObjects().forEach(function(child) {
             child.update();
@@ -1182,11 +1190,11 @@ WickObject.prototype.update = function () {
 
 }
 
-WickObject.prototype.runScript = function (scriptType) {
+WickObject.prototype.runScript = function (script, objectScope) {
 
     var that = this;
 
-    var script = this.wickScripts[scriptType];
+    if(!objectScope) objectScope = this.parentObject;
 
     // Setup wickobject reference variables
     var project = WickPlayer.getProject() || wickEditor.project;
@@ -1200,12 +1208,12 @@ WickObject.prototype.runScript = function (scriptType) {
     project.height = project.resolution.y;
 
     // Setup builtin wick scripting methods and objects
-    var play          = function ()      { that.parentObject.play(); }
-    var stop          = function ()      { that.parentObject.stop(); }
-    var gotoAndPlay   = function (frame) { that.parentObject.gotoAndPlay(frame); }
-    var gotoAndStop   = function (frame) { that.parentObject.gotoAndStop(frame); }
-    var gotoNextFrame = function ()      { that.parentObject.gotoNextFrame(); }
-    var gotoPrevFrame = function ()      { that.parentObject.gotoPrevFrame(); }
+    var play          = function ()      { objectScope.play(); }
+    var stop          = function ()      { objectScope.stop(); }
+    var gotoAndPlay   = function (frame) { objectScope.gotoAndPlay(frame); }
+    var gotoAndStop   = function (frame) { objectScope.gotoAndStop(frame); }
+    var gotoNextFrame = function ()      { objectScope.gotoNextFrame(); }
+    var gotoPrevFrame = function ()      { objectScope.gotoPrevFrame(); }
 
     // stop all sounds wrapper
     var stopAllSounds = function () { console.log(WickPlayer); WickPlayer.getAudioPlayer().stopAllSounds(); };
@@ -1214,8 +1222,8 @@ WickObject.prototype.runScript = function (scriptType) {
     var isKeyDown = function (keyString) { return keys[keyCharToCode[keyString]]; };
 
     // WickObjects in same frame (scope) are accessable without using root./parent.
-    if(!this.isRoot) {
-        this.parentObject.getAllChildObjects().forEach(function(child) {
+    if(objectScope) {
+        objectScope.getAllChildObjects().forEach(function(child) {
             if(child.name) window[child.name] = child;
         });
     }
@@ -1311,6 +1319,8 @@ WickObject.prototype.stop = function () {
 
 WickObject.prototype.gotoFrame = function (frame) {
 
+    var oldFrame = this.getCurrentFrame();
+
     // Frames are zero-indexed internally but start at one in the editor GUI, so you gotta subtract 1.
     if (CheckInput.isNonNegativeInteger(frame)) {
 
@@ -1338,6 +1348,11 @@ WickObject.prototype.gotoFrame = function (frame) {
         throw "Failed to navigate to frame \'" + frame + "\': is neither a string nor a nonnegative integer";
 
     }
+
+    var newFrame = this.getCurrentFrame();
+
+    if(newFrame !== oldFrame) this.onNewFrame = true;
+
 }
 
 WickObject.prototype.gotoAndPlay = function (frame) {

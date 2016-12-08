@@ -73,6 +73,10 @@ var TimelineInterface = function (wickEditor) {
 
         for(var l = 0; l < currentObject.layers.length; l++) {
             for(var f = 0; f < /*currentObject.getTotalTimelineLength()*/ 500; f++) {
+
+                var layer = currentObject.layers[l];
+                var frame = layer.frames[f];
+
                 if(l === 0) {
                     ctx.fillStyle = "#AAAAAA";
                     ctx.font = "10px sans-serif";
@@ -87,7 +91,7 @@ var TimelineInterface = function (wickEditor) {
                     f*frameWidth-1, l*frameHeight,
                     2, frameHeight+10);
 
-                var isActiveLayer = currentObject.getCurrentLayer() === currentObject.layers[l];
+                var isActiveLayer = layer === currentObject.getCurrentLayer();
                 ctx.fillStyle = isActiveLayer ? "#FFFFFF" : "#F6F6F6";
                 ctx.fillRect(
                     f*frameWidth + 1, l*frameHeight + 1,
@@ -102,7 +106,8 @@ var TimelineInterface = function (wickEditor) {
             var frameCount = 0;
             layer.frames.forEach(function (frame) {
 
-                ctx.fillStyle = "#999999";
+                var frameHasScripts = frame && (frame.wickScripts.onLoad !== '' || frame.wickScripts.onUpdate !== '');
+                ctx.fillStyle = frameHasScripts ? "#33EE33" : "#999999";
                 ctx.fillRect(
                     frameCount*frameWidth, layerCount*frameHeight,
                     frameWidth*frame.frameLength, frameHeight);
@@ -119,8 +124,9 @@ var TimelineInterface = function (wickEditor) {
                 if (!frame.autoplay) {
                     ctx.fillStyle = "#FF6666";
                     ctx.fillRect(
-                        frameCount*frameWidth + 1, layerCount*frameHeight + 1,
-                        frameWidth/2, frameHeight - 2);
+                        frameCount*frameWidth + frameWidth/4, layerCount*frameHeight + frameHeight/4,
+                        frameWidth/2, frameHeight/2);
+                    ctx.fill();
                 }
 
                 /*for(var f = 1; f < frame.frameLength; f++) {
