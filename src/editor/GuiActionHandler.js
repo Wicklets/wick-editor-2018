@@ -656,7 +656,20 @@ var GuiActionHandler = function (wickEditor) {
         ['editScriptsButton', 'editSymbolScriptsButton', 'editScriptsButtonProperties'], 
         {}, 
         function(args) {
-            wickEditor.interfaces['scriptingide'].open = true;
+            var selectedObj = wickEditor.interfaces.fabric.getSelectedWickObject();
+            console.log(selectedObj);
+            wickEditor.interfaces['scriptingide'].editScriptsOfObject(selectedObj);
+            wickEditor.syncInterfaces();
+        });
+
+    registerAction('editFrameScripts',
+        [], 
+        ['editFrameScriptsButton'], 
+        {}, 
+        function(args) {
+            wickEditor.interfaces.fabric.deselectAll();
+            var selectedFrame = wickEditor.project.getCurrentObject().getCurrentFrame();
+            wickEditor.interfaces['scriptingide'].editScriptsOfObject(selectedFrame);
             wickEditor.syncInterfaces();
         });
 
@@ -751,7 +764,6 @@ var GuiActionHandler = function (wickEditor) {
         ['convertToSymbolButton', 'createSymbolButton'], 
         {}, 
         function(args) {
-            //wickEditor.interfaces.scriptingide.open = true;
             var fabCanvas = wickEditor.interfaces['fabric'].canvas;
             wickEditor.actionHandler.doAction('convertSelectionToSymbol', 
                 {selection:fabCanvas.getActiveObject() || fabCanvas.getActiveGroup()}

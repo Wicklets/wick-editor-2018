@@ -12,6 +12,12 @@ var WickFrame = function () {
 
 	// Should we stop when we get to this frame?
 	this.autoplay = true;
+
+	// Setup all scripts to defaults
+	this.wickScripts = {
+        "onLoad" : "",
+        "onUpdate": ""
+    };
 };
 
 // Extend our frame to encompass more frames. 

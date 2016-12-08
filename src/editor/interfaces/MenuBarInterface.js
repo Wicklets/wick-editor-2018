@@ -81,13 +81,16 @@ var MenuBarInterface = function (wickEditor) {
             new TabButton('Open', function () {
                 wickEditor.guiActionHandler.doAction("openFile");
             }),
-            new TabSpacer(),
-            new TabButton('Export as webpage', function () {
+            //new TabSpacer(),
+            new TabButton('Export', function () {
+                wickEditor.guiActionHandler.doAction("exportProject");
+            }),
+            /*new TabButton('Export as webpage', function () {
                 wickEditor.guiActionHandler.doAction("exportProject");
             }),
             new TabButton('Export as zip file', function () {
-                
-            }),
+                alert("")
+            }),*/
         ]);
 
         addTab('Edit', [
@@ -142,7 +145,13 @@ var MenuBarInterface = function (wickEditor) {
             }),
         ]);
 
-        addTab('Import', [
+        addTab('Add', [
+            new TabButton('Text', function () {
+                
+            }),
+            new TabButton('Script', function () {
+                
+            }),
             new TabButton('File', function () {
                 wickEditor.guiActionHandler.doAction("openFile");
             }),

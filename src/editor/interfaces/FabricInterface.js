@@ -52,6 +52,7 @@ var FabricInterface = function (wickEditor) {
 
     // Update the scripting GUI/properties box when the selected object changes
         that.canvas.on('object:selected', function (e) {
+            wickEditor.interfaces.scriptingide.editScriptsOfObject(e.target.wickObjReference, {dontOpenIDE:true});
             wickEditor.syncInterfaces(['scriptingide','properties']);
             e.target.on({
                 moving: e.target.setCoords,
@@ -60,6 +61,7 @@ var FabricInterface = function (wickEditor) {
             });
         });
         that.canvas.on('selection:cleared', function (e) {
+            wickEditor.interfaces.scriptingide.editScriptsOfObject(null, {dontOpenIDE:true});
             wickEditor.syncInterfaces(['scriptingide','properties']);
         });
         that.canvas.on('selection:changed', function (e) {

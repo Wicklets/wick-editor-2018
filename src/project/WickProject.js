@@ -98,7 +98,26 @@ WickProject.fromJSON = function (rawJSONProject) {
     // Decode scripts back to human-readble and eval()-able format
     projectFromJSON.rootObject.decodeStrings();
 
+    // Add references to wickobject's parents (optimization)
     projectFromJSON.rootObject.generateParentObjectReferences();
+
+    // Backwards compatibility for old Wick projects: Add scripts to frames if they dont' have any
+    var allObjectsInProject = projectFromJSON.rootObject.getAllChildObjectsRecursive();
+    allObjectsInProject.push(projectFromJSON.rootObject);
+    allObjectsInProject.forEach(function (wickObj) {
+        if(!wickObj.isSymbol) return;
+
+        wickObj.layers.forEach(function (layer) {
+            layer.frames.forEach(function (frame) {
+                if(!frame.wickScripts) {
+                    frame.wickScripts = {
+                        "onLoad" : "",
+                        "onUpdate" : ""
+                    }
+                }
+            })
+        });
+    });
 
     return projectFromJSON;
 }

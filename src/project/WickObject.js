@@ -33,10 +33,10 @@ var WickObject = function () {
 
     // Dictionary mapping function names to WickScript object
     this.wickScripts = {
-        "onLoad" : "// Setup\n// This script runs once when this object enters the scene.\n",
-        "onClick" : "// On Click\n// This script runs when this object is clicked on.\n",
-        "onUpdate": "// Update\n// This script runs repeatedly whenever this object is in the scene.\n",
-        "onKeyDown": "// On Key Pressed\n// This script runs whenever a key is pressed.\n"
+        "onLoad" : "",
+        "onClick" : "",
+        "onUpdate": "",
+        "onKeyDown": ""
     };
 
 // Static
@@ -1156,6 +1156,8 @@ WickObject.prototype.update = function () {
     }
 
     if(this.justEnteredFrame) {
+
+        console.log("just entered frame")
 
         this.runScript('onLoad');
         
