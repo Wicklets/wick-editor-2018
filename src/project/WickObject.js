@@ -1261,7 +1261,7 @@ WickObject.prototype.runScript = function (script, objectScope) {
 
     // Shortcut for editing text
     if(!this.text && this.pixiText) this.text = this.pixiText.text;
-    
+        
     // Run da script!!
     try {
         //eval(script);
@@ -1551,9 +1551,7 @@ WickObject.prototype.copy = function () {
 
     var copiedObject = new WickObject();
 
-    copiedObject.name = undefined; // ???? SHould we generate a name based on the object being copied?
-
-    copiedObject.isClone = true;
+    copiedObject.name = undefined; // ???? Should we generate a name based on the object being copied?
 
     copiedObject.x = this.x;
     copiedObject.y = this.y;
@@ -1583,7 +1581,7 @@ WickObject.prototype.copy = function () {
         copiedObject.layers = [];
         this.layers.forEach(function (layer) {
             copiedObject.layers.push(layer.copy());
-        })
+        });
     } else {
         copiedObject.isSymbol = false;
 
