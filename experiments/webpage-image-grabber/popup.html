@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset=utf-8>
+      <title>Full page screen catpure</title>
+      <!-- there are rendering bugs when styles aren't inline... -->
+      <style>
+body {
+    font: normal 12px/16px helvetica,aria,sans-serif;
+}
+div,p { margin: 0; padding: 0; }
+
+.clr { overflow: hidden; }
+.left { float: left; }
+.right { float: right; }
+
+a {
+	color: #3681b3;
+	text-decoration: none;
+}
+a:hover { color: #265c80; }
+a:active { color: #000; }
+
+#wrap {
+    width: 300px;
+    padding-top: 9px;
+    font-size: 12px;
+    color: #888;
+}
+
+#wrap>div { display: none; }
+#wrap>#loading { display: block; }
+
+#loading .loader {
+    position: relative;
+    border-top: 12px dotted #000;
+    height: 9px;
+}
+
+#loading .bar {
+    position: absolute;
+    top: -21px;
+    left: 0;
+    height: 30px;
+    width: 0%;
+    background: #fff url(loader.gif) scroll no-repeat center right;
+}
+p { word-wrap: break-word; }
+      </style>
+  </head>
+  <body>
+      <div id="wrap">
+          <div id="loading">
+              <div class="loader"><div class="bar" id="bar"></div></div>
+              <div class="clr">
+                  <br>
+                  <p>
+                      For best results, don’t mouse over the page during
+                      capture and set “Actual Size” from the “View” menu.<br>
+                      Your finished image will open in a new window.
+                  </p>
+              </div>
+          </div>
+          <div id="invalid">
+              Full Page Screen Capture cannot be run on this page
+              because of Google Chrome Web Store policies. Try
+              another page on the web!
+          </div>
+          <div id="uh-oh">
+              Uh oh, something went wrong! Try reloading the page
+              and running this again. If the problem persists,
+              please report the error in the
+              <a href="https://chrome.google.com/webstore/support/fdpohaocaechififmbbbbbknoalclacl?hl=en&gl=US#bug">Chrome webstore</a>
+              and please include the URL you tried it on and the
+              version of Chrome.
+          </div>
+      </div>
+
+      <!-- JavaScript and HTML must be in separate files for security. -->
+      <script src="popup.js"></script>
+  </body>
+</html>
