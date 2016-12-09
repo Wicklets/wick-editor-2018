@@ -710,6 +710,15 @@ WickObject.prototype.getAbsoluteScale = function () {
     }
 }
 
+WickObject.prototype.getAbsoluteAngle = function () {
+    if(this.isRoot) {
+        return 0.0;
+    } else {
+        var parentAngle = this.parentObject.getAbsoluteAngle();
+        return this.angle + parentAngle;
+    }
+}
+
 WickObject.prototype.isOnActiveLayer = function () {
 
     return this.parentObject.getLayerWithChild(this) === this.parentObject.getCurrentLayer();
@@ -1542,7 +1551,9 @@ WickObject.prototype.copy = function () {
 
     var copiedObject = new WickObject();
 
-    this.name = undefined; // ???? SHould we generate a name based on the object being copied?
+    copiedObject.name = undefined; // ???? SHould we generate a name based on the object being copied?
+
+    copiedObject.isClone = true;
 
     copiedObject.x = this.x;
     copiedObject.y = this.y;
