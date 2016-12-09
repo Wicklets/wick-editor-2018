@@ -2,6 +2,11 @@
 
 * { margin:0; padding:0; } /* to remove the top and left whitespace */
 
+@font-face {
+    font-family:"Open Sans";
+    src: url("Open_Sans/OpenSans-Regular.ttf");
+}
+
 .noselect {
 	-webkit-touch-callout: none; /* iOS Safari */
 	-webkit-user-select: none;   /* Chrome/Safari/Opera */
