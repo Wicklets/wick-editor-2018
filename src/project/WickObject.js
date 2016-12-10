@@ -130,9 +130,9 @@ WickObject.fromAnimatedGIF = function (gifData, callback) {
     gifSymbol.y  = window.innerHeight/2;
 
     //var gif = document.getElementById("gifImportDummyElem");
-    var newGifEl = document.createElement("img"); 
+    var newGifEl = document.createElement("img");
     newGifEl.id = "gifImportDummyElem";
-    document.body.appendChild(newGifEl); 
+    document.body.appendChild(newGifEl);
     var gif = document.getElementById('gifImportDummyElem')
     gif.setAttribute('src', gifData);
     gif.setAttribute('height', '467px');
@@ -145,7 +145,7 @@ WickObject.fromAnimatedGIF = function (gifData, callback) {
         for(var i = 0; i < framesDataURLs.length; i++) {
 
             WickObject.fromImage(
-                framesDataURLs[i], 
+                framesDataURLs[i],
                 (function(frameIndex) { return function(o) {
                     gifSymbol.layers[0].frames[frameIndex].wickObjects.push(o);
                     
@@ -180,7 +180,7 @@ WickObject.fromText = function (text) {
         //backgroundColor: undefined,
         //borderColor: undefined,
         //borderDashArray: undefined,
-        //borderScaleFactor: undefined, 
+        //borderScaleFactor: undefined,
         //caching: true,
         cursorColor: '#333',
         cursorDelay: 500,
@@ -385,7 +385,7 @@ WickObject.prototype.getTotalTimelineLength = function () {
 WickObject.prototype.getAllChildObjectsRecursive = function () {
 
     if (!this.isSymbol) {
-        return []; 
+        return [];
     }
 
     var children = [];
@@ -402,11 +402,34 @@ WickObject.prototype.getAllChildObjectsRecursive = function () {
     return children;
 }
 
+/* Return all active child objects of a parent object (and their children) */
+WickObject.prototype.getAllActiveChildObjectsRecursive = function (includeParents) {
+
+    if (!this.isSymbol) {
+        return [];
+    }
+
+    var children = [];
+    //for(var l = this.layers.length-1; l >= 0; l--) {
+        //var layer = this.layers[l];
+        //for(var f = 0; f < layer.frames.length; f++) {
+            //var frame = layer.frames[f];
+            var frame = this.getCurrentFrame();
+            for(var o = 0; o < frame.wickObjects.length; o++) {
+                var obj = frame.wickObjects[o];
+                if(includeParents || !obj.isSymbol) children.push(obj);
+                children = children.concat(obj.getAllActiveChildObjectsRecursive());
+            }
+        //}
+    //}
+    return children;
+}
+
 /* Return all child objects of a parent object */
 WickObject.prototype.getAllChildObjects = function () {
 
     if (!this.isSymbol) {
-        return []; 
+        return [];
     }
 
     var children = [];
@@ -426,7 +449,7 @@ WickObject.prototype.getAllChildObjects = function () {
 WickObject.prototype.getAllActiveChildObjects = function () {
 
     if (!this.isSymbol) {
-        return []; 
+        return [];
     }
 
     var children = [];
@@ -438,14 +461,14 @@ WickObject.prototype.getAllActiveChildObjects = function () {
             });
         }
     }
-    return children; 
+    return children;
 }
 
 /* Return all child objects in the parent objects current layer. */
 WickObject.prototype.getAllActiveLayerChildObjects = function () {
 
     if (!this.isSymbol) {
-        return []; 
+        return [];
     }
 
     var children = [];
@@ -456,7 +479,7 @@ WickObject.prototype.getAllActiveLayerChildObjects = function () {
             children.push(obj);
         });
     }
-    return children; 
+    return children;
 }
 
 // Use this to render unselectable objects in Fabric
@@ -564,7 +587,7 @@ WickObject.prototype.getChildByID = function (id) {
         } else {
             if(!foundChild) foundChild = child.getChildByID(id);
         }
-    }); 
+    });
 
     return foundChild;
 }
@@ -612,7 +635,7 @@ WickObject.prototype.removeChildByID = function (id) {
             that.getCurrentFrame().wickObjects.splice(index, 1);
         }
         child.removeChildByID(id);
-    }); 
+    });
 }
 
 /* Used to generate a unique ID for new WickObjects */
@@ -632,7 +655,7 @@ WickObject.prototype.getLargestID = function (id) {
         if(subLargestID > largestID) {
             largestID = subLargestID;
         }
-    }); 
+    });
 
     return largestID;
 }
@@ -672,7 +695,7 @@ WickObject.prototype.fixOriginPoint = function (newSymbol) {
         child.y += symbolCornerPosition.y;
         if(!that.parentObject.isRoot && newSymbol) {
             child.x += bboxCenter.x;
-            child.y += bboxCenter.y;   
+            child.y += bboxCenter.y;
         }
     });
     this.x -= symbolCornerPosition.x;
@@ -683,13 +706,13 @@ WickObject.prototype.fixOriginPoint = function (newSymbol) {
 WickObject.prototype.getAbsolutePosition = function () {
     if(this.isRoot) {
         return {
-            x: 0, 
+            x: 0,
             y: 0
         };
     } else {
         var parentPosition = this.parentObject.getAbsolutePosition();
         return {
-            x: this.x + parentPosition.x, 
+            x: this.x + parentPosition.x,
             y: this.y + parentPosition.y
         };
     }
@@ -698,13 +721,13 @@ WickObject.prototype.getAbsolutePosition = function () {
 WickObject.prototype.getAbsoluteScale = function () {
     if(this.isRoot) {
         return {
-            x: 1.0, 
+            x: 1.0,
             y: 1.0
         };
     } else {
         var parentScale = this.parentObject.getAbsoluteScale();
         return {
-            x: this.scaleX * parentScale.x, 
+            x: this.scaleX * parentScale.x,
             y: this.scaleY * parentScale.y
         };
     }
@@ -1054,7 +1077,7 @@ WickObject.prototype.getToTween = function () {
     }
 
     return foundTween;
-}   
+}
 
 WickObject.prototype.applyTweens = function () {
 
@@ -1138,16 +1161,16 @@ WickObject.prototype.isPointInside = function(point, parentScaleX, parentScaleY)
         scaledObjX -= that.width*that.scaleX/2;
         scaledObjY -= that.height*that.scaleY/2;
 
-        if ( point.x >= scaledObjX && 
+        if ( point.x >= scaledObjX &&
              point.y >= scaledObjY  &&
-             point.x <= scaledObjX + scaledObjWidth && 
+             point.x <= scaledObjX + scaledObjWidth &&
              point.y <= scaledObjY  + scaledObjHeight ) {
 
             if(!that.alphaMask) return true;
 
             var objectRelativePointX = (point.x - scaledObjX);
             var objectRelativePointY = (point.y - scaledObjY);
-            var objectAlphaMaskIndex = 
+            var objectAlphaMaskIndex =
                 (Math.floor(objectRelativePointX/that.scaleX/parentScaleX)%Math.floor(that.width)) +
                 (Math.floor(objectRelativePointY/that.scaleY/parentScaleY)*Math.floor(that.width));
             return !that.alphaMask[(objectAlphaMaskIndex)];
@@ -1304,14 +1327,14 @@ WickObject.prototype.runScript = function (script, objectScope) {
 
 }
 
-WickObject.prototype.advanceTimeline = function () { 
+WickObject.prototype.advanceTimeline = function () {
     // Advance timeline for this object
     if(this.isPlaying && this.readyToAdvance) {
 
         var oldFrame = this.getCurrentFrame();
         this.playheadPosition ++;
 
-        // If we reached the end, go back to the beginning 
+        // If we reached the end, go back to the beginning
         if(this.playheadPosition >= this.getTotalTimelineLength()) {
             this.playheadPosition = 0;
         }
@@ -1445,7 +1468,7 @@ WickObject.prototype.gotoPrevFrame = function () {
 }
 
 /* Determine if two wick objects collide using rectangular hit detection on their
-       farthest border */ 
+       farthest border */
 WickObject.prototype.hitTestRectangles = function (otherObj) {
     var objA = this;
     var objB = otherObj;
@@ -1460,21 +1483,21 @@ WickObject.prototype.hitTestRectangles = function (otherObj) {
     objAAbsPos.y  -= objA.height * objAScale.y/2;
 
     var objBScale  = objB.getAbsoluteScale();
-    var objBWidth  = objB.width  * objBScale.x; 
+    var objBWidth  = objB.width  * objBScale.x;
     var objBHeight = objB.height * objBScale.y;
     objBAbsPos.x  -= objB.width  * objBScale.x/2;
-    objBAbsPos.y  -= objB.height * objBScale.y/2; 
+    objBAbsPos.y  -= objB.height * objBScale.y/2;
 
-    var left = objAAbsPos.x < (objBAbsPos.x + objBWidth); 
-    var right = (objAAbsPos.x + objAWidth) > objBAbsPos.x; 
-    var top = objAAbsPos.y < (objBAbsPos.y + objBHeight); 
-    var bottom = (objAAbsPos.y + objAHeight) > objBAbsPos.y; 
+    var left = objAAbsPos.x < (objBAbsPos.x + objBWidth);
+    var right = (objAAbsPos.x + objAWidth) > objBAbsPos.x;
+    var top = objAAbsPos.y < (objBAbsPos.y + objBHeight);
+    var bottom = (objAAbsPos.y + objAHeight) > objBAbsPos.y;
 
     return left && right && top && bottom;
 }
 
 /* Determine if two wickObjects Collide using circular hit detection from their
-   centroid using their full width and height. */ 
+   centroid using their full width and height. */
 WickObject.prototype.hitTestCircles = function (otherObj) {
     var objA = this;
     var objB = otherObj;
@@ -1482,11 +1505,11 @@ WickObject.prototype.hitTestCircles = function (otherObj) {
     var objAAbsPos = objA.getAbsolutePosition();
     var objBAbsPos = objB.getAbsolutePosition();
 
-    var dx = objAAbsPos.x - objBAbsPos.x; 
+    var dx = objAAbsPos.x - objBAbsPos.x;
     var dy = objAAbsPos.y - objBAbsPos.y;
 
     var objAWidth = objA.width * objA.scaleX;
-    var objAHeight = objAHeight * objA.scaleY; 
+    var objAHeight = objAHeight * objA.scaleY;
 
     var distance = Math.sqrt(dx * dx + dy * dy);
 
@@ -1494,10 +1517,10 @@ WickObject.prototype.hitTestCircles = function (otherObj) {
         return true;
     }
 
-    return false; 
+    return false;
 }
 
-/* Returns a boolean alerting whether or not this object or any of it's children in frame, 
+/* Returns a boolean alerting whether or not this object or any of it's children in frame,
    have collided with the given object or any of it's children in frame. */
 WickObject.prototype.hitTest = function (otherObj, hitTestType) {
     if (otherObj === undefined) {
@@ -1506,14 +1529,14 @@ WickObject.prototype.hitTest = function (otherObj, hitTestType) {
 
     // Generate lists of all children of both objects
 
-    var otherObjChildren = otherObj.getAllActiveChildObjects();
+    var otherObjChildren = otherObj.getAllActiveChildObjectsRecursive(false);
     if(!otherObj.isSymbol) {
         otherObjChildren.push(otherObj);
     }
 
-    var thisObjChildren = this.getAllActiveChildObjects();
+    var thisObjChildren = this.getAllActiveChildObjectsRecursive(false);
     if(!this.isSymbol) {
-        thisObjChildren.push(this); 
+        thisObjChildren.push(this);
     }
 
     // Load the collision detection function for the type of collision we want to check for
@@ -1537,13 +1560,15 @@ WickObject.prototype.hitTest = function (otherObj, hitTestType) {
 
     for (var i = 0; i < otherObjChildren.length; i++) {
         for (var j = 0; j < thisObjChildren.length; j++) {
-            if (thisObjChildren[j][checkMethod](otherObjChildren[i])) {
-                return true; 
+            var objA = thisObjChildren[j];
+            var objB = otherObjChildren[i];
+            if (!objA.audioData && !objB.audioData && objA[checkMethod](objB)) {
+                return true;
             }
         }
     }
 
-    return false; 
+    return false;
 
 }
 
@@ -1601,43 +1626,43 @@ WickObject.prototype.copy = function () {
 
 WickObject.prototype.moveUp = function(delta) {
     if (delta === undefined) {
-        delta = 1; 
+        delta = 1;
     }
 
     if (typeof delta != "number") {
         WickError.error("Invalid Input: moveUp() can only take numbers!");
     }
 
-    this.y -= delta; 
+    this.y -= delta;
 }
 
 WickObject.prototype.moveDown = function(delta) {
     if (delta === undefined) {
-        delta = 1; 
+        delta = 1;
     }
 
     if (typeof delta != "number") {
         WickError.error("Invalid Input: moveDown() can only take numbers!");
     }
 
-    this.y += delta; 
+    this.y += delta;
 }
 
 WickObject.prototype.moveLeft = function(delta) {
     if (delta === undefined) {
-        delta = 1; 
+        delta = 1;
     }
 
     if (typeof delta != "number") {
         WickError.error("Invalid Input: moveLeft() can only take numbers!");
     }
 
-    this.x -= delta; 
+    this.x -= delta;
 }
 
 WickObject.prototype.moveRight = function(delta) {
     if (delta === undefined) {
-        delta = 1; 
+        delta = 1;
     }
 
     if (typeof delta != "number") {
@@ -1656,7 +1681,7 @@ WickObject.prototype.rotateCW = function(theta) {
         WickError.error("Invalid Input: rotateCW() can only take numbers!");
     }
 
-    this.angle += theta; 
+    this.angle += theta;
 }
 
 WickObject.prototype.rotateCCW = function(theta) {
@@ -1668,52 +1693,52 @@ WickObject.prototype.rotateCCW = function(theta) {
         WickError.error("Invalid Input: rotateCCW() can only take numbers!");
     }
 
-    this.angle -= theta; 
+    this.angle -= theta;
 }
 
 WickObject.prototype.scale = function(scaleFactor) {
     if (scaleFactor === undefined) {
-        scaleFactor = 1; 
+        scaleFactor = 1;
     }
 
     if (typeof scaleFactor != "number") {
         WickError.error("Invalid Input: scale() can only take numbers!");
     }
 
-    this.scaleX = scaleFactor; 
-    this.scaleY = scaleFactor; 
+    this.scaleX = scaleFactor;
+    this.scaleY = scaleFactor;
 }
 
 WickObject.prototype.scaleWidth = function(scaleFactor) {
     if (scaleFactor === undefined) {
-        scaleFactor = 1; 
+        scaleFactor = 1;
     }
 
     if (typeof scaleFactor != "number") {
         WickError.error("Invalid Input: scaleWidth() can only take numbers!");
     }
 
-    this.scaleX = scaleFactor; 
+    this.scaleX = scaleFactor;
 }
 
 WickObject.prototype.scaleHeight = function(scaleFactor) {
     if (scaleFactor === undefined) {
-        scaleFactor = 1; 
+        scaleFactor = 1;
     }
 
     if (typeof scaleFactor != "number") {
         WickError.error("Invalid Input: scaleHeight() can only take numbers!");
     }
 
-    this.scaleY = scaleFactor; 
+    this.scaleY = scaleFactor;
 }
 
 WickObject.prototype.flipHorizontal = function() {
-    this.flipX = !this.flipX; 
+    this.flipX = !this.flipX;
 }
 
 WickObject.prototype.flipVertical = function() {
-    this.flipY = !this.flipY; 
+    this.flipY = !this.flipY;
 }
 
 WickObject.prototype.setOpacity = function(opacityVal) {
@@ -1724,27 +1749,27 @@ WickObject.prototype.setOpacity = function(opacityVal) {
     this.opacity = Math.min(Math.max(opacityVal, 0), 1);
 }
 
-WickObject.prototype.playSound = function (volume) { 
+WickObject.prototype.playSound = function (volume) {
 
-    WickPlayer.getAudioPlayer().playSound(this.id, this.loopSound, volume || 1.0); 
-
-}
-
-WickObject.prototype.stopSound = function () { 
-
-    WickPlayer.getAudioPlayer().stopSound(this.id); 
+    WickPlayer.getAudioPlayer().playSound(this.id, this.loopSound, volume || 1.0);
 
 }
 
-WickObject.prototype.clone = function () { 
+WickObject.prototype.stopSound = function () {
 
-    return WickPlayer.cloneObject(this); 
+    WickPlayer.getAudioPlayer().stopSound(this.id);
+
+}
+
+WickObject.prototype.clone = function () {
+
+    return WickPlayer.cloneObject(this);
 
 };
 
-WickObject.prototype.delete = function () { 
+WickObject.prototype.delete = function () {
 
-    return WickPlayer.deleteObject(this); 
+    return WickPlayer.deleteObject(this);
 
 };
 
