@@ -113,7 +113,9 @@ var TimelineInterface = function (wickEditor) {
                     frameWidth*frame.frameLength, frameHeight);
                 
                 ctx.fillStyle = "#CCCCCC";
-                if (frame == currentObject.getCurrentFrame() && layerCount == currentObject.currentLayer) {
+                if (frame.wickObjects.length === 0) {
+                    ctx.fillStyle = "#EEEEEE";
+                } else if (frame == currentObject.getCurrentFrame() && layerCount == currentObject.currentLayer) {
                     ctx.fillStyle = "#DDDDDD";
                 }
 

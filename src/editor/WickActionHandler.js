@@ -379,7 +379,7 @@ var WickActionHandler = function (wickEditor) {
 
     this.registerAction('movePlayhead',
         function (args) {
-            wickEditor.interfaces.scriptingide.editScriptsOfObject(null);
+            wickEditor.interfaces.scriptingide.editScriptsOfObject(null, {dontOpenIDE:true});
             wickEditor.interfaces['fabric'].deselectAll();
 
             args.oldPlayheadPosition = args.obj.playheadPosition;
