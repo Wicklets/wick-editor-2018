@@ -1562,6 +1562,8 @@ WickObject.prototype.hitTest = function (otherObj, hitTestType) {
         for (var j = 0; j < thisObjChildren.length; j++) {
             var objA = thisObjChildren[j];
             var objB = otherObjChildren[i];
+            // Note: audio objects are like 'ghost' objects, they don't actually
+            // show up visually in the player so they should not count in hitTest.
             if (!objA.audioData && !objB.audioData && objA[checkMethod](objB)) {
                 return true;
             }
