@@ -191,7 +191,7 @@ var TimelineInterface = function (wickEditor) {
 
                 currentObject.playheadPosition = newPlayheadPosition;
                 currentObject.currentLayer = newLayer;
-                wickEditor.interfaces.scriptingide.editScriptsOfObject(null);
+                wickEditor.interfaces.scriptingide.editScriptsOfObject(null, {dontOpenIDE:true});
                 wickEditor.syncInterfaces();
             });
         }

@@ -440,7 +440,7 @@ var GuiActionHandler = function (wickEditor) {
         ['deleteButton'], 
         {}, 
         function(args) {
-            wickEditor.interfaces.scriptingide.editScriptsOfObject(null);
+            wickEditor.interfaces.scriptingide.editScriptsOfObject(null, {dontOpenIDE:true});
             wickEditor.actionHandler.doAction('deleteObjects', { 
                 ids:wickEditor.interfaces['fabric'].getSelectedObjectIDs() 
             });
