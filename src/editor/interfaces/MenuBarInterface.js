@@ -150,13 +150,7 @@ var MenuBarInterface = function (wickEditor) {
             }),
         ]);
 
-        addTab('Add', [
-            new TabButton('Text', function () {
-                
-            }),
-            new TabButton('Script', function () {
-                
-            }),
+        addTab('Import', [
             new TabButton('File', function () {
                 wickEditor.guiActionHandler.doAction("openFile");
             }),
