@@ -138,6 +138,11 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         objectsToAdd.forEach(function (objectToAdd) {
             createFabricObjectFromWickObject(objectToAdd, function (fabricObj) {
 
+                if(wickEditor.project.getCurrentObject().getAllActiveChildObjects().indexOf(objectToAdd) === -1) {
+                    objectIDsInCanvas[objectToAdd.id] = false;
+                    return;             
+                }
+
                 objectToAdd.fabricObjectReference = fabricObj
 
                 fabricInterface.canvas.forEachObject(function(path) {

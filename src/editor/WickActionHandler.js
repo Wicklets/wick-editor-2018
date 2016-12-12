@@ -407,6 +407,9 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             var selectedObjects = wickEditor.interfaces['fabric'].getSelectedWickObjects();
 
+            var currObj = wickEditor.project.getCurrentObject();
+            if(currObj.parentObject) currObj.fixOriginPoint()
+
             var symbolZIndex = null;
             selectedObjects.forEach(function (obj) {
                 var objZIndex = wickEditor.project.getCurrentObject().getCurrentFrame().wickObjects.indexOf(obj);
@@ -434,8 +437,10 @@ var WickActionHandler = function (wickEditor) {
 
             args.children = args.symbol.getObjectsOnFirstFrame();
             args.children.forEach(function (child) {
-                child.x += args.symbol.x;
-                child.y += args.symbol.y;
+                //child.x += args.symbol.x;
+                //child.y += args.symbol.y;
+                child.x = child.getAbsolutePosition().x;
+                child.y = child.getAbsolutePosition().y;
                 wickEditor.project.addObject(child);
             });
 

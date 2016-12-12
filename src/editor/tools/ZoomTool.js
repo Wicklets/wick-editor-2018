@@ -15,10 +15,11 @@ var ZoomTool = function (wickEditor) {
     
     wickEditor.interfaces.fabric.canvas.on('mouse:down', function (e) {
     	if(wickEditor.interfaces.fabric.currentTool instanceof ZoomTool) {
-    		if (that.zoomType === "in") {
-    			wickEditor.interfaces.fabric.zoom(1.1);
-    		} else if (that.zoomType === "out") {
+            console.log(wickEditor.guiActionHandler.keys)
+    		if (wickEditor.guiActionHandler.keys[keyCharToCode["ALT"]]) {
     			wickEditor.interfaces.fabric.zoom(0.9);
+    		} else {
+    			wickEditor.interfaces.fabric.zoom(1.1);
     		}
 	    }
     });

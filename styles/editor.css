@@ -105,13 +105,15 @@ select {
 
 #statusBarGUI {
 	top: 1px;
-	right: 0px;
-	text-align: center;
+	right: 1px;
+	text-align: right;
 	display: block;
-	width: 160px;
-	height: 30px;
-	font-size: 20px;
 	border: none;
+	text-align: right;
+	padding-right: 5px;
+	font-size: 16px;
+	margin-top: 3px;
+	color: #888;
 }
 
 #splashScreenGUI {

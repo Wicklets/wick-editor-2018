@@ -418,7 +418,7 @@ WickObject.prototype.getAllActiveChildObjectsRecursive = function (includeParent
             for(var o = 0; o < frame.wickObjects.length; o++) {
                 var obj = frame.wickObjects[o];
                 if(includeParents || !obj.isSymbol) children.push(obj);
-                children = children.concat(obj.getAllActiveChildObjectsRecursive());
+                children = children.concat(obj.getAllActiveChildObjectsRecursive(includeParents));
             }
         //}
     //}
@@ -666,6 +666,7 @@ WickObject.prototype.getLargestID = function (id) {
 
 WickObject.prototype.regenBoundingBox = function () {
     if (wickEditor.project.getCurrentObject() === this) {
+        wickEditor.interfaces.fabric.deselectAll();
         this.bbox = wickEditor.interfaces.fabric.getBoundingBoxOfAllObjects();
     } else {
         var ids = [];
@@ -678,28 +679,35 @@ WickObject.prototype.regenBoundingBox = function () {
 }
 
 // used as a hack to get around fabric.js lack of rotation around anchorpoint
-WickObject.prototype.fixOriginPoint = function (newSymbol) {
+WickObject.prototype.fixOriginPoint = function (newSymbol, bbox) {
     if(this.playheadPosition === 0) this.regenBoundingBox();
+
+    //if(bbox) this.bbox = bbox;
 
     var bboxCenter = {x:this.bbox.left + this.bbox.width/2, y:this.bbox.top + this.bbox.height/2};
 
     var symbolCornerPosition = {x:this.x-bboxCenter.x, y:this.y-bboxCenter.y};
 
     var symbolAbsPos = this.parentObject.getAbsolutePosition();
-    symbolCornerPosition.x += symbolAbsPos.x;
-    symbolCornerPosition.y += symbolAbsPos.y;
+    //symbolCornerPosition.x += symbolAbsPos.x;
+    //symbolCornerPosition.y += symbolAbsPos.y;
+    console.log(symbolCornerPosition)
 
     var that = this;
     this.getAllChildObjects().forEach(function (child) {
-        child.x += symbolCornerPosition.x;
-        child.y += symbolCornerPosition.y;
+        child.x += symbolCornerPosition.x + symbolAbsPos.x;
+        child.y += symbolCornerPosition.y + symbolAbsPos.y;
+        if(newSymbol) {
+            child.x += symbolAbsPos.x
+            child.y += symbolAbsPos.y
+        }
         if(!that.parentObject.isRoot && newSymbol) {
-            child.x += bboxCenter.x;
-            child.y += bboxCenter.y;
+            //child.x += bboxCenter.x;
+            //child.y += bboxCenter.y;
         }
     });
-    this.x -= symbolCornerPosition.x;
-    this.y -= symbolCornerPosition.y;
+    this.x -= symbolCornerPosition.x + symbolAbsPos.x;
+    this.y -= symbolCornerPosition.y + symbolAbsPos.y;
 }
 
 /* Get the absolute position of this object (i.e., the position not relative to the parents) */
@@ -710,10 +718,30 @@ WickObject.prototype.getAbsolutePosition = function () {
             y: 0
         };
     } else {
-        var parentPosition = this.parentObject.getAbsolutePosition();
+        var parent = this.parentObject;
+        var parentPosition = parent.getAbsolutePosition();
         return {
             x: this.x + parentPosition.x,
             y: this.y + parentPosition.y
+        };
+    }
+}
+
+/* Get the absolute position of this object taking into account the scale of the parent */
+WickObject.prototype.getAbsolutePositionScaled = function () {
+    if(this.isRoot) {
+        return {
+            x: 0,
+            y: 0
+        };
+    } else {
+        var parent = this.parentObject;
+        var parentPosition = parent.getAbsolutePosition();
+        var parentScale = parent.isRoot ? {x:1, y:1} : {x:parent.scaleX, y:parent.scaleY};
+        console.log(parentScale)
+        return {
+            x: this.x*parentScale.x + parentPosition.x,
+            y: this.y*parentScale.y + parentPosition.y
         };
     }
 }
@@ -1124,62 +1152,54 @@ WickObject.prototype.isClickable = function () {
     return isClickable;
 }
 
-WickObject.prototype.isPointInside = function(point, parentScaleX, parentScaleY) {
+WickObject.prototype.isPointInside = function(point) {
 
-    var that = this;
-
-    if(!parentScaleX) {
-        parentScaleX = 1.0;
-    }
-    if(!parentScaleY) {
-        parentScaleY = 1.0;
+    var objects = this.getAllActiveChildObjectsRecursive(false);
+    if(!this.isSymbol) {
+        objects.push(this);
     }
 
-    if(that.isSymbol) {
+    var hit = false;
 
-        var pointInsideSymbol = false;
+    objects.forEach(function(object) {
+        if(hit) return;
 
-        that.getAllActiveChildObjects().forEach(function (child) {
-            var subPoint = {
-                x : point.x - that.x,
-                y : point.y - that.y
-            };
-            if(child.isPointInside(subPoint, that.scaleX, that.scaleY)) {
-                pointInsideSymbol = true;
-            }
-        });
+        var absPosition = object.getAbsolutePositionScaled();
+        var absScale = object.getAbsoluteScale();
+        var absAngle = object.getAbsoluteAngle();
 
-        return pointInsideSymbol;
+        var scaledObjX = absPosition.x;
+        var scaledObjY = absPosition.y;
+        var scaledObjWidth  = object.width *absScale.x;
+        var scaledObjHeight = object.height*absScale.y;
 
-    } else {
-
-        var scaledObjX = that.x;
-        var scaledObjY = that.y;
-        var scaledObjWidth = that.width*that.scaleX*parentScaleX;
-        var scaledObjHeight = that.height*that.scaleY*parentScaleY;
-
-        scaledObjX -= that.width*that.scaleX/2;
-        scaledObjY -= that.height*that.scaleY/2;
+        scaledObjX -= scaledObjWidth/2;
+        scaledObjY -= scaledObjHeight/2;
 
         if ( point.x >= scaledObjX &&
              point.y >= scaledObjY  &&
              point.x <= scaledObjX + scaledObjWidth &&
-             point.y <= scaledObjY  + scaledObjHeight ) {
+             point.y <= scaledObjY + scaledObjHeight ) {
 
-            if(!that.alphaMask) return true;
+            if(!object.alphaMask) {
+                hit = true;
+                return;
+            }
 
             var objectRelativePointX = (point.x - scaledObjX);
             var objectRelativePointY = (point.y - scaledObjY);
             var objectAlphaMaskIndex =
-                (Math.floor(objectRelativePointX/that.scaleX/parentScaleX)%Math.floor(that.width)) +
-                (Math.floor(objectRelativePointY/that.scaleY/parentScaleY)*Math.floor(that.width));
-            return !that.alphaMask[(objectAlphaMaskIndex)];
+                (Math.floor(objectRelativePointX/object.scaleX/parentScaleX)%Math.floor(object.width)) +
+                (Math.floor(objectRelativePointY/object.scaleY/parentScaleY)*Math.floor(object.width));
+            if(!object.alphaMask[(objectAlphaMaskIndex)]) {
+                hit = true;
+                return;
+            }
 
         }
+    });
 
-        return false;
-
-    }
+    return hit;
 }
 
 /*************************
@@ -1205,7 +1225,7 @@ WickObject.prototype.update = function () {
                 this.isPlaying = false;
             }
 
-            this.runScript(currentFrame.wickScripts['onLoad'], this);
+            this.runScript(currentFrame.wickScripts['onLoad'], 'onLoad', this);
         }
 
         this.onNewFrame = false;
@@ -1214,7 +1234,7 @@ WickObject.prototype.update = function () {
     if(this.justEnteredFrame) {
 
         if(!this.onLoadScriptRan) {
-            this.runScript(this.wickScripts['onLoad']);
+            this.runScript(this.wickScripts['onLoad'], 'onLoad');
             this.onLoadScriptRan = true;
         }
 
@@ -1225,7 +1245,7 @@ WickObject.prototype.update = function () {
         this.justEnteredFrame = false;
     }
 
-    this.runScript(this.wickScripts['onUpdate']);
+    this.runScript(this.wickScripts['onUpdate'], 'onUpdate');
 
     if(this.isSymbol) {
         this.advanceTimeline();
@@ -1233,7 +1253,7 @@ WickObject.prototype.update = function () {
         // For now, the WickObject that owns the frame runs the frame's scripts.
         // So, play(), stop() etc refers to the timeline that the frame is in.
         // The 'this' keyword is borked though, since it still will refer to the WickObject.
-        this.runScript(this.getCurrentFrame().wickScripts['onUpdate'], this);
+        this.runScript(this.getCurrentFrame().wickScripts['onUpdate'], 'onUpdate', this);
 
         this.getAllActiveChildObjects().forEach(function(child) {
             child.update();
@@ -1244,7 +1264,7 @@ WickObject.prototype.update = function () {
 
 }
 
-WickObject.prototype.runScript = function (script, objectScope) {
+WickObject.prototype.runScript = function (script, scriptType, objectScope) {
 
     var that = this;
 
@@ -1291,13 +1311,14 @@ WickObject.prototype.runScript = function (script, objectScope) {
         eval("try{" + script + "\n}catch (e) { throw (e); }");
     } catch (e) {
         if (window.wickEditor) {
-            if(!wickEditor.interfaces.builtinplayer.running) return;
+            //if(!wickEditor.interfaces.builtinplayer.running) return;
 
-            console.error("Exception thrown while running script of WickObject with ID " + this.id);
+            console.error("Exception thrown while running script of WickObject: " + this.name);
             console.error(e);
             var lineNumber = null;
             if(e.stack) {
                 e.stack.split('\n').forEach(function (line) {
+                    console.log(line)
                     if(lineNumber) return;
                     if(!line.includes("<anonymous>:")) return;
 
@@ -1307,6 +1328,7 @@ WickObject.prototype.runScript = function (script, objectScope) {
 
             //console.log(e.stack.split("\n")[1].split('<anonymous>:')[1].split(":")[0]);
             //console.log(e.stack.split("\n"))
+            if(wickEditor.interfaces.builtinplayer.running) wickEditor.interfaces.builtinplayer.stopRunningProject()
             wickEditor.interfaces.scriptingide.showError(this.id, scriptType, lineNumber, e);
         } else {
             alert("An exception was thrown while running a WickObject script. See console!");
@@ -1473,8 +1495,8 @@ WickObject.prototype.hitTestRectangles = function (otherObj) {
     var objA = this;
     var objB = otherObj;
 
-    var objAAbsPos = objA.getAbsolutePosition();
-    var objBAbsPos = objB.getAbsolutePosition();
+    var objAAbsPos = objA.getAbsolutePositionScaled();
+    var objBAbsPos = objB.getAbsolutePositionScaled();
 
     var objAScale  = objA.getAbsoluteScale();
     var objAWidth  = objA.width  * objAScale.x;
@@ -1502,8 +1524,8 @@ WickObject.prototype.hitTestCircles = function (otherObj) {
     var objA = this;
     var objB = otherObj;
     
-    var objAAbsPos = objA.getAbsolutePosition();
-    var objBAbsPos = objB.getAbsolutePosition();
+    var objAAbsPos = objA.getAbsolutePositionScaled();
+    var objBAbsPos = objB.getAbsolutePositionScaled();
 
     var dx = objAAbsPos.x - objBAbsPos.x;
     var dy = objAAbsPos.y - objBAbsPos.y;

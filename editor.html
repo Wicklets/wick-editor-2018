@@ -228,7 +228,7 @@
                     <img src="resources/text.png" width="20"></img>
                 </div>
 
-                <div style="display:none;" class="button tooltipElem" id="backgroundremoveToolButton" alt="Remove Background">
+                <div class="button tooltipElem" id="backgroundremoveToolButton" alt="Remove Background">
                     <img src="resources/magicwand.png" width="20"></img>
                 </div>
 
@@ -433,6 +433,11 @@
                 <div class="menubarTab" id="menubarMenuAbout">About</div>-->
             </div>
 
+        <!-- Status menu GUI, top right corner -->
+
+            <div id="statusBarGUI" class="GUIBox">
+            </div>
+
         </div>
 
     <!-- Builtin player, visible when a project is running -->
@@ -441,32 +446,9 @@
             <div id="playerCanvasContainer" contenteditable="true" tabindex="0"></div>
 
             <div id="builtinPlayerGUI" class="GUIBox">
-                <strong>Wick Player</strong><br />
-                <hr />
                 <div class="button buttonInRow tooltipElem" id="closeBuiltinPlayerButton" alt="Close player">
                     <img src="resources/back.png" width="30" />
                 </div>
-            </div>
-        </div>
-
-    <!-- Status menu GUI, top right corner -->
-
-        <div id="statusBarGUI" class="GUIBox">
-            <div id="statusBarGUInone"></div>
-            <div id="statusBarGUIsaving">
-                Saving...
-            </div>
-            <div id="statusBarGUIdone">
-                Save successful!
-            </div>
-            <div id="statusBarGUIexporting">
-                Exporting...
-            </div>
-            <div id="statusBarGUIuploading">
-                Uploading...
-            </div>
-            <div id="statusBarGUIerror">
-                Upload error!
             </div>
         </div>
 

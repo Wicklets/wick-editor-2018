@@ -277,8 +277,8 @@ var WickPlayer = (function () {
 
         // Check if we're hovered over a clickable object...
         var hoveredOverObj = false;
-        project.rootObject.getAllActiveChildObjects().forEach(function(child) {
-            if(child.isPointInside(mouse) && child.isClickable()) {
+        project.rootObject.getAllActiveChildObjectsRecursive(true).forEach(function(child) {
+            if(child.isClickable() && child.isPointInside(mouse)) {
                 child.hoveredOver = true;
                 hoveredOverObj = child;
             } else {
@@ -297,21 +297,20 @@ var WickPlayer = (function () {
 
     var onMouseDown = function (evt) {
         
-        project.rootObject.getAllActiveChildObjects().forEach(function(child) {
-            if(child.isPointInside(mouse) && child.isClickable) {
-                child.runScript(child.wickScripts["onClick"]);
+        project.rootObject.getAllActiveChildObjectsRecursive(true).forEach(function(child) {
+            if(child.isClickable() && child.isPointInside(mouse)) {
+                child.runScript(child.wickScripts["onClick"], 'onClick');
             }
         });
 
     }
 
     var handleKeyDownInput = function (event) {
-
         keys[event.keyCode] = true;
         lastKeyPressed = codeToKeyChar[event.keyCode];
 
-        project.rootObject.getAllActiveChildObjects().forEach(function(child) {
-            child.runScript(child.wickScripts["onKeyDown"]);
+        project.rootObject.getAllActiveChildObjectsRecursive(true).forEach(function(child) {
+            child.runScript(child.wickScripts["onKeyDown"], 'onKeyDown');
         });
     }
 
@@ -336,7 +335,7 @@ var WickPlayer = (function () {
 
         project.rootObject.getAllActiveChildObjects().forEach(function(child) {
             if(child.isPointInside(touchPos) && child.isClickable()) {
-                child.runScript(child.wickScripts["onClick"]);
+                child.runScript(child.wickScripts["onClick"], 'onClick');
             }
         });
 

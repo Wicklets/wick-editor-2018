@@ -69,7 +69,7 @@ var ScriptingIDEInterface = function (wickEditor) {
     }
 
     var erroneousLine;
-    function unhighlightError(){
+    function unhighlightError() {
         that.aceEditor.getSession().removeMarker(erroneousLine);
     }
     function highlightError(lineNumber) {
@@ -120,8 +120,6 @@ var ScriptingIDEInterface = function (wickEditor) {
     }
 
     this.showError = function (id, scriptType, lineNumber, errorMessage) {
-        wickEditor.interfaces.builtinplayer.running = false;
-        WickPlayer.stopRunningCurrentProject();
         wickEditor.project.jumpToObject(id);
         wickEditor.syncInterfaces();
         setTimeout(function () {

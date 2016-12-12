@@ -21,7 +21,7 @@ var WickProject = function () {
     this.borderColor = "#DDDDDD";
     this.backgroundColor = "#FFFFFF";
 
-    this.framerate = 6;
+    this.framerate = 12;
 
     this.fitScreen = false;
     this.borderColor = "#FFFFFF";
@@ -138,8 +138,7 @@ WickProject.fromLocalStorage = function () {
         console.log("No autosaved project. Loading blank project.");
         return new WickProject();
     }
-
-    console.log("Loading project from local storage...");
+    
     return WickProject.fromJSON(autosavedProjectJSON);
 
 }
@@ -147,8 +146,6 @@ WickProject.fromLocalStorage = function () {
 WickProject.prototype.getAsJSON = function (callback, args) {
 
     var that = this;
-
-    console.log("Generating project JSON...");
 
     // Rasterize SVGs
     that.rootObject.generateSVGCacheImages(function () {
@@ -159,8 +156,6 @@ WickProject.prototype.getAsJSON = function (callback, args) {
         
         // Decode scripts back to human-readble and eval()-able format
         that.rootObject.decodeStrings();
-
-        console.log("Done!");
 
         callback(JSONProject)
     });
@@ -189,7 +184,6 @@ WickProject.saveProjectJSONInLocalStorage = function (projectJSON) {
     if(localStorage) {
         try {
             localStorage.setItem('wickProject', projectJSON);
-            console.log("Project saved to local storage.");
         } catch (err) {
             console.error("LocalStorage could not save project, threw error:");
             console.log(err);

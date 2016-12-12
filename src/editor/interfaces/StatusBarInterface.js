@@ -4,7 +4,14 @@ var StatusBarInterface = function (wickEditor) {
 
     var that = this;
 
-    var states = ['none','saving','done','exporting', 'uploading', 'error']
+    var messages = {
+        none : "Wick Editor Open Beta",
+        saving : "Saving...",
+        done : "Save successful!",
+        exporting : "Exporting...", 
+        uploading : "Uploading...", 
+        error : "Save error"
+    }
     var state = 'none';
 
     var statusBarElem = document.getElementById("statusBarGUI");
@@ -21,12 +28,6 @@ var StatusBarInterface = function (wickEditor) {
     this.syncWithEditorState = function () {
         var that = this;
 
-        if(state === 'none') {
-            statusBarElem.style.display = 'none';
-        } else {
-            statusBarElem.style.display = 'block';
-        }
-
         if(state === 'done') {
             setTimeout(function () {
                 that.setState('none');
@@ -39,10 +40,8 @@ var StatusBarInterface = function (wickEditor) {
             }, 4000);
         }
 
-        states.forEach(function (s) {
-            document.getElementById('statusBarGUI' + s).style.display = 'none';
-        });
-        document.getElementById('statusBarGUI' + state).style.display = 'block';
+        statusBarElem.innerHTML = messages[state];
+
     }
 
 }

@@ -18,6 +18,8 @@ var WickProjectCompressor = (function () {
 
     var projectCompressor = { };
 
+    var printFilesize = false;
+
     var compressionRoutines = {
         'LZSTRING-BASE64': {
             compress:LZString.compressToBase64, 
@@ -30,17 +32,17 @@ var WickProjectCompressor = (function () {
     }
 
     projectCompressor.compressProject = function (projectJSON, compressionRoutineName) {
-        console.log("Compressing project of size " + projectJSON.length);
+        if(printFilesize) console.log("Compressing project of size " + projectJSON.length);
 
         var compressionRoutine = compressionRoutines[compressionRoutineName];
         var compressedProjectJSON = compressionRoutineName+compressionRoutine.compress(projectJSON)
 
-        console.log("Done! Result size " + compressedProjectJSON.length);
+        if(printFilesize) console.log("Done! Result size " + compressedProjectJSON.length);
         return compressedProjectJSON;
     }
 
     projectCompressor.decompressProject = function (compressedProjectJSON) {
-        console.log("Decompressing project...")
+        if(printFilesize) console.log("Decompressing project...")
 
         var projectJSON = compressedProjectJSON;
 
@@ -53,7 +55,7 @@ var WickProjectCompressor = (function () {
             }
         }
 
-        console.log("Done!");
+        if(printFilesize) console.log("Done!");
         return projectJSON;
     }
 

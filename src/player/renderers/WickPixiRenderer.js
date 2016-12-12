@@ -150,6 +150,8 @@ var WickPixiRenderer = function (project) {
 
 	this.render = function() {
 
+		if(!renderer) return;
+
 	    var graphics = new PIXI.Graphics();
 	    graphics.beginFill(parseInt(project.backgroundColor.replace("#","0x")));
 	    graphics.drawRect(0, 0, project.resolution.x, project.resolution.y);
@@ -263,5 +265,16 @@ var WickPixiRenderer = function (project) {
 	this.cleanup = function() {
 		window.removeEventListener('resize', resizeCanvas);
 
+		//https://gist.github.com/anonymous/b910bbb0cfea82bcf880
+		renderer.plugins.interaction.destroy();
+		renderer = null;
+		stage.destroy(true);
+		stage = null;
+		//document.body.removeChild(view);
+		view = null;
+
+		for (var textureId in PIXI.utils.TextureCache) {
+			PIXI.utils.BaseTextureCache[textureId].destroy(true);
+		}
 	}
 };
