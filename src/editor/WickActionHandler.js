@@ -332,15 +332,14 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             var currentObject = wickEditor.project.getCurrentObject();
             if(currentObject.layers.length > 1) {
-                // Add an empty frame
+                args.removedLayer = currentObject.getCurrentLayer();
                 currentObject.removeLayer(currentObject.getCurrentLayer());
-
-                // Go to last added layer
                 currentObject.currentLayer = currentObject.layers.length-1;
             }
         },
         function (args) {
-            console.error("removeLayer undo NYI");
+            var currentObject = wickEditor.project.getCurrentObject();
+            
         });
 
     this.registerAction('addBreakpoint', 
@@ -424,11 +423,21 @@ var WickActionHandler = function (wickEditor) {
 
             var symbol = new WickObject.createSymbolFromWickObjects(selectedObjects);
             wickEditor.project.addObject(symbol, symbolZIndex);
+            args.createdSymbolID = symbol.id;
             symbol.fixOriginPoint(true);
             symbol.selectOnAddToFabric = true;
         },
         function (args) {
-            console.error("convertSelectionToSymbol undo NYI")
+            args.symbol = wickEditor.project.rootObject.getChildByID(args.createdSymbolID);
+
+            args.children = args.symbol.getObjectsOnFirstFrame();
+            args.children.forEach(function (child) {
+                child.x = child.getAbsolutePosition().x;
+                child.y = child.getAbsolutePosition().y;
+                wickEditor.project.addObject(child);
+            });
+
+            wickEditor.project.getCurrentObject().removeChildByID(args.createdSymbolID);
         });
 
     this.registerAction('breakApartSymbol', 
