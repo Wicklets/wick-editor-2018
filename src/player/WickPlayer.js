@@ -26,6 +26,9 @@ var WickPlayer = (function () {
     // Set this to true to stop the next requestAnimationFrame
     var stopDrawLoop;
 
+    // For keyboard input inside iframes
+    var realWindow = window.parent || window;
+
 /*****************************
     Player Setup
 *****************************/
@@ -64,7 +67,7 @@ var WickPlayer = (function () {
             audioPlayer.setup();
         }
         renderer.setup();
-        var playerCanvasContainer = document.getElementById("playerCanvasContainer");
+        var playerCanvasContainer = renderer.getRendererElem();
 
         animate();
 
@@ -75,8 +78,8 @@ var WickPlayer = (function () {
             playerCanvasContainer.addEventListener('mousemove', onMouseMove, false);
             playerCanvasContainer.addEventListener("mousedown", onMouseDown, false);
 
-            document.addEventListener("keydown", handleKeyDownInput);
-            document.addEventListener("keyup", handleKeyUpInput);
+            playerCanvasContainer.addEventListener("keydown", handleKeyDownInput);
+            playerCanvasContainer.addEventListener("keyup", handleKeyUpInput);
         }
 
         // Setup touch events (mobile mode)
@@ -99,8 +102,8 @@ var WickPlayer = (function () {
         rendererContainerEl.removeEventListener("mousedown", onMouseDown);
         rendererContainerEl.removeEventListener("touchstart", onTouchStart);
 
-        document.removeEventListener("keydown", handleKeyDownInput);
-        document.removeEventListener("keyup", handleKeyUpInput);
+        playerCanvasContainer.removeEventListener("keydown", handleKeyDownInput);
+        playerCanvasContainer.removeEventListener("keyup", handleKeyUpInput);
 
         audioPlayer.cleanup();
         renderer.cleanup();
@@ -306,6 +309,8 @@ var WickPlayer = (function () {
     }
 
     var handleKeyDownInput = function (event) {
+        event.preventDefault();
+
         keys[event.keyCode] = true;
         lastKeyPressed = codeToKeyChar[event.keyCode];
 
@@ -315,6 +320,8 @@ var WickPlayer = (function () {
     }
 
     var handleKeyUpInput = function (event) {
+        event.preventDefault();
+        
         keys[event.keyCode] = false;
     }
 

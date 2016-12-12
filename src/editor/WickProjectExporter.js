@@ -11,6 +11,7 @@ var WickProjectExporter = (function () {
 
     // All libs needed by the player. 
     var requiredLibFiles = [
+        "lib/jquery/jquery.min.js",
         "lib/pixi/pixi.min.js",
         "lib/lz-string/lz-string.min.js",
         "lib/util/polyfills.js",
@@ -61,7 +62,7 @@ var WickProjectExporter = (function () {
 
     }
 
-    projectExporter.exportProject = function (wickProject) {
+    projectExporter.exportProjectInZip = function (wickProject) {
 
         wickEditor.interfaces.statusbar.setState('exporting');
 
@@ -69,6 +70,27 @@ var WickProjectExporter = (function () {
             var blob = new Blob([fileOut], {type: "text/plain;charset=utf-8"});
             var filename = wickProject.name || "project";
             saveAs(blob, filename+".html");
+            wickEditor.interfaces.statusbar.setState('done');
+        });
+
+    }
+
+    projectExporter.exportProject = function (wickProject, args) {
+
+        wickEditor.interfaces.statusbar.setState('exporting');
+
+        projectExporter.bundleProjectToHTML(wickProject, function(fileOut) {
+            var filename = wickProject.name || "project";
+            if(args && args.zipped) {
+                var zip = new JSZip();
+                zip.file("index.html", fileOut);
+                zip.generateAsync({type:"blob"}).then(function(content) {
+                    saveAs(content, filename+".zip");
+                });
+            } else {
+                var blob = new Blob([fileOut], {type: "text/plain;charset=utf-8"});
+                saveAs(blob, filename+".html");
+            }
             wickEditor.interfaces.statusbar.setState('done');
         });
 

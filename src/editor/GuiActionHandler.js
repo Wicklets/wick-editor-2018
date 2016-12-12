@@ -289,6 +289,17 @@ var GuiActionHandler = function (wickEditor) {
             WickProjectExporter.exportProject(wickEditor.project);
         });
 
+    // Export Project as .zip
+    registerAction('exportProjectZIP',
+        [], 
+        [], 
+        {usableInTextBoxes:true}, 
+        function(args) {
+            that.keys = [];
+            that.specialKeys = [];
+            WickProjectExporter.exportProject(wickEditor.project, {zipped:true});
+        });
+
     // Control + O
     // Open File
     registerAction('openFile',

@@ -410,18 +410,16 @@ WickObject.prototype.getAllActiveChildObjectsRecursive = function (includeParent
     }
 
     var children = [];
-    //for(var l = this.layers.length-1; l >= 0; l--) {
-        //var layer = this.layers[l];
-        //for(var f = 0; f < layer.frames.length; f++) {
-            //var frame = layer.frames[f];
-            var frame = this.getCurrentFrame();
+    for (var l = this.layers.length-1; l >= 0; l--) {
+        var frame = this.getFrameAtPlayheadPosition(this.playheadPosition, {layerToSearch:this.layers[l]});
+        if(frame) {
             for(var o = 0; o < frame.wickObjects.length; o++) {
                 var obj = frame.wickObjects[o];
                 if(includeParents || !obj.isSymbol) children.push(obj);
                 children = children.concat(obj.getAllActiveChildObjectsRecursive(includeParents));
             }
-        //}
-    //}
+        }
+    }
     return children;
 }
 
@@ -691,7 +689,6 @@ WickObject.prototype.fixOriginPoint = function (newSymbol, bbox) {
     var symbolAbsPos = this.parentObject.getAbsolutePosition();
     //symbolCornerPosition.x += symbolAbsPos.x;
     //symbolCornerPosition.y += symbolAbsPos.y;
-    console.log(symbolCornerPosition)
 
     var that = this;
     this.getAllChildObjects().forEach(function (child) {
@@ -738,7 +735,6 @@ WickObject.prototype.getAbsolutePositionScaled = function () {
         var parent = this.parentObject;
         var parentPosition = parent.getAbsolutePosition();
         var parentScale = parent.isRoot ? {x:1, y:1} : {x:parent.scaleX, y:parent.scaleY};
-        console.log(parentScale)
         return {
             x: this.x*parentScale.x + parentPosition.x,
             y: this.y*parentScale.y + parentPosition.y
@@ -1189,8 +1185,8 @@ WickObject.prototype.isPointInside = function(point) {
             var objectRelativePointX = (point.x - scaledObjX);
             var objectRelativePointY = (point.y - scaledObjY);
             var objectAlphaMaskIndex =
-                (Math.floor(objectRelativePointX/object.scaleX/parentScaleX)%Math.floor(object.width)) +
-                (Math.floor(objectRelativePointY/object.scaleY/parentScaleY)*Math.floor(object.width));
+                (Math.floor(objectRelativePointX/absScale.x)%Math.floor(object.width)) +
+                (Math.floor(objectRelativePointY/absScale.y)*Math.floor(object.width));
             if(!object.alphaMask[(objectAlphaMaskIndex)]) {
                 hit = true;
                 return;
@@ -1318,7 +1314,6 @@ WickObject.prototype.runScript = function (script, scriptType, objectScope) {
             var lineNumber = null;
             if(e.stack) {
                 e.stack.split('\n').forEach(function (line) {
-                    console.log(line)
                     if(lineNumber) return;
                     if(!line.includes("<anonymous>:")) return;
 
