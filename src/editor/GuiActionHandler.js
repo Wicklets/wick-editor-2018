@@ -861,7 +861,7 @@ var GuiActionHandler = function (wickEditor) {
         ['removeLayerButton'], 
         {}, 
         function(args) {
-            wickEditor.actionHandler.doAction('removeLayer');
+            wickEditor.actionHandler.doAction('removeLayer', {});
         });
 
     registerAction('addKeyframe',

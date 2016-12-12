@@ -338,8 +338,10 @@ var WickActionHandler = function (wickEditor) {
             }
         },
         function (args) {
-            var currentObject = wickEditor.project.getCurrentObject();
-            
+            if(args.removedLayer) {
+                var currentObject = wickEditor.project.getCurrentObject();
+                currentObject.addLayer(args.removedLayer);
+            }
         });
 
     this.registerAction('addBreakpoint', 
