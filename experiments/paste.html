@@ -1,0 +1,54 @@
+<!-- http://stackoverflow.com/questions/2176861/javascript-get-clipboard-data-on-paste-event-cross-browser -->
+
+<html>
+<head>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+<script language="JavaScript">
+ $(document).ready(function()
+{
+
+var ctrlDown = false;
+var ctrlKey = 17, vKey = 86, cKey = 67;
+
+$(document).keydown(function(e)
+{
+    if (e.keyCode == ctrlKey) ctrlDown = true;
+}).keyup(function(e)
+{
+    if (e.keyCode == ctrlKey) ctrlDown = false;
+});
+
+$(".capture-paste").keydown(function(e)
+{
+    if (ctrlDown && (e.keyCode == vKey || e.keyCode == cKey)){
+        $("#area").css("display","block");
+        $("#area").focus();
+    }
+});
+
+$(".capture-paste").keyup(function(e)
+{
+    if (ctrlDown && (e.keyCode == vKey || e.keyCode == cKey)){
+        $("#area").blur();
+        //do your sanitation check or whatever stuff here
+        $("#paste-output").text($("#area").val());
+        $("#area").val("");
+        $("#area").css("display","none");
+    }
+});
+
+});
+</script>
+
+</head>
+<body class="capture-paste">
+
+<div id="paste-output"></div>
+
+
+    <div>
+    <textarea id="area" style="display: none; position: absolute; left: -99em;"></textarea>
+    </div>
+
+</body>
+</html>

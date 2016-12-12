@@ -2,7 +2,7 @@
 
 var WickProject = function () {
 
-    // Create the root object. The editor is always editing the root 
+    // Create the root object. The editor is always editing the root
     // object or its sub-objects and cannot ever leave the root object.
     this.createNewRootObject();
 
@@ -168,11 +168,20 @@ WickProject.prototype.getAsJSON = function (callback, args) {
 }
 
 WickProject.prototype.saveInLocalStorage = function () {
+    var self = this;
     wickEditor.interfaces.statusbar.setState('saving');
     this.getAsJSON(function (JSONProject) {
-        var compressedJSONProject = WickProjectCompressor.compressProject(JSONProject, "LZSTRING-UTF16");
-        WickProject.saveProjectJSONInLocalStorage(compressedJSONProject);
-        wickEditor.interfaces.statusbar.setState('done');
+        console.log("Project size: " + JSONProject.length)
+        if(JSONProject.length > 5000000) {
+            console.log("Project >5MB, compressing...");
+            var compressedJSONProject = WickProjectCompressor.compressProject(JSONProject, "LZSTRING-UTF16");
+            WickProject.saveProjectJSONInLocalStorage(compressedJSONProject);
+            wickEditor.interfaces.statusbar.setState('done');
+        } else {
+            console.log("Project <5MB, not compressing.");
+            WickProject.saveProjectJSONInLocalStorage(JSONProject);
+            wickEditor.interfaces.statusbar.setState('done');
+        }
     });
 }
 
@@ -196,9 +205,9 @@ WickProject.prototype.getCopyData = function (ids) {
         objectJSONs.push(wickEditor.project.getObjectByID(ids[i]).getAsJSON());
     }
     var clipboardObject = {
-        /*position: {top  : group.top  + group.height/2, 
+        /*position: {top  : group.top  + group.height/2,
                    left : group.left + group.width/2},*/
-        groupPosition: {x : 0, 
+        groupPosition: {x : 0,
                         y : 0},
         wickObjectArray: objectJSONs
     }
@@ -214,7 +223,7 @@ WickProject.prototype.regenerateUniqueIDs = function (wickObject) {
 
     if(!wickObject.id && wickObject.id!=0) {
         //wickObject.id = this.rootObject.getLargestID() + 1; // Currently broken
-        // This is silly, but the actionhandler freaks out if it has to add an object 
+        // This is silly, but the actionhandler freaks out if it has to add an object
         // right after deleting another (those objects would have the same id.) (pls fix)
         wickObject.id = new Date().getTime() + this.rootObject.getLargestID();
     }
@@ -282,7 +291,7 @@ WickProject.prototype.hasSyntaxErrors = function () {
         if(child.hasSyntaxErrors) {
             projectHasSyntaxErrors = true;
         }
-    }); 
+    });
 
     return projectHasSyntaxErrors;
 
