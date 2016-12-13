@@ -69,6 +69,8 @@ var WickPlayer = (function () {
         renderer.setup();
         var playerCanvasContainer = renderer.getRendererElem();
 
+        document.getElementById('rendererCanvas').className = ''
+
         animate();
 
         // Setup mouse and key events (desktop mode)
@@ -132,6 +134,14 @@ var WickPlayer = (function () {
 
     wickPlayer.getRenderer = function () {
         return renderer;
+    }
+
+    wickPlayer.hideCursor = function () {
+        document.getElementById('rendererCanvas').className = 'hideCursor'
+    }
+
+    wickPlayer.showCursor = function () {
+        document.getElementById('rendererCanvas').className = ''
     }
 
     wickPlayer.cloneObject = function (wickObj) {

@@ -1285,11 +1285,11 @@ WickObject.prototype.runScript = function (script, scriptType, objectScope) {
     var gotoNextFrame = function ()      { objectScope.gotoNextFrame(); }
     var gotoPrevFrame = function ()      { objectScope.gotoPrevFrame(); }
 
-    // stop all sounds wrapper
+    // Etc. player wrappers
     var stopAllSounds = function () { WickPlayer.getAudioPlayer().stopAllSounds(); };
-
-    // Setup keycode shortcuts
     var isKeyDown = function (keyString) { return keys[keyCharToCode[keyString]]; };
+    var hideCursor = function () { WickPlayer.hideCursor(); };
+    var showCursor = function () { WickPlayer.showCursor(); };
 
     // WickObjects in same frame (scope) are accessable without using root./parent.
     if(objectScope) {

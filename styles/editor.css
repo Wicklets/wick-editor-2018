@@ -23,6 +23,11 @@
 	background-color:#F4B9B7;
 }
 
+.hideCursor {
+    cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjbQg61aAAAADUlEQVQYV2P4//8/IwAI/QL/+TZZdwAAAABJRU5ErkJggg=='),
+    none !important;
+}
+
 html, body { width:100%; height:100%; overflow: hidden; } /* just to be sure these are full screen*/
 
 canvas { display:block; } /* To remove the scrollbars */
