@@ -52,7 +52,6 @@ var WickObject = function () {
     // Player vars, only ever used when in the player.
     this.isPlaying = undefined;
     this.hoveredOver = undefined;
-    this.justEnteredFrame = undefined;
     this.onNewFrame = undefined;
     this.onLoadScriptRan = undefined;
     this.deleted = undefined;
@@ -673,7 +672,6 @@ WickObject.prototype.regenBoundingBox = function () {
         });
         wickEditor.interfaces.fabric.deselectAll(); // to get correct ungrouped object positions
         this.bbox = wickEditor.interfaces.fabric.getBoundingBoxOfObjects(ids);
-        console.log(this.bbox)
     //}
 }
 
@@ -1223,21 +1221,18 @@ WickObject.prototype.update = function () {
             this.runScript(currentFrame.wickScripts['onLoad'], 'onLoad', this);
         }
 
+        this.getAllActiveChildObjects().forEach(function (child) {
+            if(!child.onLoadScriptRan) {
+                child.runScript(child.wickScripts['onLoad'], 'onLoad');
+                child.onLoadScriptRan = true;
+            }
+
+            if(child.autoplaySound) {
+                child.playSound();
+            }
+        });
+
         this.onNewFrame = false;
-    }
-
-    if(this.justEnteredFrame) {
-
-        if(!this.onLoadScriptRan) {
-            this.runScript(this.wickScripts['onLoad'], 'onLoad');
-            this.onLoadScriptRan = true;
-        }
-
-        if(this.autoplaySound) {
-            this.playSound();
-        }
-
-        this.justEnteredFrame = false;
     }
 
     this.runScript(this.wickScripts['onUpdate'], 'onUpdate');
@@ -1354,9 +1349,6 @@ WickObject.prototype.advanceTimeline = function () {
 
         if(oldFrame !== newFrame) {
             this.onNewFrame = true;
-            this.getAllActiveChildObjects().forEach(function (child) {
-                child.justEnteredFrame = true;
-            });
         }
     }
 
@@ -1418,9 +1410,6 @@ WickObject.prototype.gotoFrame = function (frame) {
 
     if(newFrame !== oldFrame) {
         this.onNewFrame = true;
-        this.getAllActiveChildObjects().forEach(function (child) {
-            child.justEnteredFrame = true;
-        });
     }
 
 }
