@@ -109,20 +109,13 @@ WickObject.fromImage = function (imgSrc, callback) {
 
     var img = new Image();
     img.onload = function() {
+        var obj = new WickObject();
 
-        var croppedSrc = removeBlankPixels(img, img.width, img.height);
-        
-        var autoCroppedImg = new Image();
-        autoCroppedImg.onload = function () {
-            var obj = new WickObject();
+        obj.width = img.width;
+        obj.height = img.height;
+        obj.imageData = img.src;
 
-            obj.width = autoCroppedImg.width;
-            obj.height = autoCroppedImg.height;
-            obj.imageData = autoCroppedImg.src;
-
-            callback(obj);
-        }
-        autoCroppedImg.src = croppedSrc;
+        callback(obj);
     }
     img.src = imgSrc;
 
@@ -773,6 +766,36 @@ WickObject.prototype.isOnActiveLayer = function () {
 
     return this.parentObject.getLayerWithChild(this) === this.parentObject.getCurrentLayer();
 
+}
+
+WickObject.prototype.autocropImage = function () {
+    var that = this;
+
+    var img = new Image();
+    img.onload = function() {
+        var croppedSrc = removeBlankPixels(img, img.width, img.height);
+
+        var autoCroppedImg = new Image();
+        autoCroppedImg.onload = function () {
+
+            that.width = autoCroppedImg.width;
+            that.height = autoCroppedImg.height;
+            that.imageData = autoCroppedImg.src;
+            that.imageDirty = true;
+
+        }
+        autoCroppedImg.src = croppedSrc;
+    }
+    img.src = this.imageData;
+}
+
+WickObject.prototype.splitIntoBlobs = function () {
+    var that = this;
+    
+    GetBlobMap(this.imageData, function (blobMap) {
+        that.imageData = blobMap.src;
+        that.imageDirty = true;
+    });
 }
 
 /*************************

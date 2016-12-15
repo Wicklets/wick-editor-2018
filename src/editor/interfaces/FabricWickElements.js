@@ -90,8 +90,9 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
             var wickObj = wickEditor.project.rootObject.getChildByID(fabricObj.wickObjectID);
 
-            if(allObjectsIDs.indexOf(fabricObj.wickObjectID) == -1 || (wickObj && wickObj.forceFabricCanvasRegen)) {
+            if(allObjectsIDs.indexOf(fabricObj.wickObjectID) == -1 || (wickObj && wickObj.forceFabricCanvasRegen) || (wickObj && wickObj.imageDirty)) {
                 if(wickObj) {
+                    wickObj.imageDirty = false;
                     wickObj.forceFabricCanvasRegen = false;
                     wickObj.cachedFabricObject = null;
                 }
@@ -387,16 +388,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 scaling: setCoords,
                 rotating: setCoords
             });
-
-            if(wickObj.imageDirty) {
-                var img=new Image();
-                img.onload=function(){
-                    fabricObj.setElement(img);
-                    fabricInterface.canvas.renderAll();
-                }
-                img.src=wickObj.imageData;
-                wickObj.imageDirty = false;
-            }
 
             if(activeObjects.indexOf(wickObj) !== -1) {
                 fabricObj.hasControls = true;
