@@ -101,8 +101,15 @@ WickProject.fromJSON = function (rawJSONProject) {
     // Add references to wickobject's parents (optimization)
     projectFromJSON.rootObject.generateParentObjectReferences();
 
-    // Backwards compatibility for old Wick projects
+    // Start at the first from of the root object
+    projectFromJSON.currentObjectID = projectFromJSON.rootObject.id;
+    projectFromJSON.rootObject.playheadPosition = 0;
     var allObjectsInProject = projectFromJSON.rootObject.getAllChildObjectsRecursive();
+    allObjectsInProject.forEach(function (obj) {
+        obj.playheadPosition = 0;
+    });
+
+    // Backwards compatibility for old Wick projects
     allObjectsInProject.push(projectFromJSON.rootObject);
     allObjectsInProject.forEach(function (wickObj) {
         if(!wickObj.isSymbol) return;

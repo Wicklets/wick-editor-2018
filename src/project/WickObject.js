@@ -673,6 +673,7 @@ WickObject.prototype.regenBoundingBox = function () {
         });
         wickEditor.interfaces.fabric.deselectAll(); // to get correct ungrouped object positions
         this.bbox = wickEditor.interfaces.fabric.getBoundingBoxOfObjects(ids);
+        console.log(this.bbox)
     //}
 }
 
