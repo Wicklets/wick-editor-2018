@@ -42,7 +42,7 @@ var InputHandler = function (wickEditor) {
 *************************/
 
     var loadFileIntoWickObject = function (e,file,fileType) {
-
+        
         if (fileType === 'text/html') {
             WickProject.fromFile(file, function(project) {
                 wickEditor.project = project;

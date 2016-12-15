@@ -221,7 +221,7 @@ var PropertiesInterface = function (wickEditor) {
             modifiedStates: [{ fontSize : this.value }] 
         });
     };*/
-    $('#fontSize').on('input propertychange', function () {
+    $('#fontSize').on('input propertychange', function () {g
 
         if(CheckInput.isNumber($('#fontSize').val())) {
             var id = wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0];
