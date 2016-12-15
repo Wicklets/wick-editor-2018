@@ -62,14 +62,18 @@ var ScriptingIDEInterface = function (wickEditor) {
         objectBeingScripted = obj;
 
         if(args && args.dontOpenIDE) {
-            
+
         } else {
             this.open = true;
         }
+
+        this.syncWithEditorState();
     }
 
     this.clearSelection = function () {
         objectBeingScripted = null;
+
+        this.syncWithEditorState();
     }
 
     var erroneousLine;
@@ -101,13 +105,18 @@ var ScriptingIDEInterface = function (wickEditor) {
 
                 var script = objectBeingScripted.wickScripts[that.currentScript];
                 that.aceEditor.setValue(script, -1);
-
-                var scriptExists = function (name) { if(objectBeingScripted.wickScripts[name] !== undefined) return true; else return false; };
                 
-                document.getElementById("onLoadButton").style.display    = scriptExists('onLoad')    ? 'block' : 'none';
-                document.getElementById("onUpdateButton").style.display  = scriptExists('onUpdate')  ? 'block' : 'none';
-                document.getElementById("onClickButton").style.display   = scriptExists('onClick')   ? 'block' : 'none';
-                document.getElementById("onKeyDownButton").style.display = scriptExists('onKeyDown') ? 'block' : 'none';
+                if(objectBeingScripted instanceof WickFrame) {
+                    document.getElementById("onClickButton").style.display   = 'block';
+                    document.getElementById("onKeyDownButton").style.display = 'block';
+                    document.getElementById("onClickButton").style.display   = 'none';
+                    document.getElementById("onKeyDownButton").style.display = 'none';
+                } else {
+                    document.getElementById("onClickButton").style.display   = 'block';
+                    document.getElementById("onKeyDownButton").style.display = 'block';
+                    document.getElementById("onClickButton").style.display   = 'block';
+                    document.getElementById("onKeyDownButton").style.display = 'block';
+                }
 
                 document.getElementById("onLoadButton").className = (that.currentScript == 'onLoad' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
                 document.getElementById("onUpdateButton").className = (that.currentScript == 'onUpdate' ? "button buttonInRow activeScriptButton" : "button buttonInRow");

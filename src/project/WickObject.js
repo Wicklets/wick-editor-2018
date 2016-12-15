@@ -1248,7 +1248,8 @@ WickObject.prototype.update = function () {
         // For now, the WickObject that owns the frame runs the frame's scripts.
         // So, play(), stop() etc refers to the timeline that the frame is in.
         // The 'this' keyword is borked though, since it still will refer to the WickObject.
-        this.runScript(this.getCurrentFrame().wickScripts['onUpdate'], 'onUpdate', this);
+        if(this.getCurrentFrame())
+            this.runScript(this.getCurrentFrame().wickScripts['onUpdate'], 'onUpdate', this);
 
         this.getAllActiveChildObjects().forEach(function(child) {
             child.update();

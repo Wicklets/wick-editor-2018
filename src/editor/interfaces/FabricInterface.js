@@ -496,7 +496,7 @@ var FabricInterface = function (wickEditor) {
     this.getObjectsImage = function (callback, args) {
 
         var selectedObjs = []; 
-        this.canvas.forEachObject(function(fabricObj) {
+        that.canvas.forEachObject(function(fabricObj) {
             if(args && args.ids && args.ids.indexOf(fabricObj.wickObjectID) === -1) return;
 
             if(fabricObj.wickObjectID && !fabricObj.isWickGUIElement) {
@@ -514,7 +514,7 @@ var FabricInterface = function (wickEditor) {
                 originY: 'top'
             });
             for(var i = selectedObjs.length-1; i >= 0; i--) {
-                group.canvas = this.canvas // WHAT ??????????????? WHY
+                //group.canvas = that.canvas // WHAT ??????????????? WHY
                 var clone = fabric.util.object.clone(selectedObjs[i]);
                 group.addWithUpdate(clone);
             }
