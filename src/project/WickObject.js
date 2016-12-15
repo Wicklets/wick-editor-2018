@@ -1297,9 +1297,6 @@ WickObject.prototype.runScript = function (script, scriptType, objectScope) {
             if(child.name) window[child.name] = child;
         });
     }
-
-    // Shortcut for editing text
-    if(!this.text && this.pixiText) this.text = this.pixiText.text;
         
     // Run da script!!
     try {
@@ -1331,9 +1328,6 @@ WickObject.prototype.runScript = function (script, scriptType, objectScope) {
         }
     }
     //eval("try{" + script + "}catch (e) { console.log(e); }");
-
-    // Shortcut for text
-    if(this.pixiText) this.pixiText.text = this.text;
 
     // Get rid of wickobject reference variables
     if(!this.isRoot) {
@@ -1766,6 +1760,10 @@ WickObject.prototype.setOpacity = function(opacityVal) {
     }
 
     this.opacity = Math.min(Math.max(opacityVal, 0), 1);
+}
+
+WickObject.prototype.setText = function (text) {
+    this.pixiText.text = ""+text;
 }
 
 WickObject.prototype.playSound = function (volume) {

@@ -1,5 +1,17 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
+
+
+
+
+/* VERY IMRPOTANT */
+/* This needs to be changed so that it works like AudioPlayer i.e. so that
+   the WickObjects don't need to store a reference to their pixi objects,
+   there's just a dictionary mapping IDs to Pixi objects */
+
+
+
+
 var rendererContainerEl;
 var renderer;
 var stage;
@@ -39,7 +51,6 @@ var WickPixiRenderer = function (project) {
                 wordWrapWidth : 1440,
             };
             wickObj.pixiText = new PIXI.Text(wickObj.fontData.text, style);
-            wickObj.setText = function (text) { wickObj.pixiText.setText(text); };
             wickObj.parentObject.pixiContainer.addChild(wickObj.pixiText);
         }
 	}
@@ -67,7 +78,6 @@ var WickPixiRenderer = function (project) {
                     wordWrapWidth : 1440,
                 };
                 subObj.pixiText = new PIXI.Text(subObj.fontData.text, style);
-                subObj.setText = function (text) { subObj.pixiText.setText(text); };
                 wickObj.pixiContainer.addChild(subObj.pixiText);
             }
         });
