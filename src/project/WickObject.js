@@ -663,24 +663,22 @@ WickObject.prototype.getLargestID = function (id) {
 *************************/
 
 WickObject.prototype.regenBoundingBox = function () {
-    if (wickEditor.project.getCurrentObject() === this) {
+    /*if (wickEditor.project.getCurrentObject() === this) {
         wickEditor.interfaces.fabric.deselectAll();
         this.bbox = wickEditor.interfaces.fabric.getBoundingBoxOfAllObjects();
-    } else {
+    } else {*/
         var ids = [];
         this.getAllChildObjects().forEach(function (child) {
             ids.push(child.id);
         });
         wickEditor.interfaces.fabric.deselectAll(); // to get correct ungrouped object positions
         this.bbox = wickEditor.interfaces.fabric.getBoundingBoxOfObjects(ids);
-    }
+    //}
 }
 
 // used as a hack to get around fabric.js lack of rotation around anchorpoint
-WickObject.prototype.fixOriginPoint = function (newSymbol, bbox) {
+WickObject.prototype.fixOriginPoint = function (newSymbol) {
     if(this.playheadPosition === 0) this.regenBoundingBox();
-
-    //if(bbox) this.bbox = bbox;
 
     var bboxCenter = {x:this.bbox.left + this.bbox.width/2, y:this.bbox.top + this.bbox.height/2};
 

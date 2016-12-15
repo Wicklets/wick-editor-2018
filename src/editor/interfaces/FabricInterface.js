@@ -61,10 +61,11 @@ var FabricInterface = function (wickEditor) {
             });
         });
         that.canvas.on('selection:cleared', function (e) {
-            wickEditor.interfaces.scriptingide.editScriptsOfObject(null, {dontOpenIDE:true});
+            wickEditor.interfaces.scriptingide.clearSelection();
             wickEditor.syncInterfaces(['scriptingide','properties']);
         });
         that.canvas.on('selection:changed', function (e) {
+            wickEditor.interfaces.scriptingide.editScriptsOfObject(this.getSelectedWickObject(), {dontOpenIDE:true});
             that.guiElements.update();
             wickEditor.syncInterfaces(['scriptingide','properties']);
         });
@@ -334,7 +335,9 @@ var FabricInterface = function (wickEditor) {
         this.selectByIDs(ids);
     }
 
-    this.deselectAll = function () {
+    this.deselectAll = function (clearScriptingSelection) {
+        if(!clearScriptingSelection)
+            wickEditor.interfaces.scriptingide.clearSelection();
 
         var activeGroup = this.canvas.getActiveGroup();
         if(activeGroup) {

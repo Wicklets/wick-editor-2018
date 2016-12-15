@@ -62,10 +62,14 @@ var ScriptingIDEInterface = function (wickEditor) {
         objectBeingScripted = obj;
 
         if(args && args.dontOpenIDE) {
-
+            
         } else {
             this.open = true;
         }
+    }
+
+    this.clearSelection = function () {
+        objectBeingScripted = null;
     }
 
     var erroneousLine;
