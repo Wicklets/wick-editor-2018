@@ -203,6 +203,7 @@ var WickPlayer = (function () {
             }
         }
 
+        if(wickObject.autoplaySound) console.log("justEnteredFrame set to true by resetState")
         wickObject.hoveredOver = false;
         wickObject.justEnteredFrame = true;
         wickObject.onNewFrame = true;

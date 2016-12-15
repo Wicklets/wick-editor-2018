@@ -52,6 +52,7 @@ var WickObject = function () {
     // Player vars, only ever used when in the player.
     this.isPlaying = undefined;
     this.hoveredOver = undefined;
+    this.justEnteredFrame = undefined;
     this.onNewFrame = undefined;
     this.onLoadScriptRan = undefined;
     this.deleted = undefined;
@@ -1208,12 +1209,6 @@ WickObject.prototype.update = function () {
         if(this.isSymbol) {
             var currentFrame = this.getCurrentFrame();
 
-            if(!currentFrame.alwaysSaveState) {
-                this.getAllActiveChildObjects().forEach(function (child) {
-                    WickPlayer.resetStateOfObject(child);
-                });
-            }
-
             if(currentFrame && !currentFrame.autoplay) {
                 this.isPlaying = false;
             }
@@ -1221,18 +1216,21 @@ WickObject.prototype.update = function () {
             this.runScript(currentFrame.wickScripts['onLoad'], 'onLoad', this);
         }
 
-        this.getAllActiveChildObjects().forEach(function (child) {
-            if(!child.onLoadScriptRan) {
-                child.runScript(child.wickScripts['onLoad'], 'onLoad');
-                child.onLoadScriptRan = true;
-            }
-
-            if(child.autoplaySound) {
-                child.playSound();
-            }
-        });
-
         this.onNewFrame = false;
+    }
+
+    if(this.justEnteredFrame) {
+
+        if(!this.onLoadScriptRan) {
+            this.runScript(this.wickScripts['onLoad'], 'onLoad');
+            this.onLoadScriptRan = true;
+        }
+
+        if(this.autoplaySound) {
+            this.playSound();
+        }
+
+        this.justEnteredFrame = false;
     }
 
     this.runScript(this.wickScripts['onUpdate'], 'onUpdate');
@@ -1349,6 +1347,15 @@ WickObject.prototype.advanceTimeline = function () {
 
         if(oldFrame !== newFrame) {
             this.onNewFrame = true;
+            if(!newFrame.alwaysSaveState) {
+                this.getAllActiveChildObjects().forEach(function (child) {
+                    WickPlayer.resetStateOfObject(child);
+                });
+            }
+            this.getAllActiveChildObjects().forEach(function (child) {
+                if(child.autoplaySound) console.log("justEnteredFrame set true by advanceTimeline.")
+                child.justEnteredFrame = true;
+            });
         }
     }
 
@@ -1410,6 +1417,15 @@ WickObject.prototype.gotoFrame = function (frame) {
 
     if(newFrame !== oldFrame) {
         this.onNewFrame = true;
+        if(!newFrame.alwaysSaveState) {
+            this.getAllActiveChildObjects().forEach(function (child) {
+                WickPlayer.resetStateOfObject(child);
+            });
+        }
+        this.getAllActiveChildObjects().forEach(function (child) {
+            if(child.autoplaySound) console.log("justEnteredFrame set true by gotoFrame.")
+            child.justEnteredFrame = true;
+        });
     }
 
 }
