@@ -107,19 +107,24 @@ WickObject.fromJSONArray = function (jsonArrayObject, callback) {
 
 WickObject.fromImage = function (imgSrc, callback) {
 
-    var fileImage = new Image();
-    fileImage.src = imgSrc;
-    
-    fileImage.onload = function() {
+    var img = new Image();
+    img.onload = function() {
 
-        var obj = new WickObject();
+        var croppedSrc = removeBlankPixels(img, img.width, img.height);
+        
+        var autoCroppedImg = new Image();
+        autoCroppedImg.onload = function () {
+            var obj = new WickObject();
 
-        obj.width = fileImage.width;
-        obj.height = fileImage.height;
-        obj.imageData = fileImage.src;
+            obj.width = autoCroppedImg.width;
+            obj.height = autoCroppedImg.height;
+            obj.imageData = autoCroppedImg.src;
 
-        callback(obj);
+            callback(obj);
+        }
+        autoCroppedImg.src = croppedSrc;
     }
+    img.src = imgSrc;
 
 }
 
