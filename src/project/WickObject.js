@@ -789,12 +789,17 @@ WickObject.prototype.autocropImage = function () {
     img.src = this.imageData;
 }
 
-WickObject.prototype.splitIntoBlobs = function () {
+WickObject.prototype.getBlobImages = function (callback) {
     var that = this;
-    
-    GetBlobMap(this.imageData, function (blobMap) {
-        that.imageData = blobMap.src;
-        that.imageDirty = true;
+
+    GetBlobMap(that.imageData, function (blobResult) {
+        var img = new Image();
+        img.onload = function () {
+            GetBlobImages(blobResult.blobMap, blobResult.nBlobs, img, function (blobImages) {
+                callback(blobImages);
+            });
+        }
+        img.src = that.imageData;
     });
 }
 
