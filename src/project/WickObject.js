@@ -781,10 +781,10 @@ WickObject.prototype.autocropImage = function (callback) {
         var autoCroppedImg = new Image();
         autoCroppedImg.onload = function () {
 
-            that.width = autoCroppedImg.width;
+            that.width  = autoCroppedImg.width;
             that.height = autoCroppedImg.height;
             that.x += cropLeft + that.width/2;
-            that.y += cropTop + that.height/2;
+            that.y += cropTop  + that.height/2;
             that.imageData = autoCroppedImg.src;
             that.imageDirty = true;
 
@@ -1382,12 +1382,12 @@ WickObject.prototype.advanceTimeline = function () {
         if(oldFrame !== newFrame) {
             this.onNewFrame = true;
             if(!newFrame.alwaysSaveState) {
-                this.getAllActiveChildObjects().forEach(function (child) {
+                //this.getAllActiveChildObjects().forEach(function (child) {
+                newFrame.wickObjects.forEach(function (child) {
                     WickPlayer.resetStateOfObject(child);
                 });
             }
             this.getAllActiveChildObjects().forEach(function (child) {
-                if(child.autoplaySound) console.log("justEnteredFrame set true by advanceTimeline.")
                 child.justEnteredFrame = true;
             });
         }
@@ -1452,12 +1452,12 @@ WickObject.prototype.gotoFrame = function (frame) {
     if(newFrame !== oldFrame) {
         this.onNewFrame = true;
         if(!newFrame.alwaysSaveState) {
-            this.getAllActiveChildObjects().forEach(function (child) {
+            //this.getAllActiveChildObjects().forEach(function (child) {
+            newFrame.wickObjects.forEach(function (child) {
                 WickPlayer.resetStateOfObject(child);
             });
         }
         this.getAllActiveChildObjects().forEach(function (child) {
-            if(child.autoplaySound) console.log("justEnteredFrame set true by gotoFrame.")
             child.justEnteredFrame = true;
         });
     }
