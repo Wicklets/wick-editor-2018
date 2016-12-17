@@ -901,10 +901,11 @@ var GuiActionHandler = function (wickEditor) {
             wickObj.getBlobImages(function (images) {
                 images.forEach(function (image) {
                     WickObject.fromImage(image.src, function (newWickObject) {
-                        newWickObject.x = wickObj.x;
-                        newWickObject.y = wickObj.y;
+                        newWickObject.x = wickObj.x-wickObj.width /2;
+                        newWickObject.y = wickObj.y-wickObj.height/2;
                         newWickObject.autocropImage(function () {
-                            wickEditor.actionHandler.doAction('addObjects', {wickObjects:[newWickObject]});
+                            wickEditor.actionHandler.doAction('addObjects', { wickObjects:[newWickObject] });
+                            wickEditor.actionHandler.doAction('deleteObjects', { ids:[wickObj.id] });
                         });
                     })
                 });
