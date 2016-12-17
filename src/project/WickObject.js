@@ -768,20 +768,27 @@ WickObject.prototype.isOnActiveLayer = function () {
 
 }
 
-WickObject.prototype.autocropImage = function () {
+WickObject.prototype.autocropImage = function (callback) {
     var that = this;
 
     var img = new Image();
     img.onload = function() {
-        var croppedSrc = removeBlankPixels(img, img.width, img.height);
+        var cropImgData = removeBlankPixels(img, img.width, img.height);
+        var croppedSrc = cropImgData.dataURL;
+        var cropLeft = cropImgData.left;
+        var cropTop = cropImgData.top;
 
         var autoCroppedImg = new Image();
         autoCroppedImg.onload = function () {
 
             that.width = autoCroppedImg.width;
             that.height = autoCroppedImg.height;
+            that.x += cropLeft + that.width/2;
+            that.y += cropTop + that.height/2;
             that.imageData = autoCroppedImg.src;
             that.imageDirty = true;
+
+            callback();
 
         }
         autoCroppedImg.src = croppedSrc;
@@ -792,14 +799,8 @@ WickObject.prototype.autocropImage = function () {
 WickObject.prototype.getBlobImages = function (callback) {
     var that = this;
 
-    GetBlobMap(that.imageData, function (blobResult) {
-        var img = new Image();
-        img.onload = function () {
-            GetBlobImages(blobResult.blobMap, blobResult.nBlobs, img, function (blobImages) {
-                callback(blobImages);
-            });
-        }
-        img.src = that.imageData;
+    FindBlobsAndGetBlobImages(this.imageData, function (blobImages) {
+        callback(blobImages);
     });
 }
 

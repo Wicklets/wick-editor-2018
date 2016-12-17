@@ -892,4 +892,23 @@ var GuiActionHandler = function (wickEditor) {
             console.error("removeKeyframeButton action NYI")
         });
 
+    registerAction('splitImage',
+        ['SHIFT', 'S'],
+        [],
+        {},
+        function (args) {
+            var wickObj = wickEditor.interfaces.fabric.getSelectedWickObject();
+            wickObj.getBlobImages(function (images) {
+                images.forEach(function (image) {
+                    WickObject.fromImage(image.src, function (newWickObject) {
+                        newWickObject.x = wickObj.x;
+                        newWickObject.y = wickObj.y;
+                        newWickObject.autocropImage(function () {
+                            wickEditor.actionHandler.doAction('addObjects', {wickObjects:[newWickObject]});
+                        });
+                    })
+                });
+            });
+        })
+
 }
