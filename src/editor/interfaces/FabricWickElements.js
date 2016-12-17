@@ -344,11 +344,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         fabricObj.flipY   = wickObj.flipY;
         fabricObj.opacity = wickObj.opacity;
 
-        if(wickObj.imageData) {
-            if(wickObj.width % 2 === 1 && fabricObj.left % 1 === 0) fabricObj.left -= 0.5;
-            if(wickObj.height % 2 === 1 && fabricObj.top % 1 === 0) fabricObj.top -= 0.5;
-        }
-
         if(wickObj.isSymbol) {
             //var cornerPosition = wickObj.getSymbolBoundingBoxCorner();
             //fabricObj.left += cornerPosition.x;

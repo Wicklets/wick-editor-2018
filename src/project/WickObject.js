@@ -109,13 +109,19 @@ WickObject.fromImage = function (imgSrc, callback) {
 
     var img = new Image();
     img.onload = function() {
-        var obj = new WickObject();
+        AddPaddingToImage(img, function (paddedImgSrc) {
+            var paddedImg = new Image();
+            paddedImg.onload = function() {
+                var obj = new WickObject();
 
-        obj.width = img.width;
-        obj.height = img.height;
-        obj.imageData = img.src;
+                obj.width = paddedImg.width;
+                obj.height = paddedImg.height;
+                obj.imageData = paddedImg.src;
 
-        callback(obj);
+                callback(obj);
+            }
+            paddedImg.src = paddedImgSrc;
+        })
     }
     img.src = imgSrc;
 
@@ -781,12 +787,18 @@ WickObject.prototype.autocropImage = function (callback) {
         var autoCroppedImg = new Image();
         autoCroppedImg.onload = function () {
 
-            that.width  = autoCroppedImg.width;
-            that.height = autoCroppedImg.height;
-            that.x += cropLeft + that.width/2;
-            that.y += cropTop  + that.height/2;
-            that.imageData = autoCroppedImg.src;
-            that.imageDirty = true;
+            AddPaddingToImage(autoCroppedImg, function (paddedImgSrc) {
+                var paddedImg = new Image();
+                paddedImg.onload = function () {
+                    that.width  = paddedImg.width;
+                    that.height = paddedImg.height;
+                    that.x += cropLeft + that.width/2;
+                    that.y += cropTop  + that.height/2;
+                    that.imageData = paddedImg.src;
+                    that.imageDirty = true;
+                }
+                paddedImg.src = paddedImgSrc;
+            });
 
             callback();
 
