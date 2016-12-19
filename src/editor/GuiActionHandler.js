@@ -517,12 +517,10 @@ var GuiActionHandler = function (wickEditor) {
                 if(fileType === 'text/wickobjectsjson') {
                     var fileWickObject = WickObject.fromJSONArray(JSON.parse(file), function(objs) {
                         objs.forEach(function (obj) {
-                            obj.selectOnAddToFabric = true;
+                            //obj.selectOnAddToFabric = true; // This causes positioning problems for text!
                             obj.getAllChildObjectsRecursive().forEach(function (child) {
                                 child.id = null;
                             });
-                            //obj.x += 50;
-                            //obj.y += 50;
                         })
                         wickEditor.actionHandler.doAction('addObjects', {
                             wickObjects:objs

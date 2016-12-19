@@ -179,6 +179,7 @@ var WickActionHandler = function (wickEditor) {
 
                 // This is silly what's a better way ???
                 if(wickObj.fontData) {
+                    wickObj.forceFabricCanvasRegen = true;
                     args.originalStates[i].text = wickObj.fontData.text;
                     args.originalStates[i].fontFamily = wickObj.fontData.fontFamily;
                     args.originalStates[i].fontSize = wickObj.fontData.fontSize;
@@ -260,6 +261,7 @@ var WickActionHandler = function (wickEditor) {
 
                 // This is silly what's a better way ???
                 if(wickObj.fontData) {
+                    wickObj.forceFabricCanvasRegen = true;
                     wickObj.fontData.text = args.originalStates[i].text;
                     wickObj.fontData.fontFamily = args.originalStates[i].fontFamily;
                     wickObj.fontData.fontSize = args.originalStates[i].fontSize;

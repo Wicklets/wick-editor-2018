@@ -202,6 +202,7 @@ var PropertiesInterface = function (wickEditor) {
     };
 
     document.getElementById('fontSelector').onchange = function () {
+        wickEditor.interfaces.fabric.forceModifySelectedObjects();
         wickEditor.actionHandler.doAction('modifyObjects', { 
             ids: [wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0]], 
             modifiedStates: [{ fontFamily : document.getElementById('fontSelector').value }] 
@@ -209,19 +210,14 @@ var PropertiesInterface = function (wickEditor) {
     }
 
     document.getElementById('fontColor').onchange = function () {
+        wickEditor.interfaces.fabric.forceModifySelectedObjects();
         wickEditor.actionHandler.doAction('modifyObjects', { 
             ids: [wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0]], 
             modifiedStates: [{ fill : "#"+this.value }] 
         });
     };
 
-    /*document.getElementById('fontSize').onchange = function () {
-        wickEditor.actionHandler.doAction('modifyObjects', { 
-            ids: [wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0]], 
-            modifiedStates: [{ fontSize : this.value }] 
-        });
-    };*/
-    $('#fontSize').on('input propertychange', function () {g
+    $('#fontSize').on('input propertychange', function () {
 
         if(CheckInput.isNumber($('#fontSize').val())) {
             var id = wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0];
@@ -229,6 +225,7 @@ var PropertiesInterface = function (wickEditor) {
             var modifiedState = { 
                 fontSize : parseInt($('#fontSize').val()) 
             };
+            wickEditor.interfaces.fabric.forceModifySelectedObjects();
             wickEditor.actionHandler.doAction('modifyObjects', { 
                 ids: [id], 
                 modifiedStates: [modifiedState] 
@@ -236,6 +233,20 @@ var PropertiesInterface = function (wickEditor) {
         }
 
     });
+    document.getElementById('boldCheckbox').onchange = function () {
+        wickEditor.interfaces.fabric.forceModifySelectedObjects();
+        wickEditor.actionHandler.doAction('modifyObjects', { 
+            ids: [wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0]], 
+            modifiedStates: [{ fontWeight : (this.checked ? "bold" : "normal") }] 
+        });
+    };
+    document.getElementById('italicCheckbox').onchange = function () {
+        wickEditor.interfaces.fabric.forceModifySelectedObjects();
+        wickEditor.actionHandler.doAction('modifyObjects', { 
+            ids: [wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0]], 
+            modifiedStates: [{ fontStyle : (this.checked ? "italic" : "normal") }] 
+        });
+    };
 
     // Loop Checkbox: Toggle sound loop
     document.getElementById('loopCheckbox').onchange = function () {
@@ -246,25 +257,6 @@ var PropertiesInterface = function (wickEditor) {
     document.getElementById('autoplayCheckbox').onchange = function () {
         wickEditor.interfaces['fabric'].getSelectedWickObject().autoplaySound = this.checked;
     };
-
-    document.getElementById('boldCheckbox').onchange = function () {
-        wickEditor.actionHandler.doAction('modifyObjects', { 
-            ids: [wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0]], 
-            modifiedStates: [{ fontWeight : (this.checked ? "bold" : "normal") }] 
-        });
-    };
-    document.getElementById('italicCheckbox').onchange = function () {
-        wickEditor.actionHandler.doAction('modifyObjects', { 
-            ids: [wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0]], 
-            modifiedStates: [{ fontStyle : (this.checked ? "italic" : "normal") }] 
-        });
-    };
-    /*document.getElementById('underlinedCheckbox').onchange = function () {
-        wickEditor.actionHandler.doAction('modifyObjects', { 
-            ids: [wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0]], 
-            modifiedStates: [{ textDecoration : (this.checked ? "underline" : "none") }] 
-        });
-    };*/
 
     $('#frameIdentifier').on('input propertychange', function () {
         var currentObject = wickEditor.project.getCurrentObject();

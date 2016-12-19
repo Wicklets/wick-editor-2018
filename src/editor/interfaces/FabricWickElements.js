@@ -109,7 +109,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             } else {
                 fabricObj.remove();
             }
-        })
+        });
 
         if(enablePerfTests) stopTiming("remove objects");
 
