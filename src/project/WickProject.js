@@ -178,6 +178,7 @@ WickProject.prototype.saveInLocalStorage = function () {
             console.log("Project >5MB, compressing...");
             var compressedJSONProject = WickProjectCompressor.compressProject(JSONProject, "LZSTRING-UTF16");
             WickProject.saveProjectJSONInLocalStorage(compressedJSONProject);
+            console.log("Compressed size: " + compressedJSONProject.length)
             wickEditor.interfaces.statusbar.setState('done');
         } else {
             console.log("Project <5MB, not compressing.");
