@@ -206,7 +206,7 @@ var WickPixiRenderer = function (project) {
 
 	    if(wickObj.isSymbol) {
 	        wickObj.pixiContainer.visible = true;
-	        if(!wickObj.isRoot) {
+	        //if(!wickObj.isRoot) {
 	            wickObj.pixiContainer.anchor = new PIXI.Point(0.5, 0.5);
 	            wickObj.pixiContainer.position.x = wickObj.x//Math.round(wickObj.x);
 	            wickObj.pixiContainer.position.y = wickObj.y//Math.round(wickObj.y);
@@ -229,7 +229,7 @@ var WickPixiRenderer = function (project) {
 	            	wickObj.pixiContainer.position.x += r.x;
 	            	wickObj.pixiContainer.position.y += r.y;*/
 	            }
-	        }
+	        //}
 	        wickObj.getAllActiveChildObjects().forEach(function(subObj) {
 	            updatePixiObjectTransforms(subObj);
 	        });

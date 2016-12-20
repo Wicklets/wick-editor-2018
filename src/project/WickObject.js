@@ -713,8 +713,8 @@ WickObject.prototype.fixOriginPoint = function (newSymbol) {
 WickObject.prototype.getAbsolutePosition = function () {
     if(this.isRoot) {
         return {
-            x: 0,
-            y: 0
+            x: this.x,
+            y: this.y
         };
     } else {
         var parent = this.parentObject;
@@ -730,8 +730,8 @@ WickObject.prototype.getAbsolutePosition = function () {
 WickObject.prototype.getAbsolutePositionScaled = function () {
     if(this.isRoot) {
         return {
-            x: 0,
-            y: 0
+            x: this.x,
+            y: this.y
         };
     } else {
         var parent = this.parentObject;
@@ -747,8 +747,8 @@ WickObject.prototype.getAbsolutePositionScaled = function () {
 WickObject.prototype.getAbsoluteScale = function () {
     if(this.isRoot) {
         return {
-            x: 1.0,
-            y: 1.0
+            x: this.scaleX,
+            y: this.scaleY
         };
     } else {
         var parentScale = this.parentObject.getAbsoluteScale();
@@ -761,7 +761,7 @@ WickObject.prototype.getAbsoluteScale = function () {
 
 WickObject.prototype.getAbsoluteAngle = function () {
     if(this.isRoot) {
-        return 0.0;
+        return this.angle;
     } else {
         var parentAngle = this.parentObject.getAbsoluteAngle();
         return this.angle + parentAngle;
@@ -914,6 +914,12 @@ WickObject.addPrototypes = function (obj) {
     obj.__proto__ = WickObject.prototype;
 
     // Recursively put the prototypes back on the children objects
+    if(obj.tweens) { // Rescues old projects created before tweens came out
+        obj.tweens.forEach(function (tween) {
+            tween.__proto__ = WickTween.prototype;
+        });
+    }
+
     if(obj.isSymbol) {
         obj.layers.forEach(function (layer) {
             layer.__proto__ = WickLayer.prototype;
@@ -921,11 +927,6 @@ WickObject.addPrototypes = function (obj) {
                 frame.__proto__ = WickFrame.prototype;
             });
         });
-        if(obj.tweens) { // Rescues old projects created before tweens came out
-            obj.tweens.forEach(function (tween) {
-                tween.__proto__ = WickTween.prototype;
-            });
-        }
 
         obj.getAllChildObjects().forEach(function(currObj) {
             WickObject.addPrototypes(currObj);
@@ -1186,8 +1187,8 @@ WickObject.prototype.applyTweens = function () {
         } else {
             var tweenFrom = that.getFromTween();
             var tweenTo = that.getToTween();
-            
-            if(tweenFrom && tweenTo) {
+
+            if (tweenFrom && tweenTo) {
                 // yuck
                 var A = tweenFrom.frame;
                 var B = tweenTo.frame;
@@ -1199,6 +1200,12 @@ WickObject.prototype.applyTweens = function () {
                 var interpFunc = eval("("+tweenFrom.interpFunc+")")
                 var interpolatedTween = WickTween.interpolateTweens(tweenFrom, tweenTo, T, interpFunc);
                 interpolatedTween.applyTweenToWickObject(that);
+            }
+            if (!tweenFrom && tweenTo) {
+                tweenTo.applyTweenToWickObject(that);
+            }
+            if (!tweenTo && tweenFrom) {
+                tweenFrom.applyTweenToWickObject(that);
             }
         }
     }
