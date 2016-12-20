@@ -53,6 +53,8 @@ var TimelineInterface = function (wickEditor) {
 
     this.redraw = function () {
 
+        if(!wickEditor.interfaces) return;
+
         ctx.clearRect(0,0,canvas.width,canvas.height);
 
         ctx.fillStyle = "#EEEEEE";
@@ -106,6 +108,8 @@ var TimelineInterface = function (wickEditor) {
             var frameCount = 0;
             layer.frames.forEach(function (frame) {
 
+                var isActiveFrame = frame == currentObject.getCurrentFrame() && layerCount == currentObject.currentLayer;
+
                 var frameHasScripts = frame && (frame.wickScripts.onLoad !== '' || frame.wickScripts.onUpdate !== '');
                 ctx.fillStyle = frameHasScripts ? "#33EE33" : "#999999";
                 ctx.fillRect(
@@ -115,7 +119,7 @@ var TimelineInterface = function (wickEditor) {
                 ctx.fillStyle = "#CCCCCC";
                 if (frame.wickObjects.length === 0) {
                     ctx.fillStyle = "#EEEEEE";
-                } else if (frame == currentObject.getCurrentFrame() && layerCount == currentObject.currentLayer) {
+                } else if (isActiveFrame) {
                     ctx.fillStyle = "#DDDDDD";
                 }
 
@@ -129,6 +133,19 @@ var TimelineInterface = function (wickEditor) {
                         frameCount*frameWidth + frameWidth/4, layerCount*frameHeight + frameHeight/4,
                         frameWidth/2, frameHeight/2);
                     ctx.fill();
+                }
+
+                var selectedObject = wickEditor.interfaces.fabric.getSelectedWickObject();
+                if (selectedObject && isActiveFrame) {
+                    selectedObject.tweens.forEach(function (tween) {
+                        ctx.fillStyle = "#6666FF";
+                        ctx.fillRect(
+                            frameCount*frameWidth + frameWidth/4 + frameWidth*tween.frame, 
+                            layerCount*frameHeight + frameHeight/4,
+                            frameWidth/2, 
+                            frameHeight/2);
+                        ctx.fill();
+                    });
                 }
 
                 /*for(var f = 1; f < frame.frameLength; f++) {

@@ -1112,6 +1112,22 @@ WickObject.prototype.addTween = function (newTween) {
         this.tweens.push(newTween);
 }
 
+WickObject.prototype.removeTween = function (tweenToDelete) {
+    var self = this;
+
+    var deleteTweenIndex = null;
+    this.tweens.forEach(function (tween) {
+        if(deleteTweenIndex) return;
+        if (tweenToDelete === tween) {
+            deleteTweenIndex = self.tweens.indexOf(tween);
+        }
+    });
+
+    if(deleteTweenIndex !== null) {
+        myArray.splice(deleteTweenIndex, 1);
+    }
+}
+
 WickObject.prototype.hasTweenAtFrame = function (frame) {
     var foundTween = false
     this.tweens.forEach(function (tween) {
@@ -1172,18 +1188,13 @@ WickObject.prototype.applyTweens = function () {
             var tweenTo = that.getToTween();
             
             if(tweenFrom && tweenTo) {
+                // yuck
                 var A = tweenFrom.frame;
                 var B = tweenTo.frame;
                 var L = B-A;
                 var P = that.parentObject.getRelativePlayheadPosition(that)-A;
                 var T = P/L;
-                console.log('TO   '+A)
-                console.log('FROM '+B)
-                console.log('LEN  '+L)
-                console.log('POS  '+P)
-                console.log('INTP '+T)
                 if(B-A === 0) T = 1;
-                console.log('...')
 
                 var interpFunc = eval("("+tweenFrom.interpFunc+")")
                 var interpolatedTween = WickTween.interpolateTweens(tweenFrom, tweenTo, T, interpFunc);

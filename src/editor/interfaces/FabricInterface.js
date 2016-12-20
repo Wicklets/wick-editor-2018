@@ -48,6 +48,8 @@ var FabricInterface = function (wickEditor) {
 
     // Update the scripting GUI/properties box when the selected object changes
         that.canvas.on('object:selected', function (e) {
+            wickEditor.interfaces.timeline.redraw();
+            
             wickEditor.interfaces.scriptingide.editScriptsOfObject(e.target.wickObjReference, {dontOpenIDE:true});
             wickEditor.syncInterfaces(['scriptingide','properties']);
             e.target.on({
@@ -57,10 +59,14 @@ var FabricInterface = function (wickEditor) {
             });
         });
         that.canvas.on('selection:cleared', function (e) {
+            wickEditor.interfaces.timeline.redraw();
+
             wickEditor.interfaces.scriptingide.clearSelection();
             wickEditor.syncInterfaces(['scriptingide','properties']);
         });
         that.canvas.on('selection:changed', function (e) {
+            wickEditor.interfaces.timeline.redraw();
+
             wickEditor.interfaces.scriptingide.editScriptsOfObject(this.getSelectedWickObject(), {dontOpenIDE:true});
             that.guiElements.update();
             wickEditor.syncInterfaces(['scriptingide','properties']);
@@ -281,6 +287,7 @@ var FabricInterface = function (wickEditor) {
     }
 
     this.selectByIDs = function (ids) {
+        wickEditor.interfaces.timeline.redraw();
 
         if(ids.length == 0) {
             return;
@@ -322,6 +329,8 @@ var FabricInterface = function (wickEditor) {
     }
 
     this.selectAll = function () {
+        wickEditor.interfaces.timeline.redraw();
+
         var ids = [];
         this.canvas.forEachObject(function (o) {
             if(o.wickObjectID && o.selectable) {
@@ -332,6 +341,8 @@ var FabricInterface = function (wickEditor) {
     }
 
     this.deselectAll = function (clearScriptingSelection) {
+        wickEditor.interfaces.timeline.redraw();
+
         if(!clearScriptingSelection)
             wickEditor.interfaces.scriptingide.clearSelection();
 
