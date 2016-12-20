@@ -234,17 +234,19 @@ var PropertiesInterface = function (wickEditor) {
 
     });
     document.getElementById('boldCheckbox').onchange = function () {
+        var newWeight = this.checked ? "bold" : "normal";
         wickEditor.interfaces.fabric.forceModifySelectedObjects();
         wickEditor.actionHandler.doAction('modifyObjects', { 
             ids: [wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0]], 
-            modifiedStates: [{ fontWeight : (this.checked ? "bold" : "normal") }] 
+            modifiedStates: [{ fontWeight : newWeight }] 
         });
     };
     document.getElementById('italicCheckbox').onchange = function () {
+        var newStyle = this.checked ? "italic" : "normal";
         wickEditor.interfaces.fabric.forceModifySelectedObjects();
         wickEditor.actionHandler.doAction('modifyObjects', { 
             ids: [wickEditor.interfaces['fabric'].getSelectedObjectIDs()[0]], 
-            modifiedStates: [{ fontStyle : (this.checked ? "italic" : "normal") }] 
+            modifiedStates: [{ fontStyle : newStyle }] 
         });
     };
 

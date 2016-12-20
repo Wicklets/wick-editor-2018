@@ -160,18 +160,24 @@ select {
     height: calc(100% - 50px);
     font-size: 12px;
 }
+
 #closeScriptingGUIButton {
 	right: 5px;
-	top: 0px;
+	top: 2px;
+	position: absolute;
+}
+#beautifyButton {
+	right: 53px;
+	top: 2px;
 	position: absolute;
 }
 #expandScriptingGUIButton {
-	right: 55px;
+	right: 30px;
 	top: 2px;
 	position: absolute;
 }
 #minimizeScriptingGUIButton {
-	right: 55px;
+	right: 30px;
 	top: 2px;
 	position: absolute;
 }
