@@ -879,7 +879,7 @@ var GuiActionHandler = function (wickEditor) {
             var selectedObj = wickEditor.interfaces.fabric.getSelectedWickObject();
             var tween = WickTween.fromWickObjectState(selectedObj);
             tween.frame = selectedObj.parentObject.getRelativePlayheadPosition(selectedObj);
-            selectedObj.tweens.push(tween);
+            selectedObj.addTween(tween);
         });
 
     registerAction('removeKeyframe',

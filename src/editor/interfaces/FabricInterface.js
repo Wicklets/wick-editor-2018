@@ -4,10 +4,6 @@ var FabricInterface = function (wickEditor) {
 
     var that = this;
 
-/********************************
-    Fabric.js Canvas
-********************************/
-    
     var shapeStartPos = {x:0,y:0};
 
     this.setup = function () {

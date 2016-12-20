@@ -184,7 +184,7 @@ var TimelineInterface = function (wickEditor) {
         newLayer = Math.min(currentObject.layers.length-1, newLayer);
 
         if(newPlayheadPosition != oldPlayheadPosition) {
-            wickEditor.interfaces.fabric.deselectAll();
+            //wickEditor.interfaces.fabric.deselectAll();
             wickEditor.interfaces.fabric.onionSkinsDirty = true;
             if(!currentObject.isRoot && currentObject.playheadPosition === 0) currentObject.regenBoundingBox();
             wickEditor.interfaces.fabric.getObjectsImage(function (imgData) {

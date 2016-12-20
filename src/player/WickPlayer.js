@@ -452,6 +452,7 @@ var WickPlayer = (function () {
                 requestAnimationFrame(animate);
             }
             project.rootObject.update();
+            project.rootObject.applyTweens();
             renderer.render();
 
         }

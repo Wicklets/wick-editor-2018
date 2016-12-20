@@ -241,10 +241,10 @@ var WickActionHandler = function (wickEditor) {
                 }
                 
                 // This is silly what's a better way ???
-                if(wickObj.tweens.length === 1) {
+                if(wickObj.tweens.length > 0) {
                     var tween = WickTween.fromWickObjectState(wickObj);
                     tween.frame = wickObj.parentObject.getRelativePlayheadPosition(wickObj);
-                    wickObj.tweens.push(tween);
+                    wickObj.addTween(tween);
                 }
             }
         },

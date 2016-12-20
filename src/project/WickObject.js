@@ -1097,8 +1097,19 @@ WickObject.prototype.generateAlphaMask = function () {
      Tween stuff
 *************************/
 
-WickObject.prototype.addTween = function (tween) {
-    this.tweens.push(tween);
+WickObject.prototype.addTween = function (newTween) {
+    var self = this;
+
+    var replacedTween = false;
+    this.tweens.forEach(function (tween) {
+        if (tween.frame === newTween.frame) {
+            self.tweens[self.tweens.indexOf(tween)] = newTween;
+            replacedTween = true;
+        }
+    });
+
+    if(!replacedTween)
+        this.tweens.push(newTween);
 }
 
 WickObject.prototype.hasTweenAtFrame = function (frame) {
@@ -1159,16 +1170,31 @@ WickObject.prototype.applyTweens = function () {
         } else {
             var tweenFrom = that.getFromTween();
             var tweenTo = that.getToTween();
-            var interpFunc = eval("("+tweenFrom.interpFunc+")")
-            var t = that.parentObject.getRelativePlayheadPosition(that, {normalized:true});
-            var interpolatedTween = WickTween.interpolateTweens(tweenFrom, tweenTo, t, interpFunc);
-            interpolatedTween.applyTweenToWickObject(that);
+            
+            if(tweenFrom && tweenTo) {
+                var A = tweenFrom.frame;
+                var B = tweenTo.frame;
+                var L = B-A;
+                var P = that.parentObject.getRelativePlayheadPosition(that)-A;
+                var T = P/L;
+                console.log('TO   '+A)
+                console.log('FROM '+B)
+                console.log('LEN  '+L)
+                console.log('POS  '+P)
+                console.log('INTP '+T)
+                if(B-A === 0) T = 1;
+                console.log('...')
+
+                var interpFunc = eval("("+tweenFrom.interpFunc+")")
+                var interpolatedTween = WickTween.interpolateTweens(tweenFrom, tweenTo, T, interpFunc);
+                interpolatedTween.applyTweenToWickObject(that);
+            }
         }
     }
 
     if (!this.isSymbol) return;
 
-    this.getAllChildObjects().forEach(function (child) {
+    this.getAllActiveChildObjects().forEach(function (child) {
         child.applyTweens();
     });
 
