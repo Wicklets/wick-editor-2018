@@ -1,6 +1,6 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-var tweenValueNames = ["x","y","z","scale","angle","opacity"];
+var tweenValueNames = ["x","y","z","scaleX","scaleY","angle","opacity"];
 
 //https://github.com/mattdesl/lerp/blob/master/index.js
 var lerp = "function (v0, v1, t) { return v0*(1-t)+v1*t; }"
@@ -9,7 +9,8 @@ var WickTween = function() {
     this.x = 0;
     this.y = 0; 
     this.z = 0; 
-    this.scale = 1;
+    this.scaleX = 1;
+    this.scaleY = 1;
     this.angle = 0;
     this.opacity = 1;
 
