@@ -43,7 +43,9 @@ var WickPlayer = (function () {
 
         // Load the project!
         project = loadJSONProject(projectJSON);
+        project.fitScreen = !window.wickEditor;
         initialStateProject = loadJSONProject(projectJSON);
+        initialStateProject.fitScreen = !window.wickEditor;
 
         if(window.wickEditor) {
             if(project.borderColor) document.getElementById('builtinPlayer').style.backgroundColor = project.borderColor;
@@ -376,7 +378,7 @@ var WickPlayer = (function () {
 
         mouseX -= projectFitScreenTranslate.x;
         mouseY -= projectFitScreenTranslate.y;
-        
+
         mouseX /=  projectFitScreenScale;
         mouseY /=  projectFitScreenScale;
 
