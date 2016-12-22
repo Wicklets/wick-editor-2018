@@ -191,7 +191,7 @@ var TimelineInterface = function (wickEditor) {
     this.updatePlayheadPosition = function (x,y) {
         var currentObject = wickEditor.project.getCurrentObject();
 
-        playheadX = x + scrollbarX*5;
+        playheadX = Math.round((x + scrollbarX*5)/frameWidth-0.5)*frameWidth+frameWidth/2;
 
         var oldPlayheadPosition = currentObject.playheadPosition;
         var newPlayheadPosition = Math.floor(playheadX/frameWidth);
