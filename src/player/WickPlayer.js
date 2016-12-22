@@ -222,6 +222,24 @@ var WickPlayer = (function () {
 
     }
 
+    wickPlayer.enterFullscreen = function () {
+        var elem;
+
+        if(window.self !== window.top) {
+            // Inside iframe
+            elem = window.frameElement;
+            console.log(elem)
+        } else {
+            // Not inside iframe
+            elem = document.getElementById("rendererCanvas")
+        }
+
+        if (screenfull.enabled) {
+            console.log("tryin to fullscreen")
+            screenfull.request(elem);
+        }
+    }
+
 /*****************************
     Opening projects
 *****************************/

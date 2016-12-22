@@ -1373,6 +1373,7 @@ WickObject.prototype.runScript = function (script, scriptType, objectScope) {
     var isKeyDown = function (keyString) { return keys[keyCharToCode[keyString]]; };
     var hideCursor = function () { WickPlayer.hideCursor(); };
     var showCursor = function () { WickPlayer.showCursor(); };
+    var enterFullscreen = function () { WickPlayer.enterFullscreen(); }
 
     // WickObjects in same frame (scope) are accessable without using root./parent.
     if(objectScope) {
