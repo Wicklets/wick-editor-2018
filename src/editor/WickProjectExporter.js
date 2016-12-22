@@ -21,6 +21,7 @@ var WickProjectExporter = (function () {
         "lib/util/browserdetection.js",
         "lib/util/base64-arraybuffer.js",
         "lib/util/checkInput.js",
+        "lib/util/canvasconvert.js"
     ];
 
     // Player code. 

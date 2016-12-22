@@ -17,7 +17,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
         // Make sure everything is deselected, mulitple selected objects cause positioning problems.
         var selectedObjectIDs = fabricInterface.getSelectedObjectIDs();
-        fabricInterface.deselectAll(true);
+        if(selectedObjectIDs.length > 1) fabricInterface.deselectAll(true);
 
         var activeObjects = currentObject.getAllActiveChildObjects();
         var siblingObjects = currentObject.getAllInactiveSiblings();

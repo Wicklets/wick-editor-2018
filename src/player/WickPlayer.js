@@ -376,11 +376,11 @@ var WickPlayer = (function () {
 
         mouseX -= projectFitScreenTranslate.x;
         mouseY -= projectFitScreenTranslate.y;
-
+        
         mouseX /=  projectFitScreenScale;
         mouseY /=  projectFitScreenScale;
 
-        var centeredCanvasOffsetX = (window.innerWidth - project.resolution.x) / 2;
+        var centeredCanvasOffsetX = (window.innerWidth  - project.resolution.x) / 2;
         var centeredCanvasOffsetY = (window.innerHeight - project.resolution.y) / 2;
 
         if(!project.fitScreen) {

@@ -31,6 +31,58 @@ function rotate(centerPoint, pointToRotate, angle) {
 
 var WickPixiRenderer = function (project) {
 
+	this.setup = function() {
+
+		// update canvas size on window resize
+        window.addEventListener('resize', resizeCanvas, false);
+
+	    rendererContainerEl = document.getElementById("playerCanvasContainer");
+	    var rendererOptions = {
+	        backgroundColor : "#DDDDDD", 
+	        resolution: window.devicePixelRatio,
+	    };
+	    renderer = PIXI.autoDetectRenderer(project.resolution.x, project.resolution.y, rendererOptions);
+	    renderer.clearBeforeRender = false;
+	    renderer.roundPixels = true;
+	    renderer.view.setAttribute('tabindex', 0);
+	    $(renderer.view).click(function() { this.focus(); });
+
+	    // Get rid of old canvas (if it exists)
+	    var oldRendererCanvas = document.getElementById("rendererCanvas");
+	    if(oldRendererCanvas) {
+	        rendererContainerEl.removeChild(rendererContainerEl.childNodes[0]);
+	    }
+
+	    // Add renderer canvas
+	    rendererContainerEl.appendChild(renderer.view);
+	    renderer.view.id = "rendererCanvas";
+
+	    stage = new PIXI.Container();
+
+	    projectFitScreenScale = 1.0;
+	    projectFitScreenTranslate = {x : 0, y : 0};
+
+	    resizeCanvas();
+
+	    generatePixiScene(project.rootObject);
+
+	}
+
+	this.render = function() {
+
+		if(!renderer) return;
+
+	    var graphics = new PIXI.Graphics();
+	    graphics.beginFill(parseInt(project.backgroundColor.replace("#","0x")));
+	    graphics.drawRect(0, 0, project.resolution.x, project.resolution.y);
+	    graphics.endFill();
+	    renderer.render(graphics);
+
+	    resetAllPixiObjects(project.rootObject);
+	    updatePixiObjectTransforms(project.rootObject);
+	    renderer.render(project.rootObject.pixiContainer);
+	}
+
 	this.getRendererElem = function () {
 		return renderer.view;
 	}
@@ -122,57 +174,6 @@ var WickPixiRenderer = function (project) {
 	        rendererContainerEl.style.paddingBottom = offsetY + "px";
 	    }
 
-	}
-
-	this.setup = function() {
-
-		// update canvas size on window resize
-        window.addEventListener('resize', resizeCanvas, false);
-
-	    rendererContainerEl = document.getElementById("playerCanvasContainer");
-	    var rendererOptions = {
-	        backgroundColor : "#DDDDDD", 
-	        resolution: window.devicePixelRatio,
-	    };
-	    renderer = PIXI.autoDetectRenderer(project.resolution.x, project.resolution.y, rendererOptions);
-	    renderer.clearBeforeRender = false;
-	    renderer.roundPixels = true;
-	    renderer.view.setAttribute('tabindex', 0);
-	    $(renderer.view).click(function() { this.focus(); });
-
-	    // Get rid of old canvas (if it exists)
-	    var oldRendererCanvas = document.getElementById("rendererCanvas");
-	    if(oldRendererCanvas) {
-	        rendererContainerEl.removeChild(rendererContainerEl.childNodes[0]);
-	    }
-
-	    // Add renderer canvas
-	    rendererContainerEl.appendChild(renderer.view);
-	    renderer.view.id = "rendererCanvas";
-	    stage = new PIXI.Container();
-
-	    projectFitScreenScale = 1.0;
-	    projectFitScreenTranslate = {x : 0, y : 0};
-
-	    resizeCanvas();
-
-	    generatePixiScene(project.rootObject);
-
-	}
-
-	this.render = function() {
-
-		if(!renderer) return;
-
-	    var graphics = new PIXI.Graphics();
-	    graphics.beginFill(parseInt(project.backgroundColor.replace("#","0x")));
-	    graphics.drawRect(0, 0, project.resolution.x, project.resolution.y);
-	    graphics.endFill();
-	    renderer.render(graphics);
-
-	    resetAllPixiObjects(project.rootObject);
-	    updatePixiObjectTransforms(project.rootObject);
-	    renderer.render(project.rootObject.pixiContainer);
 	}
 
 	this.deleteObject = function (wickObj) {

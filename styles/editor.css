@@ -50,6 +50,10 @@ hr {
 	display: none;
 	background-color: #DDDDDD;
 }
+canvas:focus {
+    outline: none;
+    outline-style: none;
+}
 
 input {
 	font-size: 16px;
