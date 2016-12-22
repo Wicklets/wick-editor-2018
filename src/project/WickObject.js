@@ -796,12 +796,10 @@ WickObject.prototype.autocropImage = function (callback) {
                     that.y += cropTop  + that.height/2;
                     that.imageData = paddedImg.src;
                     that.imageDirty = true;
+                    callback();
                 }
                 paddedImg.src = paddedImgSrc;
             });
-
-            callback();
-
         }
         autoCroppedImg.src = croppedSrc;
     }

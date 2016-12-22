@@ -467,6 +467,26 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.addObject(args.symbol);
         });
 
+    this.registerAction('breakApartImage', 
+        function (args) {
+            var wickObj = wickEditor.interfaces.fabric.getSelectedWickObject();
+            wickObj.getBlobImages(function (images) {
+                images.forEach(function (image) {
+                    WickObject.fromImage(image.src, function (newWickObject) {
+                        newWickObject.x = wickObj.x-wickObj.width /2;
+                        newWickObject.y = wickObj.y-wickObj.height/2;
+                        newWickObject.autocropImage(function () {
+                            wickEditor.actionHandler.doAction('addObjects', { wickObjects:[newWickObject] });
+                            wickEditor.actionHandler.doAction('deleteObjects', { ids:[wickObj.id] });
+                        });
+                    })
+                });
+            });
+        },
+        function (args) {
+            console.error("breakApartImage undo not yet implemented")
+        });
+
     this.registerAction('editObject', 
         function (args) {
             wickEditor.interfaces['fabric'].deselectAll();

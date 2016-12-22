@@ -781,8 +781,13 @@ var GuiActionHandler = function (wickEditor) {
         ['breakApartButton'], 
         {}, 
         function(args) {
+            var selectedObject = wickEditor.interfaces.fabric.getSelectedWickObject();
             var selectedObjectIDs = wickEditor.interfaces.fabric.getSelectedObjectIDs();
-            wickEditor.actionHandler.doAction('breakApartSymbol', {id:selectedObjectIDs[0]} );
+            if(selectedObject.isSymbol) {
+                wickEditor.actionHandler.doAction('breakApartSymbol', {id:selectedObjectIDs[0]} );
+            } else {
+                wickEditor.actionHandler.doAction('breakApartImage', {id:selectedObjectIDs[0]} );
+            }
         });
 
     registerAction('downloadObject',
@@ -889,25 +894,5 @@ var GuiActionHandler = function (wickEditor) {
         function(args) {
             console.error("removeKeyframeButton action NYI")
         });
-
-    registerAction('splitImage',
-        ['SHIFT', 'S'],
-        [],
-        {},
-        function (args) {
-            var wickObj = wickEditor.interfaces.fabric.getSelectedWickObject();
-            wickObj.getBlobImages(function (images) {
-                images.forEach(function (image) {
-                    WickObject.fromImage(image.src, function (newWickObject) {
-                        newWickObject.x = wickObj.x-wickObj.width /2;
-                        newWickObject.y = wickObj.y-wickObj.height/2;
-                        newWickObject.autocropImage(function () {
-                            wickEditor.actionHandler.doAction('addObjects', { wickObjects:[newWickObject] });
-                            wickEditor.actionHandler.doAction('deleteObjects', { ids:[wickObj.id] });
-                        });
-                    })
-                });
-            });
-        })
 
 }
