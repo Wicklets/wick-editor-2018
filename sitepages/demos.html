@@ -87,7 +87,7 @@
 
 		var loadDemo = function (file) {
 			currentDemo = file;
-			viewer.src = "../demos/" + file + '/?rand=' + Math.round(Math.random() * 10000000); // random param makes sure we dont load cached version
+			viewer.src = "../demos/" + file + '?rand=' + Math.round(Math.random() * 10000000); // random param makes sure we dont load cached version
 			viewer.focus();
 		};
 
