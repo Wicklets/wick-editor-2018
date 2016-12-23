@@ -2,13 +2,13 @@
 
 ![Wick editor screenshot](resources/editor.png)
 
-Wick is a multipurpose creation environment that allows anyone to build a wide range of easily sharable internet games, animations and interactive doohickies for both phones and desktops - all in the browser.
+Wick is a Flash-style in-browser editor for games, animations, and other interactive web content.
 
-Wick allows easier access to new web technologies through a visual editor, a timeline system, and a scripting system that makes learning and writing javascript easier. Wick also exports projects as standalone webpages or embeddable HTML5 canvases - no external players or runtimes necessary!
+Wick allows easier access to new web technologies through a visual editor, a timeline system, and a scripting system that makes learning and writing javascript easier. Wick also exports projects as single webpages that can be run standalone or embedded on other websites.
 
-Try the editor [here](http://wick.online/)!
+Try the editor [here](http://wickeditor.com/)!
 
 ### How to run the editor locally for development
 * Clone or download and unzip this repo
-* Open terminal in the newly made `wick` folder and start an HTTP server: `npm install http-server -g`, `http-server -p 8000`
+* Open terminal in the newly made `wick` folder and start an HTTP server: `python -m SimpleHTTPServer`
 * Open a browser window, and go to `http://localhost:8000/`
