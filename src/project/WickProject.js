@@ -24,7 +24,6 @@ var WickProject = function () {
     this.framerate = 12;
 
     this.fitScreen = false;
-    this.borderColor = "#FFFFFF";
 
     this.renderer = "WickPixiRenderer";
     this.audioPlayer = "WickWebAudioPlayer";
