@@ -40,6 +40,44 @@ var InputHandler = function (wickEditor) {
 /*************************
      File Import
 *************************/
+    
+    var loadAnimatedGIF = function (dataURL, callback) {
+        var gifSymbol = WickObject.createNewSymbol();
+        gifSymbol.x = window.innerWidth /2;
+        gifSymbol.y  = window.innerHeight/2;
+
+        //var gif = document.getElementById("gifImportDummyElem");
+        var newGifEl = document.createElement("img");
+        newGifEl.id = "gifImportDummyElem";
+        document.body.appendChild(newGifEl);
+        var gif = document.getElementById('gifImportDummyElem')
+        gif.setAttribute('src', dataURL);
+        gif.setAttribute('height', '467px');
+        gif.setAttribute('width', '375px');
+
+        var superGif = new SuperGif({ gif: gif } );
+        superGif.load(function () {
+
+            var framesDataURLs = superGif.getFrameDataURLs();
+            for(var i = 0; i < framesDataURLs.length; i++) {
+
+                WickObject.fromImage(
+                    framesDataURLs[i],
+                    (function(frameIndex) { return function(o) {
+                        gifSymbol.layers[0].frames[frameIndex].wickObjects.push(o);
+                        
+                        if(frameIndex == framesDataURLs.length-1) {
+                            gifSymbol.width  = gifSymbol.layers[0].frames[0].wickObjects[0].width;
+                            gifSymbol.height = gifSymbol.layers[0].frames[0].wickObjects[0].height;
+                            callback(gifSymbol);
+                        } else {
+                            gifSymbol.layers[0].addFrame(new WickFrame);
+                        }
+                    }; }) (i)
+                );
+            }
+        });
+    }
 
     var loadFileIntoWickObject = function (e,file,fileType) {
         
@@ -55,12 +93,12 @@ var InputHandler = function (wickEditor) {
                 'image/jpeg'       : WickObject.fromImage,
                 'application/jpg'  : WickObject.fromImage,
                 'image/bmp'        : WickObject.fromImage,
-                'image/gif'        : WickObject.fromAnimatedGIF,
+                'image/gif'        : loadAnimatedGIF,
                 'audio/mp3'        : WickObject.fromAudioFile,
-                'audio/wav'        : WickObject.fromAudioFile,
-                'audio/wave'       : WickObject.fromAudioFile,
-                'audio/x-wav'      : WickObject.fromAudioFile,
-                'audio/x-pn-wav'   : WickObject.fromAudioFile,
+                'audio/wav'        : WickObject.fromWavFile,
+                'audio/wave'       : WickObject.fromWavFile,
+                'audio/x-wav'      : WickObject.fromWavFile,
+                'audio/x-pn-wav'   : WickObject.fromWavFile,
                 'audio/ogg'        : WickObject.fromAudioFile,
                 'audio/flac'       : WickObject.fromAudioFile,
                 'audio/x-flac'     : WickObject.fromAudioFile,
@@ -71,7 +109,7 @@ var InputHandler = function (wickEditor) {
             var fr = new FileReader();
             fr.onloadend = function() {
                 if(!fromContstructors[fileType]) { 
-                    console.error(fileType + " has no WickObject constructor!");
+                    console.error(fileType + " has no constructor!");
                     return;
                 }
 

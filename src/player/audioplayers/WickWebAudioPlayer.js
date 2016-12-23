@@ -18,7 +18,9 @@ var WickWebAudioPlayer = function (project) {
         if(!audioContext) return;
 
         if(wickObj.audioData) {
-            var rawData = wickObj.audioData.split(",")[1]; // cut off extra filetype/etc data
+            var audioData = wickObj.audioData;
+            if(wickObj.compressed) audioData = LZString.decompressFromBase64(audioData)
+            var rawData = audioData.split(",")[1]; // cut off extra filetype/etc data
             var rawBuffer = Base64ArrayBuffer.decode(rawData);
             //wickObj.audioBuffer = rawBuffer;
             audioContext.decodeAudioData(rawBuffer, function (buffer) {

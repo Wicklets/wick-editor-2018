@@ -29,6 +29,8 @@ var WickProject = function () {
     this.renderer = "WickPixiRenderer";
     this.audioPlayer = "WickWebAudioPlayer";
 
+    this.assets = {};
+
 };
 
 WickProject.prototype.createNewRootObject = function () {
@@ -43,6 +45,30 @@ WickProject.prototype.createNewRootObject = function () {
     rootObject.y = 0;
     rootObject.opacity = 1.0;
     this.rootObject = rootObject;
+}
+
+/*****************************
+    Assets
+*****************************/
+
+WickProject.prototype.loadAsset = function (filename, dataURL) {
+    // Avoid duplicate names
+    var newFilename = filename;
+    var i = 2;
+    while(this.assets[newFilename]) {
+        newFilename = filename + " " + i;
+        i++;
+    }
+
+    console.log(dataURL.length);
+    this.assets[newFilename] = LZString.compressToBase64(dataURL);
+    console.log(this.assets[newFilename].length);
+
+    return filename;
+}
+
+WickProject.prototype.getAsset = function (filename) {
+    return LZString.decompressFromBase64(this.assets[filename]);
 }
 
 /*****************************

@@ -29,6 +29,10 @@ var FabricSymbolBorders = function (wickEditor, fabricInterface) {
                 canvas.contextContainer.lineWidth = 1.0;
                 canvas.contextContainer.globalAlpha = 1.0;
                 canvas.contextContainer.strokeStyle = '#92B7FF';
+            } else if(wickObj.scriptsAllEmpty()) {
+                canvas.contextContainer.lineWidth = 4;
+                canvas.contextContainer.globalAlpha = 0.5;
+                canvas.contextContainer.strokeStyle = '#92B7FF';
             } else if(!wickObj.hasSyntaxErrors && !wickObj.causedAnException) {
                 canvas.contextContainer.lineWidth = 4;
                 canvas.contextContainer.globalAlpha = 0.5;

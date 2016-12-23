@@ -125,45 +125,9 @@ WickObject.fromImage = function (imgSrc, callback) {
     }
     img.src = imgSrc;
 
-}
-
-WickObject.fromAnimatedGIF = function (gifData, callback) {
-
-    var gifSymbol = WickObject.createNewSymbol();
-    gifSymbol.x = window.innerWidth /2;
-    gifSymbol.y  = window.innerHeight/2;
-
-    //var gif = document.getElementById("gifImportDummyElem");
-    var newGifEl = document.createElement("img");
-    newGifEl.id = "gifImportDummyElem";
-    document.body.appendChild(newGifEl);
-    var gif = document.getElementById('gifImportDummyElem')
-    gif.setAttribute('src', gifData);
-    gif.setAttribute('height', '467px');
-    gif.setAttribute('width', '375px');
-
-    var superGif = new SuperGif({ gif: gif } );
-    superGif.load(function () {
-
-        var framesDataURLs = superGif.getFrameDataURLs();
-        for(var i = 0; i < framesDataURLs.length; i++) {
-
-            WickObject.fromImage(
-                framesDataURLs[i],
-                (function(frameIndex) { return function(o) {
-                    gifSymbol.layers[0].frames[frameIndex].wickObjects.push(o);
-                    
-                    if(frameIndex == framesDataURLs.length-1) {
-                        gifSymbol.width  = gifSymbol.layers[0].frames[0].wickObjects[0].width;
-                        gifSymbol.height = gifSymbol.layers[0].frames[0].wickObjects[0].height;
-                        callback(gifSymbol);
-                    } else {
-                        gifSymbol.layers[0].addFrame(new WickFrame);
-                    }
-                }; }) (i)
-            );
-        }
-    });
+    /*var obj = new WickObject();
+    obj.imageData = imgSrc;
+    callback(obj);*/
 
 }
 
@@ -221,12 +185,20 @@ WickObject.fromAudioFile = function (audioData, callback) {
     audioWickObject.audioData = audioData;
     audioWickObject.autoplaySound = true;
     audioWickObject.loopSound = false;
-    audioWickObject.x = window.innerWidth/2;
-    audioWickObject.y = window.innerHeight/2;
-    audioWickObject.width = 100;
-    audioWickObject.height = 100;
+    audioWickObject.width = 75;
+    audioWickObject.height = 75;
 
     callback(audioWickObject);
+}
+
+WickObject.fromWavFile = function (audioData, callback) {
+    WickObject.fromAudioFile(audioData, function (audioWickObject) {
+        console.log(audioWickObject.audioData.length)
+        audioWickObject.audioData = LZString.compressToBase64(audioWickObject.audioData);
+        console.log(audioWickObject.audioData.length)
+        audioWickObject.compressed = true;
+        callback(audioWickObject);
+    });
 }
 
 WickObject.createNewSymbol = function () {
@@ -1219,6 +1191,14 @@ WickObject.prototype.applyTweens = function () {
 /*************************
      
 *************************/
+
+WickObject.prototype.scriptsAllEmpty = function () {
+    var allEmpty = true;
+    for(scriptName in this.wickScripts) {
+        if (this.wickScripts[scriptName] !== "") allEmpty = false;
+    }
+    return allEmpty;
+}
 
 WickObject.prototype.isClickable = function () {
     var isClickable = false;

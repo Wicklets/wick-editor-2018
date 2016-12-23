@@ -56,9 +56,11 @@ var WickProjectExporter = (function () {
 
         // Bundle the JSON project
         wickProject.getAsJSON(function (JSONProject) {
-            var compressedJSONProject = WickProjectCompressor.compressProject(JSONProject, "LZSTRING-BASE64");
+            //var compressedJSONProject = WickProjectCompressor.compressProject(JSONProject, "LZSTRING-BASE64");
+            //console.log(JSONProject.length)
+            //console.log(compressedJSONProject.length)
 
-            fileOut += "<script>WickPlayer.runProject('" + compressedJSONProject + "');</script>" + "\n";
+            fileOut += "<script>WickPlayer.runProject('" + JSONProject + "');</script>" + "\n";
             callback(fileOut);
         });
 
