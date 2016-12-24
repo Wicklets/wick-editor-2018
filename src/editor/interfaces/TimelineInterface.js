@@ -220,14 +220,17 @@ var TimelineInterface = function (wickEditor) {
 
         if(newPlayheadPosition != oldPlayheadPosition) {
             //wickEditor.fabric.deselectAll();
-            wickEditor.fabric.onionSkinsDirty = true;
-            if(!currentObject.isRoot && currentObject.playheadPosition === 0) currentObject.regenBoundingBox();
             
             //wickEditor.fabric.getObjectsImage(function (imgData) {
                 var currentFrame = currentObject.getCurrentFrame();
                 //if(imgData && currentFrame) currentFrame.cachedImageData = imgData;
 
-                currentObject.playheadPosition = newPlayheadPosition;
+                //currentObject.playheadPosition = newPlayheadPosition;
+                wickEditor.actionHandler.doAction('movePlayhead', {
+                    obj:currentObject,
+                    newPlayheadPosition:newPlayheadPosition
+                });
+                
                 currentObject.currentLayer = newLayer;
                 wickEditor.syncInterfaces();
             //});

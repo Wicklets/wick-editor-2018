@@ -348,18 +348,20 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             wickEditor.fabric.deselectAll();
 
+            wickEditor.fabric.onionSkinsDirty = true;
+            var currentObject = wickEditor.project.getCurrentObject();
+            if (!currentObject.isRoot && currentObject.playheadPosition === 0) {
+                currentObject.regenBoundingBox();
+            }
+
             args.oldPlayheadPosition = args.obj.playheadPosition;
 
             if(args.moveAmount) {
-
                 args.obj.playheadPosition += args.moveAmount;
                 if(args.obj.playheadPosition < 0) args.obj.playheadPosition = 0;
-
             } else if (args.newPlayheadPosition) {
-
                 args.oldPlayheadPosition = args.obj.playheadPosition;
                 args.obj.playheadPosition = args.newPlayheadPosition;
-
             }
             
         },
