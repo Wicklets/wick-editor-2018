@@ -13,7 +13,7 @@ var PaintbrushTool = function (wickEditor) {
         var context = canvas.getContext('2d');
         var centerX = canvas.width / 2;
         var centerY = canvas.height / 2;
-        var radius = that.brushSize/2 * wickEditor.interfaces.fabric.canvas.getZoom();
+        var radius = that.brushSize/2 * wickEditor.fabric.canvas.getZoom();
 
         function invertColor(hexTripletColor) {
             var color = hexTripletColor;
@@ -45,7 +45,7 @@ var PaintbrushTool = function (wickEditor) {
 // Path vectorization
 
     // Listen for new paths drawn by fabric, vectorize them, and add them to the WickProject as WickObjects
-    wickEditor.interfaces.fabric.canvas.on('object:added', function(e) {
+    wickEditor.fabric.canvas.on('object:added', function(e) {
         var fabricPath = e.target;
 
         // Make sure the new object is actually a path created by fabric's drawing tool
@@ -79,8 +79,8 @@ var PaintbrushTool = function (wickEditor) {
 
     var potraceFabricPath = function (pathFabricObject, callback) {
         // I think there's a bug in cloneAsImage when zoom != 1, this is a hack
-        var oldZoom = wickEditor.interfaces.fabric.canvas.getZoom();
-        wickEditor.interfaces.fabric.canvas.setZoom(1);
+        var oldZoom = wickEditor.fabric.canvas.getZoom();
+        wickEditor.fabric.canvas.setZoom(1);
 
         pathFabricObject.cloneAsImage(function(clone) {
             var img = new Image();
@@ -91,7 +91,7 @@ var PaintbrushTool = function (wickEditor) {
         });
 
         // Put zoom back to where it was before
-        wickEditor.interfaces.fabric.canvas.setZoom(oldZoom);
+        wickEditor.fabric.canvas.setZoom(oldZoom);
     };
 
     var potraceImage = function (img, callback) {
@@ -99,7 +99,7 @@ var PaintbrushTool = function (wickEditor) {
         // Scale the image before we pass it to potrace (fixes retina display bugs!)
         var dummyCanvas = document.createElement('canvas');
         var dummyContext = dummyCanvas.getContext('2d');
-        //var zoom = wickEditor.interfaces.fabric.canvas.getZoom();
+        //var zoom = wickEditor.fabric.canvas.getZoom();
         dummyCanvas.width = img.width/window.devicePixelRatio;
         dummyCanvas.height = img.height/window.devicePixelRatio;
         dummyContext.drawImage(img, 0,0, img.width,img.height, 0,0, img.width/window.devicePixelRatio,img.height/window.devicePixelRatio);

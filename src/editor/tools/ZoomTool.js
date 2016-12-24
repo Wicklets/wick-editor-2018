@@ -13,13 +13,13 @@ var ZoomTool = function (wickEditor) {
             return "zoom-out";
     }
     
-    wickEditor.interfaces.fabric.canvas.on('mouse:down', function (e) {
-    	if(wickEditor.interfaces.fabric.currentTool instanceof ZoomTool) {
+    wickEditor.fabric.canvas.on('mouse:down', function (e) {
+    	if(wickEditor.fabric.currentTool instanceof ZoomTool) {
             console.log(wickEditor.guiActionHandler.keys)
     		if (wickEditor.guiActionHandler.keys[keyCharToCode["ALT"]]) {
-    			wickEditor.interfaces.fabric.zoom(0.9);
+    			wickEditor.fabric.zoom(0.9);
     		} else {
-    			wickEditor.interfaces.fabric.zoom(1.1);
+    			wickEditor.fabric.zoom(1.1);
     		}
 	    }
     });
@@ -32,7 +32,7 @@ var ZoomTool = function (wickEditor) {
         if(wickEditor.guiActionHandler.specialKeys["Modifier"]) {
             var e = window.event || e;
             var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-            wickEditor.interfaces.fabric.zoom(1.0 + delta*.1);
+            wickEditor.fabric.zoom(1.0 + delta*.1);
         }
 
         return false;

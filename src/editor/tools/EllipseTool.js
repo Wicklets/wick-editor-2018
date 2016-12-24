@@ -3,7 +3,7 @@
 var EllipseTool = function (wickEditor) {
 
     var that = this;
-    var fabricInterface = wickEditor.interfaces.fabric;
+    var fabricInterface = wickEditor.fabric;
 
     this.getCursorImage = function () {
         return "crosshair"

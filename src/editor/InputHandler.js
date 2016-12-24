@@ -116,9 +116,9 @@ var InputHandler = function (wickEditor) {
                 fromContstructors[fileType](fr.result, function (newWickObject) {
                     var m
                     if(e && e.originalEvent && e.originalEvent.clientX) {
-                        m = wickEditor.interfaces.fabric.screenToCanvasSpace(e.originalEvent.clientX, e.originalEvent.clientY);
+                        m = wickEditor.fabric.screenToCanvasSpace(e.originalEvent.clientX, e.originalEvent.clientY);
                     } else {
-                        m = wickEditor.interfaces.fabric.screenToCanvasSpace(window.innerWidth/2, window.innerHeight/2);
+                        m = wickEditor.fabric.screenToCanvasSpace(window.innerWidth/2, window.innerHeight/2);
                     }
                     newWickObject.x = m.x;
                     newWickObject.y = m.y;

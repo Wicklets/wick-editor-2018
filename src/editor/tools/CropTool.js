@@ -3,7 +3,7 @@
 var CropTool = function (wickEditor) {
 
     var that = this;
-    var fabricInterface = wickEditor.interfaces['fabric'];
+    var fabricInterface = wickEditor.fabric;
     var canvas = fabricInterface.canvas;
 
     this.getCursorImage = function () {
@@ -20,7 +20,7 @@ var CropTool = function (wickEditor) {
         fabricInterface.canvas.remove(drawingShape);
         wickEditor.syncInterfaces();
 
-        wickEditor.interfaces.fabric.getObjectsImage(function (data) { 
+        wickEditor.fabric.getObjectsImage(function (data) { 
             if(!data) return;
             CropImage(data.src, function (src) {
                 var wickObj = WickObject.fromImage(src, function (wickObj) {

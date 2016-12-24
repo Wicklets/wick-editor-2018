@@ -19,7 +19,30 @@ var TimelineInterface = function (wickEditor) {
     document.getElementById("timelineScrollbar").onscroll = function () {that.syncWithEditorState()};
 
     this.setup = function () {
-        
+        window.addEventListener('resize', function(e) {
+            that.resize();
+        });
+        this.resize();
+
+        canvas.addEventListener('mousedown', function(e) {
+            mouseDown = true;
+            that.updatePlayheadPosition(e.offsetX,e.offsetY);
+            that.redraw();
+        });
+        canvas.addEventListener('mouseup', function(e) {
+            mouseDown = false;
+            that.updatePlayheadPosition(e.offsetX,e.offsetY);
+            that.redraw();
+        });
+        canvas.addEventListener('mousemove', function(e) {
+            if(mouseDown) {
+                that.updatePlayheadPosition(e.offsetX,e.offsetY);
+            }
+            that.redraw();
+        });
+        canvas.addEventListener('mouseout', function(e) {
+            mouseDown = false;
+        });
     }
 
     this.syncWithEditorState = function () {
@@ -53,7 +76,7 @@ var TimelineInterface = function (wickEditor) {
 
     this.redraw = function () {
 
-        if(!wickEditor.interfaces) return;
+        if(!wickEditor.fabric.canvas) return;
 
         ctx.clearRect(0,0,canvas.width,canvas.height);
 
@@ -135,7 +158,7 @@ var TimelineInterface = function (wickEditor) {
                     ctx.fill();
                 }
 
-                var selectedObject = wickEditor.interfaces.fabric.getSelectedWickObject();
+                var selectedObject = wickEditor.fabric.getSelectedWickObject();
                 if (selectedObject && isActiveFrame) {
                     selectedObject.tweens.forEach(function (tween) {
                         ctx.fillStyle = "#6666FF";
@@ -183,11 +206,6 @@ var TimelineInterface = function (wickEditor) {
 
     }
 
-    window.addEventListener('resize', function(e) {
-        that.resize();
-    });
-    this.resize();
-
     this.updatePlayheadPosition = function (x,y) {
         var currentObject = wickEditor.project.getCurrentObject();
 
@@ -201,11 +219,11 @@ var TimelineInterface = function (wickEditor) {
         newLayer = Math.min(currentObject.layers.length-1, newLayer);
 
         if(newPlayheadPosition != oldPlayheadPosition) {
-            //wickEditor.interfaces.fabric.deselectAll();
-            wickEditor.interfaces.fabric.onionSkinsDirty = true;
+            //wickEditor.fabric.deselectAll();
+            wickEditor.fabric.onionSkinsDirty = true;
             if(!currentObject.isRoot && currentObject.playheadPosition === 0) currentObject.regenBoundingBox();
             
-            //wickEditor.interfaces.fabric.getObjectsImage(function (imgData) {
+            //wickEditor.fabric.getObjectsImage(function (imgData) {
                 var currentFrame = currentObject.getCurrentFrame();
                 //if(imgData && currentFrame) currentFrame.cachedImageData = imgData;
 
@@ -221,25 +239,5 @@ var TimelineInterface = function (wickEditor) {
             wickEditor.syncInterfaces();
         }
     }
-
-    canvas.addEventListener('mousedown', function(e) {
-        mouseDown = true;
-        that.updatePlayheadPosition(e.offsetX,e.offsetY);
-        that.redraw();
-    });
-    canvas.addEventListener('mouseup', function(e) {
-        mouseDown = false;
-        that.updatePlayheadPosition(e.offsetX,e.offsetY);
-        that.redraw();
-    });
-    canvas.addEventListener('mousemove', function(e) {
-        if(mouseDown) {
-            that.updatePlayheadPosition(e.offsetX,e.offsetY);
-        }
-        that.redraw();
-    });
-    canvas.addEventListener('mouseout', function(e) {
-        mouseDown = false;
-    });
 
 }

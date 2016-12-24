@@ -640,15 +640,15 @@ WickObject.prototype.getLargestID = function (id) {
 
 WickObject.prototype.regenBoundingBox = function () {
     /*if (wickEditor.project.getCurrentObject() === this) {
-        wickEditor.interfaces.fabric.deselectAll();
-        this.bbox = wickEditor.interfaces.fabric.getBoundingBoxOfAllObjects();
+        wickEditor.fabric.deselectAll();
+        this.bbox = wickEditor.fabric.getBoundingBoxOfAllObjects();
     } else {*/
         var ids = [];
         this.getAllChildObjects().forEach(function (child) {
             ids.push(child.id);
         });
-        wickEditor.interfaces.fabric.deselectAll(); // to get correct ungrouped object positions
-        this.bbox = wickEditor.interfaces.fabric.getBoundingBoxOfObjects(ids);
+        wickEditor.fabric.deselectAll(); // to get correct ungrouped object positions
+        this.bbox = wickEditor.fabric.getBoundingBoxOfObjects(ids);
     //}
 }
 
@@ -1366,7 +1366,7 @@ WickObject.prototype.runScript = function (script, scriptType, objectScope) {
         eval("try{" + script + "\n}catch (e) { throw (e); }");
     } catch (e) {
         if (window.wickEditor) {
-            //if(!wickEditor.interfaces.builtinplayer.running) return;
+            //if(!wickEditor.builtinplayer.running) return;
 
             console.error("Exception thrown while running script of WickObject: " + this.name);
             console.error(e);
@@ -1382,8 +1382,8 @@ WickObject.prototype.runScript = function (script, scriptType, objectScope) {
 
             //console.log(e.stack.split("\n")[1].split('<anonymous>:')[1].split(":")[0]);
             //console.log(e.stack.split("\n"))
-            if(wickEditor.interfaces.builtinplayer.running) wickEditor.interfaces.builtinplayer.stopRunningProject()
-            wickEditor.interfaces.scriptingide.showError(this.id, scriptType, lineNumber, e);
+            if(wickEditor.builtinplayer.running) wickEditor.builtinplayer.stopRunningProject()
+            wickEditor.scriptingide.showError(this.id, scriptType, lineNumber, e);
         } else {
             alert("An exception was thrown while running a WickObject script. See console!");
             console.log(e);
@@ -1717,7 +1717,7 @@ WickObject.prototype.moveUp = function(delta) {
     }
 
     if (typeof delta != "number") {
-        WickError.error("Invalid Input: moveUp() can only take numbers!");
+        throw (new Error("Invalid Input: moveUp() can only take numbers!")); 
     }
 
     this.y -= delta;
@@ -1729,7 +1729,7 @@ WickObject.prototype.moveDown = function(delta) {
     }
 
     if (typeof delta != "number") {
-        WickError.error("Invalid Input: moveDown() can only take numbers!");
+        throw (new Error("Invalid Input: moveDown() can only take numbers!")); 
     }
 
     this.y += delta;
@@ -1741,7 +1741,7 @@ WickObject.prototype.moveLeft = function(delta) {
     }
 
     if (typeof delta != "number") {
-        WickError.error("Invalid Input: moveLeft() can only take numbers!");
+        throw (new Error("Invalid Input: moveLeft() can only take numbers!")); 
     }
 
     this.x -= delta;
@@ -1753,7 +1753,7 @@ WickObject.prototype.moveRight = function(delta) {
     }
 
     if (typeof delta != "number") {
-        WickError.error("Invalid Input: moveRight() can only take numbers!");
+        throw (new Error("Invalid Input: moveRight() can only take numbers!")); 
     }
 
     this.x += delta;
@@ -1765,7 +1765,7 @@ WickObject.prototype.rotateCW = function(theta) {
     }
 
     if (typeof theta != "number") {
-        WickError.error("Invalid Input: rotateCW() can only take numbers!");
+        throw (new Error("Invalid Input: rotateCW() can only take numbers!")); 
     }
 
     this.angle += theta;
@@ -1777,7 +1777,7 @@ WickObject.prototype.rotateCCW = function(theta) {
     }
 
     if (typeof theta != "number") {
-        WickError.error("Invalid Input: rotateCCW() can only take numbers!");
+        throw (new Error("Invalid Input: rotateCCW() can only take numbers!"));
     }
 
     this.angle -= theta;
@@ -1789,7 +1789,7 @@ WickObject.prototype.scale = function(scaleFactor) {
     }
 
     if (typeof scaleFactor != "number") {
-        WickError.error("Invalid Input: scale() can only take numbers!");
+        throw (new Error("Invalid Input: scale() can only take numbers!"));
     }
 
     this.scaleX = scaleFactor;
@@ -1802,7 +1802,7 @@ WickObject.prototype.scaleWidth = function(scaleFactor) {
     }
 
     if (typeof scaleFactor != "number") {
-        WickError.error("Invalid Input: scaleWidth() can only take numbers!");
+        throw (new Error("Invalid Input: scaleWidth() can only take numbers!"));
     }
 
     this.scaleX = scaleFactor;
@@ -1814,7 +1814,7 @@ WickObject.prototype.scaleHeight = function(scaleFactor) {
     }
 
     if (typeof scaleFactor != "number") {
-        WickError.error("Invalid Input: scaleHeight() can only take numbers!");
+        throw (new Error("Invalid Input: scaleHeight() can only take numbers!")); 
     }
 
     this.scaleY = scaleFactor;
@@ -1830,7 +1830,7 @@ WickObject.prototype.flipVertical = function() {
 
 WickObject.prototype.setOpacity = function(opacityVal) {
     if (typeof opacityVal != "number") {
-        WickError.error("Invalid Input: setOpacity() can only take numbers!");
+        throw (new Error("Invalid Input: setOpacity() can only take numbers!")); 
     }
 
     this.opacity = Math.min(Math.max(opacityVal, 0), 1);

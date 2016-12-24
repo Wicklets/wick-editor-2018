@@ -136,9 +136,9 @@ var ScriptingIDEInterface = function (wickEditor) {
         wickEditor.project.jumpToObject(id);
         wickEditor.syncInterfaces();
         setTimeout(function () {
-            wickEditor.interfaces.fabric.selectByIDs([id]);
+            wickEditor.fabric.selectByIDs([id]);
             that.editScriptsOfObject(wickEditor.project.getObjectByID(id));
-            wickEditor.interfaces.scriptingide.currentScript = scriptType;
+            wickEditor.scriptingide.currentScript = scriptType;
 
             wickEditor.project.rootObject.getChildByID(id).causedAnException = true;
 

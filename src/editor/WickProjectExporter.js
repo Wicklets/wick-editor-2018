@@ -68,20 +68,20 @@ var WickProjectExporter = (function () {
 
     projectExporter.exportProjectInZip = function (wickProject) {
 
-        wickEditor.interfaces.statusbar.setState('exporting');
+        wickEditor.statusbar.setState('exporting');
 
         projectExporter.bundleProjectToHTML(wickProject, function(fileOut) {
             var blob = new Blob([fileOut], {type: "text/plain;charset=utf-8"});
             var filename = wickProject.name || "project";
             saveAs(blob, filename+".html");
-            wickEditor.interfaces.statusbar.setState('done');
+            wickEditor.statusbar.setState('done');
         });
 
     }
 
     projectExporter.exportProject = function (wickProject, args) {
 
-        wickEditor.interfaces.statusbar.setState('exporting');
+        wickEditor.statusbar.setState('exporting');
 
         projectExporter.bundleProjectToHTML(wickProject, function(fileOut) {
             var filename = wickProject.name || "project";
@@ -95,7 +95,7 @@ var WickProjectExporter = (function () {
                 var blob = new Blob([fileOut], {type: "text/plain;charset=utf-8"});
                 saveAs(blob, filename+".html");
             }
-            wickEditor.interfaces.statusbar.setState('done');
+            wickEditor.statusbar.setState('done');
         });
 
     }

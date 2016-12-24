@@ -11,24 +11,24 @@ var ToolOptionsInterface = function (wickEditor) {
     }
 
     this.syncWithEditorState = function () {
-        lineWidthEl.value = wickEditor.interfaces.fabric.tools['paintbrush'].brushSize;
+        lineWidthEl.value = wickEditor.fabric.tools['paintbrush'].brushSize;
 
-        if(lineColorEl.jscolor) lineColorEl.jscolor.fromString(wickEditor.interfaces.fabric.tools['paintbrush'].color);
+        if(lineColorEl.jscolor) lineColorEl.jscolor.fromString(wickEditor.fabric.tools['paintbrush'].color);
         
         //document.getElementById('toolOptionsGUI').style.display = 'block';
         document.getElementById('toolOptionsGUI').style.display = 'none';
     }
     
     lineWidthEl.onchange = function() {
-        wickEditor.interfaces.fabric.tools['paintbrush'].brushSize = parseInt(this.value, 10) || 2;
+        wickEditor.fabric.tools['paintbrush'].brushSize = parseInt(this.value, 10) || 2;
         wickEditor.syncInterfaces();
     };
 
     lineColorEl.onchange = function() {
         var newColor = '#' + this.value;
-        wickEditor.interfaces.fabric.tools['paintbrush'].color = newColor;
+        wickEditor.fabric.tools['paintbrush'].color = newColor;
 
-        var selectedObjects = wickEditor.interfaces.fabric.getSelectedWickObjects();
+        var selectedObjects = wickEditor.fabric.getSelectedWickObjects();
         if(selectedObjects) {
             selectedObjects.forEach(function (child) {
                 if(!child.svgData) return;

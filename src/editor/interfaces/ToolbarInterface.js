@@ -25,7 +25,7 @@ var ToolbarInterface = function (wickEditor) {
         /* Highlight select tool, unhighlight all other tools */
         toolbarTools.forEach( function(toolName) {
             var buttonClassName = '#' + toolName + 'ToolButton';
-            if (wickEditor.interfaces.fabric.tools[toolName] === wickEditor.interfaces.fabric.currentTool) {
+            if (wickEditor.fabric.tools[toolName] === wickEditor.fabric.currentTool) {
                 $(buttonClassName).css('border', '1px solid #ccc');
             } else {
                 $(buttonClassName).css('border', '');

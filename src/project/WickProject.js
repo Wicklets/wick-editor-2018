@@ -196,7 +196,7 @@ WickProject.prototype.getAsJSON = function (callback, args) {
 
 WickProject.prototype.saveInLocalStorage = function () {
     var self = this;
-    wickEditor.interfaces.statusbar.setState('saving');
+    wickEditor.statusbar.setState('saving');
     this.getAsJSON(function (JSONProject) {
         console.log("Project size: " + JSONProject.length)
         if(JSONProject.length > 5000000) {
@@ -204,11 +204,11 @@ WickProject.prototype.saveInLocalStorage = function () {
             var compressedJSONProject = WickProjectCompressor.compressProject(JSONProject, "LZSTRING-UTF16");
             WickProject.saveProjectJSONInLocalStorage(compressedJSONProject);
             console.log("Compressed size: " + compressedJSONProject.length)
-            wickEditor.interfaces.statusbar.setState('done');
+            wickEditor.statusbar.setState('done');
         } else {
             console.log("Project <5MB, not compressing.");
             WickProject.saveProjectJSONInLocalStorage(JSONProject);
-            wickEditor.interfaces.statusbar.setState('done');
+            wickEditor.statusbar.setState('done');
         }
     });
 }

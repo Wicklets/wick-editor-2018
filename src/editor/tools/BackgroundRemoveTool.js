@@ -3,7 +3,7 @@
 var BackgroundRemoveTool = function (wickEditor) {
 
     var that = this;
-    var fabricInterface = wickEditor.interfaces['fabric'];
+    var fabricInterface = wickEditor.fabric;
     var canvas = fabricInterface.canvas;
 
     this.getCursorImage = function () {
@@ -11,7 +11,7 @@ var BackgroundRemoveTool = function (wickEditor) {
     }
 
     canvas.on('mouse:down', function(e) {
-        if(!(wickEditor.interfaces.fabric.currentTool instanceof BackgroundRemoveTool)) return;
+        if(!(wickEditor.fabric.currentTool instanceof BackgroundRemoveTool)) return;
 
         var position = {x:e.e.offsetX, y:e.e.offsetY};
         
@@ -26,7 +26,7 @@ var BackgroundRemoveTool = function (wickEditor) {
         if(topmost != undefined && topmost.wickObjectID) {
             var wickObj = topmost.wickObjReference;
 
-            var mouseScreenSpace = wickEditor.interfaces.fabric.screenToCanvasSpace(e.e.offsetX, e.e.offsetY);
+            var mouseScreenSpace = wickEditor.fabric.screenToCanvasSpace(e.e.offsetX, e.e.offsetY);
             var mousePoint = new paper.Point(mouseScreenSpace.x, mouseScreenSpace.y);
             var insideSymbolOffset = wickEditor.project.getCurrentObject().getAbsolutePosition();
             mousePoint.x -= insideSymbolOffset.x;

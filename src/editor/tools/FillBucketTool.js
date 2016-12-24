@@ -8,16 +8,16 @@ var FillBucketTool = function (wickEditor) {
         return 'url("resources/fillbucket-cursor.png") 64 64,default';
     };
 
-    var canvas = wickEditor.interfaces.fabric.canvas;
+    var canvas = wickEditor.fabric.canvas;
 
     canvas.on('mouse:down', function (e) {
         if(e.e.button != 0) return;
-        if(!(wickEditor.interfaces.fabric.currentTool instanceof FillBucketTool)) return;
+        if(!(wickEditor.fabric.currentTool instanceof FillBucketTool)) return;
 
         var onscreenObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
         VectorToolUtils.updatePaperDataOnVectorWickObjects(onscreenObjects);
 
-        var mouseScreenSpace = wickEditor.interfaces.fabric.screenToCanvasSpace(e.e.offsetX, e.e.offsetY);
+        var mouseScreenSpace = wickEditor.fabric.screenToCanvasSpace(e.e.offsetX, e.e.offsetY);
         var mousePoint = new paper.Point(mouseScreenSpace.x, mouseScreenSpace.y);
         var insideSymbolOffset = wickEditor.project.getCurrentObject().getAbsolutePosition();
         mousePoint.x -= insideSymbolOffset.x;
@@ -35,7 +35,7 @@ var FillBucketTool = function (wickEditor) {
                 
                 wickEditor.actionHandler.doAction('modifyObjects', { 
                     ids: [wickPath.id], 
-                    modifiedStates: [{ svgFillColor : wickEditor.interfaces.fabric.tools.paintbrush.color }] 
+                    modifiedStates: [{ svgFillColor : wickEditor.fabric.tools.paintbrush.color }] 
                 });
             }
 
@@ -111,7 +111,7 @@ var FillBucketTool = function (wickEditor) {
         holes.forEach(function (hole) {
             if(!hole.contains(mousePoint)) return;
 
-            var holeWickObj = VectorToolUtils.createSVGWickObject(hole, wickEditor.interfaces.fabric.tools.paintbrush.color);
+            var holeWickObj = VectorToolUtils.createSVGWickObject(hole, wickEditor.fabric.tools.paintbrush.color);
             holeWickObj.x += wickEditor.project.getCurrentObject().getAbsolutePosition().x;
             holeWickObj.y += wickEditor.project.getCurrentObject().getAbsolutePosition().y;
             wickEditor.actionHandler.doAction('addObjects', {

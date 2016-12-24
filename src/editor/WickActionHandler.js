@@ -1,6 +1,9 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
 /* WickActionHandler.js - General Logic for how undo and redo is handled in the Wick editor. */
+/* Only add routines to WickActionHandler if they:
+     (1) Change the state of the project and
+     (2) Can be undone/redone */
 
 var WickActionHandler = function (wickEditor) {
 
@@ -68,7 +71,7 @@ var WickActionHandler = function (wickEditor) {
 
         // Sync interfaces / render canvas
         wickEditor.syncInterfaces();
-        wickEditor.interfaces.fabric.canvas.renderAll();
+        wickEditor.fabric.canvas.renderAll();
 
     }
 
@@ -382,7 +385,7 @@ var WickActionHandler = function (wickEditor) {
 
     this.registerAction('movePlayhead',
         function (args) {
-            wickEditor.interfaces['fabric'].deselectAll();
+            wickEditor.fabric.deselectAll();
 
             args.oldPlayheadPosition = args.obj.playheadPosition;
 
@@ -400,14 +403,14 @@ var WickActionHandler = function (wickEditor) {
             
         },
         function (args) {
-            wickEditor.interfaces['fabric'].deselectAll();
+            wickEditor.fabric.deselectAll();
 
             args.obj.playheadPosition = args.oldPlayheadPosition;
         });
 
     this.registerAction('convertSelectionToSymbol', 
         function (args) {
-            var selectedObjects = wickEditor.interfaces['fabric'].getSelectedWickObjects();
+            var selectedObjects = wickEditor.fabric.getSelectedWickObjects();
 
             var currObj = wickEditor.project.getCurrentObject();
             if(currObj.parentObject) currObj.fixOriginPoint()
@@ -469,7 +472,7 @@ var WickActionHandler = function (wickEditor) {
 
     this.registerAction('breakApartImage', 
         function (args) {
-            var wickObj = wickEditor.interfaces.fabric.getSelectedWickObject();
+            var wickObj = wickEditor.fabric.getSelectedWickObject();
             wickObj.getBlobImages(function (images) {
                 images.forEach(function (image) {
                     WickObject.fromImage(image.src, function (newWickObject) {
@@ -489,7 +492,7 @@ var WickActionHandler = function (wickEditor) {
 
     this.registerAction('editObject', 
         function (args) {
-            wickEditor.interfaces['fabric'].deselectAll();
+            wickEditor.fabric.deselectAll();
 
             // Set the editor to be editing this object at its first frame
             args.prevEditedObjectID = wickEditor.project.getCurrentObject().id;
@@ -497,7 +500,7 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.getCurrentObject().currentFrame = 0;
         },
         function (args) {
-            wickEditor.interfaces['fabric'].deselectAll();
+            wickEditor.fabric.deselectAll();
             wickEditor.project.getCurrentObject().fixOriginPoint(); // hack to get around fabric.js lack of rotation around anchorpoint
             
             wickEditor.project.currentObjectID = args.prevEditedObjectID;
@@ -505,7 +508,7 @@ var WickActionHandler = function (wickEditor) {
 
     this.registerAction('finishEditingCurrentObject', 
         function (args) {
-            wickEditor.interfaces['fabric'].deselectAll();
+            wickEditor.fabric.deselectAll();
             wickEditor.project.getCurrentObject().fixOriginPoint(); // hack to get around fabric.js lack of rotation around anchorpoint
 
             wickEditor.project.getCurrentObject().playheadPosition = 0;
@@ -513,7 +516,7 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.currentObjectID = wickEditor.project.getCurrentObject().parentObject.id;
         },
         function (args) {
-            wickEditor.interfaces['fabric'].deselectAll();
+            wickEditor.fabric.deselectAll();
             //wickEditor.project.getCurrentObject().fixOriginPoint(); // hack to get around fabric.js lack of rotation around anchorpoint
             
             wickEditor.project.currentObjectID = args.prevEditedObjectID;

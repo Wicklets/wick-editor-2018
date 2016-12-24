@@ -55,7 +55,7 @@ var WickHostBackend = function (wickEditor) {
     $(document).on('click','#saveToWickHostButton',function(e){
         e.stopPropagation();
         e.preventDefault();
-        wickEditor.interfaces.statusbar.setState('uploading');
+        wickEditor.statusbar.setState('uploading');
         WickProjectExporter.bundleProjectToHTML(wickEditor.project, function(fileOut) {
             $.ajax({
                 url: '/updateproject',
@@ -68,11 +68,11 @@ var WickHostBackend = function (wickEditor) {
                 success: function(data) {
                     console.log("ajax: success:");
                     console.log(data);
-                    wickEditor.interfaces.statusbar.setState('done');
+                    wickEditor.statusbar.setState('done');
                 },
                 error: function () {
                     console.log("ajax: error")
-                    wickEditor.interfaces.statusbar.setState('error');
+                    wickEditor.statusbar.setState('error');
                 },
                 complete: function(response, textStatus) {
                     console.log("ajax: complete:")

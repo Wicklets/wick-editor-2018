@@ -10,19 +10,19 @@ var PanTool = function (wickEditor) {
 
 // Panning the fabric canvas
     
-    wickEditor.interfaces.fabric.canvas.on('mouse:up', function (e) {
-        wickEditor.interfaces.fabric.stopPan();
+    wickEditor.fabric.canvas.on('mouse:up', function (e) {
+        wickEditor.fabric.stopPan();
     });
 
-    wickEditor.interfaces.fabric.canvas.on('mouse:down', function (e) {
-        if(wickEditor.interfaces.fabric.currentTool instanceof PanTool) {
-            wickEditor.interfaces.fabric.startPan();
+    wickEditor.fabric.canvas.on('mouse:down', function (e) {
+        if(wickEditor.fabric.currentTool instanceof PanTool) {
+            wickEditor.fabric.startPan();
         }
     });
     
-    wickEditor.interfaces.fabric.canvas.on('mouse:move', function (e) {
-        if (wickEditor.interfaces.fabric.panning && e && e.e) {
-            wickEditor.interfaces.fabric.relativePan(e.e.movementX, e.e.movementY)
+    wickEditor.fabric.canvas.on('mouse:move', function (e) {
+        if (wickEditor.fabric.panning && e && e.e) {
+            wickEditor.fabric.relativePan(e.e.movementX, e.e.movementY)
         }
     });
 
