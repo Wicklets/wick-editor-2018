@@ -92,8 +92,8 @@ var WickPixiRenderer = function (project) {
 		if (wickObj.isSymbol) {
 			generatePixiScene(wickObj);
             wickObj.parentObject.pixiContainer.addChild(wickObj.pixiContainer);
-		} else if (wickObj.imageData || wickObj.svgCacheImageData) {
-            wickObj.pixiSprite = PIXI.Sprite.fromImage(wickObj.imageData || wickObj.svgCacheImageData);
+		} else if (wickObj.imageData) {
+            wickObj.pixiSprite = PIXI.Sprite.fromImage(wickObj.imageData);
             wickObj.parentObject.pixiContainer.addChild(wickObj.pixiSprite);
         } else if (wickObj.fontData) {
         	var style = {
@@ -116,8 +116,8 @@ var WickPixiRenderer = function (project) {
             if (subObj.isSymbol) {
                 generatePixiScene(subObj);
                 wickObj.pixiContainer.addChild(subObj.pixiContainer);
-            } else if (subObj.imageData || subObj.svgCacheImageData) {
-                subObj.pixiSprite = PIXI.Sprite.fromImage(subObj.imageData || subObj.svgCacheImageData);
+            } else if (subObj.imageData) {
+                subObj.pixiSprite = PIXI.Sprite.fromImage(subObj.imageData);
                 wickObj.pixiContainer.addChild(subObj.pixiSprite);
             } else if (subObj.fontData) {
             	var fontString = subObj.fontData.fontSize + "px " + subObj.fontData.fontFamily;

@@ -152,10 +152,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                     }
                 });
 
-                if(objectToAdd.svgData) {
-                    VectorToolUtils.updatePaperDataOnVectorWickObjects([objectToAdd]);
-                }
-
                 // The object may have been deleted while we were generating the fabric object. 
                 // Make sure we don't add it if that happened.
                 if(!wickEditor.project.rootObject.getChildByID(objectToAdd.id)) return;
@@ -229,47 +225,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             fabric.Image.fromURL('resources/audio.png', function(audioFabricObject) {
                 audioFabricObject.wickObjReference = wickObj;
                 callback(audioFabricObject);
-            });
-        }
-
-        if(wickObj.svgData) {
-
-            fabric.loadSVGFromString(wickObj.svgData.svgString, function(objects, options) {
-                var pathFabricObj = objects[0];
-
-                //that.syncObjects(wickObj, pathFabricObj);
-                pathFabricObj.setColor(wickObj.svgData.fillColor);
-
-                /*fabric.loadSVGFromString(this.svgData.svgString, function(objects, options) {
-                    objects[0].fill = that.svgData.fillColor;
-                    var svgFabricObject = fabric.util.groupSVGElements(objects, options);
-                    svgFabricObject.scaleX /= window.devicePixelRatio;
-                    svgFabricObject.scaleY /= window.devicePixelRatio;
-                    svgFabricObject.setCoords();
-                    svgFabricObject.cloneAsImage(function(clone) {
-                        var element = clone.getElement();
-                        var imgSrc = element.src;
-                        that.svgCacheImageData = imgSrc;
-                        callback();
-                    }, {enableRetinaScaling:false});
-                });*/
-                
-                pathFabricObj.scaleX /= window.devicePixelRatio;
-                pathFabricObj.scaleY /= window.devicePixelRatio;
-                pathFabricObj.cloneAsImage(function(clone) {
-                    var element = clone.getElement();
-                    var imgSrc = element.src;
-                    wickObj.svgCacheImageData = imgSrc;
-                    fabric.Image.fromURL(imgSrc, function(newFabricImage) {
-                        wickObj.cachedFabricObject = newFabricImage;
-                        newFabricImage.wickObjReference = wickObj;
-                        callback(newFabricImage);
-                    });
-                }, {enableRetinaScaling:false});
-
-                //wickObj.cachedFabricObject = pathFabricObj;
-
-                //callback(pathFabricObj);
             });
         }
 
@@ -365,10 +320,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             } else {
                 fabricObj.perPixelTargetFind = false;
             }
-        }
-
-        if(wickObj.svgData) {
-            fabricObj.setColor(wickObj.svgData.fillColor);
         }
 
         fabricObj.setCoords();

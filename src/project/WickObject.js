@@ -44,7 +44,6 @@ var WickObject = function () {
     // Data, only used by static objects
     this.imageData = undefined;
     this.fontData  = undefined;
-    this.svgData   = undefined;
     this.audioData = undefined;
 
 // Symbols
@@ -129,16 +128,6 @@ WickObject.fromImage = function (imgSrc, callback) {
     obj.imageData = imgSrc;
     callback(obj);*/
 
-}
-
-WickObject.fromSVG = function (svgData) {
-    var svgWickObject = new WickObject();
-
-    svgWickObject.svgData = {};
-    svgWickObject.svgData.svgString = svgData.svgString;
-    svgWickObject.svgData.fillColor = svgData.fillColor;
-
-    return svgWickObject;
 }
 
 WickObject.fromText = function (text) {
@@ -864,11 +853,6 @@ WickObject.prototype.downloadAsFile = function () {
         return;
     }
 
-    if(this.svgCacheImageData) {
-        saveAs(dataURItoBlob(this.svgCacheImageData), filename+".png");
-        return;
-    }
-
     if(this.audioData) {
         saveAs(dataURItoBlob(this.audioData), filename+".wav");
         return;
@@ -924,10 +908,6 @@ WickObject.prototype.encodeStrings = function () {
         this.fontData.text = encodeString(this.fontData.text);
     }
 
-    if(this.svgData) {
-        this.svgData.svgString = encodeString(this.svgData.svgString);
-    }
-
     if(this.isSymbol) {
         this.getAllChildObjects().forEach(function(child) {
             child.encodeStrings();
@@ -954,10 +934,6 @@ WickObject.prototype.decodeStrings = function () {
 
     if(this.fontData) {
         this.fontData.text = decodeString(this.fontData.text);
-    }
-
-    if(this.svgData) {
-        this.svgData.svgString = decodeString(this.svgData.svgString);
     }
 
     if(this.isSymbol) {
@@ -997,56 +973,12 @@ WickObject.prototype.generateObjectNameReferences = function () {
 
 }
 
-// Used so that if the renderer can't render SVGs it has an image to fallback to
-WickObject.prototype.generateSVGCacheImages = function (callback) {
-
-    var that = this;
-
-    if(this.svgData) {
-
-        fabric.loadSVGFromString(this.svgData.svgString, function(objects, options) {
-            objects[0].fill = that.svgData.fillColor;
-            var svgFabricObject = fabric.util.groupSVGElements(objects, options);
-            svgFabricObject.scaleX /= window.devicePixelRatio;
-            svgFabricObject.scaleY /= window.devicePixelRatio;
-            svgFabricObject.setCoords();
-            svgFabricObject.cloneAsImage(function(clone) {
-                var element = clone.getElement();
-                var imgSrc = element.src;
-                that.svgCacheImageData = imgSrc;
-                callback();
-            }, {enableRetinaScaling:false});
-        });
-
-    } else if(this.isSymbol) {
-
-        var childrenConverted = 0;
-        var nChildren = that.getTotalNumChildren();
-
-        if(nChildren == 0) {
-            callback();
-        }
-
-        this.getAllChildObjects().forEach(function(currObj) {
-            currObj.generateSVGCacheImages(function () {
-                childrenConverted++;
-                if(childrenConverted == nChildren) {
-                    callback();
-                }
-            });
-        });
-    } else {
-        callback();
-    }
-
-}
-
 /* Generate alpha mask for per-pixel hit detection */
 WickObject.prototype.generateAlphaMask = function () {
 
     var that = this;
 
-    var alphaMaskSrc = that.imageData || that.svgCacheImageData;
+    var alphaMaskSrc = that.imageData;
     if(!alphaMaskSrc) return;
 
     ImageToCanvas(alphaMaskSrc, function (canvas,ctx) {
@@ -1699,8 +1631,6 @@ WickObject.prototype.copy = function () {
 
         copiedObject.imageData = this.imageData;
         copiedObject.fontData = this.fontData;
-        copiedObject.svgData = this.svgData;
-        copiedObject.svgCacheImageData = this.svgCacheImageData;
     }
 
     return copiedObject;

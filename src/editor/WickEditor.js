@@ -4,12 +4,6 @@
 
 var WickEditor = function () {
 
-    this.syncInterfaces = function () {
-        interfaces.forEach(function (interface) {
-            interface.syncWithEditorState();
-        });
-    }
-
     var that = this;
 
     // Friendly console message ~~~
@@ -25,6 +19,12 @@ var WickEditor = function () {
     }
 
     // Setup all interfaces
+    this.syncInterfaces = function () {
+        interfaces.forEach(function (interface) {
+            interface.syncWithEditorState();
+        });
+    }
+
     var interfaces = [];
     function registerInterface (interface) {
         interfaces.push(interface);

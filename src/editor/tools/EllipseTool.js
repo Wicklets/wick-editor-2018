@@ -26,17 +26,8 @@ var EllipseTool = function (wickEditor) {
             svgString: '<svg width="'+drawingShape.width*2+'" height="'+drawingShape.height*2+'"  id="svg" version="1.0" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>', 
             fillColor: fabricInterface.tools.paintbrush.color
         }
-        var wickObj = WickObject.fromSVG(SVGData);
 
         fabricInterface.canvas.remove(drawingShape);
-        wickEditor.syncInterfaces();
-
-        wickObj.x = origX// + drawingShape.width;
-        wickObj.y = origY //+ drawingShape.height;
-
-        wickEditor.actionHandler.doAction('addObjects', {
-            wickObjects: [wickObj]
-        });
     }
 
 }

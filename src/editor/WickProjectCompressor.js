@@ -1,19 +1,5 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-/*WickProject.compressionRoutine = function (string) {
-    return LZString.compressToBase64(string);
-}
-WickProject.decompressionRoutine = function (string) {
-    return LZString.decompressFromBase64(string);
-}*/
-
-/*if(rawJSONProject.startsWith('COMPRESSION:LZ-STRING')) {
-    console.log("Project compressed with lz-string, decompressing...")
-    var compressedJSONProject = rawJSONProject.substring('COMPRESSION:LZ-STRING'.length, rawJSONProject.length);
-    JSONString = WickProject.decompressionRoutine(compressedJSONProject);
-    console.log("Done!")
-}*/
-
 var WickProjectCompressor = (function () {
 
     var projectCompressor = { };

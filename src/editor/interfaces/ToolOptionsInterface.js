@@ -28,17 +28,6 @@ var ToolOptionsInterface = function (wickEditor) {
         var newColor = '#' + this.value;
         wickEditor.fabric.tools['paintbrush'].color = newColor;
 
-        var selectedObjects = wickEditor.fabric.getSelectedWickObjects();
-        if(selectedObjects) {
-            selectedObjects.forEach(function (child) {
-                if(!child.svgData) return;
-                wickEditor.actionHandler.doAction('modifyObjects', { 
-                    ids: [child.id], 
-                    modifiedStates: [{ svgFillColor : newColor }] 
-                });
-            });
-        }
-
         wickEditor.syncInterfaces();
     };
 

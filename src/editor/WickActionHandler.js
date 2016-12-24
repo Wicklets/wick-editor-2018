@@ -208,40 +208,6 @@ var WickActionHandler = function (wickEditor) {
                     if(args.modifiedStates[i].textDecoration) wickObj.fontData.textDecoration = args.modifiedStates[i].textDecoration;
                     if(args.modifiedStates[i].fill) wickObj.fontData.fill = args.modifiedStates[i].fill;
                 }
-
-                if(args.modifiedStates[i].svgFillColor) {
-                    args.originalStates[i].svgFillColor = wickObj.svgData.fillColor;
-                    wickObj.svgData.fillColor = args.modifiedStates[i].svgFillColor;
-                    wickObj.forceFabricCanvasRegen = true;
-                }
-
-                if(wickObj.svgData) VectorToolUtils.updatePaperDataOnVectorWickObjects([wickObj]);
-                var SVGNeedsRefresh = 
-                    (args.modifiedStates[i].angle !== undefined && args.modifiedStates[i].angle !== 0) || 
-                    (args.modifiedStates[i].scaleX !== undefined && args.modifiedStates[i].scaleX !== 1) || 
-                    (args.modifiedStates[i].scaleY !== undefined && args.modifiedStates[i].scaleY !== 1)
-                if(wickObj.svgData && SVGNeedsRefresh) {
-                    var paperPath = wickObj.paperPath;
-
-                    paperPath.applyMatrix = true;
-                    paperPath.scale(wickObj.scaleX,wickObj.scaleY);
-                    paperPath.rotate(wickObj.angle);
-
-                    var updatedSVGWickObject = createSVGWickObject(paperPath, wickObj.svgData.fillColor);
-                    updatedSVGWickObject.x += wickEditor.project.getCurrentObject().getAbsolutePosition().x;
-                    updatedSVGWickObject.y += wickEditor.project.getCurrentObject().getAbsolutePosition().y;
-
-                    wickObj.paperPath = paperPath;
-
-                    wickObj.cachedFabricObject = null;
-                    wickObj.svgData = updatedSVGWickObject.svgData;
-                    wickObj.forceFabricCanvasRegen = true;
-                    wickObj.angle = 0;
-                    wickObj.scaleX = 1;
-                    wickObj.scaleY = 1;
-                    wickObj.width = null;
-                    wickObj.height = null;
-                }
                 
                 // This is silly what's a better way ???
                 if(wickObj.tweens.length > 0) {
@@ -272,11 +238,6 @@ var WickActionHandler = function (wickEditor) {
                     wickObj.fontData.fontWeight = args.originalStates[i].fontWeight;
                     wickObj.fontData.textDecoration = args.originalStates[i].textDecoration;
                     wickObj.fontData.fill = args.originalStates[i].fill;
-                }
-
-                if(args.originalStates[i].svgFillColor) {
-                    wickObj.svgData.fillColor = args.originalStates[i].svgFillColor;
-                    wickObj.forceFabricCanvasRegen = true;
                 }
             }
         });

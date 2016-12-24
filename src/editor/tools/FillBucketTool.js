@@ -28,8 +28,7 @@ var FillBucketTool = function (wickEditor) {
         onscreenObjects.forEach(function (wickPath) {
 
             if (filledPath) return;
-            if (!wickPath.svgData) return;
-
+            
             if(wickPath.paperPath.contains(mousePoint)) {
                 filledPath = true;
                 
