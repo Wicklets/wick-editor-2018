@@ -101,7 +101,7 @@ WickProject.fromWebpage = function (webpageString) {
 
     if(!extractedProjectJSON) {
         // Oh no, something went wrong
-        console.error("Bundled JSON project not found in specified HTML file (webpageString). The HTML supplied might not be a Wick project, or zach might have changed the way projects are bundled. See WickProjectExporter.js!");
+        console.error("Bundled JSON project not found in specified HTML file (webpageString). The HTML supplied might not be a Wick project, or zach might have changed the way projects are bundled. See WickProject.Exporter.js!");
         return null;
     } else {
         // Found a bundled project's JSON, let's load it!
@@ -111,7 +111,7 @@ WickProject.fromWebpage = function (webpageString) {
 
 WickProject.fromJSON = function (rawJSONProject) {
 
-    var JSONString = WickProjectCompressor.decompressProject(rawJSONProject);
+    var JSONString = WickProject.Compressor.decompressProject(rawJSONProject);
 
     // Replace current project with project in JSON
     var projectFromJSON = JSON.parse(JSONString);
@@ -182,7 +182,7 @@ WickProject.prototype.getAsJSON = function (callback, args) {
     // Encode scripts/text to avoid JSON format problems
     that.rootObject.encodeStrings();
     
-    var JSONProject = JSON.stringify(that, WickProjectExporter.JSONReplacer);
+    var JSONProject = JSON.stringify(that, WickProject.Exporter.JSONReplacer);
     
     // Decode scripts back to human-readble and eval()-able format
     that.rootObject.decodeStrings();
@@ -198,7 +198,7 @@ WickProject.prototype.saveInLocalStorage = function () {
         console.log("Project size: " + JSONProject.length)
         if(JSONProject.length > 5000000) {
             console.log("Project >5MB, compressing...");
-            var compressedJSONProject = WickProjectCompressor.compressProject(JSONProject, "LZSTRING-UTF16");
+            var compressedJSONProject = WickProject.Compressor.compressProject(JSONProject, "LZSTRING-UTF16");
             WickProject.saveProjectJSONInLocalStorage(compressedJSONProject);
             console.log("Compressed size: " + compressedJSONProject.length)
             wickEditor.statusbar.setState('done');
