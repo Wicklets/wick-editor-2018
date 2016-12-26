@@ -356,12 +356,18 @@ var WickActionHandler = function (wickEditor) {
 
             args.oldPlayheadPosition = args.obj.playheadPosition;
 
+            var oldFrame = currentObject.getCurrentFrame();
             if(args.moveAmount !== undefined) {
                 args.obj.playheadPosition += args.moveAmount;
                 if(args.obj.playheadPosition < 0) args.obj.playheadPosition = 0;
             } else if (args.newPlayheadPosition !== undefined) {
                 args.oldPlayheadPosition = args.obj.playheadPosition;
                 args.obj.playheadPosition = args.newPlayheadPosition;
+            }
+            var newFrame = wickEditor.project.getCurrentObject().getCurrentFrame();
+
+            if(oldFrame !== newFrame) {
+                wickEditor.paper.loadSVGDataFromFrame(newFrame);
             }
             
         },

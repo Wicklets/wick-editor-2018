@@ -343,6 +343,12 @@ select {
 	visibility: hidden;
 }
 
+.paperCanvas {
+	position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
 .hidden {
     position: absolute;
     bottom: 0;

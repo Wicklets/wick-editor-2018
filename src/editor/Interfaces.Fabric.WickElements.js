@@ -146,12 +146,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
                 objectToAdd.fabricObjectReference = fabricObj
 
-                fabricInterface.canvas.forEachObject(function(path) {
-                    if(path.isTemporaryDrawingPath) {
-                        fabricInterface.canvas.remove(path);
-                    }
-                });
-
                 // The object may have been deleted while we were generating the fabric object. 
                 // Make sure we don't add it if that happened.
                 if(!wickEditor.project.rootObject.getChildByID(objectToAdd.id)) return;

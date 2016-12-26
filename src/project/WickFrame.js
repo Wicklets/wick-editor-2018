@@ -7,6 +7,9 @@ var WickFrame = function () {
 	// Store all objects in frame. 
 	this.wickObjects = [];
 
+	// All path data of the frame (Stored as SVG)
+	this.pathData = null;
+
 	// Frame length for long frames
 	this.frameLength = 1;
 

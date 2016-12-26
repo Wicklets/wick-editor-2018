@@ -53,27 +53,12 @@ var PaintbrushTool = function (wickEditor) {
             return;
         }
 
-        fabricPath.isTemporaryDrawingPath = true; // So that fabric can remove it when it's time to add paths to the project as wickobjects
-
         // Vectorize the path and create a WickObject out of it
         potraceFabricPath(fabricPath, function(SVGData) {
+            //wickEditor.project.getCurrentObject().getCurrentFrame().svgData = SVGData.svgString;
+            wickEditor.paper.addSVG(SVGData.svgString);
 
-            var wickObj = WickObject.fromSVG(SVGData);
-
-            wickObj.x = fabricPath.left;
-            wickObj.y = fabricPath.top;
-
-            var symbolOffset = wickEditor.project.getCurrentObject().getAbsolutePosition();
-            //wickObj.x -= symbolOffset.x;
-            //wickObj.y -= symbolOffset.y;
-
-            //wickObj.x -= fabricPath.width/2  + that.brushSize/2;
-            //wickObj.y -= fabricPath.height/2 + that.brushSize/2;
-
-            wickEditor.actionHandler.doAction('addObjects', {
-                wickObjects: [wickObj]
-            });
-
+            wickEditor.fabric.canvas.remove(fabricPath);
         });
     });
 

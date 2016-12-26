@@ -2,11 +2,44 @@
 
 var PaperInterface = function (wickEditor) {
 
+    var paperCanvas;
+
 	this.setup = function () {
-		this.paperCanvas = document.createElement('canvas');
-		paper.setup(this.paperCanvas);
+        // Create the canvas to be used with paper.js and init the paper.js instance.
+		paperCanvas = document.createElement('canvas');
+        paperCanvas.className = 'paperCanvas';
+		paper.setup(paperCanvas);
+
+        // (Debug) Put the canvas somewhere we can see it
+        document.body.appendChild(paperCanvas);
 	}
 
+    this.addSVG = function (svgString) {
+        // Load frame's SVG data into paper.js
+        var xmlString = svgString
+          , parser = new DOMParser()
+          , doc = parser.parseFromString(xmlString, "text/xml");
+        var paperGroup = paper.project.importSVG(doc);
+    }
+
+    this.loadSVGDataFromFrame = function (frame) {
+        // Clear paper canvas??
+        paper.project.clear();
+
+        if(!frame) return;
+
+        // Load frame's SVG data into paper.js
+        var xmlString = frame.svgData
+          , parser = new DOMParser()
+          , doc = parser.parseFromString(xmlString, "text/xml");
+        var paperGroup = paper.project.importSVG(doc);
+    }
+
+    this.syncWithEditorState = function () {
+        
+    }
+
+    /*
     this.syncWithEditorState = function () {
     	
  	}
@@ -95,4 +128,5 @@ var PaperInterface = function (wickEditor) {
         });
         return intersectedObjects;
     }
+    */
  }

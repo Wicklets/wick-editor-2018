@@ -225,7 +225,6 @@ var TimelineInterface = function (wickEditor) {
                 var currentFrame = currentObject.getCurrentFrame();
                 //if(imgData && currentFrame) currentFrame.cachedImageData = imgData;
 
-                //currentObject.playheadPosition = newPlayheadPosition;
                 wickEditor.actionHandler.doAction('movePlayhead', {
                     obj:currentObject,
                     newPlayheadPosition:newPlayheadPosition
