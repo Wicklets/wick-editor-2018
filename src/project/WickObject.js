@@ -555,6 +555,19 @@ WickObject.prototype.getChildByID = function (id) {
     return foundChild;
 }
 
+WickObject.prototype.getAllFrames = function () {
+
+    var allFrames = [];
+
+    this.layers.forEach(function (layer) {
+        layer.frames.forEach(function (frame) {
+            allFrames.push(frame);
+        });
+    });
+
+    return allFrames;
+}
+
 WickObject.prototype.getFrameWithChild = function (child) {
 
     var foundFrame = null;
@@ -891,26 +904,21 @@ WickObject.addPrototypes = function (obj) {
 /* Encodes scripts and strings to avoid JSON format problems */
 WickObject.prototype.encodeStrings = function () {
 
-    var encodeString = function (str) {
-        var newStr = str;
-        newStr = encodeURI(str);
-        newStr = newStr.replace(/'/g, "%27");
-        return newStr;
-    }
-
     if(this.wickScripts) {
         for (var key in this.wickScripts) {
-            this.wickScripts[key] = encodeString(this.wickScripts[key]);
+            this.wickScripts[key] = WickProject.Compressor.encodeString(this.wickScripts[key]);
         }
     }
 
     if(this.fontData) {
-        console.log(this.fontData.text)
-        this.fontData.text = encodeString(this.fontData.text);
-        console.log(this.fontData.text)
+        this.fontData.text = WickProject.Compressor.encodeString(this.fontData.text);
     }
 
     if(this.isSymbol) {
+        this.getAllFrames().forEach(function (frame) {
+            frame.encodeStrings();
+        });
+
         this.getAllChildObjects().forEach(function(child) {
             child.encodeStrings();
         });
@@ -921,26 +929,21 @@ WickObject.prototype.encodeStrings = function () {
 /* Decodes scripts and strings back to human-readble and eval()-able format */
 WickObject.prototype.decodeStrings = function () {
     
-    var decodeString = function (str) {
-        var newStr = str;
-        newStr = newStr.replace(/%27/g, "'");
-        newStr = decodeURI(str);
-        return newStr;
-    }
-    
     if(this.wickScripts) {
         for (var key in this.wickScripts) {
-            this.wickScripts[key] = decodeString(this.wickScripts[key])
+            this.wickScripts[key] = WickProject.Compressor.decodeString(this.wickScripts[key])
         }
     }
 
     if(this.fontData) {
-        console.log(this.fontData.text)
-        this.fontData.text = decodeString(this.fontData.text);
-        console.log(this.fontData.text)
+        this.fontData.text = WickProject.Compressor.decodeString(this.fontData.text);
     }
 
     if(this.isSymbol) {
+        this.getAllFrames().forEach(function (frame) {
+            frame.decodeStrings();
+        });
+
         this.getAllChildObjects().forEach(function(child) {
             child.decodeStrings();
         });

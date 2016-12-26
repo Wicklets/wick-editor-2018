@@ -1,8 +1,8 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-// Note: The actual drawing using the mouse is handled by fabric! See FabricInterface
+if(!window.Tools) Tools = {};
 
-var PaintbrushTool = function (wickEditor) {
+Tools.Paintbrush = function (wickEditor) {
 
     var that = this;
 
@@ -55,7 +55,7 @@ var PaintbrushTool = function (wickEditor) {
 
         // Vectorize the path and create a WickObject out of it
         potraceFabricPath(fabricPath, function(SVGData) {
-            wickEditor.paper.addSVG(SVGData.svgString);
+            wickEditor.paper.addSVG(SVGData.svgString, {x:fabricPath.left, y:fabricPath.top});
             wickEditor.fabric.canvas.remove(fabricPath);
         });
     });

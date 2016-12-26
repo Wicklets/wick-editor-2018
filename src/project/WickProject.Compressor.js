@@ -44,6 +44,20 @@ WickProject.Compressor = (function () {
         if(printFilesize) console.log("Done!");
         return projectJSON;
     }
+    
+    projectCompressor.encodeString = function (str) {
+        var newStr = str;
+        newStr = encodeURI(str);
+        newStr = newStr.replace(/'/g, "%27");
+        return newStr;
+    }
+
+    projectCompressor.decodeString = function (str) {
+        var newStr = str;
+        newStr = newStr.replace(/%27/g, "'");
+        newStr = decodeURI(str);
+        return newStr;
+    }
 
     return projectCompressor;
 

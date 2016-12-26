@@ -1,6 +1,8 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-var RectangleTool = function (wickEditor) {
+if(!window.Tools) Tools = {};
+
+Tools.Rectangle = function (wickEditor) {
 
     var that = this;
     var fabricInterface = wickEditor.fabric;
@@ -10,7 +12,7 @@ var RectangleTool = function (wickEditor) {
     };
 
     fabricInterface.canvas.on('mouse:down', function (e) {
-        if(!(fabricInterface.currentTool instanceof RectangleTool)) return;
+        if(!(fabricInterface.currentTool instanceof Tools.Rectangle)) return;
 
         fabricInterface.shapeDrawer.startDrawingShape('rectangle', e.e.offsetX, e.e.offsetY, that.createWickObjectFromShape);
     });

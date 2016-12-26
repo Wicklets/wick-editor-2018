@@ -183,8 +183,6 @@ WickProject.prototype.getAsJSON = function (callback, args) {
     that.rootObject.encodeStrings();
     
     var JSONProject = JSON.stringify(that, WickProject.Exporter.JSONReplacer);
-
-    console.log("jsonified")
     
     // Decode scripts back to human-readble and eval()-able format
     that.rootObject.decodeStrings();

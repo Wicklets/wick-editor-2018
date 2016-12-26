@@ -1,6 +1,8 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-var BackgroundRemoveTool = function (wickEditor) {
+if(!window.Tools) Tools = {};
+
+Tools.BackgroundRemove = function (wickEditor) {
 
     var that = this;
     var fabricInterface = wickEditor.fabric;
@@ -11,7 +13,7 @@ var BackgroundRemoveTool = function (wickEditor) {
     }
 
     canvas.on('mouse:down', function(e) {
-        if(!(wickEditor.fabric.currentTool instanceof BackgroundRemoveTool)) return;
+        if(!(wickEditor.fabric.currentTool instanceof Tools.BackgroundRemove)) return;
 
         var position = {x:e.e.offsetX, y:e.e.offsetY};
         

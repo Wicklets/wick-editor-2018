@@ -1,6 +1,8 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-var PanTool = function (wickEditor) {
+if(!window.Tools) Tools = {};
+
+Tools.Pan = function (wickEditor) {
 
     var that = this;
 
@@ -15,7 +17,7 @@ var PanTool = function (wickEditor) {
     });
 
     wickEditor.fabric.canvas.on('mouse:down', function (e) {
-        if(wickEditor.fabric.currentTool instanceof PanTool) {
+        if(wickEditor.fabric.currentTool instanceof Tools.Pan) {
             wickEditor.fabric.startPan();
         }
     });

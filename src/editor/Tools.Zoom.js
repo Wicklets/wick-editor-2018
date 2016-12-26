@@ -1,6 +1,8 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-var ZoomTool = function (wickEditor) {
+if(!window.Tools) Tools = {};
+
+Tools.Zoom = function (wickEditor) {
 
     var that = this;
 
@@ -14,7 +16,7 @@ var ZoomTool = function (wickEditor) {
     }
     
     wickEditor.fabric.canvas.on('mouse:down', function (e) {
-    	if(wickEditor.fabric.currentTool instanceof ZoomTool) {
+    	if(wickEditor.fabric.currentTool instanceof Tools.Zoom) {
             console.log(wickEditor.guiActionHandler.keys)
     		if (wickEditor.guiActionHandler.keys[keyCharToCode["ALT"]]) {
     			wickEditor.fabric.zoom(0.9);
