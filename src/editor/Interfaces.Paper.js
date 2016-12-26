@@ -14,7 +14,7 @@ var PaperInterface = function (wickEditor) {
 		paper.setup(paperCanvas);
 
         // (Debug) Put the canvas somewhere we can see it
-        document.body.appendChild(paperCanvas);
+        //document.body.appendChild(paperCanvas);
 
         // Set initial frame to load SVG data from
         currentFrame = wickEditor.project.getCurrentObject().getCurrentFrame();
