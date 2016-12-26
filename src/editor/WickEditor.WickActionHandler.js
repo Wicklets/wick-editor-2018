@@ -365,10 +365,6 @@ var WickActionHandler = function (wickEditor) {
                 args.obj.playheadPosition = args.newPlayheadPosition;
             }
             var newFrame = wickEditor.project.getCurrentObject().getCurrentFrame();
-
-            if(oldFrame !== newFrame) {
-                wickEditor.paper.loadSVGDataFromFrame(newFrame);
-            }
             
         },
         function (args) {

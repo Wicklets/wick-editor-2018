@@ -4,6 +4,9 @@ var PaperInterface = function (wickEditor) {
 
     var paperCanvas;
 
+    var currentFrame;
+    var SVGDataDirty;
+
 	this.setup = function () {
         // Create the canvas to be used with paper.js and init the paper.js instance.
 		paperCanvas = document.createElement('canvas');
@@ -12,31 +15,45 @@ var PaperInterface = function (wickEditor) {
 
         // (Debug) Put the canvas somewhere we can see it
         document.body.appendChild(paperCanvas);
+
+        // Set initial frame to load SVG data from
+        currentFrame = wickEditor.project.getCurrentObject().getCurrentFrame();
+        SVGDataDirty = true;
 	}
 
     this.addSVG = function (svgString) {
-        // Load frame's SVG data into paper.js
+        addSVGToCanvas(svgString);
+    }
+
+    this.syncWithEditorState = function () {
+        if(!paper.project) return; // sync may get called before paper.js is ready
+
+        var newFrame = wickEditor.project.getCurrentObject().getCurrentFrame();
+        if(newFrame !== currentFrame) {
+            // Set SVGData of currentFrame to svg data from paper.js
+            if(currentFrame) currentFrame.svgData = paper.project.exportSVG({ asString: true });
+
+            SVGDataDirty = true;
+        }
+        currentFrame = newFrame;
+
+        // Only update the paper.js canvas if new SVG data exists in the WickProject
+        if (!SVGDataDirty) return;
+
+        paper.project.clear();
+
+        // currentFrame may be null if the playhead isn't over a frame
+        if (!currentFrame) return;
+
+        addSVGToCanvas(currentFrame.svgData);
+        SVGDataDirty = false;
+    }
+
+    var addSVGToCanvas = function (svgString) {
         var xmlString = svgString
           , parser = new DOMParser()
           , doc = parser.parseFromString(xmlString, "text/xml");
         var paperGroup = paper.project.importSVG(doc);
-    }
-
-    this.loadSVGDataFromFrame = function (frame) {
-        // Clear paper canvas??
-        paper.project.clear();
-
-        if(!frame) return;
-
-        // Load frame's SVG data into paper.js
-        var xmlString = frame.svgData
-          , parser = new DOMParser()
-          , doc = parser.parseFromString(xmlString, "text/xml");
-        var paperGroup = paper.project.importSVG(doc);
-    }
-
-    this.syncWithEditorState = function () {
-        
     }
 
     /*
