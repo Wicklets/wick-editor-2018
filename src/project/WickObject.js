@@ -905,7 +905,9 @@ WickObject.prototype.encodeStrings = function () {
     }
 
     if(this.fontData) {
+        console.log(this.fontData.text)
         this.fontData.text = encodeString(this.fontData.text);
+        console.log(this.fontData.text)
     }
 
     if(this.isSymbol) {
@@ -933,7 +935,9 @@ WickObject.prototype.decodeStrings = function () {
     }
 
     if(this.fontData) {
+        console.log(this.fontData.text)
         this.fontData.text = decodeString(this.fontData.text);
+        console.log(this.fontData.text)
     }
 
     if(this.isSymbol) {

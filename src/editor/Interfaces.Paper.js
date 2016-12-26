@@ -31,7 +31,7 @@ var PaperInterface = function (wickEditor) {
         var newFrame = wickEditor.project.getCurrentObject().getCurrentFrame();
         if(newFrame !== currentFrame) {
             // Set SVGData of currentFrame to svg data from paper.js
-            if(currentFrame) currentFrame.svgData = paper.project.exportSVG({ asString: true });
+            if(currentFrame) currentFrame.pathData = paper.project.exportSVG({ asString: true });
 
             SVGDataDirty = true;
         }
@@ -45,8 +45,13 @@ var PaperInterface = function (wickEditor) {
         // currentFrame may be null if the playhead isn't over a frame
         if (!currentFrame) return;
 
-        addSVGToCanvas(currentFrame.svgData);
+        addSVGToCanvas(currentFrame.pathData);
         SVGDataDirty = false;
+    }
+
+    this.applyChangesToFrame = function () {
+        console.error("if you dont see this message, it's broken (call applyChangesToFrame before you JSONify the project ya dummy)")
+        if(currentFrame) currentFrame.pathData = paper.project.exportSVG({ asString: true });
     }
 
     var addSVGToCanvas = function (svgString) {
