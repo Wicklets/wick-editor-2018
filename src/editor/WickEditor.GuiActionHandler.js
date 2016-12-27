@@ -574,7 +574,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.Cursor',
-        ['C'], 
+        [/*'C'*/], 
         ['cursorToolButton'], 
         {}, 
         function(args) {
@@ -582,7 +582,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.Paintbrush',
-        ['B'], 
+        [/*'B'*/], 
         ['paintbrushToolButton'], 
         {}, 
         function(args) {
@@ -590,7 +590,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.FillBucket',
-        ['F'], 
+        [/*'F'*/], 
         ['fillBucketToolButton'], 
         {}, 
         function(args) {
@@ -598,7 +598,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.Rectangle',
-        ['R'], 
+        [/*'R'*/], 
         ['rectangleToolButton'], 
         {}, 
         function(args) {
@@ -606,7 +606,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.Ellipse',
-        ['E'], 
+        [/*'E'*/], 
         ['ellipseToolButton'], 
         {}, 
         function(args) {
@@ -614,7 +614,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.Dropper',
-        ['D'], 
+        [/*'D'*/], 
         ['dropperToolButton'], 
         {}, 
         function(args) {
@@ -622,7 +622,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.Text',
-        ['T'], 
+        [/*'T'*/], 
         ['textToolButton'], 
         {}, 
         function(args) {
@@ -630,7 +630,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.Zoom',
-        ['Z'], 
+        [/*'Z'*/], 
         ['zoomToolButton'], 
         {}, 
         function(args) {
@@ -638,7 +638,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.Pan',
-        ['P'], 
+        [/*'P'*/], 
         ['panToolButton'], 
         {}, 
         function(args) {

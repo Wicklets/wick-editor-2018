@@ -7,23 +7,33 @@ var PaperInterface = function (wickEditor) {
     var currentFrame;
     var SVGDataDirty;
 
-	this.setup = function () {
-        // Create the canvas to be used with paper.js and init the paper.js instance.
-		paperCanvas = document.createElement('canvas');
-        paperCanvas.className = 'paperCanvas';
-        paperCanvas.style.backgroundColor = "#FFDDDD";
-		paper.setup(paperCanvas);
+    // Create the canvas to be used with paper.js and init the paper.js instance.
+    paperCanvas = document.createElement('canvas');
+    paperCanvas.className = 'paperCanvas';
+    paperCanvas.style.backgroundColor = "#FFDDDD";
+    paper.setup(paperCanvas);
 
-        // (Debug) Put the canvas somewhere we can see it
-        //document.body.appendChild(paperCanvas);
+    // (Debug) Put the canvas somewhere we can see it
+    if(localStorage.pathDebug === "1") document.body.appendChild(paperCanvas);
 
+    this.setup = function () {
         // Set initial frame to load SVG data from
         currentFrame = wickEditor.project.getCurrentObject().getCurrentFrame();
         SVGDataDirty = true;
-	}
+    }
 
     this.addSVG = function (svgString, offset) {
         addSVGToCanvas(svgString, offset);
+    }
+
+    this.getAllSVGs = function () {
+        var allSVGs = [];
+
+        paper.project.activeLayer.children.forEach(function (child) {
+            allSVGs.push(child);
+        });
+
+        return allSVGs;
     }
 
     this.syncWithEditorState = function () {
@@ -67,10 +77,10 @@ var PaperInterface = function (wickEditor) {
 
     /*
     this.syncWithEditorState = function () {
-    	
- 	}
+        
+    }
 
- 	this.updatePaperDataOnVectorWickObjects = function (wickObjects) {
+    this.updatePaperDataOnVectorWickObjects = function (wickObjects) {
         paper.project.activeLayer.removeChildren();
 
         wickObjects.forEach(function (wickObject) {

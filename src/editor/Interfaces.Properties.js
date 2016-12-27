@@ -307,6 +307,11 @@ var PropertiesInterface = function (wickEditor) {
 
     });
 
+    if(localStorage.pathDebug === "1") {
+        ['paintbrush', 'fillbucket', 'rectangle', 'ellipse', 'dropper', 'crop'].forEach(function (toolName) {
+            document.getElementById(toolName+'ToolButton').style.display = 'block';
+        });
+    }
     document.getElementById('experimentalToolsCheckbox').onclick = function (e) {
         var self = this;
         ['paintbrush', 'fillbucket', 'rectangle', 'ellipse', 'dropper', 'crop'].forEach(function (toolName) {

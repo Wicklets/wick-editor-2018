@@ -30,37 +30,10 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         //fabricInterface.guiElements.setInactiveFramePosition(2);
 
         var refreshZIndices = function (force) {
-            //console.log("updating z indices of " + fabricInterface.canvas._objects.length + " objects")
-
-            // Old routine - update in order on fabric canvas
-            /*fabricInterface.canvas.forEachObject(function(fabricObj) {
-                if(!fabricObj.wickObjectID) return;
-
-                //var wickObj = wickEditor.project.rootObject.getChildByID(fabricObj.wickObjectID);
-                wickObj = fabricObj.wickObjReference;
-
-                if(wickObj.zIndicesDirty || force) {
-
-                    var fabricZIndex = fabricInterface.canvas._objects.indexOf(fabricObj);
-                    var trueZIndex = allObjects.indexOf(wickObj) + fabricInterface.guiElements.getNumGUIElements();
-                    console.log("FZI: " + fabricZIndex + " TZI: " + trueZIndex)
-
-                    //console.log("FZI: " + fabricZIndex + " TZI: " + trueZIndex)
-                    console.log("object move")
-                    fabricInterface.canvas.moveTo(fabricObj, trueZIndex);
-                    wickObj.zIndicesDirty = false;
-                }
-            });*/
-
             var frameZIndex = siblingObjects.length
 
             // Update z-indices in order of their true positions
             allObjects.forEach(function(wickObj) {
-                //if(!fabricObj.wickObjectID) return;
-
-                //var wickObj = wickEditor.project.rootObject.getChildByID(fabricObj.wickObjectID);
-                //var wickObj = fabricObj.wickObjReference;
-
                 var fabricObj = wickObj.fabricObjectReference;
 
                 if(wickObj.zIndicesDirty || force) {
@@ -69,8 +42,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                     if(fabricZIndex > frameZIndex) fabricZIndex -= 1;
                     var trueZIndex = allObjects.indexOf(wickObj) + fabricInterface.guiElements.getNumGUIElements();
 
-                    //console.log("FZI: " + fabricZIndex + " TZI: " + trueZIndex)
-                    //console.log("object move")
                     fabricInterface.canvas.moveTo(fabricObj, trueZIndex);
                     wickObj.zIndicesDirty = false;
                 }

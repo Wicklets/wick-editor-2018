@@ -49,7 +49,7 @@ Tools.Paintbrush = function (wickEditor) {
         var fabricPath = e.target;
 
         // Make sure the new object is actually a path created by fabric's drawing tool
-        if(fabricPath.type !== "path" || fabricPath.wickObjectID) {
+        if(fabricPath.type !== "path" || fabricPath.paperObjectReference) {
             return;
         }
 
@@ -57,6 +57,7 @@ Tools.Paintbrush = function (wickEditor) {
         potraceFabricPath(fabricPath, function(SVGData) {
             wickEditor.paper.addSVG(SVGData.svgString, {x:fabricPath.left, y:fabricPath.top});
             wickEditor.fabric.canvas.remove(fabricPath);
+            wickEditor.syncInterfaces();
         });
     });
 

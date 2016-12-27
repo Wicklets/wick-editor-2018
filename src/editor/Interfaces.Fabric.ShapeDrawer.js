@@ -1,6 +1,6 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-var ShapeDrawer = function (wickEditor, fabricInterface) {
+var FabricShapeDrawer = function (wickEditor, fabricInterface) {
 
     var that = this;
 

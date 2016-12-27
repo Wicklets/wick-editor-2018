@@ -9,25 +9,24 @@ var FabricInterface = function (wickEditor) {
     this.setup = function () {
 
         this.canvas = new fabric.CanvasEx('fabricCanvas', {
-            imageSmoothingEnabled:false,
-            preserveObjectStacking:true,
-            renderOnAddRemove:false,
+            imageSmoothingEnabled : false,
+            preserveObjectStacking : true,
+            renderOnAddRemove : false,
         });
         this.canvas.selectionColor = 'rgba(110, 110, 115, 0.1)';
         this.canvas.selectionBorderColor = 'grey';
         this.canvas.backgroundColor = "#EEE";
-        this.canvas.setWidth ( window.innerWidth  );
-        this.canvas.setHeight( window.innerHeight );
-        this.canvas.imageSmoothingEnabled = false;
-
-        this.shapeDrawer = new ShapeDrawer(wickEditor, this);
-        this.guiElements = new FabricGUIElements(wickEditor, this);
-        this.wickElements = new FabricWickElements(wickEditor, this);
-        this.symbolBorders = new FabricSymbolBorders(wickEditor, this);
+        this.canvas.setWidth(window.innerWidth);
+        this.canvas.setHeight(window.innerHeight);
 
         this.panning = false;
-
         this.onionSkinsDirty = false;
+
+        this.shapeDrawer   = new FabricShapeDrawer(wickEditor, this);
+        this.paperElements = new FabricPaperElements(wickEditor, this);
+        this.guiElements   = new FabricGUIElements(wickEditor, this);
+        this.wickElements  = new FabricWickElements(wickEditor, this);
+        this.symbolBorders = new FabricSymbolBorders(wickEditor, this);
         
         this.tools = {
             "cursor"           : new Tools.Cursor(wickEditor),
@@ -111,9 +110,10 @@ var FabricInterface = function (wickEditor) {
             that.canvas.selection = false;
         }
 
-        // Update wickobjects in fabric canvas
+        // Update elements in fabric canvas
         this.wickElements.update();
         that.guiElements.update();
+        this.paperElements.update();
 
         // Render canvas
         this.canvas.renderAll();
