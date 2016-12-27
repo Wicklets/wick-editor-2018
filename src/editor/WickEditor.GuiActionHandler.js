@@ -655,7 +655,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('useTools.BackgroundRemove',
         [], 
-        ['backgroundRemoveToolButton'], 
+        ['backgroundremoveToolButton'], 
         {}, 
         function(args) {
             wickEditor.fabric.changeTool(wickEditor.fabric.tools.backgroundremove);
