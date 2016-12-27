@@ -44,7 +44,7 @@ WickFrame.prototype.shrink = function(length) {
 	// determine and return the actual change in frames. 
 	if (this.frameLength <= 0) {
 		this.frameLength = 1;
-		return originalLength - 1; 
+		return originalLength - 1;
 	} else {
 		return length; 
 	}
@@ -63,5 +63,29 @@ WickFrame.prototype.copy = function () {
 	})
 
 	return copiedFrame;
+
+}
+
+WickFrame.prototype.encodeStrings = function () {
+
+	if(this.wickScripts) {
+        for (var key in this.wickScripts) {
+            this.wickScripts[key] = WickProject.Compressor.encodeString(this.wickScripts[key]);
+        }
+    }
+
+    this.pathData = WickProject.Compressor.encodeString(this.wickScripts[key]);
+
+}
+
+WickFrame.prototype.decodeStrings = function () {
+
+	if(this.wickScripts) {
+        for (var key in this.wickScripts) {
+            this.wickScripts[key] = WickProject.Compressor.decodeString(this.wickScripts[key]);
+        }
+    }
+
+    this.pathData = WickProject.Compressor.decodeString(this.wickScripts[key]);
 
 }

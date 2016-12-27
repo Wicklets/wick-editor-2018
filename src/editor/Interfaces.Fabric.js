@@ -30,20 +30,20 @@ var FabricInterface = function (wickEditor) {
         this.onionSkinsDirty = false;
         
         this.tools = {
-            "cursor" : new CursorTool(wickEditor),
-            "paintbrush" : new PaintbrushTool(wickEditor),
-            "fillbucket" : new FillBucketTool(wickEditor),
-            "rectangle" : new RectangleTool(wickEditor),
-            "ellipse" : new EllipseTool(wickEditor),
-            "dropper" : new DropperTool(wickEditor),
-            "text" : new TextTool(wickEditor),
-            "zoom" : new ZoomTool(wickEditor),
-            "pan" : new PanTool(wickEditor),
-            "backgroundremove" : new BackgroundRemoveTool(wickEditor),
-            "crop" : new CropTool(wickEditor),
+            "cursor"           : new Tools.Cursor(wickEditor),
+            "paintbrush"       : new Tools.Paintbrush(wickEditor),
+            "fillbucket"       : new Tools.FillBucket(wickEditor),
+            "rectangle"        : new Tools.Rectangle(wickEditor),
+            "ellipse"          : new Tools.Ellipse(wickEditor),
+            "dropper"          : new Tools.Dropper(wickEditor),
+            "text"             : new Tools.Text(wickEditor),
+            "zoom"             : new Tools.Zoom(wickEditor),
+            "pan"              : new Tools.Pan(wickEditor),
+            "backgroundremove" : new Tools.BackgroundRemove(wickEditor),
+            "crop"             : new Tools.Crop(wickEditor),
         }
 
-        this.currentTool = this.tools['cursor'];
+        this.currentTool = this.tools.cursor;
         this.lastTool = this.currentTool;
 
     // Update the scripting GUI/properties box when the selected object changes
@@ -96,7 +96,7 @@ var FabricInterface = function (wickEditor) {
         that.updateCursor();
 
         // Set drawing mode
-        if(that.currentTool instanceof PaintbrushTool) {
+        if(that.currentTool instanceof Tools.Paintbrush) {
             this.canvas.isDrawingMode = true;
             this.canvas.freeDrawingBrush.width = that.currentTool.brushSize;
             this.canvas.freeDrawingBrush.color = that.currentTool.color;
@@ -105,7 +105,7 @@ var FabricInterface = function (wickEditor) {
         }
 
         // Disable selection
-        if(that.currentTool instanceof CursorTool) {
+        if(that.currentTool instanceof Tools.Cursor) {
             that.canvas.selection = true;
         } else {
             that.canvas.selection = false;

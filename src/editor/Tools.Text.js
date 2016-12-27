@@ -1,6 +1,8 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-var TextTool = function (wickEditor) {
+if(!window.Tools) Tools = {};
+
+Tools.Text = function (wickEditor) {
 
     var that = this;
 
@@ -11,7 +13,7 @@ var TextTool = function (wickEditor) {
     }
 
     canvas.on('mouse:down', function (e) {
-    	if(wickEditor.fabric.currentTool instanceof TextTool) {
+    	if(wickEditor.fabric.currentTool instanceof Tools.Text) {
 	    	addText();
             wickEditor.fabric.currentTool = wickEditor.fabric.tools.cursor;
             wickEditor.syncInterfaces();

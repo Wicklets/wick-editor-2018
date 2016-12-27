@@ -339,7 +339,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 fabricObj.evented = false;
             }
 
-            if (!(fabricInterface.currentTool instanceof CursorTool)) {
+            if (!(fabricInterface.currentTool instanceof Tools.Cursor)) {
                 fabricObj.hasControls = false;
                 fabricObj.selectable = false;
                 fabricObj.evented = false;

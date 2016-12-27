@@ -1,6 +1,8 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-var DropperTool = function (wickEditor) {
+if(!window.Tools) Tools = {};
+
+Tools.Dropper = function (wickEditor) {
 
     var that = this;
 
@@ -9,7 +11,7 @@ var DropperTool = function (wickEditor) {
     }
 
     wickEditor.fabric.canvas.on('mouse:down', function (e) {
-        if(wickEditor.fabric.currentTool instanceof DropperTool) {
+        if(wickEditor.fabric.currentTool instanceof Tools.Dropper) {
             
             var image = new Image();
             image.onload = function () {

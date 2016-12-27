@@ -11,6 +11,7 @@ var PaperInterface = function (wickEditor) {
         // Create the canvas to be used with paper.js and init the paper.js instance.
 		paperCanvas = document.createElement('canvas');
         paperCanvas.className = 'paperCanvas';
+        paperCanvas.style.backgroundColor = "#FFDDDD";
 		paper.setup(paperCanvas);
 
         // (Debug) Put the canvas somewhere we can see it
@@ -21,8 +22,8 @@ var PaperInterface = function (wickEditor) {
         SVGDataDirty = true;
 	}
 
-    this.addSVG = function (svgString) {
-        addSVGToCanvas(svgString);
+    this.addSVG = function (svgString, offset) {
+        addSVGToCanvas(svgString, offset);
     }
 
     this.syncWithEditorState = function () {
@@ -54,11 +55,14 @@ var PaperInterface = function (wickEditor) {
         if(currentFrame) currentFrame.pathData = paper.project.exportSVG({ asString: true });
     }
 
-    var addSVGToCanvas = function (svgString) {
+    var addSVGToCanvas = function (svgString, offset) {
         var xmlString = svgString
           , parser = new DOMParser()
           , doc = parser.parseFromString(xmlString, "text/xml");
         var paperGroup = paper.project.importSVG(doc);
+
+        if(offset)
+            paperGroup.position = new paper.Point(offset.x, offset.y);
     }
 
     /*

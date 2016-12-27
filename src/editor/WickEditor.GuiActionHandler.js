@@ -181,12 +181,12 @@ var GuiActionHandler = function (wickEditor) {
 
     // SPACE
     // Open Pan Tool
-    registerAction('openPanTool',
+    registerAction('openTools.Pan',
         ['SPACE'], 
         [], 
         {}, 
         function(args) {
-            if(!(wickEditor.fabric.currentTool instanceof PanTool)) {
+            if(!(wickEditor.fabric.currentTool instanceof Tools.Pan)) {
                 wickEditor.fabric.lastTool = wickEditor.fabric.currentTool;
                 wickEditor.fabric.currentTool = wickEditor.fabric.tools.pan;
                 wickEditor.syncInterfaces();
@@ -573,7 +573,7 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.project.saveInLocalStorage();
         });
 
-    registerAction('useCursorTool',
+    registerAction('useTools.Cursor',
         ['C'], 
         ['cursorToolButton'], 
         {}, 
@@ -581,7 +581,7 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.fabric.changeTool(wickEditor.fabric.tools.cursor);
         });
 
-    registerAction('usePaintbrushTool',
+    registerAction('useTools.Paintbrush',
         ['B'], 
         ['paintbrushToolButton'], 
         {}, 
@@ -589,15 +589,15 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.fabric.changeTool(wickEditor.fabric.tools.paintbrush);
         });
 
-    registerAction('useFillBucketTool',
+    registerAction('useTools.FillBucket',
         ['F'], 
-        ['fillbucketToolButton'], 
+        ['fillBucketToolButton'], 
         {}, 
         function(args) {
             wickEditor.fabric.changeTool(wickEditor.fabric.tools.fillbucket);
         });
 
-    registerAction('useRectangleTool',
+    registerAction('useTools.Rectangle',
         ['R'], 
         ['rectangleToolButton'], 
         {}, 
@@ -605,7 +605,7 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.fabric.changeTool(wickEditor.fabric.tools.rectangle);
         });
 
-    registerAction('useEllipseTool',
+    registerAction('useTools.Ellipse',
         ['E'], 
         ['ellipseToolButton'], 
         {}, 
@@ -613,7 +613,7 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.fabric.changeTool(wickEditor.fabric.tools.ellipse);
         });
 
-    registerAction('useDropperTool',
+    registerAction('useTools.Dropper',
         ['D'], 
         ['dropperToolButton'], 
         {}, 
@@ -621,7 +621,7 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.fabric.changeTool(wickEditor.fabric.tools.dropper);
         });
 
-    registerAction('useTextTool',
+    registerAction('useTools.Text',
         ['T'], 
         ['textToolButton'], 
         {}, 
@@ -629,7 +629,7 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.fabric.changeTool(wickEditor.fabric.tools.text);
         });
 
-    registerAction('useZoomTool',
+    registerAction('useTools.Zoom',
         ['Z'], 
         ['zoomToolButton'], 
         {}, 
@@ -637,7 +637,7 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.fabric.changeTool(wickEditor.fabric.tools.zoom);
         });
 
-    registerAction('usePanTool',
+    registerAction('useTools.Pan',
         ['P'], 
         ['panToolButton'], 
         {}, 
@@ -645,7 +645,7 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.fabric.changeTool(wickEditor.fabric.tools.pan);
         });
 
-    registerAction('useCropTool',
+    registerAction('useTools.Crop',
         [], 
         ['cropToolButton'], 
         {}, 
@@ -653,9 +653,9 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.fabric.changeTool(wickEditor.fabric.tools.crop);
         });
 
-    registerAction('useBackgroundRemoveTool',
+    registerAction('useTools.BackgroundRemove',
         [], 
-        ['backgroundremoveToolButton'], 
+        ['backgroundRemoveToolButton'], 
         {}, 
         function(args) {
             wickEditor.fabric.changeTool(wickEditor.fabric.tools.backgroundremove);

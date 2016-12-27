@@ -1,6 +1,8 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-var CropTool = function (wickEditor) {
+if(!window.Tools) Tools = {};
+
+Tools.Crop = function (wickEditor) {
 
     var that = this;
     var fabricInterface = wickEditor.fabric;
@@ -11,7 +13,7 @@ var CropTool = function (wickEditor) {
     }
 
     fabricInterface.canvas.on('mouse:down', function (e) {
-        if(!(fabricInterface.currentTool instanceof CropTool)) return;
+        if(!(fabricInterface.currentTool instanceof Tools.Crop)) return;
 
         fabricInterface.shapeDrawer.startDrawingShape('rectangle', e.e.offsetX, e.e.offsetY, that.cropWithShape, {crop:true});
     });

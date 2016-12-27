@@ -1,6 +1,8 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-var FillBucketTool = function (wickEditor) {
+if(!window.Tools) Tools = {};
+
+Tools.FillBucket = function (wickEditor) {
 
     var that = this;
 
@@ -12,7 +14,7 @@ var FillBucketTool = function (wickEditor) {
 
     canvas.on('mouse:down', function (e) {
         if(e.e.button != 0) return;
-        if(!(wickEditor.fabric.currentTool instanceof FillBucketTool)) return;
+        if(!(wickEditor.fabric.currentTool instanceof Tools.FillBucket)) return;
 
         var onscreenObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
         VectorToolUtils.updatePaperDataOnVectorWickObjects(onscreenObjects);

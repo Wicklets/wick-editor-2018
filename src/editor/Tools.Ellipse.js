@@ -1,6 +1,8 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-var EllipseTool = function (wickEditor) {
+if(!window.Tools) Tools = {};
+
+Tools.Ellipse = function (wickEditor) {
 
     var that = this;
     var fabricInterface = wickEditor.fabric;
@@ -10,7 +12,7 @@ var EllipseTool = function (wickEditor) {
     };
 
     fabricInterface.canvas.on('mouse:down', function (e) {
-        if(!(fabricInterface.currentTool instanceof EllipseTool)) return;
+        if(!(fabricInterface.currentTool instanceof Tools.Ellipse)) return;
 
         fabricInterface.shapeDrawer.startDrawingShape('ellipse', e.e.offsetX, e.e.offsetY, that.createWickObjectFromShape);
     });
