@@ -35,6 +35,9 @@ var WickPlayer = (function () {
 
     wickPlayer.runProject = function(projectJSON) {
 
+        // Initialize global Random var
+        window.random = new Random();
+
         stopDrawLoop = false;
 
         // Check if we're on a mobile device or not
