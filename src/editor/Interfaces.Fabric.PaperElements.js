@@ -4,7 +4,7 @@ var FabricPaperElements = function (wickEditor, fabricInterface) {
 
     var that = this;
 
-    var paperObjIDsInCanvas = [];
+    var paperObjsInCanvas = [];
 
     this.update = function () {
 
@@ -20,7 +20,7 @@ var FabricPaperElements = function (wickEditor, fabricInterface) {
 
             if(allPaths.indexOf(fabricObj.paperObjectReference) == -1) {
                 removeTheseObjs.push(fabricObj);
-                paperObjIDsInCanvas[fabricObj.paperObjectReference.id];
+                paperObjsInCanvas[fabricObj.paperObjectReference.id] = null;
             }
         });
         removeTheseObjs.forEach(function (fabricObj) {
@@ -29,14 +29,15 @@ var FabricPaperElements = function (wickEditor, fabricInterface) {
 
         // Add new paths to the fabric canvas from paper.js and update existing paths
         allPaths.forEach(function (path) {
-            if(!paperObjIDsInCanvas[path.id]) {
-                paperObjIDsInCanvas[path.id] = true;
+            if(!paperObjsInCanvas[path.id]) {
                 createFabricObjectFromPaperObject(path, function (fabricObj) {
+                    paperObjsInCanvas[path.id] = fabricObj;
                     fabricInterface.canvas.add(fabricObj);
                     fabricInterface.canvas.renderAll();
                 });
+            } else{
+                updateFabObj(paperObjsInCanvas[path.id], path);
             }
-
         });
 
     }
@@ -86,7 +87,9 @@ var FabricPaperElements = function (wickEditor, fabricInterface) {
     }
 
     var updateFabObj = function (fabricObj, paperObj, activeObjects) {
-
+        /*fabricObj.left = paperObj.position.x;
+        fabricObj.top = paperObj.position.y;
+        fabricObj.setCoords();*/
     }
 
 }

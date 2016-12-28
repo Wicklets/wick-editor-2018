@@ -245,6 +245,19 @@ var FabricInterface = function (wickEditor) {
         return foundFabricObject;
     }
 
+    this.getObjectByPaperObjectRef = function (paperObjectRef) {
+        var foundFabricObject = null;
+
+        this.canvas.forEachObject(function(fabricObject) {
+            if(foundFabricObject) return;
+            if(fabricObject.paperObjectReference === paperObjectRef) {
+                foundFabricObject = fabricObject;
+            }
+        });
+
+        return foundFabricObject;
+    }
+
     this.getBoundingBoxOfObjects = function (ids) {
         var group = new fabric.Group([], {
             originX: 'left',
@@ -424,8 +437,10 @@ var FabricInterface = function (wickEditor) {
         // For each modified fabric objects (get them by wickobject):
         //    Add new state of that fabric object to modified states
         ids.forEach(function (id) {
+            if(!id) return;
             var fabricObj = that.getObjectByWickObjectID(id);
             var wickObj = wickEditor.project.getObjectByID(id);
+            if(!wickObj) return;
             var insideSymbolReposition = {
                 x: wickObj.x-wickObj.getAbsolutePosition().x,
                 y: wickObj.y-wickObj.getAbsolutePosition().y 
@@ -461,6 +476,15 @@ var FabricInterface = function (wickEditor) {
         });
     }
 
+    this.modifyPaths = function (paths) {
+        paths.forEach(function (path) {
+            var fabricObj = that.getObjectByPaperObjectRef(path);
+            if(!fabricObj) return;
+            path.position.x = fabricObj.left + fabricObj.width/2;
+            path.position.y = fabricObj.top + fabricObj.height/2;
+        });
+    }
+
     that.modifyChangedObjects = function (e) {
         if(that.getObjectByWickObjectID(e.target.wickObjectID)) {
 
@@ -478,18 +502,23 @@ var FabricInterface = function (wickEditor) {
 
             // Get ids of all selected objects
             var ids = [];
+            var paths = [];
             if(e.target.type === "group" && !e.target.wickObjectID) {
                 // Selection is a group of objects all selected, not a symbol
                 var objects = e.target.getObjects();
                 objects.forEach(function (obj) {
-                    ids.push(obj.wickObjectID);
+                    if(obj.wickObjectID) ids.push(obj.wickObjectID);
+                    if(obj.paperObjectReference) paths.push(obj.paperObjectReference);
                 });
             } else {
                 // Only one object selected
-                ids = [e.target.wickObjectID];
+                if(e.target.wickObjectID) ids = [e.target.wickObjectID];
+                if(e.target.paperObjectReference) paths = [e.target.paperObjectReference];
+                
             }
 
             that.modifyObjects(ids);
+            that.modifyPaths(paths);
 
             // Reselect everything
             that.selectByIDs(ids);
