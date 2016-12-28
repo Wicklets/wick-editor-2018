@@ -179,6 +179,8 @@ WickProject.prototype.getAsJSON = function (callback, args) {
 
     var that = this;
 
+    wickEditor.paper.applyChangesToFrame();
+
     // Encode scripts/text to avoid JSON format problems
     that.rootObject.encodeStrings();
     

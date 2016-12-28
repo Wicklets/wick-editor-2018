@@ -480,8 +480,8 @@ var FabricInterface = function (wickEditor) {
         paths.forEach(function (path) {
             var fabricObj = that.getObjectByPaperObjectRef(path);
             if(!fabricObj) return;
-            path.position.x = fabricObj.left + fabricObj.width/2;
-            path.position.y = fabricObj.top + fabricObj.height/2;
+            path.position.x = fabricObj.left + fabricObj.width /2;
+            path.position.y = fabricObj.top  + fabricObj.height/2;
         });
     }
 

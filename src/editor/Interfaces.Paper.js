@@ -73,7 +73,6 @@ var PaperInterface = function (wickEditor) {
     }
 
     this.applyChangesToFrame = function () {
-        console.error("if you dont see this message, it's broken (call applyChangesToFrame before you JSONify the project ya dummy)")
         if(currentFrame) currentFrame.pathData = paper.project.activeLayer.exportSVG({ asString: true });
     }
 
