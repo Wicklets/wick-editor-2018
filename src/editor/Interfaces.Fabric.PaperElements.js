@@ -35,7 +35,7 @@ var FabricPaperElements = function (wickEditor, fabricInterface) {
                     fabricInterface.canvas.add(fabricObj);
                     fabricInterface.canvas.renderAll();
                 });
-            } else{
+            } else {
                 updateFabObj(paperObjsInCanvas[path.id], path);
             }
         });

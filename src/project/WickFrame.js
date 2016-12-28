@@ -74,7 +74,7 @@ WickFrame.prototype.encodeStrings = function () {
         }
     }
 
-    this.pathData = WickProject.Compressor.encodeString(this.wickScripts[key]);
+    this.pathData = WickProject.Compressor.encodeString(this.pathData);
 
 }
 
@@ -86,6 +86,6 @@ WickFrame.prototype.decodeStrings = function () {
         }
     }
 
-    this.pathData = WickProject.Compressor.decodeString(this.wickScripts[key]);
+    this.pathData = WickProject.Compressor.decodeString(this.pathData);
 
 }
