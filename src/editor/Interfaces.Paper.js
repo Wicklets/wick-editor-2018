@@ -7,11 +7,17 @@ var PaperInterface = function (wickEditor) {
     var currentFrame;
     var SVGDataDirty;
 
+    var ready = false;
+
     // Create the canvas to be used with paper.js and init the paper.js instance.
     paperCanvas = document.createElement('canvas');
     paperCanvas.className = 'paperCanvas';
     paperCanvas.style.backgroundColor = "#FFDDDD";
+    paperCanvas.style.width  = (wickEditor.project.resolution.x/3)+'px';
+    paperCanvas.style.height = (wickEditor.project.resolution.y/3)+'px';
     paper.setup(paperCanvas);
+    paper.view.viewSize.width  = wickEditor.project.resolution.x;
+    paper.view.viewSize.height = wickEditor.project.resolution.y;
 
     // (Debug) Put the canvas somewhere we can see it
     if(localStorage.pathDebug === "1") document.body.appendChild(paperCanvas);
@@ -20,6 +26,9 @@ var PaperInterface = function (wickEditor) {
         // Set initial frame to load SVG data from
         currentFrame = wickEditor.project.getCurrentObject().getCurrentFrame();
         SVGDataDirty = true;
+        ready = true;
+
+        this.syncWithEditorState()
     }
 
     this.addSVG = function (svgString, offset) {
@@ -29,7 +38,9 @@ var PaperInterface = function (wickEditor) {
     this.getAllSVGs = function () {
         var allSVGs = [];
 
+        console.log("children:")
         paper.project.activeLayer.children.forEach(function (child) {
+            console.log(child)
             allSVGs.push(child);
         });
 
@@ -37,12 +48,13 @@ var PaperInterface = function (wickEditor) {
     }
 
     this.syncWithEditorState = function () {
+        if(!ready) return;
         if(!paper.project) return; // sync may get called before paper.js is ready
 
         var newFrame = wickEditor.project.getCurrentObject().getCurrentFrame();
         if(newFrame !== currentFrame) {
             // Set SVGData of currentFrame to svg data from paper.js
-            if(currentFrame) currentFrame.pathData = paper.project.exportSVG({ asString: true });
+            if(currentFrame) currentFrame.pathData = paper.project.activeLayer.exportSVG({ asString: true });
 
             SVGDataDirty = true;
         }
@@ -56,13 +68,25 @@ var PaperInterface = function (wickEditor) {
         // currentFrame may be null if the playhead isn't over a frame
         if (!currentFrame) return;
 
-        addSVGToCanvas(currentFrame.pathData);
+        addSVGGroupdToCanvas(currentFrame.pathData);
         SVGDataDirty = false;
     }
 
     this.applyChangesToFrame = function () {
         console.error("if you dont see this message, it's broken (call applyChangesToFrame before you JSONify the project ya dummy)")
-        if(currentFrame) currentFrame.pathData = paper.project.exportSVG({ asString: true });
+        if(currentFrame) currentFrame.pathData = paper.project.activeLayer.exportSVG({ asString: true });
+    }
+
+    var addSVGGroupdToCanvas = function (svgString) {
+        if(!svgString) return;
+
+        var xmlString = svgString
+          , parser = new DOMParser()
+          , doc = parser.parseFromString(xmlString, "text/xml");
+        var paperGroup = paper.project.importSVG(doc);
+        
+        paperGroup.parent.insertChildren(paperGroup.index,  paperGroup.removeChildren());
+        paperGroup.remove();
     }
 
     var addSVGToCanvas = function (svgString, offset) {
