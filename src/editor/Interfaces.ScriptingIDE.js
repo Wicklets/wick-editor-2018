@@ -89,6 +89,7 @@ var ScriptingIDEInterface = function (wickEditor) {
     this.syncWithEditorState = function () {
         if(this.open) {
             $("#scriptingGUI").css('display', 'block');
+            $(".ace_text-input").focus();
 
             this.aceEditor.resize();
             if(maximized) {

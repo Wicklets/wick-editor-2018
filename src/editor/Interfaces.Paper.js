@@ -38,9 +38,7 @@ var PaperInterface = function (wickEditor) {
     this.getAllSVGs = function () {
         var allSVGs = [];
 
-        console.log("children:")
         paper.project.activeLayer.children.forEach(function (child) {
-            console.log(child)
             allSVGs.push(child);
         });
 

@@ -45,6 +45,7 @@ var FabricPaperElements = function (wickEditor, fabricInterface) {
     var createFabricObjectFromPaperObject = function (paperObj, callback) {
         fabric.loadSVGFromString(paperObj.exportSVG({asString:true}), function(objects, options) {
             var pathFabricObj = objects[0];
+            pathFabricObj.perPixelTargetFind = true;
 
             pathFabricObj.paperObjectReference = paperObj;
 
