@@ -24,7 +24,7 @@ var PaperInterface = function (wickEditor) {
 
     this.setup = function () {
         // Set initial frame to load SVG data from
-        currentFrame = wickEditor.project.getCurrentObject().getCurrentFrame();
+        currentFrame = wickEditor.project.currentObject.getCurrentFrame();
         SVGDataDirty = true;
         ready = true;
 
@@ -49,7 +49,7 @@ var PaperInterface = function (wickEditor) {
         if(!ready) return;
         if(!paper.project) return; // sync may get called before paper.js is ready
 
-        var newFrame = wickEditor.project.getCurrentObject().getCurrentFrame();
+        var newFrame = wickEditor.project.currentObject.getCurrentFrame();
         if(newFrame !== currentFrame) {
             // Set SVGData of currentFrame to svg data from paper.js
             if(currentFrame) currentFrame.pathData = paper.project.activeLayer.exportSVG({ asString: true });
@@ -66,7 +66,7 @@ var PaperInterface = function (wickEditor) {
         // currentFrame may be null if the playhead isn't over a frame
         if (!currentFrame) return;
 
-        addSVGGroupdToCanvas(currentFrame.pathData);
+        addSVGGroupToCanvas(currentFrame.pathData);
         SVGDataDirty = false;
     }
 
@@ -74,7 +74,7 @@ var PaperInterface = function (wickEditor) {
         if(currentFrame) currentFrame.pathData = paper.project.activeLayer.exportSVG({ asString: true });
     }
 
-    var addSVGGroupdToCanvas = function (svgString) {
+    var addSVGGroupToCanvas = function (svgString) {
         if(!svgString) return;
 
         var xmlString = svgString

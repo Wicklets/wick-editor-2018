@@ -4,7 +4,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
 	var that = this;
 
-    var objectIDsInCanvas = [];
+    var objectsInCanvas = [];
 
     this.update = function () {
         var enablePerfTests = false;
@@ -13,21 +13,15 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         if(enablePerfTests) startTiming();
         if(enablePerfTests) stopTiming("init");
 
-        var currentObject = wickEditor.project.getCurrentObject();
+        var currentObject = wickEditor.project.currentObject;
 
         // Make sure everything is deselected, mulitple selected objects cause positioning problems.
-        var selectedObjectIDs = fabricInterface.getSelectedObjectIDs();
-        if(selectedObjectIDs.length > 1) fabricInterface.deselectAll(true);
+        var selectedObjects = fabricInterface.getSelectedWickObjects();
+        if(selectedObjects.length > 1) fabricInterface.deselectAll(true);
 
         var activeObjects = currentObject.getAllActiveChildObjects();
         var siblingObjects = currentObject.getAllInactiveSiblings();
-        //var nearbyObjects = wickEditor.project.onionSkinning ? currentObject.getNearbyObjects(1,0) : [];
         var allObjects = siblingObjects.concat(activeObjects);
-
-        var allObjectsIDs = [];
-        allObjects.forEach(function(obj) { allObjectsIDs.push(obj.id) });
-
-        //fabricInterface.guiElements.setInactiveFramePosition(2);
 
         var refreshZIndices = function (force) {
             var frameZIndex = siblingObjects.length
@@ -57,17 +51,17 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         // Remove objects that don't exist anymore or need to be regenerated
         var removeTheseObjs = [];
         fabricInterface.canvas._objects.forEach(function(fabricObj) {
-            if(!fabricObj || !fabricObj.wickObjectID) return;
+            if(!fabricObj || !fabricObj.wickObjectRef) return;
 
-            var wickObj = wickEditor.project.rootObject.getChildByID(fabricObj.wickObjectID);
+            var wickObj = fabricObj.wickObjectRef;
 
-            if(allObjectsIDs.indexOf(fabricObj.wickObjectID) == -1 || (wickObj && wickObj.forceFabricCanvasRegen) || (wickObj && wickObj.imageDirty)) {
+            if(allObjects.indexOf(fabricObj.wickObjectRef) == -1 || (wickObj && wickObj.forceFabricCanvasRegen) || (wickObj && wickObj.imageDirty)) {
                 if(wickObj) {
                     wickObj.imageDirty = false;
                     wickObj.forceFabricCanvasRegen = false;
                     wickObj.cachedFabricObject = null;
                 }
-                objectIDsInCanvas[fabricObj.wickObjectID] = false;
+                objectsInCanvas.splice(objectsInCanvas.indexOf(fabricObj.wickObjectRef), 1);
                 // Object doesn't exist in the current object anymore, remove it's fabric object.
                 removeTheseObjs.push(fabricObj);
             }
@@ -89,11 +83,11 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
         // Add new objects and update existing objects
         allObjects.forEach(function (child) {
-            if(objectIDsInCanvas[child.id]) {
+            if(objectsInCanvas.indexOf(child) !== -1) {
                 // Update existing object
                 fabricInterface.canvas.forEachObject(function(fabricObj) {
                     if(fabricObj.group) return;
-                    if(fabricObj.wickObjectID === child.id) {
+                    if(fabricObj.wickObjectRef === child) {
                         updateFabObj(fabricObj, child, activeObjects);
                         //refreshZIndices();
                     }
@@ -101,7 +95,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 
             } else {
                 // Add new object
-                objectIDsInCanvas[child.id] = true;
+                objectsInCanvas.push(child);
                 objectsToAdd.push(child);
             }
         });
@@ -110,8 +104,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         objectsToAdd.forEach(function (objectToAdd) {
             createFabricObjectFromWickObject(objectToAdd, function (fabricObj) {
 
-                if(wickEditor.project.getCurrentObject().getAllActiveChildObjects().indexOf(objectToAdd) === -1) {
-                    objectIDsInCanvas[objectToAdd.id] = false;
+                if(wickEditor.project.currentObject.getAllActiveChildObjects().indexOf(objectToAdd) === -1) {
+                    objectsInCanvas.splice(objectsInCanvas.indexOf(objectToAdd), 1)
                     return;             
                 }
 
@@ -119,12 +113,12 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
                 // The object may have been deleted while we were generating the fabric object. 
                 // Make sure we don't add it if that happened.
-                if(!wickEditor.project.rootObject.getChildByID(objectToAdd.id)) return;
+                if(wickEditor.project.currentObject.getAllActiveChildObjects().indexOf(objectToAdd) === -1) return;
 
                 fabricObj.originX = 'center';
                 fabricObj.originY = 'center';
 
-                fabricObj.wickObjectID = objectToAdd.id;
+                fabricObj.wickObjectRef = objectToAdd;
                 fabricInterface.canvas.add(fabricObj);
                 updateFabObj(fabricObj, objectToAdd, activeObjects);
 
@@ -134,12 +128,12 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 if(objectToAdd.selectOnAddToFabric) {
                     if(!selectionChanged) {
                         selectionChanged = true;
-                        selectedObjectIDs = [];
+                        selectedObjects = [];
                     }
-                    selectedObjectIDs.push(objectToAdd.id);
+                    selectedObjects.push(objectToAdd);
                     objectToAdd.selectOnAddToFabric = false;
                     fabricInterface.deselectAll();
-                    fabricInterface.selectByIDs(selectedObjectIDs);
+                    fabricInterface.selectObjects(selectedObjects);
                 }
 
                 numObjectsAdded++;
@@ -160,7 +154,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         if(enablePerfTests) stopTiming("add & update objects");
 
         // Reselect objects that were selected before sync
-        if(selectedObjectIDs.length > 0) fabricInterface.selectByIDs(selectedObjectIDs);
+        if(selectedObjects.length > 0) fabricInterface.selectObjects(selectedObjects);
 
         if(enablePerfTests) stopTiming("reselect");
     }

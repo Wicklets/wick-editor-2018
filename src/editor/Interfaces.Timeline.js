@@ -47,7 +47,7 @@ var TimelineInterface = function (wickEditor) {
 
     this.syncWithEditorState = function () {
 
-        var currentObject = wickEditor.project.getCurrentObject();
+        var currentObject = wickEditor.project.currentObject;
         var currentFrame = currentObject.getCurrentFrame();
 
         var playheadPosition = currentObject.playheadPosition;
@@ -83,7 +83,7 @@ var TimelineInterface = function (wickEditor) {
         ctx.fillStyle = "#EEEEEE";
         ctx.fillRect(0,0,canvas.width,canvas.height);
 
-        var currentObject = wickEditor.project.getCurrentObject();
+        var currentObject = wickEditor.project.currentObject;
 
     // Update canvas size
 
@@ -207,7 +207,7 @@ var TimelineInterface = function (wickEditor) {
     }
 
     this.updatePlayheadPosition = function (x,y) {
-        var currentObject = wickEditor.project.getCurrentObject();
+        var currentObject = wickEditor.project.currentObject;
 
         playheadX = Math.round((x + scrollbarX*5)/frameWidth-0.5)*frameWidth+frameWidth/2;
 

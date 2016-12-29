@@ -133,15 +133,15 @@ var ScriptingIDEInterface = function (wickEditor) {
         }
     }
 
-    this.showError = function (id, scriptType, lineNumber, errorMessage) {
-        wickEditor.project.jumpToObject(id);
+    this.showError = function (object, scriptType, lineNumber, errorMessage) {
+        wickEditor.project.jumpToObject(object);
         wickEditor.syncInterfaces();
         setTimeout(function () {
             wickEditor.fabric.selectByIDs([id]);
-            that.editScriptsOfObject(wickEditor.project.getObjectByID(id));
+            that.editScriptsOfObject(object);
             wickEditor.scriptingide.currentScript = scriptType;
 
-            wickEditor.project.rootObject.getChildByID(id).causedAnException = true;
+            object.causedAnException = true;
 
             document.getElementById("errorMessage").innerHTML = errorMessage;
             if(lineNumber) document.getElementById("errorMessage").innerHTML += ", line " + lineNumber;

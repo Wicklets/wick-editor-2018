@@ -28,7 +28,7 @@ var WickWebAudioPlayer = function (project) {
                     console.error("failed to decode:", "buffer null");
                     return;
                 }
-                audioBuffers[wickObj.id] = buffer;
+                audioBuffers[wickObj.uuid] = buffer;
                 //console.log("loaded sound")
             }, function (error) {
                 console.error("failed to decode:", error);
@@ -76,17 +76,17 @@ var WickWebAudioPlayer = function (project) {
 
     var allPlayingSounds = [];
 
-    this.playSound = function (id, loop, volume) {
+    this.playSound = function (uuid, loop, volume) {
         var that = this;
 
         if(!audioContext) return;
 
         if(!project.muted) {
-            var buff = audioBuffers[id];
+            var buff = audioBuffers[uuid];
             if(!buff) {
                 //console.log("sound not loaded.")
                 setTimeout(function () {
-                    that.playSound(id,loop,volume);
+                    that.playSound(uuid,loop,volume);
                 }, 100);
                 return;
             }
@@ -99,14 +99,14 @@ var WickWebAudioPlayer = function (project) {
             gainNode.gain.value = volume;
             source.loop = loop;
             source.start(0);
-            allPlayingSounds.push({source:source, id:id});
+            allPlayingSounds.push({source:source, uuid:uuid});
             //console.log("started...");
         }
     }
 
-    this.stopSound = function (id) {
+    this.stopSound = function (uuid) {
         allPlayingSounds.forEach(function (sound) {
-            if(sound.id === id) {
+            if(sound.uuid === uuid) {
                 sound.source.stop();
             }
         });

@@ -6,6 +6,9 @@ var WickEditor = function () {
 
     var that = this;
 
+    // Init random.js
+    window.random = new Random();
+
     // Friendly console message ~~~
     console.log('%cWelcome to the javascript console! ', 'color: #ff99bb; font-size: 20px; font-weight: bold; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;');
     console.log('%cYou are free to change any of the internal editor stuff from here. Try typing "wickEditor" into the console and have a look around!', 'color: #bb4477; font-size: 12px;');
@@ -40,8 +43,8 @@ var WickEditor = function () {
     this.toolOptions = registerInterface(new ToolOptionsInterface(this));
     this.statusbar = registerInterface(new StatusBarInterface(this));
     this.properties = registerInterface(new PropertiesInterface(this));
-    this.fabric = registerInterface(new FabricInterface(this));
     this.paper = registerInterface(new PaperInterface(this));
+    this.fabric = registerInterface(new FabricInterface(this));
     this.menubar = registerInterface(new MenuBarInterface(this));
 
     interfaces.forEach(function (interface) {

@@ -174,7 +174,7 @@ var WickPlayer = (function () {
     }
 
     wickPlayer.deleteObject = function (wickObj) {
-        //project.getCurrentObject().removeChildByID(wickObj.id);
+        //project.currentObject.removeChildByID(wickObj.id);
         // So for now don't actually delete it, just make it go away somehow cos i'm lazy
         wickObj.deleted = true;
         // JUST GET IT OUTTA HERE I DONT CARE ................. 
@@ -188,11 +188,11 @@ var WickPlayer = (function () {
 
         // Clones go away because they have no original state! :O
         if(wickObject.isClone) {
-            project.getCurrentObject().removeChildByID(wickObject.id);
+            project.currentObject.removeChild(wickObject);
             return;
         }
 
-        var initialStateObject = initialStateProject.getObjectByID(wickObject.id);
+        var initialStateObject = initialStateProject.getObjectByUUID(wickObject.uuid);
         if(!initialStateObject) return;
 
         // TOXXXIC
@@ -207,8 +207,7 @@ var WickPlayer = (function () {
                 }
             }
         }
-
-        if(wickObject.autoplaySound) console.log("justEnteredFrame set to true by resetState")
+        
         wickObject.hoveredOver = false;
         wickObject.justEnteredFrame = true;
         wickObject.onNewFrame = true;
@@ -252,7 +251,7 @@ var WickPlayer = (function () {
         var newProject = WickProject.fromJSON(proj);
 
         // Make sure we are always in the root (the player never 'goes inside' objects like the editor does.)
-        newProject.currentObjectID = newProject.rootObject.id;
+        newProject.currentObject = newProject.rootObject;
         newProject.rootObject.currentLayer = 0;
 
         // Prepare all objects for being played/drawn

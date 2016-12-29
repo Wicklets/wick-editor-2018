@@ -8,8 +8,8 @@ var WickObject = function () {
 
 // Internals
 
-    // Unique ID. Must never change after object is first created.
-    this.id = null;
+    // Unique id
+    this.uuid = random.uuid4();
 
     // Identifier
     this.name = undefined;
@@ -455,7 +455,7 @@ WickObject.prototype.getAllInactiveSiblings = function () {
     var that = this;
     var siblings = [];
     this.parentObject.getAllActiveChildObjects().forEach(function (child) {
-        if(child.id !== that.id) {
+        if(child !== that) {
             siblings.push(child);
         }
     });
@@ -526,35 +526,6 @@ WickObject.prototype.getTotalNumChildren = function () {
     return count;
 }
 
-WickObject.prototype.getChildByID = function (id) {
-
-    if(!this.isSymbol) {
-        if(this.id == id) {
-            return this;
-        } else {
-            return null;
-        }
-    }
-
-    if(this.isSymbol) {
-        if(this.id == id) {
-            return this;
-        }
-    }
-
-    var foundChild = null;
-
-    this.getAllChildObjects().forEach(function(child) {
-        if(child.id == id) {
-            if(!foundChild) foundChild = child;
-        } else {
-            if(!foundChild) foundChild = child.getChildByID(id);
-        }
-    });
-
-    return foundChild;
-}
-
 WickObject.prototype.getAllFrames = function () {
 
     var allFrames = [];
@@ -598,7 +569,7 @@ WickObject.prototype.getLayerWithChild = function (child) {
     return foundLayer;
 }
 
-WickObject.prototype.removeChildByID = function (id) {
+WickObject.prototype.removeChild = function (childToRemove) {
 
     if(!this.isSymbol) {
         return;
@@ -606,34 +577,11 @@ WickObject.prototype.removeChildByID = function (id) {
 
     var that = this;
     this.getAllActiveChildObjects().forEach(function(child) {
-        if(child.id == id) {
+        if(child == childToRemove) {
             var index = that.getCurrentFrame().wickObjects.indexOf(child);
             that.getCurrentFrame().wickObjects.splice(index, 1);
         }
-        child.removeChildByID(id);
     });
-}
-
-/* Used to generate a unique ID for new WickObjects */
-WickObject.prototype.getLargestID = function (id) {
-    if(!this.isSymbol) {
-        return this.id;
-    }
-
-    var largestID = 0;
-
-    if(this.id > largestID) {
-        largestID = this.id;
-    }
-    this.getAllChildObjects().forEach(function(child) {
-        var subLargestID = child.getLargestID();
-
-        if(subLargestID > largestID) {
-            largestID = subLargestID;
-        }
-    });
-
-    return largestID;
 }
 
 /*************************
@@ -641,16 +589,11 @@ WickObject.prototype.getLargestID = function (id) {
 *************************/
 
 WickObject.prototype.regenBoundingBox = function () {
-    /*if (wickEditor.project.getCurrentObject() === this) {
+    /*if (wickEditor.project.currentObject === this) {
         wickEditor.fabric.deselectAll();
         this.bbox = wickEditor.fabric.getBoundingBoxOfAllObjects();
     } else {*/
-        var ids = [];
-        this.getAllChildObjects().forEach(function (child) {
-            ids.push(child.id);
-        });
-        wickEditor.fabric.deselectAll(); // to get correct ungrouped object positions
-        this.bbox = wickEditor.fabric.getBoundingBoxOfObjects(ids);
+        this.bbox = wickEditor.fabric.getBoundingBoxOfObjects(this.getAllChildObjects());
     //}
 }
 
@@ -793,7 +736,7 @@ WickObject.prototype.getBlobImages = function (callback) {
 *************************/
 
 WickObject.JSONReplacer = function(key, value) {
-    var dontJSONVars = ["id","parentObject","causedAnException","paperData","cachedFabricObject"];
+    var dontJSONVars = ["parentObject","causedAnException","paperData","cachedFabricObject"];
 
     if (dontJSONVars.indexOf(key) !== -1) {
         return undefined;
@@ -1322,7 +1265,7 @@ WickObject.prototype.runScript = function (script, scriptType, objectScope) {
             //console.log(e.stack.split("\n")[1].split('<anonymous>:')[1].split(":")[0]);
             //console.log(e.stack.split("\n"))
             if(wickEditor.builtinplayer.running) wickEditor.builtinplayer.stopRunningProject()
-            wickEditor.scriptingide.showError(this.id, scriptType, lineNumber, e);
+            wickEditor.scriptingide.showError(this, scriptType, lineNumber, e);
         } else {
             alert("An exception was thrown while running a WickObject script. See console!");
             console.log(e);
@@ -1779,13 +1722,13 @@ WickObject.prototype.setText = function (text) {
 
 WickObject.prototype.playSound = function (volume) {
 
-    WickPlayer.getAudioPlayer().playSound(this.id, this.loopSound, volume || 1.0);
+    WickPlayer.getAudioPlayer().playSound(this.uuid, this.loopSound, volume || 1.0);
 
 }
 
 WickObject.prototype.stopSound = function () {
 
-    WickPlayer.getAudioPlayer().stopSound(this.id);
+    WickPlayer.getAudioPlayer().stopSound(this.uuid);
 
 }
 

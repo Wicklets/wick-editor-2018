@@ -16,12 +16,12 @@ Tools.FillBucket = function (wickEditor) {
         if(e.e.button != 0) return;
         if(!(wickEditor.fabric.currentTool instanceof Tools.FillBucket)) return;
 
-        var onscreenObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
+        var onscreenObjects = wickEditor.project.currentObject.getAllActiveChildObjects();
         VectorToolUtils.updatePaperDataOnVectorWickObjects(onscreenObjects);
 
         var mouseScreenSpace = wickEditor.fabric.screenToCanvasSpace(e.e.offsetX, e.e.offsetY);
         var mousePoint = new paper.Point(mouseScreenSpace.x, mouseScreenSpace.y);
-        var insideSymbolOffset = wickEditor.project.getCurrentObject().getAbsolutePosition();
+        var insideSymbolOffset = wickEditor.project.currentObject.getAbsolutePosition();
         mousePoint.x -= insideSymbolOffset.x;
         mousePoint.y -= insideSymbolOffset.y;
 
@@ -113,8 +113,8 @@ Tools.FillBucket = function (wickEditor) {
             if(!hole.contains(mousePoint)) return;
 
             var holeWickObj = VectorToolUtils.createSVGWickObject(hole, wickEditor.fabric.tools.paintbrush.color);
-            holeWickObj.x += wickEditor.project.getCurrentObject().getAbsolutePosition().x;
-            holeWickObj.y += wickEditor.project.getCurrentObject().getAbsolutePosition().y;
+            holeWickObj.x += wickEditor.project.currentObject.getAbsolutePosition().x;
+            holeWickObj.y += wickEditor.project.currentObject.getAbsolutePosition().y;
             wickEditor.actionHandler.doAction('addObjects', {
                 wickObjects: [holeWickObj],
                 partOfChain: true

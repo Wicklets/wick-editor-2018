@@ -7,7 +7,7 @@ var WickProject = function () {
     this.createNewRootObject();
 
     // Only used by the editor. Keeps track of current object editor is editing.
-    this.currentObjectID = this.rootObject.id;
+    this.currentObject = this.rootObject;
     this.rootObject.currentFrame = 0;
 
     this.name = "NewProject";
@@ -34,7 +34,6 @@ var WickProject = function () {
 
 WickProject.prototype.createNewRootObject = function () {
     var rootObject = new WickObject();
-    rootObject.id = 0;
     rootObject.isSymbol = true;
     rootObject.isRoot = true;
     rootObject.playheadPosition = 0;
@@ -127,16 +126,17 @@ WickProject.fromJSON = function (rawJSONProject) {
     projectFromJSON.rootObject.generateParentObjectReferences();
 
     // Start at the first from of the root object
-    projectFromJSON.currentObjectID = projectFromJSON.rootObject.id;
+    projectFromJSON.currentObject = projectFromJSON.rootObject;
     projectFromJSON.rootObject.playheadPosition = 0;
     var allObjectsInProject = projectFromJSON.rootObject.getAllChildObjectsRecursive();
-    allObjectsInProject.forEach(function (obj) {
-        obj.playheadPosition = 0;
-    });
 
     // Backwards compatibility for old Wick projects
     allObjectsInProject.push(projectFromJSON.rootObject);
     allObjectsInProject.forEach(function (wickObj) {
+        wickObj.playheadPosition = 0;
+        if(!wickObj.uuid) wickObj.uuid = random.uuid4();
+        wickObj.id = null;
+
         if(!wickObj.isSymbol) return;
 
         wickObj.layers.forEach(function (layer) {
@@ -225,10 +225,10 @@ WickProject.saveProjectJSONInLocalStorage = function (projectJSON) {
     }
 }
 
-WickProject.prototype.getCopyData = function (ids) {
+WickProject.prototype.getCopyData = function (objects) {
     var objectJSONs = [];
-    for(var i = 0; i < ids.length; i++) {
-        objectJSONs.push(wickEditor.project.getObjectByID(ids[i]).getAsJSON());
+    for(var i = 0; i < objects.length; i++) {
+        objectJSONs.push(objects[i].getAsJSON());
     }
     var clipboardObject = {
         /*position: {top  : group.top  + group.height/2,
@@ -244,28 +244,25 @@ WickProject.prototype.getCopyData = function (ids) {
     Access project wickobjects
 *********************************/
 
-WickProject.prototype.regenerateUniqueIDs = function (wickObject) {
-    var that = this;
+WickProject.prototype.getObjectByUUID = function (uuid) {
+    var allObjectsInProject = this.rootObject.getAllChildObjectsRecursive();
+    allObjectsInProject.push(this.rootObject);
 
-    if(!wickObject.id && wickObject.id!=0) {
-        //wickObject.id = this.rootObject.getLargestID() + 1; // Currently broken
-        // This is silly, but the actionhandler freaks out if it has to add an object
-        // right after deleting another (those objects would have the same id.) (pls fix)
-        wickObject.id = new Date().getTime() + this.rootObject.getLargestID();
-    }
-
-    if(wickObject.isSymbol) {
-        wickObject.getAllChildObjects().forEach(function (child) {
-            that.regenerateUniqueIDs(child);
-        });
-    }
+    var foundObj = null;
+    allObjectsInProject.forEach(function (object) {
+        if(foundObj) return;
+        if(object.uuid === uuid) {
+            foundObj = object;
+        }
+    });
+    return foundObj;
 }
 
 WickProject.prototype.addObject = function (wickObject, zIndex) {
 
-    var frame = this.getCurrentObject().getCurrentFrame();
+    var frame = this.currentObject.getCurrentFrame();
 
-    var insideSymbolOffset = this.getCurrentObject().getAbsolutePosition();
+    var insideSymbolOffset = this.currentObject.getAbsolutePosition();
     wickObject.x -= insideSymbolOffset.x;
     wickObject.y -= insideSymbolOffset.y;
     
@@ -275,35 +272,22 @@ WickProject.prototype.addObject = function (wickObject, zIndex) {
         frame.wickObjects.splice(zIndex, 0, wickObject);
     }
 
-    this.regenerateUniqueIDs(this.rootObject);
     this.rootObject.generateParentObjectReferences();
 
 }
 
-WickProject.prototype.getObjectByID = function (id) {
-
-    return this.rootObject.getChildByID(id);
-
-}
-
-WickProject.prototype.getCurrentObject = function () {
-
-    return this.getObjectByID(this.currentObjectID);
-
-}
-
-WickProject.prototype.jumpToObject = function (id) {
+WickProject.prototype.jumpToObject = function (obj) {
 
     var that = this;
 
     this.rootObject.getAllChildObjectsRecursive().forEach(function (child) {
-        if(child.id === id) {
-            that.currentObjectID = child.parentObject.id;
+        if(child === obj) {
+            that.currentObject = child.parentObject;
         }
     });
 
-    var currentObject = this.getCurrentObject();
-    var frameWithChild = currentObject.getFrameWithChild(this.rootObject.getChildByID(id));
+    var currentObject = this.currentObject;
+    var frameWithChild = currentObject.getFrameWithChild(obj);
     var playheadPositionWithChild = currentObject.getPlayheadPositionAtFrame(frameWithChild);
     currentObject.playheadPosition = playheadPositionWithChild;
 

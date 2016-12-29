@@ -72,13 +72,13 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
 
     var onionSkinPast = new fabric.Image();
     onionSkinPast.identifier = "onionSkinPast";
-    onionSkinPast.getFrameFunc = function () { return wickEditor.project.getCurrentObject().getPrevFrame() };
+    onionSkinPast.getFrameFunc = function () { return wickEditor.project.currentObject.getPrevFrame() };
     onionSkinPast.updateGUIState = updateOnionSkinObject;
     addElement(onionSkinPast);
 
     /*var onionSkinNext = new fabric.Image();
     onionSkinNext.identifier = "onionSkinNext";
-    onionSkinNext.getFrameFunc = function () { wickEditor.project.getCurrentObject().getNextFrame() };
+    onionSkinNext.getFrameFunc = function () { wickEditor.project.currentObject.getNextFrame() };
     onionSkinNext.updateGUIState = updateOnionSkinObject;
     addElement(onionSkinNext);*/
 
@@ -98,7 +98,7 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
         inactiveFrame.height = window.innerHeight / zoom;
         inactiveFrame.left = -pan.x / zoom;
         inactiveFrame.top  = -pan.y / zoom;
-        var currentObject = wickEditor.project.getCurrentObject();
+        var currentObject = wickEditor.project.currentObject;
         inactiveFrame.opacity = currentObject.isRoot ? 0.0 : 0.2;
     }
     addElement(inactiveFrame);
@@ -111,13 +111,13 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
         originCrosshair.identifier = "originCrosshair";
 
         originCrosshair.updateGUIState = function () {
-            var currentObject = wickEditor.project.getCurrentObject();
+            var currentObject = wickEditor.project.currentObject;
             originCrosshair.opacity = currentObject.isRoot ? 0.0 : 1.0;
 
             originCrosshair.left = -originCrosshair.width/2;
             originCrosshair.top  = -originCrosshair.height/2;
             
-            var newOriginPos = wickEditor.project.getCurrentObject().getAbsolutePosition();
+            var newOriginPos = wickEditor.project.currentObject.getAbsolutePosition();
             originCrosshair.left += newOriginPos.x;
             originCrosshair.top  += newOriginPos.y;
         }
@@ -147,7 +147,7 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
 
         // Reposition buttons
 
-        if(!wickEditor.project.getCurrentObject().isRoot) {
+        if(!wickEditor.project.currentObject.isRoot) {
             finishEditingObjectFabricButton.style.display = "block";
             finishEditingObjectFabricButton.style.left = 40 + 'px';
             finishEditingObjectFabricButton.style.top = topOfScreen + 'px';
@@ -169,8 +169,8 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
         corner.y = Math.min(corner.y, bottomOfScreen-65);
 
         var objIsSymbol = false;
-        if(selection && selection.wickObjectID) {
-            var wickObj = wickEditor.project.rootObject.getChildByID(selection.wickObjectID);
+        if(selection && selection.wickObjectRef) {
+            var wickObj = selection.wickObjectRef;
             if(wickObj && wickObj.isSymbol) {
                 objIsSymbol = true;
             }

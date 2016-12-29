@@ -18,7 +18,7 @@ Tools.Rectangle = function (wickEditor) {
     });
 
     this.createWickObjectFromShape = function (drawingShape) {
-    	var origX = drawingShape.left;
+    	/*var origX = drawingShape.left;
         var origY = drawingShape.top;
         drawingShape.left = 0;
         drawingShape.top = 0;
@@ -38,7 +38,22 @@ Tools.Rectangle = function (wickEditor) {
 
         wickEditor.actionHandler.doAction('addObjects', {
             wickObjects: [wickObj]
-        });
+        });*/
+
+        var origX = drawingShape.left+drawingShape.width /2;
+        var origY = drawingShape.top +drawingShape.height/2;
+        drawingShape.left = 0;
+        drawingShape.top = 0;
+        drawingShape.setCoords();
+        var svg = '<rect width="'+drawingShape.width+'" height="'+drawingShape.height+'" style="fill:rgb(0,0,0);" />'
+        var SVGData = {
+            svgString: '<svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>', 
+            fillColor: fabricInterface.tools.paintbrush.color
+        }
+
+        wickEditor.paper.addSVG(SVGData.svgString, {x:origX, y:origY});
+        wickEditor.fabric.canvas.remove(drawingShape);
+        wickEditor.syncInterfaces();
     }
 
 }

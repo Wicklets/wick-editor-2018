@@ -18,7 +18,7 @@ Tools.Ellipse = function (wickEditor) {
     });
 
     this.createWickObjectFromShape = function (drawingShape) {
-    	var origX = drawingShape.left;
+    	/*var origX = drawingShape.left;
         var origY = drawingShape.top;
         drawingShape.left = 0;
         drawingShape.top = 0;
@@ -29,7 +29,22 @@ Tools.Ellipse = function (wickEditor) {
             fillColor: fabricInterface.tools.paintbrush.color
         }
 
-        fabricInterface.canvas.remove(drawingShape);
+        fabricInterface.canvas.remove(drawingShape);*/
+
+        var origX = drawingShape.left;
+        var origY = drawingShape.top;
+        drawingShape.left = 0;
+        drawingShape.top = 0;
+        drawingShape.setCoords();
+        var svg = '<ellipse cx="'+drawingShape.width+'" cy="'+drawingShape.height+'" rx="'+drawingShape.width+'" ry="'+drawingShape.height+'"/>'
+        var SVGData = {
+            svgString: '<svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>', 
+            fillColor: fabricInterface.tools.paintbrush.color
+        }
+
+        wickEditor.paper.addSVG(SVGData.svgString, {x:origX, y:origY});
+        wickEditor.fabric.canvas.remove(drawingShape);
+        wickEditor.syncInterfaces();
     }
 
 }

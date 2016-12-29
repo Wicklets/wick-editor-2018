@@ -83,7 +83,7 @@ var RightClickMenuInterface = function (wickEditor) {
         showButtonGroup("#fabricButtons");
 
         var selectedSingleObject = wickEditor.fabric.getSelectedWickObject();
-        var currentObject = wickEditor.project.getCurrentObject();
+        var currentObject = wickEditor.project.currentObject;
 
         var multiObjectSelection = wickEditor.fabric.getSelectedObjectIDs().length > 1;
 
@@ -125,7 +125,7 @@ var RightClickMenuInterface = function (wickEditor) {
 
         showButtonGroup("#commonTimelineButtons");
 
-        var frame = wickEditor.project.getCurrentObject().getCurrentFrame();
+        var frame = wickEditor.project.currentObject.getCurrentFrame();
         if(frame) {
             showButtonGroup("#clickedOnFrameButtons");
             if(frame.autoplay) {

@@ -7,7 +7,7 @@ var FabricSymbolBorders = function (wickEditor, fabricInterface) {
 
 	var boxAnimationTimer = 0;
     var boxAnimationActive = false;
-    var boxAnimationID = null;
+    var boxAnimationObj = null;
 
     var animationFramerate = 60;
     var boxSpeed = 0.06;
@@ -15,14 +15,14 @@ var FabricSymbolBorders = function (wickEditor, fabricInterface) {
     canvas.on('after:render', function() {
 
         // Render bounding boxes for symbols
-        var selectedIDs = fabricInterface.getSelectedObjectIDs();
+        var selectedObjs = fabricInterface.getSelectedWickObjects();
         canvas.forEachObject(function(obj) {
-            var wickObj = wickEditor.project.rootObject.getChildByID(obj.wickObjectID);
-            var activeLayerObjects = wickEditor.project.getCurrentObject().getAllActiveLayerChildObjects();
+            var wickObj = obj.wickObjectRef;
+            var activeLayerObjects = wickEditor.project.currentObject.getAllActiveLayerChildObjects();
 
             if(!wickObj || activeLayerObjects.indexOf(wickObj) === -1) return;
-            if(selectedIDs.indexOf(wickObj.id) === -1 && !wickObj.isSymbol) return
-            if(boxAnimationActive && boxAnimationID !== wickObj.id) return;
+            if(selectedObjs.indexOf(wickObj) === -1 && !wickObj.isSymbol) return
+            if(boxAnimationActive && boxAnimationObj !== wickObj) return;
 
             // Color the border differently depending if the object has errors
             if(!wickObj.isSymbol) {
@@ -45,7 +45,7 @@ var FabricSymbolBorders = function (wickEditor, fabricInterface) {
 
             // We need to calculate an offset because of this bug: https://github.com/kangax/fabric.js/issues/1941
             var groupOffset = {x:0,y:0};
-            if(selectedIDs.length > 1 && selectedIDs.indexOf(wickObj.id) !== -1) {
+            if(selectedObjs.length > 1 && selectedObjs.indexOf(wickObj) !== -1) {
                 var activeGroup = canvas.getActiveGroup();
                 groupOffset.x = (activeGroup.left + activeGroup.width/2)*canvas.getZoom();
                 groupOffset.y = (activeGroup.top + activeGroup.height/2)*canvas.getZoom();
@@ -77,7 +77,7 @@ var FabricSymbolBorders = function (wickEditor, fabricInterface) {
     });
 
     this.startEditObjectAnimation = function (obj) {
-        boxAnimationID = obj.id;
+        boxAnimationObj = obj;
         boxAnimationActive = true;
         var f = setInterval(function () {
             that.updateEditObjectAnimation(obj, f);
@@ -99,7 +99,7 @@ var FabricSymbolBorders = function (wickEditor, fabricInterface) {
 
     this.startLeaveObjectAnimation = function (obj) {
         boxAnimationActive = true;
-        boxAnimationID = obj.id;
+        boxAnimationObj = obj;
         boxAnimationTimer = 1;
         wickEditor.actionHandler.doAction('finishEditingCurrentObject', {});
         var f = setInterval(function () {

@@ -41,7 +41,7 @@ Tools.Cursor = function (wickEditor) {
             var selectedObject = wickEditor.fabric.getSelectedWickObject();
             if(selectedObject && selectedObject.isSymbol) {
                 wickEditor.guiActionHandler.pressButton("editSymbolButton");
-            } else if (!selectedObject && !wickEditor.project.getCurrentObject().isRoot) {
+            } else if (!selectedObject && !wickEditor.project.currentObject.isRoot) {
                 wickEditor.guiActionHandler.pressButton("finishEditingObjectButton");
             }
             lastDoubleClickTime = null;

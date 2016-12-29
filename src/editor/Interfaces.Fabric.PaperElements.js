@@ -8,10 +8,12 @@ var FabricPaperElements = function (wickEditor, fabricInterface) {
 
     this.update = function () {
 
-        var currentObject = wickEditor.project.getCurrentObject();
+        var currentObject = wickEditor.project.currentObject;
         var currentFrame = currentObject.getCurrentFrame();
 
         var allPaths = wickEditor.paper.getAllSVGs();
+
+        console.log(allPaths)
 
         // Remove paths that don't exist anymore or need to be regenerated
         var removeTheseObjs = [];
@@ -30,8 +32,8 @@ var FabricPaperElements = function (wickEditor, fabricInterface) {
         // Add new paths to the fabric canvas from paper.js and update existing paths
         allPaths.forEach(function (path) {
             if(!paperObjsInCanvas[path.id]) {
+                paperObjsInCanvas[path.id] = true;
                 createFabricObjectFromPaperObject(path, function (fabricObj) {
-                    paperObjsInCanvas[path.id] = fabricObj;
                     fabricInterface.canvas.add(fabricObj);
                     fabricInterface.canvas.renderAll();
                 });

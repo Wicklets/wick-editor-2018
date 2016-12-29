@@ -413,7 +413,7 @@ var GuiActionHandler = function (wickEditor) {
         {}, 
         function(args) {
             wickEditor.actionHandler.doAction("movePlayhead", {
-                obj: wickEditor.project.getCurrentObject(),
+                obj: wickEditor.project.currentObject,
                 moveAmount: -1
             })
             wickEditor.syncInterfaces();
@@ -427,7 +427,7 @@ var GuiActionHandler = function (wickEditor) {
         {}, 
         function(args) {
             wickEditor.actionHandler.doAction("movePlayhead", {
-                obj: wickEditor.project.getCurrentObject(),
+                obj: wickEditor.project.currentObject,
                 moveAmount: 1
             })
             wickEditor.syncInterfaces();
@@ -440,8 +440,8 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {}, 
         function(args) {
-            if(wickEditor.project.getCurrentObject().currentLayer < wickEditor.project.getCurrentObject().layers.length-1)
-                wickEditor.project.getCurrentObject().currentLayer ++;
+            if(wickEditor.project.currentObject.currentLayer < wickEditor.project.currentObject.layers.length-1)
+                wickEditor.project.currentObject.currentLayer ++;
             wickEditor.syncInterfaces();
         });
 
@@ -453,7 +453,7 @@ var GuiActionHandler = function (wickEditor) {
         {}, 
         function(args) {
             wickEditor.actionHandler.doAction('deleteObjects', { 
-                ids:wickEditor.fabric.getSelectedObjectIDs() 
+                objs:wickEditor.fabric.getSelectedWickObjects() 
             });
         });
 
@@ -465,7 +465,7 @@ var GuiActionHandler = function (wickEditor) {
         {}, 
         function(args) {
             wickEditor.actionHandler.doAction('deleteObjects', { 
-                ids:wickEditor.fabric.getSelectedObjectIDs() 
+                objs:wickEditor.fabric.getSelectedWickObjects() 
             });
         });
 
@@ -479,7 +479,7 @@ var GuiActionHandler = function (wickEditor) {
 
             var clipboardData = window.polyfillClipboardData//(window.polyfillClipboardData || args.clipboardData);
             if(clipboardData) {
-                clipboardData.setData('text/wickobjectsjson', wickEditor.project.getCopyData(wickEditor.fabric.getSelectedObjectIDs()));
+                clipboardData.setData('text/wickobjectsjson', wickEditor.project.getCopyData(wickEditor.fabric.getSelectedWickObjects()));
             }
         });
 
@@ -493,8 +493,8 @@ var GuiActionHandler = function (wickEditor) {
 
             var clipboardData = window.polyfillClipboardData//(window.polyfillClipboardData || args.clipboardData);
             if(clipboardData) {
-                clipboardData.setData('text/wickobjectsjson', wickEditor.project.getCopyData(wickEditor.fabric.getSelectedObjectIDs()));
-                wickEditor.actionHandler.doAction('deleteObjects', { ids:wickEditor.fabric.getSelectedObjectIDs() });
+                clipboardData.setData('text/wickobjectsjson', wickEditor.project.getCopyData(wickEditor.fabric.getSelectedWickObjects()));
+                wickEditor.actionHandler.doAction('deleteObjects', { objs:wickEditor.fabric.getSelectedWickObjects() });
             }
         });
 
@@ -520,7 +520,7 @@ var GuiActionHandler = function (wickEditor) {
                         objs.forEach(function (obj) {
                             //obj.selectOnAddToFabric = true; // This causes positioning problems for text!
                             obj.getAllChildObjectsRecursive().forEach(function (child) {
-                                child.id = null;
+                                child.uuid = null;
                             });
                         })
                         wickEditor.actionHandler.doAction('addObjects', {
@@ -677,7 +677,7 @@ var GuiActionHandler = function (wickEditor) {
         {}, 
         function(args) {
             wickEditor.fabric.deselectAll();
-            var selectedFrame = wickEditor.project.getCurrentObject().getCurrentFrame();
+            var selectedFrame = wickEditor.project.currentObject.getCurrentFrame();
             wickEditor.scriptingide.editScriptsOfObject(selectedFrame);
             wickEditor.syncInterfaces();
         });
@@ -688,8 +688,8 @@ var GuiActionHandler = function (wickEditor) {
         {}, 
         function(args) {
             wickEditor.actionHandler.doAction('moveObjectToZIndex', { 
-                ids: wickEditor.fabric.getSelectedObjectIDs(),
-                newZIndex: wickEditor.project.getCurrentObject().getCurrentFrame().wickObjects.length
+                objs:wickEditor.fabric.getSelectedWickObjects(),
+                newZIndex: wickEditor.project.currentObject.getCurrentFrame().wickObjects.length
             });
             wickEditor.fabric.deselectAll();
         });
@@ -700,7 +700,7 @@ var GuiActionHandler = function (wickEditor) {
         {}, 
         function(args) {
             wickEditor.actionHandler.doAction('moveObjectToZIndex', { 
-                ids: wickEditor.fabric.getSelectedObjectIDs(),
+                objs:wickEditor.fabric.getSelectedWickObjects(),
                 newZIndex: 0
             });
             wickEditor.fabric.deselectAll();
@@ -712,18 +712,16 @@ var GuiActionHandler = function (wickEditor) {
         {}, 
         function(args) {
             var selectedObjects = wickEditor.fabric.getSelectedWickObjects();
-            var selectedObjectIDs = [];
             var modifiedStates = [];
 
             selectedObjects.forEach(function (obj) {
-                selectedObjectIDs.push(obj.id);
                 modifiedStates.push({ 
                     flipX : !obj.flipX
                 });
             });
 
             wickEditor.actionHandler.doAction('modifyObjects', { 
-                ids: selectedObjectIDs, 
+                objs: selectedObjects, 
                 modifiedStates: modifiedStates 
             });
         });
@@ -734,18 +732,16 @@ var GuiActionHandler = function (wickEditor) {
         {}, 
         function(args) {
             var selectedObjects = wickEditor.fabric.getSelectedWickObjects();
-            var selectedObjectIDs = [];
             var modifiedStates = [];
 
             selectedObjects.forEach(function (obj) {
-                selectedObjectIDs.push(obj.id);
                 modifiedStates.push({ 
                     flipY : !obj.flipY
                 });
             });
             
             wickEditor.actionHandler.doAction('modifyObjects', { 
-                ids: selectedObjectIDs, 
+                objs: selectedObjects, 
                 modifiedStates: modifiedStates 
             });
         });
@@ -764,7 +760,7 @@ var GuiActionHandler = function (wickEditor) {
         ['finishEditingObjectButton', 'finishEditingObjectFabricButton'], 
         {}, 
         function(args) {
-            var currObj = wickEditor.project.getCurrentObject();
+            var currObj = wickEditor.project.currentObject;
             wickEditor.fabric.symbolBorders.startLeaveObjectAnimation(currObj);
         });
 
@@ -783,11 +779,14 @@ var GuiActionHandler = function (wickEditor) {
         {}, 
         function(args) {
             var selectedObject = wickEditor.fabric.getSelectedWickObject();
-            var selectedObjectIDs = wickEditor.fabric.getSelectedObjectIDs();
             if(selectedObject.isSymbol) {
-                wickEditor.actionHandler.doAction('breakApartSymbol', {id:selectedObjectIDs[0]} );
+                wickEditor.actionHandler.doAction('breakApartSymbol', {
+                    obj:selectedObject
+                });
             } else {
-                wickEditor.actionHandler.doAction('breakApartImage', {id:selectedObjectIDs[0]} );
+                wickEditor.actionHandler.doAction('breakApartImage', {
+                    obj:selectedObject
+                });
             }
         });
 
@@ -812,7 +811,7 @@ var GuiActionHandler = function (wickEditor) {
         ['deleteFrameButton'], 
         {}, 
         function(args) {
-            var currentObject = wickEditor.project.getCurrentObject();
+            var currentObject = wickEditor.project.currentObject;
             var frame = currentObject.getCurrentFrame();
             var layer = currentObject.getCurrentLayer();
             wickEditor.actionHandler.doAction('deleteFrame', {
@@ -826,17 +825,17 @@ var GuiActionHandler = function (wickEditor) {
         ['extendFrameButton'], 
         {}, 
         function(args) {
-            var frame = wickEditor.project.getCurrentObject().getCurrentFrame();
+            var frame = wickEditor.project.currentObject.getCurrentFrame();
             if(!frame) {
-                var frames = wickEditor.project.getCurrentObject().getCurrentLayer().frames;
+                var frames = wickEditor.project.currentObject.getCurrentLayer().frames;
                 frame = frames[frames.length - 1];
             }
 
-            var frameEndingIndex = wickEditor.project.getCurrentObject().getPlayheadPositionAtFrame(
+            var frameEndingIndex = wickEditor.project.currentObject.getPlayheadPositionAtFrame(
                 frame
             ) + frame.frameLength - 1;
 
-            var framesToExtend = wickEditor.project.getCurrentObject().playheadPosition - frameEndingIndex;
+            var framesToExtend = wickEditor.project.currentObject.playheadPosition - frameEndingIndex;
 
             wickEditor.actionHandler.doAction('extendFrame', {
                 nFramesToExtendBy: Math.max(1, framesToExtend),
@@ -849,10 +848,10 @@ var GuiActionHandler = function (wickEditor) {
         ['shrinkFrameButton'], 
         {}, 
         function(args) {
-            var frame = wickEditor.project.getCurrentObject().getCurrentFrame();
+            var frame = wickEditor.project.currentObject.getCurrentFrame();
 
-            //var frameEndingIndex = wickEditor.project.getCurrentObject().getPlayheadPositionAtFrame(frame) + frame.frameLength - 1;
-            //var framesToShrink = frameEndingIndex - wickEditor.project.getCurrentObject().playheadPosition;
+            //var frameEndingIndex = wickEditor.project.currentObject.getPlayheadPositionAtFrame(frame) + frame.frameLength - 1;
+            //var framesToShrink = frameEndingIndex - wickEditor.project.currentObject.playheadPosition;
             //framesToShrink = Math.max(1, framesToShrink)
 
             wickEditor.actionHandler.doAction('shrinkFrame', {   
