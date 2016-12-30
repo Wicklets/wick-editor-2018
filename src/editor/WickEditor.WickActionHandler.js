@@ -142,7 +142,7 @@ var WickActionHandler = function (wickEditor) {
 
     this.registerAction('deleteObjects', 
         function (args) {
-            args.restoredWickObjects = []
+            args.restoredObjects = []
             args.oldZIndices = [];
 
             // Store the old z index vars for each object. 
@@ -156,13 +156,16 @@ var WickActionHandler = function (wickEditor) {
             // Now remove them
             for(var i = 0; i < args.objs.length; i++) {
                 var obj = args.objs[i];
-                args.restoredWickObjects.push(obj);
-                wickEditor.project.currentObject.removeChild(args.objs[i]);
+                args.restoredObjects.push(obj);
+                if(obj instanceof WickObject)
+                    wickEditor.project.currentObject.removeChild(args.objs[i]);
+                else
+                    wickEditor.paper.removeSVG(obj)
             }
         },
         function (args) {
-            for(var i = 0; i < args.restoredWickObjects.length; i++) {
-                wickEditor.project.addObject(args.restoredWickObjects[i], args.oldZIndices[i]);
+            for(var i = 0; i < args.restoredObjects.length; i++) {
+                wickEditor.project.addObject(args.restoredObjects[i], args.oldZIndices[i]);
             }
         });
 
@@ -375,7 +378,7 @@ var WickActionHandler = function (wickEditor) {
 
     this.registerAction('convertSelectionToSymbol', 
         function (args) {
-            var selectedObjects = wickEditor.fabric.getSelectedWickObjects();
+            var selectedObjects = wickEditor.fabric.getSelectedObjects(WickObject);
 
             var currObj = wickEditor.project.currentObject;
             if(currObj.parentObject) currObj.fixOriginPoint()
@@ -437,7 +440,7 @@ var WickActionHandler = function (wickEditor) {
 
     this.registerAction('breakApartImage', 
         function (args) {
-            var wickObj = wickEditor.fabric.getSelectedWickObject();
+            var wickObj = wickEditor.fabric.getSelectedObject(WickObject);
             wickObj.getBlobImages(function (images) {
                 images.forEach(function (image) {
                     WickObject.fromImage(image.src, function (newWickObject) {

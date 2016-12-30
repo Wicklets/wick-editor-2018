@@ -15,7 +15,7 @@ var FabricSymbolBorders = function (wickEditor, fabricInterface) {
     canvas.on('after:render', function() {
 
         // Render bounding boxes for symbols
-        var selectedObjs = fabricInterface.getSelectedWickObjects();
+        var selectedObjs = fabricInterface.getSelectedObjects(WickObject);
         canvas.forEachObject(function(obj) {
             var wickObj = obj.wickObjectRef;
             var activeLayerObjects = wickEditor.project.currentObject.getAllActiveLayerChildObjects();

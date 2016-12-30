@@ -13,8 +13,6 @@ var FabricPaperElements = function (wickEditor, fabricInterface) {
 
         var allPaths = wickEditor.paper.getAllSVGs();
 
-        console.log(allPaths)
-
         // Remove paths that don't exist anymore or need to be regenerated
         var removeTheseObjs = [];
         fabricInterface.canvas._objects.forEach(function(fabricObj) {
@@ -34,6 +32,7 @@ var FabricPaperElements = function (wickEditor, fabricInterface) {
             if(!paperObjsInCanvas[path.id]) {
                 paperObjsInCanvas[path.id] = true;
                 createFabricObjectFromPaperObject(path, function (fabricObj) {
+                    paperObjsInCanvas[path.id] = fabricObj;
                     fabricInterface.canvas.add(fabricObj);
                     fabricInterface.canvas.renderAll();
                 });
@@ -90,9 +89,9 @@ var FabricPaperElements = function (wickEditor, fabricInterface) {
     }
 
     var updateFabObj = function (fabricObj, paperObj, activeObjects) {
-        /*fabricObj.left = paperObj.position.x;
-        fabricObj.top = paperObj.position.y;
-        fabricObj.setCoords();*/
+        //fabricObj.left = paperObj.position.x;
+        //fabricObj.top = paperObj.position.y;
+        //fabricObj.setCoords();
     }
 
 }

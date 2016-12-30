@@ -30,7 +30,7 @@ var PropertiesInterface = function (wickEditor) {
         document.getElementById(currentTab + 'PropertiesTabButton').className = 'propertiesTab propertiesTabActive';
 
         if(currentTab === 'object') {
-            var selectedObj = wickEditor.fabric.getSelectedWickObject();
+            var selectedObj = wickEditor.fabric.getSelectedObject(WickObject);
             if(selectedObj) {
                 // Display Object properties tab
                 $("#objectProperties").css('display', 'block');
@@ -136,9 +136,9 @@ var PropertiesInterface = function (wickEditor) {
     $('#objectName').on('input propertychange', function () {
         var newName = $('#objectName').val();
         if(newName === '') {
-            wickEditor.fabric.getSelectedWickObject().name = undefined;
+            wickEditor.fabric.getSelectedObject(WickObject).name = undefined;
         } else {
-            wickEditor.fabric.getSelectedWickObject().name = newName;
+            wickEditor.fabric.getSelectedObject(WickObject).name = newName;
         }
     });
 
@@ -252,12 +252,12 @@ var PropertiesInterface = function (wickEditor) {
 
     // Loop Checkbox: Toggle sound loop
     document.getElementById('loopCheckbox').onchange = function () {
-        wickEditor.fabric.getSelectedWickObject().loopSound = this.checked;
+        wickEditor.fabric.getSelectedObject(WickObject).loopSound = this.checked;
     };
 
     // Autoplay Checkbox: Toggle sound autoplay
     document.getElementById('autoplayCheckbox').onchange = function () {
-        wickEditor.fabric.getSelectedWickObject().autoplaySound = this.checked;
+        wickEditor.fabric.getSelectedObject(WickObject).autoplaySound = this.checked;
     };
 
     $('#frameIdentifier').on('input propertychange', function () {

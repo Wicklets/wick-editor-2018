@@ -11,7 +11,7 @@ var WickEditor = function () {
 
     // Friendly console message ~~~
     console.log('%cWelcome to the javascript console! ', 'color: #ff99bb; font-size: 20px; font-weight: bold; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;');
-    console.log('%cYou are free to change any of the internal editor stuff from here. Try typing "wickEditor" into the console and have a look around!', 'color: #bb4477; font-size: 12px;');
+    console.log('%cYou are free to change any of the internal editor stuff from here. Type "wickEditor" into the console and have a look around!', 'color: #bb4477; font-size: 12px;');
 
     // Setup connection to backend 
     this.backend = new WickDemoLoader(this);

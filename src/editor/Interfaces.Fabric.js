@@ -68,7 +68,7 @@ var FabricInterface = function (wickEditor) {
         that.canvas.on('selection:changed', function (e) {
             wickEditor.timeline.redraw();
 
-            wickEditor.scriptingide.editScriptsOfObject(this.getSelectedWickObject(), {dontOpenIDE:true});
+            wickEditor.scriptingide.editScriptsOfObject(this.getSelectedObject(WickObject), {dontOpenIDE:true});
             that.guiElements.update();
             wickEditor.scriptingide.syncWithEditorState();
             wickEditor.properties.syncWithEditorState();
@@ -378,27 +378,35 @@ var FabricInterface = function (wickEditor) {
 
     }
 
-    this.getSelectedWickObjects = function () {
-        var wickobjs = [];
+    this.getSelectedObjects = function (type) {
+        var selectedObjs = [];
 
         var obj = this.canvas.getActiveObject();
         var group = this.canvas.getActiveGroup();
+        var allSelectedFabricObjs = [];
 
         if(obj) {
-            wickobjs.push(obj.wickObjectRef);
+            allSelectedFabricObjs = [obj];
         }
-
         if(group) {
-            for(var i = 0; i < group._objects.length; i++) {
-                wickobjs.push(group._objects[i].wickObjectRef);
-            }
+            allSelectedFabricObjs = group._objects;
         }
 
-        return wickobjs;
+        allSelectedFabricObjs.forEach(function (fabobj) {
+            if(fabobj.paperObjectReference && (!type || type === paper.Path)) { 
+                selectedObjs.push(fabobj.paperObjectReference);
+            }
+            if(fabobj.wickObjectRef && (!type || type === WickObject)) { 
+                selectedObjs.push(fabobj.wickObjectRef);
+            }
+        })
+
+        return selectedObjs;
+
     }
 
-    this.getSelectedWickObject = function () {
-        var objs = wickEditor.fabric.getSelectedWickObjects();
+    this.getSelectedObject = function (type) {
+        var objs = wickEditor.fabric.getSelectedObjects(type);
         if(objs.length == 1) {
             return objs[0];
         } else {
@@ -408,7 +416,7 @@ var FabricInterface = function (wickEditor) {
 
     this.moveSelection = function (x,y) {
         var modifiedStates = [];
-        that.getSelectedWickObjects().forEach(function (obj) {
+        that.getSelectedObjects(WickObject).forEach(function (obj) {
             var wickObj = obj;
             modifiedStates.push({
                 x : wickObj.x + x,
@@ -417,7 +425,7 @@ var FabricInterface = function (wickEditor) {
         });
 
         wickEditor.actionHandler.doAction('modifyObjects', { 
-            objs: that.getSelectedWickObjects(), 
+            objs: that.getSelectedObjects(WickObject), 
             modifiedStates: modifiedStates 
         });
     }
@@ -510,7 +518,7 @@ var FabricInterface = function (wickEditor) {
     }
 
     this.forceModifySelectedObjects = function () {
-        var wickObj = that.getSelectedWickObject();
+        var wickObj = that.getSelectedObject(WickObject);
         if(wickObj && wickObj.fontData) {
             that.modifyObjects(wickObj);
         }

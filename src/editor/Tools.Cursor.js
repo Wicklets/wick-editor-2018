@@ -38,7 +38,7 @@ Tools.Cursor = function (wickEditor) {
 
         var currentTime = new Date().getTime();
         if(lastDoubleClickTime !== null && currentTime-lastDoubleClickTime < 350) {
-            var selectedObject = wickEditor.fabric.getSelectedWickObject();
+            var selectedObject = wickEditor.fabric.getSelectedObject(WickObject);
             if(selectedObject && selectedObject.isSymbol) {
                 wickEditor.guiActionHandler.pressButton("editSymbolButton");
             } else if (!selectedObject && !wickEditor.project.currentObject.isRoot) {

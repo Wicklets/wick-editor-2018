@@ -82,10 +82,10 @@ var RightClickMenuInterface = function (wickEditor) {
     showButtonsForMode["fabric"] = function () {
         showButtonGroup("#fabricButtons");
 
-        var selectedSingleObject = wickEditor.fabric.getSelectedWickObject();
+        var selectedSingleObject = wickEditor.fabric.getSelectedObject(WickObject);
         var currentObject = wickEditor.project.currentObject;
 
-        var multiObjectSelection = wickEditor.fabric.getSelectedObjectIDs().length > 1;
+        var multiObjectSelection = wickEditor.fabric.getSelectedObjects(WickObject).length > 1;
 
         if(!currentObject.isRoot) {
             showButtonGroup("#insideSymbolButtons");

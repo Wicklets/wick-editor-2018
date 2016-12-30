@@ -158,7 +158,7 @@ var TimelineInterface = function (wickEditor) {
                     ctx.fill();
                 }
 
-                var selectedObject = wickEditor.fabric.getSelectedWickObject();
+                var selectedObject = wickEditor.fabric.getSelectedObject(WickObject);
                 if (selectedObject && isActiveFrame) {
                     selectedObject.tweens.forEach(function (tween) {
                         ctx.fillStyle = "#6666FF";

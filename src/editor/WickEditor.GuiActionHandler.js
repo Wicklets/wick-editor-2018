@@ -453,7 +453,7 @@ var GuiActionHandler = function (wickEditor) {
         {}, 
         function(args) {
             wickEditor.actionHandler.doAction('deleteObjects', { 
-                objs:wickEditor.fabric.getSelectedWickObjects() 
+                objs:wickEditor.fabric.getSelectedObjects() 
             });
         });
 
@@ -465,7 +465,7 @@ var GuiActionHandler = function (wickEditor) {
         {}, 
         function(args) {
             wickEditor.actionHandler.doAction('deleteObjects', { 
-                objs:wickEditor.fabric.getSelectedWickObjects() 
+                objs:wickEditor.fabric.getSelectedObjects() 
             });
         });
 
@@ -479,7 +479,7 @@ var GuiActionHandler = function (wickEditor) {
 
             var clipboardData = window.polyfillClipboardData//(window.polyfillClipboardData || args.clipboardData);
             if(clipboardData) {
-                clipboardData.setData('text/wickobjectsjson', wickEditor.project.getCopyData(wickEditor.fabric.getSelectedWickObjects()));
+                clipboardData.setData('text/wickobjectsjson', wickEditor.project.getCopyData(wickEditor.fabric.getSelectedObjects(WickObject)));
             }
         });
 
@@ -493,8 +493,8 @@ var GuiActionHandler = function (wickEditor) {
 
             var clipboardData = window.polyfillClipboardData//(window.polyfillClipboardData || args.clipboardData);
             if(clipboardData) {
-                clipboardData.setData('text/wickobjectsjson', wickEditor.project.getCopyData(wickEditor.fabric.getSelectedWickObjects()));
-                wickEditor.actionHandler.doAction('deleteObjects', { objs:wickEditor.fabric.getSelectedWickObjects() });
+                clipboardData.setData('text/wickobjectsjson', wickEditor.project.getCopyData(wickEditor.fabric.getSelectedObjects(WickObject)));
+                wickEditor.actionHandler.doAction('deleteObjects', { objs:wickEditor.fabric.getSelectedObjects(WickObject) });
             }
         });
 
@@ -666,7 +666,7 @@ var GuiActionHandler = function (wickEditor) {
         ['editScriptsButton', 'editSymbolScriptsButton', 'editScriptsButtonProperties'], 
         {}, 
         function(args) {
-            var selectedObj = wickEditor.fabric.getSelectedWickObject();
+            var selectedObj = wickEditor.fabric.getSelectedObject(WickObject);
             wickEditor.scriptingide.editScriptsOfObject(selectedObj);
             wickEditor.syncInterfaces();
         });
@@ -688,7 +688,7 @@ var GuiActionHandler = function (wickEditor) {
         {}, 
         function(args) {
             wickEditor.actionHandler.doAction('moveObjectToZIndex', { 
-                objs:wickEditor.fabric.getSelectedWickObjects(),
+                objs:wickEditor.fabric.getSelectedObjects(WickObject),
                 newZIndex: wickEditor.project.currentObject.getCurrentFrame().wickObjects.length
             });
             wickEditor.fabric.deselectAll();
@@ -700,7 +700,7 @@ var GuiActionHandler = function (wickEditor) {
         {}, 
         function(args) {
             wickEditor.actionHandler.doAction('moveObjectToZIndex', { 
-                objs:wickEditor.fabric.getSelectedWickObjects(),
+                objs:wickEditor.fabric.getSelectedObjects(WickObject),
                 newZIndex: 0
             });
             wickEditor.fabric.deselectAll();
@@ -711,7 +711,7 @@ var GuiActionHandler = function (wickEditor) {
         [], 
         {}, 
         function(args) {
-            var selectedObjects = wickEditor.fabric.getSelectedWickObjects();
+            var selectedObjects = wickEditor.fabric.getSelectedObjects(WickObject);
             var modifiedStates = [];
 
             selectedObjects.forEach(function (obj) {
@@ -731,7 +731,7 @@ var GuiActionHandler = function (wickEditor) {
         [], 
         {}, 
         function(args) {
-            var selectedObjects = wickEditor.fabric.getSelectedWickObjects();
+            var selectedObjects = wickEditor.fabric.getSelectedObjects(WickObject);
             var modifiedStates = [];
 
             selectedObjects.forEach(function (obj) {
@@ -751,7 +751,7 @@ var GuiActionHandler = function (wickEditor) {
         ['editObjectButton', 'editSymbolButton'], 
         {}, 
         function(args) {
-            var selectedObject = wickEditor.fabric.getSelectedWickObject();
+            var selectedObject = wickEditor.fabric.getSelectedObject(WickObject);
             wickEditor.fabric.symbolBorders.startEditObjectAnimation(selectedObject);
         });
 
@@ -778,7 +778,7 @@ var GuiActionHandler = function (wickEditor) {
         ['breakApartButton'], 
         {}, 
         function(args) {
-            var selectedObject = wickEditor.fabric.getSelectedWickObject();
+            var selectedObject = wickEditor.fabric.getSelectedObject(WickObject);
             if(selectedObject.isSymbol) {
                 wickEditor.actionHandler.doAction('breakApartSymbol', {
                     obj:selectedObject
@@ -795,7 +795,7 @@ var GuiActionHandler = function (wickEditor) {
         ['downloadButton'], 
         {}, 
         function(args) {
-            wickEditor.fabric.getSelectedWickObject().downloadAsFile();
+            wickEditor.fabric.getSelectedObject(WickObject).downloadAsFile();
         });
 
     registerAction('addFrame',
@@ -881,7 +881,7 @@ var GuiActionHandler = function (wickEditor) {
         ['addKeyframeButton'], 
         {}, 
         function(args) {
-            var selectedObj = wickEditor.fabric.getSelectedWickObject();
+            var selectedObj = wickEditor.fabric.getSelectedObject(WickObject);
             var tween = WickTween.fromWickObjectState(selectedObj);
             tween.frame = selectedObj.parentObject.getRelativePlayheadPosition(selectedObj);
             selectedObj.addTween(tween);
