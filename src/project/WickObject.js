@@ -45,6 +45,7 @@ var WickObject = function () {
     this.imageData = undefined;
     this.fontData  = undefined;
     this.audioData = undefined;
+    this.pathData  = undefined;
 
 // Symbols
 
@@ -178,6 +179,12 @@ WickObject.fromAudioFile = function (audioData, callback) {
     audioWickObject.height = 75;
 
     callback(audioWickObject);
+}
+
+WickObject.fromPathFile = function (pathData, callback) {
+    var pathWickObject = new WickObject();
+    pathWickObject.pathData = pathData;
+    callback(pathWickObject);
 }
 
 WickObject.fromWavFile = function (audioData, callback) {

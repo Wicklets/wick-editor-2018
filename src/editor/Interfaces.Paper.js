@@ -22,6 +22,7 @@ var PaperInterface = function (wickEditor) {
     // (Debug) Put the canvas somewhere we can see it
     if(localStorage.pathDebug === "1") document.body.appendChild(paperCanvas);
 
+
     this.setup = function () {
         // Set initial frame to load SVG data from
         currentFrame = wickEditor.project.currentObject.getCurrentFrame();
@@ -29,24 +30,6 @@ var PaperInterface = function (wickEditor) {
         ready = true;
 
         this.syncWithEditorState()
-    }
-
-    this.addSVG = function (svgString, offset) {
-        addSVGToCanvas(svgString, offset);
-    }
-
-    this.removeSVG = function (path) {
-        path.remove();
-    }
-
-    this.getAllSVGs = function () {
-        var allSVGs = [];
-
-        paper.project.activeLayer.children.forEach(function (child) {
-            allSVGs.push(child);
-        });
-
-        return allSVGs;
     }
 
     this.syncWithEditorState = function () {
@@ -71,11 +54,37 @@ var PaperInterface = function (wickEditor) {
         if (!currentFrame) return;
 
         addSVGGroupToCanvas(currentFrame.pathData);
+        refreshPathWickObjects();
         SVGDataDirty = false;
     }
 
     this.applyChangesToFrame = function () {
         if(currentFrame) currentFrame.pathData = paper.project.activeLayer.exportSVG({ asString: true });
+    }
+
+    this.addSVG = function (svgString, offset) {
+        addSVGToCanvas(svgString, offset);
+    }
+
+    this.removeSVG = function (path) {
+        path.remove();
+    }
+
+
+    var getAllSVGs = function () {
+        var allSVGs = [];
+
+        paper.project.activeLayer.children.forEach(function (child) {
+            allSVGs.push(child);
+        });
+
+        return allSVGs;
+    }
+
+    var refreshPathWickObjects = function () {
+        currentFrame.wickObjects.forEach(function (wickObject) {
+            
+        });
     }
 
     var addSVGGroupToCanvas = function (svgString) {

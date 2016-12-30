@@ -14,7 +14,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         if(enablePerfTests) stopTiming("init");
 
         var currentObject = wickEditor.project.currentObject;
-        var currentFrame = currentObject.getCurrentFrame();
 
         // Make sure everything is deselected, mulitple selected objects cause positioning problems.
         var selectedObjects = fabricInterface.getSelectedObjects(WickObject);
@@ -22,8 +21,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
         var activeObjects = currentObject.getAllActiveChildObjects();
         var siblingObjects = currentObject.getAllInactiveSiblings();
-        var allPaths = wickEditor.paper.getAllSVGs();
-        var allObjects = allPaths.concat(siblingObjects.concat(activeObjects));
+        var allObjects = siblingObjects.concat(activeObjects);
 
         var refreshZIndices = function (force) {
             var frameZIndex = siblingObjects.length
@@ -186,6 +184,16 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             fabric.Image.fromURL('resources/audio.png', function(audioFabricObject) {
                 audioFabricObject.wickObjReference = wickObj;
                 callback(audioFabricObject);
+            });
+        }
+
+        if(wickObj.pathData) {
+            fabric.loadSVGFromString(wickObj.paperPath.exportSVG({
+                asString:true
+            }), function(objects, options) {
+                var pathFabricObj = objects[0];
+                pathFabricObj.wickObjReference = wickObj;
+                callback(pathFabricObj);
             });
         }
 

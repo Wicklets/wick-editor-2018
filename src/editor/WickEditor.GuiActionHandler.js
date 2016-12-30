@@ -591,7 +591,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('useTools.FillBucket',
         [/*'F'*/], 
-        ['fillBucketToolButton'], 
+        ['fillbucketToolButton'], 
         {}, 
         function(args) {
             wickEditor.fabric.changeTool(wickEditor.fabric.tools.fillbucket);
