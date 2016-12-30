@@ -23,7 +23,7 @@ var FabricInterface = function (wickEditor) {
         this.onionSkinsDirty = false;
 
         this.shapeDrawer   = new FabricShapeDrawer(wickEditor, this);
-        this.paperElements = new FabricPaperElements(wickEditor, this);
+        //this.paperElements = new FabricPaperElements(wickEditor, this);
         this.guiElements   = new FabricGUIElements(wickEditor, this);
         this.wickElements  = new FabricWickElements(wickEditor, this);
         this.symbolBorders = new FabricSymbolBorders(wickEditor, this);
@@ -113,7 +113,7 @@ var FabricInterface = function (wickEditor) {
         // Update elements in fabric canvas
         this.wickElements.update();
         that.guiElements.update();
-        this.paperElements.update();
+        //this.paperElements.update();
 
         // Render canvas
         this.canvas.renderAll();

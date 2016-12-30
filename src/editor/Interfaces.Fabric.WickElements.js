@@ -14,6 +14,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         if(enablePerfTests) stopTiming("init");
 
         var currentObject = wickEditor.project.currentObject;
+        var currentFrame = currentObject.getCurrentFrame();
 
         // Make sure everything is deselected, mulitple selected objects cause positioning problems.
         var selectedObjects = fabricInterface.getSelectedObjects(WickObject);
@@ -21,7 +22,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
         var activeObjects = currentObject.getAllActiveChildObjects();
         var siblingObjects = currentObject.getAllInactiveSiblings();
-        var allObjects = siblingObjects.concat(activeObjects);
+        var allPaths = wickEditor.paper.getAllSVGs();
+        var allObjects = allPaths.concat(siblingObjects.concat(activeObjects));
 
         var refreshZIndices = function (force) {
             var frameZIndex = siblingObjects.length

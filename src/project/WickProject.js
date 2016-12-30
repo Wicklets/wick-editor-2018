@@ -141,6 +141,11 @@ WickProject.fromJSON = function (rawJSONProject) {
 
         wickObj.layers.forEach(function (layer) {
             layer.frames.forEach(function (frame) {
+                // Add path data
+                if(!frame.pathData) {
+                    frame.pathData = "";
+                }
+
                 // Add scripts (old projects didn't have frame scripts)
                 if(!frame.wickScripts) {
                     frame.wickScripts = {
