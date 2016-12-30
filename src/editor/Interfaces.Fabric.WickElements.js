@@ -188,9 +188,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         }
 
         if(wickObj.pathData) {
-            fabric.loadSVGFromString(wickObj.paperPath.exportSVG({
-                asString:true
-            }), function(objects, options) {
+            fabric.loadSVGFromString(wickObj.pathData, function(objects, options) {
                 var pathFabricObj = objects[0];
                 pathFabricObj.wickObjReference = wickObj;
                 callback(pathFabricObj);

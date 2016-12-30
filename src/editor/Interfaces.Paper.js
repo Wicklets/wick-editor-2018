@@ -39,7 +39,7 @@ var PaperInterface = function (wickEditor) {
         var newFrame = wickEditor.project.currentObject.getCurrentFrame();
         if(newFrame !== currentFrame) {
             // Set SVGData of currentFrame to svg data from paper.js
-            if(currentFrame) currentFrame.pathData = paper.project.activeLayer.exportSVG({ asString: true });
+            this.applyChangesToFrame();
 
             SVGDataDirty = true;
         }
@@ -54,12 +54,13 @@ var PaperInterface = function (wickEditor) {
         if (!currentFrame) return;
 
         addSVGGroupToCanvas(currentFrame.pathData);
-        refreshPathWickObjects();
+        resetPathWickObjects();
         SVGDataDirty = false;
     }
 
     this.applyChangesToFrame = function () {
-        if(currentFrame) currentFrame.pathData = paper.project.activeLayer.exportSVG({ asString: true });
+        if(currentFrame) 
+            currentFrame.pathData = paper.project.activeLayer.exportSVG({ asString: true });
     }
 
     this.addSVG = function (svgString, offset) {
@@ -81,9 +82,25 @@ var PaperInterface = function (wickEditor) {
         return allSVGs;
     }
 
-    var refreshPathWickObjects = function () {
+    var resetPathWickObjects = function () {
+        var removedWOs = [];
         currentFrame.wickObjects.forEach(function (wickObject) {
-            
+            if(!wickObject.pathData) return;
+            removedWOs.push(wickObject);
+        });
+        removedWOs.forEach(function (wickObject) {
+            wickObject.parentObject.removeChild(wickObject);
+        })
+
+        getAllSVGs().forEach(function (path) {
+            addWickObjectFromPaperData(path);
+        });
+    }
+    var addWickObjectFromPaperData = function (path) {
+        WickObject.fromPathFile(path.exportSVG({asString:true}), function (wickObject) {
+            wickObject.x = path.position.x;
+            wickObject.y = path.position.y;
+            wickEditor.project.addObject(wickObject);
         });
     }
 
@@ -107,6 +124,8 @@ var PaperInterface = function (wickEditor) {
 
         if(offset)
             paperGroup.position = new paper.Point(offset.x, offset.y);
+
+        addWickObjectFromPaperData(paperGroup);
     }
 
  }

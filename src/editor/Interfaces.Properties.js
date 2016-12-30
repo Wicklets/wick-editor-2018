@@ -145,9 +145,14 @@ var PropertiesInterface = function (wickEditor) {
     $('#objectPositionX').on('input propertychange', function () {
 
         if(CheckInput.isNumber($('#objectPositionX').val())) {
-            var id = wickEditor.fabric.getSelectedObjectIDs()[0];
-            var modifiedState = { x : parseInt($('#objectPositionX').val()) };
-            wickEditor.actionHandler.doAction('modifyObjects', { ids: [id], modifiedStates: [modifiedState] });
+            var obj = wickEditor.fabric.getSelectedObject();
+            var modifiedState = { 
+                x : parseInt($('#objectPositionX').val()) 
+            };
+            wickEditor.actionHandler.doAction('modifyObjects', { 
+                objs: [obj], 
+                modifiedStates: [modifiedState] 
+            });
         }
 
     });
@@ -155,9 +160,14 @@ var PropertiesInterface = function (wickEditor) {
     $('#objectPositionY').on('input propertychange', function () {
 
         if(CheckInput.isNumber($('#objectPositionY').val())) {
-            var id = wickEditor.fabric.getSelectedObjectIDs()[0];
-            var modifiedState = { y : parseInt($('#objectPositionY').val()) };
-            wickEditor.actionHandler.doAction('modifyObjects', { ids: [id], modifiedStates: [modifiedState] });
+            var obj = wickEditor.fabric.getSelectedObject();
+            var modifiedState = { 
+                y : parseInt($('#objectPositionY').val()) 
+            };
+            wickEditor.actionHandler.doAction('modifyObjects', { 
+                objs: [obj], 
+                modifiedStates: [modifiedState] 
+            });
         }
 
     });
@@ -165,10 +175,14 @@ var PropertiesInterface = function (wickEditor) {
     $('#objectWidth').on('input propertychange', function () {
 
         if(CheckInput.isNumber($('#objectWidth').val())) {
-            var id = wickEditor.fabric.getSelectedObjectIDs()[0];
-            var obj = wickEditor.project.rootObject.getChildByID(id);
-            var modifiedState = { scaleX : parseInt($('#objectWidth').val()) / obj.width };
-            wickEditor.actionHandler.doAction('modifyObjects', { ids: [id], modifiedStates: [modifiedState] });
+            var obj = wickEditor.fabric.getSelectedObject();
+            var modifiedState = { 
+                scaleX : parseInt($('#objectWidth').val()) / obj.width 
+            };
+            wickEditor.actionHandler.doAction('modifyObjects', { 
+                objs: [obj], 
+                modifiedStates: [modifiedState] 
+            });
         }
 
     });
@@ -176,10 +190,14 @@ var PropertiesInterface = function (wickEditor) {
     $('#objectHeight').on('input propertychange', function () {
 
         if(CheckInput.isNumber($('#objectHeight').val())) {
-            var id = wickEditor.fabric.getSelectedObjectIDs()[0];
-            var obj = wickEditor.project.rootObject.getChildByID(id);
-            var modifiedState = { scaleY : parseInt($('#objectHeight').val()) / obj.height };
-            wickEditor.actionHandler.doAction('modifyObjects', { ids: [id], modifiedStates: [modifiedState] });
+            var obj = wickEditor.fabric.getSelectedObject();
+            var modifiedState = { 
+                scaleY : parseInt($('#objectHeight').val()) / obj.height 
+            };
+            wickEditor.actionHandler.doAction('modifyObjects', { 
+                objs: [obj], 
+                modifiedStates: [modifiedState] 
+            });
         }
 
     });
@@ -187,16 +205,21 @@ var PropertiesInterface = function (wickEditor) {
     $('#objectRotation').on('input propertychange', function () {
 
         if(CheckInput.isNumber($('#objectRotation').val())) {
-            var id = wickEditor.fabric.getSelectedObjectIDs()[0];
-            var modifiedState = { angle : parseInt($('#objectRotation').val()) };
-            wickEditor.actionHandler.doAction('modifyObjects', { ids: [id], modifiedStates: [modifiedState] });
+            var obj = wickEditor.fabric.getSelectedObject();
+            var modifiedState = { 
+                angle : parseInt($('#objectRotation').val()) 
+            };
+            wickEditor.actionHandler.doAction('modifyObjects', { 
+                objs: [obj], 
+                modifiedStates: [modifiedState] 
+            });
         }
 
     });
 
     document.getElementById('opacitySlider').onchange = function () {
         wickEditor.actionHandler.doAction('modifyObjects', { 
-            ids: [wickEditor.fabric.getSelectedObjectIDs()[0]], 
+            objs: [wickEditor.fabric.getSelectedObject()], 
             modifiedStates: [{ opacity : this.value/255 }] 
         });
     };
@@ -204,7 +227,7 @@ var PropertiesInterface = function (wickEditor) {
     document.getElementById('fontSelector').onchange = function () {
         wickEditor.fabric.forceModifySelectedObjects();
         wickEditor.actionHandler.doAction('modifyObjects', { 
-            ids: [wickEditor.fabric.getSelectedObjectIDs()[0]], 
+            objs: [wickEditor.fabric.getSelectedObject()], 
             modifiedStates: [{ fontFamily : document.getElementById('fontSelector').value }] 
         });
     }
@@ -212,7 +235,7 @@ var PropertiesInterface = function (wickEditor) {
     document.getElementById('fontColor').onchange = function () {
         wickEditor.fabric.forceModifySelectedObjects();
         wickEditor.actionHandler.doAction('modifyObjects', { 
-            ids: [wickEditor.fabric.getSelectedObjectIDs()[0]], 
+            objs: [wickEditor.fabric.getSelectedObject()], 
             modifiedStates: [{ fill : "#"+this.value }] 
         });
     };
@@ -220,14 +243,13 @@ var PropertiesInterface = function (wickEditor) {
     $('#fontSize').on('input propertychange', function () {
 
         if(CheckInput.isNumber($('#fontSize').val())) {
-            var id = wickEditor.fabric.getSelectedObjectIDs()[0];
-            var obj = wickEditor.project.rootObject.getChildByID(id);
+            var obj = wickEditor.fabric.getSelectedObject();
             var modifiedState = { 
                 fontSize : parseInt($('#fontSize').val()) 
             };
             wickEditor.fabric.forceModifySelectedObjects();
             wickEditor.actionHandler.doAction('modifyObjects', { 
-                ids: [id], 
+                objs: [obj], 
                 modifiedStates: [modifiedState] 
             });
         }
@@ -237,7 +259,7 @@ var PropertiesInterface = function (wickEditor) {
         var newWeight = this.checked ? "bold" : "normal";
         wickEditor.fabric.forceModifySelectedObjects();
         wickEditor.actionHandler.doAction('modifyObjects', { 
-            ids: [wickEditor.fabric.getSelectedObjectIDs()[0]], 
+            ids: [wickEditor.fabric.getSelectedObject()], 
             modifiedStates: [{ fontWeight : newWeight }] 
         });
     };
@@ -245,19 +267,19 @@ var PropertiesInterface = function (wickEditor) {
         var newStyle = this.checked ? "italic" : "normal";
         wickEditor.fabric.forceModifySelectedObjects();
         wickEditor.actionHandler.doAction('modifyObjects', { 
-            ids: [wickEditor.fabric.getSelectedObjectIDs()[0]], 
+            ids: [wickEditor.fabric.getSelectedObject()], 
             modifiedStates: [{ fontStyle : newStyle }] 
         });
     };
 
     // Loop Checkbox: Toggle sound loop
     document.getElementById('loopCheckbox').onchange = function () {
-        wickEditor.fabric.getSelectedObject(WickObject).loopSound = this.checked;
+        wickEditor.fabric.getSelectedObject().loopSound = this.checked;
     };
 
     // Autoplay Checkbox: Toggle sound autoplay
     document.getElementById('autoplayCheckbox').onchange = function () {
-        wickEditor.fabric.getSelectedObject(WickObject).autoplaySound = this.checked;
+        wickEditor.fabric.getSelectedObject().autoplaySound = this.checked;
     };
 
     $('#frameIdentifier').on('input propertychange', function () {

@@ -49,7 +49,7 @@ Tools.Paintbrush = function (wickEditor) {
         var fabricPath = e.target;
 
         // Make sure the new object is actually a path created by fabric's drawing tool
-        if(fabricPath.type !== "path" || fabricPath.paperObjectReference) {
+        if(fabricPath.type !== "path" || fabricPath.wickObjectRef) {
             return;
         }
 
