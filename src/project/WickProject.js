@@ -270,6 +270,8 @@ WickProject.prototype.addObject = function (wickObject, zIndex) {
     var insideSymbolOffset = this.currentObject.getAbsolutePosition();
     wickObject.x -= insideSymbolOffset.x;
     wickObject.y -= insideSymbolOffset.y;
+
+    if(!wickObject.uuid) wickObject.uuid = random.uuid4();
     
     if(zIndex === undefined) {
         frame.wickObjects.push(wickObject);

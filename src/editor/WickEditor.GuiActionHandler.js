@@ -514,7 +514,7 @@ var GuiActionHandler = function (wickEditor) {
 
                 var fileType = items[i].type || items[i];
                 var file = clipboardData.getData(fileType);
-
+                
                 if(fileType === 'text/wickobjectsjson') {
                     var fileWickObject = WickObject.fromJSONArray(JSON.parse(file), function(objs) {
                         objs.forEach(function (obj) {
@@ -522,7 +522,7 @@ var GuiActionHandler = function (wickEditor) {
                             obj.getAllChildObjectsRecursive().forEach(function (child) {
                                 child.uuid = null;
                             });
-                        })
+                        });
                         wickEditor.actionHandler.doAction('addObjects', {
                             wickObjects:objs
                         });
