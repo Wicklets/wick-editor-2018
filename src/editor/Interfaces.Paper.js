@@ -3,6 +3,7 @@
 var PaperInterface = function (wickEditor) {
 
     var paperCanvas;
+    var paperObjectWickMappings = {};
 
     var currentFrame;
     var SVGDataDirty;
@@ -58,6 +59,20 @@ var PaperInterface = function (wickEditor) {
         SVGDataDirty = false;
     }
 
+    this.updatePaperSceneForObject = function (wickObject, deleted) {
+        var path = paperObjectWickMappings[wickObject.uuid];
+        if (deleted) {
+            path.remove();
+        } else {
+            path.applyMatrix = false;
+            path.position.x = wickObject.x;
+            path.position.y = wickObject.y;
+            path.scaling.x = wickObject.scaleX;
+            path.scaling.y = wickObject.scaleY;
+            path.rotation = wickObject.angle;
+        }
+    }
+
     this.applyChangesToFrame = function () {
         if(currentFrame) 
             currentFrame.pathData = paper.project.activeLayer.exportSVG({ asString: true });
@@ -65,10 +80,6 @@ var PaperInterface = function (wickEditor) {
 
     this.addSVG = function (svgString, offset) {
         addSVGToCanvas(svgString, offset);
-    }
-
-    this.removeSVG = function (path) {
-        path.remove();
     }
 
 
@@ -100,6 +111,7 @@ var PaperInterface = function (wickEditor) {
         WickObject.fromPathFile(path.exportSVG({asString:true}), function (wickObject) {
             wickObject.x = path.position.x;
             wickObject.y = path.position.y;
+            paperObjectWickMappings[wickObject.uuid] = path;
             wickEditor.project.addObject(wickObject);
         });
     }

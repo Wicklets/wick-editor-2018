@@ -18,28 +18,6 @@ Tools.Rectangle = function (wickEditor) {
     });
 
     this.createWickObjectFromShape = function (drawingShape) {
-    	/*var origX = drawingShape.left;
-        var origY = drawingShape.top;
-        drawingShape.left = 0;
-        drawingShape.top = 0;
-        drawingShape.setCoords();
-        var svg = '<rect width="'+drawingShape.width+'" height="'+drawingShape.height+'" style="fill:rgb(0,0,255);" />'
-        var SVGData = {
-            svgString: '<svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>', 
-            fillColor: fabricInterface.tools.paintbrush.color
-        }
-        var wickObj = WickObject.fromSVG(SVGData);
-
-        fabricInterface.canvas.remove(drawingShape);
-        wickEditor.syncInterfaces();
-
-        wickObj.x = origX + drawingShape.width/2;
-        wickObj.y = origY + drawingShape.height/2;
-
-        wickEditor.actionHandler.doAction('addObjects', {
-            wickObjects: [wickObj]
-        });*/
-
         var origX = drawingShape.left+drawingShape.width /2;
         var origY = drawingShape.top +drawingShape.height/2;
         drawingShape.left = 0;
@@ -52,7 +30,7 @@ Tools.Rectangle = function (wickEditor) {
         }
 
         wickEditor.paper.addSVG(SVGData.svgString, {x:origX, y:origY});
-        wickEditor.fabric.canvas.remove(drawingShape);
+        wickEditor.fabric.drawingPath = drawingShape;
         wickEditor.syncInterfaces();
     }
 

@@ -157,10 +157,10 @@ var WickActionHandler = function (wickEditor) {
             for(var i = 0; i < args.objs.length; i++) {
                 var obj = args.objs[i];
                 args.restoredObjects.push(obj);
-                if(obj instanceof WickObject)
-                    wickEditor.project.currentObject.removeChild(args.objs[i]);
-                else
-                    wickEditor.paper.removeSVG(obj)
+                wickEditor.project.currentObject.removeChild(args.objs[i]);
+                if(args.objs[i].pathData) {
+                    wickEditor.paper.updatePaperSceneForObject(args.objs[i], true);
+                }
             }
         },
         function (args) {
@@ -210,6 +210,10 @@ var WickActionHandler = function (wickEditor) {
                     if(args.modifiedStates[i].fontStyle) wickObj.fontData.fontStyle = args.modifiedStates[i].fontStyle;
                     if(args.modifiedStates[i].textDecoration) wickObj.fontData.textDecoration = args.modifiedStates[i].textDecoration;
                     if(args.modifiedStates[i].fill) wickObj.fontData.fill = args.modifiedStates[i].fill;
+                }
+
+                if(wickObj.pathData) {
+                    wickEditor.paper.updatePaperSceneForObject(wickObj);
                 }
                 
                 // This is silly what's a better way ???

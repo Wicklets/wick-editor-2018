@@ -56,7 +56,7 @@ Tools.Paintbrush = function (wickEditor) {
         // Vectorize the path and create a WickObject out of it
         potraceFabricPath(fabricPath, function(SVGData) {
             wickEditor.paper.addSVG(SVGData.svgString, {x:fabricPath.left, y:fabricPath.top});
-            wickEditor.fabric.canvas.remove(fabricPath);
+            wickEditor.fabric.drawingPath = fabricPath;
             wickEditor.syncInterfaces();
         });
     });

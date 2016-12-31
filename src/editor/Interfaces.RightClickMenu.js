@@ -142,7 +142,6 @@ var RightClickMenuInterface = function (wickEditor) {
     Bind Mouse events to open menu
 ***********************************/
 
-
     document.addEventListener('contextmenu', function (event) { 
         event.preventDefault();
     }, false);

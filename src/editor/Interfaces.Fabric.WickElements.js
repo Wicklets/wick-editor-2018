@@ -6,6 +6,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
     var objectsInCanvas = [];
 
+    var cachedFabricObjects = {};
+
     this.update = function () {
         var enablePerfTests = false;
 
@@ -59,7 +61,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 if(wickObj) {
                     wickObj.imageDirty = false;
                     wickObj.forceFabricCanvasRegen = false;
-                    wickObj.cachedFabricObject = null;
+                    cachedFabricObjects[wickObj.uuid] = null;
                 }
                 objectsInCanvas.splice(objectsInCanvas.indexOf(fabricObj.wickObjectRef), 1);
                 // Object doesn't exist in the current object anymore, remove it's fabric object.
@@ -120,6 +122,10 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
                 fabricObj.wickObjectRef = objectToAdd;
                 fabricInterface.canvas.add(fabricObj);
+                //if(fabricObj.type === "path") {
+                    if(wickEditor.fabric.drawingPath) wickEditor.fabric.drawingPath.remove();
+                    wickEditor.fabric.drawingPath = null;
+                //}
                 updateFabObj(fabricObj, objectToAdd, activeObjects);
 
                 //var trueZIndex = allObjects.indexOf(objectToAdd);
@@ -161,14 +167,14 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
     var createFabricObjectFromWickObject = function (wickObj, callback) {
 
-        if(wickObj.cachedFabricObject) {
-            callback(wickObj.cachedFabricObject);
+        if(cachedFabricObjects[wickObj.uuid]) {
+            callback(cachedFabricObjects[wickObj.uuid]);
             return;
         }
 
         if(wickObj.imageData) {
             fabric.Image.fromURL(wickObj.imageData, function(newFabricImage) {
-                wickObj.cachedFabricObject = newFabricImage;
+                cachedFabricObjects[wickObj.uuid] = newFabricImage;
                 newFabricImage.wickObjReference = wickObj;
                 callback(newFabricImage);
             });
@@ -190,6 +196,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         if(wickObj.pathData) {
             fabric.loadSVGFromString(wickObj.pathData, function(objects, options) {
                 var pathFabricObj = objects[0];
+                cachedFabricObjects[wickObj.uuid] = pathFabricObj;
                 pathFabricObj.wickObjReference = wickObj;
                 callback(pathFabricObj);
             });
