@@ -131,6 +131,10 @@ var WickActionHandler = function (wickEditor) {
 
                 wickEditor.project.addObject(wickObj);
                 args.addedObjects.push(wickObj);
+
+                if(wickObj.pathData) {
+                    wickEditor.paper.updatePaperSceneForObject(wickObj);
+                }
             }
         },
         function (args) {

@@ -61,7 +61,10 @@ var PaperInterface = function (wickEditor) {
 
     this.updatePaperSceneForObject = function (wickObject, deleted) {
         var path = paperObjectWickMappings[wickObject.uuid];
-        if (deleted) {
+
+        if(!path) {
+            addSVGToCanvas(wickObject.pathData);
+        } else if (deleted) {
             path.remove();
         } else {
             path.applyMatrix = false;
