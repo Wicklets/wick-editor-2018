@@ -63,7 +63,8 @@ var PaperInterface = function (wickEditor) {
         var path = paperObjectWickMappings[wickObject.uuid];
 
         if(!path) {
-            addSVGToCanvas(wickObject.pathData);
+            wickObject.parentObject.removeChild(wickObject);
+            addSVGToCanvas(wickObject.pathData, {x: wickObject.x, y:wickObject.y});
         } else if (deleted) {
             path.remove();
         } else {
@@ -111,6 +112,7 @@ var PaperInterface = function (wickEditor) {
         });
     }
     var addWickObjectFromPaperData = function (path) {
+        console.log("addWickObjectFromPaperData")
         WickObject.fromPathFile(path.exportSVG({asString:true}), function (wickObject) {
             wickObject.x = path.position.x;
             wickObject.y = path.position.y;
