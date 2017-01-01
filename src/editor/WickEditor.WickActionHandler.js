@@ -253,6 +253,70 @@ var WickActionHandler = function (wickEditor) {
             }
         });
 
+    this.registerAction('convertSelectionToSymbol', 
+        function (args) {
+            var selectedObjects = wickEditor.fabric.getSelectedObjects(WickObject);
+
+            var currObj = wickEditor.project.currentObject;
+            if(currObj.parentObject) currObj.fixOriginPoint()
+
+            var symbolZIndex = null;
+            selectedObjects.forEach(function (obj) {
+                var objZIndex = wickEditor.project.currentObject.getCurrentFrame().wickObjects.indexOf(obj);
+                if(symbolZIndex === null || objZIndex < symbolZIndex) {
+                    symbolZIndex = objZIndex;
+                }
+            });
+            
+            selectedObjects.forEach(function (obj) {
+                wickEditor.project.currentObject.removeChild(obj);
+                wickEditor.paper.updatePaperSceneForObject(obj, true);
+                obj.inFrameSVG = false;
+            });
+
+            var symbol = new WickObject.createSymbolFromWickObjects(selectedObjects);
+            wickEditor.project.addObject(symbol, symbolZIndex);
+            args.createdSymbol = symbol;
+            symbol.fixOriginPoint(true);
+            symbol.selectOnAddToFabric = true;
+        },
+        function (args) {
+            args.symbol = args.createdSymbol;
+
+            args.children = args.symbol.getObjectsOnFirstFrame();
+            args.children.forEach(function (child) {
+                child.x = child.getAbsolutePosition().x;
+                child.y = child.getAbsolutePosition().y;
+                wickEditor.project.addObject(child);
+            });
+
+            wickEditor.project.currentObject.removeChild(args.createdSymbol);
+        });
+
+    this.registerAction('breakApartSymbol', 
+        function (args) {
+            args.symbol = args.obj;
+
+            args.children = args.symbol.getObjectsOnFirstFrame();
+            args.children.forEach(function (child) {
+                //child.x += args.symbol.x;
+                //child.y += args.symbol.y;
+                child.x = child.getAbsolutePosition().x;
+                child.y = child.getAbsolutePosition().y;
+                wickEditor.project.addObject(child);
+            });
+
+            wickEditor.project.currentObject.removeChild(args.obj);
+        },
+        function (args) {
+            args.children.forEach(function (child) {
+                child.x -= args.symbol.x;
+                child.y -= args.symbol.y;
+                wickEditor.project.currentObject.removeChild(child);
+            });
+            wickEditor.project.addObject(args.symbol);
+        });
+
     this.registerAction('addNewFrame', 
         function (args) {
             var currentObject = wickEditor.project.currentObject;
@@ -382,68 +446,6 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.fabric.deselectAll();
 
             args.obj.playheadPosition = args.oldPlayheadPosition;
-        });
-
-    this.registerAction('convertSelectionToSymbol', 
-        function (args) {
-            var selectedObjects = wickEditor.fabric.getSelectedObjects(WickObject);
-
-            var currObj = wickEditor.project.currentObject;
-            if(currObj.parentObject) currObj.fixOriginPoint()
-
-            var symbolZIndex = null;
-            selectedObjects.forEach(function (obj) {
-                var objZIndex = wickEditor.project.currentObject.getCurrentFrame().wickObjects.indexOf(obj);
-                if(symbolZIndex === null || objZIndex < symbolZIndex) {
-                    symbolZIndex = objZIndex;
-                }
-            });
-            
-            selectedObjects.forEach(function (obj) {
-                wickEditor.project.currentObject.removeChild(obj);
-            });
-
-            var symbol = new WickObject.createSymbolFromWickObjects(selectedObjects);
-            wickEditor.project.addObject(symbol, symbolZIndex);
-            args.createdSymbol = symbol;
-            symbol.fixOriginPoint(true);
-            symbol.selectOnAddToFabric = true;
-        },
-        function (args) {
-            args.symbol = args.createdSymbol;
-
-            args.children = args.symbol.getObjectsOnFirstFrame();
-            args.children.forEach(function (child) {
-                child.x = child.getAbsolutePosition().x;
-                child.y = child.getAbsolutePosition().y;
-                wickEditor.project.addObject(child);
-            });
-
-            wickEditor.project.currentObject.removeChild(args.createdSymbol);
-        });
-
-    this.registerAction('breakApartSymbol', 
-        function (args) {
-            args.symbol = args.obj;
-
-            args.children = args.symbol.getObjectsOnFirstFrame();
-            args.children.forEach(function (child) {
-                //child.x += args.symbol.x;
-                //child.y += args.symbol.y;
-                child.x = child.getAbsolutePosition().x;
-                child.y = child.getAbsolutePosition().y;
-                wickEditor.project.addObject(child);
-            });
-
-            wickEditor.project.currentObject.removeChild(args.obj);
-        },
-        function (args) {
-            args.children.forEach(function (child) {
-                child.x -= args.symbol.x;
-                child.y -= args.symbol.y;
-                wickEditor.project.currentObject.removeChild(child);
-            });
-            wickEditor.project.addObject(args.symbol);
         });
 
     this.registerAction('breakApartImage', 

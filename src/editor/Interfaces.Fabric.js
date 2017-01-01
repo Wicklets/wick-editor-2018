@@ -23,7 +23,6 @@ var FabricInterface = function (wickEditor) {
         this.onionSkinsDirty = false;
 
         this.shapeDrawer   = new FabricShapeDrawer(wickEditor, this);
-        //this.paperElements = new FabricPaperElements(wickEditor, this);
         this.guiElements   = new FabricGUIElements(wickEditor, this);
         this.wickElements  = new FabricWickElements(wickEditor, this);
         this.symbolBorders = new FabricSymbolBorders(wickEditor, this);

@@ -15,8 +15,8 @@ var ToolOptionsInterface = function (wickEditor) {
 
         if(lineColorEl.jscolor) lineColorEl.jscolor.fromString(wickEditor.fabric.tools['paintbrush'].color);
         
-        //document.getElementById('toolOptionsGUI').style.display = 'block';
-        document.getElementById('toolOptionsGUI').style.display = 'none';
+        document.getElementById('toolOptionsGUI').style.display = 'block';
+        //document.getElementById('toolOptionsGUI').style.display = 'none';
     }
     
     lineWidthEl.onchange = function() {

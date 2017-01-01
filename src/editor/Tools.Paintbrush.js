@@ -55,7 +55,7 @@ Tools.Paintbrush = function (wickEditor) {
 
         // Vectorize the path and create a WickObject out of it
         potraceFabricPath(fabricPath, function(SVGData) {
-            wickEditor.paper.addSVG(SVGData.svgString, {x:fabricPath.left, y:fabricPath.top});
+            wickEditor.paper.addSVG(SVGData, {x:fabricPath.left, y:fabricPath.top});
             wickEditor.fabric.drawingPath = fabricPath;
             wickEditor.syncInterfaces();
         });
@@ -95,11 +95,7 @@ Tools.Paintbrush = function (wickEditor) {
             alphamax: 1.0
         });
         Potrace.process(function(){
-            var SVGData = {
-                svgString: Potrace.getSVG(1), 
-                fillColor: that.color
-            }
-            callback(SVGData);
+            callback(Potrace.getSVG(1, null, that.color));
         });
     };
 

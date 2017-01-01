@@ -23,13 +23,10 @@ Tools.Ellipse = function (wickEditor) {
         drawingShape.left = 0;
         drawingShape.top = 0;
         drawingShape.setCoords();
-        var svg = '<ellipse cx="'+drawingShape.width+'" cy="'+drawingShape.height+'" rx="'+drawingShape.width+'" ry="'+drawingShape.height+'"/>'
-        var SVGData = {
-            svgString: '<svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>', 
-            fillColor: fabricInterface.tools.paintbrush.color
-        }
+        var svg = '<ellipse fill="'+drawingShape.fill+'" cx="'+drawingShape.width+'" cy="'+drawingShape.height+'" rx="'+drawingShape.width+'" ry="'+drawingShape.height+'"/>'
+        var svgData = '<svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>';
 
-        wickEditor.paper.addSVG(SVGData.svgString, {x:origX, y:origY});
+        wickEditor.paper.addSVG(svgData, {x:origX, y:origY});
         wickEditor.fabric.drawingPath = drawingShape;
         wickEditor.syncInterfaces();
     }

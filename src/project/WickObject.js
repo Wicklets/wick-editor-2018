@@ -743,7 +743,7 @@ WickObject.prototype.getBlobImages = function (callback) {
 *************************/
 
 WickObject.JSONReplacer = function(key, value) {
-    var dontJSONVars = ["parentObject","causedAnException","paperData","uuid"];
+    var dontJSONVars = ["parentObject","causedAnException","paperData","uuid","inFrameSVG"];
 
     if (dontJSONVars.indexOf(key) !== -1) {
         return undefined;

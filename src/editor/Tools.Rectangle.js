@@ -23,13 +23,10 @@ Tools.Rectangle = function (wickEditor) {
         drawingShape.left = 0;
         drawingShape.top = 0;
         drawingShape.setCoords();
-        var svg = '<rect width="'+drawingShape.width+'" height="'+drawingShape.height+'" style="fill:rgb(0,0,0);" />'
-        var SVGData = {
-            svgString: '<svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>', 
-            fillColor: fabricInterface.tools.paintbrush.color
-        }
+        var svg = '<rect fill="'+drawingShape.fill+'" width="'+drawingShape.width+'" height="'+drawingShape.height+'" style="fill:rgb(0,0,0);" />'
+        var svgString = '<svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>';
 
-        wickEditor.paper.addSVG(SVGData.svgString, {x:origX, y:origY});
+        wickEditor.paper.addSVG(svgString, {x:origX, y:origY});
         wickEditor.fabric.drawingPath = drawingShape;
         wickEditor.syncInterfaces();
     }

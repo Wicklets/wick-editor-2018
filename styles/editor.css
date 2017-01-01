@@ -345,8 +345,8 @@ select {
 
 .paperCanvas {
 	position: absolute;
-    bottom: 10px;
-    left: 10px;
+    bottom: 6px;
+    right: 6px;
 }
 
 .hidden {

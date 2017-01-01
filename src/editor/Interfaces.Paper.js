@@ -2,6 +2,8 @@
 
 var PaperInterface = function (wickEditor) {
 
+    var that = this;
+
     var paperCanvas;
     var paperObjectWickMappings = {};
 
@@ -14,8 +16,8 @@ var PaperInterface = function (wickEditor) {
     paperCanvas = document.createElement('canvas');
     paperCanvas.className = 'paperCanvas';
     paperCanvas.style.backgroundColor = "#FFDDDD";
-    paperCanvas.style.width  = (wickEditor.project.resolution.x/3)+'px';
-    paperCanvas.style.height = (wickEditor.project.resolution.y/3)+'px';
+    paperCanvas.style.width  = (wickEditor.project.resolution.x/2)+'px';
+    paperCanvas.style.height = (wickEditor.project.resolution.y/2)+'px';
     paper.setup(paperCanvas);
     paper.view.viewSize.width  = wickEditor.project.resolution.x;
     paper.view.viewSize.height = wickEditor.project.resolution.y;
@@ -30,12 +32,12 @@ var PaperInterface = function (wickEditor) {
         SVGDataDirty = true;
         ready = true;
 
-        this.syncWithEditorState()
+        this.syncWithEditorState();
     }
 
     this.syncWithEditorState = function () {
-        if(!ready) return;
-        if(!paper.project) return; // sync may get called before paper.js is ready
+        if (!ready) return;
+        if (!paper.project) return; // sync may get called before paper.js is ready
 
         var newFrame = wickEditor.project.currentObject.getCurrentFrame();
         if(newFrame !== currentFrame) {
@@ -46,10 +48,27 @@ var PaperInterface = function (wickEditor) {
         }
         currentFrame = newFrame;
 
+        if(currentFrame) {
+            var pathsToUpdate = [];
+            currentFrame.wickObjects.forEach(function (wickObject) {
+                if(wickObject.pathData && !wickObject.inFrameSVG) {
+                    pathsToUpdate.push(wickObject);
+                }
+            });
+            pathsToUpdate.forEach(function (wickObject) {
+                wickObject.parentObject.removeChild(wickObject);
+                addSVGToCanvas(wickObject.pathData, {x:wickObject.x, y:wickObject.y});
+            });
+            if(pathsToUpdate.length > 0) {
+                that.applyChangesToFrame()
+            }
+        }
+
         // Only update the paper.js canvas if new SVG data exists in the WickProject
         if (!SVGDataDirty) return;
 
         paper.project.clear();
+        paperObjectWickMappings = {};
 
         // currentFrame may be null if the playhead isn't over a frame
         if (!currentFrame) return;
@@ -64,8 +83,9 @@ var PaperInterface = function (wickEditor) {
 
         if(!path) {
             wickObject.parentObject.removeChild(wickObject);
-            addSVGToCanvas(wickObject.pathData, {x: wickObject.x, y:wickObject.y});
+            addSVGToCanvas(wickObject.pathData, {x:wickObject.x, y:wickObject.y});
         } else if (deleted) {
+            paperObjectWickMappings[wickObject.uuid] = null;
             path.remove();
         } else {
             path.applyMatrix = false;
@@ -100,7 +120,7 @@ var PaperInterface = function (wickEditor) {
     var resetPathWickObjects = function () {
         var removedWOs = [];
         currentFrame.wickObjects.forEach(function (wickObject) {
-            if(!wickObject.pathData) return;
+            if (!wickObject.pathData) return;
             removedWOs.push(wickObject);
         });
         removedWOs.forEach(function (wickObject) {
@@ -112,10 +132,10 @@ var PaperInterface = function (wickEditor) {
         });
     }
     var addWickObjectFromPaperData = function (path) {
-        console.log("addWickObjectFromPaperData")
         WickObject.fromPathFile(path.exportSVG({asString:true}), function (wickObject) {
             wickObject.x = path.position.x;
             wickObject.y = path.position.y;
+            wickObject.inFrameSVG = true;
             paperObjectWickMappings[wickObject.uuid] = path;
             wickEditor.project.addObject(wickObject);
         });

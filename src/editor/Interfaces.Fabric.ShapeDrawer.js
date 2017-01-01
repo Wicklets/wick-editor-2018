@@ -88,7 +88,6 @@ var FabricShapeDrawer = function (wickEditor, fabricInterface) {
 
         if(!drawingShape) return;
         if(drawingShape.width <= 0 || drawingShape.height <= 0) {
-            fabricInterface.canvas.remove(drawingShape);
             drawingShape = null;
             return;
         }

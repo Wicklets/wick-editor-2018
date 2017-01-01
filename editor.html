@@ -210,6 +210,10 @@
                     <img src="resources/paintbrush.png" width="20"></img>
                 </div>
 
+                <div style="display:none;" class="button tooltipElem" id="eraserToolButton" alt="Eraser">
+                    <img src="resources/eraser.png" width="20"></img>
+                </div>
+
                 <div style="display:none;" class="button tooltipElem" id="fillbucketToolButton" alt="Fill Bucket">
                     <img src="resources/fill-bucket.png" width="20"></img>
                 </div>
@@ -234,9 +238,9 @@
                     <img src="resources/magicwand.png" width="20"></img>
                 </div>
 
-                <div style="display:none;" class="button tooltipElem" id="cropToolButton" alt="Screen Grab">
+                <!--<div style="display:none;" class="button tooltipElem" id="cropToolButton" alt="Screen Grab">
                     <img src="resources/camera.png" width="20"></img>
-                </div>
+                </div>-->
 
                 <div class="button tooltipElem" id="zoomToolButton" alt="Zoom In">
                     <img src="resources/zoom.png" width="20"></img>
@@ -245,13 +249,6 @@
                 <div class="button tooltipElem" id="panToolButton" alt="Pan">
                     <img src="resources/pan.png" width="20"></img>
                 </div>
-            </div>
-
-        <!-- Tool options GUI, below toolbar gui -->
-
-            <div id="toolOptionsGUI" class="GUIBox">
-                Line Width: <input type="range" min="0" max="50" id="lineWidth"><br />
-                Line Color: <input class="jscolor" id="lineColor">
             </div>
 
         <!-- Properties GUI, bottom right corner -->
@@ -441,6 +438,13 @@
                 <div class="menubarTab" id="menubarMenuObject">Object</div>
                 <div class="menubarTab" id="menubarMenuRun">Run</div>
                 <div class="menubarTab" id="menubarMenuAbout">About</div>-->
+            </div>
+
+        <!-- Tool options GUI, below toolbar gui -->
+
+            <div id="toolOptionsGUI" class="GUIBox">
+                Line Width: <input type="range" min="0" max="50" id="lineWidth"><br />
+                Line Color: <input class="jscolor" id="lineColor">
             </div>
 
         <!-- Status menu GUI, top right corner -->
