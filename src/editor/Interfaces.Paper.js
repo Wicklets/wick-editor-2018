@@ -106,6 +106,18 @@ var PaperInterface = function (wickEditor) {
         addSVGToCanvas(svgString, offset);
     }
 
+    this.updateTouchingPaths = function () {
+
+    }
+
+    this.fillHole = function (x,y) {
+
+    }
+
+    this.eraseWithPath = function (pathData) {
+        
+    }
+
 
     var getAllSVGs = function () {
         var allSVGs = [];
