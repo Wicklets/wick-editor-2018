@@ -1,6 +1,0 @@
-{
-  "name": "Wick",
-  "tagline": "Browser-based game/animation creation environment",
-  "body": "# Wick\r\n\r\nWick is a multipurpose creation environment that allows anyone to build a wide range of easily sharable internet games, animations and interactive doohickies - all in the browser.\r\n\r\nWick allows easier access to new web technologies through a visual editor, a timeline system, and a scripting system that makes learning and writing javascript easier. Wick also exports projects as standalone webpages or embeddable HTML5 canvases - no external players or runtimes necessary!\r\n\r\nWick also handles the differences between desktop and mobile browsers. Your projects will work the same on any device!\r\n\r\nTry the editor [here](http://zrispo.co/wick/editor.htm)!\r\n\r\nTry a simple game made with the editor [here](http://zrispo.co/wick/examples/game.html)!\r\n\r\n### How to run the editor/player locally for development\r\n* Clone or download and unzip this repo\r\n* Open terminal in the newly made `wick` folder and run a python webserver using: `python -m SimpleHTTPServer`\r\n* Open a browser window, and go to `http://localhost:8000/`\r\n",
-  "note": "Don't delete this file! It's used internally to help with page regeneration."
-}
