@@ -140,7 +140,8 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             // Remove objects we added
             for(var i = 0; i < args.wickObjects.length; i++) {
-                wickEditor.project.currentObject.removeChild(args.addedObjects[i]);
+                var wickObject = args.addedObjects[i];
+                wickEditor.project.currentObject.removeChild(wickObject);
             }
         });
 

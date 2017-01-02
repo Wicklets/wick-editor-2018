@@ -93,9 +93,27 @@ var PaperInterface = function (wickEditor) {
             path.applyMatrix = true;
             path.position.x = wickObject.x;
             path.position.y = wickObject.y;
-            path.scaling.x = wickObject.scaleX;
-            path.scaling.y = wickObject.scaleY;
-            path.rotation = wickObject.angle;
+
+            if(path.origRotation === undefined) path.origRotation = 0;
+            var newRotation = wickObject.angle;
+            if(newRotation !== path.origRotation) {
+                path.rotation = newRotation-path.origRotation;
+                path.origRotation = wickObject.angle;
+            }
+
+            if(path.origScaleX === undefined) path.origScaleX = 1;
+            var newScaleX = wickObject.scaleX;
+            if(newScaleX !== path.origScaleX) {
+                path.scaling.x = newScaleX*path.origScaleX;
+                path.origScaleX = wickObject.scaleX;
+            }
+
+            if(path.origScaleY === undefined) path.origScaleY = 1;
+            var newScaleY = wickObject.scaleY;
+            if(newScaleY !== path.origScaleY) {
+                path.scaling.y = newScaleY*path.origScaleY;
+                path.origScaleY = wickObject.scaleY;
+            }
         }
     }
 
@@ -162,7 +180,9 @@ var PaperInterface = function (wickEditor) {
     }
 
     this.setPathNeedsUpdate = function (wickObject) {
-        paperObjectWickMappings[wickObject.uuid].needsIntersectCheck = true;
+        var path = paperObjectWickMappings[wickObject.uuid];
+        if(path)
+            path.needsIntersectCheck = true;
     }
 
 

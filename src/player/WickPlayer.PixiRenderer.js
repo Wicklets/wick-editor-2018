@@ -95,6 +95,15 @@ var WickPixiRenderer = function (project) {
 		} else if (wickObj.imageData) {
             wickObj.pixiSprite = PIXI.Sprite.fromImage(wickObj.imageData);
             wickObj.parentObject.pixiContainer.addChild(wickObj.pixiSprite);
+        } else if (wickObj.pathData) {
+        	var parser = new DOMParser();
+			var svgDoc = parser.parseFromString('<svg id="svg" x="0" y="0" version="1.1" width="'+project.resolution.x+'" height="'+project.resolution.x+'" xmlns="http://www.w3.org/2000/svg">'+wickObj.pathData+'</svg>', "image/svg+xml");
+
+			var s = new XMLSerializer().serializeToString(svgDoc)
+			var base64svg = 'data:image/svg+xml;base64,' + window.btoa(s);
+			
+			wickObj.pixiSprite = PIXI.Sprite.fromImage(base64svg);
+            wickObj.pixiContainer.addChild(wickObj.pixiSprite);
         } else if (wickObj.fontData) {
         	var style = {
                 font : subObj.fontData.fontWeight + " " + subObj.fontData.fontStyle + " " + subObj.fontData.fontSize + "px " + subObj.fontData.fontFamily,
@@ -119,6 +128,19 @@ var WickPixiRenderer = function (project) {
             } else if (subObj.imageData) {
                 subObj.pixiSprite = PIXI.Sprite.fromImage(subObj.imageData);
                 wickObj.pixiContainer.addChild(subObj.pixiSprite);
+	        } else if (subObj.pathData) {
+	        	var parser = new DOMParser();
+				var svgDoc = parser.parseFromString('<svg id="svg" x="0" y="0" version="1.1" width="'+project.resolution.x+'" height="'+project.resolution.y+'" xmlns="http://www.w3.org/2000/svg">'+subObj.pathData+'</svg>', "image/svg+xml");
+
+				//console.log(svgDoc)
+
+				var s = new XMLSerializer().serializeToString(svgDoc)
+				var base64svg = 'data:image/svg+xml;base64,' + window.btoa(s);
+
+				//console.log(base64svg)
+				
+				subObj.pixiSprite = PIXI.Sprite.fromImage(base64svg);
+	            wickObj.pixiContainer.addChild(subObj.pixiSprite);
             } else if (subObj.fontData) {
             	var fontString = subObj.fontData.fontSize + "px " + subObj.fontData.fontFamily;
             	if(subObj.fontData.fontWeight !== 'normal') fontString = subObj.fontData.fontWeight+" " + fontString;
@@ -262,12 +284,18 @@ var WickPixiRenderer = function (project) {
 	    } else {
 	        if(wickObj.pixiSprite) {
 	            wickObj.pixiSprite.visible = true;
-	            wickObj.pixiSprite.anchor = new PIXI.Point(0.5, 0.5);
-	            wickObj.pixiSprite.position.x = wickObj.x//Math.round(wickObj.x);
-	            wickObj.pixiSprite.position.y = wickObj.y//Math.round(wickObj.y);
-	            wickObj.pixiSprite.rotation = wickObj.angle/360*2*3.14159;
-	            wickObj.pixiSprite.scale.x = wickObj.scaleX;
-	            wickObj.pixiSprite.scale.y = wickObj.scaleY;
+	            if(!wickObj.pathData) {
+		            wickObj.pixiSprite.anchor = new PIXI.Point(0.5, 0.5);
+		            wickObj.pixiSprite.position.x = wickObj.x;
+		            wickObj.pixiSprite.position.y = wickObj.y;
+		            wickObj.pixiSprite.rotation = wickObj.angle/360*2*3.14159;
+		            wickObj.pixiSprite.scale.x = wickObj.scaleX;
+		            wickObj.pixiSprite.scale.y = wickObj.scaleY;
+		        } else {
+		        	wickObj.pixiSprite.position.x = 0;
+		        	wickObj.pixiSprite.position.y = 0;
+		        	wickObj.pixiSprite.anchor = new PIXI.Point(0, 0);
+		        }
 	            wickObj.pixiSprite.alpha = wickObj.opacity;
 
 	            if(wickObj.flipX) { 
