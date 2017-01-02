@@ -222,7 +222,7 @@ var TimelineInterface = function (wickEditor) {
             //wickEditor.fabric.deselectAll();
             
             //wickEditor.fabric.getObjectsImage(function (imgData) {
-                var currentFrame = currentObject.getCurrentFrame();
+                //var currentFrame = currentObject.getCurrentFrame();
                 //if(imgData && currentFrame) currentFrame.cachedImageData = imgData;
 
                 wickEditor.actionHandler.doAction('movePlayhead', {

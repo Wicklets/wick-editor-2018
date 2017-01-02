@@ -88,7 +88,7 @@ var PaperInterface = function (wickEditor) {
             paperObjectWickMappings[wickObject.uuid] = null;
             path.remove();
         } else {
-            path.applyMatrix = false;
+            path.applyMatrix = true;
             path.position.x = wickObject.x;
             path.position.y = wickObject.y;
             path.scaling.x = wickObject.scaleX;
@@ -108,6 +108,47 @@ var PaperInterface = function (wickEditor) {
 
     this.updateTouchingPaths = function () {
 
+        // Find all paths with needsIntersectCheck flag, these need to be checked for new intersections
+        var paths = getAllSVGs();
+        var pathsThatNeedUpdate = [];
+        paths.forEach(function(path) {
+            if(path.needsIntersectCheck) {
+                pathsThatNeedUpdate.push(path);
+            }
+        });
+
+        console.log("- - - - - - - - - -");
+        console.log("# of pathsThatNeedUpdate: " + pathsThatNeedUpdate.length);
+
+        // Check for intersections for all paths with needsIntersectCheck flag
+        pathsThatNeedUpdate.forEach(function (path) {
+
+            // Find all paths intersecting
+            var paths = getAllSVGs();
+            var intersectingPaths = [];
+            paths.forEach(function (checkPath) {
+                var pathA = path;
+                var pathB = checkPath;
+
+                if(pathA === pathB) return;
+
+                var foundIntersection = false;
+                for(var a = 0; a < pathA.children.length; a++) {
+                    for(var b = 0; b < pathB.children.length; b++) {
+                        var childA = pathA.children[a];
+                        var childB = pathB.children[b];
+                        if (!foundIntersection && childA.intersects(childB)) {
+                            foundIntersection = true;
+                            intersectingPaths.push(checkPath);
+                        }
+                    }
+                }
+            });
+
+            path.needsIntersectCheck = false;
+
+            console.log("pathsThatNeedUpdate["+pathsThatNeedUpdate.indexOf(path)+"] # intersections: " + intersectingPaths.length);
+        });
     }
 
     this.fillHole = function (x,y) {
@@ -115,7 +156,11 @@ var PaperInterface = function (wickEditor) {
     }
 
     this.eraseWithPath = function (pathData) {
-        
+
+    }
+
+    this.setPathNeedsUpdate = function (wickObject) {
+        paperObjectWickMappings[wickObject.uuid].needsIntersectCheck = true;
     }
 
 
@@ -160,6 +205,7 @@ var PaperInterface = function (wickEditor) {
           , parser = new DOMParser()
           , doc = parser.parseFromString(xmlString, "text/xml");
         var paperGroup = paper.project.importSVG(doc);
+        if(paperGroup.closePath) paperGroup.closePath();
         
         paperGroup.parent.insertChildren(paperGroup.index,  paperGroup.removeChildren());
         paperGroup.remove();
@@ -170,6 +216,7 @@ var PaperInterface = function (wickEditor) {
           , parser = new DOMParser()
           , doc = parser.parseFromString(xmlString, "text/xml");
         var paperGroup = paper.project.importSVG(doc);
+        if(paperGroup.closePath) paperGroup.closePath();
 
         if(offset)
             paperGroup.position = new paper.Point(offset.x, offset.y);

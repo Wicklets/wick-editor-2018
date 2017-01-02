@@ -134,7 +134,7 @@ var WickPixiRenderer = function (project) {
             }
         });
 
-		wickObj.layers.forEach(function (layer) {
+		/*wickObj.layers.forEach(function (layer) {
 			layer.frames.forEach(function (frame) {
 				if (frame.pathData === "") return;
 
@@ -148,7 +148,7 @@ var WickPixiRenderer = function (project) {
 
                 wickObj.pixiContainer.addChild(frame.pixiSprite);
 			});
-		});
+		});*/
     }
 
     var resizeCanvas = function () {
@@ -201,11 +201,11 @@ var WickPixiRenderer = function (project) {
 
 	var resetAllPixiObjects = function (wickObj) {
 
-		wickObj.layers.forEach(function (layer) {
+		/*wickObj.layers.forEach(function (layer) {
 			layer.frames.forEach(function (frame) {
 				if(frame.pixiSprite) frame.pixiSprite.visible = false;
 			});
-		});
+		});*/
 
 	    wickObj.getAllChildObjects().forEach(function(subObj) {
 	        if(subObj.pixiSprite) {
@@ -228,8 +228,8 @@ var WickPixiRenderer = function (project) {
 	var updatePixiObjectTransforms = function (wickObj) {
 
 	    if(wickObj.isSymbol) {
-	    	var frame = wickObj.getCurrentFrame();
-	    	if(frame.pixiSprite) frame.pixiSprite.visible = true;
+	    	/*var frame = wickObj.getCurrentFrame();
+	    	if(frame.pixiSprite) frame.pixiSprite.visible = true;*/
 
 	        wickObj.pixiContainer.visible = true;
 	        //if(!wickObj.isRoot) {

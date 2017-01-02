@@ -57,6 +57,16 @@ var FabricInterface = function (wickEditor) {
                 rotating: e.target.setCoords
             });
         });
+        that.canvas.on('before:selection:cleared', function (e) {
+            var selectedObjs = that.getSelectedObjects();
+            selectedObjs.forEach(function (wickObj) {
+                if(wickObj.pathData) {
+                    wickEditor.paper.setPathNeedsUpdate(wickObj);
+                }
+            });
+            if(selectedObjs.length > 0)
+                wickEditor.paper.updateTouchingPaths();
+        }); 
         that.canvas.on('selection:cleared', function (e) {
             wickEditor.timeline.redraw();
 
@@ -144,6 +154,10 @@ var FabricInterface = function (wickEditor) {
         that.forceModifySelectedObjects();
         that.deselectAll();
         wickEditor.syncInterfaces();
+
+        if(that.lastTool instanceof Tools.Paintbrush) {
+            wickEditor.paper.updateTouchingPaths();
+        }
     }
 
     this.useLastUsedTool = function () {
@@ -374,7 +388,6 @@ var FabricInterface = function (wickEditor) {
         that.guiElements.update();
         wickEditor.scriptingide.syncWithEditorState();
         wickEditor.properties.syncWithEditorState();
-
     }
 
     this.getSelectedObjects = function () {
