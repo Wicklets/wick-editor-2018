@@ -90,6 +90,11 @@ var PropertiesInterface = function (wickEditor) {
                     objectTypeIcon.src = 'resources/image.png';
                     objectTypeName.innerHTML = 'Image';
                 
+                } else if (selectedObj.pathData) {
+                
+                    objectTypeIcon.src = 'resources/path.png';
+                    objectTypeName.innerHTML = 'Path';
+                
                 }
 
             } else {
