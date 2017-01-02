@@ -270,7 +270,7 @@ var WickActionHandler = function (wickEditor) {
             
             selectedObjects.forEach(function (obj) {
                 wickEditor.project.currentObject.removeChild(obj);
-                wickEditor.paper.updatePaperSceneForObject(obj, true);
+                if(obj.pathData) wickEditor.paper.updatePaperSceneForObject(obj, true);
                 obj.inFrameSVG = false;
             });
 

@@ -12,6 +12,8 @@ var PaperInterface = function (wickEditor) {
 
     var ready = false;
 
+    var debugLog = true;
+
     // Create the canvas to be used with paper.js and init the paper.js instance.
     paperCanvas = document.createElement('canvas');
     paperCanvas.className = 'paperCanvas';
@@ -117,8 +119,8 @@ var PaperInterface = function (wickEditor) {
             }
         });
 
-        console.log("- - - - - - - - - -");
-        console.log("# of pathsThatNeedUpdate: " + pathsThatNeedUpdate.length);
+        if (debugLog) console.log("- - - - - - - - - -");
+        if (debugLog) console.log("# of pathsThatNeedUpdate: " + pathsThatNeedUpdate.length);
 
         // Check for intersections for all paths with needsIntersectCheck flag
         pathsThatNeedUpdate.forEach(function (path) {
@@ -147,7 +149,7 @@ var PaperInterface = function (wickEditor) {
 
             path.needsIntersectCheck = false;
 
-            console.log("pathsThatNeedUpdate["+pathsThatNeedUpdate.indexOf(path)+"] # intersections: " + intersectingPaths.length);
+            if (debugLog) console.log("pathsThatNeedUpdate["+pathsThatNeedUpdate.indexOf(path)+"] # intersections: " + intersectingPaths.length);
         });
     }
 
@@ -175,6 +177,8 @@ var PaperInterface = function (wickEditor) {
     }
 
     var resetPathWickObjects = function () {
+        if (debugLog) console.log("resetPathWickObjects")
+
         var removedWOs = [];
         currentFrame.wickObjects.forEach(function (wickObject) {
             if (!wickObject.pathData) return;

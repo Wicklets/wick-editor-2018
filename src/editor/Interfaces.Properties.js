@@ -336,7 +336,7 @@ var PropertiesInterface = function (wickEditor) {
     }
     document.getElementById('experimentalToolsCheckbox').onclick = function (e) {
         var self = this;
-        ['paintbrush', 'fillbucket', 'rectangle', 'ellipse', 'dropper', 'crop', 'eraser'].forEach(function (toolName) {
+        ['paintbrush', 'fillbucket', 'rectangle', 'ellipse', 'dropper', 'eraser'].forEach(function (toolName) {
             document.getElementById(toolName+'ToolButton').style.display = self.checked ? 'block' : 'none';
         });
         document.getElementById('experimentalWarning').style.display = self.checked ? 'block' : 'none';
