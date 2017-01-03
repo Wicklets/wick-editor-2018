@@ -115,6 +115,11 @@ var WickActionHandler = function (wickEditor) {
 
     }
 
+    this.clearHistory = function () {
+        this.undoStack = [];
+        this.redoStack = [];
+    }
+
 // Register all actions
 
     this.registerAction('addObjects', 

@@ -633,7 +633,7 @@ WickObject.prototype.fixOriginPoint = function (newSymbol, forceBbox) {
     this.y -= symbolCornerPosition.y;
 }
 
-/* Get the absolute position of this object (i.e., the position not relative to the parents) */
+/* Get the absolute position of this object (the position not relative to the parents) */
 WickObject.prototype.getAbsolutePosition = function () {
     if(this.isRoot) {
         return {
