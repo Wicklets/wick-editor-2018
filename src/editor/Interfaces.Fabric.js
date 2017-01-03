@@ -271,54 +271,6 @@ var FabricInterface = function (wickEditor) {
         return foundFabricObject;
     }
 
-    this.getBoundingBoxOfObjects = function (objects) {
-        /*var group = new fabric.Group([], {
-            originX: 'left',
-            originY: 'top'
-        });
-
-        var boundingBoxObjects = []; 
-        this.canvas.forEachObject(function(fabricObj) {
-            if(objects.indexOf(fabricObj.wickObjectRef) !== -1) {
-                boundingBoxObjects.push(fabricObj);
-            }
-        });
-        for(var i = 0; i < boundingBoxObjects.length; i++) {
-            group.canvas = this.canvas // WHAT ??????????????? WHY
-            group.addWithUpdate(boundingBoxObjects[i]);
-        }
-
-        group.setCoords();
-        var bbox = group.getBoundingRect();
-        for(var i = 0; i < boundingBoxObjects.length; i++) {
-            group.canvas = this.canvas // WHAT ??????????????? WHY
-            group.removeWithUpdate(boundingBoxObjects[i]);
-        }*/
-
-        var bbox = (that.canvas.getActiveGroup() || that.canvas.getActiveObject()).getBoundingRect();
-
-        var bboxXY = that.screenToCanvasSpace(bbox.left, bbox.top);
-        var bboxSize = that.screenToCanvasSize(bbox.width, bbox.height);
-
-        bbox.left = bboxXY.x;
-        bbox.top = bboxXY.y;
-        bbox.width = bboxSize.x;
-        bbox.height = bboxSize.y;
-
-        return bbox;
-    }
-
-    this.getBoundingBoxOfAllObjects = function () {
-        /*var objs = [];
-        this.canvas.forEachObject(function (o) {
-            if(o.wickObjectRef && o.selectable) {
-                objs.push(o.wickObjectRef);
-            }
-        });*/
-        that.selectAll();
-        return that.getBoundingBoxOfObjects(/*objs*/);
-    }
-
     this.selectObjects = function (objects) {
         wickEditor.timeline.redraw();
 

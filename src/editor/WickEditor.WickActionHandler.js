@@ -263,9 +263,6 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             var selectedObjects = wickEditor.fabric.getSelectedObjects(WickObject);
 
-            //var currObj = wickEditor.project.currentObject;
-            //if(currObj.parentObject) currObj.fixOriginPoint()
-
             var symbolZIndex = null;
             selectedObjects.forEach(function (obj) {
                 var objZIndex = wickEditor.project.currentObject.getCurrentFrame().wickObjects.indexOf(obj);
@@ -280,13 +277,9 @@ var WickActionHandler = function (wickEditor) {
                 obj.inFrameSVG = false;
             });
 
-            var bbox = wickEditor.fabric.getBoundingBoxOfObjects(selectedObjects);
-            //console.log(bbox);
-
             var symbol = new WickObject.createSymbolFromWickObjects(selectedObjects);
             wickEditor.project.addObject(symbol, symbolZIndex);
             args.createdSymbol = symbol;
-            symbol.fixOriginPoint(true, bbox);
             symbol.selectOnAddToFabric = true;
         },
         function (args) {
@@ -488,24 +481,18 @@ var WickActionHandler = function (wickEditor) {
         },
         function (args) {
             wickEditor.fabric.deselectAll();
-            wickEditor.project.currentObject.fixOriginPoint(); // hack to get around fabric.js lack of rotation around anchorpoint
-            
             wickEditor.project.currentObject = args.prevEditedObject;
         });
 
     this.registerAction('finishEditingCurrentObject', 
         function (args) {
             wickEditor.fabric.deselectAll();
-            wickEditor.project.currentObject.fixOriginPoint(); // hack to get around fabric.js lack of rotation around anchorpoint
-
             wickEditor.project.currentObject.playheadPosition = 0;
             args.prevEditedObject = wickEditor.project.currentObject;
             wickEditor.project.currentObject = wickEditor.project.currentObject.parentObject;
         },
         function (args) {
             wickEditor.fabric.deselectAll();
-            //wickEditor.project.currentObject.fixOriginPoint(); // hack to get around fabric.js lack of rotation around anchorpoint
-            
             wickEditor.project.currentObject = args.prevEditedObject;
         });
 
