@@ -43,7 +43,7 @@ var WickPixiRenderer = function (project) {
 	    };
 	    renderer = PIXI.autoDetectRenderer(project.resolution.x, project.resolution.y, rendererOptions);
 	    renderer.clearBeforeRender = false;
-	    renderer.roundPixels = true;
+	    renderer.roundPixels = false;
 	    renderer.view.setAttribute('tabindex', 0);
 	    $(renderer.view).click(function() { this.focus(); });
 
@@ -130,14 +130,14 @@ var WickPixiRenderer = function (project) {
                 wickObj.pixiContainer.addChild(subObj.pixiSprite);
 	        } else if (subObj.pathData) {
 	        	var parser = new DOMParser();
-				var svgDoc = parser.parseFromString('<svg id="svg" x="0" y="0" version="1.1" width="'+project.resolution.x+'" height="'+project.resolution.y+'" xmlns="http://www.w3.org/2000/svg">'+subObj.pathData+'</svg>', "image/svg+xml");
+				var svgDoc = parser.parseFromString('<svg id="svg" viewBox="'+(subObj.x-subObj.width/2)+' '+(subObj.y-subObj.height/2)+' '+(subObj.width)+' '+(subObj.height)+'" version="1.1" width="'+(subObj.width)+'" height="'+(subObj.height)+'" xmlns="http://www.w3.org/2000/svg">'+subObj.pathData+'</svg>', "image/svg+xml");
 
-				//console.log(svgDoc)
+				console.log(svgDoc)
 
 				var s = new XMLSerializer().serializeToString(svgDoc)
 				var base64svg = 'data:image/svg+xml;base64,' + window.btoa(s);
 
-				//console.log(base64svg)
+				console.log(base64svg)
 				
 				subObj.pixiSprite = PIXI.Sprite.fromImage(base64svg);
 	            wickObj.pixiContainer.addChild(subObj.pixiSprite);
@@ -292,9 +292,9 @@ var WickPixiRenderer = function (project) {
 		            wickObj.pixiSprite.scale.x = wickObj.scaleX;
 		            wickObj.pixiSprite.scale.y = wickObj.scaleY;
 		        } else {
-		        	wickObj.pixiSprite.position.x = 0;
-		        	wickObj.pixiSprite.position.y = 0;
-		        	wickObj.pixiSprite.anchor = new PIXI.Point(0, 0);
+		        	wickObj.pixiSprite.position.x = wickObj.x//0;
+		        	wickObj.pixiSprite.position.y = wickObj.y//0;
+		        	wickObj.pixiSprite.anchor = new PIXI.Point(0.5, 0.5);
 		        }
 	            wickObj.pixiSprite.alpha = wickObj.opacity;
 

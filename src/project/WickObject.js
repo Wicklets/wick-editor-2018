@@ -600,37 +600,37 @@ WickObject.prototype.regenBoundingBox = function () {
         wickEditor.fabric.deselectAll();
         this.bbox = wickEditor.fabric.getBoundingBoxOfAllObjects();
     } else {*/
-        this.bbox = wickEditor.fabric.getBoundingBoxOfObjects(this.getAllChildObjects());
+        this.bbox = wickEditor.fabric.getBoundingBoxOfAllObjects();
     //}
 }
 
 // used as a hack to get around fabric.js lack of rotation around anchorpoint
-WickObject.prototype.fixOriginPoint = function (newSymbol) {
-    if(this.playheadPosition === 0) this.regenBoundingBox();
+WickObject.prototype.fixOriginPoint = function (newSymbol, forceBbox) {
+    if (this.playheadPosition === 0 && !forceBbox) {
+        this.regenBoundingBox();
+    } 
+    if (forceBbox) {
+        this.bbox = forceBbox;
+    }
 
     var bboxCenter = {x:this.bbox.left + this.bbox.width/2, y:this.bbox.top + this.bbox.height/2};
-
     var symbolCornerPosition = {x:this.x-bboxCenter.x, y:this.y-bboxCenter.y};
-
+    
     var symbolAbsPos = this.parentObject.getAbsolutePosition();
-    //symbolCornerPosition.x += symbolAbsPos.x;
-    //symbolCornerPosition.y += symbolAbsPos.y;
+    symbolCornerPosition.x += symbolAbsPos.x;
+    symbolCornerPosition.y += symbolAbsPos.y;
 
     var that = this;
     this.getAllChildObjects().forEach(function (child) {
-        child.x += symbolCornerPosition.x + symbolAbsPos.x;
-        child.y += symbolCornerPosition.y + symbolAbsPos.y;
+        child.x += symbolCornerPosition.x;
+        child.y += symbolCornerPosition.y;
         if(newSymbol) {
-            child.x += symbolAbsPos.x
-            child.y += symbolAbsPos.y
-        }
-        if(!that.parentObject.isRoot && newSymbol) {
-            //child.x += bboxCenter.x;
-            //child.y += bboxCenter.y;
+            child.x += symbolAbsPos.x;
+            child.y += symbolAbsPos.y;
         }
     });
-    this.x -= symbolCornerPosition.x + symbolAbsPos.x;
-    this.y -= symbolCornerPosition.y + symbolAbsPos.y;
+    this.x -= symbolCornerPosition.x;
+    this.y -= symbolCornerPosition.y;
 }
 
 /* Get the absolute position of this object (i.e., the position not relative to the parents) */

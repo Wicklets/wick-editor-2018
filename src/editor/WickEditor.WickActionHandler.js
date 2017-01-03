@@ -258,8 +258,8 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             var selectedObjects = wickEditor.fabric.getSelectedObjects(WickObject);
 
-            var currObj = wickEditor.project.currentObject;
-            if(currObj.parentObject) currObj.fixOriginPoint()
+            //var currObj = wickEditor.project.currentObject;
+            //if(currObj.parentObject) currObj.fixOriginPoint()
 
             var symbolZIndex = null;
             selectedObjects.forEach(function (obj) {
@@ -275,10 +275,13 @@ var WickActionHandler = function (wickEditor) {
                 obj.inFrameSVG = false;
             });
 
+            var bbox = wickEditor.fabric.getBoundingBoxOfObjects(selectedObjects);
+            //console.log(bbox);
+
             var symbol = new WickObject.createSymbolFromWickObjects(selectedObjects);
             wickEditor.project.addObject(symbol, symbolZIndex);
             args.createdSymbol = symbol;
-            symbol.fixOriginPoint(true);
+            symbol.fixOriginPoint(true, bbox);
             symbol.selectOnAddToFabric = true;
         },
         function (args) {

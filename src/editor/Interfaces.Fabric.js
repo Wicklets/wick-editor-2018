@@ -272,7 +272,7 @@ var FabricInterface = function (wickEditor) {
     }
 
     this.getBoundingBoxOfObjects = function (objects) {
-        var group = new fabric.Group([], {
+        /*var group = new fabric.Group([], {
             originX: 'left',
             originY: 'top'
         });
@@ -293,7 +293,9 @@ var FabricInterface = function (wickEditor) {
         for(var i = 0; i < boundingBoxObjects.length; i++) {
             group.canvas = this.canvas // WHAT ??????????????? WHY
             group.removeWithUpdate(boundingBoxObjects[i]);
-        }
+        }*/
+
+        var bbox = (that.canvas.getActiveGroup() || that.canvas.getActiveObject()).getBoundingRect();
 
         var bboxXY = that.screenToCanvasSpace(bbox.left, bbox.top);
         var bboxSize = that.screenToCanvasSize(bbox.width, bbox.height);
@@ -307,13 +309,14 @@ var FabricInterface = function (wickEditor) {
     }
 
     this.getBoundingBoxOfAllObjects = function () {
-        var objs = [];
+        /*var objs = [];
         this.canvas.forEachObject(function (o) {
             if(o.wickObjectRef && o.selectable) {
                 objs.push(o.wickObjectRef);
             }
-        });
-        return that.getBoundingBoxOfObjects(objs);
+        });*/
+        that.selectAll();
+        return that.getBoundingBoxOfObjects(/*objs*/);
     }
 
     this.selectObjects = function (objects) {
