@@ -216,6 +216,17 @@ WickObject.createSymbolFromWickObjects = function (wickObjects) {
 
     var symbol = WickObject.createNewSymbol();
 
+    var center = {x:0,y:0};
+    wickObjects.forEach(function (wickObj) {
+        center.x += wickObj.x;
+        center.y += wickObj.y;
+    })
+    center.x /= wickObjects.length;
+    center.y /= wickObjects.length;
+
+    symbol.x = center.x;
+    symbol.y = center.y;
+
     for(var i = 0; i < wickObjects.length; i++) {
         var ii = wickObjects.length-1-i; // So objects are properly ordered in symbol
 
