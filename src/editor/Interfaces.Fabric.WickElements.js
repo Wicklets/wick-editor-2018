@@ -207,45 +207,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             var group = new fabric.Group();
             var wos = {};
 
-            // Calculate centered bounding box to be used for padding
-            // (This is a hack to get around fabric.js's lack of centerpoint rotation.)
-            //console.log("- - -")
-            var boxWidth = 0;
-            var boxHeight = 0;
-            children.forEach(function (child) {
-                if(child.x > 0) {
-                    boxWidth  = Math.max(child.x + child.bbox.width/2,  boxWidth);
-                } else {
-                    boxWidth  = Math.max(Math.abs(-child.x + child.bbox.width/2),  boxWidth);
-                }
-                if(child.y > 0) {
-                    boxHeight = Math.max(child.y + child.bbox.height/2, boxHeight);
-                } else {
-                    boxHeight = Math.max(Math.abs(-child.y + child.bbox.height/2), boxHeight);
-                }
-            });
-            //console.log(boxWidth)
-            //console.log(boxHeight)
-            var rect = new fabric.Rect({
-              left: wickObj.getAbsolutePosition().x,
-              top: wickObj.getAbsolutePosition().y,
-              fill: 'red',
-              opacity: 0,
-              width: boxWidth*2,
-              height: boxHeight*2,
-              originX: 'centerX',
-              originY: 'centerY',
-            });
-            group.addWithUpdate(rect);
-            var circle = new fabric.Circle({ 
-                radius: 3, 
-                fill: '#fff', 
-                stroke: '#777', 
-                left: wickObj.getAbsolutePosition().x,
-                top: wickObj.getAbsolutePosition().y,
-                originX: 'centerX',
-                originY: 'centerY',
-            })
+            
 
             for(var i = 0; i < children.length; i++) {
                 
@@ -265,7 +227,49 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                     wickObj.width = group.width;
                     wickObj.height = group.height;
                     group.wickObjReference = wickObj;
+
+                    // Calculate centered bounding box to be used for padding
+                    // (This is a hack to get around fabric.js's lack of centerpoint rotation.)
+                    //console.log("- - -")
+                    var boxWidth = 0;
+                    var boxHeight = 0;
+                    children.forEach(function (child) {
+                        if(child.x > 0) {
+                            boxWidth  = Math.max(child.x + child.bbox.width/2,  boxWidth);
+                        } else {
+                            boxWidth  = Math.max(Math.abs(-child.x + child.bbox.width/2),  boxWidth);
+                        }
+                        if(child.y > 0) {
+                            boxHeight = Math.max(child.y + child.bbox.height/2, boxHeight);
+                        } else {
+                            boxHeight = Math.max(Math.abs(-child.y + child.bbox.height/2), boxHeight);
+                        }
+                    });
+                    //console.log(boxWidth)
+                    //console.log(boxHeight)
+                    var rect = new fabric.Rect({
+                      left: wickObj.getAbsolutePosition().x,
+                      top: wickObj.getAbsolutePosition().y,
+                      fill: 'red',
+                      opacity: 0,
+                      width: boxWidth*2,
+                      height: boxHeight*2,
+                      originX: 'centerX',
+                      originY: 'centerY',
+                    });
+                    group.addWithUpdate(rect);
+                    var circle = new fabric.Circle({ 
+                        radius: 3, 
+                        fill: '#fff', 
+                        stroke: '#777', 
+                        left: wickObj.getAbsolutePosition().x,
+                        top: wickObj.getAbsolutePosition().y,
+                        originX: 'centerX',
+                        originY: 'centerY',
+                    })
+
                     if(wickObj.parentObject === wickEditor.project.currentObject) group.addWithUpdate(circle);
+
                     callback(group);
                 }
                 var dothing = function (wo) {
