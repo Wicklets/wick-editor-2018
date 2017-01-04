@@ -212,6 +212,7 @@ var GuiActionHandler = function (wickEditor) {
         {}, 
         function(args) {
             wickEditor.actionHandler.redoAction();
+            wickEditor.syncInterfaces();
         });
 
     // Control + Z
@@ -222,6 +223,7 @@ var GuiActionHandler = function (wickEditor) {
         {}, 
         function(args) {
             wickEditor.actionHandler.undoAction();
+            wickEditor.syncInterfaces();
         });
 
     // Title
@@ -477,10 +479,14 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.rightclickmenu.open = false;
             that.keys = [];
 
+            console.log("why")
+
             var clipboardData = window.polyfillClipboardData//(window.polyfillClipboardData || args.clipboardData);
             if(clipboardData) {
                 clipboardData.setData('text/wickobjectsjson', wickEditor.project.getCopyData(wickEditor.fabric.getSelectedObjects(WickObject)));
             }
+
+            wickEditor.syncInterfaces();
         });
 
     registerAction('cut',
@@ -496,6 +502,8 @@ var GuiActionHandler = function (wickEditor) {
                 clipboardData.setData('text/wickobjectsjson', wickEditor.project.getCopyData(wickEditor.fabric.getSelectedObjects(WickObject)));
                 wickEditor.actionHandler.doAction('deleteObjects', { objs:wickEditor.fabric.getSelectedObjects(WickObject) });
             }
+
+            wickEditor.syncInterfaces();
         });
 
     registerAction('paste',
@@ -538,6 +546,8 @@ var GuiActionHandler = function (wickEditor) {
                 }
 
             }
+
+            wickEditor.syncInterfaces();
         });
 
     registerAction('newProject',
@@ -797,6 +807,7 @@ var GuiActionHandler = function (wickEditor) {
         {}, 
         function(args) {
             wickEditor.fabric.getSelectedObject(WickObject).downloadAsFile();
+            wickEditor.syncInterfaces();
         });
 
     registerAction('addFrame',
