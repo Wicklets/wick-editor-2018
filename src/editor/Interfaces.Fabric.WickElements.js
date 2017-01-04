@@ -59,6 +59,9 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
             if(allObjects.indexOf(fabricObj.wickObjectRef) == -1 || (wickObj && wickObj.forceFabricCanvasRegen) || (wickObj && wickObj.imageDirty)) {
                 if(wickObj) {
+                    wickObj.getAllChildObjectsRecursive().forEach(function (child) {
+                        cachedFabricObjects[child.uuid] = null;
+                    });
                     wickObj.imageDirty = false;
                     wickObj.forceFabricCanvasRegen = false;
                     cachedFabricObjects[wickObj.uuid] = null;
@@ -70,7 +73,9 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         });
         removeTheseObjs.forEach(function (fabricObj) {
             if(fabricObj.type === "group") {
-                fabricObj.forEachObject(function(o){ fabricObj.removeWithUpdate(o) });
+                fabricObj.forEachObject(function(o){ 
+                    fabricObj.removeWithUpdate(o);
+                });
                 fabricInterface.canvas.remove(fabricObj);
                 fabricInterface.canvas.renderAll();
             } else {
@@ -339,12 +344,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         fabricObj.flipY   = wickObj.flipY;
         fabricObj.opacity = wickObj.opacity;
 
-        if(wickObj.isSymbol) {
-            //var cornerPosition = wickObj.getSymbolBoundingBoxCorner();
-            //fabricObj.left += cornerPosition.x;
-            //fabricObj.top += cornerPosition.y;
-        }
-
         if(wickObj.fontData) {
             fabricObj.text = wickObj.fontData.text;
             fabricObj.fontFamily = wickObj.fontData.fontFamily;
@@ -385,7 +384,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             });
 
             if(activeObjects.indexOf(wickObj) !== -1) {
-                console.log("controllable!")
                 fabricObj.hasControls = true;
                 fabricObj.selectable = true;
                 fabricObj.evented = true;
@@ -407,6 +405,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 fabricObj.evented = false;
             }
         }
+
     }
 	
 }
