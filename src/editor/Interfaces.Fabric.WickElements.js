@@ -207,33 +207,35 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             var group = new fabric.Group();
             var wos = {};
 
-            
+
 
             for(var i = 0; i < children.length; i++) {
                 
                 var setupSymbol = function () {
-                    //wos.forEach(function (pair) {
                     for(var i = 0; i < Object.keys(wos).length; i++) {
                         var pair = wos[i]
                         var fabricObj = pair.fo;
                         var child = pair.wo;
 
-                        fabricObj.originX = 'centerX';
-                        fabricObj.originY = 'centerY';
+                        //fabricObj.originX = 'centerX';
+                        //fabricObj.originY = 'centerY';
                         
                         updateFabObj(fabricObj, child);
-                        group.addWithUpdate(fabricObj);
+                        //group.addWithUpdate(fabricObj);
                     }
-                    wickObj.width = group.width;
-                    wickObj.height = group.height;
-                    group.wickObjReference = wickObj;
 
-                    // Calculate centered bounding box to be used for padding
-                    // (This is a hack to get around fabric.js's lack of centerpoint rotation.)
-                    //console.log("- - -")
                     var boxWidth = 0;
                     var boxHeight = 0;
                     children.forEach(function (child) {
+                        var bbox = child.fabricObjectReference.getBoundingRect();
+                        var bboxXY = wickEditor.fabric.screenToCanvasSpace(bbox.left, bbox.top);
+                        var bboxSize = wickEditor.fabric.screenToCanvasSize(bbox.width, bbox.height);
+                        bbox.left = bboxXY.x;
+                        bbox.top = bboxXY.y;
+                        bbox.width = bboxSize.x;
+                        bbox.height = bboxSize.y;
+                        child.bbox = bbox;
+                        
                         if(child.x > 0) {
                             boxWidth  = Math.max(child.x + child.bbox.width/2,  boxWidth);
                         } else {
@@ -248,16 +250,35 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                     //console.log(boxWidth)
                     //console.log(boxHeight)
                     var rect = new fabric.Rect({
-                      left: wickObj.getAbsolutePosition().x,
-                      top: wickObj.getAbsolutePosition().y,
-                      fill: 'red',
-                      opacity: 0,
-                      width: boxWidth*2,
-                      height: boxHeight*2,
-                      originX: 'centerX',
-                      originY: 'centerY',
+                        left: wickObj.getAbsolutePosition().x,
+                        top: wickObj.getAbsolutePosition().y,
+                        fill: 'red',
+                        opacity: 0,
+                        width: boxWidth*2,
+                        height: boxHeight*2,
+                        originX: 'centerX',
+                        originY: 'centerY',
                     });
                     group.addWithUpdate(rect);
+
+                    //wos.forEach(function (pair) {
+                    for(var i = 0; i < Object.keys(wos).length; i++) {
+                        var pair = wos[i]
+                        var fabricObj = pair.fo;
+                        var child = pair.wo;
+
+                        fabricObj.originX = 'centerX';
+                        fabricObj.originY = 'centerY';
+                        
+                        //updateFabObj(fabricObj, child);
+                        group.addWithUpdate(fabricObj);
+                    }
+                    wickObj.width = group.width;
+                    wickObj.height = group.height;
+                    group.wickObjReference = wickObj;
+                    
+
+                    
                     var circle = new fabric.Circle({ 
                         radius: 3, 
                         fill: '#fff', 
@@ -267,9 +288,9 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                         originX: 'centerX',
                         originY: 'centerY',
                     })
-
                     if(wickObj.parentObject === wickEditor.project.currentObject) group.addWithUpdate(circle);
-
+                    group.setCoords();
+                    
                     callback(group);
                 }
                 var dothing = function (wo) {
@@ -288,6 +309,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
     }
 
     var updateFabObj = function (fabricObj, wickObj, activeObjects) {
+
+        wickObj.fabricObjectReference = fabricObj
 
         // To get pixel-perfect positioning to avoid blurry images (this happens when an image has a fractional position)
         if(wickObj.imageData) {
