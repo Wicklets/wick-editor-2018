@@ -21,7 +21,6 @@ Tools.BackgroundRemove = function (wickEditor) {
         var topmost = new Object();
 
         jQuery.each(objs,function(index,val){
-            console.log(val)
             if( val.containsPoint(position) && !(canvas.isTargetTransparent(val, position.x, position.y))){
                 topmost = val;
             }

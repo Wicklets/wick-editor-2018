@@ -385,6 +385,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             });
 
             if(activeObjects.indexOf(wickObj) !== -1) {
+                console.log("controllable!")
                 fabricObj.hasControls = true;
                 fabricObj.selectable = true;
                 fabricObj.evented = true;

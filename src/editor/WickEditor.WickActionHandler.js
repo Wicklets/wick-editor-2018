@@ -427,9 +427,6 @@ var WickActionHandler = function (wickEditor) {
 
             wickEditor.fabric.onionSkinsDirty = true;
             var currentObject = wickEditor.project.currentObject;
-            if (!currentObject.isRoot && currentObject.playheadPosition === 0) {
-                currentObject.regenBoundingBox();
-            }
 
             args.oldPlayheadPosition = args.obj.playheadPosition;
 
