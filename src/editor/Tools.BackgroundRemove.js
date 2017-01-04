@@ -21,11 +21,12 @@ Tools.BackgroundRemove = function (wickEditor) {
         var topmost = new Object();
 
         jQuery.each(objs,function(index,val){
+            console.log(val)
             if( val.containsPoint(position) && !(canvas.isTargetTransparent(val, position.x, position.y))){
                 topmost = val;
             }
         });
-        if(topmost != undefined && topmost.wickObjectID) {
+        if(topmost != undefined && topmost.wickObjReference) {
             var wickObj = topmost.wickObjReference;
 
             var mouseScreenSpace = wickEditor.fabric.screenToCanvasSpace(e.e.offsetX, e.e.offsetY);
