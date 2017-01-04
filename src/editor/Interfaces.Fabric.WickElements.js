@@ -285,9 +285,9 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
                     
                     var circle = new fabric.Circle({ 
-                        radius: 3, 
-                        fill: '#fff', 
-                        stroke: '#777', 
+                        radius: 6, 
+                        fill: '', 
+                        stroke: '#91BAFF', 
                         left: wickObj.getAbsolutePosition().x,
                         top: wickObj.getAbsolutePosition().y,
                         originX: 'centerX',

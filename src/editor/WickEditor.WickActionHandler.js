@@ -278,7 +278,7 @@ var WickActionHandler = function (wickEditor) {
             });
 
             var symbol = new WickObject.createSymbolFromWickObjects(selectedObjects);
-            wickEditor.project.addObject(symbol, symbolZIndex);
+            wickEditor.project.addObject(symbol, symbolZIndex, true);
             args.createdSymbol = symbol;
             symbol.selectOnAddToFabric = true;
         },

@@ -2,7 +2,7 @@
 
 var PaperInterface = function (wickEditor) {
 
-    var that = this;
+    /*var that = this;
 
     var paperCanvas;
     var paperObjectWickMappings = {};
@@ -57,6 +57,9 @@ var PaperInterface = function (wickEditor) {
                     pathsToUpdate.push(wickObject);
                 }
             });
+            if(pathsToUpdate.length > 0) {
+                paper.project.clear();
+            }
             pathsToUpdate.forEach(function (wickObject) {
                 wickObject.parentObject.removeChild(wickObject);
                 addSVGToCanvas(wickObject.pathData, {x:wickObject.x, y:wickObject.y});
@@ -97,8 +100,13 @@ var PaperInterface = function (wickEditor) {
             if(path.origRotation === undefined) path.origRotation = 0;
             var newRotation = wickObject.angle;
             if(newRotation !== path.origRotation) {
-                path.rotation = newRotation-path.origRotation;
-                path.origRotation = wickObject.angle;
+                //path.rotation = newRotation-path.origRotation;
+                //console.log(path.bounds)
+                path.rotate(newRotation-path.origRotation);
+                //path.origRotation = wickObject.angle;
+                //resetPathWickObjects()
+                wickObject.parentObject.removeChild(wickObject)
+                addWickObjectFromPaperData(path);
             }
 
             if(path.origScaleX === undefined) path.origScaleX = 1;
@@ -218,7 +226,7 @@ var PaperInterface = function (wickEditor) {
             wickObject.y = path.position.y;
             wickObject.inFrameSVG = true;
             paperObjectWickMappings[wickObject.uuid] = path;
-            wickEditor.project.addObject(wickObject);
+            wickEditor.project.addObject(wickObject, null, true);
         });
     }
 
@@ -246,6 +254,27 @@ var PaperInterface = function (wickEditor) {
             paperGroup.position = new paper.Point(offset.x, offset.y);
 
         addWickObjectFromPaperData(paperGroup);
+    }*/
+
+    var self = this;
+
+    var paperCanvas;
+
+    self.setup = function () {
+        // Create the canvas to be used with paper.js and init the paper.js instance.
+        paperCanvas = document.createElement('canvas');
+        paperCanvas.className = 'paperCanvas';
+        paperCanvas.style.backgroundColor = "#FFDDDD";
+        paperCanvas.style.width  = (wickEditor.project.resolution.x/2)+'px';
+        paperCanvas.style.height = (wickEditor.project.resolution.y/2)+'px';
+        paper.setup(paperCanvas);
+        paper.view.viewSize.width  = wickEditor.project.resolution.x;
+        paper.view.viewSize.height = wickEditor.project.resolution.y;
+
+        // (Debug) Put the canvas somewhere we can see it
+        if(localStorage.pathDebug === "1") document.body.appendChild(paperCanvas);
     }
+
+    
 
  }

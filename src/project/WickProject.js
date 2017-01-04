@@ -263,13 +263,15 @@ WickProject.prototype.getObjectByUUID = function (uuid) {
     return foundObj;
 }
 
-WickProject.prototype.addObject = function (wickObject, zIndex) {
+WickProject.prototype.addObject = function (wickObject, zIndex, ignoreSymbolOffset) {
 
     var frame = this.currentObject.getCurrentFrame();
 
-    var insideSymbolOffset = this.currentObject.getAbsolutePosition();
-    wickObject.x -= insideSymbolOffset.x;
-    wickObject.y -= insideSymbolOffset.y;
+    if(!ignoreSymbolOffset) {
+        var insideSymbolOffset = this.currentObject.getAbsolutePosition();
+        wickObject.x -= insideSymbolOffset.x;
+        wickObject.y -= insideSymbolOffset.y;
+    }
 
     if(!wickObject.uuid) wickObject.uuid = random.uuid4();
     
