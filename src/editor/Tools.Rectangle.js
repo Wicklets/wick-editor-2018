@@ -26,7 +26,13 @@ Tools.Rectangle = function (wickEditor) {
         var svg = '<rect fill="'+drawingShape.fill+'" width="'+drawingShape.width+'" height="'+drawingShape.height+'" style="fill:rgb(0,0,0);" />'
         var svgString = '<svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>';
 
-        wickEditor.paper.addSVG(svgString, {x:origX, y:origY});
+        WickObject.fromPathFile(svgString, function (wickObject) {
+            wickObject.x = origX;
+            wickObject.y = origY;
+            wickEditor.project.addObject(wickObject);
+            wickEditor.paper.onWickObjectsChange();
+        });
+        
         wickEditor.fabric.drawingPath = drawingShape;
         wickEditor.syncInterfaces();
     }

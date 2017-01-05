@@ -303,15 +303,20 @@ var PaperInterface = function (wickEditor) {
                 var xmlString = wickObject.pathData
                   , parser = new DOMParser()
                   , doc = parser.parseFromString(xmlString, "text/xml");
-                var path = paper.project.importSVG(doc);
+                var group = paper.project.importSVG(doc);
 
-                path.children.forEach(function (child) {
-                    child.closePath();
+                group.children.forEach(function (child) {
+                    if(child instanceof paper.Shape) {
+                        child.remove();
+                        group.addChild(child.toPath());
+                    }
+
+                    if(child.closePath) child.closePath();
                 });
 
-                path.position = new paper.Point(wickObject.x, wickObject.y);
+                group.position = new paper.Point(wickObject.x, wickObject.y);
 
-                paperObjectMappings[wickObject.uuid] = path;
+                paperObjectMappings[wickObject.uuid] = group;
 
             // If there is, update the path's position/scale/rotation.
             } else {
