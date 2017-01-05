@@ -126,7 +126,7 @@ var PaperInterface = function (wickEditor) {
     }
 
     this.applyChangesToFrame = function () {
-        if(currentFrame) 
+        if(currentFrame)
             currentFrame.pathData = paper.project.activeLayer.exportSVG({ asString: true });
     }
 
@@ -259,6 +259,7 @@ var PaperInterface = function (wickEditor) {
     var self = this;
 
     var paperCanvas;
+    var paperObjectMappings = {};
 
     self.setup = function () {
         // Create the canvas to be used with paper.js and init the paper.js instance.
@@ -274,7 +275,125 @@ var PaperInterface = function (wickEditor) {
         // (Debug) Put the canvas somewhere we can see it
         if(localStorage.pathDebug === "1") document.body.appendChild(paperCanvas);
     }
-
     
+    self.syncWithEditorState = function () {
+        
+    }
+    
+    // Called when the wickobjects in the current frame have been modified.
+    // Update the paper canvas accordingly.
+    self.onWickObjectsChange = function () {
+        
+        var currentFrame = wickEditor.project.currentObject.getCurrentFrame();
+        var wickObjects = currentFrame ? currentFrame.wickObjects : [];
+        
+         // For each wickobject in the current frame:
+        wickObjects.forEach(function (wickObject) {
+            if (!wickObject.pathData) return;
+            
+            // If there is no corresponding paper path in the paper
+            // canvas, create one.
+            if(!paperObjectMappings[wickObject.uuid]) {
+            
+                var path = addWickObjectToPaperCanvas(wickObject);
+                paperObjectMappings[wickObject.uuid] = path;
+            
+            // If there is, update the path's position/scale/rotation.
+            } else {
+                
+                var path = paperObjectMappings[wickObject.uuid];
+                path.position = new paper.Point(wickObject.x, wickObject.y);
+                
+            }
+        });
+            
+        allPaths = getAllPathsInCanvas();
+        // For each path in the paper project:
+        allPaths.forEach(function (path) {
+            // If the wickobject corresponding to this path no
+            // longer exists, delete it from the paper canvas
+            var pathExistsInProject = false
+            wickObjects.forEach(function (wickObject) {
+                if (paperObjectMappings[wickObject.uuid] === path) {
+                    pathExistsInProject = true;
+                    paperObjectMappings[wickObject.uuid] = null;
+                }
+            });
+            
+            if(!pathExistsInProject) {
+                path.remove();
+            }
+        });
+            
+        // Apply changes to paper canvas to the current frame SVG.
+        applyChangesToFrame();
+        
+    }
+    
+    // Called when the paths in the paper canvas have been modified.
+    // Update the wickobjects in the current frame accordingly.
+    self.onPaperCanvasChange = function () {
+        
+        // For each path in the paper canvas:
+            // If there is no corresponding wickobject for this
+            // path, create one.
+            // If there is, update the wickobject's position, reset
+            // its rotation/scale, update its pathData, and set the
+            // flag to regen its fabric object next sync.
+        
+        // For each wickobject in the current frame:
+            // If the paper object corresponding to this wickobject
+            // no longer exists, delete it from the project.
+            
+        // Apply changes to paper canvas to the current frame SVG.
+        
+    }
+    
+    // Called when overlapping paths need to be cleaned up.
+    self.onPathsNeedCleanup = function () {
+        
+        // Do overlapping path union/subtraction for paper canvas.
+        
+        // Call onPaperCanvasChange.
+        
+    }
+    
+    //
+    
+    var addWickObjectToPaperCanvas = function (wickObject) {
+        
+        var xmlString = wickObject.pathData
+          , parser = new DOMParser()
+          , doc = parser.parseFromString(xmlString, "text/xml");
+        var paperGroup = paper.project.importSVG(doc);
+        if(paperGroup.closePath) paperGroup.closePath();
+
+        paperGroup.position = new paper.Point(wickObject.x, wickObject.y);
+
+        return paperGroup;
+        
+    }
+    
+    var getAllPathsInCanvas = function () {
+        
+        var allSVGs = [];
+
+        paper.project.activeLayer.children.forEach(function (child) {
+            allSVGs.push(child);
+        });
+
+        return allSVGs;
+        
+    }
+    
+    var applyChangesToFrame = function () {
+        
+        var currentFrame = wickEditor.project.currentObject.getCurrentFrame();
+        
+        if(currentFrame) {
+            currentFrame.pathData = paper.project.activeLayer.exportSVG({ asString: true });
+        }
+        
+    }
 
  }

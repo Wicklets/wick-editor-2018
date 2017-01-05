@@ -55,10 +55,28 @@ Tools.Paintbrush = function (wickEditor) {
 
         // Vectorize the path and create a WickObject out of it
         potraceFabricPath(fabricPath, function(SVGData) {
-            wickEditor.paper.addSVG(SVGData, {x:fabricPath.left, y:fabricPath.top});
+            //wickEditor.paper.addSVG(SVGData, {x:fabricPath.left, y:fabricPath.top});
+            WickObject.fromPathFile(SVGData, function (wickObject) {
+                wickObject.x = fabricPath.left;
+                wickObject.y = fabricPath.top;
+                wickEditor.project.addObject(wickObject);
+                wickEditor.paper.onWickObjectsChange();
+            });
+            
             wickEditor.fabric.drawingPath = fabricPath;
             wickEditor.syncInterfaces();
         });
+        
+        /*WickObject.fromPathFile(fabricPath.toSVG(), function (wickObject) {
+            wickObject.x = fabricPath.left;
+            wickObject.y = fabricPath.top;
+            wickEditor.project.addObject(wickObject);
+            wickEditor.paper.onWickObjectsChange();
+            
+            wickEditor.fabric.drawingPath = fabricPath;
+            wickEditor.syncInterfaces();
+        });*/
+        
     });
 
     var potraceFabricPath = function (pathFabricObject, callback) {
@@ -91,7 +109,7 @@ Tools.Paintbrush = function (wickEditor) {
         // Send settings and the image data to potrace to vectorize it!
         Potrace.loadImageFromDataURL(dummyCanvas.toDataURL());
         Potrace.setParameter({
-            optcurve: true, 
+            optcurve: true,
             alphamax: 1.0
         });
         Potrace.process(function(){

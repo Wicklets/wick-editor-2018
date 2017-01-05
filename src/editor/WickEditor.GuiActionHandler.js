@@ -34,7 +34,7 @@ var GuiActionHandler = function (wickEditor) {
         guiActions[name].doAction({});
     }
 
-    /* GuiAction definition. All possible actions performable through interacting 
+    /* GuiAction definition. All possible actions performable through interacting
     with the Wick Editor GUI are expected to be well defined by this structure .*/
     var GuiAction = function (hotkeys, elementIds, requiredParams, action) {
 
@@ -182,9 +182,9 @@ var GuiActionHandler = function (wickEditor) {
     // SPACE
     // Open Pan Tool
     registerAction('openTools.Pan',
-        ['SPACE'], 
-        [], 
-        {}, 
+        ['SPACE'],
+        [],
+        {},
         function(args) {
             if(!(wickEditor.fabric.currentTool instanceof Tools.Pan)) {
                 wickEditor.fabric.lastTool = wickEditor.fabric.currentTool;
@@ -196,9 +196,9 @@ var GuiActionHandler = function (wickEditor) {
     // ESC
     // Stop Running Project
     registerAction('stopRunningProject',
-        ['ESC'], 
-        [], 
-        {builtinplayerRunning : true}, 
+        ['ESC'],
+        [],
+        {builtinplayerRunning : true},
         function(args) {
             if(!wickEditor.builtinplayer.running) return;
             wickEditor.builtinplayer.stopRunningProject();
@@ -207,9 +207,9 @@ var GuiActionHandler = function (wickEditor) {
     // Control + SHIFT + Z
     // Redo Action
     registerAction('redo',
-        ['Modifier','SHIFT','Z'], 
-        ['redoButton'], 
-        {}, 
+        ['Modifier','SHIFT','Z'],
+        ['redoButton'],
+        {},
         function(args) {
             wickEditor.actionHandler.redoAction();
             wickEditor.syncInterfaces();
@@ -218,9 +218,9 @@ var GuiActionHandler = function (wickEditor) {
     // Control + Z
     // Undo Action
     registerAction('undo',
-        ['Modifier','Z'], 
-        ['undoButton'], 
-        {}, 
+        ['Modifier','Z'],
+        ['undoButton'],
+        {},
         function(args) {
             wickEditor.actionHandler.undoAction();
             wickEditor.syncInterfaces();
@@ -229,9 +229,9 @@ var GuiActionHandler = function (wickEditor) {
     // Title
     // Open splash screen
     registerAction('openSplashScreen',
-        [], 
-        ['editorTitle'], 
-        {}, 
+        [],
+        ['editorTitle'],
+        {},
         function(args) {
             wickEditor.splashscreen.openSplashScreen();
         });
@@ -239,9 +239,9 @@ var GuiActionHandler = function (wickEditor) {
     // Control + ENTER
     // Run Project
     registerAction('runProject',
-        ['Modifier','ENTER'], 
-        ['runButton'], 
-        {}, 
+        ['Modifier','ENTER'],
+        ['runButton'],
+        {},
         function(args) {
             that.keys = [];
             that.specialKeys = [];
@@ -262,9 +262,9 @@ var GuiActionHandler = function (wickEditor) {
     // Control + 0
     // Recenter Canvas
     registerAction('recenterCanvas',
-        ['Modifier','0'], 
-        [], 
-        {}, 
+        ['Modifier','0'],
+        [],
+        {},
         function(args) {
             wickEditor.fabric.recenterCanvas();
         });
@@ -272,9 +272,9 @@ var GuiActionHandler = function (wickEditor) {
     // Control + S
     // Save Project
     registerAction('saveProject',
-        ['Modifier','S'], 
-        [], 
-        {usableInTextBoxes:true}, 
+        ['Modifier','S'],
+        [],
+        {usableInTextBoxes:true},
         function(args) {
             that.keys = [];
             that.specialKeys = [];
@@ -283,9 +283,9 @@ var GuiActionHandler = function (wickEditor) {
 
     // Export Project
     registerAction('exportProject',
-        ['Modifier','SHIFT','S'], 
-        ['exportHTMLButton'], 
-        {usableInTextBoxes:true}, 
+        ['Modifier','SHIFT','S'],
+        ['exportHTMLButton'],
+        {usableInTextBoxes:true},
         function(args) {
             that.keys = [];
             that.specialKeys = [];
@@ -294,9 +294,9 @@ var GuiActionHandler = function (wickEditor) {
 
     // Export Project as .zip
     registerAction('exportProjectZIP',
-        [], 
-        [], 
-        {usableInTextBoxes:true}, 
+        [],
+        [],
+        {usableInTextBoxes:true},
         function(args) {
             that.keys = [];
             that.specialKeys = [];
@@ -306,9 +306,9 @@ var GuiActionHandler = function (wickEditor) {
     // Control + O
     // Open File
     registerAction('openFile',
-        ['Modifier','O'], 
-        ['openProjectButton'], 
-        {}, 
+        ['Modifier','O'],
+        ['openProjectButton'],
+        {},
         function(args) {
             that.keys = [];
             $('#importButton').click();
@@ -317,9 +317,9 @@ var GuiActionHandler = function (wickEditor) {
     // Control + A
     // Select All
     registerAction('selectAll',
-        ['Modifier','A'], 
-        [], 
-        {}, 
+        ['Modifier','A'],
+        [],
+        {},
         function(args) {
             wickEditor.fabric.currentTool = wickEditor.fabric.tools.cursor;
             wickEditor.syncInterfaces();
@@ -330,9 +330,9 @@ var GuiActionHandler = function (wickEditor) {
     // Up
     // Move current object up one pixel
     registerAction('moveSelectionUp',
-        ['UP'], 
-        [], 
-        {}, 
+        ['UP'],
+        [],
+        {},
         function(args) {
             wickEditor.fabric.moveSelection(0,-1);
         });
@@ -340,9 +340,9 @@ var GuiActionHandler = function (wickEditor) {
     // Down
     // Move current object down one pixel
     registerAction('moveSelectionDown',
-        ['DOWN'], 
-        [], 
-        {}, 
+        ['DOWN'],
+        [],
+        {},
         function(args) {
             wickEditor.fabric.moveSelection(0,1);
         });
@@ -350,9 +350,9 @@ var GuiActionHandler = function (wickEditor) {
     // LEFT
     // Move current object left one pixel
     registerAction('moveSelectionLeft',
-        ['LEFT'], 
-        [], 
-        {}, 
+        ['LEFT'],
+        [],
+        {},
         function(args) {
             wickEditor.fabric.moveSelection(-1,0);
         });
@@ -360,9 +360,9 @@ var GuiActionHandler = function (wickEditor) {
     // Right
     // Move current object right one pixel
     registerAction('moveSelectionRight',
-        ['RIGHT'], 
-        [], 
-        {}, 
+        ['RIGHT'],
+        [],
+        {},
         function(args) {
             wickEditor.fabric.moveSelection(1,0);
         });
@@ -370,9 +370,9 @@ var GuiActionHandler = function (wickEditor) {
     // Modifier+UP
     // Move current object up ten pixels
     registerAction('moveSelectionUp10x',
-        ['SHIFT', 'UP'], 
-        [], 
-        {}, 
+        ['SHIFT', 'UP'],
+        [],
+        {},
         function(args) {
             wickEditor.fabric.moveSelection(0,-10);
         });
@@ -380,9 +380,9 @@ var GuiActionHandler = function (wickEditor) {
     // Modifier+Down
     // Move current object down ten pixels
     registerAction('moveSelectionDown10x',
-        ['SHIFT', 'DOWN'], 
-        [], 
-        {}, 
+        ['SHIFT', 'DOWN'],
+        [],
+        {},
         function(args) {
             wickEditor.fabric.moveSelection(0,10);
         });
@@ -390,9 +390,9 @@ var GuiActionHandler = function (wickEditor) {
     // Modifier+Left
     // Move current object left ten pixels
     registerAction('moveSelectionLeft10x',
-        ['SHIFT', 'LEFT'], 
-        [], 
-        {}, 
+        ['SHIFT', 'LEFT'],
+        [],
+        {},
         function(args) {
             wickEditor.fabric.moveSelection(-10,0);
         });
@@ -400,9 +400,9 @@ var GuiActionHandler = function (wickEditor) {
     // Modifier+Right
     // Move current object right ten pixels
     registerAction('moveSelectionRight10x',
-        ['SHIFT', 'RIGHT'], 
-        [], 
-        {}, 
+        ['SHIFT', 'RIGHT'],
+        [],
+        {},
         function(args) {
             wickEditor.fabric.moveSelection(10,0);
         });
@@ -410,9 +410,9 @@ var GuiActionHandler = function (wickEditor) {
     // <
     // Move Playhead LEFT
     registerAction('movePlayheadLeft',
-        [','], 
-        [], 
-        {}, 
+        [','],
+        [],
+        {},
         function(args) {
             wickEditor.actionHandler.doAction("movePlayhead", {
                 obj: wickEditor.project.currentObject,
@@ -424,9 +424,9 @@ var GuiActionHandler = function (wickEditor) {
     // >
     // Move Playhead Right
     registerAction('movePlayheadRight',
-        ['.'], 
-        [], 
-        {}, 
+        ['.'],
+        [],
+        {},
         function(args) {
             wickEditor.actionHandler.doAction("movePlayhead", {
                 obj: wickEditor.project.currentObject,
@@ -438,9 +438,9 @@ var GuiActionHandler = function (wickEditor) {
     // Down
     // Move Down Layer
     registerAction('moveDownLayer',
-        ['DOWN'], 
+        ['DOWN'],
         [],
-        {}, 
+        {},
         function(args) {
             if(wickEditor.project.currentObject.currentLayer < wickEditor.project.currentObject.layers.length-1)
                 wickEditor.project.currentObject.currentLayer ++;
@@ -450,36 +450,34 @@ var GuiActionHandler = function (wickEditor) {
     // BACKSPACE
     // Delete Selected Objects
     registerAction('deleteSelectedObjects',
-        ['BACKSPACE'], 
-        ['deleteButton'], 
-        {}, 
+        ['BACKSPACE'],
+        ['deleteButton'],
+        {},
         function(args) {
-            wickEditor.actionHandler.doAction('deleteObjects', { 
-                objs:wickEditor.fabric.getSelectedObjects() 
+            wickEditor.actionHandler.doAction('deleteObjects', {
+                objs:wickEditor.fabric.getSelectedObjects()
             });
         });
 
     // Delete
     // Delete Selected Objects
     registerAction('deleteSelectedObjects2',
-        ['DELETE'], 
-        ['deleteButton'], 
-        {}, 
+        ['DELETE'],
+        ['deleteButton'],
+        {},
         function(args) {
-            wickEditor.actionHandler.doAction('deleteObjects', { 
-                objs:wickEditor.fabric.getSelectedObjects() 
+            wickEditor.actionHandler.doAction('deleteObjects', {
+                objs:wickEditor.fabric.getSelectedObjects()
             });
         });
 
     registerAction('copy',
-        ['Modifier',"C"], 
-        ['copyButton'], 
-        {}, 
+        ['Modifier',"C"],
+        ['copyButton'],
+        {},
         function(args) {
             wickEditor.rightclickmenu.open = false;
             that.keys = [];
-
-            console.log("why")
 
             var clipboardData = window.polyfillClipboardData//(window.polyfillClipboardData || args.clipboardData);
             if(clipboardData) {
@@ -490,9 +488,9 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('cut',
-        ['Modifier',"X"], 
-        ['cutButton'], 
-        {}, 
+        ['Modifier',"X"],
+        ['cutButton'],
+        {},
         function(args) {
             wickEditor.rightclickmenu.open = false;
             that.keys = [];
@@ -507,8 +505,8 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('paste',
-        ['Modifier',"V"], 
-        ['pasteButton'], 
+        ['Modifier',"V"],
+        ['pasteButton'],
         {},
         function(args) {
             wickEditor.rightclickmenu.open = false;
@@ -551,9 +549,9 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('newProject',
-        [], 
-        ['newProjectButton'], 
-        {}, 
+        [],
+        ['newProjectButton'],
+        {},
         function(args) {
             if(!confirm("Create a new project? All unsaved changes to the current project will be lost!")) {
                 return;
@@ -566,9 +564,9 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('exportProjectAsJSON',
-        [], 
-        ['exportProjectAsJSONButton'], 
-        {}, 
+        [],
+        ['exportProjectAsJSONButton'],
+        {},
         function(args) {
             wickEditor.project.getAsJSON(function(JSONProject) {
                 var blob = new Blob([JSONProject], {type: "text/plain;charset=utf-8"});
@@ -577,105 +575,105 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('saveProjectToLocalStorage',
-        [], 
-        ['saveProjectToLocalStorageButton'], 
-        {}, 
+        [],
+        ['saveProjectToLocalStorageButton'],
+        {},
         function(args) {
             wickEditor.project.saveInLocalStorage();
         });
 
     registerAction('useTools.Cursor',
-        [/*'C'*/], 
-        ['cursorToolButton'], 
-        {}, 
+        [/*'C'*/],
+        ['cursorToolButton'],
+        {},
         function(args) {
             wickEditor.fabric.changeTool(wickEditor.fabric.tools.cursor);
         });
 
     registerAction('useTools.Paintbrush',
-        [/*'B'*/], 
-        ['paintbrushToolButton'], 
-        {}, 
+        [/*'B'*/],
+        ['paintbrushToolButton'],
+        {},
         function(args) {
             wickEditor.fabric.changeTool(wickEditor.fabric.tools.paintbrush);
         });
 
     registerAction('useTools.FillBucket',
-        [/*'F'*/], 
-        ['fillbucketToolButton'], 
-        {}, 
+        [/*'F'*/],
+        ['fillbucketToolButton'],
+        {},
         function(args) {
             wickEditor.fabric.changeTool(wickEditor.fabric.tools.fillbucket);
         });
 
     registerAction('useTools.Rectangle',
-        [/*'R'*/], 
-        ['rectangleToolButton'], 
-        {}, 
+        [/*'R'*/],
+        ['rectangleToolButton'],
+        {},
         function(args) {
             wickEditor.fabric.changeTool(wickEditor.fabric.tools.rectangle);
         });
 
     registerAction('useTools.Ellipse',
-        [/*'E'*/], 
-        ['ellipseToolButton'], 
-        {}, 
+        [/*'E'*/],
+        ['ellipseToolButton'],
+        {},
         function(args) {
             wickEditor.fabric.changeTool(wickEditor.fabric.tools.ellipse);
         });
 
     registerAction('useTools.Dropper',
-        [/*'D'*/], 
-        ['dropperToolButton'], 
-        {}, 
+        [/*'D'*/],
+        ['dropperToolButton'],
+        {},
         function(args) {
             wickEditor.fabric.changeTool(wickEditor.fabric.tools.dropper);
         });
 
     registerAction('useTools.Text',
-        [/*'T'*/], 
-        ['textToolButton'], 
-        {}, 
+        [/*'T'*/],
+        ['textToolButton'],
+        {},
         function(args) {
             wickEditor.fabric.changeTool(wickEditor.fabric.tools.text);
         });
 
     registerAction('useTools.Zoom',
-        [/*'Z'*/], 
-        ['zoomToolButton'], 
-        {}, 
+        [/*'Z'*/],
+        ['zoomToolButton'],
+        {},
         function(args) {
             wickEditor.fabric.changeTool(wickEditor.fabric.tools.zoom);
         });
 
     registerAction('useTools.Pan',
-        [/*'P'*/], 
-        ['panToolButton'], 
-        {}, 
+        [/*'P'*/],
+        ['panToolButton'],
+        {},
         function(args) {
             wickEditor.fabric.changeTool(wickEditor.fabric.tools.pan);
         });
 
     registerAction('useTools.Crop',
-        [], 
-        ['cropToolButton'], 
-        {}, 
+        [],
+        ['cropToolButton'],
+        {},
         function(args) {
             wickEditor.fabric.changeTool(wickEditor.fabric.tools.crop);
         });
 
     registerAction('useTools.BackgroundRemove',
-        [], 
-        ['backgroundremoveToolButton'], 
-        {}, 
+        [],
+        ['backgroundremoveToolButton'],
+        {},
         function(args) {
             wickEditor.fabric.changeTool(wickEditor.fabric.tools.backgroundremove);
         });
 
     registerAction('editScripts',
-        [], 
-        ['editScriptsButton', 'editSymbolScriptsButton', 'editScriptsButtonProperties'], 
-        {}, 
+        [],
+        ['editScriptsButton', 'editSymbolScriptsButton', 'editScriptsButtonProperties'],
+        {},
         function(args) {
             var selectedObj = wickEditor.fabric.getSelectedObject(WickObject);
             wickEditor.scriptingide.editScriptsOfObject(selectedObj);
@@ -683,9 +681,9 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('editFrameScripts',
-        [], 
-        ['editFrameScriptsButton', 'editFrameScriptsRightClick'], 
-        {}, 
+        [],
+        ['editFrameScriptsButton', 'editFrameScriptsRightClick'],
+        {},
         function(args) {
             wickEditor.fabric.deselectAll();
             var selectedFrame = wickEditor.project.currentObject.getCurrentFrame();
@@ -694,11 +692,11 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('bringToFront',
-        ['Modifier', "SHIFT", "UP"], 
-        ['bringToFrontButton'], 
-        {}, 
+        ['Modifier', "SHIFT", "UP"],
+        ['bringToFrontButton'],
+        {},
         function(args) {
-            wickEditor.actionHandler.doAction('moveObjectToZIndex', { 
+            wickEditor.actionHandler.doAction('moveObjectToZIndex', {
                 objs:wickEditor.fabric.getSelectedObjects(WickObject),
                 newZIndex: wickEditor.project.currentObject.getCurrentFrame().wickObjects.length
             });
@@ -706,11 +704,11 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('sendToBack',
-        ['Modifier', "SHIFT", "DOWN"], 
-        ['sendToBackButton'], 
-        {}, 
+        ['Modifier', "SHIFT", "DOWN"],
+        ['sendToBackButton'],
+        {},
         function(args) {
-            wickEditor.actionHandler.doAction('moveObjectToZIndex', { 
+            wickEditor.actionHandler.doAction('moveObjectToZIndex', {
                 objs:wickEditor.fabric.getSelectedObjects(WickObject),
                 newZIndex: 0
             });
@@ -718,76 +716,76 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('flipHorizontally',
-        [], 
-        [], 
-        {}, 
+        [],
+        [],
+        {},
         function(args) {
             var selectedObjects = wickEditor.fabric.getSelectedObjects(WickObject);
             var modifiedStates = [];
 
             selectedObjects.forEach(function (obj) {
-                modifiedStates.push({ 
+                modifiedStates.push({
                     flipX : !obj.flipX
                 });
             });
 
-            wickEditor.actionHandler.doAction('modifyObjects', { 
-                objs: selectedObjects, 
-                modifiedStates: modifiedStates 
+            wickEditor.actionHandler.doAction('modifyObjects', {
+                objs: selectedObjects,
+                modifiedStates: modifiedStates
             });
         });
 
     registerAction('flipVertically',
-        [], 
-        [], 
-        {}, 
+        [],
+        [],
+        {},
         function(args) {
             var selectedObjects = wickEditor.fabric.getSelectedObjects(WickObject);
             var modifiedStates = [];
 
             selectedObjects.forEach(function (obj) {
-                modifiedStates.push({ 
+                modifiedStates.push({
                     flipY : !obj.flipY
                 });
             });
             
-            wickEditor.actionHandler.doAction('modifyObjects', { 
-                objs: selectedObjects, 
-                modifiedStates: modifiedStates 
+            wickEditor.actionHandler.doAction('modifyObjects', {
+                objs: selectedObjects,
+                modifiedStates: modifiedStates
             });
         });
 
     registerAction('editObject',
-        [], 
-        ['editObjectButton', 'editSymbolButton'], 
-        {}, 
+        [],
+        ['editObjectButton', 'editSymbolButton'],
+        {},
         function(args) {
             var selectedObject = wickEditor.fabric.getSelectedObject(WickObject);
             wickEditor.fabric.symbolBorders.startEditObjectAnimation(selectedObject);
         });
 
     registerAction('finishEditingObject',
-        [], 
-        ['finishEditingObjectButton', 'finishEditingObjectFabricButton'], 
-        {}, 
+        [],
+        ['finishEditingObjectButton', 'finishEditingObjectFabricButton'],
+        {},
         function(args) {
             var currObj = wickEditor.project.currentObject;
             wickEditor.fabric.symbolBorders.startLeaveObjectAnimation(currObj);
         });
 
     registerAction('convertToSymbol',
-        [], 
-        ['convertToSymbolButton', 'createSymbolButton'], 
-        {}, 
+        [],
+        ['convertToSymbolButton', 'createSymbolButton'],
+        {},
         function(args) {
             var fabCanvas = wickEditor.fabric.canvas;
             wickEditor.actionHandler.doAction('convertSelectionToSymbol', {} );
         });
 
     registerAction('breakApart',
-        [], 
-        ['breakApartButton'], 
-        {}, 
+        [],
+        ['breakApartButton'],
+        {},
         function(args) {
             var selectedObject = wickEditor.fabric.getSelectedObject(WickObject);
             if(selectedObject.isSymbol) {
@@ -802,26 +800,26 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('downloadObject',
-        [], 
-        ['downloadButton'], 
-        {}, 
+        [],
+        ['downloadButton'],
+        {},
         function(args) {
             wickEditor.fabric.getSelectedObject(WickObject).downloadAsFile();
             wickEditor.syncInterfaces();
         });
 
     registerAction('addFrame',
-        ['SHIFT', '='], 
-        ['addFrameButton'], 
-        {}, 
+        ['SHIFT', '='],
+        ['addFrameButton'],
+        {},
         function(args) {
             wickEditor.actionHandler.doAction('addNewFrame');
         });
     
     registerAction('deleteFrame',
-        ['SHIFT', '-'], 
-        ['deleteFrameButton'], 
-        {}, 
+        ['SHIFT', '-'],
+        ['deleteFrameButton'],
+        {},
         function(args) {
             var currentObject = wickEditor.project.currentObject;
             var frame = currentObject.getCurrentFrame();
@@ -833,9 +831,9 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('extendFrame',
-        ['SHIFT', '.'], 
-        ['extendFrameButton'], 
-        {}, 
+        ['SHIFT', '.'],
+        ['extendFrameButton'],
+        {},
         function(args) {
             var frame = wickEditor.project.currentObject.getCurrentFrame();
             if(!frame) {
@@ -856,9 +854,9 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('shrinkFrame',
-        ['SHIFT', ','], 
-        ['shrinkFrameButton'], 
-        {}, 
+        ['SHIFT', ','],
+        ['shrinkFrameButton'],
+        {},
         function(args) {
             var frame = wickEditor.project.currentObject.getCurrentFrame();
 
@@ -866,32 +864,32 @@ var GuiActionHandler = function (wickEditor) {
             //var framesToShrink = frameEndingIndex - wickEditor.project.currentObject.playheadPosition;
             //framesToShrink = Math.max(1, framesToShrink)
 
-            wickEditor.actionHandler.doAction('shrinkFrame', {   
-                nFramesToShrinkBy: 1, 
+            wickEditor.actionHandler.doAction('shrinkFrame', {
+                nFramesToShrinkBy: 1,
                 frame: frame
             });
         });
 
     registerAction('addLayer',
-        [], 
-        ['addLayerButton'], 
-        {}, 
+        [],
+        ['addLayerButton'],
+        {},
         function(args) {
             wickEditor.actionHandler.doAction('addNewLayer');
         });
 
     registerAction('removeLayer',
-        [], 
-        ['removeLayerButton'], 
-        {}, 
+        [],
+        ['removeLayerButton'],
+        {},
         function(args) {
             wickEditor.actionHandler.doAction('removeLayer', {});
         });
 
     registerAction('addKeyframe',
-        [], 
-        ['addKeyframeButton'], 
-        {}, 
+        [],
+        ['addKeyframeButton'],
+        {},
         function(args) {
             var selectedObj = wickEditor.fabric.getSelectedObject(WickObject);
             var tween = WickTween.fromWickObjectState(selectedObj);
@@ -900,9 +898,9 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('removeKeyframe',
-        [], 
-        ['removeKeyframeButton'], 
-        {}, 
+        [],
+        ['removeKeyframeButton'],
+        {},
         function(args) {
             console.error("removeKeyframeButton action NYI")
         });

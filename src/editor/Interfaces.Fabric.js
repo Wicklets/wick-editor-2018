@@ -61,12 +61,13 @@ var FabricInterface = function (wickEditor) {
             var selectedObjs = that.getSelectedObjects();
             selectedObjs.forEach(function (wickObj) {
                 if(wickObj.pathData) {
-                    wickEditor.paper.setPathNeedsUpdate(wickObj);
+                    //wickEditor.paper.setPathNeedsUpdate(wickObj);
                 }
             });
-            if(selectedObjs.length > 0)
-                wickEditor.paper.updateTouchingPaths();
-        }); 
+            if(selectedObjs.length > 0) {
+                //wickEditor.paper.updateTouchingPaths();
+            }
+        });
         that.canvas.on('selection:cleared', function (e) {
             wickEditor.timeline.redraw();
 
@@ -156,7 +157,7 @@ var FabricInterface = function (wickEditor) {
         wickEditor.syncInterfaces();
 
         if(that.lastTool instanceof Tools.Paintbrush) {
-            wickEditor.paper.updateTouchingPaths();
+            //wickEditor.paper.updateTouchingPaths();
         }
     }
 
@@ -278,7 +279,7 @@ var FabricInterface = function (wickEditor) {
             return;
         }
 
-        var selectedObjs = []; 
+        var selectedObjs = [];
         this.canvas.forEachObject(function(fabricObj) {
             if(objects.indexOf(fabricObj.wickObjectRef) != -1) {
                 fabricObj.set('active', true);
@@ -386,9 +387,9 @@ var FabricInterface = function (wickEditor) {
             });
         });
 
-        wickEditor.actionHandler.doAction('modifyObjects', { 
-            objs: that.getSelectedObjects(WickObject), 
-            modifiedStates: modifiedStates 
+        wickEditor.actionHandler.doAction('modifyObjects', {
+            objs: that.getSelectedObjects(WickObject),
+            modifiedStates: modifiedStates
         });
     }
 
@@ -404,7 +405,7 @@ var FabricInterface = function (wickEditor) {
             if(!wickObj) return;
             var insideSymbolReposition = {
                 x: wickObj.x-wickObj.getAbsolutePosition().x,
-                y: wickObj.y-wickObj.getAbsolutePosition().y 
+                y: wickObj.y-wickObj.getAbsolutePosition().y
             };
 
             var cornerOffset = {
@@ -475,7 +476,7 @@ var FabricInterface = function (wickEditor) {
 
     this.getObjectsImage = function (callback, args) {
 
-        var selectedObjs = []; 
+        var selectedObjs = [];
         that.canvas.forEachObject(function(fabricObj) {
             if(args && args.objs && args.objs.indexOf(fabricObj.wickObjectRef) === -1) return;
 
@@ -512,7 +513,7 @@ var FabricInterface = function (wickEditor) {
             //that.canvas.renderAll();
             group.setCoords();
 
-            group.cloneAsImage(function (img) { 
+            group.cloneAsImage(function (img) {
                 that.canvas.setZoom(oldZoom)
                 that.canvas.renderAll();
                 group.setCoords();

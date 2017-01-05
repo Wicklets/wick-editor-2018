@@ -48,7 +48,7 @@ var WickActionHandler = function (wickEditor) {
         // Create a new WickAction object
         var action = new WickAction(
             this.doActions[actionName],
-            this.undoActions[actionName] 
+            this.undoActions[actionName]
         );
         action.fname = actionName;
         if(!action.doAction) {
@@ -63,7 +63,7 @@ var WickActionHandler = function (wickEditor) {
         action.doAction(action.args);
 
         // Put the action on the undo stack to be undone later
-        this.undoStack.push(action); 
+        this.undoStack.push(action);
         this.redoStack = [];
 
         // Regen parent refs
@@ -81,10 +81,10 @@ var WickActionHandler = function (wickEditor) {
         if (this.undoStack.length == 0) {
             console.log("undoAction(): No actions on the undo stack.");
             return;
-        } 
+        }
 
         // Get last action on the undo stack
-        var action = this.undoStack.pop(); 
+        var action = this.undoStack.pop();
 
         // Do the action and put it on the redo stack to be redone later
         action.undoAction(action.args);
@@ -101,7 +101,7 @@ var WickActionHandler = function (wickEditor) {
         if (this.redoStack.length == 0) {
             console.log("redoAction(): No actions on the redo stack.");
             return;
-        } 
+        }
 
         // Get last action on the redo stack
         var action = this.redoStack.pop();
@@ -122,7 +122,7 @@ var WickActionHandler = function (wickEditor) {
 
 // Register all actions
 
-    this.registerAction('addObjects', 
+    this.registerAction('addObjects',
         function (args) {
             // Make a new frame if one doesn't exist at the playhead position
             if(!wickEditor.project.currentObject.getCurrentFrame()) {
@@ -138,7 +138,8 @@ var WickActionHandler = function (wickEditor) {
                 args.addedObjects.push(wickObj);
 
                 if(wickObj.pathData) {
-                    wickEditor.paper.updatePaperSceneForObject(wickObj);
+                    //wickEditor.paper.updatePaperSceneForObject(wickObj);
+                    wickEditor.paper.onWickObjectsChange();
                 }
             }
         },
@@ -150,12 +151,12 @@ var WickActionHandler = function (wickEditor) {
             }
         });
 
-    this.registerAction('deleteObjects', 
+    this.registerAction('deleteObjects',
         function (args) {
             args.restoredObjects = []
             args.oldZIndices = [];
 
-            // Store the old z index vars for each object. 
+            // Store the old z index vars for each object.
             // Must do this before removing them all.
             for(var i = 0; i < args.objs.length; i++) {
                 var obj = args.objs[i];
@@ -169,9 +170,11 @@ var WickActionHandler = function (wickEditor) {
                 args.restoredObjects.push(obj);
                 wickEditor.project.currentObject.removeChild(args.objs[i]);
                 if(args.objs[i].pathData) {
-                    wickEditor.paper.updatePaperSceneForObject(args.objs[i], true);
+                    //wickEditor.paper.updatePaperSceneForObject(args.objs[i], true);
                 }
             }
+            
+            wickEditor.paper.onWickObjectsChange();
         },
         function (args) {
             for(var i = 0; i < args.restoredObjects.length; i++) {
@@ -181,7 +184,7 @@ var WickActionHandler = function (wickEditor) {
 
     var modifyableAttributes = ["x","y","scaleX","scaleY","angle","opacity","flipX","flipY"];
 
-    this.registerAction('modifyObjects', 
+    this.registerAction('modifyObjects',
         function (args) {
             args.originalStates = [];
 
@@ -223,7 +226,7 @@ var WickActionHandler = function (wickEditor) {
                 }
 
                 if(wickObj.pathData) {
-                    wickEditor.paper.updatePaperSceneForObject(wickObj);
+                    //wickEditor.paper.updatePaperSceneForObject(wickObj);
                 }
                 
                 // This is silly what's a better way ???
@@ -233,6 +236,8 @@ var WickActionHandler = function (wickEditor) {
                     wickObj.addTween(tween);
                 }
             }
+            
+            wickEditor.paper.onWickObjectsChange();
         },
         function (args) {
             for(var i = 0; i < args.objs.length; i++) {
@@ -259,7 +264,7 @@ var WickActionHandler = function (wickEditor) {
             }
         });
 
-    this.registerAction('convertSelectionToSymbol', 
+    this.registerAction('convertSelectionToSymbol',
         function (args) {
             var selectedObjects = wickEditor.fabric.getSelectedObjects(WickObject);
 
@@ -295,7 +300,7 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.currentObject.removeChild(args.createdSymbol);
         });
 
-    this.registerAction('breakApartSymbol', 
+    this.registerAction('breakApartSymbol',
         function (args) {
             args.symbol = args.obj;
 
@@ -319,7 +324,7 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.addObject(args.symbol);
         });
 
-    this.registerAction('addNewFrame', 
+    this.registerAction('addNewFrame',
         function (args) {
             var currentObject = wickEditor.project.currentObject;
 
@@ -337,7 +342,7 @@ var WickActionHandler = function (wickEditor) {
             currentObject.getCurrentLayer().frames.pop();
         });
 
-    this.registerAction('deleteFrame', 
+    this.registerAction('deleteFrame',
         function (args) {
             if(!args.frame) return;
 
@@ -351,7 +356,7 @@ var WickActionHandler = function (wickEditor) {
             args.layer.addFrame(args.frameRemoved, args.frameRemovedIndex);
         });
 
-    this.registerAction('addNewLayer', 
+    this.registerAction('addNewLayer',
         function (args) {
             var currentObject = wickEditor.project.currentObject;
 
@@ -371,7 +376,7 @@ var WickActionHandler = function (wickEditor) {
             currentObject.currentLayer = currentObject.layers.length-1;
         });
 
-    this.registerAction('removeLayer', 
+    this.registerAction('removeLayer',
         function (args) {
             var currentObject = wickEditor.project.currentObject;
             if(currentObject.layers.length > 1) {
@@ -387,7 +392,7 @@ var WickActionHandler = function (wickEditor) {
             }
         });
 
-    this.registerAction('addBreakpoint', 
+    this.registerAction('addBreakpoint',
         function (args) {
             args.oldAutoplayState = args.frame.autoplay;
             args.frame.autoplay = false;
@@ -396,7 +401,7 @@ var WickActionHandler = function (wickEditor) {
             args.frame.autoplay = args.oldAutoplayState;
         });
 
-    this.registerAction('removeBreakpoint', 
+    this.registerAction('removeBreakpoint',
         function (args) {
             args.oldAutoplayState = args.frame.autoplay;
             args.frame.autoplay = true;
@@ -405,25 +410,27 @@ var WickActionHandler = function (wickEditor) {
             args.frame.autoplay = args.oldAutoplayState;
         });
 
-    this.registerAction('extendFrame', 
+    this.registerAction('extendFrame',
         function (args) {
             args.frame.extend(args.nFramesToExtendBy);
         },
         function (args) {
-            args.frame.shrink(args.nFramesToExtendBy); 
+            args.frame.shrink(args.nFramesToExtendBy);
         });
 
-    this.registerAction('shrinkFrame', 
+    this.registerAction('shrinkFrame',
         function (args) {
             args.frame.shrink(args.nFramesToShrinkBy);
         },
         function (args) {
-            args.frame.extend(args.nFramesToShrinkBy); 
+            args.frame.extend(args.nFramesToShrinkBy);
         });
 
     this.registerAction('movePlayhead',
         function (args) {
             wickEditor.fabric.deselectAll();
+            
+            wickEditor.paper.onWickObjectsChange()
 
             wickEditor.fabric.onionSkinsDirty = true;
             var currentObject = wickEditor.project.currentObject;
@@ -440,6 +447,8 @@ var WickActionHandler = function (wickEditor) {
             }
             var newFrame = wickEditor.project.currentObject.getCurrentFrame();
             
+            wickEditor.paper.onWickObjectsChange()
+            
         },
         function (args) {
             wickEditor.fabric.deselectAll();
@@ -447,7 +456,7 @@ var WickActionHandler = function (wickEditor) {
             args.obj.playheadPosition = args.oldPlayheadPosition;
         });
 
-    this.registerAction('breakApartImage', 
+    this.registerAction('breakApartImage',
         function (args) {
             var wickObj = wickEditor.fabric.getSelectedObject(WickObject);
             wickObj.getBlobImages(function (images) {
@@ -467,7 +476,7 @@ var WickActionHandler = function (wickEditor) {
             console.error("breakApartImage undo not yet implemented")
         });
 
-    this.registerAction('editObject', 
+    this.registerAction('editObject',
         function (args) {
             wickEditor.fabric.deselectAll();
 
@@ -481,7 +490,7 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.currentObject = args.prevEditedObject;
         });
 
-    this.registerAction('finishEditingCurrentObject', 
+    this.registerAction('finishEditingCurrentObject',
         function (args) {
             wickEditor.fabric.deselectAll();
             wickEditor.project.currentObject.playheadPosition = 0;
@@ -493,7 +502,7 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.currentObject = args.prevEditedObject;
         });
 
-    this.registerAction('moveObjectToZIndex', 
+    this.registerAction('moveObjectToZIndex',
         function (args) {
             args.oldZIndexes = [];
             for(var i = 0; i < args.objs.length; i++) {
@@ -507,7 +516,7 @@ var WickActionHandler = function (wickEditor) {
                 wickEditor.project.currentObject.getCurrentFrame().wickObjects.splice(args.newZIndex, 0, obj);
             }
         },
-        function (args) {  
+        function (args) {
             for(var i = 0; i < args.objs.length; i++) {
                 var obj = args.objs[i]
                 obj.zIndicesDirty = true;
