@@ -89,3 +89,17 @@ WickFrame.prototype.decodeStrings = function () {
     if(this.pathData) this.pathData = WickProject.Compressor.decodeString(this.pathData);
 
 }
+
+WickFrame.prototype.getObjectByUUID = function () {
+
+	var foundWickObject;
+
+	this.wickObjects.forEach(function (wickObject) {
+		if(wickObject.uuid === uuid) {
+			foundWickObject = wickObject;
+		}
+	});
+
+	return foundWickObject;
+
+}

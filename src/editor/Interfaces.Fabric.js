@@ -59,13 +59,15 @@ var FabricInterface = function (wickEditor) {
         });
         that.canvas.on('before:selection:cleared', function (e) {
             var selectedObjs = that.getSelectedObjects();
+            var runPathCleanup = false;
             selectedObjs.forEach(function (wickObj) {
                 if(wickObj.pathData) {
-                    //wickEditor.paper.setPathNeedsUpdate(wickObj);
+                    wickEditor.paper.setPathNeedsIntersectionCheck(wickObj);
+                    runPathCleanup = true;
                 }
             });
-            if(selectedObjs.length > 0) {
-                //wickEditor.paper.updateTouchingPaths();
+            if(runPathCleanup) {
+                wickEditor.paper.onPathsNeedCleanup();
             }
         });
         that.canvas.on('selection:cleared', function (e) {
