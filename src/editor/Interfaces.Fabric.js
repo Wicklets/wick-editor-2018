@@ -159,7 +159,7 @@ var FabricInterface = function (wickEditor) {
         wickEditor.syncInterfaces();
 
         if(that.lastTool instanceof Tools.Paintbrush) {
-            //wickEditor.paper.updateTouchingPaths();
+            wickEditor.paper.onPathsNeedCleanup();
         }
     }
 
@@ -471,7 +471,7 @@ var FabricInterface = function (wickEditor) {
     this.forceModifySelectedObjects = function () {
         var wickObj = that.getSelectedObject(WickObject);
         if(wickObj && wickObj.fontData) {
-            that.modifyObjects(wickObj);
+            that.modifyObjects([wickObj]);
         }
         wickEditor.syncInterfaces();
     }

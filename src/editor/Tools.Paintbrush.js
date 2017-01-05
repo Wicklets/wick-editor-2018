@@ -59,6 +59,7 @@ Tools.Paintbrush = function (wickEditor) {
             WickObject.fromPathFile(SVGData, function (wickObject) {
                 wickObject.x = fabricPath.left;
                 wickObject.y = fabricPath.top;
+                wickObject.isNewDrawingPath = true;
                 wickEditor.project.addObject(wickObject);
                 wickEditor.paper.onWickObjectsChange();
             });

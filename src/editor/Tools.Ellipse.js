@@ -33,6 +33,7 @@ Tools.Ellipse = function (wickEditor) {
         WickObject.fromPathFile(svgData, function (wickObject) {
             wickObject.x = origX;
             wickObject.y = origY;
+            wickObject.isNewDrawingPath = true;
             wickEditor.project.addObject(wickObject);
             wickEditor.paper.onWickObjectsChange();
         });

@@ -7,10 +7,14 @@
 
 var WickActionHandler = function (wickEditor) {
 
+    var self = this;
+
     /* WickAction definition. All user actions are expected to be well defined by
    this structure in order to properly be done and undone. */
 
-    var WickAction = function (doAction, undoAction) {
+    var WickAction = function (name, doAction, undoAction) {
+
+        this.name = name;
 
         /* To be called when an action is committed by the user. */
         this.doAction = doAction;
@@ -47,6 +51,7 @@ var WickActionHandler = function (wickEditor) {
 
         // Create a new WickAction object
         var action = new WickAction(
+            actionName,
             this.doActions[actionName],
             this.undoActions[actionName]
         );
@@ -118,6 +123,13 @@ var WickActionHandler = function (wickEditor) {
     this.clearHistory = function () {
         this.undoStack = [];
         this.redoStack = [];
+    }
+
+    this.printHistory = function () {
+        this.undoStack.forEach(function (action) {
+            console.log("Action " + self.undoStack.indexOf(action) + ":")
+            console.log(action.name);
+        })
     }
 
 // Register all actions
@@ -278,7 +290,7 @@ var WickActionHandler = function (wickEditor) {
             
             selectedObjects.forEach(function (obj) {
                 wickEditor.project.currentObject.removeChild(obj);
-                if(obj.pathData) wickEditor.paper.updatePaperSceneForObject(obj, true);
+                //if(obj.pathData) wickEditor.paper.updatePaperSceneForObject(obj, true);
                 obj.inFrameSVG = false;
             });
 

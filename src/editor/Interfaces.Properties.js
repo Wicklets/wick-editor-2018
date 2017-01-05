@@ -264,7 +264,7 @@ var PropertiesInterface = function (wickEditor) {
         var newWeight = this.checked ? "bold" : "normal";
         wickEditor.fabric.forceModifySelectedObjects();
         wickEditor.actionHandler.doAction('modifyObjects', { 
-            ids: [wickEditor.fabric.getSelectedObject()], 
+            objs: [wickEditor.fabric.getSelectedObject()], 
             modifiedStates: [{ fontWeight : newWeight }] 
         });
     };
@@ -272,7 +272,7 @@ var PropertiesInterface = function (wickEditor) {
         var newStyle = this.checked ? "italic" : "normal";
         wickEditor.fabric.forceModifySelectedObjects();
         wickEditor.actionHandler.doAction('modifyObjects', { 
-            ids: [wickEditor.fabric.getSelectedObject()], 
+            objs: [wickEditor.fabric.getSelectedObject()], 
             modifiedStates: [{ fontStyle : newStyle }] 
         });
     };

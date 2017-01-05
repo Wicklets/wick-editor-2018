@@ -16,7 +16,16 @@ Tools.FillBucket = function (wickEditor) {
         if(e.e.button != 0) return;
         if(!(wickEditor.fabric.currentTool instanceof Tools.FillBucket)) return;
 
-        var onscreenObjects = wickEditor.project.currentObject.getAllActiveChildObjects();
+        var mouseScreenSpace = wickEditor.fabric.screenToCanvasSpace(e.e.offsetX, e.e.offsetY);
+        var mousePointX = mouseScreenSpace.x;
+        var mousePointY = mouseScreenSpace.y;
+        var insideSymbolOffset = wickEditor.project.currentObject.getAbsolutePosition();
+        mousePointX -= insideSymbolOffset.x;
+        mousePointY -= insideSymbolOffset.y;
+
+        wickEditor.paper.onFill(mousePointX, mousePointY);
+
+        /*var onscreenObjects = wickEditor.project.currentObject.getAllActiveChildObjects();
         VectorToolUtils.updatePaperDataOnVectorWickObjects(onscreenObjects);
 
         var mouseScreenSpace = wickEditor.fabric.screenToCanvasSpace(e.e.offsetX, e.e.offsetY);
@@ -119,7 +128,7 @@ Tools.FillBucket = function (wickEditor) {
                 wickObjects: [holeWickObj],
                 partOfChain: true
             });
-        });
+        });*/
     });
 
 }

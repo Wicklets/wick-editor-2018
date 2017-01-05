@@ -29,6 +29,7 @@ Tools.Rectangle = function (wickEditor) {
         WickObject.fromPathFile(svgString, function (wickObject) {
             wickObject.x = origX;
             wickObject.y = origY;
+            wickObject.isNewDrawingPath = true;
             wickEditor.project.addObject(wickObject);
             wickEditor.paper.onWickObjectsChange();
         });
