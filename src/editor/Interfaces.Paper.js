@@ -535,53 +535,38 @@ var PaperInterface = function (wickEditor) {
         if(!pathFilled) {
             console.log("No path filled, looking for holes now");
 
-            // Unite all on-screen paths 
-            var allPathsUnion = undefined;
+            // Find all paths
             var paths = getAllPathsInCanvas();
-            paths.forEach(function (path) {
-                var clone = path.clone({insert:false});
 
-                if(!allPathsUnion) {
-                    allPathsUnion = clone.children[0];
-                } else {
-                    allPathsUnion = allPathsUnion.unite(clone.children[0]);
-                }
-            });
+            // Find all holes
+            var holes = [];
+            // do it here lol
 
-            if(!allPathsUnion) return;
+            // Find all holes with point inside
+            var possibleHolesToFill = [];
+            // do it here lol
 
-            // Subtract union of all paths from huge rectangle
-            var hugeRectangle = new paper.Path.Rectangle(new paper.Point(-1000,-1000), new paper.Size(2000,2000));
-            var negativeSpace = hugeRectangle.subtract(allPathsUnion);
-            hugeRectangle.remove();
-            negativeSpace.remove();
+            var holeToFill = null;
+            if(possibleHolesToFill.length == 0) {
+                // No hole to fill :(
+                console.log("no hole found, giving up")
+            } else if(possibleHolesToFill.length == 1) {
+                holeFilled = possibleHolesToFill[0];
+            } else {
+                // Calculate smallest hole
+            }
 
-            //console.log(allPathsUnion);
-            //console.log(negativeSpace);
-            //console.log(allPathsUnion.exportSVG({insert:false}))
-            //console.log(negativeSpace.exportSVG({insert:false}))
+            if(holeToFill) {
+                holeFilled = true;
 
-            negativeSpace.children.forEach(function (child) {
-                if(holeFilled) return;
-                if(child.clockwise && child.area !== 4000000 && child.contains(point)) {
-                    var clone = child.clone({insert:false});//.intersect(negativeSpace);
-                    var group = new paper.Group();
-                    group.addChild(clone);
-                    clone.clockwise = false;
-                    clone.fillColor = 'green';
-                    group.fillRule = 'evenodd';
-                    holeFilled = true;
-                }
-            });
+                // Subtract all intersecting paths and holes from holeToFill
+
+                // Add holeToFill to project
+            }
+
         }
 
         if (pathFilled || holeFilled) {
-            /*getAllPathsInCanvas().forEach(function (path) {
-                path.children.forEach(function (child) {
-                    if(child instanceof paper.Path) console.log(child.style);
-                })
-            });*/
-
             self.onPaperCanvasChange();
             wickEditor.syncInterfaces();
         }
