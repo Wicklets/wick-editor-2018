@@ -5,6 +5,7 @@ var ToolbarInterface = function (wickEditor) {
     /* Define tools in toolbar */ 
     var toolbarTools = [ 'cursor',
                          'paintbrush',
+                         'eraser',
                          'fillbucket',
                          'rectangle',
                          'ellipse',

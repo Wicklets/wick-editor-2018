@@ -6,6 +6,9 @@ Tools.Paintbrush = function (wickEditor) {
 
     var that = this;
 
+    this.brushSize = 5;
+    this.color = "#000000";
+
     this.getCursorImage = function () {
         var canvas = document.createElement("canvas");
         canvas.width = 128;
@@ -39,13 +42,12 @@ Tools.Paintbrush = function (wickEditor) {
         return 'url(' + canvas.toDataURL() + ') 64 64,default';
     };
 
-    this.brushSize = 5;
-    this.color = "#000000";
-
 // Path vectorization
 
     // Listen for new paths drawn by fabric, vectorize them, and add them to the WickProject as WickObjects
     wickEditor.fabric.canvas.on('object:added', function(e) {
+        if(!(wickEditor.fabric.currentTool instanceof Tools.Paintbrush)) return;
+
         var fabricPath = e.target;
 
         // Make sure the new object is actually a path created by fabric's drawing tool
@@ -68,7 +70,9 @@ Tools.Paintbrush = function (wickEditor) {
             wickEditor.syncInterfaces();
         });
         
-        /*WickObject.fromPathFile(fabricPath.toSVG(), function (wickObject) {
+        /*var SVGData = '<svg id="svg" version="1.1" width="'+fabricPath.width+'" height="'+fabricPath.height+'" xmlns="http://www.w3.org/2000/svg">' + fabricPath.toSVG() + '</svg>';
+        console.log(SVGData)
+        WickObject.fromPathFile(SVGData, function (wickObject) {
             wickObject.x = fabricPath.left;
             wickObject.y = fabricPath.top;
             wickEditor.project.addObject(wickObject);

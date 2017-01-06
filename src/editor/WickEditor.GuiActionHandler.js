@@ -598,6 +598,14 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.fabric.changeTool(wickEditor.fabric.tools.paintbrush);
         });
 
+    registerAction('useTools.Eraser',
+        [],
+        ['eraserToolButton'],
+        {},
+        function(args) {
+            wickEditor.fabric.changeTool(wickEditor.fabric.tools.eraser);
+        });
+
     registerAction('useTools.FillBucket',
         [/*'F'*/],
         ['fillbucketToolButton'],

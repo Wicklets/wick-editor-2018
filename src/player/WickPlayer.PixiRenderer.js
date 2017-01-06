@@ -131,9 +131,12 @@ var WickPixiRenderer = function (project) {
 	        } else if (subObj.pathData) {
 	        	var parser = new DOMParser();
 				var svgDoc = parser.parseFromString('<svg id="svg" viewBox="'+(subObj.x-subObj.width/2)+' '+(subObj.y-subObj.height/2)+' '+(subObj.width)+' '+(subObj.height)+'" version="1.1" width="'+(subObj.width)+'" height="'+(subObj.height)+'" xmlns="http://www.w3.org/2000/svg">'+subObj.pathData+'</svg>', "image/svg+xml");
+				//var svgDoc = parser.parseFromString('<svg id="svg" viewBox="'+(0)+' '+(0)+' '+(subObj.width)+' '+(subObj.height)+'" version="1.1" width="'+(subObj.width)+'" height="'+(subObj.height)+'" xmlns="http://www.w3.org/2000/svg">'+subObj.pathData+'</svg>', "image/svg+xml");
 				
 				var s = new XMLSerializer().serializeToString(svgDoc)
 				var base64svg = 'data:image/svg+xml;base64,' + window.btoa(s);
+
+				//console.log(base64svg)
 				
 				subObj.pixiSprite = PIXI.Sprite.fromImage(base64svg);
 	            wickObj.pixiContainer.addChild(subObj.pixiSprite);

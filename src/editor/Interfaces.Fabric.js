@@ -30,6 +30,7 @@ var FabricInterface = function (wickEditor) {
         this.tools = {
             "cursor"           : new Tools.Cursor(wickEditor),
             "paintbrush"       : new Tools.Paintbrush(wickEditor),
+            "eraser"           : new Tools.Eraser(wickEditor),
             "fillbucket"       : new Tools.FillBucket(wickEditor),
             "rectangle"        : new Tools.Rectangle(wickEditor),
             "ellipse"          : new Tools.Ellipse(wickEditor),
@@ -111,6 +112,10 @@ var FabricInterface = function (wickEditor) {
             this.canvas.isDrawingMode = true;
             this.canvas.freeDrawingBrush.width = that.currentTool.brushSize;
             this.canvas.freeDrawingBrush.color = that.currentTool.color;
+        } else if (that.currentTool instanceof Tools.Eraser) {
+            this.canvas.isDrawingMode = true;
+            this.canvas.freeDrawingBrush.width = that.tools.paintbrush.brushSize;
+            this.canvas.freeDrawingBrush.color = "#FFFFFF";
         } else {
             this.canvas.isDrawingMode = false;
         }
@@ -160,6 +165,9 @@ var FabricInterface = function (wickEditor) {
 
         if(that.lastTool instanceof Tools.Paintbrush) {
             wickEditor.paper.onPathsNeedCleanup();
+        }
+        if(that.lastTool instanceof Tools.Eraser) {
+            wickEditor.paper.onPathsNeedSplitApart();
         }
     }
 
