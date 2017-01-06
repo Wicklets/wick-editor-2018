@@ -281,9 +281,7 @@ var PaperInterface = function (wickEditor) {
         //For each path:
         pathsThatNeedSplitApartCheck.forEach(function (pathNeedsSplitCheck) {
 
-            //Make two lists, one will all holes and one with all paths
-            var allHoles = [];
-            var allPaths = [];
+            console.log("running split check ...")
 
             if(pathNeedsSplitCheck.children.length !== 1) console.error("something really bad happened");
             if(pathNeedsSplitCheck.children[0] instanceof paper.Path) {
@@ -292,13 +290,54 @@ var PaperInterface = function (wickEditor) {
                 return;
             }
 
-            //For each path:
-                //Make a new group containing only that path
-                //Add holes that intersect with that path to the group
-                //Add that group to project
+            //Make two lists, one will all holes and one with all paths
+            var holes = [];
+            var fills = [];
 
+            var compPath = pathNeedsSplitCheck.children[0];
+
+            //For each child:
+            compPath.children.forEach(function (child) {
+                //Make a new group containing only that path
+                if(child.clockwise) {
+                    console.log(child)
+                    holes.push(child.clone({insert:false}));
+                } else {
+                    fills.push(child.clone({insert:false}));
+                }
+            });
+
+            fills.forEach(function (fill) {
+                //Make a new group containing only that fill
+                var group = new paper.Group();
+                paper.project.activeLayer.addChild(group);
+
+                var newCompPath = new paper.CompoundPath(); newCompPath.remove();
+
+                newCompPath.addChild(fill);
+                fill.fillColor = compPath.fillColor;
+                newCompPath.fillColor = compPath.fillColor;
+
+                //Add holes that intersect with that fill to the group
+                holes.forEach(function (hole) {
+                    var thisHoleAdded = false;
+                    hole.segments.forEach(function (segment) {
+                        if(thisHoleAdded) return;
+                        if(fill.contains(segment.point)) {
+                            newCompPath.addChild(hole);
+                            thisHoleAdded = true;
+                        }
+                    });
+                });
+
+                group.addChild(newCompPath);
+                console.log(group);
+            });
+
+            removePathFromCanvas(pathNeedsSplitCheck);
 
             pathNeedsSplitCheck.needsSplitApartCheck = false;
+            pathsDirty = true;
         });
         
         if (pathsDirty) {
