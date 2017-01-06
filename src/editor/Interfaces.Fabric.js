@@ -167,7 +167,7 @@ var FabricInterface = function (wickEditor) {
             wickEditor.paper.onPathsNeedCleanup();
         }
         if(that.lastTool instanceof Tools.Eraser) {
-            wickEditor.paper.onPathsNeedSplitApart();
+            wickEditor.paper.onPathsNeedCleanup();
         }
     }
 

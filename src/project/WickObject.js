@@ -837,6 +837,10 @@ WickObject.prototype.encodeStrings = function () {
         this.fontData.text = WickProject.Compressor.encodeString(this.fontData.text);
     }
 
+    if(this.pathData) {
+        this.pathData = WickProject.Compressor.encodeString(this.pathData);
+    }
+
     if(this.isSymbol) {
         this.getAllFrames().forEach(function (frame) {
             frame.encodeStrings();
@@ -860,6 +864,10 @@ WickObject.prototype.decodeStrings = function () {
 
     if(this.fontData) {
         this.fontData.text = WickProject.Compressor.decodeString(this.fontData.text);
+    }
+
+    if(this.pathData) {
+        this.pathData = WickProject.Compressor.decodeString(this.pathData);
     }
 
     if(this.isSymbol) {

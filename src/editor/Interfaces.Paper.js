@@ -74,6 +74,8 @@ var PaperInterface = function (wickEditor) {
                     wickObjects.isNewDrawingPath = undefined;
                 }
 
+                wickObject.pathData = group.exportSVG({asString:true});
+
                 paperObjectMappings[wickObject.uuid] = group;
 
             // If there is, update the path's position/scale/rotation.
@@ -129,7 +131,7 @@ var PaperInterface = function (wickEditor) {
         });
             
         // Apply changes to paper canvas to the current frame SVG.
-        applyChangesToFrame();
+        //applyChangesToFrame(); ??? is this necessary
         
     }
     
@@ -151,7 +153,7 @@ var PaperInterface = function (wickEditor) {
             // If there is no corresponding wickobject for this
             // path, create one.
             if (!wickObject) {
-                if(debugLog) console.log("no wickObject")
+                //if(debugLog) console.log("no wickObject")
                 WickObject.fromPathFile(path.exportSVG({asString:true}), function (wickObject) {
                     wickObject.x = path.position.x;
                     wickObject.y = path.position.y;
@@ -162,7 +164,7 @@ var PaperInterface = function (wickEditor) {
             // its rotation/scale, update its pathData, and set the
             // flag to regen its fabric object next sync.
             } else {
-                if(debugLog) console.log("wickObject exists")
+                //if(debugLog) console.log("wickObject exists")
             }
 
         });
@@ -177,13 +179,13 @@ var PaperInterface = function (wickEditor) {
             // If the paper object corresponding to this wickobject
             // no longer exists, delete it from the project.
             if(!paperObjectMappings[wickObject.uuid]) {
-                if(debugLog) console.log("paper object no longer exists")
+                //if(debugLog) console.log("paper object no longer exists")
                 wickObject.parentObject.removeChild(wickObject);
             }
         });
             
         // Apply changes to paper canvas to the current frame SVG.
-        // ???
+        // ??? This might not be necessary
         
     }
     
@@ -195,18 +197,18 @@ var PaperInterface = function (wickEditor) {
         // Do overlapping path union for paper canvas.
         // Find all paths with needsIntersectCheck flag, these need to be checked for new intersections
         var paths = getAllPathsInCanvas();
-        var pathsThatNeedUpdate = [];
+        var pathsThatNeedIntersectCheck = [];
         paths.forEach(function(path) {
             if(path.needsIntersectCheck) {
-                pathsThatNeedUpdate.push(path);
+                pathsThatNeedIntersectCheck.push(path);
             }
         });
 
-        if(debugLog) console.log("- - - - - - - - - -");
-        if(debugLog) console.log("# of pathsThatNeedUpdate: " + pathsThatNeedUpdate.length);
+        //if(debugLog) console.log("- - - - - - - - - -");
+        //if(debugLog) console.log("# of pathsThatNeedIntersectCheck: " + pathsThatNeedIntersectCheck.length);
 
         // Check for intersections for all paths with needsIntersectCheck flag
-        pathsThatNeedUpdate.forEach(function (path) {
+        pathsThatNeedIntersectCheck.forEach(function (path) {
 
             // Find all paths intersecting
             var paths = getAllPathsInCanvas();
@@ -223,6 +225,7 @@ var PaperInterface = function (wickEditor) {
                         var childA = pathA.children[a];
                         var childB = pathB.children[b];
                         if (!foundIntersection && childA.intersects(childB)) {
+                            console.error("BUG: can't use intersects here. need to use .contains()")
                             foundIntersection = true;
                             intersectingPaths.push(checkPath);
                         }
@@ -232,12 +235,12 @@ var PaperInterface = function (wickEditor) {
 
             path.needsIntersectCheck = false;
 
-            if(debugLog) console.log("pathsThatNeedUpdate["+pathsThatNeedUpdate.indexOf(path)+"] # intersections: " + intersectingPaths.length);
+            //if(debugLog) console.log("pathsThatNeedIntersectCheck["+pathsThatNeedIntersectCheck.indexOf(path)+"] # intersections: " + intersectingPaths.length);
             
             if(intersectingPaths.length > 0) {
 
                 pathsDirty = true;
-                
+
                 var superPath = path.children[0].clone({insert:false});
                 intersectingPaths.forEach(function (intersectingPath) {
                     var colorA = intersectingPath.fillColor.components;
@@ -265,13 +268,38 @@ var PaperInterface = function (wickEditor) {
         });
 
         //Gen list of paths with needs split apart check flag
+        var paths2 = getAllPathsInCanvas();
+        var pathsThatNeedSplitApartCheck = [];
+        paths2.forEach(function(path) {
+            if(path.needsSplitApartCheck) {
+                pathsThatNeedSplitApartCheck.push(path);
+            }
+        });
+
+        console.log("# pathsThatNeedSplitApartCheck = " + pathsThatNeedSplitApartCheck.length);
+
         //For each path:
+        pathsThatNeedSplitApartCheck.forEach(function (pathNeedsSplitCheck) {
+
             //Make two lists, one will all holes and one with all paths
+            var allHoles = [];
+            var allPaths = [];
+
+            if(pathNeedsSplitCheck.children.length !== 1) console.error("something really bad happened");
+            if(pathNeedsSplitCheck.children[0] instanceof paper.Path) {
+                console.log("path is not a compoundpath, i.e. has no holes or multiple paths. skipping");
+                pathNeedsSplitCheck.needsSplitApartCheck = false;
+                return;
+            }
 
             //For each path:
                 //Make a new group containing only that path
                 //Add holes that intersect with that path to the group
                 //Add that group to project
+
+
+            pathNeedsSplitCheck.needsSplitApartCheck = false;
+        });
         
         if (pathsDirty) {
             self.onPaperCanvasChange();
@@ -382,6 +410,8 @@ var PaperInterface = function (wickEditor) {
     }
     
     var applyChangesToFrame = function () {
+
+        // What is the point of this ????
         
         var currentFrame = wickEditor.project.currentObject.getCurrentFrame();
         
