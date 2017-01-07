@@ -325,7 +325,7 @@ select {
 	top: 30px;
 	left: 35px;
 	width: 33px;
-	height: 84px;
+	height: /*84px;*/ 10px;
 	background-color: #E6E6E6;
 }
 
