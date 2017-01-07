@@ -69,7 +69,7 @@ Tools.Paintbrush = function (wickEditor) {
             wickEditor.fabric.drawingPath = fabricPath;
             wickEditor.syncInterfaces();
         });
-        
+
         /*var SVGData = '<svg id="svg" version="1.1" width="'+fabricPath.width+'" height="'+fabricPath.height+'" xmlns="http://www.w3.org/2000/svg">' + fabricPath.toSVG() + '</svg>';
         console.log(SVGData)
         WickObject.fromPathFile(SVGData, function (wickObject) {
@@ -114,7 +114,7 @@ Tools.Paintbrush = function (wickEditor) {
         // Send settings and the image data to potrace to vectorize it!
         Potrace.loadImageFromDataURL(dummyCanvas.toDataURL());
         Potrace.setParameter({
-            optcurve: true,
+            optcurve: false,
             alphamax: 1.0
         });
         Potrace.process(function(){

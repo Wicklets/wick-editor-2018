@@ -163,10 +163,10 @@ var FabricInterface = function (wickEditor) {
         that.deselectAll();
         wickEditor.syncInterfaces();
 
-        if(that.lastTool instanceof Tools.Paintbrush) {
-            wickEditor.paper.onPathsNeedCleanup();
-        }
-        if(that.lastTool instanceof Tools.Eraser) {
+        if((that.lastTool instanceof Tools.Paintbrush) || 
+           (that.lastTool instanceof Tools.Eraser) || 
+           (that.lastTool instanceof Tools.Ellipse) || 
+           (that.lastTool instanceof Tools.Rectangle)) {
             wickEditor.paper.onPathsNeedCleanup();
         }
     }

@@ -7,8 +7,6 @@ var PaperInterface = function (wickEditor) {
     var paperCanvas;
     var paperObjectMappings = {};
 
-    var debugLog = true;
-
     self.setup = function () {
         // Create the canvas to be used with paper.js and init the paper.js instance.
         paperCanvas = document.createElement('canvas');
@@ -57,7 +55,7 @@ var PaperInterface = function (wickEditor) {
 
                 group.children.forEach(function (child) {
                     // Convert all paper.Shapes into paper.Paths (Paths have boolean ops, Shapes do not)
-                    if(child instanceof paper.Shape) {
+                    if(!(child instanceof paper.Path) && !(child instanceof paper.CompoundPath)) {
                         child.remove();
                         group.addChild(child.toPath());
                     }
@@ -131,7 +129,7 @@ var PaperInterface = function (wickEditor) {
         });
             
         // Apply changes to paper canvas to the current frame SVG.
-        //applyChangesToFrame(); ??? is this necessary
+        // applyChangesToFrame();
         
     }
     
@@ -153,7 +151,7 @@ var PaperInterface = function (wickEditor) {
             // If there is no corresponding wickobject for this
             // path, create one.
             if (!wickObject) {
-                //if(debugLog) console.log("no wickObject")
+                //if(verbose) console.log("No wickObject for this path, creating one")
                 WickObject.fromPathFile(path.exportSVG({asString:true}), function (wickObject) {
                     wickObject.x = path.position.x;
                     wickObject.y = path.position.y;
@@ -164,7 +162,9 @@ var PaperInterface = function (wickEditor) {
             // its rotation/scale, update its pathData, and set the
             // flag to regen its fabric object next sync.
             } else {
-                //if(debugLog) console.log("wickObject exists")
+                //if(verbose) console.log("wickObject exists, updating wickObject")
+
+                // NYI
             }
 
         });
@@ -179,13 +179,13 @@ var PaperInterface = function (wickEditor) {
             // If the paper object corresponding to this wickobject
             // no longer exists, delete it from the project.
             if(!paperObjectMappings[wickObject.uuid]) {
-                //if(debugLog) console.log("paper object no longer exists")
+                //if(verbose) console.log("Path for wickobject no longer exists, deleting wickobject")
                 wickObject.parentObject.removeChild(wickObject);
             }
         });
             
         // Apply changes to paper canvas to the current frame SVG.
-        // ??? This might not be necessary
+        // applyChangesToFrame();
         
     }
     
@@ -204,38 +204,17 @@ var PaperInterface = function (wickEditor) {
             }
         });
 
-        //if(debugLog) console.log("- - - - - - - - - -");
-        //if(debugLog) console.log("# of pathsThatNeedIntersectCheck: " + pathsThatNeedIntersectCheck.length);
+        //if(verbose) console.log("# of pathsThatNeedIntersectCheck: " + pathsThatNeedIntersectCheck.length);
 
         // Check for intersections for all paths with needsIntersectCheck flag
         pathsThatNeedIntersectCheck.forEach(function (path) {
 
             // Find all paths intersecting
-            var paths = getAllPathsInCanvas();
-            var intersectingPaths = [];
-            paths.forEach(function (checkPath) {
-                var pathA = path;
-                var pathB = checkPath;
-
-                if(pathA === pathB) return;
-
-                var foundIntersection = false;
-                for(var a = 0; a < pathA.children.length; a++) {
-                    for(var b = 0; b < pathB.children.length; b++) {
-                        var childA = pathA.children[a];
-                        var childB = pathB.children[b];
-                        if (!foundIntersection && childA.intersects(childB)) {
-                            console.error("BUG: can't use intersects here. need to use .contains()")
-                            foundIntersection = true;
-                            intersectingPaths.push(checkPath);
-                        }
-                    }
-                }
-            });
+            var intersectingPaths = getIntersectingPaths(path);
 
             path.needsIntersectCheck = false;
 
-            //if(debugLog) console.log("pathsThatNeedIntersectCheck["+pathsThatNeedIntersectCheck.indexOf(path)+"] # intersections: " + intersectingPaths.length);
+            //if(verbose) console.log("pathsThatNeedIntersectCheck["+pathsThatNeedIntersectCheck.indexOf(path)+"] # intersections: " + intersectingPaths.length);
             
             if(intersectingPaths.length > 0) {
 
@@ -245,6 +224,9 @@ var PaperInterface = function (wickEditor) {
                 intersectingPaths.forEach(function (intersectingPath) {
                     var colorA = intersectingPath.fillColor.components;
                     var colorB = path.fillColor.components;
+
+                    colorA[3]=1;
+                    colorB[3]=1
 
                     if(colorA.equals(colorB)) {
                         superPath = superPath.unite(intersectingPath.children[0]);
@@ -296,9 +278,7 @@ var PaperInterface = function (wickEditor) {
 
             var compPath = pathNeedsSplitCheck.children[0];
 
-            //For each child:
             compPath.children.forEach(function (child) {
-                //Make a new group containing only that path
                 if(child.clockwise) {
                     console.log(child)
                     holes.push(child.clone({insert:false}));
@@ -331,7 +311,6 @@ var PaperInterface = function (wickEditor) {
                 });
 
                 group.addChild(newCompPath);
-                console.log(group);
             });
 
             removePathFromCanvas(pathNeedsSplitCheck);
@@ -347,64 +326,137 @@ var PaperInterface = function (wickEditor) {
         
     }
 
-    self.onEraserPathAdded = function (svgData) {
+    self.onEraserPathAdded = function (svgData, x, y) {
         //Load SVG
-        console.log(svgData)
+        var xmlString = svgData
+          , parser = new DOMParser()
+          , doc = parser.parseFromString(xmlString, "text/xml");
+        var group = paper.project.importSVG(doc);
+        group.position.x = x;
+        group.position.y = y;
 
-        //Generate list of all paths intersected by eraserPath
+        group.children.forEach(function (child) {
+            // Boolean ops only work with closed paths (potrace generates open paths for some reason)
+            if(child.closePath) child.closePath();
+        });
 
-        //For each intersected path:
+        var path = group;
+
+        var intersectingPaths = getIntersectingPaths(path);
+
+        var pathsErased = false;
+
+        console.log(intersectingPaths)
+        intersectingPaths.forEach(function (intersectingPath) {
             //Subtract eraser path
+            var splitPath = intersectingPath.children[0].clone();
+            splitPath = splitPath.subtract(path.children[0]);
+            var splitGroup = new paper.Group();
+            splitGroup.addChild(splitPath);
+            splitGroup.needsSplitApartCheck = true;
+            removePathFromCanvas(intersectingPath);
 
             //Set needsSplitApartCheck true
+            splitGroup.needsIntersectCheck = true;
+
+            pathsErased = true;
+        });
+
+        group.remove()
+
+        if(pathsErased) {
+            self.onPathsNeedCleanup();
+            self.onPaperCanvasChange();
+            wickEditor.syncInterfaces();
+        }
     }
 
-    self.onFill = function (x,y) {
+    self.onFill = function (x,y,fillColorHex) {
 
         var point = new paper.Point(x,y);
 
         // Try to find a path to fill
-        var pathFilled = false;
+        var pathWasFilled = false;
         var paths = getAllPathsInCanvas();
         paths.forEach(function (path) {
-            if(pathFilled) return;
+            if(pathWasFilled) return;
 
             if(path.contains(point)) {
                 console.log("Path filled:");
                 console.log(path);
 
-                pathFilled = true;
+                pathWasFilled = true;
             }
         });
 
         // No path filled, try to find a hole to fill
-        var holeFilled = false;
-        if(!pathFilled) {
+        var holeWasFilled = false;
+        if(!pathWasFilled) {
             console.log("No path filled, looking for holes now");
 
             // Find all paths
-            var paths = getAllPathsInCanvas();
+            var groups = getAllPathsInCanvas();
 
             // Find all holes
             var holes = [];
-            // do it here lol
+            groups.forEach(function (group) {
+                if(!(group.children[0] instanceof paper.CompoundPath)) return; // Paths have no holes
+                group.children[0].children.forEach(function (child) {
+                    if(child.clockwise) {
+                        holes.push(child.clone({insert:false}));
+                    }
+                });
+            });
+
+            if(holes.length === 0) console.log("No holes in project, giving up")
 
             // Find all holes with point inside
             var possibleHolesToFill = [];
-            // do it here lol
+            holes.forEach(function (hole) {
+                if(hole.contains(point)) {
+                    possibleHolesToFill.push(hole);
+                }
+            });
 
             var holeToFill = null;
             if(possibleHolesToFill.length == 0) {
                 // No hole to fill :(
                 console.log("no hole found, giving up");
             } else if(possibleHolesToFill.length == 1) {
-                holeFilled = possibleHolesToFill[0];
+                holeToFill = possibleHolesToFill[0];
             } else {
                 // Calculate smallest hole
+                console.log()
+                possibleHolesToFill.forEach(function (possibleHoleToFill) {
+                    console.log(possibleHoleToFill);
+                });
             }
 
             if(holeToFill) {
-                holeFilled = true;
+                holeWasFilled = true;
+
+                var clone = holeToFill.clone({insert:false});
+                clone.clockwise = false;
+                clone.set({fillColor:fillColorHex});
+                clone.fillColor.components[3] = 1
+
+                var compPath = new paper.CompoundPath(); 
+                compPath.remove();
+                compPath.set({fillColor:fillColorHex});
+                compPath.fillColor.components[3] = 1
+                compPath.addChild(clone);
+
+                var group = new paper.Group();
+                group.remove();
+                group.addChild(compPath);
+                group.fillRule = 'evenodd';
+                paper.project.activeLayer.addChild(group);
+
+                holeWasFilled = true;
+
+                console.log(group.children);
+
+                group.needsIntersectCheck = true;
 
                 // Subtract all intersecting paths and holes from holeToFill
 
@@ -413,7 +465,8 @@ var PaperInterface = function (wickEditor) {
 
         }
 
-        if (pathFilled || holeFilled) {
+        if (pathWasFilled || holeWasFilled) {
+            self.onPathsNeedCleanup();
             self.onPaperCanvasChange();
             wickEditor.syncInterfaces();
         }
@@ -447,10 +500,33 @@ var PaperInterface = function (wickEditor) {
         return allSVGs;
         
     }
+
+    var getIntersectingPaths = function (path) {
+        var paths = getAllPathsInCanvas();
+        var intersectingPaths = [];
+        paths.forEach(function (checkPath) {
+            var pathA = path;
+            var pathB = checkPath;
+
+            if(pathA === pathB) return;
+
+            var foundIntersection = false;
+            for(var a = 0; a < pathA.children.length; a++) {
+                for(var b = 0; b < pathB.children.length; b++) {
+                    var childA = pathA.children[a];
+                    var childB = pathB.children[b];
+                    if (!foundIntersection && childA.intersects(childB)) {
+                        console.error("BUG: can't use intersects here. need to use .contains()")
+                        foundIntersection = true;
+                        intersectingPaths.push(checkPath);
+                    }
+                }
+            }
+        });
+        return intersectingPaths;
+    }
     
     var applyChangesToFrame = function () {
-
-        // What is the point of this ????
         
         var currentFrame = wickEditor.project.currentObject.getCurrentFrame();
         

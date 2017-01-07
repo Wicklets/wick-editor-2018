@@ -23,7 +23,7 @@ Tools.FillBucket = function (wickEditor) {
         mousePointX -= insideSymbolOffset.x;
         mousePointY -= insideSymbolOffset.y;
 
-        wickEditor.paper.onFill(mousePointX, mousePointY);
+        wickEditor.paper.onFill(mousePointX, mousePointY, wickEditor.fabric.tools.paintbrush.color);
 
         /*var onscreenObjects = wickEditor.project.currentObject.getAllActiveChildObjects();
         VectorToolUtils.updatePaperDataOnVectorWickObjects(onscreenObjects);
