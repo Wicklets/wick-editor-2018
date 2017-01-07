@@ -1,0 +1,36 @@
+
+PATH SYSTEM TODO FINAL ALMOST DONE ACTUALLY
+
+// Core
+
+  -  Undo/Redo
+
+  X  Subtract with eraser paths
+  X  Split apart paths with multiple pieces
+  X  Fill requested holes
+
+// GUI
+
+  -  Tool options interface
+    >  Paintbrush/fill color
+    >  Brush width
+  -  Toggle potrace smoothing / potrace smoothing amount
+  -  Fill color in path properties
+
+// Current bugs
+
+  -  Loop union bug
+  -  'callback is not a funciton' in potrace after quickly drawing many paths
+  -  Paths inside paths not counting as intersecting
+  -  Werid flickering that happens sometimes
+  -  Pixi.js blurry fullscreen stretching
+  -  Split paths with shapes causes weirdness sometimes
+  -  Split paths for a second time causes invert weirdness
+
+// Fancy
+
+  -  Import SVG Files
+  -  Line tool
+  -  Path bend mode
+  -  Selection box cuts paths
+  -  Selected paths should be highlighted somehow (like flash) (maybe everything should be?)
