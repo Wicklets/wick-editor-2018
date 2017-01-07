@@ -425,11 +425,13 @@ var PaperInterface = function (wickEditor) {
             } else if(possibleHolesToFill.length == 1) {
                 holeToFill = possibleHolesToFill[0];
             } else {
-                // Calculate smallest hole
-                console.log()
+                var smallestHole = null;
                 possibleHolesToFill.forEach(function (possibleHoleToFill) {
-                    console.log(possibleHoleToFill);
+                    if(!smallestHole || possibleHoleToFill.area < smallestHole.area) {
+                        smallestHole = possibleHoleToFill;
+                    }
                 });
+                holeToFill = smallestHole;
             }
 
             if(holeToFill) {
@@ -452,15 +454,11 @@ var PaperInterface = function (wickEditor) {
                 group.fillRule = 'evenodd';
                 paper.project.activeLayer.addChild(group);
 
-                holeWasFilled = true;
-
-                console.log(group.children);
-
-                group.needsIntersectCheck = true;
-
                 // Subtract all intersecting paths and holes from holeToFill
 
-                // Add holeToFill to project
+                holeWasFilled = true;
+
+                group.needsIntersectCheck = true;
             }
 
         }

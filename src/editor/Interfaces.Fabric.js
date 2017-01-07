@@ -2,7 +2,7 @@
 
 var FabricInterface = function (wickEditor) {
 
-    var that = this;
+    var self = this;
 
     var shapeStartPos = {x:0,y:0};
 
@@ -45,8 +45,20 @@ var FabricInterface = function (wickEditor) {
         this.currentTool = this.tools.cursor;
         this.lastTool = this.currentTool;
 
-    // Update the scripting GUI/properties box when the selected object changes
-        that.canvas.on('object:selected', function (e) {
+    
+        // Canvas event listeners
+
+        self.canvas.on({
+            'object:moving': function(e) {
+                if(e.target.type === 'path')
+                    e.target.opacity = 0.5;
+            },
+            'object:modified': function(e) {
+                if(e.target.type === 'path')
+                    e.target.opacity = 1;
+            },
+        });
+        self.canvas.on('object:selected', function (e) {
             wickEditor.timeline.redraw();
             
             wickEditor.scriptingide.editScriptsOfObject(e.target.wickObjReference, {dontOpenIDE:true});
@@ -58,8 +70,8 @@ var FabricInterface = function (wickEditor) {
                 rotating: e.target.setCoords
             });
         });
-        that.canvas.on('before:selection:cleared', function (e) {
-            var selectedObjs = that.getSelectedObjects();
+        self.canvas.on('before:selection:cleared', function (e) {
+            var selectedObjs = self.getSelectedObjects();
             var runPathCleanup = false;
             selectedObjs.forEach(function (wickObj) {
                 if(wickObj.pathData) {
@@ -71,25 +83,25 @@ var FabricInterface = function (wickEditor) {
                 wickEditor.paper.onPathsNeedCleanup();
             }
         });
-        that.canvas.on('selection:cleared', function (e) {
+        self.canvas.on('selection:cleared', function (e) {
             wickEditor.timeline.redraw();
 
             wickEditor.scriptingide.clearSelection();
             wickEditor.scriptingide.syncWithEditorState();
             wickEditor.properties.syncWithEditorState();
         });
-        that.canvas.on('selection:changed', function (e) {
+        self.canvas.on('selection:changed', function (e) {
             wickEditor.timeline.redraw();
 
             wickEditor.scriptingide.editScriptsOfObject(this.getSelectedObject(WickObject), {dontOpenIDE:true});
-            that.guiElements.update();
+            self.guiElements.update();
             wickEditor.scriptingide.syncWithEditorState();
             wickEditor.properties.syncWithEditorState();
         });
 
         // Listen for objects being changed so we can undo them in the action handler.
-        that.canvas.on('object:modified', function(e) {
-            that.modifyChangedObjects(e);
+        self.canvas.on('object:modified', function(e) {
+            self.modifyChangedObjects(e);
         });
 
         this.recenterCanvas();
@@ -105,31 +117,31 @@ var FabricInterface = function (wickEditor) {
         wickEditor.project.rootObject.applyTweens();
 
         // Update cursor
-        that.updateCursor();
+        self.updateCursor();
 
         // Set drawing mode
-        if(that.currentTool instanceof Tools.Paintbrush) {
+        if(self.currentTool instanceof Tools.Paintbrush) {
             this.canvas.isDrawingMode = true;
-            this.canvas.freeDrawingBrush.width = that.currentTool.brushSize;
-            this.canvas.freeDrawingBrush.color = that.currentTool.color;
-        } else if (that.currentTool instanceof Tools.Eraser) {
+            this.canvas.freeDrawingBrush.width = self.currentTool.brushSize;
+            this.canvas.freeDrawingBrush.color = self.currentTool.color;
+        } else if (self.currentTool instanceof Tools.Eraser) {
             this.canvas.isDrawingMode = true;
-            this.canvas.freeDrawingBrush.width = that.tools.paintbrush.brushSize;
+            this.canvas.freeDrawingBrush.width = self.tools.paintbrush.brushSize;
             this.canvas.freeDrawingBrush.color = "#FFFFFF";
         } else {
             this.canvas.isDrawingMode = false;
         }
 
         // Disable selection
-        if(that.currentTool instanceof Tools.Cursor) {
-            that.canvas.selection = true;
+        if(self.currentTool instanceof Tools.Cursor) {
+            self.canvas.selection = true;
         } else {
-            that.canvas.selection = false;
+            self.canvas.selection = false;
         }
 
         // Update elements in fabric canvas
         this.wickElements.update();
-        that.guiElements.update();
+        self.guiElements.update();
         //this.paperElements.update();
 
         // Render canvas
@@ -138,105 +150,105 @@ var FabricInterface = function (wickEditor) {
 
     this.resize = function () {
 
-        var oldWidth = that.canvas.getWidth();
-        var oldHeight = that.canvas.getHeight();
+        var oldWidth = self.canvas.getWidth();
+        var oldHeight = self.canvas.getHeight();
 
-        that.canvas.setWidth ( window.innerWidth  );
-        that.canvas.setHeight( window.innerHeight );
-        that.canvas.calcOffset();
+        self.canvas.setWidth ( window.innerWidth  );
+        self.canvas.setHeight( window.innerHeight );
+        self.canvas.calcOffset();
 
-        var diffWidth = that.canvas.getWidth() - oldWidth;
-        var diffHeight = that.canvas.getHeight() - oldHeight;
+        var diffWidth = self.canvas.getWidth() - oldWidth;
+        var diffHeight = self.canvas.getHeight() - oldHeight;
 
         var panAdjustX = Math.floor(diffWidth/2);
         var panAdjustY = Math.floor(diffHeight/2);
 
-        that.canvas.relativePan(new fabric.Point(panAdjustX,panAdjustY));
-        that.canvas.renderAll();
+        self.canvas.relativePan(new fabric.Point(panAdjustX,panAdjustY));
+        self.canvas.renderAll();
 
     }
 
     this.changeTool = function (newTool) {
-        that.lastTool = that.currentTool;
-        that.currentTool = newTool;
-        that.forceModifySelectedObjects();
-        that.deselectAll();
+        self.lastTool = self.currentTool;
+        self.currentTool = newTool;
+        self.forceModifySelectedObjects();
+        self.deselectAll();
         wickEditor.syncInterfaces();
 
-        if((that.lastTool instanceof Tools.Paintbrush) || 
-           (that.lastTool instanceof Tools.Eraser) || 
-           (that.lastTool instanceof Tools.Ellipse) || 
-           (that.lastTool instanceof Tools.Rectangle)) {
+        if((self.lastTool instanceof Tools.Paintbrush) || 
+           (self.lastTool instanceof Tools.Eraser) || 
+           (self.lastTool instanceof Tools.Ellipse) || 
+           (self.lastTool instanceof Tools.Rectangle)) {
             wickEditor.paper.onPathsNeedCleanup();
         }
     }
 
     this.useLastUsedTool = function () {
-        that.currentTool = that.lastTool;
+        self.currentTool = self.lastTool;
     }
 
     this.recenterCanvas = function () {
         var centerX = Math.floor(-(window.innerWidth -wickEditor.project.resolution.x)/2 - 33/2 + 254/2);
         var centerY = Math.floor(-(window.innerHeight-wickEditor.project.resolution.y)/2 - 116/2);
 
-        that.canvas.setZoom(1);
-        that.canvas.absolutePan(new fabric.Point(centerX,centerY));
-        that.canvas.renderAll();
+        self.canvas.setZoom(1);
+        self.canvas.absolutePan(new fabric.Point(centerX,centerY));
+        self.canvas.renderAll();
         wickEditor.syncInterfaces();
     }
 
     this.relativePan = function (x,y) {
         var delta = new fabric.Point(Math.floor(x),Math.floor(y));
-        that.canvas.relativePan(delta)
-        that.guiElements.update();
+        self.canvas.relativePan(delta)
+        self.guiElements.update();
     }
 
     this.absolutePan = function (x,y) {
         var delta = new fabric.Point(Math.floor(x),Math.floor(y));
-        that.canvas.absolutePan(delta)
-        that.guiElements.update();
+        self.canvas.absolutePan(delta)
+        self.guiElements.update();
     }
 
     this.startPan = function () {
-        that.panning = true;
-        that.canvas.selection = false;
+        self.panning = true;
+        self.canvas.selection = false;
     }
 
     this.stopPan = function () {
-        that.panning = false;
-        that.canvas.selection = true;
+        self.panning = false;
+        self.canvas.selection = true;
     }
 
     this.getPan = function () {
         return {
-            x: that.canvas.viewportTransform[4],
-            y: that.canvas.viewportTransform[5]
+            x: self.canvas.viewportTransform[4],
+            y: self.canvas.viewportTransform[5]
         }
     }
 
     this.zoom = function (zoomAmount) {
         // Calculate new zoom amount
-        var oldZoom = that.canvas.getZoom();
-        var newZoom = that.canvas.getZoom() * zoomAmount;
+        var oldZoom = self.canvas.getZoom();
+        var newZoom = self.canvas.getZoom() * zoomAmount;
 
         // Calculate pan position adjustment so we zoom into the mouse's position
         var panAdjustX = (wickEditor.inputHandler.mouse.x) * (1-zoomAmount);
         var panAdjustY = (wickEditor.inputHandler.mouse.y) * (1-zoomAmount);
 
         // Do da zoom!
-        that.canvas.setZoom(newZoom);
-        that.canvas.relativePan(new fabric.Point(panAdjustX,panAdjustY));
-        //that.canvas.renderAll();
+        self.canvas.setZoom(newZoom);
+        self.canvas.relativePan(new fabric.Point(panAdjustX,panAdjustY));
+        //self.canvas.renderAll();
 
-        that.guiElements.update();
-        that.updateCursor();
+        self.guiElements.update();
+        self.updateCursor();
 
         //wickEditor.syncInterfaces();
     }
 
     this.screenToCanvasSpace = function (x,y) {
-        var pan = that.getPan();
-        var zoom = that.canvas.getZoom();
+        var pan = self.getPan();
+        var zoom = self.canvas.getZoom();
         return {
             x: (x - pan.x)/zoom,
             y: (y - pan.y)/zoom
@@ -244,7 +256,7 @@ var FabricInterface = function (wickEditor) {
     }
 
     this.screenToCanvasSize = function (x,y) {
-        var zoom = that.canvas.getZoom();
+        var zoom = self.canvas.getZoom();
         return {
             x: x/zoom,
             y: y/zoom
@@ -252,7 +264,7 @@ var FabricInterface = function (wickEditor) {
     }
 
     this.updateCursor = function () {
-        var cursorImg = that.currentTool.getCursorImage();
+        var cursorImg = self.currentTool.getCursorImage();
         this.canvas.defaultCursor = cursorImg;
         this.canvas.freeDrawingCursor = cursorImg;
     }
@@ -299,7 +311,7 @@ var FabricInterface = function (wickEditor) {
         selectedObjs.reverse()
 
         if(objects.length <= 1) {
-            that.canvas._activeObject = selectedObjs[0];
+            self.canvas._activeObject = selectedObjs[0];
         } else {
             var group = new fabric.Group([], {
                 originX: 'left',
@@ -319,7 +331,7 @@ var FabricInterface = function (wickEditor) {
             this.canvas.setActiveGroup(group.setCoords()).renderAll();
         }
 
-        that.guiElements.update();
+        self.guiElements.update();
         wickEditor.scriptingide.syncWithEditorState();
         wickEditor.properties.syncWithEditorState();
 
@@ -351,7 +363,7 @@ var FabricInterface = function (wickEditor) {
 
         this.canvas.deactivateAll().renderAll();
 
-        that.guiElements.update();
+        self.guiElements.update();
         wickEditor.scriptingide.syncWithEditorState();
         wickEditor.properties.syncWithEditorState();
     }
@@ -389,7 +401,7 @@ var FabricInterface = function (wickEditor) {
 
     this.moveSelection = function (x,y) {
         var modifiedStates = [];
-        that.getSelectedObjects(WickObject).forEach(function (obj) {
+        self.getSelectedObjects(WickObject).forEach(function (obj) {
             var wickObj = obj;
             modifiedStates.push({
                 x : wickObj.x + x,
@@ -398,7 +410,7 @@ var FabricInterface = function (wickEditor) {
         });
 
         wickEditor.actionHandler.doAction('modifyObjects', {
-            objs: that.getSelectedObjects(WickObject),
+            objs: self.getSelectedObjects(WickObject),
             modifiedStates: modifiedStates
         });
     }
@@ -407,10 +419,10 @@ var FabricInterface = function (wickEditor) {
         var modifiedStates = [];
 
         // For each modified fabric objects (get them by wickobject):
-        //    Add new state of that fabric object to modified states
+        //    Add new state of self fabric object to modified states
         objs.forEach(function (obj) {
             if(!obj) return;
-            var fabricObj = that.getObjectByWickObject(obj);
+            var fabricObj = self.getObjectByWickObject(obj);
             var wickObj = obj
             if(!wickObj) return;
             var insideSymbolReposition = {
@@ -448,11 +460,11 @@ var FabricInterface = function (wickEditor) {
         });
     }
 
-    that.modifyChangedObjects = function (e) {
-        if(that.getObjectByWickObject(e.target.wickObjectRef)) {
+    self.modifyChangedObjects = function (e) {
+        if(self.getObjectByWickObject(e.target.wickObjectRef)) {
 
             // Deselect everything
-            that.deselectAll();
+            self.deselectAll();
             
             // Get ids of all selected objects
             var wickobjs = [];
@@ -467,19 +479,19 @@ var FabricInterface = function (wickEditor) {
                 wickobjs = [e.target.wickObjectRef];
             }
 
-            that.modifyObjects(wickobjs);
+            self.modifyObjects(wickobjs);
 
             // Reselect everything
-            that.selectObjects(wickobjs);
+            self.selectObjects(wickobjs);
 
             wickEditor.syncInterfaces();
         }
     }
 
     this.forceModifySelectedObjects = function () {
-        var wickObj = that.getSelectedObject(WickObject);
+        var wickObj = self.getSelectedObject(WickObject);
         if(wickObj && wickObj.fontData) {
-            that.modifyObjects([wickObj]);
+            self.modifyObjects([wickObj]);
         }
         wickEditor.syncInterfaces();
     }
@@ -487,7 +499,7 @@ var FabricInterface = function (wickEditor) {
     this.getObjectsImage = function (callback, args) {
 
         var selectedObjs = [];
-        that.canvas.forEachObject(function(fabricObj) {
+        self.canvas.forEachObject(function(fabricObj) {
             if(args && args.objs && args.objs.indexOf(fabricObj.wickObjectRef) === -1) return;
 
             if(fabricObj.wickObjectRef && !fabricObj.isWickGUIElement) {
@@ -497,7 +509,7 @@ var FabricInterface = function (wickEditor) {
         });
 
         if(selectedObjs.length < 1) {
-            //that.canvas._activeObject = selectedObjs[0];
+            //self.canvas._activeObject = selectedObjs[0];
             callback(null);
         } else {
             var group = new fabric.Group([], {
@@ -505,7 +517,7 @@ var FabricInterface = function (wickEditor) {
                 originY: 'top'
             });
             for(var i = selectedObjs.length-1; i >= 0; i--) {
-                //group.canvas = that.canvas // WHAT ??????????????? WHY
+                //group.canvas = self.canvas // WHAT ??????????????? WHY
                 var clone = fabric.util.object.clone(selectedObjs[i]);
                 group.addWithUpdate(clone);
             }
@@ -518,19 +530,19 @@ var FabricInterface = function (wickEditor) {
             var cloneTop = (group.top)
 
             //var object = fabric.util.object.clone(group);
-            var oldZoom = that.canvas.getZoom();
-            that.canvas.setZoom(1)
-            //that.canvas.renderAll();
+            var oldZoom = self.canvas.getZoom();
+            self.canvas.setZoom(1)
+            //self.canvas.renderAll();
             group.setCoords();
 
             group.cloneAsImage(function (img) {
-                that.canvas.setZoom(oldZoom)
-                that.canvas.renderAll();
+                self.canvas.setZoom(oldZoom)
+                self.canvas.renderAll();
                 group.setCoords();
 
                 group.forEachObject(function(o){ group.removeWithUpdate(o) });
-                that.canvas.remove(group);
-                that.canvas.renderAll();
+                self.canvas.remove(group);
+                self.canvas.renderAll();
 
                 callback({
                     x:cloneLeft,
