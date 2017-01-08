@@ -209,6 +209,8 @@ var PaperInterface = function (wickEditor) {
         // Check for intersections for all paths with needsIntersectCheck flag
         pathsThatNeedIntersectCheck.forEach(function (path) {
 
+            if(path.dead) return; // paths that were joined/subtracted from arent in the canvas but are still in the array
+
             // Find all paths intersecting
             var intersectingPaths = getIntersectingPaths(path);
 
@@ -222,15 +224,18 @@ var PaperInterface = function (wickEditor) {
 
                 var superPath = path.children[0].clone({insert:false});
                 intersectingPaths.forEach(function (intersectingPath) {
+                    if(intersectingPath.dead) return; // paths that were joined/subtracted from arent in the canvas but are still in the array
+
                     var colorA = intersectingPath.fillColor.components;
                     var colorB = path.fillColor.components;
 
                     colorA[3]=1;
-                    colorB[3]=1
+                    colorB[3]=1;
 
                     if(colorA.equals(colorB)) {
                         superPath = superPath.unite(intersectingPath.children[0]);
                         removePathFromCanvas(intersectingPath);
+                        intersectingPath.dead = true;
                     } else {
                         var splitPath = intersectingPath.children[0].clone();
                         splitPath = splitPath.subtract(path.children[0]);
@@ -258,7 +263,7 @@ var PaperInterface = function (wickEditor) {
             }
         });
 
-        console.log("# pathsThatNeedSplitApartCheck = " + pathsThatNeedSplitApartCheck.length);
+        //console.log("# pathsThatNeedSplitApartCheck = " + pathsThatNeedSplitApartCheck.length);
 
         //For each path:
         pathsThatNeedSplitApartCheck.forEach(function (pathNeedsSplitCheck) {
@@ -267,7 +272,7 @@ var PaperInterface = function (wickEditor) {
 
             if(pathNeedsSplitCheck.children.length !== 1) console.error("something really bad happened");
             if(pathNeedsSplitCheck.children[0] instanceof paper.Path) {
-                console.log("path is not a compoundpath, i.e. has no holes or multiple paths. skipping");
+                //console.log("path is not a compoundpath, i.e. has no holes or multiple paths. skipping");
                 pathNeedsSplitCheck.needsSplitApartCheck = false;
                 return;
             }
@@ -440,12 +445,10 @@ var PaperInterface = function (wickEditor) {
                 var clone = holeToFill.clone({insert:false});
                 clone.clockwise = false;
                 clone.set({fillColor:fillColorHex});
-                clone.fillColor.components[3] = 1
 
                 var compPath = new paper.CompoundPath(); 
                 compPath.remove();
                 compPath.set({fillColor:fillColorHex});
-                compPath.fillColor.components[3] = 1
                 compPath.addChild(clone);
 
                 var group = new paper.Group();
@@ -464,7 +467,7 @@ var PaperInterface = function (wickEditor) {
         }
 
         if (pathWasFilled || holeWasFilled) {
-            self.onPathsNeedCleanup();
+            //self.onPathsNeedCleanup();
             self.onPaperCanvasChange();
             wickEditor.syncInterfaces();
         }
