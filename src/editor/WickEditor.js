@@ -40,7 +40,6 @@ var WickEditor = function () {
     this.scriptingide = registerInterface(new ScriptingIDEInterface(this));
     this.timeline = registerInterface(new TimelineInterface(this));
     this.toolbar = registerInterface(new ToolbarInterface(this));
-    this.toolOptions = registerInterface(new ToolOptionsInterface(this));
     this.statusbar = registerInterface(new StatusBarInterface(this));
     this.properties = registerInterface(new PropertiesInterface(this));
     this.paper = registerInterface(new PaperInterface(this));

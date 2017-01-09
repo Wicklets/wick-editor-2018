@@ -241,6 +241,20 @@ select {
 	text-align: left;
 }
 
+#lineColor {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border: 0px solid #666;
+
+    margin-top: 8px;
+    margin-bottom: 8px;
+
+    font-size: 8px;
+    width: 27px;
+    height: 27px;
+}
+
 #rightClickMenu {
 	position: fixed;
 	top: 0px;

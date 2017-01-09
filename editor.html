@@ -7,6 +7,7 @@
     <title>Wick Editor</title>
 
     <link rel="stylesheet" type="text/css" href="styles/editor.css">
+    <link rel="stylesheet" type="text/css" href="lib/rangeslider.css">
 
     <script src="lib/jquery.min.js"></script>
     <script src="lib/fabric.1.6.6.js"></script>
@@ -22,6 +23,7 @@
     <script src="lib/pixi.min.js"></script>
     <script src="lib/jszip.min.js"></script>
     <script src="lib/screenfull.js"></script>
+    <script src="lib/rangeslider.min.js"></script>
     <script src="lib/util/filedownloader.js"></script>
     <script src="lib/util/checkInput.js"></script>
     <script src="lib/util/URLParameterUtils.js"></script>
@@ -57,7 +59,6 @@
     <script src="src/editor/Interfaces.ScriptingIDE.js"></script>
     <script src="src/editor/Interfaces.Timeline.js"></script>
     <script src="src/editor/Interfaces.Toolbar.js"></script>
-    <script src="src/editor/Interfaces.ToolOptions.js"></script>
     <script src="src/editor/Interfaces.Properties.js"></script>
     <script src="src/editor/Interfaces.SplashScreen.js"></script>
     <script src="src/editor/Interfaces.StatusBar.js"></script>
@@ -256,6 +257,15 @@
                 <div class="button tooltipElem" id="panToolButton" alt="Pan">
                     <img src="resources/pan.png" width="20"></img>
                 </div>
+
+                <div id="toolOptionsGUI">
+                    <hr />
+                    <input class="jscolor" id="lineColor">
+                    <br />
+                    <canvas id="brushSizeDisplay" width="30" height="30"></canvas>
+                    <br />
+                    <div style="margin-left:9px;"><input id="lineWidth" type="range" min="2" max="10" data-rangeslider data-orientation="vertical"></div>
+                </div>
             </div>
 
         <!-- Properties GUI, bottom right corner -->
@@ -445,13 +455,6 @@
                 <div class="menubarTab" id="menubarMenuObject">Object</div>
                 <div class="menubarTab" id="menubarMenuRun">Run</div>
                 <div class="menubarTab" id="menubarMenuAbout">About</div>-->
-            </div>
-
-        <!-- Tool options GUI, below toolbar gui -->
-
-            <div id="toolOptionsGUI" class="GUIBox">
-                Line Width: <input type="range" min="0" max="50" id="lineWidth"><br />
-                Line Color: <input class="jscolor" id="lineColor">
             </div>
 
         <!-- Status menu GUI, top right corner -->
