@@ -1205,9 +1205,6 @@ WickObject.prototype.runScript = function (script, scriptType, objectScope) {
     var keys = WickPlayer.getKeys();
     var key = WickPlayer.getLastKeyPressed();
 
-    project.width = project.resolution.x;
-    project.height = project.resolution.y;
-
     // Setup builtin wick scripting methods and objects
     var play          = function ()      { objectScope.play(); }
     var stop          = function ()      { objectScope.stop(); }

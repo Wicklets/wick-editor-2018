@@ -126,8 +126,8 @@ var PropertiesInterface = function (wickEditor) {
             if(projectBgColorElem.jscolor) projectBgColorElem.jscolor.fromString(wickEditor.project.backgroundColor);
             if(projectBorderColorElem.jscolor) projectBorderColorElem.jscolor.fromString(wickEditor.project.borderColor);
 
-            document.getElementById('projectSizeX').value          = wickEditor.project.resolution.x;
-            document.getElementById('projectSizeY').value          = wickEditor.project.resolution.y;
+            document.getElementById('projectSizeX').value          = wickEditor.project.width;
+            document.getElementById('projectSizeY').value          = wickEditor.project.height;
             document.getElementById('frameRate').value             = wickEditor.project.framerate;
             document.getElementById('projectName').value           = wickEditor.project.name;
 
@@ -311,7 +311,7 @@ var PropertiesInterface = function (wickEditor) {
     $('#projectSizeX').on('input propertychange', function () {
 
         if(CheckInput.isPositiveInteger($('#projectSizeX').val())) {
-            wickEditor.project.resolution.x = parseInt($('#projectSizeX').val());
+            wickEditor.project.width = parseInt($('#projectSizeX').val());
             wickEditor.syncInterfaces();
         };
 
@@ -320,7 +320,7 @@ var PropertiesInterface = function (wickEditor) {
     $('#projectSizeY').on('input propertychange', function () {
 
         if(CheckInput.isPositiveInteger($('#projectSizeY').val())) {
-            wickEditor.project.resolution.y = parseInt($('#projectSizeY').val());
+            wickEditor.project.height = parseInt($('#projectSizeY').val());
             wickEditor.syncInterfaces();
         }
 

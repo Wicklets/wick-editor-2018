@@ -93,6 +93,12 @@ var MenuBarInterface = function (wickEditor) {
             new TabButton('Export as zip', function () {
                 wickEditor.guiActionHandler.doAction("exportProjectZIP");
             }),
+            new TabButton('Export as gif', function () {
+                wickEditor.guiActionHandler.doAction("exportProjectGIF");
+            }),
+            new TabButton('Export as WebM', function () {
+                wickEditor.guiActionHandler.doAction("exportProjectWebM");
+            }),
         ]);
 
         addTab('Edit', [

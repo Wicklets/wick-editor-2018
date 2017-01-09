@@ -22,10 +22,11 @@ var FabricInterface = function (wickEditor) {
         this.panning = false;
         this.onionSkinsDirty = false;
 
-        this.shapeDrawer   = new FabricShapeDrawer(wickEditor, this);
-        this.guiElements   = new FabricGUIElements(wickEditor, this);
-        this.wickElements  = new FabricWickElements(wickEditor, this);
-        this.symbolBorders = new FabricSymbolBorders(wickEditor, this);
+        this.shapeDrawer     = new FabricShapeDrawer(wickEditor, this);
+        this.guiElements     = new FabricGUIElements(wickEditor, this);
+        this.wickElements    = new FabricWickElements(wickEditor, this);
+        this.symbolBorders   = new FabricSymbolBorders(wickEditor, this);
+        this.projectRenderer = new FabricProjectRenderer(wickEditor, this);
         
         this.tools = {
             "cursor"           : new Tools.Cursor(wickEditor),
@@ -188,8 +189,8 @@ var FabricInterface = function (wickEditor) {
     }
 
     this.recenterCanvas = function () {
-        var centerX = Math.floor(-(window.innerWidth -wickEditor.project.resolution.x)/2 - 33/2 + 254/2);
-        var centerY = Math.floor(-(window.innerHeight-wickEditor.project.resolution.y)/2 - 116/2);
+        var centerX = Math.floor(-(window.innerWidth -wickEditor.project.width)/2 - 33/2 + 254/2);
+        var centerY = Math.floor(-(window.innerHeight-wickEditor.project.height)/2 - 116/2);
 
         self.canvas.setZoom(1);
         self.canvas.absolutePan(new fabric.Point(centerX,centerY));
@@ -494,66 +495,6 @@ var FabricInterface = function (wickEditor) {
             self.modifyObjects([wickObj]);
         }
         wickEditor.syncInterfaces();
-    }
-
-    this.getObjectsImage = function (callback, args) {
-
-        var selectedObjs = [];
-        self.canvas.forEachObject(function(fabricObj) {
-            if(args && args.objs && args.objs.indexOf(fabricObj.wickObjectRef) === -1) return;
-
-            if(fabricObj.wickObjectRef && !fabricObj.isWickGUIElement) {
-                //fabricObj.set('active', true);
-                selectedObjs.push(fabricObj);
-            }
-        });
-
-        if(selectedObjs.length < 1) {
-            //self.canvas._activeObject = selectedObjs[0];
-            callback(null);
-        } else {
-            var group = new fabric.Group([], {
-                originX: 'left',
-                originY: 'top'
-            });
-            for(var i = selectedObjs.length-1; i >= 0; i--) {
-                //group.canvas = self.canvas // WHAT ??????????????? WHY
-                var clone = fabric.util.object.clone(selectedObjs[i]);
-                group.addWithUpdate(clone);
-            }
-
-            //group.left = Math.round(group.left)
-            //group.top = Math.round(group.top)
-            group.setCoords();
-
-            var cloneLeft = (group.left)
-            var cloneTop = (group.top)
-
-            //var object = fabric.util.object.clone(group);
-            var oldZoom = self.canvas.getZoom();
-            self.canvas.setZoom(1)
-            //self.canvas.renderAll();
-            group.setCoords();
-
-            group.cloneAsImage(function (img) {
-                self.canvas.setZoom(oldZoom)
-                self.canvas.renderAll();
-                group.setCoords();
-
-                group.forEachObject(function(o){ group.removeWithUpdate(o) });
-                self.canvas.remove(group);
-                self.canvas.renderAll();
-
-                callback({
-                    x:cloneLeft,
-                    y:cloneTop,
-                    src:img.getElement().src,
-                });
-            })
-
-        }
-
-        
     }
     
 }

@@ -14,9 +14,8 @@ var WickProject = function () {
 
     this.onionSkinning = false;
     
-    this.resolution = {};
-    this.resolution.x = 720;
-    this.resolution.y = 480;
+    this.width = 720;
+    this.height = 480;
 
     this.borderColor = "#DDDDDD";
     this.backgroundColor = "#FFFFFF";
@@ -128,10 +127,19 @@ WickProject.fromJSON = function (rawJSONProject) {
     // Start at the first from of the root object
     projectFromJSON.currentObject = projectFromJSON.rootObject;
     projectFromJSON.rootObject.playheadPosition = 0;
-    var allObjectsInProject = projectFromJSON.rootObject.getAllChildObjectsRecursive();
 
+    WickProject.fixForBackwardsCompatibility(projectFromJSON);
+
+    return projectFromJSON;
+}
+
+WickProject.fixForBackwardsCompatibility = function (project) {
     // Backwards compatibility for old Wick projects
-    allObjectsInProject.push(projectFromJSON.rootObject);
+    if(!project.width) project.width = project.resolution.x;
+    if(!project.height) project.height = project.resolution.y;
+
+    var allObjectsInProject = project.rootObject.getAllChildObjectsRecursive();
+    allObjectsInProject.push(project.rootObject);
     allObjectsInProject.forEach(function (wickObj) {
         wickObj.playheadPosition = 0;
         if(!wickObj.uuid) wickObj.uuid = random.uuid4();
@@ -158,8 +166,6 @@ WickProject.fromJSON = function (rawJSONProject) {
             })
         });
     });
-
-    return projectFromJSON;
 }
 
 WickProject.fromLocalStorage = function () {

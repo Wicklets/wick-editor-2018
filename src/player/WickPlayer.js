@@ -402,8 +402,8 @@ var WickPlayer = (function () {
         mouseX /=  projectFitScreenScale;
         mouseY /=  projectFitScreenScale;
 
-        var centeredCanvasOffsetX = (window.innerWidth  - project.resolution.x) / 2;
-        var centeredCanvasOffsetY = (window.innerHeight - project.resolution.y) / 2;
+        var centeredCanvasOffsetX = (window.innerWidth  - project.width) / 2;
+        var centeredCanvasOffsetY = (window.innerHeight - project.height) / 2;
 
         if(!project.fitScreen) {
             mouseX -= centeredCanvasOffsetX;
@@ -435,8 +435,8 @@ var WickPlayer = (function () {
         touchX /=  projectFitScreenScale;
         touchY /=  projectFitScreenScale;
 
-        var centeredCanvasOffsetX = (window.innerWidth - project.resolution.x) / 2;
-        var centeredCanvasOffsetY = (window.innerHeight - project.resolution.y) / 2;
+        var centeredCanvasOffsetX = (window.innerWidth - project.width) / 2;
+        var centeredCanvasOffsetY = (window.innerHeight - project.height) / 2;
 
         if(!project.fitScreen) {
             touchX -= centeredCanvasOffsetX;

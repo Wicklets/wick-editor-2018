@@ -41,7 +41,7 @@ var WickPixiRenderer = function (project) {
 	        backgroundColor : "#DDDDDD", 
 	        resolution: window.devicePixelRatio,
 	    };
-	    renderer = PIXI.autoDetectRenderer(project.resolution.x, project.resolution.y, rendererOptions);
+	    renderer = PIXI.autoDetectRenderer(project.width, project.height, rendererOptions);
 	    renderer.clearBeforeRender = false;
 	    renderer.roundPixels = false;
 	    renderer.view.setAttribute('tabindex', 0);
@@ -74,7 +74,7 @@ var WickPixiRenderer = function (project) {
 
 	    var graphics = new PIXI.Graphics();
 	    graphics.beginFill(parseInt(project.backgroundColor.replace("#","0x")));
-	    graphics.drawRect(0, 0, project.resolution.x, project.resolution.y);
+	    graphics.drawRect(0, 0, project.width, project.height);
 	    graphics.endFill();
 	    renderer.render(graphics);
 
@@ -97,7 +97,7 @@ var WickPixiRenderer = function (project) {
             wickObj.parentObject.pixiContainer.addChild(wickObj.pixiSprite);
         } else if (wickObj.pathData) {
         	var parser = new DOMParser();
-			var svgDoc = parser.parseFromString('<svg id="svg" x="0" y="0" version="1.1" width="'+project.resolution.x+'" height="'+project.resolution.x+'" xmlns="http://www.w3.org/2000/svg">'+wickObj.pathData+'</svg>', "image/svg+xml");
+			var svgDoc = parser.parseFromString('<svg id="svg" x="0" y="0" version="1.1" width="'+project.width+'" height="'+project.width+'" xmlns="http://www.w3.org/2000/svg">'+wickObj.pathData+'</svg>', "image/svg+xml");
 
 			var s = new XMLSerializer().serializeToString(svgDoc)
 			var base64svg = 'data:image/svg+xml;base64,' + window.btoa(s);
@@ -160,7 +160,7 @@ var WickPixiRenderer = function (project) {
 				if (frame.pathData === "") return;
 
 				var parser = new DOMParser();
-				var svgDoc = parser.parseFromString('<svg id="svg" x="0" y="0" version="1.1" width="'+project.resolution.x+'" height="'+project.resolution.y+'" xmlns="http://www.w3.org/2000/svg">'+frame.pathData+'</svg>', "image/svg+xml");
+				var svgDoc = parser.parseFromString('<svg id="svg" x="0" y="0" version="1.1" width="'+project.width+'" height="'+project.height+'" xmlns="http://www.w3.org/2000/svg">'+frame.pathData+'</svg>', "image/svg+xml");
 
 				var s = new XMLSerializer().serializeToString(svgDoc)
 				var base64svg = 'data:image/svg+xml;base64,' + window.btoa(s);
@@ -176,8 +176,8 @@ var WickPixiRenderer = function (project) {
 
 	    if(project && project.fitScreen) {
 	        // Calculate how much the project would have to scale to fit either dimension
-	        widthRatio  = window.innerWidth  / project.resolution.x;
-	        heightRatio = window.innerHeight / project.resolution.y;
+	        widthRatio  = window.innerWidth  / project.width;
+	        heightRatio = window.innerHeight / project.height;
 
 	        // Fit only so much that stuff doesn't get cut off
 	        if(widthRatio > heightRatio) {
@@ -186,24 +186,24 @@ var WickPixiRenderer = function (project) {
 	            projectFitScreenScale = widthRatio;
 	        }
 
-	        renderer.view.style.width  = project.resolution.x * projectFitScreenScale + "px";
-	        renderer.view.style.height = project.resolution.y * projectFitScreenScale + "px";
+	        renderer.view.style.width  = project.width * projectFitScreenScale + "px";
+	        renderer.view.style.height = project.height * projectFitScreenScale + "px";
 
 	        if(widthRatio > heightRatio) {
-	            var offset = (window.innerWidth - project.resolution.x * projectFitScreenScale) / 2;
+	            var offset = (window.innerWidth - project.width * projectFitScreenScale) / 2;
 	            rendererContainerEl.style.paddingLeft = offset + "px";
 	            rendererContainerEl.style.paddingTop  = "0px";
 	        } else {
-	            var offset = (window.innerHeight - project.resolution.y * projectFitScreenScale) / 2;
+	            var offset = (window.innerHeight - project.height * projectFitScreenScale) / 2;
 	            rendererContainerEl.style.paddingLeft = "0px";
 	            rendererContainerEl.style.paddingTop  = offset + "px";
 	        }
 	    } else {
-	        renderer.view.style.width  = project.resolution.x + "px";
-	        renderer.view.style.height = project.resolution.y + "px";
+	        renderer.view.style.width  = project.width + "px";
+	        renderer.view.style.height = project.height + "px";
 
-	        var offsetX = (window.innerWidth  - project.resolution.x) / 2;
-	        var offsetY = (window.innerHeight - project.resolution.y) / 2;
+	        var offsetX = (window.innerWidth  - project.width) / 2;
+	        var offsetY = (window.innerHeight - project.height) / 2;
 
 	        rendererContainerEl.style.paddingLeft   = offsetX + "px";
 	        rendererContainerEl.style.paddingRight  = offsetX + "px";

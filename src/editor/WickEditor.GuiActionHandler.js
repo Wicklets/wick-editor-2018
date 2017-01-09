@@ -303,6 +303,28 @@ var GuiActionHandler = function (wickEditor) {
             WickProject.Exporter.exportProject(wickEditor.project, {zipped:true});
         });
 
+    // Export project as animated GIF
+    registerAction('exportProjectGIF',
+        [],
+        [],
+        {},
+        function (args) {
+            wickEditor.fabric.projectRenderer.renderProjectAsGIF(function (blob) {
+                window.open(URL.createObjectURL(blob));
+            });
+        });
+
+    // Export project as WebM
+    registerAction('exportProjectWebM',
+        [],
+        [],
+        {},
+        function (args) {
+            wickEditor.fabric.projectRenderer.renderProjectAsWebM(function () {
+                
+            });
+        });
+
     // Control + O
     // Open File
     registerAction('openFile',

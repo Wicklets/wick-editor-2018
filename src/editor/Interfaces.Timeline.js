@@ -221,7 +221,7 @@ var TimelineInterface = function (wickEditor) {
         if(newPlayheadPosition != oldPlayheadPosition) {
             wickEditor.fabric.deselectAll();
             
-            wickEditor.fabric.getObjectsImage(function (imgData) {
+            wickEditor.fabric.projectRenderer.getCanvasAsImage(function (imgData) {
                 var currentFrame = currentObject.getCurrentFrame();
                 if(imgData && currentFrame) currentFrame.cachedImageData = imgData;
 

@@ -22,7 +22,7 @@ Tools.Crop = function (wickEditor) {
         fabricInterface.canvas.remove(drawingShape);
         wickEditor.syncInterfaces();
 
-        wickEditor.fabric.getObjectsImage(function (data) { 
+        wickEditor.fabric.projectRenderer.getCanvasAsImage(function (data) { 
             if(!data) return;
             CropImage(data.src, function (src) {
                 var wickObj = WickObject.fromImage(src, function (wickObj) {
