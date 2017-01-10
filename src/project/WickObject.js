@@ -47,6 +47,8 @@ var WickObject = function () {
     this.audioData = undefined;
     this.pathData  = undefined;
 
+    this.volume = 1.0;
+
 // Symbols
 
     // Player vars, only ever used when in the player.
@@ -563,9 +565,11 @@ WickObject.prototype.getFrameWithChild = function (child) {
 
     this.layers.forEach(function (layer) {
         layer.frames.forEach(function (frame) {
-            if(frame.wickObjects.indexOf(child) !== -1) {
-                foundFrame = frame;
-            }
+            frame.wickObjects.forEach(function (wickObject) {
+                if(wickObject.uuid === child.uuid) {
+                    foundFrame =frame;
+                }
+            });
         });
     });
 
@@ -1201,7 +1205,6 @@ WickObject.prototype.runScript = function (script, scriptType, objectScope) {
     var project = WickPlayer.getProject() || wickEditor.project;
     var root = project.rootObject;
     var parent = this.parentObject;
-    var mouse = WickPlayer.getMouse();
     var keys = WickPlayer.getKeys();
     var key = WickPlayer.getLastKeyPressed();
 
@@ -1216,6 +1219,8 @@ WickObject.prototype.runScript = function (script, scriptType, objectScope) {
     // Etc. player wrappers
     var stopAllSounds = function () { WickPlayer.getAudioPlayer().stopAllSounds(); };
     var isKeyDown = function (keyString) { return keys[keyCharToCode[keyString]]; };
+    var getMouseX = function () { return WickPlayer.getMouse().x; }
+    var getMouseY = function () { return WickPlayer.getMouse().y; }
     var hideCursor = function () { WickPlayer.hideCursor(); };
     var showCursor = function () { WickPlayer.showCursor(); };
     var enterFullscreen = function () { WickPlayer.enterFullscreen(); }
@@ -1705,9 +1710,9 @@ WickObject.prototype.setText = function (text) {
     this.pixiText.text = ""+text;
 }
 
-WickObject.prototype.playSound = function (volume) {
+WickObject.prototype.playSound = function () {
 
-    WickPlayer.getAudioPlayer().playSound(this.uuid, this.loopSound, volume || 1.0);
+    WickPlayer.getAudioPlayer().playSound(this.uuid, this.loopSound, this.volume);
 
 }
 
@@ -1715,6 +1720,10 @@ WickObject.prototype.stopSound = function () {
 
     WickPlayer.getAudioPlayer().stopSound(this.uuid);
 
+}
+
+WickObject.prototype.setVolume = function (volume) {
+    this.volume = volume;
 }
 
 WickObject.prototype.clone = function () {
@@ -1728,4 +1737,12 @@ WickObject.prototype.delete = function () {
     return WickPlayer.deleteObject(this);
 
 };
+
+WickObject.prototype.setCuror = function (cursor) {
+    this.cursor = cursor;
+}
+
+WickObject.prototype.isHoveredOver = function () {
+    return hoveredOver;
+}
 

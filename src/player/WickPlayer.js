@@ -324,7 +324,7 @@ var WickPlayer = (function () {
 
         //...and change the cursor if we are
         if(hoveredOverObj) {
-            rendererContainerEl.style.cursor = hoveredOverObj.hoverCursor || "pointer";
+            rendererContainerEl.style.cursor = hoveredOverObj.cursor || "pointer";
         } else {
             rendererContainerEl.style.cursor = "default";
         }

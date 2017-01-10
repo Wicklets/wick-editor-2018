@@ -4,8 +4,56 @@
 	<title>It's Wick!</title>
 	<link href='https://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
 	<link href='style.css' rel='stylesheet' type='text/css'>
+	<script src="../lib/jquery.min.js"></script>
 	<meta charset="utf-8">
 </head>
 <body>
 	<h1>Reference</h1>
 </body>
+
+<style>
+    .groupName {
+
+    }
+    .propertyName {
+        font-family: monospace;
+        font-weight: normal;
+    }
+</style>
+
+<script>
+	var docs;
+
+	function buildPage () {
+		docs.docs.forEach(function (group) {
+            var groupName = document.createElement('h2');
+            groupName.className = 'groupName';
+            groupName.innerHTML = group.name;
+            document.body.appendChild(groupName);
+
+            group.properties.forEach(function (property) {
+                var propertyName = document.createElement('h3');
+                propertyName.className = 'propertyName';
+                propertyName.innerHTML = '&#8226; ' + property.name;
+                document.body.appendChild(propertyName);
+            })
+
+            document.body.appendChild(document.createElement('br'));
+        });
+	}
+
+	$.ajax({
+        url: "../src/project/Docs.json",
+        type: 'GET',
+        data: {},
+        success: function(data) {
+        	docs = data;
+        	buildPage();
+        },
+        error: function () {
+            console.log("ajax: error")
+        },
+        complete: function(response, textStatus) {
+        }
+    });
+</script>

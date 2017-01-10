@@ -134,10 +134,12 @@ var ScriptingIDEInterface = function (wickEditor) {
     }
 
     this.showError = function (object, scriptType, lineNumber, errorMessage) {
+        object = wickEditor.project.getObjectByUUID(object.uuid);
+
         wickEditor.project.jumpToObject(object);
         wickEditor.syncInterfaces();
         setTimeout(function () {
-            wickEditor.fabric.selectByIDs([id]);
+            wickEditor.fabric.selectObjects([object]);
             that.editScriptsOfObject(object);
             wickEditor.scriptingide.currentScript = scriptType;
 

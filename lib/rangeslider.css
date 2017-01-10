@@ -15,7 +15,7 @@
 }
 
 .rangeslider--horizontal {
-  height: 20px;
+  height: 10px;
   width: 100%;
 }
 
@@ -94,7 +94,7 @@
   background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.12));
 }
 .rangeslider--horizontal .rangeslider__handle {
-  top: -10px;
+  top: -5px;
   touch-action: pan-y;
   -ms-touch-action: pan-y;
 }
@@ -102,10 +102,4 @@
   left: -4px;
   touch-action: pan-x;
   -ms-touch-action: pan-x;
-}
-
-input[type="range"]:focus + .rangeslider .rangeslider__handle {
-  -moz-box-shadow: 0 0 8px rgba(255, 0, 255, 0.9);
-  -webkit-box-shadow: 0 0 8px rgba(255, 0, 255, 0.9);
-  box-shadow: 0 0 8px rgba(255, 0, 255, 0.9);
 }

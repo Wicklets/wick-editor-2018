@@ -1,0 +1,195 @@
+{
+	"docs": [
+	{
+		"name": "Timeline",
+		"properties": [
+			{
+				"name" : "play()",
+				"description" : "something...",
+				"example" : "thisIsExampleCode()"
+			}, {
+				"name" : "stop()",
+				"description" : "",
+				"example" : ""
+			}, {
+				"name" : "gotoAndStop(frame)",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "gotoAndPlay(frame)",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "gotoNextFrame()",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "gotoPrevFrame()",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}
+		]
+	}, {
+		"name": "Input",
+		"properties": [
+			{
+				"name" : "getMouseX()",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "getMouseY()",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "isKeyDown()",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}
+		]
+	}, {
+		"name": "Scope",
+		"properties": [
+			{
+				"name" : "this",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "root",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "parent",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}
+		] 
+	}, {
+		"name": "Wick Objects",
+		"properties": [
+			{
+				"name" : "play()",
+				"description" : "something...",
+				"example" : "thisIsExampleCode()"
+			}, {
+				"name" : "stop()",
+				"description" : "",
+				"example" : ""
+			}, {
+				"name" : "gotoAndStop(frame)",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "gotoAndPlay(frame)",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "gotoNextFrame()",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "gotoPrevFrame()",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "x",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "y",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "scaleX",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "scaleY",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "angle",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "flipX",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "flipY",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "opacity",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "clone()",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "delete",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "hitTest(object)",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "isHoveredOver()",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "setCursor(cursor)",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "setText(text)",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "playSound()",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "stopSound()",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}, {
+				"name" : "setVolume(volume)",
+				"description" : "",
+				"example" : "",
+				"args" : ""
+			}
+		]
+	}]
+}

@@ -127,6 +127,7 @@ WickProject.fromJSON = function (rawJSONProject) {
     // Start at the first from of the root object
     projectFromJSON.currentObject = projectFromJSON.rootObject;
     projectFromJSON.rootObject.playheadPosition = 0;
+    projectFromJSON.currentObject.currentLayer = 0;
 
     WickProject.fixForBackwardsCompatibility(projectFromJSON);
 
@@ -144,6 +145,8 @@ WickProject.fixForBackwardsCompatibility = function (project) {
         wickObj.playheadPosition = 0;
         if(!wickObj.uuid) wickObj.uuid = random.uuid4();
         wickObj.id = null;
+
+        if(!wickObj.volume) wickObj.volume = 1.0;
 
         if(!wickObj.isSymbol) return;
 
@@ -294,7 +297,7 @@ WickProject.prototype.jumpToObject = function (obj) {
     var that = this;
 
     this.rootObject.getAllChildObjectsRecursive().forEach(function (child) {
-        if(child === obj) {
+        if(child.uuid === obj.uuid) {
             that.currentObject = child.parentObject;
         }
     });
