@@ -92,34 +92,13 @@ Tools.Paintbrush = function (wickEditor) {
         pathFabricObject.cloneAsImage(function(clone) {
             var img = new Image();
             img.onload = function () {
-                potraceImage(img, callback);
+                potraceImage(img, callback, that.color);
             };
             img.src = clone._element.currentSrc || clone._element.src;
         });
 
         // Put zoom back to where it was before
         wickEditor.fabric.canvas.setZoom(oldZoom);
-    };
-
-    var potraceImage = function (img, callback) {
-
-        // Scale the image before we pass it to potrace (fixes retina display bugs!)
-        var dummyCanvas = document.createElement('canvas');
-        var dummyContext = dummyCanvas.getContext('2d');
-        //var zoom = wickEditor.fabric.canvas.getZoom();
-        dummyCanvas.width = img.width/window.devicePixelRatio;
-        dummyCanvas.height = img.height/window.devicePixelRatio;
-        dummyContext.drawImage(img, 0,0, img.width,img.height, 0,0, img.width/window.devicePixelRatio,img.height/window.devicePixelRatio);
-        
-        // Send settings and the image data to potrace to vectorize it!
-        Potrace.loadImageFromDataURL(dummyCanvas.toDataURL());
-        Potrace.setParameter({
-            optcurve: false,
-            alphamax: 1.0
-        });
-        Potrace.process(function(){
-            callback(Potrace.getSVG(1, null, that.color));
-        });
     };
 
 }

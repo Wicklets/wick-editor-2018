@@ -129,7 +129,7 @@ var PaperInterface = function (wickEditor) {
         });
             
         // Apply changes to paper canvas to the current frame SVG.
-        // applyChangesToFrame();
+        applyChangesToFrame();
         
     }
     
@@ -141,12 +141,7 @@ var PaperInterface = function (wickEditor) {
         
         // For each path in the paper canvas:
         allPaths.forEach(function (path) {
-            var wickObject = null;
-            for (uuid in paperObjectMappings) {
-                if(paperObjectMappings[uuid] === path) {
-                    wickObject = wickEditor.project.currentObject.getCurrentFrame().getObjectByUUID(uuid);
-                }
-            }
+            var wickObject = getWickObjectOfPath(path);
 
             // If there is no corresponding wickobject for this
             // path, create one.
@@ -185,7 +180,7 @@ var PaperInterface = function (wickEditor) {
         });
             
         // Apply changes to paper canvas to the current frame SVG.
-        // applyChangesToFrame();
+        applyChangesToFrame();
         
     }
     
@@ -234,15 +229,19 @@ var PaperInterface = function (wickEditor) {
 
                     if(colorA.equals(colorB)) {
                         superPath = superPath.unite(intersectingPath.children[0]);
+
                         removePathFromCanvas(intersectingPath);
                         intersectingPath.dead = true;
                     } else {
                         var splitPath = intersectingPath.children[0].clone();
                         splitPath = splitPath.subtract(path.children[0]);
+
                         var splitGroup = new paper.Group();
                         splitGroup.addChild(splitPath);
                         splitGroup.needsSplitApartCheck = true;
+
                         removePathFromCanvas(intersectingPath);
+                        intersectingPath.dead = true;
                     }
                 });
 
@@ -285,7 +284,6 @@ var PaperInterface = function (wickEditor) {
 
             compPath.children.forEach(function (child) {
                 if(child.clockwise) {
-                    console.log(child)
                     holes.push(child.clone({insert:false}));
                 } else {
                     fills.push(child.clone({insert:false}));
@@ -298,9 +296,11 @@ var PaperInterface = function (wickEditor) {
                 paper.project.activeLayer.addChild(group);
 
                 var newCompPath = new paper.CompoundPath(); newCompPath.remove();
+                newCompPath.clockwise = false;
 
                 newCompPath.addChild(fill);
                 fill.fillColor = compPath.fillColor;
+                fill.clockwise = false;
                 newCompPath.fillColor = compPath.fillColor;
 
                 //Add holes that intersect with that fill to the group
@@ -310,12 +310,15 @@ var PaperInterface = function (wickEditor) {
                         if(thisHoleAdded) return;
                         if(fill.contains(segment.point)) {
                             newCompPath.addChild(hole);
+                            hole.clockwise = true;
                             thisHoleAdded = true;
                         }
                     });
                 });
 
                 group.addChild(newCompPath);
+
+                console.log(group)
             });
 
             removePathFromCanvas(pathNeedsSplitCheck);
@@ -387,8 +390,9 @@ var PaperInterface = function (wickEditor) {
             if(pathWasFilled) return;
 
             if(path.contains(point)) {
-                console.log("Path filled:");
-                console.log(path);
+                path.fillColor = fillColorHex;
+                var wickObj = getWickObjectOfPath(path);
+                wickObj.parentObject.removeChild(wickObj);
 
                 pathWasFilled = true;
             }
@@ -402,13 +406,16 @@ var PaperInterface = function (wickEditor) {
             // Find all paths
             var groups = getAllPathsInCanvas();
 
-            // Find all holes
+            // Find all holes/fills
             var holes = [];
+            var fills = [];
             groups.forEach(function (group) {
                 if(!(group.children[0] instanceof paper.CompoundPath)) return; // Paths have no holes
                 group.children[0].children.forEach(function (child) {
                     if(child.clockwise) {
                         holes.push(child.clone({insert:false}));
+                    } else {
+                        fills.push(child.clone({insert:false}));
                     }
                 });
             });
@@ -451,13 +458,35 @@ var PaperInterface = function (wickEditor) {
                 compPath.set({fillColor:fillColorHex});
                 compPath.addChild(clone);
 
+                // Subtract all intersecting paths and holes from holeToFill
+                holes.forEach(function (hole) {
+                    if(hole === holeToFill) return;
+
+                    var added = false;
+                    hole.segments.forEach(function (segment) {
+                        if(added) return;
+                        if(compPath.contains(segment.point)) {
+                            added = true;
+                            compPath = compPath.subtract(hole);
+                        }
+                    });
+                });
+                fills.forEach(function (fill) {
+                    var added = false;
+                    fill.segments.forEach(function (segment) {
+                        if(added) return;
+                        if(compPath.contains(segment.point)) {
+                            added = true;
+                            compPath = compPath.subtract(fill);
+                        }
+                    });
+                });
+
                 var group = new paper.Group();
                 group.remove();
                 group.addChild(compPath);
                 group.fillRule = 'evenodd';
                 paper.project.activeLayer.addChild(group);
-
-                // Subtract all intersecting paths and holes from holeToFill
 
                 holeWasFilled = true;
 
@@ -467,11 +496,25 @@ var PaperInterface = function (wickEditor) {
         }
 
         if (pathWasFilled || holeWasFilled) {
-            //self.onPathsNeedCleanup();
+            self.onPathsNeedCleanup();
             self.onPaperCanvasChange();
             wickEditor.syncInterfaces();
         }
     }
+
+    /*self.fillByObject = function (wickObj, fillColorHex) {
+        paperObjectMappings[wickObj.uuid].fillColor = fillColorHex;
+
+        self.onPathsNeedCleanup();
+        self.onPaperCanvasChange();
+        wickEditor.syncInterfaces();
+    }
+
+    self.getFillOfObject = function (wickObject) {
+        var path = paperObjectMappings[wickObj.uuid];
+
+        console.log(path)
+    }*/
 
     self.setPathNeedsIntersectionCheck = function (wickObject) {
         var path = paperObjectMappings[wickObject.uuid];
@@ -502,7 +545,19 @@ var PaperInterface = function (wickEditor) {
         
     }
 
+    var getWickObjectOfPath = function (path) {
+        for (uuid in paperObjectMappings) {
+            if(paperObjectMappings[uuid] === path) {
+                return wickEditor.project.getObjectByUUID(uuid);
+            }
+        }
+
+        return null;
+    }
+
     var getIntersectingPaths = function (path) {
+        console.log("getIntersectingPaths")
+
         var paths = getAllPathsInCanvas();
         var intersectingPaths = [];
         paths.forEach(function (checkPath) {
@@ -511,29 +566,72 @@ var PaperInterface = function (wickEditor) {
 
             if(pathA === pathB) return;
 
+            // Check for intersections
             var foundIntersection = false;
             for(var a = 0; a < pathA.children.length; a++) {
                 for(var b = 0; b < pathB.children.length; b++) {
                     var childA = pathA.children[a];
                     var childB = pathB.children[b];
                     if (!foundIntersection && childA.intersects(childB)) {
-                        console.error("BUG: can't use intersects here. need to use .contains()")
                         foundIntersection = true;
                         intersectingPaths.push(checkPath);
                     }
                 }
             }
+
+            // Check for paths containing each other
+            if(!foundIntersection) {
+                if(pathContainsPath(pathA, pathB) || pathContainsPath(pathB, pathA)) {
+                    foundIntersection = true;
+                    intersectingPaths.push(checkPath);
+                }
+            }
         });
         return intersectingPaths;
     }
+
+    var pathContainsPath = function (path, checkPath) {
+        // check if checkPath is inside path
+
+        if(path.children.length > 1) console.error("something really bad happened");
+        if(checkPath.children.length > 1) console.error("something really bad happened");
+
+        var points = [];
+        var child = checkPath.children[0];
+        if (child instanceof paper.Path) {
+            child.segments.forEach(function (segment) {
+                points.push(segment.point);
+            });
+        } else if (child instanceof paper.CompoundPath) {
+            child.children.forEach(function (compChild) {
+                compChild.segments.forEach(function (segment) {
+                    points.push(segment.point);
+                });
+            });
+        } else {
+            console.error("something really bad happened")
+        }
+
+        var foundPointInside = false;
+        points.forEach(function (point) {
+            if(!foundPointInside && path.contains(point)) {
+                foundPointInside = true;
+            }
+        });
+
+        return foundPointInside;
+    }
     
     var applyChangesToFrame = function () {
+
+        /*startTiming()
         
         var currentFrame = wickEditor.project.currentObject.getCurrentFrame();
         
         if(currentFrame) {
             currentFrame.pathData = paper.project.activeLayer.exportSVG({ asString: true });
-        }
+            stopTiming()
+        }*/
         
     }
 

@@ -21,14 +21,13 @@ WickProject.Exporter = (function () {
             "lib/pixi.min.js",
             "lib/lz-string.min.js",
             "lib/screenfull.js",
-            "lib/util/polyfills.js",
-            "lib/util/keyCharToCode.js",
-            "lib/util/fpscounter.js",
-            "lib/util/browserdetection.js",
-            "lib/util/base64-arraybuffer.js",
-            "lib/util/checkInput.js",
-            "lib/util/canvasconvert.js",
-            "lib/util/random.js"
+            "lib/polyfills.js",
+            "lib/keyCharToCode.js",
+            "lib/fpscounter.js",
+            "lib/base64-arraybuffer.js",
+            "lib/checkInput.js",
+            "lib/canvasutils.js",
+            "lib/random.js"
         ];
 
         // Player code. 
