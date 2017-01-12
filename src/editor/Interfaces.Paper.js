@@ -78,17 +78,26 @@ var PaperInterface = function (wickEditor) {
 
             // If there is, update the path's position/scale/rotation.
             } else {
-                
+
                 var path = paperObjectMappings[wickObject.uuid];
-                
+
                 path.applyMatrix = true;
                 path.position.x = wickObject.x;
                 path.position.y = wickObject.y;
+
+                wickObject.angle = 0;
+                wickObject.scaleX = 1;
+                wickObject.scaleY = 1;
+
+                wickObject.pathData = path.exportSVG({asString:true});
+
+                /*
 
                 if(path.origRotation === undefined) path.origRotation = 0;
                 var newRotation = wickObject.angle;
                 if(newRotation !== path.origRotation) {
                     path.rotate(newRotation-path.origRotation);
+                    path.origRotation = wickObject.angle;
                     wickObject.parentObject.removeChild(wickObject);
                     self.onPaperCanvasChange();
                     wickEditor.syncInterfaces();
@@ -106,7 +115,7 @@ var PaperInterface = function (wickEditor) {
                 if(newScaleY !== path.origScaleY) {
                     path.scaling.y = newScaleY*path.origScaleY;
                     path.origScaleY = wickObject.scaleY;
-                }
+                }*/
                 
             }
         });
@@ -198,6 +207,7 @@ var PaperInterface = function (wickEditor) {
                 pathsThatNeedIntersectCheck.push(path);
             }
         });
+        //pathsThatNeedIntersectCheck.reverse();
 
         //if(verbose) console.log("# of pathsThatNeedIntersectCheck: " + pathsThatNeedIntersectCheck.length);
 
@@ -261,13 +271,14 @@ var PaperInterface = function (wickEditor) {
                 pathsThatNeedSplitApartCheck.push(path);
             }
         });
+        //pathsThatNeedSplitApartCheck.reverse();
 
         //console.log("# pathsThatNeedSplitApartCheck = " + pathsThatNeedSplitApartCheck.length);
 
         //For each path:
         pathsThatNeedSplitApartCheck.forEach(function (pathNeedsSplitCheck) {
 
-            console.log("running split check ...")
+            console.log("running split check...");
 
             if(pathNeedsSplitCheck.children.length !== 1) console.error("something really bad happened");
             if(pathNeedsSplitCheck.children[0] instanceof paper.Path) {

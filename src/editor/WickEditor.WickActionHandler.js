@@ -537,4 +537,32 @@ var WickActionHandler = function (wickEditor) {
             }
         });
 
+    this.registerAction('addBrushPath',
+        function (args) {
+            wickEditor.project.addObject(args.wickObject);
+            wickEditor.paper.onWickObjectsChange();
+        },
+        function (args) {
+            args.wickObject.parentObject.removeChild(args.wickObject);
+            wickEditor.paper.onWickObjectsChange();
+        });
+
+    this.registerAction('cleanupPaths',
+        function (args) {
+            //  check for restored objects here?
+
+            args.oldWickobjects = [];
+            wickEditor.project.currentObject.getCurrentFrame().wickObjects.forEach(function (wickObj) {
+                args.oldWickobjects.push(wickObj);
+            });
+            wickEditor.paper.onPathsNeedCleanup();
+        },
+        function (args) {
+            wickEditor.project.currentObject.getCurrentFrame().wickObjects = [];
+            args.oldWickobjects.forEach(function (wickObject) {
+                wickEditor.project.currentObject.getCurrentFrame().wickObjects.push(wickObject);
+            });
+            wickEditor.paper.onWickObjectsChange();
+        });
+
 }

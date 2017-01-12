@@ -404,6 +404,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 fabricObj.selectable = false;
                 fabricObj.evented = false;
             }
+
+            if(wickObj.pathData) fabricObj.hasControls =false;
         }
 
     }

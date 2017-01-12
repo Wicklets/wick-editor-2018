@@ -62,12 +62,14 @@ Tools.Paintbrush = function (wickEditor) {
                 wickObject.x = fabricPath.left;
                 wickObject.y = fabricPath.top;
                 wickObject.isNewDrawingPath = true;
-                wickEditor.project.addObject(wickObject);
-                wickEditor.paper.onWickObjectsChange();
+                
+                wickEditor.actionHandler.doAction('addBrushPath', {
+                    wickObject: wickObject
+                })
+                
+                wickEditor.fabric.drawingPath = fabricPath;
+                wickEditor.syncInterfaces();
             });
-            
-            wickEditor.fabric.drawingPath = fabricPath;
-            wickEditor.syncInterfaces();
         });
 
         /*var SVGData = '<svg id="svg" version="1.1" width="'+fabricPath.width+'" height="'+fabricPath.height+'" xmlns="http://www.w3.org/2000/svg">' + fabricPath.toSVG() + '</svg>';

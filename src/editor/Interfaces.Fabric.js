@@ -81,7 +81,7 @@ var FabricInterface = function (wickEditor) {
                 }
             });
             if(runPathCleanup) {
-                wickEditor.paper.onPathsNeedCleanup();
+                wickEditor.actionHandler.doAction('cleanupPaths', {});
             }
         });
         self.canvas.on('selection:cleared', function (e) {
@@ -180,7 +180,7 @@ var FabricInterface = function (wickEditor) {
            (self.lastTool instanceof Tools.Eraser) || 
            (self.lastTool instanceof Tools.Ellipse) || 
            (self.lastTool instanceof Tools.Rectangle)) {
-            wickEditor.paper.onPathsNeedCleanup();
+            wickEditor.actionHandler.doAction('cleanupPaths', {});
         }
     }
 
