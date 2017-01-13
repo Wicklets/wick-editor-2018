@@ -334,14 +334,15 @@ var PropertiesInterface = function (wickEditor) {
 
     });
 
+    var experimentalTools = ['eraser', 'fillbucket', 'rectangle', 'ellipse'];
     if(localStorage.pathDebug === "1") {
-        ['paintbrush', 'fillbucket', 'rectangle', 'ellipse', 'dropper', 'eraser'].forEach(function (toolName) {
+        experimentalTools.forEach(function (toolName) {
             document.getElementById(toolName+'ToolButton').style.display = 'block';
         });
     }
     document.getElementById('experimentalToolsCheckbox').onclick = function (e) {
         var self = this;
-        ['paintbrush', 'fillbucket', 'rectangle', 'ellipse', 'dropper', 'eraser'].forEach(function (toolName) {
+        experimentalTools.forEach(function (toolName) {
             document.getElementById(toolName+'ToolButton').style.display = self.checked ? 'block' : 'none';
         });
         document.getElementById('experimentalWarning').style.display = self.checked ? 'block' : 'none';
