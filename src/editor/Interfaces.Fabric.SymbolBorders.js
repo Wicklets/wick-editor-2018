@@ -2,10 +2,10 @@
 
 var FabricSymbolBorders = function (wickEditor, fabricInterface) {
 
-	var that = this;
-	var canvas = fabricInterface.canvas;
+    var that = this;
+    var canvas = fabricInterface.canvas;
 
-	var boxAnimationTimer = 0;
+    var boxAnimationTimer = 0;
     var boxAnimationActive = false;
     var boxAnimationObj = null;
 

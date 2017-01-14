@@ -20,6 +20,10 @@ var PropertiesInterface = function (wickEditor) {
     }   
 
     this.syncWithEditorState = function () {
+        var roundToTenth = function (number) {
+            return (Math.round(number * 100) / 100);
+        }
+
         $("#frameProperties").css('display', 'none');
         $("#objectProperties").css('display', 'none');
         $("#projectProperties").css('display', 'none');
@@ -46,12 +50,12 @@ var PropertiesInterface = function (wickEditor) {
                 }
                 
                 // Set object properties GUI position/rotation
-                document.getElementById('objectPositionX').value = Math.round(selectedObj.x);
-                document.getElementById('objectPositionY').value = Math.round(selectedObj.y);
-                document.getElementById('objectWidth')    .value = Math.round(selectedObj.width * selectedObj.scaleX);
-                document.getElementById('objectHeight')   .value = Math.round(selectedObj.height * selectedObj.scaleY);
-                document.getElementById('objectRotation') .value = Math.round(selectedObj.angle);
-                document.getElementById('opacitySlider')  .value = selectedObj.opacity*255
+                document.getElementById('objectPositionX').value = roundToTenth(selectedObj.x)
+                document.getElementById('objectPositionY').value = roundToTenth(selectedObj.y)
+                document.getElementById('objectWidth')    .value = roundToTenth(selectedObj.width * selectedObj.scaleX)
+                document.getElementById('objectHeight')   .value = roundToTenth(selectedObj.height * selectedObj.scaleY)
+                document.getElementById('objectRotation') .value = roundToTenth(selectedObj.angle)
+                document.getElementById('opacitySlider')  .value = roundToTenth(selectedObj.opacity*255)
 
                 var objectTypeIcon = document.getElementById('objectTypeIcon');
                 var objectTypeName = document.getElementById('objectTypeName');
@@ -69,7 +73,7 @@ var PropertiesInterface = function (wickEditor) {
 
                     document.getElementById('boldCheckbox').checked = selectedObj.fontData.fontWeight === "bold";
                     document.getElementById('italicCheckbox').checked = selectedObj.fontData.fontStyle === "italic";
-                    document.getElementById('fontSize').value = selectedObj.fontData.fontSize;
+                    document.getElementById('fontSize').value = Math.floor(selectedObj.fontData.fontSize);
                     //document.getElementById('underlinedCheckbox').checked = selectedObj.fontData.textDecoration === "underline";
                 
                     objectTypeIcon.src = 'resources/text.png';
@@ -138,7 +142,7 @@ var PropertiesInterface = function (wickEditor) {
 
 // Buttons and text boxes and stuff
 
-    $('#objectName').on('input propertychange', function () {
+    $('#objectName').on('blur', function () {
         var newName = $('#objectName').val();
         if(newName === '') {
             wickEditor.fabric.getSelectedObject(WickObject).name = undefined;
@@ -147,12 +151,47 @@ var PropertiesInterface = function (wickEditor) {
         }
     });
 
-    $('#objectPositionX').on('input propertychange', function () {
+    $('#objectPositionX').on('blur', function () {
 
-        if(CheckInput.isNumber($('#objectPositionX').val())) {
+        var newVal = parseFloat($('#objectPositionX').val())
+
+        if(!isNaN(newVal)) {
             var obj = wickEditor.fabric.getSelectedObject();
+            wickEditor.actionHandler.doAction('modifyObjects', { 
+                objs: [obj], 
+                modifiedStates: [{ 
+                    x : newVal
+                }] 
+            });
+        }
+
+    });
+
+    $('#objectPositionY').on('blur', function () {
+
+        var newVal = parseFloat($('#objectPositionY').val())
+        console.log(newVal)
+
+        if(!isNaN(newVal)) {
+            var obj = wickEditor.fabric.getSelectedObject();
+            wickEditor.actionHandler.doAction('modifyObjects', { 
+                objs: [obj], 
+                modifiedStates: [{ 
+                    y : newVal
+                }] 
+            });
+        }
+
+    });
+
+    $('#objectWidth').on('blur', function () {
+
+        var obj = wickEditor.fabric.getSelectedObject();
+        var newVal = parseFloat($('#objectWidth').val() / obj.width)
+
+        if(!isNaN(newVal)) {
             var modifiedState = { 
-                x : parseInt($('#objectPositionX').val()) 
+                scaleX : newVal
             };
             wickEditor.actionHandler.doAction('modifyObjects', { 
                 objs: [obj], 
@@ -162,12 +201,15 @@ var PropertiesInterface = function (wickEditor) {
 
     });
 
-    $('#objectPositionY').on('input propertychange', function () {
+    $('#objectHeight').on('blur', function () {
 
-        if(CheckInput.isNumber($('#objectPositionY').val())) {
+        var obj = wickEditor.fabric.getSelectedObject();
+        var newVal = parseFloat($('#objectHeight').val() / obj.height)
+
+        if(!isNaN(newVal)) {
             var obj = wickEditor.fabric.getSelectedObject();
             var modifiedState = { 
-                y : parseInt($('#objectPositionY').val()) 
+                scaleY : newVal
             };
             wickEditor.actionHandler.doAction('modifyObjects', { 
                 objs: [obj], 
@@ -177,42 +219,14 @@ var PropertiesInterface = function (wickEditor) {
 
     });
 
-    $('#objectWidth').on('input propertychange', function () {
+    $('#objectRotation').on('blur', function () {
 
-        if(CheckInput.isNumber($('#objectWidth').val())) {
+        var newVal = parseFloat($('#objectRotation').val())
+
+        if(!isNaN(newVal)) {
             var obj = wickEditor.fabric.getSelectedObject();
             var modifiedState = { 
-                scaleX : parseInt($('#objectWidth').val()) / obj.width 
-            };
-            wickEditor.actionHandler.doAction('modifyObjects', { 
-                objs: [obj], 
-                modifiedStates: [modifiedState] 
-            });
-        }
-
-    });
-
-    $('#objectHeight').on('input propertychange', function () {
-
-        if(CheckInput.isNumber($('#objectHeight').val())) {
-            var obj = wickEditor.fabric.getSelectedObject();
-            var modifiedState = { 
-                scaleY : parseInt($('#objectHeight').val()) / obj.height 
-            };
-            wickEditor.actionHandler.doAction('modifyObjects', { 
-                objs: [obj], 
-                modifiedStates: [modifiedState] 
-            });
-        }
-
-    });
-
-    $('#objectRotation').on('input propertychange', function () {
-
-        if(CheckInput.isNumber($('#objectRotation').val())) {
-            var obj = wickEditor.fabric.getSelectedObject();
-            var modifiedState = { 
-                angle : parseInt($('#objectRotation').val()) 
+                angle : newVal
             };
             wickEditor.actionHandler.doAction('modifyObjects', { 
                 objs: [obj], 
@@ -245,7 +259,7 @@ var PropertiesInterface = function (wickEditor) {
         });
     };
 
-    $('#fontSize').on('input propertychange', function () {
+    $('#fontSize').on('blur', function () {
 
         if(CheckInput.isNumber($('#fontSize').val())) {
             var obj = wickEditor.fabric.getSelectedObject();
@@ -287,7 +301,7 @@ var PropertiesInterface = function (wickEditor) {
         wickEditor.fabric.getSelectedObject().autoplaySound = this.checked;
     };
 
-    $('#frameIdentifier').on('input propertychange', function () {
+    $('#frameIdentifier').on('blur', function () {
         var currentObject = wickEditor.project.currentObject;
         var currentFrame = currentObject.getCurrentFrame();
 
@@ -299,7 +313,7 @@ var PropertiesInterface = function (wickEditor) {
         }
     });
 
-    $('#projectName').on('input propertychange', function () {
+    $('#projectName').on('blur', function () {
         var newName = $('#projectName').val();
         if(newName === '') {
             wickEditor.project.name = undefined;
@@ -308,7 +322,7 @@ var PropertiesInterface = function (wickEditor) {
         }
     });
 
-    $('#projectSizeX').on('input propertychange', function () {
+    $('#projectSizeX').on('blur', function () {
 
         if(CheckInput.isPositiveInteger($('#projectSizeX').val())) {
             wickEditor.project.width = parseInt($('#projectSizeX').val());
@@ -317,7 +331,7 @@ var PropertiesInterface = function (wickEditor) {
 
     });
 
-    $('#projectSizeY').on('input propertychange', function () {
+    $('#projectSizeY').on('blur', function () {
 
         if(CheckInput.isPositiveInteger($('#projectSizeY').val())) {
             wickEditor.project.height = parseInt($('#projectSizeY').val());
@@ -326,7 +340,7 @@ var PropertiesInterface = function (wickEditor) {
 
     });
 
-    $('#frameRate').on('input propertychange', function () {
+    $('#frameRate').on('blur', function () {
 
         if(CheckInput.isPositiveInteger($('#frameRate').val())) {
             wickEditor.project.framerate = parseInt($('#frameRate').val());
@@ -334,12 +348,10 @@ var PropertiesInterface = function (wickEditor) {
 
     });
 
-    var experimentalTools = ['eraser', 'fillbucket', 'rectangle', 'ellipse'];
-    if(localStorage.pathDebug === "1") {
-        experimentalTools.forEach(function (toolName) {
-            document.getElementById(toolName+'ToolButton').style.display = 'block';
-        });
-    }
+    var experimentalTools = ['dropper', 'paintbrush', 'eraser', 'fillbucket', 'rectangle', 'ellipse'];
+    experimentalTools.forEach(function (toolName) {
+        document.getElementById(toolName+'ToolButton').style.display = localStorage.pathDebug === "1" ? 'block' : 'none';
+    });
     document.getElementById('experimentalToolsCheckbox').onclick = function (e) {
         var self = this;
         experimentalTools.forEach(function (toolName) {

@@ -318,10 +318,10 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         wickObj.fabricObjectReference = fabricObj
 
         // To get pixel-perfect positioning to avoid blurry images (this happens when an image has a fractional position)
-        if(wickObj.imageData) {
+        /*if(wickObj.imageData) {
             wickObj.x = Math.round(wickObj.x);
             wickObj.y = Math.round(wickObj.y);
-        }
+        }*/
 
         // Some wick objects don't have a defined width/height until rendered by fabric. (e.g. paths and text)
         if(!wickObj.width) wickObj.width = fabricObj.width;

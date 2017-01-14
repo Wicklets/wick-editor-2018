@@ -46,7 +46,6 @@ var FabricInterface = function (wickEditor) {
         this.currentTool = this.tools.cursor;
         this.lastTool = this.currentTool;
 
-    
         // Canvas event listeners
 
         self.canvas.on({
@@ -431,17 +430,8 @@ var FabricInterface = function (wickEditor) {
                 y: wickObj.y-wickObj.getAbsolutePosition().y
             };
 
-            var cornerOffset = {
-                x:0,
-                y:0
-            }
-            if(wickObj.isSymbol) {
-                //cornerOffset.x = wickObj.getSymbolBoundingBoxCorner().x;
-                //cornerOffset.y = wickObj.getSymbolBoundingBoxCorner().y;
-            }
-
-            var newX = fabricObj.left + insideSymbolReposition.x - cornerOffset.x;
-            var newY = fabricObj.top  + insideSymbolReposition.y - cornerOffset.y;
+            var newX = fabricObj.left + insideSymbolReposition.x;
+            var newY = fabricObj.top  + insideSymbolReposition.y;
 
             modifiedStates.push({
                 x      : newX,

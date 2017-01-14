@@ -133,17 +133,27 @@ var ScriptingIDEInterface = function (wickEditor) {
         }
     }
 
-    this.showError = function (object, scriptType, lineNumber, errorMessage) {
-        object = wickEditor.project.getObjectByUUID(object.uuid);
+    this.showError = function (obj, scriptType, lineNumber, errorMessage) {
+        var object = wickEditor.project.getObjectByUUID(obj.uuid);
+        var frame = wickEditor.project.getFrameByUUID(obj.uuid);
 
-        wickEditor.project.jumpToObject(object);
+        console.log(object)
+        console.log(frame)
+
+        if(object) {
+            wickEditor.project.jumpToObject(object);
+        } else if (frame) {
+            wickEditor.project.jumpToFrame(frame);
+        }
+
         wickEditor.syncInterfaces();
         setTimeout(function () {
-            wickEditor.fabric.selectObjects([object]);
-            that.editScriptsOfObject(object);
+            if(object) wickEditor.fabric.selectObjects([object]);
+            if(object) that.editScriptsOfObject(object);
+            if(frame) that.editScriptsOfObject(frame);
             wickEditor.scriptingide.currentScript = scriptType;
 
-            object.causedAnException = true;
+            if(object) object.causedAnException = true;
 
             document.getElementById("errorMessage").innerHTML = errorMessage;
             if(lineNumber) document.getElementById("errorMessage").innerHTML += ", line " + lineNumber;

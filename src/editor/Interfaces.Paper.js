@@ -214,7 +214,7 @@ var PaperInterface = function (wickEditor) {
         // Check for intersections for all paths with needsIntersectCheck flag
         pathsThatNeedIntersectCheck.forEach(function (path) {
 
-            if(path.dead) return; // paths that were joined/subtracted from arent in the canvas but are still in the array
+            if(path.dead) return; // paths that were joined/subtracted from aren't in the canvas but are still in the array
 
             // Find all paths intersecting
             var intersectingPaths = getIntersectingPaths(path);

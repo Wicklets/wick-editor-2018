@@ -152,6 +152,9 @@ WickProject.fixForBackwardsCompatibility = function (project) {
 
         wickObj.layers.forEach(function (layer) {
             layer.frames.forEach(function (frame) {
+                // Add UUID
+                if(!frame.uuid) frame.uuid = random.uuid4();
+
                 // Add path data
                 if(!frame.pathData) {
                     frame.pathData = "";
@@ -267,7 +270,27 @@ WickProject.prototype.getObjectByUUID = function (uuid) {
             foundObj = object;
         }
     });
+
     return foundObj;
+}
+
+WickProject.prototype.getFrameByUUID = function (uuid) {
+    var allObjectsInProject = this.rootObject.getAllChildObjectsRecursive();
+    allObjectsInProject.push(this.rootObject);
+
+    var foundFrame = null;
+    allObjectsInProject.forEach(function (object) {
+        if(!object.isSymbol) return;
+        object.layers.forEach(function (layer) {
+            layer.frames.forEach(function (frame) {
+                if(frame.uuid === uuid) {
+                    foundFrame = frame;
+                }   
+            });
+        })
+    });
+
+    return foundFrame;
 }
 
 WickProject.prototype.addObject = function (wickObject, zIndex, ignoreSymbolOffset) {
@@ -307,6 +330,29 @@ WickProject.prototype.jumpToObject = function (obj) {
     var playheadPositionWithChild = currentObject.getPlayheadPositionAtFrame(frameWithChild);
     currentObject.playheadPosition = playheadPositionWithChild;
 
+}
+
+WickProject.prototype.jumpToFrame = function (frame) {
+
+    var that = this;
+
+    var allObjectsInProject = this.rootObject.getAllChildObjectsRecursive();
+    allObjectsInProject.push(this.rootObject);
+    allObjectsInProject.forEach(function (child) {
+        if(!child.isSymbol) return;
+        child.layers.forEach(function (layer) {
+            layer.frames.forEach(function (currframe) {
+                if(frame === currframe) {
+                    that.currentObject = child;
+                }
+            })
+        })
+    });
+
+    var currentObject = this.currentObject;
+    var frameWithChild = frame;
+    var playheadPositionWithChild = currentObject.getPlayheadPositionAtFrame(frameWithChild);
+    currentObject.playheadPosition = playheadPositionWithChild;
 }
 
 WickProject.prototype.hasSyntaxErrors = function () {

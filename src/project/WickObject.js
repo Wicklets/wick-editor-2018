@@ -111,7 +111,7 @@ WickObject.fromImage = function (imgSrc, callback) {
 
     var img = new Image();
     img.onload = function() {
-        AddPaddingToImage(img, function (paddedImgSrc) {
+        /*AddPaddingToImage(img, function (paddedImgSrc) {
             var paddedImg = new Image();
             paddedImg.onload = function() {
                 var obj = new WickObject();
@@ -123,7 +123,15 @@ WickObject.fromImage = function (imgSrc, callback) {
                 callback(obj);
             }
             paddedImg.src = paddedImgSrc;
-        })
+        })*/
+
+        var obj = new WickObject();
+
+        obj.width = img.width;
+        obj.height = img.height;
+        obj.imageData = img.src;
+
+        callback(obj);
     }
     img.src = imgSrc;
 
@@ -688,7 +696,7 @@ WickObject.prototype.autocropImage = function (callback) {
         var autoCroppedImg = new Image();
         autoCroppedImg.onload = function () {
 
-            AddPaddingToImage(autoCroppedImg, function (paddedImgSrc) {
+            /*AddPaddingToImage(autoCroppedImg, function (paddedImgSrc) {
                 var paddedImg = new Image();
                 paddedImg.onload = function () {
                     that.width  = paddedImg.width;
@@ -700,7 +708,15 @@ WickObject.prototype.autocropImage = function (callback) {
                     callback();
                 }
                 paddedImg.src = paddedImgSrc;
-            });
+            });*/
+
+            that.width  = autoCroppedImg.width;
+            that.height = autoCroppedImg.height;
+            that.x += cropLeft + that.width/2;
+            that.y += cropTop  + that.height/2;
+            that.imageData = autoCroppedImg.src;
+            that.imageDirty = true;
+            callback();
         }
         autoCroppedImg.src = croppedSrc;
     }
@@ -1155,7 +1171,7 @@ WickObject.prototype.update = function () {
                 this.isPlaying = false;
             }
 
-            this.runScript(currentFrame.wickScripts['onLoad'], 'onLoad', this);
+            this.runScript(currentFrame.wickScripts['onLoad'], 'onLoad', this, this.getCurrentFrame());
         }
 
         this.onNewFrame = false;
@@ -1184,7 +1200,7 @@ WickObject.prototype.update = function () {
         // So, play(), stop() etc refers to the timeline that the frame is in.
         // The 'this' keyword is borked though, since it still will refer to the WickObject.
         if(this.getCurrentFrame())
-            this.runScript(this.getCurrentFrame().wickScripts['onUpdate'], 'onUpdate', this);
+            this.runScript(this.getCurrentFrame().wickScripts['onUpdate'], 'onUpdate', this, this.getCurrentFrame());
 
         this.getAllActiveChildObjects().forEach(function(child) {
             child.update();
@@ -1195,7 +1211,7 @@ WickObject.prototype.update = function () {
 
 }
 
-WickObject.prototype.runScript = function (script, scriptType, objectScope) {
+WickObject.prototype.runScript = function (script, scriptType, objectScope, frame) {
 
     var that = this;
 
@@ -1255,7 +1271,8 @@ WickObject.prototype.runScript = function (script, scriptType, objectScope) {
             //console.log(e.stack.split("\n")[1].split('<anonymous>:')[1].split(":")[0]);
             //console.log(e.stack.split("\n"))
             if(wickEditor.builtinplayer.running) wickEditor.builtinplayer.stopRunningProject()
-            wickEditor.scriptingide.showError(this, scriptType, lineNumber, e);
+            wickEditor.scriptingide.showError(frame || this, scriptType, lineNumber, e);
+
         } else {
             alert("An exception was thrown while running a WickObject script. See console!");
             console.log(e);
