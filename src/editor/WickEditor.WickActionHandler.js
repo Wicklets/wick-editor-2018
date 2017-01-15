@@ -336,6 +336,24 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.addObject(args.symbol);
         });
 
+    this.registerAction('addFrame',
+        function (args) {
+            var currentObject = wickEditor.project.currentObject;
+
+            // Add an empty frame
+            currentObject.getCurrentLayer().addFrame(args.frame);
+
+            // Move to that new frame
+            wickEditor.actionHandler.doAction('movePlayhead', {
+                obj:currentObject,
+                newPlayheadPosition:currentObject.getCurrentLayer().getTotalLength()-1
+            });
+        },
+        function (args) {
+            var currentObject = wickEditor.project.currentObject;
+            currentObject.getCurrentLayer().frames.pop();
+        });
+
     this.registerAction('addNewFrame',
         function (args) {
             var currentObject = wickEditor.project.currentObject;

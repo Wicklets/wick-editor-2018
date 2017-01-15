@@ -103,3 +103,39 @@ WickFrame.prototype.getObjectByUUID = function () {
 	return foundWickObject;
 
 }
+
+WickFrame.prototype.getAsJSON = function () {
+	this.wickObjects.forEach(function (wickObject) {
+		wickObject.encodeStrings();
+	});
+
+	var dontJSONVars = ["cachedImageData","fabricObjectReference","parentObject","causedAnException","paperData","uuid","inFrameSVG"];
+
+	var frameJSON = JSON.stringify(this, function(key, value) {
+        if (dontJSONVars.indexOf(key) !== -1) {
+            return undefined;
+        } else {
+            return value;
+        }
+    });
+
+    this.wickObjects.forEach(function (wickObject) {
+		wickObject.decodeStrings();
+	});
+
+	return frameJSON;
+}
+
+WickFrame.fromJSON = function (frameJSON) {
+	var frame = JSON.parse(frameJSON);
+	frame.__proto__ = WickFrame.prototype;
+	frame.wickObjects.forEach(function (wickObject) {
+		WickObject.addPrototypes(wickObject);
+		wickObject.generateParentObjectReferences();
+		wickObject.decodeStrings();
+		wickObject.uuid = random.uuid4();
+	})
+	return frame;
+}
+
+

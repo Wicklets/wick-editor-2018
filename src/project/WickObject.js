@@ -735,16 +735,6 @@ WickObject.prototype.getBlobImages = function (callback) {
     Export
 *************************/
 
-WickObject.JSONReplacer = function(key, value) {
-    var dontJSONVars = ["cachedImageData","fabricObjectReference","parentObject","causedAnException","paperData","uuid","inFrameSVG"];
-
-    if (dontJSONVars.indexOf(key) !== -1) {
-        return undefined;
-    } else {
-        return value;
-    }
-}
-
 WickObject.prototype.getAsJSON = function () {
     var oldX = this.x;
     var oldY = this.y;
@@ -755,7 +745,14 @@ WickObject.prototype.getAsJSON = function () {
     // Encode scripts to avoid JSON format problems
     this.encodeStrings();
 
-    var JSONWickObject = JSON.stringify(this, WickObject.JSONReplacer);
+    var dontJSONVars = ["cachedImageData","fabricObjectReference","parentObject","causedAnException","paperData","uuid","inFrameSVG"];
+    var JSONWickObject = JSON.stringify(this, function(key, value) {
+        if (dontJSONVars.indexOf(key) !== -1) {
+            return undefined;
+        } else {
+            return value;
+        }
+    });
 
     // Put prototypes back on object ('class methods'), they don't get JSONified on project export.
     WickObject.addPrototypes(this);

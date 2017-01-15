@@ -348,7 +348,7 @@ var PropertiesInterface = function (wickEditor) {
 
     });
 
-    var experimentalTools = [/*'text',*/ 'backgroundremove', 'dropper', /*'paintbrush',*/ 'eraser', 'fillbucket', 'rectangle', 'ellipse'];
+    var experimentalTools = [/*'text',*/ 'backgroundremove', 'dropper', /*'paintbrush',*/ 'eraser', 'fillbucket', /*'rectangle', 'ellipse'*/];
     experimentalTools.forEach(function (toolName) {
         document.getElementById(toolName+'ToolButton').style.display = localStorage.pathDebug === "1" ? 'block' : 'none';
     });

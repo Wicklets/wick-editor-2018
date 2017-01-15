@@ -885,6 +885,28 @@ var GuiActionHandler = function (wickEditor) {
             });
         });
 
+    registerAction('copyFrame',
+        [],
+        ['copyFrameButton'],
+        {},
+        function(args) {
+            wickEditor.rightclickmenu.open = false;
+            polyfillClipboardData.setData('text/wickobjectsframe', wickEditor.project.currentObject.getCurrentFrame().getAsJSON());
+            wickEditor.syncInterfaces()
+        });
+
+    registerAction('pasteFrame',
+        [],
+        ['pasteFrameButton'],
+        {},
+        function(args) {
+            var frameJSON = polyfillClipboardData.getData('text/wickobjectsframe');
+            var frame = WickFrame.fromJSON(frameJSON);
+            wickEditor.actionHandler.doAction('addFrame', {
+                frame:frame
+            });
+        });
+
     registerAction('extendFrame',
         ['SHIFT', '.'],
         ['extendFrameButton'],
@@ -924,7 +946,7 @@ var GuiActionHandler = function (wickEditor) {
                 frame: frame
             });
         });
-
+    
     registerAction('addLayer',
         [],
         ['addLayerButton'],
