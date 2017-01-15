@@ -30,8 +30,11 @@ var GuiActionHandler = function (wickEditor) {
         guiActions[name] = new GuiAction(hotkeys, elementIds, requiredParams, action);
     }
 
-    this.doAction = function (name) {
-        guiActions[name].doAction({});
+    this.doAction = function (name, args) {
+        if(args) 
+            guiActions[name].doAction(args);
+        else
+            guiActions[name].doAction({});
     }
 
     /* GuiAction definition. All possible actions performable through interacting
@@ -163,6 +166,7 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.rightclickmenu.open = false;
             event.preventDefault();
             guiAction.doAction({});
+            console.log(guiAction)
             that.keys = [];
         })()};
     };
@@ -493,41 +497,44 @@ var GuiActionHandler = function (wickEditor) {
             });
         });
 
+    var copyKeys  = isChrome ? [] : ['Modifier',"C"];
+    var cutKeys   = isChrome ? [] : ['Modifier',"X"];
+    var pasteKeys = isChrome ? [] : ['Modifier',"V"];
+
     registerAction('copy',
-        ['Modifier',"C"],
+        copyKeys,
         ['copyButton'],
         {},
         function(args) {
             wickEditor.rightclickmenu.open = false;
             that.keys = [];
 
-            var clipboardData = window.polyfillClipboardData//(window.polyfillClipboardData || args.clipboardData);
-            if(clipboardData) {
-                clipboardData.setData('text/wickobjectsjson', wickEditor.project.getCopyData(wickEditor.fabric.getSelectedObjects(WickObject)));
-            }
+            //if(!isChrome) {
+                polyfillClipboardData.setData('text/wickobjectsjson', wickEditor.project.getCopyData(wickEditor.fabric.getSelectedObjects(WickObject)));
+            //}
 
             wickEditor.syncInterfaces();
         });
 
     registerAction('cut',
-        ['Modifier',"X"],
+        cutKeys,
         ['cutButton'],
         {},
         function(args) {
             wickEditor.rightclickmenu.open = false;
             that.keys = [];
 
-            var clipboardData = window.polyfillClipboardData//(window.polyfillClipboardData || args.clipboardData);
-            if(clipboardData) {
-                clipboardData.setData('text/wickobjectsjson', wickEditor.project.getCopyData(wickEditor.fabric.getSelectedObjects(WickObject)));
-                wickEditor.actionHandler.doAction('deleteObjects', { objs:wickEditor.fabric.getSelectedObjects(WickObject) });
-            }
+            //if(!isChrome) {
+                polyfillClipboardData.setData('text/wickobjectsjson', wickEditor.project.getCopyData(wickEditor.fabric.getSelectedObjects(WickObject)));
+            //}
+
+            wickEditor.actionHandler.doAction('deleteObjects', { objs:wickEditor.fabric.getSelectedObjects(WickObject) });
 
             wickEditor.syncInterfaces();
         });
 
     registerAction('paste',
-        ['Modifier',"V"],
+        pasteKeys,
         ['pasteButton'],
         {},
         function(args) {
@@ -535,6 +542,7 @@ var GuiActionHandler = function (wickEditor) {
             that.keys = [];
 
             var clipboardData = window.polyfillClipboardData//(window.polyfillClipboardData || args.clipboardData);
+            if(args.clipboardData) clipboardData = args.clipboardData;
             if(!clipboardData) return;
             var items = clipboardData.items || clipboardData.types;
 
@@ -555,12 +563,29 @@ var GuiActionHandler = function (wickEditor) {
                             wickObjects:objs
                         });
                     });
-                } else if (fileType === 'text/plain') {
+                /*} else if (fileType === 'text/plain') {
                     var newObj = WickObject.fromText(file);
                     newObj.selectOnAddToFabric = true;
+                    newObj.x = wickEditor.project.width/2;
+                    newObj.y = wickEditor.project.height/2;
                     wickEditor.actionHandler.doAction('addObjects', {
                         wickObjects:[newObj]
-                    });
+                    });*/
+                } else if (fileType.includes('image')) {
+                    //console.log(items[i])
+                    reader = new FileReader();
+                    reader.onload = function(evt) {
+                        //console.log(evt.target.result)
+                        WickObject.fromImage(evt.target.result, function (newObj) {
+                            newObj.selectOnAddToFabric = true;
+                            newObj.x = wickEditor.project.width/2;
+                            newObj.y = wickEditor.project.height/2;
+                            wickEditor.actionHandler.doAction('addObjects', {
+                                wickObjects:[newObj]
+                            });
+                        });
+                    };
+                    reader.readAsDataURL(items[i].getAsFile());
                 } else {
                     console.error("Pasting files with type " + fileType + "NYI.")
                 }
@@ -914,6 +939,22 @@ var GuiActionHandler = function (wickEditor) {
         {},
         function(args) {
             wickEditor.actionHandler.doAction('removeLayer', {});
+        });
+
+    registerAction('moveLayerUp',
+        [],
+        ['moveLayerUpButton'],
+        {},
+        function(args) {
+            wickEditor.actionHandler.doAction('moveLayerUp', {});
+        });
+
+    registerAction('moveLayerDown',
+        [],
+        ['moveLayerDownButton'],
+        {},
+        function(args) {
+            wickEditor.actionHandler.doAction('moveLayerDown', {});
         });
 
     registerAction('addKeyframe',

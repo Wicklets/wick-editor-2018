@@ -404,6 +404,30 @@ var WickActionHandler = function (wickEditor) {
             }
         });
 
+    this.registerAction('moveLayerUp',
+        function (args) {
+            var currentObject = wickEditor.project.currentObject;
+            if(currentObject.currentLayer === 0) return;
+            currentObject.layers.move(currentObject.currentLayer, currentObject.currentLayer-1);
+        },
+        function (args) {
+            var currentObject = wickEditor.project.currentObject;
+            if(currentObject.currentLayer === currentObject.layers.length-1) return;
+            currentObject.layers.move(currentObject.currentLayer, currentObject.currentLayer+1);
+        });
+
+    this.registerAction('moveLayerDown',
+        function (args) {
+            var currentObject = wickEditor.project.currentObject;
+            if(currentObject.currentLayer === currentObject.layers.length-1) return;
+            currentObject.layers.move(currentObject.currentLayer, currentObject.currentLayer+1);
+        },
+        function (args) {
+            var currentObject = wickEditor.project.currentObject;
+            if(currentObject.currentLayer === 0) return;
+            currentObject.layers.move(currentObject.currentLayer, currentObject.currentLayer-1);
+        });
+
     this.registerAction('addBreakpoint',
         function (args) {
             args.oldAutoplayState = args.frame.autoplay;
@@ -549,6 +573,8 @@ var WickActionHandler = function (wickEditor) {
 
     this.registerAction('cleanupPaths',
         function (args) {
+            return; 
+
             //  check for restored objects here?
 
             args.oldWickobjects = [];
@@ -558,6 +584,8 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.paper.onPathsNeedCleanup();
         },
         function (args) {
+            return; 
+            
             wickEditor.project.currentObject.getCurrentFrame().wickObjects = [];
             args.oldWickobjects.forEach(function (wickObject) {
                 wickEditor.project.currentObject.getCurrentFrame().wickObjects.push(wickObject);

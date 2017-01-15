@@ -4,7 +4,7 @@ if(!window.Tools) Tools = {};
 
 Tools.Text = function (wickEditor) {
 
-    var that = this;
+    var self = this;
 
     var canvas = wickEditor.fabric.canvas;
 
@@ -14,18 +14,23 @@ Tools.Text = function (wickEditor) {
 
     canvas.on('mouse:down', function (e) {
     	if(wickEditor.fabric.currentTool instanceof Tools.Text) {
-	    	addText();
+            var mouseCanvasSpace = wickEditor.fabric.screenToCanvasSpace(wickEditor.inputHandler.mouse.x, wickEditor.inputHandler.mouse.y)
+	    	self.addText(mouseCanvasSpace.x, mouseCanvasSpace.y);
             wickEditor.fabric.currentTool = wickEditor.fabric.tools.cursor;
             wickEditor.syncInterfaces();
 	    }
     });
 
-    var addText = function () {                                                     
+    self.addText = function (x,y) {                                                     
     	var newWickObject = WickObject.fromText('Click to edit text');
+        if(x && y) {
+            newWickObject.x = x;
+            newWickObject.y = y;
+        } else {
+            newWickObject.x = wickEditor.project.width/2;
+            newWickObject.y = wickEditor.project.height/2;
+        }
         newWickObject.fontData.fill = wickEditor.fabric.tools.paintbrush.color;
-        var mouseCanvasSpace = wickEditor.fabric.screenToCanvasSpace(wickEditor.inputHandler.mouse.x, wickEditor.inputHandler.mouse.y)
-        newWickObject.x = mouseCanvasSpace.x;
-        newWickObject.y = mouseCanvasSpace.y;
         wickEditor.actionHandler.doAction('addObjects', {wickObjects:[newWickObject]});
     }
 

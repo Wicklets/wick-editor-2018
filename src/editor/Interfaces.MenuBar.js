@@ -153,7 +153,10 @@ var MenuBarInterface = function (wickEditor) {
             }),
         ]);
 
-        addTab('Import', [
+        addTab('Add', [
+            new TabButton('Text', function () {
+                wickEditor.fabric.tools.text.addText();
+            }),
             new TabButton('File', function () {
                 wickEditor.guiActionHandler.doAction("openFile");
             }),

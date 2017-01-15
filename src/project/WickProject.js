@@ -160,6 +160,8 @@ WickProject.fixForBackwardsCompatibility = function (project) {
                     frame.pathData = "";
                 }
 
+                if(frame.cachedImageData) frame.cachedImageData = null;
+
                 // Add scripts (old projects didn't have frame scripts)
                 if(!frame.wickScripts) {
                     frame.wickScripts = {
