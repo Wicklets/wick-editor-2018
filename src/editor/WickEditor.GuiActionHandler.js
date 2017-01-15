@@ -166,7 +166,6 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.rightclickmenu.open = false;
             event.preventDefault();
             guiAction.doAction({});
-            console.log(guiAction)
             that.keys = [];
         })()};
     };
@@ -946,7 +945,7 @@ var GuiActionHandler = function (wickEditor) {
                 frame: frame
             });
         });
-    
+
     registerAction('addLayer',
         [],
         ['addLayerButton'],
