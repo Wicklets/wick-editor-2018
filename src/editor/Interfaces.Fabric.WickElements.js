@@ -234,7 +234,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                     children.forEach(function (child) {
                         var bbox = child.fabricObjectReference.getBoundingRect();
                         var bboxXY = wickEditor.fabric.screenToCanvasSpace(bbox.left, bbox.top);
-                        var bboxSize = wickEditor.fabric.screenToCanvasSize(bbox.width, bbox.height);
+                        var bboxSize = {x:bbox.width, y:bbox.height}//wickEditor.fabric.screenToCanvasSize(bbox.width, bbox.height);
                         bbox.left = bboxXY.x;
                         bbox.top = bboxXY.y;
                         bbox.width = bboxSize.x;

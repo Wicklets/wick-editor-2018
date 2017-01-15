@@ -43,7 +43,7 @@ var WickPixiRenderer = function (project) {
 	    };
 	    renderer = PIXI.autoDetectRenderer(project.width, project.height, rendererOptions);
 	    renderer.clearBeforeRender = false;
-	    renderer.roundPixels = false;
+	    renderer.roundPixels = true;
 	    renderer.view.setAttribute('tabindex', 0);
 	    $(renderer.view).click(function() { this.focus(); });
 
@@ -255,8 +255,8 @@ var WickPixiRenderer = function (project) {
 	        wickObj.pixiContainer.visible = true;
 	        //if(!wickObj.isRoot) {
 	            wickObj.pixiContainer.anchor = new PIXI.Point(0.5, 0.5);
-	            wickObj.pixiContainer.position.x = wickObj.x//Math.round(wickObj.x);
-	            wickObj.pixiContainer.position.y = wickObj.y//Math.round(wickObj.y);
+	            wickObj.pixiContainer.position.x = Math.round(wickObj.x);
+	            wickObj.pixiContainer.position.y = Math.round(wickObj.y);
 	            wickObj.pixiContainer.rotation = wickObj.angle/360*2*3.14159;
 	            wickObj.pixiContainer.scale.x = wickObj.scaleX;
 	            wickObj.pixiContainer.scale.y = wickObj.scaleY;
@@ -314,8 +314,8 @@ var WickPixiRenderer = function (project) {
 	        } else if(wickObj.pixiText) {
 	            wickObj.pixiText.visible = true;
 	            wickObj.pixiText.anchor = new PIXI.Point(0.5, 0.5);
-	            wickObj.pixiText.x        = Math.round(wickObj.x);
-	            wickObj.pixiText.y        = Math.round(wickObj.y);
+	            wickObj.pixiText.x        = wickObj.x;
+	            wickObj.pixiText.y        = wickObj.y;
 	            wickObj.pixiText.rotation = wickObj.angle/360*2*3.14159;
 	            wickObj.pixiText.scale.x  = wickObj.scaleX;
 	            wickObj.pixiText.scale.y  = wickObj.scaleY;

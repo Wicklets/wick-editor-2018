@@ -123,6 +123,12 @@ var InputHandler = function (wickEditor) {
         }
     });
 
+    var activeElemIsTextBox = function () {
+        var activeElem = document.activeElement.nodeName;
+        editingTextBox = activeElem == 'TEXTAREA' || activeElem == 'INPUT';
+        return editingTextBox;
+    };
+
     // Set clipboard event listeners on the document. 
     ['cut', 'copy', 'paste'].forEach(function(event) {
         document.addEventListener(event, function(e) {
@@ -130,6 +136,7 @@ var InputHandler = function (wickEditor) {
             if (isIe) {
                 ieClipboardEvent(event);
             } else {
+                if(activeElemIsTextBox()) return;
                 standardClipboardEvent(event, e);
                 focusHiddenArea();
                 e.preventDefault();
