@@ -58,11 +58,8 @@ var PaperInterface = function (wickEditor) {
             currentFrame.pathData = paper.project.activeLayer.exportSVG({ asString: true });
     }
 
-    // Sync the state of the paper.js canvas with the Wick project
-    var regenWickObjects = function () {
-        var groups = getAllGroupsInCanvas();
-
-        // Remove all existing path wick objects from frame
+    // Remove all existing path wick objects from frame
+    var clearPathWickObjects = function () {
         if(currentFrame) {
             currentFrame.wickObjects.forEach(function (wickObject) {
                 if(wickObject.pathData) {
@@ -70,6 +67,14 @@ var PaperInterface = function (wickEditor) {
                 }
             });
         }
+    }
+
+    // Sync the state of the paper.js canvas with the Wick project
+    var regenWickObjects = function () {
+        var groups = getAllGroupsInCanvas();
+
+        // Remove all existing path wick objects from frame
+        clearPathWickObjects()
 
         // Create new wick objects for all current paths
         groups.forEach(function (group) {
@@ -109,8 +114,11 @@ var PaperInterface = function (wickEditor) {
         currentFrame = wickEditor.project.currentObject.getCurrentFrame();
 
         if(oldFrame !== currentFrame) {
-            // Clear paper canvas
+            console.log('yepp')
+
+            // Clear paper canvas and path wick objects
             paper.project.clear();
+            clearPathWickObjects();
             wickToPaperMappings = {};
 
             // Load SVG from currentFrame
