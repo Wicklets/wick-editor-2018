@@ -61,11 +61,17 @@ var PaperInterface = function (wickEditor) {
     // Remove all existing path wick objects from frame
     var clearPathWickObjects = function () {
         if(currentFrame) {
+            var pathWickObjects = [];
+
             currentFrame.wickObjects.forEach(function (wickObject) {
                 if(wickObject.pathData) {
-                    wickObject.parentObject.removeChild(wickObject);
+                    pathWickObjects.push(wickObject);
                 }
             });
+
+            pathWickObjects.forEach(function (pathWickObject) {
+                pathWickObject.parentObject.removeChild(pathWickObject);
+            }); 
         }
     }
 

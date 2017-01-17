@@ -56,9 +56,12 @@ Tools.Paintbrush = function (wickEditor) {
         }
 
         potraceFabricPath(fabricPath, function(SVGData) {
+            var x = fabricPath.left;
+            var y = fabricPath.top;
+
             fabricPath.remove();
             wickEditor.actionHandler.doAction('addObjects', {
-                paths: [SVGData]
+                paths: [{svg:SVGData, x:x, y:y}]
             });
         });
 

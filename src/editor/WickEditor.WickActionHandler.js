@@ -157,8 +157,8 @@ var WickActionHandler = function (wickEditor) {
                 // Save current state of frame's SVG
                 // TODO
                 // Add all new paths
-                args.paths.forEach(function (path) {
-                    wickEditor.paper.addPath(path);
+                args.paths.forEach(function (pathData) {
+                    wickEditor.paper.addPath(pathData.svg, {x:pathData.x, y:pathData.y});
                 });
             }
         },
