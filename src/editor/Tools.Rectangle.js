@@ -18,7 +18,7 @@ Tools.Rectangle = function (wickEditor) {
     });
 
     this.createWickObjectFromShape = function (drawingShape) {
-        var origX = drawingShape.left+drawingShape.width /2;
+        /*var origX = drawingShape.left+drawingShape.width /2;
         var origY = drawingShape.top +drawingShape.height/2;
         drawingShape.left = 0;
         drawingShape.top = 0;
@@ -35,7 +35,7 @@ Tools.Rectangle = function (wickEditor) {
         });
         
         wickEditor.fabric.drawingPath = drawingShape;
-        wickEditor.syncInterfaces();
+        wickEditor.syncInterfaces();*/
     }
 
 }

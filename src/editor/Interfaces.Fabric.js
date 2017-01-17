@@ -71,17 +71,7 @@ var FabricInterface = function (wickEditor) {
             });
         });
         self.canvas.on('before:selection:cleared', function (e) {
-            var selectedObjs = self.getSelectedObjects();
-            var runPathCleanup = false;
-            selectedObjs.forEach(function (wickObj) {
-                if(wickObj.pathData) {
-                    wickEditor.paper.setPathNeedsIntersectionCheck(wickObj);
-                    runPathCleanup = true;
-                }
-            });
-            if(runPathCleanup) {
-                wickEditor.actionHandler.doAction('cleanupPaths', {});
-            }
+            
         });
         self.canvas.on('selection:cleared', function (e) {
             wickEditor.timeline.redraw();
@@ -142,7 +132,6 @@ var FabricInterface = function (wickEditor) {
         // Update elements in fabric canvas
         this.wickElements.update();
         self.guiElements.update();
-        //this.paperElements.update();
 
         // Render canvas
         this.canvas.renderAll();
@@ -179,7 +168,7 @@ var FabricInterface = function (wickEditor) {
            (self.lastTool instanceof Tools.Eraser) || 
            (self.lastTool instanceof Tools.Ellipse) || 
            (self.lastTool instanceof Tools.Rectangle)) {
-            wickEditor.actionHandler.doAction('cleanupPaths', {});
+            // Path cleanup used to be here
         }
     }
 
@@ -274,19 +263,6 @@ var FabricInterface = function (wickEditor) {
 
         this.canvas.forEachObject(function(fabricObject) {
             if(fabricObject.wickObjectRef === wickObj) {
-                foundFabricObject = fabricObject;
-            }
-        });
-
-        return foundFabricObject;
-    }
-
-    this.getObjectByPaperObjectRef = function (paperObjectRef) {
-        var foundFabricObject = null;
-
-        this.canvas.forEachObject(function(fabricObject) {
-            if(foundFabricObject) return;
-            if(fabricObject.paperObjectReference === paperObjectRef) {
                 foundFabricObject = fabricObject;
             }
         });

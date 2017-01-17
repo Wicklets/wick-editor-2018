@@ -55,8 +55,15 @@ Tools.Paintbrush = function (wickEditor) {
             return;
         }
 
-        // Vectorize the path and create a WickObject out of it
         potraceFabricPath(fabricPath, function(SVGData) {
+            fabricPath.remove();
+            wickEditor.actionHandler.doAction('addObjects', {
+                paths: [SVGData]
+            });
+        });
+
+        // Vectorize the path and create a WickObject out of it
+        /*potraceFabricPath(fabricPath, function(SVGData) {
             //wickEditor.paper.addSVG(SVGData, {x:fabricPath.left, y:fabricPath.top});
             WickObject.fromPathFile(SVGData, function (wickObject) {
                 wickObject.x = fabricPath.left;
@@ -70,7 +77,7 @@ Tools.Paintbrush = function (wickEditor) {
                 wickEditor.fabric.drawingPath = fabricPath;
                 wickEditor.syncInterfaces();
             });
-        });
+        });*/
 
         /*var SVGData = '<svg id="svg" version="1.1" width="'+fabricPath.width+'" height="'+fabricPath.height+'" xmlns="http://www.w3.org/2000/svg">' + fabricPath.toSVG() + '</svg>';
         console.log(SVGData)

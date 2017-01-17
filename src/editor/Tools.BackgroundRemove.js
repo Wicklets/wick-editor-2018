@@ -29,7 +29,7 @@ Tools.BackgroundRemove = function (wickEditor) {
             var wickObj = topmost.wickObjReference;
 
             var mouseScreenSpace = wickEditor.fabric.screenToCanvasSpace(e.e.offsetX, e.e.offsetY);
-            var mousePoint = new paper.Point(mouseScreenSpace.x, mouseScreenSpace.y);
+            var mousePoint = {x:mouseScreenSpace.x, y:mouseScreenSpace.y};
             var insideSymbolOffset = wickEditor.project.currentObject.getAbsolutePosition();
             mousePoint.x -= insideSymbolOffset.x;
             mousePoint.y -= insideSymbolOffset.y;

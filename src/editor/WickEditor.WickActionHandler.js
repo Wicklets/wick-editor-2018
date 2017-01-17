@@ -141,18 +141,25 @@ var WickActionHandler = function (wickEditor) {
                 wickEditor.actionHandler.doAction('addNewFrame');
             }
 
-            // Save references to added objects so they can be removed on undo
-            args.addedObjects = [];
-            for(var i = 0; i < args.wickObjects.length; i++) {
-                var wickObj = args.wickObjects[i];
+            if(args.wickObjects) {
+                // Save references to added wick objects so they can be removed on undo
+                args.addedObjects = [];
+                args.wickObjects.forEach(function (wickObj) {
+                    args.addedObjects.push(wickObj);
+                });
+                // Add all the new wick objects
+                args.wickObjects.forEach(function (wickObj) {
+                    wickEditor.project.addObject(wickObj);
+                });
+            }
 
-                wickEditor.project.addObject(wickObj);
-                args.addedObjects.push(wickObj);
-
-                if(wickObj.pathData) {
-                    //wickEditor.paper.updatePaperSceneForObject(wickObj);
-                    wickEditor.paper.onWickObjectsChange();
-                }
+            if(args.paths) {
+                // Save current state of frame's SVG
+                // TODO
+                // Add all new paths
+                args.paths.forEach(function (path) {
+                    wickEditor.paper.addPath(path);
+                });
             }
         },
         function (args) {
@@ -161,6 +168,9 @@ var WickActionHandler = function (wickEditor) {
                 var wickObject = args.addedObjects[i];
                 wickEditor.project.currentObject.removeChild(wickObject);
             }
+
+            // Restore old frame SVG state
+            // TODO
         });
 
     this.registerAction('deleteObjects',
@@ -181,12 +191,7 @@ var WickActionHandler = function (wickEditor) {
                 var obj = args.objs[i];
                 args.restoredObjects.push(obj);
                 wickEditor.project.currentObject.removeChild(args.objs[i]);
-                if(args.objs[i].pathData) {
-                    //wickEditor.paper.updatePaperSceneForObject(args.objs[i], true);
-                }
             }
-            
-            wickEditor.paper.onWickObjectsChange();
         },
         function (args) {
             for(var i = 0; i < args.restoredObjects.length; i++) {
@@ -236,10 +241,6 @@ var WickActionHandler = function (wickEditor) {
                     if(args.modifiedStates[i].textDecoration) wickObj.fontData.textDecoration = args.modifiedStates[i].textDecoration;
                     if(args.modifiedStates[i].fill) wickObj.fontData.fill = args.modifiedStates[i].fill;
                 }
-
-                if(wickObj.pathData) {
-                    //wickEditor.paper.updatePaperSceneForObject(wickObj);
-                }
                 
                 // This is silly what's a better way ???
                 if(wickObj.tweens.length > 0) {
@@ -248,8 +249,6 @@ var WickActionHandler = function (wickEditor) {
                     wickObj.addTween(tween);
                 }
             }
-            
-            wickEditor.paper.onWickObjectsChange();
         },
         function (args) {
             for(var i = 0; i < args.objs.length; i++) {
@@ -290,7 +289,6 @@ var WickActionHandler = function (wickEditor) {
             
             selectedObjects.forEach(function (obj) {
                 wickEditor.project.currentObject.removeChild(obj);
-                //if(obj.pathData) wickEditor.paper.updatePaperSceneForObject(obj, true);
                 obj.inFrameSVG = false;
             });
 
@@ -484,8 +482,6 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             wickEditor.fabric.deselectAll();
             
-            wickEditor.paper.onWickObjectsChange()
-
             wickEditor.fabric.onionSkinsDirty = true;
             var currentObject = wickEditor.project.currentObject;
 
@@ -500,8 +496,6 @@ var WickActionHandler = function (wickEditor) {
                 args.obj.playheadPosition = args.newPlayheadPosition;
             }
             var newFrame = wickEditor.project.currentObject.getCurrentFrame();
-            
-            wickEditor.paper.onWickObjectsChange()
             
         },
         function (args) {
@@ -577,38 +571,6 @@ var WickActionHandler = function (wickEditor) {
                 wickEditor.project.currentObject.removeChild(args.objs[i]);
                 wickEditor.project.currentObject.getCurrentFrame().wickObjects.splice(args.oldZIndexes[i], 0, obj);
             }
-        });
-
-    this.registerAction('addBrushPath',
-        function (args) {
-            wickEditor.project.addObject(args.wickObject);
-            wickEditor.paper.onWickObjectsChange();
-        },
-        function (args) {
-            args.wickObject.parentObject.removeChild(args.wickObject);
-            wickEditor.paper.onWickObjectsChange();
-        });
-
-    this.registerAction('cleanupPaths',
-        function (args) {
-            return; 
-
-            //  check for restored objects here?
-
-            args.oldWickobjects = [];
-            wickEditor.project.currentObject.getCurrentFrame().wickObjects.forEach(function (wickObj) {
-                args.oldWickobjects.push(wickObj);
-            });
-            wickEditor.paper.onPathsNeedCleanup();
-        },
-        function (args) {
-            return; 
-            
-            wickEditor.project.currentObject.getCurrentFrame().wickObjects = [];
-            args.oldWickobjects.forEach(function (wickObject) {
-                wickEditor.project.currentObject.getCurrentFrame().wickObjects.push(wickObject);
-            });
-            wickEditor.paper.onWickObjectsChange();
         });
 
 }
