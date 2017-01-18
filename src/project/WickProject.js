@@ -134,42 +134,57 @@ WickProject.fromJSON = function (rawJSONProject) {
     return projectFromJSON;
 }
 
+// Backwards compatibility for old Wick projects
 WickProject.fixForBackwardsCompatibility = function (project) {
-    // Backwards compatibility for old Wick projects
+    // WickProject.resolution was replaced with project.width and project.height
     if(!project.width) project.width = project.resolution.x;
     if(!project.height) project.height = project.resolution.y;
 
     var allObjectsInProject = project.rootObject.getAllChildObjectsRecursive();
     allObjectsInProject.push(project.rootObject);
     allObjectsInProject.forEach(function (wickObj) {
+        // WickObjects no longer store what frame they're on
         wickObj.playheadPosition = 0;
+
+        // WickObject.id was replaced with WickObject.uuid
         if(!wickObj.uuid) wickObj.uuid = random.uuid4();
         wickObj.id = null;
 
+        // Sound WickObjects now have a volume variable
         if(!wickObj.volume) wickObj.volume = 1.0;
 
-        if(!wickObj.isSymbol) return;
+        // WickObject.angle was replaced with WickObject.rotation
+        if(wickObj.angle !== null) {
+            console.log("fix...")
+            wickObj.rotation = wickObj.angle;
+            wickObj.angle = null;
+            console.log(wickObj.rotation)
+        }
 
+        if(!wickObj.isSymbol) return;
         wickObj.layers.forEach(function (layer) {
             layer.frames.forEach(function (frame) {
-                // Add UUID
+                // Frames now have uuids
                 if(!frame.uuid) frame.uuid = random.uuid4();
 
-                // Add path data
+                // Frames now have SVG path data
                 if(!frame.pathData) {
                     frame.pathData = "";
                 }
 
+                // Frames no longer store onion skin images (made projects too big)
                 if(frame.cachedImageData) frame.cachedImageData = null;
 
-                // Add scripts (old projects didn't have frame scripts)
+                // Frames now have scripts
                 if(!frame.wickScripts) {
                     frame.wickScripts = {
                         "onLoad" : "",
                         "onUpdate" : ""
                     }
                 }
-                // Add frame save state option (old projects always implicitly saved frame state)
+
+                // Frames can now not save their states 
+                // (old projects always implicitly saved frame state)
                 if(!frame.alwaysSaveState) frame.alwaysSaveState = false;
             })
         });

@@ -18,7 +18,7 @@ var WickObject = function () {
     this.height = undefined;
     this.scaleX = 1;
     this.scaleY = 1;
-    this.angle = 0;
+    this.rotation = 0;
     this.flipX = false;
     this.flipY = false;
     this.opacity = 1;
@@ -262,7 +262,7 @@ WickObject.prototype.copy = function () {
     copiedObject.height = this.height;
     copiedObject.scaleX = this.scaleX;
     copiedObject.scaleY = this.scaleY;
-    copiedObject.angle = this.angle;
+    copiedObject.rotation = this.rotation;
     copiedObject.flipX = this.flipX;
     copiedObject.flipY = this.flipY;
     copiedObject.opacity = this.opacity;
@@ -1013,12 +1013,12 @@ WickObject.prototype.getAbsoluteScale = function () {
     }
 }
 
-WickObject.prototype.getAbsoluteAngle = function () {
+WickObject.prototype.getAbsoluteRotation = function () {
     if(this.isRoot) {
-        return this.angle;
+        return this.rotation;
     } else {
-        var parentAngle = this.parentObject.getAbsoluteAngle();
-        return this.angle + parentAngle;
+        var parentRotation = this.parentObject.getAbsoluteRotation();
+        return this.rotation + parentRotation;
     }
 }
 
@@ -1063,7 +1063,8 @@ WickObject.prototype.update = function () {
                 this.isPlaying = false;
             }
 
-            this.runScript(currentFrame.wickScripts['onLoad'], 'onLoad', this, this.getCurrentFrame());
+            if(currentFrame)
+                this.runScript(currentFrame.wickScripts['onLoad'], 'onLoad', this, currentFrame);
         }
 
         this.onNewFrame = false;
@@ -1091,8 +1092,9 @@ WickObject.prototype.update = function () {
         // For now, the WickObject that owns the frame runs the frame's scripts.
         // So, play(), stop() etc refers to the timeline that the frame is in.
         // The 'this' keyword is borked though, since it still will refer to the WickObject.
-        if(this.getCurrentFrame())
-            this.runScript(this.getCurrentFrame().wickScripts['onUpdate'], 'onUpdate', this, this.getCurrentFrame());
+        var currentFrame = this.getCurrentFrame()
+        if(currentFrame)
+            this.runScript(currentFrame.wickScripts['onUpdate'], 'onUpdate', this, currentFrame);
 
         this.getAllActiveChildObjects().forEach(function(child) {
             child.update();
@@ -1197,8 +1199,8 @@ WickObject.prototype.advanceTimeline = function () {
 
         if(oldFrame !== newFrame) {
             this.onNewFrame = true;
+            if(!newFrame) return;
             if(!newFrame.alwaysSaveState) {
-                //this.getAllActiveChildObjects().forEach(function (child) {
                 newFrame.wickObjects.forEach(function (child) {
                     WickPlayer.resetStateOfObject(child);
                 });
@@ -1454,7 +1456,7 @@ WickObject.prototype.isPointInside = function(point) {
 
         var absPosition = object.getAbsolutePositionScaled();
         var absScale = object.getAbsoluteScale();
-        var absAngle = object.getAbsoluteAngle();
+        var absRotation = object.getAbsoluteRotation();
 
         var scaledObjX = absPosition.x;
         var scaledObjY = absPosition.y;
@@ -1547,7 +1549,7 @@ WickObject.prototype.rotateCW = function(theta) {
         throw (new Error("Invalid Input: rotateCW() can only take numbers!"));
     }
 
-    this.angle += theta;
+    this.rotation += theta;
 }
 
 WickObject.prototype.rotateCCW = function(theta) {
@@ -1559,7 +1561,7 @@ WickObject.prototype.rotateCCW = function(theta) {
         throw (new Error("Invalid Input: rotateCCW() can only take numbers!"));
     }
 
-    this.angle -= theta;
+    this.rotation -= theta;
 }
 
 WickObject.prototype.scale = function(scaleFactor) {
@@ -1643,7 +1645,7 @@ WickObject.prototype.delete = function () {
     return WickPlayer.deleteObject(this);
 };
 
-WickObject.prototype.setCuror = function (cursor) {
+WickObject.prototype.setCursor = function (cursor) {
     this.cursor = cursor;
 }
 

@@ -199,7 +199,7 @@ var WickActionHandler = function (wickEditor) {
             }
         });
 
-    var modifyableAttributes = ["x","y","scaleX","scaleY","angle","opacity","flipX","flipY"];
+    var modifyableAttributes = ["x","y","scaleX","scaleY","rotation","opacity","flipX","flipY"];
 
     this.registerAction('modifyObjects',
         function (args) {

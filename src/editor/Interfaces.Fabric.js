@@ -416,7 +416,7 @@ var FabricInterface = function (wickEditor) {
                 scaleY : fabricObj.scaleY,
                 flipX  : fabricObj.flipX,
                 flipY  : fabricObj.flipY,
-                angle  : fabricObj.angle,
+                rotation  : fabricObj.angle,
                 text   : fabricObj.text
             });
         });

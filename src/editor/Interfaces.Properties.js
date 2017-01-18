@@ -54,7 +54,7 @@ var PropertiesInterface = function (wickEditor) {
                 document.getElementById('objectPositionY').value = roundToTenth(selectedObj.y)
                 document.getElementById('objectWidth')    .value = roundToTenth(selectedObj.width * selectedObj.scaleX)
                 document.getElementById('objectHeight')   .value = roundToTenth(selectedObj.height * selectedObj.scaleY)
-                document.getElementById('objectRotation') .value = roundToTenth(selectedObj.angle)
+                document.getElementById('objectRotation') .value = roundToTenth(selectedObj.rotation)
                 document.getElementById('opacitySlider')  .value = roundToTenth(selectedObj.opacity*255)
 
                 var objectTypeIcon = document.getElementById('objectTypeIcon');
@@ -226,7 +226,7 @@ var PropertiesInterface = function (wickEditor) {
         if(!isNaN(newVal)) {
             var obj = wickEditor.fabric.getSelectedObject();
             var modifiedState = { 
-                angle : newVal
+                rotation : newVal
             };
             wickEditor.actionHandler.doAction('modifyObjects', { 
                 objs: [obj], 
