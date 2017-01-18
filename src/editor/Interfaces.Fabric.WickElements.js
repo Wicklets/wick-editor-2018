@@ -8,6 +8,22 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
     var cachedFabricObjects = {};
 
+    this.testPerformanceLol = function () {
+        fabric.Image.fromURL('resources/testcontent/SUPERDUMBgreenBG.png', function(image) {
+
+          image.set({
+            left: Math.random()*300,
+            top: Math.random()*300,
+            angle: Math.random()*360
+          })
+          //.scale(getRandomNum(minScale, maxScale))
+          .setCoords();
+
+          fabricInterface.canvas.add(image);
+          fabricInterface.canvas.renderAll();
+        });
+    }
+
     this.update = function () {
         var enablePerfTests = false;
 
@@ -26,6 +42,15 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         var allObjects = siblingObjects.concat(activeObjects);
 
         var refreshZIndices = function (force) {
+            //startTiming();
+
+            force = false;
+
+            /*if(force) 
+                console.log('forced refreshZIndices')
+            else
+                console.log('unforced refreshZIndices')*/
+
             var frameZIndex = siblingObjects.length
 
             // Update z-indices in order of their true positions
@@ -33,6 +58,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 var fabricObj = wickObj.fabricObjectReference;
 
                 if(wickObj.zIndicesDirty || force) {
+                    console.log('force or zIndicesDirty')
+
                     var fabricZIndex = fabricInterface.canvas._objects.indexOf(fabricObj);
                     if(fabricZIndex === -1) return;
                     if(fabricZIndex > frameZIndex) fabricZIndex -= 1;
@@ -46,6 +73,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             if (force || fabricInterface.canvas._objects.indexOf(fabricInterface.guiElements.getInactiveFrame()) !== frameZIndex) {
                 fabricInterface.guiElements.setInactiveFramePosition(frameZIndex);
             }
+
+            //stopTiming('refreshZIndices')
         }
 
         if(enablePerfTests) stopTiming("object list generation");
@@ -171,6 +200,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
     }
 
     var createFabricObjectFromWickObject = function (wickObj, callback) {
+
+        startTiming()
 
         if(cachedFabricObjects[wickObj.uuid]) {
             callback(cachedFabricObjects[wickObj.uuid]);

@@ -140,6 +140,8 @@ var InputHandler = function (wickEditor) {
                 standardClipboardEvent(event, e);
                 focusHiddenArea();
                 e.preventDefault();
+                $('#fabricCanvas').focus().select();
+                console.log(document.activeElement.nodeName)
             }
         });
     });

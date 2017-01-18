@@ -120,8 +120,6 @@ var PaperInterface = function (wickEditor) {
         currentFrame = wickEditor.project.currentObject.getCurrentFrame();
 
         if(oldFrame !== currentFrame) {
-            console.log('yepp')
-
             // Clear paper canvas and path wick objects
             paper.project.clear();
             clearPathWickObjects();
