@@ -137,6 +137,8 @@ function buildPage () {
     });
 
     newElem('div', 'spacer');
+
+    hljs.initHighlightingOnLoad();
 }
 
 // Load the json file with all the docs info
@@ -152,7 +154,7 @@ $.ajax({
         console.log("ajax: error")
     },
     complete: function(response, textStatus) {
-        hljs.initHighlightingOnLoad();
+        
     }
 });
 </script>
