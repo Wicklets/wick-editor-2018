@@ -5,32 +5,41 @@
 		"properties": [
 			{
 				"name" : "play()",
-				"description" : "something...",
-				"example" : "thisIsExampleCode()"
+				"description" : "Causes the timeline to begin playing. When called from inside a symbol, the parent of the symbol's timeline is played.",
+				"example" : "play();",
+				"args" : [],
+				"return" : null
 			}, {
 				"name" : "stop()",
-				"description" : "",
-				"example" : ""
+				"description" : "Causes the timeline to stop. When called from inside a symbol, the parent of the symbol's timeline is stopped.",
+				"example" : "stop();",
+				"args" : [],
+				"return" : null
+
 			}, {
 				"name" : "gotoAndStop(frame)",
-				"description" : "",
-				"example" : "",
-				"args" : ""
+				"description" : "Moves the playhead to 'frame' and causes the timeline to stop. When called from inside a symbol, the parent of the symbol's timeline is moved.",
+				"example" : "gotoAndStop(2); // Go to frame 2 and stop the timeline",
+				"args" : [{"name": "frame", "type": "Number", "description": "index of the frame to jump to"}],
+				"return" : null
 			}, {
 				"name" : "gotoAndPlay(frame)",
-				"description" : "",
-				"example" : "",
-				"args" : ""
+				"description" : "Moves the playhead to 'frame' and plays the timeline from there. When called from inside a symbol, the parent of the symbol's timeline is moved.",
+				"example" : "gotoAndPlay(2); // Go to frame to and play the timeline",
+				"args" : [{"name": "frame", "type": "Number", "description": "index of the frame to jump to"}],
+				"return" : null
 			}, {
 				"name" : "gotoNextFrame()",
-				"description" : "",
-				"example" : "",
-				"args" : ""
+				"description" : "Moves the playhead to the next frame. If called on the last frame, gotoNextFrame() does nothing. When called from inside a symbol, the parent of the symbol's timeline is moved.",
+				"example" : "gotoNextFrame();",
+				"args" : [],
+				"return" : null
 			}, {
 				"name" : "gotoPrevFrame()",
-				"description" : "",
-				"example" : "",
-				"args" : ""
+				"description" : "Moves the playhead to the previous frame. If called on the first frame, gotoPrevFrame() does nothing. When called from inside a symbol, the parent of the symbol's timeline is moved.",
+				"example" : "gotoPrevFrame",
+				"args" : [],
+				"return" : null
 			}
 		]
 	}, {
@@ -38,19 +47,22 @@
 		"properties": [
 			{
 				"name" : "getMouseX()",
-				"description" : "",
-				"example" : "",
-				"args" : ""
+				"description" : "Returns the x-location of the mouse on the project canvas. The origin (0,0) is the upper-left corner of the canvas.",
+				"example" : "this.x = getMouseX(); // Sets the object's x-position to the mouse's x-position.",
+				"args" : [],
+				"return" : [{"type": "Number", "description": "x-location of the mouse"}]
 			}, {
 				"name" : "getMouseY()",
-				"description" : "",
-				"example" : "",
-				"args" : ""
+				"description" : "Returns the y-location of the mouse on the project canvas. The origin (0,0) is the upper-left corner of the canvas.",
+				"example" : "this.y = getMouseY(); // Sets the object's y-position to the mouse's y-position.",
+				"args" : [],
+				"return" : [{"type": "Number", "description": "x-location of the mouse"}]
 			}, {
-				"name" : "isKeyDown()",
-				"description" : "",
-				"example" : "",
-				"args" : ""
+				"name" : "isKeyDown(key)",
+				"description" : "Returns true if 'key' is currently pressed and false otherwise. Casing does not matter i.e. isKeyDown('a') is equivalent to isKeyDown('A'). isKeyDown also works with special keys including 'SPACE', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'BACKSPACE', 'TAB', 'ENTER', 'SHIFT', 'CTRL', 'COMMAND', 'ALT', 'WINDOWS', 'F1', 'NUM 0', 'NUM LOCK', ",
+				"example" : "if (isKeyDown('SPACE')) { this.x += 10; // If SPACE is pressed, move this object right by 10 pixels}",
+				"args" : [],
+				"return" : [{"type": "Boolean", "description": "true if key is down, false otherwise."}]
 			}
 		]
 	}, {
@@ -58,137 +70,184 @@
 		"properties": [
 			{
 				"name" : "this",
-				"description" : "",
-				"example" : "",
-				"args" : ""
+				"description" : "When used inside of a script, ‘this’ refers to the symbol the script belongs to.",
+				"example" : "this.x += 1; // Move the symbol which ran this script to the right by one pixel",
+				"args" : [{"name": "key", "type": "String", "description": "Name of key to be checked"}],
+				"return" : null
+
 			}, {
 				"name" : "root",
-				"description" : "",
-				"example" : "",
-				"args" : ""
+				"description" : "Refers to the 'root' object. The root object contains all other objects. The root object has no parent and holds the 'root' timeline which controls the main information being shown. The keyword root can be used in any script.",
+				"example" : "root.gotoAndStop(2); // Moves the playhead on the root timeline to frame 2 and stops the root timeline",
+				"args" : [],
+				"return" : null
 			}, {
 				"name" : "parent",
-				"description" : "",
-				"example" : "",
-				"args" : ""
+				"description" : "Refers to the parent of the object which uses the 'parent' keyword in a script. 'parent' can be used to access the parent object's timeline, or other objects contained within the parent.",
+				"example" : "parent.gotoAndPlay(2); // Moves the playhead on the parent obect's timeline to frame 2 and plays that timeline",
+				"args" : [], 
+				"return" : null
 			}
 		] 
 	}, {
-		"name": "Wick Objects",
+		"name": "Wick Objects : General",
+		"properties": [
+			{
+				"name" : "x",
+				"type" : "Number",
+				"description" : "Refers to the x-location (left-to-right) of the object.",
+				"example" : "this.x += 1; // Moves the object to the right by 1 pixel",
+				"args" : [], 
+				"return" : null
+			}, {
+				"name" : "y",
+				"type" : "Number",
+				"description" : "Refers to the y-location (top-to-bottom) of the object. Y values increase as you go down on the canvas.",
+				"example" : "this.y += 1; // Moves the object down by one pixel",
+				"args" : [],
+				"return" : null
+			}, {
+				"name" : "scaleX",
+				"type" : "Number",
+				"description" : "Scales the width of the object. By default scaleX is set to 1.",
+				"example" : "this.scaleX = 2; // Doubles the width by 2.",
+				"args" : [], 
+				"return" : null
+			}, {
+				"name" : "scaleY",
+				"type" : "Number",
+				"description" : "Scales the height of the object. By default scaleY is set to 1.",
+				"example" : "this.scaleY = 2; // Doubles the height of this object.",
+				"args" : [],
+				"return" : null
+			}, {
+				"name" : "rotation",
+				"type" : "Number", 
+				"description" : "Controls the angle of rotation on the object in degrees.",
+				"example" : "this.rotation += 10; // Rotate this object 10 degrees to the right",
+				"args" : [], 
+				"return" : null
+			}, {
+				"name" : "flipX",
+				"type" : "Boolean",
+				"description" : "A boolean which determines whether or not to flip the wickObject horizontally. By default flipX is set to false.",
+				"example" : "this.flipX = true; // Flip this object horizontally.",
+				"args" : [],
+				"return" : null
+			}, {
+				"name" : "flipY",
+				"type" : "Boolean",
+				"description" : "A boolean which determines whether or not to flip the wickObject vertically. By default flipY is set to false.",
+				"example" : "this.flipY = true; // Flip this object vertically.",
+				"args" : [],
+				"return" : null
+			}, {
+				"name" : "opacity",
+				"type" : "Number",
+				"description" : "A value between 0 and 1 which determines how transparent an object is. 1 is completely opaque while 0 is completely transparent. By default opacity is set to 1.",
+				"example" : "this.opacity = .8; // Make this object slightly transparent.",
+				"args" : [], 
+				"return" : null
+			}, {
+				"name" : "clone()",
+				"description" : "Returns a clone of the WickObject which calls clone().",
+				"example" : "var myClone = this.clone(); // Creates a clone of the current wick object and stores it in the variable myClone",
+				"args" : [], 
+				"return" : {"type" : "WickObject", "description" : "A clone of the WickObject which calls clone()."}
+			}, {
+				"name" : "delete()",
+				"description" : "Deletes this WickObject completely.",
+				"example" : "this.delete(); // Removes the wickObject from the scene.",
+				"args" : [],
+				"return" : null
+			}, {
+				"name" : "hitTest(otherObject, (optional)hitTestType)",
+				"description" : "hitTest() checks for a collision with another WickObject. 'hitTestType' is an optional parameter which denotes what type of hitTest you'd like to use. This can be 'circles' for circular hit detection or 'rectangles' for rectangular hit detection. By default hitTestType is set to 'rectangles'."  ,
+				"example" : "if (this.hitTest(objectTwo)) { this.delete(); } // If this object collides with objectTwo delete this object ",
+				"args" : [{"name" : "otherObject", "type" : "WickObject", "description" : "Wick Object to check for collision with."}, 
+				          {"name" : "hitTestType", "type" : "String", "description" : "Type of hit detection to use. Can be 'rectangles' or 'circles'."}],
+				"return" : null
+			}, {
+				"name" : "isHoveredOver()",
+				"description" : "Returns true if the mouse is hovering over this object.",
+				"example" : "if (this.isHoveredOver()) { console.log('That tickles!'); }",
+				"args" : [],
+				"return" : null
+			}, {
+				"name" : "setCursor(cursor)",
+				"description" : "Sets the cursor to be different on hover. For a list of available cursor types, check http://www.w3schools.com/cssref/pr_class_cursor.asp .",
+				"example" : "this.setCursor('zoom-in'); // on hover, sets the cursor to the zoom-in style cursor." ,
+				"args" : [],
+				"return" : null
+			}
+
+		]
+	}, {
+		"name": "Wick Objects : Text",
+		"properties": [
+	 	,   {
+				"name" : "setText(text)",
+				"description" : "Sets the text of a text WickObject to 'text'.",
+				"example" : "this.setText('Apple'); // Sets the visible text to 'Apple'",
+				"args" : [{"name" : "text", "type" : "String", "description" : "A string to set this text object to."}],
+				"return" : null
+			}
+		]
+	}, {
+		"name": "Wick Objects : Sound",
+		"properties": [
+	 	,   {
+				"name" : "playSound()",
+				"description" : "Plays the sound associated with this object.",
+				"example" : "this.playSound();",
+				"args" : [], 
+				"return" : null
+			}, {
+				"name" : "stopSound()",
+				"description" : "Stops the sound associated with this object. If no sound is playing stopSound() does nothing.",
+				"example" : "this.stopSound();",
+				"args" : [],
+				"return" : null
+			}, {
+				"name" : "setVolume(volume)",
+				"description" : "Changes the gain of the associated sound. 'volume' should be a value from 0 to 1. Values greater than 1 can work, but may cause distortion.",
+				"example" : "this.setVolume(.8);",
+				"args" : [{"name" : "volume", "type" : "Number", "description" : "Value to set the gain to."}]
+			},
+		]
+	}, {
+		"name": "Wick Objects : Timeline",
 		"properties": [
 			{
 				"name" : "play()",
-				"description" : "something...",
-				"example" : "thisIsExampleCode()"
+				"description" : "Plays this symbol's timeline. Refer to the general timeline documentation for play() for further information.",
+				"example" : "this.play();",
+				"return" : null
 			}, {
 				"name" : "stop()",
-				"description" : "",
-				"example" : ""
+				"description" : "Stops the symbol's timeline. Refer to the general timeline documentation for stop() for further information.",
+				"example" : "this.stop();",
+				"return" : null
 			}, {
 				"name" : "gotoAndStop(frame)",
-				"description" : "",
-				"example" : "",
-				"args" : ""
+				"description" : "Moves the playhead of the symbol's timeline to 'frame' and stops that timeline. Refer to the general timeline documentation for gotoAndStop(frame) for further information.",
+				"example" : "this.gotoAndStop(2);",
+				"args" : [{"name": "frame", "type": "Number", "description": "index of the frame to jump to"}]
 			}, {
 				"name" : "gotoAndPlay(frame)",
-				"description" : "",
-				"example" : "",
-				"args" : ""
+				"description" : "Moves the playhead of the symbol's timeline to 'frame' and stops that timeline. Refer to the general timeline documentation for gotoAndPlay(frame) for further information.",
+				"example" : "this.gotoAndPlay(2);",
+				"args" : [{"name": "frame", "type": "Number", "description": "index of the frame to jump to"}]
 			}, {
 				"name" : "gotoNextFrame()",
-				"description" : "",
-				"example" : "",
-				"args" : ""
+				"description" : "Goes to the next frame on this symbol's timeline. Refer to the general timeline documentation for gotoNextFrame() for further information.",
+				"example" : "this.gotoNextFrame();",
+				"args" : []
 			}, {
 				"name" : "gotoPrevFrame()",
-				"description" : "",
-				"example" : "",
-				"args" : ""
-			}, {
-				"name" : "x",
-				"description" : "",
-				"example" : "",
-				"args" : ""
-			}, {
-				"name" : "y",
-				"description" : "",
-				"example" : "",
-				"args" : ""
-			}, {
-				"name" : "scaleX",
-				"description" : "",
-				"example" : "",
-				"args" : ""
-			}, {
-				"name" : "scaleY",
-				"description" : "",
-				"example" : "",
-				"args" : ""
-			}, {
-				"name" : "angle",
-				"description" : "",
-				"example" : "",
-				"args" : ""
-			}, {
-				"name" : "flipX",
-				"description" : "",
-				"example" : "",
-				"args" : ""
-			}, {
-				"name" : "flipY",
-				"description" : "",
-				"example" : "",
-				"args" : ""
-			}, {
-				"name" : "opacity",
-				"description" : "",
-				"example" : "",
-				"args" : ""
-			}, {
-				"name" : "clone()",
-				"description" : "",
-				"example" : "",
-				"args" : ""
-			}, {
-				"name" : "delete",
-				"description" : "",
-				"example" : "",
-				"args" : ""
-			}, {
-				"name" : "hitTest(object)",
-				"description" : "",
-				"example" : "",
-				"args" : ""
-			}, {
-				"name" : "isHoveredOver()",
-				"description" : "",
-				"example" : "",
-				"args" : ""
-			}, {
-				"name" : "setCursor(cursor)",
-				"description" : "",
-				"example" : "",
-				"args" : ""
-			}, {
-				"name" : "setText(text)",
-				"description" : "",
-				"example" : "",
-				"args" : ""
-			}, {
-				"name" : "playSound()",
-				"description" : "",
-				"example" : "",
-				"args" : ""
-			}, {
-				"name" : "stopSound()",
-				"description" : "",
-				"example" : "",
-				"args" : ""
-			}, {
-				"name" : "setVolume(volume)",
-				"description" : "",
-				"example" : "",
-				"args" : ""
+				"description" : "Goes to the previous frame on this symbol's timeline. Refer to the general timeline documentation for gotoPrevFrame() for further information.",
+				"example" : "this.gotoPrevFrame();",
+				"args" : []
 			}
 		]
 	}]
