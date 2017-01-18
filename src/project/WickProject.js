@@ -154,8 +154,7 @@ WickProject.fixForBackwardsCompatibility = function (project) {
         if(!wickObj.volume) wickObj.volume = 1.0;
 
         // WickObject.angle was replaced with WickObject.rotation
-        if(wickObj.angle !== null) {
-            console.log("fix...")
+        if(wickObj.angle !== null && wickObj.rotation === undefined) {
             wickObj.rotation = wickObj.angle;
             wickObj.angle = null;
             console.log(wickObj.rotation)

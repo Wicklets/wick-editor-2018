@@ -6,6 +6,8 @@
 <link href='https://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
 <link href='style.css' rel='stylesheet' type='text/css'>
 <script src="../lib/jquery.min.js"></script>
+<link rel="stylesheet" href="../lib/highlight/styles/github.css">
+<script src="../lib/highlight/highlight.pack.js"></script>
 <meta charset="utf-8">
 	
 </head>
@@ -122,7 +124,9 @@ function buildPage () {
             }
             
             newElem('div', 'title', 'Example:', box);
-            newElem('div', 'propertyExample', property.example.replaceAll("\n", "<br />").replaceAll("\t", "&nbsp&nbsp&nbsp&nbsp"), box);
+            /*newElem('div', 'propertyExample', property.example.replaceAll("\n", "<br />").replaceAll("\t", "&nbsp&nbsp&nbsp&nbsp"), box);*/
+            var exampleCodeString = property.example
+            box.innerHTML += '<pre><code class="javascript">'+exampleCodeString+'</code></pre>';
         });
     });
 
@@ -142,6 +146,7 @@ $.ajax({
         console.log("ajax: error")
     },
     complete: function(response, textStatus) {
+        hljs.initHighlightingOnLoad();
     }
 });
 </script>
