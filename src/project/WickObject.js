@@ -1126,7 +1126,7 @@ WickObject.prototype.runScript = function (script, scriptType, objectScope, fram
 
     // Etc. player wrappers
     var stopAllSounds = function () { WickPlayer.getAudioPlayer().stopAllSounds(); };
-    var isKeyDown = function (keyString) { return keys[keyCharToCode[keyString]]; };
+    var isKeyDown = function (keyString) { return keys[keyCharToCode[keyString.toUpperCase()]]; };
     var getMouseX = function () { return WickPlayer.getMouse().x; }
     var getMouseY = function () { return WickPlayer.getMouse().y; }
     var hideCursor = function () { WickPlayer.hideCursor(); };
@@ -1496,7 +1496,7 @@ WickObject.prototype.moveUp = function(delta) {
     }
 
     if (typeof delta != "number") {
-        throw (new Error("Invalid Input: moveUp() can only take numbers!")); 
+        throw (new Error("Invalid Input: moveUp() can only take numbers!"));
     }
 
     this.y -= delta;
@@ -1508,7 +1508,7 @@ WickObject.prototype.moveDown = function(delta) {
     }
 
     if (typeof delta != "number") {
-        throw (new Error("Invalid Input: moveDown() can only take numbers!")); 
+        throw (new Error("Invalid Input: moveDown() can only take numbers!"));
     }
 
     this.y += delta;
@@ -1520,7 +1520,7 @@ WickObject.prototype.moveLeft = function(delta) {
     }
 
     if (typeof delta != "number") {
-        throw (new Error("Invalid Input: moveLeft() can only take numbers!")); 
+        throw (new Error("Invalid Input: moveLeft() can only take numbers!"));
     }
 
     this.x -= delta;
@@ -1532,7 +1532,7 @@ WickObject.prototype.moveRight = function(delta) {
     }
 
     if (typeof delta != "number") {
-        throw (new Error("Invalid Input: moveRight() can only take numbers!")); 
+        throw (new Error("Invalid Input: moveRight() can only take numbers!"));
     }
 
     this.x += delta;
@@ -1544,7 +1544,7 @@ WickObject.prototype.rotateCW = function(theta) {
     }
 
     if (typeof theta != "number") {
-        throw (new Error("Invalid Input: rotateCW() can only take numbers!")); 
+        throw (new Error("Invalid Input: rotateCW() can only take numbers!"));
     }
 
     this.angle += theta;
@@ -1593,7 +1593,7 @@ WickObject.prototype.scaleHeight = function(scaleFactor) {
     }
 
     if (typeof scaleFactor != "number") {
-        throw (new Error("Invalid Input: scaleHeight() can only take numbers!")); 
+        throw (new Error("Invalid Input: scaleHeight() can only take numbers!"));
     }
 
     this.scaleY = scaleFactor;
@@ -1609,7 +1609,7 @@ WickObject.prototype.flipVertical = function() {
 
 WickObject.prototype.setOpacity = function(opacityVal) {
     if (typeof opacityVal != "number") {
-        throw (new Error("Invalid Input: setOpacity() can only take numbers!")); 
+        throw (new Error("Invalid Input: setOpacity() can only take numbers!"));
     }
 
     this.opacity = Math.min(Math.max(opacityVal, 0), 1);

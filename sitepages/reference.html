@@ -1,59 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>It's Wick!</title>
-	<link href='https://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
-	<link href='style.css' rel='stylesheet' type='text/css'>
-	<script src="../lib/jquery.min.js"></script>
-	<meta charset="utf-8">
+    
+<title>It's Wick!</title>
+<link href='https://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+<link href='style.css' rel='stylesheet' type='text/css'>
+<script src="../lib/jquery.min.js"></script>
+<meta charset="utf-8">
+	
 </head>
+
 <body>
-	<h1>Reference</h1>
-</body>
+    
+<h1>Reference</h1>
 
 <style>
-    .groupName {
-
-    }
-    .propertyName {
-        font-family: monospace;
-        font-weight: normal;
-    }
+.groupName {
+	font-size: 24px;
+	margin-left: 75px;
+	line-height: 24px;
+	font-weight: bold;
+	margin-bottom: 25px;
+	margin-top: 25px;
+}
+.title {
+    font-weight: bold;
+    margin-bottom: 3px;
+    margin-left: 10px;
+}
+.propertyName {
+    font-family: monospace;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.propertyDescription {
+    font-weight: normal;
+    margin-left: 10px;
+    margin-bottom: 15px;
+}
+.propertyExample {
+    font-family: monospace;
+    font-weight: normal;
+    margin-left: 10px;
+    margin-bottom: 5px;
+}
+.propertyParameter {
+    font-weight: normal;
+    margin-left: 10px;
+    margin-bottom: 15px;
+}
+.propertyReturns {
+    font-weight: normal;
+    margin-left: 10px;
+    margin-bottom: 15px;
+}
+.groupBox {
+    /*background-color: #DDF;*/
+    border: 1px solid;
+    margin-left: 100px;
+    width: calc(100% - 450px);
+    min-width: 500px;
+    padding: 5px;
+    margin-bottom: 15px;
+}
 </style>
 
+
 <script>
-	var docs;
+var docs;
 
-	function buildPage () {
-		docs.docs.forEach(function (group) {
-            var groupName = document.createElement('h2');
-            groupName.className = 'groupName';
-            groupName.innerHTML = group.name;
-            document.body.appendChild(groupName);
+// Helper function for creating elements
+function newElem(tag, className, innerHTML, parentElem) {
+    var elem = document.createElement(tag);
+    if(className) elem.className = className;
+    if(innerHTML) elem.innerHTML = innerHTML;
+    if(parentElem)
+        parentElem.appendChild(elem);
+    else
+        document.body.appendChild(elem);
+    return elem;
+}
 
-            group.properties.forEach(function (property) {
-                var propertyName = document.createElement('h3');
-                propertyName.className = 'propertyName';
-                propertyName.innerHTML = '&#8226; ' + property.name;
-                document.body.appendChild(propertyName);
-            })
+// Create page for everything
+function buildPage () {
+	docs.docs.forEach(function (group) {
+	    newElem('div', 'groupName', group.name);
 
-            document.body.appendChild(document.createElement('br'));
+        group.properties.forEach(function (property) {
+            var box = newElem('div', 'groupBox');
+            
+            newElem('div', 'propertyName', /*'&#8226; ' + */property.name, box);
+            //newElem('hr', null, null, box);
+            
+            newElem('div', 'propertyDescription', property.description, box);
+            
+            if(property.args.length > 0) {
+                newElem('div', 'title', 'Parameters:', box);
+                newElem('div', 'propertyParameter', property.example, box);
+            }
+            
+            if(property.return) {
+                newElem('div', 'title', 'Returns:', box);
+                newElem('div', 'propertyReturns', property.return, box);
+            }
+            
+            newElem('div', 'title', 'Example:', box);
+            newElem('div', 'propertyExample', property.example, box);
         });
-	}
-
-	$.ajax({
-        url: "../src/project/Docs.json",
-        type: 'GET',
-        data: {},
-        success: function(data) {
-        	docs = data;
-        	buildPage();
-        },
-        error: function () {
-            console.log("ajax: error")
-        },
-        complete: function(response, textStatus) {
-        }
     });
+}
+
+// Load the json file with all the docs info
+$.ajax({
+    url: "../src/project/Docs.json",
+    type: 'GET',
+    data: {},
+    success: function(data) {
+    	docs = data;
+    	buildPage();
+    },
+    error: function () {
+        console.log("ajax: error")
+    },
+    complete: function(response, textStatus) {
+    }
+});
 </script>
+
+</body>
