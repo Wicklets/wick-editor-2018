@@ -29,6 +29,8 @@
     margin-left: 10px;
 }
 .propertyName {
+    margin-left: 10px;
+    margin-top: 5px;
     font-family: monospace;
     font-weight: bold;
     margin-bottom: 10px;
@@ -43,6 +45,7 @@
     font-weight: normal;
     margin-left: 10px;
     margin-bottom: 5px;
+    background-color: #F3F3F3;
 }
 .propertyParameter {
     font-weight: normal;
@@ -63,11 +66,23 @@
     padding: 5px;
     margin-bottom: 15px;
 }
+.spacer {
+    height: 200px;
+}
+hr {
+    border-top:1px dotted #000;
+}
 </style>
 
 
 <script>
 var docs;
+
+// ugh
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
 
 // Helper function for creating elements
 function newElem(tag, className, innerHTML, parentElem) {
@@ -90,24 +105,28 @@ function buildPage () {
             var box = newElem('div', 'groupBox');
             
             newElem('div', 'propertyName', /*'&#8226; ' + */property.name, box);
-            //newElem('hr', null, null, box);
+            newElem('hr', null, null, box);
             
             newElem('div', 'propertyDescription', property.description, box);
             
             if(property.args.length > 0) {
                 newElem('div', 'title', 'Parameters:', box);
-                newElem('div', 'propertyParameter', property.example, box);
+                property.args.forEach(function (arg) {
+                    newElem('div', 'propertyParameter', arg.name + " : " + "<u>"+arg.type+"</u>"+" - "+arg.description, box);
+                });
             }
             
             if(property.return) {
                 newElem('div', 'title', 'Returns:', box);
-                newElem('div', 'propertyReturns', property.return, box);
+                newElem('div', 'propertyReturns', "<u>"+property.return.type+"</u>"+" : " + property.return.description, box);
             }
             
             newElem('div', 'title', 'Example:', box);
-            newElem('div', 'propertyExample', property.example, box);
+            newElem('div', 'propertyExample', property.example.replaceAll("\n", "<br />").replaceAll("\t", "&nbsp&nbsp&nbsp&nbsp"), box);
         });
     });
+
+    newElem('div', 'spacer');
 }
 
 // Load the json file with all the docs info

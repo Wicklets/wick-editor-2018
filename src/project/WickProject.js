@@ -186,7 +186,7 @@ WickProject.fixForBackwardsCompatibility = function (project) {
                 // Frames can now not save their states 
                 // (old projects always implicitly saved frame state)
                 if(!frame.alwaysSaveState) frame.alwaysSaveState = false;
-            })
+            });
         });
     });
 }
