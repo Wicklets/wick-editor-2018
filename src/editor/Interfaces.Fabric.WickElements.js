@@ -8,6 +8,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
     var cachedFabricObjects = {};
 
+    var currentFrameRef;
+
     this.testPerformanceLol = function () {
         fabric.Image.fromURL('resources/testcontent/SUPERDUMBgreenBG.png', function(image) {
 
@@ -25,6 +27,10 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
     }
 
     this.update = function () {
+        var newFrameRef = wickEditor.project.currentObject.getCurrentFrame();
+        var onNewFrame = newFrameRef !== currentFrameRef;
+        currentFrameRef = newFrameRef;
+
         var enablePerfTests = false;
 
         if(enablePerfTests) console.log("-------------------");
@@ -44,8 +50,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         var refreshZIndices = function (force) {
             //startTiming();
 
-            force = false;
-
             /*if(force) 
                 console.log('forced refreshZIndices')
             else
@@ -58,7 +62,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 var fabricObj = wickObj.fabricObjectReference;
 
                 if(wickObj.zIndicesDirty || force) {
-                    console.log('force or zIndicesDirty')
+                    //console.log('force or zIndicesDirty')
 
                     var fabricZIndex = fabricInterface.canvas._objects.indexOf(fabricObj);
                     if(fabricZIndex === -1) return;
@@ -177,7 +181,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 }
 
                 numObjectsAdded++;
-                if(numObjectsAdded === objectsToAdd.length) {
+                if(numObjectsAdded === objectsToAdd.length && onNewFrame) {
                     //console.log("force z index update");
                     refreshZIndices(true);
                     fabricInterface.canvas.renderAll()
