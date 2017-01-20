@@ -95,7 +95,7 @@
 		var currentDemo;
 
 		var loadDemo = function (file) {
-			if(BrowserDetectionUtils.isMobileMode || true) {
+			if(BrowserDetectionUtils.isMobileMode) {
 				var url = "../demos/" + file;
 				window.open(url,'_blank');
 			} else {
