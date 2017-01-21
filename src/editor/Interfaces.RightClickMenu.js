@@ -128,11 +128,11 @@ var RightClickMenuInterface = function (wickEditor) {
         var frame = wickEditor.project.currentObject.getCurrentFrame();
         if(frame) {
             showButtonGroup("#clickedOnFrameButtons");
-            if(frame.autoplay) {
+            /*if(frame.autoplay) {
                 showButtonGroup("#noBreakpointExists");
             } else {
                 showButtonGroup("#breakpointExists");
-            }
+            }*/
         } else {
             showButtonGroup("#clickedOffFrameButtons");
         }

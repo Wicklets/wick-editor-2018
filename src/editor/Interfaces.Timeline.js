@@ -150,13 +150,13 @@ var TimelineInterface = function (wickEditor) {
                     frameCount*frameWidth + 1, layerCount*frameHeight + 1,
                     frameWidth*frame.frameLength - 2, frameHeight - 2);
 
-                if (!frame.autoplay) {
+                /*if (!frame.autoplay) {
                     ctx.fillStyle = "#FF6666";
                     ctx.fillRect(
                         frameCount*frameWidth + frameWidth/4, layerCount*frameHeight + frameHeight/4,
                         frameWidth/2, frameHeight/2);
                     ctx.fill();
-                }
+                }*/
 
                 var selectedObject = wickEditor.fabric.getSelectedObject(WickObject);
                 if (selectedObject && isActiveFrame) {

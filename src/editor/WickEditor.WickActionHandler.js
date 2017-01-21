@@ -149,6 +149,7 @@ var WickActionHandler = function (wickEditor) {
                 });
                 // Add all the new wick objects
                 args.wickObjects.forEach(function (wickObj) {
+                    wickObj.zIndicesDirty = true;
                     wickEditor.project.addObject(wickObj);
                 });
             }
@@ -444,7 +445,7 @@ var WickActionHandler = function (wickEditor) {
             currentObject.layers.move(currentObject.currentLayer, currentObject.currentLayer-1);
         });
 
-    this.registerAction('addBreakpoint',
+    /*this.registerAction('addBreakpoint',
         function (args) {
             args.oldAutoplayState = args.frame.autoplay;
             args.frame.autoplay = false;
@@ -460,7 +461,7 @@ var WickActionHandler = function (wickEditor) {
         },
         function (args) {
             args.frame.autoplay = args.oldAutoplayState;
-        });
+        });*/
 
     this.registerAction('extendFrame',
         function (args) {

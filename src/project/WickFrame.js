@@ -13,9 +13,6 @@ var WickFrame = function () {
 	// Frame length for long frames
 	this.frameLength = 1;
 
-	// Should we stop when we get to this frame?
-	this.autoplay = true;
-
 	// Should the frame reset on being entered?
 	this.alwaysSaveState = false;
 
@@ -56,7 +53,6 @@ WickFrame.prototype.copy = function () {
 
 	copiedFrame.identifier = this.identifier;
 	copiedFrame.frameLength = this.frameLength;
-	copiedFrame.autoplay = this.autoplay;
 
 	this.wickObjects.forEach(function (wickObject) {
 		copiedFrame.wickObjects.push(wickObject.copy());

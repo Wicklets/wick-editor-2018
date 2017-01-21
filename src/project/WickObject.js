@@ -822,7 +822,7 @@ WickObject.prototype.getAllActiveLayerChildObjects = function () {
     return children;
 }
 
-// Use this to render unselectable objects in Fabric
+// Use this to get objects on other layers
 WickObject.prototype.getAllInactiveSiblings = function () {
 
     if(!this.parentObject) {
@@ -1058,10 +1058,6 @@ WickObject.prototype.update = function () {
 
         if(this.isSymbol) {
             var currentFrame = this.getCurrentFrame();
-
-            if(currentFrame && !currentFrame.autoplay) {
-                this.isPlaying = false;
-            }
 
             if(currentFrame)
                 this.runScript(currentFrame.wickScripts['onLoad'], 'onLoad', this, currentFrame);

@@ -32,6 +32,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         if(enablePerfTests) stopTiming("init");
 
         var currentObject = wickEditor.project.currentObject;
+        var currentFrame = currentFrameRef;
 
         // Make sure everything is deselected, mulitple selected objects cause positioning problems.
         var selectedObjects = fabricInterface.getSelectedObjects(WickObject);
@@ -39,7 +40,9 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
         var activeObjects = currentObject.getAllActiveChildObjects();
         var siblingObjects = currentObject.getAllInactiveSiblings();
-        var allObjects = siblingObjects.concat(activeObjects);
+        var nearbyObjects = wickEditor.project.onionSkinning ? wickEditor.project.currentObject.getNearbyObjects(1,1) : [];
+        var allObjects = nearbyObjects.concat(siblingObjects.concat(activeObjects));
+        //var allObjects = siblingObjects.concat(activeObjects);
 
         var refreshZIndices = function (force) {
             //startTiming();
@@ -51,7 +54,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             else
                 console.log('unforced refreshZIndices')*/
 
-            var frameZIndex = siblingObjects.length
+            var frameZIndex = siblingObjects.length;
 
             // Update z-indices in order of their true positions
             allObjects.forEach(function(wickObj) {
@@ -124,7 +127,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 fabricInterface.canvas.forEachObject(function(fabricObj) {
                     if(fabricObj.group) return;
                     if(fabricObj.wickObjectRef === child) {
-                        updateFabObj(fabricObj, child, activeObjects);
+                        updateFabObjPositioning(fabricObj, child);
+                        updateFabricObjectEvents(fabricObj, child, activeObjects, siblingObjects, nearbyObjects);
                         //refreshZIndices();
                     }
                 });
@@ -140,16 +144,15 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         objectsToAdd.forEach(function (objectToAdd) {
             createFabricObjectFromWickObject(objectToAdd, function (fabricObj) {
 
-                if(wickEditor.project.currentObject.getAllActiveChildObjects().indexOf(objectToAdd) === -1) {
+                // The object may have been deleted while we were generating the fabric object. 
+                // Make sure we don't add it if that happened.
+                var newAllObjects = wickEditor.project.currentObject.getAllActiveChildObjects().concat(currentObject.getNearbyObjects(1,1));
+                if(newAllObjects.indexOf(objectToAdd) === -1) {
                     objectsInCanvas.splice(objectsInCanvas.indexOf(objectToAdd), 1)
-                    return;             
+                    return;
                 }
 
                 objectToAdd.fabricObjectReference = fabricObj
-
-                // The object may have been deleted while we were generating the fabric object. 
-                // Make sure we don't add it if that happened.
-                if(wickEditor.project.currentObject.getAllActiveChildObjects().indexOf(objectToAdd) === -1) return;
 
                 fabricObj.originX = 'center';
                 fabricObj.originY = 'center';
@@ -160,7 +163,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                     if(wickEditor.fabric.drawingPath) wickEditor.fabric.drawingPath.remove();
                     wickEditor.fabric.drawingPath = null;
                 //}
-                updateFabObj(fabricObj, objectToAdd, activeObjects);
+                updateFabObjPositioning(fabricObj, objectToAdd);
+                updateFabricObjectEvents(fabricObj, objectToAdd, activeObjects, siblingObjects, nearbyObjects);
 
                 //var trueZIndex = allObjects.indexOf(objectToAdd);
                 //fabricInterface.canvas.moveTo(fabricObj, trueZIndex+fabricInterface.guiElements.getNumGUIElements());
@@ -179,7 +183,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 numObjectsAdded++;
                 if(numObjectsAdded === objectsToAdd.length) {
                     //console.log("force z index update");
-                    refreshZIndices(true);
+                    if(onNewFrame) refreshZIndices(true);
                     fabricInterface.canvas.renderAll()
                 }
                 //refreshZIndices();
@@ -256,7 +260,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                         //fabricObj.originX = 'centerX';
                         //fabricObj.originY = 'centerY';
                         
-                        updateFabObj(fabricObj, child);
+                        updateFabObjPositioning(fabricObj, child);
                         //group.addWithUpdate(fabricObj);
                     }
 
@@ -344,7 +348,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
     }
 
-    var updateFabObj = function (fabricObj, wickObj, activeObjects) {
+    var updateFabObjPositioning = function (fabricObj, wickObj) {
 
         wickObj.fabricObjectReference = fabricObj
 
@@ -403,40 +407,43 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         bbox.height = bboxSize.y;
         wickObj.bbox = bbox;
 
-    //
+    }
 
-        if(activeObjects) {
+    var updateFabricObjectEvents = function (fabricObj, wickObj, activeObjects, siblingObjects, nearbyObjects) {
+        var setCoords = fabricObj.setCoords.bind(fabricObj);
+        fabricObj.on({
+            moving: setCoords,
+            scaling: setCoords,
+            rotating: setCoords
+        });
 
-            var setCoords = fabricObj.setCoords.bind(fabricObj);
-            fabricObj.on({
-                moving: setCoords,
-                scaling: setCoords,
-                rotating: setCoords
-            });
-
-            if(activeObjects.indexOf(wickObj) !== -1) {
-                fabricObj.hasControls = true;
-                fabricObj.selectable = true;
-                fabricObj.evented = true;
-            } else {
-                fabricObj.hasControls = false;
-                fabricObj.selectable = false;
-                fabricObj.evented = false;
-            }
-
-            if (!(fabricInterface.currentTool instanceof Tools.Cursor)) {
-                fabricObj.hasControls = false;
-                fabricObj.selectable = false;
-                fabricObj.evented = false;
-            }
-
-            if (!wickObj.isOnActiveLayer()) {
-                fabricObj.hasControls = false;
-                fabricObj.selectable = false;
-                fabricObj.evented = false;
-            }
+        if(nearbyObjects.includes(wickObj)) {
+            fabricObj.opacity = wickObj.opacity/3;
+        } else {
+            fabricObj.opacity = wickObj.opacity;
         }
 
+        if(activeObjects.indexOf(wickObj) !== -1) {
+            fabricObj.hasControls = true;
+            fabricObj.selectable = true;
+            fabricObj.evented = true;
+        } else {
+            fabricObj.hasControls = false;
+            fabricObj.selectable = false;
+            fabricObj.evented = false;
+        }
+
+        if (!(fabricInterface.currentTool instanceof Tools.Cursor)) {
+            fabricObj.hasControls = false;
+            fabricObj.selectable = false;
+            fabricObj.evented = false;
+        }
+
+        if (!wickObj.isOnActiveLayer()) {
+            fabricObj.hasControls = false;
+            fabricObj.selectable = false;
+            fabricObj.evented = false;
+        }
     }
 	
 }

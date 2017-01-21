@@ -118,7 +118,7 @@ var PropertiesInterface = function (wickEditor) {
             document.getElementById('frameIdentifier').value = (currentFrame.identifier) ? currentFrame.identifier : "";
             $('#frameIdentifier').prop('disabled', false);
 
-            document.getElementById('frameAutoplayCheckbox').checked = !currentFrame.autoplay;
+            //document.getElementById('frameAutoplayCheckbox').checked = !currentFrame.autoplay;
             document.getElementById('frameSaveStateCheckbox').checked = currentFrame.alwaysSaveState;
 
         } else if(currentTab === 'project') {
@@ -375,10 +375,10 @@ var PropertiesInterface = function (wickEditor) {
         wickEditor.syncInterfaces();
     };
 
-    document.getElementById('frameAutoplayCheckbox').onclick = function (e) {
+    /*document.getElementById('frameAutoplayCheckbox').onclick = function (e) {
         wickEditor.project.currentObject.getCurrentFrame().autoplay = !this.checked;
         wickEditor.syncInterfaces();
-    }
+    }*/
     document.getElementById('frameSaveStateCheckbox').onclick = function (e) {
         wickEditor.project.currentObject.getCurrentFrame().alwaysSaveState = this.checked;
         wickEditor.syncInterfaces();
