@@ -41,8 +41,8 @@ var InputHandler = function (wickEditor) {
 
     var focusHiddenArea = function() {
         // In order to ensure that the browser will fire clipboard events, we always need to have something selected
-        hiddenInput.val(' ');
-        hiddenInput.focus().select();
+        //hiddenInput.val(' ');
+        //hiddenInput.focus().select();
     };
 
     // Focuses an element to be ready for copy/paste (used exclusively for IE)
@@ -72,8 +72,8 @@ var InputHandler = function (wickEditor) {
             var clipboardText = clipboardData.getData('Text');
             ieClipboardDiv.empty();
             setTimeout(function() {
-                console.log('Clipboard Plain Text: ' + clipboardText);
-                console.log('Clipboard HTML: ' + ieClipboardDiv.html());
+                //console.log('Clipboard Plain Text: ' + clipboardText);
+                //console.log('Clipboard HTML: ' + ieClipboardDiv.html());
                 ieClipboardDiv.empty();
                 focusHiddenArea();
             }, 0);
@@ -91,8 +91,8 @@ var InputHandler = function (wickEditor) {
             //clipboardData.setData('text/html', htmlToCopy);
         }
         if (clipboardEvent == 'paste') {
-            console.log('Clipboard Plain Text: ' + clipboardData.getData('text/plain'));
-            console.log('Clipboard HTML: ' + clipboardData.getData('text/html'));
+            //console.log('Clipboard Plain Text: ' + clipboardData.getData('text/plain'));
+            //console.log('Clipboard HTML: ' + clipboardData.getData('text/html'));
             wickEditor.guiActionHandler.doAction('paste', {clipboardData:clipboardData});
         }
     };
@@ -132,7 +132,7 @@ var InputHandler = function (wickEditor) {
     // Set clipboard event listeners on the document. 
     ['cut', 'copy', 'paste'].forEach(function(event) {
         document.addEventListener(event, function(e) {
-            console.log(event);
+            //console.log(event);
             if (isIe) {
                 ieClipboardEvent(event);
             } else {
@@ -141,7 +141,7 @@ var InputHandler = function (wickEditor) {
                 focusHiddenArea();
                 e.preventDefault();
                 $('#fabricCanvas').focus().select();
-                console.log(document.activeElement.nodeName)
+                //console.log(document.activeElement.nodeName)
             }
         });
     });
