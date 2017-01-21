@@ -8,12 +8,13 @@
 	<script src="../lib/jquery.min.js"></script>
 	<script src="../lib/FileSaver.min.js"></script>
 	<script src="../lib/screenfull.js"></script>
+	<script src="../lib/polyfills.js"></script>
 </head>
 <body>
 	<!--<h1>Demos</h1>-->
 	<h2>
 		<div id="demoViewerContainer">
-			<iframe style="margin-bottom:20px; border:0px;" width="720" height="480" id="demoViewer" allowfullscreen></iframe>
+			<iframe style="margin-bottom:20px; border:0px;" src="../demos/KitchenSink.html" width="720" height="480" id="demoViewer" allowfullscreen></iframe>
 			<span class="btn" onclick="downloadDemo()">Download Project</span>
 			<span class="btn" onclick="openInEditor()">Open in Editor</span>
 		</div>
@@ -71,6 +72,13 @@
 		</span>
 	</h3>
 
+	<h2>Mobile Stuff</h2>
+	<h3>
+		<span id="demoRow" style="display: inline-block; margin-right:20px;">
+			&#8226; <a onclick="loadDemo('DeviceOrientation.html')">Device Orientation</a><br />
+		</span>
+	</h3>
+
 	<!--<h2>Fun Stuff</h2>
 	<h3>
 		<span id="demoRow" style="display: inline-block; margin-right:20px;">
@@ -87,13 +95,20 @@
 		var currentDemo;
 
 		var loadDemo = function (file) {
-			currentDemo = file;
-			viewer.src = "../demos/" + file
-			viewer.focus();
+			if(BrowserDetectionUtils.inMobileMode) {
+				var url = "../demos/" + file;
+				window.open(url,'_blank');
+			} else {
+				currentDemo = file;
+				viewer.src = "../demos/" + file
+				viewer.focus();
+			}
 		};
 
 		var openInEditor = function () {
-			window.location.href= "../editor.html?demo=" + currentDemo;
+			var url = "../editor.html?demo=" + currentDemo;
+			//window.location.href= url;
+			window.open(url,'_blank');
 		}
 
 		var downloadDemo = function () {
@@ -117,6 +132,6 @@
 		}
 
 		currentDemo = '../demos/KitchenSink.html';
-
+		
 	</script>
 </body>
