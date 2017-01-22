@@ -17,21 +17,6 @@ var PaperInterface = function (wickEditor) {
     Util
 ******************************/
 
-    // Lookup table wrapper (Might not be needed.)
-    /*var wickToPaper = function (wickObj) {
-        return wickToPaperMappings[wickObj.uuid];
-    }*/
-
-    // Lookup table wrapper (Might not be needed.)
-    /*var paperToWick = function (paperObj) {
-        var foundPaperObj;
-        wickToPaperMappings.forEach(function (uuid) {
-            if (!foundPaperObj) return;
-            if (wickToPaperMappings[uuid] === paperObj) foundPaperObj = paperObj;
-        })
-        return foundPaperObj;
-    }*/
-
     // Generate a list of all groups in the paper.js canvas
     var getAllGroupsInCanvas = function () {
         var allGroups = [];
@@ -80,16 +65,21 @@ var PaperInterface = function (wickEditor) {
         var groups = getAllGroupsInCanvas();
 
         // Remove all existing path wick objects from frame
-        clearPathWickObjects()
+        clearPathWickObjects();
+        wickToPaperMappings = {};
 
         // Create new wick objects for all current paths
         groups.forEach(function (group) {
+            var oldPosition = {x:group.position.x, y:group.position.y};
+            group.position = new paper.Point(0,0);
             WickObject.fromPathFile(group.exportSVG({asString:true}), function (wickObject) {
-                wickObject.x = group.position.x;
-                wickObject.y = group.position.y;
+                wickObject.x = oldPosition.x;
+                wickObject.y = oldPosition.y;
                 wickEditor.project.addObject(wickObject);
+                wickToPaperMappings[wickObject.uuid] = group;
             });
-        })
+            group.position = new paper.Point(oldPosition.x, oldPosition.y);
+        });
     }
 
 /******************************
@@ -143,23 +133,34 @@ var PaperInterface = function (wickEditor) {
 
         if(offset)
             paperGroup.position = new paper.Point(offset.x, offset.y);
+    }
 
+    self.modifyPath = function (uuid, modifiedState) {
+        var group = wickToPaperMappings[uuid];
+
+        group.position = new paper.Point(modifiedState.x, modifiedState.y);
+        group.scale(modifiedState.scaleX, modifiedState.scaleY);
+        group.rotate(modifiedState.rotation);
+    }
+
+    self.removePath = function (uuid) {
+        var group = wickToPaperMappings[uuid];
+
+        group.remove();
+    }
+
+    self.refresh = function () {
         saveFrameSVG();
         regenWickObjects();
     }
 
-    self.modifyPath = function (uuid) {
-        // TODO
-
-        saveFrameSVG();
-        regenWickObjects();
-    }
-
-    self.deletePath = function (uuid) {
-        // TODO
-
-        saveFrameSVG();
-        regenWickObjects();
+    self.getPathDataOfWickObject = function (uuid) {
+        var group = wickToPaperMappings[uuid];
+        return {
+            svg: group.exportSVG({asString:true}),
+            x: group.position.x,
+            y: group.position.y
+        }
     }
 
  }

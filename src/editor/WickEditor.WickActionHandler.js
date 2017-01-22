@@ -142,13 +142,22 @@ var WickActionHandler = function (wickEditor) {
             }
 
             if(args.wickObjects) {
+                // Make sure any paths from copy/paste get handled by paper.js
+                args.wickObjects.forEach(function (wickObj) {
+                    if(wickObj.pathData) {
+                        if(!args.paths) args.paths = [];
+                        args.paths.push(wickEditor.paper.getPathDataOfWickObject(wickObj.uuidCopiedFrom));
+                    }
+                });
                 // Save references to added wick objects so they can be removed on undo
                 args.addedObjects = [];
                 args.wickObjects.forEach(function (wickObj) {
+                    if(wickObj.pathData) return;
                     args.addedObjects.push(wickObj);
                 });
                 // Add all the new wick objects
                 args.wickObjects.forEach(function (wickObj) {
+                    if(wickObj.pathData) return;
                     wickObj.zIndicesDirty = true;
                     wickEditor.project.addObject(wickObj);
                 });
@@ -160,8 +169,9 @@ var WickActionHandler = function (wickEditor) {
                 // Add all new paths
                 args.paths.forEach(function (pathData) {
                     wickEditor.paper.addPath(pathData.svg, {x:pathData.x, y:pathData.y});
-                });
+                });            
             }
+            wickEditor.paper.refresh();
         },
         function (args) {
             // Remove objects we added
@@ -181,18 +191,26 @@ var WickActionHandler = function (wickEditor) {
 
             // Store the old z index vars for each object.
             // Must do this before removing them all.
-            for(var i = 0; i < args.objs.length; i++) {
-                var obj = args.objs[i];
-                var zIndex = wickEditor.project.currentObject.getCurrentFrame().wickObjects.indexOf(obj);
-                args.oldZIndices.push(zIndex);
-            }
+            args.wickObjects.forEach(function (wickObject) {
+                if(wickObject.pathData) {
+
+                } else {
+                    var zIndex = wickEditor.project.currentObject.getCurrentFrame().wickObjects.indexOf(wickObject);
+                    args.oldZIndices.push(zIndex);
+                }
+            });
 
             // Now remove them
-            for(var i = 0; i < args.objs.length; i++) {
-                var obj = args.objs[i];
-                args.restoredObjects.push(obj);
-                wickEditor.project.currentObject.removeChild(args.objs[i]);
-            }
+            args.wickObjects.forEach(function (wickObject) {
+                if(wickObject.pathData) {
+                    wickEditor.paper.removePath(wickObject.uuid);
+                } else {
+                    args.restoredObjects.push(wickObject);
+                    wickEditor.project.currentObject.removeChild(wickObject);
+                }
+            });
+
+            wickEditor.paper.refresh();
         },
         function (args) {
             for(var i = 0; i < args.restoredObjects.length; i++) {
@@ -208,6 +226,7 @@ var WickActionHandler = function (wickEditor) {
 
             for(var i = 0; i < args.objs.length; i++) {
                 var wickObj = args.objs[i];
+                if(wickObj.pathData) continue;
 
                 args.originalStates[i] = {};
                 modifyableAttributes.forEach(function(attrib) {
@@ -249,7 +268,20 @@ var WickActionHandler = function (wickEditor) {
                     tween.frame = wickObj.parentObject.getRelativePlayheadPosition(wickObj);
                     wickObj.addTween(tween);
                 }
-            }
+            };
+
+            for(var i = 0; i < args.objs.length; i++) {
+                var wickObj = args.objs[i];
+                if(!wickObj.pathData) continue;
+                wickEditor.paper.modifyPath(wickObj.uuid, {
+                    x: args.modifiedStates[i].x,
+                    y: args.modifiedStates[i].y,
+                    scaleX: args.modifiedStates[i].scaleX,
+                    scaleY: args.modifiedStates[i].scaleY,
+                    rotation: args.modifiedStates[i].rotation
+                })
+            };
+            wickEditor.paper.refresh();
         },
         function (args) {
             for(var i = 0; i < args.objs.length; i++) {
@@ -288,10 +320,15 @@ var WickActionHandler = function (wickEditor) {
                 }
             });
             
-            selectedObjects.forEach(function (obj) {
-                wickEditor.project.currentObject.removeChild(obj);
-                obj.inFrameSVG = false;
+            selectedObjects.forEach(function (wickObject) {
+                if(wickObject.pathData) {
+                    wickEditor.paper.removePath(wickObject.uuid);
+                } else {
+                    wickEditor.project.currentObject.removeChild(wickObject);
+                }
             });
+
+            wickEditor.paper.refresh();
 
             var symbol = new WickObject.createSymbolFromWickObjects(selectedObjects);
             wickEditor.project.addObject(symbol, symbolZIndex, true);
@@ -514,8 +551,12 @@ var WickActionHandler = function (wickEditor) {
                         newWickObject.x = wickObj.x-wickObj.width /2;
                         newWickObject.y = wickObj.y-wickObj.height/2;
                         newWickObject.autocropImage(function () {
-                            wickEditor.actionHandler.doAction('addObjects', { wickObjects:[newWickObject] });
-                            wickEditor.actionHandler.doAction('deleteObjects', { objs:[wickObj] });
+                            wickEditor.actionHandler.doAction('addObjects', { 
+                                wickObjects:[newWickObject] 
+                            });
+                            wickEditor.actionHandler.doAction('deleteObjects', { 
+                                wickObjects:[wickObj] 
+                            });
                         });
                     })
                 });

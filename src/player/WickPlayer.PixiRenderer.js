@@ -130,7 +130,9 @@ var WickPixiRenderer = function (project) {
                 wickObj.pixiContainer.addChild(subObj.pixiSprite);
 	        } else if (subObj.pathData) {
 	        	var parser = new DOMParser();
-				var svgDoc = parser.parseFromString('<svg id="svg" viewBox="'+(subObj.x-subObj.width/2)+' '+(subObj.y-subObj.height/2)+' '+(subObj.width)+' '+(subObj.height)+'" version="1.1" width="'+(subObj.width)+'" height="'+(subObj.height)+'" xmlns="http://www.w3.org/2000/svg">'+subObj.pathData+'</svg>', "image/svg+xml");
+				//var svgDoc = parser.parseFromString('<svg id="svg" viewBox="'+(subObj.getAbsolutePosition().x-subObj.width/2)+' '+(subObj.getAbsolutePosition().y-subObj.height/2)+' '+(subObj.width)+' '+(subObj.height)+'" version="1.1" width="'+(subObj.width)+'" height="'+(subObj.height)+'" xmlns="http://www.w3.org/2000/svg">'+subObj.pathData+'</svg>', "image/svg+xml");
+				var svgDoc = parser.parseFromString('<svg id="svg" viewBox="'+(-subObj.width/2)+' '+(-subObj.height/2)+' '+(subObj.width)+' '+(subObj.height)+'" version="1.1" width="'+(subObj.width)+'" height="'+(subObj.height)+'" xmlns="http://www.w3.org/2000/svg">'+subObj.pathData+'</svg>', "image/svg+xml");
+				
 				//var svgDoc = parser.parseFromString('<svg id="svg" viewBox="'+(0)+' '+(0)+' '+(subObj.width)+' '+(subObj.height)+'" version="1.1" width="'+(subObj.width)+'" height="'+(subObj.height)+'" xmlns="http://www.w3.org/2000/svg">'+subObj.pathData+'</svg>', "image/svg+xml");
 				
 				var s = new XMLSerializer().serializeToString(svgDoc)

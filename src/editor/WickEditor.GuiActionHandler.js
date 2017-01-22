@@ -480,7 +480,7 @@ var GuiActionHandler = function (wickEditor) {
         {},
         function(args) {
             wickEditor.actionHandler.doAction('deleteObjects', {
-                objs:wickEditor.fabric.getSelectedObjects()
+                wickObjects:wickEditor.fabric.getSelectedObjects()
             });
         });
 
@@ -492,7 +492,7 @@ var GuiActionHandler = function (wickEditor) {
         {},
         function(args) {
             wickEditor.actionHandler.doAction('deleteObjects', {
-                objs:wickEditor.fabric.getSelectedObjects()
+                wickObjects:wickEditor.fabric.getSelectedObjects()
             });
         });
 
@@ -527,7 +527,9 @@ var GuiActionHandler = function (wickEditor) {
                 polyfillClipboardData.setData('text/wickobjectsjson', wickEditor.project.getCopyData(wickEditor.fabric.getSelectedObjects(WickObject)));
             //}
 
-            wickEditor.actionHandler.doAction('deleteObjects', { objs:wickEditor.fabric.getSelectedObjects(WickObject) });
+            wickEditor.actionHandler.doAction('deleteObjects', { 
+                wickObjects:wickEditor.fabric.getSelectedObjects(WickObject) 
+            });
 
             wickEditor.syncInterfaces();
         });

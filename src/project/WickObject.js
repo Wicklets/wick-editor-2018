@@ -306,7 +306,7 @@ WickObject.prototype.getAsJSON = function () {
     // Encode scripts to avoid JSON format problems
     this.encodeStrings();
 
-    var dontJSONVars = ["cachedImageData","fabricObjectReference","parentObject","causedAnException","uuid","inFrameSVG"];
+    var dontJSONVars = ["cachedImageData","fabricObjectReference","parentObject","causedAnException","uuid"];
     var JSONWickObject = JSON.stringify(this, function(key, value) {
         if (dontJSONVars.indexOf(key) !== -1) {
             return undefined;

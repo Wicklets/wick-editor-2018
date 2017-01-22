@@ -10,6 +10,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
     var currentFrameRef;
 
+    // i used this to debug something  lol
     this.testPerformanceLol = function () {
         fabric.Image.fromURL('resources/testcontent/SUPERDUMBgreenBG.png', function(image) {
 
@@ -185,7 +186,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 }
 
                 numObjectsAdded++;
-                if(numObjectsAdded === objectsToAdd.length && onNewFrame) {
+                if(numObjectsAdded === objectsToAdd.length) {
                     //console.log("force z index update");
                     if(onNewFrame) refreshZIndices(true);
                     fabricInterface.canvas.renderAll()
