@@ -140,6 +140,7 @@ var WickActionHandler = function (wickEditor) {
             if(!wickEditor.project.currentObject.getCurrentFrame()) {
                 wickEditor.actionHandler.doAction('addNewFrame');
             }
+            var currentFrame = wickEditor.project.currentObject.getCurrentFrame();
 
             if(args.wickObjects) {
                 // Make sure any paths from copy/paste get handled by paper.js
@@ -163,6 +164,7 @@ var WickActionHandler = function (wickEditor) {
                 });
             }
 
+            args.oldPathData = currentFrame.pathData;
             if(args.paths) {
                 // Save current state of frame's SVG
                 // TODO
@@ -175,13 +177,15 @@ var WickActionHandler = function (wickEditor) {
         },
         function (args) {
             // Remove objects we added
-            for(var i = 0; i < args.wickObjects.length; i++) {
-                var wickObject = args.addedObjects[i];
+            (args.wickObjects || []).forEach(function (wickObject) {
                 wickEditor.project.currentObject.removeChild(wickObject);
-            }
+            });
 
             // Restore old frame SVG state
-            // TODO
+            if(args.paths) {
+                wickEditor.project.currentObject.getCurrentFrame().pathData = args.oldPathData;
+                wickEditor.paper.updateWickProject();
+            }
         });
 
     this.registerAction('deleteObjects',
@@ -201,6 +205,7 @@ var WickActionHandler = function (wickEditor) {
             });
 
             // Now remove them
+            args.oldPathData = wickEditor.project.currentObject.getCurrentFrame().pathData;
             args.wickObjects.forEach(function (wickObject) {
                 if(wickObject.pathData) {
                     wickEditor.paper.removePath(wickObject.uuid);
@@ -216,6 +221,9 @@ var WickActionHandler = function (wickEditor) {
             for(var i = 0; i < args.restoredObjects.length; i++) {
                 wickEditor.project.addObject(args.restoredObjects[i], args.oldZIndices[i]);
             }
+
+            wickEditor.project.currentObject.getCurrentFrame().pathData = args.oldPathData;
+            wickEditor.paper.updateWickProject();
         });
 
     var modifyableAttributes = ["x","y","scaleX","scaleY","rotation","opacity","flipX","flipY"];
@@ -270,15 +278,17 @@ var WickActionHandler = function (wickEditor) {
                 }
             };
 
+            var currentFrame = wickEditor.project.currentObject.getCurrentFrame();
+            args.oldPathData = currentFrame.pathData;
             for(var i = 0; i < args.objs.length; i++) {
                 var wickObj = args.objs[i];
                 if(!wickObj.pathData) continue;
                 wickEditor.paper.modifyPath(wickObj.uuid, {
-                    x: args.modifiedStates[i].x,
-                    y: args.modifiedStates[i].y,
-                    scaleX: args.modifiedStates[i].scaleX,
-                    scaleY: args.modifiedStates[i].scaleY,
-                    rotation: args.modifiedStates[i].rotation
+                    x: args.modifiedStates[i].x || wickObj.x,
+                    y: args.modifiedStates[i].y || wickObj.y,
+                    scaleX: args.modifiedStates[i].scaleX || 1,
+                    scaleY: args.modifiedStates[i].scaleY || 1,
+                    rotation: args.modifiedStates[i].rotation || 0
                 })
             };
             wickEditor.paper.refresh();
@@ -286,6 +296,7 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             for(var i = 0; i < args.objs.length; i++) {
                 var wickObj = args.objs[i];
+                if(wickObj.pathData) continue;
 
                 // Revert the object's state to it's original pre-transformation state
                 modifyableAttributes.forEach(function(attrib) {
@@ -306,6 +317,9 @@ var WickActionHandler = function (wickEditor) {
                     wickObj.fontData.fill = args.originalStates[i].fill;
                 }
             }
+
+            wickEditor.project.currentObject.getCurrentFrame().pathData = args.oldPathData;
+            wickEditor.paper.updateWickProject();
         });
 
     this.registerAction('convertSelectionToSymbol',

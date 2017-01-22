@@ -56,8 +56,9 @@ Tools.Paintbrush = function (wickEditor) {
         }
 
         potraceFabricPath(fabricPath, function(SVGData) {
-            var x = fabricPath.left;
-            var y = fabricPath.top;
+            var symbolOffset = wickEditor.project.currentObject.getAbsolutePosition();
+            var x = fabricPath.left - symbolOffset.x;
+            var y = fabricPath.top - symbolOffset.y;
 
             fabricPath.remove();
             wickEditor.actionHandler.doAction('addObjects', {

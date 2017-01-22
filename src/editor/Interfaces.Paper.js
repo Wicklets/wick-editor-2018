@@ -110,34 +110,39 @@ var PaperInterface = function (wickEditor) {
         currentFrame = wickEditor.project.currentObject.getCurrentFrame();
 
         if(oldFrame !== currentFrame) {
-            // Clear all groups from paper canvas
-            paper.project.clear();
-
-            // This happens when paths are added to a frame that hasn't been
-            // touched by paper.js yet. So add all those paths to the path SVG
-            if(currentFrame && currentFrame.pathDataToAdd) {
-                currentFrame.pathDataToAdd.forEach(function (pathData) {
-                    self.addPath(pathData.svg, {x:pathData.x, y:pathData.y});
-                });
-                currentFrame.pathDataToAdd = null;
-                saveFrameSVG();
-            }
-
-            // Regen wick objects on the current frame using paper canvas
-            clearPathWickObjects();
-            wickToPaperMappings = {};
-
-            // Load SVG from currentFrame
-            if(currentFrame && currentFrame.pathData) {
-                var paperGroup = importSVG(currentFrame.pathData);
-                paperGroup.parent.insertChildren(paperGroup.index, paperGroup.removeChildren());
-                paperGroup.remove();
-            }
-
-            // Regen wick objects for currentFrame
-            regenWickObjects();
+            self.updateWickProject();
         }
 
+    }
+
+    self.updateWickProject = function () {
+        // Clear all groups from paper canvas
+        paper.project.clear();
+
+        // This happens when paths are added to a frame that hasn't been
+        // touched by paper.js yet. So add all those paths to the path SVG
+        if(currentFrame && currentFrame.pathDataToAdd) {
+            currentFrame.pathDataToAdd.forEach(function (pathData) {
+                self.addPath(pathData.svg, {x:pathData.x, y:pathData.y});
+            });
+            currentFrame.pathDataToAdd = null;
+            saveFrameSVG();
+            paper.project.clear();
+        }
+
+        // Regen wick objects on the current frame using paper canvas
+        clearPathWickObjects();
+        wickToPaperMappings = {};
+
+        // Load SVG from currentFrame
+        if(currentFrame && currentFrame.pathData) {
+            var paperGroup = importSVG(currentFrame.pathData);
+            paperGroup.parent.insertChildren(paperGroup.index, paperGroup.removeChildren());
+            paperGroup.remove();
+        }
+
+        // Regen wick objects for currentFrame
+        regenWickObjects();
     }
 
     self.addPath = function (svgString, offset) {
