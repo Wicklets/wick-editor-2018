@@ -9,6 +9,7 @@ var WickFrame = function () {
 
 	// All path data of the frame (Stored as SVG)
 	this.pathData = null;
+	this.pathDataToAdd = null;
 
 	// Frame length for long frames
 	this.frameLength = 1;

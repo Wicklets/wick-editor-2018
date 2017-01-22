@@ -75,7 +75,7 @@ var PaperInterface = function (wickEditor) {
             WickObject.fromPathFile(group.exportSVG({asString:true}), function (wickObject) {
                 wickObject.x = oldPosition.x;
                 wickObject.y = oldPosition.y;
-                wickEditor.project.addObject(wickObject);
+                wickEditor.project.addObject(wickObject, null, true);
                 wickToPaperMappings[wickObject.uuid] = group;
             });
             group.position = new paper.Point(oldPosition.x, oldPosition.y);
@@ -110,15 +110,27 @@ var PaperInterface = function (wickEditor) {
         currentFrame = wickEditor.project.currentObject.getCurrentFrame();
 
         if(oldFrame !== currentFrame) {
-            // Clear paper canvas and path wick objects
+            // Clear all groups from paper canvas
             paper.project.clear();
+
+            // This happens when paths are added to a frame that hasn't been
+            // touched by paper.js yet. So add all those paths to the path SVG
+            if(currentFrame && currentFrame.pathDataToAdd) {
+                currentFrame.pathDataToAdd.forEach(function (pathData) {
+                    self.addPath(pathData.svg, {x:pathData.x, y:pathData.y});
+                });
+                currentFrame.pathDataToAdd = null;
+                saveFrameSVG();
+            }
+
+            // Regen wick objects on the current frame using paper canvas
             clearPathWickObjects();
             wickToPaperMappings = {};
 
             // Load SVG from currentFrame
             if(currentFrame && currentFrame.pathData) {
                 var paperGroup = importSVG(currentFrame.pathData);
-                paperGroup.parent.insertChildren(paperGroup.index,  paperGroup.removeChildren());
+                paperGroup.parent.insertChildren(paperGroup.index, paperGroup.removeChildren());
                 paperGroup.remove();
             }
 

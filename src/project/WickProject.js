@@ -170,6 +170,9 @@ WickProject.fixForBackwardsCompatibility = function (project) {
                 if(!frame.pathData) {
                     frame.pathData = "";
                 }
+                if(!frame.pathDataToAdd) {
+                    frame.pathDataToAdd = null;
+                }
 
                 // Frames no longer store onion skin images (made projects too big)
                 if(frame.cachedImageData) frame.cachedImageData = null;

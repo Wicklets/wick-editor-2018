@@ -157,7 +157,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                     return;
                 }
 
-                objectToAdd.fabricObjectReference = fabricObj
+                objectToAdd.fabricObjectReference = fabricObj;
 
                 fabricObj.originX = 'center';
                 fabricObj.originY = 'center';

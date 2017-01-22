@@ -319,21 +319,30 @@ var WickActionHandler = function (wickEditor) {
                     symbolZIndex = objZIndex;
                 }
             });
-            
+
+            // Create symbol out of objects
+            var symbol = new WickObject.createSymbolFromWickObjects(selectedObjects);
+            wickEditor.project.addObject(symbol, symbolZIndex, true);
+            args.createdSymbol = symbol;
+            symbol.selectOnAddToFabric = true;
+
+            // Remove objects from original parent (they are inside the symbol now.)
             selectedObjects.forEach(function (wickObject) {
                 if(wickObject.pathData) {
                     wickEditor.paper.removePath(wickObject.uuid);
+                    var firstFrame = symbol.layers[0].frames[0];
+                    if(firstFrame.pathDataToAdd === null) firstFrame.pathDataToAdd = [];
+                    firstFrame.pathDataToAdd.push({
+                        svg: wickObject.pathData,
+                        x: wickObject.x,
+                        y: wickObject.y
+                    });
                 } else {
                     wickEditor.project.currentObject.removeChild(wickObject);
                 }
             });
 
             wickEditor.paper.refresh();
-
-            var symbol = new WickObject.createSymbolFromWickObjects(selectedObjects);
-            wickEditor.project.addObject(symbol, symbolZIndex, true);
-            args.createdSymbol = symbol;
-            symbol.selectOnAddToFabric = true;
         },
         function (args) {
             args.symbol = args.createdSymbol;
