@@ -250,6 +250,8 @@ var WickPlayer = (function () {
         // Parse dat project
         var newProject = WickProject.fromJSON(proj);
 
+        newProject.rootObject = new Proxy(newProject.rootObject, validator);
+
         // Make sure we are always in the root (the player never 'goes inside' objects like the editor does.)
         newProject.currentObject = newProject.rootObject;
         newProject.rootObject.currentLayer = 0;
