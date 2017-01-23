@@ -157,7 +157,6 @@ WickProject.fixForBackwardsCompatibility = function (project) {
         if(wickObj.angle !== null && wickObj.rotation === undefined) {
             wickObj.rotation = wickObj.angle;
             wickObj.angle = null;
-            console.log(wickObj.rotation)
         }
 
         if(!wickObj.isSymbol) return;
