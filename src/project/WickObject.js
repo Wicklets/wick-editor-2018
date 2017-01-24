@@ -1649,6 +1649,19 @@ WickObject.prototype.isHoveredOver = function () {
     return hoveredOver;
 }
 
+WickObject.prototype.setValidator = function (validator) {
+    var self = this;
+    this.parentObject.layers.forEach(function (layer) {
+        layer.frames.forEach(function (frame) {
+            for (var i = 0; i < frame.wickObjects.length; i++) {
+                if(frame.wickObjects[i] === self) {
+                    frame.wickObjects[i] = new Proxy(self, validator);
+                }
+            }
+        });
+    });
+}
+
 /***************************************
             stuff 2 deprecate
 ***************************************/

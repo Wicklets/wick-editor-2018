@@ -33,10 +33,25 @@ app.get('/', function(req, res){
     });
 });
 
-io.on('connection', function(socket){
-    socket.on('ping', function(msg){
-        console.log(msg)
-        io.emit('pong', msg);
+io.on('connection', function (socket) {
+    var clientIP = socket.request.connection.remoteAddress;
+
+    var pid;
+    socket.on('joinServer', function (PID) {
+        pid = PID;
+        console.log("User " +clientIP+ " joined with pid " + pid);
+    });
+    socket.on('propUpdate', function (update) {
+        var uuid = update.uuid;
+        var prop = update.prop;
+        var val = update.val;
+        console.log('propUpdate for pid ' + pid + ": " + uuid + " " + prop + " " + val);
+        io.emit('propUpdateBroadcast', {
+            pid: pid,
+            uuid: uuid,
+            prop: prop,
+            val: val
+        });
     });
 });
 
@@ -46,6 +61,6 @@ io.on('connection', function(socket){
 
 // Start running project here
 
-http.listen(port, function(){
+http.listen(port, function () {
     console.log('Server started on port ' + port);
 });
