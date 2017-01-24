@@ -1,7 +1,13 @@
-# chat-example
+# Wick Server
 
-This is the source code for a very simple chat example used for 
-the [Getting Started](http://socket.io/get-started/chat/) guide 
-of the Socket.IO website.
+The Wick Server is currently in development! Contact [zrispo](https://twitter.com/zrispo) for any questions!
 
-Please refer to it to learn how to run this application.
+### How to run
+
+(1) Install [Node.js](https://nodejs.org/en/)
+
+(2) Install [NPM](https://www.npmjs.com/)
+
+(3) `sudo npm install` in this directory
+
+(4) `node server.js` to start the server

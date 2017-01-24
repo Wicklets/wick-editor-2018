@@ -27,7 +27,8 @@ WickProject.Exporter = (function () {
             "lib/base64-arraybuffer.js",
             "lib/checkInput.js",
             "lib/canvasutils.js",
-            "lib/random.js"
+            "lib/random.js",
+            "lib/socket.io-1.2.0.js"
         ];
 
         // Player code. 

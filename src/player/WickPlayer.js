@@ -29,6 +29,9 @@ var WickPlayer = (function () {
     // For keyboard input inside iframes
     var realWindow = window.parent || window;
 
+    // Network PID assigned by server
+    var pid;
+
 /*****************************
     Player Setup
 *****************************/
@@ -237,9 +240,20 @@ var WickPlayer = (function () {
         }
 
         if (screenfull.enabled) {
-            console.log("tryin to fullscreen")
+            console.log("tryin to fullscreen");
             screenfull.request(elem);
         }
+    }
+
+    wickPlayer.setupNetworking = function (PID) {
+        pid = PID;
+        console.log("Connecting to server with PID " + pid);
+
+        var socket = io();
+        socket.on('pong', function(msg){
+            console.log('server ponged!')
+        });
+        socket.emit('ping', null);
     }
 
 /*****************************
@@ -250,7 +264,7 @@ var WickPlayer = (function () {
         // Parse dat project
         var newProject = WickProject.fromJSON(proj);
 
-        newProject.rootObject = new Proxy(newProject.rootObject, validator);
+        //newProject.rootObject = new Proxy(newProject.rootObject, validator);
 
         // Make sure we are always in the root (the player never 'goes inside' objects like the editor does.)
         newProject.currentObject = newProject.rootObject;

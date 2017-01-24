@@ -1649,7 +1649,6 @@ WickObject.prototype.isHoveredOver = function () {
     return hoveredOver;
 }
 
-
 /***************************************
             stuff 2 deprecate
 ***************************************/
