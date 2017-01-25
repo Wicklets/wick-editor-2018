@@ -28,11 +28,7 @@ WickProject.Exporter = (function () {
             "lib/checkInput.js",
             "lib/canvasutils.js",
             "lib/random.js",
-            "lib/socket.io-1.2.0.js"
-        ];
-
-        // Player code. 
-        var requiredPlayerFiles =[
+            "lib/socket.io-1.2.0.js",
             "src/project/WickFrame.js",
             "src/project/WickLayer.js",
             "src/project/WickObject.js",
@@ -43,15 +39,14 @@ WickProject.Exporter = (function () {
             "src/player/WickPlayer.js",
         ];
 
-        for (var libIndex = 0; libIndex < requiredLibFiles.length; libIndex++) {
-            file = requiredLibFiles[libIndex];
-            fileOut += "<script>" + FileDownloader.downloadFile(file) + "</script>\n";
-        }
-
-        for (var srcIndex = 0; srcIndex < requiredPlayerFiles.length; srcIndex++) {
-            file = requiredPlayerFiles[srcIndex];
-            fileOut += "<script>" + FileDownloader.downloadFile(file) + "</script>\n";
-        }
+        var totalSize = 0;
+        requiredLibFiles.forEach(function (filename) {
+            var script = FileDownloader.downloadFile(filename);
+            console.log(script.length + " used for " + filename);
+            totalSize += script.length;
+            fileOut += "<script>" + script + "</script>\n";
+        });
+        console.log(totalSize + " total");
 
         // Bundle the JSON project
         wickProject.getAsJSON(function (JSONProject) {

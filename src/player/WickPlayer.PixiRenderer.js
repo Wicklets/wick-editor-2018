@@ -43,7 +43,7 @@ var WickPixiRenderer = function (project) {
 	    };
 	    renderer = PIXI.autoDetectRenderer(project.width, project.height, rendererOptions);
 	    renderer.clearBeforeRender = false;
-	    renderer.roundPixels = true;
+	    renderer.roundPixels = false;
 	    renderer.view.setAttribute('tabindex', 0);
 	    $(renderer.view).click(function() { this.focus(); });
 

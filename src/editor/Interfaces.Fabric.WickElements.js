@@ -15,9 +15,9 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         fabric.Image.fromURL('resources/testcontent/SUPERDUMBgreenBG.png', function(image) {
 
           image.set({
-            left: Math.random()*300,
-            top: Math.random()*300,
-            angle: Math.random()*360
+            left:  Math.random() * 300,
+            top:   Math.random() * 300,
+            angle: Math.random() * 360
           })
           //.scale(getRandomNum(minScale, maxScale))
           .setCoords();
