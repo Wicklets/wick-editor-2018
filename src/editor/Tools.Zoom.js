@@ -17,7 +17,6 @@ Tools.Zoom = function (wickEditor) {
     
     wickEditor.fabric.canvas.on('mouse:down', function (e) {
     	if(wickEditor.fabric.currentTool instanceof Tools.Zoom) {
-            console.log(wickEditor.guiActionHandler.keys)
     		if (wickEditor.guiActionHandler.keys[keyCharToCode["ALT"]]) {
     			wickEditor.fabric.zoom(0.9);
     		} else {
