@@ -23,14 +23,20 @@ Tools.Ellipse = function (wickEditor) {
         drawingShape.left = 0;
         drawingShape.top = 0;
         drawingShape.setCoords();
-        var svg = '<ellipse fill="'+drawingShape.fill+'" cx="'+drawingShape.width+'" cy="'+drawingShape.height+'" rx="'+drawingShape.width+'" ry="'+drawingShape.height+'"/>'
-        var svgData = '<svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>';
+        //var svg = '<ellipse fill="'+drawingShape.fill+'" cx="'+drawingShape.rx+'" cy="'+drawingShape.ry+'" rx="'+drawingShape.width+'" ry="'+drawingShape.height+'"/>'
+        var svg = '<ellipse fill="'+drawingShape.fill+'" rx="'+drawingShape.rx+'" ry="'+drawingShape.ry+'"/>'
+        var svgString = '<svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>';
+
+        drawingShape.remove();
+        wickEditor.actionHandler.doAction('addObjects', {
+            paths: [{svg:svgString, x:origX, y:origY}]
+        });
 
         /*wickEditor.paper.addSVG(svgData, {x:origX, y:origY});
         wickEditor.fabric.drawingPath = drawingShape;
         wickEditor.syncInterfaces();*/
 
-        WickObject.fromPathFile(svgData, function (wickObject) {
+        /*WickObject.fromPathFile(svgData, function (wickObject) {
             wickObject.x = origX;
             wickObject.y = origY;
             wickObject.isNewDrawingPath = true;
@@ -39,7 +45,7 @@ Tools.Ellipse = function (wickEditor) {
         });
         
         wickEditor.fabric.drawingPath = drawingShape;
-        wickEditor.syncInterfaces();
+        wickEditor.syncInterfaces();*/
     }
 
 }

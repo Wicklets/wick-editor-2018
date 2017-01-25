@@ -166,6 +166,12 @@ var InputHandler = function (wickEditor) {
 /*************************
      File Import
 *************************/
+
+    var loadSVG = function (svg, callback) {
+        wickEditor.paper.addPath(svg);
+        wickEditor.paper.refresh();
+        wickEditor.syncInterfaces();
+    }
     
     var loadAnimatedGIF = function (dataURL, callback) {
         var gifSymbol = WickObject.createNewSymbol();
@@ -219,6 +225,7 @@ var InputHandler = function (wickEditor) {
                 'image/jpeg'       : WickObject.fromImage,
                 'application/jpg'  : WickObject.fromImage,
                 'image/bmp'        : WickObject.fromImage,
+                'image/svg+xml'    : loadSVG,
                 'image/gif'        : loadAnimatedGIF,
                 'audio/mp3'        : WickObject.fromAudioFile,
                 'audio/wav'        : WickObject.fromWavFile,
@@ -251,7 +258,10 @@ var InputHandler = function (wickEditor) {
                     wickEditor.actionHandler.doAction('addObjects', {wickObjects:[newWickObject]});
                 })
             };
-            if(fileType === "application/json") fr.readAsText(file); else fr.readAsDataURL(file);
+            if(fileType === "application/json" || fileType === "image/svg+xml") 
+                fr.readAsText(file); 
+            else 
+                fr.readAsDataURL(file);
         }
     }
 

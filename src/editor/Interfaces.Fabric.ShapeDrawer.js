@@ -43,12 +43,14 @@ var FabricShapeDrawer = function (wickEditor, fabricInterface) {
             }
         } else if (shapeType === 'ellipse') {
             drawingShape = new fabric.Ellipse({
-                originX: 'centerX',
-                originY: 'centerY',
+                originX: 'center',
+                originY: 'center',
                 top : screenXY.y,
                 left : screenXY.x,
-                width : 1,
-                height : 1,
+                //width : 1,
+                //height : 1,
+                rx: 3,
+                ry: 3,
                 fill : fabricInterface.tools.paintbrush.color
             });
         }
@@ -73,10 +75,17 @@ var FabricShapeDrawer = function (wickEditor, fabricInterface) {
                     drawingShape.height = Math.round(drawingShape.height);
                 }        
             } else if(drawingShape.type === 'ellipse') {
-                drawingShape.width  = Math.abs(drawingShape.left - screenXY.x);
-                drawingShape.height = Math.abs(drawingShape.top  - screenXY.y);    
-                drawingShape.rx = Math.abs(drawingShape.left - screenXY.x);
-                drawingShape.ry = Math.abs(drawingShape.top  - screenXY.y);
+                //drawingShape.width  = Math.abs(drawingShape.left - screenXY.x);
+                //drawingShape.height = Math.abs(drawingShape.top  - screenXY.y);    
+                //drawingShape.rx = Math.abs(drawingShape.left - screenXY.x);
+                //drawingShape.ry = Math.abs(drawingShape.top  - screenXY.y);
+                //drawingShape.rx = screenXY.x;
+                //drawingShape.ry = screenXY.y;
+
+                drawingShape.set({ 
+                    rx: Math.abs(drawingShape.left - screenXY.x),
+                    ry: Math.abs(drawingShape.top - screenXY.y) 
+                });
             }
             fabricInterface.canvas.renderAll();
         }

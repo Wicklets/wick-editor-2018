@@ -76,10 +76,22 @@ var PaperInterface = function (wickEditor) {
         regenWickObjects();
     }
 
-    self.addPath = function (svgString, offset) {
+    self.addPath = function (svgString, offset, isEraserPath) {
         var paperGroup = importSVG(svgString);
 
         paperGroup.dirtyFromWick = true;
+        paperGroup.isEraserPath = isEraserPath;
+
+        paperGroup.children.forEach(function (child) {
+            // Convert all paper.Shapes into paper.Paths (Paths have boolean ops, Shapes do not)
+            if(!(child instanceof paper.Path) && !(child instanceof paper.CompoundPath)) {
+                child.remove();
+                paperGroup.addChild(child.toPath());
+            }
+
+            // Boolean ops only work with closed paths (potrace generates open paths for some reason)
+            if(child.closePath) child.closePath();
+        });
 
         if(offset)
             paperGroup.position = new paper.Point(offset.x, offset.y);
@@ -112,9 +124,6 @@ var PaperInterface = function (wickEditor) {
 
             if(path.contains(point)) {
                 path.fillColor = fillColorHex;
-                var wickObj = getWickObjectOfPath(path);
-                wickObj.parentObject.removeChild(wickObj);
-
                 pathWasFilled = true;
             }
         });
@@ -394,15 +403,15 @@ var PaperInterface = function (wickEditor) {
                 colorA[3]=1;
                 colorB[3]=1;
 
-                if(colorA.equals(colorB)) {
-                    if(superPath.closePath) superPath.closePath();
+                if(!group.isEraserPath && colorA.equals(colorB)) {
+                    //if(superPath.closePath) superPath.closePath();
                     superPath = superPath.unite(touchingGroup.children[0]);
 
                     touchingGroup.remove();
                     touchingGroup.dead = true;
                 } else {
                     var splitPath = touchingGroup.children[0].clone();
-                    if(splitPath.closePath) splitPath.closePath();
+                    //if(splitPath.closePath) splitPath.closePath();
                     splitPath = splitPath.subtract(group.children[0]);
 
                     var splitGroup = new paper.Group();
@@ -429,8 +438,8 @@ var PaperInterface = function (wickEditor) {
 
                     fills.forEach(function (fill) {
                         //Make a new group containing only that fill
-                        var group = new paper.Group();
-                        paper.project.activeLayer.addChild(group);
+                        var newgroup = new paper.Group();
+                        paper.project.activeLayer.addChild(newgroup);
 
                         var newCompPath = new paper.CompoundPath(); newCompPath.remove();
                         newCompPath.clockwise = false;
@@ -453,15 +462,18 @@ var PaperInterface = function (wickEditor) {
                             });
                         });
 
-                        group.addChild(newCompPath);
+                        newgroup.addChild(newCompPath);
                     });
 
                     splitGroup.remove();
+                    if(group.isEraserPath) group.remove();
                 }
             });
 
-            var superGroup = new paper.Group();
-            superGroup.addChild(superPath);
+            if(!group.isEraserPath) {
+                var superGroup = new paper.Group();
+                superGroup.addChild(superPath);
+            }
 
             group.remove();
         });

@@ -45,8 +45,19 @@ Tools.Eraser = function (wickEditor) {
 
         //var svgData = '<svg id="svg" version="1.1" width="6" height="5" xmlns="http://www.w3.org/2000/svg">' + fabricPath.toSVG() + '</svg>'
         //wickEditor.paper.onEraserPathAdded(svgData);
-        potraceFabricPath(fabricPath, function(SVGData) {
+        /*potraceFabricPath(fabricPath, function(SVGData) {
             wickEditor.paper.onEraserPathAdded(SVGData, fabricPath.left, fabricPath.top);
+        });*/
+
+        potraceFabricPath(fabricPath, function(SVGData) {
+            var symbolOffset = wickEditor.project.currentObject.getAbsolutePosition();
+            var x = fabricPath.left - symbolOffset.x;
+            var y = fabricPath.top - symbolOffset.y;
+
+            fabricPath.remove();
+            wickEditor.actionHandler.doAction('addObjects', {
+                paths: [{svg:SVGData, x:x, y:y, isEraserPath:true}]
+            });
         });
 
         fabricPath.remove();

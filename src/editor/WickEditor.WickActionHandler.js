@@ -170,7 +170,7 @@ var WickActionHandler = function (wickEditor) {
                 // TODO
                 // Add all new paths
                 args.paths.forEach(function (pathData) {
-                    wickEditor.paper.addPath(pathData.svg, {x:pathData.x, y:pathData.y});
+                    wickEditor.paper.addPath(pathData.svg, {x:pathData.x, y:pathData.y}, pathData.isEraserPath);
                 });            
             }
             wickEditor.paper.refresh();

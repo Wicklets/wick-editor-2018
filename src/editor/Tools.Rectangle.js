@@ -18,7 +18,7 @@ Tools.Rectangle = function (wickEditor) {
     });
 
     this.createWickObjectFromShape = function (drawingShape) {
-        /*var origX = drawingShape.left+drawingShape.width /2;
+        var origX = drawingShape.left+drawingShape.width /2;
         var origY = drawingShape.top +drawingShape.height/2;
         drawingShape.left = 0;
         drawingShape.top = 0;
@@ -26,7 +26,12 @@ Tools.Rectangle = function (wickEditor) {
         var svg = '<rect fill="'+drawingShape.fill+'" width="'+drawingShape.width+'" height="'+drawingShape.height+'" style="fill:rgb(0,0,0);" />'
         var svgString = '<svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>';
 
-        WickObject.fromPathFile(svgString, function (wickObject) {
+        drawingShape.remove()
+        wickEditor.actionHandler.doAction('addObjects', {
+            paths: [{svg:svgString, x:origX, y:origY}]
+        });
+
+        /*WickObject.fromPathFile(svgString, function (wickObject) {
             wickObject.x = origX;
             wickObject.y = origY;
             wickObject.isNewDrawingPath = true;
