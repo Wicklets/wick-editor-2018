@@ -349,7 +349,7 @@ var PropertiesInterface = function (wickEditor) {
     });
 
     var experimentalTools = [/*'text',*/ /*'backgroundremove',*/ 'dropper', 'paintbrush', 'eraser', 'fillbucket', 'rectangle', 'ellipse'];
-    experimentalTools.forEach(function (toolName) {
+    /*experimentalTools.forEach(function (toolName) {
         document.getElementById(toolName+'ToolButton').style.display = localStorage.pathDebug === "1" ? 'block' : 'none';
     });
     document.getElementById('experimentalToolsCheckbox').onclick = function (e) {
@@ -358,7 +358,7 @@ var PropertiesInterface = function (wickEditor) {
             document.getElementById(toolName+'ToolButton').style.display = self.checked ? 'block' : 'none';
         });
         document.getElementById('experimentalWarning').style.display = self.checked ? 'block' : 'none';
-    }
+    }*/
 
     document.getElementById('onionSkinningCheckbox').onclick = function (e) {
         wickEditor.project.onionSkinning = this.checked;
