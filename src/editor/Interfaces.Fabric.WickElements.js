@@ -332,7 +332,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                         top: wickObj.getAbsolutePosition().y,
                         originX: 'centerX',
                         originY: 'centerY',
-                    })
+                    });
+                    group.centerpointObject = circle;
                     if(wickObj.parentObject === wickEditor.project.currentObject) group.addWithUpdate(circle);
                     group.setCoords();
                     
@@ -422,12 +423,13 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             rotating: setCoords
         });
 
-        if(nearbyObjects.includes(wickObj)) {
-            fabricObj.opacity = wickObj.opacity/3;
-        } else {
+        if(activeObjects.includes(wickObj)) {
             fabricObj.opacity = wickObj.opacity;
+        } else {
+            fabricObj.opacity = wickObj.opacity/3;
         }
 
+        // Objects that are onion skins or that are not part of the current symbol being edited cannot be interacted with
         if(activeObjects.indexOf(wickObj) !== -1) {
             fabricObj.hasControls = true;
             fabricObj.selectable = true;
@@ -438,17 +440,25 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             fabricObj.evented = false;
         }
 
+        // Tools other than the cursor can't select objects
         if (!(fabricInterface.currentTool instanceof Tools.Cursor)) {
             fabricObj.hasControls = false;
             fabricObj.selectable = false;
             fabricObj.evented = false;
         }
 
+        // Objects on other layers can't be interacted with
         if (!wickObj.isOnActiveLayer()) {
             fabricObj.hasControls = false;
             fabricObj.selectable = false;
             fabricObj.evented = false;
+            if(fabricObj.centerpointObject) fabricObj.centerpointObject.opacity = 0.0;
+        } else {
+            if(fabricObj.centerpointObject) fabricObj.centerpointObject.opacity = 1.0;
         }
+        if(fabricObj.centerpointObject) fabricObj.centerpointObject.setCoords()
+        //console.log(fabricObj.centerpointObject.opacity);
+
     }
 	
 }

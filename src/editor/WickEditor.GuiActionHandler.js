@@ -835,7 +835,9 @@ var GuiActionHandler = function (wickEditor) {
         {},
         function(args) {
             var fabCanvas = wickEditor.fabric.canvas;
-            wickEditor.actionHandler.doAction('convertSelectionToSymbol', {} );
+            wickEditor.actionHandler.doAction('convertObjectsToSymbol', {
+                objects: wickEditor.fabric.getSelectedObjects(WickObject)
+            });
         });
 
     registerAction('breakApart',

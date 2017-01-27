@@ -86,9 +86,13 @@ var PaperInterface = function (wickEditor) {
             // Convert all paper.Shapes into paper.Paths (Paths have boolean ops, Shapes do not)
             if(!(child instanceof paper.Path) && !(child instanceof paper.CompoundPath)) {
                 child.remove();
-                paperGroup.addChild(child.toPath());
+                var newChild = child.toPath({insert:false});
+                //newChild = newChild.unite(new paper.Path({insert:false}));
+                newChild.clockwise =false;
+                paperGroup.addChild(newChild);
             }
-
+        });
+        paperGroup.children.forEach(function (child) {
             // Boolean ops only work with closed paths (potrace generates open paths for some reason)
             if(child.closePath) child.closePath();
         });
@@ -140,8 +144,13 @@ var PaperInterface = function (wickEditor) {
             var holes = [];
             var fills = [];
             groups.forEach(function (group) {
-                if(!(group.children[0] instanceof paper.CompoundPath)) return; // Paths have no holes
-                group.children[0].children.forEach(function (child) {
+                var children = [];
+                if(group.children && (group.children[0] instanceof paper.CompoundPath)) 
+                    children = group.children[0].children;
+                else
+                    children = group.children;
+                
+                children.forEach(function (child) {
                     if(child.clockwise) {
                         holes.push(child.clone({insert:false}));
                     } else {
@@ -216,6 +225,7 @@ var PaperInterface = function (wickEditor) {
                 group.remove();
                 group.addChild(compPath);
                 group.fillRule = 'evenodd';
+
                 paper.project.activeLayer.addChild(group);
 
                 holeWasFilled = true;
@@ -437,7 +447,7 @@ var PaperInterface = function (wickEditor) {
                     });
 
                     fills.forEach(function (fill) {
-                        //Make a new group containing only that fill
+                        // Make a new group containing only that fill
                         var newgroup = new paper.Group();
                         paper.project.activeLayer.addChild(newgroup);
 
@@ -449,7 +459,7 @@ var PaperInterface = function (wickEditor) {
                         fill.clockwise = false;
                         newCompPath.fillColor = compPath.fillColor;
 
-                        //Add holes that intersect with that fill to the group
+                        // Add holes that intersect with that fill to the group
                         holes.forEach(function (hole) {
                             var thisHoleAdded = false;
                             hole.segments.forEach(function (segment) {

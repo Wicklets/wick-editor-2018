@@ -54,8 +54,7 @@ WickProject.Exporter = (function () {
             //console.log(JSONProject.length)
             //console.log(compressedJSONProject.length)
 
-            fileOut += "<script>WickPlayer.runProject('" + JSONProject + "');</script>" + "\n";
-            callback(fileOut);
+            fileOut += "<script>WickPlayer.runProject('" + JSONProject + "');</script>" + "\n";callback(fileOut);
         });
 
     }

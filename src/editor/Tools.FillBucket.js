@@ -23,9 +23,15 @@ Tools.FillBucket = function (wickEditor) {
         mousePointX -= insideSymbolOffset.x;
         mousePointY -= insideSymbolOffset.y;
 
-        wickEditor.paper.fillAtPoint(mousePointX, mousePointY, wickEditor.fabric.tools.paintbrush.color);
+        /*wickEditor.paper.fillAtPoint(mousePointX, mousePointY, wickEditor.fabric.tools.paintbrush.color);
         wickEditor.paper.refresh();
-        wickEditor.syncInterfaces();
+        wickEditor.syncInterfaces();*/
+
+        wickEditor.actionHandler.doAction('fillHole', {
+            x: mousePointX,
+            y: mousePointY,
+            color: wickEditor.fabric.tools.paintbrush.color
+        });
 
         /*var onscreenObjects = wickEditor.project.currentObject.getAllActiveChildObjects();
         VectorToolUtils.updatePaperDataOnVectorWickObjects(onscreenObjects);

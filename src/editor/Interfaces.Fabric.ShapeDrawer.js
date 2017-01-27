@@ -82,10 +82,9 @@ var FabricShapeDrawer = function (wickEditor, fabricInterface) {
                 //drawingShape.rx = screenXY.x;
                 //drawingShape.ry = screenXY.y;
 
-                drawingShape.set({ 
-                    rx: Math.abs(drawingShape.left - screenXY.x),
-                    ry: Math.abs(drawingShape.top - screenXY.y) 
-                });
+                var newRx = Math.abs(drawingShape.left - screenXY.x);
+                var newRy = Math.abs(drawingShape.top  - screenXY.y);
+                drawingShape.set({ rx: newRx, ry: newRy });
             }
             fabricInterface.canvas.renderAll();
         }

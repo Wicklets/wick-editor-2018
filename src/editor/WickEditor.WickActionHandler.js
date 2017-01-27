@@ -322,12 +322,12 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.paper.updateWickProject();
         });
 
-    this.registerAction('convertSelectionToSymbol',
+    this.registerAction('convertObjectsToSymbol',
         function (args) {
-            var selectedObjects = wickEditor.fabric.getSelectedObjects(WickObject);
+            var objects = args.objects;
 
             var symbolZIndex = null;
-            selectedObjects.forEach(function (obj) {
+            objects.forEach(function (obj) {
                 var objZIndex = wickEditor.project.currentObject.getCurrentFrame().wickObjects.indexOf(obj);
                 if(symbolZIndex === null || objZIndex < symbolZIndex) {
                     symbolZIndex = objZIndex;
@@ -335,13 +335,13 @@ var WickActionHandler = function (wickEditor) {
             });
 
             // Create symbol out of objects
-            var symbol = new WickObject.createSymbolFromWickObjects(selectedObjects);
+            var symbol = new WickObject.createSymbolFromWickObjects(objects);
             wickEditor.project.addObject(symbol, symbolZIndex, true);
             args.createdSymbol = symbol;
             symbol.selectOnAddToFabric = true;
 
             // Remove objects from original parent (they are inside the symbol now.)
-            selectedObjects.forEach(function (wickObject) {
+            objects.forEach(function (wickObject) {
                 if(wickObject.pathData) {
                     wickEditor.paper.removePath(wickObject.uuid);
                     var firstFrame = symbol.layers[0].frames[0];
@@ -359,14 +359,18 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.paper.refresh();
         },
         function (args) {
-            args.symbol = args.createdSymbol;
-
-            args.children = args.symbol.getObjectsOnFirstFrame();
-            args.children.forEach(function (child) {
-                child.x = child.getAbsolutePosition().x;
-                child.y = child.getAbsolutePosition().y;
-                wickEditor.project.addObject(child);
+            var children = args.createdSymbol.getObjectsOnFirstFrame();
+            children.forEach(function (child) {
+                child.x += child.parentObject.x;
+                child.y += child.parentObject.y;
+                if(child.pathData) {
+                    wickEditor.paper.addPath(child.pathData, {x:child.x, y:child.y});
+                } else {
+                    wickEditor.project.addObject(child);
+                }
             });
+            wickEditor.paper.refresh();
+            wickEditor.paper.updateWickProject();
 
             wickEditor.project.currentObject.removeChild(args.createdSymbol);
         });
@@ -377,22 +381,53 @@ var WickActionHandler = function (wickEditor) {
 
             args.children = args.symbol.getObjectsOnFirstFrame();
             args.children.forEach(function (child) {
-                //child.x += args.symbol.x;
-                //child.y += args.symbol.y;
-                child.x = child.getAbsolutePosition().x;
-                child.y = child.getAbsolutePosition().y;
-                wickEditor.project.addObject(child);
+                child.x += child.parentObject.x;
+                child.y += child.parentObject.y;
+                if(child.pathData) {
+                    wickEditor.paper.addPath(child.pathData, {x:child.x, y:child.y});
+                } else {
+                    wickEditor.project.addObject(child);
+                }
             });
+            wickEditor.paper.refresh();
+            wickEditor.paper.updateWickProject();
 
             wickEditor.project.currentObject.removeChild(args.obj);
         },
         function (args) {
             args.children.forEach(function (child) {
-                child.x -= args.symbol.x;
-                child.y -= args.symbol.y;
-                wickEditor.project.currentObject.removeChild(child);
+                child.x -= child.parentObject.x;
+                child.y -= child.parentObject.y;
+                //wickEditor.project.currentObject.removeChild(child);
+
+                if(child.pathData) {
+                    //wickEditor.paper.removePath(child.uuid);
+                    var firstFrame = args.symbol.layers[0].frames[0];
+                    if(firstFrame.pathDataToAdd === null) firstFrame.pathDataToAdd = [];
+                    firstFrame.pathDataToAdd.push({
+                        svg: child.pathData,
+                        x: child.x,
+                        y: child.y
+                    });
+                } else {
+                    wickEditor.project.currentObject.removeChild(wickObject);
+                }
             });
+            wickEditor.paper.refresh();
+            wickEditor.paper.updateWickProject();
+
             wickEditor.project.addObject(args.symbol);
+        });
+
+    this.registerAction('fillHole',
+        function (args) {
+            args.oldPathData = wickEditor.project.currentObject.getCurrentFrame().pathData;
+            wickEditor.paper.fillAtPoint(args.x, args.y, args.color);
+            wickEditor.paper.refresh();
+        }, 
+        function (args) {
+            wickEditor.project.currentObject.getCurrentFrame().pathData = args.oldPathData;
+            wickEditor.paper.updateWickProject();
         });
 
     this.registerAction('addFrame',

@@ -19,6 +19,9 @@ var FabricInterface = function (wickEditor) {
         this.canvas.setWidth(window.innerWidth);
         this.canvas.setHeight(window.innerHeight);
 
+        // This is disabled because it made zooming really slow and also caused some rendering problems with the centerpoints of symbols
+        fabric.Object.prototype.objectCaching = false;
+
         this.panning = false;
         this.onionSkinsDirty = false;
 
