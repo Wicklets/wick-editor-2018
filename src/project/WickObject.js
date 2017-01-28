@@ -493,6 +493,10 @@ WickObject.prototype.getCurrentFrame = function() {
     return this.getFrameAtPlayheadPosition(this.playheadPosition);
 }
 
+WickObject.prototype.getCurrentFrames = function() {
+    return this.getFramesAtPlayheadPosition(this.playheadPosition);
+}
+
 WickObject.prototype.getPrevFrame = function() {
     return this.getFrameAtPlayheadPosition(this.playheadPosition-1);
 }
@@ -587,6 +591,25 @@ WickObject.prototype.getFrameAtPlayheadPosition = function(pos, args) {
 
     // Playhead isn't over a frame on the current layer.
     return null;
+}
+
+WickObject.prototype.getFramesAtPlayheadPosition = function(pos, args) {
+    var frames = [];
+
+    this.layers.forEach(function (layer) {
+        var counter = 0;
+        for(var f = 0; f < layer.frames.length; f++) {
+            var frame = layer.frames[f];
+            for(var i = 0; i < frame.frameLength; i++) {
+                if(counter == pos) {
+                    frames.push(frame);
+                }
+                counter++;
+            }
+        }
+    });
+
+    return frames;
 }
 
 WickObject.prototype.getTotalTimelineLength = function () {
@@ -1052,15 +1075,17 @@ WickObject.prototype.isClickable = function () {
 
 WickObject.prototype.update = function () {
 
+    var self = this;
+
     if(this.deleted) return;
 
     if(this.onNewFrame) {
 
         if(this.isSymbol) {
-            var currentFrame = this.getCurrentFrame();
-
-            if(currentFrame)
-                this.runScript(currentFrame.wickScripts['onLoad'], 'onLoad', this, currentFrame);
+            var currentFrames = this.getCurrentFrames()
+            currentFrames.forEach(function (currentFrame) {
+                self.runScript(currentFrame.wickScripts['onLoad'], 'onLoad', self, currentFrame);
+            });
         }
 
         this.onNewFrame = false;
@@ -1088,9 +1113,10 @@ WickObject.prototype.update = function () {
         // For now, the WickObject that owns the frame runs the frame's scripts.
         // So, play(), stop() etc refers to the timeline that the frame is in.
         // The 'this' keyword is borked though, since it still will refer to the WickObject.
-        var currentFrame = this.getCurrentFrame()
-        if(currentFrame)
-            this.runScript(currentFrame.wickScripts['onUpdate'], 'onUpdate', this, currentFrame);
+        var currentFrames = this.getCurrentFrames()
+        currentFrames.forEach(function (currentFrame) {
+            self.runScript(currentFrame.wickScripts['onUpdate'], 'onUpdate', self, currentFrame);
+        });
 
         this.getAllActiveChildObjects().forEach(function(child) {
             child.update();
@@ -1646,7 +1672,7 @@ WickObject.prototype.setCursor = function (cursor) {
 }
 
 WickObject.prototype.isHoveredOver = function () {
-    return hoveredOver;
+    return this.hoveredOver;
 }
 
 WickObject.prototype.setValidator = function (validator) {
@@ -1718,8 +1744,6 @@ WickObject.prototype.getBlobImages = function (callback) {
 WickObject.prototype.generateAlphaMask = function (imageData) {
 
     var that = this;
-
-    console.log(imageData)
 
     var alphaMaskSrc = imageData || that.imageData;
     if(!alphaMaskSrc) return;
