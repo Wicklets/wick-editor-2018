@@ -428,6 +428,7 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             args.oldPathData = wickEditor.project.currentObject.getCurrentFrame().pathData;
             wickEditor.paper.fillAtPoint(args.x, args.y, args.color);
+            wickEditor.paper.cleanupPaths();
             wickEditor.paper.refresh();
         }, 
         function (args) {
