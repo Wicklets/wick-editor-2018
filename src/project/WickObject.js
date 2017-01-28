@@ -1715,11 +1715,13 @@ WickObject.prototype.getBlobImages = function (callback) {
 }
 
 /* Generate alpha mask for per-pixel hit detection */
-WickObject.prototype.generateAlphaMask = function () {
+WickObject.prototype.generateAlphaMask = function (imageData) {
 
     var that = this;
 
-    var alphaMaskSrc = that.imageData;
+    console.log(imageData)
+
+    var alphaMaskSrc = imageData || that.imageData;
     if(!alphaMaskSrc) return;
 
     ImageToCanvas(alphaMaskSrc, function (canvas,ctx) {

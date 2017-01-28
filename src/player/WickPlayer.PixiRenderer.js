@@ -127,6 +127,7 @@ var WickPixiRenderer = function (project) {
                 wickObj.pixiContainer.addChild(subObj.pixiContainer);
             } else if (subObj.imageData) {
                 subObj.pixiSprite = PIXI.Sprite.fromImage(subObj.imageData);
+                subObj.generateAlphaMask(subObj.pixiSprite.texture.baseTexture.imageUrl);
                 wickObj.pixiContainer.addChild(subObj.pixiSprite);
 	        } else if (subObj.pathData) {
 	        	var parser = new DOMParser();
@@ -141,6 +142,7 @@ var WickPixiRenderer = function (project) {
 				//console.log(base64svg)
 				
 				subObj.pixiSprite = PIXI.Sprite.fromImage(base64svg);
+				subObj.generateAlphaMask(subObj.pixiSprite.texture.baseTexture.imageUrl);
 	            wickObj.pixiContainer.addChild(subObj.pixiSprite);
             } else if (subObj.fontData) {
             	var fontString = subObj.fontData.fontSize + "px " + subObj.fontData.fontFamily;

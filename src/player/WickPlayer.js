@@ -62,11 +62,6 @@ var WickPlayer = (function () {
             if(project.borderColor) document.body.style.backgroundColor = project.borderColor;
         }
 
-        var allObjects = project.rootObject.getAllChildObjectsRecursive();
-        allObjects.forEach(function (child) {
-            child.generateAlphaMask();
-        });
-
         // Patch old projects
         if(!project.audioPlayer) project.audioPlayer = "WickWebAudioPlayer";
         if(!project.renderer) project.renderer = "WickPixiRenderer";
