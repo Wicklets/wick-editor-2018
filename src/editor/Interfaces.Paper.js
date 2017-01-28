@@ -120,6 +120,7 @@ var PaperInterface = function (wickEditor) {
 
     self.cleanupPaths = function (force) {
         var groups = getAllGroupsInCanvas();
+        groups.reverse();
 
         groups.forEach(function (group) {
             if(group.dead) return; 
@@ -409,6 +410,7 @@ var PaperInterface = function (wickEditor) {
     // Sync the state of the paper.js canvas with the Wick project
     var regenWickObjects = function () {
         var groups = getAllGroupsInCanvas();
+        groups.reverse();
 
         // Remove all existing path wick objects from frame
         clearPathWickObjects();
