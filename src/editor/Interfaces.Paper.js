@@ -63,7 +63,6 @@ var PaperInterface = function (wickEditor) {
 
         // Regen wick objects on the current frame using paper canvas
         clearPathWickObjects();
-        wickToPaperMappings = {};
 
         // Load SVG from currentFrame
         if(currentFrame && currentFrame.pathData) {
@@ -76,7 +75,7 @@ var PaperInterface = function (wickEditor) {
         regenWickObjects();
     }
 
-    self.addPath = function (svgString, offset, isEraserPath) {
+    self.addPath = function (svgString, offset, isEraserPath, selectOnAddToFabric) {
         var paperGroup = importSVG(svgString);
 
         paperGroup.dirtyFromWick = true;
@@ -97,6 +96,8 @@ var PaperInterface = function (wickEditor) {
             if(child.closePath) child.closePath();
         });
 
+        paperGroup.selectOnAddToFabric = selectOnAddToFabric;
+
         if(offset)
             paperGroup.position = new paper.Point(offset.x, offset.y);
     }
@@ -115,6 +116,106 @@ var PaperInterface = function (wickEditor) {
         var group = wickToPaperMappings[uuid];
 
         group.remove();
+    }
+
+    self.cleanupPaths = function (force) {
+        var groups = getAllGroupsInCanvas();
+
+        groups.forEach(function (group) {
+            if(group.dead) return; 
+            if(!group.dirtyFromWick && !force) return;
+
+            if(force) console.log('force!')
+
+            group.dirtyFromWick = false;
+
+            var touchingGroups = getTouchingPaths(group);
+            if(touchingGroups.length < 1) return;
+
+            var superPath = group.children[0].clone({insert:false});
+            touchingGroups.forEach(function (touchingGroup) {
+                if(touchingGroup.dead) return;
+
+                var colorA = touchingGroup.fillColor.components;
+                var colorB = group.fillColor.components;
+                colorA[3]=1;
+                colorB[3]=1;
+
+                if(!group.isEraserPath && colorA.equals(colorB)) {
+                    //if(superPath.closePath) superPath.closePath();
+                    superPath = superPath.unite(touchingGroup.children[0]);
+
+                    touchingGroup.remove();
+                    touchingGroup.dead = true;
+                } else {
+                    var splitPath = touchingGroup.children[0].clone();
+                    //if(splitPath.closePath) splitPath.closePath();
+                    splitPath = splitPath.subtract(group.children[0]);
+
+                    var splitGroup = new paper.Group();
+                    splitGroup.addChild(splitPath);
+
+                    touchingGroup.remove();
+                    touchingGroup.dead = true;
+
+                    if(splitGroup.children[0] instanceof paper.Path) return;
+
+                    //Make two lists, one will all holes and one with all paths
+                    var holes = [];
+                    var fills = [];
+
+                    var compPath = splitGroup.children[0];
+
+                    compPath.children.forEach(function (child) {
+                        if(child.clockwise) {
+                            holes.push(child.clone({insert:false}));
+                        } else {
+                            fills.push(child.clone({insert:false}));
+                        }
+                    });
+
+                    fills.forEach(function (fill) {
+                        // Make a new group containing only that fill
+                        var newgroup = new paper.Group();
+                        paper.project.activeLayer.addChild(newgroup);
+
+                        var newCompPath = new paper.CompoundPath(); newCompPath.remove();
+                        newCompPath.clockwise = false;
+
+                        newCompPath.addChild(fill);
+                        fill.fillColor = compPath.fillColor;
+                        fill.clockwise = false;
+                        newCompPath.fillColor = compPath.fillColor;
+
+                        // Add holes that intersect with that fill to the group
+                        holes.forEach(function (hole) {
+                            var thisHoleAdded = false;
+                            hole.segments.forEach(function (segment) {
+                                if(thisHoleAdded) return;
+                                if(fill.contains(segment.point)) {
+                                    newCompPath.addChild(hole);
+                                    hole.clockwise = true;
+                                    thisHoleAdded = true;
+                                }
+                            });
+                        });
+
+                        newgroup.addChild(newCompPath);
+                    });
+
+                    splitGroup.remove();
+                    if(group.isEraserPath) group.remove();
+                }
+            });
+
+            if(!group.isEraserPath) {
+                var superGroup = new paper.Group();
+                superGroup.addChild(superPath);
+            }
+
+            group.remove();
+        });
+
     }
 
     self.fillAtPoint = function (x,y,fillColorHex) {
@@ -237,12 +338,11 @@ var PaperInterface = function (wickEditor) {
         }
 
         if (pathWasFilled || holeWasFilled) {
-            console.log("well we filled something lol")
+            console.log("well we filled something lol");
         }
     }
 
     self.refresh = function () {
-        cleanupPaths();
         saveFrameSVG();
         regenWickObjects();
     }
@@ -289,6 +389,8 @@ var PaperInterface = function (wickEditor) {
 
     // Remove all existing path wick objects from frame
     var clearPathWickObjects = function () {
+        wickToPaperMappings = {};
+
         if(currentFrame) {
             var pathWickObjects = [];
 
@@ -310,7 +412,6 @@ var PaperInterface = function (wickEditor) {
 
         // Remove all existing path wick objects from frame
         clearPathWickObjects();
-        wickToPaperMappings = {};
 
         // Create new wick objects for all current paths
         groups.forEach(function (group) {
@@ -320,6 +421,10 @@ var PaperInterface = function (wickEditor) {
                 wickObject.x = oldPosition.x;
                 wickObject.y = oldPosition.y;
                 wickEditor.project.addObject(wickObject, null, true);
+                if(group.selectOnAddToFabric) {
+                    wickObject.selectOnAddToFabric = true;
+                    group.selectOnAddToFabric = false;
+                }
                 wickToPaperMappings[wickObject.uuid] = group;
             });
             group.position = new paper.Point(oldPosition.x, oldPosition.y);
@@ -390,104 +495,6 @@ var PaperInterface = function (wickEditor) {
         });
 
         return foundPointInside;
-    }
-
-    var cleanupPaths = function () {
-        var groups = getAllGroupsInCanvas();
-
-        groups.forEach(function (group) {
-            if(group.dead) return; 
-            if(!group.dirtyFromWick) return;
-
-            group.dirtyFromWick = false;
-
-            var touchingGroups = getTouchingPaths(group);
-            if(touchingGroups.length < 1) return;
-
-            var superPath = group.children[0].clone({insert:false});
-            touchingGroups.forEach(function (touchingGroup) {
-                if(touchingGroup.dead) return;
-
-                var colorA = touchingGroup.fillColor.components;
-                var colorB = group.fillColor.components;
-                colorA[3]=1;
-                colorB[3]=1;
-
-                if(!group.isEraserPath && colorA.equals(colorB)) {
-                    //if(superPath.closePath) superPath.closePath();
-                    superPath = superPath.unite(touchingGroup.children[0]);
-
-                    touchingGroup.remove();
-                    touchingGroup.dead = true;
-                } else {
-                    var splitPath = touchingGroup.children[0].clone();
-                    //if(splitPath.closePath) splitPath.closePath();
-                    splitPath = splitPath.subtract(group.children[0]);
-
-                    var splitGroup = new paper.Group();
-                    splitGroup.addChild(splitPath);
-
-                    touchingGroup.remove();
-                    touchingGroup.dead = true;
-
-                    if(splitGroup.children[0] instanceof paper.Path) return;
-
-                    //Make two lists, one will all holes and one with all paths
-                    var holes = [];
-                    var fills = [];
-
-                    var compPath = splitGroup.children[0];
-
-                    compPath.children.forEach(function (child) {
-                        if(child.clockwise) {
-                            holes.push(child.clone({insert:false}));
-                        } else {
-                            fills.push(child.clone({insert:false}));
-                        }
-                    });
-
-                    fills.forEach(function (fill) {
-                        // Make a new group containing only that fill
-                        var newgroup = new paper.Group();
-                        paper.project.activeLayer.addChild(newgroup);
-
-                        var newCompPath = new paper.CompoundPath(); newCompPath.remove();
-                        newCompPath.clockwise = false;
-
-                        newCompPath.addChild(fill);
-                        fill.fillColor = compPath.fillColor;
-                        fill.clockwise = false;
-                        newCompPath.fillColor = compPath.fillColor;
-
-                        // Add holes that intersect with that fill to the group
-                        holes.forEach(function (hole) {
-                            var thisHoleAdded = false;
-                            hole.segments.forEach(function (segment) {
-                                if(thisHoleAdded) return;
-                                if(fill.contains(segment.point)) {
-                                    newCompPath.addChild(hole);
-                                    hole.clockwise = true;
-                                    thisHoleAdded = true;
-                                }
-                            });
-                        });
-
-                        newgroup.addChild(newCompPath);
-                    });
-
-                    splitGroup.remove();
-                    if(group.isEraserPath) group.remove();
-                }
-            });
-
-            if(!group.isEraserPath) {
-                var superGroup = new paper.Group();
-                superGroup.addChild(superPath);
-            }
-
-            group.remove();
-        });
-
     }
 
  }

@@ -555,7 +555,6 @@ var GuiActionHandler = function (wickEditor) {
                 if(fileType === 'text/wickobjectsjson') {
                     var fileWickObject = WickObject.fromJSONArray(JSON.parse(file), function(objs) {
                         objs.forEach(function (obj) {
-                            //obj.selectOnAddToFabric = true; // This causes positioning problems for text!
                             obj.getAllChildObjectsRecursive().forEach(function (child) {
                                 child.uuid = null;
                             });
@@ -566,7 +565,6 @@ var GuiActionHandler = function (wickEditor) {
                     });
                 /*} else if (fileType === 'text/plain') {
                     var newObj = WickObject.fromText(file);
-                    newObj.selectOnAddToFabric = true;
                     newObj.x = wickEditor.project.width/2;
                     newObj.y = wickEditor.project.height/2;
                     wickEditor.actionHandler.doAction('addObjects', {
@@ -578,7 +576,6 @@ var GuiActionHandler = function (wickEditor) {
                     reader.onload = function(evt) {
                         //console.log(evt.target.result)
                         WickObject.fromImage(evt.target.result, function (newObj) {
-                            newObj.selectOnAddToFabric = true;
                             newObj.x = wickEditor.project.width/2;
                             newObj.y = wickEditor.project.height/2;
                             wickEditor.actionHandler.doAction('addObjects', {

@@ -28,7 +28,6 @@ Tools.Crop = function (wickEditor) {
                 var wickObj = WickObject.fromImage(src, function (wickObj) {
                     wickObj.x = drawingShape.left + drawingShape.width/2;
                     wickObj.y = drawingShape.top + drawingShape.height/2;
-                    wickObj.selectOnAddToFabric = true
                     wickEditor.actionHandler.doAction('addObjects', {wickObjects:[wickObj], });
                 });
             }, {

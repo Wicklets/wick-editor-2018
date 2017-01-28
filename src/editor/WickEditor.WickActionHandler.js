@@ -147,7 +147,10 @@ var WickActionHandler = function (wickEditor) {
                 args.wickObjects.forEach(function (wickObj) {
                     if(wickObj.pathData) {
                         if(!args.paths) args.paths = [];
-                        args.paths.push(wickEditor.paper.getPathDataOfWickObject(wickObj.uuidCopiedFrom));
+                        //var path = wickEditor.paper.getPathDataOfWickObject(wickObj.uuidCopiedFrom);
+                        var path = {svg:wickObj.pathData, x:wickObj.x, y:wickObj.y}
+                        path.selectOnAddToFabric = true;
+                        args.paths.push(path);
                     }
                 });
                 // Save references to added wick objects so they can be removed on undo
@@ -164,13 +167,12 @@ var WickActionHandler = function (wickEditor) {
                 });
             }
 
+            // Save current state of frame's SVG
             args.oldPathData = currentFrame.pathData;
             if(args.paths) {
-                // Save current state of frame's SVG
-                // TODO
                 // Add all new paths
                 args.paths.forEach(function (pathData) {
-                    wickEditor.paper.addPath(pathData.svg, {x:pathData.x, y:pathData.y}, pathData.isEraserPath);
+                    wickEditor.paper.addPath(pathData.svg, {x:pathData.x, y:pathData.y}, pathData.isEraserPath, pathData.selectOnAddToFabric);
                 });            
             }
             wickEditor.paper.refresh();
@@ -185,6 +187,9 @@ var WickActionHandler = function (wickEditor) {
             if(args.paths) {
                 wickEditor.project.currentObject.getCurrentFrame().pathData = args.oldPathData;
                 wickEditor.paper.updateWickProject();
+
+                wickEditor.paper.cleanupPaths(true);
+                wickEditor.paper.refresh();
             }
         });
 
@@ -291,6 +296,7 @@ var WickActionHandler = function (wickEditor) {
                     rotation: args.modifiedStates[i].rotation || 0
                 })
             };
+            wickEditor.paper.cleanupPaths();
             wickEditor.paper.refresh();
         },
         function (args) {
@@ -338,7 +344,6 @@ var WickActionHandler = function (wickEditor) {
             var symbol = new WickObject.createSymbolFromWickObjects(objects);
             wickEditor.project.addObject(symbol, symbolZIndex, true);
             args.createdSymbol = symbol;
-            symbol.selectOnAddToFabric = true;
 
             // Remove objects from original parent (they are inside the symbol now.)
             objects.forEach(function (wickObject) {

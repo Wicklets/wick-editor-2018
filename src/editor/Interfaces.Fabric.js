@@ -171,7 +171,9 @@ var FabricInterface = function (wickEditor) {
            (self.lastTool instanceof Tools.Eraser) || 
            (self.lastTool instanceof Tools.Ellipse) || 
            (self.lastTool instanceof Tools.Rectangle)) {
-            // Path cleanup used to be here
+            wickEditor.paper.cleanupPaths();
+            wickEditor.paper.refresh();
+            wickEditor.syncInterfaces();
         }
     }
 
