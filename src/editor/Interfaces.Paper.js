@@ -106,15 +106,13 @@ var PaperInterface = function (wickEditor) {
         if(offset)
             paperGroup.position = new paper.Point(offset.x, offset.y);
 
+        // Optimization: generate a wickobject for the newly created path before the whole project gets refresh.
+        // This way we can defer the wickobject regen for the whole frame until later, making drawing paths more responsive.
         var oldPosition = {x: paperGroup.position.x, y: paperGroup.position.y};
         WickObject.fromPathFile(paperGroup.exportSVG({asString:true}), function (wickObject) {
             wickObject.x = oldPosition.x;
             wickObject.y = oldPosition.y;
             wickEditor.project.addObject(wickObject, null, true);
-            /*if(group.selectOnAddToFabric) {
-                wickObject.selectOnAddToFabric = true;
-                group.selectOnAddToFabric = false;
-            }*/
             wickToPaperMappings[wickObject.uuid] = paperGroup;
         });
     }
@@ -136,6 +134,8 @@ var PaperInterface = function (wickEditor) {
     }
 
     self.cleanupPaths = function (force) {
+        //return;
+
         var groups = getAllGroupsInCanvas();
         groups.reverse();
 
@@ -361,6 +361,13 @@ var PaperInterface = function (wickEditor) {
     }
 
     self.refresh = function () {
+            getAllGroupsInCanvas().forEach(function (group) {
+            group.children.forEach(function (child) {
+                child.strokeColor = /*'#ff0000';*/ child.fillColor.toCSS(true);
+                child.strokeWidth = 0.1;
+            });
+        });
+
         saveFrameSVG();
         regenWickObjects();
     }
