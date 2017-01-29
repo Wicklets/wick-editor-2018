@@ -46,6 +46,10 @@ var PaperInterface = function (wickEditor) {
 
     }
 
+    self.saveFrameSVG = function () {
+        saveFrameSVG();
+    }
+
     self.updateWickProject = function () {
         // Clear all groups from paper canvas
         paper.project.clear();
@@ -81,8 +85,8 @@ var PaperInterface = function (wickEditor) {
         paperGroup.dirtyFromWick = true;
         paperGroup.isEraserPath = isEraserPath;
 
+        // Convert all paper.Shapes into paper.Paths (Paths have boolean ops, Shapes do not)
         paperGroup.children.forEach(function (child) {
-            // Convert all paper.Shapes into paper.Paths (Paths have boolean ops, Shapes do not)
             if(!(child instanceof paper.Path) && !(child instanceof paper.CompoundPath)) {
                 child.remove();
                 var newChild = child.toPath({insert:false});
@@ -91,8 +95,9 @@ var PaperInterface = function (wickEditor) {
                 paperGroup.addChild(newChild);
             }
         });
+
+        // Boolean ops only work with closed paths (potrace generates open paths for some reason)
         paperGroup.children.forEach(function (child) {
-            // Boolean ops only work with closed paths (potrace generates open paths for some reason)
             if(child.closePath) child.closePath();
         });
 
@@ -100,6 +105,18 @@ var PaperInterface = function (wickEditor) {
 
         if(offset)
             paperGroup.position = new paper.Point(offset.x, offset.y);
+
+        var oldPosition = {x: paperGroup.position.x, y: paperGroup.position.y};
+        WickObject.fromPathFile(paperGroup.exportSVG({asString:true}), function (wickObject) {
+            wickObject.x = oldPosition.x;
+            wickObject.y = oldPosition.y;
+            wickEditor.project.addObject(wickObject, null, true);
+            /*if(group.selectOnAddToFabric) {
+                wickObject.selectOnAddToFabric = true;
+                group.selectOnAddToFabric = false;
+            }*/
+            wickToPaperMappings[wickObject.uuid] = paperGroup;
+        });
     }
 
     self.modifyPath = function (uuid, modifiedState) {
@@ -126,7 +143,7 @@ var PaperInterface = function (wickEditor) {
             if(group.dead) return; 
             if(!group.dirtyFromWick && !force) return;
 
-            if(force) console.log('force!')
+            if(force) console.log('force!');
 
             group.dirtyFromWick = false;
 

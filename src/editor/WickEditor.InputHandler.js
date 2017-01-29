@@ -10,6 +10,9 @@ var InputHandler = function (wickEditor) {
      Mouse
 *************************/
 
+    // Disable images in the GUI from being dragged around
+    $('img').on('dragstart', function(event) { event.preventDefault(); });
+
     document.addEventListener('mousemove', function(e) { 
         that.mouse.x = e.clientX;
         that.mouse.y = e.clientY;

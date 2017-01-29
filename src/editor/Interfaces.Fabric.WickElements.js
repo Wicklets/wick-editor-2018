@@ -164,10 +164,10 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
                 fabricObj.wickObjectRef = objectToAdd;
                 fabricInterface.canvas.add(fabricObj);
-                //if(fabricObj.type === "path") {
+                if(fabricObj.type === "path") {
                     if(wickEditor.fabric.drawingPath) wickEditor.fabric.drawingPath.remove();
                     wickEditor.fabric.drawingPath = null;
-                //}
+                }
                 updateFabObjPositioning(fabricObj, objectToAdd);
                 updateFabricObjectEvents(fabricObj, objectToAdd, activeObjects, siblingObjects, nearbyObjects);
 

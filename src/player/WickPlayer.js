@@ -76,6 +76,9 @@ var WickPlayer = (function () {
         var playerCanvasContainer = renderer.getRendererElem();
 
         document.getElementById('rendererCanvas').className = ''
+        setTimeout(function () {
+            $('#rendererCanvas').focus();
+        }, 100);
 
         animate();
 

@@ -60,7 +60,9 @@ Tools.Paintbrush = function (wickEditor) {
             var x = fabricPath.left - symbolOffset.x;
             var y = fabricPath.top - symbolOffset.y;
 
-            fabricPath.remove();
+            //fabricPath.remove();
+            wickEditor.fabric.drawingPath = fabricPath;
+            
             wickEditor.actionHandler.doAction('addObjects', {
                 paths: [{svg:SVGData, x:x, y:y}]
             });

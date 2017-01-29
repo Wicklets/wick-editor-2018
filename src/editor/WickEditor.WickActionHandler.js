@@ -173,10 +173,16 @@ var WickActionHandler = function (wickEditor) {
                 // Add all new paths
                 args.paths.forEach(function (pathData) {
                     wickEditor.paper.addPath(pathData.svg, {x:pathData.x, y:pathData.y}, pathData.isEraserPath, pathData.selectOnAddToFabric);
-                    if(pathData.isEraserPath) wickEditor.paper.cleanupPaths();
+                    if(pathData.isEraserPath) {
+                        wickEditor.paper.cleanupPaths();
+                        wickEditor.paper.refresh();
+                    }
                 });            
             }
-            wickEditor.paper.refresh();
+
+            // Optimization: Don't update the other paths until later (makes adding paths way faster.) Keep the next line commented out!!!
+            //wickEditor.paper.refresh();
+            wickEditor.paper.saveFrameSVG();
         },
         function (args) {
             // Remove objects we added
