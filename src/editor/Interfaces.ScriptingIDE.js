@@ -111,20 +111,20 @@ var ScriptingIDEInterface = function (wickEditor) {
                 
                 if(objectBeingScripted instanceof WickFrame) {
                     document.getElementById("onClickButton").style.display   = 'block';
-                    document.getElementById("onKeyDownButton").style.display = 'block';
+                    //document.getElementById("onKeyDownButton").style.display = 'block';
                     document.getElementById("onClickButton").style.display   = 'none';
-                    document.getElementById("onKeyDownButton").style.display = 'none';
+                    //document.getElementById("onKeyDownButton").style.display = 'none';
                 } else {
                     document.getElementById("onClickButton").style.display   = 'block';
-                    document.getElementById("onKeyDownButton").style.display = 'block';
+                    //document.getElementById("onKeyDownButton").style.display = 'block';
                     document.getElementById("onClickButton").style.display   = 'block';
-                    document.getElementById("onKeyDownButton").style.display = 'block';
+                    //document.getElementById("onKeyDownButton").style.display = 'block';
                 }
 
                 document.getElementById("onLoadButton").className = (that.currentScript == 'onLoad' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
                 document.getElementById("onUpdateButton").className = (that.currentScript == 'onUpdate' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
                 document.getElementById("onClickButton").className = (that.currentScript == 'onClick' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
-                document.getElementById("onKeyDownButton").className = (that.currentScript == 'onKeyDown' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
+                //document.getElementById("onKeyDownButton").className = (that.currentScript == 'onKeyDown' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
             } else {
                 $("#noSelectionDiv").css('display', 'block');
                 $("#scriptObjectDiv").css('display', 'none');
@@ -197,12 +197,12 @@ var ScriptingIDEInterface = function (wickEditor) {
         that.clearError();
     });
 
-    $("#onKeyDownButton").on("click", function (e) {
+    /*$("#onKeyDownButton").on("click", function (e) {
         that.currentScript = 'onKeyDown';
         unhighlightError();
         wickEditor.syncInterfaces();
         that.clearError();
-    });
+    });*/
 
 // Other buttons
 

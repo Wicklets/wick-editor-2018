@@ -51,6 +51,18 @@
 				"example" : "enterFullscreen();",
 				"args" : [],
 				"return" : null
+			}, {
+				"name" : "hideCursor()",
+				"description" : "Makes the cursor invisible.",
+				"example" : "hideCursor();",
+				"args" : [],
+				"return" : null
+			}, {
+				"name" : "showCursor()",
+				"description" : "Makes the cursor visible.",
+				"example" : "showCursor();",
+				"args" : [],
+				"return" : null
 			}
 		]
 	}, {
