@@ -361,10 +361,11 @@ var PaperInterface = function (wickEditor) {
     }
 
     self.refresh = function () {
-            getAllGroupsInCanvas().forEach(function (group) {
+        getAllGroupsInCanvas().forEach(function (group) {
             group.children.forEach(function (child) {
-                child.strokeColor = /*'#ff0000';*/ child.fillColor.toCSS(true);
-                child.strokeWidth = 0.1;
+                child.strokeColor = child.fillColor.toCSS(true);
+                //child.strokeColor = '#ff0000';
+                child.strokeWidth = 0.5;
             });
         });
 

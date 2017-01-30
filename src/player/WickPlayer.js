@@ -75,10 +75,14 @@ var WickPlayer = (function () {
         renderer.setup();
         var playerCanvasContainer = renderer.getRendererElem();
 
+        // Fix focus issues
         document.getElementById('rendererCanvas').className = ''
         setTimeout(function () {
             $('#rendererCanvas').focus();
         }, 100);
+        $(document).on('focus', 'input[readonly]', function () {
+            this.blur();
+        });
 
         animate();
 

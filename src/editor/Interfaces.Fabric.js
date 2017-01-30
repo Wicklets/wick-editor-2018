@@ -46,6 +46,18 @@ var FabricInterface = function (wickEditor) {
             "crop"             : new Tools.Crop(wickEditor),
         }
 
+        // Pen pressure stuff
+        /*
+        this.canvas.freeDrawingBrush = new fabric.PenPressureBrush(this.canvas);
+        // Hacky way to talk to the fabric PenPressureBrush
+        self.canvas.getPenPressure = this.tools.paintbrush.getPenPressure;
+        self.canvas.onPenPressurePathCreated = function (path) {
+            this.tools.paintbrush.onPenPressurePathCreated(path)
+            this.tools.eraser.onPenPressurePathCreated(path)
+        };
+        */
+        this.canvas.freeDrawingBrush = new fabric.PencilBrush(this.canvas);
+
         this.currentTool = this.tools.cursor;
         this.lastTool = this.currentTool;
 

@@ -42,7 +42,13 @@ Tools.Paintbrush = function (wickEditor) {
         return 'url(' + canvas.toDataURL() + ') 64 64,default';
     };
 
-// Path vectorization
+    this.getPenPressure = function () {
+        return 1;
+    }
+
+    this.onPenPressurePathCreated = function (path) {
+        
+    }
 
     // Listen for new paths drawn by fabric, vectorize them, and add them to the WickProject as WickObjects
     wickEditor.fabric.canvas.on('object:added', function(e) {
