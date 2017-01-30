@@ -269,5 +269,34 @@
 				"args" : []
 			}
 		]
+	}, {
+		"name": "Utilities",
+		"properties": [
+			{
+				"name" : "random.bool()",
+				"description" : "Generates a random boolean, a value that can be either true or false.",
+				"example" : "// Use random.bool() to simulate a coin flip.\nvar coinFlip = random.bool();\nif(coinFlip == true) {\n\talert('You&#8217;re lucky!!');\n}",
+				"return" : {"type": "Boolean", "description": "A random boolean. Will be true 50% of the time."},
+				"args" : []
+			}, {
+				"name" : "random.integer(min, max)",
+				"description" : "Generates a random whole number from min to max.",
+				"example" : "// Use random.integer() to move to a random frame from 1-10.\nvar randomFrame = random(integer(1,10));\ngotoAndStop(randomFrame);",
+				"return" : {"type": "Number", "description": "A random whole number."},
+				"args" : []
+			}, {
+				"name" : "random.real(min, max)",
+				"description" : "Generates a random real (fractional) number from min to max.",
+				"example" : "// Use random.real() to choose how transparent an object appears.\nthis.opacity = random.real(0,1);",
+				"return" : {"type": "Number", "description": "A random real number."},
+				"args" : []
+			}, {
+				"name" : "localStorage",
+				"description" : "Use the localStorage object to save data that should ",
+				"example" : "// Use localStorage to load a saved position. \nthis.x = localStorage.savedX;\nthis.y = localStorage.savedY;\n\n// Save the position and rotation of an object in localStorage to use later.\nlocalStorage.savedX = this.x\nlocalStorage.savedY = this.y",
+				"return" : null,
+				"args" : []
+			}
+		]
 	}]
 }

@@ -16,6 +16,11 @@
     
 <h1>Reference</h1>
 
+<h3>
+    <span id="toc" style="display: inline-block; margin-right:20px;">
+    </span>
+</h3>
+
 <style>
 .groupName {
 	font-size: 24px;
@@ -107,7 +112,9 @@ function newElem(tag, className, innerHTML, parentElem) {
 // Create page for everything
 function buildPage () {
 	docs.docs.forEach(function (group) {
-	    newElem('div', 'groupName', group.name);
+	    var groupName = newElem('div', 'groupName', group.name);
+        groupName.id = group.name;
+        document.getElementById('toc').innerHTML += '&#8226; <a href="#'+group.name+'">'+group.name+'</a><br />';
 
         group.properties.forEach(function (property) {
             var box = newElem('div', 'groupBox');
