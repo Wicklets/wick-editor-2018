@@ -45,6 +45,12 @@
 				"example" : "stopAllSounds();",
 				"args" : [],
 				"return" : null
+			}, {
+				"name" : "enterFullscreen()",
+				"description" : "Makes the project fullscreen.",
+				"example" : "enterFullscreen();",
+				"args" : [],
+				"return" : null
 			}
 		]
 	}, {

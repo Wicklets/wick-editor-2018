@@ -979,15 +979,16 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.actionHandler.doAction('moveLayerDown', {});
         });
 
-    registerAction('addKeyframe',
+    registerAction('addTween',
         [],
-        ['addKeyframeButton'],
+        ['addTweenButton'],
         {},
         function(args) {
             var selectedObj = wickEditor.fabric.getSelectedObject(WickObject);
             var tween = WickTween.fromWickObjectState(selectedObj);
             tween.frame = selectedObj.parentObject.getRelativePlayheadPosition(selectedObj);
             selectedObj.addTween(tween);
+            wickEditor.syncInterfaces();
         });
 
     registerAction('removeKeyframe',

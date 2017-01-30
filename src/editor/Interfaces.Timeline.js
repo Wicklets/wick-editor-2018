@@ -28,6 +28,7 @@ var TimelineInterface = function (wickEditor) {
             mouseDown = true;
             that.updatePlayheadPosition(e.offsetX,e.offsetY);
             that.redraw();
+            wickEditor.scriptingide.editScriptsOfObject(wickEditor.project.currentObject.getCurrentFrame(), {dontOpenIDE:true});
         });
         canvas.addEventListener('mouseup', function(e) {
             mouseDown = false;

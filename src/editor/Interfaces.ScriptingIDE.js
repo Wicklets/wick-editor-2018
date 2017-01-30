@@ -61,6 +61,8 @@ var ScriptingIDEInterface = function (wickEditor) {
     this.editScriptsOfObject = function (obj, args) {
         objectBeingScripted = obj;
 
+        that.currentScript = 'onLoad';
+
         if(args && args.dontOpenIDE) {
 
         } else {
