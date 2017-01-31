@@ -32,7 +32,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         var onNewFrame = newFrameRef !== currentFrameRef;
         currentFrameRef = newFrameRef;
 
-        var enablePerfTests = true;
+        var enablePerfTests = false;
 
         if(enablePerfTests) console.log("-------------------");
         if(enablePerfTests) startTiming();
