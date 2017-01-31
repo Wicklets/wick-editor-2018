@@ -28,7 +28,8 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
                 originX: 'left',
                 originY: 'top'
             });
-            for(var i = selectedObjs.length-1; i >= 0; i--) {
+            //for(var i = selectedObjs.length-1; i >= 0; i--) {
+            for(var i = 0; i < selectedObjs.length; i++) {
                 //group.canvas = canvas // WHAT ??????????????? WHY
                 var clone = fabric.util.object.clone(selectedObjs[i]);
                 group.addWithUpdate(clone);
@@ -179,7 +180,7 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
                         wickEditor.syncInterfaces();
                     }
                 });
-            }, 300); console.error("this is very bad here")
+            }, 300); console.error("this is very bad here");
         }
 
         root.playheadPosition = 0;
