@@ -363,9 +363,8 @@ var PaperInterface = function (wickEditor) {
     self.refresh = function () {
         getAllGroupsInCanvas().forEach(function (group) {
             group.children.forEach(function (child) {
-                child.strokeColor = child.fillColor.toCSS(true);
-                //child.strokeColor = '#ff0000';
-                child.strokeWidth = 0.5;
+                //child.strokeColor = child.fillColor.toCSS(true);
+                //child.strokeWidth = 0.5;
             });
         });
 

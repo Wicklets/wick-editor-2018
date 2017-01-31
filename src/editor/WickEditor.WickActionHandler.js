@@ -340,12 +340,12 @@ var WickActionHandler = function (wickEditor) {
             var objects = args.objects;
 
             var symbolZIndex = null;
-            objects.forEach(function (obj) {
+            /*objects.forEach(function (obj) {
                 var objZIndex = wickEditor.project.currentObject.getCurrentFrame().wickObjects.indexOf(obj);
                 if(symbolZIndex === null || objZIndex < symbolZIndex) {
                     symbolZIndex = objZIndex;
                 }
-            });
+            });*/
 
             // Create symbol out of objects
             var symbol = new WickObject.createSymbolFromWickObjects(objects);

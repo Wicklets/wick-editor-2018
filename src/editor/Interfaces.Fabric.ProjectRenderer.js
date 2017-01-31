@@ -176,6 +176,7 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
                         proceed();
                     } else {
                         callback(imageSequence);
+                        wickEditor.syncInterfaces();
                     }
                 });
             }, 300); console.error("this is very bad here")
