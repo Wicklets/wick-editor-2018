@@ -23,24 +23,24 @@
 	<h2>Basics</h2>
 	<h3>
 		<span id="demoRow" style="font-weight:normal; display: inline-block; margin-right:20px;">
-			&#8226; <a onclick="loadDemo('KitchenSink.html')">Kitchen Sink</a><br />
-			&#8226; <a onclick="loadDemo('TimelineControl.html')">Timeline Control</a><br />
-			&#8226; <a onclick="loadDemo('KeyboardControls.html')">Keyboard Controls</a><br />
-			&#8226; <a onclick="loadDemo('DynamicText.html')">Dynamic Text</a><br />
-			&#8226; <a onclick="loadDemo('SoundButtons.html')">Sound Buttons</a><br />
-			&#8226; <a onclick="loadDemo('SaveData.html')">Save Data</a><br />
-			&#8226; <a onclick="loadDemo('AlertAndPrompt.html')">Alert and Prompt</a><br />
-			&#8226; <a onclick="loadDemo('CollisionDetection.html')">Collision Detection</a><br />
+			&#8226; <a onclick="loadDemo('../demos/KitchenSink.html')">Kitchen Sink</a><br />
+			&#8226; <a onclick="loadDemo('../demos/basics/TimelineControl.html')">Timeline Control</a><br />
+			&#8226; <a onclick="loadDemo('../demos/basics/KeyboardControls.html')">Keyboard Controls</a><br />
+			&#8226; <a onclick="loadDemo('../demos/basics/DynamicText.html')">Dynamic Text</a><br />
+			&#8226; <a onclick="loadDemo('../demos/basics/SoundButtons.html')">Sound Buttons</a><br />
+			&#8226; <a onclick="loadDemo('../demos/basics/SaveData.html')">Save Data</a><br />
+			&#8226; <a onclick="loadDemo('../demos/basics/AlertAndPrompt.html')">Alert and Prompt</a><br />
+			&#8226; <a onclick="loadDemo('../demos/basics/CollisionDetection.html')">Collision Detection</a><br />
 		</span>
 		<span id="demoRow" style="font-weight:normal; display: inline-block; margin-right:20px;">
-			&#8226; <a onclick="loadDemo('MousePosition.html')">Mouse Position</a><br />
-			&#8226; <a onclick="loadDemo('ObjectTransformations.html')">Object Transformations</a><br />
-			&#8226; <a onclick="loadDemo('CustomCursor.html')">Custom Cursor</a><br />
-			&#8226; <a onclick="loadDemo('Random.html')">Random Numbers</a><br />
-			&#8226; <a onclick="loadDemo('ObjectCloning.html')">Object Cloning</a><br />
-			&#8226; <a onclick="loadDemo('Hyperlinks.html')">Hyperlinks</a><br />
-			&#8226; <a onclick="loadDemo('FullscreenMode.html')">Fullscreen Mode</a><br />
-			&#8226; <a onclick="loadDemo('DeviceOrientation.html')">Device Orientation</a><br />
+			&#8226; <a onclick="loadDemo('../demos/basics/MousePosition.html')">Mouse Position</a><br />
+			&#8226; <a onclick="loadDemo('../demos/basics/ObjectTransformations.html')">Object Transformations</a><br />
+			&#8226; <a onclick="loadDemo('../demos/basics/CustomCursor.html')">Custom Cursor</a><br />
+			&#8226; <a onclick="loadDemo('../demos/basics/Random.html')">Random Numbers</a><br />
+			&#8226; <a onclick="loadDemo('../demos/basics/ObjectCloning.html')">Object Cloning</a><br />
+			&#8226; <a onclick="loadDemo('../demos/basics/Hyperlinks.html')">Hyperlinks</a><br />
+			&#8226; <a onclick="loadDemo('../demos/basics/FullscreenMode.html')">Fullscreen Mode</a><br />
+			&#8226; <a onclick="loadDemo('../demos/basics/DeviceOrientation.html')">Device Orientation</a><br />
 		</span>
 	</h3>
 
@@ -48,8 +48,9 @@
 	<h3>
 		<span id="demoRow" style="font-weight:normal; display: inline-block; margin-right:20px;">
 		
-			&#8226; <a onclick="loadDemo('ParticleSpawner.html')">Particle Spawner</a><br />
-			&#8226; <a onclick="loadDemo('FlappyGhost.html')">Flappy Ghost</a><br />
+			&#8226; <a onclick="loadDemo('../demos/code-toys/ParticleSpawner.html')">Particle Spawner</a><br />
+			&#8226; <a onclick="loadDemo('../demos/code-toys/Pinwheel.html')">Pinwheel</a><br />
+			&#8226; <a onclick="loadDemo('../demos/FlappyGhost.html')">Flappy Ghost</a><br />
 		</span>
 	</h3>
 
@@ -61,11 +62,11 @@
 
 		var loadDemo = function (file) {
 			if(BrowserDetectionUtils.inMobileMode) {
-				var url = "../demos/" + file;
+				var url = file;
 				window.open(url,'_blank');
 			} else {
 				currentDemo = file;
-				viewer.src = "../demos/" + file
+				viewer.src = file
 				viewer.focus();
 			}
 		};
@@ -78,7 +79,7 @@
 
 		var downloadDemo = function () {
 			$.ajax({
-		        url: "../demos/" + currentDemo,
+		        url: currentDemo,
 		        type: 'GET',
 		        data: {},
 		        success: function(data) {
