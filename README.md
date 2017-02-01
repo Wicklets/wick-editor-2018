@@ -12,3 +12,4 @@ Try the editor [here](http://wickeditor.com/)!
 * Clone or download and unzip this repo
 * Open terminal in the newly made `wick` folder and start an HTTP server: `python -m SimpleHTTPServer`
 * Open a browser window, and go to `http://localhost:8000/`
+# WickWorkshopProjectsGallery
