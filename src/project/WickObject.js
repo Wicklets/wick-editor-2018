@@ -724,9 +724,8 @@ WickObject.prototype.applyTweens = function () {
                 var P = that.parentObject.getRelativePlayheadPosition(that)-A;
                 var T = P/L;
                 if(B-A === 0) T = 1;
-
-                var interpFunc = eval("("+tweenFrom.interpFunc+")")
-                var interpolatedTween = WickTween.interpolateTweens(tweenFrom, tweenTo, T, interpFunc);
+                
+                var interpolatedTween = WickTween.interpolateTweens(tweenFrom, tweenTo, T);
                 interpolatedTween.applyTweenToWickObject(that);
             }
             if (!tweenFrom && tweenTo) {

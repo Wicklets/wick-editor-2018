@@ -159,6 +159,13 @@ WickProject.fixForBackwardsCompatibility = function (project) {
             wickObj.angle = null;
         }
 
+        if(wickObj.tweens) {
+            wickObj.tweens.forEach(function (tween) {
+                if(!tween.tweenType) tween.tweenType = 'Linear';
+                if(!tween.tweenDir) tween.tweenDir = 'None';
+            });
+        }
+
         if(!wickObj.isSymbol) return;
         wickObj.layers.forEach(function (layer) {
             layer.frames.forEach(function (frame) {

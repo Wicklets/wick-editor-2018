@@ -2,9 +2,6 @@
 
 var tweenValueNames = ["x","y","z","scaleX","scaleY","rotation","opacity"];
 
-//https://github.com/mattdesl/lerp/blob/master/index.js
-var lerp = "function (v0, v1, t) { return v0*(1-t)+v1*t; }"
-
 var WickTween = function() {
     this.x = 0;
     this.y = 0; 
@@ -15,7 +12,9 @@ var WickTween = function() {
     this.opacity = 1;
 
     this.frame = 0;
-    this.interpFunc = lerp;
+
+    this.tweenType = 'Linear';
+    this.tweenDir = 'None';
 }
 
 WickTween.fromWickObjectState = function (wickObject) {
@@ -36,11 +35,13 @@ WickTween.prototype.applyTweenToWickObject = function(wickObject) {
 	});
 };
 
-WickTween.interpolateTweens = function (tweenA, tweenB, t, interpFunc) {
+WickTween.interpolateTweens = function (tweenA, tweenB, t) {
 	var interpTween = new WickTween();
 
+	var tweenFunc = (tweenA.tweenType === "Linear") ? (TWEEN.Easing.Linear.None) : (TWEEN.Easing[tweenA.tweenType][tweenA.tweenDir]);
 	tweenValueNames.forEach(function (name) {
-		interpTween[name] = interpFunc(tweenA[name], tweenB[name], t);
+		var tt = tweenFunc(t);
+		interpTween[name] = lerp(tweenA[name], tweenB[name], tt);
 	});
 
 	return interpTween;

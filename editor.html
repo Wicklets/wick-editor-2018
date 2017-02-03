@@ -38,6 +38,8 @@
     <script src="lib/fpscounter.js"></script>
     <script src="lib/base64-arraybuffer.js"></script>
     <script src="lib/random.js"></script>
+    <script src="lib/Tween.js"></script>
+    <script src="lib/lerp.js"></script>
 
     <script src="src/project/WickFrame.js"></script>
     <script src="src/project/WickLayer.js"></script>
@@ -321,11 +323,36 @@
                         Size <input style="width:130px; float:right;" type="text" id="fontSize">
                         <br /><br />
                         <input type="checkbox" id="boldCheckbox"> Bold<br />
-                        <input type="checkbox" id="italicCheckbox"> Italic
+                        <input type="checkbox" id="italicCheckbox"> Italic<br />
+                        <br />
                     </div>
                     <div id="soundProperties">
                         <input type="checkbox" id="autoplayCheckbox"> Autoplay<br />
                         <input type="checkbox" id="loopCheckbox"> Loop<br />
+                    </div>
+                    <div id="tweenProperties">
+                        <strong>Tween Options</strong>
+                        <br />
+                        <br />
+                        Type<select style="float:right; width:130px;" id="tweenType">
+                            <option value="Linear">Linear</option>
+                            <option value="Quadratic">Quadratic</option>
+                            <option value="Cubic">Cubic</option>
+                            <option value="Quartic">Quartic</option>
+                            <option value="Quintic">Quintic</option>
+                            <option value="Sinusoidal">Sinusoidal</option>
+                            <option value="Exponential">Exponential</option>
+                            <option value="Circular">Circular</option>
+                            <option value="Elastic">Elastic</option>
+                            <option value="Back">Back</option>
+                            <option value="Bounce">Bounce</option>
+                        </select>
+                        <br /><br />
+                        In/Out<select style="float:right; width:130px;" id="tweenDir">
+                            <option value="In">In</option>
+                            <option value="Out">Out</option>
+                            <option value="InOut">InOut</option>
+                        </select>
                     </div>
                     <div id="symbolProperties">
                         <div class="button buttonInRow" style="border: 1px solid;" id="editScriptsButtonProperties">Edit object scripts</div>
@@ -400,6 +427,7 @@
                         <div class="button" id="downloadButton">Export</div>
                         <div class="button" id="breakApartButton">Break Apart</div>
                         <div class="button" id="addTweenButton">Add Tween</div>
+                        <div class="button" id="removeTweenButton">Remove Tween</div>
                         <div id="isImage">
                             
                         </div>

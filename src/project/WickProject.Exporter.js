@@ -29,6 +29,7 @@ WickProject.Exporter = (function () {
             "lib/canvasutils.js",
             "lib/random.js",
             "lib/socket.io-1.2.0.js",
+            "lib/Tween.js",
             "src/project/WickTween.js",
             "src/project/WickFrame.js",
             "src/project/WickLayer.js",

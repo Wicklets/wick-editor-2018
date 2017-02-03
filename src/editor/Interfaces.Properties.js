@@ -41,6 +41,7 @@ var PropertiesInterface = function (wickEditor) {
                 $("#textProperties").css('display', 'none');
                 $("#soundProperties").css('display', 'none');
                 $("#symbolProperties").css('display', 'none');
+                $("#tweenProperties").css('display', 'none');
 
                 // Set object properties GUI name 
                 if(selectedObj.name) {
@@ -99,6 +100,13 @@ var PropertiesInterface = function (wickEditor) {
                     objectTypeIcon.src = 'resources/path.png';
                     objectTypeName.innerHTML = 'Path';
                 
+                }
+
+                var tween =selectedObj.getFromTween()
+                if(tween) {
+                    $("#tweenProperties").css('display', 'block');
+                    $("#tweenType").val(tween.tweenType);
+                    $("#tweenDir").val(tween.tweenDir);
                 }
 
             } else {
@@ -290,6 +298,13 @@ var PropertiesInterface = function (wickEditor) {
             modifiedStates: [{ fontStyle : newStyle }] 
         });
     };
+
+    $('#tweenType').change(function () {
+        wickEditor.fabric.getSelectedObject().getFromTween().tweenType = this.value;
+    });
+    $('#tweenDir').change(function () {
+        wickEditor.fabric.getSelectedObject().getFromTween().tweenDir = this.value;
+    });
 
     // Loop Checkbox: Toggle sound loop
     document.getElementById('loopCheckbox').onchange = function () {

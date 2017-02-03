@@ -992,6 +992,28 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.syncInterfaces();
         });
 
+    registerAction('removeTween',
+        [],
+        ['removeTweenButton'],
+        {},
+        function(args) {
+            var selectedObj = wickEditor.fabric.getSelectedObject(WickObject);
+            var playheadPosition = selectedObj.parentObject.getRelativePlayheadPosition(selectedObj);
+
+            var foundTween = null;
+            selectedObj.tweens.forEach(function (tween) {
+                if(tween.frame === playheadPosition) {
+                    foundTween = tween;
+                }
+            });
+
+            if(foundTween) {
+                selectedObj.tweens.splice(selectedObj.tweens.indexOf(foundTween), 1);
+            }
+            
+            wickEditor.syncInterfaces();
+        });
+
     registerAction('removeKeyframe',
         [],
         ['removeKeyframeButton'],

@@ -89,8 +89,6 @@ var FabricInterface = function (wickEditor) {
             
         });
         self.canvas.on('selection:cleared', function (e) {
-            if(e.target && e.target.type !== 'path') return;
-
             wickEditor.timeline.redraw();
 
             wickEditor.scriptingide.clearSelection();
