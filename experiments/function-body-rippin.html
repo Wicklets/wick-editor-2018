@@ -61,7 +61,17 @@ var createWholeScriptFromFunctions = function (fns) {
 	return wholeScript;
 }
 
-var fnString = 'this.setup = function () {\n\tconsole.log("its setup lol");\n\tvar x = 100;\n\tvar y = x * x;\n\treturn y;\n}\nthis.update = function () {\n\tdoSomethingLol();\n}';
+var fnString = " \
+this.setup = function () { \
+	console.log('its setup lol'); \
+	var x = 100; \
+	var y = x * x; \
+	return y;\
+} \
+this.update = function () { \
+	doSomethingLol(); \
+}";
+
 console.log("WickScript string:");
 console.log(fnString);
 console.log("--------------------");

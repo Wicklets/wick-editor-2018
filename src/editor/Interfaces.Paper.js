@@ -363,8 +363,9 @@ var PaperInterface = function (wickEditor) {
     self.refresh = function () {
         getAllGroupsInCanvas().forEach(function (group) {
             group.children.forEach(function (child) {
-                child.strokeColor = child.fillColor.toCSS(true);
-                child.strokeWidth = 0.5;
+                // Fixes blurry edges on fills, but also makes paths slightly more ugly
+                //child.strokeColor = child.fillColor.toCSS(true);
+                //child.strokeWidth = 0.5;
             });
         });
 

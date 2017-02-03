@@ -363,7 +363,7 @@ WickObject.prototype.downloadAsFile = function () {
     }
 
     if(this.imageData) {
-        saveAs(dataURItoBlob(this.imageData), filename+".png");
+        saveAs(dataURItoBlob(this.imageData), filename+".jpg");
         return;
     }
 
