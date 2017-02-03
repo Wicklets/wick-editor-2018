@@ -178,8 +178,7 @@ var PropertiesInterface = function (wickEditor) {
     $('#objectPositionY').on('blur', function () {
 
         var newVal = parseFloat($('#objectPositionY').val())
-        console.log(newVal)
-
+        
         if(!isNaN(newVal)) {
             var obj = wickEditor.fabric.getSelectedObject();
             wickEditor.actionHandler.doAction('modifyObjects', { 

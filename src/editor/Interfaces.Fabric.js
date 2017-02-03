@@ -86,7 +86,8 @@ var FabricInterface = function (wickEditor) {
             });
         });
         self.canvas.on('before:selection:cleared', function (e) {
-            
+            // quick fix for properties GUI closing after selected wick object changes
+            $(":focus").blur();
         });
         self.canvas.on('selection:cleared', function (e) {
             wickEditor.timeline.redraw();
