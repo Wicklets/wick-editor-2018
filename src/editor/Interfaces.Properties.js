@@ -138,6 +138,8 @@ var PropertiesInterface = function (wickEditor) {
             if(projectBgColorElem.jscolor) projectBgColorElem.jscolor.fromString(wickEditor.project.backgroundColor);
             if(projectBorderColorElem.jscolor) projectBorderColorElem.jscolor.fromString(wickEditor.project.borderColor);
 
+            document.getElementById('transparentCheckbox').checked = wickEditor.project.transparent;
+
             document.getElementById('projectSizeX').value          = wickEditor.project.width;
             document.getElementById('projectSizeY').value          = wickEditor.project.height;
             document.getElementById('frameRate').value             = wickEditor.project.framerate;
@@ -387,6 +389,10 @@ var PropertiesInterface = function (wickEditor) {
     document.getElementById('projectBorderColor').onchange = function () {
         wickEditor.project.borderColor = "#" + this.value;
         wickEditor.syncInterfaces();
+    };
+
+    document.getElementById('transparentCheckbox').onchange = function () {
+        wickEditor.project.transparent = this.checked;
     };
 
     /*document.getElementById('frameAutoplayCheckbox').onclick = function (e) {

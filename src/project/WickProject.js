@@ -19,6 +19,7 @@ var WickProject = function () {
 
     this.borderColor = "#DDDDDD";
     this.backgroundColor = "#FFFFFF";
+    this.transparent = false;
 
     this.framerate = 12;
 
@@ -139,6 +140,7 @@ WickProject.fixForBackwardsCompatibility = function (project) {
     // WickProject.resolution was replaced with project.width and project.height
     if(!project.width) project.width = project.resolution.x;
     if(!project.height) project.height = project.resolution.y;
+    if(!project.transparent) project.transparent = false;
 
     var allObjectsInProject = project.rootObject.getAllChildObjectsRecursive();
     allObjectsInProject.push(project.rootObject);

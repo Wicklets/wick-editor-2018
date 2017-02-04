@@ -314,7 +314,7 @@ var GuiActionHandler = function (wickEditor) {
         function (args) {
             wickEditor.fabric.projectRenderer.renderProjectAsGIF(function (blob) {
                 saveAs(blob, wickEditor.project.name+".gif");
-                window.open(URL.createObjectURL(blob));
+                //window.open(URL.createObjectURL(blob));
             });
         });
 

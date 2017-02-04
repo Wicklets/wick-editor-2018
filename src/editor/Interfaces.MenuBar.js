@@ -81,15 +81,15 @@ var MenuBarInterface = function (wickEditor) {
                 wickEditor.guiActionHandler.doAction("newProject");
             }),
             new TabButton('Save', function () {
-                wickEditor.guiActionHandler.doAction("saveProject");
+                wickEditor.guiActionHandler.doAction("exportProject");
             }),
             new TabButton('Open', function () {
                 wickEditor.guiActionHandler.doAction("openFile");
             }),
             new TabSpacer(),
-            new TabButton('Export as webpage', function () {
+            /*new TabButton('Export as webpage', function () {
                 wickEditor.guiActionHandler.doAction("exportProject");
-            }),
+            }),*/
             new TabButton('Export as zip', function () {
                 wickEditor.guiActionHandler.doAction("exportProjectZIP");
             }),

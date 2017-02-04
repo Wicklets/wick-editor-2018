@@ -71,15 +71,26 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
 
     self.renderProjectAsGIF = function (callback) {
         self.getProjectAsCanvasSequence(function (canvases) {
-            var gif = new GIF({
-                workers: 2,
-                quality: 10,
-                workerScript: 'lib/gif.worker.js',
-                background: '#fff',
-                //transparent: true,
-                width: wickEditor.project.width,
-                height: wickEditor.project.height,
-            });
+            var gif;
+            if(wickEditor.project.transparent) {
+                gif = new GIF({
+                    workers: 2,
+                    quality: 10,
+                    workerScript: 'lib/gif.worker.js',
+                    transparent: true,
+                    width: wickEditor.project.width,
+                    height: wickEditor.project.height,
+                });
+            } else {
+                gif = new GIF({
+                    workers: 2,
+                    quality: 10,
+                    workerScript: 'lib/gif.worker.js',
+                    background: '#fff',
+                    width: wickEditor.project.width,
+                    height: wickEditor.project.height,
+                });
+            }
 
             canvases.forEach(function (canvas) {
                 gif.addFrame(canvas, {delay: 1000/wickEditor.project.framerate});
@@ -133,9 +144,11 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
 
                     var gifFrameCtx = gifFrameCanvas.getContext('2d');
                     gifFrameCtx.clearRect(0,0,gifFrameCanvas.width,gifFrameCanvas.height);
-                    gifFrameCtx.rect(0, 0, gifFrameCanvas.width,gifFrameCanvas.height);
-                    gifFrameCtx.fillStyle = wickEditor.project.backgroundColor;
-                    gifFrameCtx.fill();
+                    if(!wickEditor.project.transparent) {
+                        gifFrameCtx.rect(0, 0, gifFrameCanvas.width,gifFrameCanvas.height);
+                        gifFrameCtx.fillStyle = wickEditor.project.backgroundColor;
+                        gifFrameCtx.fill();
+                    }
                     gifFrameCtx.drawImage(image.img, image.x, image.y);
 
                     canvases.push(gifFrameCanvas);
