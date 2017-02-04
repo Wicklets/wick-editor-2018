@@ -292,6 +292,7 @@ var GuiActionHandler = function (wickEditor) {
         function(args) {
             that.keys = [];
             that.specialKeys = [];
+            wickEditor.project.saveInLocalStorage();
             WickProject.Exporter.exportProject(wickEditor.project);
         });
 

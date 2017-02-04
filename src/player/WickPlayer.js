@@ -108,6 +108,8 @@ var WickPlayer = (function () {
             playerCanvasContainer.addEventListener('gestureend',    function(e) { e.preventDefault(); });
         }
 
+        var preloader = new WickPreloader();
+
     }
 
     wickPlayer.stopRunningCurrentProject = function() {

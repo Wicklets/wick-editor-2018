@@ -1259,7 +1259,7 @@ WickObject.prototype.gotoFrame = function (frame) {
     var oldFrame = this.getCurrentFrame();
 
     // Frames are zero-indexed internally but start at one in the editor GUI, so you gotta subtract 1.
-    if (CheckInput.isNonNegativeInteger(frame)) {
+    if (CheckInput.isNonNegativeInteger(frame) && frame !== 0) {
 
         var actualFrame = frame-1;
 
