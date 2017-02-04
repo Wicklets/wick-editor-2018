@@ -6,10 +6,9 @@ var FabricShapeDrawer = function (wickEditor, fabricInterface) {
 
     var drawingShape = null;
     var doneFunc = null;
-    var crop;
 
     fabricInterface.canvas.on('mouse:move', function (e) {
-        that.updateDrawingShape(e.e.offsetX,e.e.offsetY);
+        that.updateDrawingShape(e.e.pageX, e.e.pageY);
     });
 
     fabricInterface.canvas.on('mouse:up', function (e) {
@@ -19,7 +18,6 @@ var FabricShapeDrawer = function (wickEditor, fabricInterface) {
     this.startDrawingShape = function (shapeType, x, y, callback, args) {
 
         doneFunc = callback;
-        crop = args && args.crop;
 
         fabricInterface.canvas.selection = false;
 
@@ -35,12 +33,6 @@ var FabricShapeDrawer = function (wickEditor, fabricInterface) {
                 height : 1,
                 fill : fabricInterface.tools.paintbrush.color
             });
-
-            if(crop) {
-                drawingShape.stroke = 'white';
-                drawingShape.strokeWidth = 1;
-                drawingShape.fill ='rgba(0,0,0,0.3)';
-            }
         } else if (shapeType === 'ellipse') {
             drawingShape = new fabric.Ellipse({
                 originX: 'center',
@@ -67,21 +59,8 @@ var FabricShapeDrawer = function (wickEditor, fabricInterface) {
                 if(screenXY.x < shapeStartPos.x) drawingShape.left = screenXY.x;
                 if(screenXY.y < shapeStartPos.y) drawingShape.top  = screenXY.y;
                 drawingShape.width  = Math.abs(shapeStartPos.x - screenXY.x);
-                drawingShape.height = Math.abs(shapeStartPos.y - screenXY.y);    
-                if(crop) {
-                    drawingShape.left = Math.round(drawingShape.left);
-                    drawingShape.top = Math.round(drawingShape.top);
-                    drawingShape.width = Math.round(drawingShape.width);
-                    drawingShape.height = Math.round(drawingShape.height);
-                }        
+                drawingShape.height = Math.abs(shapeStartPos.y - screenXY.y);
             } else if(drawingShape.type === 'ellipse') {
-                //drawingShape.width  = Math.abs(drawingShape.left - screenXY.x);
-                //drawingShape.height = Math.abs(drawingShape.top  - screenXY.y);    
-                //drawingShape.rx = Math.abs(drawingShape.left - screenXY.x);
-                //drawingShape.ry = Math.abs(drawingShape.top  - screenXY.y);
-                //drawingShape.rx = screenXY.x;
-                //drawingShape.ry = screenXY.y;
-
                 var newRx = Math.abs(drawingShape.left - screenXY.x);
                 var newRy = Math.abs(drawingShape.top  - screenXY.y);
                 drawingShape.set({ rx: newRx, ry: newRy });
