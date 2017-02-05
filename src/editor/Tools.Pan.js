@@ -17,7 +17,7 @@ Tools.Pan = function (wickEditor) {
     });
 
     wickEditor.fabric.canvas.on('mouse:down', function (e) {
-        if(wickEditor.fabric.currentTool instanceof Tools.Pan) {
+        if(wickEditor.currentTool instanceof Tools.Pan) {
             wickEditor.fabric.startPan();
         }
     });

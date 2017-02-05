@@ -13,7 +13,7 @@ Tools.BackgroundRemove = function (wickEditor) {
     }
 
     canvas.on('mouse:down', function(e) {
-        if(!(wickEditor.fabric.currentTool instanceof Tools.BackgroundRemove)) return;
+        if(!(wickEditor.currentTool instanceof Tools.BackgroundRemove)) return;
 
         var position = {x:e.e.offsetX, y:e.e.offsetY};
         

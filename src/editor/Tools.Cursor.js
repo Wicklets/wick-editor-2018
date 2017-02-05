@@ -34,15 +34,15 @@ Tools.Cursor = function (wickEditor) {
     // Double click functionality to edit symbols
     canvas.on('mouse:down', function(e) {
         if(e.e.button !== 0) return;
-        if(!(wickEditor.fabric.currentTool instanceof Tools.Cursor)) return;
+        if(!(wickEditor.currentTool instanceof Tools.Cursor)) return;
 
         var currentTime = new Date().getTime();
         if(lastDoubleClickTime !== null && currentTime-lastDoubleClickTime < 350) {
             var selectedObject = wickEditor.fabric.getSelectedObject(WickObject);
             if(selectedObject && selectedObject.isSymbol) {
-                wickEditor.guiActionHandler.pressButton("editSymbolButton");
+                wickEditor.guiActionHandler.doAction("editObject");
             } else if (!selectedObject && !wickEditor.project.currentObject.isRoot) {
-                wickEditor.guiActionHandler.pressButton("finishEditingObjectButton");
+                wickEditor.guiActionHandler.doAction("finishEditingObject");
             }
             lastDoubleClickTime = null;
         } else {

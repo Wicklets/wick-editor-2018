@@ -6,9 +6,6 @@ var WickEditor = function () {
 
     var that = this;
 
-    // Init random.js
-    window.random = new Random();
-
     // Friendly console message ~~~
     console.log('%cWelcome to the javascript console! ', 'color: #ff99bb; font-size: 20px; font-weight: bold; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;');
     console.log('%cYou are free to change any of the internal editor stuff from here. Type "wickEditor" into the console and have a look around!', 'color: #bb4477; font-size: 12px;');
@@ -22,15 +19,9 @@ var WickEditor = function () {
     }
 
     // Setup all interfaces
-    this.syncInterfaces = function () {
-        interfaces.forEach(function (interface) {
-            interface.syncWithEditorState();
-        });
-    }
-
-    var interfaces = [];
+    this.interfaces = [];
     function registerInterface (interface) {
-        interfaces.push(interface);
+        that.interfaces.push(interface);
         return interface;
     }
 
@@ -46,10 +37,29 @@ var WickEditor = function () {
     this.fabric = registerInterface(new FabricInterface(this));
     this.menubar = registerInterface(new MenuBarInterface(this));
 
-    interfaces.forEach(function (interface) {
+    this.interfaces.forEach(function (interface) {
         interface.setup();
     });
 
+    // Setup all tools
+    this.tools = {
+        "cursor"           : new Tools.Cursor(this),
+        "paintbrush"       : new Tools.Paintbrush(this),
+        "eraser"           : new Tools.Eraser(this),
+        "fillbucket"       : new Tools.FillBucket(this),
+        "rectangle"        : new Tools.Rectangle(this),
+        "ellipse"          : new Tools.Ellipse(this),
+        "dropper"          : new Tools.Dropper(this),
+        "text"             : new Tools.Text(this),
+        "zoom"             : new Tools.Zoom(this),
+        "pan"              : new Tools.Pan(this),
+        "backgroundremove" : new Tools.BackgroundRemove(this),
+        "crop"             : new Tools.Crop(this),
+    }
+    this.currentTool = this.tools.cursor;
+    this.lastTool = this.currentTool;
+
+    // Setup input handler
     this.inputHandler = new InputHandler(this);
 
     // Setup editor logic handlers
@@ -60,3 +70,30 @@ var WickEditor = function () {
 
 }
 
+WickEditor.prototype.syncInterfaces = function () {
+    if(!this.tools) return;
+    this.interfaces.forEach(function (interface) {
+        interface.syncWithEditorState();
+    });
+}
+
+WickEditor.prototype.changeTool = function (newTool) {
+    this.lastTool = this.currentTool;
+    this.currentTool = newTool;
+    this.fabric.forceModifySelectedObjects();
+    this.fabric.deselectAll();
+    this.syncInterfaces();
+
+    if((this.lastTool instanceof Tools.Paintbrush) || 
+       (this.lastTool instanceof Tools.Eraser) || 
+       (this.lastTool instanceof Tools.Ellipse) || 
+       (this.lastTool instanceof Tools.Rectangle)) {
+        this.paper.cleanupPaths();
+        this.paper.refresh();
+        this.syncInterfaces();
+    }
+}
+
+WickEditor.prototype.useLastUsedTool = function () {
+    this.currentTool = this.lastTool;
+}

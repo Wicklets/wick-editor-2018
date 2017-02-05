@@ -16,7 +16,7 @@ Tools.Zoom = function (wickEditor) {
     }
     
     wickEditor.fabric.canvas.on('mouse:down', function (e) {
-    	if(wickEditor.fabric.currentTool instanceof Tools.Zoom) {
+    	if(wickEditor.currentTool instanceof Tools.Zoom) {
     		if (wickEditor.guiActionHandler.keys[keyCharToCode["ALT"]]) {
     			wickEditor.fabric.zoom(0.9);
     		} else {
@@ -30,7 +30,7 @@ Tools.Zoom = function (wickEditor) {
     function MouseWheelHandler(e) {
         // cross-browser wheel delta
         e.preventDefault()
-        if(wickEditor.guiActionHandler.specialKeys["Modifier"]) {
+        if(wickEditor.inputHandler.specialKeys["Modifier"]) {
             var e = window.event || e;
             var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
             wickEditor.fabric.zoom(1.0 + delta*.1);

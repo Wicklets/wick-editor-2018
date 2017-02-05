@@ -441,7 +441,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         }
 
         // Tools other than the cursor can't select objects
-        if (!(fabricInterface.currentTool instanceof Tools.Cursor)) {
+        if (!(wickEditor.currentTool instanceof Tools.Cursor)) {
             fabricObj.hasControls = false;
             fabricObj.selectable = false;
             fabricObj.evented = false;
@@ -452,12 +452,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             fabricObj.hasControls = false;
             fabricObj.selectable = false;
             fabricObj.evented = false;
-            if(fabricObj.centerpointObject) fabricObj.centerpointObject.opacity = 0.0;
-        } else {
-            if(fabricObj.centerpointObject) fabricObj.centerpointObject.opacity = 1.0;
         }
-        if(fabricObj.centerpointObject) fabricObj.centerpointObject.setCoords()
-        //console.log(fabricObj.centerpointObject.opacity);
 
     }
 	

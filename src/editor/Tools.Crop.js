@@ -13,7 +13,7 @@ Tools.Crop = function (wickEditor) {
     }
 
     fabricInterface.canvas.on('mouse:down', function (e) {
-        if(!(fabricInterface.currentTool instanceof Tools.Crop)) return;
+        if(!(wickEditor.currentTool instanceof Tools.Crop)) return;
 
         fabricInterface.shapeDrawer.startDrawingShape('rectangle', e.e.offsetX, e.e.offsetY, that.cropWithShape, {crop:true});
     });

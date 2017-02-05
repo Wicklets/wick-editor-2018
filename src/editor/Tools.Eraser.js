@@ -13,7 +13,7 @@ Tools.Eraser = function (wickEditor) {
         var context = canvas.getContext('2d');
         var centerX = canvas.width / 2;
         var centerY = canvas.height / 2;
-        var radius = wickEditor.fabric.tools.paintbrush.brushSize/2 * wickEditor.fabric.canvas.getZoom();
+        var radius = wickEditor.tools.paintbrush.brushSize/2 * wickEditor.fabric.canvas.getZoom();
 
         context.beginPath();
         context.arc(centerX, centerY, radius+1, 0, 2 * Math.PI, false);
@@ -34,7 +34,7 @@ Tools.Eraser = function (wickEditor) {
 // Path vectorization
 
     wickEditor.fabric.canvas.on('object:added', function(e) {
-        if(!(wickEditor.fabric.currentTool instanceof Tools.Eraser)) return;
+        if(!(wickEditor.currentTool instanceof Tools.Eraser)) return;
 
         var fabricPath = e.target;
 

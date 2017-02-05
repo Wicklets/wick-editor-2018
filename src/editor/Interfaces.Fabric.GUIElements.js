@@ -83,6 +83,20 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
     var editSymbolScriptsButton = document.getElementById('editSymbolScriptsButton');
     var finishEditingObjectFabricButton = document.getElementById('finishEditingObjectFabricButton');
     
+    canvas.on('before:render', function () {
+        canvas._objects.forEach(function (obj) {
+            if(!obj.centerpointObject) return;
+            var selectedObj = wickEditor.fabric.getSelectedObject();
+
+            if(selectedObj && selectedObj.uuid === obj.wickObjectRef.uuid) {
+                obj.centerpointObject.opacity = 1.0;
+            } else {
+                obj.centerpointObject.opacity = 0.0;
+            }
+            obj.centerpointObject.setCoords();
+        });
+    });
+
     canvas.on('after:render', function() {
 
         createSymbolButton.style.display = "none";

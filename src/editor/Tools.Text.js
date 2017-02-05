@@ -13,10 +13,10 @@ Tools.Text = function (wickEditor) {
     }
 
     canvas.on('mouse:down', function (e) {
-    	if(wickEditor.fabric.currentTool instanceof Tools.Text) {
+    	if(wickEditor.currentTool instanceof Tools.Text) {
             var mouseCanvasSpace = wickEditor.fabric.screenToCanvasSpace(wickEditor.inputHandler.mouse.x, wickEditor.inputHandler.mouse.y)
 	    	self.addText(mouseCanvasSpace.x, mouseCanvasSpace.y);
-            wickEditor.fabric.currentTool = wickEditor.fabric.tools.cursor;
+            wickEditor.currentTool = wickEditor.tools.cursor;
             wickEditor.syncInterfaces();
 	    }
     });
@@ -30,7 +30,7 @@ Tools.Text = function (wickEditor) {
             newWickObject.x = wickEditor.project.width/2;
             newWickObject.y = wickEditor.project.height/2;
         }
-        newWickObject.fontData.fill = wickEditor.fabric.tools.paintbrush.color;
+        newWickObject.fontData.fill = wickEditor.tools.paintbrush.color;
         wickEditor.actionHandler.doAction('addObjects', {wickObjects:[newWickObject]});
     }
 

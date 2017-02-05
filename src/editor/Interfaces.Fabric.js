@@ -30,21 +30,6 @@ var FabricInterface = function (wickEditor) {
         this.wickElements    = new FabricWickElements(wickEditor, this);
         this.symbolBorders   = new FabricSymbolBorders(wickEditor, this);
         this.projectRenderer = new FabricProjectRenderer(wickEditor, this);
-        
-        this.tools = {
-            "cursor"           : new Tools.Cursor(wickEditor),
-            "paintbrush"       : new Tools.Paintbrush(wickEditor),
-            "eraser"           : new Tools.Eraser(wickEditor),
-            "fillbucket"       : new Tools.FillBucket(wickEditor),
-            "rectangle"        : new Tools.Rectangle(wickEditor),
-            "ellipse"          : new Tools.Ellipse(wickEditor),
-            "dropper"          : new Tools.Dropper(wickEditor),
-            "text"             : new Tools.Text(wickEditor),
-            "zoom"             : new Tools.Zoom(wickEditor),
-            "pan"              : new Tools.Pan(wickEditor),
-            "backgroundremove" : new Tools.BackgroundRemove(wickEditor),
-            "crop"             : new Tools.Crop(wickEditor),
-        }
 
         // Pen pressure stuff
         /*
@@ -57,9 +42,6 @@ var FabricInterface = function (wickEditor) {
         };
         */
         this.canvas.freeDrawingBrush = new fabric.PencilBrush(this.canvas);
-
-        this.currentTool = this.tools.cursor;
-        this.lastTool = this.currentTool;
 
         // Canvas event listeners
 
@@ -126,20 +108,20 @@ var FabricInterface = function (wickEditor) {
         self.updateCursor();
 
         // Set drawing mode
-        if(self.currentTool instanceof Tools.Paintbrush) {
+        if(wickEditor.currentTool instanceof Tools.Paintbrush) {
             this.canvas.isDrawingMode = true;
-            this.canvas.freeDrawingBrush.width = self.currentTool.brushSize;
-            this.canvas.freeDrawingBrush.color = self.currentTool.color;
-        } else if (self.currentTool instanceof Tools.Eraser) {
+            this.canvas.freeDrawingBrush.width = wickEditor.currentTool.brushSize;
+            this.canvas.freeDrawingBrush.color = wickEditor.currentTool.color;
+        } else if (wickEditor.currentTool instanceof Tools.Eraser) {
             this.canvas.isDrawingMode = true;
-            this.canvas.freeDrawingBrush.width = self.tools.paintbrush.brushSize;
+            this.canvas.freeDrawingBrush.width = wickEditor.tools.paintbrush.brushSize;
             this.canvas.freeDrawingBrush.color = "#FFFFFF";
         } else {
             this.canvas.isDrawingMode = false;
         }
 
         // Disable selection
-        if(self.currentTool instanceof Tools.Cursor) {
+        if(wickEditor.currentTool instanceof Tools.Cursor) {
             self.canvas.selection = true;
         } else {
             self.canvas.selection = false;
@@ -171,27 +153,6 @@ var FabricInterface = function (wickEditor) {
         self.canvas.relativePan(new fabric.Point(panAdjustX,panAdjustY));
         self.canvas.renderAll();
 
-    }
-
-    this.changeTool = function (newTool) {
-        self.lastTool = self.currentTool;
-        self.currentTool = newTool;
-        self.forceModifySelectedObjects();
-        self.deselectAll();
-        wickEditor.syncInterfaces();
-
-        if((self.lastTool instanceof Tools.Paintbrush) || 
-           (self.lastTool instanceof Tools.Eraser) || 
-           (self.lastTool instanceof Tools.Ellipse) || 
-           (self.lastTool instanceof Tools.Rectangle)) {
-            wickEditor.paper.cleanupPaths();
-            wickEditor.paper.refresh();
-            wickEditor.syncInterfaces();
-        }
-    }
-
-    this.useLastUsedTool = function () {
-        self.currentTool = self.lastTool;
     }
 
     this.recenterCanvas = function () {
@@ -271,7 +232,7 @@ var FabricInterface = function (wickEditor) {
     }
 
     this.updateCursor = function () {
-        var cursorImg = self.currentTool.getCursorImage();
+        var cursorImg = wickEditor.currentTool.getCursorImage();
         this.canvas.defaultCursor = cursorImg;
         this.canvas.freeDrawingCursor = cursorImg;
     }

@@ -12,7 +12,7 @@ Tools.Ellipse = function (wickEditor) {
     };
 
     fabricInterface.canvas.on('mouse:down', function (e) {
-        if(!(fabricInterface.currentTool instanceof Tools.Ellipse)) return;
+        if(!(wickEditor.currentTool instanceof Tools.Ellipse)) return;
 
         fabricInterface.shapeDrawer.startDrawingShape('ellipse', e.e.offsetX, e.e.offsetY, that.createWickObjectFromShape);
     });

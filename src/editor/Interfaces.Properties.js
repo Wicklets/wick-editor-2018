@@ -139,6 +139,7 @@ var PropertiesInterface = function (wickEditor) {
             if(projectBorderColorElem.jscolor) projectBorderColorElem.jscolor.fromString(wickEditor.project.borderColor);
 
             document.getElementById('transparentCheckbox').checked = wickEditor.project.transparent;
+            document.getElementById('pixelPerfectRenderingCheckbox').checked = wickEditor.project.pixelPerfectRendering;
 
             document.getElementById('projectSizeX').value          = wickEditor.project.width;
             document.getElementById('projectSizeY').value          = wickEditor.project.height;
@@ -364,18 +365,6 @@ var PropertiesInterface = function (wickEditor) {
 
     });
 
-    var experimentalTools = [/*'text',*/ /*'backgroundremove',*/ 'dropper', 'paintbrush', 'eraser', 'fillbucket', 'rectangle', 'ellipse'];
-    /*experimentalTools.forEach(function (toolName) {
-        document.getElementById(toolName+'ToolButton').style.display = localStorage.pathDebug === "1" ? 'block' : 'none';
-    });
-    document.getElementById('experimentalToolsCheckbox').onclick = function (e) {
-        var self = this;
-        experimentalTools.forEach(function (toolName) {
-            document.getElementById(toolName+'ToolButton').style.display = self.checked ? 'block' : 'none';
-        });
-        document.getElementById('experimentalWarning').style.display = self.checked ? 'block' : 'none';
-    }*/
-
     document.getElementById('onionSkinningCheckbox').onclick = function (e) {
         wickEditor.project.onionSkinning = this.checked;
         wickEditor.syncInterfaces();
@@ -393,6 +382,9 @@ var PropertiesInterface = function (wickEditor) {
 
     document.getElementById('transparentCheckbox').onchange = function () {
         wickEditor.project.transparent = this.checked;
+    };
+    document.getElementById('pixelPerfectRenderingCheckbox').onchange = function () {
+        wickEditor.project.pixelPerfectRendering = this.checked;
     };
 
     /*document.getElementById('frameAutoplayCheckbox').onclick = function (e) {

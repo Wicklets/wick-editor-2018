@@ -1,40 +1,23 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-/* GuiActionHandler.js - Abstraction for actions which may be performed through
-    the WickEditor GUI. Don't add routines that aren't supposed to be undone or
-    redone, add those to WickActionHandler. */
+/* GuiActionHandler.js - Interface for routines that don't need undo/redo functionality */
 
 var GuiActionHandler = function (wickEditor) {
 
     var that = this;
 
-    /* Set up vars needed for input listening. */
-    this.keys = [];
-    this.specialKeys = [];
-    var editingTextBox = false;
-
-    /* Define special keys */
-    var modifierKeys = ["WINDOWS","COMMAND","FIREFOXCOMMAND","CTRL"];
-    var shiftKeys = ["SHIFT"];
-
     /* Initialize list of GuiActions. */
-    var guiActions = {};
-
-    var activeElemIsTextBox = function () {
-        var activeElem = document.activeElement.nodeName;
-        editingTextBox = activeElem == 'TEXTAREA' || activeElem == 'INPUT';
-        return editingTextBox;
-    }
+    this.guiActions = {};
 
     var registerAction = function (name, hotkeys, elementIds, requiredParams, action) {
-        guiActions[name] = new GuiAction(hotkeys, elementIds, requiredParams, action);
+        that.guiActions[name] = new GuiAction(hotkeys, elementIds, requiredParams, action);
     }
 
     this.doAction = function (name, args) {
         if(args) 
-            guiActions[name].doAction(args);
+            this.guiActions[name].doAction(args);
         else
-            guiActions[name].doAction({});
+            this.guiActions[name].doAction({});
     }
 
     /* GuiAction definition. All possible actions performable through interacting
@@ -83,101 +66,6 @@ var GuiActionHandler = function (wickEditor) {
         }
     }
 
-    /* For calling GUI actions manually */
-    this.pressButton = function (id) {
-        for(actionName in guiActions) {
-            var guiAction = guiActions[actionName];
-            if(guiAction.elementIds.indexOf(id) !== -1) {
-                guiAction.doAction({});
-            }
-        };
-    }
-
-/*************************
-    Key listeners
-*************************/
-
-    // Fixes hotkey breaking bug
-    $(window).focus(function() {
-        that.keys = [];
-        that.specialKeys = [];
-    });
-    $(window).blur(function() {
-        that.keys = [];
-        that.specialKeys = [];
-    });
-
-    document.body.addEventListener("keydown", function (event) {
-        handleKeyEvent(event, "keydown");
-    });
-    document.body.addEventListener("keyup", function (event) {
-        handleKeyEvent(event, "keyup");
-    });
-
-    var handleKeyEvent = function (event, eventType) {
-
-        var keyChar = codeToKeyChar[event.keyCode];
-        var keyDownEvent = eventType === 'keydown';
-        if (modifierKeys.indexOf(keyChar) !== -1) {
-            that.specialKeys["Modifier"] = keyDownEvent;
-            that.keys = [];
-        } else if (shiftKeys.indexOf(keyChar) !== -1) {
-            that.specialKeys["SHIFT"] = keyDownEvent;
-            that.keys = [];
-        } else {
-            that.keys[event.keyCode] = keyDownEvent;
-        }
-
-        // get this outta here
-        if(event.keyCode == 32 && eventType === 'keyup' && !activeElemIsTextBox()) {
-            wickEditor.fabric.useLastUsedTool();
-            wickEditor.syncInterfaces();
-        }
-
-        for(actionName in guiActions) { (function () {
-            var guiAction = guiActions[actionName];
-
-            if (wickEditor.builtinplayer.running && !guiAction.requiredParams.builtinplayerRunning) return;
-
-            var stringkeys = [];
-            for (var numkey in that.keys) {
-                if (that.keys.hasOwnProperty(numkey) && that.keys[numkey]) {
-                    stringkeys.push(codeToKeyChar[numkey]);
-                }
-            }
-            var stringspecialkeys = [];
-            for (var numkey in that.specialKeys) {
-                if (that.specialKeys.hasOwnProperty(numkey) && that.specialKeys[numkey]) {
-                    stringspecialkeys.push(numkey);
-                }
-            }
-
-            var cmpArrays = function (a,b) {
-                return a.sort().join(',') === b.sort().join(',');
-            }
-
-            var hotkeysMatch = cmpArrays(guiAction.hotkeys, stringkeys)
-            var specialKeysMatch = cmpArrays(guiAction.specialKeys, stringspecialkeys);
-
-            if(!hotkeysMatch || !specialKeysMatch) return;
-            if(guiAction.hotkeys.length === 0) return;
-            if(activeElemIsTextBox() && !guiAction.requiredParams.usableInTextBoxes) return;
-
-            wickEditor.rightclickmenu.open = false;
-            event.preventDefault();
-            guiAction.doAction({});
-            that.keys = [];
-        })()};
-    };
-
-    // In order to ensure that the browser will fire clipboard events, we always need to have something selected
-    var focusHiddenArea = function () {
-        if($("#scriptingGUI").css('visibility') === 'hidden') {
-            $("#hidden-input").val(' ');
-            $("#hidden-input").focus().select();
-        }
-    }
-
 /****************************
     GuiAction Definitions
 *****************************/
@@ -189,9 +77,9 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function(args) {
-            if(!(wickEditor.fabric.currentTool instanceof Tools.Pan)) {
-                wickEditor.fabric.lastTool = wickEditor.fabric.currentTool;
-                wickEditor.fabric.currentTool = wickEditor.fabric.tools.pan;
+            if(!(wickEditor.currentTool instanceof Tools.Pan)) {
+                wickEditor.lastTool = wickEditor.currentTool;
+                wickEditor.currentTool = wickEditor.tools.pan;
                 wickEditor.syncInterfaces();
             }
         });
@@ -348,7 +236,7 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function(args) {
-            wickEditor.fabric.currentTool = wickEditor.fabric.tools.cursor;
+            wickEditor.currentTool = wickEditor.tools.cursor;
             wickEditor.syncInterfaces();
             wickEditor.fabric.deselectAll();
             wickEditor.fabric.selectAll();
@@ -634,7 +522,7 @@ var GuiActionHandler = function (wickEditor) {
         ['cursorToolButton'],
         {},
         function(args) {
-            wickEditor.fabric.changeTool(wickEditor.fabric.tools.cursor);
+            wickEditor.changeTool(wickEditor.tools.cursor);
         });
 
     registerAction('useTools.Paintbrush',
@@ -642,7 +530,7 @@ var GuiActionHandler = function (wickEditor) {
         ['paintbrushToolButton'],
         {},
         function(args) {
-            wickEditor.fabric.changeTool(wickEditor.fabric.tools.paintbrush);
+            wickEditor.changeTool(wickEditor.tools.paintbrush);
         });
 
     registerAction('useTools.Eraser',
@@ -650,7 +538,7 @@ var GuiActionHandler = function (wickEditor) {
         ['eraserToolButton'],
         {},
         function(args) {
-            wickEditor.fabric.changeTool(wickEditor.fabric.tools.eraser);
+            wickEditor.changeTool(wickEditor.tools.eraser);
         });
 
     registerAction('useTools.FillBucket',
@@ -658,7 +546,7 @@ var GuiActionHandler = function (wickEditor) {
         ['fillbucketToolButton'],
         {},
         function(args) {
-            wickEditor.fabric.changeTool(wickEditor.fabric.tools.fillbucket);
+            wickEditor.changeTool(wickEditor.tools.fillbucket);
         });
 
     registerAction('useTools.Rectangle',
@@ -666,7 +554,7 @@ var GuiActionHandler = function (wickEditor) {
         ['rectangleToolButton'],
         {},
         function(args) {
-            wickEditor.fabric.changeTool(wickEditor.fabric.tools.rectangle);
+            wickEditor.changeTool(wickEditor.tools.rectangle);
         });
 
     registerAction('useTools.Ellipse',
@@ -674,7 +562,7 @@ var GuiActionHandler = function (wickEditor) {
         ['ellipseToolButton'],
         {},
         function(args) {
-            wickEditor.fabric.changeTool(wickEditor.fabric.tools.ellipse);
+            wickEditor.changeTool(wickEditor.tools.ellipse);
         });
 
     registerAction('useTools.Dropper',
@@ -682,7 +570,7 @@ var GuiActionHandler = function (wickEditor) {
         ['dropperToolButton'],
         {},
         function(args) {
-            wickEditor.fabric.changeTool(wickEditor.fabric.tools.dropper);
+            wickEditor.changeTool(wickEditor.tools.dropper);
         });
 
     registerAction('useTools.Text',
@@ -690,7 +578,7 @@ var GuiActionHandler = function (wickEditor) {
         ['textToolButton'],
         {},
         function(args) {
-            wickEditor.fabric.changeTool(wickEditor.fabric.tools.text);
+            wickEditor.changeTool(wickEditor.tools.text);
         });
 
     registerAction('useTools.Zoom',
@@ -698,7 +586,7 @@ var GuiActionHandler = function (wickEditor) {
         ['zoomToolButton'],
         {},
         function(args) {
-            wickEditor.fabric.changeTool(wickEditor.fabric.tools.zoom);
+            wickEditor.changeTool(wickEditor.tools.zoom);
         });
 
     registerAction('useTools.Pan',
@@ -706,7 +594,7 @@ var GuiActionHandler = function (wickEditor) {
         ['panToolButton'],
         {},
         function(args) {
-            wickEditor.fabric.changeTool(wickEditor.fabric.tools.pan);
+            wickEditor.changeTool(wickEditor.tools.pan);
         });
 
     registerAction('useTools.Crop',
@@ -714,7 +602,7 @@ var GuiActionHandler = function (wickEditor) {
         ['cropToolButton'],
         {},
         function(args) {
-            wickEditor.fabric.changeTool(wickEditor.fabric.tools.crop);
+            wickEditor.changeTool(wickEditor.tools.crop);
         });
 
     registerAction('useTools.BackgroundRemove',
@@ -722,7 +610,7 @@ var GuiActionHandler = function (wickEditor) {
         ['backgroundremoveToolButton'],
         {},
         function(args) {
-            wickEditor.fabric.changeTool(wickEditor.fabric.tools.backgroundremove);
+            wickEditor.changeTool(wickEditor.tools.backgroundremove);
         });
 
     registerAction('editScripts',

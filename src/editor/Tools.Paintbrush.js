@@ -52,7 +52,7 @@ Tools.Paintbrush = function (wickEditor) {
 
     // Listen for new paths drawn by fabric, vectorize them, and add them to the WickProject as WickObjects
     wickEditor.fabric.canvas.on('object:added', function(e) {
-        if(!(wickEditor.fabric.currentTool instanceof Tools.Paintbrush)) return;
+        if(!(wickEditor.currentTool instanceof Tools.Paintbrush)) return;
 
         var fabricPath = e.target;
 

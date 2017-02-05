@@ -27,6 +27,106 @@ var InputHandler = function (wickEditor) {
     }, false );
 
 /*************************
+     Keyboard
+*************************/
+
+    /* Set up vars needed for input listening. */
+    this.keys = [];
+    this.specialKeys = [];
+    var editingTextBox = false;
+
+    /* Define special keys */
+    var modifierKeys = ["WINDOWS","COMMAND","FIREFOXCOMMAND","CTRL"];
+    var shiftKeys = ["SHIFT"];
+
+    var activeElemIsTextBox = function () {
+        var activeElem = document.activeElement.nodeName;
+        editingTextBox = activeElem == 'TEXTAREA' || activeElem == 'INPUT';
+        return editingTextBox;
+    }
+
+    // Fixes hotkey breaking bug
+    $(window).focus(function() {
+        that.keys = [];
+        that.specialKeys = [];
+    });
+    $(window).blur(function() {
+        that.keys = [];
+        that.specialKeys = [];
+    });
+
+    document.body.addEventListener("keydown", function (event) {
+        handleKeyEvent(event, "keydown");
+    });
+    document.body.addEventListener("keyup", function (event) {
+        handleKeyEvent(event, "keyup");
+    });
+
+    var handleKeyEvent = function (event, eventType) {
+
+        var keyChar = codeToKeyChar[event.keyCode];
+        var keyDownEvent = eventType === 'keydown';
+        if (modifierKeys.indexOf(keyChar) !== -1) {
+            that.specialKeys["Modifier"] = keyDownEvent;
+            that.keys = [];
+        } else if (shiftKeys.indexOf(keyChar) !== -1) {
+            that.specialKeys["SHIFT"] = keyDownEvent;
+            that.keys = [];
+        } else {
+            that.keys[event.keyCode] = keyDownEvent;
+        }
+
+        // get this outta here
+        if(event.keyCode == 32 && eventType === 'keyup' && !activeElemIsTextBox()) {
+            wickEditor.useLastUsedTool();
+            wickEditor.syncInterfaces();
+        }
+
+        for(actionName in wickEditor.guiActionHandler.guiActions) { (function () {
+            var guiAction = wickEditor.guiActionHandler.guiActions[actionName];
+
+            if (wickEditor.builtinplayer.running && !guiAction.requiredParams.builtinplayerRunning) return;
+
+            var stringkeys = [];
+            for (var numkey in that.keys) {
+                if (that.keys.hasOwnProperty(numkey) && that.keys[numkey]) {
+                    stringkeys.push(codeToKeyChar[numkey]);
+                }
+            }
+            var stringspecialkeys = [];
+            for (var numkey in that.specialKeys) {
+                if (that.specialKeys.hasOwnProperty(numkey) && that.specialKeys[numkey]) {
+                    stringspecialkeys.push(numkey);
+                }
+            }
+
+            var cmpArrays = function (a,b) {
+                return a.sort().join(',') === b.sort().join(',');
+            }
+
+            var hotkeysMatch = cmpArrays(guiAction.hotkeys, stringkeys)
+            var specialKeysMatch = cmpArrays(guiAction.specialKeys, stringspecialkeys);
+
+            if(!hotkeysMatch || !specialKeysMatch) return;
+            if(guiAction.hotkeys.length === 0) return;
+            if(activeElemIsTextBox() && !guiAction.requiredParams.usableInTextBoxes) return;
+
+            wickEditor.rightclickmenu.open = false;
+            event.preventDefault();
+            guiAction.doAction({});
+            that.keys = [];
+        })()};
+    };
+
+    // In order to ensure that the browser will fire clipboard events, we always need to have something selected
+    var focusHiddenArea = function () {
+        if($("#scriptingGUI").css('visibility') === 'hidden') {
+            $("#hidden-input").val(' ');
+            $("#hidden-input").focus().select();
+        }
+    }
+
+/*************************
     Copy/paste
 *************************/
 

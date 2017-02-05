@@ -15,7 +15,7 @@ var ToolbarInterface = function (wickEditor) {
                          'zoom',
                          'pan',
                          'crop',
-                         'backgroundremove' ]; 
+                         'backgroundremove' ];
 
     var brushCanvas;
     var brushCtx;
@@ -52,7 +52,7 @@ var ToolbarInterface = function (wickEditor) {
         /* Highlight select tool, unhighlight all other tools */
         toolbarTools.forEach( function(toolName) {
             var buttonClassName = '#' + toolName + 'ToolButton';
-            if (wickEditor.fabric.tools[toolName] === wickEditor.fabric.currentTool) {
+            if (wickEditor.tools[toolName] === wickEditor.currentTool) {
                 $(buttonClassName).css('border', '1px solid #ccc');
             } else {
                 $(buttonClassName).css('border', '');
@@ -60,11 +60,11 @@ var ToolbarInterface = function (wickEditor) {
         });
 
         /* Update drawing tool options elems */
-        lineWidthEl.value = wickEditor.fabric.tools['paintbrush'].brushSize;
+        lineWidthEl.value = wickEditor.tools['paintbrush'].brushSize;
 
-        if(lineColorEl.jscolor) lineColorEl.jscolor.fromString(wickEditor.fabric.tools['paintbrush'].color);
+        if(lineColorEl.jscolor) lineColorEl.jscolor.fromString(wickEditor.tools['paintbrush'].color);
         
-        var currentTool = wickEditor.fabric.currentTool;
+        var currentTool = wickEditor.currentTool;
         document.getElementById('toolOptionsGUI').style.display = 
             (currentTool instanceof Tools.Dropper) ||
             (currentTool instanceof Tools.Ellipse) ||
@@ -79,11 +79,11 @@ var ToolbarInterface = function (wickEditor) {
 
         var centerX = brushCanvas.width / 2;
         var centerY = brushCanvas.height / 2;
-        var radius = wickEditor.fabric.tools.paintbrush.brushSize/2 * wickEditor.fabric.canvas.getZoom();
+        var radius = wickEditor.tools.paintbrush.brushSize/2 * wickEditor.fabric.canvas.getZoom();
 
         brushCtx.beginPath();
         brushCtx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-        brushCtx.fillStyle = wickEditor.fabric.tools.paintbrush.color;
+        brushCtx.fillStyle = wickEditor.tools.paintbrush.color;
         brushCtx.fill();
     }
 
@@ -92,13 +92,13 @@ var ToolbarInterface = function (wickEditor) {
     var lineColorEl = document.getElementById('lineColor');
 
     lineWidthEl.onchange = function() {
-        wickEditor.fabric.tools['paintbrush'].brushSize = parseInt(this.value, 10) || 2;
+        wickEditor.tools['paintbrush'].brushSize = parseInt(this.value, 10) || 2;
         wickEditor.syncInterfaces();
     };
 
     lineColorEl.onchange = function() {
         var newColor = '#' + this.value;
-        wickEditor.fabric.tools['paintbrush'].color = newColor;
+        wickEditor.tools['paintbrush'].color = newColor;
 
         wickEditor.syncInterfaces();
     };

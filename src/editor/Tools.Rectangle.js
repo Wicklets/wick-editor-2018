@@ -12,7 +12,7 @@ Tools.Rectangle = function (wickEditor) {
     };
 
     fabricInterface.canvas.on('mouse:down', function (e) {
-        if(!(fabricInterface.currentTool instanceof Tools.Rectangle)) return;
+        if(!(wickEditor.currentTool instanceof Tools.Rectangle)) return;
 
         fabricInterface.shapeDrawer.startDrawingShape('rectangle', e.e.offsetX, e.e.offsetY, that.createWickObjectFromShape);
     });

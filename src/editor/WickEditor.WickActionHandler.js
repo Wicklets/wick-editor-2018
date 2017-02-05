@@ -378,7 +378,7 @@ var WickActionHandler = function (wickEditor) {
                 if(child.pathData) {
                     wickEditor.paper.addPath(child.pathData, {x:child.x, y:child.y});
                 } else {
-                    wickEditor.project.addObject(child);
+                    wickEditor.project.addObject(child, null, true);
                 }
             });
             wickEditor.paper.refresh();
@@ -398,7 +398,7 @@ var WickActionHandler = function (wickEditor) {
                 if(child.pathData) {
                     wickEditor.paper.addPath(child.pathData, {x:child.x, y:child.y});
                 } else {
-                    wickEditor.project.addObject(child);
+                    wickEditor.project.addObject(child, null, true);
                 }
             });
             wickEditor.paper.refresh();

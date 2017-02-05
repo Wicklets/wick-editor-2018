@@ -155,7 +155,7 @@ var MenuBarInterface = function (wickEditor) {
 
         addTab('Add', [
             new TabButton('Text', function () {
-                wickEditor.fabric.tools.text.addText();
+                wickEditor.tools.text.addText();
             }),
             new TabButton('File', function () {
                 wickEditor.guiActionHandler.doAction("openFile");
