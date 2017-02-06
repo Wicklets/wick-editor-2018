@@ -26,7 +26,6 @@ var TimelineInterface = function (wickEditor) {
         if(obj instanceof WickObject) {
 
             var timelineDiv = createDiv({className: 'timeline'});
-            registerEvents(timelineDiv, obj)
 
             obj.layers.forEach(function (wickLayer) {
                 generateDiv(wickLayer, timelineDiv);
@@ -37,7 +36,9 @@ var TimelineInterface = function (wickEditor) {
         } else if(obj instanceof WickLayer) {
 
             var layerDiv = createDiv({className: 'layer'});
-            registerEvents(layerDiv, obj)
+            layerDiv.addEventListener('mousedown', function () {
+                console.log('layer');
+            });
             
             layerDiv.appendChild(createDiv({className: 'layerOptions'}));
             obj.frames.forEach(function (wickFrame) {
@@ -49,34 +50,27 @@ var TimelineInterface = function (wickEditor) {
         } else if (obj instanceof WickFrame) {
 
             var frameDiv = createDiv({className: 'frame'});
-            registerEvents(frameDiv, obj)
+            frameDiv.addEventListener('mousedown', function (e) {
+                console.log(/*obj.identifier*/'frame')
+                e.stopPropagation()
+            });
 
             frameDiv.style.width = (frameWidth * obj.frameLength) + 'px';
 
-            var leftFrameHandle = createDiv({className: 'leftFrameHandle'});
-            var rightFrameHandle = createDiv({className: 'rightFrameHandle'});
+            var leftFrameHandle = createDiv({className: 'frameHandle leftFrameHandle'});
+            var rightFrameHandle = createDiv({className: 'frameHandle rightFrameHandle'});
+            leftFrameHandle.addEventListener('mousedown', function (e) {
+                console.log(/*obj.identifier*/'leftframehandle')
+                e.stopPropagation()
+            });
+            rightFrameHandle.addEventListener('mousedown', function (e) {
+                console.log(/*obj.identifier*/'rightFrameHandle')
+                e.stopPropagation()
+            });
             frameDiv.appendChild(leftFrameHandle);
             frameDiv.appendChild(rightFrameHandle);
 
             parent.appendChild(frameDiv);
-
-        }
-    }
-
-// Event handlers
-
-    var registerEvents = function (div, obj) {
-        if(obj instanceof WickObject) {
-
-
-        } else if(obj instanceof WickLayer) {
-
-
-        } else if(obj instanceof WickFrame) {
-
-            div.addEventListener('mousedown', function () {
-                console.log(obj.identifier)
-            });
 
         }
     }

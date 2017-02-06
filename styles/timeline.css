@@ -29,16 +29,17 @@
 	margin-right: 2px;
 }
 
-.leftFrameHandle {
-	float: left;
+.frameHandle {
 	height: 32px;
 	width: 5px;
 	background-color: purple;
+	cursor: ew-resize;
+}
+
+.leftFrameHandle {
+	float: left;
 }
 
 .rightFrameHandle {
 	float: right;
-	height: 32px;
-	width: 5px;
-	background-color: purple;
 }
