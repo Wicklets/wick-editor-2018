@@ -158,7 +158,7 @@ var RightClickMenuInterface = function (wickEditor) {
         that.repositionMenu();
     });
 
-    document.getElementById("timelineCanvas").addEventListener('mousedown', function(e) { 
+    document.getElementById("timelineGUI").addEventListener('mousedown', function(e) { 
         if(e.button == 2) {
             that.open = true;
             that.mode = "timeline";

@@ -74,7 +74,7 @@ var MenuBarInterface = function (wickEditor) {
 
         wickEditor.fabric.canvas.on('mouse:down', function (e) {
             closeAllMenus();
-        })
+        });
 
         addTab('File', [
             new TabButton('New Project', function () {

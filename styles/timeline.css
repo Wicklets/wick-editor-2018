@@ -1,0 +1,44 @@
+.timeline {
+	margin: 0px;
+	padding: 0px;
+	width: 100%;
+	height: 100px;
+	background-color: yellow;
+	overflow: scroll;
+}
+
+.layer {
+	background-color: orange;
+	width: 1000px; /* How do we make this grow automatically? */
+	height: 32px;
+	margin-bottom: 2px;
+}
+
+.layerOptions {
+	background-color: green;
+	width: 100px;
+	height: 32px;
+	margin-bottom: 2px;
+	float: left;
+}
+
+.frame {
+	float: left;
+	height: 32px;
+	background-color: red;
+	margin-right: 2px;
+}
+
+.leftFrameHandle {
+	float: left;
+	height: 32px;
+	width: 5px;
+	background-color: purple;
+}
+
+.rightFrameHandle {
+	float: right;
+	height: 32px;
+	width: 5px;
+	background-color: purple;
+}

@@ -56,7 +56,7 @@ var FabricInterface = function (wickEditor) {
             },
         });
         self.canvas.on('object:selected', function (e) {
-            wickEditor.timeline.redraw();
+            //wickEditor.timeline.redraw();
             
             wickEditor.scriptingide.editScriptsOfObject(e.target.wickObjReference, {dontOpenIDE:true});
             wickEditor.scriptingide.syncWithEditorState();
@@ -72,14 +72,14 @@ var FabricInterface = function (wickEditor) {
             $(":focus").blur();
         });
         self.canvas.on('selection:cleared', function (e) {
-            wickEditor.timeline.redraw();
+            //wickEditor.timeline.redraw();
 
             wickEditor.scriptingide.clearSelection();
             wickEditor.scriptingide.syncWithEditorState();
             wickEditor.properties.syncWithEditorState();
         });
         self.canvas.on('selection:changed', function (e) {
-            wickEditor.timeline.redraw();
+            //wickEditor.timeline.redraw();
 
             wickEditor.scriptingide.editScriptsOfObject(this.getSelectedObject(WickObject), {dontOpenIDE:true});
             self.guiElements.update();
@@ -250,7 +250,7 @@ var FabricInterface = function (wickEditor) {
     }
 
     this.selectObjects = function (objects) {
-        wickEditor.timeline.redraw();
+        //wickEditor.timeline.redraw();
 
         if(objects.length == 0) {
             return;
@@ -293,7 +293,7 @@ var FabricInterface = function (wickEditor) {
     }
 
     this.selectAll = function () {
-        wickEditor.timeline.redraw();
+        //wickEditor.timeline.redraw();
 
         var objs = [];
         this.canvas.forEachObject(function (o) {
@@ -305,7 +305,7 @@ var FabricInterface = function (wickEditor) {
     }
 
     this.deselectAll = function (clearScriptingSelection) {
-        wickEditor.timeline.redraw();
+        //wickEditor.timeline.redraw();
 
         if(!clearScriptingSelection)
             wickEditor.scriptingide.clearSelection();
