@@ -72,6 +72,11 @@ WickFrame.prototype.encodeStrings = function () {
     }
 
     if(this.pathData) this.pathData = WickProject.Compressor.encodeString(this.pathData);
+    if(this.pathDataToAdd) {
+    	for(var i = 0; i < this.pathDataToAdd.length; i++) {
+    		this.pathDataToAdd[i].svg = WickProject.Compressor.encodeString(this.pathDataToAdd[i].svg);
+    	}
+    }
 
 }
 
@@ -84,6 +89,11 @@ WickFrame.prototype.decodeStrings = function () {
     }
 
     if(this.pathData) this.pathData = WickProject.Compressor.decodeString(this.pathData);
+    if(this.pathDataToAdd) {
+    	for(var i = 0; i < this.pathDataToAdd.length; i++) {
+    		this.pathDataToAdd[i].svg = WickProject.Compressor.decodeString(this.pathDataToAdd[i].svg);
+    	}
+    }
 
 }
 

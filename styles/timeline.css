@@ -29,11 +29,16 @@
 	margin-right: 2px;
 }
 
+.selectedFrame {
+	background-color: #AA0000;
+}
+
 .frameHandle {
 	height: 32px;
 	width: 5px;
 	background-color: purple;
 	cursor: ew-resize;
+	opacity: 0.2;
 }
 
 .leftFrameHandle {

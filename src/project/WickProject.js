@@ -30,7 +30,9 @@ var WickProject = function () {
     this.renderer = "WickPixiRenderer";
     this.audioPlayer = "WickWebAudioPlayer";
 
-    this.assets = {};
+    //this.assets = {};
+
+    this.selection = [];
 
 };
 
@@ -51,7 +53,7 @@ WickProject.prototype.createNewRootObject = function () {
     Assets
 *****************************/
 
-WickProject.prototype.loadAsset = function (filename, dataURL) {
+/*WickProject.prototype.loadAsset = function (filename, dataURL) {
     // Avoid duplicate names
     var newFilename = filename;
     var i = 2;
@@ -69,7 +71,7 @@ WickProject.prototype.loadAsset = function (filename, dataURL) {
 
 WickProject.prototype.getAsset = function (filename) {
     return LZString.decompressFromBase64(this.assets[filename]);
-}
+}*/
 
 /*****************************
     Import/Export
@@ -401,3 +403,6 @@ WickProject.prototype.hasSyntaxErrors = function () {
 
 }
 
+WickProject.prototype.isObjectSelected = function (obj) {
+    return this.selection.includes(obj);
+}

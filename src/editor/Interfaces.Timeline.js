@@ -49,10 +49,10 @@ var TimelineInterface = function (wickEditor) {
 
         } else if (obj instanceof WickFrame) {
 
-            var frameDiv = createDiv({className: 'frame'});
+            var frameDiv = createDiv({className: 'frame' + (!wickEditor.project.isObjectSelected(obj)?' selectedFrame':'')});
             frameDiv.addEventListener('mousedown', function (e) {
                 console.log(/*obj.identifier*/'frame')
-                e.stopPropagation()
+                e.stopPropagation();
             });
 
             frameDiv.style.width = (frameWidth * obj.frameLength) + 'px';

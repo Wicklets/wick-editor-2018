@@ -69,6 +69,33 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
         
     }
 
+    self.getCanvasThumbnail = function (callback) {
+        self.getCanvasAsImage(function (imageObj) {
+            var thumbCanvas = document.createElement('canvas');
+            /*thumbCanvas.style.position = 'absolute'
+            thumbCanvas.style.left = '0px'
+            thumbCanvas.style.top = '0px'
+            document.getElementById('editor').appendChild(thumbCanvas)*/
+            thumbCanvas.width = wickEditor.project.width/10;
+            thumbCanvas.height = wickEditor.project.height/10;
+
+            var thumbCtx = thumbCanvas.getContext('2d');
+            thumbCtx.clearRect(0,0,thumbCanvas.width,thumbCanvas.height);
+            if(!wickEditor.project.transparent) {
+                thumbCtx.rect(0, 0, thumbCanvas.width,thumbCanvas.height);
+                thumbCtx.fillStyle = wickEditor.project.backgroundColor;
+                thumbCtx.fill();
+            }
+
+            var image = new Image();
+            image.onload = function () {
+                thumbCtx.drawImage(image, imageObj.x/10, imageObj.y/10, image.width/10, image.height/10);
+                callback(thumbCanvas.toDataURL())
+            }
+            image.src = imageObj.src;
+        });
+    }
+
     self.renderProjectAsGIF = function (callback) {
         self.getProjectAsCanvasSequence(function (canvases) {
             var gif;
