@@ -17,6 +17,9 @@ var WickFrame = function () {
 	// Should the frame reset on being entered?
 	this.alwaysSaveState = false;
 
+	// Generate unique id
+	this.uuid = random.uuid4();
+
 	// Set all scripts to defaults
 	this.wickScripts = {
         "onLoad" : "",

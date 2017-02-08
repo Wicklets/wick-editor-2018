@@ -432,15 +432,14 @@ var GuiActionHandler = function (wickEditor) {
                 var file = clipboardData.getData(fileType);
                 
                 if(fileType === 'text/wickobjectsjson') {
-                    var fileWickObject = WickObject.fromJSONArray(JSON.parse(file), function(objs) {
-                        objs.forEach(function (obj) {
-                            obj.getAllChildObjectsRecursive().forEach(function (child) {
-                                child.uuid = null;
-                            });
+                    var objs = WickObject.fromJSONArray(JSON.parse(file));
+                    objs.forEach(function (obj) {
+                        obj.getAllChildObjectsRecursive().forEach(function (child) {
+                            child.uuid = null;
                         });
-                        wickEditor.actionHandler.doAction('addObjects', {
-                            wickObjects:objs
-                        });
+                    });
+                    wickEditor.actionHandler.doAction('addObjects', {
+                        wickObjects:objs
                     });
                 /*} else if (fileType === 'text/plain') {
                     var newObj = WickObject.fromText(file);

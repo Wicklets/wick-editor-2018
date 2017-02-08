@@ -256,11 +256,11 @@ var InputHandler = function (wickEditor) {
      Tooltips
 *************************/
 
-    $('.tooltipElem').on("mouseover", function(e) {
+    $('.tooltipElem').on("mousemove", function(e) {
         $("#tooltipGUI").css('display', 'block');
         $("#tooltipGUI").css('top', wickEditor.inputHandler.mouse.y+5+'px');
-        $("#tooltipGUI").css('left', wickEditor.inputHandler.mouse.x+5+'px');
-        document.getElementById('tooltipGUI').innerHTML = e.currentTarget.alt;
+        $("#tooltipGUI").css('left', wickEditor.inputHandler.mouse.x+10+'px');
+        document.getElementById('tooltipGUI').innerHTML = e.currentTarget.getAttribute('alt');
     });
     $('.tooltipElem').on("mouseout", function(e) {
         $("#tooltipGUI").css('display', 'none');

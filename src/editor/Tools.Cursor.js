@@ -7,6 +7,7 @@ Tools.Cursor = function (wickEditor) {
     var that = this;
 
     var lastDoubleClickTime = null;
+    var lastDoubleClickPos = {x:0,y:0};
 
     this.getCursorImage = function () {
         return "default";
@@ -45,8 +46,10 @@ Tools.Cursor = function (wickEditor) {
             if(e.e.button !== 0) return;
             if(!(wickEditor.currentTool instanceof Tools.Cursor)) return;
 
+            var newDoubleClickPos = {x: e.e.clientX, y: e.e.clientX};
             var currentTime = new Date().getTime();
-            if(lastDoubleClickTime !== null && currentTime-lastDoubleClickTime < 350) {
+
+            if(lastDoubleClickTime !== null && currentTime-lastDoubleClickTime < 350 && lastDoubleClickPos.x === newDoubleClickPos.x && lastDoubleClickPos.y === newDoubleClickPos.y) {
                 var selectedObject = wickEditor.fabric.getSelectedObject(WickObject);
                 if(selectedObject && selectedObject.isSymbol) {
                     wickEditor.guiActionHandler.doAction("editObject");
@@ -57,6 +60,8 @@ Tools.Cursor = function (wickEditor) {
             } else {
                 lastDoubleClickTime = currentTime;
             }
+
+            lastDoubleClickPos = newDoubleClickPos;
         });
     }
 

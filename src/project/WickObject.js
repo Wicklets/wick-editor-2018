@@ -176,20 +176,27 @@ WickObject.createNewSymbol = function () {
 
 }
 
+// Create a new symbol and add every object in wickObjects as children
 WickObject.createSymbolFromWickObjects = function (wickObjects) {
-
-    // Create a new symbol and add every object in wickObjects as children
 
     var symbol = WickObject.createNewSymbol();
 
-    var center = {x:0,y:0};
+    // Calculate center of all WickObjects
+    var topLeft = {x:Number.MAX_SAFE_INTEGER, y:Number.MAX_SAFE_INTEGER};
+    var bottomRight = {x:0,y:0};
     wickObjects.forEach(function (wickObj) {
-        center.x += wickObj.x;
-        center.y += wickObj.y;
-    })
-    center.x /= wickObjects.length;
-    center.y /= wickObjects.length;
+        topLeft.x = Math.min(topLeft.x, wickObj.x - wickObj.width /2);
+        topLeft.y = Math.min(topLeft.y, wickObj.y - wickObj.height/2);
+        bottomRight.x = Math.max(bottomRight.x, wickObj.x + wickObj.width /2);
+        bottomRight.y = Math.max(bottomRight.y, wickObj.y + wickObj.height/2);
+    });
+    console.log(topLeft)
+    console.log(bottomRight)
 
+    var center = {
+        x: topLeft.x + (bottomRight.x - topLeft.x)/2,
+        y: topLeft.y + (bottomRight.y - topLeft.y)/2
+    }
     symbol.x = center.x;
     symbol.y = center.y;
 

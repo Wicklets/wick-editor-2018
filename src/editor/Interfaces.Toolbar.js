@@ -15,7 +15,7 @@ var ToolbarInterface = function (wickEditor) {
             var toolDiv = document.createElement('div');
             toolDiv.className = "button tooltipElem";
             toolDiv.id = toolName + "ToolButton";
-            toolDiv.alt = tool.getTooltipName();
+            toolDiv.setAttribute('alt', tool.getTooltipName());
 
             var toolIcon = document.createElement('img');
             toolIcon.src = tool.getToolbarIcon();
