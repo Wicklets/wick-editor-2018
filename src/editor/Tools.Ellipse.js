@@ -11,11 +11,21 @@ Tools.Ellipse = function (wickEditor) {
         return "crosshair"
     };
 
-    fabricInterface.canvas.on('mouse:down', function (e) {
-        if(!(wickEditor.currentTool instanceof Tools.Ellipse)) return;
+    this.getToolbarIcon = function () {
+        return "resources/ellipse.png";
+    }
 
-        fabricInterface.shapeDrawer.startDrawingShape('ellipse', e.e.offsetX, e.e.offsetY, that.createWickObjectFromShape);
-    });
+    this.getTooltipName = function () {
+        return "Ellipse";
+    }
+
+    this.setup = function () {
+        fabricInterface.canvas.on('mouse:down', function (e) {
+            if(!(wickEditor.currentTool instanceof Tools.Ellipse)) return;
+
+            fabricInterface.shapeDrawer.startDrawingShape('ellipse', e.e.offsetX, e.e.offsetY, that.createWickObjectFromShape);
+        });
+    }
 
     this.createWickObjectFromShape = function (drawingShape) {
         var origX = drawingShape.left;

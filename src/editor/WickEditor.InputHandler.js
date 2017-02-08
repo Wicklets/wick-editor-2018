@@ -260,7 +260,7 @@ var InputHandler = function (wickEditor) {
         $("#tooltipGUI").css('display', 'block');
         $("#tooltipGUI").css('top', wickEditor.inputHandler.mouse.y+5+'px');
         $("#tooltipGUI").css('left', wickEditor.inputHandler.mouse.x+5+'px');
-        document.getElementById('tooltipGUI').innerHTML = e.currentTarget.attributes.alt.value;
+        document.getElementById('tooltipGUI').innerHTML = e.currentTarget.alt;
     });
     $('.tooltipElem').on("mouseout", function(e) {
         $("#tooltipGUI").css('display', 'none');

@@ -2,19 +2,6 @@
 
 var ToolbarInterface = function (wickEditor) {
 
-    /* Define tools in toolbar */ 
-    var toolbarTools = [ 'cursor',
-                         'paintbrush',
-                         'eraser',
-                         'fillbucket',
-                         'rectangle',
-                         'ellipse',
-                         'dropper',
-                         'fillbucket',
-                         'text',
-                         'zoom',
-                         'pan' ];
-
     var brushCanvas;
     var brushCtx;
 
@@ -22,40 +9,56 @@ var ToolbarInterface = function (wickEditor) {
         brushCanvas = document.getElementById('brushSizeDisplay');
         brushCtx = brushCanvas.getContext('2d');
 
+        for(toolName in wickEditor.tools) {
+            var tool = wickEditor.tools[toolName];
+
+            var toolDiv = document.createElement('div');
+            toolDiv.className = "button tooltipElem";
+            toolDiv.id = toolName + "ToolButton";
+            toolDiv.alt = tool.getTooltipName();
+
+            var toolIcon = document.createElement('img');
+            toolIcon.src = tool.getToolbarIcon();
+            toolIcon.width = '20';
+            toolDiv.appendChild(toolIcon);
+
+            document.getElementById('tools').appendChild(toolDiv);
+        }
+
         $(function() {
-          const cssClasses = [
-            'rangeslider--is-lowest-value',
-            'rangeslider--is-highest-value'
-          ];
-          
-          $('input[type=range]')
-            .rangeslider({
-              polyfill: false
-            })
-            .on('input', function() {
-              /*const fraction = (this.value - this.min) / (this.max - this.min);
-              if (fraction === 0) {
-                this.nextSibling.classList.add(cssClasses[0]);
-              } else if (fraction === 1) {
-                this.nextSibling.classList.add(cssClasses[1]);
-              } else {
-                this.nextSibling.classList.remove(...cssClasses)
-              }*/
-            });
+            const cssClasses = [
+                'rangeslider--is-lowest-value',
+                'rangeslider--is-highest-value'
+            ];
+
+            $('input[type=range]')
+                .rangeslider({
+                    polyfill: false
+                })
+                .on('input', function() {
+                    /*const fraction = (this.value - this.min) / (this.max - this.min);
+                    if (fraction === 0) {
+                    this.nextSibling.classList.add(cssClasses[0]);
+                    } else if (fraction === 1) {
+                    this.nextSibling.classList.add(cssClasses[1]);
+                    } else {
+                    this.nextSibling.classList.remove(...cssClasses)
+                    }*/
+                });
         });
     }
 
     this.syncWithEditorState = function () {
 
         /* Highlight select tool, unhighlight all other tools */
-        toolbarTools.forEach( function(toolName) {
+        for (toolName in wickEditor.tools) {
             var buttonClassName = '#' + toolName + 'ToolButton';
             if (wickEditor.tools[toolName] === wickEditor.currentTool) {
                 $(buttonClassName).css('border', '1px solid #ccc');
             } else {
                 $(buttonClassName).css('border', '');
             }
-        });
+        };
 
         /* Update drawing tool options elems */
         lineWidthEl.value = wickEditor.tools['paintbrush'].brushSize;

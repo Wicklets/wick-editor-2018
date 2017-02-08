@@ -14,16 +14,33 @@ Tools.Zoom = function (wickEditor) {
         else
             return "zoom-out";
     }
+
+    this.getToolbarIcon = function () {
+        return "resources/zoom.png";
+    }
+
+    this.getTooltipName = function () {
+        return "Zoom";
+    }
     
-    wickEditor.fabric.canvas.on('mouse:down', function (e) {
-    	if(wickEditor.currentTool instanceof Tools.Zoom) {
-    		if (wickEditor.inputHandler.specialKeys["Modifier"]) {
-    			wickEditor.fabric.zoom(0.9);
-    		} else {
-    			wickEditor.fabric.zoom(1.1);
-    		}
-	    }
-    });
+    this.setup = function () {
+        wickEditor.fabric.canvas.on('mouse:down', function (e) {
+            if(wickEditor.currentTool instanceof Tools.Zoom) {
+                if (wickEditor.inputHandler.specialKeys["Modifier"]) {
+                    wickEditor.fabric.zoom(0.9);
+                } else {
+                    wickEditor.fabric.zoom(1.1);
+                }
+            }
+        });
+
+        var sq = document.getElementById("editor");
+        if (sq.addEventListener) {
+            sq.addEventListener("mousewheel", MouseWheelHandler, false);
+            sq.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
+        }
+        else sq.attachEvent("onmousewheel", MouseWheelHandler);
+    }
 
 // Scroll-to-zoom
 
@@ -38,12 +55,6 @@ Tools.Zoom = function (wickEditor) {
 
         return false;
     }
-    var sq = document.getElementById("editor");
-    if (sq.addEventListener) {
-        sq.addEventListener("mousewheel", MouseWheelHandler, false);
-        sq.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
-    }
-    else sq.attachEvent("onmousewheel", MouseWheelHandler);
 
 
 }

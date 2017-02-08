@@ -42,6 +42,14 @@ Tools.Paintbrush = function (wickEditor) {
         return 'url(' + canvas.toDataURL() + ') 64 64,default';
     };
 
+    this.getToolbarIcon = function () {
+        return "resources/paintbrush.png";
+    }
+
+    this.getTooltipName = function () {
+        return "Paintbrush";
+    }
+
     this.getPenPressure = function () {
         return 1;
     }
@@ -50,31 +58,33 @@ Tools.Paintbrush = function (wickEditor) {
         
     }
 
-    // Listen for new paths drawn by fabric, vectorize them, and add them to the WickProject as WickObjects
-    wickEditor.fabric.canvas.on('object:added', function(e) {
-        if(!(wickEditor.currentTool instanceof Tools.Paintbrush)) return;
+    this.setup = function () {
+        // Listen for new paths drawn by fabric, vectorize them, and add them to the WickProject as WickObjects
+        wickEditor.fabric.canvas.on('object:added', function(e) {
+            if(!(wickEditor.currentTool instanceof Tools.Paintbrush)) return;
 
-        var fabricPath = e.target;
+            var fabricPath = e.target;
 
-        // Make sure the new object is actually a path created by fabric's drawing tool
-        if(fabricPath.type !== "path" || fabricPath.wickObjectRef) {
-            return;
-        }
+            // Make sure the new object is actually a path created by fabric's drawing tool
+            if(fabricPath.type !== "path" || fabricPath.wickObjectRef) {
+                return;
+            }
 
-        potraceFabricPath(fabricPath, function(SVGData) {
-            var symbolOffset = wickEditor.project.currentObject.getAbsolutePosition();
-            var x = fabricPath.left - symbolOffset.x;
-            var y = fabricPath.top - symbolOffset.y;
+            potraceFabricPath(fabricPath, function(SVGData) {
+                var symbolOffset = wickEditor.project.currentObject.getAbsolutePosition();
+                var x = fabricPath.left - symbolOffset.x;
+                var y = fabricPath.top - symbolOffset.y;
 
-            //fabricPath.remove();
-            wickEditor.fabric.drawingPath = fabricPath;
-            
-            wickEditor.actionHandler.doAction('addObjects', {
-                paths: [{svg:SVGData, x:x, y:y}]
+                //fabricPath.remove();
+                wickEditor.fabric.drawingPath = fabricPath;
+                
+                wickEditor.actionHandler.doAction('addObjects', {
+                    paths: [{svg:SVGData, x:x, y:y}]
+                });
             });
+            
         });
-        
-    });
+    }
 
     var potraceFabricPath = function (pathFabricObject, callback) {
         // I think there's a bug in cloneAsImage when zoom != 1, this is a hack

@@ -122,53 +122,7 @@
         <!-- Toolbar -->
 
             <div id="toolbarGUI" class="GUIBox">
-                <div class="button tooltipElem" id="cursorToolButton" alt="Cursor">
-                    <img src="resources/cursor.png" width="20"></img>
-                </div>
-
-                <div class="button tooltipElem" id="paintbrushToolButton" alt="Paintbrush">
-                    <img src="resources/paintbrush.png" width="20"></img>
-                </div>
-
-                <div class="button tooltipElem" id="eraserToolButton" alt="Eraser">
-                    <img src="resources/eraser.png" width="20"></img>
-                </div>
-
-                <div class="button tooltipElem" id="fillbucketToolButton" alt="Fill Bucket">
-                    <img src="resources/fill-bucket.png" width="20"></img>
-                </div>
-
-                <div class="button tooltipElem" id="rectangleToolButton" alt="Rectangle">
-                    <img src="resources/rectangle.png" width="20"></img>
-                </div>
-
-                <div class="button tooltipElem" id="ellipseToolButton" alt="Ellipse">
-                    <img src="resources/ellipse.png" width="20"></img>
-                </div>
-
-                <div class="button tooltipElem" id="dropperToolButton" alt="Color Picker">
-                    <img src="resources/eyedropper.png" width="20"></img>
-                </div>
-
-                <div class="button tooltipElem" id="textToolButton" alt="Text">
-                    <img src="resources/text.png" width="20"></img>
-                </div>
-
-                <div style="display:none" class="button tooltipElem" id="backgroundremoveToolButton" alt="Remove Background">
-                    <img src="resources/magicwand.png" width="20"></img>
-                </div>
-
-                <!--<div style="display:none;" class="button tooltipElem" id="cropToolButton" alt="Screen Grab">
-                    <img src="resources/camera.png" width="20"></img>
-                </div>-->
-
-                <div class="button tooltipElem" id="zoomToolButton" alt="Zoom In">
-                    <img src="resources/zoom.png" width="20"></img>
-                </div>
-
-                <div class="button tooltipElem" id="panToolButton" alt="Pan">
-                    <img src="resources/pan.png" width="20"></img>
-                </div>
+                <div id="tools"></div>
 
                 <div id="toolOptionsGUI">
                     <hr />
@@ -333,68 +287,7 @@
 
         <!-- Right click menu -->
 
-            <div id="rightClickMenu" class="GUIBox">
-                <div id="fabricButtons">
-                    <div id="symbolButtons">
-                        <div class="button" id="editObjectButton">Edit Object</div>
-                        <hr />
-                    </div>
-                    <div id="allObjectButtons">
-                        <div class="button" id="copyButton">Copy</div>
-                        <div class="button" id="cutButton">Cut</div>
-                    </div>
-                    <div id="singleObjectButtons">
-                        <div class="button" id="editScriptsButton">Edit Scripts</div>
-                        <div class="button" id="downloadButton">Export</div>
-                        <div class="button" id="breakApartButton">Break Apart</div>
-                        <div class="button" id="addTweenButton">Add Tween</div>
-                        <div class="button" id="removeTweenButton">Remove Tween</div>
-                        <div id="isImage">
-                            
-                        </div>
-                        <div id="noKeyframeExists">
-                            <!--<div class="button" id="addKeyframeButton">Add Keyframe</div>-->
-                        </div>
-                        <div id="keyframeExists">
-                            <!--<div class="button" id="removeKeyframeButton">Remove Keyframe</div>-->
-                        </div>
-                        <hr />
-                    </div>
-                    <div id="commonObjectButtons">
-                        <div class="button" id="bringToFrontButton">Bring to Front</div>
-                        <div class="button" id="sendToBackButton">Send to Back</div>
-                        <div class="button" id="deleteButton">Delete</div>
-                        <hr />
-                    </div>
-                    <div id="staticObjectButtons">
-                        <div class="button" id="convertToSymbolButton">Convert to Symbol</div>
-                        <hr />
-                    </div>
-                    <div id="insideSymbolButtons">
-                        <div class="button" id="finishEditingObjectButton">Finish Editing Object</div>
-                        <hr />
-                    </div>
-                    <div class="button" id="undoButton">Undo</div>
-                    <div class="button" id="redoButton">Redo</div>
-                    <div class="button" id="pasteButton">Paste</div>
-                </div>
-                <div id="timelineButtons">
-                    <div class="button" id="addFrameButton">Add Frame <em>(Shift +)</em></div>
-                    <div class="button" id="deleteFrameButton">Delete Frame <em>(Shift -)</em></div>
-                    <div class="button" id="copyFrameButton">Copy Frame</div>
-                    <div class="button" id="pasteFrameButton">Paste Frame</div>
-                    <hr />
-                    <div class="button" id="shrinkFrameButton">Shrink Frame <em>(Shift <)</em></div>
-                    <div class="button" id="extendFrameButton">Extend Frame <em>(Shift >)</em></div>
-                    <hr />
-                    <div class="button" id="addLayerButton">Add Layer</div>
-                    <div class="button" id="removeLayerButton">Remove Layer</div>
-                    <div class="button" id="moveLayerUpButton">Move layer up</div>
-                    <div class="button" id="moveLayerDownButton">Move layer down</div>
-                    <hr />
-                    <div class="button" id="editFrameScriptsRightClick">Edit Frame Scripts</div>
-                </div>
-            </div>
+            <div id="rightClickMenu" class="GUIBox"></div>
 
         <!-- Menu bar -->
 

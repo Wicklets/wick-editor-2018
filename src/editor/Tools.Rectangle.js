@@ -11,11 +11,21 @@ Tools.Rectangle = function (wickEditor) {
         return "crosshair"
     };
 
-    fabricInterface.canvas.on('mouse:down', function (e) {
-        if(!(wickEditor.currentTool instanceof Tools.Rectangle)) return;
+    this.getToolbarIcon = function () {
+        return "resources/rectangle.png";
+    }
 
-        fabricInterface.shapeDrawer.startDrawingShape('rectangle', e.e.offsetX, e.e.offsetY, that.createWickObjectFromShape);
-    });
+    this.getTooltipName = function () {
+        return "Rectangle";
+    }
+
+    this.setup = function () {
+        fabricInterface.canvas.on('mouse:down', function (e) {
+            if(!(wickEditor.currentTool instanceof Tools.Rectangle)) return;
+
+            fabricInterface.shapeDrawer.startDrawingShape('rectangle', e.e.offsetX, e.e.offsetY, that.createWickObjectFromShape);
+        });
+    }
 
     this.createWickObjectFromShape = function (drawingShape) {
         var origX = drawingShape.left+drawingShape.width /2;

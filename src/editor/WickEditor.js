@@ -18,7 +18,7 @@ var WickEditor = function () {
         this.project = new WickProject();
     }
 
-    // Setup all interfaces
+    // Load all interfaces
     this.interfaces = [];
     function registerInterface (interface) {
         that.interfaces.push(interface);
@@ -36,11 +36,7 @@ var WickEditor = function () {
     this.fabric = registerInterface(new FabricInterface(this));
     this.menubar = registerInterface(new MenuBarInterface(this));
 
-    this.interfaces.forEach(function (interface) {
-        interface.setup();
-    });
-
-    // Setup all tools
+    // Load all tools
     this.tools = {
         "cursor"           : new Tools.Cursor(this),
         "paintbrush"       : new Tools.Paintbrush(this),
@@ -55,6 +51,14 @@ var WickEditor = function () {
     }
     this.currentTool = this.tools.cursor;
     this.lastTool = this.currentTool;
+
+    // Setup all tools + interfaces
+    this.interfaces.forEach(function (interface) {
+        interface.setup();
+    });
+    for(tool in this.tools) {
+        this.tools[tool].setup();
+    };
 
     // Setup input handler
     this.inputHandler = new InputHandler(this);

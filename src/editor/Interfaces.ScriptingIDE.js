@@ -78,16 +78,6 @@ var ScriptingIDEInterface = function (wickEditor) {
         this.syncWithEditorState();
     }
 
-    var erroneousLine;
-    function unhighlightError() {
-        that.aceEditor.getSession().removeMarker(erroneousLine);
-    }
-    function highlightError(lineNumber) {
-        unhighlightError();
-        var Range = ace.require("ace/range").Range
-        erroneousLine = that.aceEditor.session.addMarker(new Range(lineNumber, 0, lineNumber, 144), "errorHighlight", "fullLine");
-    }
-
     this.syncWithEditorState = function () {
         if(this.open) {
             $("#scriptingGUI").css('display', 'block');
@@ -161,15 +151,11 @@ var ScriptingIDEInterface = function (wickEditor) {
             if(lineNumber) document.getElementById("errorMessage").innerHTML += ", line " + lineNumber;
             document.getElementById("errorMessage").style.display = "block";
 
-            erroneousLine = lineNumber-1;
-            highlightError(erroneousLine);
-
             wickEditor.syncInterfaces();
         }, 100);
     }
 
     this.clearError = function () {
-        unhighlightError();
         document.getElementById("errorMessage").innerHTML = "";
         document.getElementById("errorMessage").style.display = "hidden";
     }
@@ -178,32 +164,22 @@ var ScriptingIDEInterface = function (wickEditor) {
 
     $("#onLoadButton").on("click", function (e) {
         that.currentScript = 'onLoad';
-        unhighlightError();
         wickEditor.syncInterfaces();
         that.clearError();
     });
 
     $("#onClickButton").on("click", function (e) {
         that.currentScript = 'onClick';
-        unhighlightError();
         wickEditor.syncInterfaces();
         that.clearError();
     });
 
     $("#onUpdateButton").on("click", function (e) {
         that.currentScript = 'onUpdate';
-        unhighlightError();
         wickEditor.syncInterfaces();
         that.clearError();
     });
-
-    /*$("#onKeyDownButton").on("click", function (e) {
-        that.currentScript = 'onKeyDown';
-        unhighlightError();
-        wickEditor.syncInterfaces();
-        that.clearError();
-    });*/
-
+    
 // Other buttons
 
     $("#closeScriptingGUIButton").on("click", function (e) {
