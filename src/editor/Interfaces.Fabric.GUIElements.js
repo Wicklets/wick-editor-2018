@@ -77,12 +77,6 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
         that.update();
     });
 
-
-    var createSymbolButton = document.getElementById('createSymbolButton');
-    var editSymbolButton = document.getElementById('editSymbolButton');
-    var editSymbolScriptsButton = document.getElementById('editSymbolScriptsButton');
-    var finishEditingObjectFabricButton = document.getElementById('finishEditingObjectFabricButton');
-    
     canvas.on('before:render', function () {
         canvas._objects.forEach(function (obj) {
             if(!obj.centerpointObject) return;
@@ -96,6 +90,11 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
             obj.centerpointObject.setCoords();
         });
     });
+
+    /*var createSymbolButton = document.getElementById('createSymbolButton');
+    var editSymbolButton = document.getElementById('editSymbolButton');
+    var editSymbolScriptsButton = document.getElementById('editSymbolScriptsButton');
+    var finishEditingObjectFabricButton = document.getElementById('finishEditingObjectFabricButton');
 
     canvas.on('after:render', function() {
 
@@ -154,7 +153,7 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
             createSymbolButton.style.top = corner.y + 'px';
             createSymbolButton.style.display = "block";
         }
-    });
+    });*/
 
     this.update = function () {
 

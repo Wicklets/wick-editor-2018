@@ -109,12 +109,11 @@ var PaperInterface = function (wickEditor) {
         // Optimization: generate a wickobject for the newly created path before the whole project gets refresh.
         // This way we can defer the wickobject regen for the whole frame until later, making drawing paths more responsive.
         var oldPosition = {x: paperGroup.position.x, y: paperGroup.position.y};
-        WickObject.fromPathFile(paperGroup.exportSVG({asString:true}), function (wickObject) {
-            wickObject.x = oldPosition.x;
-            wickObject.y = oldPosition.y;
-            wickEditor.project.addObject(wickObject, null, true);
-            wickToPaperMappings[wickObject.uuid] = paperGroup;
-        });
+        var wickObject = WickObject.fromPathFile(paperGroup.exportSVG({asString:true}));
+        wickObject.x = oldPosition.x;
+        wickObject.y = oldPosition.y;
+        wickEditor.project.addObject(wickObject, null, true);
+        wickToPaperMappings[wickObject.uuid] = paperGroup;
     }
 
     self.modifyPath = function (uuid, modifiedState) {
@@ -444,16 +443,17 @@ var PaperInterface = function (wickEditor) {
         groups.forEach(function (group) {
             var oldPosition = {x:group.position.x, y:group.position.y};
             group.position = new paper.Point(0,0);
-            WickObject.fromPathFile(group.exportSVG({asString:true}), function (wickObject) {
-                wickObject.x = oldPosition.x;
-                wickObject.y = oldPosition.y;
-                wickEditor.project.addObject(wickObject, null, true);
-                if(group.selectOnAddToFabric) {
-                    wickObject.selectOnAddToFabric = true;
-                    group.selectOnAddToFabric = false;
-                }
-                wickToPaperMappings[wickObject.uuid] = group;
-            });
+
+            var wickObject = WickObject.fromPathFile(group.exportSVG({asString:true}));
+            wickObject.x = oldPosition.x;
+            wickObject.y = oldPosition.y;
+            wickEditor.project.addObject(wickObject, null, true);
+            if(group.selectOnAddToFabric) {
+                wickObject.selectOnAddToFabric = true;
+                group.selectOnAddToFabric = false;
+            }
+            wickToPaperMappings[wickObject.uuid] = group;
+            
             group.position = new paper.Point(oldPosition.x, oldPosition.y);
         });
     }

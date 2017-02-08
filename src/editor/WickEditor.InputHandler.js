@@ -296,22 +296,46 @@ var InputHandler = function (wickEditor) {
             var framesDataURLs = superGif.getFrameDataURLs();
             for(var i = 0; i < framesDataURLs.length; i++) {
 
-                WickObject.fromImage(
-                    framesDataURLs[i],
-                    (function(frameIndex) { return function(o) {
-                        gifSymbol.layers[0].frames[frameIndex].wickObjects.push(o);
-                        
-                        if(frameIndex == framesDataURLs.length-1) {
-                            gifSymbol.width  = gifSymbol.layers[0].frames[0].wickObjects[0].width;
-                            gifSymbol.height = gifSymbol.layers[0].frames[0].wickObjects[0].height;
-                            callback(gifSymbol);
-                        } else {
-                            gifSymbol.layers[0].addFrame(new WickFrame);
-                        }
-                    }; }) (i)
-                );
+                // what the hell is going on here ??? 
+                (function(frameIndex) { return function(o) {
+                    gifSymbol.layers[0].frames[frameIndex].wickObjects.push(o);
+                    
+                    if(frameIndex == framesDataURLs.length-1) {
+                        gifSymbol.width  = gifSymbol.layers[0].frames[0].wickObjects[0].width;
+                        gifSymbol.height = gifSymbol.layers[0].frames[0].wickObjects[0].height;
+                        callback(gifSymbol);
+                    } else {
+                        gifSymbol.layers[0].addFrame(new WickFrame);
+                    }
+                }; }) (i) (WickObject.fromImage(framesDataURLs[i]));
+
             }
         });
+    }
+
+    var loadImage = function (src, callback) {
+        callback(WickObject.fromImage(src));
+    }
+
+    var loadAudio = function (src, callback) {
+        callback(WickObject.fromAudioFile(src));
+    }
+
+    var loadJSON = function (json, callback) {
+        callback(WickObject.fromJSON(json));
+    }
+
+    var loadWAV = function (dataURL, callback) {
+        var audioData = dataURL;
+        var audioWickObject = WickObject.fromAudioFile(audioData);
+
+        console.log("big audio file size: " + audioWickObject.audioData.length);
+        audioWickObject.audioData = LZString.compressToBase64(audioWickObject.audioData);
+        console.log("compressed big audio file size: " + audioWickObject.audioData.length);
+        console.log("Look how much space we saved wow!");
+        
+        audioWickObject.compressed = true;
+        callback(audioWickObject);
     }
 
     var loadFileIntoWickObject = function (e,file,fileType) {
@@ -324,22 +348,22 @@ var InputHandler = function (wickEditor) {
         } else {
 
             var fromContstructors = {
-                'image/png'        : WickObject.fromImage,
-                'image/jpeg'       : WickObject.fromImage,
-                'application/jpg'  : WickObject.fromImage,
-                'image/bmp'        : WickObject.fromImage,
+                'image/png'        : loadImage,
+                'image/jpeg'       : loadImage,
+                'application/jpg'  : loadImage,
+                'image/bmp'        : loadImage,
                 'image/svg+xml'    : loadSVG,
                 'image/gif'        : loadAnimatedGIF,
-                'audio/mp3'        : WickObject.fromAudioFile,
-                'audio/wav'        : WickObject.fromWavFile,
-                'audio/wave'       : WickObject.fromWavFile,
-                'audio/x-wav'      : WickObject.fromWavFile,
-                'audio/x-pn-wav'   : WickObject.fromWavFile,
-                'audio/ogg'        : WickObject.fromAudioFile,
-                'audio/flac'       : WickObject.fromAudioFile,
-                'audio/x-flac'     : WickObject.fromAudioFile,
-                "audio/x-m4a"      : WickObject.fromAudioFile,
-                "application/json" : WickObject.fromJSONFile
+                'audio/mp3'        : loadAudio,
+                'audio/wav'        : loadWAV,
+                'audio/wave'       : loadWAV,
+                'audio/x-wav'      : loadWAV,
+                'audio/x-pn-wav'   : loadWAV,
+                'audio/ogg'        : loadAudio,
+                'audio/flac'       : loadAudio,
+                'audio/x-flac'     : loadAudio,
+                "audio/x-m4a"      : loadAudio,
+                "application/json" : loadJSON
             }
             
             var fr = new FileReader();

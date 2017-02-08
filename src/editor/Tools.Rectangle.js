@@ -30,17 +30,6 @@ Tools.Rectangle = function (wickEditor) {
         wickEditor.actionHandler.doAction('addObjects', {
             paths: [{svg:svgString, x:origX, y:origY}]
         });
-
-        /*WickObject.fromPathFile(svgString, function (wickObject) {
-            wickObject.x = origX;
-            wickObject.y = origY;
-            wickObject.isNewDrawingPath = true;
-            wickEditor.project.addObject(wickObject);
-            wickEditor.paper.onWickObjectsChange();
-        });
-        
-        wickEditor.fabric.drawingPath = drawingShape;
-        wickEditor.syncInterfaces();*/
     }
 
 }

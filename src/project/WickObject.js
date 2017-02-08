@@ -67,11 +67,7 @@ var WickObject = function () {
 
 };
 
-WickObject.fromJSONFile = function (file, callback) {
-    callback(WickObject.fromJSONString(file));
-}
-
-WickObject.fromJSONString = function (jsonString) {
+WickObject.fromJSON = function (jsonString) {
     // Parse JSON
     var newWickObject = JSON.parse(jsonString);
 
@@ -84,13 +80,13 @@ WickObject.fromJSONString = function (jsonString) {
     return newWickObject;
 }
 
-WickObject.fromJSONArray = function (jsonArrayObject, callback) {
+WickObject.fromJSONArray = function (jsonArrayObject) {
     var newWickObjects = [];
 
     var wickObjectJSONArray = jsonArrayObject.wickObjectArray;
     for (var i = 0; i < wickObjectJSONArray.length; i++) {
         
-        var newWickObject = WickObject.fromJSONString(wickObjectJSONArray[i]);
+        var newWickObject = WickObject.fromJSON(wickObjectJSONArray[i]);
         
         if(wickObjectJSONArray.length > 1) {
             newWickObject.x += jsonArrayObject.groupPosition.x;
@@ -100,40 +96,14 @@ WickObject.fromJSONArray = function (jsonArrayObject, callback) {
         newWickObjects.push(newWickObject);
     }
 
-    callback(newWickObjects);
+    return newWickObjects;
 }
 
-WickObject.fromImage = function (imgSrc, callback) {
+WickObject.fromImage = function (imgSrc) {
 
-    var img = new Image();
-    img.onload = function() {
-        /*AddPaddingToImage(img, function (paddedImgSrc) {
-            var paddedImg = new Image();
-            paddedImg.onload = function() {
-                var obj = new WickObject();
-
-                obj.width = paddedImg.width;
-                obj.height = paddedImg.height;
-                obj.imageData = paddedImg.src;
-
-                callback(obj);
-            }
-            paddedImg.src = paddedImgSrc;
-        })*/
-
-        var obj = new WickObject();
-
-        obj.width = img.width;
-        obj.height = img.height;
-        obj.imageData = img.src;
-
-        callback(obj);
-    }
-    img.src = imgSrc;
-
-    /*var obj = new WickObject();
+    var obj = new WickObject();
     obj.imageData = imgSrc;
-    callback(obj);*/
+    return obj;
 
 }
 
@@ -175,7 +145,7 @@ WickObject.fromText = function (text) {
     return obj;
 }
 
-WickObject.fromAudioFile = function (audioData, callback) {
+WickObject.fromAudioFile = function (audioData) {
     var audioWickObject = new WickObject();
 
     audioWickObject.audioData = audioData;
@@ -184,23 +154,13 @@ WickObject.fromAudioFile = function (audioData, callback) {
     audioWickObject.width = 75;
     audioWickObject.height = 75;
 
-    callback(audioWickObject);
+    return audioWickObject;
 }
 
 WickObject.fromPathFile = function (pathData, callback) {
     var pathWickObject = new WickObject();
     pathWickObject.pathData = pathData;
-    callback(pathWickObject);
-}
-
-WickObject.fromWavFile = function (audioData, callback) {
-    WickObject.fromAudioFile(audioData, function (audioWickObject) {
-        console.log(audioWickObject.audioData.length)
-        audioWickObject.audioData = LZString.compressToBase64(audioWickObject.audioData);
-        console.log(audioWickObject.audioData.length)
-        audioWickObject.compressed = true;
-        callback(audioWickObject);
-    });
+    return pathWickObject;
 }
 
 WickObject.createNewSymbol = function () {

@@ -688,19 +688,18 @@ var WickActionHandler = function (wickEditor) {
             var wickObj = wickEditor.fabric.getSelectedObject(WickObject);
             wickObj.getBlobImages(function (images) {
                 images.forEach(function (image) {
-                    WickObject.fromImage(image.src, function (newWickObject) {
-                        newWickObject.x = wickObj.x-wickObj.width /2;
-                        newWickObject.y = wickObj.y-wickObj.height/2;
-                        newWickObject.autocropImage(function () {
-                            wickEditor.actionHandler.doAction('addObjects', { 
-                                wickObjects:[newWickObject] 
-                            });
-                            wickEditor.actionHandler.doAction('deleteObjects', { 
-                                wickObjects:[wickObj] 
-                            });
-                            done();
+                    var newWickObject = WickObject.fromImage(image.src);
+                    newWickObject.x = wickObj.x-wickObj.width /2;
+                    newWickObject.y = wickObj.y-wickObj.height/2;
+                    newWickObject.autocropImage(function () {
+                        wickEditor.actionHandler.doAction('addObjects', { 
+                            wickObjects:[newWickObject] 
                         });
-                    })
+                        wickEditor.actionHandler.doAction('deleteObjects', { 
+                            wickObjects:[wickObj] 
+                        });
+                        done();
+                    });
                 });
             });
         },

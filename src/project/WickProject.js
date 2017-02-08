@@ -142,6 +142,7 @@ WickProject.fromJSON = function (rawJSONProject) {
 // Backwards compatibility for old Wick projects
 WickProject.fixForBackwardsCompatibility = function (project) {
     // WickProject.resolution was replaced with project.width and project.height
+    if(!project.selection) project.selection = [];
     if(!project.width) project.width = project.resolution.x;
     if(!project.height) project.height = project.resolution.y;
     if(!project.transparent) project.transparent = false;

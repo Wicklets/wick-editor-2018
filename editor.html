@@ -63,7 +63,6 @@
     <script src="src/editor/Interfaces.Timeline.js"></script>
     <script src="src/editor/Interfaces.Toolbar.js"></script>
     <script src="src/editor/Interfaces.Properties.js"></script>
-    <script src="src/editor/Interfaces.SplashScreen.js"></script>
     <script src="src/editor/Interfaces.StatusBar.js"></script>
     <script src="src/editor/Interfaces.MenuBar.js"></script>
 
@@ -77,8 +76,6 @@
     <script src="src/editor/Tools.Text.js"></script>
     <script src="src/editor/Tools.Zoom.js"></script>
     <script src="src/editor/Tools.Pan.js"></script>
-    <script src="src/editor/Tools.BackgroundRemove.js"></script>
-    <script src="src/editor/Tools.Crop.js"></script>
 
     <script src="src/editor/WickEditor.js"></script>
     <script src="src/editor/WickEditor.WickActionHandler.js"></script>
@@ -118,92 +115,11 @@
                 <canvas id="fabricCanvas"></canvas>
             </div>
 
-        <!-- Symbol buttons -->
-
-            <div id="finishEditingObjectFabricButton" class="button fabricButton">
-                <img src="resources/back.png" width="22"></img>
-            </div>
-            <div id="createSymbolButton" class="button fabricButton">
-                <img src="resources/gearbox.png" width="22"></img>
-            </div>
-            <div id="editSymbolButton" class="button fabricButton">
-                <img src="resources/edit.png" width="22"></img>
-            </div>
-            <div id="editSymbolScriptsButton" class="button fabricButton">
-                <img src="resources/editcode.png" width="22"></img>
-            </div>
-
-        <!-- Splash Screen -->
-
-            <div id="splashScreenGUI" class="GUIBox">
-                <div id="splashScreenMain">
-                    <br />
-                    <p><img src="resources/wicklogo.png"></p>
-                    <strong>Pre-Alpha</strong>
-                    <br /><br />
-                    <hr />
-                    <br />
-                    <p>Have any questions? Contact me at <a target="_blank" href="http://www.zrispo.co">zach.rispoli@gmail.com</a></p>
-                    <p>You can also visit Wick <a target="_blank" href="https://github.com/zrispo/wick">on Github!</a></p>
-                    <br />
-                    <input type="button" id="splashScreenCreditsButton" value="Credits"></button>
-                    <br />
-                    <br />
-                    <p><input type="checkbox" id="dontShowSplashScreenAgainCheckbox"> Don't show this window again</input></p>
-
-                    <div class="button buttonInRow" id="closeSplashScreenButton"><font color="red">Close</font></div>
-                    <br />
-                    <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-
-                    <div>Icons made by <a href="http://www.flaticon.com/authors/eleonor-wang" title="Eleonor Wang">Eleonor Wang</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-
-                    <div>Icons made by <a href="http://www.flaticon.com/authors/dave-gandy" title="Dave Gandy">Dave Gandy</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-
-                    <div>Icons made by <a href="http://www.flaticon.com/authors/daniel-bruce" title="Daniel Bruce">Daniel Bruce</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-
-                    <div>Icons made by <a href="http://www.flaticon.com/authors/egor-rumyantsev" title="Egor Rumyantsev">Egor Rumyantsev</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-
-                    <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-
-                    <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-                </div>
-                <div id="splashScreenCredits">
-                    <br />
-                    <strong style="font-size:16px;">Credits</strong><br />
-                    <br />
-                    <strong>Contributors</strong><br />
-                    Zach Rispoli, Josh Rispoli, Luca Damasco<br />
-                    <br />
-                    <strong>Libraries/Technology</strong><br />
-                    <a href="https://ace.c9.io/#nav=about">Ace</a>, <a href="http://jsbeautifier.org/">JS Beautifier</a>, <a href="http://fabricjs.com/">Fabric.js</a>, <a href="https://github.com/eligrey/FileSaver.js/">FileSaver.js</a>, <a href="https://jquery.com/">jQuery</a>, <a href="http://jscolor.com/">jscolor</a>, <a href="https://github.com/buzzfeed/libgif-js">Libgif</a><br /> 
-                    <a href="https://github.com/pieroxy/lz-string">lz-string</a>, <a href="http://www.pixijs.com/">Pixi.js</a>, <a href="https://github.com/kilobtye/potrace">Potrace</a>, <a href="https://gist.github.com/binarymax/4071852">canvasfloodfill.js</a>, <a href="https://github.com/niklasvh/base64-arraybuffer">base64-arraybuffer</a> <a href="http://paperjs.org/">paper.js</a><br />
-                    <br />
-                    <input type="button" id="splashScreenBackButton" value="Back"></button>
-                    <br /><br />
-                </div>
-            </div>
-
-        <!-- Settings window -->
-
-            <div id="settingsGUI" class="GUIBox">
-                <strong>Settings</strong>
-                <div class="button" id="closeSettingsWindowButton"><em>Close</em></div>
-            </div>
-
-        <!-- Layers GUI -->
-
-            <div id="layersGUI" class="GUIBox">
-                <!-- add frame, delete frame -->
-                <!-- shrink frame, grow frame -->
-                <!-- add layer, delete layer -->
-                <!-- ...clone frame? -->
-            </div>
-
-        <!-- Timeline GUI -->
+        <!-- Timeline -->
 
             <div id="timelineGUI" class="GUIBox"></div>
 
-        <!-- Toolbar GUI, centered at the left side of the screen -->
+        <!-- Toolbar -->
 
             <div id="toolbarGUI" class="GUIBox">
                 <div class="button tooltipElem" id="cursorToolButton" alt="Cursor">
@@ -264,7 +180,7 @@
                 </div>
             </div>
 
-        <!-- Properties GUI, bottom right corner -->
+        <!-- Properties -->
 
             <div id="propertiesGUI" class="GUIBox">
                 <div id="objectPropertiesTabButton"  class="propertiesTab propertiesTabActive">Object</div>
@@ -353,7 +269,8 @@
                         </select>
                     </div>
                     <div id="symbolProperties">
-                        <div class="button buttonInRow" style="border: 1px solid;" id="editScriptsButtonProperties">Edit object scripts</div>
+                        <div class="button buttonInRow" style="border: 1px solid;" id="editScriptsButtonProperties">Edit Scripts</div>
+                        <div class="button buttonInRow" style="margin-left: 5px; border: 1px solid;" id="editObjectButtonProperties">Edit Object</div>
                     </div>
                 </div>
 
@@ -381,7 +298,7 @@
                 </div>
             </div>
 
-        <!-- WickObject Scripting GUI, bottom left corner -->
+        <!-- Scripting IDE -->
 
             <div id="scriptingGUI" class="GUIBox">
                 <div id="scriptObjectDiv">
@@ -414,7 +331,7 @@
                 </div>
             </div>
 
-        <!-- Right click menu, appears next to mouse on right click -->
+        <!-- Right click menu -->
 
             <div id="rightClickMenu" class="GUIBox">
                 <div id="fabricButtons">
@@ -479,21 +396,13 @@
                 </div>
             </div>
 
-        <!-- Main menu GUI, top left corner -->
+        <!-- Menu bar -->
 
-            <div id="menuBarGUI" class="GUIBox">
-                <!--<div class="menubarTab" id="menubarMenuFile">File</div>
-                <div class="menubarTab" id="menubarMenuEdit">Edit</div>
-                <div class="menubarTab" id="menubarMenuImport">Import</div>
-                <div class="menubarTab" id="menubarMenuObject">Object</div>
-                <div class="menubarTab" id="menubarMenuRun">Run</div>
-                <div class="menubarTab" id="menubarMenuAbout">About</div>-->
-            </div>
+            <div id="menuBarGUI" class="GUIBox"> </div>
 
-        <!-- Status menu GUI, top right corner -->
+        <!-- Status bar -->
 
-            <div id="statusBarGUI" class="GUIBox">
-            </div>
+            <div id="statusBarGUI" class="GUIBox"></div>
 
         </div>
 

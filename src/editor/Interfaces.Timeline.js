@@ -60,11 +60,11 @@ var TimelineInterface = function (wickEditor) {
             var leftFrameHandle = createDiv({className: 'frameHandle leftFrameHandle'});
             var rightFrameHandle = createDiv({className: 'frameHandle rightFrameHandle'});
             leftFrameHandle.addEventListener('mousedown', function (e) {
-                console.log(/*obj.identifier*/'leftframehandle')
+                console.log(/*obj.identifier*/'leftframehandle');
                 e.stopPropagation()
             });
             rightFrameHandle.addEventListener('mousedown', function (e) {
-                console.log(/*obj.identifier*/'rightFrameHandle')
+                console.log(/*obj.identifier*/'rightFrameHandle');
                 e.stopPropagation()
             });
             frameDiv.appendChild(leftFrameHandle);

@@ -10,23 +10,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
     var currentFrameRef;
 
-    // i used this to debug something  lol
-    this.testPerformanceLol = function () {
-        fabric.Image.fromURL('resources/testcontent/SUPERDUMBgreenBG.png', function(image) {
-
-          image.set({
-            left:  Math.random() * 300,
-            top:   Math.random() * 300,
-            angle: Math.random() * 360
-          })
-          //.scale(getRandomNum(minScale, maxScale))
-          .setCoords();
-
-          fabricInterface.canvas.add(image);
-          fabricInterface.canvas.renderAll();
-        });
-    }
-
     this.update = function () {
         var newFrameRef = wickEditor.project.currentObject.getCurrentFrame();
         var onNewFrame = newFrameRef !== currentFrameRef;

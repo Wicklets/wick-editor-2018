@@ -53,17 +53,6 @@ var GuiActionHandler = function (wickEditor) {
                 that.doAction({});
             }
         });
-
-        /* Check for DOMEvent in requiredParam */
-        if(requiredParams.DOMEvent) {
-            document.addEventListener(requiredParams.DOMEvent, function(event) {
-                if(activeElemIsTextBox()) return;
-                wickEditor.rightclickmenu.open = false;
-                event.preventDefault();
-                focusHiddenArea();
-                that.doAction({clipboardData:event.clipboardData});
-            });
-        }
     }
 
 /****************************
@@ -89,7 +78,7 @@ var GuiActionHandler = function (wickEditor) {
     registerAction('stopRunningProject',
         ['ESC'],
         [],
-        {builtinplayerRunning : true},
+        {},
         function(args) {
             if(!wickEditor.builtinplayer.running) return;
             wickEditor.builtinplayer.stopRunningProject();
@@ -465,12 +454,11 @@ var GuiActionHandler = function (wickEditor) {
                     reader = new FileReader();
                     reader.onload = function(evt) {
                         //console.log(evt.target.result)
-                        WickObject.fromImage(evt.target.result, function (newObj) {
-                            newObj.x = wickEditor.project.width/2;
-                            newObj.y = wickEditor.project.height/2;
-                            wickEditor.actionHandler.doAction('addObjects', {
-                                wickObjects:[newObj]
-                            });
+                        var newObj = WickObject.fromImage(evt.target.result);
+                        newObj.x = wickEditor.project.width/2;
+                        newObj.y = wickEditor.project.height/2;
+                        wickEditor.actionHandler.doAction('addObjects', {
+                            wickObjects:[newObj]
                         });
                     };
                     reader.readAsDataURL(items[i].getAsFile());
@@ -605,14 +593,6 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.changeTool(wickEditor.tools.crop);
         });
 
-    registerAction('useTools.BackgroundRemove',
-        [],
-        ['backgroundremoveToolButton'],
-        {},
-        function(args) {
-            wickEditor.changeTool(wickEditor.tools.backgroundremove);
-        });
-
     registerAction('editScripts',
         [],
         ['editScriptsButton', 'editSymbolScriptsButton', 'editScriptsButtonProperties'],
@@ -700,7 +680,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('editObject',
         [],
-        ['editObjectButton', 'editSymbolButton'],
+        ['editObjectButton', 'editSymbolButton', 'editObjectButtonProperties'],
         {},
         function(args) {
             var selectedObject = wickEditor.fabric.getSelectedObject(WickObject);

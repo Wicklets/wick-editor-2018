@@ -36,6 +36,7 @@ var WickDemoLoader = function (wickEditor) {
             console.log("ajax: complete")
             console.log(response)
             console.log(textStatus)
+            URLParameterUtils.clearURLParam("demo")
         }
     });
 

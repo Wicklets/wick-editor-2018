@@ -31,21 +31,6 @@ Tools.Ellipse = function (wickEditor) {
         wickEditor.actionHandler.doAction('addObjects', {
             paths: [{svg:svgString, x:origX, y:origY}]
         });
-
-        /*wickEditor.paper.addSVG(svgData, {x:origX, y:origY});
-        wickEditor.fabric.drawingPath = drawingShape;
-        wickEditor.syncInterfaces();*/
-
-        /*WickObject.fromPathFile(svgData, function (wickObject) {
-            wickObject.x = origX;
-            wickObject.y = origY;
-            wickObject.isNewDrawingPath = true;
-            wickEditor.project.addObject(wickObject);
-            wickEditor.paper.onWickObjectsChange();
-        });
-        
-        wickEditor.fabric.drawingPath = drawingShape;
-        wickEditor.syncInterfaces();*/
     }
 
 }

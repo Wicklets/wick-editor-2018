@@ -13,9 +13,7 @@ var ToolbarInterface = function (wickEditor) {
                          'fillbucket',
                          'text',
                          'zoom',
-                         'pan',
-                         'crop',
-                         'backgroundremove' ];
+                         'pan' ];
 
     var brushCanvas;
     var brushCtx;

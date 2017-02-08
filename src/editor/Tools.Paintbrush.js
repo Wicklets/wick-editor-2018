@@ -73,35 +73,6 @@ Tools.Paintbrush = function (wickEditor) {
                 paths: [{svg:SVGData, x:x, y:y}]
             });
         });
-
-        // Vectorize the path and create a WickObject out of it
-        /*potraceFabricPath(fabricPath, function(SVGData) {
-            //wickEditor.paper.addSVG(SVGData, {x:fabricPath.left, y:fabricPath.top});
-            WickObject.fromPathFile(SVGData, function (wickObject) {
-                wickObject.x = fabricPath.left;
-                wickObject.y = fabricPath.top;
-                wickObject.isNewDrawingPath = true;
-                
-                wickEditor.actionHandler.doAction('addBrushPath', {
-                    wickObject: wickObject
-                })
-                
-                wickEditor.fabric.drawingPath = fabricPath;
-                wickEditor.syncInterfaces();
-            });
-        });*/
-
-        /*var SVGData = '<svg id="svg" version="1.1" width="'+fabricPath.width+'" height="'+fabricPath.height+'" xmlns="http://www.w3.org/2000/svg">' + fabricPath.toSVG() + '</svg>';
-        console.log(SVGData)
-        WickObject.fromPathFile(SVGData, function (wickObject) {
-            wickObject.x = fabricPath.left;
-            wickObject.y = fabricPath.top;
-            wickEditor.project.addObject(wickObject);
-            wickEditor.paper.onWickObjectsChange();
-            
-            wickEditor.fabric.drawingPath = fabricPath;
-            wickEditor.syncInterfaces();
-        });*/
         
     });
 

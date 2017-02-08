@@ -27,7 +27,6 @@ var WickEditor = function () {
 
     this.builtinplayer = registerInterface(new BuiltinPlayerInterface(this));
     this.rightclickmenu = registerInterface(new RightClickMenuInterface(this));
-    this.splashscreen = registerInterface(new SplashScreenInterface(this));
     this.scriptingide = registerInterface(new ScriptingIDEInterface(this));
     this.timeline = registerInterface(new TimelineInterface(this));
     this.toolbar = registerInterface(new ToolbarInterface(this));
@@ -53,8 +52,6 @@ var WickEditor = function () {
         "text"             : new Tools.Text(this),
         "zoom"             : new Tools.Zoom(this),
         "pan"              : new Tools.Pan(this),
-        "backgroundremove" : new Tools.BackgroundRemove(this),
-        "crop"             : new Tools.Crop(this),
     }
     this.currentTool = this.tools.cursor;
     this.lastTool = this.currentTool;
