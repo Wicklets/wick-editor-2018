@@ -145,7 +145,6 @@ var WickActionHandler = function (wickEditor) {
                         if(!args.paths) args.paths = [];
                         //var path = wickEditor.paper.getPathDataOfWickObject(wickObj.uuidCopiedFrom);
                         var path = {svg:wickObj.pathData, x:wickObj.x, y:wickObj.y}
-                        path.selectOnAddToFabric = true;
                         args.paths.push(path);
                     }
                 });
@@ -168,7 +167,7 @@ var WickActionHandler = function (wickEditor) {
             if(args.paths) {
                 // Add all new paths
                 args.paths.forEach(function (pathData) {
-                    wickEditor.paper.addPath(pathData.svg, {x:pathData.x, y:pathData.y}, pathData.isEraserPath, pathData.selectOnAddToFabric);
+                    wickEditor.paper.addPath(pathData.svg, {x:pathData.x, y:pathData.y}, pathData.isEraserPath);
                     if(pathData.isEraserPath) {
                         wickEditor.paper.cleanupPaths();
                         wickEditor.paper.refresh();

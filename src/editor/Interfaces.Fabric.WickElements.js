@@ -25,8 +25,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         var currentFrame = currentFrameRef;
 
         // Make sure everything is deselected, mulitple selected objects cause positioning problems.
-        var selectedObjects = fabricInterface.getSelectedObjects(WickObject);
-        if(selectedObjects.length > 1) fabricInterface.deselectAll(true);
+        fabricInterface.deselectAll(true);
 
         var activeObjects = currentObject.getAllActiveChildObjects();
         var siblingObjects = currentObject.getAllInactiveSiblings();
@@ -106,7 +105,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         if(enablePerfTests) stopTiming("remove objects");
 
         var objectsToAdd = [];
-        var selectionChanged = false;
 
         // Add new objects and update existing objects
         allObjects.forEach(function (child) {
@@ -157,22 +155,15 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 //var trueZIndex = allObjects.indexOf(objectToAdd);
                 //fabricInterface.canvas.moveTo(fabricObj, trueZIndex+fabricInterface.guiElements.getNumGUIElements());
 
-                if(objectToAdd.selectOnAddToFabric) {
-                    if(!selectionChanged) {
-                        selectionChanged = true;
-                        selectedObjects = [];
-                    }
-                    selectedObjects.push(objectToAdd);
-                    objectToAdd.selectOnAddToFabric = false;
-                    fabricInterface.deselectAll();
-                    fabricInterface.selectObjects(selectedObjects);
-                }
-
                 numObjectsAdded++;
                 if(numObjectsAdded === objectsToAdd.length) {
                     //console.log("force z index update");
                     if(onNewFrame) refreshZIndices(true);
                     fabricInterface.canvas.renderAll()
+
+                    // Reselect objects that were selected before sync
+                    var selectedObjects = wickEditor.project.getSelectedObjects();
+                    fabricInterface.selectObjects(selectedObjects);
                 }
                 //refreshZIndices();
             });
@@ -184,9 +175,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         }
 
         if(enablePerfTests) stopTiming("add & update objects");
-
-        // Reselect objects that were selected before sync
-        if(selectedObjects.length > 0) fabricInterface.selectObjects(selectedObjects);
 
         if(enablePerfTests) stopTiming("reselect");
     }

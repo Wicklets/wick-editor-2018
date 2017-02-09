@@ -405,5 +405,23 @@ WickProject.prototype.hasSyntaxErrors = function () {
 }
 
 WickProject.prototype.isObjectSelected = function (obj) {
-    return this.selection.includes(obj);
+    var selected = false;
+
+    this.selection.forEach(function (uuid) {
+        if(obj.uuid === uuid) selected = true;
+    });
+
+    return selected;
+}
+
+WickProject.prototype.getSelectedObjects = function () {
+    var self = this;
+
+    var objs = [];
+    this.selection.forEach(function (uuid) {
+        var obj = self.getObjectByUUID(uuid) || self.getFrameByUUID();
+        if(obj) objs.push(obj);
+    });
+
+    return objs;
 }

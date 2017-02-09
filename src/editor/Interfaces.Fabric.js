@@ -19,7 +19,8 @@ var FabricInterface = function (wickEditor) {
         this.canvas.setWidth(window.innerWidth);
         this.canvas.setHeight(window.innerHeight);
 
-        // This is disabled because it made zooming really slow and also caused some rendering problems with the centerpoints of symbols
+        /* This is disabled because it made zooming really slow and also 
+           caused some rendering problems with the centerpoints of symbols */
         fabric.Object.prototype.objectCaching = false;
 
         this.panning = false;
@@ -31,16 +32,6 @@ var FabricInterface = function (wickEditor) {
         this.symbolBorders   = new FabricSymbolBorders(wickEditor, this);
         this.projectRenderer = new FabricProjectRenderer(wickEditor, this);
 
-        // Pen pressure stuff
-        /*
-        this.canvas.freeDrawingBrush = new fabric.PenPressureBrush(this.canvas);
-        // Hacky way to talk to the fabric PenPressureBrush
-        self.canvas.getPenPressure = this.tools.paintbrush.getPenPressure;
-        self.canvas.onPenPressurePathCreated = function (path) {
-            this.tools.paintbrush.onPenPressurePathCreated(path)
-            this.tools.eraser.onPenPressurePathCreated(path)
-        };
-        */
         this.canvas.freeDrawingBrush = new fabric.PencilBrush(this.canvas);
 
         // Canvas event listeners
@@ -57,6 +48,16 @@ var FabricInterface = function (wickEditor) {
         });
         self.canvas.on('object:selected', function (e) {
             //wickEditor.timeline.redraw();
+
+            wickEditor.project.selection = [];
+            if(e.target.wickObjReference) {
+                wickEditor.project.selection.push(e.target.wickObjReference.uuid);
+            } else {
+                e.target._objects.forEach(function (obj) {
+                    if(obj.wickObjReference.uuid) 
+                        wickEditor.project.selection.push(obj.wickObjReference.uuid);
+                });
+            }
             
             wickEditor.scriptingide.editScriptsOfObject(e.target.wickObjReference, {dontOpenIDE:true});
             wickEditor.scriptingide.syncWithEditorState();
@@ -68,6 +69,7 @@ var FabricInterface = function (wickEditor) {
             });
         });
         self.canvas.on('before:selection:cleared', function (e) {
+            wickEditor.project.selection = [];
             // quick fix for properties GUI closing after selected wick object changes
             $(":focus").blur();
         });
@@ -296,9 +298,11 @@ var FabricInterface = function (wickEditor) {
         //wickEditor.timeline.redraw();
 
         var objs = [];
+        wickEditor.project.selection = [];
         this.canvas.forEachObject(function (o) {
             if(o.wickObjectRef && o.selectable) {
                 objs.push(o.wickObjectRef);
+                wickEditor.project.selection.push(o.wickObjectRef.uuid)
             }
         });
         this.selectObjects(objs);
@@ -428,7 +432,7 @@ var FabricInterface = function (wickEditor) {
             self.modifyObjects(wickobjs);
 
             // Reselect everything
-            self.selectObjects(wickobjs);
+            //self.selectObjects(wickobjs);
 
             wickEditor.syncInterfaces();
         }

@@ -79,7 +79,7 @@ var PaperInterface = function (wickEditor) {
         regenWickObjects();
     }
 
-    self.addPath = function (svgString, offset, isEraserPath, selectOnAddToFabric) {
+    self.addPath = function (svgString, offset, isEraserPath) {
         var paperGroup = importSVG(svgString);
 
         paperGroup.dirtyFromWick = true;
@@ -91,7 +91,7 @@ var PaperInterface = function (wickEditor) {
                 child.remove();
                 var newChild = child.toPath({insert:false});
                 //newChild = newChild.unite(new paper.Path({insert:false}));
-                newChild.clockwise =false;
+                newChild.clockwise = false;
                 paperGroup.addChild(newChild);
             }
         });
@@ -100,8 +100,6 @@ var PaperInterface = function (wickEditor) {
         paperGroup.children.forEach(function (child) {
             if(child.closePath) child.closePath();
         });
-
-        paperGroup.selectOnAddToFabric = selectOnAddToFabric;
 
         if(offset)
             paperGroup.position = new paper.Point(offset.x, offset.y);
@@ -446,12 +444,10 @@ var PaperInterface = function (wickEditor) {
 
             var wickObject = WickObject.fromPathFile(group.exportSVG({asString:true}));
             wickObject.x = oldPosition.x;
+            if(!group.data.wickUUID) group.data.wickUUID = random.uuid4();
+            wickObject.uuid = group.data.wickUUID;
             wickObject.y = oldPosition.y;
             wickEditor.project.addObject(wickObject, null, true);
-            if(group.selectOnAddToFabric) {
-                wickObject.selectOnAddToFabric = true;
-                group.selectOnAddToFabric = false;
-            }
             wickToPaperMappings[wickObject.uuid] = group;
             
             group.position = new paper.Point(oldPosition.x, oldPosition.y);
