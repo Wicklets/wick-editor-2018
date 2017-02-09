@@ -2,6 +2,11 @@
 
 var RightClickMenuInterface = function (wickEditor) {
 
+
+    
+
+// Old...
+
     var that = this;
 
     this.setup = function () {

@@ -6,7 +6,7 @@ var TimelineInterface = function (wickEditor) {
 
 // DOM Utils
 
-    var createDiv = function (args, events) {
+    var newDiv = function (args, events) {
         var div = document.createElement('div')
 
         for(argName in args) {
@@ -22,57 +22,58 @@ var TimelineInterface = function (wickEditor) {
 
 // Generate view from model
 
-    var generateDiv = function (obj, parent) {
-        if(obj instanceof WickObject) {
+    var createTimelineDiv = function (wickObject, parent) {
 
-            var timelineDiv = createDiv({className: 'timeline'});
+        var timelineDiv = newDiv({className: 'timeline'});
 
-            obj.layers.forEach(function (wickLayer) {
-                generateDiv(wickLayer, timelineDiv);
-            });
+        wickObject.layers.forEach(function (wickLayer) {
+            timelineDiv.appendChild(createLayerDiv(wickLayer));
+        });
 
-            parent.appendChild(timelineDiv);
+        return timelineDiv;
+    }
 
-        } else if(obj instanceof WickLayer) {
+    var createLayerDiv = function (wickLayer, parent) {
 
-            var layerDiv = createDiv({className: 'layer'});
-            layerDiv.addEventListener('mousedown', function () {
-                console.log('layer');
-            });
-            
-            layerDiv.appendChild(createDiv({className: 'layerOptions'}));
-            obj.frames.forEach(function (wickFrame) {
-                generateDiv(wickFrame, layerDiv);
-            });
+        var layerDiv = newDiv({className: 'layer'});
+        layerDiv.addEventListener('mousedown', function () {
+            console.log('layer');
+        });
+        
+        layerDiv.appendChild(newDiv({className: 'layerOptions'}));
+        wickLayer.frames.forEach(function (wickFrame) {
+            layerDiv.appendChild(createFrameDiv(wickFrame));
+        });
 
-            parent.appendChild(layerDiv);
+        return layerDiv;
 
-        } else if (obj instanceof WickFrame) {
+    } 
 
-            var frameDiv = createDiv({className: 'frame' + (!wickEditor.project.isObjectSelected(obj)?' selectedFrame':'')});
-            frameDiv.addEventListener('mousedown', function (e) {
-                console.log(/*obj.identifier*/'frame')
-                e.stopPropagation();
-            });
+    var createFrameDiv = function (wickFrame, parent) {
 
-            frameDiv.style.width = (frameWidth * obj.frameLength) + 'px';
+        var frameDiv = newDiv({className: 'frame' + (!wickEditor.project.isObjectSelected(wickFrame)?' selectedFrame':'')});
+        frameDiv.addEventListener('mousedown', function (e) {
+            console.log(/*wickFrame.identifier*/'frame')
+            e.stopPropagation();
+        });
 
-            var leftFrameHandle = createDiv({className: 'frameHandle leftFrameHandle'});
-            var rightFrameHandle = createDiv({className: 'frameHandle rightFrameHandle'});
-            leftFrameHandle.addEventListener('mousedown', function (e) {
-                console.log(/*obj.identifier*/'leftframehandle');
-                e.stopPropagation()
-            });
-            rightFrameHandle.addEventListener('mousedown', function (e) {
-                console.log(/*obj.identifier*/'rightFrameHandle');
-                e.stopPropagation()
-            });
-            frameDiv.appendChild(leftFrameHandle);
-            frameDiv.appendChild(rightFrameHandle);
+        frameDiv.style.width = (frameWidth * wickFrame.frameLength) + 'px';
 
-            parent.appendChild(frameDiv);
+        var leftFrameHandle = newDiv({className: 'frameHandle leftFrameHandle'});
+        var rightFrameHandle = newDiv({className: 'frameHandle rightFrameHandle'});
+        leftFrameHandle.addEventListener('mousedown', function (e) {
+            console.log(/*wickFrame.identifier*/'leftframehandle');
+            e.stopPropagation();
+        });
+        rightFrameHandle.addEventListener('mousedown', function (e) {
+            console.log(/*wickFrame.identifier*/'rightFrameHandle');
+            e.stopPropagation();
+        });
+        frameDiv.appendChild(leftFrameHandle);
+        frameDiv.appendChild(rightFrameHandle);
 
-        }
+        return frameDiv;
+
     }
 
 // API
@@ -87,7 +88,7 @@ var TimelineInterface = function (wickEditor) {
         timelineGUI.innerHTML = "";
 
         // Regenerate timeline GUI DOM elem
-        generateDiv(wickEditor.project.currentObject, timelineGUI);
+        timelineGUI.appendChild(createTimelineDiv(wickEditor.project.currentObject));
     }
 
 }
