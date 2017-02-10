@@ -5,7 +5,7 @@ var StatusBarInterface = function (wickEditor) {
     var that = this;
 
     var messages = {
-        none : "Wick Editor Open Beta",
+        none : "Wick Editor",
         saving : "Saving...",
         done : "Save successful!",
         exporting : "Exporting...", 

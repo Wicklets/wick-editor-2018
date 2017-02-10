@@ -7,6 +7,9 @@ var PaperInterface = function (wickEditor) {
     // Reference to the WickFrame that paper.js currently holds path data for.
     var currentFrame;
 
+    // Path routines (These can be swapped out for more optimized routines someday~)
+    var pathRoutines = new PathRoutines(this);
+
 /******************************
     Wick Interface methods
 ******************************/
@@ -53,20 +56,17 @@ var PaperInterface = function (wickEditor) {
 ******************************/
     
     self.cleanupPaths = function () {
-        // Call bryce routine with current paper project.
-
+        pathRoutines.cleanupPaths();
         applyPathChangesToProject();
     }
 
-    self.eraseWithPath = function () {
-        // Call bryce routine with current paper project.
-
+    self.eraseWithPath = function (eraserPath) {
+        pathRoutines.eraseWithPath(eraserPath)
         applyPathChangesToProject();
     }
 
-    self.fillAt = function () {
-        // Call bryce routine with current paper project.
-
+    self.fillAt = function (x,y,color) {
+        pathRoutines.fillAt(x,y,color);
         applyPathChangesToProject();
     }
 

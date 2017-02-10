@@ -36,12 +36,12 @@ var WickActionHandler = function (wickEditor) {
         this.args = args;
 
         this.doAction = function () {
-            //console.log("StackAction: doAction on " + this.name);
+            console.log("StackAction: do " + this.name);
             actions[this.name].doFn(this.args);
         }
 
         this.undoAction = function () {
-            //console.log("StackAction: undoAction on " + this.name);
+            console.log("StackAction: undo " + this.name);
             actions[this.name].undoFn(this.args);
         }
     }
@@ -59,6 +59,12 @@ var WickActionHandler = function (wickEditor) {
         this.undoActions = function () {
             this.stackActions.forEachBackwards(function (stackAction) {
                 stackAction.undoAction();
+            });
+        }
+
+        this.redoActions = function () {
+            this.stackActions.forEachBackwards(function (stackAction) {
+                stackAction.doAction();
             });
         }
     }
@@ -83,9 +89,9 @@ var WickActionHandler = function (wickEditor) {
     // done function, call when a WickAction is finished
     var done = function () {
         console.log('done')
+        actionBeingDone = false;
 
         // Sync interfaces + do other post-action cleanup
-        actionBeingDone = false;
         wickEditor.project.rootObject.generateParentObjectReferences();
         wickEditor.syncInterfaces();
         wickEditor.fabric.canvas.renderAll();
@@ -93,8 +99,12 @@ var WickActionHandler = function (wickEditor) {
 
 // API
 
+    var initialAction = true;
     this.doAction = function (actionName, args) {
-        console.log("doAction: " + actionName);
+        if(!initialAction) {
+            console.log("killed action")
+            return;
+        }
 
         // Check for invalid action
         if(!actions[actionName]) {
@@ -105,12 +115,14 @@ var WickActionHandler = function (wickEditor) {
         // Put the action on the undo stack to be undone later
         var newAction = new StackAction(actionName, args);
         if(actionBeingDone) {
+            console.log('chaining~~~')
             // Action triggered by another action, chain them together
             var lastActionGroup = undoStack.pop();
             lastActionGroup.stackActions.push(newAction);
             undoStack.push(lastActionGroup);
             newAction.doAction();
         } else {
+            // Action triggered normally (form outside WickActionHandler), create new group
             var newGroup = new StackActionGroup();
             newGroup.stackActions.push(newAction);
             actionBeingDone = true;
@@ -129,12 +141,16 @@ var WickActionHandler = function (wickEditor) {
             return;
         }
 
+        initialAction = false;
+
         // Get last action on the undo stack
         var actionGroup = undoStack.pop();
 
         // Do the action and put it on the redo stack to be redone later
         actionGroup.undoActions();
         redoStack.push(actionGroup);
+
+        initialAction = true;
         
     }
 
@@ -146,12 +162,16 @@ var WickActionHandler = function (wickEditor) {
             return;
         }
 
+        initialAction = false
+
         // Get last action on the redo stack
         var actionGroup = redoStack.pop();
 
         // Do the action and put it back onto the undo stack
-        actionGroup.doActions();
-        this.undoStack.push(actionGroup);
+        actionGroup.redoActions();
+        undoStack.push(actionGroup);
+
+        initialAction = true
 
     }
 
