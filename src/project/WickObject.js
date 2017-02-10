@@ -157,7 +157,7 @@ WickObject.fromAudioFile = function (audioData) {
     return audioWickObject;
 }
 
-WickObject.fromPathFile = function (pathData, callback) {
+WickObject.fromPathFile = function (pathData) {
     var pathWickObject = new WickObject();
     pathWickObject.pathData = pathData;
     return pathWickObject;

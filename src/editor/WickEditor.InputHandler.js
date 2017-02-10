@@ -271,9 +271,7 @@ var InputHandler = function (wickEditor) {
 *************************/
 
     var loadSVG = function (svg, callback) {
-        wickEditor.paper.addPath(svg);
-        wickEditor.paper.refresh();
-        wickEditor.syncInterfaces();
+        console.error('loadSVG NYI!')
     }
     
     var loadAnimatedGIF = function (dataURL, callback) {

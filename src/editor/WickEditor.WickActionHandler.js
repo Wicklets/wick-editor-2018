@@ -138,95 +138,46 @@ var WickActionHandler = function (wickEditor) {
             }
             var currentFrame = wickEditor.project.currentObject.getCurrentFrame();
 
-            if(args.wickObjects) {
-                // Make sure any paths from copy/paste get handled by paper.js
-                args.wickObjects.forEach(function (wickObj) {
-                    if(wickObj.pathData) {
-                        if(!args.paths) args.paths = [];
-                        //var path = wickEditor.paper.getPathDataOfWickObject(wickObj.uuidCopiedFrom);
-                        var path = {svg:wickObj.pathData, x:wickObj.x, y:wickObj.y}
-                        args.paths.push(path);
-                    }
-                });
-                // Save references to added wick objects so they can be removed on undo
-                args.addedObjects = [];
-                args.wickObjects.forEach(function (wickObj) {
-                    if(wickObj.pathData) return;
-                    args.addedObjects.push(wickObj);
-                });
-                // Add all the new wick objects
-                args.wickObjects.forEach(function (wickObj) {
-                    if(wickObj.pathData) return;
-                    wickObj.zIndicesDirty = true;
-                    wickEditor.project.addObject(wickObj);
-                });
-            }
+            // Save references to added wick objects so they can be removed on undo
+            args.addedObjects = [];
+            args.wickObjects.forEach(function (wickObj) {
+                args.addedObjects.push(wickObj);
+            });
 
-            // Save current state of frame's SVG
-            args.oldPathData = currentFrame.pathData;
-            if(args.paths) {
-                // Add all new paths
-                args.paths.forEach(function (pathData) {
-                    wickEditor.paper.addPath(pathData.svg, {x:pathData.x, y:pathData.y}, pathData.isEraserPath);
-                    if(pathData.isEraserPath) {
-                        wickEditor.paper.cleanupPaths();
-                        wickEditor.paper.refresh();
-                    }
-                });            
-            }
-
-            // Optimization: Don't update the other paths until later (makes adding paths way faster.) Keep the next line commented out!!!
-            //wickEditor.paper.refresh();
-            wickEditor.paper.saveFrameSVG();
-
+            // Add all the new wick objects
+            args.wickObjects.forEach(function (wickObj) {
+                wickObj.zIndicesDirty = true;
+                wickEditor.project.addObject(wickObj);
+            });
+            
             done();
         },
         function (args) {
             // Remove objects we added
-            (args.wickObjects || []).forEach(function (wickObject) {
+            args.wickObjects.forEach(function (wickObject) {
                 wickEditor.project.currentObject.removeChild(wickObject);
             });
-
-            // Restore old frame SVG state
-            if(args.paths) {
-                wickEditor.project.currentObject.getCurrentFrame().pathData = args.oldPathData;
-                wickEditor.paper.updateWickProject();
-
-                wickEditor.paper.cleanupPaths(true);
-                wickEditor.paper.refresh();
-            }
 
             done();
         });
 
     this.registerAction('deleteObjects',
         function (args) {
-            args.restoredObjects = [];
+            args.restoredObjects = []
             args.oldZIndices = [];
 
             // Store the old z index vars for each object.
             // Must do this before removing them all.
             args.wickObjects.forEach(function (wickObject) {
-                if(wickObject.pathData) {
-
-                } else {
-                    var zIndex = wickEditor.project.currentObject.getCurrentFrame().wickObjects.indexOf(wickObject);
-                    args.oldZIndices.push(zIndex);
-                }
+                var zIndex = wickEditor.project.currentObject.getCurrentFrame().wickObjects.indexOf(wickObject);
+                args.oldZIndices.push(zIndex);
             });
 
             // Now remove them
-            args.oldPathData = wickEditor.project.currentObject.getCurrentFrame().pathData;
             args.wickObjects.forEach(function (wickObject) {
-                if(wickObject.pathData) {
-                    wickEditor.paper.removePath(wickObject.uuid);
-                } else {
-                    args.restoredObjects.push(wickObject);
-                    wickEditor.project.currentObject.removeChild(wickObject);
-                }
+                args.restoredObjects.push(wickObject);
+                wickEditor.project.currentObject.removeChild(wickObject);
             });
-
-            wickEditor.paper.refresh();
 
             done();
         },
@@ -234,9 +185,6 @@ var WickActionHandler = function (wickEditor) {
             for(var i = 0; i < args.restoredObjects.length; i++) {
                 wickEditor.project.addObject(args.restoredObjects[i], args.oldZIndices[i]);
             }
-
-            wickEditor.project.currentObject.getCurrentFrame().pathData = args.oldPathData;
-            wickEditor.paper.updateWickProject();
 
             done();
         });
@@ -249,7 +197,6 @@ var WickActionHandler = function (wickEditor) {
 
             for(var i = 0; i < args.objs.length; i++) {
                 var wickObj = args.objs[i];
-                if(wickObj.pathData) continue;
 
                 args.originalStates[i] = {};
                 modifyableAttributes.forEach(function(attrib) {
@@ -293,28 +240,11 @@ var WickActionHandler = function (wickEditor) {
                 }
             };
 
-            var currentFrame = wickEditor.project.currentObject.getCurrentFrame();
-            args.oldPathData = currentFrame.pathData;
-            for(var i = 0; i < args.objs.length; i++) {
-                var wickObj = args.objs[i];
-                if(!wickObj.pathData) continue;
-                wickEditor.paper.modifyPath(wickObj.uuid, {
-                    x: args.modifiedStates[i].x || wickObj.x,
-                    y: args.modifiedStates[i].y || wickObj.y,
-                    scaleX: args.modifiedStates[i].scaleX || 1,
-                    scaleY: args.modifiedStates[i].scaleY || 1,
-                    rotation: args.modifiedStates[i].rotation || 0
-                })
-            };
-            wickEditor.paper.cleanupPaths();
-            wickEditor.paper.refresh();
-
             done();
         },
         function (args) {
             for(var i = 0; i < args.objs.length; i++) {
                 var wickObj = args.objs[i];
-                if(wickObj.pathData) continue;
 
                 // Revert the object's state to it's original pre-transformation state
                 modifyableAttributes.forEach(function(attrib) {
@@ -335,9 +265,6 @@ var WickActionHandler = function (wickEditor) {
                     wickObj.fontData.fill = args.originalStates[i].fill;
                 }
             }
-
-            wickEditor.project.currentObject.getCurrentFrame().pathData = args.oldPathData;
-            wickEditor.paper.updateWickProject();
 
             done();
         });
@@ -361,21 +288,8 @@ var WickActionHandler = function (wickEditor) {
 
             // Remove objects from original parent (they are inside the symbol now.)
             objects.forEach(function (wickObject) {
-                if(wickObject.pathData) {
-                    wickEditor.paper.removePath(wickObject.uuid);
-                    var firstFrame = symbol.layers[0].frames[0];
-                    if(firstFrame.pathDataToAdd === null) firstFrame.pathDataToAdd = [];
-                    firstFrame.pathDataToAdd.push({
-                        svg: wickObject.pathData,
-                        x: wickObject.x,
-                        y: wickObject.y
-                    });
-                } else {
-                    wickEditor.project.currentObject.removeChild(wickObject);
-                }
+                wickEditor.project.currentObject.removeChild(wickObject);
             });
-
-            wickEditor.paper.refresh();
 
             done();
         },
@@ -384,14 +298,8 @@ var WickActionHandler = function (wickEditor) {
             children.forEach(function (child) {
                 child.x += child.parentObject.x;
                 child.y += child.parentObject.y;
-                if(child.pathData) {
-                    wickEditor.paper.addPath(child.pathData, {x:child.x, y:child.y});
-                } else {
-                    wickEditor.project.addObject(child, null, true);
-                }
+                wickEditor.project.addObject(child, null, true);
             });
-            wickEditor.paper.refresh();
-            wickEditor.paper.updateWickProject();
 
             wickEditor.project.currentObject.removeChild(args.createdSymbol);
 
@@ -406,14 +314,8 @@ var WickActionHandler = function (wickEditor) {
             args.children.forEach(function (child) {
                 child.x += child.parentObject.x;
                 child.y += child.parentObject.y;
-                if(child.pathData) {
-                    wickEditor.paper.addPath(child.pathData, {x:child.x, y:child.y});
-                } else {
-                    wickEditor.project.addObject(child, null, true);
-                }
+                wickEditor.project.addObject(child, null, true);
             });
-            wickEditor.paper.refresh();
-            wickEditor.paper.updateWickProject();
 
             wickEditor.project.currentObject.removeChild(args.obj);
 
@@ -423,24 +325,9 @@ var WickActionHandler = function (wickEditor) {
             args.children.forEach(function (child) {
                 child.x -= child.parentObject.x;
                 child.y -= child.parentObject.y;
-                //wickEditor.project.currentObject.removeChild(child);
-
-                if(child.pathData) {
-                    //wickEditor.paper.removePath(child.uuid);
-                    var firstFrame = args.symbol.layers[0].frames[0];
-                    if(firstFrame.pathDataToAdd === null) firstFrame.pathDataToAdd = [];
-                    firstFrame.pathDataToAdd.push({
-                        svg: child.pathData,
-                        x: child.x,
-                        y: child.y
-                    });
-                } else {
-                    wickEditor.project.currentObject.removeChild(wickObject);
-                }
+                wickEditor.project.currentObject.removeChild(child);
             });
-            wickEditor.paper.refresh();
-            wickEditor.paper.updateWickProject();
-
+            
             wickEditor.project.addObject(args.symbol);
 
             done();

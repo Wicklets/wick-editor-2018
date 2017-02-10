@@ -60,7 +60,7 @@ Tools.Paintbrush = function (wickEditor) {
 
     this.setup = function () {
         // Listen for new paths drawn by fabric, vectorize them, and add them to the WickProject as WickObjects
-        wickEditor.fabric.canvas.on('object:added', function(e) {
+        /*wickEditor.fabric.canvas.on('object:added', function(e) {
             if(!(wickEditor.currentTool instanceof Tools.Paintbrush)) return;
 
             var fabricPath = e.target;
@@ -83,7 +83,24 @@ Tools.Paintbrush = function (wickEditor) {
                 });
             });
             
-        });
+        });*/
+
+        window.secretPathListenerForWick = function (fabricPath) {
+            potraceFabricPath(fabricPath, function(SVGData) {
+                var symbolOffset = wickEditor.project.currentObject.getAbsolutePosition();
+                var x = fabricPath.left - symbolOffset.x;
+                var y = fabricPath.top - symbolOffset.y;
+
+                var pathWickObject = WickObject.fromPathFile(SVGData);
+                pathWickObject.x = x;
+                pathWickObject.y = y;
+
+                wickEditor.actionHandler.doAction('addObjects', {
+                    wickObjects: [pathWickObject]
+                });
+            });
+        }
+
     }
 
     var potraceFabricPath = function (pathFabricObject, callback) {

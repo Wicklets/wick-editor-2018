@@ -89,9 +89,7 @@ WickEditor.prototype.changeTool = function (newTool) {
        (this.lastTool instanceof Tools.Eraser) || 
        (this.lastTool instanceof Tools.Ellipse) || 
        (this.lastTool instanceof Tools.Rectangle)) {
-        this.paper.cleanupPaths();
-        this.paper.refresh();
-        this.syncInterfaces();
+        console.error("Cleanup paths call goes here!");
     }
 }
 
