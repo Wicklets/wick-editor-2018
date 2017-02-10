@@ -1,136 +1,172 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-/* WickActionHandler.js - General Logic for how undo and redo is handled in the Wick editor. */
+/* WickActionHandler - General Logic for how undo and redo is handled in the Wick editor. */
 /* Only add routines to WickActionHandler if they:
      (1) Change the state of the project and
      (2) Can be undone/redone */
-
 var WickActionHandler = function (wickEditor) {
 
     var self = this;
 
-    /* WickAction definition. All user actions are expected to be well defined by
-   this structure in order to properly be done and undone. */
+// Class definitions
 
-    var WickAction = function (name, doAction, undoAction) {
+    /* Class to define WickActions */
+    var WickAction = function (name, doFn, undoFn) {
 
         this.name = name;
 
         /* To be called when an action is committed by the user. */
-        this.doAction = doAction;
+        this.doFn = doFn;
 
         /* To be called when this the user undoes this action. This should revert
            the state of the wickEditor or wickObject back to its original state. */
-        this.undoAction = undoAction;
+        this.undoFn = undoFn;
+
+    }
+
+    /* Class to store data of actions done, stored in the undo/redo stacks */
+    var StackAction = function (name, args) {
+        /* name is used as a key to the dict of action definitions */
+        this.name = name;
 
         /* 'args' is used to pass any data that the action needs.
            'args' also saves anything that the undo will use later,
            For example, to undo a delete we need to bring back that deleted object...
            In this case the object that gets deleted gets stored in args! */
-        this.args = {};
+        this.args = args;
 
+        this.doAction = function () {
+            //console.log("StackAction: doAction on " + this.name);
+            actions[this.name].doFn(this.args);
+        }
+
+        this.undoAction = function () {
+            //console.log("StackAction: undoAction on " + this.name);
+            actions[this.name].undoFn(this.args);
+        }
     }
 
-// Undo/redo action stacks
+    /* Class to store data of actions done, stored in the undo/redo stacks */
+    var StackActionGroup = function () {
+        this.stackActions = [];
 
-    this.undoStack = [];
-    this.redoStack = [];
+        this.doActions = function () {
+            this.stackActions.forEach(function (stackAction) {
+                stackAction.doAction();
+            });
+        }
 
-// doActions and undoActions, dicts that store functions for doing and undoing all actions
+        this.undoActions = function () {
+            this.stackActions.forEachBackwards(function (stackAction) {
+                stackAction.undoAction();
+            });
+        }
+    }
 
-    this.doActions = {};
-    this.undoActions = {};
+// Private vars
+
+    // Actions dict, stores action definitions
+    var actions = {};
+
+    // Undo/redo action stacks
+    var undoStack = [];
+    var redoStack = [];
+
+    // Flag that determines if we should chain actions in the stack
+    var actionBeingDone = false;
 
     /* Call this to define a new action! */
-    this.registerAction = function(name, doFunction, undoFunction) {
-        this.doActions[name] = doFunction;
-        this.undoActions[name] = undoFunction;
+    var registerAction = function(name, doFunction, undoFunction) {
+        actions[name] = new WickAction(name, doFunction, undoFunction);
     }
 
+    // done function, call when a WickAction is finished
+    var done = function () {
+        console.log('done')
+
+        // Sync interfaces + do other post-action cleanup
+        actionBeingDone = false;
+        wickEditor.project.rootObject.generateParentObjectReferences();
+        wickEditor.syncInterfaces();
+        wickEditor.fabric.canvas.renderAll();
+    }
+
+// API
+
     this.doAction = function (actionName, args) {
+        console.log("doAction: " + actionName);
 
-        // Create a new WickAction object
-        var action = new WickAction(
-            actionName,
-            this.doActions[actionName],
-            this.undoActions[actionName]
-        );
-        action.fname = actionName;
-        if(!action.doAction) {
-            console.error(actionName + " is not a defined do action!");
+        // Check for invalid action
+        if(!actions[actionName]) {
+            console.error(actionName + " is not a defined WickAction!");
+            return;
         }
-        if(!action.undoAction) {
-            console.error(actionName + " is not a defined undo action!");
-        }
-
-        // Pass the arguments over to the WickAction and call its doAction function
-        action.args = args;
-        action.doAction(action.args);
 
         // Put the action on the undo stack to be undone later
-        this.undoStack.push(action);
-        this.redoStack = [];
+        var newAction = new StackAction(actionName, args);
+        if(actionBeingDone) {
+            // Action triggered by another action, chain them together
+            var lastActionGroup = undoStack.pop();
+            lastActionGroup.stackActions.push(newAction);
+            undoStack.push(lastActionGroup);
+            newAction.doAction();
+        } else {
+            var newGroup = new StackActionGroup();
+            newGroup.stackActions.push(newAction);
+            actionBeingDone = true;
+            undoStack.push(newGroup);
+            newGroup.doActions();
+        }
+        redoStack = [];
 
     }
 
     this.undoAction = function () {
 
         // Nothing to undo!
-        if (this.undoStack.length == 0) {
+        if (undoStack.length == 0) {
             console.log("undoAction(): No actions on the undo stack.");
             return;
         }
 
         // Get last action on the undo stack
-        var action = this.undoStack.pop();
+        var actionGroup = undoStack.pop();
 
         // Do the action and put it on the redo stack to be redone later
-        action.undoAction(action.args);
-        this.redoStack.push(action);
+        actionGroup.undoActions();
+        redoStack.push(actionGroup);
         
-    }
-
-    var done = function () {
-        // Regen parent refs
-        wickEditor.project.rootObject.generateParentObjectReferences();
-
-        // Sync interfaces / render canvas
-        wickEditor.syncInterfaces();
-        wickEditor.fabric.canvas.renderAll();
     }
 
     this.redoAction = function () {
 
         // Nothing to redo!
-        if (this.redoStack.length == 0) {
+        if (redoStack.length == 0) {
             console.log("redoAction(): No actions on the redo stack.");
             return;
         }
 
         // Get last action on the redo stack
-        var action = this.redoStack.pop();
+        var actionGroup = redoStack.pop();
 
         // Do the action and put it back onto the undo stack
-        action.doAction(action.args);
-        this.undoStack.push(action);
+        actionGroup.doActions();
+        this.undoStack.push(actionGroup);
 
     }
 
     this.clearHistory = function () {
-        this.undoStack = [];
-        this.redoStack = [];
+        undoStack = [];
+        redoStack = [];
     }
 
-    this.printHistory = function () {
-        this.undoStack.forEach(function (action) {
-            console.log("Action " + self.undoStack.indexOf(action) + ":")
-            console.log(action.name);
-        })
+    this.printHistory =  function () {
+        console.log(undoStack)
     }
 
 // Register all actions
 
-    this.registerAction('addObjects',
+    registerAction('addObjects',
         function (args) {
             // Make a new frame if one doesn't exist at the playhead position
             if(!wickEditor.project.currentObject.getCurrentFrame()) {
@@ -161,7 +197,7 @@ var WickActionHandler = function (wickEditor) {
             done();
         });
 
-    this.registerAction('deleteObjects',
+    registerAction('deleteObjects',
         function (args) {
             args.restoredObjects = []
             args.oldZIndices = [];
@@ -191,7 +227,7 @@ var WickActionHandler = function (wickEditor) {
 
     var modifyableAttributes = ["x","y","scaleX","scaleY","rotation","opacity","flipX","flipY"];
 
-    this.registerAction('modifyObjects',
+    registerAction('modifyObjects',
         function (args) {
             args.originalStates = [];
 
@@ -269,7 +305,7 @@ var WickActionHandler = function (wickEditor) {
             done();
         });
 
-    this.registerAction('convertObjectsToSymbol',
+    registerAction('convertObjectsToSymbol',
         function (args) {
             var objects = args.objects;
 
@@ -306,7 +342,7 @@ var WickActionHandler = function (wickEditor) {
             done();
         });
 
-    this.registerAction('breakApartSymbol',
+    registerAction('breakApartSymbol',
         function (args) {
             args.symbol = args.obj;
 
@@ -327,13 +363,13 @@ var WickActionHandler = function (wickEditor) {
                 child.y -= child.parentObject.y;
                 wickEditor.project.currentObject.removeChild(child);
             });
-            
+
             wickEditor.project.addObject(args.symbol);
 
             done();
         });
 
-    this.registerAction('fillHole',
+    registerAction('fillHole',
         function (args) {
             args.oldPathData = wickEditor.project.currentObject.getCurrentFrame().pathData;
             wickEditor.paper.fillAtPoint(args.x, args.y, args.color);
@@ -349,7 +385,7 @@ var WickActionHandler = function (wickEditor) {
             done();
         });
 
-    this.registerAction('addFrame',
+    registerAction('addFrame',
         function (args) {
             var currentObject = wickEditor.project.currentObject;
 
@@ -371,7 +407,7 @@ var WickActionHandler = function (wickEditor) {
             done();
         });
 
-    this.registerAction('addNewFrame',
+    registerAction('addNewFrame',
         function (args) {
             var currentObject = wickEditor.project.currentObject;
 
@@ -393,7 +429,7 @@ var WickActionHandler = function (wickEditor) {
             done();
         });
 
-    this.registerAction('deleteFrame',
+    registerAction('deleteFrame',
         function (args) {
             if(!args.frame) return;
 
@@ -411,7 +447,7 @@ var WickActionHandler = function (wickEditor) {
             done();
         });
 
-    this.registerAction('addNewLayer',
+    registerAction('addNewLayer',
         function (args) {
             var currentObject = wickEditor.project.currentObject;
 
@@ -435,7 +471,7 @@ var WickActionHandler = function (wickEditor) {
             done();
         });
 
-    this.registerAction('removeLayer',
+    registerAction('removeLayer',
         function (args) {
             var currentObject = wickEditor.project.currentObject;
             if(currentObject.layers.length > 1) {
@@ -455,7 +491,7 @@ var WickActionHandler = function (wickEditor) {
             done();
         });
 
-    this.registerAction('moveLayerUp',
+    registerAction('moveLayerUp',
         function (args) {
             var currentObject = wickEditor.project.currentObject;
             if(currentObject.currentLayer === 0) return;
@@ -471,7 +507,7 @@ var WickActionHandler = function (wickEditor) {
             done();
         });
 
-    this.registerAction('moveLayerDown',
+    registerAction('moveLayerDown',
         function (args) {
             var currentObject = wickEditor.project.currentObject;
             if(currentObject.currentLayer === currentObject.layers.length-1) return;
@@ -487,7 +523,7 @@ var WickActionHandler = function (wickEditor) {
             done();
         });
 
-    /*this.registerAction('addBreakpoint',
+    /*registerAction('addBreakpoint',
         function (args) {
             args.oldAutoplayState = args.frame.autoplay;
             args.frame.autoplay = false;
@@ -496,7 +532,7 @@ var WickActionHandler = function (wickEditor) {
             args.frame.autoplay = args.oldAutoplayState;
         });
 
-    this.registerAction('removeBreakpoint',
+    registerAction('removeBreakpoint',
         function (args) {
             args.oldAutoplayState = args.frame.autoplay;
             args.frame.autoplay = true;
@@ -505,7 +541,7 @@ var WickActionHandler = function (wickEditor) {
             args.frame.autoplay = args.oldAutoplayState;
         });*/
 
-    this.registerAction('extendFrame',
+    registerAction('extendFrame',
         function (args) {
             args.frame.extend(args.nFramesToExtendBy);
             done();
@@ -515,7 +551,7 @@ var WickActionHandler = function (wickEditor) {
             done();
         });
 
-    this.registerAction('shrinkFrame',
+    registerAction('shrinkFrame',
         function (args) {
             args.frame.shrink(args.nFramesToShrinkBy);
             done();
@@ -525,7 +561,7 @@ var WickActionHandler = function (wickEditor) {
             done();
         });
 
-    this.registerAction('movePlayhead',
+    registerAction('movePlayhead',
         function (args) {
             var proceed = function () {
                 wickEditor.fabric.deselectAll();
@@ -569,7 +605,7 @@ var WickActionHandler = function (wickEditor) {
             done();
         });
 
-    this.registerAction('breakApartImage',
+    registerAction('breakApartImage',
         function (args) {
             var wickObj = wickEditor.fabric.getSelectedObject(WickObject);
             wickObj.getBlobImages(function (images) {
@@ -593,7 +629,7 @@ var WickActionHandler = function (wickEditor) {
             console.error("breakApartImage undo not yet implemented")
         });
 
-    this.registerAction('editObject',
+    registerAction('editObject',
         function (args) {
             wickEditor.fabric.deselectAll();
 
@@ -611,7 +647,7 @@ var WickActionHandler = function (wickEditor) {
             done();
         });
 
-    this.registerAction('finishEditingCurrentObject',
+    registerAction('finishEditingCurrentObject',
         function (args) {
             wickEditor.fabric.deselectAll();
             wickEditor.project.currentObject.playheadPosition = 0;
@@ -627,7 +663,7 @@ var WickActionHandler = function (wickEditor) {
             done();
         });
 
-    this.registerAction('moveObjectToZIndex',
+    registerAction('moveObjectToZIndex',
         function (args) {
             args.oldZIndexes = [];
             for(var i = 0; i < args.objs.length; i++) {

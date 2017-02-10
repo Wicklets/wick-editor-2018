@@ -4,8 +4,11 @@ var PaperInterface = function (wickEditor) {
 
     var self = this;
 
+    // Reference to the WickFrame that paper.js currently holds path data for.
+    var currentFrame;
+
 /******************************
-    API
+    Wick Interface methods
 ******************************/
 
     self.setup = function () {
@@ -27,6 +30,58 @@ var PaperInterface = function (wickEditor) {
     
     self.syncWithEditorState = function () {
 
+        // Check if the playhead has moved to a different frame
+        var newFrame = wickEditor.project.currentObject.getCurrentFrame();
+        if(newFrame !== currentFrame) {
+            paper.project.clear();
+        }
+
+        // Sync paper canvas with SVGs in the current frame of the wick project
+        // For each paper group in project:
+            // If the wick object with the uuid of the group is no longer in the project, delete the group.
+            // If the wick object with the uuid of the group is still here, sync the wick object and the paper group. 
+                //(Only if the WickObject has pathDirty flag though.)
+                //(Also you'll probably need to reset the rotation,scaleX,and scaleY of the wickobject and have fabric regen those.)
+
+        // For each path in the wick frame:
+            // If the path doesn't exist in the paper project, import it
+
+    }
+
+/******************************
+    API
+******************************/
+    
+    self.cleanupPaths = function () {
+        // Call bryce routine with current paper project.
+
+        applyPathChangesToProject();
+    }
+
+    self.eraseWithPath = function () {
+        // Call bryce routine with current paper project.
+
+        applyPathChangesToProject();
+    }
+
+    self.fillAt = function () {
+        // Call bryce routine with current paper project.
+
+        applyPathChangesToProject();
+    }
+
+/******************************
+    Util
+******************************/
+
+    var importSVG = function () {
+
+    }
+
+    var applyPathChangesToProject = function () {
+        // Determine which paper groups were removed and trigger a WickAction to delete the corresponding WickObjects.
+        // Determine which paper groups were created and trigger a WickAction to create new WickObjects for the new groups.
     }
 
  }
+

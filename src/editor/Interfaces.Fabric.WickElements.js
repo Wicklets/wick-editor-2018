@@ -146,8 +146,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 fabricObj.wickObjectRef = objectToAdd;
                 fabricInterface.canvas.add(fabricObj);
                 if(fabricObj.type === "path") {
-                    if(wickEditor.fabric.drawingPath) wickEditor.fabric.drawingPath.remove();
-                    wickEditor.fabric.drawingPath = null;
+                    // do this here to prevent flickering when you draw a path with fabric
+                    wickEditor.fabric.canvas.clearContext(wickEditor.fabric.canvas.contextTop);
                 }
                 updateFabObjPositioning(fabricObj, objectToAdd);
                 updateFabricObjectEvents(fabricObj, objectToAdd, activeObjects, siblingObjects, nearbyObjects);
@@ -165,18 +165,19 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                     var selectedObjects = wickEditor.project.getSelectedObjects();
                     fabricInterface.selectObjects(selectedObjects);
                 }
-                //refreshZIndices();
             });
         });
 
         if(objectsToAdd.length === 0) {
             //console.log("no objectsToAdd, unforced zindex update");
             refreshZIndices(false);
+
+            // Reselect objects that were selected before sync
+            var selectedObjects = wickEditor.project.getSelectedObjects();
+            fabricInterface.selectObjects(selectedObjects);
         }
 
         if(enablePerfTests) stopTiming("add & update objects");
-
-        if(enablePerfTests) stopTiming("reselect");
     }
 
     var createFabricObjectFromWickObject = function (wickObj, callback) {
