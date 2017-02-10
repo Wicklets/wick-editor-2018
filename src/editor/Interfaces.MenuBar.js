@@ -2,8 +2,8 @@
 
 var MenuBarInterface = function (wickEditor) {
 
-    var editorElem = document.getElementById('editor');
-    var menuElem = document.getElementById('menuBarGUI');
+    var editorElem;
+    var menuElem;
 
     var tabs;
 
@@ -70,6 +70,13 @@ var MenuBarInterface = function (wickEditor) {
     }
 
     this.setup = function () {
+        editorElem = document.getElementById('editor');
+        
+        menuElem = document.createElement('div');
+        menuElem.id = "menuBarGUI";
+        menuElem.className = "GUIBox";
+        editorElem.appendChild(menuElem);
+
         tabs = [];
 
         wickEditor.fabric.canvas.on('mouse:down', function (e) {

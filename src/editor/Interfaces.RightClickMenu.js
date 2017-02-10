@@ -2,32 +2,179 @@
 
 var RightClickMenuInterface = function (wickEditor) {
 
+    var self = this;
 
-    
+    var menu;
 
-// Old...
+//
 
-    var that = this;
+    var RightClickMenu = function (buttonGroups) {
+        var self = this;
 
-    this.setup = function () {
-        this.open = false;
-        this.mode = undefined;
+        this.open = false
+        this.mode = null;
+
+        this.buttonGroups = buttonGroups;
+
+        this.elem = null;
+
+        this.generateElem = function () {
+
+            this.elem = document.createElement('div');
+            this.elem.id = 'rightClickMenu';
+            this.elem.className = "GUIBox";
+            document.getElementById('editor').appendChild(this.elem);
+
+            this.buttonGroups.forEach(function (buttonGroup) {
+                buttonGroup.generateElem();
+                self.elem.appendChild(buttonGroup.elem);
+            });
+
+            var mouseEventHandler = function (e, newMode) {
+                if(e.button == 2) {
+                    self.open = true;
+                    self.mode = newMode;
+                } else {
+                    self.open = false;
+                }
+
+                self.updateElem();
+            }
+
+            document.getElementById("editorCanvasContainer").addEventListener('mousedown', function(e) { 
+                mouseEventHandler(e, "fabric");
+            });
+
+            document.getElementById("timelineGUI").addEventListener('mousedown', function(e) { 
+                mouseEventHandler(e, "timeline");
+            });
+
+        }
+
+        this.updateElem = function () {
+
+            if(this.open) {
+
+                this.elem.style.display = 'block';
+
+                var newX = wickEditor.inputHandler.mouse.x;
+                var newY = wickEditor.inputHandler.mouse.y;
+                if(newX+this.elem.offsetWidth > window.innerWidth) {
+                    newX = window.innerWidth - this.elem.offsetWidth;
+                }
+                if(newY+this.elem.offsetHeight > window.innerHeight) {
+                    newY = window.innerHeight - this.elem.offsetHeight;
+                }
+                this.elem.style.left = newX+'px';
+                this.elem.style.top  = newY+'px';
+
+                self.buttonGroups.forEach(function (buttonGroup) {
+                    buttonGroup.updateElem();
+                });
+            
+            } else {
+
+                this.elem.style.display = 'none';
+                this.elem.style.top = '0px';
+                this.elem.style.left = '0px';
+
+            }
+
+        }
+
     }
 
-    var openRightClickMenuDiv = function () {
-        // Make rightclick menu visible
-        $("#rightClickMenu").css('display', 'block');
+    var RightClickMenuButtonGroup = function (buttons, isActiveFn) {
+        var self = this;
+
+        this.buttons = buttons;
+        this.isActiveFn = isActiveFn;
+        this.elem = null;
+
+        this.generateElem = function () {
+            this.elem = document.createElement('div');
+
+            this.buttons.forEach(function (button) {
+                button.generateElem();
+                self.elem.appendChild(button.elem);
+            });
+            this.elem.appendChild(document.createElement('hr'));
+        }
+
+        this.updateElem = function () {
+            if(this.isActiveFn()) {
+                this.elem.style.display = 'block';
+            } else {
+                this.elem.style.display = 'none';
+            }
+        }
+
     }
 
-    var closeRightClickMenuDiv = function () {
-        // Hide rightclick menu
-        $("#rightClickMenu").css('display', 'none');
-        $("#rightClickMenu").css('top', '0px');
-        $("#rightClickMenu").css('left','0px');
+    var RightClickMenuButton = function (title, action) {
+        var self = this;
+
+        this.title = title;
+        this.action = action;
+        this.elem = null;
+
+        this.generateElem = function () {
+            this.elem = document.createElement('div');
+            this.elem.className = 'button';
+            this.elem.innerHTML = title;
+
+            this.elem.addEventListener('mousedown', function (e) {
+                self.action();
+            });
+        }
+
+        this.updateElem = function () {
+
+        }
+
     }
 
-    this.syncWithEditorState = function () {
+//
 
+    self.setup = function () {
+        menu = new RightClickMenu([
+            new RightClickMenuButtonGroup([
+                new RightClickMenuButton('test1', function () {
+                    alert('test1');
+                }),
+                new RightClickMenuButton('test2', function () {
+                    alert('test2');
+                })
+            ], function () {
+                return true;
+            }),
+            new RightClickMenuButtonGroup([
+                new RightClickMenuButton('test3', function () {
+                    alert('test3');
+                })
+            ], function () {
+                return true;
+            })
+        ]);
+
+        menu.generateElem();
+    }
+
+    self.syncWithEditorState = function () {
+        menu.updateElem();
+    }
+
+// Block browser default right click menu
+
+    document.addEventListener('contextmenu', function (event) { 
+        event.preventDefault();
+    }, false);
+
+
+
+
+
+        /*
         if(this.open) {
             // Hide everything
             hideButtonGroup("#fabricButtons");
@@ -54,28 +201,10 @@ var RightClickMenuInterface = function (wickEditor) {
         } else {
             closeRightClickMenuDiv();
         }
+        */
 
-    }
 
-    this.repositionMenu = function () {
-        var menuElem = document.getElementById('rightClickMenu');
-        var newX = wickEditor.inputHandler.mouse.x;
-        var newY = wickEditor.inputHandler.mouse.y;
-        if(newX+menuElem.offsetWidth > window.innerWidth) {
-            newX = window.innerWidth - menuElem.offsetWidth;
-        }
-        if(newY+menuElem.offsetHeight > window.innerHeight) {
-            newY = window.innerHeight - menuElem.offsetHeight;
-        }
-        menuElem.style.left = newX+'px';
-        menuElem.style.top  = newY+'px';
-    }
-
-/***********************************
-    Show/hide relevant buttons
-***********************************/
-
-    var showButtonGroup = function (buttonsDivID) {
+    /*var showButtonGroup = function (buttonsDivID) {
         $(buttonsDivID).css('display', 'block');
     }
     var hideButtonGroup = function (buttonsDivID) {
@@ -133,46 +262,10 @@ var RightClickMenuInterface = function (wickEditor) {
         var frame = wickEditor.project.currentObject.getCurrentFrame();
         if(frame) {
             showButtonGroup("#clickedOnFrameButtons");
-            /*if(frame.autoplay) {
-                showButtonGroup("#noBreakpointExists");
-            } else {
-                showButtonGroup("#breakpointExists");
-            }*/
+            
         } else {
             showButtonGroup("#clickedOffFrameButtons");
         }
-    }
-
-/***********************************
-    Bind Mouse events to open menu
-***********************************/
-
-    document.addEventListener('contextmenu', function (event) { 
-        event.preventDefault();
-    }, false);
-
-    document.getElementById("editorCanvasContainer").addEventListener('mousedown', function(e) { 
-        if(e.button == 2) {
-            that.open = true;
-            that.mode = "fabric";
-        } else {
-            that.open = false;
-        }
-
-        that.syncWithEditorState();
-        that.repositionMenu();
-    });
-
-    document.getElementById("timelineGUI").addEventListener('mousedown', function(e) { 
-        if(e.button == 2) {
-            that.open = true;
-            that.mode = "timeline";
-        } else {
-            that.open = false;
-        }
-
-        that.syncWithEditorState();
-        that.repositionMenu();
-    });
+    }*/
 
 }

@@ -201,7 +201,7 @@ var WickActionHandler = function (wickEditor) {
 
     this.registerAction('deleteObjects',
         function (args) {
-            args.restoredObjects = []
+            args.restoredObjects = [];
             args.oldZIndices = [];
 
             // Store the old z index vars for each object.

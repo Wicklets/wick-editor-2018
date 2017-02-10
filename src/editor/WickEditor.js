@@ -18,6 +18,9 @@ var WickEditor = function () {
         this.project = new WickProject();
     }
 
+    // Setup input handler
+    this.inputHandler = new InputHandler(this);
+
     // Load all interfaces
     this.interfaces = [];
     function registerInterface (interface) {
@@ -59,9 +62,6 @@ var WickEditor = function () {
     for(tool in this.tools) {
         this.tools[tool].setup();
     };
-
-    // Setup input handler
-    this.inputHandler = new InputHandler(this);
 
     // Setup editor logic handlers
     this.actionHandler = new WickActionHandler(this);
