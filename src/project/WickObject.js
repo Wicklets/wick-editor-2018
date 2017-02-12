@@ -477,6 +477,20 @@ WickObject.prototype.getCurrentLayer = function() {
 }
 
 WickObject.prototype.addLayer = function (layer) {
+    var currentLayerNum = 0;
+
+    this.layers.forEach(function (layer) {
+        var splitName = layer.identifier.split("Layer ")
+        if(splitName && splitName.length > 1) {
+            layerNum = parseInt(splitName[1]);
+            if(layerNum > currentLayerNum) {
+                currentLayerNum = layerNum;
+            }
+        }
+    });
+
+    layer.identifier = "Layer " + (currentLayerNum+1);
+
     this.layers.push(layer);
 }
 

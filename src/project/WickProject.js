@@ -42,7 +42,9 @@ WickProject.prototype.createNewRootObject = function () {
     rootObject.isRoot = true;
     rootObject.playheadPosition = 0;
     rootObject.currentLayer = 0;
-    rootObject.layers = [new WickLayer()];
+    var firstLayer = new WickLayer();
+    firstLayer.identifier = "Layer 1";
+    rootObject.layers = [firstLayer];
     rootObject.x = 0;
     rootObject.y = 0;
     rootObject.opacity = 1.0;
@@ -176,6 +178,8 @@ WickProject.fixForBackwardsCompatibility = function (project) {
 
         if(!wickObj.isSymbol) return;
         wickObj.layers.forEach(function (layer) {
+            if(!layer.identifier) layer.identifier = "Untitled Layer";
+
             layer.frames.forEach(function (frame) {
                 // Frames now have uuids
                 if(!frame.uuid) frame.uuid = random.uuid4();

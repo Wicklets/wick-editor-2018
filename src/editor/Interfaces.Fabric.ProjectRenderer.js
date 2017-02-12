@@ -71,6 +71,11 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
 
     self.getCanvasThumbnail = function (callback) {
         self.getCanvasAsImage(function (imageObj) {
+            if(!imageObj) {
+                callback(null);
+                return
+            }
+
             var thumbCanvas = document.createElement('canvas');
             /*thumbCanvas.style.position = 'absolute'
             thumbCanvas.style.left = '0px'

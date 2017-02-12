@@ -36,12 +36,12 @@ var WickActionHandler = function (wickEditor) {
         this.args = args;
 
         this.doAction = function () {
-            console.log("StackAction: do " + this.name);
+            //console.log("StackAction: do " + this.name);
             actions[this.name].doFn(this.args);
         }
 
         this.undoAction = function () {
-            console.log("StackAction: undo " + this.name);
+            //console.log("StackAction: undo " + this.name);
             actions[this.name].undoFn(this.args);
         }
     }
@@ -81,6 +81,9 @@ var WickActionHandler = function (wickEditor) {
     // Flag that determines if we should chain actions in the stack
     var actionBeingDone = false;
 
+    // Flag to ignore actions called by actions if they're being undone/redone
+    var initialAction = true;
+
     /* Call this to define a new action! */
     var registerAction = function(name, doFunction, undoFunction) {
         actions[name] = new WickAction(name, doFunction, undoFunction);
@@ -88,7 +91,6 @@ var WickActionHandler = function (wickEditor) {
 
     // done function, call when a WickAction is finished
     var done = function () {
-        console.log('done')
         actionBeingDone = false;
 
         // Sync interfaces + do other post-action cleanup
@@ -99,12 +101,8 @@ var WickActionHandler = function (wickEditor) {
 
 // API
 
-    var initialAction = true;
     this.doAction = function (actionName, args) {
-        if(!initialAction) {
-            console.log("killed action")
-            return;
-        }
+        if(!initialAction) return;
 
         // Check for invalid action
         if(!actions[actionName]) {
@@ -115,7 +113,6 @@ var WickActionHandler = function (wickEditor) {
         // Put the action on the undo stack to be undone later
         var newAction = new StackAction(actionName, args);
         if(actionBeingDone) {
-            console.log('chaining~~~')
             // Action triggered by another action, chain them together
             var lastActionGroup = undoStack.pop();
             lastActionGroup.stackActions.push(newAction);
@@ -610,10 +607,10 @@ var WickActionHandler = function (wickEditor) {
             if(!currentFrame) {
                 proceed();
             } else {
-                //wickEditor.fabric.projectRenderer.getCanvasThumbnail(function (thumbnail) { 
-                //    currentFrame.thumbnail = thumbnail;
+                wickEditor.fabric.projectRenderer.getCanvasThumbnail(function (thumbnail) { 
+                    currentFrame.thumbnail = thumbnail;
                     proceed();
-                //});
+                });
             }
             
         },
