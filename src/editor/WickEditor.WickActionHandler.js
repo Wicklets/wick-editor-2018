@@ -415,11 +415,15 @@ var WickActionHandler = function (wickEditor) {
                 newPlayheadPosition:currentObject.getCurrentLayer().getTotalLength()-1
             });
 
+            currentObject.framesDirty = true;
+
             done();
         },
         function (args) {
             var currentObject = wickEditor.project.currentObject;
             currentObject.getCurrentLayer().frames.pop();
+
+            currentObject.framesDirty = true;
 
             done();
         });
@@ -437,11 +441,15 @@ var WickActionHandler = function (wickEditor) {
                 newPlayheadPosition:currentObject.getCurrentLayer().getTotalLength()-1
             });
 
+            currentObject.framesDirty = true;
+
             done();
         },
         function (args) {
             var currentObject = wickEditor.project.currentObject;
             currentObject.getCurrentLayer().frames.pop();
+
+            currentObject.framesDirty = true;
 
             done();
         });
@@ -456,10 +464,14 @@ var WickActionHandler = function (wickEditor) {
             args.frameRemoved = frameRemovedData.frame;
             args.frameRemovedIndex = frameRemovedData.i;
 
+            currentObject.framesDirty = true;
+
             done();
         },
         function (args) {
             args.layer.addFrame(args.frameRemoved, args.frameRemovedIndex);
+
+            currentObject.framesDirty = true;
 
             done();
         });
@@ -474,6 +486,8 @@ var WickActionHandler = function (wickEditor) {
             // Go to last added layer
             currentObject.currentLayer = currentObject.layers.length-1;
 
+            currentObject.framesDirty = true;
+
             done();
         },
         function (args) {
@@ -484,6 +498,8 @@ var WickActionHandler = function (wickEditor) {
 
             // Go to last added layer
             currentObject.currentLayer = currentObject.layers.length-1;
+
+            currentObject.framesDirty = true;
 
             done();
         });
@@ -497,6 +513,8 @@ var WickActionHandler = function (wickEditor) {
                 currentObject.currentLayer = currentObject.layers.length-1;
             }
 
+            currentObject.framesDirty = true;
+
             done();
         },
         function (args) {
@@ -504,6 +522,8 @@ var WickActionHandler = function (wickEditor) {
                 var currentObject = wickEditor.project.currentObject;
                 currentObject.addLayer(args.removedLayer);
             }
+
+            currentObject.framesDirty = true;
 
             done();
         });
@@ -514,12 +534,16 @@ var WickActionHandler = function (wickEditor) {
             if(currentObject.currentLayer === 0) return;
             currentObject.layers.move(currentObject.currentLayer, currentObject.currentLayer-1);
 
+            currentObject.framesDirty = true;
+
             done();
         },
         function (args) {
             var currentObject = wickEditor.project.currentObject;
             if(currentObject.currentLayer === currentObject.layers.length-1) return;
             currentObject.layers.move(currentObject.currentLayer, currentObject.currentLayer+1);
+
+            currentObject.framesDirty = true;
 
             done();
         });
@@ -530,6 +554,8 @@ var WickActionHandler = function (wickEditor) {
             if(currentObject.currentLayer === currentObject.layers.length-1) return;
             currentObject.layers.move(currentObject.currentLayer, currentObject.currentLayer+1);
 
+            currentObject.framesDirty = true;
+
             done();
         },
         function (args) {
@@ -537,44 +563,32 @@ var WickActionHandler = function (wickEditor) {
             if(currentObject.currentLayer === 0) return;
             currentObject.layers.move(currentObject.currentLayer, currentObject.currentLayer-1);
 
+            currentObject.framesDirty = true;
+
             done();
         });
-
-    /*registerAction('addBreakpoint',
-        function (args) {
-            args.oldAutoplayState = args.frame.autoplay;
-            args.frame.autoplay = false;
-        },
-        function (args) {
-            args.frame.autoplay = args.oldAutoplayState;
-        });
-
-    registerAction('removeBreakpoint',
-        function (args) {
-            args.oldAutoplayState = args.frame.autoplay;
-            args.frame.autoplay = true;
-        },
-        function (args) {
-            args.frame.autoplay = args.oldAutoplayState;
-        });*/
 
     registerAction('extendFrame',
         function (args) {
             args.frame.extend(args.nFramesToExtendBy);
+            currentObject.framesDirty = true;
             done();
         },
         function (args) {
             args.frame.shrink(args.nFramesToExtendBy);
+            currentObject.framesDirty = true;
             done();
         });
 
     registerAction('shrinkFrame',
         function (args) {
             args.frame.shrink(args.nFramesToShrinkBy);
+            currentObject.framesDirty = true;
             done();
         },
         function (args) {
             args.frame.extend(args.nFramesToShrinkBy);
+            currentObject.framesDirty = true;
             done();
         });
 

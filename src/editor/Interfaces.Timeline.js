@@ -1,12 +1,3 @@
-/* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
-
-// TIMELINE BACKEND TODO
-// - Playhead
-// - Selection box
-// - Frame extender handles
-// - Thumbnail autoupdate
-// - Drag to move selected frames
-
 var TimelineInterface = function (wickEditor) {
 
     var self = this;
@@ -14,11 +5,77 @@ var TimelineInterface = function (wickEditor) {
     var timeline;
     var layers;
     var frames;
+    var playhead;
+    var addFrameOverlay;
+
+    var cssVars;
+    var cssVar;
+
+    var lastObject;
+    var playheadX;
+
+    var currentInteraction;
+    var interactionData;
+    
+    var startInteraction = function (interactionName, e) {
+        currentInteraction = interactionName;
+        updateInteraction(e);
+    }
+    var updateInteraction = function (e) {
+        if(currentInteraction === "dragPlayhead") {
+            playheadX = e.x - frames.getBoundingClientRect().left;
+            playhead.style.left = playheadX + 'px';
+        } else if (currentInteraction === 'dragFrame') {
+            console.error('dragFrame')
+            interactionData.frameDiv.style.left = e.x - frames.getBoundingClientRect().left - cssVar('--frame-width')/2 + 'px';
+            interactionData.frameDiv.style.top = e.y - frames.getBoundingClientRect().top - cssVar('--vertical-spacing')/2 + 'px';
+        } else if (currentInteraction === 'dragFrameWidth') {
+            interactionData.frameDiv.style.width = e.x - frames.getBoundingClientRect().left + 'px';
+        } else if (currentInteraction === 'dragSelectionBox') {
+            console.error('dragSelectionBox')
+        } else if (currentInteraction === 'dragSelectionBox') {
+            console.error('dragSelectionBox')
+        } else if (currentInteraction === 'dragLayer') {
+            console.error('dragLayer')
+        }
+    }
+    var finishInteraction = function (e) {
+        if(currentInteraction === "dragPlayhead") {
+            
+        } else if (currentInteraction === 'dragFrame') {
+
+        } else if (currentInteraction === 'dragFrameWidth') {
+            
+        } else if (currentInteraction === 'dragSelectionBox') {
+
+        } else if (currentInteraction === 'dragSelectionBox') {
+            
+        } else if (currentInteraction === 'dragLayer') {
+            
+        }
+
+        addFrameOverlay.style.display = 'none';
+
+        currentInteraction = null;
+    }
 
     self.setup = function () {
+        cssVars = window.getComputedStyle(document.body);
+        cssVar = function (varName) {
+            return parseInt(cssVars.getPropertyValue(varName));
+        }
+
         timeline = document.createElement('div');
         timeline.className = 'timeline';
         document.getElementById('timelineGUI').appendChild(timeline);
+
+        currentInteraction = null;
+        timeline.addEventListener('mousemove', function (e) {
+            updateInteraction(e);
+        });
+        timeline.addEventListener('mouseup', function (e) {
+            finishInteraction(e);
+        });
 
         layers = document.createElement('div');
         layers.className = 'layers';
@@ -27,130 +84,113 @@ var TimelineInterface = function (wickEditor) {
         frames = document.createElement('div');
         frames.className = 'frames';
         timeline.appendChild(frames);
+
+        playhead = document.createElement('div');
+        playhead.className = 'playhead';
+
+        addFrameOverlay = document.createElement('img');
+        addFrameOverlay.className = 'addFrameOverlay';
+        addFrameOverlay.style.display = 'none';
+        addFrameOverlay.src = 'http://iconshow.me/media/images/Mixed/Free-Flat-UI-Icons/png/512/plus-24-512.png';
+        addFrameOverlay.addEventListener('mousedown', function (e) {
+            wickEditor.actionHandler.doAction('addNewFrame', {});
+            addFrameOverlay.style.display = 'none';
+        });
+        addFrameOverlay.addEventListener('mouseout', function (e) {
+            addFrameOverlay.style.display = 'none';
+        });
+        frames.appendChild(addFrameOverlay);
     }
 
     self.syncWithEditorState = function () {
-        layers.innerHTML = "";
-        frames.innerHTML = "";
 
-        var wickLayers = wickEditor.project.currentObject.layers;
-        wickLayers.forEach(function (wickLayer) {
-            var newLayerDiv = document.createElement('div');
-            newLayerDiv.className = "layer";
-            newLayerDiv.innerHTML = wickLayer.identifier;
-            layers.appendChild(newLayerDiv);
+        var frameSpacingX = cssVar('--frame-width');
+        var frameSpacingY = cssVar('--vertical-spacing');
 
-            var framesStrip = document.createElement('div');
-            framesStrip.className = 'framesStrip';
-            framesStrip.style.top = (wickLayers.indexOf(wickLayer) * 35) + 'px';
-            frames.appendChild(framesStrip);
+        if (lastObject !== wickEditor.project.currentObject || wickEditor.project.currentObject.framesDirty) {
 
-            wickLayer.frames.forEach(function(wickFrame) {
-                var newFrameDiv = document.createElement('div');
-                newFrameDiv.className = "frame";
-                newFrameDiv.style.left = (wickLayer.frames.indexOf(wickFrame) * 45) + 'px';
-                newFrameDiv.style.top = (wickLayers.indexOf(wickLayer) * 35) + 'px';
+            wickEditor.project.currentObject.framesDirty = false;
+            lastObject = wickEditor.project.currentObject;
 
-                if(wickFrame.thumbnail) {
+            frames.innerHTML = "";
+            layers.innerHTML = "";
+
+            var wickLayers = wickEditor.project.currentObject.layers;
+            wickLayers.forEach(function (wickLayer) {
+                var newLayerDiv = document.createElement('div');
+                newLayerDiv.className = "layer";
+                newLayerDiv.style.top = (wickLayers.indexOf(wickLayer) * frameSpacingY) + 'px';
+                newLayerDiv.innerHTML = wickLayer.identifier;
+                if(wickLayer === wickEditor.project.currentObject.getCurrentLayer()) {
+                    newLayerDiv.style.backgroundColor = "#F5F5F5";
+                }
+                layers.appendChild(newLayerDiv);
+
+                var framesStrip = document.createElement('div');
+                framesStrip.className = 'framesStrip';
+                framesStrip.style.top = (wickLayers.indexOf(wickLayer) * frameSpacingY) + 'px';
+                framesStrip.addEventListener('mousemove', function (e) {
+                    if(currentInteraction) return;
+                    addFrameOverlay.style.display = 'block';
+                    addFrameOverlay.style.left = roundToNearestN(e.clientX - frames.getBoundingClientRect().left - frameSpacingX/2, frameSpacingX) + "px";
+                    addFrameOverlay.style.top  = roundToNearestN(e.clientY - frames.getBoundingClientRect().top  - frameSpacingY/2, frameSpacingY) + "px";
+                    console.error('check for existing frame here')
+                });
+                frames.appendChild(framesStrip);
+
+                wickLayer.frames.forEach(function(wickFrame) {
+                    var newFrameDiv = document.createElement('div');
+                    newFrameDiv.className = "frame";
+                    newFrameDiv.style.left = (wickLayer.frames.indexOf(wickFrame) * frameSpacingX) + 'px';
+                    newFrameDiv.style.top = (wickLayers.indexOf(wickLayer) * frameSpacingY) + 'px';
+                    newFrameDiv.style.width = (wickFrame.frameLength * frameSpacingX - cssVar('--common-padding')/2) + 'px';
+                    newFrameDiv.addEventListener('mousedown', function (e) {
+                        interactionData = {frameDiv:newFrameDiv}
+                        startInteraction("dragFrame", e);
+                        e.stopPropagation();
+                    });
+
                     var thumbnailDiv = document.createElement('img');
                     thumbnailDiv.className = "frame-thumbnail";
-                    thumbnailDiv.src = wickFrame.thumbnail;
-                    newFrameDiv.appendChild(thumbnailDiv)
-                }
+                    thumbnailDiv.wickData = {uuid:wickFrame.uuid};
+                    newFrameDiv.appendChild(thumbnailDiv);
 
-                frames.appendChild(newFrameDiv);
+                    var extenderHandleRight = document.createElement('div');
+                    extenderHandleRight.className = "frame-extender-handle frame-extender-handle-right";
+                    extenderHandleRight.addEventListener('mousedown', function (e) {
+                        interactionData = {frameDiv:newFrameDiv}
+                        startInteraction("dragFrameWidth", e);
+                        e.stopPropagation();
+                    });
+                    newFrameDiv.appendChild(extenderHandleRight);
+
+                    var extenderHandleLeft = document.createElement('div');
+                    extenderHandleLeft.className = "frame-extender-handle frame-extender-handle-left";
+                    extenderHandleLeft.addEventListener('mousedown', function (e) {
+                        interactionData = {frameDiv:newFrameDiv}
+                        startInteraction("dragFrameWidth", e);
+                        e.stopPropagation();
+                    });
+                    newFrameDiv.appendChild(extenderHandleLeft);
+
+                    frames.appendChild(newFrameDiv);
+                });
             });
-        });
-    } 
 
-/*
-    var self = this;
-
-// DOM Utils
-
-    var newDiv = function (args, events) {
-        var div = document.createElement('div')
-
-        for(argName in args) {
-            div[argName] = args[argName];
+            frames.appendChild(playhead);
+            frames.appendChild(addFrameOverlay);
         }
 
-        return div;
-    }
+        playheadX = wickEditor.project.currentObject.playheadPosition * frameSpacingX + frameSpacingX/2 - cssVar('--playhead-width')/2;
+        playhead.style.left = playheadX + 'px';
 
-// Settings
-
-    var frameWidth = 18;
-
-// Generate view from model
-
-    var createTimelineDiv = function (wickObject, parent) {
-
-        var timelineDiv = newDiv({className: 'timeline'});
-
-        wickObject.layers.forEach(function (wickLayer) {
-            timelineDiv.appendChild(createLayerDiv(wickLayer));
-        });
-
-        return timelineDiv;
-    }
-
-    var createLayerDiv = function (wickLayer, parent) {
-
-        var layerDiv = newDiv({className: 'layer'});
-        layerDiv.addEventListener('mousedown', function () {
-            console.log('layer');
-        });
-        
-        layerDiv.appendChild(newDiv({className: 'layerOptions'}));
-        wickLayer.frames.forEach(function (wickFrame) {
-            layerDiv.appendChild(createFrameDiv(wickFrame));
-        });
-
-        return layerDiv;
-
-    } 
-
-    var createFrameDiv = function (wickFrame, parent) {
-
-        var frameDiv = newDiv({className: 'frame' + (!wickEditor.project.isObjectSelected(wickFrame)?' selectedFrame':'')});
-        frameDiv.addEventListener('mousedown', function (e) {
-            console.log('frame')
-            e.stopPropagation();
-        });
-
-        frameDiv.style.width = (frameWidth * wickFrame.frameLength) + 'px';
-
-        var leftFrameHandle = newDiv({className: 'frameHandle leftFrameHandle'});
-        var rightFrameHandle = newDiv({className: 'frameHandle rightFrameHandle'});
-        leftFrameHandle.addEventListener('mousedown', function (e) {
-            console.log('leftframehandle');
-            e.stopPropagation();
-        });
-        rightFrameHandle.addEventListener('mousedown', function (e) {
-            console.log('rightFrameHandle');
-            e.stopPropagation();
-        });
-        frameDiv.appendChild(leftFrameHandle);
-        frameDiv.appendChild(rightFrameHandle);
-
-        return frameDiv;
+        var thumbnailDivs = document.getElementsByClassName("frame-thumbnail");
+        for(var i = 0; i < thumbnailDivs.length; i++) {
+            var thumbnailDiv = thumbnailDivs[i];
+            var src = wickEditor.project.getFrameByUUID(thumbnailDiv.wickData.uuid).thumbnail;
+            if(src) thumbnailDivs[i].src = src;
+        }
 
     }
 
-// API
-
-    self.setup = function () {
-        
-    }
-
-    self.syncWithEditorState = function () {
-        // Clear timeline GUI DOM elem
-        var timelineGUI = document.getElementById('timelineGUI');
-        timelineGUI.innerHTML = "";
-
-        // Regenerate timeline GUI DOM elem
-        timelineGUI.appendChild(createTimelineDiv(wickEditor.project.currentObject));
-    }
-*/
 }

@@ -31,6 +31,8 @@ var RightClickMenuInterface = function (wickEditor) {
             });
 
             var mouseEventHandler = function (e, newMode) {
+                return; // Disabled for now because I needed the Inspect Element option
+
                 if(e.button == 2) {
                     self.open = true;
                     self.mode = newMode;
@@ -167,7 +169,8 @@ var RightClickMenuInterface = function (wickEditor) {
 // Block browser default right click menu
 
     document.addEventListener('contextmenu', function (event) { 
-        event.preventDefault();
+        // Disabled for now because I needed the Inspect Element option
+        //event.preventDefault();
     }, false);
 
 

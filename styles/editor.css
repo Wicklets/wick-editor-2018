@@ -230,8 +230,10 @@ select {
 	top: 30px;
 	left: 0px;
 	height: calc(100%);
+	width: 28px;
 	text-align: left;
 	padding: 3px;
+	overflow: hidden;
 }
 
 #toolOptionsGUI {

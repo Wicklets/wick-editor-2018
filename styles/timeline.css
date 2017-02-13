@@ -1,23 +1,44 @@
 body {
+	--playhead-width: 2px;
+
+	--vertical-spacing: 45px;
+	--common-padding: 4px;
+
 	--layers-width: 70px;
-	--frames-height: 30px;
-	--frames-padding-bottom: 5px;
-	--frame-width: 40px;
+
+	--frame-width: 60px;
+	--frame-handle-width: 5px;
+	--frames-strip-shrink-factor: 4px;
+
+	--shadow: 0px 0px 0px rgba(0, 0, 0, 0.1);
+	--border: inset 0px 0px 1px #555;
 }
 
 .timeline {
+	background-color: #FFFFFF;
+
 	margin: 0px;
 	padding: 0px;
 
 	width: 100%;
 	height: 100px;
 
-	background-color: yellow;
 	overflow: hidden;
 }
 
+.playhead {
+	background-color: #444;
+
+	width: var(--playhead-width);
+	height: 100%;
+
+	pointer-events: none;
+
+	position: absolute;
+}
+
 .layers {
-	background-color: green;
+	background-color: #FFFFFF;
 
 	width: var(--layers-width);
 	height: 100%;
@@ -26,19 +47,27 @@ body {
 
 	position: absolute;
 	overflow: hidden;
+
+	box-shadow: var(--border);
 }
 
 .layer {
-	background-color: yellow;
+	background-color: #FFFFFF;
 
-	width: 100%;
-	height: var(--frames-height);
+	width:  calc(100% - var(--common-padding));
+	height: calc(var(--vertical-spacing) - var(--common-padding));
 
-	margin-bottom: var(--frames-padding-bottom);
+	margin: calc(var(--common-padding) / 2);
+
+	position: absolute;
+
+	box-shadow: var(--border), var(--shadow);
+
+	font-size: 12px;
 }
 
 .frames {
-	background-color: red;
+	background-color: #FFFFFF;
 
 	width: calc(100% - var(--layers-width));
 	height: 100%;
@@ -47,30 +76,77 @@ body {
 
 	position: absolute;
 	overflow: hidden;
+
+	box-shadow: var(--border);
 }
 
 .framesStrip {
-	background-color: #FFAAAA;
+	background-color: #FFFFFF;
 
 	width: 100%;
-	height: 24px;
+	height: calc(var(--vertical-spacing) - var(--frames-strip-shrink-factor)*2);
 
-	margin-top: 2px;
+	margin-top: var(--frames-strip-shrink-factor);
 
 	position: absolute;
+
+	box-shadow: var(--border);
 }
 
 .frame {
-	background-color: orange;
+	background-color: #FFFFFF;
 
-	width: var(--frame-width);
-	height: var(--frames-height);
+	cursor: move;
+
+	width:  calc(var(--frame-width)      - var(--common-padding));
+	height: calc(var(--vertical-spacing) - var(--common-padding));
+
+	margin: calc(var(--common-padding) / 2);
 
 	position: absolute;
 	overflow: hidden;
+
+	box-shadow: var(--border), var(--shadow);
 }
 
 .frame-thumbnail {
-	width: 100%;
-	height: 100%;
+	width:  calc(100% - 2px);
+	height: calc(100% - 2px);
+	left: 1px;
+	top:  1px;
+	position: absolute;
+	pointer-events: none;
 }
+
+.frame-extender-handle {
+	background-color: #000000;
+
+	cursor: ew-resize;
+	width: var(--frame-handle-width);
+	height: 100%;
+
+	opacity: 0.0;
+}
+
+.frame-extender-handle-right {
+	float:right;
+}
+
+.frame-extender-handle-left {
+
+}
+
+.addFrameOverlay {
+	width: var(--frame-width); 
+	height: var(--vertical-spacing);
+	position: absolute;
+	cursor: pointer;
+}
+
+.selectionBox {
+	background-color: #CCC;
+	box-shadow: inset 0px 0px 1px #555;
+	opacity: 0.5;
+}
+
+
