@@ -21,7 +21,7 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
 
         if(selectedObjs.length < 1) {
             //canvas._activeObject = selectedObjs[0];
-            console.log("no selectedObjs")
+            //console.log("no selectedObjs")
             callback(null);
         } else {
             var group = new fabric.Group([], {

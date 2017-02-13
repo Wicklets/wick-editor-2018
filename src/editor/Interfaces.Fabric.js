@@ -133,6 +133,13 @@ var FabricInterface = function (wickEditor) {
         this.wickElements.update();
         self.guiElements.update();
 
+        /*var currentFrame = wickEditor.project.currentObject.getCurrentFrame();
+        if(currentFrame) {
+            wickEditor.fabric.projectRenderer.getCanvasThumbnail(function (thumbnail) { 
+                currentFrame.thumbnail = thumbnail;
+            });
+        }*/
+
         // Render canvas
         this.canvas.renderAll();
     }

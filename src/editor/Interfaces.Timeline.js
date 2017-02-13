@@ -1,5 +1,12 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
+// TIMELINE BACKEND TODO
+// - Playhead
+// - Selection box
+// - Frame extender handles
+// - Thumbnail autoupdate
+// - Drag to move selected frames
+
 var TimelineInterface = function (wickEditor) {
 
     var self = this;
