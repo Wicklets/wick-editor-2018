@@ -571,12 +571,12 @@ var WickActionHandler = function (wickEditor) {
     registerAction('extendFrame',
         function (args) {
             args.frame.extend(args.nFramesToExtendBy);
-            currentObject.framesDirty = true;
+            wickEditor.project.currentObject.framesDirty = true;
             done();
         },
         function (args) {
             args.frame.shrink(args.nFramesToExtendBy);
-            currentObject.framesDirty = true;
+            wickEditor.project.currentObject.framesDirty = true;
             done();
         });
 

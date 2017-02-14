@@ -2,6 +2,8 @@ var TimelineInterface = function (wickEditor) {
 
     var self = this;
 
+// Private vars
+
     var timeline;
     var layers;
     var frames;
@@ -14,68 +16,116 @@ var TimelineInterface = function (wickEditor) {
     var lastObject;
     var playheadX;
 
+// Interactions
+
     var currentInteraction;
     var interactionData;
-    
-    var startInteraction = function (interactionName, e) {
-        currentInteraction = interactionName;
-        updateInteraction(e);
-    }
-    var updateInteraction = function (e) {
-        if(currentInteraction === "dragPlayhead") {
+
+    var interactions = {};
+    interactions['dragPlayhead'] = {
+        'start' : (function (e) {
+            
+        }), 
+        'update' : (function (e) {
             playheadX = e.x - frames.getBoundingClientRect().left;
             playhead.style.left = playheadX + 'px';
-        } else if (currentInteraction === 'dragFrame') {
-            console.error('dragFrame')
+        }),
+        'finish' : (function (e) {
+
+        })
+    }
+    interactions['dragFrame'] = {
+        'start' : (function (e) {
+            
+        }), 
+        'update' : (function (e) {
             interactionData.frameDiv.style.left = e.x - frames.getBoundingClientRect().left - cssVar('--frame-width')/2 + 'px';
             interactionData.frameDiv.style.top = e.y - frames.getBoundingClientRect().top - cssVar('--vertical-spacing')/2 + 'px';
-        } else if (currentInteraction === 'dragFrameWidth') {
-            interactionData.frameDiv.style.width = e.x - frames.getBoundingClientRect().left + 'px';
-        } else if (currentInteraction === 'dragSelectionBox') {
-            console.error('dragSelectionBox')
-        } else if (currentInteraction === 'dragSelectionBox') {
-            console.error('dragSelectionBox')
-        } else if (currentInteraction === 'dragLayer') {
-            console.error('dragLayer')
-        }
+        }),
+        'finish' : (function (e) {
+
+        })
+    }
+    interactions['dragFrameWidth'] = {
+        'start' : (function (e) {
+            
+        }), 
+        'update' : (function (e) {
+            var wickFrame = interactionData.wickFrame;
+            var frameDivLeft = interactionData.frameDiv.getBoundingClientRect().left;
+            frameDivLeft -= cssVar('--frame-width')*2;
+            var framesContainerLeft = frames.getBoundingClientRect().left;
+            var mouseLeft = e.x;
+
+            interactionData.frameDiv.style.width = mouseLeft + frameDivLeft - framesContainerLeft + 12 + 'px';
+        }),
+        'finish' : (function (e) {
+            wickEditor.actionHandler.doAction('extendFrame', {
+                frame: wickEditor.project.currentObject.getCurrentFrame(), 
+                nFramesToExtendBy: 1
+            });
+        })
+    }
+    interactions['dragSelectionBox'] = {
+        'start' : (function (e) {
+            
+        }), 
+        'update' : (function (e) {
+            
+        }),
+        'finish' : (function (e) {
+
+        })
+    }
+    interactions['dragLayer'] = {
+        'start' : (function (e) {
+            
+        }), 
+        'update' : (function (e) {
+            interactionData.allLayerDivs.forEach(function (div) {
+                div.style.top = e.y - frames.getBoundingClientRect().top - cssVar('--vertical-spacing')/2 + 'px';
+            });
+        }),
+        'finish' : (function (e) {
+
+        })
+    }
+    
+    var startInteraction = function (interactionName, e, interactiondata) {
+        interactionData = interactiondata;
+        currentInteraction = interactionName;
+
+        interactions[interactionName]['start']();
+        //updateInteraction(e);
+    }
+    var updateInteraction = function (e) {
+        if(!currentInteraction) return;
+        interactions[currentInteraction]['update'](e);
     }
     var finishInteraction = function (e) {
-        if(currentInteraction === "dragPlayhead") {
-            
-        } else if (currentInteraction === 'dragFrame') {
-
-        } else if (currentInteraction === 'dragFrameWidth') {
-            
-        } else if (currentInteraction === 'dragSelectionBox') {
-
-        } else if (currentInteraction === 'dragSelectionBox') {
-            
-        } else if (currentInteraction === 'dragLayer') {
-            
-        }
+        if(!currentInteraction) return;
+        interactions[currentInteraction]['finish'](e);
+        currentInteraction = null;
 
         addFrameOverlay.style.display = 'none';
-
-        currentInteraction = null;
     }
 
+// Interface API
+
     self.setup = function () {
+
+        // Load style vars from CSS
+
         cssVars = window.getComputedStyle(document.body);
         cssVar = function (varName) {
             return parseInt(cssVars.getPropertyValue(varName));
         }
 
+        // Generate divs that stay onscreen always
+
         timeline = document.createElement('div');
         timeline.className = 'timeline';
         document.getElementById('timelineGUI').appendChild(timeline);
-
-        currentInteraction = null;
-        timeline.addEventListener('mousemove', function (e) {
-            updateInteraction(e);
-        });
-        timeline.addEventListener('mouseup', function (e) {
-            finishInteraction(e);
-        });
 
         layers = document.createElement('div');
         layers.className = 'layers';
@@ -100,6 +150,16 @@ var TimelineInterface = function (wickEditor) {
             addFrameOverlay.style.display = 'none';
         });
         frames.appendChild(addFrameOverlay);
+
+        // Add mouse event listeners for interactions
+
+        currentInteraction = null;
+        timeline.addEventListener('mousemove', function (e) {
+            updateInteraction(e);
+        });
+        timeline.addEventListener('mouseup', function (e) {
+            finishInteraction(e);
+        });
     }
 
     self.syncWithEditorState = function () {
@@ -117,6 +177,8 @@ var TimelineInterface = function (wickEditor) {
 
             var wickLayers = wickEditor.project.currentObject.layers;
             wickLayers.forEach(function (wickLayer) {
+                var allLayerDivs = [];
+
                 var newLayerDiv = document.createElement('div');
                 newLayerDiv.className = "layer";
                 newLayerDiv.style.top = (wickLayers.indexOf(wickLayer) * frameSpacingY) + 'px';
@@ -125,6 +187,7 @@ var TimelineInterface = function (wickEditor) {
                     newLayerDiv.style.backgroundColor = "#F5F5F5";
                 }
                 layers.appendChild(newLayerDiv);
+                allLayerDivs.push(newLayerDiv);
 
                 var framesStrip = document.createElement('div');
                 framesStrip.className = 'framesStrip';
@@ -137,6 +200,7 @@ var TimelineInterface = function (wickEditor) {
                     console.error('check for existing frame here')
                 });
                 frames.appendChild(framesStrip);
+                allLayerDivs.push(framesStrip);
 
                 wickLayer.frames.forEach(function(wickFrame) {
                     var newFrameDiv = document.createElement('div');
@@ -145,8 +209,7 @@ var TimelineInterface = function (wickEditor) {
                     newFrameDiv.style.top = (wickLayers.indexOf(wickLayer) * frameSpacingY) + 'px';
                     newFrameDiv.style.width = (wickFrame.frameLength * frameSpacingX - cssVar('--common-padding')/2) + 'px';
                     newFrameDiv.addEventListener('mousedown', function (e) {
-                        interactionData = {frameDiv:newFrameDiv}
-                        startInteraction("dragFrame", e);
+                        startInteraction("dragFrame", e, {frameDiv:newFrameDiv});
                         e.stopPropagation();
                     });
 
@@ -158,8 +221,7 @@ var TimelineInterface = function (wickEditor) {
                     var extenderHandleRight = document.createElement('div');
                     extenderHandleRight.className = "frame-extender-handle frame-extender-handle-right";
                     extenderHandleRight.addEventListener('mousedown', function (e) {
-                        interactionData = {frameDiv:newFrameDiv}
-                        startInteraction("dragFrameWidth", e);
+                        startInteraction("dragFrameWidth", e, {frameDiv:newFrameDiv, wickFrame:wickFrame});
                         e.stopPropagation();
                     });
                     newFrameDiv.appendChild(extenderHandleRight);
@@ -167,13 +229,17 @@ var TimelineInterface = function (wickEditor) {
                     var extenderHandleLeft = document.createElement('div');
                     extenderHandleLeft.className = "frame-extender-handle frame-extender-handle-left";
                     extenderHandleLeft.addEventListener('mousedown', function (e) {
-                        interactionData = {frameDiv:newFrameDiv}
-                        startInteraction("dragFrameWidth", e);
+                        startInteraction("dragFrameWidth", e, {frameDiv:newFrameDiv, wickFrame:wickFrame});
                         e.stopPropagation();
                     });
                     newFrameDiv.appendChild(extenderHandleLeft);
 
                     frames.appendChild(newFrameDiv);
+                    allLayerDivs.push(newFrameDiv);
+                });
+                
+                newLayerDiv.addEventListener('mousedown', function (e) {
+                    startInteraction('dragLayer', e, {allLayerDivs:allLayerDivs});
                 });
             });
 
