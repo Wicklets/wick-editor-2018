@@ -61,7 +61,7 @@ var TimelineInterface = function (wickEditor) {
             var framesContainerLeft = frames.getBoundingClientRect().left;
             var mouseLeft = e.x;
 
-            interactionData.frameDiv.style.width = mouseLeft - frameDivLeft - framesContainerLeft + cssVar('--frame-width')*2 - 12 + 'px';
+            interactionData.frameDiv.style.width = mouseLeft - frameDivLeft - framesContainerLeft + cssVar('--frame-width')*2 + 6 + 'px';
         }),
         'finish' : (function (e) {
             var newFrameDivLen = parseInt(interactionData.frameDiv.style.width);
@@ -216,10 +216,10 @@ var TimelineInterface = function (wickEditor) {
                 framesStrip.style.top = (wickLayers.indexOf(wickLayer) * frameSpacingY) + 'px';
                 framesStrip.addEventListener('mousemove', function (e) {
                     if(currentInteraction) return;
-                    addFrameOverlay.style.display = 'block';
+                    /*addFrameOverlay.style.display = 'block';
                     addFrameOverlay.style.left = roundToNearestN(e.clientX - frames.getBoundingClientRect().left - frameSpacingX/2, frameSpacingX) + "px";
                     addFrameOverlay.style.top  = roundToNearestN(e.clientY - frames.getBoundingClientRect().top  - frameSpacingY/2, frameSpacingY) + "px";
-                    console.error('check for existing frame here')
+                    console.error('check for existing frame here')*/
                 });
                 for(var i = 0; i < 10; i++) {
                     var framesStripCell = document.createElement('div');
@@ -236,6 +236,10 @@ var TimelineInterface = function (wickEditor) {
                     newFrameDiv.style.top = (wickLayers.indexOf(wickLayer) * frameSpacingY) + 'px';
                     newFrameDiv.style.width = (wickFrame.frameLength * frameSpacingX - cssVar('--common-padding')/2) + 'px';
                     newFrameDiv.addEventListener('mousedown', function (e) {
+                        wickEditor.actionHandler.doAction('movePlayhead', {
+                            obj: wickEditor.project.currentObject,
+                            newPlayheadPosition: wickFrame.getPlayheadPosition()
+                        });
                         startInteraction("dragFrame", e, {frameDiv:newFrameDiv});
                         e.stopPropagation();
                     });

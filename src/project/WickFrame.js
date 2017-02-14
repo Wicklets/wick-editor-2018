@@ -53,6 +53,20 @@ WickFrame.prototype.shrink = function(length) {
 	}
 }
 
+WickFrame.prototype.getPlayheadPosition = function () {
+	var counter = 0;
+
+    for(var f = 0; f < this.parentLayer.frames.length; f++) {
+        var frame = this.parentLayer.frames[f];
+        if(this === frame) return counter;
+        for(var i = 0; i < frame.frameLength; i++) {
+            counter++;
+        }
+    }
+
+    return null;
+}
+
 WickFrame.prototype.copy = function () {
 
 	var copiedFrame = new WickFrame();

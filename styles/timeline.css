@@ -1,12 +1,12 @@
 body {
 	--playhead-width: 2px;
 
-	--vertical-spacing: 45px;
+	--vertical-spacing: 35px;
 	--common-padding: 4px;
 
 	--layers-width: 70px;
 
-	--frame-width: 60px;
+	--frame-width: 50px;
 	--frame-handle-width: 5px;
 	--frames-strip-shrink-factor: 4px;
 
