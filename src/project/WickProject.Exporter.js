@@ -99,7 +99,15 @@ WickProject.Exporter = (function () {
     }
 
     projectExporter.JSONReplacer = function(key, value) {
-        var dontJSONVars = ["currentObject","parentObject","causedAnException","fabricObjectReference"];
+        var dontJSONVars = [
+            "currentObject",
+            "parentObject",
+            "causedAnException",
+            "fabricObjectReference",
+            "parentLayer",
+            "parentWickObject",
+            "parentFrame"
+        ];
 
         if (dontJSONVars.indexOf(key) !== -1) {
             return undefined;

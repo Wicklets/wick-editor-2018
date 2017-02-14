@@ -93,6 +93,19 @@ body {
 	position: absolute;
 
 	box-shadow: var(--border);
+
+	overflow: hidden;
+}
+
+.framesStripCell {
+	background-color: #FFFFFF;
+
+	width: var(--frame-width);
+	height: calc(var(--vertical-spacing) - var(--frames-strip-shrink-factor)*2);
+
+	box-shadow: var(--border);
+
+	float:left;
 }
 
 .frame {
@@ -149,6 +162,8 @@ body {
 	background-color: #CCC;
 	box-shadow: inset 0px 0px 1px #555;
 	opacity: 0.5;
+	position: absolute;
+	pointer-events: none;
 }
 
 

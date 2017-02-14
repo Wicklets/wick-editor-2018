@@ -19,6 +19,9 @@ var WickFrame = function () {
 	// Generate unique id
 	this.uuid = random.uuid4();
 
+	// The layer that this frame belongs to
+	this.parentLayer = null;
+
 	// Set all scripts to defaults
 	this.wickScripts = {
         "onLoad" : "",

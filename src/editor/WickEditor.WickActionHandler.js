@@ -592,6 +592,19 @@ var WickActionHandler = function (wickEditor) {
             done();
         });
 
+    registerAction('changeFrameLength',
+        function (args) {
+            args.oldFrameLength = args.frame.frameLength;
+            args.frame.frameLength = args.newFrameLength;
+            wickEditor.project.currentObject.framesDirty = true;
+            done();
+        },
+        function (args) {
+            args.frame.frameLength = args.oldFrameLength;
+            wickEditor.project.currentObject.framesDirty = true;
+            done();
+        });
+
     registerAction('movePlayhead',
         function (args) {
             var proceed = function () {

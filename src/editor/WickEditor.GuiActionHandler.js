@@ -696,7 +696,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('convertToSymbol',
-        [],
+        ['Modifier', 'SHIFT', '8'],
         ['convertToSymbolButton', 'createSymbolButton'],
         {},
         function(args) {

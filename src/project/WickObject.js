@@ -273,7 +273,16 @@ WickObject.prototype.getAsJSON = function () {
     // Encode scripts to avoid JSON format problems
     this.encodeStrings();
 
-    var dontJSONVars = ["cachedImageData","fabricObjectReference","parentObject","causedAnException","uuid"];
+    var dontJSONVars = [
+        "cachedImageData",
+        "fabricObjectReference",
+        "parentObject",
+        "causedAnException",
+        "uuid",
+        "parentLayer",
+        "parentWickObject",
+        "parentFrame"
+    ];
     var JSONWickObject = JSON.stringify(this, function(key, value) {
         if (dontJSONVars.indexOf(key) !== -1) {
             return undefined;
@@ -429,16 +438,23 @@ WickObject.prototype.decodeStrings = function () {
 
 WickObject.prototype.generateParentObjectReferences = function() {
 
-    var parentObject = this;
+    var self = this;
 
-    if(this.isSymbol) {
+    if(!self.isSymbol) return;
 
-        // Recursively regenerate parent object references of all objects inside this symbol.
-        this.getAllChildObjects().forEach(function(child) {
-            child.parentObject = parentObject;
-            child.generateParentObjectReferences();
+    self.layers.forEach(function (layer) {
+        layer.parentWickObject = self;
+
+        layer.frames.forEach(function (frame) {
+            frame.parentLayer = layer;
+
+            frame.wickObjects.forEach(function (wickObject) {
+                wickObject.parentObject = self;
+
+                wickObject.generateParentObjectReferences();
+            });
         });
-    }
+    });
 
 }
 

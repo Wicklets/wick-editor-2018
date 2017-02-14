@@ -2,6 +2,8 @@
 
 var WickLayer = function () {
 	this.frames = [new WickFrame()];
+
+	this.parentWickObject = null; // The WickObject that this layer belongs to
 };
 
 WickLayer.prototype.getTotalLength = function () {

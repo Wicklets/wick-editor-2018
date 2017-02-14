@@ -9,6 +9,7 @@ var TimelineInterface = function (wickEditor) {
     var frames;
     var playhead;
     var addFrameOverlay;
+    var selectionBox;
 
     var cssVars;
     var cssVar;
@@ -41,9 +42,13 @@ var TimelineInterface = function (wickEditor) {
         'update' : (function (e) {
             interactionData.frameDiv.style.left = e.x - frames.getBoundingClientRect().left - cssVar('--frame-width')/2 + 'px';
             interactionData.frameDiv.style.top = e.y - frames.getBoundingClientRect().top - cssVar('--vertical-spacing')/2 + 'px';
+            interactionData.frameDiv.style.zIndex = 10;
         }),
         'finish' : (function (e) {
-
+            wickEditor.actionHandler.doAction('extendFrame', {
+                frame: wickEditor.project.currentObject.getCurrentFrame(), 
+                nFramesToExtendBy: 0
+            });
         })
     }
     interactions['dragFrameWidth'] = {
@@ -53,28 +58,35 @@ var TimelineInterface = function (wickEditor) {
         'update' : (function (e) {
             var wickFrame = interactionData.wickFrame;
             var frameDivLeft = interactionData.frameDiv.getBoundingClientRect().left;
-            frameDivLeft -= cssVar('--frame-width')*2;
             var framesContainerLeft = frames.getBoundingClientRect().left;
             var mouseLeft = e.x;
 
-            interactionData.frameDiv.style.width = mouseLeft + frameDivLeft - framesContainerLeft + 12 + 'px';
+            interactionData.frameDiv.style.width = mouseLeft - frameDivLeft - framesContainerLeft + cssVar('--frame-width')*2 - 12 + 'px';
         }),
         'finish' : (function (e) {
-            wickEditor.actionHandler.doAction('extendFrame', {
+            var newFrameDivLen = parseInt(interactionData.frameDiv.style.width);
+            var newLength = Math.round(newFrameDivLen / cssVar('--frame-width'));
+
+            wickEditor.actionHandler.doAction('changeFrameLength', {
                 frame: wickEditor.project.currentObject.getCurrentFrame(), 
-                nFramesToExtendBy: 1
+                newFrameLength: newLength
             });
         })
     }
     interactions['dragSelectionBox'] = {
         'start' : (function (e) {
-            
+            console.log("LOL")
         }), 
         'update' : (function (e) {
-            
+            console.log(e)
+            selectionBox.style.display = 'block';
+            selectionBox.style.left = e.offsetX+'px'
+            selectionBox.style.top = e.offsetY+'px'
+            selectionBox.style.width = '100px'
+            selectionBox.style.height = '100px'
         }),
         'finish' : (function (e) {
-
+            selectionBox.style.display = 'none';
         })
     }
     interactions['dragLayer'] = {
@@ -87,7 +99,10 @@ var TimelineInterface = function (wickEditor) {
             });
         }),
         'finish' : (function (e) {
-
+            wickEditor.actionHandler.doAction('extendFrame', {
+                frame: wickEditor.project.currentObject.getCurrentFrame(), 
+                nFramesToExtendBy: 0
+            });
         })
     }
     
@@ -133,6 +148,9 @@ var TimelineInterface = function (wickEditor) {
 
         frames = document.createElement('div');
         frames.className = 'frames';
+        frames.addEventListener('mousedown', function (e) {
+            startInteraction('dragSelectionBox', e, {});
+        });
         timeline.appendChild(frames);
 
         playhead = document.createElement('div');
@@ -150,6 +168,10 @@ var TimelineInterface = function (wickEditor) {
             addFrameOverlay.style.display = 'none';
         });
         frames.appendChild(addFrameOverlay);
+
+        selectionBox = document.createElement('div');
+        selectionBox.className = "selectionBox";
+        selectionBox.style.display = 'none';
 
         // Add mouse event listeners for interactions
 
@@ -199,6 +221,11 @@ var TimelineInterface = function (wickEditor) {
                     addFrameOverlay.style.top  = roundToNearestN(e.clientY - frames.getBoundingClientRect().top  - frameSpacingY/2, frameSpacingY) + "px";
                     console.error('check for existing frame here')
                 });
+                for(var i = 0; i < 10; i++) {
+                    var framesStripCell = document.createElement('div');
+                    framesStripCell.className = 'framesStripCell';
+                    framesStrip.appendChild(framesStripCell);
+                }
                 frames.appendChild(framesStrip);
                 allLayerDivs.push(framesStrip);
 
@@ -245,6 +272,7 @@ var TimelineInterface = function (wickEditor) {
 
             frames.appendChild(playhead);
             frames.appendChild(addFrameOverlay);
+            frames.appendChild(selectionBox);
         }
 
         playheadX = wickEditor.project.currentObject.playheadPosition * frameSpacingX + frameSpacingX/2 - cssVar('--playhead-width')/2;
@@ -254,7 +282,11 @@ var TimelineInterface = function (wickEditor) {
         for(var i = 0; i < thumbnailDivs.length; i++) {
             var thumbnailDiv = thumbnailDivs[i];
             var src = wickEditor.project.getFrameByUUID(thumbnailDiv.wickData.uuid).thumbnail;
-            if(src) thumbnailDivs[i].src = src;
+            if(src) {
+                thumbnailDivs[i].src = src;
+            } else {
+                thumbnailDivs[i].src = 'https://www.yireo.com/images/stories/joomla/whitepage.png';
+            }
         }
 
     }
