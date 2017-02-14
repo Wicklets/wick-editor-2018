@@ -75,15 +75,34 @@ var TimelineInterface = function (wickEditor) {
     }
     interactions['dragSelectionBox'] = {
         'start' : (function (e) {
-            console.log("LOL")
+            var mx = e.x-frames.getBoundingClientRect().left;
+            var my = e.y-frames.getBoundingClientRect().top;
+            interactionData.selectionBoxOrigX = mx;
+            interactionData.selectionBoxOrigY = my;
         }), 
         'update' : (function (e) {
-            console.log(e)
+            var mx = e.x-frames.getBoundingClientRect().left;
+            var my = e.y-frames.getBoundingClientRect().top;
+
+            var ox = interactionData.selectionBoxOrigX
+            var oy = interactionData.selectionBoxOrigY
+
+            if(mx-ox > 0) {
+                selectionBox.style.left = ox+'px'
+                selectionBox.style.width = mx-ox+'px';
+            } else {
+                selectionBox.style.left = mx+'px';
+                selectionBox.style.width = ox-mx+'px'
+            }
+            if(my-oy > 0) {
+                selectionBox.style.top = oy+'px'
+                selectionBox.style.height = my-oy+'px';
+            } else {
+                selectionBox.style.top = my+'px';
+                selectionBox.style.height = oy-my+'px'
+            }
+
             selectionBox.style.display = 'block';
-            selectionBox.style.left = e.offsetX+'px'
-            selectionBox.style.top = e.offsetY+'px'
-            selectionBox.style.width = '100px'
-            selectionBox.style.height = '100px'
         }),
         'finish' : (function (e) {
             selectionBox.style.display = 'none';
@@ -110,7 +129,7 @@ var TimelineInterface = function (wickEditor) {
         interactionData = interactiondata;
         currentInteraction = interactionName;
 
-        interactions[interactionName]['start']();
+        interactions[interactionName]['start'](e);
         //updateInteraction(e);
     }
     var updateInteraction = function (e) {
