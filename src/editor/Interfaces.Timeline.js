@@ -106,6 +106,46 @@ var TimelineInterface = function (wickEditor) {
         }),
         'finish' : (function (e) {
             selectionBox.style.display = 'none';
+
+            if(parseInt(selectionBox.style.width) === 0 && parseInt(selectionBox.style.height) ===0) return;
+
+            http://stackoverflow.com/questions/2752349/fast-rectangle-to-rectangle-intersection
+            function intersectRect(r1, r2) {
+              return !(r2.left > r1.right || 
+                       r2.right < r1.left || 
+                       r2.top > r1.bottom ||
+                       r2.bottom < r1.top);
+            }
+
+            var frameDivs = document.getElementsByClassName('frame')
+            for(var i = 0; i < frameDivs.length; i ++) {
+                wickEditor.project.selection = [];
+
+                var frameDiv = frameDivs[i]
+
+                var frameRect = {
+                    left: parseInt(frameDiv.style.left),
+                    top: parseInt(frameDiv.style.top),
+                    right: parseInt(frameDiv.style.width) + parseInt(frameDiv.style.left),
+                    bottom: parseInt(frameDiv.style.height) + parseInt(frameDiv.style.top)
+                }
+
+                var selectionBoxRect = {
+                    left: parseInt(selectionBox.style.left),
+                    top: parseInt(selectionBox.style.top),
+                    right: parseInt(selectionBox.style.width) + parseInt(selectionBox.style.left),
+                    bottom: parseInt(selectionBox.style.height) + parseInt(selectionBox.style.top)
+                }
+
+                if(intersectRect(frameRect, selectionBoxRect)) {
+                    var uuid = frameDiv.wickData.uuid;
+                    wickEditor.project.selection.push(uuid);
+                } 
+
+                updateFrameDivs();
+                selectionBox.style.width = '0px'
+                selectionBox.style.height = '0px'
+            }
         })
     }
     interactions['dragLayer'] = {
@@ -142,6 +182,31 @@ var TimelineInterface = function (wickEditor) {
         currentInteraction = null;
 
         addFrameOverlay.style.display = 'none';
+    }
+
+// Div building helper functions
+
+    var updateFrameDivs = function () {
+        var frameDivs = document.getElementsByClassName("frame");
+        for(var i = 0; i < frameDivs.length; i++) {
+            var selectionOverlayDiv = frameDivs[i].getElementsByClassName('frame-selection-overlay')[0];
+            var thumbnailDiv = frameDivs[i].getElementsByClassName('frame-thumbnail')[0];
+
+            var wickFrame = wickEditor.project.getFrameByUUID(frameDivs[i].wickData.uuid);
+
+            var src = wickFrame.thumbnail;
+            if(src) {
+                thumbnailDiv.src = src;
+            } else {
+                thumbnailDiv.src = 'https://www.yireo.com/images/stories/joomla/whitepage.png';
+            }
+
+            if (wickEditor.project.isObjectSelected(wickFrame)) {
+                selectionOverlayDiv.style.display = 'block';
+            } else {
+                selectionOverlayDiv.style.display = 'none';
+            }
+        }
     }
 
 // Interface API
@@ -216,6 +281,11 @@ var TimelineInterface = function (wickEditor) {
             frames.innerHTML = "";
             layers.innerHTML = "";
 
+            frames.addEventListener('mousedown', function (e) {
+                wickEditor.project.selection = [];
+                updateFrameDivs()
+            });
+
             var wickLayers = wickEditor.project.currentObject.layers;
             wickLayers.forEach(function (wickLayer) {
                 var allLayerDivs = [];
@@ -240,7 +310,7 @@ var TimelineInterface = function (wickEditor) {
                     addFrameOverlay.style.top  = roundToNearestN(e.clientY - frames.getBoundingClientRect().top  - frameSpacingY/2, frameSpacingY) + "px";
                     console.error('check for existing frame here')*/
                 });
-                for(var i = 0; i < 10; i++) {
+                for(var i = 0; i < 100; i++) {
                     var framesStripCell = document.createElement('div');
                     framesStripCell.className = 'framesStripCell';
                     framesStrip.appendChild(framesStripCell);
@@ -254,19 +324,26 @@ var TimelineInterface = function (wickEditor) {
                     newFrameDiv.style.left = (wickLayer.frames.indexOf(wickFrame) * frameSpacingX) + 'px';
                     newFrameDiv.style.top = (wickLayers.indexOf(wickLayer) * frameSpacingY) + 'px';
                     newFrameDiv.style.width = (wickFrame.frameLength * frameSpacingX - cssVar('--common-padding')/2) + 'px';
+                    newFrameDiv.style.height = cssVar('--vertical-spacing')-cssVar('--common-padding')+'px'
+                    newFrameDiv.wickData = {uuid:wickFrame.uuid};
                     newFrameDiv.addEventListener('mousedown', function (e) {
                         wickEditor.actionHandler.doAction('movePlayhead', {
                             obj: wickEditor.project.currentObject,
-                            newPlayheadPosition: wickFrame.getPlayheadPosition()
+                            newPlayheadPosition: wickFrame.getPlayheadPosition(),
+                            newLayer: wickFrame.parentLayer
                         });
                         startInteraction("dragFrame", e, {frameDiv:newFrameDiv});
+                        wickEditor.project.selection = [wickFrame.uuid]
                         e.stopPropagation();
                     });
 
                     var thumbnailDiv = document.createElement('img');
                     thumbnailDiv.className = "frame-thumbnail";
-                    thumbnailDiv.wickData = {uuid:wickFrame.uuid};
                     newFrameDiv.appendChild(thumbnailDiv);
+
+                    var selectionOverlayDiv = document.createElement('div');
+                    selectionOverlayDiv.className = "frame-selection-overlay";
+                    newFrameDiv.appendChild(selectionOverlayDiv);
 
                     var extenderHandleRight = document.createElement('div');
                     extenderHandleRight.className = "frame-extender-handle frame-extender-handle-right";
@@ -289,6 +366,10 @@ var TimelineInterface = function (wickEditor) {
                 });
                 
                 newLayerDiv.addEventListener('mousedown', function (e) {
+                    wickEditor.actionHandler.doAction('movePlayhead', {
+                        obj: wickEditor.project.currentObject,
+                        newLayer: wickLayer
+                    });
                     startInteraction('dragLayer', e, {allLayerDivs:allLayerDivs});
                 });
             });
@@ -301,16 +382,7 @@ var TimelineInterface = function (wickEditor) {
         playheadX = wickEditor.project.currentObject.playheadPosition * frameSpacingX + frameSpacingX/2 - cssVar('--playhead-width')/2;
         playhead.style.left = playheadX + 'px';
 
-        var thumbnailDivs = document.getElementsByClassName("frame-thumbnail");
-        for(var i = 0; i < thumbnailDivs.length; i++) {
-            var thumbnailDiv = thumbnailDivs[i];
-            var src = wickEditor.project.getFrameByUUID(thumbnailDiv.wickData.uuid).thumbnail;
-            if(src) {
-                thumbnailDivs[i].src = src;
-            } else {
-                thumbnailDivs[i].src = 'https://www.yireo.com/images/stories/joomla/whitepage.png';
-            }
-        }
+        updateFrameDivs();
 
     }
 

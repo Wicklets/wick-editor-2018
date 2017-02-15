@@ -49,6 +49,7 @@ WickProject.prototype.createNewRootObject = function () {
     rootObject.y = 0;
     rootObject.opacity = 1.0;
     this.rootObject = rootObject;
+    this.rootObject.generateParentObjectReferences();
 }
 
 /*****************************

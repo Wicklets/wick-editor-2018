@@ -614,16 +614,23 @@ var WickActionHandler = function (wickEditor) {
                 var currentObject = wickEditor.project.currentObject;
 
                 args.oldPlayheadPosition = args.obj.playheadPosition;
+                args.oldLayer = args.obj.currentLayer;
 
-                var oldFrame = currentObject.getCurrentFrame();
-                if(args.moveAmount !== undefined) {
-                    args.obj.playheadPosition += args.moveAmount;
-                    if(args.obj.playheadPosition < 0) args.obj.playheadPosition = 0;
-                } else if (args.newPlayheadPosition !== undefined) {
-                    args.oldPlayheadPosition = args.obj.playheadPosition;
-                    args.obj.playheadPosition = args.newPlayheadPosition;
+                if(args.newPlayheadPosition) {
+                    var oldFrame = currentObject.getCurrentFrame();
+                    if(args.moveAmount !== undefined) {
+                        args.obj.playheadPosition += args.moveAmount;
+                        if(args.obj.playheadPosition < 0) args.obj.playheadPosition = 0;
+                    } else if (args.newPlayheadPosition !== undefined) {
+                        args.oldPlayheadPosition = args.obj.playheadPosition;
+                        args.obj.playheadPosition = args.newPlayheadPosition;
+                    }
+                    var newFrame = wickEditor.project.currentObject.getCurrentFrame();
                 }
-                var newFrame = wickEditor.project.currentObject.getCurrentFrame();
+
+                if(args.newLayer) {
+                    args.obj.currentLayer = args.obj.layers.indexOf(args.newLayer)
+                }
 
                 wickEditor.syncInterfaces();
 
@@ -645,6 +652,7 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.fabric.deselectAll();
 
             args.obj.playheadPosition = args.oldPlayheadPosition;
+            args.obj.currentLayer = args.oldLayer;
 
             done();
         });
