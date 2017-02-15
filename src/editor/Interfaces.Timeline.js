@@ -275,7 +275,7 @@ var TimelineInterface = function (wickEditor) {
                         e.stopPropagation();
                     });
                     newFrameDiv.appendChild(extenderHandleRight);
-
+                    
                     var extenderHandleLeft = document.createElement('div');
                     extenderHandleLeft.className = "frame-extender-handle frame-extender-handle-left";
                     extenderHandleLeft.addEventListener('mousedown', function (e) {
