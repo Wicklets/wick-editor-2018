@@ -118,9 +118,8 @@ var TimelineInterface = function (wickEditor) {
             }
 
             var frameDivs = document.getElementsByClassName('frame')
+            wickEditor.project.selection = [];
             for(var i = 0; i < frameDivs.length; i ++) {
-                wickEditor.project.selection = [];
-
                 var frameDiv = frameDivs[i]
 
                 var frameRect = {
@@ -140,12 +139,12 @@ var TimelineInterface = function (wickEditor) {
                 if(intersectRect(frameRect, selectionBoxRect)) {
                     var uuid = frameDiv.wickData.uuid;
                     wickEditor.project.selection.push(uuid);
+                    console.log(uuid)
                 } 
-
-                updateFrameDivs();
-                selectionBox.style.width = '0px'
-                selectionBox.style.height = '0px'
             }
+            updateFrameDivs();
+            selectionBox.style.width = '0px'
+            selectionBox.style.height = '0px'
         })
     }
     interactions['dragLayer'] = {
@@ -333,7 +332,8 @@ var TimelineInterface = function (wickEditor) {
                             newLayer: wickFrame.parentLayer
                         });
                         startInteraction("dragFrame", e, {frameDiv:newFrameDiv});
-                        wickEditor.project.selection = [wickFrame.uuid]
+                        wickEditor.project.selection = [wickFrame.uuid];
+                        updateFrameDivs()
                         e.stopPropagation();
                     });
 

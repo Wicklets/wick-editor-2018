@@ -320,7 +320,7 @@ var GuiActionHandler = function (wickEditor) {
         function(args) {
             wickEditor.actionHandler.doAction("movePlayhead", {
                 obj: wickEditor.project.currentObject,
-                moveAmount: -1
+                newPlayheadPosition: wickEditor.project.currentObject.playheadPosition-1
             })
             wickEditor.syncInterfaces();
         });
@@ -334,7 +334,7 @@ var GuiActionHandler = function (wickEditor) {
         function(args) {
             wickEditor.actionHandler.doAction("movePlayhead", {
                 obj: wickEditor.project.currentObject,
-                moveAmount: 1
+                newPlayheadPosition: wickEditor.project.currentObject.playheadPosition+1
             })
             wickEditor.syncInterfaces();
         });
