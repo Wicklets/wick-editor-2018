@@ -248,6 +248,10 @@ var TimelineInterface = function (wickEditor) {
         frames.addEventListener('mousedown', function (e) {
             startInteraction('dragSelectionBox', e, {});
         });
+        /*frames.addEventListener('mousemove', function (e) {
+            console.log(e.x)
+            playhead.style.left = e.x + 'px';
+        });*/
         timeline.appendChild(frames);
 
         playhead = document.createElement('div');
@@ -396,7 +400,7 @@ var TimelineInterface = function (wickEditor) {
         }
 
         playheadX = wickEditor.project.currentObject.playheadPosition * frameSpacingX + frameSpacingX/2 - cssVar('--playhead-width')/2;
-        playhead.style.left = playheadX + 'px';
+        //playhead.style.left = playheadX + 'px';
 
         updateFrameDivs();
 
