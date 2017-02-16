@@ -61,14 +61,16 @@ var TimelineInterface = function (wickEditor) {
             var framesContainerLeft = frames.getBoundingClientRect().left;
             var mouseLeft = e.x;
 
-            interactionData.frameDiv.style.width = mouseLeft - frameDivLeft - framesContainerLeft + cssVar('--frame-width')*2 + 6 + 'px';
+            var newWidth = mouseLeft - frameDivLeft - framesContainerLeft + cssVar('--frame-width')*2 + 6;
+            newWidth = roundToNearestN(newWidth, cssVar('--frame-width'));
+            interactionData.frameDiv.style.width = + newWidth + 'px';
         }),
         'finish' : (function (e) {
             var newFrameDivLen = parseInt(interactionData.frameDiv.style.width);
             var newLength = Math.round(newFrameDivLen / cssVar('--frame-width'));
 
             wickEditor.actionHandler.doAction('changeFrameLength', {
-                frame: wickEditor.project.currentObject.getCurrentFrame(), 
+                frame: interactionData.wickFrame, 
                 newFrameLength: newLength
             });
         })
@@ -79,13 +81,17 @@ var TimelineInterface = function (wickEditor) {
             var my = e.y-frames.getBoundingClientRect().top;
             interactionData.selectionBoxOrigX = mx;
             interactionData.selectionBoxOrigY = my;
+            selectionBox.style.left = '0px';
+            selectionBox.style.top = '0px';
+            selectionBox.style.width = '0px';
+            selectionBox.style.height = '0px';
         }), 
         'update' : (function (e) {
             var mx = e.x-frames.getBoundingClientRect().left;
             var my = e.y-frames.getBoundingClientRect().top;
 
-            var ox = interactionData.selectionBoxOrigX
-            var oy = interactionData.selectionBoxOrigY
+            var ox = interactionData.selectionBoxOrigX;
+            var oy = interactionData.selectionBoxOrigY;
 
             if(mx-ox > 0) {
                 selectionBox.style.left = ox+'px'
@@ -139,7 +145,6 @@ var TimelineInterface = function (wickEditor) {
                 if(intersectRect(frameRect, selectionBoxRect)) {
                     var uuid = frameDiv.wickData.uuid;
                     wickEditor.project.selection.push(uuid);
-                    console.log(uuid)
                 } 
             }
             updateFrameDivs();
@@ -188,7 +193,7 @@ var TimelineInterface = function (wickEditor) {
     var updateFrameDivs = function () {
         var frameDivs = document.getElementsByClassName("frame");
         for(var i = 0; i < frameDivs.length; i++) {
-            var selectionOverlayDiv = frameDivs[i].getElementsByClassName('frame-selection-overlay')[0];
+            var selectionOverlayDiv = frameDivs[i].getElementsByClassName('selection-overlay')[0];
             var thumbnailDiv = frameDivs[i].getElementsByClassName('frame-thumbnail')[0];
 
             var wickFrame = wickEditor.project.getFrameByUUID(frameDivs[i].wickData.uuid);
@@ -205,6 +210,15 @@ var TimelineInterface = function (wickEditor) {
             } else {
                 selectionOverlayDiv.style.display = 'none';
             }
+        }
+
+        var layerDivs = document.getElementsByClassName("layer");
+        for(var i = 0; i < layerDivs.length; i++) {
+            var layerDiv = layerDivs[i];
+            var layerIsSelected = wickEditor.project.currentObject.currentLayer === wickEditor.project.currentObject.layers.indexOf(layerDiv.wickData.wickLayer);
+            
+            var selectionOverlayDiv = layerDiv.getElementsByClassName('selection-overlay')[0];
+            selectionOverlayDiv.style.display = layerIsSelected ? 'block' : 'none';
         }
     }
 
@@ -293,11 +307,13 @@ var TimelineInterface = function (wickEditor) {
                 newLayerDiv.className = "layer";
                 newLayerDiv.style.top = (wickLayers.indexOf(wickLayer) * frameSpacingY) + 'px';
                 newLayerDiv.innerHTML = wickLayer.identifier;
-                if(wickLayer === wickEditor.project.currentObject.getCurrentLayer()) {
-                    newLayerDiv.style.backgroundColor = "#F5F5F5";
-                }
+                newLayerDiv.wickData = {wickLayer:wickLayer};
                 layers.appendChild(newLayerDiv);
                 allLayerDivs.push(newLayerDiv);
+
+                var layerSelectionOverlayDiv = document.createElement('div');
+                layerSelectionOverlayDiv.className = 'selection-overlay';
+                newLayerDiv.appendChild(layerSelectionOverlayDiv);
 
                 var framesStrip = document.createElement('div');
                 framesStrip.className = 'framesStrip';
@@ -320,7 +336,7 @@ var TimelineInterface = function (wickEditor) {
                 wickLayer.frames.forEach(function(wickFrame) {
                     var newFrameDiv = document.createElement('div');
                     newFrameDiv.className = "frame";
-                    newFrameDiv.style.left = (wickLayer.frames.indexOf(wickFrame) * frameSpacingX) + 'px';
+                    newFrameDiv.style.left = (wickFrame.getPlayheadPosition() * frameSpacingX) + 'px';
                     newFrameDiv.style.top = (wickLayers.indexOf(wickLayer) * frameSpacingY) + 'px';
                     newFrameDiv.style.width = (wickFrame.frameLength * frameSpacingX - cssVar('--common-padding')/2) + 'px';
                     newFrameDiv.style.height = cssVar('--vertical-spacing')-cssVar('--common-padding')+'px'
@@ -331,7 +347,7 @@ var TimelineInterface = function (wickEditor) {
                             newPlayheadPosition: wickFrame.getPlayheadPosition(),
                             newLayer: wickFrame.parentLayer
                         });
-                        startInteraction("dragFrame", e, {frameDiv:newFrameDiv});
+                        startInteraction("dragFrame", e, {frameDiv:newFrameDiv, wickFrame:wickFrame});
                         wickEditor.project.selection = [wickFrame.uuid];
                         updateFrameDivs()
                         e.stopPropagation();
@@ -342,7 +358,7 @@ var TimelineInterface = function (wickEditor) {
                     newFrameDiv.appendChild(thumbnailDiv);
 
                     var selectionOverlayDiv = document.createElement('div');
-                    selectionOverlayDiv.className = "frame-selection-overlay";
+                    selectionOverlayDiv.className = "selection-overlay";
                     newFrameDiv.appendChild(selectionOverlayDiv);
 
                     var extenderHandleRight = document.createElement('div');

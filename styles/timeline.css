@@ -8,7 +8,7 @@ body {
 
 	--frame-width: 50px;
 	--frame-handle-width: 5px;
-	--frames-strip-shrink-factor: 4px;
+	--frames-strip-shrink-factor: 6px;
 
 	--shadow: 0px 0px 0px rgba(0, 0, 0, 0.1);
 	--border: inset 0px 0px 1px #555;
@@ -38,7 +38,7 @@ body {
 }
 
 .layers {
-	background-color: #FFFFFF;
+	background-color: #F2F2F2;
 
 	width: var(--layers-width);
 	height: 100%;
@@ -69,7 +69,7 @@ body {
 }
 
 .frames {
-	background-color: #FFFFFF;
+	background-color: #F2F2F2;
 
 	width: calc(100% - var(--layers-width));
 	height: 100%;
@@ -153,12 +153,15 @@ body {
 
 }
 
-.frame-selection-overlay {
+.selection-overlay {
 	width:  100%;
 	height: 100%;
 	position: absolute;
 	pointer-events: none;
 	box-shadow: inset 0px 0px 10px orange;
+	left: 0px;
+	top:0px;
+
 }
 
 .addFrameOverlay {
@@ -174,6 +177,10 @@ body {
 	opacity: 0.5;
 	position: absolute;
 	pointer-events: none;
+	width: 0px;
+	height: 0px;
+	left: 0px;
+	top:0px;
 }
 
 

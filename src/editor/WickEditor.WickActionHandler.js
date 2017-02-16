@@ -616,15 +616,9 @@ var WickActionHandler = function (wickEditor) {
                 args.oldPlayheadPosition = args.obj.playheadPosition;
                 args.oldLayer = args.obj.currentLayer;
 
-                if(args.newPlayheadPosition) {
+                if(args.newPlayheadPosition !== undefined) {
                     var oldFrame = currentObject.getCurrentFrame();
-                    if(args.moveAmount !== undefined) {
-                        args.obj.playheadPosition += args.moveAmount;
-                        if(args.obj.playheadPosition < 0) args.obj.playheadPosition = 0;
-                    } else if (args.newPlayheadPosition !== undefined) {
-                        args.oldPlayheadPosition = args.obj.playheadPosition;
-                        args.obj.playheadPosition = args.newPlayheadPosition;
-                    }
+                    args.obj.playheadPosition = args.newPlayheadPosition;
                     var newFrame = wickEditor.project.currentObject.getCurrentFrame();
                 }
 

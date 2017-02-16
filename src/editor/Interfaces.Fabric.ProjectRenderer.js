@@ -13,7 +13,7 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
         canvas.forEachObject(function(fabricObj) {
             if(args && args.objs && args.objs.indexOf(fabricObj.wickObjectRef) === -1) return;
 
-            if(fabricObj.wickObjectRef && !fabricObj.isWickGUIElement) {
+            if(fabricObj.wickObjectRef && !fabricObj.isWickGUIElement && fabricObj.wickObjectRef.isOnActiveLayer()) {
                 //fabricObj.set('active', true);
                 selectedObjs.push(fabricObj);
             }
