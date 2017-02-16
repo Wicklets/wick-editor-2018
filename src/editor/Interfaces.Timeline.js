@@ -45,9 +45,11 @@ var TimelineInterface = function (wickEditor) {
             interactionData.frameDiv.style.zIndex = 10;
         }),
         'finish' : (function (e) {
+            var newPlayheadPosition = Math.round(parseInt(interactionData.frameDiv.style.left) / cssVar('--frame-width'));
+            console.log(newPlayheadPosition);
             wickEditor.actionHandler.doAction('moveFrame', {
                 frame: interactionData.wickFrame, 
-                newPlayheadPosition: interactionData.wickFrame.playheadPosition
+                newPlayheadPosition: newPlayheadPosition
             });
         })
     }
