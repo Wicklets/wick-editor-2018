@@ -41,7 +41,7 @@ var WickActionHandler = function (wickEditor) {
         }
 
         this.undoAction = function () {
-            console.log("StackAction: undo " + this.name);
+            //console.log("StackAction: undo " + this.name);
             actions[this.name].undoFn(this.args);
         }
     }
