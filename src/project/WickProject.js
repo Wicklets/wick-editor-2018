@@ -185,6 +185,12 @@ WickProject.fixForBackwardsCompatibility = function (project) {
                 // Frames now have uuids
                 if(!frame.uuid) frame.uuid = random.uuid4();
 
+                // 'frameLength' is now just 'length'
+                if(frame.frameLength) {
+                    frame.length = frame.frameLength;
+                    frame.frameLength = null;
+                }
+
                 // Frames now have SVG path data
                 if(!frame.pathData) {
                     frame.pathData = "";
@@ -299,6 +305,18 @@ WickProject.prototype.getCopyData = function (objects) {
     Access project wickobjects
 *********************************/
 
+WickProject.prototype.getCurrentObject = function () {
+    return this.currentObject;
+}
+
+WickProject.prototype.getCurrentLayer = function () {
+    return this.getCurrentObject().getCurrentLayer();
+}
+
+WickProject.prototype.getCurrentFrame = function () {
+    return this.getCurrentObject().getCurrentLayer().getCurrentFrame();
+}
+
 WickProject.prototype.getObjectByUUID = function (uuid) {
     var allObjectsInProject = this.rootObject.getAllChildObjectsRecursive();
     allObjectsInProject.push(this.rootObject);
@@ -335,7 +353,7 @@ WickProject.prototype.getFrameByUUID = function (uuid) {
 
 WickProject.prototype.addObject = function (wickObject, zIndex, ignoreSymbolOffset) {
 
-    var frame = this.currentObject.getCurrentFrame();
+    var frame = this.getCurrentFrame();
 
     if(!ignoreSymbolOffset) {
         var insideSymbolOffset = this.currentObject.getAbsolutePosition();
@@ -367,7 +385,7 @@ WickProject.prototype.jumpToObject = function (obj) {
 
     var currentObject = this.currentObject;
     var frameWithChild = currentObject.getFrameWithChild(obj);
-    var playheadPositionWithChild = currentObject.getPlayheadPositionAtFrame(frameWithChild);
+    var playheadPositionWithChild = frameWithChild.playheadPosition
     currentObject.playheadPosition = playheadPositionWithChild;
 
 }

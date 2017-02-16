@@ -186,10 +186,10 @@ var WickActionHandler = function (wickEditor) {
     registerAction('addObjects',
         function (args) {
             // Make a new frame if one doesn't exist at the playhead position
-            if(!wickEditor.project.currentObject.getCurrentFrame()) {
+            if(!wickEditor.project.getCurrentFrame()) {
                 wickEditor.actionHandler.doAction('addNewFrame');
             }
-            var currentFrame = wickEditor.project.currentObject.getCurrentFrame();
+            var currentFrame = wickEditor.project.getCurrentFrame();
 
             // Save references to added wick objects so they can be removed on undo
             args.addedObjects = [];
@@ -224,7 +224,7 @@ var WickActionHandler = function (wickEditor) {
             // Must do this before removing them all.
             args.objects.forEach(function (object) {
                 if(object instanceof WickObject) {
-                    var zIndex = wickEditor.project.currentObject.getCurrentFrame().wickObjects.indexOf(wickObject);
+                    var zIndex = wickEditor.project.getCurrentFrame().wickObjects.indexOf(object);
                     args.oldZIndices.push(zIndex);
                 }
             });
@@ -236,7 +236,7 @@ var WickActionHandler = function (wickEditor) {
                     wickEditor.project.currentObject.removeChild(object);
                 } else if (object instanceof WickFrame) {
                     args.restoredFrames.push(object);
-                    object.deleteSelf();
+                    object.remove();
                     wickEditor.project.currentObject.framesDirty = true;
                 }
             });
@@ -342,7 +342,7 @@ var WickActionHandler = function (wickEditor) {
 
             var symbolZIndex = null;
             /*objects.forEach(function (obj) {
-                var objZIndex = wickEditor.project.currentObject.getCurrentFrame().wickObjects.indexOf(obj);
+                var objZIndex = wickEditor.project.getCurrentFrame().wickObjects.indexOf(obj);
                 if(symbolZIndex === null || objZIndex < symbolZIndex) {
                     symbolZIndex = objZIndex;
                 }
@@ -402,7 +402,7 @@ var WickActionHandler = function (wickEditor) {
 
     registerAction('fillHole',
         function (args) {
-            args.oldPathData = wickEditor.project.currentObject.getCurrentFrame().pathData;
+            args.oldPathData = wickEditor.project.getCurrentFrame().pathData;
             wickEditor.paper.fillAtPoint(args.x, args.y, args.color);
             wickEditor.paper.cleanupPaths();
             wickEditor.paper.refresh();
@@ -410,7 +410,7 @@ var WickActionHandler = function (wickEditor) {
             done();
         }, 
         function (args) {
-            wickEditor.project.currentObject.getCurrentFrame().pathData = args.oldPathData;
+            wickEditor.project.getCurrentFrame().pathData = args.oldPathData;
             wickEditor.paper.updateWickProject();
 
             done();
@@ -447,13 +447,9 @@ var WickActionHandler = function (wickEditor) {
             var currentObject = wickEditor.project.currentObject;
 
             // Add an empty frame
-            currentObject.getCurrentLayer().addFrame(new WickFrame());
-
-            // Move to that new frame
-            wickEditor.actionHandler.doAction('movePlayhead', {
-                obj:currentObject,
-                newPlayheadPosition:currentObject.getCurrentLayer().getTotalLength()-1
-            });
+            var newFrame = new WickFrame();
+            newFrame.playheadPosition = wickEditor.project.getCurrentObject().playheadPosition
+            currentObject.getCurrentLayer().addFrame(newFrame);
 
             currentObject.framesDirty = true;
 
@@ -586,11 +582,21 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             args.oldPlayheadPosition = args.frame.playheadPosition;
             args.frame.playheadPosition = args.newPlayheadPosition;
+
+            wickEditor.actionHandler.doAction('movePlayhead', {
+                obj: wickEditor.project.currentObject,
+                newPlayheadPosition: args.newPlayheadPosition,
+                /*newLayer: wickFrame.parentLayer*/
+            });
+
             wickEditor.project.currentObject.framesDirty = true;
             done();
         },
         function (args) {
             args.frame.playheadPosition = args.oldPlayheadPosition;
+
+            
+            
             wickEditor.project.currentObject.framesDirty = true;
             done();
         });
@@ -621,13 +627,13 @@ var WickActionHandler = function (wickEditor) {
 
     registerAction('changeFrameLength',
         function (args) {
-            args.oldFrameLength = args.frame.frameLength;
-            args.frame.frameLength = args.newFrameLength;
+            args.oldFrameLength = args.frame.length;
+            args.frame.length = args.newFrameLength;
             wickEditor.project.currentObject.framesDirty = true;
             done();
         },
         function (args) {
-            args.frame.frameLength = args.oldFrameLength;
+            args.frame.length = args.oldFrameLength;
             wickEditor.project.currentObject.framesDirty = true;
             done();
         });
@@ -644,9 +650,9 @@ var WickActionHandler = function (wickEditor) {
                 args.oldLayer = args.obj.currentLayer;
 
                 if(args.newPlayheadPosition !== undefined) {
-                    var oldFrame = currentObject.getCurrentFrame();
+                    var oldFrame = wickEditor.project.getCurrentFrame();
                     args.obj.playheadPosition = args.newPlayheadPosition;
-                    var newFrame = wickEditor.project.currentObject.getCurrentFrame();
+                    var newFrame = wickEditor.project.getCurrentFrame();
                 }
 
                 if(args.newLayer) {
@@ -658,7 +664,7 @@ var WickActionHandler = function (wickEditor) {
                 done();
             }
 
-            var currentFrame = wickEditor.project.currentObject.getCurrentFrame();
+            var currentFrame = wickEditor.project.getCurrentFrame();
             if(!currentFrame) {
                 proceed();
             } else {
@@ -741,13 +747,13 @@ var WickActionHandler = function (wickEditor) {
             args.oldZIndexes = [];
             for(var i = 0; i < args.objs.length; i++) {
                 var obj = args.objs[i]
-                args.oldZIndexes.push(wickEditor.project.currentObject.getCurrentFrame().wickObjects.indexOf(obj));
+                args.oldZIndexes.push(wickEditor.project.getCurrentFrame().wickObjects.indexOf(obj));
             }
             for(var i = 0; i < args.objs.length; i++) {
                 var obj = args.objs[i]
                 obj.zIndicesDirty = true;
-                wickEditor.project.currentObject.getCurrentFrame().wickObjects.splice(args.oldZIndexes[i], 1);
-                wickEditor.project.currentObject.getCurrentFrame().wickObjects.splice(args.newZIndex, 0, obj);
+                wickEditor.project.getCurrentFrame().wickObjects.splice(args.oldZIndexes[i], 1);
+                wickEditor.project.getCurrentFrame().wickObjects.splice(args.newZIndex, 0, obj);
             }
 
             done();
@@ -757,7 +763,7 @@ var WickActionHandler = function (wickEditor) {
                 var obj = args.objs[i]
                 obj.zIndicesDirty = true;
                 wickEditor.project.currentObject.removeChild(args.objs[i]);
-                wickEditor.project.currentObject.getCurrentFrame().wickObjects.splice(args.oldZIndexes[i], 0, obj);
+                wickEditor.project.getCurrentFrame().wickObjects.splice(args.oldZIndexes[i], 0, obj);
             }
 
             done();

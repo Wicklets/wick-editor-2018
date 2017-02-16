@@ -14,7 +14,7 @@ var WickFrame = function () {
 	this.playheadPosition = null;
 
 	// Frame length for long frames
-	this.frameLength = 1;
+	this.length = 1;
 
 	// Should the frame reset on being entered?
 	this.alwaysSaveState = false;
@@ -34,7 +34,7 @@ var WickFrame = function () {
 
 // Extend our frame to encompass more frames. 
 WickFrame.prototype.extend = function(length) {
-	this.frameLength += length; 
+	this.length += length; 
 }
 
 // Reduce the number of frames this WickFrame Occupies. 
@@ -44,12 +44,12 @@ WickFrame.prototype.shrink = function(length) {
 		return;
 	}
 
-	originalLength = this.frameLength; 
-	this.frameLength -= length; 
+	originalLength = this.length; 
+	this.length -= length; 
 
 	// determine and return the actual change in frames. 
-	if (this.frameLength <= 0) {
-		this.frameLength = 1;
+	if (this.length <= 0) {
+		this.length = 1;
 		return originalLength - 1;
 	} else {
 		return length; 
@@ -62,7 +62,7 @@ WickFrame.prototype.copy = function () {
 
 	copiedFrame.identifier = this.identifier;
 	copiedFrame.playheadPosition = this.playheadPosition;
-	copiedFrame.frameLength = this.frameLength;
+	copiedFrame.length = this.length;
 
 	this.wickObjects.forEach(function (wickObject) {
 		copiedFrame.wickObjects.push(wickObject.copy());
@@ -72,8 +72,8 @@ WickFrame.prototype.copy = function () {
 
 }
 
-WickFrame.prototype.deleteSelf = function () {
-	this.parentLayer.deleteFrame(this);
+WickFrame.prototype.remove = function () {
+	this.parentLayer.removeFrame(this);
 }
 
 WickFrame.prototype.encodeStrings = function () {

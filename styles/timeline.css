@@ -96,7 +96,7 @@ body {
 
 	overflow: hidden;
 
-	pointer-events:none;
+	/*pointer-events:none;*/
 }
 
 .framesStripCell {
@@ -158,7 +158,9 @@ body {
 	height: 100%;
 	position: absolute;
 	pointer-events: none;
-	box-shadow: inset 0px 0px 10px orange;
+	box-shadow: inset 0px 0px 0px 2px orange;
+	background-color: yellow;
+	opacity: 0.5;
 	left: 0px;
 	top:0px;
 

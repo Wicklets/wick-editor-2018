@@ -608,7 +608,7 @@ var GuiActionHandler = function (wickEditor) {
         {},
         function(args) {
             wickEditor.fabric.deselectAll();
-            var selectedFrame = wickEditor.project.currentObject.getCurrentFrame();
+            var selectedFrame = wickEditor.project.getCurrentFrame();
             wickEditor.scriptingide.editScriptsOfObject(selectedFrame);
             wickEditor.syncInterfaces();
         });
@@ -620,7 +620,7 @@ var GuiActionHandler = function (wickEditor) {
         function(args) {
             wickEditor.actionHandler.doAction('moveObjectToZIndex', {
                 objs:wickEditor.fabric.getSelectedObjects(WickObject),
-                newZIndex: wickEditor.project.currentObject.getCurrentFrame().wickObjects.length
+                newZIndex: wickEditor.project.getCurrentFrame().wickObjects.length
             });
             wickEditor.fabric.deselectAll();
         });
@@ -740,27 +740,13 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.actionHandler.doAction('addNewFrame');
         });
     
-    registerAction('deleteFrame',
-        ['SHIFT', '-'],
-        ['deleteFrameButton'],
-        {},
-        function(args) {
-            var currentObject = wickEditor.project.currentObject;
-            var frame = currentObject.getCurrentFrame();
-            var layer = currentObject.getCurrentLayer();
-            wickEditor.actionHandler.doAction('deleteFrame', {
-                frame: frame,
-                layer: layer
-            });
-        });
-
     registerAction('copyFrame',
         [],
         ['copyFrameButton'],
         {},
         function(args) {
             wickEditor.rightclickmenu.open = false;
-            polyfillClipboardData.setData('text/wickobjectsframe', wickEditor.project.currentObject.getCurrentFrame().getAsJSON());
+            polyfillClipboardData.setData('text/wickobjectsframe', wickEditor.project.getCurrentFrame().getAsJSON());
             wickEditor.syncInterfaces()
         });
 
@@ -781,7 +767,7 @@ var GuiActionHandler = function (wickEditor) {
         ['extendFrameButton'],
         {},
         function(args) {
-            var frame = wickEditor.project.currentObject.getCurrentFrame();
+            var frame = wickEditor.project.getCurrentFrame();
             if(!frame) {
                 var frames = wickEditor.project.currentObject.getCurrentLayer().frames;
                 frame = frames[frames.length - 1];
@@ -789,7 +775,7 @@ var GuiActionHandler = function (wickEditor) {
 
             var frameEndingIndex = wickEditor.project.currentObject.getPlayheadPositionAtFrame(
                 frame
-            ) + frame.frameLength - 1;
+            ) + frame.length - 1;
 
             var framesToExtend = wickEditor.project.currentObject.playheadPosition - frameEndingIndex;
 
@@ -804,7 +790,7 @@ var GuiActionHandler = function (wickEditor) {
         ['shrinkFrameButton'],
         {},
         function(args) {
-            var frame = wickEditor.project.currentObject.getCurrentFrame();
+            var frame = wickEditor.project.getCurrentFrame();
 
             //var frameEndingIndex = wickEditor.project.currentObject.getPlayheadPositionAtFrame(frame) + frame.frameLength - 1;
             //var framesToShrink = frameEndingIndex - wickEditor.project.currentObject.playheadPosition;

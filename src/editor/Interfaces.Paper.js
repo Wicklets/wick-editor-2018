@@ -34,7 +34,7 @@ var PaperInterface = function (wickEditor) {
     self.syncWithEditorState = function () {
 
         // Check if the playhead has moved to a different frame
-        var newFrame = wickEditor.project.currentObject.getCurrentFrame();
+        var newFrame = wickEditor.project.getCurrentFrame();
         if(newFrame !== currentFrame) {
             paper.project.clear();
         }

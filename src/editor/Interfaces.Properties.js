@@ -115,8 +115,8 @@ var PropertiesInterface = function (wickEditor) {
             }
         } else if(currentTab === 'frame') {
 
-            var currentObject = wickEditor.project.currentObject;
-            var currentFrame = currentObject.getCurrentFrame();
+            var currentObject = wickEditor.project.getCurrentObject();
+            var currentFrame = wickEditor.project.getCurrentFrame();
             if(!currentFrame) {
                 $("#frameProperties").css('display', 'none');
                 return;
@@ -320,7 +320,7 @@ var PropertiesInterface = function (wickEditor) {
 
     $('#frameIdentifier').on('blur', function () {
         var currentObject = wickEditor.project.currentObject;
-        var currentFrame = currentObject.getCurrentFrame();
+        var currentFrame = wickEditor.project.getCurrentFrame();
 
         var newName = $('#frameIdentifier').val();
         if(newName === '') {
@@ -388,11 +388,11 @@ var PropertiesInterface = function (wickEditor) {
     };
 
     /*document.getElementById('frameAutoplayCheckbox').onclick = function (e) {
-        wickEditor.project.currentObject.getCurrentFrame().autoplay = !this.checked;
+        wickEditor.project.getCurrentFrame().autoplay = !this.checked;
         wickEditor.syncInterfaces();
     }*/
     document.getElementById('frameSaveStateCheckbox').onclick = function (e) {
-        wickEditor.project.currentObject.getCurrentFrame().alwaysSaveState = this.checked;
+        wickEditor.project.getCurrentFrame().alwaysSaveState = this.checked;
         wickEditor.syncInterfaces();
     }
 

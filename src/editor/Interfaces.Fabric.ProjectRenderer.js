@@ -218,7 +218,7 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
                     imageSequence.push(image);
                     root.playheadPosition++; 
 
-                    if(root.getCurrentFrame()) {
+                    if(wickEditor.project.getCurrentFrame()) {
                         proceed();
                     } else {
                         callback(imageSequence);

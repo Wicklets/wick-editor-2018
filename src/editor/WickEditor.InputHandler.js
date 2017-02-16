@@ -276,8 +276,7 @@ var InputHandler = function (wickEditor) {
     
     var loadAnimatedGIF = function (dataURL, callback) {
         var gifSymbol = WickObject.createNewSymbol();
-        gifSymbol.x = window.innerWidth /2;
-        gifSymbol.y  = window.innerHeight/2;
+        gifSymbol.layers[0].frames = [];
 
         //var gif = document.getElementById("gifImportDummyElem");
         var newGifEl = document.createElement("img");
@@ -288,27 +287,36 @@ var InputHandler = function (wickEditor) {
         gif.setAttribute('height', '467px');
         gif.setAttribute('width', '375px');
 
+        var framesDataURLs;
+        var gifWidth;
+        var gifHeight;
         var superGif = new SuperGif({ gif: gif } );
         superGif.load(function () {
 
-            var framesDataURLs = superGif.getFrameDataURLs();
-            for(var i = 0; i < framesDataURLs.length; i++) {
+            gifWidth = superGif.get_canvas().width;
+            gifHeight = superGif.get_canvas().height;
+            framesDataURLs = superGif.getFrameDataURLs();
+            proceed();
 
-                // what the hell is going on here ??? 
-                (function(frameIndex) { return function(o) {
-                    gifSymbol.layers[0].frames[frameIndex].wickObjects.push(o);
-                    
-                    if(frameIndex == framesDataURLs.length-1) {
-                        gifSymbol.width  = gifSymbol.layers[0].frames[0].wickObjects[0].width;
-                        gifSymbol.height = gifSymbol.layers[0].frames[0].wickObjects[0].height;
-                        callback(gifSymbol);
-                    } else {
-                        gifSymbol.layers[0].addFrame(new WickFrame);
-                    }
-                }; }) (i) (WickObject.fromImage(framesDataURLs[i]));
-
-            }
         });
+
+        var proceed = function () {
+
+            for(var i = 0; i < framesDataURLs.length; i++) {
+                var frameWickObj = WickObject.fromImage(framesDataURLs[i]);
+                frameWickObj.width = gifWidth;
+                frameWickObj.height = gifHeight;
+
+                gifSymbol.layers[0].addFrame(new WickFrame());
+                gifSymbol.layers[0].frames[i].playheadPosition = i;
+                gifSymbol.layers[0].frames[i].wickObjects.push(frameWickObj);
+            }
+
+            gifSymbol.width = gifWidth;
+            gifSymbol.height = gifHeight;
+            callback(gifSymbol);
+        }
+
     }
 
     var loadImage = function (src, callback) {

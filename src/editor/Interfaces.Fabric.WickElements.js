@@ -11,7 +11,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
     var currentFrameRef;
 
     this.update = function () {
-        var newFrameRef = wickEditor.project.currentObject.getCurrentFrame();
+        var newFrameRef = wickEditor.project.getCurrentFrame();
         var onNewFrame = newFrameRef !== currentFrameRef;
         currentFrameRef = newFrameRef;
 

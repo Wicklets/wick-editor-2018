@@ -6,7 +6,9 @@ var RightClickMenuInterface = function (wickEditor) {
 
     var menu;
 
-//
+    var enabled = true;
+
+// menu object definitions
 
     var RightClickMenu = function (buttonGroups) {
         var self = this;
@@ -31,7 +33,7 @@ var RightClickMenuInterface = function (wickEditor) {
             });
 
             var mouseEventHandler = function (e, newMode) {
-                return; // Disabled for now because I needed the Inspect Element option
+                if(!enabled) return;
 
                 if(e.button == 2) {
                     self.open = true;
@@ -136,9 +138,15 @@ var RightClickMenuInterface = function (wickEditor) {
 
     }
 
-//
+// Interface API
 
     self.setup = function () {
+        // Block browser default right click menu
+        document.addEventListener('contextmenu', function (event) { 
+            if(enabled) event.preventDefault();
+        }, false);
+
+        // Build menu object
         menu = new RightClickMenu([
             new RightClickMenuButtonGroup([
                 new RightClickMenuButton('test1', function () {
@@ -165,110 +173,5 @@ var RightClickMenuInterface = function (wickEditor) {
     self.syncWithEditorState = function () {
         menu.updateElem();
     }
-
-// Block browser default right click menu
-
-    document.addEventListener('contextmenu', function (event) { 
-        // Disabled for now because I needed the Inspect Element option
-        //event.preventDefault();
-    }, false);
-
-
-
-
-
-        /*
-        if(this.open) {
-            // Hide everything
-            hideButtonGroup("#fabricButtons");
-            hideButtonGroup("#insideSymbolButtons");
-            hideButtonGroup("#symbolButtons");
-            hideButtonGroup("#staticObjectButtons");
-            hideButtonGroup("#singleObjectButtons");
-            hideButtonGroup("#commonObjectButtons");
-            hideButtonGroup("#clickedFrameExists");
-            hideButtonGroup("#clickedOffFrameButtons");
-            hideButtonGroup("#noFramesExistButtons");
-            hideButtonGroup("#breakpointExists");
-            hideButtonGroup("#noBreakpointExists");
-            hideButtonGroup("#timelineButtons");
-            hideButtonGroup("#commonTimelineButtons");
-            hideButtonGroup("#clickedOnFrameButtons");
-            hideButtonGroup("#isImage");
-            hideButtonGroup("#noKeyframeExists");
-            hideButtonGroup("#keyframeExists");
-
-            // Selectively show portions we need depending on editor state
-            showButtonsForMode[that.mode]();
-            openRightClickMenuDiv();
-        } else {
-            closeRightClickMenuDiv();
-        }
-        */
-
-
-    /*var showButtonGroup = function (buttonsDivID) {
-        $(buttonsDivID).css('display', 'block');
-    }
-    var hideButtonGroup = function (buttonsDivID) {
-        $(buttonsDivID).css('display', 'none');
-    }
-
-    var showButtonsForMode = {};
-
-    showButtonsForMode["fabric"] = function () {
-        showButtonGroup("#fabricButtons");
-
-        var selectedSingleObject = wickEditor.fabric.getSelectedObject(WickObject);
-        var currentObject = wickEditor.project.currentObject;
-
-        var multiObjectSelection = wickEditor.fabric.getSelectedObjects(WickObject).length > 1;
-
-        if(!currentObject.isRoot) {
-            showButtonGroup("#insideSymbolButtons");
-        }
-
-        if(selectedSingleObject) {
-            showButtonGroup("#singleObjectButtons");
-
-            if(selectedSingleObject.isSymbol) {
-                showButtonGroup("#symbolButtons");
-            } else {
-                showButtonGroup("#staticObjectButtons");
-            }
-            showButtonGroup("#commonObjectButtons");
-
-            if(selectedSingleObject.imageData) {
-                showButtonGroup("#isImage");
-            }
-
-            var relPlayheadPos = selectedSingleObject.parentObject.getRelativePlayheadPosition(selectedSingleObject);
-            if(selectedSingleObject.hasTweenAtFrame(relPlayheadPos)) {
-                showButtonGroup("#keyframeExists");
-            } else {
-                showButtonGroup("#noKeyframeExists");
-            }
-        } else {
-            showButtonGroup("#frameButtons");
-        }
-
-        if(multiObjectSelection) {
-            showButtonGroup("#staticObjectButtons");
-        }
-    }
-
-    showButtonsForMode["timeline"] = function () {
-        showButtonGroup("#timelineButtons");
-
-        showButtonGroup("#commonTimelineButtons");
-
-        var frame = wickEditor.project.currentObject.getCurrentFrame();
-        if(frame) {
-            showButtonGroup("#clickedOnFrameButtons");
-            
-        } else {
-            showButtonGroup("#clickedOffFrameButtons");
-        }
-    }*/
 
 }

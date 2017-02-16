@@ -133,7 +133,8 @@ var FabricInterface = function (wickEditor) {
         this.wickElements.update();
         self.guiElements.update();
 
-        /*var currentFrame = wickEditor.project.currentObject.getCurrentFrame();
+        /*console.error('somethings wrong here');
+        var currentFrame = wickEditor.project.getCurrentFrame();
         if(currentFrame) {
             wickEditor.fabric.projectRenderer.getCanvasThumbnail(function (thumbnail) { 
                 currentFrame.thumbnail = thumbnail;
