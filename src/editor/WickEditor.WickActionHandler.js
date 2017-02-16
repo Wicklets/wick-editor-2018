@@ -41,7 +41,7 @@ var WickActionHandler = function (wickEditor) {
         }
 
         this.undoAction = function () {
-            //console.log("StackAction: undo " + this.name);
+            console.log("StackAction: undo " + this.name);
             actions[this.name].undoFn(this.args);
         }
     }
@@ -216,20 +216,29 @@ var WickActionHandler = function (wickEditor) {
 
     registerAction('deleteObjects',
         function (args) {
-            args.restoredObjects = []
+            args.restoredObjects = [];
+            args.restoredFrames = [];
             args.oldZIndices = [];
 
             // Store the old z index vars for each object.
             // Must do this before removing them all.
-            args.wickObjects.forEach(function (wickObject) {
-                var zIndex = wickEditor.project.currentObject.getCurrentFrame().wickObjects.indexOf(wickObject);
-                args.oldZIndices.push(zIndex);
+            args.objects.forEach(function (object) {
+                if(object instanceof WickObject) {
+                    var zIndex = wickEditor.project.currentObject.getCurrentFrame().wickObjects.indexOf(wickObject);
+                    args.oldZIndices.push(zIndex);
+                }
             });
 
             // Now remove them
-            args.wickObjects.forEach(function (wickObject) {
-                args.restoredObjects.push(wickObject);
-                wickEditor.project.currentObject.removeChild(wickObject);
+            args.objects.forEach(function (object) {
+                if(object instanceof WickObject) {
+                    args.restoredObjects.push(object);
+                    wickEditor.project.currentObject.removeChild(object);
+                } else if (object instanceof WickFrame) {
+                    args.restoredFrames.push(object);
+                    object.deleteSelf();
+                    wickEditor.project.currentObject.framesDirty = true;
+                }
             });
 
             done();
@@ -238,6 +247,11 @@ var WickActionHandler = function (wickEditor) {
             for(var i = 0; i < args.restoredObjects.length; i++) {
                 wickEditor.project.addObject(args.restoredObjects[i], args.oldZIndices[i]);
             }
+
+            args.restoredFrames.forEach(function (restoreFrame) {
+                restoreFrame.parentLayer.addFrame(restoreFrame);
+                wickEditor.project.currentObject.framesDirty = true;
+            });
 
             done();
         });
@@ -565,6 +579,19 @@ var WickActionHandler = function (wickEditor) {
 
             currentObject.framesDirty = true;
 
+            done();
+        });
+
+    registerAction('moveFrame',
+        function (args) {
+            args.oldPlayheadPosition = args.frame.playheadPosition;
+            args.frame.playheadPosition = args.newPlayheadPosition;
+            wickEditor.project.currentObject.framesDirty = true;
+            done();
+        },
+        function (args) {
+            args.frame.playheadPosition = args.oldPlayheadPosition;
+            wickEditor.project.currentObject.framesDirty = true;
             done();
         });
 

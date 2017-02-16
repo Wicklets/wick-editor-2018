@@ -45,9 +45,9 @@ var TimelineInterface = function (wickEditor) {
             interactionData.frameDiv.style.zIndex = 10;
         }),
         'finish' : (function (e) {
-            wickEditor.actionHandler.doAction('extendFrame', {
-                frame: wickEditor.project.currentObject.getCurrentFrame(), 
-                nFramesToExtendBy: 0
+            wickEditor.actionHandler.doAction('moveFrame', {
+                frame: interactionData.wickFrame, 
+                newPlayheadPosition: interactionData.wickFrame.playheadPosition
             });
         })
     }
@@ -340,7 +340,7 @@ var TimelineInterface = function (wickEditor) {
                 wickLayer.frames.forEach(function(wickFrame) {
                     var newFrameDiv = document.createElement('div');
                     newFrameDiv.className = "frame";
-                    newFrameDiv.style.left = (wickFrame.getPlayheadPosition() * frameSpacingX) + 'px';
+                    newFrameDiv.style.left = (wickFrame.playheadPosition * frameSpacingX) + 'px';
                     newFrameDiv.style.top = (wickLayers.indexOf(wickLayer) * frameSpacingY) + 'px';
                     newFrameDiv.style.width = (wickFrame.frameLength * frameSpacingX - cssVar('--common-padding')/2) + 'px';
                     newFrameDiv.style.height = cssVar('--vertical-spacing')-cssVar('--common-padding')+'px'
@@ -348,7 +348,7 @@ var TimelineInterface = function (wickEditor) {
                     newFrameDiv.addEventListener('mousedown', function (e) {
                         wickEditor.actionHandler.doAction('movePlayhead', {
                             obj: wickEditor.project.currentObject,
-                            newPlayheadPosition: wickFrame.getPlayheadPosition(),
+                            newPlayheadPosition: wickFrame.playheadPosition,
                             newLayer: wickFrame.parentLayer
                         });
                         startInteraction("dragFrame", e, {frameDiv:newFrameDiv, wickFrame:wickFrame});

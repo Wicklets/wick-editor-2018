@@ -424,7 +424,7 @@ WickProject.prototype.getSelectedObjects = function () {
 
     var objs = [];
     this.selection.forEach(function (uuid) {
-        var obj = self.getObjectByUUID(uuid) || self.getFrameByUUID();
+        var obj = self.getObjectByUUID(uuid) || self.getFrameByUUID(uuid);
         if(obj) objs.push(obj);
     });
 

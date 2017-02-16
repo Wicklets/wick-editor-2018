@@ -359,7 +359,7 @@ var GuiActionHandler = function (wickEditor) {
         {},
         function(args) {
             wickEditor.actionHandler.doAction('deleteObjects', {
-                wickObjects:wickEditor.fabric.getSelectedObjects()
+                objects:wickEditor.project.getSelectedObjects()
             });
         });
 
@@ -371,7 +371,7 @@ var GuiActionHandler = function (wickEditor) {
         {},
         function(args) {
             wickEditor.actionHandler.doAction('deleteObjects', {
-                wickObjects:wickEditor.fabric.getSelectedObjects()
+                objects:wickEditor.project.getSelectedObjects()
             });
         });
 

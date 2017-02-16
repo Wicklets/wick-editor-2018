@@ -10,6 +10,9 @@ var WickFrame = function () {
 	// All path data of the frame (Stored as SVG)
 	this.pathData = null;
 
+	// Where this frame exists on the timeline
+	this.playheadPosition = null;
+
 	// Frame length for long frames
 	this.frameLength = 1;
 
@@ -53,25 +56,12 @@ WickFrame.prototype.shrink = function(length) {
 	}
 }
 
-WickFrame.prototype.getPlayheadPosition = function () {
-	var counter = 0;
-
-    for(var f = 0; f < this.parentLayer.frames.length; f++) {
-        var frame = this.parentLayer.frames[f];
-        if(this === frame) return counter;
-        for(var i = 0; i < frame.frameLength; i++) {
-            counter++;
-        }
-    }
-
-    return null;
-}
-
 WickFrame.prototype.copy = function () {
 
 	var copiedFrame = new WickFrame();
 
 	copiedFrame.identifier = this.identifier;
+	copiedFrame.playheadPosition = this.playheadPosition;
 	copiedFrame.frameLength = this.frameLength;
 
 	this.wickObjects.forEach(function (wickObject) {
@@ -80,6 +70,10 @@ WickFrame.prototype.copy = function () {
 
 	return copiedFrame;
 
+}
+
+WickFrame.prototype.deleteSelf = function () {
+	this.parentLayer.deleteFrame(this);
 }
 
 WickFrame.prototype.encodeStrings = function () {
