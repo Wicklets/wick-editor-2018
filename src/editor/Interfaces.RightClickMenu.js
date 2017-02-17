@@ -128,6 +128,7 @@ var RightClickMenuInterface = function (wickEditor) {
             this.elem.innerHTML = title;
 
             this.elem.addEventListener('mousedown', function (e) {
+                menu.open = false;
                 self.action();
             });
         }
@@ -146,24 +147,72 @@ var RightClickMenuInterface = function (wickEditor) {
             if(enabled) event.preventDefault();
         }, false);
 
+        /*
+        Non symbol
+            Flip x
+            Flip y
+            Bring to front
+            Send to back
+            Convert to symbol
+            Export
+            Delete
+
+        Symbol
+            Break apart
+            Edit scripts
+            Edit object
+
+        Not available yet
+            Copy
+            Cut
+            Paste
+
+            Add tween
+            Remove tween 
+        */
+
         // Build menu object
         menu = new RightClickMenu([
+            // Objects selected options
             new RightClickMenuButtonGroup([
-                new RightClickMenuButton('test1', function () {
-                    alert('test1');
+                new RightClickMenuButton('Flip horizontally', function () {
+                    wickEditor.guiActionHandler.doAction("flipHorizontally")
                 }),
-                new RightClickMenuButton('test2', function () {
-                    alert('test2');
-                })
+                new RightClickMenuButton('Flip vertically', function () {
+                    wickEditor.guiActionHandler.doAction("flipVertically")
+                }),
+                new RightClickMenuButton('Bring to front', function () {
+                    wickEditor.guiActionHandler.doAction("bringToFront")
+                }),
+                new RightClickMenuButton('Send to back', function () {
+                    wickEditor.guiActionHandler.doAction("sendToBack")
+                }),
+                new RightClickMenuButton('Convert to symbol', function () {
+                    wickEditor.guiActionHandler.doAction("convertToSymbol")
+                }),
+                new RightClickMenuButton('Export', function () {
+                    wickEditor.guiActionHandler.doAction("downloadObject")
+                }),
+                new RightClickMenuButton('Delete', function () {
+                    wickEditor.guiActionHandler.doAction('deleteSelectedObjects');
+                }),
             ], function () {
-                return true;
+                return wickEditor.project.selection.length >= 1;
             }),
+
+            // Single symbol selected options
             new RightClickMenuButtonGroup([
-                new RightClickMenuButton('test3', function () {
-                    alert('test3');
+                new RightClickMenuButton('Edit object', function () {
+                    wickEditor.guiActionHandler.doAction('editObject');
+                }),
+                new RightClickMenuButton('Edit scripts', function () {
+                    wickEditor.guiActionHandler.doAction("editScripts")
+                }),
+                new RightClickMenuButton('Break apart', function () {
+                    wickEditor.guiActionHandler.doAction("breakApart")
                 })
             ], function () {
-                return true;
+                return wickEditor.project.selection.length === 1 && wickEditor.project.getSelectedObjects()[0].isSymbol;
             })
         ]);
 
