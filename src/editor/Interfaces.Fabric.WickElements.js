@@ -157,6 +157,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
                 numObjectsAdded++;
                 if(numObjectsAdded === objectsToAdd.length) {
+
                     //console.log("force z index update");
                     if(onNewFrame) refreshZIndices(true);
                     fabricInterface.canvas.renderAll()
@@ -164,6 +165,15 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                     // Reselect objects that were selected before sync
                     var selectedObjects = wickEditor.project.getSelectedObjects();
                     fabricInterface.selectObjects(selectedObjects);
+
+                    // Render thumbnail
+                    var currentFrame = wickEditor.project.getCurrentFrame();
+                    if(currentFrame) {
+                        wickEditor.fabric.projectRenderer.getCanvasThumbnail(function (thumbnail) { 
+                            wickEditor.project.getCurrentFrame().thumbnail = thumbnail;
+                        });
+                    }
+
                 }
             });
         });
@@ -293,8 +303,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                     wickObj.width = group.width;
                     wickObj.height = group.height;
                     group.wickObjReference = wickObj;
-                    
-
                     
                     var circle = new fabric.Circle({ 
                         radius: 6, 

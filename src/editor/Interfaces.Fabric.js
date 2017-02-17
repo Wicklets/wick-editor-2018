@@ -47,15 +47,14 @@ var FabricInterface = function (wickEditor) {
             },
         });
         self.canvas.on('object:selected', function (e) {
-            //wickEditor.timeline.redraw();
 
-            wickEditor.project.selection = [];
+            wickEditor.project.clearSelection();
             if(e.target.wickObjReference) {
-                wickEditor.project.selection.push(e.target.wickObjReference.uuid);
+                wickEditor.project.selectObject(e.target.wickObjReference);
             } else {
                 e.target._objects.forEach(function (obj) {
                     if(obj.wickObjReference.uuid) 
-                        wickEditor.project.selection.push(obj.wickObjReference.uuid);
+                        wickEditor.project.selectObject(obj.wickObjReference);
                 });
             }
             
@@ -69,7 +68,7 @@ var FabricInterface = function (wickEditor) {
             });
         });
         self.canvas.on('before:selection:cleared', function (e) {
-            wickEditor.project.selection = [];
+            wickEditor.project.clearSelection();
             // quick fix for properties GUI closing after selected wick object changes
             $(":focus").blur();
         });
@@ -132,14 +131,6 @@ var FabricInterface = function (wickEditor) {
         // Update elements in fabric canvas
         this.wickElements.update();
         self.guiElements.update();
-
-        /*console.error('somethings wrong here');
-        var currentFrame = wickEditor.project.getCurrentFrame();
-        if(currentFrame) {
-            wickEditor.fabric.projectRenderer.getCanvasThumbnail(function (thumbnail) { 
-                currentFrame.thumbnail = thumbnail;
-            });
-        }*/
 
         // Render canvas
         this.canvas.renderAll();
@@ -293,7 +284,10 @@ var FabricInterface = function (wickEditor) {
             }
 
             this.canvas._activeObject = null;
-            this.canvas.setActiveGroup(group.setCoords()).renderAll();
+            group.setCoords()
+            this.canvas._activeGroup = group
+            group.set('active', true);
+            this.canvas.renderAll()
         }
 
         self.guiElements.update();
@@ -306,11 +300,11 @@ var FabricInterface = function (wickEditor) {
         //wickEditor.timeline.redraw();
 
         var objs = [];
-        wickEditor.project.selection = [];
+        wickEditor.project.clearSelection();
         this.canvas.forEachObject(function (o) {
             if(o.wickObjectRef && o.selectable) {
                 objs.push(o.wickObjectRef);
-                wickEditor.project.selection.push(o.wickObjectRef.uuid)
+                wickEditor.project.selectObject(o.wickObjectRef.uuid)
             }
         });
         this.selectObjects(objs);

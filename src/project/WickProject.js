@@ -32,7 +32,7 @@ var WickProject = function () {
 
     //this.assets = {};
 
-    this.selection = [];
+    this._selection = [];
 
 };
 
@@ -145,7 +145,7 @@ WickProject.fromJSON = function (rawJSONProject) {
 // Backwards compatibility for old Wick projects
 WickProject.fixForBackwardsCompatibility = function (project) {
     // WickProject.resolution was replaced with project.width and project.height
-    if(!project.selection) project.selection = [];
+    if(!project._selection) project._selection = [];
     if(!project.width) project.width = project.resolution.x;
     if(!project.height) project.height = project.resolution.y;
     if(!project.transparent) project.transparent = false;
@@ -430,7 +430,7 @@ WickProject.prototype.hasSyntaxErrors = function () {
 WickProject.prototype.isObjectSelected = function (obj) {
     var selected = false;
 
-    this.selection.forEach(function (uuid) {
+    this._selection.forEach(function (uuid) {
         if(obj.uuid === uuid) selected = true;
     });
 
@@ -441,10 +441,24 @@ WickProject.prototype.getSelectedObjects = function () {
     var self = this;
 
     var objs = [];
-    this.selection.forEach(function (uuid) {
+    this._selection.forEach(function (uuid) {
         var obj = self.getObjectByUUID(uuid) || self.getFrameByUUID(uuid);
         if(obj) objs.push(obj);
     });
 
     return objs;
+}
+
+WickProject.prototype.getNumSelectedObjects = function (obj) {
+    return(this._selection.length);
+}
+
+WickProject.prototype.selectObject = function (obj) {
+    console.log(obj.uuid)
+    this._selection.push(obj.uuid);
+}
+
+WickProject.prototype.clearSelection = function () {
+    console.error("selection cleared!")
+    this._selection = [];
 }

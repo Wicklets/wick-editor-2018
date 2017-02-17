@@ -185,6 +185,8 @@ var WickActionHandler = function (wickEditor) {
 
     registerAction('addObjects',
         function (args) {
+            wickEditor.project.clearSelection();
+
             // Make a new frame if one doesn't exist at the playhead position
             if(!wickEditor.project.getCurrentFrame()) {
                 wickEditor.actionHandler.doAction('addNewFrame');
@@ -201,6 +203,7 @@ var WickActionHandler = function (wickEditor) {
             args.wickObjects.forEach(function (wickObj) {
                 wickObj.zIndicesDirty = true;
                 wickEditor.project.addObject(wickObj);
+                wickEditor.project.selectObject(wickObj)
             });
             
             done();
@@ -659,20 +662,18 @@ var WickActionHandler = function (wickEditor) {
                     args.obj.currentLayer = args.obj.layers.indexOf(args.newLayer)
                 }
 
-                wickEditor.syncInterfaces();
-
                 done();
             }
 
-            var currentFrame = wickEditor.project.getCurrentFrame();
-            if(!currentFrame) {
+            //var currentFrame = wickEditor.project.getCurrentFrame();
+            //if(!currentFrame) {
                 proceed();
-            } else {
-                wickEditor.fabric.projectRenderer.getCanvasThumbnail(function (thumbnail) { 
-                    currentFrame.thumbnail = thumbnail;
-                    proceed();
-                });
-            }
+            //} else {
+            //    wickEditor.fabric.projectRenderer.getCanvasThumbnail(function (thumbnail) { 
+            //        currentFrame.thumbnail = thumbnail;
+            //        proceed();
+            //    });
+            //}
             
         },
         function (args) {
@@ -751,7 +752,11 @@ var WickActionHandler = function (wickEditor) {
             }
             for(var i = 0; i < args.objs.length; i++) {
                 var obj = args.objs[i]
+                var frame = wickEditor.project.getCurrentFrame();
+                var oldZIndex = frame.wickObjects.indexOf(obj)
+                var newIndex = args.newIndex;
                 obj.zIndicesDirty = true;
+
                 wickEditor.project.getCurrentFrame().wickObjects.splice(args.oldZIndexes[i], 1);
                 wickEditor.project.getCurrentFrame().wickObjects.splice(args.newZIndex, 0, obj);
             }

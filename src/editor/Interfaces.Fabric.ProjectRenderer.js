@@ -44,12 +44,12 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
 
             //var object = fabric.util.object.clone(group);
             var oldZoom = canvas.getZoom();
-            canvas.setZoom(1)
+            //canvas.setZoom(1)
             //canvas.renderAll();
             group.setCoords();
 
             group.cloneAsImage(function (img) {
-                canvas.setZoom(oldZoom)
+                //canvas.setZoom(oldZoom)
                 canvas.renderAll();
                 group.setCoords();
 

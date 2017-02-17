@@ -197,7 +197,7 @@ var RightClickMenuInterface = function (wickEditor) {
                     wickEditor.guiActionHandler.doAction('deleteSelectedObjects');
                 }),
             ], function () {
-                return wickEditor.project.selection.length >= 1;
+                return wickEditor.project.getNumSelectedObjects() >= 1;
             }),
 
             // Single symbol selected options
@@ -212,7 +212,7 @@ var RightClickMenuInterface = function (wickEditor) {
                     wickEditor.guiActionHandler.doAction("breakApart")
                 })
             ], function () {
-                return wickEditor.project.selection.length === 1 && wickEditor.project.getSelectedObjects()[0].isSymbol;
+                return wickEditor.project.getNumSelectedObjects() === 1 && wickEditor.project.getSelectedObjects()[0].isSymbol;
             })
         ]);
 

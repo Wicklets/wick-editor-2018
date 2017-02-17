@@ -1,3 +1,9 @@
+// implementation todo:
+// - move multiple frames
+// - scrollbars/panning
+// - zooming
+// - move layers
+
 var TimelineInterface = function (wickEditor) {
 
     var self = this;
@@ -125,7 +131,7 @@ var TimelineInterface = function (wickEditor) {
             }
 
             var frameDivs = document.getElementsByClassName('frame')
-            wickEditor.project.selection = [];
+            wickEditor.project.clearSelection();
             for(var i = 0; i < frameDivs.length; i ++) {
                 var frameDiv = frameDivs[i]
 
@@ -144,8 +150,7 @@ var TimelineInterface = function (wickEditor) {
                 }
 
                 if(intersectRect(frameRect, selectionBoxRect)) {
-                    var uuid = frameDiv.wickData.uuid;
-                    wickEditor.project.selection.push(uuid);
+                    wickEditor.project.selectObject(frameDiv.wickData.wickFrame);
                 } 
             }
             updateFrameDivs();
@@ -197,7 +202,7 @@ var TimelineInterface = function (wickEditor) {
             var selectionOverlayDiv = frameDivs[i].getElementsByClassName('selection-overlay')[0];
             var thumbnailDiv = frameDivs[i].getElementsByClassName('frame-thumbnail')[0];
 
-            var wickFrame = wickEditor.project.getFrameByUUID(frameDivs[i].wickData.uuid);
+            var wickFrame = frameDivs[i].wickData.wickFrame;
 
             var src = wickFrame.thumbnail;
             if(src) {
@@ -296,7 +301,7 @@ var TimelineInterface = function (wickEditor) {
             layers.innerHTML = "";
 
             frames.addEventListener('mousedown', function (e) {
-                wickEditor.project.selection = [];
+                wickEditor.project.clearSelection();
                 updateFrameDivs()
             });
 
@@ -348,7 +353,7 @@ var TimelineInterface = function (wickEditor) {
                     newFrameDiv.style.top = (wickLayers.indexOf(wickLayer) * frameSpacingY) + 'px';
                     newFrameDiv.style.width = (wickFrame.length * frameSpacingX - cssVar('--common-padding')/2) + 'px';
                     newFrameDiv.style.height = cssVar('--vertical-spacing')-cssVar('--common-padding')+'px'
-                    newFrameDiv.wickData = {uuid:wickFrame.uuid};
+                    newFrameDiv.wickData = {wickFrame:wickFrame};
                     newFrameDiv.addEventListener('mousedown', function (e) {
                         wickEditor.actionHandler.doAction('movePlayhead', {
                             obj: wickEditor.project.currentObject,
@@ -356,7 +361,8 @@ var TimelineInterface = function (wickEditor) {
                             newLayer: wickFrame.parentLayer
                         });
                         startInteraction("dragFrame", e, {frameDiv:newFrameDiv, wickFrame:wickFrame});
-                        wickEditor.project.selection = [wickFrame.uuid];
+                        wickEditor.project.clearSelection();
+                        wickEditor.project.selectObject(wickFrame)
                         updateFrameDivs()
                         e.stopPropagation();
                     });

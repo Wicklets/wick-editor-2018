@@ -619,8 +619,8 @@ var GuiActionHandler = function (wickEditor) {
         {},
         function(args) {
             wickEditor.actionHandler.doAction('moveObjectToZIndex', {
-                objs:wickEditor.fabric.getSelectedObjects(WickObject),
-                newZIndex: wickEditor.project.getCurrentFrame().wickObjects.length
+                objs:wickEditor.project.getSelectedObjects(),
+                newZIndex: wickEditor.project.getCurrentFrame().wickObjects.length-1
             });
             wickEditor.fabric.deselectAll();
         });
@@ -631,7 +631,7 @@ var GuiActionHandler = function (wickEditor) {
         {},
         function(args) {
             wickEditor.actionHandler.doAction('moveObjectToZIndex', {
-                objs:wickEditor.fabric.getSelectedObjects(WickObject),
+                objs:wickEditor.project.getSelectedObjects(),
                 newZIndex: 0
             });
             wickEditor.fabric.deselectAll();
