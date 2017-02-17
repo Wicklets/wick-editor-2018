@@ -30,6 +30,7 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
             });
             //for(var i = selectedObjs.length-1; i >= 0; i--) {
             for(var i = 0; i < selectedObjs.length; i++) {
+                console.log(selectedObjs[i])
                 //group.canvas = canvas // WHAT ??????????????? WHY
                 var clone = fabric.util.object.clone(selectedObjs[i]);
                 group.addWithUpdate(clone);
@@ -70,17 +71,13 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
     }
 
     self.getCanvasThumbnail = function (callback) {
-        self.getCanvasAsImage(function (imageObj) {
+        /*self.getCanvasAsImage(function (imageObj) {
             if(!imageObj) {
                 callback(null);
                 return
             }
 
             var thumbCanvas = document.createElement('canvas');
-            /*thumbCanvas.style.position = 'absolute'
-            thumbCanvas.style.left = '0px'
-            thumbCanvas.style.top = '0px'
-            document.getElementById('editor').appendChild(thumbCanvas)*/
             thumbCanvas.width = wickEditor.project.width/10;
             thumbCanvas.height = wickEditor.project.height/10;
 
@@ -98,7 +95,39 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
                 callback(thumbCanvas.toDataURL())
             }
             image.src = imageObj.src;
+        });*/
+
+        var selectedObjs = [];
+        canvas.forEachObject(function(fabricObj) {
+            if(fabricObj.wickObjectRef && !fabricObj.isWickGUIElement && fabricObj.wickObjectRef.isOnActiveLayer()) {
+                //fabricObj.set('active', true);
+                selectedObjs.push(fabricObj);
+            }
         });
+
+        var thumbnailResizeFactor = 10.0;
+
+        var thumbCanvas = document.createElement('canvas');
+        thumbCanvas.width = wickEditor.project.width/thumbnailResizeFactor;
+        thumbCanvas.height = wickEditor.project.height/thumbnailResizeFactor;
+
+        var thumbCtx = thumbCanvas.getContext('2d');
+        thumbCtx.clearRect(0,0,thumbCanvas.width,thumbCanvas.height);
+        if(!wickEditor.project.transparent) {
+            thumbCtx.rect(0, 0, thumbCanvas.width,thumbCanvas.height);
+            thumbCtx.fillStyle = wickEditor.project.backgroundColor;
+            thumbCtx.fill();
+        }
+
+        selectedObjs.forEach(function (fabricObj) {
+            thumbCtx.drawImage(
+                fabricObj._element, 
+                fabricObj.left/thumbnailResizeFactor, fabricObj.top/thumbnailResizeFactor, 
+                fabricObj.width/thumbnailResizeFactor, fabricObj.height/thumbnailResizeFactor
+            );
+        });
+
+        callback(thumbCanvas.toDataURL());
     }
 
     self.renderProjectAsGIF = function (callback) {

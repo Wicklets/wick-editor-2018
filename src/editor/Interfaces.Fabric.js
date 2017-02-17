@@ -304,7 +304,7 @@ var FabricInterface = function (wickEditor) {
         this.canvas.forEachObject(function (o) {
             if(o.wickObjectRef && o.selectable) {
                 objs.push(o.wickObjectRef);
-                wickEditor.project.selectObject(o.wickObjectRef.uuid)
+                wickEditor.project.selectObject(o.wickObjectRef)
             }
         });
         this.selectObjects(objs);

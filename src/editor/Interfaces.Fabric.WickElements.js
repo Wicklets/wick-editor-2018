@@ -67,6 +67,20 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             //stopTiming('refreshZIndices')
         }
 
+        var finish = function () {
+            // Reselect objects that were selected before sync
+            var selectedObjects = wickEditor.project.getSelectedObjects();
+            fabricInterface.selectObjects(selectedObjects);
+
+            // Render thumbnail
+            var currentFrame = wickEditor.project.getCurrentFrame();
+            if(currentFrame) {
+                wickEditor.fabric.projectRenderer.getCanvasThumbnail(function (thumbnail) { 
+                    wickEditor.project.getCurrentFrame().thumbnail = thumbnail;
+                });
+            }
+        }
+
         if(enablePerfTests) stopTiming("object list generation");
 
         // Remove objects that don't exist anymore or need to be regenerated
@@ -162,17 +176,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                     if(onNewFrame) refreshZIndices(true);
                     fabricInterface.canvas.renderAll()
 
-                    // Reselect objects that were selected before sync
-                    var selectedObjects = wickEditor.project.getSelectedObjects();
-                    fabricInterface.selectObjects(selectedObjects);
-
-                    // Render thumbnail
-                    var currentFrame = wickEditor.project.getCurrentFrame();
-                    if(currentFrame) {
-                        wickEditor.fabric.projectRenderer.getCanvasThumbnail(function (thumbnail) { 
-                            wickEditor.project.getCurrentFrame().thumbnail = thumbnail;
-                        });
-                    }
+                    finish();
 
                 }
             });
@@ -182,9 +186,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             //console.log("no objectsToAdd, unforced zindex update");
             refreshZIndices(false);
 
-            // Reselect objects that were selected before sync
-            var selectedObjects = wickEditor.project.getSelectedObjects();
-            fabricInterface.selectObjects(selectedObjects);
+            finish();
         }
 
         if(enablePerfTests) stopTiming("add & update objects");

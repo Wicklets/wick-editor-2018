@@ -454,11 +454,9 @@ WickProject.prototype.getNumSelectedObjects = function (obj) {
 }
 
 WickProject.prototype.selectObject = function (obj) {
-    console.log(obj.uuid)
     this._selection.push(obj.uuid);
 }
 
 WickProject.prototype.clearSelection = function () {
-    console.error("selection cleared!")
     this._selection = [];
 }
