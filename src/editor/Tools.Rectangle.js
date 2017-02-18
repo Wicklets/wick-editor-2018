@@ -37,8 +37,13 @@ Tools.Rectangle = function (wickEditor) {
         var svgString = '<svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>';
 
         drawingShape.remove()
+        
+        var pathWickObject = WickObject.fromPathFile(svgString);
+        pathWickObject.x = origX;
+        pathWickObject.y = origY;
+
         wickEditor.actionHandler.doAction('addObjects', {
-            paths: [{svg:svgString, x:origX, y:origY}]
+            wickObjects: [pathWickObject]
         });
     }
 

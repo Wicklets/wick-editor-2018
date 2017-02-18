@@ -19,9 +19,10 @@ var FabricInterface = function (wickEditor) {
         this.canvas.setWidth(window.innerWidth);
         this.canvas.setHeight(window.innerHeight);
 
-        /* This is disabled because it made zooming really slow and also 
-           caused some rendering problems with the centerpoints of symbols */
-        fabric.Object.prototype.objectCaching = false;
+        /* Setting objectCaching to false fixes some rendering problems with
+           symbol centerpoints and speeds up zooming by a lot */
+        /* Currently set to true because it makes moving between frames much faster...  */
+        fabric.Object.prototype.objectCaching = true;
 
         this.panning = false;
         this.onionSkinsDirty = false;
@@ -157,8 +158,8 @@ var FabricInterface = function (wickEditor) {
     }
 
     this.recenterCanvas = function () {
-        var centerX = Math.floor(-(window.innerWidth -wickEditor.project.width)/2 + 251/2);
-        var centerY = Math.floor(-(window.innerHeight-wickEditor.project.height)/2 - 113/2);
+        var centerX = Math.floor(-(window.innerWidth -wickEditor.project.width)/2 - 33/2 + 254/2);
+        var centerY = Math.floor(-(window.innerHeight-wickEditor.project.height)/2 - 116/2);
 
         self.canvas.setZoom(1);
         self.canvas.absolutePan(new fabric.Point(centerX,centerY));

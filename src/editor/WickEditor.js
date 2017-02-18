@@ -29,7 +29,7 @@ var WickEditor = function () {
     this.rightclickmenu = registerInterface(new RightClickMenuInterface(this));
     this.scriptingide = registerInterface(new ScriptingIDEInterface(this));
     this.timeline = registerInterface(new TimelineInterface(this));
-    //this.toolbar = registerInterface(new ToolbarInterface(this));
+    this.toolbar = registerInterface(new ToolbarInterface(this));
     this.statusbar = registerInterface(new StatusBarInterface(this));
     this.properties = registerInterface(new PropertiesInterface(this));
     this.paper = registerInterface(new PaperInterface(this));
@@ -39,12 +39,12 @@ var WickEditor = function () {
     // Load all tools
     this.tools = {
         "cursor"           : new Tools.Cursor(this),
-        //"paintbrush"       : new Tools.Paintbrush(this),
+        "paintbrush"       : new Tools.Paintbrush(this),
         //"eraser"           : new Tools.Eraser(this),
         //"fillbucket"       : new Tools.FillBucket(this),
-        //"rectangle"        : new Tools.Rectangle(this),
-        //"ellipse"          : new Tools.Ellipse(this),
-        //"dropper"          : new Tools.Dropper(this),
+        "rectangle"        : new Tools.Rectangle(this),
+        "ellipse"          : new Tools.Ellipse(this),
+        "dropper"          : new Tools.Dropper(this),
         "text"             : new Tools.Text(this),
         "zoom"             : new Tools.Zoom(this),
         "pan"              : new Tools.Pan(this),

@@ -190,8 +190,6 @@ WickObject.createSymbolFromWickObjects = function (wickObjects) {
         bottomRight.x = Math.max(bottomRight.x, wickObj.x + wickObj.width /2);
         bottomRight.y = Math.max(bottomRight.y, wickObj.y + wickObj.height/2);
     });
-    console.log(topLeft)
-    console.log(bottomRight)
 
     var center = {
         x: topLeft.x + (bottomRight.x - topLeft.x)/2,

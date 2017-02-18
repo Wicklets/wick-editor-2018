@@ -61,7 +61,7 @@ var ToolbarInterface = function (wickEditor) {
         };
 
         /* Update drawing tool options elems */
-        /*lineWidthEl.value = wickEditor.tools['paintbrush'].brushSize;
+        lineWidthEl.value = wickEditor.tools['paintbrush'].brushSize;
 
         if(lineColorEl.jscolor) lineColorEl.jscolor.fromString(wickEditor.tools['paintbrush'].color);
         
@@ -85,7 +85,7 @@ var ToolbarInterface = function (wickEditor) {
         brushCtx.beginPath();
         brushCtx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
         brushCtx.fillStyle = wickEditor.tools.paintbrush.color;
-        brushCtx.fill();*/
+        brushCtx.fill();
     }
 
     var lineWidthEl = document.getElementById('lineWidth');
