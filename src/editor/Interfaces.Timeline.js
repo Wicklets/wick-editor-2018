@@ -3,6 +3,9 @@
 // - scrollbars/panning
 // - zooming
 // - move layers
+// - delete layers
+// - copy/paste frames
+// - add frames
 
 var TimelineInterface = function (wickEditor) {
 
@@ -68,7 +71,7 @@ var TimelineInterface = function (wickEditor) {
             var framesContainerLeft = frames.getBoundingClientRect().left;
             var mouseLeft = e.x;
 
-            var newWidth = mouseLeft - frameDivLeft - framesContainerLeft + cssVar('--frame-width')*2 + 6;
+            var newWidth = mouseLeft - frameDivLeft - framesContainerLeft + cssVar('--frame-width')*2 + 6 - cssVar('--frame-width')/2;
             newWidth = roundToNearestN(newWidth, cssVar('--frame-width'));
             interactionData.frameDiv.style.width = + newWidth + 'px';
         }),
@@ -259,17 +262,22 @@ var TimelineInterface = function (wickEditor) {
         playhead = document.createElement('div');
         playhead.className = 'playhead';
 
-        addFrameOverlay = document.createElement('img');
+        addFrameOverlay = document.createElement('div');
         addFrameOverlay.className = 'addFrameOverlay';
         addFrameOverlay.style.display = 'none';
-        addFrameOverlay.src = 'http://iconshow.me/media/images/Mixed/Free-Flat-UI-Icons/png/512/plus-24-512.png';
         addFrameOverlay.addEventListener('mousedown', function (e) {
-            wickEditor.actionHandler.doAction('addNewFrame', {});
+            var newFrame = new WickFrame();
+            newFrame.playheadPosition = Math.round((e.clientX - frames.getBoundingClientRect().left - cssVar('--frame-width')/2) / cssVar('--frame-width'))
+            wickEditor.actionHandler.doAction('addFrame', {frame:newFrame});
             addFrameOverlay.style.display = 'none';
         });
         addFrameOverlay.addEventListener('mouseout', function (e) {
             addFrameOverlay.style.display = 'none';
         });
+        var addFrameOverlayImg = document.createElement('img');
+        addFrameOverlayImg.className = 'addFrameOverlayImg';
+        addFrameOverlayImg.src = 'http://iconshow.me/media/images/Mixed/Free-Flat-UI-Icons/png/512/plus-24-512.png';
+        addFrameOverlay.appendChild(addFrameOverlayImg);
         frames.appendChild(addFrameOverlay);
 
         selectionBox = document.createElement('div');
@@ -325,11 +333,15 @@ var TimelineInterface = function (wickEditor) {
                 framesStrip.className = 'framesStrip';
                 framesStrip.style.top = (wickLayers.indexOf(wickLayer) * frameSpacingY) + 'px';
                 framesStrip.addEventListener('mousemove', function (e) {
+                    var px = Math.round((e.clientX - frames.getBoundingClientRect().left - cssVar('--frame-width')/2)      / cssVar('--frame-width'))
+                    var py = Math.round((e.clientY - frames.getBoundingClientRect().top  - cssVar('--vertical-spacing')/2) / cssVar('--vertical-spacing'))
+
                     if(currentInteraction) return;
-                    /*addFrameOverlay.style.display = 'block';
+                    if(wickEditor.project.getCurrentObject().layers[py].getFrameAtPlayheadPosition(px)) return;
+                    
+                    addFrameOverlay.style.display = 'block';
                     addFrameOverlay.style.left = roundToNearestN(e.clientX - frames.getBoundingClientRect().left - frameSpacingX/2, frameSpacingX) + "px";
                     addFrameOverlay.style.top  = roundToNearestN(e.clientY - frames.getBoundingClientRect().top  - frameSpacingY/2, frameSpacingY) + "px";
-                    console.error('check for existing frame here')*/
                 });
                 framesStrip.addEventListener('mousedown', function (e) {
                     wickEditor.actionHandler.doAction('movePlayhead', {

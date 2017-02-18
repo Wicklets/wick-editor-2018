@@ -120,6 +120,7 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
         }
 
         selectedObjs.forEach(function (fabricObj) {
+            if(!fabricObj._element) return;
             thumbCtx.drawImage(
                 fabricObj._element, 
                 fabricObj.left/thumbnailResizeFactor, fabricObj.top/thumbnailResizeFactor, 

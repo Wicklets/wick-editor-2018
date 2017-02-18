@@ -157,8 +157,8 @@ var FabricInterface = function (wickEditor) {
     }
 
     this.recenterCanvas = function () {
-        var centerX = Math.floor(-(window.innerWidth -wickEditor.project.width)/2 - 33/2 + 254/2);
-        var centerY = Math.floor(-(window.innerHeight-wickEditor.project.height)/2 - 116/2);
+        var centerX = Math.floor(-(window.innerWidth -wickEditor.project.width)/2 + 251/2);
+        var centerY = Math.floor(-(window.innerHeight-wickEditor.project.height)/2 - 113/2);
 
         self.canvas.setZoom(1);
         self.canvas.absolutePan(new fabric.Point(centerX,centerY));

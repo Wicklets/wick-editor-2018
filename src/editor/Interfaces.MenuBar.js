@@ -97,9 +97,7 @@ var MenuBarInterface = function (wickEditor) {
                 wickEditor.guiActionHandler.doAction("runProject");
             }),
             new TabSpacer(),
-            /*new TabButton('Export as webpage', function () {
-                wickEditor.guiActionHandler.doAction("exportProject");
-            }),*/
+
             new TabButton('Export as zip', function () {
                 wickEditor.guiActionHandler.doAction("exportProjectZIP");
             }),
@@ -119,6 +117,7 @@ var MenuBarInterface = function (wickEditor) {
                 wickEditor.guiActionHandler.doAction("redo")
             }),
             new TabSpacer(),
+
             new TabButton('Copy', function () {
                 wickEditor.guiActionHandler.doAction("copy")
             }),
@@ -133,45 +132,14 @@ var MenuBarInterface = function (wickEditor) {
             }),
         ]);
 
-        /*addTab('Selection', [
-            new TabButton('Flip horizontally', function () {
-                wickEditor.guiActionHandler.doAction("flipHorizontally")
-            }),
-            new TabButton('Flip vertically', function () {
-                wickEditor.guiActionHandler.doAction("flipVertically")
-            }),
-            new TabButton('Bring to Front', function () {
-                wickEditor.guiActionHandler.doAction("bringToFront")
-            }),
-            new TabButton('Send to Back', function () {
-                wickEditor.guiActionHandler.doAction("sendToBack")
-            }),
-            new TabSpacer(),
-            new TabButton('Convert to Symbol', function () {
-                wickEditor.guiActionHandler.doAction("convertToSymbol")
-            }),
-            new TabButton('Break apart', function () {
-                wickEditor.guiActionHandler.doAction("breakApart")
-            }),
-            new TabSpacer(),
-            new TabButton('Edit Scripts', function () {
-                wickEditor.guiActionHandler.doAction("editScripts")
-            }),
-            new TabSpacer(),
-            new TabButton('Export', function () {
-                wickEditor.guiActionHandler.doAction("downloadObject")
-            }),
-        ]);*/
-
-        addTab('Import', [
+        addTab('Add', [
             new TabButton('File', function () {
                 wickEditor.guiActionHandler.doAction("openFile");
             }),
+            new TabButton('Text', function () {
+                wickEditor.guiActionHandler.doAction("addNewText");
+            }),
         ]);
-
-        /*addTab('Run', [], function () {
-            wickEditor.guiActionHandler.doAction("runProject");
-        });*/
 
         addTab('About', [
             new TabButton('Wickeditor.com', function () {

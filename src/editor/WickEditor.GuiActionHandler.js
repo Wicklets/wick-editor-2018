@@ -876,4 +876,16 @@ var GuiActionHandler = function (wickEditor) {
             console.error("removeKeyframeButton action NYI")
         });
 
+    registerAction('addNewText',
+        [],
+        [],
+        {},
+        function (args) {
+            var newWickObject = WickObject.fromText('Click to edit text');
+            newWickObject.x = wickEditor.project.width/2;
+            newWickObject.y = wickEditor.project.height/2;
+            newWickObject.fontData.fill = '#000000';
+            wickEditor.actionHandler.doAction('addObjects', {wickObjects:[newWickObject]});
+        });
+
 }

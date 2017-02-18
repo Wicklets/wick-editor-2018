@@ -21,7 +21,7 @@ var WickProject = function () {
     this.backgroundColor = "#FFFFFF";
     this.transparent = false;
 
-    this.pixelPerfectRendering = false;
+    this.pixelPerfectRendering = true;
 
     this.framerate = 12;
 

@@ -38,7 +38,7 @@ body {
 }
 
 .layers {
-	background-color: #F2F2F2;
+	background-color: #FFF;
 
 	width: var(--layers-width);
 	height: 100%;
@@ -69,7 +69,7 @@ body {
 }
 
 .frames {
-	background-color: #F2F2F2;
+	background-color: #FFF;
 
 	width: calc(100% - var(--layers-width));
 	height: 100%;
@@ -83,7 +83,7 @@ body {
 }
 
 .framesStrip {
-	background-color: #FFFFFF;
+	background-color: #FFF;
 
 	width: 100%;
 	height: calc(var(--vertical-spacing) - var(--frames-strip-shrink-factor)*2);
@@ -100,7 +100,7 @@ body {
 }
 
 .framesStripCell {
-	background-color: #FFFFFF;
+	background-color: #FFF;
 
 	width: var(--frame-width);
 	height: calc(var(--vertical-spacing) - var(--frames-strip-shrink-factor)*2);
@@ -158,9 +158,9 @@ body {
 	height: 100%;
 	position: absolute;
 	pointer-events: none;
-	box-shadow: inset 0px 0px 0px 2px orange;
-	background-color: yellow;
-	opacity: 0.5;
+	box-shadow: inset 0px 0px 0px 2px cyan;
+	background-color: cyan;
+	opacity: 0.1;
 	left: 0px;
 	top:0px;
 
@@ -171,6 +171,15 @@ body {
 	height: var(--vertical-spacing);
 	position: absolute;
 	cursor: pointer;
+}
+
+.addFrameOverlayImg {
+	width: 10px;
+	height: 10px;
+	left: calc(50% - 5px);
+	top: calc(50% - 5px);
+	position: absolute;
+	pointer-events: none;
 }
 
 .selectionBox {
