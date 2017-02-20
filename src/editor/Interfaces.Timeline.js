@@ -1,11 +1,14 @@
 // implementation todo:
-// - move multiple frames
-// - panning
-// - zooming
+
+//1
 // - move layers
 // - delete layers
+// - panning
+
+//2
+// - zooming
+// - move multiple frames
 // - copy/paste frames
-// - add frames
 
 var TimelineInterface = function (wickEditor) {
 
@@ -71,7 +74,7 @@ var TimelineInterface = function (wickEditor) {
             var mouseLeft = e.x;
 
             var newWidth = mouseLeft - frameDivLeft;
-            newWidth = roundToNearestN(newWidth, cssVar('--frame-width'));
+            //newWidth = roundToNearestN(newWidth, cssVar('--frame-width'));
             interactionData.frameDiv.style.width = + newWidth + 'px';
         }),
         'finish' : (function (e) {

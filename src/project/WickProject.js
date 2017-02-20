@@ -145,7 +145,7 @@ WickProject.fromJSON = function (rawJSONProject) {
 // Backwards compatibility for old Wick projects
 WickProject.fixForBackwardsCompatibility = function (project) {
     // WickProject.resolution was replaced with project.width and project.height
-    if(!project._selection) project._selection = [];
+    project._selection = [];
     if(!project.width) project.width = project.resolution.x;
     if(!project.height) project.height = project.resolution.y;
     if(!project.transparent) project.transparent = false;
@@ -189,6 +189,11 @@ WickProject.fixForBackwardsCompatibility = function (project) {
                 if(frame.frameLength) {
                     frame.length = frame.frameLength;
                     frame.frameLength = null;
+                }
+
+                // Frames store where they are on the timeline
+                if(!frame.playheadPosition) {
+                    frame.playheadPosition = layer.frames.indexOf(frame)
                 }
 
                 // Frames now have SVG path data
