@@ -95,7 +95,9 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
         thumbCtx.scale(1/thumbnailResizeFactor, 1/thumbnailResizeFactor);
 
         objs.forEach(function (fabricObj) {
-            if(fabricObj._cacheCanvas && !fabricObj.thumbnailGenImg) {
+            if(fabricObj._element) {
+                fabricObj.thumbnailGenImg = fabricObj._element
+            } else if(fabricObj._cacheCanvas && !fabricObj.thumbnailGenImg) {
                 fabricObj.thumbnailGenImg = new Image();
                 fabricObj.thumbnailGenImg.src = fabricObj._cacheCanvas.toDataURL()
             }
@@ -109,7 +111,7 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
             );
         });
 
-        callback(thumbCanvas.toDataURL('image/jpeg', 0.1));
+        callback(thumbCanvas.toDataURL('image/jpeg', 0.5));
     }
 
     self.renderProjectAsGIF = function (callback) {
