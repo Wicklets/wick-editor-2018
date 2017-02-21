@@ -99,6 +99,16 @@ var WickActionHandler = function (wickEditor) {
         wickEditor.fabric.canvas.renderAll();
     }
 
+    // scrap function, 
+    var scrap = function () {
+        actionBeingDone = false;
+
+        self.undoAction();
+        redoStack.pop();
+
+        done();
+    }
+
 // API
 
     this.doAction = function (actionName, args) {
@@ -494,7 +504,9 @@ var WickActionHandler = function (wickEditor) {
             var currentObject = wickEditor.project.currentObject;
 
             // Add an empty frame
-            currentObject.addLayer(new WickLayer());
+            var newLayer = new WickLayer();
+            newLayer.frames = [];
+            currentObject.addLayer(newLayer);
 
             // Go to last added layer
             currentObject.currentLayer = currentObject.layers.length-1;
@@ -541,40 +553,19 @@ var WickActionHandler = function (wickEditor) {
             done();
         });
 
-    registerAction('moveLayerUp',
+    registerAction('moveLayer',
         function (args) {
-            var currentObject = wickEditor.project.currentObject;
-            if(currentObject.currentLayer === 0) return;
-            currentObject.layers.move(currentObject.currentLayer, currentObject.currentLayer-1);
+            args.oldIndex = wickEditor.project.currentObject.layers.indexOf(args.layer);
+            wickEditor.project.currentObject.layers.move(args.oldIndex, args.newIndex);
+            wickEditor.project.currentObject.currentLayer = args.newIndex;
 
-            currentObject.framesDirty = true;
+            wickEditor.project.currentObject.framesDirty = true;
 
             done();
         },
         function (args) {
-            var currentObject = wickEditor.project.currentObject;
-            if(currentObject.currentLayer === currentObject.layers.length-1) return;
-            currentObject.layers.move(currentObject.currentLayer, currentObject.currentLayer+1);
-
-            currentObject.framesDirty = true;
-
-            done();
-        });
-
-    registerAction('moveLayerDown',
-        function (args) {
-            var currentObject = wickEditor.project.currentObject;
-            if(currentObject.currentLayer === currentObject.layers.length-1) return;
-            currentObject.layers.move(currentObject.currentLayer, currentObject.currentLayer+1);
-
-            currentObject.framesDirty = true;
-
-            done();
-        },
-        function (args) {
-            var currentObject = wickEditor.project.currentObject;
-            if(currentObject.currentLayer === 0) return;
-            currentObject.layers.move(currentObject.currentLayer, currentObject.currentLayer-1);
+            wickEditor.project.currentObject.layers.move(args.newIndex, args.oldIndex);
+            wickEditor.project.currentObject.currentLayer = args.oldIndex;
 
             currentObject.framesDirty = true;
 
@@ -584,7 +575,21 @@ var WickActionHandler = function (wickEditor) {
     registerAction('moveFrame',
         function (args) {
             args.oldPlayheadPosition = args.frame.playheadPosition;
+            args.oldLayer = args.frame.parentLayer;
+
             args.frame.playheadPosition = args.newPlayheadPosition;
+            args.oldLayer.removeFrame(args.frame);
+            args.newLayer.addFrame(args.frame);
+
+            var touching = false;
+            args.newLayer.frames.forEach(function (frame) {
+                if(frame!==args.frame && frame.touchesFrame(args.frame)) {
+                    touching = true;
+                }
+            });
+            if(touching) {
+                scrap();
+            }
 
             wickEditor.actionHandler.doAction('movePlayhead', {
                 obj: wickEditor.project.currentObject,
@@ -598,33 +603,10 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             args.frame.playheadPosition = args.oldPlayheadPosition;
 
+            args.newLayer.removeFrame(args.frame);
+            args.oldLayer.addFrame(args.frame);
             
-            
             wickEditor.project.currentObject.framesDirty = true;
-            done();
-        });
-
-    registerAction('extendFrame',
-        function (args) {
-            args.frame.extend(args.nFramesToExtendBy);
-            wickEditor.project.currentObject.framesDirty = true;
-            done();
-        },
-        function (args) {
-            args.frame.shrink(args.nFramesToExtendBy);
-            wickEditor.project.currentObject.framesDirty = true;
-            done();
-        });
-
-    registerAction('shrinkFrame',
-        function (args) {
-            args.frame.shrink(args.nFramesToShrinkBy);
-            currentObject.framesDirty = true;
-            done();
-        },
-        function (args) {
-            args.frame.extend(args.nFramesToShrinkBy);
-            currentObject.framesDirty = true;
             done();
         });
 
@@ -632,6 +614,17 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             args.oldFrameLength = args.frame.length;
             args.frame.length = args.newFrameLength;
+
+            var touching = false;
+            wickEditor.project.getCurrentLayer().frames.forEach(function (frame) {
+                if(frame!==args.frame && frame.touchesFrame(args.frame)) {
+                    touching = true;
+                }
+            });
+            if(touching) {
+                scrap();
+            }
+
             wickEditor.project.currentObject.framesDirty = true;
             done();
         },

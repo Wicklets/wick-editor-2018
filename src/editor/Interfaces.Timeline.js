@@ -1,15 +1,3 @@
-// implementation todo:
-
-//1
-// - move layers
-// - delete layers
-// - panning
-
-//2
-// - zooming
-// - move multiple frames
-// - copy/paste frames
-
 var TimelineInterface = function (wickEditor) {
 
     var self = this;
@@ -58,9 +46,14 @@ var TimelineInterface = function (wickEditor) {
         }),
         'finish' : (function (e) {
             var newPlayheadPosition = Math.round(parseInt(interactionData.frameDiv.style.left) / cssVar('--frame-width'));
+            var newLayerIndex = Math.round(parseInt(interactionData.frameDiv.style.top) / cssVar('--vertical-spacing'));
+            var newLayer = wickEditor.project.getCurrentObject().layers[newLayerIndex];
+            if(!newLayer) newLayer = wickEditor.project.getCurrentLayer();
+
             wickEditor.actionHandler.doAction('moveFrame', {
                 frame: interactionData.wickFrame, 
-                newPlayheadPosition: newPlayheadPosition
+                newPlayheadPosition: newPlayheadPosition,
+                newLayer: newLayer
             });
         })
     }
@@ -173,9 +166,13 @@ var TimelineInterface = function (wickEditor) {
             });
         }),
         'finish' : (function (e) {
-            wickEditor.actionHandler.doAction('extendFrame', {
-                frame: wickEditor.project.getCurrentFrame(), 
-                nFramesToExtendBy: 0
+            var newIndex = Math.round(parseInt(interactionData.allLayerDivs[0].style.top) / cssVar('--vertical-spacing'));
+            newIndex = Math.max(newIndex, 0);
+            newIndex = Math.min(newIndex, wickEditor.project.currentObject.layers.length-1);
+
+            wickEditor.actionHandler.doAction('moveLayer', {
+                layer: interactionData.wickLayer, 
+                newIndex: newIndex
             });
         })
     }
@@ -414,7 +411,7 @@ var TimelineInterface = function (wickEditor) {
                         obj: wickEditor.project.currentObject,
                         newLayer: wickLayer
                     });
-                    startInteraction('dragLayer', e, {allLayerDivs:allLayerDivs});
+                    startInteraction('dragLayer', e, {allLayerDivs:allLayerDivs,wickLayer:wickLayer});
                 });
             });
 

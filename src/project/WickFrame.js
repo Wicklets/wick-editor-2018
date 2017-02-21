@@ -76,6 +76,19 @@ WickFrame.prototype.remove = function () {
 	this.parentLayer.removeFrame(this);
 }
 
+WickFrame.prototype.touchesFrame = function (frame) {
+	var A = this;
+	var B = frame;
+
+	var AStart = A.playheadPosition;
+	var AEnd = A.playheadPosition + A.length;
+
+	var BStart = B.playheadPosition;
+	var BEnd = B.playheadPosition + B.length;
+
+	return !(BStart >= AEnd || BEnd <= AStart);
+}
+
 WickFrame.prototype.encodeStrings = function () {
 
 	if(this.wickScripts) {

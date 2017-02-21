@@ -100,3 +100,6 @@ WickLayer.prototype.getFramesAtPlayheadPosition = function(pos, args) {
 
     return frames;
 }
+
+
+
