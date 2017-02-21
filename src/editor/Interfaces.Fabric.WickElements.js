@@ -143,7 +143,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         var numObjectsAdded = 0;
         objectsToAdd.forEach(function (objectToAdd) {
             createFabricObjectFromWickObject(objectToAdd, function (fabricObj) {
-
+                
                 // The object may have been deleted while we were generating the fabric object. 
                 // Make sure we don't add it if that happened.
                 var newAllObjects = wickEditor.project.currentObject.getAllActiveChildObjects().concat(currentObject.getNearbyObjects(1,1));

@@ -71,37 +71,11 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
     }
 
     self.getCanvasThumbnail = function (callback) {
-        /*self.getCanvasAsImage(function (imageObj) {
-            if(!imageObj) {
-                callback(null);
-                return
-            }
-
-            var thumbCanvas = document.createElement('canvas');
-            thumbCanvas.width = wickEditor.project.width/10;
-            thumbCanvas.height = wickEditor.project.height/10;
-
-            var thumbCtx = thumbCanvas.getContext('2d');
-            thumbCtx.clearRect(0,0,thumbCanvas.width,thumbCanvas.height);
-            if(!wickEditor.project.transparent) {
-                thumbCtx.rect(0, 0, thumbCanvas.width,thumbCanvas.height);
-                thumbCtx.fillStyle = wickEditor.project.backgroundColor;
-                thumbCtx.fill();
-            }
-
-            var image = new Image();
-            image.onload = function () {
-                thumbCtx.drawImage(image, imageObj.x/10, imageObj.y/10, image.width/10, image.height/10);
-                callback(thumbCanvas.toDataURL())
-            }
-            image.src = imageObj.src;
-        });*/
-
-        var selectedObjs = [];
+        var objs = [];
         canvas.forEachObject(function(fabricObj) {
             if(fabricObj.wickObjectRef && !fabricObj.isWickGUIElement && fabricObj.wickObjectRef.isOnActiveLayer()) {
                 //fabricObj.set('active', true);
-                selectedObjs.push(fabricObj);
+                objs.push(fabricObj);
             }
         });
 
@@ -118,17 +92,24 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
             thumbCtx.fillStyle = wickEditor.project.backgroundColor;
             thumbCtx.fill();
         }
+        thumbCtx.scale(1/thumbnailResizeFactor, 1/thumbnailResizeFactor);
 
-        selectedObjs.forEach(function (fabricObj) {
-            if(!fabricObj._element) return;
+        objs.forEach(function (fabricObj) {
+            if(fabricObj._cacheCanvas && !fabricObj.thumbnailGenImg) {
+                fabricObj.thumbnailGenImg = new Image();
+                fabricObj.thumbnailGenImg.src = fabricObj._cacheCanvas.toDataURL()
+            }
+
             thumbCtx.drawImage(
-                fabricObj._element, 
-                fabricObj.left/thumbnailResizeFactor, fabricObj.top/thumbnailResizeFactor, 
-                fabricObj.width/thumbnailResizeFactor, fabricObj.height/thumbnailResizeFactor
+                fabricObj.thumbnailGenImg, 
+                fabricObj.left - fabricObj.width/2, 
+                fabricObj.top - fabricObj.height/2, 
+                fabricObj.width, 
+                fabricObj.height
             );
         });
 
-        callback(thumbCanvas.toDataURL());
+        callback(thumbCanvas.toDataURL('image/jpeg', 0.1));
     }
 
     self.renderProjectAsGIF = function (callback) {

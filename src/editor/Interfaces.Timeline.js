@@ -342,6 +342,7 @@ var TimelineInterface = function (wickEditor) {
             this.frames.forEach(function (frame) {
                 frame.update();
             });
+            this.playhead.update();
         }
     }
 
