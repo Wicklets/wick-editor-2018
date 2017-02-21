@@ -10,7 +10,7 @@ body {
 	--frame-handle-width: 5px;
 	--frames-strip-shrink-factor: 6px;
 
-	--shadow: 0px 0px 0px rgba(0, 0, 0, 0.1);
+	--shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
 	--border: inset 0px 0px 1px #555;
 }
 
@@ -37,7 +37,7 @@ body {
 	position: absolute;
 }
 
-.layers {
+.layers-container {
 	background-color: #EEE;
 
 	width: var(--layers-width);
@@ -63,12 +63,12 @@ body {
 
 	cursor: move;
 
-	box-shadow: var(--border), var(--shadow);
+	box-shadow: var(--border);
 
 	font-size: 12px;
 }
 
-.frames {
+.frames-container {
 	background-color: #EEE;
 
 	width: calc(100% - var(--layers-width));
@@ -82,7 +82,7 @@ body {
 	box-shadow: var(--border);
 }
 
-.framesStrip {
+.frames-strip {
 	background-color: #FFF;
 
 	width: 100%;
@@ -99,7 +99,7 @@ body {
 	/*pointer-events:none;*/
 }
 
-.framesStripCell {
+.frames-strip-cell {
 	background-color: #FFF;
 
 	width: var(--frame-width);
@@ -166,14 +166,14 @@ body {
 
 }
 
-.addFrameOverlay {
+.add-frame-overlay {
 	width: var(--frame-width); 
 	height: var(--vertical-spacing);
 	position: absolute;
 	cursor: pointer;
 }
 
-.addFrameOverlayImg {
+.add-frame-overlay-img {
 	width: 10px;
 	height: 10px;
 	left: calc(50% - 5px);
@@ -182,7 +182,7 @@ body {
 	pointer-events: none;
 }
 
-.selectionBox {
+.selection-box {
 	background-color: #CCC;
 	box-shadow: inset 0px 0px 1px #555;
 	opacity: 0.5;

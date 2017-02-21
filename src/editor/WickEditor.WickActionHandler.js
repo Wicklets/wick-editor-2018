@@ -191,6 +191,10 @@ var WickActionHandler = function (wickEditor) {
         console.log(undoStack)
     }
 
+    this.getHistoryLength =  function () {
+        return undoStack.length
+    }
+
 // Register all actions
 
     registerAction('addObjects',
@@ -614,7 +618,6 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             args.oldFrameLength = args.frame.length;
             args.frame.length = Math.max(1, args.newFrameLength);
-            console.log( args.frame.length)
 
             var touching = false;
             wickEditor.project.getCurrentLayer().frames.forEach(function (frame) {
