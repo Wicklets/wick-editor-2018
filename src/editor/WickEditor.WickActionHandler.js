@@ -613,7 +613,8 @@ var WickActionHandler = function (wickEditor) {
     registerAction('changeFrameLength',
         function (args) {
             args.oldFrameLength = args.frame.length;
-            args.frame.length = args.newFrameLength;
+            args.frame.length = Math.max(1, args.newFrameLength);
+            console.log( args.frame.length)
 
             var touching = false;
             wickEditor.project.getCurrentLayer().frames.forEach(function (frame) {
