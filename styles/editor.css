@@ -144,9 +144,10 @@ select {
 	height: 300px;
 }
 #errorMessage {
-	background-color: white;
-	color: red;
+	background-color: red;
+	color: black;
 	display:hidden;
+	position: absolute;
 }
 #scriptObjectDiv {
     width: 100%;
@@ -155,8 +156,12 @@ select {
 #scriptEditor {
 	text-align: left;
     width: 100%;
-    height: calc(100% - 50px);
+    height: calc(100% - 30px);
+    top:30px;
     font-size: 12px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #AAA;
 }
 
 #closeScriptingGUIButton {

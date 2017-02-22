@@ -65,6 +65,7 @@ var InputHandler = function (wickEditor) {
     var handleKeyEvent = function (event, eventType) {
 
         var keyChar = codeToKeyChar[event.keyCode];
+        if(keyChar === 'TAB') event.preventDefault()
         var keyDownEvent = eventType === 'keydown';
         if (modifierKeys.indexOf(keyChar) !== -1) {
             that.specialKeys["Modifier"] = keyDownEvent;

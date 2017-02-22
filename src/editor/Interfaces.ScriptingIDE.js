@@ -12,7 +12,6 @@ var ScriptingIDEInterface = function (wickEditor) {
         objectBeingScripted = null;
 
         this.open = false;
-        this.currentScript = 'onLoad';
 
         this.aceEditor = ace.edit("scriptEditor");
         this.aceEditor.setTheme("ace/theme/chrome");
@@ -25,7 +24,7 @@ var ScriptingIDEInterface = function (wickEditor) {
         // Update selected objects scripts when script editor text changes
         this.aceEditor.getSession().on('change', function (e) {
             if(!objectBeingScripted) return;
-            objectBeingScripted.wickScripts[that.currentScript] = that.aceEditor.getValue();
+            objectBeingScripted.wickScript = that.aceEditor.getValue();
         });
 
         this.aceEditor.getSession().on("changeAnnotation", function(){
@@ -58,27 +57,9 @@ var ScriptingIDEInterface = function (wickEditor) {
         this.resize();
     }
 
-    this.editScriptsOfObject = function (obj, args) {
-        objectBeingScripted = obj;
-
-        that.currentScript = 'onLoad';
-
-        if(args && args.dontOpenIDE) {
-
-        } else {
-            this.open = true;
-        }
-
-        this.syncWithEditorState();
-    }
-
-    this.clearSelection = function () {
-        objectBeingScripted = null;
-
-        this.syncWithEditorState();
-    }
-
     this.syncWithEditorState = function () {
+        objectBeingScripted = wickEditor.project.getSelectedObject();
+
         if(this.open) {
             $("#scriptingGUI").css('display', 'block');
             $(".ace_text-input").focus();
@@ -96,25 +77,8 @@ var ScriptingIDEInterface = function (wickEditor) {
                 $("#noSelectionDiv").css('display', 'none');
                 $("#scriptObjectDiv").css('display', 'block');
 
-                var script = objectBeingScripted.wickScripts[that.currentScript];
+                var script = objectBeingScripted.wickScript;
                 that.aceEditor.setValue(script, -1);
-                
-                if(objectBeingScripted instanceof WickFrame) {
-                    document.getElementById("onClickButton").style.display   = 'block';
-                    //document.getElementById("onKeyDownButton").style.display = 'block';
-                    document.getElementById("onClickButton").style.display   = 'none';
-                    //document.getElementById("onKeyDownButton").style.display = 'none';
-                } else {
-                    document.getElementById("onClickButton").style.display   = 'block';
-                    //document.getElementById("onKeyDownButton").style.display = 'block';
-                    document.getElementById("onClickButton").style.display   = 'block';
-                    //document.getElementById("onKeyDownButton").style.display = 'block';
-                }
-
-                document.getElementById("onLoadButton").className = (that.currentScript == 'onLoad' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
-                document.getElementById("onUpdateButton").className = (that.currentScript == 'onUpdate' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
-                document.getElementById("onClickButton").className = (that.currentScript == 'onClick' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
-                //document.getElementById("onKeyDownButton").className = (that.currentScript == 'onKeyDown' ? "button buttonInRow activeScriptButton" : "button buttonInRow");
             } else {
                 $("#noSelectionDiv").css('display', 'block');
                 $("#scriptObjectDiv").css('display', 'none');
@@ -125,7 +89,7 @@ var ScriptingIDEInterface = function (wickEditor) {
         }
     }
 
-    this.showError = function (obj, scriptType, lineNumber, errorMessage) {
+    this.showError = function (obj, lineNumber, errorMessage) {
         var object = wickEditor.project.getObjectByUUID(obj.uuid);
         var frame = wickEditor.project.getFrameByUUID(obj.uuid);
 
@@ -140,12 +104,15 @@ var ScriptingIDEInterface = function (wickEditor) {
 
         wickEditor.syncInterfaces();
         setTimeout(function () {
+            if(object) {
+                wickEditor.project.clearSelection()
+                wickEditor.project.selectObject(object)
+            }
             if(object) wickEditor.fabric.selectObjects([object]);
-            if(object) that.editScriptsOfObject(object);
-            if(frame) that.editScriptsOfObject(frame);
-            wickEditor.scriptingide.currentScript = scriptType;
 
             if(object) object.causedAnException = true;
+
+            that.open = true;
 
             document.getElementById("errorMessage").innerHTML = errorMessage;
             if(lineNumber) document.getElementById("errorMessage").innerHTML += ", line " + lineNumber;
@@ -160,26 +127,6 @@ var ScriptingIDEInterface = function (wickEditor) {
         document.getElementById("errorMessage").style.display = "hidden";
     }
 
-// Script buttons
-
-    $("#onLoadButton").on("click", function (e) {
-        that.currentScript = 'onLoad';
-        wickEditor.syncInterfaces();
-        that.clearError();
-    });
-
-    $("#onClickButton").on("click", function (e) {
-        that.currentScript = 'onClick';
-        wickEditor.syncInterfaces();
-        that.clearError();
-    });
-
-    $("#onUpdateButton").on("click", function (e) {
-        that.currentScript = 'onUpdate';
-        wickEditor.syncInterfaces();
-        that.clearError();
-    });
-    
 // Other buttons
 
     $("#closeScriptingGUIButton").on("click", function (e) {

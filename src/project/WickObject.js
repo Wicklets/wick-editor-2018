@@ -27,13 +27,7 @@ var WickObject = function () {
 
 // Common
     
-    // Dictionary mapping function names to WickScript object
-    this.wickScripts = {
-        "onLoad" : "",
-        "onClick" : "",
-        "onUpdate": "",
-        "onKeyDown": ""
-    };
+    this.wickScript = "this.onLoad = function () {\n\t\n}\n\nthis.onUpdate = function () {\n\t\n}\n\nthis.onClick = function () {\n\t\n}\n";
 
 // Static
 
@@ -375,11 +369,7 @@ WickObject.addPrototypes = function (obj) {
 /* Encodes scripts and strings to avoid JSON format problems */
 WickObject.prototype.encodeStrings = function () {
 
-    if(this.wickScripts) {
-        for (var key in this.wickScripts) {
-            this.wickScripts[key] = WickProject.Compressor.encodeString(this.wickScripts[key]);
-        }
-    }
+    this.wickScript = WickProject.Compressor.encodeString(this.wickScript);
 
     if(this.fontData) {
         this.fontData.text = WickProject.Compressor.encodeString(this.fontData.text);
@@ -404,11 +394,7 @@ WickObject.prototype.encodeStrings = function () {
 /* Decodes scripts and strings back to human-readble and eval()-able format */
 WickObject.prototype.decodeStrings = function () {
     
-    if(this.wickScripts) {
-        for (var key in this.wickScripts) {
-            this.wickScripts[key] = WickProject.Compressor.decodeString(this.wickScripts[key])
-        }
-    }
+    this.wickScript = WickProject.Compressor.decodeString(this.wickScript);
 
     if(this.fontData) {
         this.fontData.text = WickProject.Compressor.decodeString(this.fontData.text);
@@ -1318,26 +1304,10 @@ WickObject.prototype.generateAlphaMask = function (imageData) {
 
 }
 
-WickObject.prototype.scriptsAllEmpty = function () {
-    var allEmpty = true;
-    for(scriptName in this.wickScripts) {
-        if (this.wickScripts[scriptName] !== "") allEmpty = false;
-    }
-    return allEmpty;
-}
-
 WickObject.prototype.isClickable = function () {
-    var isClickable = false;
-
-    this.wickScripts['onClick'].split("\n").forEach(function (line) {
-        if(isClickable) return;
-        line = line.trim();
-        if(!line.startsWith("//") && line !== "") {
-            isClickable = true;
-        }
-    });
-
-    return isClickable;
+    if(!this.isSymbol) return false;
+    if(!this.onClickFnBody) this.onClickFnBody = this.onClick.toString().match(/function[^{]+\{([\s\S]*)\}$/)[1];
+    return $.trim( this.onClickFnBody ) !== '';
 }
 
 WickObject.prototype.getCurrentFrames = function () {
@@ -1362,7 +1332,7 @@ WickObject.prototype.update = function () {
         if(this.isSymbol) {
             var currentFrames = this.getCurrentFrames()
             currentFrames.forEach(function (currentFrame) {
-                self.runScript(currentFrame.wickScripts['onLoad'], 'onLoad', self, currentFrame);
+                self.runScriptFn('onLoad', self, currentFrame);
             });
         }
 
@@ -1372,7 +1342,7 @@ WickObject.prototype.update = function () {
     if(this.justEnteredFrame) {
 
         if(!this.onLoadScriptRan) {
-            this.runScript(this.wickScripts['onLoad'], 'onLoad');
+            this.runScriptFn('onLoad');
             this.onLoadScriptRan = true;
         }
 
@@ -1383,7 +1353,7 @@ WickObject.prototype.update = function () {
         this.justEnteredFrame = false;
     }
 
-    this.runScript(this.wickScripts['onUpdate'], 'onUpdate');
+    this.runScriptFn('onUpdate');
 
     if(this.isSymbol) {
         this.advanceTimeline();
@@ -1393,7 +1363,7 @@ WickObject.prototype.update = function () {
         // The 'this' keyword is borked though, since it still will refer to the WickObject.
         var currentFrames = this.getCurrentFrames()
         currentFrames.forEach(function (currentFrame) {
-            self.runScript(currentFrame.wickScripts['onUpdate'], 'onUpdate', self, currentFrame);
+            self.runScriptFn('onUpdate', self, currentFrame);
         });
 
         this.getAllActiveChildObjects().forEach(function(child) {
@@ -1405,35 +1375,33 @@ WickObject.prototype.update = function () {
 
 }
 
-WickObject.prototype.runScript = function (script, scriptType, objectScope, frame) {
+WickObject.prototype.runScriptFn = function (fnName, objectScope, frame) {
 
     var that = this;
 
     if(!objectScope) objectScope = this.parentObject;
 
     // Setup wickobject reference variables
-    var project = WickPlayer.getProject() || wickEditor.project;
-    var root = project.rootObject;
-    var parent = this.parentObject;
-    var keys = WickPlayer.getKeys();
-    var key = WickPlayer.getLastKeyPressed();
+    window.project = WickPlayer.getProject() || wickEditor.project;
+    window.root = project.rootObject;
+    window.parent = this.parentObject;
 
     // Setup builtin wick scripting methods and objects
-    var play          = function ()      { objectScope.play(); }
-    var stop          = function ()      { objectScope.stop(); }
-    var gotoAndPlay   = function (frame) { objectScope.gotoAndPlay(frame); }
-    var gotoAndStop   = function (frame) { objectScope.gotoAndStop(frame); }
-    var gotoNextFrame = function ()      { objectScope.gotoNextFrame(); }
-    var gotoPrevFrame = function ()      { objectScope.gotoPrevFrame(); }
+    window.play          = function ()      { objectScope.play(); }
+    window.stop          = function ()      { objectScope.stop(); }
+    window.gotoAndPlay   = function (frame) { objectScope.gotoAndPlay(frame); }
+    window.gotoAndStop   = function (frame) { objectScope.gotoAndStop(frame); }
+    window.gotoNextFrame = function ()      { objectScope.gotoNextFrame(); }
+    window.gotoPrevFrame = function ()      { objectScope.gotoPrevFrame(); }
 
     // Etc. player wrappers
-    var stopAllSounds = function () { WickPlayer.getAudioPlayer().stopAllSounds(); };
-    var isKeyDown = function (keyString) { return keys[keyCharToCode[keyString.toUpperCase()]]; };
-    var getMouseX = function () { return WickPlayer.getMouse().x; }
-    var getMouseY = function () { return WickPlayer.getMouse().y; }
-    var hideCursor = function () { WickPlayer.hideCursor(); };
-    var showCursor = function () { WickPlayer.showCursor(); };
-    var enterFullscreen = function () { WickPlayer.enterFullscreen(); }
+    window.stopAllSounds = function () { WickPlayer.getAudioPlayer().stopAllSounds(); };
+    window.isKeyDown = function (keyString) { return keys[keyCharToCode[keyString.toUpperCase()]]; };
+    window.getMouseX = function () { return WickPlayer.getMouse().x; }
+    window.getMouseY = function () { return WickPlayer.getMouse().y; }
+    window.hideCursor = function () { WickPlayer.hideCursor(); };
+    window.showCursor = function () { WickPlayer.showCursor(); };
+    window.enterFullscreen = function () { WickPlayer.enterFullscreen(); }
 
     // WickObjects in same frame (scope) are accessable without using root./parent.
     if(objectScope) {
@@ -1445,7 +1413,12 @@ WickObject.prototype.runScript = function (script, scriptType, objectScope, fram
     // Run da script!!
     try {
         //eval(script);
-        eval("try{" + script + "\n}catch (e) { throw (e); }");
+        //eval("try{" + script + "\n}catch (e) { throw (e); }");
+        if(frame) {
+            frame[fnName]();
+        } else {
+            if(this[fnName])  this[fnName]();
+        }
     } catch (e) {
         if (window.wickEditor) {
             //if(!wickEditor.builtinplayer.running) return;
@@ -1465,7 +1438,7 @@ WickObject.prototype.runScript = function (script, scriptType, objectScope, fram
             //console.log(e.stack.split("\n")[1].split('<anonymous>:')[1].split(":")[0]);
             //console.log(e.stack.split("\n"))
             if(wickEditor.builtinplayer.running) wickEditor.builtinplayer.stopRunningProject()
-            wickEditor.scriptingide.showError(frame || this, scriptType, lineNumber, e);
+            wickEditor.scriptingide.showError(frame || this, lineNumber, e);
 
         } else {
             alert("An exception was thrown while running a WickObject script. See console!");

@@ -59,7 +59,6 @@ var FabricInterface = function (wickEditor) {
                 });
             }
             
-            wickEditor.scriptingide.editScriptsOfObject(e.target.wickObjReference, {dontOpenIDE:true});
             wickEditor.scriptingide.syncWithEditorState();
             wickEditor.properties.syncWithEditorState();
             e.target.on({
@@ -75,15 +74,13 @@ var FabricInterface = function (wickEditor) {
         });
         self.canvas.on('selection:cleared', function (e) {
             //wickEditor.timeline.redraw();
-
-            wickEditor.scriptingide.clearSelection();
+            
             wickEditor.scriptingide.syncWithEditorState();
             wickEditor.properties.syncWithEditorState();
         });
         self.canvas.on('selection:changed', function (e) {
             //wickEditor.timeline.redraw();
 
-            wickEditor.scriptingide.editScriptsOfObject(this.getSelectedObject(WickObject), {dontOpenIDE:true});
             self.guiElements.update();
             wickEditor.scriptingide.syncWithEditorState();
             wickEditor.properties.syncWithEditorState();
@@ -311,12 +308,7 @@ var FabricInterface = function (wickEditor) {
         this.selectObjects(objs);
     }
 
-    this.deselectAll = function (clearScriptingSelection) {
-        //wickEditor.timeline.redraw();
-
-        if(!clearScriptingSelection)
-            wickEditor.scriptingide.clearSelection();
-
+    this.deselectAll = function () {
         var activeGroup = this.canvas.getActiveGroup();
         if(activeGroup) {
             activeGroup.removeWithUpdate(activeGroup);

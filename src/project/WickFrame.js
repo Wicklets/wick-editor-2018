@@ -26,10 +26,7 @@ var WickFrame = function () {
 	this.parentLayer = null;
 
 	// Set all scripts to defaults
-	this.wickScripts = {
-        "onLoad" : "",
-        "onUpdate": ""
-    };
+	this.wickScript = "this.onLoad = function () {\n\t\n}\n\nthis.onUpdate = function () {\n\t\n}\n";
 };
 
 // Extend our frame to encompass more frames. 

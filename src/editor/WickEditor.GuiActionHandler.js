@@ -126,8 +126,6 @@ var GuiActionHandler = function (wickEditor) {
             that.keys = [];
             that.specialKeys = [];
 
-            wickEditor.statusbar.setState('saving');
-
             wickEditor.project.rootObject.getAllChildObjectsRecursive().forEach(function (child) {
                 child.causedAnException = false;
             });
@@ -135,7 +133,6 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.project.getAsJSON(function (JSONProject) {
                 WickProject.saveProjectJSONInLocalStorage(JSONProject);
                 wickEditor.builtinplayer.runProject(JSONProject);
-                wickEditor.statusbar.setState('done');
             })
         });
 
@@ -598,7 +595,7 @@ var GuiActionHandler = function (wickEditor) {
         {},
         function(args) {
             var selectedObj = wickEditor.fabric.getSelectedObject(WickObject);
-            wickEditor.scriptingide.editScriptsOfObject(selectedObj);
+            wickEditor.scriptingide.open = true;
             wickEditor.syncInterfaces();
         });
 
@@ -609,7 +606,6 @@ var GuiActionHandler = function (wickEditor) {
         function(args) {
             wickEditor.fabric.deselectAll();
             var selectedFrame = wickEditor.project.getCurrentFrame();
-            wickEditor.scriptingide.editScriptsOfObject(selectedFrame);
             wickEditor.syncInterfaces();
         });
 

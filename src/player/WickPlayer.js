@@ -13,7 +13,6 @@ var WickPlayer = (function () {
     // Input vars for mouse and keyboard
     var mouse = {x:0, y:0};
     var keys = [];
-    var lastKeyPressed;
 
     // Renderer
     var renderer;
@@ -130,10 +129,6 @@ var WickPlayer = (function () {
 
     wickPlayer.getKeys = function () {
         return keys;
-    }
-
-    wickPlayer.getLastKeyPressed = function () {
-        return lastKeyPressed;
     }
 
     wickPlayer.getProject = function () {
@@ -323,6 +318,17 @@ var WickPlayer = (function () {
             // Start the object playing
             wickObj.isPlaying = true;
 
+            wickObj.setupScript = function () {
+                eval(this.wickScript);
+            }
+            wickObj.setupScript();
+            wickObj.getAllFrames().forEach(function (frame) {
+                frame.setupScript = function () {
+                    eval(this.wickScript);
+                }
+                frame.setupScript();
+            })
+
             // Recursively set all playhead vars of children
             wickObj.getAllChildObjects().forEach(function(subObj) {
                 resetAllPlayheads(subObj);
@@ -382,7 +388,7 @@ var WickPlayer = (function () {
         
         project.rootObject.getAllActiveChildObjectsRecursive(true).forEach(function(child) {
             if(child.isClickable() && child.isPointInside(mouse)) {
-                child.runScript(child.wickScripts["onClick"], 'onClick');
+                child.runScriptFn("onClick");
             }
         });
 
@@ -392,11 +398,10 @@ var WickPlayer = (function () {
         event.preventDefault();
 
         keys[event.keyCode] = true;
-        lastKeyPressed = codeToKeyChar[event.keyCode];
 
-        project.rootObject.getAllActiveChildObjectsRecursive(true).forEach(function(child) {
+        /*project.rootObject.getAllActiveChildObjectsRecursive(true).forEach(function(child) {
             child.runScript(child.wickScripts["onKeyDown"], 'onKeyDown');
-        });
+        });*/
     }
 
     var handleKeyUpInput = function (event) {

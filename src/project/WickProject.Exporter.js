@@ -66,20 +66,15 @@ WickProject.Exporter = (function () {
 
     projectExporter.exportProjectInZip = function (wickProject) {
 
-        wickEditor.statusbar.setState('exporting');
-
         projectExporter.bundleProjectToHTML(wickProject, function(fileOut) {
             var blob = new Blob([fileOut], {type: "text/plain;charset=utf-8"});
             var filename = wickProject.name || "project";
             saveAs(blob, filename+".html");
-            wickEditor.statusbar.setState('done');
         });
 
     }
 
     projectExporter.exportProject = function (wickProject, args) {
-
-        wickEditor.statusbar.setState('exporting');
 
         projectExporter.bundleProjectToHTML(wickProject, function(fileOut) {
             var filename = wickProject.name || "project";
@@ -93,7 +88,6 @@ WickProject.Exporter = (function () {
                 var blob = new Blob([fileOut], {type: "text/plain;charset=utf-8"});
                 saveAs(blob, filename+".html");
             }
-            wickEditor.statusbar.setState('done');
         });
 
     }

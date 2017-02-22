@@ -142,7 +142,7 @@ var TimelineInterface = function (wickEditor) {
     interactions['dragLayer'] = {
         'start' : (function (e) {
             interactionData.allLayerDivs = [];
-            interactionData.allLayerDivs.push(interactionData.layer.elem)
+            interactionData.allLayerDivs.push(interactionData.layer.elem);
         }), 
         'update' : (function (e) {
             interactionData.allLayerDivs.forEach(function (div) {

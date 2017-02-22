@@ -259,19 +259,16 @@ WickProject.prototype.getAsJSON = function (callback, args) {
 
 WickProject.prototype.saveInLocalStorage = function () {
     var self = this;
-    wickEditor.statusbar.setState('saving');
     this.getAsJSON(function (JSONProject) {
         console.log("Project size: " + JSONProject.length)
         if(JSONProject.length > 5000000) {
             console.log("Project >5MB, compressing...");
             var compressedJSONProject = WickProject.Compressor.compressProject(JSONProject, "LZSTRING-UTF16");
             WickProject.saveProjectJSONInLocalStorage(compressedJSONProject);
-            console.log("Compressed size: " + compressedJSONProject.length)
-            wickEditor.statusbar.setState('done');
+            console.log("Compressed size: " + compressedJSONProject.length);
         } else {
             console.log("Project <5MB, not compressing.");
             WickProject.saveProjectJSONInLocalStorage(JSONProject);
-            wickEditor.statusbar.setState('done');
         }
     });
 }
@@ -440,6 +437,15 @@ WickProject.prototype.isObjectSelected = function (obj) {
     });
 
     return selected;
+}
+
+WickProject.prototype.getSelectedObject = function () {
+    var selectedObjects = this.getSelectedObjects();
+    if(selectedObjects.length !== 1) {
+        return null;
+    } else {
+        return selectedObjects[0];
+    }
 }
 
 WickProject.prototype.getSelectedObjects = function () {
