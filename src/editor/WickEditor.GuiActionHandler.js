@@ -223,9 +223,11 @@ var GuiActionHandler = function (wickEditor) {
         {},
         function(args) {
             wickEditor.currentTool = wickEditor.tools.cursor;
+            wickEditor.project.clearSelection();
+            wickEditor.project.currentObject.getAllActiveChildObjects().forEach(function (obj) {
+                wickEditor.project.selectObject(obj);
+            });
             wickEditor.syncInterfaces();
-            wickEditor.fabric.deselectAll();
-            wickEditor.fabric.selectAll();
         });
 
     // Up
