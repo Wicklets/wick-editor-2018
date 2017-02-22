@@ -604,8 +604,9 @@ var GuiActionHandler = function (wickEditor) {
         ['editFrameScriptsButton', 'editFrameScriptsRightClick'],
         {},
         function(args) {
-            wickEditor.fabric.deselectAll();
-            var selectedFrame = wickEditor.project.getCurrentFrame();
+            wickEditor.project.clearSelection()
+            wickEditor.project.selectObject(wickEditor.project.getCurrentFrame());
+            wickEditor.scriptingide.open = true;
             wickEditor.syncInterfaces();
         });
 
@@ -678,6 +679,7 @@ var GuiActionHandler = function (wickEditor) {
         ['editObjectButton', 'editSymbolButton', 'editObjectButtonProperties'],
         {},
         function(args) {
+            wickEditor.project.clearSelection()
             var selectedObject = wickEditor.fabric.getSelectedObject(WickObject);
             wickEditor.fabric.symbolBorders.startEditObjectAnimation(selectedObject);
         });

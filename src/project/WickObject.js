@@ -369,7 +369,9 @@ WickObject.addPrototypes = function (obj) {
 /* Encodes scripts and strings to avoid JSON format problems */
 WickObject.prototype.encodeStrings = function () {
 
-    this.wickScript = WickProject.Compressor.encodeString(this.wickScript);
+    if(this.wickScript) {
+        this.wickScript = WickProject.Compressor.encodeString(this.wickScript);
+    }
 
     if(this.fontData) {
         this.fontData.text = WickProject.Compressor.encodeString(this.fontData.text);
@@ -394,7 +396,9 @@ WickObject.prototype.encodeStrings = function () {
 /* Decodes scripts and strings back to human-readble and eval()-able format */
 WickObject.prototype.decodeStrings = function () {
     
-    this.wickScript = WickProject.Compressor.decodeString(this.wickScript);
+    if(this.wickScript) {
+        this.wickScript = WickProject.Compressor.decodeString(this.wickScript);
+    }
 
     if(this.fontData) {
         this.fontData.text = WickProject.Compressor.decodeString(this.fontData.text);

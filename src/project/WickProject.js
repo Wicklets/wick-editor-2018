@@ -177,6 +177,11 @@ WickProject.fixForBackwardsCompatibility = function (project) {
             });
         }
 
+        if(wickObj.wickScripts) {
+            wickObj.wickScript = "this.onLoad = function () {\n"+WickProject.Compressor.decodeString(wickObj.wickScripts['onLoad'])+"\n}\n\nthis.onUpdate = function () {\n"+WickProject.Compressor.decodeString(wickObj.wickScripts['onUpdate'])+"\n}\n\nthis.onClick = function () {\n"+WickProject.Compressor.decodeString(wickObj.wickScripts['onClick'])+"\n}\n\n"
+            wickObj.wickScripts = null;
+        }
+
         if(!wickObj.isSymbol) return;
         wickObj.layers.forEach(function (layer) {
             if(!layer.identifier) layer.identifier = "Untitled Layer";
@@ -208,11 +213,16 @@ WickProject.fixForBackwardsCompatibility = function (project) {
                 if(frame.cachedImageData) frame.cachedImageData = null;
 
                 // Frames now have scripts
-                if(!frame.wickScripts) {
+                if(!frame.wickScript && !frame.wickScripts) {
                     frame.wickScripts = {
                         "onLoad" : "",
                         "onUpdate" : ""
                     }
+                }
+
+                if(frame.wickScripts) {
+                    frame.wickScript = "this.onLoad = function () {\n"+WickProject.Compressor.decodeString(frame.wickScripts['onLoad'])+"\n}\n\nthis.onUpdate = function () {\n"+WickProject.Compressor.decodeString(frame.wickScripts['onUpdate'])+"\n}\n"
+                    frame.wickScripts = null
                 }
 
                 // Frames can now not save their states 

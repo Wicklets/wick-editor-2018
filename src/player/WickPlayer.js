@@ -131,11 +131,11 @@ var WickPlayer = (function () {
     }
 
     wickPlayer.getKeys = function () {
-        return keys;
+        return keys || [];
     }
 
     wickPlayer.getKeysJustPressed = function () {
-        return keysJustPressed;
+        return keysJustPressed || [];
     }
 
     wickPlayer.getProject = function () {
