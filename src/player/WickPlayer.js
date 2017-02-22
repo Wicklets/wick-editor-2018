@@ -406,7 +406,7 @@ var WickPlayer = (function () {
 
         // Check for new keyDown...
         if (!keys[event.keyCode]) {
-            keysJustPressed[keyCode] = true; 
+            keysJustPressed[event.keyCode] = true; 
         }
 
         keys[event.keyCode] = true;
