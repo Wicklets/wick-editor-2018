@@ -134,6 +134,10 @@ var WickPlayer = (function () {
         return keys;
     }
 
+    wickPlayer.getKeysJustPressed = function () {
+        return keysJustPressed;
+    }
+
     wickPlayer.getProject = function () {
         return project;
     }
