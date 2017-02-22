@@ -1396,7 +1396,7 @@ WickObject.prototype.runScriptFn = function (fnName, objectScope, frame) {
 
     // Etc. player wrappers
     window.stopAllSounds = function () { WickPlayer.getAudioPlayer().stopAllSounds(); };
-    window.isKeyDown = function (keyString) { return keys[keyCharToCode[keyString.toUpperCase()]]; };
+    window.isKeyDown = function (keyString) { return WickPlayer.getKeys()[keyCharToCode[keyString.toUpperCase()]]; };
     window.getMouseX = function () { return WickPlayer.getMouse().x; }
     window.getMouseY = function () { return WickPlayer.getMouse().y; }
     window.hideCursor = function () { WickPlayer.hideCursor(); };
