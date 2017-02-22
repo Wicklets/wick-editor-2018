@@ -34,7 +34,7 @@ Tools.Ellipse = function (wickEditor) {
         drawingShape.top = 0;
         drawingShape.setCoords();
         //var svg = '<ellipse fill="'+drawingShape.fill+'" cx="'+drawingShape.rx+'" cy="'+drawingShape.ry+'" rx="'+drawingShape.width+'" ry="'+drawingShape.height+'"/>'
-        var svg = '<ellipse fill="'+drawingShape.fill+'" rx="'+drawingShape.rx+'" ry="'+drawingShape.ry+'"/>'
+        var svg = '<ellipse cx="'+drawingShape.width/2+'" cy="'+drawingShape.height/2+'" fill="'+drawingShape.fill+'" rx="'+drawingShape.rx+'" ry="'+drawingShape.ry+'"/>'
         var svgString = '<svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>';
 
         drawingShape.remove()
