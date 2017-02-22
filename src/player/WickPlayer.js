@@ -11,8 +11,9 @@ var WickPlayer = (function () {
     var initialStateProject;
 
     // Input vars for mouse and keyboard
-    var mouse = {x:0, y:0};
-    var keys = [];
+    var mouse;
+    var keys;
+    var keysJustPressed; 
 
     // Renderer
     var renderer;
@@ -27,7 +28,7 @@ var WickPlayer = (function () {
 
     // For keyboard input inside iframes
     var realWindow = window.parent || window;
-
+ 
     // Networking mode enabled flag
     var networkingEnabled = false;
 
@@ -85,6 +86,8 @@ var WickPlayer = (function () {
         // Setup mouse and key events (desktop mode)
         mouse = { x : 0, y : 0 };
         keys = [];
+        keysJustPressed = []; 
+
         if(desktopMode) {
             playerCanvasContainer.addEventListener('mousemove', onMouseMove, false);
             playerCanvasContainer.addEventListener("mousedown", onMouseDown, false);
@@ -397,6 +400,11 @@ var WickPlayer = (function () {
     var handleKeyDownInput = function (event) {
         event.preventDefault();
 
+        // Check for new keyDown...
+        if (!keys[event.keyCode]) {
+            keysJustPressed[keyCode] = true; 
+        }
+
         keys[event.keyCode] = true;
 
         /*project.rootObject.getAllActiveChildObjectsRecursive(true).forEach(function(child) {
@@ -531,6 +539,7 @@ var WickPlayer = (function () {
 
         }
 
+        keysJustPressed = []; 
     }
 
     return wickPlayer;
