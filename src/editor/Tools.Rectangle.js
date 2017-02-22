@@ -33,7 +33,7 @@ Tools.Rectangle = function (wickEditor) {
         drawingShape.left = 0;
         drawingShape.top = 0;
         drawingShape.setCoords();
-        var svg = '<rect fill="'+drawingShape.fill+'" width="'+drawingShape.width+'" height="'+drawingShape.height+'" style="fill:rgb(0,0,0);" />'
+        var svg = '<rect fill="'+drawingShape.fill+'" width="'+drawingShape.width+'" height="'+drawingShape.height+'" style="" />'
         var svgString = '<svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>';
 
         drawingShape.remove()
