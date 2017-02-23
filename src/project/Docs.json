@@ -82,10 +82,16 @@
 				"return" : {"type": "Number", "description": "x-location of the mouse"}
 			}, {
 				"name" : "isKeyDown(key)",
-				"description" : "Returns true if 'key' is currently pressed and false otherwise. Casing does not matter i.e. isKeyDown('a') is equivalent to isKeyDown('A').",
+				"description" : "Returns true if 'key' is currently down and false otherwise. Casing does not matter i.e. isKeyDown('a') is equivalent to isKeyDown('A').",
 				"example" : "// If SPACE is pressed, move this object right by 10 pixels\nif (isKeyDown('SPACE')) { \n\tthis.x += 10;\n}",
 				"args" : [{"name" : "key", "type" : "String", "description" : "Any character such as 'A' or special characters including 'SPACE', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'BACKSPACE', 'TAB', 'ENTER', 'SHIFT', 'CTRL', 'COMMAND', 'ALT', 'WINDOWS', 'F1', 'NUM 0', 'NUM LOCK'"}],
 				"return" : {"type": "Boolean", "description": "true if key is down, false otherwise."}
+			}, {
+				"name" : "keyJustPressed(key)",
+				"description" : "Returns true if 'key' was just pressed and false otherwise. Casing does not matter i.e. keyJustPressed('a') is equivalent to keyJustPressed('A').",
+				"example" : "// If SPACE is pressed, move this object right by 10 pixels\nif (keyJustPressed('SPACE')) { \n\tthis.x += 10;\n}",
+				"args" : [{"name" : "key", "type" : "String", "description" : "Any character such as 'A' or special characters including 'SPACE', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'BACKSPACE', 'TAB', 'ENTER', 'SHIFT', 'CTRL', 'COMMAND', 'ALT', 'WINDOWS', 'F1', 'NUM 0', 'NUM LOCK'"}],
+				"return" : {"type": "Boolean", "description": "true if key was just pressed, false otherwise."}
 			}, {
 				"name" : "getTiltX()",
 				"description" : "Returns the x-coordinate tilt of the device. This function only works on devices with an accelerometer/gyroscope (such as smartphones).",

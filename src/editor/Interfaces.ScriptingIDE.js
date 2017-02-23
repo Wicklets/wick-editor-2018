@@ -7,6 +7,8 @@ var ScriptingIDEInterface = function (wickEditor) {
     var maximized;
     var objectBeingScripted;
 
+    this.justOpened = true;
+
     this.setup = function () {
         var proceed = function () {
             maximized = false;
@@ -83,7 +85,10 @@ var ScriptingIDEInterface = function (wickEditor) {
 
         if(this.open) {
             $("#scriptingGUI").css('display', 'block');
-            $(".ace_text-input").focus();
+            if(this.justOpened) {
+                $(".ace_text-input").focus();
+                this.justOpened = false;
+            }
 
             this.aceEditor.resize();
             if(maximized) {
@@ -107,6 +112,7 @@ var ScriptingIDEInterface = function (wickEditor) {
 
         } else {
             $("#scriptingGUI").css('display', 'none');
+            this.justOpened = true;
         }
     }
 

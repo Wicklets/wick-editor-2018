@@ -424,11 +424,11 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
     var updateFabricObjectEvents = function (fabricObj, wickObj, activeObjects, siblingObjects, nearbyObjects) {
         var setCoords = fabricObj.setCoords.bind(fabricObj);
-        fabricObj.on({
+        /*fabricObj.on({
             moving: setCoords,
             scaling: setCoords,
             rotating: setCoords
-        });
+        });*/
 
         if(activeObjects.includes(wickObj)) {
             fabricObj.opacity = wickObj.opacity;

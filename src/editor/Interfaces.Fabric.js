@@ -61,11 +61,11 @@ var FabricInterface = function (wickEditor) {
             
             wickEditor.scriptingide.syncWithEditorState();
             wickEditor.properties.syncWithEditorState();
-            e.target.on({
+            /*e.target.on({
                 moving: e.target.setCoords,
                 scaling: e.target.setCoords,
                 rotating: e.target.setCoords
-            });
+            });*/
         });
         self.canvas.on('before:selection:cleared', function (e) {
             wickEditor.project.clearSelection();
@@ -271,11 +271,11 @@ var FabricInterface = function (wickEditor) {
                 originX: 'left',
                 originY: 'top'
             });
-            group.on({
+            /*group.on({
                 moving: group.setCoords,
                 scaling: group.setCoords,
                 rotating: group.setCoords
-              });
+            });*/
             for(var i = 0; i < selectedObjs.length; i++) {
                 group.canvas = this.canvas // WHAT ??????????????? WHY
                 group.addWithUpdate(selectedObjs[i]);

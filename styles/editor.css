@@ -144,10 +144,12 @@ select {
 	height: 300px;
 }
 #errorMessage {
-	background-color: red;
-	color: black;
+	margin-left: 3px;
+	margin-top: 3px;
+	color: red;
 	display:hidden;
 	position: absolute;
+	font-weight: bold;
 }
 #scriptObjectDiv {
     width: 100%;
