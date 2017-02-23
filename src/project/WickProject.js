@@ -481,3 +481,9 @@ WickProject.prototype.selectObject = function (obj) {
 WickProject.prototype.clearSelection = function () {
     this._selection = [];
 }
+
+WickProject.prototype.deselectObjectType = function (type) {
+    for ( var i = 0; i < this._selection.length; i++ ) {
+        if(this._selection[i] instanceof type) this._selection[i] = null;
+    }
+}

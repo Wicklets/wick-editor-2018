@@ -641,7 +641,7 @@ var WickActionHandler = function (wickEditor) {
     registerAction('movePlayhead',
         function (args) {
 
-            wickEditor.project.clearSelection();
+            wickEditor.project.deselectObjectType(WickObject);
             args.newPlayheadPosition = Math.max(0, args.newPlayheadPosition)
             
             wickEditor.fabric.onionSkinsDirty = true;
