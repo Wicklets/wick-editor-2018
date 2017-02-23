@@ -98,6 +98,8 @@ body {
     
     border-radius: 5px;
 
+    cursor: pointer;
+
 	/*pointer-events:none;*/
 }
 
@@ -185,10 +187,10 @@ body {
     margin-left: calc(calc(var(--frame-width) / 2) / 1.54);
     /*    @Todo center add frame overlay w/o magic no*/
     margin-top: 16px;
-	cursor: pointer;
     background-color: #ffffff;
     border-radius: 3px;
     box-shadow: 0 0 1px 0 rgba(0,0,0,0.12), 0 1px 1px 0 rgba(0,0,0,0.24), 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24); 
+    pointer-events: none;
 }
 
 .add-frame-overlay-img {

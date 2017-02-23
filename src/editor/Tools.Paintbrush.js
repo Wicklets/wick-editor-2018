@@ -87,9 +87,9 @@ Tools.Paintbrush = function (wickEditor) {
 
         window.secretPathListenerForWick = function (fabricPath) {
             potraceFabricPath(fabricPath, function(SVGData) {
-                var symbolOffset = wickEditor.project.currentObject.getAbsolutePosition();
-                var x = fabricPath.left - symbolOffset.x;
-                var y = fabricPath.top - symbolOffset.y;
+                //var symbolOffset = wickEditor.project.currentObject.getAbsolutePosition();
+                var x = fabricPath.left// - symbolOffset.x;
+                var y = fabricPath.top// - symbolOffset.y;
 
                 var pathWickObject = WickObject.fromPathFile(SVGData);
                 pathWickObject.x = x;

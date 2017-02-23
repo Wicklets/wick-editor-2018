@@ -444,10 +444,19 @@ var TimelineInterface = function (wickEditor) {
                 timeline.framesContainer.addFrameOverlay.elem.style.top  = roundToNearestN(e.clientY - timeline.framesContainer.elem.getBoundingClientRect().top  - cssVar('--vertical-spacing')/2, cssVar('--vertical-spacing')) + "px";
             });
             this.elem.addEventListener('mousedown', function (e) {
-                wickEditor.actionHandler.doAction('movePlayhead', {
+                /*wickEditor.actionHandler.doAction('movePlayhead', {
                     obj: wickEditor.project.currentObject,
                     newPlayheadPosition: Math.round((e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2) / cssVar('--frame-width')),
-                });
+                });*/
+                var newFrame = new WickFrame();
+                newFrame.playheadPosition = Math.round((e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2) / cssVar('--frame-width'))
+                var layerIndex = Math.round((e.clientY - timeline.framesContainer.elem.getBoundingClientRect().top - cssVar('--vertical-spacing')/2) / cssVar('--vertical-spacing'))
+                var layer = wickEditor.project.currentObject.layers[layerIndex];
+                wickEditor.actionHandler.doAction('addFrame', {frame:newFrame, layer:layer});
+                timeline.framesContainer.addFrameOverlay.elem.style.display = 'none';
+            });
+            this.elem.addEventListener('mouseout', function (e) {
+                timeline.framesContainer.addFrameOverlay.elem.style.display = 'none';
             });
             for(var i = 0; i < 100; i++) {
                 var framesStripCell = document.createElement('div');
@@ -487,18 +496,6 @@ var TimelineInterface = function (wickEditor) {
             this.elem = document.createElement('div');
             this.elem.className = 'add-frame-overlay';
             this.elem.style.display = 'none';
-
-            this.elem.addEventListener('mousedown', function (e) {
-                var newFrame = new WickFrame();
-                newFrame.playheadPosition = Math.round((e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2) / cssVar('--frame-width'))
-                var layerIndex = Math.round((e.clientY - timeline.framesContainer.elem.getBoundingClientRect().top - cssVar('--vertical-spacing')/2) / cssVar('--vertical-spacing'))
-                var layer = wickEditor.project.currentObject.layers[layerIndex];
-                wickEditor.actionHandler.doAction('addFrame', {frame:newFrame, layer:layer});
-                that.elem.style.display = 'none';
-            });
-            this.elem.addEventListener('mouseout', function (e) {
-                that.elem.style.display = 'none';
-            });
 
             var addFrameOverlayImg = document.createElement('img');
             addFrameOverlayImg.className = 'add-frame-overlay-img';

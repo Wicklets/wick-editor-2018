@@ -36,12 +36,36 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         var refreshZIndices = function (force) {
             //startTiming();
 
+            force = false;
+
             /*if(force) 
                 console.log('forced refreshZIndices')
             else
                 console.log('unforced refreshZIndices')*/
 
             var frameZIndex = siblingObjects.length;
+
+            /*console.log("ORDERS ----------------")
+            console.log(" ")
+            console.log("WO true order:")
+            allObjects.forEach(function(wickObj) {
+                console.log("    WO " + wickObj.uuid.substring(0,4))
+            });
+
+            console.log(" ")
+            console.log("fabric view order:")
+            fabricInterface.canvas._objects.forEach(function(fabricObj) {
+                if(fabricObj.wickObjectRef) {
+                    console.log("    WO " + fabricObj.wickObjectRef.uuid.substring(0,4))
+                } else {
+                    console.log("    FO " + fabricObj.identifier)
+                }
+            });
+            console.log(" ")*/
+
+            if (force || fabricInterface.canvas._objects.indexOf(fabricInterface.guiElements.getInactiveFrame()) !== frameZIndex) {
+                fabricInterface.guiElements.setInactiveFramePosition(frameZIndex);
+            }
 
             // Update z-indices in order of their true positions
             allObjects.forEach(function(wickObj) {
@@ -52,10 +76,11 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
                     var fabricZIndex = fabricInterface.canvas._objects.indexOf(fabricObj);
                     if(fabricZIndex === -1) return;
-                    if(fabricZIndex > frameZIndex) fabricZIndex -= 1;
+                    //if(fabricZIndex > frameZIndex) fabricZIndex -= 1;
                     var trueZIndex = allObjects.indexOf(wickObj) + fabricInterface.guiElements.getNumGUIElements();
 
                     fabricInterface.canvas.moveTo(fabricObj, trueZIndex);
+                    //console.log("mov to "+trueZIndex)
                     wickObj.zIndicesDirty = false;
                 }
             });
@@ -63,7 +88,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             if (force || fabricInterface.canvas._objects.indexOf(fabricInterface.guiElements.getInactiveFrame()) !== frameZIndex) {
                 fabricInterface.guiElements.setInactiveFramePosition(frameZIndex);
             }
-
             //stopTiming('refreshZIndices')
         }
 
@@ -173,7 +197,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 if(numObjectsAdded === objectsToAdd.length) {
 
                     //console.log("force z index update");
-                    if(onNewFrame) refreshZIndices(true);
+                    //if(onNewFrame) refreshZIndices(true);
+                    refreshZIndices(onNewFrame);
                     fabricInterface.canvas.renderAll()
 
                     finish();

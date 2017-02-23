@@ -100,10 +100,10 @@ var WickActionHandler = function (wickEditor) {
     }
 
     // scrap function, 
-    var scrap = function () {
+    var scrap = function (dontUndo) {
         actionBeingDone = false;
 
-        self.undoAction();
+        if(!dontUndo) self.undoAction();
         redoStack.pop();
 
         done();
@@ -367,6 +367,7 @@ var WickActionHandler = function (wickEditor) {
 
             // Create symbol out of objects
             var symbol = new WickObject.createSymbolFromWickObjects(objects);
+            symbol.zIndicesDirty = true;
             wickEditor.project.addObject(symbol, symbolZIndex, true);
             args.createdSymbol = symbol;
 
@@ -383,6 +384,7 @@ var WickActionHandler = function (wickEditor) {
                 child.x += child.parentObject.x;
                 child.y += child.parentObject.y;
                 wickEditor.project.addObject(child, null, true);
+                child.zIndicesDirty = true;
             });
 
             wickEditor.project.currentObject.removeChild(args.createdSymbol);
@@ -396,9 +398,12 @@ var WickActionHandler = function (wickEditor) {
 
             args.children = args.symbol.getObjectsOnFirstFrame();
             args.children.forEach(function (child) {
+                args.origOffsetX = child.parentObject.x;
+                args.origOffsetY = child.parentObject.y;
                 child.x += child.parentObject.x;
                 child.y += child.parentObject.y;
                 wickEditor.project.addObject(child, null, true);
+                child.zIndicesDirty = true;
             });
 
             wickEditor.project.currentObject.removeChild(args.obj);
@@ -407,12 +412,13 @@ var WickActionHandler = function (wickEditor) {
         },
         function (args) {
             args.children.forEach(function (child) {
-                child.x -= child.parentObject.x;
-                child.y -= child.parentObject.y;
+                child.x -= args.origOffsetX;
+                child.y -= args.origOffsetY;
                 wickEditor.project.currentObject.removeChild(child);
             });
 
             wickEditor.project.addObject(args.symbol);
+            args.symbol.zIndicesDirty = true;
 
             done();
         });
@@ -437,13 +443,18 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             var currentObject = wickEditor.project.currentObject;
 
+            if (currentObject.getCurrentLayer().getFrameAtPlayheadPosition(args.frame.playheadPosition)) {
+                scrap(true); return;
+            }
+
             // Add an empty frame
             args.layer.addFrame(args.frame);
 
             // Move to that new frame
             wickEditor.actionHandler.doAction('movePlayhead', {
                 obj:currentObject,
-                newPlayheadPosition:args.frame.playheadPosition
+                newPlayheadPosition:args.frame.playheadPosition,
+                newLayer:args.layer
             });
 
             currentObject.framesDirty = true;
@@ -640,8 +651,9 @@ var WickActionHandler = function (wickEditor) {
 
     registerAction('movePlayhead',
         function (args) {
-
+            wickEditor.fabric.forceModifySelectedObjects()
             wickEditor.project.deselectObjectType(WickObject);
+            
             args.newPlayheadPosition = Math.max(0, args.newPlayheadPosition)
             
             wickEditor.fabric.onionSkinsDirty = true;
@@ -664,7 +676,8 @@ var WickActionHandler = function (wickEditor) {
             
         },
         function (args) {
-            wickEditor.fabric.deselectAll();
+            wickEditor.fabric.forceModifySelectedObjects()
+            wickEditor.project.deselectObjectType(WickObject);
 
             args.obj.playheadPosition = args.oldPlayheadPosition;
             args.obj.currentLayer = args.oldLayer;
@@ -716,6 +729,8 @@ var WickActionHandler = function (wickEditor) {
 
     registerAction('finishEditingCurrentObject',
         function (args) {
+            wickEditor.project.currentObject.zIndicesDirty = true;
+
             wickEditor.fabric.deselectAll();
             wickEditor.project.currentObject.playheadPosition = 0;
             args.prevEditedObject = wickEditor.project.currentObject;
@@ -724,6 +739,8 @@ var WickActionHandler = function (wickEditor) {
             done();
         },
         function (args) {
+            args.prevEditedObject.zIndicesDirty = true;
+
             wickEditor.fabric.deselectAll();
             wickEditor.project.currentObject = args.prevEditedObject;
 

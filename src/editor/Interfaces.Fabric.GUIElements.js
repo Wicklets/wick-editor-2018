@@ -73,6 +73,7 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
             originCrosshair.top  += newOriginPos.y;
         }
         addElement(originCrosshair);
+        fabricInterface.canvas.moveTo(originCrosshair, 1)
 
         that.update();
     });

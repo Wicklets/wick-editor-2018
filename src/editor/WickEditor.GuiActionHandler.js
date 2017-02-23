@@ -225,6 +225,7 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.currentTool = wickEditor.tools.cursor;
             wickEditor.project.clearSelection();
             wickEditor.project.currentObject.getAllActiveChildObjects().forEach(function (obj) {
+                if(obj.parentFrame.parentLayer !== wickEditor.project.getCurrentLayer()) return;
                 wickEditor.project.selectObject(obj);
             });
             wickEditor.syncInterfaces();

@@ -4,6 +4,8 @@ var WickLayer = function () {
     this.frames = [new WickFrame()];
     this.frames[0].playheadPosition = 0;
 
+    this.identifier = "Layer 1"
+
     this.parentWickObject = null; // The WickObject that this layer belongs to
 };
 
