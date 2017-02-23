@@ -491,7 +491,9 @@ var TimelineInterface = function (wickEditor) {
             this.elem.addEventListener('mousedown', function (e) {
                 var newFrame = new WickFrame();
                 newFrame.playheadPosition = Math.round((e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2) / cssVar('--frame-width'))
-                wickEditor.actionHandler.doAction('addFrame', {frame:newFrame});
+                var layerIndex = Math.round((e.clientY - timeline.framesContainer.elem.getBoundingClientRect().top - cssVar('--vertical-spacing')/2) / cssVar('--vertical-spacing'))
+                var layer = wickEditor.project.currentObject.layers[layerIndex];
+                wickEditor.actionHandler.doAction('addFrame', {frame:newFrame, layer:layer});
                 that.elem.style.display = 'none';
             });
             this.elem.addEventListener('mouseout', function (e) {

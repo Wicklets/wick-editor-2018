@@ -438,12 +438,12 @@ var WickActionHandler = function (wickEditor) {
             var currentObject = wickEditor.project.currentObject;
 
             // Add an empty frame
-            currentObject.getCurrentLayer().addFrame(args.frame);
+            args.layer.addFrame(args.frame);
 
             // Move to that new frame
             wickEditor.actionHandler.doAction('movePlayhead', {
                 obj:currentObject,
-                newPlayheadPosition:currentObject.getCurrentLayer().getTotalLength()-1
+                newPlayheadPosition:args.frame.playheadPosition
             });
 
             currentObject.framesDirty = true;
@@ -452,7 +452,7 @@ var WickActionHandler = function (wickEditor) {
         },
         function (args) {
             var currentObject = wickEditor.project.currentObject;
-            currentObject.getCurrentLayer().frames.pop();
+            args.layer.frames.pop();
 
             currentObject.framesDirty = true;
 
