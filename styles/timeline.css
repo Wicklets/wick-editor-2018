@@ -173,10 +173,15 @@ body {
 }
 
 .add-frame-overlay {
-	width: var(--frame-width); 
-	height: var(--vertical-spacing);
+	width: calc(var(--frame-width) / 1.5); 
+	height: calc(var(--vertical-spacing) / 1.8);
 	position: absolute;
+    margin-left: calc(calc(var(--frame-width) / 2) / 1.54);
+    margin-top: 16px;
 	cursor: pointer;
+    background-color: #ffffff;
+    border-radius: 3px;
+    box-shadow: 0 0 1px 0 rgba(0,0,0,0.12), 0 1px 1px 0 rgba(0,0,0,0.24), 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24); 
 }
 
 .add-frame-overlay-img {
