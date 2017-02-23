@@ -1310,8 +1310,13 @@ WickObject.prototype.generateAlphaMask = function (imageData) {
 
 WickObject.prototype.isClickable = function () {
     if(!this.isSymbol) return false;
-    if(!this.onClickFnBody) this.onClickFnBody = this.onClick.toString().match(/function[^{]+\{([\s\S]*)\}$/)[1];
-    return $.trim( this.onClickFnBody ) !== '';
+
+    if(this._isClickable === undefined) {
+        var _onClickFnBody = this.onClick.toString().match(/function[^{]+\{([\s\S]*)\}$/)[1];
+        this._isClickable =  $.trim( _onClickFnBody ) !== '';
+    }
+
+    return this._isClickable;
 }
 
 WickObject.prototype.getCurrentFrames = function () {

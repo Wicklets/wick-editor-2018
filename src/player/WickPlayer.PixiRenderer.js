@@ -103,7 +103,8 @@ var WickPixiRenderer = function (project) {
 			var s = new XMLSerializer().serializeToString(svgDoc)
 			var base64svg = 'data:image/svg+xml;base64,' + window.btoa(s);
 			
-			wickObj.pixiSprite = PIXI.Sprite.fromImage(base64svg);
+			// https://github.com/pixijs/pixi.js/issues/936
+			wickObj.pixiSprite = PIXI.Sprite.fromImage(base64svg, undefined, undefined, 4.0);
             wickObj.pixiContainer.addChild(wickObj.pixiSprite);
         } else if (wickObj.fontData) {
         	var style = {
@@ -289,18 +290,18 @@ var WickPixiRenderer = function (project) {
 	    } else {
 	        if(wickObj.pixiSprite) {
 	            wickObj.pixiSprite.visible = true;
-	            if(!wickObj.pathData) {
+	            //if(!wickObj.pathData) {
 		            wickObj.pixiSprite.anchor = new PIXI.Point(0.5, 0.5);
 		            wickObj.pixiSprite.position.x = wickObj.x;
 		            wickObj.pixiSprite.position.y = wickObj.y;
 		            wickObj.pixiSprite.rotation = wickObj.rotation/360*2*3.14159;
 		            wickObj.pixiSprite.scale.x = wickObj.scaleX;
 		            wickObj.pixiSprite.scale.y = wickObj.scaleY;
-		        } else {
-		        	wickObj.pixiSprite.position.x = wickObj.x//0;
-		        	wickObj.pixiSprite.position.y = wickObj.y//0;
-		        	wickObj.pixiSprite.anchor = new PIXI.Point(0.5, 0.5);
-		        }
+		        //} else {
+		        //	wickObj.pixiSprite.position.x = wickObj.x//0;
+		        //	wickObj.pixiSprite.position.y = wickObj.y//0;
+		        //	wickObj.pixiSprite.anchor = new PIXI.Point(0.5, 0.5);
+		        //}
 	            wickObj.pixiSprite.alpha = wickObj.opacity;
 
 	            if(wickObj.flipX) { 

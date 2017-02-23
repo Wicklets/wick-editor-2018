@@ -438,12 +438,12 @@ var WickActionHandler = function (wickEditor) {
             var currentObject = wickEditor.project.currentObject;
 
             // Add an empty frame
-            currentObject.getCurrentLayer().addFrame(args.frame);
+            args.layer.addFrame(args.frame);
 
             // Move to that new frame
             wickEditor.actionHandler.doAction('movePlayhead', {
                 obj:currentObject,
-                newPlayheadPosition:currentObject.getCurrentLayer().getTotalLength()-1
+                newPlayheadPosition:args.frame.playheadPosition
             });
 
             currentObject.framesDirty = true;
@@ -452,7 +452,7 @@ var WickActionHandler = function (wickEditor) {
         },
         function (args) {
             var currentObject = wickEditor.project.currentObject;
-            currentObject.getCurrentLayer().frames.pop();
+            args.layer.frames.pop();
 
             currentObject.framesDirty = true;
 
@@ -640,37 +640,27 @@ var WickActionHandler = function (wickEditor) {
 
     registerAction('movePlayhead',
         function (args) {
-            var proceed = function () {
-                wickEditor.fabric.deselectAll();
-                
-                wickEditor.fabric.onionSkinsDirty = true;
-                var currentObject = wickEditor.project.currentObject;
 
-                args.oldPlayheadPosition = args.obj.playheadPosition;
-                args.oldLayer = args.obj.currentLayer;
+            wickEditor.project.deselectObjectType(WickObject);
+            args.newPlayheadPosition = Math.max(0, args.newPlayheadPosition)
+            
+            wickEditor.fabric.onionSkinsDirty = true;
+            var currentObject = wickEditor.project.currentObject;
 
-                if(args.newPlayheadPosition !== undefined) {
-                    var oldFrame = wickEditor.project.getCurrentFrame();
-                    args.obj.playheadPosition = args.newPlayheadPosition;
-                    var newFrame = wickEditor.project.getCurrentFrame();
-                }
+            args.oldPlayheadPosition = args.obj.playheadPosition;
+            args.oldLayer = args.obj.currentLayer;
 
-                if(args.newLayer) {
-                    args.obj.currentLayer = args.obj.layers.indexOf(args.newLayer)
-                }
-
-                done();
+            if(args.newPlayheadPosition !== undefined) {
+                var oldFrame = wickEditor.project.getCurrentFrame();
+                args.obj.playheadPosition = args.newPlayheadPosition;
+                var newFrame = wickEditor.project.getCurrentFrame();
             }
 
-            //var currentFrame = wickEditor.project.getCurrentFrame();
-            //if(!currentFrame) {
-                proceed();
-            //} else {
-            //    wickEditor.fabric.projectRenderer.getCanvasThumbnail(function (thumbnail) { 
-            //        currentFrame.thumbnail = thumbnail;
-            //        proceed();
-            //    });
-            //}
+            if(args.newLayer) {
+                args.obj.currentLayer = args.obj.layers.indexOf(args.newLayer)
+            }
+
+            done();
             
         },
         function (args) {
