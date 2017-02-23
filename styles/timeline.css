@@ -6,7 +6,7 @@ body {
 
 	--layers-width: 70px;
 
-	--frame-width: 70px;
+	--frame-width: 80px;
 	--frame-handle-width: 5px;
 	--frames-strip-shrink-factor: 6px;
 
@@ -114,7 +114,7 @@ body {
 
 .frame {
 	background-color: #FFFFFF;
-
+/*    opacity: 0.5;*/
 	cursor: move;
 
 	width:  calc(var(--frame-width)      - var(--common-padding));
@@ -153,6 +153,12 @@ body {
 
 .frame-extender-handle-right {
 	float:right;
+    
+}
+
+.frame-extender-handle-right:hover{
+    
+    background-color: black;
 }
 
 .frame-extender-handle-left {
@@ -177,6 +183,7 @@ body {
 	height: calc(var(--vertical-spacing) / 1.8);
 	position: absolute;
     margin-left: calc(calc(var(--frame-width) / 2) / 1.54);
+    /*    @Todo center add frame overlay w/o magic no*/
     margin-top: 16px;
 	cursor: pointer;
     background-color: #ffffff;
