@@ -360,7 +360,6 @@ var TimelineInterface = function (wickEditor) {
 
             this.elem = document.createElement('div');
             this.elem.className = "frame";
-   
             this.elem.style.left = (that.wickFrame.playheadPosition * cssVar('--frame-width')) + 'px';
             this.elem.style.top = (wickLayers.indexOf(that.wickLayer) * cssVar('--vertical-spacing')) + 'px';
             this.elem.style.width = (that.wickFrame.length * cssVar('--frame-width') - cssVar('--common-padding')/2) + 'px';
