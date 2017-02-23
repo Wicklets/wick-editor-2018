@@ -296,8 +296,9 @@ WickProject.saveProjectJSONInLocalStorage = function (projectJSON) {
     }
 }
 
-WickProject.prototype.getCopyData = function (objects) {
+WickProject.prototype.getCopyData = function () {
     var objectJSONs = [];
+    var objects = this.getSelectedObjects();
     for(var i = 0; i < objects.length; i++) {
         objects[i].uuidCopiedFrom = objects[i].uuid;
         objectJSONs.push(objects[i].getAsJSON());

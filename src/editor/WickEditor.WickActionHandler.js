@@ -592,7 +592,7 @@ var WickActionHandler = function (wickEditor) {
                 }
             });
             if(touching) {
-                scrap();
+                scrap();return;
             }
 
             wickEditor.actionHandler.doAction('movePlayhead', {
@@ -626,7 +626,7 @@ var WickActionHandler = function (wickEditor) {
                 }
             });
             if(touching) {
-                scrap();
+                scrap();return;
             }
 
             wickEditor.project.currentObject.framesDirty = true;

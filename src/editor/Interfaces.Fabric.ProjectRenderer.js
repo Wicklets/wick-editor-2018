@@ -102,6 +102,8 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
                 fabricObj.thumbnailGenImg.src = fabricObj._cacheCanvas.toDataURL()
             }
 
+            if(!fabricObj.thumbnailGenImg) return;
+
             thumbCtx.drawImage(
                 fabricObj.thumbnailGenImg, 
                 fabricObj.left - fabricObj.width/2, 

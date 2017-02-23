@@ -434,7 +434,7 @@ var GuiActionHandler = function (wickEditor) {
                     var objs = WickObject.fromJSONArray(JSON.parse(file));
                     objs.forEach(function (obj) {
                         obj.getAllChildObjectsRecursive().forEach(function (child) {
-                            child.uuid = null;
+                            child.uuid = random.uuid4();
                         });
                     });
                     wickEditor.actionHandler.doAction('addObjects', {

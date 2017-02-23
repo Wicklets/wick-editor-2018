@@ -191,7 +191,7 @@ var InputHandler = function (wickEditor) {
         
         var clipboardData = event.clipboardData;
         if (clipboardEvent == 'cut' || clipboardEvent == 'copy') {
-            clipboardData.setData('text/wickobjectsjson', wickEditor.project.getCopyData(wickEditor.fabric.getSelectedObjects(WickObject)));
+            clipboardData.setData('text/wickobjectsjson', wickEditor.project.getCopyData());
             //clipboardData.setData('text/html', htmlToCopy);
         }
         if (clipboardEvent == 'paste') {
