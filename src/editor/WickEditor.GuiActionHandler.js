@@ -121,7 +121,7 @@ var GuiActionHandler = function (wickEditor) {
     registerAction('runProject',
         ['Modifier','ENTER'],
         ['runButton'],
-        {},
+        {usableInTextBoxes:true},
         function(args) {
             that.keys = [];
             that.specialKeys = [];

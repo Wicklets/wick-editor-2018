@@ -18,7 +18,7 @@ WickProject.Exporter = (function () {
         // All libs needed by the player. 
         var requiredLibFiles = [
             "lib/jquery.min.js",
-            "lib/pixi.min.js",
+            "lib/pixi.4.2.2.min.js",
             "lib/lz-string.min.js",
             "lib/screenfull.js",
             "lib/polyfills.js",

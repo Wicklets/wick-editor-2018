@@ -100,6 +100,7 @@ var WickPlayer = (function () {
         if(mobileMode) {
             // Touch event (one touch = like a mouse click)
             playerCanvasContainer.addEventListener("touchstart", onTouchStart, false);
+            playerCanvasContainer.addEventListener("touchmove", onTouchMove, false);
 
             // Squash gesture events
             playerCanvasContainer.addEventListener('gesturestart',  function(e) { e.preventDefault(); });
@@ -117,6 +118,7 @@ var WickPlayer = (function () {
 
         rendererContainerEl.removeEventListener("mousedown", onMouseDown);
         rendererContainerEl.removeEventListener("touchstart", onTouchStart);
+        rendererContainerEl.removeEventListener("touchmove", onTouchMove);
 
         playerCanvasContainer.removeEventListener("keydown", handleKeyDownInput);
         playerCanvasContainer.removeEventListener("keyup", handleKeyUpInput);
@@ -127,7 +129,7 @@ var WickPlayer = (function () {
     }
 
     wickPlayer.getMouse = function () {
-        return mouse;
+        return mouse || {x:0,y:0};
     }
 
     wickPlayer.getKeys = function () {
@@ -372,9 +374,9 @@ var WickPlayer = (function () {
         mouse = getMousePos(document.getElementById("rendererCanvas"), evt);
 
         // Check if we're hovered over a clickable object...
-        var hoveredOverObj = false;
-        project.rootObject.getAllActiveChildObjectsRecursive(true).forEach(function(child) {
-            if(child.isClickable() && child.isPointInside(mouse)) {
+        var hoveredOverObj = null;
+        project.rootObject.getAllActiveChildObjectsRecursive(true).forEachBackwards(function(child) {
+            if(child.isPointInside(mouse)) {
                 child.hoveredOver = true;
                 hoveredOverObj = child;
             } else {
@@ -383,7 +385,7 @@ var WickPlayer = (function () {
         });
 
         //...and change the cursor if we are
-        if(hoveredOverObj) {
+        if(hoveredOverObj && hoveredOverObj.isClickable()) {
             rendererContainerEl.style.cursor = hoveredOverObj.cursor || "pointer";
         } else {
             rendererContainerEl.style.cursor = "default";
@@ -436,12 +438,22 @@ var WickPlayer = (function () {
         }
 
         var touchPos = getTouchPos(document.getElementById("rendererCanvas"), evt);
+        mouse = touchPos;
 
         project.rootObject.getAllActiveChildObjects().forEach(function(child) {
             if(child.isPointInside(touchPos) && child.isClickable()) {
                 child.runScript(child.wickScripts["onClick"], 'onClick');
             }
         });
+
+    }
+
+    var onTouchMove = function (evt) {
+
+        evt.preventDefault();
+        
+        var touchPos = getTouchPos(document.getElementById("rendererCanvas"), evt);
+        mouse = touchPos;
 
     }
 

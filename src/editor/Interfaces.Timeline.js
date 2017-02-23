@@ -452,6 +452,7 @@ var TimelineInterface = function (wickEditor) {
             for(var i = 0; i < 100; i++) {
                 var framesStripCell = document.createElement('div');
                 framesStripCell.className = 'frames-strip-cell';
+                framesStripCell.style.left = i*cssVar('--frame-width') + 'px';
                 this.elem.appendChild(framesStripCell);
             }
         }

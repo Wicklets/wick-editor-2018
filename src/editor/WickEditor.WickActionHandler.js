@@ -640,37 +640,27 @@ var WickActionHandler = function (wickEditor) {
 
     registerAction('movePlayhead',
         function (args) {
-            var proceed = function () {
-                wickEditor.fabric.deselectAll();
-                
-                wickEditor.fabric.onionSkinsDirty = true;
-                var currentObject = wickEditor.project.currentObject;
 
-                args.oldPlayheadPosition = args.obj.playheadPosition;
-                args.oldLayer = args.obj.currentLayer;
+            wickEditor.project.clearSelection();
+            args.newPlayheadPosition = Math.max(0, args.newPlayheadPosition)
+            
+            wickEditor.fabric.onionSkinsDirty = true;
+            var currentObject = wickEditor.project.currentObject;
 
-                if(args.newPlayheadPosition !== undefined) {
-                    var oldFrame = wickEditor.project.getCurrentFrame();
-                    args.obj.playheadPosition = args.newPlayheadPosition;
-                    var newFrame = wickEditor.project.getCurrentFrame();
-                }
+            args.oldPlayheadPosition = args.obj.playheadPosition;
+            args.oldLayer = args.obj.currentLayer;
 
-                if(args.newLayer) {
-                    args.obj.currentLayer = args.obj.layers.indexOf(args.newLayer)
-                }
-
-                done();
+            if(args.newPlayheadPosition !== undefined) {
+                var oldFrame = wickEditor.project.getCurrentFrame();
+                args.obj.playheadPosition = args.newPlayheadPosition;
+                var newFrame = wickEditor.project.getCurrentFrame();
             }
 
-            //var currentFrame = wickEditor.project.getCurrentFrame();
-            //if(!currentFrame) {
-                proceed();
-            //} else {
-            //    wickEditor.fabric.projectRenderer.getCanvasThumbnail(function (thumbnail) { 
-            //        currentFrame.thumbnail = thumbnail;
-            //        proceed();
-            //    });
-            //}
+            if(args.newLayer) {
+                args.obj.currentLayer = args.obj.layers.indexOf(args.newLayer)
+            }
+
+            done();
             
         },
         function (args) {

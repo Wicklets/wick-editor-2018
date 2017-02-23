@@ -8,53 +8,74 @@ var ScriptingIDEInterface = function (wickEditor) {
     var objectBeingScripted;
 
     this.setup = function () {
-        maximized = false;
-        objectBeingScripted = null;
+        var proceed = function () {
+            maximized = false;
+            objectBeingScripted = null;
 
-        this.open = false;
+            that.open = false;
 
-        this.aceEditor = ace.edit("scriptEditor");
-        this.aceEditor.setTheme("ace/theme/chrome");
-        this.aceEditor.getSession().setMode("ace/mode/javascript");
-        this.aceEditor.$blockScrolling = Infinity; // Makes that weird message go away
-        this.aceEditor.setAutoScrollEditorIntoView(true);
+            that.aceEditor = ace.edit("scriptEditor");
+            that.aceEditor.setTheme("ace/theme/chrome");
+            that.aceEditor.getSession().setMode("ace/mode/javascript");
+            that.aceEditor.$blockScrolling = Infinity; // Makes that weird message go away
+            that.aceEditor.setAutoScrollEditorIntoView(true);
 
-        this.beautify = ace.require("ace/ext/beautify");
+            that.beautify = ace.require("ace/ext/beautify");
 
-        // Update selected objects scripts when script editor text changes
-        this.aceEditor.getSession().on('change', function (e) {
-            if(!objectBeingScripted) return;
-            objectBeingScripted.wickScript = that.aceEditor.getValue();
-        });
+            // Update selected objects scripts when script editor text changes
+            that.aceEditor.getSession().on('change', function (e) {
+                if(!objectBeingScripted) return;
+                objectBeingScripted.wickScript = that.aceEditor.getValue();
+            });
 
-        this.aceEditor.getSession().on("changeAnnotation", function(){
-            var annot = that.aceEditor.getSession().getAnnotations();
+            that.aceEditor.getSession().on("changeAnnotation", function(){
+                var annot = that.aceEditor.getSession().getAnnotations();
 
-            // Look for errors
-            if(!objectBeingScripted) return;
+                // Look for errors
+                if(!objectBeingScripted) return;
 
-            objectBeingScripted.hasSyntaxErrors = false;
-            for (var key in annot){
-                if (annot.hasOwnProperty(key)) {
-                    if(annot[key].type === 'error') {
-                        // There's a syntax error. Set the projectHasErrors flag so the project won't run.
-                        //that.projectHasErrors = true;
-                        objectBeingScripted.hasSyntaxErrors = true;
+                objectBeingScripted.hasSyntaxErrors = false;
+                for (var key in annot){
+                    if (annot.hasOwnProperty(key)) {
+                        if(annot[key].type === 'error') {
+                            // There's a syntax error. Set the projectHasErrors flag so the project won't run.
+                            //that.projectHasErrors = true;
+                            objectBeingScripted.hasSyntaxErrors = true;
+                        }
                     }
                 }
+            });
+
+            that.resize = function () {
+                var GUIWidth = parseInt($("#scriptingGUI").css("width"));
+                //$("#scriptingGUI").css('left', (window.innerWidth/2 - GUIWidth/2)+'px');
+                that.aceEditor.resize();
+            }
+
+            window.addEventListener('resize', function(e) {
+                that.resize();
+            });
+            that.resize();
+        }
+        $.ajax({
+            url: "../src/project/Docs.json",
+            type: 'GET',
+            data: {},
+            success: function(data) {
+                window.wickDocs = "";
+                data.docs.forEach(function (doc) {
+                    doc.properties.forEach(function (prop) {
+                        window.wickDocs += prop.name.split('(')[0] + "|"
+                    });
+                });
+            },
+            error: function () {
+                console.log("ajax: error")
+            },
+            complete: function(response, textStatus) {
+                proceed();
             }
         });
-
-        this.resize = function () {
-            var GUIWidth = parseInt($("#scriptingGUI").css("width"));
-            //$("#scriptingGUI").css('left', (window.innerWidth/2 - GUIWidth/2)+'px');
-            this.aceEditor.resize();
-        }
-
-        window.addEventListener('resize', function(e) {
-            that.resize();
-        });
-        this.resize();
     }
 
     this.syncWithEditorState = function () {
