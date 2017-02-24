@@ -4,7 +4,7 @@
 
 Wick is an HTML5-based Flash-style editor and player for interactive media on the web.
 
-Try the editor [here](http://wickeditor.com/)!
+Try the editor and see the demos [here](http://wickeditor.com/)!
 
 ### How to run the editor locally for development
 * Clone or download and unzip this repo
