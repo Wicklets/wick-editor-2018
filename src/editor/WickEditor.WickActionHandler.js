@@ -443,7 +443,7 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             var currentObject = wickEditor.project.currentObject;
 
-            if (currentObject.getCurrentLayer().getFrameAtPlayheadPosition(args.frame.playheadPosition)) {
+            if (args.layer.getFrameAtPlayheadPosition(args.frame.playheadPosition)) {
                 scrap(true); return;
             }
 
