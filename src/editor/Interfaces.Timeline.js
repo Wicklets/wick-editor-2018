@@ -2,14 +2,18 @@ var TimelineInterface = function (wickEditor) {
 
     var self = this;
 
-// Private vars
+// Internal state stuff vars
+
+    var lastObject;
+
+// 
 
     var timeline;
 
+// 
+
     var cssVars;
     var cssVar;
-
-    var lastObject;
 
 // Interactions
 
@@ -181,12 +185,6 @@ var TimelineInterface = function (wickEditor) {
     }
 
 // Div building helper functions
-    
-    var getTimelineHeight = function (tl) {
-        var maxTimelineHeight = cssVar("--max-timeline-height"); 
-        var expectedTimelineHeight = tl.layersContainer.layers.length * cssVar("--vertical-spacing") + 2 * cssVar("--common-padding"); 
-        return Math.min(expectedTimelineHeight, maxTimelineHeight); 
-    }
 
     var Timeline = function () {
         this.elem = null;
@@ -215,7 +213,13 @@ var TimelineInterface = function (wickEditor) {
         this.update = function () {
             this.layersContainer.update();
             this.framesContainer.update();
-            this.elem.style.height = getTimelineHeight(this) + "px";
+            this.elem.style.height = this.calculateHeight() + "px";
+        }
+
+        this.calculateHeight = function () {
+            var maxTimelineHeight = 1000//cssVar("--max-timeline-height"); 
+            var expectedTimelineHeight = this.layersContainer.layers.length * cssVar("--vertical-spacing") + 11; 
+            return Math.min(expectedTimelineHeight, maxTimelineHeight); 
         }
     }
 

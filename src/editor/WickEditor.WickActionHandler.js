@@ -112,6 +112,8 @@ var WickActionHandler = function (wickEditor) {
 // API
 
     this.doAction = function (actionName, args) {
+        if(!args) args = {};
+
         if(!initialAction) return;
 
         // Check for invalid action
