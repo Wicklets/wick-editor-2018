@@ -147,6 +147,19 @@ var TimelineInterface = function (wickEditor) {
         'start' : (function (e) {
             interactionData.allLayerDivs = [];
             interactionData.allLayerDivs.push(interactionData.layer.elem);
+
+            var currentLayer = wickEditor.project.getCurrentLayer();
+            timeline.framesContainer.frames.forEach(function (frame) {
+                if (frame.wickFrame.parentLayer === currentLayer) {
+                    interactionData.allLayerDivs.push(frame.elem)
+                }
+            });
+            timeline.framesContainer.frameStrips.forEach(function (frameStrip) {
+                if (frameStrip.wickLayer === currentLayer) {
+                    interactionData.allLayerDivs.push(frameStrip.elem)
+                }
+            });
+
         }), 
         'update' : (function (e) {
             interactionData.allLayerDivs.forEach(function (div) {
@@ -304,6 +317,7 @@ var TimelineInterface = function (wickEditor) {
         this.elem = null;
 
         this.frames = null;
+        this.frameStrips = null;
 
         this.addFrameOverlay = new AddFrameOverlay();
         this.playhead = new Playhead();
@@ -331,13 +345,16 @@ var TimelineInterface = function (wickEditor) {
         this.rebuild = function () {
             this.elem.innerHTML = "";
             this.frames = [];
+            this.frameStrips = [];
 
             var wickLayers = wickEditor.project.currentObject.layers;
             wickLayers.forEach(function (wickLayer) {
                 var framesStrip = new FramesStrip();
                 framesStrip.wickLayer = wickLayer;
                 framesStrip.build();
+                framesStrip.wickLayer = wickLayer;
                 that.elem.appendChild(framesStrip.elem);
+                that.frameStrips.push(framesStrip)
 
                 wickLayer.frames.forEach(function(wickFrame) {
                     var frame = new Frame();
@@ -501,7 +518,7 @@ var TimelineInterface = function (wickEditor) {
         }
 
         this.update = function () {
-            this.x = wickEditor.project.currentObject.playheadPosition * cssVar('--frame-width') + cssVar('--frame-width')/2 - cssVar('--playhead-width')/2;
+            this.x = wickEditor.project.currentObject.playheadPosition * cssVar('--frame-width') + cssVar('--frame-width')/2 - cssVar('--playhead-width')/2 + 9;
             this.elem.style.left = this.x + 'px';
         }
     }

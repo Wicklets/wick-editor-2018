@@ -60,8 +60,8 @@ body {
 .layer {
 	background-color: #FFFFFF;
 
-	width:  calc(100%);
-	height: calc(var(--vertical-spacing) - var(--common-padding));
+	width:  calc(100% - var(--common-padding));
+	height: calc(var(--vertical-spacing));
 
 	margin: calc(var(--common-padding) / 2);
 
