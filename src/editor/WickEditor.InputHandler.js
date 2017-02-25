@@ -276,48 +276,48 @@ var InputHandler = function (wickEditor) {
     }
     
     var loadAnimatedGIF = function (dataURL, callback) {
+        //console.log(dataURL)
+
         var gifSymbol = WickObject.createNewSymbol();
         gifSymbol.layers[0].frames = [];
 
-        //var gif = document.getElementById("gifImportDummyElem");
         var newGifEl = document.createElement("img");
-        newGifEl.id = "gifImportDummyElem";
-        document.body.appendChild(newGifEl);
-        var gif = document.getElementById('gifImportDummyElem')
-        gif.setAttribute('src', dataURL);
-        gif.setAttribute('height', '467px');
-        gif.setAttribute('width', '375px');
 
-        var framesDataURLs;
-        var gifWidth;
-        var gifHeight;
-        var superGif = new SuperGif({ gif: gif } );
-        superGif.load(function () {
+        newGifEl.onload = function () {
+            document.body.appendChild(newGifEl)
+            
+            var framesDataURLs;
+            var gifWidth;
+            var gifHeight;
+            var superGif = new SuperGif({ gif: newGifEl } );
+            superGif.load(function () {
 
-            gifWidth = superGif.get_canvas().width;
-            gifHeight = superGif.get_canvas().height;
-            framesDataURLs = superGif.getFrameDataURLs();
-            proceed();
+                gifWidth = superGif.get_canvas().width;
+                gifHeight = superGif.get_canvas().height;
+                framesDataURLs = superGif.getFrameDataURLs();
+                proceed();
 
-        });
+            });
 
-        var proceed = function () {
+            var proceed = function () {
 
-            for(var i = 0; i < framesDataURLs.length; i++) {
-                var frameWickObj = WickObject.fromImage(framesDataURLs[i]);
-                frameWickObj.width = gifWidth;
-                frameWickObj.height = gifHeight;
+                for(var i = 0; i < framesDataURLs.length; i++) {
+                    var frameWickObj = WickObject.fromImage(framesDataURLs[i]);
+                    frameWickObj.width = gifWidth;
+                    frameWickObj.height = gifHeight;
 
-                gifSymbol.layers[0].addFrame(new WickFrame());
-                gifSymbol.layers[0].frames[i].playheadPosition = i;
-                gifSymbol.layers[0].frames[i].wickObjects.push(frameWickObj);
+                    gifSymbol.layers[0].addFrame(new WickFrame());
+                    gifSymbol.layers[0].frames[i].playheadPosition = i;
+                    gifSymbol.layers[0].frames[i].wickObjects.push(frameWickObj);
+                }
+
+                gifSymbol.width = gifWidth;
+                gifSymbol.height = gifHeight;
+                callback(gifSymbol);
             }
-
-            gifSymbol.width = gifWidth;
-            gifSymbol.height = gifHeight;
-            callback(gifSymbol);
         }
 
+        newGifEl.src = dataURL;
     }
 
     var loadImage = function (src, callback) {
@@ -346,7 +346,7 @@ var InputHandler = function (wickEditor) {
     }
 
     var loadFileIntoWickObject = function (e,file,fileType) {
-        
+
         if (fileType === 'text/html') {
             WickProject.fromFile(file, function(project) {
                 wickEditor.project = project;

@@ -13,7 +13,7 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
         canvas.forEachObject(function(fabricObj) {
             if(args && args.objs && args.objs.indexOf(fabricObj.wickObjectRef) === -1) return;
 
-            if(fabricObj.wickObjectRef && !fabricObj.isWickGUIElement && fabricObj.wickObjectRef.isOnActiveLayer()) {
+            if(fabricObj.wickObjectRef && !fabricObj.isWickGUIElement && fabricObj.wickObjectRef.isOnActiveLayer(wickEditor.project.getCurrentLayer())) {
                 //fabricObj.set('active', true);
                 selectedObjs.push(fabricObj);
             }
@@ -66,14 +66,13 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
             })
 
         }
-
         
     }
 
     self.getCanvasThumbnail = function (callback) {
         var objs = [];
         canvas.forEachObject(function(fabricObj) {
-            if(fabricObj.wickObjectRef && !fabricObj.isWickGUIElement && fabricObj.wickObjectRef.isOnActiveLayer()) {
+            if(fabricObj.wickObjectRef && !fabricObj.isWickGUIElement && fabricObj.wickObjectRef.isOnActiveLayer(wickEditor.project.getCurrentLayer())) {
                 //fabricObj.set('active', true);
                 objs.push(fabricObj);
             }

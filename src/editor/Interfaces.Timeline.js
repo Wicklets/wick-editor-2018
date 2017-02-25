@@ -200,8 +200,14 @@ var TimelineInterface = function (wickEditor) {
             this.elem.appendChild(this.framesContainer.elem);
         }
 
-        this.update = function () {
+        this.rebuild = function () {
+            this.layersContainer.rebuild();
+            this.framesContainer.rebuild();
+        }
 
+        this.update = function () {
+            this.layersContainer.update();
+            this.framesContainer.update();
         }
     }
 
@@ -555,12 +561,10 @@ var TimelineInterface = function (wickEditor) {
             wickEditor.project.currentObject.framesDirty = false;
             lastObject = wickEditor.project.currentObject;
 
-            timeline.layersContainer.rebuild();
-            timeline.framesContainer.rebuild();
+            timeline.rebuild();
         }
 
-        timeline.layersContainer.update();
-        timeline.framesContainer.update();
+        timeline.update();
 
     }
 
