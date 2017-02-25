@@ -461,11 +461,12 @@ var TimelineInterface = function (wickEditor) {
                 timeline.framesContainer.addFrameOverlay.elem.style.left = roundToNearestN(e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2, cssVar('--frame-width')) + "px";
                 timeline.framesContainer.addFrameOverlay.elem.style.top  = roundToNearestN(e.clientY - timeline.framesContainer.elem.getBoundingClientRect().top  - cssVar('--vertical-spacing')/2, cssVar('--vertical-spacing')) + "px";
             });
-            this.elem.addEventListener('mousedown', function (e) {
+            this.elem.addEventListener('mouseup', function (e) {
                 /*wickEditor.actionHandler.doAction('movePlayhead', {
                     obj: wickEditor.project.currentObject,
                     newPlayheadPosition: Math.round((e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2) / cssVar('--frame-width')),
                 });*/
+                if(timeline.framesContainer.addFrameOverlay.elem.style.display === 'none') return;
                 var newFrame = new WickFrame();
                 newFrame.playheadPosition = Math.round((e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2) / cssVar('--frame-width'))
                 var layerIndex = Math.round((e.clientY - timeline.framesContainer.elem.getBoundingClientRect().top - cssVar('--vertical-spacing')/2) / cssVar('--vertical-spacing'))
@@ -559,10 +560,10 @@ var TimelineInterface = function (wickEditor) {
         // Setup mouse events for interactions
 
         currentInteraction = null;
-        timeline.elem.addEventListener('mousemove', function (e) {
+        /*timeline.elem*/window.addEventListener('mousemove', function (e) {
             updateInteraction(e);
         });
-        timeline.elem.addEventListener('mouseup', function (e) {
+        /*timeline.elem*/window.addEventListener('mouseup', function (e) {
             finishInteraction(e);
         });
     }
