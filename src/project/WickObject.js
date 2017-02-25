@@ -925,9 +925,9 @@ WickObject.prototype.getAbsoluteRotation = function () {
     }
 }
 
-WickObject.prototype.isOnActiveLayer = function () {
+WickObject.prototype.isOnActiveLayer = function (activeLayer) {
 
-    return this.parentObject.getLayerWithChild(this) === this.parentObject.getCurrentLayer();
+    return this.parentFrame.parentLayer === activeLayer;
 
 }
 

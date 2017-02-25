@@ -455,7 +455,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         }
 
         // Objects on other layers can't be interacted with
-        if (!wickObj.isOnActiveLayer()) {
+        if (!wickObj.isOnActiveLayer(wickEditor.project.getCurrentLayer())) {
             fabricObj.hasControls = false;
             fabricObj.selectable = false;
             fabricObj.evented = false;
