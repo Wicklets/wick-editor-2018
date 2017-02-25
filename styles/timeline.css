@@ -136,8 +136,8 @@ body {
 
 	position: absolute;
 	overflow: hidden;
-/*    margin-top: 7px;
-    margin-left: 15px;*/
+    margin-top: 7px;
+    margin-left: 15px;
 	box-shadow: var(--border), var(--shadow);
     
     border-radius: 3px;
