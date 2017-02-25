@@ -14,6 +14,10 @@ body {
 
 	--shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
 	--border: inset 0px 0px 1px #555;
+    
+    --timeline-left-padding   = 5px; 
+    --timeline-top-padding    = 6px; 
+    --timeline-bottom-padding = 5px; 
 }
 
 .timeline {
@@ -21,10 +25,9 @@ body {
 
 	margin: 0px;
 	padding: 0px;
-
+    
 	width: 100%;
     height: 100px; 
-
 
 	overflow: hidden;
 }
@@ -57,7 +60,7 @@ body {
 .layer {
 	background-color: #FFFFFF;
 
-	width:  calc(100% - var(--common-padding));
+	width:  calc(100%);
 	height: calc(var(--vertical-spacing) - var(--common-padding));
 
 	margin: calc(var(--common-padding) / 2);
