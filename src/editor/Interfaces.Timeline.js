@@ -27,12 +27,12 @@ var TimelineInterface = function (wickEditor) {
         }), 
         'update' : (function (e) {
             interactionData.frame.elem.style.left = e.x - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')     /2 + 'px';
-            interactionData.frame.elem.style.top  = e.y - timeline.framesContainer.elem.getBoundingClientRect().top  - cssVar('--vertical-spacing')/2 + 'px';
+            interactionData.frame.elem.style.top  = e.y - timeline.framesContainer.elem.getBoundingClientRect().top  - cssVar('--layer-height')/2 + 'px';
             interactionData.frame.elem.style.zIndex = 10;
         }),
         'finish' : (function (e) {
             var newPlayheadPosition = Math.round(parseInt(interactionData.frame.elem.style.left) / cssVar('--frame-width'));
-            var newLayerIndex       = Math.round(parseInt(interactionData.frame.elem.style.top)  / cssVar('--vertical-spacing'));
+            var newLayerIndex       = Math.round(parseInt(interactionData.frame.elem.style.top)  / cssVar('--layer-height'));
             var newLayer = wickEditor.project.getCurrentObject().layers[newLayerIndex];
             if(!newLayer) newLayer = wickEditor.project.getCurrentLayer();
 
@@ -163,11 +163,11 @@ var TimelineInterface = function (wickEditor) {
         }), 
         'update' : (function (e) {
             interactionData.allLayerDivs.forEach(function (div) {
-                div.style.top = e.y - timeline.framesContainer.elem.getBoundingClientRect().top - cssVar('--vertical-spacing')/2 + 'px';
+                div.style.top = e.y - timeline.framesContainer.elem.getBoundingClientRect().top - cssVar('--layer-height')/2 + 'px';
             });
         }),
         'finish' : (function (e) {
-            var newIndex = Math.round(parseInt(interactionData.allLayerDivs[0].style.top) / cssVar('--vertical-spacing'));
+            var newIndex = Math.round(parseInt(interactionData.allLayerDivs[0].style.top) / cssVar('--layer-height'));
             newIndex = Math.max(newIndex, 0);
             newIndex = Math.min(newIndex, wickEditor.project.currentObject.layers.length-1);
 
@@ -231,7 +231,7 @@ var TimelineInterface = function (wickEditor) {
 
         this.calculateHeight = function () {
             var maxTimelineHeight = cssVar("--max-timeline-height"); 
-            var expectedTimelineHeight = this.layersContainer.layers.length * cssVar("--vertical-spacing") + 11; 
+            var expectedTimelineHeight = this.layersContainer.layers.length * cssVar("--layer-height") + 11; 
             return Math.min(expectedTimelineHeight, maxTimelineHeight); 
         }
     }
@@ -287,7 +287,7 @@ var TimelineInterface = function (wickEditor) {
 
             this.elem = document.createElement('div');
             this.elem.className = "layer";
-            this.elem.style.top = (wickLayers.indexOf(this.wickLayer) * cssVar('--vertical-spacing')) + 'px';
+            this.elem.style.top = (wickLayers.indexOf(this.wickLayer) * cssVar('--layer-height')) + 'px';
             this.elem.innerHTML = this.wickLayer.identifier;
             this.elem.wickData = {wickLayer:this.wickLayer};
 
@@ -396,9 +396,9 @@ var TimelineInterface = function (wickEditor) {
             this.elem = document.createElement('div');
             this.elem.className = "frame";
             this.elem.style.left = (that.wickFrame.playheadPosition * cssVar('--frame-width')) + 'px';
-            this.elem.style.top = (wickLayers.indexOf(that.wickLayer) * cssVar('--vertical-spacing')) + 'px';
+            this.elem.style.top = (wickLayers.indexOf(that.wickLayer) * cssVar('--layer-height')) + 'px';
             this.elem.style.width = (that.wickFrame.length * cssVar('--frame-width') - cssVar('--common-padding')/2) + 'px';
-            this.elem.style.height = cssVar('--vertical-spacing')-cssVar('--common-padding')+'px'
+            this.elem.style.height = cssVar('--layer-height')-cssVar('--common-padding')+'px'
             this.elem.wickData = {wickFrame:that.wickFrame};
             this.elem.addEventListener('mousedown', function (e) {
                 wickEditor.actionHandler.doAction('movePlayhead', {
@@ -466,17 +466,17 @@ var TimelineInterface = function (wickEditor) {
 
             this.elem = document.createElement('div');
             this.elem.className = 'frames-strip';
-            this.elem.style.top = (wickLayers.indexOf(this.wickLayer) * cssVar('--vertical-spacing')) + 'px';
+            this.elem.style.top = (wickLayers.indexOf(this.wickLayer) * cssVar('--layer-height')) + 'px';
             this.elem.addEventListener('mousemove', function (e) {
                 var px = Math.round((e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2)      / cssVar('--frame-width'))
-                var py = Math.round((e.clientY - timeline.framesContainer.elem.getBoundingClientRect().top  - cssVar('--vertical-spacing')/2) / cssVar('--vertical-spacing'))
+                var py = Math.round((e.clientY - timeline.framesContainer.elem.getBoundingClientRect().top  - cssVar('--layer-height')/2) / cssVar('--layer-height'))
 
                 if(currentInteraction) return;
                 if(wickEditor.project.getCurrentObject().layers[py].getFrameAtPlayheadPosition(px)) return;
                 
                 timeline.framesContainer.addFrameOverlay.elem.style.display = 'block';
                 timeline.framesContainer.addFrameOverlay.elem.style.left = roundToNearestN(e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2, cssVar('--frame-width')) + "px";
-                timeline.framesContainer.addFrameOverlay.elem.style.top  = roundToNearestN(e.clientY - timeline.framesContainer.elem.getBoundingClientRect().top  - cssVar('--vertical-spacing')/2, cssVar('--vertical-spacing')) + "px";
+                timeline.framesContainer.addFrameOverlay.elem.style.top  = roundToNearestN(e.clientY - timeline.framesContainer.elem.getBoundingClientRect().top  - cssVar('--layer-height')/2, cssVar('--layer-height')) + "px";
             });
             this.elem.addEventListener('mouseup', function (e) {
                 /*wickEditor.actionHandler.doAction('movePlayhead', {
@@ -486,7 +486,7 @@ var TimelineInterface = function (wickEditor) {
                 if(timeline.framesContainer.addFrameOverlay.elem.style.display === 'none') return;
                 var newFrame = new WickFrame();
                 newFrame.playheadPosition = Math.round((e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2) / cssVar('--frame-width'))
-                var layerIndex = Math.round((e.clientY - timeline.framesContainer.elem.getBoundingClientRect().top - cssVar('--vertical-spacing')/2) / cssVar('--vertical-spacing'))
+                var layerIndex = Math.round((e.clientY - timeline.framesContainer.elem.getBoundingClientRect().top - cssVar('--layer-height')/2) / cssVar('--layer-height'))
                 var layer = wickEditor.project.currentObject.layers[layerIndex];
                 wickEditor.actionHandler.doAction('addFrame', {frame:newFrame, layer:layer});
                 timeline.framesContainer.addFrameOverlay.elem.style.display = 'none';
