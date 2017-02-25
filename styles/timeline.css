@@ -3,6 +3,8 @@ body {
 
 	--vertical-spacing: 46px;
 	--common-padding: 4px;
+    
+    --max-timeline-height: 150px; 
 
 	--layers-width: 70px;
 
@@ -21,7 +23,8 @@ body {
 	padding: 0px;
 
 	width: 100%;
-	height: 150px;
+    height: 100px; 
+
 
 	overflow: hidden;
 }
@@ -78,6 +81,8 @@ body {
 
 	position: absolute;
 	overflow: hidden;
+    
+    display: inline-block;
 
 	box-shadow: var(--border);
 }
