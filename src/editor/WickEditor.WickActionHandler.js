@@ -633,7 +633,7 @@ var WickActionHandler = function (wickEditor) {
             args.frame.length = Math.max(1, args.newFrameLength);
 
             var touching = false;
-            wickEditor.project.getCurrentLayer().frames.forEach(function (frame) {
+            args.frame.parentLayer.frames.forEach(function (frame) {
                 if(frame!==args.frame && frame.touchesFrame(args.frame)) {
                     touching = true;
                 }
