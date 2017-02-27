@@ -22,6 +22,8 @@ body {
     --timeline-left-padding: 5px; 
     --timeline-top-padding: 6px; 
     --timeline-bottom-padding: 5px; 
+
+    --frames-cell-first-padding: 5px;
 }
 
 .timeline {
@@ -107,7 +109,7 @@ body {
 	height: calc(var(--layer-height) - var(--frames-strip-padding-vertical)*2);
 
 	margin-top: calc(var(--frames-strip-padding-vertical) * 2);
-    margin-left: 10px;
+    left: 5px;
 	position: absolute;
 
 	box-shadow: var(--border);
@@ -130,6 +132,10 @@ body {
 	box-shadow: var(--border);
 
 	position: absolute;
+}
+
+.frames-strip-cell-first {
+	width: calc(var(--frame-width) + var(--frames-cell-first-padding));
 }
 
 .frame {
@@ -199,10 +205,12 @@ body {
 .add-frame-overlay {
 	width: calc(var(--frame-width) / 1.5); 
 	height: calc(var(--layer-height) / 1.8);
+	/*width: var(--frame-width);*/
+	/*height: var(--layer-height);*/
 	position: absolute;
-    margin-left: calc(calc(var(--frame-width) / 2) / 1.54);
+    margin-left: calc(var(--frame-width)  / 2 - var(--frame-width)  / 1.5 / 2);
+    margin-top:  calc(var(--layer-height) / 2 - var(--layer-height) / 1.8 / 2 + 6px);
     /*    @Todo center add frame overlay w/o magic no*/
-    margin-top: 16px;
     background-color: #ffffff;
     border-radius: 3px;
     box-shadow: 0 0 1px 0 rgba(0,0,0,0.12), 0 1px 1px 0 rgba(0,0,0,0.24), 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24); 

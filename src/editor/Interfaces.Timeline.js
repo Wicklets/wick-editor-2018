@@ -231,7 +231,7 @@ var TimelineInterface = function (wickEditor) {
 
         this.calculateHeight = function () {
             var maxTimelineHeight = cssVar("--max-timeline-height"); 
-            var expectedTimelineHeight = this.layersContainer.layers.length * cssVar("--layer-height") + 13; 
+            var expectedTimelineHeight = this.layersContainer.layers.length * cssVar("--layer-height") + 26; 
             return Math.min(expectedTimelineHeight, maxTimelineHeight); 
         }
     }
@@ -335,6 +335,23 @@ var TimelineInterface = function (wickEditor) {
                 timeline.framesContainer.update();
             });
 
+            this.elem.addEventListener('mousedown', function(e) {
+                /*if(wickEditor.inputHandler.specialKeys["Modifier"]) {
+                    var currentFrameWidth = cssVar('--frame-width');
+                    var newFrameWidth = currentFrameWidth + 10;
+
+                    document.body.style.setProperty('--frame-width', newFrameWidth+'px');
+
+                    wickEditor.project.currentObject.framesDirty = true;
+                    wickEditor.syncInterfaces();
+                } else {
+                    var currentScrollX = parseInt($('.frames-container').css('left'));
+                    var newScrollX = currentScrollX + 5;
+
+                    $('.frames-container').css('left', newScrollX+'px');
+                }*/
+            });
+
             this.addFrameOverlay.build();
             this.playhead.build();
             this.selectionBox.build();
@@ -395,7 +412,7 @@ var TimelineInterface = function (wickEditor) {
 
             this.elem = document.createElement('div');
             this.elem.className = "frame";
-            this.elem.style.left = (that.wickFrame.playheadPosition * cssVar('--frame-width')) + 'px';
+            this.elem.style.left = (that.wickFrame.playheadPosition * cssVar('--frame-width')) - 4 + 'px';
             this.elem.style.top = (wickLayers.indexOf(that.wickLayer) * cssVar('--layer-height')) + 'px';
             this.elem.style.width = (that.wickFrame.length * cssVar('--frame-width') - cssVar('--common-padding')/2) + 'px';
             this.elem.style.height = cssVar('--layer-height')-cssVar('--common-padding')+'px'
@@ -475,7 +492,7 @@ var TimelineInterface = function (wickEditor) {
                 if(wickEditor.project.getCurrentObject().layers[py].getFrameAtPlayheadPosition(px)) return;
                 
                 timeline.framesContainer.addFrameOverlay.elem.style.display = 'block';
-                timeline.framesContainer.addFrameOverlay.elem.style.left = roundToNearestN(e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2, cssVar('--frame-width')) + "px";
+                timeline.framesContainer.addFrameOverlay.elem.style.left = roundToNearestN(e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2 - 9, cssVar('--frame-width')) + 10 + "px";
                 timeline.framesContainer.addFrameOverlay.elem.style.top  = roundToNearestN(e.clientY - timeline.framesContainer.elem.getBoundingClientRect().top  - cssVar('--layer-height')/2, cssVar('--layer-height')) + "px";
             });
             this.elem.addEventListener('mouseup', function (e) {
@@ -497,7 +514,13 @@ var TimelineInterface = function (wickEditor) {
             for(var i = 0; i < 100; i++) {
                 var framesStripCell = document.createElement('div');
                 framesStripCell.className = 'frames-strip-cell';
-                framesStripCell.style.left = i*cssVar('--frame-width') + 'px';
+                if(i===0){
+                    framesStripCell.className += " frames-strip-cell-first"
+                    framesStripCell.style.left = i*cssVar('--frame-width') + 'px'
+                } else {
+                    framesStripCell.style.left = i*cssVar('--frame-width') + 5 + 'px'
+                }
+                
                 this.elem.appendChild(framesStripCell);
             }
         }

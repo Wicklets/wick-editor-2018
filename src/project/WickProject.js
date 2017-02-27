@@ -197,7 +197,7 @@ WickProject.fixForBackwardsCompatibility = function (project) {
                 }
 
                 // Frames store where they are on the timeline
-                if(!frame.playheadPosition) {
+                if(frame.playheadPosition === undefined) {
                     frame.playheadPosition = layer.frames.indexOf(frame)
                 }
 
