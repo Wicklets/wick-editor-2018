@@ -505,7 +505,7 @@ letter-spacing: 0.32px;
 .button:hover {
 	cursor: pointer;
 	background-color: #CACACA;
-    border-radius: 2px;
+/*    border-radius: 2px;*/
 }
 .button:active {
 	cursor: pointer;
