@@ -43,7 +43,8 @@ Tools.Rectangle = function (wickEditor) {
         pathWickObject.y = origY;
 
         wickEditor.actionHandler.doAction('addObjects', {
-            wickObjects: [pathWickObject]
+            wickObjects: [pathWickObject],
+            dontSelectObjects: true
         });
     }
 

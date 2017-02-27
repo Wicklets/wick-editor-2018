@@ -219,7 +219,7 @@ var WickActionHandler = function (wickEditor) {
             args.wickObjects.forEach(function (wickObj) {
                 wickObj.zIndicesDirty = true;
                 wickEditor.project.addObject(wickObj);
-                wickEditor.project.selectObject(wickObj)
+                if(!args.dontSelectObjects) wickEditor.project.selectObject(wickObj)
             });
             
             done();

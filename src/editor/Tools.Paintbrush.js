@@ -96,7 +96,8 @@ Tools.Paintbrush = function (wickEditor) {
                 pathWickObject.y = y;
 
                 wickEditor.actionHandler.doAction('addObjects', {
-                    wickObjects: [pathWickObject]
+                    wickObjects: [pathWickObject],
+                    dontSelectObjects: true
                 });
             });
         }

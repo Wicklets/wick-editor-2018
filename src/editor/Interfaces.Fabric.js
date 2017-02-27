@@ -69,7 +69,7 @@ var FabricInterface = function (wickEditor) {
             });*/
         });
         self.canvas.on('before:selection:cleared', function (e) {
-            wickEditor.project.deselectObjectType(WickFrame);
+            wickEditor.project.clearSelection();
 
             // quick fix for properties GUI closing after selected wick object changes
             $(":focus").blur();
