@@ -496,6 +496,7 @@ letter-spacing: 0.32px;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
+    border-radius:5px;
 }
 
 .button {

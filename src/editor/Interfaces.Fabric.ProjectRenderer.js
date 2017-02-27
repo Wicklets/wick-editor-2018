@@ -78,7 +78,7 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
             }
         });
 
-        var thumbnailResizeFactor = 10.0;
+        var thumbnailResizeFactor = 5.0;
 
         var thumbCanvas = document.createElement('canvas');
         thumbCanvas.width = wickEditor.project.width/thumbnailResizeFactor;
@@ -112,7 +112,7 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
             );
         });
 
-        callback(thumbCanvas.toDataURL('image/jpeg', 0.5));
+        callback(thumbCanvas.toDataURL('image/jpeg', 1.0));
     }
 
     self.renderProjectAsGIF = function (callback) {
