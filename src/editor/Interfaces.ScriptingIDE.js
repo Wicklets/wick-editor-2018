@@ -120,8 +120,8 @@ var ScriptingIDEInterface = function (wickEditor) {
         var object = wickEditor.project.getObjectByUUID(obj.uuid);
         var frame = wickEditor.project.getFrameByUUID(obj.uuid);
 
-        console.log(object)
-        console.log(frame)
+        wickEditor.project.clearSelection();
+        wickEditor.project.selectObject(obj)
 
         if(object) {
             wickEditor.project.jumpToObject(object);
@@ -131,12 +131,6 @@ var ScriptingIDEInterface = function (wickEditor) {
 
         wickEditor.syncInterfaces();
         setTimeout(function () {
-            if(object) {
-                wickEditor.project.clearSelection()
-                wickEditor.project.selectObject(object)
-            }
-            if(object) wickEditor.fabric.selectObjects([object]);
-
             if(object) object.causedAnException = true;
 
             that.open = true;

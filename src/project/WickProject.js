@@ -422,7 +422,7 @@ WickProject.prototype.jumpToFrame = function (frame) {
 
     var currentObject = this.currentObject;
     var frameWithChild = frame;
-    var playheadPositionWithChild = currentObject.getPlayheadPositionAtFrame(frameWithChild);
+    var playheadPositionWithChild = frameWithChild.playheadPosition
     currentObject.playheadPosition = playheadPositionWithChild;
 }
 

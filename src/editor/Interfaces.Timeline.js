@@ -231,7 +231,7 @@ var TimelineInterface = function (wickEditor) {
 
         this.calculateHeight = function () {
             var maxTimelineHeight = cssVar("--max-timeline-height"); 
-            var expectedTimelineHeight = this.layersContainer.layers.length * cssVar("--layer-height") + 11; 
+            var expectedTimelineHeight = this.layersContainer.layers.length * cssVar("--layer-height") + 13; 
             return Math.min(expectedTimelineHeight, maxTimelineHeight); 
         }
     }

@@ -61,6 +61,7 @@ var FabricInterface = function (wickEditor) {
             
             wickEditor.scriptingide.syncWithEditorState();
             wickEditor.properties.syncWithEditorState();
+            wickEditor.timeline.syncWithEditorState();
             /*e.target.on({
                 moving: e.target.setCoords,
                 scaling: e.target.setCoords,
@@ -68,18 +69,23 @@ var FabricInterface = function (wickEditor) {
             });*/
         });
         self.canvas.on('before:selection:cleared', function (e) {
-            wickEditor.project.clearSelection();
+            wickEditor.project.deselectObjectType(WickFrame);
+
             // quick fix for properties GUI closing after selected wick object changes
             $(":focus").blur();
+
+             wickEditor.syncInterfaces()
         });
         self.canvas.on('selection:cleared', function (e) {
             //wickEditor.timeline.redraw();
+            wickEditor.project.deselectObjectType(WickFrame);
             
             wickEditor.scriptingide.syncWithEditorState();
             wickEditor.properties.syncWithEditorState();
         });
         self.canvas.on('selection:changed', function (e) {
             //wickEditor.timeline.redraw();
+            wickEditor.project.deselectObjectType(WickFrame);
 
             self.guiElements.update();
             wickEditor.scriptingide.syncWithEditorState();
