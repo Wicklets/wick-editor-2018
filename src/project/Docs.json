@@ -196,6 +196,12 @@
 				"args" : [], 
 				"return" : {"type" : "WickObject", "description" : "A clone of the WickObject which calls clone()."}
 			}, {
+				"name" : "isClone()",
+				"description" : "Checks if this object is a clone",
+				"example" : "if(this.isClone) {\n\tconsole.log('i am a clone!')\n}",
+				"args" : [], 
+				"return" : {"type" : "Boolean", "description" : "True if the object is a clone"}
+			}, {
 				"name" : "delete()",
 				"description" : "Deletes this WickObject completely.",
 				"example" : "this.delete(); // Removes the wickObject from the scene.",

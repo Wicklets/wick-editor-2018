@@ -37,16 +37,6 @@ var FabricInterface = function (wickEditor) {
 
         // Canvas event listeners
 
-        self.canvas.on({
-            'object:moving': function(e) {
-                if(e.target.type === 'path')
-                    e.target.opacity = 0.5;
-            },
-            'object:modified': function(e) {
-                if(e.target.type === 'path')
-                    e.target.opacity = 1;
-            },
-        });
         self.canvas.on('object:selected', function (e) {
 
             wickEditor.project.clearSelection();
@@ -74,7 +64,7 @@ var FabricInterface = function (wickEditor) {
             // quick fix for properties GUI closing after selected wick object changes
             $(":focus").blur();
 
-             wickEditor.syncInterfaces()
+             wickEditor.timeline.syncWithEditorState()
         });
         self.canvas.on('selection:cleared', function (e) {
             //wickEditor.timeline.redraw();

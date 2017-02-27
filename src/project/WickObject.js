@@ -229,6 +229,7 @@ WickObject.prototype.copy = function () {
     //copiedObject.tweens = ; // TODO: Copy tweens!!!
 
     // TODO: Copy scripts !!!
+    copiedObject.wickScript = this.wickScript
 
     if(this.isSymbol) {
         copiedObject.isSymbol = true;
@@ -245,6 +246,7 @@ WickObject.prototype.copy = function () {
 
         copiedObject.imageData = this.imageData;
         copiedObject.fontData = this.fontData;
+        copiedObject.pathData = this.pathData;
     }
 
     return copiedObject;
@@ -1207,6 +1209,10 @@ WickObject.prototype.setVolume = function (volume) {
 WickObject.prototype.clone = function () {
     return WickPlayer.cloneObject(this);
 };
+
+WickObject.prototype.isClone = function () {
+    return this._isClone;
+}
 
 WickObject.prototype.delete = function () {
     return WickPlayer.deleteObject(this);

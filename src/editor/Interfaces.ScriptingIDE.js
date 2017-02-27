@@ -17,7 +17,7 @@ var ScriptingIDEInterface = function (wickEditor) {
             that.open = false;
 
             that.aceEditor = ace.edit("scriptEditor");
-            that.aceEditor.setTheme("ace/theme/chrome");
+            that.aceEditor.setTheme("ace/theme/idle_fingers");
             that.aceEditor.getSession().setMode("ace/mode/javascript");
             that.aceEditor.$blockScrolling = Infinity; // Makes that weird message go away
             that.aceEditor.setAutoScrollEditorIntoView(true);

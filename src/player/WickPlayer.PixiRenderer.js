@@ -98,15 +98,20 @@ var WickPixiRenderer = function (project) {
             wickObj.parentObject.pixiContainer.addChild(wickObj.pixiSprite);
         } else if (wickObj.pathData) {
         	var parser = new DOMParser();
-			//var svgDoc = parser.parseFromString('<svg id="svg" x="0" y="0" version="1.1" width="'+project.width+'" height="'+project.width+'" xmlns="http://www.w3.org/2000/svg">'+wickObj.pathData+'</svg>', "image/svg+xml");
-			var svgDoc = parser.parseFromString('<svg id="svg" x="0" y="0" version="1.1" width="'+project.width+'" height="'+project.width+'" xmlns="http://www.w3.org/2000/svg">'+wickObj.pathData+'</svg>', "image/svg+xml");
-
+			//var svgDoc = parser.parseFromString('<svg id="svg" viewBox="'+(subObj.getAbsolutePosition().x-subObj.width/2)+' '+(subObj.getAbsolutePosition().y-subObj.height/2)+' '+(subObj.width)+' '+(subObj.height)+'" version="1.1" width="'+(subObj.width)+'" height="'+(subObj.height)+'" xmlns="http://www.w3.org/2000/svg">'+subObj.pathData+'</svg>', "image/svg+xml");
+			//var svgDoc = parser.parseFromString('<svg id="svg" viewBox="'+(-subObj.width/2)+' '+(-subObj.height/2)+' '+(subObj.width)+' '+(subObj.height)+'" version="1.1" width="'+(subObj.width)+'" height="'+(subObj.height)+'" xmlns="http://www.w3.org/2000/svg">'+subObj.pathData+'</svg>', "image/svg+xml");
+			var svgDoc = parser.parseFromString('<svg id="svg" viewBox="'+(0)+' '+(0)+' '+(wickObj.width)+' '+(wickObj.height)+'" version="1.1" width="'+(wickObj.width)+'" height="'+(wickObj.height)+'" xmlns="http://www.w3.org/2000/svg">'+wickObj.pathData+'</svg>', "image/svg+xml");
+			
+			//var svgDoc = parser.parseFromString('<svg id="svg" viewBox="'+(0)+' '+(0)+' '+(subObj.width)+' '+(subObj.height)+'" version="1.1" width="'+(subObj.width)+'" height="'+(subObj.height)+'" xmlns="http://www.w3.org/2000/svg">'+subObj.pathData+'</svg>', "image/svg+xml");
+			
 			var s = new XMLSerializer().serializeToString(svgDoc)
 			var base64svg = 'data:image/svg+xml;base64,' + window.btoa(s);
+
+			//console.log(base64svg)
 			
-			// https://github.com/pixijs/pixi.js/issues/936
-			wickObj.pixiSprite = PIXI.Sprite.fromImage(base64svg, undefined, undefined, 4.0);
-            wickObj.pixiContainer.addChild(wickObj.pixiSprite);
+			wickObj.pixiSprite = PIXI.Sprite.fromImage(base64svg);
+			wickObj.generateAlphaMask(wickObj.pixiSprite.texture.baseTexture.imageUrl);
+            wickObj.parentObject.pixiContainer.addChild(wickObj.pixiSprite);
         } else if (wickObj.fontData) {
         	var style = {
                 font : subObj.fontData.fontWeight + " " + subObj.fontData.fontStyle + " " + subObj.fontData.fontSize + "px " + subObj.fontData.fontFamily,

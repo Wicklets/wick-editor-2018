@@ -162,7 +162,7 @@ var WickPlayer = (function () {
 
     wickPlayer.cloneObject = function (wickObj) {
         var clone = wickObj.copy();
-        clone.isClone = true;
+        clone._isClone = true;
 
         // pixi stuff
         //renderer.refreshPixiSceneForObject(clone);
