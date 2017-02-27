@@ -13,7 +13,7 @@ var ToolbarInterface = function (wickEditor) {
             var tool = wickEditor.tools[toolName];
 
             var toolDiv = document.createElement('div');
-            toolDiv.className = "button tooltipElem";
+            toolDiv.className = "button toolbarButton tooltipElem";
             toolDiv.id = toolName + "ToolButton";
             toolDiv.setAttribute('alt', tool.getTooltipName());
 

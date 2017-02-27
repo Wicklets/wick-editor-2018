@@ -486,6 +486,13 @@ letter-spacing: 0.32px;
 	display: none;
 }
 
+.toolbarButton {
+	padding-left: 4px;
+	padding-top: 4px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+}
+
 .button {
 	padding: 4px;
 }
