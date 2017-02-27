@@ -15,7 +15,7 @@ var FabricInterface = function (wickEditor) {
         });
         this.canvas.selectionColor = 'rgba(110, 110, 115, 0.1)';
         this.canvas.selectionBorderColor = 'grey';
-        this.canvas.backgroundColor = "#EEE";
+        this.canvas.backgroundColor = "#B7B7B7";
         this.canvas.setWidth(window.innerWidth);
         this.canvas.setHeight(window.innerHeight);
 

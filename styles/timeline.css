@@ -48,8 +48,8 @@ body {
 }
 
 .layers-container {
-	background-color: #EEE;
-
+	background-color: #585757;
+    border-right-color: #878787;
 	width: var(--layers-width);
 	height: 100%;
 	left: 0px;
@@ -62,12 +62,18 @@ body {
 }
 
 .layer {
-	background-color: #FFFFFF;
-
-	width:  calc(100% - var(--common-padding));
-	height: calc(var(--layer-height));
-
+	background-color: #878787;
+    
+	width:  calc(100% - 10px);
+	height: calc(var(--layer-height) - 10%);
+    
 	margin: calc(var(--common-padding) / 2);
+    margin-top: 9px;
+    margin-left: 5px;
+    margin-bottom: 5px;
+    border-radius: 2px;
+    text-align: center;
+    color: white;
 
 	position: absolute;
 

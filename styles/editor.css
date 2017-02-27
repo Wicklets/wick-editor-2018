@@ -65,12 +65,97 @@ select {
 	font-size: 16px;
 	font-family: "Open Sans", "Arial", sans-serif;
 	color: #666;
-	background-color: #EEEEEE;
+	background-color: #585757;
 
-	border: 1px solid #bbb;
-	/*border-radius: 2px;*/
+	border: 1px solid #878787;
 
-	/*box-shadow: 2px 2px 2px #AAA;*/
+}
+
+#frameIdentifier {
+    /* card: */
+background: #FAFAFA;
+/* Sketch doesnt export gradient borders at this point */
+/* Sketch doesnt export gradient borders at this point */
+box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
+border-radius: 2px;
+/* 232.5: */
+font-family: Roboto-Regular;
+font-size: 16px;
+color: #2C2C2C;
+letter-spacing: 0.32px;
+    text-align: center;
+    
+}
+
+#projectName {
+    /* card: */
+background: #FAFAFA;
+/* Sketch doesnt export gradient borders at this point */
+/* Sketch doesnt export gradient borders at this point */
+box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
+border-radius: 2px;
+/* 232.5: */
+font-family: Roboto-Regular;
+font-size: 16px;
+color: #2C2C2C;
+letter-spacing: 0.32px;
+    text-align: center;
+}
+
+#projectSizeX {
+    /* card: */
+background: #FAFAFA;
+/* Sketch doesnt export gradient borders at this point */
+/* Sketch doesnt export gradient borders at this point */
+box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
+border-radius: 2px;
+/* 232.5: */
+font-family: Roboto-Regular;
+font-size: 16px;
+color: #2C2C2C;
+letter-spacing: 0.32px;
+}
+
+
+#projectSizeY {
+    /* card: */
+background: #FAFAFA;
+/* Sketch doesnt export gradient borders at this point */
+/* Sketch doesnt export gradient borders at this point */
+box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
+border-radius: 2px;
+/* 232.5: */
+font-family: Roboto-Regular;
+font-size: 16px;
+color: #2C2C2C;
+letter-spacing: 0.32px;
+}
+
+#frameRate {
+
+    /* card: */
+background: #FAFAFA;
+/* Sketch doesnt export gradient borders at this point */
+/* Sketch doesnt export gradient borders at this point */
+box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
+border-radius: 2px;
+/* 232.5: */
+font-family: Roboto-Regular;
+font-size: 16px;
+color: #2C2C2C;
+letter-spacing: 0.32px;
+    text-align: center;
+    
+}
+
+
+}
+
+
+
+#projectBgColor {
+    border-radius: 2px;
+    box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
 }
 
 #menuBarGUI {
@@ -78,6 +163,10 @@ select {
 	left: 0px;
 	height: 30px;
 	width: calc(100% - 2px);
+    background-color: black;
+    border-top-color: black;
+    border-left-color: black;
+    border-right-color: black;
 }
 .menubarTab {
 	float:left;
@@ -85,11 +174,15 @@ select {
 	margin-left: 15px;
 	margin-right: 15px;
 	cursor: pointer;
+    color: #CCCCCC;
+/*    font-size:16px;*/
 }
 .menubarTab:hover {
 	cursor: pointer;
-	background-color: #DDD;
+	background-color: #939393;
+    border-radius: 3px;
 }
+
 .menubarMenu {
 	top: 31px;
 	left: 0px;
@@ -97,13 +190,86 @@ select {
 	padding: 5px;
 	min-width: 70px;
 	border-top:none;
+    text-align: left;
+    text-indent: 5px;
+}
+#objectPositionY {
+    /* card: */
+background: #FAFAFA;
+/* Sketch doesnt export gradient borders at this point */
+/* Sketch doesnt export gradient borders at this point */
+box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
+border-radius: 2px;
+/* 232.5: */
+
+color: #2C2C2C;
+letter-spacing: 0.32px;
+}
+
+#objectPositionX {
+ /* card: */
+background: #FAFAFA;
+/* Sketch doesnt export gradient borders at this point */
+/* Sketch doesnt export gradient borders at this point */
+box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
+border-radius: 2px;
+/* 232.5: */
+font-family: Roboto-Regular;
+font-size: 16px;
+color: #2C2C2C;
+letter-spacing: 0.32px;   
+}
+
+#objectWidth{
+    /* card: */
+background: #FAFAFA;
+/* Sketch doesnt export gradient borders at this point */
+/* Sketch doesnt export gradient borders at this point */
+box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
+border-radius: 2px;
+/* 232.5: */
+font-family: Roboto-Regular;
+font-size: 16px;
+color: #2C2C2C;
+letter-spacing: 0.32px;
+}
+
+#objectHeight{
+    /* card: */
+background: #FAFAFA;
+/* Sketch doesnt export gradient borders at this point */
+/* Sketch doesnt export gradient borders at this point */
+box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
+border-radius: 2px;
+/* 232.5: */
+font-family: Roboto-Regular;
+font-size: 16px;
+color: #2C2C2C;
+letter-spacing: 0.32px;
+}
+
+#objectRotation {
+    /* card: */
+background: #FAFAFA;
+/* Sketch doesnt export gradient borders at this point */
+/* Sketch doesnt export gradient borders at this point */
+box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
+border-radius: 2px;
+/* 232.5: */
+font-family: Roboto-Regular;
+font-size: 16px;
+color: #2C2C2C;
+letter-spacing: 0.32px;
+    text-align: center;
 }
 .menubarButton {
 	cursor: pointer;
+    color: #FFFFFF
 }
 .menubarButton:hover {
 	cursor: pointer;
-	background-color: #DDD;
+	background-color: #ff8080;
+    border-radius: 3px;
 }
 
 #statusBarGUI {
@@ -171,6 +337,8 @@ select {
 	top: 2px;
 	position: absolute;
 }
+
+
 #beautifyButton {
 	right: 53px;
 	top: 2px;
@@ -195,10 +363,18 @@ select {
 	width: 250px;
 	display: inline;
 	overflow: hidden;
+    border-right: 0px;
+    border-bottom: 0px;
+}
+.rangeslider_handle {
+    
+    background-color: aliceblue;
+    
+    
 }
 .propertiesTab {
-	border-bottom: 1px solid #bbb;
-	border-right: 1px solid #bbb;
+	border-bottom: 1px solid #646363;
+	border-right: 1px solid #646363;
 	padding: 5px;
 	padding-left: 14px;
 	padding-right: 14px;
@@ -206,13 +382,17 @@ select {
 	background-color: #DDD;
 	display: table-cell;
 	cursor: pointer;
+    color: #FFFFFF;
+    background-color: #3C3C3C;
 }
 .propertiesTabActive {
 	border-bottom: none;
-	background-color: #EEE;
+	background-color: #585757;
 }
 .propertiesGUIContent {
 	padding: 10px;
+    margin-top:10px;
+    color: #FFFFFF;
 }
 
 #closeSplashScreenButton {
@@ -235,6 +415,8 @@ select {
 	text-align: left;
 	padding: 3px;
 	overflow: hidden;
+    border-left-color: #585757;
+    border-bottom-color: #585757;
 }
 
 #toolOptionsGUI {
@@ -256,6 +438,28 @@ select {
     font-size: 8px;
     width: 27px;
     height: 27px;
+}
+
+#objectTypeName {
+    color: #FAFAFA
+}
+
+
+#objectName {
+        /* card: */
+    /* card: */
+    background: #FAFAFA;
+    /* Sketch doesnt export gradient borders at this point */
+    /* Sketch doesnt export gradient borders at this point */
+    box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
+    border-radius: 2px;
+    /* 232.5: */
+    font-family: Roboto-Regular;
+    font-size: 16px;
+    color: #2C2C2C;
+    letter-spacing: 0.32px;
+    text-align: center;
+    padding-left: 10
 }
 
 #rightClickMenu {
@@ -283,11 +487,12 @@ select {
 }
 
 .button {
-	padding: 3px;
+	padding: 4px;
 }
 .button:hover {
 	cursor: pointer;
 	background-color: #CACACA;
+    border-radius: 2px;
 }
 .button:active {
 	cursor: pointer;
@@ -321,7 +526,7 @@ select {
 	margin: 5px;
 
 	border: 1px solid #bbb;
-	border-radius: 2px;
+/*	border-radius: 2px;*/
 
 	/*box-shadow: 2px 2px 2px #AAA;*/
 }
@@ -365,6 +570,7 @@ select {
     bottom: 6px;
     right: 6px;
 }
+
 
 .hidden {
     position: absolute;
