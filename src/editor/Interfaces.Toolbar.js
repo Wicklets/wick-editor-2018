@@ -54,9 +54,12 @@ var ToolbarInterface = function (wickEditor) {
         for (toolName in wickEditor.tools) {
             var buttonClassName = '#' + toolName + 'ToolButton';
             if (wickEditor.tools[toolName] === wickEditor.currentTool) {
-                $(buttonClassName).css('border', '1px solid #ccc');
+                $(buttonClassName).css('outline', '1px solid #ccc');
+                $(buttonClassName).css('box-sizing', 'border-box');
+                $(buttonClassName).css('-moz-box-sizing', 'border-box');
+                $(buttonClassName).css('-webkit-box-sizing', 'border-box');
             } else {
-                $(buttonClassName).css('border', '');
+                $(buttonClassName).css('outline', '');
             }
         };
 

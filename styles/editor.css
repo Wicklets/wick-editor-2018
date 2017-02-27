@@ -487,10 +487,15 @@ letter-spacing: 0.32px;
 }
 
 .toolbarButton {
-	padding-left: 4px;
+	padding-left: 3px;
 	padding-top: 4px;
 	padding-right: 0px;
 	padding-bottom: 0px;
+	margin-bottom: 5px;
+	height: 30px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
 }
 
 .button {
