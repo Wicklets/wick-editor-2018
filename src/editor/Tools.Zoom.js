@@ -34,7 +34,7 @@ Tools.Zoom = function (wickEditor) {
             }
         });
 
-        var sq = document.getElementById("editor");
+        var sq = document.getElementById("editorCanvasContainer");
         if (sq.addEventListener) {
             sq.addEventListener("mousewheel", MouseWheelHandler, false);
             sq.addEventListener("DOMMouseScroll", MouseWheelHandler, false);

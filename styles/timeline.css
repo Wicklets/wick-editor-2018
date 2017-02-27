@@ -89,7 +89,7 @@ body {
 .frames-container {
 	background-color: #3C3C3C;
 
-	width: calc(100%);
+	width: 1000%;
 	height: 100%;
 	left: var(--layers-width);
 	top: 0px;

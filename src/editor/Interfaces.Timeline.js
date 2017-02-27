@@ -26,8 +26,8 @@ var TimelineInterface = function (wickEditor) {
             
         }), 
         'update' : (function (e) {
-            interactionData.frame.elem.style.left = e.x - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')     /2 + 'px';
-            interactionData.frame.elem.style.top  = e.y - timeline.framesContainer.elem.getBoundingClientRect().top  - cssVar('--layer-height')/2 + 'px';
+            interactionData.frame.elem.style.left = e.x - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width') /2 - 10 + 'px';
+            interactionData.frame.elem.style.top  = e.y - timeline.framesContainer.elem.getBoundingClientRect().top  - cssVar('--layer-height')/2 - 5+ 'px';
             interactionData.frame.elem.style.zIndex = 10;
         }),
         'finish' : (function (e) {
@@ -210,11 +210,11 @@ var TimelineInterface = function (wickEditor) {
             this.elem.className = 'timeline';
             document.getElementById('timelineGUI').appendChild(this.elem);
 
-            this.layersContainer.build();
-            this.elem.appendChild(this.layersContainer.elem);
-
             this.framesContainer.build();
             this.elem.appendChild(this.framesContainer.elem);
+
+            this.layersContainer.build();
+            this.elem.appendChild(this.layersContainer.elem);
             
         }
         
@@ -335,10 +335,16 @@ var TimelineInterface = function (wickEditor) {
                 timeline.framesContainer.update();
             });
 
-            this.elem.addEventListener('mousedown', function(e) {
-                /*if(wickEditor.inputHandler.specialKeys["Modifier"]) {
+            timeline.elem.addEventListener('mousewheel', function(e) {
+                that.addFrameOverlay.elem.style.display = 'none'
+                var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+
+                if(wickEditor.inputHandler.specialKeys["Modifier"]) {
                     var currentFrameWidth = cssVar('--frame-width');
-                    var newFrameWidth = currentFrameWidth + 10;
+
+                    var newFrameWidth = currentFrameWidth + delta * 3;
+                    newFrameWidth = Math.min(newFrameWidth, 100)
+                    newFrameWidth = Math.max(newFrameWidth, 20)
 
                     document.body.style.setProperty('--frame-width', newFrameWidth+'px');
 
@@ -346,10 +352,12 @@ var TimelineInterface = function (wickEditor) {
                     wickEditor.syncInterfaces();
                 } else {
                     var currentScrollX = parseInt($('.frames-container').css('left'));
-                    var newScrollX = currentScrollX + 5;
+
+                    var newScrollX = currentScrollX + delta * 10;
+                    newScrollX = Math.min(70, newScrollX)
 
                     $('.frames-container').css('left', newScrollX+'px');
-                }*/
+                }
             });
 
             this.addFrameOverlay.build();
