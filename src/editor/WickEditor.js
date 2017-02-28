@@ -8,13 +8,7 @@ var WickEditor = function () {
 
     // Friendly console message ~~~
     console.log('%cWelcome to the javascript console! ', 'color: #ff99bb; font-size: 20px; font-weight: bold; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;');
-    console.log('%cYou are free to change any of the internal editor stuff from here.', 'color: #bb4477; font-size: 12px;');
-    console.log('%cType "printHelp()" into the console to see some stuff you can do.', 'color: #7744bb; font-size: 12px;');
-    window.printHelp = function () {
-        
-
-        return "";
-    }
+    console.log('%cYou are free to change any of the internal editor stuff from here.', 'color: #7744bb; font-size: 12px;');
 
     // Setup connection to backend 
     this.backend = new WickDemoLoader(this);
@@ -81,6 +75,26 @@ WickEditor.prototype.syncInterfaces = function () {
     this.interfaces.forEach(function (interface) {
         interface.syncWithEditorState();
     });
+
+
+
+
+    if(!window.thumbpreview) {
+        window.thumbpreview = document.createElement('div')
+        thumbpreview.style.position = 'absolute'
+        thumbpreview.style.backgroundColor = '#FFFFFF'
+        thumbpreview.style.bottom = '0px'
+        thumbpreview.style.right = '0px'
+        thumbpreview.style.width = '500px'
+        thumbpreview.style.height = '500px'
+        //document.body.appendChild(thumbpreview);
+        this.project.fitScreen = false;
+
+        window.thumbRenderer = new WickPixiRenderer(this.project, thumbpreview);
+        thumbRenderer.setup();
+    }
+    thumbRenderer.refresh();
+    thumbRenderer.render();
 }
 
 WickEditor.prototype.changeTool = function (newTool) {

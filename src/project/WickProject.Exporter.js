@@ -31,6 +31,7 @@ WickProject.Exporter = (function () {
             "lib/socket.io-1.2.0.js",
             "lib/Tween.js",
             "lib/lerp.js",
+            "lib/bowser.js",
             "lib/URLParameterUtils.js",
             "src/project/WickTween.js",
             "src/project/WickFrame.js",
@@ -41,6 +42,7 @@ WickProject.Exporter = (function () {
             "src/player/WickPlayer.Preloader.js",
             "src/player/WickPlayer.PixiRenderer.js",
             "src/player/WickPlayer.WebAudioPlayer.js",
+            "src/player/WickPlayer.InputHandler.js",
             "src/player/WickPlayer.js",
         ];
 
@@ -59,7 +61,8 @@ WickProject.Exporter = (function () {
             //console.log(JSONProject.length)
             //console.log(compressedJSONProject.length)
 
-            fileOut += "<script>WickPlayer.runProject('" + JSONProject + "');</script>" + "\n";callback(fileOut);
+            fileOut += "<script>var wickPlayer = new WickPlayer(); wickPlayer.runProject('" + JSONProject + "', document.getElementById('playerCanvasContainer'));</script>" + "\n";
+            callback(fileOut);
         });
 
     }

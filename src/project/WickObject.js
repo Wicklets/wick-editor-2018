@@ -225,6 +225,7 @@ WickObject.prototype.copy = function () {
     copiedObject.flipX = this.flipX;
     copiedObject.flipY = this.flipY;
     copiedObject.opacity = this.opacity;
+    copiedObject.uuid = random.uuid4();
 
     //copiedObject.tweens = ; // TODO: Copy tweens!!!
 
@@ -986,7 +987,7 @@ WickObject.prototype.gotoFrame = function (frame) {
         if(!newFrame.alwaysSaveState) {
             //this.getAllActiveChildObjects().forEach(function (child) {
             newFrame.wickObjects.forEach(function (child) {
-                WickPlayer.resetStateOfObject(child);
+                wickPlayer.resetStateOfObject(child);
             });
         }
         this.getAllActiveChildObjects().forEach(function (child) {
@@ -1192,13 +1193,13 @@ WickObject.prototype.setText = function (text) {
 
 WickObject.prototype.playSound = function () {
 
-    WickPlayer.getAudioPlayer().playSound(this.uuid, this.loopSound, this.volume);
+    wickPlayer.audioPlayer.playSound(this.uuid, this.loopSound, this.volume);
 
 }
 
 WickObject.prototype.stopSound = function () {
 
-    WickPlayer.getAudioPlayer().stopSound(this.uuid);
+    wickPlayer.audioPlayer.stopSound(this.uuid);
 
 }
 
@@ -1207,7 +1208,7 @@ WickObject.prototype.setVolume = function (volume) {
 }
 
 WickObject.prototype.clone = function () {
-    return WickPlayer.cloneObject(this);
+    return wickPlayer.cloneObject(this);
 };
 
 WickObject.prototype.isClone = function () {
@@ -1215,7 +1216,7 @@ WickObject.prototype.isClone = function () {
 }
 
 WickObject.prototype.delete = function () {
-    return WickPlayer.deleteObject(this);
+    return wickPlayer.deleteObject(this);
 };
 
 WickObject.prototype.setCursor = function (cursor) {
@@ -1441,8 +1442,8 @@ WickObject.prototype.runScriptFn = function (fnName, objectScope, frame) {
 
     // Etc. player wrappers
     window.stopAllSounds = function () { WickPlayer.getAudioPlayer().stopAllSounds(); };
-    window.isKeyDown = function (keyString) { return WickPlayer.getKeys()[keyCharToCode[keyString.toUpperCase()]]; };
-    window.keyJustPressed = function (keyString) { return WickPlayer.getKeysJustPressed()[keyCharToCode[keyString.toUpperCase()]]; }
+    window.isKeyDown = function (keyString) { return wickPlayer.inputHandler.getKeys()[keyCharToCode[keyString.toUpperCase()]]; };
+    window.keyJustPressed = function (keyString) { return wickPlayer.inputHandler.getKeysJustPressed()[keyCharToCode[keyString.toUpperCase()]]; }
     window.getMouseX = function () { return WickPlayer.getMouse().x; }
     window.getMouseY = function () { return WickPlayer.getMouse().y; }
     window.hideCursor = function () { WickPlayer.hideCursor(); };
@@ -1521,7 +1522,7 @@ WickObject.prototype.advanceTimeline = function () {
             if(!newFrame) return;
             if(!newFrame.alwaysSaveState) {
                 newFrame.wickObjects.forEach(function (child) {
-                    WickPlayer.resetStateOfObject(child);
+                    wickPlayer.resetStateOfObject(child);
                 });
             }
             this.getAllActiveChildObjects().forEach(function (child) {

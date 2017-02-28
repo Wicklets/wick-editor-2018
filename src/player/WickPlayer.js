@@ -36,6 +36,7 @@ var WickPlayer = function () {
         self.inputHandler.setup();
         if(!bowser.mobile && !bowser.tablet) self.audioPlayer.setup();
         self.renderer.setup();
+        self.renderer.refresh();
 
         animate();
 
@@ -56,24 +57,12 @@ var WickPlayer = function () {
     }
 
     self.enterFullscreen = function () {
-        var elem;
-
-        if(window.self !== window.top) {
-            // Inside iframe
-            elem = window.frameElement;
-            console.log(elem)
-        } else {
-            // Not inside iframe
-            elem = document.getElementById("rendererCanvas")
-        }
-
-        if (screenfull.enabled) {
-            console.log("tryin to fullscreen");
-            screenfull.request(elem);
-        }
+        self.renderer.enterFullscreen();
     }
 
     var animate = function () {
+
+        if(stopDrawLoop) return;
 
         if(self.project.framerate < 60) {
             setTimeout(function() {
@@ -112,22 +101,11 @@ var WickPlayer = function () {
         var clone = wickObj.copy();
         clone._isClone = true;
 
-        // pixi stuff
-        //renderer.refreshPixiSceneForObject(clone);
-        //wickObj.parentObject.pixiContainer.addChild(clone.pixiContainer || clone.pixiSprite || clone.pixiText)
-
-        // player stuff
-        resetAllPlayheads(clone);
-        resetAllEventStates(clone);
+        clone.prepareForPlayer()
 
         clone.parentObject = project.rootObject;
         project.addObject(clone);
-        renderer.refresh(clone);
-
-        //project.addObject(clone);
-        //clone.parentObject = project.rootObject;
-        //wickObj.parentObject.addChild
-        //project.regenerateUniqueIDs(project.rootObject);
+        self.renderer.refresh(clone);
 
         return clone;
     }
