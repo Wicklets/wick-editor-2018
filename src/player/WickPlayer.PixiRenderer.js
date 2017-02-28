@@ -53,7 +53,7 @@ var WickPixiRenderer = function (project, canvasContainer) {
             if(project.borderColor) document.body.style.backgroundColor = project.borderColor;
         }
         // Fix focus issues
-        document.getElementById('rendererCanvas').className = ''
+        self.rendererCanvas.className = ''
         setTimeout(function () {
             $('#rendererCanvas').focus();
         }, 100);
