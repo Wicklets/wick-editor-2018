@@ -136,6 +136,16 @@ WickProject.fromJSON = function (rawJSONProject) {
 
     WickProject.fixForBackwardsCompatibility(projectFromJSON);
 
+    projectFromJSON.currentObject = projectFromJSON.rootObject;
+        
+    // Prepare all objects for being played/drawn
+    projectFromJSON.getAllObjects().forEach(function (obj) {
+        obj.prepareForPlayer();
+    })
+
+    // Regenerate name refs
+    projectFromJSON.rootObject.generateObjectNameReferences(projectFromJSON.rootObject);
+
     return projectFromJSON;
 }
 
@@ -325,6 +335,12 @@ WickProject.prototype.getCurrentLayer = function () {
 
 WickProject.prototype.getCurrentFrame = function () {
     return this.getCurrentObject().getCurrentLayer().getCurrentFrame();
+}
+
+WickProject.prototype.getAllObjects = function () {
+    var allObjectsInProject = this.rootObject.getAllChildObjectsRecursive();
+    allObjectsInProject.push(this.rootObject);
+    return allObjectsInProject;
 }
 
 WickProject.prototype.getObjectByUUID = function (uuid) {

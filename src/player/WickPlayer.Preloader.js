@@ -72,26 +72,26 @@ var WickPreloader = function (wickEditor) {
 		       	//}, 1000);
 		    },
 		      xhr: function()
-  {
-    var xhr = new window.XMLHttpRequest();
-    //Upload progress
-    xhr.upload.addEventListener("progress", function(evt){
-      if (evt.lengthComputable) {
-        var percentComplete = evt.loaded / evt.total;
-        //Do something with upload progress
-        window.percentComplete = percentComplete;
-      }
-    }, false);
-    //Download progress
-    xhr.addEventListener("progress", function(evt){
-      if (evt.lengthComputable) {
-        var percentComplete = evt.loaded / evt.total;
-        //Do something with download progress
-        window.percentComplete = percentComplete;
-      }
-    }, false);
-    return xhr;
-  }
+			  {
+			    var xhr = new window.XMLHttpRequest();
+			    //Upload progress
+			    xhr.upload.addEventListener("progress", function(evt){
+			      if (evt.lengthComputable) {
+			        var percentComplete = evt.loaded / evt.total;
+			        //Do something with upload progress
+			        window.percentComplete = percentComplete;
+			      }
+			    }, false);
+			    //Download progress
+			    xhr.addEventListener("progress", function(evt){
+			      if (evt.lengthComputable) {
+			        var percentComplete = evt.loaded / evt.total;
+			        //Do something with download progress
+			        window.percentComplete = percentComplete;
+			      }
+			    }, false);
+			    return xhr;
+			  }
 		});
 	}
 }

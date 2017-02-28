@@ -1,20 +1,21 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-var rendererContainerEl;
-var renderer;
-var stage;
+var WickPixiRenderer = function (project, canvasContainer) {
 
-var projectFitScreenScale;
-var projectFitScreenTranslate;
+	var self = this;
 
-var WickPixiRenderer = function (project) {
+	var renderer;
+	var stage;
+
+	self.canvasScale;
+	self.canvasTranslate;
+	self.rendererCanvas;
 
 	this.setup = function() {
 
 		// update canvas size on window resize
         window.addEventListener('resize', resizeCanvas, false);
 
-	    rendererContainerEl = document.getElementById("playerCanvasContainer");
 	    var rendererOptions = {
 	        backgroundColor : "#DDDDDD", 
 	        resolution: window.devicePixelRatio,
@@ -29,21 +30,36 @@ var WickPixiRenderer = function (project) {
 	    // Get rid of old canvas (if it exists)
 	    var oldRendererCanvas = document.getElementById("rendererCanvas");
 	    if(oldRendererCanvas) {
-	        rendererContainerEl.removeChild(rendererContainerEl.childNodes[0]);
+	        canvasContainer.removeChild(canvasContainer.childNodes[0]);
 	    }
 
 	    // Add renderer canvas
-	    rendererContainerEl.appendChild(renderer.view);
+	    canvasContainer.appendChild(renderer.view);
 	    renderer.view.id = "rendererCanvas";
+	    self.rendererCanvas = renderer.view;
 
 	    stage = new PIXI.Container();
 
-	    projectFitScreenScale = 1.0;
-	    projectFitScreenTranslate = {x : 0, y : 0};
+	    self.canvasScale = 1.0;
+	    self.canvasTranslate = {x : 0, y : 0};
 
 	    resizeCanvas();
 
 	    generatePixiScene(project.rootObject);
+
+	    if(window.wickEditor) {
+            if(project.borderColor) document.getElementById('builtinPlayer').style.backgroundColor = project.borderColor;
+        } else {
+            if(project.borderColor) document.body.style.backgroundColor = project.borderColor;
+        }
+        // Fix focus issues
+        document.getElementById('rendererCanvas').className = ''
+        setTimeout(function () {
+            $('#rendererCanvas').focus();
+        }, 100);
+        $(document).on('focus', 'input[readonly]', function () {
+            this.blur();
+        });
 
 	}
 
@@ -172,22 +188,22 @@ var WickPixiRenderer = function (project) {
 
 	        // Fit only so much that stuff doesn't get cut off
 	        if(widthRatio > heightRatio) {
-	            projectFitScreenScale = heightRatio;
+	            self.canvasScale = heightRatio;
 	        } else {
-	            projectFitScreenScale = widthRatio;
+	            self.canvasScale = widthRatio;
 	        }
 
-	        renderer.view.style.width  = project.width * projectFitScreenScale + "px";
-	        renderer.view.style.height = project.height * projectFitScreenScale + "px";
+	        renderer.view.style.width  = project.width * self.canvasScale + "px";
+	        renderer.view.style.height = project.height * self.canvasScale + "px";
 
 	        if(widthRatio > heightRatio) {
-	            var offset = (window.innerWidth - project.width * projectFitScreenScale) / 2;
-	            rendererContainerEl.style.paddingLeft = offset + "px";
-	            rendererContainerEl.style.paddingTop  = "0px";
+	            var offset = (window.innerWidth - project.width * self.canvasScale) / 2;
+	            canvasContainer.style.paddingLeft = offset + "px";
+	            canvasContainer.style.paddingTop  = "0px";
 	        } else {
-	            var offset = (window.innerHeight - project.height * projectFitScreenScale) / 2;
-	            rendererContainerEl.style.paddingLeft = "0px";
-	            rendererContainerEl.style.paddingTop  = offset + "px";
+	            var offset = (window.innerHeight - project.height * self.canvasScale) / 2;
+	            canvasContainer.style.paddingLeft = "0px";
+	            canvasContainer.style.paddingTop  = offset + "px";
 	        }
 	    } else {
 	        renderer.view.style.width  = project.width + "px";
@@ -196,10 +212,10 @@ var WickPixiRenderer = function (project) {
 	        var offsetX = (window.innerWidth  - project.width) / 2;
 	        var offsetY = (window.innerHeight - project.height) / 2;
 
-	        rendererContainerEl.style.paddingLeft   = offsetX + "px";
-	        rendererContainerEl.style.paddingRight  = offsetX + "px";
-	        rendererContainerEl.style.paddingTop    = offsetY + "px";
-	        rendererContainerEl.style.paddingBottom = offsetY + "px";
+	        canvasContainer.style.paddingLeft   = offsetX + "px";
+	        canvasContainer.style.paddingRight  = offsetX + "px";
+	        canvasContainer.style.paddingTop    = offsetY + "px";
+	        canvasContainer.style.paddingBottom = offsetY + "px";
 	    }
 
 	}

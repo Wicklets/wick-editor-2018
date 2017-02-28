@@ -1243,6 +1243,36 @@ WickObject.prototype.setValidator = function (validator) {
             stuff 2 deprecate
 ***************************************/
 
+WickObject.prototype.prepareForPlayer = function () {
+    // Set all playhead vars
+    if(this.isSymbol) {
+        // Set this object to it's first frame
+        this.playheadPosition = 0;
+
+        // Start the object playing
+        this.isPlaying = true;
+
+        this.setupScript = function () {
+            eval(this.wickScript);
+        }
+        this.setupScript();
+        this.getAllFrames().forEach(function (frame) {
+            frame.setupScript = function () {
+                eval(this.wickScript);
+            }
+            frame.setupScript();
+        })
+    }
+
+    // Reset the mouse hovered over state flag
+    this.hoveredOver = false;
+
+    // All WickObjects are ready to play their sounds, run their onLoad scripts, etc.
+    this.justEnteredFrame = true;
+    this.onNewFrame = true;
+    this.onLoadScriptRan = false;
+}
+
 WickObject.prototype.autocropImage = function (callback) {
     var that = this;
 
@@ -1397,7 +1427,7 @@ WickObject.prototype.runScriptFn = function (fnName, objectScope, frame) {
     if(!objectScope) objectScope = this.parentObject;
 
     // Setup wickobject reference variables
-    window.project = WickPlayer.getProject() || wickEditor.project;
+    window.project = wickPlayer.project || wickEditor.project;
     window.root = project.rootObject;
     window.parent = this.parentObject;
 

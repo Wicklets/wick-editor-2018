@@ -40,6 +40,7 @@
     <script src="lib/random.js"></script>
     <script src="lib/Tween.js"></script>
     <script src="lib/lerp.js"></script>
+    <script src="lib/bowser.js"></script>
 
     <script src="src/project/WickFrame.js"></script>
     <script src="src/project/WickLayer.js"></script>
@@ -86,10 +87,12 @@
     <script src="src/player/WickPlayer.Preloader.js"></script>
     <script src="src/player/WickPlayer.PixiRenderer.js"></script>
     <script src="src/player/WickPlayer.WebAudioPlayer.js"></script>
+    <script src="src/player/WickPlayer.InputHandler.js"></script>
 
     <script>
         $(document).ready(function() { 
             window.wickEditor = new WickEditor();
+            window.wickPlayer = new WickPlayer();
         });
     </script>
 </head>
