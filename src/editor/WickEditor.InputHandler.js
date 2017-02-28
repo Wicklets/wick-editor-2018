@@ -351,6 +351,7 @@ var InputHandler = function (wickEditor) {
             WickProject.fromFile(file, function(project) {
                 wickEditor.project = project;
                 wickEditor.syncInterfaces();
+                wickEditor.thumbnailRenderer.setup();
             });
         } else {
 

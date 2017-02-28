@@ -25,6 +25,7 @@ var WickEditor = function () {
         return interface;
     }
 
+    this.thumbnailRenderer = registerInterface(new ThumbnailRendererInterface(this));
     this.builtinplayer = registerInterface(new BuiltinPlayerInterface(this));
     this.rightclickmenu = registerInterface(new RightClickMenuInterface(this));
     this.scriptingide = registerInterface(new ScriptingIDEInterface(this));
@@ -75,26 +76,6 @@ WickEditor.prototype.syncInterfaces = function () {
     this.interfaces.forEach(function (interface) {
         interface.syncWithEditorState();
     });
-
-
-
-
-    if(!window.thumbpreview) {
-        window.thumbpreview = document.createElement('div')
-        thumbpreview.style.position = 'absolute'
-        thumbpreview.style.backgroundColor = '#FFFFFF'
-        thumbpreview.style.bottom = '0px'
-        thumbpreview.style.right = '0px'
-        thumbpreview.style.width = '500px'
-        thumbpreview.style.height = '500px'
-        //document.body.appendChild(thumbpreview);
-        this.project.fitScreen = false;
-
-        window.thumbRenderer = new WickPixiRenderer(this.project, thumbpreview);
-        thumbRenderer.setup();
-    }
-    thumbRenderer.refresh();
-    thumbRenderer.render();
 }
 
 WickEditor.prototype.changeTool = function (newTool) {

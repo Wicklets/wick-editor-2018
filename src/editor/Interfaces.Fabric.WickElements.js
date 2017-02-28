@@ -95,14 +95,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             // Reselect objects that were selected before sync
             var selectedObjects = wickEditor.project.getSelectedObjects();
             fabricInterface.selectObjects(selectedObjects);
-
-            // Render thumbnail
-            var currentFrame = wickEditor.project.getCurrentFrame();
-            if(currentFrame) {
-                wickEditor.fabric.projectRenderer.getCanvasThumbnail(function (thumbnail) { 
-                    wickEditor.project.getCurrentFrame().thumbnail = thumbnail;
-                });
-            }
         }
 
         if(enablePerfTests) stopTiming("object list generation");

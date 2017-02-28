@@ -478,11 +478,16 @@ var GuiActionHandler = function (wickEditor) {
             if(!confirm("Create a new project? All unsaved changes to the current project will be lost!")) {
                 return;
             }
+
+            wickEditor.thumbnailRenderer.cleanup();
+
             wickEditor.actionHandler.clearHistory();
             wickEditor.project = new WickProject();
             localStorage.removeItem("wickProject");
             wickEditor.fabric.recenterCanvas();
             wickEditor.syncInterfaces();
+
+            wickEditor.thumbnailRenderer.setup();
         });
 
     registerAction('exportProjectAsJSON',

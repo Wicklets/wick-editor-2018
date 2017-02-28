@@ -103,7 +103,8 @@ WickProject.Exporter = (function () {
             "fabricObjectReference",
             "parentLayer",
             "parentWickObject",
-            "parentFrame"
+            "parentFrame",
+            "alphaMask"
         ];
 
         if (dontJSONVars.indexOf(key) !== -1) {

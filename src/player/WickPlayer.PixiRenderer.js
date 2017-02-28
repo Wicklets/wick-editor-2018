@@ -1,11 +1,13 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-var WickPixiRenderer = function (project, canvasContainer) {
+var WickPixiRenderer = function (project, canvasContainer, scale, args) {
 
     var self = this;
 
     var renderer;
     var stage;
+
+    var renderScale;
 
     var wickToPixiDict;
 
@@ -15,6 +17,9 @@ var WickPixiRenderer = function (project, canvasContainer) {
 
     self.setup = function () {
 
+        renderScale = scale
+        if(!renderScale) renderScale = 1;
+
         // update canvas size on window resize
         window.addEventListener('resize', resizeCanvas, false);
 
@@ -23,7 +28,7 @@ var WickPixiRenderer = function (project, canvasContainer) {
             resolution: window.devicePixelRatio,
             preserveDrawingBuffer:true,
         };
-        renderer = PIXI.autoDetectRenderer(project.width, project.height, rendererOptions);
+        renderer = PIXI.autoDetectRenderer(project.width*renderScale, project.height*renderScale, rendererOptions);
         renderer.clearBeforeRender = false;
         renderer.roundPixels = project.pixelPerfectRendering;
         renderer.view.setAttribute('tabindex', 0);
@@ -61,7 +66,7 @@ var WickPixiRenderer = function (project, canvasContainer) {
 
     }
 
-    self.render = function () {
+    self.render = function (obj) {
 
         if(!renderer) return;
 
@@ -74,7 +79,8 @@ var WickPixiRenderer = function (project, canvasContainer) {
         for(uuid in wickToPixiDict) {
             wickToPixiDict[uuid].visible = false;
         }
-        resetTransforms();
+
+        resetTransforms(obj);
     
         renderer.render(wickToPixiDict[project.rootObject.uuid]);
     }
@@ -148,10 +154,8 @@ var WickPixiRenderer = function (project, canvasContainer) {
         refreshObject(project.rootObject);
     }
 
-    var resetTransforms = function () {
-        var resetTransformsOnObject = function (wickObject) {
-            var pixiObject = wickToPixiDict[wickObject.uuid];
-
+    var resetTransforms = function (obj) {
+        var syncPixiObject = function (wickObject, pixiObject) {
             pixiObject.visible = true;
             pixiObject.anchor = new PIXI.Point(0.5, 0.5);
             pixiObject.position.x = Math.round(wickObject.x);
@@ -159,22 +163,39 @@ var WickPixiRenderer = function (project, canvasContainer) {
             pixiObject.rotation = wickObject.rotation/360*2*3.14159;
             pixiObject.scale.x = wickObject.scaleX;
             pixiObject.scale.y = wickObject.scaleY;
+            if(wickObject.isRoot) {
+                pixiObject.scale.x *= renderScale;
+                pixiObject.scale.y *= renderScale;
+            }
             pixiObject.alpha = wickObject.opacity;
             if(wickObject.flipX) pixiObject.scale.x *= -1;
             if(wickObject.flipY) pixiObject.scale.y *= -1;
+        }
+
+        var resetTransformsOnObject = function (wickObject) {
+            syncPixiObject(wickObject, wickToPixiDict[wickObject.uuid])
 
             if(wickObject.isSymbol) {
                 wickObject.getAllActiveChildObjects().forEach(function (child) {
                     resetTransformsOnObject(child);
                 });
-            } else if(wickObject.pathData || wickObject.imageData) {
-
-            } else if(wickObject.fontData) {
-
             }
         }
 
-        resetTransformsOnObject(project.rootObject);
+        var resetTransformsOnObjectBack = function (wickObject) {
+            syncPixiObject(wickObject, wickToPixiDict[wickObject.uuid])
+
+            if(wickObject.parentObject) {
+                resetTransformsOnObjectBack(wickObject.parentObject);
+            }
+        }
+
+        if(!obj) {
+            resetTransformsOnObject(project.rootObject);
+        } else { 
+            resetTransformsOnObject(obj);
+            resetTransformsOnObjectBack(obj)
+        }
     }
 
     self.enterFullscreen = function () {
@@ -239,7 +260,7 @@ var WickPixiRenderer = function (project, canvasContainer) {
         window.removeEventListener('resize', resizeCanvas);
 
         // Get rid of old canvas
-        var oldRendererCanvas = document.getElementById("rendererCanvas");
+        var oldRendererCanvas = self.rendererCanvas
         if(oldRendererCanvas) {
             canvasContainer.removeChild(canvasContainer.childNodes[0]);
         }
@@ -253,7 +274,7 @@ var WickPixiRenderer = function (project, canvasContainer) {
         view = null;
 
         for (var textureId in PIXI.utils.TextureCache) {
-            PIXI.utils.BaseTextureCache[textureId].destroy(true);
+            //PIXI.utils.BaseTextureCache[textureId].destroy(true);
         }
     }
 
