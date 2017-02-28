@@ -2,7 +2,7 @@
 
 var WickPlayer = (function () {
 
-    var wickPlayer = { };
+    var wickPlayer = {};
 
     // Current project being played by player
     var project;
@@ -59,12 +59,8 @@ var WickPlayer = (function () {
             if(project.borderColor) document.body.style.backgroundColor = project.borderColor;
         }
 
-        // Patch old projects
-        if(!project.audioPlayer) project.audioPlayer = "WickWebAudioPlayer";
-        if(!project.renderer) project.renderer = "WickPixiRenderer";
-        
-        renderer = new window[project.renderer](project);
-        audioPlayer = new window[project.audioPlayer](project);
+        renderer = new WickPixiRenderer(project);
+        audioPlayer = new WickWebAudioPlayer(project);
 
         if(!mobileMode) {
             audioPlayer.setup();

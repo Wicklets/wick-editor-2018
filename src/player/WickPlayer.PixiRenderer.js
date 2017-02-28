@@ -1,33 +1,11 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-
-
-
-
-/* VERY IMRPOTANT */
-/* This needs to be changed so that it works like AudioPlayer i.e. so that
-   the WickObjects don't need to store a reference to their pixi objects,
-   there's just a dictionary mapping IDs to Pixi objects */
-
-
-
-
 var rendererContainerEl;
 var renderer;
 var stage;
 
 var projectFitScreenScale;
 var projectFitScreenTranslate;
-
-// http://stackoverflow.com/questions/17410809/how-to-calculate-rotation-in-2d-in-javascript
-function rotate(centerPoint, pointToRotate, angle) {
-    var radians = (Math.PI / 180) * angle,
-        cos = Math.cos(radians),
-        sin = Math.sin(radians),
-        nx = (cos * (pointToRotate.x - centerPoint.x)) + (sin * (pointToRotate.y - centerPoint.y)) + centerPoint.x,
-        ny = (cos * (pointToRotate.y - centerPoint.y)) - (sin * (pointToRotate.x - centerPoint.x)) + centerPoint.y;
-    return {x:nx, y:ny};
-}
 
 var WickPixiRenderer = function (project) {
 

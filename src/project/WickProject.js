@@ -27,9 +27,6 @@ var WickProject = function () {
 
     this.fitScreen = false;
 
-    this.renderer = "WickPixiRenderer";
-    this.audioPlayer = "WickWebAudioPlayer";
-
     //this.assets = {};
 
     this._selection = [];

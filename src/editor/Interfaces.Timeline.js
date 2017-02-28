@@ -353,7 +353,7 @@ var TimelineInterface = function (wickEditor) {
                 } else {
                     var currentScrollX = parseInt($('.frames-container').css('left'));
 
-                    var newScrollX = currentScrollX + delta * 10;
+                    var newScrollX = currentScrollX + -delta * 10;
                     newScrollX = Math.min(70, newScrollX)
 
                     $('.frames-container').css('left', newScrollX+'px');
