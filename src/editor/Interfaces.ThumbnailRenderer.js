@@ -30,6 +30,7 @@ var ThumbnailRendererInterface = function (wickEditor) {
 
         if(!thumbRenderer) return;
         if(!wickFrame) return;
+        return;
 
         var oldObject = wickEditor.project.currentObject
         wickEditor.project.currentObject = wickFrame.parentLayer.parentWickObject;

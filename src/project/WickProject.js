@@ -97,7 +97,7 @@ WickProject.fromWebpage = function (webpageString) {
 
     var webpageStringLines = webpageString.split('\n');
     webpageStringLines.forEach(function (line) {
-        if(line.startsWith("<script>WickPlayer.runProject(")) {
+        if(line.startsWith("<script>var wickPlayer = new WickPlayer(); wickPlayer.runProject(")) {
             extractedProjectJSON = line.split("'")[1];
         }
     });

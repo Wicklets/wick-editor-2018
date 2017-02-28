@@ -156,6 +156,7 @@ var WickPixiRenderer = function (project, canvasContainer, scale, args) {
 
     var resetTransforms = function (obj) {
         var syncPixiObject = function (wickObject, pixiObject) {
+            if(!pixiObject) return;
             pixiObject.visible = true;
             pixiObject.anchor = new PIXI.Point(0.5, 0.5);
             pixiObject.position.x = Math.round(wickObject.x);
