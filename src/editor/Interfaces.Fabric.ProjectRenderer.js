@@ -116,38 +116,70 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
     }
 
     self.renderProjectAsGIF = function (callback) {
-        self.getProjectAsCanvasSequence(function (canvases) {
-            var gif;
-            if(wickEditor.project.transparent) {
-                gif = new GIF({
-                    workers: 2,
-                    quality: 10,
-                    workerScript: 'lib/gif.worker.js',
-                    transparent: true,
-                    width: wickEditor.project.width,
-                    height: wickEditor.project.height,
-                });
-            } else {
-                gif = new GIF({
-                    workers: 2,
-                    quality: 10,
-                    workerScript: 'lib/gif.worker.js',
-                    background: '#fff',
-                    width: wickEditor.project.width,
-                    height: wickEditor.project.height,
-                });
-            }
+        gifCanvas = document.createElement('div')
+        wickEditor.project.fitScreen = false;
 
-            canvases.forEach(function (canvas) {
-                gif.addFrame(canvas, {delay: 1000/wickEditor.project.framerate});
+        gifRenderer = new WickPixiRenderer(wickEditor.project, gifCanvas, 1.0);
+        gifRenderer.setup();
+
+        var gifFrameDataURLs = [];
+
+        wickEditor.project.currentObject = wickEditor.project.rootObject;
+        var len = wickEditor.project.rootObject.getTotalTimelineLength();
+        for (var i = 0; i < len; i++) {
+            wickEditor.project.rootObject.playheadPosition = i;
+            gifRenderer.refresh();
+            gifRenderer.render(wickEditor.project.currentObject);
+            gifFrameDataURLs.push(gifRenderer.rendererCanvas.toDataURL());
+        }
+
+        var gif;
+        if(wickEditor.project.transparent) {
+            gif = new GIF({
+                workers: 2,
+                quality: 10,
+                workerScript: 'lib/gif.worker.js',
+                transparent: true,
+                width: wickEditor.project.width,
+                height: wickEditor.project.height,
+            });
+        } else {
+            gif = new GIF({
+                workers: 2,
+                quality: 10,
+                workerScript: 'lib/gif.worker.js',
+                background: '#fff',
+                width: wickEditor.project.width,
+                height: wickEditor.project.height,
+            });
+        }
+
+        var gifFrameImages = [];
+
+        var proceed;
+
+        gifFrameDataURLs.forEach(function (gifFrameDataURL) {
+            var gifFrameImage = new Image();
+            gifFrameImage.onload = function () {
+                gifFrameImages.push(gifFrameImage);
+                if(gifFrameImages.length === gifFrameDataURLs.length) {
+                    proceed();
+                }
+            }
+            gifFrameImage.src = gifFrameDataURL;
+        });
+
+        proceed = function () {
+            gifFrameImages.forEach(function (gifFrameImage) {
+                gif.addFrame(gifFrameImage, {delay: 1000/wickEditor.project.framerate});
             });
 
             gif.render();
 
             gif.on('finished', function(blob) {
                 callback(blob);
-            });
-        });
+            });     
+        }
     }
 
     self.renderProjectAsWebM = function (callback) {

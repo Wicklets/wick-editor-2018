@@ -6,13 +6,6 @@ var ThumbnailRendererInterface = function (wickEditor) {
     this.setup = function () {
 
         thumbpreview = document.createElement('div')
-        thumbpreview.style.position = 'absolute'
-        thumbpreview.style.backgroundColor = '#FFFFFF'
-        thumbpreview.style.bottom = '0px'
-        thumbpreview.style.right = '0px'
-        thumbpreview.style.width = '500px'
-        thumbpreview.style.height = '500px'
-        //document.body.appendChild(thumbpreview);
         wickEditor.project.fitScreen = false;
 
         thumbRenderer = new WickPixiRenderer(wickEditor.project, thumbpreview, 0.2);
@@ -30,7 +23,7 @@ var ThumbnailRendererInterface = function (wickEditor) {
 
         if(!thumbRenderer) return;
         if(!wickFrame) return;
-        return;
+        //return;
 
         var oldObject = wickEditor.project.currentObject
         wickEditor.project.currentObject = wickFrame.parentLayer.parentWickObject;
