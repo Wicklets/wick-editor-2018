@@ -352,12 +352,20 @@ var TimelineInterface = function (wickEditor) {
                     wickEditor.project.currentObject.framesDirty = true;
                     wickEditor.syncInterfaces();
                 } else {
-                    var currentScrollX = parseInt($('.frames-container').css('left'));
+                    /*var currentScrollX = parseInt($('.frames-container').css('left'));
 
                     var newScrollX = currentScrollX + -delta * 10;
                     newScrollX = Math.min(70, newScrollX)
 
-                    $('.frames-container').css('left', newScrollX+'px');
+                    $('.frames-container').css('left', newScrollX+'px');*/
+
+                    var currentScrollX = parseInt($('.frames-container').css('top'));
+
+                    var newScrollX = currentScrollX + -delta * 3;
+                    newScrollX = Math.min(0, newScrollX)
+
+                    $('.frames-container').css('top', newScrollX+'px');
+                    $('.layers-container').css('top', newScrollX+'px');
                 }
             });
 

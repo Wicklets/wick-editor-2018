@@ -53,7 +53,7 @@ body {
 	background-color: #585757;
     border-right-color: #878787;
 	width: var(--layers-width);
-	height: 100%;
+	height: 1000%;
 	left: 0px;
 	top: 0px;
 
@@ -90,7 +90,7 @@ body {
 	background-color: #3C3C3C;
 
 	width: 1000%;
-	height: 100%;
+	height: 1000%;
 	left: var(--layers-width);
 	top: 0px;
 

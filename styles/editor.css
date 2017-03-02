@@ -554,6 +554,7 @@ letter-spacing: 0.32px;
 	/*padding: 10px;*/
 	width: calc(100% - 252px);/*calc(100% - 288px);*/
 	background-color: #E6E6E6;
+	overflow: hidden;
 }
 
 #layersGUI {

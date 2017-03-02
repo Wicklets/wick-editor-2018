@@ -86,6 +86,8 @@ var WickPixiRenderer = function (project, canvasContainer, scale, args) {
     }
 
     self.refresh = function () {
+        // DONT RECURSION HERE >.>
+
         var refreshObject = function (wickObject) {
             var pixiObjectExists = wickToPixiDict[wickObject.uuid] !== undefined;
 
@@ -155,6 +157,8 @@ var WickPixiRenderer = function (project, canvasContainer, scale, args) {
     }
 
     var resetTransforms = function (obj) {
+        // DONT RECURSION HERE >.>
+        
         var syncPixiObject = function (wickObject, pixiObject) {
             if(!pixiObject) return;
             pixiObject.visible = true;
