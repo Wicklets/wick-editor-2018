@@ -8,6 +8,7 @@
 	<script src="../lib/jquery.min.js"></script>
 	<script src="../lib/FileSaver.min.js"></script>
 	<script src="../lib/polyfills.js"></script>
+	<script src="../lib/bowser.js"></script>
 </head>
 <body>
 	<!--<h1>Demos</h1>-->
@@ -60,7 +61,7 @@
 		var currentDemo;
 
 		var loadDemo = function (file) {
-			if(BrowserDetectionUtils.inMobileMode) {
+			if(bowser.mobile || bowser.tablet) {
 				var url = file;
 				window.open(url,'_blank');
 			} else {

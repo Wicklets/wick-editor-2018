@@ -298,6 +298,7 @@ var TimelineInterface = function (wickEditor) {
             this.elem.addEventListener('mousedown', function (e) {
                 wickEditor.actionHandler.doAction('movePlayhead', {
                     obj: wickEditor.project.currentObject,
+                    newPlayheadPosition: wickEditor.project.currentObject.playheadPosition,
                     newLayer: that.wickLayer
                 });
                 startInteraction('dragLayer', e, {layer:that});
