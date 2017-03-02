@@ -29,6 +29,10 @@ WickPlayerInputHandler = function (wickPlayer, canvasContainer) {
         }
     }
 
+    self.update = function () {
+        keysJustPressed = [];
+    }
+
     self.cleanup = function () {
         canvasContainer.removeEventListener("mousedown", onMouseDown);
         canvasContainer.removeEventListener("touchstart", onTouchStart);

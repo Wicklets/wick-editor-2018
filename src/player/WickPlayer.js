@@ -73,6 +73,7 @@ var WickPlayer = function () {
                     self.project.rootObject.applyTweens();
                     self.renderer.render();
                     animate();
+                    self.inputHandler.update();
                     //requestAnimationFrame(animate);
                 }
             }, 1000 / self.project.framerate);
@@ -85,10 +86,10 @@ var WickPlayer = function () {
             self.project.rootObject.update();
             self.project.rootObject.applyTweens();
             self.renderer.render();
+            self.inputHandler.update();
 
         }
 
-        keysJustPressed = []; 
     }
 
 
