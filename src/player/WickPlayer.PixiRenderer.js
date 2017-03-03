@@ -125,8 +125,6 @@ var WickPixiRenderer = function (project, canvasContainer, scale, args) {
 
         if (wickObject.isSymbol) {
 
-            console.log('PR symbol')
-
             pixiObject = new PIXI.Container();
 
         } else if (wickObject.imageData) {
@@ -135,8 +133,6 @@ var WickPixiRenderer = function (project, canvasContainer, scale, args) {
             wickObject.generateAlphaMask(pixiObject.texture.baseTexture.imageUrl);
 
         } else if (wickObject.pathData) {
-
-            console.log('PR path')
 
             var parser = new DOMParser();
             var svgDoc = parser.parseFromString('<svg id="svg" viewBox="'+(0)+' '+(0)+' '+(wickObject.width)+' '+(wickObject.height)+'" version="1.1" width="'+(wickObject.width)+'" height="'+(wickObject.height)+'" xmlns="http://www.w3.org/2000/svg">'+wickObject.pathData+'</svg>', "image/svg+xml");

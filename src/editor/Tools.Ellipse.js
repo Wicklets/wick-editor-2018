@@ -42,6 +42,8 @@ Tools.Ellipse = function (wickEditor) {
         var pathWickObject = WickObject.fromPathFile(svgString);
         pathWickObject.x = origX;
         pathWickObject.y = origY;
+        pathWickObject.width = drawingShape.width;
+        pathWickObject.height = drawingShape.height;
 
         wickEditor.actionHandler.doAction('addObjects', {
             wickObjects: [pathWickObject],
