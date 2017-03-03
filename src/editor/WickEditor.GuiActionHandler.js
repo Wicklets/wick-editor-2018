@@ -809,7 +809,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('addLayer',
-        [],
+        ['Modifier', 'SHIFT', '9'],
         ['addLayerButton'],
         {},
         function(args) {

@@ -71,7 +71,7 @@ var WickPlayer = function () {
                     
                     self.project.rootObject.update();
                     self.project.rootObject.applyTweens();
-                    self.renderer.render();
+                    self.renderer.render(self.project.rootObject.getAllActiveChildObjects());
                     animate();
                     self.inputHandler.update();
                     //requestAnimationFrame(animate);
@@ -85,7 +85,7 @@ var WickPlayer = function () {
             }
             self.project.rootObject.update();
             self.project.rootObject.applyTweens();
-            self.renderer.render();
+            self.renderer.render(self.project.rootObject.getAllActiveChildObjects());
             self.inputHandler.update();
 
         }

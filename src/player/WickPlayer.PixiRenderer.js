@@ -80,10 +80,29 @@ var WickPixiRenderer = function (project, canvasContainer, scale, args) {
             wickToPixiDict[uuid].visible = false;
         }
 
-        wickObjects.forEach(function (wickObject) {
+        /*wickObjects.forEach(function (wickObject) {
             wickObject.getAllChildObjectsRecursive().forEach(function (child) {
                 resetTransforms(child);
             });
+        });*/
+
+        var resetParent = function (parent) {
+            resetTransforms(parent);
+            if(parent.parentObject) resetParent(parent.parentObject);
+        }
+
+        var resetObject = function (object) {
+            resetTransforms(object);
+            if(object.isSymbol) {
+                object.getAllChildObjects().forEach(function (child) {
+                    resetObject(child);
+                });
+            }
+        }
+
+        wickObjects.forEach(function (wickObject) {
+            resetObject(wickObject);
+            if(wickObject.parentObject) resetParent(wickObject.parentObject)
         });
     
         renderer.render(wickToPixiDict[project.rootObject.uuid]);
@@ -160,7 +179,7 @@ var WickPixiRenderer = function (project, canvasContainer, scale, args) {
 
     var resetTransforms = function (wickObject) {
 
-        console.log('resetTransforms ' + wickObject.uuid.substring(0,2))
+        console.log('R ' + wickObject.uuid.substring(0,2));
 
         var pixiObject = wickToPixiDict[wickObject.uuid];
 
@@ -178,10 +197,6 @@ var WickPixiRenderer = function (project, canvasContainer, scale, args) {
         pixiObject.alpha = wickObject.opacity;
         if(wickObject.flipX) pixiObject.scale.x *= -1;
         if(wickObject.flipY) pixiObject.scale.y *= -1;
-
-        if(wickObject.parentObject) {
-            resetTransforms(wickObject.parentObject);
-        }
 
     }
 
