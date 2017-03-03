@@ -81,9 +81,9 @@
 				"args" : [],
 				"return" : {"type": "Number", "description": "x-location of the mouse"}
 			}, {
-				"name" : "isKeyDown(key)",
-				"description" : "Returns true if 'key' is currently down and false otherwise. Casing does not matter i.e. isKeyDown('a') is equivalent to isKeyDown('A').",
-				"example" : "// If SPACE is pressed, move this object right by 10 pixels\nif (isKeyDown('SPACE')) { \n\tthis.x += 10;\n}",
+				"name" : "keyIsDown(key)",
+				"description" : "Returns true if 'key' is currently down and false otherwise. Casing does not matter i.e. keyIsDown('a') is equivalent to keyIsDown('A').",
+				"example" : "// If SPACE is pressed, move this object right by 10 pixels\nif (keyIsDown('SPACE')) { \n\tthis.x += 10;\n}",
 				"args" : [{"name" : "key", "type" : "String", "description" : "Any character such as 'A' or special characters including 'SPACE', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'BACKSPACE', 'TAB', 'ENTER', 'SHIFT', 'CTRL', 'COMMAND', 'ALT', 'WINDOWS', 'F1', 'NUM 0', 'NUM LOCK'"}],
 				"return" : {"type": "Boolean", "description": "true if key is down, false otherwise."}
 			}, {
