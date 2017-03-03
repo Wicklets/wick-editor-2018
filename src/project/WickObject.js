@@ -668,7 +668,7 @@ WickObject.prototype.getAllActiveChildObjects = function () {
 WickObject.prototype.getAllChildObjectsRecursive = function () {
 
     if (!this.isSymbol) {
-        return [];
+        return [this];
     }
 
     var children = [];

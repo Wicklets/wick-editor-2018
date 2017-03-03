@@ -23,20 +23,10 @@ var ThumbnailRendererInterface = function (wickEditor) {
 
         if(!thumbRenderer) return;
         if(!wickFrame) return;
-        //return;
-
-        var oldObject = wickEditor.project.currentObject
-        wickEditor.project.currentObject = wickFrame.parentLayer.parentWickObject;
-
-        var oldPlayheadPosition = wickEditor.project.currentObject.playheadPosition
-        wickEditor.project.currentObject.playheadPosition = wickFrame.playheadPosition;
 
         thumbRenderer.refresh();
-        thumbRenderer.render(wickEditor.project.currentObject);
+        thumbRenderer.render(wickFrame.wickObjects);
         wickFrame.thumbnail = thumbRenderer.rendererCanvas.toDataURL();
-
-        wickEditor.project.currentObject.playheadPosition = oldPlayheadPosition;
-        wickEditor.project.currentObject = oldObject;
 
     }
 

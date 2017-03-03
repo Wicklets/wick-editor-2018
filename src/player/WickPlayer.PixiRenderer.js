@@ -66,7 +66,7 @@ var WickPixiRenderer = function (project, canvasContainer, scale, args) {
 
     }
 
-    self.render = function (obj) {
+    self.render = function (wickObjects) {
 
         if(!renderer) return;
 
@@ -80,14 +80,16 @@ var WickPixiRenderer = function (project, canvasContainer, scale, args) {
             wickToPixiDict[uuid].visible = false;
         }
 
-        resetTransforms(obj);
+        wickObjects.forEach(function (wickObject) {
+            wickObject.getAllChildObjectsRecursive().forEach(function (child) {
+                resetTransforms(child);
+            });
+        });
     
         renderer.render(wickToPixiDict[project.rootObject.uuid]);
     }
 
     self.refresh = function () {
-        // DONT RECURSION HERE >.>
-
         var refreshObject = function (wickObject) {
             var pixiObjectExists = wickToPixiDict[wickObject.uuid] !== undefined;
 
@@ -156,51 +158,31 @@ var WickPixiRenderer = function (project, canvasContainer, scale, args) {
         refreshObject(project.rootObject);
     }
 
-    var resetTransforms = function (obj) {
-        // DONT RECURSION HERE >.>
-        
-        var syncPixiObject = function (wickObject, pixiObject) {
-            if(!pixiObject) return;
-            pixiObject.visible = true;
-            pixiObject.anchor = new PIXI.Point(0.5, 0.5);
-            pixiObject.position.x = Math.round(wickObject.x);
-            pixiObject.position.y = Math.round(wickObject.y);
-            pixiObject.rotation = wickObject.rotation/360*2*3.14159;
-            pixiObject.scale.x = wickObject.scaleX;
-            pixiObject.scale.y = wickObject.scaleY;
-            if(wickObject.isRoot) {
-                pixiObject.scale.x *= renderScale;
-                pixiObject.scale.y *= renderScale;
-            }
-            pixiObject.alpha = wickObject.opacity;
-            if(wickObject.flipX) pixiObject.scale.x *= -1;
-            if(wickObject.flipY) pixiObject.scale.y *= -1;
+    var resetTransforms = function (wickObject) {
+
+        console.log('resetTransforms ' + wickObject.uuid.substring(0,2))
+
+        var pixiObject = wickToPixiDict[wickObject.uuid];
+
+        pixiObject.visible = true;
+        pixiObject.anchor = new PIXI.Point(0.5, 0.5);
+        pixiObject.position.x = Math.round(wickObject.x);
+        pixiObject.position.y = Math.round(wickObject.y);
+        pixiObject.rotation = wickObject.rotation/360*2*3.14159;
+        pixiObject.scale.x = wickObject.scaleX;
+        pixiObject.scale.y = wickObject.scaleY;
+        if(wickObject.isRoot) {
+            pixiObject.scale.x *= renderScale;
+            pixiObject.scale.y *= renderScale;
+        }
+        pixiObject.alpha = wickObject.opacity;
+        if(wickObject.flipX) pixiObject.scale.x *= -1;
+        if(wickObject.flipY) pixiObject.scale.y *= -1;
+
+        if(wickObject.parentObject) {
+            resetTransforms(wickObject.parentObject);
         }
 
-        var resetTransformsOnObject = function (wickObject) {
-            syncPixiObject(wickObject, wickToPixiDict[wickObject.uuid])
-
-            if(wickObject.isSymbol) {
-                wickObject.getAllActiveChildObjects().forEach(function (child) {
-                    resetTransformsOnObject(child);
-                });
-            }
-        }
-
-        var resetTransformsOnObjectBack = function (wickObject) {
-            syncPixiObject(wickObject, wickToPixiDict[wickObject.uuid])
-
-            if(wickObject.parentObject) {
-                resetTransformsOnObjectBack(wickObject.parentObject);
-            }
-        }
-
-        if(!obj) {
-            resetTransformsOnObject(project.rootObject);
-        } else { 
-            resetTransformsOnObject(obj);
-            resetTransformsOnObjectBack(obj)
-        }
     }
 
     self.enterFullscreen = function () {
