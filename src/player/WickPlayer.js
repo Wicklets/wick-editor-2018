@@ -36,7 +36,7 @@ var WickPlayer = function () {
         self.inputHandler.setup();
         if(!bowser.mobile && !bowser.tablet) self.audioPlayer.setup();
         self.renderer.setup();
-        self.renderer.refresh();
+        self.renderer.refresh(self.project.rootObject);
 
         animate();
 
@@ -104,8 +104,10 @@ var WickPlayer = function () {
 
         clone.prepareForPlayer()
 
-        clone.parentObject = project.rootObject;
-        project.addObject(clone);
+        clone.parentObject = wickObj.parentObject;
+        clone.parentObject.getCurrentLayer().getCurrentFrame().wickObjects.push(clone);
+        self.project.rootObject.generateParentObjectReferences();
+
         self.renderer.refresh(clone);
 
         return clone;

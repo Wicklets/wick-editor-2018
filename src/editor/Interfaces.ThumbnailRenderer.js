@@ -24,7 +24,7 @@ var ThumbnailRendererInterface = function (wickEditor) {
         if(!thumbRenderer) return;
         if(!wickFrame) return;
 
-        thumbRenderer.refresh();
+        thumbRenderer.refresh(wickEditor.project.rootObject);
         thumbRenderer.render(wickEditor.project.getCurrentObject().getAllActiveChildObjects());
         wickFrame.thumbnail = thumbRenderer.rendererCanvas.toDataURL();
 

@@ -108,73 +108,72 @@ var WickPixiRenderer = function (project, canvasContainer, scale, args) {
         renderer.render(wickToPixiDict[project.rootObject.uuid]);
     }
 
-    self.refresh = function () {
-        var refreshObject = function (wickObject) {
-            var pixiObjectExists = wickToPixiDict[wickObject.uuid] !== undefined;
+    self.refresh = function (wickObject) {
 
-            if (wickObject.isSymbol) {
+        var pixiObjectExists = wickToPixiDict[wickObject.uuid] !== undefined;
 
-                if(!pixiObjectExists) {
-                    console.log('pixi regen symbol!')
-
-                    var pixiObject = new PIXI.Container();
-
-                    wickToPixiDict[wickObject.uuid] = pixiObject;
-                    if(!wickObject.isRoot) 
-                        wickToPixiDict[wickObject.parentObject.uuid].addChild(pixiObject);
-                }
-
+        if(pixiObjectExists) {
+            if(wickObject.isSymbol) {
                 wickObject.getAllChildObjects().forEach(function (child) {
-                    refreshObject(child);
+                    self.refresh(child);
                 });
-
-            } else if (wickObject.imageData) {
-
-                if(pixiObjectExists) return;
-                console.log('pixi regen image!')
-
-                var pixiObject = PIXI.Sprite.fromImage(wickObject.imageData);
-                wickObject.generateAlphaMask(pixiObject.texture.baseTexture.imageUrl);
-
-                wickToPixiDict[wickObject.uuid] = pixiObject;
-                wickToPixiDict[wickObject.parentObject.uuid].addChild(pixiObject);
-
-            } else if (wickObject.pathData) {
-
-                if(pixiObjectExists) return;
-                console.log('pixi regen path!')
-
-                var parser = new DOMParser();
-                var svgDoc = parser.parseFromString('<svg id="svg" viewBox="'+(0)+' '+(0)+' '+(wickObject.width)+' '+(wickObject.height)+'" version="1.1" width="'+(wickObject.width)+'" height="'+(wickObject.height)+'" xmlns="http://www.w3.org/2000/svg">'+wickObject.pathData+'</svg>', "image/svg+xml");
-                var s = new XMLSerializer().serializeToString(svgDoc)
-                var base64svg = 'data:image/svg+xml;base64,' + window.btoa(s);
-                
-                var pixiObject = PIXI.Sprite.fromImage(base64svg);
-                wickObject.generateAlphaMask(pixiObject.texture.baseTexture.imageUrl);
-
-                wickToPixiDict[wickObject.uuid] = pixiObject;
-                wickToPixiDict[wickObject.parentObject.uuid].addChild(pixiObject);
-
-            } else if (wickObject.fontData) {
-
-                if(pixiObjectExists) return;
-                console.log('pixi regen text!')
-
-                var style = {
-                    font : wickObject.fontData.fontWeight + " " + wickObject.fontData.fontStyle + " " + wickObject.fontData.fontSize + "px " + wickObject.fontData.fontFamily,
-                    fill : wickObject.fontData.fill,
-                    wordWrap : true,
-                    wordWrapWidth : 1440,
-                };
-                var pixiObject = new PIXI.Text(wickObject.fontData.text, style);
-
-                wickToPixiDict[wickObject.uuid] = pixiObject;
-                wickToPixiDict[wickObject.parentObject.uuid].addChild(pixiObject);
             }
+            return;
+        }
+
+        var pixiObject;
+
+        if (wickObject.isSymbol) {
+
+            console.log('PR symbol')
+
+            pixiObject = new PIXI.Container();
+
+        } else if (wickObject.imageData) {
+
+            pixiObject = PIXI.Sprite.fromImage(wickObject.imageData);
+            wickObject.generateAlphaMask(pixiObject.texture.baseTexture.imageUrl);
+
+        } else if (wickObject.pathData) {
+
+            console.log('PR path')
+
+            var parser = new DOMParser();
+            var svgDoc = parser.parseFromString('<svg id="svg" viewBox="'+(0)+' '+(0)+' '+(wickObject.width)+' '+(wickObject.height)+'" version="1.1" width="'+(wickObject.width)+'" height="'+(wickObject.height)+'" xmlns="http://www.w3.org/2000/svg">'+wickObject.pathData+'</svg>', "image/svg+xml");
+            var s = new XMLSerializer().serializeToString(svgDoc)
+            var base64svg = 'data:image/svg+xml;base64,' + window.btoa(s);
+            
+            pixiObject = PIXI.Sprite.fromImage(base64svg);
+            wickObject.generateAlphaMask(pixiObject.texture.baseTexture.imageUrl);
+
+        } else if (wickObject.fontData) {
+
+            var style = {
+                font : wickObject.fontData.fontWeight + " " + wickObject.fontData.fontStyle + " " + wickObject.fontData.fontSize + "px " + wickObject.fontData.fontFamily,
+                fill : wickObject.fontData.fill,
+                wordWrap : true,
+                wordWrapWidth : 1440,
+            };
+            pixiObject = new PIXI.Text(wickObject.fontData.text, style);
 
         }
 
-        refreshObject(project.rootObject);
+        wickToPixiDict[wickObject.uuid] = pixiObject;
+
+        if(wickObject.parentObject) {
+            var parentObject = wickToPixiDict[wickObject.parentObject.uuid];
+            if(!parentObject) {
+                self.refresh(wickObject.parentObject);
+            }
+            wickToPixiDict[wickObject.parentObject.uuid].addChild(pixiObject)
+        }
+
+        if(wickObject.isSymbol) {
+            wickObject.getAllChildObjects().forEach(function (child) {
+                self.refresh(child);
+            });
+        }
+
     }
 
     var resetTransforms = function (wickObject) {

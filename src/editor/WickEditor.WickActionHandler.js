@@ -368,6 +368,10 @@ var WickActionHandler = function (wickEditor) {
             });*/
 
             // Create symbol out of objects
+            objects.forEach(function (obj) {
+                obj.uuid = random.uuid4();
+            })
+
             var symbol = new WickObject.createSymbolFromWickObjects(objects);
             symbol.zIndicesDirty = true;
             wickEditor.project.addObject(symbol, symbolZIndex, true);
@@ -385,6 +389,7 @@ var WickActionHandler = function (wickEditor) {
             children.forEach(function (child) {
                 child.x += child.parentObject.x;
                 child.y += child.parentObject.y;
+                child.uuid = random.uuid4();
                 wickEditor.project.addObject(child, null, true);
                 child.zIndicesDirty = true;
             });
