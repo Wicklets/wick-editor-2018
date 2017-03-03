@@ -984,7 +984,7 @@ WickObject.prototype.gotoFrame = function (frame) {
 
     if(newFrame !== oldFrame) {
         this.onNewFrame = true;
-        if(!newFrame.alwaysSaveState) {
+        if(newFrame && !newFrame.alwaysSaveState) {
             //this.getAllActiveChildObjects().forEach(function (child) {
             newFrame.wickObjects.forEach(function (child) {
                 wickPlayer.resetStateOfObject(child);
