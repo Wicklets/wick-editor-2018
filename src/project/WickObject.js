@@ -1442,7 +1442,7 @@ WickObject.prototype.runScriptFn = function (fnName, objectScope, frame) {
 
     // Etc. player wrappers
     window.stopAllSounds = function () { WickPlayer.getAudioPlayer().stopAllSounds(); };
-    window.isKeyDown = function (keyString) { return wickPlayer.inputHandler.getKeys()[keyCharToCode[keyString.toUpperCase()]]; };
+    window.keyIsDown = function (keyString) { return wickPlayer.inputHandler.getKeys()[keyCharToCode[keyString.toUpperCase()]]; };
     window.keyJustPressed = function (keyString) { return wickPlayer.inputHandler.getKeysJustPressed()[keyCharToCode[keyString.toUpperCase()]]; }
     window.getMouseX = function () { return WickPlayer.getMouse().x; }
     window.getMouseY = function () { return WickPlayer.getMouse().y; }
