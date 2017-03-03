@@ -94,7 +94,7 @@ var WickPixiRenderer = function (project, canvasContainer, scale, args) {
         var resetObject = function (object) {
             resetTransforms(object);
             if(object.isSymbol) {
-                object.getAllChildObjects().forEach(function (child) {
+                object.getAllActiveChildObjects().forEach(function (child) {
                     resetObject(child);
                 });
             }
@@ -179,7 +179,7 @@ var WickPixiRenderer = function (project, canvasContainer, scale, args) {
 
     var resetTransforms = function (wickObject) {
 
-        console.log('R ' + wickObject.uuid.substring(0,2));
+        //console.log('R ' + wickObject.uuid.substring(0,2));
 
         var pixiObject = wickToPixiDict[wickObject.uuid];
 

@@ -349,6 +349,7 @@ var InputHandler = function (wickEditor) {
 
         if (fileType === 'text/html') {
             WickProject.fromFile(file, function(project) {
+                wickEditor.thumbnailRenderer.cleanup();
                 wickEditor.project = project;
                 wickEditor.syncInterfaces();
                 wickEditor.thumbnailRenderer.setup();
