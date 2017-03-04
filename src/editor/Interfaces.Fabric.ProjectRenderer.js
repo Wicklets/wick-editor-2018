@@ -128,8 +128,8 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
         var len = wickEditor.project.rootObject.getTotalTimelineLength();
         for (var i = 0; i < len; i++) {
             wickEditor.project.rootObject.playheadPosition = i;
-            gifRenderer.refresh();
-            gifRenderer.render(wickEditor.project.currentObject);
+            gifRenderer.refresh(wickEditor.project.rootObject);
+            gifRenderer.render(wickEditor.project.getCurrentObject().getAllActiveChildObjects());
             gifFrameDataURLs.push(gifRenderer.rendererCanvas.toDataURL());
         }
 

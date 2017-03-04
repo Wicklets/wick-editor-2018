@@ -204,6 +204,8 @@ var TimelineInterface = function (wickEditor) {
 
         this.layersContainer = new LayersContainer();
         this.framesContainer = new FramesContainer();
+        this.horizontalScrollBar = new HorizontalScrollBar();
+        this.verticalScrollBar = new VerticalScrollBar();
 
         this.build = function () {
             this.elem = document.createElement('div');
@@ -215,6 +217,12 @@ var TimelineInterface = function (wickEditor) {
 
             this.layersContainer.build();
             this.elem.appendChild(this.layersContainer.elem);
+
+            this.horizontalScrollBar.build();
+            this.elem.appendChild(this.horizontalScrollBar.elem);
+
+            this.verticalScrollBar.build();
+            this.elem.appendChild(this.verticalScrollBar.elem);
             
         }
         
@@ -351,14 +359,14 @@ var TimelineInterface = function (wickEditor) {
 
                     wickEditor.project.currentObject.framesDirty = true;
                     wickEditor.syncInterfaces();
-                } else {
-                    /*var currentScrollX = parseInt($('.frames-container').css('left'));
+                } else if (wickEditor.inputHandler.specialKeys["SHIFT"]) {
+                    var currentScrollX = parseInt($('.frames-container').css('left'));
 
                     var newScrollX = currentScrollX + -delta * 10;
                     newScrollX = Math.min(70, newScrollX)
 
-                    $('.frames-container').css('left', newScrollX+'px');*/
-
+                    $('.frames-container').css('left', newScrollX+'px');
+                } else {
                     var currentScrollX = parseInt($('.frames-container').css('top'));
 
                     var newScrollX = currentScrollX + -delta * 3;
@@ -598,6 +606,32 @@ var TimelineInterface = function (wickEditor) {
         }
     }
 
+    var HorizontalScrollBar = function () {
+        this.elem = null;
+
+        this.build = function () {
+            this.elem = document.createElement('div');
+            this.elem.className = 'scrollbar horizontal-scrollbar';
+        }
+
+        this.update = function () {
+            
+        }
+    }
+
+    var VerticalScrollBar = function () {
+        this.elem = null;
+
+        this.build = function () {
+            this.elem = document.createElement('div');
+            this.elem.className = 'scrollbar vertical-scrollbar';
+        }
+
+        this.update = function () {
+            
+        }
+    }
+
 // Interface API
 
     self.setup = function () {
@@ -617,10 +651,10 @@ var TimelineInterface = function (wickEditor) {
         // Setup mouse events for interactions
 
         currentInteraction = null;
-        /*timeline.elem*/window.addEventListener('mousemove', function (e) {
+        window.addEventListener('mousemove', function (e) {
             updateInteraction(e);
         });
-        /*timeline.elem*/window.addEventListener('mouseup', function (e) {
+        window.addEventListener('mouseup', function (e) {
             finishInteraction(e);
         });
     }

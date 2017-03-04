@@ -24,6 +24,8 @@ body {
     --timeline-bottom-padding: 5px; 
 
     --frames-cell-first-padding: 5px;
+
+    --scrollbar-thickness: 14px;
 }
 
 .timeline {
@@ -238,4 +240,21 @@ body {
 	top:0px;
 }
 
+.scrollbar {
+	background-color: red;
+	position: absolute;
+}
 
+.horizontal-scrollbar {
+	bottom: 0px;
+	right: var(--scrollbar-thickness);
+	width: calc(100% - var(--layers-width) - var(--scrollbar-thickness));
+	height: var(--scrollbar-thickness);
+}
+
+.vertical-scrollbar {
+	top: 0px;
+	right: 0px;
+	height: calc(100% - var(--scrollbar-thickness));
+	width: var(--scrollbar-thickness);
+}
