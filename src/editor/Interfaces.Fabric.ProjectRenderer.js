@@ -5,6 +5,8 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
 	var self = this;
 	var canvas = fabricInterface.canvas;
 
+    var gifRenderer;
+
     self.update = function () {};
 
     self.getCanvasAsImage = function (callback, args) {
@@ -119,19 +121,22 @@ var FabricProjectRenderer = function (wickEditor, fabricInterface) {
         gifCanvas = document.createElement('div')
         wickEditor.project.fitScreen = false;
 
-        gifRenderer = new WickPixiRenderer(wickEditor.project, gifCanvas, 1.0);
-        gifRenderer.setup();
+        if(!gifRenderer) {
+            gifRenderer = new WickPixiRenderer(wickEditor.project, gifCanvas, 1.0);
+            gifRenderer.setup();
+        }
 
         var gifFrameDataURLs = [];
 
         wickEditor.project.currentObject = wickEditor.project.rootObject;
         var len = wickEditor.project.rootObject.getTotalTimelineLength();
+        gifRenderer.refresh(wickEditor.project.rootObject);
         for (var i = 0; i < len; i++) {
             wickEditor.project.rootObject.playheadPosition = i;
-            gifRenderer.refresh(wickEditor.project.rootObject);
             gifRenderer.render(wickEditor.project.getCurrentObject().getAllActiveChildObjects());
             gifFrameDataURLs.push(gifRenderer.rendererCanvas.toDataURL());
         }
+        //gifRenderer.cleanup();
 
         var gif;
         if(wickEditor.project.transparent) {
