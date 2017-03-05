@@ -258,3 +258,31 @@ body {
 	height: calc(100% - var(--scrollbar-thickness));
 	width: var(--scrollbar-thickness);
 }
+
+.scrollbar-button {
+	cursor: pointer;
+	width: var(--scrollbar-thickness);
+	height: var(--scrollbar-thickness);
+	background-color: yellow;
+	position: absolute;
+}
+
+.scrollbar-button-left {
+	left: 0px;
+	top: 0px;
+}
+
+.scrollbar-button-right {
+	right: 0px;
+	top: 0px;
+}
+
+.scrollbar-button-top {
+	right: 0px;
+	top: 0px;
+}
+
+.scrollbar-button-bottom {
+	right: 0px;
+	bottom: 0px;
+}

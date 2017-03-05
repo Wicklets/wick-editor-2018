@@ -26,18 +26,23 @@ var TimelineInterface = function (wickEditor) {
             
         }), 
         'update' : (function (e) {
-            interactionData.frame.elem.style.left = e.x - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width') /2 - 10 + 'px';
-            interactionData.frame.elem.style.top  = e.y - timeline.framesContainer.elem.getBoundingClientRect().top  - cssVar('--layer-height')/2 - 5+ 'px';
-            interactionData.frame.elem.style.zIndex = 10;
+            interactionData.frames.forEach(function (frame) {
+                var frameX = parseInt(frame.elem.style.left);
+                var frameY = parseInt(frame.elem.style.top);
+                frame.elem.style.left = frameX + e.movementX + 'px';
+                frame.elem.style.top = frameY + e.movementY + 'px';
+                frame.elem.style.zIndex = 10;
+            });
         }),
         'finish' : (function (e) {
-            var newPlayheadPosition = Math.round(parseInt(interactionData.frame.elem.style.left) / cssVar('--frame-width'));
-            var newLayerIndex       = Math.round(parseInt(interactionData.frame.elem.style.top)  / cssVar('--layer-height'));
+            var frame = interactionData.frames[0];
+            var newPlayheadPosition = Math.round(parseInt(frame.elem.style.left) / cssVar('--frame-width'));
+            var newLayerIndex       = Math.round(parseInt(frame.elem.style.top)  / cssVar('--layer-height'));
             var newLayer = wickEditor.project.getCurrentObject().layers[newLayerIndex];
             if(!newLayer) newLayer = wickEditor.project.getCurrentLayer();
 
             wickEditor.actionHandler.doAction('moveFrame', {
-                frame: interactionData.frame.wickFrame, 
+                frame: frame.wickFrame, 
                 newPlayheadPosition: newPlayheadPosition,
                 newLayer: newLayer
             });
@@ -360,20 +365,11 @@ var TimelineInterface = function (wickEditor) {
                     wickEditor.project.currentObject.framesDirty = true;
                     wickEditor.syncInterfaces();
                 } else if (wickEditor.inputHandler.specialKeys["SHIFT"]) {
-                    var currentScrollX = parseInt($('.frames-container').css('left'));
-
-                    var newScrollX = currentScrollX + -delta * 10;
-                    newScrollX = Math.min(70, newScrollX)
-
-                    $('.frames-container').css('left', newScrollX+'px');
+                    timeline.horizontalScrollBar.scroll(delta*15);
+                    that.update();
                 } else {
-                    var currentScrollX = parseInt($('.frames-container').css('top'));
-
-                    var newScrollX = currentScrollX + -delta * 3;
-                    newScrollX = Math.min(0, newScrollX)
-
-                    $('.frames-container').css('top', newScrollX+'px');
-                    $('.layers-container').css('top', newScrollX+'px');
+                    timeline.verticalScrollBar.scroll(-delta*10);
+                    that.update();
                 }
             });
 
@@ -420,6 +416,22 @@ var TimelineInterface = function (wickEditor) {
                 frame.update();
             });
             this.playhead.update();
+
+            $('.frames-container').css('left', timeline.horizontalScrollBar.scrollAmount+'px');
+            $('.frames-container').css('top', timeline.verticalScrollBar.scrollAmount+'px');
+            $('.layers-container').css('top', timeline.verticalScrollBar.scrollAmount+'px');
+        }
+
+        this.getFrames = function (wickFrames) {
+            var frames = [];
+            wickFrames.forEach(function (wickFrame) {
+                that.frames.forEach(function (frame) {
+                    if(frame.wickFrame === wickFrame) {
+                        frames.push(frame);
+                    }
+                })
+            });
+            return frames;
         }
     }
 
@@ -442,16 +454,27 @@ var TimelineInterface = function (wickEditor) {
             this.elem.style.width = (that.wickFrame.length * cssVar('--frame-width') - cssVar('--common-padding')/2) + 'px';
             this.elem.style.height = cssVar('--layer-height')-cssVar('--common-padding')+'px'
             this.elem.wickData = {wickFrame:that.wickFrame};
-            this.elem.addEventListener('mousedown', function (e) {
+            this.elem.addEventListener('mouseup', function (e) {
                 wickEditor.actionHandler.doAction('movePlayhead', {
                     obj: wickEditor.project.currentObject,
                     newPlayheadPosition: that.wickFrame.playheadPosition,
                     newLayer: that.wickFrame.parentLayer
                 });
-                startInteraction("dragFrame", e, {frame:that});
+
                 wickEditor.project.clearSelection();
                 wickEditor.project.selectObject(that.wickFrame)
                 timeline.framesContainer.update();
+            });
+            this.elem.addEventListener('mousedown', function (e) {
+                if(wickEditor.project.getNumSelectedObjects() === 0) {
+                    wickEditor.project.selectObject(that.wickFrame)
+                    timeline.framesContainer.update();
+                }
+
+                startInteraction("dragFrame", e, {frames:timeline.framesContainer.getFrames(wickEditor.project.getSelectedObjects())});
+                //wickEditor.project.clearSelection();
+                //wickEditor.project.selectObject(that.wickFrame)
+                //timeline.framesContainer.update();
                 e.stopPropagation();
             });
 
@@ -607,28 +630,84 @@ var TimelineInterface = function (wickEditor) {
     }
 
     var HorizontalScrollBar = function () {
+        var that = this;
+
         this.elem = null;
+
+        var leftButton;
+        var rightButton;
+
+        this.scrollAmount;
 
         this.build = function () {
             this.elem = document.createElement('div');
             this.elem.className = 'scrollbar horizontal-scrollbar';
+
+            that.scrollAmount = cssVar('--layers-width');
+
+            leftButton = document.createElement('div');
+            leftButton.className = 'scrollbar-button scrollbar-button-left';
+            leftButton.addEventListener('mousedown', function (e) {
+                that.scroll(20)
+            });
+            this.elem.appendChild(leftButton);
+
+            rightButton = document.createElement('div');
+            rightButton.className = 'scrollbar-button scrollbar-button-right';
+            rightButton.addEventListener('mousedown', function (e) {
+                that.scroll(-20)
+            });
+            this.elem.appendChild(rightButton);
         }
 
         this.update = function () {
             
+        }
+
+        this.scroll = function (scrollAmt) {
+            that.scrollAmount = Math.min(that.scrollAmount + scrollAmt, cssVar('--layers-width'));
+            timeline.framesContainer.update();
         }
     }
 
     var VerticalScrollBar = function () {
+        var that = this;
+
         this.elem = null;
+
+        var topButton;
+        var bottomButton
+
+        that.scrollAmount;
 
         this.build = function () {
             this.elem = document.createElement('div');
             this.elem.className = 'scrollbar vertical-scrollbar';
+
+            that.scrollAmount = 0;
+
+            topButton = document.createElement('div');
+            topButton.className = 'scrollbar-button scrollbar-button-top';
+            topButton.addEventListener('mousedown', function (e) {
+                that.scroll(20)
+            });
+            this.elem.appendChild(topButton);
+
+            bottomButton = document.createElement('div');
+            bottomButton.className = 'scrollbar-button scrollbar-button-bottom';
+            bottomButton.addEventListener('mousedown', function (e) {
+                that.scroll(-20)
+            });
+            this.elem.appendChild(bottomButton);
         }
 
         this.update = function () {
             
+        }
+
+        this.scroll = function (scrollAmt) {
+            that.scrollAmount = Math.min(that.scrollAmount + scrollAmt, 0);
+            timeline.framesContainer.update();
         }
     }
 
