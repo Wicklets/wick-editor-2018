@@ -243,6 +243,7 @@ body {
 .scrollbar {
 	background-color: red;
 	position: absolute;
+	overflow: hidden;
 }
 
 .horizontal-scrollbar {
@@ -285,4 +286,22 @@ body {
 .scrollbar-button-bottom {
 	right: 0px;
 	bottom: 0px;
+}
+
+.scrollbar-head {
+	cursor: pointer;
+	position: absolute;
+	background-color: green;
+	left: 0px;
+	top: 0px;
+}
+
+.scrollbar-head-horizontal {
+	width: 100px;
+	height: var(--scrollbar-thickness);
+}
+
+.scrollbar-head-vertical {
+	width: var(--scrollbar-thickness);
+	/* Height depends on number of layers */ 
 }
