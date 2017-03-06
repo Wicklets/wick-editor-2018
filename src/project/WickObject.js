@@ -58,6 +58,7 @@ var WickObject = function () {
 
     // List of layers, only used by symbols
     this.layers = undefined;
+    this.playRanges = undefined;
 
 };
 
@@ -165,6 +166,7 @@ WickObject.createNewSymbol = function () {
     symbol.playheadPosition = 0;
     symbol.currentLayer = 0;
     symbol.layers = [new WickLayer()];
+    symbol.playRanges = []; 
 
     return symbol;
 
@@ -567,8 +569,35 @@ WickObject.prototype.removeTween = function (tweenToDelete) {
     });
 
     if(deleteTweenIndex !== null) {
-        myArray.splice(deleteTweenIndex, 1);
+        self.tweens.splice(deleteTweenIndex, 1);
     }
+}
+
+WickObject.prototype.addPlayRange = function (playRange) {
+    if (!this.isSymbol) {
+        return; 
+    }
+
+    this.playRanges.push(playRange); 
+}
+
+WickObject.prototype.removePlayRange = function (playRangeToDelete) {
+    var self = this; 
+
+    if (!self.isSymbol) {
+        return; 
+    }
+
+    var deletePlayRangeIndex = null; 
+
+    for (var i = 0; i < self.playRanges.length; i++) {
+        if (playRangeToDelete === self.playRanges[i]) {
+            deletePlayRangeIndex = i; 
+            break; 
+        }
+    }
+
+    self.playRanges.splice(deletePlayRangeIndex, 1); 
 }
 
 WickObject.prototype.hasTweenAtFrame = function (frame) {
