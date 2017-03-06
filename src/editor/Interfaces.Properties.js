@@ -115,8 +115,7 @@ var PropertiesInterface = function (wickEditor) {
             }
         } else if(currentTab === 'frame') {
 
-            var currentObject = wickEditor.project.getCurrentObject();
-            var currentFrame = wickEditor.project.getCurrentFrame();
+            var currentFrame = wickEditor.project.getSelectedObject(WickFrame);
             if(!currentFrame) {
                 $("#frameProperties").css('display', 'none');
                 return;
