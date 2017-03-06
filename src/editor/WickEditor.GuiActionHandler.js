@@ -712,6 +712,16 @@ var GuiActionHandler = function (wickEditor) {
             });
         });
 
+    registerAction('convertFramesToSymbol',
+        [],
+        [],
+        {},
+        function (args) {
+            wickEditor.actionHandler.doAction('convertFramesToSymbol', {
+                frames: wickEditor.project.getSelectedObjects()
+            });
+        })
+
     registerAction('breakApart',
         [],
         ['breakApartButton'],

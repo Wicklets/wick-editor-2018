@@ -399,6 +399,25 @@ var WickActionHandler = function (wickEditor) {
             done();
         });
 
+    registerAction('convertFramesToSymbol', 
+        function (args) {
+            args.createdSymbol = WickObject.createSymbolFromWickFrames(args.frames);
+
+            wickEditor.actionHandler.doAction('deleteObjects', {objects:args.frames});
+
+            var newFrame = new WickFrame();
+            newFrame.playheadPosition = wickEditor.project.getCurrentObject().playheadPosition;
+            newFrame.wickObjects = [args.createdSymbol];
+            wickEditor.actionHandler.doAction('addFrame', {frame:newFrame, layer:wickEditor.project.getCurrentObject().getCurrentLayer()});
+
+            done(); 
+        }, 
+        function (args) {
+            console.error("convertFramesToSymbol undo NYI!");
+
+            done(); 
+        });
+
     registerAction('breakApartSymbol',
         function (args) {
             args.symbol = args.obj;
@@ -783,73 +802,6 @@ var WickActionHandler = function (wickEditor) {
             }
 
             done();
-        });
-
-    registerAction('framesToSymbol', 
-        function (args) {
-            selection = wickEditor.project.getSelectedObjects(); 
-            // Here's the symbol 
-            newSymbol = WickObject.createNewSymbol();
-
-            // Store Layer Identifiers 
-            layerArray = []; 
-
-            // Store new layers for the symbol. 
-            newLayerArray = []; 
-
-            // Go through all frames, add them to a new layer in the proper order... 
-            for (var i = 0; i < selection.length; i++) {
-                frame = selection[i]; 
-                parentLayerIdentifier = frame.parentLayer.identifier; 
-
-                // See if this frame belongs to a layer we've already seen. 
-                found = false; 
-                for (var j = 0; j < layerArray.length; j++) {
-                    // If it does, just add this frame to the layer we already found
-                    if (layerArray[j] === parentLayerIdentifier) {
-                        frame.parentLayer = newLayerArray[j]; 
-                        newLayerArray[j].frames.push(frame);
-                        found = true;
-                        break;
-                    }
-                }
-
-                // If not, add a new layer. 
-                if (!found) {
-                    newLayer = new WickLayer(); 
-                    newLayer.parentWickObject = newSymbol; 
-                    newLayer.frames = []; 
-                    frame.parentLayer = newLayer; 
-                    newLayer.frames.push(frame); 
-
-                    layerArray.push(parentLayerIdentifier); 
-                    newLayerArray.push(newLayer); 
-                }
-
-                frame.parentLayer.removeFrame(frame); 
-            }
-
-            newSymbol.layers = newLayerArray; 
-            newSymbol.playheadPosition = 1; 
-
-            console.log(newSymbol); 
-
-            newSymbol.x = 100; 
-            newSymbol.y = 100; 
-
-            var testFrame = new WickFrame(); 
-
-            testFrame.wickObjects.push(newSymbol);
-            testFrame.parentWickObject = wickEditor.project.rootObject.layers[0]; 
-
-            wickEditor.project.rootObject.layers[0].frames[0] = testFrame; 
-
-            done(); 
-        }, 
-        function (args) {
-            console.log("UNDO framesToSymbol"); 
-
-            done(); 
         });
 
 }
