@@ -212,16 +212,16 @@ var RightClickMenuInterface = function (wickEditor) {
             // Frames selection
             new RightClickMenuButtonGroup([
                 new RightClickMenuButton('Create symbol from frames', function () {
-                    
+                    alert("NYI")
                 }),
                 new RightClickMenuButton('Copy', function () {
-                    
+                    alert("NYI")
                 }),
                 new RightClickMenuButton('Paste', function () {
-                    
+                    alert("NYI")
                 }),
                 new RightClickMenuButton('Delete', function () {
-                    
+                    wickEditor.guiActionHandler.doAction('deleteSelectedObjects')
                 })
             ], function () {
                 return wickEditor.project.getNumSelectedObjects() >= 1 && wickEditor.project.getSelectedObjects()[0] instanceof WickFrame;
