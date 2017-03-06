@@ -516,9 +516,9 @@ var TimelineInterface = function (wickEditor) {
                 startInteraction("dragFrame", e, {frames:timeline.framesContainer.getFrames(wickEditor.project.getSelectedObjects())});
                 
                 if(e.button === 2) {
-                    wickEditor.rightclickmenu.open();
+                    wickEditor.rightclickmenu.openMenu();
                 } else {
-                    wickEditor.rightclickmenu.close();
+                    wickEditor.rightclickmenu.closeMenu();
                 }
 
                 e.stopPropagation();

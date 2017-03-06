@@ -235,12 +235,12 @@ var RightClickMenuInterface = function (wickEditor) {
         menu.updateElem();
     }
 
-    self.open = function () {
+    self.openMenu = function () {
         menu.open = true;
         self.syncWithEditorState();
     }
 
-    self.close = function () {
+    self.closeMenu = function () {
         menu.open = false;
         self.syncWithEditorState();
     }
