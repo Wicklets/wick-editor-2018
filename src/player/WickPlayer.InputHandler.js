@@ -54,12 +54,12 @@ WickPlayerInputHandler = function (wickPlayer, canvasContainer) {
         return keysJustPressed || [];
     }
 
-    self.isKeyDown = function (keyString) {
-
+    self.keyIsDown = function (keyString) {
+        return self.getKeys()[keyCharToCode[keyString.toUpperCase()]];
     }
 
-    self.keysJustPressed = function (keyString) {
-
+    self.keyJustPressed = function (keyString) {
+        return self.getKeysJustPressed()[keyCharToCode[keyString.toUpperCase()]];
     }
 
     self.hideCursor = function () {

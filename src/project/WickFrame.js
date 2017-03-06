@@ -1,7 +1,7 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
 var WickFrame = function () {
-    // Identifier so we can do e.g. gotoAndStop("menu") 
+    // Identifier so we can do e.g. movePlayheadTo("menu") 
     this.identifier = null;
 
     // Store all objects in frame. 

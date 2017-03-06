@@ -968,12 +968,12 @@ WickObject.prototype.play = function () {
     this.isPlaying = true;
 }
 
-WickObject.prototype.stop = function () {
+WickObject.prototype.pause = function () {
 
     this.isPlaying = false;
 }
 
-WickObject.prototype.gotoFrame = function (frame) {
+WickObject.prototype.movePlayheadTo = function (frame) {
 
     var oldFrame = this.getCurrentLayer().getCurrentFrame();
 
@@ -1026,22 +1026,7 @@ WickObject.prototype.gotoFrame = function (frame) {
 
 }
 
-WickObject.prototype.gotoAndPlay = function (frame) {
-
-    this.readyToAdvance = false;
-    this.gotoFrame(frame);
-    this.isPlaying = true;
-    
-}
-
-WickObject.prototype.gotoAndStop = function (frame) {
-
-    this.gotoFrame(frame);
-    this.isPlaying = false;
-
-}
-
-WickObject.prototype.gotoNextFrame = function () {
+/*WickObject.prototype.gotoNextFrame = function () {
 
     this.playheadPosition ++;
     var totalLength = this.layers[this.currentLayer.getTotalLength];
@@ -1057,7 +1042,7 @@ WickObject.prototype.gotoPrevFrame = function () {
     if(this.playheadPosition < 0) {
         this.playheadPosition = 0;
     }
-}
+}*/
 
 /* Determine if two wick objects collide using rectangular hit detection on their
        farthest border */
@@ -1462,17 +1447,14 @@ WickObject.prototype.runScriptFn = function (fnName, objectScope, frame) {
     window.parent = this.parentObject;
 
     // Setup builtin wick scripting methods and objects
-    window.play          = function ()      { objectScope.play(); }
-    window.stop          = function ()      { objectScope.stop(); }
-    window.gotoAndPlay   = function (frame) { objectScope.gotoAndPlay(frame); }
-    window.gotoAndStop   = function (frame) { objectScope.gotoAndStop(frame); }
-    window.gotoNextFrame = function ()      { objectScope.gotoNextFrame(); }
-    window.gotoPrevFrame = function ()      { objectScope.gotoPrevFrame(); }
+    window.play           = function ()      { objectScope.play(); }
+    window.pause          = function ()      { objectScope.pause(); }
+    window.movePlayheadTo = function (frame) { objectScope.movePlayheadTo(frame); }
 
     // Etc. player wrappers
     window.stopAllSounds = function () { WickPlayer.getAudioPlayer().stopAllSounds(); };
-    window.keyIsDown = function (keyString) { return wickPlayer.inputHandler.getKeys()[keyCharToCode[keyString.toUpperCase()]]; };
-    window.keyJustPressed = function (keyString) { return wickPlayer.inputHandler.getKeysJustPressed()[keyCharToCode[keyString.toUpperCase()]]; }
+    window.keyIsDown = function (keyString) { return wickPlayer.inputHandler.keyIsDown(keyString); };
+    window.keyJustPressed = function (keyString) { return wickPlayer.inputHandler.keyJustPressed(keyString); }
     window.getMouseX = function () { return WickPlayer.getMouse().x; }
     window.getMouseY = function () { return WickPlayer.getMouse().y; }
     window.hideCursor = function () { WickPlayer.hideCursor(); };
