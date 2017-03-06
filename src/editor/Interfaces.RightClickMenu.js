@@ -6,15 +6,14 @@ var RightClickMenuInterface = function (wickEditor) {
 
     var menu;
 
-    var enabled = false;
+    var enabled = true;
 
 // menu object definitions
 
     var RightClickMenu = function (buttonGroups) {
         var self = this;
 
-        this.open = false
-        this.mode = null;
+        this.open = false;
 
         this.buttonGroups = buttonGroups;
 
@@ -32,12 +31,11 @@ var RightClickMenuInterface = function (wickEditor) {
                 self.elem.appendChild(buttonGroup.elem);
             });
 
-            var mouseEventHandler = function (e, newMode) {
+            var mouseEventHandler = function (e) {
                 if(!enabled) return;
 
                 if(e.button == 2) {
                     self.open = true;
-                    self.mode = newMode;
                 } else {
                     self.open = false;
                 }
@@ -45,12 +43,8 @@ var RightClickMenuInterface = function (wickEditor) {
                 self.updateElem();
             }
 
-            document.getElementById("editorCanvasContainer").addEventListener('mousedown', function(e) { 
+            window.addEventListener('mousedown', function(e) { 
                 mouseEventHandler(e, "fabric");
-            });
-
-            document.getElementById("timelineGUI").addEventListener('mousedown', function(e) { 
-                mouseEventHandler(e, "timeline");
             });
 
         }
@@ -197,7 +191,7 @@ var RightClickMenuInterface = function (wickEditor) {
                     wickEditor.guiActionHandler.doAction('deleteSelectedObjects');
                 }),
             ], function () {
-                return wickEditor.project.getNumSelectedObjects() >= 1;
+                return wickEditor.project.getNumSelectedObjects() >= 1 && wickEditor.project.getSelectedObjects()[0] instanceof WickObject;
             }),
 
             // Single symbol selected options
@@ -213,6 +207,24 @@ var RightClickMenuInterface = function (wickEditor) {
                 })
             ], function () {
                 return wickEditor.project.getNumSelectedObjects() === 1 && wickEditor.project.getSelectedObjects()[0].isSymbol;
+            }),
+
+            // Frames selection
+            new RightClickMenuButtonGroup([
+                new RightClickMenuButton('Create symbol from frames', function () {
+                    
+                }),
+                new RightClickMenuButton('Copy', function () {
+                    
+                }),
+                new RightClickMenuButton('Paste', function () {
+                    
+                }),
+                new RightClickMenuButton('Delete', function () {
+                    
+                })
+            ], function () {
+                return wickEditor.project.getNumSelectedObjects() >= 1 && wickEditor.project.getSelectedObjects()[0] instanceof WickFrame;
             })
         ]);
 
@@ -221,6 +233,16 @@ var RightClickMenuInterface = function (wickEditor) {
 
     self.syncWithEditorState = function () {
         menu.updateElem();
+    }
+
+    self.open = function () {
+        menu.open = true;
+        self.syncWithEditorState();
+    }
+
+    self.close = function () {
+        menu.open = false;
+        self.syncWithEditorState();
     }
 
 }

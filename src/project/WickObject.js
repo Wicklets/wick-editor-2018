@@ -209,6 +209,35 @@ WickObject.createSymbolFromWickObjects = function (wickObjects) {
 
 }
 
+// Create a new symbol and add every frame into the new symbol's timeline
+WickObject.createSymbolFromWickFrames = function (wickFrames) {
+
+    var newSymbol = WickObject.createNewSymbol();
+    newSymbol.layers = [];
+
+    var nLayersNeeded = 0;
+    wickFrames.forEach(function (wickFrame) {
+        var layerIndex = wickFrame.parentLayer.parentWickObject.layers.indexOf(wickFrame.parentLayer);
+        if(layerIndex > nLayersNeeded) nLayersNeeded = layerIndex;
+    });
+
+    for(var i = 0; i < nLayersNeeded; i++) {
+        var newLayer = new WickLayer();
+        newLayer.frames = [];
+        newSymbol.layers.push(newLayer);
+    }
+
+    wickFrames.forEach(function (wickFrame) {
+        var parentWickObject = wickFrame.parentLayer.parentWickObject.parentLayer.parentWickObject;
+        var layerIndex = parentWickObject.layers.indexOf(wickFrame.parentLayer);
+        
+        newSymbol.layers[layerIndex].frames.push(wickFrame);
+    });
+
+    return newSymbol;
+
+}
+
 WickObject.prototype.copy = function () {
 
     var copiedObject = new WickObject();

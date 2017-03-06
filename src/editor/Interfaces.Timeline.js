@@ -39,17 +39,20 @@ var TimelineInterface = function (wickEditor) {
         'finish' : (function (e) {
             if(!interactionData.moved) return;
 
-            var frame = interactionData.frames[0];
-            if(!frame) return;
-            var newPlayheadPosition = Math.round(parseInt(frame.elem.style.left) / cssVar('--frame-width'));
-            var newLayerIndex       = Math.round(parseInt(frame.elem.style.top)  / cssVar('--layer-height'));
-            var newLayer = wickEditor.project.getCurrentObject().layers[newLayerIndex];
-            if(!newLayer) newLayer = wickEditor.project.getCurrentLayer();
+            //var frame = interactionData.frames[0];
 
-            wickEditor.actionHandler.doAction('moveFrame', {
-                frame: frame.wickFrame, 
-                newPlayheadPosition: newPlayheadPosition,
-                newLayer: newLayer
+            interactionData.frames.forEach(function (frame) {
+                //if(!frame) return;
+                var newPlayheadPosition = Math.round(parseInt(frame.elem.style.left) / cssVar('--frame-width'));
+                var newLayerIndex       = Math.round(parseInt(frame.elem.style.top)  / cssVar('--layer-height'));
+                var newLayer = wickEditor.project.getCurrentObject().layers[newLayerIndex];
+                if(!newLayer) newLayer = wickEditor.project.getCurrentLayer();
+
+                wickEditor.actionHandler.doAction('moveFrame', {
+                    frame: frame.wickFrame, 
+                    newPlayheadPosition: newPlayheadPosition,
+                    newLayer: newLayer
+                });
             });
         })
     }
@@ -511,9 +514,13 @@ var TimelineInterface = function (wickEditor) {
                 }
 
                 startInteraction("dragFrame", e, {frames:timeline.framesContainer.getFrames(wickEditor.project.getSelectedObjects())});
-                //wickEditor.project.clearSelection();
-                //wickEditor.project.selectObject(that.wickFrame)
-                //timeline.framesContainer.update();
+                
+                if(e.button === 2) {
+                    wickEditor.rightclickmenu.open();
+                } else {
+                    wickEditor.rightclickmenu.close();
+                }
+
                 e.stopPropagation();
             });
 
@@ -533,13 +540,13 @@ var TimelineInterface = function (wickEditor) {
             });
             this.elem.appendChild(extenderHandleRight);
             
-            var extenderHandleLeft = document.createElement('div');
+            /*var extenderHandleLeft = document.createElement('div');
             extenderHandleLeft.className = "frame-extender-handle frame-extender-handle-left";
             extenderHandleLeft.addEventListener('mousedown', function (e) {
                 startInteraction("dragFrameWidth", e, {frame:that});
                 e.stopPropagation();
             });
-            that.elem.appendChild(extenderHandleLeft);
+            that.elem.appendChild(extenderHandleLeft);*/
         }
 
         this.update = function () {
@@ -760,7 +767,7 @@ var TimelineInterface = function (wickEditor) {
         this.update = function () {
             var nLayers = wickEditor.project.getCurrentObject().layers.length;
 
-            this.elem.style.display = nLayers > 1 ? 'block' : 'none';
+            this.elem.style.display = nLayers > 2 ? 'block' : 'none';
 
             head.style.height = parseInt(timeline.elem.style.height)/4 + 'px';
             head.style.top = -that.scrollAmount + cssVar('--scrollbar-thickness') + 'px';
