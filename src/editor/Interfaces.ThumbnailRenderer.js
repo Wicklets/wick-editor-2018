@@ -25,7 +25,13 @@ var ThumbnailRendererInterface = function (wickEditor) {
         if(!wickFrame) return;
 
         thumbRenderer.refresh(wickEditor.project.rootObject);
-        thumbRenderer.render(wickEditor.project.getCurrentObject().getAllActiveChildObjects());
+        var layerObjects = [];
+        wickEditor.project.getCurrentObject().getAllActiveChildObjects().forEach(function (child) {
+            if(child.isOnActiveLayer(wickEditor.project.getCurrentLayer())) {
+                layerObjects.push(child)
+            }
+        });
+        thumbRenderer.render(layerObjects);
         wickFrame.thumbnail = thumbRenderer.rendererCanvas.toDataURL();
 
     }
