@@ -3,7 +3,7 @@ body {
 
 	--common-padding: 4px;
     
-    --max-timeline-height: 150px; 
+    --max-timeline-height: 200px; 
 
 	--layers-width: 70px;
 	--layer-height: 46px;
@@ -26,6 +26,8 @@ body {
     --frames-cell-first-padding: 5px;
 
     --scrollbar-thickness: 14px;
+
+    --number-line-height: 23px;
 }
 
 .timeline {
@@ -254,9 +256,9 @@ body {
 }
 
 .vertical-scrollbar {
-	top: 0px;
+	top: var(--number-line-height);
 	right: 0px;
-	height: calc(100% - var(--scrollbar-thickness));
+	height: calc(100% - var(--scrollbar-thickness) - var(--number-line-height));
 	width: var(--scrollbar-thickness);
 }
 
@@ -304,4 +306,30 @@ body {
 .scrollbar-head-vertical {
 	width: var(--scrollbar-thickness);
 	/* Height depends on number of layers */ 
+}
+
+.number-line {
+	position: absolute;
+	top: 0px;
+	left: var(--layers-width);
+	width: 1000%;
+	height: var(--number-line-height);
+
+	background-color: white;
+}
+
+.number-line-cell {
+	position: absolute;
+	height: var(--number-line-height);
+}
+
+.playrange {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100px;
+	height: var(--number-line-height);
+
+	background-color: red;
+	opacity: 0.5;
 }

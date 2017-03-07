@@ -6,10 +6,10 @@ var WickPlayRange = function (identifier, start, end, color) {
 
 	this.end = end; 
 
-	this.color = color || 'green'; 
+	this.color = color || 'green';
 }
 
-// val : number - Index to start playrange. Must be less then end and at least 1. 
+// index : number - Index to start playrange. Must be less then end and at least 1. 
 WickPlayRange.prototype.changeStart = function (index) {
 	if (index >= this.end) {
 		this.start = this.end; 
@@ -20,7 +20,7 @@ WickPlayRange.prototype.changeStart = function (index) {
 	}
 }
 
-// val : number - Index to end playrange. Must be greater than or equal to start. 
+// index : number - Index to end playrange. Must be greater than or equal to start. 
 WickPlayRange.prototype.changeEnd = function (index) {
 	if (index <= this.start) {
 		this.end = this.start; 

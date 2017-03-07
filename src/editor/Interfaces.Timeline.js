@@ -2,241 +2,60 @@ var TimelineInterface = function (wickEditor) {
 
     var self = this;
 
-// Internal state stuff vars
+// Internal stuff
 
     var lastObject;
 
-// 
-
     var timeline;
-
-// 
 
     var cssVars;
     var cssVar;
 
-// Interactions
+/***********************************************************
+    Interface API
+***********************************************************/
 
-    var currentInteraction;
-    var interactionData;
+    self.setup = function () {
 
-    var interactions = {};
-    interactions['dragFrame'] = {
-        'start' : (function (e) {
-            
-        }), 
-        'update' : (function (e) {
-            if(e.movementX !== 0 || e.movementY !== 0) interactionData.moved = true;
+        // Load style vars from CSS
 
-            interactionData.frames.forEach(function (frame) {
-                var frameX = parseInt(frame.elem.style.left);
-                var frameY = parseInt(frame.elem.style.top);
-                frame.elem.style.left = frameX + e.movementX + 'px';
-                frame.elem.style.top = frameY + e.movementY + 'px';
-                frame.elem.style.zIndex = 10;
-            });
-        }),
-        'finish' : (function (e) {
-            if(!interactionData.moved) return;
+        cssVars = window.getComputedStyle(document.body);
+        cssVar = function (varName) {
+            return parseInt(cssVars.getPropertyValue(varName));
+        }
 
-            //var frame = interactionData.frames[0];
+        // Build timeline in DOM
 
-            interactionData.frames.forEach(function (frame) {
-                //if(!frame) return;
-                var newPlayheadPosition = Math.round(parseInt(frame.elem.style.left) / cssVar('--frame-width'));
-                var newLayerIndex       = Math.round(parseInt(frame.elem.style.top)  / cssVar('--layer-height'));
-                var newLayer = wickEditor.project.getCurrentObject().layers[newLayerIndex];
-                if(!newLayer) newLayer = wickEditor.project.getCurrentLayer();
+        timeline = new Timeline();
+        timeline.build();
 
-                wickEditor.actionHandler.doAction('moveFrame', {
-                    frame: frame.wickFrame, 
-                    newPlayheadPosition: newPlayheadPosition,
-                    newLayer: newLayer
-                });
-            });
-        })
-    }
-    interactions['dragFrameWidth'] = {
-        'start' : (function (e) {
-            
-        }), 
-        'update' : (function (e) {
-            var wickFrame = interactionData.frame.wickFrame;
-            var frameDivLeft = interactionData.frame.elem.getBoundingClientRect().left;
-            var mouseLeft = e.x;
+        // Setup mouse events for interactions
 
-            var newWidth = mouseLeft - frameDivLeft;
-            //newWidth = roundToNearestN(newWidth, cssVar('--frame-width'));
-            interactionData.frame.elem.style.width = + newWidth + 'px';
-        }),
-        'finish' : (function (e) {
-            var newFrameDivLen = parseInt(interactionData.frame.elem.style.width);
-            var newLength = Math.round(newFrameDivLen / cssVar('--frame-width'));
-
-            wickEditor.actionHandler.doAction('changeFrameLength', {
-                frame: interactionData.frame.wickFrame, 
-                newFrameLength: newLength
-            });
-        })
-    }
-    interactions['dragHorizontalScrollbarHead'] = {
-        'start' : (function (e) {
-            
-        }), 
-        'update' : (function (e) {
-            timeline.horizontalScrollBar.scroll(-e.movementX)
-            timeline.horizontalScrollBar.update();
-            timeline.framesContainer.update();
-        }),
-        'finish' : (function (e) {
-            
-        })
-    }
-    interactions['dragVerticalScrollbarHead'] = {
-        'start' : (function (e) {
-            
-        }), 
-        'update' : (function (e) {
-            timeline.verticalScrollBar.scroll(-e.movementY)
-            timeline.verticalScrollBar.update();
-            timeline.framesContainer.update();
-        }),
-        'finish' : (function (e) {
-            
-        })
-    }
-    interactions['dragSelectionBox'] = {
-        'start' : (function (e) {
-            var mx = e.x-timeline.framesContainer.elem.getBoundingClientRect().left;
-            var my = e.y-timeline.framesContainer.elem.getBoundingClientRect().top;
-            interactionData.selectionBoxOrigX = mx;
-            interactionData.selectionBoxOrigY = my;
-            timeline.framesContainer.selectionBox.elem.style.left = '0px';
-            timeline.framesContainer.selectionBox.elem.style.top = '0px';
-            timeline.framesContainer.selectionBox.elem.style.width = '0px';
-            timeline.framesContainer.selectionBox.elem.style.height = '0px';
-        }), 
-        'update' : (function (e) {
-            var mx = e.x-timeline.framesContainer.elem.getBoundingClientRect().left;
-            var my = e.y-timeline.framesContainer.elem.getBoundingClientRect().top;
-
-            var ox = interactionData.selectionBoxOrigX;
-            var oy = interactionData.selectionBoxOrigY;
-
-            if(mx-ox > 0) {
-                timeline.framesContainer.selectionBox.elem.style.left = ox+'px'
-                timeline.framesContainer.selectionBox.elem.style.width = mx-ox+'px';
-            } else {
-                timeline.framesContainer.selectionBox.elem.style.left = mx+'px';
-                timeline.framesContainer.selectionBox.elem.style.width = ox-mx+'px'
-            }
-            if(my-oy > 0) {
-                timeline.framesContainer.selectionBox.elem.style.top = oy+'px'
-                timeline.framesContainer.selectionBox.elem.style.height = my-oy+'px';
-            } else {
-                timeline.framesContainer.selectionBox.elem.style.top = my+'px';
-                timeline.framesContainer.selectionBox.elem.style.height = oy-my+'px'
-            }
-
-            timeline.framesContainer.selectionBox.elem.style.display = 'block';
-        }),
-        'finish' : (function (e) {
-            timeline.framesContainer.selectionBox.elem.style.display = 'none';
-
-            if(parseInt(timeline.framesContainer.selectionBox.elem.style.width)  === 0 
-            && parseInt(timeline.framesContainer.selectionBox.elem.style.height) === 0) return;
-
-            http://stackoverflow.com/questions/2752349/fast-rectangle-to-rectangle-intersection
-            function intersectRect(r1, r2) {
-              return !(r2.left > r1.right || 
-                       r2.right < r1.left || 
-                       r2.top > r1.bottom ||
-                       r2.bottom < r1.top);
-            }
-
-            var frameDivs = document.getElementsByClassName('frame')
-            wickEditor.project.clearSelection();
-            for(var i = 0; i < frameDivs.length; i ++) {
-                var frameDiv = frameDivs[i]
-
-                var frameRect = {
-                    left:   parseInt(frameDiv.style.left),
-                    top:    parseInt(frameDiv.style.top),
-                    right:  parseInt(frameDiv.style.width)  + parseInt(frameDiv.style.left),
-                    bottom: parseInt(frameDiv.style.height) + parseInt(frameDiv.style.top)
-                }
-
-                var selectionBoxRect = {
-                    left:   parseInt(timeline.framesContainer.selectionBox.elem.style.left),
-                    top:    parseInt(timeline.framesContainer.selectionBox.elem.style.top),
-                    right:  parseInt(timeline.framesContainer.selectionBox.elem.style.width)  + parseInt(timeline.framesContainer.selectionBox.elem.style.left),
-                    bottom: parseInt(timeline.framesContainer.selectionBox.elem.style.height) + parseInt(timeline.framesContainer.selectionBox.elem.style.top)
-                }
-
-                if(intersectRect(frameRect, selectionBoxRect)) {
-                    wickEditor.project.selectObject(frameDiv.wickData.wickFrame);
-                } 
-            }
-            timeline.framesContainer.update();
-            timeline.framesContainer.selectionBox.elem.style.width = '0px'
-            timeline.framesContainer.selectionBox.elem.style.height = '0px'
-        })
-    }
-    interactions['dragLayer'] = {
-        'start' : (function (e) {
-            interactionData.allLayerDivs = [];
-            interactionData.allLayerDivs.push(interactionData.layer.elem);
-
-            var currentLayer = wickEditor.project.getCurrentLayer();
-            timeline.framesContainer.frames.forEach(function (frame) {
-                if (frame.wickFrame.parentLayer === currentLayer) {
-                    interactionData.allLayerDivs.push(frame.elem)
-                }
-            });
-            timeline.framesContainer.frameStrips.forEach(function (frameStrip) {
-                if (frameStrip.wickLayer === currentLayer) {
-                    interactionData.allLayerDivs.push(frameStrip.elem)
-                }
-            });
-
-        }), 
-        'update' : (function (e) {
-            interactionData.allLayerDivs.forEach(function (div) {
-                div.style.top = e.y - timeline.framesContainer.elem.getBoundingClientRect().top - cssVar('--layer-height')/2 + 'px';
-            });
-        }),
-        'finish' : (function (e) {
-            var newIndex = Math.round(parseInt(interactionData.allLayerDivs[0].style.top) / cssVar('--layer-height'));
-            newIndex = Math.max(newIndex, 0);
-            newIndex = Math.min(newIndex, wickEditor.project.currentObject.layers.length-1);
-
-            wickEditor.actionHandler.doAction('moveLayer', {
-                layer: interactionData.layer.wickLayer, 
-                newIndex: newIndex
-            });
-        })
-    }
-    
-    var startInteraction = function (interactionName, e, interactiondata) {
-        interactionData = interactiondata;
-        currentInteraction = interactionName;
-
-        interactions[interactionName]['start'](e);
-        //updateInteraction(e);
-    }
-    var updateInteraction = function (e) {
-        if(!currentInteraction) return;
-        interactions[currentInteraction]['update'](e);
-    }
-    var finishInteraction = function (e) {
-        if(!currentInteraction) return;
-        interactions[currentInteraction]['finish'](e);
         currentInteraction = null;
-
-        timeline.framesContainer.addFrameOverlay.elem.style.display = 'none';
+        window.addEventListener('mousemove', function (e) {
+            updateInteraction(e);
+        });
+        window.addEventListener('mouseup', function (e) {
+            finishInteraction(e);
+        });
     }
 
-// Div building helper functions
+    self.syncWithEditorState = function () {
+
+        if (lastObject !== wickEditor.project.currentObject || wickEditor.project.currentObject.framesDirty) {
+            wickEditor.project.currentObject.framesDirty = false;
+            lastObject = wickEditor.project.currentObject;
+
+            timeline.rebuild();
+        }
+
+        timeline.update();
+
+    }
+
+/***********************************************************
+    Div building objects
+***********************************************************/
 
     var Timeline = function () {
         this.elem = null;
@@ -245,6 +64,7 @@ var TimelineInterface = function (wickEditor) {
         this.framesContainer = new FramesContainer();
         this.horizontalScrollBar = new HorizontalScrollBar();
         this.verticalScrollBar = new VerticalScrollBar();
+        this.numberLine = new NumberLine();
 
         this.build = function () {
             this.elem = document.createElement('div');
@@ -262,12 +82,15 @@ var TimelineInterface = function (wickEditor) {
 
             this.verticalScrollBar.build();
             this.elem.appendChild(this.verticalScrollBar.elem);
-            
+
+            this.numberLine.build();
+            this.elem.appendChild(this.numberLine.elem);
         }
         
         this.rebuild = function () {
             this.layersContainer.rebuild();
             this.framesContainer.rebuild();
+            this.numberLine.rebuild();
         }
 
         this.update = function () {
@@ -275,13 +98,15 @@ var TimelineInterface = function (wickEditor) {
             this.framesContainer.update();
             this.elem.style.height = this.calculateHeight() + "px";
 
+            this.numberLine.update();
+
             this.horizontalScrollBar.update();
             this.verticalScrollBar.update();
         }
 
         this.calculateHeight = function () {
-            var maxTimelineHeight = cssVar("--max-timeline-height"); 
-            var expectedTimelineHeight = this.layersContainer.layers.length * cssVar("--layer-height") + 26; 
+            var maxTimelineHeight = cssVar("--max-timeline-height");
+            var expectedTimelineHeight = this.layersContainer.layers.length * cssVar("--layer-height") + 56; 
             return Math.min(expectedTimelineHeight, maxTimelineHeight); 
         }
     }
@@ -721,6 +546,7 @@ var TimelineInterface = function (wickEditor) {
         this.scroll = function (scrollAmt) {
             that.scrollAmount = Math.min(that.scrollAmount + scrollAmt, 0);
             timeline.framesContainer.update();
+            timeline.numberLine.update();
             that.update();
         }
     }
@@ -740,7 +566,7 @@ var TimelineInterface = function (wickEditor) {
             this.elem = document.createElement('div');
             this.elem.className = 'scrollbar vertical-scrollbar';
 
-            that.scrollAmount = 0;
+            that.scrollAmount = cssVar('--number-line-height');
 
             head = document.createElement('div');
             head.className = 'scrollbar-head scrollbar-head-vertical';
@@ -767,56 +593,304 @@ var TimelineInterface = function (wickEditor) {
         this.update = function () {
             var nLayers = wickEditor.project.getCurrentObject().layers.length;
 
-            this.elem.style.display = nLayers > 2 ? 'block' : 'none';
+            this.elem.style.display = nLayers > 3 ? 'block' : 'none';
 
             head.style.height = parseInt(timeline.elem.style.height)/4 + 'px';
-            head.style.top = -that.scrollAmount + cssVar('--scrollbar-thickness') + 'px';
+            head.style.top = -that.scrollAmount + cssVar('--scrollbar-thickness') + cssVar('--number-line-height') + 'px';
         }
 
         this.scroll = function (scrollAmt) {
-            that.scrollAmount = Math.min(that.scrollAmount + scrollAmt, 0);
+            if(wickEditor.project.getCurrentObject().layers.length < 4) return;
+
+            that.scrollAmount = Math.min(that.scrollAmount + scrollAmt, cssVar('--number-line-height'));
             timeline.framesContainer.update();
+            that.update();
         }
     }
 
-// Interface API
+    var NumberLine = function () {
+        var that = this;
 
-    self.setup = function () {
+        this.elem = null;
 
-        // Load style vars from CSS
+        this.playRanges = null;
 
-        cssVars = window.getComputedStyle(document.body);
-        cssVar = function (varName) {
-            return parseInt(cssVars.getPropertyValue(varName));
+        this.build = function () {
+            this.elem = document.createElement('div');
+            this.elem.className = 'number-line';
+
+            this.playRanges = [];
+
+            for(var i = 0; i < 100; i++) {
+                var numberLineCell = document.createElement('div');
+                numberLineCell.className = 'number-line-cell';
+                numberLineCell.style.left = i*cssVar('--frame-width') +cssVar('--frames-cell-first-padding') + 'px'
+                numberLineCell.innerHTML = "|"+(i+1);
+                
+                this.elem.appendChild(numberLineCell);
+            }
         }
 
-        // Build timeline in DOM
+        this.update = function () {
+            this.elem.style.left = timeline.horizontalScrollBar.scrollAmount+cssVar('--layers-width')+'px';
+        }
 
-        timeline = new Timeline();
-        timeline.build();
+        this.rebuild = function () {
+            this.playRanges.forEach(function (playrange) {
+                that.elem.removeChild(playrange.elem);
+            });
 
-        // Setup mouse events for interactions
+            this.playRanges = [];
 
+            wickEditor.project.getCurrentObject().playRanges.push(new WickPlayRange())
+            wickEditor.project.getCurrentObject().playRanges.forEach(function (wickPlayrange) {
+                var newPlayrange = new PlayRange();
+                newPlayrange.build();
+                that.elem.appendChild(newPlayrange.elem);
+            });
+        }
+    }
+
+    var PlayRange = function () {
+        var that = this;
+
+        this.elem = null;
+
+        this.playranges = null;
+
+        this.build = function () {
+            this.elem = document.createElement('div');
+            this.elem.className = 'playrange';
+        }
+
+        this.update = function () {
+            
+        }
+
+        this.rebuild = function () {
+            
+        }
+    }
+
+/***********************************************************
+    Interactions
+***********************************************************/
+
+    var currentInteraction;
+    var interactionData;
+
+    var interactions = {};
+    interactions['dragFrame'] = {
+        'start' : (function (e) {
+            
+        }), 
+        'update' : (function (e) {
+            if(e.movementX !== 0 || e.movementY !== 0) interactionData.moved = true;
+
+            interactionData.frames.forEach(function (frame) {
+                var frameX = parseInt(frame.elem.style.left);
+                var frameY = parseInt(frame.elem.style.top);
+                frame.elem.style.left = frameX + e.movementX + 'px';
+                frame.elem.style.top = frameY + e.movementY + 'px';
+                frame.elem.style.zIndex = 10;
+            });
+        }),
+        'finish' : (function (e) {
+            if(!interactionData.moved) return;
+
+            //var frame = interactionData.frames[0];
+
+            interactionData.frames.forEach(function (frame) {
+                //if(!frame) return;
+                var newPlayheadPosition = Math.round(parseInt(frame.elem.style.left) / cssVar('--frame-width'));
+                var newLayerIndex       = Math.round(parseInt(frame.elem.style.top)  / cssVar('--layer-height'));
+                var newLayer = wickEditor.project.getCurrentObject().layers[newLayerIndex];
+                if(!newLayer) newLayer = wickEditor.project.getCurrentLayer();
+
+                wickEditor.actionHandler.doAction('moveFrame', {
+                    frame: frame.wickFrame, 
+                    newPlayheadPosition: newPlayheadPosition,
+                    newLayer: newLayer
+                });
+            });
+        })
+    }
+    interactions['dragFrameWidth'] = {
+        'start' : (function (e) {
+            
+        }), 
+        'update' : (function (e) {
+            var wickFrame = interactionData.frame.wickFrame;
+            var frameDivLeft = interactionData.frame.elem.getBoundingClientRect().left;
+            var mouseLeft = e.x;
+
+            var newWidth = mouseLeft - frameDivLeft;
+            //newWidth = roundToNearestN(newWidth, cssVar('--frame-width'));
+            interactionData.frame.elem.style.width = + newWidth + 'px';
+        }),
+        'finish' : (function (e) {
+            var newFrameDivLen = parseInt(interactionData.frame.elem.style.width);
+            var newLength = Math.round(newFrameDivLen / cssVar('--frame-width'));
+
+            wickEditor.actionHandler.doAction('changeFrameLength', {
+                frame: interactionData.frame.wickFrame, 
+                newFrameLength: newLength
+            });
+        })
+    }
+    interactions['dragHorizontalScrollbarHead'] = {
+        'start' : (function (e) {
+            
+        }), 
+        'update' : (function (e) {
+            timeline.horizontalScrollBar.scroll(-e.movementX)
+            timeline.horizontalScrollBar.update();
+        }),
+        'finish' : (function (e) {
+            
+        })
+    }
+    interactions['dragVerticalScrollbarHead'] = {
+        'start' : (function (e) {
+            
+        }), 
+        'update' : (function (e) {
+            timeline.verticalScrollBar.scroll(-e.movementY)
+            timeline.verticalScrollBar.update();
+        }),
+        'finish' : (function (e) {
+            
+        })
+    }
+    interactions['dragSelectionBox'] = {
+        'start' : (function (e) {
+            var mx = e.x-timeline.framesContainer.elem.getBoundingClientRect().left;
+            var my = e.y-timeline.framesContainer.elem.getBoundingClientRect().top;
+            interactionData.selectionBoxOrigX = mx;
+            interactionData.selectionBoxOrigY = my;
+            timeline.framesContainer.selectionBox.elem.style.left = '0px';
+            timeline.framesContainer.selectionBox.elem.style.top = '0px';
+            timeline.framesContainer.selectionBox.elem.style.width = '0px';
+            timeline.framesContainer.selectionBox.elem.style.height = '0px';
+        }), 
+        'update' : (function (e) {
+            var mx = e.x-timeline.framesContainer.elem.getBoundingClientRect().left;
+            var my = e.y-timeline.framesContainer.elem.getBoundingClientRect().top;
+
+            var ox = interactionData.selectionBoxOrigX;
+            var oy = interactionData.selectionBoxOrigY;
+
+            if(mx-ox > 0) {
+                timeline.framesContainer.selectionBox.elem.style.left = ox+'px'
+                timeline.framesContainer.selectionBox.elem.style.width = mx-ox+'px';
+            } else {
+                timeline.framesContainer.selectionBox.elem.style.left = mx+'px';
+                timeline.framesContainer.selectionBox.elem.style.width = ox-mx+'px'
+            }
+            if(my-oy > 0) {
+                timeline.framesContainer.selectionBox.elem.style.top = oy+'px'
+                timeline.framesContainer.selectionBox.elem.style.height = my-oy+'px';
+            } else {
+                timeline.framesContainer.selectionBox.elem.style.top = my+'px';
+                timeline.framesContainer.selectionBox.elem.style.height = oy-my+'px'
+            }
+
+            timeline.framesContainer.selectionBox.elem.style.display = 'block';
+        }),
+        'finish' : (function (e) {
+            timeline.framesContainer.selectionBox.elem.style.display = 'none';
+
+            if(parseInt(timeline.framesContainer.selectionBox.elem.style.width)  === 0 
+            && parseInt(timeline.framesContainer.selectionBox.elem.style.height) === 0) return;
+
+            http://stackoverflow.com/questions/2752349/fast-rectangle-to-rectangle-intersection
+            function intersectRect(r1, r2) {
+              return !(r2.left > r1.right || 
+                       r2.right < r1.left || 
+                       r2.top > r1.bottom ||
+                       r2.bottom < r1.top);
+            }
+
+            var frameDivs = document.getElementsByClassName('frame')
+            wickEditor.project.clearSelection();
+            for(var i = 0; i < frameDivs.length; i ++) {
+                var frameDiv = frameDivs[i]
+
+                var frameRect = {
+                    left:   parseInt(frameDiv.style.left),
+                    top:    parseInt(frameDiv.style.top),
+                    right:  parseInt(frameDiv.style.width)  + parseInt(frameDiv.style.left),
+                    bottom: parseInt(frameDiv.style.height) + parseInt(frameDiv.style.top)
+                }
+
+                var selectionBoxRect = {
+                    left:   parseInt(timeline.framesContainer.selectionBox.elem.style.left),
+                    top:    parseInt(timeline.framesContainer.selectionBox.elem.style.top),
+                    right:  parseInt(timeline.framesContainer.selectionBox.elem.style.width)  + parseInt(timeline.framesContainer.selectionBox.elem.style.left),
+                    bottom: parseInt(timeline.framesContainer.selectionBox.elem.style.height) + parseInt(timeline.framesContainer.selectionBox.elem.style.top)
+                }
+
+                if(intersectRect(frameRect, selectionBoxRect)) {
+                    wickEditor.project.selectObject(frameDiv.wickData.wickFrame);
+                } 
+            }
+            timeline.framesContainer.update();
+            timeline.framesContainer.selectionBox.elem.style.width = '0px'
+            timeline.framesContainer.selectionBox.elem.style.height = '0px'
+        })
+    }
+    interactions['dragLayer'] = {
+        'start' : (function (e) {
+            interactionData.allLayerDivs = [];
+            interactionData.allLayerDivs.push(interactionData.layer.elem);
+
+            var currentLayer = wickEditor.project.getCurrentLayer();
+            timeline.framesContainer.frames.forEach(function (frame) {
+                if (frame.wickFrame.parentLayer === currentLayer) {
+                    interactionData.allLayerDivs.push(frame.elem)
+                }
+            });
+            timeline.framesContainer.frameStrips.forEach(function (frameStrip) {
+                if (frameStrip.wickLayer === currentLayer) {
+                    interactionData.allLayerDivs.push(frameStrip.elem)
+                }
+            });
+
+        }), 
+        'update' : (function (e) {
+            interactionData.allLayerDivs.forEach(function (div) {
+                div.style.top = e.y - timeline.framesContainer.elem.getBoundingClientRect().top - cssVar('--layer-height')/2 + 'px';
+            });
+        }),
+        'finish' : (function (e) {
+            var newIndex = Math.round(parseInt(interactionData.allLayerDivs[0].style.top) / cssVar('--layer-height'));
+            newIndex = Math.max(newIndex, 0);
+            newIndex = Math.min(newIndex, wickEditor.project.currentObject.layers.length-1);
+
+            wickEditor.actionHandler.doAction('moveLayer', {
+                layer: interactionData.layer.wickLayer, 
+                newIndex: newIndex
+            });
+        })
+    }
+    
+    var startInteraction = function (interactionName, e, interactiondata) {
+        interactionData = interactiondata;
+        currentInteraction = interactionName;
+
+        interactions[interactionName]['start'](e);
+        //updateInteraction(e);
+    }
+    var updateInteraction = function (e) {
+        if(!currentInteraction) return;
+        interactions[currentInteraction]['update'](e);
+    }
+    var finishInteraction = function (e) {
+        if(!currentInteraction) return;
+        interactions[currentInteraction]['finish'](e);
         currentInteraction = null;
-        window.addEventListener('mousemove', function (e) {
-            updateInteraction(e);
-        });
-        window.addEventListener('mouseup', function (e) {
-            finishInteraction(e);
-        });
-    }
 
-    self.syncWithEditorState = function () {
-
-        if (lastObject !== wickEditor.project.currentObject || wickEditor.project.currentObject.framesDirty) {
-            wickEditor.project.currentObject.framesDirty = false;
-            lastObject = wickEditor.project.currentObject;
-
-            timeline.rebuild();
-        }
-
-        timeline.update();
-
+        timeline.framesContainer.addFrameOverlay.elem.style.display = 'none';
     }
 
 }

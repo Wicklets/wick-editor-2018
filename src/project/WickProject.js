@@ -39,6 +39,7 @@ WickProject.prototype.createNewRootObject = function () {
     rootObject.isRoot = true;
     rootObject.playheadPosition = 0;
     rootObject.currentLayer = 0;
+    rootObject.playRanges = [];
     var firstLayer = new WickLayer();
     firstLayer.identifier = "Layer 1";
     rootObject.layers = [firstLayer];
@@ -190,6 +191,10 @@ WickProject.fixForBackwardsCompatibility = function (project) {
         }
 
         if(!wickObj.isSymbol) return;
+
+        if(!wickObj.playRanges) wickObj.playRanges = [];
+        console.log(wickObj.playRanges)
+
         wickObj.layers.forEach(function (layer) {
             if(!layer.identifier) layer.identifier = "Untitled Layer";
 
