@@ -393,6 +393,10 @@ WickObject.addPrototypes = function (obj) {
     }
 
     if(obj.isSymbol) {
+        obj.playRanges.forEach(function (playRange) {
+            playRange.__proto__ = WickPlayRange.prototype;
+        });
+
         obj.layers.forEach(function (layer) {
             layer.__proto__ = WickLayer.prototype;
             layer.frames.forEach(function(frame) {
