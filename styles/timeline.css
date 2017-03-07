@@ -361,3 +361,23 @@ body {
 	background-color: red;
 	opacity: 0.5;
 }
+
+.playrange-handle {
+	background-color: green;
+	position: absolute;
+
+	width: 10px;
+	height: 100%;
+
+	cursor: ew-resize;
+}
+
+.playrange-handle-left {
+	left: 0px;
+	top: 0px;
+}
+
+.playrange-handle-right {
+	right: 0px;
+	top: 0px;
+}
