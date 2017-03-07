@@ -675,6 +675,25 @@ var WickActionHandler = function (wickEditor) {
             done();
         });
 
+    registerAction('modifyPlayRange',
+        function (args) {
+            args.oldStart = args.start;
+            args.oldEnd   = args.end;
+
+            if(args.start) args.playRange.changeStart(args.start);
+            if(args.end)   args.playRange.changeEnd  (args.end);
+
+            wickEditor.project.currentObject.framesDirty = true;
+            done();
+        },
+        function (args) {
+            if(args.oldStart) args.playRange.changeStart(args.oldStart);
+            if(args.oldEnd)   args.playRange.changeEnd  (args.oldEnd);
+
+            wickEditor.project.currentObject.framesDirty = true;
+            done();
+        });
+
     registerAction('movePlayhead',
         function (args) {
             wickEditor.fabric.forceModifySelectedObjects()

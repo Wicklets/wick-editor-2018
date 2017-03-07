@@ -642,9 +642,10 @@ var TimelineInterface = function (wickEditor) {
 
             this.playRanges = [];
 
-            wickEditor.project.getCurrentObject().playRanges.push(new WickPlayRange())
             wickEditor.project.getCurrentObject().playRanges.forEach(function (wickPlayrange) {
+                console.log(wickPlayrange)
                 var newPlayrange = new PlayRange();
+                newPlayrange.wickPlayrange = wickPlayrange;
                 newPlayrange.build();
                 that.elem.appendChild(newPlayrange.elem);
             });
@@ -656,11 +657,19 @@ var TimelineInterface = function (wickEditor) {
 
         this.elem = null;
 
-        this.playranges = null;
+        this.wickPlayrange = null;
 
         this.build = function () {
             this.elem = document.createElement('div');
             this.elem.className = 'playrange';
+
+            var width = this.wickPlayrange.getLength()*cssVar('--frame-width');
+            var widthOffset = 1;
+            this.elem.style.width = width + widthOffset+'px'
+
+            var left = this.wickPlayrange.getStart()*cssVar('--frame-width');
+            var leftOffset = cssVar('--frames-cell-first-padding')*2-1;
+            this.elem.style.left  = left + leftOffset + 'px';
         }
 
         this.update = function () {
@@ -736,6 +745,28 @@ var TimelineInterface = function (wickEditor) {
                 frame: interactionData.frame.wickFrame, 
                 newFrameLength: newLength
             });
+        })
+    }
+    interactions['dragPlayRangeStart'] = {
+        'start' : (function (e) {
+            
+        }), 
+        'update' : (function (e) {
+            
+        }),
+        'finish' : (function (e) {
+            
+        })
+    }
+    interactions['dragPlayRangeEnd'] = {
+        'start' : (function (e) {
+            
+        }), 
+        'update' : (function (e) {
+            
+        }),
+        'finish' : (function (e) {
+            
         })
     }
     interactions['dragHorizontalScrollbarHead'] = {

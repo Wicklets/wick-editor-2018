@@ -246,11 +246,6 @@ WickObject.createSymbolFromWickFrames = function (wickFrames) {
 
 }
 
-WickObject.prototype.createPlayRange = function(index) {
-    //TODO: Set values like color and identifier...
-    return new WickPlayRange(index,index); 
-}
-
 WickObject.prototype.copy = function () {
 
     var copiedObject = new WickObject();
@@ -579,9 +574,7 @@ WickObject.prototype.removeTween = function (tweenToDelete) {
 }
 
 WickObject.prototype.addPlayRange = function (playRange) {
-    if (!this.isSymbol) {
-        return; 
-    }
+    if (!this.isSymbol) return; 
 
     this.playRanges.push(playRange); 
 }
@@ -589,11 +582,9 @@ WickObject.prototype.addPlayRange = function (playRange) {
 WickObject.prototype.removePlayRange = function (playRangeToDelete) {
     var self = this; 
 
-    if (!self.isSymbol) {
-        return; 
-    }
+    if (!self.isSymbol) return;
 
-    var deletePlayRangeIndex = null; 
+    var deletePlayRangeIndex = null;
 
     for (var i = 0; i < self.playRanges.length; i++) {
         if (playRangeToDelete === self.playRanges[i]) {
@@ -602,7 +593,7 @@ WickObject.prototype.removePlayRange = function (playRangeToDelete) {
         }
     }
 
-    self.playRanges.splice(deletePlayRangeIndex, 1); 
+    if(deletePlayRangeIndex !== null) self.playRanges.splice(deletePlayRangeIndex, 1); 
 }
 
 WickObject.prototype.hasTweenAtFrame = function (frame) {

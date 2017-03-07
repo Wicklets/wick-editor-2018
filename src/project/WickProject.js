@@ -193,7 +193,6 @@ WickProject.fixForBackwardsCompatibility = function (project) {
         if(!wickObj.isSymbol) return;
 
         if(!wickObj.playRanges) wickObj.playRanges = [];
-        console.log(wickObj.playRanges)
 
         wickObj.layers.forEach(function (layer) {
             if(!layer.identifier) layer.identifier = "Untitled Layer";
