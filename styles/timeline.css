@@ -324,18 +324,25 @@ body {
 }
 
 .playrange {
+	cursor: move;
+
 	position: absolute;
 	top: 0px;
 	left: 0px;
 	width: 100px;
 	height: var(--number-line-height);
 
-	background-color: red;
+	background-color: white;
 	opacity: 0.5;
+
+	-webkit-box-shadow:inset 0px 0px 0px 3px #f00;
+    -moz-box-shadow:inset    0px 0px 0px 3px #f00;
+    box-shadow:inset         0px 0px 0px 3px #f00;
 }
 
 .playrange-handle {
 	background-color: green;
+	opacity: 0.0;
 	position: absolute;
 
 	width: 10px;
