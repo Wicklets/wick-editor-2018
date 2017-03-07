@@ -246,6 +246,11 @@ WickObject.createSymbolFromWickFrames = function (wickFrames) {
 
 }
 
+WickObject.prototype.createPlayRange = function(index) {
+    //TODO: Set values like color and identifier...
+    return new WickPlayRange(index,index); 
+}
+
 WickObject.prototype.copy = function () {
 
     var copiedObject = new WickObject();
