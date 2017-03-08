@@ -1027,7 +1027,7 @@ WickObject.prototype.movePlayheadTo = function (frame) {
     } else if (CheckInput.isString(frame)) {
 
         // Search for the frame with the correct identifier and navigate if found
-        var foundFrame;
+        /*var foundFrame;
         this.layers.forEach(function (layer) {
             var layerFoundFrame = layer.getFrameByIdentifier(frame);
             if(layerFoundFrame) foundFrame = layerFoundFrame;
@@ -1036,7 +1036,20 @@ WickObject.prototype.movePlayheadTo = function (frame) {
         if(foundFrame)
             this.playheadPosition = foundFrame.playheadPosition;
         else
-            throw "Failed to navigate to frame \'" + frame + "\': is not a valid frame.";
+            throw "Failed to navigate to frame \'" + frame + "\': is not a valid frame.";*/
+
+        var foundPlayRange = null;
+        this.playRanges.forEach(function (playRange) {
+            if(playRange.identifier === frame) {
+                foundPlayRange = playRange;
+            }
+        });
+
+        if(foundPlayRange) {
+            if(this.playheadPosition < foundPlayRange.start && this.playheadPosition >= foundPlayRange.end) {
+                this.playheadPosition = foundPlayRange.start;
+            }
+        }
 
     } else {
 
