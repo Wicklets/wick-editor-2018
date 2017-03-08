@@ -106,7 +106,7 @@ var TimelineInterface = function (wickEditor) {
 
         this.calculateHeight = function () {
             var maxTimelineHeight = cssVar("--max-timeline-height");
-            var expectedTimelineHeight = this.layersContainer.layers.length * cssVar("--layer-height") + 46; 
+            var expectedTimelineHeight = this.layersContainer.layers.length * cssVar("--layer-height") + 56; 
             return Math.min(expectedTimelineHeight, maxTimelineHeight); 
         }
     }
@@ -670,13 +670,12 @@ var TimelineInterface = function (wickEditor) {
                 startInteraction("dragPlayRange", e, {playrange:that});
             });
 
-            console.log(this.wickPlayrange)
             var width = this.wickPlayrange.getLength()*cssVar('--frame-width');
-            var widthOffset = 1;
+            var widthOffset = -2;
             this.elem.style.width = width + widthOffset+'px'
 
             var left = this.wickPlayrange.getStart()*cssVar('--frame-width');
-            var leftOffset = cssVar('--frames-cell-first-padding')*2-1;
+            var leftOffset = cssVar('--frames-cell-first-padding')*2+1;
             this.elem.style.left  = left + leftOffset + 'px';
 
             this.handleRight = document.createElement('div');

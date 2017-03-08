@@ -2,15 +2,11 @@
 
 var PropertiesInterface = function (wickEditor) {
 
-    var currentTab = 'object'
+    var currentTab = 'selection'
 
     this.setup = function () {
-        document.getElementById('objectPropertiesTabButton').onclick = function () {
-            currentTab = 'object';
-            wickEditor.syncInterfaces();
-        };
-        document.getElementById('framePropertiesTabButton').onclick = function () {
-            currentTab = 'frame';
+        document.getElementById('selectionPropertiesTabButton').onclick = function () {
+            currentTab = 'selection';
             wickEditor.syncInterfaces();
         };
         document.getElementById('projectPropertiesTabButton').onclick = function () {
@@ -28,16 +24,18 @@ var PropertiesInterface = function (wickEditor) {
         $("#objectProperties").css('display', 'none');
         $("#projectProperties").css('display', 'none');
 
-        document.getElementById('objectPropertiesTabButton').className = 'propertiesTab';
-        document.getElementById('framePropertiesTabButton').className = 'propertiesTab';
+        document.getElementById('selectionPropertiesTabButton').className = 'propertiesTab';
         document.getElementById('projectPropertiesTabButton').className = 'propertiesTab';
         document.getElementById(currentTab + 'PropertiesTabButton').className = 'propertiesTab propertiesTabActive';
 
-        if(currentTab === 'object') {
-            var selectedObj = wickEditor.fabric.getSelectedObject(WickObject);
+        if(currentTab === 'selection') {
+            var selectedObj = wickEditor.project.getSelectedObject();
+
             if(selectedObj) {
+                document.getElementById('objectType').style.display = 'block';
+
                 // Display Object properties tab
-                $("#objectProperties").css('display', 'block');
+                $("#objectProperties").css('display', 'none');
                 $("#textProperties").css('display', 'none');
                 $("#soundProperties").css('display', 'none');
                 $("#symbolProperties").css('display', 'none');
@@ -61,72 +59,80 @@ var PropertiesInterface = function (wickEditor) {
                 var objectTypeIcon = document.getElementById('objectTypeIcon');
                 var objectTypeName = document.getElementById('objectTypeName');
 
-                if(selectedObj.isSymbol) {
+                if(selectedObj instanceof WickObject) {
+                    $("#objectProperties").css('display', 'block');
 
-                    $("#symbolProperties").css('display', 'block');
+                    if(selectedObj.isSymbol) {
+
+                        $("#symbolProperties").css('display', 'block');
+
+                        objectTypeIcon.src = 'resources/gearbox.png';
+                        objectTypeName.innerHTML = 'Symbol';
+                    
+                    } else if(selectedObj.fontData) {
+                    
+                        $("#textProperties").css('display', 'block');
+
+                        document.getElementById('boldCheckbox').checked = selectedObj.fontData.fontWeight === "bold";
+                        document.getElementById('italicCheckbox').checked = selectedObj.fontData.fontStyle === "italic";
+                        document.getElementById('fontSize').value = Math.floor(selectedObj.fontData.fontSize);
+                        //document.getElementById('underlinedCheckbox').checked = selectedObj.fontData.textDecoration === "underline";
+                    
+                        objectTypeIcon.src = 'resources/text.png';
+                        objectTypeName.innerHTML = 'Text';
+                    
+                    } else if (selectedObj.audioData) {
+                    
+                        $("#soundProperties").css('display', 'block');
+                        
+                        document.getElementById('loopCheckbox').checked = selectedObj.loopSound;
+                        document.getElementById('autoplayCheckbox').checked = selectedObj.autoplaySound;
+                    
+                        objectTypeIcon.src = 'resources/audioicon.png';
+                        objectTypeName.innerHTML = 'Sound';
+                    
+                    } else if (selectedObj.imageData) {
+                    
+                        objectTypeIcon.src = 'resources/image.png';
+                        objectTypeName.innerHTML = 'Image';
+                    
+                    } else if (selectedObj.pathData) {
+                    
+                        objectTypeIcon.src = 'resources/path.png';
+                        objectTypeName.innerHTML = 'Path';
+                    
+                    }
+
+                    var tween =selectedObj.getFromTween()
+                    if(tween) {
+                        $("#tweenProperties").css('display', 'block');
+                        $("#tweenType").val(tween.tweenType);
+                        $("#tweenDir").val(tween.tweenDir);
+                    }
+
+                } else if (selectedObj instanceof WickFrame) {
 
                     objectTypeIcon.src = 'resources/gearbox.png';
-                    objectTypeName.innerHTML = 'Symbol';
-                
-                } else if(selectedObj.fontData) {
-                
-                    $("#textProperties").css('display', 'block');
+                    objectTypeName.innerHTML = 'Frame';
 
-                    document.getElementById('boldCheckbox').checked = selectedObj.fontData.fontWeight === "bold";
-                    document.getElementById('italicCheckbox').checked = selectedObj.fontData.fontStyle === "italic";
-                    document.getElementById('fontSize').value = Math.floor(selectedObj.fontData.fontSize);
-                    //document.getElementById('underlinedCheckbox').checked = selectedObj.fontData.textDecoration === "underline";
-                
-                    objectTypeIcon.src = 'resources/text.png';
-                    objectTypeName.innerHTML = 'Text';
-                
-                } else if (selectedObj.audioData) {
-                
-                    $("#soundProperties").css('display', 'block');
-                    
-                    document.getElementById('loopCheckbox').checked = selectedObj.loopSound;
-                    document.getElementById('autoplayCheckbox').checked = selectedObj.autoplaySound;
-                
-                    objectTypeIcon.src = 'resources/audioicon.png';
-                    objectTypeName.innerHTML = 'Sound';
-                
-                } else if (selectedObj.imageData) {
-                
-                    objectTypeIcon.src = 'resources/image.png';
-                    objectTypeName.innerHTML = 'Image';
-                
-                } else if (selectedObj.pathData) {
-                
-                    objectTypeIcon.src = 'resources/path.png';
-                    objectTypeName.innerHTML = 'Path';
-                
-                }
+                    $("#frameProperties").css('display', 'block');
+                    document.getElementById('frameIdentifier').value = (selectedObj.identifier) ? currentFrame.identifier : "";
+                    $('#frameIdentifier').prop('disabled', false);
 
-                var tween =selectedObj.getFromTween()
-                if(tween) {
-                    $("#tweenProperties").css('display', 'block');
-                    $("#tweenType").val(tween.tweenType);
-                    $("#tweenDir").val(tween.tweenDir);
+                    document.getElementById('frameSaveStateCheckbox').checked = selectedObj.alwaysSaveState;
+
+                } else if (selectedObj instanceof WickPlayRange) {
+
+                    objectTypeIcon.src = 'resources/gearbox.png';
+                    objectTypeName.innerHTML = 'PlayRange™';
+
                 }
 
             } else {
                 
-                
+                document.getElementById('objectType').style.display = 'none';
+
             }
-        } else if(currentTab === 'frame') {
-
-            var currentFrame = wickEditor.project.getSelectedObject(WickFrame);
-            if(!currentFrame) {
-                $("#frameProperties").css('display', 'none');
-                return;
-            }
-
-            $("#frameProperties").css('display', 'block');
-            document.getElementById('frameIdentifier').value = (currentFrame.identifier) ? currentFrame.identifier : "";
-            $('#frameIdentifier').prop('disabled', false);
-
-            //document.getElementById('frameAutoplayCheckbox').checked = !currentFrame.autoplay;
-            document.getElementById('frameSaveStateCheckbox').checked = currentFrame.alwaysSaveState;
 
         } else if(currentTab === 'project') {
 

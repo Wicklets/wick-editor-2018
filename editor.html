@@ -142,9 +142,12 @@
         <!-- Properties -->
 
             <div id="propertiesGUI" class="GUIBox">
-                <div id="objectPropertiesTabButton"  class="propertiesTab propertiesTabActive">Object</div>
-                <div id="framePropertiesTabButton"   class="propertiesTab">Frame</div>
+                <div id="selectionPropertiesTabButton"  class="propertiesTab propertiesTabActive">Selection</div>
                 <div id="projectPropertiesTabButton" class="propertiesTab">Project</div>
+
+                <div id="objectType">
+                    <img id="objectTypeIcon" src="resources/gearbox.png" width="22px"> <span id="objectTypeName" style="margin-left:5px;font-size:20px;">None</span>
+                </div>
 
                 <div id="frameProperties" class="propertiesGUIContent">
                     Name <input style="width:130px; float:right;" type="text" id="frameIdentifier">
@@ -157,7 +160,6 @@
                 </div>
 
                 <div id="objectProperties" class="propertiesGUIContent">
-                    <img id="objectTypeIcon" src="resources/gearbox.png" width="22px"> <span id="objectTypeName" style="margin-left:5px;font-size:20px;">None</span>
                     <br />
                     <br />
                     Name <input style="float:right; width:130px" type="text" id="objectName">

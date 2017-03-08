@@ -384,6 +384,8 @@ letter-spacing: 0.32px;
 	cursor: pointer;
     color: #FFFFFF;
     background-color: #3C3C3C;
+    width: 100px;
+    text-align: center;
 }
 .propertiesTabActive {
 	border-bottom: none;
@@ -395,6 +397,9 @@ letter-spacing: 0.32px;
     color: #FFFFFF;
 }
 
+#objectType {
+	margin: 15px;
+}
 #closeSplashScreenButton {
 	right: 5px;
 	top: 5px;

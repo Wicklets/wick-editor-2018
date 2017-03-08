@@ -494,14 +494,17 @@ WickProject.prototype.getNumSelectedObjects = function (obj) {
 
 WickProject.prototype.selectObject = function (obj) {
     this._selection.push(obj.uuid);
+    wickEditor.properties.syncWithEditorState();
 }
 
 WickProject.prototype.clearSelection = function () {
     this._selection = [];
+    wickEditor.properties.syncWithEditorState();
 }
 
 WickProject.prototype.deselectObjectType = function (type) {
     for ( var i = 0; i < this._selection.length; i++ ) {
         if(this._selection[i] instanceof type) this._selection[i] = null;
     }
+    wickEditor.properties.syncWithEditorState();
 }

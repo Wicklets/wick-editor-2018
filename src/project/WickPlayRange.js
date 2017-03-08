@@ -10,8 +10,6 @@ var WickPlayRange = function (start, end, identifier, color) {
 // index : number - Index to start playrange. Must be less then end and at least 1. 
 WickPlayRange.prototype.changeStart = function (index) {
 
-	console.log(index)
-
 	if (index >= this.end) {
 		this.start = this.end; 
 	} else if (index < 0) {

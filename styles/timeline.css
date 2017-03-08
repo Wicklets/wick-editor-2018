@@ -363,9 +363,9 @@ body {
 	background-color: white;
 	opacity: 0.5;
 
-	-webkit-box-shadow:inset 0px 0px 0px 3px #f00;
-    -moz-box-shadow:inset    0px 0px 0px 3px #f00;
-    box-shadow:inset         0px 0px 0px 3px #f00;
+	-webkit-box-shadow:inset 0px 0px 0px 3px #ff0;
+    -moz-box-shadow:inset    0px 0px 0px 3px #ff0;
+    box-shadow:inset         0px 0px 0px 3px #ff0;
 }
 
 .playrange-handle {
