@@ -106,7 +106,7 @@ var TimelineInterface = function (wickEditor) {
 
         this.calculateHeight = function () {
             var maxTimelineHeight = cssVar("--max-timeline-height");
-            var expectedTimelineHeight = this.layersContainer.layers.length * cssVar("--layer-height") + 56; 
+            var expectedTimelineHeight = this.layersContainer.layers.length * cssVar("--layer-height") + 58; 
             return Math.min(expectedTimelineHeight, maxTimelineHeight); 
         }
     }
@@ -335,7 +335,8 @@ var TimelineInterface = function (wickEditor) {
                     });
                     wickEditor.project.clearSelection()
                     wickEditor.project.selectObject(that.wickFrame)
-                    timeline.framesContainer.update();
+                    //timeline.framesContainer.update();
+                    wickEditor.syncInterfaces()
                 }
 
                 startInteraction("dragFrame", e, {frames:timeline.framesContainer.getFrames(wickEditor.project.getSelectedObjects())});

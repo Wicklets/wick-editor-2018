@@ -1046,7 +1046,7 @@ WickObject.prototype.movePlayheadTo = function (frame) {
         });
 
         if(foundPlayRange) {
-            if(this.playheadPosition < foundPlayRange.start && this.playheadPosition >= foundPlayRange.end) {
+            if(this.playheadPosition < foundPlayRange.start || this.playheadPosition >= foundPlayRange.end) {
                 this.playheadPosition = foundPlayRange.start;
             }
         }

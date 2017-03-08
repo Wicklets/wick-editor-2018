@@ -388,6 +388,7 @@ WickProject.prototype.getPlayRangeByUUID = function (uuid) {
     var foundPlayrange = null;
     allObjectsInProject.forEach(function (object) {
         if(foundPlayrange) return;
+        if(!object.isSymbol) return;
 
         object.playRanges.forEach(function(playRange) {
             if(playRange.uuid === uuid) {
@@ -512,21 +513,23 @@ WickProject.prototype.getNumSelectedObjects = function (obj) {
 
 WickProject.prototype.selectObject = function (obj) {
     this._selection.push(obj.uuid);
-    wickEditor.properties.syncWithEditorState();
 }
 
 WickProject.prototype.clearSelection = function () {
     this._selection = [];
-    wickEditor.properties.syncWithEditorState();
 }
 
 WickProject.prototype.deselectObjectType = function (type) {
+    var deselectionHappened = false;
+
     for ( var i = 0; i < this._selection.length; i++ ) {
         var uuid = this._selection[i];
         var obj = this.getObjectByUUID(uuid) || this.getFrameByUUID(uuid) || this.getPlayRangeByUUID(uuid);
         if(obj instanceof type) {
             this._selection[i] = null;
+            deselectionHappened = true;
         }
     }
-    wickEditor.properties.syncWithEditorState();
+
+    return deselectionHappened;
 }
