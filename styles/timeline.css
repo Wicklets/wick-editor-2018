@@ -5,7 +5,7 @@ body {
     
     --max-timeline-height: 200px; 
 
-	--layers-width: 70px;
+	--layers-width: 150px;
 	--layer-height: 46px;
 
 	--frame-width: 80px;
@@ -25,13 +25,13 @@ body {
 
     --frames-cell-first-padding: 5px;
 
-    --scrollbar-thickness: 14px;
+    --scrollbar-thickness: 17px;
 
     --number-line-height: 23px;
 }
 
 .timeline {
-	background-color: #FFFFFF;
+	background-color: #585757;
 
 	margin: 0px;
 	padding: 0px;
@@ -68,10 +68,10 @@ body {
 }
 
 .layer {
-	background-color: #878787;
+	background-color: #2E9DF4;
     
 	width:  calc(100% - 10px);
-	height: calc(var(--layer-height) - 10%);
+	height: calc(var(--layer-height) - 5px);
     
 	margin: calc(var(--common-padding) / 2);
     margin-top: 9px;
@@ -79,6 +79,7 @@ body {
     margin-bottom: 5px;
     border-radius: 2px;
     text-align: center;
+    line-height: calc(var(--layer-height) - 5px);
     color: white;
 
 	position: absolute;
@@ -243,9 +244,13 @@ body {
 }
 
 .scrollbar {
-	background-color: red;
+	background-color: #2E2E2E;
 	position: absolute;
 	overflow: hidden;
+    border-color: #878787;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 3px;
 }
 
 .horizontal-scrollbar {
@@ -253,6 +258,8 @@ body {
 	right: var(--scrollbar-thickness);
 	width: calc(100% - var(--layers-width) - var(--scrollbar-thickness));
 	height: var(--scrollbar-thickness);
+/*    margin-right: 10px;*/
+
 }
 
 .vertical-scrollbar {
@@ -266,45 +273,65 @@ body {
 	cursor: pointer;
 	width: var(--scrollbar-thickness);
 	height: var(--scrollbar-thickness);
-	background-color: yellow;
 	position: absolute;
+    background-color: #2E2E2E; 
+
 }
 
 .scrollbar-button-left {
 	left: 0px;
 	top: 0px;
+    background-image: url(/resources/scrollbararrow-left.png);
+    background-repeat: no-repeat;
+    background-position: center;
+
 }
 
 .scrollbar-button-right {
-	right: 0px;
+	color: blue;
+    right: 0px;
 	top: 0px;
+
+    background-image: url(/resources/scrollbararrow-right.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    
 }
 
 .scrollbar-button-top {
 	right: 0px;
 	top: 0px;
+    background-image: url(/resources/scrollbararrow-up.png);
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .scrollbar-button-bottom {
 	right: 0px;
 	bottom: 0px;
+    background-image: url(/resources/scrollbararrow-down.png);
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .scrollbar-head {
 	cursor: pointer;
 	position: absolute;
-	background-color: green;
-	left: 0px;
+	background-color: #FAFAFA;
+    left: 0px;
 	top: 0px;
+    border-radius: 6px;
 }
 
 .scrollbar-head-horizontal {
 	width: 100px;
-	height: var(--scrollbar-thickness);
+	height: calc(var(--scrollbar-thickness) - 4px);
+    margin-top: 2px;
 }
 
 .scrollbar-head-vertical {
-	width: var(--scrollbar-thickness);
+	width: calc(var(--scrollbar-thickness) - 4px);
+    margin-left: 2px;
 	/* Height depends on number of layers */ 
 }
 
@@ -315,21 +342,49 @@ body {
 	width: 1000%;
 	height: var(--number-line-height);
 
-	background-color: white;
+	background-color: #252525;
 }
 
 .number-line-cell {
 	position: absolute;
 	height: var(--number-line-height);
+    color: #fafafa;
 }
 
 .playrange {
+	cursor: move;
+
 	position: absolute;
 	top: 0px;
 	left: 0px;
 	width: 100px;
 	height: var(--number-line-height);
 
-	background-color: red;
+	background-color: white;
 	opacity: 0.5;
+
+	-webkit-box-shadow:inset 0px 0px 0px 3px #f00;
+    -moz-box-shadow:inset    0px 0px 0px 3px #f00;
+    box-shadow:inset         0px 0px 0px 3px #f00;
+}
+
+.playrange-handle {
+	background-color: green;
+	opacity: 0.0;
+	position: absolute;
+
+	width: 10px;
+	height: 100%;
+
+	cursor: ew-resize;
+}
+
+.playrange-handle-left {
+	left: 0px;
+	top: 0px;
+}
+
+.playrange-handle-right {
+	right: 0px;
+	top: 0px;
 }

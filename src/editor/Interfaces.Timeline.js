@@ -106,7 +106,7 @@ var TimelineInterface = function (wickEditor) {
 
         this.calculateHeight = function () {
             var maxTimelineHeight = cssVar("--max-timeline-height");
-            var expectedTimelineHeight = this.layersContainer.layers.length * cssVar("--layer-height") + 56; 
+            var expectedTimelineHeight = this.layersContainer.layers.length * cssVar("--layer-height") + 46; 
             return Math.min(expectedTimelineHeight, maxTimelineHeight); 
         }
     }
@@ -620,6 +620,15 @@ var TimelineInterface = function (wickEditor) {
             this.elem.className = 'number-line';
 
             this.playRanges = [];
+        }
+
+        this.update = function () {
+            this.elem.style.left = timeline.horizontalScrollBar.scrollAmount+cssVar('--layers-width')+'px';
+        }
+
+        this.rebuild = function () {
+
+            this.elem.innerHTML = ''
 
             for(var i = 0; i < 100; i++) {
                 var numberLineCell = document.createElement('div');
@@ -629,13 +638,7 @@ var TimelineInterface = function (wickEditor) {
                 
                 this.elem.appendChild(numberLineCell);
             }
-        }
 
-        this.update = function () {
-            this.elem.style.left = timeline.horizontalScrollBar.scrollAmount+cssVar('--layers-width')+'px';
-        }
-
-        this.rebuild = function () {
             this.playRanges.forEach(function (playrange) {
                 that.elem.removeChild(playrange.elem);
             });
@@ -643,7 +646,6 @@ var TimelineInterface = function (wickEditor) {
             this.playRanges = [];
 
             wickEditor.project.getCurrentObject().playRanges.forEach(function (wickPlayrange) {
-                console.log(wickPlayrange)
                 var newPlayrange = new PlayRange();
                 newPlayrange.wickPlayrange = wickPlayrange;
                 newPlayrange.build();
@@ -656,13 +658,19 @@ var TimelineInterface = function (wickEditor) {
         var that = this;
 
         this.elem = null;
+        this.handleRight = null;
+        this.handleLeft = null;
 
         this.wickPlayrange = null;
 
         this.build = function () {
             this.elem = document.createElement('div');
             this.elem.className = 'playrange';
+            this.elem.addEventListener('mousedown', function (e) {
+                startInteraction("dragPlayRange", e, {playrange:that});
+            });
 
+            console.log(this.wickPlayrange)
             var width = this.wickPlayrange.getLength()*cssVar('--frame-width');
             var widthOffset = 1;
             this.elem.style.width = width + widthOffset+'px'
@@ -670,6 +678,22 @@ var TimelineInterface = function (wickEditor) {
             var left = this.wickPlayrange.getStart()*cssVar('--frame-width');
             var leftOffset = cssVar('--frames-cell-first-padding')*2-1;
             this.elem.style.left  = left + leftOffset + 'px';
+
+            this.handleRight = document.createElement('div');
+            this.handleRight.className = 'playrange-handle playrange-handle-right';
+            this.handleRight.addEventListener('mousedown', function (e) {
+                startInteraction("dragPlayRangeEnd", e, {playrange:that});
+                e.stopPropagation()
+            });
+            this.elem.appendChild(this.handleRight)
+
+            this.handleLeft = document.createElement('div');
+            this.handleLeft.className = 'playrange-handle playrange-handle-left';
+            this.handleLeft.addEventListener('mousedown', function (e) {
+                startInteraction("dragPlayRangeStart", e, {playrange:that});
+                e.stopPropagation()
+            });
+            this.elem.appendChild(this.handleLeft)
         }
 
         this.update = function () {
@@ -747,15 +771,60 @@ var TimelineInterface = function (wickEditor) {
             });
         })
     }
-    interactions['dragPlayRangeStart'] = {
+    interactions['dragPlayRange'] = {
         'start' : (function (e) {
-            
+            interactionData.origWidth = parseInt(interactionData.playrange.elem.style.width);
+            interactionData.origLeft = parseInt(interactionData.playrange.elem.style.left);
+            interactionData.mouseMovement = 0;
         }), 
         'update' : (function (e) {
-            
+            var wickPlayrange = interactionData.playrange.wickPlayrange;
+
+            interactionData.mouseMovement += e.movementX;
+            var newLeft = interactionData.origLeft + interactionData.mouseMovement;
+
+            interactionData.playrange.elem.style.left = newLeft + 'px';
         }),
         'finish' : (function (e) {
-            
+            var newDivLeft = parseInt(interactionData.playrange.elem.style.left);
+            var newLeft = Math.round(newDivLeft / cssVar('--frame-width'));
+            var newStart = newLeft;
+
+            var newDivLen = parseInt(interactionData.playrange.elem.style.width);
+            var newLength = Math.round(newDivLen / cssVar('--frame-width'));
+            var newEnd = newLength + newStart;
+
+            wickEditor.actionHandler.doAction('modifyPlayRange', {
+                playRange: interactionData.playrange.wickPlayrange,
+                end: newEnd,
+                start: newStart
+            });
+        })
+    }
+    interactions['dragPlayRangeStart'] = {
+        'start' : (function (e) {
+            interactionData.origWidth = parseInt(interactionData.playrange.elem.style.width);
+            interactionData.origLeft = parseInt(interactionData.playrange.elem.style.left);
+        }), 
+        'update' : (function (e) {
+            var wickPlayrange = interactionData.playrange.wickPlayrange;
+
+            var mouseLeft = e.x;
+            var newLeft = mouseLeft - timeline.numberLine.elem.getBoundingClientRect().left;
+            var diffWidth = interactionData.origLeft - newLeft;
+
+            interactionData.playrange.elem.style.left = newLeft + 'px';
+            interactionData.playrange.elem.style.width = interactionData.origWidth + diffWidth + 'px';
+        }),
+        'finish' : (function (e) {
+            var newDivLeft = parseInt(interactionData.playrange.elem.style.left);
+            var newLeft = Math.round(newDivLeft / cssVar('--frame-width'));
+            var newStart = newLeft;
+
+            wickEditor.actionHandler.doAction('modifyPlayRange', {
+                playRange: interactionData.playrange.wickPlayrange,
+                start: newStart
+            });
         })
     }
     interactions['dragPlayRangeEnd'] = {
@@ -763,10 +832,23 @@ var TimelineInterface = function (wickEditor) {
             
         }), 
         'update' : (function (e) {
-            
+            var wickPlayrange = interactionData.playrange.wickPlayrange;
+
+            var origLeft = interactionData.playrange.elem.getBoundingClientRect().left;
+            var mouseLeft = e.x;
+
+            var newWidth = mouseLeft - origLeft;
+            interactionData.playrange.elem.style.width = newWidth + 'px';
         }),
         'finish' : (function (e) {
-            
+            var newDivLen = parseInt(interactionData.playrange.elem.style.width);
+            var newLength = Math.round(newDivLen / cssVar('--frame-width'));
+            var newEnd = newLength + interactionData.playrange.wickPlayrange.getStart();
+
+            wickEditor.actionHandler.doAction('modifyPlayRange', {
+                playRange: interactionData.playrange.wickPlayrange,
+                end: newEnd
+            });
         })
     }
     interactions['dragHorizontalScrollbarHead'] = {

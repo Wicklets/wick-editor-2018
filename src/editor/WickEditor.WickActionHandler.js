@@ -680,15 +680,15 @@ var WickActionHandler = function (wickEditor) {
             args.oldStart = args.start;
             args.oldEnd   = args.end;
 
-            if(args.start) args.playRange.changeStart(args.start);
-            if(args.end)   args.playRange.changeEnd  (args.end);
+            if(args.start !== undefined) args.playRange.changeStart(args.start);
+            if(args.end   !== undefined) args.playRange.changeEnd  (args.end);
 
             wickEditor.project.currentObject.framesDirty = true;
             done();
         },
         function (args) {
-            if(args.oldStart) args.playRange.changeStart(args.oldStart);
-            if(args.oldEnd)   args.playRange.changeEnd  (args.oldEnd);
+            if(args.oldStart !== undefined) args.playRange.changeStart(args.oldStart);
+            if(args.oldEnd   !== undefined) args.playRange.changeEnd  (args.oldEnd);
 
             wickEditor.project.currentObject.framesDirty = true;
             done();
