@@ -619,11 +619,23 @@ var TimelineInterface = function (wickEditor) {
             this.elem = document.createElement('div');
             this.elem.className = 'number-line';
 
+            this.elem.addEventListener('mousedown', function (e) {
+                var start = Math.round((e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2) / cssVar('--frame-width'));
+                var playRange = new WickPlayRange(start, start+1, "bees");
+                wickEditor.actionHandler.doAction('addPlayRange', {playRange: playRange});
+                e.stopPropagation();
+            });
+
             this.playRanges = [];
         }
 
         this.update = function () {
             this.elem.style.left = timeline.horizontalScrollBar.scrollAmount+cssVar('--layers-width')+'px';
+
+            this.playRanges.forEach(function (playRange) {
+                console.log("Asdasdba")
+                playRange.update();
+            });
         }
 
         this.rebuild = function () {
@@ -639,9 +651,9 @@ var TimelineInterface = function (wickEditor) {
                 this.elem.appendChild(numberLineCell);
             }
 
-            this.playRanges.forEach(function (playrange) {
+            /*this.playRanges.forEach(function (playrange) {
                 that.elem.removeChild(playrange.elem);
-            });
+            });*/
 
             this.playRanges = [];
 
@@ -650,6 +662,7 @@ var TimelineInterface = function (wickEditor) {
                 newPlayrange.wickPlayrange = wickPlayrange;
                 newPlayrange.build();
                 that.elem.appendChild(newPlayrange.elem);
+                that.playRanges.push(newPlayrange)
             });
         }
     }
@@ -667,7 +680,12 @@ var TimelineInterface = function (wickEditor) {
             this.elem = document.createElement('div');
             this.elem.className = 'playrange';
             this.elem.addEventListener('mousedown', function (e) {
+                wickEditor.project.clearSelection()
+                wickEditor.project.selectObject(that.wickPlayrange);
+
                 startInteraction("dragPlayRange", e, {playrange:that});
+
+                e.stopPropagation();
             });
 
             var width = this.wickPlayrange.getLength()*cssVar('--frame-width');
@@ -696,7 +714,13 @@ var TimelineInterface = function (wickEditor) {
         }
 
         this.update = function () {
-            
+            console.log(wickEditor.project.isObjectSelected(this.wickPlayrange));
+
+            if(wickEditor.project.isObjectSelected(this.wickPlayrange)) {
+                this.elem.className = 'playrange playrange-selected'
+            } else {
+                this.elem.className = 'playrange'
+            }
         }
 
         this.rebuild = function () {

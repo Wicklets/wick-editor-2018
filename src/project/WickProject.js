@@ -381,6 +381,24 @@ WickProject.prototype.getFrameByUUID = function (uuid) {
     return foundFrame;
 }
 
+WickProject.prototype.getPlayRangeByUUID = function (uuid) {
+    var allObjectsInProject = this.rootObject.getAllChildObjectsRecursive();
+    allObjectsInProject.push(this.rootObject);
+
+    var foundPlayrange = null;
+    allObjectsInProject.forEach(function (object) {
+        if(foundPlayrange) return;
+
+        object.playRanges.forEach(function(playRange) {
+            if(playRange.uuid === uuid) {
+                foundPlayrange = playRange;
+            }
+        });
+    });
+
+    return foundPlayrange;
+}
+
 WickProject.prototype.addObject = function (wickObject, zIndex, ignoreSymbolOffset) {
 
     var frame = this.getCurrentFrame();
@@ -481,7 +499,7 @@ WickProject.prototype.getSelectedObjects = function () {
 
     var objs = [];
     this._selection.forEach(function (uuid) {
-        var obj = self.getObjectByUUID(uuid) || self.getFrameByUUID(uuid);
+        var obj = self.getObjectByUUID(uuid) || self.getFrameByUUID(uuid) || self.getPlayRangeByUUID(uuid);
         if(obj) objs.push(obj);
     });
 
@@ -505,7 +523,7 @@ WickProject.prototype.clearSelection = function () {
 WickProject.prototype.deselectObjectType = function (type) {
     for ( var i = 0; i < this._selection.length; i++ ) {
         var uuid = this._selection[i];
-        var obj = this.getObjectByUUID(uuid) || this.getFrameByUUID(uuid);
+        var obj = this.getObjectByUUID(uuid) || this.getFrameByUUID(uuid) || this.getPlayRangeByUUID(uuid);
         if(obj instanceof type) {
             this._selection[i] = null;
         }

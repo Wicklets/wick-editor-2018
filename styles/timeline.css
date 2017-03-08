@@ -342,6 +342,8 @@ body {
 	width: 1000%;
 	height: var(--number-line-height);
 
+	cursor: pointer;
+
 	background-color: #252525;
 }
 
@@ -366,6 +368,10 @@ body {
 	-webkit-box-shadow:inset 0px 0px 0px 3px #ff0;
     -moz-box-shadow:inset    0px 0px 0px 3px #ff0;
     box-shadow:inset         0px 0px 0px 3px #ff0;
+}
+
+.playrange-selected {
+	background-color: black;
 }
 
 .playrange-handle {

@@ -675,6 +675,20 @@ var WickActionHandler = function (wickEditor) {
             done();
         });
 
+    registerAction('addPlayRange',
+        function (args) {
+            wickEditor.project.getCurrentObject().addPlayRange(args.playRange)
+
+            wickEditor.project.currentObject.framesDirty = true;
+            done();
+        },
+        function (args) {
+            wickEditor.project.getCurrentObject().removePlayRange(args.playRange)
+
+            wickEditor.project.currentObject.framesDirty = true;
+            done();
+        });
+
     registerAction('modifyPlayRange',
         function (args) {
             args.oldStart = args.start;
