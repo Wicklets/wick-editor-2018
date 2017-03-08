@@ -87,6 +87,11 @@ var FabricInterface = function (wickEditor) {
             self.modifyChangedObjects(e);
         });
 
+        self.canvas.on('mouse:down', function (e) {
+            wickEditor.project.deselectObjectType(WickFrame);
+            wickEditor.syncInterfaces();
+        });
+
         this.recenterCanvas();
         this.guiElements.update();
 

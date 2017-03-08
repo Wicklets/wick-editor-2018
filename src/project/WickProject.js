@@ -504,7 +504,11 @@ WickProject.prototype.clearSelection = function () {
 
 WickProject.prototype.deselectObjectType = function (type) {
     for ( var i = 0; i < this._selection.length; i++ ) {
-        if(this._selection[i] instanceof type) this._selection[i] = null;
+        var uuid = this._selection[i];
+        var obj = this.getObjectByUUID(uuid) || this.getFrameByUUID(uuid);
+        if(obj instanceof type) {
+            this._selection[i] = null;
+        }
     }
     wickEditor.properties.syncWithEditorState();
 }
