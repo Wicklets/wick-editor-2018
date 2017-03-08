@@ -907,7 +907,7 @@ var GuiActionHandler = function (wickEditor) {
     registerAction('finishEditingTextbox',
         ['ENTER'],
         [],
-        {usableInTextBoxes:true},
+        {usableInTextBoxes:true, disabledInScriptingIDE:true},
         function (args) {
             $(":focus").blur();
         });
