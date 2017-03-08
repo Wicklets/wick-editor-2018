@@ -489,7 +489,8 @@ var WickActionHandler = function (wickEditor) {
         },
         function (args) {
             var currentObject = wickEditor.project.currentObject;
-            args.layer.frames.pop();
+            //args.layer.frames.pop();
+            args.layer.removeFrame(args.frame);
 
             currentObject.framesDirty = true;
 
@@ -622,7 +623,7 @@ var WickActionHandler = function (wickEditor) {
             args.oldLayer.removeFrame(args.frame);
             args.newLayer.addFrame(args.frame);
 
-            var touching = false;
+            /*var touching = false;
             args.newLayer.frames.forEach(function (frame) {
                 if(frame!==args.frame && frame.touchesFrame(args.frame)) {
                     touching = true;
@@ -630,16 +631,15 @@ var WickActionHandler = function (wickEditor) {
             });
             if(touching) {
                 scrap();return;
-            }
+            }*/
 
-            wickEditor.actionHandler.doAction('movePlayhead', {
+            /*wickEditor.actionHandler.doAction('movePlayhead', {
                 obj: wickEditor.project.currentObject,
-                newPlayheadPosition: args.newPlayheadPosition,
-                /*newLayer: wickFrame.parentLayer*/
-            });
+                newPlayheadPosition: args.newPlayheadPosition
+            });*/
 
-            wickEditor.project.currentObject.framesDirty = true;
-            done();
+            //wickEditor.project.currentObject.framesDirty = true;
+            //done();
         },
         function (args) {
             args.frame.playheadPosition = args.oldPlayheadPosition;
@@ -647,6 +647,40 @@ var WickActionHandler = function (wickEditor) {
             args.newLayer.removeFrame(args.frame);
             args.oldLayer.addFrame(args.frame);
             
+            //wickEditor.project.currentObject.framesDirty = true;
+            //done();
+        });
+
+    registerAction('moveFrames', 
+        function (args) {
+            for (var i = 0; i < args.framesMoveActionData.length; i++) {
+                var frameMoveData = args.framesMoveActionData[i]
+                wickEditor.actionHandler.doAction('moveFrame', {
+                    frame: frameMoveData.frame, 
+                    newPlayheadPosition: frameMoveData.newPlayheadPosition,
+                    newLayer: frameMoveData.newLayer
+                });
+            }
+
+            for (var i = 0; i < args.framesMoveActionData.length; i++) {
+                var currFrame = args.framesMoveActionData[i].frame
+                var touching = false;
+                args.framesMoveActionData[i].newLayer.frames.forEach(function (frame) {
+                    if(frame!==currFrame && frame.touchesFrame(currFrame)) {
+                        touching = true;
+                    }
+                });
+                if(touching) {
+                    scrap();return;
+                }
+            }
+
+            wickEditor.project.currentObject.framesDirty = true;
+            done();
+        },
+        function (args) {
+            
+
             wickEditor.project.currentObject.framesDirty = true;
             done();
         });

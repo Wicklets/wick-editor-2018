@@ -77,6 +77,8 @@ WickFrame.prototype.touchesFrame = function (frame) {
     var A = this;
     var B = frame;
 
+    if(A._beingMoved || B._beingMoved) return false;
+
     var AStart = A.playheadPosition;
     var AEnd = A.playheadPosition + A.length;
 

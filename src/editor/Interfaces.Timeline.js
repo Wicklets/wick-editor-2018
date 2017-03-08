@@ -759,7 +759,7 @@ var TimelineInterface = function (wickEditor) {
 
             //var frame = interactionData.frames[0];
 
-            interactionData.frames.forEach(function (frame) {
+            /*interactionData.frames.forEach(function (frame) {
                 //if(!frame) return;
                 var newPlayheadPosition = Math.round(parseInt(frame.elem.style.left) / cssVar('--frame-width'));
                 var newLayerIndex       = Math.round(parseInt(frame.elem.style.top)  / cssVar('--layer-height'));
@@ -771,7 +771,25 @@ var TimelineInterface = function (wickEditor) {
                     newPlayheadPosition: newPlayheadPosition,
                     newLayer: newLayer
                 });
+            });*/
+
+            var framesMoveActionData = [];
+            interactionData.frames.forEach(function (frame) {
+                if(!frame) return;
+                var newPlayheadPosition = Math.round(parseInt(frame.elem.style.left) / cssVar('--frame-width'));
+                var newLayerIndex       = Math.round(parseInt(frame.elem.style.top)  / cssVar('--layer-height'));
+                var newLayer = wickEditor.project.getCurrentObject().layers[newLayerIndex];
+                if(!newLayer) newLayer = wickEditor.project.getCurrentLayer();
+
+                framesMoveActionData.push({
+                    frame: frame.wickFrame, 
+                    newPlayheadPosition: newPlayheadPosition,
+                    newLayer: newLayer
+                });
             });
+
+            wickEditor.actionHandler.doAction('moveFrames', {framesMoveActionData: framesMoveActionData});
+
         })
     }
     interactions['dragFrameWidth'] = {

@@ -29,6 +29,9 @@ var PropertiesInterface = function (wickEditor) {
         document.getElementById('projectPropertiesTabButton').className = 'propertiesTab';
         document.getElementById(currentTab + 'PropertiesTabButton').className = 'propertiesTab propertiesTabActive';
 
+        var objectTypeIcon = document.getElementById('objectTypeIcon');
+        var objectTypeName = document.getElementById('objectTypeName');
+
         if(currentTab === 'selection') {
             var selectedObj = wickEditor.project.getSelectedObject();
 
@@ -56,9 +59,6 @@ var PropertiesInterface = function (wickEditor) {
                 document.getElementById('objectHeight')   .value = roundToTenth(selectedObj.height * selectedObj.scaleY)
                 document.getElementById('objectRotation') .value = roundToTenth(selectedObj.rotation)
                 document.getElementById('opacitySlider')  .value = roundToTenth(selectedObj.opacity*255)
-
-                var objectTypeIcon = document.getElementById('objectTypeIcon');
-                var objectTypeName = document.getElementById('objectTypeName');
 
                 if(selectedObj instanceof WickObject) {
                     $("#objectProperties").css('display', 'block');
@@ -140,6 +140,10 @@ var PropertiesInterface = function (wickEditor) {
             }
 
         } else if(currentTab === 'project') {
+
+            document.getElementById('objectType').style.display = 'block';
+            objectTypeIcon.src = 'resources/gearbox.png';
+            objectTypeName.innerHTML = 'Project';
 
             $("#projectProperties").css('display', 'block');
 
