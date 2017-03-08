@@ -21,6 +21,7 @@ var PropertiesInterface = function (wickEditor) {
         }
 
         $("#frameProperties").css('display', 'none');
+        $("#playrangeProperties").css('display', 'none');
         $("#objectProperties").css('display', 'none');
         $("#projectProperties").css('display', 'none');
 
@@ -116,7 +117,7 @@ var PropertiesInterface = function (wickEditor) {
                     objectTypeName.innerHTML = 'Frame';
 
                     $("#frameProperties").css('display', 'block');
-                    document.getElementById('frameIdentifier').value = (selectedObj.identifier) ? currentFrame.identifier : "";
+                    document.getElementById('frameIdentifier').value = (selectedObj.identifier) ? selectedObj.identifier : "";
                     $('#frameIdentifier').prop('disabled', false);
 
                     document.getElementById('frameSaveStateCheckbox').checked = selectedObj.alwaysSaveState;
@@ -125,6 +126,10 @@ var PropertiesInterface = function (wickEditor) {
 
                     objectTypeIcon.src = 'resources/gearbox.png';
                     objectTypeName.innerHTML = 'PlayRange™';
+
+                    $("#playrangeProperties").css('display', 'block');
+                    document.getElementById('playrangeIdentifier').value = (selectedObj.identifier) ? selectedObj.identifier : "";
+                    $('#playrangeIdentifier').prop('disabled', false);
 
                 }
 
@@ -324,15 +329,29 @@ var PropertiesInterface = function (wickEditor) {
     };
 
     $('#frameIdentifier').on('blur', function () {
-        var currentObject = wickEditor.project.currentObject;
-        var currentFrame = wickEditor.project.getCurrentFrame();
+        var selectedObj = wickEditor.project.getSelectedObject();
 
         var newName = $('#frameIdentifier').val();
         if(newName === '') {
-            currentFrame.identifier = undefined;
+            selectedObj.identifier = undefined;
         } else {
-            currentFrame.identifier = newName;
+            selectedObj.identifier = newName;
         }
+
+        wickEditor.project.currentObject.framesDirty = true;
+    });
+
+    $('#playrangeIdentifier').on('blur', function () {
+        var selectedObj = wickEditor.project.getSelectedObject();
+
+        var newName = $('#playrangeIdentifier').val();
+        if(newName === '') {
+            selectedObj.identifier = undefined;
+        } else {
+            selectedObj.identifier = newName;
+        }
+
+        wickEditor.project.currentObject.framesDirty = true;
     });
 
     $('#projectName').on('blur', function () {

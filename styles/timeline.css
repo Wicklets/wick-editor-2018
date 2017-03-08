@@ -362,16 +362,20 @@ body {
 	width: 100px;
 	height: var(--number-line-height);
 
-	background-color: white;
-	opacity: 0.5;
+	background-color: transparent;
 
-	-webkit-box-shadow:inset 0px 0px 0px 3px #ff0;
-    -moz-box-shadow:inset    0px 0px 0px 3px #ff0;
-    box-shadow:inset         0px 0px 0px 3px #ff0;
+	-webkit-box-shadow:inset 0px 0px 0px 2px #ff0;
+    -moz-box-shadow:inset    0px 0px 0px 2px #ff0;
+    box-shadow:inset         0px 0px 0px 2px #ff0;
 }
 
 .playrange-selected {
-	background-color: black;
+	background-color: yellow;
+}
+
+.playrange-label {
+	color: white;
+	margin-left: 20px;	
 }
 
 .playrange-handle {

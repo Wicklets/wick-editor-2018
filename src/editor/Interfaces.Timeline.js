@@ -633,7 +633,6 @@ var TimelineInterface = function (wickEditor) {
             this.elem.style.left = timeline.horizontalScrollBar.scrollAmount+cssVar('--layers-width')+'px';
 
             this.playRanges.forEach(function (playRange) {
-                console.log("Asdasdba")
                 playRange.update();
             });
         }
@@ -688,6 +687,11 @@ var TimelineInterface = function (wickEditor) {
                 e.stopPropagation();
             });
 
+            var label = document.createElement('div');
+            label.className = 'playrange-label'
+            label.innerHTML = this.wickPlayrange.identifier;
+            this.elem.appendChild(label);
+
             var width = this.wickPlayrange.getLength()*cssVar('--frame-width');
             var widthOffset = -2;
             this.elem.style.width = width + widthOffset+'px'
@@ -714,8 +718,6 @@ var TimelineInterface = function (wickEditor) {
         }
 
         this.update = function () {
-            console.log(wickEditor.project.isObjectSelected(this.wickPlayrange));
-
             if(wickEditor.project.isObjectSelected(this.wickPlayrange)) {
                 this.elem.className = 'playrange playrange-selected'
             } else {
