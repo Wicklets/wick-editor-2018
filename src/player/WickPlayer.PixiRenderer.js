@@ -154,6 +154,7 @@ var WickPixiRenderer = function (project, canvasContainer, scale, args) {
 
         }
 
+        if(!pixiObject) return;
         wickToPixiDict[wickObject.uuid] = pixiObject;
 
         if(wickObject.parentObject) {
@@ -177,6 +178,7 @@ var WickPixiRenderer = function (project, canvasContainer, scale, args) {
         //console.log('R ' + wickObject.uuid.substring(0,2));
 
         var pixiObject = wickToPixiDict[wickObject.uuid];
+        if(!pixiObject) return;
 
         pixiObject.visible = true;
         pixiObject.anchor = new PIXI.Point(0.5, 0.5);

@@ -30,6 +30,8 @@ var WickFrame = function () {
 };
     
 WickFrame.prototype.update = function () {
+    //console.log("Frame update() " + this.uuid.substring(0,2))
+
     var wasActiveLastTick = this._active;
     this._active = this.isActive();
 
@@ -41,42 +43,58 @@ WickFrame.prototype.update = function () {
     // Inactive -> Active
     // Frame just became active! It's fresh!
     else if (!wasActiveLastTick && this._active) {
-        console.log("Frame onLoad")
+        console.log("Frame onLoad " + this.uuid.substring(0,2))
         this.runScript('onLoad')
-
-        this.wickObjects.forEach(function (wickObject) {
-            wickObject.update();
-        });
     }
     // Active -> Active
     // Frame is active!
     else if (wasActiveLastTick && this._active) {
-        console.log("Frame onUpdate")
+        console.log("Frame onUpdate " + this.uuid.substring(0,2))
         this.runScript('onUpdate')
-
-        this.wickObjects.forEach(function (wickObject) {
-            wickObject.update();
-        });
     }    
     // Active -> Inactive
     // Frame just stopped being active. Clean up!
     else if (wasActiveLastTick && !this._active) {
         
     }
+
+    this.wickObjects.forEach(function (wickObject) {
+        wickObject.update();
+    });
+}
+
+
+WickFrame.prototype.isActive = function () {
+    var parent = this.parentLayer.parentWickObject;
+    return parent.playheadPosition >= this.playheadPosition
+        && parent.playheadPosition < this.playheadPosition+this.length
+        && parent.isActive();
 }
 
 WickFrame.prototype.runScript = function (fnName) {
+    var objectScope = this.parentLayer.parentWickObject;
+
+    window.project = wickPlayer.project || wickEditor.project;
+    window.root = project.rootObject;
+
+    window.play           = function ()      { objectScope.play(); }
+    window.pause          = function ()      { objectScope.pause(); }
+    window.movePlayheadTo = function (frame) { objectScope.movePlayheadTo(frame); }
+
+    window.stopAllSounds = function () { WickPlayer.getAudioPlayer().stopAllSounds(); };
+    window.keyIsDown = function (keyString) { return wickPlayer.inputHandler.keyIsDown(keyString); };
+    window.keyJustPressed = function (keyString) { return wickPlayer.inputHandler.keyJustPressed(keyString); }
+    window.getMouseX = function () { return WickPlayer.getMouse().x; }
+    window.getMouseY = function () { return WickPlayer.getMouse().y; }
+    window.hideCursor = function () { WickPlayer.hideCursor(); };
+    window.showCursor = function () { WickPlayer.showCursor(); };
+    window.enterFullscreen = function () { WickPlayer.enterFullscreen(); }
+
     try {
         if(this[fnName]) this[fnName]();
     } catch (e) {
         (wickEditor.project || wickPlayer.project).handleWickError(e,this);
     }
-}
-
-WickFrame.prototype.isActive = function () {
-    var parent = this.parentLayer.parentWickObject;
-    return parent.playheadPosition >= this.playheadPosition
-        && parent.playheadPosition <= this.playheadPosition+this.length;
 }
 
 // Extend our frame to encompass more frames. 
