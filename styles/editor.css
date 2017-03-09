@@ -611,6 +611,17 @@ input.propertyInput:focus {
     /* Because for user-select:none, Safari won't allow input */
 }
 
+<<<<<<< HEAD
 .menu {
     background-color: red;
 }
+=======
+.thumbnailPreview {
+	position: absolute;
+	left: 130px;
+	top: 130px;
+	width: 100px;
+	height: 100px;
+	background-color: blue;
+}
+>>>>>>> 21472781e2f8cf96061a1248a2eecef93bcef944

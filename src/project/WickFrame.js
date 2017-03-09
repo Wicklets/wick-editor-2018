@@ -45,13 +45,13 @@ WickFrame.prototype.update = function () {
     // Frame just became active! It's fresh!
     else if (!wasActiveLastTick && this._active) {
         //console.log("Frame onLoad " + this.uuid.substring(0,2))
-        (wickEditor.project || wickPlayer.project).runScript(this, 'onLoad');
+        (wickEditor || wickPlayer).project.runScript(this, 'onLoad');
     }
     // Active -> Active
     // Frame is active!
     else if (wasActiveLastTick && this._active) {
         //console.log("Frame onUpdate " + this.uuid.substring(0,2))
-        (wickEditor.project || wickPlayer.project).runScript(this, 'onUpdate');
+        (wickEditor || wickPlayer).project.runScript(this, 'onUpdate');
     }    
     // Active -> Inactive
     // Frame just stopped being active. Clean up!

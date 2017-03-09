@@ -1041,25 +1041,12 @@ WickObject.prototype.movePlayheadTo = function (frame) {
         // Only navigate to an integer frame if it is nonnegative and a valid frame
         if(actualFrame < endOfFrames) {
             this.playheadPosition = actualFrame;
+            this._playheadMovedThisTick = true;
         } else {
             throw (new Error("Failed to navigate to frame \'" + actualFrame + "\': is not a valid frame."));
         }
 
     } else if (CheckInput.isString(frame)) {
-
-         console.log("string :" + frame); 
-
-        // Search for the frame with the correct identifier and navigate if found
-        /*var foundFrame;
-        this.layers.forEach(function (layer) {
-            var layerFoundFrame = layer.getFrameByIdentifier(frame);
-            if(layerFoundFrame) foundFrame = layerFoundFrame;
-        });
-
-        if(foundFrame)
-            this.playheadPosition = foundFrame.playheadPosition;
-        else
-            throw "Failed to navigate to frame \'" + frame + "\': is not a valid frame.";*/
 
         var foundPlayRange = null;
         this.playRanges.forEach(function (playRange) {
@@ -1071,6 +1058,7 @@ WickObject.prototype.movePlayheadTo = function (frame) {
         if(foundPlayRange) {
             if(this.playheadPosition < foundPlayRange.start || this.playheadPosition >= foundPlayRange.end) {
                 this.playheadPosition = foundPlayRange.start;
+                this._playheadMovedThisTick = true;
             }
         }
 
@@ -1079,25 +1067,6 @@ WickObject.prototype.movePlayheadTo = function (frame) {
         throw "Failed to navigate to frame \'" + frame + "\': is neither a string nor a nonnegative integer";
 
     }
-
-    // if (this.newPlayheadPosition) {
-    //     this.playheadPosition = this.newPlayheadPosition; 
-    // }
-
-    var newFrame = this.getCurrentLayer().getCurrentFrame();
-
-    /*if(newFrame !== oldFrame) {
-        this.onNewFrame = true;
-        if(newFrame && !newFrame.alwaysSaveState) {
-            //this.getAllActiveChildObjects().forEach(function (child) {
-            newFrame.wickObjects.forEach(function (child) {
-                wickPlayer.resetStateOfObject(child);
-            });
-        }
-        this.getAllActiveChildObjects().forEach(function (child) {
-            child.justEnteredFrame = true;
-        });
-    }*/
 
 }
 
@@ -1468,6 +1437,7 @@ WickObject.prototype.getCurrentFrames = function () {
 
 WickObject.prototype.update = function () {
     if(this._deleted) return;
+    this._playheadMovedThisTick = false;
 
     if(this.isSymbol) {
         this.layers.forEach(function (layer) {
@@ -1487,7 +1457,7 @@ WickObject.prototype.update = function () {
     // Inactive -> Active
     else if (!wasActiveLastTick && this._active) {
         //if(!this.isRoot) console.log("WO onLoad " + this.uuid.substring(0,2))
-        (wickEditor.project || wickPlayer.project).runScript(this, 'onLoad');
+        (wickEditor || wickPlayer).project.runScript(this, 'onLoad');
 
         if(this.autoplaySound) {
             this.playSound();
@@ -1496,9 +1466,9 @@ WickObject.prototype.update = function () {
     // Active -> Active
     else if (wasActiveLastTick && this._active) {
         //if(!this.isRoot) console.log("WO onUpdate " + this.uuid.substring(0,2))
-        (wickEditor.project || wickPlayer.project).runScript(this, 'onUpdate');
+        (wickEditor || wickPlayer).project.runScript(this, 'onUpdate');
 
-        if(this._playing && this.isSymbol) {
+        if(this._playing && this.isSymbol && !this._playheadMovedThisTick) {
             this.playheadPosition++;
             if(this.playheadPosition >= this.getTotalTimelineLength()) {
                 this.playheadPosition = 0;
