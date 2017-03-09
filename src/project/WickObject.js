@@ -1027,7 +1027,6 @@ WickObject.prototype.play = function () {
 WickObject.prototype.pause = function () {
 
     this._playing = false;
-    this.newPlayheadPosition = this.playheadPosition;
 }
 
 WickObject.prototype.movePlayheadTo = function (frame) {
@@ -1461,7 +1460,7 @@ WickObject.prototype.update = function () {
     }
 
     var wasActiveLastTick = this._active;
-    this._active = this._newActiveState;
+    this._active = this.isActive();
 
     // Inactive -> Inactive
     if (!wasActiveLastTick && !this._active) {
@@ -1480,12 +1479,25 @@ WickObject.prototype.update = function () {
     else if (wasActiveLastTick && this._active) {
         //if(!this.isRoot) console.log("WO onUpdate " + this.uuid.substring(0,2))
         this.runScript('onUpdate');
+
+        if(this._playing && this.isSymbol) {
+            this.playheadPosition++;
+            if(this.playheadPosition >= this.getTotalTimelineLength()) {
+                this.playheadPosition = 0;
+            }
+        }
     }    
     // Active -> Inactive
     else if (wasActiveLastTick && !this._active) {
         
     }
 
+}
+
+WickObject.prototype.isActive = function () {
+    if(this.isRoot) return true;
+
+    return this.parentFrame.isActive();
 }
 
 WickObject.prototype.runScript = function (fnName) {
@@ -1499,14 +1511,14 @@ WickObject.prototype.runScript = function (fnName) {
     window.pause          = function ()      { objectScope.pause(); }
     window.movePlayheadTo = function (frame) { objectScope.movePlayheadTo(frame); }
 
-    window.stopAllSounds = function () { WickPlayer.getAudioPlayer().stopAllSounds(); };
+    window.stopAllSounds = function () { wickPlayer.getAudioPlayer().stopAllSounds(); };
     window.keyIsDown = function (keyString) { return wickPlayer.inputHandler.keyIsDown(keyString); };
     window.keyJustPressed = function (keyString) { return wickPlayer.inputHandler.keyJustPressed(keyString); }
-    window.getMouseX = function () { return WickPlayer.getMouse().x; }
-    window.getMouseY = function () { return WickPlayer.getMouse().y; }
-    window.hideCursor = function () { WickPlayer.hideCursor(); };
-    window.showCursor = function () { WickPlayer.showCursor(); };
-    window.enterFullscreen = function () { WickPlayer.enterFullscreen(); }
+    window.getMouseX = function () { return wickPlayer.getMouse().x; }
+    window.getMouseY = function () { return wickPlayer.getMouse().y; }
+    window.hideCursor = function () { wickPlayer.hideCursor(); };
+    window.showCursor = function () { wickPlayer.showCursor(); };
+    window.enterFullscreen = function () { wickPlayer.enterFullscreen(); }
 
     // WickObjects in same frame (scope) are accessable without using root./parent.
     if(objectScope) {

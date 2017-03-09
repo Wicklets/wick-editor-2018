@@ -34,7 +34,7 @@ WickFrame.prototype.update = function () {
     //console.log("Frame update() " + this.uuid.substring(0,2))
 
     var wasActiveLastTick = this._active;
-    this._active = this._newActiveState;
+    this._active = this.isActive();
 
     // Inactive -> Inactive
     // Do nothing, frame is still inactive
@@ -68,7 +68,8 @@ WickFrame.prototype.update = function () {
 WickFrame.prototype.isActive = function () {
     var parent = this.parentLayer.parentWickObject;
     return parent.playheadPosition >= this.playheadPosition
-        && parent.playheadPosition < this.playheadPosition+this.length;
+        && parent.playheadPosition < this.playheadPosition+this.length
+        && parent.isActive();
 }
 
 WickFrame.prototype.runScript = function (fnName) {
@@ -81,14 +82,14 @@ WickFrame.prototype.runScript = function (fnName) {
     window.pause          = function ()      { objectScope.pause(); }
     window.movePlayheadTo = function (frame) { objectScope.movePlayheadTo(frame); }
 
-    window.stopAllSounds = function () { WickPlayer.getAudioPlayer().stopAllSounds(); };
+    window.stopAllSounds = function () { wickPlayer.getAudioPlayer().stopAllSounds(); };
     window.keyIsDown = function (keyString) { return wickPlayer.inputHandler.keyIsDown(keyString); };
     window.keyJustPressed = function (keyString) { return wickPlayer.inputHandler.keyJustPressed(keyString); }
-    window.getMouseX = function () { return WickPlayer.getMouse().x; }
-    window.getMouseY = function () { return WickPlayer.getMouse().y; }
-    window.hideCursor = function () { WickPlayer.hideCursor(); };
-    window.showCursor = function () { WickPlayer.showCursor(); };
-    window.enterFullscreen = function () { WickPlayer.enterFullscreen(); }
+    window.getMouseX = function () { return wickPlayer.getMouse().x; }
+    window.getMouseY = function () { return wickPlayer.getMouse().y; }
+    window.hideCursor = function () { wickPlayer.hideCursor(); };
+    window.showCursor = function () { wickPlayer.showCursor(); };
+    window.enterFullscreen = function () { wickPlayer.enterFullscreen(); }
 
     try {
         if(this[fnName]) this[fnName]();
