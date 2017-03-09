@@ -441,8 +441,9 @@ select {
 }
 
 .propertyInputLarge {
-    width: 128px; 
+    width: 120px; 
     height: 17px; 
+    margin:0 auto; 
 }
 
 
