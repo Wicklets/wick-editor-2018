@@ -3,7 +3,7 @@ var WickPlayRange = function (start, end, identifier, color) {
 	this.start = start;  
 	this.end = end; 
 	this.identifier = identifier;	
-	this.color = color || 'green';
+	this.color = color || '#7E4FFF';
 	this.uuid = random.uuid4();
 
 }

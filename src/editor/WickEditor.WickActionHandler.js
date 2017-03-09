@@ -719,16 +719,39 @@ var WickActionHandler = function (wickEditor) {
         });
 
     registerAction('addPlayRange',
-        function (args) {
-            wickEditor.project.getCurrentObject().addPlayRange(args.playRange)
+        function (args) {          
+            var currentObject = wickEditor.project.getCurrentObject(); 
+            
+            var playRanges = currentObject.getPlayRanges(); 
+        
+            for (var i=0; i < playRanges.length; i++) {
+                oldPlayRange = playRanges[i]; 
 
-            wickEditor.project.currentObject.framesDirty = true;
+                newStart = args.playRange.getStart(); 
+                oldStart = oldPlayRange.getStart(); 
+                oldEnd = oldPlayRange.getEnd(); 
+
+                // This playRange overlaps with an old one. 
+                if (newStart >= oldStart && newStart < oldEnd) { 
+                    args.playRange = null; 
+                    break
+                } 
+                
+            }
+        
+            if (args.playRange) {
+                currentObject.addPlayRange(args.playRange); 
+                wickEditor.project.currentObject.framesDirty = true;
+            }
+        
             done();
         },
         function (args) {
-            wickEditor.project.getCurrentObject().removePlayRange(args.playRange)
-
-            wickEditor.project.currentObject.framesDirty = true;
+            if (args.playRange) {
+                wickEditor.project.getCurrentObject().removePlayRange(args.playRange)
+                wickEditor.project.currentObject.framesDirty = true;
+            }
+            
             done();
         });
 

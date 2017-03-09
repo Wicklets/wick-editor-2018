@@ -990,6 +990,12 @@ WickObject.prototype.isOnActiveLayer = function (activeLayer) {
 
 }
 
+WickObject.prototype.getPlayRanges = function () {
+    if (!this.isSymbol) {return;}
+    
+    return this.playRanges; 
+}
+
 WickObject.prototype.play = function () {
 
     this._playing = true;
