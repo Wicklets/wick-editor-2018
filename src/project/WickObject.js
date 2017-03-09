@@ -1482,7 +1482,7 @@ WickObject.prototype.update = function () {
     }    
     // Active -> Inactive
     else if (wasActiveLastTick && !this._active) {
-        
+        wickPlayer.resetStateOfObject(this)
     }
 
 }

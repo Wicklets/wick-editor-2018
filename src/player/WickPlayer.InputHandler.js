@@ -145,7 +145,8 @@ WickPlayerInputHandler = function (wickPlayer, canvasContainer) {
 
         project.rootObject.getAllActiveChildObjects().forEach(function(child) {
             if(child.isPointInside(touchPos) && child.isClickable()) {
-                project.runScript(child, "onClick");
+                //project.runScript(child, "onClick");
+                child._wasClicked = true;
             }
         });
 

@@ -560,7 +560,7 @@ var TimelineInterface = function (wickEditor) {
         }
 
         this.update = function () {
-            head.style.left = -that.scrollAmount + cssVar('--scrollbar-thickness') + 'px';
+            head.style.marginLeft = -that.scrollAmount + cssVar('--scrollbar-thickness') + 'px';
         }
 
         this.scroll = function (scrollAmt) {
@@ -616,7 +616,7 @@ var TimelineInterface = function (wickEditor) {
             this.elem.style.display = nLayers > 3 ? 'block' : 'none';
 
             head.style.height = parseInt(timeline.elem.style.height)/4 + 'px';
-            head.style.top = -that.scrollAmount + cssVar('--scrollbar-thickness') + cssVar('--number-line-height') + 'px';
+            head.style.marginTop = -that.scrollAmount + cssVar('--scrollbar-thickness') + cssVar('--number-line-height') + 'px';
         }
 
         this.scroll = function (scrollAmt) {

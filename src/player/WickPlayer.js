@@ -143,6 +143,8 @@ var WickPlayer = function () {
         var initialStateObject = initialStateProject.getObjectByUUID(wickObject.uuid);
         if(!initialStateObject) return;
 
+        console.log("RESET DA BOY!")
+
         // TOXXXIC
         //console.log("-------------");
         var blacklist = ['alphaMask', 'pixiSprite', 'pixiContainer', 'pixiText', 'imageData', 'audioData', 'wickScripts', 'parentObject', 'layers'];
