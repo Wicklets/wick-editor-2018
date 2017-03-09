@@ -69,6 +69,10 @@ body {
 
 .layer {
 	background-color: #2E9DF4;
+    background-image: url(/resources/layerhandle.png);
+    background-repeat: no-repeat;
+    background-position: left center;
+    
     
 	width:  calc(100% - 10px);
 	height: calc(var(--layer-height) - 5px);
@@ -258,7 +262,7 @@ body {
 	right: var(--scrollbar-thickness);
 	width: calc(100% - var(--layers-width) - var(--scrollbar-thickness));
 	height: var(--scrollbar-thickness);
-/*    margin-right: 10px;*/
+    
 
 }
 
@@ -397,4 +401,22 @@ body {
 .playrange-handle-right {
 	right: 0px;
 	top: 0px;
+}
+
+.hide-number-line-piece {
+	position: absolute;
+	width: var(--layers-width);
+	height: var(--number-line-height);
+	top: 0px;
+	left: 0px;
+	background-color: #585757;
+}
+
+.hide-layers-piece {
+	position: absolute;
+	width: var(--layers-width);
+	height: var(--scrollbar-thickness);
+	bottom: 0px;
+	left: 0px;
+	background-color: #585757;
 }

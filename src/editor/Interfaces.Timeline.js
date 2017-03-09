@@ -77,14 +77,22 @@ var TimelineInterface = function (wickEditor) {
             this.layersContainer.build();
             this.elem.appendChild(this.layersContainer.elem);
 
+            this.numberLine.build();
+            this.elem.appendChild(this.numberLine.elem);
+
+            var hideNumberlinePiece = document.createElement('div');
+            hideNumberlinePiece.className = 'hide-number-line-piece';
+            this.elem.appendChild(hideNumberlinePiece);
+            
+            var hideLayersPiece = document.createElement('div');
+            hideLayersPiece.className = 'hide-layers-piece';
+            this.elem.appendChild(hideLayersPiece);
+
             this.horizontalScrollBar.build();
             this.elem.appendChild(this.horizontalScrollBar.elem);
 
             this.verticalScrollBar.build();
             this.elem.appendChild(this.verticalScrollBar.elem);
-
-            this.numberLine.build();
-            this.elem.appendChild(this.numberLine.elem);
         }
         
         this.rebuild = function () {
@@ -220,7 +228,7 @@ var TimelineInterface = function (wickEditor) {
 
                     var newFrameWidth = currentFrameWidth + delta * 3;
                     newFrameWidth = Math.min(newFrameWidth, 100)
-                    newFrameWidth = Math.max(newFrameWidth, 20)
+                    newFrameWidth = Math.max(newFrameWidth, 30)
 
                     document.body.style.setProperty('--frame-width', newFrameWidth+'px');
 

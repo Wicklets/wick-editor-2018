@@ -1510,6 +1510,8 @@ WickObject.prototype.update = function () {
 }
 
 WickObject.prototype.runScript = function (fnName) {
+    
+    
     try {
         if(this[fnName]) this[fnName]();
     } catch (e) {

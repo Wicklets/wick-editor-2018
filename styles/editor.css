@@ -430,6 +430,10 @@ letter-spacing: 0.32px;
     border-radius:5px;
 }
 
+.toolbarButtonActive {
+	background-color: #FF3333;
+}
+
 .button {
 	padding: 4px;
 }

@@ -13,7 +13,6 @@ var ToolbarInterface = function (wickEditor) {
             var tool = wickEditor.tools[toolName];
 
             var toolDiv = document.createElement('div');
-            toolDiv.className = "button toolbarButton tooltipElem";
             toolDiv.id = toolName + "ToolButton";
             toolDiv.setAttribute('alt', tool.getTooltipName());
 
@@ -52,16 +51,11 @@ var ToolbarInterface = function (wickEditor) {
 
         /* Highlight select tool, unhighlight all other tools */
         for (toolName in wickEditor.tools) {
-            var buttonClassName = '#' + toolName + 'ToolButton';
+            var buttonClassName = toolName + 'ToolButton';
             if (wickEditor.tools[toolName] === wickEditor.currentTool) {
-                //$(buttonClassName).css('outline', '1px solid #ccc');
-                //$(buttonClassName).css('box-sizing', 'border-box');
-                //$(buttonClassName).css('-moz-box-sizing', 'border-box');
-                //$(buttonClassName).css('-webkit-box-sizing', 'border-box');
-                $(buttonClassName).css('background-color', '#ff8080');
+                document.getElementById(buttonClassName).className = "button toolbarButton tooltipElem toolbarButtonActive"
             } else {
-                //$(buttonClassName).css('outline', '');
-                $(buttonClassName).css('background-color', '');
+                document.getElementById(buttonClassName).className = "button toolbarButton tooltipElem"
             }
         };
 
