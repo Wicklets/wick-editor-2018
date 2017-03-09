@@ -157,7 +157,7 @@ var PropertiesInterface = function (wickEditor) {
 
             document.getElementById('projectSizeX').value          = wickEditor.project.width;
             document.getElementById('projectSizeY').value          = wickEditor.project.height;
-            document.getElementById('frameRate').value             = wickEditor.project.framerate;
+            document.getElementById('framerate').value             = wickEditor.project.framerate;
             document.getElementById('projectName').value           = wickEditor.project.name;
 
             document.getElementById("onionSkinningCheckbox").checked = wickEditor.project.onionSkinning;
@@ -385,10 +385,10 @@ var PropertiesInterface = function (wickEditor) {
 
     });
 
-    $('#frameRate').on('blur', function () {
+    $('#framerate').on('blur', function () {
 
-        if(CheckInput.isPositiveInteger($('#frameRate').val())) {
-            wickEditor.project.framerate = parseInt($('#frameRate').val());
+        if(CheckInput.isPositiveInteger($('#framerate').val())) {
+            wickEditor.project.framerate = parseInt($('#framerate').val());
         }
 
     });
