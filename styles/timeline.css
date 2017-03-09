@@ -25,7 +25,7 @@ body {
 
     --frames-cell-first-padding: 5px;
 
-    --scrollbar-thickness: 17px;
+    --scrollbar-thickness: 14px;
 
     --number-line-height: 23px;
 }
@@ -320,7 +320,6 @@ body {
 
 .scrollbar-head {
 	cursor: pointer;
-	position: absolute;
 	background-color: #FAFAFA;
     left: 0px;
 	top: 0px;
@@ -335,7 +334,7 @@ body {
 
 .scrollbar-head-vertical {
 	width: calc(var(--scrollbar-thickness) - 4px);
-    margin-left: 2px;
+    margin: 0 auto;
 	/* Height depends on number of layers */ 
 }
 
