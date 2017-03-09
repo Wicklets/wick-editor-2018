@@ -274,6 +274,7 @@ var WickActionHandler = function (wickEditor) {
 
             args.restoredPlayRanges.forEach(function (restorePlayRange) {
                 wickEditor.project.getCurrentObject().addPlayRange(restorePlayRange);
+                wickEditor.project.currentObject.framesDirty = true;
             });
 
             args.restoredFrames.forEach(function (restoreFrame) {
