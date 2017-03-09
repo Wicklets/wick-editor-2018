@@ -68,6 +68,29 @@ body {
 	box-shadow: var(--border);
 }
 
+.layer-tools-button {
+	position: absolute;
+
+	top: 0px;
+	left: 0px;
+
+	width: var(--scrollbar-thickness);
+	height: var(--scrollbar-thickness);
+
+	background-color: blue;
+	color: white;
+
+	cursor: pointer;
+}
+
+.add-layer-button {
+
+}
+
+.delete-layer-button {
+	left: calc(var(--scrollbar-thickness) + 5px);
+}
+
 .layer {
 	background-color: #4a6588;
     background-image: url(/resources/layerhandle.svg);

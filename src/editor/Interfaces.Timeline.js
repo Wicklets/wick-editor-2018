@@ -88,6 +88,20 @@ var TimelineInterface = function (wickEditor) {
             hideLayersPiece.className = 'layer-toolbar';
             this.elem.appendChild(hideLayersPiece);
 
+            var addLayerButton = document.createElement('div');
+            addLayerButton.className = 'layer-tools-button add-layer-button';
+            addLayerButton.addEventListener('mousedown', function (e) {
+                wickEditor.guiActionHandler.doAction('addLayer');
+            });
+            hideLayersPiece.appendChild(addLayerButton);
+
+            var deleteLayerButton = document.createElement('div');
+            deleteLayerButton.className = 'layer-tools-button delete-layer-button';
+            deleteLayerButton.addEventListener('mousedown', function (e) {
+                wickEditor.guiActionHandler.doAction('removeLayer');
+            });
+            hideLayersPiece.appendChild(deleteLayerButton);
+
             this.horizontalScrollBar.build();
             this.elem.appendChild(this.horizontalScrollBar.elem);
 
