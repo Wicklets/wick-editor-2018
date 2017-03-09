@@ -32,6 +32,8 @@ var BuiltinPlayerInterface = function (wickEditor) {
         hideBuiltinPlayer();
         that.running = false;
         wickPlayer.stopRunningProject();
+        wickEditor.thumbnailRenderer.cleanup()
+        wickEditor.thumbnailRenderer.setup()
     }
 
 // Internal utils

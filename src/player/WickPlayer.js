@@ -67,16 +67,17 @@ var WickPlayer = function () {
 
         if(stopDrawLoop) return;
 
-        console.log(" ")
-        console.log("PLAYER TICK " + tick)
-        tick++;
-
         if(self.project.framerate < 60) {
             setTimeout(function() {
 
                 if(!stopDrawLoop) {
+
+                    /*console.log(" ")
+                    console.log("PLAYER TICK " + tick)*/
+                    tick++;
+
                     
-                    self.project.rootObject.update();
+                    self.project.update();
                     //self.project.rootObject.applyTweens();
                     self.renderer.render(self.project.rootObject.getAllActiveChildObjects());
                     update();
@@ -90,7 +91,7 @@ var WickPlayer = function () {
             if(!stopDrawLoop) {
                 requestAnimationFrame(update);
             }
-            self.project.rootObject.update();
+            self.project.update();
             //self.project.rootObject.applyTweens();
             self.renderer.render(self.project.rootObject.getAllActiveChildObjects());
             self.inputHandler.update();

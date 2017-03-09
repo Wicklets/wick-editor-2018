@@ -30,10 +30,11 @@ var WickFrame = function () {
 };
     
 WickFrame.prototype.update = function () {
+    var self = this;
     //console.log("Frame update() " + this.uuid.substring(0,2))
 
     var wasActiveLastTick = this._active;
-    this._active = this.isActive();
+    this._active = this._newActiveState;
 
     // Inactive -> Inactive
     // Do nothing, frame is still inactive
@@ -43,13 +44,13 @@ WickFrame.prototype.update = function () {
     // Inactive -> Active
     // Frame just became active! It's fresh!
     else if (!wasActiveLastTick && this._active) {
-        console.log("Frame onLoad " + this.uuid.substring(0,2))
+        //console.log("Frame onLoad " + this.uuid.substring(0,2))
         this.runScript('onLoad')
     }
     // Active -> Active
     // Frame is active!
     else if (wasActiveLastTick && this._active) {
-        console.log("Frame onUpdate " + this.uuid.substring(0,2))
+        //console.log("Frame onUpdate " + this.uuid.substring(0,2))
         this.runScript('onUpdate')
     }    
     // Active -> Inactive
@@ -59,7 +60,7 @@ WickFrame.prototype.update = function () {
     }
 
     this.wickObjects.forEach(function (wickObject) {
-        wickObject.update();
+        wickObject.update(self._active);
     });
 }
 
@@ -67,8 +68,7 @@ WickFrame.prototype.update = function () {
 WickFrame.prototype.isActive = function () {
     var parent = this.parentLayer.parentWickObject;
     return parent.playheadPosition >= this.playheadPosition
-        && parent.playheadPosition < this.playheadPosition+this.length
-        && parent.isActive();
+        && parent.playheadPosition < this.playheadPosition+this.length;
 }
 
 WickFrame.prototype.runScript = function (fnName) {

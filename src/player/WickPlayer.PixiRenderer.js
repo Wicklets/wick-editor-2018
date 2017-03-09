@@ -273,7 +273,8 @@ var WickPixiRenderer = function (project, canvasContainer, scale, args) {
         view = null;
 
         for (var textureId in PIXI.utils.TextureCache) {
-            //PIXI.utils.BaseTextureCache[textureId].destroy(true);
+            //console.log(textureId)
+            PIXI.utils.BaseTextureCache[textureId].destroy(true);
         }
     }
 

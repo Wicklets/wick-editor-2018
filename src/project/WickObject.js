@@ -727,7 +727,7 @@ WickObject.prototype.getAllChildObjectsRecursive = function () {
         return [this];
     }
 
-    var children = [];
+    /*var children = [];
     for(var l = this.layers.length-1; l >= 0; l--) {
         var layer = this.layers[l];
         for(var f = 0; f < layer.frames.length; f++) {
@@ -738,6 +738,16 @@ WickObject.prototype.getAllChildObjectsRecursive = function () {
             }
         }
     }
+    return children;*/
+
+    var children = [this];
+    this.layers.forEach(function (layer) {
+        layer.frames.forEach(function (frame) {
+            frame.wickObjects.forEach(function (wickObject) {
+                children = children.concat(wickObject.getAllChildObjectsRecursive());
+            });
+        });
+    });
     return children;
 }
 
@@ -748,7 +758,7 @@ WickObject.prototype.getAllActiveChildObjectsRecursive = function (includeParent
         return [];
     }
 
-    var children = [];
+    /*var children = [];
     for (var l = this.layers.length-1; l >= 0; l--) {
         var frame = this.layers[l].getFrameAtPlayheadPosition(this.playheadPosition);
         if(frame) {
@@ -759,7 +769,20 @@ WickObject.prototype.getAllActiveChildObjectsRecursive = function (includeParent
             }
         }
     }
+    return children;*/
+
+    var children = [];
+    if(includeParents) children = [this];
+    this.layers.forEach(function (layer) {
+        layer.frames.forEach(function (frame) {
+            if(!frame.isActive()) return;
+            frame.wickObjects.forEach(function (wickObject) {
+                children = children.concat(wickObject.getAllChildObjectsRecursive());
+            });
+        });
+    });
     return children;
+
 }
 
 /* Return all child objects in the parent objects current layer. */
@@ -1004,6 +1027,7 @@ WickObject.prototype.play = function () {
 WickObject.prototype.pause = function () {
 
     this._playing = false;
+    this.newPlayheadPosition = this.playheadPosition;
 }
 
 WickObject.prototype.movePlayheadTo = function (frame) {
@@ -1017,7 +1041,7 @@ WickObject.prototype.movePlayheadTo = function (frame) {
 
         // Only navigate to an integer frame if it is nonnegative and a valid frame
         if(actualFrame < this.getCurrentLayer().frames.length) {
-            this.playheadPosition = actualFrame;
+            this.newPlayheadPosition = actualFrame;
         } else {
             throw (new Error("Failed to navigate to frame \'" + actualFrame + "\': is not a valid frame."));
         }
@@ -1045,7 +1069,7 @@ WickObject.prototype.movePlayheadTo = function (frame) {
 
         if(foundPlayRange) {
             if(this.playheadPosition < foundPlayRange.start || this.playheadPosition >= foundPlayRange.end) {
-                this.playheadPosition = foundPlayRange.start;
+                this.newPlayheadPosition = foundPlayRange.start;
             }
         }
 
@@ -1057,7 +1081,7 @@ WickObject.prototype.movePlayheadTo = function (frame) {
 
     var newFrame = this.getCurrentLayer().getCurrentFrame();
 
-    if(newFrame !== oldFrame) {
+    /*if(newFrame !== oldFrame) {
         this.onNewFrame = true;
         if(newFrame && !newFrame.alwaysSaveState) {
             //this.getAllActiveChildObjects().forEach(function (child) {
@@ -1068,7 +1092,7 @@ WickObject.prototype.movePlayheadTo = function (frame) {
         this.getAllActiveChildObjects().forEach(function (child) {
             child.justEnteredFrame = true;
         });
-    }
+    }*/
 
 }
 
@@ -1425,8 +1449,6 @@ WickObject.prototype.getCurrentFrames = function () {
 }
 
 WickObject.prototype.update = function () {
-    //console.log("WO update() " + this.uuid.substring(0,2))
-
     if(this._deleted) return;
 
     if(this.isSymbol) {
@@ -1438,7 +1460,7 @@ WickObject.prototype.update = function () {
     }
 
     var wasActiveLastTick = this._active;
-    this._active = this.isActive();
+    this._active = this._newActiveState;
 
     // Inactive -> Inactive
     if (!wasActiveLastTick && !this._active) {
@@ -1446,7 +1468,7 @@ WickObject.prototype.update = function () {
     }
     // Inactive -> Active
     else if (!wasActiveLastTick && this._active) {
-        if(!this.isRoot) console.log("WO onLoad " + this.uuid.substring(0,2))
+        //if(!this.isRoot) console.log("WO onLoad " + this.uuid.substring(0,2))
         this.runScript('onLoad');
 
         if(this.autoplaySound) {
@@ -1455,26 +1477,14 @@ WickObject.prototype.update = function () {
     }
     // Active -> Active
     else if (wasActiveLastTick && this._active) {
-        if(!this.isRoot) console.log("WO onUpdate " + this.uuid.substring(0,2))
+        //if(!this.isRoot) console.log("WO onUpdate " + this.uuid.substring(0,2))
         this.runScript('onUpdate');
-
-        if(this._playing && this.isSymbol) {
-            this.playheadPosition ++;
-            if(this.playheadPosition >= this.getTotalTimelineLength()) {
-                this.playheadPosition = 0;
-            }
-        }
     }    
     // Active -> Inactive
     else if (wasActiveLastTick && !this._active) {
         
     }
 
-}
-
-WickObject.prototype.isActive = function () {
-    if(!this.parentFrame) return true; // root object always active of course
-    return this.parentFrame._active;
 }
 
 WickObject.prototype.runScript = function (fnName) {

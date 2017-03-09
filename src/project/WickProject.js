@@ -560,3 +560,46 @@ WickProject.prototype.deselectObjectType = function (type) {
 
     return deselectionHappened;
 }
+
+WickProject.prototype.update = function () {
+    //set all objects _newActiveState to false
+    var allObjectsInProject = this.rootObject.getAllChildObjectsRecursive();
+    //console.log('inactive objs')
+    allObjectsInProject.forEach(function (obj) {
+        //console.log(obj.uuid.substring(0,4));
+        obj._newActiveState = false;
+
+        if(obj.isSymbol) {
+            obj.layers.forEach(function (layer) {
+                layer.frames.forEach(function (frame) {
+                    frame._newActiveState = frame.isActive();
+                });
+            });
+        }
+
+        if(obj.newPlayheadPosition !== undefined) {
+            obj.playheadPosition = obj.newPlayheadPosition;
+        }
+
+        if(obj._playing && obj.isSymbol) {
+            obj.newPlayheadPosition = obj.playheadPosition + 1;
+            if(obj.newPlayheadPosition >= obj.getTotalTimelineLength()) {
+                obj.newPlayheadPosition = 0;
+            }
+        } else {
+            obj.newPlayheadPosition = obj.playheadPosition;
+        }
+    });
+
+    //set active objects _newActiveState to true
+    //console.log("active objs")
+    var allActiveObjectsInProject = this.rootObject.getAllActiveChildObjectsRecursive(true);
+    allActiveObjectsInProject.forEach(function (obj) {
+        //console.log(obj.uuid.substring(0,4));
+        obj._newActiveState = true;
+    });
+
+    //console.log(" ")
+
+    this.rootObject.update();
+}
