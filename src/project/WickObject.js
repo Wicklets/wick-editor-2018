@@ -1031,10 +1031,14 @@ WickObject.prototype.pause = function () {
 
 WickObject.prototype.movePlayheadTo = function (frame) {
 
+    console.log("WE'RE MOVING");
+
     var oldFrame = this.getCurrentLayer().getCurrentFrame();
 
     // Frames are zero-indexed internally but start at one in the editor GUI, so you gotta subtract 1.
     if (CheckInput.isNonNegativeInteger(frame) && frame !== 0) {
+
+        console.log("number : " + frame); 
 
         var actualFrame = frame-1;
 
@@ -1046,6 +1050,8 @@ WickObject.prototype.movePlayheadTo = function (frame) {
         }
 
     } else if (CheckInput.isString(frame)) {
+
+         console.log("string"); 
 
         // Search for the frame with the correct identifier and navigate if found
         /*var foundFrame;
@@ -1077,6 +1083,10 @@ WickObject.prototype.movePlayheadTo = function (frame) {
         throw "Failed to navigate to frame \'" + frame + "\': is neither a string nor a nonnegative integer";
 
     }
+
+    // if (this.newPlayheadPosition) {
+    //     this.playheadPosition = this.newPlayheadPosition; 
+    // }
 
     var newFrame = this.getCurrentLayer().getCurrentFrame();
 
@@ -1491,6 +1501,12 @@ WickObject.prototype.update = function () {
     else if (wasActiveLastTick && !this._active) {
         
     }
+
+    if (this.newPlayheadPosition) { 
+        this.playheadPosition = this.newPlayheadPosition;
+    }
+
+    this.newPlayheadPosition = undefined; 
 
 }
 
