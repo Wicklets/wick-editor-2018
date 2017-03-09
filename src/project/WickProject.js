@@ -476,6 +476,33 @@ WickProject.prototype.hasSyntaxErrors = function () {
 
 }
 
+WickProject.prototype.handleWickError = function (e, objectCausedError) {
+    if (window.wickEditor) {
+        //if(!wickEditor.builtinplayer.running) return;
+
+        console.error("Exception thrown while running script of WickObject: " + this.name);
+        console.error(e);
+        var lineNumber = null;
+        if(e.stack) {
+            e.stack.split('\n').forEach(function (line) {
+                if(lineNumber) return;
+                if(!line.includes("<anonymous>:")) return;
+
+                lineNumber = parseInt(line.split("<anonymous>:")[1].split(":")[0]);
+            });
+        }
+
+        //console.log(e.stack.split("\n")[1].split('<anonymous>:')[1].split(":")[0]);
+        //console.log(e.stack.split("\n"))
+        if(wickEditor.builtinplayer.running) wickEditor.builtinplayer.stopRunningProject()
+        wickEditor.scriptingide.showError(objectCausedError, lineNumber, e);
+
+    } else {
+        alert("An exception was thrown while running a WickObject script. See console!");
+        console.log(e);
+    }
+}
+
 WickProject.prototype.isObjectSelected = function (obj) {
     var selected = false;
 

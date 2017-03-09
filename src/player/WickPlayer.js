@@ -15,9 +15,12 @@ var WickPlayer = function () {
     var initialStateProject;
     var stopDrawLoop;
 
+    var tick;
+
 
     self.runProject = function (projectJSON, canvasContainer) {
 
+        tick = 1;
         stopDrawLoop = false;
 
         self.canvasContainer = canvasContainer;
@@ -38,7 +41,7 @@ var WickPlayer = function () {
         self.renderer.setup();
         self.renderer.refresh(self.project.rootObject);
 
-        animate();
+        update();
 
         var preloader = new WickPreloader();
 
@@ -60,9 +63,13 @@ var WickPlayer = function () {
         self.renderer.enterFullscreen();
     }
 
-    var animate = function () {
+    var update = function () {
 
         if(stopDrawLoop) return;
+
+        console.log(" ")
+        console.log("PLAYER TICK " + tick)
+        tick++;
 
         if(self.project.framerate < 60) {
             setTimeout(function() {
@@ -70,21 +77,21 @@ var WickPlayer = function () {
                 if(!stopDrawLoop) {
                     
                     self.project.rootObject.update();
-                    self.project.rootObject.applyTweens();
+                    //self.project.rootObject.applyTweens();
                     self.renderer.render(self.project.rootObject.getAllActiveChildObjects());
-                    animate();
+                    update();
                     self.inputHandler.update();
-                    //requestAnimationFrame(animate);
+                    //requestAnimationFrame(update);
                 }
             }, 1000 / self.project.framerate);
 
         } else {
 
             if(!stopDrawLoop) {
-                requestAnimationFrame(animate);
+                requestAnimationFrame(update);
             }
             self.project.rootObject.update();
-            self.project.rootObject.applyTweens();
+            //self.project.rootObject.applyTweens();
             self.renderer.render(self.project.rootObject.getAllActiveChildObjects());
             self.inputHandler.update();
 
@@ -116,7 +123,7 @@ var WickPlayer = function () {
     self.deleteObject = function (wickObj) {
         //project.currentObject.removeChildByID(wickObj.id);
         // So for now don't actually delete it, just make it go away somehow cos i'm lazy
-        wickObj.deleted = true;
+        wickObj._deleted = true;
         // JUST GET IT OUTTA HERE I DONT CARE ................. 
         // it's like 8am pls forgive me for this
         wickObj.x = 80608060 + Math.random()*10000;
@@ -149,11 +156,8 @@ var WickPlayer = function () {
         }
         
         wickObject.hoveredOver = false;
-        wickObject.justEnteredFrame = true;
-        wickObject.onNewFrame = true;
-        wickObject.onLoadScriptRan = false;
         wickObject.playheadPosition = 0;
-        wickObject.isPlaying = true;
+        wickObject._playing = true;
 
         // Don't forget to reset the childrens states
         if(wickObject.isSymbol) {

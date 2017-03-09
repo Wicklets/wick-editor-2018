@@ -6,10 +6,14 @@ WickPlayerInputHandler = function (wickPlayer, canvasContainer) {
     var keys;
     var keysJustPressed; 
 
+    var project;
+
     self.setup = function () {
         mouse = { x : 0, y : 0 };
         keys = [];
         keysJustPressed = [];
+
+        project = wickPlayer.project;
 
         if(bowser.mobile || bowser.tablet) {
             // Touch event (one touch = like a mouse click)
