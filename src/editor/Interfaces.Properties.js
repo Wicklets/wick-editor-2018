@@ -125,7 +125,7 @@ var PropertiesInterface = function (wickEditor) {
                 } else if (selectedObj instanceof WickPlayRange) {
 
                     objectTypeIcon.src = 'resources/gearbox.png';
-                    objectTypeName.innerHTML = 'PlayRange™';
+                    objectTypeName.innerHTML = 'PlayRange';
 
                     $("#playrangeProperties").css('display', 'block');
                     document.getElementById('playrangeIdentifier').value = (selectedObj.identifier) ? selectedObj.identifier : "";
