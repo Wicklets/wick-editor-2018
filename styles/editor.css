@@ -34,9 +34,6 @@ hr {
     margin: 2px;
 }
 
-#editObjectButtonProperties {
-    margin-top: 12px;
-}
 #editor {
 	display: block;
 	width: 100%;
@@ -72,77 +69,6 @@ select {
 
 	border: 1px solid #878787;
 
-}
-
-#projectName {
-    /* card: */
-background: #FAFAFA;
-/* Sketch doesnt export gradient borders at this point */
-/* Sketch doesnt export gradient borders at this point */
-box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
-border-radius: 2px;
-/* 232.5: */
-font-family: Roboto-Regular;
-font-size: 16px;
-color: #2C2C2C;
-letter-spacing: 0.32px;
-    text-align: center;
-}
-
-#projectSizeX {
-    /* card: */
-background: #FAFAFA;
-/* Sketch doesnt export gradient borders at this point */
-/* Sketch doesnt export gradient borders at this point */
-box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
-border-radius: 2px;
-/* 232.5: */
-font-family: Roboto-Regular;
-font-size: 16px;
-color: #2C2C2C;
-letter-spacing: 0.32px;
-}
-
-
-#projectSizeY {
-    /* card: */
-background: #FAFAFA;
-/* Sketch doesnt export gradient borders at this point */
-/* Sketch doesnt export gradient borders at this point */
-box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
-border-radius: 2px;
-/* 232.5: */
-font-family: Roboto-Regular;
-font-size: 16px;
-color: #2C2C2C;
-letter-spacing: 0.32px;
-}
-
-#frameRate {
-
-    /* card: */
-background: #FAFAFA;
-/* Sketch doesnt export gradient borders at this point */
-/* Sketch doesnt export gradient borders at this point */
-box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
-border-radius: 2px;
-/* 232.5: */
-font-family: Roboto-Regular;
-font-size: 16px;
-color: #2C2C2C;
-letter-spacing: 0.32px;
-    text-align: center;
-    
-}
-
-
-}
-
-
-
-#projectBgColor {
-    border-radius: 2px;
-    box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
 }
 
 #menuBarGUI {
@@ -201,6 +127,7 @@ letter-spacing: 0.32px;
     text-align: center;
     font-weight: bold; 
     margin:0 auto; 
+    margin-top:5px;
     padding: 7px;
 }
 
@@ -217,6 +144,18 @@ letter-spacing: 0.32px;
 .scriptbutton:selected {
 	cursor: pointer;
 	background-color: #009688;
+}
+
+.fontSelector {
+    width:148px;
+}
+
+.jscolor {
+    border-radius: 8px; 
+}
+
+.jscolorInline {
+    padding-left: 10px; 
 }
 
 #statusBarGUI {
@@ -486,6 +425,7 @@ letter-spacing: 0.32px;
 	float: left;
 }
 
+/* Property Inputs */
 .propertyInputDiv {
 	border: none; 
 	border-radius: 8px; 
@@ -495,14 +435,26 @@ letter-spacing: 0.32px;
 }
 
 .propertyInputDivLarge {
-    width : 148px; 
+    width : 132px; 
     height : 18px; 
     float : left; 
 }
 
+.propertyInputLarge {
+    width: 120px; 
+    height: 17px; 
+    margin:0 auto; 
+}
+
+
 .propertyInputDivSmall {
-    width: 61px; 
+    width: 52px; 
     height: 18px;
+}
+
+.propertyInputSmall {
+    width:48px; 
+    height: 17px; 
 }
 
 .propertyInput {
@@ -516,15 +468,8 @@ letter-spacing: 0.32px;
     letter-spacing: 0.32px; 
 }
 
-.propertyInputLarge {
-    width: 144px; 
-    height: 17px; 
-}
 
-.propertyInputSmall {
-    width:57px; 
-    height: 17px; 
-}
+
 .propertyInputContainer {
     float: right;
 }
@@ -542,7 +487,7 @@ letter-spacing: 0.32px;
 
 .propertyName {
     font-size: 16px;
-    padding-right: 20px;
+    padding-right: 10px;
     float: left; 
 }
 
@@ -611,11 +556,6 @@ input.propertyInput:focus {
     /* Because for user-select:none, Safari won't allow input */
 }
 
-<<<<<<< HEAD
-.menu {
-    background-color: red;
-}
-=======
 .thumbnailPreview {
 	position: absolute;
 	left: 130px;
@@ -624,4 +564,3 @@ input.propertyInput:focus {
 	height: 100px;
 	background-color: blue;
 }
->>>>>>> 21472781e2f8cf96061a1248a2eecef93bcef944
