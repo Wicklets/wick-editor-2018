@@ -411,3 +411,12 @@ body {
 	left: 0px;
 	background-color: #585757;
 }
+
+.hide-layers-piece {
+	position: absolute;
+	width: var(--layers-width);
+	height: var(--scrollbar-thickness);
+	bottom: 0px;
+	left: 0px;
+	background-color: #585757;
+}
