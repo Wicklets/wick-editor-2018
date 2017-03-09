@@ -407,6 +407,14 @@ var PropertiesInterface = function (wickEditor) {
         wickEditor.project.borderColor = "#" + this.value;
         wickEditor.syncInterfaces();
     };
+    
+    document.getElementById('playRangeColor').onchange = function () {
+        var obj = wickEditor.project.getSelectedObject();
+        if (obj && obj instanceof WickPlayRange) {
+            obj.color = "#" + this.value;
+            wickEditor.syncInterfaces();
+        }
+    }
 
     document.getElementById('transparentCheckbox').onchange = function () {
         wickEditor.project.transparent = this.checked;
