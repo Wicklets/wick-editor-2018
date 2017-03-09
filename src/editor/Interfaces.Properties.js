@@ -343,6 +343,7 @@ var PropertiesInterface = function (wickEditor) {
         }
 
         wickEditor.project.currentObject.framesDirty = true;
+        wickEditor.syncInterfaces();
     });
 
     $('#playrangeIdentifier').on('blur', function () {
@@ -356,6 +357,7 @@ var PropertiesInterface = function (wickEditor) {
         }
 
         wickEditor.project.currentObject.framesDirty = true;
+        wickEditor.syncInterfaces();
     });
 
     $('#projectName').on('blur', function () {
