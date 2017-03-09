@@ -150,22 +150,28 @@
                 </div>
 
                 <div id="frameProperties" class="propertiesGUIContent">
-                    Name <input style="width:130px; float:right;" type="text" id="frameIdentifier">
+                        <div class="propertyRow">
+                            <div class="propertyName">Name</div>
+                            <div class="propertyInputContainer">
+                                <div class="propertyInputDiv propertyInputDivLarge">
+                                    <input class="propertyInput propertyInputLarge" type="text" id="frameIdentifier"> 
+                                </div> 
+                            </div>
+                        </div>
                     <br />
                     <br />
                     <!--<input type="checkbox" id="frameAutoplayCheckbox"> Always stop on this frame<br />-->
                     <input type="checkbox" id="frameSaveStateCheckbox"> Always save frame state<br />
                     <br />
-                    <div class="button buttonInRow" style="border: 1px solid;" id="editFrameScriptsButton">Edit frame scripts</div>
+                    <div class="scriptButton" id="editFrameScriptsButton">Edit Frame Scripts</div>
                 </div>
 
                 <div id="playrangeProperties" class="propertiesGUIContent">
                         <div class="propertyRow">
-                            <div class="propertyName" style="float:left">Name</div>
-                            
+                            <div class="propertyName">Name</div>
                             <div class="propertyInputContainer">
-                                <div class="propertyInputDiv" style="width:148px; height:18px; float:left;">
-                                    <input class="propertyInput" style="width:144px; height:17px" type="text" id="playrangeIdentifier"> 
+                                <div class="propertyInputDiv propertyInputDivLarge">
+                                    <input class="propertyInput propertyInputLarge" type="text" id="playrangeIdentifier"> 
                                 </div> 
                             </div>
                         </div>
@@ -174,43 +180,42 @@
                 <div id="objectProperties" class="propertiesGUIContent">
                         <div class="propertyRow">
                             <div class="propertyName" style="float:left">Name</div>
-                            
                             <div class="propertyInputContainer">
-                                <div class="propertyInputDiv" style="width:148px; height:18px; float:left;">
-                                    <input class="propertyInput" style="width:144px; height:17px" type="text" id="objectName"> 
+                                <div class="propertyInputDiv propertyInputDivLarge">
+                                    <input class="propertyInput propertyInputLarge" type="text" id="objectName"> 
                                 </div> 
                             </div>
                         </div>
                     <br />
                         <div class="propertyRow">
-                            <div class="propertyName" style="float:left">Position</div>
+                            <div class="propertyName">Position</div>
                             
                             <div class="propertyInputContainer">
-                                <div class="propertyInputDiv" style="width:61px; height:18px; float:left;">
-                                    <input class="propertyInput" style="width:57px; height:17px" type="text" id="objectPositionX"> 
+                                <div class="propertyInputDiv propertyInputDivSmall" style="float:left;">
+                                    <input class="propertyInput propertyInputSmall" type="text" id="objectPositionX"> 
                                 </div> 
                                 
                                 <div class="propertyCross">x</div>
                                 
-                                <div class="propertyInputDiv" style="width:61px; height:18px; float:right;">
-                                    <input class="propertyInput" style="width:59px; height:17px" type="text" id="objectPositionY"> 
+                                <div class="propertyInputDiv propertyInputDivSmall" style="float:right;">
+                                    <input class="propertyInput propertyInputSmall" type="text" id="objectPositionY"> 
                                 </div> 
                             </div>
                         </div>
                     <br />
                     
                         <div class="propertyRow">
-                            <div class="propertyName" style="float:left">Size</div>
+                            <div class="propertyName">Size</div>
                             
                             <div class="propertyInputContainer">
-                                <div class="propertyInputDiv" style="width:61px; height:18px; float:left;">
-                                    <input class="propertyInput" style="width:57px; height:17px" type="text" id="objectWidth"> 
+                                <div class="propertyInputDiv propertyInputDivSmall" style="float:left;">
+                                    <input class="propertyInput propertyInputSmall" type="text" id="objectWidth"> 
                                 </div> 
                                 
                                 <div class="propertyCross">x</div>
                                 
-                                <div class="propertyInputDiv" style="width:61px; height:18px; float:right;">
-                                    <input class="propertyInput" style="width:59px; height:17px" type="text" id="objectHeight"> 
+                                <div class="propertyInputDiv propertyInputDivSmall" style="float:right;">
+                                    <input class="propertyInput propertyInputSmall" type="text" id="objectHeight"> 
                                 </div> 
                             </div>
                         </div>
@@ -220,8 +225,8 @@
                             <div class="propertyName" style="float:left">Rotation</div>
                             
                             <div class="propertyInputContainer">
-                                <div class="propertyInputDiv" style="width:61px; height:18px; float:left;">
-                                    <input class="propertyInput" style="width:57px; height:17px" type="text" id="objectRotation"> 
+                                <div class="propertyInputDiv propertyInputDivSmall" style="float:left;">
+                                    <input class="propertyInput propertyInputSmall" type="text" id="objectRotation"> 
                                 </div> 
                             </div>
                         </div>
