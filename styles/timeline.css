@@ -77,19 +77,32 @@ body {
 	width: var(--scrollbar-thickness);
 	height: var(--scrollbar-thickness);
 
-	background-color: blue;
-	color: white;
+    background-color: #F0EFEF;
+    
+    border-radius: 3px;
+    margin-left: 5px;
+    
 
 	cursor: pointer;
 }
 
-.add-layer-button {
-
-}
-
 .delete-layer-button {
 	left: calc(var(--scrollbar-thickness) + 5px);
+    background-image: url("/resources/minusButton.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 12px 12px;
+    
 }
+
+.add-layer-button {
+    background-image: url(/resources/plusButton.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 12px 12px;
+}
+
+
 
 .layer {
 	background-color: #4a6588;
