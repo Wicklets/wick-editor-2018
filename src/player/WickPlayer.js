@@ -72,10 +72,9 @@ var WickPlayer = function () {
 
                 if(!stopDrawLoop) {
 
-                    console.log(" ")
-                    console.log("PLAYER TICK " + tick)
+                    /*console.log(" ")
+                    console.log("PLAYER TICK " + tick)*/
                     tick++;
-
                     
                     self.project.update();
                     //self.project.rootObject.applyTweens();
@@ -142,8 +141,6 @@ var WickPlayer = function () {
 
         var initialStateObject = initialStateProject.getObjectByUUID(wickObject.uuid);
         if(!initialStateObject) return;
-
-        console.log("RESET DA BOY!")
 
         // TOXXXIC
         //console.log("-------------");

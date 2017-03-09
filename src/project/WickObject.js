@@ -886,6 +886,8 @@ WickObject.prototype.getTotalNumChildren = function () {
 
 WickObject.prototype.getAllFrames = function () {
 
+    if(!this.isSymbol) return [];
+
     var allFrames = [];
 
     this.layers.forEach(function (layer) {
@@ -1040,8 +1042,7 @@ WickObject.prototype.movePlayheadTo = function (frame) {
         var endOfFrames = this.getFramesEnd(); 
         // Only navigate to an integer frame if it is nonnegative and a valid frame
         if(actualFrame < endOfFrames) {
-            this.playheadPosition = actualFrame;
-            this._playheadMovedThisTick = true;
+            this._newPlayheadPosition = actualFrame;
         } else {
             throw (new Error("Failed to navigate to frame \'" + actualFrame + "\': is not a valid frame."));
         }
@@ -1057,8 +1058,7 @@ WickObject.prototype.movePlayheadTo = function (frame) {
 
         if(foundPlayRange) {
             if(this.playheadPosition < foundPlayRange.start || this.playheadPosition >= foundPlayRange.end) {
-                this.playheadPosition = foundPlayRange.start;
-                this._playheadMovedThisTick = true;
+                this._newPlayheadPosition = foundPlayRange.start;
             }
         }
 
@@ -1437,7 +1437,6 @@ WickObject.prototype.getCurrentFrames = function () {
 
 WickObject.prototype.update = function () {
     if(this._deleted) return;
-    this._playheadMovedThisTick = false;
 
     if(this.isSymbol) {
         this.layers.forEach(function (layer) {
@@ -1447,21 +1446,27 @@ WickObject.prototype.update = function () {
         });
     }
 
-    var wasActiveLastTick = this._active;
-    this._active = this.isActive();
-
     if(this._wasClicked) {
         (wickEditor || wickPlayer).project.runScript(this, 'onClick');
         this._wasClicked = false;
     }
 
-    // Inactive -> Inactive
-    if (!wasActiveLastTick && !this._active) {
+    /*if(this.uuid.substring(0,2) === '35') {
+        if(this._active) {
+            console.log("ACTIVE!")
+        } else {
+            console.log("INACTIVE!")
+        }
+    }*/
 
+    // Inactive -> Inactive
+    if (!this._wasActiveLastTick && !this._active) {
+        //if(this.uuid.substring(0,2) === '35') console.log("I -> I");
     }
     // Inactive -> Active
-    else if (!wasActiveLastTick && this._active) {
-        //if(!this.isRoot) console.log("WO onLoad " + this.uuid.substring(0,2))
+    else if (!this._wasActiveLastTick && this._active) {
+        //if(this.uuid.substring(0,2) === '35') console.log("I -> A");
+
         (wickEditor || wickPlayer).project.runScript(this, 'onLoad');
 
         if(this.autoplaySound) {
@@ -1469,20 +1474,26 @@ WickObject.prototype.update = function () {
         }
     }
     // Active -> Active
-    else if (wasActiveLastTick && this._active) {
-        //if(!this.isRoot) console.log("WO onUpdate " + this.uuid.substring(0,2));
-        (wickEditor || wickPlayer).project.runScript(this, 'onUpdate');
+    else if (this._wasActiveLastTick && this._active) {
+        //if(this.uuid.substring(0,2) === '35') console.log("A -> A");
 
-        if(this._playing && this.isSymbol && !this._playheadMovedThisTick) {
-            this.playheadPosition++;
-            if(this.playheadPosition >= this.getTotalTimelineLength()) {
-                this.playheadPosition = 0;
-            }
-        }
-    }    
+        (wickEditor || wickPlayer).project.runScript(this, 'onUpdate');
+    }
     // Active -> Inactive
-    else if (wasActiveLastTick && !this._active) {
-        wickPlayer.resetStateOfObject(this)
+    else if (this._wasActiveLastTick && !this._active) {
+        //if(this.uuid.substring(0,2) === '35') console.log("A -> I");
+
+        if(!this.parentFrame.alwaysSaveState) {
+            // THIS IS VERY BROKEN AND DANGEROUS. DO NOT USE.
+            //wickPlayer.resetStateOfObject(this);
+        }
+    }
+
+    if(this._playing && this.isSymbol && this._newPlayheadPosition === undefined) {
+        this._newPlayheadPosition = this.playheadPosition+1;
+        if(this._newPlayheadPosition >= this.getTotalTimelineLength()) {
+            this._newPlayheadPosition = 0;
+        }
     }
 
 }

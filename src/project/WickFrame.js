@@ -31,42 +31,54 @@ var WickFrame = function () {
     
 WickFrame.prototype.update = function () {
     var self = this;
-    //console.log("Frame update() " + this.uuid.substring(0,2))
 
-    var wasActiveLastTick = this._active;
-    this._active = this.isActive();
+    /*if(this.uuid.substring(0,2) === '50') {
+        console.log(this._wasActiveLastTick)
+        console.log(this._active)
+    }*/
+
+    //console.log("Frame update() " + this.uuid.substring(0,2))
 
     // Inactive -> Inactive
     // Do nothing, frame is still inactive
-    if (!wasActiveLastTick && !this._active) {
+    if (!this._wasActiveLastTick && !this._active) {
 
     }
     // Inactive -> Active
     // Frame just became active! It's fresh!
-    else if (!wasActiveLastTick && this._active) {
+    else if (!this._wasActiveLastTick && this._active) {
         //console.log("Frame onLoad " + this.uuid.substring(0,2))
         (wickEditor || wickPlayer).project.runScript(this, 'onLoad');
     }
     // Active -> Active
     // Frame is active!
-    else if (wasActiveLastTick && this._active) {
+    else if (this._wasActiveLastTick && this._active) {
         //console.log("Frame onUpdate " + this.uuid.substring(0,2))
         (wickEditor || wickPlayer).project.runScript(this, 'onUpdate');
     }    
     // Active -> Inactive
     // Frame just stopped being active. Clean up!
-    else if (wasActiveLastTick && !this._active) {
+    else if (this._wasActiveLastTick && !this._active) {
         
     }
 
     this.wickObjects.forEach(function (wickObject) {
-        wickObject.update(self._active);
+        wickObject.update();
     });
 }
 
 
 WickFrame.prototype.isActive = function () {
     var parent = this.parentLayer.parentWickObject;
+
+    //if(parent.isRoot) console.log(parent.playheadPosition)
+
+    /*console.log("---")
+    console.log("ph "+(parent.playheadPosition))
+    console.log("s  "+(this.playheadPosition))
+    console.log("e  "+(this.playheadPosition+this.length))
+    console.log("---")*/
+
     return parent.playheadPosition >= this.playheadPosition
         && parent.playheadPosition < this.playheadPosition+this.length
         && parent.isActive();

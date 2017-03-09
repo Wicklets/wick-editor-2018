@@ -603,5 +603,31 @@ WickProject.prototype.runScript = function (obj, fnName) {
 }
 
 WickProject.prototype.update = function () {
+    var allObjectsInProject = this.rootObject.getAllChildObjectsRecursive();
+    //allObjectsInProject.push(this.rootObject);
+
+    allObjectsInProject.forEach(function (obj) {
+        if(obj._newPlayheadPosition !== undefined)
+            obj.playheadPosition = obj._newPlayheadPosition;
+    });
+
+    allObjectsInProject.forEach(function (obj) {
+        obj._newPlayheadPosition = undefined;
+
+        obj.getAllFrames().forEach(function (frame) {
+            frame._wasActiveLastTick = frame._active;
+            frame._active = frame.isActive();
+
+            /*if(frame.uuid.substring(0,2) === '50') {
+                console.log(frame._wasActiveLastTick)
+                console.log(frame._active)
+            }*/
+        });
+
+        obj._wasActiveLastTick = obj._active;
+        obj._active = obj.isActive();
+    });
+
+    //console.log(this.rootObject.playheadPosition)
     this.rootObject.update();
 }
