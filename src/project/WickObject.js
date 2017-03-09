@@ -758,7 +758,7 @@ WickObject.prototype.getAllActiveChildObjectsRecursive = function (includeParent
         return [];
     }
 
-    /*var children = [];
+    var children = [];
     for (var l = this.layers.length-1; l >= 0; l--) {
         var frame = this.layers[l].getFrameAtPlayheadPosition(this.playheadPosition);
         if(frame) {
@@ -769,9 +769,9 @@ WickObject.prototype.getAllActiveChildObjectsRecursive = function (includeParent
             }
         }
     }
-    return children;*/
+    return children;
 
-    var children = [];
+    /*var children = [];
     if(includeParents) children = [this];
     this.layers.forEach(function (layer) {
         layer.frames.forEach(function (frame) {
@@ -781,7 +781,7 @@ WickObject.prototype.getAllActiveChildObjectsRecursive = function (includeParent
             });
         });
     });
-    return children;
+    return children;*/
 
 }
 

@@ -165,6 +165,10 @@ var PropertiesInterface = function (wickEditor) {
         }
     }
 
+    this.setTab = function (newTab) {
+        currentTab = newTab;
+    }
+
 // Buttons and text boxes and stuff
 
     $('#objectName').on('blur', function () {
