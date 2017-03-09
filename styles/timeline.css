@@ -27,6 +27,7 @@ body {
 
     --scrollbar-thickness: 14px;
 
+
     --number-line-height: 23px;
 }
 
@@ -251,9 +252,10 @@ body {
 	background-color: #2E2E2E;
 	position: absolute;
 	overflow: hidden;
-    border-color: #878787;
-    border-width: 2px;
-    border-style: solid;
+	outline:none;
+/*    border-color: #878787;
+    border-width: 2px;*/
+    /*border-style: solid;*/
     border-radius: 3px;
 }
 
@@ -366,28 +368,36 @@ body {
 	height: var(--number-line-height);
 
 	background-color: red;
-	opacity: 0.4;
+	opacity: 0.3;
+    
+    color: #FAFAFA;
 
 	-webkit-box-shadow:inset 0px 0px 0px 2px #fff;
     -moz-box-shadow:inset    0px 0px 0px 2px #fff;
     box-shadow:inset         0px 0px 0px 2px #fff;
 }
 
+.playrange:hover {
+	opacity: 0.7;
+}
+
 .playrange-selected {
-	opacity: 0.8;
+	opacity: 0.7;
 }
 
 .playrange-label {
 	color: white;
-	margin-left: 20px;	
+	margin-left: 25px;	
+	opacity: 1;
+
 }
 
 .playrange-handle {
-	background-color: green;
-	opacity: 0.0;
+	background-color: black;
+	opacity: 0.2;
 	position: absolute;
 
-	width: 10px;
+	width: 15px;
 	height: 100%;
 
 	cursor: ew-resize;
@@ -418,5 +428,14 @@ body {
 	height: var(--scrollbar-thickness);
 	bottom: 0px;
 	left: 0px;
+	background-color: #585757;
+}
+
+.hide-scrollbar-connect-piece {
+	position: absolute;
+	width: var(--scrollbar-thickness);
+	height: var(--scrollbar-thickness);
+	bottom: 0px;
+	left: calc(100% - var(--scrollbar-thickness));
 	background-color: #585757;
 }

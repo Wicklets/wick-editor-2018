@@ -91,6 +91,10 @@ var TimelineInterface = function (wickEditor) {
             this.horizontalScrollBar.build();
             this.elem.appendChild(this.horizontalScrollBar.elem);
 
+            var hideScrollbarConnectPiece  = document.createElement('div'); 
+            hideScrollbarConnectPiece.className = 'hide-scrollbar-connect-piece';
+            this.elem.appendChild(hideScrollbarConnectPiece); 
+
             this.verticalScrollBar.build();
             this.elem.appendChild(this.verticalScrollBar.elem);
         }
