@@ -111,6 +111,7 @@ var InputHandler = function (wickEditor) {
             if(!hotkeysMatch || !specialKeysMatch) return;
             if(guiAction.hotkeys.length === 0) return;
             if(activeElemIsTextBox() && !guiAction.requiredParams.usableInTextBoxes) return;
+            if(guiAction.requiredParams.disabledInScriptingIDE && (document.activeElement.className === 'ace_text-input')) return;
 
             wickEditor.rightclickmenu.open = false;
             event.preventDefault();

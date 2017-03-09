@@ -106,7 +106,7 @@ var TimelineInterface = function (wickEditor) {
 
         this.calculateHeight = function () {
             var maxTimelineHeight = cssVar("--max-timeline-height");
-            var expectedTimelineHeight = this.layersContainer.layers.length * cssVar("--layer-height") + 46; 
+            var expectedTimelineHeight = this.layersContainer.layers.length * cssVar("--layer-height") + 58; 
             return Math.min(expectedTimelineHeight, maxTimelineHeight); 
         }
     }
@@ -335,7 +335,8 @@ var TimelineInterface = function (wickEditor) {
                     });
                     wickEditor.project.clearSelection()
                     wickEditor.project.selectObject(that.wickFrame)
-                    timeline.framesContainer.update();
+                    //timeline.framesContainer.update();
+                    wickEditor.syncInterfaces()
                 }
 
                 startInteraction("dragFrame", e, {frames:timeline.framesContainer.getFrames(wickEditor.project.getSelectedObjects())});
@@ -619,11 +620,22 @@ var TimelineInterface = function (wickEditor) {
             this.elem = document.createElement('div');
             this.elem.className = 'number-line';
 
+            this.elem.addEventListener('mousedown', function (e) {
+                var start = Math.round((e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2) / cssVar('--frame-width'));
+                var playRange = new WickPlayRange(start, start+1, "bees");
+                wickEditor.actionHandler.doAction('addPlayRange', {playRange: playRange});
+                e.stopPropagation();
+            });
+
             this.playRanges = [];
         }
 
         this.update = function () {
             this.elem.style.left = timeline.horizontalScrollBar.scrollAmount+cssVar('--layers-width')+'px';
+
+            this.playRanges.forEach(function (playRange) {
+                playRange.update();
+            });
         }
 
         this.rebuild = function () {
@@ -639,9 +651,9 @@ var TimelineInterface = function (wickEditor) {
                 this.elem.appendChild(numberLineCell);
             }
 
-            this.playRanges.forEach(function (playrange) {
+            /*this.playRanges.forEach(function (playrange) {
                 that.elem.removeChild(playrange.elem);
-            });
+            });*/
 
             this.playRanges = [];
 
@@ -650,6 +662,7 @@ var TimelineInterface = function (wickEditor) {
                 newPlayrange.wickPlayrange = wickPlayrange;
                 newPlayrange.build();
                 that.elem.appendChild(newPlayrange.elem);
+                that.playRanges.push(newPlayrange)
             });
         }
     }
@@ -666,20 +679,33 @@ var TimelineInterface = function (wickEditor) {
         this.build = function () {
             this.elem = document.createElement('div');
             this.elem.className = 'playrange';
+            this.elem.addEventListener('mousedown', function (e) {
+                wickEditor.project.clearSelection()
+                wickEditor.project.selectObject(that.wickPlayrange);
 
-            console.log(this.wickPlayrange)
+                startInteraction("dragPlayRange", e, {playrange:that});
+
+                e.stopPropagation();
+            });
+
+            var label = document.createElement('div');
+            label.className = 'playrange-label'
+            label.innerHTML = this.wickPlayrange.identifier;
+            this.elem.appendChild(label);
+
             var width = this.wickPlayrange.getLength()*cssVar('--frame-width');
-            var widthOffset = 1;
+            var widthOffset = -2;
             this.elem.style.width = width + widthOffset+'px'
 
             var left = this.wickPlayrange.getStart()*cssVar('--frame-width');
-            var leftOffset = cssVar('--frames-cell-first-padding')*2-1;
+            var leftOffset = cssVar('--frames-cell-first-padding')*2+1;
             this.elem.style.left  = left + leftOffset + 'px';
 
             this.handleRight = document.createElement('div');
             this.handleRight.className = 'playrange-handle playrange-handle-right';
             this.handleRight.addEventListener('mousedown', function (e) {
                 startInteraction("dragPlayRangeEnd", e, {playrange:that});
+                e.stopPropagation()
             });
             this.elem.appendChild(this.handleRight)
 
@@ -687,12 +713,17 @@ var TimelineInterface = function (wickEditor) {
             this.handleLeft.className = 'playrange-handle playrange-handle-left';
             this.handleLeft.addEventListener('mousedown', function (e) {
                 startInteraction("dragPlayRangeStart", e, {playrange:that});
+                e.stopPropagation()
             });
             this.elem.appendChild(this.handleLeft)
         }
 
         this.update = function () {
-            
+            if(wickEditor.project.isObjectSelected(this.wickPlayrange)) {
+                this.elem.className = 'playrange playrange-selected'
+            } else {
+                this.elem.className = 'playrange'
+            }
         }
 
         this.rebuild = function () {
@@ -728,7 +759,7 @@ var TimelineInterface = function (wickEditor) {
 
             //var frame = interactionData.frames[0];
 
-            interactionData.frames.forEach(function (frame) {
+            /*interactionData.frames.forEach(function (frame) {
                 //if(!frame) return;
                 var newPlayheadPosition = Math.round(parseInt(frame.elem.style.left) / cssVar('--frame-width'));
                 var newLayerIndex       = Math.round(parseInt(frame.elem.style.top)  / cssVar('--layer-height'));
@@ -740,7 +771,25 @@ var TimelineInterface = function (wickEditor) {
                     newPlayheadPosition: newPlayheadPosition,
                     newLayer: newLayer
                 });
+            });*/
+
+            var framesMoveActionData = [];
+            interactionData.frames.forEach(function (frame) {
+                if(!frame) return;
+                var newPlayheadPosition = Math.round(parseInt(frame.elem.style.left) / cssVar('--frame-width'));
+                var newLayerIndex       = Math.round(parseInt(frame.elem.style.top)  / cssVar('--layer-height'));
+                var newLayer = wickEditor.project.getCurrentObject().layers[newLayerIndex];
+                if(!newLayer) newLayer = wickEditor.project.getCurrentLayer();
+
+                framesMoveActionData.push({
+                    frame: frame.wickFrame, 
+                    newPlayheadPosition: newPlayheadPosition,
+                    newLayer: newLayer
+                });
             });
+
+            wickEditor.actionHandler.doAction('moveFrames', {framesMoveActionData: framesMoveActionData});
+
         })
     }
     interactions['dragFrameWidth'] = {
@@ -763,6 +812,36 @@ var TimelineInterface = function (wickEditor) {
             wickEditor.actionHandler.doAction('changeFrameLength', {
                 frame: interactionData.frame.wickFrame, 
                 newFrameLength: newLength
+            });
+        })
+    }
+    interactions['dragPlayRange'] = {
+        'start' : (function (e) {
+            interactionData.origWidth = parseInt(interactionData.playrange.elem.style.width);
+            interactionData.origLeft = parseInt(interactionData.playrange.elem.style.left);
+            interactionData.mouseMovement = 0;
+        }), 
+        'update' : (function (e) {
+            var wickPlayrange = interactionData.playrange.wickPlayrange;
+
+            interactionData.mouseMovement += e.movementX;
+            var newLeft = interactionData.origLeft + interactionData.mouseMovement;
+
+            interactionData.playrange.elem.style.left = newLeft + 'px';
+        }),
+        'finish' : (function (e) {
+            var newDivLeft = parseInt(interactionData.playrange.elem.style.left);
+            var newLeft = Math.round(newDivLeft / cssVar('--frame-width'));
+            var newStart = newLeft;
+
+            var newDivLen = parseInt(interactionData.playrange.elem.style.width);
+            var newLength = Math.round(newDivLen / cssVar('--frame-width'));
+            var newEnd = newLength + newStart;
+
+            wickEditor.actionHandler.doAction('modifyPlayRange', {
+                playRange: interactionData.playrange.wickPlayrange,
+                end: newEnd,
+                start: newStart
             });
         })
     }
@@ -809,8 +888,6 @@ var TimelineInterface = function (wickEditor) {
             var newDivLen = parseInt(interactionData.playrange.elem.style.width);
             var newLength = Math.round(newDivLen / cssVar('--frame-width'));
             var newEnd = newLength + interactionData.playrange.wickPlayrange.getStart();
-
-            console.log(newEnd)
 
             wickEditor.actionHandler.doAction('modifyPlayRange', {
                 playRange: interactionData.playrange.wickPlayrange,

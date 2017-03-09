@@ -9,7 +9,7 @@ body {
 	--layer-height: 46px;
 
 	--frame-width: 80px;
-	--frame-handle-width: 5px;
+	--frame-handle-width: 8px;
 
 	--frame-padding-width: 4px;
 	--frame-padding-height: 4px;
@@ -346,6 +346,8 @@ body {
 	width: 1000%;
 	height: var(--number-line-height);
 
+	cursor: pointer;
+
 	background-color: #252525;
 }
 
@@ -356,18 +358,33 @@ body {
 }
 
 .playrange {
+	cursor: move;
+
 	position: absolute;
 	top: 0px;
 	left: 0px;
 	width: 100px;
 	height: var(--number-line-height);
 
-	background-color: red;
-	opacity: 0.5;
+	background-color: transparent;
+
+	-webkit-box-shadow:inset 0px 0px 0px 2px #ff0;
+    -moz-box-shadow:inset    0px 0px 0px 2px #ff0;
+    box-shadow:inset         0px 0px 0px 2px #ff0;
+}
+
+.playrange-selected {
+	background-color: yellow;
+}
+
+.playrange-label {
+	color: white;
+	margin-left: 20px;	
 }
 
 .playrange-handle {
 	background-color: green;
+	opacity: 0.0;
 	position: absolute;
 
 	width: 10px;

@@ -381,6 +381,25 @@ WickProject.prototype.getFrameByUUID = function (uuid) {
     return foundFrame;
 }
 
+WickProject.prototype.getPlayRangeByUUID = function (uuid) {
+    var allObjectsInProject = this.rootObject.getAllChildObjectsRecursive();
+    allObjectsInProject.push(this.rootObject);
+
+    var foundPlayrange = null;
+    allObjectsInProject.forEach(function (object) {
+        if(foundPlayrange) return;
+        if(!object.isSymbol) return;
+
+        object.playRanges.forEach(function(playRange) {
+            if(playRange.uuid === uuid) {
+                foundPlayrange = playRange;
+            }
+        });
+    });
+
+    return foundPlayrange;
+}
+
 WickProject.prototype.addObject = function (wickObject, zIndex, ignoreSymbolOffset) {
 
     var frame = this.getCurrentFrame();
@@ -457,6 +476,33 @@ WickProject.prototype.hasSyntaxErrors = function () {
 
 }
 
+WickProject.prototype.handleWickError = function (e, objectCausedError) {
+    if (window.wickEditor) {
+        //if(!wickEditor.builtinplayer.running) return;
+
+        console.error("Exception thrown while running script of WickObject: " + this.name);
+        console.error(e);
+        var lineNumber = null;
+        if(e.stack) {
+            e.stack.split('\n').forEach(function (line) {
+                if(lineNumber) return;
+                if(!line.includes("<anonymous>:")) return;
+
+                lineNumber = parseInt(line.split("<anonymous>:")[1].split(":")[0]);
+            });
+        }
+
+        //console.log(e.stack.split("\n")[1].split('<anonymous>:')[1].split(":")[0]);
+        //console.log(e.stack.split("\n"))
+        if(wickEditor.builtinplayer.running) wickEditor.builtinplayer.stopRunningProject()
+        wickEditor.scriptingide.showError(objectCausedError, lineNumber, e);
+
+    } else {
+        alert("An exception was thrown while running a WickObject script. See console!");
+        console.log(e);
+    }
+}
+
 WickProject.prototype.isObjectSelected = function (obj) {
     var selected = false;
 
@@ -481,7 +527,7 @@ WickProject.prototype.getSelectedObjects = function () {
 
     var objs = [];
     this._selection.forEach(function (uuid) {
-        var obj = self.getObjectByUUID(uuid) || self.getFrameByUUID(uuid);
+        var obj = self.getObjectByUUID(uuid) || self.getFrameByUUID(uuid) || self.getPlayRangeByUUID(uuid);
         if(obj) objs.push(obj);
     });
 
@@ -501,7 +547,16 @@ WickProject.prototype.clearSelection = function () {
 }
 
 WickProject.prototype.deselectObjectType = function (type) {
+    var deselectionHappened = false;
+
     for ( var i = 0; i < this._selection.length; i++ ) {
-        if(this._selection[i] instanceof type) this._selection[i] = null;
+        var uuid = this._selection[i];
+        var obj = this.getObjectByUUID(uuid) || this.getFrameByUUID(uuid) || this.getPlayRangeByUUID(uuid);
+        if(obj instanceof type) {
+            this._selection[i] = null;
+            deselectionHappened = true;
+        }
     }
+
+    return deselectionHappened;
 }

@@ -142,9 +142,12 @@
         <!-- Properties -->
 
             <div id="propertiesGUI" class="GUIBox">
-                <div id="objectPropertiesTabButton"  class="propertiesTab propertiesTabActive">Object</div>
-                <div id="framePropertiesTabButton"   class="propertiesTab">Frame</div>
+                <div id="selectionPropertiesTabButton"  class="propertiesTab propertiesTabActive">Selection</div>
                 <div id="projectPropertiesTabButton" class="propertiesTab">Project</div>
+
+                <div id="objectType">
+                    <img id="objectTypeIcon" src="resources/gearbox.png" width="22px"> <span id="objectTypeName" style="margin-left:5px;font-size:20px;">None</span>
+                </div>
 
                 <div id="frameProperties" class="propertiesGUIContent">
                     Name <input style="width:130px; float:right;" type="text" id="frameIdentifier">
@@ -156,19 +159,73 @@
                     <div class="button buttonInRow" style="border: 1px solid;" id="editFrameScriptsButton">Edit frame scripts</div>
                 </div>
 
+                <div id="playrangeProperties" class="propertiesGUIContent">
+                    Name <input style="width:130px; float:right;" type="text" id="playrangeIdentifier">
+                </div>
+
                 <div id="objectProperties" class="propertiesGUIContent">
-                    <img id="objectTypeIcon" src="resources/gearbox.png" width="22px"> <span id="objectTypeName" style="margin-left:5px;font-size:20px;">None</span>
+                        <div class="propertyRow">
+                            <div class="propertyName" style="float:left">Name</div>
+                            
+                            <div class="propertyInputContainer">
+                                <div class="propertyInputDiv" style="width:148px; height:18px; float:left;">
+                                    <input class="propertyInput" style="width:144px; height:17px" type="text" id="objectName"> 
+                                </div> 
+                            </div>
+                        </div>
                     <br />
+                        <div class="propertyRow">
+                            <div class="propertyName" style="float:left">Position</div>
+                            
+                            <div class="propertyInputContainer">
+                                <div class="propertyInputDiv" style="width:61px; height:18px; float:left;">
+                                    <input class="propertyInput" style="width:57px; height:17px" type="text" id="objectPositionX"> 
+                                </div> 
+                                
+                                <div class="propertyCross">x</div>
+                                
+                                <div class="propertyInputDiv" style="width:61px; height:18px; float:right;">
+                                    <input class="propertyInput" style="width:59px; height:17px" type="text" id="objectPositionY"> 
+                                </div> 
+                            </div>
+                        </div>
                     <br />
-                    Name <input style="float:right; width:130px" type="text" id="objectName">
+                    
+                        <div class="propertyRow">
+                            <div class="propertyName" style="float:left">Size</div>
+                            
+                            <div class="propertyInputContainer">
+                                <div class="propertyInputDiv" style="width:61px; height:18px; float:left;">
+                                    <input class="propertyInput" style="width:57px; height:17px" type="text" id="objectWidth"> 
+                                </div> 
+                                
+                                <div class="propertyCross">x</div>
+                                
+                                <div class="propertyInputDiv" style="width:61px; height:18px; float:right;">
+                                    <input class="propertyInput" style="width:59px; height:17px" type="text" id="objectHeight"> 
+                                </div> 
+                            </div>
+                        </div>
                     <br />
-                    Position  <input style="text-align:center; float:right; width:61px;" type="text" id="objectPositionY"><span style="float:right;">x</span><input style="text-align:center; width:61px; float:right;" type="text" id="objectPositionX">
+                    
+                        <div class="propertyRow">
+                            <div class="propertyName" style="float:left">Rotation</div>
+                            
+                            <div class="propertyInputContainer">
+                                <div class="propertyInputDiv" style="width:61px; height:18px; float:left;">
+                                    <input class="propertyInput" style="width:57px; height:17px" type="text" id="objectRotation"> 
+                                </div> 
+                            </div>
+                        </div>
                     <br />
-                    Size  <input style="text-align:center; float:right; width:61px;" type="text" id="objectHeight"><span style="float:right;">x</span><input style="text-align:center; width:61px; float:right;" type="text" id="objectWidth">
-                    <br />
-                    Rotation <input style="float:right; width:130px"  type="text" id="objectRotation">
-                    <br />
-                    Opacity <input style="float:right; width:130px" type="range" value="255" min="0" max="255" id="opacitySlider">
+                     <div class="propertyRow">
+                            <div class="propertyName" style="float:left">Opacity</div>
+                         
+                            <div class="propertyInputContainer">
+                                <input class="propertySlider" style="width:148px" type="range" value="255" min="0" max="255" id="opacitySlider">
+                            </div>
+                        </div>
+
                     <br />
                     <br />
                     <div id="textProperties">

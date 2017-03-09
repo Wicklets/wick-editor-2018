@@ -904,4 +904,12 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.actionHandler.doAction('addObjects', {wickObjects:[newWickObject]});
         });
 
+    registerAction('finishEditingTextbox',
+        ['ENTER'],
+        [],
+        {usableInTextBoxes:true, disabledInScriptingIDE:true},
+        function (args) {
+            $(":focus").blur();
+        });
+
 }

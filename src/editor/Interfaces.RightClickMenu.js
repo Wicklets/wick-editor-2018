@@ -211,8 +211,11 @@ var RightClickMenuInterface = function (wickEditor) {
 
             // Frames selection
             new RightClickMenuButtonGroup([
-                new RightClickMenuButton('Create symbol from frames', function () {
+                /*new RightClickMenuButton('Create symbol from frames', function () {
                     wickEditor.guiActionHandler.doAction("convertFramesToSymbol")
+                }),*/
+                new RightClickMenuButton('Edit Scripts', function () {
+                    alert('NYI')
                 }),
                 new RightClickMenuButton('Copy', function () {
                     alert("NYI")

@@ -4,13 +4,12 @@ var WickPlayRange = function (start, end, identifier, color) {
 	this.end = end; 
 	this.identifier = identifier;	
 	this.color = color || 'green';
+	this.uuid = random.uuid4();
 
 }
 
 // index : number - Index to start playrange. Must be less then end and at least 1. 
 WickPlayRange.prototype.changeStart = function (index) {
-
-	console.log(index)
 
 	if (index >= this.end) {
 		this.start = this.end; 

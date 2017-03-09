@@ -28,6 +28,56 @@ var WickFrame = function () {
     // Set all scripts to defaults
     this.wickScript = "this.onLoad = function () {\n\t\n}\n\nthis.onUpdate = function () {\n\t\n}\n";
 };
+    
+WickFrame.prototype.update = function () {
+    var wasActiveLastTick = this._active;
+    this._active = this.isActive();
+
+    // Inactive -> Inactive
+    // Do nothing, frame is still inactive
+    if (!wasActiveLastTick && !this._active) {
+
+    }
+    // Inactive -> Active
+    // Frame just became active! It's fresh!
+    else if (!wasActiveLastTick && this._active) {
+        console.log("Frame onLoad")
+        this.runScript('onLoad')
+
+        this.wickObjects.forEach(function (wickObject) {
+            wickObject.update();
+        });
+    }
+    // Active -> Active
+    // Frame is active!
+    else if (wasActiveLastTick && this._active) {
+        console.log("Frame onUpdate")
+        this.runScript('onUpdate')
+
+        this.wickObjects.forEach(function (wickObject) {
+            wickObject.update();
+        });
+    }    
+    // Active -> Inactive
+    // Frame just stopped being active. Clean up!
+    else if (wasActiveLastTick && !this._active) {
+        
+    }
+}
+
+WickFrame.prototype.runScript = function (fnName) {
+    try {
+        if(this[fnName]) this[fnName]();
+    } catch (e) {
+        (wickEditor.project || wickPlayer.project).handleWickError(e,this);
+    }
+}
+
+WickFrame.prototype.isActive = function () {
+    var parent = this.parentLayer.parentWickObject;
+    return parent.playheadPosition >= this.playheadPosition
+        && parent.playheadPosition <= this.playheadPosition+this.length;
+}
 
 // Extend our frame to encompass more frames. 
 WickFrame.prototype.extend = function(length) {
@@ -76,6 +126,8 @@ WickFrame.prototype.remove = function () {
 WickFrame.prototype.touchesFrame = function (frame) {
     var A = this;
     var B = frame;
+
+    if(A._beingMoved || B._beingMoved) return false;
 
     var AStart = A.playheadPosition;
     var AEnd = A.playheadPosition + A.length;
