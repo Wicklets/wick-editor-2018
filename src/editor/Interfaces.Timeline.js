@@ -85,7 +85,7 @@ var TimelineInterface = function (wickEditor) {
             this.elem.appendChild(hideNumberlinePiece);
             
             var hideLayersPiece = document.createElement('div');
-            hideLayersPiece.className = 'hide-layers-piece';
+            hideLayersPiece.className = 'layer-toolbar';
             this.elem.appendChild(hideLayersPiece);
 
             this.horizontalScrollBar.build();

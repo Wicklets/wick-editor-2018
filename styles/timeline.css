@@ -25,7 +25,7 @@ body {
 
     --frames-cell-first-padding: 5px;
 
-    --scrollbar-thickness: 14px;
+    --scrollbar-thickness: 18px;
 
 
     --number-line-height: 23px;
@@ -422,12 +422,14 @@ body {
 	background-color: #585757;
 }
 
-.hide-layers-piece {
+.layer-toolbar {
 	position: absolute;
 	width: var(--layers-width);
 	height: var(--scrollbar-thickness);
 	bottom: 0px;
 	left: 0px;
+	border-top: 1px; 
+	border-color: black; 
 	background-color: #585757;
 }
 
