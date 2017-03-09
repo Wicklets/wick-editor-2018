@@ -45,13 +45,13 @@ WickFrame.prototype.update = function () {
     // Frame just became active! It's fresh!
     else if (!wasActiveLastTick && this._active) {
         //console.log("Frame onLoad " + this.uuid.substring(0,2))
-        this.runScript('onLoad')
+        (wickEditor.project || wickPlayer.project).runScript(this, 'onLoad');
     }
     // Active -> Active
     // Frame is active!
     else if (wasActiveLastTick && this._active) {
         //console.log("Frame onUpdate " + this.uuid.substring(0,2))
-        this.runScript('onUpdate')
+        (wickEditor.project || wickPlayer.project).runScript(this, 'onUpdate');
     }    
     // Active -> Inactive
     // Frame just stopped being active. Clean up!
@@ -70,32 +70,6 @@ WickFrame.prototype.isActive = function () {
     return parent.playheadPosition >= this.playheadPosition
         && parent.playheadPosition < this.playheadPosition+this.length
         && parent.isActive();
-}
-
-WickFrame.prototype.runScript = function (fnName) {
-    var objectScope = this.parentLayer.parentWickObject;
-
-    window.project = wickPlayer.project || wickEditor.project;
-    window.root = project.rootObject;
-
-    window.play           = function ()      { objectScope.play(); }
-    window.pause          = function ()      { objectScope.pause(); }
-    window.movePlayheadTo = function (frame) { objectScope.movePlayheadTo(frame); }
-
-    window.stopAllSounds = function () { wickPlayer.getAudioPlayer().stopAllSounds(); };
-    window.keyIsDown = function (keyString) { return wickPlayer.inputHandler.keyIsDown(keyString); };
-    window.keyJustPressed = function (keyString) { return wickPlayer.inputHandler.keyJustPressed(keyString); }
-    window.getMouseX = function () { return wickPlayer.getMouse().x; }
-    window.getMouseY = function () { return wickPlayer.getMouse().y; }
-    window.hideCursor = function () { wickPlayer.hideCursor(); };
-    window.showCursor = function () { wickPlayer.showCursor(); };
-    window.enterFullscreen = function () { wickPlayer.enterFullscreen(); }
-
-    try {
-        if(this[fnName]) this[fnName]();
-    } catch (e) {
-        (wickEditor.project || wickPlayer.project).handleWickError(e,this);
-    }
 }
 
 // Extend our frame to encompass more frames. 

@@ -561,6 +561,39 @@ WickProject.prototype.deselectObjectType = function (type) {
     return deselectionHappened;
 }
 
+WickProject.prototype.runScript = function (obj, fnName) {
+
+    var objectScope;
+    if(obj instanceof WickObject) {
+        objectScope = obj.parentObject;
+    } else if(obj instanceof WickFrame) {
+        objectScope = obj.parentLayer.parentWickObject;
+    }
+
+    window.project = wickPlayer.project || wickEditor.project;
+    window.root = project.rootObject;
+
+    window.play           = function ()      { objectScope.play(); }
+    window.pause          = function ()      { objectScope.pause(); }
+    window.movePlayheadTo = function (frame) { objectScope.movePlayheadTo(frame); }
+
+    window.stopAllSounds = function () { wickPlayer.getAudioPlayer().stopAllSounds(); };
+    window.keyIsDown      = function (keyString) { return wickPlayer.inputHandler.keyIsDown(keyString); };
+    window.keyJustPressed = function (keyString) { return wickPlayer.inputHandler.keyJustPressed(keyString); }
+    window.getMouseX = function () { return wickPlayer.inputHandler.getMouse().x; };
+    window.getMouseY = function () { return wickPlayer.inputHandler.getMouse().y; };
+    window.hideCursor = function () { wickPlayer.hideCursor(); };
+    window.showCursor = function () { wickPlayer.showCursor(); };
+    window.enterFullscreen = function () { wickPlayer.enterFullscreen(); }
+
+    try {
+        if(obj[fnName]) obj[fnName]();
+    } catch (e) {
+        this.handleWickError(e,obj);
+    }
+
+}
+
 WickProject.prototype.update = function () {
     this.rootObject.update();
 }

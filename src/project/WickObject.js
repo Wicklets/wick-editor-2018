@@ -1469,7 +1469,7 @@ WickObject.prototype.update = function () {
     // Inactive -> Active
     else if (!wasActiveLastTick && this._active) {
         //if(!this.isRoot) console.log("WO onLoad " + this.uuid.substring(0,2))
-        this.runScript('onLoad');
+        (wickEditor.project || wickPlayer.project).runScript(this, 'onLoad');
 
         if(this.autoplaySound) {
             this.playSound();
@@ -1478,7 +1478,7 @@ WickObject.prototype.update = function () {
     // Active -> Active
     else if (wasActiveLastTick && this._active) {
         //if(!this.isRoot) console.log("WO onUpdate " + this.uuid.substring(0,2))
-        this.runScript('onUpdate');
+        (wickEditor.project || wickPlayer.project).runScript(this, 'onUpdate');
 
         if(this._playing && this.isSymbol) {
             this.playheadPosition++;
@@ -1498,40 +1498,6 @@ WickObject.prototype.isActive = function () {
     if(this.isRoot) return true;
 
     return this.parentFrame.isActive();
-}
-
-WickObject.prototype.runScript = function (fnName) {
-    var objectScope = this.parentObject;
-
-    window.project = wickPlayer.project || wickEditor.project;
-    window.root = project.rootObject;
-    window.parent = this.parentObject;
-
-    window.play           = function ()      { objectScope.play(); }
-    window.pause          = function ()      { objectScope.pause(); }
-    window.movePlayheadTo = function (frame) { objectScope.movePlayheadTo(frame); }
-
-    window.stopAllSounds = function () { wickPlayer.getAudioPlayer().stopAllSounds(); };
-    window.keyIsDown = function (keyString) { return wickPlayer.inputHandler.keyIsDown(keyString); };
-    window.keyJustPressed = function (keyString) { return wickPlayer.inputHandler.keyJustPressed(keyString); }
-    window.getMouseX = function () { return wickPlayer.getMouse().x; }
-    window.getMouseY = function () { return wickPlayer.getMouse().y; }
-    window.hideCursor = function () { wickPlayer.hideCursor(); };
-    window.showCursor = function () { wickPlayer.showCursor(); };
-    window.enterFullscreen = function () { wickPlayer.enterFullscreen(); }
-
-    // WickObjects in same frame (scope) are accessable without using root./parent.
-    if(objectScope) {
-        objectScope.getAllChildObjects().forEach(function(child) {
-            if(child.name) window[child.name] = child;
-        });
-    }
-
-    try {
-        if(this[fnName]) this[fnName]();
-    } catch (e) {
-        (wickEditor.project || wickPlayer.project).handleWickError(e,this);
-    }
 }
 
 /*WickObject.prototype.runScriptFn = function (fnName, objectScope, frame) {

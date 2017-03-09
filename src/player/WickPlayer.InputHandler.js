@@ -103,7 +103,7 @@ WickPlayerInputHandler = function (wickPlayer, canvasContainer) {
         
         project.rootObject.getAllActiveChildObjectsRecursive(true).forEach(function(child) {
             if(child.isClickable() && child.isPointInside(mouse)) {
-                child.runScript("onClick");
+                project.runScript(child, "onClick");
             }
         });
 
@@ -144,7 +144,7 @@ WickPlayerInputHandler = function (wickPlayer, canvasContainer) {
 
         project.rootObject.getAllActiveChildObjects().forEach(function(child) {
             if(child.isPointInside(touchPos) && child.isClickable()) {
-                child.runScript(child.wickScripts["onClick"], 'onClick');
+                project.runScript(child, "onClick");
             }
         });
 
