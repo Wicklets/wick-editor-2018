@@ -197,6 +197,12 @@ var WickPixiRenderer = function (project, canvasContainer, scale, args) {
 
     }
 
+    self.setText = function (wickObject, newText) {
+        var pixiObject = wickToPixiDict[wickObject.uuid];
+        if(!pixiObject) return;
+        pixiObject.text = ""+newText
+    }
+
     self.enterFullscreen = function () {
         var elem;
 

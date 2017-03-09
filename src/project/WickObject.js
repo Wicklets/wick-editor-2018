@@ -1272,7 +1272,8 @@ WickObject.prototype.isPointInside = function(point) {
 }
 
 WickObject.prototype.setText = function (text) {
-    this.pixiText.text = ""+text;
+    //this.pixiText.text = ""+text;
+    wickPlayer.renderer.setText(this, text);
 }
 
 WickObject.prototype.playSound = function () {
