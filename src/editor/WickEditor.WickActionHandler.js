@@ -237,6 +237,7 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             args.restoredObjects = [];
             args.restoredFrames = [];
+            args.restoredPlayRanges = [];
             args.oldZIndices = [];
 
             // Store the old z index vars for each object.
@@ -257,6 +258,10 @@ var WickActionHandler = function (wickEditor) {
                     args.restoredFrames.push(object);
                     object.remove();
                     wickEditor.project.currentObject.framesDirty = true;
+                } else if (object instanceof WickPlayRange) {
+                    wickEditor.project.currentObject.removePlayRange(object);
+                    args.restoredPlayRanges.push(object)
+                    wickEditor.project.currentObject.framesDirty = true;
                 }
             });
 
@@ -266,6 +271,10 @@ var WickActionHandler = function (wickEditor) {
             for(var i = 0; i < args.restoredObjects.length; i++) {
                 wickEditor.project.addObject(args.restoredObjects[i], args.oldZIndices[i]);
             }
+
+            args.restoredPlayRanges.forEach(function (restorePlayRange) {
+                wickEditor.project.getCurrentObject().addPlayRange(restorePlayRange);
+            });
 
             args.restoredFrames.forEach(function (restoreFrame) {
                 restoreFrame.parentLayer.addFrame(restoreFrame);
