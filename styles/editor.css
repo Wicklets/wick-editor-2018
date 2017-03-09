@@ -71,93 +71,6 @@ select {
 
 }
 
-#frameIdentifier {
-    /* card: */
-background: #FAFAFA;
-/* Sketch doesnt export gradient borders at this point */
-/* Sketch doesnt export gradient borders at this point */
-box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
-border-radius: 2px;
-/* 232.5: */
-font-family: Roboto-Regular;
-font-size: 16px;
-color: #2C2C2C;
-letter-spacing: 0.32px;
-    text-align: center;
-    
-}
-
-#projectName {
-    /* card: */
-background: #FAFAFA;
-/* Sketch doesnt export gradient borders at this point */
-/* Sketch doesnt export gradient borders at this point */
-box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
-border-radius: 2px;
-/* 232.5: */
-font-family: Roboto-Regular;
-font-size: 16px;
-color: #2C2C2C;
-letter-spacing: 0.32px;
-    text-align: center;
-}
-
-#projectSizeX {
-    /* card: */
-background: #FAFAFA;
-/* Sketch doesnt export gradient borders at this point */
-/* Sketch doesnt export gradient borders at this point */
-box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
-border-radius: 2px;
-/* 232.5: */
-font-family: Roboto-Regular;
-font-size: 16px;
-color: #2C2C2C;
-letter-spacing: 0.32px;
-}
-
-
-#projectSizeY {
-    /* card: */
-background: #FAFAFA;
-/* Sketch doesnt export gradient borders at this point */
-/* Sketch doesnt export gradient borders at this point */
-box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
-border-radius: 2px;
-/* 232.5: */
-font-family: Roboto-Regular;
-font-size: 16px;
-color: #2C2C2C;
-letter-spacing: 0.32px;
-}
-
-#frameRate {
-
-    /* card: */
-background: #FAFAFA;
-/* Sketch doesnt export gradient borders at this point */
-/* Sketch doesnt export gradient borders at this point */
-box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
-border-radius: 2px;
-/* 232.5: */
-font-family: Roboto-Regular;
-font-size: 16px;
-color: #2C2C2C;
-letter-spacing: 0.32px;
-    text-align: center;
-    
-}
-
-
-}
-
-
-
-#projectBgColor {
-    border-radius: 2px;
-    box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
-}
-
 #menuBarGUI {
 	top: 0px;
 	left: 0px;
@@ -202,6 +115,47 @@ letter-spacing: 0.32px;
 	cursor: pointer;
 	background-color: #ff8080;
     border-radius: 3px;
+}
+
+.scriptButton {
+    background: #58F9BA;
+    color: #0b2018;
+    box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
+    border-radius: 8px; 
+    float: center;
+    width: 180px; 
+    text-align: center;
+    font-weight: bold; 
+    margin:0 auto; 
+    margin-top:5px;
+    padding: 7px;
+}
+
+.scriptButton:hover {
+    cursor: pointer;
+    background: #009688;
+}
+
+.scriptbutton:active {
+	cursor: pointer;
+	background-color: #009688;
+}
+
+.scriptbutton:selected {
+	cursor: pointer;
+	background-color: #009688;
+}
+
+.fontSelector {
+    width:148px;
+}
+
+.jscolor {
+    border-radius: 8px; 
+}
+
+.jscolorInline {
+    padding-left: 10px; 
 }
 
 #statusBarGUI {
@@ -471,12 +425,35 @@ letter-spacing: 0.32px;
 	float: left;
 }
 
+/* Property Inputs */
 .propertyInputDiv {
 	border: none; 
 	border-radius: 8px; 
 	background-color: #FAFAFA;
     align-content: center;
     box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24); 
+}
+
+.propertyInputDivLarge {
+    width : 132px; 
+    height : 18px; 
+    float : left; 
+}
+
+.propertyInputLarge {
+    width: 128px; 
+    height: 17px; 
+}
+
+
+.propertyInputDivSmall {
+    width: 52px; 
+    height: 18px;
+}
+
+.propertyInputSmall {
+    width:48px; 
+    height: 17px; 
 }
 
 .propertyInput {
@@ -489,6 +466,8 @@ letter-spacing: 0.32px;
     color: #2C2C2C;
     letter-spacing: 0.32px; 
 }
+
+
 
 .propertyInputContainer {
     float: right;
@@ -507,7 +486,8 @@ letter-spacing: 0.32px;
 
 .propertyName {
     font-size: 16px;
-    padding-right:20px
+    padding-right: 10px;
+    float: left; 
 }
 
 .propertySlider {
