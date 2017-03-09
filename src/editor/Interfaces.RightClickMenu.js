@@ -6,7 +6,7 @@ var RightClickMenuInterface = function (wickEditor) {
 
     var menu;
 
-    var enabled = true;
+    var enabled = false;
 
 // menu object definitions
 

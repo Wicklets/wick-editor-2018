@@ -69,8 +69,9 @@ body {
 }
 
 .layer {
-	background-color: #2e9df4;
-    background-image: url(/resources/layerhandle.png);
+	background-color: #4a6588;
+    background-image: url(/resources/layerhandle.svg);
+    background-size: 45px 20px;
     background-repeat: no-repeat;
     background-position: left center;
     
@@ -94,6 +95,10 @@ body {
 	box-shadow: var(--border);
 
 	font-size: 12px;
+}
+
+.active-layer {
+    background-color: #46bbf8;
 }
 
 .frames-container {
