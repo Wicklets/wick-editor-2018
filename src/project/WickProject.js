@@ -586,6 +586,13 @@ WickProject.prototype.runScript = function (obj, fnName) {
     window.showCursor = function () { wickPlayer.showCursor(); };
     window.enterFullscreen = function () { wickPlayer.enterFullscreen(); }
 
+    // WickObjects in same frame (scope) are accessable without using root./parent.
+    if(objectScope) {
+        objectScope.getAllChildObjects().forEach(function(child) {
+            if(child.name) window[child.name] = child;
+        });
+    }
+
     try {
         if(obj[fnName]) obj[fnName]();
     } catch (e) {
