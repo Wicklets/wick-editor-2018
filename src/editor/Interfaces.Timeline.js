@@ -441,7 +441,7 @@ var TimelineInterface = function (wickEditor) {
                 });*/
                 if(timeline.framesContainer.addFrameOverlay.elem.style.display === 'none') return;
                 var newFrame = new WickFrame();
-                newFrame.playheadPosition = Math.round((e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2) / cssVar('--frame-width'))
+                newFrame.playheadPosition = Math.round((e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2 - 9) / cssVar('--frame-width'))
                 var layerIndex = Math.round((e.clientY - timeline.framesContainer.elem.getBoundingClientRect().top - cssVar('--layer-height')/2) / cssVar('--layer-height'))
                 var layer = wickEditor.project.currentObject.layers[layerIndex];
                 wickEditor.actionHandler.doAction('addFrame', {frame:newFrame, layer:layer});

@@ -188,7 +188,7 @@ body {
 	width: var(--frame-handle-width);
 	height: 100%;
 
-	opacity: 0.0;
+	opacity: 0.1;
 
 	position: absolute;
 	right: 0px;

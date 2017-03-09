@@ -60,11 +60,7 @@ var FabricInterface = function (wickEditor) {
         });
         self.canvas.on('before:selection:cleared', function (e) {
             wickEditor.project.clearSelection();
-
-            // quick fix for properties GUI closing after selected wick object changes
-            $(":focus").blur();
-
-             wickEditor.timeline.syncWithEditorState()
+            wickEditor.timeline.syncWithEditorState()
         });
         self.canvas.on('selection:cleared', function (e) {
             //wickEditor.timeline.redraw();
@@ -88,6 +84,9 @@ var FabricInterface = function (wickEditor) {
         });
 
         self.canvas.on('mouse:down', function (e) {
+            // quick fix for properties GUI closing after selected wick object changes
+            $(":focus").blur();
+            
             if(wickEditor.project.deselectObjectType(WickFrame) || 
                wickEditor.project.deselectObjectType(WickPlayRange)) {
                 wickEditor.syncInterfaces();

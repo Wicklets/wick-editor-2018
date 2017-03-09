@@ -540,6 +540,7 @@ WickProject.prototype.getNumSelectedObjects = function (obj) {
 
 WickProject.prototype.selectObject = function (obj) {
     this._selection.push(obj.uuid);
+    wickEditor.properties.setTab('selection')
 }
 
 WickProject.prototype.clearSelection = function () {
