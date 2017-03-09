@@ -161,6 +161,10 @@ WickFrame.prototype.decodeStrings = function () {
 
 }
 
+WickFrame.prototype.getFrameEnd = function () {
+    return this.playheadPosition + this.length; 
+}
+
 WickFrame.prototype.getObjectByUUID = function () {
 
     var foundWickObject;

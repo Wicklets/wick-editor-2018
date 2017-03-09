@@ -1031,27 +1031,23 @@ WickObject.prototype.pause = function () {
 
 WickObject.prototype.movePlayheadTo = function (frame) {
 
-    console.log("WE'RE MOVING");
-
     var oldFrame = this.getCurrentLayer().getCurrentFrame();
 
     // Frames are zero-indexed internally but start at one in the editor GUI, so you gotta subtract 1.
     if (CheckInput.isNonNegativeInteger(frame) && frame !== 0) {
-
-        console.log("number : " + frame); 
-
         var actualFrame = frame-1;
 
+        var endOfFrames = this.getFramesEnd(); 
         // Only navigate to an integer frame if it is nonnegative and a valid frame
-        if(actualFrame < this.getCurrentLayer().frames.length) {
-            this.newPlayheadPosition = actualFrame;
+        if(actualFrame < endOfFrames) {
+            this.playheadPosition = actualFrame;
         } else {
             throw (new Error("Failed to navigate to frame \'" + actualFrame + "\': is not a valid frame."));
         }
 
     } else if (CheckInput.isString(frame)) {
 
-         console.log("string"); 
+         console.log("string :" + frame); 
 
         // Search for the frame with the correct identifier and navigate if found
         /*var foundFrame;
@@ -1074,7 +1070,7 @@ WickObject.prototype.movePlayheadTo = function (frame) {
 
         if(foundPlayRange) {
             if(this.playheadPosition < foundPlayRange.start || this.playheadPosition >= foundPlayRange.end) {
-                this.newPlayheadPosition = foundPlayRange.start;
+                this.playheadPosition = foundPlayRange.start;
             }
         }
 
@@ -1122,6 +1118,18 @@ WickObject.prototype.gotoPrevFrame = function () {
         this.playheadPosition = 0;
     }
 }*/
+
+// TODO optimize this... 
+WickObject.prototype.getFramesEnd = function() {
+    endFrame = 0; 
+
+    this.getCurrentLayer().frames.forEach( function (frame) {
+        endFrame = Math.max (frame.getFrameEnd(), endFrame); 
+    })
+
+    return endFrame;
+
+}
 
 /* Determine if two wick objects collide using rectangular hit detection on their
        farthest border */
@@ -1501,12 +1509,6 @@ WickObject.prototype.update = function () {
     else if (wasActiveLastTick && !this._active) {
         
     }
-
-    if (this.newPlayheadPosition) { 
-        this.playheadPosition = this.newPlayheadPosition;
-    }
-
-    this.newPlayheadPosition = undefined; 
 
 }
 
