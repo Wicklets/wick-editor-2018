@@ -113,7 +113,7 @@ select {
 }
 .menubarButton:hover {
 	cursor: pointer;
-	background-color: #ff8080;
+	background-color: #E40047;
     border-radius: 3px;
 }
 
@@ -373,7 +373,7 @@ select {
 }
 
 .toolbarButtonActive {
-	background-color: #FF3333;
+	background-color: #E40047;
 }
 
 .button {
@@ -381,7 +381,7 @@ select {
 }
 .button:hover {
 	cursor: pointer;
-	background-color: #CACACA;
+	background-color: #a5a5a5;
 /*    border-radius: 2px;*/
 }
 .button:active {
