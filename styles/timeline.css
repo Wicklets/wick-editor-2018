@@ -398,3 +398,12 @@ body {
 	right: 0px;
 	top: 0px;
 }
+
+.hide-number-line-piece {
+	position: absolute;
+	width: var(--layers-width);
+	height: var(--number-line-height);
+	top: 0px;
+	left: 0px;
+	background-color: #585757;
+}

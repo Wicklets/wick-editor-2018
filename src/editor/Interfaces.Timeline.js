@@ -85,6 +85,10 @@ var TimelineInterface = function (wickEditor) {
 
             this.numberLine.build();
             this.elem.appendChild(this.numberLine.elem);
+
+            var hideNumberlinePiece = document.createElement('div');
+            hideNumberlinePiece.className = 'hide-number-line-piece';
+            this.elem.appendChild(hideNumberlinePiece);
         }
         
         this.rebuild = function () {
