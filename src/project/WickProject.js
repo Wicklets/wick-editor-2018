@@ -630,4 +630,9 @@ WickProject.prototype.update = function () {
 
     //console.log(this.rootObject.playheadPosition)
     this.rootObject.update();
+
+    allObjectsInProject.forEach(function (obj) {
+        if(obj._newPlayheadPosition !== undefined)
+            obj.playheadPosition = obj._newPlayheadPosition;
+    });
 }
