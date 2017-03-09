@@ -179,7 +179,7 @@ var TimelineInterface = function (wickEditor) {
             this.elem.wickData = {wickLayer:this.wickLayer};
 
             var layerSelectionOverlayDiv = document.createElement('div');
-            layerSelectionOverlayDiv.className = 'selection-overlay';
+            layerSelectionOverlayDiv.className = 'layer-selection-overlay';
             this.elem.appendChild(layerSelectionOverlayDiv);
 
             this.elem.addEventListener('mousedown', function (e) {
@@ -194,8 +194,15 @@ var TimelineInterface = function (wickEditor) {
 
         this.update = function () {
             var layerIsSelected = wickEditor.project.getCurrentLayer() === this.wickLayer;
-            var selectionOverlayDiv = this.elem.getElementsByClassName('selection-overlay')[0];
+            var selectionOverlayDiv = this.elem.getElementsByClassName('layer-selection-overlay')[0];
             selectionOverlayDiv.style.display = layerIsSelected ? 'block' : 'none';
+            
+            var layerDiv = this.elem;
+            if (layerIsSelected === true) {
+                layerDiv.className = 'layer active-layer';
+            } else {
+                layerDiv.className = 'layer';
+            }
         }
     }
 
@@ -553,7 +560,7 @@ var TimelineInterface = function (wickEditor) {
         }
 
         this.update = function () {
-            head.style.marginLeft = -that.scrollAmount + cssVar('--scrollbar-thickness') + 'px';
+            head.style.left = -that.scrollAmount + cssVar('--scrollbar-thickness') + 'px';
         }
 
         this.scroll = function (scrollAmt) {
@@ -609,7 +616,7 @@ var TimelineInterface = function (wickEditor) {
             this.elem.style.display = nLayers > 3 ? 'block' : 'none';
 
             head.style.height = parseInt(timeline.elem.style.height)/4 + 'px';
-            head.style.marginTop = -that.scrollAmount + cssVar('--scrollbar-thickness') + cssVar('--number-line-height') + 'px';
+            head.style.top = -that.scrollAmount + cssVar('--scrollbar-thickness') + cssVar('--number-line-height') + 'px';
         }
 
         this.scroll = function (scrollAmt) {
