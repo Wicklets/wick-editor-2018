@@ -72,8 +72,8 @@ var WickPlayer = function () {
 
                 if(!stopDrawLoop) {
 
-                    /*console.log(" ")
-                    console.log("PLAYER TICK " + tick)*/
+                    console.log(" ")
+                    console.log("PLAYER TICK " + tick)
                     tick++;
 
                     

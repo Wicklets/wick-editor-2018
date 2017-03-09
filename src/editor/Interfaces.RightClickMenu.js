@@ -141,30 +141,6 @@ var RightClickMenuInterface = function (wickEditor) {
             if(enabled) event.preventDefault();
         }, false);
 
-        /*
-        Non symbol
-            Flip x
-            Flip y
-            Bring to front
-            Send to back
-            Convert to symbol
-            Export
-            Delete
-
-        Symbol
-            Break apart
-            Edit scripts
-            Edit object
-
-        Not available yet
-            Copy
-            Cut
-            Paste
-
-            Add tween
-            Remove tween 
-        */
-
         // Build menu object
         menu = new RightClickMenu([
             // Objects selected options
@@ -221,10 +197,10 @@ var RightClickMenuInterface = function (wickEditor) {
                     alert("NYI")
                 }),
                 new RightClickMenuButton('Delete', function () {
-                    wickEditor.guiActionHandler.doAction('deleteSelectedObjects')
+                    wickEditor.guiActionHandler.doAction('deleteSelectedObjects');
                 }),
                 new RightClickMenuButton('Edit Scripts', function () {
-                    alert('NYI')
+                    wickEditor.guiActionHandler.doAction('editFrameScripts');
                 }),
             ], function () {
                 return wickEditor.project.getNumSelectedObjects() >= 1 && wickEditor.project.getSelectedObjects()[0] instanceof WickFrame;

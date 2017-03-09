@@ -1450,6 +1450,11 @@ WickObject.prototype.update = function () {
     var wasActiveLastTick = this._active;
     this._active = this.isActive();
 
+    if(this._wasClicked) {
+        (wickEditor || wickPlayer).project.runScript(this, 'onClick');
+        this._wasClicked = false;
+    }
+
     // Inactive -> Inactive
     if (!wasActiveLastTick && !this._active) {
 
@@ -1465,7 +1470,7 @@ WickObject.prototype.update = function () {
     }
     // Active -> Active
     else if (wasActiveLastTick && this._active) {
-        //if(!this.isRoot) console.log("WO onUpdate " + this.uuid.substring(0,2))
+        //if(!this.isRoot) console.log("WO onUpdate " + this.uuid.substring(0,2));
         (wickEditor || wickPlayer).project.runScript(this, 'onUpdate');
 
         if(this._playing && this.isSymbol && !this._playheadMovedThisTick) {
