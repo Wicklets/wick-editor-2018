@@ -214,9 +214,6 @@ var RightClickMenuInterface = function (wickEditor) {
                 /*new RightClickMenuButton('Create symbol from frames', function () {
                     wickEditor.guiActionHandler.doAction("convertFramesToSymbol")
                 }),*/
-                new RightClickMenuButton('Edit Scripts', function () {
-                    alert('NYI')
-                }),
                 new RightClickMenuButton('Copy', function () {
                     alert("NYI")
                 }),
@@ -225,7 +222,10 @@ var RightClickMenuInterface = function (wickEditor) {
                 }),
                 new RightClickMenuButton('Delete', function () {
                     wickEditor.guiActionHandler.doAction('deleteSelectedObjects')
-                })
+                }),
+                new RightClickMenuButton('Edit Scripts', function () {
+                    alert('NYI')
+                }),
             ], function () {
                 return wickEditor.project.getNumSelectedObjects() >= 1 && wickEditor.project.getSelectedObjects()[0] instanceof WickFrame;
             })

@@ -228,7 +228,7 @@ var TimelineInterface = function (wickEditor) {
 
                     var newFrameWidth = currentFrameWidth + delta * 3;
                     newFrameWidth = Math.min(newFrameWidth, 100)
-                    newFrameWidth = Math.max(newFrameWidth, 20)
+                    newFrameWidth = Math.max(newFrameWidth, 30)
 
                     document.body.style.setProperty('--frame-width', newFrameWidth+'px');
 
