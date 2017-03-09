@@ -242,28 +242,47 @@
                     <br />
                     <br />
                     <div id="textProperties">
-                        Font <select style="float:right; width:130px;" id="fontSelector">
-                            <option value="Georgia">Georgia</option>
-                            <option value="Palatino Linotype">Palatino Linotype</option>
-                            <option value="Book Antiqua">Book Antiqua</option>
-                            <option value="Times New Roman">Times New Roman</option>
-                            <option value="Arial" selected>Arial</option>
-                            <option value="Helvetica">Helvetica</option>
-                            <option value="Arial Black">Arial Black</option>
-                            <option value="Comic Sans MS">Comic Sans MS</option>
-                            <option value="Impact">Impact</option>
-                            <option value="Lucida Sans Unicode">Lucida Sans Unicode</option>
-                            <option value="Tahoma">Tahoma</option>
-                            <option value="Geneva">Geneva</option>
-                            <option value="Trebuchet MS">Trebuchet MS</option>
-                            <option value="Verdana">Verdana</option>
-                            <option value="Courier New">Courier New</option>
-                            <option value="Lucida Console">Lucida Console</option>
-                        </select>
+                        <div class="propertyRow">
+                            <div class="propertyName" style="float:left">Font</div>
+                            <div class="propertyInputContainer">
+                                <select class= "fontSelector" style="float:right;" id="fontSelector">
+                                    <option value="Georgia">Georgia</option>
+                                    <option value="Palatino Linotype">Palatino Linotype</option>
+                                    <option value="Book Antiqua">Book Antiqua</option>
+                                    <option value="Times New Roman">Times New Roman</option>
+                                    <option value="Arial" selected>Arial</option>
+                                    <option value="Helvetica">Helvetica</option>
+                                    <option value="Arial Black">Arial Black</option>
+                                    <option value="Comic Sans MS">Comic Sans MS</option>
+                                    <option value="Impact">Impact</option>
+                                    <option value="Lucida Sans Unicode">Lucida Sans Unicode</option>
+                                    <option value="Tahoma">Tahoma</option>
+                                    <option value="Geneva">Geneva</option>
+                                    <option value="Trebuchet MS">Trebuchet MS</option>
+                                    <option value="Verdana">Verdana</option>
+                                    <option value="Courier New">Courier New</option>
+                                    <option value="Lucida Console">Lucida Console</option>
+                                </select>
+                            </div>
+                        </div>
                         <br /><br />
-                        Color <input style="width:130px; float:right;" class="jscolor" value="FFFFFF" id="fontColor">
+                        <div class="propertyRow">
+                            <div class="propertyName" style="float:left">Color</div>
+                            
+                            <div class="propertyInputContainer">
+                                <input style="width:140px; float:right;" class="jscolor jscolorInline" value="FFFFFF" id="fontColor">
+                            </div>
+                        </div>
                         <br />
-                        Size <input style="width:130px; float:right;" type="text" id="fontSize">
+                        
+                            <div class="propertyRow">
+                                <div class="propertyName">Size</div>
+                                <div class="propertyInputContainer">
+                                    <div class="propertyInputDiv propertyInputDivLarge">
+                                        <input class="propertyInput propertyInputLarge" type="text" id="fontSize"> 
+                                    </div> 
+                                </div>
+                            </div>
                         <br /><br />
                         <input type="checkbox" id="boldCheckbox"> Bold<br />
                         <input type="checkbox" id="italicCheckbox"> Italic<br />
@@ -298,30 +317,80 @@
                         </select>
                     </div>
                     <div id="symbolProperties">
-                        <div class="button buttonInRow" style="border: 1px solid;" id="editScriptsButtonProperties">Edit Scripts</div>
-                        <div class="button buttonInRow" style="margin-left: 5px; border: 1px solid;" id="editObjectButtonProperties">Edit Object</div>
+                        <div class="scriptButton" id="editScriptsButtonProperties">Edit Symbol Scripts</div>
+                        <div class="scriptButton" id="editObjectButtonProperties">Edit Object</div>
                     </div>
                 </div>
 
                 <div id="projectProperties" class="propertiesGUIContent">
-                    Name <input style="float:right; width:130px;" type="text" id="projectName">
+                    <div class="propertyRow">
+                        <div class="propertyName">Name</div>
+                        <div class="propertyInputContainer">
+                            <div class="propertyInputDiv propertyInputDivLarge">
+                                <input class="propertyInput propertyInputLarge" type="text" id="projectName"> 
+                            </div> 
+                        </div>
+                    </div>
+                    
                     <br />
-                    Background <input style="width:130px; float:right;" class="jscolor" value="#FFFFFF" id="projectBgColor">
+                    
+                    <div class="propertyRow">
+                        <div class="propertyName">Background</div>
+                        <div class="propertyInputContainer">
+                            <input style="width:100px;" class="jscolor jscolorInline" value="#FFFFFF" id="projectBgColor">
+                        </div>
+                    </div>
+                    
                     <br />
-                    Border <input style="width:130px; float:right;" class="jscolor" value="#FFFFFF" id="projectBorderColor">
+                    
+                    <div class="propertyRow">
+                        <div class="propertyName">Border</div>
+                        <div class="propertyInputContainer">
+                            <input style="width:100px;" class="jscolor jscolorInline" value="#FFFFFF" id="projectBorderColor">
+                        </div>
+                    </div>
+                    
                     <br />
-                    Size  <input style="text-align:center; float:right; width:61px;" type="text" id="projectSizeY"><span style="float:right;">x</span><input style="text-align:center; width:61px; float:right;" type="text" id="projectSizeX">
+                    
+                    <div class="propertyRow">
+                        <div class="propertyName">Size</div>
+
+                        <div class="propertyInputContainer">
+                            <div class="propertyInputDiv propertyInputDivSmall" style="float:left;">
+                                <input class="propertyInput propertyInputSmall" type="text" id="projectSizeX"> 
+                            </div> 
+
+                            <div class="propertyCross">x</div>
+
+                            <div class="propertyInputDiv propertyInputDivSmall" style="float:right;">
+                                <input class="propertyInput propertyInputSmall" type="text" id="projectSizeY"> 
+                            </div> 
+                        </div>
+                    </div>
+                    
                     <br />
-                    Framerate <input style="float:right; width:130px;"type="text" id="frameRate">
+                    
+                    <div class="propertyRow">
+                        <div class="propertyName">Framerate</div>
+                        <div class="propertyInputContainer">
+                            <div class="propertyInputDiv propertyInputDivLarge">
+                                <input class="propertyInput propertyInputLarge" type="text" id="framerate"> 
+                            </div> 
+                        </div>
+                    </div>
+                    
+                    <br /> 
                     <br />
-                    <br />
-                    <input type="checkbox" id="transparentCheckbox"> Transparent
+                    <input type="checkbox" id="transparentCheckbox"> Allow Transparency
                     <br />
                     <input type="checkbox" id="pixelPerfectRenderingCheckbox"> Pixel-perfect rendering
+<!--
                     <br />
-                    <!--<input type="checkbox" id="experimentalToolsCheckbox"> Enable experimental tools-->
+                    <input type="checkbox" id="experimentalToolsCheckbox"> Enable experimental tools
                     <br />
                     <div id="experimentalWarning" style="color:red;display:none;">Warning: these tools are buggy and may break your project</div>
+-->
+                    <br />
                     <input type="checkbox" id="onionSkinningCheckbox"> Enable onion skinning
                     <br />
                 </div>
