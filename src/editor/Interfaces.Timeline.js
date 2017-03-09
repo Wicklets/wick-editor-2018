@@ -724,10 +724,12 @@ var TimelineInterface = function (wickEditor) {
                 startInteraction("dragPlayRangeStart", e, {playrange:that});
                 e.stopPropagation()
             });
-            this.elem.appendChild(this.handleLeft)
+            this.elem.appendChild(this.handleLeft);
         }
 
         this.update = function () {
+            this.elem.style.backgroundColor = this.wickPlayrange.color;
+
             if(wickEditor.project.isObjectSelected(this.wickPlayrange)) {
                 this.elem.className = 'playrange playrange-selected'
             } else {

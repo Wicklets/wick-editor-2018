@@ -365,15 +365,16 @@ body {
 	width: 100px;
 	height: var(--number-line-height);
 
-	background-color: transparent;
+	background-color: red;
+	opacity: 0.4;
 
-	-webkit-box-shadow:inset 0px 0px 0px 2px #ff0;
-    -moz-box-shadow:inset    0px 0px 0px 2px #ff0;
-    box-shadow:inset         0px 0px 0px 2px #ff0;
+	-webkit-box-shadow:inset 0px 0px 0px 2px #fff;
+    -moz-box-shadow:inset    0px 0px 0px 2px #fff;
+    box-shadow:inset         0px 0px 0px 2px #fff;
 }
 
 .playrange-selected {
-	background-color: yellow;
+	opacity: 0.8;
 }
 
 .playrange-label {
