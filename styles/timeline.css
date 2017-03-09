@@ -69,7 +69,7 @@ body {
 }
 
 .layer {
-	background-color: #2E9DF4;
+	background-color: #2e9df4;
     background-image: url(/resources/layerhandle.png);
     background-repeat: no-repeat;
     background-position: left center;
@@ -211,7 +211,7 @@ body {
 	pointer-events: none;
 	box-shadow: inset 0px 0px 0px 2px cyan;
 	background-color: cyan;
-	opacity: 0.1;
+	opacity: .1;
 	left: 0px;
 	top:0px;
 
