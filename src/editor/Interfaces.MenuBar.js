@@ -93,9 +93,6 @@ var MenuBarInterface = function (wickEditor) {
             new TabButton('Open', function () {
                 wickEditor.guiActionHandler.doAction("openFile");
             }),
-            new TabButton('Run', function () {
-                wickEditor.guiActionHandler.doAction("runProject");
-            }),
             new TabSpacer(),
 
             new TabButton('Export as zip', function () {
@@ -146,6 +143,8 @@ var MenuBarInterface = function (wickEditor) {
                 window.open('https://www.github.com/zrispo/wick/');
             }),
         ]);
+        
+        addTab('Run', [], function () { wickEditor.guiActionHandler.doAction("runProject"); });
     }
 
     var addTab = function (name, buttons, func) {
