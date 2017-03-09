@@ -622,7 +622,8 @@ var TimelineInterface = function (wickEditor) {
 
             this.elem.addEventListener('mousedown', function (e) {
                 var start = Math.round((e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2) / cssVar('--frame-width'));
-                var playRange = new WickPlayRange(start, start+1, "bees");
+                
+                var playRange = new WickPlayRange(start, start+1, "");
                 wickEditor.actionHandler.doAction('addPlayRange', {playRange: playRange});
                 e.stopPropagation();
             });
