@@ -14,23 +14,40 @@ Tools.Zoom = function (wickEditor) {
         else
             return "zoom-out";
     }
+
+    this.getToolbarIcon = function () {
+        return "resources/zoom.png";
+    }
+
+    this.getTooltipName = function () {
+        return "Zoom";
+    }
     
-    wickEditor.fabric.canvas.on('mouse:down', function (e) {
-    	if(wickEditor.fabric.currentTool instanceof Tools.Zoom) {
-    		if (wickEditor.guiActionHandler.keys[keyCharToCode["ALT"]]) {
-    			wickEditor.fabric.zoom(0.9);
-    		} else {
-    			wickEditor.fabric.zoom(1.1);
-    		}
-	    }
-    });
+    this.setup = function () {
+        wickEditor.fabric.canvas.on('mouse:down', function (e) {
+            if(wickEditor.currentTool instanceof Tools.Zoom) {
+                if (wickEditor.inputHandler.specialKeys["Modifier"]) {
+                    wickEditor.fabric.zoom(0.9);
+                } else {
+                    wickEditor.fabric.zoom(1.1);
+                }
+            }
+        });
+
+        var sq = document.getElementById("editorCanvasContainer");
+        if (sq.addEventListener) {
+            sq.addEventListener("mousewheel", MouseWheelHandler, false);
+            sq.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
+        }
+        else sq.attachEvent("onmousewheel", MouseWheelHandler);
+    }
 
 // Scroll-to-zoom
 
     function MouseWheelHandler(e) {
         // cross-browser wheel delta
         e.preventDefault()
-        if(wickEditor.guiActionHandler.specialKeys["Modifier"]) {
+        if(wickEditor.inputHandler.specialKeys["Modifier"]) {
             var e = window.event || e;
             var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
             wickEditor.fabric.zoom(1.0 + delta*.1);
@@ -38,12 +55,6 @@ Tools.Zoom = function (wickEditor) {
 
         return false;
     }
-    var sq = document.getElementById("editor");
-    if (sq.addEventListener) {
-        sq.addEventListener("mousewheel", MouseWheelHandler, false);
-        sq.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
-    }
-    else sq.attachEvent("onmousewheel", MouseWheelHandler);
 
 
 }

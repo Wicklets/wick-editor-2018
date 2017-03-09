@@ -11,11 +11,21 @@ Tools.Rectangle = function (wickEditor) {
         return "crosshair"
     };
 
-    fabricInterface.canvas.on('mouse:down', function (e) {
-        if(!(fabricInterface.currentTool instanceof Tools.Rectangle)) return;
+    this.getToolbarIcon = function () {
+        return "resources/rectangle.png";
+    }
 
-        fabricInterface.shapeDrawer.startDrawingShape('rectangle', e.e.offsetX, e.e.offsetY, that.createWickObjectFromShape);
-    });
+    this.getTooltipName = function () {
+        return "Rectangle";
+    }
+
+    this.setup = function () {
+        fabricInterface.canvas.on('mouse:down', function (e) {
+            if(!(wickEditor.currentTool instanceof Tools.Rectangle)) return;
+
+            fabricInterface.shapeDrawer.startDrawingShape('rectangle', e.e.offsetX, e.e.offsetY, that.createWickObjectFromShape);
+        });
+    }
 
     this.createWickObjectFromShape = function (drawingShape) {
         var origX = drawingShape.left+drawingShape.width /2;
@@ -23,24 +33,21 @@ Tools.Rectangle = function (wickEditor) {
         drawingShape.left = 0;
         drawingShape.top = 0;
         drawingShape.setCoords();
-        var svg = '<rect fill="'+drawingShape.fill+'" width="'+drawingShape.width+'" height="'+drawingShape.height+'" style="fill:rgb(0,0,0);" />'
+        var svg = '<rect fill="'+drawingShape.fill+'" width="'+drawingShape.width+'" height="'+drawingShape.height+'" style="" />'
         var svgString = '<svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>';
 
         drawingShape.remove()
-        wickEditor.actionHandler.doAction('addObjects', {
-            paths: [{svg:svgString, x:origX, y:origY}]
-        });
-
-        /*WickObject.fromPathFile(svgString, function (wickObject) {
-            wickObject.x = origX;
-            wickObject.y = origY;
-            wickObject.isNewDrawingPath = true;
-            wickEditor.project.addObject(wickObject);
-            wickEditor.paper.onWickObjectsChange();
-        });
         
-        wickEditor.fabric.drawingPath = drawingShape;
-        wickEditor.syncInterfaces();*/
+        var pathWickObject = WickObject.fromPathFile(svgString);
+        pathWickObject.x = origX;
+        pathWickObject.y = origY;
+        pathWickObject.width = drawingShape.width;
+        pathWickObject.height = drawingShape.height;
+
+        wickEditor.actionHandler.doAction('addObjects', {
+            wickObjects: [pathWickObject],
+            dontSelectObjects: true
+        });
     }
 
 }

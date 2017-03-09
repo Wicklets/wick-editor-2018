@@ -1,349 +1,287 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
+var WickPixiRenderer = function (project, canvasContainer, scale, args) {
 
+    var self = this;
 
+    var renderer;
+    var stage;
 
+    var renderScale;
 
-/* VERY IMRPOTANT */
-/* This needs to be changed so that it works like AudioPlayer i.e. so that
-   the WickObjects don't need to store a reference to their pixi objects,
-   there's just a dictionary mapping IDs to Pixi objects */
+    var wickToPixiDict;
 
+    self.canvasScale;
+    self.canvasTranslate;
+    self.rendererCanvas;
 
+    self.setup = function () {
 
+        renderScale = scale
+        if(!renderScale) renderScale = 1;
 
-var rendererContainerEl;
-var renderer;
-var stage;
-
-var projectFitScreenScale;
-var projectFitScreenTranslate;
-
-// http://stackoverflow.com/questions/17410809/how-to-calculate-rotation-in-2d-in-javascript
-function rotate(centerPoint, pointToRotate, angle) {
-    var radians = (Math.PI / 180) * angle,
-        cos = Math.cos(radians),
-        sin = Math.sin(radians),
-        nx = (cos * (pointToRotate.x - centerPoint.x)) + (sin * (pointToRotate.y - centerPoint.y)) + centerPoint.x,
-        ny = (cos * (pointToRotate.y - centerPoint.y)) - (sin * (pointToRotate.x - centerPoint.x)) + centerPoint.y;
-    return {x:nx, y:ny};
-}
-
-var WickPixiRenderer = function (project) {
-
-	this.setup = function() {
-
-		// update canvas size on window resize
+        // update canvas size on window resize
         window.addEventListener('resize', resizeCanvas, false);
 
-	    rendererContainerEl = document.getElementById("playerCanvasContainer");
-	    var rendererOptions = {
-	        backgroundColor : "#DDDDDD", 
-	        resolution: window.devicePixelRatio,
-	    };
-	    renderer = PIXI.autoDetectRenderer(project.width, project.height, rendererOptions);
-	    renderer.clearBeforeRender = false;
-	    renderer.roundPixels = false;
-	    renderer.view.setAttribute('tabindex', 0);
-	    $(renderer.view).click(function() { this.focus(); });
+        var rendererOptions = {
+            backgroundColor : "#DDDDDD", 
+            resolution: window.devicePixelRatio,
+            preserveDrawingBuffer:true,
+        };
+        renderer = PIXI.autoDetectRenderer(project.width*renderScale, project.height*renderScale, rendererOptions);
+        renderer.clearBeforeRender = false;
+        renderer.roundPixels = project.pixelPerfectRendering;
+        renderer.view.setAttribute('tabindex', 0);
+        $(renderer.view).click(function() { this.focus(); });
 
-	    // Get rid of old canvas (if it exists)
-	    var oldRendererCanvas = document.getElementById("rendererCanvas");
-	    if(oldRendererCanvas) {
-	        rendererContainerEl.removeChild(rendererContainerEl.childNodes[0]);
-	    }
 
-	    // Add renderer canvas
-	    rendererContainerEl.appendChild(renderer.view);
-	    renderer.view.id = "rendererCanvas";
+        // Add renderer canvas
+        canvasContainer.appendChild(renderer.view);
+        renderer.view.id = "rendererCanvas";
+        self.rendererCanvas = renderer.view;
 
-	    stage = new PIXI.Container();
+        stage = new PIXI.Container();
 
-	    projectFitScreenScale = 1.0;
-	    projectFitScreenTranslate = {x : 0, y : 0};
+        self.canvasScale = 1.0;
+        self.canvasTranslate = {x : 0, y : 0};
 
-	    resizeCanvas();
+        resizeCanvas();
 
-	    generatePixiScene(project.rootObject);
+        wickToPixiDict = {};
+        //generatePixiScene(project.rootObject);
 
-	}
+        if(window.wickEditor) {
+            if(project.borderColor) document.getElementById('builtinPlayer').style.backgroundColor = project.borderColor;
+        } else {
+            if(project.borderColor) document.body.style.backgroundColor = project.borderColor;
+        }
+        // Fix focus issues
+        self.rendererCanvas.className = ''
+        setTimeout(function () {
+            $('#rendererCanvas').focus();
+        }, 100);
+        $(document).on('focus', 'input[readonly]', function () {
+            this.blur();
+        });
 
-	this.render = function() {
+    }
 
-		if(!renderer) return;
+    self.render = function (wickObjects) {
 
-	    var graphics = new PIXI.Graphics();
-	    graphics.beginFill(parseInt(project.backgroundColor.replace("#","0x")));
-	    graphics.drawRect(0, 0, project.width, project.height);
-	    graphics.endFill();
-	    renderer.render(graphics);
+        if(!renderer) return;
 
-	    resetAllPixiObjects(project.rootObject);
-	    updatePixiObjectTransforms(project.rootObject);
-	    renderer.render(project.rootObject.pixiContainer);
-	}
+        var graphics = new PIXI.Graphics();
+        graphics.beginFill(parseInt(project.backgroundColor.replace("#","0x")));
+        graphics.drawRect(0, 0, project.width, project.height);
+        graphics.endFill();
+        renderer.render(graphics);
 
-	this.getRendererElem = function () {
-		return renderer.view;
-	}
+        for(uuid in wickToPixiDict) {
+            wickToPixiDict[uuid].visible = false;
+        }
 
-	this.refreshPixiSceneForObject = function (wickObj) {
-		//generatePixiScene(wickObj);
-		if (wickObj.isSymbol) {
-			generatePixiScene(wickObj);
-            wickObj.parentObject.pixiContainer.addChild(wickObj.pixiContainer);
-		} else if (wickObj.imageData) {
-            wickObj.pixiSprite = PIXI.Sprite.fromImage(wickObj.imageData);
-            wickObj.parentObject.pixiContainer.addChild(wickObj.pixiSprite);
-        } else if (wickObj.pathData) {
-        	var parser = new DOMParser();
-			var svgDoc = parser.parseFromString('<svg id="svg" x="0" y="0" version="1.1" width="'+project.width+'" height="'+project.width+'" xmlns="http://www.w3.org/2000/svg">'+wickObj.pathData+'</svg>', "image/svg+xml");
+        /*wickObjects.forEach(function (wickObject) {
+            wickObject.getAllChildObjectsRecursive().forEach(function (child) {
+                resetTransforms(child);
+            });
+        });*/
 
-			var s = new XMLSerializer().serializeToString(svgDoc)
-			var base64svg = 'data:image/svg+xml;base64,' + window.btoa(s);
-			
-			wickObj.pixiSprite = PIXI.Sprite.fromImage(base64svg);
-            wickObj.pixiContainer.addChild(wickObj.pixiSprite);
-        } else if (wickObj.fontData) {
-        	var style = {
-                font : subObj.fontData.fontWeight + " " + subObj.fontData.fontStyle + " " + subObj.fontData.fontSize + "px " + subObj.fontData.fontFamily,
-                fill : subObj.fontData.fill,
+        var resetParent = function (parent) {
+            resetTransforms(parent);
+            if(parent.parentObject) resetParent(parent.parentObject);
+        }
+
+        var resetObject = function (object) {
+            resetTransforms(object);
+            if(object.isSymbol) {
+                object.getAllActiveChildObjects().forEach(function (child) {
+                    resetObject(child);
+                });
+            }
+        }
+
+        wickObjects.forEach(function (wickObject) {
+            resetObject(wickObject);
+            if(wickObject.parentObject) resetParent(wickObject.parentObject)
+        });
+    
+        renderer.render(wickToPixiDict[project.rootObject.uuid]);
+    }
+
+    self.refresh = function (wickObject) {
+
+        var pixiObjectExists = wickToPixiDict[wickObject.uuid] !== undefined;
+
+        if(pixiObjectExists) {
+            if(wickObject.isSymbol) {
+                wickObject.getAllChildObjects().forEach(function (child) {
+                    self.refresh(child);
+                });
+            }
+            return;
+        }
+
+        var pixiObject;
+
+        if (wickObject.isSymbol) {
+
+            pixiObject = new PIXI.Container();
+
+        } else if (wickObject.imageData) {
+
+            pixiObject = PIXI.Sprite.fromImage(wickObject.imageData);
+            wickObject.generateAlphaMask(pixiObject.texture.baseTexture.imageUrl);
+
+        } else if (wickObject.pathData) {
+
+            var parser = new DOMParser();
+            var svgDoc = parser.parseFromString('<svg id="svg" viewBox="'+(0)+' '+(0)+' '+(wickObject.width)+' '+(wickObject.height)+'" version="1.1" width="'+(wickObject.width)+'" height="'+(wickObject.height)+'" xmlns="http://www.w3.org/2000/svg">'+wickObject.pathData+'</svg>', "image/svg+xml");
+            var s = new XMLSerializer().serializeToString(svgDoc)
+            var base64svg = 'data:image/svg+xml;base64,' + window.btoa(s);
+            
+            pixiObject = PIXI.Sprite.fromImage(base64svg);
+            wickObject.generateAlphaMask(pixiObject.texture.baseTexture.imageUrl);
+
+        } else if (wickObject.fontData) {
+
+            var style = {
+                font : wickObject.fontData.fontWeight + " " + wickObject.fontData.fontStyle + " " + wickObject.fontData.fontSize + "px " + wickObject.fontData.fontFamily,
+                fill : wickObject.fontData.fill,
                 wordWrap : true,
                 wordWrapWidth : 1440,
             };
-            wickObj.pixiText = new PIXI.Text(wickObj.fontData.text, style);
-            wickObj.parentObject.pixiContainer.addChild(wickObj.pixiText);
+            pixiObject = new PIXI.Text(wickObject.fontData.text, style);
+
         }
-	}
 
-	/* Recursively load images of wickObj */
-    var generatePixiScene = function (wickObj) {
+        if(!pixiObject) return;
+        wickToPixiDict[wickObject.uuid] = pixiObject;
 
-        wickObj.pixiContainer = new PIXI.Container();
-
-        wickObj.getAllChildObjects().forEach(function(subObj) {
-            if (subObj.isSymbol) {
-                generatePixiScene(subObj);
-                wickObj.pixiContainer.addChild(subObj.pixiContainer);
-            } else if (subObj.imageData) {
-                subObj.pixiSprite = PIXI.Sprite.fromImage(subObj.imageData);
-                subObj.generateAlphaMask(subObj.pixiSprite.texture.baseTexture.imageUrl);
-                wickObj.pixiContainer.addChild(subObj.pixiSprite);
-	        } else if (subObj.pathData) {
-	        	var parser = new DOMParser();
-				//var svgDoc = parser.parseFromString('<svg id="svg" viewBox="'+(subObj.getAbsolutePosition().x-subObj.width/2)+' '+(subObj.getAbsolutePosition().y-subObj.height/2)+' '+(subObj.width)+' '+(subObj.height)+'" version="1.1" width="'+(subObj.width)+'" height="'+(subObj.height)+'" xmlns="http://www.w3.org/2000/svg">'+subObj.pathData+'</svg>', "image/svg+xml");
-				var svgDoc = parser.parseFromString('<svg id="svg" viewBox="'+(-subObj.width/2)+' '+(-subObj.height/2)+' '+(subObj.width)+' '+(subObj.height)+'" version="1.1" width="'+(subObj.width)+'" height="'+(subObj.height)+'" xmlns="http://www.w3.org/2000/svg">'+subObj.pathData+'</svg>', "image/svg+xml");
-				
-				//var svgDoc = parser.parseFromString('<svg id="svg" viewBox="'+(0)+' '+(0)+' '+(subObj.width)+' '+(subObj.height)+'" version="1.1" width="'+(subObj.width)+'" height="'+(subObj.height)+'" xmlns="http://www.w3.org/2000/svg">'+subObj.pathData+'</svg>', "image/svg+xml");
-				
-				var s = new XMLSerializer().serializeToString(svgDoc)
-				var base64svg = 'data:image/svg+xml;base64,' + window.btoa(s);
-
-				//console.log(base64svg)
-				
-				subObj.pixiSprite = PIXI.Sprite.fromImage(base64svg);
-				subObj.generateAlphaMask(subObj.pixiSprite.texture.baseTexture.imageUrl);
-	            wickObj.pixiContainer.addChild(subObj.pixiSprite);
-            } else if (subObj.fontData) {
-            	var fontString = subObj.fontData.fontSize + "px " + subObj.fontData.fontFamily;
-            	if(subObj.fontData.fontWeight !== 'normal') fontString = subObj.fontData.fontWeight+" " + fontString;
-            	if(subObj.fontData.fontStyle !== 'normal') fontString = subObj.fontData.fontStyle+" " + fontString;
-                var style = {
-                    font : fontString,
-                    fill : subObj.fontData.fill,
-                    wordWrap : true,
-                    wordWrapWidth : 1440,
-                };
-                subObj.pixiText = new PIXI.Text(subObj.fontData.text, style);
-                wickObj.pixiContainer.addChild(subObj.pixiText);
+        if(wickObject.parentObject) {
+            var parentObject = wickToPixiDict[wickObject.parentObject.uuid];
+            if(!parentObject) {
+                self.refresh(wickObject.parentObject);
             }
-        });
+            wickToPixiDict[wickObject.parentObject.uuid].addChild(pixiObject)
+        }
 
-		/*wickObj.layers.forEach(function (layer) {
-			layer.frames.forEach(function (frame) {
-				if (frame.pathData === "") return;
+        if(wickObject.isSymbol) {
+            wickObject.getAllChildObjects().forEach(function (child) {
+                self.refresh(child);
+            });
+        }
 
-				var parser = new DOMParser();
-				var svgDoc = parser.parseFromString('<svg id="svg" x="0" y="0" version="1.1" width="'+project.width+'" height="'+project.height+'" xmlns="http://www.w3.org/2000/svg">'+frame.pathData+'</svg>', "image/svg+xml");
+    }
 
-				var s = new XMLSerializer().serializeToString(svgDoc)
-				var base64svg = 'data:image/svg+xml;base64,' + window.btoa(s);
-				
-				frame.pixiSprite = PIXI.Sprite.fromImage(base64svg);
+    var resetTransforms = function (wickObject) {
 
-                wickObj.pixiContainer.addChild(frame.pixiSprite);
-			});
-		});*/
+        //console.log('R ' + wickObject.uuid.substring(0,2));
+
+        var pixiObject = wickToPixiDict[wickObject.uuid];
+        if(!pixiObject) return;
+
+        pixiObject.visible = true;
+        pixiObject.anchor = new PIXI.Point(0.5, 0.5);
+        pixiObject.position.x = Math.round(wickObject.x);
+        pixiObject.position.y = Math.round(wickObject.y);
+        pixiObject.rotation = wickObject.rotation/360*2*3.14159;
+        pixiObject.scale.x = wickObject.scaleX;
+        pixiObject.scale.y = wickObject.scaleY;
+        if(wickObject.isRoot) {
+            pixiObject.scale.x *= renderScale;
+            pixiObject.scale.y *= renderScale;
+        }
+        pixiObject.alpha = wickObject.opacity;
+        if(wickObject.flipX) pixiObject.scale.x *= -1;
+        if(wickObject.flipY) pixiObject.scale.y *= -1;
+
+    }
+
+    self.setText = function (wickObject, newText) {
+        var pixiObject = wickToPixiDict[wickObject.uuid];
+        if(!pixiObject) return;
+        pixiObject.text = ""+newText
+    }
+
+    self.enterFullscreen = function () {
+        var elem;
+
+        if(window.self !== window.top) {
+            // Inside iframe
+            elem = window.frameElement;
+            console.log(elem)
+        } else {
+            // Not inside iframe
+            elem = self.rendererCanvas;
+        }
+
+        if (screenfull.enabled) {
+            screenfull.request(elem);
+        }
     }
 
     var resizeCanvas = function () {
 
-	    if(project && project.fitScreen) {
-	        // Calculate how much the project would have to scale to fit either dimension
-	        widthRatio  = window.innerWidth  / project.width;
-	        heightRatio = window.innerHeight / project.height;
+        if(project && project.fitScreen) {
+            // Calculate how much the project would have to scale to fit either dimension
+            widthRatio  = window.innerWidth  / project.width;
+            heightRatio = window.innerHeight / project.height;
 
-	        // Fit only so much that stuff doesn't get cut off
-	        if(widthRatio > heightRatio) {
-	            projectFitScreenScale = heightRatio;
-	        } else {
-	            projectFitScreenScale = widthRatio;
-	        }
+            // Fit only so much that stuff doesn't get cut off
+            if(widthRatio > heightRatio) {
+                self.canvasScale = heightRatio;
+            } else {
+                self.canvasScale = widthRatio;
+            }
 
-	        renderer.view.style.width  = project.width * projectFitScreenScale + "px";
-	        renderer.view.style.height = project.height * projectFitScreenScale + "px";
+            renderer.view.style.width  = project.width * self.canvasScale + "px";
+            renderer.view.style.height = project.height * self.canvasScale + "px";
 
-	        if(widthRatio > heightRatio) {
-	            var offset = (window.innerWidth - project.width * projectFitScreenScale) / 2;
-	            rendererContainerEl.style.paddingLeft = offset + "px";
-	            rendererContainerEl.style.paddingTop  = "0px";
-	        } else {
-	            var offset = (window.innerHeight - project.height * projectFitScreenScale) / 2;
-	            rendererContainerEl.style.paddingLeft = "0px";
-	            rendererContainerEl.style.paddingTop  = offset + "px";
-	        }
-	    } else {
-	        renderer.view.style.width  = project.width + "px";
-	        renderer.view.style.height = project.height + "px";
+            if(widthRatio > heightRatio) {
+                var offset = (window.innerWidth - project.width * self.canvasScale) / 2;
+                canvasContainer.style.paddingLeft = offset + "px";
+                canvasContainer.style.paddingTop  = "0px";
+            } else {
+                var offset = (window.innerHeight - project.height * self.canvasScale) / 2;
+                canvasContainer.style.paddingLeft = "0px";
+                canvasContainer.style.paddingTop  = offset + "px";
+            }
+        } else {
+            renderer.view.style.width  = project.width + "px";
+            renderer.view.style.height = project.height + "px";
 
-	        var offsetX = (window.innerWidth  - project.width) / 2;
-	        var offsetY = (window.innerHeight - project.height) / 2;
+            var offsetX = (window.innerWidth  - project.width) / 2;
+            var offsetY = (window.innerHeight - project.height) / 2;
 
-	        rendererContainerEl.style.paddingLeft   = offsetX + "px";
-	        rendererContainerEl.style.paddingRight  = offsetX + "px";
-	        rendererContainerEl.style.paddingTop    = offsetY + "px";
-	        rendererContainerEl.style.paddingBottom = offsetY + "px";
-	    }
+            canvasContainer.style.paddingLeft   = offsetX + "px";
+            canvasContainer.style.paddingRight  = offsetX + "px";
+            canvasContainer.style.paddingTop    = offsetY + "px";
+            canvasContainer.style.paddingBottom = offsetY + "px";
+        }
 
-	}
+    }
 
-	this.deleteObject = function (wickObj) {
-		var pixiObj = wickObj.pixiContainer || wickObj.pixiText || wickObj.pixiSprite;
-		//wickObj.parentObject.pixiContainer.removeChild(pixiObj);
-		// No easy way to bring it back so just hide it for now
-		pixiObj.visible = false;
-	}
+    this.cleanup = function() {
+        window.removeEventListener('resize', resizeCanvas);
 
-	var resetAllPixiObjects = function (wickObj) {
+        // Get rid of old canvas
+        var oldRendererCanvas = self.rendererCanvas
+        if(oldRendererCanvas) {
+            canvasContainer.removeChild(canvasContainer.childNodes[0]);
+        }
 
-		/*wickObj.layers.forEach(function (layer) {
-			layer.frames.forEach(function (frame) {
-				if(frame.pixiSprite) frame.pixiSprite.visible = false;
-			});
-		});*/
+        //https://gist.github.com/anonymous/b910bbb0cfea82bcf880
+        renderer.plugins.interaction.destroy();
+        renderer = null;
+        stage.destroy(true);
+        stage = null;
+        //document.body.removeChild(view);
+        view = null;
 
-	    wickObj.getAllChildObjects().forEach(function(subObj) {
-	        if(subObj.pixiSprite) {
-	            subObj.pixiSprite.visible = false;
-	        }
-	        if(subObj.pixiText) {
-	            subObj.pixiText.visible = false;
-	        }
-	        if(subObj.pixiContainer) {
-	            subObj.pixiContainer.visible = false;
-	        }
+        for (var textureId in PIXI.utils.TextureCache) {
+            //console.log(textureId)
+            PIXI.utils.BaseTextureCache[textureId].destroy(true);
+        }
+    }
 
-	        if(subObj.isSymbol) {
-	            resetAllPixiObjects(subObj);
-	        }
-	    });
-
-	}
-
-	var updatePixiObjectTransforms = function (wickObj) {
-
-	    if(wickObj.isSymbol) {
-	    	/*var frame = wickObj.getCurrentFrame();
-	    	if(frame.pixiSprite) frame.pixiSprite.visible = true;*/
-
-	        wickObj.pixiContainer.visible = true;
-	        //if(!wickObj.isRoot) {
-	            wickObj.pixiContainer.anchor = new PIXI.Point(0.5, 0.5);
-	            wickObj.pixiContainer.position.x = Math.round(wickObj.x);
-	            wickObj.pixiContainer.position.y = Math.round(wickObj.y);
-	            wickObj.pixiContainer.rotation = wickObj.rotation/360*2*3.14159;
-	            wickObj.pixiContainer.scale.x = wickObj.scaleX;
-	            wickObj.pixiContainer.scale.y = wickObj.scaleY;
-	            wickObj.pixiContainer.alpha = wickObj.opacity;
-	            
-	            if(wickObj.flipX) { 
-	            	wickObj.pixiContainer.scale.x *= -1;
-	            	/*var m = {x:wickObj.width*wickObj.scaleX, y:0};
-	            	var r = rotate({x:0,y:0},m,-wickObj.rotation);
-	            	wickObj.pixiContainer.position.x += r.x;
-	            	wickObj.pixiContainer.position.y += r.y;*/
-	            }
-	            if(wickObj.flipY) {
-	            	wickObj.pixiContainer.scale.y *= -1;
-	            	/*var m = {x:0, y:wickObj.height*wickObj.scaleY};
-	            	var r = rotate({x:0,y:0},m,-wickObj.rotation);
-	            	wickObj.pixiContainer.position.x += r.x;
-	            	wickObj.pixiContainer.position.y += r.y;*/
-	            }
-	        //}
-	        wickObj.getAllActiveChildObjects().forEach(function(subObj) {
-	            updatePixiObjectTransforms(subObj);
-	        });
-	    } else {
-	        if(wickObj.pixiSprite) {
-	            wickObj.pixiSprite.visible = true;
-	            if(!wickObj.pathData) {
-		            wickObj.pixiSprite.anchor = new PIXI.Point(0.5, 0.5);
-		            wickObj.pixiSprite.position.x = wickObj.x;
-		            wickObj.pixiSprite.position.y = wickObj.y;
-		            wickObj.pixiSprite.rotation = wickObj.rotation/360*2*3.14159;
-		            wickObj.pixiSprite.scale.x = wickObj.scaleX;
-		            wickObj.pixiSprite.scale.y = wickObj.scaleY;
-		        } else {
-		        	wickObj.pixiSprite.position.x = wickObj.x//0;
-		        	wickObj.pixiSprite.position.y = wickObj.y//0;
-		        	wickObj.pixiSprite.anchor = new PIXI.Point(0.5, 0.5);
-		        }
-	            wickObj.pixiSprite.alpha = wickObj.opacity;
-
-	            if(wickObj.flipX) { 
-	            	wickObj.pixiSprite.scale.x *= -1;
-	            	/*var m = {x:wickObj.width*wickObj.scaleX, y:0};
-	            	var r = rotate({x:0,y:0},m,-wickObj.rotation);
-	            	wickObj.pixiSprite.position.x += r.x;
-	            	wickObj.pixiSprite.position.y += r.y;*/
-	            }
-	            if(wickObj.flipY) { 
-	            	wickObj.pixiSprite.scale.y *= -1;
-	            	/*var m = {x:0, y:wickObj.height*wickObj.scaleY};
-	            	var r = rotate({x:0,y:0},m,-wickObj.rotation);
-	            	wickObj.pixiSprite.position.x += r.x;
-	            	wickObj.pixiSprite.position.y += r.y;*/
-	            }
-	        } else if(wickObj.pixiText) {
-	            wickObj.pixiText.visible = true;
-	            wickObj.pixiText.anchor = new PIXI.Point(0.5, 0.5);
-	            wickObj.pixiText.x        = wickObj.x;
-	            wickObj.pixiText.y        = wickObj.y;
-	            wickObj.pixiText.rotation = wickObj.rotation/360*2*3.14159;
-	            wickObj.pixiText.scale.x  = wickObj.scaleX;
-	            wickObj.pixiText.scale.y  = wickObj.scaleY;
-	            if(wickObj.flipX) wickObj.pixiText.scale.x *= -1;
-	            if(wickObj.flipY) wickObj.pixiText.scale.y *= -1;
-	            wickObj.pixiText.alpha    = wickObj.opacity;
-	        }
-	    }
-
-	}
-
-	this.cleanup = function() {
-		window.removeEventListener('resize', resizeCanvas);
-
-		//https://gist.github.com/anonymous/b910bbb0cfea82bcf880
-		renderer.plugins.interaction.destroy();
-		renderer = null;
-		stage.destroy(true);
-		stage = null;
-		//document.body.removeChild(view);
-		view = null;
-
-		for (var textureId in PIXI.utils.TextureCache) {
-			PIXI.utils.BaseTextureCache[textureId].destroy(true);
-		}
-	}
 };

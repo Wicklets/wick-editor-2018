@@ -18,7 +18,7 @@ WickProject.Exporter = (function () {
         // All libs needed by the player. 
         var requiredLibFiles = [
             "lib/jquery.min.js",
-            "lib/pixi.min.js",
+            "lib/pixi.4.2.2.min.js",
             "lib/lz-string.min.js",
             "lib/screenfull.js",
             "lib/polyfills.js",
@@ -31,6 +31,7 @@ WickProject.Exporter = (function () {
             "lib/socket.io-1.2.0.js",
             "lib/Tween.js",
             "lib/lerp.js",
+            "lib/bowser.js",
             "lib/URLParameterUtils.js",
             "src/project/WickTween.js",
             "src/project/WickFrame.js",
@@ -41,6 +42,7 @@ WickProject.Exporter = (function () {
             "src/player/WickPlayer.Preloader.js",
             "src/player/WickPlayer.PixiRenderer.js",
             "src/player/WickPlayer.WebAudioPlayer.js",
+            "src/player/WickPlayer.InputHandler.js",
             "src/player/WickPlayer.js",
         ];
 
@@ -59,27 +61,23 @@ WickProject.Exporter = (function () {
             //console.log(JSONProject.length)
             //console.log(compressedJSONProject.length)
 
-            fileOut += "<script>WickPlayer.runProject('" + JSONProject + "');</script>" + "\n";callback(fileOut);
+            fileOut += "<script>var wickPlayer = new WickPlayer(); wickPlayer.runProject('" + JSONProject + "', document.getElementById('playerCanvasContainer'));</script>" + "\n";
+            callback(fileOut);
         });
 
     }
 
     projectExporter.exportProjectInZip = function (wickProject) {
 
-        wickEditor.statusbar.setState('exporting');
-
         projectExporter.bundleProjectToHTML(wickProject, function(fileOut) {
             var blob = new Blob([fileOut], {type: "text/plain;charset=utf-8"});
             var filename = wickProject.name || "project";
             saveAs(blob, filename+".html");
-            wickEditor.statusbar.setState('done');
         });
 
     }
 
     projectExporter.exportProject = function (wickProject, args) {
-
-        wickEditor.statusbar.setState('exporting');
 
         projectExporter.bundleProjectToHTML(wickProject, function(fileOut) {
             var filename = wickProject.name || "project";
@@ -93,13 +91,21 @@ WickProject.Exporter = (function () {
                 var blob = new Blob([fileOut], {type: "text/plain;charset=utf-8"});
                 saveAs(blob, filename+".html");
             }
-            wickEditor.statusbar.setState('done');
         });
 
     }
 
     projectExporter.JSONReplacer = function(key, value) {
-        var dontJSONVars = ["currentObject","parentObject","causedAnException","fabricObjectReference"];
+        var dontJSONVars = [
+            "currentObject",
+            "parentObject",
+            "causedAnException",
+            "fabricObjectReference",
+            "parentLayer",
+            "parentWickObject",
+            "parentFrame",
+            "alphaMask"
+        ];
 
         if (dontJSONVars.indexOf(key) !== -1) {
             return undefined;

@@ -2,172 +2,226 @@
 
 var RightClickMenuInterface = function (wickEditor) {
 
-    var that = this;
+    var self = this;
 
-    this.setup = function () {
+    var menu;
+
+    var enabled = true;
+
+// menu object definitions
+
+    var RightClickMenu = function (buttonGroups) {
+        var self = this;
+
         this.open = false;
-        this.mode = undefined;
-    }
 
-    var openRightClickMenuDiv = function () {
-        // Make rightclick menu visible
-        $("#rightClickMenu").css('display', 'block');
-    }
+        this.buttonGroups = buttonGroups;
 
-    var closeRightClickMenuDiv = function () {
-        // Hide rightclick menu
-        $("#rightClickMenu").css('display', 'none');
-        $("#rightClickMenu").css('top', '0px');
-        $("#rightClickMenu").css('left','0px');
-    }
+        this.elem = null;
 
-    this.syncWithEditorState = function () {
+        this.generateElem = function () {
 
-        if(this.open) {
-            // Hide everything
-            hideButtonGroup("#fabricButtons");
-            hideButtonGroup("#insideSymbolButtons");
-            hideButtonGroup("#symbolButtons");
-            hideButtonGroup("#staticObjectButtons");
-            hideButtonGroup("#singleObjectButtons");
-            hideButtonGroup("#commonObjectButtons");
-            hideButtonGroup("#clickedFrameExists");
-            hideButtonGroup("#clickedOffFrameButtons");
-            hideButtonGroup("#noFramesExistButtons");
-            hideButtonGroup("#breakpointExists");
-            hideButtonGroup("#noBreakpointExists");
-            hideButtonGroup("#timelineButtons");
-            hideButtonGroup("#commonTimelineButtons");
-            hideButtonGroup("#clickedOnFrameButtons");
-            hideButtonGroup("#isImage");
-            hideButtonGroup("#noKeyframeExists");
-            hideButtonGroup("#keyframeExists");
+            this.elem = document.createElement('div');
+            this.elem.id = 'rightClickMenu';
+            this.elem.className = "GUIBox";
+            document.getElementById('editor').appendChild(this.elem);
 
-            // Selectively show portions we need depending on editor state
-            showButtonsForMode[that.mode]();
-            openRightClickMenuDiv();
-        } else {
-            closeRightClickMenuDiv();
-        }
+            this.buttonGroups.forEach(function (buttonGroup) {
+                buttonGroup.generateElem();
+                self.elem.appendChild(buttonGroup.elem);
+            });
 
-    }
+            var mouseEventHandler = function (e) {
+                if(!enabled) return;
 
-    this.repositionMenu = function () {
-        var menuElem = document.getElementById('rightClickMenu');
-        var newX = wickEditor.inputHandler.mouse.x;
-        var newY = wickEditor.inputHandler.mouse.y;
-        if(newX+menuElem.offsetWidth > window.innerWidth) {
-            newX = window.innerWidth - menuElem.offsetWidth;
-        }
-        if(newY+menuElem.offsetHeight > window.innerHeight) {
-            newY = window.innerHeight - menuElem.offsetHeight;
-        }
-        menuElem.style.left = newX+'px';
-        menuElem.style.top  = newY+'px';
-    }
+                if(e.button == 2) {
+                    self.open = true;
+                } else {
+                    self.open = false;
+                }
 
-/***********************************
-    Show/hide relevant buttons
-***********************************/
-
-    var showButtonGroup = function (buttonsDivID) {
-        $(buttonsDivID).css('display', 'block');
-    }
-    var hideButtonGroup = function (buttonsDivID) {
-        $(buttonsDivID).css('display', 'none');
-    }
-
-    var showButtonsForMode = {};
-
-    showButtonsForMode["fabric"] = function () {
-        showButtonGroup("#fabricButtons");
-
-        var selectedSingleObject = wickEditor.fabric.getSelectedObject(WickObject);
-        var currentObject = wickEditor.project.currentObject;
-
-        var multiObjectSelection = wickEditor.fabric.getSelectedObjects(WickObject).length > 1;
-
-        if(!currentObject.isRoot) {
-            showButtonGroup("#insideSymbolButtons");
-        }
-
-        if(selectedSingleObject) {
-            showButtonGroup("#singleObjectButtons");
-
-            if(selectedSingleObject.isSymbol) {
-                showButtonGroup("#symbolButtons");
-            } else {
-                showButtonGroup("#staticObjectButtons");
-            }
-            showButtonGroup("#commonObjectButtons");
-
-            if(selectedSingleObject.imageData) {
-                showButtonGroup("#isImage");
+                self.updateElem();
             }
 
-            var relPlayheadPos = selectedSingleObject.parentObject.getRelativePlayheadPosition(selectedSingleObject);
-            if(selectedSingleObject.hasTweenAtFrame(relPlayheadPos)) {
-                showButtonGroup("#keyframeExists");
+            window.addEventListener('mousedown', function(e) { 
+                mouseEventHandler(e, "fabric");
+            });
+
+        }
+
+        this.updateElem = function () {
+
+            if(this.open) {
+
+                this.elem.style.display = 'block';
+
+                var newX = wickEditor.inputHandler.mouse.x;
+                var newY = wickEditor.inputHandler.mouse.y;
+                if(newX+this.elem.offsetWidth > window.innerWidth) {
+                    newX = window.innerWidth - this.elem.offsetWidth;
+                }
+                if(newY+this.elem.offsetHeight > window.innerHeight) {
+                    newY = window.innerHeight - this.elem.offsetHeight;
+                }
+                this.elem.style.left = newX+'px';
+                this.elem.style.top  = newY+'px';
+
+                self.buttonGroups.forEach(function (buttonGroup) {
+                    buttonGroup.updateElem();
+                });
+            
             } else {
-                showButtonGroup("#noKeyframeExists");
+
+                this.elem.style.display = 'none';
+                this.elem.style.top = '0px';
+                this.elem.style.left = '0px';
+
             }
-        } else {
-            showButtonGroup("#frameButtons");
+
         }
 
-        if(multiObjectSelection) {
-            showButtonGroup("#staticObjectButtons");
-        }
     }
 
-    showButtonsForMode["timeline"] = function () {
-        showButtonGroup("#timelineButtons");
+    var RightClickMenuButtonGroup = function (buttons, isActiveFn) {
+        var self = this;
 
-        showButtonGroup("#commonTimelineButtons");
+        this.buttons = buttons;
+        this.isActiveFn = isActiveFn;
+        this.elem = null;
 
-        var frame = wickEditor.project.currentObject.getCurrentFrame();
-        if(frame) {
-            showButtonGroup("#clickedOnFrameButtons");
-            /*if(frame.autoplay) {
-                showButtonGroup("#noBreakpointExists");
+        this.generateElem = function () {
+            this.elem = document.createElement('div');
+
+            this.buttons.forEach(function (button) {
+                button.generateElem();
+                self.elem.appendChild(button.elem);
+            });
+            this.elem.appendChild(document.createElement('hr'));
+        }
+
+        this.updateElem = function () {
+            if(this.isActiveFn()) {
+                this.elem.style.display = 'block';
             } else {
-                showButtonGroup("#breakpointExists");
-            }*/
-        } else {
-            showButtonGroup("#clickedOffFrameButtons");
+                this.elem.style.display = 'none';
+            }
         }
+
     }
 
-/***********************************
-    Bind Mouse events to open menu
-***********************************/
+    var RightClickMenuButton = function (title, action) {
+        var self = this;
 
-    document.addEventListener('contextmenu', function (event) { 
-        event.preventDefault();
-    }, false);
+        this.title = title;
+        this.action = action;
+        this.elem = null;
 
-    document.getElementById("editorCanvasContainer").addEventListener('mousedown', function(e) { 
-        if(e.button == 2) {
-            that.open = true;
-            that.mode = "fabric";
-        } else {
-            that.open = false;
+        this.generateElem = function () {
+            this.elem = document.createElement('div');
+            this.elem.className = 'button';
+            this.elem.innerHTML = title;
+
+            this.elem.addEventListener('mousedown', function (e) {
+                menu.open = false;
+                self.action();
+            });
         }
 
-        that.syncWithEditorState();
-        that.repositionMenu();
-    });
+        this.updateElem = function () {
 
-    document.getElementById("timelineCanvas").addEventListener('mousedown', function(e) { 
-        if(e.button == 2) {
-            that.open = true;
-            that.mode = "timeline";
-        } else {
-            that.open = false;
         }
 
-        that.syncWithEditorState();
-        that.repositionMenu();
-    });
+    }
+
+// Interface API
+
+    self.setup = function () {
+        // Block browser default right click menu
+        document.addEventListener('contextmenu', function (event) { 
+            if(enabled) event.preventDefault();
+        }, false);
+
+        // Build menu object
+        menu = new RightClickMenu([
+            // Objects selected options
+            new RightClickMenuButtonGroup([
+                new RightClickMenuButton('Flip horizontally', function () {
+                    wickEditor.guiActionHandler.doAction("flipHorizontally")
+                }),
+                new RightClickMenuButton('Flip vertically', function () {
+                    wickEditor.guiActionHandler.doAction("flipVertically")
+                }),
+                new RightClickMenuButton('Bring to front', function () {
+                    wickEditor.guiActionHandler.doAction("bringToFront")
+                }),
+                new RightClickMenuButton('Send to back', function () {
+                    wickEditor.guiActionHandler.doAction("sendToBack")
+                }),
+                new RightClickMenuButton('Convert to symbol', function () {
+                    wickEditor.guiActionHandler.doAction("convertToSymbol")
+                }),
+                new RightClickMenuButton('Export', function () {
+                    wickEditor.guiActionHandler.doAction("downloadObject")
+                }),
+                new RightClickMenuButton('Delete', function () {
+                    wickEditor.guiActionHandler.doAction('deleteSelectedObjects');
+                }),
+            ], function () {
+                return wickEditor.project.getNumSelectedObjects() >= 1 && wickEditor.project.getSelectedObjects()[0] instanceof WickObject;
+            }),
+
+            // Single symbol selected options
+            new RightClickMenuButtonGroup([
+                new RightClickMenuButton('Edit object', function () {
+                    wickEditor.guiActionHandler.doAction('editObject');
+                }),
+                new RightClickMenuButton('Edit scripts', function () {
+                    wickEditor.guiActionHandler.doAction("editScripts")
+                }),
+                new RightClickMenuButton('Break apart', function () {
+                    wickEditor.guiActionHandler.doAction("breakApart")
+                })
+            ], function () {
+                return wickEditor.project.getNumSelectedObjects() === 1 && wickEditor.project.getSelectedObjects()[0].isSymbol;
+            }),
+
+            // Frames selection
+            new RightClickMenuButtonGroup([
+                /*new RightClickMenuButton('Create symbol from frames', function () {
+                    wickEditor.guiActionHandler.doAction("convertFramesToSymbol")
+                }),*/
+                new RightClickMenuButton('Copy', function () {
+                    alert("NYI")
+                }),
+                new RightClickMenuButton('Paste', function () {
+                    alert("NYI")
+                }),
+                new RightClickMenuButton('Delete', function () {
+                    wickEditor.guiActionHandler.doAction('deleteSelectedObjects');
+                }),
+                new RightClickMenuButton('Edit Scripts', function () {
+                    wickEditor.guiActionHandler.doAction('editFrameScripts');
+                }),
+            ], function () {
+                return wickEditor.project.getNumSelectedObjects() >= 1 && wickEditor.project.getSelectedObjects()[0] instanceof WickFrame;
+            })
+        ]);
+
+        menu.generateElem();
+    }
+
+    self.syncWithEditorState = function () {
+        menu.updateElem();
+    }
+
+    self.openMenu = function () {
+        menu.open = true;
+        self.syncWithEditorState();
+    }
+
+    self.closeMenu = function () {
+        menu.open = false;
+        self.syncWithEditorState();
+    }
 
 }

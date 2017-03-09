@@ -7,11 +7,11 @@
     <title>Wick Editor</title>
 
     <link rel="stylesheet" type="text/css" href="styles/editor.css">
+    <link rel="stylesheet" type="text/css" href="styles/timeline.css">
     <link rel="stylesheet" type="text/css" href="lib/rangeslider.css">
 
     <script src="lib/jquery.min.js"></script>
     <script src="lib/fabric.1.7.3.js"></script>
-    <script src="lib/fabric.canvasex.js"></script>
     <script src="lib/potrace.js"></script>
     <script src="lib/paper-full.js"></script>
     <script src="lib/beautify.js"></script>
@@ -20,7 +20,7 @@
     <script src="lib/jscolor.js"></script>
     <script src="lib/libgif.js"></script>
     <script src="lib/lz-string.min.js"></script>
-    <script src="lib/pixi.min.js"></script>
+    <script src="lib/pixi.4.2.2.min.js"></script>
     <script src="lib/jszip.min.js"></script>
     <script src="lib/screenfull.js"></script>
     <script src="lib/rangeslider.min.js"></script>
@@ -40,6 +40,7 @@
     <script src="lib/random.js"></script>
     <script src="lib/Tween.js"></script>
     <script src="lib/lerp.js"></script>
+    <script src="lib/bowser.js"></script>
 
     <script src="src/project/WickFrame.js"></script>
     <script src="src/project/WickLayer.js"></script>
@@ -48,6 +49,7 @@
     <script src="src/project/WickProject.Exporter.js"></script>
     <script src="src/project/WickProject.Compressor.js"></script>
     <script src="src/project/WickTween.js"></script>
+    <script src="src/project/WickPlayRange.js"></script>
 
     <script src="src/editor/Interfaces.Fabric.js"></script>
     <script src="src/editor/Interfaces.Fabric.ShapeDrawer.js"></script>
@@ -56,15 +58,15 @@
     <script src="src/editor/Interfaces.Fabric.WickElements.js"></script>
     <script src="src/editor/Interfaces.Fabric.ProjectRenderer.js"></script>
     <script src="src/editor/Interfaces.Paper.js"></script>
+    <script src="src/editor/Interfaces.Paper.PathRoutines.js"></script>
     <script src="src/editor/Interfaces.BuiltinPlayer.js"></script>
     <script src="src/editor/Interfaces.RightClickMenu.js"></script>
     <script src="src/editor/Interfaces.ScriptingIDE.js"></script>
     <script src="src/editor/Interfaces.Timeline.js"></script>
     <script src="src/editor/Interfaces.Toolbar.js"></script>
     <script src="src/editor/Interfaces.Properties.js"></script>
-    <script src="src/editor/Interfaces.SplashScreen.js"></script>
-    <script src="src/editor/Interfaces.StatusBar.js"></script>
     <script src="src/editor/Interfaces.MenuBar.js"></script>
+    <script src="src/editor/Interfaces.ThumbnailRenderer.js"></script>
 
     <script src="src/editor/Tools.Cursor.js"></script>
     <script src="src/editor/Tools.FillBucket.js"></script>
@@ -76,8 +78,6 @@
     <script src="src/editor/Tools.Text.js"></script>
     <script src="src/editor/Tools.Zoom.js"></script>
     <script src="src/editor/Tools.Pan.js"></script>
-    <script src="src/editor/Tools.BackgroundRemove.js"></script>
-    <script src="src/editor/Tools.Crop.js"></script>
 
     <script src="src/editor/WickEditor.js"></script>
     <script src="src/editor/WickEditor.WickActionHandler.js"></script>
@@ -89,10 +89,12 @@
     <script src="src/player/WickPlayer.Preloader.js"></script>
     <script src="src/player/WickPlayer.PixiRenderer.js"></script>
     <script src="src/player/WickPlayer.WebAudioPlayer.js"></script>
+    <script src="src/player/WickPlayer.InputHandler.js"></script>
 
     <script>
         $(document).ready(function() { 
             window.wickEditor = new WickEditor();
+            window.wickPlayer = new WickPlayer();
         });
     </script>
 </head>
@@ -117,145 +119,16 @@
                 <canvas id="fabricCanvas"></canvas>
             </div>
 
-        <!-- Symbol buttons -->
-
-            <div id="finishEditingObjectFabricButton" class="button fabricButton">
-                <img src="resources/back.png" width="22"></img>
-            </div>
-            <div id="createSymbolButton" class="button fabricButton">
-                <img src="resources/gearbox.png" width="22"></img>
-            </div>
-            <div id="editSymbolButton" class="button fabricButton">
-                <img src="resources/edit.png" width="22"></img>
-            </div>
-            <div id="editSymbolScriptsButton" class="button fabricButton">
-                <img src="resources/editcode.png" width="22"></img>
-            </div>
-
-        <!-- Splash Screen -->
-
-            <div id="splashScreenGUI" class="GUIBox">
-                <div id="splashScreenMain">
-                    <br />
-                    <p><img src="resources/wicklogo.png"></p>
-                    <strong>Pre-Alpha</strong>
-                    <br /><br />
-                    <hr />
-                    <br />
-                    <p>Have any questions? Contact me at <a target="_blank" href="http://www.zrispo.co">zach.rispoli@gmail.com</a></p>
-                    <p>You can also visit Wick <a target="_blank" href="https://github.com/zrispo/wick">on Github!</a></p>
-                    <br />
-                    <input type="button" id="splashScreenCreditsButton" value="Credits"></button>
-                    <br />
-                    <br />
-                    <p><input type="checkbox" id="dontShowSplashScreenAgainCheckbox"> Don't show this window again</input></p>
-
-                    <div class="button buttonInRow" id="closeSplashScreenButton"><font color="red">Close</font></div>
-                    <br />
-                    <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-
-                    <div>Icons made by <a href="http://www.flaticon.com/authors/eleonor-wang" title="Eleonor Wang">Eleonor Wang</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-
-                    <div>Icons made by <a href="http://www.flaticon.com/authors/dave-gandy" title="Dave Gandy">Dave Gandy</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-
-                    <div>Icons made by <a href="http://www.flaticon.com/authors/daniel-bruce" title="Daniel Bruce">Daniel Bruce</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-
-                    <div>Icons made by <a href="http://www.flaticon.com/authors/egor-rumyantsev" title="Egor Rumyantsev">Egor Rumyantsev</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-
-                    <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-
-                    <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-                </div>
-                <div id="splashScreenCredits">
-                    <br />
-                    <strong style="font-size:16px;">Credits</strong><br />
-                    <br />
-                    <strong>Contributors</strong><br />
-                    Zach Rispoli, Josh Rispoli, Luca Damasco<br />
-                    <br />
-                    <strong>Libraries/Technology</strong><br />
-                    <a href="https://ace.c9.io/#nav=about">Ace</a>, <a href="http://jsbeautifier.org/">JS Beautifier</a>, <a href="http://fabricjs.com/">Fabric.js</a>, <a href="https://github.com/eligrey/FileSaver.js/">FileSaver.js</a>, <a href="https://jquery.com/">jQuery</a>, <a href="http://jscolor.com/">jscolor</a>, <a href="https://github.com/buzzfeed/libgif-js">Libgif</a><br /> 
-                    <a href="https://github.com/pieroxy/lz-string">lz-string</a>, <a href="http://www.pixijs.com/">Pixi.js</a>, <a href="https://github.com/kilobtye/potrace">Potrace</a>, <a href="https://gist.github.com/binarymax/4071852">canvasfloodfill.js</a>, <a href="https://github.com/niklasvh/base64-arraybuffer">base64-arraybuffer</a> <a href="http://paperjs.org/">paper.js</a><br />
-                    <br />
-                    <input type="button" id="splashScreenBackButton" value="Back"></button>
-                    <br /><br />
-                </div>
-            </div>
-
-        <!-- Settings window -->
-
-            <div id="settingsGUI" class="GUIBox">
-                <strong>Settings</strong>
-                <div class="button" id="closeSettingsWindowButton"><em>Close</em></div>
-            </div>
-
-        <!-- Layers GUI -->
-
-            <div id="layersGUI" class="GUIBox">
-                <!-- add frame, delete frame -->
-                <!-- shrink frame, grow frame -->
-                <!-- add layer, delete layer -->
-                <!-- ...clone frame? -->
-            </div>
-
-        <!-- Timeline GUI -->
+        <!-- Timeline -->
 
             <div id="timelineGUI" class="GUIBox">
-                <canvas id="timelineCanvas"></canvas>
-
-                <div id="timelineScrollbar"><div id="timelineScrollbarFiller"></div></div>
             </div>
 
-        <!-- Toolbar GUI, centered at the left side of the screen -->
+        <!-- Toolbar -->
 
             <div id="toolbarGUI" class="GUIBox">
-                <div class="button tooltipElem" id="cursorToolButton" alt="Cursor">
-                    <img src="resources/cursor.png" width="20"></img>
-                </div>
 
-                <div style="display:none;" class="button tooltipElem" id="paintbrushToolButton" alt="Paintbrush">
-                    <img src="resources/paintbrush.png" width="20"></img>
-                </div>
-
-                <div style="display:none;" class="button tooltipElem" id="eraserToolButton" alt="Eraser">
-                    <img src="resources/eraser.png" width="20"></img>
-                </div>
-
-                <div style="display:none;" class="button tooltipElem" id="fillbucketToolButton" alt="Fill Bucket">
-                    <img src="resources/fill-bucket.png" width="20"></img>
-                </div>
-
-                <div style="display:none;" class="button tooltipElem" id="rectangleToolButton" alt="Rectangle">
-                    <img src="resources/rectangle.png" width="20"></img>
-                </div>
-
-                <div style="display:none;" class="button tooltipElem" id="ellipseToolButton" alt="Ellipse">
-                    <img src="resources/ellipse.png" width="20"></img>
-                </div>
-
-                <div style="display:none;" class="button tooltipElem" id="dropperToolButton" alt="Color Picker">
-                    <img src="resources/eyedropper.png" width="20"></img>
-                </div>
-
-                <div class="button tooltipElem" id="textToolButton" alt="Text">
-                    <img src="resources/text.png" width="20"></img>
-                </div>
-
-                <div style="display:none" class="button tooltipElem" id="backgroundremoveToolButton" alt="Remove Background">
-                    <img src="resources/magicwand.png" width="20"></img>
-                </div>
-
-                <!--<div style="display:none;" class="button tooltipElem" id="cropToolButton" alt="Screen Grab">
-                    <img src="resources/camera.png" width="20"></img>
-                </div>-->
-
-                <div class="button tooltipElem" id="zoomToolButton" alt="Zoom In">
-                    <img src="resources/zoom.png" width="20"></img>
-                </div>
-
-                <div class="button tooltipElem" id="panToolButton" alt="Pan">
-                    <img src="resources/pan.png" width="20"></img>
-                </div>
+                <div id="tools"></div>
 
                 <div id="toolOptionsGUI">
                     <hr />
@@ -267,61 +140,160 @@
                 </div>
             </div>
 
-        <!-- Properties GUI, bottom right corner -->
+        <!-- Properties -->
 
             <div id="propertiesGUI" class="GUIBox">
-                <div id="objectPropertiesTabButton"  class="propertiesTab propertiesTabActive">Object</div>
-                <div id="framePropertiesTabButton"   class="propertiesTab">Frame</div>
+                <div id="selectionPropertiesTabButton"  class="propertiesTab propertiesTabActive">Selection</div>
                 <div id="projectPropertiesTabButton" class="propertiesTab">Project</div>
 
+                <div id="objectType">
+                    <img id="objectTypeIcon" src="resources/gearbox.png" width="22px"> <span id="objectTypeName" style="margin-left:5px;font-size:20px;">None</span>
+                </div>
+
                 <div id="frameProperties" class="propertiesGUIContent">
-                    Name <input style="width:130px; float:right;" type="text" id="frameIdentifier">
+                        <div class="propertyRow">
+                            <div class="propertyName">Name</div>
+                            <div class="propertyInputContainer">
+                                <div class="propertyInputDiv propertyInputDivLarge">
+                                    <input class="propertyInput propertyInputLarge" type="text" id="frameIdentifier"> 
+                                </div> 
+                            </div>
+                        </div>
                     <br />
                     <br />
                     <!--<input type="checkbox" id="frameAutoplayCheckbox"> Always stop on this frame<br />-->
                     <input type="checkbox" id="frameSaveStateCheckbox"> Always save frame state<br />
                     <br />
-                    <div class="button buttonInRow" style="border: 1px solid;" id="editFrameScriptsButton">Edit frame scripts</div>
+                    <div class="scriptButton" id="editFrameScriptsButton">Edit Frame Scripts</div>
+                </div>
+
+                <div id="playrangeProperties" class="propertiesGUIContent">
+                        <div class="propertyRow">
+                            <div class="propertyName">Name</div>
+                            <div class="propertyInputContainer">
+                                <div class="propertyInputDiv propertyInputDivLarge">
+                                    <input class="propertyInput propertyInputLarge" type="text" id="playrangeIdentifier"> 
+                                </div> 
+                            </div>
+                        </div>
+                    
+                    <br />
+                        <div class="propertyRow">
+                            <div class="propertyName">Color</div>
+                            <div class="propertyInputContainer">
+                                <input style="width:122px; float:right;" class="jscolor jscolorInline" value="FFFFFF" id="playRangeColor">
+                            </div>
+                        </div>
+                    
+                    
                 </div>
 
                 <div id="objectProperties" class="propertiesGUIContent">
-                    <img id="objectTypeIcon" src="resources/gearbox.png" width="22px"> <span id="objectTypeName" style="margin-left:5px;font-size:20px;">None</span>
+                        <div class="propertyRow">
+                            <div class="propertyName" style="float:left">Name</div>
+                            <div class="propertyInputContainer">
+                                <div class="propertyInputDiv propertyInputDivLarge">
+                                    <input class="propertyInput propertyInputLarge" type="text" id="objectName"> 
+                                </div> 
+                            </div>
+                        </div>
                     <br />
+                        <div class="propertyRow">
+                            <div class="propertyName">Position</div>
+                            
+                            <div class="propertyInputContainer">
+                                <div class="propertyInputDiv propertyInputDivSmall" style="float:left;">
+                                    <input class="propertyInput propertyInputSmall" type="text" id="objectPositionX"> 
+                                </div> 
+                                
+                                <div class="propertyCross">x</div>
+                                
+                                <div class="propertyInputDiv propertyInputDivSmall" style="float:right;">
+                                    <input class="propertyInput propertyInputSmall" type="text" id="objectPositionY"> 
+                                </div> 
+                            </div>
+                        </div>
                     <br />
-                    Name <input style="float:right; width:130px" type="text" id="objectName">
+                    
+                        <div class="propertyRow">
+                            <div class="propertyName">Size</div>
+                            
+                            <div class="propertyInputContainer">
+                                <div class="propertyInputDiv propertyInputDivSmall" style="float:left;">
+                                    <input class="propertyInput propertyInputSmall" type="text" id="objectWidth"> 
+                                </div> 
+                                
+                                <div class="propertyCross">x</div>
+                                
+                                <div class="propertyInputDiv propertyInputDivSmall" style="float:right;">
+                                    <input class="propertyInput propertyInputSmall" type="text" id="objectHeight"> 
+                                </div> 
+                            </div>
+                        </div>
                     <br />
-                    Position  <input style="text-align:center; float:right; width:61px;" type="text" id="objectPositionY"><span style="float:right;">x</span><input style="text-align:center; width:61px; float:right;" type="text" id="objectPositionX">
+                    
+                        <div class="propertyRow">
+                            <div class="propertyName" style="float:left">Rotation</div>
+                            
+                            <div class="propertyInputContainer">
+                                <div class="propertyInputDiv propertyInputDivSmall" style="float:left;">
+                                    <input class="propertyInput propertyInputSmall" type="text" id="objectRotation"> 
+                                </div> 
+                            </div>
+                        </div>
                     <br />
-                    Size  <input style="text-align:center; float:right; width:61px;" type="text" id="objectHeight"><span style="float:right;">x</span><input style="text-align:center; width:61px; float:right;" type="text" id="objectWidth">
-                    <br />
-                    Rotation <input style="float:right; width:130px"  type="text" id="objectRotation">
-                    <br />
-                    Opacity <input style="float:right; width:130px" type="range" value="255" min="0" max="255" id="opacitySlider">
+                     <div class="propertyRow">
+                            <div class="propertyName" style="float:left">Opacity</div>
+                         
+                            <div class="propertyInputContainer">
+                                <input class="propertySlider" style="width:148px" type="range" value="255" min="0" max="255" id="opacitySlider">
+                            </div>
+                        </div>
+
                     <br />
                     <br />
                     <div id="textProperties">
-                        Font <select style="float:right; width:130px;" id="fontSelector">
-                            <option value="Georgia">Georgia</option>
-                            <option value="Palatino Linotype">Palatino Linotype</option>
-                            <option value="Book Antiqua">Book Antiqua</option>
-                            <option value="Times New Roman">Times New Roman</option>
-                            <option value="Arial" selected>Arial</option>
-                            <option value="Helvetica">Helvetica</option>
-                            <option value="Arial Black">Arial Black</option>
-                            <option value="Comic Sans MS">Comic Sans MS</option>
-                            <option value="Impact">Impact</option>
-                            <option value="Lucida Sans Unicode">Lucida Sans Unicode</option>
-                            <option value="Tahoma">Tahoma</option>
-                            <option value="Geneva">Geneva</option>
-                            <option value="Trebuchet MS">Trebuchet MS</option>
-                            <option value="Verdana">Verdana</option>
-                            <option value="Courier New">Courier New</option>
-                            <option value="Lucida Console">Lucida Console</option>
-                        </select>
+                        <div class="propertyRow">
+                            <div class="propertyName" style="float:left">Font</div>
+                            <div class="propertyInputContainer">
+                                <select class= "fontSelector" style="float:right;" id="fontSelector">
+                                    <option value="Georgia">Georgia</option>
+                                    <option value="Palatino Linotype">Palatino Linotype</option>
+                                    <option value="Book Antiqua">Book Antiqua</option>
+                                    <option value="Times New Roman">Times New Roman</option>
+                                    <option value="Arial" selected>Arial</option>
+                                    <option value="Helvetica">Helvetica</option>
+                                    <option value="Arial Black">Arial Black</option>
+                                    <option value="Comic Sans MS">Comic Sans MS</option>
+                                    <option value="Impact">Impact</option>
+                                    <option value="Lucida Sans Unicode">Lucida Sans Unicode</option>
+                                    <option value="Tahoma">Tahoma</option>
+                                    <option value="Geneva">Geneva</option>
+                                    <option value="Trebuchet MS">Trebuchet MS</option>
+                                    <option value="Verdana">Verdana</option>
+                                    <option value="Courier New">Courier New</option>
+                                    <option value="Lucida Console">Lucida Console</option>
+                                </select>
+                            </div>
+                        </div>
                         <br /><br />
-                        Color <input style="width:130px; float:right;" class="jscolor" value="FFFFFF" id="fontColor">
+                        <div class="propertyRow">
+                            <div class="propertyName" style="float:left">Color</div>
+                            
+                            <div class="propertyInputContainer">
+                                <input style="width:140px; float:right;" class="jscolor jscolorInline" value="FFFFFF" id="fontColor">
+                            </div>
+                        </div>
                         <br />
-                        Size <input style="width:130px; float:right;" type="text" id="fontSize">
+                        
+                            <div class="propertyRow">
+                                <div class="propertyName">Size</div>
+                                <div class="propertyInputContainer">
+                                    <div class="propertyInputDiv propertyInputDivLarge">
+                                        <input class="propertyInput propertyInputLarge" type="text" id="fontSize"> 
+                                    </div> 
+                                </div>
+                            </div>
                         <br /><br />
                         <input type="checkbox" id="boldCheckbox"> Bold<br />
                         <input type="checkbox" id="italicCheckbox"> Italic<br />
@@ -356,44 +328,90 @@
                         </select>
                     </div>
                     <div id="symbolProperties">
-                        <div class="button buttonInRow" style="border: 1px solid;" id="editScriptsButtonProperties">Edit object scripts</div>
+                        <div class="scriptButton" id="editScriptsButtonProperties">Edit Symbol Scripts</div>
+                        <div class="scriptButton" id="editObjectButtonProperties">Edit Object</div>
                     </div>
                 </div>
 
                 <div id="projectProperties" class="propertiesGUIContent">
-                    Name <input style="float:right; width:130px;" type="text" id="projectName">
+                    <div class="propertyRow">
+                        <div class="propertyName">Name</div>
+                        <div class="propertyInputContainer">
+                            <div class="propertyInputDiv propertyInputDivLarge">
+                                <input class="propertyInput propertyInputLarge" type="text" id="projectName"> 
+                            </div> 
+                        </div>
+                    </div>
+                    
                     <br />
-                    Background <input style="width:130px; float:right;" class="jscolor" value="#FFFFFF" id="projectBgColor">
+                    
+                    <div class="propertyRow">
+                        <div class="propertyName">Background</div>
+                        <div class="propertyInputContainer">
+                            <input style="width:100px;" class="jscolor jscolorInline" value="#FFFFFF" id="projectBgColor">
+                        </div>
+                    </div>
+                    
                     <br />
-                    Border <input style="width:130px; float:right;" class="jscolor" value="#FFFFFF" id="projectBorderColor">
+                    
+                    <div class="propertyRow">
+                        <div class="propertyName">Border</div>
+                        <div class="propertyInputContainer">
+                            <input style="width:100px;" class="jscolor jscolorInline" value="#FFFFFF" id="projectBorderColor">
+                        </div>
+                    </div>
+                    
                     <br />
-                    <input type="checkbox" id="transparentCheckbox"> Transparent
+                    
+                    <div class="propertyRow">
+                        <div class="propertyName">Size</div>
+
+                        <div class="propertyInputContainer">
+                            <div class="propertyInputDiv propertyInputDivSmall" style="float:left;">
+                                <input class="propertyInput propertyInputSmall" type="text" id="projectSizeX"> 
+                            </div> 
+
+                            <div class="propertyCross">x</div>
+
+                            <div class="propertyInputDiv propertyInputDivSmall" style="float:right;">
+                                <input class="propertyInput propertyInputSmall" type="text" id="projectSizeY"> 
+                            </div> 
+                        </div>
+                    </div>
+                    
                     <br />
-                    Size  <input style="text-align:center; float:right; width:61px;" type="text" id="projectSizeY"><span style="float:right;">x</span><input style="text-align:center; width:61px; float:right;" type="text" id="projectSizeX">
+                    
+                    <div class="propertyRow">
+                        <div class="propertyName">Framerate</div>
+                        <div class="propertyInputContainer">
+                            <div class="propertyInputDiv propertyInputDivLarge">
+                                <input class="propertyInput propertyInputLarge" type="text" id="framerate"> 
+                            </div> 
+                        </div>
+                    </div>
+                    
+                    <br /> 
                     <br />
-                    Framerate <input style="float:right; width:130px;"type="text" id="frameRate">
+                    <input type="checkbox" id="transparentCheckbox"> Allow Transparency
                     <br />
+                    <input type="checkbox" id="pixelPerfectRenderingCheckbox"> Pixel-perfect rendering
+<!--
                     <br />
-                    <!--<input type="checkbox" id="experimentalToolsCheckbox"> Enable experimental tools-->
+                    <input type="checkbox" id="experimentalToolsCheckbox"> Enable experimental tools
                     <br />
                     <div id="experimentalWarning" style="color:red;display:none;">Warning: these tools are buggy and may break your project</div>
+-->
+                    <br />
                     <input type="checkbox" id="onionSkinningCheckbox"> Enable onion skinning
                     <br />
                 </div>
             </div>
 
-        <!-- WickObject Scripting GUI, bottom left corner -->
+        <!-- Scripting IDE -->
 
             <div id="scriptingGUI" class="GUIBox">
                 <div id="scriptObjectDiv">
                     <div id="errorMessage"></div>
-                    <div class="elemInRow">
-                        <div class="button buttonInRow" id="onLoadButton">Setup</div>
-                        <div class="button buttonInRow" id="onUpdateButton">Update</div>
-                        <div class="button buttonInRow" id="onClickButton">Click</div>
-                        <!--<div class="button buttonInRow" id="onKeyDownButton">Key Pressed</div>-->
-                        <br />
-                    </div>
                     <div id="scriptEditor"></div>
                 </div>
                 <div id="noSelectionDiv">
@@ -413,87 +431,6 @@
                         <img src="resources/close.png" width="16">
                     </div>
                 </div>
-            </div>
-
-        <!-- Right click menu, appears next to mouse on right click -->
-
-            <div id="rightClickMenu" class="GUIBox">
-                <div id="fabricButtons">
-                    <div id="symbolButtons">
-                        <div class="button" id="editObjectButton">Edit Object</div>
-                        <hr />
-                    </div>
-                    <div id="allObjectButtons">
-                        <div class="button" id="copyButton">Copy</div>
-                        <div class="button" id="cutButton">Cut</div>
-                    </div>
-                    <div id="singleObjectButtons">
-                        <div class="button" id="editScriptsButton">Edit Scripts</div>
-                        <div class="button" id="downloadButton">Export</div>
-                        <div class="button" id="breakApartButton">Break Apart</div>
-                        <div class="button" id="addTweenButton">Add Tween</div>
-                        <div class="button" id="removeTweenButton">Remove Tween</div>
-                        <div id="isImage">
-                            
-                        </div>
-                        <div id="noKeyframeExists">
-                            <!--<div class="button" id="addKeyframeButton">Add Keyframe</div>-->
-                        </div>
-                        <div id="keyframeExists">
-                            <!--<div class="button" id="removeKeyframeButton">Remove Keyframe</div>-->
-                        </div>
-                        <hr />
-                    </div>
-                    <div id="commonObjectButtons">
-                        <div class="button" id="bringToFrontButton">Bring to Front</div>
-                        <div class="button" id="sendToBackButton">Send to Back</div>
-                        <div class="button" id="deleteButton">Delete</div>
-                        <hr />
-                    </div>
-                    <div id="staticObjectButtons">
-                        <div class="button" id="convertToSymbolButton">Convert to Symbol</div>
-                        <hr />
-                    </div>
-                    <div id="insideSymbolButtons">
-                        <div class="button" id="finishEditingObjectButton">Finish Editing Object</div>
-                        <hr />
-                    </div>
-                    <div class="button" id="undoButton">Undo</div>
-                    <div class="button" id="redoButton">Redo</div>
-                    <div class="button" id="pasteButton">Paste</div>
-                </div>
-                <div id="timelineButtons">
-                    <div class="button" id="addFrameButton">Add Frame <em>(Shift +)</em></div>
-                    <div class="button" id="deleteFrameButton">Delete Frame <em>(Shift -)</em></div>
-                    <div class="button" id="copyFrameButton">Copy Frame</div>
-                    <div class="button" id="pasteFrameButton">Paste Frame</div>
-                    <hr />
-                    <div class="button" id="shrinkFrameButton">Shrink Frame <em>(Shift <)</em></div>
-                    <div class="button" id="extendFrameButton">Extend Frame <em>(Shift >)</em></div>
-                    <hr />
-                    <div class="button" id="addLayerButton">Add Layer</div>
-                    <div class="button" id="removeLayerButton">Remove Layer</div>
-                    <div class="button" id="moveLayerUpButton">Move layer up</div>
-                    <div class="button" id="moveLayerDownButton">Move layer down</div>
-                    <hr />
-                    <div class="button" id="editFrameScriptsRightClick">Edit Frame Scripts</div>
-                </div>
-            </div>
-
-        <!-- Main menu GUI, top left corner -->
-
-            <div id="menuBarGUI" class="GUIBox">
-                <!--<div class="menubarTab" id="menubarMenuFile">File</div>
-                <div class="menubarTab" id="menubarMenuEdit">Edit</div>
-                <div class="menubarTab" id="menubarMenuImport">Import</div>
-                <div class="menubarTab" id="menubarMenuObject">Object</div>
-                <div class="menubarTab" id="menubarMenuRun">Run</div>
-                <div class="menubarTab" id="menubarMenuAbout">About</div>-->
-            </div>
-
-        <!-- Status menu GUI, top right corner -->
-
-            <div id="statusBarGUI" class="GUIBox">
             </div>
 
         </div>

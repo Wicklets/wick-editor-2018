@@ -2,8 +2,8 @@
 
 var MenuBarInterface = function (wickEditor) {
 
-    var editorElem = document.getElementById('editor');
-    var menuElem = document.getElementById('menuBarGUI');
+    var editorElem;
+    var menuElem;
 
     var tabs;
 
@@ -70,11 +70,18 @@ var MenuBarInterface = function (wickEditor) {
     }
 
     this.setup = function () {
+        editorElem = document.getElementById('editor');
+        
+        menuElem = document.createElement('div');
+        menuElem.id = "menuBarGUI";
+        menuElem.className = "GUIBox";
+        editorElem.appendChild(menuElem);
+
         tabs = [];
 
         wickEditor.fabric.canvas.on('mouse:down', function (e) {
             closeAllMenus();
-        })
+        });
 
         addTab('File', [
             new TabButton('New Project', function () {
@@ -87,18 +94,16 @@ var MenuBarInterface = function (wickEditor) {
                 wickEditor.guiActionHandler.doAction("openFile");
             }),
             new TabSpacer(),
-            /*new TabButton('Export as webpage', function () {
-                wickEditor.guiActionHandler.doAction("exportProject");
-            }),*/
+
             new TabButton('Export as zip', function () {
                 wickEditor.guiActionHandler.doAction("exportProjectZIP");
             }),
             new TabButton('Export as gif', function () {
                 wickEditor.guiActionHandler.doAction("exportProjectGIF");
             }),
-            new TabButton('Export as WebM', function () {
+            /*new TabButton('Export as WebM', function () {
                 wickEditor.guiActionHandler.doAction("exportProjectWebM");
-            }),
+            }),*/
         ]);
 
         addTab('Edit', [
@@ -109,6 +114,7 @@ var MenuBarInterface = function (wickEditor) {
                 wickEditor.guiActionHandler.doAction("redo")
             }),
             new TabSpacer(),
+
             new TabButton('Copy', function () {
                 wickEditor.guiActionHandler.doAction("copy")
             }),
@@ -123,48 +129,11 @@ var MenuBarInterface = function (wickEditor) {
             }),
         ]);
 
-        addTab('Selection', [
-            new TabButton('Flip horizontally', function () {
-                wickEditor.guiActionHandler.doAction("flipHorizontally")
-            }),
-            new TabButton('Flip vertically', function () {
-                wickEditor.guiActionHandler.doAction("flipVertically")
-            }),
-            new TabButton('Bring to Front', function () {
-                wickEditor.guiActionHandler.doAction("bringToFront")
-            }),
-            new TabButton('Send to Back', function () {
-                wickEditor.guiActionHandler.doAction("sendToBack")
-            }),
-            new TabSpacer(),
-            new TabButton('Convert to Symbol', function () {
-                wickEditor.guiActionHandler.doAction("convertToSymbol")
-            }),
-            new TabButton('Break apart', function () {
-                wickEditor.guiActionHandler.doAction("breakApart")
-            }),
-            new TabSpacer(),
-            new TabButton('Edit Scripts', function () {
-                wickEditor.guiActionHandler.doAction("editScripts")
-            }),
-            new TabSpacer(),
-            new TabButton('Export', function () {
-                wickEditor.guiActionHandler.doAction("downloadObject")
-            }),
-        ]);
-
-        addTab('Add', [
-            new TabButton('Text', function () {
-                wickEditor.fabric.tools.text.addText();
-            }),
+        addTab('Import', [
             new TabButton('File', function () {
                 wickEditor.guiActionHandler.doAction("openFile");
             }),
         ]);
-
-        addTab('Run', [], function () {
-            wickEditor.guiActionHandler.doAction("runProject");
-        });
 
         addTab('About', [
             new TabButton('Wickeditor.com', function () {
@@ -174,6 +143,8 @@ var MenuBarInterface = function (wickEditor) {
                 window.open('https://www.github.com/zrispo/wick/');
             }),
         ]);
+        
+        addTab('Run', [], function () { wickEditor.guiActionHandler.doAction("runProject"); });
     }
 
     var addTab = function (name, buttons, func) {

@@ -27,6 +27,108 @@ var InputHandler = function (wickEditor) {
     }, false );
 
 /*************************
+     Keyboard
+*************************/
+
+    /* Set up vars needed for input listening. */
+    this.keys = [];
+    this.specialKeys = [];
+    var editingTextBox = false;
+
+    /* Define special keys */
+    var modifierKeys = ["WINDOWS","COMMAND","FIREFOXCOMMAND","CTRL"];
+    var shiftKeys = ["SHIFT"];
+
+    var activeElemIsTextBox = function () {
+        var activeElem = document.activeElement.nodeName;
+        editingTextBox = activeElem == 'TEXTAREA' || activeElem == 'INPUT';
+        return editingTextBox;
+    }
+
+    // Fixes hotkey breaking bug
+    $(window).focus(function() {
+        that.keys = [];
+        that.specialKeys = [];
+    });
+    $(window).blur(function() {
+        that.keys = [];
+        that.specialKeys = [];
+    });
+
+    document.body.addEventListener("keydown", function (event) {
+        handleKeyEvent(event, "keydown");
+    });
+    document.body.addEventListener("keyup", function (event) {
+        handleKeyEvent(event, "keyup");
+    });
+
+    var handleKeyEvent = function (event, eventType) {
+
+        var keyChar = codeToKeyChar[event.keyCode];
+        if(keyChar === 'TAB') event.preventDefault()
+        var keyDownEvent = eventType === 'keydown';
+        if (modifierKeys.indexOf(keyChar) !== -1) {
+            that.specialKeys["Modifier"] = keyDownEvent;
+            that.keys = [];
+        } else if (shiftKeys.indexOf(keyChar) !== -1) {
+            that.specialKeys["SHIFT"] = keyDownEvent;
+            that.keys = [];
+        } else {
+            that.keys[event.keyCode] = keyDownEvent;
+        }
+
+        // get this outta here
+        if(event.keyCode == 32 && eventType === 'keyup' && !activeElemIsTextBox()) {
+            wickEditor.useLastUsedTool();
+            wickEditor.syncInterfaces();
+        }
+
+        for(actionName in wickEditor.guiActionHandler.guiActions) { (function () {
+            var guiAction = wickEditor.guiActionHandler.guiActions[actionName];
+
+            if (wickEditor.builtinplayer.running && !guiAction.requiredParams.builtinplayerRunning) return;
+
+            var stringkeys = [];
+            for (var numkey in that.keys) {
+                if (that.keys.hasOwnProperty(numkey) && that.keys[numkey]) {
+                    stringkeys.push(codeToKeyChar[numkey]);
+                }
+            }
+            var stringspecialkeys = [];
+            for (var numkey in that.specialKeys) {
+                if (that.specialKeys.hasOwnProperty(numkey) && that.specialKeys[numkey]) {
+                    stringspecialkeys.push(numkey);
+                }
+            }
+
+            var cmpArrays = function (a,b) {
+                return a.sort().join(',') === b.sort().join(',');
+            }
+
+            var hotkeysMatch = cmpArrays(guiAction.hotkeys, stringkeys)
+            var specialKeysMatch = cmpArrays(guiAction.specialKeys, stringspecialkeys);
+
+            if(!hotkeysMatch || !specialKeysMatch) return;
+            if(guiAction.hotkeys.length === 0) return;
+            if(activeElemIsTextBox() && !guiAction.requiredParams.usableInTextBoxes) return;
+            if(guiAction.requiredParams.disabledInScriptingIDE && (document.activeElement.className === 'ace_text-input')) return;
+
+            wickEditor.rightclickmenu.open = false;
+            event.preventDefault();
+            guiAction.doAction({});
+            that.keys = [];
+        })()};
+    };
+
+    // In order to ensure that the browser will fire clipboard events, we always need to have something selected
+    var focusHiddenArea = function () {
+        if($("#scriptingGUI").css('visibility') === 'hidden') {
+            $("#hidden-input").val(' ');
+            $("#hidden-input").focus().select();
+        }
+    }
+
+/*************************
     Copy/paste
 *************************/
 
@@ -90,7 +192,7 @@ var InputHandler = function (wickEditor) {
         
         var clipboardData = event.clipboardData;
         if (clipboardEvent == 'cut' || clipboardEvent == 'copy') {
-            clipboardData.setData('text/wickobjectsjson', wickEditor.project.getCopyData(wickEditor.fabric.getSelectedObjects(WickObject)));
+            clipboardData.setData('text/wickobjectsjson', wickEditor.project.getCopyData());
             //clipboardData.setData('text/html', htmlToCopy);
         }
         if (clipboardEvent == 'paste') {
@@ -156,11 +258,11 @@ var InputHandler = function (wickEditor) {
      Tooltips
 *************************/
 
-    $('.tooltipElem').on("mouseover", function(e) {
+    $('.tooltipElem').on("mousemove", function(e) {
         $("#tooltipGUI").css('display', 'block');
         $("#tooltipGUI").css('top', wickEditor.inputHandler.mouse.y+5+'px');
-        $("#tooltipGUI").css('left', wickEditor.inputHandler.mouse.x+5+'px');
-        document.getElementById('tooltipGUI').innerHTML = e.currentTarget.attributes.alt.value;
+        $("#tooltipGUI").css('left', wickEditor.inputHandler.mouse.x+10+'px');
+        document.getElementById('tooltipGUI').innerHTML = e.currentTarget.getAttribute('alt');
     });
     $('.tooltipElem').on("mouseout", function(e) {
         $("#tooltipGUI").css('display', 'none');
@@ -171,75 +273,107 @@ var InputHandler = function (wickEditor) {
 *************************/
 
     var loadSVG = function (svg, callback) {
-        wickEditor.paper.addPath(svg);
-        wickEditor.paper.refresh();
-        wickEditor.syncInterfaces();
+        console.error('loadSVG NYI!');
     }
     
     var loadAnimatedGIF = function (dataURL, callback) {
+        //console.log(dataURL)
+
         var gifSymbol = WickObject.createNewSymbol();
-        gifSymbol.x = window.innerWidth /2;
-        gifSymbol.y  = window.innerHeight/2;
+        gifSymbol.layers[0].frames = [];
 
-        //var gif = document.getElementById("gifImportDummyElem");
         var newGifEl = document.createElement("img");
-        newGifEl.id = "gifImportDummyElem";
-        document.body.appendChild(newGifEl);
-        var gif = document.getElementById('gifImportDummyElem')
-        gif.setAttribute('src', dataURL);
-        gif.setAttribute('height', '467px');
-        gif.setAttribute('width', '375px');
 
-        var superGif = new SuperGif({ gif: gif } );
-        superGif.load(function () {
+        newGifEl.onload = function () {
+            document.body.appendChild(newGifEl)
+            
+            var framesDataURLs;
+            var gifWidth;
+            var gifHeight;
+            var superGif = new SuperGif({ gif: newGifEl } );
+            superGif.load(function () {
 
-            var framesDataURLs = superGif.getFrameDataURLs();
-            for(var i = 0; i < framesDataURLs.length; i++) {
+                gifWidth = superGif.get_canvas().width;
+                gifHeight = superGif.get_canvas().height;
+                framesDataURLs = superGif.getFrameDataURLs();
+                proceed();
 
-                WickObject.fromImage(
-                    framesDataURLs[i],
-                    (function(frameIndex) { return function(o) {
-                        gifSymbol.layers[0].frames[frameIndex].wickObjects.push(o);
-                        
-                        if(frameIndex == framesDataURLs.length-1) {
-                            gifSymbol.width  = gifSymbol.layers[0].frames[0].wickObjects[0].width;
-                            gifSymbol.height = gifSymbol.layers[0].frames[0].wickObjects[0].height;
-                            callback(gifSymbol);
-                        } else {
-                            gifSymbol.layers[0].addFrame(new WickFrame);
-                        }
-                    }; }) (i)
-                );
+            });
+
+            var proceed = function () {
+
+                for(var i = 0; i < framesDataURLs.length; i++) {
+                    var frameWickObj = WickObject.fromImage(framesDataURLs[i]);
+                    frameWickObj.width = gifWidth;
+                    frameWickObj.height = gifHeight;
+
+                    gifSymbol.layers[0].addFrame(new WickFrame());
+                    gifSymbol.layers[0].frames[i].playheadPosition = i;
+                    gifSymbol.layers[0].frames[i].wickObjects.push(frameWickObj);
+                }
+
+                gifSymbol.width = gifWidth;
+                gifSymbol.height = gifHeight;
+                callback(gifSymbol);
             }
-        });
+        }
+
+        newGifEl.src = dataURL;
+    }
+
+    var loadImage = function (src, callback) {
+        callback(WickObject.fromImage(src));
+    }
+
+    var loadAudio = function (src, callback) {
+        callback(WickObject.fromAudioFile(src));
+    }
+
+    var loadJSON = function (json, callback) {
+        callback(WickObject.fromJSON(json));
+    }
+
+    var loadWAV = function (dataURL, callback) {
+        var audioData = dataURL;
+        var audioWickObject = WickObject.fromAudioFile(audioData);
+
+        console.log("big audio file size: " + audioWickObject.audioData.length);
+        audioWickObject.audioData = LZString.compressToBase64(audioWickObject.audioData);
+        console.log("compressed big audio file size: " + audioWickObject.audioData.length);
+        console.log("Look how much space we saved wow!");
+        
+        audioWickObject.compressed = true;
+        callback(audioWickObject);
     }
 
     var loadFileIntoWickObject = function (e,file,fileType) {
-        
+
         if (fileType === 'text/html') {
             WickProject.fromFile(file, function(project) {
+                wickEditor.thumbnailRenderer.cleanup();
                 wickEditor.project = project;
                 wickEditor.syncInterfaces();
+                wickEditor.thumbnailRenderer.setup();
             });
         } else {
 
             var fromContstructors = {
-                'image/png'        : WickObject.fromImage,
-                'image/jpeg'       : WickObject.fromImage,
-                'application/jpg'  : WickObject.fromImage,
-                'image/bmp'        : WickObject.fromImage,
+                'image/png'        : loadImage,
+                'image/jpeg'       : loadImage,
+                'application/jpg'  : loadImage,
+                'image/bmp'        : loadImage,
                 'image/svg+xml'    : loadSVG,
                 'image/gif'        : loadAnimatedGIF,
-                'audio/mp3'        : WickObject.fromAudioFile,
-                'audio/wav'        : WickObject.fromWavFile,
-                'audio/wave'       : WickObject.fromWavFile,
-                'audio/x-wav'      : WickObject.fromWavFile,
-                'audio/x-pn-wav'   : WickObject.fromWavFile,
-                'audio/ogg'        : WickObject.fromAudioFile,
-                'audio/flac'       : WickObject.fromAudioFile,
-                'audio/x-flac'     : WickObject.fromAudioFile,
-                "audio/x-m4a"      : WickObject.fromAudioFile,
-                "application/json" : WickObject.fromJSONFile
+                'audio/mp3'        : loadAudio,
+                'audio/wav'        : loadWAV,
+                'audio/wave'       : loadWAV,
+                'audio/x-wav'      : loadWAV,
+                'audio/x-pn-wav'   : loadWAV,
+                'audio/ogg'        : loadAudio,
+                'audio/flac'       : loadAudio,
+                'audio/x-flac'     : loadAudio,
+                "audio/x-m4a"      : loadAudio,
+                "application/json" : loadJSON
             }
             
             var fr = new FileReader();
@@ -322,7 +456,7 @@ var InputHandler = function (wickEditor) {
 *************************/
 
     window.addEventListener("beforeunload", function (event) {
-        if(wickEditor.actionHandler.undoStack.length === 0) return;
+        if(wickEditor.actionHandler.getHistoryLength() === 0) return;
         var confirmationMessage = 'Warning: All unsaved changes will be lost!';
         (event || window.event).returnValue = confirmationMessage; //Gecko + IE
         return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.

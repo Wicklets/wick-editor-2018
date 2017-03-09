@@ -8,19 +8,21 @@ var FabricInterface = function (wickEditor) {
 
     this.setup = function () {
 
-        this.canvas = new fabric.CanvasEx('fabricCanvas', {
+        this.canvas = new fabric.Canvas('fabricCanvas', {
             imageSmoothingEnabled : true,
             preserveObjectStacking : true,
             renderOnAddRemove : false,
         });
         this.canvas.selectionColor = 'rgba(110, 110, 115, 0.1)';
         this.canvas.selectionBorderColor = 'grey';
-        this.canvas.backgroundColor = "#EEE";
+        this.canvas.backgroundColor = "#B7B7B7";
         this.canvas.setWidth(window.innerWidth);
         this.canvas.setHeight(window.innerHeight);
 
-        // This is disabled because it made zooming really slow and also caused some rendering problems with the centerpoints of symbols
-        fabric.Object.prototype.objectCaching = false;
+        /* Setting objectCaching to false fixes some rendering problems with
+           symbol centerpoints and speeds up zooming by a lot */
+        /* Currently set to true because it makes moving between frames much faster...  */
+        fabric.Object.prototype.objectCaching = true;
 
         this.panning = false;
         this.onionSkinsDirty = false;
@@ -30,76 +32,47 @@ var FabricInterface = function (wickEditor) {
         this.wickElements    = new FabricWickElements(wickEditor, this);
         this.symbolBorders   = new FabricSymbolBorders(wickEditor, this);
         this.projectRenderer = new FabricProjectRenderer(wickEditor, this);
-        
-        this.tools = {
-            "cursor"           : new Tools.Cursor(wickEditor),
-            "paintbrush"       : new Tools.Paintbrush(wickEditor),
-            "eraser"           : new Tools.Eraser(wickEditor),
-            "fillbucket"       : new Tools.FillBucket(wickEditor),
-            "rectangle"        : new Tools.Rectangle(wickEditor),
-            "ellipse"          : new Tools.Ellipse(wickEditor),
-            "dropper"          : new Tools.Dropper(wickEditor),
-            "text"             : new Tools.Text(wickEditor),
-            "zoom"             : new Tools.Zoom(wickEditor),
-            "pan"              : new Tools.Pan(wickEditor),
-            "backgroundremove" : new Tools.BackgroundRemove(wickEditor),
-            "crop"             : new Tools.Crop(wickEditor),
-        }
 
-        // Pen pressure stuff
-        /*
-        this.canvas.freeDrawingBrush = new fabric.PenPressureBrush(this.canvas);
-        // Hacky way to talk to the fabric PenPressureBrush
-        self.canvas.getPenPressure = this.tools.paintbrush.getPenPressure;
-        self.canvas.onPenPressurePathCreated = function (path) {
-            this.tools.paintbrush.onPenPressurePathCreated(path)
-            this.tools.eraser.onPenPressurePathCreated(path)
-        };
-        */
         this.canvas.freeDrawingBrush = new fabric.PencilBrush(this.canvas);
-
-        this.currentTool = this.tools.cursor;
-        this.lastTool = this.currentTool;
 
         // Canvas event listeners
 
-        self.canvas.on({
-            'object:moving': function(e) {
-                if(e.target.type === 'path')
-                    e.target.opacity = 0.5;
-            },
-            'object:modified': function(e) {
-                if(e.target.type === 'path')
-                    e.target.opacity = 1;
-            },
-        });
         self.canvas.on('object:selected', function (e) {
-            wickEditor.timeline.redraw();
+
+            wickEditor.project.clearSelection();
+            if(e.target.wickObjReference) {
+                wickEditor.project.selectObject(e.target.wickObjReference);
+            } else {
+                e.target._objects.forEach(function (obj) {
+                    if(obj.wickObjReference.uuid) 
+                        wickEditor.project.selectObject(obj.wickObjReference);
+                });
+            }
             
-            wickEditor.scriptingide.editScriptsOfObject(e.target.wickObjReference, {dontOpenIDE:true});
             wickEditor.scriptingide.syncWithEditorState();
             wickEditor.properties.syncWithEditorState();
-            e.target.on({
+            wickEditor.timeline.syncWithEditorState();
+            /*e.target.on({
                 moving: e.target.setCoords,
                 scaling: e.target.setCoords,
                 rotating: e.target.setCoords
-            });
+            });*/
         });
         self.canvas.on('before:selection:cleared', function (e) {
-            // quick fix for properties GUI closing after selected wick object changes
-            $(":focus").blur();
+            wickEditor.project.clearSelection();
+            wickEditor.timeline.syncWithEditorState()
         });
         self.canvas.on('selection:cleared', function (e) {
-            wickEditor.timeline.redraw();
-
-            wickEditor.scriptingide.clearSelection();
+            //wickEditor.timeline.redraw();
+            wickEditor.project.deselectObjectType(WickFrame);
+            
             wickEditor.scriptingide.syncWithEditorState();
             wickEditor.properties.syncWithEditorState();
         });
         self.canvas.on('selection:changed', function (e) {
-            wickEditor.timeline.redraw();
+            //wickEditor.timeline.redraw();
+            wickEditor.project.deselectObjectType(WickFrame);
 
-            wickEditor.scriptingide.editScriptsOfObject(this.getSelectedObject(WickObject), {dontOpenIDE:true});
             self.guiElements.update();
             wickEditor.scriptingide.syncWithEditorState();
             wickEditor.properties.syncWithEditorState();
@@ -108,6 +81,16 @@ var FabricInterface = function (wickEditor) {
         // Listen for objects being changed so we can undo them in the action handler.
         self.canvas.on('object:modified', function(e) {
             self.modifyChangedObjects(e);
+        });
+
+        self.canvas.on('mouse:down', function (e) {
+            // quick fix for properties GUI closing after selected wick object changes
+            $(":focus").blur();
+            
+            if(wickEditor.project.deselectObjectType(WickFrame) || 
+               wickEditor.project.deselectObjectType(WickPlayRange)) {
+                wickEditor.syncInterfaces();
+            }
         });
 
         this.recenterCanvas();
@@ -126,20 +109,20 @@ var FabricInterface = function (wickEditor) {
         self.updateCursor();
 
         // Set drawing mode
-        if(self.currentTool instanceof Tools.Paintbrush) {
+        if(wickEditor.currentTool instanceof Tools.Paintbrush) {
             this.canvas.isDrawingMode = true;
-            this.canvas.freeDrawingBrush.width = self.currentTool.brushSize;
-            this.canvas.freeDrawingBrush.color = self.currentTool.color;
-        } else if (self.currentTool instanceof Tools.Eraser) {
+            this.canvas.freeDrawingBrush.width = wickEditor.currentTool.brushSize;
+            this.canvas.freeDrawingBrush.color = wickEditor.currentTool.color;
+        } else if (wickEditor.currentTool instanceof Tools.Eraser) {
             this.canvas.isDrawingMode = true;
-            this.canvas.freeDrawingBrush.width = self.tools.paintbrush.brushSize;
+            this.canvas.freeDrawingBrush.width = wickEditor.tools.paintbrush.brushSize;
             this.canvas.freeDrawingBrush.color = "#FFFFFF";
         } else {
             this.canvas.isDrawingMode = false;
         }
 
         // Disable selection
-        if(self.currentTool instanceof Tools.Cursor) {
+        if(wickEditor.currentTool instanceof Tools.Cursor) {
             self.canvas.selection = true;
         } else {
             self.canvas.selection = false;
@@ -171,27 +154,6 @@ var FabricInterface = function (wickEditor) {
         self.canvas.relativePan(new fabric.Point(panAdjustX,panAdjustY));
         self.canvas.renderAll();
 
-    }
-
-    this.changeTool = function (newTool) {
-        self.lastTool = self.currentTool;
-        self.currentTool = newTool;
-        self.forceModifySelectedObjects();
-        self.deselectAll();
-        wickEditor.syncInterfaces();
-
-        if((self.lastTool instanceof Tools.Paintbrush) || 
-           (self.lastTool instanceof Tools.Eraser) || 
-           (self.lastTool instanceof Tools.Ellipse) || 
-           (self.lastTool instanceof Tools.Rectangle)) {
-            wickEditor.paper.cleanupPaths();
-            wickEditor.paper.refresh();
-            wickEditor.syncInterfaces();
-        }
-    }
-
-    this.useLastUsedTool = function () {
-        self.currentTool = self.lastTool;
     }
 
     this.recenterCanvas = function () {
@@ -271,7 +233,7 @@ var FabricInterface = function (wickEditor) {
     }
 
     this.updateCursor = function () {
-        var cursorImg = self.currentTool.getCursorImage();
+        var cursorImg = wickEditor.currentTool.getCursorImage();
         this.canvas.defaultCursor = cursorImg;
         this.canvas.freeDrawingCursor = cursorImg;
     }
@@ -289,7 +251,7 @@ var FabricInterface = function (wickEditor) {
     }
 
     this.selectObjects = function (objects) {
-        wickEditor.timeline.redraw();
+        //wickEditor.timeline.redraw();
 
         if(objects.length == 0) {
             return;
@@ -311,18 +273,21 @@ var FabricInterface = function (wickEditor) {
                 originX: 'left',
                 originY: 'top'
             });
-            group.on({
+            /*group.on({
                 moving: group.setCoords,
                 scaling: group.setCoords,
                 rotating: group.setCoords
-              });
+            });*/
             for(var i = 0; i < selectedObjs.length; i++) {
                 group.canvas = this.canvas // WHAT ??????????????? WHY
                 group.addWithUpdate(selectedObjs[i]);
             }
 
             this.canvas._activeObject = null;
-            this.canvas.setActiveGroup(group.setCoords()).renderAll();
+            group.setCoords()
+            this.canvas._activeGroup = group
+            group.set('active', true);
+            this.canvas.renderAll()
         }
 
         self.guiElements.update();
@@ -332,23 +297,20 @@ var FabricInterface = function (wickEditor) {
     }
 
     this.selectAll = function () {
-        wickEditor.timeline.redraw();
+        //wickEditor.timeline.redraw();
 
         var objs = [];
+        wickEditor.project.clearSelection();
         this.canvas.forEachObject(function (o) {
             if(o.wickObjectRef && o.selectable) {
                 objs.push(o.wickObjectRef);
+                wickEditor.project.selectObject(o.wickObjectRef)
             }
         });
         this.selectObjects(objs);
     }
 
-    this.deselectAll = function (clearScriptingSelection) {
-        wickEditor.timeline.redraw();
-
-        if(!clearScriptingSelection)
-            wickEditor.scriptingide.clearSelection();
-
+    this.deselectAll = function () {
         var activeGroup = this.canvas.getActiveGroup();
         if(activeGroup) {
             activeGroup.removeWithUpdate(activeGroup);
@@ -467,7 +429,7 @@ var FabricInterface = function (wickEditor) {
             self.modifyObjects(wickobjs);
 
             // Reselect everything
-            self.selectObjects(wickobjs);
+            //self.selectObjects(wickobjs);
 
             wickEditor.syncInterfaces();
         }

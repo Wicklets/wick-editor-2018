@@ -17,12 +17,6 @@
 	                              not supported by any browser */
 }
 
-.errorHighlight{
-	position:absolute;
-	z-index:20;
-	background-color:#F4B9B7;
-}
-
 .hideCursor {
     cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjbQg61aAAAADUlEQVQYV2P4//8/IwAI/QL/+TZZdwAAAABJRU5ErkJggg=='),
     none !important;
@@ -71,12 +65,10 @@ select {
 	font-size: 16px;
 	font-family: "Open Sans", "Arial", sans-serif;
 	color: #666;
-	background-color: #EEEEEE;
+	background-color: #585757;
 
-	border: 1px solid #bbb;
-	/*border-radius: 2px;*/
+	border: 1px solid #878787;
 
-	/*box-shadow: 2px 2px 2px #AAA;*/
 }
 
 #menuBarGUI {
@@ -84,6 +76,10 @@ select {
 	left: 0px;
 	height: 30px;
 	width: calc(100% - 2px);
+    background-color: black;
+    border-top-color: black;
+    border-left-color: black;
+    border-right-color: black;
 }
 .menubarTab {
 	float:left;
@@ -91,11 +87,15 @@ select {
 	margin-left: 15px;
 	margin-right: 15px;
 	cursor: pointer;
+    color: #CCCCCC;
+/*    font-size:16px;*/
 }
 .menubarTab:hover {
 	cursor: pointer;
-	background-color: #DDD;
+	background-color: #939393;
+    border-radius: 3px;
 }
+
 .menubarMenu {
 	top: 31px;
 	left: 0px;
@@ -103,13 +103,59 @@ select {
 	padding: 5px;
 	min-width: 70px;
 	border-top:none;
+    text-align: left;
+    text-indent: 5px;
 }
+
 .menubarButton {
 	cursor: pointer;
+    color: #FFFFFF
 }
 .menubarButton:hover {
 	cursor: pointer;
-	background-color: #DDD;
+	background-color: #31E19C;
+    border-radius: 3px;
+}
+
+.scriptButton {
+    background: #58F9BA;
+    color: #0b2018;
+    box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
+    border-radius: 8px; 
+    float: center;
+    width: 180px; 
+    text-align: center;
+    font-weight: bold; 
+    margin:0 auto; 
+    margin-top:5px;
+    padding: 7px;
+}
+
+.scriptButton:hover {
+    cursor: pointer;
+    background: #009688;
+}
+
+.scriptbutton:active {
+	cursor: pointer;
+	background-color: #009688;
+}
+
+.scriptbutton:selected {
+	cursor: pointer;
+	background-color: #009688;
+}
+
+.fontSelector {
+    width:148px;
+}
+
+.jscolor {
+    border-radius: 8px; 
+}
+
+.jscolorInline {
+    padding-left: 10px; 
 }
 
 #statusBarGUI {
@@ -150,9 +196,12 @@ select {
 	height: 300px;
 }
 #errorMessage {
-	background-color: white;
+	margin-left: 3px;
+	margin-top: 3px;
 	color: red;
 	display:hidden;
+	position: absolute;
+	font-weight: bold;
 }
 #scriptObjectDiv {
     width: 100%;
@@ -161,8 +210,12 @@ select {
 #scriptEditor {
 	text-align: left;
     width: 100%;
-    height: calc(100% - 50px);
+    height: calc(100% - 30px);
+    top:30px;
     font-size: 12px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #AAA;
 }
 
 #closeScriptingGUIButton {
@@ -170,6 +223,8 @@ select {
 	top: 2px;
 	position: absolute;
 }
+
+
 #beautifyButton {
 	right: 53px;
 	top: 2px;
@@ -194,10 +249,18 @@ select {
 	width: 250px;
 	display: inline;
 	overflow: hidden;
+    border-right: 0px;
+    border-bottom: 0px;
+}
+.rangeslider_handle {
+    
+    background-color: aliceblue;
+    
+    
 }
 .propertiesTab {
-	border-bottom: 1px solid #bbb;
-	border-right: 1px solid #bbb;
+	border-bottom: 1px solid #646363;
+	border-right: 1px solid #646363;
 	padding: 5px;
 	padding-left: 14px;
 	padding-right: 14px;
@@ -205,15 +268,24 @@ select {
 	background-color: #DDD;
 	display: table-cell;
 	cursor: pointer;
+    color: #FFFFFF;
+    background-color: #3C3C3C;
+    width: 100px;
+    text-align: center;
 }
 .propertiesTabActive {
 	border-bottom: none;
-	background-color: #EEE;
+	background-color: #585757;
 }
 .propertiesGUIContent {
 	padding: 10px;
+    margin-top:10px;
+    color: #FFFFFF;
 }
 
+#objectType {
+	margin: 15px;
+}
 #closeSplashScreenButton {
 	right: 5px;
 	top: 5px;
@@ -230,8 +302,12 @@ select {
 	top: 30px;
 	left: 0px;
 	height: calc(100%);
+	width: 28px;
 	text-align: left;
 	padding: 3px;
+	overflow: hidden;
+    border-left-color: #585757;
+    border-bottom-color: #585757;
 }
 
 #toolOptionsGUI {
@@ -253,6 +329,10 @@ select {
     font-size: 8px;
     width: 27px;
     height: 27px;
+}
+
+#objectTypeName {
+    color: #FAFAFA
 }
 
 #rightClickMenu {
@@ -279,12 +359,30 @@ select {
 	display: none;
 }
 
+.toolbarButton {
+	padding-left: 3px;
+	padding-top: 4px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	margin-bottom: 3px;
+	height: 30px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border-radius:5px;
+}
+
+.toolbarButtonActive {
+	background-color: #31E19C;
+}
+
 .button {
-	padding: 3px;
+	padding: 4px;
 }
 .button:hover {
 	cursor: pointer;
-	background-color: #CACACA;
+	background-color: #a5a5a5;
+/*    border-radius: 2px;*/
 }
 .button:active {
 	cursor: pointer;
@@ -318,7 +416,7 @@ select {
 	margin: 5px;
 
 	border: 1px solid #bbb;
-	border-radius: 2px;
+/*	border-radius: 2px;*/
 
 	/*box-shadow: 2px 2px 2px #AAA;*/
 }
@@ -327,12 +425,85 @@ select {
 	float: left;
 }
 
+/* Property Inputs */
+.propertyInputDiv {
+	border: none; 
+	border-radius: 8px; 
+	background-color: #FAFAFA;
+    align-content: center;
+    box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24); 
+}
+
+.propertyInputDivLarge {
+    width : 132px; 
+    height : 18px; 
+    float : left; 
+}
+
+.propertyInputLarge {
+    width: 120px; 
+    height: 17px; 
+    margin:0 auto; 
+}
+
+
+.propertyInputDivSmall {
+    width: 52px; 
+    height: 18px;
+}
+
+.propertyInputSmall {
+    width:48px; 
+    height: 17px; 
+}
+
+.propertyInput {
+    text-align: left; 
+    float: right; 
+    border: none; 
+    background-color: transparent;
+    font-family: "Open Sans";
+    font-size: 16px; 
+    color: #2C2C2C;
+    letter-spacing: 0.32px; 
+}
+
+
+
+.propertyInputContainer {
+    float: right;
+}
+
+.propertyRow {
+    padding-top: 8px; 
+}
+.propertyCross {
+    padding-left:  10px; 
+    padding-right: 10px; 
+    font-size: 12px; 
+    float: left;
+    color: #FAFAFA;
+}
+
+.propertyName {
+    font-size: 16px;
+    padding-right: 10px;
+    float: left; 
+}
+
+.propertySlider {
+    float: right; 
+}
+input.propertyInput:focus {
+    outline-width:0px; 
+}
 #timelineGUI {
 	top: 31px;
-	left: 35px;
-	padding: 10px;
-	width: calc(100% - 308px);
+	left:35px; /*0px;*/
+	/*padding: 10px;*/
+	width: calc(100% - 287px);/*calc(100% - 288px);*/
 	background-color: #E6E6E6;
+	overflow: hidden;
 }
 
 #layersGUI {
@@ -363,6 +534,7 @@ select {
     right: 6px;
 }
 
+
 .hidden {
     position: absolute;
     bottom: 0;
@@ -384,3 +556,11 @@ select {
     /* Because for user-select:none, Safari won't allow input */
 }
 
+.thumbnailPreview {
+	position: absolute;
+	left: 130px;
+	top: 130px;
+	width: 100px;
+	height: 100px;
+	background-color: blue;
+}

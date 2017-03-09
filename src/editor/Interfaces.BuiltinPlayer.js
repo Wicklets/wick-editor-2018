@@ -24,14 +24,16 @@ var BuiltinPlayerInterface = function (wickEditor) {
         }
 
         that.running = true;
-        WickPlayer.runProject(JSONProject);
+        wickPlayer.runProject(JSONProject, document.getElementById('playerCanvasContainer'));
         wickEditor.syncInterfaces();
     }
 
     this.stopRunningProject = function () {
         hideBuiltinPlayer();
         that.running = false;
-        WickPlayer.stopRunningCurrentProject();
+        wickPlayer.stopRunningProject();
+        wickEditor.thumbnailRenderer.cleanup()
+        wickEditor.thumbnailRenderer.setup()
     }
 
 // Internal utils

@@ -73,16 +73,30 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
             originCrosshair.top  += newOriginPos.y;
         }
         addElement(originCrosshair);
+        fabricInterface.canvas.moveTo(originCrosshair, 1)
 
         that.update();
     });
 
+    canvas.on('before:render', function () {
+        canvas._objects.forEach(function (obj) {
+            if(!obj.centerpointObject) return;
+            var selectedObj = wickEditor.fabric.getSelectedObject();
 
-    var createSymbolButton = document.getElementById('createSymbolButton');
+            if(selectedObj && selectedObj.uuid === obj.wickObjectRef.uuid) {
+                obj.centerpointObject.opacity = 1.0;
+            } else {
+                obj.centerpointObject.opacity = 0.0;
+            }
+            obj.centerpointObject.setCoords();
+        });
+    });
+
+    /*var createSymbolButton = document.getElementById('createSymbolButton');
     var editSymbolButton = document.getElementById('editSymbolButton');
     var editSymbolScriptsButton = document.getElementById('editSymbolScriptsButton');
     var finishEditingObjectFabricButton = document.getElementById('finishEditingObjectFabricButton');
-    
+
     canvas.on('after:render', function() {
 
         createSymbolButton.style.display = "none";
@@ -140,7 +154,7 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
             createSymbolButton.style.top = corner.y + 'px';
             createSymbolButton.style.display = "block";
         }
-    });
+    });*/
 
     this.update = function () {
 

@@ -5,39 +5,21 @@
 		"properties": [
 			{
 				"name" : "play()",
-				"description" : "Causes the timeline to begin playing. When called from inside a symbol, the parent of the symbol's timeline is played.",
+				"description" : "Causes the playhead to begin playing. When called from inside a symbol, the parent of the symbol's playhead is played.",
 				"example" : "play();",
 				"args" : [],
 				"return" : null
 			}, {
-				"name" : "stop()",
-				"description" : "Causes the timeline to stop. When called from inside a symbol, the parent of the symbol's timeline is stopped.",
+				"name" : "pause()",
+				"description" : "Causes the playhead to stop playing. When called from inside a symbol, the parent of the symbol's playhead is stopped.",
 				"example" : "stop();",
 				"args" : [],
 				"return" : null
 			}, {
-				"name" : "gotoAndStop(frame)",
-				"description" : "Moves the playhead to 'frame' and causes the timeline to stop. When called from inside a symbol, the parent of the symbol's timeline is moved.",
-				"example" : "// Go to frame 2 and stop the timeline\ngotoAndStop(2);\n// Go to 'menu' and stop the timeline\ngotoAndStop('menu');",
-				"args" : [{"name": "frame", "type": "Number", "description": "index of the frame to jump to"}],
-				"return" : null
-			}, {
-				"name" : "gotoAndPlay(frame)",
-				"description" : "Moves the playhead to 'frame' and plays the timeline from there. When called from inside a symbol, the parent of the symbol's timeline is moved.",
-				"example" : "// Go to frame to and play the timeline\ngotoAndPlay(2);\n// Go to 'jump' and play the timeline\ngotoAndPlay('jump');",
-				"args" : [{"name": "frame", "type": "Number", "description": "index of the frame to jump to"}],
-				"return" : null
-			}, {
-				"name" : "gotoNextFrame()",
-				"description" : "Moves the playhead to the next frame. If called on the last frame, gotoNextFrame() does nothing. When called from inside a symbol, the parent of the symbol's timeline is moved.",
-				"example" : "gotoNextFrame();",
-				"args" : [],
-				"return" : null
-			}, {
-				"name" : "gotoPrevFrame()",
-				"description" : "Moves the playhead to the previous frame. If called on the first frame, gotoPrevFrame() does nothing. When called from inside a symbol, the parent of the symbol's timeline is moved.",
-				"example" : "gotoPrevFrame();",
-				"args" : [],
+				"name" : "movePlayheadTo(frame)",
+				"description" : "Moves the playhead to 'frame'. When called from inside a symbol, the parent of the symbol's timeline is moved.",
+				"example" : "// Go to frame 2\ngotoAndStop(2);\n// Go to 'menu'\ngotoAndStop('menu');",
+				"args" : [{"name": "frame", "type": "Number", "description": "position to move the playhead to"}],
 				"return" : null
 			}, {
 				"name" : "stopAllSounds()",
@@ -81,11 +63,17 @@
 				"args" : [],
 				"return" : {"type": "Number", "description": "x-location of the mouse"}
 			}, {
-				"name" : "isKeyDown(key)",
-				"description" : "Returns true if 'key' is currently pressed and false otherwise. Casing does not matter i.e. isKeyDown('a') is equivalent to isKeyDown('A').",
-				"example" : "// If SPACE is pressed, move this object right by 10 pixels\nif (isKeyDown('SPACE')) { \n\tthis.x += 10;\n}",
+				"name" : "keyIsDown(key)",
+				"description" : "Returns true if 'key' is currently down and false otherwise. Casing does not matter i.e. keyIsDown('a') is equivalent to keyIsDown('A').",
+				"example" : "// If SPACE is pressed, move this object right by 10 pixels\nif (keyIsDown('SPACE')) { \n\tthis.x += 10;\n}",
 				"args" : [{"name" : "key", "type" : "String", "description" : "Any character such as 'A' or special characters including 'SPACE', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'BACKSPACE', 'TAB', 'ENTER', 'SHIFT', 'CTRL', 'COMMAND', 'ALT', 'WINDOWS', 'F1', 'NUM 0', 'NUM LOCK'"}],
 				"return" : {"type": "Boolean", "description": "true if key is down, false otherwise."}
+			}, {
+				"name" : "keyJustPressed(key)",
+				"description" : "Returns true if 'key' was just pressed and false otherwise. Casing does not matter i.e. keyJustPressed('a') is equivalent to keyJustPressed('A').",
+				"example" : "// If SPACE is pressed, move this object right by 10 pixels\nif (keyJustPressed('SPACE')) { \n\tthis.x += 10;\n}",
+				"args" : [{"name" : "key", "type" : "String", "description" : "Any character such as 'A' or special characters including 'SPACE', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'BACKSPACE', 'TAB', 'ENTER', 'SHIFT', 'CTRL', 'COMMAND', 'ALT', 'WINDOWS', 'F1', 'NUM 0', 'NUM LOCK'"}],
+				"return" : {"type": "Boolean", "description": "true if key was just pressed, false otherwise."}
 			}, {
 				"name" : "getTiltX()",
 				"description" : "Returns the x-coordinate tilt of the device. This function only works on devices with an accelerometer/gyroscope (such as smartphones).",
@@ -189,6 +177,12 @@
 				"example" : "var myClone = this.clone(); // Creates a clone of the current wick object and stores it in the variable myClone",
 				"args" : [], 
 				"return" : {"type" : "WickObject", "description" : "A clone of the WickObject which calls clone()."}
+			}, {
+				"name" : "isClone()",
+				"description" : "Checks if this object is a clone",
+				"example" : "if(this.isClone) {\n\tconsole.log('i am a clone!')\n}",
+				"args" : [], 
+				"return" : {"type" : "Boolean", "description" : "True if the object is a clone"}
 			}, {
 				"name" : "delete()",
 				"description" : "Deletes this WickObject completely.",

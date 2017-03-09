@@ -14,6 +14,8 @@ var FabricSymbolBorders = function (wickEditor, fabricInterface) {
 
     canvas.on('after:render', function() {
 
+        if(canvas._currentTransform) return;
+
         // Render bounding boxes for symbols
         var selectedObjs = fabricInterface.getSelectedObjects(WickObject);
         canvas.forEachObject(function(obj) {
@@ -29,10 +31,10 @@ var FabricSymbolBorders = function (wickEditor, fabricInterface) {
                 canvas.contextContainer.lineWidth = 1.0;
                 canvas.contextContainer.globalAlpha = 1.0;
                 canvas.contextContainer.strokeStyle = '#92B7FF';
-            } else if(wickObj.scriptsAllEmpty()) {
+            /*} else if(wickObj.scriptsAllEmpty()) {
                 canvas.contextContainer.lineWidth = 4;
                 canvas.contextContainer.globalAlpha = 0.5;
-                canvas.contextContainer.strokeStyle = '#92B7FF';
+                canvas.contextContainer.strokeStyle = '#92B7FF';*/
             } else if(!wickObj.hasSyntaxErrors && !wickObj.causedAnException) {
                 canvas.contextContainer.lineWidth = 4;
                 canvas.contextContainer.globalAlpha = 0.5;

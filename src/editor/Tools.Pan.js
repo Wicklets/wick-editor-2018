@@ -10,22 +10,32 @@ Tools.Pan = function (wickEditor) {
         return "move";
     }
 
+    this.getToolbarIcon = function () {
+        return "resources/pan.png";
+    }
+
+    this.getTooltipName = function () {
+        return "Pan";
+    }
+
 // Panning the fabric canvas
     
-    wickEditor.fabric.canvas.on('mouse:up', function (e) {
-        wickEditor.fabric.stopPan();
-    });
+    this.setup = function () {
+        wickEditor.fabric.canvas.on('mouse:up', function (e) {
+            wickEditor.fabric.stopPan();
+        });
 
-    wickEditor.fabric.canvas.on('mouse:down', function (e) {
-        if(wickEditor.fabric.currentTool instanceof Tools.Pan) {
-            wickEditor.fabric.startPan();
-        }
-    });
-    
-    wickEditor.fabric.canvas.on('mouse:move', function (e) {
-        if (wickEditor.fabric.panning && e && e.e) {
-            wickEditor.fabric.relativePan(e.e.movementX, e.e.movementY)
-        }
-    });
+        wickEditor.fabric.canvas.on('mouse:down', function (e) {
+            if(wickEditor.currentTool instanceof Tools.Pan) {
+                wickEditor.fabric.startPan();
+            }
+        });
+        
+        wickEditor.fabric.canvas.on('mouse:move', function (e) {
+            if (wickEditor.fabric.panning && e && e.e) {
+                wickEditor.fabric.relativePan(e.e.movementX, e.e.movementY)
+            }
+        });
+    }
 
 }

@@ -1,0 +1,489 @@
+body {
+	--playhead-width: 2px;
+
+	--common-padding: 4px;
+    
+    --max-timeline-height: 200px; 
+
+	--layers-width: 150px;
+	--layer-height: 46px;
+
+	--frame-width: 80px;
+	--frame-handle-width: 8px;
+
+	--frame-padding-width: 4px;
+	--frame-padding-height: 4px;
+
+	--frames-strip-padding-vertical: 6px;
+
+	--shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
+	--border: inset 0px 0px 1px #555;
+    
+    --timeline-left-padding: 5px; 
+    --timeline-top-padding: 6px; 
+    --timeline-bottom-padding: 5px; 
+
+    --frames-cell-first-padding: 5px;
+
+    --scrollbar-thickness: 18px;
+
+
+    --number-line-height: 23px;
+}
+
+.timeline {
+	background-color: #585757;
+
+	margin: 0px;
+	padding: 0px;
+    
+	width: 100%;
+    height: 100px; 
+
+	overflow: hidden;
+}
+
+.playhead {
+	background-color: #FF4646;
+
+	width: var(--playhead-width);
+	height: 100%;
+
+	pointer-events: none;
+
+	position: absolute;
+}
+
+.layers-container {
+	background-color: #585757;
+    border-right-color: #878787;
+	width: var(--layers-width);
+	height: 1000%;
+	left: 0px;
+	top: 0px;
+
+	position: absolute;
+	overflow: hidden;
+
+	box-shadow: var(--border);
+}
+
+.layer-tools-button {
+	position: absolute;
+
+	top: 0px;
+	left: 0px;
+
+	width: var(--scrollbar-thickness);
+	height: var(--scrollbar-thickness);
+
+    background-color: #F0EFEF;
+    
+    border-radius: 3px;
+    margin-left: 5px;
+    
+
+	cursor: pointer;
+}
+
+.delete-layer-button {
+	left: calc(var(--scrollbar-thickness) + 5px);
+    background-image: url("/resources/minusButton.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 12px 12px;
+    
+}
+
+.add-layer-button {
+    background-image: url(/resources/plusButton.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 12px 12px;
+}
+
+
+
+.layer {
+	background-color: #4a6588;
+    background-image: url(/resources/layerhandle.svg);
+    background-size: 45px 20px;
+    background-repeat: no-repeat;
+    background-position: left center;
+    
+    
+	width:  calc(100% - 10px);
+	height: calc(var(--layer-height) - 5px);
+    
+	margin: calc(var(--common-padding) / 2);
+    margin-top: 9px;
+    margin-left: 5px;
+    margin-bottom: 5px;
+    border-radius: 2px;
+    text-align: center;
+    line-height: calc(var(--layer-height) - 5px);
+    color: white;
+
+	position: absolute;
+
+	cursor: move;
+
+	box-shadow: var(--border);
+
+	font-size: 12px;
+}
+
+.active-layer {
+    background-color: #46bbf8;
+}
+
+.frames-container {
+	background-color: #3C3C3C;
+
+	width: 1000%;
+	height: 1000%;
+	left: var(--layers-width);
+	top: 0px;
+
+	position: absolute;
+	overflow: hidden;
+    
+    display: inline-block;
+
+	box-shadow: var(--border);
+}
+
+.frames-strip {
+	background-color: #FFF;
+
+	width: 100%;
+	height: calc(var(--layer-height) - var(--frames-strip-padding-vertical)*2);
+
+	margin-top: calc(var(--frames-strip-padding-vertical) * 2);
+    left: 5px;
+	position: absolute;
+
+	box-shadow: var(--border);
+
+	overflow: hidden;
+    
+    border-radius: 5px;
+
+    cursor: pointer;
+
+	/*pointer-events:none;*/
+}
+
+.frames-strip-cell {
+	background-color: #C2C2C2;
+
+	width: var(--frame-width);
+	height: calc(var(--layer-height) - var(--frames-strip-padding-vertical)*2);
+
+	box-shadow: var(--border);
+
+	position: absolute;
+}
+
+.frames-strip-cell-first {
+	width: calc(var(--frame-width) + var(--frames-cell-first-padding));
+}
+
+.frame {
+	background-color: #FFFFFF;
+/*    opacity: 0.5;*/
+	cursor: move;
+
+	width:  calc(var(--frame-width)      - var(--common-padding));
+	height: calc(var(--layer-height) - var(--common-padding));
+
+	position: absolute;
+	overflow: hidden;
+    margin-top: 7px;
+    margin-left: 15px;
+	box-shadow: var(--border), var(--shadow);
+    
+    border-radius: 3px;
+}
+
+.frame-thumbnail {
+	max-height:100%; 
+	max-width:100%;
+
+	margin: auto;
+	display: block;
+
+	pointer-events: none;
+    border-radius: 3px;
+}
+
+.frame-extender-handle {
+	background-color: #000000;
+
+	cursor: ew-resize;
+	width: var(--frame-handle-width);
+	height: 100%;
+
+	opacity: 0.1;
+
+	position: absolute;
+	right: 0px;
+	top: 0px;
+}
+
+.frame-extender-handle-right {
+	float:right;
+    
+}
+
+.frame-extender-handle-right:hover{
+    
+    background-color: black;
+}
+
+.frame-extender-handle-left {
+
+}
+
+.selection-overlay {
+	width:  100%;
+	height: 100%;
+	position: absolute;
+	pointer-events: none;
+	box-shadow: inset 0px 0px 0px 2px cyan;
+	background-color: cyan;
+	opacity: .1;
+	left: 0px;
+	top:0px;
+
+}
+
+.add-frame-overlay {
+	width: calc(var(--frame-width) / 1.5); 
+	height: calc(var(--layer-height) / 1.8);
+	/*width: var(--frame-width);*/
+	/*height: var(--layer-height);*/
+	position: absolute;
+    margin-left: calc(var(--frame-width)  / 2 - var(--frame-width)  / 1.5 / 2);
+    margin-top:  calc(var(--layer-height) / 2 - var(--layer-height) / 1.8 / 2 + 6px);
+    /*    @Todo center add frame overlay w/o magic no*/
+    background-color: #ffffff;
+    border-radius: 3px;
+    box-shadow: 0 0 1px 0 rgba(0,0,0,0.12), 0 1px 1px 0 rgba(0,0,0,0.24), 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24); 
+    pointer-events: none;
+}
+
+.add-frame-overlay-img {
+	width: 10px;
+	height: 10px;
+	left: calc(50% - 5px);
+	top: calc(50% - 5px);
+	position: absolute;
+	pointer-events: none;
+}
+
+.selection-box {
+	background-color: #CCC;
+	box-shadow: inset 0px 0px 1px #555;
+	opacity: 0.5;
+	position: absolute;
+	pointer-events: none;
+	width: 0px;
+	height: 0px;
+	left: 0px;
+	top:0px;
+}
+
+.scrollbar {
+	background-color: #2E2E2E;
+	position: absolute;
+	overflow: hidden;
+	outline:none;
+/*    border-color: #878787;
+    border-width: 2px;*/
+    /*border-style: solid;*/
+    border-radius: 3px;
+}
+
+.horizontal-scrollbar {
+	bottom: 0px;
+	right: var(--scrollbar-thickness);
+	width: calc(100% - var(--layers-width) - var(--scrollbar-thickness));
+	height: var(--scrollbar-thickness);
+    
+
+}
+
+.vertical-scrollbar {
+	top: var(--number-line-height);
+	right: 0px;
+	height: calc(100% - var(--scrollbar-thickness) - var(--number-line-height));
+	width: var(--scrollbar-thickness);
+}
+
+.scrollbar-button {
+	cursor: pointer;
+	width: var(--scrollbar-thickness);
+	height: var(--scrollbar-thickness);
+	position: absolute;
+    background-color: #2E2E2E; 
+
+}
+
+.scrollbar-button-left {
+	left: 0px;
+	top: 0px;
+    background-image: url(/resources/scrollbararrow-left.png);
+    background-repeat: no-repeat;
+    background-position: center;
+
+}
+
+.scrollbar-button-right {
+	color: blue;
+    right: 0px;
+	top: 0px;
+
+    background-image: url(/resources/scrollbararrow-right.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    
+}
+
+.scrollbar-button-top {
+	right: 0px;
+	top: 0px;
+    background-image: url(/resources/scrollbararrow-up.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.scrollbar-button-bottom {
+	right: 0px;
+	bottom: 0px;
+    background-image: url(/resources/scrollbararrow-down.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.scrollbar-head {
+	cursor: pointer;
+	background-color: #FAFAFA;
+    left: 0px;
+	top: 0px;
+    border-radius: 6px;
+}
+
+.scrollbar-head-horizontal {
+	width: 100px;
+	height: calc(var(--scrollbar-thickness) - 4px);
+    margin-top: 2px;
+}
+
+.scrollbar-head-vertical {
+	width: calc(var(--scrollbar-thickness) - 4px);
+    margin: 0 auto;
+	/* Height depends on number of layers */ 
+}
+
+.number-line {
+	position: absolute;
+	top: 0px;
+	left: var(--layers-width);
+	width: 1000%;
+	height: var(--number-line-height);
+
+	cursor: pointer;
+
+	background-color: #252525;
+}
+
+.number-line-cell {
+	position: absolute;
+	height: var(--number-line-height);
+    color: #fafafa;
+}
+
+.playrange {
+	cursor: move;
+
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100px;
+	height: var(--number-line-height);
+
+	background-color: red;
+	opacity: 0.3;
+    
+    color: #FAFAFA;
+
+	-webkit-box-shadow:inset 0px 0px 0px 2px #fff;
+    -moz-box-shadow:inset    0px 0px 0px 2px #fff;
+    box-shadow:inset         0px 0px 0px 2px #fff;
+}
+
+.playrange:hover {
+	opacity: 0.7;
+}
+
+.playrange-selected {
+	opacity: 0.7;
+}
+
+.playrange-label {
+	color: white;
+	margin-left: 25px;	
+	opacity: 1;
+
+}
+
+.playrange-handle {
+	background-color: black;
+	opacity: 0.2;
+	position: absolute;
+
+	width: 15px;
+	height: 100%;
+
+	cursor: ew-resize;
+}
+
+.playrange-handle-left {
+	left: 0px;
+	top: 0px;
+}
+
+.playrange-handle-right {
+	right: 0px;
+	top: 0px;
+}
+
+.hide-number-line-piece {
+	position: absolute;
+	width: var(--layers-width);
+	height: var(--number-line-height);
+	top: 0px;
+	left: 0px;
+	background-color: #585757;
+}
+
+.layer-toolbar {
+	position: absolute;
+	width: var(--layers-width);
+	height: var(--scrollbar-thickness);
+	bottom: 0px;
+	left: 0px;
+	border-top: 1px; 
+	border-color: black; 
+	background-color: #585757;
+}
+
+.hide-scrollbar-connect-piece {
+	position: absolute;
+	width: var(--scrollbar-thickness);
+	height: var(--scrollbar-thickness);
+	bottom: 0px;
+	left: calc(100% - var(--scrollbar-thickness));
+	background-color: #585757;
+}

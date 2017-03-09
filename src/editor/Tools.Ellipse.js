@@ -11,11 +11,21 @@ Tools.Ellipse = function (wickEditor) {
         return "crosshair"
     };
 
-    fabricInterface.canvas.on('mouse:down', function (e) {
-        if(!(fabricInterface.currentTool instanceof Tools.Ellipse)) return;
+    this.getToolbarIcon = function () {
+        return "resources/ellipse.png";
+    }
 
-        fabricInterface.shapeDrawer.startDrawingShape('ellipse', e.e.offsetX, e.e.offsetY, that.createWickObjectFromShape);
-    });
+    this.getTooltipName = function () {
+        return "Ellipse";
+    }
+
+    this.setup = function () {
+        fabricInterface.canvas.on('mouse:down', function (e) {
+            if(!(wickEditor.currentTool instanceof Tools.Ellipse)) return;
+
+            fabricInterface.shapeDrawer.startDrawingShape('ellipse', e.e.offsetX, e.e.offsetY, that.createWickObjectFromShape);
+        });
+    }
 
     this.createWickObjectFromShape = function (drawingShape) {
         var origX = drawingShape.left;
@@ -24,28 +34,21 @@ Tools.Ellipse = function (wickEditor) {
         drawingShape.top = 0;
         drawingShape.setCoords();
         //var svg = '<ellipse fill="'+drawingShape.fill+'" cx="'+drawingShape.rx+'" cy="'+drawingShape.ry+'" rx="'+drawingShape.width+'" ry="'+drawingShape.height+'"/>'
-        var svg = '<ellipse fill="'+drawingShape.fill+'" rx="'+drawingShape.rx+'" ry="'+drawingShape.ry+'"/>'
+        var svg = '<ellipse cx="'+drawingShape.width/2+'" cy="'+drawingShape.height/2+'" fill="'+drawingShape.fill+'" rx="'+drawingShape.rx+'" ry="'+drawingShape.ry+'"/>'
         var svgString = '<svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>';
 
-        drawingShape.remove();
-        wickEditor.actionHandler.doAction('addObjects', {
-            paths: [{svg:svgString, x:origX, y:origY}]
-        });
-
-        /*wickEditor.paper.addSVG(svgData, {x:origX, y:origY});
-        wickEditor.fabric.drawingPath = drawingShape;
-        wickEditor.syncInterfaces();*/
-
-        /*WickObject.fromPathFile(svgData, function (wickObject) {
-            wickObject.x = origX;
-            wickObject.y = origY;
-            wickObject.isNewDrawingPath = true;
-            wickEditor.project.addObject(wickObject);
-            wickEditor.paper.onWickObjectsChange();
-        });
+        drawingShape.remove()
         
-        wickEditor.fabric.drawingPath = drawingShape;
-        wickEditor.syncInterfaces();*/
+        var pathWickObject = WickObject.fromPathFile(svgString);
+        pathWickObject.x = origX;
+        pathWickObject.y = origY;
+        pathWickObject.width = drawingShape.width;
+        pathWickObject.height = drawingShape.height;
+
+        wickEditor.actionHandler.doAction('addObjects', {
+            wickObjects: [pathWickObject],
+            dontSelectObjects: true
+        });
     }
 
 }

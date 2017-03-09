@@ -2,21 +2,6 @@
 
 var ToolbarInterface = function (wickEditor) {
 
-    /* Define tools in toolbar */ 
-    var toolbarTools = [ 'cursor',
-                         'paintbrush',
-                         'eraser',
-                         'fillbucket',
-                         'rectangle',
-                         'ellipse',
-                         'dropper',
-                         'fillbucket',
-                         'text',
-                         'zoom',
-                         'pan',
-                         'crop',
-                         'backgroundremove' ]; 
-
     var brushCanvas;
     var brushCtx;
 
@@ -24,47 +9,62 @@ var ToolbarInterface = function (wickEditor) {
         brushCanvas = document.getElementById('brushSizeDisplay');
         brushCtx = brushCanvas.getContext('2d');
 
+        for(toolName in wickEditor.tools) {
+            var tool = wickEditor.tools[toolName];
+
+            var toolDiv = document.createElement('div');
+            toolDiv.id = toolName + "ToolButton";
+            toolDiv.setAttribute('alt', tool.getTooltipName());
+
+            var toolIcon = document.createElement('img');
+            toolIcon.src = tool.getToolbarIcon();
+            toolIcon.width = '20';
+            toolDiv.appendChild(toolIcon);
+
+            document.getElementById('tools').appendChild(toolDiv);
+        }
+
         $(function() {
-          const cssClasses = [
-            'rangeslider--is-lowest-value',
-            'rangeslider--is-highest-value'
-          ];
-          
-          $('input[type=range]')
-            .rangeslider({
-              polyfill: false
-            })
-            .on('input', function() {
-              /*const fraction = (this.value - this.min) / (this.max - this.min);
-              if (fraction === 0) {
-                this.nextSibling.classList.add(cssClasses[0]);
-              } else if (fraction === 1) {
-                this.nextSibling.classList.add(cssClasses[1]);
-              } else {
-                this.nextSibling.classList.remove(...cssClasses)
-              }*/
-            });
+            const cssClasses = [
+                'rangeslider--is-lowest-value',
+                'rangeslider--is-highest-value'
+            ];
+
+            $('input[type=range]')
+                .rangeslider({
+                    polyfill: false
+                })
+                .on('input', function() {
+                    /*const fraction = (this.value - this.min) / (this.max - this.min);
+                    if (fraction === 0) {
+                    this.nextSibling.classList.add(cssClasses[0]);
+                    } else if (fraction === 1) {
+                    this.nextSibling.classList.add(cssClasses[1]);
+                    } else {
+                    this.nextSibling.classList.remove(...cssClasses)
+                    }*/
+                });
         });
     }
 
     this.syncWithEditorState = function () {
 
         /* Highlight select tool, unhighlight all other tools */
-        toolbarTools.forEach( function(toolName) {
-            var buttonClassName = '#' + toolName + 'ToolButton';
-            if (wickEditor.fabric.tools[toolName] === wickEditor.fabric.currentTool) {
-                $(buttonClassName).css('border', '1px solid #ccc');
+        for (toolName in wickEditor.tools) {
+            var buttonClassName = toolName + 'ToolButton';
+            if (wickEditor.tools[toolName] === wickEditor.currentTool) {
+                document.getElementById(buttonClassName).className = "button toolbarButton tooltipElem toolbarButtonActive"
             } else {
-                $(buttonClassName).css('border', '');
+                document.getElementById(buttonClassName).className = "button toolbarButton tooltipElem"
             }
-        });
+        };
 
         /* Update drawing tool options elems */
-        lineWidthEl.value = wickEditor.fabric.tools['paintbrush'].brushSize;
+        lineWidthEl.value = wickEditor.tools['paintbrush'].brushSize;
 
-        if(lineColorEl.jscolor) lineColorEl.jscolor.fromString(wickEditor.fabric.tools['paintbrush'].color);
+        if(lineColorEl.jscolor) lineColorEl.jscolor.fromString(wickEditor.tools['paintbrush'].color);
         
-        var currentTool = wickEditor.fabric.currentTool;
+        var currentTool = wickEditor.currentTool;
         document.getElementById('toolOptionsGUI').style.display = 
             (currentTool instanceof Tools.Dropper) ||
             (currentTool instanceof Tools.Ellipse) ||
@@ -79,11 +79,11 @@ var ToolbarInterface = function (wickEditor) {
 
         var centerX = brushCanvas.width / 2;
         var centerY = brushCanvas.height / 2;
-        var radius = wickEditor.fabric.tools.paintbrush.brushSize/2 * wickEditor.fabric.canvas.getZoom();
+        var radius = wickEditor.tools.paintbrush.brushSize/2 * wickEditor.fabric.canvas.getZoom();
 
         brushCtx.beginPath();
         brushCtx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-        brushCtx.fillStyle = wickEditor.fabric.tools.paintbrush.color;
+        brushCtx.fillStyle = wickEditor.tools.paintbrush.color;
         brushCtx.fill();
     }
 
@@ -92,13 +92,13 @@ var ToolbarInterface = function (wickEditor) {
     var lineColorEl = document.getElementById('lineColor');
 
     lineWidthEl.onchange = function() {
-        wickEditor.fabric.tools['paintbrush'].brushSize = parseInt(this.value, 10) || 2;
+        wickEditor.tools['paintbrush'].brushSize = parseInt(this.value, 10) || 2;
         wickEditor.syncInterfaces();
     };
 
     lineColorEl.onchange = function() {
         var newColor = '#' + this.value;
-        wickEditor.fabric.tools['paintbrush'].color = newColor;
+        wickEditor.tools['paintbrush'].color = newColor;
 
         wickEditor.syncInterfaces();
     };

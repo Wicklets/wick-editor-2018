@@ -21,14 +21,15 @@ var WickProject = function () {
     this.backgroundColor = "#FFFFFF";
     this.transparent = false;
 
+    this.pixelPerfectRendering = true;
+
     this.framerate = 12;
 
     this.fitScreen = false;
 
-    this.renderer = "WickPixiRenderer";
-    this.audioPlayer = "WickWebAudioPlayer";
+    //this.assets = {};
 
-    this.assets = {};
+    this._selection = [];
 
 };
 
@@ -38,18 +39,22 @@ WickProject.prototype.createNewRootObject = function () {
     rootObject.isRoot = true;
     rootObject.playheadPosition = 0;
     rootObject.currentLayer = 0;
-    rootObject.layers = [new WickLayer()];
+    rootObject.playRanges = [];
+    var firstLayer = new WickLayer();
+    firstLayer.identifier = "Layer 1";
+    rootObject.layers = [firstLayer];
     rootObject.x = 0;
     rootObject.y = 0;
     rootObject.opacity = 1.0;
     this.rootObject = rootObject;
+    this.rootObject.generateParentObjectReferences();
 }
 
 /*****************************
     Assets
 *****************************/
 
-WickProject.prototype.loadAsset = function (filename, dataURL) {
+/*WickProject.prototype.loadAsset = function (filename, dataURL) {
     // Avoid duplicate names
     var newFilename = filename;
     var i = 2;
@@ -67,7 +72,7 @@ WickProject.prototype.loadAsset = function (filename, dataURL) {
 
 WickProject.prototype.getAsset = function (filename) {
     return LZString.decompressFromBase64(this.assets[filename]);
-}
+}*/
 
 /*****************************
     Import/Export
@@ -93,7 +98,7 @@ WickProject.fromWebpage = function (webpageString) {
 
     var webpageStringLines = webpageString.split('\n');
     webpageStringLines.forEach(function (line) {
-        if(line.startsWith("<script>WickPlayer.runProject(")) {
+        if(line.startsWith("<script>var wickPlayer = new WickPlayer(); wickPlayer.runProject(")) {
             extractedProjectJSON = line.split("'")[1];
         }
     });
@@ -132,15 +137,27 @@ WickProject.fromJSON = function (rawJSONProject) {
 
     WickProject.fixForBackwardsCompatibility(projectFromJSON);
 
+    projectFromJSON.currentObject = projectFromJSON.rootObject;
+        
+    // Prepare all objects for being played/drawn
+    projectFromJSON.getAllObjects().forEach(function (obj) {
+        obj.prepareForPlayer();
+    })
+
+    // Regenerate name refs
+    projectFromJSON.rootObject.generateObjectNameReferences(projectFromJSON.rootObject);
+
     return projectFromJSON;
 }
 
 // Backwards compatibility for old Wick projects
 WickProject.fixForBackwardsCompatibility = function (project) {
     // WickProject.resolution was replaced with project.width and project.height
+    project._selection = [];
     if(!project.width) project.width = project.resolution.x;
     if(!project.height) project.height = project.resolution.y;
     if(!project.transparent) project.transparent = false;
+    if(!project.pixelPerfectRendering) project.pixelPerfectRendering = false;
 
     var allObjectsInProject = project.rootObject.getAllChildObjectsRecursive();
     allObjectsInProject.push(project.rootObject);
@@ -168,11 +185,32 @@ WickProject.fixForBackwardsCompatibility = function (project) {
             });
         }
 
+        if(wickObj.wickScripts) {
+            wickObj.wickScript = "this.onLoad = function () {\n"+WickProject.Compressor.decodeString(wickObj.wickScripts['onLoad'])+"\n}\n\nthis.onUpdate = function () {\n"+WickProject.Compressor.decodeString(wickObj.wickScripts['onUpdate'])+"\n}\n\nthis.onClick = function () {\n"+WickProject.Compressor.decodeString(wickObj.wickScripts['onClick'])+"\n}\n\n"
+            wickObj.wickScripts = null;
+        }
+
         if(!wickObj.isSymbol) return;
+
+        if(!wickObj.playRanges) wickObj.playRanges = [];
+
         wickObj.layers.forEach(function (layer) {
+            if(!layer.identifier) layer.identifier = "Untitled Layer";
+
             layer.frames.forEach(function (frame) {
                 // Frames now have uuids
                 if(!frame.uuid) frame.uuid = random.uuid4();
+
+                // 'frameLength' is now just 'length'
+                if(frame.frameLength) {
+                    frame.length = frame.frameLength;
+                    frame.frameLength = null;
+                }
+
+                // Frames store where they are on the timeline
+                if(frame.playheadPosition === undefined) {
+                    frame.playheadPosition = layer.frames.indexOf(frame)
+                }
 
                 // Frames now have SVG path data
                 if(!frame.pathData) {
@@ -186,11 +224,16 @@ WickProject.fixForBackwardsCompatibility = function (project) {
                 if(frame.cachedImageData) frame.cachedImageData = null;
 
                 // Frames now have scripts
-                if(!frame.wickScripts) {
+                if(!frame.wickScript && !frame.wickScripts) {
                     frame.wickScripts = {
                         "onLoad" : "",
                         "onUpdate" : ""
                     }
+                }
+
+                if(frame.wickScripts) {
+                    frame.wickScript = "this.onLoad = function () {\n"+WickProject.Compressor.decodeString(frame.wickScripts['onLoad'])+"\n}\n\nthis.onUpdate = function () {\n"+WickProject.Compressor.decodeString(frame.wickScripts['onUpdate'])+"\n}\n"
+                    frame.wickScripts = null
                 }
 
                 // Frames can now not save their states 
@@ -237,19 +280,16 @@ WickProject.prototype.getAsJSON = function (callback, args) {
 
 WickProject.prototype.saveInLocalStorage = function () {
     var self = this;
-    wickEditor.statusbar.setState('saving');
     this.getAsJSON(function (JSONProject) {
         console.log("Project size: " + JSONProject.length)
         if(JSONProject.length > 5000000) {
             console.log("Project >5MB, compressing...");
             var compressedJSONProject = WickProject.Compressor.compressProject(JSONProject, "LZSTRING-UTF16");
             WickProject.saveProjectJSONInLocalStorage(compressedJSONProject);
-            console.log("Compressed size: " + compressedJSONProject.length)
-            wickEditor.statusbar.setState('done');
+            console.log("Compressed size: " + compressedJSONProject.length);
         } else {
             console.log("Project <5MB, not compressing.");
             WickProject.saveProjectJSONInLocalStorage(JSONProject);
-            wickEditor.statusbar.setState('done');
         }
     });
 }
@@ -267,8 +307,9 @@ WickProject.saveProjectJSONInLocalStorage = function (projectJSON) {
     }
 }
 
-WickProject.prototype.getCopyData = function (objects) {
+WickProject.prototype.getCopyData = function () {
     var objectJSONs = [];
+    var objects = this.getSelectedObjects();
     for(var i = 0; i < objects.length; i++) {
         objects[i].uuidCopiedFrom = objects[i].uuid;
         objectJSONs.push(objects[i].getAsJSON());
@@ -287,6 +328,24 @@ WickProject.prototype.getCopyData = function (objects) {
 /*********************************
     Access project wickobjects
 *********************************/
+
+WickProject.prototype.getCurrentObject = function () {
+    return this.currentObject;
+}
+
+WickProject.prototype.getCurrentLayer = function () {
+    return this.getCurrentObject().getCurrentLayer();
+}
+
+WickProject.prototype.getCurrentFrame = function () {
+    return this.getCurrentObject().getCurrentLayer().getCurrentFrame();
+}
+
+WickProject.prototype.getAllObjects = function () {
+    var allObjectsInProject = this.rootObject.getAllChildObjectsRecursive();
+    allObjectsInProject.push(this.rootObject);
+    return allObjectsInProject;
+}
 
 WickProject.prototype.getObjectByUUID = function (uuid) {
     var allObjectsInProject = this.rootObject.getAllChildObjectsRecursive();
@@ -322,9 +381,28 @@ WickProject.prototype.getFrameByUUID = function (uuid) {
     return foundFrame;
 }
 
+WickProject.prototype.getPlayRangeByUUID = function (uuid) {
+    var allObjectsInProject = this.rootObject.getAllChildObjectsRecursive();
+    allObjectsInProject.push(this.rootObject);
+
+    var foundPlayrange = null;
+    allObjectsInProject.forEach(function (object) {
+        if(foundPlayrange) return;
+        if(!object.isSymbol) return;
+
+        object.playRanges.forEach(function(playRange) {
+            if(playRange.uuid === uuid) {
+                foundPlayrange = playRange;
+            }
+        });
+    });
+
+    return foundPlayrange;
+}
+
 WickProject.prototype.addObject = function (wickObject, zIndex, ignoreSymbolOffset) {
 
-    var frame = this.currentObject.getCurrentFrame();
+    var frame = this.getCurrentFrame();
 
     if(!ignoreSymbolOffset) {
         var insideSymbolOffset = this.currentObject.getAbsolutePosition();
@@ -356,7 +434,7 @@ WickProject.prototype.jumpToObject = function (obj) {
 
     var currentObject = this.currentObject;
     var frameWithChild = currentObject.getFrameWithChild(obj);
-    var playheadPositionWithChild = currentObject.getPlayheadPositionAtFrame(frameWithChild);
+    var playheadPositionWithChild = frameWithChild.playheadPosition
     currentObject.playheadPosition = playheadPositionWithChild;
 
 }
@@ -380,7 +458,7 @@ WickProject.prototype.jumpToFrame = function (frame) {
 
     var currentObject = this.currentObject;
     var frameWithChild = frame;
-    var playheadPositionWithChild = currentObject.getPlayheadPositionAtFrame(frameWithChild);
+    var playheadPositionWithChild = frameWithChild.playheadPosition
     currentObject.playheadPosition = playheadPositionWithChild;
 }
 
@@ -398,3 +476,163 @@ WickProject.prototype.hasSyntaxErrors = function () {
 
 }
 
+WickProject.prototype.handleWickError = function (e, objectCausedError) {
+    if (window.wickEditor) {
+        //if(!wickEditor.builtinplayer.running) return;
+
+        console.error("Exception thrown while running script of WickObject: " + this.name);
+        console.error(e);
+        var lineNumber = null;
+        if(e.stack) {
+            e.stack.split('\n').forEach(function (line) {
+                if(lineNumber) return;
+                if(!line.includes("<anonymous>:")) return;
+
+                lineNumber = parseInt(line.split("<anonymous>:")[1].split(":")[0]);
+            });
+        }
+
+        //console.log(e.stack.split("\n")[1].split('<anonymous>:')[1].split(":")[0]);
+        //console.log(e.stack.split("\n"))
+        if(wickEditor.builtinplayer.running) wickEditor.builtinplayer.stopRunningProject()
+        wickEditor.scriptingide.showError(objectCausedError, lineNumber, e);
+
+    } else {
+        alert("An exception was thrown while running a WickObject script. See console!");
+        console.log(e);
+    }
+}
+
+WickProject.prototype.isObjectSelected = function (obj) {
+    var selected = false;
+
+    this._selection.forEach(function (uuid) {
+        if(obj.uuid === uuid) selected = true;
+    });
+
+    return selected;
+}
+
+WickProject.prototype.getSelectedObject = function () {
+    var selectedObjects = this.getSelectedObjects();
+    if(selectedObjects.length !== 1) {
+        return null;
+    } else {
+        return selectedObjects[0];
+    }
+}
+
+WickProject.prototype.getSelectedObjects = function () {
+    var self = this;
+
+    var objs = [];
+    this._selection.forEach(function (uuid) {
+        var obj = self.getObjectByUUID(uuid) || self.getFrameByUUID(uuid) || self.getPlayRangeByUUID(uuid);
+        if(obj) objs.push(obj);
+    });
+
+    return objs;
+}
+
+WickProject.prototype.getNumSelectedObjects = function (obj) {
+    return(this._selection.length);
+}
+
+WickProject.prototype.selectObject = function (obj) {
+    this._selection.push(obj.uuid);
+    wickEditor.properties.setTab('selection')
+}
+
+WickProject.prototype.clearSelection = function () {
+    this._selection = [];
+}
+
+WickProject.prototype.deselectObjectType = function (type) {
+    var deselectionHappened = false;
+
+    for ( var i = 0; i < this._selection.length; i++ ) {
+        var uuid = this._selection[i];
+        var obj = this.getObjectByUUID(uuid) || this.getFrameByUUID(uuid) || this.getPlayRangeByUUID(uuid);
+        if(obj instanceof type) {
+            this._selection[i] = null;
+            deselectionHappened = true;
+        }
+    }
+
+    return deselectionHappened;
+}
+
+WickProject.prototype.runScript = function (obj, fnName) {
+
+    var objectScope;
+    if(obj instanceof WickObject) {
+        objectScope = obj.parentObject;
+    } else if(obj instanceof WickFrame) {
+        objectScope = obj.parentLayer.parentWickObject;
+    }
+
+    window.project = wickPlayer.project || wickEditor.project;
+    window.root = project.rootObject;
+
+    window.play           = function ()      { objectScope.play(); }
+    window.pause          = function ()      { objectScope.pause(); }
+    window.movePlayheadTo = function (frame) { objectScope.movePlayheadTo(frame); }
+
+    window.stopAllSounds = function () { wickPlayer.getAudioPlayer().stopAllSounds(); };
+    window.keyIsDown      = function (keyString) { return wickPlayer.inputHandler.keyIsDown(keyString); };
+    window.keyJustPressed = function (keyString) { return wickPlayer.inputHandler.keyJustPressed(keyString); }
+    window.getMouseX = function () { return wickPlayer.inputHandler.getMouse().x; };
+    window.getMouseY = function () { return wickPlayer.inputHandler.getMouse().y; };
+    window.hideCursor = function () { wickPlayer.hideCursor(); };
+    window.showCursor = function () { wickPlayer.showCursor(); };
+    window.enterFullscreen = function () { wickPlayer.enterFullscreen(); }
+
+    // WickObjects in same frame (scope) are accessable without using root./parent.
+    if(objectScope) {
+        objectScope.getAllChildObjects().forEach(function(child) {
+            if(child.name) window[child.name] = child;
+        });
+    }
+
+    try {
+        if(obj[fnName]) obj[fnName]();
+    } catch (e) {
+        this.handleWickError(e,obj);
+    }
+
+}
+
+WickProject.prototype.update = function () {
+    var allObjectsInProject = this.rootObject.getAllChildObjectsRecursive();
+    //allObjectsInProject.push(this.rootObject);
+
+    allObjectsInProject.forEach(function (obj) {
+        if(obj._newPlayheadPosition !== undefined)
+            obj.playheadPosition = obj._newPlayheadPosition;
+    });
+
+    allObjectsInProject.forEach(function (obj) {
+        obj._newPlayheadPosition = undefined;
+
+        obj.getAllFrames().forEach(function (frame) {
+            frame._wasActiveLastTick = frame._active;
+            frame._active = frame.isActive();
+
+            /*if(frame.uuid.substring(0,2) === '50') {
+                console.log(frame._wasActiveLastTick)
+                console.log(frame._active)
+            }*/
+        });
+
+        obj._wasActiveLastTick = obj._active;
+        obj._active = obj.isActive();
+    });
+
+    //console.log(this.rootObject.playheadPosition)
+    this.rootObject.update();
+
+    allObjectsInProject.forEach(function (obj) {
+        if(obj._newPlayheadPosition !== undefined)
+            obj.playheadPosition = obj._newPlayheadPosition;
+    });
+}

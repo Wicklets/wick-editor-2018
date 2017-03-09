@@ -8,18 +8,32 @@
 	<script src="../lib/jquery.min.js"></script>
 	<script src="../lib/FileSaver.min.js"></script>
 	<script src="../lib/polyfills.js"></script>
+	<script src="../lib/bowser.js"></script>
 </head>
 <body>
 	<!--<h1>Demos</h1>-->
 	<h2>
 		<div id="demoViewerContainer">
-			<iframe style="margin-bottom:20px; border:0px;" src="../demos/KitchenSink.html" width="720" height="480" id="demoViewer" allowfullscreen></iframe>
+			<iframe style="margin-bottom:20px; border:0px;" src="../demos/TimelineControl.html" width="720" height="480" id="demoViewer" allowfullscreen></iframe>
 			<span class="btn" onclick="downloadDemo()">Download Project</span>
 			<span class="btn" onclick="openInEditor()">Open in Editor</span>
 		</div>
 	</h2>
 
 	<h2>Basics</h2>
+	<h3>
+		<span id="demoRow" style="font-weight:normal; display: inline-block; margin-right:20px;">
+			&#8226; <a onclick="loadDemo('../demos/TimelineControl.html')">Timeline Control</a><br />
+			&#8226; <a onclick="loadDemo('../demos/MouseControls.html')">Mouse Controls</a><br />
+			&#8226; <a onclick="loadDemo('../demos/KeyboardControls.html')">Keyboard Controls</a><br />
+			&#8226; <a onclick="loadDemo('../demos/SoundButtons.html')">Sound Buttons</a><br />
+			&#8226; <a onclick="loadDemo('../demos/AlertPrompt.html')">Alert / Prompt</a><br />
+			&#8226; <a onclick="loadDemo('../demos/DynamicText.html')">Dynamic Text</a><br />
+			&#8226; <a onclick="loadDemo('../demos/SaveData.html')">Saving Data</a><br />
+		</span>
+	</h3>
+
+	<!--<h2>Basics</h2>
 	<h3>
 		<span id="demoRow" style="font-weight:normal; display: inline-block; margin-right:20px;">
 			&#8226; <a onclick="loadDemo('../demos/KitchenSink.html')">Kitchen Sink</a><br />
@@ -51,7 +65,7 @@
 			&#8226; <a onclick="loadDemo('../demos/code-toys/Pinwheel.html')">Pinwheel</a><br />
 			&#8226; <a onclick="loadDemo('../demos/FlappyGhost.html')">Flappy Ghost</a><br />
 		</span>
-	</h3>
+	</h3>-->
 
 	<br /><br /><br /><br />
 
@@ -60,7 +74,7 @@
 		var currentDemo;
 
 		var loadDemo = function (file) {
-			if(BrowserDetectionUtils.inMobileMode) {
+			if(bowser.mobile || bowser.tablet) {
 				var url = file;
 				window.open(url,'_blank');
 			} else {
@@ -96,7 +110,7 @@
 		    });
 		}
 
-		currentDemo = '../demos/KitchenSink.html';
+		currentDemo = '../demos/TimelineControl.html';
 		
 	</script>
 </body>
