@@ -32,13 +32,6 @@ var WickFrame = function () {
 WickFrame.prototype.update = function () {
     var self = this;
 
-    /*if(this.uuid.substring(0,2) === '50') {
-        console.log(this._wasActiveLastTick)
-        console.log(this._active)
-    }*/
-
-    //console.log("Frame update() " + this.uuid.substring(0,2))
-
     // Inactive -> Inactive
     // Do nothing, frame is still inactive
     if (!this._wasActiveLastTick && !this._active) {
@@ -47,13 +40,11 @@ WickFrame.prototype.update = function () {
     // Inactive -> Active
     // Frame just became active! It's fresh!
     else if (!this._wasActiveLastTick && this._active) {
-        //console.log("Frame onLoad " + this.uuid.substring(0,2))
         (wickEditor || wickPlayer).project.runScript(this, 'onLoad');
     }
     // Active -> Active
     // Frame is active!
     else if (this._wasActiveLastTick && this._active) {
-        //console.log("Frame onUpdate " + this.uuid.substring(0,2))
         (wickEditor || wickPlayer).project.runScript(this, 'onUpdate');
     }    
     // Active -> Inactive

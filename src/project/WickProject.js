@@ -467,6 +467,12 @@ WickProject.prototype.hasSyntaxErrors = function () {
     var projectHasSyntaxErrors = false;
 
     this.rootObject.getAllChildObjectsRecursive().forEach(function (child) {
+        child.getAllFrames().forEach(function (frame) {
+            if(frame.hasSyntaxErrors) {
+                projectHasSyntaxErrors = true;
+            }
+        })
+
         if(child.hasSyntaxErrors) {
             projectHasSyntaxErrors = true;
         }
@@ -617,11 +623,6 @@ WickProject.prototype.update = function () {
         obj.getAllFrames().forEach(function (frame) {
             frame._wasActiveLastTick = frame._active;
             frame._active = frame.isActive();
-
-            /*if(frame.uuid.substring(0,2) === '50') {
-                console.log(frame._wasActiveLastTick)
-                console.log(frame._active)
-            }*/
         });
 
         obj._wasActiveLastTick = obj._active;

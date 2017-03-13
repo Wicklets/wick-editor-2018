@@ -1326,13 +1326,13 @@ WickObject.prototype.prepareForPlayer = function () {
         this._active = false;
 
         this.setupScript = function () {
-            eval(this.wickScript);
+            try { eval(this.wickScript); } catch (e) { console.log(e) };
         }
         this.setupScript();
         this.getAllFrames().forEach(function (frame) {
             frame._active = false;
             frame.setupScript = function () {
-                eval(this.wickScript);
+                try { eval(this.wickScript); } catch (e) { console.log(e) };
             }
             frame.setupScript();
         })
@@ -1416,6 +1416,8 @@ WickObject.prototype.generateAlphaMask = function (imageData) {
 WickObject.prototype.isClickable = function () {
     if(!this.isSymbol) return false;
 
+    if(!this.onClick) return false;
+
     if(this._isClickable === undefined) {
         var _onClickFnBody = this.onClick.toString().match(/function[^{]+\{([\s\S]*)\}$/)[1];
         this._isClickable =  $.trim( _onClickFnBody ) !== '';
@@ -1451,22 +1453,12 @@ WickObject.prototype.update = function () {
         this._wasClicked = false;
     }
 
-    /*if(this.uuid.substring(0,2) === '35') {
-        if(this._active) {
-            console.log("ACTIVE!")
-        } else {
-            console.log("INACTIVE!")
-        }
-    }*/
-
     // Inactive -> Inactive
     if (!this._wasActiveLastTick && !this._active) {
-        //if(this.uuid.substring(0,2) === '35') console.log("I -> I");
+
     }
     // Inactive -> Active
     else if (!this._wasActiveLastTick && this._active) {
-        //if(this.uuid.substring(0,2) === '35') console.log("I -> A");
-
         (wickEditor || wickPlayer).project.runScript(this, 'onLoad');
 
         if(this.autoplaySound) {
@@ -1475,14 +1467,10 @@ WickObject.prototype.update = function () {
     }
     // Active -> Active
     else if (this._wasActiveLastTick && this._active) {
-        //if(this.uuid.substring(0,2) === '35') console.log("A -> A");
-
         (wickEditor || wickPlayer).project.runScript(this, 'onUpdate');
     }
     // Active -> Inactive
     else if (this._wasActiveLastTick && !this._active) {
-        //if(this.uuid.substring(0,2) === '35') console.log("A -> I");
-
         if(!this.parentFrame.alwaysSaveState) {
             // THIS IS VERY BROKEN AND DANGEROUS. DO NOT USE.
             //wickPlayer.resetStateOfObject(this);

@@ -33,6 +33,8 @@ var ScriptingIDEInterface = function (wickEditor) {
             });
 
             that.aceEditor.getSession().on("changeAnnotation", function(){
+                if(!that.open)return;
+
                 var annot = that.aceEditor.getSession().getAnnotations();
 
                 // Look for errors
