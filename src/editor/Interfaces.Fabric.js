@@ -31,7 +31,6 @@ var FabricInterface = function (wickEditor) {
         this.guiElements     = new FabricGUIElements(wickEditor, this);
         this.wickElements    = new FabricWickElements(wickEditor, this);
         this.symbolBorders   = new FabricSymbolBorders(wickEditor, this);
-        this.projectRenderer = new FabricProjectRenderer(wickEditor, this);
 
         this.canvas.freeDrawingBrush = new fabric.PencilBrush(this.canvas);
 

@@ -187,7 +187,7 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function (args) {
-            wickEditor.fabric.projectRenderer.renderProjectAsGIF(function (blob) {
+            wickEditor.gifRenderer.renderProjectAsGIF(function (blob) {
                 saveAs(blob, wickEditor.project.name+".gif");
                 //window.open(URL.createObjectURL(blob));
             });
@@ -199,9 +199,7 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function (args) {
-            wickEditor.fabric.projectRenderer.renderProjectAsWebM(function () {
-                
-            });
+            alert("NYI")
         });
 
     // Control + O
@@ -433,9 +431,13 @@ var GuiActionHandler = function (wickEditor) {
                 
                 if(fileType === 'text/wickobjectsjson') {
                     var objs = WickObject.fromJSONArray(JSON.parse(file));
+                    // Make sure to reset uuids!
                     objs.forEach(function (obj) {
                         obj.getAllChildObjectsRecursive().forEach(function (child) {
                             child.uuid = random.uuid4();
+                        });
+                        obj.getAllFrames().forEach(function (frame) {
+                            frame.uuid = random.uuid4();
                         });
                     });
                     wickEditor.actionHandler.doAction('addObjects', {
@@ -480,6 +482,7 @@ var GuiActionHandler = function (wickEditor) {
             }
 
             wickEditor.thumbnailRenderer.cleanup();
+            wickEditor.gifRenderer.cleanup();
 
             wickEditor.actionHandler.clearHistory();
             wickEditor.project = new WickProject();
@@ -488,6 +491,7 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.syncInterfaces();
 
             wickEditor.thumbnailRenderer.setup();
+            wickEditor.gifRenderer.setup();
         });
 
     registerAction('exportProjectAsJSON',

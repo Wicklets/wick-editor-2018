@@ -49,7 +49,10 @@ Tools.Cursor = function (wickEditor) {
             var newDoubleClickPos = {x: e.e.clientX, y: e.e.clientX};
             var currentTime = new Date().getTime();
 
-            if(lastDoubleClickTime !== null && currentTime-lastDoubleClickTime < 350 && lastDoubleClickPos.x === newDoubleClickPos.x && lastDoubleClickPos.y === newDoubleClickPos.y) {
+            var isSecondClick = lastDoubleClickTime !== null && currentTime-lastDoubleClickTime < 350;
+            var mouseInSameArea = Math.abs(lastDoubleClickPos.x - newDoubleClickPos.x) < 3 && Math.abs(lastDoubleClickPos.y - newDoubleClickPos.y) < 3;
+
+            if(isSecondClick && mouseInSameArea) {
                 var selectedObject = wickEditor.fabric.getSelectedObject(WickObject);
                 if(selectedObject && selectedObject.isSymbol) {
                     wickEditor.guiActionHandler.doAction("editObject");

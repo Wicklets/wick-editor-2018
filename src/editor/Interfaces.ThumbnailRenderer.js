@@ -33,7 +33,7 @@ var ThumbnailRendererInterface = function (wickEditor) {
         var layerObjects = [];
         wickEditor.project.getCurrentObject().getAllActiveChildObjects().forEach(function (child) {
             if(child.isOnActiveLayer(wickEditor.project.getCurrentLayer())) {
-                layerObjects.push(child)
+                layerObjects.push(child);
             }
         });
 
