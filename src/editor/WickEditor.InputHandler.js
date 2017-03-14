@@ -331,7 +331,18 @@ var InputHandler = function (wickEditor) {
     }
 
     var loadJSON = function (json, callback) {
-        callback(WickObject.fromJSON(json));
+        var tempJsonObj = JSON.parse(json);
+        if(tempJsonObj.rootObject) {
+            
+            wickEditor.project = WickProject.fromJSON(json);
+            window.wickRenderer.setProject(wickEditor.project);
+            wickEditor.syncInterfaces();
+
+        } else {
+
+            callback(WickObject.fromJSON(json));
+
+        }
     }
 
     var loadWAV = function (dataURL, callback) {
@@ -347,71 +358,72 @@ var InputHandler = function (wickEditor) {
         callback(audioWickObject);
     }
 
+    var loadHTML = function () {
+        WickProject.fromFile(file, function(project) {
+            wickEditor.project = project;
+            window.wickRenderer.setProject(wickEditor.project);
+            wickEditor.syncInterfaces();
+        });
+    }
+
     var loadFileIntoWickObject = function (e,file,fileType) {
 
-        if (fileType === 'text/html') {
-            WickProject.fromFile(file, function(project) {
-                wickEditor.project = project;
-                wickEditor.syncInterfaces();
-            });
-        } else {
-
-            var fromContstructors = {
-                'image/png'        : loadImage,
-                'image/jpeg'       : loadImage,
-                'application/jpg'  : loadImage,
-                'image/bmp'        : loadImage,
-                'image/svg+xml'    : loadSVG,
-                'image/gif'        : loadAnimatedGIF,
-                'audio/mp3'        : loadAudio,
-                'audio/wav'        : loadWAV,
-                'audio/wave'       : loadWAV,
-                'audio/x-wav'      : loadWAV,
-                'audio/x-pn-wav'   : loadWAV,
-                'audio/ogg'        : loadAudio,
-                'audio/flac'       : loadAudio,
-                'audio/x-flac'     : loadAudio,
-                "audio/x-m4a"      : loadAudio,
-                "application/json" : loadJSON
-            }
-            
-            var fr = new FileReader();
-            fr.onloadend = function() {
-                if(!fromContstructors[fileType]) { 
-                    console.error(fileType + " has no constructor!");
-                    return;
-                }
-
-                fromContstructors[fileType](fr.result, function (newWickObject) {
-                    var m
-                    if(e && e.originalEvent && e.originalEvent.clientX) {
-                        m = wickEditor.fabric.screenToCanvasSpace(e.originalEvent.clientX, e.originalEvent.clientY);
-                    } else {
-                        m = wickEditor.fabric.screenToCanvasSpace(window.innerWidth/2, window.innerHeight/2);
-                    }
-                    newWickObject.x = m.x;
-                    newWickObject.y = m.y;
-                    wickEditor.actionHandler.doAction('addObjects', {wickObjects:[newWickObject]});
-
-                    // Generate thumbnails for gif frames inside new symbol
-                    if(fileType === 'image/gif') {
-                        var oldCurr = wickEditor.project.currentObject;
-                        wickEditor.project.currentObject = newWickObject
-                        newWickObject.getAllFrames().forEach(function (frame) {
-                            console.log(frame)
-                            wickEditor.project.currentObject.playheadPosition = frame.playheadPosition
-                            wickEditor.thumbnailRenderer.renderThumbnailForFrame(frame)
-                        });
-                        wickEditor.project.currentObject = oldCurr;
-                        newWickObject.playheadPosition = 0;
-                    }
-                })
-            };
-            if(fileType === "application/json" || fileType === "image/svg+xml") 
-                fr.readAsText(file); 
-            else 
-                fr.readAsDataURL(file);
+        var fromContstructors = {
+            'image/png'        : loadImage,
+            'image/jpeg'       : loadImage,
+            'application/jpg'  : loadImage,
+            'image/bmp'        : loadImage,
+            'image/svg+xml'    : loadSVG,
+            'image/gif'        : loadAnimatedGIF,
+            'audio/mp3'        : loadAudio,
+            'audio/wav'        : loadWAV,
+            'audio/wave'       : loadWAV,
+            'audio/x-wav'      : loadWAV,
+            'audio/x-pn-wav'   : loadWAV,
+            'audio/ogg'        : loadAudio,
+            'audio/flac'       : loadAudio,
+            'audio/x-flac'     : loadAudio,
+            "audio/x-m4a"      : loadAudio,
+            "application/json" : loadJSON,
+            'text/html'        : loadHTML
         }
+        
+        var fr = new FileReader();
+        fr.onloadend = function() {
+            if(!fromContstructors[fileType]) { 
+                console.error(fileType + " has no constructor!");
+                return;
+            }
+
+            fromContstructors[fileType](fr.result, function (newWickObject) {
+                var m
+                if(e && e.originalEvent && e.originalEvent.clientX) {
+                    m = wickEditor.fabric.screenToCanvasSpace(e.originalEvent.clientX, e.originalEvent.clientY);
+                } else {
+                    m = wickEditor.fabric.screenToCanvasSpace(window.innerWidth/2, window.innerHeight/2);
+                }
+                newWickObject.x = m.x;
+                newWickObject.y = m.y;
+                wickEditor.actionHandler.doAction('addObjects', {wickObjects:[newWickObject]});
+
+                // Generate thumbnails for gif frames inside new symbol
+                if(fileType === 'image/gif') {
+                    var oldCurr = wickEditor.project.currentObject;
+                    wickEditor.project.currentObject = newWickObject
+                    newWickObject.getAllFrames().forEach(function (frame) {
+                        console.log(frame)
+                        wickEditor.project.currentObject.playheadPosition = frame.playheadPosition
+                        wickEditor.thumbnailRenderer.renderThumbnailForFrame(frame)
+                    });
+                    wickEditor.project.currentObject = oldCurr;
+                    newWickObject.playheadPosition = 0;
+                }
+            })
+        };
+        if(fileType === "application/json" || fileType === "image/svg+xml") 
+            fr.readAsText(file); 
+        else 
+            fr.readAsDataURL(file);
     }
 
 /*************************

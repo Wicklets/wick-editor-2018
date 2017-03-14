@@ -159,7 +159,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     // Export Project
-    registerAction('exportProject',
+    registerAction('exportProjectHTML',
         ['Modifier','SHIFT','S'],
         ['exportHTMLButton'],
         {usableInTextBoxes:true},
@@ -168,6 +168,17 @@ var GuiActionHandler = function (wickEditor) {
             that.specialKeys = [];
             wickEditor.project.saveInLocalStorage();
             WickProject.Exporter.exportProject(wickEditor.project);
+        });
+
+    registerAction('exportProjectJSON',
+        [],
+        ['exportProjectAsJSONButton'],
+        {},
+        function(args) {
+            wickEditor.project.getAsJSON(function(JSONProject) {
+                var blob = new Blob([JSONProject], {type: "text/plain;charset=utf-8"});
+                saveAs(blob, wickEditor.project.name+".json");
+            });
         });
 
     // Export Project as .zip
@@ -486,17 +497,8 @@ var GuiActionHandler = function (wickEditor) {
             localStorage.removeItem("wickProject");
             wickEditor.fabric.recenterCanvas();
             wickEditor.syncInterfaces();
-        });
 
-    registerAction('exportProjectAsJSON',
-        [],
-        ['exportProjectAsJSONButton'],
-        {},
-        function(args) {
-            wickEditor.project.getAsJSON(function(JSONProject) {
-                var blob = new Blob([JSONProject], {type: "text/plain;charset=utf-8"});
-                saveAs(blob, "project.json");
-            });
+            window.wickRenderer.setProject(wickEditor.project);
         });
 
     registerAction('saveProjectToLocalStorage',

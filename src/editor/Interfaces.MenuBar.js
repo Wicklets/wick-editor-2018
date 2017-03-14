@@ -88,13 +88,16 @@ var MenuBarInterface = function (wickEditor) {
                 wickEditor.guiActionHandler.doAction("newProject");
             }),
             new TabButton('Save', function () {
-                wickEditor.guiActionHandler.doAction("exportProject");
+                wickEditor.guiActionHandler.doAction("exportProjectJSON");
             }),
             new TabButton('Open', function () {
                 wickEditor.guiActionHandler.doAction("openFile");
             }),
             new TabSpacer(),
 
+            new TabButton('Export as html', function () {
+                wickEditor.guiActionHandler.doAction("exportProjectHTML");
+            }),
             new TabButton('Export as zip', function () {
                 wickEditor.guiActionHandler.doAction("exportProjectZIP");
             }),

@@ -58,7 +58,7 @@ var WickPlayer = function () {
 
         self.inputHandler.cleanup();
         self.audioPlayer.cleanup();
-        window.wickRenderer.cleanup();
+        //window.wickRenderer.cleanup();
 
     }
 
