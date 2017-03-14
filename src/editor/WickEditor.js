@@ -68,6 +68,14 @@ var WickEditor = function () {
     // Setup inputhandler
     this.inputHandler = new InputHandler(this);
 
+    // Setup renderer
+    window.rendererCanvas = document.getElementById('playerCanvasContainer');
+    if(!window.wickRenderer) {
+        window.wickRenderer = new WickPixiRenderer();
+        window.wickRenderer.setProject(that.project);
+        window.wickRenderer.setup();
+    }
+
     this.syncInterfaces();
 
 }

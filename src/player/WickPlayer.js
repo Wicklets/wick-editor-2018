@@ -7,7 +7,6 @@ var WickPlayer = function () {
     self.project;
 
     self.inputHandler;
-    self.renderer;
     self.audioPlayer;
 
     self.canvasContainer;
@@ -18,12 +17,13 @@ var WickPlayer = function () {
     var tick;
 
 
-    self.runProject = function (projectJSON, canvasContainer) {
+    self.runProject = function (projectJSON) {
 
         tick = 1;
         stopDrawLoop = false;
 
-        self.canvasContainer = canvasContainer;
+        window.rendererCanvas = document.getElementById('playerCanvasContainer');
+        self.canvasContainer = window.rendererCanvas;
 
         // Load the project!
         self.project = WickProject.fromJSON(projectJSON);
@@ -31,15 +31,18 @@ var WickPlayer = function () {
         self.project.fitScreen = !window.wickEditor;
         initialStateProject.fitScreen = !window.wickEditor;
 
-        // Setup all the handlers n stuff
+        // Setup renderer/input/audio player
+        if(!window.wickRenderer) {
+            window.wickRenderer = new WickPixiRenderer(self.canvasContainer);
+            window.wickRenderer.setup();
+        }
+        window.wickRenderer.setProject(self.project);
         self.inputHandler = new WickPlayerInputHandler(this, self.canvasContainer);
-        self.renderer = new WickPixiRenderer(self.project, self.canvasContainer);
         self.audioPlayer = new WickWebAudioPlayer(self.project);
 
         self.inputHandler.setup();
         if(!bowser.mobile && !bowser.tablet) self.audioPlayer.setup();
-        self.renderer.setup();
-        self.renderer.refresh(self.project.rootObject);
+        window.wickRenderer.refresh(self.project.rootObject);
 
         update();
 
@@ -55,12 +58,12 @@ var WickPlayer = function () {
 
         self.inputHandler.cleanup();
         self.audioPlayer.cleanup();
-        self.renderer.cleanup();
+        window.wickRenderer.cleanup();
 
     }
 
     self.enterFullscreen = function () {
-        self.renderer.enterFullscreen();
+        window.wickRenderer.enterFullscreen();
     }
 
     var update = function () {
@@ -78,7 +81,7 @@ var WickPlayer = function () {
                     
                     self.project.update();
                     //self.project.rootObject.applyTweens();
-                    self.renderer.render(self.project.rootObject.getAllActiveChildObjects());
+                    window.wickRenderer.render(self.project.rootObject.getAllActiveChildObjects());
                     update();
                     self.inputHandler.update();
                     //requestAnimationFrame(update);
@@ -92,7 +95,7 @@ var WickPlayer = function () {
             }
             self.project.update();
             //self.project.rootObject.applyTweens();
-            self.renderer.render(self.project.rootObject.getAllActiveChildObjects());
+            window.wickRenderer.render(self.project.rootObject.getAllActiveChildObjects());
             self.inputHandler.update();
 
         }
@@ -115,7 +118,7 @@ var WickPlayer = function () {
         clone.parentObject.getCurrentLayer().getCurrentFrame().wickObjects.push(clone);
         self.project.rootObject.generateParentObjectReferences();
 
-        self.renderer.refresh(clone);
+        window.pixiRenderer.refresh(clone);
 
         return clone;
     }

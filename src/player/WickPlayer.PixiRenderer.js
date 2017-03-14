@@ -1,6 +1,6 @@
 /* Wick - (c) 2016 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-var WickPixiRenderer = function (project, canvasContainer, scale, args) {
+var WickPixiRenderer = function () {
 
     var self = this;
 
@@ -11,14 +11,23 @@ var WickPixiRenderer = function (project, canvasContainer, scale, args) {
 
     var wickToPixiDict;
 
+    var project;
+
+    var canvasContainer;
+
     self.canvasScale;
     self.canvasTranslate;
-    self.rendererCanvas;
+    self.rendererView;
+
+    self.setProject = function (wickProject) {
+        project = wickProject;
+    }
 
     self.setup = function () {
 
-        renderScale = scale
-        if(!renderScale) renderScale = 1;
+        renderScale = 1;
+
+        canvasContainer = window.rendererCanvas;
 
         // update canvas size on window resize
         window.addEventListener('resize', resizeCanvas, false);
@@ -38,7 +47,7 @@ var WickPixiRenderer = function (project, canvasContainer, scale, args) {
         // Add renderer canvas
         canvasContainer.appendChild(renderer.view);
         renderer.view.id = "rendererCanvas";
-        self.rendererCanvas = renderer.view;
+        self.rendererView = renderer.view;
 
         stage = new PIXI.Container();
 
@@ -56,7 +65,7 @@ var WickPixiRenderer = function (project, canvasContainer, scale, args) {
             if(project.borderColor) document.body.style.backgroundColor = project.borderColor;
         }
         // Fix focus issues
-        self.rendererCanvas.className = ''
+        self.rendererView.className = ''
         setTimeout(function () {
             $('#rendererCanvas').focus();
         }, 100);
@@ -212,7 +221,7 @@ var WickPixiRenderer = function (project, canvasContainer, scale, args) {
             console.log(elem)
         } else {
             // Not inside iframe
-            elem = self.rendererCanvas;
+            elem = self.rendererView;
         }
 
         if (screenfull.enabled) {
@@ -262,10 +271,12 @@ var WickPixiRenderer = function (project, canvasContainer, scale, args) {
     }
 
     this.cleanup = function() {
+        return;
+
         window.removeEventListener('resize', resizeCanvas);
 
         // Get rid of old canvas
-        var oldRendererCanvas = self.rendererCanvas
+        var oldRendererCanvas = self.rendererView
         if(oldRendererCanvas) {
             canvasContainer.removeChild(canvasContainer.childNodes[0]);
         }

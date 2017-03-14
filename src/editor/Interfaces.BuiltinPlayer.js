@@ -24,7 +24,7 @@ var BuiltinPlayerInterface = function (wickEditor) {
         }
 
         that.running = true;
-        wickPlayer.runProject(JSONProject, document.getElementById('playerCanvasContainer'));
+        wickPlayer.runProject(JSONProject);
         wickEditor.syncInterfaces();
     }
 
@@ -32,12 +32,6 @@ var BuiltinPlayerInterface = function (wickEditor) {
         hideBuiltinPlayer();
         that.running = false;
         wickPlayer.stopRunningProject();
-
-        wickEditor.thumbnailRenderer.cleanup();
-        wickEditor.thumbnailRenderer.setup();
-
-        wickEditor.thumbnailRenderer.cleanup();
-        wickEditor.thumbnailRenderer.setup();
     }
 
 // Internal utils

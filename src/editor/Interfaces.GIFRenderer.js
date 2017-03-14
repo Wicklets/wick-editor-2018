@@ -9,10 +9,10 @@ var GIFRendererInterface = function (wickEditor) {
 
     self.setup = function () {
 
-        gifCanvas = document.createElement('div');
+        /*gifCanvas = document.createElement('div');
 
         gifRenderer = new WickPixiRenderer(wickEditor.project, gifCanvas, 1.0);
-        gifRenderer.setup();
+        gifRenderer.setup();*/
 
     }
 
@@ -21,6 +21,8 @@ var GIFRendererInterface = function (wickEditor) {
     };
 
     self.renderProjectAsGIF = function (callback) {
+
+        gifRenderer = window.wickRenderer;
 
         wickEditor.project.fitScreen = false;
 
@@ -32,7 +34,7 @@ var GIFRendererInterface = function (wickEditor) {
         for (var i = 0; i < len; i++) {
             wickEditor.project.rootObject.playheadPosition = i;
             gifRenderer.render(wickEditor.project.getCurrentObject().getAllActiveChildObjects());
-            gifFrameDataURLs.push(gifRenderer.rendererCanvas.toDataURL());
+            gifFrameDataURLs.push(window.rendererCanvas.getElementsByTagName('canvas')[0].toDataURL());
         }
         //gifRenderer.cleanup();
 

@@ -7,13 +7,13 @@ var ThumbnailRendererInterface = function (wickEditor) {
 
     this.setup = function () {
 
-        thumbpreview = document.createElement('div')
+        /*thumbpreview = document.createElement('div')
         thumbpreview.className = 'thumbnailPreview';
         //document.body.appendChild(thumbpreview)
         wickEditor.project.fitScreen = false;
 
         thumbRenderer = new WickPixiRenderer(wickEditor.project, thumbpreview, 0.2);
-        thumbRenderer.setup();
+        thumbRenderer.setup();*/
 
     }
     
@@ -24,6 +24,8 @@ var ThumbnailRendererInterface = function (wickEditor) {
     }
 
     this.renderThumbnailForFrame = function (wickFrame) {
+
+        thumbRenderer = window.wickRenderer;
 
         if(!thumbRenderer) return;
         if(!wickFrame) return;
@@ -39,7 +41,8 @@ var ThumbnailRendererInterface = function (wickEditor) {
 
         setTimeout(function () {
             thumbRenderer.render(layerObjects);
-            wickFrame.thumbnail = thumbRenderer.rendererCanvas.toDataURL();
+            wickFrame.thumbnail = window.rendererCanvas.getElementsByTagName('canvas')[0].toDataURL('image/jpeg', 0.001);
+            //console.log(wickFrame.thumbnail)
             wickEditor.timeline.syncWithEditorState()
         }, 100)
 

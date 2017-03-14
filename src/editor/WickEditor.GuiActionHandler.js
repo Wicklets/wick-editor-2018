@@ -481,17 +481,11 @@ var GuiActionHandler = function (wickEditor) {
                 return;
             }
 
-            wickEditor.thumbnailRenderer.cleanup();
-            wickEditor.gifRenderer.cleanup();
-
             wickEditor.actionHandler.clearHistory();
             wickEditor.project = new WickProject();
             localStorage.removeItem("wickProject");
             wickEditor.fabric.recenterCanvas();
             wickEditor.syncInterfaces();
-
-            wickEditor.thumbnailRenderer.setup();
-            wickEditor.gifRenderer.setup();
         });
 
     registerAction('exportProjectAsJSON',
