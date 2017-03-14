@@ -262,14 +262,14 @@ WickProject.fromLocalStorage = function () {
 
 }
 
-WickProject.prototype.getAsJSON = function (callback, args) {
+WickProject.prototype.getAsJSON = function (callback, args, format) {
 
     var that = this;
 
     // Encode scripts/text to avoid JSON format problems
     that.rootObject.encodeStrings();
     
-    var JSONProject = JSON.stringify(that, WickProject.Exporter.JSONReplacer, '\t');
+    var JSONProject = JSON.stringify(that, WickProject.Exporter.JSONReplacer, format);
     
     // Decode scripts back to human-readble and eval()-able format
     that.rootObject.decodeStrings();

@@ -178,7 +178,7 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.project.getAsJSON(function(JSONProject) {
                 var blob = new Blob([JSONProject], {type: "text/plain;charset=utf-8"});
                 saveAs(blob, wickEditor.project.name+".json");
-            });
+            }, '\t');
         });
 
     // Export Project as .zip
