@@ -358,7 +358,7 @@ var InputHandler = function (wickEditor) {
         callback(audioWickObject);
     }
 
-    var loadHTML = function () {
+    var loadHTML = function (file) {
         WickProject.fromFile(file, function(project) {
             wickEditor.project = project;
             window.wickRenderer.setProject(wickEditor.project);
@@ -367,6 +367,11 @@ var InputHandler = function (wickEditor) {
     }
 
     var loadFileIntoWickObject = function (e,file,fileType) {
+
+        if(fileType === 'text/html') {
+            loadHTML(file)
+            return;
+        }
 
         var fromContstructors = {
             'image/png'        : loadImage,
@@ -384,8 +389,7 @@ var InputHandler = function (wickEditor) {
             'audio/flac'       : loadAudio,
             'audio/x-flac'     : loadAudio,
             "audio/x-m4a"      : loadAudio,
-            "application/json" : loadJSON,
-            'text/html'        : loadHTML
+            "application/json" : loadJSON
         }
         
         var fr = new FileReader();
