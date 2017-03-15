@@ -12,9 +12,9 @@ $(document).ready(function() {
         window.location.hash = ""
     });
 
-    $( "#demos-button" ).click(function() {
-        frame.src = "site/pages/demos.html"
-        window.location.hash = "demos"
+    $( "#gallery-button" ).click(function() {
+        frame.src = "site/pages/gallery.html"
+        window.location.hash = "gallery"
     });
 
     $( "#tutorials-button" ).click(function() {
