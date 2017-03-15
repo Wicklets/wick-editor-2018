@@ -38,7 +38,6 @@ var WickPlayer = function () {
             window.wickRenderer.setup();
         }
         window.wickRenderer.setProject(self.project);
-        console.log(self.project)
         self.inputHandler = new WickPlayerInputHandler(this, self.canvasContainer);
         self.audioPlayer = new WickWebAudioPlayer(self.project);
 

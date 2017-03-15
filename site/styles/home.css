@@ -1,0 +1,49 @@
+.home-message {
+	position: absolute;
+
+	width: 50%;
+	max-width: 400px;
+
+	left:50%;
+	top: 33%;
+
+	transform:translateX(-50%) translateY(-50%);
+}
+
+.launch-editor-button {
+	position: absolute;
+
+	left:50%;
+	top: 75%;
+
+	width: 50%;
+	height: 100px;
+
+	max-width: 300px;
+
+	transform:translateX(-50%) translateY(-50%);
+
+	cursor: pointer;
+
+	background-color: #00E3A0;
+
+	background-image: url(../img/launch-editor.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 200px 23px;
+
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border: 10px solid #6EF8B0;
+
+    border-radius: 50px;
+}
+
+.launch-editor-button:hover {
+	background-color: #6EF8B0;
+}
+
+.fork-me-on-github {
+	cursor: pointer;
+}

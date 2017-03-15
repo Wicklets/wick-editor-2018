@@ -1,0 +1,271 @@
+<!-- The layout for this site is taken directly from the example's page for three.js -->
+<!--  You can find it here: https://github.com/mrdoob/three.js/tree/master/examples  -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Wick Editor</title>
+	<link href='https://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+	<meta charset="utf-8">
+	
+	<!-- Google analytics -->
+    <script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-88233944-1', 'auto');
+	  ga('send', 'pageview');
+	</script>
+
+	<style>
+
+		* { box-sizing: border-box; }
+
+		html { height: 100%; }
+
+		body {
+			background-color: #ffffff;
+			margin: 0px;
+			height: 100%;
+			color: #555;
+			font-family: 'PT Sans', sans-serif;
+			font-size: 18px;
+			line-height: 26px;
+			overflow: hidden;
+		}
+
+		h1 {
+			margin-top: 30px;
+			margin-bottom: 20px;
+			margin-left: 20px;
+			font-size: 25px;
+			font-weight: normal;
+		}
+
+		h2 {
+			font-size: 24px;
+			font-weight: normal;
+		}
+
+		a {
+			color: #2194CE;
+			text-decoration: none;
+		}
+
+		hr {
+		    border: 0;
+		    height: 1px;
+		    margin-top: 25px;
+		    margin-bottom: 25px;
+		    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.15));
+		}
+
+		.link {
+			margin-left: 15px;
+		}
+
+		#panel {
+			position: fixed;
+			left: 0px;
+			width: 250px;
+			height: 100%;
+			overflow: auto;
+			background: #fafafa;
+		}
+
+		#panel #content {
+			padding: 20px 20px 20px 20px;
+		}
+
+		#panel #content .link {
+			color: #2194CE;
+			text-decoration: none;
+			cursor: pointer;
+			display: block;
+		}
+
+		#panel #content .selected {
+			color: #ff0000;
+		}
+
+		#panel #content .link:hover {
+			text-decoration: underline;
+		}
+
+		#viewer {
+			position: absolute;
+			border: 0px;
+			left: 250px;
+			width: calc(100% - 250px);
+			height: 100%;
+			overflow: auto;
+		}
+
+		#linkOrbs {
+			margin-left: 20px;
+			bottom:0px;
+			width: 100%;
+		}
+
+		.filtered {
+			display: none !important;
+		}
+
+		#panel li b {
+			font-weight: bold;
+		}
+
+		/* mobile */
+
+		#expandButton {
+			display: none;
+			position: absolute;
+			right: 20px;
+			top: 12px;
+			width: 32px;
+			height: 32px;
+		}
+
+		#expandButton span {
+			height: 2px;
+			background-color: #2194CE;
+			width: 16px;
+			position: absolute;
+			left: 8px;
+			top: 10px;
+		}
+
+		#expandButton span:nth-child(1) {
+			top: 16px;
+		}
+
+		#expandButton span:nth-child(2) {
+			top: 22px;
+		}
+
+		@media all and ( max-width: 640px ) {
+			h1{
+				margin-top: 20px;
+				margin-bottom: 20px;
+			}
+			#panel{
+				position: absolute;
+				left: 0;
+				top: 0;
+				height: 100%;
+				width: 100%;
+				right: 0;
+				z-index: 100;
+				overflow: hidden;
+				border-bottom: 1px solid #dedede;
+			}
+			#viewer{
+				position: absolute;
+				left: 0;
+				top: 56px;
+				width: 100%;
+				height: calc(100% - 56px);
+			}
+			#expandButton{
+				display: block;
+			}
+			#panel.collapsed{
+				height: 400px;
+			}
+		}
+
+		#content{
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			font-size: 17px;
+			line-height: 22px;
+			overflow: auto;
+			width: 100%;
+			height: 100%;
+		}
+
+		.logo {
+			padding: 5px;
+			
+		}
+		.logoFont {
+			font-size: 56px;
+			color: #000;
+		}
+		.ghostlogo {
+			position: relative;
+			top: 10px;
+			margin-right: 10px;
+		}
+		.catchy {
+			font-style: italic;
+			font-size: 16px;
+			text-align: center;
+			display: inline;
+		}
+		.bottomText {
+			font-style: italic;
+			font-size: 14px;
+			display: inline;
+			position: absolute;
+			bottom: 30px;
+		}
+
+	</style>
+</head>
+<body>
+	<div id="panel" class="collapsed">
+		<a id="expandButton" href="#">
+			<span></span>
+			<span></span>
+			<span></span>
+		</a>
+		<div id="content">
+			<center>
+				<div class="logo"><a class="logoFont" href="/index.html"><img class="ghostlogo" src="resources/wicklogo.png">Wick</a></div><br />
+				<div class="catchy">The Internet's free and open-source creation suite</div>
+			</center>
+			<hr />
+			<strong><a class="link" href="editor.html">Launch Editor</a></strong>
+			<div style="height:12px;"></div>
+			<a class="link" onclick="load('sitepages/demos.html')">Demos</a>
+			<!-- <a class="link" onclick="load('sitepages/tutorials.html')">Tutorials</a> -->
+			<a class="link" onclick="load('sitepages/reference.html')">Reference</a>
+			<a class="link" onclick="load('sitepages/about.html')">About</a>
+			<div style="height:12px;"></div>
+			<div style="height:12px;"></div>
+			<a class="link" href="https://www.twitter.com/zrispo">Dev Blog</a>
+			<a class="link" href="https://github.com/zrispo/wick">Source Code</a>
+			<!--<a class="link" onclick="load('sitepages/about.html')">About</a>-->
+			<hr />
+			<br />
+			<span class="bottomText">
+				by <a href="https://www.twitter.com/zrispo">zrispo</a> & <a href="https://twitter.com/lucapodular">lucapodular</a>
+			</span>
+		</div>
+	</div> 
+	<iframe id="viewer" allowfullscreen></iframe>
+
+	<script>
+		var viewer = document.getElementById("viewer");
+
+		var load = function ( file ) {
+			window.location.hash = file;
+			viewer.src = file;
+			viewer.focus();
+		};
+
+		if ( window.location.hash !== '' ) {
+			var pageName = window.location.hash.substring(1);
+			load( pageName );
+		}else {
+			viewer.src = 'sitepages/demos.html';
+		}
+	</script>
+
+</body>
+</html>
