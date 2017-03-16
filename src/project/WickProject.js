@@ -262,7 +262,7 @@ WickProject.fromLocalStorage = function () {
 
 }
 
-WickProject.prototype.getAsJSON = function (callback, args, format) {
+WickProject.prototype.getAsJSON = function (callback, format) {
 
     var that = this;
 
