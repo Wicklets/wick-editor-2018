@@ -6,6 +6,19 @@ body {
 	font-weight: bold;
 }
 
+a:link {
+	color: #00E3A0;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #6EF8B0;
+}
+
+a:visited {
+	color: #00E3A0;
+}
+
 .header {
 	position: absolute;
 
