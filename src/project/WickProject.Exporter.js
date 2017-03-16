@@ -7,8 +7,8 @@ WickProject.Exporter = (function () {
 
     var projectExporter = { };
 
-    projectExporter.bundleProjectToHTML = function (wickProject, callback) {
-
+    projectExporter.generatePlayer = function () {
+        
         var fileOut = "";
 
         // Add the player webpage (need to download the empty player)
@@ -54,6 +54,20 @@ WickProject.Exporter = (function () {
             fileOut += "<script>" + script + "</script>\n";
         });
         console.log(totalSize + " total");
+
+        return fileOut;
+
+    }
+
+    projectExporter.exportPlayer = function () {
+        var emptyplayerString = projectExporter.generatePlayer();
+        var blob = new Blob([emptyplayerString], {type: "text/plain;charset=utf-8"});
+        saveAs(blob, "player.html")
+    }
+
+    projectExporter.bundleProjectToHTML = function (wickProject, callback) {
+
+        var fileOut = projectExporter.generatePlayer();
 
         // Bundle the JSON project
         wickProject.getAsJSON(function (JSONProject) {

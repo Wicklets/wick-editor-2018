@@ -4,24 +4,6 @@
 		"name": "Common",
 		"properties": [
 			{
-				"name" : "play()",
-				"description" : "Causes the playhead to begin playing. When called from inside a symbol, the parent of the symbol's playhead is played.",
-				"example" : "play();",
-				"args" : [],
-				"return" : null
-			}, {
-				"name" : "pause()",
-				"description" : "Causes the playhead to stop playing. When called from inside a symbol, the parent of the symbol's playhead is stopped.",
-				"example" : "stop();",
-				"args" : [],
-				"return" : null
-			}, {
-				"name" : "movePlayheadTo(frame)",
-				"description" : "Moves the playhead to 'frame'. When called from inside a symbol, the parent of the symbol's timeline is moved.",
-				"example" : "// Go to frame 2\ngotoAndStop(2);\n// Go to 'menu'\ngotoAndStop('menu');",
-				"args" : [{"name": "frame", "type": "Number", "description": "position to move the playhead to"}],
-				"return" : null
-			}, {
 				"name" : "stopAllSounds()",
 				"description" : "Stops any sounds currently being played.",
 				"example" : "stopAllSounds();",
@@ -51,13 +33,13 @@
 		"name": "Input",
 		"properties": [
 			{
-				"name" : "getMouseX()",
+				"name" : "mouseX",
 				"description" : "Returns the x-location of the mouse on the project canvas. The origin (0,0) is the upper-left corner of the canvas.",
 				"example" : "// Sets the object's x-position to the mouse's x-position.\nthis.x = getMouseX();",
 				"args" : [],
 				"return" : {"type": "Number", "description": "x-location of the mouse"}
 			}, {
-				"name" : "getMouseY()",
+				"name" : "mouseY",
 				"description" : "Returns the y-location of the mouse on the project canvas. The origin (0,0) is the upper-left corner of the canvas.",
 				"example" : "// Sets the object's y-position to the mouse's y-position.\nthis.y = getMouseY();",
 				"args" : [],
@@ -75,13 +57,13 @@
 				"args" : [{"name" : "key", "type" : "String", "description" : "Any character such as 'A' or special characters including 'SPACE', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'BACKSPACE', 'TAB', 'ENTER', 'SHIFT', 'CTRL', 'COMMAND', 'ALT', 'WINDOWS', 'F1', 'NUM 0', 'NUM LOCK'"}],
 				"return" : {"type": "Boolean", "description": "true if key was just pressed, false otherwise."}
 			}, {
-				"name" : "getTiltX()",
+				"name" : "tiltX",
 				"description" : "Returns the x-coordinate tilt of the device. This function only works on devices with an accelerometer/gyroscope (such as smartphones).",
 				"example" : "// Move this object in the direction of the device's tilt\nthis.x = getTiltX();",
 				"args" : [],
 				"return" : {"type": "Number", "description": "The x-coordinate tilt of the device"}
 			}, {
-				"name" : "getTiltY()",
+				"name" : "tiltY",
 				"description" : "Returns the x-coordinate tilt of the device. This function only works on devices with an accelerometer/gyroscope (such as smartphones)",
 				"example" : "// Move this object in the direction of the device's tilt\nthis.y = getTiltY();",
 				"args" : [],
@@ -178,7 +160,7 @@
 				"args" : [], 
 				"return" : {"type" : "WickObject", "description" : "A clone of the WickObject which calls clone()."}
 			}, {
-				"name" : "isClone()",
+				"name" : "isClone",
 				"description" : "Checks if this object is a clone",
 				"example" : "if(this.isClone) {\n\tconsole.log('i am a clone!')\n}",
 				"args" : [], 
@@ -197,30 +179,13 @@
 				          {"name" : "hitTestType", "type" : "String", "description" : "Type of hit detection to use. Can be 'rectangles' or 'circles'. If no hitTestType is given, hitTest defaults to 'rectangles'"}],
 				"return" : null
 			}, {
-				"name" : "isHoveredOver()",
+				"name" : "hoveredOver",
 				"description" : "Returns true if the mouse is hovering over this object.",
 				"example" : "if (this.isHoveredOver()) {\n\tthis.rotation += 10;\n}",
 				"args" : [],
 				"return" : null
-			}, {
-				"name" : "setCursor(cursor)",
-				"description" : "Sets the cursor to be different on hover. You can find a list of available cursor types <a href='http://www.w3schools.com/cssref/pr_class_cursor.asp'>here</a>.",
-				"example" : "this.setCursor('grab');\nthis.setCursor('help');\nthis.setCursor('default');" ,
-				"args" : [],
-				"return" : null
 			}
 
-		]
-	}, {
-		"name": "Wick Objects : Text",
-		"properties": [
-	 	    {
-				"name" : "setText(text)",
-				"description" : "Sets the text of a text WickObject to 'text'.",
-				"example" : "this.setText('Apple'); // Sets the visible text to 'Apple'",
-				"args" : [{"name" : "text", "type" : "String", "description" : "A string to set this text object to."}],
-				"return" : null
-			}
 		]
 	}, {
 		"name": "Wick Objects : Sound",
@@ -238,7 +203,7 @@
 				"args" : [],
 				"return" : null
 			}, {
-				"name" : "setVolume(volume)",
+				"name" : "volume",
 				"description" : "Changes the gain of the associated sound. 'volume' should be a value from 0 to 1. Values greater than 1 can work, but may cause distortion.",
 				"example" : "this.setVolume(0.8);",
 				"args" : [{"name" : "volume", "type" : "Number", "description" : "Value to set the gain to."}]
@@ -285,26 +250,26 @@
 		"name": "Utilities",
 		"properties": [
 			{
-				"name" : "random.bool()",
+				"name" : "randomBool()",
 				"description" : "Generates a random boolean, a value that can be either true or false.",
 				"example" : "// Use random.bool() to simulate a coin flip.\nvar coinFlip = random.bool();\nif(coinFlip == true) {\n\talert('You&#8217;re lucky!!');\n}",
 				"return" : {"type": "Boolean", "description": "A random boolean. Will be true 50% of the time."},
 				"args" : []
 			}, {
-				"name" : "random.integer(min, max)",
+				"name" : "randomInt(min, max)",
 				"description" : "Generates a random whole number from min to max.",
 				"example" : "// Use random.integer() to move to a random frame from 1-10.\nvar randomFrame = random(integer(1,10));\ngotoAndStop(randomFrame);",
 				"return" : {"type": "Number", "description": "A random whole number."},
 				"args" : []
 			}, {
-				"name" : "random.real(min, max)",
+				"name" : "randomFloat(min, max)",
 				"description" : "Generates a random real (fractional) number from min to max.",
 				"example" : "// Use random.real() to choose how transparent an object appears.\nthis.opacity = random.real(0,1);",
 				"return" : {"type": "Number", "description": "A random real number."},
 				"args" : []
 			}, {
 				"name" : "localStorage",
-				"description" : "Use the localStorage object to save data that should ",
+				"description" : "Use the localStorage object to save data",
 				"example" : "// Use localStorage to load a saved position. \nthis.x = localStorage.savedX;\nthis.y = localStorage.savedY;\n\n// Save the position and rotation of an object in localStorage to use later.\nlocalStorage.savedX = this.x\nlocalStorage.savedY = this.y",
 				"return" : null,
 				"args" : []
