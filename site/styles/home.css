@@ -47,3 +47,15 @@
 .fork-me-on-github {
 	cursor: pointer;
 }
+
+.footer {
+	position: absolute;
+
+	left: 6px;
+	bottom: 6px;
+
+	font-size: 18px;
+	font-style: italic;
+	font-weight: normal;
+	color: #666;
+}
