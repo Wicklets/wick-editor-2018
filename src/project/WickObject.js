@@ -27,7 +27,7 @@ var WickObject = function () {
 
 // Common
     
-    this.wickScript = "this.onLoad = function () {\n\t\n}\n\nthis.onUpdate = function () {\n\t\n}\n\nthis.onClick = function () {\n\t\n}\n";
+    this.wickScript = "function load() {\n\t\n}\n\nfunction update() {\n\t\n}\n";
 
 // Static
 
@@ -1330,22 +1330,14 @@ WickObject.prototype.prepareForPlayer = function () {
         // Start the object playing
         this._playing = true;
         this._active = false;
-
-        this.setupScript = function () {
-            try { eval(this.wickScript); } catch (e) { console.log(e) };
-        }
-        this.setupScript();
-        this.getAllFrames().forEach(function (frame) {
-            frame._active = false;
-            frame.setupScript = function () {
-                try { eval(this.wickScript); } catch (e) { console.log(e) };
-            }
-            frame.setupScript();
-        })
     }
 
     // Reset the mouse hovered over state flag
     this.hoveredOver = false;
+}
+
+WickObject.prototype.setupScript = function () {
+    WickProject.loadScriptOfObject(this);
 }
 
 WickObject.prototype.autocropImage = function (callback) {
@@ -1443,19 +1435,19 @@ WickObject.prototype.getCurrentFrames = function () {
     return currentFrames;
 }
 
-WickObject.prototype.update = function () {
+WickObject.prototype.tick = function () {
     if(this._deleted) return;
 
     if(this.isSymbol) {
         this.layers.forEach(function (layer) {
             layer.frames.forEach(function (frame) {
-                frame.update();
+                frame.tick();
             });
         });
     }
 
     if(this._wasClicked) {
-        (wickEditor || wickPlayer).project.runScript(this, 'onClick');
+        (wickEditor || wickPlayer).project.runScript(this, 'click');
         this._wasClicked = false;
     }
 
@@ -1465,7 +1457,7 @@ WickObject.prototype.update = function () {
     }
     // Inactive -> Active
     else if (!this._wasActiveLastTick && this._active) {
-        (wickEditor || wickPlayer).project.runScript(this, 'onLoad');
+        (wickEditor || wickPlayer).project.runScript(this, 'load');
 
         if(this.autoplaySound) {
             this.playSound();
@@ -1473,7 +1465,7 @@ WickObject.prototype.update = function () {
     }
     // Active -> Active
     else if (this._wasActiveLastTick && this._active) {
-        (wickEditor || wickPlayer).project.runScript(this, 'onUpdate');
+        (wickEditor || wickPlayer).project.runScript(this, 'update');
     }
     // Active -> Inactive
     else if (this._wasActiveLastTick && !this._active) {

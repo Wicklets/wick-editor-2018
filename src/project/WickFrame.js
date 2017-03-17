@@ -26,10 +26,10 @@ var WickFrame = function () {
     this.parentLayer = null;
 
     // Set all scripts to defaults
-    this.wickScript = "this.onLoad = function () {\n\t\n}\n\nthis.onUpdate = function () {\n\t\n}\n";
+    this.wickScript = "function load() {\n\t\n}\n\nfunction update() {\n\t\n}\n";
 };
     
-WickFrame.prototype.update = function () {
+WickFrame.prototype.tick = function () {
     var self = this;
 
     // Inactive -> Inactive
@@ -40,12 +40,12 @@ WickFrame.prototype.update = function () {
     // Inactive -> Active
     // Frame just became active! It's fresh!
     else if (!this._wasActiveLastTick && this._active) {
-        (wickEditor || wickPlayer).project.runScript(this, 'onLoad');
+        (wickEditor || wickPlayer).project.runScript(this, 'load');
     }
     // Active -> Active
     // Frame is active!
     else if (this._wasActiveLastTick && this._active) {
-        (wickEditor || wickPlayer).project.runScript(this, 'onUpdate');
+        (wickEditor || wickPlayer).project.runScript(this, 'update');
     }    
     // Active -> Inactive
     // Frame just stopped being active. Clean up!
@@ -54,7 +54,7 @@ WickFrame.prototype.update = function () {
     }
 
     this.wickObjects.forEach(function (wickObject) {
-        wickObject.update();
+        wickObject.tick();
     });
 }
 

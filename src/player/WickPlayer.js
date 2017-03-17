@@ -30,6 +30,8 @@ var WickPlayer = function () {
         initialStateProject = WickProject.fromJSON(projectJSON);
         self.project.fitScreen = !window.wickEditor;
         initialStateProject.fitScreen = !window.wickEditor;
+        self.project.prepareForPlayer();
+        initialStateProject.prepareForPlayer();
 
         // Setup renderer/input/audio player
         if(!window.wickRenderer) {
@@ -80,7 +82,7 @@ var WickPlayer = function () {
                     console.log("PLAYER TICK " + tick)*/
                     tick++;
                     
-                    self.project.update();
+                    self.project.tick();
                     //self.project.rootObject.applyTweens();
                     window.wickRenderer.render(self.project.rootObject.getAllActiveChildObjects());
                     update();
@@ -94,7 +96,7 @@ var WickPlayer = function () {
             if(!stopDrawLoop) {
                 requestAnimationFrame(update);
             }
-            self.project.update();
+            self.project.tick();
             //self.project.rootObject.applyTweens();
             window.wickRenderer.render(self.project.rootObject.getAllActiveChildObjects());
             self.inputHandler.update();

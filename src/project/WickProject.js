@@ -138,11 +138,6 @@ WickProject.fromJSON = function (rawJSONProject) {
     WickProject.fixForBackwardsCompatibility(projectFromJSON);
 
     projectFromJSON.currentObject = projectFromJSON.rootObject;
-        
-    // Prepare all objects for being played/drawn
-    projectFromJSON.getAllObjects().forEach(function (obj) {
-        obj.prepareForPlayer();
-    })
 
     // Regenerate name refs
     projectFromJSON.rootObject.generateObjectNameReferences(projectFromJSON.rootObject);
@@ -343,7 +338,6 @@ WickProject.prototype.getCurrentFrame = function () {
 
 WickProject.prototype.getAllObjects = function () {
     var allObjectsInProject = this.rootObject.getAllChildObjectsRecursive();
-    allObjectsInProject.push(this.rootObject);
     return allObjectsInProject;
 }
 
@@ -612,7 +606,45 @@ WickProject.prototype.runScript = function (obj, fnName) {
 
 }
 
-WickProject.prototype.update = function () {
+WickProject.prototype.prepareForPlayer = function () {
+    var self = this;
+
+    self.getAllObjects().forEach(function (obj) {
+        obj.prepareForPlayer();
+        
+        self.loadScriptOfObject(obj);
+        obj.getAllFrames().forEach(function (frame) {
+            self.loadScriptOfObject(frame);
+        });
+    });
+}
+
+var WickObjectBuiltins = [
+    'load',
+    'update'
+];
+
+WickProject.prototype.loadScriptOfObject = function (obj) {
+    try { 
+        var dummy = {};
+        var load = undefined;
+        var update = undefined;
+        eval(obj.wickScript + "dummy.load=load;dummy.update=update;");
+
+        WickObjectBuiltins.forEach(function (builtinName) {
+            var fn = dummy[builtinName];
+            if(fn) {
+                obj[builtinName] = fn;
+            } else {
+                obj[builtinName] = function () { return; };
+            }
+        })
+    } catch (e) { 
+        console.log(e) 
+    };
+}
+
+WickProject.prototype.tick = function () {
     var allObjectsInProject = this.rootObject.getAllChildObjectsRecursive();
     //allObjectsInProject.push(this.rootObject);
 
@@ -634,7 +666,7 @@ WickProject.prototype.update = function () {
     });
 
     //console.log(this.rootObject.playheadPosition)
-    this.rootObject.update();
+    this.rootObject.tick();
 
     allObjectsInProject.forEach(function (obj) {
         if(obj._newPlayheadPosition !== undefined)
