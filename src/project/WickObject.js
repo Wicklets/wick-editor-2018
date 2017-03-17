@@ -1026,9 +1026,19 @@ WickObject.prototype.play = function () {
     this._playing = true;
 }
 
-WickObject.prototype.pause = function () {
+WickObject.prototype.stop = function () {
 
     this._playing = false;
+}
+
+WickObject.prototype.gotoAndStop = function (frame) {
+    this.movePlayheadTo(frame);
+    this.stop();
+}
+
+WickObject.prototype.gotoAndPlay = function (frame) {
+    this.movePlayheadTo(frame);
+    this.play();
 }
 
 WickObject.prototype.movePlayheadTo = function (frame) {
@@ -1281,10 +1291,6 @@ WickObject.prototype.setVolume = function (volume) {
 WickObject.prototype.clone = function () {
     return wickPlayer.cloneObject(this);
 };
-
-WickObject.prototype.isClone = function () {
-    return this._isClone;
-}
 
 WickObject.prototype.delete = function () {
     return wickPlayer.deleteObject(this);

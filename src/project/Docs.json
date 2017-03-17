@@ -234,16 +234,6 @@
 				"description" : "Moves the playhead of the symbol's timeline to 'frame' and stops that timeline. Refer to the general timeline documentation for gotoAndPlay(frame) for further information.",
 				"example" : "this.gotoAndPlay(2);",
 				"args" : [{"name": "frame", "type": "Number", "description": "frame number or name to jump to"}]
-			}, {
-				"name" : "gotoNextFrame()",
-				"description" : "Goes to the next frame on this symbol's timeline. Refer to the general timeline documentation for gotoNextFrame() for further information.",
-				"example" : "this.gotoNextFrame();",
-				"args" : []
-			}, {
-				"name" : "gotoPrevFrame()",
-				"description" : "Goes to the previous frame on this symbol's timeline. Refer to the general timeline documentation for gotoPrevFrame() for further information.",
-				"example" : "this.gotoPrevFrame();",
-				"args" : []
 			}
 		]
 	}, {

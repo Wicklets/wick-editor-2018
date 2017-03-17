@@ -111,7 +111,7 @@ var WickPlayer = function () {
 
     self.cloneObject = function (wickObj) {
         var clone = wickObj.copy();
-        clone._isClone = true;
+        clone.isClone = true;
 
         clone.prepareForPlayer()
 
@@ -138,7 +138,7 @@ var WickPlayer = function () {
     self.resetStateOfObject = function (wickObject) {
 
         // Clones go away because they have no original state! :O
-        if(wickObject.isClone()) {
+        if(wickObject.isClone) {
             project.currentObject.removeChild(wickObject);
             return;
         }

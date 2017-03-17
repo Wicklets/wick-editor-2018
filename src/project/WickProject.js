@@ -581,14 +581,18 @@ WickProject.prototype.runScript = function (obj, fnName) {
     window.root = project.rootObject;
 
     window.play           = function ()      { objectScope.play(); }
-    window.pause          = function ()      { objectScope.pause(); }
+    window.stop           = function ()      { objectScope.stop(); }
     window.movePlayheadTo = function (frame) { objectScope.movePlayheadTo(frame); }
+    window.gotoAndStop    = function (frame) { objectScope.gotoAndStop(frame); }
+    window.gotoAndPlay    = function (frame) { objectScope.gotoAndPlay(frame); }
 
     window.stopAllSounds = function () { wickPlayer.getAudioPlayer().stopAllSounds(); };
     window.keyIsDown      = function (keyString) { return wickPlayer.inputHandler.keyIsDown(keyString); };
     window.keyJustPressed = function (keyString) { return wickPlayer.inputHandler.keyJustPressed(keyString); }
-    window.getMouseX = function () { return wickPlayer.inputHandler.getMouse().x; };
-    window.getMouseY = function () { return wickPlayer.inputHandler.getMouse().y; };
+    window.mouseX = wickPlayer.inputHandler.getMouse().x;
+    window.mouseY = wickPlayer.inputHandler.getMouse().y;
+    window.tiltX = getTiltX();
+    window.tiltY = getTiltY();
     window.hideCursor = function () { wickPlayer.hideCursor(); };
     window.showCursor = function () { wickPlayer.showCursor(); };
     window.enterFullscreen = function () { wickPlayer.enterFullscreen(); }
