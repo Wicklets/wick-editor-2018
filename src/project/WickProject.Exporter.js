@@ -52,6 +52,7 @@ WickProject.Exporter = (function () {
             "src/project/WickFrame.js",
             "src/project/WickLayer.js",
             "src/project/WickObject.js",
+            "src/project/WickPlayRange.js",
             "src/project/WickProject.js",
             "src/project/WickProject.Compressor.js",
             "src/player/WickPlayer.Preloader.js",
