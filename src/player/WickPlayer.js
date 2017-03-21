@@ -45,8 +45,10 @@ var WickPlayer = function () {
         // Load the project!
         self.project = WickProject.fromJSON(projectJSON);
         initialStateProject = WickProject.fromJSON(projectJSON);
-        self.project.fitScreen = !window.wickEditor;
-        initialStateProject.fitScreen = !window.wickEditor;
+        //self.project.fitScreen = !window.wickEditor;
+        //initialStateProject.fitScreen = !window.wickEditor;
+        self.project.fitScreen = false;
+        initialStateProject.fitScreen = false;
         self.project.prepareForPlayer();
         initialStateProject.prepareForPlayer();
 
@@ -138,7 +140,7 @@ var WickPlayer = function () {
         clone.parentObject.getCurrentLayer().getCurrentFrame().wickObjects.push(clone);
         self.project.rootObject.generateParentObjectReferences();
 
-        window.pixiRenderer.refresh(clone);
+        window.wickRenderer.refresh(clone);
 
         return clone;
     }
