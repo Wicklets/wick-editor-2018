@@ -95,7 +95,7 @@ WickPlayerInputHandler = function (wickPlayer) {
         });
 
         //...and change the cursor if we are
-        if(hoveredOverObj && hoveredOverObj.isClickable()) {
+        if(hoveredOverObj && hoveredOverObj.isButton) {
             canvasContainer.style.cursor = hoveredOverObj.cursor || "pointer";
         } else {
             canvasContainer.style.cursor = "default";
@@ -105,8 +105,8 @@ WickPlayerInputHandler = function (wickPlayer) {
 
     var onMouseDown = function (evt) {
         
-        project.rootObject.getAllActiveChildObjectsRecursive(true).forEach(function(child) {
-            if(child.isClickable() && child.isPointInside(mouse)) {
+        project.rootObject.getAllActiveChildObjectsRecursive(true).forEachBackwards(function(child) {
+            if(child.isPointInside(mouse)) {
                 //project.runScript(child, "onClick");
                 child._wasClicked = true;
             }
@@ -148,11 +148,12 @@ WickPlayerInputHandler = function (wickPlayer) {
         mouse = touchPos;
 
         project.rootObject.getAllActiveChildObjects().forEach(function(child) {
-            if(child.isPointInside(touchPos) && child.isClickable()) {
+            if(child.isPointInside(touchPos)) {
                 //project.runScript(child, "onClick");
                 child._wasClicked = true;
             }
         });
+        
 
     }
 

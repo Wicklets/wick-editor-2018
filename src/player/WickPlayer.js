@@ -11,16 +11,18 @@ var WickPlayer = function () {
 
     self.canvasContainer;
 
+    self.running = false;
+
     var initialStateProject;
-    var stopDrawLoop;
 
     var tick;
 
 
     self.runProject = function (projectJSON) {
 
+        self.running = true;
+
         tick = 1;
-        stopDrawLoop = false;
 
         window.rendererCanvas = document.getElementById('playerCanvasContainer');
         self.canvasContainer = window.rendererCanvas;
@@ -47,17 +49,22 @@ var WickPlayer = function () {
         if(!bowser.mobile && !bowser.tablet) self.audioPlayer.setup();
         window.wickRenderer.refresh(self.project.rootObject);
 
-        update();
-
         var preloader = new WickPreloader();
+
+        self.project.tick();
+        window.wickRenderer.render(self.project.rootObject.getAllActiveChildObjects());
+        update();
 
     }
 
     self.stopRunningProject = function () {
 
-        self.project = null;
+        self.running = false;
 
-        stopDrawLoop = true;
+        update();
+        clearTimeout(loopTimeout);
+
+        self.project = null;
 
         self.inputHandler.cleanup();
         self.audioPlayer.cleanup();
@@ -69,35 +76,30 @@ var WickPlayer = function () {
         window.wickRenderer.enterFullscreen();
     }
 
+    var loopTimeout;
     var update = function () {
 
-        if(stopDrawLoop) return;
+        if(!self.running) return;
 
         if(self.project.framerate < 60) {
-            setTimeout(function() {
+            loopTimeout = setTimeout(function() {
 
-                if(!stopDrawLoop) {
+                if(self.running) {
 
-                    /*console.log(" ")
-                    console.log("PLAYER TICK " + tick)*/
-                    tick++;
-                    
                     self.project.tick();
-                    //self.project.rootObject.applyTweens();
                     window.wickRenderer.render(self.project.rootObject.getAllActiveChildObjects());
-                    update();
                     self.inputHandler.update();
-                    //requestAnimationFrame(update);
+
+                    update();
                 }
             }, 1000 / self.project.framerate);
 
         } else {
 
-            if(!stopDrawLoop) {
+            if(self.running) {
                 requestAnimationFrame(update);
             }
             self.project.tick();
-            //self.project.rootObject.applyTweens();
             window.wickRenderer.render(self.project.rootObject.getAllActiveChildObjects());
             self.inputHandler.update();
 

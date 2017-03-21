@@ -40,6 +40,8 @@ var ThumbnailRendererInterface = function (wickEditor) {
         });
 
         setTimeout(function () {
+            if(wickPlayer.running) return;
+
             thumbRenderer.render(layerObjects);
             wickFrame.thumbnail = window.rendererCanvas.getElementsByTagName('canvas')[0].toDataURL('image/jpeg', 0.001);
             //console.log(wickFrame.thumbnail)

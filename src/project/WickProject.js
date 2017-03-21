@@ -147,96 +147,18 @@ WickProject.fromJSON = function (rawJSONProject) {
 
 // Backwards compatibility for old Wick projects
 WickProject.fixForBackwardsCompatibility = function (project) {
-    // WickProject.resolution was replaced with project.width and project.height
-    project._selection = [];
-    if(!project.width) project.width = project.resolution.x;
-    if(!project.height) project.height = project.resolution.y;
-    if(!project.transparent) project.transparent = false;
-    if(!project.pixelPerfectRendering) project.pixelPerfectRendering = false;
 
     var allObjectsInProject = project.rootObject.getAllChildObjectsRecursive();
     allObjectsInProject.push(project.rootObject);
     allObjectsInProject.forEach(function (wickObj) {
-        // WickObjects no longer store what frame they're on
-        wickObj.playheadPosition = 0;
-
-        // WickObject.id was replaced with WickObject.uuid
-        if(!wickObj.uuid) wickObj.uuid = random.uuid4();
-        wickObj.id = null;
-
-        // Sound WickObjects now have a volume variable
-        if(!wickObj.volume) wickObj.volume = 1.0;
-
-        // WickObject.angle was replaced with WickObject.rotation
-        if(wickObj.angle !== null && wickObj.rotation === undefined) {
-            wickObj.rotation = wickObj.angle;
-            wickObj.angle = null;
-        }
-
-        if(wickObj.tweens) {
-            wickObj.tweens.forEach(function (tween) {
-                if(!tween.tweenType) tween.tweenType = 'Linear';
-                if(!tween.tweenDir) tween.tweenDir = 'None';
-            });
-        }
-
-        if(wickObj.wickScripts) {
-            wickObj.wickScript = "this.onLoad = function () {\n"+WickProject.Compressor.decodeString(wickObj.wickScripts['onLoad'])+"\n}\n\nthis.onUpdate = function () {\n"+WickProject.Compressor.decodeString(wickObj.wickScripts['onUpdate'])+"\n}\n\nthis.onClick = function () {\n"+WickProject.Compressor.decodeString(wickObj.wickScripts['onClick'])+"\n}\n\n"
-            wickObj.wickScripts = null;
-        }
-
-        if(!wickObj.isSymbol) return;
-
-        if(!wickObj.playRanges) wickObj.playRanges = [];
-
+        if(!wickObj.isSymbol) return
         wickObj.layers.forEach(function (layer) {
-            if(!layer.identifier) layer.identifier = "Untitled Layer";
-
             layer.frames.forEach(function (frame) {
-                // Frames now have uuids
-                if(!frame.uuid) frame.uuid = random.uuid4();
-
-                // 'frameLength' is now just 'length'
-                if(frame.frameLength) {
-                    frame.length = frame.frameLength;
-                    frame.frameLength = null;
-                }
-
-                // Frames store where they are on the timeline
-                if(frame.playheadPosition === undefined) {
-                    frame.playheadPosition = layer.frames.indexOf(frame)
-                }
-
-                // Frames now have SVG path data
-                if(!frame.pathData) {
-                    frame.pathData = "";
-                }
-                if(!frame.pathDataToAdd) {
-                    frame.pathDataToAdd = null;
-                }
-
-                // Frames no longer store onion skin images (made projects too big)
-                if(frame.cachedImageData) frame.cachedImageData = null;
-
-                // Frames now have scripts
-                if(!frame.wickScript && !frame.wickScripts) {
-                    frame.wickScripts = {
-                        "onLoad" : "",
-                        "onUpdate" : ""
-                    }
-                }
-
-                if(frame.wickScripts) {
-                    frame.wickScript = "this.onLoad = function () {\n"+WickProject.Compressor.decodeString(frame.wickScripts['onLoad'])+"\n}\n\nthis.onUpdate = function () {\n"+WickProject.Compressor.decodeString(frame.wickScripts['onUpdate'])+"\n}\n"
-                    frame.wickScripts = null
-                }
-
-                // Frames can now not save their states 
-                // (old projects always implicitly saved frame state)
-                if(!frame.alwaysSaveState) frame.alwaysSaveState = false;
+                
             });
         });
     });
+
 }
 
 WickProject.fromLocalStorage = function () {
@@ -562,13 +484,13 @@ WickProject.prototype.deselectObjectType = function (type) {
     return deselectionHappened;
 }
 
-WickProject.prototype.runScript = function (obj, fnName) {
+WickProject.prototype.loadBuiltinFunctions = function (contextObject) {
 
-    var objectScope;
-    if(obj instanceof WickObject) {
-        objectScope = obj.parentObject;
-    } else if(obj instanceof WickFrame) {
-        objectScope = obj.parentLayer.parentWickObject;
+    var objectScope = null;
+    if(contextObject instanceof WickObject) {
+        objectScope = contextObject.parentObject;
+    } else if (contextObject instanceof WickFrame) {
+        objectScope = contextObject.parentLayer.parentWickObject;
     }
 
     window.project = wickPlayer.project || wickEditor.project;
@@ -598,6 +520,12 @@ WickProject.prototype.runScript = function (obj, fnName) {
         });
     }
 
+}
+
+WickProject.prototype.runScript = function (obj, fnName) {
+
+    this.loadBuiltinFunctions(obj);
+
     try {
         if(obj[fnName]) obj[fnName]();
     } catch (e) {
@@ -606,22 +534,12 @@ WickProject.prototype.runScript = function (obj, fnName) {
 
 }
 
-WickProject.prototype.prepareForPlayer = function () {
-    var self = this;
-
-    self.getAllObjects().forEach(function (obj) {
-        obj.prepareForPlayer();
-        
-        self.loadScriptOfObject(obj);
-        obj.getAllFrames().forEach(function (frame) {
-            self.loadScriptOfObject(frame);
-        });
-    });
-}
-
 var WickObjectBuiltins = [
     'load',
-    'update'
+    'update',
+    'mousedown',
+    'mouseover',
+    'mouseout'
 ];
 
 WickProject.prototype.loadScriptOfObject = function (obj) {
@@ -629,7 +547,20 @@ WickProject.prototype.loadScriptOfObject = function (obj) {
         var dummy = {};
         var load = undefined;
         var update = undefined;
-        eval(obj.wickScript + "dummy.load=load;dummy.update=update;");
+        var mousedown = undefined;
+        var mouseover = undefined;
+        var mouseout = undefined;
+        obj._scopeWrapper = function () {
+            var dummyLoaderScript = "";
+            WickObjectBuiltins.forEach(function (builtinName) {
+                dummyLoaderScript += '\ndummy.'+builtinName+"="+builtinName+";"
+            });
+
+            (wickEditor || wickPlayer).project.loadBuiltinFunctions(obj);
+
+            eval(obj.wickScript + dummyLoaderScript);
+        }
+        obj._scopeWrapper();
 
         WickObjectBuiltins.forEach(function (builtinName) {
             var fn = dummy[builtinName];
@@ -642,6 +573,14 @@ WickProject.prototype.loadScriptOfObject = function (obj) {
     } catch (e) { 
         console.log(e) 
     };
+}
+
+WickProject.prototype.prepareForPlayer = function () {
+    var self = this;
+
+    self.getAllObjects().forEach(function (obj) {
+        obj.prepareForPlayer();
+    });
 }
 
 WickProject.prototype.tick = function () {
@@ -668,8 +607,8 @@ WickProject.prototype.tick = function () {
     //console.log(this.rootObject.playheadPosition)
     this.rootObject.tick();
 
-    allObjectsInProject.forEach(function (obj) {
+    /*allObjectsInProject.forEach(function (obj) {
         if(obj._newPlayheadPosition !== undefined)
             obj.playheadPosition = obj._newPlayheadPosition;
-    });
+    });*/
 }

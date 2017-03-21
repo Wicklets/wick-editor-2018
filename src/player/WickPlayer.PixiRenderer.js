@@ -117,6 +117,10 @@ var WickPixiRenderer = function () {
         renderer.render(wickToPixiDict[project.rootObject.uuid]);
     }
 
+    self.clear = function () {
+        
+    }
+
     self.refresh = function (wickObject) {
 
         var pixiObjectExists = wickToPixiDict[wickObject.uuid] !== undefined;
@@ -139,7 +143,7 @@ var WickPixiRenderer = function () {
         } else if (wickObject.imageData) {
 
             pixiObject = PIXI.Sprite.fromImage(wickObject.imageData);
-            wickObject.generateAlphaMask(pixiObject.texture.baseTexture.imageUrl);
+            //wickObject.generateAlphaMask(pixiObject.texture.baseTexture.imageUrl);
 
         } else if (wickObject.pathData) {
 
@@ -149,7 +153,7 @@ var WickPixiRenderer = function () {
             var base64svg = 'data:image/svg+xml;base64,' + window.btoa(s);
             
             pixiObject = PIXI.Sprite.fromImage(base64svg);
-            wickObject.generateAlphaMask(pixiObject.texture.baseTexture.imageUrl);
+            //wickObject.generateAlphaMask(pixiObject.texture.baseTexture.imageUrl);
 
         } else if (wickObject.fontData) {
 
@@ -188,6 +192,8 @@ var WickPixiRenderer = function () {
 
         var pixiObject = wickToPixiDict[wickObject.uuid];
         if(!pixiObject) return;
+
+        if(!wickObject.alphaMask && (wickObject.imageData || wickObject.pathData)) wickObject.generateAlphaMask(pixiObject.texture.baseTexture.imageUrl);
 
         pixiObject.visible = true;
         pixiObject.anchor = new PIXI.Point(0.5, 0.5);

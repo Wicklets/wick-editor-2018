@@ -157,8 +157,11 @@ var RightClickMenuInterface = function (wickEditor) {
                 new RightClickMenuButton('Send to back', function () {
                     wickEditor.guiActionHandler.doAction("sendToBack")
                 }),
-                new RightClickMenuButton('Convert to symbol', function () {
+                new RightClickMenuButton('Convert to MovieClip', function () {
                     wickEditor.guiActionHandler.doAction("convertToSymbol")
+                }),
+                new RightClickMenuButton('Convert to Button', function () {
+                    wickEditor.guiActionHandler.doAction("convertToButton")
                 }),
                 new RightClickMenuButton('Export', function () {
                     wickEditor.guiActionHandler.doAction("downloadObject")

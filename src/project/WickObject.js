@@ -27,7 +27,8 @@ var WickObject = function () {
 
 // Common
     
-    this.wickScript = "function load() {\n\t\n}\n\nfunction update() {\n\t\n}\n";
+    //this.wickScript = "function load() {\n\t\n}\n\nfunction update() {\n\t\n}\n";
+    this.wickScript = "";
 
 // Static
 
@@ -41,8 +42,8 @@ var WickObject = function () {
 
 // Symbols
 
-    // See design docs for how objects and symbols work.
     this.isSymbol = false;
+    this.isButton = false;
 
     // Used to keep track of what frame is being edited
     this.playheadPosition = null;
@@ -1031,6 +1032,33 @@ WickObject.prototype.stop = function () {
     this._playing = false;
 }
 
+WickObject.prototype.getPlayrangeById = function (identifier) {
+    var foundPlayRange = null;
+
+    this.playRanges.forEach(function (playRange) {
+        if(playRange.identifier === identifier) {
+            foundPlayRange = playRange;
+        }
+    });
+
+    return foundPlayRange;
+}
+
+WickObject.prototype.getFramesInPlayrange = function (playrange) {
+    var frames = [];
+
+    this.layers.forEach(function (layer) {
+        for(var i = playrange.start; i < playrange.end; i++) {
+            var frame = layer.getFrameAtPlayheadPosition(i);
+            if(frame && !frames.includes(frame)) {
+                frames.push(frame);
+            }
+        }
+    });
+
+    return frames;
+}
+
 WickObject.prototype.gotoAndStop = function (frame) {
     this.movePlayheadTo(frame);
     this.stop();
@@ -1059,12 +1087,7 @@ WickObject.prototype.movePlayheadTo = function (frame) {
 
     } else if (CheckInput.isString(frame)) {
 
-        var foundPlayRange = null;
-        this.playRanges.forEach(function (playRange) {
-            if(playRange.identifier === frame) {
-                foundPlayRange = playRange;
-            }
-        });
+        var foundPlayRange = this.getPlayrangeById(frame)
 
         if(foundPlayRange) {
             if(this.playheadPosition < foundPlayRange.start || this.playheadPosition >= foundPlayRange.end) {
@@ -1269,7 +1292,7 @@ WickObject.prototype.isPointInside = function(point) {
 
 WickObject.prototype.setText = function (text) {
     //this.pixiText.text = ""+text;
-    wickPlayer.renderer.setText(this, text);
+    wickRenderer.setText(this, text);
 }
 
 WickObject.prototype.playSound = function () {
@@ -1330,14 +1353,14 @@ WickObject.prototype.prepareForPlayer = function () {
         // Start the object playing
         this._playing = true;
         this._active = false;
+
+        this.getAllFrames().forEach(function (frame) {
+            //frame.prepareForPlayer();
+        });
     }
 
     // Reset the mouse hovered over state flag
     this.hoveredOver = false;
-}
-
-WickObject.prototype.setupScript = function () {
-    WickProject.loadScriptOfObject(this);
 }
 
 WickObject.prototype.autocropImage = function (callback) {
@@ -1411,19 +1434,6 @@ WickObject.prototype.generateAlphaMask = function (imageData) {
 
 }
 
-WickObject.prototype.isClickable = function () {
-    if(!this.isSymbol) return false;
-
-    if(!this.onClick) return false;
-
-    if(this._isClickable === undefined) {
-        var _onClickFnBody = this.onClick.toString().match(/function[^{]+\{([\s\S]*)\}$/)[1];
-        this._isClickable =  $.trim( _onClickFnBody ) !== '';
-    }
-
-    return this._isClickable;
-}
-
 WickObject.prototype.getCurrentFrames = function () {
     var currentFrames = [];
 
@@ -1433,6 +1443,10 @@ WickObject.prototype.getCurrentFrames = function () {
     });
 
     return currentFrames;
+}
+
+WickObject.prototype.getFramesAtPlayheadPosition = function () {
+
 }
 
 WickObject.prototype.tick = function () {
@@ -1446,8 +1460,22 @@ WickObject.prototype.tick = function () {
         });
     }
 
+    if(this.isButton) {
+        this.stop();
+        if(this._wasClicked) {
+            if(this.getFramesInPlayrange(this.getPlayrangeById('mousedown')).length > 0)
+                this.movePlayheadTo('mousedown');
+        } else if (this.hoveredOver) {
+            if(this.getFramesInPlayrange(this.getPlayrangeById('mouseover')).length > 0)
+                this.movePlayheadTo('mouseover');
+        } else {
+            if(this.getFramesInPlayrange(this.getPlayrangeById('mouseup')).length > 0)
+                this.movePlayheadTo('mouseup');
+        }
+    }
+
     if(this._wasClicked) {
-        (wickEditor || wickPlayer).project.runScript(this, 'click');
+        (wickEditor || wickPlayer).project.runScript(this, 'mousedown');
         this._wasClicked = false;
     }
 
@@ -1457,6 +1485,8 @@ WickObject.prototype.tick = function () {
     }
     // Inactive -> Active
     else if (!this._wasActiveLastTick && this._active) {
+        (wickEditor || wickPlayer).project.loadScriptOfObject(this);
+
         (wickEditor || wickPlayer).project.runScript(this, 'load');
 
         if(this.autoplaySound) {
@@ -1473,6 +1503,11 @@ WickObject.prototype.tick = function () {
             // THIS IS VERY BROKEN AND DANGEROUS. DO NOT USE.
             //wickPlayer.resetStateOfObject(this);
         }
+    }
+
+    if(this.fontData) {
+        (wickEditor || wickPlayer).project.loadBuiltinFunctions(this);
+        this.setText(eval(this.name));
     }
 
     if(this._playing && this.isSymbol && this._newPlayheadPosition === undefined) {

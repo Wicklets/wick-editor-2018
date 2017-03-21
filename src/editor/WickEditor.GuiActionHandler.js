@@ -706,9 +706,19 @@ var GuiActionHandler = function (wickEditor) {
         ['convertToSymbolButton', 'createSymbolButton'],
         {},
         function(args) {
-            var fabCanvas = wickEditor.fabric.canvas;
             wickEditor.actionHandler.doAction('convertObjectsToSymbol', {
                 objects: wickEditor.fabric.getSelectedObjects(WickObject)
+            });
+        });
+
+    registerAction('convertToButton',
+        ['Modifier', 'SHIFT', '8'],
+        ['convertToSymbolButton', 'createSymbolButton'],
+        {},
+        function(args) {
+            wickEditor.actionHandler.doAction('convertObjectsToSymbol', {
+                objects: wickEditor.fabric.getSelectedObjects(WickObject),
+                button: true
             });
         });
 

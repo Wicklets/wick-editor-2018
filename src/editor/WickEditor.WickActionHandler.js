@@ -387,6 +387,13 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.addObject(symbol, symbolZIndex, true);
             args.createdSymbol = symbol;
 
+            if(args.button) {
+                symbol.addPlayRange(new WickPlayRange(0,1,'mouseup'));
+                symbol.addPlayRange(new WickPlayRange(1,2,'mouseover'));
+                symbol.addPlayRange(new WickPlayRange(2,3,'mousedown'));
+                symbol.isButton = true;
+            }
+
             // Remove objects from original parent (they are inside the symbol now.)
             objects.forEach(function (wickObject) {
                 wickEditor.project.currentObject.removeChild(wickObject);

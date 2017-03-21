@@ -95,9 +95,31 @@
 			}
 		]
 	}, {
-		"name": "Wick Objects : General",
+		"name": "Wick Objects",
 		"properties": [
 			{
+				"name" : "play()",
+				"description" : "Plays this symbol's timeline. Refer to the general timeline documentation for play() for further information.",
+				"example" : "this.play();",
+				"return" : null,
+				"args" : []
+			}, {
+				"name" : "stop()",
+				"description" : "Stops the symbol's timeline. Refer to the general timeline documentation for stop() for further information.",
+				"example" : "this.stop();",
+				"return" : null,
+				"args" : []
+			}, {
+				"name" : "gotoAndStop(frame)",
+				"description" : "Moves the playhead of the symbol's timeline to 'frame' and stops that timeline. Refer to the general timeline documentation for gotoAndStop(frame) for further information.",
+				"example" : "this.gotoAndStop(2);",
+				"args" : [{"name": "frame", "type": "Number", "description": "frame number or name to jump to"}]
+			}, {
+				"name" : "gotoAndPlay(frame)",
+				"description" : "Moves the playhead of the symbol's timeline to 'frame' and stops that timeline. Refer to the general timeline documentation for gotoAndPlay(frame) for further information.",
+				"example" : "this.gotoAndPlay(2);",
+				"args" : [{"name": "frame", "type": "Number", "description": "frame number or name to jump to"}]
+			}, {
 				"name" : "x",
 				"type" : "Number",
 				"description" : "Refers to the x-location (left-to-right) of the object.",
@@ -188,79 +210,65 @@
 
 		]
 	}, {
-		"name": "Wick Objects : Sound",
-		"properties": [
-	 	    {
-				"name" : "playSound()",
-				"description" : "Plays the sound associated with this object.",
-				"example" : "this.playSound();",
-				"args" : [], 
-				"return" : null
-			}, {
-				"name" : "stopSound()",
-				"description" : "Stops the sound associated with this object. If no sound is playing stopSound() does nothing.",
-				"example" : "this.stopSound();",
-				"args" : [],
-				"return" : null
-			}, {
-				"name" : "volume",
-				"description" : "Changes the gain of the associated sound. 'volume' should be a value from 0 to 1. Values greater than 1 can work, but may cause distortion.",
-				"example" : "this.setVolume(0.8);",
-				"args" : [{"name" : "volume", "type" : "Number", "description" : "Value to set the gain to."}]
-			}
-		]
-	}, {
-		"name": "Wick Objects : Timeline",
-		"properties": [
-			{
-				"name" : "play()",
-				"description" : "Plays this symbol's timeline. Refer to the general timeline documentation for play() for further information.",
-				"example" : "this.play();",
-				"return" : null,
-				"args" : []
-			}, {
-				"name" : "stop()",
-				"description" : "Stops the symbol's timeline. Refer to the general timeline documentation for stop() for further information.",
-				"example" : "this.stop();",
-				"return" : null,
-				"args" : []
-			}, {
-				"name" : "gotoAndStop(frame)",
-				"description" : "Moves the playhead of the symbol's timeline to 'frame' and stops that timeline. Refer to the general timeline documentation for gotoAndStop(frame) for further information.",
-				"example" : "this.gotoAndStop(2);",
-				"args" : [{"name": "frame", "type": "Number", "description": "frame number or name to jump to"}]
-			}, {
-				"name" : "gotoAndPlay(frame)",
-				"description" : "Moves the playhead of the symbol's timeline to 'frame' and stops that timeline. Refer to the general timeline documentation for gotoAndPlay(frame) for further information.",
-				"example" : "this.gotoAndPlay(2);",
-				"args" : [{"name": "frame", "type": "Number", "description": "frame number or name to jump to"}]
-			}
-		]
-	}, {
 		"name": "Utilities",
 		"properties": [
 			{
 				"name" : "randomBool()",
 				"description" : "Generates a random boolean, a value that can be either true or false.",
-				"example" : "// Use random.bool() to simulate a coin flip.\nvar coinFlip = random.bool();\nif(coinFlip == true) {\n\talert('You&#8217;re lucky!!');\n}",
+				"example" : "// Use randomBool to simulate a coin flip.\nvar coinFlip = randomBool();\nif(coinFlip == true) {\n\talert('You&#8217;re lucky!!');\n}",
 				"return" : {"type": "Boolean", "description": "A random boolean. Will be true 50% of the time."},
 				"args" : []
 			}, {
 				"name" : "randomInt(min, max)",
 				"description" : "Generates a random whole number from min to max.",
-				"example" : "// Use random.integer() to move to a random frame from 1-10.\nvar randomFrame = random(integer(1,10));\ngotoAndStop(randomFrame);",
+				"example" : "// Use randomInt to move to a random frame from 1-10.\nvar randomFrame = randomInt(1,10);\ngotoAndStop(randomFrame);",
 				"return" : {"type": "Number", "description": "A random whole number."},
 				"args" : []
 			}, {
 				"name" : "randomFloat(min, max)",
 				"description" : "Generates a random real (fractional) number from min to max.",
-				"example" : "// Use random.real() to choose how transparent an object appears.\nthis.opacity = random.real(0,1);",
+				"example" : "// Use randomFloat to choose how transparent an object appears.\nthis.opacity = randomFloat(0,1);",
 				"return" : {"type": "Number", "description": "A random real number."},
 				"args" : []
 			}, {
 				"name" : "localStorage",
 				"description" : "Use the localStorage object to save data",
 				"example" : "// Use localStorage to load a saved position. \nthis.x = localStorage.savedX;\nthis.y = localStorage.savedY;\n\n// Save the position and rotation of an object in localStorage to use later.\nlocalStorage.savedX = this.x\nlocalStorage.savedY = this.y",
+				"return" : null,
+				"args" : []
+			}
+		]
+	}, {
+		"name": "Functions",
+		"properties": [
+			{
+				"name" : "load",
+				"description" : "",
+				"example" : "",
+				"return" : null,
+				"args" : []
+			}, {
+				"name" : "update",
+				"description" : "",
+				"example" : "",
+				"return" : null,
+				"args" : []
+			}, {
+				"name" : "mousedown",
+				"description" : "",
+				"example" : "",
+				"return" : null,
+				"args" : []
+			}, {
+				"name" : "mouseover",
+				"description" : "",
+				"example" : "",
+				"return" : null,
+				"args" : []
+			}, {
+				"name" : "mouseup",
+				"description" : "",
+				"example" : "",
 				"return" : null,
 				"args" : []
 			}

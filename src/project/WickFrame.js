@@ -26,7 +26,8 @@ var WickFrame = function () {
     this.parentLayer = null;
 
     // Set all scripts to defaults
-    this.wickScript = "function load() {\n\t\n}\n\nfunction update() {\n\t\n}\n";
+    //this.wickScript = "function load() {\n\t\n}\n\nfunction update() {\n\t\n}\n";
+    this.wickScript = "";
 };
     
 WickFrame.prototype.tick = function () {
@@ -40,6 +41,8 @@ WickFrame.prototype.tick = function () {
     // Inactive -> Active
     // Frame just became active! It's fresh!
     else if (!this._wasActiveLastTick && this._active) {
+        (wickEditor || wickPlayer).project.loadScriptOfObject(this);
+        
         (wickEditor || wickPlayer).project.runScript(this, 'load');
     }
     // Active -> Active
