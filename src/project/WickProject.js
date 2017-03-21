@@ -402,7 +402,7 @@ WickProject.prototype.hasSyntaxErrors = function () {
             if(frame.hasSyntaxErrors) {
                 projectHasSyntaxErrors = true;
             }
-        })
+        });
 
         if(child.hasSyntaxErrors) {
             projectHasSyntaxErrors = true;

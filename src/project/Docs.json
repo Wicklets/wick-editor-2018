@@ -242,32 +242,26 @@
 		"name": "Functions",
 		"properties": [
 			{
-				"name" : "load",
-				"description" : "",
-				"example" : "",
-				"return" : null,
-				"args" : []
-			}, {
 				"name" : "update",
-				"description" : "",
-				"example" : "",
+				"description" : "Gets called every tick.",
+				"example" : "// This will move the object slowly to the left.\nfunction update() {\n\tthis.x --;\n}",
 				"return" : null,
 				"args" : []
 			}, {
 				"name" : "mousedown",
-				"description" : "",
-				"example" : "",
+				"description" : "Gets called when the object is clicked.",
+				"example" : "// Delete this object when it's clicked.\nfunction mousedown() {\n\tthis.delete();\n}",
 				"return" : null,
 				"args" : []
 			}, {
 				"name" : "mouseover",
-				"description" : "",
+				"description" : "Gets called when the mouse is over the object.",
 				"example" : "",
 				"return" : null,
 				"args" : []
 			}, {
 				"name" : "mouseup",
-				"description" : "",
+				"description" : "Gets called when after the mouse clicks the object.",
 				"example" : "",
 				"return" : null,
 				"args" : []
