@@ -1,271 +1,430 @@
 {
-	"docs": [
-	{
-		"name": "Common",
-		"properties": [
+  "docs": [
+    {
+      "name": "Timeline",
+      "properties": [
+        {
+          "name": "play()",
+          "description": "Plays the timeline. ",
+          "example": "play();",
+          "return": null,
+          "args": []
+        },
+        {
+          "name": "stop()",
+          "description": "Stops the timeline.",
+          "example": "stop();",
+          "return": null,
+          "args": []
+        },
+        {
+          "name": "gotoAndStop(frame)",
+          "description": "Moves the timeline to a frame number or name and stops that timeline.",
+          "example": "gotoAndStop(2);\ngotoAndStop('menu');",
+          "args": [
+            {
+              "name": "frame",
+              "type": "Number",
+              "description": "frame number or name to jump to"
+            }
+          ]
+        },
+        {
+          "name": "gotoAndPlay(frame)",
+          "description": "Moves the timeline to a frame number or name and stops that timeline.",
+          "example": "gotoAndPlay(2);\ngotoAndPlay('menu');",
+          "args": [
+            {
+              "name": "frame",
+              "type": "Number",
+              "description": "frame number or name to jump to"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Wick Object Properties",
+      "properties": [
+        {
+          "name": "x",
+          "type": "Number",
+          "description": "Refers to the x-location (left-to-right) of the object.",
+          "example": "this.x += 1; // Moves the object to the right by 1 pixel",
+          "args": [],
+          "return": null
+        },
+        {
+          "name": "y",
+          "type": "Number",
+          "description": "Refers to the y-location (top-to-bottom) of the object. Y values increase as you go down on the canvas.",
+          "example": "this.y += 1; // Moves the object down by one pixel",
+          "args": [],
+          "return": null
+        },
+        {
+          "name": "scaleX",
+          "type": "Number",
+          "description": "Scales the width of the object. By default scaleX is set to 1.",
+          "example": "this.scaleX = 2; // Doubles the width of this object.",
+          "args": [],
+          "return": null
+        },
+        {
+          "name": "scaleY",
+          "type": "Number",
+          "description": "Scales the height of the object. By default scaleY is set to 1.",
+          "example": "this.scaleY = 2; // Doubles the height of this object.",
+          "args": [],
+          "return": null
+        },
+        {
+          "name": "rotation",
+          "type": "Number",
+          "description": "Controls the angle of rotation on the object in degrees.",
+          "example": "this.rotation += 10; // Rotate this object 10 degrees to the right",
+          "args": [],
+          "return": null
+        },
+        {
+          "name": "flipX",
+          "type": "Boolean",
+          "description": "A boolean which determines whether or not to flip the wickObject horizontally. By default flipX is set to false.",
+          "example": "this.flipX = true; // Flip this object horizontally.",
+          "args": [],
+          "return": null
+        },
+        {
+          "name": "flipY",
+          "type": "Boolean",
+          "description": "A boolean which determines whether or not to flip the wickObject vertically. By default flipY is set to false.",
+          "example": "this.flipY = true; // Flip this object vertically.",
+          "args": [],
+          "return": null
+        },
+        {
+          "name": "opacity",
+          "type": "Number",
+          "description": "A value between 0 and 1 which determines how transparent an object is. 1 is completely opaque while 0 is completely transparent. By default opacity is set to 1.",
+          "example": "this.opacity = 0.8; // Make this object slightly transparent.",
+          "args": [],
+          "return": null
+        },
+        {
+          "name": "isClone",
+          "description": "Checks if this object is a clone",
+          "example": "if(this.isClone) {\n\tconsole.log('i am a clone!')\n}",
+          "args": [],
+          "return": {
+            "type": "Boolean",
+            "description": "True if the object is a clone"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Wick Object Functions",
+      "properties": [
+        {
+          "name": "clone()",
+          "description": "The resulting clone.",
+          "example": "// Creates a clone of the current wick object and stores it in the variable myClone\nvar myClone = this.clone();",
+          "args": [],
+          "return": {
+            "type": "WickObject",
+            "description": "A clone of the WickObject which calls clone()."
+          }
+        },
+        {
+          "name": "delete()",
+          "description": "Deletes this WickObject completely.",
+          "example": "this.delete(); // Removes the wickObject from the scene.",
+          "args": [],
+          "return": null
+        },
+        {
+          "name": "hitTest(otherObject, hitTestType)",
+          "description": "hitTest() checks for a collision with another WickObject.",
+          "example": "// If this object collides with objectTwo delete this object\nif (this.hitTest(objectTwo)) {\n\tthis.delete(); \n} ",
+          "args": [
+            {
+              "name": "otherObject",
+              "type": "WickObject",
+              "description": "Wick Object to check for collision with."
+            },
+            {
+              "name": "hitTestType",
+              "type": "String",
+              "description": "Type of hit detection to use. Can be 'rectangles' or 'circles'. If no hitTestType is given, hitTest defaults to 'rectangles'"
+            }
+          ],
+          "return": null
+        }
+      ]
+    },
+    {
+      "name": "Event Functions",
+      "properties": [
+        {
+          "name": "update",
+          "description": "Gets called every tick.",
+          "example": "// This will move the object slowly to the left\nfunction update() {\n\tthis.x --;\n}",
+          "return": null,
+          "args": []
+        },
+        {
+          "name": "mousedown",
+          "description": "Gets called when the object is clicked",
+          "example": "// Delete this object when it's clicked.\nfunction mousedown() {\n\tthis.delete();\n}",
+          "return": null,
+          "args": []
+        },
+        {
+          "name": "mouseover",
+          "description": "Gets called when the mouse is over the object.",
+          "example": "// Move this object when the mouse hovers over it\nfunction mouseover() {\n\tthis.x ++;\n}",
+          "return": null,
+          "args": []
+        },
+        {
+          "name": "mouseup",
+          "description": "Gets called when after the mouse clicks the object",
+          "example": "// Delete this object when it's clicked.\nfunction mouseup() {\n\tthis.delete();\n}",
+          "return": null,
+          "args": []
+        }
+      ]
+    },
+    {
+      "name": "Project",
+      "properties": [
+        {
+          "name": "stopAllSounds()",
+          "description": "Stops any sounds currently being played.",
+          "example": "stopAllSounds();",
+          "args": [],
+          "return": null
+        },
+        {
+          "name": "enterFullscreen()",
+          "description": "Makes the project fullscreen.",
+          "example": "enterFullscreen();",
+          "args": [],
+          "return": null
+        },
+        {
+          "name": "hideCursor()",
+          "description": "Makes the cursor invisible.",
+          "example": "hideCursor();",
+          "args": [],
+          "return": null
+        },
+        {
+          "name": "showCursor()",
+          "description": "Makes the cursor visible.",
+          "example": "showCursor();",
+          "args": [],
+          "return": null
+        }
+      ]
+    },
+    {
+      "name": "Input",
+      "properties": [
+        {
+          "name": "mouseX",
+          "description": "Returns the x-location of the mouse on the project canvas. The origin (0,0) is the upper-left corner of the canvas.",
+          "example": "// Sets the object's x-position to the mouse's x-position.\nthis.x = mouseX",
+          "args": [],
+          "return": {
+            "type": "Number",
+            "description": "x-location of the mouse"
+          }
+        },
+        {
+          "name": "mouseY",
+          "description": "Returns the y-location of the mouse on the project canvas. The origin (0,0) is the upper-left corner of the canvas.",
+          "example": "// Sets the object's y-position to the mouse's y-position.\nthis.y = mouseY",
+          "args": [],
+          "return": {
+            "type": "Number",
+            "description": "x-location of the mouse"
+          }
+        },
+        {
+          "name": "keyIsDown(key)",
+          "description": "Returns true if 'key' is currently down and false otherwise. Casing does not matter i.e. keyIsDown('a') is equivalent to keyIsDown('A').",
+          "example": "// If SPACE is pressed, move this object right by 10 pixels\nif (keyIsDown('SPACE')) { \n\tthis.x += 10;\n}",
+          "args": [
+            {
+              "name": "key",
+              "type": "String",
+              "description": "Any character such as 'A' or special characters including 'SPACE', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'BACKSPACE', 'TAB', 'ENTER', 'SHIFT', 'CTRL', 'COMMAND', 'ALT', 'WINDOWS', 'F1', 'NUM 0', 'NUM LOCK'"
+            }
+          ],
+          "return": {
+            "type": "Boolean",
+            "description": "true if key is down, false otherwise."
+          }
+        },
+        {
+          "name": "keyJustPressed(key)",
+          "description": "Returns true if 'key' was just pressed and false otherwise. Casing does not matter i.e. keyJustPressed('a') is equivalent to keyJustPressed('A').",
+          "example": "// If SPACE is pressed, move this object right by 10 pixels\nif (keyJustPressed('SPACE')) { \n\tthis.x += 10;\n}",
+          "args": [
+            {
+              "name": "key",
+              "type": "String",
+              "description": "Any character such as 'A' or special characters including 'SPACE', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'BACKSPACE', 'TAB', 'ENTER', 'SHIFT', 'CTRL', 'COMMAND', 'ALT', 'WINDOWS', 'F1', 'NUM 0', 'NUM LOCK'"
+            }
+          ],
+          "return": {
+            "type": "Boolean",
+            "description": "true if key was just pressed, false otherwise."
+          }
+        },
+        {
+          "name": "tiltX",
+          "description": "Returns the x-coordinate tilt of the device. This function only works on devices with an accelerometer/gyroscope (such as smartphones).",
+          "example": "// Move this object in the direction of the device's tilt\nthis.x = tiltX;",
+          "args": [],
+          "return": {
+            "type": "Number",
+            "description": "The x-coordinate tilt of the device"
+          }
+        },
+        {
+          "name": "tiltY",
+          "description": "Returns the x-coordinate tilt of the device. This function only works on devices with an accelerometer/gyroscope (such as smartphones)",
+          "example": "// Move this object in the direction of the device's tilt\nthis.y = tiltY;",
+          "args": [],
+          "return": {
+            "type": "Number",
+            "description": "The y-coordinate tilt of the device"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Scope",
+      "properties": [
+        {
+          "name": "this",
+          "description": "When used inside of a script, ‘this’ refers to the symbol the script belongs to.",
+          "example": "// Move the symbol which ran this script to the right by one pixel\nthis.x += 1;",
+          "args": [],
+          "return": null
+        },
+        {
+          "name": "root",
+          "description": "Refers to the 'root' object. The root object contains all other objects. The root object has no parent and holds the 'root' timeline which controls the main information being shown. The keyword root can be used in any script.",
+          "example": "// Moves the playhead on the root timeline to frame 2 and stops the root timeline\nroot.gotoAndStop(2);",
+          "args": [],
+          "return": null
+        },
+        {
+          "name": "parent",
+          "description": "Refers to the parent of the object which uses the 'parent' keyword in a script. 'parent' can be used to access the parent object's timeline, or other objects contained within the parent.",
+          "example": "// Moves the playhead on the parent obect's timeline to frame 2 and plays that timeline\nparent.gotoAndPlay(2);",
+          "args": [],
+          "return": null
+        }
+      ]
+    },
+    {
+      "name": "Utilities",
+      "properties": [
+        {
+          "name": "random.bool(min,max)",
+          "description": "Generates a random boolean (a value that can be either true or false). See <a target='_parent' href='https://github.com/ckknight/random-js'>this page</a> for more info.",
+          "example": "// Use randomBool to simulate a coin flip.\nvar coinFlip = random.bool();\nif(coinFlip == true) {\n\talert('You&#8217;re lucky!!');\n}",
+          "return": {
+            "type": "Boolean",
+            "description": "A random boolean. Will be true 50% of the time."
+          },
+          "args": []
+        }, {
+          "name": "random.integer(min,max)",
+          "description": "Generates a random whole number from min to max. See <a target='_parent' href='https://github.com/ckknight/random-js'>this page</a> for more info.",
+          "example": "// Use randomInt to move to a random frame from 1-10.\nvar randomFrame = random.integer(1,10);\ngotoAndStop(randomFrame);",
+          "return": {
+            "type": "Number",
+            "description": "A random whole number."
+          },
+          "args": [
+            {
+              "name": "min",
+              "type": "Number",
+              "description": "The generated number will be greater than or equal to min"
+            }, {
+              "name": "max",
+              "type": "Number",
+              "description": "The generated number will be less than or equal to max"
+            }
+           ]
+        }, {
+          "name": "random.real(min,max)",
+          "description": "Generates a random real (fractional) number from min to max. See <a target='_parent' href='https://github.com/ckknight/random-js'>this page</a> for more info.",
+          "example": "// Use randomFloat to choose how transparent an object appears.\nthis.opacity = random.real(0,1);",
+          "return": {
+            "type": "Number",
+            "description": "A random real number."
+          },
+          "args": [
 			{
-				"name" : "stopAllSounds()",
-				"description" : "Stops any sounds currently being played.",
-				"example" : "stopAllSounds();",
-				"args" : [],
-				"return" : null
-			}, {
-				"name" : "enterFullscreen()",
-				"description" : "Makes the project fullscreen.",
-				"example" : "enterFullscreen();",
-				"args" : [],
-				"return" : null
-			}, {
-				"name" : "hideCursor()",
-				"description" : "Makes the cursor invisible.",
-				"example" : "hideCursor();",
-				"args" : [],
-				"return" : null
-			}, {
-				"name" : "showCursor()",
-				"description" : "Makes the cursor visible.",
-				"example" : "showCursor();",
-				"args" : [],
-				"return" : null
-			}
-		]
-	}, {
-		"name": "Input",
-		"properties": [
-			{
-				"name" : "mouseX",
-				"description" : "Returns the x-location of the mouse on the project canvas. The origin (0,0) is the upper-left corner of the canvas.",
-				"example" : "// Sets the object's x-position to the mouse's x-position.\nthis.x = getMouseX();",
-				"args" : [],
-				"return" : {"type": "Number", "description": "x-location of the mouse"}
-			}, {
-				"name" : "mouseY",
-				"description" : "Returns the y-location of the mouse on the project canvas. The origin (0,0) is the upper-left corner of the canvas.",
-				"example" : "// Sets the object's y-position to the mouse's y-position.\nthis.y = getMouseY();",
-				"args" : [],
-				"return" : {"type": "Number", "description": "x-location of the mouse"}
-			}, {
-				"name" : "keyIsDown(key)",
-				"description" : "Returns true if 'key' is currently down and false otherwise. Casing does not matter i.e. keyIsDown('a') is equivalent to keyIsDown('A').",
-				"example" : "// If SPACE is pressed, move this object right by 10 pixels\nif (keyIsDown('SPACE')) { \n\tthis.x += 10;\n}",
-				"args" : [{"name" : "key", "type" : "String", "description" : "Any character such as 'A' or special characters including 'SPACE', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'BACKSPACE', 'TAB', 'ENTER', 'SHIFT', 'CTRL', 'COMMAND', 'ALT', 'WINDOWS', 'F1', 'NUM 0', 'NUM LOCK'"}],
-				"return" : {"type": "Boolean", "description": "true if key is down, false otherwise."}
-			}, {
-				"name" : "keyJustPressed(key)",
-				"description" : "Returns true if 'key' was just pressed and false otherwise. Casing does not matter i.e. keyJustPressed('a') is equivalent to keyJustPressed('A').",
-				"example" : "// If SPACE is pressed, move this object right by 10 pixels\nif (keyJustPressed('SPACE')) { \n\tthis.x += 10;\n}",
-				"args" : [{"name" : "key", "type" : "String", "description" : "Any character such as 'A' or special characters including 'SPACE', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'BACKSPACE', 'TAB', 'ENTER', 'SHIFT', 'CTRL', 'COMMAND', 'ALT', 'WINDOWS', 'F1', 'NUM 0', 'NUM LOCK'"}],
-				"return" : {"type": "Boolean", "description": "true if key was just pressed, false otherwise."}
-			}, {
-				"name" : "tiltX",
-				"description" : "Returns the x-coordinate tilt of the device. This function only works on devices with an accelerometer/gyroscope (such as smartphones).",
-				"example" : "// Move this object in the direction of the device's tilt\nthis.x = getTiltX();",
-				"args" : [],
-				"return" : {"type": "Number", "description": "The x-coordinate tilt of the device"}
-			}, {
-				"name" : "tiltY",
-				"description" : "Returns the x-coordinate tilt of the device. This function only works on devices with an accelerometer/gyroscope (such as smartphones)",
-				"example" : "// Move this object in the direction of the device's tilt\nthis.y = getTiltY();",
-				"args" : [],
-				"return" : {"type": "Number", "description": "The y-coordinate tilt of the device"}
-			}
-		]
-	}, {
-		"name": "Scope",
-		"properties": [
-			{
-				"name" : "this",
-				"description" : "When used inside of a script, ‘this’ refers to the symbol the script belongs to.",
-				"example" : "// Move the symbol which ran this script to the right by one pixel\nthis.x += 1;",
-				"args" : [],
-				"return" : null
-
-			}, {
-				"name" : "root",
-				"description" : "Refers to the 'root' object. The root object contains all other objects. The root object has no parent and holds the 'root' timeline which controls the main information being shown. The keyword root can be used in any script.",
-				"example" : "// Moves the playhead on the root timeline to frame 2 and stops the root timeline\nroot.gotoAndStop(2);",
-				"args" : [],
-				"return" : null
-			}, {
-				"name" : "parent",
-				"description" : "Refers to the parent of the object which uses the 'parent' keyword in a script. 'parent' can be used to access the parent object's timeline, or other objects contained within the parent.",
-				"example" : "// Moves the playhead on the parent obect's timeline to frame 2 and plays that timeline\nparent.gotoAndPlay(2);",
-				"args" : [], 
-				"return" : null
-			}
-		]
-	}, {
-		"name": "Wick Objects",
-		"properties": [
-			{
-				"name" : "play()",
-				"description" : "Plays this symbol's timeline. Refer to the general timeline documentation for play() for further information.",
-				"example" : "this.play();",
-				"return" : null,
-				"args" : []
-			}, {
-				"name" : "stop()",
-				"description" : "Stops the symbol's timeline. Refer to the general timeline documentation for stop() for further information.",
-				"example" : "this.stop();",
-				"return" : null,
-				"args" : []
-			}, {
-				"name" : "gotoAndStop(frame)",
-				"description" : "Moves the playhead of the symbol's timeline to 'frame' and stops that timeline. Refer to the general timeline documentation for gotoAndStop(frame) for further information.",
-				"example" : "this.gotoAndStop(2);",
-				"args" : [{"name": "frame", "type": "Number", "description": "frame number or name to jump to"}]
-			}, {
-				"name" : "gotoAndPlay(frame)",
-				"description" : "Moves the playhead of the symbol's timeline to 'frame' and stops that timeline. Refer to the general timeline documentation for gotoAndPlay(frame) for further information.",
-				"example" : "this.gotoAndPlay(2);",
-				"args" : [{"name": "frame", "type": "Number", "description": "frame number or name to jump to"}]
-			}, {
-				"name" : "x",
-				"type" : "Number",
-				"description" : "Refers to the x-location (left-to-right) of the object.",
-				"example" : "this.x += 1; // Moves the object to the right by 1 pixel",
-				"args" : [], 
-				"return" : null
-			}, {
-				"name" : "y",
-				"type" : "Number",
-				"description" : "Refers to the y-location (top-to-bottom) of the object. Y values increase as you go down on the canvas.",
-				"example" : "this.y += 1; // Moves the object down by one pixel",
-				"args" : [],
-				"return" : null
-			}, {
-				"name" : "scaleX",
-				"type" : "Number",
-				"description" : "Scales the width of the object. By default scaleX is set to 1.",
-				"example" : "this.scaleX = 2; // Doubles the width of this object.",
-				"args" : [], 
-				"return" : null
-			}, {
-				"name" : "scaleY",
-				"type" : "Number",
-				"description" : "Scales the height of the object. By default scaleY is set to 1.",
-				"example" : "this.scaleY = 2; // Doubles the height of this object.",
-				"args" : [],
-				"return" : null
-			}, {
-				"name" : "rotation",
-				"type" : "Number", 
-				"description" : "Controls the angle of rotation on the object in degrees.",
-				"example" : "this.rotation += 10; // Rotate this object 10 degrees to the right",
-				"args" : [], 
-				"return" : null
-			}, {
-				"name" : "flipX",
-				"type" : "Boolean",
-				"description" : "A boolean which determines whether or not to flip the wickObject horizontally. By default flipX is set to false.",
-				"example" : "this.flipX = true; // Flip this object horizontally.",
-				"args" : [],
-				"return" : null
-			}, {
-				"name" : "flipY",
-				"type" : "Boolean",
-				"description" : "A boolean which determines whether or not to flip the wickObject vertically. By default flipY is set to false.",
-				"example" : "this.flipY = true; // Flip this object vertically.",
-				"args" : [],
-				"return" : null
-			}, {
-				"name" : "opacity",
-				"type" : "Number",
-				"description" : "A value between 0 and 1 which determines how transparent an object is. 1 is completely opaque while 0 is completely transparent. By default opacity is set to 1.",
-				"example" : "this.opacity = 0.8; // Make this object slightly transparent.",
-				"args" : [], 
-				"return" : null
-			}, {
-				"name" : "clone()",
-				"description" : "The resulting clone.",
-				"example" : "var myClone = this.clone(); // Creates a clone of the current wick object and stores it in the variable myClone",
-				"args" : [], 
-				"return" : {"type" : "WickObject", "description" : "A clone of the WickObject which calls clone()."}
-			}, {
-				"name" : "isClone",
-				"description" : "Checks if this object is a clone",
-				"example" : "if(this.isClone) {\n\tconsole.log('i am a clone!')\n}",
-				"args" : [], 
-				"return" : {"type" : "Boolean", "description" : "True if the object is a clone"}
-			}, {
-				"name" : "delete()",
-				"description" : "Deletes this WickObject completely.",
-				"example" : "this.delete(); // Removes the wickObject from the scene.",
-				"args" : [],
-				"return" : null
-			}, {
-				"name" : "hitTest(otherObject, hitTestType)",
-				"description" : "hitTest() checks for a collision with another WickObject."  ,
-				"example" : "// If this object collides with objectTwo delete this object\nif (this.hitTest(objectTwo)) {\n\tthis.delete(); \n} ",
-				"args" : [{"name" : "otherObject", "type" : "WickObject", "description" : "Wick Object to check for collision with."}, 
-				          {"name" : "hitTestType", "type" : "String", "description" : "Type of hit detection to use. Can be 'rectangles' or 'circles'. If no hitTestType is given, hitTest defaults to 'rectangles'"}],
-				"return" : null
-			}, {
-				"name" : "hoveredOver",
-				"description" : "Returns true if the mouse is hovering over this object.",
-				"example" : "if (this.isHoveredOver()) {\n\tthis.rotation += 10;\n}",
-				"args" : [],
-				"return" : null
-			}
-
-		]
-	}, {
-		"name": "Utilities",
-		"properties": [
-			{
-				"name" : "randomBool()",
-				"description" : "Generates a random boolean, a value that can be either true or false.",
-				"example" : "// Use randomBool to simulate a coin flip.\nvar coinFlip = randomBool();\nif(coinFlip == true) {\n\talert('You&#8217;re lucky!!');\n}",
-				"return" : {"type": "Boolean", "description": "A random boolean. Will be true 50% of the time."},
-				"args" : []
-			}, {
-				"name" : "randomInt(min, max)",
-				"description" : "Generates a random whole number from min to max.",
-				"example" : "// Use randomInt to move to a random frame from 1-10.\nvar randomFrame = randomInt(1,10);\ngotoAndStop(randomFrame);",
-				"return" : {"type": "Number", "description": "A random whole number."},
-				"args" : []
-			}, {
-				"name" : "randomFloat(min, max)",
-				"description" : "Generates a random real (fractional) number from min to max.",
-				"example" : "// Use randomFloat to choose how transparent an object appears.\nthis.opacity = randomFloat(0,1);",
-				"return" : {"type": "Number", "description": "A random real number."},
-				"args" : []
-			}, {
-				"name" : "localStorage",
-				"description" : "Use the localStorage object to save data",
-				"example" : "// Use localStorage to load a saved position. \nthis.x = localStorage.savedX;\nthis.y = localStorage.savedY;\n\n// Save the position and rotation of an object in localStorage to use later.\nlocalStorage.savedX = this.x\nlocalStorage.savedY = this.y",
-				"return" : null,
-				"args" : []
-			}
-		]
-	}, {
-		"name": "Functions",
-		"properties": [
-			{
-				"name" : "update",
-				"description" : "Gets called every tick.",
-				"example" : "// This will move the object slowly to the left\nfunction update() {\n\tthis.x --;\n}",
-				"return" : null,
-				"args" : []
-			}, {
-				"name" : "mousedown",
-				"description" : "Gets called when the object is clicked",
-				"example" : "// Delete this object when it's clicked.\nfunction mousedown() {\n\tthis.delete();\n}",
-				"return" : null,
-				"args" : []
-			}, {
-				"name" : "mouseover",
-				"description" : "Gets called when the mouse is over the object.",
-				"example" : "// Move this object when the mouse hovers over it\nfunction mouseover() {\n\tthis.x ++;\n}",
-				"return" : null,
-				"args" : []
-			}, {
-				"name" : "mouseup",
-				"description" : "Gets called when after the mouse clicks the object",
-				"example" : "// Delete this object when it's clicked.\nfunction mouseup() {\n\tthis.delete();\n}",
-				"return" : null,
-				"args" : []
-			}
-		]
-	}]
+              "name": "min",
+              "type": "Number",
+              "description": "The generated number will be greater than or equal to min"
+            }, {
+              "name": "max",
+              "type": "Number",
+              "description": "The generated number will be less than or equal to max"
+            }
+          ]
+        }, {
+          "name": "localStorage",
+          "description": "Use the localStorage object to save data. See <a target='_parent' href='https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage'>this page</a> for more info",
+          "example": "// Use localStorage to load a saved position. \nthis.x = localStorage.savedX;\nthis.y = localStorage.savedY;\n\n// Save the position and rotation of an object in localStorage to use later.\nlocalStorage.savedX = this.x\nlocalStorage.savedY = this.y",
+          "return": null,
+          "args": []
+        }, {
+          "name": "Math",
+          "description": "The builtin JavaScript object with a bunch of helpful math functions. See <a target='_parent' href='https://www.w3schools.com/js/js_math.asp'>this page</a> for more info",
+          "example": "Math.round(5.3); // returns 5\nMath.pow(8, 2); // returns 64\nMath.sqrt(64); // returns 8\nMath.abs(-4.7); // returns 4.7\nMath.ceil(4.4); // returns 5\nMath.floor(4.7); // returns 4\nMath.sin(90 * Math.PI / 180); // returns 1 (the sine of 90 degrees)\nMath.cos(0 * Math.PI / 180); // returns 1 (the cos of 0 degrees)\nMath.min(50, 150); // returns 50\nMath.max(50, 150); // returns 150",
+          "return": null,
+          "args": []
+        }, {
+          "name": "window.open(url)",
+          "description": "Opens a new window with the given url.",
+          "example": "window.open('http://www.wickeditor.com/')",
+          "return": null,
+          "args": []
+        }, {
+          "name": "alert(message)",
+          "description": "Displays a popup window with the message given.",
+          "example": "alert('Hello!!');",
+          "return": null,
+          "args": [
+            {
+              "name": "message",
+              "type": "String",
+              "description": "The message to display"
+            }
+          ]
+        }, {
+          "name": "prompt(message)",
+          "description": "Prompts the user with a popup and a text input field.",
+          "example": "var name = prompt('What is your name?');\nalert('Your name is ' + name);",
+          "return": null,
+          "args": [
+            {
+              "name": "message",
+              "type": "String",
+              "description": "The message to display"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
