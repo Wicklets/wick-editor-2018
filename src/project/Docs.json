@@ -244,25 +244,25 @@
 			{
 				"name" : "update",
 				"description" : "Gets called every tick.",
-				"example" : "// This will move the object slowly to the left.\nfunction update() {\n\tthis.x --;\n}",
+				"example" : "// This will move the object slowly to the left\nfunction update() {\n\tthis.x --;\n}",
 				"return" : null,
 				"args" : []
 			}, {
 				"name" : "mousedown",
-				"description" : "Gets called when the object is clicked.",
+				"description" : "Gets called when the object is clicked",
 				"example" : "// Delete this object when it's clicked.\nfunction mousedown() {\n\tthis.delete();\n}",
 				"return" : null,
 				"args" : []
 			}, {
 				"name" : "mouseover",
 				"description" : "Gets called when the mouse is over the object.",
-				"example" : "",
+				"example" : "// Move this object when the mouse hovers over it\nfunction mouseover() {\n\tthis.x ++;\n}",
 				"return" : null,
 				"args" : []
 			}, {
 				"name" : "mouseup",
-				"description" : "Gets called when after the mouse clicks the object.",
-				"example" : "",
+				"description" : "Gets called when after the mouse clicks the object",
+				"example" : "// Delete this object when it's clicked.\nfunction mouseup() {\n\tthis.delete();\n}",
 				"return" : null,
 				"args" : []
 			}
