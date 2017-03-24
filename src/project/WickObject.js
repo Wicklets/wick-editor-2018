@@ -1521,8 +1521,10 @@ WickObject.prototype.tick = function () {
     }
 
     if(this.fontData) {
-        (wickEditor || wickPlayer).project.loadBuiltinFunctions(this);
-        this.setText(eval(this.name));
+        if(this.varName) {
+            (wickEditor || wickPlayer).project.loadBuiltinFunctions(this);
+            this.setText(eval(this.varName));
+        }
     }
 
     if(this._playing && this.isSymbol && this._newPlayheadPosition === undefined) {

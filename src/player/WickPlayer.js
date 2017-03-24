@@ -45,10 +45,8 @@ var WickPlayer = function () {
         // Load the project!
         self.project = WickProject.fromJSON(projectJSON);
         initialStateProject = WickProject.fromJSON(projectJSON);
-        //self.project.fitScreen = !window.wickEditor;
-        //initialStateProject.fitScreen = !window.wickEditor;
-        self.project.fitScreen = false;
-        initialStateProject.fitScreen = false;
+        self.project.fitScreen = bowser.tablet || bowser.mobile;
+        initialStateProject.fitScreen = bowser.tablet || bowser.mobile;
         self.project.prepareForPlayer();
         initialStateProject.prepareForPlayer();
 
