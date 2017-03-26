@@ -66,9 +66,8 @@ var WickPlayer = function () {
 
         var preloader = new WickPreloader();
 
-        self.project.tick();
-        window.wickRenderer.render(self.project.rootObject.getAllActiveChildObjects());
-        update();
+        window.wickRenderer.render([]);
+        update(true);
 
     }
 
@@ -92,7 +91,7 @@ var WickPlayer = function () {
     }
 
     var loopTimeout;
-    var update = function () {
+    var update = function (firstTick) {
 
         if(!self.running) return;
 
@@ -101,9 +100,9 @@ var WickPlayer = function () {
 
                 if(self.running) {
 
-                    self.project.tick();
+                    if(!firstTick) self.project.tick();
                     window.wickRenderer.render(self.project.rootObject.getAllActiveChildObjects());
-                    self.inputHandler.update();
+                    self.inputHandler.update(false);
 
                     update();
                 }
@@ -112,9 +111,9 @@ var WickPlayer = function () {
         } else {
 
             if(self.running) {
-                requestAnimationFrame(update);
+                requestAnimationFrame(function () { update(false) });
             }
-            self.project.tick();
+            if(!firstTick) self.project.tick();
             window.wickRenderer.render(self.project.rootObject.getAllActiveChildObjects());
             self.inputHandler.update();
 

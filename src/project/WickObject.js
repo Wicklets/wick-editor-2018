@@ -1504,6 +1504,8 @@ WickObject.prototype.tick = function () {
 
         (wickEditor || wickPlayer).project.runScript(this, 'load');
 
+        this.advanceTimeline();
+
         if(this.autoplaySound) {
             this.playSound();
         }
@@ -1511,6 +1513,8 @@ WickObject.prototype.tick = function () {
     // Active -> Active
     else if (this._wasActiveLastTick && this._active) {
         (wickEditor || wickPlayer).project.runScript(this, 'update');
+
+        this.advanceTimeline();
     }
     // Active -> Inactive
     else if (this._wasActiveLastTick && !this._active) {
@@ -1527,13 +1531,15 @@ WickObject.prototype.tick = function () {
         }
     }
 
+}
+
+WickObject.prototype.advanceTimeline = function () {
     if(this._playing && this.isSymbol && this._newPlayheadPosition === undefined) {
         this._newPlayheadPosition = this.playheadPosition+1;
         if(this._newPlayheadPosition >= this.getTotalTimelineLength()) {
             this._newPlayheadPosition = 0;
         }
     }
-
 }
 
 WickObject.prototype.isActive = function () {

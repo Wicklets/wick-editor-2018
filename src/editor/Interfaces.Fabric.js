@@ -325,6 +325,12 @@ var FabricInterface = function (wickEditor) {
     }
 
     this.deselectAll = function () {
+        this.canvas._objects.forEach(function(fabricObj) {
+            if(fabricObj.text && fabricObj.isEditing) {
+                fabricObj.exitEditing();
+            }
+        });
+
         var activeGroup = this.canvas.getActiveGroup();
         if(activeGroup) {
             activeGroup.removeWithUpdate(activeGroup);

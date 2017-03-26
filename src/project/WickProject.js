@@ -600,12 +600,6 @@ WickProject.prototype.prepareForPlayer = function () {
 
 WickProject.prototype.tick = function () {
     var allObjectsInProject = this.rootObject.getAllChildObjectsRecursive();
-    //allObjectsInProject.push(this.rootObject);
-
-    allObjectsInProject.forEach(function (obj) {
-        if(obj._newPlayheadPosition !== undefined)
-            obj.playheadPosition = obj._newPlayheadPosition;
-    });
 
     allObjectsInProject.forEach(function (obj) {
         obj._newPlayheadPosition = undefined;
@@ -618,12 +612,11 @@ WickProject.prototype.tick = function () {
         obj._wasActiveLastTick = obj._active;
         obj._active = obj.isActive();
     });
-
-    //console.log(this.rootObject.playheadPosition)
+    
     this.rootObject.tick();
 
-    /*allObjectsInProject.forEach(function (obj) {
+    allObjectsInProject.forEach(function (obj) {
         if(obj._newPlayheadPosition !== undefined)
             obj.playheadPosition = obj._newPlayheadPosition;
-    });*/
+    });
 }
