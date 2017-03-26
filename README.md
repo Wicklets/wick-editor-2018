@@ -8,7 +8,9 @@ Try the editor and see the demos [here](http://wickeditor.com/)!
 
 ### How to run the editor locally for development
 * Clone or download and unzip this repo
-* Open terminal in the newly made `wick` folder and start an HTTP server: `python -m SimpleHTTPServer`
+* Open terminal in the newly made `wick` folder and start an HTTP server:
+  * `python -m SimpleHTTPServer` (Python 2)
+  * `python -m http.server` (Python 3)
 * Open a browser window, and go to `http://localhost:8000/`
 
 ### How to contribute to Wick
