@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="10px" height="10px" viewBox="0 0 10 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>ic_library_add_white_24px copy</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="New-Layer-Button" transform="translate(-2.000000, -2.000000)">
+            <g id="Group-2">
+                <g id="ic_library_add_white_24px-copy" transform="translate(2.000000, 2.000000)">
+                    <g id="Group">
+                        <polygon id="Shape" points="0 0 10 0 10 10 0 10"></polygon>
+                        <path d="M1.66666667,2.5 L0.833333333,2.5 L0.833333333,8.33333333 C0.833333333,8.79166667 1.20833333,9.16666667 1.66666667,9.16666667 L7.5,9.16666667 L7.5,8.33333333 L1.66666667,8.33333333 L1.66666667,2.5 Z M8.33333333,0.833333333 L3.33333333,0.833333333 C2.875,0.833333333 2.5,1.20833333 2.5,1.66666667 L2.5,6.66666667 C2.5,7.125 2.875,7.5 3.33333333,7.5 L8.33333333,7.5 C8.79166667,7.5 9.16666667,7.125 9.16666667,6.66666667 L9.16666667,1.66666667 C9.16666667,1.20833333 8.79166667,0.833333333 8.33333333,0.833333333 Z M7.91666667,4.58333333 L6.25,4.58333333 L6.25,6.25 L5.41666667,6.25 L5.41666667,4.58333333 L3.75,4.58333333 L3.75,3.75 L5.41666667,3.75 L5.41666667,2.08333333 L6.25,2.08333333 L6.25,3.75 L7.91666667,3.75 L7.91666667,4.58333333 Z" id="Shape" fill="#383838" fill-rule="nonzero"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

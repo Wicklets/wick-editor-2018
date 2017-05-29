@@ -1,0 +1,159 @@
+#toolbarGUI {
+    top: 30px;
+    left: 0px;
+    height: calc(100%);
+    width: 34px;
+    text-align: left;
+    padding: 3px;
+    overflow: hidden;
+/*    border-left-color: #585757;*/
+/*    border-bottom-color: #585757;*/
+}
+
+#toolOptionsGUI {
+    display: none;
+    bottom: 0px;
+    left: 0px;
+    text-align: left;
+}
+
+#tooltipGUI {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: #FFFFFF;
+    display: none;
+    z-index: 11111;
+    border: none;
+    padding-left:5px;
+    padding-right: 5px;
+    box-shadow: 2px 2px 2px #AAA;
+}
+
+.toolButton {
+    height: 28px;
+    width: 28px;
+    border-radius: 5px;
+    padding-bottom: 0px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    margin-left: 3px;
+
+    background-repeat: no-repeat;
+    background-position: center;
+    text-overflow: clip;
+    overflow: hidden;
+    background-size: 100% 100%;
+
+    -webkit-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+}
+.toolButton:hover {
+    background-color: #31E19C;
+}
+.toolButton:active {
+    background-color: #658a7c;
+}
+
+.toolButtonActive {
+    background-color: #333; /*#31E19C;*/
+    fill: purple;
+}
+
+.drawing-tool-options-container {
+
+}
+
+hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.color-picker-container {
+    margin-bottom: 5px;
+    left: 0px;
+    top: 0px;
+    width: 17px;
+    height: 19px;
+    float: right;
+}
+
+.color-picker-button-icon {
+    margin-bottom: 5px;
+    left: 0px;
+    top: 0px;
+    width: 17px;
+    height: 19px;
+    float: left;
+    background-color: transparent;
+    background-size: 100% 100%;
+}
+
+.range-slider-button-container {
+    left: 0px;
+    top: 0px;
+    width: 34px;
+    height: 18px;
+    /*background-color: red;*/
+    /*border-radius: 2px;*/
+    cursor: pointer;
+    overflow: hidden;
+    margin-top: 5px;
+}
+.range-slider-button-container:hover {
+    background-color: #333;
+}
+
+.range-slider-button-value-display {
+    float: right;
+    width: 17px;
+    height: 12px;
+    margin-top: 3px;
+    background-color: white;
+    color: black;
+    font-size: 10px;
+    overflow: hidden;
+    text-align: center;
+    border-radius: 3px;
+}
+
+.range-slider-button-icon {
+    left: 0px;
+    top: 0px;
+    width: 17px;
+    height: 18px;
+    float: left;
+    background-color: transparent;
+    background-size: 100% 100%;
+}
+
+.range-slider-slider-container {
+    width: 300px;
+    height: 30px;
+    background-color: rgba(0,0,0,0.5);
+    border-radius: 5px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    z-index: 10;
+
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-top: 11px;
+}
+
+.range-slider-slider {
+
+}
+
+.range-slider-click-out-div {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0.1;
+    z-index: 9;
+}

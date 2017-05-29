@@ -1,0 +1,24 @@
+#treeContainer {
+	position: absolute;
+	bottom: 20px;
+	left: 10px;
+	width: calc(100% - 20px);
+	height: 200px;
+	overflow: hidden;
+  	border-radius: 5px;
+}
+
+#asset-library-title {
+	color: white;
+
+}
+
+#tree {
+  	border-radius: 5px;
+	position: absolute;
+	width: 100%;
+	border: none;
+	background-color: white;
+	height: 200px;
+	overflow-y: auto;
+}

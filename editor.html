@@ -1,0 +1,255 @@
+<!-- Wick - (c) 2017 Zach Rispoli, Luca Damasco, and Josh Rispoli -->
+
+<!-- This file is part of Wick. 
+    
+    Wick is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Wick is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Wick.  If not, see <http://www.gnu.org/licenses/>. -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Wick Editor</title>
+
+    <link rel="stylesheet" type="text/css" href="styles/editor.css">
+    <link rel="stylesheet" type="text/css" href="styles/timeline.css">
+    <link rel="stylesheet" type="text/css" href="styles/scriptingide.css">
+    <link rel="stylesheet" type="text/css" href="styles/library.css">
+    <link rel="stylesheet" type="text/css" href="styles/inspector.css">
+    <link rel="stylesheet" type="text/css" href="styles/toolbar.css">
+    <link rel="stylesheet" type="text/css" href="lib/rangeslider.css">
+    <link rel="stylesheet" type="text/css" href="lib/nouislider.css">
+    <link href="lib/skin-win8/ui.fancytree.css" rel="stylesheet">
+    <link href="lib/spectrum.css" rel="stylesheet">
+
+    <base href=””>
+
+    <!-- Insert this line above script imports (so it works for electron)  -->
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
+    <script src="lib/jquery.min.js"></script>
+    <script src="lib/jquery-ui.custom.js"></script>
+    <script src="lib/jquery.fancytree.js"></script>
+    <script src="lib/fabric.1.7.11.js"></script>
+    <script src="lib/potrace.js"></script>
+    <script src="lib/paper-full.js"></script>
+    <script src="lib/beautify.js"></script>
+    <script src="lib/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lib/FileSaver.min.js"></script>
+    <script src="lib/jscolor.js"></script>
+    <script src="lib/libgif.js"></script>
+    <script src="lib/lz-string.min.js"></script>
+    <script src="lib/pixi.4.2.2.min.js"></script>
+    <script src="lib/jszip.min.js"></script>
+    <script src="lib/screenfull.js"></script>
+    <script src="lib/rangeslider.min.js"></script>
+    <script src="lib/gif.js"></script>
+    <script src="lib/gif.worker.js"></script>
+    <script src="lib/whammy.js"></script>
+    <script src="lib/filedownloader.js"></script>
+    <script src="lib/checkInput.js"></script>
+    <script src="lib/URLParameterUtils.js"></script>
+    <script src="lib/keyCharToCode.js"></script>
+    <script src="lib/timer.js"></script>
+    <script src="lib/canvasutils.js"></script>
+    <script src="lib/polyfills.js"></script>
+    <script src="lib/floodfill.js"></script>
+    <script src="lib/fpscounter.js"></script>
+    <script src="lib/base64-arraybuffer.js"></script>
+    <script src="lib/random.js"></script>
+    <script src="lib/Tween.js"></script>
+    <script src="lib/lerp.js"></script>
+    <script src="lib/bowser.js"></script>
+    <script src="lib/howler.min.js"></script>
+    <script src="lib/scrollbar.js"></script>
+    <script src="lib/spectrum.js"></script>
+    <script src="lib/nouislider.js"></script>
+
+    <script src="src/project/WickFrame.js"></script>
+    <script src="src/project/WickLayer.js"></script>
+    <script src="src/project/WickObject.js"></script>
+    <script src="src/project/WickAsset.js"></script>
+    <script src="src/project/WickProject.js"></script>
+    <script src="src/project/WickProject.Exporter.js"></script>
+    <script src="src/project/WickProject.Compressor.js"></script>
+    <script src="src/project/WickProject.AssetLibrary.js"></script>
+    <script src="src/project/WickTween.js"></script>
+    <script src="src/project/WickPlayRange.js"></script>
+
+    <script src="src/editor/Interfaces.Fabric.js"></script>
+    <script src="src/editor/Interfaces.Fabric.ShapeDrawer.js"></script>
+    <script src="src/editor/Interfaces.Fabric.GUIElements.js"></script>
+    <script src="src/editor/Interfaces.Fabric.SymbolBorders.js"></script>
+    <script src="src/editor/Interfaces.Fabric.WickElements.js"></script>
+    <script src="src/editor/Interfaces.Paper.js"></script>
+    <script src="src/editor/Interfaces.Library.js"></script>
+    <script src="src/editor/Interfaces.Paper.PathRoutines.js"></script>
+    <script src="src/editor/Interfaces.BuiltinPlayer.js"></script>
+    <script src="src/editor/Interfaces.RightClickMenu.js"></script>
+    <script src="src/editor/Interfaces.ScriptingIDE.js"></script>
+    <script src="src/editor/Interfaces.ScriptingIDE.Reference.js"></script>
+    <script src="src/editor/Interfaces.Timeline.js"></script>
+    <script src="src/editor/Interfaces.Timeline.AddFrameOverlay.js"></script>
+    <script src="src/editor/Interfaces.Timeline.Frame.js"></script>
+    <script src="src/editor/Interfaces.Timeline.FramesContainer.js"></script>
+    <script src="src/editor/Interfaces.Timeline.FramesStrip.js"></script>
+    <script src="src/editor/Interfaces.Timeline.HorizontalScrollBar.js"></script>
+    <script src="src/editor/Interfaces.Timeline.Interactions.js"></script>
+    <script src="src/editor/Interfaces.Timeline.LayersContainer.js"></script>
+    <script src="src/editor/Interfaces.Timeline.Layer.js"></script>
+    <script src="src/editor/Interfaces.Timeline.NumberLine.js"></script>
+    <script src="src/editor/Interfaces.Timeline.PlayRange.js"></script>
+    <script src="src/editor/Interfaces.Timeline.Playhead.js"></script>
+    <script src="src/editor/Interfaces.Timeline.SelectionBox.js"></script>
+    <script src="src/editor/Interfaces.Timeline.VerticalScrollBar.js"></script>
+    <script src="src/editor/Interfaces.Timeline.Tween.js"></script>
+    <script src="src/editor/Interfaces.Toolbar.js"></script>
+    <script src="src/editor/Interfaces.Toolbar.RangeSlider.js"></script>
+    <script src="src/editor/Interfaces.Toolbar.ColorPicker.js"></script>
+    <script src="src/editor/Interfaces.PreviewPlayer.js"></script>
+    <script src="src/editor/Interfaces.Inspector.js"></script>
+    <script src="src/editor/Interfaces.Inspector.Properties.js"></script>
+    <script src="src/editor/Interfaces.Inspector.InputTypes.js"></script>
+    <script src="src/editor/Interfaces.MenuBar.js"></script>
+    <script src="src/editor/Interfaces.ThumbnailRenderer.js"></script>
+    <script src="src/editor/Interfaces.GIFRenderer.js"></script>
+    <script src="src/editor/Interfaces.Breadcrumbs.js"></script>
+    <script src="src/editor/Interfaces.AlertBox.js"></script>
+    <script src="src/editor/Interfaces.CursorIcon.js"></script>
+
+    <script src="src/editor/Tools.Cursor.js"></script>
+    <script src="src/editor/Tools.Pen.js"></script>
+    <script src="src/editor/Tools.FillBucket.js"></script>
+    <script src="src/editor/Tools.Paintbrush.js"></script>
+    <script src="src/editor/Tools.Eraser.js"></script>
+    <script src="src/editor/Tools.Rectangle.js"></script>
+    <script src="src/editor/Tools.Ellipse.js"></script>
+    <script src="src/editor/Tools.Line.js"></script>
+    <script src="src/editor/Tools.Dropper.js"></script>
+    <script src="src/editor/Tools.Text.js"></script>
+    <script src="src/editor/Tools.Zoom.js"></script>
+    <script src="src/editor/Tools.Pan.js"></script>
+
+    <script src="src/editor/WickEditor.js"></script>
+    <script src="src/editor/WickEditor.Settings.js"></script>
+    <script src="src/editor/WickEditor.WickActionHandler.js"></script>
+    <script src="src/editor/WickEditor.GuiActionHandler.js"></script>
+    <script src="src/editor/WickEditor.InputHandler.js"></script>  
+    <script src="src/editor/WickEditor.DemoLoader.js"></script>
+    <script src="src/editor/WickEditor.ElectronWrapper.js"></script>
+
+    <script src="src/player/WickPlayer.js"></script>
+    <script src="src/player/WickPlayer.Preloader.js"></script>
+    <script src="src/player/WickPlayer.PixiRenderer.js"></script>
+    <script src="src/player/WickPlayer.HowlerAudioPlayer.js"></script>
+    <script src="src/player/WickPlayer.InputHandler.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Anonymous+Pro" />
+
+    <!-- Insert this line after script imports -->
+    <script>if (window.module) module = window.module;</script>
+
+    <!-- To ensure the electron app closes properly -->
+    <script>
+        window.onbeforeunload = function () { document.write(""); window.close(); }
+    </script>
+
+    <script>
+        $(document).ready(function() { 
+            window.wickEditor = new WickEditor();
+            //window.wickPlayer = new WickPlayer();
+        });
+    </script>
+</head>
+
+<body>
+<div class="noselect">
+    <!-- Hidden element to always be selected so browser always fires copy/paste events -->
+    <input id="hidden-input" class="hidden" type="text" value="" />
+
+    <!-- Hidden element that gets clicked by other divs to open file dialog -->
+    <input type="file" class="hidden" id="importButton" /> 
+
+    <div id="alert-box" class="GUIBox">
+        <div class="alert-box-icon"></div>
+        <div class="alert-box-text"></div>
+    </div>
+
+    <div id="editor">
+
+        <div tabindex="1" id="editorCanvasContainer">
+            <canvas id="fabricCanvas"></canvas>
+            <div id="previewRenderContainer"></div>
+        </div>
+
+        <div id="cursorIcon" class="GUIBox"></div>
+
+        <div id="timelineGUI" class="GUIBox"></div>
+
+        <div id="breadcrumbsGUI" class="GUIBox"></div>
+
+        <div id="toolbarGUI" class="GUIBox">
+            <div id="tools"></div>
+        </div>
+
+        <div id="inspectorGUI" class="GUIBox">
+            <div id="treeContainer">
+                <div id="asset-library-title">Asset Library</div>
+                <div id="tree"><ul></ul></div>
+            </div>
+        </div>
+
+        <div id="scriptingGUI" class="GUIBox">
+            <div id="scriptObjectDiv">
+                <div id="scriptEditor"></div>
+                <div id="scriptEditorSidebar">
+                    <!--<div id="scriptEditorObjectName"></div>
+                    <img id="scriptEditorObjectThumbnail" />-->
+                    <div id="scriptEditorReference"></div>
+                </div>
+            </div>
+            <div id="noSelectionDiv"></div>
+            <div id="scriptingIDEHeader"></div>
+            <div class="elemInRow">
+                <div class="button buttonInRow tooltipElem" id="beautifyButton" alt="Beautify Code">
+                    <img src="resources/beautify.png" width="16">
+                </div>
+                <div class="button buttonInRow tooltipElem" id="expandScriptingGUIButton" alt="Expand Scripting IDE">
+                    <img src="resources/fullscreen.png">
+                </div>
+                <div class="button buttonInRow tooltipElem" id="minimizeScriptingGUIButton" alt="Collapse Scripting GUI">
+                    <img src="resources/unfullscreen.png">
+                </div>
+                <div class="button buttonInRow tooltipElem" id="closeScriptingGUIButton" alt="Close Scripting IDE">
+                    <img src="resources/close-tab.svg" width="16">
+                </div>
+                <div class="button buttonInRow tooltipElem" id="openScriptingGUIButton" alt="Open Scripting IDE">
+                    <img src="resources/open-tab.svg" width="16">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="builtinPlayer">
+        <div id="builtinPlayerGUI" class="GUIBox">
+            <div class="tooltipElem" id="closeBuiltinPlayerButton" alt="Close project"></div>
+            <div id="builtinPlayerProjectInfo"></div>
+        </div>
+    </div>
+
+    <div id="tooltipGUI" class="GUIBox tooltip"></div>
+
+</div>
+</body>
+
+</html>

@@ -1,0 +1,21 @@
+{
+	"demos": [
+		{
+			"name" : "Keyboard Controls",
+			"path" : "KeyboardControls"
+		}, {
+			"name" : "Flashy Follows Mouse",
+			"path" : "FlashyFollowsMouse"
+		}, {
+			"name" : "Flashy Follows Mouse",
+			"path" : "FlashyFollowsMouse"
+		}, {
+			"name" : "randomball",
+			"path" : "randomball"
+		}, {
+			"name" : "Flashy Clone Click",
+			"path" : "FlashyCloneClick"
+		}
+
+	]
+}

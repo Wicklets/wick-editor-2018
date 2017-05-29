@@ -1,0 +1,612 @@
+/* Wick - (c) 2017 Zach Rispoli, Luca Damasco, and Josh Rispoli */
+
+/*  This file is part of Wick. 
+    
+    Wick is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Wick is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
+
+* { margin:0; padding:0; } /* to remove the top and left whitespace */
+
+@font-face {
+    font-family:"Open Sans";
+    src: url("Open_Sans/OpenSans-Regular.ttf");
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Chrome/Safari/Opera */
+    -khtml-user-select: none;    /* Konqueror */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* Internet Explorer/Edge */
+    user-select: none;           /* Non-prefixed version, currently
+                                  not supported by any browser */
+}
+
+.hideCursor {
+    cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjbQg61aAAAADUlEQVQYV2P4//8/IwAI/QL/+TZZdwAAAABJRU5ErkJggg=='),
+    none !important;
+}
+
+html, body { width:100%; height:100%; overflow: hidden; } /* just to be sure these are full screen*/
+
+body {
+    background-color: #B7B7B7;
+}
+
+canvas { display:block; } /* To remove the scrollbars */
+
+hr {
+    border: 0;
+    height: 1px;
+    background: #FFF;
+    /*background-image: linear-gradient(to right, #ccc, #999, #ccc);*/
+    margin: 2px;
+}
+
+#editor {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+canvas:focus {
+    outline: none;
+    outline-style: none;
+}
+
+input {
+    font-size: 16px;
+    color: #666;
+    border: none;
+}
+select {
+    font-size: 16px;
+    color: #666;
+    width: 80px;
+}
+
+.GUIBox {
+    position: absolute;
+    font-size: 16px;
+    font-family: "Anonymous Pro", "Helvetica", "Arial", sans-serif;
+    color: #666;
+    background-color: #585757;
+
+/*    border: 1px solid #878787;*/
+
+}
+
+#menuBarGUI {
+    top: 0px;
+    left: 0px;
+    height: 30px;
+    width: 100%;
+    background-color: black;/*#31E19C;*/
+/*
+    border-top-color: black;
+    border-left-color: black;
+    border-right-color: black;
+*/
+}
+.menubarTab {
+    float:left;
+    margin-top: 4px;
+    margin-left: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    color: #CCCCCC;
+    padding: 3px;
+
+    -webkit-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+}
+.menubarTab:hover {
+    cursor: pointer;
+    background-color: #31E19C;
+    border-radius: 3px;
+    color: black;
+}
+
+.menubarMenu {
+    top: 30px;
+    left: 0px;
+    line-height: 30px;
+    padding: 5px;
+    min-width: 70px;
+    border-top:none;
+    text-align: left;
+    text-indent: 5px;
+    z-index: 10;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+    border-radius: 3px;
+}
+
+.menubarButton {
+    cursor: pointer;
+    color: #FFFFFF;
+
+    -webkit-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+}
+.menubarButton:hover {
+    cursor: pointer;
+    background-color: #31E19C;
+    border-radius: 3px;
+}
+
+.menuBarProjectTitle {
+    position: absolute;
+    right: 40px;
+    top: 8px;
+    width: 300px;
+    height: 100%;
+    background-color: none;
+    text-align: right;
+    color: #CCC;
+}
+.unsavedText {
+    color: red;
+}
+.menuBarProjectSettingsButton {
+    position: absolute;
+    right: 2px;
+    top: 0px;
+    width: 30px;
+    height: 30px;
+    background-image: url("../resources/settings.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    text-overflow: clip;
+    overflow: hidden;
+    background-size: 16px 16px;
+    opacity: 1.0;
+    cursor: pointer;
+}
+.menuBarProjectSettingsButton:hover {
+    opacity: 0.5;
+}
+
+.scriptButton {
+    background: #58F9BA;
+    color: #0b2018;
+    box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
+    border-radius: 8px; 
+    float: center;
+    width: 180px; 
+    text-align: center;
+    font-weight: bold; 
+    margin:0 auto; 
+    margin-top:5px;
+    padding: 7px;
+}
+
+.scriptButton:hover {
+    cursor: pointer;
+    background: #009688;
+}
+
+.scriptbutton:active {
+    cursor: pointer;
+    background-color: #009688;
+}
+
+.scriptbutton:selected {
+    cursor: pointer;
+    background-color: #009688;
+}
+
+.fontSelector {
+    width:148px;
+}
+
+.jscolor {
+    border-radius: 8px; 
+}
+
+.jscolorInline {
+    padding-left: 10px; 
+}
+
+#statusBarGUI {
+    top: 1px;
+    right: 1px;
+    text-align: right;
+    display: block;
+    border: none;
+    text-align: right;
+    padding-right: 5px;
+    font-size: 16px;
+    margin-top: 3px;
+    color: #888;
+}
+
+#splashScreenGUI {
+    width: 500px;
+    top: 0px;
+    left: 0px;
+    text-align: center;
+    display: block;
+}
+
+#settingsGUI {
+    width: 170px;
+    top: 0px;
+    left: 0px;
+    text-align: center;
+    display: block;
+}
+
+.rangeslider_handle {
+    
+    background-color: aliceblue;
+    
+    
+}
+
+
+#objectType {
+    margin: 15px;
+}
+#closeSplashScreenButton {
+    right: 5px;
+    top: 5px;
+    position: absolute;
+}
+
+#builtinPlayer {
+    display: none;
+    background-color: rgba(0,0,0,0.7);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 999; /* HA! HA ! i lOVE CSS*/
+    width: 100%;
+    height: 100%;
+}
+#rendererCanvas {
+    /*-webkit-box-shadow: 3px 3px 12px 0px rgba(0,0,0,0.73);
+    -moz-box-shadow: 3px 3px 12px 0px rgba(0,0,0,0.73);
+    box-shadow: 3px 3px 12px 0px rgba(0,0,0,0.73);*/
+}
+#builtinPlayerGUI {
+    top: 0px;
+    left: 0px;
+    text-align: center;
+}
+#closeBuiltinPlayerButton {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 16px;
+    height: 16px;
+    background-color: none;
+    cursor: pointer;
+
+    background-image: url("../resources/close.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    text-overflow: clip;
+    overflow: hidden;
+    background-size: 16px 16px;
+
+    opacity: 1.0;
+}
+#closeBuiltinPlayerButton:hover {
+    opacity: 0.5;
+}
+
+#builtinPlayerProjectInfo {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 0px;
+    height: 0px;
+    color: #888;
+    font-weight: bold;
+    text-align: left;
+    font-size: 18px;
+}
+
+#lineColor {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border: 0px solid #666;
+
+    margin-top: 8px;
+    margin-bottom: 8px;
+
+    font-size: 8px;
+    width: 27px;
+    height: 27px;
+}
+
+#objectTypeName {
+    color: #FAFAFA
+}
+
+#rightClickMenu {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    background-color: #2b2b2b;
+    display: none;
+    z-index: 11110;
+    border-radius: 3px;
+    padding: 3px;
+    box-shadow: 2px 2px 2px #000;
+}
+.rightClickMenuButton {
+    padding: 2px;
+    background-color: transparent;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.rightClickMenuButton:hover {
+    background-color: #31E19C;
+    color: black;
+}
+.rightClickMenuButtonIcon {
+    background-repeat: no-repeat;
+    background-position: center;
+    text-overflow: clip;
+    background-size: 10px 10px;
+    width: 13px;
+    height: 13px;
+    float: left;
+    margin-right: 3px;
+
+}
+
+#popupGUI {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: #EEEEEE;
+    display: none;
+}
+
+.button {
+    padding: 4px;
+}
+.button:hover {
+    cursor: pointer;
+    background-color: #a5a5a5;
+/*    border-radius: 2px;*/
+}
+.button:active {
+    cursor: pointer;
+    background-color: #A0A0A0;
+}
+.button:selected {
+    cursor: pointer;
+    background-color: #A1A1A1;
+}
+.activeScriptButton {
+    background-color: #FFFFFF;
+}
+
+.buttonInRow {
+    float: left;
+}
+
+.fabricButton {
+    position: fixed;
+    display: block;
+    width: 21px;
+    height: 21px;
+
+    top: 0px;
+    left: 0px;
+    text-align: center;
+    display: block;
+
+    background-color: #EEEEEE;
+
+    margin: 5px;
+
+    border: 1px solid #bbb;
+/*  border-radius: 2px;*/
+
+    /*box-shadow: 2px 2px 2px #AAA;*/
+}
+
+.elemInRow {
+    float: left;
+}
+
+#timelineGUI {
+    top: 45px;
+    left:40px; /*0px;*/
+    /*padding: 10px;*/
+    width: calc(100% - 290px);
+    background-color: #E6E6E6;
+    overflow: hidden;
+}
+
+#layersGUI {
+    top: 30px;
+    left: 35px;
+    width: 33px;
+    height: /*84px;*/ 10px;
+    background-color: #E6E6E6;
+}
+
+#timelineScrollbar {
+    overflow-x:scroll;
+}
+
+#timelineScrollbarFiller {
+    width:3000px;
+    height:1px;
+}
+
+#gifImportDummyElem {
+    display: none;
+    visibility: hidden;
+}
+
+.paperCanvas {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+}
+
+
+.hidden {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    display: block;
+    font-size: 1;
+    z-index: -1;
+    color: transparent;
+    background: transparent;
+    overflow: hidden;
+    border: none;
+    padding: 0;
+    resize: none;
+    outline: none;
+    -webkit-user-select: text;
+    user-select: text;
+    /* Because for user-select:none, Safari won't allow input */
+}
+
+.thumbnailPreview {
+    position: absolute;
+    left: 130px;
+    top: 130px;
+    width: 100px;
+    height: 100px;
+    background-color: blue;
+}
+
+#tooltipGUI {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: #FFFFFF;
+    display: none;
+    z-index: 1000;
+    border: none;
+    padding-left:5px;
+    padding-right: 5px;
+    max-width: 300px;
+    box-shadow: 2px 2px 2px #AAA;
+    padding: 2px;
+    opacity: 0.0;
+    pointer-events: none;
+    border-radius: 2px;
+
+    transition: opacity 0.15s ease-in-out;
+    -moz-transition: opacity 0.15s ease-in-out;
+    -webkit-transition: opacity 0.15s ease-in-out;
+}
+
+#alert-box {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    width: 300px;
+    height: 50px;
+    z-index: 999999;
+    background-color: #777;
+    box-shadow: 2px 2px 2px black;
+    background-color: #585757;
+
+    border-radius: 5px;
+
+    transition: opacity .25s ease-in-out;
+    -moz-transition: opacity .25s ease-in-out;
+    -webkit-transition: opacity .25s ease-in-out;
+
+    opacity: 0.0;
+
+    cursor: pointer;
+}
+#alert-box:hover {
+    background-color: #31E19C;
+}
+
+
+.alert-box-icon {
+    background-image: url("../resources/check-sign.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    text-overflow: clip;
+    background-size: 30px 30px;
+
+    color: white;
+
+    float: left;
+    width: 50px;
+    height: 50px;
+}
+.alert-box-text {
+    float: right;
+
+    color: white;
+    font-size: 24px;
+
+    text-align: center;
+    margin-top: 10px;
+
+    width: 250px;
+    height: 50px;
+}
+
+#previewRenderContainer {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    background-color: #B7B7B7;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#builtinPlayerViewer {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    border: none;
+    -webkit-box-shadow: 3px 3px 12px 0px rgba(0,0,0,0.73);
+    -moz-box-shadow: 3px 3px 12px 0px rgba(0,0,0,0.73);
+    box-shadow: 3px 3px 12px 0px rgba(0,0,0,0.73);
+}
+
+#cursorIcon {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: none;
+    width: 15px;
+    height: 15px;
+
+    pointer-events: none;
+    background-color: transparent;
+
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 15px 15px;
+}
+
+
+
+
+

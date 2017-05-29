@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Wick: The Internet's Free and Open-Source Creation Toolkit</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+      body,h1,h2,h3,h4,h5,h6 {font-family: "Nunito"}
+      body, html {
+          height: 100%;
+          line-height: 1.8;
+      }
+      /* Full height image header */
+      .bgimg-1 {
+          background-position: center;
+          background-size: cover;
+          min-height: 100%;
+      }
+      .w3-bar .w3-button {
+          padding: 16px;
+      }
+    </style>
+
+    <!-- Placeholder for official font (Arial Rounded?) later. -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+
+    <!-- Google analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-88233944-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+    <script
+      src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+      integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="
+      crossorigin="anonymous"></script>
+    <script src="site/js/index.js"></script>
+
+    <link href='site/styles/common.css' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+  <!-- Navbar (sit on top) -->
+    <div class="w3-top">
+      <div class="w3-bar wick-menu-bar w3-card-2" id="myNavbar">
+        <a class="w3-button logotop-bar-item logo"> <img id="logo-image" src="/resources/Flashy.svg"><div id="header-title">Wick</div></a>
+        <!-- Right-sided navbar links -->
+        <div class="w3-right w3-hide-small">
+          <!--<a class="w3-button top-bar-item create-button" href="/editor.html">Editor</a>-->
+          <div class="w3-button top-bar-item tutorials-button">Tutorials</div>
+          <div class="w3-button top-bar-item demos-button">Demos</div>
+          <div class="w3-button top-bar-item community-button">Community</div>
+          <div class="w3-button top-bar-item reference-button">Reference</div>
+          <div class="w3-button top-bar-item about-button">About</div>
+        </div>
+
+        <!-- Hide right-floated links on small screens and replace them with a menu icon -->
+        <a href="javascript:void(0)" class="w3-bar-item top-bar-item w3-button w3-right w3-hide-large w3-hide-medium" onclick="w3_open()">
+          <i class="fa fa-bars"></i>
+        </a>
+      </div>
+      <div id="accent-bar"></div>
+    </div>
+
+    <!-- Sidebar on small screens when clicking the menu icon -->
+    <nav class="w3-sidebar w3-bar-block w3-black w3-card-2 w3-animate-left w3-hide-medium w3-hide-large" style="display:none" id="mySidebar">
+      <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button side-bar-item">Close</a>
+      <div onclick="w3_close()" class="w3-bar-item w3-button side-bar-item logo">Home</div>
+      <!--<a   onclick="w3_close()" class="w3-bar-item w3-button side-bar-item create-button" href="/editor.html">Editor</a>-->
+      <div onclick="w3_close()" class="w3-bar-item w3-button side-bar-item tutorials-button">Tutorials</div>
+      <div onclick="w3_close()" class="w3-bar-item w3-button side-bar-item demos-button">Demos</div>
+      <div onclick="w3_close()" class="w3-bar-item w3-button side-bar-item community-button">Community</div>
+      <div onclick="w3_close()" class="w3-bar-item w3-button side-bar-item reference-button">Reference</div>
+      <div onclick="w3_close()" class="w3-bar-item w3-button side-bar-item about-button">About</div>
+    </nav>
+
+
+
+    <script>
+    // Toggle between showing and hiding the sidebar when clicking the menu icon
+    var mySidebar = document.getElementById("mySidebar");
+
+    function w3_open() {
+        if (mySidebar.style.display === 'block') {
+            mySidebar.style.display = 'none';
+        } else {
+            mySidebar.style.display = 'block';
+        }
+    }
+
+    // Close the sidebar with the close button
+    function w3_close() {
+        mySidebar.style.display = "none";
+    }
+    </script>
+
+    <div class="viewer">
+        <iframe id="viewer-frame" src="/site/pages/home.html" style=></iframe>
+    </div>
+</body>
+</html>

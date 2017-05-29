@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg"
+      width="1000" height="600" viewBox="0 0 5 5">
+<rect fill="#FFF" width="5" height="5"/>
+<rect fill="#CCC" width="5" height="4"/>
+<rect fill="#888" width="5" height="3"/>
+<rect fill="#444" width="5" height="2"/>
+<rect fill="#000" width="5" height="1"/>
+</svg>

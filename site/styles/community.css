@@ -1,0 +1,40 @@
+.link-button {
+	width: 560px;
+	height: 160px;
+	opacity: 1.0;
+	cursor: pointer;
+	position: relative;
+	left: 50%;
+	transform:translateX(-50%);
+	margin-top: 25px;
+	margin-bottom: 25px;
+	background-size: 100% auto;
+	background-repeat: no-repeat;
+}
+.link-button:hover {
+	opacity: 0.5;
+}
+
+#github {
+	margin-top: 50px;
+	background-image: url('../img/wick-on-github.png');
+}
+
+#twitter {
+	background-image: url('../img/zrispo-on-twitter.png');
+}
+
+#email {
+	background-image: url('../img/zrispo-at-gmail.png');
+	cursor: default;
+}
+#email:hover {
+	opacity: 1.0;
+}
+
+@media only screen and (max-width: 700px) {
+	.link-button {
+		width: 90%;
+		height: 160px;
+	}
+}
