@@ -1108,9 +1108,9 @@ var GuiActionHandler = function (wickEditor) {
 
             selectedObjects.forEach(function (selectedObject) {
                 var copy = selectedObject.copy();
-                var absPos = selectedObject.getAbsolutePosition();
-                copy.x += absPos.x + 50;
-                copy.y += absPos.y + 50;
+                //var absPos = selectedObject.getAbsolutePosition();
+                copy.x += 50;
+                copy.y += 50;
                 duplicates.push(copy);
             });
 
