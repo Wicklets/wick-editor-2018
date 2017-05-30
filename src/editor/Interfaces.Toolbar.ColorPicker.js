@@ -47,7 +47,6 @@ var setupColorPicker = function (id, fn) {
       
       },
       hide: function (color) {
-        console.log(color.toString())
         fn(color.toString())
       },
       change: function() {
