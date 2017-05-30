@@ -54,21 +54,21 @@ var ToolbarInterface = function (wickEditor) {
         toolOptionInputs = [];
 
         toolOptionInputs.push(new ToolbarInterface.ColorPicker(container, 'strokeColorPicker', 'tools/Line.svg', function (color) {
-            wickEditor.settings.setValue('strokeColor', color.toString());
-            wickEditor.syncInterfaces();
+            wickEditor.settings.setValue('strokeColor', color);
             wickEditor.guiActionHandler.doAction("changeStrokeColorOfSelection", {
-                color: color.toString()
+                color: color
             });
+            wickEditor.syncInterfaces();
         }, function () {
             $("#strokeColorPicker").spectrum("set", wickEditor.settings.strokeColor);
         }));
 
         toolOptionInputs.push(new ToolbarInterface.ColorPicker(container, 'fillColorPicker', 'tools/Bucket.svg', function (color) {
-            wickEditor.settings.setValue('fillColor', color.toString());
-            wickEditor.syncInterfaces();
+            wickEditor.settings.setValue('fillColor', color);
             wickEditor.guiActionHandler.doAction("changeFillColorOfSelection", {
-                color: color.toString()
+                color: color
             });
+            wickEditor.syncInterfaces();
         }, function () {
             $("#fillColorPicker").spectrum("set", wickEditor.settings.fillColor);
         }));

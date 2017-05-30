@@ -19,7 +19,7 @@ ToolbarInterface.ColorPicker = function (container, id, iconPath, updateFn, upda
 
 }
 
-var setupColorPicker = function (id, move) {
+var setupColorPicker = function (id, fn) {
   $("#"+id).spectrum({
       color: "#ECC",
       showInput: true,
@@ -32,7 +32,9 @@ var setupColorPicker = function (id, move) {
       localStorageKey: "spectrum.demo",
       showAlpha: true,
 
-      move: move,
+      move: function () {
+
+      },
       show: function () {
 
         if(id === 'strokeColorPicker')
@@ -44,8 +46,9 @@ var setupColorPicker = function (id, move) {
       beforeShow: function () {
       
       },
-      hide: function () {
-
+      hide: function (color) {
+        console.log(color.toString())
+        fn(color.toString())
       },
       change: function() {
           
