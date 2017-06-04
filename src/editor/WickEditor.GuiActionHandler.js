@@ -682,6 +682,14 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.changeTool(wickEditor.tools.ellipse);
         });
 
+    registerAction('useTools.polygon',
+        [/*'E'*/],
+        [],
+        {},
+        function(args) {
+            wickEditor.changeTool(wickEditor.tools.polygon);
+        });
+
     registerAction('useTools.dropper',
         [/*'D'*/],
         [],

@@ -41,7 +41,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         fabricInterface.deselectAll(true);
 
         var activeObjects = currentObject.getAllActiveChildObjects();
-        if(wickEditor.currentTool instanceof Tools.Pen) {
+        if(wickEditor.paper.isActive()) {
             activeObjects = activeObjects.filter(function (obj) {
                 return !obj.isPath;
             }); 

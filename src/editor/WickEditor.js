@@ -89,6 +89,7 @@ var WickEditor = function () {
         "rectangle"        : new Tools.Rectangle(this),
         "ellipse"          : new Tools.Ellipse(this),
         "line"             : new Tools.Line(this),
+        "polygon"          : new Tools.Polygon(this),
         "dropper"          : new Tools.Dropper(this),
         "text"             : new Tools.Text(this),
         "zoom"             : new Tools.Zoom(this),
