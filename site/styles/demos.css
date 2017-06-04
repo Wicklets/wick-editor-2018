@@ -47,9 +47,12 @@ body {
 	position: relative;
 	width: 100%;
 	margin-top: calc(50% + 10px);
-	text-align: right;
+	text-align: left;
 	font-weight: normal;
+
+	padding-left: 4px;
 	font-size: 10px;
+	font-weight: bold;
 	height: 20px;
 }
 
