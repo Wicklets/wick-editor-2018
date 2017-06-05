@@ -40,7 +40,7 @@ Tools.Polygon = function (wickEditor) {
     this.paperTool = new paper.Tool();
 
     //var path;
-    //var currentSegment;
+    var currentSegment;
     var drawingPath;
 
     this.paperTool.onMouseDown = function(event) {
@@ -77,6 +77,7 @@ Tools.Polygon = function (wickEditor) {
             });
 
             drawingPath = pathWickObject;
+            currentSegment = pathWickObject.paper.children[0].segments[0];
         } else {
             console.log('Check for hitTest on first segment, this means we gotta close the path')
 
@@ -84,7 +85,9 @@ Tools.Polygon = function (wickEditor) {
             //currentSegment = path.add(event.point);
             //currentSegment.selected = true;
 
-            drawingPath.paper.children[0].add(event.point);
+            currentSegment.selected = false;
+            currentSegment = drawingPath.paper.children[0].add(event.point);
+            currentSegment.selected = true;
         }
     }
 
@@ -93,7 +96,6 @@ Tools.Polygon = function (wickEditor) {
     }
 
     this.paperTool.onMouseDrag = function(event) {
-        return;
         var delta = event.delta.clone();
         currentSegment.handleIn.x -= delta.x;
         currentSegment.handleIn.y -= delta.y;
