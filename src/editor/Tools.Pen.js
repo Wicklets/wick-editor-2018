@@ -134,65 +134,8 @@ Tools.Pen = function (wickEditor) {
     }
 
     this.paperTool.onMouseMove = function(event) {
-        // cursor icon selection
 
-        /*if(!active) {
-            wickEditor.cursorIcon.hide()
-            return;
-        }
-
-        /*var fillbucketMode = (wickEditor.currentTool instanceof Tools.FillBucket);
-        if(fillbucketMode) {
-            paperCanvas.style.cursor = 'url(/resources/fillbucket-cursor.png) 64 64,default';
-        } else {
-            paperCanvas.style.cursor = 'auto';
-        }
-
-        refreshSelection()
-        if (event.item) 
-            event.item.selected = true;
-
-        var hitOptions = {
-            segments: !fillbucketMode,
-            fill: true,
-            curves: !fillbucketMode,
-            handles: showHandles && !fillbucketMode,
-            stroke: fillbucketMode,
-            tolerance: 5 / wickEditor.fabric.getCanvasTransform().zoom
-        }
-
-        hitResult = paper.project.hitTest(event.point, hitOptions);
-        //console.log(hitResult)
-        if(hitResult) {
-            if(!hitResult.item.selected) {
-                wickEditor.cursorIcon.hide()
-                return;
-            } else if(hitResult.type === 'curve' ||
-                      hitResult.type === 'stroke') {
-                wickEditor.cursorIcon.setImage('/resources/cursor-curve.png')
-            } else if(hitResult.type === 'fill') {
-
-                if(fillbucketMode) {
-                    wickEditor.cursorIcon.setImage('/resources/cursor-segment.png')
-                } else {
-                    wickEditor.cursorIcon.setImage('/resources/cursor-fill.png')
-                }
-
-                
-            } else if(hitResult.type === 'segment' ||
-                      hitResult.type === 'handle-in' ||
-                      hitResult.type === 'handle-out') {
-                wickEditor.cursorIcon.setImage('/resources/cursor-segment.png')
-            } else {
-                wickEditor.cursorIcon.hide()
-            }
-        } else {
-            if(fillbucketMode) {
-                wickEditor.cursorIcon.setImage('/resources/cursor-no.png')
-            } else {
-                 wickEditor.cursorIcon.hide()
-            }
-        }*/
+        wickEditor.paper.updateCursor(event);
         
     }
 

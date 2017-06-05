@@ -26,7 +26,7 @@ Tools.Polygon = function (wickEditor) {
     };
 
     this.getToolbarIcon = function () {
-        return "resources/tools/Polygon.svg";
+        return "resources/tools/Polygon.png";
     }
 
     this.getTooltipName = function () {
@@ -38,8 +38,6 @@ Tools.Polygon = function (wickEditor) {
     }
 
     this.paperTool = new paper.Tool();
-
-    
 
     this.paperTool.onMouseDown = function(event) {
 
