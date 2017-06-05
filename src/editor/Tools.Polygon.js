@@ -46,14 +46,9 @@ Tools.Polygon = function (wickEditor) {
     this.paperTool.onMouseDown = function(event) {
         if(!drawingPath) {
             var newPath = new paper.Path({insert:false});
-            newPath.fillColor = {
-                hue: 360 * Math.random(),
-                saturation: 1,
-                brightness: 1,
-                alpha: 0.5
-            };
-            newPath.strokeColor = '#000000';
-            newPath.strokeWidth = 1;
+            newPath.fillColor = wickEditor.settings.fillColor;
+            newPath.strokeColor = wickEditor.settings.strokeColor;
+            newPath.strokeWidth = wickEditor.settings.strokeWidth;
             newPath.selected = true;
             newPath.add(event.point);
             //currentSegment = path.add(event.point);
@@ -78,6 +73,7 @@ Tools.Polygon = function (wickEditor) {
 
             drawingPath = pathWickObject;
             currentSegment = pathWickObject.paper.children[0].segments[0];
+            currentSegment.selected = true;
         } else {
             console.log('Check for hitTest on first segment, this means we gotta close the path')
 
