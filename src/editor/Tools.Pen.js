@@ -201,34 +201,7 @@ Tools.Pen = function (wickEditor) {
 
         console.log('Check for hitTest on first segment, this means we gotta close the path')
 
-        var path = hitResult.item;
-
-        var parent = path.parent;
-        var grandparent = parent.parent;
-
-        var pathToModify;
-        if(parent instanceof paper.Group) {
-            pathToModify = parent;
-        } else if (grandparent instanceof paper.Group) {
-            pathToModify = grandparent;
-        }
-
-        var wickObject = pathToModify.wick;
-        var parentAbsPos = wickObject.parentObject ? wickObject.parentObject.getAbsolutePosition() : {x:0,y:0};
-
-        var modifiedStates = [{
-            x: pathToModify.bounds._x + pathToModify.bounds._width /2 - parentAbsPos.x,
-            y: pathToModify.bounds._y + pathToModify.bounds._height/2 - parentAbsPos.y,
-            //pathData: '<svg id="svg" version="1.1" width="'+pathToModify.bounds._width+'" height="'+pathToModify.bounds._height+'" xmlns="http://www.w3.org/2000/svg">' +pathToModify.exportSVG({asString:true})+ '</svg>'
-            pathData: pathToModify.exportSVG({asString:true})
-        }];
-        var modifiedObjects = [
-            pathToModify.wick
-        ];
-        wickEditor.actionHandler.doAction('modifyObjects', {
-            objs: modifiedObjects,
-            modifiedStates: modifiedStates
-        });
+        wickEditor.paper.refreshSVGWickObject(hitResult.item);
     }
 
 }

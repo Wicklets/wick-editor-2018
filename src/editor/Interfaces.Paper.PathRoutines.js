@@ -299,17 +299,17 @@ var PathRoutines = function (paperInterface, wickEditor) {
 
         wickObject.paper = paper.project.importSVG(doc, {insert:false});
         //console.log(wickObject.paper)
-        wickObject.paper.children.forEach(function (child) {
-            // Convert all paper.Shapes into paper.Paths (Paths have boolean ops, Shapes do not)
-            if(!(child instanceof paper.Path) && !(child instanceof paper.CompoundPath)) {
-                //console.log(child)
-                child.remove();
-                var newChild = child.toPath({insert:false});
-                //newChild = newChild.unite(new paper.Path({insert:false}));
-                newChild.clockwise = false;
-                wickObject.paper.addChild(newChild);
-            }
-        });
+        if(wickObject.paper.children) {
+            wickObject.paper.children.forEach(function (child) {
+                // Convert all paper.Shapes into paper.Paths (Paths have boolean ops, Shapes do not)
+                if(!(child instanceof paper.Path) && !(child instanceof paper.CompoundPath)) {
+                    child.remove();
+                    var newChild = child.toPath({insert:false});
+                    newChild.clockwise = false;
+                    wickObject.paper.addChild(newChild);
+                }
+            });
+        }
         if(wickObject.paper.closePath) wickObject.paper.closePath();
 
         var absPos = wickObject.getAbsolutePosition() || {x:wickObject.x,y:wickObject.y};

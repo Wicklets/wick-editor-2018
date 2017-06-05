@@ -39,31 +39,52 @@ Tools.Polygon = function (wickEditor) {
 
     this.paperTool = new paper.Tool();
 
-    var path;
-    var currentSegment;
+    //var path;
+    //var currentSegment;
+    var drawingPath;
 
     this.paperTool.onMouseDown = function(event) {
-        if(!path) {
-            path = new paper.Path();
-            path.fillColor = {
+        if(!drawingPath) {
+            var newPath = new paper.Path({insert:false});
+            newPath.fillColor = {
                 hue: 360 * Math.random(),
                 saturation: 1,
                 brightness: 1,
                 alpha: 0.5
             };
-            path.strokeColor = '#000000';
-            path.strokeWidth = 1;
-            path.selected = true;
-            currentSegment = path.add(event.point);
-            currentSegment.selected = true;
+            newPath.strokeColor = '#000000';
+            newPath.strokeWidth = 1;
+            newPath.selected = true;
+            newPath.add(event.point);
+            //currentSegment = path.add(event.point);
+            //currentSegment.selected = true;
 
-            console.log('uh i guess create wickobject here')
+            var group = new paper.Group({insert:false});
+            group.addChild(newPath);
+
+            var svgString = group.exportSVG({asString:true});
+            var pathWickObject = WickObject.createPathObject(svgString);
+            pathWickObject.x = event.point.x;
+            pathWickObject.y = event.point.y;
+            pathWickObject.width = 1;
+            pathWickObject.height = 1;
+
+            wickEditor.paper.pathRoutines.refreshPathData(pathWickObject);
+
+            wickEditor.actionHandler.doAction('addObjects', {
+                wickObjects: [pathWickObject],
+                dontSelectObjects: true
+            });
+
+            drawingPath = pathWickObject;
         } else {
             console.log('Check for hitTest on first segment, this means we gotta close the path')
 
-            currentSegment.selected = false;
-            currentSegment = path.add(event.point);
-            currentSegment.selected = true;
+            //currentSegment.selected = false;
+            //currentSegment = path.add(event.point);
+            //currentSegment.selected = true;
+
+            drawingPath.paper.children[0].add(event.point);
         }
     }
 
@@ -72,6 +93,7 @@ Tools.Polygon = function (wickEditor) {
     }
 
     this.paperTool.onMouseDrag = function(event) {
+        return;
         var delta = event.delta.clone();
         currentSegment.handleIn.x -= delta.x;
         currentSegment.handleIn.y -= delta.y;
@@ -80,7 +102,7 @@ Tools.Polygon = function (wickEditor) {
     }
 
     this.paperTool.onMouseUp = function (event) {
-        console.log('uh i guess sync wickobject here (modifyObjects action)')
+        wickEditor.paper.refreshSVGWickObject(drawingPath.paper.children[0]);
     }
 
 }
