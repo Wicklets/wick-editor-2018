@@ -199,6 +199,8 @@ Tools.Pen = function (wickEditor) {
         if(!hitResult.item) return;
         if(wickEditor.currentTool instanceof Tools.FillBucket) return;
 
+        console.log('Check for hitTest on first segment, this means we gotta close the path')
+
         var path = hitResult.item;
 
         var parent = path.parent;

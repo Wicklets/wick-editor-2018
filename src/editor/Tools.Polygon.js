@@ -39,8 +39,32 @@ Tools.Polygon = function (wickEditor) {
 
     this.paperTool = new paper.Tool();
 
-    this.paperTool.onMouseDown = function(event) {
+    var path;
+    var currentSegment;
 
+    this.paperTool.onMouseDown = function(event) {
+        if(!path) {
+            path = new paper.Path();
+            path.fillColor = {
+                hue: 360 * Math.random(),
+                saturation: 1,
+                brightness: 1,
+                alpha: 0.5
+            };
+            path.strokeColor = '#000000';
+            path.strokeWidth = 1;
+            path.selected = true;
+            currentSegment = path.add(event.point);
+            currentSegment.selected = true;
+
+            console.log('uh i guess create wickobject here')
+        } else {
+            console.log('Check for hitTest on first segment, this means we gotta close the path')
+
+            currentSegment.selected = false;
+            currentSegment = path.add(event.point);
+            currentSegment.selected = true;
+        }
     }
 
     this.paperTool.onMouseMove = function(event) {
@@ -48,11 +72,15 @@ Tools.Polygon = function (wickEditor) {
     }
 
     this.paperTool.onMouseDrag = function(event) {
-
+        var delta = event.delta.clone();
+        currentSegment.handleIn.x -= delta.x;
+        currentSegment.handleIn.y -= delta.y;
+        currentSegment.handleOut.x += delta.x;
+        currentSegment.handleOut.y += delta.y;
     }
 
     this.paperTool.onMouseUp = function (event) {
-
+        console.log('uh i guess sync wickobject here (modifyObjects action)')
     }
 
 }
