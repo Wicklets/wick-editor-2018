@@ -75,7 +75,9 @@ var ToolbarInterface = function (wickEditor) {
 
         toolOptionInputs.push(new ToolbarInterface.RangeSlider(container, 'tools/Line.svg', 1, 50, function (val) {
             wickEditor.settings.setValue('strokeWidth', val);
-            wickEditor.paper.pathRoutines.setStrokeWidth(wickEditor.project.getSelectedObjects(), wickEditor.settings.strokeWidth);
+            wickEditor.guiActionHandler.doAction("changeStrokeWidthOfSelection", {
+                strokeWidth: wickEditor.settings.strokeWidth
+            });
             wickEditor.syncInterfaces();
         }, function () {
             return parseInt(wickEditor.settings.strokeWidth);

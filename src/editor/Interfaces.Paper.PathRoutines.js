@@ -19,20 +19,8 @@ var PathRoutines = function (paperInterface, wickEditor) {
 
     var self = this;
 
-	self.unitePaths = function (args) {
-        var touchingPaths;
-        if(args.touchingPaths) {
-            touchingPaths = args.touchingPaths;
-        } else {
-            var currObjs = wickEditor.project.getCurrentFrame().wickObjects;
-            var touchingPaths = [];
-            currObjs.forEach(function (obj) {
-                if(!obj.pathData) return;
-                var path = obj;
-
-                touchingPaths.push(path);
-            });
-        }
+	self.doBooleanOperation = function (boolFnName, objs) {
+        var touchingPaths = objs;
 
         wickEditor.actionHandler.doAction('deleteObjects', {
             objects: touchingPaths
@@ -51,7 +39,7 @@ var PathRoutines = function (paperInterface, wickEditor) {
         touchingPaths.forEach(function (path) {
             if(path === touchingPaths[0]) return;
             if(superPath.closePath) superPath.closePath();
-            superPath = superPath.unite(path.paper.children[0]);
+            superPath = superPath[boolFnName](path.paper.children[0]);
         });
 
         var superGroup = new paper.Group({insert:false});

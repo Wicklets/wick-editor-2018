@@ -73,8 +73,6 @@ Tools.Polygon = function (wickEditor) {
             currentSegment = pathWickObject.paper.children[0].segments[0];
             currentSegment.selected = true;
         } else {
-            console.log('Check for hitTest on first segment, this means we gotta close the path')
-
             //currentSegment.selected = false;
             //currentSegment = path.add(event.point);
             //currentSegment.selected = true;
@@ -85,19 +83,26 @@ Tools.Polygon = function (wickEditor) {
             lastSegment.selected = false;*/
 
             var path = drawingPath.paper.children[0];
-
             var segments = path.segments;
-            var lastSegment = segments[segments.length-1]
+            var lastSegment = segments[segments.length-1];
             lastSegment.handleOut.x = -lastSegment.handleIn.x
             lastSegment.handleOut.y = -lastSegment.handleIn.y
-
-            currentSegment = path.add(event.point);
-            currentSegment.selected = true;
+            var hitResult = paper.project.hitTest(event.point, {
+                segments: true,
+                tolerance: 5 / wickEditor.fabric.getCanvasTransform().zoom
+            });
+            if(hitResult && hitResult.type === 'segment') {
+                path.closePath();
+                currentSegment = path.segments[0];
+            } else {
+                currentSegment = path.add(event.point);
+                currentSegment.selected = true;
+            }
         }
     }
 
     this.paperTool.onMouseMove = function(event) {
-
+        wickEditor.paper.updateCursor(event);
     }
 
     this.paperTool.onMouseDrag = function(event) {
@@ -109,7 +114,14 @@ Tools.Polygon = function (wickEditor) {
     }
 
     this.paperTool.onMouseUp = function (event) {
-        wickEditor.paper.refreshSVGWickObject(drawingPath.paper.children[0]);
+        var path = drawingPath.paper.children[0];
+
+        wickEditor.paper.refreshSVGWickObject(path);
+
+        if(path.closed) {
+            drawingPath = null;
+            currentSegment = null;
+        }
     }
 
 }

@@ -272,6 +272,42 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
+    properties.push(new InspectorInterface.ColorInput({
+        title: 'Stroke Color',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isPath;
+        },
+        getValueFn: function () {
+            if(!selectionInfo.object || !selectionInfo.object.fabricObjectReference) return;
+            if(!selectionInfo.object.fabricObjectReference.stroke) return;
+            return selectionInfo.object.fabricObjectReference.stroke;
+        }, 
+        onChangeFn: function (val) {
+            wickEditor.guiActionHandler.doAction("changeStrokeColorOfSelection", {
+                color: val
+            });
+            wickEditor.syncInterfaces();
+        }
+    }));
+
+    properties.push(new InspectorInterface.StringInput({
+        title: 'Stroke Width',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isPath;
+        },
+        getValueFn: function () {
+            if(!selectionInfo.object || !selectionInfo.object.fabricObjectReference) return;
+            if(!selectionInfo.object.fabricObjectReference.stroke) return;
+            return selectionInfo.object.fabricObjectReference.strokeWidth;
+        }, 
+        onChangeFn: function (val) {
+            wickEditor.guiActionHandler.doAction("changeStrokeWidthOfSelection", {
+                strokeWidth: eval(val)
+            });
+            wickEditor.syncInterfaces();
+        }
+    }));
+
     properties.push(new InspectorInterface.StringInput({
         title: 'Name',
         isActiveFn: function () {
@@ -582,6 +618,19 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Close Path",
+        icon: "./resources/ellipse.png",
+        colorClass: 'all-paths',
+        isActiveFn: function () {
+            return selectionInfo.dataType === 'path' 
+                && selectionInfo.numObjects === 1;
+        },
+        buttonAction: function () {
+            
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Unite Paths",
         icon: "./resources/ellipse.png",
         colorClass: 'all-paths',
@@ -590,7 +639,59 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
                 && selectionInfo.special.allPaths;
         },
         buttonAction: function () {
-            wickEditor.guiActionHandler.doAction('unitePaths');
+            wickEditor.guiActionHandler.doAction('doBooleanOperation', {boolFnName:'unite'});
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Intersect Paths",
+        icon: "./resources/ellipse.png",
+        colorClass: 'all-paths',
+        isActiveFn: function () {
+            return selectionInfo.numObjects > 1 
+                && selectionInfo.special.allPaths;
+        },
+        buttonAction: function () {
+            
+        }
+    }));
+
+     properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Subtract Paths",
+        icon: "./resources/ellipse.png",
+        colorClass: 'all-paths',
+        isActiveFn: function () {
+            return selectionInfo.numObjects > 1 
+                && selectionInfo.special.allPaths;
+        },
+        buttonAction: function () {
+            
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Exclude Paths",
+        icon: "./resources/ellipse.png",
+        colorClass: 'all-paths',
+        isActiveFn: function () {
+            return selectionInfo.numObjects > 1 
+                && selectionInfo.special.allPaths;
+        },
+        buttonAction: function () {
+            
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Divide Paths",
+        icon: "./resources/ellipse.png",
+        colorClass: 'all-paths',
+        isActiveFn: function () {
+            return selectionInfo.numObjects > 1 
+                && selectionInfo.special.allPaths;
+        },
+        buttonAction: function () {
+            
         }
     }));
 

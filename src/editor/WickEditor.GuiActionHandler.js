@@ -1086,6 +1086,14 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.paper.pathRoutines.setStrokeColor(wickEditor.project.getSelectedObjects(), args.color);
         });
 
+    registerAction('changeStrokeWidthOfSelection',
+        [],
+        [],
+        {},
+        function (args) {
+            wickEditor.paper.pathRoutines.setStrokeWidth(wickEditor.project.getSelectedObjects(), args.strokeWidth);
+        });
+
     registerAction('copyFrameForward', 
         [],
         [],
@@ -1127,12 +1135,14 @@ var GuiActionHandler = function (wickEditor) {
             });
         })
 
-    registerAction('unitePaths',
+    registerAction('doBooleanOperation',
         [],
         [],
         {},
         function (args) {
-            wickEditor.paper.pathRoutines.unitePaths({touchingPaths:wickEditor.project.getSelectedObjects()});
+            var objs = wickEditor.project.getSelectedObjects();
+            var boolFnName = args.boolFnName;
+            wickEditor.paper.pathRoutines.doBooleanOperation(boolFnName, objs); 
         });
 
     registerAction('resetSettings',
