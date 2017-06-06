@@ -93,10 +93,10 @@ Tools.Polygon = function (wickEditor) {
 
     this.paperTool.onMouseDrag = function(event) {
         var delta = event.delta.clone();
-        currentSegment.handleIn.x -= delta.x;
-        currentSegment.handleIn.y -= delta.y;
-        currentSegment.handleOut.x += delta.x;
-        currentSegment.handleOut.y += delta.y;
+        currentSegment.handleIn.x += delta.x;
+        currentSegment.handleIn.y += delta.y;
+        currentSegment.handleOut.x -= delta.x;
+        currentSegment.handleOut.y -= delta.y;
     }
 
     this.paperTool.onMouseUp = function (event) {

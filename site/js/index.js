@@ -18,7 +18,7 @@ $(document).ready(function() {
     });
 
     $( ".demos-button" ).click(function() {
-        frame.src = "site/pages/demos.html"
+        frame.src = "site/pages/nothing.html"
         window.location.hash = "demos"
     });
 
