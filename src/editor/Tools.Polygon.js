@@ -39,7 +39,6 @@ Tools.Polygon = function (wickEditor) {
 
     this.paperTool = new paper.Tool();
 
-    //var path;
     var currentSegment;
     var drawingPath;
 
@@ -67,8 +66,7 @@ Tools.Polygon = function (wickEditor) {
             wickEditor.paper.pathRoutines.refreshPathData(pathWickObject);
 
             wickEditor.actionHandler.doAction('addObjects', {
-                wickObjects: [pathWickObject],
-                dontSelectObjects: true
+                wickObjects: [pathWickObject]
             });
 
             drawingPath = pathWickObject;
@@ -81,8 +79,19 @@ Tools.Polygon = function (wickEditor) {
             //currentSegment = path.add(event.point);
             //currentSegment.selected = true;
 
-            currentSegment.selected = false;
-            currentSegment = drawingPath.paper.children[0].add(event.point);
+            /*lastSegment = currentSegment;
+            lastSegment.handleOut.x = -lastSegment.handleIn.x
+            lastSegment.handleOut.y = -lastSegment.handleIn.y
+            lastSegment.selected = false;*/
+
+            var path = drawingPath.paper.children[0];
+
+            var segments = path.segments;
+            var lastSegment = segments[segments.length-1]
+            lastSegment.handleOut.x = -lastSegment.handleIn.x
+            lastSegment.handleOut.y = -lastSegment.handleIn.y
+
+            currentSegment = path.add(event.point);
             currentSegment.selected = true;
         }
     }
@@ -93,10 +102,10 @@ Tools.Polygon = function (wickEditor) {
 
     this.paperTool.onMouseDrag = function(event) {
         var delta = event.delta.clone();
-        currentSegment.handleIn.x += delta.x;
-        currentSegment.handleIn.y += delta.y;
-        currentSegment.handleOut.x -= delta.x;
-        currentSegment.handleOut.y -= delta.y;
+        currentSegment.handleIn.x -= delta.x;
+        currentSegment.handleIn.y -= delta.y;
+        currentSegment.handleOut.x += delta.x;
+        currentSegment.handleOut.y += delta.y;
     }
 
     this.paperTool.onMouseUp = function (event) {
