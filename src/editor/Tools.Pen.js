@@ -142,6 +142,15 @@ Tools.Pen = function (wickEditor) {
     this.paperTool.onMouseDrag = function(event) {
         if(!hitResult) return;
 
+        function handlesAreOpposite() {
+            var a = hitResult.segment.handleIn;
+            var b = hitResult.segment.handleOut;
+            var dx = Math.abs(a.x - -b.x);
+            var dy = Math.abs(a.y - -b.y);
+            var tol = 1;
+            return dx < tol && dy < tol;
+        }
+
         if(hitResult.type === 'fill') {
             hitResult.item.position = new paper.Point(
                 hitResult.item.position.x + event.delta.x,
@@ -155,19 +164,24 @@ Tools.Pen = function (wickEditor) {
             if(event.modifiers.shift) {
                 hitResult.segment.clearHandles()
             }
-        } else if (hitResult.type === 'handle-in') {
-            hitResult.segment.handleIn.x += event.delta.x;
-            hitResult.segment.handleIn.y += event.delta.y;
-            if(!event.modifiers.shift) {
-                hitResult.segment.handleOut.x -= event.delta.x;
-                hitResult.segment.handleOut.y -= event.delta.y;
+        } else if (hitResult.type.startsWith('handle')) {
+
+            var otherHandle;
+            var handle;
+            var opposite = handlesAreOpposite();
+            if(hitResult.type === 'handle-in') {
+                handle = hitResult.segment.handleIn;
+                otherHandle = hitResult.segment.handleOut;
+            } else if (hitResult.type === 'handle-out') {
+                handle = hitResult.segment.handleOut;
+                otherHandle = hitResult.segment.handleIn;
             }
-        } else if (hitResult.type === 'handle-out') {
-            hitResult.segment.handleOut.x += event.delta.x;
-            hitResult.segment.handleOut.y += event.delta.y;
-            if(!event.modifiers.shift) {
-                hitResult.segment.handleIn.x -= event.delta.x;
-                hitResult.segment.handleIn.y -= event.delta.y;
+
+            handle.x += event.delta.x;
+            handle.y += event.delta.y;
+            if(!event.modifiers.shift && opposite) {
+                otherHandle.x -= event.delta.x;
+                otherHandle.y -= event.delta.y;
             }
         }
 
