@@ -111,15 +111,19 @@ Tools.Pen = function (wickEditor) {
                         addedPoint.handleOut.x*addedPoint.handleOut.x+
                         addedPoint.handleOut.y+addedPoint.handleOut.y)
 
-                    var avgMag;// = (handleInMag + handleOutMag)/2;
+                    //var avgMag;// = (handleInMag + handleOutMag)/2;
                     if(handleInMag > handleOutMag) {
                         avgMag = handleOutMag;
-                        addedPoint.handleIn.x = -addedPoint.handleOut.x
-                        addedPoint.handleIn.y = -addedPoint.handleOut.y
+                        addedPoint.handleIn.x = -addedPoint.handleOut.x*1.5;
+                        addedPoint.handleIn.y = -addedPoint.handleOut.y*1.5;
+                        addedPoint.handleOut.x *= 1.5;
+                        addedPoint.handleOut.y *= 1.5;
                     } else {
                         avgMag = handleInMag;
-                        addedPoint.handleOut.x = -addedPoint.handleIn.x
-                        addedPoint.handleOut.y = -addedPoint.handleIn.y
+                        addedPoint.handleOut.x = -addedPoint.handleIn.x*1.5;
+                        addedPoint.handleOut.y = -addedPoint.handleIn.y*1.5;
+                        addedPoint.handleIn.x *= 1.5;
+                        addedPoint.handleIn.y *= 1.5;
                     }
 
                 }

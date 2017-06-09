@@ -885,8 +885,11 @@ WickProject.prototype.tick = function () {
     // If a playhead position was changed through a script, make sure the 
     // change is reflected on next render (things look more responsive)
     allObjectsInProject.forEach(function (obj) {
-        if(obj._newPlayheadPosition !== undefined && obj._forceNewPlayheadPosition)
-            obj.playheadPosition = obj._newPlayheadPosition;
+        if(obj._newPlayheadPosition !== undefined && obj._forceNewPlayheadPosition) {
+            //obj.playheadPosition = obj._newPlayheadPosition;
+            //obj._newPlayheadPosition = null;
+            //obj._forceNewPlayheadPosition = null;
+        }
     });
 }
 
