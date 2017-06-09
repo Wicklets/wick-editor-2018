@@ -42,7 +42,18 @@ Tools.Pen = function (wickEditor) {
     var hitResult;
     var addedPoint;
 
+    var lastEvent;
+
     this.paperTool.onMouseDown = function(event) {
+
+        if(lastEvent 
+        && event.timeStamp-lastEvent.timeStamp<300 
+        && event.point.x===lastEvent.point.x
+        && event.point.y===lastEvent.point.y) {
+            that.paperTool.onDoubleClick(event);
+            return;
+        }
+        lastEvent = event;
 
         if(wickEditor.currentTool instanceof Tools.FillBucket) {
             var hitOptions = {
@@ -137,6 +148,23 @@ Tools.Pen = function (wickEditor) {
 
     }
 
+    this.paperTool.onDoubleClick = function (event) {
+        if (hitResult && hitResult.type === 'segment') {
+            var hix = hitResult.segment.handleIn.x;
+            var hiy = hitResult.segment.handleIn.y;
+            var hox = hitResult.segment.handleOut.x;
+            var hoy = hitResult.segment.handleOut.y;
+            if(hix === 0 && hiy === 0 && hix === 0 && hiy === 0) {
+                hitResult.segment.smooth();
+            } else {
+                hitResult.segment.handleIn.x = 0;
+                hitResult.segment.handleIn.y = 0;
+                hitResult.segment.handleOut.x = 0;
+                hitResult.segment.handleOut.y = 0;
+            }
+        }
+    }
+
     this.paperTool.onMouseMove = function(event) {
 
         wickEditor.paper.updateCursor(event);
@@ -165,9 +193,9 @@ Tools.Pen = function (wickEditor) {
                 hitResult.segment.point.x + event.delta.x, 
                 hitResult.segment.point.y + event.delta.y
             );
-            if(event.modifiers.shift) {
+            /*if(event.modifiers.shift) {
                 hitResult.segment.clearHandles()
-            }
+            }*/
         } else if (hitResult.type.startsWith('handle')) {
 
             var otherHandle;

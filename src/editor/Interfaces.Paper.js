@@ -267,7 +267,8 @@ var PaperInterface = function (wickEditor) {
             if(wickEditor.project.isObjectSelected(child.wick)) {
                 child.selected = true;
                 //if(showHandles) {
-                    child.fullySelected = true;
+                    //child.fullySelected = true;
+                    child.selected = true;
                 //} 
             }
         });
