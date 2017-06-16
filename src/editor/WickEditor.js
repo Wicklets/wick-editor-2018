@@ -32,6 +32,7 @@ var WickEditor = function () {
         localStorage.wickVersion = self.version;
         console.log("Looks like wick updated!")
     }
+    window.wickVersion = self.version;
 
     // Friendly console message ~~~
     console.log('%cWelcome to the javascript console! ', 'color: #ff99bb; font-size: 20px; font-weight: bold; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;');

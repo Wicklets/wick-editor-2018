@@ -78,7 +78,7 @@ Tools.Pen = function (wickEditor) {
             segments: true,
             fill: true,
             curves: true,
-            handles: true,
+            handles: false,
             tolerance: 5 / wickEditor.fabric.getCanvasTransform().zoom
         }
 

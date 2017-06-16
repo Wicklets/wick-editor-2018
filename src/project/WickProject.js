@@ -48,6 +48,8 @@ var WickProject = function () {
 
     this._selection = [];
 
+    if(window.wickVersion) this.wickVersion = window.wickVersion;
+
 };
 
 WickProject.prototype.createNewRootObject = function () {
@@ -208,8 +210,14 @@ WickProject.fromLocalStorage = function () {
         console.log("No autosaved project. Loading blank project.");
         return new WickProject();
     }
+
+    var project = WickProject.fromJSON(autosavedProjectJSON);
     
-    return WickProject.fromJSON(autosavedProjectJSON);
+    if(!project.wickVersion) {
+        return new WickProject();
+    } else {
+        return project;
+    }
 
 }
 
