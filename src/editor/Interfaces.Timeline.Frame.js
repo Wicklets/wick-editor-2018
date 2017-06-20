@@ -110,10 +110,17 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
 
     this.update = function () {
         var src = this.wickFrame.thumbnail;
-        if(src) {
-            thumbnailDiv.src = src;
-        } else {
+        if(this.wickFrame.tweens.length > 0) {
+            thumbnailDiv.style.display = 'none';
+            this.elem.style.backgroundColor = '#e4eafb';
+        } else if(!src || wickEditor.project.smallFramesMode) {
+            thumbnailDiv.style.display = 'block';
             thumbnailDiv.src = '/resources/whitepage.png';
+            this.elem.style.backgroundColor = wickEditor.project.backgroundColor;//'#FFF';
+        } else if(src) {
+            thumbnailDiv.style.display = 'block';
+            thumbnailDiv.src = src;
+            this.elem.style.backgroundColor = wickEditor.project.backgroundColor;//'#FFF';
         }
         
         if (wickEditor.project.isObjectSelected(this.wickFrame)) {

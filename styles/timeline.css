@@ -320,6 +320,10 @@ body {
     border-radius: 3px;
 }
 
+.frame-tween-mode {
+
+}
+
 .frame-extender-handle {
     background-color: rgba(0,0,0,0);
 
@@ -756,7 +760,7 @@ body {
     background-color: none;
     cursor: pointer;
 
-    background-image: url('../resources/map-marker.svg');
+    background-image: url('../resources/tween.png');
     background-size: 20px 20px;
     background-repeat: no-repeat;
     background-position: left;

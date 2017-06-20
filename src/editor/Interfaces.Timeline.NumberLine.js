@@ -61,6 +61,10 @@ TimelineInterface.NumberLine = function (wickEditor, timeline) {
 
         for(var i = 0; i < numbers.length; i++) {
             numbers[i].innerHTML = i+1+Math.floor(-shift/cssVar('--frame-width'));
+            numbers[i].className = 'number-line-cell-number';
+            /*if(wickEditor.project.smallFramesMode) {
+                numbers[i].className += ' number-line-cell-number-small';
+            }*/
         }
     }
 
