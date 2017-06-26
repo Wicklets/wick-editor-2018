@@ -18,7 +18,7 @@ String.prototype.replaceAll = function(search, replacement) {
 
 function buildTOC (docs) {
 
-    var tocElem = document.createElement('div');
+    var tocElem = document.getElementById('toc');
     tocElem.className = 'toc';
     docs.forEach(function (group) {
         var tocItem = document.createElement('a');
@@ -140,7 +140,6 @@ function buildDocs (docs) {
 
 function buildPage (docs) {
     var tocElem = buildTOC(docs);
-    document.body.appendChild(tocElem);
 
     var docsElem = buildDocs(docs);
     document.body.appendChild(docsElem);

@@ -3,13 +3,12 @@ body {
 }
 
 .toc {
-    position: fixed;
-
-    left: 0%;
-    top: 250px;
+    margin-left: 0px;
+    margin-top: 20px;
+    top: 0px;
     font-size: 20px;
 
-    width: 30%;
+    width: 100%;
 
     font-weight: normal; 
     display: inline-block;
