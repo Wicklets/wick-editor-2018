@@ -56,6 +56,11 @@ var TimelineInterface = function (wickEditor) {
         return timeline;
     }
 
+    self.resetScrollbars = function () {
+        timeline.horizontalScrollBar.reset();
+        timeline.verticalScrollBar.reset();
+    }
+
 }
 
 TimelineInterface.Timeline = function (wickEditor) {

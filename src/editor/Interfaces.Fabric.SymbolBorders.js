@@ -106,6 +106,7 @@ var FabricSymbolBorders = function (wickEditor, fabricInterface) {
     });
 
     this.startEditObjectAnimation = function (obj) {
+        wickEditor.timeline.resetScrollbars();
         boxAnimationObj = obj;
         boxAnimationActive = true;
         var f = setInterval(function () {
@@ -127,6 +128,7 @@ var FabricSymbolBorders = function (wickEditor, fabricInterface) {
     }
 
     this.startLeaveObjectAnimation = function (obj) {
+        wickEditor.timeline.resetScrollbars();
         boxAnimationActive = true;
         boxAnimationObj = obj;
         boxAnimationTimer = 1;

@@ -99,4 +99,8 @@ TimelineInterface.HorizontalScrollBar = function (wickEditor, timeline) {
     this.getScrollPosition = function () {
         return scrollbar.viewboxPosition;
     }
+
+    this.reset = function () {
+        scrollbar.setBarPosition(0);
+    }
 }
