@@ -128,6 +128,7 @@ var WickEditor = function () {
         if(!isElectronMode && !self.backend.active) {
             WickProject.Exporter.getAutosavedProject(function (project) {
                 self.project = project;
+                window.wickRenderer.setProject(self.project);
                 self.syncInterfaces();
             });
         }
