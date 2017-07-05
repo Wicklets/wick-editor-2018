@@ -596,7 +596,8 @@ var GuiActionHandler = function (wickEditor) {
             var project = args.project;
 
             wickEditor.project = project;
-            WickProject.Exporter.autosaveProject(wickEditor.project);
+            if(!args.dontAutosave)
+                WickProject.Exporter.autosaveProject(wickEditor.project);
 
             wickEditor.actionHandler.clearHistory();
             window.wickRenderer.setProject(wickEditor.project);

@@ -55,15 +55,13 @@ var ThumbnailRendererInterface = function (wickEditor) {
         });
 
         setTimeout(function () {
-
             thumbRenderer.render(layerObjects);
             if(wickEditor.previewplayer.playing) return;
             if(!wickFrame) return;
             
             wickFrame.thumbnail = window.rendererCanvas.getElementsByTagName('canvas')[0].toDataURL('image/jpeg', 0.001);
-            //console.log(wickFrame.thumbnail)
-            wickEditor.timeline.syncWithEditorState()
-        }, 100)
+            wickEditor.timeline.syncWithEditorState();
+        }, 100);
 
     }
 

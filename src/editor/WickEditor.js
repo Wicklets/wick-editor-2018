@@ -45,15 +45,8 @@ var WickEditor = function () {
     // Setup thing that handles all the electron stuff
     this.electron = new WickElectronWrapper(this);
 
-    if(isElectronMode) {
-        this.project = new WickProject();
-    } else if(!this.backend.active) {
-        WickProject.Exporter.getAutosavedProject(function (project) {
-            self.project = project;
-        });
-    } else { 
-        this.project = new WickProject();
-    }
+    // Setup init project
+    this.project = new WickProject();
 
     // Load settings
     this.settings = new WickEditorSettings();
@@ -127,7 +120,18 @@ var WickEditor = function () {
         self.thumbnailRenderer.renderAllThumbsOnTimeline();
     }
 
-    this.syncInterfaces();
+    self.syncInterfaces();
+
+    // This is put after the first sync so the page loads before the editor asks to load an autosaved project
+    // (and we gotta wait a little bit before loading it ... we want to make sure the editor is ready)
+    setTimeout(function () {
+        if(!isElectronMode && !self.backend.active) {
+            WickProject.Exporter.getAutosavedProject(function (project) {
+                self.project = project;
+                self.syncInterfaces();
+            });
+        }
+    }, 1000);
 
 }
 

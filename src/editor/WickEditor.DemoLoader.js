@@ -40,7 +40,8 @@ var WickDemoLoader = function (wickEditor) {
                 //wickEditor.project = WickProject.fromWebpage(data);
                 wickEditor.guiActionHandler.doAction('openProject', {
                     project:WickProject.fromJSON(JSON.stringify(data)),
-                    dontWarn: true
+                    dontWarn: true,
+                    dontAutosave: true
                 })
             }
             wickEditor.syncInterfaces();
