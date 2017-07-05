@@ -7,8 +7,11 @@
 			"name" : "Flashy Follows Mouse",
 			"path" : "FlashyFollowsMouse"
 		}, {
-			"name" : "Flashy Follows Mouse",
-			"path" : "FlashyFollowsMouse"
+			"name" : "Homepage",
+			"path" : "Homepage"
+		}, {
+			"name" : "Spooky dress up",
+			"path" : "SpookyDressUp"
 		}, {
 			"name" : "randomball",
 			"path" : "randomball"

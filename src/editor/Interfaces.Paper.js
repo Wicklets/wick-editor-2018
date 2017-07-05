@@ -131,7 +131,7 @@ var PaperInterface = function (wickEditor) {
             segments: !fillbucketMode,
             fill: true,
             curves: !fillbucketMode,
-            handles: /*showHandles &&*/ !fillbucketMode,
+            handles: true/*showHandles &&*/ /*!fillbucketMode*/,
             stroke: fillbucketMode,
             tolerance: 5 / wickEditor.fabric.getCanvasTransform().zoom
         }
@@ -267,8 +267,8 @@ var PaperInterface = function (wickEditor) {
             if(wickEditor.project.isObjectSelected(child.wick)) {
                 child.selected = true;
                 //if(showHandles) {
-                    //child.fullySelected = true;
-                    child.selected = true;
+                    child.fullySelected = true;
+                    //child.selected = true;
                 //} 
             }
         });
