@@ -168,9 +168,9 @@ var GuiActionHandler = function (wickEditor) {
             });
             wickEditor.scriptingide.clearError();
             
+            WickProject.Exporter.autosaveProject(wickEditor.project);
             wickEditor.project.getAsJSON(function (JSONProject) {
                 wickEditor.project.unsaved = false;
-                WickProject.saveProjectJSONInLocalStorage(JSONProject);
                 wickEditor.builtinplayer.runProject(JSONProject);
             });
 
@@ -196,7 +196,7 @@ var GuiActionHandler = function (wickEditor) {
             that.keys = [];
             that.specialKeys = [];
             if(!isElectronMode) {
-                wickEditor.project.saveInLocalStorage();
+                WickProject.Exporter.autosaveProject(wickEditor.project);
                 //wickEditor.guiActionHandler.doAction('exportProjectJSON');
             } else {
                 wickEditor.project.getAsJSON(function(JSONProject) {
@@ -213,7 +213,7 @@ var GuiActionHandler = function (wickEditor) {
         function(args) {
             that.keys = [];
             that.specialKeys = [];
-            wickEditor.project.saveInLocalStorage();
+            WickProject.Exporter.autosaveProject(wickEditor.project);
             WickProject.Exporter.exportProject(wickEditor.project);
         });
 
@@ -222,13 +222,11 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function(args) {
-            wickEditor.project.saveInLocalStorage();
+            WickProject.Exporter.autosaveProject(wickEditor.project);
             wickEditor.project.getAsJSON(function(JSONProject) {
                 var blob = new Blob([JSONProject], {type: "text/plain;charset=utf-8"});
                 saveAs(blob, wickEditor.project.name+".json");
             }, '\t');
-            
-            wickEditor.alertbox.showProjectSavedMessage();
         });
 
     // Export Project as .zip
@@ -598,7 +596,7 @@ var GuiActionHandler = function (wickEditor) {
             var project = args.project;
 
             wickEditor.project = project;
-            wickEditor.project.saveInLocalStorage();
+            WickProject.Exporter.autosaveProject(wickEditor.project);
 
             wickEditor.actionHandler.clearHistory();
             window.wickRenderer.setProject(wickEditor.project);
@@ -608,14 +606,6 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.paper.needsUpdate = true;
             wickEditor.thumbnailRenderer.renderAllThumbsOnTimeline();
             wickEditor.syncInterfaces();
-        });
-
-    registerAction('saveProjectToLocalStorage',
-        [],
-        [],
-        {},
-        function(args) {
-            wickEditor.project.saveInLocalStorage();
         });
 
     registerAction('useTools.cursor',

@@ -46,9 +46,7 @@ var WickDemoLoader = function (wickEditor) {
             wickEditor.syncInterfaces();
         },
         error: function () {
-            console.log("ajax: error")
-            console.log("loading project from localstorage instead of backend.")
-            wickEditor.project = WickProject.fromLocalStorage();
+            console.log("ajax: error");
             wickEditor.syncInterfaces();
         },
         complete: function(response, textStatus) {

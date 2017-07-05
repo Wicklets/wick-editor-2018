@@ -117,21 +117,11 @@ var MenuBarInterface = function (wickEditor) {
                 wickEditor.guiActionHandler.doAction("newProject");
             }),
             new TabButton('Save', function () {
-                wickEditor.guiActionHandler.doAction("saveProject");
+                wickEditor.guiActionHandler.doAction("exportProjectJSON");
+                //wickEditor.guiActionHandler.doAction("saveProject");
             }),
             new TabButton('Open', function () {
                 wickEditor.guiActionHandler.doAction("openFile");
-            }),
-            new TabSpacer(),
-
-            new TabButton('Save as json', function () {
-                wickEditor.guiActionHandler.doAction("exportProjectJSON");
-            }),
-            new TabButton('Save as html', function () {
-                wickEditor.guiActionHandler.doAction("exportProjectHTML");
-            }),
-            new TabButton('Save as zip', function () {
-                wickEditor.guiActionHandler.doAction("exportProjectZIP");
             }),
             new TabSpacer(),
 
@@ -141,6 +131,11 @@ var MenuBarInterface = function (wickEditor) {
             new TabButton('Export SVG', function () {
                 wickEditor.guiActionHandler.doAction("exportFrameSVG");
             }),
+            new TabButton('Export ZIP', function () {
+                wickEditor.guiActionHandler.doAction("exportProjectZIP");
+            }),
+            new TabSpacer(),
+            
             new TabButton('Project settings', function () {
                 wickEditor.guiActionHandler.doAction("openProjectSettings");
             }),

@@ -197,7 +197,7 @@ WickProject.fixForBackwardsCompatibility = function (project) {
 
 }
 
-WickProject.fromLocalStorage = function () {
+/*WickProject.fromLocalStorage = function () {
 
     if(!localStorage) {
         console.error("LocalStorage not available. Loading blank project");
@@ -219,7 +219,7 @@ WickProject.fromLocalStorage = function () {
         return project;
     }
 
-}
+}*/
 
 WickProject.prototype.getAsJSON = function (callback, format) {
 
@@ -253,7 +253,7 @@ WickProject.prototype.getAsJSON = function (callback, format) {
 
 }
 
-WickProject.prototype.saveInLocalStorage = function () {
+/*WickProject.prototype.saveInLocalStorage = function () {
     var self = this;
     this.getAsJSON(function (JSONProject) {
         console.log("Project size: " + JSONProject.length)
@@ -286,7 +286,7 @@ WickProject.saveProjectJSONInLocalStorage = function (projectJSON) {
     } else {
         console.error("LocalStorage not available.")
     }
-}
+}*/
 
 WickProject.prototype.getCopyData = function () {
     var objectJSONs = [];

@@ -48,7 +48,9 @@ var WickEditor = function () {
     if(isElectronMode) {
         this.project = new WickProject();
     } else if(!this.backend.active) {
-        this.project = WickProject.fromLocalStorage();
+        WickProject.Exporter.getAutosavedProject(function (project) {
+            self.project = project;
+        });
     } else { 
         this.project = new WickProject();
     }

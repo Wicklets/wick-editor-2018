@@ -51,7 +51,6 @@ var BuiltinPlayerInterface = function (wickEditor) {
         //wickPlayer.runProject(JSONProject);
         wickEditor.syncInterfaces();
 
-        wickEditor.project.saveInLocalStorage();
         WickProject.Exporter.bundleProjectToHTML(wickEditor.project, function (result) {
             /*var myWindow = window.open(
                 "", 

@@ -135,6 +135,55 @@ WickProject.Exporter = (function () {
 
     }
 
+    projectExporter.autosaveProject = function (wickProject, args) {
+        wickProject.getAsJSON(function (projectJSON) {
+            console.log("Project size: " + projectJSON.length)
+            if(localStorage) {
+                try {
+                    wickEditor.alertbox.showProjectSavedMessage();
+                    localStorage.setItem('wickProject', projectJSON);
+                } catch (err) {
+                    console.error("LocalStorage could not save project, threw error:");
+                    console.log(err);
+                }
+            } else {
+                console.error("LocalStorage not available.")
+            }
+            wickProject.unsaved = false;
+            wickEditor.syncInterfaces();
+        });
+    }
+
+    projectExporter.getAutosavedProject = function (callback) {
+        if(!localStorage) {
+            console.error("LocalStorage not available. Loading blank project");
+            callback(new WickProject());
+            return;
+        }
+        
+        var autosavedProjectJSON = localStorage.getItem('wickProject');
+
+        if(!autosavedProjectJSON) {
+            callback(new WickProject());
+            return;
+        }
+
+        var project = WickProject.fromJSON(autosavedProjectJSON);
+        
+        if(!project.wickVersion) {
+            callback(new WickProject());
+            return;
+        } else {
+            if(window.confirm("There is an autosaved project. Would you like to recover it?")) {
+                callback(project);
+                return;
+            } else {
+                callback(new WickProject());
+                return;
+            }
+        }
+    }
+
     var dontJSONVars = [
         "thumbnail",
         "currentObject",

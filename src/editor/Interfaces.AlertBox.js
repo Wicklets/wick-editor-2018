@@ -52,7 +52,7 @@ var AlertBoxInterface = function (wickEditor) {
     }
 
     self.showProjectSavedMessage = function () {
-        self.showMessage("Project saved!");
+        self.showMessage("Project autosaved!");
     }
 
     self.hide = function () {
