@@ -58,6 +58,8 @@
 	font-style: italic;
 	font-weight: normal;
 	color: #666;
+
+	display: none;
 }
 
 .w3-button {
