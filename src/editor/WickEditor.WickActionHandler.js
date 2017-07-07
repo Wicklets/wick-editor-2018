@@ -309,11 +309,11 @@ var WickActionHandler = function (wickEditor) {
 
                 if(wickObj.pathData) {
                     if(args.modifiedStates[i]['pathData'] 
-                    || args.modifiedStates[i]['rotation'] 
-                    || args.modifiedStates[i]['scaleX'] 
-                    || args.modifiedStates[i]['scaleY'] 
-                    || args.modifiedStates[i]['flipX'] 
-                    || args.modifiedStates[i]['flipY']) {
+                    || args.modifiedStates[i]['rotation'] !== 0 
+                    || args.modifiedStates[i]['scaleX'] !== 1
+                    || args.modifiedStates[i]['scaleY'] !== 1
+                    || args.modifiedStates[i]['flipX'] !== false
+                    || args.modifiedStates[i]['flipY'] !== false) {
                         wickEditor.paper.pathRoutines.refreshPathData(wickObj);
                         wickObj._renderDirty = true;
                     }

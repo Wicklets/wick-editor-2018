@@ -412,7 +412,12 @@ var FabricInterface = function (wickEditor) {
             var wickObj = obj;
             modifiedStates.push({
                 x : wickObj.x + x,
-                y : wickObj.y + y
+                y : wickObj.y + y,
+                scaleX : 1,
+                scaleY : 1,
+                rotation : 0,
+                flipX : false,
+                flipY : false
             });
         });
 
