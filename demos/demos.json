@@ -1,24 +1,44 @@
 {
 	"demos": [
 		{
-			"name" : "Keyboard Controls",
-			"path" : "KeyboardControls"
+			"name" : "Haunted House",
+			"path" : "HauntedHouse"
 		}, {
-			"name" : "Flashy Follows Mouse",
-			"path" : "FlashyFollowsMouse"
+			"name" : "Wise Old Ghost",
+			"path" : "FortuneTeller"
 		}, {
-			"name" : "Homepage",
-			"path" : "Homepage"
+			"name" : "Fragile Pet Simulator",
+			"path" : "FragilePetSimulator"
 		}, {
-			"name" : "Spooky dress up",
-			"path" : "SpookyDressUp"
+			"name" : "Sneaky Little Fella",
+			"path" : "SneakyLittleFella"
 		}, {
-			"name" : "randomball",
-			"path" : "randomball"
+			"name" : "Well-Dressed Ghost",
+			"path" : "WellDressedGhost"
 		}, {
-			"name" : "Flashy Clone Click",
-			"path" : "FlashyCloneClick"
+			"name" : "Virtual Sculptor",
+			"path" : "VirtualSculptor"
+		}, {
+			"name" : "Flashy Phone",
+			"path" : "FlashyPhone"
+		}, {
+			"name" : "DJ Spookyman",
+			"path" : "DJSpookyman"
+		}, {
+			"name" : "Hatch An Egg",
+			"path" : "HatchAnEgg"
+		}, {
+			"name" : "Dr. Ghost's Vision Test",
+			"path" : "DrGhostsVisionTest"
+		}, {
+			"name" : "Spooky Labyrinth",
+			"path" : "SpookyLabyrinth"
+		}, {
+			"name" : "Forest of Cats",
+			"path" : "ForestOfCats"
+		}, {
+			"name" : "Chill Guy Havin a Dance",
+			"path" : "ChillGuyHavinADance"
 		}
-
 	]
 }

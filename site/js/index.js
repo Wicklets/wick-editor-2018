@@ -13,7 +13,7 @@ $(document).ready(function() {
     });
 
     $( ".tutorials-button" ).click(function() {
-        frame.src = "site/pages/tutorials.html"
+        frame.src = "site/pages/nothing.html"
         window.location.hash = "tutorials"
     });
 

@@ -48,6 +48,8 @@ function loadDemo (demo) {
 // Create page for everything
 function buildPage (demos) {
 
+    loadDemo(demos[0]);
+
     //var playerWindow = document.getElementById("wickPlayerIFrame").contentWindow;
     thumbnailsContainer = document.getElementsByClassName('thumbnails-container')[0];
     playerContainer = document.getElementsByClassName('player-container')[0];
@@ -86,10 +88,10 @@ function buildPage (demos) {
 }
 
 function recenterThumbnails () {
-    $('.thumbnails-container').css('width', '40%')
+    $('.thumbnails-container').css('width', '100%')
     var offset = (parseInt($('.thumbnails-container').width()) % 165) / 2;
     $('.thumbnails-container').css('margin-left', offset + 'px')
-    $('.thumbnails-container').css('width', 'calc(40% - ' + offset + 'px)')
+    $('.thumbnails-container').css('width', 'calc(100% - ' + offset + 'px)')
 }
 
 // Load the json file with all the demos info

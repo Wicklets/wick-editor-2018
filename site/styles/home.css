@@ -1,3 +1,25 @@
+body {
+	height: 200%;
+	overflow-x: hidden;
+}
+
+.top-page {
+	position: absolute;
+	height: 97%;
+	width: 100%;
+	left: 0px;
+	top: 0px;
+}
+
+.bottom-page {
+	position: absolute;
+	top: 97%;
+	left: 0px;
+	height: 100%;
+	width: 100%;
+	background-color: #d4f8f4;
+}
+
 .home-message {
 	position: absolute;
 
@@ -45,10 +67,15 @@
 	background-color: #6EF8B0;
 }
 
-.fork-me-on-github {
-	cursor: pointer;
-}
-
 .w3-button {
 	color: white; 
+}
+
+.tweetbox {
+	position: absolute;
+	right: 0px;
+	top: 10%;
+	width: 300px;
+	height: 80%;
+	overflow-y: scroll;
 }
