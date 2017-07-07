@@ -723,6 +723,8 @@ body {
     color: white;
     float: left;
     cursor: pointer;
+    font-size: 14px;
+    margin-top: 2px;
 
     -webkit-transition: background-color 100ms linear;
     -ms-transition: background-color 100ms linear;

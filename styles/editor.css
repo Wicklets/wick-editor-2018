@@ -89,9 +89,11 @@ select {
 #menuBarGUI {
     top: 0px;
     left: 0px;
-    height: 30px;
-    width: 100%;
-    background-color: black;/*#31E19C;*/
+    height: 28px;
+    width: calc(100% - 2px);
+    /*background-color: #31E19C;*/
+    background-color: black;
+    border: 1px solid #585757;
 /*
     border-top-color: black;
     border-left-color: black;
@@ -100,11 +102,11 @@ select {
 }
 .menubarTab {
     float:left;
-    margin-top: 4px;
+    margin-top: 3px;
     margin-left: 10px;
     margin-right: 10px;
     cursor: pointer;
-    color: #CCCCCC;
+    color: white;
     padding: 3px;
 
     -webkit-transition: background-color 100ms linear;
@@ -113,7 +115,7 @@ select {
 }
 .menubarTab:hover {
     cursor: pointer;
-    background-color: #31E19C;
+    background-color: #6EF8B0;
     border-radius: 3px;
     color: black;
 }
@@ -130,6 +132,7 @@ select {
     z-index: 10;
     box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
     border-radius: 3px;
+    /*background-color: black;*/
 }
 
 .menubarButton {
@@ -154,7 +157,7 @@ select {
     height: 100%;
     background-color: none;
     text-align: right;
-    color: #CCC;
+    color: white;
 }
 .unsavedText {
     color: red;

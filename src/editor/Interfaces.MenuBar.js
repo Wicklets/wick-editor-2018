@@ -217,11 +217,11 @@ var MenuBarInterface = function (wickEditor) {
             new TabButton('Source code', function () {
                 window.open('https://www.github.com/zrispo/wick/');
             }),
-            new TabSpacer(),
+            /*new TabSpacer(),
 
             new TabButton('Reset editor settings', function () {
                 wickEditor.guiActionHandler.doAction('resetSettings');
-            })
+            })*/
         ]);
         
         addTab('Run', [], function () { wickEditor.guiActionHandler.doAction("runProject"); });

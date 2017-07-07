@@ -2,10 +2,11 @@
 	position: absolute;
 
 	/*width: 50%;*/
-	width: 400px;
+	width: 500px;
+	max-width: 95%;
 
 	left:50%;
-	top: 33%;
+	top: 37%;
 
 	transform:translateX(-50%) translateY(-50%);
 }
@@ -14,7 +15,7 @@
 	position: absolute;
 
 	left:50%;
-	top: 75%;
+	top: 80%;
 
 	/*width: 50%;*/
 	height: 100px;
@@ -46,20 +47,6 @@
 
 .fork-me-on-github {
 	cursor: pointer;
-}
-
-.footer {
-	position: absolute;
-
-	left: 6px;
-	bottom: 6px;
-
-	font-size: 18px;
-	font-style: italic;
-	font-weight: normal;
-	color: #666;
-
-	display: none;
 }
 
 .w3-button {
