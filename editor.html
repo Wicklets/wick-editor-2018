@@ -173,6 +173,14 @@
 </head>
 
 <body>
+<div class="alpha-warning">
+    <script>function hideWarning () { var e = document.getElementsByClassName('alpha-warning')[0];e.style.pointerEvents='none';e.style.display='none'; }; if (localStorage.hideWarning) { hideWarning(); };</script>
+    <div class="alpha-warning-text">
+        NOTE: The Wick Editor is currently in alpha! Please report all bugs on <a href="https://github.com/zrispo/wick/issues" target="_blank">Github</a>!!
+    </div>
+    <div class="alpha-warning-closebutton" onclick="localStorage.hideWarning='true';hideWarning();">x</div>
+</div>
+
 <div class="noselect">
     <!-- Hidden element to always be selected so browser always fires copy/paste events -->
     <input id="hidden-input" class="hidden" type="text" value="" />

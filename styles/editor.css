@@ -606,7 +606,40 @@ select {
     background-size: 15px 15px;
 }
 
+.alpha-warning {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    width: 300px;
+    height: 77px;
+    background-color: orange;
+    box-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+    z-index: 999999999;
+    font-size: 18px;
 
+    font-weight: bold;
+    font-family: "Anonymous Pro", "Helvetica", "Arial", sans-serif;
+    color: #FFFFFF;
+}
 
+.alpha-warning-text {
+    width: 285px;
+    height: 80px;
+    margin: 10px;
+}
 
-
+.alpha-warning-closebutton {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 20px;
+    height: 20px;
+    font-weight: normal;
+    font-family: "Arial", sans-serif;
+    text-align: center;
+    font-size: 20px;
+    cursor: pointer;
+}
+.alpha-warning-closebutton:hover {
+    color: gray;
+}
