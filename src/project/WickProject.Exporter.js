@@ -174,7 +174,7 @@ WickProject.Exporter = (function () {
             callback(new WickProject());
             return;
         } else {
-            if(window.confirm("There is an autosaved project. Would you like to recover it?")) {
+            if(localStorage.alwaysLoadAutosavedProject === 'true' || window.confirm("There is an autosaved project. Would you like to recover it?")) {
                 callback(project);
                 return;
             } else {

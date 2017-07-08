@@ -382,7 +382,7 @@ var WickActionHandler = function (wickEditor) {
 
     registerAction('convertObjectsToSymbol',
         function (args) {
-            var objects = args.objects;
+            var objects = args.objects.concat([]);//make sure we dont modify the original array
 
             objects.forEach(function(obj) {
                 obj._tempZIndex = wickEditor.project.getCurrentFrame().wickObjects.indexOf(obj);
@@ -412,7 +412,9 @@ var WickActionHandler = function (wickEditor) {
             });
             wickEditor.project.addObject(symbol, undefined, true);
 
-            if(args.button) {
+            if(args.symbolName) {
+                symbol.name = wickEditor.project.getNextAvailableName(args.symbolName);
+            } else if(args.button) {
                 symbol.name = wickEditor.project.getNextAvailableName("New Button");
             } else {
                 symbol.name = wickEditor.project.getNextAvailableName("New Clip");
@@ -1052,18 +1054,64 @@ var WickActionHandler = function (wickEditor) {
     registerAction('createMotionTween', 
         function (args) {
             var frame = args.frame;
+            
+            if(frame.wickObjects.length > 1) {
+                args.createClipAction = wickEditor.actionHandler.doAction('convertObjectsToSymbol', {
+                    objects: frame.wickObjects,
+                    dontAddToStack: true,
+                    symbolName: 'Tweened Object'
+                });
+            }
+            
             var wickObj = frame.wickObjects[0];
             var tween = WickTween.fromWickObjectState(wickObj);
             tween.playheadPosition = args.playheadPosition;
 
             frame.addTween(tween);
+            args.addedTween = tween;
             wickEditor.project.getCurrentObject().framesDirty = true;
 
             done();
         },
         function (args) {
-            alert("create motion tween undo NYI!!!!!!!!!!!!!!! TELL SOMEBODY!!!!!!!!!!!!")
+            var frame = args.frame;
+            frame.removeTween(args.addedTween);
+            wickEditor.project.getCurrentObject().framesDirty = true;
 
+            if(args.createClipAction) args.createClipAction.undoAction();
+
+            done();
+        });
+
+    registerAction('deleteMotionTween', 
+        function (args) {
+            var frame = args.frame;
+            args.removedTween = frame.getCurrentTween();
+            frame.removeTween(args.removedTween);
+            wickEditor.project.getCurrentObject().framesDirty = true;
+
+            done();
+        },
+        function (args) {
+            var frame = args.frame;
+            frame.addTween(args.removedTween);
+            wickEditor.project.getCurrentObject().framesDirty = true;
+
+            done();
+        });
+
+    registerAction('moveMotionTween',
+        function (args) {
+            args.oldPlayheadPosition = args.tween.playheadPosition;
+            args.tween.playheadPosition = args.newPlayheadPosition;
+            
+            wickEditor.project.currentObject.framesDirty = true;
+            done();
+        }, 
+        function (args) {
+            args.tween.playheadPosition = args.oldPlayheadPosition
+
+            wickEditor.project.currentObject.framesDirty = true;
             done();
         });
 

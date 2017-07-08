@@ -990,6 +990,20 @@ var GuiActionHandler = function (wickEditor) {
                 playheadPosition: currentObject.playheadPosition-frame.playheadPosition
             });
         });
+    
+    registerAction('deleteMotionTween',
+        [],
+        [],
+        {},
+        function(args) {
+            var frame = wickEditor.project.getSelectedObject();
+            var currentObject = wickEditor.project.getCurrentObject()
+
+            wickEditor.actionHandler.doAction('deleteMotionTween', {
+                frame: frame,
+                playheadPosition: currentObject.playheadPosition-frame.playheadPosition
+            });
+        });
 
     registerAction('removeTween',
         [],

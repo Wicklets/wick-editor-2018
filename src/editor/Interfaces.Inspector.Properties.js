@@ -757,10 +757,25 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         colorClass: 'frames',
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 
-                && selectionInfo.dataType === 'frame';
+                && selectionInfo.dataType === 'frame'
+                && !selectionInfo.object.getCurrentTween();
         },
         buttonAction: function () {
             wickEditor.guiActionHandler.doAction('createMotionTween');
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Delete Motion Tween",
+        icon: "./resources/inspector-delete.svg",
+        colorClass: 'frames',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 
+                && selectionInfo.dataType === 'frame'
+                && selectionInfo.object.getCurrentTween();
+        },
+        buttonAction: function () {
+            wickEditor.guiActionHandler.doAction('deleteMotionTween');
         }
     }));
 

@@ -163,7 +163,8 @@ var PaperInterface = function (wickEditor) {
             }
         } else {
             if(fillbucketMode) {
-                wickEditor.cursorIcon.setImage('/resources/cursor-no.png')
+                //wickEditor.cursorIcon.setImage('/resources/cursor-no.png')
+                wickEditor.cursorIcon.hide()
             } else {
                  wickEditor.cursorIcon.hide()
             }

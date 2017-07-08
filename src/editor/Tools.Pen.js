@@ -62,12 +62,14 @@ Tools.Pen = function (wickEditor) {
                 tolerance: 5 / wickEditor.fabric.getCanvasTransform().zoom
             }
             hitResult = paper.project.hitTest(event.point, hitOptions);
-            if(!hitResult) return;
-
-            if(hitResult.type === 'fill') {
-                wickEditor.paper.pathRoutines.setFillColor([event.item.wick], wickEditor.settings.fillColor);
-            } else if (hitResult.type === 'stroke') {
-                wickEditor.paper.pathRoutines.setStrokeColor([event.item.wick], wickEditor.settings.strokeColor);
+            if(!hitResult) {
+                console.log(PaperHoleFinder.getHoleAtPosition(paper.project, event.point));
+            } else {
+                if(hitResult.type === 'fill') {
+                    wickEditor.paper.pathRoutines.setFillColor([event.item.wick], wickEditor.settings.fillColor);
+                } else if (hitResult.type === 'stroke') {
+                    wickEditor.paper.pathRoutines.setStrokeColor([event.item.wick], wickEditor.settings.strokeColor);
+                }
             }
             
             return;

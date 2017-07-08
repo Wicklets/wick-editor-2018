@@ -391,12 +391,12 @@ TimelineInterface.Interactions = function (wickEditor, timeline) {
                 var newLayer = wickEditor.project.getCurrentObject().layers[newLayerIndex];
                 if(!newLayer) newLayer = wickEditor.project.getCurrentLayer();
                 */
-                tween.wickTween.playheadPosition = Math.round((parseInt(tween.elem.style.left)-5) / cssVar('--frame-width'));
-                console.log(tween.wickTween.playheadPosition);
 
-                wickEditor.project.currentObject.framesDirty = true;
-                wickEditor.syncInterfaces();
-
+                wickEditor.actionHandler.doAction('moveMotionTween', {
+                    tween: tween.wickTween,
+                    newPlayheadPosition: Math.round((parseInt(tween.elem.style.left)-5) / cssVar('--frame-width'))
+                });
+                
                 /*framesMoveActionData.push({
                     frame: frame.wickFrame, 
                     newPlayheadPosition: newPlayheadPosition,
