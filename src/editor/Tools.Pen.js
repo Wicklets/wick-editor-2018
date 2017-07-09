@@ -63,7 +63,7 @@ Tools.Pen = function (wickEditor) {
             }
             hitResult = paper.project.hitTest(event.point, hitOptions);
             if(!hitResult) {
-                console.log(PaperHoleFinder.getHoleAtPosition(paper.project, event.point));
+                console.log(PaperHoleFinder.getHoleShapeAtPosition(paper.project, event.point));
             } else {
                 if(hitResult.type === 'fill') {
                     wickEditor.paper.pathRoutines.setFillColor([event.item.wick], wickEditor.settings.fillColor);

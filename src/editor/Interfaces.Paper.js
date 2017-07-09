@@ -212,9 +212,6 @@ var PaperInterface = function (wickEditor) {
                 var absPos = wickObject.getAbsolutePosition();
                 wickObject.paper.position.x = absPos.x;
                 wickObject.paper.position.y = absPos.y;
-
-                /*wickObject.paper.position.x = wickObject.x;
-                wickObject.paper.position.y = wickObject.y;*/
                 
                 wickObject.paper.wick = wickObject;
             });
