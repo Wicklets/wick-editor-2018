@@ -63,7 +63,24 @@ Tools.Pen = function (wickEditor) {
             }
             hitResult = paper.project.hitTest(event.point, hitOptions);
             if(!hitResult) {
-                console.log(PaperHoleFinder.getHoleShapeAtPosition(paper.project, event.point));
+                //console.log(PaperHoleFinder.getHoleShapeAtPosition(paper.project, event.point));
+                var hole = PaperHoleFinder.getHoleShapeAtPosition(paper.project, event.point);
+                if(hole) {
+                    hole.fillColor = wickEditor.settings.fillColor;
+                    hole.strokeColor = wickEditor.settings.fillColor;
+                    hole.strokeWidth = wickEditor.settings.strokeWidth;
+                    var superPathString = hole.exportSVG({asString:true});
+                    var svgString = '<svg id="svg" version="1.1" width="'+hole.bounds._width+'" height="'+hole.bounds._height+'" xmlns="http://www.w3.org/2000/svg">' +superPathString+ '</svg>'
+                    var superPathWickObject = WickObject.createPathObject(svgString);
+                    superPathWickObject.x = hole.position.x;
+                    superPathWickObject.y = hole.position.y;
+                    wickEditor.paper.pathRoutines.refreshPathData(superPathWickObject)
+                    wickEditor.actionHandler.doAction('addObjects', {
+                        wickObjects: [superPathWickObject],
+                        sendToBack: true,
+                        dontSelectObjects: true
+                    });
+                }
             } else {
                 if(hitResult.type === 'fill') {
                     wickEditor.paper.pathRoutines.setFillColor([event.item.wick], wickEditor.settings.fillColor);
