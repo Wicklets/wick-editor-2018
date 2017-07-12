@@ -68,7 +68,7 @@ Tools.Pen = function (wickEditor) {
                 if(hole) {
                     hole.fillColor = wickEditor.settings.fillColor;
                     hole.strokeColor = wickEditor.settings.fillColor;
-                    hole.strokeWidth = wickEditor.settings.strokeWidth;
+                    hole.strokeWidth = 1;
                     var superPathString = hole.exportSVG({asString:true});
                     var svgString = '<svg id="svg" version="1.1" width="'+hole.bounds._width+'" height="'+hole.bounds._height+'" xmlns="http://www.w3.org/2000/svg">' +superPathString+ '</svg>'
                     var superPathWickObject = WickObject.createPathObject(svgString);
@@ -91,7 +91,6 @@ Tools.Pen = function (wickEditor) {
             
             return;
         }
-
 
         var hitOptions = {
             segments: true,

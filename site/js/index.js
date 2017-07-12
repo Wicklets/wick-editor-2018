@@ -13,12 +13,12 @@ $(document).ready(function() {
     });
 
     $( ".tutorials-button" ).click(function() {
-        frame.src = "site/pages/nothing.html"
+        frame.src = "site/pages/tutorials.html"
         window.location.hash = "tutorials"
     });
 
     $( ".demos-button" ).click(function() {
-        frame.src = "site/pages/nothing.html"
+        frame.src = "site/pages/demos.html"
         window.location.hash = "demos"
     });
 

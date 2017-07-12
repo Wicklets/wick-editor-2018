@@ -39,15 +39,6 @@ body {
     margin-bottom: 100px;
 }
 
-@media only screen and (max-width: 700px) {
-    .toc {
-        top: 50px;
-    }
-    .docs { 
-        margin-top: 50px;
-    }
-}
-
 .group {
     margin-bottom: 50px;
 }
@@ -131,4 +122,17 @@ body {
     position: fixed;
 
     margin-top: 0px;
+}
+
+@media only screen and (max-width: 700px) {
+    .toc {
+        top: 150px;
+        left: 0px;
+        display: none;
+    }
+    .docs { 
+        margin-top: 200px;
+        margin-left: 5%;
+        width: 90%;
+    }
 }

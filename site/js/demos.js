@@ -48,7 +48,7 @@ function loadDemo (demo) {
 // Create page for everything
 function buildPage (demos) {
 
-    loadDemo(demos[0]);
+    loadDemo({path:'KitchenSink'});
 
     //var playerWindow = document.getElementById("wickPlayerIFrame").contentWindow;
     thumbnailsContainer = document.getElementsByClassName('thumbnails-container')[0];

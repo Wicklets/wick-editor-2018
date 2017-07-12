@@ -61,7 +61,7 @@ var WickPixiRenderer = function () {
         var rendererOptions = {
             backgroundColor : "#DDDDDD", 
             resolution: window.devicePixelRatio,
-            preserveDrawingBuffer:true,
+            preserveDrawingBuffer: true,
         };
         renderer = PIXI.autoDetectRenderer(project.width*renderScale, project.height*renderScale, rendererOptions);
         renderer.clearBeforeRender = false;

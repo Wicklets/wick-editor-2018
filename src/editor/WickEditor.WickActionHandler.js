@@ -190,7 +190,7 @@ var WickActionHandler = function (wickEditor) {
 
             // Add all the new wick objects
             args.wickObjects.forEach(function (wickObj) {
-                wickEditor.project.addObject(wickObj, args.sendToBack);
+                wickEditor.project.addObject(wickObj, args.sendToBack ? 0 : null);
                 if(!args.dontSelectObjects) wickEditor.project.selectObject(wickObj)
             });
             
