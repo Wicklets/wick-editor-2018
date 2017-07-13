@@ -128,8 +128,11 @@ var MenuBarInterface = function (wickEditor) {
             new TabButton('Export animated GIF', function () {
                 wickEditor.guiActionHandler.doAction("exportProjectGIF");
             }),
-            new TabButton('Export SVG', function () {
+            /*new TabButton('Export SVG', function () {
                 wickEditor.guiActionHandler.doAction("exportFrameSVG");
+            }),*/
+            new TabButton('Export webpage', function () {
+                wickEditor.guiActionHandler.doAction("exportProjectHTML");
             }),
             new TabButton('Export ZIP', function () {
                 wickEditor.guiActionHandler.doAction("exportProjectZIP");
