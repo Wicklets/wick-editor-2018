@@ -1,3 +1,7 @@
+.tutorials-container {
+	margin-top: 50px;
+}
+
 .tutorial {
 	width: 500px;
 	height: 150px;
@@ -9,7 +13,7 @@
 	border-radius: 3px;
 	box-shadow: 3px 3px 5px #99BBBB;
 	overflow: hidden;
-	margin-left: 50%;
+	margin-left: 65%;
 	transform: translateX(-50%);
 	max-width: 100%;
 	margin-bottom: 20px;
@@ -46,4 +50,28 @@
 	width: 100%;
 	text-align: center;
 	font-size: 30px;
+}
+
+.title-box {
+    position: fixed;
+    margin-top: 0px;
+}
+@media only screen and (max-width: 700px) {
+	.tutorials-container {
+		margin-top: 0px;
+	}
+    .title-box {
+        position: static;
+        margin-top: 70px;
+        margin-bottom: 50px;
+    }
+    .title-description {
+        width: 200px;
+        max-width: 100%;
+        margin-left: 50%;
+        transform: translateX(-50%);
+    }
+    .tutorial {
+    	margin-left: 50%;
+    }
 }

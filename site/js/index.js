@@ -2,10 +2,15 @@ $(document).ready(function() {
 
     var frame = document.getElementById("viewer-frame");
 
-    var page = window.location.hash.replace("#", '');
-    if(page !== '') {
-        frame.src = "site/pages/" + page + ".html";
+    function loadNewPage () {
+        var page = window.location.hash.replace("#", '');
+        if(page !== '') {
+            frame.src = "site/pages/" + page + ".html";
+        }
     }
+    loadNewPage();
+
+    window.addEventListener("hashchange", loadNewPage, false);
 
     $( ".logo" ).click(function() {
         frame.src = "site/pages/home.html"

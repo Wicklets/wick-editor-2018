@@ -33,7 +33,7 @@ body {
 
 .docs {
     margin-left: 35%;
-    margin-top: 200px;
+    margin-top: 166px;
 
     width: 55%;
     margin-bottom: 100px;
@@ -131,8 +131,19 @@ body {
         display: none;
     }
     .docs { 
-        margin-top: 200px;
+        margin-top: 0px;
         margin-left: 5%;
         width: 90%;
+    }
+    .title-box {
+        position: static;
+        margin-top: 70px;
+        margin-bottom: 70px;
+    }
+    .title-description {
+        width: 200px;
+        max-width: 100%;
+        margin-left: 50%;
+        transform: translateX(-50%);
     }
 }
