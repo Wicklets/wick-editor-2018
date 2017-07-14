@@ -480,9 +480,9 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
-    properties.push(new InspectorInterface.SelectInput({
+    /*properties.push(new InspectorInterface.SelectInput({
         title: 'Type',
-        options: ['Linear', 'Quadratic', /*'Cubic', 'Quartic', 'Quintic', 'Sinusoidal',*/ 'Exponential', /*'Circular', 'Elastic', 'Back', 'Bounce'*/],
+        options: ['Linear', 'Quadratic', 'Exponential'],
         isActiveFn: function () {
             return selectionInfo.type === 'frame' 
                 && selectionInfo.numObjects === 1 
@@ -503,7 +503,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             }
             wickEditor.syncInterfaces();
         }
-    }));
+    }));*/
 
     properties.push(new InspectorInterface.SelectInput({
         title: 'Direction',
@@ -522,10 +522,10 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             tween.tweenDir = val;
             if(val === 'None') {
                 tween.tweenType = 'Linear';
-            }
-            if(val !== 'None' && selectionInfo.object.tweenType === 'Linear') {
+            } else {
                 tween.tweenType = 'Quadratic';
             }
+            console.log(tween);
             wickEditor.syncInterfaces();
         }
     }));

@@ -1055,13 +1055,13 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             var frame = args.frame;
             
-            if(frame.wickObjects.length > 1) {
+            //if(frame.wickObjects.length > 1) {
                 args.createClipAction = wickEditor.actionHandler.doAction('convertObjectsToSymbol', {
                     objects: frame.wickObjects,
                     dontAddToStack: true,
                     symbolName: 'Tweened Object'
                 });
-            }
+            //}
             
             var wickObj = frame.wickObjects[0];
             var tween = WickTween.fromWickObjectState(wickObj);
