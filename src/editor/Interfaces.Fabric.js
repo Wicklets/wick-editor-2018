@@ -413,11 +413,11 @@ var FabricInterface = function (wickEditor) {
             modifiedStates.push({
                 x : wickObj.x + x,
                 y : wickObj.y + y,
-                scaleX : 1,
-                scaleY : 1,
-                rotation : 0,
-                flipX : false,
-                flipY : false
+                scaleX : obj.isPath ? 1 : obj.scaleX,
+                scaleY : obj.isPath ? 1 : obj.scaleY,
+                rotation : obj.isPath ? 0 : obj.rotation,
+                flipX : obj.isPath ? false : obj.flipX,
+                flipY : obj.isPath ? false : obj.flipY
             });
         });
 
