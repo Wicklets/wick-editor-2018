@@ -3663,6 +3663,25 @@ WickTween.fromWickObjectState = function (wickObject) {
 	return tween;
 }
 
+WickTween.prototype.copy = function () {
+    var copy = new WickTween();
+
+    copy.x = this.x;
+    copy.y = this.y; 
+    copy.z = this.z; 
+    copy.scaleX = this.scaleX;
+    copy.scaleY = this.scaleY;
+    copy.rotation = this.rotation;
+    copy.opacity = this.opacity;
+
+    copy.playheadPosition = this.playheadPosition;
+
+    copy.tweenType = this.tweenType;
+    copy.tweenDir = this.tweenDir;
+
+    return copy;
+}
+
 WickTween.prototype.updateFromWickObjectState = function (wickObject) {
     var self = this;
     
@@ -3825,6 +3844,10 @@ WickFrame.prototype.copy = function () {
 
     this.wickObjects.forEach(function (wickObject) {
         copiedFrame.wickObjects.push(wickObject.copy());
+    })
+
+    this.tweens.forEach(function (tween) {
+        copiedFrame.tweens.push(tween.copy());
     })
 
     return copiedFrame;
@@ -6070,6 +6093,8 @@ var WickProject = function () {
 
     this._selection = [];
 
+    if(window.wickVersion) this.wickVersion = window.wickVersion;
+
 };
 
 WickProject.prototype.createNewRootObject = function () {
@@ -6217,7 +6242,7 @@ WickProject.fixForBackwardsCompatibility = function (project) {
 
 }
 
-WickProject.fromLocalStorage = function () {
+/*WickProject.fromLocalStorage = function () {
 
     if(!localStorage) {
         console.error("LocalStorage not available. Loading blank project");
@@ -6230,10 +6255,16 @@ WickProject.fromLocalStorage = function () {
         console.log("No autosaved project. Loading blank project.");
         return new WickProject();
     }
-    
-    return WickProject.fromJSON(autosavedProjectJSON);
 
-}
+    var project = WickProject.fromJSON(autosavedProjectJSON);
+    
+    if(!project.wickVersion) {
+        return new WickProject();
+    } else {
+        return project;
+    }
+
+}*/
 
 WickProject.prototype.getAsJSON = function (callback, format) {
 
@@ -6267,7 +6298,7 @@ WickProject.prototype.getAsJSON = function (callback, format) {
 
 }
 
-WickProject.prototype.saveInLocalStorage = function () {
+/*WickProject.prototype.saveInLocalStorage = function () {
     var self = this;
     this.getAsJSON(function (JSONProject) {
         console.log("Project size: " + JSONProject.length)
@@ -6300,7 +6331,7 @@ WickProject.saveProjectJSONInLocalStorage = function (projectJSON) {
     } else {
         console.error("LocalStorage not available.")
     }
-}
+}*/
 
 WickProject.prototype.getCopyData = function () {
     var objectJSONs = [];
@@ -6907,8 +6938,11 @@ WickProject.prototype.tick = function () {
     // If a playhead position was changed through a script, make sure the 
     // change is reflected on next render (things look more responsive)
     allObjectsInProject.forEach(function (obj) {
-        if(obj._newPlayheadPosition !== undefined && obj._forceNewPlayheadPosition)
-            obj.playheadPosition = obj._newPlayheadPosition;
+        if(obj._newPlayheadPosition !== undefined && obj._forceNewPlayheadPosition) {
+            //obj.playheadPosition = obj._newPlayheadPosition;
+            //obj._newPlayheadPosition = null;
+            //obj._forceNewPlayheadPosition = null;
+        }
     });
 }
 
@@ -7270,7 +7304,7 @@ var WickPixiRenderer = function () {
         var rendererOptions = {
             backgroundColor : "#DDDDDD", 
             resolution: window.devicePixelRatio,
-            preserveDrawingBuffer:true,
+            preserveDrawingBuffer: true,
         };
         renderer = PIXI.autoDetectRenderer(project.width*renderScale, project.height*renderScale, rendererOptions);
         renderer.clearBeforeRender = false;

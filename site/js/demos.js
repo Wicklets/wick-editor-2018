@@ -67,8 +67,8 @@ function buildPage (demos) {
 
         var thumb = document.createElement('div');
         thumb.className = 'thumbnail';
-        //thumb.style.backgroundImage = "url(" + DEMOS_PATH + demo.path + ".png)";
-        thumb.style.backgroundImage = "url(" + DEMOS_PATH + "placeholder.png)";
+        thumb.style.backgroundImage = "url(" + DEMOS_PATH + demo.path + ".png)";
+        //thumb.style.backgroundImage = "url(" + DEMOS_PATH + "placeholder.png)";
         thumb.onclick = function () {
             openInEditorButton.style.display = 'block';
             loadDemo(demo);

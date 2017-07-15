@@ -44,6 +44,25 @@ WickTween.fromWickObjectState = function (wickObject) {
 	return tween;
 }
 
+WickTween.prototype.copy = function () {
+    var copy = new WickTween();
+
+    copy.x = this.x;
+    copy.y = this.y; 
+    copy.z = this.z; 
+    copy.scaleX = this.scaleX;
+    copy.scaleY = this.scaleY;
+    copy.rotation = this.rotation;
+    copy.opacity = this.opacity;
+
+    copy.playheadPosition = this.playheadPosition;
+
+    copy.tweenType = this.tweenType;
+    copy.tweenDir = this.tweenDir;
+
+    return copy;
+}
+
 WickTween.prototype.updateFromWickObjectState = function (wickObject) {
     var self = this;
     

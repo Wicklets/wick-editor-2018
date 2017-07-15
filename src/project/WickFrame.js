@@ -135,6 +135,10 @@ WickFrame.prototype.copy = function () {
         copiedFrame.wickObjects.push(wickObject.copy());
     })
 
+    this.tweens.forEach(function (tween) {
+        copiedFrame.tweens.push(tween.copy());
+    })
+
     return copiedFrame;
 
 }
