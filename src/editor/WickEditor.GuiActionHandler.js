@@ -522,6 +522,7 @@ var GuiActionHandler = function (wickEditor) {
                     objs.forEachBackwards(function (obj) {
                         obj.getAllChildObjectsRecursive().forEach(function (child) {
                             child.uuid = random.uuid4();
+                            child.name = "";
                         });
                         obj.getAllFrames().forEach(function (frame) {
                             frame.uuid = random.uuid4();
