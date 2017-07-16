@@ -1122,15 +1122,20 @@ var WickActionHandler = function (wickEditor) {
             copiedFrame.playheadPosition = frame.getNextOpenPlayheadPosition();
 
             wickEditor.project.getCurrentLayer().addFrame(copiedFrame);
-            wickEditor.project.getCurrentObject().playheadPosition = copiedFrame.playheadPosition;
+            // wickEditor.project.getCurrentObject().playheadPosition = copiedFrame.playheadPosition;
             wickEditor.project.clearSelection();
             wickEditor.project.selectObject(copiedFrame);
+
+            args.addedFrame = copiedFrame;
 
             wickEditor.project.currentObject.framesDirty = true;
             done();
         }, 
         function (args) {
+            wickEditor.project.getCurrentLayer().removeFrame(args.copiedFrame);
 
+            wickEditor.project.currentObject.framesDirty = true;
+            done();
         });
 
     registerAction('extendFrameToPosition',
@@ -1139,6 +1144,8 @@ var WickActionHandler = function (wickEditor) {
             var timelinePlayheadPosition = wickEditor.project.getCurrentObject().playheadPosition;
             var framePlayheadPosition = frame.playheadPosition;
 
+            args.changedFrame = frame;
+            args.oldLength = frame.length;
             var numFramesToExtend = timelinePlayheadPosition - framePlayheadPosition + 1;
             frame.length = numFramesToExtend;
 
@@ -1146,7 +1153,10 @@ var WickActionHandler = function (wickEditor) {
             done();
         }, 
         function (args) {
+            args.changedFrame = args.oldLength;
 
+            wickEditor.project.currentObject.framesDirty = true;
+            done();
         });
 
 }
