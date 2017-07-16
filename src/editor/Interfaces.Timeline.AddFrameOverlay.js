@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
 
-TimelineInterface.AddFrameOverlay = function () {
+TimelineInterface.AddFrameOverlay = function (wickEditor, timeline) {
     this.elem = null;
 
     var that = this;

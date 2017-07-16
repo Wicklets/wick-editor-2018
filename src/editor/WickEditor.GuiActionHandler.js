@@ -1104,19 +1104,15 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function (args) {
-            var frame = wickEditor.project.getSelectedObject();
-            var copiedFrame = frame.copy();
-            copiedFrame.playheadPosition = frame.getNextOpenPlayheadPosition();
+            wickEditor.actionHandler.doAction('copyFrameForward');
+        });
 
-            wickEditor.project.getCurrentLayer().addFrame(copiedFrame);
-            wickEditor.project.getCurrentObject().playheadPosition = copiedFrame.playheadPosition;
-            wickEditor.project.clearSelection();
-            wickEditor.project.selectObject(copiedFrame);
-            wickEditor.project.currentObject.framesDirty = true;
-            wickEditor.project.rootObject.generateParentObjectReferences();
-            wickEditor.project.regenAssetReferences();
-
-            wickEditor.syncInterfaces();
+    registerAction('extendFrameToPosition',
+        [],
+        [],
+        {},
+        function (args) {
+            wickEditor.actionHandler.doAction('extendFrameToPosition');
         });
 
     registerAction('duplicateSelection',

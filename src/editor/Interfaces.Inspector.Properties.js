@@ -780,6 +780,19 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Add Frame",
+        icon: "./resources/inspector-flip-vertically.svg",
+        colorClass: 'frames',
+        isActiveFn: function () {
+            return selectionInfo.numObjects > 0 
+                && selectionInfo.dataType === 'frame';
+        },
+        buttonAction: function () {
+            wickEditor.actionHandler.doAction('addNewFrame');
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Copy Frame Forward",
         icon: "./resources/inspector-duplicate.svg",
         colorClass: 'frames',
@@ -789,6 +802,19 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         },
         buttonAction: function () {
             wickEditor.guiActionHandler.doAction('copyFrameForward')
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Extend Frame To Position",
+        icon: "./resources/inspector-flip-vertically.svg",
+        colorClass: 'frames',
+        isActiveFn: function () {
+            return selectionInfo.numObjects > 0 
+                && selectionInfo.dataType === 'frame';
+        },
+        buttonAction: function () {
+            wickEditor.guiActionHandler.doAction('extendFrameToPosition')
         }
     }));
 

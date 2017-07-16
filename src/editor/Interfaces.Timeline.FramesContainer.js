@@ -40,18 +40,21 @@ TimelineInterface.FramesContainer = function (wickEditor, timeline) {
 
         this.elem.addEventListener('mousedown', function (e) {
             timeline.interactions.start('dragSelectionBox', e, {});
-            wickEditor.project.clearSelection();
-            wickEditor.syncInterfaces();
-        });
 
-        this.elem.addEventListener('mousedown', function (e) {
             wickEditor.project.clearSelection();
-            timeline.framesContainer.update();
 
             wickEditor.actionHandler.doAction('movePlayhead', {
                 obj: wickEditor.project.currentObject,
-                newPlayheadPosition: Math.round((e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2) / cssVar('--frame-width')),
+                newPlayheadPosition: Math.round((e.clientX - 9 - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2) / cssVar('--frame-width')),
             });
+
+            if(wickEditor.project.smallFramesMode) {
+                var layer = wickEditor.project.getCurrentLayer();
+                var frame = layer.getLastFrame(wickEditor.project.getCurrentObject().playheadPosition);
+                if(frame) wickEditor.project.selectObject(frame);
+                wickEditor.syncInterfaces();
+            }
+            timeline.framesContainer.update();
         });
 
         this.elem.addEventListener('mouseout', function (e) {

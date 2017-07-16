@@ -132,7 +132,7 @@ var WickEditor = function () {
                 self.syncInterfaces();
             });
         }
-    }, 1000);
+    }, 100);
 
 }
 

@@ -547,6 +547,9 @@ body {
     /*font-size: vmin;*/
     font-family: "Anonymous Pro" ;
 }
+.number-line-cell-number-small {
+    font-size: 12px;
+}
 
 .number-line-cell-bar {
     position: absolute;

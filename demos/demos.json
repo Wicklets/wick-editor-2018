@@ -10,9 +10,6 @@
 			"name" : "Fragile Pet Simulator",
 			"path" : "FragilePetSimulator"
 		}, {
-			"name" : "Sneaky Little Fella",
-			"path" : "SneakyLittleFella"
-		}, {
 			"name" : "Well-Dressed Ghost",
 			"path" : "WellDressedGhost"
 		}, {
@@ -25,20 +22,11 @@
 			"name" : "DJ Spookyman",
 			"path" : "DJSpookyman"
 		}, {
-			"name" : "Hatch An Egg",
-			"path" : "HatchAnEgg"
-		}, {
 			"name" : "Dr. Ghost's Vision Test",
 			"path" : "DrGhostsVisionTest"
 		}, {
 			"name" : "Spooky Labyrinth",
 			"path" : "SpookyLabyrinth"
-		}, {
-			"name" : "Forest of Cats",
-			"path" : "ForestOfCats"
-		}, {
-			"name" : "Chill Guy Havin a Dance",
-			"path" : "ChillGuyHavinADance"
 		}
 	]
 }

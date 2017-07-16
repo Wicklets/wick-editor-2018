@@ -31,6 +31,8 @@ TimelineInterface.FramesStrip = function (wickEditor, timeline) {
         this.elem.className = 'frames-strip';
         this.elem.style.top = (wickLayers.indexOf(this.wickLayer) * cssVar('--layer-height')) + 'px';
         this.elem.addEventListener('mousemove', function (e) {
+            if(wickEditor.project.smallFramesMode) return;
+            
             var px = Math.round((e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2)      / cssVar('--frame-width'))
             var py = Math.round((e.clientY - timeline.framesContainer.elem.getBoundingClientRect().top  - cssVar('--layer-height')/2) / cssVar('--layer-height'))
 
@@ -43,6 +45,7 @@ TimelineInterface.FramesStrip = function (wickEditor, timeline) {
         });
         this.elem.addEventListener('mousedown', function (e) {
             if(e.button === 2) return;
+            if(wickEditor.project.smallFramesMode) return;
             /*wickEditor.actionHandler.doAction('movePlayhead', {
                 obj: wickEditor.project.currentObject,
                 newPlayheadPosition: Math.round((e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2) / cssVar('--frame-width')),

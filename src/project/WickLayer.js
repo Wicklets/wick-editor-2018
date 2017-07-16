@@ -119,7 +119,6 @@ WickLayer.prototype.getFramesAtPlayheadPosition = function(pos, args) {
 }
 
 WickLayer.prototype.getNextOpenPlayheadPosition = function (startPosition) {
-
     var targetPosition = startPosition;
 
     while(this.getFrameAtPlayheadPosition(targetPosition)) {
@@ -127,6 +126,19 @@ WickLayer.prototype.getNextOpenPlayheadPosition = function (startPosition) {
     }
 
     return targetPosition;
-
 }
 
+WickLayer.prototype.getLastFrame = function (playheadPosition) {
+    var lastFrame = null;
+
+    if(!playheadPosition) playheadPosition = 0;
+
+    this.frames.forEach(function (frame) {
+        if(!lastFrame) lastFrame = frame;
+        if(frame.playheadPosition > lastFrame.playheadPosition && frame.playheadPosition < playheadPosition) {
+            lastFrame = frame;
+        }
+    });
+
+    return lastFrame;
+}

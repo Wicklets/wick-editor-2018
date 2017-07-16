@@ -1115,4 +1115,38 @@ var WickActionHandler = function (wickEditor) {
             done();
         });
 
+    registerAction('copyFrameForward',
+        function (args) {
+            var frame = wickEditor.project.getSelectedObject();
+            var copiedFrame = frame.copy();
+            copiedFrame.playheadPosition = frame.getNextOpenPlayheadPosition();
+
+            wickEditor.project.getCurrentLayer().addFrame(copiedFrame);
+            wickEditor.project.getCurrentObject().playheadPosition = copiedFrame.playheadPosition;
+            wickEditor.project.clearSelection();
+            wickEditor.project.selectObject(copiedFrame);
+
+            wickEditor.project.currentObject.framesDirty = true;
+            done();
+        }, 
+        function (args) {
+
+        });
+
+    registerAction('extendFrameToPosition',
+        function (args) {
+            var frame = wickEditor.project.getSelectedObject();
+            var timelinePlayheadPosition = wickEditor.project.getCurrentObject().playheadPosition;
+            var framePlayheadPosition = frame.playheadPosition;
+
+            var numFramesToExtend = timelinePlayheadPosition - framePlayheadPosition + 1;
+            frame.length = numFramesToExtend;
+
+            wickEditor.project.currentObject.framesDirty = true;
+            done();
+        }, 
+        function (args) {
+
+        });
+
 }

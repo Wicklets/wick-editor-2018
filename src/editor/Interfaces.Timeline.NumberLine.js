@@ -24,6 +24,7 @@ TimelineInterface.NumberLine = function (wickEditor, timeline) {
 
     var numberlineContainer;
     var numbers = [];
+    var bars = [];
 
     this.build = function () {
         this.elem = document.createElement('div');
@@ -32,7 +33,6 @@ TimelineInterface.NumberLine = function (wickEditor, timeline) {
         numberlineContainer = document.createElement('span');
         numberlineContainer.className = 'numberline-container';
         this.elem.appendChild(numberlineContainer);
-        
 
         this.elem.addEventListener('mousedown', function (e) {
             var start = Math.round((e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2) / cssVar('--frame-width'));
@@ -60,11 +60,18 @@ TimelineInterface.NumberLine = function (wickEditor, timeline) {
         });
 
         for(var i = 0; i < numbers.length; i++) {
-            numbers[i].innerHTML = i+1+Math.floor(-shift/cssVar('--frame-width'));
+            var num = i+1+Math.floor(-shift/cssVar('--frame-width'));
+            numbers[i].innerHTML = num;
             numbers[i].className = 'number-line-cell-number';
-            /*if(wickEditor.project.smallFramesMode) {
+            if(wickEditor.project.smallFramesMode) {
+                if(num % 5 !== 0 && num !== 1)  {
+                    numbers[i].innerHTML = '';
+                    bars[i].style.opacity = '0.2';
+                } else {
+                    bars[i].style.opacity = '1.0';
+                }
                 numbers[i].className += ' number-line-cell-number-small';
-            }*/
+            }
         }
     }
 
@@ -75,6 +82,7 @@ TimelineInterface.NumberLine = function (wickEditor, timeline) {
         numberlineContainer.innerHTML = ""
 
         numbers = []
+        bars = []
         for(var i = 0; i < 50; i++) {
             var numberLineCell = document.createElement('div');
             numberLineCell.className = 'number-line-cell';
@@ -83,6 +91,7 @@ TimelineInterface.NumberLine = function (wickEditor, timeline) {
             var bar = document.createElement('div');
             bar.className = 'number-line-cell-bar';
             numberLineCell.appendChild(bar);
+            bars.push(bar);
 
             var number = document.createElement('div');
             number.className = 'number-line-cell-number';
