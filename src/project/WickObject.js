@@ -204,9 +204,9 @@ WickObject.createSymbolFromWickObjects = function (wickObjects) {
 // Create a new symbol and add every frame into the new symbol's timeline
 WickObject.createSymbolFromWickFrames = function (wickFrames) {
 
-    wickFrames.forEach(function (wickFrame) {
+    /*wickFrames.forEach(function (wickFrame) {
         console.log(wickFrame.parentLayer)
-    })
+    })*/
 
     var newSymbol = WickObject.createNewSymbol();
     newSymbol.layers = [];

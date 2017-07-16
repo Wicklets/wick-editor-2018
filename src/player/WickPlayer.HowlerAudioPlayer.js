@@ -31,7 +31,7 @@ var WickHowlerAudioPlayer = function (project) {
 
         allObjects.forEach(function (wickObject) {
             if(!wickObject.isSound) return;
-            console.log(wickObject); 
+            //console.log(wickObject); 
 
             var audioData = wickObject.asset.getData();
             //if(wickObject.compressed) audioData = LZString.decompressFromBase64(audioData)
