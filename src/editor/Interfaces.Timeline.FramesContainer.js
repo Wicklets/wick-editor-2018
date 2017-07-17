@@ -43,9 +43,12 @@ TimelineInterface.FramesContainer = function (wickEditor, timeline) {
 
             wickEditor.project.clearSelection();
 
+            var layerIndex = Math.round((e.clientY - timeline.framesContainer.elem.getBoundingClientRect().top - cssVar('--layer-height')/2) / cssVar('--layer-height'))
+            var layer = wickEditor.project.currentObject.layers[layerIndex];
             wickEditor.actionHandler.doAction('movePlayhead', {
                 obj: wickEditor.project.currentObject,
                 newPlayheadPosition: Math.round((e.clientX - 9 - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2) / cssVar('--frame-width')),
+                newLayer: layer,
             });
 
             if(wickEditor.project.smallFramesMode) {

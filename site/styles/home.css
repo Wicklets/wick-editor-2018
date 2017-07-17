@@ -5,10 +5,11 @@ body {
 
 .top-page {
 	position: absolute;
-	height: 97%;
+	height: 608px;
 	width: 100%;
 	left: 0px;
-	top: 0px;
+	top: 50%;
+	transform: translateY(-50%);
 }
 
 .bottom-page {
@@ -34,17 +35,14 @@ body {
 }
 
 .launch-editor-button {
-	position: absolute;
+	margin-left: 50%;
+	margin-bottom: 0%;
+	margin-top: 10px;
 
-	left:50%;
-	top: 80%;
-
-	/*width: 50%;*/
 	height: 100px;
-
 	width: 300px;
 
-	transform:translateX(-50%) translateY(-50%);
+	transform:translateX(-50%);
 
 	cursor: pointer;
 
@@ -78,4 +76,18 @@ body {
 	width: 300px;
 	height: 80%;
 	overflow-y: scroll;
+}
+
+#player-container {
+	margin-left: 50%;
+	margin-top: 0%;
+	width: 720px;
+	height: 480px;
+	transform: translateX(-50%);
+}
+.player {
+	position: relative;
+	width: 720px;
+	height: 480px;
+	border: none;
 }

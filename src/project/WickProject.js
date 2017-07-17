@@ -834,10 +834,10 @@ WickProject.prototype.getDuplicateName = function () {
 
             //http://stackoverflow.com/questions/840781/easiest-way-to-find-duplicate-values-in-a-javascript-array
             var uniq = names
-            .map((name) => {
+            .map(function (name) {
               return {count: 1, name: name}
             })
-            .reduce((a, b) => {
+            .reduce(function (a, b) {
               a[b.name] = (a[b.name] || 0) + b.count
               return a
             }, {})

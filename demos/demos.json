@@ -27,6 +27,9 @@
 		}, {
 			"name" : "Spooky Labyrinth",
 			"path" : "SpookyLabyrinth"
+		}, {
+			"name" : "Homepage",
+			"path" : "Homepage"
 		}
 	]
 }

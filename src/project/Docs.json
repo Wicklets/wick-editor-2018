@@ -44,6 +44,20 @@
               "description": "frame number or name to jump to"
             }
           ]
+        },
+        {
+          "name": "gotoNextFrame()",
+          "description": "Moves the timeline forward one frame.",
+          "example": "gotoNextFrame();",
+          "snippet": "gotoNextFrame()",
+          "args": []
+        },
+        {
+          "name": "gotoPrevFrame()",
+          "description": "Moves the timeline backwards one frame.",
+          "example": "gotoPrevFrame();",
+          "snippet": "gotoPrevFrame()",
+          "args": []
         }
       ]
     },

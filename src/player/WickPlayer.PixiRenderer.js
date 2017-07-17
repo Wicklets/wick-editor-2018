@@ -110,12 +110,12 @@ var WickPixiRenderer = function () {
         if(window.wickEditor
         || document.activeElement === document.getElementById('rendererCanvas')
         || document.activeElement === document.getElementById('playerCanvasContainer')) {
-            //rendererCanvas.style.opacity = 1.0;
-            rendererCanvas.style.filter = 'none';
+            // Dimming the player when it's not focused is disabled for now
+            //rendererCanvas.style.filter = 'none';
         } else {
-            //rendererCanvas.style.opacity = 0.75;
-            rendererCanvas.style.filter = 'brightness(.85)';
+            //rendererCanvas.style.filter = 'brightness(.85)';
         }
+        rendererCanvas.style.filter = 'none';
 
         var graphics = new PIXI.Graphics();
         graphics.beginFill(parseInt(project.backgroundColor.replace("#","0x")));

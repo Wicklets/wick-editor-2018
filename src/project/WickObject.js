@@ -1154,23 +1154,28 @@ WickObject.prototype.movePlayheadTo = function (frame) {
 
 }
 
-/*WickObject.prototype.gotoNextFrame = function () {
+WickObject.prototype.gotoNextFrame = function () {
 
-    this.playheadPosition ++;
-    var totalLength = this.layers[this.currentLayer.getTotalLength];
-    if(this.playheadPosition >= totalLength) {
-        this.playheadPosition = totalLength-1;
+    var nextFramePos = this.playheadPosition+1;
+    var totalLength = this.layers[this.currentLayer].getTotalLength();
+    if(nextFramePos >= totalLength) {
+        nextFramePos = 0;
     }
+
+    this._newPlayheadPosition = nextFramePos;
 
 }
 
 WickObject.prototype.gotoPrevFrame = function () {
 
-    this.playheadPosition --;
-    if(this.playheadPosition < 0) {
-        this.playheadPosition = 0;
+    var nextFramePos = this.playheadPosition-1;
+    if(nextFramePos < 0) {
+        nextFramePos = 0;
     }
-}*/
+
+    this._newPlayheadPosition = nextFramePos;
+
+}
 
 WickObject.prototype.getFramesEnd = function() {
     endFrame = 0; 
