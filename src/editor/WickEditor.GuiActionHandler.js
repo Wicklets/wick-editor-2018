@@ -748,6 +748,28 @@ var GuiActionHandler = function (wickEditor) {
             //wickEditor.fabric.deselectAll();
         });
 
+    registerAction('moveBackwards',
+        ['Modifier', "DOWN"],
+        [],
+        {},
+        function(args) {
+            wickEditor.actionHandler.doAction('moveObjectBackwards', {
+                objs: wickEditor.project.getSelectedObjects()
+            });
+            //wickEditor.fabric.deselectAll();
+        });
+
+    registerAction('moveForwards',
+        ['Modifier', "UP"],
+        [],
+        {},
+        function(args) {
+            wickEditor.actionHandler.doAction('moveObjectForwards', {
+                objs: wickEditor.project.getSelectedObjects()
+            });
+            //wickEditor.fabric.deselectAll();
+        });
+
     registerAction('flipHorizontally',
         [],
         [],

@@ -997,6 +997,10 @@ WickObject.prototype.getAbsolutePosition = function () {
     }
 }
 
+WickObject.prototype.getZIndex = function () {
+    return this.parentFrame.wickObjects.indexOf(this);
+}
+
 /* Get the absolute position of this object taking into account the scale of the parent */
 WickObject.prototype.getAbsolutePositionTransformed = function () {
     if(this.isRoot) {

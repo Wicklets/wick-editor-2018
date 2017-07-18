@@ -605,6 +605,30 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Move Backwards",
+        icon: "./resources/inspector-send-to-back.svg",
+        colorClass: 'common',
+        isActiveFn: function () {
+            return (selectionInfo.numObjects > 0 && selectionInfo.type === 'wickobject');
+        },
+        buttonAction: function () {
+            wickEditor.guiActionHandler.doAction("moveBackwards")
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Move Forwards",
+        icon: "./resources/inspector-bring-to-front.svg",
+        colorClass: 'common',
+        isActiveFn: function () {
+            return (selectionInfo.numObjects > 0 && selectionInfo.type === 'wickobject');
+        },
+        buttonAction: function () {
+            wickEditor.guiActionHandler.doAction("moveForwards")
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Edit Code",
         icon: "./resources/inspector-edit-code.svg",
         colorClass: 'common',

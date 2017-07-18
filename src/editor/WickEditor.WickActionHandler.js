@@ -1007,6 +1007,59 @@ var WickActionHandler = function (wickEditor) {
             done();
         });
 
+    registerAction('moveObjectForwards',
+        function (args) {
+            var newZIndex = 0;
+            args.objs.forEach(function (obj) {
+                var z = obj.getZIndex();
+                if(z+1 > newZIndex) {
+                    newZIndex = z+1;
+                }
+            });
+
+            var len = args.objs[0].parentFrame.wickObjects.length-1;
+            if(newZIndex >= len) newIndex = len;
+
+            args.moveAction = wickEditor.actionHandler.doAction('moveObjectToZIndex', {
+                objs: args.objs,
+                newZIndex: newZIndex,
+                dontAddToStack: true
+            });
+
+            done();
+        },
+        function (args) {
+            args.moveAction.undoAction();
+
+            done();
+        });
+
+    registerAction('moveObjectBackwards',
+        function (args) {
+            var newZIndex = args.objs[0].parentFrame.wickObjects.length-1;
+            args.objs.forEach(function (obj) {
+                var z = obj.getZIndex();
+                if(z-1 < newZIndex) {
+                    newZIndex = z-1;
+                }
+            });
+
+            if(newZIndex < 0) newZIndex = 0;
+
+            args.moveAction = wickEditor.actionHandler.doAction('moveObjectToZIndex', {
+                objs: args.objs,
+                newZIndex: newZIndex,
+                dontAddToStack: true
+            });
+
+            done();
+        },
+        function (args) {
+            args.moveAction.undoAction();
+
+            done();
+        });
+
     registerAction('deleteAsset', 
         function (args) {
             var asset = args.asset;
