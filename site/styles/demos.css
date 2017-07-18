@@ -38,6 +38,8 @@ body {
 	box-shadow: 3px 3px 5px #99BBBB;
 	overflow: hidden;
 
+	background-size: 100% 85%;
+
 	-webkit-transition: opacity 0.1s;
     -moz-transition: opacity 0.1s;
     transition: opacity 0.1s;

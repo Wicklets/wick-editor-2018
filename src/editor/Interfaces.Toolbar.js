@@ -60,7 +60,9 @@ var ToolbarInterface = function (wickEditor) {
             });
             wickEditor.syncInterfaces();
         }, function () {
-            $("#strokeColorPicker").spectrum("set", wickEditor.settings.strokeColor);
+            if(this.cachedColor !== wickEditor.settings.strokeColor)
+                $("#strokeColorPicker").spectrum("set", wickEditor.settings.strokeColor);
+            this.cachedColor = wickEditor.settings.strokeColor;
         }));
 
         toolOptionInputs.push(new ToolbarInterface.ColorPicker(container, 'fillColorPicker', 'tools/Bucket.svg', function (color) {
@@ -70,7 +72,9 @@ var ToolbarInterface = function (wickEditor) {
             });
             wickEditor.syncInterfaces();
         }, function () {
-            $("#fillColorPicker").spectrum("set", wickEditor.settings.fillColor);
+            if(this.cachedColor !== wickEditor.settings.fillColor)
+                $("#fillColorPicker").spectrum("set", wickEditor.settings.fillColor);
+            this.cachedColor = wickEditor.settings.fillColor;
         }));
 
         toolOptionInputs.push(new ToolbarInterface.RangeSlider(container, 'tools/Line.svg', 1, 50, function (val) {
@@ -123,7 +127,6 @@ var ToolbarInterface = function (wickEditor) {
     }
 
     this.syncWithEditorState = function () {
-
         toolOptionInputs.forEach(function (toolOptionInput) {
             toolOptionInput.updateViewValue();
         });

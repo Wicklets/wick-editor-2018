@@ -137,12 +137,21 @@ var WickEditor = function () {
 }
 
 WickEditor.prototype.syncInterfaces = function () {
+    //startTiming();
+
     this.project.applyTweens();
     
     if(!this.tools) return;
     this.interfaces.forEach(function (interface) {
+        //startTiming();
         interface.syncWithEditorState();
+        /*stopTiming('');
+        console.log(interface)
+        console.log(' ')*/
     });
+
+    //console.log(new Error())
+    //stopTiming('total sync')
 }
 
 WickEditor.prototype.changeTool = function (newTool) {

@@ -185,7 +185,6 @@ var FabricInterface = function (wickEditor) {
         self.canvas.setZoom(1);
         self.resetPan();
         self.canvas.renderAll();
-        wickEditor.syncInterfaces();
     }
 
     this.relativePan = function (x,y) {
@@ -515,7 +514,7 @@ var FabricInterface = function (wickEditor) {
             // Reselect everything
             //self.selectObjects(wickobjs);
 
-            wickEditor.syncInterfaces();
+            //wickEditor.syncInterfaces();
         }
     }
 
@@ -524,7 +523,7 @@ var FabricInterface = function (wickEditor) {
         if(wickObj && wickObj.textData) {
             self.modifyObjects([wickObj]);
         }
-        wickEditor.syncInterfaces();
+        //wickEditor.syncInterfaces();
 
     }
 

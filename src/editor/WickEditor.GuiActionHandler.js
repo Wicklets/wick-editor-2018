@@ -127,7 +127,6 @@ var GuiActionHandler = function (wickEditor) {
         {},
         function(args) {
             wickEditor.actionHandler.redoAction();
-            wickEditor.syncInterfaces();
         });
 
     // Control + Z
@@ -138,7 +137,6 @@ var GuiActionHandler = function (wickEditor) {
         {},
         function(args) {
             wickEditor.actionHandler.undoAction();
-            wickEditor.syncInterfaces();
         });
 
     // Title
@@ -400,7 +398,6 @@ var GuiActionHandler = function (wickEditor) {
                 obj: wickEditor.project.currentObject,
                 newPlayheadPosition: wickEditor.project.currentObject.playheadPosition-1
             })
-            wickEditor.syncInterfaces();
         });
 
     // >
@@ -414,7 +411,6 @@ var GuiActionHandler = function (wickEditor) {
                 obj: wickEditor.project.currentObject,
                 newPlayheadPosition: wickEditor.project.currentObject.playheadPosition+1
             })
-            wickEditor.syncInterfaces();
         });
 
     // Down
@@ -494,8 +490,6 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.actionHandler.doAction('deleteObjects', { 
                 wickObjects:wickEditor.fabric.getSelectedObjects(WickObject) 
             });
-
-            wickEditor.syncInterfaces();
         });
 
     registerAction('paste',
@@ -564,8 +558,6 @@ var GuiActionHandler = function (wickEditor) {
                 }
 
             }
-
-            wickEditor.syncInterfaces();
         });
 
     registerAction('newProject',
@@ -1004,36 +996,6 @@ var GuiActionHandler = function (wickEditor) {
                 frame: frame,
                 playheadPosition: currentObject.playheadPosition-frame.playheadPosition
             });
-        });
-
-    registerAction('removeTween',
-        [],
-        [],
-        {},
-        function(args) {
-            var selectedObj = wickEditor.fabric.getSelectedObject(WickObject);
-            var playheadPosition = selectedObj.parentObject.getRelativePlayheadPosition(selectedObj);
-
-            var foundTween = null;
-            selectedObj.tweens.forEach(function (tween) {
-                if(tween.frame === playheadPosition) {
-                    foundTween = tween;
-                }
-            });
-
-            if(foundTween) {
-                selectedObj.tweens.splice(selectedObj.tweens.indexOf(foundTween), 1);
-            }
-            
-            wickEditor.syncInterfaces();
-        });
-
-    registerAction('removeKeyframe',
-        [],
-        [],
-        {},
-        function(args) {
-            console.error("removeKeyframeButton action NYI")
         });
 
     registerAction('addNewText',

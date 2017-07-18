@@ -77,8 +77,10 @@ ToolbarInterface.RangeSlider = function (container, iconPath, min, max, valueCal
             clickOutDiv.style.display = display;
 
             sliderContainter.style.display = display;
-            sliderContainter.style.left = buttonContainer.getBoundingClientRect().left+40+"px";
-            sliderContainter.style.top  = buttonContainer.getBoundingClientRect().top -20+"px";
+            if(active) {
+                sliderContainter.style.left = buttonContainer.getBoundingClientRect().left+40+"px";
+                sliderContainter.style.top  = buttonContainer.getBoundingClientRect().top -20+"px";
+            }
 
             slider.noUiSlider.set(self.getValueFn())
             buttonValueDisplay.innerHTML = Math.floor(slider.noUiSlider.get());
