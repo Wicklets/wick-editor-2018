@@ -52,6 +52,7 @@ var FabricInterface = function (wickEditor) {
 
         self.panning = false;
         self.onionSkinsDirty = false;
+        self.objHoveredOver = null;
 
         self.shapeDrawer     = new FabricShapeDrawer(wickEditor, self);
         self.guiElements     = new FabricGUIElements(wickEditor, self);
@@ -96,7 +97,7 @@ var FabricInterface = function (wickEditor) {
         });
 
         self.canvas.on('mouse:move', function (e) {
-
+            self.objHoveredOver = e.target;
         });
 
         self.canvas.on('mouse:up', function (e) {
@@ -293,6 +294,18 @@ var FabricInterface = function (wickEditor) {
         });
 
         return foundFabricObject;
+    }
+
+    this.selectObjectsHoveredOver = function () {
+        if(self.objHoveredOver) {
+            console.log(self.objHoveredOver)
+            wickEditor.project.clearSelection();
+            wickEditor.project.selectObject(self.objHoveredOver.wickObjReference);
+            wickEditor.syncInterfaces();
+        } else {
+            wickEditor.project.clearSelection();
+            wickEditor.syncInterfaces();
+        }
     }
 
     this.selectObjects = function (objects) {

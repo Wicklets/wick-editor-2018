@@ -50,6 +50,7 @@ var RightClickMenuInterface = function (wickEditor) {
                 if(!enabled) return;
 
                 if(e.button == 2) {
+                    wickEditor.fabric.selectObjectsHoveredOver();
                     self.open = true;
                 } else {
                     self.open = false;
