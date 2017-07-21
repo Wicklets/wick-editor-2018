@@ -131,10 +131,16 @@ TimelineInterface.FramesContainer = function (wickEditor, timeline) {
         });
         this.playhead.update();
 
-        framesStrip.update();
+        this.frameStrips.forEach(function (frameStrip) {
+            frameStrip.update();
+        });
 
         var scrollX = -timeline.horizontalScrollBar.getScrollPosition();
         var scrollY = -timeline.verticalScrollBar.getScrollPosition();
+        if(wickEditor.project.getCurrentObject().layers.length < 4) {
+            scrollY = 0;
+            timeline.verticalScrollBar.reset();
+        }
         $('.frames-container').css('left', scrollX+cssVar('--layers-width')      +'px');
         $('.frames-container').css('top',  scrollY+cssVar('--number-line-height')+'px');
         $('.layers-container').css('top',  scrollY+cssVar('--number-line-height')+'px');

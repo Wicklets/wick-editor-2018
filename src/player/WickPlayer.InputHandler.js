@@ -165,7 +165,6 @@ WickPlayerInputHandler = function (wickPlayer) {
                 if(child.isButton) canvasContainer.style.cursor = child.cursor || "pointer";
                 child.hoveredOver = true;
                 hoveredOverObj = child;
-                console.log(hoveredOverObj)
             } else {
                 if(child.hoveredOver) {
                     child._mouseJustLeft = true;
