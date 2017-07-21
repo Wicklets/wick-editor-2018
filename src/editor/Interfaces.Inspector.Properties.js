@@ -581,20 +581,8 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Send to Back",
-        icon: "./resources/inspector-send-to-back.svg",
-        colorClass: 'common',
-        isActiveFn: function () {
-            return (selectionInfo.numObjects > 0 && selectionInfo.type === 'wickobject');
-        },
-        buttonAction: function () {
-            wickEditor.guiActionHandler.doAction("sendToBack")
-        }
-    }));
-
-    properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Bring to Front",
-        icon: "./resources/inspector-bring-to-front.svg",
+        icon: "./resources/inspector-bring-to-front.png",
         colorClass: 'common',
         isActiveFn: function () {
             return (selectionInfo.numObjects > 0 && selectionInfo.type === 'wickobject');
@@ -605,26 +593,38 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Move Backwards",
-        icon: "./resources/inspector-send-to-back.svg",
-        colorClass: 'common',
-        isActiveFn: function () {
-            return (selectionInfo.numObjects > 0 && selectionInfo.type === 'wickobject');
-        },
-        buttonAction: function () {
-            wickEditor.guiActionHandler.doAction("moveBackwards")
-        }
-    }));
-
-    properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Move Forwards",
-        icon: "./resources/inspector-bring-to-front.svg",
+        icon: "./resources/inspector-move-up.svg",
         colorClass: 'common',
         isActiveFn: function () {
             return (selectionInfo.numObjects > 0 && selectionInfo.type === 'wickobject');
         },
         buttonAction: function () {
             wickEditor.guiActionHandler.doAction("moveForwards")
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Send to Back",
+        icon: "./resources/inspector-send-to-back.png",
+        colorClass: 'common',
+        isActiveFn: function () {
+            return (selectionInfo.numObjects > 0 && selectionInfo.type === 'wickobject');
+        },
+        buttonAction: function () {
+            wickEditor.guiActionHandler.doAction("sendToBack")
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Move Backwards",
+        icon: "./resources/inspector-move-back.svg",
+        colorClass: 'common',
+        isActiveFn: function () {
+            return (selectionInfo.numObjects > 0 && selectionInfo.type === 'wickobject');
+        },
+        buttonAction: function () {
+            wickEditor.guiActionHandler.doAction("moveBackwards")
         }
     }));
 
@@ -641,7 +641,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
-    properties.push(new InspectorInterface.InspectorButton({
+    /*properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Close Path",
         icon: "./resources/ellipse.png",
         colorClass: 'all-paths',
@@ -652,11 +652,11 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         buttonAction: function () {
             
         }
-    }));
+    }));*/
 
     properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Unite Paths",
-        icon: "./resources/ellipse.png",
+        icon: "./resources/inspector-unite.png",
         colorClass: 'all-paths',
         isActiveFn: function () {
             return selectionInfo.numObjects > 1 
@@ -667,7 +667,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
-    properties.push(new InspectorInterface.InspectorButton({
+    /* properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Intersect Paths",
         icon: "./resources/ellipse.png",
         colorClass: 'all-paths',
@@ -678,22 +678,22 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         buttonAction: function () {
             
         }
-    }));
+    })); */
 
      properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Subtract Paths",
-        icon: "./resources/ellipse.png",
+        icon: "./resources/inspector-subtract.png",
         colorClass: 'all-paths',
         isActiveFn: function () {
             return selectionInfo.numObjects > 1 
                 && selectionInfo.special.allPaths;
         },
         buttonAction: function () {
-            
+            wickEditor.guiActionHandler.doAction('doBooleanOperation', {boolFnName:'subtract'});
         }
     }));
 
-    properties.push(new InspectorInterface.InspectorButton({
+    /* properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Exclude Paths",
         icon: "./resources/ellipse.png",
         colorClass: 'all-paths',
@@ -704,7 +704,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         buttonAction: function () {
             
         }
-    }));
+    })); 
 
     properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Divide Paths",
@@ -717,7 +717,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         buttonAction: function () {
             
         }
-    }));
+    })); */
 
     properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Convert to Clip",

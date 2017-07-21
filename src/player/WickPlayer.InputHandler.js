@@ -158,13 +158,14 @@ WickPlayerInputHandler = function (wickPlayer) {
         // Check if we're hovered over a clickable object...
         var hoveredOverObj = null;
         project.rootObject.getAllActiveChildObjectsRecursive(true).forEachBackwards(function(child) {
-            if(child.isPointInside(self.getMouse())) {
+            if(!(hoveredOverObj && hoveredOverObj.isButton) && child.isPointInside(self.getMouse())) {
                 if(!child.hoveredOver) {
                     child._wasHoveredOver = true;
                 }
                 if(child.isButton) canvasContainer.style.cursor = child.cursor || "pointer";
                 child.hoveredOver = true;
                 hoveredOverObj = child;
+                console.log(hoveredOverObj)
             } else {
                 if(child.hoveredOver) {
                     child._mouseJustLeft = true;
@@ -185,11 +186,13 @@ WickPlayerInputHandler = function (wickPlayer) {
             wickPlayer.fullscreenRequested = false;
         }
         
+        var clickedObj;
         project.rootObject.getAllActiveChildObjectsRecursive(true).forEachBackwards(function(child) {
-            if(child.isPointInside(self.getMouse())) {
+            if(!(clickedObj && clickedObj.isButton) && child.isPointInside(self.getMouse())) {
                 //project.runScript(child, "onClick");
                 child._wasClicked = true;
                 child._beingClicked = true;
+                clickedObj = child;
             }
         });
 
