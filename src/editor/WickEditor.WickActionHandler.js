@@ -183,16 +183,22 @@ var WickActionHandler = function (wickEditor) {
             var currentFrame = wickEditor.project.getCurrentFrame();
             
             // Save references to added wick objects so they can be removed on undo
-            args.addedObjects = [];
-            args.wickObjects.forEach(function (wickObj) {
-                args.addedObjects.push(wickObj);
-            });
+            if(args.addedObjects) {
+                args.addedObjects.forEach(function (wickObj) {
+                    wickEditor.project.addObject(wickObj, args.sendToBack ? 0 : null, true);
+                });
+            } else {
+                args.addedObjects = [];
+                args.wickObjects.forEach(function (wickObj) {
+                    args.addedObjects.push(wickObj);
+                });
 
-            // Add all the new wick objects
-            args.wickObjects.forEach(function (wickObj) {
-                wickEditor.project.addObject(wickObj, args.sendToBack ? 0 : null);
-                if(!args.dontSelectObjects) wickEditor.project.selectObject(wickObj)
-            });
+                // Add all the new wick objects
+                args.wickObjects.forEach(function (wickObj) {
+                    wickEditor.project.addObject(wickObj, args.sendToBack ? 0 : null);
+                    if(!args.dontSelectObjects) wickEditor.project.selectObject(wickObj)
+                });
+            }
             
             wickEditor.paper.needsUpdate = true;
             done();
@@ -251,7 +257,7 @@ var WickActionHandler = function (wickEditor) {
         },
         function (args) {
             for(var i = 0; i < args.restoredObjects.length; i++) {
-                wickEditor.project.addObject(args.restoredObjects[i], args.oldZIndices[i]);
+                wickEditor.project.addObject(args.restoredObjects[i], args.oldZIndices[i], true);
             }
 
             args.restoredPlayRanges.forEach(function (restorePlayRange) {
