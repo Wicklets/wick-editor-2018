@@ -13,12 +13,12 @@
         <h1>Creating a Play Button</h1>
         <div class="subtitle">Tutorial by <a href="https://www.twitter.com/zrispo" target="_blank">zrispo</a><div>
 
-        <h2>Setting up your project</h2>
-
         <p>In this tutorial, you will learn how to make a simple play button for an animation!</p>
 
         <img src="nothing.png"/>
         <div class="image-subtitle">Pictured: Example of a play button</div>
+
+        <h2>Setting up your project</h2>
 
         <p>Let's get started by creating the "menu" screen of the project. This is where the play button will be. </p>
 
@@ -30,16 +30,16 @@
         <img src="nothing.png"/>
         <div class="image-subtitle">Pictured: What your project should look like so far</div>
 
-        <p>Your project should now look like this: One frame for the play button, and a few more frames for the animation. Now, if we want our button to start the animation, we're going to have to add scripts. But don't be alarmed - writing code in Wick is simple! Let's add a script to our button that will play an animation.</p>
-
-        <p>(try running the project, you need to add a stop(), etc)</p>
+        <p>Your project should now look like this: One frame for the play button, and a few more frames for the animation. Now, if we want our button to start the animation, we're going to have to add a script.</p>
 
         <h2>Building a button</h2>
+
+        <p>First, try running your project. Notice that it plays by itself - we need to make the sure the project won't start playing automatically. Click on the first frame and open the scripting tab. Now, select Timeline -> stop in the code box {{{NEED BETTER NAME}}}. Now your project won't play automatically.</p>
 
         <p>Select the button you drew earlier and click "Convert to Button" in the Inspector.</p>
 
         <img src="nothing.png"/>
-        <div class="image-subtitle">Pictured: Selecting the button.</div>
+        <div class="image-subtitle">Pictured: Converting objects to a button.</div>
 
         <br />
 
@@ -77,10 +77,12 @@
         <img src="nothing.png"/>
         <div class="image-subtitle">Pictured: The scripting window.</div>
 
-        <p>Let's build a script that will play the animation when the button is clicked. We'll need two parts: a line of code that plays the timeline, and an "event" that tells us when to run that line of code. Luckily you don't have to write all this code by hand if you don't want to - you can </p>
+        <p>Let's build a script that will play the animation when the button is clicked. We'll need two parts: code that plays the timeline, and an "event" that tells us when to run that code. Select the button you created and open the scripting tab. Select Events -> mouseup. Now remove the comment inside the curly braces. In its place, select Timeline -> play.</p>
 
         <img src="nothing.png"/>
         <div class="image-subtitle">Pictured: Selecting code from the code box {{MAKE UP BETTER NAME!}}</div>
+
+        <p>Now run your project and enjoy your play button!</p>
 
     </div>
 

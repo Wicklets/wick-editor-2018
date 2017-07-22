@@ -515,7 +515,7 @@ var GuiActionHandler = function (wickEditor) {
                     var objs = WickObject.fromJSONArray(JSON.parse(file));
                     // Make sure to reset uuids!
                     objs.forEachBackwards(function (obj) {
-                        obj.name = obj.name + ' copy';
+                        if(obj.name) obj.name = obj.name + ' copy';
                         obj.getAllChildObjectsRecursive().forEach(function (child) {
                             child.uuid = random.uuid4();
                             //child.name = "";

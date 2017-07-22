@@ -298,7 +298,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         },
         getValueFn: function () {
             if(!selectionInfo.object || !selectionInfo.object.fabricObjectReference) return;
-            if(!selectionInfo.object.fabricObjectReference.stroke) return;
+            if(!selectionInfo.object.fabricObjectReference.stroke === undefined) return;
             return selectionInfo.object.fabricObjectReference.strokeWidth;
         }, 
         onChangeFn: function (val) {
