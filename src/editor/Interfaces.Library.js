@@ -21,6 +21,10 @@ var LibraryInterface = function (wickEditor) {
 
     this.setup = function () {
         //$("#tree").fancytree();
+        $("#tree").mousedown(function() {
+            wickEditor.project.clearSelection();
+            wickEditor.syncInterfaces();
+        });
 
         $("#tree").fancytree({
             //checkbox: true,
