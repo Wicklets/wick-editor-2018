@@ -182,6 +182,7 @@ var GuiActionHandler = function (wickEditor) {
         {},
         function(args) {
             wickEditor.fabric.recenterCanvas();
+            wickEditor.paper.updateViewTransforms();
         });
 
     // Control + S

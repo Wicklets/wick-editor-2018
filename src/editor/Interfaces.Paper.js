@@ -171,6 +171,13 @@ var PaperInterface = function (wickEditor) {
         }
     }
 
+    self.updateViewTransforms = function () {
+        var canvasTransform = wickEditor.fabric.getCanvasTransform();
+        paper.view.matrix = new paper.Matrix();
+        paper.view.matrix.translate(new paper.Point(canvasTransform.x,canvasTransform.y))
+        paper.view.matrix.scale(canvasTransform.zoom)
+    }
+
     self.syncWithEditorState = function () {
 
         var lastActive = active;
@@ -189,10 +196,7 @@ var PaperInterface = function (wickEditor) {
 
             paperCanvas.style.display = 'block';
 
-            var canvasTransform = wickEditor.fabric.getCanvasTransform();
-            paper.view.matrix = new paper.Matrix();
-            paper.view.matrix.translate(new paper.Point(canvasTransform.x,canvasTransform.y))
-            paper.view.matrix.scale(canvasTransform.zoom)
+            self.updateViewTransforms();
 
             refreshSelection();
 
