@@ -530,6 +530,7 @@ var GuiActionHandler = function (wickEditor) {
                     var frames = WickFrame.fromJSONArray(JSON.parse(file));
                     frames.forEach(function (frame) {
                         frame.uuid = random.uuid4();
+                        if(frame.name) frame.name = frame.name + ' copy';
 
                         frame.wickObjects.forEach(function (wickObject) {
                             wickObject.getAllChildObjectsRecursive().forEach(function (child) {

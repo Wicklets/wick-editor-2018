@@ -130,6 +130,7 @@ WickFrame.prototype.copy = function () {
     copiedFrame.identifier = this.identifier;
     copiedFrame.playheadPosition = this.playheadPosition;
     copiedFrame.length = this.length;
+    copiedFrame.wickScript = this.wickScript;
 
     this.wickObjects.forEach(function (wickObject) {
         copiedFrame.wickObjects.push(wickObject.copy());

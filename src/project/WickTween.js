@@ -93,7 +93,7 @@ WickTween.interpolateTweens = function (tweenA, tweenB, t) {
             while(valB < -180) valB += 360;
             while(valA > 180) valA -= 360;
             while(valB > 180) valB -= 360;
-            if(tweenA.rotations) valB += tweenA.rotations * 360;
+            valB += tweenA.rotations * 360;
         }
 		interpTween[name] = lerp(valA, valB, tt);
 	});
