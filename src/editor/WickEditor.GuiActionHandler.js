@@ -474,7 +474,7 @@ var GuiActionHandler = function (wickEditor) {
             }
             polyfillClipboardData.setData(copyType, copyData);
 
-            wickEditor.syncInterfaces();
+            //wickEditor.syncInterfaces();
         });
 
     registerAction('cut',
@@ -514,9 +514,10 @@ var GuiActionHandler = function (wickEditor) {
                     var objs = WickObject.fromJSONArray(JSON.parse(file));
                     // Make sure to reset uuids!
                     objs.forEachBackwards(function (obj) {
+                        obj.name = obj.name + ' copy';
                         obj.getAllChildObjectsRecursive().forEach(function (child) {
                             child.uuid = random.uuid4();
-                            child.name = "";
+                            //child.name = "";
                         });
                         obj.getAllFrames().forEach(function (frame) {
                             frame.uuid = random.uuid4();
