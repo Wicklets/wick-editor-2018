@@ -46,6 +46,7 @@ var GIFRendererInterface = function (wickEditor) {
         gifRenderer.refresh(wickEditor.project.rootObject);
         for (var i = 0; i < len; i++) {
             wickEditor.project.rootObject.playheadPosition = i;
+            wickEditor.project.applyTweens();
             gifRenderer.render(wickEditor.project.getCurrentObject().getAllActiveChildObjects());
             gifFrameDataURLs.push(window.rendererCanvas.getElementsByTagName('canvas')[0].toDataURL());
         }
