@@ -21,6 +21,7 @@ var InspectorInterface = function (wickEditor) {
 
     var selectionIcon;
     var selectionTitle;
+    var inspectorTitle;
 
     var specialMode;
 
@@ -42,6 +43,7 @@ var InspectorInterface = function (wickEditor) {
         var inspectorDiv = document.getElementById('inspectorGUI')
         selectionIcon = buildDiv('inspector-selection-icon', inspectorDiv);
         selectionTitle = buildDiv('inspector-selection-title', inspectorDiv);
+        inspectorTitle = document.getElementById('inspector-title');
 
         specialMode = 'project';
 
@@ -162,6 +164,7 @@ var InspectorInterface = function (wickEditor) {
 
     var updateSelectonTypeTitle = function () {
 
+        var noSelectionTitle = "Inspector";
         var title; 
         var image;
 
@@ -172,7 +175,8 @@ var InspectorInterface = function (wickEditor) {
 
         } else if(selectionInfo.type === 'none') {
 
-            title = "No selection"
+            noSelectionTitle = "Inspector (No Selection)"
+            title = ""
             image = null;
 
         } else if(selectionInfo.numObjects > 1) {
@@ -216,6 +220,7 @@ var InspectorInterface = function (wickEditor) {
         }
 
         selectionTitle.innerHTML = title;
+        inspectorTitle.innerHTML = noSelectionTitle;
         if(image)
             selectionIcon.style.backgroundImage = 'url('+image+')';
         else
