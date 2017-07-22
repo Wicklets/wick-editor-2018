@@ -1,13 +1,3 @@
-a {
-	color: black;
-}
-a:hover {
-	color: black;
-}
-a:visited {
-	color: black;
-}
-
 .tutorials-container {
 	margin-top: 50px;
 }
@@ -62,10 +52,28 @@ a:visited {
 	font-size: 30px;
 }
 
+.submit-a-tutorial {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	font-weight: bold;
+	color: black;
+}
+.tutorial-title {
+	color: black;
+}
+.tutorial-title:hover {
+	color: black;
+}
+.tutorial-title:visited {
+	color: black;
+}
+
 .title-box {
     position: fixed;
     margin-top: 0px;
+    height: 220px;
 }
+
 @media only screen and (max-width: 700px) {
 	.tutorials-container {
 		margin-top: 0px;
