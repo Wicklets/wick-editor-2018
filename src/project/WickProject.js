@@ -160,6 +160,9 @@ WickProject.fixForBackwardsCompatibility = function (project) {
         wickObj.layers.forEach(function (layer) {
             layer.frames.forEach(function (frame) {
                 if(!frame.tweens) frame.tweens = [];
+                frame.tweens.forEach(function (tween) {
+                    if(!tween.rotations) tween.rotations = 0;
+                });
             });
         });
     });

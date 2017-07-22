@@ -27,6 +27,7 @@ var WickTween = function() {
     this.opacity = 1;
 
     this.playheadPosition = 0;
+    this.rotations = 0;
 
     this.uuid = random.uuid4();
 
@@ -85,7 +86,16 @@ WickTween.interpolateTweens = function (tweenA, tweenB, t) {
 	var tweenFunc = (tweenA.tweenType === "Linear") ? (TWEEN.Easing.Linear.None) : (TWEEN.Easing[tweenA.tweenType][tweenA.tweenDir]);
 	tweenValueNames.forEach(function (name) {
 		var tt = tweenFunc(t);
-		interpTween[name] = lerp(tweenA[name], tweenB[name], tt);
+        var valA = tweenA[name];
+        var valB = tweenB[name];
+        if(name === 'rotation') {
+            while(valA < -180) valA += 360;
+            while(valB < -180) valB += 360;
+            while(valA > 180) valA -= 360;
+            while(valB > 180) valB -= 360;
+            if(tweenA.rotations) valB += tweenA.rotations * 360;
+        }
+		interpTween[name] = lerp(valA, valB, tt);
 	});
 
 	return interpTween;

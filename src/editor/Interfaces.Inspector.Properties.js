@@ -506,6 +506,22 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));*/
 
+    properties.push(new InspectorInterface.StringInput({
+        title: 'Rotations',
+        isActiveFn: function () {
+            return selectionInfo.type === 'frame' 
+                && selectionInfo.numObjects === 1 
+                && selectionInfo.object.getCurrentTween();
+        },
+        getValueFn: function () {
+            return selectionInfo.object.getCurrentTween().rotations;
+        }, 
+        onChangeFn: function (val) {
+            var tween = selectionInfo.object.getCurrentTween();
+            tween.rotations = parseInt(val);
+        }
+    }));
+
     properties.push(new InspectorInterface.SelectInput({
         title: 'Direction',
         options: ['None', 'In', 'Out', 'InOut'],

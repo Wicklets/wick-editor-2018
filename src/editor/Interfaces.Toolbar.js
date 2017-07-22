@@ -77,7 +77,7 @@ var ToolbarInterface = function (wickEditor) {
             this.cachedColor = wickEditor.settings.fillColor;
         }));
 
-        toolOptionInputs.push(new ToolbarInterface.RangeSlider(container, 'tools/Line.svg', 1, 50, function (val) {
+        toolOptionInputs.push(new ToolbarInterface.RangeSlider(container, 'tools/Line.svg', 0, 50, function (val) {
             wickEditor.settings.setValue('strokeWidth', val);
             wickEditor.guiActionHandler.doAction("changeStrokeWidthOfSelection", {
                 strokeWidth: wickEditor.settings.strokeWidth
