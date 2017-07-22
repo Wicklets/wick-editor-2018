@@ -1128,9 +1128,10 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function (args) {
-            var objs = wickEditor.project.getSelectedObjects();
-            var boolFnName = args.boolFnName;
-            wickEditor.paper.pathRoutines.doBooleanOperation(boolFnName, objs); 
+            wickEditor.actionHandler.doAction('doBooleanOperation', {
+                boolFnName: args.boolFnName,
+                objs: wickEditor.project.getSelectedObjects()
+            });
         });
 
     registerAction('resetSettings',

@@ -1218,4 +1218,24 @@ var WickActionHandler = function (wickEditor) {
             done();
         });
 
+    registerAction('doBooleanOperation',
+        function (args) {
+            args.deleteAction = wickEditor.actionHandler.doAction('deleteObjects', {
+                objects: args.objs,
+                dontAddToStack: true
+            });
+            args.addAction = wickEditor.actionHandler.doAction('addObjects', {
+                wickObjects: [wickEditor.paper.pathRoutines.getBooleanOpResult(args.boolFnName, args.objs)],
+                dontAddToStack: true
+            });
+
+            done();
+        }, 
+        function (args) {
+            args.addAction.undoAction();
+            args.deleteAction.undoAction();
+
+            done();
+        });
+
 }

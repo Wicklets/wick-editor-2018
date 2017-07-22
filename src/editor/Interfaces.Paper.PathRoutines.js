@@ -19,7 +19,7 @@ var PathRoutines = function (paperInterface, wickEditor) {
 
     var self = this;
 
-	self.doBooleanOperation = function (boolFnName, objs) {
+	/*self.doBooleanOperation = function (boolFnName, objs) {
         var touchingPaths = objs;
 
         wickEditor.actionHandler.doAction('deleteObjects', {
@@ -57,6 +57,48 @@ var PathRoutines = function (paperInterface, wickEditor) {
         wickEditor.actionHandler.doAction('addObjects', {
             wickObjects: [superPathWickObject]
         });
+    }*/
+
+    self.getBooleanOpResult = function (boolFnName, objs) {
+        var touchingPaths = objs;
+
+        /*wickEditor.actionHandler.doAction('deleteObjects', {
+            objects: touchingPaths
+        });*/
+
+        startTiming()
+
+        touchingPaths.forEach(function (path) {
+            self.regenPaperJSState(path);
+        });
+
+        stopTiming("regen paper states!")
+        startTiming();
+
+        var superPath = touchingPaths[0].paper.children[0].clone({insert:false});
+        touchingPaths.forEach(function (path) {
+            if(path === touchingPaths[0]) return;
+            if(superPath.closePath) superPath.closePath();
+            superPath = superPath[boolFnName](path.paper.children[0]);
+        });
+
+        var superGroup = new paper.Group({insert:false});
+        superGroup.addChild(superPath);
+
+        var superPathString = superPath.exportSVG({asString:true});
+        var svgString = '<svg id="svg" version="1.1" width="'+superPath.bounds._width+'" height="'+superPath.bounds._height+'" xmlns="http://www.w3.org/2000/svg">' +superPathString+ '</svg>'
+        var superPathWickObject = WickObject.createPathObject(svgString);
+        superPathWickObject.x = superPath.position.x;
+        superPathWickObject.y = superPath.position.y;
+
+        stopTiming("union!")
+
+        self.refreshPathData(superPathWickObject)
+        /*wickEditor.actionHandler.doAction('addObjects', {
+            wickObjects: [superPathWickObject]
+        });*/
+
+        return superPathWickObject;
     }
 
     self.eraseWithPath = function (args) {
