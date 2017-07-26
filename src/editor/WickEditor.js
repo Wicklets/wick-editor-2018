@@ -1,7 +1,7 @@
 /* Wick - (c) 2017 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-/*  This file is part of Wick. 
-    
+/*  This file is part of Wick.
+
     Wick is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -14,7 +14,7 @@
 
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
-    
+
 /* This is the entry point for the whole editor */
 
 var WickEditor = function () {
@@ -22,15 +22,16 @@ var WickEditor = function () {
     var self = this;
 
     // http://semver.org/
-    self.version = "0.0.0";
+    self.version = "0.0.1";
     console.log("Wick Editor version " + self.version)
     if(localStorage.wickVersion !== self.version) {
-        // Wick has either 
-        //   (1) never been used on this machine/browser or 
+        // Wick has either
+        //   (1) never been used on this machine/browser or
         //   (2) wick updated since it was last used on this machine/browser
         // So we need to show the update message screen!
+        // (We don't have an update message screen yet, so just console.log)
         localStorage.wickVersion = self.version;
-        console.log("Looks like wick updated!")
+        console.log("Looks like wick updated! See the update notes here: https://github.com/zrispo/wick/releases");
     }
     window.wickVersion = self.version;
 
@@ -39,7 +40,7 @@ var WickEditor = function () {
     console.log('%cYou are free to change any of the internal editor stuff from here.', 'color: #7744bb; font-size: 12px;');
     console.log('%cTry typing "wickEditor" into the console to see some stuff!.', 'color: #22bb99; font-size: 12px;');
 
-    // Setup connection to backend 
+    // Setup connection to backend
     this.backend = new WickDemoLoader(this);
 
     // Setup thing that handles all the electron stuff
@@ -140,7 +141,7 @@ WickEditor.prototype.syncInterfaces = function () {
     //startTiming();
 
     this.project.applyTweens();
-    
+
     if(!this.tools) return;
     this.interfaces.forEach(function (interface) {
         //startTiming();

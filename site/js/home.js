@@ -9,7 +9,7 @@ $(document).ready(function() {
     });
 
     $.ajax({
-        url: "../../demos/Homepage.json",
+        url: "demos/Homepage.json",
         type: 'GET',
         data: {},
         success: function(data) {
@@ -27,7 +27,7 @@ $(document).ready(function() {
             console.log("ajax: error")
         },
         complete: function(response, textStatus) {
-            
+
         }
     });
 

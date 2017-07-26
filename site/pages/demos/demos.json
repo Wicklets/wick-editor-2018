@@ -5,7 +5,7 @@
 			"path" : "HauntedHouse"
 		}, {
 			"name" : "Wise Old Ghost",
-			"path" : "FortuneTeller"
+			"path" : "WiseOldGhost"
 		}, {
 			"name" : "Fragile Pet Simulator",
 			"path" : "FragilePetSimulator"
@@ -13,20 +13,14 @@
 			"name" : "Well-Dressed Ghost",
 			"path" : "WellDressedGhost"
 		}, {
-			"name" : "Virtual Sculptor",
-			"path" : "VirtualSculptor"
-		}, {
 			"name" : "Flashy Phone",
 			"path" : "FlashyPhone"
 		}, {
 			"name" : "DJ Spookyman",
 			"path" : "DJSpookyman"
 		}, {
-			"name" : "Dr. Ghost's Vision Test",
-			"path" : "DrGhostsVisionTest"
-		}, {
-			"name" : "Spooky Labyrinth",
-			"path" : "SpookyLabyrinth"
+			"name" : "Kitchen Sink",
+			"path" : "KitchenSink"
 		}, {
 			"name" : "Homepage",
 			"path" : "Homepage"

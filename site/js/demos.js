@@ -1,5 +1,5 @@
 var demos;
-var DEMOS_PATH = "../../demos/"; 
+var DEMOS_PATH = "../pages/demos/"; 
 var currentDemo;
 
 var thumbnailsContainer;
@@ -40,7 +40,7 @@ function loadDemo (demo) {
             console.log("ajax: error")
         },
         complete: function(response, textStatus) {
-            
+
         }
     });
 }
@@ -108,7 +108,7 @@ $(document).ready(function() {
             console.log("ajax: error")
         },
         complete: function(response, textStatus) {
-            
+
         }
     });
 
