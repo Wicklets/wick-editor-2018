@@ -698,6 +698,8 @@ WickProject.prototype.loadBuiltinFunctions = function (contextObject) {
     window.movePlayheadTo = function (frame) { objectScope.movePlayheadTo(frame); }
     window.gotoAndStop    = function (frame) { objectScope.gotoAndStop(frame); }
     window.gotoAndPlay    = function (frame) { objectScope.gotoAndPlay(frame); }
+    window.gotoNextFrame  = function ()      { objectScope.gotoNextFrame(); }
+    window.gotoPrevFrame  = function ()      { objectScope.gotoPrevFrame(); }
 
     window.stopAllSounds = function () { wickPlayer.audioPlayer.stopAllSounds(); };
     window.keyIsDown      = function (keyString) { return wickPlayer.inputHandler.keyIsDown(keyString); };

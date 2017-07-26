@@ -62,10 +62,11 @@ var WickPixiRenderer = function () {
             backgroundColor : "#DDDDDD", 
             resolution: window.devicePixelRatio,
             preserveDrawingBuffer: true,
+            antialias: true,
         };
         renderer = PIXI.autoDetectRenderer(project.width*renderScale, project.height*renderScale, rendererOptions);
         renderer.clearBeforeRender = false;
-        renderer.roundPixels = project.pixelPerfectRendering;
+        renderer.roundPixels = true;//project.pixelPerfectRendering;
         renderer.view.setAttribute('tabindex', 0);
         /*$(renderer.view).click(function() { this.focus(); });*/
 

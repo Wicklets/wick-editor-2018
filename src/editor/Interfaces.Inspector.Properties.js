@@ -131,6 +131,42 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.StringInput({
+        title: 'Scale (X)',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && !selectionInfo.object.isSound;
+        },
+        getValueFn: function () {
+            return roundToHundredths(selectionInfo.object.scaleX);
+        }, 
+        onChangeFn: function (val) {
+            wickEditor.actionHandler.doAction('modifyObjects', {
+                objs: [selectionInfo.object],
+                modifiedStates: [{
+                    scaleX: eval(val)
+                }]
+            });
+        }
+    }));
+
+    properties.push(new InspectorInterface.StringInput({
+        title: 'Scale (Y)',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && !selectionInfo.object.isSound;
+        },
+        getValueFn: function () {
+            return roundToHundredths(selectionInfo.object.scaleY);
+        }, 
+        onChangeFn: function (val) {
+            wickEditor.actionHandler.doAction('modifyObjects', {
+                objs: [selectionInfo.object],
+                modifiedStates: [{
+                    scaleY: eval(val)
+                }]
+            });
+        }
+    }));
+
+    properties.push(new InspectorInterface.StringInput({
         title: 'Volume',
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isSound;

@@ -67,6 +67,8 @@ Tools.Rectangle = function (wickEditor) {
             wickObjects: [pathWickObject],
             dontSelectObjects: true
         });
+
+        wickEditor.paper.pathRoutines.refreshPathData(pathWickObject);
     }
 
 }
