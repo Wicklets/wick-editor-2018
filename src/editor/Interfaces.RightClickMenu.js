@@ -46,10 +46,18 @@ var RightClickMenuInterface = function (wickEditor) {
                 self.elem.appendChild(buttonGroup.elem);
             });
 
+            var textboxSelected = function (e) {
+                return e.target.tagName === 'INPUT' || e.target.className === 'ace_content' || e.target.tagName === 'TEXTAREA';
+            } 
+
             var mouseEventHandler = function (e) {
                 if(!enabled) return;
 
                 if(e.button == 2) {
+                    if(textboxSelected(e)) {
+                        self.open = false;
+                        return;
+                    }
                     if(e.target.tagName === 'CANVAS')
                         wickEditor.fabric.selectObjectsHoveredOver();
                     self.open = true;
@@ -63,6 +71,10 @@ var RightClickMenuInterface = function (wickEditor) {
             window.addEventListener('mousedown', function(e) { 
                 mouseEventHandler(e);
             });
+            document.addEventListener('contextmenu', function (e) { 
+                console.log(e.target)
+                if(enabled && !textboxSelected(e)) event.preventDefault();
+            }, false);
 
         }
 
@@ -161,11 +173,6 @@ var RightClickMenuInterface = function (wickEditor) {
 // Interface API
 
     self.setup = function () {
-        // Block browser default right click menu
-        document.addEventListener('contextmenu', function (event) { 
-            if(enabled) event.preventDefault();
-        }, false);
-
         var buttons = []
 
         wickEditor.inspector.getButtons().forEach(function (button) {
