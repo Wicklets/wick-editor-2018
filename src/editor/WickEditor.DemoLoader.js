@@ -29,7 +29,7 @@ var WickDemoLoader = function (wickEditor) {
     console.log("demoName: " + demoName);
 
     $.ajax({
-        url: "../demos/" + demoName,
+        url: "../site/pages/demos/" + demoName,
         type: 'GET',
         data: {},
         success: function(data) {
