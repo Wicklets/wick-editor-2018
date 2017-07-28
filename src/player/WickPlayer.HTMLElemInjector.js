@@ -47,7 +47,6 @@ var WickHTMLElemInjector = function (project) {
             document.body.appendChild(elem);
             htmlElems[wickObject.uuid] = elem;
         });
-        //console.log(htmlElems)
     }
 
     self.update = function () {
