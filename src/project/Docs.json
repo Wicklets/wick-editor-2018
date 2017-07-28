@@ -270,6 +270,14 @@
           "return": null
         },
         {
+          "name": "inputValue",
+          "description": "The current content of a text box. Only usable by editable text boxes.",
+          "example": "playerName = textBox.inputValue;",
+          "snippet": "this.inputValue",
+          "args": [],
+          "return": null
+        },
+        {
           "name": "playSound()",
           "description": "Plays the sound of the object (works on sound objects only).",
           "example": "this.playSound();",

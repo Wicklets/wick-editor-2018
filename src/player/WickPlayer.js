@@ -66,9 +66,11 @@ var WickPlayer = function () {
         window.wickRenderer.setProject(self.project);
         self.inputHandler = new WickPlayerInputHandler(this, self.canvasContainer);
         self.audioPlayer = new WickHowlerAudioPlayer(self.project);
+        self.htmlElemInjector = new WickHTMLElemInjector(self.project);
 
         self.inputHandler.setup();
         if(!bowser.mobile && !bowser.tablet) self.audioPlayer.setup();
+        self.htmlElemInjector.setup();
         window.wickRenderer.refresh(self.project.rootObject);
 
         var preloader = new WickPreloader();
@@ -113,6 +115,7 @@ var WickPlayer = function () {
 
                     if(!firstTick) self.project.tick();
                     if(self.project) window.wickRenderer.render(self.project.rootObject.getAllActiveChildObjects());
+                    if(self.project) self.htmlElemInjector.update();
                     self.inputHandler.update(false);
 
                     update();
@@ -126,6 +129,7 @@ var WickPlayer = function () {
             }
             if(!firstTick) self.project.tick();
             window.wickRenderer.render(self.project.rootObject.getAllActiveChildObjects());
+            self.htmlElemInjector.update();
             self.inputHandler.update();
 
         }

@@ -64,6 +64,7 @@ WickProject.Exporter = (function () {
             "src/player/WickPlayer.PixiRenderer.js",
             "src/player/WickPlayer.HowlerAudioPlayer.js",
             "src/player/WickPlayer.InputHandler.js",
+            "src/player/WickPlayer.HTMLElemInjector.js",
             "src/player/WickPlayer.js",
         ];
 
