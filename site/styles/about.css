@@ -112,6 +112,29 @@ hr {
 	/*margin-left: 10%;*/
 }
 
+.patrons-label {
+	font-weight: bold;
+	font-size: 20px;
+	padding-bottom: 10px;
+}
+.patrons-group {
+	padding-bottom: 30px;
+	width: 80%;
+	margin-left: 10%;
+}
+.patrons-large {
+	font-weight: normal;
+	font-size: 20px;
+}
+.patrons-medium {
+	font-weight: normal;
+	font-size: 16px;
+}
+.patrons-small {
+	font-weight: normal;
+	font-size: 14px;
+}
+
 @media only screen and (max-width: 700px) {
     /* For mobile phones: */
     .section {
