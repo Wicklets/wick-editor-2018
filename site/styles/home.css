@@ -21,6 +21,20 @@ body {
 	background-color: #d4f8f4;
 }
 
+#player-container {
+	margin-left: 50%;
+	margin-top: 5%;
+	width: 720px;
+	height: 480px;
+	transform: translateX(-50%);
+}
+.player {
+	position: relative;
+	width: 720px;
+	height: 480px;
+	border: none;
+}
+
 .home-message {
 	position: absolute;
 
@@ -65,6 +79,22 @@ body {
 	background-color: #6EF8B0;
 }
 
+.launch-editor-button-subtitle {
+	margin-left: 50%;
+	margin-bottom: 0%;
+	margin-top: 10px;
+
+	height: 30px;
+	width: 300px;
+	text-align: center;
+
+	font-size: 14px;
+	font-weight: normal;
+	color: #333;
+
+	transform:translateX(-50%);
+}
+
 .w3-button {
 	color: white; 
 }
@@ -76,18 +106,4 @@ body {
 	width: 300px;
 	height: 80%;
 	overflow-y: scroll;
-}
-
-#player-container {
-	margin-left: 50%;
-	margin-top: 0%;
-	width: 720px;
-	height: 480px;
-	transform: translateX(-50%);
-}
-.player {
-	position: relative;
-	width: 720px;
-	height: 480px;
-	border: none;
 }

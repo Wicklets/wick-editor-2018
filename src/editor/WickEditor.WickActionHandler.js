@@ -618,7 +618,8 @@ var WickActionHandler = function (wickEditor) {
 
             // Add an empty frame
             var newLayer = new WickLayer();
-            newLayer.frames = [];
+            newLayer.frames = [new WickFrame()];
+            newLayer.frames[0].playheadPosition = 0;
             currentObject.addLayer(newLayer);
 
             // Go to last added layer

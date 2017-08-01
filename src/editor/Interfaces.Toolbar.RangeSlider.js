@@ -1,4 +1,4 @@
-ToolbarInterface.RangeSlider = function (container, iconPath, min, max, valueCallback, getValueFn, isActiveFn, onChangeFn) {
+ToolbarInterface.RangeSlider = function (container, alt, iconPath, min, max, valueCallback, getValueFn, isActiveFn, onChangeFn) {
 
     var self = this;
 
@@ -17,7 +17,8 @@ ToolbarInterface.RangeSlider = function (container, iconPath, min, max, valueCal
     var clickOutDiv;
 
     buttonContainer = document.createElement('div');
-    buttonContainer.className = 'range-slider-button-container';
+    buttonContainer.className = 'range-slider-button-container tooltipElem';
+    buttonContainer.setAttribute('alt', alt);
     buttonContainer.onclick = function () {
         active = !active;
         wickEditor.syncInterfaces();

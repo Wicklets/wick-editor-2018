@@ -849,40 +849,15 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Create Motion Tween",
-        icon: "./resources/inspector-tween.svg",
-        colorClass: 'frames',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 
-                && selectionInfo.dataType === 'frame'
-                && !selectionInfo.object.getCurrentTween();
-        },
-        buttonAction: function () {
-            wickEditor.guiActionHandler.doAction('createMotionTween');
-        }
-    }));
-
-    properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Delete Motion Tween",
-        icon: "./resources/inspector-delete.svg",
-        colorClass: 'frames',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 
-                && selectionInfo.dataType === 'frame'
-                && selectionInfo.object.getCurrentTween();
-        },
-        buttonAction: function () {
-            wickEditor.guiActionHandler.doAction('deleteMotionTween');
-        }
-    }));
-
-    properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Add Frame",
-        icon: "./resources/inspector-flip-vertically.svg",
+        icon: "./resources/inspector-duplicate.svg",
         colorClass: 'frames',
         isActiveFn: function () {
+            var layer = wickEditor.project.getCurrentLayer();
+            var playheadPos = wickEditor.project.getCurrentObject().playheadPosition;
             return selectionInfo.numObjects > 0 
-                && selectionInfo.dataType === 'frame';
+                && selectionInfo.dataType === 'frame'
+                && !layer.getFrameAtPlayheadPosition(playheadPos);
         },
         buttonAction: function () {
             wickEditor.actionHandler.doAction('addNewFrame');
@@ -951,6 +926,34 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         },
         buttonAction: function () {
             wickEditor.guiActionHandler.doAction("deleteSelectedObjects")
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Create Motion Tween",
+        icon: "./resources/inspector-tween.svg",
+        colorClass: 'frames',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 
+                && selectionInfo.dataType === 'frame'
+                && !selectionInfo.object.getCurrentTween();
+        },
+        buttonAction: function () {
+            wickEditor.guiActionHandler.doAction('createMotionTween');
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Delete Motion Tween",
+        icon: "./resources/inspector-delete.svg",
+        colorClass: 'frames',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 
+                && selectionInfo.dataType === 'frame'
+                && selectionInfo.object.getCurrentTween();
+        },
+        buttonAction: function () {
+            wickEditor.guiActionHandler.doAction('deleteMotionTween');
         }
     }));
 

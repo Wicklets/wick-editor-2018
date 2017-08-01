@@ -302,7 +302,7 @@ var InputHandler = function (wickEditor) {
             document.getElementById('tooltipGUI').style.display = 'block';
             document.getElementById('tooltipGUI').style.opacity = 0.0;
         });
-    }, 500);
+    }, 1500);
 
 /*************************
      File Import
