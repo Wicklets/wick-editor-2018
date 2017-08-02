@@ -1,29 +1,28 @@
-body {
-	height: 200%;
-	overflow-x: hidden;
-}
-
-.top-page {
-	position: absolute;
-	height: 608px;
-	width: 100%;
-	left: 0px;
-	top: 50%;
-	transform: translateY(-50%);
-}
-
-.bottom-page {
-	position: absolute;
-	top: 97%;
-	left: 0px;
+html {
 	height: 100%;
 	width: 100%;
-	background-color: #d4f8f4;
+}
+
+body {
+	height: 100%;
+	width: 100%;
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+
+.version-number {
+	text-decoration: underline;
+	position: absolute;
+	width: 100px;
+	height: 30px;
+	text-align: center;
+	top: 5px;
+	right: 5px;
 }
 
 #player-container {
 	margin-left: 50%;
-	margin-top: 5%;
+	margin-top: 0%;
 	width: 720px;
 	height: 480px;
 	transform: translateX(-50%);
@@ -33,6 +32,22 @@ body {
 	width: 720px;
 	height: 480px;
 	border: none;
+}
+
+.homepage-image-alt {
+	width: 720px;
+	max-width: 90%;
+	margin-left: 5%;
+}
+.homepage-image {
+	width: 95%;
+	margin-left: 2.5%;
+}
+.whats-wick-button {
+	text-align: center;
+	font-size: 46px;
+	text-decoration: underline;
+	margin-top: 30px;
 }
 
 .home-message {
@@ -99,11 +114,31 @@ body {
 	color: white; 
 }
 
-.tweetbox {
+.desktop {
 	position: absolute;
-	right: 0px;
-	top: 10%;
-	width: 300px;
-	height: 80%;
-	overflow-y: scroll;
+	display: block;
+	top: 50%;
+	transform:translateY(-50%);
+	width: 100%;
+	height: 650px;
+}
+.mobile {
+	display: none;
+	position: absolute;
+	top: 50%;
+	transform:translateY(-50%);
+	width: 100%;
+	height: 500px;
+}
+@media only screen and (max-width: 700px) {
+	.link-button {
+		width: 90%;
+		height: 160px;
+	}
+	.desktop {
+		display: none;
+	}
+	.mobile {
+		display: block;
+	}
 }

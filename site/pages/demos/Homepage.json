@@ -30,7 +30,7 @@
 								"name": "logo",
 								"x": 225.40784264654224,
 								"y": 188.2740060134338,
-								"width": 652.1457634180845,
+								"width": 652.1490190237821,
 								"height": 352.1080120268675,
 								"scaleX": 1,
 								"scaleY": 1,
@@ -59,7 +59,7 @@
 														"name": "ghost",
 														"x": 0,
 														"y": -21.9672638513253,
-														"width": 651.1457634180845,
+														"width": 651.1490190237821,
 														"height": 307.17348432421693,
 														"scaleX": 1,
 														"scaleY": 1,
@@ -87,7 +87,7 @@
 																				"name": "poof",
 																				"x": -281.40784264654224,
 																				"y": -145.3067421621085,
-																				"width": 87.330078125,
+																				"width": 87.33333373069763,
 																				"height": 15.559999999999995,
 																				"scaleX": 1,
 																				"scaleY": 1,
@@ -114,7 +114,7 @@
 																									{
 																										"x": 0,
 																										"y": 0,
-																										"width": 85.330078125,
+																										"width": 85.33333373069763,
 																										"height": 13.559999999999997,
 																										"scaleX": 1,
 																										"scaleY": 1,
@@ -145,13 +145,13 @@
 																										"isButton": false,
 																										"playheadPosition": null,
 																										"currentLayer": null,
-																										"svgWidth": 86.330078125,
-																										"svgHeight": 14.559999999999997,
+																										"svgWidth": 86.33333373069763,
+																										"svgHeight": 14.559999999999999,
 																										"svgStrokeWidth": 1,
 																										"bbox": {
-																											"left": -173,
-																											"top": -177,
-																											"width": 86.330078125,
+																											"left": -54,
+																											"top": -168,
+																											"width": 86.33333373069763,
 																											"height": 14.559999999999995
 																										},
 																										"_zindex": 0,
@@ -274,13 +274,13 @@
 																					}
 																				],
 																				"playRanges": [],
-																				"svgWidth": 87.330078125,
+																				"svgWidth": 87.33333373069763,
 																				"svgHeight": 15.559999999999995,
 																				"svgStrokeWidth": 0,
 																				"bbox": {
-																					"left": -173,
-																					"top": -177,
-																					"width": 87.330078125,
+																					"left": -54,
+																					"top": -168,
+																					"width": 87.33333373069763,
 																					"height": 15.559999999999995
 																				},
 																				"_zindex": 14,
@@ -529,7 +529,8 @@
 																										"playheadPosition": 0,
 																										"uuid": "622bcdd9-fb29-4fb2-ab6b-56b6e13f66f1",
 																										"tweenType": "Linear",
-																										"tweenDir": "None"
+																										"tweenDir": "None",
+																										"rotations": 0
 																									},
 																									{
 																										"x": 25.536955807562265,
@@ -542,7 +543,8 @@
 																										"playheadPosition": 9,
 																										"uuid": "8c8a48e5-310e-4310-89d0-709de9dd14d1",
 																										"tweenType": "Linear",
-																										"tweenDir": "None"
+																										"tweenDir": "None",
+																										"rotations": 0
 																									},
 																									{
 																										"x": 25.53695580756225,
@@ -555,7 +557,8 @@
 																										"playheadPosition": 18,
 																										"uuid": "71e9bf4d-4c30-44c3-a1a6-9e1a2585450f",
 																										"tweenType": "Linear",
-																										"tweenDir": "None"
+																										"tweenDir": "None",
+																										"rotations": 0
 																									}
 																								],
 																								"pathData": null,
@@ -681,7 +684,8 @@
 																										"playheadPosition": 0,
 																										"uuid": "51e5e1bc-b21d-4b21-8619-7061fce2e76e",
 																										"tweenType": "Quadratic",
-																										"tweenDir": "In"
+																										"tweenDir": "In",
+																										"rotations": 0
 																									},
 																									{
 																										"x": -24.994558039824938,
@@ -694,7 +698,8 @@
 																										"playheadPosition": 9,
 																										"uuid": "77c4a8d8-3579-4357-bb45-87b44bfa0019",
 																										"tweenType": "Quadratic",
-																										"tweenDir": "Out"
+																										"tweenDir": "Out",
+																										"rotations": 0
 																									},
 																									{
 																										"x": -24.994558039824938,
@@ -707,7 +712,8 @@
 																										"playheadPosition": 18,
 																										"uuid": "96379f10-f96c-4f96-8ace-e0ac8dd95c74",
 																										"tweenType": "Linear",
-																										"tweenDir": "None"
+																										"tweenDir": "None",
+																										"rotations": 0
 																									}
 																								],
 																								"pathData": null,
@@ -1178,8 +1184,8 @@
 																				"isPath": true,
 																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#ffffff%22%20fill-rule=%22nonzero%22%20stroke=%22#000000%22%20stroke-width=%228.78%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M279.11658,250.08292c2.51454,3.73516%203.23782,3.85402%205.40856,-0.64082c2.62648,-4.94396%2044.06372,-63.63433%2037.25907,-108.67353c-6.80465,-45.03917%20-42.41315,-81.62998%20-95.7684,-82.21482c-53.3552,-0.58484%20-97.73808,43.65285%20-97.73808,93.55129c0,49.8984%2038.96259,95.68501%2041.92203,99.35271c2.78414,3.56428%203.90295,3.42485%206.29852,-0.11227c2.73995,-4.45292%209.09195,-17.4304%2011.0051,-20.17175c1.83726,-2.73904%202.44696,-2.67665%204.49284,-0.20535c2.16108,2.80749%2013.76315,15.86708%2016.60226,19.71264c2.85582,3.30467%204.0419,2.19596%205.6878,-0.25368c1.90232,-2.89102%209.53136,-17.42581%2011.02153,-19.82653c1.32986,-2.01943%202.9616,-2.04479%204.29464,0.02254c1.31261,2.06732%2013.15379,18.98761%2013.99741,20.32414c1.00852,1.36378%202.51014,2.06209%203.7045,-0.08559c1.32959,-2.04648%2011.78534,-18.33476%2013.16875,-20.82911c1.3896,-2.4944%203.4453,-2.8525%204.95946,0.02091c1.61303,2.78577%2011.22113,16.43908%2013.68399,20.02924z%22/%3E%3C/g%3E",
 																				"bbox": {
-																					"left": 108.40784264654224,
-																					"top": -31.693257837891508,
+																					"left": 227.40784264654224,
+																					"top": -22.693257837891508,
 																					"width": 203.0402302857009,
 																					"height": 204.29746027048185
 																				},
@@ -1218,8 +1224,8 @@
 																				"isPath": true,
 																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#fee8e4%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#000000%22%20stroke-width=%228.78%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M254.24305,155.94558c18.90939,-0.77969%2033.9552,-6.92691%2033.60578,-13.73017c-0.34942,-6.80328%20-15.96178,-11.68634%20-34.87117,-10.90662c-18.90939,0.77969%20-33.9552,6.92691%20-33.60578,13.73017c0.34942,6.80328%2015.96178,11.68634%2034.87117,10.90662z%22/%3E%3C/g%3E",
 																				"bbox": {
-																					"left": 136.61035922389198,
-																					"top": -44.372810572478045,
+																					"left": 255.61035922389198,
+																					"top": -35.372810572478045,
 																					"width": 77.26887991359138,
 																					"height": 33.580361776659515
 																				},
@@ -1258,8 +1264,8 @@
 																				"isPath": true,
 																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#000000%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#000000%22%20stroke-width=%228.78%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M237.22582,138.54654c2.5529,0%204.62241,-2.82667%204.62241,-6.31355c0,-3.48687%20-2.06953,-6.31355%20-4.62241,-6.31355c-2.5529,0%20-4.62241,2.82667%20-4.62241,6.31355c0,3.48687%202.06953,6.31355%204.62241,6.31355z%22/%3E%3C/g%3E",
 																				"bbox": {
-																					"left": 120.22582019035684,
-																					"top": -55.767008028082984,
+																					"left": 239.22582019035684,
+																					"top": -46.767008028082984,
 																					"width": 18.024820000000005,
 																					"height": 21.407100000000014
 																				},
@@ -1269,7 +1275,7 @@
 																				"svgY": 125.91944197191701,
 																				"svgStrokeWidth": 8.78,
 																				"svgWidth": 18.024820000000005,
-																				"svgHeight": 21.407100000000014,
+																				"svgHeight": 21.4071,
 																				"_tempZIndex": 2,
 																				"uuid": "77def79f-fe32-4fe3-a79a-5279fc8f3800"
 																			},
@@ -1298,10 +1304,10 @@
 																				"isPath": true,
 																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#000000%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#000000%22%20stroke-width=%228.78%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M268.76813,137.86947c2.56105,0%204.63717,-2.63587%204.63717,-5.88737c0,-3.2515%20-2.07615,-5.88737%20-4.63717,-5.88737c-2.56105,0%20-4.63717,2.63587%20-4.63717,5.88737c0,3.2515%202.07615,5.88737%204.63717,5.88737z%22/%3E%3C/g%3E",
 																				"bbox": {
-																					"left": 151.76813296799043,
-																					"top": -56.017900333326054,
+																					"left": 270.7681329679904,
+																					"top": -47.017900333326025,
 																					"width": 18.05434000000008,
-																					"height": 20.554740000000038
+																					"height": 20.55474000000001
 																				},
 																				"_zindex": 13,
 																				"forceFabricCanvasRegen": false,
@@ -1328,13 +1334,13 @@
 														],
 														"playRanges": [],
 														"_zindex": 7,
-														"svgWidth": 651.1457634180845,
+														"svgWidth": 651.1490190237821,
 														"svgHeight": 307.17348432421693,
 														"svgStrokeWidth": 0,
 														"bbox": {
-															"left": 108.40784264654224,
-															"top": -31.693257837891508,
-															"width": 651.1457634180845,
+															"left": 227.40784264654224,
+															"top": -22.693257837891508,
+															"width": 651.1490190237821,
 															"height": 307.17348432421693
 														},
 														"forceFabricCanvasRegen": false,
@@ -1353,7 +1359,8 @@
 														"playheadPosition": 59,
 														"uuid": "6183f659-376c-4376-8701-bc7089766526",
 														"tweenType": "Linear",
-														"tweenDir": "None"
+														"tweenDir": "None",
+														"rotations": 0
 													},
 													{
 														"x": 0,
@@ -1366,7 +1373,8 @@
 														"playheadPosition": 0,
 														"uuid": "6994a694-fe9b-4fe9-a6a6-ae6aa30e030a",
 														"tweenType": "Quadratic",
-														"tweenDir": "InOut"
+														"tweenDir": "InOut",
+														"rotations": 0
 													},
 													{
 														"x": 0,
@@ -1379,7 +1387,8 @@
 														"playheadPosition": 29,
 														"uuid": "e332dc07-530e-4530-8c5b-acc5bd47f927",
 														"tweenType": "Quadratic",
-														"tweenDir": "InOut"
+														"tweenDir": "InOut",
+														"rotations": 0
 													}
 												],
 												"pathData": null,
@@ -1456,8 +1465,8 @@
 																				"svgWidth": 142,
 																				"svgHeight": 32,
 																				"bbox": {
-																					"left": 108,
-																					"top": 98,
+																					"left": 227,
+																					"top": 107,
 																					"width": 142,
 																					"height": 32
 																				},
@@ -1485,8 +1494,8 @@
 														"svgHeight": 33,
 														"svgStrokeWidth": 0,
 														"bbox": {
-															"left": 108,
-															"top": 98,
+															"left": 227,
+															"top": 107,
 															"width": 143,
 															"height": 33
 														},
@@ -1505,7 +1514,8 @@
 														"playheadPosition": 59,
 														"uuid": "7441fc0c-051b-4051-9ff3-e9ffeb90098f",
 														"tweenType": "Linear",
-														"tweenDir": "None"
+														"tweenDir": "None",
+														"rotations": 0
 													},
 													{
 														"x": -0.40784264654223534,
@@ -1518,7 +1528,8 @@
 														"playheadPosition": 0,
 														"uuid": "c1c065d5-7464-4746-ad46-c2d471b448a7",
 														"tweenType": "Linear",
-														"tweenDir": "None"
+														"tweenDir": "None",
+														"rotations": 0
 													},
 													{
 														"x": -0.9669305344218628,
@@ -1531,7 +1542,8 @@
 														"playheadPosition": 29,
 														"uuid": "20d05319-91d6-491d-b10c-6f105d700003",
 														"tweenType": "Linear",
-														"tweenDir": "None"
+														"tweenDir": "None",
+														"rotations": 0
 													}
 												],
 												"pathData": null,
@@ -1546,14 +1558,14 @@
 									}
 								],
 								"playRanges": [],
-								"svgWidth": 652.1457634180845,
-								"svgHeight": 352.1080120268675,
+								"svgWidth": 1860.6572610500027,
+								"svgHeight": 1004.6052514690377,
 								"svgStrokeWidth": 0,
 								"bbox": {
-									"left": -100.6650390625,
-									"top": 12.220000000000056,
-									"width": 652.1457634180845,
-									"height": 352.1080120268675
+									"left": -100.66666686534882,
+									"top": 12.220000000000018,
+									"width": 652.1490190237821,
+									"height": 352.1080120268676
 								},
 								"_zindex": 1,
 								"framesDirty": false,
@@ -1620,8 +1632,8 @@
 														"svgWidth": 85.75812431812881,
 														"svgHeight": 71.03770177979442,
 														"bbox": {
-															"left": 430.4998541537699,
-															"top": -4.846490742960185,
+															"left": 418.4998541537699,
+															"top": -5.846490742960185,
 															"width": 85.75812431812892,
 															"height": 71.03770177979442
 														},
@@ -1771,14 +1783,14 @@
 										"uuid": "a24bff05-dabe-4dab-8610-6c612b23cf37"
 									}
 								],
-								"svgWidth": 86.75812431812892,
-								"svgHeight": 72.03770177979447,
+								"svgWidth": 247.53105388282214,
+								"svgHeight": 205.5319704177018,
 								"svgStrokeWidth": 0,
 								"bbox": {
-									"left": 373.1207919947054,
-									"top": 147.13465836714255,
+									"left": 373.1207919947055,
+									"top": 147.13465836714258,
 									"width": 86.75812431812892,
-									"height": 72.03770177979447
+									"height": 72.03770177979445
 								},
 								"_zindex": 2,
 								"framesDirty": false,
@@ -1841,8 +1853,8 @@
 														"svgWidth": 13.196839513550685,
 														"svgHeight": 53.159050227039586,
 														"bbox": {
-															"left": 487.9922581626037,
-															"top": 4.575993181100813,
+															"left": 475.9922581626037,
+															"top": 3.575993181100813,
 															"width": 13.196839513550685,
 															"height": 53.159050227039586
 														},
@@ -1883,8 +1895,8 @@
 														"svgWidth": 13.531119999999987,
 														"svgHeight": 13.139520000000005,
 														"bbox": {
-															"left": 487.9857317920996,
-															"top": -33.54879849847336,
+															"left": 475.9857317920996,
+															"top": -34.54879849847336,
 															"width": 13.531119999999987,
 															"height": 13.139520000000005
 														},
@@ -2120,14 +2132,14 @@
 										"uuid": "8f86e57c-3f74-43f7-a984-8698fa59d666"
 									}
 								],
-								"svgWidth": 14.5311200000001,
-								"svgHeight": 72.27407679309397,
+								"svgWidth": 41.45898123048915,
+								"svgHeight": 206.20637591705372,
 								"svgStrokeWidth": 0,
 								"bbox": {
-									"left": 466.72017179209956,
+									"left": 466.7201717920996,
 									"top": 147.38144150152664,
-									"width": 14.5311200000001,
-									"height": 72.27407679309397
+									"width": 14.531119999999987,
+									"height": 72.27407679309398
 								},
 								"_zindex": 3,
 								"framesDirty": false,
@@ -2191,10 +2203,10 @@
 														"svgStrokeWidth": 1,
 														"_zindex": 7,
 														"svgWidth": 48.51415871639995,
-														"svgHeight": 52.60978853499506,
+														"svgHeight": 52.60978853499503,
 														"bbox": {
-															"left": 387.4369227991923,
-															"top": 4.715692656487107,
+															"left": 516.4369227991923,
+															"top": 3.715692656487107,
 															"width": 48.51415871640006,
 															"height": 52.60978853499506
 														},
@@ -2345,14 +2357,14 @@
 										"uuid": "78a58107-3c86-43c8-a395-4639fefab40d"
 									}
 								],
-								"svgWidth": 49.51415871640006,
-								"svgHeight": 53.60978853499506,
+								"svgWidth": 141.26967342274327,
+								"svgHeight": 152.95498328021893,
 								"svgStrokeWidth": 0,
 								"bbox": {
 									"left": 489.6798434409923,
-									"top": 165.91079838898963,
-									"width": 49.51415871640006,
-									"height": 53.60978853499506
+									"top": 165.91079838898958,
+									"width": 49.514158716400075,
+									"height": 53.60978853499507
 								},
 								"_zindex": 4,
 								"framesDirty": false,
@@ -2382,16 +2394,17 @@
 								"playheadPosition": null,
 								"currentLayer": null,
 								"isImage": true,
-								"svgWidth": 595.9673469387756,
-								"svgHeight": 96.03265306122444,
+								"svgWidth": 1700.3643938470766,
+								"svgHeight": 273.9923667810456,
 								"svgStrokeWidth": 0,
 								"bbox": {
-									"left": 72,
-									"top": 346,
+									"left": 72.00000000000003,
+									"top": 346.00000000000006,
 									"width": 595.9673469387756,
-									"height": 96.03265306122444
+									"height": 96.03265306122452
 								},
-								"_zindex": 5
+								"_zindex": 5,
+								"forceFabricCanvasRegen": false
 							},
 							{
 								"uuid": "38dd8e0d-087a-4087-ae80-e2e8e2de1f4f",
@@ -2414,7 +2427,7 @@
 								"textData": false,
 								"isSymbol": true,
 								"isButton": false,
-								"playheadPosition": 1,
+								"playheadPosition": 0,
 								"currentLayer": 0,
 								"layers": [
 									{
@@ -2622,7 +2635,8 @@
 														"playheadPosition": 0,
 														"uuid": "be7ca4a2-c9b7-4c9b-965d-3d65b0c5267d",
 														"tweenType": "Quadratic",
-														"tweenDir": "Out"
+														"tweenDir": "Out",
+														"rotations": 0
 													},
 													{
 														"x": 0,
@@ -2635,7 +2649,8 @@
 														"playheadPosition": 9,
 														"uuid": "29d30afa-16d1-416d-b00e-ab00a0ea56be",
 														"tweenType": "Linear",
-														"tweenDir": "None"
+														"tweenDir": "None",
+														"rotations": 0
 													}
 												],
 												"pathData": null,
@@ -3701,7 +3716,8 @@
 														"playheadPosition": 0,
 														"uuid": "604b15d8-bc14-4bc1-8baa-0cbaf979d71c",
 														"tweenType": "Linear",
-														"tweenDir": "None"
+														"tweenDir": "None",
+														"rotations": 0
 													},
 													{
 														"x": 180,
@@ -3714,7 +3730,8 @@
 														"playheadPosition": 123,
 														"uuid": "7cb116fa-1fe0-41fe-8294-f029b18a1113",
 														"tweenType": "Linear",
-														"tweenDir": "None"
+														"tweenDir": "None",
+														"rotations": 0
 													},
 													{
 														"x": 186.8292682926829,
@@ -3727,7 +3744,8 @@
 														"playheadPosition": 73,
 														"uuid": "68748150-e0df-4e0d-b44c-b744e3a78f50",
 														"tweenType": "Linear",
-														"tweenDir": "None"
+														"tweenDir": "None",
+														"rotations": 0
 													}
 												],
 												"pathData": null,
@@ -3812,8 +3830,8 @@
 																				"svgWidth": 13.4393940807131,
 																				"svgHeight": 71.49562376306619,
 																				"bbox": {
-																					"left": 426.4622092143318,
-																					"top": -4.855443690494525,
+																					"left": 555.4622092143318,
+																					"top": -5.855443690494525,
 																					"width": 13.43939408071276,
 																					"height": 71.49562376306605
 																				},
@@ -3851,8 +3869,8 @@
 																				"svgWidth": 37.622554005605934,
 																				"svgHeight": 39.53503813536531,
 																				"bbox": {
-																					"left": 441.0002097219908,
-																					"top": -2.123750860447501,
+																					"left": 570.0002097219908,
+																					"top": -3.123750860447501,
 																					"width": 37.622554005605934,
 																					"height": 39.535038135365255
 																				},
@@ -3890,8 +3908,8 @@
 																				"svgWidth": 28.80784731242204,
 																				"svgHeight": 38.3843828571664,
 																				"bbox": {
-																					"left": 448.9989821716458,
-																					"top": 11.483590135419433,
+																					"left": 577.9989821716458,
+																					"top": 10.483590135419433,
 																					"width": 28.80784731242204,
 																					"height": 38.38438285716643
 																				},
@@ -4215,13 +4233,13 @@
 															}
 														],
 														"svgWidth": 44.66039365388144,
-														"svgHeight": 72.49562376306608,
+														"svgHeight": 72.49562376306605,
 														"svgStrokeWidth": 0,
 														"bbox": {
-															"left": 546.2425121739755,
-															"top": 146.8967444279724,
+															"left": 570.5727090009161,
+															"top": -5.855443690494525,
 															"width": 44.66039365388144,
-															"height": 72.49562376306608
+															"height": 72.49562376306605
 														},
 														"_zindex": 6,
 														"framesDirty": false,
@@ -4448,14 +4466,14 @@
 									}
 								],
 								"playRanges": [],
-								"svgWidth": 45.66039365388144,
-								"svgHeight": 73.49562376306608,
+								"svgWidth": 130.27443194144828,
+								"svgHeight": 209.69159198437922,
 								"svgStrokeWidth": 0,
 								"bbox": {
 									"left": 545.7425121739755,
 									"top": 146.3967444279724,
-									"width": 45.66039365388144,
-									"height": 73.49562376306608
+									"width": 45.660393653881435,
+									"height": 73.4956237630661
 								},
 								"_zindex": 6,
 								"framesDirty": false,
@@ -4536,8 +4554,8 @@
 														"svgWidth": 724,
 														"svgHeight": 484,
 														"bbox": {
-															"left": 233,
-															"top": 52.00000000000003,
+															"left": 362,
+															"top": 51.00000000000003,
 															"width": 724,
 															"height": 484
 														},
@@ -4617,13 +4635,13 @@
 									}
 								],
 								"playRanges": [],
-								"svgWidth": 725,
-								"svgHeight": 485,
+								"svgWidth": 2068.5096119297523,
+								"svgHeight": 1383.7616024633514,
 								"svgStrokeWidth": 0,
 								"bbox": {
-									"left": -2.5,
-									"top": -2.4999999999999716,
-									"width": 725,
+									"left": -2.499999999999993,
+									"top": -2.499999999999983,
+									"width": 725.0000000000001,
 									"height": 485
 								},
 								"_zindex": 0,

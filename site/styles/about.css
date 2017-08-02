@@ -135,10 +135,16 @@ hr {
 	font-size: 14px;
 }
 
+.mobile-only {
+	display: none;
+}
 @media only screen and (max-width: 700px) {
     /* For mobile phones: */
     .section {
         width: 90%;
+    }
+    .mobile-only {
+    	display: block;
     }
 }
 
