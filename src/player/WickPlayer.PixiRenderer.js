@@ -342,8 +342,7 @@ var WickPixiRenderer = function () {
     }
 
     this.cleanup = function() {
-        return;
-
+        /*
         window.removeEventListener('resize', resizeCanvas);
 
         // Get rid of old canvas
@@ -364,6 +363,7 @@ var WickPixiRenderer = function () {
             //console.log(textureId)
             PIXI.utils.BaseTextureCache[textureId].destroy(true);
         }
+        */
     }
 
 };

@@ -67,7 +67,6 @@ Tools.Paintbrush = function (wickEditor) {
         window.secretPathListenerForWick = function (fabricPath) {
             fabricPath.stroke = "#000000";
             potraceFabricPath(fabricPath, function(SVGData) {
-
                 if(wickEditor.currentTool instanceof Tools.Eraser) {
                     wickEditor.paper.pathRoutines.eraseWithPath({
                         pathData: SVGData,

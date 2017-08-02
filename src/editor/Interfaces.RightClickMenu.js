@@ -72,7 +72,7 @@ var RightClickMenuInterface = function (wickEditor) {
                 mouseEventHandler(e);
             });
             document.addEventListener('contextmenu', function (e) { 
-                if(enabled && !textboxSelected(e)) event.preventDefault();
+                if(enabled && !textboxSelected(e)) e.preventDefault();
             }, false);
 
         }

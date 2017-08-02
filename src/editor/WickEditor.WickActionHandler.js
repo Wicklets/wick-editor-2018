@@ -115,9 +115,9 @@ var WickActionHandler = function (wickEditor) {
         if(!args.dontAddToStack) undoStack.push(newAction);
         newAction.doAction();
 
-        return newAction;
-
         redoStack = [];
+
+        return newAction;
 
     }
 
