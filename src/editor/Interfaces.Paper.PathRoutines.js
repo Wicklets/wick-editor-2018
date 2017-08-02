@@ -135,9 +135,10 @@ var PathRoutines = function (paperInterface, wickEditor) {
             path.svgX = subtractedPath.bounds._x;
             path.svgY = subtractedPath.bounds._y;
 
+            var abs = wickEditor.project.currentObject.getAbsolutePosition();
             modifiedStates.push({
-                x: subtractedPath.bounds._x + subtractedPath.bounds._width/2,
-                y: subtractedPath.bounds._y + subtractedPath.bounds._height/2,
+                x: subtractedPath.bounds._x + subtractedPath.bounds._width/2 - abs.x,
+                y: subtractedPath.bounds._y + subtractedPath.bounds._height/2 - abs.y,
                 pathData : '<svg id="svg" version="1.1" width="'+subtractedPath.bounds._width+'" height="'+subtractedPath.bounds._height+'" xmlns="http://www.w3.org/2000/svg">' +subtractedPath.exportSVG({asString:true})+ '</svg>'
             });
             modifiedObjects.push(path);

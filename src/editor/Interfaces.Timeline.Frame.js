@@ -116,7 +116,7 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
         } else if(!src || wickEditor.project.smallFramesMode) {
             thumbnailDiv.style.display = 'block';
             thumbnailDiv.src = '/resources/whitepage.png';
-            this.elem.style.backgroundColor = wickEditor.project.backgroundColor;//'#FFF';
+            this.elem.style.backgroundColor = '#FFF';
         } else if(src) {
             thumbnailDiv.style.display = 'block';
             thumbnailDiv.src = src;

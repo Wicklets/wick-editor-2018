@@ -602,6 +602,7 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.guiActionHandler.doAction("openProjectSettings");
             wickEditor.paper.needsUpdate = true;
             wickEditor.thumbnailRenderer.renderAllThumbsOnTimeline();
+            wickEditor.project.currentObject.framesDirty = true;
             wickEditor.syncInterfaces();
         });
 
