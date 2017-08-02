@@ -3646,6 +3646,7 @@ var WickTween = function() {
     this.opacity = 1;
 
     this.playheadPosition = 0;
+    this.rotations = 0;
 
     this.uuid = random.uuid4();
 
@@ -3704,11 +3705,21 @@ WickTween.interpolateTweens = function (tweenA, tweenB, t) {
 	var tweenFunc = (tweenA.tweenType === "Linear") ? (TWEEN.Easing.Linear.None) : (TWEEN.Easing[tweenA.tweenType][tweenA.tweenDir]);
 	tweenValueNames.forEach(function (name) {
 		var tt = tweenFunc(t);
-		interpTween[name] = lerp(tweenA[name], tweenB[name], tt);
+        var valA = tweenA[name];
+        var valB = tweenB[name];
+        if(name === 'rotation') {
+            while(valA < -180) valA += 360;
+            while(valB < -180) valB += 360;
+            while(valA > 180) valA -= 360;
+            while(valB > 180) valB -= 360;
+            valB += tweenA.rotations * 360;
+        }
+		interpTween[name] = lerp(valA, valB, tt);
 	});
 
 	return interpTween;
-}</script>
+}
+</script>
 <script>/* Wick - (c) 2017 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
 /*  This file is part of Wick. 
@@ -3841,6 +3852,7 @@ WickFrame.prototype.copy = function () {
     copiedFrame.identifier = this.identifier;
     copiedFrame.playheadPosition = this.playheadPosition;
     copiedFrame.length = this.length;
+    copiedFrame.wickScript = this.wickScript;
 
     this.wickObjects.forEach(function (wickObject) {
         copiedFrame.wickObjects.push(wickObject.copy());
@@ -4506,6 +4518,7 @@ WickObject.prototype.copy = function () {
     copiedObject.isSound = this.isSound;
     copiedObject.isButton = this.isButton;
     copiedObject.cachedAbsolutePosition = this.getAbsolutePosition();
+    copiedObject.svgStrokeWidth = this.svgStrokeWidth;
 
     copiedObject.textData = JSON.parse(JSON.stringify(this.textData));
 
@@ -5237,6 +5250,10 @@ WickObject.prototype.getAbsolutePosition = function () {
             y: this.y + parentPosition.y
         };
     }
+}
+
+WickObject.prototype.getZIndex = function () {
+    return this.parentFrame.wickObjects.indexOf(this);
 }
 
 /* Get the absolute position of this object taking into account the scale of the parent */
@@ -6222,6 +6239,9 @@ WickProject.fixForBackwardsCompatibility = function (project) {
         wickObj.layers.forEach(function (layer) {
             layer.frames.forEach(function (frame) {
                 if(!frame.tweens) frame.tweens = [];
+                frame.tweens.forEach(function (tween) {
+                    if(!tween.rotations) tween.rotations = 0;
+                });
             });
         });
     });
@@ -6757,6 +6777,8 @@ WickProject.prototype.loadBuiltinFunctions = function (contextObject) {
     window.movePlayheadTo = function (frame) { objectScope.movePlayheadTo(frame); }
     window.gotoAndStop    = function (frame) { objectScope.gotoAndStop(frame); }
     window.gotoAndPlay    = function (frame) { objectScope.gotoAndPlay(frame); }
+    window.gotoNextFrame  = function ()      { objectScope.gotoNextFrame(); }
+    window.gotoPrevFrame  = function ()      { objectScope.gotoPrevFrame(); }
 
     window.stopAllSounds = function () { wickPlayer.audioPlayer.stopAllSounds(); };
     window.keyIsDown      = function (keyString) { return wickPlayer.inputHandler.keyIsDown(keyString); };
@@ -6904,7 +6926,10 @@ WickProject.prototype.getDuplicateName = function () {
               return a
             }, {})
 
-            var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1)
+            //var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1)
+            var duplicates = Object.keys(uniq).filter(function (a) {
+                return uniq[a] > 1;
+            });
 
             if(duplicates.length > 0) foundDuplicate = duplicates[0];
         });
@@ -7322,10 +7347,11 @@ var WickPixiRenderer = function () {
             backgroundColor : "#DDDDDD", 
             resolution: window.devicePixelRatio,
             preserveDrawingBuffer: true,
+            antialias: true,
         };
         renderer = PIXI.autoDetectRenderer(project.width*renderScale, project.height*renderScale, rendererOptions);
         renderer.clearBeforeRender = false;
-        renderer.roundPixels = project.pixelPerfectRendering;
+        renderer.roundPixels = true;//project.pixelPerfectRendering;
         renderer.view.setAttribute('tabindex', 0);
         /*$(renderer.view).click(function() { this.focus(); });*/
 
@@ -7454,13 +7480,12 @@ var WickPixiRenderer = function () {
             //wickObject.generateAlphaMask(pixiObject.texture.baseTexture.imageUrl);
 
         } else if (wickObject.pathData) {
-
             var parser = new DOMParser();
             var x = (wickObject.svgX || 0);
             var y = (wickObject.svgY || 0);
             if(!wickObject.svgStrokeWidth) wickObject.svgStrokeWidth = 0;
-            x -= wickObject.svgStrokeWidth/2
-            y -= wickObject.svgStrokeWidth/2
+            x -= wickObject.svgStrokeWidth/2;
+            y -= wickObject.svgStrokeWidth/2;
             var w = (wickObject.width  + wickObject.svgStrokeWidth*1);
             var h = (wickObject.height + wickObject.svgStrokeWidth*1);
             var svgDoc = parser.parseFromString('<svg id="svg" viewBox="'+x+' '+y+' '+w+' '+h+'" version="1.1" width="'+w+'" height="'+h+'" xmlns="http://www.w3.org/2000/svg">'+wickObject.pathData+'</svg>', "image/svg+xml");
@@ -7602,8 +7627,7 @@ var WickPixiRenderer = function () {
     }
 
     this.cleanup = function() {
-        return;
-
+        /*
         window.removeEventListener('resize', resizeCanvas);
 
         // Get rid of old canvas
@@ -7624,6 +7648,7 @@ var WickPixiRenderer = function () {
             //console.log(textureId)
             PIXI.utils.BaseTextureCache[textureId].destroy(true);
         }
+        */
     }
 
 };</script>
@@ -7881,7 +7906,7 @@ WickPlayerInputHandler = function (wickPlayer) {
         // Check if we're hovered over a clickable object...
         var hoveredOverObj = null;
         project.rootObject.getAllActiveChildObjectsRecursive(true).forEachBackwards(function(child) {
-            if(child.isPointInside(self.getMouse())) {
+            if(!(hoveredOverObj && hoveredOverObj.isButton) && child.isPointInside(self.getMouse())) {
                 if(!child.hoveredOver) {
                     child._wasHoveredOver = true;
                 }
@@ -7908,11 +7933,13 @@ WickPlayerInputHandler = function (wickPlayer) {
             wickPlayer.fullscreenRequested = false;
         }
         
+        var clickedObj;
         project.rootObject.getAllActiveChildObjectsRecursive(true).forEachBackwards(function(child) {
-            if(child.isPointInside(self.getMouse())) {
+            if(!(clickedObj && clickedObj.isButton) && child.isPointInside(self.getMouse())) {
                 //project.runScript(child, "onClick");
                 child._wasClicked = true;
                 child._beingClicked = true;
+                clickedObj = child;
             }
         });
 
@@ -8072,6 +8099,97 @@ WickPlayerInputHandler = function (wickPlayer) {
 
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
+
+var WickHTMLElemInjector = function (project) {
+
+    var self = this;
+
+    var htmlElems;
+
+    self.setup = function () {
+        htmlElems = [];
+        project.getAllObjects().forEach(function (wickObject) {
+            if(!wickObject.htmlElemData) return;
+
+            var elem = document.createElement(wickObject.htmlElemData.tagName);
+            elem.style.position = 'absolute';
+            elem.style.top = '0px';
+            elem.style.left = '0px';
+            elem.width = wickObject.width;
+            elem.height = wickObject.height;
+            elem.style.width = (wickObject.width+5)+'px';
+            elem.style.height = wickObject.height+'px';
+            if(wickObject.textData) {
+                elem.type = 'text';
+                elem.value = wickObject.textData.text;
+                elem.style.fontSize = wickObject.textData.fontSize;
+                elem.style.fontFamily = wickObject.textData.fontFamily;
+                elem.fontStyle = wickObject.textData.fontStyle;
+                elem.fontWeight = wickObject.textData.fontWeight;
+                elem.fontColor = wickObject.textData.fill;
+                elem.style.display = 'none';
+            }
+            document.body.appendChild(elem);
+            htmlElems[wickObject.uuid] = elem;
+        });
+    }
+
+    self.update = function () {
+        for( uuid in htmlElems ) {
+            var elem = htmlElems[uuid];
+            var wickObject = project.getObjectByUUID(uuid);
+            if(!wickObject) return;
+            if(wickObject.isActive()) {
+                if(wickObject.textData) {
+                    wickObject.inputValue = elem.value;
+                }
+                var transform = buildCSSTransformValueFromWickObject(wickObject);
+                elem.style.transform = transform;
+                elem.style.display = 'block';
+            } else {
+                elem.style.display = 'none';
+            }
+        };
+    }
+
+    // util
+
+    var buildCSSTransformValueFromWickObject = function (wickObject) {
+        var absPos = wickObject.getAbsolutePositionTransformed();
+        var absScale = wickObject.getAbsoluteScale();
+        var absRotate = wickObject.getAbsoluteRotation();
+        absPos.x -= wickObject.width/2;
+        absPos.y -= wickObject.height/2;
+        return buildCSSTransformValue(absPos.x, absPos.y, absScale.x, absScale.y, absRotate)
+    }
+
+    var buildCSSTransformValue = function (x, y, scaleX, scaleY, rotate) {
+        var transform = "";
+        transform += "translateX("+x+"px) "
+        transform += "translateY("+y+"px) "
+        transform += "scaleX("+scaleX+") "
+        transform += "scaleY("+scaleY+") "
+        transform += "rotate("+rotate+"deg) "
+        return transform;
+    }
+
+};</script>
+<script>/* Wick - (c) 2017 Zach Rispoli, Luca Damasco, and Josh Rispoli */
+
+/*  This file is part of Wick. 
+    
+    Wick is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Wick is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
     
 var WickPlayer = function () {
 
@@ -8124,9 +8242,11 @@ var WickPlayer = function () {
         window.wickRenderer.setProject(self.project);
         self.inputHandler = new WickPlayerInputHandler(this, self.canvasContainer);
         self.audioPlayer = new WickHowlerAudioPlayer(self.project);
+        self.htmlElemInjector = new WickHTMLElemInjector(self.project);
 
         self.inputHandler.setup();
         if(!bowser.mobile && !bowser.tablet) self.audioPlayer.setup();
+        self.htmlElemInjector.setup();
         window.wickRenderer.refresh(self.project.rootObject);
 
         var preloader = new WickPreloader();
@@ -8171,6 +8291,7 @@ var WickPlayer = function () {
 
                     if(!firstTick) self.project.tick();
                     if(self.project) window.wickRenderer.render(self.project.rootObject.getAllActiveChildObjects());
+                    if(self.project) self.htmlElemInjector.update();
                     self.inputHandler.update(false);
 
                     update();
@@ -8184,6 +8305,7 @@ var WickPlayer = function () {
             }
             if(!firstTick) self.project.tick();
             window.wickRenderer.render(self.project.rootObject.getAllActiveChildObjects());
+            self.htmlElemInjector.update();
             self.inputHandler.update();
 
         }

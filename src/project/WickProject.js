@@ -847,7 +847,10 @@ WickProject.prototype.getDuplicateName = function () {
               return a
             }, {})
 
-            var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1)
+            //var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1)
+            var duplicates = Object.keys(uniq).filter(function (a) {
+                return uniq[a] > 1;
+            });
 
             if(duplicates.length > 0) foundDuplicate = duplicates[0];
         });
