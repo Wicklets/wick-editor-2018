@@ -135,6 +135,11 @@ hr {
 	font-size: 14px;
 }
 
+.contact {
+	text-align: center;
+	font-weight: normal;
+}
+
 .mobile-only {
 	display: none;
 }

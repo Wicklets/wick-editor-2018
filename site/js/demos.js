@@ -88,10 +88,10 @@ function buildPage (demos) {
 }
 
 function recenterThumbnails () {
-    $('.thumbnails-container').css('width', '100%')
+    //$('.thumbnails-container').css('width', '100%')
     var offset = (parseInt($('.thumbnails-container').width()) % 165) / 2;
-    $('.thumbnails-container').css('margin-left', offset + 'px')
-    $('.thumbnails-container').css('width', 'calc(100% - ' + offset + 'px)')
+    /*$('.thumbnails-container').css('margin-left', offset + 'px')
+    $('.thumbnails-container').css('width', 'calc(720px - ' + offset + 'px)')*/
 }
 
 // Load the json file with all the demos info
