@@ -298,7 +298,7 @@ var FabricInterface = function (wickEditor) {
 
     this.selectObjectsHoveredOver = function () {
         if(self.objHoveredOver) {
-            console.log(self.objHoveredOver)
+            if(self.objHoveredOver.type === 'group')return;
             wickEditor.project.clearSelection();
             wickEditor.project.selectObject(self.objHoveredOver.wickObjReference);
             wickEditor.syncInterfaces();
