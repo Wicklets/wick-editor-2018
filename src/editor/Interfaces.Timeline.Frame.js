@@ -58,7 +58,7 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
                 newLayer: that.wickFrame.parentLayer
             });
             if(!wickEditor.project.isObjectSelected(that.wickFrame)) {
-                wickEditor.project.clearSelection();
+                if(!e.shiftKey) wickEditor.project.clearSelection();
                 wickEditor.project.selectObject(that.wickFrame);
                 wickEditor.syncInterfaces();
             }
@@ -109,6 +109,12 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
     }
 
     this.update = function () {
+        if(wickEditor.project.smallFramesMode) {
+            this.elem.style.borderRadius = '0px';
+        } else {
+            this.elem.style.borderRadius = '2px';
+        }
+
         var src = this.wickFrame.thumbnail;
         if(this.wickFrame.tweens.length > 0) {
             thumbnailDiv.style.display = 'none';

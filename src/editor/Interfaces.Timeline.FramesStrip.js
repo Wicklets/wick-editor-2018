@@ -84,5 +84,6 @@ TimelineInterface.FramesStrip = function (wickEditor, timeline) {
     this.update = function () {
         var shift = timeline.horizontalScrollBar.getScrollPosition();
         framesStripCellContainer.style.left = (shift-shift%cssVar('--frame-width'))+'px';
+        this.elem.style.cursor = wickEditor.project.smallFramesMode ? 'deafult' : 'pointer';
     }
 }

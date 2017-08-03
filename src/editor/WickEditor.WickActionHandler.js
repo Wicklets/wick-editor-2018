@@ -725,12 +725,20 @@ var WickActionHandler = function (wickEditor) {
 
     registerAction('moveFrames', 
         function (args) {
+            var fixNegativeOffset = 0;
+            for (var i = 0; i < args.framesMoveActionData.length; i++) {
+                var frameMoveData = args.framesMoveActionData[i]
+                if(frameMoveData.newPlayheadPosition < 0) {
+                    fixNegativeOffset = -Math.min(fixNegativeOffset, frameMoveData.newPlayheadPosition)
+                }
+            }
+
             args.moveFrameActions = [];
             for (var i = 0; i < args.framesMoveActionData.length; i++) {
                 var frameMoveData = args.framesMoveActionData[i]
                 args.moveFrameActions.push(wickEditor.actionHandler.doAction('moveFrame', {
                     frame: frameMoveData.frame, 
-                    newPlayheadPosition: frameMoveData.newPlayheadPosition,
+                    newPlayheadPosition: frameMoveData.newPlayheadPosition+fixNegativeOffset,
                     newLayer: frameMoveData.newLayer,
                     dontAddToStack: true
                 }));

@@ -271,8 +271,6 @@ body {
     
     border-radius: 5px;
 
-    cursor: pointer;
-
     /*pointer-events:none;*/
 }
 
@@ -396,7 +394,6 @@ body {
     box-shadow: 0 0 1px 0 rgba(0,0,0,0.12), 0 1px 1px 0 rgba(0,0,0,0.24), 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24); 
     pointer-events: none;
     z-index: 10;
-    
 }
 
 .add-frame-overlay-img {
@@ -409,8 +406,8 @@ body {
 }
 
 .selection-box {
-    background-color: #CCC;
-    box-shadow: inset 0px 0px 1px #555;
+    background-color: #AAAAFF;
+    box-shadow: inset 0px 0px 1px #0000FF;
     opacity: 0.5;
     position: absolute;
     pointer-events: none;

@@ -287,7 +287,7 @@ TimelineInterface.Interactions = function (wickEditor, timeline) {
             if(parseInt(timeline.framesContainer.selectionBox.elem.style.width)  === 0 
             && parseInt(timeline.framesContainer.selectionBox.elem.style.height) === 0) return;
 
-            http://stackoverflow.com/questions/2752349/fast-rectangle-to-rectangle-intersection
+            // http://stackoverflow.com/questions/2752349/fast-rectangle-to-rectangle-intersection
             function intersectRect(r1, r2) {
               return !(r2.left > r1.right || 
                        r2.right < r1.left || 
@@ -301,9 +301,9 @@ TimelineInterface.Interactions = function (wickEditor, timeline) {
                 var frameDiv = frameDivs[i]
 
                 var frameRect = {
-                    left:   parseInt(frameDiv.style.left),
+                    left:   parseInt(frameDiv.style.left) + 15,
                     top:    parseInt(frameDiv.style.top),
-                    right:  parseInt(frameDiv.style.width)  + parseInt(frameDiv.style.left),
+                    right:  parseInt(frameDiv.style.width)  + parseInt(frameDiv.style.left) + 15,
                     bottom: parseInt(frameDiv.style.height) + parseInt(frameDiv.style.top)
                 }
 
