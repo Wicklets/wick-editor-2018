@@ -20,6 +20,7 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
 
     var selectionOverlayDiv = null;
     var thumbnailDiv = null;
+    var hasScriptsIconDiv = null;
 
     this.wickFrame = null;
     this.wickLayer = null;
@@ -81,6 +82,10 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
         selectionOverlayDiv.className = "selection-overlay";
         this.elem.appendChild(selectionOverlayDiv);
 
+        hasScriptsIconDiv = document.createElement('div');
+        hasScriptsIconDiv.className = "has-scripts-icon";
+        this.elem.appendChild(hasScriptsIconDiv);
+
         var extenderHandleRight = document.createElement('div');
         extenderHandleRight.className = "frame-extender-handle frame-extender-handle-right";
         extenderHandleRight.addEventListener('mousedown', function (e) {
@@ -114,6 +119,8 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
         } else {
             this.elem.style.borderRadius = '2px';
         }
+
+        hasScriptsIconDiv.style.display = this.wickFrame.hasScript() ? 'block' : 'none';
 
         var src = this.wickFrame.thumbnail;
         if(this.wickFrame.tweens.length > 0) {

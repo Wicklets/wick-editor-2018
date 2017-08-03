@@ -87,7 +87,7 @@ var ToolbarInterface = function (wickEditor) {
             return parseInt(wickEditor.settings.strokeWidth);
         }));
 
-        toolOptionInputs.push(new ToolbarInterface.RangeSlider(container, 'Brush Thickness', 'tools/Paintbrush.svg', 5, 100, function (val) {
+        toolOptionInputs.push(new ToolbarInterface.RangeSlider(container, 'Brush Thickness', 'tools/Paintbrush.svg', 3, 100, function (val) {
             wickEditor.settings.setValue('brushThickness', parseFloat(val));
             wickEditor.syncInterfaces();
         }, function () {
