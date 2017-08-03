@@ -869,6 +869,7 @@ var WickActionHandler = function (wickEditor) {
 
     registerAction('movePlayhead',
         function (args) {
+            wickEditor.tools.polygon.finishPath();
             wickEditor.fabric.forceModifySelectedObjects()
             wickEditor.project.deselectObjectType(WickObject);
             
@@ -1189,6 +1190,13 @@ var WickActionHandler = function (wickEditor) {
             var copiedFrame = frame.copy();
             copiedFrame.playheadPosition = frame.getNextOpenPlayheadPosition();
 
+            args.movePlayheadAction = wickEditor.actionHandler.doAction('movePlayhead', {
+                obj:wickEditor.project.getCurrentObject(),
+                newPlayheadPosition:copiedFrame.playheadPosition,
+                newLayer:copiedFrame.parentLayer,
+                dontAddToStack: true
+            });
+
             wickEditor.project.getCurrentLayer().addFrame(copiedFrame);
             // wickEditor.project.getCurrentObject().playheadPosition = copiedFrame.playheadPosition;
             wickEditor.project.clearSelection();
@@ -1201,6 +1209,8 @@ var WickActionHandler = function (wickEditor) {
         }, 
         function (args) {
             wickEditor.project.getCurrentLayer().removeFrame(args.copiedFrame);
+
+            args.movePlayheadAction.undoAction();
 
             wickEditor.project.currentObject.framesDirty = true;
             done();

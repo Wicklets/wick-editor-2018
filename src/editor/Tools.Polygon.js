@@ -119,9 +119,13 @@ Tools.Polygon = function (wickEditor) {
         wickEditor.paper.refreshSVGWickObject(path);
 
         if(path.closed) {
-            drawingPath = null;
-            currentSegment = null;
+            this.finishPath();
         }
+    }
+
+    this.finishPath = function () {
+        drawingPath = null;
+        currentSegment = null;
     }
 
 }
