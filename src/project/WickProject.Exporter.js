@@ -217,6 +217,7 @@ WickProject.Exporter = (function () {
         "_renderDirty",
         "_selection",
         "smallFramesMode",
+        "_soundDataForPreview"
     ];
 
     projectExporter.JSONReplacer = function(key, value) {

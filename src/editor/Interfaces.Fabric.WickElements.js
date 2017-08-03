@@ -231,13 +231,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             newFabricText.wickObjReference = wickObj;
             callback(newFabricText);
         }
-
-        if(wickObj.isSound) {
-            fabric.Image.fromURL('resources/audio.png', function(audioFabricObject) {
-                audioFabricObject.wickObjReference = wickObj;
-                callback(audioFabricObject);
-            });
-        }
         
         if(wickObj.pathData) {
             fabric.loadSVGFromString(wickObj.pathData, function(objects, options) {
@@ -464,10 +457,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             fabricObj.hasControls = false;
             fabricObj.selectable = false;
             fabricObj.evented = false;
-        }
-
-        if(wickObj.isSound) {
-            fabricObj.hasControls = false;
         }
 
     }

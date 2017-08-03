@@ -187,10 +187,7 @@ WickProject.fixForBackwardsCompatibility = function (project) {
                 wickObject.name = 'untitled';
             } else if(wickObject.audioData) {
                 var asset = new WickAsset(wickObject.imageData, 'audio', 'untitled');
-                wickObject.assetUUID = project.library.addAsset(asset);
-                wickObject.isSound = true;
-                wickObject.imageData = null;
-                wickObject.name = 'untitled';
+                var assetUUID = project.library.addAsset(asset);
             }
         })
     }
@@ -701,7 +698,6 @@ WickProject.prototype.loadBuiltinFunctions = function (contextObject) {
     window.gotoNextFrame  = function ()      { objectScope.gotoNextFrame(); }
     window.gotoPrevFrame  = function ()      { objectScope.gotoPrevFrame(); }
 
-    window.stopAllSounds = function () { wickPlayer.audioPlayer.stopAllSounds(); };
     window.keyIsDown      = function (keyString) { return wickPlayer.inputHandler.keyIsDown(keyString); };
     window.keyJustPressed = function (keyString) { return wickPlayer.inputHandler.keyJustPressed(keyString); }
     window.mouseX = wickPlayer.inputHandler.getMouse().x;

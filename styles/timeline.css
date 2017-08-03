@@ -318,6 +318,15 @@ body {
     border-radius: 3px;
 }
 
+.frame-waveform {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 600px;
+    height: 40px;
+    pointer-events: none;
+}
+
 .has-scripts-icon {
     bottom: 0px;
     left: 0px;

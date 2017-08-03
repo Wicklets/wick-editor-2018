@@ -25,7 +25,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.StringInput({
         title: 'X',
         isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && !selectionInfo.object.isSound;
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
         },
         getValueFn: function () {
             return roundToHundredths(selectionInfo.object.x);
@@ -43,7 +43,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.StringInput({
         title: 'Y',
         isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && !selectionInfo.object.isSound;
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
         },
         getValueFn: function () {
             return roundToHundredths(selectionInfo.object.y);
@@ -61,7 +61,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.StringInput({
         title: 'Rotation',
         isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && !selectionInfo.object.isSound;
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
         },
         getValueFn: function () {
             return roundToHundredths(selectionInfo.object.rotation);
@@ -79,7 +79,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.StringInput({
         title: 'Opacity',
         isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && !selectionInfo.object.isSound;
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
         },
         getValueFn: function () {
             return roundToHundredths(selectionInfo.object.opacity);
@@ -97,7 +97,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.StringInput({
         title: 'Width',
         isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && !selectionInfo.object.isSound;
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
         },
         getValueFn: function () {
             return roundToHundredths(selectionInfo.object.scaleX*selectionInfo.object.width);
@@ -115,7 +115,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.StringInput({
         title: 'Height',
         isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && !selectionInfo.object.isSound;
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
         },
         getValueFn: function () {
             return roundToHundredths(selectionInfo.object.scaleY*selectionInfo.object.height);
@@ -133,7 +133,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.StringInput({
         title: 'Scale (X)',
         isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && !selectionInfo.object.isSound;
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
         },
         getValueFn: function () {
             return roundToHundredths(selectionInfo.object.scaleX);
@@ -151,7 +151,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.StringInput({
         title: 'Scale (Y)',
         isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && !selectionInfo.object.isSound;
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
         },
         getValueFn: function () {
             return roundToHundredths(selectionInfo.object.scaleY);
@@ -169,7 +169,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.StringInput({
         title: 'Volume',
         isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isSound;
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
         },
         getValueFn: function () {
             return roundToHundredths(selectionInfo.object.volume);
@@ -182,7 +182,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.CheckboxInput({
         title: 'Loop',
         isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isSound;
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
         },
         getValueFn: function () {
             return selectionInfo.object.loop;

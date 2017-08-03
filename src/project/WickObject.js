@@ -46,7 +46,6 @@ var WickObject = function () {
 // Static
 
     this.assetUUID = null;
-    this.volume = 1.0;
     this.loop = false;
 
 // Text
@@ -261,7 +260,6 @@ WickObject.prototype.copy = function () {
     copiedObject.isImage = this.isImage;
     copiedObject.isPath = this.isPath;
     copiedObject.isText = this.isText;
-    copiedObject.isSound = this.isSound;
     copiedObject.isButton = this.isButton;
     copiedObject.cachedAbsolutePosition = this.getAbsolutePosition();
     copiedObject.svgStrokeWidth = this.svgStrokeWidth;
@@ -358,11 +356,6 @@ WickObject.prototype.downloadAsFile = function () {
     if(asset.type === 'image') {
         var ext = asset.getData().split("/")[1].split(';')[0];
         saveAs(dataURItoBlob(asset.getData()), filename+"."+ext);
-        return;
-    }
-
-    if(this.audioData) {
-        saveAs(dataURItoBlob(this.audioData), filename+".wav");
         return;
     }
 
@@ -1339,9 +1332,7 @@ WickObject.prototype.hitTest = function (otherObj, hitTestType, args) {
         for (var j = 0; j < thisObjChildren.length; j++) {
             var objA = thisObjChildren[j];
             var objB = otherObjChildren[i];
-            // Note: audio objects are like 'ghost' objects, they don't actually
-            // show up visually in the player so they should not count in hitTest.
-            if (!objA.audioData && !objB.audioData && objA[checkMethod](objB)) {
+            if (objA[checkMethod](objB)) {
                 return true;
             }
         }
@@ -1423,8 +1414,6 @@ WickObject.prototype.getTypeString = function (format) {
         typeString = "clip";
     } else if (this.isImage) {
         typeString = "image";
-    } else if (this.isSound) {
-        typeString = "sound";
     } else if (this.isPath) {
         typeString = "path";
     } else if (this.isText) {
@@ -1441,22 +1430,6 @@ WickObject.prototype.getTypeString = function (format) {
 WickObject.prototype.setText = function (text) {
     //this.pixiText.text = ""+text;
     wickRenderer.setText(this, text);
-}
-
-WickObject.prototype.playSound = function () {
-
-    wickPlayer.audioPlayer.playSound(this, this.loopSound, this.volume);
-
-}
-
-WickObject.prototype.stopSound = function () {
-
-    wickPlayer.audioPlayer.stopSound(this);
-
-}
-
-WickObject.prototype.setVolume = function (volume) {
-    this.volume = volume;
 }
 
 WickObject.prototype.clone = function () {
@@ -1618,10 +1591,6 @@ WickObject.prototype.tick = function () {
         (wickPlayer || wickEditor).project.runScript(this, 'update');
 
         this.advanceTimeline();
-
-        if(this.isSound) {
-            this.playSound();
-        }
     }
     // Active -> Active
     else if (this._wasActiveLastTick && this._active) {

@@ -1151,24 +1151,20 @@ var GuiActionHandler = function (wickEditor) {
         {},
         function (args) {
             var asset = wickEditor.library.getSelectedAsset();
-            var wickObj;
 
             if(asset.type === 'image') {
-                wickObj = new WickObject();
+                var wickObj = new WickObject();
                 wickObj.assetUUID = asset.uuid;
                 wickObj.isImage = true;
+                wickEditor.actionHandler.doAction('addObjects', {
+                    wickObjects:[wickObj]
+                });
             } else if(asset.type === 'audio') {
-                wickObj = new WickObject();
-                wickObj.assetUUID = asset.uuid;
-                wickObj.isSound = true;
-                wickObj.width = 50;
-                wickObj.height = 50;
+                var currentFrame = wickEditor.project.getCurrentFrame();
+                if(currentFrame) {
+                    currentFrame.audioAssetUUID = asset.uuid;
+                }
             }
-
-            if(!wickObj) return;
-            wickEditor.actionHandler.doAction('addObjects', {
-                wickObjects:[wickObj]
-            });
 
         });
 

@@ -80,9 +80,6 @@ var InspectorInterface = function (wickEditor) {
             if(selectionInfo.object.isImage) {
                 selectionInfo.type = 'wickobject';
                 selectionInfo.dataType = 'image';
-            } else if (selectionInfo.object.isSound) {
-                selectionInfo.type = 'wickobject';
-                selectionInfo.dataType = 'sound';
             } else if (selectionInfo.object.isPath) {
                 selectionInfo.type = 'wickobject';
                 selectionInfo.dataType = 'path';
@@ -203,9 +200,6 @@ var InspectorInterface = function (wickEditor) {
             } else if (selectionInfo.dataType === 'image') {
                 title = "Image"; 
                 image = "./resources/image.png"
-            } else if (selectionInfo.dataType === 'sound') {
-                title = "Sound"; 
-                image = "./resources/audioicon.png"
             } else if (selectionInfo.dataType === 'text') {
                 title = "Text"; 
                 image = "./resources/text.png"
