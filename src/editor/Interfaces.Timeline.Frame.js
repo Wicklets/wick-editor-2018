@@ -156,6 +156,7 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
                 } else {
                     waveformDiv.src = self.wickFrame._soundDataForPreview.waveform;
                 }
+                this.elem.style.backgroundColor = '#FFF';
             } else {
                 this.wickFrame._soundDataForPreview = null;
             }
