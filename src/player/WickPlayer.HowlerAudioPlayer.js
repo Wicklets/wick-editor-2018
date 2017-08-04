@@ -30,7 +30,6 @@ var WickHowlerAudioPlayer = function (project) {
         var allFrames = project.getAllFrames();
 
         allFrames.forEach(function (wickFrame) {
-            console.log(wickFrame)
             if(!wickFrame.audioAssetUUID) return;
             var asset = project.library.getAsset(wickFrame.audioAssetUUID);
             var audioData = asset.getData();

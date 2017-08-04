@@ -1168,7 +1168,7 @@ WickObject.prototype.gotoPrevFrame = function () {
 
     var nextFramePos = this.playheadPosition-1;
     if(nextFramePos < 0) {
-        nextFramePos = 0;
+        nextFramePos = this.layers[this.currentLayer].getTotalLength()-1;
     }
 
     this._newPlayheadPosition = nextFramePos;

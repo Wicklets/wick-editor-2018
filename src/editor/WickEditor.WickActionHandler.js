@@ -77,8 +77,9 @@ var WickActionHandler = function (wickEditor) {
     }
 
     // done function, call when a WickAction is finished
-    var done = function () {
+    var done = function (args) {
         // Sync interfaces + do other post-action cleanup
+        if(args && args.dontAddToStack) return;
         wickEditor.project.unsaved = true;
         wickEditor.project.rootObject.generateParentObjectReferences();
         wickEditor.project.regenAssetReferences();
@@ -201,7 +202,7 @@ var WickActionHandler = function (wickEditor) {
             }
             
             wickEditor.paper.needsUpdate = true;
-            done();
+            done(args);
         },
         function (args) {
             // Remove objects we added
@@ -212,7 +213,7 @@ var WickActionHandler = function (wickEditor) {
             if(args.addFrameAction) args.addFrameAction.undoAction();
 
             wickEditor.paper.needsUpdate = true;
-            done();
+            done(args);
         });
 
     registerAction('deleteObjects',
@@ -253,7 +254,7 @@ var WickActionHandler = function (wickEditor) {
             });
 
             wickEditor.paper.needsUpdate = true;
-            done();
+            done(args);
         },
         function (args) {
             for(var i = 0; i < args.restoredObjects.length; i++) {
@@ -276,7 +277,7 @@ var WickActionHandler = function (wickEditor) {
             });*/
 
             wickEditor.paper.needsUpdate = true;
-            done();
+            done(args);
         });
 
     var modifyableAttributes = ["x","y","scaleX","scaleY","rotation","opacity","flipX","flipY","pathData"];
@@ -342,7 +343,7 @@ var WickActionHandler = function (wickEditor) {
             };
 
             wickEditor.paper.needsUpdate = true;
-            done();
+            done(args);
         },
         function (args) {
             for(var i = 0; i < args.objs.length; i++) {
@@ -383,7 +384,7 @@ var WickActionHandler = function (wickEditor) {
             }
 
             wickEditor.paper.needsUpdate = true;
-            done();
+            done(args);
         });
 
     registerAction('convertObjectsToSymbol',
@@ -429,7 +430,7 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.clearSelection()
             wickEditor.project.selectObject(symbol)
 
-            done();
+            done(args);
         },
         function (args) {
             var children = args.createdSymbol.getObjectsOnFirstFrame();
@@ -442,7 +443,7 @@ var WickActionHandler = function (wickEditor) {
 
             wickEditor.project.currentObject.removeChild(args.createdSymbol);
 
-            done();
+            done(args);
         });
 
     /*registerAction('convertFramesToSymbol', 
@@ -456,12 +457,12 @@ var WickActionHandler = function (wickEditor) {
             newFrame.wickObjects = [args.createdSymbol];
             wickEditor.actionHandler.doAction('addFrame', {frame:newFrame, layer:wickEditor.project.getCurrentObject().getCurrentLayer()});
 
-            done(); 
+            done(args); 
         }, 
         function (args) {
             console.error("convertFramesToSymbol undo NYI!");
 
-            done(); 
+            done(args); 
         });*/
 
     registerAction('breakApartSymbol',
@@ -479,7 +480,7 @@ var WickActionHandler = function (wickEditor) {
 
             wickEditor.project.currentObject.removeChild(args.obj);
 
-            done();
+            done(args);
         },
         function (args) {
             args.children.forEach(function (child) {
@@ -490,23 +491,7 @@ var WickActionHandler = function (wickEditor) {
 
             wickEditor.project.addObject(args.symbol);
 
-            done();
-        });
-
-    registerAction('fillHole',
-        function (args) {
-            args.oldPathData = wickEditor.project.getCurrentFrame().pathData;
-            wickEditor.paper.fillAtPoint(args.x, args.y, args.color);
-            wickEditor.paper.cleanupPaths();
-            wickEditor.paper.refresh();
-
-            done();
-        }, 
-        function (args) {
-            wickEditor.project.getCurrentFrame().pathData = args.oldPathData;
-            wickEditor.paper.updateWickProject();
-
-            done();
+            done(args);
         });
 
     registerAction('addFrame',
@@ -530,7 +515,7 @@ var WickActionHandler = function (wickEditor) {
 
             currentObject.framesDirty = true;
 
-            done();
+            done(args);
         },
         function (args) {
             var currentObject = wickEditor.project.currentObject;
@@ -541,7 +526,7 @@ var WickActionHandler = function (wickEditor) {
 
             currentObject.framesDirty = true;
 
-            done();
+            done(args);
         });
 
     registerAction('addFrames',
@@ -558,7 +543,7 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.rootObject.generateParentObjectReferences()
             wickEditor.thumbnailRenderer.renderAllThumbsOnTimeline();
 
-            done();
+            done(args);
         },
         function (args) {
             args.frames.forEach(function (frame) {
@@ -579,7 +564,7 @@ var WickActionHandler = function (wickEditor) {
 
             currentObject.framesDirty = true;
 
-            done();
+            done(args);
         },
         function (args) {
             var currentObject = wickEditor.project.currentObject;
@@ -587,7 +572,7 @@ var WickActionHandler = function (wickEditor) {
 
             currentObject.framesDirty = true;
 
-            done();
+            done(args);
         });
 
     registerAction('deleteFrame',
@@ -602,14 +587,14 @@ var WickActionHandler = function (wickEditor) {
 
             currentObject.framesDirty = true;
 
-            done();
+            done(args);
         },
         function (args) {
             args.layer.addFrame(args.frameRemoved, args.frameRemovedIndex);
 
             currentObject.framesDirty = true;
 
-            done();
+            done(args);
         });
 
     registerAction('addNewLayer',
@@ -627,7 +612,7 @@ var WickActionHandler = function (wickEditor) {
 
             currentObject.framesDirty = true;
 
-            done();
+            done(args);
         },
         function (args) {
             var currentObject = wickEditor.project.currentObject;
@@ -640,7 +625,7 @@ var WickActionHandler = function (wickEditor) {
 
             currentObject.framesDirty = true;
 
-            done();
+            done(args);
         });
 
     registerAction('removeLayer',
@@ -654,7 +639,7 @@ var WickActionHandler = function (wickEditor) {
 
             currentObject.framesDirty = true;
 
-            done();
+            done(args);
         },
         function (args) {
             if(args.removedLayer) {
@@ -664,7 +649,7 @@ var WickActionHandler = function (wickEditor) {
 
             currentObject.framesDirty = true;
 
-            done();
+            done(args);
         });
 
     registerAction('moveLayer',
@@ -675,7 +660,7 @@ var WickActionHandler = function (wickEditor) {
 
             wickEditor.project.currentObject.framesDirty = true;
 
-            done();
+            done(args);
         },
         function (args) {
             wickEditor.project.currentObject.layers.move(args.newIndex, args.oldIndex);
@@ -683,7 +668,7 @@ var WickActionHandler = function (wickEditor) {
 
             currentObject.framesDirty = true;
 
-            done();
+            done(args);
         });
 
     registerAction('moveFrame',
@@ -694,6 +679,9 @@ var WickActionHandler = function (wickEditor) {
             args.frame.playheadPosition = args.newPlayheadPosition;
             args.oldLayer.removeFrame(args.frame);
             args.newLayer.addFrame(args.frame);
+
+            //args.oldProjectPlayheadPosition = wickEditor.project.getCurrentObject().playheadPosition;
+            //wickEditor.project.getCurrentObject().playheadPosition = args.newPlayheadPosition;
 
             /*var touching = false;
             args.newLayer.frames.forEach(function (frame) {
@@ -710,17 +698,19 @@ var WickActionHandler = function (wickEditor) {
                 newPlayheadPosition: args.newPlayheadPosition
             });*/
 
-            //wickEditor.project.currentObject.framesDirty = true;
-            //done();
+            wickEditor.project.currentObject.framesDirty = true;
+            done(args);
         },
         function (args) {
             args.frame.playheadPosition = args.oldPlayheadPosition;
 
             args.newLayer.removeFrame(args.frame);
             args.oldLayer.addFrame(args.frame);
-            
-            //wickEditor.project.currentObject.framesDirty = true;
-            //done();
+
+            //wickEditor.project.getCurrentObject().playheadPosition = args.oldProjectPlayheadPosition;
+
+            wickEditor.project.currentObject.framesDirty = true;
+            done(args);
         });
 
     registerAction('moveFrames', 
@@ -733,13 +723,18 @@ var WickActionHandler = function (wickEditor) {
                 }
             }
 
+            var newPlayheadPosition = 0;
+            var newLayer = wickEditor.project.getCurrentLayer();
+
             args.moveFrameActions = [];
             for (var i = 0; i < args.framesMoveActionData.length; i++) {
                 var frameMoveData = args.framesMoveActionData[i]
+                newPlayheadPosition = frameMoveData.newPlayheadPosition+fixNegativeOffset;
+                newLayer = frameMoveData.newLayer;
                 args.moveFrameActions.push(wickEditor.actionHandler.doAction('moveFrame', {
                     frame: frameMoveData.frame, 
-                    newPlayheadPosition: frameMoveData.newPlayheadPosition+fixNegativeOffset,
-                    newLayer: frameMoveData.newLayer,
+                    newPlayheadPosition: newPlayheadPosition,
+                    newLayer: newLayer,
                     dontAddToStack: true
                 }));
             }
@@ -760,16 +755,25 @@ var WickActionHandler = function (wickEditor) {
                 }
             }
 
+            args.movePlayheadAction = wickEditor.actionHandler.doAction('movePlayhead', {
+                obj: wickEditor.project.getCurrentObject(),
+                newPlayheadPosition: newPlayheadPosition,
+                newLayer: frameMoveData.newLayer,
+                dontAddToStack: true
+            });
+
             wickEditor.project.currentObject.framesDirty = true;
-            done();
+            done(args);
         },
         function (args) {
             args.moveFrameActions.forEach(function (moveFrameAction) {
                 moveFrameAction.undoAction();
             })
 
+            args.movePlayheadAction.undoAction();
+
             wickEditor.project.currentObject.framesDirty = true;
-            done();
+            done(args);
         });
 
     registerAction('changeFrameLength',
@@ -789,12 +793,12 @@ var WickActionHandler = function (wickEditor) {
             }
 
             wickEditor.project.currentObject.framesDirty = true;
-            done();
+            done(args);
         },
         function (args) {
             args.frame.length = args.oldFrameLength;
             wickEditor.project.currentObject.framesDirty = true;
-            done();
+            done(args);
         });
 
     registerAction('addPlayRange',
@@ -823,7 +827,7 @@ var WickActionHandler = function (wickEditor) {
                 wickEditor.project.currentObject.framesDirty = true;
             }
         
-            done();
+            done(args);
         },
         function (args) {
             if (args.playRange) {
@@ -831,7 +835,7 @@ var WickActionHandler = function (wickEditor) {
                 wickEditor.project.currentObject.framesDirty = true;
             }
             
-            done();
+            done(args);
         });
 
     registerAction('modifyPlayRange',
@@ -857,14 +861,14 @@ var WickActionHandler = function (wickEditor) {
             }
 
             wickEditor.project.currentObject.framesDirty = true;
-            done();
+            done(args);
         },
         function (args) {
             if(args.oldStart !== undefined) args.playRange.start = args.oldStart;
             if(args.oldEnd   !== undefined) args.playRange.end = args.oldEnd;
 
             wickEditor.project.currentObject.framesDirty = true;
-            done();
+            done(args);
         });
 
     registerAction('movePlayhead',
@@ -893,7 +897,7 @@ var WickActionHandler = function (wickEditor) {
 
             wickEditor.paper.needsUpdate = true;
 
-            done();
+            done(args);
             
         },
         function (args) {
@@ -903,7 +907,7 @@ var WickActionHandler = function (wickEditor) {
             args.obj.playheadPosition = args.oldPlayheadPosition;
             args.obj.currentLayer = args.oldLayer;
 
-            done();
+            done(args);
         });
 
     /*registerAction('breakApartImage',
@@ -921,7 +925,7 @@ var WickActionHandler = function (wickEditor) {
                         wickEditor.actionHandler.doAction('deleteObjects', { 
                             wickObjects:[wickObj] 
                         });
-                        done();
+                        done(args);
                     });
                 });
             });
@@ -941,7 +945,7 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.thumbnailRenderer.renderAllThumbsOnTimeline();
             wickEditor.paper.needsUpdate = true;
 
-            done();
+            done(args);
         },
         function (args) {
             wickEditor.fabric.deselectAll();
@@ -949,7 +953,7 @@ var WickActionHandler = function (wickEditor) {
 
             wickEditor.paper.needsUpdate = true;
 
-            done();
+            done(args);
         });
 
     registerAction('finishEditingCurrentObject',
@@ -961,13 +965,13 @@ var WickActionHandler = function (wickEditor) {
 
             wickEditor.thumbnailRenderer.renderAllThumbsOnTimeline();
 
-            done();
+            done(args);
         },
         function (args) {
             wickEditor.fabric.deselectAll();
             wickEditor.project.currentObject = args.prevEditedObject;
 
-            done();
+            done(args);
         });
 
     registerAction('moveObjectToZIndex',
@@ -1002,7 +1006,7 @@ var WickActionHandler = function (wickEditor) {
                 wickEditor.project.getCurrentFrame().wickObjects.splice(args.newZIndex, 0, obj);
             }*/
 
-            done();
+            done(args);
         },
         function (args) {
             var currFrame = wickEditor.project.getCurrentFrame();
@@ -1020,7 +1024,7 @@ var WickActionHandler = function (wickEditor) {
                 currFrame.wickObjects.move(oldIndex, newIndex);
             });
 
-            done();
+            done(args);
         });
 
     registerAction('moveObjectForwards',
@@ -1042,12 +1046,12 @@ var WickActionHandler = function (wickEditor) {
                 dontAddToStack: true
             });
 
-            done();
+            done(args);
         },
         function (args) {
             args.moveAction.undoAction();
 
-            done();
+            done(args);
         });
 
     registerAction('moveObjectBackwards',
@@ -1068,12 +1072,12 @@ var WickActionHandler = function (wickEditor) {
                 dontAddToStack: true
             });
 
-            done();
+            done(args);
         },
         function (args) {
             args.moveAction.undoAction();
 
-            done();
+            done(args);
         });
 
     registerAction('deleteAsset', 
@@ -1087,6 +1091,11 @@ var WickActionHandler = function (wickEditor) {
                     objectsWithAsset.push(wickObject);
                 }
             })
+            wickEditor.project.getAllFrames().forEach(function (wickFrame) {
+                if(wickFrame.audioAssetUUID === asset.uuid) {
+                    wickFrame.audioAssetUUID = null;
+                }
+            })
 
             args.deleteAction = wickEditor.actionHandler.doAction('deleteObjects', {
                 objects: objectsWithAsset,
@@ -1095,14 +1104,14 @@ var WickActionHandler = function (wickEditor) {
 
             wickEditor.project.library.deleteAsset(asset.uuid);
 
-            done();
+            done(args);
         },
         function (args) {
             wickEditor.project.library.addAsset(args.recoverAsset);
 
             args.deleteAction.undoAction();
 
-            done();
+            done(args);
         });
 
     registerAction('renameAsset', 
@@ -1112,12 +1121,12 @@ var WickActionHandler = function (wickEditor) {
             args.oldName =  args.asset.filename;
             args.asset.filename = prompt("Enter a new name for the asset:") || "Untitled";
 
-            done();
+            done(args);
         },
         function (args) {
             args.asset.filename = args.oldName;
 
-            done();
+            done(args);
         });
 
     registerAction('addSoundToFrame', 
@@ -1125,12 +1134,12 @@ var WickActionHandler = function (wickEditor) {
             args.oldAssetUUID = args.frame.audioAssetUUID;
             args.frame.audioAssetUUID = args.asset.uuid;
 
-            done();
+            done(args);
         },
         function (args) {
             args.frame.audioAssetUUID = args.oldAssetUUID;
 
-            done();
+            done(args);
         });
 
     registerAction('createMotionTween', 
@@ -1153,7 +1162,7 @@ var WickActionHandler = function (wickEditor) {
             args.addedTween = tween;
             wickEditor.project.getCurrentObject().framesDirty = true;
 
-            done();
+            done(args);
         },
         function (args) {
             var frame = args.frame;
@@ -1162,7 +1171,7 @@ var WickActionHandler = function (wickEditor) {
 
             if(args.createClipAction) args.createClipAction.undoAction();
 
-            done();
+            done(args);
         });
 
     registerAction('deleteMotionTween', 
@@ -1172,14 +1181,14 @@ var WickActionHandler = function (wickEditor) {
             frame.removeTween(args.removedTween);
             wickEditor.project.getCurrentObject().framesDirty = true;
 
-            done();
+            done(args);
         },
         function (args) {
             var frame = args.frame;
             frame.addTween(args.removedTween);
             wickEditor.project.getCurrentObject().framesDirty = true;
 
-            done();
+            done(args);
         });
 
     registerAction('moveMotionTween',
@@ -1188,13 +1197,13 @@ var WickActionHandler = function (wickEditor) {
             args.tween.playheadPosition = args.newPlayheadPosition;
             
             wickEditor.project.currentObject.framesDirty = true;
-            done();
+            done(args);
         }, 
         function (args) {
             args.tween.playheadPosition = args.oldPlayheadPosition
 
             wickEditor.project.currentObject.framesDirty = true;
-            done();
+            done(args);
         });
 
     registerAction('copyFrameForward',
@@ -1218,7 +1227,7 @@ var WickActionHandler = function (wickEditor) {
             args.addedFrame = copiedFrame;
 
             wickEditor.project.currentObject.framesDirty = true;
-            done();
+            done(args);
         }, 
         function (args) {
             wickEditor.project.getCurrentLayer().removeFrame(args.copiedFrame);
@@ -1226,7 +1235,7 @@ var WickActionHandler = function (wickEditor) {
             args.movePlayheadAction.undoAction();
 
             wickEditor.project.currentObject.framesDirty = true;
-            done();
+            done(args);
         });
 
     registerAction('extendFrameToPosition',
@@ -1241,13 +1250,13 @@ var WickActionHandler = function (wickEditor) {
             frame.length = numFramesToExtend;
 
             wickEditor.project.currentObject.framesDirty = true;
-            done();
+            done(args);
         }, 
         function (args) {
             args.changedFrame = args.oldLength;
 
             wickEditor.project.currentObject.framesDirty = true;
-            done();
+            done(args);
         });
 
     registerAction('doBooleanOperation',
@@ -1266,13 +1275,13 @@ var WickActionHandler = function (wickEditor) {
                 dontAddToStack: true
             });
 
-            done();
+            done(args);
         }, 
         function (args) {
             args.addAction.undoAction();
             args.deleteAction.undoAction();
 
-            done();
+            done(args);
         });
 
 }

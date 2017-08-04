@@ -599,7 +599,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             } else {
                 tween.tweenType = 'Quadratic';
             }
-            console.log(tween);
             wickEditor.syncInterfaces();
         }
     }));

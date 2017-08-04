@@ -24,11 +24,13 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
     var currentFrameRef;
 
     this.update = function () {
+        window.blockAllRender = true;
+
         var newFrameRef = wickEditor.project.getCurrentFrame();
         var onNewFrame = newFrameRef !== currentFrameRef;
         currentFrameRef = newFrameRef;
 
-        var enablePerfTests = false;
+        var enablePerfTests = true;
 
         if(enablePerfTests) console.log("-------------------");
         if(enablePerfTests) startTiming();
@@ -47,7 +49,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             }); 
         }
 
-        var siblingObjects = currentObject.getAllInactiveSiblings();
+        //var siblingObjects = currentObject.getAllInactiveSiblings();
+        var siblingObjects = [];
         var nearbyObjects = wickEditor.project.onionSkinning ? wickEditor.project.currentObject.getNearbyObjects(1,1) : [];
         var allObjects = nearbyObjects.concat(siblingObjects.concat(activeObjects));
         //var allObjects = siblingObjects.concat(activeObjects);
@@ -88,6 +91,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             })
             console.log("")*/
 
+            window.blockAllRender = false;
             fabricInterface.canvas.renderAll();
         }
 
