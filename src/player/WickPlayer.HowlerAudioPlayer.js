@@ -27,11 +27,12 @@ var WickHowlerAudioPlayer = function (project) {
 
         muted = false;
 
-        var allFrames = project.rootObject.getAllFrames();
+        var allFrames = project.getAllFrames();
 
         allFrames.forEach(function (wickFrame) {
+            console.log(wickFrame)
             if(!wickFrame.audioAssetUUID) return;
-            var asset = wickEditor.project.library.getAsset(wickFrame.audioAssetUUID);
+            var asset = project.library.getAsset(wickFrame.audioAssetUUID);
             var audioData = asset.getData();
 
             sounds[wickFrame.uuid] = new Howl({

@@ -1164,6 +1164,7 @@ var GuiActionHandler = function (wickEditor) {
                 if(currentFrame) {
                     currentFrame.audioAssetUUID = asset.uuid;
                 }
+                wickEditor.syncInterfaces();
             }
 
         });

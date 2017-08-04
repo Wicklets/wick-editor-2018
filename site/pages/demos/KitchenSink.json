@@ -17,8 +17,8 @@
 		"textData": false,
 		"isSymbol": true,
 		"isButton": false,
-		"playheadPosition": 4,
-		"currentLayer": 1,
+		"playheadPosition": 0,
+		"currentLayer": 0,
 		"layers": [
 			{
 				"frames": [
@@ -111,8 +111,8 @@
 																				"svgWidth": 210.96109000000004,
 																				"svgHeight": 128.00302,
 																				"bbox": {
-																					"left": 542.5367516562902,
-																					"top": 245.55532989652534,
+																					"left": 591.5367516562902,
+																					"top": 221.55532989652534,
 																					"width": 210.96108843732418,
 																					"height": 128.00302486580586
 																				},
@@ -154,8 +154,8 @@
 																				"svgWidth": 29.380629999999996,
 																				"svgHeight": 30.622389999999996,
 																				"bbox": {
-																					"left": 587.7079854088598,
-																					"top": 249.44589869371953,
+																					"left": 636.7079854088598,
+																					"top": 225.44589869371953,
 																					"width": 29.380625659363318,
 																					"height": 30.622394428101984
 																				},
@@ -193,8 +193,8 @@
 																				"svgWidth": 30.610510000000033,
 																				"svgHeight": 34.361060000000066,
 																				"bbox": {
-																					"left": 552.9639474467647,
-																					"top": 248.0856771531469,
+																					"left": 601.9639474467647,
+																					"top": 224.0856771531469,
 																					"width": 30.610524645730266,
 																					"height": 34.36105798815436
 																				},
@@ -232,8 +232,8 @@
 																				"svgWidth": 28.363470000000007,
 																				"svgHeight": 34.231432195644004,
 																				"bbox": {
-																					"left": 518.4719173383054,
-																					"top": 246.59662528665422,
+																					"left": 567.4719173383054,
+																					"top": 222.59662528665422,
 																					"width": 28.36346508176007,
 																					"height": 34.23143795788587
 																				},
@@ -271,8 +271,8 @@
 																				"svgWidth": 33.84804,
 																				"svgHeight": 35.8996351402906,
 																				"bbox": {
-																					"left": 482.93039984310144,
-																					"top": 244.01547343103636,
+																					"left": 531.9303998431014,
+																					"top": 220.01547343103636,
 																					"width": 33.84804827323774,
 																					"height": 35.89963836799359
 																				},
@@ -309,8 +309,8 @@
 																				"svgWidth": 37.90623000000005,
 																				"svgHeight": 40.2919,
 																				"bbox": {
-																					"left": 482.52636252288994,
-																					"top": 243.98262063216305,
+																					"left": 531.5263625228899,
+																					"top": 219.98262063216305,
 																					"width": 37.90623030044901,
 																					"height": 40.291906610449246
 																				},
@@ -348,8 +348,8 @@
 																				"svgWidth": 32.741447801184336,
 																				"svgHeight": 38.72081897743794,
 																				"bbox": {
-																					"left": 518.4232444033503,
-																					"top": 246.6172541646738,
+																					"left": 567.4232444033503,
+																					"top": 222.6172541646738,
 																					"width": 32.74145179297011,
 																					"height": 38.72081577193899
 																				},
@@ -387,8 +387,8 @@
 																				"svgWidth": 36.16694276350853,
 																				"svgHeight": 38.067849999999964,
 																				"bbox": {
-																					"left": 553.1949182126341,
-																					"top": 247.71501813655334,
+																					"left": 602.1949182126341,
+																					"top": 223.71501813655334,
 																					"width": 36.166945095102164,
 																					"height": 38.06785487122784
 																				},
@@ -426,8 +426,8 @@
 																				"svgWidth": 34.361060000000066,
 																				"svgHeight": 34.27808447491964,
 																				"bbox": {
-																					"left": 587.0711619500214,
-																					"top": 249.47144049156054,
+																					"left": 636.0711619500214,
+																					"top": 225.47144049156054,
 																					"width": 34.36105798815436,
 																					"height": 34.278103961356294
 																				},
@@ -1254,8 +1254,8 @@
 														"svgHeight": 129.00302486580586,
 														"svgStrokeWidth": 0,
 														"bbox": {
-															"left": 542.5367516562902,
-															"top": 245.55532989652534,
+															"left": 591.5367516562902,
+															"top": 221.55532989652534,
 															"width": 211.96108843732418,
 															"height": 129.00302486580586
 														},
@@ -1276,7 +1276,8 @@
 														"playheadPosition": 0,
 														"uuid": "1c16b3f9-0884-4088-ad81-5ad830065f16",
 														"tweenType": "Quadratic",
-														"tweenDir": "InOut"
+														"tweenDir": "InOut",
+														"rotations": 0
 													},
 													{
 														"x": 0,
@@ -1289,7 +1290,8 @@
 														"playheadPosition": 47,
 														"uuid": "da83b702-f214-4f21-8e1a-f0e1335294de",
 														"tweenType": "Linear",
-														"tweenDir": "None"
+														"tweenDir": "None",
+														"rotations": 0
 													},
 													{
 														"x": 0,
@@ -1302,7 +1304,8 @@
 														"playheadPosition": 27,
 														"uuid": "83498c6e-aff3-4aff-97b7-f97bbc2c6a63",
 														"tweenType": "Quadratic",
-														"tweenDir": "InOut"
+														"tweenDir": "InOut",
+														"rotations": 0
 													}
 												],
 												"pathData": null,
@@ -1456,12 +1459,12 @@
 								"isPath": true,
 								"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#3e3e3e%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M460.44964,227.61148l0,-69.01851c0,0%200.78479,-9.18798%20-9.94774,-9.18667c-10.73252,0.0013%20-10.39455,9.18667%20-10.39455,9.18667l0,69.01851c0,0%20-0.37573,8.85768%2010.39455,8.856c10.77028,-0.00168%209.94774,-8.856%209.94774,-8.856z%22/%3E%3C/g%3E",
 								"svgStrokeWidth": 1,
-								"svgWidth": 21.358329779283906,
+								"svgWidth": 21.358329779283963,
 								"svgHeight": 88.06118037901803,
 								"bbox": {
-									"left": 439.6057523761503,
+									"left": 439.60575237615024,
 									"top": 148.90629634328934,
-									"width": 21.358329779283906,
+									"width": 21.358329779283963,
 									"height": 88.06118037901803
 								},
 								"_zindex": 2,
@@ -1497,12 +1500,12 @@
 								"svgX": 439.8158737870624,
 								"svgY": 119.1696340890227,
 								"svgStrokeWidth": 1,
-								"svgWidth": 21.91629999999992,
+								"svgWidth": 21.91629999999998,
 								"svgHeight": 21.26266000000004,
 								"bbox": {
-									"left": 439.31587378706234,
+									"left": 439.3158737870624,
 									"top": 118.66963408902274,
-									"width": 21.91629999999992,
+									"width": 21.91629999999998,
 									"height": 21.26266000000004
 								},
 								"_zindex": 3,
@@ -1788,8 +1791,8 @@
 																				"isPath": true,
 																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#ffffff%22%20fill-rule=%22nonzero%22%20stroke=%22#000000%22%20stroke-width=%228.78%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M298.21706,349.27907c3.20013,4.75354%204.1206,4.90481%206.88319,-0.81553c3.34258,-6.29191%2056.07758,-80.98406%2047.41766,-138.30307c-8.65992,-57.31897%20-53.97699,-103.88617%20-121.87939,-104.63047c-67.90235,-0.7443%20-124.3861,55.55468%20-124.3861,119.05779c0,63.50306%2049.58564,121.77326%2053.35196,126.44096c3.54323,4.53607%204.96708,4.35862%208.01579,-0.14288c3.48699,-5.667%2011.57084,-22.18274%2014.00561,-25.67153c2.33819,-3.48583%203.11412,-3.40643%205.7178,-0.26134c2.75029,3.57294%2017.51563,20.1932%2021.12882,25.08724c3.63445,4.20568%205.14391,2.79469%207.23856,-0.32284c2.42098,-3.67925%2012.13006,-22.17691%2014.02652,-25.23218c1.69245,-2.57002%203.76907,-2.60229%205.46556,0.02869c1.67049,2.63096%2016.74013,24.16453%2017.81377,25.86546c1.28348,1.73561%203.19453,2.62431%204.71453,-0.10893c1.69211,-2.60444%2014.99858,-23.33368%2016.75918,-26.50812c1.76848,-3.17449%204.38465,-3.63023%206.31164,0.0266c2.05282,3.5453%2014.28054,20.92116%2017.4149,25.49016z%22/%3E%3C/g%3E",
 																				"bbox": {
-																					"left": 98.17372798731299,
-																					"top": -23.655980507249268,
+																					"left": 147.173727987313,
+																					"top": -47.65598050724927,
 																					"width": 256.00474824581056,
 																					"height": 257.6047605150886
 																				},
@@ -1828,8 +1831,8 @@
 																				"isPath": true,
 																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#fee8e4%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#000000%22%20stroke-width=%228.78%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M266.56184,229.47545c24.06498,-0.99227%2043.213,-8.81552%2042.76831,-17.47366c-0.44469,-8.65817%20-20.31372,-14.87258%20-44.3787,-13.88028c-24.06498,0.99227%20-43.213,8.81552%20-42.76831,17.47366c0.44469,8.65817%2020.31372,14.87258%2044.3787,13.88028z%22/%3E%3C/g%3E",
 																				"bbox": {
-																					"left": 134.0655831730804,
-																					"top": -39.792578435378516,
+																					"left": 183.0655831730804,
+																					"top": -63.792578435378516,
 																					"width": 95.94219267103759,
 																					"height": 40.342105904638686
 																				},
@@ -1868,8 +1871,8 @@
 																				"isPath": true,
 																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#000000%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#000000%22%20stroke-width=%228.78%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M244.90491,207.33262c3.24894,0%205.88269,-3.59736%205.88269,-8.03493c0,-4.43756%20-2.63378,-8.03493%20-5.88269,-8.03493c-3.24894,0%20-5.88269,3.59736%20-5.88269,8.03493c0,4.43756%202.63378,8.03493%205.88269,8.03493z%22/%3E%3C/g%3E",
 																				"bbox": {
-																					"left": 113.21384461761119,
-																					"top": -54.293372501503256,
+																					"left": 162.2138446176112,
+																					"top": -78.29337250150326,
 																					"width": 20.545380000000023,
 																					"height": 24.849860000000007
 																				},
@@ -1908,8 +1911,8 @@
 																				"isPath": true,
 																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#000000%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#000000%22%20stroke-width=%228.78%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M285.04715,206.47094c3.25931,0%205.90149,-3.35454%205.90149,-7.49255c0,-4.13801%20-2.64221,-7.49255%20-5.90149,-7.49255c-3.25931,0%20-5.90149,3.35454%20-5.90149,7.49255c0,4.13801%202.64221,7.49255%205.90149,7.49255z%22/%3E%3C/g%3E",
 																				"bbox": {
-																					"left": 153.3560822556617,
-																					"top": -54.61266990399963,
+																					"left": 202.3560822556617,
+																					"top": -78.61266990399963,
 																					"width": 20.58298000000005,
 																					"height": 23.76509999999999
 																				},
@@ -1940,8 +1943,8 @@
 														"svgHeight": 258.60476051508874,
 														"svgStrokeWidth": 0,
 														"bbox": {
-															"left": 98.1737279873131,
-															"top": -23.655980507249353,
+															"left": 147.1737279873131,
+															"top": -47.65598050724935,
 															"width": 257.0047482458108,
 															"height": 258.60476051508874
 														},
@@ -1962,7 +1965,8 @@
 														"opacity": 1,
 														"playheadPosition": 0,
 														"tweenType": "Quadratic",
-														"tweenDir": "InOut"
+														"tweenDir": "InOut",
+														"rotations": 0
 													},
 													{
 														"x": 0,
@@ -1974,7 +1978,8 @@
 														"opacity": 1,
 														"playheadPosition": 59,
 														"tweenType": "Linear",
-														"tweenDir": "None"
+														"tweenDir": "None",
+														"rotations": 0
 													},
 													{
 														"x": 0,
@@ -1986,7 +1991,8 @@
 														"opacity": 1,
 														"playheadPosition": 29,
 														"tweenType": "Quadratic",
-														"tweenDir": "InOut"
+														"tweenDir": "InOut",
+														"rotations": 0
 													}
 												],
 												"pathData": null,
@@ -2062,8 +2068,8 @@
 																				"svgWidth": 160.95276,
 																				"svgHeight": 28.393699999999967,
 																				"bbox": {
-																					"left": 98.69869989053038,
-																					"top": 166.51917399962542,
+																					"left": 147.69869989053038,
+																					"top": 142.51917399962542,
 																					"width": 160.95276000000004,
 																					"height": 28.393699999999967
 																				},
@@ -2088,8 +2094,8 @@
 														"svgHeight": 29.393699999999967,
 														"svgStrokeWidth": 0,
 														"bbox": {
-															"left": 98.69869989053038,
-															"top": 166.51917399962542,
+															"left": 147.69869989053038,
+															"top": 142.51917399962542,
 															"width": 161.95276000000004,
 															"height": 29.393699999999967
 														},
@@ -2110,7 +2116,8 @@
 														"opacity": 1,
 														"playheadPosition": 0,
 														"tweenType": "Linear",
-														"tweenDir": "None"
+														"tweenDir": "None",
+														"rotations": 0
 													},
 													{
 														"x": 7.626278203057268,
@@ -2122,7 +2129,8 @@
 														"opacity": 1,
 														"playheadPosition": 29,
 														"tweenType": "Linear",
-														"tweenDir": "None"
+														"tweenDir": "None",
+														"rotations": 0
 													},
 													{
 														"x": 0.5249719032172493,
@@ -2134,7 +2142,8 @@
 														"opacity": 1,
 														"playheadPosition": 59,
 														"tweenType": "Linear",
-														"tweenDir": "None"
+														"tweenDir": "None",
+														"rotations": 0
 													}
 												],
 												"pathData": null,
@@ -2153,7 +2162,7 @@
 								"svgHeight": 196.3822603227252,
 								"svgStrokeWidth": 0,
 								"bbox": {
-									"left": 91.86241775340483,
+									"left": 91.86241775340481,
 									"top": 82.13270145605327,
 									"width": 146.6226204678166,
 									"height": 196.3822603227252
@@ -2211,13 +2220,13 @@
 								"playheadPosition": null,
 								"currentLayer": null,
 								"svgWidth": 130.0234375,
-								"svgHeight": 21.340000000000032,
+								"svgHeight": 21.339999999999975,
 								"svgStrokeWidth": 1,
 								"bbox": {
 									"left": 66.98828125,
 									"top": 315.33,
 									"width": 130.0234375,
-									"height": 21.340000000000032
+									"height": 21.339999999999975
 								},
 								"_zindex": 0,
 								"forceFabricCanvasRegen": false
@@ -2373,8 +2382,8 @@
 														"svgHeight": 200,
 														"svgStrokeWidth": 0,
 														"bbox": {
-															"left": 340,
-															"top": 132,
+															"left": 390,
+															"top": 127,
 															"width": 200,
 															"height": 200
 														},
@@ -2526,7 +2535,7 @@
 								"isSymbol": true,
 								"isButton": true,
 								"playheadPosition": 0,
-								"currentLayer": 0,
+								"currentLayer": 1,
 								"layers": [
 									{
 										"frames": [
@@ -2563,12 +2572,12 @@
 														"svgWidth": 158.55009999999993,
 														"svgHeight": 159.41636000000005,
 														"bbox": {
-															"left": 532.4547484760071,
-															"top": -50.87027641436231,
+															"left": 582.4547484760071,
+															"top": -55.87027641436231,
 															"width": 158.55009999999993,
 															"height": 159.41636
 														},
-														"_zindex": 8,
+														"_zindex": 9,
 														"_tempZIndex": 0,
 														"uuid": "13d8e411-7b53-47b5-b017-cb011b05add6"
 													},
@@ -2603,12 +2612,12 @@
 														"svgWidth": 157.11009999999993,
 														"svgHeight": 157.97636,
 														"bbox": {
-															"left": 522.4547484760071,
-															"top": -60.87027641436232,
+															"left": 572.4547484760071,
+															"top": -65.87027641436232,
 															"width": 157.11009730207888,
 															"height": 157.9763622291024
 														},
-														"_zindex": 9,
+														"_zindex": 10,
 														"_tempZIndex": 0
 													},
 													{
@@ -2639,12 +2648,12 @@
 														"svgWidth": 52.783570000000054,
 														"svgHeight": 74.36963,
 														"bbox": {
-															"left": 556.1433124096351,
-															"top": -58.23214780243522,
+															"left": 606.1433124096351,
+															"top": -63.23214780243522,
 															"width": 52.78356857585163,
 															"height": 74.36963447313148
 														},
-														"_zindex": 10,
+														"_zindex": 11,
 														"forceFabricCanvasRegen": false,
 														"svgX": 538.7515281217094,
 														"svgY": 36.58303496099906,
@@ -2680,12 +2689,12 @@
 														"svgWidth": 13.916191240990202,
 														"svgHeight": 32.06334000000001,
 														"bbox": {
-															"left": 517.4076230706062,
-															"top": -58.09980309926618,
+															"left": 567.4076230706062,
+															"top": -63.09980309926618,
 															"width": 13.916191240990429,
 															"height": 32.06334000000004
 														},
-														"_zindex": 11,
+														"_zindex": 12,
 														"uuid": "fcec1c5d-61a3-461a-83ec-4c3ef6c82a02",
 														"_tempZIndex": 9
 													},
@@ -2719,12 +2728,12 @@
 														"svgWidth": 24.695173428916632,
 														"svgHeight": 74.87664000000001,
 														"bbox": {
-															"left": 501.0965461979764,
-															"top": -59.58261455116184,
+															"left": 551.0965461979764,
+															"top": -64.58261455116184,
 															"width": 24.695173025259237,
 															"height": 74.87663271305473
 														},
-														"_zindex": 12,
+														"_zindex": 13,
 														"uuid": "23bcefd1-8d30-48d3-954c-e154375f6c75",
 														"_tempZIndex": 10
 													},
@@ -2758,12 +2767,12 @@
 														"svgWidth": 35.59540563903346,
 														"svgHeight": 118.17154,
 														"bbox": {
-															"left": 481.74699699453595,
-															"top": -61.492991236513646,
+															"left": 531.746996994536,
+															"top": -66.49299123651365,
 															"width": 35.595403341523706,
 															"height": 118.17153410005652
 														},
-														"_zindex": 13,
+														"_zindex": 14,
 														"uuid": "a0b5fd21-db16-4db1-abdd-52bdc08b4f19",
 														"_tempZIndex": 11
 													}
@@ -2810,11 +2819,11 @@
 														"svgHeight": 159.41636000000005,
 														"bbox": {
 															"left": 521.1796984760072,
-															"top": 64.42154358563766,
+															"top": 49.421543585637664,
 															"width": 158.55009999999993,
 															"height": 159.41636000000005
 														},
-														"_zindex": 8,
+														"_zindex": 9,
 														"_tempZIndex": 0,
 														"uuid": "d8ad5beb-8034-4803-a535-0e535878122a"
 													},
@@ -2853,11 +2862,11 @@
 														"svgHeight": 157.97636,
 														"bbox": {
 															"left": 511.8996984760072,
-															"top": 55.14154358563769,
+															"top": 40.14154358563769,
 															"width": 157.1101,
 															"height": 157.97636
 														},
-														"_zindex": 9,
+														"_zindex": 10,
 														"forceFabricCanvasRegen": false
 													},
 													{
@@ -2895,11 +2904,11 @@
 														"svgHeight": 74.36963447313144,
 														"bbox": {
 															"left": 597.7515281217094,
-															"top": 99.58303496099904,
+															"top": 84.58303496099904,
 															"width": 52.78356857585163,
 															"height": 74.36963447313144
 														},
-														"_zindex": 10,
+														"_zindex": 11,
 														"forceFabricCanvasRegen": false
 													},
 													{
@@ -2937,11 +2946,11 @@
 														"svgHeight": 32.06334000000004,
 														"bbox": {
 															"left": 578.449527450111,
-															"top": 120.8685269007338,
+															"top": 105.8685269007338,
 															"width": 13.916191240990429,
 															"height": 32.06334000000004
 														},
-														"_zindex": 11,
+														"_zindex": 12,
 														"forceFabricCanvasRegen": false
 													},
 													{
@@ -2979,11 +2988,11 @@
 														"svgHeight": 74.87663271305473,
 														"bbox": {
 															"left": 556.7489596853468,
-															"top": 97.9790690923108,
+															"top": 82.9790690923108,
 															"width": 24.695173025259237,
 															"height": 74.87663271305473
 														},
-														"_zindex": 12,
+														"_zindex": 13,
 														"forceFabricCanvasRegen": false
 													},
 													{
@@ -3021,11 +3030,11 @@
 														"svgHeight": 118.17153410005653,
 														"bbox": {
 															"left": 531.9492953237743,
-															"top": 74.42124171345807,
+															"top": 59.42124171345807,
 															"width": 35.59540334152359,
 															"height": 118.17153410005653
 														},
-														"_zindex": 13,
+														"_zindex": 14,
 														"forceFabricCanvasRegen": false
 													}
 												],
@@ -3075,7 +3084,7 @@
 															"width": 166.81377665155014,
 															"height": 167.72752877512852
 														},
-														"_zindex": 8,
+														"_zindex": 9,
 														"_tempZIndex": 0,
 														"uuid": "e23414fc-5610-4561-96dd-496d08aa4547"
 													},
@@ -3118,7 +3127,7 @@
 															"width": 173.31381999999996,
 															"height": 174.27321999999995
 														},
-														"_zindex": 9,
+														"_zindex": 10,
 														"forceFabricCanvasRegen": false
 													},
 													{
@@ -3160,7 +3169,7 @@
 															"width": 58.24288492395249,
 															"height": 82.14948086711934
 														},
-														"_zindex": 10,
+														"_zindex": 11,
 														"forceFabricCanvasRegen": false
 													},
 													{
@@ -3202,7 +3211,7 @@
 															"width": 14.572616556706407,
 															"height": 34.67061280531266
 														},
-														"_zindex": 11,
+														"_zindex": 12,
 														"forceFabricCanvasRegen": false
 													},
 													{
@@ -3244,7 +3253,7 @@
 															"width": 26.51035655397095,
 															"height": 82.08641096827466
 														},
-														"_zindex": 12,
+														"_zindex": 13,
 														"forceFabricCanvasRegen": false
 													},
 													{
@@ -3286,7 +3295,7 @@
 															"width": 38.58238114456094,
 															"height": 130.03558190080312
 														},
-														"_zindex": 13,
+														"_zindex": 14,
 														"forceFabricCanvasRegen": false
 													},
 													{
@@ -3322,7 +3331,7 @@
 															"width": 50,
 															"height": 50
 														},
-														"_zindex": 14,
+														"_zindex": 15,
 														"forceFabricCanvasRegen": false
 													}
 												],
@@ -3336,6 +3345,23 @@
 											}
 										],
 										"identifier": "Layer 1"
+									},
+									{
+										"frames": [
+											{
+												"identifier": "",
+												"wickObjects": [],
+												"tweens": [],
+												"pathData": null,
+												"playheadPosition": 2,
+												"length": 1,
+												"alwaysSaveState": false,
+												"uuid": "3e2307fd-60a0-460a-8769-90763e819d69",
+												"wickScript": "",
+												"audioAssetUUID": "baf0ab26-6cfc-46cf-9101-bd10f4d93f74"
+											}
+										],
+										"identifier": "Layer 2"
 									}
 								],
 								"playRanges": [
@@ -3362,7 +3388,7 @@
 									}
 								],
 								"svgWidth": 179.55009999999993,
-								"svgHeight": 180.41636000000005,
+								"svgHeight": 180.41636000000003,
 								"svgStrokeWidth": 0,
 								"bbox": {
 									"left": 500.67969847600716,
@@ -3503,13 +3529,13 @@
 								"playheadPosition": null,
 								"currentLayer": null,
 								"svgWidth": 130.0234375,
-								"svgHeight": 21.340000000000032,
+								"svgHeight": 21.339999999999975,
 								"svgStrokeWidth": 1,
 								"bbox": {
 									"left": 67.98828125,
 									"top": 316.33,
 									"width": 130.0234375,
-									"height": 21.340000000000032
+									"height": 21.339999999999975
 								},
 								"_zindex": 7,
 								"forceFabricCanvasRegen": false,
@@ -3537,7 +3563,7 @@
 								"isSymbol": true,
 								"isButton": true,
 								"playheadPosition": 0,
-								"currentLayer": 0,
+								"currentLayer": 1,
 								"layers": [
 									{
 										"frames": [
@@ -3572,12 +3598,12 @@
 														"svgHeight": 400,
 														"svgStrokeWidth": 0,
 														"bbox": {
-															"left": 129.01382306477092,
-															"top": -42.26382306477092,
+															"left": 179.01382306477092,
+															"top": -47.26382306477092,
 															"width": 115.02764612954189,
 															"height": 197.47235387045816
 														},
-														"_zindex": 0,
+														"_zindex": 9,
 														"_tempZIndex": 8,
 														"forceFabricCanvasRegen": false
 													},
@@ -3609,12 +3635,12 @@
 														"svgHeight": 547,
 														"svgStrokeWidth": 0,
 														"bbox": {
-															"left": 112.08558091286307,
-															"top": 60.414419087136935,
+															"left": 162.08558091286307,
+															"top": 55.414419087136935,
 															"width": 111.17116182572613,
 															"height": 145.82883817427387
 														},
-														"_zindex": 1,
+														"_zindex": 10,
 														"_tempZIndex": 9,
 														"forceFabricCanvasRegen": false
 													},
@@ -3646,12 +3672,12 @@
 														"svgHeight": 210,
 														"svgStrokeWidth": 0,
 														"bbox": {
-															"left": -216,
-															"top": -209.00000000000009,
+															"left": -166,
+															"top": -214.00000000000009,
 															"width": 236.00000000000003,
 															"height": 210.00000000000003
 														},
-														"_zindex": 2,
+														"_zindex": 11,
 														"forceFabricCanvasRegen": false,
 														"_tempZIndex": 10
 													}
@@ -3832,7 +3858,7 @@
 															"width": 136.62662473819594,
 															"height": 231.93953887960652
 														},
-														"_zindex": 12,
+														"_zindex": 9,
 														"forceFabricCanvasRegen": false
 													},
 													{
@@ -3871,7 +3897,7 @@
 															"width": 115.17147907644784,
 															"height": 160.81598834033827
 														},
-														"_zindex": 13,
+														"_zindex": 10,
 														"forceFabricCanvasRegen": false
 													},
 													{
@@ -3901,16 +3927,16 @@
 															"x": 84.65943412881076,
 															"y": 175.2141070603272
 														},
-														"svgWidth": 260.6166592873757,
+														"svgWidth": 260.61665928737574,
 														"svgHeight": 260.55589654843914,
 														"svgStrokeWidth": 0,
 														"bbox": {
-															"left": -46.72965487209231,
+															"left": -46.7296548720923,
 															"top": 31.696400515304305,
-															"width": 260.6166592873757,
+															"width": 260.61665928737574,
 															"height": 260.55589654843914
 														},
-														"_zindex": 14,
+														"_zindex": 11,
 														"forceFabricCanvasRegen": false
 													},
 													{
@@ -3945,7 +3971,7 @@
 															"width": 50,
 															"height": 50
 														},
-														"_zindex": 15,
+														"_zindex": 12,
 														"uuid": "b479ab88-f32f-4f32-93d4-713dbed58cb2",
 														"forceFabricCanvasRegen": false
 													}
@@ -3960,6 +3986,23 @@
 											}
 										],
 										"identifier": "Layer 1"
+									},
+									{
+										"frames": [
+											{
+												"identifier": "",
+												"wickObjects": [],
+												"tweens": [],
+												"pathData": null,
+												"playheadPosition": 2,
+												"length": 1,
+												"alwaysSaveState": false,
+												"uuid": "b265d3bb-89f8-489f-a47d-8247fbe4a4df",
+												"wickScript": "",
+												"audioAssetUUID": "70621d99-2d61-42d6-aec5-b6ec27802152"
+											}
+										],
+										"identifier": "Layer 2"
 									}
 								],
 								"playRanges": [
@@ -4193,7 +4236,7 @@
 																				"svgWidth": 72,
 																				"svgHeight": 69,
 																				"bbox": {
-																					"left": 316.5,
+																					"left": 367.5,
 																					"top": -3,
 																					"width": 72,
 																					"height": 69
@@ -4229,7 +4272,7 @@
 																				"svgHeight": 194,
 																				"svgStrokeWidth": 0,
 																				"bbox": {
-																					"left": 318.25735294117646,
+																					"left": 369.25735294117646,
 																					"top": -2.757352941176464,
 																					"width": 64.51470588235293,
 																					"height": 58.48529411764707
@@ -4256,7 +4299,7 @@
 														"svgHeight": 70,
 														"svgStrokeWidth": 0,
 														"bbox": {
-															"left": 276.6873129374028,
+															"left": 327.6873129374028,
 															"top": -3.0000000000000284,
 															"width": 99.85581489151707,
 															"height": 99.09454710729702
@@ -4277,7 +4320,8 @@
 														"playheadPosition": 0,
 														"uuid": "507e35a7-f476-4f47-b83c-d78347a8e8f1",
 														"tweenType": "Quadratic",
-														"tweenDir": "InOut"
+														"tweenDir": "InOut",
+														"rotations": 0
 													},
 													{
 														"x": 267.7649284791778,
@@ -4290,7 +4334,8 @@
 														"playheadPosition": 27,
 														"uuid": "89d7c190-cabd-4cab-bcea-87ce1273901e",
 														"tweenType": "Linear",
-														"tweenDir": "None"
+														"tweenDir": "None",
+														"rotations": 0
 													}
 												],
 												"pathData": null,
@@ -5409,7 +5454,8 @@
 														"opacity": 1,
 														"playheadPosition": 0,
 														"tweenType": "Quadratic",
-														"tweenDir": "InOut"
+														"tweenDir": "InOut",
+														"rotations": 0
 													},
 													{
 														"x": 0,
@@ -5421,7 +5467,8 @@
 														"opacity": 1,
 														"playheadPosition": 59,
 														"tweenType": "Linear",
-														"tweenDir": "None"
+														"tweenDir": "None",
+														"rotations": 0
 													},
 													{
 														"x": 0,
@@ -5433,7 +5480,8 @@
 														"opacity": 1,
 														"playheadPosition": 29,
 														"tweenType": "Quadratic",
-														"tweenDir": "InOut"
+														"tweenDir": "InOut",
+														"rotations": 0
 													}
 												],
 												"pathData": null,
@@ -5557,7 +5605,8 @@
 														"opacity": 1,
 														"playheadPosition": 0,
 														"tweenType": "Linear",
-														"tweenDir": "None"
+														"tweenDir": "None",
+														"rotations": 0
 													},
 													{
 														"x": 7.626278203057268,
@@ -5569,7 +5618,8 @@
 														"opacity": 1,
 														"playheadPosition": 29,
 														"tweenType": "Linear",
-														"tweenDir": "None"
+														"tweenDir": "None",
+														"rotations": 0
 													},
 													{
 														"x": 0.5249719032172493,
@@ -5581,7 +5631,8 @@
 														"opacity": 1,
 														"playheadPosition": 59,
 														"tweenType": "Linear",
-														"tweenDir": "None"
+														"tweenDir": "None",
+														"rotations": 0
 													}
 												],
 												"pathData": null,

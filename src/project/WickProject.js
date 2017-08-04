@@ -329,7 +329,7 @@ WickProject.prototype.getAllFrames = function () {
     var frames = [];
 
     var allObjectsInProject = this.getAllObjects();
-    allObjectsInProject.forEach(function (obj){
+    allObjectsInProject.forEach(function (obj) {
         frames = frames.concat(obj.getAllFrames());
     });
 

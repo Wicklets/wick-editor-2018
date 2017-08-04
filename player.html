@@ -3784,6 +3784,8 @@ WickFrame.prototype.tick = function () {
         
         (wickPlayer || wickEditor).project.runScript(this, 'load');
         (wickPlayer || wickEditor).project.runScript(this, 'update');
+
+        if(wickPlayer) wickPlayer.audioPlayer.playSound(this);
     }
     // Active -> Active
     // Frame is active!
@@ -4300,7 +4302,6 @@ var WickObject = function () {
 // Static
 
     this.assetUUID = null;
-    this.volume = 1.0;
     this.loop = false;
 
 // Text
@@ -4515,7 +4516,6 @@ WickObject.prototype.copy = function () {
     copiedObject.isImage = this.isImage;
     copiedObject.isPath = this.isPath;
     copiedObject.isText = this.isText;
-    copiedObject.isSound = this.isSound;
     copiedObject.isButton = this.isButton;
     copiedObject.cachedAbsolutePosition = this.getAbsolutePosition();
     copiedObject.svgStrokeWidth = this.svgStrokeWidth;
@@ -4612,11 +4612,6 @@ WickObject.prototype.downloadAsFile = function () {
     if(asset.type === 'image') {
         var ext = asset.getData().split("/")[1].split(';')[0];
         saveAs(dataURItoBlob(asset.getData()), filename+"."+ext);
-        return;
-    }
-
-    if(this.audioData) {
-        saveAs(dataURItoBlob(this.audioData), filename+".wav");
         return;
     }
 
@@ -5593,9 +5588,7 @@ WickObject.prototype.hitTest = function (otherObj, hitTestType, args) {
         for (var j = 0; j < thisObjChildren.length; j++) {
             var objA = thisObjChildren[j];
             var objB = otherObjChildren[i];
-            // Note: audio objects are like 'ghost' objects, they don't actually
-            // show up visually in the player so they should not count in hitTest.
-            if (!objA.audioData && !objB.audioData && objA[checkMethod](objB)) {
+            if (objA[checkMethod](objB)) {
                 return true;
             }
         }
@@ -5677,8 +5670,6 @@ WickObject.prototype.getTypeString = function (format) {
         typeString = "clip";
     } else if (this.isImage) {
         typeString = "image";
-    } else if (this.isSound) {
-        typeString = "sound";
     } else if (this.isPath) {
         typeString = "path";
     } else if (this.isText) {
@@ -5695,22 +5686,6 @@ WickObject.prototype.getTypeString = function (format) {
 WickObject.prototype.setText = function (text) {
     //this.pixiText.text = ""+text;
     wickRenderer.setText(this, text);
-}
-
-WickObject.prototype.playSound = function () {
-
-    wickPlayer.audioPlayer.playSound(this, this.loopSound, this.volume);
-
-}
-
-WickObject.prototype.stopSound = function () {
-
-    wickPlayer.audioPlayer.stopSound(this);
-
-}
-
-WickObject.prototype.setVolume = function (volume) {
-    this.volume = volume;
 }
 
 WickObject.prototype.clone = function () {
@@ -5872,10 +5847,6 @@ WickObject.prototype.tick = function () {
         (wickPlayer || wickEditor).project.runScript(this, 'update');
 
         this.advanceTimeline();
-
-        if(this.isSound) {
-            this.playSound();
-        }
     }
     // Active -> Active
     else if (this._wasActiveLastTick && this._active) {
@@ -6266,10 +6237,7 @@ WickProject.fixForBackwardsCompatibility = function (project) {
                 wickObject.name = 'untitled';
             } else if(wickObject.audioData) {
                 var asset = new WickAsset(wickObject.imageData, 'audio', 'untitled');
-                wickObject.assetUUID = project.library.addAsset(asset);
-                wickObject.isSound = true;
-                wickObject.imageData = null;
-                wickObject.name = 'untitled';
+                var assetUUID = project.library.addAsset(asset);
             }
         })
     }
@@ -6411,7 +6379,7 @@ WickProject.prototype.getAllFrames = function () {
     var frames = [];
 
     var allObjectsInProject = this.getAllObjects();
-    allObjectsInProject.forEach(function (obj){
+    allObjectsInProject.forEach(function (obj) {
         frames = frames.concat(obj.getAllFrames());
     });
 
@@ -6780,7 +6748,6 @@ WickProject.prototype.loadBuiltinFunctions = function (contextObject) {
     window.gotoNextFrame  = function ()      { objectScope.gotoNextFrame(); }
     window.gotoPrevFrame  = function ()      { objectScope.gotoPrevFrame(); }
 
-    window.stopAllSounds = function () { wickPlayer.audioPlayer.stopAllSounds(); };
     window.keyIsDown      = function (keyString) { return wickPlayer.inputHandler.keyIsDown(keyString); };
     window.keyJustPressed = function (keyString) { return wickPlayer.inputHandler.keyJustPressed(keyString); }
     window.mouseX = wickPlayer.inputHandler.getMouse().x;
@@ -7681,19 +7648,18 @@ var WickHowlerAudioPlayer = function (project) {
 
         muted = false;
 
-        var allObjects = project.rootObject.getAllChildObjectsRecursive();
+        var allFrames = project.getAllFrames();
 
-        allObjects.forEach(function (wickObject) {
-            if(!wickObject.isSound) return;
-            //console.log(wickObject); 
+        allFrames.forEach(function (wickFrame) {
+            console.log(wickFrame)
+            if(!wickFrame.audioAssetUUID) return;
+            var asset = project.library.getAsset(wickFrame.audioAssetUUID);
+            var audioData = asset.getData();
 
-            var audioData = wickObject.asset.getData();
-            //if(wickObject.compressed) audioData = LZString.decompressFromBase64(audioData)
-
-            sounds[wickObject.uuid] = new Howl({
+            sounds[wickFrame.uuid] = new Howl({
                 src: [audioData],
-                loop: wickObject.loop,
-                volume: wickObject.volume,
+                loop: false,
+                volume: 1.0,
                 onend: function(id) { self.onSoundEnd(id); },
                 onStop: function(id) { self.onSoundStop(id); },
                 onPlay: function(id) { self.onSoundPlay(id); }
@@ -7702,22 +7668,21 @@ var WickHowlerAudioPlayer = function (project) {
 
     }
 
-    self.playSound = function (wickObject, loop, volume) {
+    self.playSound = function (wickFrame) {
         if(muted) return;
-        wickObject.currentHowlID = sounds[wickObject.uuid].play();
+        if(!sounds[wickFrame.uuid]) return;
+        wickFrame.currentHowlID = sounds[wickFrame.uuid].play();
     }
 
     // TODO : Do this only for playing sounds
     this.stopAllSounds = function () {
-        console.log(sounds);
         for (var sound in sounds) {
-            console.log(sound);
             sounds[sound].stop();
         }
     }
 
-    self.stopSound = function (wickObject) {
-        sounds[wickObject.uuid].stop();
+    self.stopSound = function (wickFrame) {
+        sounds[wickFrame.uuid].stop();
     }
 
     self.cleanup = function () {
