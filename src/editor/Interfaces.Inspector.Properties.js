@@ -417,6 +417,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }, 
         onChangeFn: function (val) {
             wickEditor.project.framerate = eval(val);
+            wickEditor.syncInterfaces();
         }
     }));
 

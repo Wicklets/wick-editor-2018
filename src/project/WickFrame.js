@@ -62,6 +62,8 @@ WickFrame.prototype.tick = function () {
         
         (wickPlayer || wickEditor).project.runScript(this, 'load');
         (wickPlayer || wickEditor).project.runScript(this, 'update');
+
+        if(wickPlayer) wickPlayer.audioPlayer.playSound(this);
     }
     // Active -> Active
     // Frame is active!
