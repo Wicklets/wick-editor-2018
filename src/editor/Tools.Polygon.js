@@ -119,7 +119,8 @@ Tools.Polygon = function (wickEditor) {
         wickEditor.paper.refreshSVGWickObject(path);
 
         if(path.closed) {
-            this.finishPath();
+            that.finishPath();
+            wickEditor.changeTool(wickEditor.tools.pen)
         }
     }
 
