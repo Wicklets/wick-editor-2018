@@ -22,3 +22,16 @@
 	height: 200px;
 	overflow-y: auto;
 }
+
+#draggedAsset {
+	position: absolute;
+    top: 0px;
+    left: 0px;
+    display: none;
+    pointer-events: none;
+    width: 100px;
+    height: 100px;
+    opacity: 0.6;
+    transform: translateX(-50%) translateY(-50%);
+    background-size: 100px 100px;
+}

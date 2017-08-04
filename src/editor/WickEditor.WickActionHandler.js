@@ -1120,6 +1120,19 @@ var WickActionHandler = function (wickEditor) {
             done();
         });
 
+    registerAction('addSoundToFrame', 
+        function (args) {
+            args.oldAssetUUID = args.frame.audioAssetUUID;
+            args.frame.audioAssetUUID = args.asset.uuid;
+
+            done();
+        },
+        function (args) {
+            args.frame.audioAssetUUID = args.oldAssetUUID;
+
+            done();
+        });
+
     registerAction('createMotionTween', 
         function (args) {
             var frame = args.frame;

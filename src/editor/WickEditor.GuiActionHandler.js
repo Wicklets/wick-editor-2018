@@ -1145,30 +1145,6 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.syncInterfaces();
         });
 
-    registerAction('createObjectFromAsset',
-        [],
-        [],
-        {},
-        function (args) {
-            var asset = wickEditor.library.getSelectedAsset();
-
-            if(asset.type === 'image') {
-                var wickObj = new WickObject();
-                wickObj.assetUUID = asset.uuid;
-                wickObj.isImage = true;
-                wickEditor.actionHandler.doAction('addObjects', {
-                    wickObjects:[wickObj]
-                });
-            } else if(asset.type === 'audio') {
-                var currentFrame = wickEditor.project.getCurrentFrame();
-                if(currentFrame) {
-                    currentFrame.audioAssetUUID = asset.uuid;
-                }
-                wickEditor.syncInterfaces();
-            }
-
-        });
-
     registerAction('deleteAsset',
         [],
         [],
@@ -1187,6 +1163,47 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.actionHandler.doAction('renameAsset', {
                 asset: wickEditor.library.getSelectedAsset()
             });
+        });
+
+    registerAction('createObjectFromAsset',
+        [],
+        [],
+        {},
+        function (args) {
+            var asset = args.asset;
+
+            if(asset.type === 'image') {
+                var wickObj = new WickObject();
+                wickObj.assetUUID = asset.uuid;
+                wickObj.isImage = true;
+                wickObj.x = args.x;
+                wickObj.y = args.y;
+                wickEditor.actionHandler.doAction('addObjects', {
+                    wickObjects:[wickObj]
+                });
+            } else if(asset.type === 'audio') {
+                wickEditor.actionHandler.doAction('addSoundToFrame', {
+                    frame: wickEditor.project.getCurrentFrame(),
+                    asset: args.asset
+                });
+            }
+
+        });
+
+    registerAction('createSoundFromAsset',
+        [],
+        [],
+        {},
+        function (args) {
+            var asset = args.asset;
+
+            if(asset.type === 'audio') {
+                wickEditor.actionHandler.doAction('addSoundToFrame', {
+                    frame: args.frame,
+                    asset: args.asset
+                });
+            }
+
         });
 
 }

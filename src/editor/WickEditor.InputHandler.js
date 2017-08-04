@@ -377,21 +377,23 @@ var InputHandler = function (wickEditor) {
     var loadAudio = function (src, filename, callback) {
         var asset = new WickAsset(src, 'audio', filename);
         var assetUUID = wickEditor.project.library.addAsset(asset);
+        wickEditor.syncInterfaces();
 
-        var currentFrame = wickEditor.project.getCurrentFrame();
+        /*var currentFrame = wickEditor.project.getCurrentFrame();
         if(currentFrame) {
             currentFrame.audioAssetUUID = assetUUID;
-        }
+        }*/
     }
 
     var loadUncompressedAudio = function (src, filename, callback) {
         var asset = new WickAsset(src, 'audio', filename, true);
         var assetUUID = wickEditor.project.library.addAsset(asset);
+        wickEditor.syncInterfaces();
 
-        var currentFrame = wickEditor.project.getCurrentFrame();
+        /*var currentFrame = wickEditor.project.getCurrentFrame();
         if(currentFrame) {
             currentFrame.audioAssetUUID = assetUUID;
-        }
+        }*/
     }
 
     var loadJSON = function (json, filename, callback) {

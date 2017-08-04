@@ -193,12 +193,12 @@ var RightClickMenuInterface = function (wickEditor) {
                 'url(./resources/unhide-layer.svg)', 
                 function () { wickEditor.guiActionHandler.doAction("paste") }),
             ], function () {return !wickEditor.library.isSelected()}, false ));
-        buttons.push(new RightClickMenuButtonGroup([
+        /*buttons.push(new RightClickMenuButtonGroup([
             new RightClickMenuButton(
                 "Create Object from Asset", 
                 'url(./resources/inspector-duplicate.svg)', 
                 function () { wickEditor.guiActionHandler.doAction("createObjectFromAsset") }),
-            ], function () {return wickEditor.library.isSelected()}, true ));
+            ], function () {return wickEditor.library.isSelected()}, true ));*/
         buttons.push(new RightClickMenuButtonGroup([
             new RightClickMenuButton(
                 "Delete Asset", 

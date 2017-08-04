@@ -17,13 +17,18 @@
     
 var LibraryInterface = function (wickEditor) {
 
+    var self = this;
+
     var selectedNode;
+    var draggedNode;
+
+    var draggedAssetElem;
 
     this.setup = function () {
         //$("#tree").fancytree();
         $("#tree").mousedown(function() {
             wickEditor.project.clearSelection();
-            wickEditor.syncInterfaces();
+            //wickEditor.syncInterfaces();
         });
 
         $("#tree").fancytree({
@@ -51,10 +56,43 @@ var LibraryInterface = function (wickEditor) {
             }*/
         });
 
-        /*document.getElementById('tree').addEventListener('mousedown', function (e) {
-            console.log(e.srcElement)
-            console.log($('#tree').fancytree('getTree').getSelectedNodes())
-        });*/
+        draggedAssetElem = document.createElement('div');
+        draggedAssetElem.id = 'draggedAsset';
+        document.getElementById('tree').addEventListener('mousedown', function (e) {
+            draggedNode = selectedNode;
+            draggedAssetElem.style.display = 'block';
+            var asset = self.getSelectedAsset();
+            var assetURL;
+            if(asset.type === 'image') {
+                assetURL = asset.data;
+            } else if(self.getSelectedAsset().type === 'audio') {
+                assetURL = 'resources/audio.png';
+            }
+            draggedAssetElem.style.backgroundImage = 'url('+assetURL+')';
+        });
+        window.addEventListener('mouseup', function (e) {
+            if(!draggedNode) return;
+            draggedNode = null;
+            draggedAssetElem.style.display = 'none';
+            if(e.target.nodeName === 'CANVAS') {
+                wickEditor.guiActionHandler.doAction("createObjectFromAsset", {
+                    asset: self.getSelectedAsset(),
+                    x: e.x,
+                    y: e.y
+                });
+            } else if (e.target.className === 'frame') {
+                wickEditor.guiActionHandler.doAction("createSoundFromAsset", {
+                    asset: self.getSelectedAsset(),
+                    frame: e.target.wickData.wickFrame
+                });
+            }
+        });
+        window.addEventListener('mousemove', function (e) {
+            if(!draggedAssetElem) return;
+            draggedAssetElem.style.left = e.x + 'px';
+            draggedAssetElem.style.top = e.y + 'px';
+        });
+        document.body.appendChild(draggedAssetElem);
     }
 
     this.syncWithEditorState = function () {
