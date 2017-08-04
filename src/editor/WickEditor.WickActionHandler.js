@@ -1252,8 +1252,13 @@ var WickActionHandler = function (wickEditor) {
 
     registerAction('doBooleanOperation',
         function (args) {
+            var removeObjs = args.objs;
+            if(args.boolFnName === 'subtract') {
+                removeObjs = [args.objs[0]];
+            }
+
             args.deleteAction = wickEditor.actionHandler.doAction('deleteObjects', {
-                objects: args.objs,
+                objects: removeObjs,
                 dontAddToStack: true
             });
             args.addAction = wickEditor.actionHandler.doAction('addObjects', {
