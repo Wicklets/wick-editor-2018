@@ -166,7 +166,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
-    properties.push(new InspectorInterface.StringInput({
+    /*properties.push(new InspectorInterface.StringInput({
         title: 'Volume',
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
@@ -190,7 +190,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         onChangeFn: function (val) {
             selectionInfo.object.loop = val;
         }
-    }));
+    }));*/
 
     properties.push(new InspectorInterface.StringInput({
         title: 'Variable',
