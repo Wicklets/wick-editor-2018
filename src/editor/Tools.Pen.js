@@ -65,10 +65,11 @@ Tools.Pen = function (wickEditor) {
             if(!hitResult) {
                 //console.log(PaperHoleFinder.getHoleShapeAtPosition(paper.project, event.point));
                 var hole = PaperHoleFinder.getHoleShapeAtPosition(paper.project, event.point);
+                PaperHoleFinder.expandHole(hole);
                 if(hole) {
                     hole.fillColor = wickEditor.settings.fillColor;
                     hole.strokeColor = wickEditor.settings.fillColor;
-                    hole.strokeWidth = 3;
+                    hole.strokeWidth = 0;
                     var superPathString = hole.exportSVG({asString:true});
                     var svgString = '<svg id="svg" version="1.1" width="'+hole.bounds._width+'" height="'+hole.bounds._height+'" xmlns="http://www.w3.org/2000/svg">' +superPathString+ '</svg>'
                     var superPathWickObject = WickObject.createPathObject(svgString);
