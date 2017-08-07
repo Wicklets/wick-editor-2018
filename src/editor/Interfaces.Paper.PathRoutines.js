@@ -124,6 +124,9 @@ var PathRoutines = function (paperInterface, wickEditor) {
 
         subtractWithPath.position.x = args.pathX;
         subtractWithPath.position.y = args.pathY;
+        console.log(subtractWithPath)
+        subtractWithPath.scaling.x /= wickEditor.fabric.canvas.getZoom();
+        subtractWithPath.scaling.y /= wickEditor.fabric.canvas.getZoom();
 
         var modifiedStates = [];
         var modifiedObjects = [];
