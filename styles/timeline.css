@@ -599,7 +599,7 @@ body {
     width: 10000%;
     height: var(--number-line-height);
 
-    cursor: pointer;
+    /*cursor: pointer;*/
 
     background-color: #252525;
 }

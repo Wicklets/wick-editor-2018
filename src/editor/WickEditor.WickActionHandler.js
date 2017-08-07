@@ -407,9 +407,9 @@ var WickActionHandler = function (wickEditor) {
             args.createdSymbol = symbol;
 
             if(args.button) {
-                symbol.addPlayRange(new WickPlayRange(0,1,'mouseup'));
-                symbol.addPlayRange(new WickPlayRange(1,2,'mouseover'));
-                symbol.addPlayRange(new WickPlayRange(2,3,'mousedown'));
+                symbol.addPlayRange(new WickPlayRange(0,1,'mouseup','#4a6588'));
+                symbol.addPlayRange(new WickPlayRange(1,2,'mouseover','#4a6588'));
+                symbol.addPlayRange(new WickPlayRange(2,3,'mousedown','#4a6588'));
                 symbol.isButton = true;
             }
 

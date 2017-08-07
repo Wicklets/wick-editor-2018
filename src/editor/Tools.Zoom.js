@@ -61,7 +61,9 @@ Tools.Zoom = function (wickEditor) {
                 wickEditor.fabric.zoom(1 / 0.7, endX, endY);
                 wickEditor.paper.syncWithEditorState();
             } else {
-                wickEditor.fabric.zoom(window.innerWidth/diffX*0.8, (startX+endX)/2, (startY+endY)/2);
+                var wZoom = window.innerWidth/diffX*0.8;
+                var hZoom = window.innerHeight/diffY*0.8;
+                wickEditor.fabric.zoom(Math.min(wZoom, hZoom), (startX+endX)/2, (startY+endY)/2-30);
                 wickEditor.paper.syncWithEditorState();
             }
         });
