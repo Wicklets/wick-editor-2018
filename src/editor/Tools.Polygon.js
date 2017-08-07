@@ -30,7 +30,7 @@ Tools.Polygon = function (wickEditor) {
     }
 
     this.getTooltipName = function () {
-        return "Polygon";
+        return "Polygon (O)";
     }
 
     this.setup = function () {

@@ -158,6 +158,8 @@ WickProject.fixForBackwardsCompatibility = function (project) {
 
         if(!wickObj.isSymbol) return
         wickObj.layers.forEach(function (layer) {
+            if(!layer.locked) layer.locked = false;
+            if(!layer.hidden) layer.hidden = false;
             layer.frames.forEach(function (frame) {
                 if(!frame.tweens) frame.tweens = [];
                 frame.tweens.forEach(function (tween) {

@@ -28,7 +28,7 @@ Tools.Paintbrush = function (wickEditor) {
         var context = canvas.getContext('2d');
         var centerX = canvas.width / 2;
         var centerY = canvas.height / 2;
-        var radius = wickEditor.settings.brushThickness/2 * wickEditor.fabric.canvas.getZoom();
+        var radius = wickEditor.settings.brushThickness/2;// * wickEditor.fabric.canvas.getZoom();
 
         function invertColor(hexTripletColor) {
             var color = hexTripletColor;
@@ -59,7 +59,7 @@ Tools.Paintbrush = function (wickEditor) {
     }
 
     this.getTooltipName = function () {
-        return "Paintbrush";
+        return "Brush (B)";
     }
 
     this.setup = function () {
@@ -83,8 +83,9 @@ Tools.Paintbrush = function (wickEditor) {
                     pathWickObject.y = y;
 
                     var smoothing = getBrushSmoothing();
-                    pathWickObject.scaleX = 1/smoothing;
-                    pathWickObject.scaleY = 1/smoothing;
+                    var zoom = wickEditor.fabric.canvas.getZoom();
+                    pathWickObject.scaleX = 1/smoothing/zoom;
+                    pathWickObject.scaleY = 1/smoothing/zoom;
                     
                     wickEditor.paper.pathRoutines.refreshPathData(pathWickObject);
 
@@ -105,12 +106,14 @@ Tools.Paintbrush = function (wickEditor) {
 
     var potraceFabricPath = function (pathFabricObject, callback) {
         // I think there's a bug in cloneAsImage when zoom != 1, this is a hack
-        var oldZoom = wickEditor.fabric.canvas.getZoom();
-        wickEditor.fabric.canvas.setZoom(1);
+        //var oldZoom = wickEditor.fabric.canvas.getZoom();
+        //wickEditor.fabric.canvas.setZoom(1);
 
         var smoothing = getBrushSmoothing();
-        pathFabricObject.scaleX = smoothing;
-        pathFabricObject.scaleY = smoothing;
+        var zoom = wickEditor.fabric.canvas.getZoom();
+        pathFabricObject.scaleX = smoothing*zoom;
+        pathFabricObject.scaleY = smoothing*zoom;
+        pathFabricObject.setCoords();
 
         pathFabricObject.cloneAsImage(function(clone) {
             var img = new Image();
@@ -121,7 +124,7 @@ Tools.Paintbrush = function (wickEditor) {
         });
 
         // Put zoom back to where it was before
-        wickEditor.fabric.canvas.setZoom(oldZoom);
+        //wickEditor.fabric.canvas.setZoom(oldZoom);
     };
 
     var getBrushSmoothing = function () {

@@ -31,7 +31,7 @@ Tools.Ellipse = function (wickEditor) {
     }
 
     this.getTooltipName = function () {
-        return "Ellipse";
+        return "Ellipse (S)";
     }
 
     this.setup = function () {

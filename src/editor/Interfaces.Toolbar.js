@@ -87,7 +87,7 @@ var ToolbarInterface = function (wickEditor) {
             return parseInt(wickEditor.settings.strokeWidth);
         }));
 
-        toolOptionInputs.push(new ToolbarInterface.RangeSlider(container, 'Brush Thickness', 'tools/Paintbrush.svg', 3, 100, function (val) {
+        toolOptionInputs.push(new ToolbarInterface.RangeSlider(container, 'Brush Thickness', 'tools/Paintbrush.svg', 2, 100, function (val) {
             wickEditor.settings.setValue('brushThickness', parseFloat(val));
             wickEditor.syncInterfaces();
         }, function () {
@@ -96,7 +96,7 @@ var ToolbarInterface = function (wickEditor) {
             return (wickEditor.currentTool instanceof Tools.Paintbrush);
         }));
 
-        toolOptionInputs.push(new ToolbarInterface.RangeSlider(container, 'Brush Smoothness', 'tools/Paintbrush.svg', 25, 100, function (val) {
+        toolOptionInputs.push(new ToolbarInterface.RangeSlider(container, 'Brush Smoothness', 'tools/Paintbrush.svg', 65, 100, function (val) {
             wickEditor.settings.setValue('brushSmoothness', parseFloat(val));
             wickEditor.syncInterfaces();
         }, function () {

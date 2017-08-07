@@ -30,7 +30,7 @@ Tools.Text = function (wickEditor) {
     }
 
     this.getTooltipName = function () {
-        return "Text";
+        return "Text (T)";
     }
 
     this.setup = function () {

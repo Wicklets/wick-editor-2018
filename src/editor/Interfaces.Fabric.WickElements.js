@@ -445,8 +445,12 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             fabricObj.opacity = wickObj.opacity/2;
         }
 
+        if(wickObj.parentFrame.parentLayer.hidden) {
+            fabricObj.opacity = 0.0;
+        }
+
         // Objects that are onion skins or that are not part of the current symbol being edited cannot be interacted with
-        if(activeObjects.indexOf(wickObj) !== -1) {
+        if(activeObjects.indexOf(wickObj) !== -1 && !wickObj.parentFrame.parentLayer.locked && !wickObj.parentFrame.parentLayer.hidden) {
             fabricObj.hasControls = true;
             fabricObj.selectable = true;
             fabricObj.evented = true;

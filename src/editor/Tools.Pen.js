@@ -30,7 +30,7 @@ Tools.Pen = function (wickEditor) {
     }
 
     this.getTooltipName = function () {
-        return "Path Cursor";
+        return "Path Cursor (P)";
     }
 
     this.setup = function () {

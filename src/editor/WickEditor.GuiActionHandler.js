@@ -607,7 +607,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.cursor',
-        [/*'C'*/],
+        ['C'],
         [],
         {},
         function(args) {
@@ -615,7 +615,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.pen',
-        [],
+        ['P'],
         [],
         {},
         function (args) {
@@ -623,7 +623,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.paintbrush',
-        [/*'B'*/],
+        ['B'],
         [],
         {},
         function(args) {
@@ -631,7 +631,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.line',
-        [],
+        ['L'],
         [],
         {},
         function(args) {
@@ -639,7 +639,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.eraser',
-        [],
+        ['E'],
         [],
         {},
         function(args) {
@@ -647,7 +647,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.fillbucket',
-        [/*'F'*/],
+        ['G'],
         [],
         {},
         function(args) {
@@ -655,7 +655,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.rectangle',
-        [/*'R'*/],
+        ['R'],
         [],
         {},
         function(args) {
@@ -663,7 +663,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.ellipse',
-        [/*'E'*/],
+        ['S'],
         [],
         {},
         function(args) {
@@ -671,7 +671,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.polygon',
-        [/*'E'*/],
+        ['O'],
         [],
         {},
         function(args) {
@@ -679,7 +679,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.dropper',
-        [/*'D'*/],
+        ['D'],
         [],
         {},
         function(args) {
@@ -687,7 +687,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.text',
-        [/*'T'*/],
+        ['T'],
         [],
         {},
         function(args) {
@@ -695,7 +695,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.zoom',
-        [/*'Z'*/],
+        ['Z'],
         [],
         {},
         function(args) {

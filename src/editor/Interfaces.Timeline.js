@@ -141,7 +141,7 @@ TimelineInterface.Timeline = function (wickEditor) {
 
         var previewPlayButton = document.createElement('div');
         previewPlayButton.className = 'layer-tools-button play-preview-button tooltipElem';
-        previewPlayButton.setAttribute('alt', "Play Preview");
+        previewPlayButton.setAttribute('alt', "Play Preview (Enter)");
         previewPlayButton.addEventListener('mousedown', function (e) {
             wickEditor.guiActionHandler.doAction('previewPlay');
         });
@@ -149,7 +149,7 @@ TimelineInterface.Timeline = function (wickEditor) {
 
         var previewPauseButton = document.createElement('div');
         previewPauseButton.className = 'layer-tools-button pause-preview-button tooltipElem';
-        previewPauseButton.setAttribute('alt', "Pause Preview");
+        previewPauseButton.setAttribute('alt', "Pause Preview (Enter)");
         previewPauseButton.addEventListener('mousedown', function (e) {
             wickEditor.guiActionHandler.doAction('previewPause');
         });
@@ -157,7 +157,7 @@ TimelineInterface.Timeline = function (wickEditor) {
 
         var previewStepForwardButton = document.createElement('div');
         previewStepForwardButton.className = 'layer-tools-button step-forward-preview-button tooltipElem';
-        previewStepForwardButton.setAttribute('alt', "Step Forwards");
+        previewStepForwardButton.setAttribute('alt', "Step Forwards (.)");
         previewStepForwardButton.addEventListener('mousedown', function (e) {
             wickEditor.guiActionHandler.doAction('movePlayheadRight');
         });
@@ -165,7 +165,7 @@ TimelineInterface.Timeline = function (wickEditor) {
 
         var previewStepBackwardButton = document.createElement('div');
         previewStepBackwardButton.className = 'layer-tools-button step-backward-preview-button tooltipElem';
-        previewStepBackwardButton.setAttribute('alt', "Step Backwards");
+        previewStepBackwardButton.setAttribute('alt', "Step Backwards (,)");
         previewStepBackwardButton.addEventListener('mousedown', function (e) {
             wickEditor.guiActionHandler.doAction('movePlayheadLeft');
         });

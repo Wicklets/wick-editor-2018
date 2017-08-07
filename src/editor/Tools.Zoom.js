@@ -37,7 +37,7 @@ Tools.Zoom = function (wickEditor) {
     }
 
     this.getTooltipName = function () {
-        return "Zoom";
+        return "Zoom (Z/Command+Scroll)";
     }
     
     this.setup = function () {
@@ -55,13 +55,13 @@ Tools.Zoom = function (wickEditor) {
             diffY = Math.abs(endY-startY);
 
             if (wickEditor.inputHandler.specialKeys["Modifier"] || wickEditor.inputHandler.keys[keyCharToCode['ALT']]) {
-                wickEditor.fabric.zoom(0.8, endX, endY);
+                wickEditor.fabric.zoom(0.7, endX, endY);
                 wickEditor.paper.syncWithEditorState();
             } else if (diffX < 10 && diffY < 10) {
-                wickEditor.fabric.zoom(1.2, endX, endY);
+                wickEditor.fabric.zoom(1 / 0.7, endX, endY);
                 wickEditor.paper.syncWithEditorState();
             } else {
-                wickEditor.fabric.zoom(window.innerWidth/diffX, (startX+endX)/2, (startY+endY)/2);
+                wickEditor.fabric.zoom(window.innerWidth/diffX*0.8, (startX+endX)/2, (startY+endY)/2);
                 wickEditor.paper.syncWithEditorState();
             }
         });

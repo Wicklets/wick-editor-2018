@@ -197,10 +197,10 @@ body {
 
 .layer {
     background-color: #4a6588;
-    background-image: url('../resources/layer-handle.svg');
+    /*background-image: url('../resources/layer-handle.svg');
     background-size: 15px 17px;
     background-repeat: no-repeat;
-    background-position: left;
+    background-position: left;*/
     
     
     width:  calc(100% - 10px);
@@ -235,8 +235,58 @@ body {
 
 }
 
-.layer-gnurl {
-    
+.layer-lock-button {
+    border-radius: 7px;
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    top: 11px;
+    left: 3px;
+    background-color: transparent;
+    background-image: url('../resources/lock-layer.svg');
+    background-size: 13px 13px;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    opacity: 0.6;
+}
+.layer-lock-button:hover {
+    background-color: rgba(255,255,255,0.4);
+}
+.layer-lock-button:active {
+    background-color: rgba(255,255,255,0.8);;
+    opacity: 1.0;
+}
+.layer-locked {
+    opacity: 1.0;
+    background-color: rgba(255,255,255,0.5);
+}
+
+.layer-hide-button {
+    border-radius: 7px;
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    top: 11px;
+    left: 20px;
+    background-color: transparent;
+    background-image: url('../resources/hide-layer.svg');
+    background-size: 13px 13px;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    opacity: 0.6;
+}
+.layer-hide-button:hover {
+    background-color: rgba(255,255,255,0.4);
+}
+.layer-hide-button:active {
+    background-color: rgba(255,255,255,0.8);
+    opacity: 1.0;
+}
+.layer-hidden {
+    opacity: 1.0;
+    background-color: rgba(255,255,255,0.5);
 }
 
 .frames-container {

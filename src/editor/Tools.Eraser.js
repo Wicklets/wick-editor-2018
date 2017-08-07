@@ -48,7 +48,7 @@ Tools.Eraser = function (wickEditor) {
     }
 
     this.getTooltipName = function () {
-        return "Eraser";
+        return "Eraser (E)";
     }
 
     this.setup = function () {
