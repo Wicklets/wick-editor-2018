@@ -184,13 +184,19 @@ var RightClickMenuInterface = function (wickEditor) {
         buttons.push(new RightClickMenuButtonGroup([
             new RightClickMenuButton(
                 "Copy", 
-                'url(./resources/pen.png)', 
+                'url(./resources/copy.svg)', 
                 function () { wickEditor.guiActionHandler.doAction("copy") }),
             ], function () {return !wickEditor.library.isSelected()}, false ));
         buttons.push(new RightClickMenuButtonGroup([
             new RightClickMenuButton(
+                "Cut", 
+                'url(./resources/cut.svg)', 
+                function () { wickEditor.guiActionHandler.doAction("cut") }),
+            ], function () {return !wickEditor.library.isSelected()}, false ));
+        buttons.push(new RightClickMenuButtonGroup([
+            new RightClickMenuButton(
                 "Paste", 
-                'url(./resources/unhide-layer.svg)', 
+                'url(./resources/paste.svg)', 
                 function () { wickEditor.guiActionHandler.doAction("paste") }),
             ], function () {return !wickEditor.library.isSelected()}, false ));
         /*buttons.push(new RightClickMenuButtonGroup([

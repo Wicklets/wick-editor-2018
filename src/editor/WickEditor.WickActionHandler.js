@@ -540,7 +540,7 @@ var WickActionHandler = function (wickEditor) {
             args.frames.forEach(function (frame) {
                 frame.playheadPosition = currentLayer.getNextOpenPlayheadPosition(frame.playheadPosition);
                 currentLayer.addFrame(frame);
-                wickEditor.selectObject(frame);
+                wickEditor.project.selectObject(frame);
             });
 
             currentObject.framesDirty = true;

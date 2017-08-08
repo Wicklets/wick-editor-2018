@@ -483,14 +483,8 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function(args) {
-            wickEditor.rightclickmenu.open = false;
-            that.keys = [];
-
-            polyfillClipboardData.setData('text/wickobjectsjson', wickEditor.project.getCopyData());
-
-            wickEditor.actionHandler.doAction('deleteObjects', { 
-                wickObjects:wickEditor.fabric.getSelectedObjects(WickObject) 
-            });
+            wickEditor.guiActionHandler.doAction('copy');
+            wickEditor.guiActionHandler.doAction('deleteSelectedObjects');
         });
 
     registerAction('paste',
@@ -529,9 +523,16 @@ var GuiActionHandler = function (wickEditor) {
                     });
                 } else if (fileType === 'text/wickframesjson') {
                     var frames = WickFrame.fromJSONArray(JSON.parse(file));
+                    var firstPlayheadPosition = null;
+                    frames.forEach(function (frame) {
+                        if(!firstPlayheadPosition || frame.playheadPosition < firstPlayheadPosition) 
+                            firstPlayheadPosition = frame.playheadPosition;
+                    });
                     frames.forEach(function (frame) {
                         frame.uuid = random.uuid4();
                         if(frame.name) frame.name = frame.name + ' copy';
+                        frame.playheadPosition -= firstPlayheadPosition;
+                        frame.playheadPosition += wickEditor.project.getCurrentObject().playheadPosition;
 
                         frame.wickObjects.forEach(function (wickObject) {
                             wickObject.getAllChildObjectsRecursive().forEach(function (child) {
