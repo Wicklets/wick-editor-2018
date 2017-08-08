@@ -521,7 +521,7 @@ WickProject.prototype.hasSyntaxErrors = function () {
 
 WickProject.prototype.handleWickError = function (e, objectCausedError) {
 
-    if (window.parent.window.wickEditor) {
+    if (window.wickEditor) {
         //if(!wickEditor.builtinplayer.running) return;
 
         console.log("Exception thrown while running script of WickObject: " + this.name);

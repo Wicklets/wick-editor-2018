@@ -1,5 +1,5 @@
 var demos;
-var DEMOS_PATH = "../pages/demos/"; 
+var DEMOS_PATH = "../demos/"; 
 var currentDemo;
 
 var thumbnailsContainer;

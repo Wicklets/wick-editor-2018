@@ -34,8 +34,12 @@ var WickPlayer = function () {
 
     self.runProject = function (projectJSON) {
 
-        if(window.parent && window.parent.wickEditor) window.wickEditor = window.parent.wickEditor;
-        
+        try {
+            if(window.parent && window.parent.wickEditor) window.wickEditor = window.parent.wickEditor;
+        } catch (e) {
+            console.log(e)
+        }
+
         self.running = true;
 
         window.rendererCanvas = document.getElementById('playerCanvasContainer');
