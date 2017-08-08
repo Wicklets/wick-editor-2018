@@ -1257,7 +1257,7 @@ var WickActionHandler = function (wickEditor) {
             done(args);
         }, 
         function (args) {
-            args.changedFrame = args.oldLength;
+            args.changedFrame.length = args.oldLength;
 
             wickEditor.project.currentObject.framesDirty = true;
             done(args);
