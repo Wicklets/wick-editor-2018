@@ -59,6 +59,8 @@ TimelineInterface.FramesStrip = function (wickEditor, timeline) {
             
             wickEditor.actionHandler.doAction('addFrame', {frame:newFrame, layer:layer});
             timeline.framesContainer.addFrameOverlay.elem.style.display = 'none';
+
+            e.stopPropagation();
         });
         this.elem.addEventListener('mouseout', function (e) {
             timeline.framesContainer.addFrameOverlay.elem.style.display = 'none';

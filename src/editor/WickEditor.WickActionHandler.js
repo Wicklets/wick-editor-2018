@@ -504,6 +504,8 @@ var WickActionHandler = function (wickEditor) {
 
             // Add frame
             args.layer.addFrame(args.frame);
+            wickEditor.project.clearSelection();
+            wickEditor.project.selectObject(args.frame);
 
             // Move to that new frame
             args.movePlayheadAction = wickEditor.actionHandler.doAction('movePlayhead', {
@@ -534,9 +536,11 @@ var WickActionHandler = function (wickEditor) {
             var currentObject = wickEditor.project.getCurrentObject();
             var currentLayer = currentObject.getCurrentLayer();
 
+            wickEditor.project.clearSelection();
             args.frames.forEach(function (frame) {
                 frame.playheadPosition = currentLayer.getNextOpenPlayheadPosition(frame.playheadPosition);
                 currentLayer.addFrame(frame);
+                wickEditor.selectObject(frame);
             });
 
             currentObject.framesDirty = true;

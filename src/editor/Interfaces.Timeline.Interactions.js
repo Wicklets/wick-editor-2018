@@ -130,7 +130,7 @@ TimelineInterface.Interactions = function (wickEditor, timeline) {
             var mouseLeft = e.x;
 
             var newWidth = mouseLeft - frameDivLeft;
-            //newWidth = roundToNearestN(newWidth, cssVar('--frame-width'));
+            newWidth = roundToNearestN(newWidth, cssVar('--frame-width'));
             newWidth = Math.max(newWidth, cssVar('--frame-width'));
             interactionData.frame.elem.style.width = + newWidth + 'px';
         }),

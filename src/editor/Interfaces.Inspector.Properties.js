@@ -525,7 +525,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
-    properties.push(new InspectorInterface.CheckboxInput({
+    /*properties.push(new InspectorInterface.CheckboxInput({
         title: 'Save State',
         isActiveFn: function () {
             return selectionInfo.type === 'frame' && selectionInfo.numObjects === 1;
@@ -536,7 +536,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         onChangeFn: function (val) {
             selectionInfo.object.alwaysSaveState = val;
         }
-    }));
+    }));*/
 
     /*properties.push(new InspectorInterface.SelectInput({
         title: 'Type',

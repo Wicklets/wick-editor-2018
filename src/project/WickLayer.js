@@ -135,12 +135,15 @@ WickLayer.prototype.getLastFrame = function (playheadPosition) {
 
     if(!playheadPosition) playheadPosition = 0;
 
+    // Look backwards
     this.frames.forEach(function (frame) {
         if(!lastFrame) lastFrame = frame;
         if(frame.playheadPosition > lastFrame.playheadPosition && frame.playheadPosition < playheadPosition) {
             lastFrame = frame;
         }
     });
+
+    if(lastFrame.playheadPosition > playheadPosition) return null;
 
     return lastFrame;
 }
