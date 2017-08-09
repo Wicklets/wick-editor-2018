@@ -3855,6 +3855,7 @@ WickFrame.prototype.copy = function () {
     copiedFrame.playheadPosition = this.playheadPosition;
     copiedFrame.length = this.length;
     copiedFrame.wickScript = this.wickScript;
+    copiedFrame.uuid = random.uuid4();
 
     this.wickObjects.forEach(function (wickObject) {
         copiedFrame.wickObjects.push(wickObject.copy());
@@ -3952,6 +3953,7 @@ WickFrame.prototype.getAsJSON = function () {
 WickFrame.fromJSON = function (frameJSON) {
     var frame = JSON.parse(frameJSON);
     frame.__proto__ = WickFrame.prototype;
+    frame.uuid = random.uuid4();
     frame.wickObjects.forEach(function (wickObject) {
         WickObject.addPrototypes(wickObject);
         wickObject.generateParentObjectReferences();
@@ -4131,6 +4133,8 @@ var WickLayer = function () {
     this.frames[0].playheadPosition = 0;
 
     this.identifier = "Layer 1"
+    this.locked = false;
+    this.hidden = false;
 
     this.parentWickObject = null; // The WickObject that this layer belongs to
 };
@@ -4244,12 +4248,15 @@ WickLayer.prototype.getLastFrame = function (playheadPosition) {
 
     if(!playheadPosition) playheadPosition = 0;
 
+    // Look backwards
     this.frames.forEach(function (frame) {
         if(!lastFrame) lastFrame = frame;
         if(frame.playheadPosition > lastFrame.playheadPosition && frame.playheadPosition < playheadPosition) {
             lastFrame = frame;
         }
     });
+
+    if(lastFrame.playheadPosition > playheadPosition) return null;
 
     return lastFrame;
 }
@@ -5424,7 +5431,7 @@ WickObject.prototype.gotoPrevFrame = function () {
 
     var nextFramePos = this.playheadPosition-1;
     if(nextFramePos < 0) {
-        nextFramePos = 0;
+        nextFramePos = this.layers[this.currentLayer].getTotalLength()-1;
     }
 
     this._newPlayheadPosition = nextFramePos;
@@ -6208,6 +6215,8 @@ WickProject.fixForBackwardsCompatibility = function (project) {
 
         if(!wickObj.isSymbol) return
         wickObj.layers.forEach(function (layer) {
+            if(!layer.locked) layer.locked = false;
+            if(!layer.hidden) layer.hidden = false;
             layer.frames.forEach(function (frame) {
                 if(!frame.tweens) frame.tweens = [];
                 frame.tweens.forEach(function (tween) {
@@ -6569,7 +6578,7 @@ WickProject.prototype.hasSyntaxErrors = function () {
 
 WickProject.prototype.handleWickError = function (e, objectCausedError) {
 
-    if (window.parent.window.wickEditor) {
+    if (window.wickEditor) {
         //if(!wickEditor.builtinplayer.running) return;
 
         console.log("Exception thrown while running script of WickObject: " + this.name);
@@ -7651,7 +7660,6 @@ var WickHowlerAudioPlayer = function (project) {
         var allFrames = project.getAllFrames();
 
         allFrames.forEach(function (wickFrame) {
-            console.log(wickFrame)
             if(!wickFrame.audioAssetUUID) return;
             var asset = project.library.getAsset(wickFrame.audioAssetUUID);
             var audioData = asset.getData();
@@ -8175,8 +8183,12 @@ var WickPlayer = function () {
 
     self.runProject = function (projectJSON) {
 
-        if(window.parent && window.parent.wickEditor) window.wickEditor = window.parent.wickEditor;
-        
+        try {
+            if(window.parent && window.parent.wickEditor) window.wickEditor = window.parent.wickEditor;
+        } catch (e) {
+            console.log(e)
+        }
+
         self.running = true;
 
         window.rendererCanvas = document.getElementById('playerCanvasContainer');
