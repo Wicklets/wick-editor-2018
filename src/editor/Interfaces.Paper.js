@@ -208,6 +208,8 @@ var PaperInterface = function (wickEditor) {
             var activeObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
             activeObjects.forEach(function (wickObject) {
                 if(!wickObject.isPath) return;
+                var layer = wickObject.parentFrame.parentLayer;
+                if(layer.locked || layer.hidden) return;
                 
                 self.pathRoutines.refreshPathData(wickObject);
                 self.pathRoutines.regenPaperJSState(wickObject);

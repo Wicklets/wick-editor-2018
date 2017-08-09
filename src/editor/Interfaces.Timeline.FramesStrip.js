@@ -43,7 +43,7 @@ TimelineInterface.FramesStrip = function (wickEditor, timeline) {
             timeline.framesContainer.addFrameOverlay.elem.style.left = roundToNearestN(e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2 - 9, cssVar('--frame-width')) + 10 + "px";
             timeline.framesContainer.addFrameOverlay.elem.style.top  = roundToNearestN(e.clientY - timeline.framesContainer.elem.getBoundingClientRect().top  - cssVar('--layer-height')/2, cssVar('--layer-height')) + "px";
         });
-        this.elem.addEventListener('mousedown', function (e) {
+        this.elem.addEventListener('mouseup', function (e) {
             if(e.button === 2) return;
             if(wickEditor.project.smallFramesMode) return;
             /*wickEditor.actionHandler.doAction('movePlayhead', {
@@ -60,7 +60,7 @@ TimelineInterface.FramesStrip = function (wickEditor, timeline) {
             wickEditor.actionHandler.doAction('addFrame', {frame:newFrame, layer:layer});
             timeline.framesContainer.addFrameOverlay.elem.style.display = 'none';
 
-            e.stopPropagation();
+            //e.stopPropagation();
         });
         this.elem.addEventListener('mouseout', function (e) {
             timeline.framesContainer.addFrameOverlay.elem.style.display = 'none';

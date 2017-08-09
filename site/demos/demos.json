@@ -7,14 +7,11 @@
 			"name" : "Wise Old Ghost",
 			"path" : "WiseOldGhost"
 		}, {
-			"name" : "Hungry Pet",
-			"path" : "HungryPet"
-		}, {
 			"name" : "Well-Dressed Ghost",
 			"path" : "WellDressedGhost"
 		}, {
-			"name" : "Flashy Phone",
-			"path" : "FlashyPhone"
+			"name" : "Hungry Ghost",
+			"path" : "HungryGhost"
 		}, {
 			"name" : "DJ Spookyman",
 			"path" : "DJSpookyman"

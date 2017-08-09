@@ -47,7 +47,6 @@ TimelineInterface.Layer = function (wickEditor, timeline) {
         lockLayerButton = document.createElement('div');
         lockLayerButton.className = 'layer-lock-button';
         lockLayerButton.onclick = function (e) {
-            console.log("???")
             that.wickLayer.locked = !that.wickLayer.locked;
             wickEditor.syncInterfaces();
             e.stopPropagation();

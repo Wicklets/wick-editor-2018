@@ -60,7 +60,7 @@ var InputHandler = function (wickEditor) {
         return editingTextBox;
     }
 
-    // Fixes hotkey breaking bug
+    // Hack to prevent keys getting stuck
     $(window).focus(function() {
         that.keys = [];
         that.specialKeys = [];

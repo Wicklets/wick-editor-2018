@@ -312,24 +312,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.ColorInput({
-        title: 'Fill Color',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isPath;
-        },
-        getValueFn: function () {
-            if(!selectionInfo.object || !selectionInfo.object.fabricObjectReference) return;
-            if(!selectionInfo.object.fabricObjectReference.fill) return;
-            return selectionInfo.object.fabricObjectReference.fill;
-        }, 
-        onChangeFn: function (val) {
-            wickEditor.guiActionHandler.doAction("changeFillColorOfSelection", {
-                color: val
-            });
-            wickEditor.syncInterfaces();
-        }
-    }));
-
-    properties.push(new InspectorInterface.ColorInput({
         title: 'Stroke Color',
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isPath;
@@ -341,6 +323,24 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }, 
         onChangeFn: function (val) {
             wickEditor.guiActionHandler.doAction("changeStrokeColorOfSelection", {
+                color: val
+            });
+            wickEditor.syncInterfaces();
+        }
+    }));
+
+    properties.push(new InspectorInterface.ColorInput({
+        title: 'Fill Color',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isPath;
+        },
+        getValueFn: function () {
+            if(!selectionInfo.object || !selectionInfo.object.fabricObjectReference) return;
+            if(!selectionInfo.object.fabricObjectReference.fill) return;
+            return selectionInfo.object.fabricObjectReference.fill;
+        }, 
+        onChangeFn: function (val) {
+            wickEditor.guiActionHandler.doAction("changeFillColorOfSelection", {
                 color: val
             });
             wickEditor.syncInterfaces();
