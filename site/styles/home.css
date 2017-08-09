@@ -10,10 +10,27 @@ body {
 	overflow-y: hidden;
 }
 
+.github-widget {
+	position:absolute;
+	left:5px;
+	top:5px;
+}
+
+.github-message {
+	text-align: center;
+	width: 140px;
+	height: 40px;
+	font-size: 10px;
+	font-weight: normal;
+	position: absolute;
+	top: 40px;
+	left: 5px;
+}
+
 .version-number {
 	text-decoration: underline;
 	position: absolute;
-	width: 100px;
+	width: 140px;
 	height: 30px;
 	text-align: center;
 	top: 5px;
