@@ -16,7 +16,7 @@
 		"textData": false,
 		"isSymbol": true,
 		"isButton": false,
-		"playheadPosition": 353,
+		"playheadPosition": 0,
 		"currentLayer": 0,
 		"layers": [
 			{
@@ -103,20 +103,20 @@
 									"fill": "#000000",
 									"textAlign": "left",
 									"textDecoration": "",
-									"text": "On%20a%20mountain%20somehwere%20lives%20a%20ghost%20that%20knows%20everything.%0AAsk%20a%20question%20..."
+									"text": "On%20a%20mountain%20somewhere%20lives%20a%20ghost%20that%20knows%20everything.%0AAsk%20a%20question%20..."
 								},
 								"isSymbol": false,
 								"isButton": false,
 								"playheadPosition": null,
 								"currentLayer": null,
 								"svgWidth": 618.546875,
-								"svgHeight": 54.697599999999966,
+								"svgHeight": 54.697599999999994,
 								"svgStrokeWidth": 1,
 								"bbox": {
 									"left": 6.7265625,
 									"top": 3.651200000000017,
 									"width": 618.546875,
-									"height": 54.697599999999966
+									"height": 54.697599999999994
 								},
 								"_zindex": 2,
 								"forceFabricCanvasRegen": false
@@ -207,8 +207,8 @@
 																				"svgWidth": 237.05497854712215,
 																				"svgHeight": 253.4376338089345,
 																				"bbox": {
-																					"left": 284.738952734604,
-																					"top": 34.101028814116376,
+																					"left": 374.738952734604,
+																					"top": 56.101028814116376,
 																					"width": 237.05497854712212,
 																					"height": 253.4376338089345
 																				},
@@ -246,8 +246,8 @@
 																				"svgWidth": 246.37477627353974,
 																				"svgHeight": 260.63969143716747,
 																				"bbox": {
-																					"left": 285.0000000000001,
-																					"top": 34.50000000000006,
+																					"left": 375.0000000000001,
+																					"top": 56.50000000000006,
 																					"width": 246.37477627353962,
 																					"height": 260.6396914371675
 																				},
@@ -263,7 +263,9 @@
 																		"wickScript": ""
 																	}
 																],
-																"identifier": "Layer 1"
+																"identifier": "Layer 1",
+																"locked": false,
+																"hidden": false
 															}
 														],
 														"playRanges": [],
@@ -272,8 +274,8 @@
 														"svgHeight": 261.63969143716764,
 														"svgStrokeWidth": 0,
 														"bbox": {
-															"left": 285.0000000000001,
-															"top": 34.49999999999997,
+															"left": 375.0000000000001,
+															"top": 56.49999999999997,
 															"width": 247.37477627353962,
 															"height": 261.6396914371676
 														},
@@ -332,17 +334,19 @@
 												"wickScript": ""
 											}
 										],
-										"identifier": "Layer 1"
+										"identifier": "Layer 1",
+										"locked": false,
+										"hidden": false
 									}
 								],
 								"playRanges": [],
-								"svgWidth": 248.37477627353957,
+								"svgWidth": 248.37477627353962,
 								"svgHeight": 262.6396914371676,
 								"svgStrokeWidth": 0,
 								"bbox": {
 									"left": 242.8126118632303,
 									"top": 113.18015428141621,
-									"width": 248.37477627353957,
+									"width": 248.37477627353962,
 									"height": 262.6396914371676
 								},
 								"_zindex": 3,
@@ -407,8 +411,8 @@
 														"svgWidth": 105,
 														"svgHeight": 48,
 														"bbox": {
-															"left": 516.5,
-															"top": 218,
+															"left": 606.5,
+															"top": 240,
 															"width": 105,
 															"height": 48
 														},
@@ -453,8 +457,8 @@
 														"svgHeight": 46.199999999999996,
 														"svgStrokeWidth": 1,
 														"bbox": {
-															"left": 517,
-															"top": 219,
+															"left": 607,
+															"top": 241,
 															"width": 78.79296875,
 															"height": 46.200000000000045
 														},
@@ -678,7 +682,9 @@
 												"wickScript": ""
 											}
 										],
-										"identifier": "Layer 1"
+										"identifier": "Layer 1",
+										"locked": false,
+										"hidden": false
 									}
 								],
 								"playRanges": [
@@ -3040,7 +3046,9 @@
 												"wickScript": ""
 											}
 										],
-										"identifier": "Layer 1"
+										"identifier": "Layer 1",
+										"locked": false,
+										"hidden": false
 									}
 								],
 								"playRanges": [
@@ -8642,7 +8650,9 @@
 												"wickScript": ""
 											}
 										],
-										"identifier": "Layer 1"
+										"identifier": "Layer 1",
+										"locked": false,
+										"hidden": false
 									}
 								],
 								"playRanges": [],
@@ -8669,7 +8679,9 @@
 						"wickScript": "stop();"
 					}
 				],
-				"identifier": "Layer 1"
+				"identifier": "Layer 1",
+				"locked": false,
+				"hidden": false
 			},
 			{
 				"frames": [
@@ -8734,8 +8746,8 @@
 														"svgWidth": 750.319973809583,
 														"svgHeight": 425.8422864722594,
 														"bbox": {
-															"left": 278.1143815737393,
-															"top": 85.85268037859288,
+															"left": 368.1143815737393,
+															"top": 107.85268037859288,
 															"width": 750.3199738095827,
 															"height": 425.84228647225945
 														},
@@ -8772,8 +8784,8 @@
 														"svgWidth": 142.27156187543022,
 														"svgHeight": 226.79281999999992,
 														"bbox": {
-															"left": -22.989407382240458,
-															"top": -21.645311918736667,
+															"left": 67.01059261775954,
+															"top": 0.3546880812633333,
 															"width": 142.27156187543028,
 															"height": 226.79281999999992
 														},
@@ -8811,8 +8823,8 @@
 														"svgWidth": 629,
 														"svgHeight": 196.8345530104806,
 														"bbox": {
-															"left": 199.75,
-															"top": 100.38888888888891,
+															"left": 289.75,
+															"top": 122.38888888888891,
 															"width": 629,
 															"height": 196.8345530104807
 														},
@@ -8848,8 +8860,8 @@
 														"svgWidth": 174.20908519060424,
 														"svgHeight": 190.95841950315673,
 														"bbox": {
-															"left": 593,
-															"top": -34.99999999999994,
+															"left": 683,
+															"top": -12.999999999999943,
 															"width": 174.20908519060424,
 															"height": 190.95841950315673
 														},
@@ -8886,8 +8898,8 @@
 														"svgWidth": 167,
 														"svgHeight": 235,
 														"bbox": {
-															"left": -32,
-															"top": -23.899519052838343,
+															"left": 58,
+															"top": -1.8995190528383432,
 															"width": 167,
 															"height": 235
 														},
@@ -8924,8 +8936,8 @@
 														"svgWidth": 760.3397962710503,
 														"svgHeight": 472.8242098946634,
 														"bbox": {
-															"left": 278.9135802469137,
-															"top": 68.34567901234573,
+															"left": 368.9135802469137,
+															"top": 90.34567901234573,
 															"width": 760.3397962710505,
 															"height": 472.82420989466357
 														},
@@ -8942,7 +8954,9 @@
 												"wickScript": ""
 											}
 										],
-										"identifier": "Layer 1"
+										"identifier": "Layer 1",
+										"locked": false,
+										"hidden": false
 									}
 								],
 								"playRanges": [],
@@ -8968,7 +8982,9 @@
 						"wickScript": ""
 					}
 				],
-				"identifier": "Layer 2"
+				"identifier": "Layer 2",
+				"locked": false,
+				"hidden": false
 			}
 		],
 		"playRanges": [],
