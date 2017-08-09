@@ -53,12 +53,12 @@
 								"svgY": 373.57010156597636,
 								"svgStrokeWidth": 0,
 								"svgWidth": 112.96303752046583,
-								"svgHeight": 129.84246555821306,
+								"svgHeight": 129.84246555821312,
 								"bbox": {
-									"left": 61.51848123976703,
-									"top": 326.57010156597636,
+									"left": 61.51848123976702,
+									"top": 326.5701015659764,
 									"width": 112.96303752046583,
-									"height": 129.84246555821306
+									"height": 129.84246555821312
 								},
 								"_zindex": 0
 							},
@@ -166,12 +166,12 @@
 								"svgY": 25.52264401461063,
 								"svgStrokeWidth": 2.01,
 								"svgWidth": 101.67780330464029,
-								"svgHeight": 44.939443572996,
+								"svgHeight": 44.93944357299597,
 								"bbox": {
 									"left": 591.1830761238521,
 									"top": 24.517644014610653,
 									"width": 101.67780330464029,
-									"height": 44.939443572996
+									"height": 44.93944357299597
 								},
 								"_zindex": 3,
 								"_tempZIndex": 2,
@@ -391,8 +391,8 @@
 								"textData": false,
 								"isSymbol": true,
 								"isButton": false,
-								"playheadPosition": 0,
-								"currentLayer": 0,
+								"playheadPosition": 16,
+								"currentLayer": 1,
 								"layers": [
 									{
 										"frames": [
@@ -426,15 +426,15 @@
 														"svgX": 201.7087317971014,
 														"svgY": 96.96941058147387,
 														"svgStrokeWidth": 0,
-														"svgWidth": 300.2418604087684,
+														"svgWidth": 300.2418604087685,
 														"svgHeight": 282.09861118258414,
 														"bbox": {
-															"left": 144.3359817706724,
-															"top": 12.749623518491637,
+															"left": 201.7087317971014,
+															"top": 96.96941058147388,
 															"width": 300.2418604087685,
-															"height": 282.0986111825841
+															"height": 282.098611182584
 														},
-														"_zindex": 0
+														"_zindex": 13
 													},
 													{
 														"uuid": "b5a8752c-b48c-4b48-b0dd-fb0d3eea72bb",
@@ -467,12 +467,12 @@
 														"svgWidth": 306.5908679363599,
 														"svgHeight": 291.87240111428844,
 														"bbox": {
-															"left": 144.44174826607718,
-															"top": 12.7380022477352,
+															"left": 198.70456603182004,
+															"top": 92.06379944285572,
 															"width": 306.5908679363599,
-															"height": 291.8724011142884
+															"height": 291.87240111428844
 														},
-														"_zindex": 1,
+														"_zindex": 14,
 														"_tempZIndex": 0
 													},
 													{
@@ -506,12 +506,12 @@
 														"svgWidth": 28.75150224306026,
 														"svgHeight": 13.977390000000014,
 														"bbox": {
-															"left": 113.24045178235465,
-															"top": -37.55662492005631,
+															"left": 287.37424887846987,
+															"top": 150.011305,
 															"width": 28.75150224306026,
 															"height": 13.977390000000014
 														},
-														"_zindex": 2,
+														"_zindex": 15,
 														"_tempZIndex": 5
 													},
 													{
@@ -542,15 +542,15 @@
 														"svgX": 357.7546612864837,
 														"svgY": 129.47821513186025,
 														"svgStrokeWidth": 1,
-														"svgWidth": 26.49067742703278,
+														"svgWidth": 26.490677427032722,
 														"svgHeight": 19.043569736279494,
 														"bbox": {
-															"left": 155.92879274267162,
-															"top": -49.04366939665068,
+															"left": 357.2546612864837,
+															"top": 128.97821513186022,
 															"width": 26.49067742703278,
-															"height": 19.043569736279494
+															"height": 19.04356973627955
 														},
-														"_zindex": 3,
+														"_zindex": 16,
 														"_tempZIndex": 6
 													},
 													{
@@ -581,15 +581,15 @@
 														"svgX": 270.689195,
 														"svgY": 239.096425,
 														"svgStrokeWidth": 1,
-														"svgWidth": 177.12160999999998,
+														"svgWidth": 177.12161,
 														"svgHeight": 39.93214999999998,
 														"bbox": {
-															"left": 148.63296719672647,
-															"top": 25.505696953139108,
-															"width": 177.12160999999992,
+															"left": 270.18919500000004,
+															"top": 238.596425,
+															"width": 177.12160999999998,
 															"height": 39.93214999999998
 														},
-														"_zindex": 4,
+														"_zindex": 17,
 														"_tempZIndex": 7
 													},
 													{
@@ -652,8 +652,8 @@
 																				"svgWidth": 41.55708513194486,
 																				"svgHeight": 71.44865000000001,
 																				"bbox": {
-																					"left": 114.17183376694338,
-																					"top": -4.337334136391541,
+																					"left": 311.25,
+																					"top": 22.49999999999997,
 																					"width": 41.557095897867384,
 																					"height": 71.44864664441971
 																				},
@@ -691,8 +691,8 @@
 																				"svgWidth": 17.558223269514883,
 																				"svgHeight": 37.60426279867934,
 																				"bbox": {
-																					"left": 112.15383946700116,
-																					"top": -4.958255459450661,
+																					"left": 308.00000000000006,
+																					"top": 21.50000000000003,
 																					"width": 17.558231615866703,
 																					"height": 37.60426324223255
 																				},
@@ -730,8 +730,8 @@
 																				"svgWidth": 44.959899293809485,
 																				"svgHeight": 78.53780563111198,
 																				"bbox": {
-																					"left": 164.15600027320534,
-																					"top": -14.892996628397157,
+																					"left": 391.75,
+																					"top": 5.5,
 																					"width": 44.95990031778484,
 																					"height": 78.53779511178436
 																				},
@@ -769,8 +769,8 @@
 																				"svgWidth": 19.10914141104172,
 																				"svgHeight": 29.051976789498525,
 																				"bbox": {
-																					"left": 161.05139365790953,
-																					"top": -15.513917951456277,
+																					"left": 386.74999999999994,
+																					"top": 4.500000000000057,
 																					"width": 19.10914230320691,
 																					"height": 29.05197350736057
 																				},
@@ -977,12 +977,12 @@
 														"svgHeight": 92.99322087810202,
 														"svgStrokeWidth": 0,
 														"bbox": {
-															"left": 139.69213547570604,
-															"top": -10.715616243824055,
+															"left": 281.9714520510663,
+															"top": 153.73110244410782,
 															"width": 124.75849810782609,
-															"height": 92.99322087810205
+															"height": 92.99322087810202
 														},
-														"_zindex": 5,
+														"_zindex": 18,
 														"framesDirty": false,
 														"forceFabricCanvasRegen": false
 													}
@@ -1026,15 +1026,15 @@
 														"svgX": 255.2347976509402,
 														"svgY": 165.01675353779837,
 														"svgStrokeWidth": 0,
-														"svgWidth": 201.4035095319639,
-														"svgHeight": 167.01083236797268,
+														"svgWidth": 201.40350953196395,
+														"svgHeight": 167.01083236797263,
 														"bbox": {
-															"left": 255.2347976509402,
+															"left": 255.23479765094024,
 															"top": 165.01675353779837,
-															"width": 201.4035095319639,
+															"width": 201.40350953196386,
 															"height": 167.01083236797268
 														},
-														"_zindex": 0
+														"_zindex": 13
 													},
 													{
 														"uuid": "2c908880-a4a7-4a4a-a57c-4257708fed46",
@@ -1064,15 +1064,15 @@
 														"svgX": 251.68186923935136,
 														"svgY": 160.08975262187906,
 														"svgStrokeWidth": 1,
-														"svgWidth": 208.63626152129757,
-														"svgHeight": 178.7770015549795,
+														"svgWidth": 208.6362615212975,
+														"svgHeight": 178.7770015549794,
 														"bbox": {
 															"left": 251.18186923935133,
 															"top": 159.58975262187903,
 															"width": 208.63626152129757,
 															"height": 178.7770015549795
 														},
-														"_zindex": 1
+														"_zindex": 14
 													},
 													{
 														"uuid": "b8f2956d-76a0-476a-8f96-c4f9704ddec1",
@@ -1102,15 +1102,15 @@
 														"svgX": 262.4356183189931,
 														"svgY": 111.64579101526407,
 														"svgStrokeWidth": 1,
-														"svgWidth": 40.128763362014126,
-														"svgHeight": 57.56043238151591,
+														"svgWidth": 40.12876336201418,
+														"svgHeight": 57.56043238151585,
 														"bbox": {
 															"left": 261.9356183189931,
 															"top": 111.14579101526408,
-															"width": 40.128763362014126,
+															"width": 40.1287633620141,
 															"height": 57.56043238151591
 														},
-														"_zindex": 2
+														"_zindex": 15
 													},
 													{
 														"uuid": "ef933aaa-ec8d-4ec8-a490-1a499f73ec6c",
@@ -1140,15 +1140,15 @@
 														"svgX": 275.1881395981797,
 														"svgY": 115.27756242575305,
 														"svgStrokeWidth": 1,
-														"svgWidth": 15.123720803640822,
-														"svgHeight": 35.02957509346925,
+														"svgWidth": 15.123720803640879,
+														"svgHeight": 35.029575093469305,
 														"bbox": {
 															"left": 274.6881395981797,
 															"top": 114.77756242575305,
 															"width": 15.123720803640822,
 															"height": 35.02957509346925
 														},
-														"_zindex": 3
+														"_zindex": 16
 													},
 													{
 														"uuid": "2878e707-107a-4107-b26d-93261452dd57",
@@ -1178,15 +1178,15 @@
 														"svgX": 361.5756942655968,
 														"svgY": 91.52674412218633,
 														"svgStrokeWidth": 1,
-														"svgWidth": 44.848611468806666,
-														"svgHeight": 59.630240000000015,
+														"svgWidth": 44.84861146880644,
+														"svgHeight": 59.63023999999996,
 														"bbox": {
 															"left": 361.0756942655968,
 															"top": 91.02674412218636,
 															"width": 44.848611468806666,
 															"height": 59.630240000000015
 														},
-														"_zindex": 4
+														"_zindex": 17
 													},
 													{
 														"uuid": "c1d9f658-4eb6-44eb-96d6-d16dd388d1b8",
@@ -1224,7 +1224,7 @@
 															"width": 13.75577661851355,
 															"height": 36.85344138845937
 														},
-														"_zindex": 5
+														"_zindex": 18
 													},
 													{
 														"uuid": "0c1c478d-c636-4c63-9de0-c5de7e59cefe",
@@ -1254,15 +1254,15 @@
 														"svgX": 204.3995613934819,
 														"svgY": 61.54526508713376,
 														"svgStrokeWidth": 1,
-														"svgWidth": 288.20087721303645,
+														"svgWidth": 288.2008772130365,
 														"svgHeight": 350.78396,
 														"bbox": {
 															"left": 203.89956139348186,
 															"top": 61.04526508713377,
-															"width": 288.20087721303645,
+															"width": 288.2008772130365,
 															"height": 350.78396
 														},
-														"_zindex": 6
+														"_zindex": 19
 													}
 												],
 												"tweens": [],
@@ -1313,7 +1313,7 @@
 															"width": 382.8591998214731,
 															"height": 240.78890175924835
 														},
-														"_zindex": 0
+														"_zindex": 13
 													},
 													{
 														"uuid": "325aefad-4922-4492-94ee-7d4e52aa00a9",
@@ -1351,7 +1351,7 @@
 															"width": 72.25296267519866,
 															"height": 38.56033547986465
 														},
-														"_zindex": 1
+														"_zindex": 14
 													},
 													{
 														"uuid": "8fdb6792-3190-4319-b251-ef251288a47f",
@@ -1389,7 +1389,7 @@
 															"width": 19.30505632524597,
 															"height": 26.748677135737637
 														},
-														"_zindex": 2
+														"_zindex": 15
 													},
 													{
 														"uuid": "6a18388b-b9ad-4b9a-b97a-cb97f41d7a3d",
@@ -1427,7 +1427,7 @@
 															"width": 58.47126436781605,
 															"height": 35.300480277804354
 														},
-														"_zindex": 3
+														"_zindex": 16
 													},
 													{
 														"uuid": "d4a812a8-37bb-437b-aff4-72ff5bc4f8e1",
@@ -1465,7 +1465,7 @@
 															"width": 21.124378708482254,
 															"height": 28.423987771450868
 														},
-														"_zindex": 4
+														"_zindex": 17
 													},
 													{
 														"uuid": "a45c22ff-09f2-409f-b3c5-673c73559f00",
@@ -1503,7 +1503,7 @@
 															"width": 280.44822796555763,
 															"height": 50.85117104270762
 														},
-														"_zindex": 5
+														"_zindex": 18
 													}
 												],
 												"tweens": [],
@@ -3225,7 +3225,7 @@
 															"width": 314.18266021336126,
 															"height": 269.7480889768153
 														},
-														"_zindex": 0,
+														"_zindex": 13,
 														"forceFabricCanvasRegen": false
 													},
 													{
@@ -3266,7 +3266,7 @@
 															"width": 32.546639047053134,
 															"height": 58.3759289233318
 														},
-														"_zindex": 1,
+														"_zindex": 14,
 														"forceFabricCanvasRegen": false
 													},
 													{
@@ -3307,7 +3307,7 @@
 															"width": 13.684496144764353,
 															"height": 28.56845125067798
 														},
-														"_zindex": 2,
+														"_zindex": 15,
 														"forceFabricCanvasRegen": false
 													},
 													{
@@ -3348,7 +3348,7 @@
 															"width": 41.77680532422778,
 															"height": 53.67577113522799
 														},
-														"_zindex": 3,
+														"_zindex": 16,
 														"forceFabricCanvasRegen": false
 													},
 													{
@@ -3389,7 +3389,7 @@
 															"width": 19.539120000000025,
 															"height": 21.18597638378185
 														},
-														"_zindex": 4,
+														"_zindex": 17,
 														"forceFabricCanvasRegen": false
 													},
 													{
@@ -3430,7 +3430,7 @@
 															"width": 177.01704433262813,
 															"height": 16.94282598033817
 														},
-														"_zindex": 5,
+														"_zindex": 18,
 														"forceFabricCanvasRegen": false
 													}
 												],
@@ -3444,6 +3444,25 @@
 											}
 										],
 										"identifier": "Layer 1",
+										"locked": false,
+										"hidden": false
+									},
+									{
+										"frames": [
+											{
+												"identifier": "",
+												"wickObjects": [],
+												"tweens": [],
+												"pathData": null,
+												"playheadPosition": 2,
+												"length": 15,
+												"alwaysSaveState": false,
+												"uuid": "fd07c0cd-8cf9-48cf-a7dc-4a7d74d2c4d4",
+												"wickScript": "",
+												"audioAssetUUID": "6cccdf97-1511-4151-a9b2-5e9b2f627825"
+											}
+										],
+										"identifier": "Layer 2",
 										"locked": false,
 										"hidden": false
 									}
@@ -3522,8 +3541,8 @@
 														"svgWidth": 102.91524376640575,
 														"svgHeight": 33.407433038874245,
 														"bbox": {
-															"left": 324.3742575151215,
-															"top": -74.81047343327947,
+															"left": 649.7831054706785,
+															"top": -90.99769556903105,
 															"width": 102.91524376640575,
 															"height": 33.4074330388742
 														},
@@ -3561,8 +3580,8 @@
 														"svgWidth": 102.96514000000002,
 														"svgHeight": 44.491420000000005,
 														"bbox": {
-															"left": 323.7378484789797,
-															"top": -83.31318420891682,
+															"left": 648.7581623538817,
+															"top": -104.69139630030277,
 															"width": 102.96514000000002,
 															"height": 44.491420000000005
 														},
@@ -3600,8 +3619,8 @@
 														"svgWidth": 112.82767615685316,
 														"svgHeight": 49.16701235664217,
 														"bbox": {
-															"left": 323.9825535496904,
-															"top": -108.04577896165452,
+															"left": 649.1522623173121,
+															"top": -144.5234874755344,
 															"width": 112.82767615685316,
 															"height": 49.16701235664215
 														},
@@ -3639,8 +3658,8 @@
 														"svgWidth": 121.19539602574082,
 														"svgHeight": 59.129717513510045,
 														"bbox": {
-															"left": 324.35876669743215,
-															"top": -108.31126529901073,
+															"left": 649.7581573538816,
+															"top": -144.95105587670992,
 															"width": 121.19539602574082,
 															"height": 59.12971751351006
 														},
@@ -3678,8 +3697,8 @@
 														"svgWidth": 110.38081000000005,
 														"svgHeight": 51.05562,
 														"bbox": {
-															"left": 323.737845374373,
-															"top": -83.16395171511496,
+															"left": 648.7581573538816,
+															"top": -104.45105587670994,
 															"width": 110.38081000000011,
 															"height": 51.055620000000005
 														},
@@ -3717,8 +3736,8 @@
 														"svgWidth": 114.08861999999993,
 														"svgHeight": 39.93214999999999,
 														"bbox": {
-															"left": 324.35876669743215,
-															"top": -74.47105319228677,
+															"left": 649.7581573538816,
+															"top": -90.45105587670992,
 															"width": 114.08861999999999,
 															"height": 39.93214999999998
 														},
@@ -4030,7 +4049,7 @@
 									"width": 122.19539602574082,
 									"height": 105.03093375675508
 								},
-								"_zindex": 10,
+								"_zindex": 9,
 								"forceFabricCanvasRegen": false,
 								"framesDirty": false,
 								"scriptError": null
@@ -4093,8 +4112,8 @@
 														"svgWidth": 81.06136970407329,
 														"svgHeight": 76.83326132214825,
 														"bbox": {
-															"left": 319.15803456094346,
-															"top": 112.99314621262887,
+															"left": 641.3823262407452,
+															"top": 211.46191190690092,
 															"width": 81.06136287555955,
 															"height": 76.8332602080846
 														},
@@ -4130,8 +4149,8 @@
 														"svgWidth": 77.48915706195271,
 														"svgHeight": 70.92272999999994,
 														"bbox": {
-															"left": 324.00147615865296,
-															"top": 70.29551542601584,
+															"left": 649.1827373682723,
+															"top": 142.69695054875274,
 															"width": 77.48914744051058,
 															"height": 70.92273952379708
 														},
@@ -4167,8 +4186,8 @@
 														"svgWidth": 91.97316597651115,
 														"svgHeight": 88.10389588164992,
 														"bbox": {
-															"left": 319.4767363789739,
-															"top": 113.3848202650762,
+															"left": 641.8955987057014,
+															"top": 212.09270688510787,
 															"width": 91.97318474405961,
 															"height": 88.10389019874884
 														},
@@ -4204,8 +4223,8 @@
 														"svgWidth": 87.58538182269149,
 														"svgHeight": 80.89259738801957,
 														"bbox": {
-															"left": 324.0648794228023,
-															"top": 70.15968316795663,
+															"left": 649.2848489592175,
+															"top": 142.4781913388258,
 															"width": 87.58536648028121,
 															"height": 80.89259782464387
 														},
@@ -4431,7 +4450,7 @@
 									"width": 99.15506439871615,
 									"height": 174.83743139023727
 								},
-								"_zindex": 11,
+								"_zindex": 10,
 								"forceFabricCanvasRegen": false,
 								"framesDirty": false,
 								"scriptError": null,
@@ -4495,8 +4514,8 @@
 														"svgWidth": 136.14358756795394,
 														"svgHeight": 57.816766499557346,
 														"bbox": {
-															"left": 2.993481181489494,
-															"top": -92.41374882006345,
+															"left": 132.1961513776006,
+															"top": -119.34794661220053,
 															"width": 136.14357207912076,
 															"height": 57.8167704029545
 														},
@@ -4532,8 +4551,8 @@
 														"svgWidth": 135.53614000000005,
 														"svgHeight": 44.51627000000002,
 														"bbox": {
-															"left": 2.984806666471557,
-															"top": -78.62415408718483,
+															"left": 132.18218098441906,
+															"top": -97.13966639895219,
 															"width": 135.53612777424422,
 															"height": 44.51626187628557
 														},
@@ -4569,8 +4588,8 @@
 														"svgWidth": 146.81694991101256,
 														"svgHeight": 83.5604611686253,
 														"bbox": {
-															"left": 2.9978436282755467,
-															"top": -87.66857425765924,
+															"left": 132.203177141774,
+															"top": -111.70579552770295,
 															"width": 146.81695005486336,
 															"height": 83.56044614445995
 														},
@@ -4606,8 +4625,8 @@
 														"svgWidth": 74.55166052525186,
 														"svgHeight": 12.573468716001614,
 														"bbox": {
-															"left": 5.184470700257577,
-															"top": -95.90058205806214,
+															"left": 135.72476190747176,
+															"top": -124.96352641032982,
 															"width": 74.55165301561355,
 															"height": 12.573459158397924
 														},
@@ -4643,8 +4662,8 @@
 														"svgWidth": 53.19087223669578,
 														"svgHeight": 10.249102978423963,
 														"bbox": {
-															"left": 10.56465723728093,
-															"top": -97.95858400816286,
+															"left": 144.38960612721326,
+															"top": -128.27795913098652,
 															"width": 53.19087066422395,
 															"height": 10.249095587712212
 														},
@@ -4680,8 +4699,8 @@
 														"svgWidth": 144.89328717433625,
 														"svgHeight": 37.63461877103787,
 														"bbox": {
-															"left": 3.486499018202288,
-															"top": -84.7765975298458,
+															"left": 132.9901615338049,
+															"top": -107.0482380877921,
 															"width": 144.89333697788118,
 															"height": 37.63460558596563
 														},
@@ -4989,7 +5008,7 @@
 									"width": 152.70698963064808,
 									"height": 92.14975059922895
 								},
-								"_zindex": 12,
+								"_zindex": 11,
 								"forceFabricCanvasRegen": false,
 								"framesDirty": false,
 								"scriptError": null,
@@ -5053,8 +5072,8 @@
 														"svgWidth": 101.28096639844995,
 														"svgHeight": 89.08915568539675,
 														"bbox": {
-															"left": -0.8757611373100402,
-															"top": 119.41638222793748,
+															"left": 125.96469793075075,
+															"top": 221.8065977419156,
 															"width": 101.28096639844999,
 															"height": 89.0891540252029
 														},
@@ -5090,8 +5109,8 @@
 														"svgWidth": 72.85687460043042,
 														"svgHeight": 60.342010000000016,
 														"bbox": {
-															"left": -3.8477833025153116,
-															"top": 90.71491921931967,
+															"left": 121.178226513466,
+															"top": 175.5826045519065,
 															"width": 72.85687460043044,
 															"height": 60.342010000000016
 														},
@@ -5127,8 +5146,8 @@
 														"svgWidth": 85.68614680089348,
 														"svgHeight": 74.6882324649041,
 														"bbox": {
-															"left": -3.958447945060841,
-															"top": 90.61036166330734,
+															"left": 121,
+															"top": 175.4142135623731,
 															"width": 85.68614680089354,
 															"height": 74.6882324649041
 														},
@@ -5164,8 +5183,8 @@
 														"svgWidth": 113.96303752046585,
 														"svgHeight": 97.82514272048968,
 														"bbox": {
-															"left": -0.8538413297650758,
-															"top": 118.29462716779153,
+															"left": 125.99999999999999,
+															"top": 219.99999999999994,
 															"width": 113.96303752046585,
 															"height": 97.82514272048968
 														},
@@ -5383,15 +5402,15 @@
 									}
 								],
 								"svgWidth": 117.44672281270255,
-								"svgHeight": 147.85890982998302,
+								"svgHeight": 147.85890982998296,
 								"svgStrokeWidth": 0,
 								"bbox": {
 									"left": 58.03479594753037,
-									"top": 325.5700973299211,
+									"top": 325.57009732992117,
 									"width": 117.44672281270255,
-									"height": 147.85890982998302
+									"height": 147.85890982998296
 								},
-								"_zindex": 13,
+								"_zindex": 12,
 								"forceFabricCanvasRegen": false,
 								"framesDirty": false,
 								"scriptError": null,
@@ -5418,7 +5437,14 @@
 		"framesDirty": false
 	},
 	"library": {
-		"assets": {}
+		"assets": {
+			"6cccdf97-1511-4151-a9b2-5e9b2f627825": {
+				"data": "data:audio/ogg;base64,T2dnUwACAAAAAAAAAADMYWJaAAAAAL6yApkBHgF2b3JiaXMAAAAAAkSsAAAAAAAAAHECAAAAAAC4AU9nZ1MAAAAAAAAAAAAAzGFiWgEAAAD4FwyvEqD/////////////////////kQN2b3JiaXMrAAAAWGlwaC5PcmcgbGliVm9yYmlzIEkgMjAxMjAyMDMgKE9tbmlwcmVzZW50KQQAAAAQAAAAbWFqb3JfYnJhbmQ9aXNvbRYAAABTb2Z0d2FyZT1MYXZmNTYuMjUuMTAxEQAAAG1pbm9yX3ZlcnNpb249NTEyHgAAAGNvbXBhdGlibGVfYnJhbmRzPWlzb21pc28ybXA0MQEFdm9yYmlzKUJDVgEACAAAADFMIMWA0JBVAAAQAABgJCkOk2ZJKaWUoSh5mJRISSmllMUwiZiUicUYY4wxxhhjjDHGGGOMIDRkFQAABACAKAmOo+ZJas45ZxgnjnKgOWlOOKcgB4pR4DkJwvUmY26mtKZrbs4pJQgNWQUAAAIAQEghhRRSSCGFFGKIIYYYYoghhxxyyCGnnHIKKqigggoyyCCDTDLppJNOOumoo4466ii00EILLbTSSkwx1VZjrr0GXXxzzjnnnHPOOeecc84JQkNWAQAgAAAEQgYZZBBCCCGFFFKIKaaYcgoyyIDQkFUAACAAgAAAAABHkRRJsRTLsRzN0SRP8ixREzXRM0VTVE1VVVVVdV1XdmXXdnXXdn1ZmIVbuH1ZuIVb2IVd94VhGIZhGIZhGIZh+H3f933f930gNGQVACABAKAjOZbjKaIiGqLiOaIDhIasAgBkAAAEACAJkiIpkqNJpmZqrmmbtmirtm3LsizLsgyEhqwCAAABAAQAAAAAAKBpmqZpmqZpmqZpmqZpmqZpmqZpmmZZlmVZlmVZlmVZlmVZlmVZlmVZlmVZlmVZlmVZlmVZlmVZlmVZQGjIKgBAAgBAx3Ecx3EkRVIkx3IsBwgNWQUAyAAACABAUizFcjRHczTHczzHczxHdETJlEzN9EwPCA1ZBQAAAgAIAAAAAABAMRzFcRzJ0SRPUi3TcjVXcz3Xc03XdV1XVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVYHQkFUAAAQAACGdZpZqgAgzkGEgNGQVAIAAAAAYoQhDDAgNWQUAAAQAAIih5CCa0JrzzTkOmuWgqRSb08GJVJsnuamYm3POOeecbM4Z45xzzinKmcWgmdCac85JDJqloJnQmnPOeRKbB62p0ppzzhnnnA7GGWGcc85p0poHqdlYm3POWdCa5qi5FJtzzomUmye1uVSbc84555xzzjnnnHPOqV6czsE54Zxzzonam2u5CV2cc875ZJzuzQnhnHPOOeecc84555xzzglCQ1YBAEAAAARh2BjGnYIgfY4GYhQhpiGTHnSPDpOgMcgppB6NjkZKqYNQUhknpXSC0JBVAAAgAACEEFJIIYUUUkghhRRSSCGGGGKIIaeccgoqqKSSiirKKLPMMssss8wyy6zDzjrrsMMQQwwxtNJKLDXVVmONteaec645SGultdZaK6WUUkoppSA0ZBUAAAIAQCBkkEEGGYUUUkghhphyyimnoIIKCA1ZBQAAAgAIAAAA8CTPER3RER3RER3RER3RER3P8RxREiVREiXRMi1TMz1VVFVXdm1Zl3Xbt4Vd2HXf133f141fF4ZlWZZlWZZlWZZlWZZlWZZlCUJDVgEAIAAAAEIIIYQUUkghhZRijDHHnINOQgmB0JBVAAAgAIAAAAAAR3EUx5EcyZEkS7IkTdIszfI0T/M00RNFUTRNUxVd0RV10xZlUzZd0zVl01Vl1XZl2bZlW7d9WbZ93/d93/d93/d93/d939d1IDRkFQAgAQCgIzmSIimSIjmO40iSBISGrAIAZAAABACgKI7iOI4jSZIkWZImeZZniZqpmZ7pqaIKhIasAgAAAQAEAAAAAACgaIqnmIqniIrniI4oiZZpiZqquaJsyq7ruq7ruq7ruq7ruq7ruq7ruq7ruq7ruq7ruq7ruq7ruq7rukBoyCoAQAIAQEdyJEdyJEVSJEVyJAcIDVkFAMgAAAgAwDEcQ1Ikx7IsTfM0T/M00RM90TM9VXRFFwgNWQUAAAIACAAAAAAAwJAMS7EczdEkUVIt1VI11VItVVQ9VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV1TRN0zSB0JCVAAAZAADkpKbUeg4SYpA5iUFoCEnEHMVcOumco1yMh5AjRkntIVPMEAS1mNBJhRTU4lpqHXNUi42tZEhBLbbGUiHlqAdCQ1YIAKEZAA7HARxNAxxLAwAAAAAAAABJ0wBNFAHNEwEAAAAAAADA0TRAEz1AE0UAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABxNAzRRBDRRBAAAAAAAAABNFAHRVAHRNAEAAAAAAABAE0XAM0VANFUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABxNAzRRBDRRBAAAAAAAAABNFAFRNQFPNAEAAAAAAABAE0VANE1AVE0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAABDgAAARZCoSErAoA4AQCH40CSIEnwNIBjWfA8eBpME+BYFjwPmgfTBAAAAAAAAAAAAEDyNHgePA+mCZA0D54Hz4NpAgAAAAAAAAAAACB5HjwPngfTBEieB8+D58E0AQAAAAAAAAAAAPBME6YJ0YRqAjzThGnCNGGqAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAIABBwCAABPKQKEhKwKAOAEAh6NIEgAAOJJkWQAAoEiSZQEAgGVZngcAAJJleR4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAgAEHAIAAE8pAoSErAYAoAACHolgWcBzLAo5jWUCSLAtgWQBNA3gaQBQBgAAAgAIHAIAAGzQlFgcoNGQlABAFAOBwFMvSNFHkOJalaaLIcSxL00SRZWmapokiNEvTRBGe53mmCc/zPNOEKIqiaQJRNE0BAAAFDgAAATZoSiwOUGjISgAgJADA4TiW5XmiKIqmaZqqynEsy/NEURRNU1Vdl+NYlueJoiiapqq6LsvSNM8TRVE0TVV1XWia54miKJqmqrouNE0UTdM0VVVVXRea5ommaZqqqqquC88TRdM0TVV1XdcFomiapqmqruu6QBRN0zRV1XVdF4iiaJqmqrqu6wLTNE1VVV3XlWWAaaqqqrquLANUVVVd15VlGaCqquq6rivLANd1XdmVZVkG4LquK8uyLAAA4MABACDACDrJqLIIG0248AAUGrIiAIgCAACMYUoxpQxjEkIKoWFMQkghZFJSKimlCkIqJZVSQUilpFIySi2lllIFIZWSSqkgpFJSKQUAgB04AIAdWAiFhqwEAPIAAAhjlGLMOeckQkox5pxzEiGlGHPOOakUY84555yUkjHnnHNOSsmYc845J6VkzDnnnJNSOueccw5KKaV0zjnnpJRSQuicc1JKKZ1zzjkBAEAFDgAAATaKbE4wElRoyEoAIBUAwOA4lqVpnieKpmlJkqZ5nieapmlqkqRpnieKpmmaPM/zRFEUTVNVeZ7niaIomqaqcl1RFE3TNE1VJcuiKIqmqaqqCtM0TdNUVVWFaZqmaaqq68K2VVVVXdd1Yduqqqqu67rAdV3XdWUZuK7ruq4sCwAAT3AAACqwYXWEk6KxwEJDVgIAGQAAhDEIKYQQUgYhpBBCSCmFkAAAgAEHAIAAE8pAoSErAYBwAACAEIwxxhhjjDE2jGGMMcYYY4wxcQpjjDHGGGOMMcYYY4wxxhhjjDHGGGOMMcYYY4wxxhhjjDHGGGOMMcYYY4wxxhhjjDHGGGOMMcYYY4wxxhhjjDHGGGOMMcYYY4wxxhhjjDHGGGOMMcYYY4wxxhhjjDHGGGOMMcYYY4wxxhhjjDHGGGOMMcbYWmuttVYAGM6FA0BZhI0zrCSdFY4GFxqyEgAICQAAjEGIMegklJJKShVCjDkoJZWWWoqtQogxCKWk1FpsMRbPOQehpJRaiim24jnnpKTUWowxxlpcCyGllFqLLbYYm2whpJRSazHGWmMzSrWUWosxxhhrLEq5lFJrscUYa41FKJtbazHGWmutNSnlc0ux1VpjrLUmo4ySMcZaa6y11iKUUjLGFFOstdaahDDG9xhjrDHnWpMSwvgeUy2x1VprUkopI2SNqcZac05KCWWMjS3VlHPOBQBAPTgAQCUYQScZVRZhowkXHoBCQ1YCALkBAAhCSjHGmHPOOeeccw5SpBhzzDnnIIQQQgghpAgxxphzzkEIIYQQQkgZY8w55yCEEEIIoYSSUsqYc85BCCGEUkopJaXUOecghBBCKKWUUkpKqXPOQQghhFJKKaWUlFIIIYQQQgillFJKKSmllEIIIYQSSimllFJSSimFEEIIpZRSSimlpJRSCiGEEEoppZRSSkkppRRCCaWUUkoppZSSUkoppRBKKaWUUkopJaWUUkqllFJKKaWUUkpKKaWUSimllFJKKaWUlFJKKZVSSimllFJKKSmllFJKqZRSSimllFJSSimllFIppZRSSimlpJRSSimlUkoppZRSSkkppZRSSqWUUkoppZSSUkoppZRSKqWUUkoppQAAoAMHAIAAIyotxE4zrjwCRxQyTECFhqwEAMgAABAHsbTWWquMcspJSa1DRhrmoKTYSQchtVhLZSBByklKnYIIKQaphYwqpZiTlkLLmFIMYisxdIwxRznlVELHGAAAAIIAAAMRMhMIFECBgQwAOEBIkAIACgsMHcNFQEAuIaPAoHBMOCedNgAAQYjMEImIxSAxoRooKqYDgMUFhnwAyNDYSLu4gC4DXNDFXQdCCEIQglgcQAEJODjhhife8IQbnKBTVOpAAAAAAAAeAOABACDZACIiopnj6PD4AAkRGSEpMTlBEQAAAAAAOwD4AABIUoCIiGjmODo8PkBCREZISkxOUAIAAAEEAAAAAEAAAQgICAAAAAAABAAAAAgIT2dnUwAEZj4AAAAAAADMYWJaAgAAAEFQxC8dQjk/Oj4+Ojc4OTg3Pju9ucDDuru3vLSvtsG7yMM0Hb3v0ug/339qtD9sOnrfpdF/vv/UaH/4ARIJGAgAUACSIqKCDIcPtFoUVItqRaOIPP9ZEWu1KrL+fJ/6tGpp9YU8HUu/gXz3dFNLC/OnY+k3kO+ebmppYX4ggGaCAAAA2gAEWD5HklK27PrTMFDriFHdlZ2l1OhEAACEHT3vYPXL5x8kkbEQyrCj5x2sfvn8gyQyFkL5AiRgDgAAoAkgDCspIMRCxMKaCaKIaDSK8Pf9fxY5G9ZNVQQMKXcexrH1K8OaoT3fkHLnYRxbvzKsGdrz3XojQ4YlAAAAYFUNalCsRSsai4pVjS2oorEqCgZV85UApB31T6QtHR6/OfXEmXbUP5G2dHj85tQT562nJiKxDAAAwFiLWqMWHarWqiiqVqeqgtag0YoqaMRiwdK6qQDEHUv/a9hMR48PrYQ0446l/zVspqPHh1ZCmh9gMAcAAFAAolI8Lp/PQhSNIqjWiCoajVg1aETxn7rAqo0oArwxd//r8XzX7qGknty+MXf/6/F81+6hpJ7c3prIMpKRAwAAsIJgMCo6tAqIYp0a1RqDFhVRi1K+3AP8QQv/zC54v5VUCOYPWvhndsH7raRCMLdapwomCAAAAGsUa4wqCiqqRqxB1YEVBK1glW/uQIsBzDV3/5XK7qftF11PnHPN3X+lsvtp+0XXE+cBdaOMyJQYAAAAK4o1IrrM2YqNVpDCHSiiAaPRAgDUKXf/B7tW2gF/YmRwCWnVKXf/B7tW2gF/YmRwCWkdUKeaRCAnBwAAIFaNGFUlUpBvc6RP6pd3NgC0KV/3jx32bdwoDEuTvTbl6/6xw76NG4VhabJ3QG1ZFIKEFgAAgBFjxYjen9hW0YhIXqlBRUHrH+RJX/lx5Wl8VxIKzTdP+sqPK0/ju5JQaL4H1GSZKXKCAAAAjFhjVE3pegcoWisGRAuuXbKqAQAUbnf8cOAhf77/CTO1QxVud/xw4CF/vv8JM7VD9Vs722kBAABgNeyxqp0qtmrRqmCBdcU6WMdCRRFBFB2KHxRqd/zx9JQ63t3cnj0Wanf88fSUOt7d3J49HlBbI0UW0wQAAMAIqBUb7b7XgFbRoIhiWwNW1AK1NK0HujfdJGVzrQxI0/0abLLBku5NN0nZXCsD0nS/BptssKTfAAB6sdPWuwLgyMHBIRWxo1QkAAAAAAAAAAhVkAIxTTVNbOwN0xS1GhY1bGxFxFBREYUQRoDPYQWJhIiQmDQuTw21ZlWsiimGGIah/bOoESIKNqJobIAaWrGfJNPkS4WH3XFkzOxUdlVcE9mSr9wEBQSsUVUxSFbkSbrnX61zfr7y6jRCVWiNRVEFK6KoKFYEAEWwBvJ1W1Ir660A3ujcmPiHpKtJWU+2bauQJW10bkz8Q9LVpKwn27ZVyJLezCyLFRl7KgFHqcTEHIk7AAAAAAAAAIAatva2YtoYBmCHxc40bC12psXWNOxNrJlWrFuxRFELMC2xbpjWTDGwNA2rWEG0GIuoYBBLWeYc+TZUOrloLIoBEGO57UM0hBbEAAiK2KoVi4rWIggq0VA1gF+rIVhn4zKsmgjIdl2vS4nsh7Fga1VFq0PQKlgapk02WNggViwtTAAe+NwYsVnD5SF9DLeHQjVbssDnxojNGi4P6WO4PRSq2ZK9kSo1WSkTYLXt5kgglUAqsVzcAQAAAAAAAADEqFhjjFFRi5oGWGzFzsbG1rS1s7NusyVqGFhYqIVho4moqGJFEItGa6XTkhu5ghWLilGMaJVuMz4KolMsxlhAsGiwsQGLKlWoJ/XW7wWAgAYBsGAFraJaEVVExSJRU2jXqHJR4flXAsAKqgjWGAyrhiGW1kxLK4KgVkysmaZhRUFMAQDeKM2K30oGdOKX+PvRXp4lbJRmxW8lAzrxS/z9aC/PEl6sHjani8shFYtNpy8M+gAAAAAAAAAARNRiq7aY9lY7qwCCvVispgmAWlqaalixUdWKLawaNtokVixssFC1YoNhqoUVC0usao0gYkWjQwc2q4gKAoiqiSxa/MF9wyFMFdOwhqqgGEKLqFriRpKcRZoBqxYwohGA9ek+trKfth5JAcuvZT9aLTBgW7VWVS06FGsNWkXECraiqHXTUixEEcHrEwB+Oc2Ib40c8BCvY5iy69+Su5xmxLdGDniI1zFM2fVvyV20esnuDg4ODmIOqTanAgAAAAAAAADB3mJVw95WBOwsLU1LC0MtLUxb2GRpC9SqjaYtTbABrIhaNSxVDFDrammaoqY1Wm5S4dCS7vw562bRV3Jb+93scH2/r/OQm75P6ki9qHK1hhiJ+/uoB4RUqmY+aUYg0jl3iIgBsBUNSu77u0ocmAoCYhVF1ZqIoAOs6tQaAAARnaoOAAD++Qzkr2ZzdRFeQyHDG+/zGchfzebqIryGQoY33guyVqbaaipid0jl4Ig41cwBAAAAAAAAAATFYIwxxqqxtI4VG0zTRgsLU00x1dI0bcRSTbWKqKmGKTZYNy0Q1MI0LA3tJcD0UR7GEhjVouoURRRQkDazIk72t/ynrGopv7K+UflZDAYQbBFV1ahoOUtc6QpBEVUjGDBQ+qgpLBaLBSsGdAq2rYqADlQAEI21Iqga0YIt1QY1TdM0FBQA3kq1zWYHCvuPy3FC25K2Um2z2YHC/uNynNC2pC9QWxbKKlE60+9DKrFJTJzKIQcAAAAAAAAAUFUVFRU1KgZTxc6wE1tVqwkYVi2t2GxasWJVDUurplWriFWtTo0KWgGLaBTEWABFkPcRiSd6B3cZebKwuUQMosFYFcEYq6KKRQXReIutBcSloT5Yev191vVsolVQsREA8ZOAunr1sz+/6iatv+9BFRRrBKxasWHFwrCwtG7FmgIAvmq18D/ET2P/ePlPEqpbtVr4H+KnsX+8/CcJ1b2RKnVri0AkjOQpoxqJsibBdHAgFhfxzAEAAAAAAAAAVAxqDIJaMWqYmIaa2NnZ2FusIsZYY9SoqFW1WBEtVrBgUQUBi0GriBEErQFRRYwR+YRf4vKncL27E1avEoBav7vuE2QvhxcmoqxdhawAYolYtRCbLZAh9JY1iMNijICgQbFYscaiourQqUO1Yo3FioKqYFFUwDBMMQzFmmFpFQA+OxXE/y6+E3DZfjnqZqeC+N/FdwIu2y9H3QWRYXPk4OBoOqRySAEAAAAAAAAAWA3D1mraGfYmVsO62GSzaZOlGqZhqk02Y5N1Q8TCZiuGdTFM1EKnBlUBsWCNilIGkh0TURVjNFoRVYArr0qmk4AIUXDbxHwqE9/dccQGIQoAto2IoAEwGhXQAQAAWFSNqlEFfxUsm+DddQjWqIAF0WpUydlA6BGucmTnXOIMgAFRdCJiVQE+aAyV/4nMlzG79JJKfXoYGjSGyv9E5suYXXpJpT49DN0LuRnZAueFwcFBzMFBLJVYCgAAAAAAAAAs2GJaDMGCqXZWe7EzxFZNxMbOxsDEUIuiFsOqtmK1Ggi2RlHRaLRaIGUFWyGSoR03xUxKhITamU5VTOQUnDz8Vn5xUKb7isKHtN+SJZbU2vH9QSEM55JtfwQRESNYAWvOYrnpEJn7BvLyvhJaVWsUFbFYLE4APppF6P/O3IrrmV2Po7qqwGgWof87cyuuZ3Y9juqqAm8gioIoVOr0BtgcHFJSHMTElYoEAAAAAAAAAKCCVSPGGou9Wq2GYTEwrBhWe1vDCjZYIKZNYppqIYag6NQCGh2iisZqvJzSDvjPRg3+IjUEIv2Jg6cTxSpWFAQDn4o6FLFoAMCiEVnwbMv84t4Sci64gbvbrwWeqdVbKcvIN6pZVVExMAwMrCNgLYqKEVFVAcgfT6ctFACeq43x/2rbpVjeVf39KEOuNsb/3bYLtbyr+tutjPgNWdZGRkZkIRfW7jAdxMTEfC4IAAAAAAAAAFCjWLFYsWoxbezsFFVbQ9TO3s6adatiGDZYtWoKamkpKlatmxiWlqYlpqVol8v4viJft6sSEooGUDSoIgBiFNU6VMGI1qL2MqoiBj0zsqjtEJk22mIXkfPfjE+bEuvCDHsfNjgksC1YLSutimhFp6JDq8NoViywGI0qLNIKmquKYljPzge9GQAAvpp17v+0NSoz3uFRCSZWs879n7ZGZcY7OCrBxAdqyqosCNUisyaBkMQZAw4OKQ7EbuKdCgAAAAAAAAAEUUGssQiqYtVaK6BgsVhsbWzVNE1TbWwREbTWWFWwqKJB7epd7ai+WqxSj3b+qRTXjlq7xYdGBTFYMWCe7nJ217tDsqNJ5xp3zifja+nJJ3dIISgGAOT16CYhMiBMECZ2poWJWmDdwgJVEUKJkAAMUjbYE6TtQodiA3RkZRXSAP5pnJd/2ymTM4Tfn3KwifZpnJd/2ymTM4Tfn3KwBqhdtBM2h1QODnUiMqcSIiEIAAAAAAAQq51h2onF1hCrRa3WLNUGW9og1q2oVRusqjWrhmGjhVi1ENOKqRbWrahFLFZUrGg1oPgqLfXWq52AsaLV6FQMYLGY3QnIar3rYLVjn6KrkV3rlSuuhxZuQ4FcwgIDIGQSFCqOylgWoDAIhZGrIVK6JopjAhQrWsUAGBbxhLoY2jIWkiptylIvolV1AAChAEsBGgADvmVc52cqY6xvOJ6oZyJsGdf5mcoY6xuOJ+qZCAe029gdHAQczMGBFmMGAAAAAACAxWoxsdiYFnuriNWiljbZbGHYaJON1qxbsTRMw1INLK3ZaM1UC0sD1DBFUcMULK1Zt1A1brNH3ncnV+mckX2dxG3peicAb5dRNaqgalTFYLEA7C7d6irUyC4zenMoF6MwMIAA9nXknL1OYBI5e99dV2vc3uac4YtNA4BlDQqDcp1MIufyWdZb+fx5tjrfn2Wdy1sA",
+				"type": "audio",
+				"filename": "chomp.ogg",
+				"uuid": "6cccdf97-1511-4151-a9b2-5e9b2f627825"
+			}
+		}
 	},
 	"name": "HungryGhost",
 	"onionSkinning": false,
