@@ -116,8 +116,8 @@ body {
 	margin-bottom: 0%;
 	margin-top: 10px;
 
-	height: 30px;
-	width: 300px;
+	height: 20px;
+	width: 400px;
 	text-align: center;
 
 	font-size: 14px;
@@ -125,6 +125,10 @@ body {
 	color: #333;
 
 	transform:translateX(-50%);
+}
+.subtitle2 {
+	margin-top: 0px;
+	font-weight: bold;
 }
 
 .w3-button {
