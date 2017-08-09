@@ -512,6 +512,11 @@ var GuiActionHandler = function (wickEditor) {
                         if(obj.name) obj.name = obj.name + ' copy';
                         obj.getAllChildObjectsRecursive().forEach(function (child) {
                             child.uuid = random.uuid4();
+                            (child.layers||[]).forEach(function (layer) {
+                                layer.frames.forEach(function (frame) {
+                                    frame.uuid = random.uuid4();
+                                })
+                            });
                             //child.name = "";
                         });
                         obj.getAllFrames().forEach(function (frame) {
