@@ -143,14 +143,12 @@ var WickPlayer = function () {
     }
 
 
-
-
-
-///////////// DEPRACTAETION ZOOOOEN!!!!!!!!!!!!!!!!!!!!!!!
+///////////// DEPRECATED ZOOOOOONE!!!!!!!!!!!!!!!!!!!!!!!
 
     self.cloneObject = function (wickObj) {
         var clone = wickObj.copy();
         clone.isClone = true;
+        clone.asset = wickObj.asset;
 
         clone.prepareForPlayer()
 
