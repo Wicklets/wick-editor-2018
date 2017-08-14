@@ -74,6 +74,12 @@ var PreviewPlayer = function (wickEditor) {
                 window.wickRenderer.render(wickEditor.project.rootObject.getAllActiveChildObjects());
                 //wickEditor.thumbnailRenderer.syncWithEditorState();
                 //wickEditor.syncInterfaces();
+                currObj.layers.forEach(function (wickLayer) {
+                    wickLayer.frames.forEach(function (wickFrame) {
+                        if(wickFrame._soundDataForPreview && wickFrame.playheadPosition === currObj.playheadPosition) 
+                            wickFrame._soundDataForPreview.howl.play()
+                    });
+                });
                 currObj.playheadPosition ++;
             }
             

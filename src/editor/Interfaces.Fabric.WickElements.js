@@ -24,6 +24,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
     var currentFrameRef;
 
     this.update = function () {
+        window.blockAllRender = true;
+
         var newFrameRef = wickEditor.project.getCurrentFrame();
         var onNewFrame = newFrameRef !== currentFrameRef;
         currentFrameRef = newFrameRef;
@@ -46,8 +48,15 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 return !obj.isPath;
             }); 
         }
+        activeObjects = activeObjects.filter(function (obj) {
+            return !obj.parentFrame.parentLayer.hidden;
+        });  
 
         var siblingObjects = currentObject.getAllInactiveSiblings();
+        siblingObjects = siblingObjects.filter(function (obj) {
+            return !obj.parentFrame.parentLayer.hidden;
+        });  
+        //var siblingObjects = [];
         var nearbyObjects = wickEditor.project.onionSkinning ? wickEditor.project.currentObject.getNearbyObjects(1,1) : [];
         var allObjects = nearbyObjects.concat(siblingObjects.concat(activeObjects));
         //var allObjects = siblingObjects.concat(activeObjects);
@@ -88,6 +97,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             })
             console.log("")*/
 
+            window.blockAllRender = false;
             fabricInterface.canvas.renderAll();
         }
 
@@ -230,13 +240,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             var newFabricText = new fabric.IText(wickObj.textData.text, wickObj.textData);
             newFabricText.wickObjReference = wickObj;
             callback(newFabricText);
-        }
-
-        if(wickObj.isSound) {
-            fabric.Image.fromURL('resources/audio.png', function(audioFabricObject) {
-                audioFabricObject.wickObjReference = wickObj;
-                callback(audioFabricObject);
-            });
         }
         
         if(wickObj.pathData) {
@@ -449,7 +452,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         }
 
         // Objects that are onion skins or that are not part of the current symbol being edited cannot be interacted with
-        if(activeObjects.indexOf(wickObj) !== -1) {
+        if(activeObjects.indexOf(wickObj) !== -1 && !wickObj.parentFrame.parentLayer.locked) {
             fabricObj.hasControls = true;
             fabricObj.selectable = true;
             fabricObj.evented = true;
@@ -464,10 +467,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             fabricObj.hasControls = false;
             fabricObj.selectable = false;
             fabricObj.evented = false;
-        }
-
-        if(wickObj.isSound) {
-            fabricObj.hasControls = false;
         }
 
     }

@@ -273,8 +273,6 @@ var ScriptingIDEInterface = function (wickEditor) {
                     wickObjectType = 'clip'
                 } else if(objectBeingScripted.isPath) {
                     wickObjectType = 'path'
-                } else if(objectBeingScripted.isSound) {
-                    wickObjectType = 'sound'
                 } else if(objectBeingScripted.isImage) {
                     wickObjectType = 'image'
                 }

@@ -128,9 +128,10 @@ var WickEditor = function () {
     setTimeout(function () {
         if(!isElectronMode && !self.backend.active) {
             WickProject.Exporter.getAutosavedProject(function (project) {
-                self.project = project;
-                window.wickRenderer.setProject(self.project);
-                self.syncInterfaces();
+                wickEditor.guiActionHandler.doAction('openProject', {
+                    project: project,
+                    dontWarn: true
+                })
             });
         }
     }, 100);
@@ -146,9 +147,9 @@ WickEditor.prototype.syncInterfaces = function () {
     this.interfaces.forEach(function (interface) {
         //startTiming();
         interface.syncWithEditorState();
-        /*stopTiming('');
-        console.log(interface)
-        console.log(' ')*/
+        //stopTiming('interface:');
+        //console.log(interface)
+        //console.log(' ')
     });
 
     //console.log(new Error())
@@ -159,6 +160,7 @@ WickEditor.prototype.changeTool = function (newTool) {
     this.lastTool = this.currentTool;
     this.currentTool = newTool;
     if(newTool.onSelected) newTool.onSelected();
+    this.tools.polygon.finishPath();
     this.fabric.forceModifySelectedObjects();
     this.fabric.deselectAll();
 

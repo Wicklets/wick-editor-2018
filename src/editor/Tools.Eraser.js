@@ -28,7 +28,7 @@ Tools.Eraser = function (wickEditor) {
         var context = canvas.getContext('2d');
         var centerX = canvas.width / 2;
         var centerY = canvas.height / 2;
-        var radius = wickEditor.settings.brushThickness/2 * wickEditor.fabric.canvas.getZoom();
+        var radius = wickEditor.settings.brushThickness/2;// * wickEditor.fabric.canvas.getZoom();
 
         context.beginPath();
         context.arc(centerX, centerY, radius+1, 0, 2 * Math.PI, false);
@@ -48,7 +48,7 @@ Tools.Eraser = function (wickEditor) {
     }
 
     this.getTooltipName = function () {
-        return "Eraser";
+        return "Eraser (E)";
     }
 
     this.setup = function () {

@@ -41,8 +41,6 @@ TimelineInterface.FramesContainer = function (wickEditor, timeline) {
         this.elem.addEventListener('mousedown', function (e) {
             timeline.interactions.start('dragSelectionBox', e, {});
 
-            wickEditor.project.clearSelection();
-
             var layerIndex = Math.round((e.clientY - timeline.framesContainer.elem.getBoundingClientRect().top - cssVar('--layer-height')/2) / cssVar('--layer-height'))
             var layer = wickEditor.project.currentObject.layers[layerIndex];
             wickEditor.actionHandler.doAction('movePlayhead', {
@@ -51,7 +49,8 @@ TimelineInterface.FramesContainer = function (wickEditor, timeline) {
                 newLayer: layer,
             });
 
-            if(wickEditor.project.smallFramesMode) {
+            wickEditor.project.clearSelection();
+            if(e.button === 2) {
                 var layer = wickEditor.project.getCurrentLayer();
                 var frame = layer.getLastFrame(wickEditor.project.getCurrentObject().playheadPosition);
                 if(frame) wickEditor.project.selectObject(frame);

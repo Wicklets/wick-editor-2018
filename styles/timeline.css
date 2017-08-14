@@ -197,10 +197,10 @@ body {
 
 .layer {
     background-color: #4a6588;
-    background-image: url('../resources/layer-handle.svg');
+    /*background-image: url('../resources/layer-handle.svg');
     background-size: 15px 17px;
     background-repeat: no-repeat;
-    background-position: left;
+    background-position: left;*/
     
     
     width:  calc(100% - 10px);
@@ -235,8 +235,58 @@ body {
 
 }
 
-.layer-gnurl {
-    
+.layer-lock-button {
+    border-radius: 7px;
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    top: 11px;
+    left: 3px;
+    background-color: transparent;
+    background-image: url('../resources/lock-layer.svg');
+    background-size: 13px 13px;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    opacity: 0.6;
+}
+.layer-lock-button:hover {
+    background-color: rgba(255,255,255,0.4);
+}
+.layer-lock-button:active {
+    background-color: rgba(255,255,255,0.8);;
+    opacity: 1.0;
+}
+.layer-locked {
+    opacity: 1.0;
+    background-color: rgba(255,255,255,0.5);
+}
+
+.layer-hide-button {
+    border-radius: 7px;
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    top: 11px;
+    left: 20px;
+    background-color: transparent;
+    background-image: url('../resources/hide-layer.svg');
+    background-size: 13px 13px;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    opacity: 0.6;
+}
+.layer-hide-button:hover {
+    background-color: rgba(255,255,255,0.4);
+}
+.layer-hide-button:active {
+    background-color: rgba(255,255,255,0.8);
+    opacity: 1.0;
+}
+.layer-hidden {
+    opacity: 1.0;
+    background-color: rgba(255,255,255,0.5);
 }
 
 .frames-container {
@@ -270,8 +320,6 @@ body {
     overflow: hidden;
     
     border-radius: 5px;
-
-    cursor: pointer;
 
     /*pointer-events:none;*/
 }
@@ -309,15 +357,41 @@ body {
 }
 
 .frame-thumbnail {
-    max-height: 90%; 
-    max-width: 90%;
-    padding: 1px;
+    max-height: 100%; 
+    max-width: 100%;
+    padding: 0px;
 
     margin: auto;
     display: block;
 
     pointer-events: none;
     border-radius: 3px;
+}
+
+.frame-waveform {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 600px;
+    height: 40px;
+    pointer-events: none;
+}
+
+.has-scripts-icon {
+    bottom: 0px;
+    left: 0px;
+    width: 13px;
+    height: 13px;
+    position: absolute;
+    background-color: white;
+    border-radius: 4px;
+    border-color: #878787;
+    border-width: 1px;
+    border-style: solid;
+    background-image: url('../resources/code.png');
+    background-size: 13px 13px;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .frame-tween-mode {
@@ -396,7 +470,6 @@ body {
     box-shadow: 0 0 1px 0 rgba(0,0,0,0.12), 0 1px 1px 0 rgba(0,0,0,0.24), 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24); 
     pointer-events: none;
     z-index: 10;
-    
 }
 
 .add-frame-overlay-img {
@@ -409,8 +482,8 @@ body {
 }
 
 .selection-box {
-    background-color: #CCC;
-    box-shadow: inset 0px 0px 1px #555;
+    background-color: #AAAAFF;
+    box-shadow: inset 0px 0px 1px #0000FF;
     opacity: 0.5;
     position: absolute;
     pointer-events: none;
@@ -526,7 +599,7 @@ body {
     width: 10000%;
     height: var(--number-line-height);
 
-    cursor: pointer;
+    cursor: default;
 
     background-color: #252525;
 }

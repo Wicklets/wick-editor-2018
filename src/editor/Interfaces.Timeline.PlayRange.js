@@ -35,6 +35,8 @@ TimelineInterface.PlayRange = function (wickEditor, timeline) {
     this.build = function () {
         this.elem = document.createElement('div');
         this.elem.addEventListener('mousedown', function (e) {
+            return;
+
             wickEditor.project.clearSelection();
             wickEditor.project.selectObject(that.wickPlayrange);
             wickEditor.syncInterfaces();

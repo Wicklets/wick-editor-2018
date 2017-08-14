@@ -30,7 +30,7 @@ Tools.Pan = function (wickEditor) {
     }
 
     this.getTooltipName = function () {
-        return "Pan";
+        return "Pan (Space)";
     }
 
 // Panning the fabric canvas

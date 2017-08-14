@@ -77,7 +77,7 @@ var ToolbarInterface = function (wickEditor) {
             this.cachedColor = wickEditor.settings.fillColor;
         }));
 
-        toolOptionInputs.push(new ToolbarInterface.RangeSlider(container, 'tools/Line.svg', 0, 50, function (val) {
+        toolOptionInputs.push(new ToolbarInterface.RangeSlider(container, 'Stroke Width', 'tools/Line.svg', 0, 50, function (val) {
             wickEditor.settings.setValue('strokeWidth', val);
             wickEditor.guiActionHandler.doAction("changeStrokeWidthOfSelection", {
                 strokeWidth: wickEditor.settings.strokeWidth
@@ -87,7 +87,7 @@ var ToolbarInterface = function (wickEditor) {
             return parseInt(wickEditor.settings.strokeWidth);
         }));
 
-        toolOptionInputs.push(new ToolbarInterface.RangeSlider(container, 'tools/Paintbrush.svg', 5, 100, function (val) {
+        toolOptionInputs.push(new ToolbarInterface.RangeSlider(container, 'Brush Thickness', 'tools/Paintbrush.svg', 2, 100, function (val) {
             wickEditor.settings.setValue('brushThickness', parseFloat(val));
             wickEditor.syncInterfaces();
         }, function () {
@@ -96,7 +96,7 @@ var ToolbarInterface = function (wickEditor) {
             return (wickEditor.currentTool instanceof Tools.Paintbrush);
         }));
 
-        toolOptionInputs.push(new ToolbarInterface.RangeSlider(container, 'tools/Paintbrush.svg', 25, 100, function (val) {
+        toolOptionInputs.push(new ToolbarInterface.RangeSlider(container, 'Brush Smoothness', 'tools/Paintbrush.svg', 65, 100, function (val) {
             wickEditor.settings.setValue('brushSmoothness', parseFloat(val));
             wickEditor.syncInterfaces();
         }, function () {
@@ -105,7 +105,7 @@ var ToolbarInterface = function (wickEditor) {
             return (wickEditor.currentTool instanceof Tools.Paintbrush);
         }));
 
-        toolOptionInputs.push(new ToolbarInterface.RangeSlider(container, 'tools/Square.svg', 0, 100, function (val) {
+        toolOptionInputs.push(new ToolbarInterface.RangeSlider(container, 'Rectangle Corner Roundness', 'tools/Square.svg', 0, 100, function (val) {
             wickEditor.settings.setValue('rectangleCornerRadius', val);
             wickEditor.syncInterfaces();
         }, function () {
@@ -114,7 +114,7 @@ var ToolbarInterface = function (wickEditor) {
             return (wickEditor.currentTool instanceof Tools.Rectangle);
         }));
 
-        toolOptionInputs.push(new ToolbarInterface.RangeSlider(container, 'tools/Zoom.svg', 25, 500, function (val) {
+        toolOptionInputs.push(new ToolbarInterface.RangeSlider(container, 'Zoom amount', 'tools/Zoom.svg', 25, 500, function (val) {
             wickEditor.syncInterfaces();
         }, function () {
             return wickEditor.fabric.getCanvasTransform().zoom * 100;

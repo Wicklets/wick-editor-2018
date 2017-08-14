@@ -64,6 +64,7 @@ WickProject.Exporter = (function () {
             "src/player/WickPlayer.PixiRenderer.js",
             "src/player/WickPlayer.HowlerAudioPlayer.js",
             "src/player/WickPlayer.InputHandler.js",
+            "src/player/WickPlayer.HTMLElemInjector.js",
             "src/player/WickPlayer.js",
         ];
 
@@ -214,6 +215,7 @@ WickProject.Exporter = (function () {
         "_renderDirty",
         "_selection",
         "smallFramesMode",
+        "_soundDataForPreview"
     ];
 
     projectExporter.JSONReplacer = function(key, value) {

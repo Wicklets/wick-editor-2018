@@ -25,7 +25,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.StringInput({
         title: 'X',
         isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && !selectionInfo.object.isSound;
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
         },
         getValueFn: function () {
             return roundToHundredths(selectionInfo.object.x);
@@ -43,7 +43,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.StringInput({
         title: 'Y',
         isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && !selectionInfo.object.isSound;
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
         },
         getValueFn: function () {
             return roundToHundredths(selectionInfo.object.y);
@@ -61,7 +61,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.StringInput({
         title: 'Rotation',
         isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && !selectionInfo.object.isSound;
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
         },
         getValueFn: function () {
             return roundToHundredths(selectionInfo.object.rotation);
@@ -79,7 +79,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.StringInput({
         title: 'Opacity',
         isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && !selectionInfo.object.isSound;
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
         },
         getValueFn: function () {
             return roundToHundredths(selectionInfo.object.opacity);
@@ -97,7 +97,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.StringInput({
         title: 'Width',
         isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && !selectionInfo.object.isSound;
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
         },
         getValueFn: function () {
             return roundToHundredths(selectionInfo.object.scaleX*selectionInfo.object.width);
@@ -115,7 +115,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.StringInput({
         title: 'Height',
         isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && !selectionInfo.object.isSound;
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
         },
         getValueFn: function () {
             return roundToHundredths(selectionInfo.object.scaleY*selectionInfo.object.height);
@@ -133,7 +133,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.StringInput({
         title: 'Scale (X)',
         isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && !selectionInfo.object.isSound;
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
         },
         getValueFn: function () {
             return roundToHundredths(selectionInfo.object.scaleX);
@@ -151,7 +151,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.StringInput({
         title: 'Scale (Y)',
         isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && !selectionInfo.object.isSound;
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
         },
         getValueFn: function () {
             return roundToHundredths(selectionInfo.object.scaleY);
@@ -166,10 +166,10 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
-    properties.push(new InspectorInterface.StringInput({
+    /*properties.push(new InspectorInterface.StringInput({
         title: 'Volume',
         isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isSound;
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
         },
         getValueFn: function () {
             return roundToHundredths(selectionInfo.object.volume);
@@ -182,7 +182,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.CheckboxInput({
         title: 'Loop',
         isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isSound;
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
         },
         getValueFn: function () {
             return selectionInfo.object.loop;
@@ -190,7 +190,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         onChangeFn: function (val) {
             selectionInfo.object.loop = val;
         }
-    }));
+    }));*/
 
     properties.push(new InspectorInterface.StringInput({
         title: 'Variable',
@@ -202,6 +202,26 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }, 
         onChangeFn: function (val) {
             selectionInfo.object.varName = val;
+        }
+    }));
+
+    properties.push(new InspectorInterface.CheckboxInput({
+        title: 'Editable',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isText;
+        },
+        getValueFn: function () {
+            return selectionInfo.object.htmlElemData !== undefined;
+        }, 
+        onChangeFn: function (val) {
+            if(selectionInfo.object.htmlElemData) {
+                selectionInfo.object.htmlElemData = undefined;
+            } else {
+                selectionInfo.object.htmlElemData = {
+                    tagName : 'input'
+                };
+            }
+            wickEditor.syncInterfaces();
         }
     }));
 
@@ -292,24 +312,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.ColorInput({
-        title: 'Fill Color',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isPath;
-        },
-        getValueFn: function () {
-            if(!selectionInfo.object || !selectionInfo.object.fabricObjectReference) return;
-            if(!selectionInfo.object.fabricObjectReference.fill) return;
-            return selectionInfo.object.fabricObjectReference.fill;
-        }, 
-        onChangeFn: function (val) {
-            wickEditor.guiActionHandler.doAction("changeFillColorOfSelection", {
-                color: val
-            });
-            wickEditor.syncInterfaces();
-        }
-    }));
-
-    properties.push(new InspectorInterface.ColorInput({
         title: 'Stroke Color',
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isPath;
@@ -321,6 +323,24 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }, 
         onChangeFn: function (val) {
             wickEditor.guiActionHandler.doAction("changeStrokeColorOfSelection", {
+                color: val
+            });
+            wickEditor.syncInterfaces();
+        }
+    }));
+
+    properties.push(new InspectorInterface.ColorInput({
+        title: 'Fill Color',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isPath;
+        },
+        getValueFn: function () {
+            if(!selectionInfo.object || !selectionInfo.object.fabricObjectReference) return;
+            if(!selectionInfo.object.fabricObjectReference.fill) return;
+            return selectionInfo.object.fabricObjectReference.fill;
+        }, 
+        onChangeFn: function (val) {
+            wickEditor.guiActionHandler.doAction("changeFillColorOfSelection", {
                 color: val
             });
             wickEditor.syncInterfaces();
@@ -397,6 +417,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }, 
         onChangeFn: function (val) {
             wickEditor.project.framerate = eval(val);
+            wickEditor.syncInterfaces();
         }
     }));
 
@@ -504,7 +525,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
-    properties.push(new InspectorInterface.CheckboxInput({
+    /*properties.push(new InspectorInterface.CheckboxInput({
         title: 'Save State',
         isActiveFn: function () {
             return selectionInfo.type === 'frame' && selectionInfo.numObjects === 1;
@@ -515,7 +536,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         onChangeFn: function (val) {
             selectionInfo.object.alwaysSaveState = val;
         }
-    }));
+    }));*/
 
     /*properties.push(new InspectorInterface.SelectInput({
         title: 'Type',
@@ -578,7 +599,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             } else {
                 tween.tweenType = 'Quadratic';
             }
-            console.log(tween);
             wickEditor.syncInterfaces();
         }
     }));
@@ -867,40 +887,15 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.Divider());
 
     properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Create Motion Tween",
-        icon: "./resources/inspector-tween.svg",
-        colorClass: 'frames',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 
-                && selectionInfo.dataType === 'frame'
-                && !selectionInfo.object.getCurrentTween();
-        },
-        buttonAction: function () {
-            wickEditor.guiActionHandler.doAction('createMotionTween');
-        }
-    }));
-
-    properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Delete Motion Tween",
-        icon: "./resources/inspector-delete.svg",
-        colorClass: 'frames',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 
-                && selectionInfo.dataType === 'frame'
-                && selectionInfo.object.getCurrentTween();
-        },
-        buttonAction: function () {
-            wickEditor.guiActionHandler.doAction('deleteMotionTween');
-        }
-    }));
-
-    properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Add Frame",
-        icon: "./resources/inspector-flip-vertically.svg",
+        icon: "./resources/inspector-duplicate.svg",
         colorClass: 'frames',
         isActiveFn: function () {
+            var layer = wickEditor.project.getCurrentLayer();
+            var playheadPos = wickEditor.project.getCurrentObject().playheadPosition;
             return selectionInfo.numObjects > 0 
-                && selectionInfo.dataType === 'frame';
+                && selectionInfo.dataType === 'frame'
+                && !layer.getFrameAtPlayheadPosition(playheadPos);
         },
         buttonAction: function () {
             wickEditor.actionHandler.doAction('addNewFrame');
@@ -970,6 +965,34 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         },
         buttonAction: function () {
             wickEditor.guiActionHandler.doAction("deleteSelectedObjects")
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Create Motion Tween",
+        icon: "./resources/inspector-tween.svg",
+        colorClass: 'frames',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 
+                && selectionInfo.dataType === 'frame'
+                && !selectionInfo.object.getCurrentTween();
+        },
+        buttonAction: function () {
+            wickEditor.guiActionHandler.doAction('createMotionTween');
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Delete Motion Tween",
+        icon: "./resources/inspector-delete.svg",
+        colorClass: 'frames',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 
+                && selectionInfo.dataType === 'frame'
+                && selectionInfo.object.getCurrentTween();
+        },
+        buttonAction: function () {
+            wickEditor.guiActionHandler.doAction('deleteMotionTween');
         }
     }));
 

@@ -31,7 +31,7 @@ Tools.Rectangle = function (wickEditor) {
     }
 
     this.getTooltipName = function () {
-        return "Rectangle";
+        return "Rectangle (R)";
     }
 
     this.setup = function () {

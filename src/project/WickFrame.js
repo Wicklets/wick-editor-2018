@@ -62,6 +62,8 @@ WickFrame.prototype.tick = function () {
         
         (wickPlayer || wickEditor).project.runScript(this, 'load');
         (wickPlayer || wickEditor).project.runScript(this, 'update');
+
+        if(wickPlayer) wickPlayer.audioPlayer.playSound(this);
     }
     // Active -> Active
     // Frame is active!
@@ -131,6 +133,7 @@ WickFrame.prototype.copy = function () {
     copiedFrame.playheadPosition = this.playheadPosition;
     copiedFrame.length = this.length;
     copiedFrame.wickScript = this.wickScript;
+    copiedFrame.uuid = random.uuid4();
 
     this.wickObjects.forEach(function (wickObject) {
         copiedFrame.wickObjects.push(wickObject.copy());
@@ -228,6 +231,7 @@ WickFrame.prototype.getAsJSON = function () {
 WickFrame.fromJSON = function (frameJSON) {
     var frame = JSON.parse(frameJSON);
     frame.__proto__ = WickFrame.prototype;
+    frame.uuid = random.uuid4();
     frame.wickObjects.forEach(function (wickObject) {
         WickObject.addPrototypes(wickObject);
         wickObject.generateParentObjectReferences();

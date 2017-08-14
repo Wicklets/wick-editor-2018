@@ -22,6 +22,9 @@ TimelineInterface.Layer = function (wickEditor, timeline) {
 
     this.wickLayer = null;
 
+    var lockLayerButton;
+    var hideLayerButton;
+
     this.build = function () {
         var wickLayers = wickEditor.project.currentObject.layers;
 
@@ -37,13 +40,31 @@ TimelineInterface.Layer = function (wickEditor, timeline) {
         this.elem.appendChild(layerSelectionOverlayDiv);
         
         //div creation block for gnurl overlay
-        var gnurl = document.createElement('div');
+        /*var gnurl = document.createElement('div');
         gnurl.className = 'layer-gnurl';
-        this.elem.appendChild(gnurl);
+        this.elem.appendChild(gnurl);*/
         
-        
+        lockLayerButton = document.createElement('div');
+        lockLayerButton.className = 'layer-lock-button';
+        lockLayerButton.onclick = function (e) {
+            that.wickLayer.locked = !that.wickLayer.locked;
+            wickEditor.syncInterfaces();
+            e.stopPropagation();
+        }
+        this.elem.appendChild(lockLayerButton);
+
+        hideLayerButton = document.createElement('div');
+        hideLayerButton.className = 'layer-hide-button';
+        hideLayerButton.onclick = function (e) {
+            that.wickLayer.hidden = !that.wickLayer.hidden;
+            wickEditor.syncInterfaces();
+        }
+        this.elem.appendChild(hideLayerButton);
+
+        //hideLayerButton
 
         this.elem.addEventListener('mousedown', function (e) {
+            if(e.layerX < 30) return;
             wickEditor.actionHandler.doAction('movePlayhead', {
                 obj: wickEditor.project.currentObject,
                 newPlayheadPosition: wickEditor.project.currentObject.playheadPosition,
@@ -58,6 +79,18 @@ TimelineInterface.Layer = function (wickEditor, timeline) {
         var selectionOverlayDiv = this.elem.getElementsByClassName('layer-selection-overlay')[0];
         selectionOverlayDiv.style.display = layerIsSelected ? 'block' : 'none';
         
+        if(this.wickLayer.hidden) {
+            hideLayerButton.className = 'layer-hide-button layer-hidden';
+        } else {
+            hideLayerButton.className = 'layer-hide-button';
+        }
+
+        if(this.wickLayer.locked) {
+            lockLayerButton.className = 'layer-lock-button layer-locked';
+        } else {
+            lockLayerButton.className = 'layer-lock-button';
+        }
+
         var layerDiv = this.elem;
         if (layerIsSelected === true) {
             layerDiv.className = 'layer active-layer';

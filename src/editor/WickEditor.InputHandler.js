@@ -60,7 +60,7 @@ var InputHandler = function (wickEditor) {
         return editingTextBox;
     }
 
-    // Fixes hotkey breaking bug
+    // Hack to prevent keys getting stuck
     $(window).focus(function() {
         that.keys = [];
         that.specialKeys = [];
@@ -302,7 +302,7 @@ var InputHandler = function (wickEditor) {
             document.getElementById('tooltipGUI').style.display = 'block';
             document.getElementById('tooltipGUI').style.opacity = 0.0;
         });
-    }, 500);
+    }, 1500);
 
 /*************************
      File Import
@@ -376,26 +376,24 @@ var InputHandler = function (wickEditor) {
 
     var loadAudio = function (src, filename, callback) {
         var asset = new WickAsset(src, 'audio', filename);
-        var wickObj = new WickObject();
-        wickObj.assetUUID = wickEditor.project.library.addAsset(asset);
-        wickObj.isSound = true;
-        wickObj.width = 50;
-        wickObj.height = 50;
-        wickObj.name = filename;
+        var assetUUID = wickEditor.project.library.addAsset(asset);
+        wickEditor.syncInterfaces();
 
-        callback(wickObj);
+        /*var currentFrame = wickEditor.project.getCurrentFrame();
+        if(currentFrame) {
+            currentFrame.audioAssetUUID = assetUUID;
+        }*/
     }
 
     var loadUncompressedAudio = function (src, filename, callback) {
         var asset = new WickAsset(src, 'audio', filename, true);
-        var wickObj = new WickObject();
-        wickObj.assetUUID = wickEditor.project.library.addAsset(asset);
-        wickObj.isSound = true;
-        wickObj.width = 50;
-        wickObj.height = 50;
-        wickObj.name = filename;
+        var assetUUID = wickEditor.project.library.addAsset(asset);
+        wickEditor.syncInterfaces();
 
-        callback(wickObj);
+        /*var currentFrame = wickEditor.project.getCurrentFrame();
+        if(currentFrame) {
+            currentFrame.audioAssetUUID = assetUUID;
+        }*/
     }
 
     var loadJSON = function (json, filename, callback) {

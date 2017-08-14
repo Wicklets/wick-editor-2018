@@ -12,12 +12,14 @@ body {
 
 .thumbnails-container {
 	position: absolute;
-	left: 0%;
+	left: 50%;
 	top: 600px;
-	width: 100%;
+	width: 720px;
 	height: auto;
 	text-align: right;
 	padding-bottom: 100px;
+	padding-left: 80px;
+	transform: translateX(-50%);
 }
 
 .thumbnails-container-spacer {

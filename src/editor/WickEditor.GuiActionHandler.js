@@ -480,14 +480,8 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function(args) {
-            wickEditor.rightclickmenu.open = false;
-            that.keys = [];
-
-            polyfillClipboardData.setData('text/wickobjectsjson', wickEditor.project.getCopyData());
-
-            wickEditor.actionHandler.doAction('deleteObjects', { 
-                wickObjects:wickEditor.fabric.getSelectedObjects(WickObject) 
-            });
+            wickEditor.guiActionHandler.doAction('copy');
+            wickEditor.guiActionHandler.doAction('deleteSelectedObjects');
         });
 
     registerAction('paste',
@@ -515,6 +509,11 @@ var GuiActionHandler = function (wickEditor) {
                         if(obj.name) obj.name = obj.name + ' copy';
                         obj.getAllChildObjectsRecursive().forEach(function (child) {
                             child.uuid = random.uuid4();
+                            (child.layers||[]).forEach(function (layer) {
+                                layer.frames.forEach(function (frame) {
+                                    frame.uuid = random.uuid4();
+                                })
+                            });
                             //child.name = "";
                         });
                         obj.getAllFrames().forEach(function (frame) {
@@ -526,9 +525,16 @@ var GuiActionHandler = function (wickEditor) {
                     });
                 } else if (fileType === 'text/wickframesjson') {
                     var frames = WickFrame.fromJSONArray(JSON.parse(file));
+                    var firstPlayheadPosition = null;
+                    frames.forEach(function (frame) {
+                        if(!firstPlayheadPosition || frame.playheadPosition < firstPlayheadPosition) 
+                            firstPlayheadPosition = frame.playheadPosition;
+                    });
                     frames.forEach(function (frame) {
                         frame.uuid = random.uuid4();
                         if(frame.name) frame.name = frame.name + ' copy';
+                        frame.playheadPosition -= firstPlayheadPosition;
+                        frame.playheadPosition += wickEditor.project.getCurrentObject().playheadPosition;
 
                         frame.wickObjects.forEach(function (wickObject) {
                             wickObject.getAllChildObjectsRecursive().forEach(function (child) {
@@ -599,11 +605,12 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.guiActionHandler.doAction("openProjectSettings");
             wickEditor.paper.needsUpdate = true;
             wickEditor.thumbnailRenderer.renderAllThumbsOnTimeline();
+            wickEditor.project.currentObject.framesDirty = true;
             wickEditor.syncInterfaces();
         });
 
     registerAction('useTools.cursor',
-        [/*'C'*/],
+        ['C'],
         [],
         {},
         function(args) {
@@ -611,7 +618,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.pen',
-        [],
+        ['P'],
         [],
         {},
         function (args) {
@@ -619,7 +626,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.paintbrush',
-        [/*'B'*/],
+        ['B'],
         [],
         {},
         function(args) {
@@ -627,7 +634,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.line',
-        [],
+        ['L'],
         [],
         {},
         function(args) {
@@ -635,7 +642,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.eraser',
-        [],
+        ['E'],
         [],
         {},
         function(args) {
@@ -643,7 +650,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.fillbucket',
-        [/*'F'*/],
+        ['G'],
         [],
         {},
         function(args) {
@@ -651,7 +658,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.rectangle',
-        [/*'R'*/],
+        ['R'],
         [],
         {},
         function(args) {
@@ -659,7 +666,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.ellipse',
-        [/*'E'*/],
+        ['S'],
         [],
         {},
         function(args) {
@@ -667,7 +674,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.polygon',
-        [/*'E'*/],
+        ['O'],
         [],
         {},
         function(args) {
@@ -675,7 +682,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.dropper',
-        [/*'D'*/],
+        ['D'],
         [],
         {},
         function(args) {
@@ -683,7 +690,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.text',
-        [/*'T'*/],
+        ['T'],
         [],
         {},
         function(args) {
@@ -691,7 +698,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.zoom',
-        [/*'Z'*/],
+        ['Z'],
         [],
         {},
         function(args) {
@@ -1152,33 +1159,6 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.syncInterfaces();
         });
 
-    registerAction('createObjectFromAsset',
-        [],
-        [],
-        {},
-        function (args) {
-            var asset = wickEditor.library.getSelectedAsset();
-            var wickObj;
-
-            if(asset.type === 'image') {
-                wickObj = new WickObject();
-                wickObj.assetUUID = asset.uuid;
-                wickObj.isImage = true;
-            } else if(asset.type === 'audio') {
-                wickObj = new WickObject();
-                wickObj.assetUUID = asset.uuid;
-                wickObj.isSound = true;
-                wickObj.width = 50;
-                wickObj.height = 50;
-            }
-
-            if(!wickObj) return;
-            wickEditor.actionHandler.doAction('addObjects', {
-                wickObjects:[wickObj]
-            });
-
-        });
-
     registerAction('deleteAsset',
         [],
         [],
@@ -1197,6 +1177,47 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.actionHandler.doAction('renameAsset', {
                 asset: wickEditor.library.getSelectedAsset()
             });
+        });
+
+    registerAction('createObjectFromAsset',
+        [],
+        [],
+        {},
+        function (args) {
+            var asset = args.asset;
+
+            if(asset.type === 'image') {
+                var wickObj = new WickObject();
+                wickObj.assetUUID = asset.uuid;
+                wickObj.isImage = true;
+                wickObj.x = args.x;
+                wickObj.y = args.y;
+                wickEditor.actionHandler.doAction('addObjects', {
+                    wickObjects:[wickObj]
+                });
+            } else if(asset.type === 'audio') {
+                wickEditor.actionHandler.doAction('addSoundToFrame', {
+                    frame: wickEditor.project.getCurrentFrame(),
+                    asset: args.asset
+                });
+            }
+
+        });
+
+    registerAction('createSoundFromAsset',
+        [],
+        [],
+        {},
+        function (args) {
+            var asset = args.asset;
+
+            if(asset.type === 'audio') {
+                wickEditor.actionHandler.doAction('addSoundToFrame', {
+                    frame: args.frame,
+                    asset: args.asset
+                });
+            }
+
         });
 
 }

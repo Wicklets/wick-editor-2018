@@ -30,7 +30,7 @@ Tools.FillBucket = function (wickEditor) {
     }
 
     this.getTooltipName = function () {
-        return "Fill Bucket";
+        return "Fill Bucket (G)";
     }
 
     this.setup = function () {

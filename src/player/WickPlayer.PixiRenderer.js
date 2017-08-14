@@ -195,13 +195,12 @@ var WickPixiRenderer = function () {
             //wickObject.generateAlphaMask(pixiObject.texture.baseTexture.imageUrl);
 
         } else if (wickObject.pathData) {
-
             var parser = new DOMParser();
             var x = (wickObject.svgX || 0);
             var y = (wickObject.svgY || 0);
             if(!wickObject.svgStrokeWidth) wickObject.svgStrokeWidth = 0;
-            x -= wickObject.svgStrokeWidth/2
-            y -= wickObject.svgStrokeWidth/2
+            x -= wickObject.svgStrokeWidth/2;
+            y -= wickObject.svgStrokeWidth/2;
             var w = (wickObject.width  + wickObject.svgStrokeWidth*1);
             var h = (wickObject.height + wickObject.svgStrokeWidth*1);
             var svgDoc = parser.parseFromString('<svg id="svg" viewBox="'+x+' '+y+' '+w+' '+h+'" version="1.1" width="'+w+'" height="'+h+'" xmlns="http://www.w3.org/2000/svg">'+wickObject.pathData+'</svg>', "image/svg+xml");
@@ -343,8 +342,7 @@ var WickPixiRenderer = function () {
     }
 
     this.cleanup = function() {
-        return;
-
+        /*
         window.removeEventListener('resize', resizeCanvas);
 
         // Get rid of old canvas
@@ -365,6 +363,7 @@ var WickPixiRenderer = function () {
             //console.log(textureId)
             PIXI.utils.BaseTextureCache[textureId].destroy(true);
         }
+        */
     }
 
 };

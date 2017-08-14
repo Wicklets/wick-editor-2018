@@ -158,6 +158,8 @@ WickProject.fixForBackwardsCompatibility = function (project) {
 
         if(!wickObj.isSymbol) return
         wickObj.layers.forEach(function (layer) {
+            if(!layer.locked) layer.locked = false;
+            if(!layer.hidden) layer.hidden = false;
             layer.frames.forEach(function (frame) {
                 if(!frame.tweens) frame.tweens = [];
                 frame.tweens.forEach(function (tween) {
@@ -187,10 +189,7 @@ WickProject.fixForBackwardsCompatibility = function (project) {
                 wickObject.name = 'untitled';
             } else if(wickObject.audioData) {
                 var asset = new WickAsset(wickObject.imageData, 'audio', 'untitled');
-                wickObject.assetUUID = project.library.addAsset(asset);
-                wickObject.isSound = true;
-                wickObject.imageData = null;
-                wickObject.name = 'untitled';
+                var assetUUID = project.library.addAsset(asset);
             }
         })
     }
@@ -332,7 +331,7 @@ WickProject.prototype.getAllFrames = function () {
     var frames = [];
 
     var allObjectsInProject = this.getAllObjects();
-    allObjectsInProject.forEach(function (obj){
+    allObjectsInProject.forEach(function (obj) {
         frames = frames.concat(obj.getAllFrames());
     });
 
@@ -522,7 +521,7 @@ WickProject.prototype.hasSyntaxErrors = function () {
 
 WickProject.prototype.handleWickError = function (e, objectCausedError) {
 
-    if (window.parent.window.wickEditor) {
+    if (window.wickEditor) {
         //if(!wickEditor.builtinplayer.running) return;
 
         console.log("Exception thrown while running script of WickObject: " + this.name);
@@ -701,7 +700,6 @@ WickProject.prototype.loadBuiltinFunctions = function (contextObject) {
     window.gotoNextFrame  = function ()      { objectScope.gotoNextFrame(); }
     window.gotoPrevFrame  = function ()      { objectScope.gotoPrevFrame(); }
 
-    window.stopAllSounds = function () { wickPlayer.audioPlayer.stopAllSounds(); };
     window.keyIsDown      = function (keyString) { return wickPlayer.inputHandler.keyIsDown(keyString); };
     window.keyJustPressed = function (keyString) { return wickPlayer.inputHandler.keyJustPressed(keyString); }
     window.mouseX = wickPlayer.inputHandler.getMouse().x;
@@ -847,7 +845,10 @@ WickProject.prototype.getDuplicateName = function () {
               return a
             }, {})
 
-            var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1)
+            //var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1)
+            var duplicates = Object.keys(uniq).filter(function (a) {
+                return uniq[a] > 1;
+            });
 
             if(duplicates.length > 0) foundDuplicate = duplicates[0];
         });

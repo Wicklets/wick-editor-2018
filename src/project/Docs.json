@@ -270,10 +270,10 @@
           "return": null
         },
         {
-          "name": "playSound()",
-          "description": "Plays the sound of the object (works on sound objects only).",
-          "example": "this.playSound();",
-          "snippet": "this.playSound()",
+          "name": "inputValue",
+          "description": "The current content of a text box. Only usable by editable text boxes.",
+          "example": "playerName = textBox.inputValue;",
+          "snippet": "this.inputValue",
           "args": [],
           "return": null
         },
@@ -284,14 +284,6 @@
           "snippet": "this.play()",
           "return": null,
           "args": []
-        },
-        {
-          "name": "stopSound()",
-          "description": "Stops the sound of the object (works on sound objects only).",
-          "example": "this.stopSound();",
-          "snippet": "this.stopSound()",
-          "args": [],
-          "return": null
         },
         {
           "name": "stop()",

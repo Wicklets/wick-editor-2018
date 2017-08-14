@@ -98,6 +98,7 @@ var FabricInterface = function (wickEditor) {
 
         self.canvas.on('mouse:move', function (e) {
             self.objHoveredOver = e.target;
+            self.canvas.freeDrawingBrush.width = wickEditor.settings.brushThickness/this.getZoom();
         });
 
         self.canvas.on('mouse:up', function (e) {
@@ -129,7 +130,7 @@ var FabricInterface = function (wickEditor) {
         // Set drawing mode
         if(wickEditor.currentTool instanceof Tools.Paintbrush) {
             this.canvas.isDrawingMode = true;
-            this.canvas.freeDrawingBrush.width = wickEditor.settings.brushThickness;
+            //this.canvas.freeDrawingBrush.width = wickEditor.settings.brushThickness;
             this.canvas.freeDrawingBrush.color = wickEditor.settings.fillColor;
         } else if (wickEditor.currentTool instanceof Tools.Eraser) {
             this.canvas.isDrawingMode = true;
@@ -298,7 +299,7 @@ var FabricInterface = function (wickEditor) {
 
     this.selectObjectsHoveredOver = function () {
         if(self.objHoveredOver) {
-            console.log(self.objHoveredOver)
+            if(self.objHoveredOver.type === 'group')return;
             wickEditor.project.clearSelection();
             wickEditor.project.selectObject(self.objHoveredOver.wickObjReference);
             wickEditor.syncInterfaces();

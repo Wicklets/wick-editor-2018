@@ -9,7 +9,7 @@ $(document).ready(function() {
     });
 
     $.ajax({
-        url: "demos/Homepage.json",
+        url: "../demos/Homepage.json",
         type: 'GET',
         data: {},
         success: function(data) {
@@ -17,6 +17,7 @@ $(document).ready(function() {
             playerContainer.innerHTML = "";
             var iframe = document.createElement('iframe');
             iframe.className = 'player';
+            iframe.alt = "Wick: The Internet's free and open-source creation toolkit.";
             iframe.onload = function () {
                 iframe.contentWindow.runProject(JSON.stringify(data));
             }

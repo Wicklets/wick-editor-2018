@@ -31,7 +31,7 @@ Tools.Line = function (wickEditor) {
     }
 
     this.getTooltipName = function () {
-        return "Line";
+        return "Line (L)";
     }
 
     this.setup = function () {

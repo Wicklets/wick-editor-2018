@@ -30,7 +30,7 @@ Tools.Polygon = function (wickEditor) {
     }
 
     this.getTooltipName = function () {
-        return "Polygon";
+        return "Polygon (O)";
     }
 
     this.setup = function () {
@@ -119,9 +119,14 @@ Tools.Polygon = function (wickEditor) {
         wickEditor.paper.refreshSVGWickObject(path);
 
         if(path.closed) {
-            drawingPath = null;
-            currentSegment = null;
+            that.finishPath();
+            wickEditor.changeTool(wickEditor.tools.pen)
         }
+    }
+
+    this.finishPath = function () {
+        drawingPath = null;
+        currentSegment = null;
     }
 
 }

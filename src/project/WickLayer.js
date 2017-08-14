@@ -20,6 +20,8 @@ var WickLayer = function () {
     this.frames[0].playheadPosition = 0;
 
     this.identifier = "Layer 1"
+    this.locked = false;
+    this.hidden = false;
 
     this.parentWickObject = null; // The WickObject that this layer belongs to
 };
@@ -133,12 +135,15 @@ WickLayer.prototype.getLastFrame = function (playheadPosition) {
 
     if(!playheadPosition) playheadPosition = 0;
 
+    // Look backwards
     this.frames.forEach(function (frame) {
         if(!lastFrame) lastFrame = frame;
         if(frame.playheadPosition > lastFrame.playheadPosition && frame.playheadPosition < playheadPosition) {
             lastFrame = frame;
         }
     });
+
+    if(lastFrame.playheadPosition > playheadPosition) return null;
 
     return lastFrame;
 }

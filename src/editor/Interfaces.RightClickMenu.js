@@ -72,8 +72,7 @@ var RightClickMenuInterface = function (wickEditor) {
                 mouseEventHandler(e);
             });
             document.addEventListener('contextmenu', function (e) { 
-                console.log(e.target)
-                if(enabled && !textboxSelected(e)) event.preventDefault();
+                if(enabled && !textboxSelected(e)) e.preventDefault();
             }, false);
 
         }
@@ -185,21 +184,27 @@ var RightClickMenuInterface = function (wickEditor) {
         buttons.push(new RightClickMenuButtonGroup([
             new RightClickMenuButton(
                 "Copy", 
-                'url(./resources/pen.png)', 
+                'url(./resources/copy.svg)', 
                 function () { wickEditor.guiActionHandler.doAction("copy") }),
             ], function () {return !wickEditor.library.isSelected()}, false ));
         buttons.push(new RightClickMenuButtonGroup([
             new RightClickMenuButton(
-                "Paste", 
-                'url(./resources/unhide-layer.svg)', 
-                function () { wickEditor.guiActionHandler.doAction("paste") }),
+                "Cut", 
+                'url(./resources/cut.svg)', 
+                function () { wickEditor.guiActionHandler.doAction("cut") }),
             ], function () {return !wickEditor.library.isSelected()}, false ));
         buttons.push(new RightClickMenuButtonGroup([
+            new RightClickMenuButton(
+                "Paste", 
+                'url(./resources/paste.svg)', 
+                function () { wickEditor.guiActionHandler.doAction("paste") }),
+            ], function () {return !wickEditor.library.isSelected()}, false ));
+        /*buttons.push(new RightClickMenuButtonGroup([
             new RightClickMenuButton(
                 "Create Object from Asset", 
                 'url(./resources/inspector-duplicate.svg)', 
                 function () { wickEditor.guiActionHandler.doAction("createObjectFromAsset") }),
-            ], function () {return wickEditor.library.isSelected()}, true ));
+            ], function () {return wickEditor.library.isSelected()}, true ));*/
         buttons.push(new RightClickMenuButtonGroup([
             new RightClickMenuButton(
                 "Delete Asset", 

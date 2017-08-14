@@ -16,10 +16,12 @@
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
 
 TimelineInterface.Frame = function (wickEditor, timeline) {
-    var that = this;
+    var self = this;
 
     var selectionOverlayDiv = null;
     var thumbnailDiv = null;
+    var waveformDiv = null;
+    var hasScriptsIconDiv = null;
 
     this.wickFrame = null;
     this.wickLayer = null;
@@ -32,19 +34,19 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
 
         this.elem = document.createElement('div');
         this.elem.className = "frame";
-        this.elem.style.left = (that.wickFrame.playheadPosition * cssVar('--frame-width')) - 4 + 'px';
-        this.elem.style.top = (wickLayers.indexOf(that.wickLayer) * cssVar('--layer-height')) + 'px';
-        this.elem.style.width = (that.wickFrame.length * cssVar('--frame-width') - cssVar('--common-padding')/2) + 'px';
+        this.elem.style.left = (self.wickFrame.playheadPosition * cssVar('--frame-width')) - 4 + 'px';
+        this.elem.style.top = (wickLayers.indexOf(self.wickLayer) * cssVar('--layer-height')) + 'px';
+        this.elem.style.width = (self.wickFrame.length * cssVar('--frame-width') - cssVar('--common-padding')/2) + 'px';
         this.elem.style.height = cssVar('--layer-height')-cssVar('--common-padding')+'px'
-        this.elem.wickData = {wickFrame:that.wickFrame};
+        this.elem.wickData = {wickFrame:self.wickFrame};
         this.elem.addEventListener('mouseup', function (e) {
             /*wickEditor.actionHandler.doAction('movePlayhead', {
                 obj: wickEditor.project.currentObject,
-                newPlayheadPosition: that.wickFrame.playheadPosition,
-                newLayer: that.wickFrame.parentLayer
+                newPlayheadPosition: self.wickFrame.playheadPosition,
+                newLayer: self.wickFrame.parentLayer
             });
             wickEditor.project.clearSelection()
-            wickEditor.project.selectObject(that.wickFrame)
+            wickEditor.project.selectObject(self.wickFrame)
             timeline.framesContainer.update();*/
         });
         this.elem.addEventListener('mousedown', function (e) {
@@ -54,12 +56,12 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
 
             wickEditor.actionHandler.doAction('movePlayhead', {
                 obj: wickEditor.project.currentObject,
-                newPlayheadPosition: that.wickFrame.playheadPosition + Math.floor((e.offsetX+2) / cssVar('--frame-width')),
-                newLayer: that.wickFrame.parentLayer
+                newPlayheadPosition: self.wickFrame.playheadPosition + Math.floor((e.offsetX+2) / cssVar('--frame-width')),
+                newLayer: self.wickFrame.parentLayer
             });
-            if(!wickEditor.project.isObjectSelected(that.wickFrame)) {
-                wickEditor.project.clearSelection();
-                wickEditor.project.selectObject(that.wickFrame);
+            if(!wickEditor.project.isObjectSelected(self.wickFrame)) {
+                if(!e.shiftKey) wickEditor.project.clearSelection();
+                wickEditor.project.selectObject(self.wickFrame);
                 wickEditor.syncInterfaces();
             }
 
@@ -77,14 +79,22 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
         thumbnailDiv.className = "frame-thumbnail";
         this.elem.appendChild(thumbnailDiv);
 
+        waveformDiv = document.createElement('img');
+        waveformDiv.className = "frame-waveform";
+        this.elem.appendChild(waveformDiv);
+
         selectionOverlayDiv = document.createElement('div');
         selectionOverlayDiv.className = "selection-overlay";
         this.elem.appendChild(selectionOverlayDiv);
 
+        hasScriptsIconDiv = document.createElement('div');
+        hasScriptsIconDiv.className = "has-scripts-icon";
+        this.elem.appendChild(hasScriptsIconDiv);
+
         var extenderHandleRight = document.createElement('div');
         extenderHandleRight.className = "frame-extender-handle frame-extender-handle-right";
         extenderHandleRight.addEventListener('mousedown', function (e) {
-            timeline.interactions.start("dragFrameWidth", e, {frame:that});
+            timeline.interactions.start("dragFrameWidth", e, {frame:self});
             e.stopPropagation();
         });
         this.elem.appendChild(extenderHandleRight);
@@ -92,35 +102,85 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
 //        var extenderHandleLeft = document.createElement('div');
 //        extenderHandleLeft.className = "frame-extender-handle-left";
 //        extenderHandleLeft.addEventListener('mousedown', function (e) {
-//            timeline.interactions.start("dragFrameWidth", e, {frame:that});
+//            timeline.interactions.start("dragFrameWidth", e, {frame:self});
 //            e.stopPropagation();
 //        });
-//        that.elem.appendChild(extenderHandleLeft);
+//        self.elem.appendChild(extenderHandleLeft);
 
         tweens = [];
         this.wickFrame.tweens.forEach(function (wickTween) {
             var tween = new TimelineInterface.Tween(wickEditor, timeline);
             tween.wickTween = wickTween;
-            tween.wickFrame = that.wickFrame;
+            tween.wickFrame = self.wickFrame;
             tween.build();
-            that.elem.appendChild(tween.elem);
+            self.elem.appendChild(tween.elem);
             tweens.push(tween)
         });
     }
 
     this.update = function () {
-        var src = this.wickFrame.thumbnail;
-        if(this.wickFrame.tweens.length > 0) {
+        if(wickEditor.project.smallFramesMode) {
+            this.elem.style.borderRadius = '0px';
+        } else {
+            this.elem.style.borderRadius = '2px';
+        }
+
+        hasScriptsIconDiv.style.display = this.wickFrame.hasScript() ? 'block' : 'none';
+
+        if(this.wickFrame.audioAssetUUID) {
             thumbnailDiv.style.display = 'none';
-            this.elem.style.backgroundColor = '#e4eafb';
-        } else if(!src || wickEditor.project.smallFramesMode) {
-            thumbnailDiv.style.display = 'block';
-            thumbnailDiv.src = '/resources/whitepage.png';
-            this.elem.style.backgroundColor = wickEditor.project.backgroundColor;//'#FFF';
-        } else if(src) {
-            thumbnailDiv.style.display = 'block';
-            thumbnailDiv.src = src;
-            this.elem.style.backgroundColor = wickEditor.project.backgroundColor;//'#FFF';
+            waveformDiv.style.display = 'block';
+            if(this.wickFrame.audioAssetUUID) {
+                if(!this.wickFrame._soundDataForPreview) {
+                    self.wickFrame._soundDataForPreview = {};
+                    var canvas = document.createElement('canvas');
+                    canvas.width = 600;
+                    canvas.height = 40;
+                    var asset = wickEditor.project.library.getAsset(this.wickFrame.audioAssetUUID);
+                    var src = asset.getData();
+                    var scwf = new SCWF();
+                    scwf.generate(src, {
+                        onComplete: function(png, pixels) {
+                            self.wickFrame._soundDataForPreview.waveform = png;
+                        }
+                    });
+                    this.wickFrame._soundDataForPreview.howl = new Howl({
+                        src: [src],
+                        loop: false,
+                        volume: 1.0,
+                        onend:  function(id) { return;self.onSoundEnd(id); },
+                        onStop: function(id) { return;self.onSoundStop(id); },
+                        onPlay: function(id) { return;self.onSoundPlay(id); }
+                    });
+                    //self.wickFrame._soundDataForPreview.howl.play();
+                } else {
+                    waveformDiv.src = self.wickFrame._soundDataForPreview.waveform;
+                    var baseWidth = 600*(12.0/10.0);
+                    var waveformWidth = baseWidth;
+                    if(wickEditor.project.smallFramesMode) waveformWidth = waveformWidth*(14/60);
+                    waveformWidth = waveformWidth/(12.0/wickEditor.project.framerate);
+                    waveformWidth = waveformWidth * (self.wickFrame._soundDataForPreview.howl._sprite.__default[1]/1000.0)
+                    waveformDiv.style.width = waveformWidth + 'px';
+                }
+                this.elem.style.backgroundColor = '#FFF';
+            } else {
+                this.wickFrame._soundDataForPreview = null;
+            }
+        } else {
+            var src = this.wickFrame.thumbnail;
+            waveformDiv.style.display = 'none';
+            if(this.wickFrame.tweens.length > 0) {
+                thumbnailDiv.style.display = 'none';
+                this.elem.style.backgroundColor = '#e4eafb';
+            } else if(!src || wickEditor.project.smallFramesMode) {
+                thumbnailDiv.style.display = 'block';
+                thumbnailDiv.src = '/resources/whitepage.png';
+                this.elem.style.backgroundColor = '#FFF';
+            } else if(src) {
+                thumbnailDiv.style.display = 'block';
+                thumbnailDiv.src = src;
+                this.elem.style.backgroundColor = wickEditor.project.backgroundColor;//'#FFF';
+            }
         }
         
         if (wickEditor.project.isObjectSelected(this.wickFrame)) {

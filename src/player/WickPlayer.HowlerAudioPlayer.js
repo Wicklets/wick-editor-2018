@@ -27,19 +27,17 @@ var WickHowlerAudioPlayer = function (project) {
 
         muted = false;
 
-        var allObjects = project.rootObject.getAllChildObjectsRecursive();
+        var allFrames = project.getAllFrames();
 
-        allObjects.forEach(function (wickObject) {
-            if(!wickObject.isSound) return;
-            //console.log(wickObject); 
+        allFrames.forEach(function (wickFrame) {
+            if(!wickFrame.audioAssetUUID) return;
+            var asset = project.library.getAsset(wickFrame.audioAssetUUID);
+            var audioData = asset.getData();
 
-            var audioData = wickObject.asset.getData();
-            //if(wickObject.compressed) audioData = LZString.decompressFromBase64(audioData)
-
-            sounds[wickObject.uuid] = new Howl({
+            sounds[wickFrame.uuid] = new Howl({
                 src: [audioData],
-                loop: wickObject.loop,
-                volume: wickObject.volume,
+                loop: false,
+                volume: 1.0,
                 onend: function(id) { self.onSoundEnd(id); },
                 onStop: function(id) { self.onSoundStop(id); },
                 onPlay: function(id) { self.onSoundPlay(id); }
@@ -48,22 +46,21 @@ var WickHowlerAudioPlayer = function (project) {
 
     }
 
-    self.playSound = function (wickObject, loop, volume) {
+    self.playSound = function (wickFrame) {
         if(muted) return;
-        wickObject.currentHowlID = sounds[wickObject.uuid].play();
+        if(!sounds[wickFrame.uuid]) return;
+        wickFrame.currentHowlID = sounds[wickFrame.uuid].play();
     }
 
     // TODO : Do this only for playing sounds
     this.stopAllSounds = function () {
-        console.log(sounds);
         for (var sound in sounds) {
-            console.log(sound);
             sounds[sound].stop();
         }
     }
 
-    self.stopSound = function (wickObject) {
-        sounds[wickObject.uuid].stop();
+    self.stopSound = function (wickFrame) {
+        sounds[wickFrame.uuid].stop();
     }
 
     self.cleanup = function () {
