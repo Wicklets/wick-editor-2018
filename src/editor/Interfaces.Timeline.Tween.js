@@ -70,8 +70,8 @@ TimelineInterface.Tween = function (wickEditor, timeline) {
 
         var baseX = self.wickTween.playheadPosition*cssVar('--frame-width');
         var paddingX = cssVar('--frame-width')/2 - 10;
-        if(!timeline.interactions.getCurrent())
-            self.elem.style.left = baseX+paddingX+"px";
+        //if(!timeline.interactions.getCurrent())
+        self.elem.style.left = (baseX+paddingX)+"px";
 
         var baseY = 0;
         var paddingY = cssVar('--layer-height')/2 - 10 - 2;

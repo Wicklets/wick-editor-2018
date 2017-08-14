@@ -213,12 +213,21 @@ var MenuBarInterface = function (wickEditor) {
             }),
         ]);
 
-        addTab('About', [
-            new TabButton('Wickeditor.com', function () {
-                window.open('http://www.wickeditor.com/');
+        addTab('Help', [
+            new TabButton('Tutorials', function () {
+                window.open('http://www.wickeditor.com/#tutorials');
+            }),
+            new TabButton('Examples', function () {
+                window.open('http://www.wickeditor.com/#demos');
+            }),
+            new TabButton('Reference', function () {
+                window.open('http://www.wickeditor.com/#reference');
             }),
             new TabButton('Source code', function () {
                 window.open('https://www.github.com/zrispo/wick/');
+            }),
+            new TabButton('About Wick', function () {
+                window.open('http://www.wickeditor.com/#about');
             }),
             /*new TabSpacer(),
 

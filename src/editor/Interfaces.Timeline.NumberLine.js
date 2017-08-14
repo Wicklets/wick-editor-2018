@@ -83,7 +83,7 @@ TimelineInterface.NumberLine = function (wickEditor, timeline) {
 
         numbers = []
         bars = []
-        for(var i = 0; i < 50; i++) {
+        for(var i = 0; i < 70; i++) {
             var numberLineCell = document.createElement('div');
             numberLineCell.className = 'number-line-cell';
             numberLineCell.style.left = i*cssVar('--frame-width') +cssVar('--frames-cell-first-padding') + 'px'

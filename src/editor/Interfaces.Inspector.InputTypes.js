@@ -206,3 +206,20 @@ InspectorInterface.InspectorButton = function (args) {
     buttonsContainer.appendChild(elem);
 
 }
+
+InspectorInterface.Divider = function (args) {
+
+    var self = this;
+    self.isActiveFn = function () { return true; };
+    self.buttonAction = function () { return true; };
+
+    self.name = '';
+    self.icon = '';
+
+    self.updateViewValue = function () { return true; };
+
+    var elem = document.createElement('div');
+    elem.className = 'inspector-divider';
+    buttonsContainer.appendChild(elem);
+
+}

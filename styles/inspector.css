@@ -179,6 +179,12 @@
 	background-color: #C44D58;
 }
 
+.inspector-divider {
+	width: 100%;
+	height: 0px;
+	clear: left;
+}
+
 /***************************************************************/
 
 .inspector-button:hover {

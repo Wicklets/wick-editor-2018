@@ -267,6 +267,8 @@ var ScriptingIDEInterface = function (wickEditor) {
                     wickObjectType = 'text'
                 } else if(objectBeingScripted.isButton) {
                     wickObjectType = 'button'
+                } else if(objectBeingScripted.isGroup) {
+                    wickObjectType = 'group'
                 } else if(objectBeingScripted.isSymbol) {
                     wickObjectType = 'clip'
                 } else if(objectBeingScripted.isPath) {

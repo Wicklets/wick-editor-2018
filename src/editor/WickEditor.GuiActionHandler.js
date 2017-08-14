@@ -222,10 +222,7 @@ var GuiActionHandler = function (wickEditor) {
         {},
         function(args) {
             WickProject.Exporter.autosaveProject(wickEditor.project);
-            wickEditor.project.getAsJSON(function(JSONProject) {
-                var blob = new Blob([JSONProject], {type: "text/plain;charset=utf-8"});
-                saveAs(blob, wickEditor.project.name+".json");
-            }, '\t');
+            WickProject.Exporter.exportProject(wickEditor.project, {json:true});
         });
 
     // Export Project as .zip
@@ -847,13 +844,24 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('convertToButton',
-        ['Modifier', 'SHIFT', '8'],
+        [],
         [],
         {},
         function(args) {
             wickEditor.actionHandler.doAction('convertObjectsToSymbol', {
                 objects: wickEditor.fabric.getSelectedObjects(WickObject),
                 button: true
+            });
+        });
+
+    registerAction('convertToGroup',
+        ['Modifier', 'SHIFT', '8'],
+        [],
+        {},
+        function(args) {
+            wickEditor.actionHandler.doAction('convertObjectsToSymbol', {
+                objects: wickEditor.fabric.getSelectedObjects(WickObject),
+                group: true
             });
         });
 

@@ -66,7 +66,7 @@ TimelineInterface.FramesStrip = function (wickEditor, timeline) {
 
         framesStripCellContainer = document.createElement('span');
         framesStripCellContainer.className = 'frames-strip-cell-container';
-        for(var i = 0; i < 50; i++) {
+        for(var i = 0; i < 70; i++) {
             var framesStripCell = document.createElement('div');
             framesStripCell.className = 'frames-strip-cell';
             if(i===0){

@@ -411,6 +411,9 @@ var WickActionHandler = function (wickEditor) {
                 symbol.addPlayRange(new WickPlayRange(2,3,'mousedown'));
                 symbol.isButton = true;
             }
+            if(args.group) {
+                symbol.isGroup = true;
+            }
 
             // Remove objects from original parent (they are inside the symbol now.)
             objects.forEach(function (wickObject) {
@@ -422,6 +425,8 @@ var WickActionHandler = function (wickEditor) {
                 symbol.name = wickEditor.project.getNextAvailableName(args.symbolName);
             } else if(args.button) {
                 symbol.name = wickEditor.project.getNextAvailableName("New Button");
+            } else if(args.group) {
+                symbol.name = wickEditor.project.getNextAvailableName("New Group");
             } else {
                 symbol.name = wickEditor.project.getNextAvailableName("New Clip");
             }

@@ -362,51 +362,28 @@ TimelineInterface.Interactions = function (wickEditor, timeline) {
 
     interactions['dragTweens'] = {
         'start' : (function (e) {
-            interactionData.startX = e.clientX;
+            interactionData.tweenElemOrigX = parseInt(interactionData.tweens[0].elem.style.left);
+            interactionData.startX = e.x;
+            interactionData.moveX = 0;
         }), 
         'update' : (function (e) {
-            //if(e.movementX !== 0 || e.movementY !== 0) interactionData.moved = true;
+            interactionData.moveX = e.x - interactionData.startX;
 
-            var dx = e.clientX - interactionData.startX;
-            interactionData.startX = e.clientX;
-
-            if(dx !== 0 ) interactionData.moved = true;
-
-            interactionData.tweens.forEach(function (tween) {
-                var x = parseInt(tween.elem.style.left);
-                var y = parseInt(tween.elem.style.top);
-                tween.elem.style.left = x + e.movementX  + 'px';
-                //tween.elem.style.top = y + e.movementY + 'px';
-                tween.elem.style.zIndex = 10;
-            });
+            var tween = interactionData.tweens[0];
+            var newPos = roundToNearestN(interactionData.moveX, cssVar('--frame-width'));
+            newPos = parseInt(newPos);
+            tween.elem.style.left = interactionData.tweenElemOrigX+newPos + 'px';
+            tween.elem.style.opacity = 0.5;
         }),
         'finish' : (function (e) {
-            //if(!interactionData.moved) return;
-
-            //var framesMoveActionData = [];
-            interactionData.tweens.forEach(function (tween) {
-                /*if(!frame) return;
-                var newPlayheadPosition = Math.round(parseInt(frame.elem.style.left) / cssVar('--frame-width'));
-                var newLayerIndex       = Math.round(parseInt(frame.elem.style.top)  / cssVar('--layer-height'));
-                var newLayer = wickEditor.project.getCurrentObject().layers[newLayerIndex];
-                if(!newLayer) newLayer = wickEditor.project.getCurrentLayer();
-                */
-
-                wickEditor.actionHandler.doAction('moveMotionTween', {
-                    tween: tween.wickTween,
-                    newPlayheadPosition: Math.round((parseInt(tween.elem.style.left)-5) / cssVar('--frame-width'))
-                });
-                
-                /*framesMoveActionData.push({
-                    frame: frame.wickFrame, 
-                    newPlayheadPosition: newPlayheadPosition,
-                    newLayer: newLayer
-                });*/
+            var tween = interactionData.tweens[0];
+            tween.elem.style.opacity = 1.0;
+            
+            var newPlayheadPosition = Math.round((parseInt(tween.elem.style.left)) / cssVar('--frame-width'));
+            wickEditor.actionHandler.doAction('moveMotionTween', {
+                tween: tween.wickTween,
+                newPlayheadPosition: newPlayheadPosition
             });
-
-            /*wickEditor.actionHandler.doAction('moveFrames', {
-                framesMoveActionData: framesMoveActionData
-            });*/
 
         })
     }

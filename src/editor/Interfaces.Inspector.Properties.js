@@ -707,6 +707,8 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));*/
 
+    properties.push(new InspectorInterface.Divider());
+
     properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Unite Paths",
         icon: "./resources/inspector-unite.png",
@@ -772,8 +774,24 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     })); */
 
+    properties.push(new InspectorInterface.Divider());
+
     properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Convert to Clip",
+        tooltipTitle: "Group Objects",
+        icon: "./resources/group.svg",
+        colorClass: 'multiple',
+        isActiveFn: function () {
+            return selectionInfo.numObjects > 0 
+                && (selectionInfo.type === 'wickobject' || selectionInfo.type === 'multiple') 
+                && selectionInfo.dataType !== 'symbol';
+        },
+        buttonAction: function () {
+            wickEditor.guiActionHandler.doAction("convertToGroup");
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Create Clip from Objects",
         icon: "./resources/inspector-edit-timeline.svg",
         colorClass: 'multiple',
         isActiveFn: function () {
@@ -787,7 +805,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Convert to Button",
+        tooltipTitle: "Create Button from Objects",
         icon: "./resources/inspector-button.svg",
         colorClass: 'multiple',
         isActiveFn: function () {
@@ -800,6 +818,8 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
+    properties.push(new InspectorInterface.Divider());
+
     properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Edit Frames",
         icon: "./resources/inspector-edit-timeline.svg",
@@ -807,7 +827,23 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 
                 && selectionInfo.type === 'wickobject'
-                && selectionInfo.dataType === 'symbol';
+                && selectionInfo.dataType === 'symbol'
+                && (!selectionInfo.object.isGroup);
+        },
+        buttonAction: function () {
+            wickEditor.guiActionHandler.doAction("editObject")
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Edit Group",
+        icon: "./resources/group.svg",
+        colorClass: 'symbol',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 
+                && selectionInfo.type === 'wickobject'
+                && selectionInfo.dataType === 'symbol'
+                && selectionInfo.object.isGroup;
         },
         buttonAction: function () {
             wickEditor.guiActionHandler.doAction("editObject")
@@ -827,6 +863,8 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             wickEditor.guiActionHandler.doAction("breakApart")
         }
     }));
+
+    properties.push(new InspectorInterface.Divider());
 
     properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Create Motion Tween",
@@ -922,6 +960,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.InspectorButton({
+<<<<<<< Updated upstream
         tooltipTitle: "Delete PlayRange",
         icon: "./resources/inspector-delete.svg",
         colorClass: 'playranges',
@@ -936,10 +975,44 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
 
     properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Delete Tween",
+=======
+        tooltipTitle: "Create Motion Tween",
+        icon: "./resources/inspector-tween.svg",
+        colorClass: 'frames',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 
+                && selectionInfo.dataType === 'frame'
+                && !selectionInfo.object.getCurrentTween();
+        },
+        buttonAction: function () {
+            wickEditor.guiActionHandler.doAction('createMotionTween');
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Delete Motion Tween",
+        icon: "./resources/inspector-delete.svg",
+        colorClass: 'frames',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 
+                && selectionInfo.dataType === 'frame'
+                && selectionInfo.object.getCurrentTween();
+        },
+        buttonAction: function () {
+            wickEditor.guiActionHandler.doAction('deleteMotionTween');
+        }
+    }));
+
+    properties.push(new InspectorInterface.Divider());
+
+    properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Delete PlayRange",
+>>>>>>> Stashed changes
         icon: "./resources/inspector-delete.svg",
         colorClass: 'playranges',
         isActiveFn: function () {
-            return selectionInfo.type === 'tween';
+            return selectionInfo.numObjects > 0 
+                && selectionInfo.dataType === 'playrange';
         },
         buttonAction: function () {
             wickEditor.guiActionHandler.doAction("deleteSelectedObjects")

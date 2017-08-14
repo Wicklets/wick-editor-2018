@@ -194,6 +194,9 @@ var InspectorInterface = function (wickEditor) {
             if(selectionInfo.dataType === 'symbol' && selectionInfo.object.isButton) {
                 title = "Button"; 
                 image = "./resources/inspector-button.svg"
+            } else if(selectionInfo.dataType === 'symbol' && selectionInfo.object.isGroup) {
+                title = "Group"; 
+                image = "./resources/group.svg"
             } else if(selectionInfo.dataType === 'symbol' && !selectionInfo.object.isButton) {
                 title = "Clip"; 
                 image = "./resources/inspector-edit-timeline.svg"

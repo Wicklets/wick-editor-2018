@@ -58,6 +58,7 @@ var WickObject = function () {
 
     this.isSymbol = false;
     this.isButton = false;
+    this.isGroup = false;
 
     // Used to keep track of what frame is being edited
     this.playheadPosition = null;
@@ -263,6 +264,7 @@ WickObject.prototype.copy = function () {
     copiedObject.isText = this.isText;
     copiedObject.isSound = this.isSound;
     copiedObject.isButton = this.isButton;
+    copiedObject.isGroup = this.isGroup;
     copiedObject.cachedAbsolutePosition = this.getAbsolutePosition();
 
     copiedObject.textData = JSON.parse(JSON.stringify(this.textData));
@@ -1417,6 +1419,8 @@ WickObject.prototype.getTypeString = function (format) {
     var typeString = "";
 
     if(this.isButton) {
+        typeString = "button";
+    } else if(this.isGroup) {
         typeString = "button";
     } else if (this.isSymbol) {
         typeString = "clip";
