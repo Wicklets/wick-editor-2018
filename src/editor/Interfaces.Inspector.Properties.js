@@ -955,20 +955,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.InspectorButton({
-<<<<<<< Updated upstream
-        tooltipTitle: "Delete PlayRange",
-        icon: "./resources/inspector-delete.svg",
-        colorClass: 'playranges',
-        isActiveFn: function () {
-            return selectionInfo.numObjects > 0 
-                && selectionInfo.dataType === 'playrange';
-        },
-        buttonAction: function () {
-            wickEditor.guiActionHandler.doAction("deleteSelectedObjects")
-        }
-    }));
-
-    properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Create Motion Tween",
         icon: "./resources/inspector-tween.svg",
         colorClass: 'frames',
@@ -993,52 +979,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         },
         buttonAction: function () {
             wickEditor.guiActionHandler.doAction('deleteMotionTween');
-        }
-    }));
-
-    properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Delete Tween",
-=======
-        tooltipTitle: "Create Motion Tween",
-        icon: "./resources/inspector-tween.svg",
-        colorClass: 'frames',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 
-                && selectionInfo.dataType === 'frame'
-                && !selectionInfo.object.getCurrentTween();
-        },
-        buttonAction: function () {
-            wickEditor.guiActionHandler.doAction('createMotionTween');
-        }
-    }));
-
-    properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Delete Motion Tween",
-        icon: "./resources/inspector-delete.svg",
-        colorClass: 'frames',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 
-                && selectionInfo.dataType === 'frame'
-                && selectionInfo.object.getCurrentTween();
-        },
-        buttonAction: function () {
-            wickEditor.guiActionHandler.doAction('deleteMotionTween');
-        }
-    }));
-
-    properties.push(new InspectorInterface.Divider());
-
-    properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Delete PlayRange",
->>>>>>> Stashed changes
-        icon: "./resources/inspector-delete.svg",
-        colorClass: 'playranges',
-        isActiveFn: function () {
-            return selectionInfo.numObjects > 0 
-                && selectionInfo.dataType === 'playrange';
-        },
-        buttonAction: function () {
-            wickEditor.guiActionHandler.doAction("deleteSelectedObjects")
         }
     }));
 
