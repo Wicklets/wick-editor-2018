@@ -395,8 +395,8 @@ var WickActionHandler = function (wickEditor) {
                 obj._tempZIndex = wickEditor.project.getCurrentFrame().wickObjects.indexOf(obj);
             })
             objects.sort(function (a,b) {
-                return a._tempZIndex > b._tempZIndex;
-            })
+                return a._tempZIndex - b._tempZIndex;
+            });
 
             // Create symbol out of objects
             objects.forEach(function (obj) {
