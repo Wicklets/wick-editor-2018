@@ -29,7 +29,7 @@ var PreviewPlayer = function (wickEditor) {
 
     }
 
-    this.play = function () {
+    this.play = function (loop) {
         if(self.playing) return;
 
         self.playing = true;
@@ -60,28 +60,31 @@ var PreviewPlayer = function (wickEditor) {
         loopInterval = setInterval(function () {
             var currObj = wickEditor.project.getCurrentObject();
 
-            if(currObj.playheadPosition >= currObj.getTotalTimelineLength()-1) {
+            if(currObj.playheadPosition >= currObj.getTotalTimelineLength()) {
                 //wickEditor.project.getCurrentObject().playheadPosition -= 2;
-                self.stop();
-                currObj.playheadPosition = currObj.getTotalTimelineLength()-1;
-                wickEditor.project.applyTweens();
-                wickEditor.syncInterfaces();
-            } else {
-                wickEditor.timeline.getElem().framesContainer.playhead.update();
-                wickEditor.project.applyTweens();
-                window.rendererCanvas.style.display = 'block';
-                document.getElementById('fabricCanvas').style.display = 'none';
-                window.wickRenderer.render(wickEditor.project.rootObject.getAllActiveChildObjects());
-                //wickEditor.thumbnailRenderer.syncWithEditorState();
-                //wickEditor.syncInterfaces();
-                currObj.layers.forEach(function (wickLayer) {
-                    wickLayer.frames.forEach(function (wickFrame) {
-                        if(wickFrame._soundDataForPreview && wickFrame.playheadPosition === currObj.playheadPosition) 
-                            wickFrame._soundDataForPreview.howl.play()
-                    });
-                });
-                currObj.playheadPosition ++;
+                if(loop) {
+                    currObj.playheadPosition = 0;
+                } else {
+                    currObj.playheadPosition = currObj.getTotalTimelineLength()-1;
+                    self.stop();
+                    return;
+                }
             }
+
+            wickEditor.timeline.getElem().framesContainer.playhead.update();
+            wickEditor.project.applyTweens();
+            window.rendererCanvas.style.display = 'block';
+            document.getElementById('fabricCanvas').style.display = 'none';
+            window.wickRenderer.render(wickEditor.project.rootObject.getAllActiveChildObjects());
+            //wickEditor.thumbnailRenderer.syncWithEditorState();
+            //wickEditor.syncInterfaces();
+            currObj.layers.forEach(function (wickLayer) {
+                wickLayer.frames.forEach(function (wickFrame) {
+                    if(wickFrame._soundDataForPreview && wickFrame.playheadPosition === currObj.playheadPosition) 
+                        wickFrame._soundDataForPreview.howl.play()
+                });
+            });
+            currObj.playheadPosition ++;
             
         }, 1000/wickEditor.project.framerate);
     }
@@ -95,6 +98,7 @@ var PreviewPlayer = function (wickEditor) {
         self.playing = false;
 
         //wickEditor.project.rootObject.applyTweens();
+        wickEditor.project.applyTweens();
         wickEditor.syncInterfaces();
     }
 

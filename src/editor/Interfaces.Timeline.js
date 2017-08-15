@@ -141,9 +141,10 @@ TimelineInterface.Timeline = function (wickEditor) {
 
         var previewPlayButton = document.createElement('div');
         previewPlayButton.className = 'layer-tools-button play-preview-button tooltipElem';
-        previewPlayButton.setAttribute('alt', "Play Preview (Enter)");
+        previewPlayButton.setAttribute('alt', "Play Preview (Enter)<br/>(Shift+Click to loop)");
         previewPlayButton.addEventListener('mousedown', function (e) {
-            wickEditor.guiActionHandler.doAction('previewPlay');
+            console.log(e)
+            wickEditor.guiActionHandler.doAction('previewPlay', {loop:e.shiftKey});
         });
         this.elem.appendChild(previewPlayButton);
 

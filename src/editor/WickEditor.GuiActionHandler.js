@@ -97,7 +97,7 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function(args) {
-            wickEditor.previewplayer.play();
+            wickEditor.previewplayer.play(args.loop);
         });
 
     registerAction('previewPause',
