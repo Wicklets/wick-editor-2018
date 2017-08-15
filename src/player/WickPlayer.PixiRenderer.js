@@ -195,6 +195,9 @@ var WickPixiRenderer = function () {
             //wickObject.generateAlphaMask(pixiObject.texture.baseTexture.imageUrl);
 
         } else if (wickObject.pathData) {
+            wickObject.x = Math.floor(wickObject.x);
+            wickObject.y = Math.floor(wickObject.y);
+
             var parser = new DOMParser();
             var x = (wickObject.svgX || 0);
             var y = (wickObject.svgY || 0);
@@ -253,8 +256,8 @@ var WickPixiRenderer = function () {
 
         pixiObject.visible = true;
         pixiObject.anchor = new PIXI.Point(0.5, 0.5);
-        pixiObject.position.x = Math.round(wickObject.x);
-        pixiObject.position.y = Math.round(wickObject.y);
+        pixiObject.position.x = wickObject.x//Math.round(wickObject.x);
+        pixiObject.position.y = wickObject.y//Math.round(wickObject.y);
         pixiObject.rotation = wickObject.rotation/360*2*3.14159;
         pixiObject.scale.x = wickObject.scaleX;
         pixiObject.scale.y = wickObject.scaleY;

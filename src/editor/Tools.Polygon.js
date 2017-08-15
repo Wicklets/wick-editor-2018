@@ -48,6 +48,7 @@ Tools.Polygon = function (wickEditor) {
             newPath.fillColor = wickEditor.settings.fillColor;
             newPath.strokeColor = wickEditor.settings.strokeColor;
             newPath.strokeWidth = wickEditor.settings.strokeWidth;
+            newPath.strokeJoin = 'round';
             newPath.selected = true;
             newPath.add(event.point);
             //currentSegment = path.add(event.point);
