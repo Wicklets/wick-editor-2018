@@ -1,9 +1,0 @@
-{
-  "name": "wick-server",
-  "version": "0.0.1",
-  "description": "Hosts a Wick project and syncs up clients.",
-  "dependencies": {
-    "express": "4.10.2",
-    "socket.io": "1.2.0"
-  }
-}

@@ -40,7 +40,7 @@ TimelineInterface.FramesStrip = function (wickEditor, timeline) {
             if(wickEditor.project.getCurrentObject().layers[py].getFrameAtPlayheadPosition(px)) return;
             
             timeline.framesContainer.addFrameOverlay.elem.style.display = 'block';
-            timeline.framesContainer.addFrameOverlay.elem.style.left = roundToNearestN(e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2 - 9, cssVar('--frame-width')) + 10 + "px";
+            timeline.framesContainer.addFrameOverlay.elem.style.left = roundToNearestN(e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2 - 9, cssVar('--frame-width')) + "px";
             timeline.framesContainer.addFrameOverlay.elem.style.top  = roundToNearestN(e.clientY - timeline.framesContainer.elem.getBoundingClientRect().top  - cssVar('--layer-height')/2, cssVar('--layer-height')) + "px";
         });
         this.elem.addEventListener('mouseup', function (e) {

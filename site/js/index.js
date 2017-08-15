@@ -37,9 +37,9 @@ $(document).ready(function() {
         window.location.hash = "about"
     });
 
-    $( ".community-button" ).click(function() {
-        frame.src = "site/pages/community.html"
-        window.location.hash = "community"
+    $( ".updates-button" ).click(function() {
+        frame.src = "site/pages/updates.html"
+        window.location.hash = "updates"
     });
 
     $( ".logotop-bar-item" ).click(function() {

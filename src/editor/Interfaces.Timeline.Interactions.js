@@ -60,6 +60,13 @@ TimelineInterface.Interactions = function (wickEditor, timeline) {
     interactions['dragFrame'] = {
         'start' : (function (e) {
             interactionData.movedDistance = {x:0, y:0};
+
+            interactionData.frames.forEach(function (frame) {
+                frame.origX = parseInt(frame.elem.style.left);
+                frame.origY = parseInt(frame.elem.style.top);
+                frame.currentX = 0;
+                frame.currentY = 0;
+            });
         }), 
         'update' : (function (e) {
             if(e.movementX !== 0 || e.movementY !== 0) interactionData.moved = true;
@@ -72,11 +79,13 @@ TimelineInterface.Interactions = function (wickEditor, timeline) {
                 return;
             }
 
+            var frameWidth = cssVar('--frame-width');
+            var layerHeight = cssVar('--layer-height');
             interactionData.frames.forEach(function (frame) {
-                var frameX = parseInt(frame.elem.style.left);
-                var frameY = parseInt(frame.elem.style.top);
-                frame.elem.style.left = frameX + e.movementX + 'px';
-                frame.elem.style.top = frameY + e.movementY + 'px';
+                frame.currentX += e.movementX;
+                frame.currentY += e.movementY;
+                frame.elem.style.left = frame.origX + roundToNearestN(frame.currentX,frameWidth) + 'px';
+                frame.elem.style.top  = frame.origY + roundToNearestN(frame.currentY,layerHeight) + 'px';
                 frame.elem.style.zIndex = 10;
             });
         }),

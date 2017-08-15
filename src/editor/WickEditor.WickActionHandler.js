@@ -779,7 +779,7 @@ var WickActionHandler = function (wickEditor) {
                 moveFrameAction.undoAction();
             })
 
-            args.movePlayheadAction.undoAction();
+            if(args.movePlayheadAction) args.movePlayheadAction.undoAction();
 
             wickEditor.project.currentObject.framesDirty = true;
             done(args);
@@ -1159,7 +1159,8 @@ var WickActionHandler = function (wickEditor) {
                 args.createClipAction = wickEditor.actionHandler.doAction('convertObjectsToSymbol', {
                     objects: frame.wickObjects,
                     dontAddToStack: true,
-                    symbolName: 'Tweened Object'
+                    group: true,
+                    symbolName: 'Tweened Objects'
                 });
             }
             
