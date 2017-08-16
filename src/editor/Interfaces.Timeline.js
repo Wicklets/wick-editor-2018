@@ -143,7 +143,6 @@ TimelineInterface.Timeline = function (wickEditor) {
         previewPlayButton.className = 'layer-tools-button play-preview-button tooltipElem';
         previewPlayButton.setAttribute('alt', "Play Preview (Enter)<br/>(Shift+Click to loop)");
         previewPlayButton.addEventListener('mousedown', function (e) {
-            console.log(e)
             wickEditor.guiActionHandler.doAction('previewPlay', {loop:e.shiftKey});
         });
         this.elem.appendChild(previewPlayButton);

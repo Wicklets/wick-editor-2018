@@ -480,7 +480,7 @@ if (window.DeviceOrientationEvent) {
 
 var roundToNearestN = function (val, n, d) {
   if(d === undefined) d = 20;
-  return (Math.round(val/n)*n).toFixed(d);
+  return parseFloat((Math.round(val/n)*n).toFixed(d));
 }
 
 var roundToHundredths = function (val) {
@@ -4320,6 +4320,7 @@ var WickObject = function () {
 
     this.isSymbol = false;
     this.isButton = false;
+    this.isGroup = false;
 
     // Used to keep track of what frame is being edited
     this.playheadPosition = null;
@@ -4524,6 +4525,7 @@ WickObject.prototype.copy = function () {
     copiedObject.isPath = this.isPath;
     copiedObject.isText = this.isText;
     copiedObject.isButton = this.isButton;
+    copiedObject.isGroup = this.isGroup;
     copiedObject.cachedAbsolutePosition = this.getAbsolutePosition();
     copiedObject.svgStrokeWidth = this.svgStrokeWidth;
 
@@ -5673,6 +5675,8 @@ WickObject.prototype.getTypeString = function (format) {
 
     if(this.isButton) {
         typeString = "button";
+    } else if(this.isGroup) {
+        typeString = "button";
     } else if (this.isSymbol) {
         typeString = "clip";
     } else if (this.isImage) {
@@ -5833,6 +5837,10 @@ WickObject.prototype.tick = function () {
         (wickPlayer || wickEditor).project.runScript(this, 'mouseup');
         this._wasClickedOff = false;
     }
+
+    wickPlayer.inputHandler.getAllKeysJustReleased().forEach(function (key) {
+        (wickPlayer || wickEditor).project.runScript(self, 'keyreleased', key);
+    });
 
     wickPlayer.inputHandler.getAllKeysJustPressed().forEach(function (key) {
         (wickPlayer || wickEditor).project.runScript(self, 'keypressed', key);
@@ -6799,6 +6807,7 @@ var WickObjectBuiltins = [
     "mouseout",
     "keypressed",
     "keydown",
+    "keyreleased",
 ];
 
 WickProject.prototype.loadScriptOfObject = function (obj) {
@@ -6813,6 +6822,7 @@ WickProject.prototype.loadScriptOfObject = function (obj) {
         var mouseout = undefined;
         var keydown = undefined;
         var keypressed = undefined;
+        var keyreleased = undefined;
         obj._scopeWrapper = function () {
             var dummyLoaderScript = "";
             WickObjectBuiltins.forEach(function (builtinName) {
@@ -7327,7 +7337,7 @@ var WickPixiRenderer = function () {
         };
         renderer = PIXI.autoDetectRenderer(project.width*renderScale, project.height*renderScale, rendererOptions);
         renderer.clearBeforeRender = false;
-        renderer.roundPixels = true;//project.pixelPerfectRendering;
+        renderer.roundPixels = false;//project.pixelPerfectRendering;
         renderer.view.setAttribute('tabindex', 0);
         /*$(renderer.view).click(function() { this.focus(); });*/
 
@@ -7456,6 +7466,9 @@ var WickPixiRenderer = function () {
             //wickObject.generateAlphaMask(pixiObject.texture.baseTexture.imageUrl);
 
         } else if (wickObject.pathData) {
+            //wickObject.x = Math.floor(wickObject.x);
+            //wickObject.y = Math.floor(wickObject.y);
+
             var parser = new DOMParser();
             var x = (wickObject.svgX || 0);
             var y = (wickObject.svgY || 0);
@@ -7514,8 +7527,8 @@ var WickPixiRenderer = function () {
 
         pixiObject.visible = true;
         pixiObject.anchor = new PIXI.Point(0.5, 0.5);
-        pixiObject.position.x = Math.round(wickObject.x);
-        pixiObject.position.y = Math.round(wickObject.y);
+        pixiObject.position.x = wickObject.x//Math.round(wickObject.x);
+        pixiObject.position.y = wickObject.y//Math.round(wickObject.y);
         pixiObject.rotation = wickObject.rotation/360*2*3.14159;
         pixiObject.scale.x = wickObject.scaleX;
         pixiObject.scale.y = wickObject.scaleY;
@@ -7746,6 +7759,7 @@ WickPlayerInputHandler = function (wickPlayer) {
     var newMouse;
     var keys;
     var keysJustPressed; 
+    var keysJustReleased;
 
     var project;
 
@@ -7757,6 +7771,7 @@ WickPlayerInputHandler = function (wickPlayer) {
         mouse = null;
         keys = [];
         keysJustPressed = [];
+        keysJustReleased = [];
 
         project = wickPlayer.project;
 
@@ -7781,6 +7796,7 @@ WickPlayerInputHandler = function (wickPlayer) {
 
     self.update = function () {
         keysJustPressed = [];
+        keysJustReleased = [];
 
         lastMouse = mouse;
         if(newMouse) mouse = newMouse;
@@ -7825,6 +7841,10 @@ WickPlayerInputHandler = function (wickPlayer) {
         return keysJustPressed || [];
     }
 
+    self.getKeysJustReleased = function () {
+        return keysJustReleased || [];
+    }
+
     self.keyIsDown = function (keyString) {
         return self.getKeys()[keyCharToCode[keyString.toUpperCase()]];
     }
@@ -7851,6 +7871,20 @@ WickPlayerInputHandler = function (wickPlayer) {
         var keysDown = [];
 
         var _keys = self.getKeysJustPressed();
+        for(var i = 0; i < _keys.length; i++) {
+            if(_keys[i]) {
+                var c = codeToKeyChar[i];
+                keysDown.push(c);
+            }
+        }
+
+        return keysDown;
+    }
+
+    self.getAllKeysJustReleased = function () {
+        var keysDown = [];
+
+        var _keys = self.getKeysJustReleased();
         for(var i = 0; i < _keys.length; i++) {
             if(_keys[i]) {
                 var c = codeToKeyChar[i];
@@ -7950,6 +7984,8 @@ WickPlayerInputHandler = function (wickPlayer) {
 
     var onKeyUp = function (event) {
         event.preventDefault();
+
+        keysJustReleased[event.keyCode] = true;
         
         keys[event.keyCode] = false;
     }
@@ -8292,14 +8328,12 @@ var WickPlayer = function () {
     }
 
 
-
-
-
-///////////// DEPRACTAETION ZOOOOEN!!!!!!!!!!!!!!!!!!!!!!!
+///////////// DEPRECATED ZOOOOOONE!!!!!!!!!!!!!!!!!!!!!!!
 
     self.cloneObject = function (wickObj) {
         var clone = wickObj.copy();
         clone.isClone = true;
+        clone.asset = wickObj.asset;
 
         clone.prepareForPlayer()
 

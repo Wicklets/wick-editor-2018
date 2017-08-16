@@ -142,6 +142,9 @@ var MenuBarInterface = function (wickEditor) {
             new TabButton('Project settings', function () {
                 wickEditor.guiActionHandler.doAction("openProjectSettings");
             }),
+            new TabButton('Editor settings', function () {
+                wickEditor.guiActionHandler.doAction("openEditorSettings");
+            }),
         ]);
 
         addTab('Edit', [

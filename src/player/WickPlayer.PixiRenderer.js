@@ -195,8 +195,8 @@ var WickPixiRenderer = function () {
             //wickObject.generateAlphaMask(pixiObject.texture.baseTexture.imageUrl);
 
         } else if (wickObject.pathData) {
-            wickObject.x = Math.floor(wickObject.x);
-            wickObject.y = Math.floor(wickObject.y);
+            //wickObject.x = Math.floor(wickObject.x);
+            //wickObject.y = Math.floor(wickObject.y);
 
             var parser = new DOMParser();
             var x = (wickObject.svgX || 0);

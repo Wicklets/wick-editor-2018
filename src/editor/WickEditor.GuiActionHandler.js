@@ -1068,6 +1068,15 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.syncInterfaces();
         });
 
+    registerAction('openEditorSettings',
+        [],
+        [],
+        {},
+        function (args) {
+            wickEditor.editorSettings.open();
+            wickEditor.syncInterfaces();
+        });
+
     registerAction('toggleProjectSettings',
         [],
         [],

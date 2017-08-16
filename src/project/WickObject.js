@@ -1575,6 +1575,10 @@ WickObject.prototype.tick = function () {
         this._wasClickedOff = false;
     }
 
+    wickPlayer.inputHandler.getAllKeysJustReleased().forEach(function (key) {
+        (wickPlayer || wickEditor).project.runScript(self, 'keyreleased', key);
+    });
+
     wickPlayer.inputHandler.getAllKeysJustPressed().forEach(function (key) {
         (wickPlayer || wickEditor).project.runScript(self, 'keypressed', key);
     });

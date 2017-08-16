@@ -121,6 +121,14 @@
           "args": []
         },
         {
+          "name": "keyreleased",
+          "description": "Gets called once when a key is released.",
+          "example": "function keyreleased(key) {\n    if (key == 'z') {\n        //user is no longer pressing z\n    }\n}",
+          "snippet": "function keyreleased(key) {\n    // Do something here!\n}\n",
+          "return": null,
+          "args": []
+        },
+        {
           "name": "keydown",
           "description": "Gets called once every update while a key is down.",
           "example": "function keydown(key) {\n    if (key == 'UP') {\n        this.x += 20; //Move 20 pixels to the right\n    }\n}",

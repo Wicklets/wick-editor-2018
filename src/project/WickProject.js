@@ -742,6 +742,7 @@ var WickObjectBuiltins = [
     "mouseout",
     "keypressed",
     "keydown",
+    "keyreleased",
 ];
 
 WickProject.prototype.loadScriptOfObject = function (obj) {
@@ -756,6 +757,7 @@ WickProject.prototype.loadScriptOfObject = function (obj) {
         var mouseout = undefined;
         var keydown = undefined;
         var keypressed = undefined;
+        var keyreleased = undefined;
         obj._scopeWrapper = function () {
             var dummyLoaderScript = "";
             WickObjectBuiltins.forEach(function (builtinName) {

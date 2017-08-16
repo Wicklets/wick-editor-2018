@@ -25,6 +25,7 @@ WickPlayerInputHandler = function (wickPlayer) {
     var newMouse;
     var keys;
     var keysJustPressed; 
+    var keysJustReleased;
 
     var project;
 
@@ -36,6 +37,7 @@ WickPlayerInputHandler = function (wickPlayer) {
         mouse = null;
         keys = [];
         keysJustPressed = [];
+        keysJustReleased = [];
 
         project = wickPlayer.project;
 
@@ -60,6 +62,7 @@ WickPlayerInputHandler = function (wickPlayer) {
 
     self.update = function () {
         keysJustPressed = [];
+        keysJustReleased = [];
 
         lastMouse = mouse;
         if(newMouse) mouse = newMouse;
@@ -104,6 +107,10 @@ WickPlayerInputHandler = function (wickPlayer) {
         return keysJustPressed || [];
     }
 
+    self.getKeysJustReleased = function () {
+        return keysJustReleased || [];
+    }
+
     self.keyIsDown = function (keyString) {
         return self.getKeys()[keyCharToCode[keyString.toUpperCase()]];
     }
@@ -130,6 +137,20 @@ WickPlayerInputHandler = function (wickPlayer) {
         var keysDown = [];
 
         var _keys = self.getKeysJustPressed();
+        for(var i = 0; i < _keys.length; i++) {
+            if(_keys[i]) {
+                var c = codeToKeyChar[i];
+                keysDown.push(c);
+            }
+        }
+
+        return keysDown;
+    }
+
+    self.getAllKeysJustReleased = function () {
+        var keysDown = [];
+
+        var _keys = self.getKeysJustReleased();
         for(var i = 0; i < _keys.length; i++) {
             if(_keys[i]) {
                 var c = codeToKeyChar[i];
@@ -229,6 +250,8 @@ WickPlayerInputHandler = function (wickPlayer) {
 
     var onKeyUp = function (event) {
         event.preventDefault();
+
+        keysJustReleased[event.keyCode] = true;
         
         keys[event.keyCode] = false;
     }
