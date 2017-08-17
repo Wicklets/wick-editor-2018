@@ -575,7 +575,7 @@ var GuiActionHandler = function (wickEditor) {
                 return;
             }
 
-            localStorage.removeItem("wickProject");
+            //localStorage.removeItem("wickProject");
             
             var project = new WickProject();
             project.name = window.prompt("Enter a name for your new project:", "NewProject") || "NewProject";
@@ -595,8 +595,6 @@ var GuiActionHandler = function (wickEditor) {
             var project = args.project;
 
             wickEditor.project = project;
-            if(!args.dontAutosave)
-                WickProject.Exporter.autosaveProject(wickEditor.project);
 
             wickEditor.actionHandler.clearHistory();
             window.wickRenderer.setProject(wickEditor.project);
