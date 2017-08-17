@@ -396,16 +396,16 @@ var InputHandler = function (wickEditor) {
         }*/
     }
 
+    var loadPlaintext = function (text, filename, callback) {
+        loadJSON(text, filename, callback);
+    }
+
     var loadJSON = function (json, filename, callback) {
         var tempJsonObj = JSON.parse(json);
         if(tempJsonObj.rootObject) {
-
             wickEditor.guiActionHandler.doAction('openProject', {project:WickProject.fromJSON(json)})
-
         } else {
-
             callback(WickObject.fromJSON(json));
-
         }
     }
 
@@ -464,7 +464,8 @@ var InputHandler = function (wickEditor) {
             'audio/flac'       : loadAudio,
             'audio/x-flac'     : loadAudio,
             "audio/x-m4a"      : loadAudio,
-            "application/json" : loadJSON
+            "application/json" : loadJSON,
+            "text/plain"       : loadPlaintext
         }
         
         var fr = new FileReader();
@@ -488,7 +489,7 @@ var InputHandler = function (wickEditor) {
                 wickEditor.actionHandler.doAction('addObjects', {wickObjects:[newWickObject]});
             })
         };
-        if(fileType === "application/json" || fileType === "image/svg+xml") 
+        if(fileType === "application/json" || fileType === "image/svg+xml" || fileType === "text/plain") 
             fr.readAsText(file); 
         else 
             fr.readAsDataURL(file);
