@@ -27,6 +27,10 @@ WickPlayerInputHandler = function (wickPlayer) {
     var keysJustPressed; 
     var keysJustReleased;
 
+    var _cachedKeysDown;
+    var _cachedKeysJustPressed;
+    var _cachedKeysJustReleased;
+
     var project;
 
     var canvasContainer;
@@ -63,6 +67,10 @@ WickPlayerInputHandler = function (wickPlayer) {
     self.update = function () {
         keysJustPressed = [];
         keysJustReleased = [];
+
+        _cachedKeysDown = null;
+        _cachedKeysJustPressed = null;
+        _cachedKeysJustReleased = null;
 
         lastMouse = mouse;
         if(newMouse) mouse = newMouse;
@@ -120,45 +128,51 @@ WickPlayerInputHandler = function (wickPlayer) {
     }
 
     self.getAllKeysDown = function () {
-        var keysDown = [];
+        if(_cachedKeysDown) return _cachedKeysDown;
+
+        _cachedKeysDown = [];
 
         var _keys = self.getKeys();
         for(var i = 0; i < _keys.length; i++) {
             if(_keys[i]) {
                 var c = codeToKeyChar[i];
-                keysDown.push(c);
+                _cachedKeysDown.push(c);
             }
         }
 
-        return keysDown;
+        return _cachedKeysDown;
     }
 
     self.getAllKeysJustPressed = function () {
-        var keysDown = [];
+        if(_cachedKeysJustPressed) return _cachedKeysJustPressed;
+
+        _cachedKeysJustPressed = [];
 
         var _keys = self.getKeysJustPressed();
         for(var i = 0; i < _keys.length; i++) {
             if(_keys[i]) {
                 var c = codeToKeyChar[i];
-                keysDown.push(c);
+                _cachedKeysJustPressed.push(c);
             }
         }
 
-        return keysDown;
+        return _cachedKeysJustPressed;
     }
 
     self.getAllKeysJustReleased = function () {
-        var keysDown = [];
+        if(_cachedKeysJustReleased) return _cachedKeysJustReleased;
+
+        _cachedKeysJustReleased = [];
 
         var _keys = self.getKeysJustReleased();
         for(var i = 0; i < _keys.length; i++) {
             if(_keys[i]) {
                 var c = codeToKeyChar[i];
-                keysDown.push(c);
+                _cachedKeysJustReleased.push(c);
             }
         }
 
-        return keysDown;
+        return _cachedKeysJustReleased;
     }
 
     self.hideCursor = function () {
@@ -205,6 +219,12 @@ WickPlayerInputHandler = function (wickPlayer) {
             wickPlayer.enterFullscreen();
             wickPlayer.fullscreenRequested = false;
         }
+
+        var currFrame = project.getCurrentFrame();
+        if(currFrame) {
+            currFrame._wasClicked = true;
+            currFrame._beingClicked = true;
+        }
         
         var clickedObj;
         project.rootObject.getAllActiveChildObjectsRecursive(true).forEachBackwards(function(child) {
@@ -219,6 +239,12 @@ WickPlayerInputHandler = function (wickPlayer) {
     }
 
     var onMouseUp = function (evt) {
+        var currFrame = project.getCurrentFrame();
+        if(currFrame) {
+            currFrame._beingClicked = false;
+            currFrame._wasClickedOff = true;
+        }
+
         project.rootObject.getAllActiveChildObjectsRecursive(true).forEachBackwards(function(child) {
             child._beingClicked = false;
 
