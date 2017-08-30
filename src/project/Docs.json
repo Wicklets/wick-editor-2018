@@ -623,23 +623,6 @@
           "args": []
         },
         {
-          "name": "Math.abs(value)",
-          "description": "TODO: description",
-          "example": "TODO: example",
-          "snippet": "Math.abs(value)",
-          "return": {
-            "type": "Number",
-            "description": "TODO: description"
-          },
-          "args": [
-            {
-              "name": "value",
-              "type": "Number",
-              "description": "TODO: description"
-            }
-          ]
-        },
-        {
           "name": "alert(message)",
           "description": "Displays a popup window with the message given.",
           "example": "alert('Hello!!');",
