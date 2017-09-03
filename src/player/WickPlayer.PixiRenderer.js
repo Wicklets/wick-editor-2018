@@ -280,27 +280,6 @@ var WickPixiRenderer = function () {
         wickObject.height = pixiObject.height;
     }
 
-    self.requestFullscreen = function () {
-        wickPlayer.fullscreenRequested = true;
-    }
-
-    self.enterFullscreen = function () {
-        var elem;
-
-        if(window.self !== window.top) {
-            // Inside iframe
-            elem = window.frameElement;
-            console.log(elem)
-        } else {
-            // Not inside iframe
-            elem = self.rendererView;
-        }
-
-        if (screenfull.enabled) {
-            screenfull.request(elem);
-        }
-    }
-
     var resizeCanvas = function () {
 
         if(window.wickEditor) return;

@@ -710,7 +710,6 @@ WickProject.prototype.loadBuiltinFunctions = function (contextObject) {
     window.tiltY = getTiltY();
     window.hideCursor = function () { wickPlayer.hideCursor(); };
     window.showCursor = function () { wickPlayer.showCursor(); };
-    window.enterFullscreen = function () { wickPlayer.requestFullscreen(); }
 
     // WickObjects in same frame (scope) are accessable without using root./parent.
     if(objectScope) {

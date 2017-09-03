@@ -54,7 +54,6 @@ var PreviewPlayer = function (wickEditor) {
         if(currObj.playheadPosition >= currObj.getTotalTimelineLength()-1) {
             currObj.playheadPosition = 0;
         }
-        //wickEditor.thumbnailRenderer.syncWithEditorState();
         window.wickRenderer.render(wickEditor.project.rootObject.getAllActiveChildObjects());
 
         loopInterval = setInterval(function () {

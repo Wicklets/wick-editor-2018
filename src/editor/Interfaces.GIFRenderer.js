@@ -19,23 +19,17 @@ var GIFRendererInterface = function (wickEditor) {
 
 	var self = this;
 
-    var gifCanvas;
-    var gifRenderer;
-
     self.setup = function () {
-
-        /*gifCanvas = document.createElement('div');
-
-        gifRenderer = new WickPixiRenderer(wickEditor.project, gifCanvas, 1.0);
-        gifRenderer.setup();*/
 
     }
 
     self.syncWithEditorState = function () {
 
-    };
+    }
 
     self.renderProjectAsGIF = function (callback) {
+
+        return;
 
         gifRenderer = window.wickRenderer;
 

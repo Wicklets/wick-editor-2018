@@ -23,14 +23,7 @@ var ThumbnailRendererInterface = function (wickEditor) {
     var thumbRenderer;
 
     this.setup = function () {
-
-        /*thumbpreview = document.createElement('div')
-        thumbpreview.className = 'thumbnailPreview';
-        //document.body.appendChild(thumbpreview)
-
-        thumbRenderer = new WickPixiRenderer(wickEditor.project, thumbpreview, 0.2);
-        thumbRenderer.setup();*/
-
+        
     }
     
     this.syncWithEditorState = function () {

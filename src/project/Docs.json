@@ -341,14 +341,6 @@
       "name": "Display",
       "properties": [
         {
-          "name": "enterFullscreen()",
-          "description": "Makes the project fullscreen.",
-          "example": "enterFullscreen();",
-          "snippet": "enterFullscreen()",
-          "args": [],
-          "return": null
-        },
-        {
           "name": "hideCursor()",
           "description": "Makes the cursor invisible.",
           "example": "hideCursor();",
@@ -596,8 +588,7 @@
               "description": "The generated number will be less than or equal to max"
             }
           ]
-        },
-        {
+        }, {
           "name": "elapsedSeconds()",
           "description": "Returns the number of seconds since the project was started.",
           "example": "// Add this to a text object\nfunction update () {\n    this.setText(elapsedSeconds()); \n}",
@@ -612,14 +603,6 @@
           "snippet": "elapsedMilliseconds()",
           "return": { "type": "Number",
                       "description": "The number of milliseconds since the project was started." },
-          "args": []
-        }, {
-          "name": "elapsedTicks()",
-          "description": "Returns the number of frames since the project was started.",
-          "example": "// Add this to a text object\nfunction update () {\n    this.setText(elapsedTicks()); \n}",
-          "snippet": "elapsedTicks()",
-          "return": { "type": "Number",
-                      "description": "The number of frames since the project was started." },
           "args": []
         },
         {

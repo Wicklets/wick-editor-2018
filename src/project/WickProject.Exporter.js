@@ -32,10 +32,8 @@ WickProject.Exporter = (function () {
 
         // All libs needed by the player. 
         var requiredLibFiles = [
-            /*"lib/jquery.min.js",*/
-            "lib/pixi.4.2.2.min.js",
+            "lib/two.min.js",
             "lib/lz-string.min.js",
-            "lib/screenfull.js",
             "lib/polyfills.js",
             "lib/keyCharToCode.js",
             "lib/fpscounter.js",
@@ -44,8 +42,7 @@ WickProject.Exporter = (function () {
             "lib/canvasutils.js",
             "lib/random.js",
             "lib/SAT.js",
-            "lib/jquery.min.js", 
-            /*"lib/socket.io-1.2.0.js",*/
+            "lib/jquery.min.js",
             "lib/Tween.js",
             "lib/lerp.js",
             "lib/bowser.js",
@@ -61,7 +58,7 @@ WickProject.Exporter = (function () {
             "src/project/WickProject.AssetLibrary.js",
             "src/project/WickProject.Compressor.js",
             "src/player/WickPlayer.Preloader.js",
-            "src/player/WickPlayer.PixiRenderer.js",
+            "src/player/WickPlayer.TwoRenderer.js",
             "src/player/WickPlayer.HowlerAudioPlayer.js",
             "src/player/WickPlayer.InputHandler.js",
             "src/player/WickPlayer.HTMLElemInjector.js",

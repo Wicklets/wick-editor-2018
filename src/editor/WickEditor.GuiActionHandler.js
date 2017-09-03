@@ -597,7 +597,6 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.project = project;
 
             wickEditor.actionHandler.clearHistory();
-            window.wickRenderer.setProject(wickEditor.project);
 
             wickEditor.fabric.recenterCanvas();
             wickEditor.guiActionHandler.doAction("openProjectSettings");

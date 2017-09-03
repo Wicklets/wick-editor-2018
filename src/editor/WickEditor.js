@@ -111,17 +111,6 @@ var WickEditor = function () {
     // Setup inputhandler
     this.inputHandler = new InputHandler(this);
 
-    // Setup renderer
-    window.rendererCanvas = document.getElementById('previewRenderContainer');//document.getElementById('builtinPlayer');
-    window.rendererCanvas.style.display = 'none';
-    if(!window.wickRenderer) {
-        window.wickRenderer = new WickPixiRenderer();
-        window.wickRenderer.setProject(self.project);
-        window.wickRenderer.setup();
-
-        self.thumbnailRenderer.renderAllThumbsOnTimeline();
-    }
-
     self.syncInterfaces();
 
     // This is put after the first sync so the page loads before the editor asks to load an autosaved project
