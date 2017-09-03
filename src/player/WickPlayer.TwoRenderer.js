@@ -19,16 +19,33 @@ var WickTwoRenderer = function (canvasContainer, wickProject) {
 
     var self = this;
 
-    self.canvas = null;
-
     self.setup = function () {
-        console.log('WickTwoRenderer setup')
-        // Create canvas
-        // Load wickobjects
+        var two = new Two({
+            type: Two.Types.webgl,
+            fullscreen: true,
+            autostart: true
+        }).appendTo(canvasContainer);
+
+        var ball = two.makeCircle(two.width / 2, two.height / 2, 50);
+        ball.noStroke().fill = 'white';
+
+        wickProject.getAllObjects().forEach(function (wickObject) {
+            if(!wickObject.pathData) return;
+
+            var svgcontainer = document.createElement('div');
+            svgcontainer.innerHTML = wickObject.pathData;
+            var shape = two.interpret(svgcontainer.children[0]).center();
+
+            shape.fill = 'white';
+            shape.visible = true;
+            //shape.noStroke();
+            shape.stroke = 'orangered'; // Accepts all valid css color
+            shape.linewidth = 1;
+            shape.translation.set(wickObject.x, wickObject.y);
+        });
     }
 
     self.render = function () {
-        console.log('WickTwoRenderer update');
         // Update transforms of all wick objects
         // Render all wickobjects (update canvas)
     }

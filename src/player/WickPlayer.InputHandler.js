@@ -192,7 +192,7 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
 
     var onMouseDown = function (evt) {
 
-        document.getElementById('rendererCanvas').focus();
+        canvasContainer.children[0].focus();
         
         var clickedObj;
         wickProject.rootObject.getAllActiveChildObjectsRecursive(true).forEachBackwards(function(child) {
@@ -282,12 +282,6 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
             mouseY -= canvasBoundingClientRect.top;
         }
 
-        mouseX -= window.wickRenderer.canvasTranslate.x;
-        mouseY -= window.wickRenderer.canvasTranslate.y;
-
-        mouseX /=  window.wickRenderer.canvasScale;
-        mouseY /=  window.wickRenderer.canvasScale;
-
         var centeredCanvasOffsetX = (window.innerWidth  - wickProject.width) / 2;
         var centeredCanvasOffsetY = (window.innerHeight - wickProject.height) / 2;
 
@@ -314,12 +308,6 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
             touchX -= canvasBoundingClientRect.left;
             touchY -= canvasBoundingClientRect.top;
         }
-
-        touchX -= window.wickRenderer.canvasTranslate.x;
-        touchY -= window.wickRenderer.canvasTranslate.y;
-
-        touchX /=  window.wickRenderer.canvasScale;
-        touchY /=  window.wickRenderer.canvasScale;
 
         var centeredCanvasOffsetX = (window.innerWidth - wickProject.width) / 2;
         var centeredCanvasOffsetY = (window.innerHeight - wickProject.height) / 2;
