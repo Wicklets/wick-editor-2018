@@ -32,7 +32,7 @@ WickProject.Exporter = (function () {
 
         // All libs needed by the player. 
         var requiredLibFiles = [
-            "lib/two.min.js",
+            "lib/two.js",
             "lib/lz-string.min.js",
             "lib/polyfills.js",
             "lib/keyCharToCode.js",
