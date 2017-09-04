@@ -43,17 +43,23 @@ var WickTwoRenderer = function (canvasContainer, wickProject) {
 
             // quick hack to ignore empty svgs
             if(svgcontainer.children[0].innerHTML === '<path d=""></path>') return;
-
             var shape = two.interpret(svgcontainer.children[0]).center();
-            var svg = svgcontainer.children[0];
-            var absPos = wickObject.getAbsolutePosition();
+            
+            var absTransforms = wickObject.getAbsoluteTransformations();
+            shape._matrix.manual = true;
+            shape._matrix
+                .identity()
+                .translate(absTransforms.position.x, absTransforms.position.y)
+                .rotate(absTransforms.rotation)
+                .scale(absTransforms.scale.x, absTransforms.scale.y);
 
+            var svg = svgcontainer.children[0];
+            shape.visible = false;
             shape.fill = hexToRgbA(svg.getAttribute('fill'), svg.getAttribute('fill-opacity') || 1);
             shape.stroke = hexToRgbA(svg.getAttribute('stroke'), svg.getAttribute('stroke-opacity') || 1);
-            shape.visible = false;
             shape.linewidth = parseInt(svg.getAttribute('stroke-width'));
-            shape.translation.set(absPos.x, absPos.y);
-            shape.opacity = wickObject.opacity;//need to use abs opacity
+            shape.opacity = absTransforms.opacity;
+
             shapes[wickObject.uuid] = shape;
         });
     }
@@ -83,6 +89,12 @@ var WickTwoRenderer = function (canvasContainer, wickProject) {
         var shape = shapes[wickObject.uuid];
         if(shape) {
             shape.visible = true;
+            /*shape.children.forEach(function (child) {
+                child.vertices.forEach(function (v) {
+                    v.x += Math.random()-.5
+                    v.y += Math.random()-.5
+                });
+            })*/
         }
 
         wickObject.getAllActiveChildObjects().forEach(function (child) {

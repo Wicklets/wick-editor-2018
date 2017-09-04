@@ -974,6 +974,10 @@ WickObject.prototype.removeChild = function (childToRemove) {
     });
 }
 
+WickObject.prototype.getZIndex = function () {
+    return this.parentFrame.wickObjects.indexOf(this);
+}
+
 /* Get the absolute position of this object (the position not relative to the parents) */
 WickObject.prototype.getAbsolutePosition = function () {
     if(this.isRoot) {
@@ -991,10 +995,6 @@ WickObject.prototype.getAbsolutePosition = function () {
             y: this.y + parentPosition.y
         };
     }
-}
-
-WickObject.prototype.getZIndex = function () {
-    return this.parentFrame.wickObjects.indexOf(this);
 }
 
 /* Get the absolute position of this object taking into account the scale of the parent */
@@ -1040,6 +1040,24 @@ WickObject.prototype.getAbsoluteRotation = function () {
     } else {
         var parentRotation = this.parentObject.getAbsoluteRotation();
         return this.rotation + parentRotation;
+    }
+}
+
+WickObject.prototype.getAbsoluteOpacity = function () {
+    if(this.isRoot) {
+        return this.opacity;
+    } else {
+        var parentOpacity = this.parentObject.getAbsoluteOpacity();
+        return this.opacity * parentOpacity;
+    }
+}
+
+WickObject.prototype.getAbsoluteTransformations = function () {
+    return {
+        position: this.getAbsolutePosition(),
+        scale: this.getAbsoluteScale(),
+        rotation: this.getAbsoluteRotation(),
+        opacity: this.getAbsoluteOpacity(),
     }
 }
 
