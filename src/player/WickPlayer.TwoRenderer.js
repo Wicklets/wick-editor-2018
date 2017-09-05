@@ -67,15 +67,44 @@ var WickTwoRenderer = function (canvasContainer) {
 
         // load all wickobjects into two
         currentProject.getAllObjects().forEach(function (wickObject) {
-            if(!wickObject.pathData) return;
+            var shape;
 
-            var svgcontainer = document.createElement('div');
-            svgcontainer.innerHTML = wickObject.pathData;
+            if(wickObject.pathData) {
+                var svgcontainer = document.createElement('div');
+                svgcontainer.innerHTML = wickObject.pathData;
 
-            // quick hack to ignore empty svgs
-            if(svgcontainer.children[0].innerHTML === '<path d=""></path>') return;
-            var shape = two.interpret(svgcontainer.children[0]).center();
-            
+                // quick hack to ignore empty svgs
+                if(svgcontainer.children[0].innerHTML === '<path d=""></path>') return;
+                shape = two.interpret(svgcontainer.children[0]).center();
+
+                var svg = svgcontainer.children[0];
+                shape.visible = false;
+                shape.fill = hexToRgbA(svg.getAttribute('fill'), svg.getAttribute('fill-opacity') || 1);
+                shape.stroke = hexToRgbA(svg.getAttribute('stroke'), svg.getAttribute('stroke-opacity') || 1);
+                shape.linewidth = parseInt(svg.getAttribute('stroke-width'));
+            } else if (wickObject.textData) {
+                var styles = {
+                    family: wickObject.textData.fontFamily,
+                    size: wickObject.textData.fontSize,
+                    leading: 0,
+                    weight: wickObject.textData.fontWeight === 'normal' ? 400 : 900,
+                };
+                shape = two.makeText(wickObject.textData.text, 0, 0, styles);
+                shape.fill = wickObject.textData.fill;
+            }  else if (wickObject.asset && wickObject.asset.type === 'image') {
+                //pixiObject = PIXI.Sprite.fromImage(wickObject.asset.getData());
+
+                shape = two.makeRectangle(0, 0, wickObject.width, wickObject.height);
+                var texture = new Two.Texture(wickObject.asset.getData())
+
+                // Textures fill as patterns on any Two.Path
+                shape.fill = texture;
+                shape.stroke = 'rgba(0,0,0,0)';
+                texture.scale = 1.0;
+            }
+
+            if(!shape) return;
+
             var absTransforms = wickObject.getAbsoluteTransformations();
             shape._matrix.manual = true;
             shape._matrix
@@ -83,12 +112,6 @@ var WickTwoRenderer = function (canvasContainer) {
                 .translate(absTransforms.position.x, absTransforms.position.y)
                 .rotate(absTransforms.rotation)
                 .scale(absTransforms.scale.x, absTransforms.scale.y);
-
-            var svg = svgcontainer.children[0];
-            shape.visible = false;
-            shape.fill = hexToRgbA(svg.getAttribute('fill'), svg.getAttribute('fill-opacity') || 1);
-            shape.stroke = hexToRgbA(svg.getAttribute('stroke'), svg.getAttribute('stroke-opacity') || 1);
-            shape.linewidth = parseInt(svg.getAttribute('stroke-width'));
             shape.opacity = absTransforms.opacity;
 
             shapes[wickObject.uuid] = shape;
