@@ -20,9 +20,10 @@ var WickTwoRenderer = function (canvasContainer) {
     var self = this;
 
     var two = two = new Two({
-        type: Two.Types.svg,
+        type: Two.Types.webgl,
         fullscreen: true,
-        autostart: true
+        autostart: true,
+        ratio: 2,
     }).appendTo(canvasContainer);
 
     var shapes = {};
@@ -131,6 +132,8 @@ var WickTwoRenderer = function (canvasContainer) {
                 .translate(absTransforms.position.x, absTransforms.position.y)
                 .rotate(absTransforms.rotation/57.2958)
                 .scale(absTransforms.scale.x, absTransforms.scale.y);
+            if(absTransforms.opacity === 0) absTransforms.opacity = 0.01; // WTF???
+            shape.opacity = absTransforms.opacity;
         }
 
         wickObject.getAllActiveChildObjects().forEach(function (child) {
