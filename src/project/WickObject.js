@@ -1054,7 +1054,7 @@ WickObject.prototype.getAbsoluteOpacity = function () {
 
 WickObject.prototype.getAbsoluteTransformations = function () {
     return {
-        position: this.getAbsolutePosition(),
+        position: this.getAbsolutePositionTransformed(),
         scale: this.getAbsoluteScale(),
         rotation: this.getAbsoluteRotation(),
         opacity: this.getAbsoluteOpacity(),

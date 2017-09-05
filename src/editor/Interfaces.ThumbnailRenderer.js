@@ -33,29 +33,32 @@ var ThumbnailRendererInterface = function (wickEditor) {
     }
 
     self.renderThumbnailForFrame = function (wickFrame) {
-
         if(!wickFrame) return;
 
         self.canvasContainer.style.width = wickEditor.project.width+'px';
         self.canvasContainer.style.height = wickEditor.project.height+'px';
 
-        self.renderer.render(wickEditor.project, wickFrame.wickObjects);
+        //self.renderer.render(wickEditor.project, wickFrame.wickObjects);
 
-        setTimeout(function () {
-            var svg = self.canvasContainer.children[0];
-            svgAsDataUri(svg, {}, function(uri) {
-                wickFrame.thumbnail = uri;
-                wickEditor.timeline.syncWithEditorState();
-            });
-        }, 50);
+        //var svg = self.canvasContainer.children[0];
+        
+        // SO SLOW >:(
+        /*svgAsDataUri(svg, {}, function(uri) {
+            wickFrame.thumbnail = uri;
+            wickEditor.timeline.syncWithEditorState();
+        });*/
+        /*html2canvas(svg, {
+            onrendered: function(canvas) {
+                theCanvas = canvas;
+                document.body.appendChild(canvas);
+            }
+        });*/
     }
 
     self.renderAllThumbsOnTimeline = function () {
         var allFrames = wickEditor.project.currentObject.getAllFrames();
         allFrames.forEach(function (frame) {
-            setTimeout(function () {
-                self.renderThumbnailForFrame(frame);
-            }, allFrames.indexOf(frame)*200+1000);
+            self.renderThumbnailForFrame(frame);
         });
     }
 

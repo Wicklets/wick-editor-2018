@@ -75,7 +75,13 @@ var WickTwoRenderer = function (canvasContainer) {
 
                 // quick hack to ignore empty svgs
                 if(svgcontainer.children[0].innerHTML === '<path d=""></path>') return;
-                shape = two.interpret(svgcontainer.children[0]).center();
+                shape = two.interpret(svgcontainer.children[0])//.corner();
+                shape.children.forEach(function (child) {
+                    child.vertices.forEach(function (v) {
+                        v.x -= (wickObject.svgX||0) + wickObject.width/2
+                        v.y -= (wickObject.svgY||0) + wickObject.height/2
+                    });
+                })
 
                 var svg = svgcontainer.children[0];
                 shape.visible = false;
@@ -92,12 +98,9 @@ var WickTwoRenderer = function (canvasContainer) {
                 shape = two.makeText(wickObject.textData.text, 0, 0, styles);
                 shape.fill = wickObject.textData.fill;
             }  else if (wickObject.asset && wickObject.asset.type === 'image') {
-                //pixiObject = PIXI.Sprite.fromImage(wickObject.asset.getData());
-
                 shape = two.makeRectangle(0, 0, wickObject.width, wickObject.height);
                 var texture = new Two.Texture(wickObject.asset.getData())
 
-                // Textures fill as patterns on any Two.Path
                 shape.fill = texture;
                 shape.stroke = 'rgba(0,0,0,0)';
                 texture.scale = 1.0;
@@ -110,7 +113,7 @@ var WickTwoRenderer = function (canvasContainer) {
             shape._matrix
                 .identity()
                 .translate(absTransforms.position.x, absTransforms.position.y)
-                .rotate(absTransforms.rotation)
+                .rotate(absTransforms.rotation/57.2958)
                 .scale(absTransforms.scale.x, absTransforms.scale.y);
             shape.opacity = absTransforms.opacity;
 
@@ -121,7 +124,13 @@ var WickTwoRenderer = function (canvasContainer) {
     var renderWickObject = function (wickObject) {
         var shape = shapes[wickObject.uuid];
         if(shape) {
+            var absTransforms = wickObject.getAbsoluteTransformations();
             shape.visible = true;
+            shape._matrix
+                .identity()
+                .translate(absTransforms.position.x, absTransforms.position.y)
+                .rotate(absTransforms.rotation/57.2958)
+                .scale(absTransforms.scale.x, absTransforms.scale.y);
         }
 
         wickObject.getAllActiveChildObjects().forEach(function (child) {

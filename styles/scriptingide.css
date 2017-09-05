@@ -1,8 +1,8 @@
 #scriptingGUI {
     bottom: 0px;
-    left: 34px;
+    left: 40px;
     text-align: center;
-    width: calc(100% - 284px);
+    width: calc(100% - 289px);
     height: 300px;
     z-index: 4;
 }
