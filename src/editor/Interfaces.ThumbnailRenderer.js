@@ -19,62 +19,42 @@ var ThumbnailRendererInterface = function (wickEditor) {
 
     var self = this;
 
-    var thumbpreview;
-    var thumbRenderer;
-
-    this.setup = function () {
-        
+    self.setup = function () {
+        self.canvasContainer = document.createElement('div');
+        self.canvasContainer.style.position = 'absolute';
+        self.canvasContainer.style.left = '0px';
+        self.canvasContainer.style.top = '0px';
+        self.renderer = new WickTwoRenderer(self.canvasContainer);
+        self.renderer.setup();
     }
     
-    this.syncWithEditorState = function () {
-
+    self.syncWithEditorState = function () {
         self.renderThumbnailForFrame(wickEditor.project.getCurrentFrame());
-
     }
 
-    this.renderThumbnailForFrame = function (wickFrame) {
+    self.renderThumbnailForFrame = function (wickFrame) {
 
-        thumbRenderer = window.wickRenderer;
+        if(!wickFrame) return;
 
-        if(!thumbRenderer) return;
+        self.canvasContainer.style.width = wickEditor.project.width+'px';
+        self.canvasContainer.style.height = wickEditor.project.height+'px';
 
-        thumbRenderer.refresh(wickEditor.project.rootObject);
-
-        var layerObjects = [];
-        wickEditor.project.getCurrentObject().getAllActiveChildObjects().forEach(function (child) {
-            if(child.isOnActiveLayer(wickEditor.project.getCurrentLayer())) {
-                layerObjects.push(child);
-            }
-        });
+        self.renderer.render(wickEditor.project, wickFrame.wickObjects);
 
         setTimeout(function () {
-            thumbRenderer.render(layerObjects);
-            if(wickEditor.previewplayer.playing) return;
-            if(!wickFrame) return;
-            
-            wickFrame.thumbnail = window.rendererCanvas.getElementsByTagName('canvas')[0].toDataURL('image/jpeg', 0.001);
-            wickEditor.timeline.syncWithEditorState();
-        }, 100);
-
+            var svg = self.canvasContainer.children[0];
+            svgAsDataUri(svg, {}, function(uri) {
+                wickFrame.thumbnail = uri;
+                wickEditor.timeline.syncWithEditorState();
+            });
+        }, 50);
     }
 
-    this.renderAllThumbsOnTimeline = function () {
-        var oldPlayheadPosition = wickEditor.project.currentObject.playheadPosition;
-        var oldLayer = wickEditor.project.currentObject.currentLayer;
-        var oldCurr = wickEditor.project.currentObject;
-
-        wickEditor.project.currentObject.getAllFrames().forEach(function (frame) {
-            wickEditor.project.currentObject.currentLayer = wickEditor.project.currentObject.layers.indexOf(frame.parentLayer)
-            wickEditor.project.currentObject.playheadPosition = frame.playheadPosition
-            wickEditor.thumbnailRenderer.renderThumbnailForFrame(frame)
-        });
-        
-        wickEditor.project.currentObject.currentLayer = oldLayer;
-        wickEditor.project.currentObject = oldCurr;
-        wickEditor.project.currentObject.playheadPosition = oldPlayheadPosition;
+    self.renderAllThumbsOnTimeline = function () {
+        /*var allFrames = wickEditor.project.currentObject.getAllFrames();
+        allFrames.forEach(function (frame) {
+            self.renderThumbnailForFrame(frame);
+        });*/
     }
 
-    this.cleanup = function () {
-        thumbRenderer.cleanup();
-    }
 }

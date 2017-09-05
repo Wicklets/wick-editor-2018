@@ -44,6 +44,8 @@ var WickProject = function () {
 
     this.fitScreen = false;
 
+    this.uuid = random.uuid4();
+
     //this.assets = {};
 
     this._selection = [];

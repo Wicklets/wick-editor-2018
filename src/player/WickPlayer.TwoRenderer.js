@@ -15,27 +15,58 @@
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
 
-var WickTwoRenderer = function (canvasContainer, wickProject) {
+var WickTwoRenderer = function (canvasContainer) {
 
     var self = this;
 
-    var shapes = {};
+    var two = two = new Two({
+        type: Two.Types.svg,
+        fullscreen: true,
+        autostart: true
+    }).appendTo(canvasContainer);
 
-    self.setup = function () {
-        // setup two
-        var two = new Two({
-            type: Two.Types.svg,
-            fullscreen: true,
-            autostart: true
-        }).appendTo(canvasContainer);
+    var shapes = {};
+    var currentProject;
+
+    self.setup = function () {};
+
+    self.render = function (wickProject, wickObjects) {
+        // TODO:
+        // Update transforms of all wick objects
+        // Update fill/stroke etc
+        // Add new wickobjects that were just added
+        // Update ordering
+        // Show/hide wickobjects
+        // Render all wickobjects (update canvas)
+
+        if(!currentProject || currentProject.uuid !== wickProject.uuid) {
+            loadProjectSVGs(wickProject);
+        }
+
+        if(!wickObjects) {
+            wickObjects = [wickProject.rootObject];
+        }
+
+        for(uuid in shapes) {
+            shapes[uuid].visible = false;
+        }
+
+        wickObjects.forEach(function (wickObject) {
+            renderWickObject(wickObject);
+        })
+    }
+
+    var loadProjectSVGs = function (wickProject) {
+        currentProject = wickProject;
+        two.clear();
 
         // setup canvas
-        canvasContainer.style.backgroundColor = wickProject.backgroundColor;
-        canvasContainer.style.width = wickProject.width + 'px';
-        canvasContainer.style.height = wickProject.height + 'px';
+        canvasContainer.style.backgroundColor = currentProject.backgroundColor;
+        canvasContainer.style.width = currentProject.width + 'px';
+        canvasContainer.style.height = currentProject.height + 'px';
 
         // load all wickobjects into two
-        wickProject.getAllObjects().forEach(function (wickObject) {
+        currentProject.getAllObjects().forEach(function (wickObject) {
             if(!wickObject.pathData) return;
 
             var svgcontainer = document.createElement('div');
@@ -64,37 +95,10 @@ var WickTwoRenderer = function (canvasContainer, wickProject) {
         });
     }
 
-    self.render = function (wickObjects) {
-        // Update transforms of all wick objects
-        // Update fill/stroke etc
-        // Add new wickobjects that were just added
-        // Update ordering
-        // Show/hide wickobjects
-        // Render all wickobjects (update canvas)
-
-        if(!wickObjects) {
-            wickObjects = [wickProject.rootObject];
-        }
-
-        for(uuid in shapes) {
-            shapes[uuid].visible = false;
-        }
-
-        wickObjects.forEach(function (wickObject) {
-            renderWickObject(wickObject);
-        })
-    }
-
     var renderWickObject = function (wickObject) {
         var shape = shapes[wickObject.uuid];
         if(shape) {
             shape.visible = true;
-            /*shape.children.forEach(function (child) {
-                child.vertices.forEach(function (v) {
-                    v.x += Math.random()-.5
-                    v.y += Math.random()-.5
-                });
-            })*/
         }
 
         wickObject.getAllActiveChildObjects().forEach(function (child) {

@@ -57,7 +57,7 @@ var WickPlayer = function () {
         initialStateProject.prepareForPlayer();
 
         // Setup renderer/input/audio player
-        self.renderer = new WickTwoRenderer(self.canvasContainer, self.project);
+        self.renderer = new WickTwoRenderer(self.canvasContainer);
         self.inputHandler = new WickPlayerInputHandler(self.canvasContainer, self.project);
         self.audioPlayer = new WickHowlerAudioPlayer(self.project);
         self.htmlElemInjector = new WickHTMLElemInjector(self.project);
@@ -96,7 +96,7 @@ var WickPlayer = function () {
                 if(self.running) {
 
                     if(!firstTick) self.project.tick();
-                    if(self.project) self.renderer.render(self.project.rootObject.getAllActiveChildObjects());
+                    if(self.project) self.renderer.render(self.project, self.project.rootObject.getAllActiveChildObjects());
                     if(self.project) self.htmlElemInjector.update();
                     self.inputHandler.update(false);
 
@@ -110,7 +110,7 @@ var WickPlayer = function () {
                 requestAnimationFrame(function () { update(false) });
             }
             if(!firstTick) self.project.tick();
-            self.renderer.render(self.project.rootObject.getAllActiveChildObjects());
+            self.renderer.render(self.project, self.project.rootObject.getAllActiveChildObjects());
             self.htmlElemInjector.update();
             self.inputHandler.update();
 
