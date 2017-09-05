@@ -51,10 +51,12 @@ var ThumbnailRendererInterface = function (wickEditor) {
     }
 
     self.renderAllThumbsOnTimeline = function () {
-        /*var allFrames = wickEditor.project.currentObject.getAllFrames();
+        var allFrames = wickEditor.project.currentObject.getAllFrames();
         allFrames.forEach(function (frame) {
-            self.renderThumbnailForFrame(frame);
-        });*/
+            setTimeout(function () {
+                self.renderThumbnailForFrame(frame);
+            }, allFrames.indexOf(frame)*200+1000);
+        });
     }
 
 }
