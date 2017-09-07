@@ -50,6 +50,9 @@ var WickPlayer = function () {
         self.project.fitScreen = bowser.tablet || bowser.mobile;
         initialStateProject.fitScreen = bowser.tablet || bowser.mobile;
 
+        self.canvasContainer.style.width = self.project.width+'px';
+        self.canvasContainer.style.height = self.project.height+'px';
+
         self.project.rootObject.generateObjectNameReferences(self.project.rootObject);
         initialStateProject.rootObject.generateObjectNameReferences(initialStateProject.rootObject);
 

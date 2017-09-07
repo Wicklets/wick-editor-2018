@@ -74,8 +74,8 @@ TimelineInterface.Interactions = function (wickEditor, timeline) {
             interactionData.movedDistance.x += e.movementX;
             interactionData.movedDistance.y += e.movementY;
 
-            if(Math.abs(interactionData.movedDistance.x) < 2 &&
-               Math.abs(interactionData.movedDistance.y) < 2) {
+            if(Math.abs(interactionData.movedDistance.x) < 1 &&
+               Math.abs(interactionData.movedDistance.y) < 1) {
                 return;
             }
 
@@ -84,8 +84,10 @@ TimelineInterface.Interactions = function (wickEditor, timeline) {
             interactionData.frames.forEach(function (frame) {
                 frame.currentX += e.movementX;
                 frame.currentY += e.movementY;
-                frame.elem.style.left = frame.origX + roundToNearestN(frame.currentX,frameWidth) + 'px';
-                frame.elem.style.top  = frame.origY + roundToNearestN(frame.currentY,layerHeight) + 'px';
+                //frame.elem.style.left = frame.origX + roundToNearestN(frame.currentX,frameWidth) + 'px';
+                //frame.elem.style.top  = frame.origY + roundToNearestN(frame.currentY,layerHeight) + 'px';
+                frame.elem.style.left = frame.origX + frame.currentX + 'px';
+                frame.elem.style.top  = frame.origY + frame.currentY + 'px';
                 frame.elem.style.zIndex = 10;
             });
         }),

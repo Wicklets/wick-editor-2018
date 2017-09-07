@@ -27,6 +27,8 @@ var PreviewPlayer = function (wickEditor) {
         this.playing = false;
 
         canvasContainer = document.getElementById('previewRenderContainer');
+        canvasContainer.style.width = wickEditor.project.width+'px';
+        canvasContainer.style.height = wickEditor.project.height+'px';
         renderer = new WickTwoRenderer(canvasContainer);
     }
 

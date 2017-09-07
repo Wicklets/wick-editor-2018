@@ -728,6 +728,16 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.syncInterfaces();
         });
 
+    registerAction('openScriptingIDE',
+        ['`'],
+        [],
+        {},
+        function(args) {
+            wickEditor.scriptingide.open = true;
+            wickEditor.scriptingide.aceEditor.focus()
+            wickEditor.syncInterfaces();
+        });
+
     registerAction('bringToFront',
         ['Modifier', "SHIFT", "UP"],
         [],

@@ -15,15 +15,19 @@
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
 
-var WickTwoRenderer = function (canvasContainer) {
+var WickTwoRenderer = function (canvasContainer, settings) {
+
+    if(!settings) settings = {};
 
     var self = this;
 
     var two = two = new Two({
         type: Two.Types.webgl,
-        fullscreen: true,
+        fullscreen: false,
         autostart: true,
-        ratio: 2,
+        ratio: 2/window.devicePixelRatio * (settings.scale || 1.0),
+        width: parseInt(canvasContainer.style.width),
+        height: parseInt(canvasContainer.style.height),
     }).appendTo(canvasContainer);
 
     var shapes = {};
@@ -55,6 +59,7 @@ var WickTwoRenderer = function (canvasContainer) {
         wickObjects.forEach(function (wickObject) {
             renderWickObject(wickObject);
         })
+        two.forcerender();
     }
 
     var loadProjectSVGs = function (wickProject) {

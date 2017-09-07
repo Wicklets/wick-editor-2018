@@ -24,35 +24,30 @@ var ThumbnailRendererInterface = function (wickEditor) {
         self.canvasContainer.style.position = 'absolute';
         self.canvasContainer.style.left = '0px';
         self.canvasContainer.style.top = '0px';
-        self.renderer = new WickTwoRenderer(self.canvasContainer);
+        self.canvasContainer.style.width = wickEditor.project.width+'px';
+        self.canvasContainer.style.height = wickEditor.project.height+'px';
+        self.renderer = new WickTwoRenderer(self.canvasContainer, {scale: 0.1});
         self.renderer.setup();
     }
     
     self.syncWithEditorState = function () {
-        self.renderThumbnailForFrame(wickEditor.project.getCurrentFrame());
+        //self.renderThumbnailForFrame(wickEditor.project.getCurrentFrame());
     }
 
-    self.renderThumbnailForFrame = function (wickFrame) {
+    self.renderThumbnailForFrame = function (wickFrame,callback) {
         if(!wickFrame) return;
 
         self.canvasContainer.style.width = wickEditor.project.width+'px';
         self.canvasContainer.style.height = wickEditor.project.height+'px';
 
-        //self.renderer.render(wickEditor.project, wickFrame.wickObjects);
-
-        //var svg = self.canvasContainer.children[0];
-        
-        // SO SLOW >:(
-        /*svgAsDataUri(svg, {}, function(uri) {
-            wickFrame.thumbnail = uri;
+        self.renderer.render(wickEditor.project, wickFrame.wickObjects);
+        //window.twojsisdonerendering = function () {
+            var canvas = self.canvasContainer.children[0];
+            wickFrame.thumbnail = canvas.toDataURL('image/png');
             wickEditor.timeline.syncWithEditorState();
-        });*/
-        /*html2canvas(svg, {
-            onrendered: function(canvas) {
-                theCanvas = canvas;
-                document.body.appendChild(canvas);
-            }
-        });*/
+            window.twojsisdonerendering = null;
+            if(callback) callback();
+        //}
     }
 
     self.renderAllThumbsOnTimeline = function () {

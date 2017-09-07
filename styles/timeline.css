@@ -392,6 +392,10 @@ body {
     background-size: 13px 13px;
     background-repeat: no-repeat;
     background-position: center;
+    cursor: pointer;
+}
+.has-scripts-icon:hover {
+    background-color: #31E19C;
 }
 
 .frame-tween-mode {
