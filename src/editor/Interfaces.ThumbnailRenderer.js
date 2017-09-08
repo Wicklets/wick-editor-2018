@@ -31,7 +31,7 @@ var ThumbnailRendererInterface = function (wickEditor) {
     }
     
     self.syncWithEditorState = function () {
-        //self.renderThumbnailForFrame(wickEditor.project.getCurrentFrame());
+        self.renderThumbnailForFrame(wickEditor.project.getCurrentFrame());
     }
 
     self.renderThumbnailForFrame = function (wickFrame,callback) {
@@ -41,13 +41,11 @@ var ThumbnailRendererInterface = function (wickEditor) {
         self.canvasContainer.style.height = wickEditor.project.height+'px';
 
         self.renderer.render(wickEditor.project, wickFrame.wickObjects);
-        //window.twojsisdonerendering = function () {
-            var canvas = self.canvasContainer.children[0];
-            wickFrame.thumbnail = canvas.toDataURL('image/png');
-            wickEditor.timeline.syncWithEditorState();
-            window.twojsisdonerendering = null;
-            if(callback) callback();
-        //}
+        var canvas = self.canvasContainer.children[0];
+        wickFrame.thumbnail = canvas.toDataURL('image/png');
+        wickEditor.timeline.syncWithEditorState();
+        window.twojsisdonerendering = null;
+        if(callback) callback();
     }
 
     self.renderAllThumbsOnTimeline = function () {
