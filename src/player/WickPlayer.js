@@ -29,6 +29,8 @@ var WickPlayer = function () {
     self.running = false;
 
     var initialStateProject;
+    var stats;
+    var statsEnabled = true;
 
     self.runProject = function (projectJSON) {
 
@@ -41,6 +43,12 @@ var WickPlayer = function () {
         self.running = true;
 
         self.canvasContainer = document.getElementById('playerCanvasContainer');
+
+        if(statsEnabled) {
+            stats = new Stats();
+            stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+            document.body.appendChild( stats.dom );
+        }
 
         resetElapsedTime();
 
@@ -93,6 +101,8 @@ var WickPlayer = function () {
 
         if(!self.running) return;
 
+        if(statsEnabled) stats.begin();
+
         if(self.project.framerate < 60) {
             loopTimeout = setTimeout(function() {
 
@@ -118,6 +128,8 @@ var WickPlayer = function () {
             self.inputHandler.update();
 
         }
+
+        if(statsEnabled) stats.end();
 
     }
 

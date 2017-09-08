@@ -20,7 +20,14 @@ var GIFRendererInterface = function (wickEditor) {
 	var self = this;
 
     self.setup = function () {
-
+        self.canvasContainer = document.createElement('div');
+        self.canvasContainer.style.position = 'absolute';
+        self.canvasContainer.style.left = '0px';
+        self.canvasContainer.style.top = '0px';
+        self.canvasContainer.style.width = wickEditor.project.width+'px';
+        self.canvasContainer.style.height = wickEditor.project.height+'px';
+        self.renderer = new WickTwoRenderer(self.canvasContainer);
+        self.renderer.setup();
     }
 
     self.syncWithEditorState = function () {
@@ -29,22 +36,20 @@ var GIFRendererInterface = function (wickEditor) {
 
     self.renderProjectAsGIF = function (callback) {
 
-        return;
-
-        gifRenderer = window.wickRenderer;
-
         var gifFrameDataURLs = [];
+
+        self.canvasContainer.style.width = wickEditor.project.width+'px';
+        self.canvasContainer.style.height = wickEditor.project.height+'px';
 
         wickEditor.project.currentObject = wickEditor.project.rootObject;
         var len = wickEditor.project.rootObject.getTotalTimelineLength();
-        gifRenderer.refresh(wickEditor.project.rootObject);
         for (var i = 0; i < len; i++) {
             wickEditor.project.rootObject.playheadPosition = i;
             wickEditor.project.applyTweens();
-            gifRenderer.render(wickEditor.project.getCurrentObject().getAllActiveChildObjects());
-            gifFrameDataURLs.push(window.rendererCanvas.getElementsByTagName('canvas')[0].toDataURL());
+            self.renderer.render(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects());
+            var canvas = self.canvasContainer.children[0];
+            gifFrameDataURLs.push(canvas.toDataURL());
         }
-        //gifRenderer.cleanup();
 
         var gif;
         if(wickEditor.project.transparent) {
@@ -69,7 +74,17 @@ var GIFRendererInterface = function (wickEditor) {
 
         var gifFrameImages = [];
 
-        var proceed;
+        function proceed () {
+            gifFrameImages.forEach(function (gifFrameImage) {
+                gif.addFrame(gifFrameImage, {delay: 1000/wickEditor.project.framerate});
+            });
+
+            gif.render();
+
+            gif.on('finished', function(blob) {
+                callback(blob);
+            });     
+        }
 
         gifFrameDataURLs.forEach(function (gifFrameDataURL) {
             var gifFrameImage = new Image();
@@ -82,22 +97,6 @@ var GIFRendererInterface = function (wickEditor) {
             gifFrameImage.src = gifFrameDataURL;
         });
 
-        proceed = function () {
-            gifFrameImages.forEach(function (gifFrameImage) {
-                gif.addFrame(gifFrameImage, {delay: 1000/wickEditor.project.framerate});
-            });
-
-            gif.render();
-
-            gif.on('finished', function(blob) {
-                callback(blob);
-            });     
-        }
-
-    }
-
-    self.cleanup = function () {
-        gifRenderer.cleanup();
     }
 
 }

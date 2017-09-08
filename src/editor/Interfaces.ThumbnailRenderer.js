@@ -34,7 +34,7 @@ var ThumbnailRendererInterface = function (wickEditor) {
         self.renderThumbnailForFrame(wickEditor.project.getCurrentFrame());
     }
 
-    self.renderThumbnailForFrame = function (wickFrame,callback) {
+    self.renderThumbnailForFrame = function (wickFrame) {
         if(!wickFrame) return;
 
         self.canvasContainer.style.width = wickEditor.project.width+'px';
@@ -44,8 +44,6 @@ var ThumbnailRendererInterface = function (wickEditor) {
         var canvas = self.canvasContainer.children[0];
         wickFrame.thumbnail = canvas.toDataURL('image/png');
         wickEditor.timeline.syncWithEditorState();
-        window.twojsisdonerendering = null;
-        if(callback) callback();
     }
 
     self.renderAllThumbsOnTimeline = function () {

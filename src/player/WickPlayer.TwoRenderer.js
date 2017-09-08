@@ -91,6 +91,7 @@ var WickTwoRenderer = function (canvasContainer, settings) {
                         size: wickObject.textData.fontSize,
                         leading: 0,
                         weight: wickObject.textData.fontWeight === 'normal' ? 400 : 900,
+                        fill: wickObject.textData.fill,
                     }
                 );
             } else if (wickObject.asset && wickObject.asset.type === 'image') {
@@ -118,7 +119,7 @@ var WickTwoRenderer = function (canvasContainer, settings) {
                 .translate(absTransforms.position.x, absTransforms.position.y)
                 .rotate(absTransforms.rotation/57.2958)
                 .scale(absTransforms.scale.x, absTransforms.scale.y);
-            if(absTransforms.opacity === 0) absTransforms.opacity = 0.01; // WTF???
+            if(absTransforms.opacity === 0) absTransforms.opacity = 0.01; // WTF??? someone screwed up lol
             shape.opacity = absTransforms.opacity;
         }
 
@@ -154,8 +155,8 @@ var WickTwoRenderer = function (canvasContainer, settings) {
         },
         'image' : function (src, width, height) {
 
-            shape = two.makeRectangle(0, 0, wickObject.width, wickObject.height);
-            var texture = new Two.Texture(wickObject.asset.getData())
+            shape = two.makeRectangle(0, 0, width, height);
+            var texture = new Two.Texture(src)
 
             shape.fill = texture;
             shape.stroke = 'rgba(0,0,0,0)';
@@ -165,9 +166,9 @@ var WickTwoRenderer = function (canvasContainer, settings) {
 
         },
         'text' : function (text, style) {
-            
-            shape = two.makeText(wickObject.textData.text, 0, 0, style);
-            shape.fill = wickObject.textData.fill;
+
+            shape = two.makeText(text, 0, 0, style);
+            shape.fill = style.fill;
 
             return shape;
 
