@@ -75,6 +75,38 @@ WickFrame.prototype.tick = function () {
     else if (this._wasActiveLastTick && !this._active) {
         
     }
+    
+    if(this._wasClicked) {
+        (wickPlayer || wickEditor).project.runScript(this, 'mousedown');
+        this._wasClicked = false;
+    }
+
+    if(this._wasHoveredOver) {
+        (wickPlayer || wickEditor).project.runScript(this, 'mouseover');
+        this._wasHoveredOver = false;
+    }
+
+    if(this._mouseJustLeft) {
+        (wickPlayer || wickEditor).project.runScript(this, 'mouseout');
+        this._mouseJustLeft = false;
+    }
+
+    if(this._wasClickedOff) {
+        (wickPlayer || wickEditor).project.runScript(this, 'mouseup');
+        this._wasClickedOff = false;
+    }
+
+    wickPlayer.inputHandler.getAllKeysJustReleased().forEach(function (key) {
+        (wickPlayer || wickEditor).project.runScript(self, 'keyreleased', key);
+    });
+
+    wickPlayer.inputHandler.getAllKeysJustPressed().forEach(function (key) {
+        (wickPlayer || wickEditor).project.runScript(self, 'keypressed', key);
+    });
+
+    wickPlayer.inputHandler.getAllKeysDown().forEach(function (key) {
+        (wickPlayer || wickEditor).project.runScript(self, 'keydown', key);
+    });
 
     this.wickObjects.forEach(function (wickObject) {
         wickObject.tick();

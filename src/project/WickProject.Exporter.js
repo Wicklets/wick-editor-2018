@@ -32,7 +32,7 @@ WickProject.Exporter = (function () {
 
         // All libs needed by the player. 
         var requiredLibFiles = [
-            "lib/two.js",
+            "lib/pixi.4.5.5.min.js",
             "lib/lz-string.min.js",
             "lib/polyfills.js",
             "lib/keyCharToCode.js",
@@ -59,7 +59,7 @@ WickProject.Exporter = (function () {
             "src/project/WickProject.AssetLibrary.js",
             "src/project/WickProject.Compressor.js",
             "src/player/WickPlayer.Preloader.js",
-            "src/player/WickPlayer.TwoRenderer.js",
+            "src/player/WickPlayer.PixiRenderer.js",
             "src/player/WickPlayer.HowlerAudioPlayer.js",
             "src/player/WickPlayer.InputHandler.js",
             "src/player/WickPlayer.HTMLElemInjector.js",
@@ -213,7 +213,11 @@ WickProject.Exporter = (function () {
         "_renderDirty",
         "_selection",
         "smallFramesMode",
-        "_soundDataForPreview"
+        "_soundDataForPreview",
+        "_wasClicked",
+        "_wasClickedOff",
+        "_wasHoveredOver",
+        "_beingClicked"
     ];
 
     projectExporter.JSONReplacer = function(key, value) {

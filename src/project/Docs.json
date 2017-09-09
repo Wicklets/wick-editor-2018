@@ -264,28 +264,6 @@
           }
         },
         {
-          "name": "setText(newText)",
-          "description": "Changes the text of the object (works on text objects only).",
-          "example": "// Basic usage\nthis.setText('Some text!');\n// Using a variable\nthis.setText('Score: ' + root.score);",
-          "snippet": "this.setText('Some text')",
-          "args": [
-            {
-              "name": "newText",
-              "type": "String",
-              "description": "The text to change the object to."
-            }
-          ],
-          "return": null
-        },
-        {
-          "name": "inputValue",
-          "description": "The current content of a text box. Only usable by editable text boxes.",
-          "example": "playerName = textBox.inputValue;",
-          "snippet": "this.inputValue",
-          "args": [],
-          "return": null
-        },
-        {
           "name": "play()",
           "description": "Plays this objects timeline (only usable for Clips). ",
           "example": "this.play();",
@@ -332,27 +310,6 @@
           "description": "The position of the playhead of the object (works on Clip and Button objects only).",
           "example": "if(this.playheadPosition === 10) {\n    alert('On frame 10!')\n}",
           "snippet": "this.playheadPosition",
-          "args": [],
-          "return": null
-        }
-      ]
-    },
-    {
-      "name": "Display",
-      "properties": [
-        {
-          "name": "hideCursor()",
-          "description": "Makes the cursor invisible.",
-          "example": "hideCursor();",
-          "snippet": "hideCursor()",
-          "args": [],
-          "return": null
-        },
-        {
-          "name": "showCursor()",
-          "description": "Makes the cursor visible.",
-          "example": "showCursor();",
-          "snippet": "showCursor()",
           "args": [],
           "return": null
         }
@@ -503,6 +460,22 @@
           "snippet": "tiltY",
           "args": [],
           "return": null
+        },
+        {
+          "name": "hideCursor()",
+          "description": "Makes the cursor invisible.",
+          "example": "hideCursor();",
+          "snippet": "hideCursor()",
+          "args": [],
+          "return": null
+        },
+        {
+          "name": "showCursor()",
+          "description": "Makes the cursor visible.",
+          "example": "showCursor();",
+          "snippet": "showCursor()",
+          "args": [],
+          "return": null
         }
       ]
     },
@@ -539,23 +512,23 @@
       "name": "Utilities",
       "properties": [
         {
-          "name": "random.bool()",
-          "description": "Generates a random boolean (a value that can be either true or false). See <a target='_parent' href='https://github.com/ckknight/random-js'>this page</a> for more info.",
-          "example": "// Use random.bool to simulate a coin flip.\nvar coinFlip = random.bool();\nif(coinFlip == true) {\n    alert('You&#8217;re lucky!!');\n}",
-          "snippet": "var randomBool = random.bool()",
+          "name": "randomBool()",
+          "description": "Generates a random boolean (true or false).",
+          "example": "// Use randomBool to simulate a coin flip.\nvar coinFlip = random.bool();\nif(coinFlip == true) {\n    alert('You&#8217;re lucky!!');\n}",
+          "snippet": "var randombool = randomBool()",
           "return": {
             "type": "Boolean",
             "description": "A random boolean. Will be true 50% of the time."
           },
           "args": []
         }, {
-          "name": "random.integer(min,max)",
-          "description": "Generates a random whole number from min to max. See <a target='_parent' href='https://github.com/ckknight/random-js'>this page</a> for more info.",
+          "name": "randomInt(min,max)",
+          "description": "Generates a random whole number between min and max.",
           "example": "// Use random.integer to move to a random frame from 1-10.\nvar randomFrame = random.integer(1,10);\ngotoAndStop(randomFrame);",
-          "snippet": "var randomInt = random.integer(min, max)",
+          "snippet": "var randomint = randomInt(min, max)",
           "return": {
             "type": "Number",
-            "description": "A random whole number."
+            "description": "A random integer (whole number)."
           },
           "args": [
             {
@@ -569,13 +542,13 @@
             }
            ]
         }, {
-          "name": "random.real(min,max)",
-          "description": "Generates a random real (fractional) number from min to max. See <a target='_parent' href='https://github.com/ckknight/random-js'>this page</a> for more info.",
-          "example": "// Use random.real to choose how transparent an object appears.\nthis.opacity = random.real(0,1);",
-          "snippet": "var randomReal = random.real(min, max)",
+          "name": "randomFloat(min,max)",
+          "description": "Generates a random float between min and max.",
+          "example": "// Use randomFloat to choose how transparent an object appears.\nthis.opacity = random.real(0,1);",
+          "snippet": "var randomfloat = randomFloat(min, max)",
           "return": {
             "type": "Number",
-            "description": "A random real number."
+            "description": "A random float (rational number)."
           },
           "args": [
             {
@@ -604,23 +577,6 @@
           "return": { "type": "Number",
                       "description": "The number of milliseconds since the project was started." },
           "args": []
-        },
-        {
-          "name": "Math.abs(value)",
-          "description": "TODO: description",
-          "example": "TODO: example",
-          "snippet": "Math.abs(value)",
-          "return": {
-            "type": "Number",
-            "description": "TODO: description"
-          },
-          "args": [
-            {
-              "name": "value",
-              "type": "Number",
-              "description": "TODO: description"
-            }
-          ]
         },
         {
           "name": "alert(message)",
@@ -659,7 +615,7 @@
         },
         {
           "name": "localStorage",
-          "description": "Use the localStorage object to save data. See <a target='_parent' href='https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage'>this page</a> for more info",
+          "description": "Use the localStorage object to save data.",
           "example": "// Use localStorage to load a saved position. \nthis.x = localStorage.savedX;\nthis.y = localStorage.savedY;\n\n// Save the position and rotation of an object in localStorage to use later.\nlocalStorage.savedX = this.x\nlocalStorage.savedY = this.y",
           "snippet": "localStorage",
           "return": null,

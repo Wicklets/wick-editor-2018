@@ -82,21 +82,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 fabricInterface.canvas.moveTo(fabObj, wickObj._zindex+gec, true);
             });
 
-
-            /*console.log("Model:")
-            allObjects.forEach(function (obj) {
-                console.log("  " + obj.getTypeString() + " " + obj.uuid.substring(0,2));
-            });
-            console.log("View:")
-            fabricInterface.canvas._objects.forEach(function (obj) {
-                if(obj.wickObjectRef) {
-                    console.log("  " + obj.wickObjectRef.getTypeString() + " " + obj.wickObjectRef.uuid.substring(0,2));
-                } else {
-                    console.log("  " + obj.identifier);
-                }
-            })
-            console.log("")*/
-
             window.blockAllRender = false;
             fabricInterface.canvas.renderAll();
         }

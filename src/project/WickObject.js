@@ -1425,30 +1425,6 @@ WickObject.prototype.isPointInside = function(point) {
     return hit;
 }
 
-WickObject.prototype.getTypeString = function (format) {
-    var typeString = "";
-
-    if(this.isButton) {
-        typeString = "button";
-    } else if(this.isGroup) {
-        typeString = "button";
-    } else if (this.isSymbol) {
-        typeString = "clip";
-    } else if (this.isImage) {
-        typeString = "image";
-    } else if (this.isPath) {
-        typeString = "path";
-    } else if (this.isText) {
-        typeString = "text";
-    }
-
-    if(format && format.capitalized) {
-        console.error('getTypeString format.capitalized NYI');
-    }
-
-    return typeString;
-}
-
 WickObject.prototype.setText = function (text) {
     //this.pixiText.text = ""+text;
     wickRenderer.setText(this, text);

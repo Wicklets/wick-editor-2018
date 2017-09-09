@@ -52,14 +52,40 @@ var WickTwoRenderer = function (canvasContainer, settings) {
             wickObjects = [wickProject.rootObject];
         }
 
-        for(uuid in shapes) {
-            shapes[uuid].visible = false;
-        }
+        currentProject.getAllObjects().forEach(function (wickObject) {
+            if(!wickObject._active && shapes[wickObject.uuid])
+                shapes[wickObject.uuid].visible = false;
+            if(shapes[wickObject.uuid] && !window.wickPlayer) 
+                shape.visible = false;
+        });
 
         wickObjects.forEach(function (wickObject) {
             renderWickObject(wickObject);
         })
         two.forcerender();
+    }
+
+    var renderWickObject = function (wickObject) {
+        var shape = shapes[wickObject.uuid];
+        if(shape) {
+            if(!wickObject._wasActiveLastTick && wickObject._active)
+                shape.visible = true;
+            if(!window.wickPlayer) 
+                shape.visible = true;
+
+            var absTransforms = wickObject.getAbsoluteTransformations();
+            shape._matrix
+                .identity()
+                .translate(absTransforms.position.x, absTransforms.position.y)
+                .rotate(absTransforms.rotation/57.2958)
+                .scale(absTransforms.scale.x, absTransforms.scale.y);
+            if(absTransforms.opacity === 0) absTransforms.opacity = 0.01; // probably some !0=true bug in two.js
+            shape.opacity = absTransforms.opacity;
+        }
+
+        wickObject.getAllActiveChildObjects().forEach(function (child) {
+            renderWickObject(child);
+        });
     }
 
     var loadProjectSVGs = function (wickProject) {
@@ -105,26 +131,8 @@ var WickTwoRenderer = function (canvasContainer, settings) {
             if(!shape) return;
 
             shape._matrix.manual = true;
-            shapes[wickObject.uuid] = shape;
-        });
-    }
-
-    var renderWickObject = function (wickObject) {
-        var shape = shapes[wickObject.uuid];
-        if(shape) {
-            var absTransforms = wickObject.getAbsoluteTransformations();
             shape.visible = true;
-            shape._matrix
-                .identity()
-                .translate(absTransforms.position.x, absTransforms.position.y)
-                .rotate(absTransforms.rotation/57.2958)
-                .scale(absTransforms.scale.x, absTransforms.scale.y);
-            if(absTransforms.opacity === 0) absTransforms.opacity = 0.01; // WTF??? someone screwed up lol
-            shape.opacity = absTransforms.opacity;
-        }
-
-        wickObject.getAllActiveChildObjects().forEach(function (child) {
-            renderWickObject(child);
+            shapes[wickObject.uuid] = shape;
         });
     }
 
@@ -145,7 +153,6 @@ var WickTwoRenderer = function (canvasContainer, settings) {
             })
 
             var svg = svgcontainer.children[0];
-            shape.visible = false;
             shape.fill = hexToRgbA(svg.getAttribute('fill'), svg.getAttribute('fill-opacity') || 1);
             shape.stroke = hexToRgbA(svg.getAttribute('stroke'), svg.getAttribute('stroke-opacity') || 1);
             shape.linewidth = parseInt(svg.getAttribute('stroke-width'));

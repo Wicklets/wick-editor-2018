@@ -27,7 +27,13 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
     var keysJustPressed; 
     var keysJustReleased;
 
-    var canvasContainer;
+    var _cachedKeysDown;
+    var _cachedKeysJustPressed;
+    var _cachedKeysJustReleased;
+
+    var project;
+
+    var canvas = canvasContainer.children[0];
 
     self.setup = function () {
         mouse = null;
@@ -37,26 +43,30 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
 
         if(bowser.mobile || bowser.tablet) {
             // Touch event (one touch = like a mouse click)
-            canvasContainer.addEventListener("touchstart", onTouchStart, false);
-            canvasContainer.addEventListener("touchmove", onTouchMove, false);
+            document.body.addEventListener("touchstart", onTouchStart, false);
+            document.body.addEventListener("touchmove", onTouchMove, false);
 
             // Squash gesture events
-            canvasContainer.addEventListener('gesturestart',  function(e) { e.preventDefault(); });
-            canvasContainer.addEventListener('gesturechange', function(e) { e.preventDefault(); });
-            canvasContainer.addEventListener('gestureend',    function(e) { e.preventDefault(); });
+            document.body.addEventListener('gesturestart',  function(e) { e.preventDefault(); });
+            document.body.addEventListener('gesturechange', function(e) { e.preventDefault(); });
+            document.body.addEventListener('gestureend',    function(e) { e.preventDefault(); });
         } else {
-            canvasContainer.addEventListener('mousemove', onMouseMove, false);
-            canvasContainer.addEventListener("mousedown", onMouseDown, false);
-            canvasContainer.addEventListener("mouseup",   onMouseUp,   false);
+            document.body.addEventListener('mousemove', onMouseMove, false);
+            document.body.addEventListener("mousedown", onMouseDown, false);
+            document.body.addEventListener("mouseup",   onMouseUp,   false);
 
-            canvasContainer.addEventListener("keydown", onKeyDown);
-            canvasContainer.addEventListener("keyup", onKeyUp);
+            document.body.addEventListener("keydown", onKeyDown);
+            document.body.addEventListener("keyup", onKeyUp);
         }
     }
 
     self.update = function () {
         keysJustPressed = [];
         keysJustReleased = [];
+
+        _cachedKeysDown = null;
+        _cachedKeysJustPressed = null;
+        _cachedKeysJustReleased = null;
 
         lastMouse = mouse;
         if(newMouse) mouse = newMouse;
@@ -74,15 +84,15 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
     }
 
     self.cleanup = function () {
-        canvasContainer.removeEventListener("mousedown", onMouseDown);
-        canvasContainer.removeEventListener("mousemove", onMouseMove);
-        canvasContainer.removeEventListener("mouseup", onMouseUp);
+        document.body.removeEventListener("mousedown", onMouseDown);
+        document.body.removeEventListener("mousemove", onMouseMove);
+        document.body.removeEventListener("mouseup", onMouseUp);
 
-        canvasContainer.removeEventListener("touchstart", onTouchStart);
-        canvasContainer.removeEventListener("touchmove", onTouchMove);
+        document.body.removeEventListener("touchstart", onTouchStart);
+        document.body.removeEventListener("touchmove", onTouchMove);
 
-        canvasContainer.removeEventListener("keydown", onKeyDown);
-        canvasContainer.removeEventListener("keyup", onKeyUp);
+        document.body.removeEventListener("keydown", onKeyDown);
+        document.body.removeEventListener("keyup", onKeyUp);
     }
     
     self.getMouse = function () {
@@ -114,45 +124,51 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
     }
 
     self.getAllKeysDown = function () {
-        var keysDown = [];
+        if(_cachedKeysDown) return _cachedKeysDown;
+
+        _cachedKeysDown = [];
 
         var _keys = self.getKeys();
         for(var i = 0; i < _keys.length; i++) {
             if(_keys[i]) {
                 var c = codeToKeyChar[i];
-                keysDown.push(c);
+                _cachedKeysDown.push(c);
             }
         }
 
-        return keysDown;
+        return _cachedKeysDown;
     }
 
     self.getAllKeysJustPressed = function () {
-        var keysDown = [];
+        if(_cachedKeysJustPressed) return _cachedKeysJustPressed;
+
+        _cachedKeysJustPressed = [];
 
         var _keys = self.getKeysJustPressed();
         for(var i = 0; i < _keys.length; i++) {
             if(_keys[i]) {
                 var c = codeToKeyChar[i];
-                keysDown.push(c);
+                _cachedKeysJustPressed.push(c);
             }
         }
 
-        return keysDown;
+        return _cachedKeysJustPressed;
     }
 
     self.getAllKeysJustReleased = function () {
-        var keysDown = [];
+        if(_cachedKeysJustReleased) return _cachedKeysJustReleased;
+
+        _cachedKeysJustReleased = [];
 
         var _keys = self.getKeysJustReleased();
         for(var i = 0; i < _keys.length; i++) {
             if(_keys[i]) {
                 var c = codeToKeyChar[i];
-                keysDown.push(c);
+                _cachedKeysJustReleased.push(c);
             }
         }
 
-        return keysDown;
+        return _cachedKeysJustReleased;
     }
 
     self.hideCursor = function () {
@@ -192,7 +208,19 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
 
     var onMouseDown = function (evt) {
 
-        canvasContainer.children[0].focus();
+        canvasContainer.focus();
+
+        // Hack to avoid "'requestFullscreen' can only be initiated by a user gesture." error
+        if(wickPlayer.fullscreenRequested) {
+            wickPlayer.enterFullscreen();
+            wickPlayer.fullscreenRequested = false;
+        }
+
+        var currFrame = wickProject.getCurrentFrame();
+        if(currFrame) {
+            currFrame._wasClicked = true;
+            currFrame._beingClicked = true;
+        }
         
         var clickedObj;
         wickProject.rootObject.getAllActiveChildObjectsRecursive(true).forEachBackwards(function(child) {
@@ -206,6 +234,12 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
     }
 
     var onMouseUp = function (evt) {
+        var currFrame = wickProject.getCurrentFrame();
+        if(currFrame) {
+            currFrame._beingClicked = false;
+            currFrame._wasClickedOff = true;
+        }
+
         wickProject.rootObject.getAllActiveChildObjectsRecursive(true).forEachBackwards(function(child) {
             child._beingClicked = false;
 
