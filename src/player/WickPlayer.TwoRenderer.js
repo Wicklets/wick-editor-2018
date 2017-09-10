@@ -61,7 +61,7 @@ var WickTwoRenderer = function (canvasContainer, settings) {
 
         wickObjects.forEach(function (wickObject) {
             renderWickObject(wickObject);
-        })
+        });
         two.forcerender();
     }
 

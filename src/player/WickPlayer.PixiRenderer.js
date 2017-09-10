@@ -35,11 +35,12 @@ var WickPixiRenderer = function (canvasContainer) {
     var container = new PIXI.Container();
     var pixiSprites = {};
 
-    self.renderWickObjects = function (project, objects) {
-        if(renderer.width !== project.width || renderer.height !== project.height)
+    self.renderWickObjects = function (project, wickObjects) {
+        if(renderer.width !== project.width || renderer.height !== project.height) {
             renderer.resize(project.width, project.height);
-        renderer.view.style.width  = project.width  + "px";
-        renderer.view.style.height = project.height + "px";
+            renderer.view.style.width  = project.width  + "px";
+            renderer.view.style.height = project.height + "px";
+        }
 
         var graphics = new PIXI.Graphics();
         graphics.beginFill(parseInt(project.backgroundColor.replace("#","0x")));
@@ -51,31 +52,33 @@ var WickPixiRenderer = function (canvasContainer) {
             pixiSprites[uuid].visible = false;
         }
 
-        objects.forEach(function (object) {
-            if(!pixiSprites[object.uuid]) {
-                createPixiSprite(object);
-            }
-            renderWickObject(object);
+        wickObjects.forEach(function (wickObject) {
+            renderWickObject(wickObject);
         });
         renderer.render(container);
     }
 
-    function renderWickObject (object) {
-        var sprite = pixiSprites[object.uuid];
+    function renderWickObject (wickObject) {
+        var sprite = pixiSprites[wickObject.uuid];
+        if(!sprite) {
+            createPixiSprite(wickObject);
+        }
         if(sprite) {
             sprite.visible = true;
             sprite.anchor = new PIXI.Point(0.5, 0.5);
-            sprite.position.x = object.x
-            sprite.position.y = object.y
-            sprite.rotation = object.rotation/360*2*3.14159;
-            sprite.scale.x = object.scaleX;
-            sprite.scale.y = object.scaleY;
-            sprite.alpha = object.opacity;
-            sprite.scale.x *= (object.flipX ? -1 : 1);
-            sprite.scale.y *= (object.flipY ? -1 : 1);
+
+            var absTransforms = wickObject.getAbsoluteTransformations();
+            sprite.position.x = absTransforms.position.x;
+            sprite.position.y = absTransforms.position.y;
+            sprite.rotation = absTransforms.rotation/360*2*3.14159;
+            sprite.scale.x = absTransforms.scale.x;
+            sprite.scale.y = absTransforms.scale.y;
+            sprite.alpha = absTransforms.opacity;
+            sprite.scale.x *= (absTransforms.flip.x ? -1 : 1);
+            sprite.scale.y *= (absTransforms.flip.y ? -1 : 1);
         }
 
-        object.getAllActiveChildObjects().forEach(function (child) {
+        wickObject.getAllActiveChildObjects().forEach(function (child) {
             renderWickObject(child);
         });
     }
@@ -102,7 +105,7 @@ var WickPixiRenderer = function (canvasContainer) {
 
     var WickToPixiSprite = {
         'image': function (wickObject) {
-            var pixiSprite = PIXI.Sprite.fromImage(object.asset.getData());
+            var pixiSprite = PIXI.Sprite.fromImage(wickObject.asset.getData());
             return pixiSprite;
         },
         'svg': function (wickObject) {

@@ -19,31 +19,37 @@ var ThumbnailRendererInterface = function (wickEditor) {
 
     var self = this;
 
+    var renderer;
+    var canvasContainer;
+
     self.setup = function () {
-        self.canvasContainer = document.createElement('div');
-        self.canvasContainer.style.position = 'absolute';
-        self.canvasContainer.style.left = '0px';
-        self.canvasContainer.style.top = '0px';
-        self.canvasContainer.style.width = wickEditor.project.width+'px';
-        self.canvasContainer.style.height = wickEditor.project.height+'px';
-        self.renderer = new WickTwoRenderer(self.canvasContainer, {scale: 0.1});
-        self.renderer.setup();
+        /*canvasContainer = document.getElementById('previewRenderContainer');
+        canvasContainer.style.width = wickEditor.project.width+'px';
+        canvasContainer.style.height = wickEditor.project.height+'px';
+        renderer = new WickPixiRenderer(canvasContainer);*/
     }
     
     self.syncWithEditorState = function () {
-        self.renderThumbnailForFrame(wickEditor.project.getCurrentFrame());
+        var frame = wickEditor.project.getCurrentFrame();
+        if(frame) {
+            self.renderThumbnailForFrame(frame);
+        }
     }
 
     self.renderThumbnailForFrame = function (wickFrame) {
-        if(!wickFrame) return;
+        if(!canvasContainer) {
+            var otherRenderer = wickEditor.previewplayer.getRenderer();
+            renderer = otherRenderer.renderer;
+            canvasContainer = otherRenderer.canvasContainer;
+        }
+        if(canvasContainer) {
+            canvasContainer.style.width = wickEditor.project.width+'px';
+            canvasContainer.style.height = wickEditor.project.height+'px';
 
-        self.canvasContainer.style.width = wickEditor.project.width+'px';
-        self.canvasContainer.style.height = wickEditor.project.height+'px';
-
-        self.renderer.render(wickEditor.project, wickFrame.wickObjects);
-        var canvas = self.canvasContainer.children[0];
-        wickFrame.thumbnail = canvas.toDataURL('image/png');
-        wickEditor.timeline.syncWithEditorState();
+            renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects());
+            var canvas = canvasContainer.children[0];
+            wickFrame.thumbnail = canvas.toDataURL('image/png');
+        }
     }
 
     self.renderAllThumbsOnTimeline = function () {

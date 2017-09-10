@@ -29,7 +29,7 @@ var PreviewPlayer = function (wickEditor) {
         canvasContainer = document.getElementById('previewRenderContainer');
         canvasContainer.style.width = wickEditor.project.width+'px';
         canvasContainer.style.height = wickEditor.project.height+'px';
-        renderer = new WickTwoRenderer(canvasContainer);
+        renderer = new WickPixiRenderer(canvasContainer);
     }
 
     this.syncWithEditorState = function () {
@@ -61,7 +61,7 @@ var PreviewPlayer = function (wickEditor) {
         if(currObj.playheadPosition >= currObj.getTotalTimelineLength()-1) {
             currObj.playheadPosition = 0;
         }
-        renderer.render(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects());
+        renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects());
 
         loopInterval = setInterval(function () {
             var currObj = wickEditor.project.getCurrentObject();
@@ -81,7 +81,7 @@ var PreviewPlayer = function (wickEditor) {
             wickEditor.project.applyTweens();
             canvasContainer.style.display = 'block';
             document.getElementById('fabricCanvas').style.display = 'none';
-            renderer.render(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects());
+            renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects());
             //wickEditor.thumbnailRenderer.syncWithEditorState();
             //wickEditor.syncInterfaces();
             currObj.layers.forEach(function (wickLayer) {
@@ -114,6 +114,13 @@ var PreviewPlayer = function (wickEditor) {
         } else {
             self.play();
         }
+    }
+
+    this.getRenderer = function () {
+        return {
+            renderer: renderer,
+            canvasContainer: canvasContainer
+        };
     }
 	
 }

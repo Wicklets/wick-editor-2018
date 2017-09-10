@@ -1052,12 +1052,28 @@ WickObject.prototype.getAbsoluteOpacity = function () {
     }
 }
 
+WickObject.prototype.getAbsoluteFlip = function () {
+    if(this.isRoot) {
+        return {
+            x: this.flipX,
+            y: this.flipY
+        };
+    } else {
+        var parentFlip = this.parentObject.getAbsoluteFlip();
+        return {
+            x: this.flipX || parentFlip.x,
+            y: this.flipY || parentFlip.y
+        };
+    }
+}
+
 WickObject.prototype.getAbsoluteTransformations = function () {
     return {
         position: this.getAbsolutePositionTransformed(),
         scale: this.getAbsoluteScale(),
         rotation: this.getAbsoluteRotation(),
         opacity: this.getAbsoluteOpacity(),
+        flip: this.getAbsoluteFlip(),
     }
 }
 

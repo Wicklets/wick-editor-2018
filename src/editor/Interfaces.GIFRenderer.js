@@ -26,8 +26,7 @@ var GIFRendererInterface = function (wickEditor) {
         self.canvasContainer.style.top = '0px';
         self.canvasContainer.style.width = wickEditor.project.width+'px';
         self.canvasContainer.style.height = wickEditor.project.height+'px';
-        self.renderer = new WickTwoRenderer(self.canvasContainer);
-        self.renderer.setup();
+        self.renderer = new WickPixiRenderer(self.canvasContainer);
     }
 
     self.syncWithEditorState = function () {
@@ -46,7 +45,7 @@ var GIFRendererInterface = function (wickEditor) {
         for (var i = 0; i < len; i++) {
             wickEditor.project.rootObject.playheadPosition = i;
             wickEditor.project.applyTweens();
-            self.renderer.render(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects());
+            self.renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects());
             var canvas = self.canvasContainer.children[0];
             gifFrameDataURLs.push(canvas.toDataURL());
         }
