@@ -105,11 +105,24 @@ hr {
 	margin-bottom: 5px;
 }
 
+.names-title-small {
+	text-align: center;
+	width: 100%;
+	margin-bottom: 5px;
+	font-size: 16px;
+}
+
 .names-list {
 	font-weight: normal;
 	text-align: center;
 	width: 100%;
-	/*margin-left: 10%;*/
+}
+
+.names-list-small {
+	font-weight: normal;
+	text-align: center;
+	width: 70%;
+	margin-left: 15%;
 }
 
 .patrons-label {

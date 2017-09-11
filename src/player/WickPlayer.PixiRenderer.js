@@ -19,6 +19,8 @@ var WickPixiRenderer = function (canvasContainer) {
 
     var self = this;
 
+    var SVG_SCALE = 1.5;
+
     renderer = PIXI.autoDetectRenderer(720, 480, {
         backgroundColor : "#FFFFFF", 
         resolution: window.devicePixelRatio,
@@ -72,13 +74,14 @@ var WickPixiRenderer = function (canvasContainer) {
         if(sprite) {
             sprite.visible = true;
             sprite.anchor = new PIXI.Point(0.5, 0.5);
+            var textureScale = (wickObject.pathData || wickObject.textData ? SVG_SCALE : 1);
 
             var absTransforms = wickObject.getAbsoluteTransformations();
             sprite.position.x = absTransforms.position.x;
             sprite.position.y = absTransforms.position.y;
             sprite.rotation = absTransforms.rotation/360*2*3.14159;
-            sprite.scale.x = absTransforms.scale.x;
-            sprite.scale.y = absTransforms.scale.y;
+            sprite.scale.x = absTransforms.scale.x/textureScale;
+            sprite.scale.y = absTransforms.scale.y/textureScale;
             sprite.alpha = absTransforms.opacity;
             sprite.scale.x *= (absTransforms.flip.x ? -1 : 1);
             sprite.scale.y *= (absTransforms.flip.y ? -1 : 1);
@@ -110,7 +113,7 @@ var WickPixiRenderer = function (canvasContainer) {
             var newPixiSprite = WickToPixiSprite[type](wickObject);
             container.addChild(newPixiSprite);
             pixiSprites[wickObject.uuid] = newPixiSprite;
-            // wickObject.generateAlphaMask(pixiObject.texture.baseTexture.imageUrl);
+            //wickObject.generateAlphaMask(newPixiSprite.texture.baseTexture.imageUrl);
         }
         
     }
@@ -133,12 +136,13 @@ var WickPixiRenderer = function (canvasContainer) {
             var s = new XMLSerializer().serializeToString(svgDoc);
             var base64svg = 'data:image/svg+xml;base64,' + window.btoa(s);
             
-            var newSprite = PIXI.Sprite.fromImage(base64svg);
+            var texture = PIXI.Texture.fromImage(base64svg, undefined, undefined, SVG_SCALE);
+            var newSprite = new PIXI.Sprite(texture);
             return newSprite;
         },
         'text': function (wickObject) {
             var style = {
-                font : wickObject.textData.fontWeight + " " + wickObject.textData.fontStyle + " " + wickObject.textData.fontSize + "px " + wickObject.textData.fontFamily,
+                font : wickObject.textData.fontWeight + " " + wickObject.textData.fontStyle + " " + (wickObject.textData.fontSize*SVG_SCALE) + "px " + wickObject.textData.fontFamily,
                 fill : wickObject.textData.fill,
                 wordWrap : true,
                 wordWrapWidth : 1440,
