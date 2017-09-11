@@ -113,7 +113,10 @@ var WickPixiRenderer = function (canvasContainer) {
             var newPixiSprite = WickToPixiSprite[type](wickObject);
             container.addChild(newPixiSprite);
             pixiSprites[wickObject.uuid] = newPixiSprite;
-            //wickObject.generateAlphaMask(newPixiSprite.texture.baseTexture.imageUrl);
+
+            var textureSrc = newPixiSprite.texture.baseTexture.imageUrl;
+            if(textureSrc)
+                wickObject.generateAlphaMask(textureSrc);
         }
         
     }
