@@ -253,7 +253,8 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function (args) {
-            alert("Coming soon!")
+            wickEditor.guiActionHandler.doAction('useTools.pen')
+            wickEditor.paper.getProjectAsSVG()
         });
 
     // Export project as WebM

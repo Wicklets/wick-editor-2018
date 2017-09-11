@@ -246,6 +246,7 @@ var PathRoutines = function (paperInterface, wickEditor) {
         //console.log(xmlString)
 
         wickObject.paper = paper.project.importSVG(doc, {insert:false});
+
         //console.log(wickObject.paper)
         if(wickObject.paper.children) {
             wickObject.paper.children.forEach(function (child) {

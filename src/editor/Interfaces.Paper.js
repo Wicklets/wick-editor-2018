@@ -264,6 +264,14 @@ var PaperInterface = function (wickEditor) {
         });
     }
 
+    self.getProjectAsSVG = function () {
+        var url = "data:image/svg+xml;utf8," + encodeURIComponent(paper.project.exportSVG({asString:true}));
+        var link = document.createElement("a");
+           link.download = wickEditor.project.name + '.svg';
+           link.href = url;
+           link.click();
+    }
+
     function refreshSelection () {
 
         paper.project.activeLayer.selected = false;

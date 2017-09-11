@@ -128,9 +128,9 @@ var MenuBarInterface = function (wickEditor) {
             new TabButton('Export Animated GIF', function () {
                 wickEditor.guiActionHandler.doAction("exportProjectGIF");
             }),
-            /*new TabButton('Export SVG', function () {
+            new TabButton('Export SVG', function () {
                 wickEditor.guiActionHandler.doAction("exportFrameSVG");
-            }),*/
+            }),
             new TabButton('Export HTML', function () {
                 wickEditor.guiActionHandler.doAction("exportProjectHTML");
             }),
@@ -174,9 +174,9 @@ var MenuBarInterface = function (wickEditor) {
             new TabButton('Sound', function () {
                 wickEditor.guiActionHandler.doAction("importFile");
             }),
-            /*new TabButton('SVG', function () {
+            new TabButton('SVG', function () {
                 wickEditor.guiActionHandler.doAction("importFile");
-            }),*/
+            }),
             new TabButton('JSON', function () {
                 wickEditor.guiActionHandler.doAction("importFile");
             }),

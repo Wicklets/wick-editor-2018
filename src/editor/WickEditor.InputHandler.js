@@ -309,9 +309,41 @@ var InputHandler = function (wickEditor) {
 *************************/
 
     var loadSVG = function (svg, filename, callback) {
-        console.log(svg)
-        var pathWickObject = WickObject.createPathObject(svg);
-        callback(pathWickObject);
+        var xmlString = svg
+          , parser = new DOMParser()
+          , doc = parser.parseFromString(xmlString, "text/xml");
+        var paperObj = paper.project.importSVG(doc, {insert:false});
+        
+        var allPaths = [];
+
+        function importPaperGroup (paperGroup) {
+            paperGroup.children.forEach(function (child) {
+                if(child instanceof paper.Group) {
+                    importPaperGroup(child);
+                } else {
+                    importPaperPath(child);
+                }
+            })
+        }
+        function importPaperPath (paperPath) {
+            var svgRaw = paperPath.exportSVG({asString:true})
+            var svgString = '<svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">'+svgRaw+'</svg>';
+            var wickPath = WickObject.createPathObject(svgString);
+            wickPath.x = paperPath.position.x;
+            wickPath.y = paperPath.position.y;
+            wickPath.width = paperPath.bounds._width;
+            wickPath.height = paperPath.bounds._height;
+            wickEditor.paper.pathRoutines.refreshPathData(wickPath);
+            allPaths.push(wickPath);
+        }
+
+        if(paperObj instanceof paper.Group) {
+            importPaperGroup(paperObj);
+        } else {
+            importPaperPath(paperObj);
+        }
+
+        wickEditor.actionHandler.doAction('addObjects', {wickObjects:allPaths});
     }
     
     var loadAnimatedGIF = function (dataURL, filename, callback) {
