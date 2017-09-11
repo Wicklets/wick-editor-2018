@@ -5182,11 +5182,11 @@ WickObject.prototype.getAbsolutePositionTransformed = function () {
     } else {
         var parent = this.parentObject;
         var parentPosition = parent.getAbsolutePositionTransformed();
-        var parentScale = {x:parent.scaleX, y:parent.scaleY};
+        var parentScale = parent.getAbsoluteScale()
         var rotatedPosition = {x:this.x*parentScale.x, y:this.y*parentScale.y};
         if(parent.flipX) rotatedPosition.x *= -1;
         if(parent.flipY) rotatedPosition.y *= -1;
-        rotatedPosition = rotate_point(rotatedPosition.x, rotatedPosition.y, 0, 0, parent.rotation);
+        rotatedPosition = rotate_point(rotatedPosition.x, rotatedPosition.y, 0, 0, parent.getAbsoluteRotation());
         return {
             x: rotatedPosition.x + parentPosition.x,
             y: rotatedPosition.y + parentPosition.y

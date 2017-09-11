@@ -727,21 +727,8 @@ WickObject.prototype.getAllChildObjectsRecursive = function () {
         return [this];
     }
 
-    /*var children = [];
-    for(var l = this.layers.length-1; l >= 0; l--) {
-        var layer = this.layers[l];
-        for(var f = 0; f < layer.frames.length; f++) {
-            var frame = layer.frames[f];
-            for(var o = 0; o < frame.wickObjects.length; o++) {
-                children.push(frame.wickObjects[o]);
-                children = children.concat(frame.wickObjects[o].getAllChildObjectsRecursive());
-            }
-        }
-    }
-    return children;*/
-
     var children = [this];
-    this.layers.forEach(function (layer) {
+    this.layers.forEachBackwards(function (layer) {
         layer.frames.forEach(function (frame) {
             frame.wickObjects.forEach(function (wickObject) {
                 children = children.concat(wickObject.getAllChildObjectsRecursive());

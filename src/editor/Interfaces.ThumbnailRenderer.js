@@ -55,10 +55,16 @@ var ThumbnailRendererInterface = function (wickEditor) {
     }
 
     self.renderAllThumbsOnTimeline = function () {
+        // force renderer to preload everything
+        renderer.renderWickObjects(wickEditor.project, []);
+
         var allFrames = wickEditor.project.currentObject.getAllFrames();
-        allFrames.forEach(function (frame) {
-            self.renderThumbnailForFrame(frame);
-        });
+        setTimeout(function () {
+            allFrames.forEach(function (frame) {
+                self.renderThumbnailForFrame(frame);
+            });
+            wickEditor.timeline.syncWithEditorState();
+        }, 500); // eh just give it a little time to get ready
     }
 
 }
