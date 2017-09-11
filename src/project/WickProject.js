@@ -232,22 +232,6 @@ WickProject.prototype.getAsJSON = function (callback, format) {
     // Encode scripts/text to avoid JSON format problems
     self.rootObject.encodeStrings();
 
-    // Remove unused library assets
-    /*var removeAssetUUIDs = [];
-    for(uuid in self.library.assets) {
-        var asset = self.library.assets[uuid];
-        var assetBeingUsed = false;
-        self.getAllObjects().forEach(function (obj) {
-            if(obj.assetUUID === asset.uuid) assetBeingUsed = true;
-        });
-        if(!assetBeingUsed) {
-            removeAssetUUIDs.push(asset.uuid);
-        }
-    };
-    removeAssetUUIDs.forEach(function (uuid) {
-        self.library.deleteAsset(uuid);
-    });*/
-    
     var JSONProject = JSON.stringify(self, WickProject.Exporter.JSONReplacer, format);
     
     // Decode scripts back to human-readble and eval()-able format
@@ -256,41 +240,6 @@ WickProject.prototype.getAsJSON = function (callback, format) {
     callback(JSONProject);
 
 }
-
-/*WickProject.prototype.saveInLocalStorage = function () {
-    var self = this;
-    this.getAsJSON(function (JSONProject) {
-        console.log("Project size: " + JSONProject.length)
-        if(JSONProject.length > 5000000) {
-            wickEditor.alertbox.showMessage("Project too large to autosave");
-            return;
-
-            console.log("Project >5MB, compressing...");
-            var compressedJSONProject = WickProject.Compressor.compressProject(JSONProject, "LZSTRING-UTF16");
-            WickProject.saveProjectJSONInLocalStorage(compressedJSONProject);
-            console.log("Compressed size: " + compressedJSONProject.length);
-        } else {
-            console.log("Project <5MB, not compressing.");
-            WickProject.saveProjectJSONInLocalStorage(JSONProject);
-        }
-        self.unsaved = false;
-        wickEditor.syncInterfaces()
-    });
-}
-
-WickProject.saveProjectJSONInLocalStorage = function (projectJSON) {
-    if(localStorage) {
-        try {
-            wickEditor.alertbox.showProjectSavedMessage();
-            localStorage.setItem('wickProject', projectJSON);
-        } catch (err) {
-            console.error("LocalStorage could not save project, threw error:");
-            console.log(err);
-        }
-    } else {
-        console.error("LocalStorage not available.")
-    }
-}*/
 
 WickProject.prototype.getCopyData = function () {
     var objectJSONs = [];

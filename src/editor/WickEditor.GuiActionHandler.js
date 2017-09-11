@@ -574,8 +574,6 @@ var GuiActionHandler = function (wickEditor) {
             if(!args.dontWarn && !confirm("Create a new project? All unsaved changes to the current project will be lost!")) {
                 return;
             }
-
-            //localStorage.removeItem("wickProject");
             
             var project = new WickProject();
             project.name = window.prompt("Enter a name for your new project:", "NewProject") || "NewProject";

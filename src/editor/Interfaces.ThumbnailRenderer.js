@@ -38,6 +38,8 @@ var ThumbnailRendererInterface = function (wickEditor) {
 
     self.renderThumbnailForFrame = function (wickFrame) {
         if(!canvasContainer) {
+            // we have to use the renderer from the preview player because pixi gets mad if theres >1 renderer
+            // later just make a big global renderer owned by the editor that everybody can use
             var otherRenderer = wickEditor.previewplayer.getRenderer();
             renderer = otherRenderer.renderer;
             canvasContainer = otherRenderer.canvasContainer;

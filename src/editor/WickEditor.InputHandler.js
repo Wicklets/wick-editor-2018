@@ -530,7 +530,7 @@ var InputHandler = function (wickEditor) {
      Import Files
 *************************/
 
-    document.getElementById('importButton').onchange = function (e) {
+    function importFile (e) {
         var filePath = document.getElementById("importButton");
         if(filePath.files && filePath.files[0]) {
             var reader = new FileReader();
@@ -540,9 +540,11 @@ var InputHandler = function (wickEditor) {
             loadFileIntoWickObject(null,file,fileType);
         }
 
-        var importButton = $("importButton");
-        importButton.replaceWith( importButton = importButton.clone( true ) );
+        $("#importButton").replaceWith($("<input>", {id : "importButton", type: "file", "class": "hidden"}));
+        document.getElementById('importButton').onchange = importFile;
     }
+
+    document.getElementById('importButton').onchange = importFile;
 
 /*************************
     Leave page warning
