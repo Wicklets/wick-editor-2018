@@ -48,7 +48,7 @@ var ThumbnailRendererInterface = function (wickEditor) {
             canvasContainer.style.width = wickEditor.project.width+'px';
             canvasContainer.style.height = wickEditor.project.height+'px';
 
-            renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects());
+            renderer.renderWickObjects(wickEditor.project, wickFrame.wickObjects);
             var canvas = canvasContainer.children[0];
             wickFrame.thumbnail = canvas.toDataURL('image/png');
         }

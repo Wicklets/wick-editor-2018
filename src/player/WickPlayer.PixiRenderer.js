@@ -32,10 +32,16 @@ var WickPixiRenderer = function (canvasContainer) {
     canvasContainer.appendChild(renderer.view);
     renderer.view.focus()
 
+    var currentProjectUUID = null;
     var container = new PIXI.Container();
     var pixiSprites = {};
 
     self.renderWickObjects = function (project, wickObjects) {
+        if(currentProjectUUID !== project.uuid) {
+            currentProjectUUID = project.uuid;
+            preloadAllAssets(project);
+        }
+
         if(renderer.width !== project.width || renderer.height !== project.height) {
             renderer.resize(project.width, project.height);
             renderer.view.style.width  = project.width  + "px";
@@ -81,6 +87,12 @@ var WickPixiRenderer = function (canvasContainer) {
         wickObject.getAllActiveChildObjects().forEach(function (child) {
             renderWickObject(child);
         });
+    }
+
+    function preloadAllAssets (project) {
+        project.getAllObjects().forEach(function (wickObject) {
+            createPixiSprite(wickObject);
+        })
     }
 
     function createPixiSprite (wickObject) {
