@@ -4,20 +4,20 @@
 			"name" : "Haunted House",
 			"path" : "HauntedHouse"
 		}, {
-			"name" : "Wise Old Ghost",
-			"path" : "WiseOldGhost"
-		}, {
 			"name" : "Well-Dressed Ghost",
 			"path" : "WellDressedGhost"
-		}, {
-			"name" : "Hungry Ghost",
-			"path" : "HungryGhost"
 		}, {
 			"name" : "DJ Spookyman",
 			"path" : "DJSpookyman"
 		}, {
 			"name" : "Buggy",
 			"path" : "Buggy"
+		}, {
+			"name" : "Wise Old Ghost",
+			"path" : "WiseOldGhost"
+		}, {
+			"name" : "Hungry Ghost",
+			"path" : "HungryGhost"
 		}, {
 			"name" : "Kitchen Sink",
 			"path" : "KitchenSink"
