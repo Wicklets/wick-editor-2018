@@ -112,7 +112,7 @@ Tools.Pen = function (wickEditor) {
 
                 wickEditor.project.clearSelection();
                 var wickObj = hitResult.item.parent.wick;
-                wickEditor.project.selectObject(wickObj);
+                if(wickObj) wickEditor.project.selectObject(wickObj);
                 wickEditor.syncInterfaces();
 
                 if(newlySelected) return;
