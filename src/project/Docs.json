@@ -553,14 +553,36 @@
               "description": "The generated number will be less than or equal to max"
             }
           ]
-        },
-        {
-          "name": "localStorage",
-          "description": "Use the localStorage object to save data.",
-          "example": "// Use localStorage to load a saved position. \nthis.x = localStorage.savedX;\nthis.y = localStorage.savedY;\n\n// Save the position and rotation of an object in localStorage to use later.\nlocalStorage.savedX = this.x\nlocalStorage.savedY = this.y",
-          "snippet": "localStorage",
+        }, {
+          "name": "saveData(key,data)",
+          "description": "Saves data that persists between sessions.",
+          "example": "// Save what frame the project was at.\nsaveData('frame', root.currentFrameNumber);",
+          "snippet": "saveData('name', data)",
           "return": null,
-          "args": []
+          "args": [
+            {
+              "name": "key",
+              "type": "String",
+              "description": "The name that can be used to load the data later."
+            }, {
+              "name": "data",
+              "type": "Number, String, or Object",
+              "description": "The data to save"
+            }
+          ]
+        }, {
+          "name": "loadData(key)",
+          "description": "Loads data that was saved from a previous session.",
+          "example": "// Go to the frame where the project was last time it was run.\nvar frameNumber = loadData('frame');\ngotoAndStop(frameNumber);",
+          "snippet": "var data = loadData('name')",
+          "return": null,
+          "args": [
+            {
+              "name": "key",
+              "type": "String",
+              "description": "The name of the data you wish to load."
+            }
+          ]
         }
       ]
     }
