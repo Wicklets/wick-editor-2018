@@ -514,7 +514,7 @@
         {
           "name": "randomBool()",
           "description": "Generates a random boolean (true or false).",
-          "example": "// Use randomBool to simulate a coin flip.\nvar coinFlip = random.bool();\nif(coinFlip == true) {\n    alert('You&#8217;re lucky!!');\n}",
+          "example": "// Use randomBool to simulate a coin flip.\nvar coinFlip = randomBool();\nif(coinFlip == true) {\n    alert('You&#8217;re lucky!!');\n}",
           "snippet": "var randombool = randomBool()",
           "return": {
             "type": "Boolean",
@@ -524,7 +524,7 @@
         }, {
           "name": "randomInt(min,max)",
           "description": "Generates a random whole number between min and max.",
-          "example": "// Use random.integer to move to a random frame from 1-10.\nvar randomFrame = random.integer(1,10);\ngotoAndStop(randomFrame);",
+          "example": "// Use randomInt to move to a random frame from 1-10.\nvar randomFrame = randomInt(1,10);\ngotoAndStop(randomFrame);",
           "snippet": "var randomint = randomInt(min, max)",
           "return": {
             "type": "Number",
@@ -544,7 +544,7 @@
         }, {
           "name": "randomFloat(min,max)",
           "description": "Generates a random float between min and max.",
-          "example": "// Use randomFloat to choose how transparent an object appears.\nthis.opacity = random.real(0,1);",
+          "example": "// Use randomFloat to choose how transparent an object appears.\nthis.opacity = randomFloat(0,1);",
           "snippet": "var randomfloat = randomFloat(min, max)",
           "return": {
             "type": "Number",
