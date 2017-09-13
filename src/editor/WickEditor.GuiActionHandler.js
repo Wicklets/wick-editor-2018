@@ -257,6 +257,16 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.paper.getProjectAsSVG()
         });
 
+    registerAction('exportProjectPNG',
+        [],
+        [],
+        {},
+        function (args) {
+            wickEditor.gifRenderer.renderProjectAsPNG(function (blob) {
+                saveAs(blob, wickEditor.project.name+".png");
+            });
+        });
+
     // Export project as WebM
     registerAction('exportProjectWebM',
         [],

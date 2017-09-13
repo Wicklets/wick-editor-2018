@@ -116,12 +116,17 @@ var MenuBarInterface = function (wickEditor) {
             new TabButton('New Project', function () {
                 wickEditor.guiActionHandler.doAction("newProject");
             }),
-            new TabButton('Save', function () {
-                wickEditor.guiActionHandler.doAction("exportProjectJSON");
-                //wickEditor.guiActionHandler.doAction("saveProject");
-            }),
             new TabButton('Open', function () {
                 wickEditor.guiActionHandler.doAction("openFile");
+            }),
+            new TabButton('Save', function () {
+                wickEditor.guiActionHandler.doAction("exportProjectJSON");
+            }),
+            new TabButton('Save As HTML', function () {
+                wickEditor.guiActionHandler.doAction("exportProjectHTML");
+            }),
+            new TabButton('Save As ZIP', function () {
+                wickEditor.guiActionHandler.doAction("exportProjectZIP");
             }),
             new TabSpacer(),
 
@@ -131,20 +136,17 @@ var MenuBarInterface = function (wickEditor) {
             new TabButton('Export SVG', function () {
                 wickEditor.guiActionHandler.doAction("exportFrameSVG");
             }),
-            new TabButton('Export HTML', function () {
-                wickEditor.guiActionHandler.doAction("exportProjectHTML");
-            }),
-            new TabButton('Export ZIP', function () {
-                wickEditor.guiActionHandler.doAction("exportProjectZIP");
+            new TabButton('Export PNG', function () {
+                wickEditor.guiActionHandler.doAction("exportProjectPNG");
             }),
             new TabSpacer(),
             
             new TabButton('Project settings', function () {
                 wickEditor.guiActionHandler.doAction("openProjectSettings");
             }),
-            new TabButton('Editor settings', function () {
+            /*new TabButton('Editor settings', function () {
                 wickEditor.guiActionHandler.doAction("openEditorSettings");
-            }),
+            }),*/
         ]);
 
         addTab('Edit', [

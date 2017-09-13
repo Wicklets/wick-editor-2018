@@ -34,14 +34,30 @@ var ScriptingIDEInterface = function (wickEditor) {
             that.open = false;
 
             that.aceEditor = ace.edit("scriptEditor");
-            that.aceEditor.setOptions({
-                enableBasicAutocompletion: true,
-                enableLiveAutocompletion: true,
-            })
             that.aceEditor.setTheme("ace/theme/idle_fingers");
             that.aceEditor.getSession().setMode("ace/mode/javascript");
             that.aceEditor.$blockScrolling = Infinity; // Makes that weird message go away
             that.aceEditor.setAutoScrollEditorIntoView(true);
+
+            that.aceEditor.setOptions({
+                enableBasicAutocompletion: true,
+                enableLiveAutocompletion: true,
+            })
+            var langTools = ace.require('ace/ext/language_tools');
+            var staticWordCompleter = {
+            getCompletions: function(editor, session, pos, prefix, callback) {
+                var wordList = window.wickDocsKeyworksArray;
+                callback(null, wordList.map(function(word) {
+                    return {
+                        caption: word,
+                        value: word,
+                        meta: "static"
+                    };
+                }));
+
+                }
+            }
+            that.aceEditor.completers = [staticWordCompleter]
 
             that.beautify = ace.require("ace/ext/beautify");
 
@@ -97,11 +113,13 @@ var ScriptingIDEInterface = function (wickEditor) {
             data: {},
             success: function(data) {
                 window.wickDocsKeywords = "";
+                window.wickDocsKeyworksArray = [];
                 window.wickDocs = data.docs;
                 if(!data.docs) return;
                 data.docs.forEach(function (doc) {
                     doc.properties.forEach(function (prop) {
                         window.wickDocsKeywords += prop.name.split('(')[0] + "|"
+                        window.wickDocsKeyworksArray.push(prop.name.split('(')[0]);
                     });
                 });
 
