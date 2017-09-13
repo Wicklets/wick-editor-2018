@@ -15,6 +15,12 @@
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
 
+
+// TODO: 
+// Update changed sprites
+// Update changed ordering
+// Use isDirty flags for these so they don't slow everything down.
+
 var WickPixiRenderer = function (canvasContainer) {
 
     var self = this;

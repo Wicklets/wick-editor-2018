@@ -515,37 +515,6 @@ WickObject.prototype.updateFrameTween = function (relativePlayheadPosition) {
     }
 }
 
-/*WickObject.prototype.addTween = function (newTween) {
-    var self = this;
-
-    var replacedTween = false;
-    this.tweens.forEach(function (tween) {
-        if (tween.frame === newTween.frame) {
-            self.tweens[self.tweens.indexOf(tween)] = newTween;
-            replacedTween = true;
-        }
-    });
-
-    if(!replacedTween)
-        this.tweens.push(newTween);
-}
-
-WickObject.prototype.removeTween = function (tweenToDelete) {
-    var self = this;
-
-    var deleteTweenIndex = null;
-    this.tweens.forEach(function (tween) {
-        if(deleteTweenIndex) return;
-        if (tweenToDelete === tween) {
-            deleteTweenIndex = self.tweens.indexOf(tween);
-        }
-    });
-
-    if(deleteTweenIndex !== null) {
-        self.tweens.splice(deleteTweenIndex, 1);
-    }
-}*/
-
 WickObject.prototype.addPlayRange = function (playRange) {
     if (!this.isSymbol) return; 
 
@@ -568,92 +537,6 @@ WickObject.prototype.removePlayRange = function (playRangeToDelete) {
 
     if(deletePlayRangeIndex !== null) self.playRanges.splice(deletePlayRangeIndex, 1); 
 }
-
-/*WickObject.prototype.hasTweenAtFrame = function (frame) {
-    var foundTween = false
-    this.tweens.forEach(function (tween) {
-        if(foundTween) return;
-        if(tween.frame === frame) foundTween = true;
-    })
-    return foundTween;
-}
-
-WickObject.prototype.getFromTween = function () {
-    var foundTween = null;
-
-    var relativePlayheadPosition = this.parentObject.playheadPosition - this.parentFrame.playheadPosition;
-    
-    var seekPlayheadPosition = relativePlayheadPosition;
-    while (!foundTween && seekPlayheadPosition >= 0) {
-        this.tweens.forEach(function (tween) {
-            if(tween.frame === seekPlayheadPosition) {
-                foundTween = tween;
-            }
-        });
-        seekPlayheadPosition--;
-    }
-
-    return foundTween;
-}
-
-WickObject.prototype.getToTween = function () {
-    var foundTween = null;
-
-    var relativePlayheadPosition = this.parentObject.playheadPosition - this.parentFrame.playheadPosition;
-
-    var seekPlayheadPosition = relativePlayheadPosition;
-    var parentFrameLength = this.parentObject.getFrameWithChild(this).length;
-    while (!foundTween && seekPlayheadPosition < parentFrameLength) {
-        this.tweens.forEach(function (tween) {
-            if(tween.frame === seekPlayheadPosition) {
-                foundTween = tween;
-            }
-        });
-        seekPlayheadPosition++;
-    }
-
-    return foundTween;
-}*/
-
-/*WickObject.prototype.applyTweens = function () {
-
-    var that = this;
-
-    if (!this.isRoot && this.tweens.length > 0) {
-        if(this.tweens.length === 1) {
-            this.tweens[0].applyTweenToWickObject(that);
-        } else {
-            var tweenFrom = that.getFromTween();
-            var tweenTo = that.getToTween();
-
-            if (tweenFrom && tweenTo) {
-                // yuck
-                var A = tweenFrom.frame;
-                var B = tweenTo.frame;
-                var L = B-A;
-                var P = (this.parentObject.playheadPosition - this.parentFrame.playheadPosition)-A;
-                var T = P/L;
-                if(B-A === 0) T = 1;
-                
-                var interpolatedTween = WickTween.interpolateTweens(tweenFrom, tweenTo, T);
-                interpolatedTween.applyTweenToWickObject(that);
-            }
-            if (!tweenFrom && tweenTo) {
-                tweenTo.applyTweenToWickObject(that);
-            }
-            if (!tweenTo && tweenFrom) {
-                tweenFrom.applyTweenToWickObject(that);
-            }
-        }
-    }
-
-    if (!this.isSymbol) return;
-
-    this.getAllActiveChildObjects().forEach(function (child) {
-        child.applyTweens();
-    });
-
-}*/
 
 /* Return all child objects of a parent object */
 WickObject.prototype.getAllChildObjects = function () {
@@ -732,18 +615,6 @@ WickObject.prototype.getAllActiveChildObjectsRecursive = function (includeParent
         }
     }
     return children;
-
-    /*var children = [];
-    if(includeParents) children = [this];
-    this.layers.forEach(function (layer) {
-        layer.frames.forEach(function (frame) {
-            if(!frame.isActive()) return;
-            frame.wickObjects.forEach(function (wickObject) {
-                children = children.concat(wickObject.getAllChildObjectsRecursive());
-            });
-        });
-    });
-    return children;*/
 
 }
 
@@ -1191,55 +1062,6 @@ WickObject.prototype.hitTestRectangles = function (otherObj) {
     var objA = this;
     var objB = otherObj;
 
-    // var aPos = objA.getAbsolutePositionTransformed(); 
-    // var bPos = objB.getAbsolutePositionTransformed(); 
-
-    // var aScale = objA.getAbsoluteScale();
-    // var aWidth = objA.width * aScale.x; 
-    // var aHeight = objA.height * aScale.y; 
-    // var bScale = objB.getAbsoluteScale();
-    // var bWidth = objB.width * bScale.x; 
-    // var bHeight = objB.height * bScale.y; 
-
-    // var aRot = objA.getAbsoluteRotation(); 
-    // var bRot = objB.getAbsoluteRotation(); 
-
-
-    // // Define bottom left points for SAT boxes 
-    // var aPoint = { "x": aPos.x - (aWidth/2), 
-    //                "y": aPos.y - (aHeight/2) };
-
-    // var bPoint = { "x": bPos.x - (bWidth/2), 
-    //                "y": bPos.y - (bHeight/2) };
-
-    // console.log(aPoint, aWidth, aHeight, aRot);
-    // console.log(bPoint, bWidth, bHeight, bRot);
-
-    // var boxA = new SAT.Box(new SAT.Vector(0,0), aWidth, aHeight); 
-    // var boxB = new SAT.Box(new SAT.Vector(0,0), bWidth, bHeight); 
-
-    // console.log(boxA);
-
-    // var polyA = boxA.toPolygon(); 
-    // var polyB = boxB.toPolygon(); 
-
-    // polyA.rotate(-toRadians(aRot)); 
-    // polyB.rotate(-toRadians(bRot)); 
-
-    // console.log(toRadians(aRot));
-
-    // polyA.translate(aPoint.x, aPoint.y); 
-    // polyB.translate(bPoint.x, bPoint.y); 
-
-    // var response = new SAT.Response();
-
-    // console.log(polyA, polyB);
-
-    // console.log(SAT.testPolygonPolygon(polyA, polyB, response));
-
-    // return SAT.testPolygonPolygon(polyA, polyB, response);
-
-
     var objAAbsPos = objA.getAbsolutePositionTransformed();
     var objBAbsPos = objB.getAbsolutePositionTransformed();
 
@@ -1366,10 +1188,6 @@ WickObject.prototype.isPointInside = function(point) {
             -object.getAbsoluteRotation()
         );
 
-        /*console.log('---')
-        console.log(transformedPoint)
-        console.log(transformedPosition)*/
-
         // Bounding box check
         if ( transformedPoint.x >= transformedPosition.x - transformedWidth /2 &&
              transformedPoint.y >= transformedPosition.y - transformedHeight/2 &&
@@ -1387,7 +1205,6 @@ WickObject.prototype.isPointInside = function(point) {
             }
 
             // Alpha mask check
-            //console.log(relativePoint)
             var objectAlphaMaskIndex =
                 (Math.floor(relativePoint.x/transformedScale.x)%Math.floor(object.width+object.svgStrokeWidth)) +
                 (Math.floor(relativePoint.y/transformedScale.y)*Math.floor(object.width+object.svgStrokeWidth));
@@ -1404,7 +1221,6 @@ WickObject.prototype.isPointInside = function(point) {
 }
 
 WickObject.prototype.setText = function (text) {
-    //this.pixiText.text = ""+text;
     wickRenderer.setText(this, text);
 }
 
@@ -1585,6 +1401,7 @@ WickObject.prototype.tick = function () {
         }
     }
 
+    // Update text display
     if(this.textData) {
         if(this.varName) {
             (wickPlayer || wickEditor).project.loadBuiltinFunctions(this);
@@ -1596,6 +1413,12 @@ WickObject.prototype.tick = function () {
             }
             this.setText(newText);
         }
+    }
+
+    // Update currentFrameNumber and currentFrameName for API
+    if(this.isSymbol) {
+        this.currentFrameNumber = this.playheadPosition+1;
+        this.currentFrameName = this.getCurrentLayer().getCurrentFrame().name;
     }
 
 }

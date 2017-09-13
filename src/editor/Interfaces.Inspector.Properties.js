@@ -205,26 +205,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
-    properties.push(new InspectorInterface.CheckboxInput({
-        title: 'Editable',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isText;
-        },
-        getValueFn: function () {
-            return selectionInfo.object.htmlElemData !== undefined;
-        }, 
-        onChangeFn: function (val) {
-            if(selectionInfo.object.htmlElemData) {
-                selectionInfo.object.htmlElemData = undefined;
-            } else {
-                selectionInfo.object.htmlElemData = {
-                    tagName : 'input'
-                };
-            }
-            wickEditor.syncInterfaces();
-        }
-    }));
-
     properties.push(new InspectorInterface.SelectInput({
         title: 'Font',
         options: ['arial', 'times new roman', 'comic sans ms', 'georgia', 'palatino linotype', 'book antiqua', 'helvetica', 'arial black', 'impact', 'lucida sans unicode', 'tahoma', 'geneva', 'trebuchet ms', 'verdana', 'courier new', 'Lucida Console'],

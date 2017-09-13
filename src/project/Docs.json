@@ -306,10 +306,18 @@
           ]
         },
         {
-          "name": "playheadPosition",
-          "description": "The position of the playhead of the object (works on Clip and Button objects only).",
-          "example": "if(this.playheadPosition === 10) {\n    alert('On frame 10!')\n}",
-          "snippet": "this.playheadPosition",
+          "name": "currentFrameNumber",
+          "description": "The position of the playhead of the object (only works on Clips).",
+          "example": "if(this.currentFrameNumber === 10) {\n    alert('On frame 10!')\n}",
+          "snippet": "this.currentFrameNumber",
+          "args": [],
+          "return": null
+        },
+        {
+          "name": "currentFrameName",
+          "description": "The name of the current frame of the object (only works on Clips).",
+          "example": "if(this.currentFrameName === 'walking') {\n    alert('On walking frame!')\n}",
+          "snippet": "this.currentFrameName",
           "args": [],
           "return": null
         }
@@ -446,22 +454,6 @@
           }
         },
         {
-          "name": "tiltX",
-          "description": "Returns the x-coordinate tilt of the device. This function only works on devices with an accelerometer/gyroscope (such as smartphones).",
-          "example": "// Move this object in the direction of the device's tilt\nthis.x = tiltX;",
-          "snippet": "tiltX",
-          "args": [],
-          "return": null
-        },
-        {
-          "name": "tiltY",
-          "description": "Returns the y-coordinate tilt of the device. This function only works on devices with an accelerometer/gyroscope (such as smartphones)",
-          "example": "// Move this object in the direction of the device's tilt\nthis.y = tiltY;",
-          "snippet": "tiltY",
-          "args": [],
-          "return": null
-        },
-        {
           "name": "hideCursor()",
           "description": "Makes the cursor invisible.",
           "example": "hideCursor();",
@@ -561,57 +553,6 @@
               "description": "The generated number will be less than or equal to max"
             }
           ]
-        }, {
-          "name": "elapsedSeconds()",
-          "description": "Returns the number of seconds since the project was started.",
-          "example": "// Add this to a text object\nfunction update () {\n    this.setText(elapsedSeconds()); \n}",
-          "snippet": "elapsedSeconds()",
-          "return": { "type": "Number",
-                      "description": "The number of seconds since the project was started." },
-          "args": []
-        }, {
-          "name": "elapsedMilliseconds()",
-          "description": "Returns the number of milliseconds since the project was started.",
-          "example": "// Add this to a text object\nfunction update () {\n    this.setText(elapsedMilliseconds()); \n}",
-          "snippet": "elapsedMilliseconds()",
-          "return": { "type": "Number",
-                      "description": "The number of milliseconds since the project was started." },
-          "args": []
-        },
-        {
-          "name": "alert(message)",
-          "description": "Displays a popup window with the message given.",
-          "example": "alert('Hello!!');",
-          "snippet": "alert('Hello!!')",
-          "return": null,
-          "args": [
-            {
-              "name": "message",
-              "type": "String",
-              "description": "The message to display"
-            }
-          ]
-        }, {
-          "name": "prompt(message)",
-          "description": "Prompts the user with a popup and a text input field.",
-          "example": "var name = prompt('What is your name?');\nalert('Your name is ' + name);",
-          "snippet": "var input = prompt('Enter something')",
-          "return": null,
-          "args": [
-            {
-              "name": "message",
-              "type": "String",
-              "description": "The message to display"
-            }
-          ]
-        },
-        {
-          "name": "window.open(url)",
-          "description": "Opens a new window with the given url.",
-          "example": "window.open('http://www.wickeditor.com/')",
-          "snippet": "window.open('http://www.wickeditor.com/')",
-          "return": null,
-          "args": []
         },
         {
           "name": "localStorage",
