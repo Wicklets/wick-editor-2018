@@ -36,6 +36,16 @@ body {
 	top: 5px;
 	right: 5px;
 }
+.last-updated {
+	position: absolute;
+	width: 140px;
+	height: 30px;
+	text-align: center;
+	font-size: 12px;
+	top: 25px;
+	right: 5px;
+	color: #555;
+}
 
 #player-container {
 	margin-left: 50%;
