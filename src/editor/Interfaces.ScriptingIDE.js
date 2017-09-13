@@ -22,6 +22,9 @@ var ScriptingIDEInterface = function (wickEditor) {
     var maximized;
     var objectBeingScripted;
 
+    var changeAnnotationTimer;
+    var SYNTAX_ERROR_MSG_DELAY = 800;
+
     var reference = new ScriptingIDEReference(this, wickEditor);
 
     this.justOpened = true;
@@ -68,32 +71,35 @@ var ScriptingIDEInterface = function (wickEditor) {
             });
 
             that.aceEditor.getSession().on("changeAnnotation", function(){
-                if(!that.open)return;
+                clearTimeout(changeAnnotationTimer);
+                changeAnnotationTimer = setTimeout (function () {
+                    if(!that.open)return;
 
-                var annot = that.aceEditor.getSession().getAnnotations();
+                    var annot = that.aceEditor.getSession().getAnnotations();
 
-                // Look for errors
-                if(!objectBeingScripted) return;
+                    // Look for errors
+                    if(!objectBeingScripted) return;
 
-                if(objectBeingScripted.scriptError && objectBeingScripted.scriptError.type === 'syntax')
-                    objectBeingScripted.scriptError = null;
+                    if(objectBeingScripted.scriptError && objectBeingScripted.scriptError.type === 'syntax')
+                        objectBeingScripted.scriptError = null;
 
-                for (var key in annot){
-                    if (annot.hasOwnProperty(key)) {
-                        if(annot[key].type === 'error') {
-                            // There's a syntax error. Set the projectHasErrors flag so the project won't run.
-                            //that.projectHasErrors = true;
-                            if(!objectBeingScripted.scriptError || objectBeingScripted.scriptError.type === 'runtime') {
-                                objectBeingScripted.scriptError = {
-                                    message: annot[key].text,
-                                    line: annot[key].row+1,
-                                    type: 'syntax'
+                    for (var key in annot){
+                        if (annot.hasOwnProperty(key)) {
+                            if(annot[key].type === 'error') {
+                                // There's a syntax error. Set the projectHasErrors flag so the project won't run.
+                                //that.projectHasErrors = true;
+                                if(!objectBeingScripted.scriptError || objectBeingScripted.scriptError.type === 'runtime') {
+                                    objectBeingScripted.scriptError = {
+                                        message: annot[key].text,
+                                        line: annot[key].row+1,
+                                        type: 'syntax'
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                updateHeaderText()
+                    updateHeaderText()
+                },SYNTAX_ERROR_MSG_DELAY);
             });
 
             that.resize = function () {
@@ -243,7 +249,8 @@ var ScriptingIDEInterface = function (wickEditor) {
         /*document.getElementById("errorMessage").innerHTML = "";
         document.getElementById("errorMessage").style.display = "hidden";*/
 
-        wickEditor.project.getAllObjects().forEach(function (obj) {
+        var framesAndObjects = (wickEditor.project.getAllFrames().concat(wickEditor.project.getAllObjects()));
+        framesAndObjects.forEach(function (obj) {
             if(obj.scriptError && obj.scriptError.type === 'runtime') {
                 obj.scriptError = null;
             }
