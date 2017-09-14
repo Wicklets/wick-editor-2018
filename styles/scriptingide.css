@@ -6,6 +6,7 @@
     height: 300px;
     z-index: 4;
     transition: height 0.2s ease;
+    border-radius: 9px 9px 0px 0px;
 }
 
 #errorMessage {
