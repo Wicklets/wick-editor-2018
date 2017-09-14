@@ -71,6 +71,10 @@ var ScriptingIDEInterface = function (wickEditor) {
             });
 
             that.aceEditor.getSession().on("changeAnnotation", function(){
+                if(objectBeingScripted.scriptError && objectBeingScripted.scriptError.type === 'syntax')
+                    objectBeingScripted.scriptError = null;
+                updateHeaderText()
+
                 clearTimeout(changeAnnotationTimer);
                 changeAnnotationTimer = setTimeout (function () {
                     if(!that.open)return;
