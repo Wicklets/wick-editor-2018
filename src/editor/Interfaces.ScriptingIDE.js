@@ -338,4 +338,18 @@ var ScriptingIDEInterface = function (wickEditor) {
         that.syncWithEditorState();
     });
 
+    $("#scriptingIDEHeader").on("click", function (e) {
+        that.open = !that.open;
+        that.clearError();
+        that.syncWithEditorState();
+    });
+    $("#scriptingIDEHeader").on("mouseover", function (e) {
+        if(!that.open)
+            $("#scriptingGUI").css('height', '35px');
+    });
+    $("#scriptingIDEHeader").on("mouseout", function (e) {
+        if(!that.open)
+            $("#scriptingGUI").css('height', '30px');
+    });
+
 }
