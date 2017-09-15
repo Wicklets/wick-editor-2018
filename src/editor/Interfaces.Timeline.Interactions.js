@@ -399,4 +399,30 @@ TimelineInterface.Interactions = function (wickEditor, timeline) {
         })
     }
 
+    var timelineOffset = 186;
+    interactions['dragPlayhead'] = {
+        'start' : (function (e) {
+            timeline.playhead.setPosition(e.pageX-timelineOffset);
+            wickEditor.project.getCurrentObject().playheadPosition = timeline.playhead.getFramePosition();
+            wickEditor.previewplayer.startFastRendering();
+            wickEditor.previewplayer.doFastRender();
+        }), 
+        'update' : (function (e) {
+            timeline.playhead.setPosition(e.pageX-timelineOffset);
+            if(timeline.playhead.frameDidChange()) {
+                wickEditor.project.getCurrentObject().playheadPosition = timeline.playhead.getFramePosition();
+                wickEditor.previewplayer.doFastRender();
+            }
+        }),
+        'finish' : (function (e) {
+            timeline.playhead.snap();
+            wickEditor.previewplayer.stopFastRendering();
+            wickEditor.actionHandler.doAction('movePlayhead', {
+                obj: wickEditor.project.getCurrentObject(),
+                newPlayheadPosition: timeline.playhead.getFramePosition(),
+                newLayer: wickEditor.project.getCurrentLayer()
+            });
+        })
+    }
+
 }

@@ -71,6 +71,10 @@ var ScriptingIDEInterface = function (wickEditor) {
             });
 
             that.aceEditor.getSession().on("changeAnnotation", function(){
+                if(objectBeingScripted && objectBeingScripted.scriptError && objectBeingScripted.scriptError.type === 'syntax')
+                    objectBeingScripted.scriptError = null;
+                updateHeaderText()
+                
                 clearTimeout(changeAnnotationTimer);
                 changeAnnotationTimer = setTimeout (function () {
                     if(!that.open)return;
@@ -157,7 +161,7 @@ var ScriptingIDEInterface = function (wickEditor) {
             } else {
                 document.getElementById('scriptingGUI').style.height = '300px';
             }
-
+            
             this.aceEditor.resize();
             document.getElementById('closeScriptingGUIButton').style.display = 'block';
             document.getElementById('openScriptingGUIButton').style.display = 'none';
@@ -345,7 +349,7 @@ var ScriptingIDEInterface = function (wickEditor) {
     });
     $("#scriptingIDEHeader").on("mouseover", function (e) {
         if(!that.open)
-            $("#scriptingGUI").css('height', '35px');
+            $("#scriptingGUI").css('height', '32px');
     });
     $("#scriptingIDEHeader").on("mouseout", function (e) {
         if(!that.open)
