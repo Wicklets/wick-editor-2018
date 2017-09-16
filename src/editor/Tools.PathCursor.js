@@ -112,6 +112,7 @@ Tools.PathCursor = function (wickEditor) {
                 drawingPath = item;
             })
 
+            hitResult = paper.project.hitTest(event.point, hitOptions);
             if(drawingPath) {
                 var segments = drawingPath.segments;
                 var firstSegment = segments[0];
@@ -120,7 +121,6 @@ Tools.PathCursor = function (wickEditor) {
                 lastSegment.handleOut.x = -lastSegment.handleIn.x
                 lastSegment.handleOut.y = -lastSegment.handleIn.y
 
-                hitResult = paper.project.hitTest(event.point, hitOptions);
                 if(hitResult && hitResult.segment === firstSegment) {
                     drawingPath.closePath();
                     currentSegment = segments[0];
@@ -129,35 +129,37 @@ Tools.PathCursor = function (wickEditor) {
                     currentSegment.selected = true;
                 }
             } else {
-                var newPath = new paper.Path({insert:false});
-                newPath.fillColor = wickEditor.settings.fillColor;
-                newPath.strokeColor = wickEditor.settings.strokeColor;
-                newPath.strokeWidth = wickEditor.settings.strokeWidth;
-                newPath.strokeJoin = 'round';
-                newPath.add(event.point);
+                if(!hitResult) {
+                    var newPath = new paper.Path({insert:false});
+                    newPath.fillColor = wickEditor.settings.fillColor;
+                    newPath.strokeColor = wickEditor.settings.strokeColor;
+                    newPath.strokeWidth = wickEditor.settings.strokeWidth;
+                    newPath.strokeJoin = 'round';
+                    newPath.add(event.point);
 
-                var group = new paper.Group({insert:false});
-                group.addChild(newPath);
+                    var group = new paper.Group({insert:false});
+                    group.addChild(newPath);
 
-                var svgString = group.exportSVG({asString:true});
-                var pathWickObject = WickObject.createPathObject(svgString);
-                pathWickObject.x = event.point.x;
-                pathWickObject.y = event.point.y;
-                pathWickObject.width = 1;
-                pathWickObject.height = 1;
+                    var svgString = group.exportSVG({asString:true});
+                    var pathWickObject = WickObject.createPathObject(svgString);
+                    pathWickObject.x = event.point.x;
+                    pathWickObject.y = event.point.y;
+                    pathWickObject.width = 1;
+                    pathWickObject.height = 1;
 
-                wickEditor.paper.pathRoutines.refreshPathData(pathWickObject);
+                    wickEditor.paper.pathRoutines.refreshPathData(pathWickObject);
 
-                wickEditor.actionHandler.doAction('addObjects', {
-                    wickObjects: [pathWickObject]
-                });
-                paper.project.selectedItems.forEach(function (item) {
-                    if(item instanceof paper.Group) return;
-                    drawingPath = item;
-                    currentSegment = drawingPath.segments[0];
-                    currentSegment.selected = true;
-                })
-                return;
+                    wickEditor.actionHandler.doAction('addObjects', {
+                        wickObjects: [pathWickObject]
+                    });
+                    paper.project.selectedItems.forEach(function (item) {
+                        if(item instanceof paper.Group) return;
+                        drawingPath = item;
+                        currentSegment = drawingPath.segments[0];
+                        currentSegment.selected = true;
+                    })
+                    return;
+                }
             }
         }
 

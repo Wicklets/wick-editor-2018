@@ -318,6 +318,17 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.syncInterfaces();
         });
 
+    // Control + Shift + A
+    // Deselect All
+    registerAction('deselectAll',
+        ['Modifier','SHIFT','A'],
+        [],
+        {},
+        function(args) {
+            wickEditor.project.clearSelection();
+            wickEditor.syncInterfaces();
+        });
+
     // Up
     // Move current object up one pixel
     registerAction('moveSelectionUp',

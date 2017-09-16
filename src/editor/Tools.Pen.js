@@ -26,7 +26,7 @@ Tools.Pen = function (wickEditor) {
     };
 
     this.getToolbarIcon = function () {
-        return "resources/tools/Vector.svg";
+        return "resources/path.png";
     }
 
     this.getTooltipName = function () {

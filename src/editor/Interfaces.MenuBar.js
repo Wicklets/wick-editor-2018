@@ -170,6 +170,14 @@ var MenuBarInterface = function (wickEditor) {
             new TabButton('Delete', function () {
                 wickEditor.guiActionHandler.doAction("deleteSelectedObjects")
             }),
+            new TabSpacer(),
+
+            new TabButton('Select All', function () {
+                wickEditor.guiActionHandler.doAction("selectAll")
+            }),
+            new TabButton('Deselect All', function () {
+                wickEditor.guiActionHandler.doAction("deselectAll")
+            }),
         ]);
 
         addTab('Import', [
