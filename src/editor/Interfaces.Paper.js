@@ -186,11 +186,12 @@ var PaperInterface = function (wickEditor) {
               || (wickEditor.currentTool instanceof Tools.Pen)
               || (wickEditor.currentTool instanceof Tools.Polygon);
 
-        if(wickEditor.currentTool instanceof Tools.Polygon) {
+        /*if(wickEditor.currentTool instanceof Tools.Polygon) {
             polygonTool.activate();
         } else {
             pathSelectionTool.activate();
-        }
+        }*/
+        pathSelectionTool.activate();
 
         if(active) {
 
@@ -265,11 +266,17 @@ var PaperInterface = function (wickEditor) {
     }
 
     self.getProjectAsSVG = function () {
+        paper.view.viewSize.width  = wickEditor.project.width;
+        paper.view.viewSize.height = wickEditor.project.height;
+        paper.view.matrix = new paper.Matrix();
         var url = "data:image/svg+xml;utf8," + encodeURIComponent(paper.project.exportSVG({asString:true}));
         var link = document.createElement("a");
-           link.download = wickEditor.project.name + '.svg';
-           link.href = url;
-           link.click();
+        link.download = wickEditor.project.name + '.svg';
+        link.href = url;
+        link.click();
+
+        paper.view.viewSize.width  = window.innerWidth;
+        paper.view.viewSize.height = window.innerHeight;
     }
 
     function refreshSelection () {
@@ -281,7 +288,7 @@ var PaperInterface = function (wickEditor) {
                 //if(showHandles) {
                     child.fullySelected = true;
                     //child.selected = true;
-                //} 
+                //}
             }
         });
 

@@ -33,7 +33,7 @@ Tools.Cursor = function (wickEditor) {
     }
 
     this.getTooltipName = function () {
-        return "Cursor (C)";
+        return "Selection Cursor (C)";
     }
 
     this.setup = function () {

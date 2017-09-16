@@ -22,7 +22,7 @@ var WickEditor = function () {
     var self = this;
 
     // http://semver.org/
-    self.version = "0.3";
+    self.version = "0.4";
     console.log("Wick Editor version " + self.version)
     if(localStorage.wickVersion !== self.version) {
         // Wick has either
@@ -154,7 +154,6 @@ WickEditor.prototype.changeTool = function (newTool) {
     this.lastTool = this.currentTool;
     this.currentTool = newTool;
     if(newTool.onSelected) newTool.onSelected();
-    this.tools.polygon.finishPath();
     this.fabric.forceModifySelectedObjects();
     this.fabric.deselectAll();
 

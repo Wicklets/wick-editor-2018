@@ -307,7 +307,9 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function(args) {
-            wickEditor.currentTool = wickEditor.tools.cursor;
+            if(!(wickEditor.currentTool instanceof Tools.Pen))
+                wickEditor.currentTool = wickEditor.tools.cursor;
+
             wickEditor.project.clearSelection();
             wickEditor.project.currentObject.getAllActiveChildObjects().forEach(function (obj) {
                 if(obj.parentFrame.parentLayer !== wickEditor.project.getCurrentLayer()) return;

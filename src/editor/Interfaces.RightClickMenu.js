@@ -239,4 +239,6 @@ var RightClickMenuInterface = function (wickEditor) {
         self.syncWithEditorState();
     }
 
+    window.disableWickRightClickMenu = function () { enabled = false; };
+
 }

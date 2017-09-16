@@ -26,7 +26,7 @@ Tools.Pen = function (wickEditor) {
     };
 
     this.getToolbarIcon = function () {
-        return "resources/path.png";
+        return "resources/tools/PathCursor.svg";
     }
 
     this.getTooltipName = function () {
@@ -43,6 +43,9 @@ Tools.Pen = function (wickEditor) {
     var addedPoint;
 
     var lastEvent;
+
+    var drawingPath;
+    var currentSegment;
 
     this.paperTool.onMouseDown = function(event) {
 
@@ -101,6 +104,63 @@ Tools.Pen = function (wickEditor) {
             tolerance: 5 / wickEditor.fabric.getCanvasTransform().zoom
         }
 
+        if(wickEditor.currentTool instanceof Tools.Polygon) {
+            drawingPath = null;
+            paper.project.selectedItems.forEach(function (item) {
+                if(item instanceof paper.Group) return;
+                if(item.closed) return;
+                drawingPath = item;
+            })
+
+            if(drawingPath) {
+                var segments = drawingPath.segments;
+                var firstSegment = segments[0];
+
+                var lastSegment = segments[segments.length-1];
+                lastSegment.handleOut.x = -lastSegment.handleIn.x
+                lastSegment.handleOut.y = -lastSegment.handleIn.y
+
+                hitResult = paper.project.hitTest(event.point, hitOptions);
+                if(hitResult && hitResult.segment === firstSegment) {
+                    drawingPath.closePath();
+                    currentSegment = segments[0];
+                } else if(!hitResult) {
+                    currentSegment = drawingPath.add(event.point);
+                    currentSegment.selected = true;
+                }
+            } else {
+                var newPath = new paper.Path({insert:false});
+                newPath.fillColor = wickEditor.settings.fillColor;
+                newPath.strokeColor = wickEditor.settings.strokeColor;
+                newPath.strokeWidth = wickEditor.settings.strokeWidth;
+                newPath.strokeJoin = 'round';
+                newPath.add(event.point);
+
+                var group = new paper.Group({insert:false});
+                group.addChild(newPath);
+
+                var svgString = group.exportSVG({asString:true});
+                var pathWickObject = WickObject.createPathObject(svgString);
+                pathWickObject.x = event.point.x;
+                pathWickObject.y = event.point.y;
+                pathWickObject.width = 1;
+                pathWickObject.height = 1;
+
+                wickEditor.paper.pathRoutines.refreshPathData(pathWickObject);
+
+                wickEditor.actionHandler.doAction('addObjects', {
+                    wickObjects: [pathWickObject]
+                });
+                paper.project.selectedItems.forEach(function (item) {
+                    if(item instanceof paper.Group) return;
+                    drawingPath = item;
+                    currentSegment = drawingPath.segments[0];
+                    currentSegment.selected = true;
+                })
+                return;
+            }
+        }
+
         hitResult = paper.project.hitTest(event.point, hitOptions);
         if(hitResult) {
             if(hitResult.item) {
@@ -108,7 +168,10 @@ Tools.Pen = function (wickEditor) {
                 hitResult.item.strokeCap = 'round';
                 hitResult.item.strokeJoin = 'round';
 
-                var newlySelected = !wickEditor.project.isObjectSelected(hitResult.item.parent.wick)
+                var selectCheckWickObj = hitResult.item.parent.wick;
+                var newlySelected = false;
+                if(selectCheckWickObj)
+                    newlySelected = !wickEditor.project.isObjectSelected(selectCheckWickObj)
 
                 wickEditor.project.clearSelection();
                 var wickObj = hitResult.item.parent.wick;
@@ -191,6 +254,18 @@ Tools.Pen = function (wickEditor) {
     }
 
     this.paperTool.onMouseDrag = function(event) {
+
+        if(wickEditor.currentTool instanceof Tools.Polygon) {
+            if(currentSegment) {
+                var delta = event.delta.clone();
+                currentSegment.handleIn.x -= delta.x;
+                currentSegment.handleIn.y -= delta.y;
+                currentSegment.handleOut.x += delta.x;
+                currentSegment.handleOut.y += delta.y;
+                return;
+            }
+        }
+
         if(!hitResult) return;
 
         function handlesAreOpposite() {
@@ -260,6 +335,15 @@ Tools.Pen = function (wickEditor) {
     }
 
     this.paperTool.onMouseUp = function (event) {
+        if(wickEditor.currentTool instanceof Tools.Polygon) {
+            if(currentSegment) {
+                wickEditor.paper.refreshSVGWickObject(drawingPath);
+                currentSegment = null;
+                drawingPath = null;
+                return;
+            }
+        }
+
         if(!hitResult) return;
         if(!hitResult.item) return;
         if(wickEditor.currentTool instanceof Tools.FillBucket) return;
