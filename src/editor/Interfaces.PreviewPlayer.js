@@ -41,21 +41,7 @@ var PreviewPlayer = function (wickEditor) {
 
         self.playing = true;
 
-        var pan = wickEditor.fabric.getPan();
-        var zoom = wickEditor.fabric.canvas.getZoom();
-        //pan = {x:0,y:0}
-        var tx = pan.x+wickEditor.project.width*(zoom-1)/2;
-        var ty = pan.y+wickEditor.project.height*(zoom-1)/2;
-        var transform = 'translate('+tx+'px,'+ty+'px) scale('+zoom+', '+zoom+')';
-        canvasContainer.style.width = wickEditor.project.width+'px';
-        canvasContainer.style.height = wickEditor.project.height+'px';
-        canvasContainer.style.paddingLeft = '0px';//(pan.x*zoom)+'px';
-        canvasContainer.style.paddingRight = '0px';
-        canvasContainer.style.paddingTop = '0px';//(pan.y*zoom)+'px';
-        canvasContainer.style.paddingBottom = '0px';
-        canvasContainer.style["-ms-transform"] = transform;
-        canvasContainer.style["-webkit-transform"] = transform;
-        canvasContainer.style["transform"] = transform;
+        updateCanvasTransforms();
 
         var currObj = wickEditor.project.getCurrentObject();
         if(currObj.playheadPosition >= currObj.getTotalTimelineLength()-1) {
@@ -77,7 +63,7 @@ var PreviewPlayer = function (wickEditor) {
                 }
             }
 
-            wickEditor.timeline.getElem().framesContainer.playhead.update();
+            wickEditor.timeline.getElem().playhead.update();
             wickEditor.project.applyTweens();
             canvasContainer.style.display = 'block';
             document.getElementById('fabricCanvas').style.display = 'none';
@@ -116,11 +102,49 @@ var PreviewPlayer = function (wickEditor) {
         }
     }
 
+    this.startFastRendering = function () {
+        this.playing = true;
+        document.getElementById('fabricCanvas').style.display = 'none';
+        updateCanvasTransforms()
+        renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects());
+    }
+
+    this.stopFastRendering = function () {
+        this.playing = false;
+        canvasContainer.style.display = 'none';
+        document.getElementById('fabricCanvas').style.display = 'block';
+    }
+
+    this.doFastRender = function () {
+        canvasContainer.style.display = 'block';
+        document.getElementById('fabricCanvas').style.display = 'none';
+        updateCanvasTransforms()
+        renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects());
+    }
+
     this.getRenderer = function () {
         return {
             renderer: renderer,
             canvasContainer: canvasContainer
         };
+    }
+
+    function updateCanvasTransforms () {
+        var pan = wickEditor.fabric.getPan();
+        var zoom = wickEditor.fabric.canvas.getZoom();
+        //pan = {x:0,y:0}
+        var tx = pan.x+wickEditor.project.width*(zoom-1)/2;
+        var ty = pan.y+wickEditor.project.height*(zoom-1)/2;
+        var transform = 'translate('+tx+'px,'+ty+'px) scale('+zoom+', '+zoom+')';
+        canvasContainer.style.width = wickEditor.project.width+'px';
+        canvasContainer.style.height = wickEditor.project.height+'px';
+        canvasContainer.style.paddingLeft = '0px';//(pan.x*zoom)+'px';
+        canvasContainer.style.paddingRight = '0px';
+        canvasContainer.style.paddingTop = '0px';//(pan.y*zoom)+'px';
+        canvasContainer.style.paddingBottom = '0px';
+        canvasContainer.style["-ms-transform"] = transform;
+        canvasContainer.style["-webkit-transform"] = transform;
+        canvasContainer.style["transform"] = transform;
     }
 	
 }

@@ -882,7 +882,6 @@ var WickActionHandler = function (wickEditor) {
 
     registerAction('movePlayhead',
         function (args) {
-            wickEditor.tools.polygon.finishPath();
             wickEditor.fabric.forceModifySelectedObjects()
             wickEditor.project.deselectObjectType(WickObject);
             

@@ -20,7 +20,6 @@ var PaperInterface = function (wickEditor) {
     var self = this;
 
     var pathSelectionTool;
-    var polygonTool;
 
     var active;
 
@@ -62,8 +61,7 @@ var PaperInterface = function (wickEditor) {
         path.fillColor = { hue: Math.random() * 360, saturation: 1, lightness: 1.0 };
         path.strokeColor = 'black';*/
 
-        pathSelectionTool = wickEditor.tools.pen.paperTool;
-        polygonTool = wickEditor.tools.polygon.paperTool;
+        pathSelectionTool = wickEditor.tools.pathCursor.paperTool;
 
     }
 
@@ -183,14 +181,10 @@ var PaperInterface = function (wickEditor) {
         var lastActive = active;
 
         active = (wickEditor.currentTool instanceof Tools.FillBucket)
-              || (wickEditor.currentTool instanceof Tools.Pen)
-              || (wickEditor.currentTool instanceof Tools.Polygon);
+              || (wickEditor.currentTool instanceof Tools.PathCursor)
+              || (wickEditor.currentTool instanceof Tools.Pen);
 
-        if(wickEditor.currentTool instanceof Tools.Polygon) {
-            polygonTool.activate();
-        } else {
-            pathSelectionTool.activate();
-        }
+        pathSelectionTool.activate();
 
         if(active) {
 
@@ -265,11 +259,17 @@ var PaperInterface = function (wickEditor) {
     }
 
     self.getProjectAsSVG = function () {
+        paper.view.viewSize.width  = wickEditor.project.width;
+        paper.view.viewSize.height = wickEditor.project.height;
+        paper.view.matrix = new paper.Matrix();
         var url = "data:image/svg+xml;utf8," + encodeURIComponent(paper.project.exportSVG({asString:true}));
         var link = document.createElement("a");
-           link.download = wickEditor.project.name + '.svg';
-           link.href = url;
-           link.click();
+        link.download = wickEditor.project.name + '.svg';
+        link.href = url;
+        link.click();
+
+        paper.view.viewSize.width  = window.innerWidth;
+        paper.view.viewSize.height = window.innerHeight;
     }
 
     function refreshSelection () {
@@ -281,7 +281,7 @@ var PaperInterface = function (wickEditor) {
                 //if(showHandles) {
                     child.fullySelected = true;
                     //child.selected = true;
-                //} 
+                //}
             }
         });
 

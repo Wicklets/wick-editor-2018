@@ -22,7 +22,7 @@ var WickEditor = function () {
     var self = this;
 
     // http://semver.org/
-    self.version = "0.3";
+    self.version = "0.05";
     console.log("Wick Editor version " + self.version)
     if(localStorage.wickVersion !== self.version) {
         // Wick has either
@@ -80,14 +80,14 @@ var WickEditor = function () {
     // Load all tools
     this.tools = {
         "cursor"           : new Tools.Cursor(this),
-        "pen"              : new Tools.Pen(this),
+        "pathCursor"       : new Tools.PathCursor(this),
         "paintbrush"       : new Tools.Paintbrush(this),
         "eraser"           : new Tools.Eraser(this),
         "fillbucket"       : new Tools.FillBucket(this),
         "rectangle"        : new Tools.Rectangle(this),
         "ellipse"          : new Tools.Ellipse(this),
         "line"             : new Tools.Line(this),
-        "polygon"          : new Tools.Polygon(this),
+        "pen"              : new Tools.Pen(this),
         "dropper"          : new Tools.Dropper(this),
         "text"             : new Tools.Text(this),
         "zoom"             : new Tools.Zoom(this),
@@ -154,7 +154,6 @@ WickEditor.prototype.changeTool = function (newTool) {
     this.lastTool = this.currentTool;
     this.currentTool = newTool;
     if(newTool.onSelected) newTool.onSelected();
-    this.tools.polygon.finishPath();
     this.fabric.forceModifySelectedObjects();
     this.fabric.deselectAll();
 

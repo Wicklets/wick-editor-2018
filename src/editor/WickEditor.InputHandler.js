@@ -222,6 +222,10 @@ var InputHandler = function (wickEditor) {
                 copyType = 'text/wickframesjson';
             }
             clipboardData.setData(copyType, copyData);
+
+            if(clipboardEvent == 'cut') {
+                wickEditor.guiActionHandler.doAction('deleteSelectedObjects');
+            }
         }
         if (clipboardEvent == 'paste') {
             //console.log('Clipboard Plain Text: ' + clipboardData.getData('text/plain'));

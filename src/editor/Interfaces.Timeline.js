@@ -71,6 +71,7 @@ TimelineInterface.Timeline = function (wickEditor) {
     this.horizontalScrollBar = new TimelineInterface.HorizontalScrollBar(wickEditor, this);
     this.verticalScrollBar = new TimelineInterface.VerticalScrollBar(wickEditor, this);
     this.numberLine = new TimelineInterface.NumberLine(wickEditor, this);
+    this.playhead = new TimelineInterface.Playhead(wickEditor, this);
 
     this.interactions = new TimelineInterface.Interactions(wickEditor, this);
     this.interactions.setup();
@@ -90,6 +91,9 @@ TimelineInterface.Timeline = function (wickEditor) {
 
         this.numberLine.build();
         this.elem.appendChild(this.numberLine.elem);
+
+        this.playhead.build();
+        this.elem.appendChild(this.playhead.elem);
 
         var hideNumberlinePiece = document.createElement('div');
         hideNumberlinePiece.className = 'hide-number-line-piece';
@@ -194,6 +198,7 @@ TimelineInterface.Timeline = function (wickEditor) {
         this.elem.style.height = this.calculateHeight() + "px";
 
         this.numberLine.update();
+        this.playhead.update();
 
         this.horizontalScrollBar.update();
         this.verticalScrollBar.update();

@@ -28,24 +28,14 @@ TimelineInterface.NumberLine = function (wickEditor, timeline) {
 
     this.build = function () {
         this.elem = document.createElement('div');
+        this.elem.addEventListener('mousedown', function (e) {
+            timeline.interactions.start("dragPlayhead", e, {});
+        })
         this.elem.className = 'number-line';
 
         numberlineContainer = document.createElement('span');
         numberlineContainer.className = 'numberline-container';
         this.elem.appendChild(numberlineContainer);
-
-        this.elem.addEventListener('mousedown', function (e) {
-            return;
-
-            var start = Math.round((e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2) / cssVar('--frame-width'));
-            
-            var playRange = new WickPlayRange(start, start+1, null, '#4a6588');
-            wickEditor.actionHandler.doAction('addPlayRange', {playRange: playRange});
-            wickEditor.project.clearSelection();
-            wickEditor.project.selectObject(playRange);
-
-            e.stopPropagation();
-        });
 
         this.playRanges = [];
     }

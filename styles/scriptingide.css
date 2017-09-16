@@ -5,7 +5,7 @@
     width: calc(100% - 290px);
     height: 300px;
     z-index: 4;
-    transition: height 0.2s ease;
+    /* transition: height 0.2s ease; */
     border-radius: 9px 9px 0px 0px;
 }
 
@@ -25,8 +25,8 @@
 
 #scriptEditor {
     text-align: left;
-    width: calc(100% - 150px);
-    height: calc(100% - 50px);
+    width: calc(100% - 152px);
+    height: calc(100% - 47px);
     left: 149px;
     top: 30px;
     font-size: 14px;
@@ -38,8 +38,8 @@
 #scriptEditorSidebar {
     position: absolute;
     width: calc(149px);
-    height: calc(100% - 50px);
-    left: 0px;
+    height: calc(100% - 47px);
+    left: 2px;
     top: 30px;
     background-color: #333;
 
@@ -49,6 +49,19 @@
 
     overflow-x: hidden;
     overflow-y: auto;
+}
+
+#noSelectionDiv {
+    color: #DDD;
+    height: calc(100% - 135px - 46px);
+    background-color: #444;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #666;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 30px;
+    padding-top: 135px;
 }
 
 #scriptEditorObjectName {
@@ -88,9 +101,11 @@
     -webkit-transition: background-color 500ms linear;
     -ms-transition: background-color 500ms linear;
     transition: background-color 500ms linear;
+
+    border-radius: 7px;
 }
 #scriptingIDEHeader:hover {
-    box-shadow: inset 0 0 3px #fff;
+    box-shadow: inset 0 0 1px #fff;
 }
 
 #closeScriptingGUIButton {
@@ -122,11 +137,6 @@
     right: 30px;
     top: 2px;
     position: absolute;
-}
-
-#noSelectionDiv {
-    margin-top: 135px;
-    color: #FFFFFF;
 }
 
 /* reference section */

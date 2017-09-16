@@ -161,11 +161,22 @@ var MenuBarInterface = function (wickEditor) {
             new TabButton('Copy', function () {
                 wickEditor.guiActionHandler.doAction("copy")
             }),
+            new TabButton('Cut', function () {
+                wickEditor.guiActionHandler.doAction("cut")
+            }),
             new TabButton('Paste', function () {
                 wickEditor.guiActionHandler.doAction("paste")
             }),
             new TabButton('Delete', function () {
                 wickEditor.guiActionHandler.doAction("deleteSelectedObjects")
+            }),
+            new TabSpacer(),
+
+            new TabButton('Select All', function () {
+                wickEditor.guiActionHandler.doAction("selectAll")
+            }),
+            new TabButton('Deselect All', function () {
+                wickEditor.guiActionHandler.doAction("deselectAll")
             }),
         ]);
 
