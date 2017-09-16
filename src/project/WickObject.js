@@ -1418,7 +1418,10 @@ WickObject.prototype.tick = function () {
     // Update currentFrameNumber and currentFrameName for API
     if(this.isSymbol) {
         this.currentFrameNumber = this.playheadPosition+1;
-        this.currentFrameName = this.getCurrentLayer().getCurrentFrame().name;
+        var currentFrame = this.getCurrentLayer().getCurrentFrame();
+        if(currentFrame) {
+            this.currentFrameName = this.getCurrentLayer().getCurrentFrame().name;
+        }
     }
 
 }

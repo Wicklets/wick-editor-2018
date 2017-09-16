@@ -25,7 +25,7 @@ var WickPixiRenderer = function (canvasContainer) {
 
     var self = this;
 
-    var SVG_SCALE = 1.5;
+    var SVG_SCALE = 1.4;
 
     renderer = PIXI.autoDetectRenderer(720, 480, {
         backgroundColor : "#FFFFFF", 

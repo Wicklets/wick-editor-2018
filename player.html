@@ -440,6 +440,31 @@ function hexToRgbA(hex, a){
     }
     console.log(hex);
     throw new Error('Bad Hex');
+}
+
+function dataURItoBlob(dataURI) {
+  // convert base64 to raw binary data held in a string
+  // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+  var byteString = atob(dataURI.split(',')[1]);
+
+  // separate out the mime component
+  var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+  // write the bytes of the string to an ArrayBuffer
+  var ab = new ArrayBuffer(byteString.length);
+  var ia = new Uint8Array(ab);
+  for (var i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+  }
+
+  // write the ArrayBuffer to a blob, and you're done
+  var blob = new Blob([ab], {type: mimeString});
+  return blob;
+
+  // Old code
+  // var bb = new BlobBuilder();
+  // bb.append(ab);
+  // return bb.getBlob(mimeString);
 }</script>
 <script>// https://www.npmjs.com/package/keycode
 // Original key mappings lifted from http://jsfiddle.net/vWx8V/ via http://stackoverflow.com/questions/5603195/full-list-of-javascript-keycodes
@@ -1956,7 +1981,10 @@ var removeBlankPixels = function (img, imgWidth, imgHeight) {
   }
 }(this));
 
-window.random = new Random();</script>
+window.random = new Random();
+window.randomInt = function (min,max) { return random.integer(min,max); };
+window.randomBool = function () { return random.bool() };
+window.randomFloat = function (min,max) { return random.real(min,max); };</script>
 <script>/* SAT.js - Version 0.6.0 - Copyright 2012 - 2016 - Jim Riecken <jimr@jimr.ca> - released under the MIT License. https://github.com/jriecken/sat-js */
 function x(){function c(a,e){this.x=a||0;this.y=e||0}function B(a,e){this.pos=a||new c;this.r=e||0}function n(a,e){this.pos=a||new c;this.angle=0;this.offset=new c;this.u(e||[])}function q(a,e,b){this.pos=a||new c;this.w=e||0;this.h=b||0}function w(){this.b=this.a=null;this.overlapN=new c;this.overlapV=new c;this.clear()}function C(a,e,b){for(var h=Number.MAX_VALUE,c=-Number.MAX_VALUE,k=a.length,g=0;g<k;g++){var d=a[g].f(e);d<h&&(h=d);d>c&&(c=d)}b[0]=h;b[1]=c}function y(a,e,b,h,c,k){var g=r.pop(),
 d=r.pop();a=m.pop().c(e).sub(a);e=a.f(c);C(b,c,g);C(h,c,d);d[0]+=e;d[1]+=e;if(g[0]>d[1]||d[0]>g[1])return m.push(a),r.push(g),r.push(d),!0;k&&(g[0]<d[0]?(k.aInB=!1,g[1]<d[1]?(b=g[1]-d[0],k.bInA=!1):(b=g[1]-d[0],h=d[1]-g[0],b=b<h?b:-h)):(k.bInA=!1,g[1]>d[1]?(b=g[0]-d[1],k.aInB=!1):(b=g[1]-d[0],h=d[1]-g[0],b=b<h?b:-h)),h=Math.abs(b),h<k.overlap&&(k.overlap=h,k.overlapN.c(c),0>b&&k.overlapN.reverse()));m.push(a);r.push(g);r.push(d);return!1}function z(a,e){var b=a.g(),c=e.f(a);return 0>c?-1:c>b?1:0}
@@ -3497,6 +3525,35 @@ u(++l%c.children.length)},!1);var k=(performance||Date).now(),g=k,a=0,r=e(new f.
 1048576,d.jsHeapSizeLimit/1048576)}return c},update:function(){k=this.end()},domElement:c,setMode:u}};f.Panel=function(e,f,l){var c=Infinity,k=0,g=Math.round,a=g(window.devicePixelRatio||1),r=80*a,h=48*a,t=3*a,v=2*a,d=3*a,m=15*a,n=74*a,p=30*a,q=document.createElement("canvas");q.width=r;q.height=h;q.style.cssText="width:80px;height:48px";var b=q.getContext("2d");b.font="bold "+9*a+"px Helvetica,Arial,sans-serif";b.textBaseline="top";b.fillStyle=l;b.fillRect(0,0,r,h);b.fillStyle=f;b.fillText(e,t,v);
 b.fillRect(d,m,n,p);b.fillStyle=l;b.globalAlpha=.9;b.fillRect(d,m,n,p);return{dom:q,update:function(h,w){c=Math.min(c,h);k=Math.max(k,h);b.fillStyle=l;b.globalAlpha=1;b.fillRect(0,0,r,m);b.fillStyle=f;b.fillText(g(h)+" "+e+" ("+g(c)+"-"+g(k)+")",t,v);b.drawImage(q,d+a,m,n-a,p,d,m,n-a,p);b.fillRect(d+n-a,m,a,p);b.fillStyle=l;b.globalAlpha=.9;b.fillRect(d+n-a,m,a,g((1-h/w)*p))}}};return f});
 </script>
+<script>window.saveData = function (key, data) {
+	if(!localStorage.savedData) 
+		localStorage.savedData = JSON.stringify({});
+
+	var savedData = JSON.parse(localStorage.savedData)
+	var type = typeof data;
+	savedData[key] = {
+		type: type,
+		data: (type === 'object') ? JSON.stringify(data) : data
+	};
+	localStorage.savedData = JSON.stringify(savedData);
+}
+
+window.getData = function (key) {
+	var savedData = JSON.parse(localStorage.savedData)
+	if(savedData[key] !== undefined) {
+		var value = savedData[key];
+		if(value.type === 'number') {
+			return parseFloat(value.data)
+		} else if (value.type === 'string') {
+			return value.data;
+		} else if (value.type === 'object') {
+			return JSON.parse(value.data);
+		}
+	} else {
+		throw (new Error(key + " does not exist in saved data."))
+	}
+}
+</script>
 <script>/* Wick - (c) 2017 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
 /*  This file is part of Wick. 
@@ -4503,31 +4560,6 @@ WickObject.prototype.downloadAsFile = function () {
         return;
     }
 
-    function dataURItoBlob(dataURI) {
-      // convert base64 to raw binary data held in a string
-      // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
-      var byteString = atob(dataURI.split(',')[1]);
-
-      // separate out the mime component
-      var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
-
-      // write the bytes of the string to an ArrayBuffer
-      var ab = new ArrayBuffer(byteString.length);
-      var ia = new Uint8Array(ab);
-      for (var i = 0; i < byteString.length; i++) {
-          ia[i] = byteString.charCodeAt(i);
-      }
-
-      // write the ArrayBuffer to a blob, and you're done
-      var blob = new Blob([ab], {type: mimeString});
-      return blob;
-
-      // Old code
-      // var bb = new BlobBuilder();
-      // bb.append(ab);
-      // return bb.getBlob(mimeString);
-    }
-
     var asset = wickEditor.project.library.getAsset(this.assetUUID);
 
     if(asset.type === 'image') {
@@ -4715,37 +4747,6 @@ WickObject.prototype.updateFrameTween = function (relativePlayheadPosition) {
     }
 }
 
-/*WickObject.prototype.addTween = function (newTween) {
-    var self = this;
-
-    var replacedTween = false;
-    this.tweens.forEach(function (tween) {
-        if (tween.frame === newTween.frame) {
-            self.tweens[self.tweens.indexOf(tween)] = newTween;
-            replacedTween = true;
-        }
-    });
-
-    if(!replacedTween)
-        this.tweens.push(newTween);
-}
-
-WickObject.prototype.removeTween = function (tweenToDelete) {
-    var self = this;
-
-    var deleteTweenIndex = null;
-    this.tweens.forEach(function (tween) {
-        if(deleteTweenIndex) return;
-        if (tweenToDelete === tween) {
-            deleteTweenIndex = self.tweens.indexOf(tween);
-        }
-    });
-
-    if(deleteTweenIndex !== null) {
-        self.tweens.splice(deleteTweenIndex, 1);
-    }
-}*/
-
 WickObject.prototype.addPlayRange = function (playRange) {
     if (!this.isSymbol) return; 
 
@@ -4768,92 +4769,6 @@ WickObject.prototype.removePlayRange = function (playRangeToDelete) {
 
     if(deletePlayRangeIndex !== null) self.playRanges.splice(deletePlayRangeIndex, 1); 
 }
-
-/*WickObject.prototype.hasTweenAtFrame = function (frame) {
-    var foundTween = false
-    this.tweens.forEach(function (tween) {
-        if(foundTween) return;
-        if(tween.frame === frame) foundTween = true;
-    })
-    return foundTween;
-}
-
-WickObject.prototype.getFromTween = function () {
-    var foundTween = null;
-
-    var relativePlayheadPosition = this.parentObject.playheadPosition - this.parentFrame.playheadPosition;
-    
-    var seekPlayheadPosition = relativePlayheadPosition;
-    while (!foundTween && seekPlayheadPosition >= 0) {
-        this.tweens.forEach(function (tween) {
-            if(tween.frame === seekPlayheadPosition) {
-                foundTween = tween;
-            }
-        });
-        seekPlayheadPosition--;
-    }
-
-    return foundTween;
-}
-
-WickObject.prototype.getToTween = function () {
-    var foundTween = null;
-
-    var relativePlayheadPosition = this.parentObject.playheadPosition - this.parentFrame.playheadPosition;
-
-    var seekPlayheadPosition = relativePlayheadPosition;
-    var parentFrameLength = this.parentObject.getFrameWithChild(this).length;
-    while (!foundTween && seekPlayheadPosition < parentFrameLength) {
-        this.tweens.forEach(function (tween) {
-            if(tween.frame === seekPlayheadPosition) {
-                foundTween = tween;
-            }
-        });
-        seekPlayheadPosition++;
-    }
-
-    return foundTween;
-}*/
-
-/*WickObject.prototype.applyTweens = function () {
-
-    var that = this;
-
-    if (!this.isRoot && this.tweens.length > 0) {
-        if(this.tweens.length === 1) {
-            this.tweens[0].applyTweenToWickObject(that);
-        } else {
-            var tweenFrom = that.getFromTween();
-            var tweenTo = that.getToTween();
-
-            if (tweenFrom && tweenTo) {
-                // yuck
-                var A = tweenFrom.frame;
-                var B = tweenTo.frame;
-                var L = B-A;
-                var P = (this.parentObject.playheadPosition - this.parentFrame.playheadPosition)-A;
-                var T = P/L;
-                if(B-A === 0) T = 1;
-                
-                var interpolatedTween = WickTween.interpolateTweens(tweenFrom, tweenTo, T);
-                interpolatedTween.applyTweenToWickObject(that);
-            }
-            if (!tweenFrom && tweenTo) {
-                tweenTo.applyTweenToWickObject(that);
-            }
-            if (!tweenTo && tweenFrom) {
-                tweenFrom.applyTweenToWickObject(that);
-            }
-        }
-    }
-
-    if (!this.isSymbol) return;
-
-    this.getAllActiveChildObjects().forEach(function (child) {
-        child.applyTweens();
-    });
-
-}*/
 
 /* Return all child objects of a parent object */
 WickObject.prototype.getAllChildObjects = function () {
@@ -4932,18 +4847,6 @@ WickObject.prototype.getAllActiveChildObjectsRecursive = function (includeParent
         }
     }
     return children;
-
-    /*var children = [];
-    if(includeParents) children = [this];
-    this.layers.forEach(function (layer) {
-        layer.frames.forEach(function (frame) {
-            if(!frame.isActive()) return;
-            frame.wickObjects.forEach(function (wickObject) {
-                children = children.concat(wickObject.getAllChildObjectsRecursive());
-            });
-        });
-    });
-    return children;*/
 
 }
 
@@ -5391,55 +5294,6 @@ WickObject.prototype.hitTestRectangles = function (otherObj) {
     var objA = this;
     var objB = otherObj;
 
-    // var aPos = objA.getAbsolutePositionTransformed(); 
-    // var bPos = objB.getAbsolutePositionTransformed(); 
-
-    // var aScale = objA.getAbsoluteScale();
-    // var aWidth = objA.width * aScale.x; 
-    // var aHeight = objA.height * aScale.y; 
-    // var bScale = objB.getAbsoluteScale();
-    // var bWidth = objB.width * bScale.x; 
-    // var bHeight = objB.height * bScale.y; 
-
-    // var aRot = objA.getAbsoluteRotation(); 
-    // var bRot = objB.getAbsoluteRotation(); 
-
-
-    // // Define bottom left points for SAT boxes 
-    // var aPoint = { "x": aPos.x - (aWidth/2), 
-    //                "y": aPos.y - (aHeight/2) };
-
-    // var bPoint = { "x": bPos.x - (bWidth/2), 
-    //                "y": bPos.y - (bHeight/2) };
-
-    // console.log(aPoint, aWidth, aHeight, aRot);
-    // console.log(bPoint, bWidth, bHeight, bRot);
-
-    // var boxA = new SAT.Box(new SAT.Vector(0,0), aWidth, aHeight); 
-    // var boxB = new SAT.Box(new SAT.Vector(0,0), bWidth, bHeight); 
-
-    // console.log(boxA);
-
-    // var polyA = boxA.toPolygon(); 
-    // var polyB = boxB.toPolygon(); 
-
-    // polyA.rotate(-toRadians(aRot)); 
-    // polyB.rotate(-toRadians(bRot)); 
-
-    // console.log(toRadians(aRot));
-
-    // polyA.translate(aPoint.x, aPoint.y); 
-    // polyB.translate(bPoint.x, bPoint.y); 
-
-    // var response = new SAT.Response();
-
-    // console.log(polyA, polyB);
-
-    // console.log(SAT.testPolygonPolygon(polyA, polyB, response));
-
-    // return SAT.testPolygonPolygon(polyA, polyB, response);
-
-
     var objAAbsPos = objA.getAbsolutePositionTransformed();
     var objBAbsPos = objB.getAbsolutePositionTransformed();
 
@@ -5566,10 +5420,6 @@ WickObject.prototype.isPointInside = function(point) {
             -object.getAbsoluteRotation()
         );
 
-        /*console.log('---')
-        console.log(transformedPoint)
-        console.log(transformedPosition)*/
-
         // Bounding box check
         if ( transformedPoint.x >= transformedPosition.x - transformedWidth /2 &&
              transformedPoint.y >= transformedPosition.y - transformedHeight/2 &&
@@ -5587,7 +5437,6 @@ WickObject.prototype.isPointInside = function(point) {
             }
 
             // Alpha mask check
-            //console.log(relativePoint)
             var objectAlphaMaskIndex =
                 (Math.floor(relativePoint.x/transformedScale.x)%Math.floor(object.width+object.svgStrokeWidth)) +
                 (Math.floor(relativePoint.y/transformedScale.y)*Math.floor(object.width+object.svgStrokeWidth));
@@ -5604,7 +5453,6 @@ WickObject.prototype.isPointInside = function(point) {
 }
 
 WickObject.prototype.setText = function (text) {
-    //this.pixiText.text = ""+text;
     wickRenderer.setText(this, text);
 }
 
@@ -5785,6 +5633,7 @@ WickObject.prototype.tick = function () {
         }
     }
 
+    // Update text display
     if(this.textData) {
         if(this.varName) {
             (wickPlayer || wickEditor).project.loadBuiltinFunctions(this);
@@ -5795,6 +5644,15 @@ WickObject.prototype.tick = function () {
                 newText = e;
             }
             this.setText(newText);
+        }
+    }
+
+    // Update currentFrameNumber and currentFrameName for API
+    if(this.isSymbol) {
+        this.currentFrameNumber = this.playheadPosition+1;
+        var currentFrame = this.getCurrentLayer().getCurrentFrame();
+        if(currentFrame) {
+            this.currentFrameName = this.getCurrentLayer().getCurrentFrame().name;
         }
     }
 
@@ -7145,11 +7003,17 @@ var WickPreloader = function (wickEditor) {
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
 
+
+// TODO: 
+// Update changed sprites
+// Update changed ordering
+// Use isDirty flags for these so they don't slow everything down.
+
 var WickPixiRenderer = function (canvasContainer) {
 
     var self = this;
 
-    var SVG_SCALE = 1.5;
+    var SVG_SCALE = 1.4;
 
     renderer = PIXI.autoDetectRenderer(720, 480, {
         backgroundColor : "#FFFFFF", 
