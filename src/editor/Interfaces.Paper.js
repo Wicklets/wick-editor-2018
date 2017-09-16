@@ -20,7 +20,6 @@ var PaperInterface = function (wickEditor) {
     var self = this;
 
     var pathSelectionTool;
-    var polygonTool;
 
     var active;
 
@@ -62,8 +61,7 @@ var PaperInterface = function (wickEditor) {
         path.fillColor = { hue: Math.random() * 360, saturation: 1, lightness: 1.0 };
         path.strokeColor = 'black';*/
 
-        pathSelectionTool = wickEditor.tools.pen.paperTool;
-        polygonTool = wickEditor.tools.polygon.paperTool;
+        pathSelectionTool = wickEditor.tools.pathCursor.paperTool;
 
     }
 
@@ -183,14 +181,9 @@ var PaperInterface = function (wickEditor) {
         var lastActive = active;
 
         active = (wickEditor.currentTool instanceof Tools.FillBucket)
-              || (wickEditor.currentTool instanceof Tools.Pen)
-              || (wickEditor.currentTool instanceof Tools.Polygon);
+              || (wickEditor.currentTool instanceof Tools.PathCursor)
+              || (wickEditor.currentTool instanceof Tools.Pen);
 
-        /*if(wickEditor.currentTool instanceof Tools.Polygon) {
-            polygonTool.activate();
-        } else {
-            pathSelectionTool.activate();
-        }*/
         pathSelectionTool.activate();
 
         if(active) {

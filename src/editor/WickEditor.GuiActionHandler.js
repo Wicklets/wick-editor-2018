@@ -253,7 +253,7 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function (args) {
-            wickEditor.guiActionHandler.doAction('useTools.pen')
+            wickEditor.guiActionHandler.doAction('useTools.pathCursor')
             wickEditor.paper.getProjectAsSVG()
         });
 
@@ -307,7 +307,7 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function(args) {
-            if(!(wickEditor.currentTool instanceof Tools.Pen))
+            if(!(wickEditor.currentTool instanceof Tools.PathCursor))
                 wickEditor.currentTool = wickEditor.tools.cursor;
 
             wickEditor.project.clearSelection();
@@ -625,12 +625,12 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.changeTool(wickEditor.tools.cursor);
         });
 
-    registerAction('useTools.pen',
+    registerAction('useTools.pathCursor',
         ['P'],
         [],
         {},
         function (args) {
-            wickEditor.changeTool(wickEditor.tools.pen);
+            wickEditor.changeTool(wickEditor.tools.pathCursor);
         });
 
     registerAction('useTools.paintbrush',
@@ -681,12 +681,12 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.changeTool(wickEditor.tools.ellipse);
         });
 
-    registerAction('useTools.polygon',
+    registerAction('useTools.pen',
         ['O'],
         [],
         {},
         function(args) {
-            wickEditor.changeTool(wickEditor.tools.polygon);
+            wickEditor.changeTool(wickEditor.tools.pen);
         });
 
     registerAction('useTools.dropper',

@@ -69,9 +69,7 @@ Tools.Cursor = function (wickEditor) {
 
             if(isSecondClick && mouseInSameArea) {
                 var selectedObject = wickEditor.fabric.getSelectedObject(WickObject);
-                /*if(selectedObject && selectedObject.isPath) {
-                    wickEditor.guiActionHandler.doAction('useTools.pen');
-                } else */if(selectedObject && selectedObject.isSymbol) {
+                if(selectedObject && selectedObject.isSymbol) {
                     wickEditor.guiActionHandler.doAction("editObject");
                 } else if (!selectedObject && !wickEditor.project.currentObject.isRoot) {
                     wickEditor.guiActionHandler.doAction("finishEditingObject");
