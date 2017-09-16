@@ -16,7 +16,7 @@
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
 
 TimelineInterface.Playhead = function (wickEditor, timeline) {
-    var self = this; 
+    var self = this;
 
     self.elem = null;
     self.pos = null;
@@ -63,7 +63,7 @@ TimelineInterface.Playhead = function (wickEditor, timeline) {
     self.frameDidChange = function () {
         if(!framePosCached) {
             framePosCached = self.getFramePosition();
-            return false;
+            return true;
         } else {
             var newFramePos = self.getFramePosition();
             var frameChanged = newFramePos !== framePosCached;
