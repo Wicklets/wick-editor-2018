@@ -119,6 +119,7 @@ var PreviewPlayer = function (wickEditor) {
         canvasContainer.style.display = 'block';
         document.getElementById('fabricCanvas').style.display = 'none';
         updateCanvasTransforms()
+        wickEditor.project.applyTweens();
         renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects());
     }
 
