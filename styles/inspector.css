@@ -3,65 +3,61 @@
     top: 0px;
     margin-top: 30px;
     height: calc(100% - 25px);
-    width: 250px;
+    width: 240px;
     display: inline;
     overflow: hidden;
     border-right: 0px;
     border-bottom: 0px;
     font-family: "Open Sans";
+    padding: 5px;
 }
 
 #inspector-title {
-	color: white;
-	margin-left: 10px;
-	margin-top: 5px;
+	color: #BBB;
+	text-align: center;
+	background-color: #666;
+	width: 100%;
+	border-radius: 3px;
 }
 
 .inspector-selection-icon {
-	/*background-color: yellow;*/
-
-	position: absolute;
 	width: 50px;
 	height: 50px;
-	left: 0px;
-	top: 25px;
 
 	background-repeat: no-repeat;
     background-position: center;
     text-overflow: clip;
     overflow: hidden;
     background-size: 60% 60%;
+    float: left;
+}
 
+.inspector-title-bar {
+	height: 50px;
+	width: 100%;
 }
 
 .inspector-selection-title {
-	float: right;
-
 	color: white;
 	font-size: 20px;
-
-	top: 0px;
-	padding-top: 10px;
-	width: calc(100% - 58px);
+	width: calc(100% - 50px);
 	height: 50px;
+	float: right;
+	margin-top: 10px;
 }
 
 .inspector-allitems-container {
 	width: 100%;
-	height: calc(100% - 215px - 90px);
+	height: calc(100% - 125px);
 	overflow-y: auto;
 }
 
 .inspector-properties-container {
-	/*background-color: blue;*/
-
 	width: 100%;
 	display:inline-block;
 }
 
 .inspector-buttons-container {
-	/*background-color: green;*/
-
 	width: calc(100% - 30px);
 	display:inline-block;
 

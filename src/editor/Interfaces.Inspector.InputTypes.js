@@ -7,37 +7,42 @@ InspectorInterface.StringInput = function (args) {
 
     self.updateViewValue = function () {
         if(self.isActiveFn()) {
-            title.style.display = 'block';
-            elem.style.display = 'block';
-            elem.value = self.getValueFn();
+            self.propertyDiv.style.display = 'block';
+            self.valueDiv.value = self.getValueFn();
         } else {
-            title.style.display = 'none';
-            elem.style.display = 'none';
+            self.propertyDiv.style.display = 'none';
         }
     }
     self.updateModelValue = function () {
         try {
-            self.onChangeFn(elem.value);
+            self.onChangeFn(self.valueDiv.value);
         } catch (e) {
             self.updateViewValue();
         }
     }
 
     self.isFocused = function () {
-        return document.activeElement === elem
+        return document.activeElement === self.valueDiv;
     }
 
-    var title = document.createElement('span');
-    title.className = "inspector-input-title";
-    title.innerHTML = args.title;
-    propertiesContainer.appendChild(title);
+    self.propertyDiv;
+    self.valueDiv;
+    self.getPropertyDiv = function () {
+        var title = document.createElement('span');
+        title.className = "inspector-input-title";
+        title.innerHTML = args.title;
 
-    var elem = document.createElement('input');
-    elem.className = 'inspector-input inspector-input-string ' + args.className;
-    elem.onchange = function (e) {
-        self.updateModelValue();
+        self.valueDiv = document.createElement('input');
+        self.valueDiv.className = 'inspector-input inspector-input-string ' + args.className;
+        self.valueDiv.onchange = function (e) {
+            self.updateModelValue();
+        }
+
+        self.propertyDiv = document.createElement('div');
+        self.propertyDiv.appendChild(title);
+        self.propertyDiv.appendChild(self.valueDiv);
+        return self.propertyDiv;
     }
-    propertiesContainer.appendChild(elem);
 
 }
 
@@ -51,38 +56,43 @@ InspectorInterface.SelectInput = function (args) {
 
     self.updateViewValue = function () {
         if(self.isActiveFn()) {
-            title.style.display = 'block';
-            elem.style.display = 'block';
-            elem.value = self.getValueFn();
+            self.propertyDiv.style.display = 'block';
+            self.valueDiv.value = self.getValueFn();
         } else {
-            title.style.display = 'none';
-            elem.style.display = 'none';
+            self.propertyDiv.style.display = 'none';
         }
     }
     self.updateModelValue = function () {
         try {
-            self.onChangeFn(elem.value);
+            self.onChangeFn(self.valueDiv.value);
         } catch (e) {
             self.updateViewValue();
         }
     }
 
-    var title = document.createElement('span');
-    title.className = "inspector-input-title";
-    title.innerHTML = args.title;
-    propertiesContainer.appendChild(title);
+    self.propertyDiv;
+    self.valueDiv;
+    self.getPropertyDiv = function () {
+        var title = document.createElement('span');
+        title.className = "inspector-input-title";
+        title.innerHTML = args.title;
 
-    var elem = document.createElement('SELECT');
-    elem.className = 'inspector-input inspector-input-select ' + args.className;
-    self.options.forEach(function (optionText) {
-        var option = document.createElement("option");
-        option.text = optionText;
-        elem.add(option);
-    })
-    elem.onchange = function (e) {
-        self.updateModelValue();
+        self.valueDiv = document.createElement('SELECT');
+        self.valueDiv.className = 'inspector-input inspector-input-select ' + args.className;
+        self.options.forEach(function (optionText) {
+            var option = document.createElement("option");
+            option.text = optionText;
+            self.valueDiv.add(option);
+        })
+        self.valueDiv.onchange = function (e) {
+            self.updateModelValue();
+        }
+
+        self.propertyDiv = document.createElement('div');
+        self.propertyDiv.appendChild(title);
+        self.propertyDiv.appendChild(self.valueDiv);
+        return self.propertyDiv;
     }
-    propertiesContainer.appendChild(elem);
 
 }
 
@@ -120,11 +130,11 @@ InspectorInterface.ColorInput = function (args) {
     var title = document.createElement('span');
     title.className = "inspector-input-title";
     title.innerHTML = args.title;
-    propertiesContainer.appendChild(title);
+    //propertiesContainer.appendChild(title);
 
     var elem = document.createElement('div');
     elem.className = 'inspector-input inspector-input-color';
-    propertiesContainer.appendChild(elem);
+    //propertiesContainer.appendChild(elem);
 
     var picker = document.createElement('input');
     picker.type = 'text';
@@ -165,7 +175,7 @@ InspectorInterface.CheckboxInput = function (args) {
     var title = document.createElement('span');
     title.className = "inspector-input-title";
     title.innerHTML = args.title;
-    propertiesContainer.appendChild(title);
+    //propertiesContainer.appendChild(title);
 
     var elem = document.createElement('input');
     elem.type = 'checkBox';
@@ -173,7 +183,7 @@ InspectorInterface.CheckboxInput = function (args) {
     elem.onchange = function (e) {
         self.updateModelValue();
     }
-    propertiesContainer.appendChild(elem);
+    //propertiesContainer.appendChild(elem);
 
     //propertiesContainer.appendChild(document.createElement('br'))
 
@@ -203,7 +213,7 @@ InspectorInterface.InspectorButton = function (args) {
         self.buttonAction();
     }
     elem.setAttribute('alt', args.tooltipTitle);
-    buttonsContainer.appendChild(elem);
+    //buttonsContainer.appendChild(elem);
 
 }
 
@@ -220,6 +230,6 @@ InspectorInterface.Divider = function (args) {
 
     var elem = document.createElement('div');
     elem.className = 'inspector-divider';
-    buttonsContainer.appendChild(elem);
+    //buttonsContainer.appendChild(elem);
 
 }

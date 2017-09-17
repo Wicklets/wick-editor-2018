@@ -2,11 +2,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
 
 	var properties = [];
 
-	inspectorDiv = document.getElementById('inspectorGUI');
-    allItemsContainer = buildDiv('inspector-allitems-container', inspectorDiv);
-    propertiesContainer = buildDiv('inspector-properties-container', allItemsContainer);
-    buttonsContainer = buildDiv('inspector-buttons-container', allItemsContainer);
-
     selectionInfo = inspector.selectionInfo;
 
     properties.push(new InspectorInterface.StringInput({
