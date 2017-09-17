@@ -402,13 +402,15 @@ TimelineInterface.Interactions = function (wickEditor, timeline) {
     var timelineOffset = 186;
     interactions['dragPlayhead'] = {
         'start' : (function (e) {
-            timeline.playhead.setPosition(e.pageX-timelineOffset);
+            var shift = -timeline.horizontalScrollBar.getScrollPosition();
+            timeline.playhead.setPosition(e.pageX-timelineOffset-shift);
             wickEditor.project.getCurrentObject().playheadPosition = timeline.playhead.getFramePosition();
             wickEditor.previewplayer.startFastRendering();
             wickEditor.previewplayer.doFastRender();
         }), 
         'update' : (function (e) {
-            timeline.playhead.setPosition(e.pageX-timelineOffset);
+            var shift = -timeline.horizontalScrollBar.getScrollPosition();
+            timeline.playhead.setPosition(e.pageX-timelineOffset-shift);
             if(timeline.playhead.frameDidChange()) {
                 wickEditor.project.getCurrentObject().playheadPosition = timeline.playhead.getFramePosition();
                 wickEditor.previewplayer.doFastRender();

@@ -39,6 +39,7 @@ InspectorInterface.StringInput = function (args) {
         }
 
         self.propertyDiv = document.createElement('div');
+        self.propertyDiv.className = 'inspector-property';
         self.propertyDiv.appendChild(title);
         self.propertyDiv.appendChild(self.valueDiv);
         return self.propertyDiv;
@@ -89,6 +90,7 @@ InspectorInterface.SelectInput = function (args) {
         }
 
         self.propertyDiv = document.createElement('div');
+        self.propertyDiv.className = 'inspector-property';
         self.propertyDiv.appendChild(title);
         self.propertyDiv.appendChild(self.valueDiv);
         return self.propertyDiv;
@@ -104,18 +106,23 @@ InspectorInterface.ColorInput = function (args) {
     self.isActiveFn = args.isActiveFn;
 
     self.uuid = random.uuid4();
+    self.colorPickerNeedsSetup = true;
 
     self.updateViewValue = function () {
+        if(self.colorPickerNeedsSetup) {
+            setupColorPicker(self.uuid, function (color) {
+                self.updateModelValue(color.toString());
+            });
+            self.colorPickerNeedsSetup = false;
+        }
+
         if(self.isActiveFn()) {
-            elem.style.display = 'block';
-            title.style.display = 'block';
+            self.propertyDiv.style.display = 'block';
             setTimeout(function () {
                 $("#"+self.uuid).spectrum("set", self.getValueFn());
-            }, 300)
-            //$("#"+self.uuid).spectrum("set", self.getValueFn());
+            }, 300);
         } else {
-            elem.style.display = 'none';
-            title.style.display = 'none';
+            self.propertyDiv.style.display = 'none';
         }
     }
     self.updateModelValue = function (val) {
@@ -127,23 +134,28 @@ InspectorInterface.ColorInput = function (args) {
         }
     }
 
-    var title = document.createElement('span');
-    title.className = "inspector-input-title";
-    title.innerHTML = args.title;
-    //propertiesContainer.appendChild(title);
+    self.propertyDiv;
+    self.valueDiv;
+    self.getPropertyDiv = function () {
+        var title = document.createElement('span');
+        title.className = "inspector-input-title";
+        title.innerHTML = args.title;
+        
+        self.valueDiv = document.createElement('div');
+        self.valueDiv.className = 'inspector-input inspector-input-color';
 
-    var elem = document.createElement('div');
-    elem.className = 'inspector-input inspector-input-color';
-    //propertiesContainer.appendChild(elem);
+        var picker = document.createElement('input');
+        picker.type = 'text';
+        picker.id = self.uuid;
+        picker.style.display = 'none';
+        self.valueDiv.appendChild(picker);
 
-    var picker = document.createElement('input');
-    picker.type = 'text';
-    picker.id = self.uuid;
-    picker.style.display = 'none';
-    elem.appendChild(picker);
-    setupColorPicker(self.uuid, function (color) {
-        self.updateModelValue(color.toString());
-    });
+        self.propertyDiv = document.createElement('div');
+        self.propertyDiv.className = 'inspector-property';
+        self.propertyDiv.appendChild(title);
+        self.propertyDiv.appendChild(self.valueDiv);
+        return self.propertyDiv;
+    }
 
 }
 
@@ -156,37 +168,40 @@ InspectorInterface.CheckboxInput = function (args) {
 
     self.updateViewValue = function () {
         if(self.isActiveFn()) {
-            title.style.display = 'block';
-            elem.style.display = 'block';
-            elem.checked = self.getValueFn();
+            self.propertyDiv.style.display = 'block';
+            self.valueDiv.checked = self.getValueFn();
         } else {
-            title.style.display = 'none';
-            elem.style.display = 'none';
+            self.propertyDiv.style.display = 'none';
         }
     }
     self.updateModelValue = function () {
         try {
-            self.onChangeFn(elem.checked);
+            self.onChangeFn(self.valueDiv.checked);
         } catch (e) {
             self.updateViewValue();
         }
     }
 
-    var title = document.createElement('span');
-    title.className = "inspector-input-title";
-    title.innerHTML = args.title;
-    //propertiesContainer.appendChild(title);
+    self.propertyDiv;
+    self.valueDiv;
+    self.getPropertyDiv = function () {
+        var title = document.createElement('span');
+        title.className = "inspector-input-title";
+        title.innerHTML = args.title;
 
-    var elem = document.createElement('input');
-    elem.type = 'checkBox';
-    elem.className = 'inspector-input inspector-input-checkbox ' + args.className;
-    elem.onchange = function (e) {
-        self.updateModelValue();
+        self.valueDiv = document.createElement('input');
+        self.valueDiv.type = 'checkBox';
+        self.valueDiv.className = 'inspector-input inspector-input-checkbox ' + args.className;
+        self.valueDiv.onchange = function (e) {
+            self.updateModelValue();
+        }
+
+        self.propertyDiv = document.createElement('div');
+        self.propertyDiv.className = 'inspector-property';
+        self.propertyDiv.appendChild(title);
+        self.propertyDiv.appendChild(self.valueDiv);
+        return self.propertyDiv;
     }
-    //propertiesContainer.appendChild(elem);
-
-    //propertiesContainer.appendChild(document.createElement('br'))
-
 }
 
 InspectorInterface.InspectorButton = function (args) {
@@ -200,20 +215,23 @@ InspectorInterface.InspectorButton = function (args) {
 
     self.updateViewValue = function () {
         if(self.isActiveFn()) {
-            elem.style.display = 'block';
+            self.buttonDiv.style.display = 'block';
         } else {
-            elem.style.display = 'none';
+            self.buttonDiv.style.display = 'none';
         }
     }
 
-    var elem = document.createElement('div');
-    elem.className = 'inspector-button tooltipElem inspector-button-' + args.colorClass;
-    elem.style.backgroundImage = self.icon;
-    elem.onclick = function () {
-        self.buttonAction();
+    self.buttonDiv;
+    self.getButtonDiv = function () {
+        self.buttonDiv = document.createElement('div');
+        self.buttonDiv.className = 'inspector-button tooltipElem inspector-button-' + args.colorClass;
+        self.buttonDiv.style.backgroundImage = self.icon;
+        self.buttonDiv.onclick = function () {
+            self.buttonAction();
+        }
+        self.buttonDiv.setAttribute('alt', args.tooltipTitle);
+        return self.buttonDiv;
     }
-    elem.setAttribute('alt', args.tooltipTitle);
-    //buttonsContainer.appendChild(elem);
 
 }
 
@@ -230,6 +248,12 @@ InspectorInterface.Divider = function (args) {
 
     var elem = document.createElement('div');
     elem.className = 'inspector-divider';
-    //buttonsContainer.appendChild(elem);
+
+    self.buttonDiv;
+    self.getButtonDiv = function () {
+        self.buttonDiv = document.createElement('div');
+        self.buttonDiv.className = 'inspector-divider';
+        return self.buttonDiv;
+    }
 
 }

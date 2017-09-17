@@ -40,87 +40,97 @@
 .inspector-selection-title {
 	color: white;
 	font-size: 20px;
-	width: calc(100% - 50px);
+	width: calc(100% - 55px);
 	height: 50px;
 	float: right;
-	margin-top: 10px;
+	margin-top: 12px;
+	margin-left: 5px;
 }
 
 .inspector-allitems-container {
 	width: 100%;
-	height: calc(100% - 125px);
+	height: calc(100% - 305px);
 	overflow-y: auto;
 }
 
 .inspector-properties-container {
 	width: 100%;
-	display:inline-block;
+	height:auto;
+	padding-top: 5px;
+	padding-bottom: 10px;
+
+	display: -webkit-flex;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .inspector-buttons-container {
-	width: calc(100% - 30px);
-	display:inline-block;
+	width: calc(100%);
+	height:auto;
+	padding-bottom: 15px;
 
-	margin-left: 25px;
-
-	padding-top: 10px;
+	display: -webkit-flex;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 /***************************************************************/
 
+.inspector-property {
+	height: 25px;
+	width: 95%;
+	overflow: hidden;
+}
+
 .inspector-input-title {
 	color: white;
 
-	width: 100px;
+	width: calc(50% - 5px);
+	padding-right: 5px;
 	height: 20px;
 
 	font-size: 14px;
 
 	float: left;
-	margin-bottom: 2px;
 
 	text-align: right;
-
-	margin-left: 5px;
 }
 
 .inspector-input-string {
 	border-radius: 4px;
 
-	width: 100px;
+	width: 50%;
 	height: 20px;
 
 	float: left;
 	margin-bottom: 4px;
-	margin-left: 7px;
 }
 
 .inspector-input-checkbox {
-	width: 100px;
+	width: 50%;
 	height: 16px;
 
 	float: left;
 	margin-top: 4px;
 	margin-bottom: 4px;
-	margin-left: 7px;
 }
 
 .inspector-input-select {
-	width: 100px;
+	width: 50%;
 	height: 20px;
 
 	float: left;
-	margin-left: 7px;
 	margin-bottom: 4px;
 }
 
 .inspector-input-color {
-	width: 100px;
+	width: 50%;
 	height: 24px;
 
 	float: left;
 	margin-bottom: 0px;
-	margin-left: 7px;
 
 	overflow: hidden;
 }
@@ -129,7 +139,6 @@
 	width: 30px;
 	height: 30px;
 
-	float: left;
 	margin: 5px;
 
 	border-radius: 4px;

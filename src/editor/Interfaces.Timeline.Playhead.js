@@ -73,7 +73,8 @@ TimelineInterface.Playhead = function (wickEditor, timeline) {
     }
 
     function updateView () {
-        self.elem.style.left = (self.pos+132)+'px';
+        var shift = -timeline.horizontalScrollBar.getScrollPosition();
+        self.elem.style.left = (self.pos+132+shift)+'px';
     }
 
     function snapPosition () {
