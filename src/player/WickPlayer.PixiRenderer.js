@@ -77,6 +77,10 @@ var WickPixiRenderer = function (canvasContainer) {
         if(!sprite) {
             createPixiSprite(wickObject);
         }
+        if(sprite && wickObject._renderDirty) {
+            regenPixiTexture(wickObject, sprite);
+            wickObject._renderDirty = false;
+        }
         if(sprite) {
             sprite.visible = true;
             sprite.anchor = new PIXI.Point(0.5, 0.5);
@@ -127,24 +131,19 @@ var WickPixiRenderer = function (canvasContainer) {
         
     }
 
+    function regenPixiTexture (wickObject, pixiSprite) {
+        var base64svg = getBase64SVG(wickObject);
+        var texture = PIXI.Texture.fromImage(base64svg, undefined, undefined, SVG_SCALE);
+        pixiSprite.setTexture(texture);
+    }
+
     var WickToPixiSprite = {
         'image': function (wickObject) {
             var pixiSprite = PIXI.Sprite.fromImage(wickObject.asset.getData());
             return pixiSprite;
         },
         'svg': function (wickObject) {
-            var parser = new DOMParser();
-            var x = (wickObject.svgX || 0);
-            var y = (wickObject.svgY || 0);
-            if(!wickObject.svgStrokeWidth) wickObject.svgStrokeWidth = 0;
-            x -= wickObject.svgStrokeWidth/2;
-            y -= wickObject.svgStrokeWidth/2;
-            var w = (wickObject.width  + wickObject.svgStrokeWidth*1);
-            var h = (wickObject.height + wickObject.svgStrokeWidth*1);
-            var svgDoc = parser.parseFromString('<svg id="svg" viewBox="'+x+' '+y+' '+w+' '+h+'" version="1.1" width="'+w+'" height="'+h+'" xmlns="http://www.w3.org/2000/svg">'+wickObject.pathData+'</svg>', "image/svg+xml");
-            var s = new XMLSerializer().serializeToString(svgDoc);
-            var base64svg = 'data:image/svg+xml;base64,' + window.btoa(s);
-            
+            var base64svg = getBase64SVG(wickObject);
             var texture = PIXI.Texture.fromImage(base64svg, undefined, undefined, SVG_SCALE);
             var newSprite = new PIXI.Sprite(texture);
             return newSprite;
@@ -162,4 +161,20 @@ var WickPixiRenderer = function (canvasContainer) {
         }
     }
 
+    function getBase64SVG (wickObject) {
+        var parser = new DOMParser();
+        var x = (wickObject.svgX || 0);
+        var y = (wickObject.svgY || 0);
+        if(!wickObject.svgStrokeWidth) wickObject.svgStrokeWidth = 0;
+        x -= wickObject.svgStrokeWidth/2;
+        y -= wickObject.svgStrokeWidth/2;
+        var w = (wickObject.width  + wickObject.svgStrokeWidth*1);
+        var h = (wickObject.height + wickObject.svgStrokeWidth*1);
+        var svgDoc = parser.parseFromString('<svg id="svg" viewBox="'+x+' '+y+' '+w+' '+h+'" version="1.1" width="'+w+'" height="'+h+'" xmlns="http://www.w3.org/2000/svg">'+wickObject.pathData+'</svg>', "image/svg+xml");
+        var s = new XMLSerializer().serializeToString(svgDoc);
+        var base64svg = 'data:image/svg+xml;base64,' + window.btoa(s);
+        return base64svg;
+    }
+
 };
+
