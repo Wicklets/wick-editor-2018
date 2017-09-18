@@ -158,11 +158,11 @@ var MenuBarInterface = function (wickEditor) {
             }),
             new TabSpacer(),
 
-            new TabButton('Copy', function () {
-                wickEditor.guiActionHandler.doAction("copy")
-            }),
             new TabButton('Cut', function () {
                 wickEditor.guiActionHandler.doAction("cut")
+            }),
+            new TabButton('Copy', function () {
+                wickEditor.guiActionHandler.doAction("copy")
             }),
             new TabButton('Paste', function () {
                 wickEditor.guiActionHandler.doAction("paste")
