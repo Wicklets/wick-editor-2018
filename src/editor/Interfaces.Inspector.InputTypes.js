@@ -42,6 +42,83 @@ InspectorInterface.StringInput = function (args) {
         self.propertyDiv.className = 'inspector-property';
         self.propertyDiv.appendChild(title);
         self.propertyDiv.appendChild(self.valueDiv);
+
+        if(args.type === 'right-input') {
+            self.propertyDiv.className += ' inspector-property-right';
+            title.className += ' inspector-input-title-right'
+        } else if (args.type === 'left-input') {
+            self.propertyDiv.className += ' inspector-property-left';
+            title.className += ' inspector-input-title-left'
+        }
+
+        return self.propertyDiv;
+    }
+
+}
+
+InspectorInterface.TwoStringInput = function (args) {
+
+    var self = this;
+    self.getValueFn = args.getValueFn;
+    self.onChangeFn = args.onChangeFn;
+    self.isActiveFn = args.isActiveFn;
+
+    self.updateViewValue = function () {
+        if(self.isActiveFn()) {
+            self.propertyDiv.style.display = 'block';
+            self.leftValueDiv.value = self.getValueFn().left;
+            self.rightValueDiv.value = self.getValueFn().right;
+        } else {
+            self.propertyDiv.style.display = 'none';
+        }
+    }
+    self.updateModelValue = function () {
+        try {
+            self.onChangeFn({
+                left: self.leftValueDiv.value,
+                right: self.rightValueDiv.value
+            });
+        } catch (e) {
+            self.updateViewValue();
+        }
+    }
+
+    self.isFocused = function () {
+        return document.activeElement === self.leftValueDiv
+            || document.activeElement === self.rightValueDiv;
+    }
+
+    self.propertyDiv;
+    self.leftValueDiv;
+    self.rightValueDiv;
+    self.getPropertyDiv = function () {
+        var title = document.createElement('span');
+        title.className = "inspector-input-title";
+        title.innerHTML = args.title;
+
+        self.leftValueDiv = document.createElement('input');
+        self.leftValueDiv.className = 'inspector-input inspector-input-string inspector-input-string-small ' + args.className;
+        self.leftValueDiv.onchange = function (e) {
+            self.updateModelValue();
+        }
+
+        var otherTitle = document.createElement('span');
+        otherTitle.className = "inspector-input-title inspector-input-title-small";
+        otherTitle.innerHTML = args.otherTitle;
+
+        self.rightValueDiv = document.createElement('input');
+        self.rightValueDiv.className = 'inspector-input inspector-input-string inspector-input-string-small ' + args.className;
+        self.rightValueDiv.onchange = function (e) {
+            self.updateModelValue();
+        }
+
+        self.propertyDiv = document.createElement('div');
+        self.propertyDiv.className = 'inspector-property';
+        self.propertyDiv.appendChild(title);
+        self.propertyDiv.appendChild(self.leftValueDiv);
+        self.propertyDiv.appendChild(otherTitle);
+        self.propertyDiv.appendChild(self.rightValueDiv);
+
         return self.propertyDiv;
     }
 

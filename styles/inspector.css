@@ -66,7 +66,8 @@
 }
 
 .inspector-buttons-container {
-	width: calc(100%);
+	width: 90%;
+	padding-left: 5%;
 	height:auto;
 	padding-bottom: 15px;
 
@@ -87,25 +88,34 @@
 .inspector-input-title {
 	color: white;
 
-	width: calc(50% - 5px);
+	width: calc(40% - 5px);
 	padding-right: 5px;
 	height: 20px;
 
-	font-size: 14px;
+	font-size: 12px;
+	padding-top: 2px;
 
 	float: left;
 
 	text-align: right;
 }
+.inspector-input-title-small {
+	width: 10%;
+	text-align: center;
+	padding-right: 0px;
+}
 
 .inspector-input-string {
 	border-radius: 4px;
 
-	width: 50%;
+	width: 60%;
 	height: 20px;
 
 	float: left;
 	margin-bottom: 4px;
+}
+.inspector-input-string-small {
+	width: 25%;
 }
 
 .inspector-input-checkbox {
