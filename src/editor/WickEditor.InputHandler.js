@@ -588,6 +588,7 @@ var InputHandler = function (wickEditor) {
 
     window.onbeforeunload = function(event) {
         if(wickEditor.actionHandler.getHistoryLength() === 0) return;
+        
         var confirmationMessage = 'Warning: All unsaved changes will be lost!';
         (event || window.event).returnValue = confirmationMessage; //Gecko + IE
         return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
