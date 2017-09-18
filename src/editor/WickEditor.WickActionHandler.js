@@ -297,7 +297,7 @@ var WickActionHandler = function (wickEditor) {
 
                 // This is silly what's a better way ???
                 if(wickObj.textData) {
-                    wickObj.forceFabricCanvasRegen = true;
+                    /*wickObj.forceFabricCanvasRegen = true;
                     args.originalStates[i].text = wickObj.textData.text;
                     args.originalStates[i].fontFamily = wickObj.textData.fontFamily;
                     args.originalStates[i].fontSize = wickObj.textData.fontSize;
@@ -305,7 +305,7 @@ var WickActionHandler = function (wickEditor) {
                     args.originalStates[i].fontStyle = wickObj.textData.fontStyle;
                     args.originalStates[i].textDecoration = wickObj.textData.textDecoration;
                     args.originalStates[i].fill = wickObj.textData.fill;
-                    args.originalStates[i].textAlign = wickObj.textData.textAlign;
+                    args.originalStates[i].textAlign = wickObj.textData.textAlign;*/
                 }
 
                 modifyableAttributes.forEach(function(attrib) {

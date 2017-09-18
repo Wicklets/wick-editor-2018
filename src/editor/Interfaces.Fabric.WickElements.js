@@ -116,7 +116,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 fabricInterface.canvas.remove(fabricObj);
                 //fabricInterface.canvas.renderAll();
             } else {
-                fabricObj.remove();
+                fabricInterface.canvas.remove(fabricObj);
             }
         });
 
@@ -222,7 +222,18 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         }
 
         if(wickObj.textData) {
-            var newFabricText = new fabric.IText(wickObj.textData.text, wickObj.textData);
+            //var newFabricText = new fabric.IText(wickObj.textData.text, wickObj.textData);
+            var newFabricText = new fabric.Textbox('First Textbox',{
+              left: 0,
+              top: 10,
+              fill: "#ff0000",
+              width: 300,
+              height: 100
+            });
+
+            newFabricText.selectAll();
+            newFabricText.setSelectionStyles({'fontWeight':'bold'})
+
             newFabricText.wickObjReference = wickObj;
             callback(newFabricText);
         }
@@ -374,12 +385,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         if(!wickObj.width) wickObj.width = fabricObj.width;
         if(!wickObj.height) wickObj.height = fabricObj.height;
 
-        // Always use length of text from fabric
-        if(fabricObj.type === "i-text") {
-            wickObj.width  = fabricObj.width;
-            wickObj.height  = fabricObj.height;
-        }
-
         fabricObj.left    = wickObj.getAbsolutePosition().x;
         fabricObj.top     = wickObj.getAbsolutePosition().y;
         fabricObj.width   = wickObj.width;
@@ -392,14 +397,14 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         fabricObj.opacity = wickObj.opacity;
 
         if(wickObj.textData) {
-            fabricObj.text = wickObj.textData.text;
+            /*fabricObj.text = wickObj.textData.text;
             fabricObj.fontFamily = wickObj.textData.fontFamily;
             fabricObj.setColor(wickObj.textData.fill);
             fabricObj.fontSize = wickObj.textData.fontSize;
             fabricObj.fontStyle = wickObj.textData.fontStyle;
             fabricObj.fontWeight = wickObj.textData.fontWeight;
             fabricObj.textDecoration = wickObj.textData.textDecoration;
-            fabricObj.textAlign = wickObj.textData.textAlign;
+            fabricObj.textAlign = wickObj.textData.textAlign;*/
         } else {
             if(wickObj.opacity > 0) {
                 fabricObj.perPixelTargetFind = true;

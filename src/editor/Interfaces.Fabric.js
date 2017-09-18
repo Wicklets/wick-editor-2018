@@ -26,24 +26,24 @@ var FabricInterface = function (wickEditor) {
             preserveObjectStacking : true,
             renderOnAddRemove : false,
         });
-        self.canvas.selectionColor = 'rgba(110, 110, 115, 0.1)';
+        self.canvas.selectionColor = 'rgba(110, 110, 115, 0.6)';
         self.canvas.selectionBorderColor = 'grey';
         self.canvas.backgroundColor = "transparent";
         self.canvas.setWidth(window.innerWidth);
         self.canvas.setHeight(window.innerHeight);
 
-        fabric.Object.prototype.cornerStyle = 'circle'
+        /*fabric.Object.prototype.cornerStyle = 'circle'
         fabric.Object.prototype.transparentCorners = true;
         fabric.Object.prototype.cornerColor = 'rgba(177,177,255,1.0)';
         fabric.Object.prototype.cornerdrawingColor = "rgba(177,177,255,1.0)";
         fabric.Object.prototype.borderScaleFactor = 2.0;
         fabric.Object.prototype.borderColor = 'rgba(177,177,255,0.7)';
-        fabric.Object.prototype.borderOpacityWhenMoving = 0.1;
+        fabric.Object.prototype.borderOpacityWhenMoving = 0.8;
         fabric.Object.prototype.cornerSize = 10;
 
         self.canvas.selectionColor = 'rgba(177,177,255,0.3)';
         self.canvas.selectionBorderColor = 'rgba(177,177,255,0.3)';
-        self.canvas.selectionLineWidth = 1;
+        self.canvas.selectionLineWidth = 1;*/
 
         /* Setting objectCaching to false fixes some rendering problems with
            symbol centerpoints and speeds up zooming by a lot */
@@ -376,13 +376,13 @@ var FabricInterface = function (wickEditor) {
             }
         });
 
-        var activeGroup = this.canvas.getActiveGroup();
+        /*var activeGroup = this.canvas.getActiveGroup();
         if(activeGroup) {
             activeGroup.removeWithUpdate(activeGroup);
             this.canvas.renderAll();
-        }
+        }*/
 
-        this.canvas.deactivateAll().renderAll();
+        //this.canvas.deactivateAll().renderAll();
 
         self.guiElements.update();
         wickEditor.scriptingide.syncWithEditorState();
@@ -392,7 +392,7 @@ var FabricInterface = function (wickEditor) {
         var selectedObjs = [];
 
         var obj = this.canvas.getActiveObject();
-        var group = this.canvas.getActiveGroup();
+        var group = null//this.canvas.getActiveGroup();
         var allSelectedFabricObjs = [];
 
         if(obj) {

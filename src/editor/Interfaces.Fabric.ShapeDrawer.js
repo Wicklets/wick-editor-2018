@@ -149,7 +149,7 @@ var FabricShapeDrawer = function (wickEditor, fabricInterface) {
         if(!drawingShape) return;
 
         if(!mouseMoved) {
-            drawingShape.remove()
+            wickEditor.fabric.canvas.remove(drawingShape)
             drawingShape = null;
             return;
         }

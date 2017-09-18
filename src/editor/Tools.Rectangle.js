@@ -55,7 +55,7 @@ Tools.Rectangle = function (wickEditor) {
         }
         var svgString = '<svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>';
 
-        drawingShape.remove()
+        wickEditor.fabric.canvas.remove(drawingShape)
         
         var pathWickObject = WickObject.createPathObject(svgString);
         pathWickObject.x = origX + drawingShape.strokeWidth/2;
