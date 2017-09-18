@@ -88,8 +88,8 @@
 .inspector-input-title {
 	color: white;
 
-	width: calc(40% - 5px);
-	padding-right: 5px;
+	width: calc(40% - 10px);
+	padding-right: 10px;
 	height: 20px;
 
 	font-size: 12px;
