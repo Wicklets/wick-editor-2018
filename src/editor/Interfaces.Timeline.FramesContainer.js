@@ -52,12 +52,6 @@ TimelineInterface.FramesContainer = function (wickEditor, timeline) {
             }
             timeline.framesContainer.update();
         });
-        this.elem.addEventListener('mouseover', function (e) {
-            timeline.playhead.elem.style.pointerEvents = 'none'
-        })
-        this.elem.addEventListener('mouseout', function (e) {
-            timeline.playhead.elem.style.pointerEvents = 'auto'
-        })
 
         timeline.elem.addEventListener('mousewheel', function(e) {
             that.addFrameOverlay.elem.style.display = 'none'

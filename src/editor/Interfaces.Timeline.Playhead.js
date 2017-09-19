@@ -34,6 +34,10 @@ TimelineInterface.Playhead = function (wickEditor, timeline) {
         });
         self.elem.appendChild(playheadNub);
 
+        window.addEventListener('mousemove', function (e) {
+            self.elem.style.pointerEvents = (e.y>60) ? 'none' : 'auto';
+        });
+
         var playheadBody = document.createElement('div');
         playheadBody.className = 'playhead-body';
         self.elem.appendChild(playheadBody);
