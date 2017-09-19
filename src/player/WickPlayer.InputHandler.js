@@ -316,8 +316,8 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
             mouseY -= canvasBoundingClientRect.top;
         }
 
-        var centeredCanvasOffsetX = (window.innerWidth  - wickProject.width) / 2;
-        var centeredCanvasOffsetY = (window.innerHeight - wickProject.height) / 2;
+        var centeredCanvasOffsetX = 0//(window.innerWidth  - wickProject.width) / 2;
+        var centeredCanvasOffsetY = 0//(window.innerHeight - wickProject.height) / 2;
 
         if(!wickProject.fitScreen) {
             mouseX -= centeredCanvasOffsetX;
@@ -343,8 +343,8 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
             touchY -= canvasBoundingClientRect.top;
         }
 
-        var centeredCanvasOffsetX = (window.innerWidth - wickProject.width) / 2;
-        var centeredCanvasOffsetY = (window.innerHeight - wickProject.height) / 2;
+        var centeredCanvasOffsetX = 0//(window.innerWidth - wickProject.width) / 2;
+        var centeredCanvasOffsetY = 0//(window.innerHeight - wickProject.height) / 2;
 
         if(!wickProject.fitScreen) {
             touchX -= centeredCanvasOffsetX;
