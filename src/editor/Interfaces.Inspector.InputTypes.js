@@ -281,6 +281,70 @@ InspectorInterface.CheckboxInput = function (args) {
     }
 }
 
+InspectorInterface.MultiCheckboxInput = function (args) {
+
+    var self = this;
+    self.getValueFn = args.getValueFn;
+    self.onChangeFn = args.onChangeFn;
+    self.isActiveFn = args.isActiveFn;
+
+    self.updateViewValue = function () {
+        if(self.isActiveFn()) {
+            self.propertyDiv.style.display = 'block';
+            var vals = self.getValueFn();
+            for(var i = 0; i < self.valueDivs.length; i++) {
+                var activated = vals[i];
+                var valueDiv = self.valueDivs[i];
+                valueDiv.activated = activated;
+                valueDiv.className = activated ? 
+                    'inspector-input inspector-input-togglebutton inspector-input-togglebutton-activated' : 
+                    'inspector-input inspector-input-togglebutton ' ;
+            }
+        } else {
+            self.propertyDiv.style.display = 'none';
+        }
+    }
+    self.updateModelValue = function () {
+        try {
+            var vals = [];
+            self.valueDivs.forEach(function (valueDiv) {
+                vals.push(valueDiv.activated);
+            });
+            self.onChangeFn(vals);
+        } catch (e) {
+            console.log(e)
+            self.updateViewValue();
+        }
+    }
+
+    self.propertyDiv;
+    self.valueDivs;
+    self.getPropertyDiv = function () {
+        var title = document.createElement('span');
+        title.className = "inspector-input-title";
+        title.innerHTML = args.title;
+
+        self.valueDivs = [];
+        args.icons.forEach(function (val) {
+            var valueDiv = document.createElement('div');
+            valueDiv.className = 'inspector-input inspector-input-togglebutton ';
+            valueDiv.onmousedown = function (e) {
+                valueDiv.activated = !valueDiv.activated;
+                self.updateModelValue();
+            }
+            self.valueDivs.push(valueDiv);
+        })
+
+        self.propertyDiv = document.createElement('div');
+        self.propertyDiv.className = 'inspector-property';
+        self.propertyDiv.appendChild(title);
+        self.valueDivs.forEach(function (valueDiv) {
+            self.propertyDiv.appendChild(valueDiv);
+        });
+        return self.propertyDiv;
+    }
+}
+
 InspectorInterface.InspectorButton = function (args) {
 
     var self = this;

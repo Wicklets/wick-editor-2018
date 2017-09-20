@@ -269,6 +269,25 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));*/
 
+    properties.push(new InspectorInterface.MultiCheckboxInput({
+        title: '',
+        icons: ['close.png', 'close.png'],
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isText;
+        },
+        getValueFn: function () {
+            return [
+                selectionInfo.object.textData.fontWeight === 'bold',
+                false,
+            ];
+        }, 
+        onChangeFn: function (vals) {
+            selectionInfo.object.textData.fontWeight = vals[0] ? 'bold' : 'normal';
+            console.log(selectionInfo.object.textData.fontWeight)
+            wickEditor.syncInterfaces();
+        }
+    }));
+
     properties.push(new InspectorInterface.ColorInput({
         title: 'Stroke Color',
         isActiveFn: function () {
