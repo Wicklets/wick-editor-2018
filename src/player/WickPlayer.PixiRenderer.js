@@ -149,13 +149,15 @@ var WickPixiRenderer = function (canvasContainer) {
             return newSprite;
         },
         'text': function (wickObject) {
+            var textData = wickObject.textData;
             var style = {
-                font : 'Times New Roman',
-                fill : '#FF0000',
+                font : textData.fontWeight + " " + textData.fontStyle + " " + (textData.fontSize*SVG_SCALE) + "px " + textData.fontFamily,
+                fill : textData.fill,
                 wordWrap : true,
-                wordWrapWidth : 100
+                wordWrapWidth : wickObject.width,
+                align: textData.textAlign
             };
-            var pixiText = new PIXI.Text("PIXI Text Placeholder", style);
+            var pixiText = new PIXI.Text(textData.text, style);
             return pixiText;
         }
     }
