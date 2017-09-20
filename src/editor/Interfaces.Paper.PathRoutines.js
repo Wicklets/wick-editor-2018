@@ -292,8 +292,6 @@ var PathRoutines = function (paperInterface, wickEditor) {
 
         wickObject.pathData = wickObject.paper.exportSVG({asString:true});
 
-        wickObject.forceFabricCanvasRegen = true;
-
         wickObject.svgX = wickObject.paper.bounds._x;
         wickObject.svgY = wickObject.paper.bounds._y;
 

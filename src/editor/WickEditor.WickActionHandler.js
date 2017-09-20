@@ -280,7 +280,7 @@ var WickActionHandler = function (wickEditor) {
             done(args);
         });
 
-    var modifyableAttributes = ["x","y","scaleX","scaleY","rotation","opacity","flipX","flipY","pathData"];
+    var modifyableAttributes = ["x","y","scaleX","scaleY","rotation","opacity","flipX","flipY","pathData","textData"];
 
     registerAction('modifyObjects',
         function (args) {
@@ -292,12 +292,12 @@ var WickActionHandler = function (wickEditor) {
 
                 args.originalStates[i] = {};
                 modifyableAttributes.forEach(function(attrib) {
-                    args.originalStates[i][attrib] = wickObj[attrib];
+                    args.originalStates[i][attrib] = deepCopy(wickObj[attrib]);
                 });
 
                 modifyableAttributes.forEach(function(attrib) {
                     if(args.modifiedStates[i][attrib] !== undefined) {
-                        wickObj[attrib] = args.modifiedStates[i][attrib];
+                        wickObj[attrib] = deepCopy(args.modifiedStates[i][attrib]);
                     }
                 });
 
@@ -309,6 +309,7 @@ var WickActionHandler = function (wickEditor) {
                     || args.modifiedStates[i]['flipX'] !== false
                     || args.modifiedStates[i]['flipY'] !== false) {
                         wickEditor.paper.pathRoutines.refreshPathData(wickObj);
+                        wickObj.forceFabricCanvasRegen = true;
                         wickObj._renderDirty = true;
                     }
                 }
@@ -327,7 +328,7 @@ var WickActionHandler = function (wickEditor) {
                 modifyableAttributes.forEach(function(attrib) {
                     if(attrib === 'pathData') wickObj.forceFabricCanvasRegen = true;
                     if(args.originalStates[i][attrib] !== undefined) {
-                        wickObj[attrib] = args.originalStates[i][attrib];
+                        wickObj[attrib] = deepCopy(args.originalStates[i][attrib]);
                     }
                 });
 

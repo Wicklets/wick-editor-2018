@@ -30,6 +30,12 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
         var enablePerfTests = false;
 
+        wickEditor.fabric.canvas.discardActiveObject();
+        wickEditor.fabric.canvas.renderAll();
+        wickEditor.fabric.canvas.getActiveObjects().forEach(function (fo) {
+            fo.setCoords();
+        });
+
         if(enablePerfTests) console.log("-------------------");
         if(enablePerfTests) startTiming();
         if(enablePerfTests) stopTiming("init");
@@ -73,6 +79,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             });
 
             window.blockAllRender = false;
+            fabricInterface.syncSelectionWithWickProject();
             fabricInterface.canvas.renderAll();
         }
 
@@ -186,16 +193,20 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         }
 
         if(wickObj.isText) {
-            var newFabricText = new fabric.Textbox('First Textbox',{
-              left: 0,
-              top: 10,
-              fill: "#ff0000",
-              width: 300,
-              height: 100
+            var textData = wickObj.textData;
+            var newFabricText = new fabric.Textbox('First Textbox', {
+                /*cursorColor: '#333',
+                cursorDelay: 500,
+                editable: true,*/
+                fontFamily: textData.fontFamily,
+                fontSize: textData.fontSize,
+                fontStyle: textData.fontStyle,
+                fontWeight: textData.fontWeight,
+                lineHeight: textData.lineHeight,
+                fill: textData.fill,
+                textAlign: textData.textAlign,
+                text: textData.text,
             });
-
-            newFabricText.selectAll();
-            newFabricText.setSelectionStyles({'fontWeight':'bold'})
 
             newFabricText.wickObjReference = wickObj;
             callback(newFabricText);

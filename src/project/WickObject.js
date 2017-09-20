@@ -112,6 +112,17 @@ WickObject.createTextObject = function (text) {
     var obj = new WickObject();
 
     obj.isText = true;
+    obj.width = 100;
+    obj.textData = {
+        fontFamily: 'arial',
+        fontSize: 40,
+        fontStyle: 'normal',
+        fontWeight: 'normal',
+        lineHeight: 1.0,
+        fill: '#000000',
+        textAlign: 'left',
+        text: text
+    };
 
     return obj;
 }
