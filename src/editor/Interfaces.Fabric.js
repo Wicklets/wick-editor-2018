@@ -281,5 +281,11 @@ var FabricInterface = function (wickEditor) {
             //self.applyChangesInCanvasToProject([object.wickObjectRef]);
         }
     }
+
+    this.getObjectHoveredOver = function () {
+        if(!self.objHoveredOver) return null;
+        if(!self.objHoveredOver.wickObjReference) return null;
+        return self.objHoveredOver.wickObjReference;
+    }
     
 }
