@@ -266,7 +266,8 @@ WickObject.prototype.copy = function () {
     copiedObject.cachedAbsolutePosition = this.getAbsolutePosition();
     copiedObject.svgStrokeWidth = this.svgStrokeWidth;
 
-    copiedObject.textData = JSON.parse(JSON.stringify(this.textData));
+    if(this.textData)
+        copiedObject.textData = JSON.parse(JSON.stringify(this.textData));
 
     copiedObject.wickScript = this.wickScript
 

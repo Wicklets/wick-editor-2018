@@ -1157,7 +1157,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('duplicateSelection',
-        [],
+        ['Modifier', 'D'],
         [],
         {},
         function (args) {
