@@ -96,7 +96,7 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
     canvas.on('before:render', function () {
         canvas._objects.forEach(function (obj) {
             if(!obj.centerpointObject) return;
-            var selectedObj = wickEditor.fabric.getSelectedObject();
+            var selectedObj = wickEditor.project.getSelectedObject();
 
             if(selectedObj && selectedObj.uuid === obj.wickObjectRef.uuid) {
                 obj.centerpointObject.opacity = 1.0;
@@ -107,77 +107,11 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
         });
     });
 
-    /*var createSymbolButton = document.getElementById('createSymbolButton');
-    var editSymbolButton = document.getElementById('editSymbolButton');
-    var editSymbolScriptsButton = document.getElementById('editSymbolScriptsButton');
-    var finishEditingObjectFabricButton = document.getElementById('finishEditingObjectFabricButton');
-
-    canvas.on('after:render', function() {
-
-        createSymbolButton.style.display = "none";
-        editSymbolButton.style.display = "none";
-        editSymbolScriptsButton.style.display = "none";
-        finishEditingObjectFabricButton.style.display = "none";
-
-        var layersHeight = document.getElementById("timelineGUI").offsetHeight;
-        var topOfScreen = 33 + layersHeight;
-        var leftOfScreen = 40;
-        var rightOfScreen = window.innerWidth-252;
-        var bottomOfScreen = window.innerHeight-10;
-
-        // Reposition buttons
-
-        if(!wickEditor.project.currentObject.isRoot) {
-            finishEditingObjectFabricButton.style.display = "block";
-            finishEditingObjectFabricButton.style.left = 40 + 'px';
-            finishEditingObjectFabricButton.style.top = topOfScreen + 'px';
-        }
-
-        var selection = canvas.getActiveObject() || canvas.getActiveGroup();
-        if(!selection) return;
-        if(selection._objects && selection._objects.length === 0) return;
-
-        var bound = selection.getBoundingRect();
-        var pan = fabricInterface.getPan();
-        var corner = {
-            x : bound.left+bound.width,
-            y : bound.top 
-        }
-        corner.x = Math.max(corner.x, leftOfScreen);
-        corner.x = Math.min(corner.x, rightOfScreen-40);
-        corner.y = Math.max(corner.y, topOfScreen);
-        corner.y = Math.min(corner.y, bottomOfScreen-65);
-
-        var objIsSymbol = false;
-        if(selection && selection.wickObjectRef) {
-            var wickObj = selection.wickObjectRef;
-            if(wickObj && wickObj.isSymbol) {
-                objIsSymbol = true;
-            }
-        }
-
-        if(objIsSymbol) {
-            editSymbolButton.style.left = corner.x + 'px';
-            editSymbolButton.style.top = corner.y + 35 + 'px';
-            editSymbolButton.style.display = "block";
-
-            editSymbolScriptsButton.style.left = corner.x + 'px';
-            editSymbolScriptsButton.style.top = corner.y + 'px';
-            editSymbolScriptsButton.style.display = "block";
-        } else {
-            createSymbolButton.style.left = corner.x + 'px';
-            createSymbolButton.style.top = corner.y + 'px';
-            createSymbolButton.style.display = "block";
-        }
-    });*/
-
     this.update = function () {
 
         elements.forEach(function (elem) {
             elem.updateGUIState();
         });
-
-        fabricInterface.onionSkinsDirty = false;
 
         canvas.renderAll();
     }

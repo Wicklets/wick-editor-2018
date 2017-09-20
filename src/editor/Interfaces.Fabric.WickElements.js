@@ -19,8 +19,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
     var objectsInCanvas = [];
 
-    var cachedFabricObjects = {};
-
     var currentFrameRef;
 
     this.update = function () {
@@ -38,9 +36,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
         var currentObject = wickEditor.project.currentObject;
         var currentFrame = currentFrameRef;
-
-        // Make sure everything is deselected, mulitple selected objects cause positioning problems.
-        fabricInterface.deselectAll(true);
 
         var activeObjects = currentObject.getAllActiveChildObjects();
         if(wickEditor.paper.isActive()) {
@@ -62,11 +57,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         //var allObjects = siblingObjects.concat(activeObjects);
 
         var finish = function () {
-            // Reselect objects that were selected before sync
-            var selectedObjects = wickEditor.project.getSelectedObjects();
-            fabricInterface.deselectAll();
-            fabricInterface.selectObjects(selectedObjects);
-
             for(var i = 0; i < allObjects.length; i++) {
                 allObjects[i]._zindex = i;
             }
@@ -97,11 +87,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
             if(allObjects.indexOf(fabricObj.wickObjectRef) == -1 || (wickObj && wickObj.forceFabricCanvasRegen)) {
                 if(wickObj) {
-                    wickObj.getAllChildObjectsRecursive().forEach(function (child) {
-                        cachedFabricObjects[child.uuid] = null;
-                    });
                     wickObj.forceFabricCanvasRegen = false;
-                    cachedFabricObjects[wickObj.uuid] = null;
                 }
                 objectsInCanvas.splice(objectsInCanvas.indexOf(fabricObj.wickObjectRef), 1);
                 // Object doesn't exist in the current object anymore, remove it's fabric object.
@@ -189,40 +175,17 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
     }
 
     var createFabricObjectFromWickObject = function (wickObj, callback) {
-
-        if(cachedFabricObjects[wickObj.uuid]) {
-            //callback(cachedFabricObjects[wickObj.uuid]);
-            //return;
-        }
         
         if(wickObj.isImage) {
-            /*var asset = wickEditor.project.library.getAsset(wickObj.assetUUID);
-            fabric.util.loadImage('/resources/editor.png'/, function(img) {
-                var pattern = new fabric.Pattern({
-                    source: img,
-                    repeat: 'repeat'
-                });
-                var rect = new fabric.Rect({
-                    //left: 100,
-                    //top: 100,
-                    width: 100,
-                    height: 100,
-                    fill: pattern
-                });
-                callback(rect);
-            });*/
-
             var asset = wickEditor.project.library.getAsset(wickObj.assetUUID);
             if(!asset) return;
             fabric.Image.fromURL(asset.getData(), function(newFabricImage) {
-                cachedFabricObjects[wickObj.uuid] = newFabricImage;
                 newFabricImage.wickObjReference = wickObj;
                 callback(newFabricImage);
             });
         }
 
-        if(wickObj.textData) {
-            //var newFabricText = new fabric.IText(wickObj.textData.text, wickObj.textData);
+        if(wickObj.isText) {
             var newFabricText = new fabric.Textbox('First Textbox',{
               left: 0,
               top: 10,
@@ -246,7 +209,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 if(!wickObj.paper) wickEditor.paper.pathRoutines.regenPaperJSState(wickObj)
                 if(wickObj.paper && wickObj.paper.fillColor) pathFabricObj.fill = wickObj.paper.fillColor.toCSS()
 
-                cachedFabricObjects[wickObj.uuid] = pathFabricObj;
                 pathFabricObj.wickObjReference = wickObj;
                 callback(pathFabricObj);
             });
@@ -396,39 +358,28 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         fabricObj.flipY   = wickObj.flipY;
         fabricObj.opacity = wickObj.opacity;
 
-        if(wickObj.textData) {
-            /*fabricObj.text = wickObj.textData.text;
-            fabricObj.fontFamily = wickObj.textData.fontFamily;
-            fabricObj.setColor(wickObj.textData.fill);
-            fabricObj.fontSize = wickObj.textData.fontSize;
-            fabricObj.fontStyle = wickObj.textData.fontStyle;
-            fabricObj.fontWeight = wickObj.textData.fontWeight;
-            fabricObj.textDecoration = wickObj.textData.textDecoration;
-            fabricObj.textAlign = wickObj.textData.textAlign;*/
+        if(wickObj.opacity > 0) {
+            fabricObj.perPixelTargetFind = true;
+            fabricObj.targetFindTolerance = 4;
         } else {
-            if(wickObj.opacity > 0) {
-                fabricObj.perPixelTargetFind = true;
-                fabricObj.targetFindTolerance = 4;
-            } else {
-                fabricObj.perPixelTargetFind = false;
-            }
+            fabricObj.perPixelTargetFind = false;
         }
 
         fabricObj.setCoords();
 
-        var bbox = fabricObj.getBoundingRect();
+        /*var bbox = fabricObj.getBoundingRect();
         var bboxXY = wickEditor.fabric.screenToCanvasSpace(bbox.left, bbox.top);
         var bboxSize = wickEditor.fabric.screenToCanvasSize(bbox.width, bbox.height);
         bbox.left = bboxXY.x;
         bbox.top = bboxXY.y;
         bbox.width = bboxSize.x;
         bbox.height = bboxSize.y;
-        wickObj.bbox = bbox;
+        wickObj.bbox = bbox;*/
 
     }
 
     var updateFabricObjectEvents = function (fabricObj, wickObj, activeObjects, siblingObjects, nearbyObjects) {
-        var setCoords = fabricObj.setCoords.bind(fabricObj);
+        //var setCoords = fabricObj.setCoords.bind(fabricObj);
         /*fabricObj.on({
             moving: setCoords,
             scaling: setCoords,

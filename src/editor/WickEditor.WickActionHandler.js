@@ -295,19 +295,6 @@ var WickActionHandler = function (wickEditor) {
                     args.originalStates[i][attrib] = wickObj[attrib];
                 });
 
-                // This is silly what's a better way ???
-                if(wickObj.textData) {
-                    /*wickObj.forceFabricCanvasRegen = true;
-                    args.originalStates[i].text = wickObj.textData.text;
-                    args.originalStates[i].fontFamily = wickObj.textData.fontFamily;
-                    args.originalStates[i].fontSize = wickObj.textData.fontSize;
-                    args.originalStates[i].fontWeight = wickObj.textData.fontWeight;
-                    args.originalStates[i].fontStyle = wickObj.textData.fontStyle;
-                    args.originalStates[i].textDecoration = wickObj.textData.textDecoration;
-                    args.originalStates[i].fill = wickObj.textData.fill;
-                    args.originalStates[i].textAlign = wickObj.textData.textAlign;*/
-                }
-
                 modifyableAttributes.forEach(function(attrib) {
                     if(args.modifiedStates[i][attrib] !== undefined) {
                         wickObj[attrib] = args.modifiedStates[i][attrib];
@@ -324,19 +311,6 @@ var WickActionHandler = function (wickEditor) {
                         wickEditor.paper.pathRoutines.refreshPathData(wickObj);
                         wickObj._renderDirty = true;
                     }
-                }
-
-                // This is silly what's a better way ???
-                if(wickObj.textData) {
-                    wickObj._renderDirty = true;
-                    if(args.modifiedStates[i].text) wickObj.textData.text = args.modifiedStates[i].text;
-                    if(args.modifiedStates[i].fontFamily) wickObj.textData.fontFamily = args.modifiedStates[i].fontFamily;
-                    if(args.modifiedStates[i].fontSize) wickObj.textData.fontSize = args.modifiedStates[i].fontSize;
-                    if(args.modifiedStates[i].fontWeight) wickObj.textData.fontWeight = args.modifiedStates[i].fontWeight;
-                    if(args.modifiedStates[i].fontStyle) wickObj.textData.fontStyle = args.modifiedStates[i].fontStyle;
-                    if(args.modifiedStates[i].textDecoration) wickObj.textData.textDecoration = args.modifiedStates[i].textDecoration;
-                    if(args.modifiedStates[i].fill) wickObj.textData.fill = args.modifiedStates[i].fill;
-                    if(args.modifiedStates[i].textAlign) wickObj.textData.textAlign = args.modifiedStates[i].textAlign;
                 }
 
                 wickObj.updateFrameTween();
@@ -366,20 +340,7 @@ var WickActionHandler = function (wickEditor) {
                         wickObj._renderDirty = true;
                     }
                 }
-
-                // This is silly what's a better way ???
-                if(wickObj.textData) {
-                    wickObj.forceFabricCanvasRegen = true;
-                    wickObj.textData.text = args.originalStates[i].text;
-                    wickObj.textData.fontFamily = args.originalStates[i].fontFamily;
-                    wickObj.textData.fontSize = args.originalStates[i].fontSize;
-                    wickObj.textData.fontStyle = args.originalStates[i].fontStyle;
-                    wickObj.textData.fontWeight = args.originalStates[i].fontWeight;
-                    wickObj.textData.textDecoration = args.originalStates[i].textDecoration;
-                    wickObj.textData.fill = args.originalStates[i].fill;
-                    wickObj.textData.textAlign = args.originalStates[i].textAlign;
-                }
-
+                
                 wickObj.updateFrameTween();
             }
 
@@ -882,12 +843,10 @@ var WickActionHandler = function (wickEditor) {
 
     registerAction('movePlayhead',
         function (args) {
-            wickEditor.fabric.forceModifySelectedObjects()
             wickEditor.project.deselectObjectType(WickObject);
             
             args.newPlayheadPosition = Math.max(0, args.newPlayheadPosition)
             
-            wickEditor.fabric.onionSkinsDirty = true;
             var currentObject = wickEditor.project.currentObject;
 
             args.oldPlayheadPosition = args.obj.playheadPosition;
@@ -909,42 +868,15 @@ var WickActionHandler = function (wickEditor) {
             
         },
         function (args) {
-            wickEditor.fabric.forceModifySelectedObjects()
-            wickEditor.project.deselectObjectType(WickObject);
-
             args.obj.playheadPosition = args.oldPlayheadPosition;
             args.obj.currentLayer = args.oldLayer;
 
             done(args);
         });
 
-    /*registerAction('breakApartImage',
-        function (args) {
-            var wickObj = wickEditor.fabric.getSelectedObject(WickObject);
-            wickObj.getBlobImages(function (images) {
-                images.forEach(function (image) {
-                    var newWickObject = WickObject.fromImage(image.src);
-                    newWickObject.x = wickObj.x-wickObj.width /2;
-                    newWickObject.y = wickObj.y-wickObj.height/2;
-                    newWickObject.autocropImage(function () {
-                        wickEditor.actionHandler.doAction('addObjects', { 
-                            wickObjects:[newWickObject] 
-                        });
-                        wickEditor.actionHandler.doAction('deleteObjects', { 
-                            wickObjects:[wickObj] 
-                        });
-                        done(args);
-                    });
-                });
-            });
-        },
-        function (args) {
-            console.error("breakApartImage undo not yet implemented")
-        });*/
-
     registerAction('editObject',
         function (args) {
-            wickEditor.fabric.deselectAll();
+            wickEditor.project.clearSelection();
 
             // Set the editor to be editing this object at its first frame
             args.prevEditedObject = wickEditor.project.currentObject;
@@ -956,7 +888,7 @@ var WickActionHandler = function (wickEditor) {
             done(args);
         },
         function (args) {
-            wickEditor.fabric.deselectAll();
+            wickEditor.project.clearSelection();
             wickEditor.project.currentObject = args.prevEditedObject;
 
             wickEditor.paper.needsUpdate = true;
@@ -966,7 +898,7 @@ var WickActionHandler = function (wickEditor) {
 
     registerAction('finishEditingCurrentObject',
         function (args) {
-            wickEditor.fabric.deselectAll();
+            wickEditor.project.clearSelection();
             wickEditor.project.currentObject.playheadPosition = 0;
             args.prevEditedObject = wickEditor.project.currentObject;
             wickEditor.project.currentObject = wickEditor.project.currentObject.parentObject;
@@ -976,7 +908,7 @@ var WickActionHandler = function (wickEditor) {
             done(args);
         },
         function (args) {
-            wickEditor.fabric.deselectAll();
+            wickEditor.project.clearSelection();
             wickEditor.project.currentObject = args.prevEditedObject;
 
             done(args);

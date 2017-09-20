@@ -34,16 +34,6 @@ var WickHTMLElemInjector = function (project) {
             elem.height = wickObject.height;
             elem.style.width = (wickObject.width+5)+'px';
             elem.style.height = wickObject.height+'px';
-            if(wickObject.textData) {
-                elem.type = 'text';
-                elem.value = wickObject.textData.text;
-                elem.style.fontSize = wickObject.textData.fontSize;
-                elem.style.fontFamily = wickObject.textData.fontFamily;
-                elem.fontStyle = wickObject.textData.fontStyle;
-                elem.fontWeight = wickObject.textData.fontWeight;
-                elem.fontColor = wickObject.textData.fill;
-                elem.style.display = 'none';
-            }
             document.body.appendChild(elem);
             htmlElems[wickObject.uuid] = elem;
         });
@@ -55,9 +45,6 @@ var WickHTMLElemInjector = function (project) {
             var wickObject = project.getObjectByUUID(uuid);
             if(!wickObject) return;
             if(wickObject.isActive()) {
-                if(wickObject.textData) {
-                    wickObject.inputValue = elem.value;
-                }
                 var transform = buildCSSTransformValueFromWickObject(wickObject);
                 elem.style.transform = transform;
                 elem.style.display = 'block';

@@ -184,7 +184,7 @@ var InputHandler = function (wickEditor) {
     var ieClipboardEvent = function(clipboardEvent) {
         var clipboardData = window.clipboardData;
         if (clipboardEvent == 'cut' || clipboardEvent == 'copy') {
-            clipboardData.setData('Text', wickEditor.project.getCopyData(wickEditor.fabric.getSelectedObjects(WickObject)));
+            clipboardData.setData('Text', wickEditor.project.getCopyData(wickEditor.project.getSelectedObjects(WickObject)));
             ieClipboardDiv.html(htmlToCopy);
             focusIeClipboardDiv();
             setTimeout(function() {

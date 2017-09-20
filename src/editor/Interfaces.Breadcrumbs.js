@@ -54,7 +54,7 @@ var BreadcrumbsInterface = function (wickEditor) {
         var button = document.createElement('div');
         button.className = 'breadcrumbs-button';
         button.onclick = function () {
-            wickEditor.fabric.symbolBorders.startEditObjectAnimation(wickObject);
+            wickEditor.actionHandler.doAction('editObject', { objectToEdit: wickObject });
         }
         button.innerHTML = title;
 

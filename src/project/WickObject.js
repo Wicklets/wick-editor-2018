@@ -51,7 +51,6 @@ var WickObject = function () {
 // Text
 
     this.isText = false;
-    this.textData = false;
 
 // Symbols
 
@@ -113,38 +112,6 @@ WickObject.createTextObject = function (text) {
     var obj = new WickObject();
 
     obj.isText = true;
-
-    obj.textData = {
-        //backgroundColor: undefined,
-        //borderColor: undefined,
-        //borderDashArray: undefined,
-        //borderScaleFactor: undefined,
-        //caching: true,
-        cursorColor: '#333',
-        cursorDelay: 500,
-        //cursorWidth: 2,
-        editable: true,
-        //editingBorderColor: '#333',
-        fontFamily: 'arial',
-        fontSize: 40,
-        fontStyle: 'normal',
-        fontWeight: 'normal',
-        //textDecoration: '',
-        //hasBorders: true,
-        lineHeight: 1.16,
-        fill: '#000000',
-        //selectionColor: undefined,
-        //selectionEnd: undefined,
-        //selectionStart: undefined,
-        //shadow: undefined,
-        //stateProperties: undefined,
-        //stroke: undefined,
-        //styles: undefined, // Stores variable character styles
-        textAlign: 'left',
-        //textBackgroundColor: undefined,
-        textDecoration: "",
-        text: text
-    };
 
     return obj;
 }
@@ -266,7 +233,6 @@ WickObject.prototype.copy = function () {
     copiedObject.cachedAbsolutePosition = this.getAbsolutePosition();
     copiedObject.svgStrokeWidth = this.svgStrokeWidth;
 
-    copiedObject.textData = JSON.parse(JSON.stringify(this.textData));
 
     copiedObject.wickScript = this.wickScript
 
@@ -376,10 +342,6 @@ WickObject.prototype.encodeStrings = function () {
         this.wickScript = WickProject.Compressor.encodeString(this.wickScript);
     }
 
-    if(this.textData) {
-        this.textData.text = WickProject.Compressor.encodeString(this.textData.text);
-    }
-
     if(this.pathData) {
         this.pathData = WickProject.Compressor.encodeString(this.pathData);
     }
@@ -401,10 +363,6 @@ WickObject.prototype.decodeStrings = function () {
     
     if(this.wickScript) {
         this.wickScript = WickProject.Compressor.decodeString(this.wickScript);
-    }
-
-    if(this.textData) {
-        this.textData.text = WickProject.Compressor.decodeString(this.textData.text);
     }
 
     if(this.pathData) {
@@ -932,18 +890,6 @@ WickObject.prototype.stop = function () {
     this._playing = false;
 }
 
-WickObject.prototype.getPlayrangeById = function (identifier) {
-    var foundPlayRange = null;
-
-    this.playRanges.forEach(function (playRange) {
-        if(playRange.identifier === identifier) {
-            foundPlayRange = playRange;
-        }
-    });
-
-    return foundPlayRange;
-}
-
 WickObject.prototype.getFrameById = function (identifier) {
     var foundFrame = null;
 
@@ -954,6 +900,18 @@ WickObject.prototype.getFrameById = function (identifier) {
     });
 
     return foundFrame;
+}
+
+WickObject.prototype.getPlayrangeById = function (identifier) {
+    var foundPlayRange = null;
+
+    this.playRanges.forEach(function (playRange) {
+        if(playRange.identifier === identifier) {
+            foundPlayRange = playRange;
+        }
+    });
+
+    return foundPlayRange;
 }
 
 WickObject.prototype.getFramesInPlayrange = function (playrange) {
@@ -1220,10 +1178,6 @@ WickObject.prototype.isPointInside = function(point) {
     return hit;
 }
 
-WickObject.prototype.setText = function (text) {
-    wickRenderer.setText(this, text);
-}
-
 WickObject.prototype.clone = function () {
     return wickPlayer.cloneObject(this);
 };
@@ -1400,21 +1354,7 @@ WickObject.prototype.tick = function () {
             wickPlayer.resetStateOfObject(this);
         }
     }
-
-    // Update text display
-    if(this.textData) {
-        if(this.varName) {
-            (wickPlayer || wickEditor).project.loadBuiltinFunctions(this);
-            var newText = "";
-            try {
-                newText = eval(this.varName);
-            } catch (e) {
-                newText = e;
-            }
-            this.setText(newText);
-        }
-    }
-
+    
     // Update currentFrameNumber and currentFrameName for API
     if(this.isSymbol) {
         this.currentFrameNumber = this.playheadPosition+1;

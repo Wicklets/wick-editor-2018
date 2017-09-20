@@ -84,7 +84,7 @@ var WickPixiRenderer = function (canvasContainer) {
         if(sprite) {
             sprite.visible = true;
             sprite.anchor = new PIXI.Point(0.5, 0.5);
-            var textureScale = (wickObject.pathData || wickObject.textData ? SVG_SCALE : 1);
+            var textureScale = (wickObject.pathData || wickObject.isText ? SVG_SCALE : 1);
 
             var absTransforms = wickObject.getAbsoluteTransformations();
             sprite.position.x = absTransforms.position.x;
@@ -115,7 +115,7 @@ var WickPixiRenderer = function (canvasContainer) {
             type = 'image';
         } else if (wickObject.pathData) {
             type = 'svg';
-        } else if (wickObject.textData) {
+        } else if (wickObject.isText) {
             type = 'text';
         }
 
@@ -150,13 +150,12 @@ var WickPixiRenderer = function (canvasContainer) {
         },
         'text': function (wickObject) {
             var style = {
-                font : wickObject.textData.fontWeight + " " + wickObject.textData.fontStyle + " " + (wickObject.textData.fontSize*SVG_SCALE) + "px " + wickObject.textData.fontFamily,
-                fill : wickObject.textData.fill,
+                font : 'Times New Roman',
+                fill : '#FF0000',
                 wordWrap : true,
-                wordWrapWidth : 1440,
-                align: wickObject.textData.textAlign
+                wordWrapWidth : 100
             };
-            var pixiText = new PIXI.Text(wickObject.textData.text, style);
+            var pixiText = new PIXI.Text("PIXI Text Placeholder", style);
             return pixiText;
         }
     }

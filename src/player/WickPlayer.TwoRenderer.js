@@ -109,17 +109,6 @@ var WickTwoRenderer = function (canvasContainer, settings) {
                     wickObject.width,
                     wickObject.height
                 );
-            } else if (wickObject.textData) {
-                shape = TwoShapeGenerators['text'](
-                    wickObject.textData.text,
-                    {
-                        family: wickObject.textData.fontFamily,
-                        size: wickObject.textData.fontSize,
-                        leading: 0,
-                        weight: wickObject.textData.fontWeight === 'normal' ? 400 : 900,
-                        fill: wickObject.textData.fill,
-                    }
-                );
             } else if (wickObject.asset && wickObject.asset.type === 'image') {
                 shape = TwoShapeGenerators['image'](
                     wickObject.asset.getData(),

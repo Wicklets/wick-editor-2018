@@ -154,8 +154,7 @@ WickEditor.prototype.changeTool = function (newTool) {
     this.lastTool = this.currentTool;
     this.currentTool = newTool;
     if(newTool.onSelected) newTool.onSelected();
-    this.fabric.forceModifySelectedObjects();
-    this.fabric.deselectAll();
+    wickEditor.project.clearSelection();
 
     this.syncInterfaces();
 
