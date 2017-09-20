@@ -325,9 +325,10 @@ InspectorInterface.MultiCheckboxInput = function (args) {
         title.innerHTML = args.title;
 
         self.valueDivs = [];
-        args.icons.forEach(function (val) {
+        args.icons.forEach(function (icon) {
             var valueDiv = document.createElement('div');
             valueDiv.className = 'inspector-input inspector-input-togglebutton ';
+            valueDiv.style.backgroundImage = 'url('+icon+')';
             valueDiv.onmousedown = function (e) {
                 valueDiv.activated = !valueDiv.activated;
                 self.updateModelValue();

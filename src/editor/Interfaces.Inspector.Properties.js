@@ -271,7 +271,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
 
     properties.push(new InspectorInterface.MultiCheckboxInput({
         title: '',
-        icons: ['close.png', 'close.png'],
+        icons: ['resources/close.png', 'resources/close.png'],
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isText;
         },
@@ -283,7 +283,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }, 
         onChangeFn: function (vals) {
             selectionInfo.object.textData.fontWeight = vals[0] ? 'bold' : 'normal';
-            console.log(selectionInfo.object.textData.fontWeight)
             wickEditor.syncInterfaces();
         }
     }));
