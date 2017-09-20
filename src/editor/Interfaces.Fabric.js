@@ -167,6 +167,7 @@ var FabricInterface = function (wickEditor) {
                 flipX : fabricObj.flipX,
                 flipY : fabricObj.flipY,
                 rotation : fabricObj.angle,
+                width : wickObj.isText ? fabricObj.width : undefined,
                 textData : (wickObj.isText ? {
                     fontFamily: fabricObj.fontFamily,
                     fontSize: fabricObj.fontSize,
@@ -176,7 +177,7 @@ var FabricInterface = function (wickEditor) {
                     fill: fabricObj.fill,
                     textAlign: fabricObj.textAlign,
                     text: fabricObj.text,
-                } : null)
+                } : undefined)
             });
         });
 

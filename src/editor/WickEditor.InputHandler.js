@@ -70,10 +70,21 @@ var InputHandler = function (wickEditor) {
         that.specialKeys = [];
     });
 
+    function isFabricEditingText () {
+        var activeObj = wickEditor.fabric.canvas.getActiveObject();
+        if(!activeObj) {
+            return false;
+        } else {
+            return activeObj.isEditing;
+        }
+    }
+
     document.body.addEventListener("keydown", function (event) {
+        if(isFabricEditingText()) return;
         handleKeyEvent(event, "keydown");
     });
     document.body.addEventListener("keyup", function (event) {
+        if(isFabricEditingText()) return;
         handleKeyEvent(event, "keyup");
     });
 

@@ -112,7 +112,7 @@ WickObject.createTextObject = function (text) {
     var obj = new WickObject();
 
     obj.isText = true;
-    obj.width = 100;
+    obj.width = 400;
     obj.textData = {
         fontFamily: 'arial',
         fontSize: 40,

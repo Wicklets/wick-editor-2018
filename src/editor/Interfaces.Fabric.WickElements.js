@@ -150,6 +150,19 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
                 objectToAdd.fabricObjectReference = fabricObj;
 
+                if(fabricObj.type === 'textbox') {
+                    fabricObj.setControlsVisibility({
+                        bl: false,
+                        br: false,
+                        mb: false,
+                        ml: false,
+                        mr: true,
+                        mt: false,
+                        tl: false,
+                        tr: false,
+                        mtr: true,
+                    });
+                }
                 fabricObj.originX = 'center';
                 fabricObj.originY = 'center';
 
