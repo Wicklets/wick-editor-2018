@@ -353,6 +353,10 @@ WickObject.prototype.encodeStrings = function () {
         this.wickScript = WickProject.Compressor.encodeString(this.wickScript);
     }
 
+    if(this.textData) {
+        this.textData.text = WickProject.Compressor.encodeString(this.textData.text);
+    }
+
     if(this.pathData) {
         this.pathData = WickProject.Compressor.encodeString(this.pathData);
     }
@@ -374,6 +378,10 @@ WickObject.prototype.decodeStrings = function () {
     
     if(this.wickScript) {
         this.wickScript = WickProject.Compressor.decodeString(this.wickScript);
+    }
+
+    if(this.textData) {
+        this.textData.text = WickProject.Compressor.decodeString(this.textData.text);
     }
 
     if(this.pathData) {
