@@ -925,16 +925,10 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function(args) {
-            var selectedObject = wickEditor.project.getSelectedObjects();
-            if(selectedObject.isSymbol) {
-                wickEditor.actionHandler.doAction('breakApartSymbol', {
-                    obj:selectedObject
-                });
-            } else {
-                wickEditor.actionHandler.doAction('breakApartImage', {
-                    obj:selectedObject
-                });
-            }
+            var selectedObject = wickEditor.project.getSelectedObject();
+            wickEditor.actionHandler.doAction('breakApartSymbol', {
+                obj:selectedObject
+            });
         });
 
     registerAction('downloadObject',

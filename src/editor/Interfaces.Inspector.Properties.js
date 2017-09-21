@@ -269,6 +269,21 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));*/
 
+    properties.push(new InspectorInterface.SelectInput({
+        title: 'Font',
+        options: ['arial', 'times new roman', 'comic sans ms', 'georgia', 'palatino linotype', 'book antiqua', 'helvetica', 'arial black', 'impact', 'lucida sans unicode', 'tahoma', 'geneva', 'trebuchet ms', 'verdana', 'courier new', 'Lucida Console'],
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isText;
+        },
+        getValueFn: function () {
+            return selectionInfo.object.textData.fontFamily;
+        }, 
+        onChangeFn: function (val) {
+            selectionInfo.object.textData.fontFamily = val;
+            wickEditor.syncInterfaces();
+        }
+    }));
+
     properties.push(new InspectorInterface.MultiCheckboxInput({
         title: '',
         icons: ['resources/close.png', 'resources/close.png'],

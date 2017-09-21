@@ -15,11 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
 
-
 // TODO: 
-// Update changed sprites
 // Update changed ordering
-// Use isDirty flags for these so they don't slow everything down.
 
 var WickPixiRenderer = function (canvasContainer) {
 
@@ -87,7 +84,7 @@ var WickPixiRenderer = function (canvasContainer) {
             var textureScale = (wickObject.pathData || wickObject.isText ? SVG_SCALE : 1);
 
             var absTransforms = wickObject.getAbsoluteTransformations();
-            sprite.position.x = absTransforms.position.x;
+            sprite.position.x = absTransforms.position.x - (sprite.textboxOffset || 0);
             sprite.position.y = absTransforms.position.y;
             sprite.rotation = absTransforms.rotation/360*2*3.14159;
             sprite.scale.x = absTransforms.scale.x/textureScale;
@@ -154,10 +151,14 @@ var WickPixiRenderer = function (canvasContainer) {
                 font : textData.fontWeight + " " + textData.fontStyle + " " + (textData.fontSize*SVG_SCALE) + "px " + textData.fontFamily,
                 fill : textData.fill,
                 wordWrap : true,
-                wordWrapWidth : wickObject.width,
+                wordWrapWidth : wickObject.width*SVG_SCALE,
                 align: textData.textAlign
             };
             var pixiText = new PIXI.Text(textData.text, style);
+            pixiText.calculateBounds();
+            var textWidth = pixiText.width/SVG_SCALE;
+            var textboxWidth = wickObject.width;
+            pixiText.textboxOffset = (textboxWidth-textWidth)/2;
             return pixiText;
         }
     }
