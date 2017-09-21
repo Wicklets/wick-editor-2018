@@ -382,6 +382,18 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         fabricObj.flipY   = wickObj.flipY;
         fabricObj.opacity = wickObj.opacity;
 
+        if(wickObj.isText) {
+            var textData = wickObj.textData;
+            fabricObj.fontFamily = textData.fontFamily;
+            fabricObj.fontSize = textData.fontSize;
+            fabricObj.fontStyle = textData.fontStyle;
+            fabricObj.fontWeight = textData.fontWeight;
+            fabricObj.lineHeight = textData.lineHeight;
+            fabricObj.fill = textData.fill;
+            fabricObj.textAlign = textData.textAlign;
+            fabricObj.text = textData.text;
+        }
+
         if(wickObj.opacity > 0) {
             fabricObj.perPixelTargetFind = true;
             fabricObj.targetFindTolerance = 4;
