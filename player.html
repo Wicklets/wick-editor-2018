@@ -465,7 +465,16 @@ function dataURItoBlob(dataURI) {
   // var bb = new BlobBuilder();
   // bb.append(ab);
   // return bb.getBlob(mimeString);
-}</script>
+}
+
+function deepCopy (val) {
+  if(typeof val === 'object') {
+    return JSON.parse(JSON.stringify(val));
+  } else {
+    return val;
+  }
+}
+</script>
 <script>// https://www.npmjs.com/package/keycode
 // Original key mappings lifted from http://jsfiddle.net/vWx8V/ via http://stackoverflow.com/questions/5603195/full-list-of-javascript-keycodes
 
@@ -4344,6 +4353,17 @@ WickObject.createTextObject = function (text) {
     var obj = new WickObject();
 
     obj.isText = true;
+    obj.width = 400;
+    obj.textData = {
+        fontFamily: 'arial',
+        fontSize: 40,
+        fontStyle: 'normal',
+        fontWeight: 'normal',
+        lineHeight: 1.0,
+        fill: '#000000',
+        textAlign: 'left',
+        text: text
+    };
 
     return obj;
 }
@@ -4465,6 +4485,9 @@ WickObject.prototype.copy = function () {
     copiedObject.cachedAbsolutePosition = this.getAbsolutePosition();
     copiedObject.svgStrokeWidth = this.svgStrokeWidth;
 
+    if(this.isText)
+        copiedObject.textData = JSON.parse(JSON.stringify(this.textData));
+
     copiedObject.wickScript = this.wickScript
 
     if(this.isSymbol) {
@@ -4573,6 +4596,10 @@ WickObject.prototype.encodeStrings = function () {
         this.wickScript = WickProject.Compressor.encodeString(this.wickScript);
     }
 
+    if(this.textData) {
+        this.textData.text = WickProject.Compressor.encodeString(this.textData.text);
+    }
+
     if(this.pathData) {
         this.pathData = WickProject.Compressor.encodeString(this.pathData);
     }
@@ -4594,6 +4621,10 @@ WickObject.prototype.decodeStrings = function () {
     
     if(this.wickScript) {
         this.wickScript = WickProject.Compressor.decodeString(this.wickScript);
+    }
+
+    if(this.textData) {
+        this.textData.text = WickProject.Compressor.decodeString(this.textData.text);
     }
 
     if(this.pathData) {
@@ -5121,18 +5152,6 @@ WickObject.prototype.stop = function () {
     this._playing = false;
 }
 
-WickObject.prototype.getPlayrangeById = function (identifier) {
-    var foundPlayRange = null;
-
-    this.playRanges.forEach(function (playRange) {
-        if(playRange.identifier === identifier) {
-            foundPlayRange = playRange;
-        }
-    });
-
-    return foundPlayRange;
-}
-
 WickObject.prototype.getFrameById = function (identifier) {
     var foundFrame = null;
 
@@ -5143,6 +5162,18 @@ WickObject.prototype.getFrameById = function (identifier) {
     });
 
     return foundFrame;
+}
+
+WickObject.prototype.getPlayrangeById = function (identifier) {
+    var foundPlayRange = null;
+
+    this.playRanges.forEach(function (playRange) {
+        if(playRange.identifier === identifier) {
+            foundPlayRange = playRange;
+        }
+    });
+
+    return foundPlayRange;
 }
 
 WickObject.prototype.getFramesInPlayrange = function (playrange) {
@@ -5409,10 +5440,6 @@ WickObject.prototype.isPointInside = function(point) {
     return hit;
 }
 
-WickObject.prototype.setText = function (text) {
-    wickRenderer.setText(this, text);
-}
-
 WickObject.prototype.clone = function () {
     return wickPlayer.cloneObject(this);
 };
@@ -5589,21 +5616,7 @@ WickObject.prototype.tick = function () {
             wickPlayer.resetStateOfObject(this);
         }
     }
-
-    // Update text display
-    if(this.textData) {
-        if(this.varName) {
-            (wickPlayer || wickEditor).project.loadBuiltinFunctions(this);
-            var newText = "";
-            try {
-                newText = eval(this.varName);
-            } catch (e) {
-                newText = e;
-            }
-            this.setText(newText);
-        }
-    }
-
+    
     // Update currentFrameNumber and currentFrameName for API
     if(this.isSymbol) {
         this.currentFrameNumber = this.playheadPosition+1;
@@ -6131,25 +6144,6 @@ WickProject.prototype.getFrameByUUID = function (uuid) {
     return foundFrame;
 }
 
-WickProject.prototype.getPlayRangeByUUID = function (uuid) {
-    var allObjectsInProject = this.rootObject.getAllChildObjectsRecursive();
-    allObjectsInProject.push(this.rootObject);
-
-    var foundPlayrange = null;
-    allObjectsInProject.forEach(function (object) {
-        if(foundPlayrange) return;
-        if(!object.isSymbol) return;
-
-        object.playRanges.forEach(function(playRange) {
-            if(playRange.uuid === uuid) {
-                foundPlayrange = playRange;
-            }
-        });
-    });
-
-    return foundPlayrange;
-}
-
 WickProject.prototype.addObject = function (wickObject, zIndex, ignoreSymbolOffset) {
 
     var frame = this.getCurrentFrame();
@@ -6316,9 +6310,7 @@ WickProject.prototype.isTypeSelected = function (type) {
 
     this._selection.forEach(function (uuid) {
         var obj = self.getObjectByUUID(uuid) 
-               || self.getFrameByUUID(uuid) 
-               || self.getPlayRangeByUUID(uuid)
-               //|| self.getTweenByUUID(uuid);
+               || self.getFrameByUUID(uuid);
         if(obj instanceof type) selected = true;
     });
 
@@ -6353,9 +6345,20 @@ WickProject.prototype.getSelectedObjects = function () {
     var objs = [];
     this._selection.forEach(function (uuid) {
         var obj = self.getObjectByUUID(uuid) 
-               || self.getFrameByUUID(uuid) 
-               || self.getPlayRangeByUUID(uuid)
+               || self.getFrameByUUID(uuid);
                //|| self.getTweenByUUID(uuid);
+        if(obj) objs.push(obj);
+    });
+
+    return objs;
+}
+
+WickProject.prototype.getSelectedWickObjects = function () {
+    var self = this;
+
+    var objs = [];
+    this._selection.forEach(function (uuid) {
+        var obj = self.getObjectByUUID(uuid);
         if(obj) objs.push(obj);
     });
 
@@ -6368,9 +6371,7 @@ WickProject.prototype.getSelectedObjectsUUIDs = function () {
     var objs = [];
     this._selection.forEach(function (uuid) {
         var obj = self.getObjectByUUID(uuid) 
-               || self.getFrameByUUID(uuid) 
-               || self.getPlayRangeByUUID(uuid)
-               //|| self.getTweenByUUID(uuid);
+               || self.getFrameByUUID(uuid);
         if(obj) objs.push(obj.uuids);
     });
 
@@ -6397,9 +6398,7 @@ WickProject.prototype.deselectObjectType = function (type) {
     for ( var i = 0; i < this._selection.length; i++ ) {
         var uuid = this._selection[i];
         var obj = this.getObjectByUUID(uuid) 
-               || this.getFrameByUUID(uuid) 
-               || this.getPlayRangeByUUID(uuid)
-               //|| this.getTweenByUUID(uuid);
+               || this.getFrameByUUID(uuid);
         if(obj instanceof type) {
             this._selection[i] = null;
             deselectionHappened = true;
@@ -6960,11 +6959,8 @@ var WickPreloader = function (wickEditor) {
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
 
-
 // TODO: 
-// Update changed sprites
 // Update changed ordering
-// Use isDirty flags for these so they don't slow everything down.
 
 var WickPixiRenderer = function (canvasContainer) {
 
@@ -7022,14 +7018,21 @@ var WickPixiRenderer = function (canvasContainer) {
         if(!sprite) {
             createPixiSprite(wickObject);
         }
+        if(sprite && wickObject._renderDirty) {
+            regenPixiTexture(wickObject, sprite);
+            wickObject._renderDirty = false;
+        }
         if(sprite) {
             sprite.visible = true;
             sprite.anchor = new PIXI.Point(0.5, 0.5);
-            var textureScale = (wickObject.pathData || wickObject.textData ? SVG_SCALE : 1);
+            var textureScale = (wickObject.pathData || wickObject.isText ? SVG_SCALE : 1);
 
             var absTransforms = wickObject.getAbsoluteTransformations();
-            sprite.position.x = absTransforms.position.x;
-            sprite.position.y = absTransforms.position.y;
+            var textOffset = wickObject.isText ? 
+                rotate_point(sprite.textboxOffset, 0, 0, 0, absTransforms.rotation) :
+                {x:0,y:0};
+            sprite.position.x = absTransforms.position.x - textOffset.x;
+            sprite.position.y = absTransforms.position.y - textOffset.y;
             sprite.rotation = absTransforms.rotation/360*2*3.14159;
             sprite.scale.x = absTransforms.scale.x/textureScale;
             sprite.scale.y = absTransforms.scale.y/textureScale;
@@ -7056,7 +7059,7 @@ var WickPixiRenderer = function (canvasContainer) {
             type = 'image';
         } else if (wickObject.pathData) {
             type = 'svg';
-        } else if (wickObject.textData) {
+        } else if (wickObject.isText) {
             type = 'text';
         }
 
@@ -7072,42 +7075,57 @@ var WickPixiRenderer = function (canvasContainer) {
         
     }
 
+    function regenPixiTexture (wickObject, pixiSprite) {
+        var base64svg = getBase64SVG(wickObject);
+        var texture = PIXI.Texture.fromImage(base64svg, undefined, undefined, SVG_SCALE);
+        pixiSprite.setTexture(texture);
+    }
+
     var WickToPixiSprite = {
         'image': function (wickObject) {
             var pixiSprite = PIXI.Sprite.fromImage(wickObject.asset.getData());
             return pixiSprite;
         },
         'svg': function (wickObject) {
-            var parser = new DOMParser();
-            var x = (wickObject.svgX || 0);
-            var y = (wickObject.svgY || 0);
-            if(!wickObject.svgStrokeWidth) wickObject.svgStrokeWidth = 0;
-            x -= wickObject.svgStrokeWidth/2;
-            y -= wickObject.svgStrokeWidth/2;
-            var w = (wickObject.width  + wickObject.svgStrokeWidth*1);
-            var h = (wickObject.height + wickObject.svgStrokeWidth*1);
-            var svgDoc = parser.parseFromString('<svg id="svg" viewBox="'+x+' '+y+' '+w+' '+h+'" version="1.1" width="'+w+'" height="'+h+'" xmlns="http://www.w3.org/2000/svg">'+wickObject.pathData+'</svg>', "image/svg+xml");
-            var s = new XMLSerializer().serializeToString(svgDoc);
-            var base64svg = 'data:image/svg+xml;base64,' + window.btoa(s);
-            
+            var base64svg = getBase64SVG(wickObject);
             var texture = PIXI.Texture.fromImage(base64svg, undefined, undefined, SVG_SCALE);
             var newSprite = new PIXI.Sprite(texture);
             return newSprite;
         },
         'text': function (wickObject) {
+            var textData = wickObject.textData;
             var style = {
-                font : wickObject.textData.fontWeight + " " + wickObject.textData.fontStyle + " " + (wickObject.textData.fontSize*SVG_SCALE) + "px " + wickObject.textData.fontFamily,
-                fill : wickObject.textData.fill,
+                font : textData.fontWeight + " " + textData.fontStyle + " " + (textData.fontSize*SVG_SCALE) + "px " + textData.fontFamily,
+                fill : textData.fill,
                 wordWrap : true,
-                wordWrapWidth : 1440,
-                align: wickObject.textData.textAlign
+                wordWrapWidth : wickObject.width*SVG_SCALE,
+                align: textData.textAlign
             };
-            var pixiText = new PIXI.Text(wickObject.textData.text, style);
+            var pixiText = new PIXI.Text(textData.text, style);
+            var textWidth = pixiText.width/SVG_SCALE;
+            var textboxWidth = wickObject.width;
+            pixiText.textboxOffset = (textboxWidth-textWidth)/2;
             return pixiText;
         }
     }
 
+    function getBase64SVG (wickObject) {
+        var parser = new DOMParser();
+        var x = (wickObject.svgX || 0);
+        var y = (wickObject.svgY || 0);
+        if(!wickObject.svgStrokeWidth) wickObject.svgStrokeWidth = 0;
+        x -= wickObject.svgStrokeWidth/2;
+        y -= wickObject.svgStrokeWidth/2;
+        var w = (wickObject.width  + wickObject.svgStrokeWidth*1);
+        var h = (wickObject.height + wickObject.svgStrokeWidth*1);
+        var svgDoc = parser.parseFromString('<svg id="svg" viewBox="'+x+' '+y+' '+w+' '+h+'" version="1.1" width="'+w+'" height="'+h+'" xmlns="http://www.w3.org/2000/svg">'+wickObject.pathData+'</svg>', "image/svg+xml");
+        var s = new XMLSerializer().serializeToString(svgDoc);
+        var base64svg = 'data:image/svg+xml;base64,' + window.btoa(s);
+        return base64svg;
+    }
+
 };
+
 </script>
 <script>/* Wick - (c) 2017 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
@@ -7518,8 +7536,8 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
             mouseY -= canvasBoundingClientRect.top;
         }
 
-        var centeredCanvasOffsetX = (window.innerWidth  - wickProject.width) / 2;
-        var centeredCanvasOffsetY = (window.innerHeight - wickProject.height) / 2;
+        var centeredCanvasOffsetX = 0//(window.innerWidth  - wickProject.width) / 2;
+        var centeredCanvasOffsetY = 0//(window.innerHeight - wickProject.height) / 2;
 
         if(!wickProject.fitScreen) {
             mouseX -= centeredCanvasOffsetX;
@@ -7545,8 +7563,8 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
             touchY -= canvasBoundingClientRect.top;
         }
 
-        var centeredCanvasOffsetX = (window.innerWidth - wickProject.width) / 2;
-        var centeredCanvasOffsetY = (window.innerHeight - wickProject.height) / 2;
+        var centeredCanvasOffsetX = 0//(window.innerWidth - wickProject.width) / 2;
+        var centeredCanvasOffsetY = 0//(window.innerHeight - wickProject.height) / 2;
 
         if(!wickProject.fitScreen) {
             touchX -= centeredCanvasOffsetX;
@@ -7600,16 +7618,6 @@ var WickHTMLElemInjector = function (project) {
             elem.height = wickObject.height;
             elem.style.width = (wickObject.width+5)+'px';
             elem.style.height = wickObject.height+'px';
-            if(wickObject.textData) {
-                elem.type = 'text';
-                elem.value = wickObject.textData.text;
-                elem.style.fontSize = wickObject.textData.fontSize;
-                elem.style.fontFamily = wickObject.textData.fontFamily;
-                elem.fontStyle = wickObject.textData.fontStyle;
-                elem.fontWeight = wickObject.textData.fontWeight;
-                elem.fontColor = wickObject.textData.fill;
-                elem.style.display = 'none';
-            }
             document.body.appendChild(elem);
             htmlElems[wickObject.uuid] = elem;
         });
@@ -7621,9 +7629,6 @@ var WickHTMLElemInjector = function (project) {
             var wickObject = project.getObjectByUUID(uuid);
             if(!wickObject) return;
             if(wickObject.isActive()) {
-                if(wickObject.textData) {
-                    wickObject.inputValue = elem.value;
-                }
                 var transform = buildCSSTransformValueFromWickObject(wickObject);
                 elem.style.transform = transform;
                 elem.style.display = 'block';
