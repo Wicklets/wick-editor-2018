@@ -314,6 +314,17 @@ var WickActionHandler = function (wickEditor) {
                     }
                 }
 
+                var frame = wickObj.parentFrame;
+                if(frame.tweens.length > 0) {
+                    if(!frame.getTweenAtFrame(wickObj.parentObject.playheadPosition)) {
+                        args.createTweenAction = wickEditor.actionHandler.doAction('createMotionTween', { 
+                            dontAddToStack: true,
+                            frame: frame,
+                            playheadPosition: wickObj.parentObject.playheadPosition,
+                        });
+                    }
+                }
+
                 wickObj.updateFrameTween();
             };
 
@@ -323,6 +334,8 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             for(var i = 0; i < args.objs.length; i++) {
                 var wickObj = args.objs[i];
+
+                if(args.createTweenAction) args.createTweenAction.undoAction();
 
                 // Revert the object's state to it's original pre-transformation state
                 modifyableAttributes.forEach(function(attrib) {

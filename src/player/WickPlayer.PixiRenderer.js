@@ -84,8 +84,11 @@ var WickPixiRenderer = function (canvasContainer) {
             var textureScale = (wickObject.pathData || wickObject.isText ? SVG_SCALE : 1);
 
             var absTransforms = wickObject.getAbsoluteTransformations();
-            sprite.position.x = absTransforms.position.x - (sprite.textboxOffset || 0);
-            sprite.position.y = absTransforms.position.y;
+            var textOffset = wickObject.isText ? 
+                rotate_point(sprite.textboxOffset, 0, 0, 0, absTransforms.rotation) :
+                {x:0,y:0};
+            sprite.position.x = absTransforms.position.x - textOffset.x;
+            sprite.position.y = absTransforms.position.y - textOffset.y;
             sprite.rotation = absTransforms.rotation/360*2*3.14159;
             sprite.scale.x = absTransforms.scale.x/textureScale;
             sprite.scale.y = absTransforms.scale.y/textureScale;
@@ -155,7 +158,6 @@ var WickPixiRenderer = function (canvasContainer) {
                 align: textData.textAlign
             };
             var pixiText = new PIXI.Text(textData.text, style);
-            pixiText.calculateBounds();
             var textWidth = pixiText.width/SVG_SCALE;
             var textboxWidth = wickObject.width;
             pixiText.textboxOffset = (textboxWidth-textWidth)/2;
