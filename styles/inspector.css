@@ -127,6 +127,30 @@
 	margin-bottom: 4px;
 }
 
+.inspector-input-togglebutton {
+	width: 25px;
+	height: 20px;
+	border-radius: 2px;
+	cursor: pointer;
+
+	float: left;
+	margin-top: 4px;
+	margin-bottom: 4px;
+	margin-right: 4px;
+
+	background-color: red;
+	opacity: 1.0;
+}
+.inspector-input-togglebutton:hover {
+	opacity: 0.7;
+}
+.inspector-input-togglebutton:active {
+	opacity: 0.4;
+}
+.inspector-input-togglebutton-activated {
+	background-color: green;
+}
+
 .inspector-input-select {
 	width: 50%;
 	height: 20px;

@@ -15,11 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
 
-
 // TODO: 
-// Update changed sprites
 // Update changed ordering
-// Use isDirty flags for these so they don't slow everything down.
 
 var WickPixiRenderer = function (canvasContainer) {
 
@@ -84,11 +81,14 @@ var WickPixiRenderer = function (canvasContainer) {
         if(sprite) {
             sprite.visible = true;
             sprite.anchor = new PIXI.Point(0.5, 0.5);
-            var textureScale = (wickObject.pathData || wickObject.textData ? SVG_SCALE : 1);
+            var textureScale = (wickObject.pathData || wickObject.isText ? SVG_SCALE : 1);
 
             var absTransforms = wickObject.getAbsoluteTransformations();
-            sprite.position.x = absTransforms.position.x;
-            sprite.position.y = absTransforms.position.y;
+            var textOffset = wickObject.isText ? 
+                rotate_point(sprite.textboxOffset, 0, 0, 0, absTransforms.rotation) :
+                {x:0,y:0};
+            sprite.position.x = absTransforms.position.x - textOffset.x;
+            sprite.position.y = absTransforms.position.y - textOffset.y;
             sprite.rotation = absTransforms.rotation/360*2*3.14159;
             sprite.scale.x = absTransforms.scale.x/textureScale;
             sprite.scale.y = absTransforms.scale.y/textureScale;
@@ -115,7 +115,7 @@ var WickPixiRenderer = function (canvasContainer) {
             type = 'image';
         } else if (wickObject.pathData) {
             type = 'svg';
-        } else if (wickObject.textData) {
+        } else if (wickObject.isText) {
             type = 'text';
         }
 
@@ -149,14 +149,18 @@ var WickPixiRenderer = function (canvasContainer) {
             return newSprite;
         },
         'text': function (wickObject) {
+            var textData = wickObject.textData;
             var style = {
-                font : wickObject.textData.fontWeight + " " + wickObject.textData.fontStyle + " " + (wickObject.textData.fontSize*SVG_SCALE) + "px " + wickObject.textData.fontFamily,
-                fill : wickObject.textData.fill,
+                font : textData.fontWeight + " " + textData.fontStyle + " " + (textData.fontSize*SVG_SCALE) + "px " + textData.fontFamily,
+                fill : textData.fill,
                 wordWrap : true,
-                wordWrapWidth : 1440,
-                align: wickObject.textData.textAlign
+                wordWrapWidth : wickObject.width*SVG_SCALE,
+                align: textData.textAlign
             };
-            var pixiText = new PIXI.Text(wickObject.textData.text, style);
+            var pixiText = new PIXI.Text(textData.text, style);
+            var textWidth = pixiText.width/SVG_SCALE;
+            var textboxWidth = wickObject.width;
+            pixiText.textboxOffset = (textboxWidth-textWidth)/2;
             return pixiText;
         }
     }

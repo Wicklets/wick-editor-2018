@@ -256,18 +256,18 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
-    properties.push(new InspectorInterface.StringInput({
+    /*properties.push(new InspectorInterface.StringInput({
         title: 'Variable',
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isText;
         },
         getValueFn: function () {
             return selectionInfo.object.varName || "";
-        }, 
+        },
         onChangeFn: function (val) {
             selectionInfo.object.varName = val;
         }
-    }));
+    }));*/
 
     properties.push(new InspectorInterface.SelectInput({
         title: 'Font',
@@ -280,49 +280,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }, 
         onChangeFn: function (val) {
             selectionInfo.object.textData.fontFamily = val;
-            wickEditor.syncInterfaces();
-        }
-    }));
-
-    properties.push(new InspectorInterface.SelectInput({
-        title: 'Align',
-        options: ['left', 'center', 'right'],
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isText;
-        },
-        getValueFn: function () {
-            return selectionInfo.object.textData.textAlign;
-        }, 
-        onChangeFn: function (val) {
-            selectionInfo.object.textData.textAlign = val;
-            wickEditor.syncInterfaces();
-        }
-    }));
-
-    properties.push(new InspectorInterface.CheckboxInput({
-        title: 'Bold',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isText;
-        },
-        getValueFn: function () {
-            return selectionInfo.object.textData.fontWeight === 'bold';
-        }, 
-        onChangeFn: function (val) {
-            selectionInfo.object.textData.fontWeight = val ? 'bold' : 'normal';
-            wickEditor.syncInterfaces();
-        }
-    }));
-
-    properties.push(new InspectorInterface.CheckboxInput({
-        title: 'Italic',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isText;
-        },
-        getValueFn: function () {
-            return selectionInfo.object.textData.fontStyle === 'italic';
-        }, 
-        onChangeFn: function (val) {
-            selectionInfo.object.textData.fontStyle = val ? 'italic' : 'normal';
             wickEditor.syncInterfaces();
         }
     }));
@@ -351,6 +308,24 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }, 
         onChangeFn: function (val) {
             selectionInfo.object.textData.fontSize = eval(val);
+            wickEditor.syncInterfaces();
+        }
+    }));
+
+    properties.push(new InspectorInterface.MultiCheckboxInput({
+        title: '',
+        icons: ['resources/close.png', 'resources/close.png'],
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isText;
+        },
+        getValueFn: function () {
+            return [
+                selectionInfo.object.textData.fontWeight === 'bold',
+                false,
+            ];
+        }, 
+        onChangeFn: function (vals) {
+            selectionInfo.object.textData.fontWeight = vals[0] ? 'bold' : 'normal';
             wickEditor.syncInterfaces();
         }
     }));

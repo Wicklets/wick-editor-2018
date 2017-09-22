@@ -17,7 +17,7 @@
 		"textData": false,
 		"isSymbol": true,
 		"isButton": false,
-		"playheadPosition": 0,
+		"playheadPosition": 3,
 		"currentLayer": 0,
 		"layers": [
 			{
@@ -108,11 +108,11 @@
 																				"isPath": true,
 																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#ff0000%22%20fill-rule=%22nonzero%22%20stroke=%22#ff9900%22%20stroke-width=%226.59%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M240.73193,225.26184l85.99037,-55.68192l-81.35101,-65.7311l-2.4283,37.10742l-117.06682,-6.75923l-3.52496,53.86561l119.50001,6.31738z%22/%3E%3C/g%3E",
 																				"svgStrokeWidth": 6.59,
-																				"svgWidth": 210.96109000000004,
+																				"svgWidth": 210.96109,
 																				"svgHeight": 128.00302,
 																				"bbox": {
-																					"left": 591.5367516562902,
-																					"top": 221.55532989652534,
+																					"left": 594.5367516562902,
+																					"top": 237.55532989652534,
 																					"width": 210.96108843732418,
 																					"height": 128.00302486580586
 																				},
@@ -154,8 +154,8 @@
 																				"svgWidth": 29.380629999999996,
 																				"svgHeight": 30.622389999999996,
 																				"bbox": {
-																					"left": 636.7079854088598,
-																					"top": 225.44589869371953,
+																					"left": 639.7079854088598,
+																					"top": 241.44589869371953,
 																					"width": 29.380625659363318,
 																					"height": 30.622394428101984
 																				},
@@ -193,8 +193,8 @@
 																				"svgWidth": 30.610510000000033,
 																				"svgHeight": 34.361060000000066,
 																				"bbox": {
-																					"left": 601.9639474467647,
-																					"top": 224.0856771531469,
+																					"left": 604.9639474467647,
+																					"top": 240.0856771531469,
 																					"width": 30.610524645730266,
 																					"height": 34.36105798815436
 																				},
@@ -232,8 +232,8 @@
 																				"svgWidth": 28.363470000000007,
 																				"svgHeight": 34.231432195644004,
 																				"bbox": {
-																					"left": 567.4719173383054,
-																					"top": 222.59662528665422,
+																					"left": 570.4719173383054,
+																					"top": 238.59662528665422,
 																					"width": 28.36346508176007,
 																					"height": 34.23143795788587
 																				},
@@ -271,8 +271,8 @@
 																				"svgWidth": 33.84804,
 																				"svgHeight": 35.8996351402906,
 																				"bbox": {
-																					"left": 531.9303998431014,
-																					"top": 220.01547343103636,
+																					"left": 534.9303998431014,
+																					"top": 236.01547343103636,
 																					"width": 33.84804827323774,
 																					"height": 35.89963836799359
 																				},
@@ -309,8 +309,8 @@
 																				"svgWidth": 37.90623000000005,
 																				"svgHeight": 40.2919,
 																				"bbox": {
-																					"left": 531.5263625228899,
-																					"top": 219.98262063216305,
+																					"left": 534.5263625228899,
+																					"top": 235.98262063216305,
 																					"width": 37.90623030044901,
 																					"height": 40.291906610449246
 																				},
@@ -348,8 +348,8 @@
 																				"svgWidth": 32.741447801184336,
 																				"svgHeight": 38.72081897743794,
 																				"bbox": {
-																					"left": 567.4232444033503,
-																					"top": 222.6172541646738,
+																					"left": 570.4232444033503,
+																					"top": 238.6172541646738,
 																					"width": 32.74145179297011,
 																					"height": 38.72081577193899
 																				},
@@ -387,8 +387,8 @@
 																				"svgWidth": 36.16694276350853,
 																				"svgHeight": 38.067849999999964,
 																				"bbox": {
-																					"left": 602.1949182126341,
-																					"top": 223.71501813655334,
+																					"left": 605.1949182126341,
+																					"top": 239.71501813655334,
 																					"width": 36.166945095102164,
 																					"height": 38.06785487122784
 																				},
@@ -426,8 +426,8 @@
 																				"svgWidth": 34.361060000000066,
 																				"svgHeight": 34.27808447491964,
 																				"bbox": {
-																					"left": 636.0711619500214,
-																					"top": 225.47144049156054,
+																					"left": 639.0711619500214,
+																					"top": 241.47144049156054,
 																					"width": 34.36105798815436,
 																					"height": 34.278103961356294
 																				},
@@ -1224,7 +1224,9 @@
 																		"wickScript": ""
 																	}
 																],
-																"identifier": "Layer 1"
+																"identifier": "Layer 1",
+																"locked": false,
+																"hidden": false
 															}
 														],
 														"playRanges": [
@@ -1254,8 +1256,8 @@
 														"svgHeight": 129.00302486580586,
 														"svgStrokeWidth": 0,
 														"bbox": {
-															"left": 591.5367516562902,
-															"top": 221.55532989652534,
+															"left": 594.5367516562902,
+															"top": 237.55532989652534,
 															"width": 211.96108843732418,
 															"height": 129.00302486580586
 														},
@@ -1316,7 +1318,9 @@
 												"wickScript": ""
 											}
 										],
-										"identifier": "Layer 1"
+										"identifier": "Layer 1",
+										"locked": false,
+										"hidden": false
 									}
 								],
 								"playRanges": [],
@@ -1329,7 +1333,7 @@
 									"width": 212.96108843732418,
 									"height": 130.00302486580586
 								},
-								"_zindex": 10,
+								"_zindex": 5,
 								"framesDirty": false,
 								"forceFabricCanvasRegen": false
 							}
@@ -1343,7 +1347,9 @@
 						"wickScript": ""
 					}
 				],
-				"identifier": "Layer 1"
+				"identifier": "Layer 1",
+				"locked": false,
+				"hidden": false
 			},
 			{
 				"frames": [
@@ -1351,9 +1357,9 @@
 						"identifier": "",
 						"wickObjects": [
 							{
-								"x": 383,
-								"y": 323,
-								"width": 520.17578125,
+								"x": 396.46778063692676,
+								"y": 321.58447921542995,
+								"width": 547.2597111255501,
 								"height": 45.199999999999996,
 								"scaleX": 0.9999999999999997,
 								"scaleY": 1,
@@ -1367,9 +1373,6 @@
 								"loop": false,
 								"isText": true,
 								"textData": {
-									"cursorColor": "#333",
-									"cursorDelay": 500,
-									"editable": true,
 									"fontFamily": "arial black",
 									"fontSize": 40,
 									"fontStyle": "normal",
@@ -1377,15 +1380,14 @@
 									"lineHeight": 1.16,
 									"fill": "rgba(0, 0, 0, 0.51)",
 									"textAlign": "left",
-									"textDecoration": "",
 									"text": "Can%20do%20a%20bunch%20of%20stuff!"
 								},
 								"isSymbol": false,
 								"isButton": false,
 								"playheadPosition": null,
 								"currentLayer": null,
-								"svgWidth": 523.1499407917559,
-								"svgHeight": 100.42461507239545,
+								"svgWidth": 550.0855020656095,
+								"svgHeight": 103.25565664153555,
 								"svgStrokeWidth": 1,
 								"bbox": {
 									"left": 121.42502960412207,
@@ -1665,9 +1667,9 @@
 							},
 							{
 								"uuid": "bd6daa53-9f53-49f5-abfa-42bfc2478910",
-								"x": 381,
-								"y": 321,
-								"width": 520.17578125,
+								"x": 401.70318975957264,
+								"y": 318.8240070727599,
+								"width": 561.8102386832497,
 								"height": 45.199999999999996,
 								"scaleX": 0.9999999999999997,
 								"scaleY": 1.0000000000000018,
@@ -1681,9 +1683,6 @@
 								"loop": false,
 								"isText": true,
 								"textData": {
-									"cursorColor": "#333",
-									"cursorDelay": 500,
-									"editable": true,
 									"fontFamily": "arial black",
 									"fontSize": 40,
 									"fontStyle": "normal",
@@ -1691,15 +1690,14 @@
 									"lineHeight": 1.16,
 									"fill": "#37ff2d",
 									"textAlign": "left",
-									"textDecoration": "",
 									"text": "Can%20do%20a%20bunch%20of%20stuff!"
 								},
 								"isSymbol": false,
 								"isButton": false,
 								"playheadPosition": null,
 								"currentLayer": null,
-								"svgWidth": 523.1499407917559,
-								"svgHeight": 100.42461507239557,
+								"svgWidth": 564.5563203109011,
+								"svgHeight": 104.77660092687563,
 								"svgStrokeWidth": 1,
 								"bbox": {
 									"left": 119.42502960412207,
@@ -1791,8 +1789,8 @@
 																				"isPath": true,
 																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#ffffff%22%20fill-rule=%22nonzero%22%20stroke=%22#000000%22%20stroke-width=%228.78%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M298.21706,349.27907c3.20013,4.75354%204.1206,4.90481%206.88319,-0.81553c3.34258,-6.29191%2056.07758,-80.98406%2047.41766,-138.30307c-8.65992,-57.31897%20-53.97699,-103.88617%20-121.87939,-104.63047c-67.90235,-0.7443%20-124.3861,55.55468%20-124.3861,119.05779c0,63.50306%2049.58564,121.77326%2053.35196,126.44096c3.54323,4.53607%204.96708,4.35862%208.01579,-0.14288c3.48699,-5.667%2011.57084,-22.18274%2014.00561,-25.67153c2.33819,-3.48583%203.11412,-3.40643%205.7178,-0.26134c2.75029,3.57294%2017.51563,20.1932%2021.12882,25.08724c3.63445,4.20568%205.14391,2.79469%207.23856,-0.32284c2.42098,-3.67925%2012.13006,-22.17691%2014.02652,-25.23218c1.69245,-2.57002%203.76907,-2.60229%205.46556,0.02869c1.67049,2.63096%2016.74013,24.16453%2017.81377,25.86546c1.28348,1.73561%203.19453,2.62431%204.71453,-0.10893c1.69211,-2.60444%2014.99858,-23.33368%2016.75918,-26.50812c1.76848,-3.17449%204.38465,-3.63023%206.31164,0.0266c2.05282,3.5453%2014.28054,20.92116%2017.4149,25.49016z%22/%3E%3C/g%3E",
 																				"bbox": {
-																					"left": 147.173727987313,
-																					"top": -47.65598050724927,
+																					"left": 150.173727987313,
+																					"top": -31.655980507249268,
 																					"width": 256.00474824581056,
 																					"height": 257.6047605150886
 																				},
@@ -1831,8 +1829,8 @@
 																				"isPath": true,
 																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#fee8e4%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#000000%22%20stroke-width=%228.78%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M266.56184,229.47545c24.06498,-0.99227%2043.213,-8.81552%2042.76831,-17.47366c-0.44469,-8.65817%20-20.31372,-14.87258%20-44.3787,-13.88028c-24.06498,0.99227%20-43.213,8.81552%20-42.76831,17.47366c0.44469,8.65817%2020.31372,14.87258%2044.3787,13.88028z%22/%3E%3C/g%3E",
 																				"bbox": {
-																					"left": 183.0655831730804,
-																					"top": -63.792578435378516,
+																					"left": 186.0655831730804,
+																					"top": -47.792578435378516,
 																					"width": 95.94219267103759,
 																					"height": 40.342105904638686
 																				},
@@ -1871,8 +1869,8 @@
 																				"isPath": true,
 																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#000000%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#000000%22%20stroke-width=%228.78%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M244.90491,207.33262c3.24894,0%205.88269,-3.59736%205.88269,-8.03493c0,-4.43756%20-2.63378,-8.03493%20-5.88269,-8.03493c-3.24894,0%20-5.88269,3.59736%20-5.88269,8.03493c0,4.43756%202.63378,8.03493%205.88269,8.03493z%22/%3E%3C/g%3E",
 																				"bbox": {
-																					"left": 162.2138446176112,
-																					"top": -78.29337250150326,
+																					"left": 165.2138446176112,
+																					"top": -62.293372501503256,
 																					"width": 20.545380000000023,
 																					"height": 24.849860000000007
 																				},
@@ -1911,8 +1909,8 @@
 																				"isPath": true,
 																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#000000%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#000000%22%20stroke-width=%228.78%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M285.04715,206.47094c3.25931,0%205.90149,-3.35454%205.90149,-7.49255c0,-4.13801%20-2.64221,-7.49255%20-5.90149,-7.49255c-3.25931,0%20-5.90149,3.35454%20-5.90149,7.49255c0,4.13801%202.64221,7.49255%205.90149,7.49255z%22/%3E%3C/g%3E",
 																				"bbox": {
-																					"left": 202.3560822556617,
-																					"top": -78.61266990399963,
+																					"left": 205.3560822556617,
+																					"top": -62.61266990399963,
 																					"width": 20.58298000000005,
 																					"height": 23.76509999999999
 																				},
@@ -1935,7 +1933,9 @@
 																		"wickScript": ""
 																	}
 																],
-																"identifier": "Layer 1"
+																"identifier": "Layer 1",
+																"locked": false,
+																"hidden": false
 															}
 														],
 														"playRanges": [],
@@ -1943,8 +1943,8 @@
 														"svgHeight": 258.60476051508874,
 														"svgStrokeWidth": 0,
 														"bbox": {
-															"left": 147.1737279873131,
-															"top": -47.65598050724935,
+															"left": 150.1737279873131,
+															"top": -31.655980507249353,
 															"width": 257.0047482458108,
 															"height": 258.60476051508874
 														},
@@ -2003,7 +2003,9 @@
 												"uuid": "e62a767e-294c-4294-b1b1-171b7dd0d098"
 											}
 										],
-										"identifier": "Layer 2"
+										"identifier": "Layer 2",
+										"locked": false,
+										"hidden": false
 									},
 									{
 										"frames": [
@@ -2068,8 +2070,8 @@
 																				"svgWidth": 160.95276,
 																				"svgHeight": 28.393699999999967,
 																				"bbox": {
-																					"left": 147.69869989053038,
-																					"top": 142.51917399962542,
+																					"left": 150.69869989053038,
+																					"top": 158.51917399962542,
 																					"width": 160.95276000000004,
 																					"height": 28.393699999999967
 																				},
@@ -2086,7 +2088,9 @@
 																		"wickScript": ""
 																	}
 																],
-																"identifier": "Layer 1"
+																"identifier": "Layer 1",
+																"locked": false,
+																"hidden": false
 															}
 														],
 														"playRanges": [],
@@ -2094,8 +2098,8 @@
 														"svgHeight": 29.393699999999967,
 														"svgStrokeWidth": 0,
 														"bbox": {
-															"left": 147.69869989053038,
-															"top": 142.51917399962542,
+															"left": 150.69869989053038,
+															"top": 158.51917399962542,
 															"width": 161.95276000000004,
 															"height": 29.393699999999967
 														},
@@ -2154,7 +2158,9 @@
 												"uuid": "4d82e123-9c84-49c8-8dd6-54ddc4cba00a"
 											}
 										],
-										"identifier": "Layer 1"
+										"identifier": "Layer 1",
+										"locked": false,
+										"hidden": false
 									}
 								],
 								"playRanges": [],
@@ -2219,8 +2225,8 @@
 								"isButton": false,
 								"playheadPosition": null,
 								"currentLayer": null,
-								"svgWidth": 130.0234375,
-								"svgHeight": 21.339999999999975,
+								"svgWidth": 69.02734375,
+								"svgHeight": 44.93439999999998,
 								"svgStrokeWidth": 1,
 								"bbox": {
 									"left": 66.98828125,
@@ -2265,8 +2271,8 @@
 								"isButton": false,
 								"playheadPosition": null,
 								"currentLayer": null,
-								"svgWidth": 113.025390625,
-								"svgHeight": 21.340000000000032,
+								"svgWidth": 70.99609375,
+								"svgHeight": 44.93439999999998,
 								"svgStrokeWidth": 1,
 								"bbox": {
 									"left": 535.4873046875,
@@ -2312,8 +2318,8 @@
 								"isButton": false,
 								"playheadPosition": null,
 								"currentLayer": null,
-								"svgWidth": 107.998046875,
-								"svgHeight": 21.340000000000032,
+								"svgWidth": 56.9951171875,
+								"svgHeight": 44.93439999999998,
 								"svgStrokeWidth": 1,
 								"bbox": {
 									"left": 355.0009765625,
@@ -2382,8 +2388,8 @@
 														"svgHeight": 200,
 														"svgStrokeWidth": 0,
 														"bbox": {
-															"left": 390,
-															"top": 127,
+															"left": 393,
+															"top": 143,
 															"width": 200,
 															"height": 200
 														},
@@ -2496,7 +2502,9 @@
 												"wickScript": ""
 											}
 										],
-										"identifier": "Layer 1"
+										"identifier": "Layer 1",
+										"locked": false,
+										"hidden": false
 									}
 								],
 								"playRanges": [],
@@ -2569,11 +2577,11 @@
 														"svgX": 525.0896984760071,
 														"svgY": 68.33154358563769,
 														"svgStrokeWidth": 7.82,
-														"svgWidth": 158.55009999999993,
-														"svgHeight": 159.41636000000005,
+														"svgWidth": 158.55010000000004,
+														"svgHeight": 159.41636,
 														"bbox": {
-															"left": 582.4547484760071,
-															"top": -55.87027641436231,
+															"left": 585.4547484760071,
+															"top": -39.87027641436231,
 															"width": 158.55009999999993,
 															"height": 159.41636
 														},
@@ -2609,11 +2617,11 @@
 														"svgX": 457.5733851172043,
 														"svgY": -4.4266148827952225,
 														"svgStrokeWidth": 6.38,
-														"svgWidth": 157.11009999999993,
+														"svgWidth": 157.11010000000005,
 														"svgHeight": 157.97636,
 														"bbox": {
-															"left": 572.4547484760071,
-															"top": -65.87027641436232,
+															"left": 575.4547484760071,
+															"top": -49.87027641436232,
 															"width": 157.11009730207888,
 															"height": 157.9763622291024
 														},
@@ -2648,8 +2656,8 @@
 														"svgWidth": 52.783570000000054,
 														"svgHeight": 74.36963,
 														"bbox": {
-															"left": 606.1433124096351,
-															"top": -63.23214780243522,
+															"left": 609.1433124096351,
+															"top": -47.23214780243522,
 															"width": 52.78356857585163,
 															"height": 74.36963447313148
 														},
@@ -2689,8 +2697,8 @@
 														"svgWidth": 13.916191240990202,
 														"svgHeight": 32.06334000000001,
 														"bbox": {
-															"left": 567.4076230706062,
-															"top": -63.09980309926618,
+															"left": 570.4076230706062,
+															"top": -47.09980309926618,
 															"width": 13.916191240990429,
 															"height": 32.06334000000004
 														},
@@ -2728,8 +2736,8 @@
 														"svgWidth": 24.695173428916632,
 														"svgHeight": 74.87664000000001,
 														"bbox": {
-															"left": 551.0965461979764,
-															"top": -64.58261455116184,
+															"left": 554.0965461979764,
+															"top": -48.58261455116184,
 															"width": 24.695173025259237,
 															"height": 74.87663271305473
 														},
@@ -2767,8 +2775,8 @@
 														"svgWidth": 35.59540563903346,
 														"svgHeight": 118.17154,
 														"bbox": {
-															"left": 531.746996994536,
-															"top": -66.49299123651365,
+															"left": 534.746996994536,
+															"top": -50.492991236513646,
 															"width": 35.595403341523706,
 															"height": 118.17153410005652
 														},
@@ -3344,7 +3352,9 @@
 												"wickScript": ""
 											}
 										],
-										"identifier": "Layer 1"
+										"identifier": "Layer 1",
+										"locked": false,
+										"hidden": false
 									},
 									{
 										"frames": [
@@ -3361,7 +3371,9 @@
 												"audioAssetUUID": "baf0ab26-6cfc-46cf-9101-bd10f4d93f74"
 											}
 										],
-										"identifier": "Layer 2"
+										"identifier": "Layer 2",
+										"locked": false,
+										"hidden": false
 									}
 								],
 								"playRanges": [
@@ -3434,8 +3446,8 @@
 								"isButton": false,
 								"playheadPosition": null,
 								"currentLayer": null,
-								"svgWidth": 113.025390625,
-								"svgHeight": 21.340000000000032,
+								"svgWidth": 70.99609375,
+								"svgHeight": 44.93439999999998,
 								"svgStrokeWidth": 1,
 								"bbox": {
 									"left": 536.4873046875,
@@ -3481,8 +3493,8 @@
 								"isButton": false,
 								"playheadPosition": null,
 								"currentLayer": null,
-								"svgWidth": 107.998046875,
-								"svgHeight": 21.340000000000032,
+								"svgWidth": 56.9951171875,
+								"svgHeight": 44.93439999999998,
 								"svgStrokeWidth": 1,
 								"bbox": {
 									"left": 356.0009765625,
@@ -3528,8 +3540,8 @@
 								"isButton": false,
 								"playheadPosition": null,
 								"currentLayer": null,
-								"svgWidth": 130.0234375,
-								"svgHeight": 21.339999999999975,
+								"svgWidth": 69.02734375,
+								"svgHeight": 44.93439999999998,
 								"svgStrokeWidth": 1,
 								"bbox": {
 									"left": 67.98828125,
@@ -3598,8 +3610,8 @@
 														"svgHeight": 400,
 														"svgStrokeWidth": 0,
 														"bbox": {
-															"left": 179.01382306477092,
-															"top": -47.26382306477092,
+															"left": 182.01382306477092,
+															"top": -31.263823064770918,
 															"width": 115.02764612954189,
 															"height": 197.47235387045816
 														},
@@ -3635,8 +3647,8 @@
 														"svgHeight": 547,
 														"svgStrokeWidth": 0,
 														"bbox": {
-															"left": 162.08558091286307,
-															"top": 55.414419087136935,
+															"left": 165.08558091286307,
+															"top": 71.41441908713693,
 															"width": 111.17116182572613,
 															"height": 145.82883817427387
 														},
@@ -3672,8 +3684,8 @@
 														"svgHeight": 210,
 														"svgStrokeWidth": 0,
 														"bbox": {
-															"left": -166,
-															"top": -214.00000000000009,
+															"left": -163,
+															"top": -198.00000000000009,
 															"width": 236.00000000000003,
 															"height": 210.00000000000003
 														},
@@ -3985,7 +3997,9 @@
 												"wickScript": ""
 											}
 										],
-										"identifier": "Layer 1"
+										"identifier": "Layer 1",
+										"locked": false,
+										"hidden": false
 									},
 									{
 										"frames": [
@@ -4002,7 +4016,9 @@
 												"audioAssetUUID": "70621d99-2d61-42d6-aec5-b6ec27802152"
 											}
 										],
-										"identifier": "Layer 2"
+										"identifier": "Layer 2",
+										"locked": false,
+										"hidden": false
 									}
 								],
 								"playRanges": [
@@ -4029,7 +4045,7 @@
 									}
 								],
 								"svgWidth": 359.58558091286307,
-								"svgHeight": 316.650596022366,
+								"svgHeight": 316.65059602236613,
 								"svgStrokeWidth": 0,
 								"bbox": {
 									"left": -30.5,
@@ -4088,8 +4104,8 @@
 								"isButton": false,
 								"playheadPosition": null,
 								"currentLayer": null,
-								"svgWidth": 292.09375,
-								"svgHeight": 46.200000000000045,
+								"svgWidth": 149.92578125,
+								"svgHeight": 98.632,
 								"svgStrokeWidth": 1,
 								"bbox": {
 									"left": 87.953125,
@@ -4134,8 +4150,8 @@
 								"isButton": false,
 								"playheadPosition": null,
 								"currentLayer": null,
-								"svgWidth": 292.09375,
-								"svgHeight": 46.200000000000045,
+								"svgWidth": 149.92578125,
+								"svgHeight": 98.632,
 								"svgStrokeWidth": 1,
 								"bbox": {
 									"left": 89.953125,
@@ -4236,8 +4252,8 @@
 																				"svgWidth": 72,
 																				"svgHeight": 69,
 																				"bbox": {
-																					"left": 367.5,
-																					"top": -3,
+																					"left": 370.5,
+																					"top": 13,
 																					"width": 72,
 																					"height": 69
 																				},
@@ -4272,8 +4288,8 @@
 																				"svgHeight": 194,
 																				"svgStrokeWidth": 0,
 																				"bbox": {
-																					"left": 369.25735294117646,
-																					"top": -2.757352941176464,
+																					"left": 372.25735294117646,
+																					"top": 13.242647058823536,
 																					"width": 64.51470588235293,
 																					"height": 58.48529411764707
 																				},
@@ -4290,7 +4306,9 @@
 																		"wickScript": ""
 																	}
 																],
-																"identifier": "Layer 1"
+																"identifier": "Layer 1",
+																"locked": false,
+																"hidden": false
 															}
 														],
 														"playRanges": [],
@@ -4299,8 +4317,8 @@
 														"svgHeight": 70,
 														"svgStrokeWidth": 0,
 														"bbox": {
-															"left": 327.6873129374028,
-															"top": -3.0000000000000284,
+															"left": 330.6873129374028,
+															"top": 12.999999999999972,
 															"width": 99.85581489151707,
 															"height": 99.09454710729702
 														},
@@ -4346,7 +4364,9 @@
 												"wickScript": ""
 											}
 										],
-										"identifier": "Layer 1"
+										"identifier": "Layer 1",
+										"locked": false,
+										"hidden": false
 									}
 								],
 								"playRanges": [],
@@ -4432,8 +4452,8 @@
 														"svgWidth": 163,
 														"svgHeight": 161,
 														"bbox": {
-															"left": 300.5,
-															"top": 73.5,
+															"left": 353.5,
+															"top": 84.5,
 															"width": 163,
 															"height": 161
 														},
@@ -4472,8 +4492,8 @@
 														"svgWidth": 128.55444999999997,
 														"svgHeight": 127.71287000000001,
 														"bbox": {
-															"left": 301.96039613585333,
-															"top": 77.53960411678884,
+															"left": 354.96039613585333,
+															"top": 88.53960411678884,
 															"width": 128.55445519873894,
 															"height": 127.7128710419907
 														},
@@ -4586,7 +4606,9 @@
 												"name": "green"
 											}
 										],
-										"identifier": "Layer 1"
+										"identifier": "Layer 1",
+										"locked": false,
+										"hidden": false
 									}
 								],
 								"playRanges": [],
@@ -4604,9 +4626,9 @@
 								"forceFabricCanvasRegen": false
 							},
 							{
-								"x": 479,
+								"x": 503.2809871299794,
 								"y": 60,
-								"width": 357.87109375,
+								"width": 406.43306800995884,
 								"height": 45.199999999999996,
 								"scaleX": 1,
 								"scaleY": 1,
@@ -4620,9 +4642,6 @@
 								"loop": false,
 								"isText": true,
 								"textData": {
-									"cursorColor": "#333",
-									"cursorDelay": 500,
-									"editable": true,
 									"fontFamily": "helvetica",
 									"fontSize": 40,
 									"fontStyle": "normal",
@@ -4630,15 +4649,14 @@
 									"lineHeight": 1.16,
 									"fill": "#000000",
 									"textAlign": "left",
-									"textDecoration": "",
 									"text": "Scriptable%20objects!"
 								},
 								"isSymbol": false,
 								"isButton": false,
 								"playheadPosition": null,
 								"currentLayer": null,
-								"svgWidth": 358.87109375,
-								"svgHeight": 46.20000000000002,
+								"svgWidth": 407.4330680099588,
+								"svgHeight": 46.19999999999999,
 								"svgStrokeWidth": 1,
 								"bbox": {
 									"left": 299.564453125,
@@ -4651,9 +4669,9 @@
 								"uuid": "6156f517-8622-4862-a4d5-c64df47b2a7f"
 							},
 							{
-								"x": 481,
+								"x": 500.28096210125887,
 								"y": 62,
-								"width": 357.87109375,
+								"width": 396.4330179525178,
 								"height": 45.199999999999996,
 								"scaleX": 1,
 								"scaleY": 1,
@@ -4667,9 +4685,6 @@
 								"loop": false,
 								"isText": true,
 								"textData": {
-									"cursorColor": "#333",
-									"cursorDelay": 500,
-									"editable": true,
 									"fontFamily": "helvetica",
 									"fontSize": 40,
 									"fontStyle": "normal",
@@ -4677,15 +4692,14 @@
 									"lineHeight": 1.16,
 									"fill": "#000000",
 									"textAlign": "left",
-									"textDecoration": "",
 									"text": "Scriptable%20objects!"
 								},
 								"isSymbol": false,
 								"isButton": false,
 								"playheadPosition": null,
 								"currentLayer": null,
-								"svgWidth": 358.87109375,
-								"svgHeight": 46.20000000000002,
+								"svgWidth": 397.43301795251773,
+								"svgHeight": 46.19999999999999,
 								"svgStrokeWidth": 1,
 								"bbox": {
 									"left": 301.564453125,
@@ -4699,9 +4713,9 @@
 							},
 							{
 								"uuid": "f0b78f30-cb4f-4cb4-bf91-abf9c45eb776",
-								"x": 597,
+								"x": 612.8542361225725,
 								"y": 97,
-								"width": 173.5830078125,
+								"width": 205.291480057645,
 								"height": 24.86,
 								"scaleX": 1,
 								"scaleY": 1,
@@ -4715,9 +4729,6 @@
 								"loop": false,
 								"isText": true,
 								"textData": {
-									"cursorColor": "#333",
-									"cursorDelay": 500,
-									"editable": true,
 									"fontFamily": "arial",
 									"fontSize": 22,
 									"fontStyle": "normal",
@@ -4725,14 +4736,13 @@
 									"lineHeight": 1.16,
 									"fill": "rgba(0, 0, 0, 0.51)",
 									"textAlign": "left",
-									"textDecoration": "",
 									"text": "(With%20JavaScript!)"
 								},
 								"isSymbol": false,
 								"isButton": false,
 								"playheadPosition": null,
 								"currentLayer": null,
-								"svgWidth": 174.5830078125,
+								"svgWidth": 206.291480057645,
 								"svgHeight": 25.860000000000014,
 								"svgStrokeWidth": 1,
 								"bbox": {
@@ -4798,8 +4808,8 @@
 														"isPath": true,
 														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#ffffff%22%20fill-rule=%22nonzero%22%20stroke=%22#000000%22%20stroke-width=%224.86%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M208.18079,217.08382c1.51584,2.25166%201.95185,2.32331%203.26044,-0.3863c1.58332,-2.98036%2026.56288,-38.3606%2022.46084,-65.51152c-4.10204,-27.1509%20-25.56787,-49.20889%20-57.73194,-49.56145c-32.16405,-0.35256%20-58.91932,26.31519%20-58.91932,56.3954c0,30.08019%2023.48777,57.68167%2025.2718,59.89267c1.67836,2.14865%202.35281,2.06459%203.79693,-0.06768c1.65172,-2.68435%205.48089,-10.50754%206.63419,-12.16011c1.10756,-1.65117%201.4751,-1.61356%202.70841,-0.12379c1.30276,1.69243%208.29682,9.56513%2010.00832,11.88335c1.72157,1.99215%202.43657,1.32379%203.42877,-0.15292c1.14677,-1.74279%205.74578,-10.50478%206.64409,-11.952c0.80168,-1.21737%201.78534,-1.23266%202.58893,0.01359c0.79128,1.24624%207.92948,11.44628%208.43804,12.25197c0.60796,0.82213%201.51319,1.24309%202.23318,-0.0516c0.80152,-1.23367%207.10454,-11.05272%207.9385,-12.55639c0.8377,-1.5037%202.07692,-1.71957%202.9897,0.0126c0.97238,1.67934%206.76442,9.90995%208.24911,12.0742z%22/%3E%3C/g%3E",
 														"bbox": {
-															"left": 22.803631782381913,
-															"top": 39.552864767425035,
+															"left": 76.80363178238191,
+															"top": 55.552864767425035,
 															"width": 121.96564261804876,
 															"height": 122.72353583408426
 														},
@@ -4809,7 +4819,7 @@
 														"svgY": 101.62109685038295,
 														"svgStrokeWidth": 4.86,
 														"svgWidth": 121.9656426180488,
-														"svgHeight": 122.72353583408422,
+														"svgHeight": 122.72353583408425,
 														"_tempZIndex": 0,
 														"uuid": "93cf6cd7-46d9-446d-85d6-785df9a2a6bc"
 													},
@@ -4838,8 +4848,8 @@
 														"isPath": true,
 														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#fee8e4%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#000000%22%20stroke-width=%224.86%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M193.18632,160.33515c11.39912,-0.47002%2020.46917,-4.17574%2020.25853,-8.27694c-0.21064,-4.10121%20-9.62222,-7.04486%20-21.02134,-6.57482c-11.39912,0.47002%20-20.46917,4.17574%20-20.25853,8.27694c0.21064,4.10121%209.62222,7.04486%2021.02134,6.57482z%22/%3E%3C/g%3E",
 														"bbox": {
-															"left": 39.80491752826646,
-															"top": 31.909266772207502,
+															"left": 93.80491752826646,
+															"top": 47.9092667722075,
 															"width": 46.1470616639441,
 															"height": 19.810366674129227
 														},
@@ -4848,7 +4858,7 @@
 														"svgX": 172.1613866962944,
 														"svgY": 145.4340834351429,
 														"svgStrokeWidth": 4.86,
-														"svgWidth": 46.14706166394413,
+														"svgWidth": 46.1470616639441,
 														"svgHeight": 19.810366674129227,
 														"_tempZIndex": 1,
 														"uuid": "4ad29880-d2bb-4d2b-80bb-480b33e20841"
@@ -4878,8 +4888,8 @@
 														"isPath": true,
 														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#000000%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#000000%22%20stroke-width=%224.86%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M182.92785,149.84651c1.53896,0%202.78652,-1.704%202.78652,-3.80599c0,-2.10199%20-1.24757,-3.80599%20-2.78652,-3.80599c-1.53896,0%20-2.78652,1.704%20-2.78652,3.80599c0,2.10199%201.24757,3.80599%202.78652,3.80599z%22/%3E%3C/g%3E",
 														"bbox": {
-															"left": 29.92784754553162,
-															"top": 25.040517798814392,
+															"left": 83.92784754553162,
+															"top": 41.04051779881439,
 															"width": 10.433040000000005,
 															"height": 12.47198000000003
 														},
@@ -4918,8 +4928,8 @@
 														"isPath": true,
 														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#000000%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#000000%22%20stroke-width=%224.86%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M201.94246,149.43835c1.54387,0%202.79542,-1.58898%202.79542,-3.54908c0,-1.9601%20-1.25156,-3.54908%20-2.79542,-3.54908c-1.54387,0%20-2.79542,1.58898%20-2.79542,3.54908c0,1.9601%201.25156,3.54908%202.79542,3.54908z%22/%3E%3C/g%3E",
 														"bbox": {
-															"left": 48.942458215038755,
-															"top": 24.889272722468718,
+															"left": 102.94245821503876,
+															"top": 40.88927272246872,
 															"width": 10.450840000000028,
 															"height": 11.95816000000002
 														},
@@ -4943,7 +4953,9 @@
 												"wickScript": ""
 											}
 										],
-										"identifier": "Layer 1"
+										"identifier": "Layer 1",
+										"locked": false,
+										"hidden": false
 									}
 								],
 								"playRanges": [],
@@ -4999,8 +5011,8 @@
 								"svgY": 118.75771900312736,
 								"svgStrokeWidth": 1,
 								"_zindex": 0,
-								"svgWidth": 126.9441936992834,
-								"svgHeight": 105.05183437490712,
+								"svgWidth": 142.47384253567157,
+								"svgHeight": 117.90329335006413,
 								"bbox": {
 									"left": 279.71765745101305,
 									"top": 118.25771900312742,
@@ -5033,8 +5045,8 @@
 								"isPath": true,
 								"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#3e3e3e%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M460.44964,227.61148l0,-69.01851c0,0%200.78479,-9.18798%20-9.94774,-9.18667c-10.73252,0.0013%20-10.39455,9.18667%20-10.39455,9.18667l0,69.01851c0,0%20-0.37573,8.85768%2010.39455,8.856c10.77028,-0.00168%209.94774,-8.856%209.94774,-8.856z%22/%3E%3C/g%3E",
 								"svgStrokeWidth": 1,
-								"svgWidth": 19.03027183334217,
-								"svgHeight": 78.46251171770501,
+								"svgWidth": 21.358329779284077,
+								"svgHeight": 88.06118037901808,
 								"bbox": {
 									"left": 436.23874900914683,
 									"top": 148.90629634328943,
@@ -5074,8 +5086,8 @@
 								"svgX": 439.8158737870624,
 								"svgY": 119.1696340890227,
 								"svgStrokeWidth": 1,
-								"svgWidth": 19.527423299999953,
-								"svgHeight": 18.945030060000022,
+								"svgWidth": 21.91629999999998,
+								"svgHeight": 21.262659999999983,
 								"bbox": {
 									"left": 435.94887042005894,
 									"top": 118.6696340890227,
@@ -5113,8 +5125,8 @@
 								"svgY": 149.75258631025008,
 								"svgStrokeWidth": 1,
 								"_zindex": 3,
-								"svgWidth": 71.5545669372309,
-								"svgHeight": 77.64563644516636,
+								"svgWidth": 80.30815593404145,
+								"svgHeight": 87.14437311466486,
 								"bbox": {
 									"left": 474.2719698439428,
 									"top": 149.25258631025014,
@@ -5147,8 +5159,8 @@
 								"isPath": true,
 								"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#3e3e3e%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M593.30307,224.30431l0,-95.00775c0,0%200.73753,-10.93577%20-10.11694,-10.93596c-10.85447,-0.00019%20-10.63187,10.38995%20-10.63187,10.38995l0,95.82678c0,0%20-0.496,11.4607%209.81284,11.45091c10.30884,-0.0098%2010.93597,-11.72392%2010.93597,-11.72392z%22/%3E%3C/g%3E",
 								"svgStrokeWidth": 1,
-								"svgWidth": 19.391000595974447,
-								"svgHeight": 105.73287282761464,
+								"svgWidth": 21.76318809873692,
+								"svgHeight": 118.66764627117237,
 								"bbox": {
 									"left": 568.6834352551114,
 									"top": 117.86059874747717,
@@ -5185,8 +5197,8 @@
 								"isPath": true,
 								"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#3e3e3e%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M633.12488,166.68952c0,0%208.82073,-6.49217%202.13195,-14.04254c-6.68878,-7.55038%20-13.76021,1.27972%20-13.76021,1.27972l-44.86275,43.88003l5.73322,16.10763z%22/%3E%3C/g%3E",
 								"svgStrokeWidth": 1,
-								"svgWidth": 55.35647261856093,
-								"svgHeight": 58.20073022723665,
+								"svgWidth": 62.12847656404142,
+								"svgHeight": 65.32068487905349,
 								"bbox": {
 									"left": 572.7668665086792,
 									"top": 149.09367925811668,
@@ -5204,7 +5216,7 @@
 								"x": 161.80672462030967,
 								"y": 170.2228215164058,
 								"width": 258.0047482458108,
-								"height": 345.5643847644192,
+								"height": 345.56438476441906,
 								"scaleX": 0.5682942715772183,
 								"scaleY": 0.5682942715772183,
 								"rotation": 0,
@@ -5232,7 +5244,7 @@
 														"x": 0,
 														"y": -42.979812124665216,
 														"width": 257.0047482458108,
-														"height": 258.60476051508874,
+														"height": 258.6047605150886,
 														"scaleX": 1,
 														"scaleY": 1,
 														"rotation": 0,
@@ -5280,10 +5292,10 @@
 																				"isPath": true,
 																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#ffffff%22%20fill-rule=%22nonzero%22%20stroke=%22#000000%22%20stroke-width=%228.78%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M298.21706,349.27907c3.20013,4.75354%204.1206,4.90481%206.88319,-0.81553c3.34258,-6.29191%2056.07758,-80.98406%2047.41766,-138.30307c-8.65992,-57.31897%20-53.97699,-103.88617%20-121.87939,-104.63047c-67.90235,-0.7443%20-124.3861,55.55468%20-124.3861,119.05779c0,63.50306%2049.58564,121.77326%2053.35196,126.44096c3.54323,4.53607%204.96708,4.35862%208.01579,-0.14288c3.48699,-5.667%2011.57084,-22.18274%2014.00561,-25.67153c2.33819,-3.48583%203.11412,-3.40643%205.7178,-0.26134c2.75029,3.57294%2017.51563,20.1932%2021.12882,25.08724c3.63445,4.20568%205.14391,2.79469%207.23856,-0.32284c2.42098,-3.67925%2012.13006,-22.17691%2014.02652,-25.23218c1.69245,-2.57002%203.76907,-2.60229%205.46556,0.02869c1.67049,2.63096%2016.74013,24.16453%2017.81377,25.86546c1.28348,1.73561%203.19453,2.62431%204.71453,-0.10893c1.69211,-2.60444%2014.99858,-23.33368%2016.75918,-26.50812c1.76848,-3.17449%204.38465,-3.63023%206.31164,0.0266c2.05282,3.5453%2014.28054,20.92116%2017.4149,25.49016z%22/%3E%3C/g%3E",
 																				"bbox": {
-																					"left": 98.17372798731299,
-																					"top": -23.655980507249268,
+																					"left": 146.80672462030952,
+																					"top": -41.75699060825937,
 																					"width": 256.00474824581056,
-																					"height": 257.6047605150886
+																					"height": 257.6047605150885
 																				},
 																				"_zindex": 10,
 																				"forceFabricCanvasRegen": false,
@@ -5320,8 +5332,8 @@
 																				"isPath": true,
 																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#fee8e4%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#000000%22%20stroke-width=%228.78%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M266.56184,229.47545c24.06498,-0.99227%2043.213,-8.81552%2042.76831,-17.47366c-0.44469,-8.65817%20-20.31372,-14.87258%20-44.3787,-13.88028c-24.06498,0.99227%20-43.213,8.81552%20-42.76831,17.47366c0.44469,8.65817%2020.31372,14.87258%2044.3787,13.88028z%22/%3E%3C/g%3E",
 																				"bbox": {
-																					"left": 134.0655831730804,
-																					"top": -39.792578435378516,
+																					"left": 182.69857980607694,
+																					"top": -57.89358853638859,
 																					"width": 95.94219267103759,
 																					"height": 40.342105904638686
 																				},
@@ -5360,8 +5372,8 @@
 																				"isPath": true,
 																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#000000%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#000000%22%20stroke-width=%228.78%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M244.90491,207.33262c3.24894,0%205.88269,-3.59736%205.88269,-8.03493c0,-4.43756%20-2.63378,-8.03493%20-5.88269,-8.03493c-3.24894,0%20-5.88269,3.59736%20-5.88269,8.03493c0,4.43756%202.63378,8.03493%205.88269,8.03493z%22/%3E%3C/g%3E",
 																				"bbox": {
-																					"left": 113.21384461761119,
-																					"top": -54.293372501503256,
+																					"left": 161.84684125060772,
+																					"top": -72.39438260251333,
 																					"width": 20.545380000000023,
 																					"height": 24.849860000000007
 																				},
@@ -5400,8 +5412,8 @@
 																				"isPath": true,
 																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#000000%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#000000%22%20stroke-width=%228.78%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M285.04715,206.47094c3.25931,0%205.90149,-3.35454%205.90149,-7.49255c0,-4.13801%20-2.64221,-7.49255%20-5.90149,-7.49255c-3.25931,0%20-5.90149,3.35454%20-5.90149,7.49255c0,4.13801%202.64221,7.49255%205.90149,7.49255z%22/%3E%3C/g%3E",
 																				"bbox": {
-																					"left": 153.3560822556617,
-																					"top": -54.61266990399963,
+																					"left": 201.98907888865824,
+																					"top": -72.7136800050097,
 																					"width": 20.58298000000005,
 																					"height": 23.76509999999999
 																				},
@@ -5424,18 +5436,20 @@
 																		"wickScript": ""
 																	}
 																],
-																"identifier": "Layer 1"
+																"identifier": "Layer 1",
+																"locked": false,
+																"hidden": false
 															}
 														],
 														"playRanges": [],
 														"svgWidth": 257.0047482458108,
-														"svgHeight": 258.60476051508874,
+														"svgHeight": 258.6047605150886,
 														"svgStrokeWidth": 0,
 														"bbox": {
-															"left": 98.1737279873131,
-															"top": -23.655980507249353,
+															"left": 146.80672462030964,
+															"top": -41.75699060825946,
 															"width": 257.0047482458108,
-															"height": 258.60476051508874
+															"height": 258.6047605150886
 														},
 														"_zindex": 11,
 														"forceFabricCanvasRegen": false,
@@ -5492,7 +5506,9 @@
 												"uuid": "3ea0423b-8307-4830-9654-cd6566d9508f"
 											}
 										],
-										"identifier": "Layer 2"
+										"identifier": "Layer 2",
+										"locked": false,
+										"hidden": false
 									},
 									{
 										"frames": [
@@ -5557,8 +5573,8 @@
 																				"svgWidth": 160.95276,
 																				"svgHeight": 28.393699999999967,
 																				"bbox": {
-																					"left": 98.69869989053038,
-																					"top": 166.51917399962542,
+																					"left": 147.33169652352692,
+																					"top": 148.41816389861538,
 																					"width": 160.95276000000004,
 																					"height": 28.393699999999967
 																				},
@@ -5575,7 +5591,9 @@
 																		"wickScript": ""
 																	}
 																],
-																"identifier": "Layer 1"
+																"identifier": "Layer 1",
+																"locked": false,
+																"hidden": false
 															}
 														],
 														"playRanges": [],
@@ -5583,8 +5601,8 @@
 														"svgHeight": 29.393699999999967,
 														"svgStrokeWidth": 0,
 														"bbox": {
-															"left": 98.69869989053038,
-															"top": 166.51917399962542,
+															"left": 147.33169652352692,
+															"top": 148.41816389861538,
 															"width": 161.95276000000004,
 															"height": 29.393699999999967
 														},
@@ -5643,12 +5661,14 @@
 												"uuid": "f762b62e-f20d-4f20-ba1e-3ba1ddb5f0f6"
 											}
 										],
-										"identifier": "Layer 1"
+										"identifier": "Layer 1",
+										"locked": false,
+										"hidden": false
 									}
 								],
 								"playRanges": [],
-								"svgWidth": 130.64075483682467,
-								"svgHeight": 174.97659394754822,
+								"svgWidth": 146.6226204678166,
+								"svgHeight": 196.3822603227252,
 								"svgStrokeWidth": 0,
 								"bbox": {
 									"left": 88.49541438640132,
@@ -5685,8 +5705,8 @@
 								"isPath": true,
 								"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#3e3e3e%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M625.52195,229.18176c0,0%204.68306,10.0252%2013.51149,5.14597c8.82841,-4.87924%202.57397,-14.52673%202.57397,-14.52673l-28.93323,-46.53435l-15.33264,9.17701z%22/%3E%3C/g%3E",
 								"svgStrokeWidth": 1,
-								"svgWidth": 42.24713574444854,
-								"svgHeight": 56.48946450251037,
+								"svgWidth": 47.415416099268896,
+								"svgHeight": 63.40007239338979,
 								"bbox": {
 									"left": 593.4745323362368,
 									"top": 173.7666524594127,
@@ -5701,9 +5721,9 @@
 							},
 							{
 								"uuid": "2cbda016-41e6-441e-aef3-b2ef09f99fd6",
-								"x": 369.21324354657685,
-								"y": 338.72727272727286,
-								"width": 513.33984375,
+								"x": 371.52165933891644,
+								"y": 339.72727272727286,
+								"width": 577.9566753346792,
 								"height": 45.199999999999996,
 								"scaleX": 1,
 								"scaleY": 1,
@@ -5717,9 +5737,6 @@
 								"loop": false,
 								"isText": true,
 								"textData": {
-									"cursorColor": "#333",
-									"cursorDelay": 500,
-									"editable": true,
 									"fontFamily": "helvetica",
 									"fontSize": 40,
 									"fontStyle": "normal",
@@ -5727,15 +5744,14 @@
 									"lineHeight": 1.16,
 									"fill": "#000000",
 									"textAlign": "center",
-									"textDecoration": "",
 									"text": "What%20are%20you%20waiting%20for??"
 								},
 								"isSymbol": false,
 								"isButton": false,
 								"playheadPosition": null,
 								"currentLayer": null,
-								"svgWidth": 458.27680078125,
-								"svgHeight": 41.16420000000005,
+								"svgWidth": 578.9566753346792,
+								"svgHeight": 46.200000000000045,
 								"svgStrokeWidth": 1,
 								"bbox": {
 									"left": 112.04332167157682,
@@ -5781,8 +5797,8 @@
 								"isButton": false,
 								"playheadPosition": null,
 								"currentLayer": null,
-								"svgWidth": 264.9388826293945,
-								"svgHeight": 56.26665000000003,
+								"svgWidth": 297.35003662109375,
+								"svgHeight": 63.15000000000009,
 								"svgStrokeWidth": 1,
 								"bbox": {
 									"left": 212.68188404635566,
@@ -5803,7 +5819,9 @@
 						"wickScript": "stop();"
 					}
 				],
-				"identifier": "Layer 2"
+				"identifier": "Layer 2",
+				"locked": false,
+				"hidden": false
 			}
 		],
 		"playRanges": [],
