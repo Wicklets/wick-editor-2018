@@ -42,6 +42,10 @@ $(document).ready(function() {
         window.location.hash = "updates"
     });
 
+    $( ".community-button" ).click(function() {
+        window.open('http://forum.wickeditor.com/');
+    });
+
     $( ".logotop-bar-item" ).click(function() {
         frame.src = "site/pages/home.html"
         window.location.hash = ""
