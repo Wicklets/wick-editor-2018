@@ -58,8 +58,14 @@ var RightClickMenuInterface = function (wickEditor) {
                         self.open = false;
                         return;
                     }
-                    if(e.target.tagName === 'CANVAS')
-                        wickEditor.fabric.selectObjectsHoveredOver();
+                    if(e.target.tagName === 'CANVAS') {
+                        wickEditor.project.clearSelection();
+                        var hoveredObj = wickEditor.fabric.getObjectHoveredOver();
+                        if(hoveredObj) {
+                            wickEditor.project.selectObject(hoveredObj);
+                            wickEditor.syncInterfaces();
+                        }
+                    }
                     self.open = true;
                 } else {
                     self.open = false;

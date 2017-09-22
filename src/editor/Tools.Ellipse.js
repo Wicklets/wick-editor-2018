@@ -53,7 +53,7 @@ Tools.Ellipse = function (wickEditor) {
         //var svg = '<ellipse cx="'+drawingShape.width/2+'" cy="'+drawingShape.height/2+'" fill="'+drawingShape.fill+'" rx="'+drawingShape.rx+'" ry="'+drawingShape.ry+'"/>'
         var svgString = '<svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>';
 
-        drawingShape.remove();
+        wickEditor.fabric.canvas.remove(drawingShape)
         
         var pathWickObject = WickObject.createPathObject(svgString);
         pathWickObject.x = origX;

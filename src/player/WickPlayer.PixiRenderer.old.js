@@ -213,17 +213,6 @@ var WickPixiRenderer = function () {
             pixiObject = PIXI.Sprite.fromImage(base64svg);
             wickObject.generateAlphaMask(pixiObject.texture.baseTexture.imageUrl);
 
-        } else if (wickObject.textData) {
-
-            var style = {
-                font : wickObject.textData.fontWeight + " " + wickObject.textData.fontStyle + " " + wickObject.textData.fontSize + "px " + wickObject.textData.fontFamily,
-                fill : wickObject.textData.fill,
-                wordWrap : true,
-                wordWrapWidth : 1440,
-                align: wickObject.textData.textAlign
-            };
-            pixiObject = new PIXI.Text(wickObject.textData.text, style);
-
         }
 
         if(!pixiObject) return;
@@ -269,15 +258,6 @@ var WickPixiRenderer = function () {
         if(wickObject.flipX) pixiObject.scale.x *= -1;
         if(wickObject.flipY) pixiObject.scale.y *= -1;
 
-    }
-
-    self.setText = function (wickObject, newText) {
-        var pixiObject = wickToPixiDict[wickObject.uuid];
-        if(!pixiObject) return;
-        pixiObject.text = ""+newText
-        pixiObject.calculateBounds(); 
-        wickObject.width = pixiObject.width; 
-        wickObject.height = pixiObject.height;
     }
 
     var resizeCanvas = function () {

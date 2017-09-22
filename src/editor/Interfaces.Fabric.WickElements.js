@@ -19,8 +19,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
     var objectsInCanvas = [];
 
-    var cachedFabricObjects = {};
-
     var currentFrameRef;
 
     this.update = function () {
@@ -32,15 +30,18 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
         var enablePerfTests = false;
 
+        wickEditor.fabric.canvas.discardActiveObject();
+        wickEditor.fabric.canvas.renderAll();
+        wickEditor.fabric.canvas.getActiveObjects().forEach(function (fo) {
+            fo.setCoords();
+        });
+
         if(enablePerfTests) console.log("-------------------");
         if(enablePerfTests) startTiming();
         if(enablePerfTests) stopTiming("init");
 
         var currentObject = wickEditor.project.currentObject;
         var currentFrame = currentFrameRef;
-
-        // Make sure everything is deselected, mulitple selected objects cause positioning problems.
-        fabricInterface.deselectAll(true);
 
         var activeObjects = currentObject.getAllActiveChildObjects();
         if(wickEditor.paper.isActive()) {
@@ -62,11 +63,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         //var allObjects = siblingObjects.concat(activeObjects);
 
         var finish = function () {
-            // Reselect objects that were selected before sync
-            var selectedObjects = wickEditor.project.getSelectedObjects();
-            fabricInterface.deselectAll();
-            fabricInterface.selectObjects(selectedObjects);
-
             for(var i = 0; i < allObjects.length; i++) {
                 allObjects[i]._zindex = i;
             }
@@ -83,6 +79,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             });
 
             window.blockAllRender = false;
+            fabricInterface.syncSelectionWithWickProject();
             fabricInterface.canvas.renderAll();
         }
 
@@ -97,11 +94,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
             if(allObjects.indexOf(fabricObj.wickObjectRef) == -1 || (wickObj && wickObj.forceFabricCanvasRegen)) {
                 if(wickObj) {
-                    wickObj.getAllChildObjectsRecursive().forEach(function (child) {
-                        cachedFabricObjects[child.uuid] = null;
-                    });
                     wickObj.forceFabricCanvasRegen = false;
-                    cachedFabricObjects[wickObj.uuid] = null;
                 }
                 objectsInCanvas.splice(objectsInCanvas.indexOf(fabricObj.wickObjectRef), 1);
                 // Object doesn't exist in the current object anymore, remove it's fabric object.
@@ -116,7 +109,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 fabricInterface.canvas.remove(fabricObj);
                 //fabricInterface.canvas.renderAll();
             } else {
-                fabricObj.remove();
+                fabricInterface.canvas.remove(fabricObj);
             }
         });
 
@@ -157,6 +150,19 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
                 objectToAdd.fabricObjectReference = fabricObj;
 
+                if(fabricObj.type === 'textbox') {
+                    fabricObj.setControlsVisibility({
+                        bl: false,
+                        br: false,
+                        mb: false,
+                        ml: false,
+                        mr: true,
+                        mt: false,
+                        tl: false,
+                        tr: false,
+                        mtr: true,
+                    });
+                }
                 fabricObj.originX = 'center';
                 fabricObj.originY = 'center';
 
@@ -189,40 +195,32 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
     }
 
     var createFabricObjectFromWickObject = function (wickObj, callback) {
-
-        if(cachedFabricObjects[wickObj.uuid]) {
-            //callback(cachedFabricObjects[wickObj.uuid]);
-            //return;
-        }
         
         if(wickObj.isImage) {
-            /*var asset = wickEditor.project.library.getAsset(wickObj.assetUUID);
-            fabric.util.loadImage('/resources/editor.png'/, function(img) {
-                var pattern = new fabric.Pattern({
-                    source: img,
-                    repeat: 'repeat'
-                });
-                var rect = new fabric.Rect({
-                    //left: 100,
-                    //top: 100,
-                    width: 100,
-                    height: 100,
-                    fill: pattern
-                });
-                callback(rect);
-            });*/
-
             var asset = wickEditor.project.library.getAsset(wickObj.assetUUID);
             if(!asset) return;
             fabric.Image.fromURL(asset.getData(), function(newFabricImage) {
-                cachedFabricObjects[wickObj.uuid] = newFabricImage;
                 newFabricImage.wickObjReference = wickObj;
                 callback(newFabricImage);
             });
         }
 
-        if(wickObj.textData) {
-            var newFabricText = new fabric.IText(wickObj.textData.text, wickObj.textData);
+        if(wickObj.isText) {
+            var textData = wickObj.textData;
+            var newFabricText = new fabric.Textbox('First Textbox', {
+                /*cursorColor: '#333',
+                cursorDelay: 500,
+                editable: true,*/
+                fontFamily: textData.fontFamily,
+                fontSize: textData.fontSize,
+                fontStyle: textData.fontStyle,
+                fontWeight: textData.fontWeight,
+                lineHeight: textData.lineHeight,
+                fill: textData.fill,
+                textAlign: textData.textAlign,
+                text: textData.text,
+            });
+
             newFabricText.wickObjReference = wickObj;
             callback(newFabricText);
         }
@@ -235,7 +233,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 if(!wickObj.paper) wickEditor.paper.pathRoutines.regenPaperJSState(wickObj)
                 if(wickObj.paper && wickObj.paper.fillColor) pathFabricObj.fill = wickObj.paper.fillColor.toCSS()
 
-                cachedFabricObjects[wickObj.uuid] = pathFabricObj;
                 pathFabricObj.wickObjReference = wickObj;
                 callback(pathFabricObj);
             });
@@ -374,16 +371,10 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         if(!wickObj.width) wickObj.width = fabricObj.width;
         if(!wickObj.height) wickObj.height = fabricObj.height;
 
-        // Always use length of text from fabric
-        if(fabricObj.type === "i-text") {
-            wickObj.width  = fabricObj.width;
-            wickObj.height  = fabricObj.height;
-        }
-
         fabricObj.left    = wickObj.getAbsolutePosition().x;
         fabricObj.top     = wickObj.getAbsolutePosition().y;
         fabricObj.width   = wickObj.width;
-        fabricObj.height  = wickObj.height;
+        if(!wickObj.isText) fabricObj.height  = wickObj.height;
         fabricObj.scaleX  = wickObj.scaleX;
         fabricObj.scaleY  = wickObj.scaleY;
         fabricObj.angle   = wickObj.rotation;
@@ -391,39 +382,40 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         fabricObj.flipY   = wickObj.flipY;
         fabricObj.opacity = wickObj.opacity;
 
-        if(wickObj.textData) {
-            fabricObj.text = wickObj.textData.text;
-            fabricObj.fontFamily = wickObj.textData.fontFamily;
-            fabricObj.setColor(wickObj.textData.fill);
-            fabricObj.fontSize = wickObj.textData.fontSize;
-            fabricObj.fontStyle = wickObj.textData.fontStyle;
-            fabricObj.fontWeight = wickObj.textData.fontWeight;
-            fabricObj.textDecoration = wickObj.textData.textDecoration;
-            fabricObj.textAlign = wickObj.textData.textAlign;
+        if(wickObj.isText) {
+            var textData = wickObj.textData;
+            fabricObj.fontFamily = textData.fontFamily;
+            fabricObj.fontSize = textData.fontSize;
+            fabricObj.fontStyle = textData.fontStyle;
+            fabricObj.fontWeight = textData.fontWeight;
+            fabricObj.lineHeight = textData.lineHeight;
+            fabricObj.fill = textData.fill;
+            fabricObj.textAlign = textData.textAlign;
+            fabricObj.text = textData.text;
+        }
+
+        if(wickObj.opacity > 0) {
+            fabricObj.perPixelTargetFind = true;
+            fabricObj.targetFindTolerance = 4;
         } else {
-            if(wickObj.opacity > 0) {
-                fabricObj.perPixelTargetFind = true;
-                fabricObj.targetFindTolerance = 4;
-            } else {
-                fabricObj.perPixelTargetFind = false;
-            }
+            fabricObj.perPixelTargetFind = false;
         }
 
         fabricObj.setCoords();
 
-        var bbox = fabricObj.getBoundingRect();
+        /*var bbox = fabricObj.getBoundingRect();
         var bboxXY = wickEditor.fabric.screenToCanvasSpace(bbox.left, bbox.top);
         var bboxSize = wickEditor.fabric.screenToCanvasSize(bbox.width, bbox.height);
         bbox.left = bboxXY.x;
         bbox.top = bboxXY.y;
         bbox.width = bboxSize.x;
         bbox.height = bboxSize.y;
-        wickObj.bbox = bbox;
+        wickObj.bbox = bbox;*/
 
     }
 
     var updateFabricObjectEvents = function (fabricObj, wickObj, activeObjects, siblingObjects, nearbyObjects) {
-        var setCoords = fabricObj.setCoords.bind(fabricObj);
+        //var setCoords = fabricObj.setCoords.bind(fabricObj);
         /*fabricObj.on({
             moving: setCoords,
             scaling: setCoords,

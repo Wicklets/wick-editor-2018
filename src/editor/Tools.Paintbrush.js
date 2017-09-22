@@ -70,13 +70,13 @@ Tools.Paintbrush = function (wickEditor) {
                 if(wickEditor.currentTool instanceof Tools.Eraser) {
                     wickEditor.paper.pathRoutines.eraseWithPath({
                         pathData: SVGData,
-                        pathX: fabricPath.left,
-                        pathY: fabricPath.top
+                        pathX: fabricPath.left + fabricPath.width/2 + wickEditor.settings.brushThickness/2,
+                        pathY: fabricPath.top + fabricPath.height/2 + wickEditor.settings.brushThickness/2
                     });
                 } else {
                     //var symbolOffset = wickEditor.project.currentObject.getAbsolutePosition();
-                    var x = fabricPath.left// - symbolOffset.x;
-                    var y = fabricPath.top// - symbolOffset.y;
+                    var x = fabricPath.left + fabricPath.width/2 + wickEditor.settings.brushThickness/2// - symbolOffset.x;
+                    var y = fabricPath.top + fabricPath.height/2 + wickEditor.settings.brushThickness/2// - symbolOffset.y;
 
                     var pathWickObject = WickObject.createPathObject(SVGData);
                     pathWickObject.x = x;

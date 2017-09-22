@@ -68,7 +68,7 @@ Tools.Cursor = function (wickEditor) {
             var mouseInSameArea = Math.abs(lastDoubleClickPos.x - newDoubleClickPos.x) < 3 && Math.abs(lastDoubleClickPos.y - newDoubleClickPos.y) < 3;
 
             if(isSecondClick && mouseInSameArea) {
-                var selectedObject = wickEditor.fabric.getSelectedObject(WickObject);
+                var selectedObject = wickEditor.project.getSelectedObject();
                 if(selectedObject && selectedObject.isSymbol) {
                     wickEditor.guiActionHandler.doAction("editObject");
                 } else if (!selectedObject && !wickEditor.project.currentObject.isRoot) {

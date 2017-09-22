@@ -70,10 +70,21 @@ var InputHandler = function (wickEditor) {
         that.specialKeys = [];
     });
 
+    function isFabricEditingText () {
+        var activeObj = wickEditor.fabric.canvas.getActiveObject();
+        if(!activeObj) {
+            return false;
+        } else {
+            return activeObj.isEditing;
+        }
+    }
+
     document.body.addEventListener("keydown", function (event) {
+        if(isFabricEditingText()) return;
         handleKeyEvent(event, "keydown");
     });
     document.body.addEventListener("keyup", function (event) {
+        if(isFabricEditingText()) return;
         handleKeyEvent(event, "keyup");
     });
 
@@ -184,7 +195,7 @@ var InputHandler = function (wickEditor) {
     var ieClipboardEvent = function(clipboardEvent) {
         var clipboardData = window.clipboardData;
         if (clipboardEvent == 'cut' || clipboardEvent == 'copy') {
-            clipboardData.setData('Text', wickEditor.project.getCopyData(wickEditor.fabric.getSelectedObjects(WickObject)));
+            clipboardData.setData('Text', wickEditor.project.getCopyData(wickEditor.project.getSelectedObjects(WickObject)));
             ieClipboardDiv.html(htmlToCopy);
             focusIeClipboardDiv();
             setTimeout(function() {
