@@ -313,6 +313,11 @@ var WickActionHandler = function (wickEditor) {
                         wickObj._renderDirty = true;
                     }
                 }
+                if(wickObj.textData) {
+                    if(args.modifiedStates[i]['textData']) {
+                        wickObj._renderDirty = true;
+                    }
+                }
 
                 var frame = wickObj.parentFrame;
                 if(frame.tweens.length > 0) {

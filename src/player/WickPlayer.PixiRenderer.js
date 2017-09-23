@@ -74,8 +74,12 @@ var WickPixiRenderer = function (canvasContainer) {
         if(!sprite) {
             createPixiSprite(wickObject);
         }
-        if(sprite && wickObject._renderDirty) {
-            regenPixiTexture(wickObject, sprite);
+        if(sprite && wickObject._renderDirty && wickObject.isPath) {
+            regenPixiPath(wickObject, sprite);
+            wickObject._renderDirty = false;
+        }
+        if(sprite && wickObject._renderDirty && wickObject.isText) {
+            sprite = regenPixiText(wickObject, sprite);
             wickObject._renderDirty = false;
         }
         if(sprite) {
@@ -131,10 +135,18 @@ var WickPixiRenderer = function (canvasContainer) {
         
     }
 
-    function regenPixiTexture (wickObject, pixiSprite) {
+    function regenPixiPath (wickObject, pixiSprite) {
         var base64svg = getBase64SVG(wickObject);
         var texture = PIXI.Texture.fromImage(base64svg, undefined, undefined, SVG_SCALE);
         pixiSprite.setTexture(texture);
+    }
+
+    function regenPixiText (wickObject, pixiSprite) {
+        container.removeChild(pixiSprite);
+        var newPixiText = WickToPixiSprite['text'](wickObject);
+        container.addChild(newPixiText);
+        pixiSprites[wickObject.uuid] = newPixiText;
+        return newPixiText;
     }
 
     var WickToPixiSprite = {
