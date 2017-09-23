@@ -17,42 +17,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
-    /*properties.push(new InspectorInterface.StringInput({
-        title: 'X',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
-        },
-        getValueFn: function () {
-            return roundToHundredths(selectionInfo.object.x);
-        }, 
-        onChangeFn: function (val) {
-            wickEditor.actionHandler.doAction('modifyObjects', {
-                objs: [selectionInfo.object],
-                modifiedStates: [{
-                    x: eval(val)
-                }]
-            });
-        }
-    }));
-
-    properties.push(new InspectorInterface.StringInput({
-        title: 'Y',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
-        },
-        getValueFn: function () {
-            return roundToHundredths(selectionInfo.object.y);
-        }, 
-        onChangeFn: function (val) {
-            wickEditor.actionHandler.doAction('modifyObjects', {
-                objs: [selectionInfo.object],
-                modifiedStates: [{
-                    y: eval(val)
-                }]
-            });
-        }
-    }));*/
-
     properties.push(new InspectorInterface.TwoStringInput({
         title: 'X',
         otherTitle: 'Y',
@@ -76,42 +40,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
-    /*properties.push(new InspectorInterface.StringInput({
-        title: 'Width',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
-        },
-        getValueFn: function () {
-            return roundToHundredths(selectionInfo.object.scaleX*selectionInfo.object.width);
-        }, 
-        onChangeFn: function (val) {
-            wickEditor.actionHandler.doAction('modifyObjects', {
-                objs: [selectionInfo.object],
-                modifiedStates: [{
-                    scaleX: eval(val)/selectionInfo.object.width
-                }]
-            });
-        }
-    }));
-
-    properties.push(new InspectorInterface.StringInput({
-        title: 'Height',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
-        },
-        getValueFn: function () {
-            return roundToHundredths(selectionInfo.object.scaleY*selectionInfo.object.height);
-        }, 
-        onChangeFn: function (val) {
-            wickEditor.actionHandler.doAction('modifyObjects', {
-                objs: [selectionInfo.object],
-                modifiedStates: [{
-                    scaleY: eval(val)/selectionInfo.object.height
-                }]
-            });
-        }
-    }));*/
-
     properties.push(new InspectorInterface.TwoStringInput({
         title: 'Size W',
         otherTitle: 'H',
@@ -134,42 +62,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             });
         }
     }));
-
-    /*properties.push(new InspectorInterface.StringInput({
-        title: 'Scale (X)',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
-        },
-        getValueFn: function () {
-            return roundToHundredths(selectionInfo.object.scaleX);
-        }, 
-        onChangeFn: function (val) {
-            wickEditor.actionHandler.doAction('modifyObjects', {
-                objs: [selectionInfo.object],
-                modifiedStates: [{
-                    scaleX: eval(val)
-                }]
-            });
-        }
-    }));
-
-    properties.push(new InspectorInterface.StringInput({
-        title: 'Scale (Y)',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
-        },
-        getValueFn: function () {
-            return roundToHundredths(selectionInfo.object.scaleY);
-        }, 
-        onChangeFn: function (val) {
-            wickEditor.actionHandler.doAction('modifyObjects', {
-                objs: [selectionInfo.object],
-                modifiedStates: [{
-                    scaleY: eval(val)
-                }]
-            });
-        }
-    }));*/
 
     properties.push(new InspectorInterface.TwoStringInput({
         title: 'Scale W',
@@ -270,8 +162,8 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));*/
 
     properties.push(new InspectorInterface.SelectInput({
-        title: 'Font',
-        options: ['arial', 'times new roman', 'comic sans ms', 'georgia', 'palatino linotype', 'book antiqua', 'helvetica', 'arial black', 'impact', 'lucida sans unicode', 'tahoma', 'geneva', 'trebuchet ms', 'verdana', 'courier new', 'Lucida Console'],
+        title: 'Font Family',
+        options: getAvailableFonts(),
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isText;
         },
@@ -314,18 +206,38 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
 
     properties.push(new InspectorInterface.MultiCheckboxInput({
         title: '',
-        icons: ['resources/close.png', 'resources/close.png'],
+        icons: [
+            'resources/align-left.svg', 
+            'resources/align-center.svg',
+            'resources/align-right.svg',
+            'resources/text-bold.svg',
+            'resources/text-italic.svg'
+        ],
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isText;
         },
         getValueFn: function () {
             return [
+                selectionInfo.object.textData.textAlign === 'left',
+                selectionInfo.object.textData.textAlign === 'center',
+                selectionInfo.object.textData.textAlign === 'right',
                 selectionInfo.object.textData.fontWeight === 'bold',
-                false,
+                selectionInfo.object.textData.fontStyle === 'italic'
             ];
         }, 
         onChangeFn: function (vals) {
-            selectionInfo.object.textData.fontWeight = vals[0] ? 'bold' : 'normal';
+            var currentAlign = selectionInfo.object.textData.textAlign;
+            if(vals[0]) {
+                if(currentAlign !== 'left') selectionInfo.object.textData.textAlign = 'left';
+            }
+            if(vals[1]) {
+                if(currentAlign !== 'center') selectionInfo.object.textData.textAlign = 'center';
+            }
+            if(vals[2]) {
+                if(currentAlign !== 'right') selectionInfo.object.textData.textAlign = 'right';
+            }
+            selectionInfo.object.textData.fontWeight = vals[3] ? 'bold' : 'normal';
+            selectionInfo.object.textData.fontStyle = vals[4] ? 'italic' : 'normal';
             wickEditor.syncInterfaces();
         }
     }));

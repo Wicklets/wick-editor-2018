@@ -312,7 +312,7 @@ InspectorInterface.MultiCheckboxInput = function (args) {
             });
             self.onChangeFn(vals);
         } catch (e) {
-            console.log(e)
+            console.log(e);
             self.updateViewValue();
         }
     }

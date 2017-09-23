@@ -114,7 +114,7 @@ WickObject.createTextObject = function (text) {
     obj.isText = true;
     obj.width = 400;
     obj.textData = {
-        fontFamily: 'arial',
+        fontFamily: 'Arial',
         fontSize: 40,
         fontStyle: 'normal',
         fontWeight: 'normal',
