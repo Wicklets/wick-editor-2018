@@ -134,7 +134,7 @@
 	cursor: pointer;
 
 	float: left;
-	margin-top: 4px;
+	margin-top: 0px;
 	margin-bottom: 4px;
 	margin-right: 3px;
 
@@ -163,7 +163,7 @@
 }
 
 .inspector-input-select {
-	width: 50%;
+	width: 60%;
 	height: 20px;
 
 	float: left;

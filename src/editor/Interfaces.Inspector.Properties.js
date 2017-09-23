@@ -176,36 +176,8 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
-    properties.push(new InspectorInterface.ColorInput({
-        title: 'Font Color',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isText;
-        },
-        getValueFn: function () {
-            return selectionInfo.object.textData.fill;
-        }, 
-        onChangeFn: function (val) {
-            selectionInfo.object.textData.fill = val;
-            wickEditor.syncInterfaces();
-        }
-    }));
-
-    properties.push(new InspectorInterface.StringInput({
-        title: 'Font Size',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isText;
-        },
-        getValueFn: function () {
-            return selectionInfo.object.textData.fontSize;
-        }, 
-        onChangeFn: function (val) {
-            selectionInfo.object.textData.fontSize = eval(val);
-            wickEditor.syncInterfaces();
-        }
-    }));
-
     properties.push(new InspectorInterface.MultiCheckboxInput({
-        title: '',
+        title: 'Font Style',
         icons: [
             'resources/align-left.svg', 
             'resources/align-center.svg',
@@ -238,6 +210,34 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             }
             selectionInfo.object.textData.fontWeight = vals[3] ? 'bold' : 'normal';
             selectionInfo.object.textData.fontStyle = vals[4] ? 'italic' : 'normal';
+            wickEditor.syncInterfaces();
+        }
+    }));
+
+    properties.push(new InspectorInterface.StringInput({
+        title: 'Font Size',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isText;
+        },
+        getValueFn: function () {
+            return selectionInfo.object.textData.fontSize;
+        }, 
+        onChangeFn: function (val) {
+            selectionInfo.object.textData.fontSize = eval(val);
+            wickEditor.syncInterfaces();
+        }
+    }));
+
+    properties.push(new InspectorInterface.ColorInput({
+        title: 'Font Color',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isText;
+        },
+        getValueFn: function () {
+            return selectionInfo.object.textData.fill;
+        }, 
+        onChangeFn: function (val) {
+            selectionInfo.object.textData.fill = val;
             wickEditor.syncInterfaces();
         }
     }));
