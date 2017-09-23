@@ -172,7 +172,13 @@ var WickPixiRenderer = function (canvasContainer) {
             var pixiText = new PIXI.Text(textData.text, style);
             var textWidth = pixiText.width/SVG_SCALE;
             var textboxWidth = wickObject.width;
-            pixiText.textboxOffset = (textboxWidth-textWidth)/2;
+            if(textData.textAlign === 'left') {
+                pixiText.textboxOffset = (textboxWidth-textWidth)/2;
+            } else if (textData.textAlign === 'center') {
+                pixiText.textboxOffset = 0;
+            } else if (textData.textAlign === 'right') {
+                pixiText.textboxOffset = -(textboxWidth-textWidth)/2;
+            }
             return pixiText;
         }
     }
