@@ -981,9 +981,7 @@ var GuiActionHandler = function (wickEditor) {
                 frame = frames[frames.length - 1];
             }
 
-            var frameEndingIndex = wickEditor.project.currentObject.getPlayheadPositionAtFrame(
-                frame
-            ) + frame.length - 1;
+            var frameEndingIndex = frame.playheadPosition + frame.length - 1;
 
             var framesToExtend = wickEditor.project.currentObject.playheadPosition - frameEndingIndex;
 
