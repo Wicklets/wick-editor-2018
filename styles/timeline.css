@@ -802,8 +802,8 @@ body {
 
 #breadcrumbsGUI {
     top: 30px;
-    left: 40px;
-    width: calc(100% - 290px);
+    left: 46px;
+    width: calc(100% - 296px);
     height: 15px;
     background-color: #000;
     overflow: hidden;

@@ -175,67 +175,6 @@ InspectorInterface.SelectInput = function (args) {
 
 }
 
-InspectorInterface.ColorInput = function (args) {
-
-    var self = this;
-    self.getValueFn = args.getValueFn;
-    self.onChangeFn = args.onChangeFn;
-    self.isActiveFn = args.isActiveFn;
-
-    self.uuid = random.uuid4();
-    self.colorPickerNeedsSetup = true;
-
-    self.updateViewValue = function () {
-        if(self.colorPickerNeedsSetup) {
-            setupColorPicker(self.uuid, function (color) {
-                self.updateModelValue(color.toString());
-            });
-            self.colorPickerNeedsSetup = false;
-        }
-
-        if(self.isActiveFn()) {
-            self.propertyDiv.style.display = 'block';
-            setTimeout(function () {
-                $("#"+self.uuid).spectrum("set", self.getValueFn());
-            }, 300);
-        } else {
-            self.propertyDiv.style.display = 'none';
-        }
-    }
-    self.updateModelValue = function (val) {
-        if(!val) return;
-        try {
-            self.onChangeFn(val);
-        } catch (e) {
-            self.updateViewValue();
-        }
-    }
-
-    self.propertyDiv;
-    self.valueDiv;
-    self.getPropertyDiv = function () {
-        var title = document.createElement('span');
-        title.className = "inspector-input-title";
-        title.innerHTML = args.title;
-        
-        self.valueDiv = document.createElement('div');
-        self.valueDiv.className = 'inspector-input inspector-input-color';
-
-        var picker = document.createElement('input');
-        picker.type = 'text';
-        picker.id = self.uuid;
-        picker.style.display = 'none';
-        self.valueDiv.appendChild(picker);
-
-        self.propertyDiv = document.createElement('div');
-        self.propertyDiv.className = 'inspector-property';
-        self.propertyDiv.appendChild(title);
-        self.propertyDiv.appendChild(self.valueDiv);
-        return self.propertyDiv;
-    }
-
-}
-
 InspectorInterface.CheckboxInput = function (args) {
 
     var self = this;

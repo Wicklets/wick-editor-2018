@@ -228,56 +228,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
-    properties.push(new InspectorInterface.ColorInput({
-        title: 'Font Color',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isText;
-        },
-        getValueFn: function () {
-            return selectionInfo.object.textData.fill;
-        }, 
-        onChangeFn: function (val) {
-            selectionInfo.object.textData.fill = val;
-            wickEditor.syncInterfaces();
-        }
-    }));
-
-    properties.push(new InspectorInterface.ColorInput({
-        title: 'Stroke Color',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isPath;
-        },
-        getValueFn: function () {
-            if(!selectionInfo.object || !selectionInfo.object.fabricObjectReference) return;
-            if(!selectionInfo.object.fabricObjectReference.stroke) return;
-            return selectionInfo.object.fabricObjectReference.stroke;
-        }, 
-        onChangeFn: function (val) {
-            wickEditor.guiActionHandler.doAction("changeStrokeColorOfSelection", {
-                color: val
-            });
-            wickEditor.syncInterfaces();
-        }
-    }));
-
-    properties.push(new InspectorInterface.ColorInput({
-        title: 'Fill Color',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isPath;
-        },
-        getValueFn: function () {
-            if(!selectionInfo.object || !selectionInfo.object.fabricObjectReference) return;
-            if(!selectionInfo.object.fabricObjectReference.fill) return;
-            return selectionInfo.object.fabricObjectReference.fill;
-        }, 
-        onChangeFn: function (val) {
-            wickEditor.guiActionHandler.doAction("changeFillColorOfSelection", {
-                color: val
-            });
-            wickEditor.syncInterfaces();
-        }
-    }));
-
     properties.push(new InspectorInterface.StringInput({
         title: 'Stroke Width',
         isActiveFn: function () {
@@ -343,20 +293,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
-    properties.push(new InspectorInterface.ColorInput({
-        title: 'BG Color',
-        isActiveFn: function () {
-            return selectionInfo.type === 'project';
-        },
-        getValueFn: function () {
-            return wickEditor.project.backgroundColor;
-        }, 
-        onChangeFn: function (val) {
-            wickEditor.project.backgroundColor = val;
-            wickEditor.syncInterfaces();
-        }
-    }));
-
     properties.push(new InspectorInterface.StringInput({
         title: 'Name',
         isActiveFn: function () {
@@ -368,20 +304,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         onChangeFn: function (val) {
             selectionInfo.object.identifier = val;
             wickEditor.syncInterfaces()
-        }
-    }));
-
-    properties.push(new InspectorInterface.ColorInput({
-        title: 'Color',
-        isActiveFn: function () {
-            return selectionInfo.type === 'playrange' && selectionInfo.numObjects === 1;
-        },
-        getValueFn: function () {
-            return selectionInfo.object.color;
-        }, 
-        onChangeFn: function (val) {
-            selectionInfo.object.color = val;
-            wickEditor.syncInterfaces();
         }
     }));
 

@@ -75,6 +75,7 @@ var WickEditor = function () {
     this.alertbox = registerInterface(new AlertBoxInterface(this));
     this.previewplayer = registerInterface(new PreviewPlayer(this));
     this.cursorIcon = registerInterface(new CursorIconInterface(this));
+    this.colorPicker = registerInterface(new ColorPickerInterface(this));
     //this.editorSettings = registerInterface(new EditorSettings(this));
 
     // Load all tools

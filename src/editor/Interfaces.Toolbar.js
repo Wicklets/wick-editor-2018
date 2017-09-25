@@ -48,6 +48,8 @@ var ToolbarInterface = function (wickEditor) {
             toolbarDiv.appendChild(toolDiv);
         }
 
+        toolbarDiv.appendChild(document.createElement('hr'));
+
         
 
     }
