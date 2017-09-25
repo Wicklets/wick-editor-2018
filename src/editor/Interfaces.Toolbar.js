@@ -48,88 +48,11 @@ var ToolbarInterface = function (wickEditor) {
             toolbarDiv.appendChild(toolDiv);
         }
 
-        container = buildDiv("drawing-tool-options-container", toolbarDiv);
-        container.appendChild(document.createElement('hr'))
-
-        toolOptionInputs = [];
-
-        toolOptionInputs.push(new ToolbarInterface.ColorPicker(container, 'strokeColorPicker', 'tools/Line.svg', function (color) {
-            wickEditor.settings.setValue('strokeColor', color);
-            wickEditor.guiActionHandler.doAction("changeStrokeColorOfSelection", {
-                color: color
-            });
-            wickEditor.syncInterfaces();
-        }, function () {
-            if(this.cachedColor !== wickEditor.settings.strokeColor)
-                $("#strokeColorPicker").spectrum("set", wickEditor.settings.strokeColor);
-            this.cachedColor = wickEditor.settings.strokeColor;
-        }));
-
-        toolOptionInputs.push(new ToolbarInterface.ColorPicker(container, 'fillColorPicker', 'tools/Bucket.svg', function (color) {
-            wickEditor.settings.setValue('fillColor', color);
-            wickEditor.guiActionHandler.doAction("changeFillColorOfSelection", {
-                color: color
-            });
-            wickEditor.syncInterfaces();
-        }, function () {
-            if(this.cachedColor !== wickEditor.settings.fillColor)
-                $("#fillColorPicker").spectrum("set", wickEditor.settings.fillColor);
-            this.cachedColor = wickEditor.settings.fillColor;
-        }));
-
-        toolOptionInputs.push(new ToolbarInterface.RangeSlider(container, 'Stroke Width', 'tools/Line.svg', 0, 50, function (val) {
-            wickEditor.settings.setValue('strokeWidth', val);
-            wickEditor.guiActionHandler.doAction("changeStrokeWidthOfSelection", {
-                strokeWidth: wickEditor.settings.strokeWidth
-            });
-            wickEditor.syncInterfaces();
-        }, function () {
-            return parseInt(wickEditor.settings.strokeWidth);
-        }));
-
-        toolOptionInputs.push(new ToolbarInterface.RangeSlider(container, 'Brush Thickness', 'tools/Paintbrush.svg', 2, 100, function (val) {
-            wickEditor.settings.setValue('brushThickness', parseFloat(val));
-            wickEditor.syncInterfaces();
-        }, function () {
-            return parseFloat(wickEditor.settings.brushThickness);
-        }, function () {
-            return (wickEditor.currentTool instanceof Tools.Paintbrush);
-        }));
-
-        toolOptionInputs.push(new ToolbarInterface.RangeSlider(container, 'Brush Smoothness', 'tools/Paintbrush.svg', 65, 100, function (val) {
-            wickEditor.settings.setValue('brushSmoothness', parseFloat(val));
-            wickEditor.syncInterfaces();
-        }, function () {
-            return parseFloat(wickEditor.settings.brushSmoothness);
-        }, function () {
-            return (wickEditor.currentTool instanceof Tools.Paintbrush);
-        }));
-
-        toolOptionInputs.push(new ToolbarInterface.RangeSlider(container, 'Rectangle Corner Roundness', 'tools/Square.svg', 0, 100, function (val) {
-            wickEditor.settings.setValue('rectangleCornerRadius', val);
-            wickEditor.syncInterfaces();
-        }, function () {
-            return parseFloat(wickEditor.settings.rectangleCornerRadius);
-        }, function () {
-            return (wickEditor.currentTool instanceof Tools.Rectangle);
-        }));
-
-        toolOptionInputs.push(new ToolbarInterface.RangeSlider(container, 'Zoom amount', 'tools/Zoom.svg', 25, 500, function (val) {
-            wickEditor.syncInterfaces();
-        }, function () {
-            return wickEditor.fabric.getCanvasTransform().zoom * 100;
-        }, function () {
-            return true;
-        }, function (val) {
-            wickEditor.fabric.setZoom(val/100, true);
-        }));
+        
 
     }
 
     this.syncWithEditorState = function () {
-        toolOptionInputs.forEach(function (toolOptionInput) {
-            toolOptionInput.updateViewValue();
-        });
 
         // Highlight select tool, unhighlight all other tools
         for (toolName in wickEditor.tools) {
