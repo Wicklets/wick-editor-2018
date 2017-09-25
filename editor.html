@@ -32,17 +32,12 @@
     <link href="lib/skin-win8/ui.fancytree.css" rel="stylesheet">
     <link href="lib/spectrum.css" rel="stylesheet">
 
-    <base href=””>
-
-    <!-- Insert this line above script imports (so it works for electron)  -->
-    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
-
     <script src="lib/jquery.min.js"></script>
-    <script src="lib/jquery-ui.custom.js"></script>
+    <script src="lib/jquery-ui.custom.min.js"></script>
     <script src="lib/jquery.fancytree.js"></script>
-    <script src="lib/fabric.2.0.0.b7.js"></script>
+    <script src="lib/fabric.2.0.0.b7.min.js"></script>
     <script src="lib/potrace.js"></script>
-    <script src="lib/paper-full.js"></script>
+    <script src="lib/paper-full.min.js"></script>
     <script src="lib/paperholefinder.js"></script>
     <script src="lib/beautify.js"></script>
     <script src="lib/FileSaver.min.js"></script>
@@ -70,7 +65,7 @@
     <script src="lib/lerp.js"></script>
     <script src="lib/bowser.js"></script>
     <script src="lib/howler.min.js"></script>
-    <script src="lib/pixi.4.5.5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.6/pixi.min.js"></script>
     <script src="lib/scrollbar.js"></script>
     <script src="lib/spectrum.js"></script>
     <script src="lib/nouislider.js"></script>
@@ -78,6 +73,8 @@
     <script src="lib/saveSvgAsPng.js"></script>
     <script src="lib/html2canvas.js"></script>
     <script src="lib/localstoragewrapper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.8/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lib/ace/ext-language_tools.min.js" type="text/javascript" charset="utf-8"></script>
 
     <script src="src/project/WickFrame.js"></script>
     <script src="src/project/WickLayer.js"></script>
@@ -160,21 +157,9 @@
     <script src="src/player/WickPlayer.InputHandler.js"></script>
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Anonymous+Pro" />
 
-    <!-- Insert this line after script imports -->
-    <script>if (window.module) module = window.module;</script>
-
-    <script src="lib/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-    <script src="lib/ace/ext-language_tools.js" type="text/javascript" charset="utf-8"></script>
-
-    <!-- To ensure the electron app closes properly -->
-    <script>
-        window.onbeforeunload = function () { document.write(""); window.close(); }
-    </script>
-
     <script>
         $(document).ready(function() { 
             window.wickEditor = new WickEditor();
-            //window.wickPlayer = new WickPlayer();
         });
     </script>
 </head>

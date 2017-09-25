@@ -34,7 +34,7 @@ WickProject.Exporter = (function () {
 
         // All libs needed by the player. 
         var requiredLibFiles = [
-            "lib/pixi.4.5.5.min.js",
+            "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.6/pixi.min.js",
             "lib/lz-string.min.js",
             "lib/polyfills.js",
             "lib/keyCharToCode.js",
