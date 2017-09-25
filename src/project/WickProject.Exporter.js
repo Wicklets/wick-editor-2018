@@ -23,6 +23,8 @@ WickProject.Exporter = (function () {
     var projectExporter = { };
 
     projectExporter.generatePlayer = function () {
+
+        if(window.cachedPlayer) return window.cachedPlayer;
         
         var fileOut = "";
 
@@ -80,6 +82,7 @@ WickProject.Exporter = (function () {
         });
         //console.log(totalSize + " total");
 
+        window.cachedPlayer = fileOut;
         return fileOut;
 
     }
