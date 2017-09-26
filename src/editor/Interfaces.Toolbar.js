@@ -56,8 +56,9 @@ var ToolbarInterface = function (wickEditor) {
         fillColor.onclick = function () {
             wickEditor.colorPicker.open(function (color) {
                 fillColor.style.backgroundColor = color;
+                wickEditor.settings.setValue('fillColor', color);
                 wickEditor.syncInterfaces();
-            })
+            }, wickEditor.settings.fillColor)
         }
 
     }

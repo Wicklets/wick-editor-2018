@@ -1,8 +1,26 @@
 #colorPickerGUI {
-	width: 100px;
-	height: 100px;
-	background-color: red;
+	width: 436px;
+	height: 220px;
 	position: absolute;
 	left: 0px;
 	top: 0px;
+}
+
+.color-picker-close-button {
+	background-color: red;
+	width: 25px;
+	height: 25px;
+	float: right;
+}
+
+.sp-container {
+	border: none !important;
+}
+
+.sp-palette-container {
+	border: none !important;
+}
+
+.sp-picker-container {
+	border: none !important;
 }
