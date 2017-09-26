@@ -91,11 +91,11 @@ var ToolbarInterface = function (wickEditor) {
                 wickEditor.settings.setValue(settingsVal, color);
                 wickEditor.syncInterfaces();
             }, 
-            wickEditor.settings.colorPickerContainer,
+            wickEditor.settings[settingsVal],
             colorPickerContainer.getBoundingClientRect().left,
             colorPickerContainer.getBoundingClientRect().top)
         }
-        
+
         colorPickerDivs.push(colorPickerContainer);
         toolbarDiv.appendChild(colorPickerContainer);
     }

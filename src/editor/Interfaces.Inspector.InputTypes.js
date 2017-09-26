@@ -124,6 +124,58 @@ InspectorInterface.TwoStringInput = function (args) {
 
 }
 
+InspectorInterface.ColorPickerInput = function (args) {
+
+    var self = this;
+    self.getValueFn = args.getValueFn;
+    self.onChangeFn = args.onChangeFn;
+    self.isActiveFn = args.isActiveFn;
+
+    self.updateViewValue = function () {
+        if(self.isActiveFn()) {
+            self.propertyDiv.style.display = 'block';
+            self.valueDiv.style.backgroundColor = self.getValueFn();
+        } else {
+            self.propertyDiv.style.display = 'none';
+        }
+    }
+    self.updateModelValue = function () {
+        try {
+            self.onChangeFn(self.valueDiv.value);
+        } catch (e) {
+            self.updateViewValue();
+        }
+    }
+
+    self.propertyDiv;
+    self.valueDiv;
+    self.getPropertyDiv = function () {
+        var title = document.createElement('span');
+        title.className = "inspector-input-title";
+        title.innerHTML = args.title;
+
+        self.valueDiv = document.createElement('div');
+        self.valueDiv.className = 'inspector-input inspector-color-picker';
+        self.valueDiv.onclick = function () {
+            wickEditor.colorPicker.open(function (color) {
+                self.onChangeFn(color)
+                wickEditor.syncInterfaces();
+            }, 
+            self.getValueFn(),
+            self.valueDiv.getBoundingClientRect().left,
+            self.valueDiv.getBoundingClientRect().top)
+        }
+
+        self.propertyDiv = document.createElement('div');
+        self.propertyDiv.className = 'inspector-property';
+        self.propertyDiv.appendChild(title);
+        self.propertyDiv.appendChild(self.valueDiv);
+
+        return self.propertyDiv;
+    }
+
+}
+
 InspectorInterface.SelectInput = function (args) {
 
     var self = this;

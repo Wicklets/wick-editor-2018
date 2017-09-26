@@ -170,14 +170,19 @@
 	margin-bottom: 4px;
 }
 
-.inspector-input-color {
-	width: 50%;
-	height: 24px;
+.inspector-color-picker {
+	width: 59%;
+	height: 18px;
 
 	float: left;
 	margin-bottom: 0px;
 
 	overflow: hidden;
+
+	border: 1px solid white;
+	border-radius: 3px;
+
+	cursor: pointer;
 }
 
 .inspector-button {

@@ -293,6 +293,20 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
+    properties.push(new InspectorInterface.ColorPickerInput({
+        title: 'BG Color',
+        isActiveFn: function () {
+            return selectionInfo.type === 'project';
+        },
+        getValueFn: function () {
+            return wickEditor.project.backgroundColor;
+        }, 
+        onChangeFn: function (val) {
+            wickEditor.project.backgroundColor = val;
+            wickEditor.syncInterfaces();
+        }
+    }));
+
     properties.push(new InspectorInterface.StringInput({
         title: 'Name',
         isActiveFn: function () {
