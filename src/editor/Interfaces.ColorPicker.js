@@ -32,12 +32,19 @@ var ColorPickerInterface = function (wickEditor) {
         colorPickerContainer.style.display = 'none';
 
         window.addEventListener('mousedown', function(e) { 
-            if(isOpen && e.target.id !== 'colorPickerGUI')
-                self.close();
+            if(isOpen && e.target.id !== 'colorPickerGUI') {
+                wickEditor.tools.dropper.getColorAtCursor(function (color) {
+                    currentColor = color;
+                    self.close();
+                });
+            }
         });
     }
 
-    self.open = function (x,y,doneFn) {
+    self.open = function (doneFn,x,y) {
+        if(!x) x = wickEditor.inputHandler.mouse.x;
+        if(!y) y = wickEditor.inputHandler.mouse.y;
+
         wickEditor.changeTool(wickEditor.tools.dropper);
         wickEditor.syncInterfaces();
 
@@ -59,6 +66,10 @@ var ColorPickerInterface = function (wickEditor) {
 
     self.syncWithEditorState = function () {
 
+    }
+
+    self.isOpen = function () {
+        return isOpen;
     }
 
 }

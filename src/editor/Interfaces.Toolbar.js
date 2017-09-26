@@ -50,7 +50,15 @@ var ToolbarInterface = function (wickEditor) {
 
         toolbarDiv.appendChild(document.createElement('hr'));
 
-        
+        var fillColor = document.createElement('div');
+        fillColor.className = 'toolbar-color toolbar-fill-color';
+        toolbarDiv.appendChild(fillColor);
+        fillColor.onclick = function () {
+            wickEditor.colorPicker.open(function (color) {
+                fillColor.style.backgroundColor = color;
+                wickEditor.syncInterfaces();
+            })
+        }
 
     }
 

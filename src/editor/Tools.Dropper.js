@@ -41,21 +41,27 @@ Tools.Dropper = function (wickEditor) {
 
     this.setup = function () {
         wickEditor.fabric.canvas.on('mouse:down', function (e) {
-            if(wickEditor.currentTool instanceof Tools.Dropper) {
-                
-                var image = new Image();
-                image.onload = function () {
-                    var mouse = wickEditor.inputHandler.mouse;
-                    var color = GetColorAtCoords(image, mouse.x*window.devicePixelRatio, mouse.y*window.devicePixelRatio, "hex");
+            if(wickEditor.currentTool instanceof Tools.Dropper && !wickEditor.colorPicker.isOpen()) {
+                that.getColorAtCursor(function (color) {
                     wickEditor.settings.setValue(colorVar, color);
-                    console.log(color)
                     wickEditor.syncInterfaces();
-                };
-                image.src = wickEditor.fabric.canvas.toDataURL();
-                
-                wickEditor.syncInterfaces();
+                });
             }
         });
+    }
+
+    this.getColorAtCursor = function (callback) {
+        var image = new Image();
+        image.onload = function () {
+            var mouse = wickEditor.inputHandler.mouse;
+            var color = GetColorAtCoords(
+                image, 
+                mouse.x*window.devicePixelRatio, 
+                mouse.y*window.devicePixelRatio, 
+                "hex");
+            callback(color);
+        };
+        image.src = wickEditor.fabric.canvas.toDataURL();
     }
 
 }
