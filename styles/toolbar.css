@@ -72,11 +72,12 @@ hr {
 }
 
 .toolbar-color {
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     border-radius: 3px;
     border: 1px solid white;
     background-color: green;
+    cursor: pointer;
 }
 
 .toolbar-fill-color {

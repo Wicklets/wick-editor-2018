@@ -183,6 +183,10 @@
 	border-radius: 3px;
 
 	cursor: pointer;
+	opacity: 1.0;
+}
+.inspector-color-picker:hover {
+	opacity: 0.8;
 }
 
 .inspector-button {

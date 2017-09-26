@@ -89,6 +89,11 @@ var ToolbarInterface = function (wickEditor) {
         colorPickerContainer.onclick = function () {
             wickEditor.colorPicker.open(function (color) {
                 wickEditor.settings.setValue(settingsVal, color);
+                if(settingsVal === 'fillColor') {
+                    wickEditor.guiActionHandler.doAction("changeFillColorOfSelection", {color: color});
+                } else if (settingsVal === 'strokeColor') {
+                    wickEditor.guiActionHandler.doAction("changeStrokeColorOfSelection", {color: color});
+                }
                 wickEditor.syncInterfaces();
             }, 
             wickEditor.settings[settingsVal],

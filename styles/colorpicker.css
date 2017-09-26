@@ -1,5 +1,5 @@
 #colorPickerGUI {
-	width: 413px;
+	width: 335px;
 	height: 250px;
 	position: absolute;
 	left: 0px;
@@ -7,6 +7,7 @@
 	border: 1px solid white;
 	z-index: 9;
 	border-radius: 4px;
+	background-color: #444;
 }
 
 .color-picker-close-button {
@@ -30,6 +31,7 @@
 
 .sp-container {
 	border: none !important;
+	background-color: rgba(0,0,0,0) !important;
 }
 
 .sp-palette-container {
