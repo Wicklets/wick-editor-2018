@@ -83,3 +83,30 @@ hr {
 .toolbar-fill-color {
 
 }
+
+.toolbar-stroke-color {
+
+}
+
+.toolbar-brush-size-preview-container {
+    width: 35px;
+    height: 35px;
+    background-color: white;
+}
+
+.toolbar-stroke-width-preview-container {
+    width: 35px;
+    height: 15px;
+    background-color: white;
+}
+
+.toolbar-number-input {
+    height: 15px;
+    width: 35px;
+    cursor: ew-resize;
+    text-align: center;
+    font-size: 13px;
+    border-radius: 3px;
+}
+
+
