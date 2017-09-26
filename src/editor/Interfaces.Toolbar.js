@@ -22,44 +22,21 @@ var ToolbarInterface = function (wickEditor) {
     var container;
     var toolOptionInputs;
 
+    var colorPickerDivs = [];
+
     this.setup = function () {
         toolbarDiv = document.getElementById('tools');
 
         // Build tool button elements
 
         for(toolName in wickEditor.tools) {
-            var tool = wickEditor.tools[toolName];
-
-            var toolDiv = document.createElement('div');
-            toolDiv.id = toolName + "ToolButton";
-            toolDiv.setAttribute('alt', tool.getTooltipName());
-
-            // nasty closure thing
-            var useToolFn = function (toolName) {
-                return function () { wickEditor.guiActionHandler.doAction('useTools.'+toolName); };
-            }
-            toolDiv.onclick = useToolFn(toolName);
-
-            var toolIcon = document.createElement('img');
-            toolIcon.src = tool.getToolbarIcon();
-            toolIcon.width = '28';
-            toolDiv.appendChild(toolIcon);
-
-            toolbarDiv.appendChild(toolDiv);
+            createToolButtonDiv(toolName);
         }
 
         toolbarDiv.appendChild(document.createElement('hr'));
 
-        var fillColor = document.createElement('div');
-        fillColor.className = 'toolbar-color toolbar-fill-color';
-        toolbarDiv.appendChild(fillColor);
-        fillColor.onclick = function () {
-            wickEditor.colorPicker.open(function (color) {
-                fillColor.style.backgroundColor = color;
-                wickEditor.settings.setValue('fillColor', color);
-                wickEditor.syncInterfaces();
-            }, wickEditor.settings.fillColor)
-        }
+        createColorPickerDiv('fillColor', 'toolbar-fill-color');
+        createColorPickerDiv('strokeColor', 'toolbar-fill-color');
 
     }
 
@@ -75,6 +52,52 @@ var ToolbarInterface = function (wickEditor) {
             }
         };
 
+        // Update color picker preview colors
+        colorPickerDivs.forEach(function (colorPicker) {
+            //colorPickerContainer.style.backgroundColor = color;
+            colorPicker.style.backgroundColor = wickEditor.settings[colorPicker.wickSettingsVal];
+        });
+
+    }
+
+    function createToolButtonDiv (toolName) {
+        var tool = wickEditor.tools[toolName];
+
+        var toolDiv = document.createElement('div');
+        toolDiv.id = toolName + "ToolButton";
+        toolDiv.setAttribute('alt', tool.getTooltipName());
+
+        // nasty closure thing
+        var useToolFn = function (toolName) {
+            return function () { wickEditor.guiActionHandler.doAction('useTools.'+toolName); };
+        }
+        toolDiv.onclick = useToolFn(toolName);
+
+        var toolIcon = document.createElement('img');
+        toolIcon.src = tool.getToolbarIcon();
+        toolIcon.width = '28';
+        toolDiv.appendChild(toolIcon);
+
+        toolbarDiv.appendChild(toolDiv);
+    }
+
+    function createColorPickerDiv (settingsVal, className) {
+        var colorPickerContainer = document.createElement('div');
+        colorPickerContainer.className = 'toolbar-color ' + className;
+        colorPickerContainer.wickSettingsVal = settingsVal;
+
+        colorPickerContainer.onclick = function () {
+            wickEditor.colorPicker.open(function (color) {
+                wickEditor.settings.setValue(settingsVal, color);
+                wickEditor.syncInterfaces();
+            }, 
+            wickEditor.settings.colorPickerContainer,
+            colorPickerContainer.getBoundingClientRect().left,
+            colorPickerContainer.getBoundingClientRect().top)
+        }
+        
+        colorPickerDivs.push(colorPickerContainer);
+        toolbarDiv.appendChild(colorPickerContainer);
     }
 
 }
