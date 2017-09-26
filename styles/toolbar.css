@@ -71,27 +71,53 @@ hr {
     margin-bottom: 10px;
 }
 
+.toolbar-color-picker-container {
+    width: 35px;
+    height: 35px;
+    position: relative;
+}
+
 .toolbar-color {
-    width: 30px;
-    height: 30px;
-    border-radius: 3px;
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
     border: 1px solid white;
     background-color: green;
     cursor: pointer;
 }
 
 .toolbar-fill-color {
-
+    right: 0px;
+    bottom: 0px;
 }
 
 .toolbar-stroke-color {
-
+    left: 0px;
+    top: 0px;
 }
 
 .toolbar-brush-size-preview-container {
     width: 35px;
     height: 35px;
     background-color: white;
+
+    background-image:
+      -moz-linear-gradient(45deg, #ddd 25%, transparent 25%), 
+      -moz-linear-gradient(-45deg, #ddd 25%, transparent 25%),
+      -moz-linear-gradient(45deg, transparent 75%, #ddd 75%),
+      -moz-linear-gradient(-45deg, transparent 75%, #ddd 75%);
+    background-image:
+      -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, #ddd), color-stop(.25, transparent)), 
+      -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.25, #ddd), color-stop(.25, transparent)),
+      -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.75, transparent), color-stop(.75, #ddd)),
+      -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.75, transparent), color-stop(.75, #ddd));
+
+    -moz-background-size:10px 10px;
+    background-size:10px 10px;
+    -webkit-background-size:10px 11px;
+    
+    background-position:0 0, 5px 0, 5px -5px, 0px 5px;
 }
 
 .toolbar-stroke-width-preview-container {

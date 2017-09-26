@@ -38,13 +38,17 @@ var ToolbarInterface = function (wickEditor) {
         toolbarDiv.appendChild(document.createElement('hr'));
 
         // Build color pickers
+        var colorPickerContainer = document.createElement('div');
+        colorPickerContainer.className = 'toolbar-color-picker-container';
+        toolbarDiv.appendChild(colorPickerContainer);
+
         var fillColorPicker = new ColorPicker('fillColor', 'toolbar-fill-color');
         colorPickerDivs.push(fillColorPicker);
-        toolbarDiv.appendChild(fillColorPicker);
+        colorPickerContainer.appendChild(fillColorPicker);
 
         var strokeColorPicker = new ColorPicker('strokeColor', 'toolbar-stroke-color');
         colorPickerDivs.push(strokeColorPicker);
-        toolbarDiv.appendChild(strokeColorPicker);
+        colorPickerContainer.appendChild(strokeColorPicker);
 
         brushSizePreview = new BrushSizePreview();
         toolbarDiv.appendChild(brushSizePreview);
