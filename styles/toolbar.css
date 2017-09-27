@@ -75,6 +75,7 @@ hr {
     width: 35px;
     height: 35px;
     position: relative;
+    margin-left: 2px;
 }
 
 .toolbar-color {
@@ -98,6 +99,10 @@ hr {
 }
 
 .toolbar-brush-size-preview-container {
+    margin-top: 12px;
+    margin-left: 2px;
+    border-radius: 3px;
+
     width: 35px;
     height: 35px;
     background-color: white;
@@ -121,12 +126,33 @@ hr {
 }
 
 .toolbar-stroke-width-preview-container {
+    margin-left: 2px;
+    margin-top: 12px;
     width: 35px;
     height: 15px;
+    border-radius: 3px;
     background-color: white;
+
+    background-image:
+      -moz-linear-gradient(45deg, #ddd 25%, transparent 25%), 
+      -moz-linear-gradient(-45deg, #ddd 25%, transparent 25%),
+      -moz-linear-gradient(45deg, transparent 75%, #ddd 75%),
+      -moz-linear-gradient(-45deg, transparent 75%, #ddd 75%);
+    background-image:
+      -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, #ddd), color-stop(.25, transparent)), 
+      -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.25, #ddd), color-stop(.25, transparent)),
+      -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.75, transparent), color-stop(.75, #ddd)),
+      -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.75, transparent), color-stop(.75, #ddd));
+
+    -moz-background-size:10px 10px;
+    background-size:10px 10px;
+    -webkit-background-size:10px 11px;
+    
+    background-position:0 0, 5px 0, 5px -5px, 0px 5px;
 }
 
 .toolbar-number-input {
+    margin-left: 2px;
     height: 15px;
     width: 35px;
     cursor: ew-resize;
