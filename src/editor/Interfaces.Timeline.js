@@ -201,6 +201,10 @@ TimelineInterface.Timeline = function (wickEditor) {
         var zoomIcon = document.createElement('div');
         zoomIcon.className = 'timeline-zoom-icon';
         zoomBox.appendChild(zoomIcon);
+        var zoomPercentSign = document.createElement('div');
+        zoomPercentSign.className = 'timeline-zoom-percent-sign';
+        zoomPercentSign.innerHTML = '%'
+        zoomBox.appendChild(zoomPercentSign);
 
         this.verticalScrollBar.build();
         this.elem.appendChild(this.verticalScrollBar.elem);

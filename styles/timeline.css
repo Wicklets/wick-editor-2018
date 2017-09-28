@@ -800,7 +800,7 @@ body {
 
 .zoom-box {
     position: absolute;
-    width: 60px;
+    width: 62px;
     height: var(--scrollbar-thickness);
     bottom: 0px;
     left: calc(100% - var(--scrollbar-thickness) - 49px);
@@ -808,10 +808,14 @@ body {
 }
 
 .timeline-number-input {
-    width: 45px;
-    height: 15px;
+    position: absolute;
+    width: 30px;
+    height: 12px;
     border-radius: 3px;
     font-size: 12px;
+    left: 17px;
+    top: 1px;
+    text-align: center;
 }
 
 .timeline-zoom-icon {
@@ -822,6 +826,19 @@ body {
     background-repeat: no-repeat;
     background-position: left;
     float: left;
+}
+
+.timeline-zoom-percent-sign {
+    color: white;
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    font-size: 10px;
+    font-family: arial;
+    left: 48px;
+    top: 1px;
+    font-weight: bold;
+    text-align: center;
 }
 
 /* Breadcrumbs */
