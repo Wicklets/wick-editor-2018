@@ -63,7 +63,7 @@ var ToolbarInterface = function (wickEditor) {
                 wickEditor.syncInterfaces();
             },
             min: 1,
-            max: 30,
+            max: 100,
             moveFactor: 0.2,
             initValue: wickEditor.settings.brushThickness,
         });
@@ -86,7 +86,7 @@ var ToolbarInterface = function (wickEditor) {
                 wickEditor.syncInterfaces();
             },
             min: 1,
-            max: 10,
+            max: 50,
             moveFactor: 0.1,
             initValue: wickEditor.settings.strokeWidth,
         });

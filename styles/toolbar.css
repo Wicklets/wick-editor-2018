@@ -121,6 +121,7 @@ hr {
     -moz-background-size:10px 10px;
     background-size:10px 10px;
     -webkit-background-size:10px 11px;
+    overflow: hidden;
     
     background-position:0 0, 5px 0, 5px -5px, 0px 5px;
 }
@@ -132,6 +133,7 @@ hr {
     height: 15px;
     border-radius: 3px;
     background-color: white;
+    overflow: hidden;
 
     background-image:
       -moz-linear-gradient(45deg, #ddd 25%, transparent 25%), 
