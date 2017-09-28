@@ -178,9 +178,29 @@ TimelineInterface.Timeline = function (wickEditor) {
         this.horizontalScrollBar.build();
         this.elem.appendChild(this.horizontalScrollBar.elem);
 
-        var hideScrollbarConnectPiece  = document.createElement('div'); 
+        /*var hideScrollbarConnectPiece  = document.createElement('div'); 
         hideScrollbarConnectPiece.className = 'hide-scrollbar-connect-piece';
-        this.elem.appendChild(hideScrollbarConnectPiece); 
+        this.elem.appendChild(hideScrollbarConnectPiece); */
+        var zoomBox = document.createElement('div');
+        zoomBox.className = 'zoom-box';
+        this.elem.appendChild(zoomBox);
+        self.numberInput = new SlideyNumberInput({
+            onsoftchange: function (e) {
+                wickEditor.fabric.setZoom(e/100, true);
+            },
+            onhardchange: function (e) {
+                wickEditor.fabric.setZoom(e/100, true);
+            },
+            min: 1,
+            max: 500,
+            moveFactor: 0.5,
+            initValue: 100,
+        });
+        self.numberInput.className = 'timeline-number-input';
+        zoomBox.appendChild(self.numberInput);
+        var zoomIcon = document.createElement('div');
+        zoomIcon.className = 'timeline-zoom-icon';
+        zoomBox.appendChild(zoomIcon);
 
         this.verticalScrollBar.build();
         this.elem.appendChild(this.verticalScrollBar.elem);
@@ -205,6 +225,8 @@ TimelineInterface.Timeline = function (wickEditor) {
 
         onionSkinningButton.style.backgroundColor = wickEditor.project.onionSkinning ? 'orange' : '#F0EFEF';
         smallFramesModeButton.style.backgroundColor = wickEditor.project.smallFramesMode ? 'orange' : '#F0EFEF';
+
+        self.numberInput.value = Math.floor(wickEditor.fabric.getCanvasTransform().zoom * 100);
 
         resetFrameSize();
     }

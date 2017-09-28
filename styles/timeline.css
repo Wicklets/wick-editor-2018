@@ -524,8 +524,8 @@ body {
 
 .horizontal-scrollbar {
     bottom: 0px;
-    right: var(--scrollbar-thickness);
-    width: calc(100% - var(--layers-width) - var(--scrollbar-thickness));
+    right: calc(var(--scrollbar-thickness) + 50px);
+    width: calc(100% - var(--layers-width) - var(--scrollbar-thickness) - 50px);
     height: var(--scrollbar-thickness);
     
 
@@ -796,6 +796,32 @@ body {
     bottom: 0px;
     left: calc(100% - var(--scrollbar-thickness));
     background-color: #252525;
+}
+
+.zoom-box {
+    position: absolute;
+    width: 60px;
+    height: var(--scrollbar-thickness);
+    bottom: 0px;
+    left: calc(100% - var(--scrollbar-thickness) - 49px);
+    background-color: #252525;
+}
+
+.timeline-number-input {
+    width: 45px;
+    height: 15px;
+    border-radius: 3px;
+    font-size: 12px;
+}
+
+.timeline-zoom-icon {
+    width: 15px;
+    height: 15px;
+    background-image: url('../resources/tools/Zoom.svg');
+    background-size: 15px 15px;
+    background-repeat: no-repeat;
+    background-position: left;
+    float: left;
 }
 
 /* Breadcrumbs */
