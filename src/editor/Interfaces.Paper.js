@@ -190,8 +190,6 @@ var PaperInterface = function (wickEditor) {
 
             paperCanvas.style.display = 'block';
 
-            self.updateViewTransforms();
-
             refreshSelection();
 
             if(!self.needsUpdate) return;

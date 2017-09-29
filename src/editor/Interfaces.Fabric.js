@@ -252,18 +252,21 @@ var FabricInterface = function (wickEditor) {
         self.canvas.setZoom(1);
         self.resetPan();
         self.canvas.renderAll();
+        wickEditor.paper.updateViewTransforms();
     }
 
     this.relativePan = function (x,y) {
         var delta = new fabric.Point(Math.floor(x),Math.floor(y));
         self.canvas.relativePan(delta)
         self.guiElements.update();
+        wickEditor.paper.updateViewTransforms();
     }
 
     this.absolutePan = function (x,y) {
         var delta = new fabric.Point(Math.floor(x),Math.floor(y));
         self.canvas.absolutePan(delta)
         self.guiElements.update();
+        wickEditor.paper.updateViewTransforms();
     }
 
     this.startPan = function () {
@@ -296,6 +299,8 @@ var FabricInterface = function (wickEditor) {
         self.canvas.setZoom(newZoom);
         self.canvas.relativePan(new fabric.Point(panAdjustX,panAdjustY));
         self.canvas.renderAll();
+        wickEditor.paper.updateViewTransforms();
+        wickEditor.timeline.getElem().updateZoomBox();
 
         self.guiElements.update();
         self.updateCursor();
@@ -304,7 +309,14 @@ var FabricInterface = function (wickEditor) {
     }
 
     this.setZoom = function (newZoom, nosync) {
-        var centerX = Math.floor(-(window.innerWidth -wickEditor.project.width)/2 - 33/2 + 254/2);
+        var oldZoom = self.canvas.getZoom();
+        var newZoom = newZoom;
+        var zoomRatio = newZoom/oldZoom;
+        self.zoom(zoomRatio, window.innerWidth/2, window.innerHeight/2);
+        wickEditor.paper.updateViewTransforms();
+        wickEditor.timeline.getElem().updateZoomBox();
+
+        /*var centerX = Math.floor(-(window.innerWidth -wickEditor.project.width)/2 - 33/2 + 254/2);
         var centerY = Math.floor(-(window.innerHeight-wickEditor.project.height)/2 - 100/2);
 
         centerX -= (wickEditor.project.width  - wickEditor.project.width *newZoom)/2;
@@ -313,8 +325,9 @@ var FabricInterface = function (wickEditor) {
         self.canvas.setZoom(newZoom);
         self.canvas.absolutePan(new fabric.Point(centerX,centerY));
         self.canvas.renderAll();
+        wickEditor.paper.updateViewTransforms();
 
-        if(!nosync) wickEditor.syncInterfaces();
+        if(!nosync) wickEditor.syncInterfaces();*/
     }
 
     this.getCanvasTransform = function () {
