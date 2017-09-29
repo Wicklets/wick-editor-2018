@@ -826,6 +826,11 @@ body {
     background-repeat: no-repeat;
     background-position: left;
     float: left;
+    cursor: pointer;
+    opacity: 1.0;
+}
+.timeline-zoom-icon:hover {
+    opacity: 0.7;
 }
 
 .timeline-zoom-percent-sign {

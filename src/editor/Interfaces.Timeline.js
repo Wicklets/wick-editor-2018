@@ -200,6 +200,10 @@ TimelineInterface.Timeline = function (wickEditor) {
         zoomBox.appendChild(self.numberInput);
         var zoomIcon = document.createElement('div');
         zoomIcon.className = 'timeline-zoom-icon';
+        zoomIcon.onclick = function () {
+            wickEditor.fabric.setZoom(1, true);
+            wickEditor.syncInterfaces();
+        }
         zoomBox.appendChild(zoomIcon);
         var zoomPercentSign = document.createElement('div');
         zoomPercentSign.className = 'timeline-zoom-percent-sign';
