@@ -98,12 +98,6 @@ var ColorPickerInterface = function (wickEditor) {
             var t = e.target;
             if (t.className === 'sp-thumb-inner') {
                 self.close();
-            } else if(elementInsideElement(t, colorPickerContainer)) {
-                // nothin
-            } else if (t.className === 'upper-canvas ') {
-                
-            } else {
-                //self.close();
             }
         });
     }
