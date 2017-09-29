@@ -252,7 +252,7 @@ var FabricInterface = function (wickEditor) {
         self.canvas.setZoom(1);
         self.resetPan();
         self.canvas.renderAll();
-        wickEditor.paper.updateViewTransforms();
+        wickEditor.syncInterfaces();
     }
 
     this.relativePan = function (x,y) {
