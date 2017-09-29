@@ -42,13 +42,24 @@ var ToolbarInterface = function (wickEditor) {
         colorPickerContainer.className = 'toolbar-color-picker-container';
         toolbarDiv.appendChild(colorPickerContainer);
 
-        var fillColorPicker = new ColorPicker('fillColor', 'toolbar-fill-color');
-        colorPickerDivs.push(fillColorPicker);
-        colorPickerContainer.appendChild(fillColorPicker);
+        var strokeColorBackground = document.createElement('div');
+        strokeColorBackground.className = 'toolbar-stroke-color-background';
+        colorPickerContainer.appendChild(strokeColorBackground);
 
         var strokeColorPicker = new ColorPicker('strokeColor', 'toolbar-stroke-color');
         colorPickerDivs.push(strokeColorPicker);
+        var strokeInnerRect = document.createElement('div');
+        strokeInnerRect.className = 'toolbar-stroke-color-inner-rect';
+        strokeColorPicker.appendChild(strokeInnerRect);
         colorPickerContainer.appendChild(strokeColorPicker);
+
+        var fillColorBackground = document.createElement('div');
+        fillColorBackground.className = 'toolbar-fill-color-background';
+        colorPickerContainer.appendChild(fillColorBackground);
+
+        var fillColorPicker = new ColorPicker('fillColor', 'toolbar-fill-color');
+        colorPickerDivs.push(fillColorPicker);
+        colorPickerContainer.appendChild(fillColorPicker);
 
         brushSizePreview = new BrushSizePreview();
         toolbarDiv.appendChild(brushSizePreview);

@@ -78,6 +78,20 @@ var ColorPickerInterface = function (wickEditor) {
             ]
         });
 
+        window.addEventListener('mousedown', function(e) { 
+            if(!isOpen) return;
+
+            var t = e.target;
+            if (t.className === 'upper-canvas ') {
+                wickEditor.tools.dropper.getColorAtCursor(function (color) {
+                    currentColor = color;
+                    self.close();
+                });
+            } else if(!elementInsideElement(t, colorPickerContainer)) {
+                self.close();
+            }
+        });
+
         window.addEventListener('mouseup', function(e) { 
             if(!isOpen) return;
 
@@ -87,12 +101,9 @@ var ColorPickerInterface = function (wickEditor) {
             } else if(elementInsideElement(t, colorPickerContainer)) {
                 // nothin
             } else if (t.className === 'upper-canvas ') {
-                wickEditor.tools.dropper.getColorAtCursor(function (color) {
-                    currentColor = color;
-                    self.close();
-                });
+                
             } else {
-                self.close();
+                //self.close();
             }
         });
     }
