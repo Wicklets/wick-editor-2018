@@ -39,8 +39,16 @@ Tools.Dropper = function (wickEditor) {
         colorVar = newColorVar;
     }
 
+    this.onSelected = function () {
+        
+    }
+
+    this.onDeselected = function () {
+       
+    }
+
     this.setup = function () {
-        wickEditor.fabric.canvas.on('mouse:down', function (e) {
+        window.addEventListener('mousedown', function (e) {
             if(wickEditor.currentTool instanceof Tools.Dropper && !wickEditor.colorPicker.isOpen()) {
                 that.getColorAtCursor(function (color) {
                     wickEditor.settings.setValue(colorVar, color);

@@ -153,6 +153,7 @@ WickEditor.prototype.syncInterfaces = function () {
 
 WickEditor.prototype.changeTool = function (newTool) {
     this.lastTool = this.currentTool;
+    if(this.lastTool.onDeselected) this.lastTool.onDeselected();
     this.currentTool = newTool;
     if(newTool.onSelected) newTool.onSelected();
 

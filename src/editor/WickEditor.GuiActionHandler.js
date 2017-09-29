@@ -1120,6 +1120,11 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function (args) {
+            wickEditor.project.getSelectedObjects().forEach(function (obj) {
+                if(obj.isText) {
+                    obj.textData.fill = args.color;
+                }
+            })
             wickEditor.paper.pathRoutines.setFillColor(wickEditor.project.getSelectedObjects(), args.color);
         });
 
