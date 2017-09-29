@@ -56,7 +56,7 @@ var FabricInterface = function (wickEditor) {
 
         self.canvas.on('mouse:down', function (e) {
             if(wickEditor.project.deselectObjectType(WickFrame)) {
-                wickEditor.timeline.syncWithEditorState();
+                wickEditor.syncInterfaces();
             }
         });
 
