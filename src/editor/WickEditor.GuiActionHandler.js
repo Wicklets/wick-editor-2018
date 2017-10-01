@@ -848,7 +848,19 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function(args) {
-            wickEditor.fabric.flipSelection(true, false);
+            var modifiedStates = [];
+            var objs = wickEditor.project.getSelectedObjects();
+            objs.forEach(function (obj) {
+                var wickObj = obj;
+                modifiedStates.push({
+                    flipX : !obj.flipX,
+                });
+            });
+
+            wickEditor.actionHandler.doAction('modifyObjects', {
+                objs: objs,
+                modifiedStates: modifiedStates
+            });
         });
 
     registerAction('flipVertically',
@@ -856,7 +868,19 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function(args) {
-            wickEditor.fabric.flipSelection(false, true);
+            var modifiedStates = [];
+            var objs = wickEditor.project.getSelectedObjects();
+            objs.forEach(function (obj) {
+                var wickObj = obj;
+                modifiedStates.push({
+                    flipY : !obj.flipY
+                });
+            });
+
+            wickEditor.actionHandler.doAction('modifyObjects', {
+                objs: objs,
+                modifiedStates: modifiedStates
+            });
         });
 
     registerAction('editObject',

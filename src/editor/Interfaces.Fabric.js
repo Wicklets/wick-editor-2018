@@ -361,35 +361,6 @@ var FabricInterface = function (wickEditor) {
         this.canvas.freeDrawingCursor = cursorImg;
     }
 
-    this.flipSelection = function (flipX, flipY) {
-        var group = this.canvas.getActiveGroup();
-        var object = this.canvas.getActiveObject();
-
-        if(group) {
-            if(flipX) {
-                group.flipX = true;
-            }
-            if(flipY) {
-                group.flipY = true;
-            }
-            group.setCoords();
-            this.canvas.renderAll();
-
-            //self.modifyChangedObjects({target:group});
-        }
-
-        if(object) {
-            if(flipX) {
-                object.flipX = !object.flipX;
-            }
-            if(flipY) {
-                object.flipY = !object.flipY;
-            }
-
-            //self.applyChangesInCanvasToProject([object.wickObjectRef]);
-        }
-    }
-
     this.getObjectHoveredOver = function () {
         if(!self.objHoveredOver) return null;
         if(!self.objHoveredOver.wickObjReference) return null;

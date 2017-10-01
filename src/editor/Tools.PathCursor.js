@@ -183,8 +183,15 @@ Tools.PathCursor = function (wickEditor) {
                 if(newlySelected) return;
             }
 
-            if (hitResult.type == 'segment' && event.modifiers.alt) {
-                hitResult.segment.remove();
+            if (hitResult.type == 'segment') {
+                if(event.modifiers.alt || 
+                    event.modifiers.command ||
+                    event.modifiers.control ||
+                    event.modifiers.option ||
+                    event.modifiers.shift ||
+                    event.event.button === 2) {
+                    hitResult.segment.remove();
+                }
             }
 
             if (hitResult.type == 'curve') {
@@ -349,8 +356,6 @@ Tools.PathCursor = function (wickEditor) {
         if(!hitResult) return;
         if(!hitResult.item) return;
         if(wickEditor.currentTool instanceof Tools.FillBucket) return;
-
-        console.log('Check for hitTest on first segment, this means we gotta close the path')
 
         wickEditor.paper.refreshSVGWickObject(hitResult.item);
     }
