@@ -51,7 +51,7 @@ var InputHandler = function (wickEditor) {
     var editingTextBox = false;
 
     /* Define special keys */
-    var modifierKeys = ["WINDOWS","COMMAND","FIREFOXCOMMAND","CTRL"];
+    var modifierKeys = ["WINDOWS","COMMAND","FIREFOXCOMMAND","CTRL","RIGHT CLICK"]; 
     var shiftKeys = ["SHIFT"];
 
     var activeElemIsTextBox = function () {
