@@ -107,9 +107,14 @@ var LibraryInterface = function (wickEditor) {
         var library = wickEditor.project.library;
         for (uuid in library.assets) {
             var asset = library.assets[uuid];
+            var iconSrc = {
+                image : 'resources/library-image.png',
+                audio : 'resources/library-audio.png',
+            }[asset.type]
             newTreeChildren.push({ 
                 title: asset.filename,
-                data: {uuid:asset.uuid}
+                data: {uuid:asset.uuid},
+                icon: iconSrc,
             });
         }
 
