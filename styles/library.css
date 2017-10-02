@@ -19,7 +19,7 @@
 	width: 100%;
 	border: none;
 	background-color: white;
-	height: 200px;
+	height: 175px;
 	overflow-y: auto;
 }
 
@@ -34,4 +34,9 @@
     opacity: 0.6;
     transform: translateX(-50%) translateY(-50%);
     background-size: 100px 100px;
+}
+
+#fancytree-container {
+	border-radius: 5px;
+	background-color: rgba(0,0,0,0);
 }

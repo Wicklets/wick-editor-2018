@@ -24,7 +24,7 @@ ul.fancytree-container {
   white-space: nowrap;
   padding: 3px;
   margin: 0;
-  background-color: white;
+  background-color: rgba(0,0,0,0);
   /*border: 1px dotted gray;*/
   min-height: 0%;
   position: relative;
