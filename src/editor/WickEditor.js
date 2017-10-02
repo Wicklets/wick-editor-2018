@@ -22,7 +22,7 @@ var WickEditor = function () {
     var self = this;
 
     // http://semver.org/
-    self.version = "0.07";
+    self.version = "0.08";
     console.log("Wick Editor version " + self.version)
     if(localStorage.wickVersion !== self.version) {
         // Wick has either
@@ -76,7 +76,11 @@ var WickEditor = function () {
     this.previewplayer = registerInterface(new PreviewPlayer(this));
     this.cursorIcon = registerInterface(new CursorIconInterface(this));
     this.colorPicker = registerInterface(new ColorPickerInterface(this));
-    //this.editorSettings = registerInterface(new EditorSettings(this));
+    this.editorSettings = registerInterface(new EditorSettings(this));
+
+    // Setup editor logic handlers
+    this.actionHandler = new WickActionHandler(this);
+    this.guiActionHandler = new GuiActionHandler(this);
 
     // Load all tools
     this.tools = {
@@ -104,10 +108,6 @@ var WickEditor = function () {
     for(tool in this.tools) {
         this.tools[tool].setup();
     };
-
-    // Setup editor logic handlers
-    this.actionHandler = new WickActionHandler(this);
-    this.guiActionHandler = new GuiActionHandler(this);
 
     // Setup inputhandler
     this.inputHandler = new InputHandler(this);

@@ -20,12 +20,38 @@ var EditorSettings = function (wickEditor) {
     var self = this;
     var settingsWindow = document.getElementById('editorSettingsGUI');
     var closeButton = document.getElementsByClassName('editorSettingsGUICloseButton')[0];
-    var properties = document.getElementsByClassName('editorSettingsGUIProperties')[0];
+    var hotkeysContainer = document.getElementsByClassName('editorSettingsGUIHotkeys')[0];
 
     self.setup = function () {
         closeButton.onclick = function () {
             self.close();
         }
+
+        var guiActions = wickEditor.guiActionHandler.guiActions;
+        for(key in guiActions) {
+            var action = guiActions[key];
+            var hotkeys = action.specialKeys.concat(action.hotkeys);
+            if(hotkeys.length === 0 || !action.title) continue;
+
+            var hotkeyDiv = document.createElement('div');
+            hotkeyDiv.className = 'hotkey';
+
+            var hotkeyTitle = document.createElement('div');
+            hotkeyTitle.className = 'hotkey-title';
+            hotkeyTitle.innerHTML = action.title;
+            hotkeyDiv.appendChild(hotkeyTitle);
+
+            var hotkeyDesc = document.createElement('div');
+            hotkeyDesc.className = 'hotkey-description';
+            hotkeyDesc.innerHTML = hotkeys.join(' + ');
+            hotkeyDiv.appendChild(hotkeyDesc);
+
+            hotkeysContainer.appendChild(hotkeyDiv);
+
+            var hr = document.createElement('hr');
+            hr.className = 'hotkeyhr';
+            hotkeysContainer.appendChild(hr);
+        };
     }
 
     self.syncWithEditorState = function () {

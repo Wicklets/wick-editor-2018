@@ -24,8 +24,8 @@ var GuiActionHandler = function (wickEditor) {
     /* Initialize list of GuiActions. */
     this.guiActions = {};
 
-    var registerAction = function (name, hotkeys, elementIds, requiredParams, action) {
-        that.guiActions[name] = new GuiAction(hotkeys, elementIds, requiredParams, action);
+    var registerAction = function (name, hotkeys, title, requiredParams, action) {
+        that.guiActions[name] = new GuiAction(hotkeys, title, requiredParams, action);
     }
 
     this.doAction = function (name, args) {
@@ -41,12 +41,15 @@ var GuiActionHandler = function (wickEditor) {
 
     /* GuiAction definition. All possible actions performable through interacting
     with the Wick Editor GUI are expected to be well defined by this structure .*/
-    var GuiAction = function (hotkeys, elementIds, requiredParams, action) {
+    var GuiAction = function (hotkeys, title, requiredParams, action) {
 
         var that = this;
 
         /* Function to be called when either a hotkey or element fires. */
         this.doAction = action;
+
+        /* What this action should be labeled as in the hotkeys window */
+        this.title = title;
 
         /* Options for special cases */
         this.requiredParams = requiredParams;
@@ -68,11 +71,9 @@ var GuiActionHandler = function (wickEditor) {
     GuiAction Definitions
 *****************************/
 
-    // SPACE
-    // Open Pan Tool
     registerAction('openTools.Pan',
         ['SPACE'],
-        [],
+        'Pan',
         {},
         function(args) {
             if(!(wickEditor.currentTool instanceof Tools.Pan)) {
@@ -82,11 +83,9 @@ var GuiActionHandler = function (wickEditor) {
             }
         });
 
-    // ENTER
-    // Preview play
     registerAction('previewToggle',
         ['ENTER'],
-        [],
+        'Play/Pause Preview',
         {},
         function(args) {
             wickEditor.previewplayer.togglePlaying();
@@ -108,52 +107,34 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.previewplayer.stop();
         });
 
-    // ESC
-    // Stop Running Project
     registerAction('stopRunningProject',
         ['ESC'],
-        [],
+        'Stop Running Project',
         {builtinplayerRunning:true},
         function(args) {
             if(!wickEditor.builtinplayer.running) return;
             wickEditor.builtinplayer.stopRunningProject();
         });
 
-    // Control + SHIFT + Z
-    // Redo Action
     registerAction('redo',
         ['Modifier','SHIFT','Z'],
-        [],
+        'Redo',
         {},
         function(args) {
             wickEditor.actionHandler.redoAction();
         });
 
-    // Control + Z
-    // Undo Action
     registerAction('undo',
         ['Modifier','Z'],
-        [],
+        'Undo',
         {},
         function(args) {
             wickEditor.actionHandler.undoAction();
         });
 
-    // Title
-    // Open splash screen
-    registerAction('openSplashScreen',
-        [],
-        [],
-        {},
-        function(args) {
-            wickEditor.splashscreen.openSplashScreen();
-        });
-
-    // Control + ENTER
-    // Run Project
     registerAction('runProject',
         ['Modifier','ENTER'],
-        [],
+        'Run Project',
         {usableInTextBoxes:true},
         function(args) {
             $(":focus").blur();
@@ -174,21 +155,17 @@ var GuiActionHandler = function (wickEditor) {
 
         });
 
-    // Control + 0
-    // Recenter Canvas
     registerAction('recenterCanvas',
         ['Modifier','0'],
-        [],
+        'Recenter Canvas',
         {},
         function(args) {
             wickEditor.fabric.recenterCanvas();
         });
 
-    // Control + S
-    // Save Project
     registerAction('saveProject',
         ['Modifier','S'],
-        [],
+        'Save',
         {usableInTextBoxes:true},
         function(args) {
             that.keys = [];
@@ -203,7 +180,6 @@ var GuiActionHandler = function (wickEditor) {
             }
         });
 
-    // Export Project
     registerAction('exportProjectHTML',
         [],
         [],
@@ -217,14 +193,13 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('exportProjectJSON',
         ['Modifier','SHIFT','S'],
-        [],
+        'Save As',
         {},
         function(args) {
             WickProject.Exporter.autosaveProject(wickEditor.project);
             WickProject.Exporter.exportProject(wickEditor.project, {json:true});
         });
 
-    // Export Project as .zip
     registerAction('exportProjectZIP',
         [],
         [],
@@ -235,7 +210,6 @@ var GuiActionHandler = function (wickEditor) {
             WickProject.Exporter.exportProject(wickEditor.project, {zipped:true});
         });
 
-    // Export project as animated GIF
     registerAction('exportProjectGIF',
         [],
         [],
@@ -243,7 +217,6 @@ var GuiActionHandler = function (wickEditor) {
         function (args) {
             wickEditor.gifRenderer.renderProjectAsGIF(function (blob) {
                 saveAs(blob, wickEditor.project.name+".gif");
-                //window.open(URL.createObjectURL(blob));
             });
         });
 
@@ -266,7 +239,6 @@ var GuiActionHandler = function (wickEditor) {
             });
         });
 
-    // Export project as WebM
     registerAction('exportProjectWebM',
         [],
         [],
@@ -275,11 +247,9 @@ var GuiActionHandler = function (wickEditor) {
             alert("NYI")
         });
 
-    // Control + O
-    // Open File
     registerAction('openFile',
         ['Modifier','O'],
-        [],
+        'Open',
         {},
         function(args) {
             that.keys = [];
@@ -299,11 +269,9 @@ var GuiActionHandler = function (wickEditor) {
             $('#importButton').click();
         });
 
-    // Control + A
-    // Select All
     registerAction('selectAll',
         ['Modifier','A'],
-        [],
+        'Select All',
         {},
         function(args) {
             if(!(wickEditor.currentTool instanceof Tools.PathCursor))
@@ -343,22 +311,18 @@ var GuiActionHandler = function (wickEditor) {
             });
         });
 
-    // Control + Shift + A
-    // Deselect All
     registerAction('deselectAll',
         ['Modifier','SHIFT','A'],
-        [],
+        'Deselect All',
         {},
         function(args) {
             wickEditor.project.clearSelection();
             wickEditor.syncInterfaces();
         });
 
-    // Up
-    // Move current object up one pixel
     registerAction('moveSelectionUp',
         ['UP'],
-        [],
+        'Move selection up 1px',
         {},
         function(args) {
             wickEditor.guiActionHandler.doAction('moveSelection', {
@@ -366,11 +330,9 @@ var GuiActionHandler = function (wickEditor) {
             })
         });
 
-    // Down
-    // Move current object down one pixel
     registerAction('moveSelectionDown',
         ['DOWN'],
-        [],
+        'Move selection down 1px',
         {},
         function(args) {
             wickEditor.guiActionHandler.doAction('moveSelection', {
@@ -378,11 +340,9 @@ var GuiActionHandler = function (wickEditor) {
             })
         });
 
-    // LEFT
-    // Move current object left one pixel
     registerAction('moveSelectionLeft',
         ['LEFT'],
-        [],
+        'Move selection left 1px',
         {},
         function(args) {
             wickEditor.guiActionHandler.doAction('moveSelection', {
@@ -390,11 +350,9 @@ var GuiActionHandler = function (wickEditor) {
             })
         });
 
-    // Right
-    // Move current object right one pixel
     registerAction('moveSelectionRight',
         ['RIGHT'],
-        [],
+        'Move selection right 1px',
         {},
         function(args) {
             wickEditor.guiActionHandler.doAction('moveSelection', {
@@ -402,11 +360,9 @@ var GuiActionHandler = function (wickEditor) {
             })
         });
 
-    // Modifier+UP
-    // Move current object up ten pixels
     registerAction('moveSelectionUp10x',
         ['SHIFT', 'UP'],
-        [],
+        'Move selection up 10px',
         {},
         function(args) {
             wickEditor.guiActionHandler.doAction('moveSelection', {
@@ -414,11 +370,9 @@ var GuiActionHandler = function (wickEditor) {
             })
         });
 
-    // Modifier+Down
-    // Move current object down ten pixels
     registerAction('moveSelectionDown10x',
         ['SHIFT', 'DOWN'],
-        [],
+        'Move selection down 10px',
         {},
         function(args) {
             wickEditor.guiActionHandler.doAction('moveSelection', {
@@ -426,11 +380,9 @@ var GuiActionHandler = function (wickEditor) {
             })
         });
 
-    // Modifier+Left
-    // Move current object left ten pixels
     registerAction('moveSelectionLeft10x',
         ['SHIFT', 'LEFT'],
-        [],
+        'Move selection left 10px',
         {},
         function(args) {
             wickEditor.guiActionHandler.doAction('moveSelection', {
@@ -438,11 +390,9 @@ var GuiActionHandler = function (wickEditor) {
             })
         });
 
-    // Modifier+Right
-    // Move current object right ten pixels
     registerAction('moveSelectionRight10x',
         ['SHIFT', 'RIGHT'],
-        [],
+        'Move selection right 10px',
         {},
         function(args) {
             wickEditor.guiActionHandler.doAction('moveSelection', {
@@ -450,11 +400,9 @@ var GuiActionHandler = function (wickEditor) {
             })
         });
 
-    // <
-    // Move Playhead LEFT
     registerAction('movePlayheadLeft',
         [','],
-        [],
+        'Previous frame',
         {},
         function(args) {
             wickEditor.actionHandler.doAction("movePlayhead", {
@@ -463,11 +411,9 @@ var GuiActionHandler = function (wickEditor) {
             })
         });
 
-    // >
-    // Move Playhead Right
     registerAction('movePlayheadRight',
         ['.'],
-        [],
+        'Next frame',
         {},
         function(args) {
             wickEditor.actionHandler.doAction("movePlayhead", {
@@ -476,23 +422,11 @@ var GuiActionHandler = function (wickEditor) {
             })
         });
 
-    // Down
-    // Move Down Layer
-    registerAction('moveDownLayer',
-        ['DOWN'],
-        [],
-        {},
-        function(args) {
-            if(wickEditor.project.currentObject.currentLayer < wickEditor.project.currentObject.layers.length-1)
-                wickEditor.project.currentObject.currentLayer ++;
-            wickEditor.syncInterfaces();
-        });
-
     // BACKSPACE
     // Delete Selected Objects
     registerAction('deleteSelectedObjects',
         ['BACKSPACE'],
-        [],
+        null,
         {},
         function(args) {
             if(wickEditor.project.isTypeSelected(WickTween)) {
@@ -510,7 +444,7 @@ var GuiActionHandler = function (wickEditor) {
     // Delete Selected Objects
     registerAction('deleteSelectedObjects2',
         ['DELETE'],
-        [],
+        'Delete Selection',
         {},
         function(args) {
             wickEditor.guiActionHandler.doAction('deleteSelectedObjects');
@@ -522,7 +456,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('copy',
         copyKeys,
-        [],
+        'Copy',
         {},
         function(args) {
             wickEditor.rightclickmenu.open = false;
@@ -542,7 +476,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('cut',
         cutKeys,
-        [],
+        'Cut',
         {},
         function(args) {
             wickEditor.guiActionHandler.doAction('copy');
@@ -551,7 +485,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('paste',
         pasteKeys,
-        [],
+        'Paste',
         {},
         function(args) {
             wickEditor.rightclickmenu.open = false;
@@ -671,7 +605,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('useTools.cursor',
         ['C'],
-        [],
+        'Switch to Cursor',
         {},
         function(args) {
             wickEditor.changeTool(wickEditor.tools.cursor);
@@ -679,7 +613,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('useTools.pathCursor',
         ['P'],
-        [],
+        'Switch to Path Cursor',
         {},
         function (args) {
             wickEditor.changeTool(wickEditor.tools.pathCursor);
@@ -687,7 +621,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('useTools.paintbrush',
         ['B'],
-        [],
+        'Switch to Brush',
         {},
         function(args) {
             wickEditor.changeTool(wickEditor.tools.paintbrush);
@@ -695,7 +629,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('useTools.line',
         ['L'],
-        [],
+        'Switch to Line',
         {},
         function(args) {
             wickEditor.changeTool(wickEditor.tools.line);
@@ -703,7 +637,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('useTools.eraser',
         ['E'],
-        [],
+        'Switch to Eraser',
         {},
         function(args) {
             wickEditor.changeTool(wickEditor.tools.eraser);
@@ -711,7 +645,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('useTools.fillbucket',
         ['G'],
-        [],
+        'Switch to Fill Bucket',
         {},
         function(args) {
             wickEditor.changeTool(wickEditor.tools.fillbucket);
@@ -719,7 +653,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('useTools.rectangle',
         ['R'],
-        [],
+        'Switch to Rectangle',
         {},
         function(args) {
             wickEditor.changeTool(wickEditor.tools.rectangle);
@@ -727,7 +661,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('useTools.ellipse',
         ['S'],
-        [],
+        'Switch to Ellipse',
         {},
         function(args) {
             wickEditor.changeTool(wickEditor.tools.ellipse);
@@ -735,7 +669,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('useTools.pen',
         ['O'],
-        [],
+        'Switch to Pen',
         {},
         function(args) {
             wickEditor.changeTool(wickEditor.tools.pen);
@@ -743,7 +677,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('useTools.dropper',
         ['D'],
-        [],
+        'Switch to Eyedropper',
         {},
         function(args) {
             wickEditor.changeTool(wickEditor.tools.dropper);
@@ -751,7 +685,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('useTools.text',
         ['T'],
-        [],
+        'Switch to Text',
         {},
         function(args) {
             wickEditor.changeTool(wickEditor.tools.text);
@@ -759,7 +693,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('useTools.zoom',
         ['Z'],
-        [],
+        'Switch to Zoom',
         {},
         function(args) {
             wickEditor.changeTool(wickEditor.tools.zoom);
@@ -773,17 +707,9 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.changeTool(wickEditor.tools.pan);
         });
 
-    registerAction('useTools.crop',
-        [],
-        [],
-        {},
-        function(args) {
-            wickEditor.changeTool(wickEditor.tools.crop);
-        });
-
     registerAction('editScripts',
         ['`'],
-        [],
+        'Open Scripting Window',
         {},
         function(args) {
             wickEditor.scriptingide.open = !wickEditor.scriptingide.open;
@@ -791,19 +717,9 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.syncInterfaces();
         });
 
-    registerAction('openScriptingIDE',
-        ['`'],
-        [],
-        {},
-        function(args) {
-            wickEditor.scriptingide.open = true;
-            wickEditor.scriptingide.aceEditor.focus()
-            wickEditor.syncInterfaces();
-        });
-
     registerAction('bringToFront',
         ['Modifier', "SHIFT", "UP"],
-        [],
+        'Bring to Front',
         {},
         function(args) {
             wickEditor.actionHandler.doAction('moveObjectToZIndex', {
@@ -814,7 +730,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('sendToBack',
         ['Modifier', "SHIFT", "DOWN"],
-        [],
+        'Send to Back',
         {},
         function(args) {
             wickEditor.actionHandler.doAction('moveObjectToZIndex', {
@@ -825,7 +741,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('moveBackwards',
         ['Modifier', "DOWN"],
-        [],
+        'Move Backwards',
         {},
         function(args) {
             wickEditor.actionHandler.doAction('moveObjectBackwards', {
@@ -835,7 +751,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('moveForwards',
         ['Modifier', "UP"],
-        [],
+        'Move Forwards',
         {},
         function(args) {
             wickEditor.actionHandler.doAction('moveObjectForwards', {
@@ -902,7 +818,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('convertToSymbol',
-        ['Modifier', 'SHIFT', '8'],
+        [],
         [],
         {},
         function(args) {
@@ -923,8 +839,8 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('convertToGroup',
-        ['Modifier', 'SHIFT', '8'],
-        [],
+        ['Modifier', 'G'],
+        'Group Selection',
         {},
         function(args) {
             wickEditor.actionHandler.doAction('convertObjectsToSymbol', {
@@ -964,7 +880,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('addFrame',
-        ['SHIFT', '='],
+        [],
         [],
         {},
         function(args) {
@@ -995,7 +911,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('extendFrame',
         ['SHIFT', '.'],
-        [],
+        'Extend Frame',
         {},
         function(args) {
             var frame = wickEditor.project.getCurrentFrame();
@@ -1016,7 +932,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('shrinkFrame',
         ['SHIFT', ','],
-        [],
+        'Shrink Frame',
         {},
         function(args) {
             var frame = wickEditor.project.getCurrentFrame();
@@ -1032,7 +948,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('addLayer',
-        ['Modifier', 'SHIFT', '9'],
+        [],
         [],
         {},
         function(args) {
@@ -1104,7 +1020,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('finishEditingTextbox',
         ['ENTER'],
-        [],
+        null,
         {usableInTextBoxes:true, disabledInScriptingIDE:true},
         function (args) {
             $(":focus").blur();
@@ -1186,7 +1102,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('duplicateSelection',
         ['Modifier', 'D'],
-        [],
+        'Duplicate Selection',
         {},
         function (args) {
             var selectedObjects = wickEditor.project.getSelectedObjects();

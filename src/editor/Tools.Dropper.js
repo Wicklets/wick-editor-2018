@@ -32,7 +32,7 @@ Tools.Dropper = function (wickEditor) {
     }
 
     this.getTooltipName = function () {
-        return "Color Picker (D)";
+        return "Eyedropper (D)";
     }
 
     this.setColorVar = function (newColorVar) {

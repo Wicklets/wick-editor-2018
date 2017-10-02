@@ -652,8 +652,8 @@ select {
     border-radius: 3px;
     left: 50%;
     top: 50%;
-    width: 200px;
-    height: 300px;
+    width: 500px;
+    height: 500px;
     position: absolute;
     z-index: 10;
     box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
@@ -661,13 +661,13 @@ select {
     display: none;
 }
 .editorSettingsGUITitle {
-    font-family: "Open Sans";
     color: white;
     width: 100%;
-    height: 30px;
+    height: 25px;
     text-align: center;
-    margin-top: 5px;
+    margin-top: 10px;
     font-weight: bold;
+    font-size: 14px;
 }
 .editorSettingsGUICloseButton {
     position: absolute;
@@ -687,7 +687,37 @@ select {
 .editorSettingsGUICloseButton:hover {
     background-color: rgba(255,255,255,0.5);
 }
-.editorSettingsGUIProperties {
+.editorSettingsGUIHotkeys {
     width: 100%;
-    height: 270px;
+    height: 90%;
+    overflow-y: scroll;
+    font-size: 14px;
 }
+.hotkey {
+    margin-left: 5%;
+    width: 90%;
+    height: 17px;
+    color: white;
+}
+.hotkey-title {
+    width: 47%;
+    height: 100%;
+    float:left;
+    text-align: left;
+    font-weight: bold;
+}
+.hotkey-description {
+    width: 47%;
+    height: 100%;
+    float:right;
+    text-align: left;
+    font-weight: normal;
+}
+hr.hotkeyhr {
+    margin: 2px;
+    margin-bottom: 4px;
+    background-color: rgba(255,255,255,0.5)
+}
+
+
+
