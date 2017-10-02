@@ -180,9 +180,7 @@ var PaperInterface = function (wickEditor) {
 
         var lastActive = active;
 
-        active = (wickEditor.currentTool instanceof Tools.FillBucket)
-              || (wickEditor.currentTool instanceof Tools.PathCursor)
-              || (wickEditor.currentTool instanceof Tools.Pen);
+        active = wickEditor.currentTool.getCanvasMode() === 'paper';
 
         pathSelectionTool.activate();
 

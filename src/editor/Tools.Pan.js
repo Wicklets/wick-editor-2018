@@ -32,8 +32,6 @@ Tools.Pan = function (wickEditor) {
     this.getTooltipName = function () {
         return "Pan (Space)";
     }
-
-// Panning the fabric canvas
     
     this.setup = function () {
         wickEditor.fabric.canvas.on('mouse:up', function (e) {
@@ -51,6 +49,10 @@ Tools.Pan = function (wickEditor) {
                 wickEditor.fabric.relativePan(e.e.movementX, e.e.movementY)
             }
         });
+    }
+
+    this.getCanvasMode = function () {
+        return 'fabric';
     }
 
 }

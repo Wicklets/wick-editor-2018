@@ -37,4 +37,8 @@ Tools.Pen = function (wickEditor) {
 
     }
 
+    this.getCanvasMode = function () {
+        return 'paper';
+    }
+
 }

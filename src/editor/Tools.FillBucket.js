@@ -34,23 +34,11 @@ Tools.FillBucket = function (wickEditor) {
     }
 
     this.setup = function () {
-        //wickEditor.paper.pathRoutines.fill(mousePointX, mousePointY, wickEditor.settings.fillColor);
 
-        /*var canvas = wickEditor.fabric.canvas;
+    }
 
-        canvas.on('mouse:down', function (e) {
-            if(e.e.button != 0) return;
-            if(!(wickEditor.currentTool instanceof Tools.FillBucket)) return;
-
-            var mouseScreenSpace = wickEditor.fabric.screenToCanvasSpace(e.e.offsetX, e.e.offsetY);
-            var mousePointX = mouseScreenSpace.x;
-            var mousePointY = mouseScreenSpace.y;
-            var insideSymbolOffset = wickEditor.project.currentObject.getAbsolutePosition();
-            mousePointX -= insideSymbolOffset.x;
-            mousePointY -= insideSymbolOffset.y;
-
-            wickEditor.paper.pathRoutines.fill(mousePointX, mousePointY, wickEditor.settings.fillColor);
-        });*/
+    this.getCanvasMode = function () {
+        return 'fabric';
     }
 
 }

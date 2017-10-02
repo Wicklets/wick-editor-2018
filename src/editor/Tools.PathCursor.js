@@ -37,6 +37,10 @@ Tools.PathCursor = function (wickEditor) {
 
     }
 
+    this.getCanvasMode = function () {
+        return 'paper';
+    }
+
     this.paperTool = new paper.Tool();
 
     var hitResult;

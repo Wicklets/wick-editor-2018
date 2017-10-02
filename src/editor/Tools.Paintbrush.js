@@ -64,75 +64,14 @@ Tools.Paintbrush = function (wickEditor) {
 
     this.setup = function () {
 
-        window.secretPathListenerForWick = function (fabricPath) {
-            fabricPath.stroke = "#000000";
-            potraceFabricPath(fabricPath, function(SVGData) {
-                if(wickEditor.currentTool instanceof Tools.Eraser) {
-                    wickEditor.paper.pathRoutines.eraseWithPath({
-                        pathData: SVGData,
-                        pathX: fabricPath.left + fabricPath.width/2 + wickEditor.settings.brushThickness/2,
-                        pathY: fabricPath.top + fabricPath.height/2 + wickEditor.settings.brushThickness/2
-                    });
-                } else {
-                    //var symbolOffset = wickEditor.project.currentObject.getAbsolutePosition();
-                    var x = fabricPath.left + fabricPath.width/2 + wickEditor.settings.brushThickness/2// - symbolOffset.x;
-                    var y = fabricPath.top + fabricPath.height/2 + wickEditor.settings.brushThickness/2// - symbolOffset.y;
-
-                    var pathWickObject = WickObject.createPathObject(SVGData);
-                    pathWickObject.x = x;
-                    pathWickObject.y = y;
-
-                    var smoothing = getBrushSmoothing();
-                    var zoom = wickEditor.fabric.canvas.getZoom();
-                    pathWickObject.scaleX = 1/smoothing/zoom;
-                    pathWickObject.scaleY = 1/smoothing/zoom;
-                    
-                    wickEditor.paper.pathRoutines.refreshPathData(pathWickObject);
-
-                    wickEditor.actionHandler.doAction('addObjects', {
-                        wickObjects: [pathWickObject],
-                        dontSelectObjects: true
-                    });
-                }
-
-            });
-        }
-
     }
 
     this.onSelected = function () {
         wickEditor.project.clearSelection();
     }
 
-    var potraceFabricPath = function (pathFabricObject, callback) {
-        // I think there's a bug in cloneAsImage when zoom != 1, this is a hack
-        //var oldZoom = wickEditor.fabric.canvas.getZoom();
-        //wickEditor.fabric.canvas.setZoom(1);
-
-        var smoothing = getBrushSmoothing();
-        var zoom = wickEditor.fabric.canvas.getZoom();
-        pathFabricObject.scaleX = smoothing*zoom;
-        pathFabricObject.scaleY = smoothing*zoom;
-        pathFabricObject.setCoords();
-
-        pathFabricObject.cloneAsImage(function(clone) {
-            var img = new Image();
-            img.onload = function () {
-                potraceImage(img, callback, wickEditor.settings.fillColor);
-            };
-            img.src = clone._element.currentSrc || clone._element.src;
-        });
-
-        // Put zoom back to where it was before
-        //wickEditor.fabric.canvas.setZoom(oldZoom);
-    };
-
-    var getBrushSmoothing = function () {
-        if(!(wickEditor.currentTool instanceof Tools.Paintbrush)) {
-            return 1;
-        } else {
-            return parseFloat(wickEditor.settings.brushSmoothness)/100;
-        }
+    this.getCanvasMode = function () {
+        return 'paper';
     }
 
 }

@@ -47,6 +47,10 @@ Tools.Dropper = function (wickEditor) {
        
     }
 
+    this.getCanvasMode = function () {
+        return 'fabric';
+    }
+
     this.setup = function () {
         window.addEventListener('mousedown', function (e) {
             if(wickEditor.currentTool instanceof Tools.Dropper && !wickEditor.colorPicker.isOpen()) {

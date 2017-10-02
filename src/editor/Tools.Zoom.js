@@ -39,6 +39,10 @@ Tools.Zoom = function (wickEditor) {
     this.getTooltipName = function () {
         return "Zoom (Z/Command+Scroll)";
     }
+
+    this.getCanvasMode = function () {
+        return 'fabric';
+    }
     
     this.setup = function () {
         wickEditor.fabric.canvas.on('mouse:down', function (e) {

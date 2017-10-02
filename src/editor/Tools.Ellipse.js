@@ -34,39 +34,12 @@ Tools.Ellipse = function (wickEditor) {
         return "Ellipse (S)";
     }
 
-    this.setup = function () {
-        fabricInterface.canvas.on('mouse:down', function (e) {
-            if(!(wickEditor.currentTool instanceof Tools.Ellipse)) return;
-
-            fabricInterface.shapeDrawer.startDrawingShape('ellipse', e.e.offsetX, e.e.offsetY, that.createWickObjectFromShape);
-        });
+    this.getCanvasMode = function () {
+        return 'paper';
     }
 
-    this.createWickObjectFromShape = function (drawingShape) {
-        var origX = drawingShape.left;
-        var origY = drawingShape.top;
-        drawingShape.left = 0;
-        drawingShape.top = 0;
-        drawingShape.setCoords();
-        //var svg = '<ellipse fill="'+drawingShape.fill+'" cx="'+drawingShape.rx+'" cy="'+drawingShape.ry+'" rx="'+drawingShape.width+'" ry="'+drawingShape.height+'"/>'
-        var svg = '<ellipse stroke-linecap="'+drawingShape.strokeLineCap+'" stroke-linejoin="'+drawingShape.strokeLineJoin+'" cx="'+drawingShape.width/2+'" cy="'+drawingShape.height/2+'" stroke="'+drawingShape.stroke+'" stroke-width="'+drawingShape.strokeWidth+'" fill="'+drawingShape.fill+'" rx="'+drawingShape.rx+'" ry="'+drawingShape.ry+'"/>'
-        //var svg = '<ellipse cx="'+drawingShape.width/2+'" cy="'+drawingShape.height/2+'" fill="'+drawingShape.fill+'" rx="'+drawingShape.rx+'" ry="'+drawingShape.ry+'"/>'
-        var svgString = '<svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>';
-
-        wickEditor.fabric.canvas.remove(drawingShape)
+    this.setup = function () {
         
-        var pathWickObject = WickObject.createPathObject(svgString);
-        pathWickObject.x = origX;
-        pathWickObject.y = origY;
-        pathWickObject.width = drawingShape.width;
-        pathWickObject.height = drawingShape.height;
-
-        wickEditor.paper.pathRoutines.refreshPathData(pathWickObject);
-
-        wickEditor.actionHandler.doAction('addObjects', {
-            wickObjects: [pathWickObject],
-            dontSelectObjects: true
-        });
     }
 
 }

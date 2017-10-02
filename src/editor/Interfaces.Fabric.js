@@ -43,7 +43,6 @@ var FabricInterface = function (wickEditor) {
         self.panning = false;
         self.objHoveredOver = null;
 
-        self.shapeDrawer = new FabricShapeDrawer(wickEditor, self);
         self.guiElements = new FabricGUIElements(wickEditor, self);
         self.wickElements = new FabricWickElements(wickEditor, self);
 

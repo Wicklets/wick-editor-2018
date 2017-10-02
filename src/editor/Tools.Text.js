@@ -57,4 +57,8 @@ Tools.Text = function (wickEditor) {
         wickEditor.actionHandler.doAction('addObjects', {wickObjects:[newWickObject]});
     }
 
+    this.getCanvasMode = function () {
+        return 'fabric';
+    }
+
 }

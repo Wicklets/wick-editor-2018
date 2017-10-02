@@ -36,6 +36,10 @@ Tools.Cursor = function (wickEditor) {
         return "Selection Cursor (C)";
     }
 
+    this.getCanvasMode = function () {
+        return 'fabric';
+    }
+
     this.setup = function () {
         var canvas = wickEditor.fabric.canvas;
         

@@ -55,4 +55,8 @@ Tools.Eraser = function (wickEditor) {
         
     }
 
+    this.getCanvasMode = function () {
+        return 'paper';
+    }
+
 }
