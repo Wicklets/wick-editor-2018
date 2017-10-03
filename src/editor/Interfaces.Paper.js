@@ -19,10 +19,7 @@ var PaperInterface = function (wickEditor) {
 
     var self = this;
 
-    var pathSelectionTool;
-
     var active;
-
     var paperCanvas;
 
     self.setup = function () {
@@ -40,10 +37,9 @@ var PaperInterface = function (wickEditor) {
         paperCanvas.style.width  = window.innerWidth+'px';
         paperCanvas.style.height = window.innerHeight+'px';
         paper.setup(paperCanvas);
-        paper.settings.handleSize = 10;
+        
         paper.view.viewSize.width  = window.innerWidth;
         paper.view.viewSize.height = window.innerHeight;
-
         window.addEventListener('resize', function () {
             paperCanvas.style.width  = window.innerWidth+'px';
             paperCanvas.style.height = window.innerHeight+'px';
@@ -52,16 +48,7 @@ var PaperInterface = function (wickEditor) {
         }, false);
         paper.view.viewSize.width  = window.innerWidth;
         paper.view.viewSize.height = window.innerHeight;
-
         document.getElementById('editorCanvasContainer').appendChild(paperCanvas);
-
-        /*var point = new paper.Point(220, 220);
-        var size = new paper.Size(60, 60);
-        var path = new paper.Path.Rectangle(point, size);
-        path.fillColor = { hue: Math.random() * 360, saturation: 1, lightness: 1.0 };
-        path.strokeColor = 'black';*/
-
-        pathSelectionTool = wickEditor.tools.pathCursor.paperTool;
 
     }
 
@@ -69,89 +56,34 @@ var PaperInterface = function (wickEditor) {
         return active;
     }
 
-    self.smoothPath = function () {
-        hitResult.item.smooth()
-    }
-
-    self.simplifyPath = function () {
-        hitResult.item.simplify()
-    }
-
-    self.flattenPath = function () {
-        hitResult.item.flatten()
-    }
-   
-    self.smoothPoint = function () {
-        hitResult.segment.smooth()
-    }
-
-    self.setStrokeCap = function (newStrokeCap) {
-        // 'round', 'square', 'butt'
-        //console.log(hitResult.item)
-        hitResult.item.strokeCap = newStrokeCap;
-    }
-
-    self.setStrokeJoin = function (newStrokeJoin) {
-        // 'miter', 'round', 'bevel'
-         hitResult.item.strokeJoin = newStrokeJoin;
-    }
-
-    self.setShadow = function () {
-        hitResult.item.shadowColor = new paper.Color(0, 0, 0),
-        // Set the shadow blur radius to 12:
-        hitResult.item.shadowBlur = 12,
-        // Offset the shadow by { x: 5, y: 5 }
-        hitResult.item.shadowOffset = new paper.Point(5, 5)
-    }
-
-    self.getItem = function () {
-        return hitResult.item;
-    }
-
-    self.updateCursor = function (event) {
-        if(!active) {
-            wickEditor.cursorIcon.hide()
-            return;
-        }
-
-        var fillbucketMode = (wickEditor.currentTool instanceof Tools.FillBucket);
-        if(fillbucketMode) {
-            paperCanvas.style.cursor = 'url(/resources/fillbucket-cursor.png) 64 64,default';
-        } else {
-            paperCanvas.style.cursor = 'auto';
-        }
-
+    self.highlightHoveredOverObject = function (event) {
         refreshSelection()
         if (event.item) 
             event.item.selected = true;
+    }
+
+    self.updateCursorIcon = function (event) {
+        if(!active) {
+            wickEditor.cursorIcon.hide();
+            return;
+        }
 
         var hitOptions = {
-            segments: !fillbucketMode,
+            segments: false,
             fill: true,
-            curves: !fillbucketMode,
-            handles: true/*showHandles &&*/ /*!fillbucketMode*/,
-            stroke: fillbucketMode,
+            curves: false,
+            handles: true,
+            stroke: false,
             tolerance: 5 / wickEditor.fabric.getCanvasTransform().zoom
         }
 
         hitResult = paper.project.hitTest(event.point, hitOptions);
-        //console.log(hitResult)
         if(hitResult) {
-            if(!hitResult.item.selected) {
-                wickEditor.cursorIcon.hide()
-                return;
-            } else if(hitResult.type === 'curve' ||
+            if(hitResult.type === 'curve' ||
                       hitResult.type === 'stroke') {
                 wickEditor.cursorIcon.setImage('/resources/cursor-curve.png')
             } else if(hitResult.type === 'fill') {
-
-                if(fillbucketMode) {
-                    wickEditor.cursorIcon.setImage('/resources/cursor-segment.png')
-                } else {
-                    wickEditor.cursorIcon.setImage('/resources/cursor-fill.png')
-                }
-
-                
+                wickEditor.cursorIcon.setImage('/resources/cursor-fill.png')
             } else if(hitResult.type === 'segment' ||
                       hitResult.type === 'handle-in' ||
                       hitResult.type === 'handle-out') {
@@ -160,12 +92,7 @@ var PaperInterface = function (wickEditor) {
                 wickEditor.cursorIcon.hide()
             }
         } else {
-            if(fillbucketMode) {
-                //wickEditor.cursorIcon.setImage('/resources/cursor-no.png')
-                wickEditor.cursorIcon.hide()
-            } else {
-                 wickEditor.cursorIcon.hide()
-            }
+            wickEditor.cursorIcon.hide()
         }
     }
 
@@ -182,10 +109,10 @@ var PaperInterface = function (wickEditor) {
 
         active = wickEditor.currentTool.getCanvasMode() === 'paper';
 
-        pathSelectionTool.activate();
-
         if(active) {
 
+            wickEditor.currentTool.paperTool.activate();
+            paperCanvas.style.cursor = wickEditor.currentTool.getCursorImage()
             paperCanvas.style.display = 'block';
 
             refreshSelection();
@@ -224,64 +151,16 @@ var PaperInterface = function (wickEditor) {
 
     }
 
-    self.refreshSVGWickObject = function (obj) {
-        var path = obj;
-
-        var parent = path.parent;
-        var grandparent = parent.parent;
-
-        var pathToModify;
-        if(parent instanceof paper.Group) {
-            pathToModify = parent;
-        } else if (grandparent instanceof paper.Group) {
-            pathToModify = grandparent;
-        }
-
-        var wickObject = pathToModify.wick;
-        var parentAbsPos = wickObject.parentObject ? wickObject.parentObject.getAbsolutePosition() : {x:0,y:0};
-
-        var modifiedStates = [{
-            x: pathToModify.bounds._x + pathToModify.bounds._width /2 - parentAbsPos.x,
-            y: pathToModify.bounds._y + pathToModify.bounds._height/2 - parentAbsPos.y,
-            //pathData: '<svg id="svg" version="1.1" width="'+pathToModify.bounds._width+'" height="'+pathToModify.bounds._height+'" xmlns="http://www.w3.org/2000/svg">' +pathToModify.exportSVG({asString:true})+ '</svg>'
-            pathData: pathToModify.exportSVG({asString:true})
-        }];
-        var modifiedObjects = [
-            pathToModify.wick
-        ];
-        wickEditor.actionHandler.doAction('modifyObjects', {
-            objs: modifiedObjects,
-            modifiedStates: modifiedStates
-        });
-    }
-
-    self.getProjectAsSVG = function () {
-        paper.view.viewSize.width  = wickEditor.project.width;
-        paper.view.viewSize.height = wickEditor.project.height;
-        paper.view.matrix = new paper.Matrix();
-        var url = "data:image/svg+xml;utf8," + encodeURIComponent(paper.project.exportSVG({asString:true}));
-        var link = document.createElement("a");
-        link.download = wickEditor.project.name + '.svg';
-        link.href = url;
-        link.click();
-
-        paper.view.viewSize.width  = window.innerWidth;
-        paper.view.viewSize.height = window.innerHeight;
-    }
-
     function refreshSelection () {
-
+        paper.settings.handleSize = 1;
         paper.project.activeLayer.selected = false;
         paper.project.activeLayer.children.forEach(function (child) {
             if(wickEditor.project.isObjectSelected(child.wick)) {
                 child.selected = true;
-                //if(showHandles) {
-                    child.fullySelected = true;
-                    //child.selected = true;
-                //}
+                child.fullySelected = true;
+                paper.settings.handleSize = 10;
             }
         });
-
     }
 
  }

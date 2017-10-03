@@ -21,8 +21,11 @@ Tools.Pen = function (wickEditor) {
 
     var that = this;
 
+    var drawingPath;
+    var currentSegment;
+
     this.getCursorImage = function () {
-        return "crosshair"
+        return "auto"
     };
 
     this.getToolbarIcon = function () {
@@ -39,6 +42,106 @@ Tools.Pen = function (wickEditor) {
 
     this.getCanvasMode = function () {
         return 'paper';
+    }
+
+    this.paperTool = new paper.Tool();
+
+    this.paperTool.onMouseMove = function (event) {
+        wickEditor.paper.highlightHoveredOverObject(event);
+        wickEditor.paper.updateCursorIcon(event);
+    }
+
+    this.paperTool.onMouseDown = function (event) {
+        var hitOptions = {
+            segments: true,
+            fill: true,
+            curves: true,
+            handles: true,
+            tolerance: 5 / wickEditor.fabric.getCanvasTransform().zoom
+        }
+
+        drawingPath = null;
+        paper.project.selectedItems.forEach(function (item) {
+            if(item instanceof paper.Group) return;
+            if(item.closed) return;
+            drawingPath = item;
+        })
+
+        hitResult = paper.project.hitTest(event.point, hitOptions);
+        if(drawingPath) {
+            var segments = drawingPath.segments;
+            var firstSegment = segments[0];
+
+            var lastSegment = segments[segments.length-1];
+            lastSegment.handleOut.x = -lastSegment.handleIn.x
+            lastSegment.handleOut.y = -lastSegment.handleIn.y
+
+            if(hitResult && hitResult.segment === firstSegment) {
+                drawingPath.closePath();
+                currentSegment = segments[0];
+            } else if(!hitResult) {
+                currentSegment = drawingPath.add(event.point);
+                currentSegment.selected = true;
+            } else {
+                wickEditor.tools.pathCursor.paperTool.onMouseDown(event)
+            }
+        } else {
+            if(!hitResult) {
+                var newPath = new paper.Path({insert:false});
+                newPath.fillColor = wickEditor.settings.fillColor;
+                newPath.strokeColor = wickEditor.settings.strokeColor;
+                newPath.strokeWidth = wickEditor.settings.strokeWidth;
+                newPath.strokeJoin = 'round';
+                newPath.add(event.point);
+
+                var group = new paper.Group({insert:false});
+                group.addChild(newPath);
+
+                var svgString = group.exportSVG({asString:true});
+                var pathWickObject = WickObject.createPathObject(svgString);
+                pathWickObject.x = event.point.x;
+                pathWickObject.y = event.point.y;
+                pathWickObject.width = 1;
+                pathWickObject.height = 1;
+
+                wickEditor.paper.pathRoutines.refreshPathData(pathWickObject);
+
+                wickEditor.actionHandler.doAction('addObjects', {
+                    wickObjects: [pathWickObject]
+                });
+                paper.project.selectedItems.forEach(function (item) {
+                    if(item instanceof paper.Group) return;
+                    drawingPath = item;
+                    currentSegment = drawingPath.segments[0];
+                    currentSegment.selected = true;
+                })
+            } else {
+                wickEditor.tools.pathCursor.paperTool.onMouseDown(event)
+            }
+        }
+
+    }
+
+    this.paperTool.onMouseDrag = function(event) {
+        if(currentSegment) {
+            var delta = event.delta.clone();
+            currentSegment.handleIn.x -= delta.x;
+            currentSegment.handleIn.y -= delta.y;
+            currentSegment.handleOut.x += delta.x;
+            currentSegment.handleOut.y += delta.y;
+        } else {
+            wickEditor.tools.pathCursor.paperTool.onMouseDrag(event)
+        }
+    }
+
+    this.paperTool.onMouseUp = function (event) {
+        if(currentSegment) {
+            wickEditor.paper.pathRoutines.refreshSVGWickObject(drawingPath);
+            currentSegment = null;
+            drawingPath = null;
+        } else {
+            wickEditor.tools.pathCursor.paperTool.onMouseUp(event)
+        }
     }
 
 }

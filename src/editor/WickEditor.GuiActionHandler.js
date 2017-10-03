@@ -226,7 +226,7 @@ var GuiActionHandler = function (wickEditor) {
         {},
         function (args) {
             wickEditor.guiActionHandler.doAction('useTools.pathCursor')
-            wickEditor.paper.getProjectAsSVG()
+            wickEditor.paper.pathRoutines.getProjectAsSVG()
         });
 
     registerAction('exportProjectPNG',

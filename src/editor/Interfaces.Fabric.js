@@ -46,11 +46,8 @@ var FabricInterface = function (wickEditor) {
         self.guiElements = new FabricGUIElements(wickEditor, self);
         self.wickElements = new FabricWickElements(wickEditor, self);
 
-        self.canvas.freeDrawingBrush = new fabric.PencilBrush(self.canvas);
-
         self.canvas.on('mouse:move', function (e) {
             self.objHoveredOver = e.target;
-            self.canvas.freeDrawingBrush.width = wickEditor.settings.brushThickness/this.getZoom();
         });
 
         self.canvas.on('mouse:down', function (e) {
@@ -107,15 +104,7 @@ var FabricInterface = function (wickEditor) {
         self.updateCursor();
 
         // Set drawing mode
-        if(wickEditor.currentTool instanceof Tools.Paintbrush) {
-            this.canvas.isDrawingMode = true;
-            this.canvas.freeDrawingBrush.color = wickEditor.settings.fillColor;
-        } else if (wickEditor.currentTool instanceof Tools.Eraser) {
-            this.canvas.isDrawingMode = true;
-            this.canvas.freeDrawingBrush.color = "#FFFFFF";
-        } else {
-            this.canvas.isDrawingMode = false;
-        }
+        this.canvas.isDrawingMode = false;
 
         // Disable selection
         if(wickEditor.currentTool instanceof Tools.Cursor ||
@@ -357,7 +346,6 @@ var FabricInterface = function (wickEditor) {
     this.updateCursor = function () {
         var cursorImg = wickEditor.currentTool.getCursorImage();
         this.canvas.defaultCursor = cursorImg;
-        this.canvas.freeDrawingCursor = cursorImg;
     }
 
     this.getObjectHoveredOver = function () {

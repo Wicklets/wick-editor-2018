@@ -42,4 +42,6 @@ Tools.Ellipse = function (wickEditor) {
         
     }
 
+    this.paperTool = new paper.Tool();
+
 }

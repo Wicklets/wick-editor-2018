@@ -42,4 +42,6 @@ Tools.Line = function (wickEditor) {
         return 'paper';
     }
 
+    this.paperTool = new paper.Tool();
+
 }
