@@ -78,10 +78,12 @@ Tools.PathCursor = function (wickEditor) {
                 if(selectCheckWickObj)
                     newlySelected = !wickEditor.project.isObjectSelected(selectCheckWickObj)
 
-                wickEditor.project.clearSelection();
                 var wickObj = hitResult.item.parent.wick;
-                if(wickObj) wickEditor.project.selectObject(wickObj);
-                wickEditor.syncInterfaces();
+                if(wickObj) {
+                    wickEditor.project.clearSelection();
+                    wickEditor.project.selectObject(wickObj);
+                    wickEditor.syncInterfaces();
+                }
 
                 if(newlySelected) return;
             }
@@ -105,9 +107,6 @@ Tools.PathCursor = function (wickEditor) {
 
                 if(!event.modifiers.shift) {
                     addedPoint.smooth()
-
-                    //console.log(addedPoint.handleIn)
-                    //console.log(addedPoint.handleOut)
 
                     var handleInMag = Math.sqrt(
                         addedPoint.handleIn.x*addedPoint.handleIn.x+

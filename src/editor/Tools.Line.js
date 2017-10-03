@@ -45,6 +45,10 @@ Tools.Line = function (wickEditor) {
         return 'paper';
     }
 
+    this.onSelected = function () {
+        wickEditor.project.clearSelection();
+    }
+
     this.onDeselected = function () {
         tempGroup.remove();
     }
@@ -85,7 +89,8 @@ Tools.Line = function (wickEditor) {
         wickEditor.paper.pathRoutines.refreshPathData(pathWickObject);
 
         wickEditor.actionHandler.doAction('addObjects', {
-            wickObjects: [pathWickObject]
+            wickObjects: [pathWickObject],
+            dontSelectObjects: true,
         });
     }
 

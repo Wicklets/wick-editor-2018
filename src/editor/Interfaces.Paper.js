@@ -156,8 +156,9 @@ var PaperInterface = function (wickEditor) {
     }
 
     function refreshSelection () {
-        paper.settings.handleSize = 1;
+        paper.settings.handleSize = 0;
         paper.project.activeLayer.selected = false;
+        paper.project.deselectAll();
         paper.project.activeLayer.children.forEach(function (child) {
             if(wickEditor.project.isObjectSelected(child.wick)) {
                 child.selected = true;
