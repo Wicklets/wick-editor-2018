@@ -23,6 +23,7 @@ Tools.Line = function (wickEditor) {
     var fabricInterface = wickEditor.fabric;
 
     var drawingLine;
+    var tempGroup;
 
     this.getCursorImage = function () {
         return "crosshair"
@@ -44,6 +45,10 @@ Tools.Line = function (wickEditor) {
         return 'paper';
     }
 
+    this.onDeselected = function () {
+        tempGroup.remove();
+    }
+
     this.paperTool = new paper.Tool();
 
     this.paperTool.onMouseDown = function (event) {
@@ -55,13 +60,25 @@ Tools.Line = function (wickEditor) {
         newPath.add(event.point);
         newPath.add(event.point);
 
-        var group = new paper.Group({insert:false});
-        group.addChild(newPath);
+        tempGroup = new paper.Group();
+        tempGroup.addChild(newPath);
+
+        drawingLine = newPath;
+    }
+
+    this.paperTool.onMouseDrag = function (event) {
+        drawingLine.segments[1].point = event.point;
+    }
+
+    this.paperTool.onMouseUp = function (event) {
+        tempGroup.remove();
+
+        var group = tempGroup.clone({insert:false});
 
         var svgString = group.exportSVG({asString:true});
         var pathWickObject = WickObject.createPathObject(svgString);
-        pathWickObject.x = event.point.x;
-        pathWickObject.y = event.point.y;
+        pathWickObject.x = (drawingLine.segments[0].point.x + drawingLine.segments[1].point.x)/2;
+        pathWickObject.y = (drawingLine.segments[0].point.y + drawingLine.segments[1].point.y)/2;
         pathWickObject.width = 1;
         pathWickObject.height = 1;
 
@@ -70,19 +87,6 @@ Tools.Line = function (wickEditor) {
         wickEditor.actionHandler.doAction('addObjects', {
             wickObjects: [pathWickObject]
         });
-
-        paper.project.selectedItems.forEach(function (item) {
-            if(item instanceof paper.Group) return;
-            drawingLine = item;
-        })
-    }
-
-    this.paperTool.onMouseDrag = function (event) {
-        drawingLine.segments[1].point = event.point;
-    }
-
-    this.paperTool.onMouseUp = function (event) {
-        wickEditor.paper.pathRoutines.refreshSVGWickObject(drawingLine);
     }
 
 }

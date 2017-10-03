@@ -21,6 +21,8 @@ Tools.Paintbrush = function (wickEditor) {
 
     var that = this;
 
+    var drawingPath;
+
     this.getCursorImage = function () {
         var canvas = document.createElement("canvas");
         canvas.width = 128;
@@ -75,5 +77,17 @@ Tools.Paintbrush = function (wickEditor) {
     }
 
     this.paperTool = new paper.Tool();
+
+    this.paperTool.onMouseDown = function (event) {
+        
+    }
+
+    this.paperTool.onMouseDrag = function (event) {
+        
+    }
+
+    this.paperTool.onMouseUp = function (event) {
+        wickEditor.paper.pathRoutines.refreshSVGWickObject(drawingPath);
+    }
 
 }

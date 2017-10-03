@@ -24,6 +24,8 @@ Tools.Rectangle = function (wickEditor) {
 
     var drawingRect;
 
+    var tempGroup;
+
     this.getCursorImage = function () {
         return "crosshair"
     };
@@ -44,6 +46,10 @@ Tools.Rectangle = function (wickEditor) {
         return 'paper';
     }
 
+    this.onDeselected = function () {
+        tempGroup.remove();
+    }
+
     this.paperTool = new paper.Tool();
 
     this.paperTool.onMouseDown = function (event) {
@@ -58,26 +64,10 @@ Tools.Rectangle = function (wickEditor) {
         newPath.add(event.point);
         newPath.add(event.point);
 
-        var group = new paper.Group({insert:false});
-        group.addChild(newPath);
+        tempGroup = new paper.Group();
+        tempGroup.addChild(newPath);
 
-        var svgString = group.exportSVG({asString:true});
-        var pathWickObject = WickObject.createPathObject(svgString);
-        pathWickObject.x = event.point.x;
-        pathWickObject.y = event.point.y;
-        pathWickObject.width = 1;
-        pathWickObject.height = 1;
-
-        wickEditor.paper.pathRoutines.refreshPathData(pathWickObject);
-
-        wickEditor.actionHandler.doAction('addObjects', {
-            wickObjects: [pathWickObject]
-        });
-
-        paper.project.selectedItems.forEach(function (item) {
-            if(item instanceof paper.Group) return;
-            drawingRect = item;
-        })
+        drawingRect = newPath;
     }
 
     this.paperTool.onMouseDrag = function (event) {
@@ -88,7 +78,22 @@ Tools.Rectangle = function (wickEditor) {
     }
 
     this.paperTool.onMouseUp = function (event) {
-        wickEditor.paper.pathRoutines.refreshSVGWickObject(drawingRect);
+        tempGroup.remove();
+
+        var group = tempGroup.clone({insert:false});
+
+        var svgString = group.exportSVG({asString:true});
+        var pathWickObject = WickObject.createPathObject(svgString);
+        pathWickObject.x = (drawingRect.segments[0].point.x+drawingRect.segments[2].point.x)/2 + 0.5;
+        pathWickObject.y = (drawingRect.segments[0].point.y+drawingRect.segments[2].point.y)/2 + 0.5;
+        pathWickObject.width = 1;
+        pathWickObject.height = 1;
+
+        wickEditor.paper.pathRoutines.refreshPathData(pathWickObject);
+
+        wickEditor.actionHandler.doAction('addObjects', {
+            wickObjects: [pathWickObject]
+        });
     }
 
 }
