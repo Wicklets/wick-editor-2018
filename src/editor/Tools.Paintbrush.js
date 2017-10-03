@@ -95,7 +95,7 @@ Tools.Paintbrush = function (wickEditor) {
             totalDelta.y += event.delta.y;
         }
 
-        if (totalDelta.length > minSize) {
+        if (totalDelta.length > wickEditor.settings.brushThickness) {
 
             totalDelta.x = 0;
             totalDelta.y = 0;
@@ -109,7 +109,9 @@ Tools.Paintbrush = function (wickEditor) {
 
             var thickness = event.delta.length;
             thickness /= wickEditor.settings.brushThickness/2;
-            //console.log(wickEditor.inputHandler.getPenPressure())
+
+            var pressure = 1;
+            if(wickEditor.settings.pressureEnabled) pressure = 1+wickEditor.inputHandler.getPenPressure()*wickEditor.inputHandler.getPenPressure()*5
 
             var step = event.delta.divide(thickness);
             step.angle = step.angle + 90;
