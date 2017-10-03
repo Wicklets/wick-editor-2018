@@ -30,14 +30,24 @@ var WickEditorSettings = function () {
 
 }
 
+WickEditorSettings.prototype.getDefaults = function () {
+    return {
+        brushThickness : 5,
+        brushSmoothness : 2.5,
+        pressureEnabled : false,
+        strokeWidth : 5,
+        strokeColor : "#000000",
+        fillColor : "#9999FF",
+        rectangleCornerRadius : 0,
+    }
+}
+
 WickEditorSettings.prototype.setDefaults = function () {
 
-    this.brushThickness = 5;
-    this.brushSmoothness = 2.5;
-    this.strokeWidth = 5;
-    this.strokeColor = "#000000"
-    this.fillColor = "#9999FF";
-    this.rectangleCornerRadius = 0;
+    var defaults = this.getDefaults();
+    for(key in defaults) {
+        this[key] = defaults[key];
+    }
 
     this.save();
 
@@ -68,6 +78,13 @@ WickEditorSettings.prototype.load = function () {
 
     for (key in savedSettings) {
         this[key] = savedSettings[key];
+    }
+
+    var defaults = this.getDefaults();
+    for(key in defaults) {
+        if(this[key] === undefined) {
+            this[key] = defaults[key];
+        }
     }
 
 }

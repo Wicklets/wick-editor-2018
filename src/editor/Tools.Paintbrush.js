@@ -109,7 +109,7 @@ Tools.Paintbrush = function (wickEditor) {
 
             var thickness = event.delta.length;
             thickness /= wickEditor.settings.brushThickness/2;
-            console.log(wickEditor.inputHandler.getPenPressure())
+            //console.log(wickEditor.inputHandler.getPenPressure())
 
             var step = event.delta.divide(thickness);
             step.angle = step.angle + 90;

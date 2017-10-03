@@ -29,8 +29,7 @@ var InputHandler = function (wickEditor) {
 
     Pressure.set(".paperCanvas", { 
         change: function(force, event) { 
-            console.log(force)
-             that.penPressure = force; 
+            that.penPressure = force; 
         } 
     });
 
