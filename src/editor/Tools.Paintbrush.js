@@ -79,7 +79,6 @@ Tools.Paintbrush = function (wickEditor) {
     }
 
     this.paperTool = new paper.Tool();
-    var minSize = 3;
     var path;
     var totalDelta;
 
@@ -88,6 +87,13 @@ Tools.Paintbrush = function (wickEditor) {
     }
 
     this.paperTool.onMouseDrag = function (event) {
+        if (!path) {
+            path = new paper.Path({
+                fillColor: wickEditor.settings.fillColor
+            });
+            path.add(event.lastPoint);
+        }
+
         if(!totalDelta) {
             totalDelta = event.delta;
         } else {
@@ -99,13 +105,6 @@ Tools.Paintbrush = function (wickEditor) {
 
             totalDelta.x = 0;
             totalDelta.y = 0;
-
-            if (!path) {
-                path = new paper.Path({
-                    fillColor: wickEditor.settings.fillColor
-                });
-                path.add(event.lastPoint);
-            }
 
             var thickness = event.delta.length;
             thickness /= wickEditor.settings.brushThickness/2;
