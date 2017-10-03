@@ -44,4 +44,43 @@ Tools.Line = function (wickEditor) {
 
     this.paperTool = new paper.Tool();
 
+    this.paperTool.onMouseDown = function (event) {
+        var newPath = new paper.Path({insert:false});
+        newPath.strokeColor = wickEditor.settings.strokeColor;
+        newPath.strokeWidth = wickEditor.settings.strokeWidth;
+        newPath.strokeJoin = 'round';
+        newPath.strokeCap = 'round';
+        newPath.add(event.point);
+        newPath.add(event.point);
+
+        var group = new paper.Group({insert:false});
+        group.addChild(newPath);
+
+        var svgString = group.exportSVG({asString:true});
+        var pathWickObject = WickObject.createPathObject(svgString);
+        pathWickObject.x = event.point.x;
+        pathWickObject.y = event.point.y;
+        pathWickObject.width = 1;
+        pathWickObject.height = 1;
+
+        wickEditor.paper.pathRoutines.refreshPathData(pathWickObject);
+
+        wickEditor.actionHandler.doAction('addObjects', {
+            wickObjects: [pathWickObject]
+        });
+
+        paper.project.selectedItems.forEach(function (item) {
+            if(item instanceof paper.Group) return;
+            drawingLine = item;
+        })
+    }
+
+    this.paperTool.onMouseDrag = function (event) {
+        drawingLine.segments[1].point = event.point;
+    }
+
+    this.paperTool.onMouseUp = function (event) {
+        wickEditor.paper.pathRoutines.refreshSVGWickObject(drawingLine);
+    }
+
 }

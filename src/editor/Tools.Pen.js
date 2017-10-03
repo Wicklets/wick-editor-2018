@@ -92,6 +92,7 @@ Tools.Pen = function (wickEditor) {
                 newPath.strokeColor = wickEditor.settings.strokeColor;
                 newPath.strokeWidth = wickEditor.settings.strokeWidth;
                 newPath.strokeJoin = 'round';
+                newPath.strokeCap = 'round';
                 newPath.add(event.point);
 
                 var group = new paper.Group({insert:false});
