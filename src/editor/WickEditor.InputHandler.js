@@ -22,6 +22,23 @@ var InputHandler = function (wickEditor) {
     var that = this;
 
 /*************************
+    Pressure
+*************************/
+
+    this.penPressure = 0; 
+
+    Pressure.set(".paperCanvas", { 
+        change: function(force, event) { 
+            console.log(force)
+             that.penPressure = force; 
+        } 
+    });
+
+    this.getPenPressure = function() {
+        return that.penPressure; 
+    }
+
+/*************************
      Mouse
 *************************/
 
