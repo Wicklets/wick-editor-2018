@@ -68,19 +68,23 @@ var PaperInterface = function (wickEditor) {
             return;
         }
 
+        if(event.item && event.item.wick && !wickEditor.project.isObjectSelected(event.item.wick)) {
+            wickEditor.cursorIcon.setImage('/resources/cursor-fill.png')
+            return;
+        }
+
         var hitOptions = {
-            segments: false,
+            segments: true,
             fill: true,
-            curves: false,
+            curves: true,
             handles: true,
-            stroke: false,
+            stroke: true,
             tolerance: 5 / wickEditor.fabric.getCanvasTransform().zoom
         }
 
         hitResult = paper.project.hitTest(event.point, hitOptions);
         if(hitResult) {
-            if(hitResult.type === 'curve' ||
-                      hitResult.type === 'stroke') {
+            if(hitResult.type === 'curve' || hitResult.type === 'stroke') {
                 wickEditor.cursorIcon.setImage('/resources/cursor-curve.png')
             } else if(hitResult.type === 'fill') {
                 wickEditor.cursorIcon.setImage('/resources/cursor-fill.png')

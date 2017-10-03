@@ -22,6 +22,8 @@ Tools.Line = function (wickEditor) {
     var that = this;
     var fabricInterface = wickEditor.fabric;
 
+    var drawingLine;
+
     this.getCursorImage = function () {
         return "crosshair"
     };
