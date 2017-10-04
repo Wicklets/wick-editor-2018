@@ -69,7 +69,7 @@ var PaperInterface = function (wickEditor) {
         }
 
         if(event.item && event.item.wick && !wickEditor.project.isObjectSelected(event.item.wick)) {
-            wickEditor.cursorIcon.setImage('/resources/cursor-fill.png')
+            wickEditor.cursorIcon.setImage('resources/cursor-fill.png')
             return;
         }
 
@@ -85,13 +85,13 @@ var PaperInterface = function (wickEditor) {
         hitResult = paper.project.hitTest(event.point, hitOptions);
         if(hitResult) {
             if(hitResult.type === 'curve' || hitResult.type === 'stroke') {
-                wickEditor.cursorIcon.setImage('/resources/cursor-curve.png')
+                wickEditor.cursorIcon.setImage('resources/cursor-curve.png')
             } else if(hitResult.type === 'fill') {
-                wickEditor.cursorIcon.setImage('/resources/cursor-fill.png')
+                wickEditor.cursorIcon.setImage('resources/cursor-fill.png')
             } else if(hitResult.type === 'segment' ||
                       hitResult.type === 'handle-in' ||
                       hitResult.type === 'handle-out') {
-                wickEditor.cursorIcon.setImage('/resources/cursor-segment.png')
+                wickEditor.cursorIcon.setImage('resources/cursor-segment.png')
             } else {
                 wickEditor.cursorIcon.hide()
             }

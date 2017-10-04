@@ -1154,7 +1154,11 @@ var WickActionHandler = function (wickEditor) {
     registerAction('moveMotionTween',
         function (args) {
             args.oldPlayheadPosition = args.tween.playheadPosition;
-            args.tween.playheadPosition = args.newPlayheadPosition;
+            var boundPlayheadPosition = Math.min(Math.max(0, args.newPlayheadPosition), args.frame.length-1);
+            if(args.frame.getTweenAtPlayheadPosition(boundPlayheadPosition)) {
+                boundPlayheadPosition = args.oldPlayheadPosition;
+            }
+            args.tween.playheadPosition = boundPlayheadPosition;
             
             wickEditor.project.currentObject.framesDirty = true;
             done(args);

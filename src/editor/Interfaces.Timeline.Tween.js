@@ -46,7 +46,8 @@ TimelineInterface.Tween = function (wickEditor, timeline) {
             wickEditor.syncInterfaces();
 
             timeline.interactions.start("dragTweens", e, {
-                tweens: [self]
+                tweens: [self],
+                frame: self.wickFrame,
             });
         }); 
     }

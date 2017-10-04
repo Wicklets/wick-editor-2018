@@ -392,6 +392,7 @@ TimelineInterface.Interactions = function (wickEditor, timeline) {
             
             var newPlayheadPosition = Math.round((parseInt(tween.elem.style.left)) / cssVar('--frame-width'));
             wickEditor.actionHandler.doAction('moveMotionTween', {
+                frame: interactionData.frame,
                 tween: tween.wickTween,
                 newPlayheadPosition: newPlayheadPosition
             });
