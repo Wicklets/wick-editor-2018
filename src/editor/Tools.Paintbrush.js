@@ -114,13 +114,15 @@ Tools.Paintbrush = function (wickEditor) {
 
             var thickness = event.delta.length;
             thickness /= wickEditor.settings.brushThickness/2;
-            thickness *= wickEditor.fabric.canvas.getZoom()
+            thickness *= wickEditor.fabric.canvas.getZoom();
+            
+            // Assume full pressure if pressure is disabled. 
+            var penPressure = 1; 
+            if (wickEditor.settings.pressureEnabled) {
+                penPressure = wickEditor.inputHandler.getPenPressure(); 
+            } 
 
-            var pressure = 1;
-            var p = wickEditor.inputHandler.getPenPressure()
-            if(wickEditor.settings.pressureEnabled) pressure = 0.1+p*p*5
-
-            var step = event.delta.divide(thickness).multiply(pressure);
+            var step = event.delta.divide(thickness).multiply(penPressure);
             step.angle = step.angle + 90;
 
             var top = event.middlePoint.add(step);
@@ -130,15 +132,6 @@ Tools.Paintbrush = function (wickEditor) {
             path.insert(0, bottom);
             path.smooth();
 
-        } else {
-
-            /*if (path) {
-                path.add(event.point);
-                path.closed = true;
-                path.smooth();
-                path.remove();
-                path = null;
-            }*/
         }
     }
 
@@ -147,43 +140,23 @@ Tools.Paintbrush = function (wickEditor) {
             totalDelta.x = 0;
             totalDelta.y = 0;
 
-            if(true) {
-                var thickness = lastEvent.delta.length;
-                thickness /= wickEditor.settings.brushThickness/2;
-                thickness *= wickEditor.fabric.canvas.getZoom()
+            var thickness = lastEvent.delta.length;
+            thickness /= wickEditor.settings.brushThickness/2;
+            thickness *= wickEditor.fabric.canvas.getZoom()
 
-                var pressure = .5;
-                var p = wickEditor.inputHandler.getPenPressure()
-                if(wickEditor.settings.pressureEnabled) pressure = 0.1+p*p*5
+            var pressure = .5;
+            var p = wickEditor.inputHandler.getPenPressure()
+            if(wickEditor.settings.pressureEnabled) pressure = 0.1+p*p*5
 
-                var step = lastEvent.delta.divide(thickness).multiply(pressure);
-                step.angle = step.angle + 60;
+            var step = lastEvent.delta.divide(thickness).multiply(pressure);
+            step.angle = step.angle + 60;
 
-                var top = lastEvent.middlePoint.add(step);
-                var bottom = lastEvent.middlePoint.subtract(step);
+            var top = lastEvent.middlePoint.add(step);
+            var bottom = lastEvent.middlePoint.subtract(step);
 
-                path.add(top);
-                //path.insert(0, bottom);
-            }
-            if(true) {
-                var thickness = lastEvent.delta.length;
-                thickness /= wickEditor.settings.brushThickness/2;
-                thickness *= wickEditor.fabric.canvas.getZoom()
-
-                var pressure = .5;
-                var p = wickEditor.inputHandler.getPenPressure()
-                if(wickEditor.settings.pressureEnabled) pressure = 0.1+p*p*5
-
-                var step = lastEvent.delta.divide(thickness).multiply(pressure);
-                step.angle = step.angle + 120;
-
-                var top = lastEvent.middlePoint.add(step);
-                var bottom = lastEvent.middlePoint.subtract(step);
-
-                path.add(top);
-                //path.insert(0, bottom);
-            }
-
+            path.add(top);
+            //path.insert(0, bottom);
+            
             path.closed = true;
             path.smooth();
             path.simplify(wickEditor.settings.brushSmoothness/2);
