@@ -186,11 +186,9 @@ TimelineInterface.Timeline = function (wickEditor) {
         this.elem.appendChild(zoomBox);
         self.numberInput = new SlideyNumberInput({
             onsoftchange: function (e) {
-                console.log(e/100)
                 wickEditor.fabric.setZoom(e/100, true);
             },
             onhardchange: function (e) {
-                console.log(e/100)
                 wickEditor.fabric.setZoom(e/100, true);
             },
             min: 1,
