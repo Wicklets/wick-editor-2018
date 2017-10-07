@@ -466,7 +466,10 @@ var InputHandler = function (wickEditor) {
     var loadJSON = function (json, filename, callback) {
         var tempJsonObj = JSON.parse(json);
         if(tempJsonObj.rootObject) {
-            wickEditor.guiActionHandler.doAction('openProject', {project:WickProject.fromJSON(json)})
+            var project = WickProject.fromJSON(json);
+            var filenameParts = filename.split('.');
+            project.name = filenameParts[0] || 'NewProject';
+            wickEditor.guiActionHandler.doAction('openProject', {project:project})
         } else {
             callback(WickObject.fromJSON(json));
         }
