@@ -22,9 +22,10 @@ Tools.Rectangle = function (wickEditor) {
     var that = this;
     var fabricInterface = wickEditor.fabric;
 
-    var drawingRect;
-
     var tempGroup;
+
+    var topLeft;
+    var bottomRight;
 
     this.getCursorImage = function () {
         return "crosshair"
@@ -51,45 +52,41 @@ Tools.Rectangle = function (wickEditor) {
     }
 
     this.onDeselected = function () {
-        tempGroup.remove();
+        if(tempGroup) tempGroup.remove();
     }
 
     this.paperTool = new paper.Tool();
 
     this.paperTool.onMouseDown = function (event) {
-        var newPath = new paper.Path({insert:false});
-        newPath.fillColor = wickEditor.settings.fillColor;
-        newPath.strokeColor = wickEditor.settings.strokeColor;
-        newPath.strokeWidth = wickEditor.settings.strokeWidth;
-        newPath.strokeJoin = 'round';
-        newPath.strokeCap = 'round';
-        newPath.add(event.point);
-        newPath.add(event.point);
-        newPath.add(event.point);
-        newPath.add(event.point);
-
         tempGroup = new paper.Group();
-        tempGroup.addChild(newPath);
-
-        drawingRect = newPath;
+        topLeft = event.point;
     }
 
     this.paperTool.onMouseDrag = function (event) {
-        drawingRect.segments[1].point.x = event.point.x;
-        drawingRect.segments[2].point = event.point;
-        drawingRect.segments[3].point.y = event.point.y;
-        drawingRect.closed = true;
+        bottomRight = event.point;
+
+        tempGroup.remove();
+
+        var rectangle = new paper.Rectangle(
+            new paper.Point(topLeft.x, topLeft.y), 
+            new paper.Point(bottomRight.x, bottomRight.y));
+        var roundedRect = new paper.Path.RoundRectangle(rectangle, wickEditor.settings.rectangleCornerRadius);
+        roundedRect.fillColor = wickEditor.settings.fillColor;
+        roundedRect.strokeColor = wickEditor.settings.strokeColor;
+        roundedRect.strokeWidth = wickEditor.settings.strokeWidth;
+        roundedRect.strokeJoin = wickEditor.settings.strokeJoin;
+        roundedRect.strokeCap = wickEditor.settings.strokeCap;
+
+        tempGroup = new paper.Group();
+        tempGroup.addChild(roundedRect);
     }
 
     this.paperTool.onMouseUp = function (event) {
+        var svgString = tempGroup.exportSVG({asString:true});
         tempGroup.remove();
-
-        var group = tempGroup.clone({insert:false});
-
-        var svgString = group.exportSVG({asString:true});
         var pathWickObject = WickObject.createPathObject(svgString);
-        pathWickObject.x = (drawingRect.segments[0].point.x+drawingRect.segments[2].point.x)/2 + 0.5;
-        pathWickObject.y = (drawingRect.segments[0].point.y+drawingRect.segments[2].point.y)/2 + 0.5;
+        pathWickObject.x = topLeft.x+(bottomRight.x-topLeft.x)/2;
+        pathWickObject.y = topLeft.y+(bottomRight.y-topLeft.y)/2;
         pathWickObject.width = 1;
         pathWickObject.height = 1;
 

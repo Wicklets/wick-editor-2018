@@ -50,7 +50,7 @@ Tools.Line = function (wickEditor) {
     }
 
     this.onDeselected = function () {
-        tempGroup.remove();
+        if(tempGroup) tempGroup.remove();
     }
 
     this.paperTool = new paper.Tool();
@@ -59,8 +59,8 @@ Tools.Line = function (wickEditor) {
         var newPath = new paper.Path({insert:false});
         newPath.strokeColor = wickEditor.settings.strokeColor;
         newPath.strokeWidth = wickEditor.settings.strokeWidth;
-        newPath.strokeJoin = 'round';
-        newPath.strokeCap = 'round';
+        newPath.strokeJoin = wickEditor.settings.strokeJoin;
+        newPath.strokeCap = wickEditor.settings.strokeCap;
         newPath.add(event.point);
         newPath.add(event.point);
 

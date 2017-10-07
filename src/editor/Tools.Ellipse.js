@@ -49,7 +49,7 @@ Tools.Ellipse = function (wickEditor) {
     }
 
     this.onDeselected = function () {
-        tempGroup.remove();
+        if(tempGroup) tempGroup.remove();
     }
 
     this.setup = function () {
@@ -59,81 +59,34 @@ Tools.Ellipse = function (wickEditor) {
     this.paperTool = new paper.Tool();
 
     this.paperTool.onMouseDown = function (event) {
-        var newPath = new paper.Path.Ellipse({
-            point: [event.point.x, event.point.y],
-            size: [1, 1],
-            fillColor: 'black'
-        });
-        newPath.fillColor = wickEditor.settings.fillColor;
-        newPath.strokeColor = wickEditor.settings.strokeColor;
-        newPath.strokeWidth = wickEditor.settings.strokeWidth;
-        newPath.strokeJoin = 'round';
-        newPath.strokeCap = 'round';
-        drawingEllipse = newPath;
-
         tempGroup = new paper.Group();
-        tempGroup.addChild(newPath);
-
         topLeft = event.point;
     }
 
     this.paperTool.onMouseDrag = function (event) {
         bottomRight = event.point;
 
-        drawingEllipse.segments[1].point.x = (topLeft.x + bottomRight.x)/2;
+        tempGroup.remove();
 
-        drawingEllipse.segments[2].point.x = bottomRight.x;
-        drawingEllipse.segments[2].point.y = (topLeft.y + bottomRight.y)/2;
+        var newPath = new paper.Path.Ellipse({
+            point: [topLeft.x, topLeft.y],
+            size: [bottomRight.x-topLeft.x, bottomRight.y-topLeft.y],
+        });
+        newPath.fillColor = wickEditor.settings.fillColor;
+        newPath.strokeColor = wickEditor.settings.strokeColor;
+        newPath.strokeWidth = wickEditor.settings.strokeWidth;
+        newPath.strokeJoin = wickEditor.settings.strokeJoin;
+        newPath.strokeCap = wickEditor.settings.strokeCap;
+        drawingEllipse = newPath;
 
-        drawingEllipse.segments[3].point.x = (topLeft.x + bottomRight.x)/2;
-        drawingEllipse.segments[3].point.y = bottomRight.y;
-
-        drawingEllipse.segments[0].point.x = topLeft.x;
-        drawingEllipse.segments[0].point.y = (topLeft.y + bottomRight.y)/2;
-
-        var w = (bottomRight.x-topLeft.x)/3.62132028;
-        var h = (bottomRight.y-topLeft.y)/3.62132028;
-        drawingEllipse.segments[0].handleIn.x = 0;
-        drawingEllipse.segments[0].handleIn.y = h;
-        drawingEllipse.segments[0].handleOut.x = 0;
-        drawingEllipse.segments[0].handleOut.y = -h;
-
-        drawingEllipse.segments[1].handleIn.x = -w;
-        drawingEllipse.segments[1].handleIn.y = 0;
-        drawingEllipse.segments[1].handleOut.x = w;
-        drawingEllipse.segments[1].handleOut.y = 0;
-
-        drawingEllipse.segments[2].handleIn.x = 0;
-        drawingEllipse.segments[2].handleIn.y = -h;
-        drawingEllipse.segments[2].handleOut.x = 0;
-        drawingEllipse.segments[2].handleOut.y = h;
-
-        drawingEllipse.segments[3].handleIn.x = w;
-        drawingEllipse.segments[3].handleIn.y = 0;
-        drawingEllipse.segments[3].handleOut.x = -w;
-        drawingEllipse.segments[3].handleOut.y = 0;
-
-        drawingEllipse.closed = true;
+        tempGroup = new paper.Group();
+        tempGroup.addChild(newPath);
     }
 
     this.paperTool.onMouseUp = function (event) {
+
+        var svgString = tempGroup.exportSVG({asString:true});
         tempGroup.remove();
-
-        var ellipse = new paper.Path.Ellipse({
-            point: [0, 0],
-            size: [bottomRight.x-topLeft.x, bottomRight.y-topLeft.y],
-            fillColor: 'black'
-        });
-        ellipse.fillColor = wickEditor.settings.fillColor;
-        ellipse.strokeColor = wickEditor.settings.strokeColor;
-        ellipse.strokeWidth = wickEditor.settings.strokeWidth;
-        ellipse.strokeJoin = 'round';
-        ellipse.strokeCap = 'round';
-
-        var ellipseSVG = new paper.Group({insert:false});
-        ellipseSVG.addChild(ellipse);
-
-        var svgString = ellipseSVG.exportSVG({asString:true});
         var pathWickObject = WickObject.createPathObject(svgString);
         pathWickObject.x = (bottomRight.x+topLeft.x)/2;
         pathWickObject.y = (bottomRight.y+topLeft.y)/2;
