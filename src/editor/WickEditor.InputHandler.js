@@ -591,9 +591,6 @@ var InputHandler = function (wickEditor) {
                 if(ext === 'json') fileType = 'application/json';
             }
 
-            console.log(file);
-            console.log(fileType);
-
             loadFileIntoWickObject(e,file,fileType);
 
         }
