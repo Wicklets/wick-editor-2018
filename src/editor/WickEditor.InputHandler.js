@@ -582,6 +582,15 @@ var InputHandler = function (wickEditor) {
             var file = files[i];
             var fileType = file.type;
 
+            if(fileType === '') {
+                var parts = file.name.split('.');
+                ext = parts[parts.length-1];
+                if(ext === 'json') fileType = 'application/json';
+            }
+
+            console.log(file);
+            console.log(fileType);
+
             loadFileIntoWickObject(e,file,fileType);
 
         }
