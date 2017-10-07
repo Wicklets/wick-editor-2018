@@ -232,6 +232,10 @@ WickProject.prototype.getAsJSON = function (callback, format) {
     // Encode scripts/text to avoid JSON format problems
     self.rootObject.encodeStrings();
 
+    // Add some browser/OS/wick editor version info for debugging other ppl's projects
+    self.metaInfo = getBrowserAndOSInfo();
+    self.metaInfo.wickVersion = wickEditor.version
+
     var JSONProject = JSON.stringify(self, WickProject.Exporter.JSONReplacer, format);
     
     // Decode scripts back to human-readble and eval()-able format
@@ -643,8 +647,6 @@ WickProject.prototype.loadBuiltinFunctions = function (contextObject) {
     window.mouseY = wickPlayer.inputHandler.getMouse().y;
     window.mouseMoveX = wickPlayer.inputHandler.getMouseDiff().x;
     window.mouseMoveY = wickPlayer.inputHandler.getMouseDiff().y;
-    window.tiltX = getTiltX();
-    window.tiltY = getTiltY();
     window.hideCursor = function () { wickPlayer.hideCursor(); };
     window.showCursor = function () { wickPlayer.showCursor(); };
 

@@ -115,7 +115,7 @@ WickProject.Exporter = (function () {
         if(args && args.json) {
             wickProject.getAsJSON(function(JSONProject) {
                 var blob = new Blob([JSONProject], {type: "text/plain;charset=utf-8"});
-                saveAs(blob, wickProject.name+".wickproject.json");
+                saveAs(blob, wickProject.name+".json");
             }, '\t');
             return;
         }
@@ -126,11 +126,11 @@ WickProject.Exporter = (function () {
                 var zip = new JSZip();
                 zip.file("index.html", fileOut);
                 zip.generateAsync({type:"blob"}).then(function(content) {
-                    saveAs(content, filename+".wickproject.zip");
+                    saveAs(content, filename+".zip");
                 });
             } else {
                 var blob = new Blob([fileOut], {type: "text/plain;charset=utf-8"});
-                saveAs(blob, filename+".wickproject.html");
+                saveAs(blob, filename+".html");
             }
         });
 

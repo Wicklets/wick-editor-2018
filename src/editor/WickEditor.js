@@ -22,7 +22,7 @@ var WickEditor = function () {
     var self = this;
 
     // http://semver.org/
-    self.version = "0.08";
+    self.version = "0.08pre";
     console.log("Wick Editor version " + self.version)
     if(localStorage.wickVersion !== self.version) {
         // Wick has either
@@ -31,7 +31,7 @@ var WickEditor = function () {
         // So we need to show the update message screen!
         // (We don't have an update message screen yet, so just console.log)
         localStorage.wickVersion = self.version;
-        console.log("Looks like wick updated! See the update notes here: https://github.com/zrispo/wick/releases");
+        console.log("Looks like wick updated! See the update notes here: http://wickeditor.com/#updates");
     }
     window.wickVersion = self.version;
 
