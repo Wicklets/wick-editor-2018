@@ -95,9 +95,10 @@ Tools.Paintbrush = function (wickEditor) {
 
         if (!path) {
             path = new paper.Path({
-                fillColor: wickEditor.settings.fillColor
+                fillColor: wickEditor.settings.fillColor,
+                //strokeColor: '#000',
             });
-            path.add(event.lastPoint);
+            //path.add(event.lastPoint);
         }
 
         if(!totalDelta) {
@@ -107,7 +108,7 @@ Tools.Paintbrush = function (wickEditor) {
             totalDelta.y += event.delta.y;
         }
 
-        if (totalDelta.length > wickEditor.settings.brushThickness/3) {
+        if (totalDelta.length > wickEditor.settings.brushThickness/2) {
 
             totalDelta.x = 0;
             totalDelta.y = 0;
@@ -137,7 +138,7 @@ Tools.Paintbrush = function (wickEditor) {
 
     this.paperTool.onMouseUp = function (event) {
         if (path) {
-            totalDelta.x = 0;
+            /*totalDelta.x = 0;
             totalDelta.y = 0;
 
             var thickness = lastEvent.delta.length;
@@ -154,7 +155,7 @@ Tools.Paintbrush = function (wickEditor) {
             var top = lastEvent.middlePoint.add(step);
             var bottom = lastEvent.middlePoint.subtract(step);
 
-            path.add(top);
+            path.add(top);*/
             //path.insert(0, bottom);
             
             path.closed = true;

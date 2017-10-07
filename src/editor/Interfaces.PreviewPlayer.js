@@ -26,9 +26,11 @@ var PreviewPlayer = function (wickEditor) {
     this.setup = function () {
         this.playing = false;
 
-        canvasContainer = document.getElementById('previewRenderContainer');
+        canvasContainer = document.createElement('div');
+        canvasContainer.id = 'previewRenderContainer';
         canvasContainer.style.width = wickEditor.project.width+'px';
         canvasContainer.style.height = wickEditor.project.height+'px';
+        document.getElementById('editorCanvasContainer').appendChild(canvasContainer);
         renderer = new WickPixiRenderer(canvasContainer);
     }
 
