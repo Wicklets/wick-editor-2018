@@ -189,7 +189,7 @@
         {
           "name": "flipX",
           "type": "Boolean",
-          "description": "A boolean which determines whether or not to flip the wickObject horizontally. By default flipX is set to false.",
+          "description": "A boolean which determines whether or not to flip the object horizontally. By default flipX is set to false.",
           "example": "this.flipX = true; // Flip this object horizontally.",
           "snippet": "this.flipX",
           "args": [],
@@ -198,7 +198,7 @@
         {
           "name": "flipY",
           "type": "Boolean",
-          "description": "A boolean which determines whether or not to flip the wickObject vertically. By default flipY is set to false.",
+          "description": "A boolean which determines whether or not to flip the object vertically. By default flipY is set to false.",
           "example": "this.flipY = true; // Flip this object vertically.",
           "snippet": "this.flipY",
           "args": [],
@@ -230,20 +230,20 @@
           "args": [],
           "return": {
             "type": "WickObject",
-            "description": "A clone of the WickObject which calls clone()."
+            "description": "A clone of the object that called clone()."
           }
         },
         {
           "name": "delete()",
-          "description": "Deletes this WickObject completely.",
-          "example": "this.delete(); // Removes the wickObject from the scene.",
+          "description": "Deletes the object completely.",
+          "example": "this.delete(); // Removes the object from the scene.",
           "snippet": "this.delete()",
           "args": [],
           "return": null
         },
         {
           "name": "hitTest(otherObject, hitTestType)",
-          "description": "Checks for a collision with another WickObject.",
+          "description": "Checks for a collision with another object.",
           "example": "// If this object collides with objectTwo delete this object\nif (this.hitTest(objectTwo)) {\n    this.delete(); \n} ",
           "snippet": "if(this.hitTest(other_object_name)) {\n    // Do something here!\n}",
           "args": [
