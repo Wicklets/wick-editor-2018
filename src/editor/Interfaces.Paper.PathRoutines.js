@@ -22,14 +22,16 @@ var PathRoutines = function (paperInterface, wickEditor) {
     self.getBooleanOpResult = function (boolFnName, objs) {
         var touchingPaths = objs;
 
+        if(boolFnName === 'intersect') {
+            touchingPaths = touchingPaths.reverse();
+            //console.log(touchingPaths);
+        }
+
         //startTiming()
 
         touchingPaths.forEach(function (path) {
             self.regenPaperJSState(path);
         });
-
-        //stopTiming("regen paper states!")
-        //startTiming();
 
         var superPath = touchingPaths[0].paper.children[0].clone({insert:false});
         touchingPaths.forEach(function (path) {
@@ -47,7 +49,7 @@ var PathRoutines = function (paperInterface, wickEditor) {
         superPathWickObject.x = superPath.position.x;
         superPathWickObject.y = superPath.position.y;
 
-        //stopTiming("union!")
+        //stopTiming("boolean op done")
 
         self.refreshPathData(superPathWickObject)
 

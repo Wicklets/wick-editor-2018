@@ -1229,6 +1229,9 @@ var WickActionHandler = function (wickEditor) {
             if(args.boolFnName === 'subtract') {
                 removeObjs = [args.objs[0]];
             }
+            if(args.boolFnName === 'intersect') {
+                removeObjs = [args.objs[args.objs.length-1]];
+            }
 
             args.deleteAction = wickEditor.actionHandler.doAction('deleteObjects', {
                 objects: removeObjs,

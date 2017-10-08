@@ -78,6 +78,7 @@ Tools.Ellipse = function (wickEditor) {
         newPath.strokeJoin = wickEditor.settings.strokeJoin;
         newPath.strokeCap = wickEditor.settings.strokeCap;
         drawingEllipse = newPath;
+        console.log(wickEditor.settings.strokeWidth)
 
         tempGroup = new paper.Group();
         tempGroup.addChild(newPath);

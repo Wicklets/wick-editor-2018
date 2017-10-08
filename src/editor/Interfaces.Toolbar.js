@@ -96,7 +96,7 @@ var ToolbarInterface = function (wickEditor) {
                 });
                 wickEditor.syncInterfaces();
             },
-            min: 1,
+            min: 0,
             max: 50,
             moveFactor: 0.1,
             initValue: wickEditor.settings.strokeWidth,

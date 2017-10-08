@@ -53,6 +53,7 @@ Tools.Dropper = function (wickEditor) {
 
     this.setup = function () {
         window.addEventListener('mousedown', function (e) {
+            if(e.target.className !== 'upper-canvas ') return;
             if(wickEditor.currentTool instanceof Tools.Dropper && !wickEditor.colorPicker.isOpen()) {
                 that.getColorAtCursor(function (color) {
                     wickEditor.settings.setValue(colorVar, color);

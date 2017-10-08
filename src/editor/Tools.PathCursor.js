@@ -70,9 +70,6 @@ Tools.PathCursor = function (wickEditor) {
         if(hitResult) {
             if(hitResult.item) {
 
-                hitResult.item.strokeCap = 'round';
-                hitResult.item.strokeJoin = 'round';
-
                 var selectCheckWickObj = hitResult.item.parent.wick;
                 var newlySelected = false;
                 if(selectCheckWickObj)

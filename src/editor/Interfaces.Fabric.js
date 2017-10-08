@@ -74,6 +74,7 @@ var FabricInterface = function (wickEditor) {
         });
         self.canvas.on('selection:cleared', function (e) {
             if (!e.e) return;
+            if(wickEditor.currentTool === wickEditor.tools.dropper) return;
             self.applySelectionToWickProject();
         });
 

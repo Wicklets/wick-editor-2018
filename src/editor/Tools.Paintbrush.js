@@ -160,7 +160,8 @@ Tools.Paintbrush = function (wickEditor) {
             
             path.closed = true;
             path.smooth();
-            path.simplify(wickEditor.settings.brushSmoothness/2);
+            if(wickEditor.settings.brushSmoothingEnabled)
+                path.simplify(wickEditor.settings.brushThickness * (wickEditor.settings.brushSmootingAmount/100));
             path = path.unite(new paper.Path())
             path.remove();
 

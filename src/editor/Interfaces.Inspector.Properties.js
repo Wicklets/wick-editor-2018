@@ -614,19 +614,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
-    /* properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Intersect Paths",
-        icon: "./resources/ellipse.png",
-        colorClass: 'all-paths',
-        isActiveFn: function () {
-            return selectionInfo.numObjects > 1 
-                && selectionInfo.special.allPaths;
-        },
-        buttonAction: function () {
-            
-        }
-    })); */
-
      properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Subtract Paths",
         icon: "./resources/inspector-subtract.png",
@@ -639,6 +626,45 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             wickEditor.guiActionHandler.doAction('doBooleanOperation', {boolFnName:'subtract'});
         }
     }));
+
+    properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Intersect Paths",
+        icon: "./resources/inspector-unite.png",
+        colorClass: 'all-paths',
+        isActiveFn: function () {
+            return selectionInfo.numObjects > 1 
+                && selectionInfo.special.allPaths;
+        },
+        buttonAction: function () {
+            wickEditor.guiActionHandler.doAction('doBooleanOperation', {boolFnName:'intersect'});
+        }
+    }));
+
+    /*properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Divide Paths",
+        icon: "./resources/inspector-unite.png",
+        colorClass: 'all-paths',
+        isActiveFn: function () {
+            return selectionInfo.numObjects > 1 
+                && selectionInfo.special.allPaths;
+        },
+        buttonAction: function () {
+            wickEditor.guiActionHandler.doAction('doBooleanOperation', {boolFnName:'divide'});
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Exclude Paths",
+        icon: "./resources/inspector-unite.png",
+        colorClass: 'all-paths',
+        isActiveFn: function () {
+            return selectionInfo.numObjects > 1 
+                && selectionInfo.special.allPaths;
+        },
+        buttonAction: function () {
+            wickEditor.guiActionHandler.doAction('doBooleanOperation', {boolFnName:'exclude'});
+        }
+    }));*/
 
     /* properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Exclude Paths",
