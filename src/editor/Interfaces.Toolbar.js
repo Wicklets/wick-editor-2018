@@ -104,6 +104,38 @@ var ToolbarInterface = function (wickEditor) {
         numberInput.className = 'toolbar-number-input';
         toolbarDiv.appendChild(numberInput);
 
+        /*var numberInput = new SlideyNumberInput({
+            onsoftchange: function (e) {
+                
+            },
+            onhardchange: function (e) {
+                wickEditor.settings.setValue('brushSmootingAmount', parseInt(e));
+                wickEditor.syncInterfaces();
+            },
+            min: 0,
+            max: 100,
+            moveFactor: 0.1,
+            initValue: wickEditor.settings.brushSmootingAmount,
+        });
+        numberInput.className = 'toolbar-number-input';
+        toolbarDiv.appendChild(numberInput);
+
+        var numberInput = new SlideyNumberInput({
+            onsoftchange: function (e) {
+                
+            },
+            onhardchange: function (e) {
+                wickEditor.settings.setValue('rectangleCornerRadius', parseInt(e));
+                wickEditor.syncInterfaces();
+            },
+            min: 0,
+            max: 100,
+            moveFactor: 0.1,
+            initValue: wickEditor.settings.rectangleCornerRadius,
+        });
+        numberInput.className = 'toolbar-number-input';
+        toolbarDiv.appendChild(numberInput);*/
+
     }
 
     this.syncWithEditorState = function () {

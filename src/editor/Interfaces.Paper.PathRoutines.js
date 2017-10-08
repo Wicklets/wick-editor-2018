@@ -57,8 +57,6 @@ var PathRoutines = function (paperInterface, wickEditor) {
     }
 
     self.eraseWithPath = function (args) {
-        startTiming()
-
         var paths = [];
         wickEditor.project.getCurrentFrame().wickObjects.forEach(function (wickObject) {
             if(wickObject.pathData) {
@@ -66,9 +64,6 @@ var PathRoutines = function (paperInterface, wickEditor) {
                 self.regenPaperJSState(wickObject);
             }
         });
-
-        stopTiming('regen paper states!');
-        startTiming();
 
         var xmlString = args.pathData
           , parser = new DOMParser()
@@ -79,9 +74,9 @@ var PathRoutines = function (paperInterface, wickEditor) {
 
         subtractWithPath.position.x = args.pathX;
         subtractWithPath.position.y = args.pathY;
-        console.log(subtractWithPath)
-        subtractWithPath.scaling.x /= wickEditor.fabric.canvas.getZoom();
-        subtractWithPath.scaling.y /= wickEditor.fabric.canvas.getZoom();
+        console.log(args)
+        //subtractWithPath.scaling.x /= wickEditor.fabric.canvas.getZoom();
+        //subtractWithPath.scaling.y /= wickEditor.fabric.canvas.getZoom();
 
         var modifiedStates = [];
         var modifiedObjects = [];
@@ -106,8 +101,6 @@ var PathRoutines = function (paperInterface, wickEditor) {
             objs: modifiedObjects,
             modifiedStates: modifiedStates
         });
-
-        stopTiming('subtraction!');
     }
 
     self.setFillColor = function (wickObjects, newColor) {

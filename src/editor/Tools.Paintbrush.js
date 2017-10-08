@@ -108,7 +108,7 @@ Tools.Paintbrush = function (wickEditor) {
             totalDelta.y += event.delta.y;
         }
 
-        if (totalDelta.length > wickEditor.settings.brushThickness/2) {
+        if (totalDelta.length > wickEditor.settings.brushThickness/2/wickEditor.fabric.canvas.getZoom()) {
 
             totalDelta.x = 0;
             totalDelta.y = 0;
@@ -160,8 +160,12 @@ Tools.Paintbrush = function (wickEditor) {
             
             path.closed = true;
             path.smooth();
-            if(wickEditor.settings.brushSmoothingEnabled)
-                path.simplify(wickEditor.settings.brushThickness * (wickEditor.settings.brushSmootingAmount/100));
+            if(wickEditor.settings.brushSmootingAmount > 0) {
+                var t = wickEditor.settings.brushThickness;
+                var s = wickEditor.settings.brushSmootingAmount/100;
+                var z = wickEditor.fabric.canvas.getZoom();
+                path.simplify(t / z * s);
+            }
             path = path.unite(new paper.Path())
             path.remove();
 
