@@ -25,13 +25,13 @@ var InputHandler = function (wickEditor) {
     Pressure
 *************************/
 
-    this.penPressure = 0; 
+    this.penPressure = 1; 
 
     Pressure.set(".paperCanvas", { 
         change: function(force, event) { 
             that.penPressure = force; 
         } 
-    });
+    }, {polyfill: false});
 
     this.getPenPressure = function() {
         return that.penPressure; 

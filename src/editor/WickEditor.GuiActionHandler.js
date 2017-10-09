@@ -1084,6 +1084,17 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.paper.pathRoutines.setStrokeWidth(wickEditor.project.getSelectedObjects(), args.strokeWidth);
         });
 
+    registerAction('changeStrokeCapAndJoinOfSelection',
+        [],
+        [],
+        {},
+        function (args) {
+            wickEditor.paper.pathRoutines.setStrokeCapAndJoin(
+                wickEditor.project.getSelectedObjects(), 
+                args.strokeCap,
+                args.strokeJoin);
+        });
+
     registerAction('copyFrameForward', 
         [],
         [],

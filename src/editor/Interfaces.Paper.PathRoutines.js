@@ -183,6 +183,29 @@ var PathRoutines = function (paperInterface, wickEditor) {
 
     }
 
+    self.setStrokeCapAndJoin = function (wickObjects, strokeCap, strokeJoin) {
+        var modifiedStates = [];
+        var modifiedObjects = [];
+
+        wickObjects.forEach(function (wickObject) {
+            if(!wickObject.isPath) return;
+            self.regenPaperJSState(wickObject);
+
+            wickObject.paper.strokeCap = strokeCap;
+            wickObject.paper.strokeJoin = strokeJoin;
+
+            modifiedStates.push({
+                pathData : wickObject.paper.exportSVG({asString:true})
+            });
+            modifiedObjects.push(wickObject);
+        });
+
+        wickEditor.actionHandler.doAction('modifyObjects', {
+            objs: modifiedObjects,
+            modifiedStates: modifiedStates
+        });
+    }
+
     self.regenPaperJSState = function (wickObject) {
         if(!wickObject.isPath/* && !wickObject.isImage*/) return;
 

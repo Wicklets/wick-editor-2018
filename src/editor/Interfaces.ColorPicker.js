@@ -52,7 +52,7 @@ var ColorPickerInterface = function (wickEditor) {
             showInput: true,
             showButtons: false,
             className: "full-spectrum",
-            showInitial: true,
+            //showInitial: true,
             showPalette: true,
             showSelectionPalette: true,
             maxSelectionSize: 10,
@@ -78,12 +78,20 @@ var ColorPickerInterface = function (wickEditor) {
             ]
         });
 
+        var dropperButton = document.createElement('div');
+        dropperButton.className = 'color-picker-dropper-button';
+        dropperButton.onclick = function () {
+            wickEditor.changeTool(wickEditor.tools.dropper);
+        }
+        colorPickerContainer.appendChild(dropperButton);
+
         window.addEventListener('mousedown', function(e) { 
             if(!isOpen) return;
 
             var t = e.target;
-            if (t.className === 'upper-canvas ') {
+            if (t.className === 'upper-canvas ' && wickEditor.currentTool === wickEditor.tools.dropper) {
                 wickEditor.tools.dropper.getColorAtCursor(function (color) {
+                    wickEditor.useLastUsedTool();
                     currentColor = color;
                     self.close();
                 });
@@ -106,7 +114,7 @@ var ColorPickerInterface = function (wickEditor) {
         if(!x) x = wickEditor.inputHandler.mouse.x;
         if(!y) y = wickEditor.inputHandler.mouse.y;
 
-        wickEditor.changeTool(wickEditor.tools.dropper);
+        //wickEditor.changeTool(wickEditor.tools.dropper);
         wickEditor.syncInterfaces();
 
         isOpen = true;
@@ -126,7 +134,6 @@ var ColorPickerInterface = function (wickEditor) {
 
     self.close = function () {
         setTimeout(function () {
-            wickEditor.useLastUsedTool();
             isOpen = false;
             currentDoneFn(currentColor);
             colorPickerContainer.style.display = 'none';

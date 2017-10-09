@@ -83,6 +83,8 @@ Tools.Paintbrush = function (wickEditor) {
     var totalDelta;
     var lastEvent;
 
+    var BRUSH_MIN_DISTANCE = 0.5;
+
     this.paperTool.onMouseDown = function (event) {
         
     }
@@ -108,7 +110,7 @@ Tools.Paintbrush = function (wickEditor) {
             totalDelta.y += event.delta.y;
         }
 
-        if (totalDelta.length > wickEditor.settings.brushThickness/2/wickEditor.fabric.canvas.getZoom()) {
+        if (totalDelta.length > wickEditor.settings.brushThickness*BRUSH_MIN_DISTANCE/wickEditor.fabric.canvas.getZoom()) {
 
             totalDelta.x = 0;
             totalDelta.y = 0;
@@ -117,11 +119,7 @@ Tools.Paintbrush = function (wickEditor) {
             thickness /= wickEditor.settings.brushThickness/2;
             thickness *= wickEditor.fabric.canvas.getZoom();
             
-            // Assume full pressure if pressure is disabled. 
-            var penPressure = 1; 
-            if (wickEditor.settings.pressureEnabled) {
-                penPressure = wickEditor.inputHandler.getPenPressure(); 
-            } 
+            var penPressure = wickEditor.inputHandler.getPenPressure();
 
             var step = event.delta.divide(thickness).multiply(penPressure);
             step.angle = step.angle + 90;
@@ -138,26 +136,6 @@ Tools.Paintbrush = function (wickEditor) {
 
     this.paperTool.onMouseUp = function (event) {
         if (path) {
-            /*totalDelta.x = 0;
-            totalDelta.y = 0;
-
-            var thickness = lastEvent.delta.length;
-            thickness /= wickEditor.settings.brushThickness/2;
-            thickness *= wickEditor.fabric.canvas.getZoom()
-
-            var pressure = .5;
-            var p = wickEditor.inputHandler.getPenPressure()
-            if(wickEditor.settings.pressureEnabled) pressure = 0.1+p*p*5
-
-            var step = lastEvent.delta.divide(thickness).multiply(pressure);
-            step.angle = step.angle + 60;
-
-            var top = lastEvent.middlePoint.add(step);
-            var bottom = lastEvent.middlePoint.subtract(step);
-
-            path.add(top);*/
-            //path.insert(0, bottom);
-            
             path.closed = true;
             path.smooth();
             if(wickEditor.settings.brushSmootingAmount > 0) {

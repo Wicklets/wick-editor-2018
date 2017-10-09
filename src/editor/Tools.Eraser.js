@@ -100,10 +100,7 @@ Tools.Eraser = function (wickEditor) {
             thickness /= wickEditor.settings.brushThickness/2;
             thickness *= wickEditor.fabric.canvas.getZoom();
             
-            var penPressure = 1; 
-            if (wickEditor.settings.pressureEnabled) {
-                penPressure = wickEditor.inputHandler.getPenPressure(); 
-            } 
+            var penPressure = wickEditor.inputHandler.getPenPressure(); 
 
             var step = event.delta.divide(thickness).multiply(penPressure);
             step.angle = step.angle + 90;

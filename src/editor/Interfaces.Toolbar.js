@@ -83,6 +83,20 @@ var ToolbarInterface = function (wickEditor) {
 
         strokeWidthPreview = new StrokeWidthPreview();
         toolbarDiv.appendChild(strokeWidthPreview);
+        strokeWidthPreview.onclick = function () {
+            if(wickEditor.settings.strokeCap === 'round') {
+                wickEditor.settings.setValue('strokeCap', 'butt');
+                wickEditor.settings.setValue('strokeJoin', 'miter');
+            } else {
+                wickEditor.settings.setValue('strokeCap', 'round');
+                wickEditor.settings.setValue('strokeJoin', 'round');
+            }
+            strokeWidthPreview.refresh();
+            wickEditor.guiActionHandler.doAction("changeStrokeCapAndJoinOfSelection", {
+                strokeCap: wickEditor.settings.strokeCap,
+                strokeJoin: wickEditor.settings.strokeJoin
+            });
+        }
         strokeWidthPreview.refresh();
 
         var numberInput = new SlideyNumberInput({
@@ -239,13 +253,15 @@ var ToolbarInterface = function (wickEditor) {
         line.setAttribute('y1', 7);
         line.setAttribute('y2', 7);
         line.setAttribute('x2', 30);
-        line.setAttribute('stroke-linecap', 'round');
         svg.appendChild(line);
 
         strokeWidthPreviewContainer.refresh = function (val) {
             var bbox = strokeWidthPreviewContainer.getBoundingClientRect();
             if(!val) val = wickEditor.settings.strokeWidth;
-            line.setAttribute('style', 'stroke:'+wickEditor.settings.strokeColor+'; stroke-width:'+val);
+            line.setAttribute('style', 
+                'stroke:'+wickEditor.settings.strokeColor+
+                '; stroke-width:'+val);
+            line.setAttribute('stroke-linecap', wickEditor.settings.strokeCap);
         }
 
         return strokeWidthPreviewContainer;
