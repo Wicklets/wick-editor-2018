@@ -63,7 +63,15 @@ var ToolbarInterface = function (wickEditor) {
 
         brushSizePreview = new BrushSizePreview();
         toolbarDiv.appendChild(brushSizePreview);
+        brushSizePreview.onclick = function (e) {
+            brushSizeSettingsWindow.toggleOpen(
+                brushSizePreview.getBoundingClientRect().left,
+                brushSizePreview.getBoundingClientRect().top)
+        }
         brushSizePreview.refresh();
+
+        var brushSizeSettingsWindow = new BrushSizeSettingsWindow();
+        toolbarDiv.parentElement.parentElement.appendChild(brushSizeSettingsWindow);
 
         var numberInput = new SlideyNumberInput({
             onsoftchange: function (e) {
@@ -118,21 +126,7 @@ var ToolbarInterface = function (wickEditor) {
         numberInput.className = 'toolbar-number-input';
         toolbarDiv.appendChild(numberInput);
 
-        /*var numberInput = new SlideyNumberInput({
-            onsoftchange: function (e) {
-                
-            },
-            onhardchange: function (e) {
-                wickEditor.settings.setValue('brushSmootingAmount', parseInt(e));
-                wickEditor.syncInterfaces();
-            },
-            min: 0,
-            max: 100,
-            moveFactor: 0.1,
-            initValue: wickEditor.settings.brushSmootingAmount,
-        });
-        numberInput.className = 'toolbar-number-input';
-        toolbarDiv.appendChild(numberInput);
+        /*
 
         var numberInput = new SlideyNumberInput({
             onsoftchange: function (e) {
@@ -250,8 +244,8 @@ var ToolbarInterface = function (wickEditor) {
 
         var line = document.createElementNS(svg.namespaceURI,'line');
         line.setAttribute('x1', 5);
-        line.setAttribute('y1', 7);
-        line.setAttribute('y2', 7);
+        line.setAttribute('y1', 12);
+        line.setAttribute('y2', 12);
         line.setAttribute('x2', 30);
         svg.appendChild(line);
 
@@ -262,9 +256,67 @@ var ToolbarInterface = function (wickEditor) {
                 'stroke:'+wickEditor.settings.strokeColor+
                 '; stroke-width:'+val);
             line.setAttribute('stroke-linecap', wickEditor.settings.strokeCap);
+
+            var makeLessBlurryOffset = (wickEditor.settings.strokeWidth%2) === 0 ? 0 : .5;
+            line.setAttribute('y1', 11 + makeLessBlurryOffset);
+            line.setAttribute('y2', 11 + makeLessBlurryOffset);
         }
 
         return strokeWidthPreviewContainer;
+    }
+
+    var BrushSizeSettingsWindow = function () {
+        var brushSettingsWindowDiv = document.createElement('div');
+        brushSettingsWindowDiv.className = 'toolbar-brush-settings-window';
+
+        var open = false;
+
+        brushSettingsWindowDiv.sync = function () {
+
+        }
+
+        brushSettingsWindowDiv.toggleOpen = function (x,y) {
+            open = !open;
+            brushSettingsWindowDiv.style.left = x+'px'
+            brushSettingsWindowDiv.style.top = y+'px'
+            brushSettingsWindowDiv.style.display = open ? 'block' : 'none';
+        }
+
+        var closeButton = document.createElement('div');
+        closeButton.className = 'toolbar-brush-settings-window-close-button';
+        closeButton.onclick = function () {
+            brushSettingsWindowDiv.toggleOpen();
+        }
+        brushSettingsWindowDiv.appendChild(closeButton);
+
+        var smoothnessLabel = document.createElement('div');
+        smoothnessLabel.className = 'toolbar-brush-settings-window-smoothness-label';
+        smoothnessLabel.innerHTML = 'Brush Smoothness: '
+        brushSettingsWindowDiv.appendChild(smoothnessLabel);
+
+        var numberInput = new SlideyNumberInput({
+            onsoftchange: function (e) {
+                
+            },
+            onhardchange: function (e) {
+                wickEditor.settings.setValue('brushSmoothingAmount', parseInt(e));
+                wickEditor.syncInterfaces();
+            },
+            min: 0,
+            max: 100,
+            moveFactor: 0.1,
+            initValue: wickEditor.settings.brushSmoothingAmount,
+        });
+        numberInput.className = 'toolbar-number-input toolbar-brush-settings-window-number-input';
+        brushSettingsWindowDiv.appendChild(numberInput);
+
+        window.addEventListener('mousedown', function(e) { 
+            if(open && !elementInsideElement(e.target, brushSettingsWindowDiv)) {
+                brushSettingsWindowDiv.toggleOpen()
+            }
+        });
+
+        return brushSettingsWindowDiv;
     }
 
 }

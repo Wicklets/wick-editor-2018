@@ -115,21 +115,7 @@ Tools.Paintbrush = function (wickEditor) {
             totalDelta.x = 0;
             totalDelta.y = 0;
 
-            var thickness = event.delta.length;
-            thickness /= wickEditor.settings.brushThickness/2;
-            thickness *= wickEditor.fabric.canvas.getZoom();
-            
-            var penPressure = wickEditor.inputHandler.getPenPressure();
-
-            var step = event.delta.divide(thickness).multiply(penPressure);
-            step.angle = step.angle + 90;
-
-            var top = event.middlePoint.add(step);
-            var bottom = event.middlePoint.subtract(step);
-
-            path.add(top);
-            path.insert(0, bottom);
-            path.smooth();
+            addNextSegment(event)
 
         }
     }
@@ -138,9 +124,9 @@ Tools.Paintbrush = function (wickEditor) {
         if (path) {
             path.closed = true;
             path.smooth();
-            if(wickEditor.settings.brushSmootingAmount > 0) {
+            if(wickEditor.settings.brushSmoothingAmount > 0) {
                 var t = wickEditor.settings.brushThickness;
-                var s = wickEditor.settings.brushSmootingAmount/100;
+                var s = wickEditor.settings.brushSmoothingAmount/100;
                 var z = wickEditor.fabric.canvas.getZoom();
                 path.simplify(t / z * s);
             }
@@ -166,6 +152,24 @@ Tools.Paintbrush = function (wickEditor) {
 
             path = null;
         } 
+    }
+
+    var addNextSegment = function (event) {
+        var thickness = event.delta.length;
+        thickness /= wickEditor.settings.brushThickness/2;
+        thickness *= wickEditor.fabric.canvas.getZoom();
+        
+        var penPressure = wickEditor.inputHandler.getPenPressure();
+
+        var step = event.delta.divide(thickness).multiply(penPressure);
+        step.angle = step.angle + 90;
+
+        var top = event.middlePoint.add(step);
+        var bottom = event.middlePoint.subtract(step);
+
+        path.add(top);
+        path.insert(0, bottom);
+        path.smooth();
     }
 
 }

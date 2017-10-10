@@ -196,13 +196,21 @@ hr {
     overflow: hidden;
     
     background-position:0 0, 5px 0, 5px -5px, 0px 5px;
+    cursor: pointer;
+    opacity: 1.0;
+}
+.toolbar-brush-size-preview-container:hover {
+  opacity: 0.8;
+}
+.toolbar-brush-size-preview-container:active {
+  opacity: 0.6;
 }
 
 .toolbar-stroke-width-preview-container {
     margin-left: 2px;
     margin-top: 12px;
     width: 35px;
-    height: 15px;
+    height: 23px;
     border-radius: 3px;
     background-color: white;
     overflow: hidden;
@@ -223,6 +231,15 @@ hr {
     -webkit-background-size:10px 11px;
     
     background-position:0 0, 5px 0, 5px -5px, 0px 5px;
+
+    cursor: pointer;
+    opacity: 1.0;
+}
+.toolbar-stroke-width-preview-container:hover {
+  opacity: 0.8;
+}
+.toolbar-stroke-width-preview-container:active {
+  opacity: 0.6;
 }
 
 .toolbar-number-input {
@@ -235,4 +252,51 @@ hr {
     border-radius: 3px;
 }
 
+.toolbar-brush-settings-window {
+    width: 200px;
+    height: 45px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    border: 1px solid white;
+    z-index: 9;
+    border-radius: 4px;
+    background-color: #444;
+    display: none;
+}
 
+.toolbar-brush-settings-window-smoothness-label {
+  width: 120px;
+  height: 20px;
+  font-family:"Open Sans";
+  src: url("Open_Sans/OpenSans-Regular.ttf");
+  color: white;
+  font-size: 12px;
+  position: absolute;
+  left: 10px;
+  top: 12px;
+}
+.toolbar-brush-settings-window-number-input {
+  position: absolute;
+  left: 126px;
+  top: 13px;
+}
+
+.toolbar-brush-settings-window-close-button {
+  width: 20px;
+  height: 20px;
+  float: right;
+  cursor: pointer;
+  background-image: url("../resources/close.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  text-overflow: clip;
+  overflow: hidden;
+  background-size: 12px 12px;
+  opacity: 1.0;
+  margin-top: 3px;
+  margin-right: 3px;
+}
+.toolbar-brush-settings-window-close-button:hover {
+  opacity: 0.6;
+}
