@@ -125,6 +125,7 @@ var WickPixiRenderer = function (canvasContainer) {
                 wickObject.alphaMask = wickProject.getObjectByUUID(wickObject.sourceUUID).alphaMask
                 container.addChild(pixiSprite);
                 pixiSprites[wickObject.uuid] = pixiSprite;
+                pixiSprites[wickObject.uuid].visible = false;
                 return;
             }
         }
