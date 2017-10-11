@@ -435,7 +435,7 @@ select {
     top: 45px;
     left:46px; /*0px;*/
     /*padding: 10px;*/
-    width: calc(100% - 296px);
+    width: calc(100% - 266px);
     background-color: #E6E6E6;
     overflow: hidden;
 }

@@ -192,7 +192,7 @@ var ScriptingIDEInterface = function (wickEditor) {
             }
 
             if(maximized) {
-                document.getElementById('scriptingGUI').style.height = 'calc(100% - 30px)';
+                document.getElementById('scriptingGUI').style.height = 'calc(100% - 24px)';
             } else {
                 document.getElementById('scriptingGUI').style.height = wickEditor.settings.scriptingIDEHeight+'px';
             }
@@ -237,7 +237,7 @@ var ScriptingIDEInterface = function (wickEditor) {
         } else {
             //$("#scriptingGUI").css('display', 'none');
             $("#noSelectionDiv").css('display', 'none');
-            $("#scriptingGUI").css('height', '30px');
+            $("#scriptingGUI").css('height', '24px');
             this.justOpened = true;
 
             document.getElementById('expandScriptingGUIButton').style.display = 'none';

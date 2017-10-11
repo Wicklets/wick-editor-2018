@@ -254,7 +254,7 @@ hr {
 
 .toolbar-brush-settings-window {
     width: 200px;
-    height: 45px;
+    height: 35px;
     position: absolute;
     left: 0px;
     top: 0px;
@@ -274,12 +274,13 @@ hr {
   font-size: 12px;
   position: absolute;
   left: 10px;
-  top: 12px;
+  top: 8px;
 }
 .toolbar-brush-settings-window-number-input {
   position: absolute;
   left: 126px;
-  top: 13px;
+  top: 10px;
+  height: 13px;
 }
 
 .toolbar-brush-settings-window-close-button {

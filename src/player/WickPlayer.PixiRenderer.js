@@ -141,8 +141,6 @@ var WickPixiRenderer = function (canvasContainer) {
         }
 
         if(type) {
-            console.log('generating new pixi sprite (this is slow!!)')
-
             var newPixiSprite = WickToPixiSprite[type](wickObject);
             container.addChild(newPixiSprite);
             pixiSprites[wickObject.uuid] = newPixiSprite;

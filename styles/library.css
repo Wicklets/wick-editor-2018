@@ -5,7 +5,7 @@
 	width: calc(100% - 20px);
 	height: 200px;
 	overflow: hidden;
-  	border-radius: 5px;
+  	border-radius: 3px;
 }
 
 #asset-library-title {
@@ -14,7 +14,7 @@
 }
 
 #tree {
-  	border-radius: 5px;
+  	border-radius: 3px;
 	position: absolute;
 	width: 100%;
 	border: none;
@@ -37,6 +37,6 @@
 }
 
 #fancytree-container {
-	border-radius: 5px;
+	border-radius: 3px;
 	background-color: rgba(0,0,0,0);
 }

@@ -277,7 +277,7 @@ var ToolbarInterface = function (wickEditor) {
 
         brushSettingsWindowDiv.toggleOpen = function (x,y) {
             open = !open;
-            brushSettingsWindowDiv.style.left = x+'px'
+            brushSettingsWindowDiv.style.left = x+34+'px'
             brushSettingsWindowDiv.style.top = y+'px'
             brushSettingsWindowDiv.style.display = open ? 'block' : 'none';
         }

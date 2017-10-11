@@ -2,7 +2,7 @@
     bottom: 0px;
     left: 46px;
     text-align: center;
-    width: calc(100% - 296px);
+    width: calc(100% - 266px);
     height: 300px;
     z-index: 4;
     /* transition: height 0.2s ease; */
@@ -26,9 +26,9 @@
 #scriptEditor {
     text-align: left;
     width: calc(100% - 152px);
-    height: calc(100% - 47px);
+    height: calc(100% - 36px);
     left: 149px;
-    top: 30px;
+    top: 24px;
     font-size: 14px;
     border-style: solid;
     border-width: 1px;
@@ -38,9 +38,9 @@
 #scriptEditorSidebar {
     position: absolute;
     width: calc(149px);
-    height: calc(100% - 47px);
+    height: calc(100% - 36px);
     left: 2px;
-    top: 30px;
+    top: 24px;
     background-color: #333;
 
     border-style: solid;
@@ -53,14 +53,14 @@
 
 #noSelectionDiv {
     color: #DDD;
-    height: calc(100% - 46px);
+    height: calc(100% - 36px);
     background-color: #444;
     border-style: solid;
     border-width: 1px;
     border-color: #666;
     margin-left: 2px;
     margin-right: 2px;
-    margin-top: 30px;
+    margin-top: 24px;
     overflow: hidden;
 }
 #noSelectionText {
@@ -95,9 +95,11 @@
     height: 23px;
     position: absolute;
     color: white;
-    padding-top: 7px;
+    padding-top: 6px;
     padding-left: 7px;
     text-align: left;
+
+    font-size: 14px;
 
     background-color: none;
     /*cursor: pointer;*/
@@ -116,33 +118,67 @@
 
 #closeScriptingGUIButton {
     right: 5px;
-    top: 2px;
+    top: 1px;
     position: absolute;
-    border-radius: 3px;
+    background-image: url('../resources/close-tab.svg');
+    width: 14px;
+    height: 14px;
+    background-size: 13px 13px;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 2px;
 }
 
 #openScriptingGUIButton {
     right: 5px;
-    top: 2px;
+    top: 1px;
     position: absolute;
+    background-image: url('../resources/open-tab.svg');
+    width: 14px;
+    height: 14px;
+    background-size: 13px 13px;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 2px;
 }
 
 #beautifyButton {
-    right: 53px;
-    top: 2px;
+    right: 51px;
+    top: 1px;
     position: absolute;
+    background-image: url('../resources/beautify.png');
+    width: 14px;
+    height: 14px;
+    background-size: 13px 13px;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 2px;
 }
 
 #expandScriptingGUIButton {
-    right: 30px;
-    top: 2px;
+    right: 28px;
+    top: 1px;
     position: absolute;
+    background-image: url('../resources/fullscreen.png');
+    width: 14px;
+    height: 14px;
+    background-size: 13px 13px;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 2px;
 }
 
 #minimizeScriptingGUIButton {
-    right: 30px;
-    top: 2px;
+    right: 28px;
+    top: 1px;
     position: absolute;
+    background-image: url('../resources/unfullscreen.png');
+    width: 14px;
+    height: 14px;
+    background-size: 13px 13px;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 2px;
 }
 
 #resizeScriptingGUIBar {
