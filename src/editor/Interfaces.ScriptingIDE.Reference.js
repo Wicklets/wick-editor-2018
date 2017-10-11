@@ -66,8 +66,12 @@ var ScriptingIDEReference = function (scriptingIDE, wickEditor) {
             propButtons[key].sectionLabel.style.boxShadow = '';
         }
 
-        propButtons[name].style.boxShadow = 'inset 0px 0px 2px #31E19C';
-        propButtons[name].sectionLabel.style.boxShadow = 'inset 0px 0px 2px #31E19C';
+        var propButton = propButtons[name];
+        if(propButton) {
+            var borderStyle = 'inset 0px 0px 2px #31E19C'
+            propButton.style.boxShadow = borderStyle;
+            propButton.sectionLabel.style.boxShadow = borderStyle;
+        }
     }
 
 // Helper functions
