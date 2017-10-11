@@ -107,6 +107,15 @@ var ScriptingIDEInterface = function (wickEditor) {
                 },SYNTAX_ERROR_MSG_DELAY);
             });
 
+            that.aceEditor.on('changeSelection', function(e) {
+                var position = that.aceEditor.getCursorPosition();
+                var token = that.aceEditor.session.getTokenAt(position.row, position.column);
+                if(token) {
+                    var refElem = document.getElementById('reference-button-'+token.value);
+                    //if(refElem) refElem.style.backgroundColor = 'red';
+                }
+            });
+
             var resizer = document.getElementById('resizeScriptingGUIBar');
             resizer.resizing = false;
             resizer.addEventListener('mousedown', function (e) {

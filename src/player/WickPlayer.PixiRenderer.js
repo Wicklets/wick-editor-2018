@@ -40,8 +40,13 @@ var WickPixiRenderer = function (canvasContainer) {
     var currentProjectUUID = null;
     var container = new PIXI.Container();
     var pixiSprites = {};
+    var pixiTextures = {};
+
+    var wickProject;
 
     self.renderWickObjects = function (project, wickObjects) {
+        wickProject = project;
+
         if(currentProjectUUID !== project.uuid) {
             currentProjectUUID = project.uuid;
             preloadAllAssets(project);
@@ -71,7 +76,7 @@ var WickPixiRenderer = function (canvasContainer) {
 
     function renderWickObject (wickObject) {
         var sprite = pixiSprites[wickObject.uuid];
-        if(!sprite) {
+        if(!sprite && !wickObject.isSymbol) {
             createPixiSprite(wickObject);
         }
         if(sprite && wickObject._renderDirty && wickObject.isPath) {
@@ -113,6 +118,17 @@ var WickPixiRenderer = function (canvasContainer) {
     }
 
     function createPixiSprite (wickObject) {
+        if(wickObject.sourceUUID) {
+            var pixiTexture = pixiTextures[wickObject.sourceUUID];
+            if(pixiTexture) {
+                var pixiSprite = new PIXI.Sprite(pixiTexture);
+                wickObject.alphaMask = wickProject.getObjectByUUID(wickObject.sourceUUID).alphaMask
+                container.addChild(pixiSprite);
+                pixiSprites[wickObject.uuid] = pixiSprite;
+                return;
+            }
+        }
+
         var type;
 
         if (wickObject.asset && wickObject.asset.type === 'image') {
@@ -124,6 +140,8 @@ var WickPixiRenderer = function (canvasContainer) {
         }
 
         if(type) {
+            console.log('generating new pixi sprite (this is slow!!)')
+
             var newPixiSprite = WickToPixiSprite[type](wickObject);
             container.addChild(newPixiSprite);
             pixiSprites[wickObject.uuid] = newPixiSprite;
@@ -151,13 +169,16 @@ var WickPixiRenderer = function (canvasContainer) {
 
     var WickToPixiSprite = {
         'image': function (wickObject) {
-            var pixiSprite = PIXI.Sprite.fromImage(wickObject.asset.getData());
+            var pixiTexture = PIXI.Texture.fromImage(wickObject.asset.getData());
+            var pixiSprite = new PIXI.Sprite(pixiTexture);
+            pixiTextures[wickObject.uuid] = pixiTexture;
             return pixiSprite;
         },
         'svg': function (wickObject) {
             var base64svg = getBase64SVG(wickObject);
-            var texture = PIXI.Texture.fromImage(base64svg, undefined, undefined, SVG_SCALE);
-            var newSprite = new PIXI.Sprite(texture);
+            var pixiTexture = PIXI.Texture.fromImage(base64svg, undefined, undefined, SVG_SCALE);
+            var newSprite = new PIXI.Sprite(pixiTexture);
+            pixiTextures[wickObject.uuid] = pixiTexture;
             return newSprite;
         },
         'text': function (wickObject) {

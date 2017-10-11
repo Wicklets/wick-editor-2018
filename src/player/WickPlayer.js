@@ -144,8 +144,6 @@ var WickPlayer = function () {
         clone.parentObject.getCurrentLayer().getCurrentFrame().wickObjects.push(clone);
         self.project.rootObject.generateParentObjectReferences();
 
-        //window.wickRenderer.refresh(clone);
-
         return clone;
     }
 

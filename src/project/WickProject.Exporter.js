@@ -221,7 +221,8 @@ WickProject.Exporter = (function () {
         "_wasClicked",
         "_wasClickedOff",
         "_wasHoveredOver",
-        "_beingClicked"
+        "_beingClicked",
+        "_pixiTextureCached",
     ];
 
     projectExporter.JSONReplacer = function(key, value) {

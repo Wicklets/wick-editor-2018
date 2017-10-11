@@ -41,6 +41,7 @@ var ScriptingIDEReference = function (scriptingIDE, wickEditor) {
 
             section.properties.forEach(function (prop) {
                 var propertyButton = document.createElement('div');
+                propertyButton.id = 'reference-button-' + stripFunctionParams(prop.name);
                 propertyButton.className = 'sidebarGroupElement tooltipElem';
                 propertyButton.innerHTML = stripFunctionParams(prop.name);
                 propertyButton.setAttribute('alt', getPropertyHTML(prop));

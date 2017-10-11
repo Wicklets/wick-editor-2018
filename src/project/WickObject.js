@@ -232,6 +232,7 @@ WickObject.prototype.copy = function () {
     copiedObject.flipY = this.flipY;
     copiedObject.opacity = this.opacity;
     copiedObject.uuid = random.uuid4();
+    copiedObject.sourceUUID = this.uuid;
     copiedObject.assetUUID = this.assetUUID;
     copiedObject.svgX = this.svgX;
     copiedObject.svgY = this.svgY;
