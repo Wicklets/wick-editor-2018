@@ -304,7 +304,7 @@ var ToolbarInterface = function (wickEditor) {
             },
             min: 0,
             max: 100,
-            moveFactor: 0.1,
+            moveFactor: 0.25,
             initValue: wickEditor.settings.brushSmoothingAmount,
         });
         numberInput.className = 'toolbar-number-input toolbar-brush-settings-window-number-input';

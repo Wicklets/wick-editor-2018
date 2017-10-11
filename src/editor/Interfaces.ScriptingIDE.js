@@ -107,6 +107,31 @@ var ScriptingIDEInterface = function (wickEditor) {
                 },SYNTAX_ERROR_MSG_DELAY);
             });
 
+            var resizer = document.getElementById('resizeScriptingGUIBar');
+            resizer.resizing = false;
+            resizer.addEventListener('mousedown', function (e) {
+                if(that.open){
+                    resizer.resizing = true;
+                } else {
+                    resizer.resizing = true;
+                    that.open = true;
+                    that.clearError();
+                    that.syncWithEditorState();
+                }
+
+            });
+            window.addEventListener('mousemove', function (e) {
+                if(resizer.resizing) {
+                    var newIDEHeight = wickEditor.settings.scriptingIDEHeight - e.movementY;
+                    wickEditor.settings.setValue('scriptingIDEHeight', newIDEHeight)
+                    document.getElementById('scriptingGUI').style.height = wickEditor.settings.scriptingIDEHeight+'px';
+                    that.resize()
+                }
+            });
+            window.addEventListener('mouseup', function (e) {
+                resizer.resizing = false
+            });
+
             that.resize = function () {
                 var GUIWidth = parseInt($("#scriptingGUI").css("width"));
                 //$("#scriptingGUI").css('left', (window.innerWidth/2 - GUIWidth/2)+'px');
@@ -160,7 +185,7 @@ var ScriptingIDEInterface = function (wickEditor) {
             if(maximized) {
                 document.getElementById('scriptingGUI').style.height = 'calc(100% - 30px)';
             } else {
-                document.getElementById('scriptingGUI').style.height = '300px';
+                document.getElementById('scriptingGUI').style.height = wickEditor.settings.scriptingIDEHeight+'px';
             }
             
             this.aceEditor.resize();
@@ -194,14 +219,15 @@ var ScriptingIDEInterface = function (wickEditor) {
                 $("#scriptObjectDiv").css('display', 'none');
 
                 if(wickEditor.project.getNumSelectedObjects() < 2) {
-                    document.getElementById('noSelectionDiv').innerHTML = "No scriptable object selected!";
+                    document.getElementById('noSelectionText').innerHTML = "No scriptable object selected!";
                 } else {
-                    document.getElementById('noSelectionDiv').innerHTML = "Multiple objects can't be scripted.<br />Convert them to a Clip or Button!";
+                    document.getElementById('noSelectionText').innerHTML = "Multiple objects can't be scripted.<br />Group them, or convert them to a Clip or Button!";
                 }
             }
 
         } else {
             //$("#scriptingGUI").css('display', 'none');
+            $("#noSelectionDiv").css('display', 'none');
             $("#scriptingGUI").css('height', '30px');
             this.justOpened = true;
 
@@ -343,7 +369,7 @@ var ScriptingIDEInterface = function (wickEditor) {
         that.syncWithEditorState();
     });
 
-    $("#scriptingIDEHeader").on("click", function (e) {
+    /*$("#scriptingIDEHeader").on("click", function (e) {
         that.open = !that.open;
         that.clearError();
         that.syncWithEditorState();
@@ -355,6 +381,6 @@ var ScriptingIDEInterface = function (wickEditor) {
     $("#scriptingIDEHeader").on("mouseout", function (e) {
         if(!that.open)
             $("#scriptingGUI").css('height', '30px');
-    });
+    });*/
 
 }
