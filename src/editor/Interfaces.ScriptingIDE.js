@@ -111,8 +111,7 @@ var ScriptingIDEInterface = function (wickEditor) {
                 var position = that.aceEditor.getCursorPosition();
                 var token = that.aceEditor.session.getTokenAt(position.row, position.column);
                 if(token) {
-                    var refElem = document.getElementById('reference-button-'+token.value);
-                    //if(refElem) refElem.style.backgroundColor = 'red';
+                    reference.highlightPropButton(token.value);
                 }
             });
 

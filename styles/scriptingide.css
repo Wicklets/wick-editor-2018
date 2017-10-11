@@ -213,6 +213,8 @@
     color: #BBB;
     padding-left: 3px;
 
+    width: 90%;
+
     -webkit-transition: background-color 50ms linear;
     -ms-transition: background-color 50ms linear;
     transition: background-color 50ms linear;
