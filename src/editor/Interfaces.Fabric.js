@@ -231,8 +231,8 @@ var FabricInterface = function (wickEditor) {
     }
 
     this.resetPan = function () {
-        var centerX = Math.floor(-(window.innerWidth -wickEditor.project.width)/2 - 33/2 + 254/2);
-        var centerY = Math.floor(-(window.innerHeight-wickEditor.project.height)/2 - 100/2);
+        var centerX = Math.floor(-(window.innerWidth -wickEditor.project.width)/2 - 33/2 + 204/2);
+        var centerY = Math.floor(-(window.innerHeight-wickEditor.project.height)/2 - 102/2);
         
         self.canvas.absolutePan(new fabric.Point(centerX,centerY));
     }
