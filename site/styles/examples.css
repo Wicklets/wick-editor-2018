@@ -2,6 +2,10 @@ body {
 	margin: 0px;
 }
 
+.clouds-angel {
+	opacity: 0.8;
+}
+
 /*********************************
 	Examples page container
 *********************************/
