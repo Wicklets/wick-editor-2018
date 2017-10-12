@@ -1,0 +1,192 @@
+body {
+	margin: 0px;
+}
+
+/*********************************
+	Examples page container
+*********************************/
+
+.examples-container {
+	width: 80%;
+	max-width: 900px;
+	margin-left: 50%;
+	transform: translateX(-50%);
+	margin-bottom: 100px;
+}
+
+/*********************************
+	Header
+*********************************/
+
+.examples-header {
+	margin-top: 50px;
+	margin-bottom: 40px;
+}
+
+.examples-header-title {
+	font-size: 42px;
+}
+
+.examples-header-subtitle {
+	font-size: 16px;
+	font-weight: normal;
+}
+
+/*********************************
+	Floating player
+*********************************/
+
+.player-window {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+}
+
+.player-window-background {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	background-color: rgba(0,0,0,0.5)
+}
+
+.player-window-title {
+	position: absolute;
+}
+
+.player-window-close-button {
+	position: absolute;
+}
+
+.player-window-player-container {
+	width: 720px;
+	height: 480px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translateX(-50%) translateY(-50%);
+	-webkit-box-shadow: 3px 3px 12px 0px rgba(0,0,0,0.73);
+    -moz-box-shadow: 3px 3px 12px 0px rgba(0,0,0,0.73);
+    box-shadow: 3px 3px 12px 0px rgba(0,0,0,0.73);
+    background-color: white;
+    border: none;
+}
+.player {
+	position: relative;
+	width: 720px;
+	height: 480px;
+	border: none;
+}
+
+/*********************************
+	Menubar for tags
+*********************************/
+
+.tags-menubar {
+	height: 50px;
+	border-radius: 25px;
+	background-color: #43f2b8;
+	display: flex;
+	margin-bottom: 50px;
+}
+
+.tags-menubar-tag {
+	flex-grow: 1;
+	justify-content: space-around;
+	height: 100%;
+	width: 100%;
+}
+
+.tags-menubar-tag-title {
+	cursor: pointer;
+	height: 45%;
+	width: max-content;
+	padding-left: 20px;
+	padding-right: 20px;
+	border-radius: 15px;
+	text-align: center;
+	margin-top: 15px;
+	margin-left: 50%;
+	transform: translateX(-50%);
+	background-color: #43f2b8;
+}
+.tags-menubar-tag-title-selected {
+	background-color: #c9fbe9;
+}
+.tags-menubar-tag-title:hover {
+	background-color: red;
+}
+
+/*********************************
+	Examples grid
+*********************************/
+
+.examples-grid {
+	width: 100%;
+	display: flex;
+	flex-flow: row wrap;
+  	justify-content: space-around;
+}
+
+.example-grid-element {
+	width: 200px;
+	height: 180px;
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-bottom: 45px;
+}
+
+.example-grid-element-thumbnail {
+	width: 100%;
+	height: calc(100% - 40px);
+	background-color: white;
+	border-radius: 6px;
+	cursor: pointer;
+	background-size: 100% 100%;
+}
+
+.example-grid-element-title {
+	margin-top: 5px;
+	width: 90%;
+	height: 30px;
+	margin-left: 5%;
+	font-weight: bold;
+	font-size: 18px;
+}
+
+.example-grid-element-open-in-editor-link {
+	width: 85px;
+	height: 14px;
+	border-radius: 7px;
+	background-color: #c9fbe9;
+	box-shadow: inset 0px 0px 3px #31E19C;
+	margin-left: 5%;
+	font-weight: normal;
+	font-size: 11px;
+	text-align: center;
+	cursor: pointer;
+	float: left;
+}
+.example-grid-element-open-in-editor-link:hover {
+	background-color: #31E19C;
+}
+
+.example-grid-element-tutorial-link {
+	width: 85px;
+	height: 14px;
+	border-radius: 7px;
+	background-color: #c9fbe9;
+	box-shadow: inset 0px 0px 3px #31E19C;
+	margin-left: 5%;
+	font-weight: normal;
+	font-size: 11px;
+	text-align: center;
+	cursor: pointer;
+	float: right;
+}
+.example-grid-element-tutorial-link:hover {
+	background-color: #31E19C;
+}

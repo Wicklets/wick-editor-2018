@@ -1,3 +1,4 @@
+/*
 var demos;
 var DEMOS_PATH = "../demos/"; 
 var currentDemo;
@@ -90,8 +91,8 @@ function buildPage (demos) {
 function recenterThumbnails () {
     //$('.thumbnails-container').css('width', '100%')
     var offset = (parseInt($('.thumbnails-container').width()) % 165) / 2;
-    /*$('.thumbnails-container').css('margin-left', offset + 'px')
-    $('.thumbnails-container').css('width', 'calc(720px - ' + offset + 'px)')*/
+    //$('.thumbnails-container').css('margin-left', offset + 'px')
+    //$('.thumbnails-container').css('width', 'calc(720px - ' + offset + 'px)')
 }
 
 // Load the json file with all the demos info
@@ -113,4 +114,80 @@ $(document).ready(function() {
     });
 
     window.onresize = recenterThumbnails;
+});
+*/
+
+function createDemoThumbs (demos) {
+    var dummy = document.getElementById('example-grid-element-dummy');
+    var container = document.getElementById('examples-grid');
+
+    document.getElementById('player-window-background').onclick = function () {
+        document.getElementById('player-window').style.display = 'none';
+        document.getElementById('player-container').innerHTML = "";
+    }
+    
+    demos.forEach(function (demo) {
+        var demoElem = dummy.cloneNode(true);
+        var children = demoElem.getElementsByTagName('div');
+        for(var i = 0; i < children.length; i++) {
+            demoElem[children[i].className] = children[i];
+        }
+        demoElem['example-grid-element-thumbnail'].style.backgroundImage = "url(" + DEMOS_PATH + demo.path + ".png)"
+        demoElem['example-grid-element-thumbnail'].onclick = function () {
+            document.getElementById('player-window').style.display = 'block';
+            loadDemo(demo);
+        }
+        demoElem['example-grid-element-title'].innerHTML = '<a href="dasd.com">'+demo.name+'</a>';
+        container.appendChild(demoElem);
+    });
+
+    dummy.parentNode.removeChild(dummy);
+}
+
+var DEMOS_PATH = "../demos/";
+
+function loadDemo (demo) {
+    var playerContainer = document.getElementById('player-container');
+    currentDemo = demo.path;
+    $.ajax({
+        url: DEMOS_PATH+demo.path+".json",
+        type: 'GET',
+        data: {},
+        success: function(data) {
+            playerContainer.innerHTML = "";
+            var iframe = document.createElement('iframe');
+            iframe.className = 'player';
+            iframe.onload = function () {
+                iframe.contentWindow.runProject(JSON.stringify(data));
+            }
+            iframe.src = "../../player.html";
+            playerContainer.appendChild(iframe);
+        },
+        error: function () {
+            console.log("ajax: error")
+        },
+        complete: function(response, textStatus) {
+
+        }
+    });
+}
+
+$(document).ready(function() {
+    $.ajax({
+        url: DEMOS_PATH+"demos.json",
+        type: 'GET',
+        data: {},
+        success: function(data) {
+            createDemoThumbs(data.demos);
+        },
+        error: function (e) {
+            console.log("ajax: error");
+            console.log(e);
+        },
+        complete: function(response, textStatus) {
+            console.log('aja: complete');
+            console.log(response)
+            console.log(textStatus)
+        }
+    });
 });

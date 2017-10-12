@@ -13,14 +13,29 @@
 			"name" : "Buggy",
 			"path" : "Buggy"
 		}, {
-			"name" : "Hungry Ghost",
-			"path" : "HungryGhost"
+			"name" : "Haunted House",
+			"path" : "HauntedHouse"
 		}, {
-			"name" : "Kitchen Sink",
-			"path" : "KitchenSink"
+			"name" : "Well-Dressed Ghost",
+			"path" : "WellDressedGhost"
 		}, {
-			"name" : "Homepage",
-			"path" : "Homepage"
+			"name" : "DJ Spookyman",
+			"path" : "DJSpookyman"
+		}, {
+			"name" : "Buggy",
+			"path" : "Buggy"
+		}, {
+			"name" : "Haunted House",
+			"path" : "HauntedHouse"
+		}, {
+			"name" : "Well-Dressed Ghost",
+			"path" : "WellDressedGhost"
+		}, {
+			"name" : "DJ Spookyman",
+			"path" : "DJSpookyman"
+		}, {
+			"name" : "Buggy",
+			"path" : "Buggy"
 		}
 	]
 }
