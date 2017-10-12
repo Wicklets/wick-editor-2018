@@ -132,12 +132,21 @@ function createDemoThumbs (demos) {
         for(var i = 0; i < children.length; i++) {
             demoElem[children[i].className] = children[i];
         }
-        demoElem['example-grid-element-thumbnail'].style.backgroundImage = "url(" + DEMOS_PATH + demo.path + ".png)"
+        demoElem['example-grid-element-thumbnail'].style.backgroundImage = "url(" + DEMOS_PATH+demo.thumbPath + ")"
         demoElem['example-grid-element-thumbnail'].onclick = function () {
             document.getElementById('player-window').style.display = 'block';
             loadDemo(demo);
         }
         demoElem['example-grid-element-title'].innerHTML = '<a href="dasd.com">'+demo.name+'</a>';
+        if(demo.tutorialPath) {
+
+        } else {
+            demoElem['example-grid-element-tutorial-link'].style.display = 'none';
+        }
+        demoElem['example-grid-element-open-in-editor-link'].onclick = function () {
+            var url = "../../editor.html?demo=" + demo.projectPath;
+            window.open(url,'_parent');
+        }
         container.appendChild(demoElem);
     });
 
@@ -148,9 +157,8 @@ var DEMOS_PATH = "../demos/";
 
 function loadDemo (demo) {
     var playerContainer = document.getElementById('player-container');
-    currentDemo = demo.path;
     $.ajax({
-        url: DEMOS_PATH+demo.path+".json",
+        url: DEMOS_PATH+demo.projectPath,
         type: 'GET',
         data: {},
         success: function(data) {

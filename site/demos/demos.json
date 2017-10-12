@@ -1,41 +1,50 @@
 {
 	"demos": [
 		{
-			"name" : "Haunted House",
-			"path" : "HauntedHouse"
+			"name" : "Follow The Cursor",
+			"projectPath" : "FollowTheCursor.json",
+			"thumbPath" : "FollowTheCursor.png",
+			"tutorialPath" : "FollowTheCursor.htm"
 		}, {
-			"name" : "Well-Dressed Ghost",
-			"path" : "WellDressedGhost"
+			"name" : "Moving To Frames",
+			"projectPath" : "MovingToFrames.json",
+			"thumbPath" : "MovingToFrames.png",
+			"tutorialPath" : "MovingToFrames.htm"
 		}, {
-			"name" : "DJ Spookyman",
-			"path" : "DJSpookyman"
+			"name" : "Keyboard Controls",
+			"projectPath" : "KeyboardControls.json",
+			"thumbPath" : "KeyboardControls.png",
+			"tutorialPath" : "FollowTheCursor.htm"
 		}, {
-			"name" : "Buggy",
-			"path" : "Buggy"
-		}, {
-			"name" : "Haunted House",
-			"path" : "HauntedHouse"
-		}, {
-			"name" : "Well-Dressed Ghost",
-			"path" : "WellDressedGhost"
-		}, {
-			"name" : "DJ Spookyman",
-			"path" : "DJSpookyman"
-		}, {
-			"name" : "Buggy",
-			"path" : "Buggy"
+			"name" : "Drag and Drop",
+			"projectPath" : "DragAndDrop.json",
+			"thumbPath" : "DragAndDrop.png",
+			"tutorialPath" : "DragAndDrop.htm"
 		}, {
 			"name" : "Haunted House",
-			"path" : "HauntedHouse"
+			"projectPath" : "HauntedHouse.json",
+			"thumbPath" : "HauntedHouse.png",
+			"tutorialPath" : null
 		}, {
 			"name" : "Well-Dressed Ghost",
-			"path" : "WellDressedGhost"
+			"projectPath" : "WellDressedGhost.json",
+			"thumbPath" : "WellDressedGhost.png",
+			"tutorialPath" : null
 		}, {
 			"name" : "DJ Spookyman",
-			"path" : "DJSpookyman"
+			"projectPath" : "DJSpookyman.json",
+			"thumbPath" : "DJSpookyman.png",
+			"tutorialPath" : null
 		}, {
-			"name" : "Buggy",
-			"path" : "Buggy"
+			"name" : "Homepage",
+			"projectPath" : "Homepage.json",
+			"thumbPath" : "Homepage.png",
+			"tutorialPath" : null
+		}, {
+			"name" : "Kitchen Sink",
+			"projectPath" : "KitchenSink.json",
+			"thumbPath" : "KitchenSink.png",
+			"tutorialPath" : null
 		}
 	]
 }

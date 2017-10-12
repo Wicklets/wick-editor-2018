@@ -117,7 +117,7 @@ body {
 	background-color: #c9fbe9;
 }
 .tags-menubar-tag-title:hover {
-	background-color: red;
+	background-color: #43f2b8;
 }
 
 /*********************************
@@ -146,6 +146,10 @@ body {
 	border-radius: 6px;
 	cursor: pointer;
 	background-size: 100% 100%;
+	opacity: 1.0;
+}
+.example-grid-element-thumbnail:hover {
+	opacity: 0.8;
 }
 
 .example-grid-element-title {
@@ -180,7 +184,7 @@ body {
 	border-radius: 7px;
 	background-color: #c9fbe9;
 	box-shadow: inset 0px 0px 3px #31E19C;
-	margin-left: 5%;
+	margin-right: 5%;
 	font-weight: normal;
 	font-size: 11px;
 	text-align: center;
