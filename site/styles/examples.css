@@ -91,7 +91,7 @@ body {
 *********************************/
 
 .tags-menubar {
-	height: 50px;
+	height: 40px;
 	border-radius: 25px;
 	background-color: #43f2b8;
 	display: flex;
@@ -107,13 +107,13 @@ body {
 
 .tags-menubar-tag-title {
 	cursor: pointer;
-	height: 45%;
+	height: 50%;
 	width: max-content;
 	padding-left: 20px;
 	padding-right: 20px;
 	border-radius: 15px;
 	text-align: center;
-	margin-top: 15px;
+	margin-top: 10px;
 	margin-left: 50%;
 	transform: translateX(-50%);
 	background-color: #43f2b8;
