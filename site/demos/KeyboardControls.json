@@ -17,7 +17,7 @@
 		"isButton": false,
 		"isGroup": false,
 		"playheadPosition": 0,
-		"currentLayer": 1,
+		"currentLayer": 0,
 		"layers": [
 			{
 				"frames": [
@@ -509,7 +509,7 @@
 					}
 				],
 				"identifier": "Layer 1",
-				"locked": true,
+				"locked": false,
 				"hidden": false
 			},
 			{
@@ -543,7 +543,7 @@
 								"svgY": 6.661338147750939e-15,
 								"svgStrokeWidth": 0,
 								"svgWidth": 102.87141,
-								"svgHeight": 96.00798403193613,
+								"svgHeight": 96.00798403193616,
 								"_zindex": 0,
 								"forceFabricCanvasRegen": false,
 								"uuid": "bdc97d58-d423-4d42-919e-5d19e7a05c1a"
@@ -574,7 +574,7 @@
 								"svgY": 6.661338147750939e-15,
 								"svgStrokeWidth": 0,
 								"svgWidth": 102.87140999999997,
-								"svgHeight": 96.00798403193613,
+								"svgHeight": 96.00798403193616,
 								"_zindex": 1,
 								"forceFabricCanvasRegen": false,
 								"uuid": "b74f67bd-53b3-453b-8ef0-4cefaedc7bbe"
@@ -605,7 +605,7 @@
 								"svgY": 6.661338147750939e-15,
 								"svgStrokeWidth": 0,
 								"svgWidth": 102.87140999999997,
-								"svgHeight": 96.00798403193613,
+								"svgHeight": 96.00798403193616,
 								"_zindex": 2,
 								"forceFabricCanvasRegen": false,
 								"uuid": "042ec7b9-046f-4046-b5d2-3f5d5cc88976"
@@ -636,7 +636,7 @@
 								"svgY": 6.661338147750939e-15,
 								"svgStrokeWidth": 0,
 								"svgWidth": 102.87140999999997,
-								"svgHeight": 96.00798403193613,
+								"svgHeight": 96.00798403193616,
 								"_zindex": 3,
 								"forceFabricCanvasRegen": false,
 								"uuid": "3636034f-0e7a-40e7-9e7e-35e7e3646fca"
@@ -1086,7 +1086,7 @@
 					}
 				],
 				"identifier": "Layer 2",
-				"locked": false,
+				"locked": true,
 				"hidden": false
 			}
 		],
