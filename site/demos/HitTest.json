@@ -84,8 +84,8 @@
 														"uuid": "3253f806-f743-4f74-af5c-2ef559ca3d8c",
 														"_tempZIndex": 1,
 														"bbox": {
-															"left": -46.5,
-															"top": -3.5,
+															"left": -2.5,
+															"top": 4.5,
 															"width": 110,
 															"height": 102
 														}
@@ -122,8 +122,8 @@
 														"uuid": "ab5f6676-a824-4a82-bb50-c3b59fcde13e",
 														"_tempZIndex": 2,
 														"bbox": {
-															"left": 5,
-															"top": 42.5,
+															"left": 49,
+															"top": 50.5,
 															"width": 215,
 															"height": 200
 														}
@@ -160,8 +160,8 @@
 														"uuid": "ae83764a-86be-486b-957f-39578253e318",
 														"_tempZIndex": 3,
 														"bbox": {
-															"left": 152.5,
-															"top": 189.5,
+															"left": 196.5,
+															"top": 197.5,
 															"width": 110,
 															"height": 102
 														}
@@ -198,8 +198,8 @@
 														"uuid": "622bec40-df3e-4df3-b19d-7719536f989e",
 														"_tempZIndex": 4,
 														"bbox": {
-															"left": 101,
-															"top": 142.5,
+															"left": 145,
+															"top": 150.5,
 															"width": 215,
 															"height": 200
 														}
@@ -236,8 +236,8 @@
 														"uuid": "fe636fa3-551e-4551-b1f0-1f1f4486c19b",
 														"_tempZIndex": 5,
 														"bbox": {
-															"left": 54.5,
-															"top": 92,
+															"left": 98.5,
+															"top": 100,
 															"width": 308,
 															"height": 295
 														}
@@ -274,8 +274,8 @@
 														"uuid": "3486d5fc-9faf-49fa-a143-fe14b5b82720",
 														"_tempZIndex": 6,
 														"bbox": {
-															"left": 54.03947559115346,
-															"top": 93.46052564530783,
+															"left": 98.03947559115346,
+															"top": 101.46052564530783,
 															"width": 311.07895,
 															"height": 298.0789500000001
 														}
@@ -312,8 +312,8 @@
 														"uuid": "965cfc1a-382e-4382-9b2e-1db20320f481",
 														"_tempZIndex": 7,
 														"bbox": {
-															"left": 54,
-															"top": 93,
+															"left": 98,
+															"top": 101,
 															"width": 311,
 															"height": 299
 														}
@@ -349,8 +349,8 @@
 														"forceFabricCanvasRegen": false,
 														"uuid": "64988af7-59ff-459f-801c-7801e234819b",
 														"bbox": {
-															"left": 48.75,
-															"top": 93.75,
+															"left": 92.75,
+															"top": 101.75,
 															"width": 302.5,
 															"height": 302.5
 														}
@@ -439,8 +439,8 @@
 														"forceFabricCanvasRegen": false,
 														"_tempZIndex": 2,
 														"bbox": {
-															"left": 59.5,
-															"top": -120.5,
+															"left": 103.5,
+															"top": -112.5,
 															"width": 72,
 															"height": 72
 														}
@@ -477,8 +477,8 @@
 														"forceFabricCanvasRegen": false,
 														"_tempZIndex": 3,
 														"bbox": {
-															"left": 72.03848456195453,
-															"top": -131.69877977034395,
+															"left": 116.03848456195453,
+															"top": -123.69877977034395,
 															"width": 25.78078000000005,
 															"height": 26.628980000000006
 														}
@@ -515,8 +515,8 @@
 														"_zindex": 22,
 														"_tempZIndex": 4,
 														"bbox": {
-															"left": 56.10066475279007,
-															"top": -114.21980621753448,
+															"left": 100.10066475279007,
+															"top": -106.21980621753448,
 															"width": 51.361989517848315,
 															"height": 47.957087816613495
 														}
@@ -534,6 +534,76 @@
 											{
 												"identifier": "",
 												"wickObjects": [
+													{
+														"x": -0.1325720531636989,
+														"y": 0.378034454776369,
+														"width": 98.59920000000002,
+														"height": 95.88656,
+														"scaleX": 1,
+														"scaleY": 1,
+														"rotation": 0,
+														"flipX": false,
+														"flipY": false,
+														"opacity": 1,
+														"wickScript": "",
+														"assetUUID": null,
+														"loop": false,
+														"isText": false,
+														"isSymbol": false,
+														"isButton": false,
+														"isGroup": false,
+														"playheadPosition": null,
+														"currentLayer": null,
+														"svgX": 211.06782794683627,
+														"svgY": 20.934754454776368,
+														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20fill-opacity=%220.26%22%20fill=%22#00ff00%22%20fill-rule=%22nonzero%22%20stroke=%22#000000%22%20stroke-width=%220%22%20stroke-linecap=%22butt%22%20stroke-linejoin=%22miter%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M211.06783,68.87803c0,-26.47834%2022.07218,-47.94328%2049.2996,-47.94328c27.22742,0%2049.2996,21.46493%2049.2996,47.94328c0,26.47834%20-22.07218,47.94328%20-49.2996,47.94328c-27.22742,0%20-49.2996,-21.46493%20-49.2996,-47.94328z%22/%3E%3C/g%3E",
+														"isPath": true,
+														"cachedAbsolutePosition": {
+															"x": 260.5,
+															"y": 68.5
+														},
+														"svgStrokeWidth": 0,
+														"svgWidth": 98.59920000000005,
+														"svgHeight": 95.88656000000003,
+														"_zindex": 20,
+														"forceFabricCanvasRegen": false,
+														"uuid": "a8ffe341-ea3e-4ea3-8cad-c0ca1aa6e0c1"
+													},
+													{
+														"x": 0.13936762899948008,
+														"y": -0.11996104231648985,
+														"width": 82.88737999999998,
+														"height": 80.60699306137401,
+														"scaleX": 1,
+														"scaleY": 1,
+														"rotation": 0,
+														"flipX": false,
+														"flipY": false,
+														"opacity": 1,
+														"wickScript": "",
+														"assetUUID": null,
+														"loop": false,
+														"isText": false,
+														"isSymbol": false,
+														"isButton": false,
+														"isGroup": false,
+														"playheadPosition": null,
+														"currentLayer": null,
+														"svgX": 219.1956776289995,
+														"svgY": 28.0765424269965,
+														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20fill-opacity=%220.51%22%20fill=%22#00ff00%22%20fill-rule=%22nonzero%22%20stroke=%22#000000%22%20stroke-width=%220%22%20stroke-linecap=%22butt%22%20stroke-linejoin=%22miter%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M219.19568,68.38004c0,-22.25901%2018.55497,-40.3035%2041.44369,-40.3035c22.88872,0%2041.44369,18.04449%2041.44369,40.3035c0,22.25901%20-18.55497,40.3035%20-41.44369,40.3035c-22.88872,0%20-41.44369,-18.04449%20-41.44369,-40.3035z%22/%3E%3C/g%3E",
+														"isPath": true,
+														"cachedAbsolutePosition": {
+															"x": 260.5,
+															"y": 68.5
+														},
+														"svgStrokeWidth": 0,
+														"svgWidth": 82.88738000000001,
+														"svgHeight": 80.60699306137403,
+														"_zindex": 21,
+														"forceFabricCanvasRegen": false,
+														"uuid": "7285ec09-6268-4626-92ac-3d2aea27837c"
+													},
 													{
 														"uuid": "890ccb01-3066-4306-82b9-182b2999f324",
 														"x": 0,
@@ -566,7 +636,7 @@
 														"svgStrokeWidth": 5,
 														"svgWidth": 72,
 														"svgHeight": 72,
-														"_zindex": 20,
+														"_zindex": 22,
 														"forceFabricCanvasRegen": false
 													},
 													{
@@ -600,8 +670,8 @@
 														},
 														"svgStrokeWidth": 5,
 														"svgWidth": 25.78078000000005,
-														"svgHeight": 26.628979999999984,
-														"_zindex": 21,
+														"svgHeight": 26.628980000000013,
+														"_zindex": 23,
 														"forceFabricCanvasRegen": false
 													},
 													{
@@ -636,7 +706,7 @@
 														"svgStrokeWidth": 5,
 														"svgWidth": 51.361989517848315,
 														"svgHeight": 47.957087816613466,
-														"_zindex": 22,
+														"_zindex": 24,
 														"forceFabricCanvasRegen": false
 													}
 												],
@@ -744,8 +814,8 @@
 																				"isPath": true,
 																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#ffffff%22%20fill-rule=%22nonzero%22%20stroke=%22#000000%22%20stroke-width=%228.78%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M421.11658,308.08292c2.51454,3.73516%203.23782,3.85402%205.40856,-0.64082c2.62648,-4.94396%2044.06372,-63.63433%2037.25907,-108.67353c-6.80465,-45.03917%20-42.41315,-81.62998%20-95.7684,-82.21482c-53.3552,-0.58484%20-97.73808,43.65285%20-97.73808,93.55129c0,49.8984%2038.96259,95.68501%2041.92203,99.35271c2.78414,3.56428%203.90295,3.42485%206.29852,-0.11227c2.73995,-4.45292%209.09195,-17.4304%2011.0051,-20.17175c1.83726,-2.73904%202.44696,-2.67665%204.49284,-0.20535c2.16108,2.80749%2013.76315,15.86708%2016.60226,19.71264c2.85582,3.30467%204.0419,2.19596%205.6878,-0.25368c1.90232,-2.89102%209.53136,-17.42581%2011.02153,-19.82653c1.32986,-2.01943%202.9616,-2.04479%204.29464,0.02254c1.31261,2.06732%2013.15379,18.98761%2013.99741,20.32414c1.00852,1.36378%202.51014,2.06209%203.7045,-0.08559c1.32959,-2.04648%2011.78534,-18.33476%2013.16875,-20.82911c1.3896,-2.4944%203.4453,-2.8525%204.95946,0.02091c1.61303,2.78577%2011.22113,16.43908%2013.68399,20.02924z%22/%3E%3C/g%3E",
 																				"bbox": {
-																					"left": 364.40784264654224,
-																					"top": 31.306742162108463,
+																					"left": 408.40784264654224,
+																					"top": 39.30674216210846,
 																					"width": 203.0402302857009,
 																					"height": 204.29746027048188
 																				},
@@ -784,8 +854,8 @@
 																				"isPath": true,
 																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#fee8e4%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#000000%22%20stroke-width=%228.78%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M254.24305,165.94558c18.90939,-0.77969%2033.9552,-6.92691%2033.60578,-13.73017c-0.34942,-6.80328%20-15.96178,-11.68634%20-34.87117,-10.90662c-18.90939,0.77969%20-33.9552,6.92691%20-33.60578,13.73017c0.34942,6.80328%2015.96178,11.68634%2034.87117,10.90662z%22/%3E%3C/g%3E",
 																				"bbox": {
-																					"left": 392.6103592238919,
-																					"top": 18.627189427521955,
+																					"left": 436.6103592238919,
+																					"top": 26.627189427521955,
 																					"width": 77.26887991359138,
 																					"height": 33.580361776659515
 																				},
@@ -824,8 +894,8 @@
 																				"isPath": true,
 																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#000000%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#000000%22%20stroke-width=%228.78%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M237.22582,148.54654c2.5529,0%204.62241,-2.82667%204.62241,-6.31355c0,-3.48687%20-2.06953,-6.31355%20-4.62241,-6.31355c-2.5529,0%20-4.62241,2.82667%20-4.62241,6.31355c0,3.48687%202.06953,6.31355%204.62241,6.31355z%22/%3E%3C/g%3E",
 																				"bbox": {
-																					"left": 376.2258201903569,
-																					"top": 7.232991971916988,
+																					"left": 420.2258201903569,
+																					"top": 15.232991971916988,
 																					"width": 18.02482000000009,
 																					"height": 21.407100000000014
 																				},
@@ -864,8 +934,8 @@
 																				"isPath": true,
 																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#000000%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#000000%22%20stroke-width=%228.78%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M268.76813,147.86947c2.56105,0%204.63717,-2.63587%204.63717,-5.88737c0,-3.2515%20-2.07615,-5.88737%20-4.63717,-5.88737c-2.56105,0%20-4.63717,2.63587%20-4.63717,5.88737c0,3.2515%202.07615,5.88737%204.63717,5.88737z%22/%3E%3C/g%3E",
 																				"bbox": {
-																					"left": 407.76813296799037,
-																					"top": 6.982099666673946,
+																					"left": 451.76813296799037,
+																					"top": 14.982099666673946,
 																					"width": 18.05434000000014,
 																					"height": 20.554740000000038
 																				},
@@ -900,8 +970,8 @@
 														"svgHeight": 205.2974602704819,
 														"svgStrokeWidth": 0,
 														"bbox": {
-															"left": 364.40784264654224,
-															"top": 31.306742162108492,
+															"left": 408.40784264654224,
+															"top": 39.30674216210849,
 															"width": 204.0402302857009,
 															"height": 205.2974602704819
 														},
@@ -1026,8 +1096,8 @@
 																				"svgWidth": 142,
 																				"svgHeight": 32,
 																				"bbox": {
-																					"left": 364,
-																					"top": 161,
+																					"left": 408,
+																					"top": 169,
 																					"width": 142,
 																					"height": 32
 																				},
@@ -1057,8 +1127,8 @@
 														"svgHeight": 33,
 														"svgStrokeWidth": 0,
 														"bbox": {
-															"left": 364,
-															"top": 161,
+															"left": 408,
+															"top": 169,
 															"width": 143,
 															"height": 33
 														},
