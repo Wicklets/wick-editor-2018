@@ -16,11 +16,9 @@ function createDemoThumbs (demos) {
             demoElem[children[i].className] = children[i];
         }
         demoElem['example-grid-element-thumbnail'].style.backgroundImage = "url(" + DEMOS_PATH+demo.thumbPath + ")"
-        demoElem['example-grid-element-thumbnail'].onclick = function () {
-            document.getElementById('player-window').style.display = 'block';
-            loadDemo(demo);
-        }
-        demoElem['example-grid-element-title'].innerHTML = '<a href="dasd.com">'+demo.name+'</a>';
+        demoElem['example-grid-element-thumbnail'].onclick = function () { loadDemo(demo); }
+        demoElem['example-grid-element-title'].onclick = function () { loadDemo(demo); }
+        demoElem['example-grid-element-title'].innerHTML = demo.name;
         if(demo.tutorialPath) {
 
         } else {
@@ -52,6 +50,7 @@ function showProjectsWithTag(tag) {
 }
 
 function loadDemo (demo) {
+    document.getElementById('player-window').style.display = 'block';
     var playerContainer = document.getElementById('player-container');
     document.getElementsByClassName('player-window-title')[0].innerHTML = demo.name;
     $.ajax({

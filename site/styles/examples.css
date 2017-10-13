@@ -188,6 +188,11 @@ body {
 	margin-left: 6px;
 	font-weight: bold;
 	font-size: 18px;
+	color: #31E19C;
+	cursor: pointer;
+}
+.example-grid-element-title:hover {
+	color: #c9fbe9;
 }
 
 .example-grid-element-open-in-editor-link {
