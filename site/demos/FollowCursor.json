@@ -17,7 +17,7 @@
 		"isButton": false,
 		"isGroup": false,
 		"playheadPosition": 0,
-		"currentLayer": 1,
+		"currentLayer": 0,
 		"layers": [
 			{
 				"frames": [
@@ -36,7 +36,7 @@
 								"flipX": false,
 								"flipY": false,
 								"opacity": 1,
-								"wickScript": "dragging%20=%20false;%0A%0Afunction%20update()%20%7B%0A%20%20%20%20if%20(dragging)%20%7B%0A%20%20%20%20%20%20%20%20this.x%20=%20mouseX%0A%20%20%20%20%20%20%20%20this.y%20=%20mouseY%0A%20%20%20%20%7D%0A%7D%0A%0Afunction%20mousedown%20()%20%7B%0A%20%20%20%20dragging%20=%20true%0A%7D%0A%0Afunction%20mouseup%20()%20%7B%0A%20%20%20%20dragging%20=%20false%0A%7D",
+								"wickScript": "function%20update()%20%7B%0A%20%20%20%20this.x%20=%20mouseX%0A%20%20%20%20this.y%20=%20mouseY%0A%7D",
 								"assetUUID": null,
 								"volume": 1,
 								"loop": false,
@@ -1098,7 +1098,7 @@
 	"library": {
 		"assets": {}
 	},
-	"name": "FollowTheCursor",
+	"name": "FollowCursor",
 	"onionSkinning": false,
 	"width": 720,
 	"height": 480,
