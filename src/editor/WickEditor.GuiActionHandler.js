@@ -860,7 +860,7 @@ var GuiActionHandler = function (wickEditor) {
         })
 
     registerAction('breakApart',
-        [],
+        ["Modifier", "B"],
         [],
         {},
         function(args) {

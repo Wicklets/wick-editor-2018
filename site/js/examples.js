@@ -5,10 +5,8 @@ function createDemoThumbs (demos) {
     var dummy = document.getElementById('example-grid-element-dummy');
     var container = document.getElementById('examples-grid');
 
-    document.getElementById('player-window-background').onclick = function () {
-        document.getElementById('player-window').style.display = 'none';
-        document.getElementById('player-container').innerHTML = "";
-    }
+    document.getElementById('player-window-background').onclick = closePlayer;
+    document.getElementsByClassName('player-window-close-button')[0].onclick = closePlayer;
     
     demos.forEach(function (demo) {
         var demoElem = dummy.cloneNode(true);
@@ -55,6 +53,7 @@ function showProjectsWithTag(tag) {
 
 function loadDemo (demo) {
     var playerContainer = document.getElementById('player-container');
+    document.getElementsByClassName('player-window-title')[0].innerHTML = demo.name;
     $.ajax({
         url: DEMOS_PATH+demo.projectPath,
         type: 'GET',
@@ -76,6 +75,11 @@ function loadDemo (demo) {
 
         }
     });
+}
+
+function closePlayer () {
+    document.getElementById('player-window').style.display = 'none';
+    document.getElementById('player-container').innerHTML = "";
 }
 
 $(document).ready(function() {

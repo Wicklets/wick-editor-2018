@@ -60,10 +60,34 @@ body {
 
 .player-window-title {
 	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 720px;
+	height: 30px;
+	color: white;
+	font-size: 20px;
+	text-shadow: 2px 2px #333;
+	top: calc(50% - 240px);
+	left: 50%;
+	transform: translateX(-50%) translateY(-100%);
 }
 
 .player-window-close-button {
 	position: absolute;
+	top: calc(50% - 240px);
+	left: calc(50% + 360px);
+	width: 25px;
+	height: 40px;
+	transform: translateX(-100%) translateY(-100%);
+	cursor: pointer;
+	font-size: 30px;
+	color: white;
+	text-shadow: 2px 2px #333;
+	opacity: 1.0;
+	text-align: center;
+}
+.player-window-close-button:hover {
+	opacity: 0.7;
 }
 
 .player-window-player-container {
