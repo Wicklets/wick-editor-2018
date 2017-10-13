@@ -861,7 +861,7 @@ var GuiActionHandler = function (wickEditor) {
 
     registerAction('breakApart',
         ["Modifier", "B"],
-        [],
+        'Break Apart Selection',
         {},
         function(args) {
             var selectedObject = wickEditor.project.getSelectedObject();
