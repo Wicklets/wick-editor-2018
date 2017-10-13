@@ -1,28 +1,34 @@
 {
 	"demos": [
 		{
-			"name" : "Follow The Cursor",
-			"projectPath" : "FollowTheCursor.json",
-			"thumbPath" : "FollowTheCursor.png",
-			"tutorialPath" : "FollowTheCursor.htm",
+			"name" : "Follow Cursor",
+			"projectPath" : "FollowCursor.json",
+			"thumbPath" : "FollowCursor.png",
+			"tutorialPath" : null,
 			"tags": ["basics"]
 		}, {
 			"name" : "Moving To Frames",
 			"projectPath" : "MovingToFrames.json",
 			"thumbPath" : "MovingToFrames.png",
-			"tutorialPath" : "MovingToFrames.htm",
+			"tutorialPath" : null,
 			"tags": ["basics"]
 		}, {
 			"name" : "Keyboard Controls",
 			"projectPath" : "KeyboardControls.json",
 			"thumbPath" : "KeyboardControls.png",
-			"tutorialPath" : "FollowTheCursor.htm",
+			"tutorialPath" : null,
 			"tags": ["basics"]
 		}, {
 			"name" : "Drag and Drop",
 			"projectPath" : "DragAndDrop.json",
 			"thumbPath" : "DragAndDrop.png",
-			"tutorialPath" : "DragAndDrop.htm",
+			"tutorialPath" : null,
+			"tags": ["basics"]
+		}, {
+			"name" : "Follow Cursor (Easing)",
+			"projectPath" : "FollowCursorEasing.json",
+			"thumbPath" : "FollowCursorEasing.png",
+			"tutorialPath" : null,
 			"tags": ["basics"]
 		}, {
 			"name" : "Haunted House",
