@@ -25,6 +25,12 @@
 			"tutorialPath" : null,
 			"tags": ["basics"]
 		}, {
+			"name" : "Hit Test",
+			"projectPath" : "HitTest.json",
+			"thumbPath" : "HitTest.png",
+			"tutorialPath" : null,
+			"tags": ["basics"]
+		}, {
 			"name" : "Follow Cursor (Easing)",
 			"projectPath" : "FollowCursorEasing.json",
 			"thumbPath" : "FollowCursorEasing.png",
