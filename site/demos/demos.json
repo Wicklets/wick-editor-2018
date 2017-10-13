@@ -4,47 +4,56 @@
 			"name" : "Follow The Cursor",
 			"projectPath" : "FollowTheCursor.json",
 			"thumbPath" : "FollowTheCursor.png",
-			"tutorialPath" : "FollowTheCursor.htm"
+			"tutorialPath" : "FollowTheCursor.htm",
+			"tags": ["basics"]
 		}, {
 			"name" : "Moving To Frames",
 			"projectPath" : "MovingToFrames.json",
 			"thumbPath" : "MovingToFrames.png",
-			"tutorialPath" : "MovingToFrames.htm"
+			"tutorialPath" : "MovingToFrames.htm",
+			"tags": ["basics"]
 		}, {
 			"name" : "Keyboard Controls",
 			"projectPath" : "KeyboardControls.json",
 			"thumbPath" : "KeyboardControls.png",
-			"tutorialPath" : "FollowTheCursor.htm"
+			"tutorialPath" : "FollowTheCursor.htm",
+			"tags": ["basics"]
 		}, {
 			"name" : "Drag and Drop",
 			"projectPath" : "DragAndDrop.json",
 			"thumbPath" : "DragAndDrop.png",
-			"tutorialPath" : "DragAndDrop.htm"
+			"tutorialPath" : "DragAndDrop.htm",
+			"tags": ["basics"]
 		}, {
 			"name" : "Haunted House",
 			"projectPath" : "HauntedHouse.json",
 			"thumbPath" : "HauntedHouse.png",
-			"tutorialPath" : null
+			"tutorialPath" : null,
+			"tags": ["games"]
 		}, {
 			"name" : "Well-Dressed Ghost",
 			"projectPath" : "WellDressedGhost.json",
 			"thumbPath" : "WellDressedGhost.png",
-			"tutorialPath" : null
+			"tutorialPath" : null,
+			"tags": ["games"]
 		}, {
 			"name" : "DJ Spookyman",
 			"projectPath" : "DJSpookyman.json",
 			"thumbPath" : "DJSpookyman.png",
-			"tutorialPath" : null
+			"tutorialPath" : null,
+			"tags": ["games"]
 		}, {
 			"name" : "Homepage",
 			"projectPath" : "Homepage.json",
 			"thumbPath" : "Homepage.png",
-			"tutorialPath" : null
+			"tutorialPath" : null,
+			"tags": ["techdemos"]
 		}, {
 			"name" : "Kitchen Sink",
 			"projectPath" : "KitchenSink.json",
 			"thumbPath" : "KitchenSink.png",
-			"tutorialPath" : null
+			"tutorialPath" : null,
+			"tags": ["techdemos"]
 		}
 	]
 }

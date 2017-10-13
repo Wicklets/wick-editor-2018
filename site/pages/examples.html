@@ -30,16 +30,16 @@
 
 		<div class="tags-menubar">
 			<div class="tags-menubar-tag">
-				<div class="tags-menubar-tag-title tags-menubar-tag-title-selected">All</div>
+				<div onclick="showProjectsWithTag('all');" class="tags-menubar-tag-title tags-menubar-tag-title-selected" id="tag-all">All</div>
 			</div>
 			<div class="tags-menubar-tag">
-				<div class="tags-menubar-tag-title">Coding</div>
+				<div onclick="showProjectsWithTag('basics');" class="tags-menubar-tag-title" id="tag-basics">Basics</div>
 			</div>
 			<div class="tags-menubar-tag">
-				<div class="tags-menubar-tag-title">Games</div>
+				<div onclick="showProjectsWithTag('games');" id="tag-games" class="tags-menubar-tag-title">Games</div>
 			</div>
 			<div class="tags-menubar-tag">
-				<div class="tags-menubar-tag-title">Tech Demos</div>
+				<div onclick="showProjectsWithTag('techdemos');" id="tag-techdemos" class="tags-menubar-tag-title">Tech Demos</div>
 			</div>
 		</div>
 		<div class="examples-grid" id="examples-grid">
