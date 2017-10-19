@@ -320,6 +320,18 @@
           "snippet": "this.currentFrameName",
           "args": [],
           "return": null
+        },
+        { "name": "setText(text)",
+          "description": "Dynamically updates the text for a text object. (only works on Text).",
+          "example": "//Dynamically update with mouseX position\nfunction update () {\n this.setText('mouseX:' + mouseX);\n}",
+          "snippet": "this.setText('update text here')",
+          "args": [
+            {
+              "name": "text",
+              "type": "String",
+              "description": "The string to update the textbox with."
+            }
+          ]
         }
       ]
     },
