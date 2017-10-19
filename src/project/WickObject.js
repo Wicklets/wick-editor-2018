@@ -66,6 +66,10 @@ var WickObject = function () {
     this.layers = undefined;
     this.playRanges = undefined;
 
+// Render
+    
+    this._renderDirty = false;  // Tell the renderer if this object has changed. 
+
 };
 
 WickObject.fromJSON = function (jsonString) {
@@ -1401,5 +1405,12 @@ WickObject.prototype.isActive = function () {
     if(this.isRoot) return true;
 
     return this.parentFrame._active;
+}
+
+WickObject.prototype.setText = function (text) {
+    if (!this.isText) { return; } // We're not text, don't set anything
+
+    this.textData.text = String(text); // Convert to a string, just in case.
+    this._renderDirty = true;  
 }
 
