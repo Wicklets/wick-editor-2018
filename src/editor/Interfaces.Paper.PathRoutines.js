@@ -19,61 +19,19 @@ var PathRoutines = function (paperInterface, wickEditor) {
 
     var self = this;
 
-	/*self.doBooleanOperation = function (boolFnName, objs) {
-        var touchingPaths = objs;
-
-        wickEditor.actionHandler.doAction('deleteObjects', {
-            objects: touchingPaths
-        });
-
-        startTiming()
-
-        touchingPaths.forEach(function (path) {
-            self.regenPaperJSState(path);
-        });
-
-        stopTiming("regen paper states!")
-        startTiming();
-
-        var superPath = touchingPaths[0].paper.children[0].clone({insert:false});
-        touchingPaths.forEach(function (path) {
-            if(path === touchingPaths[0]) return;
-            if(superPath.closePath) superPath.closePath();
-            superPath = superPath[boolFnName](path.paper.children[0]);
-        });
-
-        var superGroup = new paper.Group({insert:false});
-        superGroup.addChild(superPath);
-
-        var superPathString = superPath.exportSVG({asString:true});
-        var svgString = '<svg id="svg" version="1.1" width="'+superPath.bounds._width+'" height="'+superPath.bounds._height+'" xmlns="http://www.w3.org/2000/svg">' +superPathString+ '</svg>'
-        var superPathWickObject = WickObject.createPathObject(svgString);
-        superPathWickObject.x = superPath.position.x;
-        superPathWickObject.y = superPath.position.y;
-
-        stopTiming("union!")
-
-        self.refreshPathData(superPathWickObject)
-        wickEditor.actionHandler.doAction('addObjects', {
-            wickObjects: [superPathWickObject]
-        });
-    }*/
-
     self.getBooleanOpResult = function (boolFnName, objs) {
         var touchingPaths = objs;
 
-        /*wickEditor.actionHandler.doAction('deleteObjects', {
-            objects: touchingPaths
-        });*/
+        if(boolFnName === 'intersect') {
+            touchingPaths = touchingPaths.reverse();
+            //console.log(touchingPaths);
+        }
 
-        startTiming()
+        //startTiming()
 
         touchingPaths.forEach(function (path) {
             self.regenPaperJSState(path);
         });
-
-        stopTiming("regen paper states!")
-        startTiming();
 
         var superPath = touchingPaths[0].paper.children[0].clone({insert:false});
         touchingPaths.forEach(function (path) {
@@ -91,19 +49,14 @@ var PathRoutines = function (paperInterface, wickEditor) {
         superPathWickObject.x = superPath.position.x;
         superPathWickObject.y = superPath.position.y;
 
-        stopTiming("union!")
+        //stopTiming("boolean op done")
 
         self.refreshPathData(superPathWickObject)
-        /*wickEditor.actionHandler.doAction('addObjects', {
-            wickObjects: [superPathWickObject]
-        });*/
 
         return superPathWickObject;
     }
 
     self.eraseWithPath = function (args) {
-        startTiming()
-
         var paths = [];
         wickEditor.project.getCurrentFrame().wickObjects.forEach(function (wickObject) {
             if(wickObject.pathData) {
@@ -111,9 +64,6 @@ var PathRoutines = function (paperInterface, wickEditor) {
                 self.regenPaperJSState(wickObject);
             }
         });
-
-        stopTiming('regen paper states!');
-        startTiming();
 
         var xmlString = args.pathData
           , parser = new DOMParser()
@@ -124,9 +74,8 @@ var PathRoutines = function (paperInterface, wickEditor) {
 
         subtractWithPath.position.x = args.pathX;
         subtractWithPath.position.y = args.pathY;
-        console.log(subtractWithPath)
-        subtractWithPath.scaling.x /= wickEditor.fabric.canvas.getZoom();
-        subtractWithPath.scaling.y /= wickEditor.fabric.canvas.getZoom();
+        //subtractWithPath.scaling.x /= wickEditor.fabric.canvas.getZoom();
+        //subtractWithPath.scaling.y /= wickEditor.fabric.canvas.getZoom();
 
         var modifiedStates = [];
         var modifiedObjects = [];
@@ -151,8 +100,6 @@ var PathRoutines = function (paperInterface, wickEditor) {
             objs: modifiedObjects,
             modifiedStates: modifiedStates
         });
-
-        stopTiming('subtraction!');
     }
 
     self.setFillColor = function (wickObjects, newColor) {
@@ -236,6 +183,29 @@ var PathRoutines = function (paperInterface, wickEditor) {
 
     }
 
+    self.setStrokeCapAndJoin = function (wickObjects, strokeCap, strokeJoin) {
+        var modifiedStates = [];
+        var modifiedObjects = [];
+
+        wickObjects.forEach(function (wickObject) {
+            if(!wickObject.isPath) return;
+            self.regenPaperJSState(wickObject);
+
+            wickObject.paper.strokeCap = strokeCap;
+            wickObject.paper.strokeJoin = strokeJoin;
+
+            modifiedStates.push({
+                pathData : wickObject.paper.exportSVG({asString:true})
+            });
+            modifiedObjects.push(wickObject);
+        });
+
+        wickEditor.actionHandler.doAction('modifyObjects', {
+            objs: modifiedObjects,
+            modifiedStates: modifiedStates
+        });
+    }
+
     self.regenPaperJSState = function (wickObject) {
         if(!wickObject.isPath/* && !wickObject.isImage*/) return;
 
@@ -246,6 +216,7 @@ var PathRoutines = function (paperInterface, wickEditor) {
         //console.log(xmlString)
 
         wickObject.paper = paper.project.importSVG(doc, {insert:false});
+
         //console.log(wickObject.paper)
         if(wickObject.paper.children) {
             wickObject.paper.children.forEach(function (child) {
@@ -291,8 +262,6 @@ var PathRoutines = function (paperInterface, wickEditor) {
 
         wickObject.pathData = wickObject.paper.exportSVG({asString:true});
 
-        wickObject.forceFabricCanvasRegen = true;
-
         wickObject.svgX = wickObject.paper.bounds._x;
         wickObject.svgY = wickObject.paper.bounds._y;
 
@@ -307,39 +276,49 @@ var PathRoutines = function (paperInterface, wickEditor) {
         wickObject.y = wickObject.paper.position.y - parentAbsPos.y;
     }
 
-}
+    self.refreshSVGWickObject = function (obj) {
+        var path = obj;
 
-// https://gist.github.com/winduptoy/8b5c574e0e33bf547a31
-function roundCorners(path,radius) {
-    var segments = path.segments.slice(0);
-    path.removeSegments();
+        var parent = path.parent;
+        var grandparent = parent.parent;
 
-    for(var i = 0, l = segments.length; i < l; i++) {
-        var curPoint = segments[i].point;
-        var nextPoint = segments[i + 1 == l ? 0 : i + 1].point;
-        var prevPoint = segments[i - 1 < 0 ? segments.length - 1 : i - 1].point;
-        var nextDelta = curPoint.subtract(nextPoint);
-        var prevDelta = curPoint.subtract(prevPoint);
+        var pathToModify;
+        if(parent instanceof paper.Group) {
+            pathToModify = parent;
+        } else if (grandparent instanceof paper.Group) {
+            pathToModify = grandparent;
+        }
 
-        nextDelta.length = radius;
-        prevDelta.length = radius;
+        var wickObject = pathToModify.wick;
+        var parentAbsPos = wickObject.parentObject ? wickObject.parentObject.getAbsolutePosition() : {x:0,y:0};
 
-        path.add(
-            new paper.Segment(
-                curPoint.subtract(prevDelta),
-                null,
-                prevDelta.divide(2)
-            )
-        );
-
-        path.add(
-            new paper.Segment(
-                curPoint.subtract(nextDelta),
-                nextDelta.divide(2),
-                null
-            )
-        );
+        var modifiedStates = [{
+            x: pathToModify.bounds._x + pathToModify.bounds._width /2 - parentAbsPos.x,
+            y: pathToModify.bounds._y + pathToModify.bounds._height/2 - parentAbsPos.y,
+            //pathData: '<svg id="svg" version="1.1" width="'+pathToModify.bounds._width+'" height="'+pathToModify.bounds._height+'" xmlns="http://www.w3.org/2000/svg">' +pathToModify.exportSVG({asString:true})+ '</svg>'
+            pathData: pathToModify.exportSVG({asString:true})
+        }];
+        var modifiedObjects = [
+            pathToModify.wick
+        ];
+        wickEditor.actionHandler.doAction('modifyObjects', {
+            objs: modifiedObjects,
+            modifiedStates: modifiedStates
+        });
     }
-    path.closed = true;
-    return path;
+
+    self.getProjectAsSVG = function () {
+        paper.view.viewSize.width  = wickEditor.project.width;
+        paper.view.viewSize.height = wickEditor.project.height;
+        paper.view.matrix = new paper.Matrix();
+        var url = "data:image/svg+xml;utf8," + encodeURIComponent(paper.project.exportSVG({asString:true}));
+        var link = document.createElement("a");
+        link.download = wickEditor.project.name + '.svg';
+        link.href = url;
+        link.click();
+
+        paper.view.viewSize.width  = window.innerWidth;
+        paper.view.viewSize.height = window.innerHeight;
+    }
+
 }

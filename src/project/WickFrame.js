@@ -324,6 +324,15 @@ WickFrame.prototype.getCurrentTween = function () {
     return this.getTweenAtFrame(this.parentObject.playheadPosition-this.playheadPosition)
 }
 
+WickFrame.prototype.getTweenAtPlayheadPosition = function (playheadPosition) {
+    var foundTween;
+    this.tweens.forEach(function (tween) {
+        if(foundTween) return;
+        if(tween.playheadPosition === playheadPosition) foundTween = tween;
+    })
+    return foundTween;
+}
+
 WickFrame.prototype.hasTweenAtFrame = function () {
     var playheadPosition = this.parentObject.playheadPosition-this.playheadPosition;
 

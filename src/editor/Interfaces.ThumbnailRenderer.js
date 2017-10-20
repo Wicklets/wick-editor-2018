@@ -19,69 +19,52 @@ var ThumbnailRendererInterface = function (wickEditor) {
 
     var self = this;
 
-    var thumbpreview;
-    var thumbRenderer;
+    var renderer;
+    var canvasContainer;
 
-    this.setup = function () {
-
-        /*thumbpreview = document.createElement('div')
-        thumbpreview.className = 'thumbnailPreview';
-        //document.body.appendChild(thumbpreview)
-
-        thumbRenderer = new WickPixiRenderer(wickEditor.project, thumbpreview, 0.2);
-        thumbRenderer.setup();*/
-
+    self.setup = function () {
+        /*canvasContainer = document.getElementById('previewRenderContainer');
+        canvasContainer.style.width = wickEditor.project.width+'px';
+        canvasContainer.style.height = wickEditor.project.height+'px';
+        renderer = new WickPixiRenderer(canvasContainer);*/
     }
     
-    this.syncWithEditorState = function () {
-
-        self.renderThumbnailForFrame(wickEditor.project.getCurrentFrame());
-
+    self.syncWithEditorState = function () {
+        var frame = wickEditor.project.getCurrentFrame();
+        if(frame) {
+            self.renderThumbnailForFrame(frame);
+        }
     }
 
-    this.renderThumbnailForFrame = function (wickFrame) {
+    self.renderThumbnailForFrame = function (wickFrame) {
+        if(!canvasContainer) {
+            // we have to use the renderer from the preview player because pixi gets mad if theres >1 renderer
+            // later just make a big global renderer owned by the editor that everybody can use
+            var otherRenderer = wickEditor.previewplayer.getRenderer();
+            renderer = otherRenderer.renderer;
+            canvasContainer = otherRenderer.canvasContainer;
+        }
+        if(canvasContainer) {
+            canvasContainer.style.width = wickEditor.project.width+'px';
+            canvasContainer.style.height = wickEditor.project.height+'px';
 
-        thumbRenderer = window.wickRenderer;
+            renderer.renderWickObjects(wickEditor.project, wickFrame.wickObjects);
+            var canvas = canvasContainer.children[0];
+            wickFrame.thumbnail = canvas.toDataURL('image/png');
+        }
+    }
 
-        if(!thumbRenderer) return;
+    self.renderAllThumbsOnTimeline = function () {
+        // force renderer to preload everything
+        renderer.renderWickObjects(wickEditor.project, []);
 
-        thumbRenderer.refresh(wickEditor.project.rootObject);
-
-        var layerObjects = [];
-        wickEditor.project.getCurrentObject().getAllActiveChildObjects().forEach(function (child) {
-            if(child.isOnActiveLayer(wickEditor.project.getCurrentLayer())) {
-                layerObjects.push(child);
-            }
-        });
-
+        var allFrames = wickEditor.project.currentObject.getAllFrames();
         setTimeout(function () {
-            thumbRenderer.render(layerObjects);
-            if(wickEditor.previewplayer.playing) return;
-            if(!wickFrame) return;
-            
-            wickFrame.thumbnail = window.rendererCanvas.getElementsByTagName('canvas')[0].toDataURL('image/jpeg', 0.001);
+            allFrames.forEach(function (frame) {
+                self.renderThumbnailForFrame(frame);
+            });
             wickEditor.timeline.syncWithEditorState();
-        }, 100);
-
+        }, 500); // eh just give it a little time to get ready
     }
 
-    this.renderAllThumbsOnTimeline = function () {
-        var oldPlayheadPosition = wickEditor.project.currentObject.playheadPosition;
-        var oldLayer = wickEditor.project.currentObject.currentLayer;
-        var oldCurr = wickEditor.project.currentObject;
-
-        wickEditor.project.currentObject.getAllFrames().forEach(function (frame) {
-            wickEditor.project.currentObject.currentLayer = wickEditor.project.currentObject.layers.indexOf(frame.parentLayer)
-            wickEditor.project.currentObject.playheadPosition = frame.playheadPosition
-            wickEditor.thumbnailRenderer.renderThumbnailForFrame(frame)
-        });
-        
-        wickEditor.project.currentObject.currentLayer = oldLayer;
-        wickEditor.project.currentObject = oldCurr;
-        wickEditor.project.currentObject.playheadPosition = oldPlayheadPosition;
-    }
-
-    this.cleanup = function () {
-        thumbRenderer.cleanup();
-    }
 }

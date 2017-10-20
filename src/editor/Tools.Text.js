@@ -38,9 +38,9 @@ Tools.Text = function (wickEditor) {
         canvas.on('mouse:down', function (e) {
             if(wickEditor.currentTool instanceof Tools.Text && e.e.buttons === 1) {
                 var mouseCanvasSpace = wickEditor.fabric.screenToCanvasSpace(wickEditor.inputHandler.mouse.x, wickEditor.inputHandler.mouse.y)
-                self.addText(mouseCanvasSpace.x, mouseCanvasSpace.y);
                 wickEditor.currentTool = wickEditor.tools.cursor;
-                wickEditor.syncInterfaces();
+                self.addText(mouseCanvasSpace.x, mouseCanvasSpace.y);
+                //wickEditor.syncInterfaces();
             }
         });
     }
@@ -54,8 +54,11 @@ Tools.Text = function (wickEditor) {
             newWickObject.x = wickEditor.project.width/2;
             newWickObject.y = wickEditor.project.height/2;
         }
-        newWickObject.textData.fill = wickEditor.settings.fillColor;
         wickEditor.actionHandler.doAction('addObjects', {wickObjects:[newWickObject]});
+    }
+
+    this.getCanvasMode = function () {
+        return 'fabric';
     }
 
 }

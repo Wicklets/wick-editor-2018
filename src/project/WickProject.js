@@ -44,6 +44,8 @@ var WickProject = function () {
 
     this.fitScreen = false;
 
+    this.uuid = random.uuid4();
+
     //this.assets = {};
 
     this._selection = [];
@@ -230,22 +232,10 @@ WickProject.prototype.getAsJSON = function (callback, format) {
     // Encode scripts/text to avoid JSON format problems
     self.rootObject.encodeStrings();
 
-    // Remove unused library assets
-    /*var removeAssetUUIDs = [];
-    for(uuid in self.library.assets) {
-        var asset = self.library.assets[uuid];
-        var assetBeingUsed = false;
-        self.getAllObjects().forEach(function (obj) {
-            if(obj.assetUUID === asset.uuid) assetBeingUsed = true;
-        });
-        if(!assetBeingUsed) {
-            removeAssetUUIDs.push(asset.uuid);
-        }
-    };
-    removeAssetUUIDs.forEach(function (uuid) {
-        self.library.deleteAsset(uuid);
-    });*/
-    
+    // Add some browser/OS/wick editor version info for debugging other ppl's projects
+    self.metaInfo = getBrowserAndOSInfo();
+    self.metaInfo.wickVersion = wickEditor.version
+
     var JSONProject = JSON.stringify(self, WickProject.Exporter.JSONReplacer, format);
     
     // Decode scripts back to human-readble and eval()-able format
@@ -254,41 +244,6 @@ WickProject.prototype.getAsJSON = function (callback, format) {
     callback(JSONProject);
 
 }
-
-/*WickProject.prototype.saveInLocalStorage = function () {
-    var self = this;
-    this.getAsJSON(function (JSONProject) {
-        console.log("Project size: " + JSONProject.length)
-        if(JSONProject.length > 5000000) {
-            wickEditor.alertbox.showMessage("Project too large to autosave");
-            return;
-
-            console.log("Project >5MB, compressing...");
-            var compressedJSONProject = WickProject.Compressor.compressProject(JSONProject, "LZSTRING-UTF16");
-            WickProject.saveProjectJSONInLocalStorage(compressedJSONProject);
-            console.log("Compressed size: " + compressedJSONProject.length);
-        } else {
-            console.log("Project <5MB, not compressing.");
-            WickProject.saveProjectJSONInLocalStorage(JSONProject);
-        }
-        self.unsaved = false;
-        wickEditor.syncInterfaces()
-    });
-}
-
-WickProject.saveProjectJSONInLocalStorage = function (projectJSON) {
-    if(localStorage) {
-        try {
-            wickEditor.alertbox.showProjectSavedMessage();
-            localStorage.setItem('wickProject', projectJSON);
-        } catch (err) {
-            console.error("LocalStorage could not save project, threw error:");
-            console.log(err);
-        }
-    } else {
-        console.error("LocalStorage not available.")
-    }
-}*/
 
 WickProject.prototype.getCopyData = function () {
     var objectJSONs = [];
@@ -389,25 +344,6 @@ WickProject.prototype.getFrameByUUID = function (uuid) {
     });
 
     return foundFrame;
-}
-
-WickProject.prototype.getPlayRangeByUUID = function (uuid) {
-    var allObjectsInProject = this.rootObject.getAllChildObjectsRecursive();
-    allObjectsInProject.push(this.rootObject);
-
-    var foundPlayrange = null;
-    allObjectsInProject.forEach(function (object) {
-        if(foundPlayrange) return;
-        if(!object.isSymbol) return;
-
-        object.playRanges.forEach(function(playRange) {
-            if(playRange.uuid === uuid) {
-                foundPlayrange = playRange;
-            }
-        });
-    });
-
-    return foundPlayrange;
 }
 
 WickProject.prototype.addObject = function (wickObject, zIndex, ignoreSymbolOffset) {
@@ -576,9 +512,7 @@ WickProject.prototype.isTypeSelected = function (type) {
 
     this._selection.forEach(function (uuid) {
         var obj = self.getObjectByUUID(uuid) 
-               || self.getFrameByUUID(uuid) 
-               || self.getPlayRangeByUUID(uuid)
-               //|| self.getTweenByUUID(uuid);
+               || self.getFrameByUUID(uuid);
         if(obj instanceof type) selected = true;
     });
 
@@ -613,9 +547,20 @@ WickProject.prototype.getSelectedObjects = function () {
     var objs = [];
     this._selection.forEach(function (uuid) {
         var obj = self.getObjectByUUID(uuid) 
-               || self.getFrameByUUID(uuid) 
-               || self.getPlayRangeByUUID(uuid)
+               || self.getFrameByUUID(uuid);
                //|| self.getTweenByUUID(uuid);
+        if(obj) objs.push(obj);
+    });
+
+    return objs;
+}
+
+WickProject.prototype.getSelectedWickObjects = function () {
+    var self = this;
+
+    var objs = [];
+    this._selection.forEach(function (uuid) {
+        var obj = self.getObjectByUUID(uuid);
         if(obj) objs.push(obj);
     });
 
@@ -628,9 +573,7 @@ WickProject.prototype.getSelectedObjectsUUIDs = function () {
     var objs = [];
     this._selection.forEach(function (uuid) {
         var obj = self.getObjectByUUID(uuid) 
-               || self.getFrameByUUID(uuid) 
-               || self.getPlayRangeByUUID(uuid)
-               //|| self.getTweenByUUID(uuid);
+               || self.getFrameByUUID(uuid);
         if(obj) objs.push(obj.uuids);
     });
 
@@ -657,9 +600,7 @@ WickProject.prototype.deselectObjectType = function (type) {
     for ( var i = 0; i < this._selection.length; i++ ) {
         var uuid = this._selection[i];
         var obj = this.getObjectByUUID(uuid) 
-               || this.getFrameByUUID(uuid) 
-               || this.getPlayRangeByUUID(uuid)
-               //|| this.getTweenByUUID(uuid);
+               || this.getFrameByUUID(uuid);
         if(obj instanceof type) {
             this._selection[i] = null;
             deselectionHappened = true;
@@ -706,11 +647,8 @@ WickProject.prototype.loadBuiltinFunctions = function (contextObject) {
     window.mouseY = wickPlayer.inputHandler.getMouse().y;
     window.mouseMoveX = wickPlayer.inputHandler.getMouseDiff().x;
     window.mouseMoveY = wickPlayer.inputHandler.getMouseDiff().y;
-    window.tiltX = getTiltX();
-    window.tiltY = getTiltY();
     window.hideCursor = function () { wickPlayer.hideCursor(); };
     window.showCursor = function () { wickPlayer.showCursor(); };
-    window.enterFullscreen = function () { wickPlayer.requestFullscreen(); }
 
     // WickObjects in same frame (scope) are accessable without using root./parent.
     if(objectScope) {

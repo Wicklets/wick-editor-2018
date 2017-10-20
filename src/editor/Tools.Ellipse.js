@@ -22,6 +22,12 @@ Tools.Ellipse = function (wickEditor) {
     var that = this;
     var fabricInterface = wickEditor.fabric;
 
+    var drawingEllipse;
+    var topLeft;
+    var bottomRight;
+
+    var tempGroup;
+
     this.getCursorImage = function () {
         return "crosshair"
     };
@@ -34,38 +40,64 @@ Tools.Ellipse = function (wickEditor) {
         return "Ellipse (S)";
     }
 
-    this.setup = function () {
-        fabricInterface.canvas.on('mouse:down', function (e) {
-            if(!(wickEditor.currentTool instanceof Tools.Ellipse)) return;
-
-            fabricInterface.shapeDrawer.startDrawingShape('ellipse', e.e.offsetX, e.e.offsetY, that.createWickObjectFromShape);
-        });
+    this.getCanvasMode = function () {
+        return 'paper';
     }
 
-    this.createWickObjectFromShape = function (drawingShape) {
-        var origX = drawingShape.left;
-        var origY = drawingShape.top;
-        drawingShape.left = 0;
-        drawingShape.top = 0;
-        drawingShape.setCoords();
-        //var svg = '<ellipse fill="'+drawingShape.fill+'" cx="'+drawingShape.rx+'" cy="'+drawingShape.ry+'" rx="'+drawingShape.width+'" ry="'+drawingShape.height+'"/>'
-        var svg = '<ellipse stroke-linecap="'+drawingShape.strokeLineCap+'" stroke-linejoin="'+drawingShape.strokeLineJoin+'" cx="'+drawingShape.width/2+'" cy="'+drawingShape.height/2+'" stroke="'+drawingShape.stroke+'" stroke-width="'+drawingShape.strokeWidth+'" fill="'+drawingShape.fill+'" rx="'+drawingShape.rx+'" ry="'+drawingShape.ry+'"/>'
-        //var svg = '<ellipse cx="'+drawingShape.width/2+'" cy="'+drawingShape.height/2+'" fill="'+drawingShape.fill+'" rx="'+drawingShape.rx+'" ry="'+drawingShape.ry+'"/>'
-        var svgString = '<svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>';
+    this.onSelected = function () {
+        wickEditor.project.clearSelection();
+    }
 
-        drawingShape.remove();
+    this.onDeselected = function () {
+        if(tempGroup) tempGroup.remove();
+    }
+
+    this.setup = function () {
         
+    }
+
+    this.paperTool = new paper.Tool();
+
+    this.paperTool.onMouseDown = function (event) {
+        tempGroup = new paper.Group();
+        topLeft = event.point;
+    }
+
+    this.paperTool.onMouseDrag = function (event) {
+        bottomRight = event.point;
+
+        tempGroup.remove();
+
+        var newPath = new paper.Path.Ellipse({
+            point: [topLeft.x, topLeft.y],
+            size: [bottomRight.x-topLeft.x, bottomRight.y-topLeft.y],
+        });
+        newPath.fillColor = wickEditor.settings.fillColor;
+        newPath.strokeColor = wickEditor.settings.strokeColor;
+        newPath.strokeWidth = wickEditor.settings.strokeWidth;
+        newPath.strokeJoin = wickEditor.settings.strokeJoin;
+        newPath.strokeCap = wickEditor.settings.strokeCap;
+        drawingEllipse = newPath;
+
+        tempGroup = new paper.Group();
+        tempGroup.addChild(newPath);
+    }
+
+    this.paperTool.onMouseUp = function (event) {
+
+        var svgString = tempGroup.exportSVG({asString:true});
+        tempGroup.remove();
         var pathWickObject = WickObject.createPathObject(svgString);
-        pathWickObject.x = origX;
-        pathWickObject.y = origY;
-        pathWickObject.width = drawingShape.width;
-        pathWickObject.height = drawingShape.height;
+        pathWickObject.x = (bottomRight.x+topLeft.x)/2;
+        pathWickObject.y = (bottomRight.y+topLeft.y)/2;
+        pathWickObject.width = 1;
+        pathWickObject.height = 1;
 
         wickEditor.paper.pathRoutines.refreshPathData(pathWickObject);
 
         wickEditor.actionHandler.doAction('addObjects', {
             wickObjects: [pathWickObject],
-            dontSelectObjects: true
+            dontSelectObjects: true,
         });
     }
 

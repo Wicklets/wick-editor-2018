@@ -58,8 +58,17 @@ var RightClickMenuInterface = function (wickEditor) {
                         self.open = false;
                         return;
                     }
-                    if(e.target.tagName === 'CANVAS')
-                        wickEditor.fabric.selectObjectsHoveredOver();
+                    if(wickEditor.currentTool === wickEditor.tools.pathCursor) {
+                        return;
+                    }
+                    if(e.target.tagName === 'CANVAS') {
+                        wickEditor.project.clearSelection();
+                        var hoveredObj = wickEditor.fabric.getObjectHoveredOver();
+                        if(hoveredObj) {
+                            wickEditor.project.selectObject(hoveredObj);
+                            wickEditor.syncInterfaces();
+                        }
+                    }
                     self.open = true;
                 } else {
                     self.open = false;
@@ -238,5 +247,7 @@ var RightClickMenuInterface = function (wickEditor) {
         menu.open = false;
         self.syncWithEditorState();
     }
+
+    window.disableWickRightClickMenu = function () { enabled = false; };
 
 }

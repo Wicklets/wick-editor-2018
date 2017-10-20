@@ -22,6 +22,22 @@ var InputHandler = function (wickEditor) {
     var that = this;
 
 /*************************
+    Pressure
+*************************/
+
+    this.penPressure = 1; 
+
+    Pressure.set(".paperCanvas", { 
+        change: function(force, event) { 
+            that.penPressure = force; 
+        } 
+    }, {polyfill: false});
+
+    this.getPenPressure = function() {
+        return that.penPressure; 
+    }
+
+/*************************
      Mouse
 *************************/
 
@@ -51,7 +67,7 @@ var InputHandler = function (wickEditor) {
     var editingTextBox = false;
 
     /* Define special keys */
-    var modifierKeys = ["WINDOWS","COMMAND","FIREFOXCOMMAND","CTRL"];
+    var modifierKeys = ["WINDOWS","COMMAND","FIREFOXCOMMAND","CTRL","RIGHT CLICK"]; 
     var shiftKeys = ["SHIFT"];
 
     var activeElemIsTextBox = function () {
@@ -70,10 +86,21 @@ var InputHandler = function (wickEditor) {
         that.specialKeys = [];
     });
 
+    function isFabricEditingText () {
+        var activeObj = wickEditor.fabric.canvas.getActiveObject();
+        if(!activeObj) {
+            return false;
+        } else {
+            return activeObj.isEditing;
+        }
+    }
+
     document.body.addEventListener("keydown", function (event) {
+        if(isFabricEditingText()) return;
         handleKeyEvent(event, "keydown");
     });
     document.body.addEventListener("keyup", function (event) {
+        if(isFabricEditingText()) return;
         handleKeyEvent(event, "keyup");
     });
 
@@ -184,7 +211,7 @@ var InputHandler = function (wickEditor) {
     var ieClipboardEvent = function(clipboardEvent) {
         var clipboardData = window.clipboardData;
         if (clipboardEvent == 'cut' || clipboardEvent == 'copy') {
-            clipboardData.setData('Text', wickEditor.project.getCopyData(wickEditor.fabric.getSelectedObjects(WickObject)));
+            clipboardData.setData('Text', wickEditor.project.getCopyData(wickEditor.project.getSelectedObjects(WickObject)));
             ieClipboardDiv.html(htmlToCopy);
             focusIeClipboardDiv();
             setTimeout(function() {
@@ -222,6 +249,10 @@ var InputHandler = function (wickEditor) {
                 copyType = 'text/wickframesjson';
             }
             clipboardData.setData(copyType, copyData);
+
+            if(clipboardEvent == 'cut') {
+                wickEditor.guiActionHandler.doAction('deleteSelectedObjects');
+            }
         }
         if (clipboardEvent == 'paste') {
             //console.log('Clipboard Plain Text: ' + clipboardData.getData('text/plain'));
@@ -309,9 +340,41 @@ var InputHandler = function (wickEditor) {
 *************************/
 
     var loadSVG = function (svg, filename, callback) {
-        console.log(svg)
-        var pathWickObject = WickObject.createPathObject(svg);
-        callback(pathWickObject);
+        var xmlString = svg
+          , parser = new DOMParser()
+          , doc = parser.parseFromString(xmlString, "text/xml");
+        var paperObj = paper.project.importSVG(doc, {insert:false});
+        
+        var allPaths = [];
+
+        function importPaperGroup (paperGroup) {
+            paperGroup.children.forEach(function (child) {
+                if(child instanceof paper.Group) {
+                    importPaperGroup(child);
+                } else {
+                    importPaperPath(child);
+                }
+            })
+        }
+        function importPaperPath (paperPath) {
+            var svgRaw = paperPath.exportSVG({asString:true})
+            var svgString = '<svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">'+svgRaw+'</svg>';
+            var wickPath = WickObject.createPathObject(svgString);
+            wickPath.x = paperPath.position.x;
+            wickPath.y = paperPath.position.y;
+            wickPath.width = paperPath.bounds._width;
+            wickPath.height = paperPath.bounds._height;
+            wickEditor.paper.pathRoutines.refreshPathData(wickPath);
+            allPaths.push(wickPath);
+        }
+
+        if(paperObj instanceof paper.Group) {
+            importPaperGroup(paperObj);
+        } else {
+            importPaperPath(paperObj);
+        }
+
+        wickEditor.actionHandler.doAction('addObjects', {wickObjects:allPaths});
     }
     
     var loadAnimatedGIF = function (dataURL, filename, callback) {
@@ -403,7 +466,10 @@ var InputHandler = function (wickEditor) {
     var loadJSON = function (json, filename, callback) {
         var tempJsonObj = JSON.parse(json);
         if(tempJsonObj.rootObject) {
-            wickEditor.guiActionHandler.doAction('openProject', {project:WickProject.fromJSON(json)})
+            var project = WickProject.fromJSON(json);
+            var filenameParts = filename.split('.');
+            project.name = filenameParts[0] || 'NewProject';
+            wickEditor.guiActionHandler.doAction('openProject', {project:project})
         } else {
             callback(WickObject.fromJSON(json));
         }
@@ -519,6 +585,12 @@ var InputHandler = function (wickEditor) {
             var file = files[i];
             var fileType = file.type;
 
+            if(fileType === '') {
+                var parts = file.name.split('.');
+                ext = parts[parts.length-1];
+                if(ext === 'json') fileType = 'application/json';
+            }
+
             loadFileIntoWickObject(e,file,fileType);
 
         }
@@ -530,7 +602,7 @@ var InputHandler = function (wickEditor) {
      Import Files
 *************************/
 
-    document.getElementById('importButton').onchange = function (e) {
+    function importFile (e) {
         var filePath = document.getElementById("importButton");
         if(filePath.files && filePath.files[0]) {
             var reader = new FileReader();
@@ -540,9 +612,11 @@ var InputHandler = function (wickEditor) {
             loadFileIntoWickObject(null,file,fileType);
         }
 
-        var importButton = $("importButton");
-        importButton.replaceWith( importButton = importButton.clone( true ) );
+        $("#importButton").replaceWith($("<input>", {id : "importButton", type: "file", "class": "hidden"}));
+        document.getElementById('importButton').onchange = importFile;
     }
+
+    document.getElementById('importButton').onchange = importFile;
 
 /*************************
     Leave page warning
@@ -550,6 +624,7 @@ var InputHandler = function (wickEditor) {
 
     window.onbeforeunload = function(event) {
         if(wickEditor.actionHandler.getHistoryLength() === 0) return;
+        
         var confirmationMessage = 'Warning: All unsaved changes will be lost!';
         (event || window.event).returnValue = confirmationMessage; //Gecko + IE
         return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.

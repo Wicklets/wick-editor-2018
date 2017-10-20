@@ -55,4 +55,87 @@ Tools.Eraser = function (wickEditor) {
         
     }
 
+    this.getCanvasMode = function () {
+        return 'paper';
+    }
+
+    this.onDeselected = function () {
+        if(path) path.remove();
+    }
+
+    this.paperTool = new paper.Tool();
+    var path;
+    var totalDelta;
+    var lastEvent;
+
+    this.paperTool.onMouseDown = function(event) {
+        
+    }
+
+    this.paperTool.onMouseDrag = function(event) {
+        lastEvent = {
+            delta: event.delta,
+            middlePoint: event.middlePoint,
+        }
+
+        if (!path) {
+            path = new paper.Path({
+                fillColor: '#FFFFFF',
+            });
+        }
+
+        if(!totalDelta) {
+            totalDelta = event.delta;
+        } else {
+            totalDelta.x += event.delta.x;
+            totalDelta.y += event.delta.y;
+        }
+
+        if (totalDelta.length > wickEditor.settings.brushThickness/2/wickEditor.fabric.canvas.getZoom()) {
+
+            totalDelta.x = 0;
+            totalDelta.y = 0;
+
+            var thickness = event.delta.length;
+            thickness /= wickEditor.settings.brushThickness/2;
+            thickness *= wickEditor.fabric.canvas.getZoom();
+            
+            var penPressure = wickEditor.inputHandler.getPenPressure(); 
+
+            var step = event.delta.divide(thickness).multiply(penPressure);
+            step.angle = step.angle + 90;
+
+            var top = event.middlePoint.add(step);
+            var bottom = event.middlePoint.subtract(step);
+
+            path.add(top);
+            path.insert(0, bottom);
+            path.smooth();
+
+        }
+    }
+
+    this.paperTool.onMouseUp = function(event) {
+        if (path) {
+            path.closed = true;
+            path.smooth();
+            path = path.unite(new paper.Path())
+            var t = wickEditor.settings.brushThickness;
+            var z = wickEditor.fabric.canvas.getZoom();
+            path.simplify(t / z * 0.2);
+
+            var group = new paper.Group({insert:false});
+            group.addChild(path);
+
+            var svgString = group.exportSVG({asString:true});
+            wickEditor.paper.pathRoutines.eraseWithPath({
+                pathData:svgString,
+                pathX: path.position.x,
+                pathY: path.position.y
+            });
+            path.remove();
+            path = null;
+        } 
+    }
+
 }

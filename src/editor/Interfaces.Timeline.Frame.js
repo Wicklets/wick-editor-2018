@@ -54,16 +54,17 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
             if(e.button === 2)
                 wickEditor.rightclickmenu.openMenu();
 
+            if(!wickEditor.project.isObjectSelected(self.wickFrame)) {
+                if(!e.shiftKey) wickEditor.project.clearSelection();
+                wickEditor.project.selectObject(self.wickFrame);
+                
+            }
             wickEditor.actionHandler.doAction('movePlayhead', {
                 obj: wickEditor.project.currentObject,
                 newPlayheadPosition: self.wickFrame.playheadPosition + Math.floor((e.offsetX+2) / cssVar('--frame-width')),
                 newLayer: self.wickFrame.parentLayer
             });
-            if(!wickEditor.project.isObjectSelected(self.wickFrame)) {
-                if(!e.shiftKey) wickEditor.project.clearSelection();
-                wickEditor.project.selectObject(self.wickFrame);
-                wickEditor.syncInterfaces();
-            }
+            
 
             timeline.interactions.start("dragFrame", e, {
                 frames: timeline.framesContainer.getFrames(wickEditor.project.getSelectedObjects())
@@ -126,6 +127,9 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
         }
 
         hasScriptsIconDiv.style.display = this.wickFrame.hasScript() ? 'block' : 'none';
+        hasScriptsIconDiv.onclick = function () {
+            wickEditor.guiActionHandler.doAction('openScriptingIDE')
+        }
 
         if(this.wickFrame.audioAssetUUID) {
             thumbnailDiv.style.display = 'none';

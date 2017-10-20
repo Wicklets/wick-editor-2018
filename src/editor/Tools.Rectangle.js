@@ -22,6 +22,11 @@ Tools.Rectangle = function (wickEditor) {
     var that = this;
     var fabricInterface = wickEditor.fabric;
 
+    var tempGroup;
+
+    var topLeft;
+    var bottomRight;
+
     this.getCursorImage = function () {
         return "crosshair"
     };
@@ -35,40 +40,62 @@ Tools.Rectangle = function (wickEditor) {
     }
 
     this.setup = function () {
-        fabricInterface.canvas.on('mouse:down', function (e) {
-            if(!(wickEditor.currentTool instanceof Tools.Rectangle) || e.e.buttons !== 1) return;
 
-            fabricInterface.shapeDrawer.startDrawingShape('rectangle', e.e.offsetX, e.e.offsetY, that.createWickObjectFromShape);
-        });
     }
 
-    this.createWickObjectFromShape = function (drawingShape) {
-        var origX = drawingShape.left+drawingShape.width /2;
-        var origY = drawingShape.top +drawingShape.height/2;
-        drawingShape.left = 0;
-        drawingShape.top = 0;
-        drawingShape.setCoords();
-        if(drawingShape.strokeWidth !== 0) {
-            var svg = '<rect stroke-linecap="'+drawingShape.strokeLineCap+'" stroke-linejoin="'+drawingShape.strokeLineJoin+'" fill="'+drawingShape.fill+'" stroke="'+drawingShape.stroke+'" stroke-width="'+drawingShape.strokeWidth+'" width="'+drawingShape.width+'" height="'+drawingShape.height+'" rx="'+drawingShape.rx+'" ry="'+drawingShape.ry+'" style="" />'
-        } else {
-            var svg = '<rect stroke-linecap="'+drawingShape.strokeLineCap+'" stroke-linejoin="'+drawingShape.strokeLineJoin+'" fill="'+drawingShape.fill+'" width="'+drawingShape.width+'" height="'+drawingShape.height+'" rx="'+drawingShape.rx+'" ry="'+drawingShape.ry+'" style="" />'
-        }
-        var svgString = '<svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>';
+    this.getCanvasMode = function () {
+        return 'paper';
+    }
 
-        drawingShape.remove()
-        
+    this.onSelected = function () {
+        wickEditor.project.clearSelection();
+    }
+
+    this.onDeselected = function () {
+        if(tempGroup) tempGroup.remove();
+    }
+
+    this.paperTool = new paper.Tool();
+
+    this.paperTool.onMouseDown = function (event) {
+        tempGroup = new paper.Group();
+        topLeft = event.point;
+    }
+
+    this.paperTool.onMouseDrag = function (event) {
+        bottomRight = event.point;
+
+        tempGroup.remove();
+
+        var rectangle = new paper.Rectangle(
+            new paper.Point(topLeft.x, topLeft.y), 
+            new paper.Point(bottomRight.x, bottomRight.y));
+        var roundedRect = new paper.Path.RoundRectangle(rectangle, wickEditor.settings.rectangleCornerRadius);
+        roundedRect.fillColor = wickEditor.settings.fillColor;
+        roundedRect.strokeColor = wickEditor.settings.strokeColor;
+        roundedRect.strokeWidth = wickEditor.settings.strokeWidth;
+        roundedRect.strokeJoin = wickEditor.settings.strokeJoin;
+        roundedRect.strokeCap = wickEditor.settings.strokeCap;
+
+        tempGroup = new paper.Group();
+        tempGroup.addChild(roundedRect);
+    }
+
+    this.paperTool.onMouseUp = function (event) {
+        var svgString = tempGroup.exportSVG({asString:true});
+        tempGroup.remove();
         var pathWickObject = WickObject.createPathObject(svgString);
-        pathWickObject.x = origX + drawingShape.strokeWidth/2;
-        pathWickObject.y = origY + drawingShape.strokeWidth/2;
-        pathWickObject.width = drawingShape.width;
-        pathWickObject.height = drawingShape.height;
+        pathWickObject.x = topLeft.x+(bottomRight.x-topLeft.x)/2;
+        pathWickObject.y = topLeft.y+(bottomRight.y-topLeft.y)/2;
+        pathWickObject.width = 1;
+        pathWickObject.height = 1;
+
+        wickEditor.paper.pathRoutines.refreshPathData(pathWickObject);
 
         wickEditor.actionHandler.doAction('addObjects', {
             wickObjects: [pathWickObject],
-            dontSelectObjects: true
+            dontSelectObjects: true,
         });
-
-        wickEditor.paper.pathRoutines.refreshPathData(pathWickObject);
     }
 
 }

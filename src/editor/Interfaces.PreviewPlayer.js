@@ -20,9 +20,18 @@ var PreviewPlayer = function (wickEditor) {
 	var self = this;
 
     var loopInterval;
+    var renderer;
+    var canvasContainer;
 
     this.setup = function () {
         this.playing = false;
+
+        canvasContainer = document.createElement('div');
+        canvasContainer.id = 'previewRenderContainer';
+        canvasContainer.style.width = wickEditor.project.width+'px';
+        canvasContainer.style.height = wickEditor.project.height+'px';
+        document.getElementById('editorCanvasContainer').appendChild(canvasContainer);
+        renderer = new WickPixiRenderer(canvasContainer);
     }
 
     this.syncWithEditorState = function () {
@@ -34,28 +43,13 @@ var PreviewPlayer = function (wickEditor) {
 
         self.playing = true;
 
-        var pan = wickEditor.fabric.getPan();
-        var zoom = wickEditor.fabric.canvas.getZoom();
-        //pan = {x:0,y:0}
-        var tx = pan.x+wickEditor.project.width*(zoom-1)/2;
-        var ty = pan.y+wickEditor.project.height*(zoom-1)/2;
-        var transform = 'translate('+tx+'px,'+ty+'px) scale('+zoom+', '+zoom+')';
-        window.rendererCanvas.style.width = wickEditor.project.width+'px';
-        window.rendererCanvas.style.height = wickEditor.project.height+'px';
-        window.rendererCanvas.style.paddingLeft = '0px';//(pan.x*zoom)+'px';
-        window.rendererCanvas.style.paddingRight = '0px';
-        window.rendererCanvas.style.paddingTop = '0px';//(pan.y*zoom)+'px';
-        window.rendererCanvas.style.paddingBottom = '0px';
-        window.rendererCanvas.style["-ms-transform"] = transform;
-        window.rendererCanvas.style["-webkit-transform"] = transform;
-        window.rendererCanvas.style["transform"] = transform;
+        updateCanvasTransforms();
 
         var currObj = wickEditor.project.getCurrentObject();
         if(currObj.playheadPosition >= currObj.getTotalTimelineLength()-1) {
             currObj.playheadPosition = 0;
         }
-        //wickEditor.thumbnailRenderer.syncWithEditorState();
-        window.wickRenderer.render(wickEditor.project.rootObject.getAllActiveChildObjects());
+        renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects());
 
         loopInterval = setInterval(function () {
             var currObj = wickEditor.project.getCurrentObject();
@@ -71,11 +65,11 @@ var PreviewPlayer = function (wickEditor) {
                 }
             }
 
-            wickEditor.timeline.getElem().framesContainer.playhead.update();
+            wickEditor.timeline.getElem().playhead.update();
             wickEditor.project.applyTweens();
-            window.rendererCanvas.style.display = 'block';
+            canvasContainer.style.display = 'block';
             document.getElementById('fabricCanvas').style.display = 'none';
-            window.wickRenderer.render(wickEditor.project.rootObject.getAllActiveChildObjects());
+            renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects());
             //wickEditor.thumbnailRenderer.syncWithEditorState();
             //wickEditor.syncInterfaces();
             currObj.layers.forEach(function (wickLayer) {
@@ -94,7 +88,7 @@ var PreviewPlayer = function (wickEditor) {
 
         clearInterval(loopInterval)
         document.getElementById('fabricCanvas').style.display = 'block';
-        window.rendererCanvas.style.display = 'none'
+        canvasContainer.style.display = 'none'
         self.playing = false;
 
         //wickEditor.project.rootObject.applyTweens();
@@ -108,6 +102,52 @@ var PreviewPlayer = function (wickEditor) {
         } else {
             self.play();
         }
+    }
+
+    this.startFastRendering = function () {
+        this.playing = true;
+        document.getElementById('fabricCanvas').style.display = 'none';
+        updateCanvasTransforms()
+        renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects());
+    }
+
+    this.stopFastRendering = function () {
+        this.playing = false;
+        canvasContainer.style.display = 'none';
+        document.getElementById('fabricCanvas').style.display = 'block';
+    }
+
+    this.doFastRender = function () {
+        canvasContainer.style.display = 'block';
+        document.getElementById('fabricCanvas').style.display = 'none';
+        updateCanvasTransforms()
+        wickEditor.project.applyTweens();
+        renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects());
+    }
+
+    this.getRenderer = function () {
+        return {
+            renderer: renderer,
+            canvasContainer: canvasContainer
+        };
+    }
+
+    function updateCanvasTransforms () {
+        var pan = wickEditor.fabric.getPan();
+        var zoom = wickEditor.fabric.canvas.getZoom();
+        //pan = {x:0,y:0}
+        var tx = pan.x+wickEditor.project.width*(zoom-1)/2;
+        var ty = pan.y+wickEditor.project.height*(zoom-1)/2;
+        var transform = 'translate('+tx+'px,'+ty+'px) scale('+zoom+', '+zoom+')';
+        canvasContainer.style.width = wickEditor.project.width+'px';
+        canvasContainer.style.height = wickEditor.project.height+'px';
+        canvasContainer.style.paddingLeft = '0px';//(pan.x*zoom)+'px';
+        canvasContainer.style.paddingRight = '0px';
+        canvasContainer.style.paddingTop = '0px';//(pan.y*zoom)+'px';
+        canvasContainer.style.paddingBottom = '0px';
+        canvasContainer.style["-ms-transform"] = transform;
+        canvasContainer.style["-webkit-transform"] = transform;
+        canvasContainer.style["transform"] = transform;
     }
 	
 }

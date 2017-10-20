@@ -2,7 +2,7 @@
     top: 30px;
     left: 0px;
     height: calc(100%);
-    width: 34px;
+    width: 40px;
     text-align: left;
     padding: 3px;
     padding-top: 5px;
@@ -38,7 +38,7 @@
     padding-bottom: 0px;
     margin-bottom: 5px;
     cursor: pointer;
-    margin-left: 3px;
+    margin-left: 6px;
 
     background-repeat: no-repeat;
     background-position: center;
@@ -71,90 +71,233 @@ hr {
     margin-bottom: 10px;
 }
 
-.color-picker-container {
-    margin-bottom: 5px;
-    left: 0px;
-    top: 0px;
-    width: 17px;
-    height: 19px;
-    float: right;
+.toolbar-color-picker-container {
+    width: 35px;
+    height: 35px;
+    position: relative;
+    margin-left: 2px;
 }
 
-.color-picker-button-icon {
-    margin-bottom: 5px;
-    left: 0px;
-    top: 0px;
-    width: 17px;
-    height: 19px;
-    float: left;
-    background-color: transparent;
-    background-size: 100% 100%;
-}
-
-.range-slider-button-container {
-    left: 0px;
-    top: 0px;
-    width: 34px;
-    height: 18px;
-    /*background-color: red;*/
-    /*border-radius: 2px;*/
+.toolbar-color {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    border: 1px solid white;
+    background-color: green;
     cursor: pointer;
-    overflow: hidden;
-    margin-top: 5px;
-}
-.range-slider-button-container:hover {
-    background-color: #333;
 }
 
-.range-slider-button-value-display {
-    float: right;
-    width: 17px;
-    height: 12px;
-    margin-top: 3px;
+.toolbar-fill-color {
+    left: 0px;
+    top: 0px;
+}
+
+.toolbar-fill-color-background {
+    position: absolute;
     background-color: white;
-    color: black;
-    font-size: 10px;
+    background-image:
+      -moz-linear-gradient(45deg, #ddd 25%, transparent 25%), 
+      -moz-linear-gradient(-45deg, #ddd 25%, transparent 25%),
+      -moz-linear-gradient(45deg, transparent 75%, #ddd 75%),
+      -moz-linear-gradient(-45deg, transparent 75%, #ddd 75%);
+    background-image:
+      -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, #ddd), color-stop(.25, transparent)), 
+      -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.25, #ddd), color-stop(.25, transparent)),
+      -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.75, transparent), color-stop(.75, #ddd)),
+      -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.75, transparent), color-stop(.75, #ddd));
+      -moz-background-size:10px 10px;
+    background-size:10px 10px;
+    -webkit-background-size:10px 11px;
     overflow: hidden;
+    
+    background-position:0 0, 5px 0, 5px -5px, 0px 5px;
+
+    left: 0px;
+    top: 0px;
+
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    border: 1px solid white;
+    cursor: pointer;
+}
+
+.toolbar-stroke-color {
+    right: 0px;
+    bottom: 0px;
+}
+
+.toolbar-stroke-color-background {
+    position: absolute;
+    background-color: white;
+    background-image:
+      -moz-linear-gradient(45deg, #ddd 25%, transparent 25%), 
+      -moz-linear-gradient(-45deg, #ddd 25%, transparent 25%),
+      -moz-linear-gradient(45deg, transparent 75%, #ddd 75%),
+      -moz-linear-gradient(-45deg, transparent 75%, #ddd 75%);
+    background-image:
+      -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, #ddd), color-stop(.25, transparent)), 
+      -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.25, #ddd), color-stop(.25, transparent)),
+      -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.75, transparent), color-stop(.75, #ddd)),
+      -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.75, transparent), color-stop(.75, #ddd));
+      -moz-background-size:10px 10px;
+    background-size:10px 10px;
+    -webkit-background-size:10px 11px;
+    overflow: hidden;
+    
+    background-position:0 0, 5px 0, 5px -5px, 0px 5px;
+      
+    right: 0px;
+    bottom: 0px;
+
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    border: 1px solid white;
+    cursor: pointer;
+}
+
+.toolbar-stroke-color-inner-rect {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    border: 1px solid white;
+    background-color: #555;
+    cursor: pointer;
+}
+
+.toolbar-brush-size-preview-container {
+    margin-top: 12px;
+    margin-left: 2px;
+    border-radius: 3px;
+
+    width: 35px;
+    height: 35px;
+    background-color: white;
+
+    background-image:
+      -moz-linear-gradient(45deg, #ddd 25%, transparent 25%), 
+      -moz-linear-gradient(-45deg, #ddd 25%, transparent 25%),
+      -moz-linear-gradient(45deg, transparent 75%, #ddd 75%),
+      -moz-linear-gradient(-45deg, transparent 75%, #ddd 75%);
+    background-image:
+      -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, #ddd), color-stop(.25, transparent)), 
+      -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.25, #ddd), color-stop(.25, transparent)),
+      -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.75, transparent), color-stop(.75, #ddd)),
+      -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.75, transparent), color-stop(.75, #ddd));
+
+    -moz-background-size:10px 10px;
+    background-size:10px 10px;
+    -webkit-background-size:10px 11px;
+    overflow: hidden;
+    
+    background-position:0 0, 5px 0, 5px -5px, 0px 5px;
+    cursor: pointer;
+    opacity: 1.0;
+}
+.toolbar-brush-size-preview-container:hover {
+  opacity: 0.8;
+}
+.toolbar-brush-size-preview-container:active {
+  opacity: 0.6;
+}
+
+.toolbar-stroke-width-preview-container {
+    margin-left: 2px;
+    margin-top: 12px;
+    width: 35px;
+    height: 23px;
+    border-radius: 3px;
+    background-color: white;
+    overflow: hidden;
+
+    background-image:
+      -moz-linear-gradient(45deg, #ddd 25%, transparent 25%), 
+      -moz-linear-gradient(-45deg, #ddd 25%, transparent 25%),
+      -moz-linear-gradient(45deg, transparent 75%, #ddd 75%),
+      -moz-linear-gradient(-45deg, transparent 75%, #ddd 75%);
+    background-image:
+      -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, #ddd), color-stop(.25, transparent)), 
+      -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.25, #ddd), color-stop(.25, transparent)),
+      -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.75, transparent), color-stop(.75, #ddd)),
+      -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.75, transparent), color-stop(.75, #ddd));
+
+    -moz-background-size:10px 10px;
+    background-size:10px 10px;
+    -webkit-background-size:10px 11px;
+    
+    background-position:0 0, 5px 0, 5px -5px, 0px 5px;
+
+    cursor: pointer;
+    opacity: 1.0;
+}
+.toolbar-stroke-width-preview-container:hover {
+  opacity: 0.8;
+}
+.toolbar-stroke-width-preview-container:active {
+  opacity: 0.6;
+}
+
+.toolbar-number-input {
+    margin-left: 2px;
+    height: 15px;
+    width: 35px;
+    cursor: ew-resize;
     text-align: center;
+    font-size: 13px;
     border-radius: 3px;
 }
 
-.range-slider-button-icon {
-    left: 0px;
-    top: 0px;
-    width: 17px;
-    height: 18px;
-    float: left;
-    background-color: transparent;
-    background-size: 100% 100%;
-}
-
-.range-slider-slider-container {
-    width: 300px;
-    height: 30px;
-    background-color: rgba(0,0,0,0.5);
-    border-radius: 5px;
+.toolbar-brush-settings-window {
+    width: 200px;
+    height: 35px;
     position: absolute;
     left: 0px;
     top: 0px;
-    z-index: 10;
-
-    padding-left: 25px;
-    padding-right: 25px;
-    padding-top: 11px;
-}
-
-.range-slider-slider {
-
-}
-
-.range-slider-click-out-div {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    height: 100%;
-    background-color: black;
-    opacity: 0.1;
+    border: 1px solid white;
     z-index: 9;
+    border-radius: 4px;
+    background-color: #444;
+    display: none;
+}
+
+.toolbar-brush-settings-window-smoothness-label {
+  width: 120px;
+  height: 20px;
+  font-family:"Open Sans";
+  src: url("Open_Sans/OpenSans-Regular.ttf");
+  color: white;
+  font-size: 12px;
+  position: absolute;
+  left: 10px;
+  top: 8px;
+}
+.toolbar-brush-settings-window-number-input {
+  position: absolute;
+  left: 126px;
+  top: 10px;
+  height: 13px;
+}
+
+.toolbar-brush-settings-window-close-button {
+  width: 20px;
+  height: 20px;
+  float: right;
+  cursor: pointer;
+  background-image: url("../resources/close.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  text-overflow: clip;
+  overflow: hidden;
+  background-size: 12px 12px;
+  opacity: 1.0;
+  margin-top: 3px;
+  margin-right: 3px;
+}
+.toolbar-brush-settings-window-close-button:hover {
+  opacity: 0.6;
 }

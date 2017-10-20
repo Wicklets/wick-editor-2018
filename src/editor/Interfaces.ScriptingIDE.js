@@ -22,6 +22,9 @@ var ScriptingIDEInterface = function (wickEditor) {
     var maximized;
     var objectBeingScripted;
 
+    var changeAnnotationTimer;
+    var SYNTAX_ERROR_MSG_DELAY = 800;
+
     var reference = new ScriptingIDEReference(this, wickEditor);
 
     this.justOpened = true;
@@ -34,14 +37,30 @@ var ScriptingIDEInterface = function (wickEditor) {
             that.open = false;
 
             that.aceEditor = ace.edit("scriptEditor");
-            that.aceEditor.setOptions({
-                enableBasicAutocompletion: true,
-                enableLiveAutocompletion: true,
-            })
             that.aceEditor.setTheme("ace/theme/idle_fingers");
             that.aceEditor.getSession().setMode("ace/mode/javascript");
             that.aceEditor.$blockScrolling = Infinity; // Makes that weird message go away
             that.aceEditor.setAutoScrollEditorIntoView(true);
+
+            that.aceEditor.setOptions({
+                enableBasicAutocompletion: true,
+                enableLiveAutocompletion: true,
+            })
+            var langTools = ace.require('ace/ext/language_tools');
+            var staticWordCompleter = {
+            getCompletions: function(editor, session, pos, prefix, callback) {
+                var wordList = window.wickDocsKeyworksArray;
+                callback(null, wordList.map(function(word) {
+                    return {
+                        caption: word,
+                        value: word,
+                        meta: "static"
+                    };
+                }));
+
+                }
+            }
+            that.aceEditor.completers = [staticWordCompleter]
 
             that.beautify = ace.require("ace/ext/beautify");
 
@@ -52,32 +71,73 @@ var ScriptingIDEInterface = function (wickEditor) {
             });
 
             that.aceEditor.getSession().on("changeAnnotation", function(){
-                if(!that.open)return;
 
-                var annot = that.aceEditor.getSession().getAnnotations();
-
-                // Look for errors
-                if(!objectBeingScripted) return;
-
-                if(objectBeingScripted.scriptError && objectBeingScripted.scriptError.type === 'syntax')
+                if(objectBeingScripted && objectBeingScripted.scriptError && objectBeingScripted.scriptError.type === 'syntax')
                     objectBeingScripted.scriptError = null;
+                updateHeaderText()
 
-                for (var key in annot){
-                    if (annot.hasOwnProperty(key)) {
-                        if(annot[key].type === 'error') {
-                            // There's a syntax error. Set the projectHasErrors flag so the project won't run.
-                            //that.projectHasErrors = true;
-                            if(!objectBeingScripted.scriptError || objectBeingScripted.scriptError.type === 'runtime') {
-                                objectBeingScripted.scriptError = {
-                                    message: annot[key].text,
-                                    line: annot[key].row+1,
-                                    type: 'syntax'
+                clearTimeout(changeAnnotationTimer);
+                changeAnnotationTimer = setTimeout (function () {
+                    if(!that.open)return;
+
+                    var annot = that.aceEditor.getSession().getAnnotations();
+
+                    // Look for errors
+                    if(!objectBeingScripted) return;
+
+                    if(objectBeingScripted.scriptError && objectBeingScripted.scriptError.type === 'syntax')
+                        objectBeingScripted.scriptError = null;
+
+                    for (var key in annot){
+                        if (annot.hasOwnProperty(key)) {
+                            if(annot[key].type === 'error') {
+                                // There's a syntax error. Set the projectHasErrors flag so the project won't run.
+                                //that.projectHasErrors = true;
+                                if(!objectBeingScripted.scriptError || objectBeingScripted.scriptError.type === 'runtime') {
+                                    objectBeingScripted.scriptError = {
+                                        message: annot[key].text,
+                                        line: annot[key].row+1,
+                                        type: 'syntax'
+                                    }
                                 }
                             }
                         }
                     }
+                    updateHeaderText()
+                },SYNTAX_ERROR_MSG_DELAY);
+            });
+
+            that.aceEditor.on('changeSelection', function(e) {
+                var position = that.aceEditor.getCursorPosition();
+                var token = that.aceEditor.session.getTokenAt(position.row, position.column);
+                if(token) {
+                    reference.highlightPropButton(token.value);
                 }
-                updateHeaderText()
+            });
+
+            var resizer = document.getElementById('resizeScriptingGUIBar');
+            resizer.resizing = false;
+            resizer.addEventListener('mousedown', function (e) {
+                if(that.open){
+                    resizer.resizing = true;
+                } else {
+                    resizer.resizing = true;
+                    that.open = true;
+                    that.clearError();
+                    that.syncWithEditorState();
+                }
+
+            });
+            window.addEventListener('mousemove', function (e) {
+                if(resizer.resizing) {
+                    var newIDEHeight = wickEditor.settings.scriptingIDEHeight - e.movementY;
+                    wickEditor.settings.setValue('scriptingIDEHeight', newIDEHeight)
+                    document.getElementById('scriptingGUI').style.height = wickEditor.settings.scriptingIDEHeight+'px';
+                    that.resize()
+                }
+            });
+            window.addEventListener('mouseup', function (e) {
+                resizer.resizing = false
             });
 
             that.resize = function () {
@@ -97,11 +157,13 @@ var ScriptingIDEInterface = function (wickEditor) {
             data: {},
             success: function(data) {
                 window.wickDocsKeywords = "";
+                window.wickDocsKeyworksArray = [];
                 window.wickDocs = data.docs;
                 if(!data.docs) return;
                 data.docs.forEach(function (doc) {
                     doc.properties.forEach(function (prop) {
                         window.wickDocsKeywords += prop.name.split('(')[0] + "|"
+                        window.wickDocsKeyworksArray.push(prop.name.split('(')[0]);
                     });
                 });
 
@@ -129,11 +191,11 @@ var ScriptingIDEInterface = function (wickEditor) {
             }
 
             if(maximized) {
-                document.getElementById('scriptingGUI').style.height = 'calc(100% - 30px)';
+                document.getElementById('scriptingGUI').style.height = 'calc(100% - 24px)';
             } else {
-                document.getElementById('scriptingGUI').style.height = '300px';
+                document.getElementById('scriptingGUI').style.height = wickEditor.settings.scriptingIDEHeight+'px';
             }
-
+            
             this.aceEditor.resize();
             document.getElementById('closeScriptingGUIButton').style.display = 'block';
             document.getElementById('openScriptingGUIButton').style.display = 'none';
@@ -165,15 +227,16 @@ var ScriptingIDEInterface = function (wickEditor) {
                 $("#scriptObjectDiv").css('display', 'none');
 
                 if(wickEditor.project.getNumSelectedObjects() < 2) {
-                    document.getElementById('noSelectionDiv').innerHTML = "No scriptable object selected!";
+                    document.getElementById('noSelectionText').innerHTML = "No scriptable object selected!";
                 } else {
-                    document.getElementById('noSelectionDiv').innerHTML = "Multiple objects can't be scripted.<br />Convert them to a Clip or Button!";
+                    document.getElementById('noSelectionText').innerHTML = "Multiple objects can't be scripted.<br />Group them, or convert them to a Clip or Button!";
                 }
             }
 
         } else {
             //$("#scriptingGUI").css('display', 'none');
-            $("#scriptingGUI").css('height', '30px');
+            $("#noSelectionDiv").css('display', 'none');
+            $("#scriptingGUI").css('height', '24px');
             this.justOpened = true;
 
             document.getElementById('expandScriptingGUIButton').style.display = 'none';
@@ -225,7 +288,8 @@ var ScriptingIDEInterface = function (wickEditor) {
         /*document.getElementById("errorMessage").innerHTML = "";
         document.getElementById("errorMessage").style.display = "hidden";*/
 
-        wickEditor.project.getAllObjects().forEach(function (obj) {
+        var framesAndObjects = (wickEditor.project.getAllFrames().concat(wickEditor.project.getAllObjects()));
+        framesAndObjects.forEach(function (obj) {
             if(obj.scriptError && obj.scriptError.type === 'runtime') {
                 obj.scriptError = null;
             }
@@ -312,5 +376,19 @@ var ScriptingIDEInterface = function (wickEditor) {
         maximized = false;
         that.syncWithEditorState();
     });
+
+    /*$("#scriptingIDEHeader").on("click", function (e) {
+        that.open = !that.open;
+        that.clearError();
+        that.syncWithEditorState();
+    });
+    $("#scriptingIDEHeader").on("mouseover", function (e) {
+        if(!that.open)
+            $("#scriptingGUI").css('height', '32px');
+    });
+    $("#scriptingIDEHeader").on("mouseout", function (e) {
+        if(!that.open)
+            $("#scriptingGUI").css('height', '30px');
+    });*/
 
 }

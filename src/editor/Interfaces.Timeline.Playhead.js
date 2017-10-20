@@ -16,35 +16,73 @@
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
 
 TimelineInterface.Playhead = function (wickEditor, timeline) {
-    this.elem = null;
-    this.ghostElem = null;
+    var self = this;
 
-    this.x = null;
-    this.ghostX = null;
+    self.elem = null;
+    self.pos = null;
 
-    this.build = function () {
-        this.elem = document.createElement('div');
-        this.elem.className = 'playhead';
+    var framePosCached = 0;
 
-        this.ghostElem = document.createElement('div');
-        this.ghostElem.className = 'playhead playhead-ghost';
-        this.ghostElem.style.display = 'none'
+    self.build = function () {
+        self.elem = document.createElement('div');
+        self.elem.className = 'playhead';
+
+        var playheadNub = document.createElement('div');
+        playheadNub.className = 'playhead-nub';
+        self.elem.addEventListener('mousedown', function (e) {
+            timeline.interactions.start("dragPlayhead", e, {});
+        });
+        self.elem.appendChild(playheadNub);
+
+        window.addEventListener('mousemove', function (e) {
+            self.elem.style.pointerEvents = (e.y>60) ? 'none' : 'auto';
+        });
+
+        var playheadBody = document.createElement('div');
+        playheadBody.className = 'playhead-body';
+        self.elem.appendChild(playheadBody);
     }
 
-    this.update = function () {
-        this.x = wickEditor.project.currentObject.playheadPosition * cssVar('--frame-width') + cssVar('--frame-width')/2 - cssVar('--playhead-width')/2 + 9;
-        this.elem.style.left = this.x + 'px';
-
-        //this.ghostX = 0 * cssVar('--frame-width') + cssVar('--frame-width')/2 - cssVar('--playhead-width')/2 + 9;
-        //this.ghostElem.style.left = this.ghostX + 'px';
+    self.update = function () {
+        self.setPosition(wickEditor.project.currentObject.playheadPosition * cssVar('--frame-width'));
+        snapPosition()
+        updateView();
     }
 
-    this.setGhostPosition = function (e) {
-        var x = e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - 9
-        //x -= cssVar('--frame-width')
-        var roundedX = Math.floor(x/cssVar('--frame-width'))*cssVar('--frame-width');
-        roundedX += 9;
-        roundedX += cssVar('--frame-width')/2;
-        this.ghostElem.style.left = roundedX+'px';
+    self.setPosition = function (pos) {
+        self.pos = pos;
+        updateView();
+    }
+
+    self.snap = function () {
+        snapPosition();
+        updateView();
+    }
+
+    self.getFramePosition = function () {
+        var framePos = Math.floor(self.pos/cssVar('--frame-width'));
+        return framePos;
+    }
+
+    self.frameDidChange = function () {
+        if(!framePosCached) {
+            framePosCached = self.getFramePosition();
+            return true;
+        } else {
+            var newFramePos = self.getFramePosition();
+            var frameChanged = newFramePos !== framePosCached;
+            framePosCached = newFramePos;
+            return frameChanged;
+        }
+    }
+
+    function updateView () {
+        var shift = -timeline.horizontalScrollBar.getScrollPosition();
+        self.elem.style.left = (self.pos+132+shift)+'px';
+    }
+
+    function snapPosition () {
+        self.pos = Math.floor(self.pos/cssVar('--frame-width'))*cssVar('--frame-width')
+        self.pos += cssVar('--frame-width')/2;
     }
 }

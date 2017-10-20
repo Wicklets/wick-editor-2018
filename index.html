@@ -27,6 +27,16 @@
         vertical-align: top;
         color: yellow;
       }
+      .wicklogo {
+        float: left;
+        background-color: rgba(0,0,0,0);
+        cursor: pointer;
+        width: 160px;
+        height: 100%;
+      }
+      .wicklogo:hover {
+        background-color: rgba(0,0,0,0.1);
+      }
     </style>
 
     <!-- Placeholder for official font (Arial Rounded?) later. -->
@@ -56,13 +66,14 @@
   <!-- Navbar (sit on top) -->
     <div class="w3-top">
       <div class="w3-bar wick-menu-bar w3-card-2" id="myNavbar">
-        <a class="w3-button logotop-bar-item logo"> <img id="logo-image" src="/resources/Flashy.svg"><div id="header-title">Wick</div></a>
+        <div class="logo wicklogo"> <img id="logo-image" src="/resources/Flashy.svg"><div id="header-title">Wick</div></div>
         <!-- Right-sided navbar links -->
         <div class="w3-right w3-hide-small">
           <!--<a class="w3-button top-bar-item create-button" href="/editor.html">Editor</a>-->
-          <div class="w3-button top-bar-item tutorials-button">Tutorials</div>
-          <div class="w3-button top-bar-item demos-button">Demos</div>
+          <!--<div class="w3-button top-bar-item tutorials-button">Tutorials</div>-->
+          <div class="w3-button top-bar-item examples-button">Examples</div>
           <div class="w3-button top-bar-item reference-button">Reference</div>
+          <div class="w3-button top-bar-item community-button">Community</div>
           <div class="w3-button top-bar-item updates-button">Updates<span class="new-pop">New!</span></div>
           <div class="w3-button top-bar-item about-button">About</div>
         </div>
@@ -80,9 +91,10 @@
       <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button side-bar-item">Close</a>
       <div onclick="w3_close()" class="w3-bar-item w3-button side-bar-item logo">Home</div>
       <!--<a   onclick="w3_close()" class="w3-bar-item w3-button side-bar-item create-button" href="/editor.html">Editor</a>-->
-      <div onclick="w3_close()" class="w3-bar-item w3-button side-bar-item tutorials-button">Tutorials</div>
-      <div onclick="w3_close()" class="w3-bar-item w3-button side-bar-item demos-button">Demos</div>
+      <div onclick="w3_close()" class="w3-bar-item w3-button side-bar-item Examples-button">Examples</div>
+      <!--<div onclick="w3_close()" class="w3-bar-item w3-button side-bar-item demos-button">Demos</div>-->
       <div onclick="w3_close()" class="w3-bar-item w3-button side-bar-item reference-button">Reference</div>
+      <div onclick="w3_close()" class="w3-bar-item w3-button side-bar-item community-button">Community</div>
       <div onclick="w3_close()" class="w3-bar-item w3-button side-bar-item updates-button">Updates</div>
       <div onclick="w3_close()" class="w3-bar-item w3-button side-bar-item about-button">About</div>
     </nav>

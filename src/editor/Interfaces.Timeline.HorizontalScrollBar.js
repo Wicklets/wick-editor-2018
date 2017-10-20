@@ -93,6 +93,7 @@ TimelineInterface.HorizontalScrollBar = function (wickEditor, timeline) {
         scrollbar.setBarPosition(scrollbar.barPosition + scrollAmt);
         timeline.framesContainer.update();
         timeline.numberLine.update();
+        timeline.playhead.update();
         that.update();
     }
 

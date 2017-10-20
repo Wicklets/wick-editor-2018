@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
     
-WickPlayerInputHandler = function (wickPlayer) {
+WickPlayerInputHandler = function (canvasContainer, wickProject) {
 
     var self = this;
 
@@ -33,34 +33,30 @@ WickPlayerInputHandler = function (wickPlayer) {
 
     var project;
 
-    var canvasContainer;
+    var canvas = canvasContainer.children[0];
 
     self.setup = function () {
-        canvasContainer = window.rendererCanvas;
-
         mouse = null;
         keys = [];
         keysJustPressed = [];
         keysJustReleased = [];
 
-        project = wickPlayer.project;
-
         if(bowser.mobile || bowser.tablet) {
             // Touch event (one touch = like a mouse click)
-            canvasContainer.addEventListener("touchstart", onTouchStart, false);
-            canvasContainer.addEventListener("touchmove", onTouchMove, false);
+            document.body.addEventListener("touchstart", onTouchStart, false);
+            document.body.addEventListener("touchmove", onTouchMove, false);
 
             // Squash gesture events
-            canvasContainer.addEventListener('gesturestart',  function(e) { e.preventDefault(); });
-            canvasContainer.addEventListener('gesturechange', function(e) { e.preventDefault(); });
-            canvasContainer.addEventListener('gestureend',    function(e) { e.preventDefault(); });
+            document.body.addEventListener('gesturestart',  function(e) { e.preventDefault(); });
+            document.body.addEventListener('gesturechange', function(e) { e.preventDefault(); });
+            document.body.addEventListener('gestureend',    function(e) { e.preventDefault(); });
         } else {
-            canvasContainer.addEventListener('mousemove', onMouseMove, false);
-            canvasContainer.addEventListener("mousedown", onMouseDown, false);
-            canvasContainer.addEventListener("mouseup",   onMouseUp,   false);
+            document.body.addEventListener('mousemove', onMouseMove, false);
+            document.body.addEventListener("mousedown", onMouseDown, false);
+            document.body.addEventListener("mouseup",   onMouseUp,   false);
 
-            canvasContainer.addEventListener("keydown", onKeyDown);
-            canvasContainer.addEventListener("keyup", onKeyUp);
+            document.body.addEventListener("keydown", onKeyDown);
+            document.body.addEventListener("keyup", onKeyUp);
         }
     }
 
@@ -88,15 +84,15 @@ WickPlayerInputHandler = function (wickPlayer) {
     }
 
     self.cleanup = function () {
-        canvasContainer.removeEventListener("mousedown", onMouseDown);
-        canvasContainer.removeEventListener("mousemove", onMouseMove);
-        canvasContainer.removeEventListener("mouseup", onMouseUp);
+        document.body.removeEventListener("mousedown", onMouseDown);
+        document.body.removeEventListener("mousemove", onMouseMove);
+        document.body.removeEventListener("mouseup", onMouseUp);
 
-        canvasContainer.removeEventListener("touchstart", onTouchStart);
-        canvasContainer.removeEventListener("touchmove", onTouchMove);
+        document.body.removeEventListener("touchstart", onTouchStart);
+        document.body.removeEventListener("touchmove", onTouchMove);
 
-        canvasContainer.removeEventListener("keydown", onKeyDown);
-        canvasContainer.removeEventListener("keyup", onKeyUp);
+        document.body.removeEventListener("keydown", onKeyDown);
+        document.body.removeEventListener("keyup", onKeyUp);
     }
     
     self.getMouse = function () {
@@ -192,7 +188,7 @@ WickPlayerInputHandler = function (wickPlayer) {
 
         // Check if we're hovered over a clickable object...
         var hoveredOverObj = null;
-        project.rootObject.getAllActiveChildObjectsRecursive(true).forEachBackwards(function(child) {
+        wickProject.rootObject.getAllActiveChildObjectsRecursive(true).forEachBackwards(function(child) {
             if(!(hoveredOverObj && hoveredOverObj.isButton) && child.isPointInside(self.getMouse())) {
                 if(!child.hoveredOver) {
                     child._wasHoveredOver = true;
@@ -212,7 +208,7 @@ WickPlayerInputHandler = function (wickPlayer) {
 
     var onMouseDown = function (evt) {
 
-        document.getElementById('rendererCanvas').focus();
+        canvasContainer.focus();
 
         // Hack to avoid "'requestFullscreen' can only be initiated by a user gesture." error
         if(wickPlayer.fullscreenRequested) {
@@ -220,16 +216,15 @@ WickPlayerInputHandler = function (wickPlayer) {
             wickPlayer.fullscreenRequested = false;
         }
 
-        var currFrame = project.getCurrentFrame();
+        var currFrame = wickProject.getCurrentFrame();
         if(currFrame) {
             currFrame._wasClicked = true;
             currFrame._beingClicked = true;
         }
         
         var clickedObj;
-        project.rootObject.getAllActiveChildObjectsRecursive(true).forEachBackwards(function(child) {
+        wickProject.rootObject.getAllActiveChildObjectsRecursive(true).forEachBackwards(function(child) {
             if(!(clickedObj && clickedObj.isButton) && child.isPointInside(self.getMouse())) {
-                //project.runScript(child, "onClick");
                 child._wasClicked = true;
                 child._beingClicked = true;
                 clickedObj = child;
@@ -239,13 +234,13 @@ WickPlayerInputHandler = function (wickPlayer) {
     }
 
     var onMouseUp = function (evt) {
-        var currFrame = project.getCurrentFrame();
+        var currFrame = wickProject.getCurrentFrame();
         if(currFrame) {
             currFrame._beingClicked = false;
             currFrame._wasClickedOff = true;
         }
 
-        project.rootObject.getAllActiveChildObjectsRecursive(true).forEachBackwards(function(child) {
+        wickProject.rootObject.getAllActiveChildObjectsRecursive(true).forEachBackwards(function(child) {
             child._beingClicked = false;
 
             if(child.isPointInside(self.getMouse())) {
@@ -268,10 +263,6 @@ WickPlayerInputHandler = function (wickPlayer) {
         }
 
         keys[event.keyCode] = true;
-
-        /*project.rootObject.getAllActiveChildObjectsRecursive(true).forEach(function(child) {
-            child.runScript(child.wickScripts["onKeyDown"], 'onKeyDown');
-        });*/
     }
 
     var onKeyUp = function (event) {
@@ -300,9 +291,8 @@ WickPlayerInputHandler = function (wickPlayer) {
         var touchPos = getTouchPos(canvasContainer, evt);
         setMousePos(touchPos);
 
-        project.rootObject.getAllActiveChildObjects().forEach(function(child) {
+        wickProject.rootObject.getAllActiveChildObjects().forEach(function(child) {
             if(child.isPointInside(touchPos)) {
-                //project.runScript(child, "onClick");
                 child._wasClicked = true;
             }
         });
@@ -325,21 +315,15 @@ WickPlayerInputHandler = function (wickPlayer) {
         var mouseX = evt.clientX;
         var mouseY = evt.clientY;
 
-        if(project.fitScreen) {
+        if(wickProject.fitScreen) {
             mouseX -= canvasBoundingClientRect.left;
             mouseY -= canvasBoundingClientRect.top;
         }
 
-        mouseX -= window.wickRenderer.canvasTranslate.x;
-        mouseY -= window.wickRenderer.canvasTranslate.y;
+        var centeredCanvasOffsetX = 0//(window.innerWidth  - wickProject.width) / 2;
+        var centeredCanvasOffsetY = 0//(window.innerHeight - wickProject.height) / 2;
 
-        mouseX /=  window.wickRenderer.canvasScale;
-        mouseY /=  window.wickRenderer.canvasScale;
-
-        var centeredCanvasOffsetX = (window.innerWidth  - project.width) / 2;
-        var centeredCanvasOffsetY = (window.innerHeight - project.height) / 2;
-
-        if(!project.fitScreen) {
+        if(!wickProject.fitScreen) {
             mouseX -= centeredCanvasOffsetX;
             mouseY -= centeredCanvasOffsetY;
         }
@@ -358,21 +342,15 @@ WickPlayerInputHandler = function (wickPlayer) {
         var touchX = touch.pageX;
         var touchY = touch.pageY;
 
-        if(project.fitScreen) {
+        if(wickProject.fitScreen) {
             touchX -= canvasBoundingClientRect.left;
             touchY -= canvasBoundingClientRect.top;
         }
 
-        touchX -= window.wickRenderer.canvasTranslate.x;
-        touchY -= window.wickRenderer.canvasTranslate.y;
+        var centeredCanvasOffsetX = 0//(window.innerWidth - wickProject.width) / 2;
+        var centeredCanvasOffsetY = 0//(window.innerHeight - wickProject.height) / 2;
 
-        touchX /=  window.wickRenderer.canvasScale;
-        touchY /=  window.wickRenderer.canvasScale;
-
-        var centeredCanvasOffsetX = (window.innerWidth - project.width) / 2;
-        var centeredCanvasOffsetY = (window.innerHeight - project.height) / 2;
-
-        if(!project.fitScreen) {
+        if(!wickProject.fitScreen) {
             touchX -= centeredCanvasOffsetX;
             touchY -= centeredCanvasOffsetY;
         }

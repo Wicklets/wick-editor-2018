@@ -1,10 +1,12 @@
 #scriptingGUI {
     bottom: 0px;
-    left: 34px;
+    left: 46px;
     text-align: center;
-    width: calc(100% - 284px);
+    width: calc(100% - 266px);
     height: 300px;
     z-index: 4;
+    /* transition: height 0.2s ease; */
+    border-radius: 9px 9px 0px 0px;
 }
 
 #errorMessage {
@@ -23,10 +25,10 @@
 
 #scriptEditor {
     text-align: left;
-    width: calc(100% - 150px);
-    height: calc(100% - 50px);
+    width: calc(100% - 152px);
+    height: calc(100% - 36px);
     left: 149px;
-    top: 30px;
+    top: 24px;
     font-size: 14px;
     border-style: solid;
     border-width: 1px;
@@ -36,9 +38,9 @@
 #scriptEditorSidebar {
     position: absolute;
     width: calc(149px);
-    height: calc(100% - 50px);
-    left: 0px;
-    top: 30px;
+    height: calc(100% - 36px);
+    left: 2px;
+    top: 24px;
     background-color: #333;
 
     border-style: solid;
@@ -47,6 +49,25 @@
 
     overflow-x: hidden;
     overflow-y: auto;
+}
+
+#noSelectionDiv {
+    color: #DDD;
+    height: calc(100% - 36px);
+    background-color: #444;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #666;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 24px;
+    overflow: hidden;
+}
+#noSelectionText {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    top: calc(50% - 8px);
 }
 
 #scriptEditorObjectName {
@@ -74,50 +95,100 @@
     height: 23px;
     position: absolute;
     color: white;
-    padding-top: 7px;
+    padding-top: 6px;
     padding-left: 7px;
     text-align: left;
 
+    font-size: 14px;
+
     background-color: none;
+    /*cursor: pointer;*/
+
+    box-shadow: none;
 
     -webkit-transition: background-color 500ms linear;
     -ms-transition: background-color 500ms linear;
     transition: background-color 500ms linear;
+
+    border-radius: 7px;
 }
+/*#scriptingIDEHeader:hover {
+    box-shadow: inset 0 0 1px #fff;
+}*/
 
 #closeScriptingGUIButton {
     right: 5px;
-    top: 2px;
+    top: 1px;
     position: absolute;
+    background-image: url('../resources/close-tab.svg');
+    width: 14px;
+    height: 14px;
+    background-size: 13px 13px;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 2px;
 }
 
 #openScriptingGUIButton {
     right: 5px;
-    top: 2px;
+    top: 1px;
     position: absolute;
+    background-image: url('../resources/open-tab.svg');
+    width: 14px;
+    height: 14px;
+    background-size: 13px 13px;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 2px;
 }
 
 #beautifyButton {
-    right: 53px;
-    top: 2px;
+    right: 51px;
+    top: 1px;
     position: absolute;
+    background-image: url('../resources/beautify.png');
+    width: 14px;
+    height: 14px;
+    background-size: 13px 13px;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 2px;
 }
 
 #expandScriptingGUIButton {
-    right: 30px;
-    top: 2px;
+    right: 28px;
+    top: 1px;
     position: absolute;
+    background-image: url('../resources/fullscreen.png');
+    width: 14px;
+    height: 14px;
+    background-size: 13px 13px;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 2px;
 }
 
 #minimizeScriptingGUIButton {
-    right: 30px;
-    top: 2px;
+    right: 28px;
+    top: 1px;
     position: absolute;
+    background-image: url('../resources/unfullscreen.png');
+    width: 14px;
+    height: 14px;
+    background-size: 13px 13px;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 2px;
 }
 
-#noSelectionDiv {
-    margin-top: 135px;
-    color: #FFFFFF;
+#resizeScriptingGUIBar {
+    position: absolute;
+    background-color: rgba(0,0,0,0);
+    cursor: ns-resize;
+    height: 24px;
+    width: 100%;
+    left: 0px;
+    top: 0px;
 }
 
 /* reference section */
@@ -141,6 +212,8 @@
     border-radius: 3px;
     color: #BBB;
     padding-left: 3px;
+
+    width: 90%;
 
     -webkit-transition: background-color 50ms linear;
     -ms-transition: background-color 50ms linear;

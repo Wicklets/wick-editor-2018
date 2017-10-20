@@ -19,18 +19,12 @@ var WickPlayer = function () {
 
     var self = this;
 
-    self.project;
-
-    self.inputHandler;
-    self.audioPlayer;
-
-    self.canvasContainer;
-
     self.running = false;
 
     var initialStateProject;
-
-    var ticksElapsed;
+    
+    var stats;
+    var statsEnabled = false;
 
     self.runProject = function (projectJSON) {
 
@@ -42,11 +36,14 @@ var WickPlayer = function () {
 
         self.running = true;
 
-        window.rendererCanvas = document.getElementById('playerCanvasContainer');
-        self.canvasContainer = window.rendererCanvas;
+        self.canvasContainer = document.getElementById('playerCanvasContainer');
 
-        ticksElapsed = 0;
-        window.elapsedTicks = function () { return ticksElapsed; }
+        if(statsEnabled) {
+            stats = new Stats();
+            stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+            document.body.appendChild( stats.dom );
+        }
+
         resetElapsedTime();
 
         // Load the project!
@@ -55,6 +52,9 @@ var WickPlayer = function () {
         self.project.fitScreen = bowser.tablet || bowser.mobile;
         initialStateProject.fitScreen = bowser.tablet || bowser.mobile;
 
+        self.canvasContainer.style.width = self.project.width+'px';
+        self.canvasContainer.style.height = self.project.height+'px';
+
         self.project.rootObject.generateObjectNameReferences(self.project.rootObject);
         initialStateProject.rootObject.generateObjectNameReferences(initialStateProject.rootObject);
 
@@ -62,26 +62,22 @@ var WickPlayer = function () {
         initialStateProject.prepareForPlayer();
 
         // Setup renderer/input/audio player
-        if(!window.wickRenderer) {
-            window.wickRenderer = new WickPixiRenderer(self.canvasContainer);
-            window.wickRenderer.setProject(self.project);
-            window.wickRenderer.setup();
-        }
-        window.wickRenderer.setProject(self.project);
-        self.inputHandler = new WickPlayerInputHandler(this, self.canvasContainer);
+        self.renderer = new WickPixiRenderer(self.canvasContainer);
+        self.inputHandler = new WickPlayerInputHandler(self.canvasContainer, self.project);
         self.audioPlayer = new WickHowlerAudioPlayer(self.project);
         self.htmlElemInjector = new WickHTMLElemInjector(self.project);
 
-        self.inputHandler.setup();
+        self.inputHandler.setup(); 
         if(!bowser.mobile && !bowser.tablet) self.audioPlayer.setup();
         self.htmlElemInjector.setup();
-        window.wickRenderer.refresh(self.project.rootObject);
 
         var preloader = new WickPreloader();
 
-        window.wickRenderer.render([]);
         update(false);
+    }
 
+    window.runProject = function (projectJSON) {
+        self.runProject(projectJSON)
     }
 
     self.stopRunningProject = function () {
@@ -95,16 +91,6 @@ var WickPlayer = function () {
 
         self.inputHandler.cleanup();
         self.audioPlayer.cleanup();
-        //window.wickRenderer.cleanup();
-
-    }
-
-    self.requestFullscreen = function () {
-        window.wickRenderer.requestFullscreen();
-    }
-
-    self.enterFullscreen = function () {
-        window.wickRenderer.enterFullscreen();
     }
 
     var loopTimeout;
@@ -112,13 +98,15 @@ var WickPlayer = function () {
 
         if(!self.running) return;
 
+        if(statsEnabled) stats.begin();
+
         if(self.project.framerate < 60) {
             loopTimeout = setTimeout(function() {
 
                 if(self.running) {
 
                     if(!firstTick) self.project.tick();
-                    if(self.project) window.wickRenderer.render(self.project.rootObject.getAllActiveChildObjects());
+                    if(self.project) self.renderer.renderWickObjects(self.project, self.project.rootObject.getAllActiveChildObjects());
                     if(self.project) self.htmlElemInjector.update();
                     self.inputHandler.update(false);
 
@@ -132,13 +120,13 @@ var WickPlayer = function () {
                 requestAnimationFrame(function () { update(false) });
             }
             if(!firstTick) self.project.tick();
-            window.wickRenderer.render(self.project.rootObject.getAllActiveChildObjects());
+            self.renderer.renderWickObjects(self.project, self.project.rootObject.getAllActiveChildObjects());
             self.htmlElemInjector.update();
             self.inputHandler.update();
 
         }
 
-        ticksElapsed++;
+        if(statsEnabled) stats.end();
 
     }
 
@@ -155,8 +143,6 @@ var WickPlayer = function () {
         clone.parentObject = wickObj.parentObject;
         clone.parentObject.getCurrentLayer().getCurrentFrame().wickObjects.push(clone);
         self.project.rootObject.generateParentObjectReferences();
-
-        window.wickRenderer.refresh(clone);
 
         return clone;
     }
@@ -209,6 +195,7 @@ var WickPlayer = function () {
 
 }
 
+// this is temporary, need a better system for this...
 function runProject (json) {
     window.wickPlayer = new WickPlayer(); 
     window.wickPlayer.runProject(json);

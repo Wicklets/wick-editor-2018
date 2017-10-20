@@ -1,0 +1,66 @@
+#colorPickerGUI {
+	width: 335px;
+	height: 250px;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	border: 1px solid white;
+	z-index: 9;
+	border-radius: 4px;
+	background-color: #444;
+}
+
+.color-picker-close-button {
+	width: 25px;
+	height: 25px;
+	float: right;
+	cursor: pointer;
+	background-image: url("../resources/close.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    text-overflow: clip;
+    overflow: hidden;
+    background-size: 16px 16px;
+    opacity: 1.0;
+    margin-top: 3px;
+	margin-right: 3px;
+}
+.color-picker-close-button:hover {
+	opacity: 0.6;
+}
+
+.color-picker-dropper-button {
+	width: 25px;
+	height: 25px;
+	float: right;
+	cursor: pointer;
+	background-image: url("../resources/tools/Dropper.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    text-overflow: clip;
+    overflow: hidden;
+    background-size: 25px 25px;
+    opacity: 1.0;
+    margin-top: 3px;
+	margin-right: 3px;
+	position: absolute;
+	left: 122px;
+	top: 203px;
+	z-index: 99999999999;
+}
+.color-picker-dropper-button:hover {
+	opacity: 0.6;
+}
+
+.sp-container {
+	border: none !important;
+	background-color: rgba(0,0,0,0) !important;
+}
+
+.sp-palette-container {
+	border: none !important;
+}
+
+.sp-picker-container {
+	border: none !important;
+}

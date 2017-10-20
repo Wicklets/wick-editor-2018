@@ -33,7 +33,11 @@ Tools.Cursor = function (wickEditor) {
     }
 
     this.getTooltipName = function () {
-        return "Cursor (C)";
+        return "Selection Cursor (C)";
+    }
+
+    this.getCanvasMode = function () {
+        return 'fabric';
     }
 
     this.setup = function () {
@@ -68,10 +72,8 @@ Tools.Cursor = function (wickEditor) {
             var mouseInSameArea = Math.abs(lastDoubleClickPos.x - newDoubleClickPos.x) < 3 && Math.abs(lastDoubleClickPos.y - newDoubleClickPos.y) < 3;
 
             if(isSecondClick && mouseInSameArea) {
-                var selectedObject = wickEditor.fabric.getSelectedObject(WickObject);
-                /*if(selectedObject && selectedObject.isPath) {
-                    wickEditor.guiActionHandler.doAction('useTools.pen');
-                } else */if(selectedObject && selectedObject.isSymbol) {
+                var selectedObject = wickEditor.project.getSelectedObject();
+                if(selectedObject && selectedObject.isSymbol) {
                     wickEditor.guiActionHandler.doAction("editObject");
                 } else if (!selectedObject && !wickEditor.project.currentObject.isRoot) {
                     wickEditor.guiActionHandler.doAction("finishEditingObject");

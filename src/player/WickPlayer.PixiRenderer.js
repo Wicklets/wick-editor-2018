@@ -15,108 +15,48 @@
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
 
-var WickPixiRenderer = function () {
+// TODO: 
+// Update changed ordering
+
+var WickPixiRenderer = function (canvasContainer) {
 
     var self = this;
 
-    var renderer;
-    var stage;
+    var SVG_SCALE = 1.4;
 
-    var renderScale;
+    renderer = PIXI.autoDetectRenderer(720, 480, {
+        backgroundColor : "#FFFFFF", 
+        resolution: window.devicePixelRatio,
+        preserveDrawingBuffer: true,
+        antialias: true,
+    });
+    renderer.clearBeforeRender = false;
+    renderer.roundPixels = false;
+    renderer.view.setAttribute('tabindex', 0);
 
-    var wickToPixiDict;
+    canvasContainer.appendChild(renderer.view);
+    renderer.view.focus()
 
-    var project;
+    var currentProjectUUID = null;
+    var container = new PIXI.Container();
+    var pixiSprites = {};
+    var pixiTextures = {};
 
-    var canvasContainer;
+    var wickProject;
 
-    var dirty;
+    self.renderWickObjects = function (project, wickObjects) {
+        wickProject = project;
 
-    self.canvasScale;
-    self.canvasTranslate;
-    self.rendererView;
-
-    self.setProject = function (wickProject) {
-        dirty = true;
-
-        project = wickProject;
-
-        if(renderer) {
-            self.refresh(project.rootObject);
-            resizeCanvas();
+        if(currentProjectUUID !== project.uuid) {
+            currentProjectUUID = project.uuid;
+            preloadAllAssets(project);
         }
 
-        dirty = false;
-    }
-
-    self.setup = function () {
-
-        renderScale = 1;
-
-        canvasContainer = window.rendererCanvas;
-
-        // update canvas size on window resize
-        window.addEventListener('resize', resizeCanvas, false);
-
-        var rendererOptions = {
-            backgroundColor : "#DDDDDD", 
-            resolution: window.devicePixelRatio,
-            preserveDrawingBuffer: true,
-            antialias: true,
-        };
-        renderer = PIXI.autoDetectRenderer(project.width*renderScale, project.height*renderScale, rendererOptions);
-        renderer.clearBeforeRender = false;
-        renderer.roundPixels = false;//project.pixelPerfectRendering;
-        renderer.view.setAttribute('tabindex', 0);
-        /*$(renderer.view).click(function() { this.focus(); });*/
-
-
-
-        // Add renderer canvas
-        canvasContainer.appendChild(renderer.view);
-        renderer.view.id = "rendererCanvas";
-        self.rendererView = renderer.view;
-        renderer.view.focus()
-
-        stage = new PIXI.Container();
-
-        self.canvasScale = 1.0;
-        self.canvasTranslate = {x : 0, y : 0};
-
-        resizeCanvas();
-
-        wickToPixiDict = {};
-        //generatePixiScene(project.rootObject);
-
-        // Fix focus issues
-        /*self.rendererView.className = ''
-        setTimeout(function () {
-            $('#rendererCanvas').focus();
-        }, 100);
-        $(document).on('focus', 'input[readonly]', function () {
-            this.blur();
-        });*/
-
-    }
-
-    self.render = function (wickObjects) {
-
-        if(!renderer) return;
-
-        if(renderer.width !== project.width || renderer.height !== project.height)
+        if(renderer.width !== project.width || renderer.height !== project.height) {
             renderer.resize(project.width, project.height);
-        renderer.view.style.width  = project.width * self.canvasScale + "px";
-        renderer.view.style.height = project.height * self.canvasScale + "px";
-
-        if(window.wickEditor
-        || document.activeElement === document.getElementById('rendererCanvas')
-        || document.activeElement === document.getElementById('playerCanvasContainer')) {
-            // Dimming the player when it's not focused is disabled for now
-            //rendererCanvas.style.filter = 'none';
-        } else {
-            //rendererCanvas.style.filter = 'brightness(.85)';
+            renderer.view.style.width  = project.width  + "px";
+            renderer.view.style.height = project.height + "px";
         }
-        rendererCanvas.style.filter = 'none';
 
         var graphics = new PIXI.Graphics();
         graphics.beginFill(parseInt(project.backgroundColor.replace("#","0x")));
@@ -124,249 +64,160 @@ var WickPixiRenderer = function () {
         graphics.endFill();
         renderer.render(graphics);
 
-        for(uuid in wickToPixiDict) {
-            wickToPixiDict[uuid].visible = false;
-        }
-
-        /*wickObjects.forEach(function (wickObject) {
-            wickObject.getAllChildObjectsRecursive().forEach(function (child) {
-                resetTransforms(child);
-            });
-        });*/
-
-        var resetParent = function (parent) {
-            resetTransforms(parent);
-            if(parent.parentObject) resetParent(parent.parentObject);
-        }
-
-        var resetObject = function (object) {
-            resetTransforms(object);
-            if(object.isSymbol) {
-                object.getAllActiveChildObjects().forEach(function (child) {
-                    resetObject(child);
-                });
-            }
+        for (uuid in pixiSprites) {
+            pixiSprites[uuid].visible = false;
         }
 
         wickObjects.forEach(function (wickObject) {
-            resetObject(wickObject);
-            if(wickObject.parentObject) resetParent(wickObject.parentObject)
+            renderWickObject(wickObject);
         });
-    
-        renderer.render(wickToPixiDict[project.rootObject.uuid]);
+        renderer.render(container);
     }
 
-    self.clear = function () {
+    function renderWickObject (wickObject) {
+        var sprite = pixiSprites[wickObject.uuid];
+        if(!sprite && !wickObject.isSymbol) {
+            createPixiSprite(wickObject);
+        }
+        if(sprite && wickObject._renderDirty && wickObject.isPath) {
+            regenPixiPath(wickObject, sprite);
+            wickObject._renderDirty = false;
+        }
+        if(sprite && wickObject._renderDirty && wickObject.isText) {
+            sprite = regenPixiText(wickObject, sprite);
+            wickObject._renderDirty = false;
+        }
+        if(sprite) {
+            sprite.visible = true;
+            sprite.anchor = new PIXI.Point(0.5, 0.5);
+            var textureScale = (wickObject.pathData || wickObject.isText ? SVG_SCALE : 1);
+
+            var absTransforms = wickObject.getAbsoluteTransformations();
+            var textOffset = wickObject.isText ? 
+                rotate_point(sprite.textboxOffset, 0, 0, 0, absTransforms.rotation) :
+                {x:0,y:0};
+            sprite.position.x = absTransforms.position.x - textOffset.x;
+            sprite.position.y = absTransforms.position.y - textOffset.y;
+            sprite.rotation = absTransforms.rotation/360*2*3.14159;
+            sprite.scale.x = absTransforms.scale.x/textureScale;
+            sprite.scale.y = absTransforms.scale.y/textureScale;
+            sprite.alpha = absTransforms.opacity;
+            sprite.scale.x *= (absTransforms.flip.x ? -1 : 1);
+            sprite.scale.y *= (absTransforms.flip.y ? -1 : 1);
+        }
+
+        wickObject.getAllActiveChildObjects().forEach(function (child) {
+            renderWickObject(child);
+        });
+    }
+
+    function preloadAllAssets (project) {
+        project.getAllObjects().forEach(function (wickObject) {
+            createPixiSprite(wickObject);
+        })
+    }
+
+    function createPixiSprite (wickObject) {
+        if(wickObject.sourceUUID) {
+            var pixiTexture = pixiTextures[wickObject.sourceUUID];
+            if(pixiTexture) {
+                console.log('loaded cached')
+                var pixiSprite = new PIXI.Sprite(pixiTexture);
+                wickObject.alphaMask = wickProject.getObjectByUUID(wickObject.sourceUUID).alphaMask
+                container.addChild(pixiSprite);
+                pixiSprites[wickObject.uuid] = pixiSprite;
+                pixiSprites[wickObject.uuid].visible = false;
+                return;
+            }
+        }
+
+        var type;
+
+        if (wickObject.asset && wickObject.asset.type === 'image') {
+            type = 'image';
+        } else if (wickObject.pathData) {
+            type = 'svg';
+        } else if (wickObject.isText) {
+            type = 'text';
+        }
+
+        if(type) {
+            var newPixiSprite = WickToPixiSprite[type](wickObject);
+            container.addChild(newPixiSprite);
+            pixiSprites[wickObject.uuid] = newPixiSprite;
+
+            var textureSrc = newPixiSprite.texture.baseTexture.imageUrl;
+            if(textureSrc)
+                wickObject.generateAlphaMask(textureSrc);
+        }
         
     }
 
-    self.refresh = function (wickObject) {
+    function regenPixiPath (wickObject, pixiSprite) {
+        var base64svg = getBase64SVG(wickObject);
+        var texture = PIXI.Texture.fromImage(base64svg, undefined, undefined, SVG_SCALE);
+        pixiSprite.setTexture(texture);
+    }
 
-        if (dirty || wickObject._renderDirty) {
-            pixiObjectExists = false;
-            wickObject._renderDirty = false;
-            
-            var eraseThisObj = wickToPixiDict[wickObject.uuid];
-            if(eraseThisObj && eraseThisObj.parent) {
-                eraseThisObj.parent.removeChild(eraseThisObj);
-            }
-        } else {
-            pixiObjectExists = wickToPixiDict[wickObject.uuid] !== undefined;
-        }
+    function regenPixiText (wickObject, pixiSprite) {
+        container.removeChild(pixiSprite);
+        var newPixiText = WickToPixiSprite['text'](wickObject);
+        container.addChild(newPixiText);
+        pixiSprites[wickObject.uuid] = newPixiText;
+        return newPixiText;
+    }
 
-        if(pixiObjectExists) {
-            if(wickObject.isSymbol) {
-                wickObject.getAllChildObjects().forEach(function (child) {
-                    self.refresh(child);
-                });
-            }
-            return;
-        }
-
-        var pixiObject;
-
-        if (wickObject.isSymbol) {
-
-            pixiObject = new PIXI.Container();
-
-        } else if (wickObject.asset && wickObject.asset.type === 'image') {
-
-            pixiObject = PIXI.Sprite.fromImage(wickObject.asset.getData());
-            //wickObject.generateAlphaMask(pixiObject.texture.baseTexture.imageUrl);
-
-        } else if (wickObject.pathData) {
-            //wickObject.x = Math.floor(wickObject.x);
-            //wickObject.y = Math.floor(wickObject.y);
-
-            var parser = new DOMParser();
-            var x = (wickObject.svgX || 0);
-            var y = (wickObject.svgY || 0);
-            if(!wickObject.svgStrokeWidth) wickObject.svgStrokeWidth = 0;
-            x -= wickObject.svgStrokeWidth/2;
-            y -= wickObject.svgStrokeWidth/2;
-            var w = (wickObject.width  + wickObject.svgStrokeWidth*1);
-            var h = (wickObject.height + wickObject.svgStrokeWidth*1);
-            var svgDoc = parser.parseFromString('<svg id="svg" viewBox="'+x+' '+y+' '+w+' '+h+'" version="1.1" width="'+w+'" height="'+h+'" xmlns="http://www.w3.org/2000/svg">'+wickObject.pathData+'</svg>', "image/svg+xml");
-            var s = new XMLSerializer().serializeToString(svgDoc);
-            var base64svg = 'data:image/svg+xml;base64,' + window.btoa(s);
-            
-            pixiObject = PIXI.Sprite.fromImage(base64svg);
-            wickObject.generateAlphaMask(pixiObject.texture.baseTexture.imageUrl);
-
-        } else if (wickObject.textData) {
-
+    var WickToPixiSprite = {
+        'image': function (wickObject) {
+            var pixiTexture = PIXI.Texture.fromImage(wickObject.asset.getData());
+            var pixiSprite = new PIXI.Sprite(pixiTexture);
+            pixiTextures[wickObject.uuid] = pixiTexture;
+            return pixiSprite;
+        },
+        'svg': function (wickObject) {
+            var base64svg = getBase64SVG(wickObject);
+            var pixiTexture = PIXI.Texture.fromImage(base64svg, undefined, undefined, SVG_SCALE);
+            var newSprite = new PIXI.Sprite(pixiTexture);
+            pixiTextures[wickObject.uuid] = pixiTexture;
+            return newSprite;
+        },
+        'text': function (wickObject) {
+            var textData = wickObject.textData;
             var style = {
-                font : wickObject.textData.fontWeight + " " + wickObject.textData.fontStyle + " " + wickObject.textData.fontSize + "px " + wickObject.textData.fontFamily,
-                fill : wickObject.textData.fill,
+                font : textData.fontWeight + " " + textData.fontStyle + " " + (textData.fontSize*SVG_SCALE) + "px " + textData.fontFamily,
+                fill : textData.fill,
                 wordWrap : true,
-                wordWrapWidth : 1440,
-                align: wickObject.textData.textAlign
+                wordWrapWidth : wickObject.width*SVG_SCALE,
+                align: textData.textAlign
             };
-            pixiObject = new PIXI.Text(wickObject.textData.text, style);
-
-        }
-
-        if(!pixiObject) return;
-        wickToPixiDict[wickObject.uuid] = pixiObject;
-
-        if(wickObject.parentObject) {
-            var parentObject = wickToPixiDict[wickObject.parentObject.uuid];
-            if(!parentObject) {
-                self.refresh(wickObject.parentObject);
+            var pixiText = new PIXI.Text(textData.text, style);
+            var textWidth = pixiText.width/SVG_SCALE;
+            var textboxWidth = wickObject.width;
+            if(textData.textAlign === 'left') {
+                pixiText.textboxOffset = (textboxWidth-textWidth)/2;
+            } else if (textData.textAlign === 'center') {
+                pixiText.textboxOffset = 0;
+            } else if (textData.textAlign === 'right') {
+                pixiText.textboxOffset = -(textboxWidth-textWidth)/2;
             }
-            wickToPixiDict[wickObject.parentObject.uuid].addChild(pixiObject)
-        }
-
-        if(wickObject.isSymbol) {
-            wickObject.getAllChildObjects().forEach(function (child) {
-                self.refresh(child);
-            });
-        }
-
-    }
-
-    var resetTransforms = function (wickObject) {
-
-        //console.log('R ' + wickObject.uuid.substring(0,2));
-
-        var pixiObject = wickToPixiDict[wickObject.uuid];
-        if(!pixiObject) return;
-
-        if(!wickObject.alphaMask && wickObject.asset && (wickObject.asset.type === 'image' || wickObject.asset.type === 'path')) wickObject.generateAlphaMask(pixiObject.texture.baseTexture.imageUrl);
-
-        pixiObject.visible = true;
-        pixiObject.anchor = new PIXI.Point(0.5, 0.5);
-        pixiObject.position.x = wickObject.x//Math.round(wickObject.x);
-        pixiObject.position.y = wickObject.y//Math.round(wickObject.y);
-        pixiObject.rotation = wickObject.rotation/360*2*3.14159;
-        pixiObject.scale.x = wickObject.scaleX;
-        pixiObject.scale.y = wickObject.scaleY;
-        if(wickObject.isRoot) {
-            pixiObject.scale.x *= renderScale;
-            pixiObject.scale.y *= renderScale;
-        }
-        pixiObject.alpha = wickObject.opacity;
-        if(wickObject.flipX) pixiObject.scale.x *= -1;
-        if(wickObject.flipY) pixiObject.scale.y *= -1;
-
-    }
-
-    self.setText = function (wickObject, newText) {
-        var pixiObject = wickToPixiDict[wickObject.uuid];
-        if(!pixiObject) return;
-        pixiObject.text = ""+newText
-        pixiObject.calculateBounds(); 
-        wickObject.width = pixiObject.width; 
-        wickObject.height = pixiObject.height;
-    }
-
-    self.requestFullscreen = function () {
-        wickPlayer.fullscreenRequested = true;
-    }
-
-    self.enterFullscreen = function () {
-        var elem;
-
-        if(window.self !== window.top) {
-            // Inside iframe
-            elem = window.frameElement;
-            console.log(elem)
-        } else {
-            // Not inside iframe
-            elem = self.rendererView;
-        }
-
-        if (screenfull.enabled) {
-            screenfull.request(elem);
+            return pixiText;
         }
     }
 
-    var resizeCanvas = function () {
-
-        if(window.wickEditor) return;
-
-        if(project && project.fitScreen) {
-            // Calculate how much the project would have to scale to fit either dimension
-            widthRatio  = window.innerWidth  / project.width;
-            heightRatio = window.innerHeight / project.height;
-
-            // Fit only so much that stuff doesn't get cut off
-            if(widthRatio > heightRatio) {
-                self.canvasScale = heightRatio;
-            } else {
-                self.canvasScale = widthRatio;
-            }
-
-            renderer.view.style.width  = project.width * self.canvasScale + "px";
-            renderer.view.style.height = project.height * self.canvasScale + "px";
-
-            if(widthRatio > heightRatio) {
-                var offset = (window.innerWidth - project.width * self.canvasScale) / 2;
-                canvasContainer.style.paddingLeft = offset + "px";
-                canvasContainer.style.paddingTop  = "0px";
-            } else {
-                var offset = (window.innerHeight - project.height * self.canvasScale) / 2;
-                canvasContainer.style.paddingLeft = "0px";
-                canvasContainer.style.paddingTop  = offset + "px";
-            }
-        } else {
-            renderer.view.style.width  = project.width + "px";
-            renderer.view.style.height = project.height + "px";
-
-            var offsetX = (window.innerWidth  - project.width) / 2;
-            var offsetY = (window.innerHeight - project.height) / 2;
-
-            canvasContainer.style.paddingLeft   = offsetX + "px";
-            canvasContainer.style.paddingRight  = offsetX + "px";
-            canvasContainer.style.paddingTop    = offsetY + "px";
-            canvasContainer.style.paddingBottom = offsetY + "px";
-        }
-
-    }
-
-    this.cleanup = function() {
-        /*
-        window.removeEventListener('resize', resizeCanvas);
-
-        // Get rid of old canvas
-        var oldRendererCanvas = self.rendererView
-        if(oldRendererCanvas) {
-            canvasContainer.removeChild(canvasContainer.childNodes[0]);
-        }
-
-        //https://gist.github.com/anonymous/b910bbb0cfea82bcf880
-        renderer.plugins.interaction.destroy();
-        renderer = null;
-        stage.destroy(true);
-        stage = null;
-        //document.body.removeChild(view);
-        view = null;
-
-        for (var textureId in PIXI.utils.TextureCache) {
-            //console.log(textureId)
-            PIXI.utils.BaseTextureCache[textureId].destroy(true);
-        }
-        */
+    function getBase64SVG (wickObject) {
+        var parser = new DOMParser();
+        var x = (wickObject.svgX || 0);
+        var y = (wickObject.svgY || 0);
+        if(!wickObject.svgStrokeWidth) wickObject.svgStrokeWidth = 0;
+        x -= wickObject.svgStrokeWidth/2;
+        y -= wickObject.svgStrokeWidth/2;
+        var w = (wickObject.width  + wickObject.svgStrokeWidth*1);
+        var h = (wickObject.height + wickObject.svgStrokeWidth*1);
+        var svgDoc = parser.parseFromString('<svg id="svg" viewBox="'+x+' '+y+' '+w+' '+h+'" version="1.1" width="'+w+'" height="'+h+'" xmlns="http://www.w3.org/2000/svg">'+wickObject.pathData+'</svg>', "image/svg+xml");
+        var s = new XMLSerializer().serializeToString(svgDoc);
+        var base64svg = 'data:image/svg+xml;base64,' + window.btoa(s);
+        return base64svg;
     }
 
 };
+

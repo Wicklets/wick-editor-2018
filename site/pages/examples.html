@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!-- Placeholder for official font (Arial Rounded?) later. -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+
+    <link href='../styles/common.css' rel='stylesheet' type='text/css'>
+    <link href='../styles/examples.css' rel='stylesheet' type='text/css'>
+
+    <script src="../../lib/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../lib/highlight/styles/github.css">
+    <script src="../../lib/highlight/highlight.pack.js"></script>
+    <script src="../js/examples.js"></script>
+</head>
+<body>
+	<div class="sky"></div>
+	<div class='clouds-angel'></div>
+	<!--<div class="title-box">
+		<div class="title">Learn</div>
+		<div class="title-description">Here you can learn how to use The Wick Editor! Feel free to browse demos and tutorials, download them and open them in the editor!</div>
+	</div>
+	<div id="scrollbar"> </div>
+	<div id="thumbnails"> </div>-->
+
+	<div class="examples-container">
+		<div class="examples-header">
+			<div class="examples-header-title">Examples</div>
+			<div class="examples-header-subtitle">Hey! Check out some examples to help you get started using Wick. Have an idea for an example, or want to submit your own? Post it on <a target="_parent" href="http://forum.wickeditor.com/">the forums</a>!</div>
+		</div>
+
+		<div class="tags-menubar">
+			<div class="tags-menubar-tag">
+				<div onclick="showProjectsWithTag('all');" class="tags-menubar-tag-title tags-menubar-tag-title-selected" id="tag-all">All</div>
+			</div>
+			<div class="tags-menubar-tag">
+				<div onclick="showProjectsWithTag('basics');" class="tags-menubar-tag-title" id="tag-basics">Basics</div>
+			</div>
+			<div class="tags-menubar-tag">
+				<div onclick="showProjectsWithTag('games');" id="tag-games" class="tags-menubar-tag-title">Games</div>
+			</div>
+			<div class="tags-menubar-tag">
+				<div onclick="showProjectsWithTag('techdemos');" id="tag-techdemos" class="tags-menubar-tag-title">Tech Demos</div>
+			</div>
+		</div>
+		<div class="examples-grid" id="examples-grid">
+			<div id="example-grid-element-dummy" class="example-grid-element">
+				<div class="example-grid-element-thumbnail"></div>
+				<div class="example-grid-element-title"></div>
+				<div class="example-grid-element-open-in-editor-link">Open in Editor</div>
+				<div class="example-grid-element-tutorial-link">Tutorial</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="player-window" class="player-window" style="display:none">
+		<div class="player-window-background" id="player-window-background"></div>
+		<div class="player-window-title"></div>
+		<div class="player-window-close-button">x</div>
+		<div class="player-window-player-container" id="player-container"></div>
+	</div>
+</body>

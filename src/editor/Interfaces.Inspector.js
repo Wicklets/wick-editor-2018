@@ -41,13 +41,27 @@ var InspectorInterface = function (wickEditor) {
 
     this.setup = function () {
         var inspectorDiv = document.getElementById('inspectorGUI')
-        selectionIcon = buildDiv('inspector-selection-icon', inspectorDiv);
-        selectionTitle = buildDiv('inspector-selection-title', inspectorDiv);
+        selectionTitleBar = buildDiv('inspector-title-bar', inspectorDiv);
+        selectionIcon = buildDiv('inspector-selection-icon', selectionTitleBar);
+        selectionTitle = buildDiv('inspector-selection-title', selectionTitleBar);
         inspectorTitle = document.getElementById('inspector-title');
 
         specialMode = 'project';
 
+        inspectorDiv = document.getElementById('inspectorGUI');
+        allItemsContainer = buildDiv('inspector-allitems-container', inspectorDiv);
+        propertiesContainer = buildDiv('inspector-properties-container', allItemsContainer);
+        buttonsContainer = buildDiv('inspector-buttons-container', allItemsContainer);
+
         inputs = InspectorInterface.getProperties(wickEditor, this);
+        inputs.forEach(function (input) {
+            if(input.getPropertyDiv) {
+                propertiesContainer.appendChild(input.getPropertyDiv());
+            }
+            if(input.getButtonDiv) {
+                buttonsContainer.appendChild(input.getButtonDiv());
+            }
+        });
     }
 
     this.syncWithEditorState = function () {

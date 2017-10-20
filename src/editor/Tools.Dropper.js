@@ -32,29 +32,49 @@ Tools.Dropper = function (wickEditor) {
     }
 
     this.getTooltipName = function () {
-        return "Color Picker (D)";
+        return "Eyedropper (D)";
     }
 
     this.setColorVar = function (newColorVar) {
         colorVar = newColorVar;
     }
 
+    this.onSelected = function () {
+        
+    }
+
+    this.onDeselected = function () {
+       
+    }
+
+    this.getCanvasMode = function () {
+        return 'fabric';
+    }
+
     this.setup = function () {
-        wickEditor.fabric.canvas.on('mouse:down', function (e) {
-            if(wickEditor.currentTool instanceof Tools.Dropper) {
-                
-                var image = new Image();
-                image.onload = function () {
-                    var mouse = wickEditor.inputHandler.mouse;
-                    var color = GetColorAtCoords(image, mouse.x*window.devicePixelRatio, mouse.y*window.devicePixelRatio, "hex");
-                    wickEditor.settings.setValue(colorVar, color)
+        window.addEventListener('mousedown', function (e) {
+            if(e.target.className !== 'upper-canvas ') return;
+            if(wickEditor.currentTool instanceof Tools.Dropper && !wickEditor.colorPicker.isOpen()) {
+                that.getColorAtCursor(function (color) {
+                    wickEditor.settings.setValue(colorVar, color);
                     wickEditor.syncInterfaces();
-                };
-                image.src = wickEditor.fabric.canvas.toDataURL();
-                
-                wickEditor.syncInterfaces();
+                });
             }
         });
+    }
+
+    this.getColorAtCursor = function (callback) {
+        var image = new Image();
+        image.onload = function () {
+            var mouse = wickEditor.inputHandler.mouse;
+            var color = GetColorAtCoords(
+                image, 
+                mouse.x*window.devicePixelRatio, 
+                mouse.y*window.devicePixelRatio, 
+                "hex");
+            callback(color);
+        };
+        image.src = wickEditor.fabric.canvas.toDataURL();
     }
 
 }

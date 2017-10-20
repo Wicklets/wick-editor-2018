@@ -22,6 +22,9 @@ Tools.Line = function (wickEditor) {
     var that = this;
     var fabricInterface = wickEditor.fabric;
 
+    var drawingLine;
+    var tempGroup;
+
     this.getCursorImage = function () {
         return "crosshair"
     };
@@ -35,40 +38,59 @@ Tools.Line = function (wickEditor) {
     }
 
     this.setup = function () {
-        fabricInterface.canvas.on('mouse:down', function (e) {
-            if(!(wickEditor.currentTool instanceof Tools.Line) || e.e.buttons !== 1) return;
-
-            fabricInterface.shapeDrawer.startDrawingShape('line', e.e.offsetX, e.e.offsetY, that.createWickObjectFromShape);
-        });
 
     }
 
-    this.createWickObjectFromShape = function (drawingShape) {
-        var origX = drawingShape.left+drawingShape.width /2+drawingShape.strokeWidth/2;
-        var origY = drawingShape.top +drawingShape.height/2+drawingShape.strokeWidth/2;
-        drawingShape.left = 0;
-        drawingShape.top = 0;
-        drawingShape.setCoords();
-        //var svg = '<rect fill="'+drawingShape.fill+'" rx="'+drawingShape.rx+'" ry="'+drawingShape.ry+'" width="'+drawingShape.width+'" height="'+drawingShape.height+'" style="" />'
-        var svg = '<line stroke-linecap="'+drawingShape.strokeLineCap+'" stroke-linejoin="'+drawingShape.strokeLineJoin+'" fill="rgba(0,0,0,0)" x1="'+drawingShape.x1+'" y1="'+drawingShape.y1+'" x2="'+drawingShape.x2+'" y2="'+drawingShape.y2+'" stroke="'+drawingShape.stroke+'" stroke-width="'+drawingShape.strokeWidth+'" />'
-        //console.log(svg)
-        var svgString = '<svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>';
+    this.getCanvasMode = function () {
+        return 'paper';
+    }
 
-        drawingShape.remove()
-        
+    this.onSelected = function () {
+        wickEditor.project.clearSelection();
+    }
+
+    this.onDeselected = function () {
+        if(tempGroup) tempGroup.remove();
+    }
+
+    this.paperTool = new paper.Tool();
+
+    this.paperTool.onMouseDown = function (event) {
+        var newPath = new paper.Path({insert:false});
+        newPath.strokeColor = wickEditor.settings.strokeColor;
+        newPath.strokeWidth = wickEditor.settings.strokeWidth;
+        newPath.strokeJoin = wickEditor.settings.strokeJoin;
+        newPath.strokeCap = wickEditor.settings.strokeCap;
+        newPath.add(event.point);
+        newPath.add(event.point);
+
+        tempGroup = new paper.Group();
+        tempGroup.addChild(newPath);
+
+        drawingLine = newPath;
+    }
+
+    this.paperTool.onMouseDrag = function (event) {
+        drawingLine.segments[1].point = event.point;
+    }
+
+    this.paperTool.onMouseUp = function (event) {
+        tempGroup.remove();
+
+        var group = tempGroup.clone({insert:false});
+
+        var svgString = group.exportSVG({asString:true});
         var pathWickObject = WickObject.createPathObject(svgString);
-        pathWickObject.x = origX;
-        pathWickObject.y = origY;
-        //console.log(drawingShape)
-        pathWickObject.width = drawingShape.width;
-        pathWickObject.height = drawingShape.height;
-        pathWickObject.rotation = drawingShape.angle;
+        pathWickObject.x = (drawingLine.segments[0].point.x + drawingLine.segments[1].point.x)/2;
+        pathWickObject.y = (drawingLine.segments[0].point.y + drawingLine.segments[1].point.y)/2;
+        pathWickObject.width = 1;
+        pathWickObject.height = 1;
 
         wickEditor.paper.pathRoutines.refreshPathData(pathWickObject);
 
         wickEditor.actionHandler.doAction('addObjects', {
             wickObjects: [pathWickObject],
-            dontSelectObjects: true
+            dontSelectObjects: true,
         });
     }
 

@@ -51,7 +51,6 @@ var WickObject = function () {
 // Text
 
     this.isText = false;
-    this.textData = false;
 
 // Symbols
 
@@ -113,36 +112,15 @@ WickObject.createTextObject = function (text) {
     var obj = new WickObject();
 
     obj.isText = true;
-
+    obj.width = 400;
     obj.textData = {
-        //backgroundColor: undefined,
-        //borderColor: undefined,
-        //borderDashArray: undefined,
-        //borderScaleFactor: undefined,
-        //caching: true,
-        cursorColor: '#333',
-        cursorDelay: 500,
-        //cursorWidth: 2,
-        editable: true,
-        //editingBorderColor: '#333',
-        fontFamily: 'arial',
+        fontFamily: 'Arial',
         fontSize: 40,
         fontStyle: 'normal',
         fontWeight: 'normal',
-        //textDecoration: '',
-        //hasBorders: true,
-        lineHeight: 1.16,
+        lineHeight: 1.0,
         fill: '#000000',
-        //selectionColor: undefined,
-        //selectionEnd: undefined,
-        //selectionStart: undefined,
-        //shadow: undefined,
-        //stateProperties: undefined,
-        //stroke: undefined,
-        //styles: undefined, // Stores variable character styles
         textAlign: 'left',
-        //textBackgroundColor: undefined,
-        textDecoration: "",
         text: text
     };
 
@@ -254,6 +232,7 @@ WickObject.prototype.copy = function () {
     copiedObject.flipY = this.flipY;
     copiedObject.opacity = this.opacity;
     copiedObject.uuid = random.uuid4();
+    copiedObject.sourceUUID = this.uuid;
     copiedObject.assetUUID = this.assetUUID;
     copiedObject.svgX = this.svgX;
     copiedObject.svgY = this.svgY;
@@ -266,7 +245,8 @@ WickObject.prototype.copy = function () {
     copiedObject.cachedAbsolutePosition = this.getAbsolutePosition();
     copiedObject.svgStrokeWidth = this.svgStrokeWidth;
 
-    copiedObject.textData = JSON.parse(JSON.stringify(this.textData));
+    if(this.isText)
+        copiedObject.textData = JSON.parse(JSON.stringify(this.textData));
 
     copiedObject.wickScript = this.wickScript
 
@@ -326,31 +306,6 @@ WickObject.prototype.downloadAsFile = function () {
         var blob = new Blob([this.getAsJSON()], {type: "text/plain;charset=utf-8"});
         saveAs(blob, filename+".json");
         return;
-    }
-
-    function dataURItoBlob(dataURI) {
-      // convert base64 to raw binary data held in a string
-      // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
-      var byteString = atob(dataURI.split(',')[1]);
-
-      // separate out the mime component
-      var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
-
-      // write the bytes of the string to an ArrayBuffer
-      var ab = new ArrayBuffer(byteString.length);
-      var ia = new Uint8Array(ab);
-      for (var i = 0; i < byteString.length; i++) {
-          ia[i] = byteString.charCodeAt(i);
-      }
-
-      // write the ArrayBuffer to a blob, and you're done
-      var blob = new Blob([ab], {type: mimeString});
-      return blob;
-
-      // Old code
-      // var bb = new BlobBuilder();
-      // bb.append(ab);
-      // return bb.getBlob(mimeString);
     }
 
     var asset = wickEditor.project.library.getAsset(this.assetUUID);
@@ -540,37 +495,6 @@ WickObject.prototype.updateFrameTween = function (relativePlayheadPosition) {
     }
 }
 
-/*WickObject.prototype.addTween = function (newTween) {
-    var self = this;
-
-    var replacedTween = false;
-    this.tweens.forEach(function (tween) {
-        if (tween.frame === newTween.frame) {
-            self.tweens[self.tweens.indexOf(tween)] = newTween;
-            replacedTween = true;
-        }
-    });
-
-    if(!replacedTween)
-        this.tweens.push(newTween);
-}
-
-WickObject.prototype.removeTween = function (tweenToDelete) {
-    var self = this;
-
-    var deleteTweenIndex = null;
-    this.tweens.forEach(function (tween) {
-        if(deleteTweenIndex) return;
-        if (tweenToDelete === tween) {
-            deleteTweenIndex = self.tweens.indexOf(tween);
-        }
-    });
-
-    if(deleteTweenIndex !== null) {
-        self.tweens.splice(deleteTweenIndex, 1);
-    }
-}*/
-
 WickObject.prototype.addPlayRange = function (playRange) {
     if (!this.isSymbol) return; 
 
@@ -593,92 +517,6 @@ WickObject.prototype.removePlayRange = function (playRangeToDelete) {
 
     if(deletePlayRangeIndex !== null) self.playRanges.splice(deletePlayRangeIndex, 1); 
 }
-
-/*WickObject.prototype.hasTweenAtFrame = function (frame) {
-    var foundTween = false
-    this.tweens.forEach(function (tween) {
-        if(foundTween) return;
-        if(tween.frame === frame) foundTween = true;
-    })
-    return foundTween;
-}
-
-WickObject.prototype.getFromTween = function () {
-    var foundTween = null;
-
-    var relativePlayheadPosition = this.parentObject.playheadPosition - this.parentFrame.playheadPosition;
-    
-    var seekPlayheadPosition = relativePlayheadPosition;
-    while (!foundTween && seekPlayheadPosition >= 0) {
-        this.tweens.forEach(function (tween) {
-            if(tween.frame === seekPlayheadPosition) {
-                foundTween = tween;
-            }
-        });
-        seekPlayheadPosition--;
-    }
-
-    return foundTween;
-}
-
-WickObject.prototype.getToTween = function () {
-    var foundTween = null;
-
-    var relativePlayheadPosition = this.parentObject.playheadPosition - this.parentFrame.playheadPosition;
-
-    var seekPlayheadPosition = relativePlayheadPosition;
-    var parentFrameLength = this.parentObject.getFrameWithChild(this).length;
-    while (!foundTween && seekPlayheadPosition < parentFrameLength) {
-        this.tweens.forEach(function (tween) {
-            if(tween.frame === seekPlayheadPosition) {
-                foundTween = tween;
-            }
-        });
-        seekPlayheadPosition++;
-    }
-
-    return foundTween;
-}*/
-
-/*WickObject.prototype.applyTweens = function () {
-
-    var that = this;
-
-    if (!this.isRoot && this.tweens.length > 0) {
-        if(this.tweens.length === 1) {
-            this.tweens[0].applyTweenToWickObject(that);
-        } else {
-            var tweenFrom = that.getFromTween();
-            var tweenTo = that.getToTween();
-
-            if (tweenFrom && tweenTo) {
-                // yuck
-                var A = tweenFrom.frame;
-                var B = tweenTo.frame;
-                var L = B-A;
-                var P = (this.parentObject.playheadPosition - this.parentFrame.playheadPosition)-A;
-                var T = P/L;
-                if(B-A === 0) T = 1;
-                
-                var interpolatedTween = WickTween.interpolateTweens(tweenFrom, tweenTo, T);
-                interpolatedTween.applyTweenToWickObject(that);
-            }
-            if (!tweenFrom && tweenTo) {
-                tweenTo.applyTweenToWickObject(that);
-            }
-            if (!tweenTo && tweenFrom) {
-                tweenFrom.applyTweenToWickObject(that);
-            }
-        }
-    }
-
-    if (!this.isSymbol) return;
-
-    this.getAllActiveChildObjects().forEach(function (child) {
-        child.applyTweens();
-    });
-
-}*/
 
 /* Return all child objects of a parent object */
 WickObject.prototype.getAllChildObjects = function () {
@@ -727,21 +565,8 @@ WickObject.prototype.getAllChildObjectsRecursive = function () {
         return [this];
     }
 
-    /*var children = [];
-    for(var l = this.layers.length-1; l >= 0; l--) {
-        var layer = this.layers[l];
-        for(var f = 0; f < layer.frames.length; f++) {
-            var frame = layer.frames[f];
-            for(var o = 0; o < frame.wickObjects.length; o++) {
-                children.push(frame.wickObjects[o]);
-                children = children.concat(frame.wickObjects[o].getAllChildObjectsRecursive());
-            }
-        }
-    }
-    return children;*/
-
     var children = [this];
-    this.layers.forEach(function (layer) {
+    this.layers.forEachBackwards(function (layer) {
         layer.frames.forEach(function (frame) {
             frame.wickObjects.forEach(function (wickObject) {
                 children = children.concat(wickObject.getAllChildObjectsRecursive());
@@ -770,18 +595,6 @@ WickObject.prototype.getAllActiveChildObjectsRecursive = function (includeParent
         }
     }
     return children;
-
-    /*var children = [];
-    if(includeParents) children = [this];
-    this.layers.forEach(function (layer) {
-        layer.frames.forEach(function (frame) {
-            if(!frame.isActive()) return;
-            frame.wickObjects.forEach(function (wickObject) {
-                children = children.concat(wickObject.getAllChildObjectsRecursive());
-            });
-        });
-    });
-    return children;*/
 
 }
 
@@ -974,6 +787,10 @@ WickObject.prototype.removeChild = function (childToRemove) {
     });
 }
 
+WickObject.prototype.getZIndex = function () {
+    return this.parentFrame.wickObjects.indexOf(this);
+}
+
 /* Get the absolute position of this object (the position not relative to the parents) */
 WickObject.prototype.getAbsolutePosition = function () {
     if(this.isRoot) {
@@ -993,10 +810,6 @@ WickObject.prototype.getAbsolutePosition = function () {
     }
 }
 
-WickObject.prototype.getZIndex = function () {
-    return this.parentFrame.wickObjects.indexOf(this);
-}
-
 /* Get the absolute position of this object taking into account the scale of the parent */
 WickObject.prototype.getAbsolutePositionTransformed = function () {
     if(this.isRoot) {
@@ -1007,11 +820,12 @@ WickObject.prototype.getAbsolutePositionTransformed = function () {
     } else {
         var parent = this.parentObject;
         var parentPosition = parent.getAbsolutePositionTransformed();
-        var parentScale = {x:parent.scaleX, y:parent.scaleY};
+        var parentScale = parent.getAbsoluteScale()
+        var parentFlip = parent.getAbsoluteFlip();
         var rotatedPosition = {x:this.x*parentScale.x, y:this.y*parentScale.y};
-        if(parent.flipX) rotatedPosition.x *= -1;
-        if(parent.flipY) rotatedPosition.y *= -1;
-        rotatedPosition = rotate_point(rotatedPosition.x, rotatedPosition.y, 0, 0, parent.rotation);
+        if(parentFlip.x) rotatedPosition.x *= -1;
+        if(parentFlip.y) rotatedPosition.y *= -1;
+        rotatedPosition = rotate_point(rotatedPosition.x, rotatedPosition.y, 0, 0, parent.getAbsoluteRotation());
         return {
             x: rotatedPosition.x + parentPosition.x,
             y: rotatedPosition.y + parentPosition.y
@@ -1043,6 +857,40 @@ WickObject.prototype.getAbsoluteRotation = function () {
     }
 }
 
+WickObject.prototype.getAbsoluteOpacity = function () {
+    if(this.isRoot) {
+        return this.opacity;
+    } else {
+        var parentOpacity = this.parentObject.getAbsoluteOpacity();
+        return this.opacity * parentOpacity;
+    }
+}
+
+WickObject.prototype.getAbsoluteFlip = function () {
+    if(this.isRoot) {
+        return {
+            x: this.flipX,
+            y: this.flipY
+        };
+    } else {
+        var parentFlip = this.parentObject.getAbsoluteFlip();
+        return {
+            x: this.flipX || parentFlip.x,
+            y: this.flipY || parentFlip.y
+        };
+    }
+}
+
+WickObject.prototype.getAbsoluteTransformations = function () {
+    return {
+        position: this.getAbsolutePositionTransformed(),
+        scale: this.getAbsoluteScale(),
+        rotation: this.getAbsoluteRotation(),
+        opacity: this.getAbsoluteOpacity(),
+        flip: this.getAbsoluteFlip(),
+    }
+}
+
 WickObject.prototype.isOnActiveLayer = function (activeLayer) {
 
     return this.parentFrame.parentLayer === activeLayer;
@@ -1065,18 +913,6 @@ WickObject.prototype.stop = function () {
     this._playing = false;
 }
 
-WickObject.prototype.getPlayrangeById = function (identifier) {
-    var foundPlayRange = null;
-
-    this.playRanges.forEach(function (playRange) {
-        if(playRange.identifier === identifier) {
-            foundPlayRange = playRange;
-        }
-    });
-
-    return foundPlayRange;
-}
-
 WickObject.prototype.getFrameById = function (identifier) {
     var foundFrame = null;
 
@@ -1087,6 +923,18 @@ WickObject.prototype.getFrameById = function (identifier) {
     });
 
     return foundFrame;
+}
+
+WickObject.prototype.getPlayrangeById = function (identifier) {
+    var foundPlayRange = null;
+
+    this.playRanges.forEach(function (playRange) {
+        if(playRange.identifier === identifier) {
+            foundPlayRange = playRange;
+        }
+    });
+
+    return foundPlayRange;
 }
 
 WickObject.prototype.getFramesInPlayrange = function (playrange) {
@@ -1194,55 +1042,6 @@ WickObject.prototype.hitTestRectangles = function (otherObj) {
     // Create a circle whose center is (10,10) with radius of 20
     var objA = this;
     var objB = otherObj;
-
-    // var aPos = objA.getAbsolutePositionTransformed(); 
-    // var bPos = objB.getAbsolutePositionTransformed(); 
-
-    // var aScale = objA.getAbsoluteScale();
-    // var aWidth = objA.width * aScale.x; 
-    // var aHeight = objA.height * aScale.y; 
-    // var bScale = objB.getAbsoluteScale();
-    // var bWidth = objB.width * bScale.x; 
-    // var bHeight = objB.height * bScale.y; 
-
-    // var aRot = objA.getAbsoluteRotation(); 
-    // var bRot = objB.getAbsoluteRotation(); 
-
-
-    // // Define bottom left points for SAT boxes 
-    // var aPoint = { "x": aPos.x - (aWidth/2), 
-    //                "y": aPos.y - (aHeight/2) };
-
-    // var bPoint = { "x": bPos.x - (bWidth/2), 
-    //                "y": bPos.y - (bHeight/2) };
-
-    // console.log(aPoint, aWidth, aHeight, aRot);
-    // console.log(bPoint, bWidth, bHeight, bRot);
-
-    // var boxA = new SAT.Box(new SAT.Vector(0,0), aWidth, aHeight); 
-    // var boxB = new SAT.Box(new SAT.Vector(0,0), bWidth, bHeight); 
-
-    // console.log(boxA);
-
-    // var polyA = boxA.toPolygon(); 
-    // var polyB = boxB.toPolygon(); 
-
-    // polyA.rotate(-toRadians(aRot)); 
-    // polyB.rotate(-toRadians(bRot)); 
-
-    // console.log(toRadians(aRot));
-
-    // polyA.translate(aPoint.x, aPoint.y); 
-    // polyB.translate(bPoint.x, bPoint.y); 
-
-    // var response = new SAT.Response();
-
-    // console.log(polyA, polyB);
-
-    // console.log(SAT.testPolygonPolygon(polyA, polyB, response));
-
-    // return SAT.testPolygonPolygon(polyA, polyB, response);
-
 
     var objAAbsPos = objA.getAbsolutePositionTransformed();
     var objBAbsPos = objB.getAbsolutePositionTransformed();
@@ -1370,10 +1169,6 @@ WickObject.prototype.isPointInside = function(point) {
             -object.getAbsoluteRotation()
         );
 
-        /*console.log('---')
-        console.log(transformedPoint)
-        console.log(transformedPosition)*/
-
         // Bounding box check
         if ( transformedPoint.x >= transformedPosition.x - transformedWidth /2 &&
              transformedPoint.y >= transformedPosition.y - transformedHeight/2 &&
@@ -1391,7 +1186,6 @@ WickObject.prototype.isPointInside = function(point) {
             }
 
             // Alpha mask check
-            //console.log(relativePoint)
             var objectAlphaMaskIndex =
                 (Math.floor(relativePoint.x/transformedScale.x)%Math.floor(object.width+object.svgStrokeWidth)) +
                 (Math.floor(relativePoint.y/transformedScale.y)*Math.floor(object.width+object.svgStrokeWidth));
@@ -1405,35 +1199,6 @@ WickObject.prototype.isPointInside = function(point) {
     });
 
     return hit;
-}
-
-WickObject.prototype.getTypeString = function (format) {
-    var typeString = "";
-
-    if(this.isButton) {
-        typeString = "button";
-    } else if(this.isGroup) {
-        typeString = "button";
-    } else if (this.isSymbol) {
-        typeString = "clip";
-    } else if (this.isImage) {
-        typeString = "image";
-    } else if (this.isPath) {
-        typeString = "path";
-    } else if (this.isText) {
-        typeString = "text";
-    }
-
-    if(format && format.capitalized) {
-        console.error('getTypeString format.capitalized NYI');
-    }
-
-    return typeString;
-}
-
-WickObject.prototype.setText = function (text) {
-    //this.pixiText.text = ""+text;
-    wickRenderer.setText(this, text);
 }
 
 WickObject.prototype.clone = function () {
@@ -1612,17 +1377,13 @@ WickObject.prototype.tick = function () {
             wickPlayer.resetStateOfObject(this);
         }
     }
-
-    if(this.textData) {
-        if(this.varName) {
-            (wickPlayer || wickEditor).project.loadBuiltinFunctions(this);
-            var newText = "";
-            try {
-                newText = eval(this.varName);
-            } catch (e) {
-                newText = e;
-            }
-            this.setText(newText);
+    
+    // Update currentFrameNumber and currentFrameName for API
+    if(this.isSymbol) {
+        this.currentFrameNumber = this.playheadPosition+1;
+        var currentFrame = this.getCurrentLayer().getCurrentFrame();
+        if(currentFrame) {
+            this.currentFrameName = this.getCurrentLayer().getCurrentFrame().name;
         }
     }
 

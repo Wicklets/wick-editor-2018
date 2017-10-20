@@ -19,6 +19,8 @@ var ScriptingIDEReference = function (scriptingIDE, wickEditor) {
 
 // API
 
+    var propButtons = {};
+
     this.setup = function () {
         var reference = document.getElementById('scriptEditorReference');
 
@@ -41,6 +43,9 @@ var ScriptingIDEReference = function (scriptingIDE, wickEditor) {
 
             section.properties.forEach(function (prop) {
                 var propertyButton = document.createElement('div');
+                propButtons[stripFunctionParams(prop.name)] = propertyButton;
+                propertyButton.sectionLabel = referenceTitle;
+
                 propertyButton.className = 'sidebarGroupElement tooltipElem';
                 propertyButton.innerHTML = stripFunctionParams(prop.name);
                 propertyButton.setAttribute('alt', getPropertyHTML(prop));
@@ -53,6 +58,20 @@ var ScriptingIDEReference = function (scriptingIDE, wickEditor) {
                 referenceGroup.appendChild(propertyButton);
             })
         })
+    }
+
+    this.highlightPropButton = function (name) {
+        for(key in propButtons) {
+            propButtons[key].style.boxShadow = '';
+            propButtons[key].sectionLabel.style.boxShadow = '';
+        }
+
+        var propButton = propButtons[name];
+        if(propButton) {
+            var borderStyle = 'inset 0px 0px 2px #31E19C'
+            propButton.style.boxShadow = borderStyle;
+            propButton.sectionLabel.style.boxShadow = borderStyle;
+        }
     }
 
 // Helper functions

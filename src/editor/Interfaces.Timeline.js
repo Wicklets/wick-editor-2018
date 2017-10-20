@@ -71,6 +71,7 @@ TimelineInterface.Timeline = function (wickEditor) {
     this.horizontalScrollBar = new TimelineInterface.HorizontalScrollBar(wickEditor, this);
     this.verticalScrollBar = new TimelineInterface.VerticalScrollBar(wickEditor, this);
     this.numberLine = new TimelineInterface.NumberLine(wickEditor, this);
+    this.playhead = new TimelineInterface.Playhead(wickEditor, this);
 
     this.interactions = new TimelineInterface.Interactions(wickEditor, this);
     this.interactions.setup();
@@ -90,6 +91,9 @@ TimelineInterface.Timeline = function (wickEditor) {
 
         this.numberLine.build();
         this.elem.appendChild(this.numberLine.elem);
+
+        this.playhead.build();
+        this.elem.appendChild(this.playhead.elem);
 
         var hideNumberlinePiece = document.createElement('div');
         hideNumberlinePiece.className = 'hide-number-line-piece';
@@ -174,9 +178,37 @@ TimelineInterface.Timeline = function (wickEditor) {
         this.horizontalScrollBar.build();
         this.elem.appendChild(this.horizontalScrollBar.elem);
 
-        var hideScrollbarConnectPiece  = document.createElement('div'); 
+        /*var hideScrollbarConnectPiece  = document.createElement('div'); 
         hideScrollbarConnectPiece.className = 'hide-scrollbar-connect-piece';
-        this.elem.appendChild(hideScrollbarConnectPiece); 
+        this.elem.appendChild(hideScrollbarConnectPiece); */
+        var zoomBox = document.createElement('div');
+        zoomBox.className = 'zoom-box';
+        this.elem.appendChild(zoomBox);
+        self.numberInput = new SlideyNumberInput({
+            onsoftchange: function (e) {
+                wickEditor.fabric.setZoom(e/100, true);
+            },
+            onhardchange: function (e) {
+                wickEditor.fabric.setZoom(e/100, true);
+            },
+            min: 1,
+            max: 500,
+            moveFactor: 0.5,
+            initValue: 100,
+        });
+        self.numberInput.className = 'timeline-number-input';
+        zoomBox.appendChild(self.numberInput);
+        var zoomIcon = document.createElement('div');
+        zoomIcon.className = 'timeline-zoom-icon';
+        zoomIcon.onclick = function () {
+            wickEditor.fabric.recenterCanvas();
+            wickEditor.syncInterfaces();
+        }
+        zoomBox.appendChild(zoomIcon);
+        var zoomPercentSign = document.createElement('div');
+        zoomPercentSign.className = 'timeline-zoom-percent-sign';
+        zoomPercentSign.innerHTML = '%'
+        zoomBox.appendChild(zoomPercentSign);
 
         this.verticalScrollBar.build();
         this.elem.appendChild(this.verticalScrollBar.elem);
@@ -194,6 +226,7 @@ TimelineInterface.Timeline = function (wickEditor) {
         this.elem.style.height = this.calculateHeight() + "px";
 
         this.numberLine.update();
+        this.playhead.update();
 
         this.horizontalScrollBar.update();
         this.verticalScrollBar.update();
@@ -201,7 +234,13 @@ TimelineInterface.Timeline = function (wickEditor) {
         onionSkinningButton.style.backgroundColor = wickEditor.project.onionSkinning ? 'orange' : '#F0EFEF';
         smallFramesModeButton.style.backgroundColor = wickEditor.project.smallFramesMode ? 'orange' : '#F0EFEF';
 
+        this.updateZoomBox();
+
         resetFrameSize();
+    }
+
+    this.updateZoomBox = function () {
+        self.numberInput.value = Math.floor(wickEditor.fabric.getCanvasTransform().zoom * 100);
     }
 
     this.calculateHeight = function () {
@@ -211,8 +250,8 @@ TimelineInterface.Timeline = function (wickEditor) {
     }
 
     var resetFrameSize = function () {
-        var newFrameWidth = wickEditor.project.smallFramesMode ? 14 : 60;
-        var newHandleWidth = wickEditor.project.smallFramesMode ? 4 : 8;
+        var newFrameWidth = wickEditor.project.smallFramesMode ? 11 : 60;
+        var newHandleWidth = wickEditor.project.smallFramesMode ? 3 : 8;
         document.body.style.setProperty('--frame-width', newFrameWidth+'px');
         document.body.style.setProperty('--frame-handle-width', newHandleWidth+'px');
     }

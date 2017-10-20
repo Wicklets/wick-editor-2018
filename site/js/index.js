@@ -22,9 +22,9 @@ $(document).ready(function() {
         window.location.hash = "tutorials"
     });
 
-    $( ".demos-button" ).click(function() {
-        frame.src = "site/pages/demos.html"
-        window.location.hash = "demos"
+    $( ".examples-button" ).click(function() {
+        frame.src = "site/pages/examples.html"
+        window.location.hash = "examples"
     });
 
     $( ".reference-button" ).click(function() {
@@ -40,6 +40,10 @@ $(document).ready(function() {
     $( ".updates-button" ).click(function() {
         frame.src = "site/pages/updates.html"
         window.location.hash = "updates"
+    });
+
+    $( ".community-button" ).click(function() {
+        window.open('http://forum.wickeditor.com/');
     });
 
     $( ".logotop-bar-item" ).click(function() {

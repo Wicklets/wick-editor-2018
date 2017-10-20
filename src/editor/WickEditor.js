@@ -22,7 +22,7 @@ var WickEditor = function () {
     var self = this;
 
     // http://semver.org/
-    self.version = "0.0.2";
+    self.version = "0.08";
     console.log("Wick Editor version " + self.version)
     if(localStorage.wickVersion !== self.version) {
         // Wick has either
@@ -31,7 +31,7 @@ var WickEditor = function () {
         // So we need to show the update message screen!
         // (We don't have an update message screen yet, so just console.log)
         localStorage.wickVersion = self.version;
-        console.log("Looks like wick updated! See the update notes here: https://github.com/zrispo/wick/releases");
+        console.log("Looks like wick updated! See the update notes here: http://wickeditor.com/#updates");
     }
     window.wickVersion = self.version;
 
@@ -75,19 +75,24 @@ var WickEditor = function () {
     this.alertbox = registerInterface(new AlertBoxInterface(this));
     this.previewplayer = registerInterface(new PreviewPlayer(this));
     this.cursorIcon = registerInterface(new CursorIconInterface(this));
-    //this.editorSettings = registerInterface(new EditorSettings(this));
+    this.colorPicker = registerInterface(new ColorPickerInterface(this));
+    this.editorSettings = registerInterface(new EditorSettings(this));
+
+    // Setup editor logic handlers
+    this.actionHandler = new WickActionHandler(this);
+    this.guiActionHandler = new GuiActionHandler(this);
 
     // Load all tools
     this.tools = {
         "cursor"           : new Tools.Cursor(this),
-        "pen"              : new Tools.Pen(this),
+        "pathCursor"       : new Tools.PathCursor(this),
         "paintbrush"       : new Tools.Paintbrush(this),
         "eraser"           : new Tools.Eraser(this),
         "fillbucket"       : new Tools.FillBucket(this),
         "rectangle"        : new Tools.Rectangle(this),
         "ellipse"          : new Tools.Ellipse(this),
         "line"             : new Tools.Line(this),
-        "polygon"          : new Tools.Polygon(this),
+        "pen"              : new Tools.Pen(this),
         "dropper"          : new Tools.Dropper(this),
         "text"             : new Tools.Text(this),
         "zoom"             : new Tools.Zoom(this),
@@ -104,23 +109,8 @@ var WickEditor = function () {
         this.tools[tool].setup();
     };
 
-    // Setup editor logic handlers
-    this.actionHandler = new WickActionHandler(this);
-    this.guiActionHandler = new GuiActionHandler(this);
-
     // Setup inputhandler
     this.inputHandler = new InputHandler(this);
-
-    // Setup renderer
-    window.rendererCanvas = document.getElementById('previewRenderContainer');//document.getElementById('builtinPlayer');
-    window.rendererCanvas.style.display = 'none';
-    if(!window.wickRenderer) {
-        window.wickRenderer = new WickPixiRenderer();
-        window.wickRenderer.setProject(self.project);
-        window.wickRenderer.setup();
-
-        self.thumbnailRenderer.renderAllThumbsOnTimeline();
-    }
 
     self.syncInterfaces();
 
@@ -140,17 +130,21 @@ var WickEditor = function () {
 }
 
 WickEditor.prototype.syncInterfaces = function () {
+    var enablePerfTests = false;
+
     //startTiming();
 
     this.project.applyTweens();
 
     if(!this.tools) return;
     this.interfaces.forEach(function (interface) {
-        //startTiming();
+        if(enablePerfTests) startTiming();
         interface.syncWithEditorState();
-        //stopTiming('interface:');
-        //console.log(interface)
-        //console.log(' ')
+        if(enablePerfTests) {
+            stopTiming('interface:');
+            console.log(interface)
+            console.log(' ')
+        }
     });
 
     //console.log(new Error())
@@ -159,11 +153,9 @@ WickEditor.prototype.syncInterfaces = function () {
 
 WickEditor.prototype.changeTool = function (newTool) {
     this.lastTool = this.currentTool;
+    if(this.lastTool.onDeselected) this.lastTool.onDeselected();
     this.currentTool = newTool;
     if(newTool.onSelected) newTool.onSelected();
-    this.tools.polygon.finishPath();
-    this.fabric.forceModifySelectedObjects();
-    this.fabric.deselectAll();
 
     this.syncInterfaces();
 

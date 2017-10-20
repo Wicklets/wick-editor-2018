@@ -64,75 +64,112 @@ Tools.Paintbrush = function (wickEditor) {
 
     this.setup = function () {
 
-        window.secretPathListenerForWick = function (fabricPath) {
-            fabricPath.stroke = "#000000";
-            potraceFabricPath(fabricPath, function(SVGData) {
-                if(wickEditor.currentTool instanceof Tools.Eraser) {
-                    wickEditor.paper.pathRoutines.eraseWithPath({
-                        pathData: SVGData,
-                        pathX: fabricPath.left,
-                        pathY: fabricPath.top
-                    });
-                } else {
-                    //var symbolOffset = wickEditor.project.currentObject.getAbsolutePosition();
-                    var x = fabricPath.left// - symbolOffset.x;
-                    var y = fabricPath.top// - symbolOffset.y;
-
-                    var pathWickObject = WickObject.createPathObject(SVGData);
-                    pathWickObject.x = x;
-                    pathWickObject.y = y;
-
-                    var smoothing = getBrushSmoothing();
-                    var zoom = wickEditor.fabric.canvas.getZoom();
-                    pathWickObject.scaleX = 1/smoothing/zoom;
-                    pathWickObject.scaleY = 1/smoothing/zoom;
-                    
-                    wickEditor.paper.pathRoutines.refreshPathData(pathWickObject);
-
-                    wickEditor.actionHandler.doAction('addObjects', {
-                        wickObjects: [pathWickObject],
-                        dontSelectObjects: true
-                    });
-                }
-
-            });
-        }
-
     }
 
     this.onSelected = function () {
         wickEditor.project.clearSelection();
     }
 
-    var potraceFabricPath = function (pathFabricObject, callback) {
-        // I think there's a bug in cloneAsImage when zoom != 1, this is a hack
-        //var oldZoom = wickEditor.fabric.canvas.getZoom();
-        //wickEditor.fabric.canvas.setZoom(1);
+    this.onDeselected = function () {
+        if(path) path.remove();
+    }
 
-        var smoothing = getBrushSmoothing();
-        var zoom = wickEditor.fabric.canvas.getZoom();
-        pathFabricObject.scaleX = smoothing*zoom;
-        pathFabricObject.scaleY = smoothing*zoom;
-        pathFabricObject.setCoords();
+    this.getCanvasMode = function () {
+        return 'paper';
+    }
 
-        pathFabricObject.cloneAsImage(function(clone) {
-            var img = new Image();
-            img.onload = function () {
-                potraceImage(img, callback, wickEditor.settings.fillColor);
-            };
-            img.src = clone._element.currentSrc || clone._element.src;
-        });
+    this.paperTool = new paper.Tool();
+    var path;
+    var totalDelta;
+    var lastEvent;
 
-        // Put zoom back to where it was before
-        //wickEditor.fabric.canvas.setZoom(oldZoom);
-    };
+    var BRUSH_MIN_DISTANCE = 0.5;
 
-    var getBrushSmoothing = function () {
-        if(!(wickEditor.currentTool instanceof Tools.Paintbrush)) {
-            return 1;
-        } else {
-            return parseFloat(wickEditor.settings.brushSmoothness)/100;
+    this.paperTool.onMouseDown = function (event) {
+        
+    }
+
+    this.paperTool.onMouseDrag = function (event) {
+        lastEvent = {
+            delta: event.delta,
+            middlePoint: event.middlePoint,
         }
+
+        if (!path) {
+            path = new paper.Path({
+                fillColor: wickEditor.settings.fillColor,
+                //strokeColor: '#000',
+            });
+            //path.add(event.lastPoint);
+        }
+
+        if(!totalDelta) {
+            totalDelta = event.delta;
+        } else {
+            totalDelta.x += event.delta.x;
+            totalDelta.y += event.delta.y;
+        }
+
+        if (totalDelta.length > wickEditor.settings.brushThickness*BRUSH_MIN_DISTANCE/wickEditor.fabric.canvas.getZoom()) {
+
+            totalDelta.x = 0;
+            totalDelta.y = 0;
+
+            addNextSegment(event)
+
+        }
+    }
+
+    this.paperTool.onMouseUp = function (event) {
+        if (path) {
+            path.closed = true;
+            path.smooth();
+            if(wickEditor.settings.brushSmoothingAmount > 0) {
+                var t = wickEditor.settings.brushThickness;
+                var s = wickEditor.settings.brushSmoothingAmount/100;
+                var z = wickEditor.fabric.canvas.getZoom();
+                path.simplify(t / z * s);
+            }
+            path = path.unite(new paper.Path())
+            path.remove();
+
+            var group = new paper.Group({insert:false});
+            group.addChild(path);
+
+            var svgString = group.exportSVG({asString:true});
+            var pathWickObject = WickObject.createPathObject(svgString);
+            pathWickObject.x = group.position.x;
+            pathWickObject.y = group.position.y;
+            pathWickObject.width = 1;
+            pathWickObject.height = 1;
+
+            wickEditor.paper.pathRoutines.refreshPathData(pathWickObject);
+
+            wickEditor.actionHandler.doAction('addObjects', {
+                wickObjects: [pathWickObject],
+                dontSelectObjects: true,
+            });
+
+            path = null;
+        } 
+    }
+
+    var addNextSegment = function (event) {
+        var thickness = event.delta.length;
+        thickness /= wickEditor.settings.brushThickness/2;
+        thickness *= wickEditor.fabric.canvas.getZoom();
+        
+        var penPressure = wickEditor.inputHandler.getPenPressure();
+
+        var step = event.delta.divide(thickness).multiply(penPressure);
+        step.angle = step.angle + 90;
+
+        var top = event.middlePoint.add(step);
+        var bottom = event.middlePoint.subtract(step);
+
+        path.add(top);
+        path.insert(0, bottom);
+        path.smooth();
     }
 
 }

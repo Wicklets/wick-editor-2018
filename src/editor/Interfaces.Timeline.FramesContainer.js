@@ -24,7 +24,6 @@ TimelineInterface.FramesContainer = function (wickEditor, timeline) {
     this.frameStrips = null;
 
     this.addFrameOverlay = new TimelineInterface.AddFrameOverlay(wickEditor, timeline);
-    this.playhead = new TimelineInterface.Playhead(wickEditor, timeline);
     this.selectionBox = new TimelineInterface.SelectionBox(wickEditor, timeline);
 
     var framesStrip;
@@ -32,11 +31,6 @@ TimelineInterface.FramesContainer = function (wickEditor, timeline) {
     this.build = function () {
         this.elem = document.createElement('div');
         this.elem.className = 'frames-container';
-
-        this.elem.addEventListener('mousemove', function (e) {
-            timeline.framesContainer.playhead.ghostElem.style.display = 'block';
-            timeline.framesContainer.playhead.setGhostPosition(e);
-        });
 
         this.elem.addEventListener('mousedown', function (e) {
             timeline.interactions.start('dragSelectionBox', e, {});
@@ -58,10 +52,6 @@ TimelineInterface.FramesContainer = function (wickEditor, timeline) {
             }
             timeline.framesContainer.update();
         });
-
-        this.elem.addEventListener('mouseout', function (e) {
-            timeline.framesContainer.playhead.ghostElem.style.display = 'none';
-        }); 
 
         timeline.elem.addEventListener('mousewheel', function(e) {
             that.addFrameOverlay.elem.style.display = 'none'
@@ -86,7 +76,6 @@ TimelineInterface.FramesContainer = function (wickEditor, timeline) {
         });
 
         this.addFrameOverlay.build();
-        this.playhead.build();
         this.selectionBox.build();
 
         this.rebuild();
@@ -119,8 +108,6 @@ TimelineInterface.FramesContainer = function (wickEditor, timeline) {
         });
 
         this.elem.appendChild(this.addFrameOverlay.elem);
-        this.elem.appendChild(this.playhead.elem);
-        this.elem.appendChild(this.playhead.ghostElem);
         this.elem.appendChild(this.selectionBox.elem);
     }
 
@@ -128,7 +115,6 @@ TimelineInterface.FramesContainer = function (wickEditor, timeline) {
         this.frames.forEach(function (frame) {
             frame.update();
         });
-        this.playhead.update();
 
         this.frameStrips.forEach(function (frameStrip) {
             frameStrip.update();
