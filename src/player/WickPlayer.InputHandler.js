@@ -280,8 +280,12 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
         evt.preventDefault();
 
         // on iOS, WebAudio context only gets 'unmuted' after first user interaction
-        if(!audioContext) {
-            wickPlayer.audioPlayer.setup(wickProject);
+        try{
+             if(!audioContext){
+                 wickPlayer.audioPlayer.setup(project);
+             } 
+         }catch(err){
+           console.log('Ocurrio un error audioContext: ' + err);
         }
 
         var touchPos = getTouchPos(canvasContainer, evt);
