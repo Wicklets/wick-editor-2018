@@ -21,7 +21,7 @@ body {
     --max-timeline-height: 160px; 
 
     --layers-width: 135px;
-    --layer-height: 41px;
+    --layer-height: 30px;
 
 
     --frame-width: 69px;
@@ -30,7 +30,7 @@ body {
     --frame-padding-width: 4px;
     --frame-padding-height: 4px;
 
-    --frames-strip-padding-vertical: 6px;
+    --frames-strip-padding-vertical: 3px;
 
     --shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
     --border: inset 0px 0px 1px #555;
@@ -254,7 +254,7 @@ body {
     width: 15px;
     height: 15px;
     position: absolute;
-    top: 11px;
+    top: 5px;
     left: 3px;
     background-color: transparent;
     background-image: url('../resources/lock-layer.svg');
@@ -281,7 +281,7 @@ body {
     width: 15px;
     height: 15px;
     position: absolute;
-    top: 11px;
+    top: 5px;
     left: 20px;
     background-color: transparent;
     background-image: url('../resources/hide-layer.svg');
@@ -319,13 +319,25 @@ body {
     box-shadow: var(--border);
 }
 
+.frames-cell {
+    background-color: rgba(0,0,0,0);
+
+    width: var(--frame-width);
+    height: 200px;
+
+    /*box-shadow: inset 0px 0px 1px #555;*/
+    border-left: 1px solid #444;
+
+    position: absolute;
+}
+
 .frames-strip {
     background-color: #C2C2C2;
 
     width: 100%;
     height: calc(var(--layer-height) - var(--frames-strip-padding-vertical)*2);
 
-    margin-top: calc(var(--frames-strip-padding-vertical) * 2);
+    margin-top: calc(var(--frames-strip-padding-vertical) * 3);
     left: 5px;
     position: absolute;
 
@@ -339,7 +351,7 @@ body {
 }
 
 .frames-strip-cell {
-    background-color: #C2C2C2;
+    background-color: rgba(0,0,0,0);
 
     width: var(--frame-width);
     height: calc(var(--layer-height) - var(--frames-strip-padding-vertical)*2);

@@ -55,7 +55,7 @@ TimelineInterface.NumberLine = function (wickEditor, timeline) {
             var num = i+1+Math.floor(-shift/cssVar('--frame-width'));
             numbers[i].innerHTML = num;
             numbers[i].className = 'number-line-cell-number';
-            if(wickEditor.project.smallFramesMode) {
+            //if(wickEditor.project.smallFramesMode) {
                 if(num % 5 !== 0 && num !== 1)  {
                     numbers[i].innerHTML = '';
                     bars[i].style.opacity = '0.2';
@@ -63,7 +63,7 @@ TimelineInterface.NumberLine = function (wickEditor, timeline) {
                     bars[i].style.opacity = '1.0';
                 }
                 numbers[i].className += ' number-line-cell-number-small';
-            }
+            //}
         }
     }
 

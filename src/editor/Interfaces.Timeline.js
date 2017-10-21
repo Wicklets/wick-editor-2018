@@ -250,8 +250,8 @@ TimelineInterface.Timeline = function (wickEditor) {
     }
 
     var resetFrameSize = function () {
-        var newFrameWidth = wickEditor.project.smallFramesMode ? 11 : 60;
-        var newHandleWidth = wickEditor.project.smallFramesMode ? 3 : 8;
+        var newFrameWidth = wickEditor.project.smallFramesMode ? 20 : 20;
+        var newHandleWidth = wickEditor.project.smallFramesMode ? 3 : 5;
         document.body.style.setProperty('--frame-width', newFrameWidth+'px');
         document.body.style.setProperty('--frame-handle-width', newHandleWidth+'px');
     }

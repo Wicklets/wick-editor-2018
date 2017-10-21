@@ -128,7 +128,7 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
 
         hasScriptsIconDiv.style.display = this.wickFrame.hasScript() ? 'block' : 'none';
         hasScriptsIconDiv.onclick = function () {
-            wickEditor.guiActionHandler.doAction('openScriptingIDE')
+            wickEditor.guiActionHandler.doAction('editScripts')
         }
 
         if(this.wickFrame.audioAssetUUID) {
@@ -171,12 +171,15 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
                 this.wickFrame._soundDataForPreview = null;
             }
         } else {
-            var src = this.wickFrame.thumbnail;
+            //var src = this.wickFrame.thumbnail;
             waveformDiv.style.display = 'none';
             if(this.wickFrame.tweens.length > 0) {
                 thumbnailDiv.style.display = 'none';
                 this.elem.style.backgroundColor = '#e4eafb';
-            } else if(!src || wickEditor.project.smallFramesMode) {
+            } else {
+                this.elem.style.backgroundColor = '#FFF';
+            }
+            /* else if(!src || wickEditor.project.smallFramesMode) {
                 thumbnailDiv.style.display = 'block';
                 thumbnailDiv.src = '/resources/whitepage.png';
                 this.elem.style.backgroundColor = '#FFF';
@@ -184,7 +187,7 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
                 thumbnailDiv.style.display = 'block';
                 thumbnailDiv.src = src;
                 this.elem.style.backgroundColor = wickEditor.project.backgroundColor;//'#FFF';
-            }
+            }*/
         }
         
         if (wickEditor.project.isObjectSelected(this.wickFrame)) {

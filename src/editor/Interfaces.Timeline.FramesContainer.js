@@ -27,6 +27,7 @@ TimelineInterface.FramesContainer = function (wickEditor, timeline) {
     this.selectionBox = new TimelineInterface.SelectionBox(wickEditor, timeline);
 
     var framesStrip;
+    var framesStripCellContainer;
 
     this.build = function () {
         this.elem = document.createElement('div');
@@ -75,6 +76,17 @@ TimelineInterface.FramesContainer = function (wickEditor, timeline) {
             //}
         });
 
+        framesStripCellContainer = document.createElement('span');
+        framesStripCellContainer.className = 'frames-cell-container';
+        for(var i = 0; i < 70; i++) {
+            var framesStripCell = document.createElement('div');
+            framesStripCell.className = 'frames-cell';
+            framesStripCell.style.left = i*20 + 10 + 'px'
+            
+            framesStripCellContainer.appendChild(framesStripCell);
+        }
+        this.elem.appendChild(framesStripCellContainer)
+
         this.addFrameOverlay.build();
         this.selectionBox.build();
 
@@ -85,6 +97,8 @@ TimelineInterface.FramesContainer = function (wickEditor, timeline) {
         this.elem.innerHTML = "";
         this.frames = [];
         this.frameStrips = [];
+
+        this.elem.appendChild(framesStripCellContainer)
 
         var wickLayers = wickEditor.project.currentObject.layers;
         wickLayers.forEach(function (wickLayer) {
@@ -119,6 +133,9 @@ TimelineInterface.FramesContainer = function (wickEditor, timeline) {
         this.frameStrips.forEach(function (frameStrip) {
             frameStrip.update();
         });
+
+        var shift = timeline.horizontalScrollBar.getScrollPosition();
+        framesStripCellContainer.style.left = (shift-shift%cssVar('--frame-width'))+'px';
 
         var scrollX = -timeline.horizontalScrollBar.getScrollPosition();
         var scrollY = -timeline.verticalScrollBar.getScrollPosition();
