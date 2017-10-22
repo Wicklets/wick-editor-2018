@@ -73,7 +73,7 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
             e.stopPropagation();
         });
         this.elem.addEventListener('dblclick', function (e) {
-            wickEditor.guiActionHandler.doAction('copyFrameForward')
+            //wickEditor.guiActionHandler.doAction('copyFrameForward')
         });
 
         thumbnailDiv = document.createElement('img');
