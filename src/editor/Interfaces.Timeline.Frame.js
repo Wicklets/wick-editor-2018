@@ -176,8 +176,12 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
             if(this.wickFrame.tweens.length > 0) {
                 thumbnailDiv.style.display = 'none';
                 this.elem.style.backgroundColor = '#e4eafb';
+            } else if(this.wickFrame.wickObjects.length > 0) {
+                this.elem.style.backgroundColor = '#EEE';
+                thumbnailDiv.src = '/resources/fullframe.svg';
             } else {
                 this.elem.style.backgroundColor = '#FFF';
+                thumbnailDiv.src = '/resources/emptyframe.svg';
             }
             /* else if(!src || wickEditor.project.smallFramesMode) {
                 thumbnailDiv.style.display = 'block';

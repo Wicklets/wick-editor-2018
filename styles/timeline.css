@@ -386,9 +386,12 @@ body {
 .frame-thumbnail {
     max-height: 100%; 
     max-width: 100%;
+    width:  14px;
+    height: 14px;
+    margin-left: 3px;
+    margin-top: 10px;
     padding: 0px;
 
-    margin: auto;
     display: block;
 
     pointer-events: none;

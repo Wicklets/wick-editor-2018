@@ -74,8 +74,8 @@ TimelineInterface.Interactions = function (wickEditor, timeline) {
             interactionData.movedDistance.x += e.movementX;
             interactionData.movedDistance.y += e.movementY;
 
-            if(Math.abs(interactionData.movedDistance.x) < 1 &&
-               Math.abs(interactionData.movedDistance.y) < 1) {
+            if(Math.abs(interactionData.movedDistance.x) < 0 &&
+               Math.abs(interactionData.movedDistance.y) < 0) {
                 return;
             }
 

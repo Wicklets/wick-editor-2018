@@ -37,7 +37,8 @@ TimelineInterface.FramesStrip = function (wickEditor, timeline) {
             var py = Math.round((e.clientY - timeline.framesContainer.elem.getBoundingClientRect().top  - cssVar('--layer-height')/2) / cssVar('--layer-height'))
 
             if(timeline.interactions.getCurrent()) return;
-            if(wickEditor.project.getCurrentObject().layers[py].getFrameAtPlayheadPosition(px)) return;
+            var layer = wickEditor.project.getCurrentObject().layers[py];
+            if(layer && layer.getFrameAtPlayheadPosition(px)) return;
             
             timeline.framesContainer.addFrameOverlay.elem.style.display = 'block';
             timeline.framesContainer.addFrameOverlay.elem.style.left = roundToNearestN(e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2 - 9, cssVar('--frame-width')) + "px";
