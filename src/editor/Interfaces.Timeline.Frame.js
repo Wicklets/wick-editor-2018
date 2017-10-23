@@ -86,6 +86,7 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
 
             var rect = self.elem.getBoundingClientRect();
             var x = rect.left-193+12 + (e.offsetX - (e.offsetX%cssVar('--frame-width')));
+            x += timeline.horizontalScrollBar.getScrollPosition()
             var y = rect.top-70+9;
             timeline.framesContainer.hoverHighlightOverlay.style.left = x+'px';
             timeline.framesContainer.hoverHighlightOverlay.style.top = y+'px';

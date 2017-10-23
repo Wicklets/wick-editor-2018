@@ -921,13 +921,13 @@ body {
     background-color: none;
     cursor: pointer;
 
-    background-image: url('../resources/fullframe.svg');
+    background-image: url('../resources/tweenpoint.svg');
     background-size: 100%;
     background-repeat: no-repeat;
     background-position: left;
 }
 .tween:hover {
-
+    box-shadow: inset 1px 1px 2px yellow;
 }
 
 .hover-highlight-overlay {

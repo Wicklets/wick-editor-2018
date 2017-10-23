@@ -801,8 +801,8 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Add Tween Point",
-        icon: "./resources/inspector-tween.svg",
+        tooltipTitle: "Add Tween Keyframe",
+        icon: "./resources/tweenpoint-inspector.svg",
         colorClass: 'frames',
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 
