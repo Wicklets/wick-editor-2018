@@ -28,6 +28,7 @@ TimelineInterface.FramesContainer = function (wickEditor, timeline) {
 
     var framesStrip;
     var framesStripCellContainer;
+    this.hoverHighlightOverlay;
 
     this.build = function () {
         this.elem = document.createElement('div');
@@ -87,6 +88,9 @@ TimelineInterface.FramesContainer = function (wickEditor, timeline) {
         }
         this.elem.appendChild(framesStripCellContainer)
 
+        this.hoverHighlightOverlay = document.createElement('div')
+        this.hoverHighlightOverlay.className = 'hover-highlight-overlay';
+
         this.addFrameOverlay.build();
         this.selectionBox.build();
 
@@ -99,6 +103,7 @@ TimelineInterface.FramesContainer = function (wickEditor, timeline) {
         this.frameStrips = [];
 
         this.elem.appendChild(framesStripCellContainer)
+        this.elem.appendChild(this.hoverHighlightOverlay)
 
         var wickLayers = wickEditor.project.currentObject.layers;
         wickLayers.forEach(function (wickLayer) {

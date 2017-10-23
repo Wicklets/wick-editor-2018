@@ -75,6 +75,22 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
         this.elem.addEventListener('dblclick', function (e) {
             //wickEditor.guiActionHandler.doAction('copyFrameForward')
         });
+        this.elem.addEventListener('mouseout', function (e) {
+            timeline.framesContainer.hoverHighlightOverlay.style.display = 'none';
+        });
+        this.elem.addEventListener('mousemove', function (e) {
+            if(e.target.className !== 'frame') {
+                timeline.framesContainer.hoverHighlightOverlay.style.display = 'none';
+                return;
+            }
+
+            var rect = self.elem.getBoundingClientRect();
+            var x = rect.left-193+12 + (e.offsetX - (e.offsetX%cssVar('--frame-width')));
+            var y = rect.top-70+9;
+            timeline.framesContainer.hoverHighlightOverlay.style.left = x+'px';
+            timeline.framesContainer.hoverHighlightOverlay.style.top = y+'px';
+            timeline.framesContainer.hoverHighlightOverlay.style.display = 'block';
+        });
 
         thumbnailDiv = document.createElement('img');
         thumbnailDiv.className = "frame-thumbnail";

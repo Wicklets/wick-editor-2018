@@ -930,3 +930,13 @@ body {
 
 }
 
+.hover-highlight-overlay {
+    position: absolute;
+    width:  calc(var(--frame-width) - var(--common-padding) + 1px);
+    height: calc(var(--layer-height) - var(--common-padding));
+    background-color: cyan;
+    opacity: 0.2;
+    z-index: 999;
+    pointer-events: none;
+    display: none;
+}
