@@ -376,12 +376,13 @@ TimelineInterface.Interactions = function (wickEditor, timeline) {
             interactionData.tweenElemOrigX = parseInt(interactionData.tweens[0].elem.style.left);
             interactionData.startX = e.x;
             interactionData.moveX = 0;
+            interactionData.tweens[0].elem.style.pointerEvents = 'none';
         }), 
         'update' : (function (e) {
             interactionData.moveX = e.x - interactionData.startX;
 
             var tween = interactionData.tweens[0];
-            var newPos = roundToNearestN(interactionData.moveX, cssVar('--frame-width'));
+            var newPos = interactionData.moveX//roundToNearestN(interactionData.moveX, cssVar('--frame-width'));
             newPos = parseInt(newPos);
             tween.elem.style.left = interactionData.tweenElemOrigX+newPos + 'px';
             tween.elem.style.opacity = 0.5;
@@ -389,6 +390,7 @@ TimelineInterface.Interactions = function (wickEditor, timeline) {
         'finish' : (function (e) {
             var tween = interactionData.tweens[0];
             tween.elem.style.opacity = 1.0;
+            interactionData.tweens[0].elem.style.pointerEvents = 'auto';
             
             var newPlayheadPosition = Math.round((parseInt(tween.elem.style.left)) / cssVar('--frame-width'));
             wickEditor.actionHandler.doAction('moveMotionTween', {

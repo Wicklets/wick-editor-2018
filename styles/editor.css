@@ -718,3 +718,20 @@ hr.hotkeyhr {
     margin-bottom: 4px;
     background-color: rgba(255,255,255,0.5)
 }
+
+#wick-editor-version {
+    position: absolute;
+    width: 220px;
+    height: 15px;
+    font-size: 13px;
+    bottom: 0px;
+    margin-bottom: 3px;
+    right: 0px;
+    color: white;
+    font-family: "Anonymous Pro", "Helvetica", "Arial", sans-serif;
+    text-align: center;
+    cursor: pointer;
+}
+#wick-editor-version:hover {
+    color: gray;
+}
