@@ -159,6 +159,11 @@ body {
 	margin-left: 5%;
 	font-weight: bold;
 	font-size: 18px;
+	color: #43f2b8;
+	cursor: pointer;
+}
+.example-grid-element-title:hover {
+	color: #c9fbe9;
 }
 
 .example-grid-element-open-in-editor-link {

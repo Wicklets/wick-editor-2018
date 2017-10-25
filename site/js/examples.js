@@ -137,7 +137,11 @@ function createDemoThumbs (demos) {
             document.getElementById('player-window').style.display = 'block';
             loadDemo(demo);
         }
-        demoElem['example-grid-element-title'].innerHTML = '<a href="dasd.com">'+demo.name+'</a>';
+        demoElem['example-grid-element-title'].onclick = function () {
+            document.getElementById('player-window').style.display = 'block';
+            loadDemo(demo);
+        }
+        demoElem['example-grid-element-title'].innerHTML = demo.name;
         if(demo.tutorialPath) {
 
         } else {
