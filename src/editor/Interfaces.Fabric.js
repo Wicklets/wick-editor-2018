@@ -77,6 +77,10 @@ var FabricInterface = function (wickEditor) {
             if(wickEditor.currentTool === wickEditor.tools.dropper) return;
             self.applySelectionToWickProject();
         });
+        self.canvas.on('selection:updated', function (e) {
+            if (!e.e) return;
+            self.applySelectionToWickProject();
+        });
 
         self.canvas.on('object:modified', function (e) {
             var modifiedObjects = [];
