@@ -4442,6 +4442,10 @@ var WickObject = function () {
     this.layers = undefined;
     this.playRanges = undefined;
 
+// Render
+    
+    this._renderDirty = false;  // Tell the renderer if this object has changed. 
+
 };
 
 WickObject.fromJSON = function (jsonString) {
@@ -5780,6 +5784,13 @@ WickObject.prototype.isActive = function () {
     return this.parentFrame._active;
 }
 
+WickObject.prototype.setText = function (text) {
+    if (!this.isText) { return; } // We're not text, don't set anything
+
+    this.textData.text = String(text); // Convert to a string, just in case.
+    this._renderDirty = true;  
+}
+
 </script>
 <script>/* Wick - (c) 2017 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
@@ -6173,7 +6184,8 @@ WickProject.prototype.getAsJSON = function (callback, format) {
 
     // Add some browser/OS/wick editor version info for debugging other ppl's projects
     self.metaInfo = getBrowserAndOSInfo();
-    self.metaInfo.wickVersion = wickEditor.version
+    self.metaInfo.wickVersion = wickEditor.version;
+    self.metaInfo.dateSaved = new Date().toGMTString();
 
     var JSONProject = JSON.stringify(self, WickProject.Exporter.JSONReplacer, format);
     

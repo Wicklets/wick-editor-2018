@@ -91,6 +91,14 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.previewplayer.togglePlaying();
         });
 
+    registerAction('previewToggleAndLoop',
+        ['SHIFT','ENTER'],
+        'Loop Preview',
+        {},
+        function(args) {
+            wickEditor.guiActionHandler.doAction('previewPlay', {loop:true});
+        });
+
     registerAction('previewPlay',
         [],
         [],

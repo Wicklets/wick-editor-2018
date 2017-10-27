@@ -234,7 +234,8 @@ WickProject.prototype.getAsJSON = function (callback, format) {
 
     // Add some browser/OS/wick editor version info for debugging other ppl's projects
     self.metaInfo = getBrowserAndOSInfo();
-    self.metaInfo.wickVersion = wickEditor.version
+    self.metaInfo.wickVersion = wickEditor.version;
+    self.metaInfo.dateSaved = new Date().toGMTString();
 
     var JSONProject = JSON.stringify(self, WickProject.Exporter.JSONReplacer, format);
     
