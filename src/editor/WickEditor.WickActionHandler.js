@@ -935,7 +935,7 @@ var WickActionHandler = function (wickEditor) {
 
     registerAction('moveObjectToZIndex',
         function (args) {
-            var currFrame = wickEditor.project.getCurrentFrame();
+            var currFrame = args.objs[0].parentFrame;
 
             args.oldZIndexes = [];
             args.objs.forEach(function (obj) {
