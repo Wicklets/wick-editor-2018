@@ -484,6 +484,33 @@
       ]
     },
     {
+      "name": "Camera",
+      "properties": [
+        {
+          "name": "camera.setPosition(x,y)",
+          "description": "Generates a random boolean (true or false).",
+          "example": "// Use randomBool to simulate a coin flip.\nvar coinFlip = randomBool();\nif(coinFlip == true) {\n    alert('You&#8217;re lucky!!');\n}",
+          "snippet": "var randombool = randomBool()",
+          "return": {
+            "type": "Boolean",
+            "description": "A random boolean. Will be true 50% of the time."
+          },
+          "args": []
+        },
+        {
+          "name": "camera.followObject(wickObject)",
+          "description": "Generates a random boolean (true or false).",
+          "example": "// Use randomBool to simulate a coin flip.\nvar coinFlip = randomBool();\nif(coinFlip == true) {\n    alert('You&#8217;re lucky!!');\n}",
+          "snippet": "var randombool = randomBool()",
+          "return": {
+            "type": "Boolean",
+            "description": "A random boolean. Will be true 50% of the time."
+          },
+          "args": []
+        }
+      ]
+    },
+    {
       "name": "Scope",
       "properties": [
         {

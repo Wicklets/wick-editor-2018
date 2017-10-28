@@ -1044,30 +1044,53 @@ WickObject.prototype.getFramesEnd = function() {
        farthest border */
 WickObject.prototype.hitTestRectangles = function (otherObj) {
     // Create a circle whose center is (10,10) with radius of 20
-    var objA = this;
-    var objB = otherObj;
+    var A = this;
+    var B = otherObj;
+    var V = SAT.Vector;
+    var P = SAT.Polygon;
 
-    var objAAbsPos = objA.getAbsolutePositionTransformed();
-    var objBAbsPos = objB.getAbsolutePositionTransformed();
+    var At = A.getAbsoluteTransformations();
+    var Bt = B.getAbsoluteTransformations();
 
-    var objAScale  = objA.getAbsoluteScale();
-    var objAWidth  = objA.width  * objAScale.x;
-    var objAHeight = objA.height * objAScale.y;
-    objAAbsPos.x  -= objA.width  * objAScale.x/2;
-    objAAbsPos.y  -= objA.height * objAScale.y/2;
+    var AWidth = (A.width * At.scale.x) / 2;
+    var BWidth = (B.width * Bt.scale.x) / 2;
+    var AHeight = (A.height * At.scale.y) / 2;
+    var BHeight = (B.height * Bt.scale.y) / 2;
 
-    var objBScale  = objB.getAbsoluteScale();
-    var objBWidth  = objB.width  * objBScale.x;
-    var objBHeight = objB.height * objBScale.y;
-    objBAbsPos.x  -= objB.width  * objBScale.x/2;
-    objBAbsPos.y  -= objB.height * objBScale.y/2;
+    var Ax = Math.round(At.position.x);
+    var Bx = Math.round(Bt.position.x);
+    var Ay = Math.round(At.position.y);
+    var By = Math.round(Bt.position.y);
 
-    var left = objAAbsPos.x < (objBAbsPos.x + objBWidth);
-    var right = (objAAbsPos.x + objAWidth) > objBAbsPos.x;
-    var top = objAAbsPos.y < (objBAbsPos.y + objBHeight);
-    var bottom = (objAAbsPos.y + objAHeight) > objBAbsPos.y;
+    var ALeft = Math.round(-AWidth);
+    var ARight = Math.round(AWidth);
+    var ATop = Math.round(-AHeight);
+    var ABottom = Math.round(AHeight);
 
-    return left && right && top && bottom;
+    var BLeft = Math.round(-BWidth);
+    var BRight = Math.round(BWidth);
+    var BTop = Math.round(-BHeight);
+    var BBottom = Math.round(BHeight);
+
+    var polygon1 = new P(new V(Ax, Ay), [
+      new SAT.Vector(ARight, ATop), 
+      new SAT.Vector(ARight, ABottom), 
+      new SAT.Vector(ALeft, ABottom), 
+      new SAT.Vector(ALeft, ATop),
+    ]);
+    polygon1.rotate(At.rotation * 0.0174533);
+
+    var polygon2 = new P(new V(Bx, By), [
+      new SAT.Vector(BRight, BTop), 
+      new SAT.Vector(BRight, BBottom), 
+      new SAT.Vector(BLeft, BBottom), 
+      new SAT.Vector(BLeft, BTop),
+    ]);
+    polygon1.rotate(Bt.rotation * 0.0174533);
+
+    var response = new SAT.Response();
+    var collided = SAT.testPolygonPolygon(polygon1, polygon2, response);
+    return collided;
 }
 
 /* Determine if two wickObjects Collide using circular hit detection from their
@@ -1083,7 +1106,6 @@ WickObject.prototype.hitTestCircles = function (otherObj) {
     var dy = objAAbsPos.y - objBAbsPos.y;
 
     var objAWidth = objA.width * objA.scaleX;
-
     var objBWidth = objB.width * objB.scaleX; 
 
     var distance = Math.sqrt(dx * dx + dy * dy);
@@ -1137,8 +1159,9 @@ WickObject.prototype.hitTest = function (otherObj, hitTestType, args) {
         for (var j = 0; j < thisObjChildren.length; j++) {
             var objA = thisObjChildren[j];
             var objB = otherObjChildren[i];
-            if (objA[checkMethod](objB)) {
-                return true;
+            var result = objA[checkMethod](objB)
+            if (result) {
+                return result;
             }
         }
     }
