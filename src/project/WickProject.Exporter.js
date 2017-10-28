@@ -59,6 +59,7 @@ WickProject.Exporter = (function () {
             "src/project/WickAsset.js",
             "src/project/WickPlayRange.js",
             "src/project/WickProject.js",
+            "src/project/WickCamera.js",
             "src/project/WickProject.AssetLibrary.js",
             "src/project/WickProject.Compressor.js",
             "src/player/WickPlayer.Preloader.js",
@@ -223,6 +224,7 @@ WickProject.Exporter = (function () {
         "_wasHoveredOver",
         "_beingClicked",
         "_pixiTextureCached",
+        "_hitBox",
         "sourceUUID",
     ];
 

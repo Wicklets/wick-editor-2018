@@ -836,6 +836,7 @@ WickProject.prototype.tick = function () {
     });
     
     this.rootObject.tick();
+    this.updateCamera();
     
     // If a playhead position was changed through a script, make sure the 
     // change is reflected on next render (things look more responsive)
@@ -852,4 +853,15 @@ WickProject.prototype.applyTweens = function () {
     this.getAllFrames().forEach(function (frame) {
         frame.applyTween();
     });
+}
+
+WickProject.prototype.updateCamera = function () {
+    var camera = window.camera;
+    if(!camera) return;
+
+    camera.update();
+
+    var camPos = camera.getPosition();
+    this.rootObject.x = -camPos.x+this.width/2;
+    this.rootObject.y = -camPos.y+this.height/2;
 }

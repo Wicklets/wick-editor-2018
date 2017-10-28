@@ -61,6 +61,9 @@ var WickPlayer = function () {
         self.project.prepareForPlayer();
         initialStateProject.prepareForPlayer();
 
+        // Make the camera
+        window.camera = new WickCamera(self.project);
+
         // Setup renderer/input/audio player
         self.renderer = new WickPixiRenderer(self.canvasContainer);
         self.inputHandler = new WickPlayerInputHandler(self.canvasContainer, self.project);
@@ -171,7 +174,7 @@ var WickPlayer = function () {
 
         // TOXXXIC
         //console.log("-------------");
-        var blacklist = ['asset', 'alphaMask', 'pixiSprite', 'pixiContainer', 'pixiText', 'audioData', 'wickScripts', 'parentObject', 'layers', '_active', '_wasActiveLastTick', '_scopeWrapper', 'parentFrame', 'bbox', 'tweens'];
+        var blacklist = ['_hitBox', 'asset', 'alphaMask', 'pixiSprite', 'pixiContainer', 'pixiText', 'audioData', 'wickScripts', 'parentObject', 'layers', '_active', '_wasActiveLastTick', '_scopeWrapper', 'parentFrame', 'bbox', 'tweens'];
         for (var name in wickObject) {
             if (name !== 'undefined' && wickObject.hasOwnProperty(name) && blacklist.indexOf(name) === -1) {
                 if(initialStateObject[name] !== wickObject[name]) {

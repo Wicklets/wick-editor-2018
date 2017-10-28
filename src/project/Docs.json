@@ -336,35 +336,6 @@
       ]
     },
     {
-      "name": "Sounds",
-      "properties": [
-        {
-          "name": "stopAllSounds()",
-          "description": "Stops any sounds currently being played.",
-          "example": "stopAllSounds();",
-          "snippet": "stopAllSounds()",
-          "args": [],
-          "return": null
-        },
-        {
-          "name": "mute()",
-          "description": "Mutes the entire project (no sounds will play).",
-          "example": "mute();",
-          "snippet": "mute()",
-          "args": [],
-          "return": null
-        },
-        {
-          "name": "unmute()",
-          "description": "Unmutes the enite project (sounds will play again).",
-          "example": "unmute();",
-          "snippet": "unmute()",
-          "args": [],
-          "return": null
-        }
-      ]
-    },
-    {
       "name": "Project",
       "properties": [
         {
@@ -397,7 +368,36 @@
       ]
     },
     {
-      "name": "User Input",
+      "name": "Sounds",
+      "properties": [
+        {
+          "name": "stopAllSounds()",
+          "description": "Stops any sounds currently being played.",
+          "example": "stopAllSounds();",
+          "snippet": "stopAllSounds()",
+          "args": [],
+          "return": null
+        },
+        {
+          "name": "mute()",
+          "description": "Mutes the entire project (no sounds will play).",
+          "example": "mute();",
+          "snippet": "mute()",
+          "args": [],
+          "return": null
+        },
+        {
+          "name": "unmute()",
+          "description": "Unmutes the enite project (sounds will play again).",
+          "example": "unmute();",
+          "snippet": "unmute()",
+          "args": [],
+          "return": null
+        }
+      ]
+    },
+    {
+      "name": "Input",
       "properties": [
         {
           "name": "mouseX",
@@ -513,9 +513,45 @@
       ]
     },
     {
-      "name": "Utilities",
+      "name": "Storage",
       "properties": [
         {
+          "name": "saveData(key,data)",
+          "description": "Saves data that persists between sessions.",
+          "example": "// Save what frame the project was at.\nsaveData('frame', root.currentFrameNumber);",
+          "snippet": "saveData('name', data)",
+          "return": null,
+          "args": [
+            {
+              "name": "key",
+              "type": "String",
+              "description": "The name that can be used to load the data later."
+            }, {
+              "name": "data",
+              "type": "Number, String, or Object",
+              "description": "The data to save"
+            }
+          ]
+        }, {
+          "name": "loadData(key)",
+          "description": "Loads data that was saved from a previous session.",
+          "example": "// Go to the frame where the project was last time it was run.\nvar frameNumber = loadData('frame');\ngotoAndStop(frameNumber);",
+          "snippet": "var data = loadData('name')",
+          "return": null,
+          "args": [
+            {
+              "name": "key",
+              "type": "String",
+              "description": "The name of the data you wish to load."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Random",
+      "properties": [
+      {
           "name": "randomBool()",
           "description": "Generates a random boolean (true or false).",
           "example": "// Use randomBool to simulate a coin flip.\nvar coinFlip = randomBool();\nif(coinFlip == true) {\n    alert('You&#8217;re lucky!!');\n}",
@@ -565,38 +601,7 @@
               "description": "The generated number will be less than or equal to max"
             }
           ]
-        }, {
-          "name": "saveData(key,data)",
-          "description": "Saves data that persists between sessions.",
-          "example": "// Save what frame the project was at.\nsaveData('frame', root.currentFrameNumber);",
-          "snippet": "saveData('name', data)",
-          "return": null,
-          "args": [
-            {
-              "name": "key",
-              "type": "String",
-              "description": "The name that can be used to load the data later."
-            }, {
-              "name": "data",
-              "type": "Number, String, or Object",
-              "description": "The data to save"
-            }
-          ]
-        }, {
-          "name": "loadData(key)",
-          "description": "Loads data that was saved from a previous session.",
-          "example": "// Go to the frame where the project was last time it was run.\nvar frameNumber = loadData('frame');\ngotoAndStop(frameNumber);",
-          "snippet": "var data = loadData('name')",
-          "return": null,
-          "args": [
-            {
-              "name": "key",
-              "type": "String",
-              "description": "The name of the data you wish to load."
-            }
-          ]
         }
-      ]
-    }
+    ]}
   ]
 }

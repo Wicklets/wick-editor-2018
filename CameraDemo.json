@@ -1,0 +1,151 @@
+﻿{
+	"rootObject": {
+		"uuid": "44e8657c-59c8-459c-9acc-31ac0294a454",
+		"x": 0,
+		"y": 0,
+		"scaleX": 1,
+		"scaleY": 1,
+		"rotation": 0,
+		"flipX": false,
+		"flipY": false,
+		"opacity": 1,
+		"wickScript": "",
+		"assetUUID": null,
+		"loop": false,
+		"isText": false,
+		"isSymbol": true,
+		"isButton": false,
+		"isGroup": false,
+		"playheadPosition": 0,
+		"currentLayer": 0,
+		"layers": [
+			{
+				"frames": [
+					{
+						"identifier": "",
+						"wickObjects": [
+							{
+								"uuid": "baba14c7-382e-4382-bbb4-4fbba2adfcf2",
+								"x": 430.5,
+								"y": 257,
+								"width": 99,
+								"height": 114,
+								"scaleX": 1,
+								"scaleY": 1,
+								"rotation": 0,
+								"flipX": false,
+								"flipY": false,
+								"opacity": 1,
+								"wickScript": "function%20keydown(key)%20%7B%0A%20%20%20%20var%20speed%20=%204;%0A%20%20%20%20if(key%20===%20%27LEFT%27)%20%7B%0A%20%20%20%20%20%20%20%20this.x%20-=%20speed;%0A%20%20%20%20%7D%0A%20%20%20%20if(key%20===%20%27RIGHT%27)%20%7B%0A%20%20%20%20%20%20%20%20this.x%20+=%20speed;%0A%20%20%20%20%7D%0A%20%20%20%20if(key%20===%20%27UP%27)%20%7B%0A%20%20%20%20%20%20%20%20this.y%20-=%20speed;%0A%20%20%20%20%7D%0A%20%20%20%20if(key%20===%20%27DOWN%27)%20%7B%0A%20%20%20%20%20%20%20%20this.y%20+=%20speed;%0A%20%20%20%20%7D%0A%7D%0A%0Afunction%20update()%20%7B%0A%20%20%20%20camera.x%20=%20this.x;%0A%20%20%20%20camera.y%20=%20this.y;%0A%7D%0A",
+								"assetUUID": null,
+								"loop": false,
+								"isText": false,
+								"isSymbol": false,
+								"isButton": false,
+								"isGroup": false,
+								"playheadPosition": null,
+								"currentLayer": null,
+								"isPath": true,
+								"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20fill=%22#a55900%22%20fill-rule=%22nonzero%22%20stroke=%22#000000%22%20stroke-width=%225%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M381,257c0,-31.48023%2022.1619,-57%2049.5,-57c27.3381,0%2049.5,25.51977%2049.5,57c0,31.48023%20-22.1619,57%20-49.5,57c-27.3381,0%20-49.5,-25.51977%20-49.5,-57z%22/%3E%3C/g%3E",
+								"svgX": 381,
+								"svgY": 200,
+								"svgStrokeWidth": 5,
+								"svgWidth": 104,
+								"svgHeight": 119,
+								"_zindex": 1,
+								"scriptError": null,
+								"forceFabricCanvasRegen": false
+							}
+						],
+						"tweens": [],
+						"pathData": null,
+						"playheadPosition": 0,
+						"length": 1,
+						"alwaysSaveState": false,
+						"uuid": "5c3e6304-d87c-4d87-ba7d-03a7e1a12007",
+						"wickScript": ""
+					}
+				],
+				"identifier": "Layer 1",
+				"locked": false,
+				"hidden": false
+			},
+			{
+				"frames": [
+					{
+						"identifier": "",
+						"wickObjects": [
+							{
+								"uuid": "d9fc4956-d6ce-4d6c-9bd9-6dbd027ad1f0",
+								"x": 365,
+								"y": 236,
+								"width": 548,
+								"height": 440,
+								"scaleX": 1,
+								"scaleY": 1,
+								"rotation": 0,
+								"flipX": false,
+								"flipY": false,
+								"opacity": 1,
+								"wickScript": "",
+								"assetUUID": null,
+								"loop": false,
+								"isText": false,
+								"isSymbol": false,
+								"isButton": false,
+								"isGroup": false,
+								"playheadPosition": null,
+								"currentLayer": null,
+								"isPath": true,
+								"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20fill=%22#00ff00%22%20fill-rule=%22nonzero%22%20stroke=%22#000000%22%20stroke-width=%225%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M91,456v-440h548v440z%22/%3E%3C/g%3E",
+								"svgX": 91,
+								"svgY": 16,
+								"svgStrokeWidth": 5,
+								"svgWidth": 553,
+								"svgHeight": 445,
+								"_zindex": 0,
+								"forceFabricCanvasRegen": false
+							}
+						],
+						"tweens": [],
+						"pathData": null,
+						"playheadPosition": 0,
+						"length": 1,
+						"alwaysSaveState": false,
+						"uuid": "32bc533a-8bb6-48bb-a07c-ce0722c03633",
+						"wickScript": ""
+					}
+				],
+				"identifier": "Layer 2",
+				"locked": false,
+				"hidden": false
+			}
+		],
+		"playRanges": [],
+		"isRoot": true,
+		"currentFrame": 0,
+		"framesDirty": false
+	},
+	"library": {
+		"assets": {}
+	},
+	"name": "CameraDemo",
+	"onionSkinning": false,
+	"width": 720,
+	"height": 480,
+	"backgroundColor": "#ffffff",
+	"transparent": false,
+	"pixelPerfectRendering": false,
+	"framerate": 60,
+	"fitScreen": false,
+	"uuid": "2239ba7c-67b5-467b-a74d-6674974e6e59",
+	"wickVersion": "0.09pre",
+	"metaInfo": {
+		"browser": "Chrome",
+		"browserVersion": "61.0.3163.100",
+		"navigatorAppName": "Netscape",
+		"navigatorUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36",
+		"wickVersion": "0.09pre",
+		"dateSaved": "Sat, 28 Oct 2017 17:14:02 GMT"
+	}
+}
