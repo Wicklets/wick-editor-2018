@@ -500,25 +500,35 @@
       "properties": [
         {
           "name": "camera.setPosition(x,y)",
-          "description": "Generates a random boolean (true or false).",
-          "example": "// Use randomBool to simulate a coin flip.\nvar coinFlip = randomBool();\nif(coinFlip == true) {\n    alert('You&#8217;re lucky!!');\n}",
-          "snippet": "var randombool = randomBool()",
-          "return": {
-            "type": "Boolean",
-            "description": "A random boolean. Will be true 50% of the time."
-          },
-          "args": []
+          "description": "Moves the camera to the given x-y coordinates.",
+          "example": "camera.setPosition(0,0)",
+          "snippet": "camera.setPosition(0,0)",
+          "return": null,
+          "args": [{
+              "name": "x",
+              "type": "Number",
+              "description": "The x coordinate to move the camera to."
+            }, {
+              "name": "y",
+              "type": "Number",
+              "description": "The y coordinate to move the camera to."
+            }]
         },
         {
-          "name": "camera.followObject(wickObject)",
+          "name": "camera.followObject(wickObject, smoothness)",
           "description": "Generates a random boolean (true or false).",
-          "example": "// Use randomBool to simulate a coin flip.\nvar coinFlip = randomBool();\nif(coinFlip == true) {\n    alert('You&#8217;re lucky!!');\n}",
-          "snippet": "var randombool = randomBool()",
-          "return": {
-            "type": "Boolean",
-            "description": "A random boolean. Will be true 50% of the time."
-          },
-          "args": []
+          "example": "// Follow this object nice and smoothly.\ncamera.followObject(wickObject, 0.1)",
+          "snippet": "camera.followObject(wickObject, 0.1)",
+          "return": null,
+          "args": [{
+              "name": "wickObject",
+              "type": "WickObject",
+              "description": "The WickObject to follow."
+            }, {
+              "name": "smoothness",
+              "type": "Number",
+              "description": "How smoothly the camera should follow the object. The less this value is, the longer it will take the camera to catch up with the object."
+            }]
         }
       ]
     },
@@ -597,7 +607,7 @@
           "snippet": "var randombool = randomBool()",
           "return": {
             "type": "Boolean",
-            "description": "A random boolean. Will be true 50% of the time."
+            "description": "A random boolean. Will be true 50% of the time, and false 50% of the time."
           },
           "args": []
         }, {
