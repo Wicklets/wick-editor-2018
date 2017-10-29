@@ -41,6 +41,11 @@ Tools.PathCursor = function (wickEditor) {
         return 'paper';
     }
 
+    this.onSelected = function () {
+        wickEditor.project.clearSelection();
+        wickEditor.paper.needsUpdate = true;
+    }
+
     this.paperTool = new paper.Tool();
 
     var hitResult;

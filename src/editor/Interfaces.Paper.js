@@ -116,7 +116,6 @@ var PaperInterface = function (wickEditor) {
         paperCanvas.style.display = wickEditor.previewplayer.playing ? 'none' : 'block';
 
         if(active) {
-
             wickEditor.currentTool.paperTool.activate();
             paperCanvas.style.cursor = wickEditor.currentTool.getCursorImage()
             paperCanvas.style.display = 'block';

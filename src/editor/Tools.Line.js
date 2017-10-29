@@ -46,6 +46,7 @@ Tools.Line = function (wickEditor) {
     }
 
     this.onSelected = function () {
+        wickEditor.paper.needsUpdate = true;
         wickEditor.project.clearSelection();
     }
 

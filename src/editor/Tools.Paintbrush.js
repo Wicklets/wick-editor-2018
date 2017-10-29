@@ -68,6 +68,7 @@ Tools.Paintbrush = function (wickEditor) {
 
     this.onSelected = function () {
         wickEditor.project.clearSelection();
+        wickEditor.paper.needsUpdate = true;
     }
 
     this.onDeselected = function () {

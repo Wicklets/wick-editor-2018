@@ -44,6 +44,10 @@ Tools.Pen = function (wickEditor) {
         return 'paper';
     }
 
+    this.onSelected = function () {
+        wickEditor.paper.needsUpdate = true;
+    }
+
     this.paperTool = new paper.Tool();
 
     this.paperTool.onMouseMove = function (event) {

@@ -935,6 +935,8 @@ var WickActionHandler = function (wickEditor) {
 
     registerAction('moveObjectToZIndex',
         function (args) {
+            wickEditor.paper.needsUpdate = true;
+
             var currFrame = args.objs[0].parentFrame;
 
             args.oldZIndexes = [];
@@ -968,6 +970,8 @@ var WickActionHandler = function (wickEditor) {
             done(args);
         },
         function (args) {
+            wickEditor.paper.needsUpdate = true;
+            
             var currFrame = wickEditor.project.getCurrentFrame();
 
             args.objs.sort(function (a,b) {

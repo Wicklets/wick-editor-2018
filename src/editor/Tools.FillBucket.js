@@ -41,6 +41,11 @@ Tools.FillBucket = function (wickEditor) {
         return 'paper';
     }
 
+    this.onSelected = function () {
+        wickEditor.project.clearSelection();
+        wickEditor.paper.needsUpdate = true;
+    }
+
     this.paperTool = new paper.Tool();
 
     this.paperTool.onMouseMove = function(event) {

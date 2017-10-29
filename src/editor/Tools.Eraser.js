@@ -59,6 +59,11 @@ Tools.Eraser = function (wickEditor) {
         return 'paper';
     }
 
+    this.onSelected = function () {
+        wickEditor.project.clearSelection();
+        wickEditor.paper.needsUpdate = true;
+    }
+
     this.onDeselected = function () {
         if(path) path.remove();
     }
