@@ -1040,10 +1040,7 @@ WickObject.prototype.getFramesEnd = function() {
 
 }
 
-/* Determine if two wick objects collide using rectangular hit detection on their
-       farthest border */
 WickObject.prototype.hitTestRectangles = function (otherObj) {
-    // Create a circle whose center is (10,10) with radius of 20
     var A = this;
     var B = otherObj;
     var V = SAT.Vector;
@@ -1073,7 +1070,7 @@ WickObject.prototype.hitTestRectangles = function (otherObj) {
     var BBottom = Math.round(BHeight);
 
     var polygon1 = new P(new V(Ax, Ay), [
-      new SAT.Vector(ARight, ATop), 
+      new SAT.Vector(ARight, ATop),
       new SAT.Vector(ARight, ABottom), 
       new SAT.Vector(ALeft, ABottom), 
       new SAT.Vector(ALeft, ATop),
@@ -1090,36 +1087,14 @@ WickObject.prototype.hitTestRectangles = function (otherObj) {
 
     var response = new SAT.Response();
     var collided = SAT.testPolygonPolygon(polygon1, polygon2, response);
-    return collided;
-}
-
-/* Determine if two wickObjects Collide using circular hit detection from their
-   centroid using their full width and height. */
-WickObject.prototype.hitTestCircles = function (otherObj) {
-    var objA = this;
-    var objB = otherObj;
-    
-    var objAAbsPos = objA.getAbsolutePositionTransformed();
-    var objBAbsPos = objB.getAbsolutePositionTransformed();
-
-    var dx = objAAbsPos.x - objBAbsPos.x;
-    var dy = objAAbsPos.y - objBAbsPos.y;
-
-    var objAWidth = objA.width * objA.scaleX;
-    var objBWidth = objB.width * objB.scaleX; 
-
-    var distance = Math.sqrt(dx * dx + dy * dy);
-
-    if (distance < ((objAWidth/2) + (objBWidth/2))) {
-        return true;
+    if(collided) {
+        return response;
+    } else {
+        return null;
     }
-
-    return false;
 }
 
-/* Returns a boolean alerting whether or not this object or any of it's children in frame,
-   have collided with the given object or any of it's children in frame. */
-WickObject.prototype.hitTest = function (otherObj, hitTestType, args) {
+WickObject.prototype.hitTest = function (otherObj) {
     if (otherObj === undefined || !otherObj._active) {
         return false;
     }
@@ -1136,38 +1111,37 @@ WickObject.prototype.hitTest = function (otherObj, hitTestType, args) {
         thisObjChildren.push(this);
     }
 
-    // Load the collision detection function for the type of collision we want to check for
-
-    var checkMethod;
-    var hitTestMethods = {
-        "rectangles" : "hitTestRectangles",
-        "circles" : "hitTestCircles"
-    }
-    if(!hitTestType) {
-        // Use default (rectangular hittest) if no hitTestType is provided
-        checkMethod = hitTestMethods["rectangles"];
-    } else {
-        checkMethod = hitTestMethods[hitTestType];
-        if(!checkMethod) {
-            console.error("Invalid hitTest collision type: " + hitTestType);
-        }
-    }
-
-    // Ready to go! Check for collisions!!
-
     for (var i = 0; i < otherObjChildren.length; i++) {
         for (var j = 0; j < thisObjChildren.length; j++) {
             var objA = thisObjChildren[j];
             var objB = otherObjChildren[i];
-            var result = objA[checkMethod](objB)
+            var result = objA["hitTestRectangles"](objB)
             if (result) {
                 return result;
             }
         }
     }
 
-    return false;
+    return null;
 
+}
+
+WickObject.prototype.getHitInfo = function (otherObj) {
+    var result = this.hitTest(otherObj);
+
+    if(result) {
+        return {
+            hit: true,
+            overlapX: result.overlapV.x,
+            overlapY: result.overlapV.y,
+        }
+    } else {
+        return {
+            hit: false,
+            overlapX: 0,
+            overlapY: 0,
+        }
+    }
 }
 
 WickObject.prototype.isPointInside = function(point) {

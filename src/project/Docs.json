@@ -242,7 +242,7 @@
           "return": null
         },
         {
-          "name": "hitTest(otherObject, hitTestType)",
+          "name": "hitTest(otherObject)",
           "description": "Checks for a collision with another object.",
           "example": "// If this object collides with objectTwo delete this object\nif (this.hitTest(objectTwo)) {\n    this.delete(); \n} ",
           "snippet": "if(this.hitTest(other_object_name)) {\n    // Do something here!\n}",
@@ -251,16 +251,28 @@
               "name": "otherObject",
               "type": "WickObject",
               "description": "Wick Object to check for collision with."
-            },
-            {
-              "name": "hitTestType",
-              "type": "String",
-              "description": "Type of hit detection to use. Can be 'rectangles' or 'circles'. If no hitTestType is given, hitTest defaults to 'rectangles'"
             }
           ],
           "return": {
             "type": "Boolean",
             "description": "True if the objects collide, false otherwise."
+          }
+        },
+        {
+          "name": "getHitInfo(otherObject)",
+          "description": "Returns information about a collision between two objects if they are touching.",
+          "example": "// If there's a collision, move this object so that the objects are no longer touching.\nvar hitInfo = this.getHitInfo(other_object_name);\nif (hitInfo.hit) {\n      this.x -= hitInfo.overlapX\n      this.y -= hitInfo.overlapY\n}",
+          "snippet": "var hitInfo = this.getHitInfo(other_object_name)",
+          "args": [
+            {
+              "name": "otherObject",
+              "type": "WickObject",
+              "description": "Wick Object to check for collision with."
+            }
+          ],
+          "return": {
+            "type": "HitInfo",
+            "description": "An object holdng the information about the collision."
           }
         },
         {

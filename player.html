@@ -5420,30 +5420,57 @@ WickObject.prototype.getFramesEnd = function() {
        farthest border */
 WickObject.prototype.hitTestRectangles = function (otherObj) {
     // Create a circle whose center is (10,10) with radius of 20
-    var objA = this;
-    var objB = otherObj;
+    var A = this;
+    var B = otherObj;
+    var V = SAT.Vector;
+    var P = SAT.Polygon;
 
-    var objAAbsPos = objA.getAbsolutePositionTransformed();
-    var objBAbsPos = objB.getAbsolutePositionTransformed();
+    var At = A.getAbsoluteTransformations();
+    var Bt = B.getAbsoluteTransformations();
 
-    var objAScale  = objA.getAbsoluteScale();
-    var objAWidth  = objA.width  * objAScale.x;
-    var objAHeight = objA.height * objAScale.y;
-    objAAbsPos.x  -= objA.width  * objAScale.x/2;
-    objAAbsPos.y  -= objA.height * objAScale.y/2;
+    var AWidth = (A.width * At.scale.x) / 2;
+    var BWidth = (B.width * Bt.scale.x) / 2;
+    var AHeight = (A.height * At.scale.y) / 2;
+    var BHeight = (B.height * Bt.scale.y) / 2;
 
-    var objBScale  = objB.getAbsoluteScale();
-    var objBWidth  = objB.width  * objBScale.x;
-    var objBHeight = objB.height * objBScale.y;
-    objBAbsPos.x  -= objB.width  * objBScale.x/2;
-    objBAbsPos.y  -= objB.height * objBScale.y/2;
+    var Ax = Math.round(At.position.x);
+    var Bx = Math.round(Bt.position.x);
+    var Ay = Math.round(At.position.y);
+    var By = Math.round(Bt.position.y);
 
-    var left = objAAbsPos.x < (objBAbsPos.x + objBWidth);
-    var right = (objAAbsPos.x + objAWidth) > objBAbsPos.x;
-    var top = objAAbsPos.y < (objBAbsPos.y + objBHeight);
-    var bottom = (objAAbsPos.y + objAHeight) > objBAbsPos.y;
+    var ALeft = Math.round(-AWidth);
+    var ARight = Math.round(AWidth);
+    var ATop = Math.round(-AHeight);
+    var ABottom = Math.round(AHeight);
 
-    return left && right && top && bottom;
+    var BLeft = Math.round(-BWidth);
+    var BRight = Math.round(BWidth);
+    var BTop = Math.round(-BHeight);
+    var BBottom = Math.round(BHeight);
+
+    var polygon1 = new P(new V(Ax, Ay), [
+      new SAT.Vector(ARight, ATop), 
+      new SAT.Vector(ARight, ABottom), 
+      new SAT.Vector(ALeft, ABottom), 
+      new SAT.Vector(ALeft, ATop),
+    ]);
+    polygon1.rotate(At.rotation * 0.0174533);
+
+    var polygon2 = new P(new V(Bx, By), [
+      new SAT.Vector(BRight, BTop), 
+      new SAT.Vector(BRight, BBottom), 
+      new SAT.Vector(BLeft, BBottom), 
+      new SAT.Vector(BLeft, BTop),
+    ]);
+    polygon1.rotate(Bt.rotation * 0.0174533);
+
+    var response = new SAT.Response();
+    var collided = SAT.testPolygonPolygon(polygon1, polygon2, response);
+    if(collided) {
+        return response;
+    } else {
+        return null;
+    }
 }
 
 /* Determine if two wickObjects Collide using circular hit detection from their
@@ -5459,7 +5486,6 @@ WickObject.prototype.hitTestCircles = function (otherObj) {
     var dy = objAAbsPos.y - objBAbsPos.y;
 
     var objAWidth = objA.width * objA.scaleX;
-
     var objBWidth = objB.width * objB.scaleX; 
 
     var distance = Math.sqrt(dx * dx + dy * dy);
@@ -5513,8 +5539,9 @@ WickObject.prototype.hitTest = function (otherObj, hitTestType, args) {
         for (var j = 0; j < thisObjChildren.length; j++) {
             var objA = thisObjChildren[j];
             var objB = otherObjChildren[i];
-            if (objA[checkMethod](objB)) {
-                return true;
+            var result = objA[checkMethod](objB)
+            if (result) {
+                return result;
             }
         }
     }
@@ -6786,6 +6813,7 @@ WickProject.prototype.tick = function () {
     });
     
     this.rootObject.tick();
+    this.updateCamera();
     
     // If a playhead position was changed through a script, make sure the 
     // change is reflected on next render (things look more responsive)
@@ -6802,7 +6830,77 @@ WickProject.prototype.applyTweens = function () {
     this.getAllFrames().forEach(function (frame) {
         frame.applyTween();
     });
-}</script>
+}
+
+WickProject.prototype.updateCamera = function () {
+    var camera = window.camera;
+    if(!camera) return;
+
+    camera.update();
+
+    var camPos = camera.getPosition();
+    this.rootObject.x = -camPos.x+this.width/2;
+    this.rootObject.y = -camPos.y+this.height/2;
+}
+</script>
+<script>/* Wick - (c) 2017 Zach Rispoli, Luca Damasco, and Josh Rispoli */
+
+/*  This file is part of Wick. 
+    
+    Wick is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Wick is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
+
+var WickCamera = function (project) {
+
+    var self = this;
+
+    var x = 0;
+    var y = 0;
+
+    var followingObject = null;
+    var followingSmoothness = 1;
+
+    this.followObject = function (object, smoothness) {
+    	followingObject = object;
+    	followingSmoothness = smoothness || 1;
+    }
+
+    this.getPosition = function () {
+    	return {
+    		x: x, 
+    		y: y
+    	};
+    }
+
+    this.setPosition = function (_x,_y) {
+    	x = _x;
+    	y = _y;
+    }
+
+    this.update = function () {
+    	if(followingObject) {
+    		var dx = followingObject.x - x;
+    		var dy = followingObject.y - y;
+    		self.setPosition(
+    			x + dx*followingSmoothness, 
+    			y + dy*followingSmoothness
+    		);
+    	}
+    }
+
+};
+
+</script>
 <script>/* Wick - (c) 2017 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
 /*  This file is part of Wick. 
@@ -7109,9 +7207,6 @@ var WickPreloader = function (wickEditor) {
 
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
-
-// TODO: 
-// Update changed ordering
 
 var WickPixiRenderer = function (canvasContainer) {
 
@@ -7913,6 +8008,9 @@ var WickPlayer = function () {
         self.project.prepareForPlayer();
         initialStateProject.prepareForPlayer();
 
+        // Make the camera
+        window.camera = new WickCamera(self.project);
+
         // Setup renderer/input/audio player
         self.renderer = new WickPixiRenderer(self.canvasContainer);
         self.inputHandler = new WickPlayerInputHandler(self.canvasContainer, self.project);
@@ -8023,7 +8121,7 @@ var WickPlayer = function () {
 
         // TOXXXIC
         //console.log("-------------");
-        var blacklist = ['asset', 'alphaMask', 'pixiSprite', 'pixiContainer', 'pixiText', 'audioData', 'wickScripts', 'parentObject', 'layers', '_active', '_wasActiveLastTick', '_scopeWrapper', 'parentFrame', 'bbox', 'tweens'];
+        var blacklist = ['_hitBox', 'asset', 'alphaMask', 'pixiSprite', 'pixiContainer', 'pixiText', 'audioData', 'wickScripts', 'parentObject', 'layers', '_active', '_wasActiveLastTick', '_scopeWrapper', 'parentFrame', 'bbox', 'tweens'];
         for (var name in wickObject) {
             if (name !== 'undefined' && wickObject.hasOwnProperty(name) && blacklist.indexOf(name) === -1) {
                 if(initialStateObject[name] !== wickObject[name]) {
