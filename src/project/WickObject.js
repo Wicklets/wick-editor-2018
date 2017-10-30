@@ -1083,7 +1083,7 @@ WickObject.prototype.hitTestRectangles = function (otherObj) {
       new SAT.Vector(BLeft, BBottom), 
       new SAT.Vector(BLeft, BTop),
     ]);
-    polygon1.rotate(Bt.rotation * 0.0174533);
+    polygon2.rotate(Bt.rotation * 0.0174533);
 
     var response = new SAT.Response();
     var collided = SAT.testPolygonPolygon(polygon1, polygon2, response);
