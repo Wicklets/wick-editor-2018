@@ -1054,20 +1054,20 @@ WickObject.prototype.hitTestRectangles = function (otherObj) {
     var AHeight = (A.height * At.scale.y) / 2;
     var BHeight = (B.height * Bt.scale.y) / 2;
 
-    var Ax = Math.round(At.position.x);
-    var Bx = Math.round(Bt.position.x);
-    var Ay = Math.round(At.position.y);
-    var By = Math.round(Bt.position.y);
+    var Ax = (At.position.x);
+    var Bx = (Bt.position.x);
+    var Ay = (At.position.y);
+    var By = (Bt.position.y);
 
-    var ALeft = Math.round(-AWidth);
-    var ARight = Math.round(AWidth);
-    var ATop = Math.round(-AHeight);
-    var ABottom = Math.round(AHeight);
+    var ALeft = (-AWidth);
+    var ARight = (AWidth);
+    var ATop = (-AHeight);
+    var ABottom = (AHeight);
 
-    var BLeft = Math.round(-BWidth);
-    var BRight = Math.round(BWidth);
-    var BTop = Math.round(-BHeight);
-    var BBottom = Math.round(BHeight);
+    var BLeft = (-BWidth);
+    var BRight = (BWidth);
+    var BTop = (-BHeight);
+    var BBottom = (BHeight);
 
     var polygon1 = new P(new V(Ax, Ay), [
       new SAT.Vector(ARight, ATop),
@@ -1111,37 +1111,42 @@ WickObject.prototype.hitTest = function (otherObj) {
         thisObjChildren.push(this);
     }
 
+    var results = [];
     for (var i = 0; i < otherObjChildren.length; i++) {
         for (var j = 0; j < thisObjChildren.length; j++) {
             var objA = thisObjChildren[j];
             var objB = otherObjChildren[i];
             var result = objA["hitTestRectangles"](objB)
             if (result) {
-                return result;
+                //return result;
+                results.push(result);
             }
         }
     }
 
-    return null;
-
-}
-
-WickObject.prototype.getHitInfo = function (otherObj) {
-    var result = this.hitTest(otherObj);
-
-    if(result) {
-        return {
-            hit: true,
-            overlapX: result.overlapV.x,
-            overlapY: result.overlapV.y,
-        }
-    } else {
+    if(results.length === 0)  {
         return {
             hit: false,
             overlapX: 0,
             overlapY: 0,
-        }
+        };
     }
+
+    var finalResult = {
+        hit: true,
+        overlapX: 0,
+        overlapY: 0,
+    }
+    results.forEach(function (result) {
+        finalResult.overlapX += result.overlapV.x;
+        finalResult.overlapY += result.overlapV.y;
+    });
+    return finalResult;
+
+}
+
+WickObject.prototype.getHitInfo = function (otherObj) {
+    return this.hitTest(otherObj);
 }
 
 WickObject.prototype.isPointInside = function(point) {
