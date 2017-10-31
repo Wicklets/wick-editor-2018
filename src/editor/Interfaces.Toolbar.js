@@ -25,6 +25,7 @@ var ToolbarInterface = function (wickEditor) {
     var colorPickerDivs = [];
 
     var brushSizePreview;
+    var cornerRadiusPreview;
 
     this.setup = function () {
         toolbarDiv = document.getElementById('tools');
@@ -126,11 +127,13 @@ var ToolbarInterface = function (wickEditor) {
         numberInput.className = 'toolbar-number-input';
         toolbarDiv.appendChild(numberInput);
 
-        /*
+        cornerRadiusPreview = CornerRadiusPreview();
+        toolbarDiv.appendChild(cornerRadiusPreview);
+        cornerRadiusPreview.refresh();
 
-        var numberInput = new SlideyNumberInput({
+        cornerRadiusInput = new SlideyNumberInput({
             onsoftchange: function (e) {
-                
+                cornerRadiusPreview.refresh(parseInt(e));
             },
             onhardchange: function (e) {
                 wickEditor.settings.setValue('rectangleCornerRadius', parseInt(e));
@@ -141,8 +144,8 @@ var ToolbarInterface = function (wickEditor) {
             moveFactor: 0.1,
             initValue: wickEditor.settings.rectangleCornerRadius,
         });
-        numberInput.className = 'toolbar-number-input';
-        toolbarDiv.appendChild(numberInput);*/
+        cornerRadiusInput.className = 'toolbar-number-input';
+        toolbarDiv.appendChild(cornerRadiusInput);
 
     }
 
@@ -163,9 +166,18 @@ var ToolbarInterface = function (wickEditor) {
             colorPicker.style.backgroundColor = wickEditor.settings[colorPicker.wickSettingsVal];
         });
 
-        // Update brush/stroke thickness previews
+        // Update previews
         brushSizePreview.refresh();
         strokeWidthPreview.refresh();
+        cornerRadiusPreview.refresh();
+
+        if(wickEditor.currentTool === wickEditor.tools.rectangle) {
+            cornerRadiusPreview.style.display = 'block';
+            cornerRadiusInput.style.display = 'block';
+        } else {
+            cornerRadiusPreview.style.display = 'none';
+            cornerRadiusInput.style.display = 'none';
+        }
 
     }
 
@@ -317,6 +329,23 @@ var ToolbarInterface = function (wickEditor) {
         });
 
         return brushSettingsWindowDiv;
+    }
+
+    var CornerRadiusPreview = function () {
+        var cornerRadiusPreviewContainer = document.createElement('div');
+        cornerRadiusPreviewContainer.className = 'toolbar-corner-radius-preview-container';
+
+        var rect = document.createElement('div');
+        rect.className = 'toolbar-corner-radius-preview-rect';
+        cornerRadiusPreviewContainer.appendChild(rect)
+
+        cornerRadiusPreviewContainer.refresh = function (val) {
+            var bbox = cornerRadiusPreviewContainer.getBoundingClientRect();
+            if(!val) val = wickEditor.settings.rectangleCornerRadius;
+            rect.style.borderRadius = val+'px'
+        }
+
+        return cornerRadiusPreviewContainer;
     }
 
 }

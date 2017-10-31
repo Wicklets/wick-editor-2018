@@ -301,3 +301,41 @@ hr {
 .toolbar-brush-settings-window-close-button:hover {
   opacity: 0.6;
 }
+
+.toolbar-corner-radius-preview-container {
+    margin-left: 2px;
+    margin-top: 12px;
+    width: 35px;
+    height: 35px;
+    border-radius: 3px;
+    background-color: white;
+    overflow: hidden;
+    margin-bottom: 1px;
+
+    background-image:
+      -moz-linear-gradient(45deg, #ddd 25%, transparent 25%), 
+      -moz-linear-gradient(-45deg, #ddd 25%, transparent 25%),
+      -moz-linear-gradient(45deg, transparent 75%, #ddd 75%),
+      -moz-linear-gradient(-45deg, transparent 75%, #ddd 75%);
+    background-image:
+      -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, #ddd), color-stop(.25, transparent)), 
+      -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.25, #ddd), color-stop(.25, transparent)),
+      -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.75, transparent), color-stop(.75, #ddd)),
+      -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.75, transparent), color-stop(.75, #ddd));
+
+    -moz-background-size:10px 10px;
+    background-size:10px 10px;
+    -webkit-background-size:10px 11px;
+    
+    background-position:0 0, 5px 0, 5px -5px, 0px 5px;
+
+    opacity: 1.0;
+}
+.toolbar-corner-radius-preview-rect {
+  background-color: rgba(255,255,255,0.7);
+  border: 1px solid black;
+  width: 100px;
+  height: 100px;
+  margin-left: 12px;
+  margin-top: 12px;
+}
