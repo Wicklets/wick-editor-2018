@@ -1088,8 +1088,8 @@ WickObject.prototype.hitTestRectangles = function (otherObj) {
     var response = new SAT.Response();
     var collided = SAT.testPolygonPolygon(polygon1, polygon2, response);
     if(collided) {
-        response.dirX = (polygon1.pos.x > polygon2.pos.x) ? 'left' : 'right';
-        response.dirY = (polygon1.pos.y > polygon2.pos.y) ? 'up' : 'down';
+        if(response.overlapV.x !== 0) response.dirX = (polygon1.pos.x > polygon2.pos.x) ? 'left' : 'right';
+        if(response.overlapV.y !== 0) response.dirY = (polygon1.pos.y > polygon2.pos.y) ? 'up' : 'down';
         return response;
     } else {
         return null;
@@ -1142,8 +1142,8 @@ WickObject.prototype.getHitResult = function (otherObj) {
     results.forEach(function (result) {
         finalResult.overlapX += result.overlapV.x;
         finalResult.overlapY += result.overlapV.y;
-        finalResult.dirX = result.dirX;
-        finalResult.dirY = result.dirY;
+        if(result.dirX) finalResult.dirX = result.dirX;
+        if(result.dirY) finalResult.dirY = result.dirY;
     });
     return finalResult;
 
