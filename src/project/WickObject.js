@@ -1088,13 +1088,15 @@ WickObject.prototype.hitTestRectangles = function (otherObj) {
     var response = new SAT.Response();
     var collided = SAT.testPolygonPolygon(polygon1, polygon2, response);
     if(collided) {
+        response.dirX = (polygon1.pos.x > polygon2.pos.x) ? 'left' : 'right';
+        response.dirY = (polygon1.pos.y > polygon2.pos.y) ? 'up' : 'down';
         return response;
     } else {
         return null;
     }
 }
 
-WickObject.prototype.hitTest = function (otherObj) {
+WickObject.prototype.getHitResult = function (otherObj) {
     if (otherObj === undefined || !otherObj._active) {
         return false;
     }
@@ -1140,13 +1142,19 @@ WickObject.prototype.hitTest = function (otherObj) {
     results.forEach(function (result) {
         finalResult.overlapX += result.overlapV.x;
         finalResult.overlapY += result.overlapV.y;
+        finalResult.dirX = result.dirX;
+        finalResult.dirY = result.dirY;
     });
     return finalResult;
 
 }
 
+WickObject.prototype.hitTest = function (otherObj) {
+    return this.getHitInfo(otherObj).hit;
+}
+
 WickObject.prototype.getHitInfo = function (otherObj) {
-    return this.hitTest(otherObj);
+    return this.getHitResult(otherObj);
 }
 
 WickObject.prototype.isPointInside = function(point) {

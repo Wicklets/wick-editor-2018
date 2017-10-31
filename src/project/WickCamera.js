@@ -19,8 +19,8 @@ var WickCamera = function (project) {
 
     var self = this;
 
-    var x = 0;
-    var y = 0;
+    var x = project.width/2;
+    var y = project.height/2;
 
     var followingObject = null;
     var followingSmoothness = 1;
