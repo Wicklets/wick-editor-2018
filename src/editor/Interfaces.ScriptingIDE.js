@@ -42,6 +42,14 @@ var ScriptingIDEInterface = function (wickEditor) {
             that.aceEditor.$blockScrolling = Infinity; // Makes that weird message go away
             that.aceEditor.setAutoScrollEditorIntoView(true);
 
+            that.aceEditor.commands.addCommand({
+                name: "...",
+                exec: function() {
+                    wickEditor.guiActionHandler.doAction('editScripts');
+                },
+                bindKey: {mac: "`", win: "`"}
+            })
+
             that.aceEditor.setOptions({
                 enableBasicAutocompletion: true,
                 enableLiveAutocompletion: true,
