@@ -774,10 +774,19 @@ var GuiActionHandler = function (wickEditor) {
         function(args) {
             var modifiedStates = [];
             var objs = wickEditor.project.getSelectedObjects();
+
+            var centerX = 0;
+            objs.forEach(function (obj) {
+                centerX += obj.x;
+            });
+            centerX /= objs.length;
+
             objs.forEach(function (obj) {
                 var wickObj = obj;
                 modifiedStates.push({
                     flipX : !obj.flipX,
+                    rotation: -obj.rotation,
+                    x: -(obj.x-centerX)+centerX,
                 });
             });
 
@@ -794,10 +803,19 @@ var GuiActionHandler = function (wickEditor) {
         function(args) {
             var modifiedStates = [];
             var objs = wickEditor.project.getSelectedObjects();
+
+            var centerY = 0;
+            objs.forEach(function (obj) {
+                centerY += obj.y;
+            });
+            centerY /= objs.length;
+
             objs.forEach(function (obj) {
                 var wickObj = obj;
                 modifiedStates.push({
-                    flipY : !obj.flipY
+                    flipY : !obj.flipY,
+                    rotation: -obj.rotation,
+                    y: -(obj.y-centerY)+centerY,
                 });
             });
 

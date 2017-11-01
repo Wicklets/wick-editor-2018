@@ -249,6 +249,12 @@ WickProject.prototype.getAsJSON = function (callback, format) {
 WickProject.prototype.getCopyData = function () {
     var objectJSONs = [];
     var objects = this.getSelectedObjects();
+    objects.forEach(function(obj) {
+        obj._tempZIndex = wickEditor.project.getCurrentFrame().wickObjects.indexOf(obj);
+    })
+    objects.sort(function (a,b) {
+        return a._tempZIndex - b._tempZIndex;
+    });
     for(var i = 0; i < objects.length; i++) {
         objectJSONs.push(objects[i].getAsJSON());
     }
