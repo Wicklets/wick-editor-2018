@@ -77,15 +77,17 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
         originCrosshair.identifier = "originCrosshair";
 
         originCrosshair.updateGUIState = function () {
-            var currentObject = wickEditor.project.currentObject;
+            var currentObject = wickEditor.project.getCurrentObject();
             originCrosshair.opacity = currentObject.isRoot ? 0.0 : 1.0;
 
             originCrosshair.left = -originCrosshair.width/2;
             originCrosshair.top  = -originCrosshair.height/2;
             
-            var newOriginPos = wickEditor.project.currentObject.getAbsolutePosition();
+            var newOriginPos = currentObject.getAbsolutePosition();
             originCrosshair.left += newOriginPos.x;
             originCrosshair.top  += newOriginPos.y;
+
+            originCrosshair.setCoords();
         }
         addElement(originCrosshair);
         fabricInterface.canvas.moveTo(originCrosshair, 1)

@@ -163,8 +163,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                         mtr: true,
                     });
                 }
-                fabricObj.originX = 'center';
-                fabricObj.originY = 'center';
+                //fabricObj.originX = 'center';
+                //fabricObj.originY = 'center';
 
                 fabricObj.wickObjectRef = objectToAdd;
                 fabricInterface.canvas.add(fabricObj);
@@ -246,18 +246,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             var wos = {};
 
             if(children.length === 0) {
-                var rect = new fabric.Rect({
-                    left: 0,
-                    top: 0,
-                    fill: 'cyan',
-                    opacity: 0.3,
-                    width: 10,
-                    height: 10,
-                    originX: 'centerX',
-                    originY: 'centerY',
-                });
-                group.addWithUpdate(rect);
-
                 callback(group);
             }
 
@@ -268,79 +256,58 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                         var pair = wos[i]
                         var fabricObj = pair.fo;
                         var child = pair.wo;
-
-                        //fabricObj.originX = 'centerX';
-                        //fabricObj.originY = 'centerY';
                         
                         updateFabObjPositioning(fabricObj, child);
-                        //group.addWithUpdate(fabricObj);
                     }
 
-                    var boxWidth = 0;
-                    var boxHeight = 0;
+                    var boxCoords = {
+                        left: 1000000,
+                        right: -1000000,
+                        top: 1000000,
+                        bottom: -1000000,
+                    };
                     children.forEach(function (child) {
                         var bbox = child.fabricObjectReference.getBoundingRect();
                         var bboxXY = wickEditor.fabric.screenToCanvasSpace(bbox.left, bbox.top);
-                        var bboxSize = {x:bbox.width, y:bbox.height}//wickEditor.fabric.screenToCanvasSize(bbox.width, bbox.height);
+                        var bboxSize = {x:bbox.width, y:bbox.height};//wickEditor.fabric.screenToCanvasSize(bbox.width, bbox.height);
                         bbox.left = bboxXY.x;
                         bbox.top = bboxXY.y;
                         bbox.width = bboxSize.x;
                         bbox.height = bboxSize.y;
                         child.bbox = bbox;
-                        
-                        if(child.x > 0) {
-                            boxWidth  = Math.max(child.x + child.bbox.width/2,  boxWidth);
-                        } else {
-                            boxWidth  = Math.max(Math.abs(-child.x + child.bbox.width/2),  boxWidth);
-                        }
-                        if(child.y > 0) {
-                            boxHeight = Math.max(child.y + child.bbox.height/2, boxHeight);
-                        } else {
-                            boxHeight = Math.max(Math.abs(-child.y + child.bbox.height/2), boxHeight);
-                        }
+                        boxCoords.left = Math.min(boxCoords.left, bbox.left);
+                        boxCoords.top = Math.min(boxCoords.top, bbox.top);
                     });
-                    //console.log(boxWidth)
-                    //console.log(boxHeight)
-                    var rect = new fabric.Rect({
-                        left: wickObj.getAbsolutePosition().x,
-                        top: wickObj.getAbsolutePosition().y,
-                        fill: 'red',
-                        opacity: 0,
-                        width: boxWidth*2,
-                        height: boxHeight*2,
-                        originX: 'centerX',
-                        originY: 'centerY',
-                    });
-                    group.addWithUpdate(rect);
 
-                    //wos.forEach(function (pair) {
                     for(var i = 0; i < Object.keys(wos).length; i++) {
                         var pair = wos[i]
                         var fabricObj = pair.fo;
                         var child = pair.wo;
 
-                        fabricObj.originX = 'centerX';
-                        fabricObj.originY = 'centerY';
+                        fabricObj.originX = 0.5;
+                        fabricObj.originY = 0.5;
                         
                         //updateFabObj(fabricObj, child);
                         group.addWithUpdate(fabricObj);
                     }
                     wickObj.width = group.width;
                     wickObj.height = group.height;
+
+                    var Pabs = wickObj.getAbsolutePosition();
+                    var Ss = {w: wickObj.width, h: wickObj.height };
+
+                    group.originX = 0.5;
+                    group.originY = 0.5;
+
                     group.wickObjReference = wickObj;
                     
-                    var circle = new fabric.Circle({ 
-                        radius: 6, 
-                        fill: '', 
-                        stroke: '#91BAFF', 
-                        left: wickObj.getAbsolutePosition().x,
-                        top: wickObj.getAbsolutePosition().y,
-                        originX: 'centerX',
-                        originY: 'centerY',
-                    });
-                    group.centerpointObject = circle;
-                    if(wickObj.parentObject === wickEditor.project.currentObject) group.addWithUpdate(circle);
                     group.setCoords();
+
+                    var r = group.getBoundingRect();
+                    var boxLeft = (r.left + group.width/2);
+                    var boxTop = (r.top + group.height/2);
+                    group.originX = ((Pabs.x - (boxLeft)) / Ss.w);
+                    group.originY = ((Pabs.y - (boxTop)) / Ss.h);
                     
                     callback(group);
                 }
@@ -399,6 +366,11 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             fabricObj.targetFindTolerance = 4;
         } else {
             fabricObj.perPixelTargetFind = false;
+        }
+
+        if(!wickObj.isSymbol) {
+            fabricObj.originX = 'centerX';
+            fabricObj.originY = 'centerY';
         }
 
         fabricObj.setCoords();
