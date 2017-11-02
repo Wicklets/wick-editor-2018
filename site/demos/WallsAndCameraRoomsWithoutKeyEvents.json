@@ -17,7 +17,7 @@
 		"isButton": false,
 		"isGroup": false,
 		"playheadPosition": 0,
-		"currentLayer": 1,
+		"currentLayer": 0,
 		"layers": [
 			{
 				"frames": [
@@ -36,7 +36,7 @@
 								"flipX": false,
 								"flipY": false,
 								"opacity": 1,
-								"wickScript": "camera.followObject(this,%200.05);%0Acamera.setPosition(this.x,%20this.y)%0A%0Avar%20speed%20=%202;%0Avar%20facingDirection%0A%0Afunction%20update()%20%7B%0A%20%20%20%20if%20(keyIsDown(%27UP%27))%20%7B%0A%20%20%20%20%20%20%20%20this.y%20-=%20speed;%0A%20%20%20%20%20%20%20%20this.walking%20=%20true;%0A%20%20%20%20%20%20%20%20this.facingDirection%20=%20%27up%27;%0A%20%20%20%20%7D%20else%20if%20(keyIsDown(%27DOWN%27))%20%7B%0A%20%20%20%20%20%20%20%20this.y%20+=%20speed;%0A%20%20%20%20%20%20%20%20this.walking%20=%20true;%0A%20%20%20%20%20%20%20%20this.facingDirection%20=%20%27down%27;%0A%20%20%20%20%7D%20else%20if%20(keyIsDown(%27LEFT%27))%20%7B%0A%20%20%20%20%20%20%20%20this.x%20-=%20speed;%0A%20%20%20%20%20%20%20%20this.walking%20=%20true;%0A%20%20%20%20%20%20%20%20this.facingDirection%20=%20%27left%27;%0A%20%20%20%20%7D%20else%20if%20(keyIsDown(%27RIGHT%27))%20%7B%0A%20%20%20%20%20%20%20%20this.x%20+=%20speed;%0A%20%20%20%20%20%20%20%20this.walking%20=%20true;%0A%20%20%20%20%20%20%20%20this.facingDirection%20=%20%27right%27;%0A%20%20%20%20%7D%0A%0A%20%20%20%20var%20hitInfo%20=%20this.hitbox.getHitInfo(stage);%0A%20%20%20%20if%20(hitInfo.hit)%20%7B%0A%20%20%20%20%20%20%20%20this.y%20-=%20hitInfo.overlapY;%0A%20%20%20%20%20%20%20%20this.x%20-=%20hitInfo.overlapX;%0A%20%20%20%20%7D%0A%0A%20%20%20%20if%20(this.walking)%20%7B%0A%20%20%20%20%20%20%20%20this.gotoAndStop(%27walk_%27%20+%20this.facingDirection)%0A%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20%20%20this.gotoAndStop(%27stand_%27%20+%20this.facingDirection)%0A%20%20%20%20%7D%0A%0A%20%20%20%20this.walking%20=%20false;%0A%7D",
+								"wickScript": "camera.followObject(this,%200.05);%0A%0Avar%20speed%20=%202;%0Avar%20facingDirection%0A%0Afunction%20update()%20%7B%0A%20%20%20%20if%20(keyIsDown(%27UP%27))%20%7B%0A%20%20%20%20%20%20%20%20this.y%20-=%20speed;%0A%20%20%20%20%20%20%20%20this.walking%20=%20true;%0A%20%20%20%20%20%20%20%20this.facingDirection%20=%20%27up%27;%0A%20%20%20%20%7D%20else%20if%20(keyIsDown(%27DOWN%27))%20%7B%0A%20%20%20%20%20%20%20%20this.y%20+=%20speed;%0A%20%20%20%20%20%20%20%20this.walking%20=%20true;%0A%20%20%20%20%20%20%20%20this.facingDirection%20=%20%27down%27;%0A%20%20%20%20%7D%20else%20if%20(keyIsDown(%27LEFT%27))%20%7B%0A%20%20%20%20%20%20%20%20this.x%20-=%20speed;%0A%20%20%20%20%20%20%20%20this.walking%20=%20true;%0A%20%20%20%20%20%20%20%20this.facingDirection%20=%20%27left%27;%0A%20%20%20%20%7D%20else%20if%20(keyIsDown(%27RIGHT%27))%20%7B%0A%20%20%20%20%20%20%20%20this.x%20+=%20speed;%0A%20%20%20%20%20%20%20%20this.walking%20=%20true;%0A%20%20%20%20%20%20%20%20this.facingDirection%20=%20%27right%27;%0A%20%20%20%20%7D%0A%0A%20%20%20%20var%20hitInfo%20=%20this.hitbox.getHitInfo(stage);%0A%20%20%20%20if%20(hitInfo.hit)%20%7B%0A%20%20%20%20%20%20%20%20this.y%20-=%20hitInfo.overlapY;%0A%20%20%20%20%20%20%20%20this.x%20-=%20hitInfo.overlapX;%0A%20%20%20%20%7D%0A%0A%20%20%20%20if%20(this.walking)%20%7B%0A%20%20%20%20%20%20%20%20this.gotoAndStop(%27walk_%27%20+%20this.facingDirection)%0A%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20%20%20this.gotoAndStop(%27stand_%27%20+%20this.facingDirection)%0A%20%20%20%20%7D%0A%0A%20%20%20%20this.walking%20=%20false;%0A%7D",
 								"assetUUID": null,
 								"loop": false,
 								"isText": false,
@@ -12550,7 +12550,7 @@
 									}
 								],
 								"playRanges": [],
-								"svgWidth": 32.98089126288127,
+								"svgWidth": 32.9808912628813,
 								"svgHeight": 39.58104519733092,
 								"svgStrokeWidth": 0,
 								"_zindex": 3,
@@ -12856,7 +12856,7 @@
 									}
 								],
 								"playRanges": [],
-								"svgWidth": 488.41692,
+								"svgWidth": 488.41691999999995,
 								"svgHeight": 455.18468999999993,
 								"svgStrokeWidth": 0,
 								"_zindex": 0,
@@ -12939,8 +12939,7 @@
 						"length": 1,
 						"alwaysSaveState": false,
 						"uuid": "09958709-6394-4639-8d7f-e4d76088765a",
-						"wickScript": "stop()",
-						"scriptError": null
+						"wickScript": "stop()"
 					},
 					{
 						"identifier": "",
@@ -13501,7 +13500,7 @@
 		"browserVersion": "61.0.3163.100",
 		"navigatorAppName": "Netscape",
 		"navigatorUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36",
-		"wickVersion": "0.09",
-		"dateSaved": "Thu, 02 Nov 2017 19:03:19 GMT"
+		"wickVersion": "0.09pre",
+		"dateSaved": "Thu, 02 Nov 2017 17:53:11 GMT"
 	}
 }

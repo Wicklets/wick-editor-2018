@@ -19,12 +19,6 @@
 			"tutorialPath" : null,
 			"tags": ["basics"]
 		}, {
-			"name" : "Keyboard Controls Bounds",
-			"projectPath" : "KeyboardControlsBoundaries.json",
-			"thumbPath" : "KeyboardControlsBounds.png",
-			"tutorialPath" : null,
-			"tags": ["basics"]
-		}, {
 			"name" : "Drag and Drop",
 			"projectPath" : "DragAndDrop.json",
 			"thumbPath" : "DragAndDrop.png",

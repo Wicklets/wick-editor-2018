@@ -221,7 +221,8 @@ var ScriptingIDEInterface = function (wickEditor) {
                 $("#scriptObjectDiv").css('display', 'block');
 
                 var script = objectBeingScripted.wickScript;
-                that.aceEditor.setValue(script, -1);
+                if(that.aceEditor.getValue() !== objectBeingScripted.wickScript)
+                    that.aceEditor.setValue(script, -1);
 
                 /*document.getElementById('scriptEditorObjectName').innerHTML = objectBeingScripted.identifier;
 
