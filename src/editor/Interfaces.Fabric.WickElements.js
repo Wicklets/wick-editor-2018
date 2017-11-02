@@ -310,8 +310,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                     var boxTop = (r.top + group.height/2);
                     group.originX = ((Pabs.x - (boxLeft)) / Ss.w);
                     group.originY = ((Pabs.y - (boxTop)) / Ss.h);
-                    console.log(group.originX)
-                    console.log(group.originY)
                     
                     callback(group);
                 }
