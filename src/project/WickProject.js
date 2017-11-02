@@ -659,6 +659,11 @@ WickProject.prototype.loadBuiltinFunctions = function (contextObject) {
 
     // WickObjects in same frame (scope) are accessable without using root./parent.
     if(objectScope) {
+        objectScope.getAllChildObjects().forEach(function(child) {
+            if(child.name) window[child.name] = child;
+        });
+    }
+    if(objectScope) {
         objectScope.getAllActiveChildObjects().forEach(function(child) {
             if(child.name) window[child.name] = child;
         });

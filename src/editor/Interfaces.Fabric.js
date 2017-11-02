@@ -35,6 +35,7 @@ var FabricInterface = function (wickEditor) {
             imageSmoothingEnabled : true,
             preserveObjectStacking : true,
             renderOnAddRemove : false,
+            uniScaleTransform : true,
         });
         self.canvas.backgroundColor = "transparent";
         self.canvas.setWidth(window.innerWidth);

@@ -239,9 +239,11 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         }
 
         if (wickObj.isSymbol) {
+            // Dont do this recursively - just create a group of all children (and children of children) in one level
+
             wickObj.playheadPosition = 0;
 
-            var children = wickObj.getAllActiveChildObjects();
+            var children = wickObj.getAllActiveChildObjectsRecursive();
             var group = new fabric.Group();
             var wos = {};
 
@@ -260,7 +262,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                         updateFabObjPositioning(fabricObj, child);
                     }
 
-                    var boxCoords = {
+                    /*var boxCoords = {
                         left: 1000000,
                         right: -1000000,
                         top: 1000000,
@@ -277,15 +279,15 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                         child.bbox = bbox;
                         boxCoords.left = Math.min(boxCoords.left, bbox.left);
                         boxCoords.top = Math.min(boxCoords.top, bbox.top);
-                    });
+                    });*/
 
                     for(var i = 0; i < Object.keys(wos).length; i++) {
                         var pair = wos[i]
                         var fabricObj = pair.fo;
                         var child = pair.wo;
 
-                        fabricObj.originX = 0.5;
-                        fabricObj.originY = 0.5;
+                        fabricObj.originX = 'centerX';
+                        fabricObj.originY = 'centerY';
                         
                         //updateFabObj(fabricObj, child);
                         group.addWithUpdate(fabricObj);
@@ -308,6 +310,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                     var boxTop = (r.top + group.height/2);
                     group.originX = ((Pabs.x - (boxLeft)) / Ss.w);
                     group.originY = ((Pabs.y - (boxTop)) / Ss.h);
+                    console.log(group.originX)
+                    console.log(group.originY)
                     
                     callback(group);
                 }
@@ -369,8 +373,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         }
 
         if(!wickObj.isSymbol) {
-            fabricObj.originX = 'centerX';
-            fabricObj.originY = 'centerY';
+            fabricObj.originX = 0.5;
+            fabricObj.originY = 0.5;
         }
 
         fabricObj.setCoords();
