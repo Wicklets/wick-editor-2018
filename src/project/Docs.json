@@ -276,6 +276,25 @@
           }
         },
         {
+          "name": "pointTo(x,y)",
+          "description": "Rotates this object so that it is facing in the direction of the given point (x,y)",
+          "example": "// Make this object point towards the mouse\nthis.pointTo(mouseX, mouseY)",
+          "snippet": "this.pointTo(x,y)",
+          "args": [
+            {
+              "name": "x",
+              "type": "Number",
+              "description": "The x-coordinate of the point to rotate towards."
+            },
+            {
+              "name": "y",
+              "type": "Number",
+              "description": "The y-coordinate of the point to rotate towards."
+            }
+          ],
+          "return": null
+        },
+        {
           "name": "play()",
           "description": "Plays this objects timeline (only usable for Clips). ",
           "example": "this.play();",

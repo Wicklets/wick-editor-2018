@@ -1425,3 +1425,9 @@ WickObject.prototype.setText = function (text) {
     this._renderDirty = true;  
 }
 
+WickObject.prototype.pointTo = function ( x2, y2 ) {
+    var dx = this.x - x2,
+        dy = this.y - y2;
+    
+    this.rotation = Math.atan2(dy,dx) * 180 / Math.PI - 90;
+};

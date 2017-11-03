@@ -30,7 +30,7 @@ body {
 .version-number {
 	text-decoration: underline;
 	position: absolute;
-	width: 140px;
+	width: 145px;
 	height: 30px;
 	text-align: center;
 	top: 5px;
@@ -38,7 +38,7 @@ body {
 }
 .last-updated {
 	position: absolute;
-	width: 140px;
+	width: 145px;
 	height: 30px;
 	text-align: center;
 	font-size: 12px;
