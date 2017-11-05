@@ -37,12 +37,6 @@
 			"tutorialPath" : null,
 			"tags": ["basics"]
 		}, {
-            "name" : "Walls and Camera",
-			"projectPath" : "WallsAndCamera.json",
-			"thumbPath" : "WallsAndCamera.png",
-			"tutorialPath" : null,
-			"tags": ["basics"]
-		}, {
 			"name" : "Haunted House",
 			"projectPath" : "HauntedHouse.json",
 			"thumbPath" : "HauntedHouse.png",

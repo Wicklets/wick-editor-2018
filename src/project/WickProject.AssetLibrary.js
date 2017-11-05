@@ -54,12 +54,23 @@ AssetLibrary.prototype.getAllAssets = function (type) {
 
     for (assetUUID in this.assets) {
         var asset = this.assets[assetUUID];
-        if(type && asset.type === type) {
+        if(!type || asset.type === type) {
             allAssets.push(asset);
         }
     }
 
     return allAssets;
+
+}
+
+AssetLibrary.prototype.getAssetByName = function (filename) {
+
+    var foundAsset = null;
+    this.getAllAssets().forEach(function (asset) {
+        if (asset.filename === filename)
+            foundAsset = asset;
+    });
+    return foundAsset
 
 }
 

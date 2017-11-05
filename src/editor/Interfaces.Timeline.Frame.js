@@ -176,9 +176,8 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
                     //self.wickFrame._soundDataForPreview.howl.play();
                 } else {
                     waveformDiv.src = self.wickFrame._soundDataForPreview.waveform;
-                    var baseWidth = 600*(12.0/10.0);
+                    var baseWidth = 200*(12.0/10.0);
                     var waveformWidth = baseWidth;
-                    if(wickEditor.project.smallFramesMode) waveformWidth = waveformWidth*(14/60);
                     waveformWidth = waveformWidth/(12.0/wickEditor.project.framerate);
                     waveformWidth = waveformWidth * (self.wickFrame._soundDataForPreview.howl._sprite.__default[1]/1000.0)
                     waveformDiv.style.width = waveformWidth + 'px';

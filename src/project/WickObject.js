@@ -222,8 +222,7 @@ WickObject.prototype.copy = function () {
 
     var copiedObject = new WickObject();
 
-    if(this.name)
-        copiedObject.name = this.name + " copy";
+    copiedObject.name = undefined;
 
     copiedObject.x = this.x;
     copiedObject.y = this.y;

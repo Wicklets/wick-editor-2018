@@ -23,6 +23,8 @@ var PreviewPlayer = function (wickEditor) {
     var renderer;
     var canvasContainer;
 
+    var soundsPlaying = [];
+
     this.setup = function () {
         this.playing = false;
 
@@ -40,6 +42,8 @@ var PreviewPlayer = function (wickEditor) {
 
     this.play = function (loop) {
         if(self.playing) return;
+
+        soundsPlaying = [];
 
         self.playing = true;
 
@@ -74,8 +78,10 @@ var PreviewPlayer = function (wickEditor) {
             //wickEditor.syncInterfaces();
             currObj.layers.forEach(function (wickLayer) {
                 wickLayer.frames.forEach(function (wickFrame) {
-                    if(wickFrame._soundDataForPreview && wickFrame.playheadPosition === currObj.playheadPosition) 
+                    if(wickFrame._soundDataForPreview && wickFrame.playheadPosition === currObj.playheadPosition) {
                         wickFrame._soundDataForPreview.howl.play()
+                        soundsPlaying.push(wickFrame._soundDataForPreview.howl)
+                    }
                 });
             });
             currObj.playheadPosition ++;
@@ -85,6 +91,10 @@ var PreviewPlayer = function (wickEditor) {
 
     this.stop = function () {
         if(!self.playing) return;
+
+        soundsPlaying.forEach(function (howlSound) {
+            howlSound.stop();
+        })
 
         clearInterval(loopInterval)
         document.getElementById('fabricCanvas').style.display = 'block';
