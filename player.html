@@ -478,55 +478,6 @@ function elementInsideElement (target, parent) {
   }
 }
 
-var SlideyNumberInput = function (args) {
-  var input = document.createElement('input');
-  input.type = 'text';
-  input.value = args.initValue;
-
-  var mouseIsDown = false;
-  var initXY = {};
-  var oldValue;
-
-  input.addEventListener('mousedown', function (e) {
-    mouseIsDown = true;
-    initXY.x = e.screenX - parseFloat(input.value)/args.moveFactor;
-    initXY.y = e.screenY;
-    oldValue = parseFloat(input.value);
-  });
-
-  input.addEventListener('mouseup', function (e) {
-    input.select();
-  });
-
-  window.addEventListener('mousemove', function (e) {
-    if(!mouseIsDown) return;
-    var diffXY = {
-      x:(e.screenX-initXY.x)*args.moveFactor,
-      y:(e.screenY-initXY.y)*args.moveFactor,
-    }
-    if(diffXY.x !== 0) {
-      input.value = roundToHundredths(Math.min(args.max, Math.max(args.min, diffXY.x)));
-      args.onsoftchange(input.value);
-    }
-  });
-
-  window.addEventListener('mouseup', function (e) {
-    if(mouseIsDown) {
-      if(parseFloat(input.value) !== oldValue) {
-        args.onhardchange(parseFloat(input.value) || args.min);
-        document.getElementById('editorCanvasContainer').focus();
-      }
-    }
-    mouseIsDown = false;
-  });
-
-  input.addEventListener('change', function (e) {
-    args.onhardchange(parseFloat(input.value) || args.min);
-  });
-
-  return input;
-}
-
 function getBrowserAndOSInfo () {
   var nVer = navigator.appVersion;
   var nAgt = navigator.userAgent;
@@ -3857,7 +3808,7 @@ WickFrame.prototype.tick = function () {
         (wickPlayer || wickEditor).project.runScript(this, 'load');
         (wickPlayer || wickEditor).project.runScript(this, 'update');
 
-        if(wickPlayer) wickPlayer.audioPlayer.playSound(this);
+        if(wickPlayer) wickPlayer.audioPlayer.playSound(this.audioAssetUUID);
     }
     // Active -> Active
     // Frame is active!
@@ -4057,6 +4008,11 @@ WickFrame.prototype.getAsJSON = function () {
 WickFrame.fromJSON = function (frameJSON) {
     var frame = JSON.parse(frameJSON);
     frame.__proto__ = WickFrame.prototype;
+    if(frame.tweens) {
+        frame.tweens.forEach(function (tween) {
+            tween.__proto__ = WickTween.prototype;
+        });
+    }
     frame.uuid = random.uuid4();
     frame.wickObjects.forEach(function (wickObject) {
         WickObject.addPrototypes(wickObject);
@@ -4199,7 +4155,6 @@ WickFrame.prototype.applyTween = function () {
         var tweenTo = self.getToTween();
 
         if (tweenFrom && tweenTo) {
-            // yuck
             var A = tweenFrom.playheadPosition;
             var B = tweenTo.playheadPosition;
             var L = B-A;
@@ -4598,8 +4553,7 @@ WickObject.prototype.copy = function () {
 
     var copiedObject = new WickObject();
 
-    if(this.name)
-        copiedObject.name = this.name + " copy";
+    copiedObject.name = undefined;
 
     copiedObject.x = this.x;
     copiedObject.y = this.y;
@@ -5464,8 +5418,8 @@ WickObject.prototype.hitTestRectangles = function (otherObj) {
     var response = new SAT.Response();
     var collided = SAT.testPolygonPolygon(polygon1, polygon2, response);
     if(collided) {
-        response.dirX = (polygon1.pos.x > polygon2.pos.x) ? 'left' : 'right';
-        response.dirY = (polygon1.pos.y > polygon2.pos.y) ? 'up' : 'down';
+        if(response.overlapV.x !== 0) response.dirX = (polygon1.pos.x > polygon2.pos.x) ? 'left' : 'right';
+        if(response.overlapV.y !== 0) response.dirY = (polygon1.pos.y > polygon2.pos.y) ? 'up' : 'down';
         return response;
     } else {
         return null;
@@ -5518,8 +5472,8 @@ WickObject.prototype.getHitResult = function (otherObj) {
     results.forEach(function (result) {
         finalResult.overlapX += result.overlapV.x;
         finalResult.overlapY += result.overlapV.y;
-        finalResult.dirX = result.dirX;
-        finalResult.dirY = result.dirY;
+        if(result.dirX) finalResult.dirX = result.dirX;
+        if(result.dirY) finalResult.dirY = result.dirY;
     });
     return finalResult;
 
@@ -5801,6 +5755,12 @@ WickObject.prototype.setText = function (text) {
     this._renderDirty = true;  
 }
 
+WickObject.prototype.pointTo = function ( x2, y2 ) {
+    var dx = this.x - x2,
+        dy = this.y - y2;
+    
+    this.rotation = Math.atan2(dy,dx) * 180 / Math.PI - 90;
+};
 </script>
 <script>/* Wick - (c) 2017 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
@@ -6209,6 +6169,12 @@ WickProject.prototype.getAsJSON = function (callback, format) {
 WickProject.prototype.getCopyData = function () {
     var objectJSONs = [];
     var objects = this.getSelectedObjects();
+    objects.forEach(function(obj) {
+        obj._tempZIndex = wickEditor.project.getCurrentFrame().wickObjects.indexOf(obj);
+    })
+    objects.sort(function (a,b) {
+        return a._tempZIndex - b._tempZIndex;
+    });
     for(var i = 0; i < objects.length; i++) {
         objectJSONs.push(objects[i].getAsJSON());
     }
@@ -6613,6 +6579,11 @@ WickProject.prototype.loadBuiltinFunctions = function (contextObject) {
 
     // WickObjects in same frame (scope) are accessable without using root./parent.
     if(objectScope) {
+        objectScope.getAllChildObjects().forEach(function(child) {
+            if(child.name) window[child.name] = child;
+        });
+    }
+    if(objectScope) {
         objectScope.getAllActiveChildObjects().forEach(function(child) {
             if(child.name) window[child.name] = child;
         });
@@ -6940,12 +6911,23 @@ AssetLibrary.prototype.getAllAssets = function (type) {
 
     for (assetUUID in this.assets) {
         var asset = this.assets[assetUUID];
-        if(type && asset.type === type) {
+        if(!type || asset.type === type) {
             allAssets.push(asset);
         }
     }
 
     return allAssets;
+
+}
+
+AssetLibrary.prototype.getAssetByName = function (filename) {
+
+    var foundAsset = null;
+    this.getAllAssets().forEach(function (asset) {
+        if (asset.filename === filename)
+            foundAsset = asset;
+    });
+    return foundAsset
 
 }
 
@@ -7424,14 +7406,10 @@ var WickHowlerAudioPlayer = function (project) {
 
         muted = false;
 
-        var allFrames = project.getAllFrames();
-
-        allFrames.forEach(function (wickFrame) {
-            if(!wickFrame.audioAssetUUID) return;
-            var asset = project.library.getAsset(wickFrame.audioAssetUUID);
+        project.library.getAllAssets('audio').forEach(function (asset) {
             var audioData = asset.getData();
 
-            sounds[wickFrame.uuid] = new Howl({
+            sounds[asset.uuid] = new Howl({
                 src: [audioData],
                 loop: false,
                 volume: 1.0,
@@ -7443,10 +7421,10 @@ var WickHowlerAudioPlayer = function (project) {
 
     }
 
-    self.playSound = function (wickFrame) {
+    self.playSound = function (assetUUID) {
         if(muted) return;
-        if(!sounds[wickFrame.uuid]) return;
-        wickFrame.currentHowlID = sounds[wickFrame.uuid].play();
+        if(!sounds[assetUUID]) return;
+        var howlerID = sounds[assetUUID].play();
     }
 
     // TODO : Do this only for playing sounds
@@ -7454,10 +7432,6 @@ var WickHowlerAudioPlayer = function (project) {
         for (var sound in sounds) {
             sounds[sound].stop();
         }
-    }
-
-    self.stopSound = function (wickFrame) {
-        sounds[wickFrame.uuid].stop();
     }
 
     self.cleanup = function () {
@@ -7474,6 +7448,17 @@ var WickHowlerAudioPlayer = function (project) {
 
     self.onSoundPlay = function (howlid) {
 
+    }
+
+    window.playSound = function (assetFilename) {
+        var asset = project.library.getAssetByName(assetFilename);
+        if(asset) {
+            self.playSound(asset.uuid);
+        }
+    }
+
+    window.stopAllSounds = function () {
+        self.stopAllSounds();
     }
 
     window.mute = function () {

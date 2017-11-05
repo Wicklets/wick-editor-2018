@@ -27,14 +27,10 @@ var WickHowlerAudioPlayer = function (project) {
 
         muted = false;
 
-        var allFrames = project.getAllFrames();
-
-        allFrames.forEach(function (wickFrame) {
-            if(!wickFrame.audioAssetUUID) return;
-            var asset = project.library.getAsset(wickFrame.audioAssetUUID);
+        project.library.getAllAssets('audio').forEach(function (asset) {
             var audioData = asset.getData();
 
-            sounds[wickFrame.uuid] = new Howl({
+            sounds[asset.uuid] = new Howl({
                 src: [audioData],
                 loop: false,
                 volume: 1.0,
@@ -46,10 +42,10 @@ var WickHowlerAudioPlayer = function (project) {
 
     }
 
-    self.playSound = function (wickFrame) {
+    self.playSound = function (assetUUID) {
         if(muted) return;
-        if(!sounds[wickFrame.uuid]) return;
-        wickFrame.currentHowlID = sounds[wickFrame.uuid].play();
+        if(!sounds[assetUUID]) return;
+        var howlerID = sounds[assetUUID].play();
     }
 
     // TODO : Do this only for playing sounds
@@ -57,10 +53,6 @@ var WickHowlerAudioPlayer = function (project) {
         for (var sound in sounds) {
             sounds[sound].stop();
         }
-    }
-
-    self.stopSound = function (wickFrame) {
-        sounds[wickFrame.uuid].stop();
     }
 
     self.cleanup = function () {
@@ -77,6 +69,17 @@ var WickHowlerAudioPlayer = function (project) {
 
     self.onSoundPlay = function (howlid) {
 
+    }
+
+    window.playSound = function (assetFilename) {
+        var asset = project.library.getAssetByName(assetFilename);
+        if(asset) {
+            self.playSound(asset.uuid);
+        }
+    }
+
+    window.stopAllSounds = function () {
+        self.stopAllSounds();
     }
 
     window.mute = function () {

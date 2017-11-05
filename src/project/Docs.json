@@ -402,6 +402,20 @@
       "name": "Sounds",
       "properties": [
         {
+          "name": "playSound(filename)",
+          "description": "Plays the sound in the asset library with the specified filename.",
+          "example": "playSound('something.mp3');",
+          "snippet": "playSound('something.mp3');",
+          "args": [
+            {
+              "name": "filename",
+              "type": "String",
+              "description": "The filename of the sound to play."
+            }
+          ],
+          "return": null
+        },
+        {
           "name": "stopAllSounds()",
           "description": "Stops any sounds currently being played.",
           "example": "stopAllSounds();",
