@@ -84,18 +84,11 @@ Tools.Paintbrush = function (wickEditor) {
     var totalDelta;
     var lastEvent;
 
-    var BRUSH_MIN_DISTANCE = 0.5;
-
     this.paperTool.onMouseDown = function (event) {
         
     }
 
     this.paperTool.onMouseDrag = function (event) {
-        lastEvent = {
-            delta: event.delta,
-            middlePoint: event.middlePoint,
-        }
-
         if (!path) {
             path = new paper.Path({
                 fillColor: wickEditor.settings.fillColor,
@@ -111,12 +104,13 @@ Tools.Paintbrush = function (wickEditor) {
             totalDelta.y += event.delta.y;
         }
 
-        if (totalDelta.length > wickEditor.settings.brushThickness*BRUSH_MIN_DISTANCE/wickEditor.fabric.canvas.getZoom()) {
+        if (totalDelta.length > wickEditor.settings.brushThickness/2/wickEditor.fabric.canvas.getZoom()) {
 
             totalDelta.x = 0;
             totalDelta.y = 0;
 
             addNextSegment(event)
+            lastEvent = event;
 
         }
     }
@@ -155,7 +149,7 @@ Tools.Paintbrush = function (wickEditor) {
         } 
     }
 
-    var addNextSegment = function (event) {
+    function addNextSegment (event) {
         var thickness = event.delta.length;
         thickness /= wickEditor.settings.brushThickness/2;
         thickness *= wickEditor.fabric.canvas.getZoom();
