@@ -28,7 +28,7 @@ var FabricInterface = function (wickEditor) {
         fabric.Object.prototype.borderScaleFactor = 2.0;
         fabric.Object.prototype.borderColor = 'rgba(177,177,255,0.7)';
         fabric.Object.prototype.borderOpacityWhenMoving = 0.1;
-        fabric.Object.prototype.cornerSize = 10;
+        fabric.Object.prototype.cornerSize = 7;
         fabric.Object.prototype.objectCaching = false;
 
         self.canvas = new fabric.Canvas('fabricCanvas', {

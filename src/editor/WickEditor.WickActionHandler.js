@@ -394,6 +394,7 @@ var WickActionHandler = function (wickEditor) {
             }
             if(args.group) {
                 symbol.isGroup = true;
+                symbol.frames[0].wickScript = 'stop();';
             }
 
             // Remove objects from original parent (they are inside the symbol now.)

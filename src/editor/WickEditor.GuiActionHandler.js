@@ -513,7 +513,7 @@ var GuiActionHandler = function (wickEditor) {
                     var objs = WickObject.fromJSONArray(JSON.parse(file));
                     // Make sure to reset uuids!
                     objs.forEachBackwards(function (obj) {
-                        if(obj.name) obj.name = obj.name;
+                        if(obj.name) obj.name = undefined;
                         obj.getAllChildObjectsRecursive().forEach(function (child) {
                             child.uuid = random.uuid4();
                             (child.layers||[]).forEach(function (layer) {
@@ -521,7 +521,7 @@ var GuiActionHandler = function (wickEditor) {
                                     frame.uuid = random.uuid4();
                                 })
                             });
-                            //child.name = "";
+                            child.name = undefined;
                         });
                         obj.getAllFrames().forEach(function (frame) {
                             frame.uuid = random.uuid4();
