@@ -5725,10 +5725,11 @@ WickObject.prototype.tick = function () {
     // Update currentFrameNumber and currentFrameName for API
     if(this.isSymbol) {
         this.currentFrameNumber = this.playheadPosition+1;
+        var self = this;
         this.layers.forEach(function (layer) {
             var frame = layer.getCurrentFrame();
             if(frame && frame.name) {
-                this.currentFrameName = frame.name;
+                self.currentFrameName = frame.name;
             }
         })
     }
@@ -7278,6 +7279,7 @@ var WickPixiRenderer = function (canvasContainer) {
         if(wickObject.sourceUUID) {
             var pixiTexture = pixiTextures[wickObject.sourceUUID];
             if(pixiTexture) {
+                console.log('loaded cached')
                 var pixiSprite = new PIXI.Sprite(pixiTexture);
                 wickObject.alphaMask = wickProject.getObjectByUUID(wickObject.sourceUUID).alphaMask
                 container.addChild(pixiSprite);
