@@ -511,7 +511,6 @@ var GuiActionHandler = function (wickEditor) {
                 
                 if(fileType === 'text/wickobjectsjson') {
                     var objs = WickObject.fromJSONArray(JSON.parse(file));
-                    console.log(objs)
                     // Make sure to reset uuids!
                     objs.forEachBackwards(function (obj) {
                         if(obj.name) obj.name = obj.name;

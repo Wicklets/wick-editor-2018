@@ -1,6 +1,24 @@
 {
 	"demos": [
 		{
+			"name" : "Haunted House",
+			"projectPath" : "HauntedHouse.json",
+			"thumbPath" : "HauntedHouse.png",
+			"tutorialPath" : null,
+			"tags": ["games"]
+		}, {
+			"name" : "Well-Dressed Ghost",
+			"projectPath" : "WellDressedGhost.json",
+			"thumbPath" : "WellDressedGhost.png",
+			"tutorialPath" : null,
+			"tags": ["games"]
+		}, {
+			"name" : "DJ Spookyman",
+			"projectPath" : "DJSpookyman.json",
+			"thumbPath" : "DJSpookyman.png",
+			"tutorialPath" : null,
+			"tags": ["games"]
+		}, {
 			"name" : "Follow Cursor",
 			"projectPath" : "FollowCursor.json",
 			"thumbPath" : "FollowCursor.png",
@@ -36,24 +54,6 @@
 			"thumbPath" : "FollowCursorEasing.png",
 			"tutorialPath" : null,
 			"tags": ["basics"]
-		}, {
-			"name" : "Haunted House",
-			"projectPath" : "HauntedHouse.json",
-			"thumbPath" : "HauntedHouse.png",
-			"tutorialPath" : null,
-			"tags": ["games"]
-		}, {
-			"name" : "Well-Dressed Ghost",
-			"projectPath" : "WellDressedGhost.json",
-			"thumbPath" : "WellDressedGhost.png",
-			"tutorialPath" : null,
-			"tags": ["games"]
-		}, {
-			"name" : "DJ Spookyman",
-			"projectPath" : "DJSpookyman.json",
-			"thumbPath" : "DJSpookyman.png",
-			"tutorialPath" : null,
-			"tags": ["games"]
 		}, {
 			"name" : "Homepage",
 			"projectPath" : "Homepage.json",

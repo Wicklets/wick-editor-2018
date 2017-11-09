@@ -68,7 +68,7 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
         inactiveFrame.opacity = currentObject.isRoot ? 0.0 : 0.2;
     }
     addElement(inactiveFrame);
-
+    
 // Crosshair that shows where (0,0) of the current object is
 
     fabric.Image.fromURL('resources/origin.png', function(obj) {
