@@ -46,7 +46,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         var activeObjects = currentObject.getAllActiveChildObjects();
         if(wickEditor.paper.isActive()) {
             activeObjects = activeObjects.filter(function (obj) {
-                return !obj.isPath;
+                return obj.isImage || obj.isText;
             }); 
         }
         activeObjects = activeObjects.filter(function (obj) {
@@ -138,15 +138,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
         var numObjectsAdded = 0;
         objectsToAdd.forEach(function (objectToAdd) {
+            objectToAdd._frameUUID = currentFrame.uuid;
             createFabricObjectFromWickObject(objectToAdd, function (fabricObj) {
-                
-                // The object may have been deleted while we were generating the fabric object. 
-                // Make sure we don't add it if that happened.
-                var newAllObjects = wickEditor.project.currentObject.getAllActiveChildObjects().concat(currentObject.getNearbyObjects(1,1));
-                if(newAllObjects.indexOf(objectToAdd) === -1) {
-                    objectsInCanvas.splice(objectsInCanvas.indexOf(objectToAdd), 1)
-                    return;
-                }
 
                 objectToAdd.fabricObjectReference = fabricObj;
 
@@ -166,6 +159,10 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 //fabricObj.originX = 'center';
                 //fabricObj.originY = 'center';
 
+                if (currentFrameRef.uuid !== objectToAdd._frameUUID) {
+                    objectsInCanvas.splice(objectsInCanvas.indexOf(objectToAdd), 1)
+                    return;
+                }
                 fabricObj.wickObjectRef = objectToAdd;
                 fabricInterface.canvas.add(fabricObj);
 

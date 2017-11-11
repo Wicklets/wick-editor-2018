@@ -33,7 +33,7 @@ var WickEditorSettings = function () {
 WickEditorSettings.prototype.getDefaults = function () {
     return {
         brushThickness : 5,
-        brushSmoothingAmount : 10,
+        brushSmoothingAmount : 50,
         strokeWidth : 5,
         strokeColor : "#000000",
         fillColor : "#9999FF",

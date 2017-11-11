@@ -128,21 +128,22 @@ var PaperInterface = function (wickEditor) {
 
             paper.project.activeLayer.removeChildren();
 
-            var activeObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
+            var activeObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjectsRecursive();
             activeObjects.forEach(function (wickObject) {
-                if(!wickObject.isPath) return;
-                var layer = wickObject.parentFrame.parentLayer;
-                if(layer.locked || layer.hidden) return;
-                
-                self.pathRoutines.refreshPathData(wickObject);
-                self.pathRoutines.regenPaperJSState(wickObject);
-                paper.project.activeLayer.addChild(wickObject.paper);
-                
-                var absPos = wickObject.getAbsolutePosition();
-                wickObject.paper.position.x = absPos.x;
-                wickObject.paper.position.y = absPos.y;
-                
-                wickObject.paper.wick = wickObject;
+                if(wickObject.isPath) {
+                    var layer = wickObject.parentFrame.parentLayer;
+                    if(layer.locked || layer.hidden) return;
+                    
+                    self.pathRoutines.refreshPathData(wickObject);
+                    self.pathRoutines.regenPaperJSState(wickObject);
+                    paper.project.activeLayer.addChild(wickObject.paper);
+                    
+                    var absPos = wickObject.getAbsolutePosition();
+                    wickObject.paper.position.x = absPos.x;
+                    wickObject.paper.position.y = absPos.y;
+                    
+                    wickObject.paper.wick = wickObject;
+                }
             });
 
             refreshSelection();
