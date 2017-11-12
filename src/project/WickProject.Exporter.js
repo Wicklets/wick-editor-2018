@@ -40,7 +40,6 @@ WickProject.Exporter = (function () {
             "lib/keyCharToCode.js",
             "lib/fpscounter.js",
             "lib/base64-arraybuffer.js",
-            "lib/checkInput.js",
             "lib/canvasutils.js",
             "lib/random.js",
             "lib/SAT.js",
@@ -130,8 +129,13 @@ WickProject.Exporter = (function () {
                     saveAs(content, filename+".zip");
                 });
             } else {
-                var blob = new Blob([fileOut], {type: "text/plain;charset=utf-8"});
-                saveAs(blob, filename+".html");
+                if(args.asNewWindow) {
+                    var x=window.open('','','width='+wickProject.width+', height='+wickProject.height);
+                    x.document.open().write(fileOut);
+                } else {
+                    var blob = new Blob([fileOut], {type: "text/plain;charset=utf-8"});
+                    saveAs(blob, filename+".html");
+                }
             }
         });
 

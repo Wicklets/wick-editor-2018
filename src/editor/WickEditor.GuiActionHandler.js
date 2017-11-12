@@ -163,6 +163,16 @@ var GuiActionHandler = function (wickEditor) {
 
         });
 
+    registerAction('openProjectAsNewWindow',
+        ['Modifier','SHIFT','ENTER'],
+        'Run Project in New Window',
+        {usableInTextBoxes:true},
+        function(args) {
+            that.keys = [];
+            that.specialKeys = [];
+            WickProject.Exporter.exportProject(wickEditor.project, {asNewWindow:true});
+        });
+
     registerAction('recenterCanvas',
         ['Modifier','0'],
         'Recenter Canvas',
