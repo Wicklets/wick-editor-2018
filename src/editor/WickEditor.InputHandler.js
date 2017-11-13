@@ -530,6 +530,7 @@ var InputHandler = function (wickEditor) {
             'audio/flac'       : loadAudio,
             'audio/x-flac'     : loadAudio,
             "audio/x-m4a"      : loadAudio,
+            'audio/mpeg'       : loadAudio,
             "application/json" : loadJSON,
             "text/plain"       : loadPlaintext
         }
