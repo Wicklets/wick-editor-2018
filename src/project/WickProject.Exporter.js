@@ -144,50 +144,31 @@ WickProject.Exporter = (function () {
     projectExporter.autosaveProject = function (wickProject, args) {
         wickProject.getAsJSON(function (projectJSON) {
             console.log("Project size: " + projectJSON.length)
-            if(localStorage) {
-                try {
-                    wickEditor.alertbox.showProjectSavedMessage();
-                    localStorage.setItem('wickProject', projectJSON);
-                } catch (err) {
-                    console.error("LocalStorage could not save project, threw error:");
-                    console.log(err);
-                }
-            } else {
-                console.error("LocalStorage not available.")
-            }
-            wickProject.unsaved = false;
-            wickEditor.syncInterfaces();
+            idbKeyval.set('AutosavedWickProject', projectJSON)
+              .then(() => {
+                wickEditor.alertbox.showProjectSavedMessage();
+                wickProject.unsaved = false;
+                wickEditor.syncInterfaces();
+              })
+              .catch(err => console.log('idbKeyval failed to save. ', err));
         });
     }
 
     projectExporter.getAutosavedProject = function (callback) {
-        if(!localStorage) {
-            console.error("LocalStorage not available. Loading blank project");
-            callback(new WickProject());
-            return;
-        }
-        
-        var autosavedProjectJSON = localStorage.getItem('wickProject');
-
-        if(!autosavedProjectJSON) {
-            callback(new WickProject());
-            return;
-        }
-
-        var project = WickProject.fromJSON(autosavedProjectJSON);
-        
-        if(!project.wickVersion) {
-            callback(new WickProject());
-            return;
-        } else {
-            if(localStorage.alwaysLoadAutosavedProject === 'true' || window.confirm("There is an autosaved project. Would you like to recover it?")) {
-                callback(project);
-                return;
-            } else {
+        idbKeyval.get('AutosavedWickProject').then(val => {
+            if(!val) {
                 callback(new WickProject());
-                return;
+            } else {
+                if(localStorage.alwaysLoadAutosavedProject === 'true' || window.confirm("There is an autosaved project. Would you like to recover it?")) {
+                    var project = WickProject.fromJSON(val);
+                    callback(project);
+                    return;
+                } else {
+                    callback(new WickProject());
+                    return;
+                }
             }
-        }
+        });
     }
 
     var dontJSONVars = [

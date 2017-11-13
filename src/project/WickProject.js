@@ -201,30 +201,6 @@ WickProject.fixForBackwardsCompatibility = function (project) {
 
 }
 
-/*WickProject.fromLocalStorage = function () {
-
-    if(!localStorage) {
-        console.error("LocalStorage not available. Loading blank project");
-        return new WickProject();
-    }
-    
-    var autosavedProjectJSON = localStorage.getItem('wickProject');
-
-    if(!autosavedProjectJSON) {
-        console.log("No autosaved project. Loading blank project.");
-        return new WickProject();
-    }
-
-    var project = WickProject.fromJSON(autosavedProjectJSON);
-    
-    if(!project.wickVersion) {
-        return new WickProject();
-    } else {
-        return project;
-    }
-
-}*/
-
 WickProject.prototype.getAsJSON = function (callback, format) {
 
     var self = this;
