@@ -105,7 +105,9 @@ var ColorPickerInterface = function (wickEditor) {
 
             var t = e.target;
             if (t.className === 'sp-thumb-inner') {
-                self.close();
+                setTimeout(function () {
+                    self.close();
+                }, 10);
             }
         });
     }
@@ -133,11 +135,9 @@ var ColorPickerInterface = function (wickEditor) {
     }
 
     self.close = function () {
-        setTimeout(function () {
-            isOpen = false;
-            currentDoneFn(currentColor);
-            colorPickerContainer.style.display = 'none';
-        },20)
+        isOpen = false;
+        currentDoneFn(currentColor);
+        colorPickerContainer.style.display = 'none';
     }
 
     self.syncWithEditorState = function () {
