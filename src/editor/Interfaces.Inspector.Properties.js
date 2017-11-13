@@ -775,7 +775,8 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 
                 && selectionInfo.type === 'wickobject'
-                && selectionInfo.dataType === 'symbol';
+                && selectionInfo.dataType === 'symbol'
+                && selectionInfo.object.parentFrame.tweens.length === 0;
         },
         buttonAction: function () {
             wickEditor.guiActionHandler.doAction("breakApart")
