@@ -126,10 +126,9 @@ var ScriptingIDEInterface = function (wickEditor) {
             var resizer = document.getElementById('resizeScriptingGUIBar');
             resizer.resizing = false;
             resizer.addEventListener('mousedown', function (e) {
-                if(that.open){
+                if(that.open && !maximized){
                     resizer.resizing = true;
                 } else {
-                    resizer.resizing = true;
                     that.open = true;
                     that.clearError();
                     that.syncWithEditorState();
