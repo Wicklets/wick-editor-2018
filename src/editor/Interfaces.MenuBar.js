@@ -97,7 +97,7 @@ var MenuBarInterface = function (wickEditor) {
         projectNameElem = document.createElement('div');
         projectNameElem.className = "menuBarProjectTitle";
         projectNameElem.onclick = function () {
-            wickEditor.guiActionHandler.doAction('exportProjectZIP')
+            wickEditor.guiActionHandler.doAction('saveProject')
         }
         menuElem.appendChild(projectNameElem);
 
