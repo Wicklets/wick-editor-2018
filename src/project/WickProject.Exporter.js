@@ -15,9 +15,6 @@
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
     
-/* WickProject Exporter */
-/* Bundles WickProjects with the WickPlayer in a single HTML file. */
-
 WickProject.Exporter = (function () {
 
     var projectExporter = { };
@@ -126,7 +123,7 @@ WickProject.Exporter = (function () {
                 var zip = new JSZip();
                 zip.file("index.html", fileOut);
                 zip.generateAsync({type:"blob"}).then(function(content) {
-                    saveAs(content, filename+".zip");
+                    saveAs(content, filename+'-'+timeStamp()+".zip");
                 });
             } else {
                 if(args.asNewWindow) {

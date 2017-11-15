@@ -96,6 +96,9 @@ var MenuBarInterface = function (wickEditor) {
 
         projectNameElem = document.createElement('div');
         projectNameElem.className = "menuBarProjectTitle";
+        projectNameElem.onclick = function () {
+            wickEditor.guiActionHandler.doAction('exportProjectZIP')
+        }
         menuElem.appendChild(projectNameElem);
 
         projectSettingsElem = document.createElement('div');
@@ -120,16 +123,10 @@ var MenuBarInterface = function (wickEditor) {
                 wickEditor.guiActionHandler.doAction("openFile");
             }),
             new TabButton('Save Project', function () {
-                wickEditor.guiActionHandler.doAction("exportProjectJSON");
+                wickEditor.guiActionHandler.doAction("exportProjectZIP");
             }),
             new TabSpacer(),
 
-            new TabButton('Export As HTML', function () {
-                wickEditor.guiActionHandler.doAction("exportProjectHTML");
-            }),
-            new TabButton('Export As ZIP', function () {
-                wickEditor.guiActionHandler.doAction("exportProjectZIP");
-            }),
             new TabButton('Export Animated GIF', function () {
                 wickEditor.guiActionHandler.doAction("exportProjectGIF");
             }),

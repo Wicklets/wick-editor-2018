@@ -181,9 +181,19 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.fabric.recenterCanvas();
         });
 
-    registerAction('saveProject',
+    registerAction('exportProjectZIP',
         ['Modifier','S'],
-        'Save',
+        ['Save Project'],
+        {usableInTextBoxes:true},
+        function(args) {
+            that.keys = [];
+            that.specialKeys = [];
+            WickProject.Exporter.exportProject(wickEditor.project, {zipped:true});
+        });
+
+    registerAction('saveProject',
+        ['Modifier','SHIFT','S'],
+        'Force autosave',
         {usableInTextBoxes:true},
         function(args) {
             that.keys = [];
@@ -210,22 +220,12 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('exportProjectJSON',
-        ['Modifier','SHIFT','S'],
+        [],
         'Save As',
         {},
         function(args) {
             WickProject.Exporter.autosaveProject(wickEditor.project);
             WickProject.Exporter.exportProject(wickEditor.project, {json:true});
-        });
-
-    registerAction('exportProjectZIP',
-        [],
-        [],
-        {usableInTextBoxes:true},
-        function(args) {
-            that.keys = [];
-            that.specialKeys = [];
-            WickProject.Exporter.exportProject(wickEditor.project, {zipped:true});
         });
 
     registerAction('exportProjectGIF',
@@ -593,7 +593,7 @@ var GuiActionHandler = function (wickEditor) {
             }
             
             var project = new WickProject();
-            project.name = window.prompt("Enter a name for your new project:", "NewProject") || "NewProject";
+            project.name = window.prompt("Enter a name for your new project:", "New Project") || "New Project";
             
             wickEditor.guiActionHandler.doAction('openProject', {project:project, dontWarn:true});
         });

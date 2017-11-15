@@ -27,7 +27,7 @@ var WickProject = function () {
 
     this.library = new AssetLibrary();
 
-    this.name = "NewProject";
+    this.name = "New Project";
 
     this.onionSkinning = false;
     this.smallFramesMode = false;
