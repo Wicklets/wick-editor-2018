@@ -20,6 +20,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
     var objectsInCanvas = [];
 
     var currentFrameRef;
+    var currentFrameUUIDs;
 
     this.update = function () {
         window.blockAllRender = true;
@@ -27,6 +28,10 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         var newFrameRef = wickEditor.project.getCurrentFrame();
         var onNewFrame = newFrameRef !== currentFrameRef;
         currentFrameRef = newFrameRef;
+
+        currentFrameUUIDs = wickEditor.project.getCurrentFrames().map(function (frame) {
+            return frame.uuid;
+        });
 
         var enablePerfTests = false;
 
@@ -138,7 +143,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
         var numObjectsAdded = 0;
         objectsToAdd.forEach(function (objectToAdd) {
-            objectToAdd._frameUUID = currentFrame.uuid;
+            objectToAdd._frameUUID = objectToAdd.parentFrame.uuid;
             createFabricObjectFromWickObject(objectToAdd, function (fabricObj) {
 
                 objectToAdd.fabricObjectReference = fabricObj;
@@ -159,7 +164,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 //fabricObj.originX = 'center';
                 //fabricObj.originY = 'center';
 
-                if (currentFrameRef.uuid !== objectToAdd._frameUUID) {
+                if (currentFrameUUIDs.indexOf(objectToAdd._frameUUID) === -1) {
                     objectsInCanvas.splice(objectsInCanvas.indexOf(objectToAdd), 1)
                     return;
                 }

@@ -260,6 +260,10 @@ WickProject.prototype.getCurrentFrame = function () {
     return this.getCurrentObject().getCurrentLayer().getCurrentFrame();
 }
 
+WickProject.prototype.getCurrentFrames = function () {
+    return this.getCurrentObject().getCurrentFrames();
+}
+
 WickProject.prototype.getAllObjects = function () {
     var allObjectsInProject = this.rootObject.getAllChildObjectsRecursive();
     return allObjectsInProject;
