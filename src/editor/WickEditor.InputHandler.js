@@ -504,7 +504,7 @@ var InputHandler = function (wickEditor) {
             return;
         }
 
-        if(fileType === 'application/zip') {
+        if(fileType === 'application/zip' || fileType === 'application/x-zip-compressed') {
             loadZIP(file)
             return;
         }
