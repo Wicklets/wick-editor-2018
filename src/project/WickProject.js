@@ -27,7 +27,7 @@ var WickProject = function () {
 
     this.library = new AssetLibrary();
 
-    this.name = "NewProject";
+    this.name = "New Project";
 
     this.onionSkinning = false;
     this.smallFramesMode = false;
@@ -258,6 +258,10 @@ WickProject.prototype.getCurrentLayer = function () {
 
 WickProject.prototype.getCurrentFrame = function () {
     return this.getCurrentObject().getCurrentLayer().getCurrentFrame();
+}
+
+WickProject.prototype.getCurrentFrames = function () {
+    return this.getCurrentObject().getCurrentFrames();
 }
 
 WickProject.prototype.getAllObjects = function () {

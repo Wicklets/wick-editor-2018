@@ -1002,7 +1002,7 @@ var WickActionHandler = function (wickEditor) {
             });
 
             var len = args.objs[0].parentFrame.wickObjects.length-1;
-            if(newZIndex >= len) newIndex = len;
+            if(newZIndex >= len) newZIndex = len;
 
             args.moveAction = wickEditor.actionHandler.doAction('moveObjectToZIndex', {
                 objs: args.objs,

@@ -158,7 +158,13 @@ select {
     background-color: none;
     text-align: right;
     color: white;
+    cursor: pointer;
+    opacity: 1.0;
 }
+.menuBarProjectTitle:hover {
+    opacity: 0.8;
+}
+
 .unsavedText {
     color: red;
 }
