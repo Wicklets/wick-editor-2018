@@ -621,27 +621,34 @@ select {
     right: 15px;
     top: 15px;
     width: 300px;
-    height: 77px;
-    background-color: orange;
+    height: 115px;
+    background-color: #e05a12;
     box-shadow: 2px 2px 0px rgba(0,0,0,0.5);
     z-index: 999999999;
     font-size: 18px;
+    border-radius: 3px;
 
-    font-weight: bold;
+    font-weight: normal;
     font-family: "Anonymous Pro", "Helvetica", "Arial", sans-serif;
     color: #FFFFFF;
 }
 
 .alpha-warning-text {
-    width: 285px;
-    height: 80px;
+    text-align: center;
+    width: 90%;
+    height: 90%;
     margin: 10px;
+}
+
+.alpha-warning-hr {
+    width: 60%;
+    margin-left: 20%;
 }
 
 .alpha-warning-closebutton {
     position: absolute;
-    top: 0px;
-    right: 0px;
+    top: 3px;
+    right: 3px;
     width: 20px;
     height: 20px;
     font-weight: normal;
@@ -649,9 +656,22 @@ select {
     text-align: center;
     font-size: 20px;
     cursor: pointer;
+    opacity: 1.0;
+
+    background-image: url("../resources/close.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    text-overflow: clip;
+    background-size: 15px 15px;
 }
 .alpha-warning-closebutton:hover {
-    color: gray;
+    opacity: 0.6;
+}
+
+.forums-link {
+    font-weight: bold;
+    text-decoration: underline;
+    color: white;
 }
 
 #editorSettingsGUI {

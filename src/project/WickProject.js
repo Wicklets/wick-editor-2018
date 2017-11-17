@@ -696,7 +696,7 @@ WickProject.prototype.loadScriptOfObject = function (obj) {
 
             (wickPlayer || wickEditor).project.loadBuiltinFunctions(obj);
 
-            var evalScript = /*'"use strict"; ' + */obj.wickScript + dummyLoaderScript;
+            var evalScript = obj.wickScript + dummyLoaderScript;
             eval(evalScript);
         }
         obj._scopeWrapper();
