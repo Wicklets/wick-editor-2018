@@ -1,4 +1,4 @@
-<img alt="Wick: The Internet's free and open source creation toolkit" src="site/img/home-message.png" alt="Drawing" width="500"/>
+# Wick
 
 Wick is a browser-based hybrid animation/coding environment for making interactive things for the web, heavily inspired by similar tools such as Flash, HyperCard, and Scratch. It was developed in response to a growing need for such a tool for the modern web. Wick is currently live at [www.WickEditor.com](http://wickeditor.com/), come check it out sometime!
 
