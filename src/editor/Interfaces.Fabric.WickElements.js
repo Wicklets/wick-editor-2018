@@ -261,7 +261,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                         var fabricObj = pair.fo;
                         var child = pair.wo;
                         
-                        updateFabObjPositioning(fabricObj, child);
+                        updateFabObjPositioning(fabricObj, child, true, wickObj);
                     }
 
                     /*var boxCoords = {
@@ -330,7 +330,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
     }
 
-    var updateFabObjPositioning = function (fabricObj, wickObj) {
+    var updateFabObjPositioning = function (fabricObj, wickObj, isChild, parentWickObj) {
 
         wickObj.fabricObjectReference = fabricObj;
 
@@ -352,6 +352,17 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         fabricObj.flipX   = wickObj.flipX;
         fabricObj.flipY   = wickObj.flipY;
         fabricObj.opacity = wickObj.opacity;
+
+        if(isChild) {
+            var absTrans = wickObj.getAbsoluteTransformations()
+            var parentAbsTrans = parentWickObj.getAbsoluteTransformations();
+            fabricObj.scaleX  = absTrans.scale.x / parentAbsTrans.scale.x;
+            fabricObj.scaleY  = absTrans.scale.y / parentAbsTrans.scale.y;
+            fabricObj.angle   = absTrans.rotation - parentAbsTrans.rotation;
+            fabricObj.flipX   = absTrans.flip.x !== parentAbsTrans.flip.x;
+            fabricObj.flipY   = absTrans.flip.y !== parentAbsTrans.flip.y;
+            fabricObj.opacity = absTrans.opacity / parentAbsTrans.opacity;
+        }
 
         if(wickObj.isText) {
             var textData = wickObj.textData;

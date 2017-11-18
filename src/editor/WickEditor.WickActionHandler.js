@@ -905,6 +905,8 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.thumbnailRenderer.renderAllThumbsOnTimeline();
             wickEditor.paper.needsUpdate = true;
 
+            wickEditor.timeline.resetScrollbars();
+
             done(args);
         },
         function (args) {
@@ -912,6 +914,8 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.currentObject = args.prevEditedObject;
 
             wickEditor.paper.needsUpdate = true;
+
+            wickEditor.timeline.resetScrollbars();
 
             done(args);
         });
@@ -923,13 +927,15 @@ var WickActionHandler = function (wickEditor) {
             args.prevEditedObject = wickEditor.project.currentObject;
             wickEditor.project.currentObject = wickEditor.project.currentObject.parentObject;
 
-            wickEditor.thumbnailRenderer.renderAllThumbsOnTimeline();
+            wickEditor.timeline.resetScrollbars();
 
             done(args);
         },
         function (args) {
             wickEditor.project.clearSelection();
             wickEditor.project.currentObject = args.prevEditedObject;
+
+            wickEditor.timeline.resetScrollbars();
 
             done(args);
         });

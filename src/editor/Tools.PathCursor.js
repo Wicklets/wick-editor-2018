@@ -75,6 +75,10 @@ Tools.PathCursor = function (wickEditor) {
         if(hitResult) {
             if(hitResult.item) {
 
+                if(hitResult.item.parent && hitResult.item.parent._isPartOfGroup) {
+                    return;
+                }
+
                 var selectCheckWickObj = hitResult.item.parent.wick;
                 var newlySelected = false;
                 if(selectCheckWickObj)

@@ -878,8 +878,8 @@ WickObject.prototype.getAbsoluteFlip = function () {
     } else {
         var parentFlip = this.parentObject.getAbsoluteFlip();
         return {
-            x: this.flipX || parentFlip.x,
-            y: this.flipY || parentFlip.y
+            x: this.flipX !== parentFlip.x,
+            y: this.flipY !== parentFlip.y
         };
     }
 }
