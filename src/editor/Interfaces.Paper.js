@@ -148,6 +148,12 @@ var PaperInterface = function (wickEditor) {
 
                     if(wickObject.parentObject !== wickEditor.project.getCurrentObject()) {
                         wickObject.paper._isPartOfGroup = true;
+                        var absTrans = wickObject.getAbsoluteTransformations();
+                        if(!wickObject.paper._transformed) {
+                            wickObject.paper.scale(absTrans.scale.x, absTrans.scale.y);
+                            wickObject.paper.rotate(absTrans.rotation)
+                            wickObject.paper._transformed = true;
+                        }
                     }
                     
                     wickObject.paper.wick = wickObject;

@@ -172,6 +172,7 @@ Tools.PathCursor = function (wickEditor) {
     this.paperTool.onMouseDrag = function(event) {
 
         if(!hitResult) return;
+        if(hitResult.item.parent._isPartOfGroup) return;
 
         function handlesAreOpposite() {
             var a = hitResult.segment.handleIn;
@@ -229,6 +230,7 @@ Tools.PathCursor = function (wickEditor) {
 
         if(!hitResult) return;
         if(!hitResult.item) return;
+        if(hitResult.item.parent._isPartOfGroup) return;
         if(wickEditor.currentTool instanceof Tools.FillBucket) return;
 
         wickEditor.paper.pathRoutines.refreshSVGWickObject(hitResult.item);
