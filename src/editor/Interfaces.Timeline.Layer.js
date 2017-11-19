@@ -31,8 +31,35 @@ TimelineInterface.Layer = function (wickEditor, timeline) {
         this.elem = document.createElement('div');
         this.elem.className = "layer";
         this.elem.style.top = (wickLayers.indexOf(this.wickLayer) * cssVar('--layer-height')) + 'px';
-        this.elem.innerHTML = this.wickLayer.identifier;
         this.elem.wickData = {wickLayer:this.wickLayer};
+
+        this.elem.appendChild((function () {
+            var nameElem = document.createElement('div');
+            nameElem.innerHTML = that.wickLayer.identifier;
+            nameElem.className = 'layer-name';
+            nameElem.addEventListener('mousedown', function (e) {
+                renameLayerTextfield.select();
+                renameLayerTextfield.value = that.wickLayer.identifier;
+                renameLayerTextfield.style.display = 'block';
+                e.stopPropagation();
+            });
+            return nameElem;
+        })());
+
+        var renameLayerTextfield = document.createElement('input');
+        renameLayerTextfield.className = 'layer-rename-textfield';
+        renameLayerTextfield.type = 'text';
+        renameLayerTextfield.addEventListener('mouseup', function (e) {
+            this.select();
+            e.stopPropagation();
+        });
+        renameLayerTextfield.addEventListener('blur', function (e) {
+            that.wickLayer.identifier = renameLayerTextfield.value;
+            renameLayerTextfield.style.display = 'none';
+            wickEditor.project.currentObject.framesDirty = true;
+            wickEditor.syncInterfaces();
+        });
+        this.elem.appendChild(renameLayerTextfield);
 
         //div creation block for selection overlay
         var layerSelectionOverlayDiv = document.createElement('div');

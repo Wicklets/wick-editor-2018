@@ -240,6 +240,27 @@ body {
     font-style: Bold; 
 }
 
+.layer-name {
+    cursor: text;
+    width: 100px;
+    height: 25px;
+    margin-left: 50px;
+    text-align: left;
+}
+
+.layer-rename-textfield {
+    display: none;
+    width: 100px;
+    height: 15px;
+    z-index: 999;
+    position: absolute;
+    top: 5px;
+    left: 50px;
+    font-size: 12px;
+    font-family: "Anonymous Pro";
+    font-style: Bold; 
+}
+
 .active-layer {
     background-color: #46bbf8;
     border-style: solid;
