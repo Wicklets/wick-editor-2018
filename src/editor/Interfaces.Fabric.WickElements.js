@@ -67,6 +67,13 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         var allObjects = nearbyObjects.concat(siblingObjects.concat(activeObjects));
         //var allObjects = siblingObjects.concat(activeObjects);
 
+        allObjects.forEach(function (o) {
+            o._isOnionSkinObject = false;
+        })
+        nearbyObjects.forEach(function (o) {
+            o._isOnionSkinObject = true;
+        })
+
         var finish = function () {
             for(var i = 0; i < allObjects.length; i++) {
                 allObjects[i]._zindex = i;
@@ -164,7 +171,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 //fabricObj.originX = 'center';
                 //fabricObj.originY = 'center';
 
-                if (currentFrameUUIDs.indexOf(objectToAdd._frameUUID) === -1) {
+                if (currentFrameUUIDs.indexOf(objectToAdd._frameUUID) === -1 && !objectToAdd._isOnionSkinObject) {
                     objectsInCanvas.splice(objectsInCanvas.indexOf(objectToAdd), 1)
                     return;
                 }
