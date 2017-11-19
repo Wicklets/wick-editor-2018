@@ -118,7 +118,6 @@ var WickPixiRenderer = function (canvasContainer) {
         if(wickObject.sourceUUID) {
             var pixiTexture = pixiTextures[wickObject.sourceUUID];
             if(pixiTexture) {
-                console.log('loaded cached')
                 var pixiSprite = new PIXI.Sprite(pixiTexture);
                 wickObject.alphaMask = wickProject.getObjectByUUID(wickObject.sourceUUID).alphaMask
                 container.addChild(pixiSprite);

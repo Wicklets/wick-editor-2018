@@ -58,7 +58,7 @@ var PaperInterface = function (wickEditor) {
 
     self.highlightHoveredOverObject = function (event) {
         refreshSelection()
-        if (event.item) 
+        if (event.item && !event.item._isPartOfGroup) 
             event.item.selected = true;
     }
 
@@ -68,7 +68,9 @@ var PaperInterface = function (wickEditor) {
             return;
         }
 
-        if(event.item && event.item.wick && !wickEditor.project.isObjectSelected(event.item.wick)) {
+        if(event.item && event.item.wick && 
+           !wickEditor.project.isObjectSelected(event.item.wick) &&
+           !event.item._isPartOfGroup) {
             wickEditor.cursorIcon.setImage('resources/cursor-fill.png')
             return;
         }
@@ -84,7 +86,9 @@ var PaperInterface = function (wickEditor) {
 
         hitResult = paper.project.hitTest(event.point, hitOptions);
         if(hitResult) {
-            if(hitResult.type === 'curve' || hitResult.type === 'stroke') {
+            if(hitResult.item.parent && hitResult.item.parent._isPartOfGroup) {
+                wickEditor.cursorIcon.hide()
+            } else if(hitResult.type === 'curve' || hitResult.type === 'stroke') {
                 wickEditor.cursorIcon.setImage('resources/cursor-curve.png')
             } else if(hitResult.type === 'fill') {
                 wickEditor.cursorIcon.setImage('resources/cursor-fill.png')
@@ -141,6 +145,16 @@ var PaperInterface = function (wickEditor) {
                     var absPos = wickObject.getAbsolutePosition();
                     wickObject.paper.position.x = absPos.x;
                     wickObject.paper.position.y = absPos.y;
+
+                    if(wickObject.parentObject !== wickEditor.project.getCurrentObject()) {
+                        wickObject.paper._isPartOfGroup = true;
+                        var absTrans = wickObject.getAbsoluteTransformations();
+                        if(!wickObject.paper._transformed) {
+                            wickObject.paper.scale(absTrans.scale.x, absTrans.scale.y);
+                            wickObject.paper.rotate(absTrans.rotation)
+                            wickObject.paper._transformed = true;
+                        }
+                    }
                     
                     wickObject.paper.wick = wickObject;
                 }

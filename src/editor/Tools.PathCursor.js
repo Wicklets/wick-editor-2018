@@ -75,6 +75,10 @@ Tools.PathCursor = function (wickEditor) {
         if(hitResult) {
             if(hitResult.item) {
 
+                if(hitResult.item.parent && hitResult.item.parent._isPartOfGroup) {
+                    return;
+                }
+
                 var selectCheckWickObj = hitResult.item.parent.wick;
                 var newlySelected = false;
                 if(selectCheckWickObj)
@@ -168,6 +172,7 @@ Tools.PathCursor = function (wickEditor) {
     this.paperTool.onMouseDrag = function(event) {
 
         if(!hitResult) return;
+        if(hitResult.item.parent._isPartOfGroup) return;
 
         function handlesAreOpposite() {
             var a = hitResult.segment.handleIn;
@@ -225,6 +230,7 @@ Tools.PathCursor = function (wickEditor) {
 
         if(!hitResult) return;
         if(!hitResult.item) return;
+        if(hitResult.item.parent._isPartOfGroup) return;
         if(wickEditor.currentTool instanceof Tools.FillBucket) return;
 
         wickEditor.paper.pathRoutines.refreshSVGWickObject(hitResult.item);

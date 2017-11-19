@@ -199,12 +199,6 @@ var MenuBarInterface = function (wickEditor) {
             new TabButton('Hotkeys', function () {
                 wickEditor.guiActionHandler.doAction("openEditorSettings");
             }),
-            new TabButton('Tutorials', function () {
-                window.open('http://www.wickeditor.com/#tutorials');
-            }),
-            new TabButton('Examples', function () {
-                window.open('http://www.wickeditor.com/#demos');
-            }),
             new TabButton('Source code', function () {
                 window.open('https://www.github.com/zrispo/wick/');
             }),
