@@ -637,6 +637,14 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.changeTool(wickEditor.tools.pathCursor);
         });
 
+    registerAction('useTools.pencil',
+        ['V'],
+        'Switch to Pencil',
+        {},
+        function(args) {
+            wickEditor.changeTool(wickEditor.tools.pencil);
+        });
+
     registerAction('useTools.paintbrush',
         ['B'],
         'Switch to Brush',
