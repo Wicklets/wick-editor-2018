@@ -77,7 +77,7 @@ Tools.Pencil = function (wickEditor) {
             totalDelta.y += event.delta.y;
         }
 
-        if (totalDelta.length > wickEditor.settings.brushThickness/4/wickEditor.fabric.canvas.getZoom()) {
+        if (totalDelta.length > wickEditor.settings.strokeWidth/2/wickEditor.fabric.canvas.getZoom()) {
 
             totalDelta.x = 0;
             totalDelta.y = 0;
@@ -89,12 +89,20 @@ Tools.Pencil = function (wickEditor) {
     }
 
     this.paperTool.onMouseUp = function (event) {
-        if (path) {
+        if (path && path.segments.length > 1) {
             //path.closed = true;
             path.add(event.point)
             path.smooth();
+
+            var first = path.segments[0].point;
+            var last = path.segments[path.segments.length-1].point;
+            var dist = first.subtract(last);
+            if(dist.length < 7/wickEditor.fabric.canvas.getZoom()) {
+                path.closed = true;
+            }
+
             if(wickEditor.settings.brushSmoothingAmount > 0) {
-                var t = wickEditor.settings.brushThickness;
+                var t = wickEditor.settings.strokeWidth;
                 var s = wickEditor.settings.brushSmoothingAmount/100;
                 var z = wickEditor.fabric.canvas.getZoom();
                 path.simplify(t / z * s);
