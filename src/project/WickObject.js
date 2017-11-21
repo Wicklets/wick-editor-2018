@@ -1316,14 +1316,11 @@ WickObject.prototype.tick = function () {
     if(this.isButton) {
         this.stop();
         if(this._beingClicked) {
-            if(this.getFramesInPlayrange(this.getPlayrangeById('mousedown')).length > 0)
-                this.movePlayheadTo('mousedown');
+            this.movePlayheadTo('mousedown');
         } else if (this.hoveredOver) {
-            if(this.getFramesInPlayrange(this.getPlayrangeById('mouseover')).length > 0)
-                this.movePlayheadTo('mouseover');
+            this.movePlayheadTo('mouseover');
         } else {
-            if(this.getFramesInPlayrange(this.getPlayrangeById('mouseup')).length > 0)
-                this.movePlayheadTo('mouseup');
+            this.movePlayheadTo('mouseup');
         }
     }
 

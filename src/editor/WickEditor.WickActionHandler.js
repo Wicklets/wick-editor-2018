@@ -387,9 +387,19 @@ var WickActionHandler = function (wickEditor) {
             args.createdSymbol = symbol;
 
             if(args.button) {
-                symbol.addPlayRange(new WickPlayRange(0,1,'mouseup','#4a6588'));
+                /*symbol.addPlayRange(new WickPlayRange(0,1,'mouseup','#4a6588'));
                 symbol.addPlayRange(new WickPlayRange(1,2,'mouseover','#4a6588'));
-                symbol.addPlayRange(new WickPlayRange(2,3,'mousedown','#4a6588'));
+                symbol.addPlayRange(new WickPlayRange(2,3,'mousedown','#4a6588'));*/
+                symbol.layers[0].frames.push(symbol.layers[0].frames[0].copy());
+                symbol.layers[0].frames.push(symbol.layers[0].frames[0].copy());
+
+                symbol.layers[0].frames[0].name = 'mouseup';
+                symbol.layers[0].frames[0].playheadPosition = 0;
+                symbol.layers[0].frames[1].name = 'mouseover';
+                symbol.layers[0].frames[1].playheadPosition = 1;
+                symbol.layers[0].frames[2].name = 'mousedown';
+                symbol.layers[0].frames[2].playheadPosition = 2;
+
                 symbol.isButton = true;
             }
             if(args.group) {
