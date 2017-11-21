@@ -30,17 +30,6 @@ Tools.Pencil = function (wickEditor) {
         var centerY = canvas.height / 2;
         var radius = wickEditor.settings.strokeWidth/2;// * wickEditor.fabric.canvas.getZoom();
 
-        function invertColor(hexTripletColor) {
-            var color = hexTripletColor;
-            color = color.substring(1); // remove #
-            color = parseInt(color, 16); // convert to integer
-            color = 0xFFFFFF ^ color; // invert three bytes
-            color = color.toString(16); // convert to hex
-            color = ("000000" + color).slice(-6); // pad with leading zeros
-            color = "#" + color; // prepend #
-            return color;
-        }
-
         context.beginPath();
         context.arc(centerX, centerY, radius+1, 0, 2 * Math.PI, false);
         context.fillStyle = invertColor(wickEditor.settings.strokeColor);
@@ -157,24 +146,10 @@ Tools.Pencil = function (wickEditor) {
             });
 
             path = null;
-        } 
+        }
     }
 
     function addNextSegment (event) {
-        /*var thickness = event.delta.length;
-        thickness /= wickEditor.settings.brushThickness/2;
-        thickness *= wickEditor.fabric.canvas.getZoom();
-        
-        var penPressure = wickEditor.inputHandler.getPenPressure();
-
-        var step = event.delta.divide(thickness).multiply(penPressure);
-        step.angle = step.angle + 90;
-
-        var top = event.middlePoint.add(step);
-        var bottom = event.middlePoint.subtract(step);*/
-
-        //path.add(top);
-        //path.insert(0, bottom);
         path.add(event.point)
         path.smooth();
     }
