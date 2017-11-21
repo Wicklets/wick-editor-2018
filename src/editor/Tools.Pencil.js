@@ -28,7 +28,7 @@ Tools.Pencil = function (wickEditor) {
         var context = canvas.getContext('2d');
         var centerX = canvas.width / 2;
         var centerY = canvas.height / 2;
-        var radius = wickEditor.settings.strokeWidth/2;// * wickEditor.fabric.canvas.getZoom();
+        var radius = wickEditor.settings.strokeWidth/2 * wickEditor.fabric.canvas.getZoom();
 
         context.beginPath();
         context.arc(centerX, centerY, radius+1, 0, 2 * Math.PI, false);
@@ -112,12 +112,12 @@ Tools.Pencil = function (wickEditor) {
             path.add(event.point)
             path.smooth();
 
-            var first = path.segments[0].point;
+            /*var first = path.segments[0].point;
             var last = path.segments[path.segments.length-1].point;
             var dist = first.subtract(last);
             if(dist.length < 7/wickEditor.fabric.canvas.getZoom()) {
                 path.closed = true;
-            }
+            }*/
 
             if(wickEditor.settings.brushSmoothingAmount > 0) {
                 var t = wickEditor.settings.strokeWidth;
@@ -125,7 +125,12 @@ Tools.Pencil = function (wickEditor) {
                 var z = wickEditor.fabric.canvas.getZoom();
                 path.simplify(t / z * s);
             }
+
+            path.join(path, 10/wickEditor.fabric.canvas.getZoom())
+
             //path = path.unite(new paper.Path())
+
+
             path.remove();
 
             var group = new paper.Group({insert:false});
