@@ -22,7 +22,36 @@ Tools.Pencil = function (wickEditor) {
     var that = this;
 
     this.getCursorImage = function () {
-        return 'default'
+        var canvas = document.createElement("canvas");
+        canvas.width = 128;
+        canvas.height = 128;
+        var context = canvas.getContext('2d');
+        var centerX = canvas.width / 2;
+        var centerY = canvas.height / 2;
+        var radius = wickEditor.settings.strokeWidth/2;// * wickEditor.fabric.canvas.getZoom();
+
+        function invertColor(hexTripletColor) {
+            var color = hexTripletColor;
+            color = color.substring(1); // remove #
+            color = parseInt(color, 16); // convert to integer
+            color = 0xFFFFFF ^ color; // invert three bytes
+            color = color.toString(16); // convert to hex
+            color = ("000000" + color).slice(-6); // pad with leading zeros
+            color = "#" + color; // prepend #
+            return color;
+        }
+
+        context.beginPath();
+        context.arc(centerX, centerY, radius+1, 0, 2 * Math.PI, false);
+        context.fillStyle = invertColor(wickEditor.settings.strokeColor);
+        context.fill();
+
+        context.beginPath();
+        context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+        context.fillStyle = wickEditor.settings.strokeColor;
+        context.fill();
+
+        return 'url(' + canvas.toDataURL() + ') 64 64,default';
     };
 
     this.getToolbarIcon = function () {
@@ -77,7 +106,7 @@ Tools.Pencil = function (wickEditor) {
             totalDelta.y += event.delta.y;
         }
 
-        if (totalDelta.length > wickEditor.settings.strokeWidth/2/wickEditor.fabric.canvas.getZoom()) {
+        if (totalDelta.length > wickEditor.settings.strokeWidth/wickEditor.fabric.canvas.getZoom()) {
 
             totalDelta.x = 0;
             totalDelta.y = 0;
@@ -132,7 +161,7 @@ Tools.Pencil = function (wickEditor) {
     }
 
     function addNextSegment (event) {
-        var thickness = event.delta.length;
+        /*var thickness = event.delta.length;
         thickness /= wickEditor.settings.brushThickness/2;
         thickness *= wickEditor.fabric.canvas.getZoom();
         
@@ -142,7 +171,7 @@ Tools.Pencil = function (wickEditor) {
         step.angle = step.angle + 90;
 
         var top = event.middlePoint.add(step);
-        var bottom = event.middlePoint.subtract(step);
+        var bottom = event.middlePoint.subtract(step);*/
 
         //path.add(top);
         //path.insert(0, bottom);

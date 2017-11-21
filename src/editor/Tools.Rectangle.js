@@ -71,6 +71,7 @@ Tools.Rectangle = function (wickEditor) {
         var rectangle = new paper.Rectangle(
             new paper.Point(topLeft.x, topLeft.y), 
             new paper.Point(bottomRight.x, bottomRight.y));
+
         var roundedRect = new paper.Path.RoundRectangle(rectangle, wickEditor.settings.rectangleCornerRadius);
         roundedRect.fillColor = wickEditor.settings.fillColor;
         roundedRect.strokeColor = wickEditor.settings.strokeColor;
