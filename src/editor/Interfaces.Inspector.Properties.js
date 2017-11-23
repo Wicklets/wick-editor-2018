@@ -260,6 +260,29 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
+    properties.push(new InspectorInterface.CheckboxInput({
+        title: 'Closed',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isPath;
+        },
+        getValueFn: function () {
+            return selectionInfo.object.paper.children[0].closed;
+        }, 
+        onChangeFn: function (val) {
+            var closed = selectionInfo.object.paper.children[0].closed;
+            selectionInfo.object.paper.children[0].closed = !closed;
+
+            wickEditor.actionHandler.doAction('modifyObjects', {
+                objs: [selectionInfo.object],
+                modifiedStates: [{
+                    pathData : selectionInfo.object.paper.exportSVG({asString:true})
+                }]
+            });
+
+            wickEditor.paper.needsUpdate = true;
+        }
+    }));
+
     properties.push(new InspectorInterface.StringInput({
         title: 'Name',
         isActiveFn: function () {
