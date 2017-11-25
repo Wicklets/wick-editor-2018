@@ -266,9 +266,11 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isPath;
         },
         getValueFn: function () {
+            if(!selectionInfo.object.paper) return false;
             return selectionInfo.object.paper.children[0].closed;
         }, 
         onChangeFn: function (val) {
+            if(!selectionInfo.object.paper) return;
             var closed = selectionInfo.object.paper.children[0].closed;
             selectionInfo.object.paper.children[0].closed = !closed;
 

@@ -17,7 +17,7 @@
 
 var WickFrame = function () {
     // Identifier so we can do e.g. movePlayheadTo("menu") 
-    this.identifier = "";
+    this.name = "";
 
     // Store all objects in frame. 
     this.wickObjects = [];
@@ -161,7 +161,7 @@ WickFrame.prototype.copy = function () {
 
     var copiedFrame = new WickFrame();
 
-    copiedFrame.identifier = this.identifier;
+    copiedFrame.name = this.name;
     copiedFrame.playheadPosition = this.playheadPosition;
     copiedFrame.length = this.length;
     copiedFrame.wickScript = this.wickScript;

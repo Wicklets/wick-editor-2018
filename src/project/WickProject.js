@@ -444,6 +444,11 @@ WickProject.prototype.hasSyntaxErrors = function () {
 
 WickProject.prototype.handleWickError = function (e, objectCausedError) {
 
+    objectCausedError = window.errorCausingObject
+    if(objectCausedError.objectClonedFrom) {
+        objectCausedError = objectCausedError.objectClonedFrom
+    }
+
     if (window.wickEditor) {
         //if(!wickEditor.builtinplayer.running) return;
 
@@ -609,6 +614,8 @@ WickProject.prototype.getIntersectingPaths = function (path) {
 
 WickProject.prototype.loadBuiltinFunctions = function (contextObject) {
 
+    if(contextObject.wickScript === '') return;
+
     var objectScope = null;
     if(contextObject instanceof WickObject) {
         objectScope = contextObject.parentObject;
@@ -653,6 +660,8 @@ WickProject.prototype.loadBuiltinFunctions = function (contextObject) {
 
 WickProject.prototype.runScript = function (obj, fnName, arg1, arg2, arg3) {
 
+    window.errorCausingObject = obj;
+
     this.loadBuiltinFunctions(obj);
 
     try {
@@ -676,6 +685,8 @@ var WickObjectBuiltins = [
 ];
 
 WickProject.prototype.loadScriptOfObject = function (obj) {
+
+    if(obj.wickScript === '') return;
     
     try { 
         var dummy = {};
