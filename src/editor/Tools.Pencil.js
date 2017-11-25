@@ -74,10 +74,6 @@ Tools.Pencil = function (wickEditor) {
     var lastEvent;
 
     this.paperTool.onMouseDown = function (event) {
-        
-    }
-
-    this.paperTool.onMouseDrag = function (event) {
         if (!path) {
             path = new paper.Path({
                 //fillColor: wickEditor.settings.fillColor,
@@ -87,6 +83,11 @@ Tools.Pencil = function (wickEditor) {
             });
             //path.add(event.lastPoint);
         }
+
+        path.add(event.point);
+    }
+
+    this.paperTool.onMouseDrag = function (event) {
 
         if(!totalDelta) {
             totalDelta = event.delta;
@@ -100,36 +101,30 @@ Tools.Pencil = function (wickEditor) {
             totalDelta.x = 0;
             totalDelta.y = 0;
 
-            addNextSegment(event)
+            path.add(event.point)
+            path.smooth();
             lastEvent = event;
 
         }
     }
 
     this.paperTool.onMouseUp = function (event) {
-        if (path && path.segments.length > 1) {
-            //path.closed = true;
+        if (path) {
+
             path.add(event.point)
-            path.smooth();
+            
+            if(path.segments.length > 2) {
+                path.smooth();
 
-            /*var first = path.segments[0].point;
-            var last = path.segments[path.segments.length-1].point;
-            var dist = first.subtract(last);
-            if(dist.length < 7/wickEditor.fabric.canvas.getZoom()) {
-                path.closed = true;
-            }*/
+                if(wickEditor.settings.brushSmoothingAmount > 0) {
+                    var t = wickEditor.settings.strokeWidth;
+                    var s = wickEditor.settings.brushSmoothingAmount/100;
+                    var z = wickEditor.fabric.canvas.getZoom();
+                    path.simplify(t / z * s);
+                }
 
-            if(wickEditor.settings.brushSmoothingAmount > 0) {
-                var t = wickEditor.settings.strokeWidth;
-                var s = wickEditor.settings.brushSmoothingAmount/100;
-                var z = wickEditor.fabric.canvas.getZoom();
-                path.simplify(t / z * s);
+                path.join(path, 10/wickEditor.fabric.canvas.getZoom())
             }
-
-            path.join(path, 10/wickEditor.fabric.canvas.getZoom())
-
-            //path = path.unite(new paper.Path())
-
 
             path.remove();
 
@@ -152,11 +147,6 @@ Tools.Pencil = function (wickEditor) {
 
             path = null;
         }
-    }
-
-    function addNextSegment (event) {
-        path.add(event.point)
-        path.smooth();
     }
 
 }
