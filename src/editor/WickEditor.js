@@ -60,7 +60,7 @@ var WickEditor = function () {
         return interface;
     }
 
-    this.thumbnailRenderer = registerInterface(new ThumbnailRendererInterface(this));
+    //this.thumbnailRenderer = registerInterface(new ThumbnailRendererInterface(this));
     this.gifRenderer = registerInterface(new GIFRendererInterface(this));
     this.builtinplayer = registerInterface(new BuiltinPlayerInterface(this));
     this.scriptingide = registerInterface(new ScriptingIDEInterface(this));

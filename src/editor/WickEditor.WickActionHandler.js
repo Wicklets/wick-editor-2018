@@ -541,7 +541,7 @@ var WickActionHandler = function (wickEditor) {
 
             currentObject.framesDirty = true;
             wickEditor.project.rootObject.generateParentObjectReferences()
-            wickEditor.thumbnailRenderer.renderAllThumbsOnTimeline();
+            //wickEditor.thumbnailRenderer.renderAllThumbsOnTimeline();
 
             done(args);
         },
@@ -912,7 +912,7 @@ var WickActionHandler = function (wickEditor) {
             args.prevEditedObject = wickEditor.project.currentObject;
             wickEditor.project.currentObject = args.objectToEdit;
 
-            wickEditor.thumbnailRenderer.renderAllThumbsOnTimeline();
+            //wickEditor.thumbnailRenderer.renderAllThumbsOnTimeline();
             wickEditor.paper.needsUpdate = true;
 
             wickEditor.timeline.resetScrollbars();

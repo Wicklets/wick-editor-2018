@@ -231,6 +231,8 @@ var PathRoutines = function (paperInterface, wickEditor) {
         }
         if(wickObject.paper.closePath) wickObject.paper.closePath();
 
+        wickObject.svgStrokeWidth = wickObject.paper.strokeWidth;
+
         var absPos = wickObject.getAbsolutePosition() || {x:wickObject.x,y:wickObject.y};
         wickObject.paper.position.x = absPos.x;
         wickObject.paper.position.y = absPos.y;

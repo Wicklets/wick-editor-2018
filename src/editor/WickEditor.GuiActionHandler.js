@@ -616,7 +616,7 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.fabric.recenterCanvas();
             wickEditor.guiActionHandler.doAction("openProjectSettings");
             wickEditor.paper.needsUpdate = true;
-            wickEditor.thumbnailRenderer.renderAllThumbsOnTimeline();
+            //wickEditor.thumbnailRenderer.renderAllThumbsOnTimeline();
             wickEditor.project.currentObject.framesDirty = true;
             wickEditor.syncInterfaces();
         });
