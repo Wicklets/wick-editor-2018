@@ -26,8 +26,9 @@ var WickPixiRenderer = function (canvasContainer) {
         resolution: window.devicePixelRatio,
         preserveDrawingBuffer: true,
         antialias: true,
+        transparent: true,
     });
-    renderer.clearBeforeRender = false;
+    renderer.clearBeforeRender = true;
     renderer.roundPixels = false;
     renderer.view.setAttribute('tabindex', 0);
 
@@ -41,7 +42,9 @@ var WickPixiRenderer = function (canvasContainer) {
 
     var wickProject;
 
-    self.renderWickObjects = function (project, wickObjects) {
+    self.renderWickObjects = function (project, wickObjects, renderExtraSpace) {
+        if(!renderExtraSpace) renderExtraSpace = 1;
+
         wickProject = project;
 
         if(currentProjectUUID !== project.uuid) {
@@ -50,9 +53,14 @@ var WickPixiRenderer = function (canvasContainer) {
         }
 
         if(renderer.width !== project.width || renderer.height !== project.height) {
-            renderer.resize(project.width, project.height);
-            renderer.view.style.width  = project.width  + "px";
-            renderer.view.style.height = project.height + "px";
+            renderer.resize(project.width*renderExtraSpace, project.height*renderExtraSpace);
+            renderer.view.style.width  = project.width*renderExtraSpace  + "px";
+            renderer.view.style.height = project.height*renderExtraSpace + "px";
+
+            if(renderExtraSpace !== 1) {
+                container.position.x = project.width/renderExtraSpace;
+                container.position.y = project.height/renderExtraSpace;
+            }
         }
 
         var graphics = new PIXI.Graphics();

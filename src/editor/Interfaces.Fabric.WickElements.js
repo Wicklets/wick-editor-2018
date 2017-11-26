@@ -58,21 +58,21 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             return !obj.parentFrame.parentLayer.hidden;
         });  
 
-        var siblingObjects = currentObject.getAllInactiveSiblings();
+        /*var siblingObjects = currentObject.getAllInactiveSiblings();
         siblingObjects = siblingObjects.filter(function (obj) {
             return !obj.parentFrame.parentLayer.hidden;
-        });  
+        });  */
         //var siblingObjects = [];
-        var nearbyObjects = wickEditor.project.onionSkinning ? wickEditor.project.currentObject.getNearbyObjects(1,1) : [];
-        var allObjects = nearbyObjects.concat(siblingObjects.concat(activeObjects));
+        //var nearbyObjects = wickEditor.project.onionSkinning ? wickEditor.project.currentObject.getNearbyObjects(1,1) : [];
+        var allObjects = activeObjects
         //var allObjects = siblingObjects.concat(activeObjects);
 
-        allObjects.forEach(function (o) {
+        /*allObjects.forEach(function (o) {
             o._isOnionSkinObject = false;
         })
         nearbyObjects.forEach(function (o) {
             o._isOnionSkinObject = true;
-        })
+        })*/
 
         var finish = function () {
             for(var i = 0; i < allObjects.length; i++) {
@@ -137,7 +137,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                     if(fabricObj.group) return;
                     if(fabricObj.wickObjectRef === child) {
                         updateFabObjPositioning(fabricObj, child);
-                        updateFabricObjectEvents(fabricObj, child, activeObjects, siblingObjects, nearbyObjects);
+                        updateFabricObjectEvents(fabricObj, child, activeObjects);
                     }
                 });
                 
@@ -171,7 +171,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 //fabricObj.originX = 'center';
                 //fabricObj.originY = 'center';
 
-                if (currentFrameUUIDs.indexOf(objectToAdd._frameUUID) === -1 && !objectToAdd._isOnionSkinObject) {
+                if (currentFrameUUIDs.indexOf(objectToAdd._frameUUID) === -1) {
                     objectsInCanvas.splice(objectsInCanvas.indexOf(objectToAdd), 1)
                     return;
                 }
@@ -183,7 +183,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                     wickEditor.fabric.canvas.clearContext(wickEditor.fabric.canvas.contextTop);
                 }
                 updateFabObjPositioning(fabricObj, objectToAdd);
-                updateFabricObjectEvents(fabricObj, objectToAdd, activeObjects, siblingObjects, nearbyObjects);
+                updateFabricObjectEvents(fabricObj, objectToAdd, activeObjects);
 
                 //var trueZIndex = allObjects.indexOf(objectToAdd);
                 //fabricInterface.canvas.moveTo(fabricObj, trueZIndex+fabricInterface.guiElements.getNumGUIElements());
@@ -408,7 +408,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
     }
 
-    var updateFabricObjectEvents = function (fabricObj, wickObj, activeObjects, siblingObjects, nearbyObjects) {
+    var updateFabricObjectEvents = function (fabricObj, wickObj, activeObjects) {
         //var setCoords = fabricObj.setCoords.bind(fabricObj);
         /*fabricObj.on({
             moving: setCoords,

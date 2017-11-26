@@ -53,7 +53,7 @@ var PreviewPlayer = function (wickEditor) {
         if(currObj.playheadPosition >= currObj.getTotalTimelineLength()-1) {
             currObj.playheadPosition = 0;
         }
-        renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects());
+        renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 2);
 
         loopInterval = setInterval(function () {
             var currObj = wickEditor.project.getCurrentObject();
@@ -73,7 +73,7 @@ var PreviewPlayer = function (wickEditor) {
             wickEditor.project.applyTweens();
             canvasContainer.style.display = 'block';
             document.getElementById('fabricCanvas').style.display = 'none';
-            renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects());
+            renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 2);
             //wickEditor.thumbnailRenderer.syncWithEditorState();
             //wickEditor.syncInterfaces();
             currObj.layers.forEach(function (wickLayer) {
@@ -118,7 +118,7 @@ var PreviewPlayer = function (wickEditor) {
         this.playing = true;
         document.getElementById('fabricCanvas').style.display = 'none';
         updateCanvasTransforms()
-        renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects());
+        renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 2);
     }
 
     this.stopFastRendering = function () {
@@ -132,7 +132,7 @@ var PreviewPlayer = function (wickEditor) {
         document.getElementById('fabricCanvas').style.display = 'none';
         updateCanvasTransforms()
         wickEditor.project.applyTweens();
-        renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects());
+        renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 2);
     }
 
     this.getRenderer = function () {
@@ -145,12 +145,18 @@ var PreviewPlayer = function (wickEditor) {
     function updateCanvasTransforms () {
         var pan = wickEditor.fabric.getPan();
         var zoom = wickEditor.fabric.canvas.getZoom();
+
+        var width = wickEditor.project.width;
+        var height = wickEditor.project.height;
+
         //pan = {x:0,y:0}
-        var tx = pan.x+wickEditor.project.width*(zoom-1)/2;
-        var ty = pan.y+wickEditor.project.height*(zoom-1)/2;
+        var tx = (pan.x)+width *2*(zoom-1)/2;
+        var ty = (pan.y)+height*2*(zoom-1)/2;
+        tx -= width /2*(zoom);
+        ty -= height/2*(zoom);
         var transform = 'translate('+tx+'px,'+ty+'px) scale('+zoom+', '+zoom+')';
-        canvasContainer.style.width = wickEditor.project.width+'px';
-        canvasContainer.style.height = wickEditor.project.height+'px';
+        canvasContainer.style.width = (width*2)+'px';
+        canvasContainer.style.height = (height*2)+'px';
         canvasContainer.style.paddingLeft = '0px';//(pan.x*zoom)+'px';
         canvasContainer.style.paddingRight = '0px';
         canvasContainer.style.paddingTop = '0px';//(pan.y*zoom)+'px';
