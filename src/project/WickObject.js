@@ -1318,23 +1318,23 @@ WickObject.prototype.tick = function () {
     if(this.isButton) {
         this.stop();
         if(this._beingClicked) {
-            this.movePlayheadTo('mouseDown');
+            this.movePlayheadTo('mousePressed');
         } else if (this.hoveredOver) {
             this.movePlayheadTo('mouseHover');
         } else {
-            this.movePlayheadTo('mouseUp');
+            this.movePlayheadTo('mouseReleased');
         }
     }
 
     // Input events
 
     if(this._wasClicked) {
-        (wickPlayer || wickEditor).project.runScript(this, 'mouseDown');
+        (wickPlayer || wickEditor).project.runScript(this, 'mousePressed');
         this._wasClicked = false;
     }
 
     if(this._wasClickedOff) {
-        (wickPlayer || wickEditor).project.runScript(this, 'mouseUp');
+        (wickPlayer || wickEditor).project.runScript(this, 'mouseReleased');
         this._wasClickedOff = false;
     }
 

@@ -399,11 +399,11 @@ var WickActionHandler = function (wickEditor) {
                 symbol.layers[0].frames.push(symbol.layers[0].frames[0].copy());
                 symbol.layers[0].frames.push(symbol.layers[0].frames[0].copy());
 
-                symbol.layers[0].frames[0].name = 'mouseup';
+                symbol.layers[0].frames[0].name = 'mouseReleased';
                 symbol.layers[0].frames[0].playheadPosition = 0;
-                symbol.layers[0].frames[1].name = 'mouseover';
+                symbol.layers[0].frames[1].name = 'mouseHover';
                 symbol.layers[0].frames[1].playheadPosition = 1;
-                symbol.layers[0].frames[2].name = 'mousedown';
+                symbol.layers[0].frames[2].name = 'mousePressed';
                 symbol.layers[0].frames[2].playheadPosition = 2;
 
                 symbol.isButton = true;
