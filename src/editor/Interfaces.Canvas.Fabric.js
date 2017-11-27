@@ -15,9 +15,12 @@
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
     
-var FabricInterface = function (wickEditor) {
+var FabricCanvas = function (wickEditor) {
 
     var self = this;
+
+    var lastDoubleClickTime = null;
+    var lastDoubleClickPos = {x:0,y:0};
 
     self.setup = function () {
 
@@ -31,6 +34,9 @@ var FabricInterface = function (wickEditor) {
         fabric.Object.prototype.cornerSize = 8;
         fabric.Object.prototype.objectCaching = false;
 
+        var canvasContainer = document.createElement('canvas');
+        canvasContainer.id = 'fabricCanvas';
+        document.getElementById('editorCanvasContainer').appendChild(canvasContainer);
         self.canvas = new fabric.Canvas('fabricCanvas', {
             imageSmoothingEnabled : true,
             preserveObjectStacking : true,
@@ -93,6 +99,48 @@ var FabricInterface = function (wickEditor) {
             }
 
             self.applyChangesInCanvasToProject(modifiedObjects);
+        });
+
+        // Select objects on right click (fabric.js doesn't do this by default >.>)
+        self.canvas.on('mouse:down', function(e) {
+            if(e.e.button !== 2) return;
+
+            if (e.target && e.target.wickObjectID) {
+                // Set active object of fabric canvas
+                var id = self.canvas.getObjects().indexOf(e.target);
+                self.canvas.setActiveObject(self.canvas.item(id)).renderAll();
+            }
+
+            if(!e.target) {
+                // Didn't right click an object, deselect everything
+                self.canvas.deactivateAll().renderAll();
+            }
+        });
+
+        // Double click functionality to edit symbols
+        self.canvas.on('mouse:down', function(e) {
+            if(e.e.button !== 0) return;
+            if(!(wickEditor.currentTool instanceof Tools.Cursor)) return;
+
+            var newDoubleClickPos = {x: e.e.clientX, y: e.e.clientX};
+            var currentTime = new Date().getTime();
+
+            var isSecondClick = lastDoubleClickTime !== null && currentTime-lastDoubleClickTime < 350;
+            var mouseInSameArea = Math.abs(lastDoubleClickPos.x - newDoubleClickPos.x) < 3 && Math.abs(lastDoubleClickPos.y - newDoubleClickPos.y) < 3;
+
+            if(isSecondClick && mouseInSameArea) {
+                var selectedObject = wickEditor.project.getSelectedObject();
+                if(selectedObject && selectedObject.isSymbol) {
+                    wickEditor.guiActionHandler.doAction("editObject");
+                } else if (!selectedObject && !wickEditor.project.currentObject.isRoot) {
+                    wickEditor.guiActionHandler.doAction("finishEditingObject");
+                }
+                lastDoubleClickTime = null;
+            } else {
+                lastDoubleClickTime = currentTime;
+            }
+
+            lastDoubleClickPos = newDoubleClickPos;
         });
 
         this.recenterCanvas();
@@ -243,21 +291,21 @@ var FabricInterface = function (wickEditor) {
         self.canvas.setZoom(1);
         self.resetPan();
         self.canvas.renderAll();
-        wickEditor.syncInterfaces();
+        //wickEditor.syncInterfaces();
     }
 
     this.relativePan = function (x,y) {
         var delta = new fabric.Point(Math.floor(x),Math.floor(y));
         self.canvas.relativePan(delta)
         self.guiElements.update();
-        wickEditor.paper.updateViewTransforms();
+        wickEditor.canvas.getPaperCanvas().updateViewTransforms();
     }
 
     this.absolutePan = function (x,y) {
         var delta = new fabric.Point(Math.floor(x),Math.floor(y));
         self.canvas.absolutePan(delta)
         self.guiElements.update();
-        wickEditor.paper.updateViewTransforms();
+        wickEditor.canvas.getPaperCanvas().updateViewTransforms();
     }
 
     this.startPan = function () {
@@ -290,7 +338,7 @@ var FabricInterface = function (wickEditor) {
         self.canvas.setZoom(newZoom);
         self.canvas.relativePan(new fabric.Point(panAdjustX,panAdjustY));
         self.canvas.renderAll();
-        wickEditor.paper.updateViewTransforms();
+        wickEditor.canvas.getPaperCanvas().updateViewTransforms();
         wickEditor.timeline.getElem().updateZoomBox();
 
         self.guiElements.update();
@@ -304,7 +352,7 @@ var FabricInterface = function (wickEditor) {
         var newZoom = newZoom;
         var zoomRatio = newZoom/oldZoom;
         self.zoom(zoomRatio, window.innerWidth/2, window.innerHeight/2);
-        wickEditor.paper.updateViewTransforms();
+        wickEditor.canvas.getPaperCanvas().updateViewTransforms();
         wickEditor.timeline.getElem().updateZoomBox();
 
         /*var centerX = Math.floor(-(window.innerWidth -wickEditor.project.width)/2 - 33/2 + 254/2);
@@ -316,7 +364,7 @@ var FabricInterface = function (wickEditor) {
         self.canvas.setZoom(newZoom);
         self.canvas.absolutePan(new fabric.Point(centerX,centerY));
         self.canvas.renderAll();
-        wickEditor.paper.updateViewTransforms();
+        wickEditor.canvas.getPaperCanvas().updateViewTransforms();
 
         if(!nosync) wickEditor.syncInterfaces();*/
     }

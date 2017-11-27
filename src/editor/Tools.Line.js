@@ -20,7 +20,7 @@ if(!window.Tools) Tools = {};
 Tools.Line = function (wickEditor) {
 
     var that = this;
-    var fabricInterface = wickEditor.fabric;
+    var fabricInterface = wickEditor.canvas.getFabricCanvas();
 
     var drawingLine;
     var tempGroup;
@@ -46,7 +46,7 @@ Tools.Line = function (wickEditor) {
     }
 
     this.onSelected = function () {
-        wickEditor.paper.needsUpdate = true;
+        wickEditor.canvas.getPaperCanvas().needsUpdate = true;
         wickEditor.project.clearSelection();
     }
 
@@ -87,7 +87,7 @@ Tools.Line = function (wickEditor) {
         pathWickObject.width = 1;
         pathWickObject.height = 1;
 
-        wickEditor.paper.pathRoutines.refreshPathData(pathWickObject);
+        wickEditor.canvas.getPaperCanvas().pathRoutines.refreshPathData(pathWickObject);
 
         wickEditor.actionHandler.doAction('addObjects', {
             wickObjects: [pathWickObject],

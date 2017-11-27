@@ -63,7 +63,7 @@ var RightClickMenuInterface = function (wickEditor) {
                     }
                     if(e.target.tagName === 'CANVAS') {
                         wickEditor.project.clearSelection();
-                        var hoveredObj = wickEditor.fabric.getObjectHoveredOver();
+                        var hoveredObj = wickEditor.canvas.getFabricCanvas().getObjectHoveredOver();
                         if(hoveredObj) {
                             wickEditor.project.selectObject(hoveredObj);
                             wickEditor.syncInterfaces();

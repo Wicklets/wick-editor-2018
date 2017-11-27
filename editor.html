@@ -90,12 +90,13 @@
     <script src="src/project/WickTween.js"></script>
     <script src="src/project/WickPlayRange.js"></script>
 
-    <script src="src/editor/Interfaces.Fabric.js"></script>
-    <script src="src/editor/Interfaces.Fabric.GUIElements.js"></script>
-    <script src="src/editor/Interfaces.Fabric.WickElements.js"></script>
-    <script src="src/editor/Interfaces.Paper.js"></script>
+    <script src="src/editor/Interfaces.Canvas.js"></script>
+    <script src="src/editor/Interfaces.Canvas.Fabric.js"></script>
+    <script src="src/editor/Interfaces.Canvas.Fabric.GUIElements.js"></script>
+    <script src="src/editor/Interfaces.Canvas.Fabric.WickElements.js"></script>
+    <script src="src/editor/Interfaces.Canvas.Paper.js"></script>
     <script src="src/editor/Interfaces.Library.js"></script>
-    <script src="src/editor/Interfaces.Paper.PathRoutines.js"></script>
+    <script src="src/editor/Interfaces.Canvas.Paper.PathRoutines.js"></script>
     <script src="src/editor/Interfaces.BuiltinPlayer.js"></script>
     <script src="src/editor/Interfaces.RightClickMenu.js"></script>
     <script src="src/editor/Interfaces.ScriptingIDE.js"></script>
@@ -116,13 +117,12 @@
     <script src="src/editor/Interfaces.Timeline.VerticalScrollBar.js"></script>
     <script src="src/editor/Interfaces.Timeline.Tween.js"></script>
     <script src="src/editor/Interfaces.Toolbar.js"></script>
-    <script src="src/editor/Interfaces.PreviewPlayer.js"></script>
+    <script src="src/editor/Interfaces.Canvas.Pixi.js"></script>
     <script src="src/editor/Interfaces.Inspector.js"></script>
     <script src="src/editor/Interfaces.Inspector.Properties.js"></script>
     <script src="src/editor/Interfaces.Inspector.InputTypes.js"></script>
     <script src="src/editor/Interfaces.MenuBar.js"></script>
     <script src="src/editor/Interfaces.ThumbnailRenderer.js"></script>
-    <script src="src/editor/Interfaces.GIFRenderer.js"></script>
     <script src="src/editor/Interfaces.Breadcrumbs.js"></script>
     <script src="src/editor/Interfaces.AlertBox.js"></script>
     <script src="src/editor/Interfaces.CursorIcon.js"></script>
@@ -150,7 +150,7 @@
     <script src="src/editor/WickEditor.GuiActionHandler.js"></script>
     <script src="src/editor/WickEditor.InputHandler.js"></script>  
     <script src="src/editor/WickEditor.DemoLoader.js"></script>
-    <script src="src/editor/WickEditor.ElectronWrapper.js"></script>
+    <script src="src/editor/WickEditor.GIFRenderer.js"></script>
 
     <script src="src/player/WickPlayer.js"></script>
     <script src="src/player/WickPlayer.Preloader.js"></script>
@@ -189,9 +189,7 @@
 
     <div id="editor">
 
-        <div tabindex="1" id="editorCanvasContainer">
-            <canvas id="fabricCanvas"></canvas>
-        </div>
+        <div tabindex="1" id="editorCanvasContainer"></div>
 
         <div id="cursorIcon" class="GUIBox"></div>
 

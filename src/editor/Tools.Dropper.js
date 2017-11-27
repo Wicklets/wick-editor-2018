@@ -74,7 +74,7 @@ Tools.Dropper = function (wickEditor) {
                 "hex");
             callback(color);
         };
-        image.src = wickEditor.fabric.canvas.toDataURL();
+        image.src = wickEditor.canvas.getFabricCanvas().canvas.toDataURL();
     }
 
 }

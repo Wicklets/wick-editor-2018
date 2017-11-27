@@ -87,7 +87,7 @@ var InputHandler = function (wickEditor) {
     });
 
     function isFabricEditingText () {
-        var activeObj = wickEditor.fabric.canvas.getActiveObject();
+        var activeObj = wickEditor.canvas.getFabricCanvas().canvas.getActiveObject();
         if(!activeObj) {
             return false;
         } else {
@@ -364,7 +364,7 @@ var InputHandler = function (wickEditor) {
             wickPath.y = paperPath.position.y;
             wickPath.width = paperPath.bounds._width;
             wickPath.height = paperPath.bounds._height;
-            wickEditor.paper.pathRoutines.refreshPathData(wickPath);
+            wickEditor.canvas.getPaperCanvas().pathRoutines.refreshPathData(wickPath);
             allPaths.push(wickPath);
         }
 
@@ -547,9 +547,9 @@ var InputHandler = function (wickEditor) {
             fromContstructors[fileType](fr.result, file.name, function (newWickObject) {
                 var m
                 if(e && e.originalEvent && e.originalEvent.clientX) {
-                    m = wickEditor.fabric.screenToCanvasSpace(e.originalEvent.clientX, e.originalEvent.clientY);
+                    m = wickEditor.canvas.getFabricCanvas().screenToCanvasSpace(e.originalEvent.clientX, e.originalEvent.clientY);
                 } else {
-                    m = wickEditor.fabric.screenToCanvasSpace(window.innerWidth/2, window.innerHeight/2);
+                    m = wickEditor.canvas.getFabricCanvas().screenToCanvasSpace(window.innerWidth/2, window.innerHeight/2);
                 }
                 newWickObject.x = m.x;
                 newWickObject.y = m.y;

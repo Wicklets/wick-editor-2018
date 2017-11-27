@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
     
-var PaperInterface = function (wickEditor) {
+var PaperCanvas = function (wickEditor) {
 
     var self = this;
 
@@ -81,7 +81,7 @@ var PaperInterface = function (wickEditor) {
             curves: true,
             handles: true,
             stroke: true,
-            tolerance: 5 / wickEditor.fabric.getCanvasTransform().zoom
+            tolerance: 5 / wickEditor.canvas.getFabricCanvas().getCanvasTransform().zoom
         }
 
         hitResult = paper.project.hitTest(event.point, hitOptions);
@@ -105,7 +105,7 @@ var PaperInterface = function (wickEditor) {
     }
 
     self.updateViewTransforms = function () {
-        var canvasTransform = wickEditor.fabric.getCanvasTransform();
+        var canvasTransform = wickEditor.canvas.getFabricCanvas().getCanvasTransform();
         paper.view.matrix = new paper.Matrix();
         paper.view.matrix.translate(new paper.Point(canvasTransform.x,canvasTransform.y))
         paper.view.matrix.scale(canvasTransform.zoom)

@@ -34,10 +34,9 @@ Tools.Text = function (wickEditor) {
     }
 
     this.setup = function () {
-        var canvas = wickEditor.fabric.canvas;
-        canvas.on('mouse:down', function (e) {
+        wickEditor.canvas.getFabricCanvas().canvas.on('mouse:down', function (e) {
             if(wickEditor.currentTool instanceof Tools.Text && e.e.buttons === 1) {
-                var mouseCanvasSpace = wickEditor.fabric.screenToCanvasSpace(wickEditor.inputHandler.mouse.x, wickEditor.inputHandler.mouse.y)
+                var mouseCanvasSpace = wickEditor.canvas.getFabricCanvas().screenToCanvasSpace(wickEditor.inputHandler.mouse.x, wickEditor.inputHandler.mouse.y)
                 wickEditor.currentTool = wickEditor.tools.cursor;
                 self.addText(mouseCanvasSpace.x, mouseCanvasSpace.y);
                 //wickEditor.syncInterfaces();

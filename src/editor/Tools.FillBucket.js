@@ -43,7 +43,7 @@ Tools.FillBucket = function (wickEditor) {
 
     this.onSelected = function () {
         wickEditor.project.clearSelection();
-        wickEditor.paper.needsUpdate = true;
+        wickEditor.canvas.getPaperCanvas().needsUpdate = true;
     }
 
     this.paperTool = new paper.Tool();
@@ -58,7 +58,7 @@ Tools.FillBucket = function (wickEditor) {
             var hitOptions = {
                 fill: true,
                 stroke: true,
-                tolerance: 5 / wickEditor.fabric.getCanvasTransform().zoom
+                tolerance: 5 / wickEditor.canvas.getFabricCanvas().getCanvasTransform().zoom
             }
             hitResult = paper.project.hitTest(event.point, hitOptions);
             if(!hitResult) {
@@ -80,7 +80,7 @@ Tools.FillBucket = function (wickEditor) {
                     var superPathWickObject = WickObject.createPathObject(svgString);
                     superPathWickObject.x = hole.position.x;
                     superPathWickObject.y = hole.position.y;
-                    wickEditor.paper.pathRoutines.refreshPathData(superPathWickObject)
+                    wickEditor.canvas.getPaperCanvas().pathRoutines.refreshPathData(superPathWickObject)
                     wickEditor.actionHandler.doAction('addObjects', {
                         wickObjects: [superPathWickObject],
                         sendToBack: true,
@@ -89,9 +89,9 @@ Tools.FillBucket = function (wickEditor) {
                 }
             } else {
                 if(hitResult.type === 'fill') {
-                    wickEditor.paper.pathRoutines.setFillColor([event.item.wick], wickEditor.settings.fillColor);
+                    wickEditor.canvas.getPaperCanvas().pathRoutines.setFillColor([event.item.wick], wickEditor.settings.fillColor);
                 } else if (hitResult.type === 'stroke') {
-                    wickEditor.paper.pathRoutines.setStrokeColor([event.item.wick], wickEditor.settings.strokeColor);
+                    wickEditor.canvas.getPaperCanvas().pathRoutines.setStrokeColor([event.item.wick], wickEditor.settings.strokeColor);
                 }
             }
             

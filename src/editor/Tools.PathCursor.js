@@ -43,7 +43,7 @@ Tools.PathCursor = function (wickEditor) {
 
     this.onSelected = function () {
         wickEditor.project.clearSelection();
-        wickEditor.paper.needsUpdate = true;
+        wickEditor.canvas.getPaperCanvas().needsUpdate = true;
     }
 
     this.paperTool = new paper.Tool();
@@ -69,7 +69,7 @@ Tools.PathCursor = function (wickEditor) {
             fill: true,
             curves: true,
             handles: true,
-            tolerance: 5 / wickEditor.fabric.getCanvasTransform().zoom
+            tolerance: 5 / wickEditor.canvas.getFabricCanvas().getCanvasTransform().zoom
         }
         hitResult = paper.project.hitTest(event.point, hitOptions);
         if(hitResult) {
@@ -165,8 +165,8 @@ Tools.PathCursor = function (wickEditor) {
     }
 
     this.paperTool.onMouseMove = function(event) {
-        wickEditor.paper.highlightHoveredOverObject(event);
-        wickEditor.paper.updateCursorIcon(event);
+        wickEditor.canvas.getPaperCanvas().highlightHoveredOverObject(event);
+        wickEditor.canvas.getPaperCanvas().updateCursorIcon(event);
     }
 
     this.paperTool.onMouseDrag = function(event) {
@@ -233,7 +233,7 @@ Tools.PathCursor = function (wickEditor) {
         if(hitResult.item.parent._isPartOfGroup) return;
         if(wickEditor.currentTool instanceof Tools.FillBucket) return;
 
-        wickEditor.paper.pathRoutines.refreshSVGWickObject(hitResult.item);
+        wickEditor.canvas.getPaperCanvas().pathRoutines.refreshSVGWickObject(hitResult.item);
     }
 
 }

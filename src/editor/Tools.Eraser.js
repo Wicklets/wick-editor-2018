@@ -28,7 +28,7 @@ Tools.Eraser = function (wickEditor) {
         var context = canvas.getContext('2d');
         var centerX = canvas.width / 2;
         var centerY = canvas.height / 2;
-        var radius = wickEditor.settings.brushThickness/2;// * wickEditor.fabric.canvas.getZoom();
+        var radius = wickEditor.settings.brushThickness/2;
 
         context.beginPath();
         context.arc(centerX, centerY, radius+1, 0, 2 * Math.PI, false);
@@ -61,7 +61,7 @@ Tools.Eraser = function (wickEditor) {
 
     this.onSelected = function () {
         wickEditor.project.clearSelection();
-        wickEditor.paper.needsUpdate = true;
+        wickEditor.canvas.getPaperCanvas().needsUpdate = true;
     }
 
     this.onDeselected = function () {
@@ -96,14 +96,14 @@ Tools.Eraser = function (wickEditor) {
             totalDelta.y += event.delta.y;
         }
 
-        if (totalDelta.length > wickEditor.settings.brushThickness/2/wickEditor.fabric.canvas.getZoom()) {
+        if (totalDelta.length > wickEditor.settings.brushThickness/2/wickEditor.canvas.getFabricCanvas().canvas.getZoom()) {
 
             totalDelta.x = 0;
             totalDelta.y = 0;
 
             var thickness = event.delta.length;
             thickness /= wickEditor.settings.brushThickness/2;
-            thickness *= wickEditor.fabric.canvas.getZoom();
+            thickness *= wickEditor.canvas.getFabricCanvas().canvas.getZoom();
             
             var penPressure = wickEditor.inputHandler.getPenPressure(); 
 
@@ -126,14 +126,14 @@ Tools.Eraser = function (wickEditor) {
             path.smooth();
             path = path.unite(new paper.Path())
             var t = wickEditor.settings.brushThickness;
-            var z = wickEditor.fabric.canvas.getZoom();
+            var z = wickEditor.canvas.getFabricCanvas().canvas.getZoom();
             path.simplify(t / z * 0.2);
 
             var group = new paper.Group({insert:false});
             group.addChild(path);
 
             var svgString = group.exportSVG({asString:true});
-            wickEditor.paper.pathRoutines.eraseWithPath({
+            wickEditor.canvas.getPaperCanvas().pathRoutines.eraseWithPath({
                 pathData:svgString,
                 pathX: path.position.x,
                 pathY: path.position.y

@@ -28,7 +28,7 @@ Tools.Pencil = function (wickEditor) {
         var context = canvas.getContext('2d');
         var centerX = canvas.width / 2;
         var centerY = canvas.height / 2;
-        var radius = wickEditor.settings.strokeWidth/2 * wickEditor.fabric.canvas.getZoom();
+        var radius = wickEditor.settings.strokeWidth/2 * wickEditor.canvas.getFabricCanvas().canvas.getZoom();
 
         context.beginPath();
         context.arc(centerX, centerY, radius+1, 0, 2 * Math.PI, false);
@@ -57,7 +57,7 @@ Tools.Pencil = function (wickEditor) {
 
     this.onSelected = function () {
         wickEditor.project.clearSelection();
-        wickEditor.paper.needsUpdate = true;
+        wickEditor.canvas.getPaperCanvas().needsUpdate = true;
     }
 
     this.onDeselected = function () {
@@ -96,7 +96,7 @@ Tools.Pencil = function (wickEditor) {
             totalDelta.y += event.delta.y;
         }
 
-        if (totalDelta.length > wickEditor.settings.strokeWidth/wickEditor.fabric.canvas.getZoom()) {
+        if (totalDelta.length > wickEditor.settings.strokeWidth/wickEditor.canvas.getFabricCanvas().canvas.getZoom()) {
 
             totalDelta.x = 0;
             totalDelta.y = 0;
@@ -119,11 +119,11 @@ Tools.Pencil = function (wickEditor) {
                 if(wickEditor.settings.brushSmoothingAmount > 0) {
                     var t = wickEditor.settings.strokeWidth;
                     var s = wickEditor.settings.brushSmoothingAmount/100;
-                    var z = wickEditor.fabric.canvas.getZoom();
+                    var z = wickEditor.canvas.getFabricCanvas().canvas.getZoom();
                     path.simplify(t / z * s);
                 }
 
-                path.join(path, 10/wickEditor.fabric.canvas.getZoom())
+                path.join(path, 10/wickEditor.canvas.getFabricCanvas().canvas.getZoom())
             }
 
             path.remove();
@@ -138,7 +138,7 @@ Tools.Pencil = function (wickEditor) {
             pathWickObject.width = 1;
             pathWickObject.height = 1;
 
-            wickEditor.paper.pathRoutines.refreshPathData(pathWickObject);
+            wickEditor.canvas.getPaperCanvas().pathRoutines.refreshPathData(pathWickObject);
 
             wickEditor.actionHandler.doAction('addObjects', {
                 wickObjects: [pathWickObject],

@@ -88,7 +88,7 @@ var GuiActionHandler = function (wickEditor) {
         'Play/Pause Preview',
         {},
         function(args) {
-            wickEditor.previewplayer.togglePlaying();
+            //wickEditor.previewplayer.togglePlaying();
         });
 
     registerAction('previewToggleAndLoop',
@@ -96,7 +96,7 @@ var GuiActionHandler = function (wickEditor) {
         'Loop Preview',
         {},
         function(args) {
-            wickEditor.guiActionHandler.doAction('previewPlay', {loop:true});
+            //wickEditor.guiActionHandler.doAction('previewPlay', {loop:true});
         });
 
     registerAction('previewPlay',
@@ -104,7 +104,7 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function(args) {
-            wickEditor.previewplayer.play(args.loop);
+            //wickEditor.previewplayer.play(args.loop);
         });
 
     registerAction('previewPause',
@@ -112,7 +112,7 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function(args) {
-            wickEditor.previewplayer.stop();
+            //wickEditor.previewplayer.stop();
         });
 
     registerAction('stopRunningProject',
@@ -178,7 +178,7 @@ var GuiActionHandler = function (wickEditor) {
         'Recenter Canvas',
         {},
         function(args) {
-            wickEditor.fabric.recenterCanvas();
+            wickEditor.canvas.getFabricCanvas().recenterCanvas();
         });
 
     registerAction('exportProjectZIP',
@@ -198,14 +198,8 @@ var GuiActionHandler = function (wickEditor) {
         function(args) {
             that.keys = [];
             that.specialKeys = [];
-            if(!isElectronMode) {
-                WickProject.Exporter.autosaveProject(wickEditor.project);
-                //wickEditor.guiActionHandler.doAction('exportProjectJSON');
-            } else {
-                wickEditor.project.getAsJSON(function(JSONProject) {
-                    wickEditor.electron.saveProject(JSONProject, wickEditor.project.name);
-                }, '\t');
-            }
+            WickProject.Exporter.autosaveProject(wickEditor.project);
+            //wickEditor.guiActionHandler.doAction('exportProjectJSON');
         });
 
     registerAction('exportProjectHTML',
@@ -244,7 +238,7 @@ var GuiActionHandler = function (wickEditor) {
         {},
         function (args) {
             wickEditor.guiActionHandler.doAction('useTools.pathCursor')
-            wickEditor.paper.pathRoutines.getProjectAsSVG()
+            wickEditor.canvas.getPaperCanvas().pathRoutines.getProjectAsSVG()
         });
 
     registerAction('exportProjectPNG',
@@ -271,11 +265,7 @@ var GuiActionHandler = function (wickEditor) {
         {},
         function(args) {
             that.keys = [];
-            if(!isElectronMode) {
-                $('#importButton').click();
-            } else {
-                wickEditor.electron.openProject();
-            }
+            $('#importButton').click();
         });
 
     registerAction('importFile',
@@ -613,9 +603,9 @@ var GuiActionHandler = function (wickEditor) {
 
             wickEditor.actionHandler.clearHistory();
 
-            wickEditor.fabric.recenterCanvas();
+            wickEditor.canvas.getFabricCanvas().recenterCanvas();
             wickEditor.guiActionHandler.doAction("openProjectSettings");
-            wickEditor.paper.needsUpdate = true;
+            wickEditor.canvas.getPaperCanvas().needsUpdate = true;
             //wickEditor.thumbnailRenderer.renderAllThumbsOnTimeline();
             wickEditor.project.currentObject.framesDirty = true;
             wickEditor.syncInterfaces();
@@ -1109,7 +1099,7 @@ var GuiActionHandler = function (wickEditor) {
                     obj.textData.fill = args.color;
                 }
             })
-            wickEditor.paper.pathRoutines.setFillColor(wickEditor.project.getSelectedObjects(), args.color);
+            wickEditor.canvas.getPaperCanvas().pathRoutines.setFillColor(wickEditor.project.getSelectedObjects(), args.color);
         });
 
     registerAction('changeStrokeColorOfSelection', 
@@ -1117,7 +1107,7 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function (args) {
-            wickEditor.paper.pathRoutines.setStrokeColor(wickEditor.project.getSelectedObjects(), args.color);
+            wickEditor.canvas.getPaperCanvas().pathRoutines.setStrokeColor(wickEditor.project.getSelectedObjects(), args.color);
         });
 
     registerAction('changeStrokeWidthOfSelection',
@@ -1125,7 +1115,7 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function (args) {
-            wickEditor.paper.pathRoutines.setStrokeWidth(wickEditor.project.getSelectedObjects(), args.strokeWidth);
+            wickEditor.canvas.getPaperCanvas().pathRoutines.setStrokeWidth(wickEditor.project.getSelectedObjects(), args.strokeWidth);
         });
 
     registerAction('changeStrokeCapAndJoinOfSelection',
@@ -1133,7 +1123,7 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function (args) {
-            wickEditor.paper.pathRoutines.setStrokeCapAndJoin(
+            wickEditor.canvas.getPaperCanvas().pathRoutines.setStrokeCapAndJoin(
                 wickEditor.project.getSelectedObjects(), 
                 args.strokeCap,
                 args.strokeJoin);

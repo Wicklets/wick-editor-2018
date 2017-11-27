@@ -15,15 +15,12 @@
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
     
-var GIFRendererInterface = function (wickEditor) {
+var GIFRenderer = (function () {
 
 	var self = this;
 
-    self.setup = function () {
-        
-    }
+    self.renderProjectAsGIF = function (callback) {
 
-    self.syncWithEditorState = function () {
         if(!self.canvasContainer) {
             // we have to use the renderer from the preview player because pixi gets mad if theres >1 renderer
             // later just make a big global renderer owned by the editor that everybody can use
@@ -31,9 +28,6 @@ var GIFRendererInterface = function (wickEditor) {
             self.renderer = otherRenderer.renderer;
             self.canvasContainer = otherRenderer.canvasContainer;
         }
-    }
-
-    self.renderProjectAsGIF = function (callback) {
 
         var gifFrameDataURLs = [];
 
@@ -108,4 +102,6 @@ var GIFRendererInterface = function (wickEditor) {
         callback(dataURItoBlob(canvas.toDataURL()))
     }
 
-}
+    return self;
+
+})();

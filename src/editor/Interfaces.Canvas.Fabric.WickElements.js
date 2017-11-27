@@ -35,9 +35,9 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
         var enablePerfTests = false;
 
-        wickEditor.fabric.canvas.discardActiveObject();
-        wickEditor.fabric.canvas.renderAll();
-        wickEditor.fabric.canvas.getActiveObjects().forEach(function (fo) {
+        wickEditor.canvas.getFabricCanvas().canvas.discardActiveObject();
+        wickEditor.canvas.getFabricCanvas().canvas.renderAll();
+        wickEditor.canvas.getFabricCanvas().canvas.getActiveObjects().forEach(function (fo) {
             fo.setCoords();
         });
 
@@ -49,7 +49,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         var currentFrame = currentFrameRef;
 
         var activeObjects = currentObject.getAllActiveChildObjects();
-        if(wickEditor.paper.isActive()) {
+        if(wickEditor.canvas.getPaperCanvas().isActive()) {
             activeObjects = activeObjects.filter(function (obj) {
                 return obj.isImage || obj.isText;
             }); 
@@ -178,10 +178,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 fabricObj.wickObjectRef = objectToAdd;
                 fabricInterface.canvas.add(fabricObj);
 
-                if(fabricObj.type === "path") {
-                    // do this here to prevent flickering when you draw a path with fabric
-                    wickEditor.fabric.canvas.clearContext(wickEditor.fabric.canvas.contextTop);
-                }
                 updateFabObjPositioning(fabricObj, objectToAdd);
                 updateFabricObjectEvents(fabricObj, objectToAdd, activeObjects);
 
@@ -239,7 +235,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 var pathFabricObj = objects[0];
 
                 // Workaround for buggy fabric.js SVG opacity
-                if(!wickObj.paper) wickEditor.paper.pathRoutines.regenPaperJSState(wickObj)
+                if(!wickObj.paper) wickEditor.canvas.getPaperCanvas().pathRoutines.regenPaperJSState(wickObj)
                 if(wickObj.paper && wickObj.paper.fillColor) pathFabricObj.fill = wickObj.paper.fillColor.toCSS()
 
                 pathFabricObj.wickObjReference = wickObj;
@@ -270,25 +266,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                         
                         updateFabObjPositioning(fabricObj, child, true, wickObj);
                     }
-
-                    /*var boxCoords = {
-                        left: 1000000,
-                        right: -1000000,
-                        top: 1000000,
-                        bottom: -1000000,
-                    };
-                    children.forEach(function (child) {
-                        var bbox = child.fabricObjectReference.getBoundingRect();
-                        var bboxXY = wickEditor.fabric.screenToCanvasSpace(bbox.left, bbox.top);
-                        var bboxSize = {x:bbox.width, y:bbox.height};//wickEditor.fabric.screenToCanvasSize(bbox.width, bbox.height);
-                        bbox.left = bboxXY.x;
-                        bbox.top = bboxXY.y;
-                        bbox.width = bboxSize.x;
-                        bbox.height = bboxSize.y;
-                        child.bbox = bbox;
-                        boxCoords.left = Math.min(boxCoords.left, bbox.left);
-                        boxCoords.top = Math.min(boxCoords.top, bbox.top);
-                    });*/
 
                     for(var i = 0; i < Object.keys(wos).length; i++) {
                         var pair = wos[i]
@@ -396,15 +373,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         }
 
         fabricObj.setCoords();
-
-        /*var bbox = fabricObj.getBoundingRect();
-        var bboxXY = wickEditor.fabric.screenToCanvasSpace(bbox.left, bbox.top);
-        var bboxSize = wickEditor.fabric.screenToCanvasSize(bbox.width, bbox.height);
-        bbox.left = bboxXY.x;
-        bbox.top = bboxXY.y;
-        bbox.width = bboxSize.x;
-        bbox.height = bboxSize.y;
-        wickObj.bbox = bbox;*/
 
     }
 

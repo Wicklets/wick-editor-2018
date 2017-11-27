@@ -45,14 +45,14 @@ Tools.Pen = function (wickEditor) {
     }
 
     this.onSelected = function () {
-        wickEditor.paper.needsUpdate = true;
+        wickEditor.canvas.getPaperCanvas().needsUpdate = true;
     }
 
     this.paperTool = new paper.Tool();
 
     this.paperTool.onMouseMove = function (event) {
-        wickEditor.paper.highlightHoveredOverObject(event);
-        wickEditor.paper.updateCursorIcon(event);
+        wickEditor.canvas.getPaperCanvas().highlightHoveredOverObject(event);
+        wickEditor.canvas.getPaperCanvas().updateCursorIcon(event);
     }
 
     this.paperTool.onMouseDown = function (event) {
@@ -61,7 +61,7 @@ Tools.Pen = function (wickEditor) {
             fill: true,
             curves: true,
             handles: true,
-            tolerance: 5 / wickEditor.fabric.getCanvasTransform().zoom
+            tolerance: 5 / wickEditor.canvas.getFabricCanvas().getCanvasTransform().zoom
         }
 
         drawingPath = null;
@@ -109,7 +109,7 @@ Tools.Pen = function (wickEditor) {
                 pathWickObject.width = 1;
                 pathWickObject.height = 1;
 
-                wickEditor.paper.pathRoutines.refreshPathData(pathWickObject);
+                wickEditor.canvas.getPaperCanvas().pathRoutines.refreshPathData(pathWickObject);
 
                 wickEditor.actionHandler.doAction('addObjects', {
                     wickObjects: [pathWickObject]
@@ -141,7 +141,7 @@ Tools.Pen = function (wickEditor) {
 
     this.paperTool.onMouseUp = function (event) {
         if(currentSegment) {
-            wickEditor.paper.pathRoutines.refreshSVGWickObject(drawingPath);
+            wickEditor.canvas.getPaperCanvas().pathRoutines.refreshSVGWickObject(drawingPath);
             currentSegment = null;
             drawingPath = null;
         } else {

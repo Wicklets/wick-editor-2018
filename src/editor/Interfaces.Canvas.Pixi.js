@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
     
-var PreviewPlayer = function (wickEditor) {
+var PixiCanvas = function (wickEditor) {
 
 	var self = this;
 
@@ -131,8 +131,8 @@ var PreviewPlayer = function (wickEditor) {
     }
 
     function updateCanvasTransforms () {
-        var pan = wickEditor.fabric.getPan();
-        var zoom = wickEditor.fabric.canvas.getZoom();
+        var pan = wickEditor.canvas.getFabricCanvas().getPan();
+        var zoom = wickEditor.canvas.getFabricCanvas().canvas.getZoom();
 
         var width = wickEditor.project.width;
         var height = wickEditor.project.height;

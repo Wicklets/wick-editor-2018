@@ -34,19 +34,19 @@ Tools.Pan = function (wickEditor) {
     }
     
     this.setup = function () {
-        wickEditor.fabric.canvas.on('mouse:up', function (e) {
-            wickEditor.fabric.stopPan();
+        wickEditor.canvas.getFabricCanvas().canvas.on('mouse:up', function (e) {
+            wickEditor.canvas.getFabricCanvas().stopPan();
         });
 
-        wickEditor.fabric.canvas.on('mouse:down', function (e) {
+        wickEditor.canvas.getFabricCanvas().canvas.on('mouse:down', function (e) {
             if(wickEditor.currentTool instanceof Tools.Pan || e.e.buttons === 4) {
-                wickEditor.fabric.startPan();
+                wickEditor.canvas.getFabricCanvas().startPan();
             }
         });
         
-        wickEditor.fabric.canvas.on('mouse:move', function (e) {
-            if (wickEditor.fabric.panning && e && e.e) {
-                wickEditor.fabric.relativePan(e.e.movementX, e.e.movementY)
+        wickEditor.canvas.getFabricCanvas().canvas.on('mouse:move', function (e) {
+            if (wickEditor.canvas.getFabricCanvas().panning && e && e.e) {
+                wickEditor.canvas.getFabricCanvas().relativePan(e.e.movementX, e.e.movementY)
             }
         });
     }

@@ -20,7 +20,7 @@ if(!window.Tools) Tools = {};
 Tools.Ellipse = function (wickEditor) {
 
     var that = this;
-    var fabricInterface = wickEditor.fabric;
+    var fabricInterface = wickEditor.canvas.getFabricCanvas();
 
     var drawingEllipse;
     var topLeft;
@@ -93,7 +93,7 @@ Tools.Ellipse = function (wickEditor) {
         pathWickObject.width = 1;
         pathWickObject.height = 1;
 
-        wickEditor.paper.pathRoutines.refreshPathData(pathWickObject);
+        wickEditor.canvas.getPaperCanvas().pathRoutines.refreshPathData(pathWickObject);
 
         wickEditor.actionHandler.doAction('addObjects', {
             wickObjects: [pathWickObject],

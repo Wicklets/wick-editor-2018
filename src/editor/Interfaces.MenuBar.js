@@ -111,7 +111,7 @@ var MenuBarInterface = function (wickEditor) {
 
         tabs = [];
 
-        wickEditor.fabric.canvas.on('mouse:down', function (e) {
+        wickEditor.canvas.getCanvasContainer().addEventListener('mousedown', function (e) {
             closeAllMenus();
         });
 

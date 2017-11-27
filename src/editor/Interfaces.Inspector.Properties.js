@@ -281,7 +281,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
                 }]
             });
 
-            wickEditor.paper.needsUpdate = true;
+            wickEditor.canvas.getPaperCanvas().needsUpdate = true;
         }
     }));
 

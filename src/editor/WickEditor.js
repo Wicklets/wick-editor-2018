@@ -44,9 +44,6 @@ var WickEditor = function () {
     // Setup connection to backend
     this.backend = new WickDemoLoader(this);
 
-    // Setup thing that handles all the electron stuff
-    this.electron = new WickElectronWrapper(this);
-
     // Setup init project
     this.project = new WickProject();
 
@@ -61,7 +58,7 @@ var WickEditor = function () {
     }
 
     //this.thumbnailRenderer = registerInterface(new ThumbnailRendererInterface(this));
-    this.gifRenderer = registerInterface(new GIFRendererInterface(this));
+    //this.gifRenderer = registerInterface(new GIFRendererInterface(this));
     this.builtinplayer = registerInterface(new BuiltinPlayerInterface(this));
     this.scriptingide = registerInterface(new ScriptingIDEInterface(this));
     this.timeline = registerInterface(new TimelineInterface(this));
@@ -69,12 +66,13 @@ var WickEditor = function () {
     this.toolbar = registerInterface(new ToolbarInterface(this));
     this.inspector = registerInterface(new InspectorInterface(this));
     this.rightclickmenu = registerInterface(new RightClickMenuInterface(this));
-    this.paper = registerInterface(new PaperInterface(this));
-    this.fabric = registerInterface(new FabricInterface(this));
+    this.canvas = registerInterface(new CanvasInterface(this));
+    //this.paper = registerInterface(new PaperInterface(this));
+    //this.fabric = registerInterface(new FabricInterface(this));
     this.menubar = registerInterface(new MenuBarInterface(this));
     this.breadcrumbs = registerInterface(new BreadcrumbsInterface(this));
     this.alertbox = registerInterface(new AlertBoxInterface(this));
-    this.previewplayer = registerInterface(new PreviewPlayer(this));
+    //this.previewplayer = registerInterface(new PreviewPlayer(this));
     this.cursorIcon = registerInterface(new CursorIconInterface(this));
     this.colorPicker = registerInterface(new ColorPickerInterface(this));
     this.editorSettings = registerInterface(new EditorSettings(this));
@@ -119,7 +117,7 @@ var WickEditor = function () {
     // This is put after the first sync so the page loads before the editor asks to load an autosaved project
     // (and we gotta wait a little bit before loading it ... we want to make sure the editor is ready)
     setTimeout(function () {
-        if(!isElectronMode && !self.backend.active) {
+        if(!self.backend.active) {
             WickProject.Exporter.getAutosavedProject(function (project) {
                 wickEditor.guiActionHandler.doAction('openProject', {
                     project: project,
