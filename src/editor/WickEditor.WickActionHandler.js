@@ -113,6 +113,7 @@ var WickActionHandler = function (wickEditor) {
         // Put the action on the undo stack to be undone later
         var newAction = new StackAction(actionName, args);
 
+        newAction._selectionAtState = wickEditor.project.getSelectedObjectsUUIDs();
         if(!args.dontAddToStack) undoStack.push(newAction);
         newAction.doAction();
 
@@ -132,6 +133,11 @@ var WickActionHandler = function (wickEditor) {
 
         // Get last action on the undo stack
         var action = undoStack.pop();
+
+        wickEditor.project.clearSelection();
+        action._selectionAtState.forEach(function (uuid) {
+            wickEditor.project.selectObjectByUUID(uuid);
+        })
 
         // Do the action and put it on the redo stack to be redone later
         action.undoAction();

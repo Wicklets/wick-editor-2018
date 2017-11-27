@@ -103,9 +103,6 @@ var FabricInterface = function (wickEditor) {
     }
 
     this.syncWithEditorState = function () {
-
-        document.getElementById('fabricCanvas').style.display = wickEditor.previewplayer.playing ? 'none' : 'block'
-
         // Update cursor
         self.updateCursor();
 

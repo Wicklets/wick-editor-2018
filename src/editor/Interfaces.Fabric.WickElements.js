@@ -56,7 +56,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         }
         activeObjects = activeObjects.filter(function (obj) {
             return !obj.parentFrame.parentLayer.hidden;
-        });  
+        });
 
         /*var siblingObjects = currentObject.getAllInactiveSiblings();
         siblingObjects = siblingObjects.filter(function (obj) {

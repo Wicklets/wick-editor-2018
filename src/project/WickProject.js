@@ -566,7 +566,7 @@ WickProject.prototype.getSelectedObjectsUUIDs = function () {
     this._selection.forEach(function (uuid) {
         var obj = self.getObjectByUUID(uuid) 
                || self.getFrameByUUID(uuid);
-        if(obj) objs.push(obj.uuids);
+        if(obj) objs.push(obj.uuid);
     });
 
     return objs;
@@ -580,6 +580,12 @@ WickProject.prototype.selectObject = function (obj) {
     wickEditor.inspector.clearSpecialMode();
     if(this._selection.indexOf(obj.uuid) === -1)
         this._selection.push(obj.uuid);
+}
+
+WickProject.prototype.selectObjectByUUID = function (uuid) {
+    wickEditor.inspector.clearSpecialMode();
+    if(this._selection.indexOf(uuid) === -1)
+        this._selection.push(uuid);
 }
 
 WickProject.prototype.clearSelection = function () {

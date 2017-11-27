@@ -59,7 +59,6 @@ var PreviewPlayer = function (wickEditor) {
             var currObj = wickEditor.project.getCurrentObject();
 
             if(currObj.playheadPosition >= currObj.getTotalTimelineLength()) {
-                //wickEditor.project.getCurrentObject().playheadPosition -= 2;
                 if(loop) {
                     currObj.playheadPosition = 0;
                 } else {
@@ -71,11 +70,8 @@ var PreviewPlayer = function (wickEditor) {
 
             wickEditor.timeline.getElem().playhead.update();
             wickEditor.project.applyTweens();
-            canvasContainer.style.display = 'block';
-            document.getElementById('fabricCanvas').style.display = 'none';
             renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 2);
-            //wickEditor.thumbnailRenderer.syncWithEditorState();
-            //wickEditor.syncInterfaces();
+            
             currObj.layers.forEach(function (wickLayer) {
                 wickLayer.frames.forEach(function (wickFrame) {
                     if(wickFrame._soundDataForPreview && wickFrame.playheadPosition === currObj.playheadPosition) {
@@ -97,11 +93,8 @@ var PreviewPlayer = function (wickEditor) {
         })
 
         clearInterval(loopInterval)
-        document.getElementById('fabricCanvas').style.display = 'block';
-        canvasContainer.style.display = 'none'
         self.playing = false;
 
-        //wickEditor.project.rootObject.applyTweens();
         wickEditor.project.applyTweens();
         wickEditor.syncInterfaces();
     }
@@ -116,20 +109,15 @@ var PreviewPlayer = function (wickEditor) {
 
     this.startFastRendering = function () {
         this.playing = true;
-        document.getElementById('fabricCanvas').style.display = 'none';
         updateCanvasTransforms()
         renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 2);
     }
 
     this.stopFastRendering = function () {
         this.playing = false;
-        canvasContainer.style.display = 'none';
-        document.getElementById('fabricCanvas').style.display = 'block';
     }
 
     this.doFastRender = function () {
-        canvasContainer.style.display = 'block';
-        document.getElementById('fabricCanvas').style.display = 'none';
         updateCanvasTransforms()
         wickEditor.project.applyTweens();
         renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 2);
