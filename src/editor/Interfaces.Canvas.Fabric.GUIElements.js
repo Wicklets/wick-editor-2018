@@ -14,7 +14,7 @@
 
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
-    
+
 var FabricGUIElements = function (wickEditor, fabricInterface) {
 
 	var that = this;
@@ -35,7 +35,7 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
 
 // White box that shows resolution & objects that will be on screen when project is exported
 
-    var frameInside = new fabric.Rect({
+    /*var frameInside = new fabric.Rect({
         fill: '#FFF',
     });
 
@@ -46,7 +46,7 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
         frameInside.height = wickEditor.project.height;
         frameInside.setCoords();
     }
-    addElement(frameInside);
+    addElement(frameInside);*/
 
 // Fade that grays out inactive objects (the objects in the parent objects frame)
 
@@ -90,7 +90,7 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
             originCrosshair.setCoords();
         }
         addElement(originCrosshair);
-        fabricInterface.canvas.moveTo(originCrosshair, 1)
+        fabricInterface.canvas.moveTo(originCrosshair, 1);
 
         that.update();
     });

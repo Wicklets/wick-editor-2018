@@ -19,11 +19,10 @@ var PixiCanvas = function (wickEditor) {
 
 	var self = this;
 
-    var loopInterval;
-    var renderer;
+    var pixiRenderer;
     var canvasContainer;
 
-    var soundsPlaying = [];
+    var intervalID;
 
     this.setup = function () {
         this.playing = false;
@@ -33,101 +32,44 @@ var PixiCanvas = function (wickEditor) {
         canvasContainer.style.width = wickEditor.project.width+'px';
         canvasContainer.style.height = wickEditor.project.height+'px';
         document.getElementById('editorCanvasContainer').appendChild(canvasContainer);
-        renderer = new WickPixiRenderer(canvasContainer);
+        pixiRenderer = new WickPixiRenderer(canvasContainer);
     }
 
-    this.syncWithEditorState = function () {
-
-    }
-
-    this.play = function (loop) {
-        if(self.playing) return;
-
-        soundsPlaying = [];
-
-        self.playing = true;
-
+    this.update = function () {
         updateCanvasTransforms();
-
-        var currObj = wickEditor.project.getCurrentObject();
-        if(currObj.playheadPosition >= currObj.getTotalTimelineLength()-1) {
-            currObj.playheadPosition = 0;
-        }
-        renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 2);
-
-        loopInterval = setInterval(function () {
-            var currObj = wickEditor.project.getCurrentObject();
-
-            if(currObj.playheadPosition >= currObj.getTotalTimelineLength()) {
-                if(loop) {
-                    currObj.playheadPosition = 0;
-                } else {
-                    currObj.playheadPosition = currObj.getTotalTimelineLength()-1;
-                    self.stop();
-                    return;
-                }
-            }
-
-            wickEditor.timeline.getElem().playhead.update();
-            wickEditor.project.applyTweens();
-            renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 2);
-            
-            currObj.layers.forEach(function (wickLayer) {
-                wickLayer.frames.forEach(function (wickFrame) {
-                    if(wickFrame._soundDataForPreview && wickFrame.playheadPosition === currObj.playheadPosition) {
-                        wickFrame._soundDataForPreview.howl.play()
-                        soundsPlaying.push(wickFrame._soundDataForPreview.howl)
-                    }
-                });
-            });
-            currObj.playheadPosition ++;
-            
-        }, 1000/wickEditor.project.framerate);
-    }
-
-    this.stop = function () {
-        if(!self.playing) return;
-
-        soundsPlaying.forEach(function (howlSound) {
-            howlSound.stop();
-        })
-
-        clearInterval(loopInterval)
-        self.playing = false;
-
-        wickEditor.project.applyTweens();
-        wickEditor.syncInterfaces();
-    }
-
-    this.togglePlaying = function () {
-        if(self.playing) {
-            self.stop();
-        } else {
-            self.play();
-        }
+        canvasContainer.style.display = 'block';
+        // TODO render onion skin + sibling objects here
+        pixiRenderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 2, false);
     }
 
     this.startFastRendering = function () {
-        this.playing = true;
-        updateCanvasTransforms()
-        renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 2);
+        wickEditor.canvas.getFabricCanvas().hide();
+        wickEditor.canvas.getPaperCanvas().hide();
+
+        function proceed () {
+            pixiRenderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 2, true);
+        }
+
+        proceed();
+        loopInterval = setInterval(proceed, 1000/60);
     }
 
     this.stopFastRendering = function () {
-        this.playing = false;
-    }
+        wickEditor.canvas.getFabricCanvas().show();
+        wickEditor.canvas.getPaperCanvas().show();
 
-    this.doFastRender = function () {
-        updateCanvasTransforms()
-        wickEditor.project.applyTweens();
-        renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 2);
+        clearInterval(intervalID);
     }
 
     this.getRenderer = function () {
         return {
-            renderer: renderer,
+            renderer: pixiRenderer,
             canvasContainer: canvasContainer
         };
+    }
+
+    this.updateViewTransforms = function () {
+        updateCanvasTransforms();
     }
 
     function updateCanvasTransforms () {

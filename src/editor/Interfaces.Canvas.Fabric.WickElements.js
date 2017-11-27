@@ -49,7 +49,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         var currentFrame = currentFrameRef;
 
         var activeObjects = currentObject.getAllActiveChildObjects();
-        if(wickEditor.canvas.getPaperCanvas().isActive()) {
+        if(wickEditor.canvas.getPaperCanvas().isHidden()) {
             activeObjects = activeObjects.filter(function (obj) {
                 return obj.isImage || obj.isText;
             }); 
@@ -64,7 +64,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         });  */
         //var siblingObjects = [];
         //var nearbyObjects = wickEditor.project.onionSkinning ? wickEditor.project.currentObject.getNearbyObjects(1,1) : [];
-        var allObjects = activeObjects
+        var allObjects = activeObjects;
         //var allObjects = siblingObjects.concat(activeObjects);
 
         /*allObjects.forEach(function (o) {

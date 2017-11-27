@@ -55,15 +55,18 @@ Tools.Zoom = function (wickEditor) {
 
             if (wickEditor.inputHandler.specialKeys["Modifier"] || wickEditor.inputHandler.keys[keyCharToCode['ALT']]) {
                 wickEditor.canvas.getFabricCanvas().zoom(0.7, endX, endY);
-                wickEditor.canvas.getPaperCanvas().syncWithEditorState();
+                wickEditor.canvas.getPaperCanvas().update();
+                wickEditor.canvas.getPixiCanvas().update();
             } else if (diffX < 10 && diffY < 10) {
                 wickEditor.canvas.getFabricCanvas().zoom(1 / 0.7, endX, endY);
-                wickEditor.canvas.getPaperCanvas().syncWithEditorState();
+                wickEditor.canvas.getPaperCanvas().update();
+                wickEditor.canvas.getPixiCanvas().update();
             } else {
                 var wZoom = window.innerWidth/diffX*0.8;
                 var hZoom = window.innerHeight/diffY*0.8;
                 wickEditor.canvas.getFabricCanvas().zoom(Math.min(wZoom, hZoom), (startX+endX)/2, (startY+endY)/2-30);
-                wickEditor.canvas.getPaperCanvas().syncWithEditorState();
+                wickEditor.canvas.getPaperCanvas().update();
+                wickEditor.canvas.getPixiCanvas().update();
             }
         });
 
@@ -84,7 +87,8 @@ Tools.Zoom = function (wickEditor) {
             var e = window.event || e;
             var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
             wickEditor.canvas.getFabricCanvas().zoom(1.0 + delta*.1, wickEditor.inputHandler.mouse.x, wickEditor.inputHandler.mouse.y);
-            wickEditor.canvas.getPaperCanvas().syncWithEditorState();
+            wickEditor.canvas.getPaperCanvas().update();
+            wickEditor.canvas.getPixiCanvas().update();
         }
 
         return false;

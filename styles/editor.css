@@ -583,11 +583,12 @@ select {
     position: absolute;
     left: 0px;
     top: 0px;
-    background-color: #B7B7B7;
+    background-color: rgba(0,0,0,0);
     width: 100%;
     height: 100%;
     overflow: hidden;
     display: none;
+    pointer-events: none;
 }
 
 #builtinPlayerViewer {

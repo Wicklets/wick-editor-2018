@@ -22,6 +22,8 @@ var FabricCanvas = function (wickEditor) {
     var lastDoubleClickTime = null;
     var lastDoubleClickPos = {x:0,y:0};
 
+    var canvasContainer;
+
     self.setup = function () {
 
         fabric.Object.prototype.cornerStyle = 'circle'
@@ -34,7 +36,7 @@ var FabricCanvas = function (wickEditor) {
         fabric.Object.prototype.cornerSize = 8;
         fabric.Object.prototype.objectCaching = false;
 
-        var canvasContainer = document.createElement('canvas');
+        canvasContainer = document.createElement('canvas');
         canvasContainer.id = 'fabricCanvas';
         document.getElementById('editorCanvasContainer').appendChild(canvasContainer);
         self.canvas = new fabric.Canvas('fabricCanvas', {
@@ -150,7 +152,7 @@ var FabricCanvas = function (wickEditor) {
 
     }
 
-    this.syncWithEditorState = function () {
+    this.update = function () {
         // Update cursor
         self.updateCursor();
 
@@ -171,6 +173,13 @@ var FabricCanvas = function (wickEditor) {
 
         // Render canvas
         this.canvas.renderAll();
+    }
+
+    this.hide = function () {
+        canvasContainer.style.display = 'none';
+    }
+    this.show = function (newActive) {
+        canvasContainer.style.display = 'block';
     }
 
     // Syncs up fabric state with wickproject state
@@ -299,6 +308,7 @@ var FabricCanvas = function (wickEditor) {
         self.canvas.relativePan(delta)
         self.guiElements.update();
         wickEditor.canvas.getPaperCanvas().updateViewTransforms();
+        wickEditor.canvas.getPixiCanvas().updateViewTransforms();
     }
 
     this.absolutePan = function (x,y) {
@@ -306,6 +316,7 @@ var FabricCanvas = function (wickEditor) {
         self.canvas.absolutePan(delta)
         self.guiElements.update();
         wickEditor.canvas.getPaperCanvas().updateViewTransforms();
+        wickEditor.canvas.getPixiCanvas().updateViewTransforms();
     }
 
     this.startPan = function () {

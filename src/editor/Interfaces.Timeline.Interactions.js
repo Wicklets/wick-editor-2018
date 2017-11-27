@@ -408,20 +408,22 @@ TimelineInterface.Interactions = function (wickEditor, timeline) {
             var shift = -timeline.horizontalScrollBar.getScrollPosition();
             timeline.playhead.setPosition(e.pageX-timelineOffset-shift);
             wickEditor.project.getCurrentObject().playheadPosition = timeline.playhead.getFramePosition();
-            wickEditor.previewplayer.startFastRendering();
-            wickEditor.previewplayer.doFastRender();
+            //wickEditor.previewplayer.startFastRendering();
+            //wickEditor.previewplayer.doFastRender();
+            wickEditor.canvas.getPixiCanvas().startFastRendering();
         }), 
         'update' : (function (e) {
             var shift = -timeline.horizontalScrollBar.getScrollPosition();
             timeline.playhead.setPosition(e.pageX-timelineOffset-shift);
             if(timeline.playhead.frameDidChange()) {
                 wickEditor.project.getCurrentObject().playheadPosition = timeline.playhead.getFramePosition();
-                wickEditor.previewplayer.doFastRender();
+                //wickEditor.previewplayer.doFastRender();
             }
         }),
         'finish' : (function (e) {
             timeline.playhead.snap();
-            wickEditor.previewplayer.stopFastRendering();
+            //wickEditor.previewplayer.stopFastRendering();
+            wickEditor.canvas.getPixiCanvas().stopFastRendering();
             wickEditor.actionHandler.doAction('movePlayhead', {
                 obj: wickEditor.project.getCurrentObject(),
                 newPlayheadPosition: timeline.playhead.getFramePosition(),

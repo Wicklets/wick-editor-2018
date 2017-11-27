@@ -52,7 +52,13 @@ var PaperCanvas = function (wickEditor) {
 
     }
 
-    self.isActive = function () {
+    self.show = function () {
+        paperCanvas.style.display = 'block'
+    }
+    self.hide = function () {
+        paperCanvas.style.display = 'none'
+    }
+    self.isHidden = function () {
         return active;
     }
 
@@ -111,16 +117,14 @@ var PaperCanvas = function (wickEditor) {
         paper.view.matrix.scale(canvasTransform.zoom)
     }
 
-    self.syncWithEditorState = function () {
-
-        var lastActive = active;
+    self.update = function () {
 
         active = wickEditor.currentTool.getCanvasMode() === 'paper';
 
         if(active) {
             wickEditor.currentTool.paperTool.activate();
             paperCanvas.style.cursor = wickEditor.currentTool.getCursorImage()
-            paperCanvas.style.display = 'block';
+            self.show();
 
             refreshSelection();
             self.updateViewTransforms();
@@ -160,11 +164,9 @@ var PaperCanvas = function (wickEditor) {
 
             refreshSelection();
         } else {
-            active = false;
-
             wickEditor.cursorIcon.hide();
 
-            paperCanvas.style.display = 'none';
+            self.hide();
         }
 
     }

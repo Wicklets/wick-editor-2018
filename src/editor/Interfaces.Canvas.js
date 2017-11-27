@@ -38,9 +38,9 @@ var CanvasInterface = function (wickEditor) {
     }
 
     self.syncWithEditorState = function () {
-        fabricCanvas.syncWithEditorState();
-        paperCanvas.syncWithEditorState();
-        pixiCanvas.syncWithEditorState();
+        paperCanvas.update();
+        fabricCanvas.update();
+        pixiCanvas.update();
     }
 
     self.getCanvasContainer = function () {

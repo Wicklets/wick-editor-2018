@@ -21,7 +21,7 @@ var WickPixiRenderer = function (canvasContainer) {
 
     var SVG_SCALE = 1.4;
 
-    renderer = PIXI.autoDetectRenderer(720, 480, {
+    renderer = PIXI.autoDetectRenderer(100, 100, {
         backgroundColor : "#FFFFFF", 
         resolution: window.devicePixelRatio,
         preserveDrawingBuffer: true,
@@ -62,12 +62,6 @@ var WickPixiRenderer = function (canvasContainer) {
                 container.position.y = project.height/renderExtraSpace;
             }
         }
-
-        var graphics = new PIXI.Graphics();
-        graphics.beginFill(parseInt(project.backgroundColor.replace("#","0x")));
-        graphics.drawRect(0, 0, project.width, project.height);
-        graphics.endFill();
-        renderer.render(graphics);
 
         for (uuid in pixiSprites) {
             pixiSprites[uuid].visible = false;

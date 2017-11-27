@@ -179,6 +179,8 @@ var GuiActionHandler = function (wickEditor) {
         {},
         function(args) {
             wickEditor.canvas.getFabricCanvas().recenterCanvas();
+            wickEditor.canvas.getPaperCanvas().updateViewTransforms();
+            wickEditor.canvas.getPixiCanvas().updateViewTransforms();
         });
 
     registerAction('exportProjectZIP',
