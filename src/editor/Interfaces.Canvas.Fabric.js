@@ -309,6 +309,7 @@ var FabricCanvas = function (wickEditor) {
         self.guiElements.update();
         wickEditor.canvas.getPaperCanvas().updateViewTransforms();
         wickEditor.canvas.getPixiCanvas().updateViewTransforms();
+        wickEditor.canvas.getBackdrop().updateViewTransforms();
     }
 
     this.absolutePan = function (x,y) {
@@ -317,6 +318,7 @@ var FabricCanvas = function (wickEditor) {
         self.guiElements.update();
         wickEditor.canvas.getPaperCanvas().updateViewTransforms();
         wickEditor.canvas.getPixiCanvas().updateViewTransforms();
+        wickEditor.canvas.getBackdrop().updateViewTransforms();
     }
 
     this.startPan = function () {

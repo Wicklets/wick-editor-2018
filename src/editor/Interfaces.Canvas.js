@@ -23,24 +23,29 @@ var CanvasInterface = function (wickEditor) {
     var paperCanvas;
     var pixiCanvas;
 
+    var canvasBackdrop;
     var canvasContainer;
 
     self.setup = function () {
         canvasContainer = document.getElementById('editorCanvasContainer')
 
+        canvasBackdrop = new CanvasBackdrop(wickEditor, canvasContainer);
+        canvasBackdrop.setup();
+
         fabricCanvas = new FabricCanvas(wickEditor);
         paperCanvas = new PaperCanvas(wickEditor);
         pixiCanvas = new PixiCanvas(wickEditor);
 
+        pixiCanvas.setup();
         fabricCanvas.setup();
         paperCanvas.setup();
-        pixiCanvas.setup();
     }
 
     self.syncWithEditorState = function () {
         paperCanvas.update();
         fabricCanvas.update();
         pixiCanvas.update();
+        canvasBackdrop.update();
     }
 
     self.getCanvasContainer = function () {
@@ -57,6 +62,10 @@ var CanvasInterface = function (wickEditor) {
 
     self.getPixiCanvas = function () {
         return pixiCanvas;
+    }
+
+    self.getBackdrop = function () {
+        return canvasBackdrop;
     }
 
 }
