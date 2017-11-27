@@ -1318,46 +1318,50 @@ WickObject.prototype.tick = function () {
     if(this.isButton) {
         this.stop();
         if(this._beingClicked) {
-            this.movePlayheadTo('mousedown');
+            this.movePlayheadTo('mouseDown');
         } else if (this.hoveredOver) {
-            this.movePlayheadTo('mouseover');
+            this.movePlayheadTo('mouseHover');
         } else {
-            this.movePlayheadTo('mouseup');
+            this.movePlayheadTo('mouseUp');
         }
     }
 
     // Input events
 
     if(this._wasClicked) {
-        (wickPlayer || wickEditor).project.runScript(this, 'mousedown');
+        (wickPlayer || wickEditor).project.runScript(this, 'mouseDown');
         this._wasClicked = false;
     }
 
+    if(this._wasClickedOff) {
+        (wickPlayer || wickEditor).project.runScript(this, 'mouseUp');
+        this._wasClickedOff = false;
+    }
+
+    if(this.isHoveredOver()) {
+        (wickPlayer || wickEditor).project.runScript(this, 'mouseHover');
+    }
+
     if(this._wasHoveredOver) {
-        (wickPlayer || wickEditor).project.runScript(this, 'mouseover');
+        (wickPlayer || wickEditor).project.runScript(this, 'mouseEnter');
         this._wasHoveredOver = false;
     }
 
     if(this._mouseJustLeft) {
-        (wickPlayer || wickEditor).project.runScript(this, 'mouseout');
+        (wickPlayer || wickEditor).project.runScript(this, 'mouseLeave');
         this._mouseJustLeft = false;
     }
 
-    if(this._wasClickedOff) {
-        (wickPlayer || wickEditor).project.runScript(this, 'mouseup');
-        this._wasClickedOff = false;
-    }
-
     wickPlayer.inputHandler.getAllKeysJustReleased().forEach(function (key) {
-        (wickPlayer || wickEditor).project.runScript(self, 'keyreleased', key);
+        (wickPlayer || wickEditor).project.runScript(self, 'keyReleased', key);
     });
 
     wickPlayer.inputHandler.getAllKeysJustPressed().forEach(function (key) {
-        (wickPlayer || wickEditor).project.runScript(self, 'keypressed', key);
+        (wickPlayer || wickEditor).project.runScript(self, 'keyPressed', key);
     });
 
     wickPlayer.inputHandler.getAllKeysDown().forEach(function (key) {
-        (wickPlayer || wickEditor).project.runScript(self, 'keydown', key);
+        (wickPlayer || wickEditor).project.runScript(self, 'keyDown', key);
     });
 
     // Inactive -> Inactive

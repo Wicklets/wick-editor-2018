@@ -33,6 +33,8 @@ var PixiCanvas = function (wickEditor) {
         canvasContainer.style.height = wickEditor.project.height+'px';
         document.getElementById('editorCanvasContainer').appendChild(canvasContainer);
         pixiRenderer = new WickPixiRenderer(canvasContainer);
+
+        canvasContainer.style.opacity = '0.5';
     }
 
     this.update = function () {

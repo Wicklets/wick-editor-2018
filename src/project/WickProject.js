@@ -647,8 +647,8 @@ WickProject.prototype.loadBuiltinFunctions = function (contextObject) {
     window.mouseY = wickPlayer.inputHandler.getMouse().y;
     window.mouseMoveX = wickPlayer.inputHandler.getMouseDiff().x;
     window.mouseMoveY = wickPlayer.inputHandler.getMouseDiff().y;
-    window.hideCursor = function () { wickPlayer.hideCursor(); };
-    window.showCursor = function () { wickPlayer.showCursor(); };
+    window.hideCursor = function () { wickPlayer.inputHandler.hideCursor(); };
+    window.showCursor = function () { wickPlayer.inputHandler.showCursor(); };
 
     // WickObjects in same frame (scope) are accessable without using root./parent.
     if(objectScope) {
@@ -681,13 +681,14 @@ WickProject.prototype.runScript = function (obj, fnName, arg1, arg2, arg3) {
 var WickObjectBuiltins = [
     'load',
     'update',
-    'mousedown',
-    'mouseover',
-    'mouseup',
-    "mouseout",
-    "keypressed",
-    "keydown",
-    "keyreleased",
+    'mouseDown',
+    'mouseUp',
+    'mouseHover',
+    'mouseEnter',
+    "mouseLeave",
+    "keyPressed",
+    "keyDown",
+    "keyReleased",
 ];
 
 WickProject.prototype.loadScriptOfObject = function (obj) {
@@ -698,13 +699,14 @@ WickProject.prototype.loadScriptOfObject = function (obj) {
         var dummy = {};
         var load = undefined;
         var update = undefined;
-        var mousedown = undefined;
-        var mouseover = undefined;
-        var mouseup = undefined;
-        var mouseout = undefined;
-        var keydown = undefined;
-        var keypressed = undefined;
-        var keyreleased = undefined;
+        var mouseDown = undefined;
+        var mouseUp = undefined;
+        var mouseHover = undefined;
+        var mouseEnter = undefined;
+        var mouseLeave = undefined;
+        var keyDown = undefined;
+        var keyPressed = undefined;
+        var keyReleased = undefined;
         obj._scopeWrapper = function () {
             var dummyLoaderScript = "";
             WickObjectBuiltins.forEach(function (builtinName) {
@@ -727,7 +729,6 @@ WickProject.prototype.loadScriptOfObject = function (obj) {
             }
         })
     } catch (e) { 
-        console.log(window.wickEditor)
         if (window.wickEditor) {
             //if(!wickEditor.builtinplayer.running) return;
 
