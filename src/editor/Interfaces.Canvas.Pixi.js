@@ -41,7 +41,7 @@ var PixiCanvas = function (wickEditor) {
         updateCanvasTransforms();
         canvasContainer.style.display = 'block';
         // TODO render onion skin + sibling objects here
-        pixiRenderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 2, false);
+        pixiRenderer.renderWickObjects(wickEditor.project, [], 2, false);
     }
 
     this.startFastRendering = function () {
@@ -53,7 +53,7 @@ var PixiCanvas = function (wickEditor) {
         }
 
         proceed();
-        loopInterval = setInterval(proceed, 1000/60);
+        intervalID = setInterval(proceed, 1000/60);
     }
 
     this.stopFastRendering = function () {
