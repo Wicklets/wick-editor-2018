@@ -80,6 +80,11 @@ var PixiCanvas = function (wickEditor) {
         previewPlaying = true;
         self.startFastRendering();
 
+        var currObj = wickEditor.project.currentObject;
+        if(currObj.playheadPosition >= currObj.getTotalTimelineLength()-1) {
+            currObj.playheadPosition = 0;
+        }
+
         function proceed () {
             var currObj = wickEditor.project.currentObject;
             currObj.playheadPosition ++;
@@ -95,8 +100,7 @@ var PixiCanvas = function (wickEditor) {
 
             wickEditor.timeline.getElem().playhead.update();
         }
-
-        proceed();
+        
         previewPlayIntervalID = setInterval(proceed, wickEditor.project.framerate);
     }
 

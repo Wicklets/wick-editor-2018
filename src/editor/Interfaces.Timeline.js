@@ -76,7 +76,6 @@ TimelineInterface.Timeline = function (wickEditor) {
     this.interactions = new TimelineInterface.Interactions(wickEditor, this);
     this.interactions.setup();
 
-    var smallFramesModeButton;
     var onionSkinningButton;
 
     this.build = function () {
@@ -129,19 +128,6 @@ TimelineInterface.Timeline = function (wickEditor) {
         });
         this.elem.appendChild(onionSkinningButton);
 
-        smallFramesModeButton = document.createElement('div');
-        smallFramesModeButton.className = 'layer-tools-button small-frames-button tooltipElem';
-        smallFramesModeButton.setAttribute('alt', "Toggle Small Frame Mode");
-        smallFramesModeButton.style.backgroundColor = wickEditor.project.smallFramesMode ? 'orange' : '#F0EFEF';
-        smallFramesModeButton.addEventListener('mousedown', function (e) {
-            wickEditor.project.smallFramesMode = !wickEditor.project.smallFramesMode;
-            wickEditor.project.currentObject.framesDirty = true;
-            resetFrameSize();
-            wickEditor.syncInterfaces();
-        });
-        wickEditor.project.currentObject.framesDirty = true;
-        resetFrameSize();
-        this.elem.appendChild(smallFramesModeButton);
 
         var previewPlayButton = document.createElement('div');
         previewPlayButton.className = 'layer-tools-button play-preview-button tooltipElem';
@@ -232,7 +218,6 @@ TimelineInterface.Timeline = function (wickEditor) {
         this.verticalScrollBar.update();
 
         onionSkinningButton.style.backgroundColor = wickEditor.project.onionSkinning ? 'orange' : '#F0EFEF';
-        smallFramesModeButton.style.backgroundColor = wickEditor.project.smallFramesMode ? 'orange' : '#F0EFEF';
 
         this.updateZoomBox();
 
@@ -250,8 +235,8 @@ TimelineInterface.Timeline = function (wickEditor) {
     }
 
     var resetFrameSize = function () {
-        var newFrameWidth = wickEditor.project.smallFramesMode ? 20 : 20;
-        var newHandleWidth = wickEditor.project.smallFramesMode ? 3 : 5;
+        var newFrameWidth = 20;
+        var newHandleWidth = 5;
         document.body.style.setProperty('--frame-width', newFrameWidth+'px');
         document.body.style.setProperty('--frame-handle-width', newHandleWidth+'px');
     }
