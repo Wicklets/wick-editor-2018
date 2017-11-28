@@ -129,7 +129,7 @@ body {
 .add-layer-button {
     position: absolute;
     top: 5px;
-    left: 25px;
+    left: 5px;
     background-image: url("../resources/plusButton.svg");
 }
 .add-layer-button:hover {
@@ -139,7 +139,7 @@ body {
 .delete-layer-button {
     position: absolute;
     top: 5px;
-    left: 45px;
+    left: 25px;
     background-image: url("../resources/minusButton.svg");
     
 }
@@ -151,7 +151,7 @@ body {
 .onion-skin-button {
     position: absolute;
     top: 5px;
-    left: 65px;
+    left: 110px;
     background-image: url("../resources/onion.png");
     
 }
