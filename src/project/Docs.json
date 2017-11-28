@@ -81,39 +81,47 @@
           "args": []
         },
         {
-          "name": "mousedown",
-          "description": "Gets called when the object is clicked",
-          "example": "// Delete this object when it's clicked.\nfunction mousedown() {\n    this.delete();\n}",
-          "snippet": "function mousedown() {\n    // Do something here!\n}\n",
+          "name": "mousePressed",
+          "description": "Gets called once when the object is pressed",
+          "example": "// Delete this object when it's pressed.\nfunction mousedown() {\n    this.delete();\n}",
+          "snippet": "function mousePressed() {\n    // Do something here!\n}\n",
           "return": null,
           "args": []
         },
         {
-          "name": "mouseover",
-          "description": "Gets called when the mouse is over the object.",
-          "example": "// Move this object when the mouse hovers over it\nfunction mouseover() {\n    this.x ++;\n}",
-          "snippet": "function mouseover() {\n    // Do something here!\n}\n",
+          "name": "mouseReleased",
+          "description": "Gets called once when the mouse is released over the object.",
+          "example": "// Delete this object when it's clicked.\nfunction mouseReleased() {\n    this.delete();\n}",
+          "snippet": "function mouseReleased() {\n    // Do something here!\n}\n",
           "return": null,
           "args": []
         },
         {
-          "name": "mouseup",
-          "description": "Gets called when after the mouse clicks the object",
-          "example": "// Delete this object when it's clicked.\nfunction mouseup() {\n    this.delete();\n}",
-          "snippet": "function mouseup() {\n    // Do something here!\n}\n",
+          "name": "mouseHover",
+          "description": "Gets called every update when the mouse hovers over the object.",
+          "example": "// Move this object when the mouse hovers over it\nfunction mouseHover() {\n    this.x ++;\n}",
+          "snippet": "function mouseHover() {\n    // Do something here!\n}\n",
           "return": null,
           "args": []
         },
         {
-          "name": "mouseout",
-          "description": "Gets called when after the mouse leaves the object",
-          "example": "// Delete the object if the mouse ever leaves.\nfunction mouseup() {\n    this.delete();\n}",
-          "snippet": "function mouseout() {\n    // Do something here!\n}\n",
+          "name": "mouseEnter",
+          "description": "Gets called once when the mouse enters the object",
+          "example": "// Delete the object if the mouse touches it.\nfunction mouseEnter() {\n    this.delete();\n}",
+          "snippet": "function mouseEnter() {\n    // Do something here!\n}\n",
           "return": null,
           "args": []
         },
         {
-          "name": "keypressed",
+          "name": "mouseLeave",
+          "description": "Gets called once when the mouse leaves the object",
+          "example": "// Delete the object if the mouse ever leaves.\nfunction mouseLeave() {\n    this.delete();\n}",
+          "snippet": "function mouseLeave() {\n    // Do something here!\n}\n",
+          "return": null,
+          "args": []
+        },
+        {
+          "name": "keyPressed",
           "description": "Gets called once when a key is first pressed.",
           "example": "function keypressed(key) {\n    if (key == 'UP') {\n        this.x += 20; //Move 20 pixels to the right\n    }\n}",
           "snippet": "function keypressed(key) {\n    // Do something here!\n}\n",
@@ -121,7 +129,7 @@
           "args": []
         },
         {
-          "name": "keyreleased",
+          "name": "keyReleased",
           "description": "Gets called once when a key is released.",
           "example": "function keyreleased(key) {\n    if (key == 'z') {\n        //user is no longer pressing z\n    }\n}",
           "snippet": "function keyreleased(key) {\n    // Do something here!\n}\n",
@@ -129,10 +137,10 @@
           "args": []
         },
         {
-          "name": "keydown",
+          "name": "keyDown",
           "description": "Gets called once every update while a key is down.",
-          "example": "function keydown(key) {\n    if (key == 'UP') {\n        this.x += 20; //Move 20 pixels to the right\n    }\n}",
-          "snippet": "function keydown(key) {\n    // Do something here!\n}\n",
+          "example": "function keyDown(key) {\n    if (key == 'UP') {\n        this.x += 20; //Move 20 pixels to the right\n    }\n}",
+          "snippet": "function keyDown(key) {\n    // Do something here!\n}\n",
           "return": null,
           "args": []
         }

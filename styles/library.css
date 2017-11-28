@@ -14,13 +14,14 @@
 }
 
 #tree {
-  	border-radius: 3px;
+  	border-radius: 0px 0px 2px 2px;
 	position: absolute;
 	width: 100%;
 	border: none;
 	background-color: white;
 	height: 175px;
 	overflow-y: auto;
+	background-color: #CFCFCF;
 }
 
 #draggedAsset {
@@ -37,6 +38,6 @@
 }
 
 #fancytree-container {
-	border-radius: 3px;
+	border-radius: 2px;
 	background-color: rgba(0,0,0,0);
 }
