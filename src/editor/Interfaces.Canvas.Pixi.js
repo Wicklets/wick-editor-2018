@@ -81,7 +81,19 @@ var PixiCanvas = function (wickEditor) {
         self.startFastRendering();
 
         function proceed () {
-            pixiRenderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 2, true);
+            var currObj = wickEditor.project.currentObject;
+            currObj.playheadPosition ++;
+
+            if(currObj.playheadPosition >= currObj.getTotalTimelineLength()) {
+                if(loop) {
+                    currObj.playheadPosition = 0;
+                } else {
+                    currObj.playheadPosition -= 1;
+                    self.stopPreviewPlaying();
+                }
+            }
+
+            wickEditor.timeline.getElem().playhead.update();
         }
 
         proceed();
@@ -92,7 +104,9 @@ var PixiCanvas = function (wickEditor) {
         previewPlaying = false;
         self.stopFastRendering();
 
-        clearInterval(previewPlayIntervalID)
+        clearInterval(previewPlayIntervalID);
+
+        wickEditor.syncInterfaces();
     }
 
     this.togglePreviewPlaying = function () {
