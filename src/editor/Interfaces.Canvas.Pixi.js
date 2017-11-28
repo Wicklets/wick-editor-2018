@@ -22,10 +22,15 @@ var PixiCanvas = function (wickEditor) {
     var pixiRenderer;
     var canvasContainer;
 
-    var intervalID;
+    var fastRenderIntervalID;
+    var previewPlayIntervalID;
+
+    var fastRendering;
+    var previewPlaying;
 
     this.setup = function () {
-        this.playing = false;
+        fastRendering = false;
+        previewPlaying = false;
 
         canvasContainer = document.createElement('div');
         canvasContainer.id = 'previewRenderContainer';
@@ -40,11 +45,17 @@ var PixiCanvas = function (wickEditor) {
     this.update = function () {
         updateCanvasTransforms();
         canvasContainer.style.display = 'block';
-        // TODO render onion skin + sibling objects here
-        pixiRenderer.renderWickObjects(wickEditor.project, [], 2, false);
+        
+        var inactiveObjects = [];
+        if (wickEditor.project.onionSkinning) {
+            inactiveObjects = wickEditor.project.currentObject.getNearbyObjects(1,1)
+        }
+        pixiRenderer.renderWickObjects(wickEditor.project, inactiveObjects, 2, false);
     }
 
     this.startFastRendering = function () {
+        fastRendering = true;
+
         wickEditor.canvas.getFabricCanvas().hide();
         wickEditor.canvas.getPaperCanvas().hide();
 
@@ -53,14 +64,43 @@ var PixiCanvas = function (wickEditor) {
         }
 
         proceed();
-        intervalID = setInterval(proceed, 1000/60);
+        fastRenderIntervalID = setInterval(proceed, 1000/60);
     }
 
     this.stopFastRendering = function () {
+        fastRendering = true;
+
         wickEditor.canvas.getFabricCanvas().show();
         wickEditor.canvas.getPaperCanvas().show();
 
-        clearInterval(intervalID);
+        clearInterval(fastRenderIntervalID);
+    }
+
+    this.startPreviewPlaying = function (loop) {
+        previewPlaying = true;
+        self.startFastRendering();
+
+        function proceed () {
+            pixiRenderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 2, true);
+        }
+
+        proceed();
+        previewPlayIntervalID = setInterval(proceed, wickEditor.project.framerate);
+    }
+
+    this.stopPreviewPlaying = function () {
+        previewPlaying = false;
+        self.stopFastRendering();
+
+        clearInterval(previewPlayIntervalID)
+    }
+
+    this.togglePreviewPlaying = function () {
+        if(previewPlaying) {
+            self.stopPreviewPlaying();
+        } else {
+            self.startPreviewPlaying();
+        }
     }
 
     this.getRenderer = function () {

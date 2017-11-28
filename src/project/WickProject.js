@@ -681,8 +681,8 @@ WickProject.prototype.runScript = function (obj, fnName, arg1, arg2, arg3) {
 var WickObjectBuiltins = [
     'load',
     'update',
-    'mouseDown',
-    'mouseUp',
+    'mousePressed',
+    'mouseReleased',
     'mouseHover',
     'mouseEnter',
     "mouseLeave",
@@ -699,8 +699,8 @@ WickProject.prototype.loadScriptOfObject = function (obj) {
         var dummy = {};
         var load = undefined;
         var update = undefined;
-        var mouseDown = undefined;
-        var mouseUp = undefined;
+        var mousePressed = undefined;
+        var mouseReleased = undefined;
         var mouseHover = undefined;
         var mouseEnter = undefined;
         var mouseLeave = undefined;
