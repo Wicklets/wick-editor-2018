@@ -994,7 +994,9 @@ WickObject.prototype.movePlayheadTo = function (frame) {
                 this._newPlayheadPosition = foundPlayRange.start;
             }
         } else if (foundFrame) {
-            this._newPlayheadPosition = foundFrame.playheadPosition;
+            if(this.playheadPosition < foundFrame.playheadPosition || this.playheadPosition >= foundFrame.playheadPosition+foundFrame.length-1) {
+                this._newPlayheadPosition = foundFrame.playheadPosition;
+            }
         } else {
             throw (new Error("Failed to navigate to frame. \'" + frame + "\' is not a valid frame."));
         }

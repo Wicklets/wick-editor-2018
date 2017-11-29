@@ -22,6 +22,7 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
     var thumbnailDiv = null;
     var waveformDiv = null;
     var hasScriptsIconDiv = null;
+    var nameDiv = null;
 
     this.wickFrame = null;
     this.wickLayer = null;
@@ -101,6 +102,10 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
         waveformDiv.className = "frame-waveform";
         this.elem.appendChild(waveformDiv);
 
+        nameDiv = document.createElement('div');
+        nameDiv.className = "frame-name";
+        this.elem.appendChild(nameDiv);
+
         selectionOverlayDiv = document.createElement('div');
         selectionOverlayDiv.className = "selection-overlay";
         this.elem.appendChild(selectionOverlayDiv);
@@ -147,6 +152,8 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
         hasScriptsIconDiv.onclick = function () {
             wickEditor.guiActionHandler.doAction('editScripts')
         }
+
+        nameDiv.innerHTML = this.wickFrame.name || '';
 
         if(this.wickFrame.audioAssetUUID) {
             thumbnailDiv.style.display = 'none';
