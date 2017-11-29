@@ -104,6 +104,7 @@ var PixiCanvas = function (wickEditor) {
             wickEditor.timeline.getElem().playhead.update();
         }
 
+        wickEditor.timeline.getElem().playhead.update();
         previewPlayIntervalID = setInterval(proceed, wickEditor.project.framerate);
     }
 
