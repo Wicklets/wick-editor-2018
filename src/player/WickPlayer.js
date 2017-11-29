@@ -54,6 +54,7 @@ var WickPlayer = function () {
 
         self.canvasContainer.style.width = self.project.width+'px';
         self.canvasContainer.style.height = self.project.height+'px';
+        self.canvasContainer.style.backgroundColor = self.project.backgroundColor;
 
         self.project.rootObject.generateObjectNameReferences(self.project.rootObject);
         initialStateProject.rootObject.generateObjectNameReferences(initialStateProject.rootObject);
