@@ -38,23 +38,25 @@ var PixiCanvas = function (wickEditor) {
         canvasContainer.style.height = wickEditor.project.height+'px';
         document.getElementById('editorCanvasContainer').appendChild(canvasContainer);
         pixiRenderer = new WickPixiRenderer(canvasContainer);
-
-        canvasContainer.style.opacity = '0.5';
     }
 
     this.update = function () {
         updateCanvasTransforms();
         canvasContainer.style.display = 'block';
+        canvasContainer.style.opacity = '0.5';
         
-        var inactiveObjects = [];
+        var nearbyObjects = wickEditor.project.currentObject.getAllInactiveSiblings();
+        var inactiveObjects = nearbyObjects;
         if (wickEditor.project.onionSkinning) {
-            inactiveObjects = wickEditor.project.currentObject.getNearbyObjects(1,1)
+            var onionSkinObjects = wickEditor.project.currentObject.getNearbyObjects(1,1);
+            inactiveObjects = inactiveObjects.concat(onionSkinObjects)
         }
         pixiRenderer.renderWickObjects(wickEditor.project, inactiveObjects, 2, false);
     }
 
     this.startFastRendering = function () {
         fastRendering = true;
+        canvasContainer.style.opacity = '1.0';
 
         wickEditor.canvas.getFabricCanvas().hide();
         wickEditor.canvas.getPaperCanvas().hide();
@@ -69,6 +71,7 @@ var PixiCanvas = function (wickEditor) {
 
     this.stopFastRendering = function () {
         fastRendering = true;
+        canvasContainer.style.opacity = '0.5';
 
         wickEditor.canvas.getFabricCanvas().show();
         wickEditor.canvas.getPaperCanvas().show();
@@ -100,7 +103,7 @@ var PixiCanvas = function (wickEditor) {
 
             wickEditor.timeline.getElem().playhead.update();
         }
-        
+
         previewPlayIntervalID = setInterval(proceed, wickEditor.project.framerate);
     }
 
