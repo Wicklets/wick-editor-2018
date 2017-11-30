@@ -22,6 +22,8 @@ Tools.Pencil = function (wickEditor) {
     var that = this;
 
     this.getCursorImage = function () {
+        return 'default';
+
         var canvas = document.createElement("canvas");
         canvas.width = 128;
         canvas.height = 128;
