@@ -340,6 +340,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         if(isChild) {
             var absTrans = wickObj.getAbsoluteTransformations()
             var parentAbsTrans = parentWickObj.getAbsoluteTransformations();
+            fabricObj.left    = absTrans.position.x;
+            fabricObj.top     = absTrans.position.y;
             fabricObj.scaleX  = absTrans.scale.x / parentAbsTrans.scale.x;
             fabricObj.scaleY  = absTrans.scale.y / parentAbsTrans.scale.y;
             fabricObj.angle   = absTrans.rotation - parentAbsTrans.rotation;
