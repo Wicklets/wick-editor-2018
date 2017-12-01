@@ -62,6 +62,7 @@ var PixiCanvas = function (wickEditor) {
         wickEditor.canvas.getPaperCanvas().hide();
 
         function proceed () {
+            wickEditor.project.applyTweens();
             pixiRenderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 2, true);
         }
 
@@ -102,7 +103,6 @@ var PixiCanvas = function (wickEditor) {
             }
 
             wickEditor.timeline.getElem().playhead.update();
-            wickEditor.project.applyTweens();
         }
 
         wickEditor.timeline.getElem().playhead.update();
