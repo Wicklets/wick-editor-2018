@@ -230,7 +230,7 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function (args) {
-            wickEditor.gifRenderer.renderProjectAsGIF(function (blob) {
+            GIFRenderer.renderProjectAsGIF(function (blob) {
                 saveAs(blob, wickEditor.project.name+".gif");
             });
         });
@@ -249,7 +249,7 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function (args) {
-            wickEditor.gifRenderer.renderProjectAsPNG(function (blob) {
+            GIFRenderer.renderProjectAsPNG(function (blob) {
                 saveAs(blob, wickEditor.project.name+".png");
             });
         });

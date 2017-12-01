@@ -21,7 +21,7 @@ var WickPixiRenderer = function (canvasContainer) {
 
     var SVG_SCALE = 1.4;
 
-    renderer = PIXI.autoDetectRenderer(100, 100, {
+    var renderer = PIXI.autoDetectRenderer(100, 100, {
         backgroundColor : "#FFFFFF", 
         resolution: window.devicePixelRatio,
         preserveDrawingBuffer: true,
@@ -42,8 +42,19 @@ var WickPixiRenderer = function (canvasContainer) {
 
     var wickProject;
 
+    var graphics = new PIXI.Graphics();
+    
+    container.addChild(graphics);
+
     self.renderWickObjects = function (project, wickObjects, renderExtraSpace) {
         if(!renderExtraSpace) renderExtraSpace = 1;
+
+        graphics.beginFill(parseInt(project.backgroundColor.replace("#","0x")));
+        graphics.moveTo(0, 0);
+        graphics.lineTo(project.width, 0);
+        graphics.lineTo(project.width, project.height);
+        graphics.lineTo(0, project.height);
+        graphics.endFill();
 
         wickProject = project;
 
@@ -52,6 +63,11 @@ var WickPixiRenderer = function (canvasContainer) {
             preloadAllAssets(project);
         }
 
+        container.position.x = 0;
+        container.position.y = 0;
+        renderer.resize(project.width*renderExtraSpace, project.height*renderExtraSpace);
+        renderer.view.style.width  = project.width*renderExtraSpace  + "px";
+        renderer.view.style.height = project.height*renderExtraSpace + "px";
         if(renderer.width !== project.width || renderer.height !== project.height) {
             renderer.resize(project.width*renderExtraSpace, project.height*renderExtraSpace);
             renderer.view.style.width  = project.width*renderExtraSpace  + "px";

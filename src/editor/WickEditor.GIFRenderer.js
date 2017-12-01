@@ -24,7 +24,7 @@ var GIFRenderer = (function () {
         if(!self.canvasContainer) {
             // we have to use the renderer from the preview player because pixi gets mad if theres >1 renderer
             // later just make a big global renderer owned by the editor that everybody can use
-            var otherRenderer = wickEditor.previewplayer.getRenderer();
+            var otherRenderer = wickEditor.canvas.getPixiCanvas().getRenderer();
             self.renderer = otherRenderer.renderer;
             self.canvasContainer = otherRenderer.canvasContainer;
         }
@@ -39,12 +39,22 @@ var GIFRenderer = (function () {
         for (var i = 0; i < len; i++) {
             wickEditor.project.rootObject.playheadPosition = i;
             wickEditor.project.applyTweens();
-            self.renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects());
+            //self.renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects());
+            self.renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 1);
             var canvas = self.canvasContainer.children[0];
             gifFrameDataURLs.push(canvas.toDataURL());
         }
 
-        var gif;
+        gif = new GIF({
+            workers: 2,
+            quality: 10,
+            workerScript: 'lib/gif.worker.js',
+            background: '#FF0000',
+            width: wickEditor.project.width,
+            height: wickEditor.project.height,
+        });
+
+        /*var gif;
         if(wickEditor.project.transparent) {
             gif = new GIF({
                 workers: 2,
@@ -63,7 +73,7 @@ var GIFRenderer = (function () {
                 width: wickEditor.project.width,
                 height: wickEditor.project.height,
             });
-        }
+        }*/
 
         var gifFrameImages = [];
 
