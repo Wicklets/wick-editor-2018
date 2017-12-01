@@ -49,6 +49,7 @@ var WickPixiRenderer = function (canvasContainer) {
     self.renderWickObjects = function (project, wickObjects, renderExtraSpace) {
         if(!renderExtraSpace) renderExtraSpace = 1;
 
+        graphics.clear();
         graphics.beginFill(parseInt(project.backgroundColor.replace("#","0x")));
         graphics.moveTo(0, 0);
         graphics.lineTo(project.width, 0);
@@ -164,7 +165,6 @@ var WickPixiRenderer = function (canvasContainer) {
             if(textureSrc)
                 wickObject.generateAlphaMask(textureSrc);
         }
-        
     }
 
     function regenPixiPath (wickObject, pixiSprite) {
