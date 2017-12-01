@@ -30,8 +30,8 @@
 								"name": "shootingstar",
 								"x": 638.8164128737181,
 								"y": -57.80520280792405,
-								"width": 180.90998030074945,
-								"height": 79.66338645052633,
+								"width": 188.33295242672477,
+								"height": 86.76514725149593,
 								"scaleX": 1,
 								"scaleY": 1,
 								"rotation": 0,
@@ -431,8 +431,8 @@
 									}
 								],
 								"playRanges": [],
-								"svgWidth": 180.90998030074957,
-								"svgHeight": 79.66338645052633,
+								"svgWidth": 131.8330666987074,
+								"svgHeight": 60.73560307604714,
 								"svgStrokeWidth": 0,
 								"bbox": {
 									"left": 540.1253722530421,
@@ -442,7 +442,8 @@
 								},
 								"_zindex": 1,
 								"framesDirty": false,
-								"forceFabricCanvasRegen": false
+								"forceFabricCanvasRegen": false,
+								"_frameUUID": "d86e8eb4-cc26-4cc2-b672-9f67e2f4a64c"
 							},
 							{
 								"uuid": "0b82e943-61e7-461e-8688-50683e88a132",
@@ -478,8 +479,8 @@
 														"name": "ghost",
 														"x": 0,
 														"y": -21.9672638513253,
-														"width": 651.1457634180845,
-														"height": 307.17348432421693,
+														"width": 426.0929968518927,
+														"height": 262.60027229734936,
 														"scaleX": 1,
 														"scaleY": 1,
 														"rotation": 0,
@@ -506,8 +507,8 @@
 																				"name": "poof",
 																				"x": -281.40784264654224,
 																				"y": -145.3067421621085,
-																				"width": 87.330078125,
-																				"height": 15.559999999999995,
+																				"width": 86.330078125,
+																				"height": 30.289599999999993,
 																				"scaleX": 1,
 																				"scaleY": 1,
 																				"rotation": 0,
@@ -577,7 +578,8 @@
 																										"forceFabricCanvasRegen": false,
 																										"_tempZIndex": 4,
 																										"uuid": "074515c4-5750-4575-943e-4543535080f0",
-																										"name": ""
+																										"name": "",
+																										"_frameUUID": "0b8186a3-310c-4310-9dc5-21dc34fa26ec"
 																									}
 																								],
 																								"tweens": [],
@@ -619,15 +621,16 @@
 																										"svgX": 101.99999743001024,
 																										"svgY": 2,
 																										"svgStrokeWidth": 4,
-																										"svgWidth": 246.74496,
-																										"svgHeight": 276,
+																										"svgWidth": 172.72147199999995,
+																										"svgHeight": 193.20000000000002,
 																										"bbox": {
 																											"left": 99.99999743001024,
 																											"top": 9.999999999999972,
 																											"width": 246.74496,
 																											"height": 276
 																										},
-																										"_zindex": 1
+																										"_zindex": 0,
+																										"_frameUUID": "018536fb-ec17-4ec1-8936-80932b35ff76"
 																									}
 																								],
 																								"tweens": [],
@@ -669,15 +672,16 @@
 																										"svgX": 110.40644708325098,
 																										"svgY": 14.454578303044507,
 																										"svgStrokeWidth": 4,
-																										"svgWidth": 228.80165999999997,
-																										"svgHeight": 248.65738999999994,
+																										"svgWidth": 160.16116199999993,
+																										"svgHeight": 174.06017299999996,
 																										"bbox": {
 																											"left": 108.40644708325101,
 																											"top": 22.454578303044542,
 																											"width": 228.80165999999997,
 																											"height": 248.65738999999994
 																										},
-																										"_zindex": 0
+																										"_zindex": 0,
+																										"_frameUUID": "55fa6d8e-5e41-45e4-bd52-8fd5cf019315"
 																									}
 																								],
 																								"tweens": [],
@@ -878,16 +882,17 @@
 																										"svgX": 102.31087576949722,
 																										"svgY": 12.310878339486955,
 																										"svgStrokeWidth": 4,
-																										"svgWidth": 284.4770350418148,
-																										"svgHeight": 318.27945417022715,
+																										"svgWidth": 199.13392452927036,
+																										"svgHeight": 222.79561791915899,
 																										"bbox": {
 																											"left": 80.31087576949724,
 																											"top": -15.689121660513024,
 																											"width": 284.4770350418148,
 																											"height": 318.27945417022715
 																										},
-																										"_zindex": 14,
-																										"uuid": "c52aab8a-cf46-4cf4-9a76-8da745ed18da"
+																										"_zindex": 0,
+																										"uuid": "c52aab8a-cf46-4cf4-9a76-8da745ed18da",
+																										"_frameUUID": "65335f75-566e-4566-8c3a-50c3560da9bb"
 																									}
 																								],
 																								"tweens": [],
@@ -905,8 +910,8 @@
 																					}
 																				],
 																				"playRanges": [],
-																				"svgWidth": 87.330078125,
-																				"svgHeight": 15.559999999999995,
+																				"svgWidth": 60.43105468750002,
+																				"svgHeight": 21.20272,
 																				"svgStrokeWidth": 0,
 																				"bbox": {
 																					"left": -189,
@@ -914,10 +919,11 @@
 																					"width": 87.330078125,
 																					"height": 15.559999999999995
 																				},
-																				"_zindex": 12,
+																				"_zindex": 4,
 																				"forceFabricCanvasRegen": false,
 																				"framesDirty": false,
-																				"uuid": "9ac2c566-f41b-4f41-b644-cb64a2b76c3b"
+																				"uuid": "9ac2c566-f41b-4f41-b644-cb64a2b76c3b",
+																				"_frameUUID": "829ee5f9-ce3d-4ce3-b1c6-cf1c5f59b613"
 																			}
 																		],
 																		"tweens": [],
@@ -2654,7 +2660,7 @@
 																					"width": 203.0402302857009,
 																					"height": 204.29746027048185
 																				},
-																				"_zindex": 8,
+																				"_zindex": 0,
 																				"forceFabricCanvasRegen": false,
 																				"svgX": 128.2777275036918,
 																				"svgY": 68.5480120268676,
@@ -2662,7 +2668,8 @@
 																				"svgWidth": 203.04023028570097,
 																				"svgHeight": 204.29746027048188,
 																				"_tempZIndex": 0,
-																				"uuid": "48419c72-d44d-4d44-917f-f117772711fd"
+																				"uuid": "48419c72-d44d-4d44-917f-f117772711fd",
+																				"_frameUUID": "f4448b41-af2c-4af2-bb5c-0bb5ec026b75"
 																			},
 																			{
 																				"x": 28.20251657734974,
@@ -2694,7 +2701,7 @@
 																					"width": 77.26887991359138,
 																					"height": 33.580361776659515
 																				},
-																				"_zindex": 9,
+																				"_zindex": 1,
 																				"forceFabricCanvasRegen": false,
 																				"svgX": 219.3659192670963,
 																				"svgY": 141.2270085391922,
@@ -2702,7 +2709,8 @@
 																				"svgWidth": 77.26887991359149,
 																				"svgHeight": 33.580361776659515,
 																				"_tempZIndex": 1,
-																				"uuid": "5f51abf9-3cd3-43cd-aa3c-eea3efab8354"
+																				"uuid": "5f51abf9-3cd3-43cd-aa3c-eea3efab8354",
+																				"_frameUUID": "f4448b41-af2c-4af2-bb5c-0bb5ec026b75"
 																			},
 																			{
 																				"x": 11.817977543814607,
@@ -2734,7 +2742,7 @@
 																					"width": 18.024820000000005,
 																					"height": 21.407100000000014
 																				},
-																				"_zindex": 10,
+																				"_zindex": 2,
 																				"forceFabricCanvasRegen": false,
 																				"svgX": 232.60341019035684,
 																				"svgY": 135.91944197191702,
@@ -2742,7 +2750,8 @@
 																				"svgWidth": 18.024820000000005,
 																				"svgHeight": 21.407100000000014,
 																				"_tempZIndex": 2,
-																				"uuid": "77def79f-fe32-4fe3-a79a-5279fc8f3800"
+																				"uuid": "77def79f-fe32-4fe3-a79a-5279fc8f3800",
+																				"_frameUUID": "f4448b41-af2c-4af2-bb5c-0bb5ec026b75"
 																			},
 																			{
 																				"x": 43.36029032144819,
@@ -2774,7 +2783,7 @@
 																					"width": 18.05434000000008,
 																					"height": 20.554740000000038
 																				},
-																				"_zindex": 11,
+																				"_zindex": 3,
 																				"forceFabricCanvasRegen": false,
 																				"svgX": 264.1309629679904,
 																				"svgY": 136.09472966667394,
@@ -2782,7 +2791,8 @@
 																				"svgWidth": 18.054340000000025,
 																				"svgHeight": 20.554740000000038,
 																				"_tempZIndex": 3,
-																				"uuid": "306b7a52-9701-4970-b8c9-638c9a529935"
+																				"uuid": "306b7a52-9701-4970-b8c9-638c9a529935",
+																				"_frameUUID": "f4448b41-af2c-4af2-bb5c-0bb5ec026b75"
 																			}
 																		],
 																		"tweens": [],
@@ -2800,9 +2810,9 @@
 															}
 														],
 														"playRanges": [],
-														"_zindex": 8,
-														"svgWidth": 651.1457634180845,
-														"svgHeight": 307.17348432421693,
+														"_zindex": 1,
+														"svgWidth": 298.2650977963249,
+														"svgHeight": 183.82019060814451,
 														"svgStrokeWidth": 0,
 														"bbox": {
 															"left": 92.40784264654224,
@@ -2811,7 +2821,8 @@
 															"height": 307.17348432421693
 														},
 														"forceFabricCanvasRegen": false,
-														"framesDirty": false
+														"framesDirty": false,
+														"_frameUUID": "d98fc08a-ef97-4ef9-b9e0-9f9e7f93d3d3"
 													}
 												],
 												"tweens": [
@@ -2880,8 +2891,8 @@
 														"name": "shadow",
 														"x": -0.40784264654223534,
 														"y": 107.72599398656621,
-														"width": 143,
-														"height": 33,
+														"width": 142,
+														"height": 32,
 														"scaleX": 1,
 														"scaleY": 1,
 														"rotation": 0,
@@ -2961,8 +2972,8 @@
 														],
 														"playRanges": [],
 														"_zindex": 0,
-														"svgWidth": 143,
-														"svgHeight": 33,
+														"svgWidth": 99.39999999999998,
+														"svgHeight": 22.399999999999977,
 														"svgStrokeWidth": 0,
 														"bbox": {
 															"left": 92,
@@ -2970,7 +2981,8 @@
 															"width": 143,
 															"height": 33
 														},
-														"forceFabricCanvasRegen": false
+														"forceFabricCanvasRegen": false,
+														"_frameUUID": "d1dc5b0a-667b-4667-83af-c83a508c38a3"
 													}
 												],
 												"tweens": [
@@ -3031,8 +3043,8 @@
 									}
 								],
 								"playRanges": [],
-								"svgWidth": 426.0929968518926,
-								"svgHeight": 306.1448,
+								"svgWidth": 298.2650977963249,
+								"svgHeight": 214.30135999999993,
 								"svgStrokeWidth": 0,
 								"bbox": {
 									"left": -100.6650390625,
@@ -3042,813 +3054,8 @@
 								},
 								"_zindex": 2,
 								"framesDirty": false,
-								"forceFabricCanvasRegen": false
-							},
-							{
-								"uuid": "22d59d0b-eb27-4eb2-bafc-5faf9b08cd89",
-								"name": "letter_w",
-								"x": 416.4998541537699,
-								"y": 183.15350925703981,
-								"width": 85.75812431812892,
-								"height": 71.03770177979442,
-								"scaleX": 1,
-								"scaleY": 1,
-								"rotation": 0,
-								"flipX": false,
-								"flipY": false,
-								"opacity": 1,
-								"wickScript": "function%20mousedown()%20%7B%0A%20%20%20%20logo.ghost.poof.play();%0A%20%20%20%20logo.ghost.gotoNextFrame();%0A%7D%0A",
-								"assetUUID": null,
-								"volume": 1,
-								"loop": false,
-								"isText": false,
-								"textData": false,
-								"isSymbol": true,
-								"isButton": true,
-								"playheadPosition": 0,
-								"currentLayer": 0,
-								"layers": [
-									{
-										"frames": [
-											{
-												"identifier": "",
-												"wickObjects": [
-													{
-														"uuid": "01adfffa-23ce-423c-a521-c252a2738fee",
-														"x": 0,
-														"y": 0,
-														"width": 84.75812431812892,
-														"height": 70.03770177979442,
-														"scaleX": 1,
-														"scaleY": 1,
-														"rotation": 0,
-														"flipX": false,
-														"flipY": false,
-														"opacity": 1,
-														"wickScript": "",
-														"assetUUID": null,
-														"volume": 1,
-														"loop": false,
-														"isText": false,
-														"textData": false,
-														"isSymbol": false,
-														"isButton": false,
-														"playheadPosition": null,
-														"currentLayer": null,
-														"isPath": true,
-														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20fill=%22#3e3e3e%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M364.34795,147.04648c0,0%20-1.8175,-7.32336%204.82959,-8.72594c6.64709,-1.40257%207.36423,5.59254%207.36423,5.59254l9.79742,43.43654l11.24914,-40.74556c0,0%201.11568,-8.20145%208.63836,-8.23434c7.52269,-0.03289%208.86286,7.78361%208.86286,7.78361l11.51482,40.86852l10.01709,-42.64883c0,0%201.97701,-7.42335%207.86498,-6.06198c5.88797,1.36137%204.15435,8.47001%204.15435,8.47001l-13.21959,54.07401c0,0%20-0.46075,7.04024%20-8.07611,6.99342c-7.61536,-0.04683%20-7.93976,-7.17703%20-7.93976,-7.17703l-12.66376,-46.46531l-12.63995,45.99946c0,0%20-1.37102,7.87713%20-8.31545,7.96603c-6.94443,0.0889%20-8.29474,-7.92863%20-8.29474,-7.92863z%22/%3E%3C/g%3E",
-														"forceFabricCanvasRegen": false,
-														"svgX": 364.1207919947054,
-														"svgY": 138.1346583671426,
-														"svgStrokeWidth": 1,
-														"_zindex": 5,
-														"svgWidth": 85.75812431812881,
-														"svgHeight": 71.03770177979442,
-														"bbox": {
-															"left": 283.4998541537699,
-															"top": -31.846490742960185,
-															"width": 85.75812431812892,
-															"height": 71.03770177979442
-														},
-														"_tempZIndex": 0
-													}
-												],
-												"tweens": [],
-												"pathData": null,
-												"playheadPosition": 0,
-												"length": 1,
-												"alwaysSaveState": false,
-												"uuid": "fb214fa6-0ae9-40ae-9193-7119751a307e",
-												"wickScript": ""
-											},
-											{
-												"identifier": "",
-												"wickObjects": [
-													{
-														"uuid": "9467f654-ba68-4ba6-8a12-a8a100f434d8",
-														"x": 0,
-														"y": 2.842170943040401e-14,
-														"width": 84.75812431812886,
-														"height": 70.03770177979445,
-														"scaleX": 1,
-														"scaleY": 1,
-														"rotation": 0,
-														"flipX": false,
-														"flipY": false,
-														"opacity": 1,
-														"wickScript": "",
-														"assetUUID": null,
-														"volume": 1,
-														"loop": false,
-														"isText": false,
-														"textData": false,
-														"isSymbol": false,
-														"isButton": false,
-														"playheadPosition": null,
-														"currentLayer": null,
-														"svgX": 374.1207919947054,
-														"svgY": 148.13465836714263,
-														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20fill=%22#000000%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M374.34795,157.04648c0,0%20-1.8175,-7.32336%204.82959,-8.72594c6.64709,-1.40257%207.36423,5.59254%207.36423,5.59254l9.79742,43.43654l11.24914,-40.74556c0,0%201.11568,-8.20145%208.63836,-8.23434c7.52269,-0.03289%208.86286,7.78361%208.86286,7.78361l11.51482,40.86852l10.01709,-42.64883c0,0%201.97701,-7.42335%207.86498,-6.06198c5.88797,1.36137%204.15435,8.47001%204.15435,8.47001l-13.21959,54.07401c0,0%20-0.46075,7.04024%20-8.07611,6.99342c-7.61536,-0.04683%20-7.93976,-7.17703%20-7.93976,-7.17703l-12.66376,-46.46531l-12.63995,45.99946c0,0%20-1.37102,7.87713%20-8.31545,7.96603c-6.94443,0.0889%20-8.29474,-7.92863%20-8.29474,-7.92863z%22/%3E%3C/g%3E",
-														"isPath": true,
-														"cachedAbsolutePosition": {
-															"x": 406.4998541537699,
-															"y": 183.15350925703981
-														},
-														"svgStrokeWidth": 1,
-														"svgWidth": 85.75812431812892,
-														"svgHeight": 71.03770177979447,
-														"bbox": {
-															"left": 373.6207919947054,
-															"top": 147.6346583671426,
-															"width": 85.75812431812892,
-															"height": 71.03770177979447
-														},
-														"_zindex": 5,
-														"forceFabricCanvasRegen": false
-													}
-												],
-												"tweens": [],
-												"pathData": null,
-												"playheadPosition": 1,
-												"length": 1,
-												"alwaysSaveState": false,
-												"uuid": "533fd0c5-be1a-4be1-aced-c6ce9be10504",
-												"wickScript": ""
-											},
-											{
-												"identifier": "",
-												"wickObjects": [
-													{
-														"uuid": "361a8fb3-f3fb-4f3f-b364-3f36ef56e3ef",
-														"x": 0,
-														"y": 2.842170943040401e-14,
-														"width": 84.75812431812886,
-														"height": 70.03770177979445,
-														"scaleX": 1,
-														"scaleY": 1,
-														"rotation": 0,
-														"flipX": false,
-														"flipY": false,
-														"opacity": 1,
-														"wickScript": "",
-														"assetUUID": null,
-														"volume": 1,
-														"loop": false,
-														"isText": false,
-														"textData": false,
-														"isSymbol": false,
-														"isButton": false,
-														"playheadPosition": null,
-														"currentLayer": null,
-														"svgX": 374.1207919947054,
-														"svgY": 148.13465836714263,
-														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20fill=%22#16da80%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M374.34795,157.04648c0,0%20-1.8175,-7.32336%204.82959,-8.72594c6.64709,-1.40257%207.36423,5.59254%207.36423,5.59254l9.79742,43.43654l11.24914,-40.74556c0,0%201.11568,-8.20145%208.63836,-8.23434c7.52269,-0.03289%208.86286,7.78361%208.86286,7.78361l11.51482,40.86852l10.01709,-42.64883c0,0%201.97701,-7.42335%207.86498,-6.06198c5.88797,1.36137%204.15435,8.47001%204.15435,8.47001l-13.21959,54.07401c0,0%20-0.46075,7.04024%20-8.07611,6.99342c-7.61536,-0.04683%20-7.93976,-7.17703%20-7.93976,-7.17703l-12.66376,-46.46531l-12.63995,45.99946c0,0%20-1.37102,7.87713%20-8.31545,7.96603c-6.94443,0.0889%20-8.29474,-7.92863%20-8.29474,-7.92863z%22/%3E%3C/g%3E",
-														"isPath": true,
-														"cachedAbsolutePosition": {
-															"x": 406.4998541537699,
-															"y": 183.15350925703984
-														},
-														"svgStrokeWidth": 1,
-														"svgWidth": 85.75812431812881,
-														"svgHeight": 71.03770177979447,
-														"bbox": {
-															"left": 373.6207919947054,
-															"top": 147.6346583671426,
-															"width": 85.75812431812892,
-															"height": 71.03770177979447
-														},
-														"_zindex": 5,
-														"forceFabricCanvasRegen": false
-													}
-												],
-												"tweens": [],
-												"pathData": null,
-												"playheadPosition": 2,
-												"length": 1,
-												"alwaysSaveState": false,
-												"uuid": "64939241-f685-4f68-806f-1c069fc09d72",
-												"wickScript": ""
-											}
-										],
-										"identifier": "Layer 1",
-										"locked": false,
-										"hidden": false
-									}
-								],
-								"playRanges": [
-									{
-										"start": 0,
-										"end": 1,
-										"identifier": "mouseup",
-										"color": "#FDC77C",
-										"uuid": "b50f1d37-61fc-461f-9198-b91984c2e273"
-									},
-									{
-										"start": 1,
-										"end": 2,
-										"identifier": "mouseover",
-										"color": "#3DE898",
-										"uuid": "5d4078dd-45fb-445f-b5c9-935c34cf3c6b"
-									},
-									{
-										"start": 2,
-										"end": 3,
-										"identifier": "mousedown",
-										"color": "#DF6C89",
-										"uuid": "a24bff05-dabe-4dab-8610-6c612b23cf37"
-									}
-								],
-								"svgWidth": 85.75812431812892,
-								"svgHeight": 71.03770177979442,
-								"svgStrokeWidth": 0,
-								"bbox": {
-									"left": 373.1207919947054,
-									"top": 147.13465836714255,
-									"width": 86.75812431812892,
-									"height": 72.03770177979447
-								},
-								"_zindex": 3,
-								"framesDirty": false,
 								"forceFabricCanvasRegen": false,
-								"scriptError": null
-							},
-							{
-								"uuid": "9fc5bbd9-69af-469a-b3da-173db13a9f6d",
-								"name": "letter_i",
-								"x": 473.9857317920996,
-								"y": 183.51847989807362,
-								"width": 13.531119999999987,
-								"height": 71.27407679309397,
-								"scaleX": 1,
-								"scaleY": 1,
-								"rotation": 0,
-								"flipX": false,
-								"flipY": false,
-								"opacity": 1,
-								"wickScript": "function%20mousedown()%20%7B%0A%20%20%20%20weather.gotoNextFrame();%0A%7D%0A",
-								"assetUUID": null,
-								"volume": 1,
-								"loop": false,
-								"isText": false,
-								"textData": false,
-								"isSymbol": true,
-								"isButton": true,
-								"playheadPosition": 0,
-								"currentLayer": 0,
-								"layers": [
-									{
-										"frames": [
-											{
-												"identifier": "",
-												"wickObjects": [
-													{
-														"x": 0.0065263705041047615,
-														"y": 9.057513283027191,
-														"width": 12.196839513550685,
-														"height": 52.159050227039586,
-														"scaleX": 1,
-														"scaleY": 1,
-														"rotation": 0,
-														"flipX": false,
-														"flipY": false,
-														"opacity": 1,
-														"wickScript": "",
-														"assetUUID": null,
-														"volume": 1,
-														"loop": false,
-														"isText": false,
-														"textData": false,
-														"isSymbol": false,
-														"isButton": false,
-														"playheadPosition": null,
-														"currentLayer": null,
-														"isPath": true,
-														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#3e3e3e%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M470.08203,203.34982l0,-41.34954c0,0%200.47017,-5.50459%20-5.95977,-5.50381c-6.42994,0.00078%20-6.22746,5.50381%20-6.22746,5.50381l0,41.34954c0,0%20-0.2251,5.30671%206.22746,5.3057c6.45256,-0.00101%205.95977,-5.3057%205.95977,-5.3057z%22/%3E%3C/g%3E",
-														"svgStrokeWidth": 1,
-														"svgWidth": 13.196839513550685,
-														"svgHeight": 53.159050227039586,
-														"bbox": {
-															"left": 340.9922581626037,
-															"top": -22.424006818899187,
-															"width": 13.196839513550685,
-															"height": 53.159050227039586
-														},
-														"_zindex": 7,
-														"forceFabricCanvasRegen": false,
-														"svgX": 457.8938384058284,
-														"svgY": 156.49646806758102,
-														"uuid": "0afc28da-253e-4253-80f7-800f1015f753",
-														"_tempZIndex": 0
-													},
-													{
-														"x": 0,
-														"y": -29.067278396546982,
-														"width": 12.531119999999987,
-														"height": 12.139520000000005,
-														"scaleX": 1,
-														"scaleY": 1,
-														"rotation": 0,
-														"flipX": false,
-														"flipY": false,
-														"opacity": 1,
-														"wickScript": "",
-														"assetUUID": null,
-														"volume": 1,
-														"loop": false,
-														"isText": false,
-														"textData": false,
-														"isSymbol": false,
-														"isButton": false,
-														"playheadPosition": null,
-														"currentLayer": null,
-														"isPath": true,
-														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#3e3e3e%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M463.98573,140.52096c3.46037,0%206.26556,-2.71753%206.26556,-6.06976c0,-3.35224%20-2.80519,-6.06976%20-6.26556,-6.06976c-3.46037,0%20-6.26556,2.71753%20-6.26556,6.06976c0,3.35224%202.80519,6.06976%206.26556,6.06976z%22/%3E%3C/g%3E",
-														"forceFabricCanvasRegen": false,
-														"svgX": 457.7201717920996,
-														"svgY": 128.38144150152664,
-														"svgStrokeWidth": 1,
-														"svgWidth": 13.531119999999987,
-														"svgHeight": 13.139520000000005,
-														"bbox": {
-															"left": 340.9857317920996,
-															"top": -60.54879849847336,
-															"width": 13.531119999999987,
-															"height": 13.139520000000005
-														},
-														"_zindex": 8,
-														"uuid": "0f140228-330f-4330-abe0-62be0c4b55d5",
-														"_tempZIndex": 1
-													}
-												],
-												"tweens": [],
-												"pathData": null,
-												"playheadPosition": 0,
-												"length": 1,
-												"alwaysSaveState": false,
-												"uuid": "d87cc03c-6f2d-46f2-aa85-f2a82e920554",
-												"wickScript": ""
-											},
-											{
-												"identifier": "",
-												"wickObjects": [
-													{
-														"uuid": "6e7c0ef4-34ae-434a-9c62-79c63664abbb",
-														"x": 0.006526370504275292,
-														"y": 9.057513283027191,
-														"width": 12.196839513550515,
-														"height": 52.159050227039586,
-														"scaleX": 1,
-														"scaleY": 1,
-														"rotation": 0,
-														"flipX": false,
-														"flipY": false,
-														"opacity": 1,
-														"wickScript": "",
-														"assetUUID": null,
-														"volume": 1,
-														"loop": false,
-														"isText": false,
-														"textData": false,
-														"isSymbol": false,
-														"isButton": false,
-														"playheadPosition": null,
-														"currentLayer": null,
-														"svgX": 467.8938384058286,
-														"svgY": 166.49646806758102,
-														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#000000%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M480.08203,213.34982l0,-41.34954c0,0%200.47017,-5.50459%20-5.95977,-5.50381c-6.42994,0.00078%20-6.22746,5.50381%20-6.22746,5.50381l0,41.34954c0,0%20-0.2251,5.30671%206.22746,5.3057c6.45256,-0.00101%205.95977,-5.3057%205.95977,-5.3057z%22/%3E%3C/g%3E",
-														"isPath": true,
-														"cachedAbsolutePosition": {
-															"x": 463.9922581626037,
-															"y": 192.5759931811008
-														},
-														"svgStrokeWidth": 1,
-														"svgWidth": 13.196839513550685,
-														"svgHeight": 53.159050227039586,
-														"bbox": {
-															"left": 467.39383840582866,
-															"top": 165.99646806758102,
-															"width": 13.196839513550515,
-															"height": 53.159050227039586
-														},
-														"_zindex": 0,
-														"forceFabricCanvasRegen": false
-													},
-													{
-														"uuid": "edc61b80-1247-4124-8361-b836b6bd02f5",
-														"x": 0,
-														"y": -29.067278396546982,
-														"width": 12.531119999999987,
-														"height": 12.139520000000005,
-														"scaleX": 1,
-														"scaleY": 1,
-														"rotation": 0,
-														"flipX": false,
-														"flipY": false,
-														"opacity": 1,
-														"wickScript": "",
-														"assetUUID": null,
-														"volume": 1,
-														"loop": false,
-														"isText": false,
-														"textData": false,
-														"isSymbol": false,
-														"isButton": false,
-														"playheadPosition": null,
-														"currentLayer": null,
-														"svgX": 467.7201717920996,
-														"svgY": 148.38144150152664,
-														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#000000%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M473.98573,160.52096c3.46037,0%206.26556,-2.71753%206.26556,-6.06976c0,-3.35224%20-2.80519,-6.06976%20-6.26556,-6.06976c-3.46037,0%20-6.26556,2.71753%20-6.26556,6.06976c0,3.35224%202.80519,6.06976%206.26556,6.06976z%22/%3E%3C/g%3E",
-														"isPath": true,
-														"cachedAbsolutePosition": {
-															"x": 463.9857317920996,
-															"y": 154.45120150152664
-														},
-														"svgStrokeWidth": 1,
-														"svgWidth": 13.531119999999987,
-														"svgHeight": 13.139520000000005,
-														"bbox": {
-															"left": 467.2201717920996,
-															"top": 147.88144150152664,
-															"width": 13.531119999999987,
-															"height": 13.139520000000005
-														},
-														"_zindex": 1,
-														"forceFabricCanvasRegen": false
-													}
-												],
-												"tweens": [],
-												"pathData": null,
-												"playheadPosition": 1,
-												"length": 1,
-												"alwaysSaveState": false,
-												"uuid": "a495fad4-0f77-40f7-8710-c471f9058be5",
-												"wickScript": ""
-											},
-											{
-												"identifier": "",
-												"wickObjects": [
-													{
-														"uuid": "81fd15d0-667d-4667-bfb5-77fb34f33842",
-														"x": 0.006526370504161605,
-														"y": 9.057513283027191,
-														"width": 12.196839513550628,
-														"height": 52.159050227039586,
-														"scaleX": 1,
-														"scaleY": 1,
-														"rotation": 0,
-														"flipX": false,
-														"flipY": false,
-														"opacity": 1,
-														"wickScript": "",
-														"assetUUID": null,
-														"volume": 1,
-														"loop": false,
-														"isText": false,
-														"textData": false,
-														"isSymbol": false,
-														"isButton": false,
-														"playheadPosition": null,
-														"currentLayer": null,
-														"svgX": 467.8938384058285,
-														"svgY": 166.49646806758102,
-														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#16da80%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M480.08203,213.34982l0,-41.34954c0,0%200.47017,-5.50459%20-5.95977,-5.50381c-6.42994,0.00078%20-6.22746,5.50381%20-6.22746,5.50381l0,41.34954c0,0%20-0.2251,5.30671%206.22746,5.3057c6.45256,-0.00101%205.95977,-5.3057%205.95977,-5.3057z%22/%3E%3C/g%3E",
-														"isPath": true,
-														"cachedAbsolutePosition": {
-															"x": 463.9922581626037,
-															"y": 192.5759931811008
-														},
-														"svgStrokeWidth": 1,
-														"svgWidth": 13.196839513550685,
-														"svgHeight": 53.159050227039586,
-														"bbox": {
-															"left": 467.39383840582843,
-															"top": 165.99646806758102,
-															"width": 13.196839513550685,
-															"height": 53.159050227039586
-														},
-														"_zindex": 5,
-														"forceFabricCanvasRegen": false
-													},
-													{
-														"uuid": "21201a1c-8041-4804-a965-9296ce7df388",
-														"x": 0,
-														"y": -29.067278396546982,
-														"width": 12.531119999999987,
-														"height": 12.139520000000005,
-														"scaleX": 1,
-														"scaleY": 1,
-														"rotation": 0,
-														"flipX": false,
-														"flipY": false,
-														"opacity": 1,
-														"wickScript": "",
-														"assetUUID": null,
-														"volume": 1,
-														"loop": false,
-														"isText": false,
-														"textData": false,
-														"isSymbol": false,
-														"isButton": false,
-														"playheadPosition": null,
-														"currentLayer": null,
-														"svgX": 467.7201717920996,
-														"svgY": 148.38144150152664,
-														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#16da80%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M473.98573,160.52096c3.46037,0%206.26556,-2.71753%206.26556,-6.06976c0,-3.35224%20-2.80519,-6.06976%20-6.26556,-6.06976c-3.46037,0%20-6.26556,2.71753%20-6.26556,6.06976c0,3.35224%202.80519,6.06976%206.26556,6.06976z%22/%3E%3C/g%3E",
-														"isPath": true,
-														"cachedAbsolutePosition": {
-															"x": 463.9857317920996,
-															"y": 154.45120150152664
-														},
-														"svgStrokeWidth": 1,
-														"svgWidth": 13.5311200000001,
-														"svgHeight": 13.139520000000005,
-														"bbox": {
-															"left": 467.22017179209956,
-															"top": 147.88144150152664,
-															"width": 13.5311200000001,
-															"height": 13.139520000000005
-														},
-														"_zindex": 6,
-														"forceFabricCanvasRegen": false
-													}
-												],
-												"tweens": [],
-												"pathData": null,
-												"playheadPosition": 2,
-												"length": 1,
-												"alwaysSaveState": false,
-												"uuid": "0d9d89eb-0d84-40d8-b4bc-0f4b135d747b",
-												"wickScript": ""
-											}
-										],
-										"identifier": "Layer 1",
-										"locked": false,
-										"hidden": false
-									}
-								],
-								"playRanges": [
-									{
-										"start": 0,
-										"end": 1,
-										"identifier": "mouseup",
-										"color": "#3A533F",
-										"uuid": "bd165a13-e96b-4e96-bf3a-3bf3c1c6eb9f"
-									},
-									{
-										"start": 1,
-										"end": 2,
-										"identifier": "mouseover",
-										"color": "#46D5B9",
-										"uuid": "567b50fc-35f1-435f-818d-041821978b16"
-									},
-									{
-										"start": 2,
-										"end": 3,
-										"identifier": "mousedown",
-										"color": "#100674",
-										"uuid": "8f86e57c-3f74-43f7-a984-8698fa59d666"
-									}
-								],
-								"svgWidth": 13.5311200000001,
-								"svgHeight": 71.27407679309397,
-								"svgStrokeWidth": 0,
-								"bbox": {
-									"left": 466.72017179209956,
-									"top": 147.38144150152664,
-									"width": 14.5311200000001,
-									"height": 72.27407679309397
-								},
-								"_zindex": 4,
-								"framesDirty": false,
-								"forceFabricCanvasRegen": false
-							},
-							{
-								"uuid": "6a7a246d-45df-445d-94fa-c94f771d433f",
-								"name": "letter_c",
-								"x": 514.4369227991923,
-								"y": 192.7156926564871,
-								"width": 48.51415871640006,
-								"height": 52.60978853499506,
-								"scaleX": 1,
-								"scaleY": 1,
-								"rotation": 0,
-								"flipX": false,
-								"flipY": false,
-								"opacity": 1,
-								"wickScript": "function%20mousedown()%20%7B%0A%20%20%20%20shootingstar.play();%0A%7D%0A",
-								"assetUUID": null,
-								"volume": 1,
-								"loop": false,
-								"isText": false,
-								"textData": false,
-								"isSymbol": true,
-								"isButton": true,
-								"playheadPosition": 0,
-								"currentLayer": 0,
-								"layers": [
-									{
-										"frames": [
-											{
-												"identifier": "",
-												"wickObjects": [
-													{
-														"x": 0,
-														"y": 0,
-														"width": 47.51415871640006,
-														"height": 51.60978853499506,
-														"scaleX": 1,
-														"scaleY": 1,
-														"rotation": 0,
-														"flipX": false,
-														"flipY": false,
-														"opacity": 1,
-														"wickScript": "",
-														"assetUUID": null,
-														"volume": 1,
-														"loop": false,
-														"isText": false,
-														"textData": false,
-														"isSymbol": false,
-														"isButton": false,
-														"playheadPosition": null,
-														"currentLayer": null,
-														"isPath": true,
-														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20fill=%22#3e3e3e%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M517.46043,174.3404c0,0%202.74336,4.31645%207.39939,1.74103c4.65603,-2.57542%202.39392,-7.61702%202.39392,-7.61702c0,0%20-3.22151,-6.23233%20-8.70516,-9.14042c-5.48365,-2.90809%20-13.49301,-2.61155%20-13.49301,-2.61155c0,0%20-11.53991,0.78462%20-17.41033,7.18176c-5.87042,6.39713%20-7.00931,13.01398%20-6.96413,19.36899c0.04401,6.19039%201.10977,12.17051%206.86868,18.28275c5.75891,6.11225%2016.63526,6.7446%2016.63526,6.7446c0,0%208.20366,0.5109%2014.58116,-3.26444c6.3775,-3.77533%208.08664,-8.24508%208.08664,-8.24508c0,0%203.61711,-5.94598%20-1.02915,-8.39019c-4.64626,-2.44421%20-7.1104,2.03057%20-7.1104,2.03057c0,0%20-3.55317,5.35091%20-5.75373,6.39812c-2.15511,1.02558%20-6.3482,2.18958%20-8.74397,1.6758c-2.79184,-0.59872%20-5.16911,-0.5367%20-8.42454,-4.94437c-3.38729,-4.56569%20-3.29498,-9.94604%20-3.29498,-9.94604c0,0%20-0.47959,-7.63809%203.20144,-12.09369c3.56329,-4.29848%206.55727,-5.18671%209.57568,-5.44074c3.25828,-0.37693%205.75803,0.56503%208.15976,2.73381c2.39008,2.24352%204.02747,5.53611%204.02747,5.53611z%22/%3E%3C/g%3E",
-														"forceFabricCanvasRegen": false,
-														"svgX": 480.6798434409923,
-														"svgY": 156.7039307172978,
-														"svgStrokeWidth": 1,
-														"_zindex": 7,
-														"svgWidth": 48.51415871639995,
-														"svgHeight": 52.60978853499506,
-														"bbox": {
-															"left": 381.4369227991923,
-															"top": -22.284307343512893,
-															"width": 48.51415871640006,
-															"height": 52.60978853499506
-														},
-														"uuid": "edf69670-5e99-45e9-8279-bc27aff44a31",
-														"_tempZIndex": 0
-													}
-												],
-												"tweens": [],
-												"pathData": null,
-												"playheadPosition": 0,
-												"length": 1,
-												"alwaysSaveState": false,
-												"uuid": "01b1f399-28ec-428e-8760-0476f4bdb575",
-												"wickScript": ""
-											},
-											{
-												"identifier": "",
-												"wickObjects": [
-													{
-														"uuid": "f2c305cc-9d79-49d7-88f1-308f12734338",
-														"x": 0,
-														"y": -2.842170943040401e-14,
-														"width": 47.51415871639989,
-														"height": 51.60978853499509,
-														"scaleX": 1,
-														"scaleY": 1,
-														"rotation": 0,
-														"flipX": false,
-														"flipY": false,
-														"opacity": 1,
-														"wickScript": "",
-														"assetUUID": null,
-														"volume": 1,
-														"loop": false,
-														"isText": false,
-														"textData": false,
-														"isSymbol": false,
-														"isButton": false,
-														"playheadPosition": null,
-														"currentLayer": null,
-														"svgX": 490.67984344099233,
-														"svgY": 166.91079838898952,
-														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20fill=%22#000000%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M527.46043,184.54727c0,0%202.74336,4.31645%207.39939,1.74103c4.65603,-2.57542%202.39392,-7.61702%202.39392,-7.61702c0,0%20-3.22151,-6.23233%20-8.70516,-9.14042c-5.48365,-2.90809%20-13.49301,-2.61155%20-13.49301,-2.61155c0,0%20-11.53991,0.78462%20-17.41033,7.18176c-5.87042,6.39713%20-7.00931,13.01398%20-6.96413,19.36899c0.04401,6.19039%201.10977,12.17051%206.86868,18.28275c5.75891,6.11225%2016.63526,6.7446%2016.63526,6.7446c0,0%208.20366,0.5109%2014.58116,-3.26444c6.3775,-3.77533%208.08664,-8.24508%208.08664,-8.24508c0,0%203.61711,-5.94598%20-1.02915,-8.39019c-4.64626,-2.44421%20-7.1104,2.03057%20-7.1104,2.03057c0,0%20-3.55317,5.35091%20-5.75373,6.39812c-2.15511,1.02558%20-6.3482,2.18958%20-8.74397,1.6758c-2.79184,-0.59872%20-5.16911,-0.5367%20-8.42454,-4.94437c-3.38729,-4.56569%20-3.29498,-9.94604%20-3.29498,-9.94604c0,0%20-0.47959,-7.63809%203.20144,-12.09369c3.56329,-4.29848%206.55727,-5.18671%209.57568,-5.44074c3.25828,-0.37693%205.75803,0.56503%208.15976,2.73381c2.39008,2.24352%204.02747,5.53611%204.02747,5.53611z%22/%3E%3C/g%3E",
-														"isPath": true,
-														"cachedAbsolutePosition": {
-															"x": 504.4369227991923,
-															"y": 192.50882498479533
-														},
-														"svgStrokeWidth": 1,
-														"svgWidth": 48.514158716399834,
-														"svgHeight": 52.60978853499512,
-														"bbox": {
-															"left": 490.1798434409924,
-															"top": 166.41079838898952,
-															"width": 48.51415871639995,
-															"height": 52.60978853499512
-														},
-														"_zindex": 0,
-														"forceFabricCanvasRegen": false
-													}
-												],
-												"tweens": [],
-												"pathData": null,
-												"playheadPosition": 1,
-												"length": 1,
-												"alwaysSaveState": false,
-												"uuid": "25a39323-ad0d-4ad0-9f95-39f9bb46446c",
-												"wickScript": ""
-											},
-											{
-												"identifier": "",
-												"wickObjects": [
-													{
-														"uuid": "c558bd19-0db3-40db-9ee7-d9eec1ff2df0",
-														"x": 0,
-														"y": -2.842170943040401e-14,
-														"width": 47.51415871639989,
-														"height": 51.60978853499509,
-														"scaleX": 1,
-														"scaleY": 1,
-														"rotation": 0,
-														"flipX": false,
-														"flipY": false,
-														"opacity": 1,
-														"wickScript": "",
-														"assetUUID": null,
-														"volume": 1,
-														"loop": false,
-														"isText": false,
-														"textData": false,
-														"isSymbol": false,
-														"isButton": false,
-														"playheadPosition": null,
-														"currentLayer": null,
-														"svgX": 490.67984344099233,
-														"svgY": 166.91079838898952,
-														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20fill=%22#16da80%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M527.46043,184.54727c0,0%202.74336,4.31645%207.39939,1.74103c4.65603,-2.57542%202.39392,-7.61702%202.39392,-7.61702c0,0%20-3.22151,-6.23233%20-8.70516,-9.14042c-5.48365,-2.90809%20-13.49301,-2.61155%20-13.49301,-2.61155c0,0%20-11.53991,0.78462%20-17.41033,7.18176c-5.87042,6.39713%20-7.00931,13.01398%20-6.96413,19.36899c0.04401,6.19039%201.10977,12.17051%206.86868,18.28275c5.75891,6.11225%2016.63526,6.7446%2016.63526,6.7446c0,0%208.20366,0.5109%2014.58116,-3.26444c6.3775,-3.77533%208.08664,-8.24508%208.08664,-8.24508c0,0%203.61711,-5.94598%20-1.02915,-8.39019c-4.64626,-2.44421%20-7.1104,2.03057%20-7.1104,2.03057c0,0%20-3.55317,5.35091%20-5.75373,6.39812c-2.15511,1.02558%20-6.3482,2.18958%20-8.74397,1.6758c-2.79184,-0.59872%20-5.16911,-0.5367%20-8.42454,-4.94437c-3.38729,-4.56569%20-3.29498,-9.94604%20-3.29498,-9.94604c0,0%20-0.47959,-7.63809%203.20144,-12.09369c3.56329,-4.29848%206.55727,-5.18671%209.57568,-5.44074c3.25828,-0.37693%205.75803,0.56503%208.15976,2.73381c2.39008,2.24352%204.02747,5.53611%204.02747,5.53611z%22/%3E%3C/g%3E",
-														"isPath": true,
-														"cachedAbsolutePosition": {
-															"x": 504.4369227991923,
-															"y": 192.71569265648708
-														},
-														"svgStrokeWidth": 1,
-														"svgWidth": 48.514158716399834,
-														"svgHeight": 52.60978853499512,
-														"bbox": {
-															"left": 490.1798434409924,
-															"top": 166.41079838898952,
-															"width": 48.51415871639995,
-															"height": 52.60978853499512
-														},
-														"_zindex": 5,
-														"forceFabricCanvasRegen": false
-													}
-												],
-												"tweens": [],
-												"pathData": null,
-												"playheadPosition": 2,
-												"length": 1,
-												"alwaysSaveState": false,
-												"uuid": "5d3de2a7-7657-4765-80cc-d80c777bab2e",
-												"wickScript": ""
-											}
-										],
-										"identifier": "Layer 1",
-										"locked": false,
-										"hidden": false
-									}
-								],
-								"playRanges": [
-									{
-										"start": 0,
-										"end": 1,
-										"identifier": "mouseup",
-										"color": "#1BBBB4",
-										"uuid": "5262c87e-699f-4699-9e86-91e81e2f6334"
-									},
-									{
-										"start": 1,
-										"end": 2,
-										"identifier": "mouseover",
-										"color": "#D005B7",
-										"uuid": "7e58a04d-09e6-409e-a368-a236de23493b"
-									},
-									{
-										"start": 2,
-										"end": 3,
-										"identifier": "mousedown",
-										"color": "#701362",
-										"uuid": "78a58107-3c86-43c8-a395-4639fefab40d"
-									}
-								],
-								"svgWidth": 48.51415871640006,
-								"svgHeight": 52.60978853499512,
-								"svgStrokeWidth": 0,
-								"bbox": {
-									"left": 489.6798434409923,
-									"top": 165.91079838898963,
-									"width": 49.51415871640006,
-									"height": 53.60978853499506
-								},
-								"_zindex": 5,
-								"framesDirty": false,
-								"forceFabricCanvasRegen": false,
-								"scriptError": null
+								"_frameUUID": "d86e8eb4-cc26-4cc2-b672-9f67e2f4a64c"
 							},
 							{
 								"uuid": "4963405f-e796-4e79-bb03-1fb0ca29ea03",
@@ -3874,8 +3081,8 @@
 								"playheadPosition": null,
 								"currentLayer": null,
 								"isImage": true,
-								"svgWidth": 595.9673469387756,
-								"svgHeight": 96.03265306122444,
+								"svgWidth": 417.1771428571428,
+								"svgHeight": 67.2228571428571,
 								"svgStrokeWidth": 0,
 								"bbox": {
 									"left": 72,
@@ -3883,8 +3090,9 @@
 									"width": 595.9673469387756,
 									"height": 96.03265306122444
 								},
-								"_zindex": 6,
-								"forceFabricCanvasRegen": false
+								"_zindex": 3,
+								"forceFabricCanvasRegen": false,
+								"_frameUUID": "d86e8eb4-cc26-4cc2-b672-9f67e2f4a64c"
 							},
 							{
 								"uuid": "38dd8e0d-087a-4087-ae80-e2e8e2de1f4f",
@@ -3908,7 +3116,7 @@
 								"isSymbol": true,
 								"isButton": false,
 								"playheadPosition": 0,
-								"currentLayer": 1,
+								"currentLayer": 0,
 								"layers": [
 									{
 										"frames": [
@@ -3920,8 +3128,8 @@
 														"name": "Tweened Object 3",
 														"x": 0,
 														"y": 0,
-														"width": 44.66039365388144,
-														"height": 72.49562376306605,
+														"width": 43.66039365388144,
+														"height": 71.49562376306605,
 														"scaleX": 1,
 														"scaleY": 1,
 														"rotation": 0,
@@ -4093,8 +3301,8 @@
 														],
 														"playRanges": [],
 														"_zindex": 5,
-														"svgWidth": 44.66039365388144,
-														"svgHeight": 72.49562376306608,
+														"svgWidth": 30.562275557717044,
+														"svgHeight": 50.04693663414628,
 														"svgStrokeWidth": 0,
 														"bbox": {
 															"left": 546.2425121739755,
@@ -4102,7 +3310,8 @@
 															"width": 44.66039365388144,
 															"height": 72.49562376306608
 														},
-														"forceFabricCanvasRegen": false
+														"forceFabricCanvasRegen": false,
+														"_frameUUID": "59aff917-dc36-4dc3-aeee-46ee97b834dd"
 													}
 												],
 												"tweens": [
@@ -4150,8 +3359,8 @@
 														"name": "New Clip 3",
 														"x": 0,
 														"y": -6.508232456238936,
-														"width": 45.66039365388144,
-														"height": 81.47915885058816,
+														"width": 43.66039365388144,
+														"height": 77.97915885058816,
 														"scaleX": 1,
 														"scaleY": 1,
 														"rotation": 0,
@@ -5190,8 +4399,8 @@
 															}
 														],
 														"playRanges": [],
-														"svgWidth": 45.66039365388144,
-														"svgHeight": 81.47915885058819,
+														"svgWidth": 30.562275557717044,
+														"svgHeight": 54.58541119541172,
 														"svgStrokeWidth": 0,
 														"bbox": {
 															"left": 725.7425121739755,
@@ -5201,7 +4410,8 @@
 														},
 														"_zindex": 0,
 														"framesDirty": false,
-														"forceFabricCanvasRegen": false
+														"forceFabricCanvasRegen": false,
+														"_frameUUID": "7e6a8827-10ce-410c-9d58-81d5eceee47d"
 													}
 												],
 												"tweens": [
@@ -5220,20 +4430,6 @@
 														"rotations": 0
 													},
 													{
-														"x": 180,
-														"y": -6.508232456238936,
-														"z": 0,
-														"scaleX": 1,
-														"scaleY": 1,
-														"rotation": 0,
-														"opacity": 1,
-														"playheadPosition": 123,
-														"uuid": "7cb116fa-1fe0-41fe-8294-f029b18a1113",
-														"tweenType": "Linear",
-														"tweenDir": "None",
-														"rotations": 0
-													},
-													{
 														"x": 186.8292682926829,
 														"y": -6.508232456238936,
 														"z": 0,
@@ -5241,7 +4437,7 @@
 														"scaleY": 1,
 														"rotation": 0,
 														"opacity": 1,
-														"playheadPosition": 73,
+														"playheadPosition": 66,
 														"uuid": "68748150-e0df-4e0d-b44c-b744e3a78f50",
 														"tweenType": "Linear",
 														"tweenDir": "None",
@@ -5250,10 +4446,464 @@
 												],
 												"pathData": null,
 												"playheadPosition": 11,
-												"length": 124,
+												"length": 82,
 												"alwaysSaveState": false,
 												"uuid": "7e6a8827-10ce-410c-9d58-81d5eceee47d",
 												"wickScript": ""
+											},
+											{
+												"name": "",
+												"wickObjects": [
+													{
+														"x": 0,
+														"y": 0,
+														"width": 43.6601904562599,
+														"height": 71.4956237630661,
+														"scaleX": 0.9999909837303649,
+														"scaleY": 1.0000612098573805,
+														"rotation": 0,
+														"flipX": false,
+														"flipY": false,
+														"opacity": 1,
+														"wickScript": "gotoAndStop(1);",
+														"assetUUID": null,
+														"loop": false,
+														"isText": false,
+														"isSymbol": true,
+														"isButton": false,
+														"isGroup": true,
+														"playheadPosition": 0,
+														"currentLayer": 0,
+														"layers": [
+															{
+																"frames": [
+																	{
+																		"name": "",
+																		"wickObjects": [
+																			{
+																				"x": -15.110499786584313,
+																				"y": 0,
+																				"width": 12.439394080712873,
+																				"height": 70.4956237630661,
+																				"scaleX": 1,
+																				"scaleY": 1,
+																				"rotation": 0,
+																				"flipX": false,
+																				"flipY": false,
+																				"opacity": 1,
+																				"wickScript": "",
+																				"assetUUID": null,
+																				"volume": 1,
+																				"loop": false,
+																				"isText": false,
+																				"textData": false,
+																				"isSymbol": false,
+																				"isButton": false,
+																				"playheadPosition": null,
+																				"currentLayer": null,
+																				"isPath": true,
+																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#3e3e3e%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M565.38987,-8.63153v-56.91991c0,0%200.44186,-6.55171%20-6.06114,-6.55182c-6.503,-0.00011%20-6.36964,6.2247%20-6.36964,6.2247v57.41059c0,0%20-0.29716,6.8662%205.87895,6.86033c6.17611,-0.00587%206.55183,-7.02389%206.55183,-7.02389z%22/%3E%3C/g%3E",
+																				"svgStrokeWidth": 1,
+																				"svgWidth": 13.4393940807131,
+																				"svgHeight": 71.49562376306604,
+																				"bbox": {
+																					"left": 420.4622092143318,
+																					"top": -31.855443690494525,
+																					"width": 13.43939408071276,
+																					"height": 71.49562376306605
+																				},
+																				"_zindex": 0,
+																				"forceFabricCanvasRegen": false,
+																				"svgX": 552.9567978882611,
+																				"svgY": -72.10325557202768,
+																				"_tempZIndex": 0,
+																				"_frameUUID": "8a0b22f1-202f-4202-838c-2c3877e4a767",
+																				"uuid": "f30a9f64-8cf3-48cf-87d2-407deff9b9fe"
+																			},
+																			{
+																				"x": -0.5724992789252781,
+																				"y": 2.731692830047052,
+																				"width": 36.62255400560582,
+																				"height": 38.535038135365255,
+																				"scaleX": 1,
+																				"scaleY": 1,
+																				"rotation": 0,
+																				"flipX": false,
+																				"flipY": false,
+																				"opacity": 1,
+																				"wickScript": "",
+																				"assetUUID": null,
+																				"volume": 1,
+																				"loop": false,
+																				"isText": false,
+																				"textData": false,
+																				"isSymbol": false,
+																				"isButton": false,
+																				"playheadPosition": null,
+																				"currentLayer": null,
+																				"isPath": true,
+																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#3e3e3e%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M589.24743,-43.14901c0,0%205.28457,-3.88951%201.27727,-8.413c-4.0073,-4.52349%20-8.24385,0.76669%20-8.24385,0.76669l-26.87763,26.28888l3.43482,9.65021z%22/%3E%3C/g%3E",
+																				"svgStrokeWidth": 1,
+																				"svgWidth": 37.622554005605934,
+																				"svgHeight": 39.53503813536528,
+																				"bbox": {
+																					"left": 435.0002097219908,
+																					"top": -29.1237508604475,
+																					"width": 37.622554005605934,
+																					"height": 39.535038135365255
+																				},
+																				"_zindex": 1,
+																				"forceFabricCanvasRegen": false,
+																				"svgX": 555.4032184334736,
+																				"svgY": -53.391269928130185,
+																				"_tempZIndex": 1,
+																				"_frameUUID": "8a0b22f1-202f-4202-838c-2c3877e4a767",
+																				"uuid": "40b9fbad-b8ba-4b8b-bd06-13d06e780e7c"
+																			},
+																			{
+																				"x": 7.426273170729729,
+																				"y": 16.339033825913987,
+																				"width": 27.80784731242204,
+																				"height": 37.38438285716643,
+																				"scaleX": 1,
+																				"scaleY": 1,
+																				"rotation": 0,
+																				"flipX": false,
+																				"flipY": false,
+																				"opacity": 1,
+																				"wickScript": "",
+																				"assetUUID": null,
+																				"volume": 1,
+																				"loop": false,
+																				"isText": false,
+																				"textData": false,
+																				"isSymbol": false,
+																				"isButton": false,
+																				"playheadPosition": null,
+																				"currentLayer": null,
+																				"isPath": true,
+																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#3e3e3e%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M584.69245,-5.70941c0,0%202.80566,6.00618%208.09484,3.08299c5.28917,-2.92319%201.54209,-8.70308%201.54209,-8.70308l-17.33413,-27.8791l-9.18591,5.49802z%22/%3E%3C/g%3E",
+																				"svgStrokeWidth": 1,
+																				"svgWidth": 28.80784731242227,
+																				"svgHeight": 38.38438285716642,
+																				"bbox": {
+																					"left": 442.9989821716458,
+																					"top": -15.516409864580567,
+																					"width": 28.80784731242204,
+																					"height": 38.38438285716643
+																				},
+																				"_zindex": 2,
+																				"forceFabricCanvasRegen": false,
+																				"svgX": 567.8093442297205,
+																				"svgY": -39.20860129316384,
+																				"_tempZIndex": 2,
+																				"_frameUUID": "8a0b22f1-202f-4202-838c-2c3877e4a767",
+																				"uuid": "33e6bdf8-e93a-4e93-b8d8-838d50a98cd1"
+																			}
+																		],
+																		"tweens": [],
+																		"pathData": null,
+																		"playheadPosition": 0,
+																		"length": 1,
+																		"alwaysSaveState": false,
+																		"wickScript": "stop();",
+																		"uuid": "e26f2838-246d-4246-834d-6c34287e9436"
+																	}
+																],
+																"identifier": "Layer 1",
+																"locked": false,
+																"hidden": false
+															}
+														],
+														"playRanges": [],
+														"_frameUUID": "54e8a920-9f3c-49f3-9413-bd417af78003",
+														"svgWidth": 30.561857762947284,
+														"svgHeight": 50.049999999999955,
+														"svgStrokeWidth": 0,
+														"_zindex": 0,
+														"forceFabricCanvasRegen": false,
+														"_tempZIndex": -1,
+														"uuid": "8cb7b566-a608-4a60-a2b6-1a2b8963cf09"
+													}
+												],
+												"tweens": [],
+												"pathData": null,
+												"playheadPosition": 114,
+												"length": 1,
+												"alwaysSaveState": false,
+												"uuid": "54e8a920-9f3c-49f3-9413-bd417af78003",
+												"wickScript": ""
+											},
+											{
+												"name": "",
+												"wickObjects": [
+													{
+														"uuid": "89ab01dd-ea19-4ea1-b95d-479566a6dfca",
+														"name": "New Group",
+														"x": 6.798547086071835,
+														"y": -239.3747555240907,
+														"width": 37.947169557925235,
+														"height": 80.70609153243424,
+														"scaleX": 1,
+														"scaleY": 1,
+														"rotation": -20,
+														"flipX": false,
+														"flipY": false,
+														"opacity": 1,
+														"wickScript": "",
+														"assetUUID": null,
+														"loop": false,
+														"isText": false,
+														"isSymbol": true,
+														"isButton": false,
+														"isGroup": true,
+														"playheadPosition": 0,
+														"currentLayer": 0,
+														"layers": [
+															{
+																"frames": [
+																	{
+																		"name": "",
+																		"wickObjects": [
+																			{
+																				"x": -15.110499786584313,
+																				"y": 0,
+																				"width": 12.439394080712873,
+																				"height": 70.4956237630661,
+																				"scaleX": 1,
+																				"scaleY": 1,
+																				"rotation": 0,
+																				"flipX": false,
+																				"flipY": false,
+																				"opacity": 1,
+																				"wickScript": "",
+																				"assetUUID": null,
+																				"volume": 1,
+																				"loop": false,
+																				"isText": false,
+																				"textData": false,
+																				"isSymbol": false,
+																				"isButton": false,
+																				"playheadPosition": null,
+																				"currentLayer": null,
+																				"isPath": true,
+																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#3e3e3e%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M565.38987,-8.63153v-56.91991c0,0%200.44186,-6.55171%20-6.06114,-6.55182c-6.503,-0.00011%20-6.36964,6.2247%20-6.36964,6.2247v57.41059c0,0%20-0.29716,6.8662%205.87895,6.86033c6.17611,-0.00587%206.55183,-7.02389%206.55183,-7.02389z%22/%3E%3C/g%3E",
+																				"svgStrokeWidth": 1,
+																				"svgWidth": 13.4393940807131,
+																				"svgHeight": 71.49562376306604,
+																				"bbox": {
+																					"left": 420.4622092143318,
+																					"top": -31.855443690494525,
+																					"width": 13.43939408071276,
+																					"height": 71.49562376306605
+																				},
+																				"_zindex": 0,
+																				"forceFabricCanvasRegen": false,
+																				"svgX": 552.9567978882611,
+																				"svgY": -72.10325557202768,
+																				"_tempZIndex": 0,
+																				"_frameUUID": "8a0b22f1-202f-4202-838c-2c3877e4a767",
+																				"uuid": "f6d7d760-6357-4635-b4b6-d74bb475b632"
+																			},
+																			{
+																				"x": -0.5724992789252781,
+																				"y": 2.731692830047052,
+																				"width": 36.62255400560582,
+																				"height": 38.535038135365255,
+																				"scaleX": 1,
+																				"scaleY": 1,
+																				"rotation": 0,
+																				"flipX": false,
+																				"flipY": false,
+																				"opacity": 1,
+																				"wickScript": "",
+																				"assetUUID": null,
+																				"volume": 1,
+																				"loop": false,
+																				"isText": false,
+																				"textData": false,
+																				"isSymbol": false,
+																				"isButton": false,
+																				"playheadPosition": null,
+																				"currentLayer": null,
+																				"isPath": true,
+																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#3e3e3e%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M589.24743,-43.14901c0,0%205.28457,-3.88951%201.27727,-8.413c-4.0073,-4.52349%20-8.24385,0.76669%20-8.24385,0.76669l-26.87763,26.28888l3.43482,9.65021z%22/%3E%3C/g%3E",
+																				"svgStrokeWidth": 1,
+																				"svgWidth": 37.622554005605934,
+																				"svgHeight": 39.53503813536528,
+																				"bbox": {
+																					"left": 435.0002097219908,
+																					"top": -29.1237508604475,
+																					"width": 37.622554005605934,
+																					"height": 39.535038135365255
+																				},
+																				"_zindex": 1,
+																				"forceFabricCanvasRegen": false,
+																				"svgX": 555.4032184334736,
+																				"svgY": -53.391269928130185,
+																				"_tempZIndex": 1,
+																				"_frameUUID": "8a0b22f1-202f-4202-838c-2c3877e4a767",
+																				"uuid": "f06b9904-5731-4573-b00d-1f00a605653e"
+																			},
+																			{
+																				"x": 7.426273170729729,
+																				"y": 16.339033825913987,
+																				"width": 27.80784731242204,
+																				"height": 37.38438285716643,
+																				"scaleX": 1,
+																				"scaleY": 1,
+																				"rotation": 0,
+																				"flipX": false,
+																				"flipY": false,
+																				"opacity": 1,
+																				"wickScript": "",
+																				"assetUUID": null,
+																				"volume": 1,
+																				"loop": false,
+																				"isText": false,
+																				"textData": false,
+																				"isSymbol": false,
+																				"isButton": false,
+																				"playheadPosition": null,
+																				"currentLayer": null,
+																				"isPath": true,
+																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#3e3e3e%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M584.69245,-5.70941c0,0%202.80566,6.00618%208.09484,3.08299c5.28917,-2.92319%201.54209,-8.70308%201.54209,-8.70308l-17.33413,-27.8791l-9.18591,5.49802z%22/%3E%3C/g%3E",
+																				"svgStrokeWidth": 1,
+																				"svgWidth": 28.80784731242227,
+																				"svgHeight": 38.38438285716642,
+																				"bbox": {
+																					"left": 442.9989821716458,
+																					"top": -15.516409864580567,
+																					"width": 28.80784731242204,
+																					"height": 38.38438285716643
+																				},
+																				"_zindex": 2,
+																				"forceFabricCanvasRegen": false,
+																				"svgX": 567.8093442297205,
+																				"svgY": -39.20860129316384,
+																				"_tempZIndex": 2,
+																				"_frameUUID": "8a0b22f1-202f-4202-838c-2c3877e4a767",
+																				"uuid": "0e431fda-7b56-47b5-92a0-352a75dbbfc6"
+																			}
+																		],
+																		"tweens": [],
+																		"pathData": null,
+																		"playheadPosition": 0,
+																		"length": 1,
+																		"alwaysSaveState": false,
+																		"uuid": "3834b9ae-abe1-4abe-ace5-9ece1b6c0b7e",
+																		"wickScript": "stop();"
+																	}
+																],
+																"identifier": "Layer 1",
+																"locked": false,
+																"hidden": false
+															}
+														],
+														"playRanges": [],
+														"_frameUUID": "8a0b22f1-202f-4202-838c-2c3877e4a767",
+														"svgWidth": 37.72837096526723,
+														"svgHeight": 60.782490987112965,
+														"svgStrokeWidth": 0,
+														"_zindex": 0,
+														"forceFabricCanvasRegen": false,
+														"_tempZIndex": -1
+													}
+												],
+												"tweens": [
+													{
+														"x": 6.798547086071835,
+														"y": -239.3747555240907,
+														"z": 0,
+														"scaleX": 1,
+														"scaleY": 1,
+														"rotation": -20,
+														"opacity": 1,
+														"playheadPosition": 0,
+														"rotations": 0,
+														"uuid": "5de59c30-99cf-499c-8a43-80a412f8ed14",
+														"tweenType": "Linear",
+														"tweenDir": "None"
+													},
+													{
+														"x": 8.227118514643394,
+														"y": -240.80332695266213,
+														"z": 0,
+														"scaleX": 0.5915868876999167,
+														"scaleY": 1.5769652292078933,
+														"rotation": 0,
+														"opacity": 1,
+														"playheadPosition": 94,
+														"rotations": 0,
+														"uuid": "840165f5-91fb-491f-8d77-30d7b9389c14",
+														"tweenType": "Linear",
+														"tweenDir": "None"
+													},
+													{
+														"x": 16.63400666005873,
+														"y": 24.04519864269318,
+														"z": 0,
+														"scaleX": 2.67,
+														"scaleY": 1,
+														"rotation": 0,
+														"opacity": 1,
+														"playheadPosition": 118,
+														"rotations": 0,
+														"uuid": "f7219b58-7005-4700-8ae6-c8ae8b23ff8f",
+														"tweenType": "Linear",
+														"tweenDir": "None"
+													},
+													{
+														"x": 0,
+														"y": 0,
+														"z": 0,
+														"scaleX": 1,
+														"scaleY": 1,
+														"rotation": -12,
+														"opacity": 1,
+														"playheadPosition": 10,
+														"rotations": 0,
+														"uuid": "0e8e0f33-d7d2-4d7d-9a3f-b1a352cf5a83",
+														"tweenType": "Linear",
+														"tweenDir": "None"
+													},
+													{
+														"x": 0,
+														"y": 0,
+														"z": 0,
+														"scaleX": 1,
+														"scaleY": 1,
+														"rotation": 6,
+														"opacity": 1,
+														"playheadPosition": 12,
+														"rotations": 0,
+														"uuid": "16142993-d346-4d34-843c-7443c65b857a",
+														"tweenType": "Linear",
+														"tweenDir": "None"
+													},
+													{
+														"x": 0,
+														"y": 0,
+														"z": 0,
+														"scaleX": 1,
+														"scaleY": 1,
+														"rotation": 0,
+														"opacity": 1,
+														"playheadPosition": 14,
+														"rotations": 0,
+														"uuid": "2e671195-1285-4128-9e82-d9e8781ab137",
+														"tweenType": "Linear",
+														"tweenDir": "None"
+													}
+												],
+												"pathData": null,
+												"playheadPosition": 93,
+												"length": 21,
+												"alwaysSaveState": false,
+												"uuid": "8a0b22f1-202f-4202-838c-2c3877e4a767",
+												"wickScript": "",
+												"scaleX": 2.67,
+												"scaleY": 1
 											}
 										],
 										"identifier": "Layer 2",
@@ -5266,33 +4916,32 @@
 												"identifier": "",
 												"wickObjects": [
 													{
-														"uuid": "dcf591fa-4c6d-44c6-be07-c7e0a961c4f9",
-														"name": "letter_k",
+														"uuid": "fa375249-654f-4654-8cab-20ca801288f2",
+														"name": "k",
 														"x": 0,
 														"y": 0,
-														"width": 44.66039365388144,
-														"height": 72.49562376306605,
+														"width": 43.66039365388144,
+														"height": 71.49562376306605,
 														"scaleX": 1,
 														"scaleY": 1,
 														"rotation": 0,
 														"flipX": false,
 														"flipY": false,
 														"opacity": 1,
-														"wickScript": "function%20mousedown()%20%7B%0A%20%20%20%20play();%0A%7D%0A",
+														"wickScript": "function%20mousePressed()%20%7B%0A%20%20%20%20play();%0A%7D",
 														"assetUUID": null,
-														"volume": 1,
 														"loop": false,
 														"isText": false,
-														"textData": false,
 														"isSymbol": true,
 														"isButton": true,
+														"isGroup": false,
 														"playheadPosition": 0,
 														"currentLayer": 0,
 														"layers": [
 															{
 																"frames": [
 																	{
-																		"identifier": "",
+																		"name": "mouseReleased",
 																		"wickObjects": [
 																			{
 																				"x": -15.110499786584342,
@@ -5326,12 +4975,13 @@
 																					"width": 13.43939408071276,
 																					"height": 71.49562376306605
 																				},
-																				"_zindex": 5,
+																				"_zindex": 0,
 																				"forceFabricCanvasRegen": false,
 																				"svgX": 537.2425121739755,
 																				"svgY": 137.8967444279724,
-																				"uuid": "ecc77527-ef47-4ef4-a343-ae345df16c58",
-																				"_tempZIndex": 0
+																				"uuid": "34253552-28b1-428b-b28d-1b281e3a1241",
+																				"_tempZIndex": 0,
+																				"_frameUUID": "28fcb772-89f3-489f-9347-a9343047275e"
 																			},
 																			{
 																				"x": -0.5724992789253065,
@@ -5365,12 +5015,13 @@
 																					"width": 37.622554005605934,
 																					"height": 39.535038135365255
 																				},
-																				"_zindex": 6,
+																				"_zindex": 1,
 																				"forceFabricCanvasRegen": false,
 																				"svgX": 539.6889327191878,
 																				"svgY": 156.60873007186987,
-																				"uuid": "f37ef045-eea4-4eea-8ca9-c0ca04671b11",
-																				"_tempZIndex": 1
+																				"uuid": "f34be288-dc5d-4dc5-9269-99264360099a",
+																				"_tempZIndex": 1,
+																				"_frameUUID": "28fcb772-89f3-489f-9347-a9343047275e"
 																			},
 																			{
 																				"x": 7.426273170729701,
@@ -5404,12 +5055,13 @@
 																					"width": 28.80784731242204,
 																					"height": 38.38438285716643
 																				},
-																				"_zindex": 7,
+																				"_zindex": 2,
 																				"forceFabricCanvasRegen": false,
 																				"svgX": 552.0950585154347,
 																				"svgY": 170.79139870683622,
-																				"uuid": "ca6f3dd0-4a9a-44a9-986c-95860d645be8",
-																				"_tempZIndex": 2
+																				"uuid": "57f685fd-ba94-4ba9-a127-7e120f4685c1",
+																				"_tempZIndex": 2,
+																				"_frameUUID": "28fcb772-89f3-489f-9347-a9343047275e"
 																			}
 																		],
 																		"tweens": [],
@@ -5417,14 +5069,14 @@
 																		"playheadPosition": 0,
 																		"length": 1,
 																		"alwaysSaveState": false,
-																		"uuid": "d667a1d0-aaae-4aaa-86c4-a06cc3213c72",
+																		"uuid": "28fcb772-89f3-489f-9347-a9343047275e",
 																		"wickScript": ""
 																	},
 																	{
-																		"identifier": "",
+																		"name": "mouseHover",
 																		"wickObjects": [
 																			{
-																				"uuid": "b15d99cf-5ca4-45ca-9c88-55c8a7da884a",
+																				"uuid": "812838dc-72bc-472b-9f78-ddf76ac5a1ea",
 																				"x": -15.110499786584342,
 																				"y": 0,
 																				"width": 12.43939408071276,
@@ -5437,40 +5089,33 @@
 																				"opacity": 1,
 																				"wickScript": "",
 																				"assetUUID": null,
-																				"volume": 1,
 																				"loop": false,
 																				"isText": false,
-																				"textData": false,
 																				"isSymbol": false,
 																				"isButton": false,
 																				"playheadPosition": null,
 																				"currentLayer": null,
 																				"svgX": 547.2425121739755,
 																				"svgY": 147.8967444279724,
-																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#000000%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M559.67558,211.36847l0,-56.91991c0,0%200.44186,-6.55171%20-6.06114,-6.55182c-6.503,-0.00011%20-6.36964,6.2247%20-6.36964,6.2247l0,57.41059c0,0%20-0.29716,6.8662%205.87895,6.86033c6.17611,-0.00587%206.55183,-7.02389%206.55183,-7.02389z%22/%3E%3C/g%3E",
+																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#000000%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M559.67558,211.36847v-56.91991c0,0%200.44186,-6.55171%20-6.06114,-6.55182c-6.503,-0.00011%20-6.36964,6.2247%20-6.36964,6.2247v57.41059c0,0%20-0.29716,6.8662%205.87895,6.86033c6.17611,-0.00587%206.55183,-7.02389%206.55183,-7.02389z%22/%3E%3C/g%3E",
 																				"isPath": true,
 																				"cachedAbsolutePosition": {
-																					"x": 543.4622092143318,
+																					"x": 553.4622092143318,
 																					"y": 183.14455630950545
 																				},
 																				"svgStrokeWidth": 1,
-																				"svgWidth": 13.43939408071276,
+																				"_frameUUID": "59175f44-908a-4908-877f-3077a9933697",
+																				"svgWidth": 13.439394080712873,
 																				"svgHeight": 71.49562376306608,
-																				"bbox": {
-																					"left": 546.7425121739755,
-																					"top": 147.3967444279724,
-																					"width": 13.43939408071276,
-																					"height": 71.49562376306608
-																				},
-																				"_zindex": 5,
+																				"_zindex": 0,
 																				"forceFabricCanvasRegen": false
 																			},
 																			{
-																				"uuid": "9c1a20b1-3046-4304-ab3d-96b3efe0879e",
+																				"uuid": "df004696-80bf-480b-844e-c4449323abc1",
 																				"x": -0.5724992789253065,
 																				"y": 2.731692830047052,
-																				"width": 36.62255400560582,
-																				"height": 38.53503813536528,
+																				"width": 36.622554005605934,
+																				"height": 38.535038135365255,
 																				"scaleX": 1,
 																				"scaleY": 1,
 																				"rotation": 0,
@@ -5479,36 +5124,29 @@
 																				"opacity": 1,
 																				"wickScript": "",
 																				"assetUUID": null,
-																				"volume": 1,
 																				"loop": false,
 																				"isText": false,
-																				"textData": false,
 																				"isSymbol": false,
 																				"isButton": false,
 																				"playheadPosition": null,
 																				"currentLayer": null,
 																				"svgX": 549.6889327191878,
-																				"svgY": 166.60873007186984,
+																				"svgY": 166.60873007186987,
 																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#000000%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M583.53314,176.85099c0,0%205.28457,-3.88951%201.27727,-8.413c-4.0073,-4.52349%20-8.24385,0.76669%20-8.24385,0.76669l-26.87763,26.28888l3.43482,9.65021z%22/%3E%3C/g%3E",
 																				"isPath": true,
 																				"cachedAbsolutePosition": {
-																					"x": 558.0002097219908,
+																					"x": 568.0002097219908,
 																					"y": 185.8762491395525
 																				},
 																				"svgStrokeWidth": 1,
+																				"_frameUUID": "59175f44-908a-4908-877f-3077a9933697",
 																				"svgWidth": 37.62255400560582,
 																				"svgHeight": 39.53503813536531,
-																				"bbox": {
-																					"left": 549.188932719188,
-																					"top": 166.10873007186984,
-																					"width": 37.62255400560582,
-																					"height": 39.53503813536531
-																				},
-																				"_zindex": 6,
+																				"_zindex": 1,
 																				"forceFabricCanvasRegen": false
 																			},
 																			{
-																				"uuid": "2f4735f8-897f-4897-b2bf-b72b9a4b22af",
+																				"uuid": "03707ee9-3fea-43fe-9afb-11af0bd6f71a",
 																				"x": 7.426273170729701,
 																				"y": 16.339033825913987,
 																				"width": 27.80784731242204,
@@ -5521,10 +5159,8 @@
 																				"opacity": 1,
 																				"wickScript": "",
 																				"assetUUID": null,
-																				"volume": 1,
 																				"loop": false,
 																				"isText": false,
-																				"textData": false,
 																				"isSymbol": false,
 																				"isButton": false,
 																				"playheadPosition": null,
@@ -5534,19 +5170,14 @@
 																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#000000%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M578.97817,214.29059c0,0%202.80566,6.00618%208.09484,3.08299c5.28917,-2.92319%201.54209,-8.70308%201.54209,-8.70308l-17.33413,-27.8791l-9.18591,5.49802z%22/%3E%3C/g%3E",
 																				"isPath": true,
 																				"cachedAbsolutePosition": {
-																					"x": 565.9989821716458,
+																					"x": 575.9989821716458,
 																					"y": 199.48359013541943
 																				},
 																				"svgStrokeWidth": 1,
+																				"_frameUUID": "59175f44-908a-4908-877f-3077a9933697",
 																				"svgWidth": 28.80784731242204,
 																				"svgHeight": 38.38438285716643,
-																				"bbox": {
-																					"left": 561.5950585154349,
-																					"top": 180.29139870683622,
-																					"width": 28.80784731242204,
-																					"height": 38.38438285716643
-																				},
-																				"_zindex": 7,
+																				"_zindex": 2,
 																				"forceFabricCanvasRegen": false
 																			}
 																		],
@@ -5555,14 +5186,14 @@
 																		"playheadPosition": 1,
 																		"length": 1,
 																		"alwaysSaveState": false,
-																		"uuid": "9f04839b-fae6-4fae-867e-90670f8ce11e",
+																		"uuid": "59175f44-908a-4908-877f-3077a9933697",
 																		"wickScript": ""
 																	},
 																	{
-																		"identifier": "",
+																		"name": "mousePressed",
 																		"wickObjects": [
 																			{
-																				"uuid": "f35c0c8b-3485-4348-ab29-82b236815c80",
+																				"uuid": "2f0d5243-bd10-4bd1-901b-e501aafafdc2",
 																				"x": -15.110499786584342,
 																				"y": 0,
 																				"width": 12.43939408071276,
@@ -5575,40 +5206,28 @@
 																				"opacity": 1,
 																				"wickScript": "",
 																				"assetUUID": null,
-																				"volume": 1,
 																				"loop": false,
 																				"isText": false,
-																				"textData": false,
 																				"isSymbol": false,
 																				"isButton": false,
 																				"playheadPosition": null,
 																				"currentLayer": null,
-																				"svgX": 547.2425121739755,
-																				"svgY": 147.8967444279724,
-																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#16da80%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M559.67558,211.36847l0,-56.91991c0,0%200.44186,-6.55171%20-6.06114,-6.55182c-6.503,-0.00011%20-6.36964,6.2247%20-6.36964,6.2247l0,57.41059c0,0%20-0.29716,6.8662%205.87895,6.86033c6.17611,-0.00587%206.55183,-7.02389%206.55183,-7.02389z%22/%3E%3C/g%3E",
+																				"svgX": 537.2425121739755,
+																				"svgY": 137.8967444279724,
+																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#3e3e3e%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M549.67558,201.36847l0,-56.91991c0,0%200.44186,-6.55171%20-6.06114,-6.55182c-6.503,-0.00011%20-6.36964,6.2247%20-6.36964,6.2247l0,57.41059c0,0%20-0.29716,6.8662%205.87895,6.86033c6.17611,-0.00587%206.55183,-7.02389%206.55183,-7.02389z%22/%3E%3C/g%3E",
 																				"isPath": true,
 																				"cachedAbsolutePosition": {
-																					"x": 543.4622092143318,
+																					"x": 553.4622092143318,
 																					"y": 183.14455630950545
 																				},
-																				"svgStrokeWidth": 1,
-																				"svgWidth": 13.439394080712873,
-																				"svgHeight": 71.49562376306608,
-																				"bbox": {
-																					"left": 546.7425121739755,
-																					"top": 147.3967444279724,
-																					"width": 13.43939408071276,
-																					"height": 71.49562376306608
-																				},
-																				"_zindex": 5,
-																				"forceFabricCanvasRegen": false
+																				"svgStrokeWidth": 1
 																			},
 																			{
-																				"uuid": "e8c5bcf4-c453-4c45-86e1-c46e0e10dcf6",
+																				"uuid": "ff572f86-583c-4583-ae3c-3ee3d8ca4e01",
 																				"x": -0.5724992789253065,
 																				"y": 2.731692830047052,
-																				"width": 36.62255400560582,
-																				"height": 38.53503813536528,
+																				"width": 36.622554005605934,
+																				"height": 38.535038135365255,
 																				"scaleX": 1,
 																				"scaleY": 1,
 																				"rotation": 0,
@@ -5617,36 +5236,24 @@
 																				"opacity": 1,
 																				"wickScript": "",
 																				"assetUUID": null,
-																				"volume": 1,
 																				"loop": false,
 																				"isText": false,
-																				"textData": false,
 																				"isSymbol": false,
 																				"isButton": false,
 																				"playheadPosition": null,
 																				"currentLayer": null,
-																				"svgX": 549.6889327191878,
-																				"svgY": 166.60873007186984,
-																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#16da80%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M583.53314,176.85099c0,0%205.28457,-3.88951%201.27727,-8.413c-4.0073,-4.52349%20-8.24385,0.76669%20-8.24385,0.76669l-26.87763,26.28888l3.43482,9.65021z%22/%3E%3C/g%3E",
+																				"svgX": 539.6889327191878,
+																				"svgY": 156.60873007186987,
+																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#3e3e3e%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M573.53314,166.85099c0,0%205.28457,-3.88951%201.27727,-8.413c-4.0073,-4.52349%20-8.24385,0.76669%20-8.24385,0.76669l-26.87763,26.28888l3.43482,9.65021z%22/%3E%3C/g%3E",
 																				"isPath": true,
 																				"cachedAbsolutePosition": {
-																					"x": 558.0002097219908,
+																					"x": 568.0002097219908,
 																					"y": 185.8762491395525
 																				},
-																				"svgStrokeWidth": 1,
-																				"svgWidth": 37.622554005605934,
-																				"svgHeight": 39.53503813536531,
-																				"bbox": {
-																					"left": 549.188932719188,
-																					"top": 166.10873007186984,
-																					"width": 37.62255400560582,
-																					"height": 39.53503813536531
-																				},
-																				"_zindex": 6,
-																				"forceFabricCanvasRegen": false
+																				"svgStrokeWidth": 1
 																			},
 																			{
-																				"uuid": "8d9a328d-5808-4580-ae58-d6e55b2f1583",
+																				"uuid": "c07f622e-837d-4837-af35-26f3b0583656",
 																				"x": 7.426273170729701,
 																				"y": 16.339033825913987,
 																				"width": 27.80784731242204,
@@ -5659,33 +5266,21 @@
 																				"opacity": 1,
 																				"wickScript": "",
 																				"assetUUID": null,
-																				"volume": 1,
 																				"loop": false,
 																				"isText": false,
-																				"textData": false,
 																				"isSymbol": false,
 																				"isButton": false,
 																				"playheadPosition": null,
 																				"currentLayer": null,
-																				"svgX": 562.0950585154347,
-																				"svgY": 180.79139870683622,
-																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#16da80%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M578.97817,214.29059c0,0%202.80566,6.00618%208.09484,3.08299c5.28917,-2.92319%201.54209,-8.70308%201.54209,-8.70308l-17.33413,-27.8791l-9.18591,5.49802z%22/%3E%3C/g%3E",
+																				"svgX": 552.0950585154347,
+																				"svgY": 170.79139870683622,
+																				"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#3e3e3e%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M568.97817,204.29059c0,0%202.80566,6.00618%208.09484,3.08299c5.28917,-2.92319%201.54209,-8.70308%201.54209,-8.70308l-17.33413,-27.8791l-9.18591,5.49802z%22/%3E%3C/g%3E",
 																				"isPath": true,
 																				"cachedAbsolutePosition": {
-																					"x": 565.9989821716458,
+																					"x": 575.9989821716458,
 																					"y": 199.48359013541943
 																				},
-																				"svgStrokeWidth": 1,
-																				"svgWidth": 28.807847312422155,
-																				"svgHeight": 38.38438285716643,
-																				"bbox": {
-																					"left": 561.5950585154349,
-																					"top": 180.29139870683622,
-																					"width": 28.80784731242204,
-																					"height": 38.38438285716643
-																				},
-																				"_zindex": 7,
-																				"forceFabricCanvasRegen": false
+																				"svgStrokeWidth": 1
 																			}
 																		],
 																		"tweens": [],
@@ -5693,7 +5288,7 @@
 																		"playheadPosition": 2,
 																		"length": 1,
 																		"alwaysSaveState": false,
-																		"uuid": "5f7bbf23-4a39-44a3-aaf3-46af9e5468f2",
+																		"uuid": "d72c20be-b14a-4b14-9c30-65c3e95a7055",
 																		"wickScript": ""
 																	}
 																],
@@ -5702,42 +5297,15 @@
 																"hidden": false
 															}
 														],
-														"playRanges": [
-															{
-																"start": 0,
-																"end": 1,
-																"identifier": "mouseup",
-																"color": "#B6B69F",
-																"uuid": "b11976bb-0118-4011-9bee-81be009b9f0b"
-															},
-															{
-																"start": 1,
-																"end": 2,
-																"identifier": "mouseover",
-																"color": "#AE283F",
-																"uuid": "62aec6c0-9185-4918-95c6-115c3f17ff84"
-															},
-															{
-																"start": 2,
-																"end": 3,
-																"identifier": "mousedown",
-																"color": "#131503",
-																"uuid": "2a1f0a24-e398-4e39-bfa2-9bfa5a8c609a"
-															}
-														],
-														"svgWidth": 44.66039365388144,
-														"svgHeight": 72.49562376306605,
+														"playRanges": [],
+														"_frameUUID": "3b011f4f-656a-4656-915c-e115b3e56d17",
+														"svgWidth": 30.562275557717044,
+														"svgHeight": 50.04693663414628,
 														"svgStrokeWidth": 0,
-														"bbox": {
-															"left": 435.5727090009161,
-															"top": -31.855443690494525,
-															"width": 44.66039365388144,
-															"height": 72.49562376306605
-														},
 														"_zindex": 0,
-														"framesDirty": false,
 														"forceFabricCanvasRegen": false,
-														"_tempZIndex": 4
+														"framesDirty": false,
+														"_tempZIndex": 0
 													}
 												],
 												"tweens": [],
@@ -5782,8 +5350,8 @@
 															"y": -23.144556309505447
 														},
 														"svgStrokeWidth": 1,
-														"svgWidth": 6.429442490486281,
-														"svgHeight": 5.640809999999988,
+														"svgWidth": 4.500609743340419,
+														"svgHeight": 3.9485670000000255,
 														"bbox": {
 															"left": -0.7874289799507892,
 															"top": -25.964959821239376,
@@ -5791,7 +5359,8 @@
 															"height": 5.640807023467858
 														},
 														"_zindex": 0,
-														"forceFabricCanvasRegen": false
+														"forceFabricCanvasRegen": false,
+														"_frameUUID": "6bfa570a-7de9-47de-b7fd-c37fadb03eaa"
 													},
 													{
 														"uuid": "7a1f9876-7311-4731-a36b-fe3647b500a3",
@@ -5821,15 +5390,16 @@
 														"svgX": 549.5984914792195,
 														"svgY": 202.8163804846439,
 														"svgStrokeWidth": 4,
-														"svgWidth": 4.151659999999993,
-														"svgHeight": 18.55952000000002,
+														"svgWidth": 2.906161999999995,
+														"svgHeight": 12.991664000000014,
 														"bbox": {
 															"left": 547.5984914792195,
 															"top": 197.8163804846439,
 															"width": 4.151661695770144,
 															"height": 18.5595227939167
 														},
-														"_zindex": 1
+														"_zindex": 1,
+														"_frameUUID": "6bfa570a-7de9-47de-b7fd-c37fadb03eaa"
 													},
 													{
 														"uuid": "87ed1299-58f3-458f-99fc-f59fa23521b1",
@@ -5859,15 +5429,16 @@
 														"svgX": 549.7501531749896,
 														"svgY": 217.3759032785606,
 														"svgStrokeWidth": 4,
-														"svgWidth": 12.189730000000054,
-														"svgHeight": 4,
+														"svgWidth": 8.532811000000038,
+														"svgHeight": 2.8000000000000114,
 														"bbox": {
 															"left": 547.7501531749895,
 															"top": 212.3759032785606,
 															"width": 12.18973157157825,
 															"height": 4
 														},
-														"_zindex": 2
+														"_zindex": 2,
+														"_frameUUID": "6bfa570a-7de9-47de-b7fd-c37fadb03eaa"
 													},
 													{
 														"uuid": "5cf479ba-1a19-41a1-8ba6-40ba56c8d7ba",
@@ -5897,15 +5468,16 @@
 														"svgX": 579.4758455459029,
 														"svgY": 206.15293779158316,
 														"svgStrokeWidth": 4,
-														"svgWidth": 4.151659999999993,
-														"svgHeight": 15.071300000000065,
+														"svgWidth": 2.906161999999995,
+														"svgHeight": 10.549910000000011,
 														"bbox": {
 															"left": 577.4758455459029,
 															"top": 201.15293779158316,
 															"width": 4.151661695769917,
 															"height": 15.071303791207527
 														},
-														"_zindex": 3
+														"_zindex": 3,
+														"_frameUUID": "6bfa570a-7de9-47de-b7fd-c37fadb03eaa"
 													},
 													{
 														"uuid": "74ea728a-e2b8-4e2b-a883-0e8866d3285c",
@@ -5935,15 +5507,16 @@
 														"svgX": 579.6275072416728,
 														"svgY": 217.22424158279065,
 														"svgStrokeWidth": 4,
-														"svgWidth": 12.644720000000007,
-														"svgHeight": 4,
+														"svgWidth": 8.851304000000027,
+														"svgHeight": 2.8000000000000114,
 														"bbox": {
 															"left": 577.6275072416728,
 															"top": 212.22424158279068,
 															"width": 12.644716658888001,
 															"height": 4
 														},
-														"_zindex": 4
+														"_zindex": 4,
+														"_frameUUID": "6bfa570a-7de9-47de-b7fd-c37fadb03eaa"
 													}
 												],
 												"tweens": [],
@@ -5978,13 +5551,32 @@
 											}
 										],
 										"identifier": "Layer 1",
-										"locked": false,
+										"locked": true,
+										"hidden": false
+									},
+									{
+										"frames": [
+											{
+												"name": "",
+												"wickObjects": [],
+												"tweens": [],
+												"pathData": null,
+												"playheadPosition": 11,
+												"length": 82,
+												"alwaysSaveState": false,
+												"uuid": "c1496134-2b67-42b6-969a-a169de8c8edf",
+												"wickScript": "",
+												"audioAssetUUID": "087cefee-e35f-4e35-adcb-dadc8dd6f57f"
+											}
+										],
+										"identifier": "Layer 3",
+										"locked": true,
 										"hidden": false
 									}
 								],
 								"playRanges": [],
-								"svgWidth": 43.66039365388144,
-								"svgHeight": 71.49562376306608,
+								"svgWidth": 30.562275557717044,
+								"svgHeight": 50.04693663414628,
 								"svgStrokeWidth": 0,
 								"bbox": {
 									"left": 545.7425121739755,
@@ -5992,37 +5584,667 @@
 									"width": 45.66039365388144,
 									"height": 73.49562376306608
 								},
-								"_zindex": 7,
+								"_zindex": 4,
 								"framesDirty": false,
-								"forceFabricCanvasRegen": false
+								"forceFabricCanvasRegen": false,
+								"_frameUUID": "d86e8eb4-cc26-4cc2-b672-9f67e2f4a64c"
 							},
 							{
-								"uuid": "f3618486-1329-4132-a4a5-fa4a6d8334b4",
-								"name": "Screen Shot 2017-11-10 at 3.45.41 PM.png",
-								"x": 486,
-								"y": 240,
-								"width": 88,
-								"height": 30,
+								"x": 514.4369227991923,
+								"y": 192.7156926564871,
+								"width": 48.51415871640006,
+								"height": 52.60978853499506,
 								"scaleX": 1,
 								"scaleY": 1,
 								"rotation": 0,
 								"flipX": false,
 								"flipY": false,
 								"opacity": 1,
-								"wickScript": "",
-								"assetUUID": "8b96c889-ad9d-4ad9-9bf7-19bfe7f0c756",
+								"wickScript": "function%20mousePressed()%20%7B%0A%20%20%20%20shootingstar.play();%0A%7D",
+								"assetUUID": null,
 								"loop": false,
 								"isText": false,
-								"isSymbol": false,
-								"isButton": false,
+								"isSymbol": true,
+								"isButton": true,
 								"isGroup": false,
-								"playheadPosition": null,
-								"currentLayer": null,
-								"isImage": true,
-								"svgWidth": 88,
-								"svgHeight": 30,
+								"playheadPosition": 0,
+								"currentLayer": 0,
+								"layers": [
+									{
+										"frames": [
+											{
+												"name": "mouseReleased",
+												"wickObjects": [
+													{
+														"x": 0,
+														"y": 0,
+														"width": 47.51415871640006,
+														"height": 51.60978853499506,
+														"scaleX": 1,
+														"scaleY": 1,
+														"rotation": 0,
+														"flipX": false,
+														"flipY": false,
+														"opacity": 1,
+														"wickScript": "",
+														"assetUUID": null,
+														"volume": 1,
+														"loop": false,
+														"isText": false,
+														"textData": false,
+														"isSymbol": false,
+														"isButton": false,
+														"playheadPosition": null,
+														"currentLayer": null,
+														"isPath": true,
+														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20fill=%22#3e3e3e%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M517.46043,174.3404c0,0%202.74336,4.31645%207.39939,1.74103c4.65603,-2.57542%202.39392,-7.61702%202.39392,-7.61702c0,0%20-3.22151,-6.23233%20-8.70516,-9.14042c-5.48365,-2.90809%20-13.49301,-2.61155%20-13.49301,-2.61155c0,0%20-11.53991,0.78462%20-17.41033,7.18176c-5.87042,6.39713%20-7.00931,13.01398%20-6.96413,19.36899c0.04401,6.19039%201.10977,12.17051%206.86868,18.28275c5.75891,6.11225%2016.63526,6.7446%2016.63526,6.7446c0,0%208.20366,0.5109%2014.58116,-3.26444c6.3775,-3.77533%208.08664,-8.24508%208.08664,-8.24508c0,0%203.61711,-5.94598%20-1.02915,-8.39019c-4.64626,-2.44421%20-7.1104,2.03057%20-7.1104,2.03057c0,0%20-3.55317,5.35091%20-5.75373,6.39812c-2.15511,1.02558%20-6.3482,2.18958%20-8.74397,1.6758c-2.79184,-0.59872%20-5.16911,-0.5367%20-8.42454,-4.94437c-3.38729,-4.56569%20-3.29498,-9.94604%20-3.29498,-9.94604c0,0%20-0.47959,-7.63809%203.20144,-12.09369c3.56329,-4.29848%206.55727,-5.18671%209.57568,-5.44074c3.25828,-0.37693%205.75803,0.56503%208.15976,2.73381c2.39008,2.24352%204.02747,5.53611%204.02747,5.53611z%22/%3E%3C/g%3E",
+														"forceFabricCanvasRegen": false,
+														"svgX": 480.6798434409923,
+														"svgY": 156.7039307172978,
+														"svgStrokeWidth": 1,
+														"_zindex": 0,
+														"svgWidth": 48.51415871639995,
+														"svgHeight": 52.60978853499506,
+														"bbox": {
+															"left": 381.4369227991923,
+															"top": -22.284307343512893,
+															"width": 48.51415871640006,
+															"height": 52.60978853499506
+														},
+														"_tempZIndex": 8,
+														"_frameUUID": "c514c842-dc8a-4dc8-8044-4004d8981a76",
+														"uuid": "e0241ba9-e171-4e17-b723-a77204adf0ea"
+													}
+												],
+												"tweens": [],
+												"pathData": null,
+												"playheadPosition": 0,
+												"length": 1,
+												"alwaysSaveState": false,
+												"wickScript": "",
+												"uuid": "cee54f2a-d33b-4d33-b0e5-770ed11aad29"
+											},
+											{
+												"name": "mouseHover",
+												"wickObjects": [
+													{
+														"x": 0,
+														"y": -2.842170943040401e-14,
+														"width": 47.51415871639989,
+														"height": 51.60978853499509,
+														"scaleX": 1,
+														"scaleY": 1,
+														"rotation": 0,
+														"flipX": false,
+														"flipY": false,
+														"opacity": 1,
+														"wickScript": "",
+														"assetUUID": null,
+														"volume": 1,
+														"loop": false,
+														"isText": false,
+														"textData": false,
+														"isSymbol": false,
+														"isButton": false,
+														"playheadPosition": null,
+														"currentLayer": null,
+														"svgX": 490.67984344099233,
+														"svgY": 166.91079838898952,
+														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20fill=%22#000000%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M527.46043,184.54727c0,0%202.74336,4.31645%207.39939,1.74103c4.65603,-2.57542%202.39392,-7.61702%202.39392,-7.61702c0,0%20-3.22151,-6.23233%20-8.70516,-9.14042c-5.48365,-2.90809%20-13.49301,-2.61155%20-13.49301,-2.61155c0,0%20-11.53991,0.78462%20-17.41033,7.18176c-5.87042,6.39713%20-7.00931,13.01398%20-6.96413,19.36899c0.04401,6.19039%201.10977,12.17051%206.86868,18.28275c5.75891,6.11225%2016.63526,6.7446%2016.63526,6.7446c0,0%208.20366,0.5109%2014.58116,-3.26444c6.3775,-3.77533%208.08664,-8.24508%208.08664,-8.24508c0,0%203.61711,-5.94598%20-1.02915,-8.39019c-4.64626,-2.44421%20-7.1104,2.03057%20-7.1104,2.03057c0,0%20-3.55317,5.35091%20-5.75373,6.39812c-2.15511,1.02558%20-6.3482,2.18958%20-8.74397,1.6758c-2.79184,-0.59872%20-5.16911,-0.5367%20-8.42454,-4.94437c-3.38729,-4.56569%20-3.29498,-9.94604%20-3.29498,-9.94604c0,0%20-0.47959,-7.63809%203.20144,-12.09369c3.56329,-4.29848%206.55727,-5.18671%209.57568,-5.44074c3.25828,-0.37693%205.75803,0.56503%208.15976,2.73381c2.39008,2.24352%204.02747,5.53611%204.02747,5.53611z%22/%3E%3C/g%3E",
+														"isPath": true,
+														"cachedAbsolutePosition": {
+															"x": 504.4369227991923,
+															"y": 192.50882498479533
+														},
+														"svgStrokeWidth": 1,
+														"svgWidth": 48.51415871639995,
+														"svgHeight": 52.60978853499512,
+														"bbox": {
+															"left": 490.1798434409924,
+															"top": 166.41079838898952,
+															"width": 48.51415871639995,
+															"height": 52.60978853499512
+														},
+														"_zindex": 0,
+														"forceFabricCanvasRegen": false,
+														"_frameUUID": "a57731e8-83d9-483d-92b9-452b2ad744ba",
+														"_tempZIndex": 7,
+														"uuid": "7062f6e0-139e-4139-a4d9-b24d1611a717"
+													}
+												],
+												"tweens": [],
+												"pathData": null,
+												"playheadPosition": 1,
+												"length": 1,
+												"alwaysSaveState": false,
+												"wickScript": "",
+												"uuid": "c0d6a8c4-7c9c-47c9-bfe9-0ffe0c4c43ca"
+											},
+											{
+												"name": "mousePressed",
+												"wickObjects": [
+													{
+														"x": 0,
+														"y": 0,
+														"width": 47.51415871640006,
+														"height": 51.60978853499506,
+														"scaleX": 1,
+														"scaleY": 1,
+														"rotation": 0,
+														"flipX": false,
+														"flipY": false,
+														"opacity": 1,
+														"wickScript": "",
+														"assetUUID": null,
+														"loop": false,
+														"isText": false,
+														"isSymbol": false,
+														"isButton": false,
+														"playheadPosition": null,
+														"currentLayer": null,
+														"svgX": 480.6798434409923,
+														"svgY": 156.7039307172978,
+														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20fill=%22#3e3e3e%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M517.46043,174.3404c0,0%202.74336,4.31645%207.39939,1.74103c4.65603,-2.57542%202.39392,-7.61702%202.39392,-7.61702c0,0%20-3.22151,-6.23233%20-8.70516,-9.14042c-5.48365,-2.90809%20-13.49301,-2.61155%20-13.49301,-2.61155c0,0%20-11.53991,0.78462%20-17.41033,7.18176c-5.87042,6.39713%20-7.00931,13.01398%20-6.96413,19.36899c0.04401,6.19039%201.10977,12.17051%206.86868,18.28275c5.75891,6.11225%2016.63526,6.7446%2016.63526,6.7446c0,0%208.20366,0.5109%2014.58116,-3.26444c6.3775,-3.77533%208.08664,-8.24508%208.08664,-8.24508c0,0%203.61711,-5.94598%20-1.02915,-8.39019c-4.64626,-2.44421%20-7.1104,2.03057%20-7.1104,2.03057c0,0%20-3.55317,5.35091%20-5.75373,6.39812c-2.15511,1.02558%20-6.3482,2.18958%20-8.74397,1.6758c-2.79184,-0.59872%20-5.16911,-0.5367%20-8.42454,-4.94437c-3.38729,-4.56569%20-3.29498,-9.94604%20-3.29498,-9.94604c0,0%20-0.47959,-7.63809%203.20144,-12.09369c3.56329,-4.29848%206.55727,-5.18671%209.57568,-5.44074c3.25828,-0.37693%205.75803,0.56503%208.15976,2.73381c2.39008,2.24352%204.02747,5.53611%204.02747,5.53611z%22/%3E%3C/g%3E",
+														"isPath": true,
+														"cachedAbsolutePosition": {
+															"x": 0,
+															"y": 0
+														},
+														"svgStrokeWidth": 1,
+														"uuid": "1a9a56b4-0a9a-40a9-9065-410662ee4420"
+													}
+												],
+												"tweens": [],
+												"pathData": null,
+												"playheadPosition": 2,
+												"length": 1,
+												"alwaysSaveState": false,
+												"wickScript": "",
+												"uuid": "4190fe07-0d7e-40d7-8fbf-2cfb2f7dee18"
+											}
+										],
+										"identifier": "Layer 1",
+										"locked": false,
+										"hidden": false
+									}
+								],
+								"playRanges": [],
+								"_frameUUID": "d86e8eb4-cc26-4cc2-b672-9f67e2f4a64c",
+								"svgWidth": 33.95991110148009,
+								"svgHeight": 36.82685197449655,
 								"svgStrokeWidth": 0,
-								"_zindex": 8
+								"_zindex": 5,
+								"framesDirty": false,
+								"forceFabricCanvasRegen": false,
+								"_tempZIndex": 4,
+								"uuid": "5de3525b-7cc2-47cc-8596-ac59086a9da8"
+							},
+							{
+								"x": 473.9857317920996,
+								"y": 183.51847989807362,
+								"width": 13.531119999999987,
+								"height": 71.27407679309397,
+								"scaleX": 1,
+								"scaleY": 1,
+								"rotation": 0,
+								"flipX": false,
+								"flipY": false,
+								"opacity": 1,
+								"wickScript": "function%20mousePressed()%20%7B%0A%20%20%20%20weather.gotoNextFrame();%0A%7D",
+								"assetUUID": null,
+								"loop": false,
+								"isText": false,
+								"isSymbol": true,
+								"isButton": true,
+								"isGroup": false,
+								"playheadPosition": 0,
+								"currentLayer": 0,
+								"layers": [
+									{
+										"frames": [
+											{
+												"name": "mouseReleased",
+												"wickObjects": [
+													{
+														"x": 0.0065263705041047615,
+														"y": 9.057513283027191,
+														"width": 12.196839513550685,
+														"height": 52.159050227039586,
+														"scaleX": 1,
+														"scaleY": 1,
+														"rotation": 0,
+														"flipX": false,
+														"flipY": false,
+														"opacity": 1,
+														"wickScript": "",
+														"assetUUID": null,
+														"volume": 1,
+														"loop": false,
+														"isText": false,
+														"textData": false,
+														"isSymbol": false,
+														"isButton": false,
+														"playheadPosition": null,
+														"currentLayer": null,
+														"isPath": true,
+														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#3e3e3e%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M470.08203,203.34982l0,-41.34954c0,0%200.47017,-5.50459%20-5.95977,-5.50381c-6.42994,0.00078%20-6.22746,5.50381%20-6.22746,5.50381l0,41.34954c0,0%20-0.2251,5.30671%206.22746,5.3057c6.45256,-0.00101%205.95977,-5.3057%205.95977,-5.3057z%22/%3E%3C/g%3E",
+														"svgStrokeWidth": 1,
+														"svgWidth": 13.196839513550685,
+														"svgHeight": 53.159050227039586,
+														"bbox": {
+															"left": 340.9922581626037,
+															"top": -22.424006818899187,
+															"width": 13.196839513550685,
+															"height": 53.159050227039586
+														},
+														"_zindex": 0,
+														"forceFabricCanvasRegen": false,
+														"svgX": 457.8938384058284,
+														"svgY": 156.49646806758102,
+														"_tempZIndex": 7,
+														"_frameUUID": "853eb0bc-8b33-48b3-ac3a-02c39e6af00b",
+														"uuid": "93433f89-bac2-4bac-92d2-012dc9879082"
+													},
+													{
+														"x": 0,
+														"y": -29.067278396546982,
+														"width": 12.531119999999987,
+														"height": 12.139520000000005,
+														"scaleX": 1,
+														"scaleY": 1,
+														"rotation": 0,
+														"flipX": false,
+														"flipY": false,
+														"opacity": 1,
+														"wickScript": "",
+														"assetUUID": null,
+														"volume": 1,
+														"loop": false,
+														"isText": false,
+														"textData": false,
+														"isSymbol": false,
+														"isButton": false,
+														"playheadPosition": null,
+														"currentLayer": null,
+														"isPath": true,
+														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#3e3e3e%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M463.98573,140.52096c3.46037,0%206.26556,-2.71753%206.26556,-6.06976c0,-3.35224%20-2.80519,-6.06976%20-6.26556,-6.06976c-3.46037,0%20-6.26556,2.71753%20-6.26556,6.06976c0,3.35224%202.80519,6.06976%206.26556,6.06976z%22/%3E%3C/g%3E",
+														"forceFabricCanvasRegen": false,
+														"svgX": 457.7201717920996,
+														"svgY": 128.38144150152664,
+														"svgStrokeWidth": 1,
+														"svgWidth": 13.531119999999987,
+														"svgHeight": 13.139520000000005,
+														"bbox": {
+															"left": 340.9857317920996,
+															"top": -60.54879849847336,
+															"width": 13.531119999999987,
+															"height": 13.139520000000005
+														},
+														"_zindex": 1,
+														"_tempZIndex": 8,
+														"_frameUUID": "853eb0bc-8b33-48b3-ac3a-02c39e6af00b",
+														"uuid": "b77faffc-165c-4165-84db-e44d88409678"
+													}
+												],
+												"tweens": [],
+												"pathData": null,
+												"playheadPosition": 0,
+												"length": 1,
+												"alwaysSaveState": false,
+												"wickScript": "",
+												"uuid": "ddc82efb-d69b-4d69-9ee8-01ee4f4962cf"
+											},
+											{
+												"name": "mouseHover",
+												"wickObjects": [
+													{
+														"x": 0.006526370504161605,
+														"y": 9.057513283027191,
+														"width": 12.196839513550628,
+														"height": 52.159050227039586,
+														"scaleX": 1,
+														"scaleY": 1,
+														"rotation": 0,
+														"flipX": false,
+														"flipY": false,
+														"opacity": 1,
+														"wickScript": "",
+														"assetUUID": null,
+														"loop": false,
+														"isText": false,
+														"isSymbol": false,
+														"isButton": false,
+														"playheadPosition": null,
+														"currentLayer": null,
+														"svgX": 467.89383840582843,
+														"svgY": 166.49646806758102,
+														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#000000%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M480.08203,213.34982v-41.34954c0,0%200.47017,-5.50459%20-5.95977,-5.50381c-6.42994,0.00078%20-6.22746,5.50381%20-6.22746,5.50381v41.34954c0,0%20-0.2251,5.30671%206.22746,5.3057c6.45256,-0.00101%205.95977,-5.3057%205.95977,-5.3057z%22/%3E%3C/g%3E",
+														"isPath": true,
+														"cachedAbsolutePosition": {
+															"x": 0.0065263705041047615,
+															"y": 9.057513283027191
+														},
+														"svgStrokeWidth": 1,
+														"_frameUUID": "913706ee-76dc-476d-84d1-184defe2e593",
+														"svgWidth": 13.196839513550685,
+														"svgHeight": 53.159050227039586,
+														"_zindex": 0,
+														"forceFabricCanvasRegen": false,
+														"uuid": "eee29b68-9c3b-49c3-99d1-599d2d526e92"
+													},
+													{
+														"x": 0,
+														"y": -29.067278396546982,
+														"width": 12.531119999999987,
+														"height": 12.139520000000005,
+														"scaleX": 1,
+														"scaleY": 1,
+														"rotation": 0,
+														"flipX": false,
+														"flipY": false,
+														"opacity": 1,
+														"wickScript": "",
+														"assetUUID": null,
+														"loop": false,
+														"isText": false,
+														"isSymbol": false,
+														"isButton": false,
+														"playheadPosition": null,
+														"currentLayer": null,
+														"svgX": 467.7201717920996,
+														"svgY": 148.38144150152664,
+														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#000000%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M473.98573,160.52096c3.46037,0%206.26556,-2.71753%206.26556,-6.06976c0,-3.35224%20-2.80519,-6.06976%20-6.26556,-6.06976c-3.46037,0%20-6.26556,2.71753%20-6.26556,6.06976c0,3.35224%202.80519,6.06976%206.26556,6.06976z%22/%3E%3C/g%3E",
+														"isPath": true,
+														"cachedAbsolutePosition": {
+															"x": 0,
+															"y": -29.067278396546982
+														},
+														"svgStrokeWidth": 1,
+														"_frameUUID": "913706ee-76dc-476d-84d1-184defe2e593",
+														"svgWidth": 13.531119999999987,
+														"svgHeight": 13.139520000000005,
+														"_zindex": 1,
+														"forceFabricCanvasRegen": false,
+														"uuid": "38e8e245-3471-4347-b5af-cf5acc9910c2"
+													}
+												],
+												"tweens": [],
+												"pathData": null,
+												"playheadPosition": 1,
+												"length": 1,
+												"alwaysSaveState": false,
+												"wickScript": "",
+												"uuid": "61f73934-8dfc-48df-8796-50798adab2d2"
+											},
+											{
+												"name": "mousePressed",
+												"wickObjects": [
+													{
+														"x": 0.0065263705041047615,
+														"y": 9.057513283027191,
+														"width": 12.196839513550685,
+														"height": 52.159050227039586,
+														"scaleX": 1,
+														"scaleY": 1,
+														"rotation": 0,
+														"flipX": false,
+														"flipY": false,
+														"opacity": 1,
+														"wickScript": "",
+														"assetUUID": null,
+														"loop": false,
+														"isText": false,
+														"isSymbol": false,
+														"isButton": false,
+														"playheadPosition": null,
+														"currentLayer": null,
+														"svgX": 457.8938384058284,
+														"svgY": 156.49646806758102,
+														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#3e3e3e%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M470.08203,203.34982l0,-41.34954c0,0%200.47017,-5.50459%20-5.95977,-5.50381c-6.42994,0.00078%20-6.22746,5.50381%20-6.22746,5.50381l0,41.34954c0,0%20-0.2251,5.30671%206.22746,5.3057c6.45256,-0.00101%205.95977,-5.3057%205.95977,-5.3057z%22/%3E%3C/g%3E",
+														"isPath": true,
+														"cachedAbsolutePosition": {
+															"x": 0.0065263705041047615,
+															"y": 9.057513283027191
+														},
+														"svgStrokeWidth": 1,
+														"uuid": "4f98a2e6-3ba5-43ba-b4d5-674dc8a52b12"
+													},
+													{
+														"x": 0,
+														"y": -29.067278396546982,
+														"width": 12.531119999999987,
+														"height": 12.139520000000005,
+														"scaleX": 1,
+														"scaleY": 1,
+														"rotation": 0,
+														"flipX": false,
+														"flipY": false,
+														"opacity": 1,
+														"wickScript": "",
+														"assetUUID": null,
+														"loop": false,
+														"isText": false,
+														"isSymbol": false,
+														"isButton": false,
+														"playheadPosition": null,
+														"currentLayer": null,
+														"svgX": 457.7201717920996,
+														"svgY": 128.38144150152664,
+														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20id=%22svg%22%20fill=%22#3e3e3e%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M463.98573,140.52096c3.46037,0%206.26556,-2.71753%206.26556,-6.06976c0,-3.35224%20-2.80519,-6.06976%20-6.26556,-6.06976c-3.46037,0%20-6.26556,2.71753%20-6.26556,6.06976c0,3.35224%202.80519,6.06976%206.26556,6.06976z%22/%3E%3C/g%3E",
+														"isPath": true,
+														"cachedAbsolutePosition": {
+															"x": 0,
+															"y": -29.067278396546982
+														},
+														"svgStrokeWidth": 1,
+														"uuid": "48e2864e-7664-4766-864d-ec641c8a05e1"
+													}
+												],
+												"tweens": [],
+												"pathData": null,
+												"playheadPosition": 2,
+												"length": 1,
+												"alwaysSaveState": false,
+												"wickScript": "",
+												"uuid": "f880f527-277b-4277-980b-99805b872ffc"
+											}
+										],
+										"identifier": "Layer 1",
+										"locked": false,
+										"hidden": false
+									}
+								],
+								"playRanges": [],
+								"_frameUUID": "d86e8eb4-cc26-4cc2-b672-9f67e2f4a64c",
+								"svgWidth": 9.47178400000007,
+								"svgHeight": 49.89185375516581,
+								"svgStrokeWidth": 0,
+								"_zindex": 6,
+								"framesDirty": false,
+								"forceFabricCanvasRegen": false,
+								"_tempZIndex": 5,
+								"uuid": "8fc7d9d5-6018-4601-89d6-c89d1a2a5b6b"
+							},
+							{
+								"x": 416.4998541537699,
+								"y": 183.15350925703981,
+								"width": 85.75812431812892,
+								"height": 71.03770177979442,
+								"scaleX": 1,
+								"scaleY": 1,
+								"rotation": 0,
+								"flipX": false,
+								"flipY": false,
+								"opacity": 1,
+								"wickScript": "function%20mousePressed()%20%7B%0A%20%20%20%20logo.ghost.poof.play();%0A%20%20%20%20logo.ghost.gotoNextFrame();%0A%7D",
+								"assetUUID": null,
+								"loop": false,
+								"isText": false,
+								"isSymbol": true,
+								"isButton": true,
+								"isGroup": false,
+								"playheadPosition": 0,
+								"currentLayer": 0,
+								"layers": [
+									{
+										"frames": [
+											{
+												"name": "mouseReleased",
+												"wickObjects": [
+													{
+														"x": 0,
+														"y": 0,
+														"width": 84.75812431812892,
+														"height": 70.03770177979442,
+														"scaleX": 1,
+														"scaleY": 1,
+														"rotation": 0,
+														"flipX": false,
+														"flipY": false,
+														"opacity": 1,
+														"wickScript": "",
+														"assetUUID": null,
+														"volume": 1,
+														"loop": false,
+														"isText": false,
+														"textData": false,
+														"isSymbol": false,
+														"isButton": false,
+														"playheadPosition": null,
+														"currentLayer": null,
+														"isPath": true,
+														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20fill=%22#3e3e3e%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M364.34795,147.04648c0,0%20-1.8175,-7.32336%204.82959,-8.72594c6.64709,-1.40257%207.36423,5.59254%207.36423,5.59254l9.79742,43.43654l11.24914,-40.74556c0,0%201.11568,-8.20145%208.63836,-8.23434c7.52269,-0.03289%208.86286,7.78361%208.86286,7.78361l11.51482,40.86852l10.01709,-42.64883c0,0%201.97701,-7.42335%207.86498,-6.06198c5.88797,1.36137%204.15435,8.47001%204.15435,8.47001l-13.21959,54.07401c0,0%20-0.46075,7.04024%20-8.07611,6.99342c-7.61536,-0.04683%20-7.93976,-7.17703%20-7.93976,-7.17703l-12.66376,-46.46531l-12.63995,45.99946c0,0%20-1.37102,7.87713%20-8.31545,7.96603c-6.94443,0.0889%20-8.29474,-7.92863%20-8.29474,-7.92863z%22/%3E%3C/g%3E",
+														"forceFabricCanvasRegen": false,
+														"svgX": 364.1207919947054,
+														"svgY": 138.1346583671426,
+														"svgStrokeWidth": 1,
+														"_zindex": 0,
+														"svgWidth": 85.75812431812881,
+														"svgHeight": 71.03770177979442,
+														"bbox": {
+															"left": 283.4998541537699,
+															"top": -31.846490742960185,
+															"width": 85.75812431812892,
+															"height": 71.03770177979442
+														},
+														"_tempZIndex": 7,
+														"_frameUUID": "03d34b8a-d28a-4d28-85f1-d05f4c194d10",
+														"uuid": "9687da93-4e7c-44e7-a514-aa51f9fccddb"
+													}
+												],
+												"tweens": [],
+												"pathData": null,
+												"playheadPosition": 0,
+												"length": 1,
+												"alwaysSaveState": false,
+												"wickScript": "",
+												"uuid": "573aa4a9-4f75-44f7-beca-4fecf6dc3588"
+											},
+											{
+												"name": "mouseHover",
+												"wickObjects": [
+													{
+														"x": 0,
+														"y": 0,
+														"width": 84.75812431812892,
+														"height": 70.03770177979442,
+														"scaleX": 1,
+														"scaleY": 1,
+														"rotation": 0,
+														"flipX": false,
+														"flipY": false,
+														"opacity": 1,
+														"wickScript": "",
+														"assetUUID": null,
+														"loop": false,
+														"isText": false,
+														"isSymbol": false,
+														"isButton": false,
+														"playheadPosition": null,
+														"currentLayer": null,
+														"svgX": 374.1207919947054,
+														"svgY": 148.1346583671426,
+														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20fill=%22#000000%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M374.34795,157.04648c0,0%20-1.8175,-7.32336%204.82959,-8.72594c6.64709,-1.40257%207.36423,5.59254%207.36423,5.59254l9.79742,43.43654l11.24914,-40.74556c0,0%201.11568,-8.20145%208.63836,-8.23434c7.52269,-0.03289%208.86286,7.78361%208.86286,7.78361l11.51482,40.86852l10.01709,-42.64883c0,0%201.97701,-7.42335%207.86498,-6.06198c5.88797,1.36137%204.15435,8.47001%204.15435,8.47001l-13.21959,54.07401c0,0%20-0.46075,7.04024%20-8.07611,6.99342c-7.61536,-0.04683%20-7.93976,-7.17703%20-7.93976,-7.17703l-12.66376,-46.46531l-12.63995,45.99946c0,0%20-1.37102,7.87713%20-8.31545,7.96603c-6.94443,0.0889%20-8.29474,-7.92863%20-8.29474,-7.92863z%22/%3E%3C/g%3E",
+														"isPath": true,
+														"cachedAbsolutePosition": {
+															"x": 0,
+															"y": 0
+														},
+														"svgStrokeWidth": 1,
+														"_frameUUID": "a01102e1-0f0b-40f0-a8e4-368e8e28b583",
+														"svgWidth": 85.75812431812881,
+														"svgHeight": 71.03770177979447,
+														"_zindex": 0,
+														"forceFabricCanvasRegen": false,
+														"uuid": "76058785-e2d3-4e2d-a6be-b26b63540104"
+													}
+												],
+												"tweens": [],
+												"pathData": null,
+												"playheadPosition": 1,
+												"length": 1,
+												"alwaysSaveState": false,
+												"wickScript": "",
+												"uuid": "e79e39b0-2b2e-42b2-bd00-6bd071d2d5c6"
+											},
+											{
+												"name": "mousePressed",
+												"wickObjects": [
+													{
+														"x": 0,
+														"y": 0,
+														"width": 84.75812431812892,
+														"height": 70.03770177979442,
+														"scaleX": 1,
+														"scaleY": 1,
+														"rotation": 0,
+														"flipX": false,
+														"flipY": false,
+														"opacity": 1,
+														"wickScript": "",
+														"assetUUID": null,
+														"loop": false,
+														"isText": false,
+														"isSymbol": false,
+														"isButton": false,
+														"playheadPosition": null,
+														"currentLayer": null,
+														"svgX": 364.1207919947054,
+														"svgY": 138.1346583671426,
+														"pathData": "%3Cg%20xmlns=%22http://www.w3.org/2000/svg%22%20fill=%22#3e3e3e%22%20fill-rule=%22nonzero%22%20stroke-opacity=%220%22%20stroke=%22#ff0000%22%20stroke-width=%221%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-miterlimit=%2210%22%20stroke-dasharray=%22%22%20stroke-dashoffset=%220%22%20font-family=%22none%22%20font-weight=%22none%22%20font-size=%22none%22%20text-anchor=%22none%22%20style=%22mix-blend-mode:%20normal%22%3E%3Cpath%20d=%22M364.34795,147.04648c0,0%20-1.8175,-7.32336%204.82959,-8.72594c6.64709,-1.40257%207.36423,5.59254%207.36423,5.59254l9.79742,43.43654l11.24914,-40.74556c0,0%201.11568,-8.20145%208.63836,-8.23434c7.52269,-0.03289%208.86286,7.78361%208.86286,7.78361l11.51482,40.86852l10.01709,-42.64883c0,0%201.97701,-7.42335%207.86498,-6.06198c5.88797,1.36137%204.15435,8.47001%204.15435,8.47001l-13.21959,54.07401c0,0%20-0.46075,7.04024%20-8.07611,6.99342c-7.61536,-0.04683%20-7.93976,-7.17703%20-7.93976,-7.17703l-12.66376,-46.46531l-12.63995,45.99946c0,0%20-1.37102,7.87713%20-8.31545,7.96603c-6.94443,0.0889%20-8.29474,-7.92863%20-8.29474,-7.92863z%22/%3E%3C/g%3E",
+														"isPath": true,
+														"cachedAbsolutePosition": {
+															"x": 0,
+															"y": 0
+														},
+														"svgStrokeWidth": 1,
+														"uuid": "d47fe92a-29a0-429a-97c6-517c2340fa57"
+													}
+												],
+												"tweens": [],
+												"pathData": null,
+												"playheadPosition": 2,
+												"length": 1,
+												"alwaysSaveState": false,
+												"wickScript": "",
+												"uuid": "58111882-ebaa-4eba-8b2f-c0b2bac8bd63"
+											}
+										],
+										"identifier": "Layer 1",
+										"locked": false,
+										"hidden": false
+									}
+								],
+								"playRanges": [],
+								"_frameUUID": "d86e8eb4-cc26-4cc2-b672-9f67e2f4a64c",
+								"svgWidth": 60.030687022690245,
+								"svgHeight": 49.72639124585612,
+								"svgStrokeWidth": 0,
+								"_zindex": 7,
+								"framesDirty": false,
+								"forceFabricCanvasRegen": false,
+								"_tempZIndex": 6,
+								"uuid": "dcb478cb-c50b-4c50-8d34-d4d30dac9923"
 							}
 						],
 						"tweens": [],
@@ -7990,8 +8212,8 @@
 									}
 								],
 								"playRanges": [],
-								"svgWidth": 724,
-								"svgHeight": 484,
+								"svgWidth": 506.79999999999995,
+								"svgHeight": 338.7999999999999,
 								"svgStrokeWidth": 0,
 								"bbox": {
 									"left": -2.5,
@@ -8001,7 +8223,8 @@
 								},
 								"_zindex": 0,
 								"framesDirty": false,
-								"forceFabricCanvasRegen": false
+								"forceFabricCanvasRegen": false,
+								"_frameUUID": "d715e631-eed7-4eed-9adb-1dade1db22d8"
 							}
 						],
 						"tweens": [],
@@ -8687,6 +8910,12 @@
 				"type": "image",
 				"filename": "Screen Shot 2017-11-10 at 3.45.41 PM.png",
 				"uuid": "8b96c889-ad9d-4ad9-9bf7-19bfe7f0c756"
+			},
+			"087cefee-e35f-4e35-adcb-dadc8dd6f57f": {
+				"data": "data:audio/ogg;base64,T2dnUwACAAAAAAAAAAAmEPcfAAAAAPn2zOMBHgF2b3JiaXMAAAAAAkSsAAAAAAAAgLUBAAAAAAC4AU9nZ1MAAAAAAAAAAAAAJhD3HwEAAAAWyGOlEd////////////////////8HA3ZvcmJpcw0AAABMYXZmNTcuNDguMTAzBwAAACkAAABjcmVhdGlvbl90aW1lPTIwMTQtMTItMDVUMTM6NTM6MjIuMDAwMDAwWgwAAABsYW5ndWFnZT11bmQZAAAAaGFuZGxlcl9uYW1lPVNvdW5kSGFuZGxlch8AAABlbmNvZGVyPUxhdmM1Ny41NS4xMDEgbGlidm9yYmlzEAAAAG1ham9yX2JyYW5kPWRhc2gPAAAAbWlub3JfdmVyc2lvbj0wGgAAAGNvbXBhdGlibGVfYnJhbmRzPWlzbzZtcDQxAQV2b3JiaXMlQkNWAQBAAAAkcxgqRqVzFoQQGkJQGeMcQs5r7BlCTBGCHDJMW8slc5AhpKBCiFsogdCQVQAAQAAAh0F4FISKQQghhCU9WJKDJz0IIYSIOXgUhGlBCCGEEEIIIYQQQgghhEU5aJKDJ0EIHYTjMDgMg+U4+ByERTlYEIMnQegghA9CuJqDrDkIIYQkNUhQgwY56ByEwiwoioLEMLgWhAQ1KIyC5DDI1IMLQoiag0k1+BqEZ0F4FoRpQQghhCRBSJCDBkHIGIRGQViSgwY5uBSEy0GoGoQqOQgfhCA0ZBUAkAAAoKIoiqIoChAasgoAyAAAEEBRFMdxHMmRHMmxHAsIDVkFAAABAAgAAKBIiqRIjuRIkiRZkiVZkiVZkuaJqizLsizLsizLMhAasgoASAAAUFEMRXEUBwgNWQUAZAAACKA4iqVYiqVoiueIjgiEhqwCAIAAAAQAABA0Q1M8R5REz1RV17Zt27Zt27Zt27Zt27ZtW5ZlGQgNWQUAQAAAENJpZqkGiDADGQZCQ1YBAAgAAIARijDEgNCQVQAAQAAAgBhKDqIJrTnfnOOgWQ6aSrE5HZxItXmSm4q5Oeecc87J5pwxzjnnnKKcWQyaCa0555zEoFkKmgmtOeecJ7F50JoqrTnnnHHO6WCcEcY555wmrXmQmo21OeecBa1pjppLsTnnnEi5eVKbS7U555xzzjnnnHPOOeec6sXpHJwTzjnnnKi9uZab0MU555xPxunenBDOOeecc84555xzzjnnnCA0ZBUAAAQAQBCGjWHcKQjS52ggRhFiGjLpQffoMAkag5xC6tHoaKSUOggllXFSSicIDVkFAAACAEAIIYUUUkghhRRSSCGFFGKIIYYYcsopp6CCSiqpqKKMMssss8wyyyyzzDrsrLMOOwwxxBBDK63EUlNtNdZYa+4555qDtFZaa621UkoppZRSCkJDVgEAIAAABEIGGWSQUUghhRRiiCmnnHIKKqiA0JBVAAAgAIAAAAAAT/Ic0REd0REd0REd0REd0fEczxElURIlURIt0zI101NFVXVl15Z1Wbd9W9iFXfd93fd93fh1YViWZVmWZVmWZVmWZVmWZVmWIDRkFQAAAgAAIIQQQkghhRRSSCnGGHPMOegklBAIDVkFAAACAAgAAABwFEdxHMmRHEmyJEvSJM3SLE/zNE8TPVEURdM0VdEVXVE3bVE2ZdM1XVM2XVVWbVeWbVu2dduXZdv3fd/3fd/3fd/3fd/3fV0HQkNWAQASAAA6kiMpkiIpkuM4jiRJQGjIKgBABgBAAACK4iiO4ziSJEmSJWmSZ3mWqJma6ZmeKqpAaMgqAAAQAEAAAAAAAACKpniKqXiKqHiO6IiSaJmWqKmaK8qm7Lqu67qu67qu67qu67qu67qu67qu67qu67qu67qu67qu67quC4SGrAIAJAAAdCRHciRHUiRFUiRHcoDQkFUAgAwAgAAAHMMxJEVyLMvSNE/zNE8TPdETPdNTRVd0gdCQVQAAIACAAAAAAAAADMmwFMvRHE0SJdVSLVVTLdVSRdVTVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTdM0TRMIDVkJAJABAJAQUy0txpoJiyRi0mqroGMMUuylsUgqZ7W3yjGFGLVeGoeUURB7qSRjikHMLaTQKSat1lRChRSkmGMqFVIOUiA0ZIUAEJoB4HAcQLIsQLIsAAAAAAAAAJA0DdA8D7A0DwAAAAAAAAAkTQMsTwM0zwMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQNI0QPM8QPM8AAAAAAAAANA8D/A8EfBEEQAAAAAAAAAszwM00QM8UQQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQNI0QPM8QPM8AAAAAAAAALA8D/BEEdA8EQAAAAAAAAAszwM8UQQ80QMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAABDgAAAQYCEUGrIiAIgTAHBIEiQJkgTNA0iWBU2DpsE0AZJlQdOgaTBNAAAAAAAAAAAAACRNg6ZB0yCKAEnToGnQNIgiAAAAAAAAAAAAAJKmQdOgaRBFgKRp0DRoGkQRAAAAAAAAAAAAAM80IYoQRZgmwDNNiCJEEaYJAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAABhwAAAIMKEMFBqyIgCIEwBwOIplAQCA4ziWBQAAjuNYFgAAWJYligAAYFmaKAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAGHAAAAgwoQwUGrISAIgCAHAoimUBx7Es4DiWBSTJsgCWBdA8gKYBRBEACAAAKHAAAAiwQVNicYBCQ1YCAFEAAAbFsSxNE0WSpGmaJ4okSdM8TxRpmud5nmnC8zzPNCGKomiaEEVRNE2YpmmqKjBNVRUAAFDgAAAQYIOmxOIAhYasBABCAgAcimJZmuZ5nieKpqmaJEnTPE8URdE0TVNVSZKmeZ4oiqJpmqaqsixN8zxRFEXTVFVVhaZ5niiKommqqurC8zxPFEXRNFXVdeF5nieKomiaquq6EEVRNE3TVE1VdV0giqZpmqqqqq4LRE8UTVNVXdd1geeJommqqqu6LhBN01RVVXVdWQaYpmmqquvKMkBVVdV1XVeWAaqqqq7rurIMUFXXdV1ZlmUAruu6sizLAgAADhwAAAKMoJOMKouw0YQLD0ChISsCgCgAAMAYphRTyjAmIaQQGsYkhBRCJiWl0lKqIKRSUikVhFRKKiWjlFJqKVUQUimplApCKiWVUgAA2IEDANiBhVBoyEoAIA8AgDBGKcYYc04ipBRjzjknEVKKMeeck0ox5pxzzkkpGXPMOeeklM4555xzUkrmnHPOOSmlc84555yUUkrnnHNOSiklhM5BJ6WU0jnnnBMAAFTgAAAQYKPI5gQjQYWGrAQAUgEADI5jWZrmeaJompYkaZrneZ4omqYmSZrmeZ4niqrJ8zxPFEXRNFWV53meKIqiaaoq1xVF0zRNVVVdsiyKpmmaquq6ME3TVFXXdV2Ypmmqquu6LmxbVVXVdWUZtq2qquq6sgxc13Vl2ZaBLLuu7NqyAADwBAcAoAIbVkc4KRoLLDRkJQCQAQBAGIOQQgghZRBCCiGElFIICQAAGHAAAAgwoQwUGrISAEgFAACMsdZaa6211kBnrbXWWmutgMxaa6211lprrbXWWmuttdZSa6211lprrbXWWmuttdZaa6211lprrbXWWmuttdZaa6211lprrbXWWmuttdZaa6211lprLaWUUkoppZRSSimllFJKKaWUUkoFAPpVOAD4P9iwOsJJ0VhgoSErAYBwAADAGKUYcwxCKaVUCDHmnHRUWouxQogx5ySk1FpsxXPOQSghldZiLJ5zDkIpKcVWY1EphFJSSi22WItKoaOSUkqt1ViMMamk1lqLrcZijEkptNRaizEWI2xNqbXYaquxGGNrKi20GGOMxQhfZGwtptpqDcYII1ssLdVaazDGGN1bi6W2mosxPvjaUiwx1lwAAHeDAwBEgo0zrCSdFY4GFxqyEgAICQAgEFKKMcYYc84556RSjDnmnHMOQgihVIoxxpxzDkIIIZSMMeaccxBCCCGEUkrGnHMQQgghhJBS6pxzEEIIIYQQSimdcw5CCCGEEEIppYMQQgghhBBKKKWkFEIIIYQQQgippJRCCCGEUkIoIZWUUgghhBBCKSWklFIKIYRSQgihhJRSSimFEEIIpZSSUkoppRJKCSWEElIpKaUUSgghlFJKSimlVEoJoYQSSiklpZRSSiGEEEopBQAAHDgAAAQYQScZVRZhowkXHoBCQ1YCAGQAAJCilFIpLUWCIqUYpBhLRhVzUFqKqHIMUs2pUs4g5iSWiDGElJNUMuYUQgxC6hx1TCkGLZUYQsYYpNhyS6FzDgAAAEEAgICQAAADBAUzAMDgAOFzEHQCBEcbAIAgRGaIRMNCcHhQCRARUwFAYoJCLgBUWFykXVxAlwEu6OKuAyEEIQhBLA6ggAQcnHDDE294wg1O0CkqdSAAAAAAAA0A8AAAkFwAERHRzGFkaGxwdHh8gISIjJAIAAAAAAAZAHwAACQlQERENHMYGRobHB0eHyAhIiMkAQCAAAIAAAAAIIAABAQEAAAAAAACAAAABARPZ2dTAAD9rAAAAAAAACYQ9x8CAAAAPALGuGABAQEBAQEBI9H/AzQ0NDItLywvNjfPyisuKiosLDU1MrG8wNY3OkQ/trrHLjc2NLO/xS4tLDo7PLu8xCwuMC4qKSszNjXHydEwLTo4RDI8Mr+/5jw+RDvhutQ5OMjEzC0ACg4ODg4OPpb855m+NAHcwFjyn2f60gRwAwAAAAAAAAAAAAAAAAAAAAA+lvzezr8KBWwgLPmznd6ggA3AoGRjdGoUKVdVIQhBADDx4o97GceeAQDANTGnMez31XWFk4HsSVwkBbZtYN59fT63kWCMMfb3f1/XxgvpxSSzqduXYebpy6cjuX99NE7VeHgY08Pt6qoS53Zj0/jdKSXVzbCf7xcwoSHGt2MaZjISpkV112zfunIA1GkGmMkgypJ6S5FlmWb5Rqnt5yY+Y2J2UwP2i/FngCbDKnQ8p4zRHtVafNBZW1+n8TdWO1bFP0Yx++BLBqwh1pAAoGBAAdaV7OvlzTQbJhN0JafreacbqIXZEXMHp/W5/if1zl4aUdTlKlaFVACmnhb52t7ojvb4zOwqcbHlAAA9S2xfCwc+8yt/9/SkU1enKseWi4Hkzcub4/31sW3PQ/9hLugPiAFRtiJRcWyiSNhGy1NtW/v15/e61JH1nnFsaACA3HtvqiUxw/5s9/veD7cfvy6L/fPnuP06Z4Db/U9uN1iqx8AWNIIZIAIwZwQTT2gNAAAsluFw3Cfj3HHVXnZAZwsEBAKw3KpwcgwgXmPq3x4owrYrXydzXO27rzbsIZuM+2p5bwzIZp2dSf59os3xB1R90gE2GQCqAay2AQM55oZx/59vAIxGrxwFY+7R6I1TnIx7UcAyADdrt77ElbRu1jxX79rP138zUCZCHSMJrP0TljG7ED7Q8QGERi+lgpHmQ1r1ZZ7d+wSHsQLQd1x9e+wtj5VMz29jSOurI7snQPXOEqPnD6LpSsn61YoBjESfTAVjrlFolQ1nMX6vwRgoAPP6/+09tlknQ8wuetTbR74PjAKBZiLJ5+lYEf80nVzrAIREP5diAKmR6JOuYOy9RKwCQP34t6/8aZGqWl01nanp/z25DCmYD/r3W2F0Rwm5uSsHjESvbMUhQEj0QCtOAmsUyKwAoC9fzk+epi6XPgNvTP5ufQkVmXx6cbgQ/XEAjEYPuII9zWj0kisGMaYXEgoByBfR/3WkQqCFqZMpRSAT/WhxR+51R/rtRiDGAQCEyJx+ENY9ROb0g7DuC2QIFACCG6wYmzDMkU7TbA/06e6z7f7/VxSHKPO2AIzGrvpbczR21d+amwBBKgRAHcTBAVN1OtpuW8feHp0kVcyf0VJSI/MjNiSQpiYAHN+3k79p2PF9O/mbht16CpmZKB2AAqBGjIhRaTqdTtNoshsvsk/fmrzPaJom1Xa7pemA0icKFOmzs34ZXKTPzvpl8EpNG2QdQHIBAAAATNTRgpiCgjE6jx48+r46ojpt0nZaEY3EBwqbbqcNAPoY3sT3Zn83X7D8BJ9vVUMqj+FNfG/2d/MFyzf0fKsfUvkAWVONDMT0ZQaTZROBBiwWswa4ihAAAAAAYBAUNVpq7Y4OFovaDIu43nAUI97xQayikZi4QNEYIq9PxvdnRmEoBICx0JZQRLeKUCFOWhaynIqqVKf0WiZFUAAAHMeW9PzThwAAbbqdrk71KKUQQgK+JkLIRBL0kg2UbLk3/f8K2LYBtbuF7m8NewMANE/btEm300YFABFFOuUZCrw6/yq6X7oM7QDb84AteEAGAFao3cTH5v/xL7p39O8/FU8Uajfx/g8SDn9R39G/fyqeBB+BDDUREUWQZo1TK1OmYaWA5VU2RAAAAAAAACuKiLEiao0RSXOjLdnaII25AasVdyWewJ2oYuQIEYjGBYZeVAehh0JAmvg1569HRapTgTBMrKbSYYcBMC5hGEu1PWGpgAEEFiKeIGobkCMAAANvVdVtVTWdJAkyiD6QYoD9xIXN9VTEWRURug4S1zzKKZYFwFPa8EORNglEhG47XkJjCVkIhVpBjn2VAgDM3Iv7UZf5zdyL+1GX+cW2AUIKAAAAoFa1gcYkVFwChQQ9dYT1h4QEz3UAzNyLdVcM5vyZe7HuB1HMaWWJDRlSAAAAQK0qps2iamJBAD1A1V+BofuSuOQSANTcq2Hf6Gvu1bBv9Cv3FxsgpQAAAIDFsBgGpmCaIggU2qeBfx79E25eAdzaq/z+K7f2Kr//yq4FBBABAAAAdjFNm02Qw8QTCWV2SnV6yOFr9aa6CMTYz/kUnX+M/ZxP0fmvr1uSgQVKAQAAADEWMRYxxW4xlJalXkumDWXOui5U1NarfJ3Vhdp6la+zurC+NispsEAVCIBRK4IKYjEMU4Qtrw1D94OZ102GDCP84re4ik/vF7/FVXx6u34yjCgQAIuD3RGLRRwlVCQBiULP0qbtVhQQ672zpeimVL+Kkv/SOhTvt3FmXPF+G2fGEVNtCwBlKhAAMdQwHASURYCqV1W9DgKVJtXt2bYqTUdJIPqoq+VX5Jg3FO+zY6pBX/E+O6Ya9BFTKwDQEgAAADAMu6PdQFEtgF41UaUigUceGZW2U+nWxGLWpQOaad7Exy99EqdZv5HzaxUyzZv4+KVP4jTrN3J+rcKDyV72Y1tYm2lFMGarmJUrEAIAAAAAoBimiaNhsxh2R0dxxNFuR0Etgi0aF03omGg0giJhlEglPTq0rTbI9yPTMzIGwCCC+B5NpCopVFUnUkaYFaDVFNX0KBkE+EuBZ//UqW6lqQDlwdX9Iii0kBY17lixXFwOi06JTjlc5n70VggfO8AZAFrzuW3sGTQeNhkcbAB+6N34dfMn/wJPf/OronLo3fh18yf/Ak9/86uiclqmG2OSs5wrFikAAAAAsAMUJhJEE4QkSBAbDSM4gRQmCANEbNN0O02b6HST0iOeOAe2CCMWIBF6FI0gMIBskzCBZSuUAFCIdKU69ExBLvbzBkBgD4HRb19JAJUClW7S7VR9/wg9VPLdBiGkIRot7IzmOo9ly3qELdHp8Y+zDNedArUjSMRkFmTxoi/rq7t4iy+EHNMRg5thpoQMdJW6An6Y3XD/R6f5As37+w31VFClh9kN9/9O8wWa9/cb6qmgcoM+OwiADZArAUFgalOuAggCAAAAACKmGFZVB4uBabeAqgAKoBYBAERExEQICcJQicTEKCDiSADRMIgJ42MiYUw0iKiakqY6RRS6zgT0M+EoQIhO21Spkm12J20FQAAdr6QfECAAKanqVhAmTgAAeBUqPKdPDXaotCiqU0mbgtCL0L6yONvN/xFV9aUWd2oGIATWpbPrlYVDAC+/AGRQAJYX3djlf98vZuBt/juhVjVG17zoxi7/+34xC2/z3wm1qjHygQzVOmVRVLKsmFjJSmAQkOVWWcwxV0gmCSkAiDWiqiJqrVV1NA272h0tqhbTrjar2tV0sIoDplhMRPT67JcTyJdtspIUgKYbVxirx13KhhAtWeWIFNohvdcDZjhuRmJ///5/zhHVbduqqkLcXy11a5t2uQfVX1oQhBHqwIRTExTRl2XT4i/6RJ87mltCwte75wfAxoFD3M5AiwPgq/7XAjDMF1rKGrYCBgLik8m7CNlsAQC8zKs4R93LvIpz1J21FZkgpXQAEBBVYyEajYvKe/26hk6HsXp480Xes9mvz+uIy1qd1WXTXu8CDOuLuypG2A/ri7sqRtivVMtCtW4J7EgoABabCA52A8EaMMd1tJZSND42NuqTEPtWVXVL4mmyWjVOHRzts0OlZ3pH++xQ6ZkewQoArrIDwQUAqMJm2gxxdCSRRJSYqGKRUpibCJUYvHsVJKh2q2m7jW7ZI4NKPEroSLQbraoAHO9PlKVndsf7E2XpmR0xpQ0AXKEHklgArOpgEQFCCUXFwRRVhVFrrqg44uvDW+rddJu2aZu6epFl23SbttM2mmnepMtm1tct7P7p33g7P5Bp3qTLZtbXLez+6d94Oz/wYDJl7G7PmAxMyVoh5ZhJcgAhBCEAAABEFauDYbHaHBytptWwGRYcHA21mVYrkuNiiQRhxEpgoooe9tl6tV31FEpIBekRH1iWQZZltVilfyrzszpNCShtt61u2/QQAMDudtsCBACBTAc8vBvTCieqcQUBQfKL1vbUd9B1yO9YCx2fEUMMqwu+rqqwUSDx2Bt4egBtsQLeCN7Y+UffnAP/PPefPn9oBG/s/KNvzoF/nvtPnz+cHQTAtIExlWNWJmEWACAAAAAgCKiAAGKaWASKJCZOcZHAsfGRqHCC2CASjUQcIS5EJoiPITZwGDjQ7QgpnWqKL6MlOLptkzYpiaQCGEAmPggIFQMwkU7bFkippm26TQEAAKpHT8XEBwAAAMBuhplnavk4pAXAAQKU4VcIHjzWNhz07HpvQLoafchgeEvx6PRIVNn0/BKPgV8yAGQWqN3o+lf/C2/8a7vp0FimBGo3uv7V/8IL/9puOjSWKR/IrESm2rI2in7kwmYawJJTh1w5QCIAAAAAUSNGrLEWa1QdbYZiMQ1xRK1WdYyPDQMIg4jjYyMSaZqk261KSiXCG2cghURkABw4kQ8VOqyqqqpJW92eGnUDLh2AWWBpzh7VYECSkE4I4uSYGIUAAMEA4mL7Fl+aatN2RZrSIdUVTRNKvct2XdqOzysh4aL7GwA7T6+PfiwT9JglPrFAv0E2kAGgPVIUxNbP7HTCxdTP7XTCVm5lMIBUAbBbxXQ0DEVNw2IoCjgxYUKD3nLO32sdVLgUAPTaz2z9/HvtZ7Z+vl0/IRgShUgATCym1dGqIDbBFDkaTRiNj1WBuG661XenR66dcuJVVcFu6yIU7Yt4lp7pivZFPEvPdCsVu8i6IgGSCwgEwFR1sDgIgFojhqajW6rStm23PWlaPVuaek+VQhUc71d9KJUPO96v+lAqH0ZM9QIAEC0AAADANBxtjgagGhBGrR4NUkAkSBxcpZepF0VTdFbdumnehOuP/sIST/997cOmeROuP/oLSzz997UPDyZmcrK9cODkCAqmyhVjOUAIAAAAAKCoYRFHRwer3WpgteJgt1vEATFtFkGKD2MSJEQQEIYxxAcIoVAy9iH18iLLMhayrERfg1SlVKtEUx06AQAAdCsF3a4CABBClhUfI0Wqh7YpUuEA8EvVAJmkLd7dV6nl7RWuKryWMF949jfoMZP2C+7L8ifAXjoqL0taeDyH7gKQAQHeCN5g/avPSIkf29cRhkbwButffUZK/Ni+jjA8GMICdjxgR7v3VDnLFUAAAAAAAKCqhqNpYjccxWoTwzDBMExR0y4WFUURAFBEFI2LMUEscQ4iKNJWDzrdJpUWpC1QQac6PZK2qRJAUk0FlVa31TMAAAAAEhPaiDAuMQBgAABKU91KxcaDAQkAgIBuNSVZ8WGABACwjb3NNnwY5kxu9b/GELSW+190fDFR6avFIGq+JX6MB3Bqjsfja1mbXQBAARao3YTzn7/0Bkbo/XZyIQKB2k04//lLb2CE3m8nFyLwhkw1GWUdZW1MMm2SbW0q5iqEICEIAgAgomLFisVaMIoL4+yEUcUkmiA2Ucc61gmiVhALkfg4+YnhrIOvW23BNoEMgG3iO2loClS17SoRjnqmhZZIhKZnjzZI0zMAAANgnIgh2rNHmiAA/JEtRPVsq9NBfQvQ4FLgPSWkA6a+89zJE/gpCgz9i8ccf4vr7TiyazZc74jHuW4TgAAfIIAFgAG2IgY2xFTr5ekcLqZaL0/nsPV1qqUEYQAqEAArYo1RK2JR0wIKqmeHthswxnUjEYO5LbxW6+3VWdxrtd5encWdRQ2JAchgAgCAtcZawRBxkAiYKnQb6dltgh0xSgB5DdxU6+x8GXxTrbPzZfCpJhUgIQsAAFisVYziIBFQqkjQdBr80fs+Edzw0oxbtNJr7DqIAu5a6TV2HUQBd1sbaDooADYVm1isWul20rNtSxLV6RaSdCSRptpOGMQBwnzD3+8YdDhuAQxp63TY6oe0dTps9Su1fWQWdSqg+AgEwDDUwa6GiVFrrYgSWrpt1FZcgpiI9p3vkqahR0dVQxl3WjUAFG/rpB5EwCve1kk9iIBHsAJAcUIBAABqEIkmnpgwFkmhEUZVwUGqNN34BPGJBInK84p4qZYjCWOMwbABGnre+NdvgVDNsIPX01lyIvS88a/fAqGaYQevp7PkxMNYvUk2ho0nB4BhJbksxk0EEAAAAABQFbuj1YpN7I4WR5thGogFwyIOplXUISQmGolVJDCKd4x0k46iQnWqZvoOpWOXNy4MQhnLsizPNGggRUBXt5QeCSKCFJqRo03RTZWmCnC/CFREirRN22mbttHj0eupUkYZ3TBabZZv6TKsaNMKDQoQ1lvYd087rNdTrYqOtCWCq0IvYwDIAN4I3sj6D3on6Hi7vZ2AEI3gjaz/oHeCjrfb0wkIcWOS3eRKAjCYklwxqxwIAQAAAABExVSrg8VqmCKKGqYIiiACEgMJFDhGjnUQGyE2hlB2NC6MCjum22mkoSlaJTY24VBS1QChJzyeVgBI07SdkqbbKdJUGtAaAAAACqJBRHLiBt2iS0RU23QV4hWYEoCZZifIJjqbKxO5MHY9euErrChxX9GfxEsk+iet2mMBbJmP5d3cByCcDQ7IYBABVsjd2Haz/3yF9q0/tQVyoJC7se1m//kK7Vt/agvkwAeiyMysqM0yMtqyxwUY7EoC0ByBKucqByKEAAAAgBorWGusGhDspkWsFruDYTdsht2CoAYOphoqmIppgAgCAKJpq40KulVFo4z8siy435EKJacBqi2qQ0WuWlr1AAAA3UarqkLjhSat0g2UKICqotsznSZDad0quWWA+OIdYOLVMEzI1YNKyfy5kRGnYUIv13fMwNcx5ffRDRpAK4CDDNCioZEBB8zYq/0pP9qMvdqf8qOunAkBAYRAATAdrDbTpqAKBtKG1a1qu0gOc6pCHbYAzNhrwLPRzdhrwLPRnUW1CBIIIFUA1FoVazQgEknEMl8YOEEgYyBuOZdoGEh8ALzUq/Gp9LzUq/Gp9MQmDCAFUAAw1GIaEIlNmKgdCtBNj66mAyrpaFtNp1NlQ+NPAMzWa8Bd3Bl7NdzFW7kdiYAAsgIghqPFwaKKYbWoYDCsTtNturHnb17xgXIkeADkVuts7+TLrdbZ3sl3VqpJkgEqEACxghFBik88MGGAHmrfEAulkk4YdR/c2Iv3dMLf2Iv3dMKfWSdJAFQFAACswYri0AkVCRABThha4a94ecBIPMzSq2iemJqlV9E8MXXWzSITAAaoAiCq1qhCrBJNEBWaoqhS6h2nJzvFBwIE57N1U8u54Hy2bmo5t3Iv0VqEQMpAADDULlYFUYuDgyMgVxgfOhTU/lWfsVUvfykG7Awc77NpVAxg3+N9No2KAexLTLUWANixAADg6IADYoIiE3SKwdICmlxYYmMjCYiNyjqTfLHZUw8U7bNhqs+8RftsmOozLzG1AwDJFAgAADbDYjpaRVEpIXWY6/WqAL5Opakq32B5aOV8vugWAJpp3th9M3/t69Sv/+cLZJo3dt/MX/s69ev/+QIPJjGZvTCx4dM9dhUzCcsKFAEAAACgIo5Wi8204WCxiFUMB5tVxe6oanW0SgxBjGMTBMQExMj0aKvSKkVVm/qytwLGsgBZJJIQhABZlrXY8gAAAIqaeNA0AN10S2l1GgAAQkXbjQsBKQyioYxRTYBquk0o9BApFNl1TS3t9pjSa7eKeKXnTwPnFyiHLg2XhBdO/NjK5fXmkVwKlosxZd2ZPP2gQAN0DRsaCgDe6N3Ivtnf4Q3czv+vs10gBxq9G9k3+zu8idv5/3W2C+TA2UEATCAwOaY2xWIMRAAAAAAAUAUEMKwKiARBTBCbuBIJ4wKIRCKJOggjgYNY4kJIGEaigcMIDqJB03YqKaVpSckhbB+cWACpVJWIajuaCqC1cnVSQHpGFyTAsQAAAHDF625Up02hadOUpmcKIAHACeMsACDFjBdkC2xoOyWVgqei4SnmnQLmwKkX9R8jMNB7Xbd36mXJ4SnRE7oh13/9I1EFQANCDQD2h93Y9p/655yYzverbD9c8ofd2Paf+uccmM73R9l+uOQXAKDV0pdhw1vMmXIu5likiiAEAQCUkojA0TSshoPN4mgRi6PFZgCqVFRTVWOi0VrqFSIOgiiRRGJjsQl7aClNq6LVdbb2AkQkBECYoLpJJUqKlCRbKE4RC1Qn1MsAj14vXxoAcqsZpehRIhYAgAX1S4fBFWu1AZtPIjmHZ2NhcbdZg7YE8KiXaRmhtO872IPJL38YgZ3t6J20TiIFJ58AjsDOAJCPECCzAcABAQwNANzOs/+XltAbeva/SkvYmbVJACgIQBUAAyhiMCxiWvAEQTShHG/4av//3xfO7nzpAdzUi/u1aW/qxf3aNGdNIQIACpABCoARq2KFUI4kDKMiQgzxgbuFa9k0ecPCB9zOs3d2Qm/n2Ts7obs2QBnCAsDRwWJaLBYDhYnExwVhPASh4wJJ222rCnJJz7hfE3H2+4RK0m3VZBwE6Yt+LD2bBemLfiw9mxEToqYSCRBKFQARo0ZFlSAxiguioOnZM82LF6/PeN1SEVofXbGj9LajARTvszsUG0hfvM/uUGwgPTElAQDFEY0DYMPRbrWpoBLAgN7UHKEAJLQCwmh8XCQMlWi00FTPdNpu5w+L6UdRxxGryGsBHO+zMktlseN9VmapLEawAgCEWSAAqAmEiSRIPB4jDXq9pRGB6tGRRa5+68l/pSTCOTQU7ZXSFQN4v6K9UrpiAO9HTAkAACEHoABY7BYH0yqgEkBjFFIqkKbTTX4rbz1Uq0m31SPdbtPotghzyQYE64tgLD3bBeuLYCw92xGsAAChFACAAKAIxEbDMGFECI1eSK0QVHUFF3I8LqMdx6mIATo53tTHP+hjTc34L8pxfsPkeFMf/6CPNTXjvyjH+Q0PTDs3222kHWB5hU9VjAIsQhACAAAAQEWwWB2tYtgsNgeLxWq3WdWK3TBsDjZJJFRsJFACAoiPBEGnaaJJJCVtQiKQeioVCqVSneP4hx6ZHax009JLKEe4226LoKoqamU3AQAAQMRFQxwfISaMGMACMgnM2wOATjcXFyjtJWC6m5V7kLchIhiirmL/tClFim608LysgZ5Hb+U7SgAcZFAAftjd6PkPd/ME5l++ne2Msfiwu9HzH+7mCcy/fDvbGWPxGYHJQBOvMoAHMIswBggCAAAAgGFarKpqCAoAdgiR+IQOiCQSSUxi4qPEOwLxiiUUTfWstnp2qu1U022l6dGTRFHa1PfYloBqCqrokUg0YoXCgTACCsUtgQVCD11JlaZBUxVtIlWp6pifHJRL2AAQL9+wPf4AqrqKoaGNnm5TgnQb2AAA8LJnDqIunRkR2wY4eu1llZlh1i3yNBA0AFAWeN3I5Z9/8wSm8X3az1YCrxu5/PNv3sDUft72sxIfoDaoJ2vKotLvRWt7jMBkIBDNAk2sqkJCEAQAYKxRVYxasQarYTOx2zGsDoZYLG2PtttUU6mGtqcmPTvVSKXp2aoyf2AkQikEPeLiZRmDJYTwbSYdEv7XVJW2bbtttQug9O7plt6mSKWQiiwAAADAlIMLIJQwsdgA2JKAASxtRY8ZUdU0bbuKXDWoSlLiWQGLdI6AANTXMw9eH8syFe6yzClle81dH7NMYueZFmegGdNAz089CvXhSWsTbmDI2Pj4uAEymAwEANTGq7B3pqiNV2HvTLFq0BsmCwDTwbDZFMu8/FvxgaIGNUiBpNNpElXV7VbVGWLrvOfJspGiK93qlkyOAwTni5t3+gvOFzfv9Le+piIjMC1mEmYABBGxGMHB5mAVVlrk63Z7dnV6dLQ08H7dljRNp5G9fZ7SdDpNvHcBHG3rxKVluqNtnbi0TEdMZQIAV+0kEhUA4uggDjYEUUAtFrFYAUVvlCj8tdTmkmOAV1udtkdVuqkz0kmlZ9OmU017tgEc77OrKDawveN9dhXFBrZHTG0PAJKzBYDNQS2GqiAKoJiqilbBcHUk0iJe7s8Ouvjj+VPhHuxIW9JDAZpp3uT7ptU3Ms3l7evp1HV2yjRv8n3T6huZ5vL29XTqOjs9SG16srfW5s3BtBrgmBVzjCA5FwEAImoYNgfBZjVRR5uhFhWxWNRqsWAoEo2JxComPmIiEUXSKlKdbkqquABWWegsfj3aVNpUKpVKSXcQfKSiUqjodgBAp310DAAACAGKT6R69qi0aVOgnAq0Detpe+QxQKWCUE2r00KoCuT1upx0RIHUnR1Ypq6eqRJRqp4hCqQx4yY+lvTlIfYVZVi0WwUIhw5gACqyvRdgVl7qIL8ALOslXDpAhaUNHL1ZAV7pHXbZrPpYSfxo+xvqk0grvcMum1UfK4kfbX9DfRLp2UEA7OSQbMq5kgIEAAAAACAiCACAGoBi5TASOIxGYmMTj7UcE09ITECMrRjHRFFo4iE+cDRt2+mmkUTbKkUROyITgx0YBcYmEHavV6XpBCCpihJpgkqnrgBNXYUMVFV126gqaZomSdN0miQmdo6RBg32C9NGj1rckulc4dHN0m2WrVuszSEiEeAZAX+xTXWqqSYilH+2DTFgA1aY3cj6r0CIFfhob6uW7xRmN7L+KxBiBT7a26rlOx+EKIqyThRRrYYwi820VpasillVGHIRgAAAVkFVjFqMWFHF0TCtVgzUqpjW+DAaxIR2AjuMhLHodKoUpZoCwISCMRjAMon3aEopTVOinEfGukUlVVXV9mybRNzEnaI2QAekJtQBQHWQpqrtJNW2PUvbI9TvH5/9ryFuZKwbR+P8//9fq2QoL+/35rzPAoA5FHarDK39X3V/CgFUz+d+3iDwVwuZmZn54hZpk/L9/9digIgQABQA7GDr43BOOjvY+jick86tqSiAcCnBBAA1VsSYpmlK23Zf2wgTJCAMI0B8GO1qpenQ0NIZT9newe0HFO+LoXXCFe+LoXXCrbZUSSCrNQFcMhAAABBjRK1gLEZFKgYOLSaBw0RkdZuk7dkVadtu2/m3uwL6id7I5VtfNGzbXv/UZoT5RG/k8q0vGrZtr39qM8Jcod3fqFCUhRRRRrKDANjpaDEnq2LMARIAAAAAqKGGFXVwtDk42MRqDEZRIxaxAKqoCACqiKMyiklUjokNQqRnSkWlTaVqDsGMnkgYWAgsy/jlmXotRRukKtVRXQkAut2mSAUAALAAhYlvAAjXiwjqH6nqKIuV/fISVCol1XR79OzRs0e3aVMpYAv7JSUAdiEa+CIvRyFsgJ4jbGYsnjmmhc4qvZgVYAPGAb4I3ui8WU/zBvup3V9rlUXwRufNepo32E/t/lqr3BjBCQJgm4E5YNopwmKOORAJAAAAYIhpoKYNR+w2VREBAFFQBwAAUBTTYiYSLyKJRiMB0RgpSkx8AMTGBGFERIMgPkqAI8iCwA6H8TNdSVUiFaD1jrCjpeH7km6nuoFQSIgAAACq0wQAMADYUjRedgBB4oEQCPCADYQFtIdouXu0Gi4vDD/dXe9AKJSXqE9BbaHMPE2S7oPoHxHCc7i2ABkEALIDgAaWuN3o7R/90x0Ynv+/zk+FAEjcbvT2j/7pDgzP/z/OT4UA+BCkesqyrMmKukLCDkwOlq2yYi4GKoAQAEBRgyLWiqBW7HZHq4MVR7E7WE0HR4tDRQiJEgkj0bggIp2uaiSNSONLVbrTkUQpKpWeCQkgBGSQ6TMAJtWIQKn07DRJBQJ1CBHCLrR6z9UFJC8BADWpSKOaTvVMUwHupQ8fZOhZzmgZWtXwWB6h9ZQuvPk8DWe9pnvSGwOgGprQpEP7aBsB2DgAlgYAggKAAQzM2mvILWNzs/YacsvY3MqT2EQBYQCAANjFIjbFJoLFEJR44i0jUJ22ozIMoQhPZ2dTAAB6WQEAAAAAACYQ9x8DAAAAbYlrU3IuKy0qNzXBw8YrKy0wLD1BNdq8xi0tMzMsuMLILC4rLCw3PDu9r8EuLSw2NDo408roLCssLis4Oj3LprorKy04PjbFscEuLCwtKiwpPDfGsbUoMSs1NcLCyissLS0rODo80LXCLSswKy83NrivzC0uLCvE1mvkU+52sfUa+ZS73QcAARSgAFQCMFoKhJkUkp5dTI8pPkwUQ6a8iMUFk4MA3NRrwC+77U29Bvyy2946mUmiACkAAmCsGKtGNKpnImb+S1XNQS7TPuGRBdzSq3HfZLf0atw32a1VlBISoDIAVq0xgmiq2y36J6vTqA5717bxt0GGw0RJD/zQi2Mc0R96cYwjuqrVAqoCYLdZ7TZVc78TmaLMx98EWWmx8q25XXOWIQTri32sTBesL/axMt3Km9CCMmUgABZV02pawHS02ExhcqVDpUnTdDpNp2ma1BCIb9+H6EwxrQAc75VtqqXueK9sUy11xFS7BwBdBAIAgINiUdNQqEDVCqNOKiB8yn8BgYP4wKmmpNtK6Jk0Avpp3ujtj0R5HM3f81bVBZ/mjd7+SJTH0Pw9n6q64IOEiGpNlJUyRJux2dUANANWzDnHCkQQAAAAABgQMapqLVbsiKqDo8VEDTWtpimmgZgGoiiKo4kQdRA4QqyDoG07Uk2aqiZS2mgNy4MaEe6Lk5OlAlr0bJt63yP0x6gElQalBOlWmhSv4K6nSo9STTWFagDQN1UvX5qZX5kGyqGEGmzaDUYDd4SC9/hkDkMeoC9BBGr65nPtfJ0S7o4KADSFBjje+N1g/XOOrdCe+adqaqDxu8G6Wc6xJdpTf6qqohvJurGBMRloNmYUsFiOMQAIAAAAAGKYgiGoRVQdDLtd1IJgMa2oBcMgUDQ2hiChwpioFDFxCCTkkJBKVCqiAyolSJW0nUQIQmRbgIAh+kd0gV9u0wOgK6UUnYZqSgrQ8pFtWrCr6TYVsUhERAokm4EuNGyPw9UAFgmDBQR4YMdreRFu1Bgqu3ad5TmEEe9OkOcczS16MYAlQL7nqRahC4dpBdpXIAB2uN342+bv8S2ct/6cup443G78bfP3+CbOW39OXU98CFFUQ9Stzcxoi4HNtDYHO5WVRWKEEEIAAgAoItZaxQjWKg42R4uj6WC1WR1wNMXRclyMFUMMCmOgqkcb1aS0mhLly+qJhQ0AxsR3EpqiQiVZQqKoFnQlqRj4jbbTTQ8FAKhOJa2eefEKAABkXl8CwvgwVCAAkCy2D/Dsln6tfEqXn/DRs1xQCdFnspej/SN+HPQvtCcoOkNhfXxAgFCNggCwUSADDQDk2KvwrdxtcuxV+Cp3tzPqQQIBsgJgBCOIlYOEgXBx572966rQ7dDXrS0IvNhr899kL/ba/Np4uwhagFAgADiYNrujKThMPACFoCNpqAE2DpUeDBRdF9zWa/BrsW/rNfgvuRcAAVSAABQAnbmiaFStxI6PhPih3pROKcMeMz+0xPgRB8TWa/BVyzSx9Rp81TLtGfUgGRkyAMYgFhXCIGFgEIVOJ3SahL/mAPUa4YW8BngbAPzWi3IsjPutF+VYGHfWVMuUQBEUADFqQASHiQppsin9RkvEqkVXYFy44NUHFOuLvpbK5Ir1RV9LZXIrb0If6hBTAMTRcHBQUzEcTMNQSXIHTUccRuMTRi3LD19V0+l0tG/uLPgv+rVvABTvi9ClZ3LF+yJ06ZncSqOKBIBWkAYWABZrjBhFlLAKYEOEIvRaKYWjQzpVnXMrRLrV0dEzytPp50W3Z9oena4oHO+zp5ae2R3vs6eWntmtlB5EnXoBkmUA7I6GA3YUY7FiqRIHQVSi579tJt8TXsmyk2dCdwDaWd7w/g9/8Srd9DQdWUxnecP7P/zFq3TT03RkMQ/Tb7dz2iMkk0EAzCTZDo6xWBarKgAAIKbFanewmSZqcXC0YBUcMU2Lg80mdptVRQUAEAUihDhhYkgQiRInBfN+JcLqqlqlPqXHB8iBsSxkyjH9CbY+a3o2PSoqIGi7AQAAAEBhJC6+6dlUoEDbCqk0RLfT5ZjXFAjwMj+3NNAHPFm6CD0AEMDojxKyEf0qL5wzxY5x9D8iLRiY4+8XI+fpTwEAMuSbULY5SvZengIs0yARnh6nHD0IcL8IAF4I3oRpcwUK9m3Pt7PtkULwJkybK1Cwb3u+nW2P3Ngx2raOHagQ5pgrEAEAAAAAi4FaxMHuiN1mqiMBsU4kDGOt2Jgglq7q9kjPHml7VOk2MfEByCIEbNERIVIaBoWSACQn6NEVFYWoZHcdC0VAVXqoTlKl2kJ1w3giNiAZACBEpVNuoP9u20H17FCQBk1PJQAIbLBvek0zkSo7R9WGP+Dlo1Ntt8N8/UHEyTaQcPAo846pS1p5FQfkGRAAlpgd2v73DCuwv/kNnzGQmB3a/vcMK7C/+Q2fMfCRUSDrhIyaSkVLwg6sBiDQ4irLMVcECUEIAgBYUVExCIpijUWwi2GxOmC3qc1QVRVUBADQeCUIFMUx8VEUS9CpTqWSRlFN7VMaQSuloNB26H+HLtT80aPbSJWqVEnSUQ3SBQCAbRspbgeJa6ElNZRu27OHKlXFBsyfT90oRocB8LVpAESvIogpNjmbiKBUt8ygxhg0agl8VeBkOxdQARQwbJA3+gAGIMMGvNSr+an0vdSr+an0nfWSKSCAKgBqRFGLgzCSiKQ90GnSaZvg9lpvoYtPq/UAzNCreVt0s/Rq3hb9WZuRIZJUCCYA1histQI4DiHoUknToyCwNUZ6x0sUNkIF7N6Lc+yMf/denGNn/LdumQkkQwoEwGCtWGvSaZK22+rkI011C1krgWMv/K33XG55+SwBHO2Leio2UXq0L+qp2ETpXgBSTQALAgEAIKoAYFERcxO9RK/jIDPybtP06HSScaRI/2J7FO+LYm614n1RzK1GTGUCAFkAAADA4mBa1I4iCyhSb6GoGtn2x/G/mqHyKRn6ad7Y/c/f/o7pvW/nGz7NG7v/+dvfMb337XzDB2RRFtWsySJtu91H7sB0tLxCWLkCIQAAAACAQdWoFbWIiDg4qJgWtVlxsNgcQLHRBE5oogTxSN10mqQELXmrMkiGtlRAqJ4JHFjGsizLEc/FN00FpFuAJLoVPQLSowEEGIRCA0E0XppcwBddGYLq9lCC0ADgVI7lKc2IqGG34dCtVHkrpFsna3M0fnUKuGGfRiNnoUQ2RxA4NwBQvtjdcNzsla/A851fp31UF7sbjpu98hV4vvPrtI/qDUmceMBOBkadci4rFqgAAACAmoDpYGKxitXBriCIKQCghoEVBkEQDcIYHBcNgljhIBJPgBSiKAnCCA4sFII7FZCWikog4yA0QoDDAvdGAyRXE2noUbRNSTTRLUAoIig03XRLoDSp8CkCsWFMQgAAcIE5HoCk/GI7QvO7XrJzwK7TtSsh8ZE9wBwAVHKd6satAGy7wHy4ZnvMi5ACABsyGxIBAAMWiN1g/ecn94Bvf1uc1EDsBus/P7kHfPvb4qR+QpJlWaeoFOqkdrYHNnwlAWADdco5F2MRRhAEQQAAK0asEbVYjKhRNUWtNrHbxOJgR0wHxCIKoCJoQBCNRmJjEipGYQKCbkcpWpWmYsvOBgAAEyVxoKUUwfBDVXOV+z90icgW1ekGREVFCtBtgEuvS7FR4sAAANAo06kCC6mRl7raoGQbCN2D3jPP6UP7JTbMF9M6AA4wlKElLoVGhGAAFPow0NZA6ysALgMKANTWa/BzgK62XoOfA3S7DBgxUADspohFrMiKj0Nwh+DZg2k6odrXTp6gnTQBzFbr23MgYTdbrW/3PAlzK9WSoKgCBMCoERVE2/bsEUirmwrQR4v+VBsgTpRtAOzWq+UfYPzderX8A4x/1hsRkVAFAgQAFaxRkUkYSHDHwqVwsvC5YiwRcQDE2GvL68Dmxdhry+vA5p11qkUGWIEAARARrFER0YRxAfRriquuWYSDV/fVAPzSt+F+mfilb8PtTP6sWy0kFhUgAGJUjcUoMAlCALCdaLdbCjkre3oMZ1AF5MyLeJbK+HLmRTxLZXxnUYugz4wEqlUrinGo+FBCcfFyGMQlVCghdaQ2Rs7rfe/pCkkH7PN/LQTpi3XoLD5IX6yzs7iV0oesVktQfIAAAOAgFrHaBNRaNUi4Jart9kaJVJVIgqoi8n6tpmlWNFWqt0uiARRv66QpBrH/4m2dNMUg9rdS+kj11gZ01bQDCQQAALthMQyboCJiFVXTwW63G4LlwvFptqa8rrs63QJ8+onexMdm0g9z8jfkbQuf6E18bCb9MCd/Q9628CBlbG+jPcYONAMw1gDGcgUAAgAAAAAgpsUwbWpRu93BZrcgdtTRBLU4mkYYKJYgJmGMFCoI3LOTpNB2Wm2MJj0zk0qlUqlUqul2O9VUKm0qlQqQH0QB9BHV7TSkTaWiQNpOG1TT7VyDAOWOwCa553/16piBSjWVtuk20jbey1N4LDTgUSFeQkESshvqfR8MHO6T/kAaNZ7ntslEz25A1QY2Hgke2jf7a/7AtOdXLUSCh/bN/po/MO35VQs3RNCyK0kAO+VczLKKgQggAAAAAohFBCvigKGKoGqIoqhCooGlxISxBCFhTJTqSio92kq3m/R0JJ4QgDBEdn1vAMaFUTX26I3ZaGC4FPUAADmKAAiJC1BqG3sSAsDYnRICsJ2WodxSMOFXpGhUoLYlhlvtDF3AB/jvoKG5aEXWqRSJAP0aYz20M5dlFCL0ADAADagSABao3bjLP3quVuJOVD828ZlA7cZd/tFztRJ3ovqxic98BFlklFWhbqXo93ejzeYbk7UiLFcBJEIAAgCgIhhBUaNG1OZgE5tFLY42B0esBoZovEVcNAwjocM2epSqEtFEcQDvF2OEkUSNjYwMNqqKTqsplaI496gYoCKhFZBOU2jTSaCtqioAx6aTSttUp+0WOJ/dWv7CUgNVwP8LNlrha6vvfW/7HR9jiGux8bieSA8mfrQzWMvfP/ggHAUUYAYcBADM2Iv5dsLP2Iv5dsKtrydCgEQIsAAQACsIqtYEu1XVEDgTRhxEgR3STWk0iyAK3NiLff83buzFvm/zK0tIxAMABQqAzWaK3bQIhmComqZFDASAThEbpm7wiRgAvNBfbHVOe6G/2Oqc1t9hVAEAACUxicTEJZBQxEG8iAniQYaND7PFuSY7WgD02ov0lEq6XnuRnlJJt3I/ILUyEgCLo9XBVItFDLVjFQL0EBAfb8Lp28Np8kz9cbVdSnG89AEU7Yt8KQ6LFu2LfCkOi65UP0FtvclAFggAVouKg01UsEbUAjpt0aMHGrf6WSl11vfKkZ0BHO+LKDa5430RxSZHTPUWAJQpZAAcHR1EBUFZQtWgVQxaQeuqKN0m3U5TcQYS2a99a+0TWr/2C219ABTts6uUnvUV7bOrlJ71rZQ+qLdugDJVAKyGo82qpqFWBKtK66boSKK6yvXqNRrnHkfU5Xo+TS0VulnexPtmFggNJ1rUeSsj2Cxv4n0zC4SGEy3qvJURfECUhZq6qQy0jbEDg+R7qpgzSayKAAQAAMQaY6xaY8SIOjiKODpabDhiOprWqOPiw0h8fMSSFVG37baSpqNtq20hcQp0KtVQqUil2/YolUpFClIqrepUFaD7VZV0mkRVUQgBb4ZHLqIJokJgAIBSEKmenU6gMBaRSNQxoRARyEg2LFEai4BsViX6zFymfqmAcktLRa+dFgDcWvbz9uBWnC/9uATIgsMxtwxu/XIX2ATIwIaMAN643bD/tw89GM9/+A2/VonG7Yb9v32YwXj+5Tf82siBc9g9cDYowBgzSUUKIAQAUCSEiKRoEIaJEygm0ThHoigmliiR+EBRoSBhJBIbE0YJ5XhZAKFwhLnAUByBRJEwCIVMYACQ6lRUpGkBgFS3qknSrRRS1MQEjwUcv0VoFmgAYJbFC6AWrFpfrF7ioq5VVeokbhxAAiA3uiUQQiHaZF9yerNptCZaNQkdCKXhF2glDNjkYfV2YqV0wKAgQDY62zfBK8FAQECABmwWWN3w/Of9wpM5/5k/4Z+AAoHVDc9/7H4RyZz/rL/wT0CBD0ElsjYURW1RzRSsFl8SMHAgipqYxXJVSBEAVhErCsaIKhaLzdGOFatpdTBsDo6GiCkooAB0qitpe1Q3kp5dxcdZKAARI7m3awzXlxKx0iYF3R4FBaDpdtpGq6HbkDbUMjgQ4KjyxCsArtYNaDtVxQIvBo/CYNAAAw3QEjS1ToFdQErSDaEaUrliZgYM90sU1XKZhp6PevAMy3aTDboAFg+h47yMGpsd3eI1GQQQ4M64vrAjyHGxFAN8I1BlA2aGtgY1QMABpNBr83NgXgq9Nj8H5p01kRkJhCoAiFo1WHB8vCSqeujmGcTnXdpx5KLvYQO80mv4L7vfl3q1/7L7ewGgKgAFADMFrU6DCRKNguWs9ZrcydzHyIzEmxMD9NKV/Zebtqeu7L/cdOuLeoLEglQBUItirGJiiKBao1U6YNyWYefnzI4dOw7UyIvyV3pq5EX5Kz1bBgOQZQAcHcSw2BDdRioJ6XR76qrq2UIfuGqWrnJhOnkL5MKL8vD+ufCiPNlj6yUjBMgAmGqI2g10NaREhzYanY6SobXWnDnl7wTHAeTEi7wbyo0XeTe8tQeSmSSBDg7iaLHaRJpOD0q9bkWrK02Ied05eRtGB4nRm07aqlR4r1xVFZUBBOmruHTCBemruHTCrZQ+lNVqAuPMDICD4WDYLQZYsYIYGWXVOyYuLi4iu+J7HS+kx//XaOORfX16DBTvlZ1Xple8V3Zemd5KqysKACA7BCEAxho1RkA1IY2KmTBBYt9UqfQIQhITRiGyB7pNt5o2yrsnHqfsVwIamt7416bVVzFNz1D/tbYjiELTG//atPoqpukZ6r/WdgTRAzZYsSE2vBkYUwMcqRUACAAAAACAimkzrA6G1WpaDDtWB7vF0bSpXU3DbiWMSRhGID7GRBShZ1JVbdu2TaqqJu2XpywrlGVZYRDfs6lUpFKpVBhEmagCOM/sVhOVAmjSttVtAEoFqFTokTBQKAAATMUGpdwerVNRVfXyZdu0Tdu0aTvdpu10O8/Lly9dRsgAGZo01zCsA0EcUGvYc6pSqZS200aiC0VoAF45Hnb81tdiYHv6UYHK8bDjt74WE9vTWwXxmQxcEsA25YrlGAMAAQAAAMAqiImBKqoAckAkTsKJhI7GJ0xgxSSuMJ6AaCzYsqLEJYocSrHPO7dfdeh/R0WpVUqhUD0iKir0TAOA74gCIHi6PbpNiwCAPm3HWQDduCTuXgAhH8OgwuZutLVXrqXjt4+4Nribni27jAFX0xQ42rC9x/wInj2OBlGlUADW2N2461/9BSZO+P+vssVEbuxu3PWv/gITJ/z/V9liIn9AUYmykJWsG70NrB2YRDAOsLJyDnEAQQAAAAAAgxgUMWoRdcSwiRhWw9FmUYthIWHEigmIEDriMLZtq9NqmrbaNKrheTJ5V1URBNKJD21boNAQ4j1XPZfzB4C20lVtelYda4Ck2yIlVYxKHuqyJ7Z3izvvYO5WTE209MhBw1GQJJXALihS48b2ApnzJQAPFykF3C1cAZAhGADU3Kv4bnU19yq+W9362kiZkBAACCAAAGCstUbBEAcTU9iVtpOmIlS6LfgAzNrPeUtLuln7OW9pSbeyhIQAUCAA2K1Wi6OiomIaCl9TnU4qcun/dLEVH9zSq3Bl31t6Fa7se0ZNpgABoQyAscYoBoXExUcQoS3dasuQ7V+TPZFhN/vcBvzmi3Zu/b/5op1b/2prsxSQippKAFBKFgMgVowIIkaMVasOIC7GwZVMX9Dsuy1JT3RCggLHRtUADO+LOLO/4X0RZ/ZHsAIApAhpHACoAYkkTEx8hFBIVWcqNTSkZyXVpqPLdRb8oVBxYTR4v7AQaKGIBnGh/wIc77OlngPB8T5b6jkQEFNaAYDSDAQTAItVrXYAKlCkqSJVHYZr4ua9cSveDG2XvNCefVLvVgC6ad7Ey7dAWFIQOX7kIGyaN/HyLRCWFESOHzkID1rtnsncWGsHKpPIZsVYWczCEAkAJAAAUFFHTDXEtNntNjEQU+1Wm11shsWGwyCBowliUAjQVNttmzTRqkSfAhJqUqlQoO3ZaVUqlUqlUi8DiSufXi+wq4BIqaZnm+pUJQAwuE7a0qZSTdONoAPKbJcTmQF+Bq49jqsBmXXLi5243SJbIq7/OBNRHarc4ADgtddZE9/IQeN8qIJLDT8GAIENBEAArQBRAD453si+Wb72Tdyez7dTF+nkeCP7ZvnaN3F7Pt9OXaQ3SLmDANgpZmuFWBYrRwAAAAAAABBQtTiKDSyioiIKAKhh4LjYuFjFEkaISSg5qtDguIQoiqLp9gwqVUrb2ClRn+MCkEPJYME9z37fE/PeEHklSMAXotKIh3e6qbQBAKy0UT0q3VQABiAb+mKJ3uQXKXpLCeIoaTw/WTF2dF32PdmojsmfVi3O7bv7CjVmYiPABnbI3ejxDz/zBM63fjhyyN3o8Q8/8wTOt/448kVSt7ZIdaNKVUapTBkZ2EEA7AiwTCflHIsFAgAAAACgiFExahRREWtUUVGxBiuggBiKgqIYsXIC4oMwGgREooFJ29JJ6TYp/kbodqdJqIiQACXVhHQUQgg3KRVCdIowPxYej3KpPyoAGBAARooHomGiMYo6iCgQuhAJBnXMikPyeumRSE04OxNeDiiez7l4qILdrQIBA5SWpF/FFZHSFsLFXAQBgB+01Gv3Xsb2W+q1+5ax/bOOlAkIMQBAABBjACVKokEoZAOOC4HFaijpnX77lHwExFDr7fkyFkOtt98Z31VbkCBIgQJgjFgVobq6bYf1XaRHFtjzjWgMNyZDxAbE0mvjLZlcLL023vMSWyQgqQJgGBhWG5pu22lUIwBKTCLCD9HOJaCqgGb4DLzOa+j+Zet1XkP3L1urWiABQikAdptpsRom/+tPFDLR7XYbx1L2Y9hkAEUBANzUq/FvvJt6Nf6Nb9dOSFkgAA6OiKOpph1LvBD+OqHpWbIgOI+VhhpYAtTYa+Mz5mvstfEZ+2dtRQJOFQCjWGONFU4YBkjg81JsK6TPZMvX0v4xBGwAxM5r51q02HntXIv2AVQoACVAq5EWaFSkZ89Q60PR+vIPVTRtrfRJhjj05Gvg6oy/J18DV2f0Z52ICKAlCxAAK9ZiQEFcgkQSxARijrJKRYdFhw0bFiXXqmmSqk6pLmqPPJatzQAc74tkqsu4432RTHUZt1JaCPXUyQDIKtIAAQDAFEcHwQS1VrCqhuEoBoLqtHrqsihCb09VqvgOOoreuOtmFohdDO/g+rQoMYreuOtmFohdDO/g+rQo8jAZOT3ttpU22WTyCFQWi5lUOUAAAAAAAKihpqlqqlpNrDaLWgRxdHSwYOBgMYMgGgQJg5CYaByh3KSrDRJNmzotmCW0qVQqlbZHp02bNm2kUikRSZDLcdK0HoMU3RHXbBNpk+pWpwooQHpcAAJUl0rFRipV3SalAni+vMx/DAAwr/5/qNDrZxEHSqvPx9MJNNkW5AwAcKsaKoouwWceFVuUT1QBeAEEPhkePDfrN2+Jr+fPDzAZHjw36zdvia/nzw8wZ8AOrCQAvJINChRzBQACAAAAgKMdcTRV1WaqaRU11MQwVBUBUACTOCGKSzwuMYkJI4YoCYNISBiJqqluo6tUWpHXf5jQTZIWoIv6xZaWbyjKi4flneoUqqJUWxl/aH0KaQpV0rMBbacbAgApVjQ1AItbSptqQjzLxUWabrlD3u4eRbp/AdJ8rw4DEHZjXrRbmReVFBAAlsgdfvwjiURgjm8l5ETu8OMfk0g45vhWWvIBZZEhqhlZGxhsdiUBkA00YMVirggACEIAAADAqBgVjLUqioFpt9hNTDVNB0eLIiCGCgCAlEgEhSISlWMjSkcVVaQDRSkJwXEmLtUo0QvyDaXF+YCBr4qjPUiJgqLhoECqaS06kkbTL6LToxQhkTIAmo3QJBKZcbP9XtoZea/f/SMSeU//J0tM917EdVsFMP0dw2HYnv1loIEDCMzaa/D5U7P2Gnz+1K4FKgQAIADYFLvaEGFMYgCRF7tyCX9HHa6/NBbU2Gv8eFYzNfYaP57VzLbB0AxQAOyGgcVRpGh6dJFIp20onQrox8fVqa60jQfANN8DzNJr77jtzdJr77jtratVRCIDVQCw1qoiynWISqRHe+dCeSyG+O8jmkc+BwTpq3RTnDYL0lfppjhttvLmsmkRCgTAYlEbDlYBu2m1C5bAQWKqZ3XbCLt5X2j1edccXt8GFO+LYlBsYrPifVEMik1sRkxQWxuAKCkAAIg1xqrFkfhEI45yrMYTQGBTR54bmuyZnaYKBAGaad7ky2b9y9exfZ9Pp0Yl07zJl836l69j+z6fTo3KB0QhK9V6CmWKaAux2SY7mlXlrCIVAAAAAKNYxFixBozarKajVRwNi900sUtcLEGCaGwQxOIwCul2ibZaqW4FtQQy5pjp6b/bSKtSKAVzE0ngsvC+X78kBEIUkG4BVCpU26M6HZVKADZ0XiqSbigFgPa37MC+z4EizB0c3Xmf1+Qg3d+jC3pYldsNQbfwyHPITDgHcCYvasbQQKsGgCvAIBtAAL4I3ljfrCdP4GjPt9OtyovgjfXNevIEjvZ8O92qfIOQm11JAgZ8cipmMcYiEQIAAABARcVqM21iNVQwUFEwQEEFQSQ+UBgSDYP4MLAD4iOKEkQFYaTTs6NtKoqmmmo5Dhm1p6a6+4VwUEGnpE1Bi25VUl0l3baAYQAAsIxsJ4xLGALIFgAA6GpJIi6eAAwA0qvGBsMWt9srCROqiZc0lnrpDrrjQbYEhI8oSo9WHMAA/TKjBCJYSfR8kAAgAJiuAmQAlrjdcN/sf3YX7hv/0IkStxvum/3P7sJ94z90fECoUxR169St1snJBZvplCl8rDJAVm0KEIIAgAAAAGKNMQZVg1pNBwdHB5saFrvFjt0wTBNH01SbiCpKwqgDBwpQfOD4iDulEoGW8hfRfZewCcASQCKJElohAADIty6Fti9ehWDiQnCiEQSlAgDgqGWikcR7NG0AAIqIVnVbnIAAo3+a64nR4enojjoKKFJ9LWv78d2fkVgZI7dEKUlUVlUNxwKjfyUnKPQB+BQAA9TWq3DvlKupV+HeKdu1gwUgBQqAHWwWNQRFlNAIMCa+K02LTbdCqLDRowHM1Gvg06mbqdfAp1N31lSLgBagCoAFa41RB46JB4rQSUKIs4GkExawMHxdB8zUq/FVdtCZejX+sqPu+m0yQBUAuyEmNjENMYkCCbQ91OcW/Ngae23drY14AOzUi/Ct6L479SJ8lbvYrhUQygIBME2bXcWqhCRICEHDjQgThIDZfECwZ++mFtTOq+GM+dp5NZwxf9aqEFCFDICKGLVKGARx0cAeeMtvN5olvu9bJLwvWB/c0qtwVaZ/S6/CVZn+tkmmFJEAOBhisxoG1e2ZpmmaagvpockJr9+vVQT283udvzVVqO6ar1sFABTti6V30hXti6V30q22VkQJaopqQldNQKgAGIsBEEXUGrVgsdmtIgFv4en4ToR/HR8rAnAxFz0ZtQAc77NxUJf9jvfZOKjLfistKyUAIFeDom5CKBAAayxiBUQJLFYMKnUaC4mUAn+UtDotKpc4YUQGXG2yOwH6id7wvpk/4ncbf9eTXOUTveF9M3/E7zb+rie5ygMYvRjSSoQA2ICZnBAmphOOilkxRxCCAAAAABAFw4rNFBGrmI6mOIjd0bQ42iwYGKZpFbujxVEtjlabDQRUFAAVNTi6ntN4s11MKAuQQcaEHumAQMiWLCAOQKBQioKiJH4aCAAAAAUkBCwHCYhYUQCkQpFqKm2nm7bTbdpOz063qaZnjzaVttMGaVNZgIAE1wgwV/WoHaIKWAEcwFMSiOShvlfiPqIO+tVxv+BSQAaC3bYA3gje6PHnbb7AcN9/TgSN4I0ef97mCwz3/edEEM+Aw7TJBgEwTKdILBcBAQQAAADYLFbD0TRBsVisNgVUAdRUsCjdrk6TdJtOV3qgeEeC2CCIDyAaiRJnC8C2RTTfjIA4MJYBgDBBpyVtJVAE38DGD8Dj81MXDJ8qrRoVGzAAAAGKxkVlSxAjFB8x0GIGHKxkdxIf9d1b+k/0Y7MjfTxF++efYw0QX3gZwHnlZ/UepFoAnAIGAHao3WC7+T+1xPzkH5441G6w3ex/6oX5qX944gOksqxbk5nZamkhB9NJlpXjJquKFEAIAQAUEFQVazFiTQd1dMSuWAwxTAfp9mi7qqHo2enZNtWzQ0hHp5WvWSEHYYwAIeIScSgMEkIgIWhQesxqIN1EXLFcb74HEPMHfubApzuIJluv/9Wiu2SFBFqAp6S6KKIDbmfe0dtXKKxPrsnpy2ayq8ulP3byb0JmTD7CdmOx7+vG/qk7BWh1BTIYAwAGMEADzFjr7Skt681Y6+2XllV3fZAABQIBcLAbdsMwsaNxMRaN1aQtHSHdxEZ01nYAvNJr77N1Xuq19dl6p1qZAgKoAmAsImpRqLiIzPQwPdtquqi7L5baoLleA9RW6+3prFZbrbffWexWKmVmQgJkBcAaI8aoSQ9NzyotXN220fRIBEGTPt261TUHA7TSa/heua6FXuP3yrW7XaBCAbBhWAzTFEfCOEVszKP8k2nCeoxWb+LTbQLs4qt4KD1vv4uv4qH0vH1s0wKgsAQAAAwH02o3SKhIojExAoJ4C2QDX7eKCpudyRTts9rUZ/9F+6w29dk/wQoAEJiBAACAokgSE09iwmhgNIow6hTaatumk/yNZu8pnUbanq8XVAAU7bf5UAo+XdF+mw+l4NOttFSNAACCGQgAAFassaCoBDAY9aZaIditapuuLB1PT0raHm34yyiaad6E+y99DaXhRN5fINO8Cfdf+hpKw4m8v8AVpjWjVNYgJcEeQ/iogGRZrkgIAAAAACBiqMXBarVbDewOomJErBij1mJURBIqklCEKHSoSo8mVVWJhqKDIlAqSKVSqbQ9eohUCiDSjQhoUsp6a7U2/+keEwAAIMfENZ2StoBCpVMBGiptVI82qlIpwJwIraFaKkrpQFUakFUCwFaqZizYyQmAqDm2v8NqKeTb7em7g+EBmgJARqABvhkeePx9Z8exvZ/fUE/kxGZ44PH3nR3H9n5+Qz2RE2cHVhIAjANMAiyLuQIAAQAAAMBiopiIKIoAKCSSSEAkEiRIkEhMwpjAsTFKSHzoEEIF8QoCokGC+ICQoO3RoxoIVNDPcfOnpAIoPYsIvYZqeXw1Qnc8m2FUTClwXvIYQPRsCqn07FTgA4CW5u9ZLOj/xIZaxnt7xLCJTqQEVBBBPiSmOUojc8TvT+81NI8AADao3ej+D7/0JM7Hf7BDEoPaje7/8EtP4nz8Bzsk8YGM2moU1SQKvc1hN9NLAHCArVaMlQVCACAIAICCGGutwRhjLSYOWAxHm2lVq1ospgGCiCIIBmFAghgrLjaBFIlY1fRESJOi/usigBCBDQBWwlJJElTTg8y5p+xx13N9AsjfqaYgpRSfAEC/DOjPbVXTdKm2qrrdcmglcOkI0Cha1U2KOLy5JpPRGE1cwbPQjLFRJYBemyxSnRzan6nPfSKwQw8dD4DgIArMDhwKANzQq/i1JLf0Kn4t6a2pkBICCBUAtUZUjdB0m24boTRNenSd1yfchxCl7eKDBbzQa+zfxq/0Gvu36QtAMARVAOoAUFEHVLEQis4cCJxoYKEAgk5Hr04oNjr7aAPkVOvlj3VOtV7+WJ+qkRGAhAqAsdYCAjGJEnEogKIJHSPkSF6cs+m26c3nA+TSi/jxnUsv4sf3SglQK4FQFgCbxTDtYqCIUaPg936v2YRGl0MFeCcfwQJPZ2dTAAC4CQIAAAAAACYQ9x8EAAAArqKys1M4OEBA38/AKSgsNzKysskuLDU0Nzs6N8WrzC0uNy3FscAuKSktNjw2M8fG0y4rNDM2vK3JLTMrLy8tLTc1Psa1z8O8udfXz6oaAQEBAQEBAQEBAdzSi3UrzHtLL9atMO9Z1IOEZKYZALVqURU5SDw+Aqrs2dCzSRvod/H/RPNI5L153Jr6lSzTVLUGDOuLt5c7vWF98fZyp7dyC7YPxiEFEwCrzYrNaqJiWBwNxFjEFY5Go7GJxnPTPpw16tbYlnjTvjQU7YtI21zRvoi0zRFTkwAAspoiyqoCkB0AYDMcBRNZhVVjRRApzMzMFS1IVM+Hg65AmGi8ZI1Gp2PiYsLEw4AoFO+zKzqnK95nV3ROR0xtDwBQIdgBYLGog6FqQBVS6FQzRS+YCiYuGpi0nZ5NedCr6dk0pZaLLl/RmPhE4mMsBbpp3sTtt/7FZRr+n6e+kAKb5k3cfutfXKbh/3nqCynwARlSFGWlGliifTEAO+Vsc6osVjIoxIUhiwAAgBqsiqiCVcPB5mi1OBgWq10cMRxNm6l2RAwxQUyzkk7TFpSq6GE7T5QJGO74iAPLIMuylr13TN4xXczrVR3X10i9NbVFgLh6tgEAAByNAxwbJ+wgSmCtKM3mrrCMmhfYzaubHonQ/1F01x4di3ubphPzfmga2uItBAhAzsylmm5HpVKpdJtKuo0UoIsDAPefAtgA9wwQflbRHS9tfnn2aOHFhBu+uN24dbM+9m9s5+9/2NOOJFncbty6WR/7N7bz9z/saUeSnMG0sgH4FDdZriJVCAIAYCsaEMSTaIBEkDBWxCcIsBUQjeuZtq2m7VHVVDXdHtXtkY4WVU1JHyP0ZwwWIASO6ymqqUpCqX5xe+J2KMgbo03DhAh/R6coJQlR5wEAFhJOQAhEotG4EACApOlsPoumFeimTSoVTbfTDaOEPKXT1EtGAICviSj2Hxe4GTLbS8ilTYjwOV5eUjeY9ZG7QAJLrJZzFrYANFBgIwRogAPWd9249b8PVfDof0DfdePW/z5UwaP/AR+SqFO3KqOmpgyxjN3klGXZKosxVkUAgiAAABhjEBFjRLFGsWPYFNM0TavN0cFKYIeRKDGhHMao0yM9E5FEVY1jepFQimp0EnVgZIMA9IyrjVl9xGT1hZ4RQnIzu0PdTHSiAgAQr76slG7TNE0UVUBG3nqdrUrs9/EyvlAHGnlhHwIwPaT3OGPcX1OVT5hfZuShbX3J0+7HAwEEwAw/HlbTQAKZAsAGyADU1Gvgs+nX1Gvgs+nfqE0CCBAKBMAoKGqq9Oypqny+45JdO2ZQsKUZiuTWi/du+rn14r2b/q4FBIAMBMBwsGK1qIYmjMck8ZrSEYm4nRrGMQSkzuv52W4p9Hp+tvt1dUOkkBUKAGoECy94XFTbI23L15+20DEm7THLYf8bAtzeq30sLdu/vVf7WFq2f2uKDEkLmYEAWFFrjaLT6dFJaDrp9Gg64HgHkOQQf1Qog8kTEo+nex0U66toLD/XYn0VjeXnulITICsgSRkAAEysFrEpBsUY0VEi0qQ6oNGibbslU39qk6fBANpp3vj7ZpJQfIln5PetPtJO88bfN5OE4ks8I79v9ZE+ENtrITbY7JRlMZNkWbECAAAAAAAAgNXRahgW04JpNSziYJpW02bYreqgKAxiYhLGOggtiIbpCFEqpdMVikAhQge8CcLAsixkWU4VUpGxs+sF/PUdGvh9juOZG8hwvcgxBQ2iPTxvBsABYKAvBaA1urrI+kB0qTcxTxcnXjnbRFqLIq0SIdG5ucQUXP0yLbxmqADeCN7I8vdt9kTxfX5VdaARvJHl79vsieL7/KrqwJwFO7CSAFQ2wCTAYrlCAAIAAACAYTXEwRA1xDBUDDANVQEFBYAgVEiQSMJogogTcTTG0TASEx8kCEFRN7qNtpGSSkGBqihoCkiqZ/8DlYBSUk03TZ1fMvjlY0IviEXRfxEKAUQpaTud8PIOgJgZKfVpyFN6+Lx22UQBqUbcwnEgVAQ/ur7Iou2XkZVjFBI6mUU4goICNpjd2P6vhOYvbPv/n1O/ymB2Y/u/Epq/sO3/f079Km9ERBllpRJFVGt3YJKdHNwAVwVICAAIAKBqrLVGjRgBo4kkHh/GJBrGB8aRxCPxUQdhXGy8ozFAwoCOpKKqkUZo6LQ8ahShFFU9E5GQhJCEEPSmRacfE2VgVRAg0QRgAAAg9Oru0bMpAABU0PTs0f6hKtBhWOa9pp0JlL9X8ehPIdVKU6TtwDdyVam3jw/d3qPQKnu6QmqGVge3qN6FOTxvlDKDAVQAAhAAzNZr5D9gbrZeI/8B81aOXAS4MAACYHEUwTAEEbspIkM6+gc7LpRV6SiXUajQFNzUi/k5MP6mXszPgfG7FhBlAATAsNnEpjZVgBIJCTeU0ukwrTzSb/PbN9w+5NKz+902zaVn97ttekZNkgBuE8wABUBVjIogmIbNQVAYjUvEDkYbQsuBStuz1JclwyGvLQDEzqv4V8bFzqv4V8adtVlkohUiCgCqqFgrxRHEBE4VqhtREMYDw6HsQiTz5/OT0C1DvVUAvNJr/Kr0f6XX+FXp3ydRIQYgYeIJwngRiDA+EgaKj68HbdNU6ZG2W2i7bVWSrjRXiY6wRR0bBwzni7l/SYbzxdy/JCu3JK0WtGSBAKjYHG0mqmIVm1rQTolK04mJRCJxCRIT1/QQpastbbdt9RxOZYsCHO+LsB5/dLwvwnr8ETHVGwDoRiIEAAAA7GrYxW4BUcDBZhiGVUyEopjpFdFw0/p220STxv36U1wgDBzvi6SVXdzxvkha2cWt1GQQWU89CY2TAAAAgJg2iyMiWAFjMFwn1ZF4RRJNJCpeSZwv/+nR1QD6ed6E26brH16GE0z/nKZW93nehNum6x9ehhNM/5ymVvcByogsI4uq7Zm2tdkKh/MaYGUxYgGCAAAAAIAaFTAqYlStGBZVi1jUdLTbcVBxnOKDIBqNKowQH6gr0jaRplJpjwseO3iqqurp0aZSKZVSqYvztDVXTCZCfKAwwLJANgAAYGRFwwQqFQBwt7bTs1MA1JINEm55dNWkm6aNommb72iIEICsUFUBAVitzONfYo/nZUCe9bJHCoA86ZbqL0ExQQbAAB4ZHjo2yyf7A8OZf8oQGR46Nssn+wPDmX/KcIMdm31dSQAAQ1y5HGMRQAAAAAAARexWmyqGOhpWYxSxAqoAhHGxsTEJFRFhgBQfcWzE0bgwNi42olhF2kZ1itJScSpu6TkEBLRWUkpVOrrqLwL4rTZAtUVUv1UA6DjHMSjNzfIgYWVA6VG6CEk3sYGlpiyvnMhLQVogGtg3dgtP6QO90OaUpotRCmaHvgIwA5bI3eCx+W+zJ8aTP05sNpDI3eCx+W+zJ8aTP05sNvALALBjRJoMrCQALVmnspzLIiCEIAAAAEAolESyOlgMNa12i4Oj2EQsaldUUVVARYWQYGJU0WuMRq2FSaCoFTqwEkSUiPQ7TukzXqjRLBWaKoLQaYAnQkknACQMJMWHAZIAbgCSpqppK/ToVM9SXZIA7DEUxMQSFw1tMC4KV2fo+M4MKTXVqa4WK0h0tFjq40v3Ji17uE9AtpfaHgC0TPy0x6Ra7ysGcAoZwIYZANzYa+DbWN/Ya+BrbNfXViAZSCCEAmCwVkUFQUUQSZ6WRifBtZcTvCfc2SyDA+TYq+R2ps2xV8ntTHsWdQIgACgUAGNVxaglcCIOITVs2mqqJ8DFO6VNhvKzBwX03ov/bHu99+I/295Zt4wIgRQNA6BiLWIlkJ0wNhoaXupUt9up3HzOu0aabqM6bVLRbZRWVCoEFO2Ldix/u6J90Y7lb7dSmwO1RUACAJCBANhMG+poRcRijGD4I3rgmHpo9nwDumneuOtm/qcvsP09v8oam+aNu27mf/oC29/zq6zxYNKK6Ye+HEwnOVmnyrJyjJACAAAAgFXFwWLaxNG02W3YrVYHiynqaHEwsNi6SdPRs9ujqR5NFT0abZukotKk1PtosgGHFgCyEsaFDkHGWGCZkePT5BVAZHoHzoEqFKhO6bbVNopuSrdtCENdAOJDIQAAYRtAXfmqkXd/97waByJXxf/adEQrosY42qlA70GrJ5NVAnAC+TEougJw+MbSAGADDagKABj+KN7Y/Puxd+C2339OrfAo3tj8+7F34Lbff06tcGMSJwiAnXKWrWJVgZAAAAAAqoaIaTqIzUFUAMFiooCAYYgwgRUbSRCNyoGdkIhjpdCBrAixRBLKthBYoVuJcNCROLCEAYzX04sTHzCRi78zp2lK+KB7/nH5VwAgvtI0TXV6RnULcEGBJShwX6SWVQ6FTysuaOolMpfmSpac2iE0OyQpAG+A5TZ8FW4DKCwhAGoA2ACWmN1g++8n74nzzb+wMyRmN9j++8l74nzzL+wMHyEjoqZSKlWVGzNwMQDTaZMdUzGXywGCIAQAAEAUrFEBsaDWalOx2x1E1VATC4YYKIZdbHZD1DDTpGlTbTWlE+mgQAkAAwIBiSZGEQgUCEkAw7S5pFRoQ7r1Y71ih19oRhBT9N8UgXQDANpuR7fKBoKQSFwoAyxusNgNsJJdSiE6NvUPU1yknJ3ri2bRdrssQem1YABmoAXQy0g1mwYFSADYPgDU1mv429LV1mv429J9ABBACAgAAJQBaPUmqDqNrFbTo5uYHxzEWQHvouiEC10A1NBf+NrgaugvfG1wtyYzUwABAAUCoNaoqFVtpYdqaeBInITbbwsbKg7Uzqv01Xy18yp9Nd9VQxCA0wMAVAAEI1hrwRAcICXdVjQlMqoKx0YwGeTKi2Mf01x5cexjurUDBJBUABwc7Ba7aZik6bYtJaqpHompa0D1LGCJYrULANTQi33f4Gvoxb5v8Ge9kSkDiGaYAcAKagSigRPKkROEgpA4Uokxl9L2pPDWc0cu9CRSSHqgAvzoi7tvsx99cfdttnJsy2YLIBlBBsBmWC2OVsBB7IoDqJ6VptPpdHok+jzlZ9gk2m5bE6qXNq/PfJG1ABzvs3UW3+54n62z+HbE1AYAcAUBKgAGhmk6mCArcFAHNVQMoZWqRmhQ+O6X3c1E1G8Y6OWlKQzvi2h2BhveF9HsDEZMtVoAAFIKAAA2tdttYgiyAiFNLVU0kER12qRnj56dtu7I4eAwGbpJ3tjzj0BEAtOPt7MMNskbe/4RiIhj+vF1lsGDoZ1mwGRgckwDVTkmVRUAAABAUASLOtjVwWqxGqZhdXRQdbDY1GpYLIqEJAiVID4mYiRF6ff3cn1cXwJW0gaCdBOJYhnLIMTMyK8AAGg6bToo0qk2GgQxcQIQoQGG0e818QEAOiJtD6VpQzUSnaIgjufMLaZY0oYDu1Ao2e+fAa73cNIVAiGqib7zgk/RdqhIBbiyvAPKlA0ItKUKTvZeC7kTBTzJFwIbmAHeh92k/o+Staqgf/RjmejDblL/R8laVdA/+rFMnAusVM+ubFWMVSwkBBAAQKyGo4OAzTBwsKiS0EhROUoQTRgXE42VE1Ek3lERVUjTleoQaCspVKoB1YHzxDgRKpSMMZINQoCCeBQAAAAQxLtnU6AaPVWTkuoE0lFF5m8f4gcAuM6ubFpJUqkk3cacoakyQZ479YJdLitPjnUKxH3EfPiW1PNQ5fjKTQHh2Mh6LE2/88JLshXbLYBA/CJbtgceCSqwtEEQUADWd92E9X+eoTv+ffPr0BaJnr7rJqz/8ww98O+bX4e2SPR8IhK1UW9RlkUoNjFhk6fZtGIuZ1UEQSIRANYKxqAGazFqxW5zVDFN07CYjqpmiIiJOp6YEMc6aNJpm1RUaVLworfSU0MEJAiEogoIggALQADIKIGjACAdqoHrPxSVgG6nomRqEdPtDDT7UpNGT5VKCzDcs92sc9q5SLW0aBDtLL5bQUWDvA7FdVAx/bUvUu3smI6YvQQwvIvkVlQOLmnz3klI4PsADJAjDkPGAA3AZAAyxNpr6LPVYu01dN/q9gEIYwEUgCIAESwmgsESrdRpEDqaTiU6YeNytFeibFDODtzWi/dJfrf14n2S76xbElgAqgBgrIoxhDgmQRQAwkhcoKIjaKyHXSGQqwHE2D9wf3Mx9g/cM/9de9MIFQCsdgcHq0IYT3zCEI106NmTTlNJfP3QrJh2x7eSu2a859E/BOuLf250wfrinxvdSvVB1q0GA0kgAAA4qE0tjoqowaiKtG26Paon2uLva/xWKUnTg1IGDO2LspWe0Q/ti7KVntGvVkUKpHojIGkGAAAAMGJEVTBWraLUnJrSjYpW9FfP/6JnNdU26joF2nneuOum/dsncPv3/XoStfO8cddN+7dP4Pbv+/Uk6oONVluY7QWbKWdZq5VzLEcCAAAAAABitalVLBZHm6OjTU21mBarzdFiNywqoChBJNEggiIOCbpdFdBpqqpSRGkZZFmWQVZIoi+wtYr40ZU70AXCB9tNV/Pi6/huiGz6G6mNQUBS0XQqBYDbwZBG1mqrrSRNdSmxHD7WIIJif8eUXqKxOfcW+nH/8dBXUoaYVIU4Nq7ALUl6y0ADNgC+KR46fn/knRjO9yfUUz9sioeO3x95B4bz/Qv11A9nxwO2idnmFFJZSAQBAAAAAKCCCgCKWhSFgmhMYqKOOs5yGC8nCCxFHMaFEBtnokFoRwNwglaPtglUKirpqoDSNNWjIxVdTSVKi+nL5Hsm0UaZ7k8UTE+PEMVbuhJUAAChJlgJIwoRAECmJCibRSrJfLpJzQmh91Tsl+U97V/CNLIzL3WDAfXmpHIt2ADkElao3bj9H33kH9iefz9O/VCo3bj934/8A9vz39epH+mHIIp6y0rU1FYq0Uro20ynY7SrBMBcjlUAAAAQAECNBVWwxirWOlpNERSxmRYHm6MhYlgxVQUASBhRnFDUKIiNoOpKKW2i06ruAfQHSxgwxopPREIgJAKZKzWhSaHQdJVqO/QAlUKkh64CUABSempaOqV0204CIAAIceKBYGMUAHwh8PK/gbi/dyUPAQY71YjIGHr4K76GVzfZTaVCXwyFAn46caABABrQANzWi/sZr7f14n7G2/o61SCwATEFQABQrFErKBZVIXbQ6nYrgOf81FdkFMB5ALTSq/U5EGmpV+tzILa+nkqEwAYQygAAAbAiWLUqJg42QbYNIj6C9ZBO0kg6HUmrFBM8AOTQs+tuuxx6dt1tt76mlkgISAqAABiw1qgRDDVEcSHRaSjugf/5T68KnDPU0M/xO3OtpZ/jd+buVE9mAKIMgAAIIlZEibMTE0L1jBzhL1CRrkq36TaEGsYVANTIi+GtM+8aeTG8OvO+WVskECQJgAAYg7FWpXpqtZROBUFg5DZBC9NvJVeqFIYe3MyL7dXZ88282F6dPd+yJkvoCwEQABUBIE2nZ49ARGDiHW8ByK7H1XfUJ8w+5Mqr4C5urrwK7uKuq9YWIikIYCEAiDVqDP/rH2mSpkdTsRT6JXINVawh3wkA1NardK/0q61X6V7p9wLkDEkBKBOQZkgLDdJRh0EcVGkruvJBmk5Ddc9taNfvfKG9phPQvmaiBRTri3ZW+hXri3ZW+q3UJkRNkfACYgAAcLSIabcqWLEiasL5Hf/DWKO4iKXpAcFE4y0En9AoFO+VbSoqt+K9sk1F5UZM9RIAclVOD0gAAFCLYTioRVEkHOw4GjYQis5EYyoFUWoFVT30T5xEEg2CAJALfQDaed642y/9JQXe/pevGTrPG3f7pb+kwNv/8jXDg+zZabezZ9lMJ1m25bipWJEIAAAAAKiYYrXZTLtps9jUitVqFQdHi82uhoPNauJITHyEBPEx4Ijcpkelpaq0tM6oKv0J5cCAhRyQSEKEECAA/DyXg3gYgP+AsEAA/9ECLz0zf6eFUAAAAA7suNjAj3FEHABZtC9eCe1DSKU6LU1pSGOb2+25vwmtmjw+WtP95Hrn6YEDk7ZFF0JF4DYbz7+/iUDOswYgs3F+Cd7I5V89RhxPt2f4Z7+YS/BGLv/qMeJ4uj3DP/vFnMG0JWHIJFXMKkKKAAAAQKgwVo6QmGhcbDSwQ4VRgvggYUxsxHTTpppu0/Tskbbb9Gx7tFVtITSSqiJ0pIAAwGCFCbptpBJVCgIIZRQ4XuiK7xKaTo9OAEBm8lZfCADNQDgDbGqM22TTtSWfvTzjQf8tuh5zKa5EDcWWIg4wQns7nL12oi4+LG3ZKQO3DXgCQAdoCkAAnpjdyPzvLp8E+/9PqJOOxOxG5n93+STY/39CnXTcwOYmV5KAFqbJqSznXJEqhAAAahFTDBVUsYuDaVhBxEAVQUQCxRCbMIwlCOIUDUMCEXU0ljCMiQvi6baaUlVJlNKvb6oQVNHoQLzQ4hsAUh3d1oATBomCsREAGCViAgUJY6V4AAAAaMh4YRQXIYKNwbhbqkTanxuqdO97iJ9RxfKpIBtvQDm3afascsGtOWlps2ErdIau8B3v6LAV34yB4LMxG4Dy7LuiAhAkw3aAAGAA/lneyPJbj2OAf/sdKuTP8kaW33ocA/zb71Ahnw2vk/DLAKacs2I5hEQAAACAmnYAFADARGVHYgMSjUkQGweReMcEEAlDh3FhGBe14yGQYxyNo+m0aaqJtJWKyrl7AzIYwIETTY9uUiFQNdEuLBEIAHCsEgS3aoAGAAIIwojiw/gKUEW3Z4CC+ISyARC5igOQU1x3OnRfiAc/FkIAo/5Piz7uEKtQdeHdShcdbv1/Oj0B28btOuK/emq3SSBTNggKEFAAvikevPx62z/B3/0XKqSb4sHLr7f9C/zdf6FCejZswDZXAQEfQcmysiwHCAAAAAAAAEUBFIsVUAUAxIqjCAUO4xLGWgmiYZC4QlthnB0GsQ4dQ0wQjVF8VJEw4pjqVqqp0JA2SR3XNCptp6REtSh1RrE1Fq1VATAAEImNjUm804QKABRAj7atVKfVaQMAGOD+r2iXf+KbOAemdfqq/sp9+ejfrcCqGxpodSTqEIgyHZPqJqdkWamF3lwAGgAemB3q/7CLVSSf/o8Tgdmh/g+7WEXy6f84MSfAZBAA28SBQBVzzipQABACAJgWTNOu4uhgFbHbEAUEAFVsViKgqKOxsWHimJgIhIFjE4SKRGOi0bh98YkZ+gCY6bShGggpKT/MEXfabaT/cvDIkVwLJIB0uj3aVwoAAKB0elBN2zOVgrADuJlWVOSce7VlDqXCBRJP4y3aAWAUid67Dn1IGYhvALhbZW9PF58FKh54sAU0BvUGmQ2AA57W3LD+ieiF5uf/P/Uhrblh/RvRAs3P/3/qw9mwAdvEPDCjslWuSFUFAERRAUCxGEZyGJMwQUxIYAiiUmycFRIqGokmIOr4wIGitqJI2k4bldJ2KnG6XB56gJRKBS2D7HHMz+4PLk1XZ6iXVMEPP9P6AQAARNv2KMBxocGiNPCcBUmSZTTT+Y2oCkSSSIL+PPEU5boqtUwEkBZk4jBI1XCnBkZCEXGFmGRXzX/vahff//60mKFKb+sHQF9oNFvwKDoMVrMAhepd1vpjBR2Mhe5szH8jnwgA/pUM+sf/TAc/zzcKfCWD/vlf08HP+aKgdBabmDPTkYo5AZCqCAAgy5GoIrFx8XHRuGgkGonGxMdEI6FCxVYz8URGiKDY4YcbsCOxAxZuQCEKBbJZdjqLi6edbqfbFKkU9KtXr47/gKRV5iBqZubVyAhUPParAwAAAKCtUGYnSbFgnwEaAAdua1Usy1ihgBOAl2a2yyUL14u9YLfnAZnvlIRX5PPVQc/0yMAcLX2RpLgKLy+yjMUKAMQ23spule7G2UBDc4BMppn5m6hHdlq+Yw81pjuhvxQelkyP62dOxyK1KYcDmLFkeV6/ZwVWqU25LESUkU02mI6ohopVhRQBAADIZJUJpHXpjGU3lWXabfVmd2O0ebnHYmZxyWG7xGo34wCCUMIWRG4nKRswBN2oSEtUIByhB/TRVAAE04qmCEVBAuZTItxiAgFVApRzIKttVmFQQah2wLvXVHTyLIIwBQgDJCGKq5iNQ5Dxd8CYfbG+CmYLcLFOZ6iZ7a3QSysFLdIN7AqAsEOXBNb42feLAcJPiVnDcG0Iu53b6JOiAo1sYreYUgE+lnxezm+bgimZFjFjydfl+NatmNgAoIMzG50aKiSkEIIAAAAABUAFgKysdLD2lMLACSDLsooq5tXIQShMWu4ByzJoXQwgy4qDUEaGafd01lVZVDpZNM/9ac/BrtQe3RUEQaCz6FcqlVpf1pf3t+ftkVXgZX3mdAJNfPr+++OvFxyorGkva2QBaHGxs1hh0SZFhQ0sbaAtKhBuDyhZVKAtAm1xEVgCMCtsAW4s+d9Zv3QBHAAAAAAAAAAAAAAAAAAAAAAADg4ODg4ODg4ODk9nZ1MABPcPAgAAAAAAJhD3HwUAAAA1KonKAgEBDg4=",
+				"type": "audio",
+				"filename": "Cartoon-Tiptoe-Sound-Effect.ogg",
+				"uuid": "087cefee-e35f-4e35-adcb-dadc8dd6f57f"
 			}
 		}
 	},
@@ -8702,10 +8931,10 @@
 	"wickVersion": "0.0.0",
 	"metaInfo": {
 		"browser": "Chrome",
-		"browserVersion": "61.0.3163.100",
+		"browserVersion": "62.0.3202.89",
 		"navigatorAppName": "Netscape",
-		"navigatorUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36",
+		"navigatorUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.89 Safari/537.36",
 		"wickVersion": "0.10",
-		"dateSaved": "Fri, 10 Nov 2017 20:46:36 GMT"
+		"dateSaved": "Fri, 01 Dec 2017 07:20:43 GMT"
 	}
 }
