@@ -58,8 +58,8 @@
 														"name": "Tweened Object 11",
 														"x": -0.06000847740062909,
 														"y": 14.32838482265322,
-														"width": 196.26206428655087,
-														"height": 94.3730477863163,
+														"width": 188.33295242672477,
+														"height": 86.76514725149593,
 														"scaleX": 1,
 														"scaleY": 1,
 														"rotation": 0,
@@ -108,31 +108,32 @@
 																				"svgX": 568.129001132961,
 																				"svgY": -75.808511210534,
 																				"svgStrokeWidth": 4,
-																				"svgWidth": 174.58240001314402,
-																				"svgHeight": 71.44879039821564,
+																				"svgWidth": 174.58239341373132,
+																				"svgHeight": 71.44879852860069,
 																				"bbox": {
 																					"left": 510.42019783982664,
 																					"top": -264.08411194623363,
 																					"width": 174.58239341373132,
 																					"height": 71.44879852860069
 																				},
-																				"_zindex": 7,
-																				"_tempZIndex": 0
+																				"_zindex": 0,
+																				"_tempZIndex": 0,
+																				"_frameUUID": "201f68c9-f8dc-4f8d-a894-26893a16965b"
 																			},
 																			{
 																				"uuid": "493c2eb9-1f40-41f4-b6bc-576bc382b1b7",
 																				"name": "",
 																				"x": -60.724248548979745,
 																				"y": 9.168272876783533,
-																				"width": 58.46148320279008,
-																				"height": 60.326840696959295,
+																				"width": 56.46148320279008,
+																				"height": 58.32684069695925,
 																				"scaleX": 1,
 																				"scaleY": 1,
 																				"rotation": -17.381532001852356,
 																				"flipX": false,
 																				"flipY": false,
 																				"opacity": 1,
-																				"wickScript": "function%20mousedown()%20%7B%0A%20%20%20%20root.gotoAndStop(%27secret%27);%0A%7D%0A",
+																				"wickScript": "function%20mousePressed()%20%7B%0A%20%20%20%20root.gotoAndStop(%27secret%27);%0A%7D%0A",
 																				"assetUUID": null,
 																				"loop": false,
 																				"isText": false,
@@ -324,8 +325,8 @@
 																					}
 																				],
 																				"playRanges": [],
-																				"svgWidth": 58.46148320279008,
-																				"svgHeight": 60.326840696959295,
+																				"svgWidth": 71.30742745474072,
+																				"svgHeight": 72.5303622988985,
 																				"svgStrokeWidth": 0,
 																				"bbox": {
 																					"left": 445.0321558473378,
@@ -333,11 +334,12 @@
 																					"width": 73.81356718859138,
 																					"height": 75.03650203274921
 																				},
-																				"_zindex": 8,
+																				"_zindex": 1,
 																				"framesDirty": false,
 																				"forceFabricCanvasRegen": false,
 																				"_tempZIndex": 1,
-																				"scriptError": null
+																				"scriptError": null,
+																				"_frameUUID": "201f68c9-f8dc-4f8d-a894-26893a16965b"
 																			}
 																		],
 																		"tweens": [],
@@ -355,8 +357,8 @@
 															}
 														],
 														"playRanges": [],
-														"svgWidth": 196.26206428655087,
-														"svgHeight": 94.3730477863163,
+														"svgWidth": 188.3329524267249,
+														"svgHeight": 86.76514725149593,
 														"svgStrokeWidth": 0,
 														"bbox": {
 															"left": 505.7564043963175,
@@ -364,9 +366,10 @@
 															"width": 196.26206428655087,
 															"height": 94.3730477863163
 														},
-														"_zindex": 7,
+														"_zindex": 0,
 														"forceFabricCanvasRegen": false,
-														"framesDirty": false
+														"framesDirty": false,
+														"_frameUUID": "2472a9be-ca06-4ca0-8c08-a0c0ae74d862"
 													}
 												],
 												"tweens": [
@@ -431,8 +434,8 @@
 									}
 								],
 								"playRanges": [],
-								"svgWidth": 131.8330666987074,
-								"svgHeight": 60.73560307604714,
+								"svgWidth": 188.3329524267249,
+								"svgHeight": 86.76514725149593,
 								"svgStrokeWidth": 0,
 								"bbox": {
 									"left": 540.1253722530421,
@@ -3043,8 +3046,8 @@
 									}
 								],
 								"playRanges": [],
-								"svgWidth": 298.2650977963249,
-								"svgHeight": 214.30135999999993,
+								"svgWidth": 426.0929968518926,
+								"svgHeight": 306.1448,
 								"svgStrokeWidth": 0,
 								"bbox": {
 									"left": -100.6650390625,
@@ -3081,8 +3084,8 @@
 								"playheadPosition": null,
 								"currentLayer": null,
 								"isImage": true,
-								"svgWidth": 417.1771428571428,
-								"svgHeight": 67.2228571428571,
+								"svgWidth": 595.9673469387756,
+								"svgHeight": 96.03265306122444,
 								"svgStrokeWidth": 0,
 								"bbox": {
 									"left": 72,
@@ -5575,8 +5578,8 @@
 									}
 								],
 								"playRanges": [],
-								"svgWidth": 30.562275557717044,
-								"svgHeight": 50.04693663414628,
+								"svgWidth": 43.66039365388144,
+								"svgHeight": 71.49562376306608,
 								"svgStrokeWidth": 0,
 								"bbox": {
 									"left": 545.7425121739755,
@@ -5770,8 +5773,8 @@
 								],
 								"playRanges": [],
 								"_frameUUID": "d86e8eb4-cc26-4cc2-b672-9f67e2f4a64c",
-								"svgWidth": 33.95991110148009,
-								"svgHeight": 36.82685197449655,
+								"svgWidth": 48.51415871640006,
+								"svgHeight": 52.60978853499512,
 								"svgStrokeWidth": 0,
 								"_zindex": 5,
 								"framesDirty": false,
@@ -6056,8 +6059,8 @@
 								],
 								"playRanges": [],
 								"_frameUUID": "d86e8eb4-cc26-4cc2-b672-9f67e2f4a64c",
-								"svgWidth": 9.47178400000007,
-								"svgHeight": 49.89185375516581,
+								"svgWidth": 13.5311200000001,
+								"svgHeight": 71.27407679309397,
 								"svgStrokeWidth": 0,
 								"_zindex": 6,
 								"framesDirty": false,
@@ -6237,8 +6240,8 @@
 								],
 								"playRanges": [],
 								"_frameUUID": "d86e8eb4-cc26-4cc2-b672-9f67e2f4a64c",
-								"svgWidth": 60.030687022690245,
-								"svgHeight": 49.72639124585612,
+								"svgWidth": 85.75812431812892,
+								"svgHeight": 71.03770177979442,
 								"svgStrokeWidth": 0,
 								"_zindex": 7,
 								"framesDirty": false,
@@ -8212,8 +8215,8 @@
 									}
 								],
 								"playRanges": [],
-								"svgWidth": 506.79999999999995,
-								"svgHeight": 338.7999999999999,
+								"svgWidth": 724,
+								"svgHeight": 484,
 								"svgStrokeWidth": 0,
 								"bbox": {
 									"left": -2.5,
@@ -8934,7 +8937,7 @@
 		"browserVersion": "62.0.3202.89",
 		"navigatorAppName": "Netscape",
 		"navigatorUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.89 Safari/537.36",
-		"wickVersion": "0.10",
-		"dateSaved": "Fri, 01 Dec 2017 07:20:43 GMT"
+		"wickVersion": "0.11",
+		"dateSaved": "Fri, 01 Dec 2017 08:20:55 GMT"
 	}
 }
