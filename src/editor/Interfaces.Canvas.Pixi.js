@@ -102,6 +102,7 @@ var PixiCanvas = function (wickEditor) {
             }
 
             wickEditor.timeline.getElem().playhead.update();
+            wickEditor.project.applyTweens();
         }
 
         wickEditor.timeline.getElem().playhead.update();
