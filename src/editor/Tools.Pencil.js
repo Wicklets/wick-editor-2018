@@ -98,7 +98,7 @@ Tools.Pencil = function (wickEditor) {
             totalDelta.y += event.delta.y;
         }
 
-        if (totalDelta.length > wickEditor.settings.strokeWidth/wickEditor.canvas.getFabricCanvas().canvas.getZoom()) {
+        if (totalDelta.length > 2/wickEditor.canvas.getFabricCanvas().canvas.getZoom()) {
 
             totalDelta.x = 0;
             totalDelta.y = 0;
