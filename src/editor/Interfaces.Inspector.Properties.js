@@ -243,19 +243,45 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.StringInput({
-        title: 'Stroke Width',
+        title: 'StrokeWidth',
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isPath;
         },
         getValueFn: function () {
-            if(!selectionInfo.object || !selectionInfo.object.fabricObjectReference) return;
-            if(!selectionInfo.object.fabricObjectReference.stroke === undefined) return;
-            return selectionInfo.object.fabricObjectReference.strokeWidth;
+            return selectionInfo.object.paper.strokeWidth;
         }, 
         onChangeFn: function (val) {
             wickEditor.guiActionHandler.doAction("changeStrokeWidthOfSelection", {
                 strokeWidth: eval(val)
             });
+            wickEditor.syncInterfaces();
+        }
+    }));
+
+    properties.push(new InspectorInterface.ColorPickerInput({
+        title: 'StrokeColor',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isPath;
+        },
+        getValueFn: function () {
+            return selectionInfo.object.paper.strokeColor.toCSS();
+        }, 
+        onChangeFn: function (val) {
+            wickEditor.guiActionHandler.doAction("changeStrokeColorOfSelection", {color: val});
+            wickEditor.syncInterfaces();
+        }
+    }));
+
+    properties.push(new InspectorInterface.ColorPickerInput({
+        title: 'Fill Color',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isPath;
+        },
+        getValueFn: function () {
+            return selectionInfo.object.paper.fillColor.toCSS();
+        }, 
+        onChangeFn: function (val) {
+            wickEditor.guiActionHandler.doAction("changeFillColorOfSelection", {color: val});
             wickEditor.syncInterfaces();
         }
     }));

@@ -53,51 +53,22 @@ Tools.FillBucket = function (wickEditor) {
     }
 
     this.paperTool.onMouseDown = function (event) {
+        GIFRenderer.renderProjectAsPNG(function (dataURL) {
+            var img = document.createElement('img');
+            img.onload = function () {
+                var canvas = document.createElement('canvas');
+                var context = canvas.getContext("2d");
+                canvas.width = wickEditor.project.width;
+                canvas.height = wickEditor.project.height;
+                context.drawImage(img, 0, 0);
+                context.fillStyle = "rgba(255,0,0,1)";
+                context.fillFlood(wickEditor.inputHandler.mouse.x, wickEditor.inputHandler.mouse.y);
+                var win = window.open('', 'Title', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width='+wickEditor.project.width+', height='+wickEditor.project.height+', top=100, left=100');
 
-        if(wickEditor.currentTool instanceof Tools.FillBucket) {
-            var hitOptions = {
-                fill: true,
-                stroke: true,
-                tolerance: 5 / wickEditor.canvas.getFabricCanvas().getCanvasTransform().zoom
+                win.document.body.innerHTML = '<div><img src= '+canvas.toDataURL()+'></div>';
             }
-            hitResult = paper.project.hitTest(event.point, hitOptions);
-            if(!hitResult) {
-                //console.log(PaperHoleFinder.getHoleShapeAtPosition(paper.project, event.point));
-                var hole = PaperHoleFinder.getHoleShapeAtPosition(paper.project, event.point);
-                if(hole) {
-                    PaperHoleFinder.expandHole(hole);
-                    hole.fillColor = wickEditor.settings.fillColor;
-                    hole.strokeColor = wickEditor.settings.fillColor;
-                    hole.strokeWidth = 0;
-                    (hole.children || []).forEach(function (child) {
-                        child.segments.forEach(function (segment) {
-                            if(isNaN(segment.point.x)) segment.point.x = 0;
-                            if(isNaN(segment.point.y)) segment.point.y = 0;
-                        })
-                    });
-                    var superPathString = hole.exportSVG({asString:true});
-                    var svgString = '<svg id="svg" version="1.1" width="'+hole.bounds._width+'" height="'+hole.bounds._height+'" xmlns="http://www.w3.org/2000/svg">' +superPathString+ '</svg>'
-                    var superPathWickObject = WickObject.createPathObject(svgString);
-                    superPathWickObject.x = hole.position.x;
-                    superPathWickObject.y = hole.position.y;
-                    wickEditor.canvas.getPaperCanvas().pathRoutines.refreshPathData(superPathWickObject)
-                    wickEditor.actionHandler.doAction('addObjects', {
-                        wickObjects: [superPathWickObject],
-                        sendToBack: true,
-                        dontSelectObjects: true
-                    });
-                }
-            } else {
-                if(hitResult.type === 'fill') {
-                    wickEditor.canvas.getPaperCanvas().pathRoutines.setFillColor([event.item.wick], wickEditor.settings.fillColor);
-                } else if (hitResult.type === 'stroke') {
-                    wickEditor.canvas.getPaperCanvas().pathRoutines.setStrokeColor([event.item.wick], wickEditor.settings.strokeColor);
-                }
-            }
-            
-            return;
-        }
-        
+            img.src = dataURL;
+        });
     }
 
 }
