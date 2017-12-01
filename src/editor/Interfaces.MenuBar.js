@@ -123,7 +123,7 @@ var MenuBarInterface = function (wickEditor) {
                 wickEditor.guiActionHandler.doAction("openFile");
             }),
             new TabButton('Save Project', function () {
-                wickEditor.guiActionHandler.doAction("exportProjectZIP");
+                wickEditor.guiActionHandler.doAction("exportProjectHTML");
             }),
             new TabSpacer(),
 
@@ -135,6 +135,9 @@ var MenuBarInterface = function (wickEditor) {
             }),
             new TabButton('Export PNG', function () {
                 wickEditor.guiActionHandler.doAction("exportProjectPNG");
+            }),
+            new TabButton('Export ZIP', function () {
+                wickEditor.guiActionHandler.doAction("exportProjectZIP");
             }),
             new TabSpacer(),
             

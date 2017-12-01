@@ -185,8 +185,8 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('exportProjectZIP',
-        ['Modifier','S'],
-        ['Save Project'],
+        [],
+        ['Export Project as ZIP'],
         {usableInTextBoxes:true},
         function(args) {
             that.keys = [];
@@ -207,8 +207,8 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('exportProjectHTML',
-        [],
-        [],
+        ['Modifier','S'],
+        ['Save Project'],
         {usableInTextBoxes:true},
         function(args) {
             that.keys = [];

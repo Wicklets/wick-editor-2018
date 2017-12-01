@@ -126,12 +126,12 @@ WickProject.Exporter = (function () {
                     saveAs(content, filename+'-'+timeStamp()+".zip");
                 });
             } else {
-                if(args.asNewWindow) {
+                if(args && args.asNewWindow) {
                     var x=window.open('','','width='+wickProject.width+', height='+wickProject.height);
                     x.document.open().write(fileOut);
                 } else {
                     var blob = new Blob([fileOut], {type: "text/plain;charset=utf-8"});
-                    saveAs(blob, filename+".html");
+                    saveAs(blob, filename+'-'+timeStamp()+".html");
                 }
             }
         });

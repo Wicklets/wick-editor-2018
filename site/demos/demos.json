@@ -60,12 +60,6 @@
 			"thumbPath" : "Homepage.png",
 			"tutorialPath" : null,
 			"tags": ["techdemos"]
-		}, {
-			"name" : "Kitchen Sink",
-			"projectPath" : "KitchenSink.json",
-			"thumbPath" : "KitchenSink.png",
-			"tutorialPath" : null,
-			"tags": ["techdemos"]
 		}
 	]
 }
