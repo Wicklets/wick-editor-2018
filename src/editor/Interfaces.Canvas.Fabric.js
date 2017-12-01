@@ -366,6 +366,7 @@ var FabricCanvas = function (wickEditor) {
         var zoomRatio = newZoom/oldZoom;
         self.zoom(zoomRatio, window.innerWidth/2, window.innerHeight/2);
         wickEditor.canvas.getPaperCanvas().updateViewTransforms();
+        wickEditor.canvas.getBackdrop().updateViewTransforms();
         wickEditor.timeline.getElem().updateZoomBox();
 
         /*var centerX = Math.floor(-(window.innerWidth -wickEditor.project.width)/2 - 33/2 + 254/2);
