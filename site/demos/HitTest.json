@@ -29,8 +29,8 @@
 								"name": "hitarea",
 								"x": 254.53947529557672,
 								"y": 281.50000032265393,
-								"width": 313.07895059115356,
-								"height": 305.99999935469214,
+								"width": 312.07895059115344,
+								"height": 302.5,
 								"scaleX": 1,
 								"scaleY": 1,
 								"rotation": 0,
@@ -371,21 +371,22 @@
 									}
 								],
 								"playRanges": [],
-								"svgWidth": 313.0789505911535,
-								"svgHeight": 305.99999935469214,
+								"svgWidth": 312.07895059115344,
+								"svgHeight": 302.5,
 								"svgStrokeWidth": 0,
 								"_zindex": 18,
 								"scriptError": null,
 								"forceFabricCanvasRegen": false,
-								"framesDirty": false
+								"framesDirty": false,
+								"_frameUUID": "54ecc372-5c61-45c6-8bb8-18bb97ca94b6"
 							},
 							{
 								"uuid": "39d04588-9175-4917-9ba5-05ba1ca13cd1",
 								"name": "light",
 								"x": 260.5,
 								"y": 68.5,
-								"width": 73,
-								"height": 73,
+								"width": 72,
+								"height": 72,
 								"scaleX": 1,
 								"scaleY": 1,
 								"rotation": 0,
@@ -726,26 +727,27 @@
 									}
 								],
 								"playRanges": [],
-								"svgWidth": 73,
-								"svgHeight": 73,
+								"svgWidth": 72,
+								"svgHeight": 72,
 								"svgStrokeWidth": 0,
 								"_zindex": 19,
 								"framesDirty": false,
-								"forceFabricCanvasRegen": false
+								"forceFabricCanvasRegen": false,
+								"_frameUUID": "54ecc372-5c61-45c6-8bb8-18bb97ca94b6"
 							},
 							{
 								"name": "flashy",
 								"x": 565.4078426465422,
 								"y": 242.2740060134338,
-								"width": 205.04023028570083,
-								"height": 250.2319879731325,
+								"width": 203.04023028570083,
+								"height": 247.84198797313243,
 								"scaleX": 1,
 								"scaleY": 1,
 								"rotation": 0,
 								"flipX": false,
 								"flipY": false,
 								"opacity": 1,
-								"wickScript": "dragging%20=%20false;%0A%0Afunction%20update()%20%7B%0A%20%20%20%20if%20(dragging)%20%7B%0A%20%20%20%20%20%20%20%20this.x%20=%20mouseX%0A%20%20%20%20%20%20%20%20this.y%20=%20mouseY%0A%20%20%20%20%7D%0A%7D%0A%0Afunction%20mousedown%20()%20%7B%0A%20%20%20%20dragging%20=%20true%0A%7D%0A%0Afunction%20mouseup%20()%20%7B%0A%20%20%20%20dragging%20=%20false%0A%7D",
+								"wickScript": "dragging%20=%20false;%0A%0Afunction%20update()%20%7B%0A%20%20%20%20if%20(dragging)%20%7B%0A%20%20%20%20%20%20%20%20this.x%20=%20mouseX%0A%20%20%20%20%20%20%20%20this.y%20=%20mouseY%0A%20%20%20%20%7D%0A%7D%0A%0Afunction%20mousePressed%20()%20%7B%0A%20%20%20%20dragging%20=%20true%0A%7D%0A%0Afunction%20mouseReleased%20()%20%7B%0A%20%20%20%20dragging%20=%20false%0A%7D",
 								"assetUUID": null,
 								"volume": 1,
 								"loop": false,
@@ -1192,8 +1194,8 @@
 									}
 								],
 								"playRanges": [],
-								"svgWidth": 205.04023028570077,
-								"svgHeight": 250.23198797313256,
+								"svgWidth": 203.0402302857009,
+								"svgHeight": 247.84198797313252,
 								"svgStrokeWidth": 0,
 								"bbox": {
 									"left": -100.6650390625,
@@ -1205,7 +1207,8 @@
 								"framesDirty": false,
 								"forceFabricCanvasRegen": false,
 								"uuid": "0fd05a4e-6ada-46ad-ae22-8ae2150ae40e",
-								"scriptError": null
+								"scriptError": null,
+								"_frameUUID": "54ecc372-5c61-45c6-8bb8-18bb97ca94b6"
 							}
 						],
 						"tweens": [],
@@ -1255,7 +1258,8 @@
 								"svgHeight": 96.40719000000001,
 								"_zindex": 0,
 								"forceFabricCanvasRegen": false,
-								"uuid": "bdc97d58-d423-4d42-919e-5d19e7a05c1a"
+								"uuid": "bdc97d58-d423-4d42-919e-5d19e7a05c1a",
+								"_frameUUID": "d4ffd53c-cd5c-4cd5-b4d2-974dd724b28d"
 							},
 							{
 								"x": 257.20724094881393,
@@ -1286,7 +1290,8 @@
 								"svgHeight": 96.40719000000001,
 								"_zindex": 1,
 								"forceFabricCanvasRegen": false,
-								"uuid": "b74f67bd-53b3-453b-8ef0-4cefaedc7bbe"
+								"uuid": "b74f67bd-53b3-453b-8ef0-4cefaedc7bbe",
+								"_frameUUID": "d4ffd53c-cd5c-4cd5-b4d2-974dd724b28d"
 							},
 							{
 								"x": 462.95006242197246,
@@ -1317,7 +1322,8 @@
 								"svgHeight": 96.40719000000001,
 								"_zindex": 2,
 								"forceFabricCanvasRegen": false,
-								"uuid": "042ec7b9-046f-4046-b5d2-3f5d5cc88976"
+								"uuid": "042ec7b9-046f-4046-b5d2-3f5d5cc88976",
+								"_frameUUID": "d4ffd53c-cd5c-4cd5-b4d2-974dd724b28d"
 							},
 							{
 								"x": 668.6928838951312,
@@ -1348,7 +1354,8 @@
 								"svgHeight": 96.40719000000001,
 								"_zindex": 3,
 								"forceFabricCanvasRegen": false,
-								"uuid": "3636034f-0e7a-40e7-9e7e-35e7e3646fca"
+								"uuid": "3636034f-0e7a-40e7-9e7e-35e7e3646fca",
+								"_frameUUID": "d4ffd53c-cd5c-4cd5-b4d2-974dd724b28d"
 							},
 							{
 								"x": 154.33583021223467,
@@ -1379,7 +1386,8 @@
 								"svgHeight": 96.40719000000001,
 								"_zindex": 4,
 								"forceFabricCanvasRegen": false,
-								"uuid": "4ad9b7ba-2a7c-42a7-93fe-e53f1018da48"
+								"uuid": "4ad9b7ba-2a7c-42a7-93fe-e53f1018da48",
+								"_frameUUID": "d4ffd53c-cd5c-4cd5-b4d2-974dd724b28d"
 							},
 							{
 								"x": 360.0786516853932,
@@ -1406,11 +1414,12 @@
 								"svgX": 308.64294668539316,
 								"svgY": 96.40718344311377,
 								"svgStrokeWidth": 0,
-								"svgWidth": 102.87141000000003,
+								"svgWidth": 102.87141000000008,
 								"svgHeight": 96.40719000000001,
 								"_zindex": 5,
 								"forceFabricCanvasRegen": false,
-								"uuid": "658086d3-3e9c-43e9-a6bf-a66bfd91d813"
+								"uuid": "658086d3-3e9c-43e9-a6bf-a66bfd91d813",
+								"_frameUUID": "d4ffd53c-cd5c-4cd5-b4d2-974dd724b28d"
 							},
 							{
 								"x": 565.8214731585518,
@@ -1441,7 +1450,8 @@
 								"svgHeight": 96.40719000000001,
 								"_zindex": 6,
 								"forceFabricCanvasRegen": false,
-								"uuid": "e81a9f3d-19c1-419c-8b86-20b83355d1e3"
+								"uuid": "e81a9f3d-19c1-419c-8b86-20b83355d1e3",
+								"_frameUUID": "d4ffd53c-cd5c-4cd5-b4d2-974dd724b28d"
 							},
 							{
 								"x": 51.46441947565541,
@@ -1472,7 +1482,8 @@
 								"svgHeight": 96.40719000000001,
 								"_zindex": 7,
 								"forceFabricCanvasRegen": false,
-								"uuid": "d677083a-24f4-424f-b603-4f60a6e44b0a"
+								"uuid": "d677083a-24f4-424f-b603-4f60a6e44b0a",
+								"_frameUUID": "d4ffd53c-cd5c-4cd5-b4d2-974dd724b28d"
 							},
 							{
 								"x": 257.20724094881393,
@@ -1503,7 +1514,8 @@
 								"svgHeight": 96.40719000000001,
 								"_zindex": 8,
 								"forceFabricCanvasRegen": false,
-								"uuid": "df08039c-6f3b-46f3-9b17-9db11e351aa1"
+								"uuid": "df08039c-6f3b-46f3-9b17-9db11e351aa1",
+								"_frameUUID": "d4ffd53c-cd5c-4cd5-b4d2-974dd724b28d"
 							},
 							{
 								"x": 462.95006242197246,
@@ -1534,7 +1546,8 @@
 								"svgHeight": 96.40719000000001,
 								"_zindex": 9,
 								"forceFabricCanvasRegen": false,
-								"uuid": "c6d4c725-7a04-47a0-8aa2-9caa625d884b"
+								"uuid": "c6d4c725-7a04-47a0-8aa2-9caa625d884b",
+								"_frameUUID": "d4ffd53c-cd5c-4cd5-b4d2-974dd724b28d"
 							},
 							{
 								"x": 668.6928838951312,
@@ -1565,7 +1578,8 @@
 								"svgHeight": 96.40719000000001,
 								"_zindex": 10,
 								"forceFabricCanvasRegen": false,
-								"uuid": "daad6582-3cdc-43cd-8b6e-20b67be07b44"
+								"uuid": "daad6582-3cdc-43cd-8b6e-20b67be07b44",
+								"_frameUUID": "d4ffd53c-cd5c-4cd5-b4d2-974dd724b28d"
 							},
 							{
 								"x": 154.33583021223467,
@@ -1596,7 +1610,8 @@
 								"svgHeight": 96.40718999999996,
 								"_zindex": 11,
 								"forceFabricCanvasRegen": false,
-								"uuid": "c7c0292e-5db6-45db-9ca4-cdca24f8b7f9"
+								"uuid": "c7c0292e-5db6-45db-9ca4-cdca24f8b7f9",
+								"_frameUUID": "d4ffd53c-cd5c-4cd5-b4d2-974dd724b28d"
 							},
 							{
 								"x": 360.0786516853932,
@@ -1623,11 +1638,12 @@
 								"svgX": 308.64294668539316,
 								"svgY": 289.2215547005987,
 								"svgStrokeWidth": 0,
-								"svgWidth": 102.87141000000003,
+								"svgWidth": 102.87141000000008,
 								"svgHeight": 96.40719000000007,
 								"_zindex": 12,
 								"forceFabricCanvasRegen": false,
-								"uuid": "30edb254-d761-4d76-aa6f-f6a603ae9497"
+								"uuid": "30edb254-d761-4d76-aa6f-f6a603ae9497",
+								"_frameUUID": "d4ffd53c-cd5c-4cd5-b4d2-974dd724b28d"
 							},
 							{
 								"x": 565.8214731585518,
@@ -1658,7 +1674,8 @@
 								"svgHeight": 96.40718999999996,
 								"_zindex": 13,
 								"forceFabricCanvasRegen": false,
-								"uuid": "db13f327-6538-4653-9d6f-d9d6507e0695"
+								"uuid": "db13f327-6538-4653-9d6f-d9d6507e0695",
+								"_frameUUID": "d4ffd53c-cd5c-4cd5-b4d2-974dd724b28d"
 							},
 							{
 								"x": 461.9213483146068,
@@ -1689,7 +1706,8 @@
 								"svgHeight": 96.40719000000013,
 								"_zindex": 14,
 								"forceFabricCanvasRegen": false,
-								"uuid": "a63e4ab2-2f16-42f1-8669-e466e18b3add"
+								"uuid": "a63e4ab2-2f16-42f1-8669-e466e18b3add",
+								"_frameUUID": "d4ffd53c-cd5c-4cd5-b4d2-974dd724b28d"
 							},
 							{
 								"x": 667.6641697877653,
@@ -1720,7 +1738,8 @@
 								"svgHeight": 96.40719000000013,
 								"_zindex": 15,
 								"forceFabricCanvasRegen": false,
-								"uuid": "e622ed40-8001-4800-824c-5c2476bddf2e"
+								"uuid": "e622ed40-8001-4800-824c-5c2476bddf2e",
+								"_frameUUID": "d4ffd53c-cd5c-4cd5-b4d2-974dd724b28d"
 							},
 							{
 								"x": 256.17852684144816,
@@ -1747,11 +1766,12 @@
 								"svgX": 204.74282184144812,
 								"svgY": 386.5928121856287,
 								"svgStrokeWidth": 0,
-								"svgWidth": 102.87141000000008,
+								"svgWidth": 102.87141000000003,
 								"svgHeight": 96.40719000000013,
 								"_zindex": 16,
 								"forceFabricCanvasRegen": false,
-								"uuid": "e1550248-96d4-496d-a5d2-d25d7f48e991"
+								"uuid": "e1550248-96d4-496d-a5d2-d25d7f48e991",
+								"_frameUUID": "d4ffd53c-cd5c-4cd5-b4d2-974dd724b28d"
 							},
 							{
 								"x": 50.43570536828963,
@@ -1782,7 +1802,8 @@
 								"svgHeight": 96.40719000000013,
 								"_zindex": 17,
 								"forceFabricCanvasRegen": false,
-								"uuid": "3ad23788-dce9-4dce-8ecf-54ec709a716e"
+								"uuid": "3ad23788-dce9-4dce-8ecf-54ec709a716e",
+								"_frameUUID": "d4ffd53c-cd5c-4cd5-b4d2-974dd724b28d"
 							}
 						],
 						"tweens": [],
@@ -1820,9 +1841,10 @@
 	"wickVersion": "0.08",
 	"metaInfo": {
 		"browser": "Chrome",
-		"browserVersion": "61.0.3163.100",
+		"browserVersion": "62.0.3202.89",
 		"navigatorAppName": "Netscape",
-		"navigatorUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36",
-		"wickVersion": "0.08"
+		"navigatorUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.89 Safari/537.36",
+		"wickVersion": "0.10",
+		"dateSaved": "Fri, 01 Dec 2017 04:00:32 GMT"
 	}
 }
