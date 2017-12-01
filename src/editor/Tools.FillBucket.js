@@ -53,6 +53,22 @@ Tools.FillBucket = function (wickEditor) {
     }
 
     this.paperTool.onMouseDown = function (event) {
+        /*GIFRenderer.renderProjectAsPNG(function (dataURL) {
+            var img = document.createElement('img');
+            img.onload = function () {
+                var canvas = document.createElement('canvas');
+                var context = canvas.getContext("2d");
+                canvas.width = wickEditor.project.width;
+                canvas.height = wickEditor.project.height;
+                context.drawImage(img, 0, 0);
+                context.fillStyle = "rgba(255,0,0,1)";
+                context.fillFlood(wickEditor.inputHandler.mouse.x, wickEditor.inputHandler.mouse.y);
+                var win = window.open('', 'Title', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width='+wickEditor.project.width+', height='+wickEditor.project.height+', top=100, left=100');
+
+                win.document.body.innerHTML = '<div><img src= '+canvas.toDataURL()+'></div>';
+            }
+            img.src = dataURL;
+        });*/
 
         if(wickEditor.currentTool instanceof Tools.FillBucket) {
             var hitOptions = {
@@ -97,7 +113,6 @@ Tools.FillBucket = function (wickEditor) {
             
             return;
         }
-        
     }
 
 }

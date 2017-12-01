@@ -551,6 +551,54 @@ function getBrowserAndOSInfo () {
    }
 
 }
+
+// https://gist.github.com/hurjas/2660489
+
+/**
+ * Return a timestamp with the format "m/d/yy h:MM:ss TT"
+ * @type {Date}
+ */
+
+function timeStamp() {
+// Create a date object with the current time
+  var now = new Date();
+
+// Create an array with the current month, day and time
+  var date = [ now.getMonth() + 1, now.getDate(), now.getFullYear() ];
+
+// Create an array with the current hour, minute and second
+  var time = [ now.getHours(), now.getMinutes(), now.getSeconds() ];
+
+// Determine AM or PM suffix based on the hour
+  var suffix = ( time[0] < 12 ) ? "AM" : "PM";
+
+// Convert hour from military time
+  time[0] = ( time[0] < 12 ) ? time[0] : time[0] - 12;
+
+// If hour is 0, set it to 12
+  time[0] = time[0] || 12;
+
+// If seconds and minutes are less than 10, add a zero
+  for ( var i = 1; i < 3; i++ ) {
+    if ( time[i] < 10 ) {
+      time[i] = "0" + time[i];
+    }
+  }
+
+// Return the formatted string
+  return date.join(".") + " " + time.join(".") + " " + suffix;
+}
+
+function invertColor(hexTripletColor) {
+            var color = hexTripletColor;
+            color = color.substring(1); // remove #
+            color = parseInt(color, 16); // convert to integer
+            color = 0xFFFFFF ^ color; // invert three bytes
+            color = color.toString(16); // convert to hex
+            color = ("000000" + color).slice(-6); // pad with leading zeros
+            color = "#" + color; // prepend #
+            return color;
+        }
 </script>
 <script>// https://www.npmjs.com/package/keycode
 // Original key mappings lifted from http://jsfiddle.net/vWx8V/ via http://stackoverflow.com/questions/5603195/full-list-of-javascript-keycodes
@@ -756,44 +804,6 @@ var Base64ArrayBuffer = (function () {
 
 })();
 </script>
-<script>/* lil input checker by Josh */
-
-var CheckInput = (function () {
-
-    var checkInput = {};
-
-    checkInput.isNumber = function (n) {
-        var num = parseInt(n);
-        return (typeof num === 'number') && !isNaN(num);
-    }
-
-    checkInput.isInteger = function (n) {
-        var num = parseInt(n);
-        return (typeof num === 'number') && (num % 1 == 0);
-    }
-
-	checkInput.isPositiveInteger = function (n) {
-        var num = parseInt(n);
-        return (typeof num === 'number') && (num % 1 == 0) && (num > 0)
-    }
-
-    checkInput.isString = function (str) {
-        return typeof str === 'string';
-    }
-
-    checkInput.testPositiveInteger = function (n) {
-        var num = parseInt(n);
-        return ((typeof num === 'number') && (num % 1 == 0) && (num > 0));
-    }
-
-    checkInput.isNonNegativeInteger = function (n) {
-        var num = parseInt(n);
-        return ((typeof num === 'number') && (num % 1 == 0) && (num >= 0));
-    }
-
-	return checkInput;
-
-})();</script>
 <script>http://blog.acipo.com/blob-detection-js/
 
 function unique(arr){
@@ -3762,7 +3772,7 @@ WickTween.interpolateTweens = function (tweenA, tweenB, t) {
 
 var WickFrame = function () {
     // Identifier so we can do e.g. movePlayheadTo("menu") 
-    this.identifier = "";
+    this.name = "";
 
     // Store all objects in frame. 
     this.wickObjects = [];
@@ -3906,7 +3916,7 @@ WickFrame.prototype.copy = function () {
 
     var copiedFrame = new WickFrame();
 
-    copiedFrame.identifier = this.identifier;
+    copiedFrame.name = this.name;
     copiedFrame.playheadPosition = this.playheadPosition;
     copiedFrame.length = this.length;
     copiedFrame.wickScript = this.wickScript;
@@ -5209,8 +5219,8 @@ WickObject.prototype.getAbsoluteFlip = function () {
     } else {
         var parentFlip = this.parentObject.getAbsoluteFlip();
         return {
-            x: this.flipX || parentFlip.x,
-            y: this.flipY || parentFlip.y
+            x: this.flipX !== parentFlip.x,
+            y: this.flipY !== parentFlip.y
         };
     }
 }
@@ -5304,7 +5314,7 @@ WickObject.prototype.movePlayheadTo = function (frame) {
     var oldFrame = this.getCurrentLayer().getCurrentFrame();
 
     // Frames are zero-indexed internally but start at one in the editor GUI, so you gotta subtract 1.
-    if (CheckInput.isNonNegativeInteger(frame) && frame !== 0) {
+    if (typeof frame === 'number') {
         var actualFrame = frame-1;
 
         var endOfFrames = this.getFramesEnd(); 
@@ -5315,7 +5325,7 @@ WickObject.prototype.movePlayheadTo = function (frame) {
             throw (new Error("Failed to navigate to frame \'" + actualFrame + "\': is not a valid frame."));
         }
 
-    } else if (CheckInput.isString(frame)) {
+    } else if (typeof frame === 'string') {
 
         var foundPlayRange = this.getPlayrangeById(frame)
         var foundFrame = this.getFrameById(frame)
@@ -5325,12 +5335,12 @@ WickObject.prototype.movePlayheadTo = function (frame) {
                 this._newPlayheadPosition = foundPlayRange.start;
             }
         } else if (foundFrame) {
-            this._newPlayheadPosition = foundFrame.playheadPosition;
+            if(this.playheadPosition < foundFrame.playheadPosition || this.playheadPosition >= foundFrame.playheadPosition+foundFrame.length-1) {
+                this._newPlayheadPosition = foundFrame.playheadPosition;
+            }
+        } else {
+            throw (new Error("Failed to navigate to frame. \'" + frame + "\' is not a valid frame."));
         }
-
-    } else {
-
-        throw "Failed to navigate to frame \'" + frame + "\': is neither a string nor a nonnegative integer";
 
     }
 
@@ -5651,49 +5661,53 @@ WickObject.prototype.tick = function () {
     if(this.isButton) {
         this.stop();
         if(this._beingClicked) {
-            if(this.getFramesInPlayrange(this.getPlayrangeById('mousedown')).length > 0)
-                this.movePlayheadTo('mousedown');
+            if(this.getFrameById('mousePressed'))
+                this.movePlayheadTo('mousePressed');
         } else if (this.hoveredOver) {
-            if(this.getFramesInPlayrange(this.getPlayrangeById('mouseover')).length > 0)
-                this.movePlayheadTo('mouseover');
+            if(this.getFrameById('mouseHover'))
+                this.movePlayheadTo('mouseHover');
         } else {
-            if(this.getFramesInPlayrange(this.getPlayrangeById('mouseup')).length > 0)
-                this.movePlayheadTo('mouseup');
+            if(this.getFrameById('mouseReleased'))
+                this.movePlayheadTo('mouseReleased');
         }
     }
 
     // Input events
 
     if(this._wasClicked) {
-        (wickPlayer || wickEditor).project.runScript(this, 'mousedown');
+        (wickPlayer || wickEditor).project.runScript(this, 'mousePressed');
         this._wasClicked = false;
     }
 
+    if(this._wasClickedOff) {
+        (wickPlayer || wickEditor).project.runScript(this, 'mouseReleased');
+        this._wasClickedOff = false;
+    }
+
+    if(this.isHoveredOver()) {
+        (wickPlayer || wickEditor).project.runScript(this, 'mouseHover');
+    }
+
     if(this._wasHoveredOver) {
-        (wickPlayer || wickEditor).project.runScript(this, 'mouseover');
+        (wickPlayer || wickEditor).project.runScript(this, 'mouseEnter');
         this._wasHoveredOver = false;
     }
 
     if(this._mouseJustLeft) {
-        (wickPlayer || wickEditor).project.runScript(this, 'mouseout');
+        (wickPlayer || wickEditor).project.runScript(this, 'mouseLeave');
         this._mouseJustLeft = false;
     }
 
-    if(this._wasClickedOff) {
-        (wickPlayer || wickEditor).project.runScript(this, 'mouseup');
-        this._wasClickedOff = false;
-    }
-
     wickPlayer.inputHandler.getAllKeysJustReleased().forEach(function (key) {
-        (wickPlayer || wickEditor).project.runScript(self, 'keyreleased', key);
+        (wickPlayer || wickEditor).project.runScript(self, 'keyReleased', key);
     });
 
     wickPlayer.inputHandler.getAllKeysJustPressed().forEach(function (key) {
-        (wickPlayer || wickEditor).project.runScript(self, 'keypressed', key);
+        (wickPlayer || wickEditor).project.runScript(self, 'keyPressed', key);
     });
 
     wickPlayer.inputHandler.getAllKeysDown().forEach(function (key) {
-        (wickPlayer || wickEditor).project.runScript(self, 'keydown', key);
+        (wickPlayer || wickEditor).project.runScript(self, 'keyDown', key);
     });
 
     // Inactive -> Inactive
@@ -6124,30 +6138,6 @@ WickProject.fixForBackwardsCompatibility = function (project) {
 
 }
 
-/*WickProject.fromLocalStorage = function () {
-
-    if(!localStorage) {
-        console.error("LocalStorage not available. Loading blank project");
-        return new WickProject();
-    }
-    
-    var autosavedProjectJSON = localStorage.getItem('wickProject');
-
-    if(!autosavedProjectJSON) {
-        console.log("No autosaved project. Loading blank project.");
-        return new WickProject();
-    }
-
-    var project = WickProject.fromJSON(autosavedProjectJSON);
-    
-    if(!project.wickVersion) {
-        return new WickProject();
-    } else {
-        return project;
-    }
-
-}*/
-
 WickProject.prototype.getAsJSON = function (callback, format) {
 
     var self = this;
@@ -6205,6 +6195,10 @@ WickProject.prototype.getCurrentLayer = function () {
 
 WickProject.prototype.getCurrentFrame = function () {
     return this.getCurrentObject().getCurrentLayer().getCurrentFrame();
+}
+
+WickProject.prototype.getCurrentFrames = function () {
+    return this.getCurrentObject().getCurrentFrames();
 }
 
 WickProject.prototype.getAllObjects = function () {
@@ -6387,6 +6381,11 @@ WickProject.prototype.hasSyntaxErrors = function () {
 
 WickProject.prototype.handleWickError = function (e, objectCausedError) {
 
+    objectCausedError = window.errorCausingObject
+    if(objectCausedError.objectClonedFrom) {
+        objectCausedError = objectCausedError.objectClonedFrom
+    }
+
     if (window.wickEditor) {
         //if(!wickEditor.builtinplayer.running) return;
 
@@ -6504,7 +6503,7 @@ WickProject.prototype.getSelectedObjectsUUIDs = function () {
     this._selection.forEach(function (uuid) {
         var obj = self.getObjectByUUID(uuid) 
                || self.getFrameByUUID(uuid);
-        if(obj) objs.push(obj.uuids);
+        if(obj) objs.push(obj.uuid);
     });
 
     return objs;
@@ -6518,6 +6517,12 @@ WickProject.prototype.selectObject = function (obj) {
     wickEditor.inspector.clearSpecialMode();
     if(this._selection.indexOf(obj.uuid) === -1)
         this._selection.push(obj.uuid);
+}
+
+WickProject.prototype.selectObjectByUUID = function (uuid) {
+    wickEditor.inspector.clearSpecialMode();
+    if(this._selection.indexOf(uuid) === -1)
+        this._selection.push(uuid);
 }
 
 WickProject.prototype.clearSelection = function () {
@@ -6552,6 +6557,8 @@ WickProject.prototype.getIntersectingPaths = function (path) {
 
 WickProject.prototype.loadBuiltinFunctions = function (contextObject) {
 
+    if(contextObject.wickScript === '') return;
+
     var objectScope = null;
     if(contextObject instanceof WickObject) {
         objectScope = contextObject.parentObject;
@@ -6577,8 +6584,8 @@ WickProject.prototype.loadBuiltinFunctions = function (contextObject) {
     window.mouseY = wickPlayer.inputHandler.getMouse().y;
     window.mouseMoveX = wickPlayer.inputHandler.getMouseDiff().x;
     window.mouseMoveY = wickPlayer.inputHandler.getMouseDiff().y;
-    window.hideCursor = function () { wickPlayer.hideCursor(); };
-    window.showCursor = function () { wickPlayer.showCursor(); };
+    window.hideCursor = function () { wickPlayer.inputHandler.hideCursor(); };
+    window.showCursor = function () { wickPlayer.inputHandler.showCursor(); };
 
     // WickObjects in same frame (scope) are accessable without using root./parent.
     if(objectScope) {
@@ -6596,6 +6603,8 @@ WickProject.prototype.loadBuiltinFunctions = function (contextObject) {
 
 WickProject.prototype.runScript = function (obj, fnName, arg1, arg2, arg3) {
 
+    window.errorCausingObject = obj;
+
     this.loadBuiltinFunctions(obj);
 
     try {
@@ -6609,28 +6618,32 @@ WickProject.prototype.runScript = function (obj, fnName, arg1, arg2, arg3) {
 var WickObjectBuiltins = [
     'load',
     'update',
-    'mousedown',
-    'mouseover',
-    'mouseup',
-    "mouseout",
-    "keypressed",
-    "keydown",
-    "keyreleased",
+    'mousePressed',
+    'mouseReleased',
+    'mouseHover',
+    'mouseEnter',
+    "mouseLeave",
+    "keyPressed",
+    "keyDown",
+    "keyReleased",
 ];
 
 WickProject.prototype.loadScriptOfObject = function (obj) {
+
+    if(obj.wickScript === '') return;
     
     try { 
         var dummy = {};
         var load = undefined;
         var update = undefined;
-        var mousedown = undefined;
-        var mouseover = undefined;
-        var mouseup = undefined;
-        var mouseout = undefined;
-        var keydown = undefined;
-        var keypressed = undefined;
-        var keyreleased = undefined;
+        var mousePressed = undefined;
+        var mouseReleased = undefined;
+        var mouseHover = undefined;
+        var mouseEnter = undefined;
+        var mouseLeave = undefined;
+        var keyDown = undefined;
+        var keyPressed = undefined;
+        var keyReleased = undefined;
         obj._scopeWrapper = function () {
             var dummyLoaderScript = "";
             WickObjectBuiltins.forEach(function (builtinName) {
@@ -6639,7 +6652,7 @@ WickProject.prototype.loadScriptOfObject = function (obj) {
 
             (wickPlayer || wickEditor).project.loadBuiltinFunctions(obj);
 
-            var evalScript = /*'"use strict"; ' + */obj.wickScript + dummyLoaderScript;
+            var evalScript = obj.wickScript + dummyLoaderScript;
             eval(evalScript);
         }
         obj._scopeWrapper();
@@ -6653,7 +6666,6 @@ WickProject.prototype.loadScriptOfObject = function (obj) {
             }
         })
     } catch (e) { 
-        console.log(window.wickEditor)
         if (window.wickEditor) {
             //if(!wickEditor.builtinplayer.running) return;
 
@@ -7182,13 +7194,14 @@ var WickPixiRenderer = function (canvasContainer) {
 
     var SVG_SCALE = 1.4;
 
-    renderer = PIXI.autoDetectRenderer(720, 480, {
+    var renderer = PIXI.autoDetectRenderer(100, 100, {
         backgroundColor : "#FFFFFF", 
         resolution: window.devicePixelRatio,
         preserveDrawingBuffer: true,
         antialias: true,
+        transparent: true,
     });
-    renderer.clearBeforeRender = false;
+    renderer.clearBeforeRender = true;
     renderer.roundPixels = false;
     renderer.view.setAttribute('tabindex', 0);
 
@@ -7202,7 +7215,21 @@ var WickPixiRenderer = function (canvasContainer) {
 
     var wickProject;
 
-    self.renderWickObjects = function (project, wickObjects) {
+    var graphics = new PIXI.Graphics();
+    
+    container.addChild(graphics);
+
+    self.renderWickObjects = function (project, wickObjects, renderExtraSpace) {
+        if(!renderExtraSpace) renderExtraSpace = 1;
+
+        graphics.clear();
+        graphics.beginFill(parseInt(project.backgroundColor.replace("#","0x")));
+        graphics.moveTo(0, 0);
+        graphics.lineTo(project.width, 0);
+        graphics.lineTo(project.width, project.height);
+        graphics.lineTo(0, project.height);
+        graphics.endFill();
+
         wickProject = project;
 
         if(currentProjectUUID !== project.uuid) {
@@ -7210,17 +7237,21 @@ var WickPixiRenderer = function (canvasContainer) {
             preloadAllAssets(project);
         }
 
+        container.position.x = 0;
+        container.position.y = 0;
+        renderer.resize(project.width*renderExtraSpace, project.height*renderExtraSpace);
+        renderer.view.style.width  = project.width*renderExtraSpace  + "px";
+        renderer.view.style.height = project.height*renderExtraSpace + "px";
         if(renderer.width !== project.width || renderer.height !== project.height) {
-            renderer.resize(project.width, project.height);
-            renderer.view.style.width  = project.width  + "px";
-            renderer.view.style.height = project.height + "px";
-        }
+            renderer.resize(project.width*renderExtraSpace, project.height*renderExtraSpace);
+            renderer.view.style.width  = project.width*renderExtraSpace  + "px";
+            renderer.view.style.height = project.height*renderExtraSpace + "px";
 
-        var graphics = new PIXI.Graphics();
-        graphics.beginFill(parseInt(project.backgroundColor.replace("#","0x")));
-        graphics.drawRect(0, 0, project.width, project.height);
-        graphics.endFill();
-        renderer.render(graphics);
+            if(renderExtraSpace !== 1) {
+                container.position.x = project.width/renderExtraSpace;
+                container.position.y = project.height/renderExtraSpace;
+            }
+        }
 
         for (uuid in pixiSprites) {
             pixiSprites[uuid].visible = false;
@@ -7279,7 +7310,6 @@ var WickPixiRenderer = function (canvasContainer) {
         if(wickObject.sourceUUID) {
             var pixiTexture = pixiTextures[wickObject.sourceUUID];
             if(pixiTexture) {
-                console.log('loaded cached')
                 var pixiSprite = new PIXI.Sprite(pixiTexture);
                 wickObject.alphaMask = wickProject.getObjectByUUID(wickObject.sourceUUID).alphaMask
                 container.addChild(pixiSprite);
@@ -7308,7 +7338,6 @@ var WickPixiRenderer = function (canvasContainer) {
             if(textureSrc)
                 wickObject.generateAlphaMask(textureSrc);
         }
-        
     }
 
     function regenPixiPath (wickObject, pixiSprite) {
@@ -7972,6 +8001,7 @@ var WickPlayer = function () {
 
         self.canvasContainer.style.width = self.project.width+'px';
         self.canvasContainer.style.height = self.project.height+'px';
+        self.canvasContainer.style.backgroundColor = self.project.backgroundColor;
 
         self.project.rootObject.generateObjectNameReferences(self.project.rootObject);
         initialStateProject.rootObject.generateObjectNameReferences(initialStateProject.rootObject);
@@ -8058,6 +8088,8 @@ var WickPlayer = function () {
         var clone = wickObj.copy();
         clone.isClone = true;
         clone.asset = wickObj.asset;
+
+        clone.objectClonedFrom = wickObj;
 
         clone.prepareForPlayer()
 

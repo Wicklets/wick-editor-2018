@@ -87,7 +87,7 @@ var WickEditor = function () {
         "pathCursor"       : new Tools.PathCursor(this),
         "paintbrush"       : new Tools.Paintbrush(this),
         "pencil"           : new Tools.Pencil(this),
-        "eraser"           : new Tools.Eraser(this),
+        //"eraser"           : new Tools.Eraser(this),
         "fillbucket"       : new Tools.FillBucket(this),
         "rectangle"        : new Tools.Rectangle(this),
         "ellipse"          : new Tools.Ellipse(this),
