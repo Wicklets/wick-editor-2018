@@ -129,7 +129,7 @@ TimelineInterface.Timeline = function (wickEditor) {
         this.elem.appendChild(onionSkinningButton);
 
 
-        /*var previewPlayButton = document.createElement('div');
+        var previewPlayButton = document.createElement('div');
         previewPlayButton.className = 'layer-tools-button play-preview-button tooltipElem';
         previewPlayButton.setAttribute('alt', "Play Preview (Enter)<br/>(Shift+Click to loop)");
         previewPlayButton.addEventListener('mousedown', function (e) {
@@ -145,7 +145,7 @@ TimelineInterface.Timeline = function (wickEditor) {
         });
         this.elem.appendChild(previewPauseButton);
 
-        var previewStepForwardButton = document.createElement('div');
+        /*var previewStepForwardButton = document.createElement('div');
         previewStepForwardButton.className = 'layer-tools-button step-forward-preview-button tooltipElem';
         previewStepForwardButton.setAttribute('alt', "Step Forwards (.)");
         previewStepForwardButton.addEventListener('mousedown', function (e) {

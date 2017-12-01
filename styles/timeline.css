@@ -173,8 +173,10 @@ body {
 .play-preview-button {
     position: absolute;
     top: calc(100% - 15px);
-    left: 25px;
+    left: 5px;
     background-image: url('../resources/play.png');
+    border-radius: 7px;
+    background-size: 8px 8px;
 }
 .play-preview-button:hover {
     background-color: #31E19C;
@@ -183,8 +185,9 @@ body {
 .pause-preview-button {
     position: absolute;
     top: calc(100% - 15px);
-    left: 45px;
+    left: 25px;
     background-image: url('../resources/pause.png');
+    background-size: 8px 8px;
 }
 .pause-preview-button:hover {
     background-color: #31E19C;

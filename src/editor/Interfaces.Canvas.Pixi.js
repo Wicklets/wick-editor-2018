@@ -55,6 +55,8 @@ var PixiCanvas = function (wickEditor) {
     }
 
     this.startFastRendering = function () {
+        clearInterval(fastRenderIntervalID);
+        
         fastRendering = true;
         canvasContainer.style.opacity = '1.0';
 
@@ -81,6 +83,8 @@ var PixiCanvas = function (wickEditor) {
     }
 
     this.startPreviewPlaying = function (loop) {
+        clearInterval(previewPlayIntervalID);
+
         previewPlaying = true;
         self.startFastRendering();
 
