@@ -191,6 +191,7 @@ var GuiActionHandler = function (wickEditor) {
         function(args) {
             that.keys = [];
             that.specialKeys = [];
+            WickProject.Exporter.autosaveProject(wickEditor.project);
             WickProject.Exporter.exportProject(wickEditor.project, {zipped:true});
         });
 
