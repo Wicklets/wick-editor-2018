@@ -6611,7 +6611,7 @@
 					}
 				],
 				"identifier": "board",
-				"locked": true,
+				"locked": false,
 				"hidden": false
 			},
 			{
@@ -7527,7 +7527,7 @@
 									}
 								],
 								"playRanges": [],
-								"svgWidth": 231.61230866759598,
+								"svgWidth": 231.612308667596,
 								"svgHeight": 217.6172695296999,
 								"svgStrokeWidth": 0,
 								"bbox": {
@@ -8171,6 +8171,6 @@
 		"navigatorAppName": "Netscape",
 		"navigatorUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.89 Safari/537.36",
 		"wickVersion": "0.10",
-		"dateSaved": "Fri, 01 Dec 2017 05:39:52 GMT"
+		"dateSaved": "Fri, 01 Dec 2017 05:42:55 GMT"
 	}
 }
