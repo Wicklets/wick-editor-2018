@@ -286,6 +286,9 @@ var FabricCanvas = function (wickEditor) {
 
         self.canvas.relativePan(new fabric.Point(panAdjustX,panAdjustY));
         self.canvas.renderAll();
+        wickEditor.canvas.getPaperCanvas().updateViewTransforms();
+        wickEditor.canvas.getPixiCanvas().updateViewTransforms();
+        wickEditor.canvas.getBackdrop().updateViewTransforms();
 
     }
 
