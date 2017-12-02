@@ -1217,12 +1217,13 @@ var GuiActionHandler = function (wickEditor) {
         function (args) {
             var asset = args.asset;
 
+            var screenPos = wickEditor.canvas.getFabricCanvas().screenToCanvasSpace(args.x, args.y)
             if(asset.type === 'image') {
                 var wickObj = new WickObject();
                 wickObj.assetUUID = asset.uuid;
                 wickObj.isImage = true;
-                wickObj.x = args.x;
-                wickObj.y = args.y;
+                wickObj.x = screenPos.x;
+                wickObj.y = screenPos.y;
                 wickEditor.actionHandler.doAction('addObjects', {
                     wickObjects:[wickObj]
                 });
