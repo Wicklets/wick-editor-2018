@@ -46,7 +46,7 @@ var WickPixiRenderer = function (canvasContainer) {
     
     container.addChild(graphics);
 
-    self.renderWickObjects = function (project, wickObjects, renderExtraSpace) {
+    self.renderWickObjects = function (project, wickObjects, renderExtraSpace, fitToScreen) {
         window._lastRender = {
             project: project,
             wickObjects: wickObjects, 
@@ -69,19 +69,31 @@ var WickPixiRenderer = function (canvasContainer) {
             preloadAllAssets(project);
         }
 
-        container.position.x = 0;
-        container.position.y = 0;
-        renderer.resize(project.width*renderExtraSpace, project.height*renderExtraSpace);
-        renderer.view.style.width  = project.width*renderExtraSpace  + "px";
-        renderer.view.style.height = project.height*renderExtraSpace + "px";
-        if(renderer.width !== project.width || renderer.height !== project.height) {
+        if(fitToScreen) {
+            var w = window.innerWidth;
+            var h = window.innerHeight;
+            canvasContainer.style.width  = w + 'px';
+            canvasContainer.style.height = h + 'px';
+            renderer.resize(w, h);
+            renderer.view.style.width  = w + "px";
+            renderer.view.style.height = h + "px";
+            container.scale.x = w / project.width;
+            container.scale.y = h / project.height;
+        } else {
+            container.position.x = 0;
+            container.position.y = 0;
             renderer.resize(project.width*renderExtraSpace, project.height*renderExtraSpace);
             renderer.view.style.width  = project.width*renderExtraSpace  + "px";
             renderer.view.style.height = project.height*renderExtraSpace + "px";
+            if(renderer.width !== project.width || renderer.height !== project.height) {
+                renderer.resize(project.width*renderExtraSpace, project.height*renderExtraSpace);
+                renderer.view.style.width  = project.width*renderExtraSpace  + "px";
+                renderer.view.style.height = project.height*renderExtraSpace + "px";
 
-            if(renderExtraSpace !== 1) {
-                container.position.x = project.width/renderExtraSpace;
-                container.position.y = project.height/renderExtraSpace;
+                if(renderExtraSpace !== 1) {
+                    container.position.x = project.width/renderExtraSpace;
+                    container.position.y = project.height/renderExtraSpace;
+                }
             }
         }
 
@@ -199,9 +211,9 @@ var WickPixiRenderer = function (canvasContainer) {
             var newSprite = new PIXI.Sprite(pixiTexture);
             newSprite.texture.baseTexture.on('loaded', function(){
                 self.renderWickObjects(
-                        window._lastRender.project, 
-                        window._lastRender.wickObjects, 
-                        window._lastRender.renderExtraSpace)
+                    window._lastRender.project, 
+                    window._lastRender.wickObjects, 
+                    window._lastRender.renderExtraSpace)
             });
             pixiTextures[wickObject.uuid] = pixiTexture;
             return newSprite;

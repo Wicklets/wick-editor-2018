@@ -22,9 +22,6 @@ var WickPlayer = function () {
     self.running = false;
 
     var initialStateProject;
-    
-    var stats;
-    var statsEnabled = false;
 
     self.runProject = function (projectJSON) {
 
@@ -38,19 +35,11 @@ var WickPlayer = function () {
 
         self.canvasContainer = document.getElementById('playerCanvasContainer');
 
-        if(statsEnabled) {
-            stats = new Stats();
-            stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-            document.body.appendChild( stats.dom );
-        }
-
         resetElapsedTime();
 
         // Load the project!
         self.project = WickProject.fromJSON(projectJSON);
         initialStateProject = WickProject.fromJSON(projectJSON);
-        self.project.fitScreen = bowser.tablet || bowser.mobile;
-        initialStateProject.fitScreen = bowser.tablet || bowser.mobile;
 
         self.canvasContainer.style.width = self.project.width+'px';
         self.canvasContainer.style.height = self.project.height+'px';
@@ -102,15 +91,13 @@ var WickPlayer = function () {
 
         if(!self.running) return;
 
-        if(statsEnabled) stats.begin();
-
         if(self.project.framerate < 60) {
             loopTimeout = setTimeout(function() {
 
                 if(self.running) {
 
                     if(!firstTick) self.project.tick();
-                    if(self.project) self.renderer.renderWickObjects(self.project, self.project.rootObject.getAllActiveChildObjects());
+                    if(self.project) self.renderer.renderWickObjects(self.project, self.project.rootObject.getAllActiveChildObjects(), null, true);
                     if(self.project) self.htmlElemInjector.update();
                     self.inputHandler.update(false);
 
@@ -124,13 +111,11 @@ var WickPlayer = function () {
                 requestAnimationFrame(function () { update(false) });
             }
             if(!firstTick) self.project.tick();
-            self.renderer.renderWickObjects(self.project, self.project.rootObject.getAllActiveChildObjects());
+            self.renderer.renderWickObjects(self.project, self.project.rootObject.getAllActiveChildObjects(), null, true);
             self.htmlElemInjector.update();
             self.inputHandler.update();
 
         }
-
-        if(statsEnabled) stats.end();
 
     }
 
