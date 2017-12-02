@@ -52,12 +52,17 @@ TimelineInterface.FramesStrip = function (wickEditor, timeline) {
                 newPlayheadPosition: Math.round((e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2) / cssVar('--frame-width')),
             });*/
             if(timeline.framesContainer.addFrameOverlay.elem.style.display === 'none') return;
+
+            var playheadPosition = Math.round((e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2 - 9) / cssVar('--frame-width'));
+
+            if (playheadPosition < 0) return; // Your behind position 0!
+
             var newFrame = new WickFrame();
-            newFrame.playheadPosition = Math.round((e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2 - 9) / cssVar('--frame-width'))
+            newFrame.playheadPosition = playheadPosition; 
             
             var layerIndex = Math.round((e.clientY - timeline.framesContainer.elem.getBoundingClientRect().top - cssVar('--layer-height')/2) / cssVar('--layer-height'))
             var layer = wickEditor.project.currentObject.layers[layerIndex];
-            
+
             wickEditor.actionHandler.doAction('addFrame', {frame:newFrame, layer:layer});
             timeline.framesContainer.addFrameOverlay.elem.style.display = 'none';
 
