@@ -131,8 +131,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
         // Add new objects and update existing objects
         allObjects.forEach(function (child) {
-            if(objectsInCanvas.indexOf(child) !== -1) {
-                // Update existing object
+            if(objectsInCanvas.indexOf(child) !== -1) {// Update existing object
                 fabricInterface.canvas.forEachObject(function(fabricObj) {
                     if(fabricObj.group) return;
                     if(fabricObj.wickObjectRef === child) {
@@ -233,6 +232,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         if(wickObj.pathData) {
             fabric.loadSVGFromString(wickObj.pathData, function(objects, options) {
                 var pathFabricObj = objects[0];
+                if(!pathFabricObj) return;
 
                 // Workaround for buggy fabric.js SVG opacity
                 if(!wickObj.paper) wickEditor.canvas.getPaperCanvas().pathRoutines.regenPaperJSState(wickObj)
