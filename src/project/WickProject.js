@@ -42,8 +42,6 @@ var WickProject = function () {
 
     this.framerate = 12;
 
-    this.fitScreen = false;
-
     this.uuid = random.uuid4();
 
     //this.assets = {};

@@ -51,7 +51,7 @@ var PixiCanvas = function (wickEditor) {
             var onionSkinObjects = wickEditor.project.currentObject.getNearbyObjects(1,1);
             inactiveObjects = inactiveObjects.concat(onionSkinObjects)
         }
-        pixiRenderer.renderWickObjects(wickEditor.project, inactiveObjects, 2, false);
+        pixiRenderer.renderWickObjects(wickEditor.project, inactiveObjects, 2);
     }
 
     this.startFastRendering = function () {
@@ -65,7 +65,7 @@ var PixiCanvas = function (wickEditor) {
 
         function proceed () {
             wickEditor.project.applyTweens();
-            pixiRenderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 2, true);
+            pixiRenderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 2);
         }
 
         proceed();

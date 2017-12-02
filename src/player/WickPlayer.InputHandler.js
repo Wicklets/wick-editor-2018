@@ -311,19 +311,6 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
         var mouseX = evt.clientX;
         var mouseY = evt.clientY;
 
-        if(wickProject.fitScreen) {
-            mouseX -= canvasBoundingClientRect.left;
-            mouseY -= canvasBoundingClientRect.top;
-        }
-
-        var centeredCanvasOffsetX = 0//(window.innerWidth  - wickProject.width) / 2;
-        var centeredCanvasOffsetY = 0//(window.innerHeight - wickProject.height) / 2;
-
-        if(!wickProject.fitScreen) {
-            mouseX -= centeredCanvasOffsetX;
-            mouseY -= centeredCanvasOffsetY;
-        }
-
         return {
             x: mouseX,
             y: mouseY
@@ -338,19 +325,6 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
         var touchX = touch.pageX;
         var touchY = touch.pageY;
 
-        if(wickProject.fitScreen) {
-            touchX -= canvasBoundingClientRect.left;
-            touchY -= canvasBoundingClientRect.top;
-        }
-
-        var centeredCanvasOffsetX = 0//(window.innerWidth - wickProject.width) / 2;
-        var centeredCanvasOffsetY = 0//(window.innerHeight - wickProject.height) / 2;
-
-        if(!wickProject.fitScreen) {
-            touchX -= centeredCanvasOffsetX;
-            touchY -= centeredCanvasOffsetY;
-        }
-
         return {
             x: touchX,
             y: touchY
@@ -358,7 +332,18 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
     }
 
     var setMousePos = function (newPos) {
-        newMouse = newPos;
+        var windowScale = getWindowScale();
+        newMouse = {
+            x: newPos.x * windowScale.x,
+            y: newPos.y * windowScale.y
+        }
+    }
+
+    var getWindowScale = function () {
+        return {
+            x: wickProject.width / window.innerWidth,
+            y: wickProject.height / window.innerHeight
+        }
     }
 
 }
