@@ -248,7 +248,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isPath;
         },
         getValueFn: function () {
-            return selectionInfo.object.paper.strokeWidth;
+            return selectionInfo.object.paper && selectionInfo.object.paper.strokeWidth;
         }, 
         onChangeFn: function (val) {
             wickEditor.guiActionHandler.doAction("changeStrokeWidthOfSelection", {
@@ -264,8 +264,9 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isPath;
         },
         getValueFn: function () {
-            if(selectionInfo.object.paper.strokeColor)
-                return selectionInfo.object.paper.strokeColor.toCSS();
+            return selectionInfo.object.paper 
+                && selectionInfo.object.paper.strokeColor
+                && selectionInfo.object.paper.strokeColor.toCSS();
         }, 
         onChangeFn: function (val) {
             wickEditor.guiActionHandler.doAction("changeStrokeColorOfSelection", {color: val});
@@ -279,8 +280,9 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isPath;
         },
         getValueFn: function () {
-            if(selectionInfo.object.paper.fillColor)
-                return selectionInfo.object.paper.fillColor.toCSS();
+            return selectionInfo.object.paper 
+                && selectionInfo.object.paper.fillColor
+                && selectionInfo.object.paper.fillColor.toCSS();
         }, 
         onChangeFn: function (val) {
             wickEditor.guiActionHandler.doAction("changeFillColorOfSelection", {color: val});
