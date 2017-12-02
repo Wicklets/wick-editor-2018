@@ -33,7 +33,7 @@ var WickPixiRenderer = function (canvasContainer) {
     renderer.view.setAttribute('tabindex', 0);
 
     canvasContainer.appendChild(renderer.view);
-    renderer.view.focus()
+    renderer.view.focus();
 
     var currentProjectUUID = null;
     var container = new PIXI.Container();
@@ -47,6 +47,11 @@ var WickPixiRenderer = function (canvasContainer) {
     container.addChild(graphics);
 
     self.renderWickObjects = function (project, wickObjects, renderExtraSpace) {
+        window._lastRender = {
+            project: project,
+            wickObjects: wickObjects, 
+            renderExtraSpace: renderExtraSpace
+        }
         if(!renderExtraSpace) renderExtraSpace = 1;
 
         graphics.clear();
@@ -192,6 +197,12 @@ var WickPixiRenderer = function (canvasContainer) {
             var base64svg = getBase64SVG(wickObject);
             var pixiTexture = PIXI.Texture.fromImage(base64svg, undefined, undefined, SVG_SCALE);
             var newSprite = new PIXI.Sprite(pixiTexture);
+            newSprite.texture.baseTexture.on('loaded', function(){
+                self.renderWickObjects(
+                        window._lastRender.project, 
+                        window._lastRender.wickObjects, 
+                        window._lastRender.renderExtraSpace)
+            });
             pixiTextures[wickObject.uuid] = pixiTexture;
             return newSprite;
         },
