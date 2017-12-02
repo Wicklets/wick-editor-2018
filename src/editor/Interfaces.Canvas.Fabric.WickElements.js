@@ -209,6 +209,13 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             });
         }
 
+        if(wickObj.isSound) {
+            fabric.Image.fromURL("/resources/testcontent/duck.bmp", function(soundFabricIcon) {
+                soundFabricIcon.wickObjReference = wickObj; 
+                callback(soundFabricIcon); 
+            });
+        }
+
         if(wickObj.isText) {
             var textData = wickObj.textData;
             var newFabricText = new fabric.Textbox('First Textbox', {

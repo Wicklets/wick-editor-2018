@@ -52,6 +52,14 @@ var WickObject = function () {
 
     this.isText = false;
 
+// Images
+
+    this.isImage = false;
+
+// Sounds
+
+    this.isSound = false;
+
 // Symbols
 
     this.isSymbol = false;

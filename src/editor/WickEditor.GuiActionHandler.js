@@ -1227,10 +1227,29 @@ var GuiActionHandler = function (wickEditor) {
                     wickObjects:[wickObj]
                 });
             } else if(asset.type === 'audio') {
+                var wickObj = new WickObject();
+                wickObj.assetUUID = asset.uuid;
+                wickObj.isSound = true; 
+                wickObj.x = args.x;
+                wickObj.y = args.y;
+
+
+                wickEditor.actionHandler.doAction('addObjects', {
+                    wickObjects:[wickObj]
+                });
+
+                console.log(wickEditor.project.currentObject);
+                // wickEditor.actionHandler.doAction('addObjects', {
+                //     wickObjects:[wickObj];
+                // }); 
+                // console.log(wickObjects);
+
+                /*
                 wickEditor.actionHandler.doAction('addSoundToFrame', {
                     frame: wickEditor.project.getCurrentFrame(),
                     asset: args.asset
                 });
+                */
             }
 
         });
