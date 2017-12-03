@@ -1391,10 +1391,7 @@ WickObject.prototype.tick = function () {
 
         
         if (this.isSound) {
-            // Plays every tick, not every on load...
-            if(wickPlayer && !this._wasActiveLastTick) {
-                wickPlayer.audioPlayer.playSound(this.assetUUID);
-            }
+            if(wickPlayer) wickPlayer.audioPlayer.playSound(this.assetUUID);
         }
 
 
