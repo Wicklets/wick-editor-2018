@@ -66,7 +66,7 @@ var LibraryInterface = function (wickEditor) {
             if(asset.type === 'image') {
                 assetURL = asset.data;
             } else if(self.getSelectedAsset().type === 'audio') {
-                assetURL = 'resources/audio.png';
+                assetURL = 'resources/icon_sound_canvas.png';
             }
             draggedAssetElem.style.backgroundImage = 'url('+assetURL+')';
         });
