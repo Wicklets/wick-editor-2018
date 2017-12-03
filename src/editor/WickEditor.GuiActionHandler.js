@@ -1219,7 +1219,7 @@ var GuiActionHandler = function (wickEditor) {
             var asset = args.asset;
 
             if (!asset) return; // Null Check
-            var screenPos = wickEditor.canvas.getFabricCanvas().screenToCanvasSpace(args.x, args.y); // Where did they drop the object
+            var screenPos = wickEditor.canvas.getFabricCanvas().screenToCanvasSpace(args.x, args.y); // Where did they drop the object?
             var wickObj = new WickObject();
 
             wickObj.assetUUID = asset.uuid;
@@ -1230,6 +1230,7 @@ var GuiActionHandler = function (wickEditor) {
                 wickObj.isImage = true;
             } else if(asset.type === 'audio') {
                 wickObj.isSound = true; 
+                // Keep the audio icon to 100x100px
                 wickObj.width = 100; 
                 wickObj.height = 100; 
             }

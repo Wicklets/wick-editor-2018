@@ -1388,6 +1388,15 @@ WickObject.prototype.tick = function () {
         (wickPlayer || wickEditor).project.runScript(this, 'load');
         (wickPlayer || wickEditor).project.runScript(this, 'update');
 
+        
+        if (this.isSound) {
+            // Plays every tick, not every on load...
+            if(wickPlayer && !this._wasActiveLastTick) {
+                wickPlayer.audioPlayer.playSound(this.assetUUID);
+            }
+        }
+
+
         this.advanceTimeline();
     }
     // Active -> Active
