@@ -211,7 +211,10 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
         if(wickObj.isSound) {
             fabric.Image.fromURL("/resources/icon_sound_canvas.png", function(soundFabricIcon) {
-                soundFabricIcon.wickObjReference = wickObj; 
+                soundFabricIcon.wickObjReference = wickObj;
+
+
+                soundFabricIcon.hasControls = false; 
                 callback(soundFabricIcon); 
             });
         }
@@ -401,7 +404,10 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
         // Objects that are onion skins or that are not part of the current symbol being edited cannot be interacted with
         if(activeObjects.indexOf(wickObj) !== -1 && !wickObj.parentFrame.parentLayer.locked) {
-            fabricObj.hasControls = true;
+            // Don't show controls on sounds
+            if (!wickObj.isSound) { 
+                fabricObj.hasControls = true;
+            } 
             fabricObj.selectable = true;
             fabricObj.evented = true;
         } else {
