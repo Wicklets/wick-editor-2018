@@ -59,6 +59,7 @@ var WickObject = function () {
 // Sounds
 
     this.isSound = false;
+    this.loop = false;
 
 // Symbols
 
