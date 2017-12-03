@@ -557,7 +557,6 @@ var GuiActionHandler = function (wickEditor) {
                         frames:frames
                     });
                 } else if (fileType.includes('image')) {
-                    //console.log(items[i])
                     reader = new FileReader();
                     reader.onload = function(evt) {
                         var asset = new WickAsset(evt.target.result, 'image', 'Pasted Image');

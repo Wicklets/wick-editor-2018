@@ -1391,7 +1391,8 @@ WickObject.prototype.tick = function () {
 
         
         if (this.isSound) {
-            if(wickPlayer) wickPlayer.audioPlayer.playSound(this.assetUUID);
+            this._updateAudio(); 
+            this._playSound(); 
         }
 
 
@@ -1452,3 +1453,18 @@ WickObject.prototype.pointTo = function ( x2, y2 ) {
     
     this.rotation = Math.atan2(dy,dx) * 180 / Math.PI - 90;
 };
+
+WickObject.prototype._updateAudio = function () {
+    if (!this.isSound) return; 
+    // Lazily create sound objects
+    if (!this.howl) {
+        this.howl = wickPlayer.audioPlayer.makeSound(this.assetUUID, this.loop, this.volume); 
+    }
+    this.howl.volume = this.volume; 
+    this.howl.loop = this.loop; 
+}
+
+WickObject.prototype._playSound = function () {
+    if (!this.isSound) return; 
+    var howlerID = this.howl.play(); 
+}

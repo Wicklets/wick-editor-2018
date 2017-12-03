@@ -484,7 +484,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             return selectionInfo.object.loop;
         }, 
         onChangeFn: function (val) {
-            console.log(val); 
             wickEditor.actionHandler.doAction('modifyObjects', {
                 objs: [selectionInfo.object],
                 modifiedStates: [{
