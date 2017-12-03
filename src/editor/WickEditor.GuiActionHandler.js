@@ -1210,6 +1210,7 @@ var GuiActionHandler = function (wickEditor) {
             });
         });
 
+    
     registerAction('createObjectFromAsset',
         [],
         [],
@@ -1217,40 +1218,25 @@ var GuiActionHandler = function (wickEditor) {
         function (args) {
             var asset = args.asset;
 
-            if(asset.type === 'image') {
-                var wickObj = new WickObject();
-                wickObj.assetUUID = asset.uuid;
+            if (!asset) return; // Null Check
+            var screenPos = wickEditor.canvas.getFabricCanvas().screenToCanvasSpace(args.x, args.y); // Where did they drop the object
+            var wickObj = new WickObject();
+
+            wickObj.assetUUID = asset.uuid;
+            wickObj.x = screenPos.x;
+            wickObj.y = screenPos.y;
+ 
+            if(asset.type === 'image') {                
                 wickObj.isImage = true;
-                wickObj.x = args.x;
-                wickObj.y = args.y;
-                wickEditor.actionHandler.doAction('addObjects', {
-                    wickObjects:[wickObj]
-                });
             } else if(asset.type === 'audio') {
-                var wickObj = new WickObject();
-                wickObj.assetUUID = asset.uuid;
                 wickObj.isSound = true; 
-                wickObj.x = args.x;
-                wickObj.y = args.y;
-
-
-                wickEditor.actionHandler.doAction('addObjects', {
-                    wickObjects:[wickObj]
-                });
-
-                console.log(wickEditor.project.currentObject);
-                // wickEditor.actionHandler.doAction('addObjects', {
-                //     wickObjects:[wickObj];
-                // }); 
-                // console.log(wickObjects);
-
-                /*
-                wickEditor.actionHandler.doAction('addSoundToFrame', {
-                    frame: wickEditor.project.getCurrentFrame(),
-                    asset: args.asset
-                });
-                */
+                wickObj.width = 100; 
+                wickObj.height = 100; 
             }
+
+            wickEditor.actionHandler.doAction('addObjects', {
+                wickObjects:[wickObj]
+            });
 
         });
 

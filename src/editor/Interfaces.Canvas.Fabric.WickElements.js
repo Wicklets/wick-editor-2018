@@ -210,7 +210,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         }
 
         if(wickObj.isSound) {
-            fabric.Image.fromURL("/resources/testcontent/duck.bmp", function(soundFabricIcon) {
+            fabric.Image.fromURL("/resources/icon_sound_canvas.png", function(soundFabricIcon) {
                 soundFabricIcon.wickObjReference = wickObj; 
                 callback(soundFabricIcon); 
             });
