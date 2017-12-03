@@ -28,6 +28,7 @@ var WickHowlerAudioPlayer = function (project) {
         muted = false;
 
         project.library.getAllAssets('audio').forEach(function (asset) {
+            console.log(asset);
             var audioData = asset.getData();
 
             sounds[asset.uuid] = new Howl({
@@ -40,6 +41,23 @@ var WickHowlerAudioPlayer = function (project) {
             });
         });
 
+    }
+
+    self.makeSound = function (assetUUID, objLoop, objVolume) {
+        var asset = project.library.getAsset(assetUUID);
+        if (!asset) return; 
+        var audioData = asset.getData(); 
+
+        howl = new Howl({
+                src: [audioData],
+                loop: objLoop,
+                volume: objVolume,
+                onend: function(id) { self.onSoundEnd(id); },
+                onStop: function(id) { self.onSoundStop(id); },
+                onPlay: function(id) { self.onSoundPlay(id); }
+            });
+
+        return howl;
     }
 
     self.playSound = function (assetUUID) {

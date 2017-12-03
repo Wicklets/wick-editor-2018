@@ -286,7 +286,7 @@ var WickActionHandler = function (wickEditor) {
             done(args);
         });
 
-    var modifyableAttributes = ["x","y","scaleX","scaleY","rotation","opacity","flipX","flipY","pathData","textData","width"];
+    var modifyableAttributes = ["x","y","scaleX","scaleY","rotation","opacity","flipX","flipY","pathData","textData","width", "volume", "loop"];
 
     registerAction('modifyObjects',
         function (args) {

@@ -1230,6 +1230,7 @@ var GuiActionHandler = function (wickEditor) {
                 wickObj.isImage = true;
             } else if(asset.type === 'audio') {
                 wickObj.isSound = true; 
+                wickObj.volume = 1.0; 
                 // Keep the audio icon to 100x100px
                 wickObj.width = 100; 
                 wickObj.height = 100; 
