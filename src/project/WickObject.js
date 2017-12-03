@@ -1402,12 +1402,20 @@ WickObject.prototype.tick = function () {
     else if (this._wasActiveLastTick && this._active) {
         (wickPlayer || wickEditor).project.runScript(this, 'update');
 
+        if (this.isSound) {
+            this._updateAudio(); 
+        }
+
         this.advanceTimeline();
     }
     // Active -> Inactive
     else if (this._wasActiveLastTick && !this._active) {
         if(!this.parentFrame.alwaysSaveState) {
             wickPlayer.resetStateOfObject(this);
+        }
+
+        if (this.isSound) {
+            this._stopSound(); 
         }
     }
     
