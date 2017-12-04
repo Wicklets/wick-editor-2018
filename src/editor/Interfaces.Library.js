@@ -80,6 +80,8 @@ var LibraryInterface = function (wickEditor) {
             draggedNode = selectedNode;
             draggedAssetElem.style.display = 'block';
             var asset = self.getSelectedAsset();
+            if (!asset) return; 
+            
             var assetURL;
             if(asset.type === 'image') {
                 assetURL = asset.data;
@@ -152,6 +154,7 @@ var LibraryInterface = function (wickEditor) {
     }
 
     this.getSelectedAsset = function () {
+        if (!selectedNode) return; 
         return wickEditor.project.library.getAsset(selectedNode.data.uuid)
     }
 
