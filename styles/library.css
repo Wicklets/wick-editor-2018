@@ -1,11 +1,13 @@
 #treeContainer {
 	position: absolute;
-	bottom: 38px;
+	bottom: 60px;
 	left: 10px;
-	width: calc(100% - 20px);
+    right: 10px;
+	/*width: calc(100% - 20px);*/
 	height: 200px;
 	overflow: hidden;
   	border-radius: 3px;
+    display: table; 
 }
 
 #asset-library-title {
@@ -40,4 +42,11 @@
 #fancytree-container {
 	border-radius: 2px;
 	background-color: rgba(0,0,0,0);
+}
+
+#treeOptionsContainer {
+    height: 50px;
+    background-color: #000000;
+    width: 100%;
+    display: table-footer-group;
 }
