@@ -99,7 +99,7 @@ Tools.Paintbrush = function (wickEditor) {
             totalDelta.y += event.delta.y;
         }
 
-        if (totalDelta.length < 6) {
+        if (totalDelta.length < 10) {
             return;
         }
         totalDelta.x = 0;
@@ -128,13 +128,13 @@ Tools.Paintbrush = function (wickEditor) {
             center: event.point,
             radius: t/2,
         });
-        //circle.strokeColor = 'green';
-        circle.fillColor = wickEditor.settings.fillColor
+        circle.strokeColor = 'green';
+        //circle.fillColor = wickEditor.settings.fillColor
 
         if(lastBottom) {
             var strokeRect = new paper.Path();
-            //strokeRect.strokeColor = 'orange';
-            strokeRect.fillColor = wickEditor.settings.fillColor;
+            strokeRect.strokeColor = 'orange';
+            //strokeRect.fillColor = wickEditor.settings.fillColor;
             strokeRect.add(top);
             strokeRect.add(bottom);
             strokeRect.add(lastPoint.subtract(stepLast));
@@ -147,8 +147,8 @@ Tools.Paintbrush = function (wickEditor) {
             var d = lastDelta.angle-event.delta.angle
             if(d > 300) d -= 360;
             if(d < -300) d += 360;
-            if(d > 45)  d=45;
-            if(d < -45) d=-45;
+            if(d >  90) d=0;
+            if(d < -90) d=0;
             var a = (d)*0.0045;
             midA = midA.add(event.delta.rotate(90).multiply(a));
 
