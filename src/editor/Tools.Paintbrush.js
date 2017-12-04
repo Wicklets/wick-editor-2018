@@ -61,7 +61,7 @@ Tools.Paintbrush = function (wickEditor) {
     }
 
     this.onDeselected = function () {
-        if(path) path.remove();
+        
     }
 
     this.getCanvasMode = function () {
@@ -70,90 +70,64 @@ Tools.Paintbrush = function (wickEditor) {
 
     this.paperTool = new paper.Tool();
     var path;
-    var totalDelta;
-    var lastEvent;
+    var lastPoint;
+    var lastTop;
+    var lastBottom;
+
+    var first;
 
     this.paperTool.onMouseDown = function (event) {
-        
+        path = new paper.Path();
+        path.strokeColor = 'blue';
+        lastPoint = event.point;
+        first = true;
     }
 
     this.paperTool.onMouseDrag = function (event) {
-        if (!path) {
-            path = new paper.Path({
-                fillColor: wickEditor.settings.fillColor,
-                //strokeColor: '#000',
-            });
-            //path.add(event.lastPoint);
+        if(first) {
+            first = false;
+            return;
+        }
+        if(event.delta.x === 0 && event.delta.y === 0) return;
+
+        var t = wickEditor.settings.brushThickness;
+
+        path.add(event.point);
+
+        var dirLine = new paper.Path();
+        dirLine.strokeColor = 'red';
+        var step = event.delta.divide(event.delta.length).multiply(t/2);
+        step.angle = step.angle + 90;
+
+        var top = event.point.add(step);
+        var bottom = event.point.subtract(step);
+        dirLine.add(bottom);
+        dirLine.add(top);
+
+        var circle = new paper.Path.Circle({
+            center: event.point,
+            radius: t/2,
+        });
+        circle.strokeColor = 'green';
+
+        if(lastBottom) {
+            var strokeRect = new paper.Path();
+            strokeRect.strokeColor = 'orange';
+            strokeRect.add(top);
+            strokeRect.add(bottom);
+            strokeRect.add(lastBottom);
+            strokeRect.add(lastTop);
+            strokeRect.closed = true;
         }
 
-        if(!totalDelta) {
-            totalDelta = event.delta;
-        } else {
-            totalDelta.x += event.delta.x;
-            totalDelta.y += event.delta.y;
-        }
-
-        if (totalDelta.length > wickEditor.settings.brushThickness/4/wickEditor.canvas.getFabricCanvas().canvas.getZoom()) {
-
-            totalDelta.x = 0;
-            totalDelta.y = 0;
-
-            addNextSegment(event)
-            lastEvent = event;
-
-        }
+        lastTop = top;
+        lastBottom = bottom;
     }
 
     this.paperTool.onMouseUp = function (event) {
-        if (path) {
-            path.closed = true;
-            path.smooth();
-            if(wickEditor.settings.brushSmoothingAmount > 0) {
-                var t = wickEditor.settings.brushThickness;
-                var s = wickEditor.settings.brushSmoothingAmount/100;
-                var z = wickEditor.canvas.getFabricCanvas().canvas.getZoom();
-                path.simplify(t / z * s);
-            }
-            path = path.unite(new paper.Path())
-            path.remove();
-
-            var group = new paper.Group({insert:false});
-            group.addChild(path);
-
-            var svgString = group.exportSVG({asString:true});
-            var pathWickObject = WickObject.createPathObject(svgString);
-            pathWickObject.x = group.position.x;
-            pathWickObject.y = group.position.y;
-            pathWickObject.width = 1;
-            pathWickObject.height = 1;
-
-            wickEditor.canvas.getPaperCanvas().pathRoutines.refreshPathData(pathWickObject);
-
-            wickEditor.actionHandler.doAction('addObjects', {
-                wickObjects: [pathWickObject],
-                dontSelectObjects: true,
-            });
-
-            path = null;
-        } 
-    }
-
-    function addNextSegment (event) {
-        var thickness = event.delta.length;
-        thickness /= wickEditor.settings.brushThickness/2;
-        thickness *= wickEditor.canvas.getFabricCanvas().canvas.getZoom();
-        
-        var penPressure = wickEditor.inputHandler.getPenPressure();
-
-        var step = event.delta.divide(thickness).multiply(penPressure);
-        step.angle = step.angle + 90;
-
-        var top = event.middlePoint.add(step);
-        var bottom = event.middlePoint.subtract(step);
-
-        path.add(top);
-        path.insert(0, bottom);
-        path.smooth();
+        lastBottom = null;
+        lastTop = null;
+        lastPoint = null;
     }
 
 }
