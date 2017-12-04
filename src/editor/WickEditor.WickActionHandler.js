@@ -1137,7 +1137,6 @@ var WickActionHandler = function (wickEditor) {
 
             currentFrame = currentLayer.getFrameAtPlayheadPosition(args.playheadPosition);
 
-            console.log(currentFrame); 
             if (currentFrame === null) {
                 var newFrame = new WickFrame(); 
                 newFrame.playheadPosition = args.playheadPosition;
@@ -1147,15 +1146,15 @@ var WickActionHandler = function (wickEditor) {
                 args.addedNewFrame = true; 
             }
 
-            currentFrame.audioAssetUUID = asset.assetUUID; 
+            currentFrame.audioAssetUUID = asset.uuid; 
 
             done(args);
         },
         function (args) {
             // args.frame.audioAssetUUID = args.oldAssetUUID;
 
-            if (args.addLayerAction) args.addLayerAction.undoAction();
             if (args.addFrameAction) args.addFrameAction.undoAction();
+            if (args.addLayerAction) args.addLayerAction.undoAction();
 
             done(args);
         });
