@@ -67,11 +67,9 @@ var LibraryInterface = function (wickEditor) {
             }*/
         });
 
-        // Setup Filter
-        treeFilterInput = document.getElementById('treeFilterInput'); 
-
-        treeFilterInput.addEventListener('change', function () {
-              $("#tree").fancytree("getTree").filterNodes(treeFilterInput.value); 
+        var filterInput = $('#treeFilterInput');
+        filterInput.bind("propertychange change click keyup input paste", function(event){
+            $("#tree").fancytree("getTree").filterNodes(filterInput.val());
         });
 
         draggedAssetElem = document.createElement('div');
@@ -81,7 +79,7 @@ var LibraryInterface = function (wickEditor) {
             draggedAssetElem.style.display = 'block';
             var asset = self.getSelectedAsset();
             if (!asset) return; 
-            
+
             var assetURL;
             if(asset.type === 'image') {
                 assetURL = asset.data;
@@ -126,7 +124,7 @@ var LibraryInterface = function (wickEditor) {
             var asset = library.assets[uuid];
             var iconSrc = {
                 image : 'resources/library-image.png',
-                audio : 'resources/library-audio.png',
+                audio : 'resources/icon_sound.png',
             }[asset.type]
             newTreeChildren.push({ 
                 title: asset.filename,
