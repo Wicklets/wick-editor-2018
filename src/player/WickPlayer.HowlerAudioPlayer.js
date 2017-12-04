@@ -28,7 +28,6 @@ var WickHowlerAudioPlayer = function (project) {
         muted = false;
 
         project.library.getAllAssets('audio').forEach(function (asset) {
-            console.log(asset);
             var audioData = asset.getData();
 
             sounds[asset.uuid] = new Howl({

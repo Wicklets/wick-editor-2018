@@ -1241,19 +1241,4 @@ var GuiActionHandler = function (wickEditor) {
 
         });
 
-    // registerAction('createSoundFrameFromAsset',
-    //     [],
-    //     [],
-    //     {},
-    //     function (args) {
-    //         if (!args.asset) return; 
-    //         asset = args.asset; 
-    //         if(asset.type === 'audio') {
-    //             wickEditor.actionHandler.doAction('addSoundToFrame', {
-    //                 asset: args.asset
-    //             });
-    //         }
-
-    //     });
-
 }
