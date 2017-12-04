@@ -77,8 +77,8 @@ Tools.Paintbrush = function (wickEditor) {
     var first;
 
     this.paperTool.onMouseDown = function (event) {
-        path = new paper.Path();
-        path.strokeColor = 'blue';
+        //path = new paper.Path();
+        //path.strokeColor = 'blue';
         lastPoint = event.point;
         first = true;
     }
@@ -90,29 +90,32 @@ Tools.Paintbrush = function (wickEditor) {
         }
         if(event.delta.x === 0 && event.delta.y === 0) return;
 
-        var t = wickEditor.settings.brushThickness;
+        var penPressure = wickEditor.inputHandler.getPenPressure();
+        var t = wickEditor.settings.brushThickness*(penPressure+0.5);
 
-        path.add(event.point);
+        //path.add(event.point);
 
-        var dirLine = new paper.Path();
-        dirLine.strokeColor = 'red';
+        //var dirLine = new paper.Path();
+        //dirLine.strokeColor = 'red';
         var step = event.delta.divide(event.delta.length).multiply(t/2);
         step.angle = step.angle + 90;
 
         var top = event.point.add(step);
         var bottom = event.point.subtract(step);
-        dirLine.add(bottom);
-        dirLine.add(top);
+        //dirLine.add(bottom);
+        //dirLine.add(top);
 
         var circle = new paper.Path.Circle({
             center: event.point,
             radius: t/2,
         });
-        circle.strokeColor = 'green';
+        //circle.strokeColor = 'green';
+        circle.fillColor = wickEditor.settings.fillColor
 
         if(lastBottom) {
             var strokeRect = new paper.Path();
-            strokeRect.strokeColor = 'orange';
+            //strokeRect.strokeColor = 'orange';
+            strokeRect.fillColor = wickEditor.settings.fillColor;
             strokeRect.add(top);
             strokeRect.add(bottom);
             strokeRect.add(lastBottom);
