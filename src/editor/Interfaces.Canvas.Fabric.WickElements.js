@@ -51,7 +51,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         var activeObjects = currentObject.getAllActiveChildObjects();
         if(wickEditor.canvas.getPaperCanvas().isHidden()) {
             activeObjects = activeObjects.filter(function (obj) {
-                return obj.isImage || obj.isText;
+                return obj.isImage || obj.isText || obj.isSound;
             }); 
         }
         activeObjects = activeObjects.filter(function (obj) {

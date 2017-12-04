@@ -47,13 +47,23 @@ TimelineInterface.FramesStrip = function (wickEditor, timeline) {
         this.elem.addEventListener('mouseup', function (e) {
             if(e.button === 2) return;
             if(wickEditor.project.smallFramesMode) return;
-            /*wickEditor.actionHandler.doAction('movePlayhead', {
-                obj: wickEditor.project.currentObject,
-                newPlayheadPosition: Math.round((e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2) / cssVar('--frame-width')),
-            });*/
+
             if(timeline.framesContainer.addFrameOverlay.elem.style.display === 'none') return;
 
             var playheadPosition = Math.round((e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2 - 9) / cssVar('--frame-width'));
+
+            if(wickEditor.library.isDraggingAsset()) { 
+                var asset = wickEditor.library.getSelectedAsset(); 
+
+                if (asset.type == 'audio') {
+                    wickEditor.actionHandler.doAction("addSoundToFrame", {
+                        asset: asset,
+                        playheadPosition: playheadPosition
+                    });
+                }
+                return; 
+            }
+            
 
             if (playheadPosition < 0) return; // Your behind position 0!
 

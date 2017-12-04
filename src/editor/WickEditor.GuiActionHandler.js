@@ -1241,20 +1241,19 @@ var GuiActionHandler = function (wickEditor) {
 
         });
 
-    registerAction('createSoundFromAsset',
-        [],
-        [],
-        {},
-        function (args) {
-            var asset = args.asset;
+    // registerAction('createSoundFrameFromAsset',
+    //     [],
+    //     [],
+    //     {},
+    //     function (args) {
+    //         if (!args.asset) return; 
+    //         asset = args.asset; 
+    //         if(asset.type === 'audio') {
+    //             wickEditor.actionHandler.doAction('addSoundToFrame', {
+    //                 asset: args.asset
+    //             });
+    //         }
 
-            if(asset.type === 'audio') {
-                wickEditor.actionHandler.doAction('addSoundToFrame', {
-                    frame: args.frame,
-                    asset: args.asset
-                });
-            }
-
-        });
+    //     });
 
 }

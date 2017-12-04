@@ -23,6 +23,7 @@ var LibraryInterface = function (wickEditor) {
     var draggedNode;
 
     var draggedAssetElem;
+    var isDraggingAsset = false; 
 
     this.setup = function () {
         //$("#tree").fancytree();
@@ -69,6 +70,7 @@ var LibraryInterface = function (wickEditor) {
                 assetURL = 'resources/icon_sound_canvas.png';
             }
             draggedAssetElem.style.backgroundImage = 'url('+assetURL+')';
+            isDraggingAsset = true; 
         });
         window.addEventListener('mouseup', function (e) {
             if(!draggedNode) return;
@@ -80,12 +82,8 @@ var LibraryInterface = function (wickEditor) {
                     x: e.x,
                     y: e.y
                 });
-            } else if (e.target.className === 'frame') {
-                wickEditor.guiActionHandler.doAction("createSoundFromAsset", {
-                    asset: self.getSelectedAsset(),
-                    frame: e.target.wickData.wickFrame
-                });
-            }
+            } 
+            isDraggingAsset = false; 
         });
         window.addEventListener('mousemove', function (e) {
             if(!draggedAssetElem) return;
@@ -138,6 +136,10 @@ var LibraryInterface = function (wickEditor) {
 
     this.getSelectedAsset = function () {
         return wickEditor.project.library.getAsset(selectedNode.data.uuid)
+    }
+
+    this.isDraggingAsset = function () {
+        return isDraggingAsset; 
     }
 
 }
