@@ -58,11 +58,9 @@ WickProject.Exporter = (function () {
             "src/project/WickCamera.js",
             "src/project/WickProject.AssetLibrary.js",
             "src/project/WickProject.Compressor.js",
-            "src/player/WickPlayer.Preloader.js",
             "src/player/WickPlayer.PixiRenderer.js",
             "src/player/WickPlayer.HowlerAudioPlayer.js",
             "src/player/WickPlayer.InputHandler.js",
-            "src/player/WickPlayer.HTMLElemInjector.js",
             "src/player/WickPlayer.js",
         ];
 
