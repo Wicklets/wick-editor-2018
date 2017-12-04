@@ -19,8 +19,6 @@ var BreadcrumbsInterface = function (wickEditor) {
 
     var breadcrumbsDiv = document.getElementById('breadcrumbsGUI');
 
-/* API */
-
     this.setup = function () {
         
     }
@@ -34,8 +32,6 @@ var BreadcrumbsInterface = function (wickEditor) {
         })
 
     }
-
-/* Helper functions */
 
     var createButton = function (wickObject) {
 

@@ -22,7 +22,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
     var currentFrameRef;
     var currentFrameUUIDs;
 
-    this.update = function () {
+    this.update = function (callback) {
         window.blockAllRender = true;
 
         var newFrameRef = wickEditor.project.getCurrentFrame();
@@ -57,22 +57,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         activeObjects = activeObjects.filter(function (obj) {
             return !obj.parentFrame.parentLayer.hidden;
         });
-
-        /*var siblingObjects = currentObject.getAllInactiveSiblings();
-        siblingObjects = siblingObjects.filter(function (obj) {
-            return !obj.parentFrame.parentLayer.hidden;
-        });  */
-        //var siblingObjects = [];
-        //var nearbyObjects = wickEditor.project.onionSkinning ? wickEditor.project.currentObject.getNearbyObjects(1,1) : [];
         var allObjects = activeObjects;
-        //var allObjects = siblingObjects.concat(activeObjects);
-
-        /*allObjects.forEach(function (o) {
-            o._isOnionSkinObject = false;
-        })
-        nearbyObjects.forEach(function (o) {
-            o._isOnionSkinObject = true;
-        })*/
 
         var finish = function () {
             for(var i = 0; i < allObjects.length; i++) {
@@ -91,8 +76,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             });
 
             window.blockAllRender = false;
-            fabricInterface.syncSelectionWithWickProject();
-            fabricInterface.canvas.renderAll();
+            callback()
         }
 
         if(enablePerfTests) stopTiming("object list generation");
@@ -167,8 +151,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                         mtr: true,
                     });
                 }
-                //fabricObj.originX = 'center';
-                //fabricObj.originY = 'center';
 
                 if (currentFrameUUIDs.indexOf(objectToAdd._frameUUID) === -1) {
                     objectsInCanvas.splice(objectsInCanvas.indexOf(objectToAdd), 1)
@@ -180,12 +162,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 updateFabObjPositioning(fabricObj, objectToAdd);
                 updateFabricObjectEvents(fabricObj, objectToAdd, activeObjects);
 
-                //var trueZIndex = allObjects.indexOf(objectToAdd);
-                //fabricInterface.canvas.moveTo(fabricObj, trueZIndex+fabricInterface.guiElements.getNumGUIElements());
-
                 numObjectsAdded++;
                 if(numObjectsAdded === objectsToAdd.length) {
-                    //fabricInterface.canvas.renderAll()
                     finish();
                 }
             });
@@ -212,9 +190,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         if(wickObj.isText) {
             var textData = wickObj.textData;
             var newFabricText = new fabric.Textbox('First Textbox', {
-                /*cursorColor: '#333',
-                cursorDelay: 500,
-                editable: true,*/
                 fontFamily: textData.fontFamily,
                 fontSize: textData.fontSize,
                 fontStyle: textData.fontStyle,
@@ -244,8 +219,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
         }
 
         if (wickObj.isSymbol) {
-            // Dont do this recursively - just create a group of all children (and children of children) in one level
-
             wickObj.playheadPosition = 0;
 
             var children = wickObj.getAllActiveChildObjectsRecursive();
@@ -256,50 +229,49 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                 callback(group);
             }
 
-            for(var i = 0; i < children.length; i++) {
-                
-                var setupSymbol = function () {
-                    for(var i = 0; i < Object.keys(wos).length; i++) {
-                        var pair = wos[i]
-                        var fabricObj = pair.fo;
-                        var child = pair.wo;
-                        
-                        updateFabObjPositioning(fabricObj, child, true, wickObj);
-                    }
-
-                    for(var i = 0; i < Object.keys(wos).length; i++) {
-                        var pair = wos[i]
-                        var fabricObj = pair.fo;
-                        var child = pair.wo;
-
-                        fabricObj.originX = 'centerX';
-                        fabricObj.originY = 'centerY';
-                        
-                        //updateFabObj(fabricObj, child);
-                        group.addWithUpdate(fabricObj);
-                    }
-                    wickObj.width = group.width;
-                    wickObj.height = group.height;
-
-                    var Pabs = wickObj.getAbsolutePosition();
-                    var Ss = {w: wickObj.width, h: wickObj.height };
-
-                    group.originX = 0.5;
-                    group.originY = 0.5;
-
-                    group.wickObjReference = wickObj;
+            var setupSymbol = function () {
+                for(var i = 0; i < Object.keys(wos).length; i++) {
+                    var pair = wos[i]
+                    var fabricObj = pair.fo;
+                    var child = pair.wo;
                     
-                    group.setCoords();
-
-                    var r = group.getBoundingRect();
-                    var boxLeft = (r.left + group.width/2);
-                    var boxTop = (r.top + group.height/2);
-                    group.originX = ((Pabs.x - (boxLeft)) / Ss.w);
-                    group.originY = ((Pabs.y - (boxTop)) / Ss.h);
-                    
-                    callback(group);
+                    updateFabObjPositioning(fabricObj, child, true, wickObj);
                 }
-                var dothing = function (wo) {
+
+                for(var i = 0; i < Object.keys(wos).length; i++) {
+                    var pair = wos[i]
+                    var fabricObj = pair.fo;
+                    var child = pair.wo;
+
+                    fabricObj.originX = 'centerX';
+                    fabricObj.originY = 'centerY';
+                    
+                    group.addWithUpdate(fabricObj);
+                }
+                wickObj.width = group.width;
+                wickObj.height = group.height;
+
+                var Pabs = wickObj.getAbsolutePosition();
+                var Ss = {w: wickObj.width, h: wickObj.height };
+
+                group.originX = 0.5;
+                group.originY = 0.5;
+
+                group.wickObjReference = wickObj;
+                
+                group.setCoords();
+
+                var r = group.getBoundingRect();
+                var boxLeft = (r.left + group.width/2);
+                var boxTop = (r.top + group.height/2);
+                group.originX = ((Pabs.x - (boxLeft)) / Ss.w);
+                group.originY = ((Pabs.y - (boxTop)) / Ss.h);
+                
+                callback(group);
+            }
+
+            for(var i = 0; i < children.length; i++) {
+                (function (wo) {
                     createFabricObjectFromWickObject(children[wo], function(fabricObj) {
                         wos[wo] = ({fo:fabricObj,wo:children[wo]});
 
@@ -307,8 +279,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
                             setupSymbol();
                         }
                     });
-                }
-                dothing(i);
+                })(i);
             }
         }
 
@@ -379,19 +350,6 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
     }
 
     var updateFabricObjectEvents = function (fabricObj, wickObj, activeObjects) {
-        //var setCoords = fabricObj.setCoords.bind(fabricObj);
-        /*fabricObj.on({
-            moving: setCoords,
-            scaling: setCoords,
-            rotating: setCoords
-        });*/
-
-        if(activeObjects.includes(wickObj)) {
-            fabricObj.opacity = wickObj.opacity;
-        } else {
-            fabricObj.opacity = wickObj.opacity/2;
-        }
-
         // Objects that are onion skins or that are not part of the current symbol being edited cannot be interacted with
         if(activeObjects.indexOf(wickObj) !== -1 && !wickObj.parentFrame.parentLayer.locked) {
             fabricObj.hasControls = true;

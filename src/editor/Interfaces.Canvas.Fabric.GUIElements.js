@@ -33,21 +33,6 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
         canvas.add(obj);
     }
 
-// White box that shows resolution & objects that will be on screen when project is exported
-
-    /*var frameInside = new fabric.Rect({
-        fill: '#FFF',
-    });
-
-    frameInside.identifier = "frameInside";
-    frameInside.updateGUIState = function () {
-        frameInside.setColor(wickEditor.project.backgroundColor)
-        frameInside.width  = wickEditor.project.width;
-        frameInside.height = wickEditor.project.height;
-        frameInside.setCoords();
-    }
-    addElement(frameInside);*/
-
 // Fade that grays out inactive objects (the objects in the parent objects frame)
 
     var inactiveFrame = new fabric.Rect({
@@ -60,10 +45,10 @@ var FabricGUIElements = function (wickEditor, fabricInterface) {
     inactiveFrame.updateGUIState = function () {
         var pan = fabricInterface.getPan();
         var zoom = canvas.getZoom();
-        inactiveFrame.width  = window.innerWidth  / zoom;
-        inactiveFrame.height = window.innerHeight / zoom;
-        inactiveFrame.left = -pan.x / zoom;
-        inactiveFrame.top  = -pan.y / zoom;
+        inactiveFrame.width  = window.innerWidth  / zoom * 10;
+        inactiveFrame.height = window.innerHeight / zoom * 10;
+        inactiveFrame.left = -pan.x / zoom - inactiveFrame.width/2;
+        inactiveFrame.top  = -pan.y / zoom - inactiveFrame.height/2;
         var currentObject = wickEditor.project.currentObject;
         inactiveFrame.opacity = currentObject.isRoot ? 0.0 : 0.2;
     }

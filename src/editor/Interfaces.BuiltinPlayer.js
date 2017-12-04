@@ -19,8 +19,15 @@ var BuiltinPlayerInterface = function (wickEditor) {
 
     var that = this;
 
+    var closeButton;
+
     this.setup = function () {
         this.running = false;
+
+        closeButton = document.getElementById('closeBuiltinPlayerButton')
+        closeButton.addEventListener("mousedown", function (e) {
+            that.stopRunningProject(); 
+        });
 
         window.addEventListener('resize', resize, false);
     }
@@ -48,17 +55,9 @@ var BuiltinPlayerInterface = function (wickEditor) {
         }
 
         that.running = true;
-        //wickPlayer.runProject(JSONProject);
         wickEditor.syncInterfaces();
 
         WickProject.Exporter.bundleProjectToHTML(wickEditor.project, function (result) {
-            /*var myWindow = window.open(
-                "", 
-                wickEditor.project.name, 
-                "width=" + wickEditor.project.width + ",height=" + wickEditor.project.height
-            );
-            myWindow.document.write(result);*/
-            //<iframe id="builtinPlayerViewer"></iframe>
             var oldIframe = document.getElementById('builtinPlayerViewer');
             if(oldIframe) {
                 oldIframe.remove();
@@ -71,28 +70,19 @@ var BuiltinPlayerInterface = function (wickEditor) {
 
             resize();
         });
-
-        //$("#rendererCanvas").focus();
     }
 
     this.stopRunningProject = function () {
         document.getElementById('builtinPlayerViewer').remove();
         hideBuiltinPlayer();
         that.running = false;
-        //wickPlayer.stopRunningProject();
     }
 
-// Internal utils
-
     var showBuiltinPlayer = function () {
-        //document.getElementById("editor").style.display = "none";
         document.getElementById("builtinPlayer").style.display = "block";
-
-        //resize();
     }
 
     var hideBuiltinPlayer = function () {
-        //document.getElementById("editor").style.display = "block";
         document.getElementById("builtinPlayer").style.display = "none";
     }
 
@@ -104,7 +94,6 @@ var BuiltinPlayerInterface = function (wickEditor) {
         title.style.left = ((window.innerWidth -wickEditor.project.width) /2)+'px';
         title.style.top  = ((window.innerHeight-wickEditor.project.height)/2-16-6)+'px';
 
-        var closeButton = document.getElementById('closeBuiltinPlayerButton')
         closeButton.style.left = ((window.innerWidth -wickEditor.project.width) /2+wickEditor.project.width-16)+'px';
         closeButton.style.top  = ((window.innerHeight-wickEditor.project.height)/2-16-4)+'px';
 
@@ -116,12 +105,5 @@ var BuiltinPlayerInterface = function (wickEditor) {
             viewer.style.height = (wickEditor.project.height)+'px';
         }
     }
-
-// Button events
-
-    $("#closeBuiltinPlayerButton").on("click", function (e) {
-        that.stopRunningProject();
-        
-    });
 
 }

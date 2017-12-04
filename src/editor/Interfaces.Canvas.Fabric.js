@@ -66,29 +66,28 @@ var FabricCanvas = function (wickEditor) {
         });
 
         self.canvas.on('mouse:up', function (e) {
-            /*wickEditor.project.clearSelection();
-            var selectWickObjects = self.canvas.getActiveObjects().map(function (fo) {
-                wickEditor.project.selectObject(fo.wickObjReference);
-            });
-            wickEditor.scriptingide.syncWithEditorState();
-            wickEditor.inspector.syncWithEditorState();*/
+            
         });
+
         self.canvas.on('object:selected', function (e) {
             if (!e.e) return;
-            self.applySelectionToWickProject();
+            applySelectionToWickProject();
         });
+
         self.canvas.on('selection:created', function (e) {
             if (!e.e) return;
-            self.applySelectionToWickProject();
+            applySelectionToWickProject();
         });
+
         self.canvas.on('selection:cleared', function (e) {
             if (!e.e) return;
             if(wickEditor.currentTool === wickEditor.tools.dropper) return;
-            self.applySelectionToWickProject();
+            applySelectionToWickProject();
         });
+
         self.canvas.on('selection:updated', function (e) {
             if (!e.e) return;
-            self.applySelectionToWickProject();
+            applySelectionToWickProject();
         });
 
         self.canvas.on('object:modified', function (e) {
@@ -100,7 +99,7 @@ var FabricCanvas = function (wickEditor) {
                 modifiedObjects = e.target._objects;
             }
 
-            self.applyChangesInCanvasToProject(modifiedObjects);
+            applyChangesInCanvasToProject(modifiedObjects);
         });
 
         // Select objects on right click (fabric.js doesn't do this by default >.>)
@@ -148,18 +147,34 @@ var FabricCanvas = function (wickEditor) {
         this.recenterCanvas();
         this.guiElements.update();
 
-        window.addEventListener('resize', this.resize, false);
+        window.addEventListener('resize', function () {
+            var oldWidth = self.canvas.getWidth();
+            var oldHeight = self.canvas.getHeight();
+
+            self.canvas.setWidth ( window.innerWidth  );
+            self.canvas.setHeight( window.innerHeight );
+            self.canvas.calcOffset();
+
+            var diffWidth = self.canvas.getWidth() - oldWidth;
+            var diffHeight = self.canvas.getHeight() - oldHeight;
+
+            var panAdjustX = Math.floor(diffWidth/2);
+            var panAdjustY = Math.floor(diffHeight/2);
+
+            self.canvas.relativePan(new fabric.Point(panAdjustX,panAdjustY));
+            self.canvas.renderAll();
+            wickEditor.canvas.getPaperCanvas().updateViewTransforms();
+            wickEditor.canvas.getPixiCanvas().updateViewTransforms();
+            wickEditor.canvas.getBackdrop().updateViewTransforms();
+        }, false);
 
     }
 
     this.update = function () {
-        // Update cursor
         self.updateCursor();
 
-        // Set drawing mode
         this.canvas.isDrawingMode = false;
 
-        // Disable selection
         if(wickEditor.currentTool instanceof Tools.Cursor ||
            wickEditor.currentTool instanceof Tools.Zoom) {
             self.canvas.selection = true;
@@ -167,129 +182,20 @@ var FabricCanvas = function (wickEditor) {
             self.canvas.selection = false;
         }
 
-        // Update elements in fabric canvas
-        this.wickElements.update();
+        this.wickElements.update(function () {
+            syncSelectionWithWickProject();
+        });
         self.guiElements.update();
 
-        // Render canvas
         this.canvas.renderAll();
     }
 
     this.hide = function () {
         canvasContainer.style.display = 'none';
     }
+
     this.show = function (newActive) {
         canvasContainer.style.display = 'block';
-    }
-
-    // Syncs up fabric state with wickproject state
-    this.applyChangesInCanvasToProject = function (modifiedFabricObjects) {
-
-        var modifiedStates = [];
-        var modifiedWickObjects = [];
-
-        self.canvas.discardActiveObject();
-        self.canvas.renderAll();
-        self.canvas.getActiveObjects().forEach(function (fo) {
-            fo.setCoords();
-        });
-
-        modifiedFabricObjects.forEach(function (fabricObj) {
-            var wickObj = fabricObj.wickObjReference;
-            modifiedWickObjects.push(wickObj);
-            wickEditor.project.selectObject(wickObj);
-
-            var insideSymbolReposition = {
-                x: wickObj.x-wickObj.getAbsolutePosition().x,
-                y: wickObj.y-wickObj.getAbsolutePosition().y
-            };
-
-            var newX = fabricObj.left + insideSymbolReposition.x;
-            var newY = fabricObj.top  + insideSymbolReposition.y;
-
-            modifiedStates.push({
-                x : newX,
-                y : newY,
-                scaleX : fabricObj.scaleX,
-                scaleY : fabricObj.scaleY,
-                flipX : fabricObj.flipX,
-                flipY : fabricObj.flipY,
-                rotation : fabricObj.angle,
-                width : wickObj.isText ? fabricObj.width : undefined,
-                textData : (wickObj.isText ? {
-                    fontFamily: fabricObj.fontFamily,
-                    fontSize: fabricObj.fontSize,
-                    fontStyle: fabricObj.fontStyle,
-                    fontWeight: fabricObj.fontWeight,
-                    lineHeight: fabricObj.lineHeight,
-                    fill: fabricObj.fill,
-                    textAlign: fabricObj.textAlign,
-                    text: fabricObj.text,
-                } : undefined)
-            });
-        });
-
-        wickEditor.actionHandler.doAction('modifyObjects', {
-            objs: modifiedWickObjects,
-            modifiedStates: modifiedStates
-        });
-    }
-
-    this.applySelectionToWickProject = function () {
-        wickEditor.project.clearSelection();
-        var selectWickObjects = self.canvas.getActiveObjects().map(function (fo) {
-            wickEditor.project.selectObject(fo.wickObjReference);
-        });
-        wickEditor.scriptingide.syncWithEditorState();
-        wickEditor.inspector.syncWithEditorState();
-    }
-
-    this.syncSelectionWithWickProject = function () {
-
-        var selectedUUIDs = wickEditor.project.getSelectedWickObjects().map(function (wo) {
-            return wo.uuid;
-        });
-
-        var fabricObjectsToSelect = [];
-        self.canvas._objects.forEach(function (o) {
-            if(o.wickObjReference && selectedUUIDs.includes(o.wickObjReference.uuid)) {
-                fabricObjectsToSelect.push(o)
-            }
-        });
-
-        if(fabricObjectsToSelect.length === 1) {
-            self.canvas.setActiveObject(fabricObjectsToSelect[0]);
-        } else if(fabricObjectsToSelect.length > 1) {
-            var selection = new fabric.ActiveSelection(fabricObjectsToSelect, {
-              canvas: self.canvas
-            });
-            self.canvas.setActiveObject(selection);
-        }
-    }
-
-// Canvas utils
-
-    this.resize = function () {
-
-        var oldWidth = self.canvas.getWidth();
-        var oldHeight = self.canvas.getHeight();
-
-        self.canvas.setWidth ( window.innerWidth  );
-        self.canvas.setHeight( window.innerHeight );
-        self.canvas.calcOffset();
-
-        var diffWidth = self.canvas.getWidth() - oldWidth;
-        var diffHeight = self.canvas.getHeight() - oldHeight;
-
-        var panAdjustX = Math.floor(diffWidth/2);
-        var panAdjustY = Math.floor(diffHeight/2);
-
-        self.canvas.relativePan(new fabric.Point(panAdjustX,panAdjustY));
-        self.canvas.renderAll();
-        wickEditor.canvas.getPaperCanvas().updateViewTransforms();
-        wickEditor.canvas.getPixiCanvas().updateViewTransforms();
-        wickEditor.canvas.getBackdrop().updateViewTransforms();
-
     }
 
     this.resetPan = function () {
@@ -371,19 +277,6 @@ var FabricCanvas = function (wickEditor) {
         wickEditor.canvas.getPaperCanvas().updateViewTransforms();
         wickEditor.canvas.getBackdrop().updateViewTransforms();
         wickEditor.timeline.getElem().updateZoomBox();
-
-        /*var centerX = Math.floor(-(window.innerWidth -wickEditor.project.width)/2 - 33/2 + 254/2);
-        var centerY = Math.floor(-(window.innerHeight-wickEditor.project.height)/2 - 100/2);
-
-        centerX -= (wickEditor.project.width  - wickEditor.project.width *newZoom)/2;
-        centerY -= (wickEditor.project.height - wickEditor.project.height*newZoom)/2;
-
-        self.canvas.setZoom(newZoom);
-        self.canvas.absolutePan(new fabric.Point(centerX,centerY));
-        self.canvas.renderAll();
-        wickEditor.canvas.getPaperCanvas().updateViewTransforms();
-
-        if(!nosync) wickEditor.syncInterfaces();*/
     }
 
     this.getCanvasTransform = function () {
@@ -420,6 +313,92 @@ var FabricCanvas = function (wickEditor) {
         if(!self.objHoveredOver) return null;
         if(!self.objHoveredOver.wickObjReference) return null;
         return self.objHoveredOver.wickObjReference;
+    }
+
+    var applyChangesInCanvasToProject = function (modifiedFabricObjects) {
+
+        var modifiedStates = [];
+        var modifiedWickObjects = [];
+
+        self.canvas.discardActiveObject();
+        self.canvas.renderAll();
+        self.canvas.getActiveObjects().forEach(function (fo) {
+            fo.setCoords();
+        });
+
+        modifiedFabricObjects.forEach(function (fabricObj) {
+            var wickObj = fabricObj.wickObjReference;
+            modifiedWickObjects.push(wickObj);
+            wickEditor.project.selectObject(wickObj);
+
+            var insideSymbolReposition = {
+                x: wickObj.x-wickObj.getAbsolutePosition().x,
+                y: wickObj.y-wickObj.getAbsolutePosition().y
+            };
+
+            var newX = fabricObj.left + insideSymbolReposition.x;
+            var newY = fabricObj.top  + insideSymbolReposition.y;
+
+            modifiedStates.push({
+                x : newX,
+                y : newY,
+                scaleX : fabricObj.scaleX,
+                scaleY : fabricObj.scaleY,
+                flipX : fabricObj.flipX,
+                flipY : fabricObj.flipY,
+                rotation : fabricObj.angle,
+                width : wickObj.isText ? fabricObj.width : undefined,
+                textData : (wickObj.isText ? {
+                    fontFamily: fabricObj.fontFamily,
+                    fontSize: fabricObj.fontSize,
+                    fontStyle: fabricObj.fontStyle,
+                    fontWeight: fabricObj.fontWeight,
+                    lineHeight: fabricObj.lineHeight,
+                    fill: fabricObj.fill,
+                    textAlign: fabricObj.textAlign,
+                    text: fabricObj.text,
+                } : undefined)
+            });
+        });
+
+        wickEditor.actionHandler.doAction('modifyObjects', {
+            objs: modifiedWickObjects,
+            modifiedStates: modifiedStates
+        });
+    }
+
+    var applySelectionToWickProject = function () {
+        wickEditor.project.clearSelection();
+        var selectWickObjects = self.canvas.getActiveObjects().map(function (fo) {
+            wickEditor.project.selectObject(fo.wickObjReference);
+        });
+        wickEditor.scriptingide.syncWithEditorState();
+        wickEditor.inspector.syncWithEditorState();
+    }
+
+    var syncSelectionWithWickProject = function () {
+
+        var selectedUUIDs = wickEditor.project.getSelectedWickObjects().map(function (wo) {
+            return wo.uuid;
+        });
+
+        var fabricObjectsToSelect = [];
+        self.canvas._objects.forEach(function (o) {
+            if(o.wickObjReference && selectedUUIDs.includes(o.wickObjReference.uuid)) {
+                fabricObjectsToSelect.push(o)
+            }
+        });
+
+        if(fabricObjectsToSelect.length === 1) {
+            self.canvas.setActiveObject(fabricObjectsToSelect[0]);
+        } else if(fabricObjectsToSelect.length > 1) {
+            var selection = new fabric.ActiveSelection(fabricObjectsToSelect, {
+              canvas: self.canvas
+            });
+            self.canvas.setActiveObject(selection);
+        }
+
+        self.canvas.renderAll();
     }
     
 }

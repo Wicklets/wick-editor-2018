@@ -57,8 +57,6 @@ var WickEditor = function () {
         return interface;
     }
 
-    //this.thumbnailRenderer = registerInterface(new ThumbnailRendererInterface(this));
-    //this.gifRenderer = registerInterface(new GIFRendererInterface(this));
     this.builtinplayer = registerInterface(new BuiltinPlayerInterface(this));
     this.scriptingide = registerInterface(new ScriptingIDEInterface(this));
     this.timeline = registerInterface(new TimelineInterface(this));
@@ -67,12 +65,9 @@ var WickEditor = function () {
     this.inspector = registerInterface(new InspectorInterface(this));
     this.rightclickmenu = registerInterface(new RightClickMenuInterface(this));
     this.canvas = registerInterface(new CanvasInterface(this));
-    //this.paper = registerInterface(new PaperInterface(this));
-    //this.fabric = registerInterface(new FabricInterface(this));
     this.menubar = registerInterface(new MenuBarInterface(this));
     this.breadcrumbs = registerInterface(new BreadcrumbsInterface(this));
     this.alertbox = registerInterface(new AlertBoxInterface(this));
-    //this.previewplayer = registerInterface(new PreviewPlayer(this));
     this.cursorIcon = registerInterface(new CursorIconInterface(this));
     this.colorPicker = registerInterface(new ColorPickerInterface(this));
     this.editorSettings = registerInterface(new EditorSettings(this));

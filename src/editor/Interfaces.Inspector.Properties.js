@@ -452,44 +452,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
-    /*properties.push(new InspectorInterface.CheckboxInput({
-        title: 'Save State',
-        isActiveFn: function () {
-            return selectionInfo.type === 'frame' && selectionInfo.numObjects === 1;
-        },
-        getValueFn: function () {
-            return selectionInfo.object.alwaysSaveState;
-        }, 
-        onChangeFn: function (val) {
-            selectionInfo.object.alwaysSaveState = val;
-        }
-    }));*/
-
-    /*properties.push(new InspectorInterface.SelectInput({
-        title: 'Type',
-        options: ['Linear', 'Quadratic', 'Exponential'],
-        isActiveFn: function () {
-            return selectionInfo.type === 'frame' 
-                && selectionInfo.numObjects === 1 
-                && selectionInfo.object.getCurrentTween();
-        },
-        getValueFn: function () {
-            return selectionInfo.object.getCurrentTween().tweenType;
-        }, 
-        onChangeFn: function (val) {
-            var tween = selectionInfo.object.getCurrentTween();
-
-            tween.tweenType = val;
-            if(val === 'Linear') {
-                tween.tweenDir = 'None';
-            }
-            if(val !== 'Linear' && tween.tweenDir === 'None') {
-                tween.tweenDir = "In";
-            }
-            wickEditor.syncInterfaces();
-        }
-    }));*/
-
     properties.push(new InspectorInterface.StringInput({
         title: 'Rotations',
         isActiveFn: function () {
@@ -641,19 +603,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
-    /*properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Close Path",
-        icon: "./resources/ellipse.png",
-        colorClass: 'all-paths',
-        isActiveFn: function () {
-            return selectionInfo.dataType === 'path' 
-                && selectionInfo.numObjects === 1;
-        },
-        buttonAction: function () {
-            
-        }
-    }));*/
-
     properties.push(new InspectorInterface.Divider());
 
     properties.push(new InspectorInterface.InspectorButton({
@@ -720,32 +669,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             wickEditor.guiActionHandler.doAction('doBooleanOperation', {boolFnName:'exclude'});
         }
     }));*/
-
-    /* properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Exclude Paths",
-        icon: "./resources/ellipse.png",
-        colorClass: 'all-paths',
-        isActiveFn: function () {
-            return selectionInfo.numObjects > 1 
-                && selectionInfo.special.allPaths;
-        },
-        buttonAction: function () {
-            
-        }
-    })); 
-
-    properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Divide Paths",
-        icon: "./resources/ellipse.png",
-        colorClass: 'all-paths',
-        isActiveFn: function () {
-            return selectionInfo.numObjects > 1 
-                && selectionInfo.special.allPaths;
-        },
-        buttonAction: function () {
-            
-        }
-    })); */
 
     properties.push(new InspectorInterface.Divider());
 

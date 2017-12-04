@@ -31,9 +31,6 @@ var CursorIconInterface = function (wickEditor) {
 
             cursorIconDiv.style.top = e.y + imgOffset.y + 'px';
             cursorIconDiv.style.left = e.x + imgOffset.x + 'px';
-            //console.log(e)
-            //console.log(cursorIconDiv)
-            //console.log(e)
         });
     }
 

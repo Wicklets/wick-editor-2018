@@ -35,10 +35,6 @@ var InspectorInterface = function (wickEditor) {
     }
     var selectionInfo = this.selectionInfo;
 
-/*********************************************
-    API
-*********************************************/
-
     this.setup = function () {
         var inspectorDiv = document.getElementById('inspectorGUI')
         selectionTitleBar = buildDiv('inspector-title-bar', inspectorDiv);
@@ -168,10 +164,6 @@ var InspectorInterface = function (wickEditor) {
         });
         return buttons;
     }
-
-/*********************************************
-    Selection type title
-*********************************************/
 
     var updateSelectonTypeTitle = function () {
 

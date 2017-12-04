@@ -222,14 +222,6 @@ var ScriptingIDEInterface = function (wickEditor) {
                 var script = objectBeingScripted.wickScript;
                 if(that.aceEditor.getValue() !== objectBeingScripted.wickScript)
                     that.aceEditor.setValue(script, -1);
-
-                /*document.getElementById('scriptEditorObjectName').innerHTML = objectBeingScripted.identifier;
-
-                if(objectBeingScripted instanceof WickFrame) {
-                    document.getElementById('scriptEditorObjectThumbnail').src = objectBeingScripted.thumbnail;
-                } else {
-                    document.getElementById('scriptEditorObjectThumbnail').src = objectBeingScripted.fabricObjectReference._cacheCanvas.toDataURL(); 
-                }*/
             } else {
                 $("#noSelectionDiv").css('display', 'block');
                 $("#scriptObjectDiv").css('display', 'none');
