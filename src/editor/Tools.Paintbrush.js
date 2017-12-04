@@ -73,6 +73,8 @@ Tools.Paintbrush = function (wickEditor) {
     var lastPoint;
     var lastTop;
     var lastBottom;
+    var totalDelta;
+    var lastPressure;
 
     var first;
 
@@ -90,14 +92,31 @@ Tools.Paintbrush = function (wickEditor) {
         }
         if(event.delta.x === 0 && event.delta.y === 0) return;
 
+        if(!totalDelta) {
+            totalDelta = event.delta;
+        } else {
+            totalDelta.x += event.delta.x;
+            totalDelta.y += event.delta.y;
+        }
+
+        if (totalDelta.length < 6) {
+            return;
+        }
+        totalDelta.x = 0;
+        totalDelta.y = 0;
+
         var penPressure = wickEditor.inputHandler.getPenPressure();
-        var t = wickEditor.settings.brushThickness*(penPressure+0.5);
+        if(!lastPressure) lastPressure = penPressure;
+        var t = wickEditor.settings.brushThickness*(penPressure);
+        var tLast = wickEditor.settings.brushThickness*(lastPressure);
 
         //path.add(event.point);
 
         //var dirLine = new paper.Path();
         //dirLine.strokeColor = 'red';
         var step = event.delta.divide(event.delta.length).multiply(t/2);
+        var stepLast = event.delta.divide(event.delta.length).multiply(tLast/2);
+        stepLast.angle = stepLast.angle + 90;
         step.angle = step.angle + 90;
 
         var top = event.point.add(step);
@@ -118,13 +137,32 @@ Tools.Paintbrush = function (wickEditor) {
             strokeRect.fillColor = wickEditor.settings.fillColor;
             strokeRect.add(top);
             strokeRect.add(bottom);
-            strokeRect.add(lastBottom);
-            strokeRect.add(lastTop);
+            strokeRect.add(lastPoint.subtract(stepLast));
+            strokeRect.add(lastPoint.add(stepLast));
             strokeRect.closed = true;
+
+            var midA = event.middlePoint.subtract(event.point);
+            var midB = event.middlePoint.subtract(event.point).rotate(90);
+
+            var d = lastDelta.angle-event.delta.angle
+            if(d > 300) d -= 360;
+            if(d < -300) d += 360;
+            if(d > 45)  d=45;
+            if(d < -45) d=-45;
+            var a = (d)*0.0045;
+            midA = midA.add(event.delta.rotate(90).multiply(a));
+
+            strokeRect.segments[0].handleIn.x = midA.x
+            strokeRect.segments[0].handleIn.y = midA.y
+            strokeRect.segments[1].handleOut.x = midA.x
+            strokeRect.segments[1].handleOut.y = midA.y
         }
 
         lastTop = top;
         lastBottom = bottom;
+        lastPoint = event.point;
+        lastDelta = event.delta
+        lastPressure = penPressure
     }
 
     this.paperTool.onMouseUp = function (event) {
