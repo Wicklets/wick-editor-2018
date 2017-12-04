@@ -31,8 +31,39 @@ var LibraryInterface = function (wickEditor) {
             wickEditor.project.clearSelection();
             //wickEditor.syncInterfaces();
         });
+                $("#tree").mousedown(function() {
+            wickEditor.project.clearSelection();
+            //wickEditor.syncInterfaces();
+        });
+
+        // $("#tree").fancytree({
+        //     extensions: ["filter"],
+        //     filter: { 
+        //         counter: false;,
+        //         mode: "hide"
+        //     }
+        //     selectMode: 1,
+        //     activate: function(event, data) {
+        //         selectedNode = data.node;
+        //     },
+        //     select: function(event, data) {
+        //     },
+        //     dblclick: function(event, data) {
+        //     },
+        //     /*keydown: function(event, data) {
+        //         if( event.which === 32 ) {
+        //             data.node.toggleSelected();
+        //             return false;
+        //         }
+        //     }*/
+        // });
 
         $("#tree").fancytree({
+            extensions: ["filter"],
+            filter: { 
+                counter: false, 
+                mode: "hide",
+            },
             //checkbox: true,
             selectMode: 1,
             //source: SOURCE,
