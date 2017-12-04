@@ -772,5 +772,6 @@ hr.hotkeyhr {
     padding-left:20px;
     text-overflow: ellipsis; 
     display: block;
+    border-radius: 2px 2px 0px 0px;
 
 }
