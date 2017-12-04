@@ -762,3 +762,9 @@ hr.hotkeyhr {
 #wick-editor-version:hover {
     color: gray;
 }
+
+#treeFilterInput {
+    background-color: #A2A2A2;
+    color: #4E4D4D;
+    width: 100%;
+}

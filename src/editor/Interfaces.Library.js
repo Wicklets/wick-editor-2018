@@ -31,32 +31,11 @@ var LibraryInterface = function (wickEditor) {
             wickEditor.project.clearSelection();
             //wickEditor.syncInterfaces();
         });
-                $("#tree").mousedown(function() {
+        
+        $("#tree").mousedown(function() {
             wickEditor.project.clearSelection();
             //wickEditor.syncInterfaces();
         });
-
-        // $("#tree").fancytree({
-        //     extensions: ["filter"],
-        //     filter: { 
-        //         counter: false;,
-        //         mode: "hide"
-        //     }
-        //     selectMode: 1,
-        //     activate: function(event, data) {
-        //         selectedNode = data.node;
-        //     },
-        //     select: function(event, data) {
-        //     },
-        //     dblclick: function(event, data) {
-        //     },
-        //     /*keydown: function(event, data) {
-        //         if( event.which === 32 ) {
-        //             data.node.toggleSelected();
-        //             return false;
-        //         }
-        //     }*/
-        // });
 
         $("#tree").fancytree({
             extensions: ["filter"],
@@ -86,6 +65,13 @@ var LibraryInterface = function (wickEditor) {
                     return false;
                 }
             }*/
+        });
+
+        // Setup Filter
+        treeFilterInput = document.getElementById('treeFilterInput'); 
+
+        treeFilterInput.addEventListener('change', function () {
+              $("#tree").fancytree("getTree").filterNodes(treeFilterInput.value); 
         });
 
         draggedAssetElem = document.createElement('div');
