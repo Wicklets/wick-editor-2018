@@ -244,6 +244,10 @@ body {
     font-style: Bold; 
 }
 
+.soundLayer {
+    background-color: #47ad8a;
+}
+
 .layer-name {
     cursor: text;
     width: 100px;
@@ -272,6 +276,10 @@ body {
     border-width: 1px;
 /*    box-shadow: 0 0 10px 3px rgba(255,255,255,0.18);*/
 
+}
+
+.active-soundLayer {
+    background-color: #60e5b6;
 }
 
 .layer-lock-button {

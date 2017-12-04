@@ -121,8 +121,14 @@ TimelineInterface.Layer = function (wickEditor, timeline) {
         var layerDiv = this.elem;
         if (layerIsSelected === true) {
             layerDiv.className = 'layer active-layer';
+            if (this.wickLayer.isSoundLayer) {
+                layerDiv.className += ' active-soundLayer';
+            }
         } else {
             layerDiv.className = 'layer';
+            if (this.wickLayer.isSoundLayer) {
+                layerDiv.className += ' soundLayer';
+            }
         }
     }
 }

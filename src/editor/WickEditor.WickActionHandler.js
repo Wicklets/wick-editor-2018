@@ -1151,8 +1151,6 @@ var WickActionHandler = function (wickEditor) {
             done(args);
         },
         function (args) {
-            // args.frame.audioAssetUUID = args.oldAssetUUID;
-
             if (args.addFrameAction) args.addFrameAction.undoAction();
             if (args.addLayerAction) args.addLayerAction.undoAction();
 
