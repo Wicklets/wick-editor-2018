@@ -24,7 +24,7 @@ Tools.Zoom = function (wickEditor) {
     var startX,startY;
 
     this.getCursorImage = function () {
-        return "url('resources/zoom-cursor.png') 5 5,default";
+        return "zoom-in";
     }
 
     this.getToolbarIcon = function () {
