@@ -53,7 +53,7 @@ Tools.FillBucket = function (wickEditor) {
     }
 
     this.paperTool.onMouseDown = function (event) {
-        /*GIFRenderer.renderProjectAsPNG(function (dataURL) {
+        GIFRenderer.renderProjectAsPNG(function (dataURL) {
             var img = document.createElement('img');
             img.onload = function () {
                 var canvas = document.createElement('canvas');
@@ -68,7 +68,9 @@ Tools.FillBucket = function (wickEditor) {
                 win.document.body.innerHTML = '<div><img src= '+canvas.toDataURL()+'></div>';
             }
             img.src = dataURL;
-        });*/
+        });
+
+        return;
 
         if(wickEditor.currentTool instanceof Tools.FillBucket) {
             var hitOptions = {

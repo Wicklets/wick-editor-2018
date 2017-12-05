@@ -99,7 +99,7 @@ Tools.Paintbrush = function (wickEditor) {
             totalDelta.y += event.delta.y;
         }
 
-        if (totalDelta.length < 10) {
+        if (totalDelta.length < 1) {
             return;
         }
         totalDelta.x = 0;
@@ -128,13 +128,13 @@ Tools.Paintbrush = function (wickEditor) {
             center: event.point,
             radius: t/2,
         });
-        circle.strokeColor = 'green';
-        //circle.fillColor = wickEditor.settings.fillColor
+        //circle.strokeColor = 'green';
+        circle.fillColor = wickEditor.settings.fillColor
 
         if(lastBottom) {
             var strokeRect = new paper.Path();
-            strokeRect.strokeColor = 'orange';
-            //strokeRect.fillColor = wickEditor.settings.fillColor;
+            //strokeRect.strokeColor = 'orange';
+            strokeRect.fillColor = wickEditor.settings.fillColor;
             strokeRect.add(top);
             strokeRect.add(bottom);
             strokeRect.add(lastPoint.subtract(stepLast));
@@ -152,10 +152,10 @@ Tools.Paintbrush = function (wickEditor) {
             var a = (d)*0.0045;
             midA = midA.add(event.delta.rotate(90).multiply(a));
 
-            strokeRect.segments[0].handleIn.x = midA.x
+            /*strokeRect.segments[0].handleIn.x = midA.x
             strokeRect.segments[0].handleIn.y = midA.y
             strokeRect.segments[1].handleOut.x = midA.x
-            strokeRect.segments[1].handleOut.y = midA.y
+            strokeRect.segments[1].handleOut.y = midA.y*/
         }
 
         lastTop = top;
@@ -169,6 +169,25 @@ Tools.Paintbrush = function (wickEditor) {
         lastBottom = null;
         lastTop = null;
         lastPoint = null;
+
+        var img = new Image();
+        img.onload = function () {
+            potraceImage(img, function (svgString) {
+                var pathWickObject = WickObject.createPathObject(svgString);
+                pathWickObject.x = 0;
+                pathWickObject.y = 0;
+                pathWickObject.width = 1;
+                pathWickObject.height = 1;
+
+                wickEditor.canvas.getPaperCanvas().pathRoutines.refreshPathData(pathWickObject);
+
+                wickEditor.actionHandler.doAction('addObjects', {
+                    wickObjects: [pathWickObject],
+                    dontSelectObjects: true,
+                });
+            }, wickEditor.settings.fillColor);
+        }
+        img.src = paper.view._element.toDataURL();
     }
 
 }
