@@ -143,8 +143,7 @@ Tools.FillBucket = function (wickEditor) {
                                 pathWickObject.height = 1;
 
                                 wickEditor.canvas.getPaperCanvas().pathRoutines.refreshPathData(pathWickObject);
-                                PaperHoleFinder.expandHole(pathWickObject.paper.children[0]);
-
+                                
                                 pathWickObject.x = tempPaperForPosition.position.x;
                                 pathWickObject.y = tempPaperForPosition.position.y;
 
@@ -152,6 +151,15 @@ Tools.FillBucket = function (wickEditor) {
                                     wickObjects: [pathWickObject],
                                     dontSelectObjects: true,
                                 });
+                                PaperHoleFinder.expandHole(pathWickObject.paper);
+                                wickEditor.canvas.getPaperCanvas().pathRoutines.refreshSVGWickObject(pathWickObject.paper.children[0]);
+                                wickEditor.actionHandler.doAction('moveObjectToZIndex', {
+                                    objs:[pathWickObject],
+                                    newZIndex: 0,
+                                    dontAddToStack: true
+                                });
+                                wickEditor.syncInterfaces();
+
                             }, wickEditor.settings.fillColor);
                         }
                         final.src = canvas.toDataURL();
