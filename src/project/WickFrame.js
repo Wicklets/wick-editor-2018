@@ -77,35 +77,35 @@ WickFrame.prototype.tick = function () {
     }
     
     if(this._wasClicked) {
-        (wickPlayer || wickEditor).project.runScript(this, 'mousedown');
+        (wickPlayer || wickEditor).project.runScript(this, 'mousePressed');
         this._wasClicked = false;
     }
 
     if(this._wasHoveredOver) {
-        (wickPlayer || wickEditor).project.runScript(this, 'mouseover');
+        (wickPlayer || wickEditor).project.runScript(this, 'mouseHover');
         this._wasHoveredOver = false;
     }
 
     if(this._mouseJustLeft) {
-        (wickPlayer || wickEditor).project.runScript(this, 'mouseout');
+        (wickPlayer || wickEditor).project.runScript(this, 'mouseLeave');
         this._mouseJustLeft = false;
     }
 
     if(this._wasClickedOff) {
-        (wickPlayer || wickEditor).project.runScript(this, 'mouseup');
+        (wickPlayer || wickEditor).project.runScript(this, 'mouseReleased');
         this._wasClickedOff = false;
     }
 
     wickPlayer.inputHandler.getAllKeysJustReleased().forEach(function (key) {
-        (wickPlayer || wickEditor).project.runScript(self, 'keyreleased', key);
+        (wickPlayer || wickEditor).project.runScript(self, 'keyRelease', key);
     });
 
     wickPlayer.inputHandler.getAllKeysJustPressed().forEach(function (key) {
-        (wickPlayer || wickEditor).project.runScript(self, 'keypressed', key);
+        (wickPlayer || wickEditor).project.runScript(self, 'keyPressed', key);
     });
 
     wickPlayer.inputHandler.getAllKeysDown().forEach(function (key) {
-        (wickPlayer || wickEditor).project.runScript(self, 'keydown', key);
+        (wickPlayer || wickEditor).project.runScript(self, 'keyDown', key);
     });
 
     this.wickObjects.forEach(function (wickObject) {

@@ -117,8 +117,8 @@ var GIFRenderer = (function () {
         wickEditor.project.currentObject = wickEditor.project.rootObject;
         self.renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects());
         var canvas = self.canvasContainer.children[0];
-        callback(dataURItoBlob(canvas.toDataURL()))
-        //callback(canvas.toDataURL())
+        //callback(dataURItoBlob(canvas.toDataURL()))
+        callback(canvas.toDataURL())
     }
 
     return self;

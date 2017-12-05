@@ -53,23 +53,7 @@ Tools.FillBucket = function (wickEditor) {
     }
 
     this.paperTool.onMouseDown = function (event) {
-        /*GIFRenderer.renderProjectAsPNG(function (dataURL) {
-            var img = document.createElement('img');
-            img.onload = function () {
-                var canvas = document.createElement('canvas');
-                var context = canvas.getContext("2d");
-                canvas.width = wickEditor.project.width;
-                canvas.height = wickEditor.project.height;
-                context.drawImage(img, 0, 0);
-                context.fillStyle = "rgba(255,0,0,1)";
-                context.fillFlood(wickEditor.inputHandler.mouse.x, wickEditor.inputHandler.mouse.y);
-                var win = window.open('', 'Title', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width='+wickEditor.project.width+', height='+wickEditor.project.height+', top=100, left=100');
-
-                win.document.body.innerHTML = '<div><img src= '+canvas.toDataURL()+'></div>';
-            }
-            img.src = dataURL;
-        });*/
-
+        
         if(wickEditor.currentTool instanceof Tools.FillBucket) {
             var hitOptions = {
                 fill: true,
@@ -79,7 +63,7 @@ Tools.FillBucket = function (wickEditor) {
             hitResult = paper.project.hitTest(event.point, hitOptions);
             if(!hitResult) {
                 //console.log(PaperHoleFinder.getHoleShapeAtPosition(paper.project, event.point));
-                var hole = PaperHoleFinder.getHoleShapeAtPosition(paper.project, event.point);
+                /*var hole = PaperHoleFinder.getHoleShapeAtPosition(paper.project, event.point);
                 if(hole) {
                     PaperHoleFinder.expandHole(hole);
                     hole.fillColor = wickEditor.settings.fillColor;
@@ -102,7 +86,78 @@ Tools.FillBucket = function (wickEditor) {
                         sendToBack: true,
                         dontSelectObjects: true
                     });
-                }
+                }*/
+
+                GIFRenderer.renderProjectAsPNG(function (dataURL) {
+                    var img = document.createElement('img');
+                    img.onload = function () {
+                        var canvas = document.createElement('canvas');
+                        var context = canvas.getContext("2d");
+                        canvas.width = wickEditor.project.width;
+                        canvas.height = wickEditor.project.height;
+                        var mouseCanvasSpace = wickEditor.canvas.getFabricCanvas().screenToCanvasSpace(wickEditor.inputHandler.mouse.x, wickEditor.inputHandler.mouse.y)
+                        context.drawImage(img, 0, 0);
+                        context.fillStyle = "rgba(123,123,123,1)";
+                        context.fillFlood(mouseCanvasSpace.x, mouseCanvasSpace.y, 10);
+                        //var win = window.open('', 'Title', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width='+wickEditor.project.width+', height='+wickEditor.project.height+', top=100, left=100');
+
+                        //win.document.body.innerHTML = '<div><img src= '+canvas.toDataURL()+'></div>';
+
+                        var imageData = context.getImageData(0, 0, img.width, img.height);
+                        var data = imageData.data;
+
+                        for(var i = 0; i < data.length; i += 4) {
+                          if(data[i] !== 123) {
+                            data[i] = 0;
+                            data[i+1] = 0;
+                            data[i+2] = 0;
+                            data[i+3] = 0;
+                          } else {
+                            data[i] = 255;
+                            data[i+1] = 255;
+                            data[i+2] = 255;
+                            data[i+3] = 255;
+                          }
+                        }
+
+                        // overwrite original image
+                        context.putImageData(imageData, 0, 0);
+
+                        var final = new Image();
+                        final.onload = function () {
+                            //var win = window.open('', 'Title', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width='+wickEditor.project.width+', height='+wickEditor.project.height+', top=100, left=100');
+
+                            //win.document.body.innerHTML = '<div><img src= '+final.src+'></div>';
+
+
+                            potraceImage(final, function (svgString) {
+                                var xmlString = svgString
+                                  , parser = new DOMParser()
+                                  , doc = parser.parseFromString(xmlString, "text/xml");
+                                var tempPaperForPosition = paper.project.importSVG(doc, {insert:false});
+
+                                var pathWickObject = WickObject.createPathObject(svgString);
+                                pathWickObject.x = 0;
+                                pathWickObject.y = 0;
+                                pathWickObject.width = 1;
+                                pathWickObject.height = 1;
+
+                                wickEditor.canvas.getPaperCanvas().pathRoutines.refreshPathData(pathWickObject);
+                                PaperHoleFinder.expandHole(pathWickObject.paper.children[0]);
+
+                                pathWickObject.x = tempPaperForPosition.position.x;
+                                pathWickObject.y = tempPaperForPosition.position.y;
+
+                                wickEditor.actionHandler.doAction('addObjects', {
+                                    wickObjects: [pathWickObject],
+                                    dontSelectObjects: true,
+                                });
+                            }, wickEditor.settings.fillColor);
+                        }
+                        final.src = canvas.toDataURL();
+                    }
+                    img.src = dataURL;
+                });
             } else {
                 if(hitResult.type === 'fill') {
                     wickEditor.canvas.getPaperCanvas().pathRoutines.setFillColor([event.item.wick], wickEditor.settings.fillColor);
