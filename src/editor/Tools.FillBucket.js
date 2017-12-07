@@ -88,14 +88,14 @@ Tools.FillBucket = function (wickEditor) {
                     });
                 }*/
 
-                GIFRenderer.renderProjectAsPNG(function (dataURL) {
+                GIFRenderer.getCanvasAsDataURL(function (dataURL) {
                     var img = document.createElement('img');
                     img.onload = function () {
                         var canvas = document.createElement('canvas');
                         var context = canvas.getContext("2d");
-                        canvas.width = wickEditor.project.width;
-                        canvas.height = wickEditor.project.height;
-                        var mouseCanvasSpace = wickEditor.canvas.getFabricCanvas().screenToCanvasSpace(wickEditor.inputHandler.mouse.x, wickEditor.inputHandler.mouse.y)
+                        canvas.width = wickEditor.project.width*2;
+                        canvas.height = wickEditor.project.height*2;
+                        var mouseCanvasSpace = wickEditor.canvas.getFabricCanvas().screenToCanvasSpace(wickEditor.inputHandler.mouse.x + wickEditor.project.width/2, wickEditor.inputHandler.mouse.y + wickEditor.project.height/2)
                         context.drawImage(img, 0, 0);
                         context.fillStyle = "rgba(123,123,123,1)";
                         context.fillFlood(mouseCanvasSpace.x, mouseCanvasSpace.y, 10);
@@ -144,8 +144,8 @@ Tools.FillBucket = function (wickEditor) {
 
                                 wickEditor.canvas.getPaperCanvas().pathRoutines.refreshPathData(pathWickObject);
                                 
-                                pathWickObject.x = tempPaperForPosition.position.x;
-                                pathWickObject.y = tempPaperForPosition.position.y;
+                                pathWickObject.x = tempPaperForPosition.position.x - wickEditor.project.width/2;
+                                pathWickObject.y = tempPaperForPosition.position.y - wickEditor.project.height/2;
 
                                 wickEditor.actionHandler.doAction('addObjects', {
                                     wickObjects: [pathWickObject],

@@ -83,9 +83,14 @@ var InspectorInterface = function (wickEditor) {
         selectionInfo.uuids = wickEditor.project.getSelectedObjectsUUIDs();
         selectionInfo.special = {};
 
-        if(!selectionInfo.object) {
+        // Show current frame if nothing is selected
+        if(selectionInfo.numObjects === 0) {
             selectionInfo.object = wickEditor.project.getCurrentFrame();
-            selectionInfo.numObjects = 1;
+            if(!selectionInfo.object) {
+                selectionInfo.numObjects = 0;
+            } else {
+                selectionInfo.numObjects = 1;
+            }
         }
 
         if(specialMode) {

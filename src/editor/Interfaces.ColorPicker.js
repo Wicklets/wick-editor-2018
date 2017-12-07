@@ -48,11 +48,11 @@ var ColorPickerInterface = function (wickEditor) {
         spectrumContainer = $("#"+colorPicker.id);
         spectrumContainer.spectrum({
             flat: true,
-            color: "#ECC",
+            //color: "rgba(0,0,0,1.0)",
             showInput: true,
             showButtons: false,
             className: "full-spectrum",
-            //showInitial: true,
+            showInitial: true,
             showPalette: true,
             showSelectionPalette: true,
             maxSelectionSize: 10,
@@ -60,7 +60,7 @@ var ColorPickerInterface = function (wickEditor) {
             localStorageKey: "spectrum.demo",
             showAlpha: true,
             maxSelectionSize: 6,
-            move: function (color) { 
+            move: function (color) {
                 currentColor = color.toString();
             },
             show: function () {
@@ -72,8 +72,18 @@ var ColorPickerInterface = function (wickEditor) {
                 currentColor = color.toString();
             },
             palette: [
-                ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)","rgb(204, 204, 204)", "rgb(217, 217, 217)","rgb(255, 255, 255)"],
-                ["rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)","rgb(0, 181, 255)", "rgb(181, 0, 255)"], 
+                ["rgba(0,0,0,1)",   
+                 "rgba(67,67,67,1)",  
+                 "rgba(102,102,102,1)", 
+                 "rgba(204,204,204,1)", 
+                 "rgba(217,217,217,1)", 
+                 "rgba(255,255,255,1)"],
+                ["rgba(255,0,0,1,1)", 
+                 "rgba(255,153,0,1,1)", 
+                 "rgba(255,255,0,1,1)",    
+                 "rgba(0,255,0,1,1)",      
+                 "rgba(0,181,255,1,1)",    
+                 "rgba(181,0,255,1)"], 
                 ["rgba(0,0,0,0)"], 
             ]
         });

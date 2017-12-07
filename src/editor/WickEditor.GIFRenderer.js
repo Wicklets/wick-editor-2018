@@ -15,6 +15,9 @@
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
     
+
+/* move this to Interfaces.Canvas and call it ImageRenderer or something */
+
 var GIFRenderer = (function () {
 
 	var self = this;
@@ -117,7 +120,23 @@ var GIFRenderer = (function () {
         wickEditor.project.currentObject = wickEditor.project.rootObject;
         self.renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects());
         var canvas = self.canvasContainer.children[0];
-        //callback(dataURItoBlob(canvas.toDataURL()))
+        callback(dataURItoBlob(canvas.toDataURL()))
+        //callback(canvas.toDataURL())
+    }
+
+    self.getCanvasAsDataURL = function (callback) {
+        if(!self.canvasContainer) {
+            // we have to use the renderer from the preview player because pixi gets mad if theres >1 renderer
+            // later just make a big global renderer owned by the editor that everybody can use
+            var otherRenderer = wickEditor.canvas.getPixiCanvas().getRenderer();
+            self.renderer = otherRenderer.renderer;
+            self.canvasContainer = otherRenderer.canvasContainer;
+        }
+
+        wickEditor.project.currentObject = wickEditor.project.rootObject;
+        self.renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 2);
+        var canvas = self.canvasContainer.children[0];
+        
         callback(canvas.toDataURL())
     }
 
