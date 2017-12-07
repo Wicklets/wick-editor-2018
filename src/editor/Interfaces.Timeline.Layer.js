@@ -90,8 +90,12 @@ TimelineInterface.Layer = function (wickEditor, timeline) {
 
         //hideLayerButton
 
-        this.elem.addEventListener('mousedown', function (e) {
-            if(e.layerX < 30) return;
+        this.elem.gnurl = document.createElement('div');
+        this.elem.gnurl.className = 'layer-gnurl'
+        this.elem.appendChild(this.elem.gnurl)
+
+        this.elem.gnurl.addEventListener('mousedown', function (e) {
+            //if(e.layerX < 30) return;
             wickEditor.actionHandler.doAction('movePlayhead', {
                 obj: wickEditor.project.currentObject,
                 newPlayheadPosition: wickEditor.project.currentObject.playheadPosition,
