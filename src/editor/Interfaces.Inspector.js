@@ -83,6 +83,11 @@ var InspectorInterface = function (wickEditor) {
         selectionInfo.uuids = wickEditor.project.getSelectedObjectsUUIDs();
         selectionInfo.special = {};
 
+        if(!selectionInfo.object) {
+            selectionInfo.object = wickEditor.project.getCurrentFrame();
+            selectionInfo.numObjects = 1;
+        }
+
         if(specialMode) {
             selectionInfo.type = specialMode;
             selectionInfo.dataType = null;

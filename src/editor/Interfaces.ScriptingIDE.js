@@ -186,7 +186,7 @@ var ScriptingIDEInterface = function (wickEditor) {
     }
 
     this.syncWithEditorState = function () {
-        objectBeingScripted = wickEditor.project.getSelectedObject();
+        objectBeingScripted = wickEditor.project.getSelectedObject() || wickEditor.project.getCurrentFrame();
 
         updateHeaderText()
 
