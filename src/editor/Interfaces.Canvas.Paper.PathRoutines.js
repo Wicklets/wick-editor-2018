@@ -289,7 +289,6 @@ var PathRoutines = function (paperInterface, wickEditor) {
             pathToModify = grandparent;
         }
 
-        console.log(pathToModify)
         var wickObject = pathToModify.wick;
         var parentAbsPos = wickObject.parentObject ? wickObject.parentObject.getAbsolutePosition() : {x:0,y:0};
 

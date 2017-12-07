@@ -80,10 +80,10 @@ var WickEditor = function () {
     this.tools = {
         "cursor"           : new Tools.Cursor(this),
         "pathCursor"       : new Tools.PathCursor(this),
-        "paintbrush"       : new Tools.Paintbrush(this),
+        //"paintbrush"       : new Tools.Paintbrush(this),
         "pencil"           : new Tools.Pencil(this),
         //"eraser"           : new Tools.Eraser(this),
-        "fillbucket"       : new Tools.FillBucket(this),
+        //"fillbucket"       : new Tools.FillBucket(this),
         "rectangle"        : new Tools.Rectangle(this),
         "ellipse"          : new Tools.Ellipse(this),
         "line"             : new Tools.Line(this),

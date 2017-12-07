@@ -51,6 +51,11 @@ var PixiCanvas = function (wickEditor) {
             var onionSkinObjects = wickEditor.project.currentObject.getNearbyObjects(1,1);
             inactiveObjects = inactiveObjects.concat(onionSkinObjects)
         }
+
+        inactiveObjects = inactiveObjects.concat(wickEditor.project.currentObject.getAllActiveChildObjects().filter(function (c) {
+            return c.parentFrame.parentLayer.locked;
+        }));
+
         pixiRenderer.renderWickObjects(wickEditor.project, inactiveObjects, 2);
     }
 

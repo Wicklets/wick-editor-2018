@@ -139,11 +139,11 @@ var PaperCanvas = function (wickEditor) {
                 if(wickObject.isPath) {
                     var layer = wickObject.parentFrame.parentLayer;
                     if(layer.locked || layer.hidden) return;
-                    
+
                     self.pathRoutines.refreshPathData(wickObject);
                     self.pathRoutines.regenPaperJSState(wickObject);
                     paper.project.activeLayer.addChild(wickObject.paper);
-                    
+
                     var absPos = wickObject.getAbsolutePosition();
                     wickObject.paper.position.x = absPos.x;
                     wickObject.paper.position.y = absPos.y;

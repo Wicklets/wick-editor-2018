@@ -7,17 +7,17 @@
 			"tutorialPath" : null,
 			"tags": ["games"]
 		}, {
-			"name" : "Well-Dressed Ghost",
-			"projectPath" : "WellDressedGhost.json",
-			"thumbPath" : "WellDressedGhost.png",
+			"name" : "Pig",
+			"projectPath" : "Pig.json",
+			"thumbPath" : "Pig.png",
 			"tutorialPath" : null,
 			"tags": ["games"]
 		}, {
-			"name" : "DJ Spookyman",
-			"projectPath" : "DJSpookyman.json",
-			"thumbPath" : "DJSpookyman.png",
+			"name" : "Homepage",
+			"projectPath" : "Homepage.json",
+			"thumbPath" : "Homepage.png",
 			"tutorialPath" : null,
-			"tags": ["games"]
+			"tags": ["techdemos"]
 		}, {
 			"name" : "Follow Cursor",
 			"projectPath" : "FollowCursor.json",
@@ -54,12 +54,6 @@
 			"thumbPath" : "FollowCursorEasing.png",
 			"tutorialPath" : null,
 			"tags": ["basics"]
-		}, {
-			"name" : "Homepage",
-			"projectPath" : "Homepage.json",
-			"thumbPath" : "Homepage.png",
-			"tutorialPath" : null,
-			"tags": ["techdemos"]
 		}
 	]
 }

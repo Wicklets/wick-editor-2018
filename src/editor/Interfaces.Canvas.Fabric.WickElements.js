@@ -55,7 +55,8 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
             }); 
         }
         activeObjects = activeObjects.filter(function (obj) {
-            return !obj.parentFrame.parentLayer.hidden;
+            return !obj.parentFrame.parentLayer.hidden
+                && !obj.parentFrame.parentLayer.locked;
         });
         var allObjects = activeObjects;
 
@@ -351,7 +352,7 @@ var FabricWickElements = function (wickEditor, fabricInterface) {
 
     var updateFabricObjectEvents = function (fabricObj, wickObj, activeObjects) {
         // Objects that are onion skins or that are not part of the current symbol being edited cannot be interacted with
-        if(activeObjects.indexOf(wickObj) !== -1 && !wickObj.parentFrame.parentLayer.locked) {
+        if(activeObjects.indexOf(wickObj) !== -1/* && !wickObj.parentFrame.parentLayer.locked*/) {
             fabricObj.hasControls = true;
             fabricObj.selectable = true;
             fabricObj.evented = true;
