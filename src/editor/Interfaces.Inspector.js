@@ -142,8 +142,6 @@ var InspectorInterface = function (wickEditor) {
             }
         }
 
-        console.log(selectionInfo)
-
         updateSelectonTypeTitle();
 
         // Update values in view

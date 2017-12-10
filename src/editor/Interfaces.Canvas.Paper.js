@@ -19,7 +19,6 @@ var PaperCanvas = function (wickEditor) {
 
     var self = this;
 
-    var active;
     var paperCanvas;
 
     self.setup = function () {
@@ -55,11 +54,9 @@ var PaperCanvas = function (wickEditor) {
     self.show = function () {
         paperCanvas.style.display = 'block'
     }
+
     self.hide = function () {
         paperCanvas.style.display = 'none'
-    }
-    self.isHidden = function () {
-        return active;
     }
 
     self.highlightHoveredOverObject = function (event) {
@@ -69,10 +66,10 @@ var PaperCanvas = function (wickEditor) {
     }
 
     self.updateCursorIcon = function (event) {
-        if(!active) {
+        /*if(!active) {
             wickEditor.cursorIcon.hide();
             return;
-        }
+        }*/
 
         if(event.item && event.item.wick && 
            !wickEditor.project.isObjectSelected(event.item.wick) &&
@@ -116,56 +113,47 @@ var PaperCanvas = function (wickEditor) {
 
         self.updateViewTransforms();
 
-        active = true
+        if(wickEditor.currentTool.paperTool) wickEditor.currentTool.paperTool.activate();
+        paperCanvas.style.cursor = wickEditor.currentTool.getCursorImage()
+        self.show();
 
-        if(active) {
+        refreshSelection();
 
-            if(wickEditor.currentTool.paperTool) wickEditor.currentTool.paperTool.activate();
-            paperCanvas.style.cursor = wickEditor.currentTool.getCursorImage()
-            self.show();
+        if(!self.needsUpdate) return;
+        self.needsUpdate = false;
 
-            refreshSelection();
+        paper.project.activeLayer.removeChildren();
 
-            if(!self.needsUpdate) return;
-            self.needsUpdate = false;
+        var activeObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjectsRecursive();
+        activeObjects.forEach(function (wickObject) {
+            if(wickObject.isPath) {
 
-            paper.project.activeLayer.removeChildren();
+                var layer = wickObject.parentFrame.parentLayer;
+                if(layer.locked || layer.hidden) return;
 
-            var activeObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjectsRecursive();
-            activeObjects.forEach(function (wickObject) {
-                if(wickObject.isPath) {
+                self.pathRoutines.refreshPathData(wickObject);
+                self.pathRoutines.regenPaperJSState(wickObject);
+                paper.project.activeLayer.addChild(wickObject.paper);
 
-                    var layer = wickObject.parentFrame.parentLayer;
-                    if(layer.locked || layer.hidden) return;
+                var absPos = wickObject.getAbsolutePosition();
+                wickObject.paper.position.x = absPos.x;
+                wickObject.paper.position.y = absPos.y;
 
-                    self.pathRoutines.refreshPathData(wickObject);
-                    self.pathRoutines.regenPaperJSState(wickObject);
-                    paper.project.activeLayer.addChild(wickObject.paper);
-
-                    var absPos = wickObject.getAbsolutePosition();
-                    wickObject.paper.position.x = absPos.x;
-                    wickObject.paper.position.y = absPos.y;
-
-                    if(wickObject.parentObject !== wickEditor.project.getCurrentObject()) {
-                        wickObject.paper._isPartOfGroup = true;
-                        var absTrans = wickObject.getAbsoluteTransformations();
-                        if(!wickObject.paper._transformed) {
-                            wickObject.paper.scale(absTrans.scale.x, absTrans.scale.y);
-                            wickObject.paper.rotate(absTrans.rotation)
-                            wickObject.paper._transformed = true;
-                        }
+                if(wickObject.parentObject !== wickEditor.project.getCurrentObject()) {
+                    wickObject.paper._isPartOfGroup = true;
+                    var absTrans = wickObject.getAbsoluteTransformations();
+                    if(!wickObject.paper._transformed) {
+                        wickObject.paper.scale(absTrans.scale.x, absTrans.scale.y);
+                        wickObject.paper.rotate(absTrans.rotation)
+                        wickObject.paper._transformed = true;
                     }
-                    
-                    wickObject.paper.wick = wickObject;
                 }
-            });
+                
+                wickObject.paper.wick = wickObject;
+            }
+        });
 
-            refreshSelection();
-        } else {
-            wickEditor.cursorIcon.hide();
-
-            self.hide();
-        }
+        refreshSelection();
 
     }
 

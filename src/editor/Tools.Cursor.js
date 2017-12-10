@@ -184,10 +184,17 @@ Tools.Cursor = function (wickEditor) {
         }
 
         if(hitResult.type === 'fill') {
+            /*console.log(hitResult.item)
             hitResult.item.position = new paper.Point(
                 hitResult.item.position.x + event.delta.x,
                 hitResult.item.position.y + event.delta.y
-            );
+            );*/
+            wickEditor.project.getSelectedObjects().forEach(function (o) {
+                o.paper.position = new paper.Point(
+                    o.paper.position.x + event.delta.x,
+                    o.paper.position.y + event.delta.y
+                );
+            });
         } else if (hitResult.type === 'segment') {
             hitResult.segment.point = new paper.Point(
                 hitResult.segment.point.x + event.delta.x, 
@@ -233,7 +240,7 @@ Tools.Cursor = function (wickEditor) {
         if(hitResult.item.parent._isPartOfGroup) return;
         if(wickEditor.currentTool instanceof Tools.FillBucket) return;
 
-        wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshSVGWickObject(hitResult.item);
+        //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshSVGWickObject(hitResult.item);
     }
 
 }

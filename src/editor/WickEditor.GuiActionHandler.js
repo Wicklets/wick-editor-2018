@@ -239,7 +239,7 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function (args) {
-            wickEditor.guiActionHandler.doAction('useTools.pathCursor')
+            wickEditor.guiActionHandler.doAction('useTools.cursor')
             wickEditor.canvas.getInteractiveCanvas().pathRoutines.getProjectAsSVG()
         });
 
