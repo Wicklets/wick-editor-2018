@@ -187,12 +187,12 @@ var MenuBarInterface = function (wickEditor) {
             new TabButton('SVG', function () {
                 wickEditor.guiActionHandler.doAction("importFile");
             }),
-            new TabButton('JSON', function () {
+            /*new TabButton('JSON', function () {
                 wickEditor.guiActionHandler.doAction("importFile");
             }),
             new TabButton('Script', function () {
                 wickEditor.guiActionHandler.doAction("importFile");
-            }),
+            }),*/
         ]);
 
         addTab('Help', [

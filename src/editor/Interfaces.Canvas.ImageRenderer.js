@@ -18,7 +18,7 @@
 
 /* move this to Interfaces.Canvas and call it ImageRenderer or something */
 
-var GIFRenderer = (function () {
+var ImageRenderer = function () {
 
 	var self = this;
 
@@ -142,4 +142,4 @@ var GIFRenderer = (function () {
 
     return self;
 
-})();
+};

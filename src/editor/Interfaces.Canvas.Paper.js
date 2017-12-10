@@ -87,7 +87,7 @@ var PaperCanvas = function (wickEditor) {
             curves: true,
             handles: true,
             stroke: true,
-            tolerance: 5 / wickEditor.canvas.getFabricCanvas().getCanvasTransform().zoom
+            tolerance: 5 / wickEditor.canvas.getZoom()
         }
 
         hitResult = paper.project.hitTest(event.point, hitOptions);
@@ -110,24 +110,21 @@ var PaperCanvas = function (wickEditor) {
         }
     }
 
-    self.updateViewTransforms = function () {
-        var canvasTransform = wickEditor.canvas.getFabricCanvas().getCanvasTransform();
-        paper.view.matrix = new paper.Matrix();
-        paper.view.matrix.translate(new paper.Point(canvasTransform.x,canvasTransform.y))
-        paper.view.matrix.scale(canvasTransform.zoom)
-    }
-
     self.update = function () {
 
-        active = wickEditor.currentTool.getCanvasMode() === 'paper';
+
+
+        self.updateViewTransforms();
+
+        active = true
 
         if(active) {
-            wickEditor.currentTool.paperTool.activate();
+
+            if(wickEditor.currentTool.paperTool) wickEditor.currentTool.paperTool.activate();
             paperCanvas.style.cursor = wickEditor.currentTool.getCursorImage()
             self.show();
 
             refreshSelection();
-            self.updateViewTransforms();
 
             if(!self.needsUpdate) return;
             self.needsUpdate = false;
@@ -137,6 +134,7 @@ var PaperCanvas = function (wickEditor) {
             var activeObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjectsRecursive();
             activeObjects.forEach(function (wickObject) {
                 if(wickObject.isPath) {
+
                     var layer = wickObject.parentFrame.parentLayer;
                     if(layer.locked || layer.hidden) return;
 
@@ -169,6 +167,14 @@ var PaperCanvas = function (wickEditor) {
             self.hide();
         }
 
+    }
+
+    self.updateViewTransforms = function () {
+        var zoom = wickEditor.canvas.getZoom();
+        var pan = wickEditor.canvas.getPan();
+        paper.view.matrix = new paper.Matrix();
+        paper.view.matrix.translate(new paper.Point(pan.x,pan.y))
+        paper.view.matrix.scale(zoom)
     }
 
     function refreshSelection () {

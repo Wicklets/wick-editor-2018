@@ -65,8 +65,7 @@ var PixiCanvas = function (wickEditor) {
         fastRendering = true;
         canvasContainer.style.opacity = '1.0';
 
-        wickEditor.canvas.getFabricCanvas().hide();
-        wickEditor.canvas.getPaperCanvas().hide();
+        wickEditor.canvas.getInteractiveCanvas().hide();
 
         function proceed () {
             wickEditor.project.applyTweens();
@@ -81,8 +80,7 @@ var PixiCanvas = function (wickEditor) {
         fastRendering = true;
         canvasContainer.style.opacity = '0.5';
 
-        wickEditor.canvas.getFabricCanvas().show();
-        wickEditor.canvas.getPaperCanvas().show();
+        wickEditor.canvas.getInteractiveCanvas().show();
 
         clearInterval(fastRenderIntervalID);
     }
@@ -147,8 +145,8 @@ var PixiCanvas = function (wickEditor) {
     }
 
     function updateCanvasTransforms () {
-        var pan = wickEditor.canvas.getFabricCanvas().getPan();
-        var zoom = wickEditor.canvas.getFabricCanvas().canvas.getZoom();
+        var pan = wickEditor.canvas.getPan();
+        var zoom = wickEditor.canvas.getZoom();
 
         var width = wickEditor.project.width;
         var height = wickEditor.project.height;

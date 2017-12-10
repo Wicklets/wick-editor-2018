@@ -20,8 +20,7 @@ if(!window.Tools) Tools = {};
 Tools.Rectangle = function (wickEditor) {
 
     var that = this;
-    var fabricInterface = wickEditor.canvas.getFabricCanvas();
-
+    
     var tempGroup;
 
     var topLeft;
@@ -43,13 +42,9 @@ Tools.Rectangle = function (wickEditor) {
 
     }
 
-    this.getCanvasMode = function () {
-        return 'paper';
-    }
-
     this.onSelected = function () {
-        wickEditor.canvas.getPaperCanvas().needsUpdate = true;
         wickEditor.project.clearSelection();
+        wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
     }
 
     this.onDeselected = function () {
@@ -92,7 +87,7 @@ Tools.Rectangle = function (wickEditor) {
         pathWickObject.width = 1;
         pathWickObject.height = 1;
 
-        wickEditor.canvas.getPaperCanvas().pathRoutines.refreshPathData(pathWickObject);
+        //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(pathWickObject);
 
         wickEditor.actionHandler.doAction('addObjects', {
             wickObjects: [pathWickObject],

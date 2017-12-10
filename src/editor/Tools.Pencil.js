@@ -39,15 +39,11 @@ Tools.Pencil = function (wickEditor) {
 
     this.onSelected = function () {
         wickEditor.project.clearSelection();
-        wickEditor.canvas.getPaperCanvas().needsUpdate = true;
+        wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
     }
 
     this.onDeselected = function () {
         if(path) path.remove();
-    }
-
-    this.getCanvasMode = function () {
-        return 'paper';
     }
 
     this.paperTool = new paper.Tool();
@@ -78,7 +74,7 @@ Tools.Pencil = function (wickEditor) {
             totalDelta.y += event.delta.y;
         }
 
-        if (totalDelta.length > 2/wickEditor.canvas.getFabricCanvas().canvas.getZoom()) {
+        if (totalDelta.length > 2/wickEditor.canvas.getZoom()) {
 
             totalDelta.x = 0;
             totalDelta.y = 0;
@@ -101,11 +97,11 @@ Tools.Pencil = function (wickEditor) {
                 if(wickEditor.settings.brushSmoothingAmount > 0) {
                     var t = wickEditor.settings.strokeWidth;
                     var s = wickEditor.settings.brushSmoothingAmount/100;
-                    var z = wickEditor.canvas.getFabricCanvas().canvas.getZoom();
+                    var z = wickEditor.canvas.getZoom();
                     path.simplify(t / z * s);
                 }
 
-                path.join(path, 10/wickEditor.canvas.getFabricCanvas().canvas.getZoom())
+                path.join(path, 10/wickEditor.canvas.getZoom())
             }
 
             path.remove();
@@ -120,7 +116,7 @@ Tools.Pencil = function (wickEditor) {
             pathWickObject.width = 1;
             pathWickObject.height = 1;
 
-            wickEditor.canvas.getPaperCanvas().pathRoutines.refreshPathData(pathWickObject);
+            //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(pathWickObject);
 
             wickEditor.actionHandler.doAction('addObjects', {
                 wickObjects: [pathWickObject],

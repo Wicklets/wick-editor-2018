@@ -84,7 +84,6 @@ var WickActionHandler = function (wickEditor) {
         wickEditor.project.rootObject.generateParentObjectReferences();
         wickEditor.project.regenAssetReferences();
         wickEditor.syncInterfaces();
-        wickEditor.canvas.getFabricCanvas().canvas.renderAll();
     }
 
     // scrap function, 
@@ -207,7 +206,7 @@ var WickActionHandler = function (wickEditor) {
                 });
             }
             
-            wickEditor.canvas.getPaperCanvas().needsUpdate = true;
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
             done(args);
         },
         function (args) {
@@ -218,7 +217,7 @@ var WickActionHandler = function (wickEditor) {
 
             if(args.addFrameAction) args.addFrameAction.undoAction();
 
-            wickEditor.canvas.getPaperCanvas().needsUpdate = true;
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
             done(args);
         });
 
@@ -259,7 +258,7 @@ var WickActionHandler = function (wickEditor) {
                 }*/
             });
 
-            wickEditor.canvas.getPaperCanvas().needsUpdate = true;
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
             done(args);
         },
         function (args) {
@@ -282,7 +281,7 @@ var WickActionHandler = function (wickEditor) {
                 wickEditor.project.currentObject.framesDirty = true;
             });*/
 
-            wickEditor.canvas.getPaperCanvas().needsUpdate = true;
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
             done(args);
         });
 
@@ -314,8 +313,7 @@ var WickActionHandler = function (wickEditor) {
                     || args.modifiedStates[i]['scaleY'] !== 1
                     || args.modifiedStates[i]['flipX'] !== false
                     || args.modifiedStates[i]['flipY'] !== false) {
-                        wickEditor.canvas.getPaperCanvas().pathRoutines.refreshPathData(wickObj);
-                        wickObj.forceFabricCanvasRegen = true;
+                        wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(wickObj);
                         wickObj._renderDirty = true;
                     }
                 }
@@ -339,7 +337,7 @@ var WickActionHandler = function (wickEditor) {
                 wickObj.updateFrameTween();
             };
 
-            wickEditor.canvas.getPaperCanvas().needsUpdate = true;
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
             done(args);
         },
         function (args) {
@@ -356,12 +354,9 @@ var WickActionHandler = function (wickEditor) {
                     }
                 });
 
-                if(args.originalStates[i]['pathData']) {
-                    wickObj.forceFabricCanvasRegen = true;
-                }
                 if(wickObj.pathData) {
                     if(args.originalStates[i]['rotation'] || args.originalStates[i]['scaleX'] || args.originalStates[i]['scaleY']) {
-                        wickEditor.canvas.getPaperCanvas().pathRoutines.refreshPathData(wickObj);
+                        wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(wickObj);
                         wickObj._renderDirty = true;
                     }
                 }
@@ -369,7 +364,7 @@ var WickActionHandler = function (wickEditor) {
                 wickObj.updateFrameTween();
             }
 
-            wickEditor.canvas.getPaperCanvas().needsUpdate = true;
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
             done(args);
         });
 
@@ -898,7 +893,7 @@ var WickActionHandler = function (wickEditor) {
                 args.obj.currentLayer = args.obj.layers.indexOf(args.newLayer)
             }
 
-            wickEditor.canvas.getPaperCanvas().needsUpdate = true;
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
 
             done(args);
             
@@ -919,7 +914,7 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.currentObject = args.objectToEdit;
 
             //wickEditor.thumbnailRenderer.renderAllThumbsOnTimeline();
-            wickEditor.canvas.getPaperCanvas().needsUpdate = true;
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
 
             wickEditor.timeline.resetScrollbars();
 
@@ -929,7 +924,7 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.clearSelection();
             wickEditor.project.currentObject = args.prevEditedObject;
 
-            wickEditor.canvas.getPaperCanvas().needsUpdate = true;
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
 
             wickEditor.timeline.resetScrollbars();
 
@@ -958,7 +953,7 @@ var WickActionHandler = function (wickEditor) {
 
     registerAction('moveObjectToZIndex',
         function (args) {
-            wickEditor.canvas.getPaperCanvas().needsUpdate = true;
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
 
             var currFrame = args.objs[0].parentFrame;
 
@@ -993,7 +988,7 @@ var WickActionHandler = function (wickEditor) {
             done(args);
         },
         function (args) {
-            wickEditor.canvas.getPaperCanvas().needsUpdate = true;
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
             
             var currFrame = wickEditor.project.getCurrentFrame();
 
@@ -1265,7 +1260,7 @@ var WickActionHandler = function (wickEditor) {
                 dontAddToStack: true
             });
             args.addAction = wickEditor.actionHandler.doAction('addObjects', {
-                wickObjects: [wickEditor.canvas.getPaperCanvas().pathRoutines.getBooleanOpResult(args.boolFnName, args.objs)],
+                wickObjects: [wickEditor.canvas.getInteractiveCanvas().pathRoutines.getBooleanOpResult(args.boolFnName, args.objs)],
                 dontAddToStack: true
             });
 

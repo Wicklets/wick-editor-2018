@@ -37,13 +37,9 @@ Tools.FillBucket = function (wickEditor) {
 
     }
 
-    this.getCanvasMode = function () {
-        return 'paper';
-    }
-
     this.onSelected = function () {
         wickEditor.project.clearSelection();
-        wickEditor.canvas.getPaperCanvas().needsUpdate = true;
+        wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
     }
 
     this.paperTool = new paper.Tool();
@@ -58,7 +54,7 @@ Tools.FillBucket = function (wickEditor) {
             var hitOptions = {
                 fill: true,
                 stroke: true,
-                tolerance: 5 / wickEditor.canvas.getFabricCanvas().getCanvasTransform().zoom
+                tolerance: 5 / wickEditor.canvas.getZoom()
             }
             hitResult = paper.project.hitTest(event.point, hitOptions);
             if(!hitResult) {
@@ -80,7 +76,7 @@ Tools.FillBucket = function (wickEditor) {
                     var superPathWickObject = WickObject.createPathObject(svgString);
                     superPathWickObject.x = hole.position.x;
                     superPathWickObject.y = hole.position.y;
-                    wickEditor.canvas.getPaperCanvas().pathRoutines.refreshPathData(superPathWickObject)
+                    wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(superPathWickObject)
                     wickEditor.actionHandler.doAction('addObjects', {
                         wickObjects: [superPathWickObject],
                         sendToBack: true,
@@ -95,7 +91,7 @@ Tools.FillBucket = function (wickEditor) {
                         var context = canvas.getContext("2d");
                         canvas.width = wickEditor.project.width*2;
                         canvas.height = wickEditor.project.height*2;
-                        var mouseCanvasSpace = wickEditor.canvas.getFabricCanvas().screenToCanvasSpace(wickEditor.inputHandler.mouse.x + wickEditor.project.width/2, wickEditor.inputHandler.mouse.y + wickEditor.project.height/2)
+                        var mouseCanvasSpace = wickEditor.canvas.screenToCanvasSpace(wickEditor.inputHandler.mouse.x + wickEditor.project.width/2, wickEditor.inputHandler.mouse.y + wickEditor.project.height/2)
                         context.drawImage(img, 0, 0);
                         context.fillStyle = "rgba(123,123,123,1)";
                         context.fillFlood(mouseCanvasSpace.x, mouseCanvasSpace.y, 10);
@@ -142,7 +138,7 @@ Tools.FillBucket = function (wickEditor) {
                                 pathWickObject.width = 1;
                                 pathWickObject.height = 1;
 
-                                wickEditor.canvas.getPaperCanvas().pathRoutines.refreshPathData(pathWickObject);
+                                wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(pathWickObject);
                                 
                                 pathWickObject.x = tempPaperForPosition.position.x - wickEditor.project.width/2;
                                 pathWickObject.y = tempPaperForPosition.position.y - wickEditor.project.height/2;
@@ -152,7 +148,7 @@ Tools.FillBucket = function (wickEditor) {
                                     dontSelectObjects: true,
                                 });
                                 PaperHoleFinder.expandHole(pathWickObject.paper);
-                                wickEditor.canvas.getPaperCanvas().pathRoutines.refreshSVGWickObject(pathWickObject.paper.children[0]);
+                                wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshSVGWickObject(pathWickObject.paper.children[0]);
                                 wickEditor.actionHandler.doAction('moveObjectToZIndex', {
                                     objs:[pathWickObject],
                                     newZIndex: 0,
@@ -168,9 +164,9 @@ Tools.FillBucket = function (wickEditor) {
                 });
             } else {
                 if(hitResult.type === 'fill') {
-                    wickEditor.canvas.getPaperCanvas().pathRoutines.setFillColor([event.item.wick], wickEditor.settings.fillColor);
+                    wickEditor.canvas.getInteractiveCanvas().pathRoutines.setFillColor([event.item.wick], wickEditor.settings.fillColor);
                 } else if (hitResult.type === 'stroke') {
-                    wickEditor.canvas.getPaperCanvas().pathRoutines.setStrokeColor([event.item.wick], wickEditor.settings.strokeColor);
+                    wickEditor.canvas.getInteractiveCanvas().pathRoutines.setStrokeColor([event.item.wick], wickEditor.settings.strokeColor);
                 }
             }
             

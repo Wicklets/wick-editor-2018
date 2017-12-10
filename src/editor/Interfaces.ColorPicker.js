@@ -126,7 +126,6 @@ var ColorPickerInterface = function (wickEditor) {
         if(!x) x = wickEditor.inputHandler.mouse.x;
         if(!y) y = wickEditor.inputHandler.mouse.y;
 
-        //wickEditor.changeTool(wickEditor.tools.dropper);
         wickEditor.syncInterfaces();
 
         isOpen = true;

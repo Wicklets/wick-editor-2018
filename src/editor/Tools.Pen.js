@@ -40,19 +40,15 @@ Tools.Pen = function (wickEditor) {
 
     }
 
-    this.getCanvasMode = function () {
-        return 'paper';
-    }
-
     this.onSelected = function () {
-        wickEditor.canvas.getPaperCanvas().needsUpdate = true;
+        wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
     }
 
     this.paperTool = new paper.Tool();
 
     this.paperTool.onMouseMove = function (event) {
-        wickEditor.canvas.getPaperCanvas().highlightHoveredOverObject(event);
-        wickEditor.canvas.getPaperCanvas().updateCursorIcon(event);
+        wickEditor.canvas.getInteractiveCanvas().highlightHoveredOverObject(event);
+        wickEditor.canvas.getInteractiveCanvas().updateCursorIcon(event);
     }
 
     this.paperTool.onMouseDown = function (event) {
@@ -61,7 +57,7 @@ Tools.Pen = function (wickEditor) {
             fill: true,
             curves: true,
             handles: true,
-            tolerance: 5 / wickEditor.canvas.getFabricCanvas().getCanvasTransform().zoom
+            tolerance: 5 / wickEditor.canvas.getZoom()
         }
 
         drawingPath = null;
@@ -87,7 +83,7 @@ Tools.Pen = function (wickEditor) {
                 currentSegment = drawingPath.add(event.point);
                 currentSegment.selected = true;
             } else {
-                wickEditor.tools.pathCursor.paperTool.onMouseDown(event)
+                //wickEditor.tools.cursor.paperTool.onMouseDown(event)
             }
         } else {
             if(!hitResult) {
@@ -109,7 +105,7 @@ Tools.Pen = function (wickEditor) {
                 pathWickObject.width = 1;
                 pathWickObject.height = 1;
 
-                wickEditor.canvas.getPaperCanvas().pathRoutines.refreshPathData(pathWickObject);
+                wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(pathWickObject);
 
                 wickEditor.actionHandler.doAction('addObjects', {
                     wickObjects: [pathWickObject]
@@ -121,7 +117,7 @@ Tools.Pen = function (wickEditor) {
                     currentSegment.selected = true;
                 })
             } else {
-                wickEditor.tools.pathCursor.paperTool.onMouseDown(event)
+                //wickEditor.tools.cursor.paperTool.onMouseDown(event)
             }
         }
 
@@ -135,17 +131,17 @@ Tools.Pen = function (wickEditor) {
             currentSegment.handleOut.x += delta.x;
             currentSegment.handleOut.y += delta.y;
         } else {
-            wickEditor.tools.pathCursor.paperTool.onMouseDrag(event)
+            //wickEditor.tools.cursor.paperTool.onMouseDrag(event)
         }
     }
 
     this.paperTool.onMouseUp = function (event) {
         if(currentSegment) {
-            wickEditor.canvas.getPaperCanvas().pathRoutines.refreshSVGWickObject(drawingPath);
+            wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshSVGWickObject(drawingPath);
             currentSegment = null;
             drawingPath = null;
         } else {
-            wickEditor.tools.pathCursor.paperTool.onMouseUp(event)
+            //wickEditor.tools.cursor.paperTool.onMouseUp(event)
         }
     }
 

@@ -172,10 +172,10 @@ TimelineInterface.Timeline = function (wickEditor) {
         this.elem.appendChild(zoomBox);
         self.numberInput = new SlideyNumberInput({
             onsoftchange: function (e) {
-                wickEditor.canvas.getFabricCanvas().setZoom(e/100, true);
+                wickEditor.canvas.setZoom(e/100, true);
             },
             onhardchange: function (e) {
-                wickEditor.canvas.getFabricCanvas().setZoom(e/100, true);
+                wickEditor.canvas.setZoom(e/100, true);
             },
             min: 1,
             max: 500,
@@ -187,7 +187,7 @@ TimelineInterface.Timeline = function (wickEditor) {
         var zoomIcon = document.createElement('div');
         zoomIcon.className = 'timeline-zoom-icon';
         zoomIcon.onclick = function () {
-            wickEditor.canvas.getFabricCanvas().recenterCanvas();
+            wickEditor.canvas.recenterCanvas();
             wickEditor.syncInterfaces();
         }
         zoomBox.appendChild(zoomIcon);
@@ -225,7 +225,7 @@ TimelineInterface.Timeline = function (wickEditor) {
     }
 
     this.updateZoomBox = function () {
-        self.numberInput.value = Math.floor(wickEditor.canvas.getFabricCanvas().getCanvasTransform().zoom * 100);
+        self.numberInput.value = Math.floor(wickEditor.canvas.getZoom() * 100);
     }
 
     this.calculateHeight = function () {

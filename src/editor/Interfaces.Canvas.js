@@ -19,9 +19,13 @@ var CanvasInterface = function (wickEditor) {
 
     var self = this;
 
-    var fabricCanvas;
-    var paperCanvas;
-    var pixiCanvas;
+    var pan;
+    var zoom;
+
+    var interactiveCanvas;
+    var fastCanvas;
+
+    var imageRenderer;
 
     var canvasBackdrop;
     var canvasContainer;
@@ -32,19 +36,22 @@ var CanvasInterface = function (wickEditor) {
         canvasBackdrop = new CanvasBackdrop(wickEditor, canvasContainer);
         canvasBackdrop.setup();
 
-        fabricCanvas = new FabricCanvas(wickEditor);
-        paperCanvas = new PaperCanvas(wickEditor);
-        pixiCanvas = new PixiCanvas(wickEditor);
+        interactiveCanvas = new PaperCanvas(wickEditor);
+        fastCanvas = new PixiCanvas(wickEditor);
 
-        pixiCanvas.setup();
-        fabricCanvas.setup();
-        paperCanvas.setup();
+        fastCanvas.setup();
+        interactiveCanvas.setup();
+
+        imageRenderer = new ImageRenderer();
+
+        pan = {x:0,y:0};
+        zoom = 1.0;
+        window.addEventListener('resize', self.recenterCanvas, false);
     }
 
     self.syncWithEditorState = function () {
-        paperCanvas.update();
-        fabricCanvas.update();
-        pixiCanvas.update();
+        interactiveCanvas.update();
+        fastCanvas.update();
         canvasBackdrop.update();
     }
 
@@ -52,20 +59,43 @@ var CanvasInterface = function (wickEditor) {
         return canvasContainer;
     }
 
-    self.getFabricCanvas = function () {
-        return fabricCanvas;
+    self.getInteractiveCanvas = function () {
+        return interactiveCanvas;
     }
 
-    self.getPaperCanvas = function () {
-        return paperCanvas;
-    }
-
-    self.getPixiCanvas = function () {
-        return pixiCanvas;
+    self.getFastCanvas = function () {
+        return fastCanvas;
     }
 
     self.getBackdrop = function () {
         return canvasBackdrop;
+    }
+
+    self.getZoom = function () {
+        return zoom;
+    }
+
+    self.getPan = function () {
+        return pan;
+    }
+
+    self.recenterCanvas = function () {
+        var guiOffsetX = -85;
+        var guiOffsetY = 47;
+        var windowW = window.innerWidth;
+        var windowH = window.innerHeight;
+        var projectW = wickEditor.project.width
+        var projectH = wickEditor.project.height
+        var centerX = (windowW/2) - (projectW/2) + guiOffsetX;
+        var centerY = (windowH/2) - (projectH/2) + guiOffsetY;
+
+        pan.x = centerX;
+        pan.y = centerY;
+        zoom = 1.0;
+
+        interactiveCanvas.updateViewTransforms();
+        fastCanvas.updateViewTransforms();
+        canvasBackdrop.updateViewTransforms();
     }
 
 }

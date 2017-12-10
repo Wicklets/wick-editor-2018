@@ -20,8 +20,7 @@ if(!window.Tools) Tools = {};
 Tools.Ellipse = function (wickEditor) {
 
     var that = this;
-    var fabricInterface = wickEditor.canvas.getFabricCanvas();
-
+    
     var drawingEllipse;
     var topLeft;
     var bottomRight;
@@ -40,12 +39,9 @@ Tools.Ellipse = function (wickEditor) {
         return "Ellipse (S)";
     }
 
-    this.getCanvasMode = function () {
-        return 'paper';
-    }
-
     this.onSelected = function () {
         wickEditor.project.clearSelection();
+        wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
     }
 
     this.onDeselected = function () {
@@ -93,7 +89,7 @@ Tools.Ellipse = function (wickEditor) {
         pathWickObject.width = 1;
         pathWickObject.height = 1;
 
-        wickEditor.canvas.getPaperCanvas().pathRoutines.refreshPathData(pathWickObject);
+        //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(pathWickObject);
 
         wickEditor.actionHandler.doAction('addObjects', {
             wickObjects: [pathWickObject],

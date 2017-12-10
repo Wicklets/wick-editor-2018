@@ -22,7 +22,7 @@ var WickEditor = function () {
     var self = this;
 
     // http://semver.org/
-    self.version = "0.11";
+    self.version = "0.12";
     document.getElementById('wick-editor-version').innerHTML = 'Wick Editor ' + self.version;
     console.log("Wick Editor version " + self.version)
     if(localStorage.wickVersion !== self.version) {
@@ -41,8 +41,8 @@ var WickEditor = function () {
     console.log('%cYou are free to change any of the internal editor stuff from here.', 'color: #7744bb; font-size: 12px;');
     console.log('%cTry typing "wickEditor" into the console to see some stuff!.', 'color: #22bb99; font-size: 12px;');
 
-    // Setup connection to backend
-    this.backend = new WickDemoLoader(this);
+    // Setup demo loader for website
+    this.demoLoader = new WickDemoLoader(this);
 
     // Setup init project
     this.project = new WickProject();
@@ -56,7 +56,6 @@ var WickEditor = function () {
         self.interfaces.push(interface);
         return interface;
     }
-
     this.builtinplayer = registerInterface(new BuiltinPlayerInterface(this));
     this.scriptingide = registerInterface(new ScriptingIDEInterface(this));
     this.timeline = registerInterface(new TimelineInterface(this));
@@ -79,17 +78,16 @@ var WickEditor = function () {
     // Load all tools
     this.tools = {
         "cursor"           : new Tools.Cursor(this),
-        "pathCursor"       : new Tools.PathCursor(this),
         "paintbrush"       : new Tools.Paintbrush(this),
         "pencil"           : new Tools.Pencil(this),
         //"eraser"           : new Tools.Eraser(this),
-        "fillbucket"       : new Tools.FillBucket(this),
+        //"fillbucket"       : new Tools.FillBucket(this),
         "rectangle"        : new Tools.Rectangle(this),
         "ellipse"          : new Tools.Ellipse(this),
         "line"             : new Tools.Line(this),
         "pen"              : new Tools.Pen(this),
         "dropper"          : new Tools.Dropper(this),
-        "text"             : new Tools.Text(this),
+        //"text"             : new Tools.Text(this),
         "zoom"             : new Tools.Zoom(this),
         "pan"              : new Tools.Pan(this),
     }
@@ -112,7 +110,7 @@ var WickEditor = function () {
     // This is put after the first sync so the page loads before the editor asks to load an autosaved project
     // (and we gotta wait a little bit before loading it ... we want to make sure the editor is ready)
     setTimeout(function () {
-        if(!self.backend.active) {
+        if(!self.demoLoader.active) {
             WickProject.Exporter.getAutosavedProject(function (project) {
                 wickEditor.guiActionHandler.doAction('openProject', {
                     project: project,

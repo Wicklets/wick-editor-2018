@@ -28,7 +28,7 @@ Tools.Paintbrush = function (wickEditor) {
         var context = canvas.getContext('2d');
         var centerX = canvas.width / 2;
         var centerY = canvas.height / 2;
-        var radius = wickEditor.settings.brushThickness/2;// * wickEditor.canvas.getFabricCanvas().canvas.getZoom();
+        var radius = wickEditor.settings.brushThickness/2;
 
         context.beginPath();
         context.arc(centerX, centerY, radius+1, 0, 2 * Math.PI, false);
@@ -57,15 +57,11 @@ Tools.Paintbrush = function (wickEditor) {
 
     this.onSelected = function () {
         wickEditor.project.clearSelection();
-        wickEditor.canvas.getPaperCanvas().needsUpdate = true;
+        wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
     }
 
     this.onDeselected = function () {
         if(path) path.remove();
-    }
-
-    this.getCanvasMode = function () {
-        return 'paper';
     }
 
     this.paperTool = new paper.Tool();
@@ -93,7 +89,7 @@ Tools.Paintbrush = function (wickEditor) {
             totalDelta.y += event.delta.y;
         }
 
-        if (totalDelta.length > wickEditor.settings.brushThickness/4/wickEditor.canvas.getFabricCanvas().canvas.getZoom()) {
+        if (totalDelta.length > wickEditor.settings.brushThickness/4/wickEditor.canvas.getZoom()) {
 
             totalDelta.x = 0;
             totalDelta.y = 0;
@@ -111,7 +107,7 @@ Tools.Paintbrush = function (wickEditor) {
             if(wickEditor.settings.brushSmoothingAmount > 0) {
                 var t = wickEditor.settings.brushThickness;
                 var s = wickEditor.settings.brushSmoothingAmount/100;
-                var z = wickEditor.canvas.getFabricCanvas().canvas.getZoom();
+                var z = wickEditor.canvas.getZoom();
                 path.simplify(t / z * s);
             }
             path = path.unite(new paper.Path())
@@ -127,7 +123,7 @@ Tools.Paintbrush = function (wickEditor) {
             pathWickObject.width = 1;
             pathWickObject.height = 1;
 
-            wickEditor.canvas.getPaperCanvas().pathRoutines.refreshPathData(pathWickObject);
+            wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(pathWickObject);
 
             wickEditor.actionHandler.doAction('addObjects', {
                 wickObjects: [pathWickObject],
@@ -141,7 +137,7 @@ Tools.Paintbrush = function (wickEditor) {
     function addNextSegment (event) {
         var thickness = event.delta.length;
         thickness /= wickEditor.settings.brushThickness/2;
-        thickness *= wickEditor.canvas.getFabricCanvas().canvas.getZoom();
+        thickness *= wickEditor.canvas.getZoom();
         
         var penPressure = wickEditor.inputHandler.getPenPressure();
 

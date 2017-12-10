@@ -86,21 +86,10 @@ var InputHandler = function (wickEditor) {
         that.specialKeys = [];
     });
 
-    function isFabricEditingText () {
-        var activeObj = wickEditor.canvas.getFabricCanvas().canvas.getActiveObject();
-        if(!activeObj) {
-            return false;
-        } else {
-            return activeObj.isEditing;
-        }
-    }
-
     document.body.addEventListener("keydown", function (event) {
-        if(isFabricEditingText()) return;
         handleKeyEvent(event, "keydown");
     });
     document.body.addEventListener("keyup", function (event) {
-        if(isFabricEditingText()) return;
         handleKeyEvent(event, "keyup");
     });
 
@@ -304,7 +293,7 @@ var InputHandler = function (wickEditor) {
                 standardClipboardEvent(event, e);
                 focusHiddenArea();
                 e.preventDefault();
-                $('#fabricCanvas').focus().select();
+                $('#editorCanvasContainer').focus().select();
                 //console.log(document.activeElement.nodeName)
             }
         });
@@ -364,7 +353,7 @@ var InputHandler = function (wickEditor) {
             wickPath.y = paperPath.position.y;
             wickPath.width = paperPath.bounds._width;
             wickPath.height = paperPath.bounds._height;
-            wickEditor.canvas.getPaperCanvas().pathRoutines.refreshPathData(wickPath);
+            wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(wickPath);
             allPaths.push(wickPath);
         }
 
@@ -547,9 +536,9 @@ var InputHandler = function (wickEditor) {
             fromContstructors[fileType](fr.result, file.name, function (newWickObject) {
                 var m
                 if(e && e.originalEvent && e.originalEvent.clientX) {
-                    m = wickEditor.canvas.getFabricCanvas().screenToCanvasSpace(e.originalEvent.clientX, e.originalEvent.clientY);
+                    m = wickEditor.canvas.screenToCanvasSpace(e.originalEvent.clientX, e.originalEvent.clientY);
                 } else {
-                    m = wickEditor.canvas.getFabricCanvas().screenToCanvasSpace(window.innerWidth/2, window.innerHeight/2);
+                    m = wickEditor.canvas.screenToCanvasSpace(window.innerWidth/2, window.innerHeight/2);
                 }
                 newWickObject.x = m.x;
                 newWickObject.y = m.y;

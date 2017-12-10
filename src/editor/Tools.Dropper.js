@@ -40,15 +40,11 @@ Tools.Dropper = function (wickEditor) {
     }
 
     this.onSelected = function () {
-        
+        wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
     }
 
     this.onDeselected = function () {
        
-    }
-
-    this.getCanvasMode = function () {
-        return 'fabric';
     }
 
     this.setup = function () {
@@ -74,7 +70,7 @@ Tools.Dropper = function (wickEditor) {
                 "hex");
             callback(color);
         };
-        image.src = wickEditor.canvas.getFabricCanvas().canvas.toDataURL();
+        image.src = wickEditor.canvas.getPNG().src;
     }
 
 }

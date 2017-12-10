@@ -55,13 +55,9 @@ Tools.Eraser = function (wickEditor) {
         
     }
 
-    this.getCanvasMode = function () {
-        return 'paper';
-    }
-
     this.onSelected = function () {
         wickEditor.project.clearSelection();
-        wickEditor.canvas.getPaperCanvas().needsUpdate = true;
+        wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
     }
 
     this.onDeselected = function () {
@@ -96,14 +92,14 @@ Tools.Eraser = function (wickEditor) {
             totalDelta.y += event.delta.y;
         }
 
-        if (totalDelta.length > wickEditor.settings.brushThickness/2/wickEditor.canvas.getFabricCanvas().canvas.getZoom()) {
+        if (totalDelta.length > wickEditor.settings.brushThickness/2/wickEditor.canvas.getZoom()) {
 
             totalDelta.x = 0;
             totalDelta.y = 0;
 
             var thickness = event.delta.length;
             thickness /= wickEditor.settings.brushThickness/2;
-            thickness *= wickEditor.canvas.getFabricCanvas().canvas.getZoom();
+            thickness *= wickEditor.canvas.getZoom();
             
             var penPressure = wickEditor.inputHandler.getPenPressure(); 
 
@@ -126,14 +122,14 @@ Tools.Eraser = function (wickEditor) {
             path.smooth();
             path = path.unite(new paper.Path())
             var t = wickEditor.settings.brushThickness;
-            var z = wickEditor.canvas.getFabricCanvas().canvas.getZoom();
+            var z = wickEditor.canvas.getZoom();
             path.simplify(t / z * 0.2);
 
             var group = new paper.Group({insert:false});
             group.addChild(path);
 
             var svgString = group.exportSVG({asString:true});
-            wickEditor.canvas.getPaperCanvas().pathRoutines.eraseWithPath({
+            wickEditor.canvas.getInteractiveCanvas().pathRoutines.eraseWithPath({
                 pathData:svgString,
                 pathX: path.position.x,
                 pathY: path.position.y

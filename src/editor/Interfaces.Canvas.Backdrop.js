@@ -34,8 +34,8 @@ var CanvasBackdrop = function (wickEditor, canvasContainer) {
     }
 
     self.updateViewTransforms = function () {
-        var pan = wickEditor.canvas.getFabricCanvas().getPan();
-        var zoom = wickEditor.canvas.getFabricCanvas().canvas.getZoom();
+        var pan = wickEditor.canvas.getPan();
+        var zoom = wickEditor.canvas.getZoom();
 
         var width = wickEditor.project.width;
         var height = wickEditor.project.height;

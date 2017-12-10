@@ -311,7 +311,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
                 }]
             });
 
-            wickEditor.canvas.getPaperCanvas().needsUpdate = true;
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
         }
     }));
 

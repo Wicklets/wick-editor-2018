@@ -88,7 +88,7 @@ var GuiActionHandler = function (wickEditor) {
         'Play/Pause Preview',
         {},
         function(args) {
-            wickEditor.canvas.getPixiCanvas().togglePreviewPlaying();
+            wickEditor.canvas.getFastCanvas().togglePreviewPlaying();
         });
 
     registerAction('previewToggleAndLoop',
@@ -104,7 +104,7 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function(args) {
-            wickEditor.canvas.getPixiCanvas().startPreviewPlaying(args.loop);
+            wickEditor.canvas.getFastCanvas().startPreviewPlaying(args.loop);
         });
 
     registerAction('previewPause',
@@ -112,7 +112,7 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function(args) {
-            wickEditor.canvas.getPixiCanvas().stopPreviewPlaying();
+            wickEditor.canvas.getFastCanvas().stopPreviewPlaying();
         });
 
     registerAction('stopRunningProject',
@@ -178,10 +178,8 @@ var GuiActionHandler = function (wickEditor) {
         'Recenter Canvas',
         {},
         function(args) {
-            wickEditor.canvas.getFabricCanvas().recenterCanvas();
-            wickEditor.canvas.getPaperCanvas().updateViewTransforms();
-            wickEditor.canvas.getPixiCanvas().updateViewTransforms();
-            wickEditor.canvas.getBackdrop().updateViewTransforms();
+            wickEditor.canvas.recenterCanvas();
+            wickEditor.syncInterfaces();
         });
 
     registerAction('exportProjectZIP',
@@ -242,7 +240,7 @@ var GuiActionHandler = function (wickEditor) {
         {},
         function (args) {
             wickEditor.guiActionHandler.doAction('useTools.pathCursor')
-            wickEditor.canvas.getPaperCanvas().pathRoutines.getProjectAsSVG()
+            wickEditor.canvas.getInteractiveCanvas().pathRoutines.getProjectAsSVG()
         });
 
     registerAction('exportProjectPNG',
@@ -286,8 +284,8 @@ var GuiActionHandler = function (wickEditor) {
         'Select All',
         {},
         function(args) {
-            if(!(wickEditor.currentTool instanceof Tools.PathCursor))
-                wickEditor.currentTool = wickEditor.tools.cursor;
+            /*if(!(wickEditor.currentTool instanceof Tools.Cursor))
+                wickEditor.currentTool = wickEditor.tools.cursor;*/
 
             wickEditor.project.clearSelection();
             wickEditor.project.currentObject.getAllActiveChildObjects().forEach(function (obj) {
@@ -607,10 +605,10 @@ var GuiActionHandler = function (wickEditor) {
 
             wickEditor.actionHandler.clearHistory();
 
-            wickEditor.canvas.getFabricCanvas().recenterCanvas();
+            wickEditor.canvas.recenterCanvas();
             wickEditor.guiActionHandler.doAction("openProjectSettings");
-            wickEditor.canvas.getPaperCanvas().needsUpdate = true;
             wickEditor.project.currentObject.framesDirty = true;
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
             wickEditor.syncInterfaces();
         });
 
@@ -1102,7 +1100,7 @@ var GuiActionHandler = function (wickEditor) {
                     obj.textData.fill = args.color;
                 }
             })
-            wickEditor.canvas.getPaperCanvas().pathRoutines.setFillColor(wickEditor.project.getSelectedObjects(), args.color);
+            wickEditor.canvas.getInteractiveCanvas().pathRoutines.setFillColor(wickEditor.project.getSelectedObjects(), args.color);
         });
 
     registerAction('changeStrokeColorOfSelection', 
@@ -1110,7 +1108,7 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function (args) {
-            wickEditor.canvas.getPaperCanvas().pathRoutines.setStrokeColor(wickEditor.project.getSelectedObjects(), args.color);
+            wickEditor.canvas.getInteractiveCanvas().pathRoutines.setStrokeColor(wickEditor.project.getSelectedObjects(), args.color);
         });
 
     registerAction('changeStrokeWidthOfSelection',
@@ -1118,7 +1116,7 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function (args) {
-            wickEditor.canvas.getPaperCanvas().pathRoutines.setStrokeWidth(wickEditor.project.getSelectedObjects(), args.strokeWidth);
+            wickEditor.canvas.getInteractiveCanvas().pathRoutines.setStrokeWidth(wickEditor.project.getSelectedObjects(), args.strokeWidth);
         });
 
     registerAction('changeStrokeCapAndJoinOfSelection',
@@ -1126,7 +1124,7 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function (args) {
-            wickEditor.canvas.getPaperCanvas().pathRoutines.setStrokeCapAndJoin(
+            wickEditor.canvas.getInteractiveCanvas().pathRoutines.setStrokeCapAndJoin(
                 wickEditor.project.getSelectedObjects(), 
                 args.strokeCap,
                 args.strokeJoin);
@@ -1216,7 +1214,7 @@ var GuiActionHandler = function (wickEditor) {
         function (args) {
             var asset = args.asset;
 
-            var screenPos = wickEditor.canvas.getFabricCanvas().screenToCanvasSpace(args.x, args.y)
+            var screenPos = wickEditor.canvas.screenToCanvasSpace(args.x, args.y)
             if(asset.type === 'image') {
                 var wickObj = new WickObject();
                 wickObj.assetUUID = asset.uuid;

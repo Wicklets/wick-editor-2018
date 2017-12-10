@@ -34,7 +34,7 @@ Tools.Pan = function (wickEditor) {
     }
     
     this.setup = function () {
-        wickEditor.canvas.getFabricCanvas().canvas.on('mouse:up', function (e) {
+        /*wickEditor.canvas.getFabricCanvas().canvas.on('mouse:up', function (e) {
             wickEditor.canvas.getFabricCanvas().stopPan();
         });
 
@@ -48,11 +48,7 @@ Tools.Pan = function (wickEditor) {
             if (wickEditor.canvas.getFabricCanvas().panning && e && e.e) {
                 wickEditor.canvas.getFabricCanvas().relativePan(e.e.movementX, e.e.movementY)
             }
-        });
-    }
-
-    this.getCanvasMode = function () {
-        return 'fabric';
+        });*/
     }
 
 }
