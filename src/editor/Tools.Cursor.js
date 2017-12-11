@@ -21,6 +21,11 @@ Tools.Cursor = function (wickEditor) {
 
     var that = this;
 
+    var makingSelectionSquare = false;
+    var selectionSquare = null;
+    var selectionSquareTopLeft;
+    var selectionSquareBottomRight;
+
     this.getCursorImage = function () {
         return "auto"
     };
@@ -70,11 +75,6 @@ Tools.Cursor = function (wickEditor) {
         hitResult = paper.project.hitTest(event.point, hitOptions);
         if(hitResult) {
             if(hitResult.item) {
-
-                if(hitResult.item.parent && hitResult.item.parent._isPartOfGroup) {
-                    return;
-                }
-
                 var selectCheckWickObj = hitResult.item.parent.wick;
                 var newlySelected = false;
                 if(selectCheckWickObj)
@@ -143,6 +143,10 @@ Tools.Cursor = function (wickEditor) {
         } else {
             wickEditor.project.clearSelection();
             wickEditor.syncInterfaces();
+
+            makingSelectionSquare = true;
+            selectionSquareTopLeft = event.point;
+            selectionSquareBottomRight = event.point
         }
 
     }
@@ -171,8 +175,23 @@ Tools.Cursor = function (wickEditor) {
 
     this.paperTool.onMouseDrag = function(event) {
 
+        if(makingSelectionSquare) {
+            selectionSquareBottomRight = event.point;
+
+            if(selectionSquare) {
+                selectionSquare.remove();
+            }
+
+            selectionSquare = new paper.Path.Rectangle(
+                    new paper.Point(selectionSquareTopLeft.x, selectionSquareTopLeft.y), 
+                    new paper.Point(selectionSquareBottomRight.x, selectionSquareBottomRight.y));
+            selectionSquare.strokeColor = 'blue';
+            selectionSquare.strokeWidth = 1;
+
+            return;
+        }
+
         if(!hitResult) return;
-        if(hitResult.item.parent._isPartOfGroup) return;
 
         function handlesAreOpposite() {
             var a = hitResult.segment.handleIn;
@@ -235,12 +254,64 @@ Tools.Cursor = function (wickEditor) {
 
     this.paperTool.onMouseUp = function (event) {
 
+        if(makingSelectionSquare) {
+            if(!selectionSquare)return;
+
+            if(event.modifiers.shift) {
+                wickEditor.project.clearSelection()
+            }
+            wickEditor.project.getCurrentObject().getAllActiveChildObjects().forEach(function (wickObject) {
+                if(selectionSquare.bounds.contains(wickObject.paper.bounds)) {
+                    wickEditor.project.selectObject(wickObject)
+                }
+            });
+            wickEditor.syncInterfaces()
+
+            if(selectionSquare) {
+                selectionSquare.remove();
+            }
+            selectionSquare = null;
+            makingSelectionSquare = false;
+            return;
+        }
+
         if(!hitResult) return;
         if(!hitResult.item) return;
-        if(hitResult.item.parent._isPartOfGroup) return;
-        if(wickEditor.currentTool instanceof Tools.FillBucket) return;
 
-        //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshSVGWickObject(hitResult.item);
+        wickEditor.project.getSelectedObjects().forEach(function (wickObject) {
+            wickObject.paper.applyMatrix = true;
+            wickObject.paper.rotate(wickObject.rotation);
+            wickObject.paper.scaling.x = wickObject.scaleX;
+            wickObject.paper.scaling.y = wickObject.scaleY;
+            if(wickObject.flipX) {
+                wickObject.paper.scale(-1, 1)
+            }
+            if(wickObject.flipY) {
+                wickObject.paper.scale(1, -1)
+            }
+
+            wickObject.rotation = 0;
+            wickObject.scaleX = 1;
+            wickObject.scaleY = 1;
+            wickObject.width = wickObject.paper.bounds._width;
+            wickObject.height = wickObject.paper.bounds._height;
+            wickObject.flipX = false;
+            wickObject.flipY = false;
+
+            wickObject.pathData = wickObject.paper.exportSVG({asString:true});
+
+            wickObject.svgX = wickObject.paper.bounds._x;
+            wickObject.svgY = wickObject.paper.bounds._y;
+
+            var parentAbsPos;
+            if(wickObject.parentObject)
+                parentAbsPos = wickObject.parentObject.getAbsolutePosition();
+            else 
+                parentAbsPos = {x:0,y:0};
+
+            wickObject.x = wickObject.paper.position.x - parentAbsPos.x;
+            wickObject.y = wickObject.paper.position.y - parentAbsPos.y;
+        });
     }
 
 }

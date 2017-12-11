@@ -24,8 +24,6 @@ var PaperCanvas = function (wickEditor) {
     self.setup = function () {
         self.needsUpdate = true;
 
-        this.pathRoutines = new PathRoutines(this, wickEditor);
-
         // Create the canvas to be used with paper.js and init the paper.js instance.
         paperCanvas = document.createElement('canvas');
         paperCanvas.className = 'paperCanvas';
@@ -60,7 +58,7 @@ var PaperCanvas = function (wickEditor) {
     }
 
     self.highlightHoveredOverObject = function (event) {
-        refreshSelection()
+        updateSelection()
         if (event.item && !event.item._isPartOfGroup) 
             event.item.selected = true;
     }
@@ -109,52 +107,39 @@ var PaperCanvas = function (wickEditor) {
 
     self.update = function () {
 
-
-
         self.updateViewTransforms();
 
         if(wickEditor.currentTool.paperTool) wickEditor.currentTool.paperTool.activate();
         paperCanvas.style.cursor = wickEditor.currentTool.getCursorImage()
         self.show();
 
-        refreshSelection();
+        if(self.needsUpdate) {
+            paper.project.activeLayer.removeChildren();
 
-        if(!self.needsUpdate) return;
-        self.needsUpdate = false;
-
-        paper.project.activeLayer.removeChildren();
-
-        var activeObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjectsRecursive();
-        activeObjects.forEach(function (wickObject) {
-            if(wickObject.isPath) {
+            var activeObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
+            activeObjects.forEach(function (wickObject) {
+                if(!wickObject.isPath) return;
 
                 var layer = wickObject.parentFrame.parentLayer;
                 if(layer.locked || layer.hidden) return;
 
-                self.pathRoutines.refreshPathData(wickObject);
-                self.pathRoutines.regenPaperJSState(wickObject);
+                var xmlString = wickObject.pathData
+                  , parser = new DOMParser()
+                  , doc = parser.parseFromString(xmlString, "text/xml");
+                wickObject.paper = paper.project.importSVG(doc, {insert:false});
+
                 paper.project.activeLayer.addChild(wickObject.paper);
 
                 var absPos = wickObject.getAbsolutePosition();
                 wickObject.paper.position.x = absPos.x;
                 wickObject.paper.position.y = absPos.y;
-
-                if(wickObject.parentObject !== wickEditor.project.getCurrentObject()) {
-                    wickObject.paper._isPartOfGroup = true;
-                    var absTrans = wickObject.getAbsoluteTransformations();
-                    if(!wickObject.paper._transformed) {
-                        wickObject.paper.scale(absTrans.scale.x, absTrans.scale.y);
-                        wickObject.paper.rotate(absTrans.rotation)
-                        wickObject.paper._transformed = true;
-                    }
-                }
                 
                 wickObject.paper.wick = wickObject;
-            }
-        });
+            });
+        }
+        self.needsUpdate = false;
 
-        refreshSelection();
-
+        updateSelection();
     }
 
     self.updateViewTransforms = function () {
@@ -165,15 +150,15 @@ var PaperCanvas = function (wickEditor) {
         paper.view.matrix.scale(zoom)
     }
 
-    function refreshSelection () {
-        paper.settings.handleSize = 0;
+    function updateSelection () {
+        paper.settings.handleSize = 10;
         paper.project.activeLayer.selected = false;
         paper.project.deselectAll();
         paper.project.activeLayer.children.forEach(function (child) {
+            if(!child.wick) return;
             if(wickEditor.project.isObjectSelected(child.wick)) {
                 child.selected = true;
                 child.fullySelected = true;
-                paper.settings.handleSize = 10;
             }
         });
     }

@@ -105,7 +105,7 @@ Tools.Pen = function (wickEditor) {
                 pathWickObject.width = 1;
                 pathWickObject.height = 1;
 
-                wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(pathWickObject);
+                //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(pathWickObject);
 
                 wickEditor.actionHandler.doAction('addObjects', {
                     wickObjects: [pathWickObject]
@@ -137,7 +137,7 @@ Tools.Pen = function (wickEditor) {
 
     this.paperTool.onMouseUp = function (event) {
         if(currentSegment) {
-            wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshSVGWickObject(drawingPath);
+            //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshSVGWickObject(drawingPath);
             currentSegment = null;
             drawingPath = null;
         } else {
