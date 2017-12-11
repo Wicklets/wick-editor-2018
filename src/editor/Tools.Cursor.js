@@ -64,6 +64,13 @@ Tools.Cursor = function (wickEditor) {
             return;
         }
         lastEvent = event;
+
+        if(event.item._wickInteraction) {
+            if(event.item._wickInteraction === 'scaleBR') {
+                
+                return;
+            }
+        }
         
         var hitOptions = {
             segments: true,
@@ -170,10 +177,13 @@ Tools.Cursor = function (wickEditor) {
 
     this.paperTool.onMouseMove = function(event) {
         wickEditor.canvas.getInteractiveCanvas().highlightHoveredOverObject(event);
-        wickEditor.canvas.getInteractiveCanvas().updateCursorIcon(event);
+        wickEditor.cursorIcon.setImageForPaperEvent(event)
+        //wickEditor.canvas.getInteractiveCanvas().updateCursorIcon(event);
     }
 
     this.paperTool.onMouseDrag = function(event) {
+
+        wickEditor.canvas.getInteractiveCanvas().highlightHoveredOverObject(event);
 
         if(makingSelectionSquare) {
             selectionSquareBottomRight = event.point;
@@ -185,8 +195,9 @@ Tools.Cursor = function (wickEditor) {
             selectionSquare = new paper.Path.Rectangle(
                     new paper.Point(selectionSquareTopLeft.x, selectionSquareTopLeft.y), 
                     new paper.Point(selectionSquareBottomRight.x, selectionSquareBottomRight.y));
-            selectionSquare.strokeColor = 'blue';
+            selectionSquare.strokeColor = 'rgba(100,100,255,0.7)';
             selectionSquare.strokeWidth = 1;
+            selectionSquare.fillColor = 'rgba(100,100,255,0.15)';
 
             return;
         }
@@ -255,7 +266,11 @@ Tools.Cursor = function (wickEditor) {
     this.paperTool.onMouseUp = function (event) {
 
         if(makingSelectionSquare) {
-            if(!selectionSquare)return;
+            if(!selectionSquare) {
+                selectionSquare = null;
+                makingSelectionSquare = false;
+                return;
+            }
 
             if(event.modifiers.shift) {
                 wickEditor.project.clearSelection()

@@ -59,50 +59,8 @@ var PaperCanvas = function (wickEditor) {
 
     self.highlightHoveredOverObject = function (event) {
         updateSelection()
-        if (event.item && !event.item._isPartOfGroup) 
+        if (event.item && !event.item._wickInteraction) 
             event.item.selected = true;
-    }
-
-    self.updateCursorIcon = function (event) {
-        /*if(!active) {
-            wickEditor.cursorIcon.hide();
-            return;
-        }*/
-
-        if(event.item && event.item.wick && 
-           !wickEditor.project.isObjectSelected(event.item.wick) &&
-           !event.item._isPartOfGroup) {
-            wickEditor.cursorIcon.setImage('resources/cursor-fill.png')
-            return;
-        }
-
-        var hitOptions = {
-            segments: true,
-            fill: true,
-            curves: true,
-            handles: true,
-            stroke: true,
-            tolerance: 5 / wickEditor.canvas.getZoom()
-        }
-
-        hitResult = paper.project.hitTest(event.point, hitOptions);
-        if(hitResult) {
-            if(hitResult.item.parent && hitResult.item.parent._isPartOfGroup) {
-                wickEditor.cursorIcon.hide()
-            } else if(hitResult.type === 'curve' || hitResult.type === 'stroke') {
-                wickEditor.cursorIcon.setImage('resources/cursor-curve.png')
-            } else if(hitResult.type === 'fill') {
-                wickEditor.cursorIcon.setImage('resources/cursor-fill.png')
-            } else if(hitResult.type === 'segment' ||
-                      hitResult.type === 'handle-in' ||
-                      hitResult.type === 'handle-out') {
-                wickEditor.cursorIcon.setImage('resources/cursor-segment.png')
-            } else {
-                wickEditor.cursorIcon.hide()
-            }
-        } else {
-            wickEditor.cursorIcon.hide()
-        }
     }
 
     self.update = function () {
@@ -150,6 +108,9 @@ var PaperCanvas = function (wickEditor) {
         paper.view.matrix.scale(zoom)
     }
 
+    var selectionRect;
+    var scaleBR;
+
     function updateSelection () {
         paper.settings.handleSize = 10;
         paper.project.activeLayer.selected = false;
@@ -159,8 +120,42 @@ var PaperCanvas = function (wickEditor) {
             if(wickEditor.project.isObjectSelected(child.wick)) {
                 child.selected = true;
                 child.fullySelected = true;
+                if(!selectionBoundsRect) {
+                    selectionBoundsRect = child.bounds.clone()
+                } else {
+                    selectionBoundsRect = selectionBoundsRect.unite(child.bounds);
+                }
             }
         });
+
+        var selectionBoundsRect;
+
+        paper.project.activeLayer.children.forEach(function (child) {
+            if(!child.wick) return;
+            if(wickEditor.project.isObjectSelected(child.wick)) {
+                if(!selectionBoundsRect) {
+                    selectionBoundsRect = child.bounds.clone()
+                } else {
+                    selectionBoundsRect = selectionBoundsRect.unite(child.bounds);
+                }
+            }
+        });
+
+        if(selectionRect) selectionRect.remove();
+        if(scaleBR) scaleBR.remove();
+
+        if(selectionBoundsRect) {
+            selectionBoundsRect = selectionBoundsRect.expand(10);
+
+            selectionRect = new paper.Path.Rectangle(selectionBoundsRect);
+            selectionRect.strokeColor = 'purple';
+            selectionRect.strokeWidth = 1;
+            selectionRect._wickInteraction = 'selectionRect';
+
+            scaleBR = new paper.Path.Circle(selectionBoundsRect.bottomRight, 10);
+            scaleBR.fillColor = 'purple'
+            scaleBR._wickInteraction = 'scaleBR';
+        }
     }
 
  }

@@ -42,6 +42,44 @@ var CursorIconInterface = function (wickEditor) {
         cursorIconDiv.style.display = 'none';
     }
 
+    this.setImageForPaperEvent = function (event) {
+        if(event.item && event.item.wick && 
+           !wickEditor.project.isObjectSelected(event.item.wick)) {
+            wickEditor.cursorIcon.setImage('resources/cursor-fill.png')
+            return;
+        }
+
+        var hitOptions = {
+            segments: true,
+            fill: true,
+            curves: true,
+            handles: true,
+            stroke: true,
+            tolerance: 5 / wickEditor.canvas.getZoom()
+        }
+
+        hitResult = paper.project.hitTest(event.point, hitOptions);
+        if(hitResult) {
+            if (hitResult.item._wickInteraction) {
+                wickEditor.cursorIcon.hide()
+            } else if(hitResult.item.parent && hitResult.item.parent._isPartOfGroup) {
+                wickEditor.cursorIcon.hide()
+            } else if(hitResult.type === 'curve' || hitResult.type === 'stroke') {
+                wickEditor.cursorIcon.setImage('resources/cursor-curve.png')
+            } else if(hitResult.type === 'fill') {
+                wickEditor.cursorIcon.setImage('resources/cursor-fill.png')
+            } else if(hitResult.type === 'segment' ||
+                      hitResult.type === 'handle-in' ||
+                      hitResult.type === 'handle-out') {
+                wickEditor.cursorIcon.setImage('resources/cursor-segment.png')
+            } else {
+                wickEditor.cursorIcon.hide()
+            }
+        } else {
+            wickEditor.cursorIcon.hide()
+        }
+    }
+
     this.setImage = function (url) {
         cursorIconDiv.style.backgroundImage = 'url('+url+')'
         cursorIconDiv.style.display = "block";

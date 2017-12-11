@@ -47,8 +47,7 @@ Tools.Pen = function (wickEditor) {
     this.paperTool = new paper.Tool();
 
     this.paperTool.onMouseMove = function (event) {
-        wickEditor.canvas.getInteractiveCanvas().highlightHoveredOverObject(event);
-        wickEditor.canvas.getInteractiveCanvas().updateCursorIcon(event);
+        wickEditor.tools.cursor.paperTool.onMouseMove(event)
     }
 
     this.paperTool.onMouseDown = function (event) {
@@ -83,7 +82,7 @@ Tools.Pen = function (wickEditor) {
                 currentSegment = drawingPath.add(event.point);
                 currentSegment.selected = true;
             } else {
-                //wickEditor.tools.cursor.paperTool.onMouseDown(event)
+                wickEditor.tools.cursor.paperTool.onMouseDown(event)
             }
         } else {
             if(!hitResult) {
@@ -117,7 +116,7 @@ Tools.Pen = function (wickEditor) {
                     currentSegment.selected = true;
                 })
             } else {
-                //wickEditor.tools.cursor.paperTool.onMouseDown(event)
+                wickEditor.tools.cursor.paperTool.onMouseDown(event)
             }
         }
 
@@ -131,7 +130,7 @@ Tools.Pen = function (wickEditor) {
             currentSegment.handleOut.x += delta.x;
             currentSegment.handleOut.y += delta.y;
         } else {
-            //wickEditor.tools.cursor.paperTool.onMouseDrag(event)
+            wickEditor.tools.cursor.paperTool.onMouseDrag(event)
         }
     }
 
@@ -141,7 +140,7 @@ Tools.Pen = function (wickEditor) {
             currentSegment = null;
             drawingPath = null;
         } else {
-            //wickEditor.tools.cursor.paperTool.onMouseUp(event)
+            wickEditor.tools.cursor.paperTool.onMouseUp(event)
         }
     }
 
