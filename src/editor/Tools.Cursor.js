@@ -65,11 +65,9 @@ Tools.Cursor = function (wickEditor) {
         }
         lastEvent = event;
 
-        if(event.item._wickInteraction) {
-            if(event.item._wickInteraction === 'scaleBR') {
-                
-                return;
-            }
+        if(event.item && event.item._wickInteraction) {
+            transformMode = event.item._wickInteraction
+            return;
         }
         
         var hitOptions = {
@@ -185,6 +183,13 @@ Tools.Cursor = function (wickEditor) {
 
         wickEditor.canvas.getInteractiveCanvas().highlightHoveredOverObject(event);
 
+        if(transformMode === 'scaleBR') {
+            wickEditor.project.getSelectedObjects().forEach(function (o) {
+                o.paper.scale(0.9, 0.9)
+            });
+            return;
+        }
+
         if(makingSelectionSquare) {
             selectionSquareBottomRight = event.point;
 
@@ -264,6 +269,8 @@ Tools.Cursor = function (wickEditor) {
     }
 
     this.paperTool.onMouseUp = function (event) {
+
+        transformMode = null;
 
         if(makingSelectionSquare) {
             if(!selectionSquare) {
