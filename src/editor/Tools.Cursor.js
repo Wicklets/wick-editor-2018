@@ -53,6 +53,7 @@ Tools.Cursor = function (wickEditor) {
     var addedPoint;
 
     var lastEvent;
+    var transformMode;
 
     this.paperTool.onMouseDown = function(event) {
 
@@ -181,11 +182,9 @@ Tools.Cursor = function (wickEditor) {
 
     this.paperTool.onMouseDrag = function(event) {
 
-        wickEditor.canvas.getInteractiveCanvas().highlightHoveredOverObject(event);
-
         if(transformMode === 'scaleBR') {
             wickEditor.project.getSelectedObjects().forEach(function (o) {
-                o.paper.scale(0.9, 0.9)
+                o.paper.scale(0.9, 0.9, new paper.Point(0,0))
             });
             return;
         }
@@ -206,6 +205,8 @@ Tools.Cursor = function (wickEditor) {
 
             return;
         }
+
+        wickEditor.canvas.getInteractiveCanvas().highlightHoveredOverObject(event);
 
         if(!hitResult) return;
 

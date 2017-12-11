@@ -151,6 +151,7 @@ var PaperCanvas = function (wickEditor) {
             selectionRect.strokeColor = 'purple';
             selectionRect.strokeWidth = 1;
             selectionRect._wickInteraction = 'selectionRect';
+            selectionRect.locked = true;
 
             scaleBR = new paper.Path.Circle(selectionBoundsRect.bottomRight, 10);
             scaleBR.fillColor = 'purple'
