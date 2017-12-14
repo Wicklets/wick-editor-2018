@@ -17,6 +17,8 @@
     
 var CursorIconInterface = function (wickEditor) {
 
+    var self = this;
+
     var cursorIconDiv = document.getElementById('cursorIcon');
 
     this.setup = function () {
@@ -45,7 +47,7 @@ var CursorIconInterface = function (wickEditor) {
     this.setImageForPaperEvent = function (event) {
         if(event.item && event.item.wick && 
            !wickEditor.project.isObjectSelected(event.item.wick)) {
-            wickEditor.cursorIcon.setImage('resources/cursor-fill.png')
+            self.setImage('resources/cursor-fill.png')
             return;
         }
 
@@ -59,24 +61,30 @@ var CursorIconInterface = function (wickEditor) {
         }
 
         hitResult = paper.project.hitTest(event.point, hitOptions);
+
+        if(hitResult && hitResult.item._cursor)
+            document.body.style.cursor = hitResult.item._cursor;
+        else
+            document.body.style.cursor = wickEditor.currentTool.getCursorImage()
+
         if(hitResult) {
             if (hitResult.item._wickInteraction) {
-                wickEditor.cursorIcon.hide()
+                self.hide()
             } else if(hitResult.item.parent && hitResult.item.parent._isPartOfGroup) {
-                wickEditor.cursorIcon.hide()
+                self.hide()
             } else if(hitResult.type === 'curve' || hitResult.type === 'stroke') {
-                wickEditor.cursorIcon.setImage('resources/cursor-curve.png')
+                self.setImage('resources/cursor-curve.png')
             } else if(hitResult.type === 'fill') {
-                wickEditor.cursorIcon.setImage('resources/cursor-fill.png')
+                self.setImage('resources/cursor-fill.png')
             } else if(hitResult.type === 'segment' ||
                       hitResult.type === 'handle-in' ||
                       hitResult.type === 'handle-out') {
-                wickEditor.cursorIcon.setImage('resources/cursor-segment.png')
+                self.setImage('resources/cursor-segment.png')
             } else {
-                wickEditor.cursorIcon.hide()
+                self.hide()
             }
         } else {
-            wickEditor.cursorIcon.hide()
+            self.hide()
         }
     }
 

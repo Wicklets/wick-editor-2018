@@ -68,7 +68,6 @@ var PaperCanvas = function (wickEditor) {
         self.updateViewTransforms();
 
         if(wickEditor.currentTool.paperTool) wickEditor.currentTool.paperTool.activate();
-        paperCanvas.style.cursor = wickEditor.currentTool.getCursorImage()
         self.show();
 
         if(self.needsUpdate) {
@@ -109,7 +108,16 @@ var PaperCanvas = function (wickEditor) {
     }
 
     var selectionRect;
+    var selectionBoundsRect;
     var scaleBR;
+
+    self.getSelectionRect = function () {
+        return selectionBoundsRect;
+    }
+
+    self.forceUpdateSelection = function () {
+        updateSelection();
+    }
 
     function updateSelection () {
         paper.settings.handleSize = 10;
@@ -119,7 +127,7 @@ var PaperCanvas = function (wickEditor) {
             if(!child.wick) return;
             if(wickEditor.project.isObjectSelected(child.wick)) {
                 child.selected = true;
-                child.fullySelected = true;
+                //child.fullySelected = true;
                 if(!selectionBoundsRect) {
                     selectionBoundsRect = child.bounds.clone()
                 } else {
@@ -128,7 +136,7 @@ var PaperCanvas = function (wickEditor) {
             }
         });
 
-        var selectionBoundsRect;
+        selectionBoundsRect = null;
 
         paper.project.activeLayer.children.forEach(function (child) {
             if(!child.wick) return;
@@ -153,9 +161,10 @@ var PaperCanvas = function (wickEditor) {
             selectionRect._wickInteraction = 'selectionRect';
             selectionRect.locked = true;
 
-            scaleBR = new paper.Path.Circle(selectionBoundsRect.bottomRight, 10);
+            scaleBR = new paper.Path.Circle(selectionBoundsRect.bottomRight, 5);
             scaleBR.fillColor = 'purple'
             scaleBR._wickInteraction = 'scaleBR';
+            scaleBR._cursor = 'nwse-resize';
         }
     }
 

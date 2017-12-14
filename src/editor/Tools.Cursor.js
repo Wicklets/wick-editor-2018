@@ -183,8 +183,14 @@ Tools.Cursor = function (wickEditor) {
     this.paperTool.onMouseDrag = function(event) {
 
         if(transformMode === 'scaleBR') {
+            var rect = wickEditor.canvas.getInteractiveCanvas().getSelectionRect();
             wickEditor.project.getSelectedObjects().forEach(function (o) {
-                o.paper.scale(0.9, 0.9, new paper.Point(0,0))
+                var resizeRatio = event.point.subtract(rect.topLeft);
+                resizeRatio.x /= rect.width;
+                resizeRatio.y /= rect.height;
+                console.log(resizeRatio)
+                o.paper.scale(resizeRatio.x, resizeRatio.y, rect.topLeft);
+                wickEditor.canvas.getInteractiveCanvas().forceUpdateSelection()
             });
             return;
         }
