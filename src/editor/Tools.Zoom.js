@@ -19,9 +19,14 @@ if(!window.Tools) Tools = {};
 
 Tools.Zoom = function (wickEditor) {
 
-    var that = this;
+    var self = this;
 
     var startX,startY;
+
+    var CLICK_ZOOM_AMT = 0.15;
+    var SCROLL_ZOOM_AMT = 0.1;
+
+    this.paperTool = new paper.Tool();
 
     this.getCursorImage = function () {
         return "zoom-in";
@@ -36,45 +41,26 @@ Tools.Zoom = function (wickEditor) {
     }
     
     this.setup = function () {
-        /*wickEditor.canvas.getFabricCanvas().canvas.on('mouse:down', function (e) {
-            startX = wickEditor.inputHandler.mouse.x;
-            startY = wickEditor.inputHandler.mouse.y;
-        });
-        wickEditor.canvas.getFabricCanvas().canvas.on('mouse:up', function (e) {
-            if(!(wickEditor.currentTool instanceof Tools.Zoom)) return;
-
-            endX = wickEditor.inputHandler.mouse.x;
-            endY = wickEditor.inputHandler.mouse.y;
-
-            diffX = Math.abs(endX-startX);
-            diffY = Math.abs(endY-startY);
-
-            if (wickEditor.inputHandler.specialKeys["Modifier"] || wickEditor.inputHandler.keys[keyCharToCode['ALT']]) {
-                wickEditor.canvas.getFabricCanvas().zoom(0.7, endX, endY);
-                wickEditor.canvas.getInteractiveCanvas().update();
-                wickEditor.canvas.getPixiCanvas().update();
-                wickEditor.canvas.getBackdrop().updateViewTransforms();
-            } else if (diffX < 10 && diffY < 10) {
-                wickEditor.canvas.getFabricCanvas().zoom(1 / 0.7, endX, endY);
-                wickEditor.canvas.getInteractiveCanvas().update();
-                wickEditor.canvas.getPixiCanvas().update();
-                wickEditor.canvas.getBackdrop().updateViewTransforms();
-            } else {
-                var wZoom = window.innerWidth/diffX*0.8;
-                var hZoom = window.innerHeight/diffY*0.8;
-                wickEditor.canvas.getFabricCanvas().zoom(Math.min(wZoom, hZoom), (startX+endX)/2, (startY+endY)/2-30);
-                wickEditor.canvas.getInteractiveCanvas().update();
-                wickEditor.canvas.getPixiCanvas().update();
-                wickEditor.canvas.getBackdrop().updateViewTransforms();
-            }
-        });
-
         var sq = document.getElementById("editorCanvasContainer");
         if (sq.addEventListener) {
             sq.addEventListener("mousewheel", MouseWheelHandler, false);
             sq.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
+        } else {
+            sq.attachEvent("onmousewheel", MouseWheelHandler);
         }
-        else sq.attachEvent("onmousewheel", MouseWheelHandler);*/
+    }
+
+    this.paperTool.onMouseDown = function(event) {
+
+    }
+
+    this.paperTool.onMouseUp = function(event) {
+        var mouse = wickEditor.inputHandler.mouse;
+        if(wickEditor.inputHandler.specialKeys["Modifier"]) {
+            wickEditor.canvas.zoomToPoint(1-CLICK_ZOOM_AMT, mouse.x, mouse.y);
+        } else {
+            wickEditor.canvas.zoomToPoint(1+CLICK_ZOOM_AMT, mouse.x, mouse.y);
+        }
     }
 
 // Scroll-to-zoom
@@ -85,14 +71,11 @@ Tools.Zoom = function (wickEditor) {
         if(wickEditor.inputHandler.specialKeys["Modifier"]) {
             var e = window.event || e;
             var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-            wickEditor.canvas.getFabricCanvas().zoom(1.0 + delta*.1, wickEditor.inputHandler.mouse.x, wickEditor.inputHandler.mouse.y);
-            wickEditor.canvas.getInteractiveCanvas().update();
-            wickEditor.canvas.getPixiCanvas().update();
-            wickEditor.canvas.getBackdrop().updateViewTransforms();
+            var mouse = wickEditor.inputHandler.mouse;
+            wickEditor.canvas.zoomToPoint(1.0 + delta*SCROLL_ZOOM_AMT, mouse.x, mouse.y);
         }
 
         return false;
     }
-
 
 }

@@ -108,10 +108,17 @@ var PaperCanvas = function (wickEditor) {
         paper.view.matrix.scale(zoom)
     }
 
+
+
+
+
+// Move this somewhere else lol
+
     var selectionRect;
     var selectionBoundsRect;
     var scaleBR;
     var rotate;
+    var GUI_DOTS_SIZE = 5;
 
     self.getSelectionRect = function () {
         return selectionBoundsRect;
@@ -160,16 +167,16 @@ var PaperCanvas = function (wickEditor) {
 
             selectionRect = new paper.Path.Rectangle(selectionBoundsRect);
             selectionRect.strokeColor = 'purple';
-            selectionRect.strokeWidth = 1;
+            selectionRect.strokeWidth = 1/wickEditor.canvas.getZoom();
             selectionRect._wickInteraction = 'selectionRect';
             selectionRect.locked = true;
 
-            scaleBR = new paper.Path.Circle(selectionBoundsRect.bottomRight, 5);
+            scaleBR = new paper.Path.Circle(selectionBoundsRect.bottomRight, GUI_DOTS_SIZE/wickEditor.canvas.getZoom());
             scaleBR.fillColor = 'purple'
             scaleBR._wickInteraction = 'scaleBR';
             scaleBR._cursor = 'nwse-resize';
 
-            rotate = new paper.Path.Circle(selectionBoundsRect.topRight.add(new paper.Point(20,-20)), 5);
+            rotate = new paper.Path.Circle(selectionBoundsRect.topRight.add(new paper.Point(20,-20)), GUI_DOTS_SIZE/wickEditor.canvas.getZoom());
             rotate.fillColor = 'purple'
             rotate._wickInteraction = 'rotate';
             rotate._cursor = 'grab';

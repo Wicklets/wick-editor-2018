@@ -32,23 +32,15 @@ Tools.Pan = function (wickEditor) {
     this.getTooltipName = function () {
         return "Pan (Space)";
     }
+
+    this.paperTool = new paper.Tool();
     
     this.setup = function () {
-        /*wickEditor.canvas.getFabricCanvas().canvas.on('mouse:up', function (e) {
-            wickEditor.canvas.getFabricCanvas().stopPan();
-        });
-
-        wickEditor.canvas.getFabricCanvas().canvas.on('mouse:down', function (e) {
-            if(wickEditor.currentTool instanceof Tools.Pan || e.e.buttons === 4) {
-                wickEditor.canvas.getFabricCanvas().startPan();
-            }
-        });
         
-        wickEditor.canvas.getFabricCanvas().canvas.on('mouse:move', function (e) {
-            if (wickEditor.canvas.getFabricCanvas().panning && e && e.e) {
-                wickEditor.canvas.getFabricCanvas().relativePan(e.e.movementX, e.e.movementY)
-            }
-        });*/
+    }
+
+    this.paperTool.onMouseDrag = function(event) {
+        wickEditor.canvas.panByAmount(event.event.movementX, event.event.movementY);
     }
 
 }

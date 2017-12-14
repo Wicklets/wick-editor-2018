@@ -111,6 +111,7 @@ var InputHandler = function (wickEditor) {
         // get this outta here
         if(event.keyCode == 32 && eventType === 'keyup' && !activeElemIsTextBox()) {
             wickEditor.useLastUsedTool();
+            wickEditor.canvas.updateCursor();
             wickEditor.syncInterfaces();
         }
 

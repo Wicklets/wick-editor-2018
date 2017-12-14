@@ -79,6 +79,10 @@ var CanvasInterface = function (wickEditor) {
         return pan;
     }
 
+    self.updateCursor = function () {
+        document.body.style.cursor = wickEditor.currentTool.getCursorImage();
+    }
+
     self.recenterCanvas = function () {
         var guiOffsetX = -85;
         var guiOffsetY = 47;
@@ -92,6 +96,26 @@ var CanvasInterface = function (wickEditor) {
         pan.x = centerX;
         pan.y = centerY;
         zoom = 1.0;
+
+        interactiveCanvas.updateViewTransforms();
+        fastCanvas.updateViewTransforms();
+        canvasBackdrop.updateViewTransforms();
+    }
+
+    self.panByAmount = function (x, y) {
+        pan.x += x;
+        pan.y += y;
+
+        interactiveCanvas.updateViewTransforms();
+        fastCanvas.updateViewTransforms();
+        canvasBackdrop.updateViewTransforms();
+    }
+
+    self.zoomToPoint = function (zoomAmount, x, y) {
+        zoom *= zoomAmount;
+
+        pan.x += (x-pan.x)*(1-zoomAmount);
+        pan.y += (y-pan.y)*(1-zoomAmount);
 
         interactiveCanvas.updateViewTransforms();
         fastCanvas.updateViewTransforms();

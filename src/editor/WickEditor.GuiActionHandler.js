@@ -79,6 +79,7 @@ var GuiActionHandler = function (wickEditor) {
             if(!(wickEditor.currentTool instanceof Tools.Pan)) {
                 wickEditor.lastTool = wickEditor.currentTool;
                 wickEditor.currentTool = wickEditor.tools.pan;
+                wickEditor.canvas.updateCursor();
                 wickEditor.syncInterfaces();
             }
         });
