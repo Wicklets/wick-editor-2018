@@ -285,8 +285,8 @@ var GuiActionHandler = function (wickEditor) {
         'Select All',
         {},
         function(args) {
-            /*if(!(wickEditor.currentTool instanceof Tools.Cursor))
-                wickEditor.currentTool = wickEditor.tools.cursor;*/
+            if(!(wickEditor.currentTool instanceof Tools.Cursor))
+                wickEditor.currentTool = wickEditor.tools.cursor;
 
             wickEditor.project.clearSelection();
             wickEditor.project.currentObject.getAllActiveChildObjects().forEach(function (obj) {

@@ -51,14 +51,6 @@ Tools.Pen = function (wickEditor) {
     }
 
     this.paperTool.onMouseDown = function (event) {
-        var hitOptions = {
-            segments: true,
-            fill: true,
-            curves: true,
-            handles: true,
-            tolerance: 5 / wickEditor.canvas.getZoom()
-        }
-
         drawingPath = null;
         paper.project.selectedItems.forEach(function (item) {
             if(item instanceof paper.Group) return;
@@ -66,7 +58,14 @@ Tools.Pen = function (wickEditor) {
             drawingPath = item;
         })
 
-        hitResult = paper.project.hitTest(event.point, hitOptions);
+        hitResult = paper.project.hitTest(event.point, {
+            segments: true,
+            fill: true,
+            curves: true,
+            handles: true,
+            tolerance: 5 / wickEditor.canvas.getZoom()
+        });
+        
         if(drawingPath) {
             var segments = drawingPath.segments;
             var firstSegment = segments[0];

@@ -59,8 +59,8 @@ var PaperCanvas = function (wickEditor) {
 
     self.highlightHoveredOverObject = function (event) {
         updateSelection()
-        if (event.item && !event.item._wickInteraction) 
-            event.item.selected = true;
+        /*if (event.item && !event.item._wickInteraction) 
+            event.item.selected = true;*/
     }
 
     self.update = function () {
