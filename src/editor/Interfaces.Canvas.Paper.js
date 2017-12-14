@@ -90,6 +90,7 @@ var PaperCanvas = function (wickEditor) {
                 var absPos = wickObject.getAbsolutePosition();
                 wickObject.paper.position.x = absPos.x;
                 wickObject.paper.position.y = absPos.y;
+                wickObject.svgStrokeWidth = wickObject.paper.strokeWidth;
                 
                 wickObject.paper.wick = wickObject;
             });
@@ -110,6 +111,7 @@ var PaperCanvas = function (wickEditor) {
     var selectionRect;
     var selectionBoundsRect;
     var scaleBR;
+    var rotate;
 
     self.getSelectionRect = function () {
         return selectionBoundsRect;
@@ -127,7 +129,7 @@ var PaperCanvas = function (wickEditor) {
             if(!child.wick) return;
             if(wickEditor.project.isObjectSelected(child.wick)) {
                 child.selected = true;
-                //child.fullySelected = true;
+                child.fullySelected = true;
                 if(!selectionBoundsRect) {
                     selectionBoundsRect = child.bounds.clone()
                 } else {
@@ -151,6 +153,7 @@ var PaperCanvas = function (wickEditor) {
 
         if(selectionRect) selectionRect.remove();
         if(scaleBR) scaleBR.remove();
+        if(rotate) rotate.remove();
 
         if(selectionBoundsRect) {
             selectionBoundsRect = selectionBoundsRect.expand(10);
@@ -165,6 +168,11 @@ var PaperCanvas = function (wickEditor) {
             scaleBR.fillColor = 'purple'
             scaleBR._wickInteraction = 'scaleBR';
             scaleBR._cursor = 'nwse-resize';
+
+            rotate = new paper.Path.Circle(selectionBoundsRect.topRight.add(new paper.Point(20,-20)), 5);
+            rotate.fillColor = 'purple'
+            rotate._wickInteraction = 'rotate';
+            rotate._cursor = 'grab';
         }
     }
 

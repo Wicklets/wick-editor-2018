@@ -65,20 +65,20 @@ Tools.Cursor = function (wickEditor) {
             return;
         }
         lastEvent = event;
-
-        if(event.item && event.item._wickInteraction) {
-            transformMode = event.item._wickInteraction
-            return;
-        }
         
-        var hitOptions = {
+        hitResult = paper.project.hitTest(event.point, {
             segments: true,
             fill: true,
             curves: true,
             handles: true,
             tolerance: 5 / wickEditor.canvas.getZoom()
+        });
+
+        if(hitResult && hitResult.item && hitResult.item._wickInteraction) {
+            transformMode = hitResult.item._wickInteraction
+            return;
         }
-        hitResult = paper.project.hitTest(event.point, hitOptions);
+
         if(hitResult) {
             if(hitResult.item) {
                 var selectCheckWickObj = hitResult.item.parent.wick;
@@ -188,9 +188,19 @@ Tools.Cursor = function (wickEditor) {
                 var resizeRatio = event.point.subtract(rect.topLeft);
                 resizeRatio.x /= rect.width;
                 resizeRatio.y /= rect.height;
-                console.log(resizeRatio)
                 o.paper.scale(resizeRatio.x, resizeRatio.y, rect.topLeft);
                 wickEditor.canvas.getInteractiveCanvas().forceUpdateSelection()
+            });
+            return;
+        }
+        if(transformMode === 'rotate') {
+            var rect = wickEditor.canvas.getInteractiveCanvas().getSelectionRect();
+            wickEditor.project.getSelectedObjects().forEach(function (o) {
+                var pivot = rect.center;
+                var oldAngle = event.lastPoint.subtract(pivot).angle;
+                var newAngle = event.point.subtract(pivot).angle;
+                o.paper.rotate(newAngle-oldAngle, pivot);
+                //wickEditor.canvas.getInteractiveCanvas().forceUpdateSelection()
             });
             return;
         }
