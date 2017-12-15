@@ -1204,9 +1204,17 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function (args) {
-            wickEditor.actionHandler.doAction('renameAsset', {
-                asset: wickEditor.library.getSelectedAsset()
-            });
+            var asset = wickEditor.library.getSelectedAsset(); 
+            var oldAssetName = asset.filename; 
+            var newName = prompt("Rename " + oldAssetName + " to:");
+
+            if (newName) {
+                wickEditor.actionHandler.doAction('renameAsset', {
+                    asset: wickEditor.library.getSelectedAsset(),
+                    newFilename: newName,
+                });
+            }
+
         });
 
     

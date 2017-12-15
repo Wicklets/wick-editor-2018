@@ -26,45 +26,25 @@ var LibraryInterface = function (wickEditor) {
     var isDraggingAsset = false; 
 
     this.setup = function () {
-        //$("#tree").fancytree();
         $("#tree").mousedown(function() {
             wickEditor.project.clearSelection();
             //wickEditor.syncInterfaces();
         });
         
-        $("#tree").mousedown(function() {
-            wickEditor.project.clearSelection();
-            //wickEditor.syncInterfaces();
-        });
-
         $("#tree").fancytree({
             extensions: ["filter"],
             filter: { 
                 counter: false, 
                 mode: "hide",
             },
-            //checkbox: true,
             selectMode: 1,
-            //source: SOURCE,
             activate: function(event, data) {
                 selectedNode = data.node;
-                //console.log(data.node)
-                //console.log(data.node.data)
             },
             select: function(event, data) {
-                // Display list of selected nodes
-                //var s = data.tree.getSelectedNodes().join(", ");
-                //console.log(s);
             },
             dblclick: function(event, data) {
-                //data.node.toggleSelected();
             },
-            /*keydown: function(event, data) {
-                if( event.which === 32 ) {
-                    data.node.toggleSelected();
-                    return false;
-                }
-            }*/
         });
 
         var filterInput = $('#treeFilterInput');
