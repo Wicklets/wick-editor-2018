@@ -59,8 +59,12 @@ var PaperCanvas = function (wickEditor) {
 
     self.highlightHoveredOverObject = function (event) {
         updateSelection()
+
         /*if (event.item && !event.item._wickInteraction) 
             event.item.selected = true;*/
+        hitResult = self.getItemAtPoint(event.point);
+        if(hitResult && hitResult.item && !hitResult.item._wickInteraction)
+            hitResult.item.selected = true;
     }
 
     self.update = function () {
@@ -108,6 +112,17 @@ var PaperCanvas = function (wickEditor) {
         paper.view.matrix.scale(zoom)
     }
 
+    self.getItemAtPoint = function (point) {
+        return paper.project.hitTest(point, {
+            segments: true,
+            fill: true,
+            curves: true,
+            handles: false,
+            stroke: true,
+            tolerance: 5 / wickEditor.canvas.getZoom()
+        });
+    }
+
 
 
 
@@ -135,8 +150,8 @@ var PaperCanvas = function (wickEditor) {
         paper.project.activeLayer.children.forEach(function (child) {
             if(!child.wick) return;
             if(wickEditor.project.isObjectSelected(child.wick)) {
-                child.selected = true;
-                child.fullySelected = true;
+                //child.selected = true;
+                //child.fullySelected = true;
                 if(!selectionBoundsRect) {
                     selectionBoundsRect = child.bounds.clone()
                 } else {

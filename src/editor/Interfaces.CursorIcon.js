@@ -45,22 +45,13 @@ var CursorIconInterface = function (wickEditor) {
     }
 
     this.setImageForPaperEvent = function (event) {
-        if(event.item && event.item.wick && 
+        /*if(event.item && event.item.wick && 
            !wickEditor.project.isObjectSelected(event.item.wick)) {
             self.setImage('resources/cursor-fill.png')
             return;
-        }
+        }*/
 
-        var hitOptions = {
-            segments: true,
-            fill: true,
-            curves: true,
-            handles: true,
-            stroke: true,
-            tolerance: 5 / wickEditor.canvas.getZoom()
-        }
-
-        hitResult = paper.project.hitTest(event.point, hitOptions);
+        hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point);
 
         if(hitResult && hitResult.item._cursor)
             document.body.style.cursor = hitResult.item._cursor;

@@ -66,13 +66,7 @@ Tools.Cursor = function (wickEditor) {
         }
         lastEvent = event;
         
-        hitResult = paper.project.hitTest(event.point, {
-            segments: true,
-            fill: true,
-            curves: true,
-            handles: true,
-            tolerance: 5 / wickEditor.canvas.getZoom()
-        });
+        hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point);
 
         if(hitResult && hitResult.item && hitResult.item._wickInteraction) {
             transformMode = hitResult.item._wickInteraction
@@ -80,7 +74,7 @@ Tools.Cursor = function (wickEditor) {
         }
 
         if(hitResult) {
-            if(hitResult.item) {
+            if(hitResult.type === 'fill') {
                 var selectCheckWickObj = hitResult.item.parent.wick;
                 var newlySelected = false;
                 if(selectCheckWickObj)
@@ -97,7 +91,7 @@ Tools.Cursor = function (wickEditor) {
                     wickEditor.syncInterfaces();
                 }
 
-                if(newlySelected) return;
+                //if(newlySelected) return;
             }
 
             if (hitResult.type == 'segment') {
@@ -111,7 +105,7 @@ Tools.Cursor = function (wickEditor) {
                 }
             }
 
-            if (hitResult.type == 'curve') {
+            if (hitResult.type == 'stroke') {
                 var location = hitResult.location;
                 var path = hitResult.item;
 
@@ -252,6 +246,7 @@ Tools.Cursor = function (wickEditor) {
                 hitResult.segment.point.x + event.delta.x, 
                 hitResult.segment.point.y + event.delta.y
             );
+            //hitResult.segment.smooth();
             /*if(event.modifiers.shift) {
                 hitResult.segment.clearHandles()
             }*/

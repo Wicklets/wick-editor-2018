@@ -58,13 +58,7 @@ Tools.Pen = function (wickEditor) {
             drawingPath = item;
         })
 
-        hitResult = paper.project.hitTest(event.point, {
-            segments: true,
-            fill: true,
-            curves: true,
-            handles: true,
-            tolerance: 5 / wickEditor.canvas.getZoom()
-        });
+        hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point);
         
         if(drawingPath) {
             var segments = drawingPath.segments;

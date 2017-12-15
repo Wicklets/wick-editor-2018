@@ -51,12 +51,7 @@ Tools.FillBucket = function (wickEditor) {
     this.paperTool.onMouseDown = function (event) {
         
         if(wickEditor.currentTool instanceof Tools.FillBucket) {
-            var hitOptions = {
-                fill: true,
-                stroke: true,
-                tolerance: 5 / wickEditor.canvas.getZoom()
-            }
-            hitResult = paper.project.hitTest(event.point, hitOptions);
+            hitResult = event.item;
             if(!hitResult) {
                 //console.log(PaperHoleFinder.getHoleShapeAtPosition(paper.project, event.point));
                 /*var hole = PaperHoleFinder.getHoleShapeAtPosition(paper.project, event.point);
@@ -163,11 +158,11 @@ Tools.FillBucket = function (wickEditor) {
                     img.src = dataURL;
                 });
             } else {
-                if(hitResult.type === 'fill') {
+                /*if(hitResult.type === 'fill') {
                     wickEditor.canvas.getInteractiveCanvas().pathRoutines.setFillColor([event.item.wick], wickEditor.settings.fillColor);
                 } else if (hitResult.type === 'stroke') {
                     wickEditor.canvas.getInteractiveCanvas().pathRoutines.setStrokeColor([event.item.wick], wickEditor.settings.strokeColor);
-                }
+                }*/
             }
             
             return;
