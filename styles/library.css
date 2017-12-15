@@ -110,6 +110,12 @@ span.fancytree-title:hover {
     cursor: pointer;
 }
 
+.assetLibraryButton:active {
+    background: #CFCFCF no-repeat 2px 0px;
+    background-size: 20px 20px;
+    cursor: pointer;
+}
+
 #deleteAssetButton {
     background-image: url(../resources/delete_layer.png);
 }

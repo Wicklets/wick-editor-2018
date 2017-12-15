@@ -14,6 +14,14 @@
 
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
+
+var LibraryInterface = function (wickEditor) {
+    var self = this; 
+
+    this.setup = function () {
+
+    }
+}
     
 var LibraryInterface = function (wickEditor) {
 
@@ -28,7 +36,6 @@ var LibraryInterface = function (wickEditor) {
     this.setup = function () {
         $("#tree").mousedown(function() {
             wickEditor.project.clearSelection();
-            //wickEditor.syncInterfaces();
         });
         
         $("#tree").fancytree({
@@ -47,9 +54,16 @@ var LibraryInterface = function (wickEditor) {
             },
         });
 
+        // Setup the filter
         var filterInput = $('#treeFilterInput');
         filterInput.bind("propertychange change click keyup input paste", function(event){
             $("#tree").fancytree("getTree").filterNodes(filterInput.val());
+        });
+
+        // Enable the delete asset button
+        var deleteAssetButton = $('#deleteAssetButton');
+        deleteAssetButton.bind("mouseup", function(event) {
+            wickEditor.guiActionHandler.doAction('deleteAsset'); 
         });
 
         draggedAssetElem = document.createElement('div');

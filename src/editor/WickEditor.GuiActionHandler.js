@@ -1194,9 +1194,14 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function (args) {
-            wickEditor.actionHandler.doAction('deleteAsset', {
-                asset: wickEditor.library.getSelectedAsset()
-            });
+            var asset = wickEditor.library.getSelectedAsset(); 
+
+            if (asset) {
+                wickEditor.actionHandler.doAction('deleteAsset', {
+                    asset: asset,
+                });
+            }
+
         });
 
     registerAction('renameAsset',
