@@ -96,26 +96,37 @@ span.fancytree-title:hover {
     color: #CFCFCF            !important;
 }
 
+span.fancytree-title:active {
+    background-color: #585757 !important; 
+    border-color: #585757     !important;
+    color: #CFCFCF            !important;
+}
+
 .assetLibraryButton {
     height: 20px; 
     width: 20px;
     float: right; 
-    background: #CFCFCF no-repeat 2px 0px;
+    background: #CFCFCF no-repeat 1px 0px;
     background-size: 20px 20px;
+    border-radius: 2px;
 }
 
 .assetLibraryButton:hover {
-    background: #A2A2A2 no-repeat 2px 0px;
+    background: #A2A2A2 no-repeat 1px 0px;
     background-size: 20px 20px;
     cursor: pointer;
 }
 
 .assetLibraryButton:active {
-    background: #CFCFCF no-repeat 2px 0px;
+    background: #CFCFCF no-repeat 1px 0px;
     background-size: 20px 20px;
     cursor: pointer;
 }
 
 #deleteAssetButton {
     background-image: url(../resources/delete_layer.png);
+}
+
+#renameAssetButton {
+    background-image: url(../resources/rename.png);
 }

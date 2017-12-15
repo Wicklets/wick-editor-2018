@@ -66,6 +66,12 @@ var LibraryInterface = function (wickEditor) {
             wickEditor.guiActionHandler.doAction('deleteAsset'); 
         });
 
+        // Enable rename asset button
+        var renameAssetButton = $('#renameAssetButton');
+        renameAssetButton.bind("mouseup", function(event) {
+            wickEditor.guiActionHandler.doAction('renameAsset'); 
+        });
+
         draggedAssetElem = document.createElement('div');
         draggedAssetElem.id = 'draggedAsset';
         document.getElementById('tree').addEventListener('mousedown', function (e) {
