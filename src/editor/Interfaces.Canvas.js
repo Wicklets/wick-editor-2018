@@ -126,4 +126,11 @@ var CanvasInterface = function (wickEditor) {
         canvasBackdrop.updateViewTransforms();
     }
 
+    self.screenToCanvasSpace = function (x,y) {
+        return {
+            x: (x - pan.x)/zoom,
+            y: (y - pan.y)/zoom
+        }
+    }
+
 }

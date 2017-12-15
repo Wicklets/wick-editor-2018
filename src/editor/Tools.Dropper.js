@@ -23,6 +23,8 @@ Tools.Dropper = function (wickEditor) {
 
     var colorVar = 'fillColor';
 
+    this.paperTool = new paper.Tool();
+
     this.getCursorImage = function () {
         return 'url("resources/dropper.png") 2 14,default';
     }
@@ -49,7 +51,7 @@ Tools.Dropper = function (wickEditor) {
 
     this.setup = function () {
         window.addEventListener('mousedown', function (e) {
-            if(e.target.className !== 'upper-canvas ') return;
+            if(e.target.className !== 'paperCanvas') return;
             if(wickEditor.currentTool instanceof Tools.Dropper && !wickEditor.colorPicker.isOpen()) {
                 that.getColorAtCursor(function (color) {
                     wickEditor.settings.setValue(colorVar, color);
@@ -60,17 +62,26 @@ Tools.Dropper = function (wickEditor) {
     }
 
     this.getColorAtCursor = function (callback) {
-        var image = new Image();
-        image.onload = function () {
-            var mouse = wickEditor.inputHandler.mouse;
-            var color = GetColorAtCoords(
-                image, 
-                mouse.x*window.devicePixelRatio, 
-                mouse.y*window.devicePixelRatio, 
-                "hex");
-            callback(color);
-        };
-        image.src = wickEditor.canvas.getPNG().src;
+        wickEditor.canvas.getCanvasRenderer().getCanvasAsDataURL(function (dataURL) {
+            var image = new Image();
+            image.onload = function () {
+                /*document.body.innerHTML = ''
+                document.body.appendChild(image);*/
+
+                var mouse = wickEditor.inputHandler.mouse;
+                var localMouse = wickEditor.canvas.screenToCanvasSpace(mouse.x, mouse.y);
+                localMouse.x = Math.floor(localMouse.x)
+                localMouse.y = Math.floor(localMouse.y)
+                var color = GetColorAtCoords(
+                    image,
+                    localMouse.x*window.devicePixelRatio+wickEditor.project.width/2, 
+                    localMouse.y*window.devicePixelRatio+wickEditor.project.height/2, 
+                    "hex");
+                console.log(color)
+                callback(color);
+            };
+            image.src = dataURL;
+        });
     }
 
 }
