@@ -112,14 +112,16 @@ var PaperCanvas = function (wickEditor) {
         paper.view.matrix.scale(zoom)
     }
 
-    self.getItemAtPoint = function (point) {
+    self.getItemAtPoint = function (point, tolerance) {
+        if(tolerance === undefined) tolerance = 5;
+
         return paper.project.hitTest(point, {
             segments: true,
             fill: true,
             curves: true,
             handles: false,
             stroke: true,
-            tolerance: 5 / wickEditor.canvas.getZoom()
+            tolerance: tolerance / wickEditor.canvas.getZoom()
         });
     }
 

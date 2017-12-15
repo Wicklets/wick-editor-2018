@@ -51,7 +51,7 @@ Tools.FillBucket = function (wickEditor) {
     this.paperTool.onMouseDown = function (event) {
         
         if(wickEditor.currentTool instanceof Tools.FillBucket) {
-            hitResult = event.item;
+            hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point, 0);
             if(!hitResult) {
                 //console.log(PaperHoleFinder.getHoleShapeAtPosition(paper.project, event.point));
                 /*var hole = PaperHoleFinder.getHoleShapeAtPosition(paper.project, event.point);
@@ -79,7 +79,7 @@ Tools.FillBucket = function (wickEditor) {
                     });
                 }*/
 
-                GIFRenderer.getCanvasAsDataURL(function (dataURL) {
+                wickEditor.canvas.getCanvasRenderer().getCanvasAsDataURL(function (dataURL) {
                     var img = document.createElement('img');
                     img.onload = function () {
                         var canvas = document.createElement('canvas');
@@ -158,11 +158,13 @@ Tools.FillBucket = function (wickEditor) {
                     img.src = dataURL;
                 });
             } else {
-                /*if(hitResult.type === 'fill') {
-                    wickEditor.canvas.getInteractiveCanvas().pathRoutines.setFillColor([event.item.wick], wickEditor.settings.fillColor);
+                console.log(hitResult.type)
+                console.log(hitResult.item)
+                if(hitResult.type === 'fill') {
+                    hitResult.item.fillColor = wickEditor.settings.fillColor;
                 } else if (hitResult.type === 'stroke') {
-                    wickEditor.canvas.getInteractiveCanvas().pathRoutines.setStrokeColor([event.item.wick], wickEditor.settings.strokeColor);
-                }*/
+                    hitResult.item.strokeColor = wickEditor.settings.strokeColor;
+                }
             }
             
             return;

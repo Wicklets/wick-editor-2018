@@ -67,6 +67,10 @@ var CanvasInterface = function (wickEditor) {
         return fastCanvas;
     }
 
+    self.getCanvasRenderer = function () {
+        return imageRenderer;
+    }
+
     self.getBackdrop = function () {
         return canvasBackdrop;
     }

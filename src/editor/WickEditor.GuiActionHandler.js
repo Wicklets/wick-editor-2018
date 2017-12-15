@@ -1091,46 +1091,6 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.syncInterfaces();
         });
 
-    registerAction('changeFillColorOfSelection', 
-        [],
-        [],
-        {},
-        function (args) {
-            wickEditor.project.getSelectedObjects().forEach(function (obj) {
-                if(obj.isText) {
-                    obj.textData.fill = args.color;
-                }
-            })
-            wickEditor.canvas.getInteractiveCanvas().pathRoutines.setFillColor(wickEditor.project.getSelectedObjects(), args.color);
-        });
-
-    registerAction('changeStrokeColorOfSelection', 
-        [],
-        [],
-        {},
-        function (args) {
-            wickEditor.canvas.getInteractiveCanvas().pathRoutines.setStrokeColor(wickEditor.project.getSelectedObjects(), args.color);
-        });
-
-    registerAction('changeStrokeWidthOfSelection',
-        [],
-        [],
-        {},
-        function (args) {
-            wickEditor.canvas.getInteractiveCanvas().pathRoutines.setStrokeWidth(wickEditor.project.getSelectedObjects(), args.strokeWidth);
-        });
-
-    registerAction('changeStrokeCapAndJoinOfSelection',
-        [],
-        [],
-        {},
-        function (args) {
-            wickEditor.canvas.getInteractiveCanvas().pathRoutines.setStrokeCapAndJoin(
-                wickEditor.project.getSelectedObjects(), 
-                args.strokeCap,
-                args.strokeJoin);
-        });
-
     registerAction('copyFrameForward', 
         [],
         [],
