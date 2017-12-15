@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
     
-var PaperCanvas = function (wickEditor) {
+var InteractiveCanvas = function (wickEditor) {
 
     var self = this;
 
@@ -129,7 +129,8 @@ var PaperCanvas = function (wickEditor) {
 
 
 
-// Move this somewhere else lol
+// Move this to selection cursor
+// Also we need two cursors
 
     var selectionRect;
     var selectionBoundsRect;

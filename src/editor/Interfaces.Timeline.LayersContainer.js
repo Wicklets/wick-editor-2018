@@ -53,3 +53,119 @@ TimelineInterface.LayersContainer = function (wickEditor, timeline) {
         })
     }
 }
+
+TimelineInterface.Layer = function (wickEditor, timeline) {
+    var that = this;
+
+    this.elem = null
+
+    this.wickLayer = null;
+
+    var lockLayerButton;
+    var hideLayerButton;
+
+    this.build = function () {
+        var wickLayers = wickEditor.project.currentObject.layers;
+
+        this.elem = document.createElement('div');
+        this.elem.className = "layer";
+        this.elem.style.top = (wickLayers.indexOf(this.wickLayer) * cssVar('--layer-height')) + 'px';
+        this.elem.wickData = {wickLayer:this.wickLayer};
+
+        this.elem.appendChild((function () {
+            var nameElem = document.createElement('div');
+            nameElem.innerHTML = that.wickLayer.identifier;
+            nameElem.className = 'layer-name';
+            nameElem.addEventListener('mousedown', function (e) {
+                renameLayerTextfield.select();
+                renameLayerTextfield.value = that.wickLayer.identifier;
+                renameLayerTextfield.style.display = 'block';
+                e.stopPropagation();
+            });
+            return nameElem;
+        })());
+
+        var renameLayerTextfield = document.createElement('input');
+        renameLayerTextfield.className = 'layer-rename-textfield';
+        renameLayerTextfield.type = 'text';
+        renameLayerTextfield.addEventListener('mouseup', function (e) {
+            this.select();
+            e.stopPropagation();
+        });
+        renameLayerTextfield.addEventListener('blur', function (e) {
+            that.wickLayer.identifier = renameLayerTextfield.value;
+            renameLayerTextfield.style.display = 'none';
+            wickEditor.project.currentObject.framesDirty = true;
+            wickEditor.syncInterfaces();
+        });
+        this.elem.appendChild(renameLayerTextfield);
+
+        //div creation block for selection overlay
+        var layerSelectionOverlayDiv = document.createElement('div');
+        layerSelectionOverlayDiv.className = 'layer-selection-overlay';
+        this.elem.appendChild(layerSelectionOverlayDiv);
+        
+        //div creation block for gnurl overlay
+        /*var gnurl = document.createElement('div');
+        gnurl.className = 'layer-gnurl';
+        this.elem.appendChild(gnurl);*/
+        
+        lockLayerButton = document.createElement('div');
+        lockLayerButton.className = 'layer-lock-button';
+        lockLayerButton.onclick = function (e) {
+            that.wickLayer.locked = !that.wickLayer.locked;
+            wickEditor.syncInterfaces();
+            e.stopPropagation();
+        }
+        this.elem.appendChild(lockLayerButton);
+
+        hideLayerButton = document.createElement('div');
+        hideLayerButton.className = 'layer-hide-button';
+        hideLayerButton.onclick = function (e) {
+            that.wickLayer.hidden = !that.wickLayer.hidden;
+            wickEditor.syncInterfaces();
+        }
+        this.elem.appendChild(hideLayerButton);
+
+        //hideLayerButton
+
+        this.elem.gnurl = document.createElement('div');
+        this.elem.gnurl.className = 'layer-gnurl'
+        this.elem.appendChild(this.elem.gnurl)
+
+        this.elem.gnurl.addEventListener('mousedown', function (e) {
+            //if(e.layerX < 30) return;
+            wickEditor.actionHandler.doAction('movePlayhead', {
+                obj: wickEditor.project.currentObject,
+                newPlayheadPosition: wickEditor.project.currentObject.playheadPosition,
+                newLayer: that.wickLayer
+            });
+            timeline.interactions.start('dragLayer', e, {layer:that});
+        });
+    }
+
+    this.update = function () {
+        var layerIsSelected = wickEditor.project.getCurrentLayer() === this.wickLayer;
+        var selectionOverlayDiv = this.elem.getElementsByClassName('layer-selection-overlay')[0];
+        selectionOverlayDiv.style.display = layerIsSelected ? 'block' : 'none';
+        
+        if(this.wickLayer.hidden) {
+            hideLayerButton.className = 'layer-hide-button layer-hidden';
+        } else {
+            hideLayerButton.className = 'layer-hide-button';
+        }
+
+        if(this.wickLayer.locked) {
+            lockLayerButton.className = 'layer-lock-button layer-locked';
+        } else {
+            lockLayerButton.className = 'layer-lock-button';
+        }
+
+        var layerDiv = this.elem;
+        if (layerIsSelected === true) {
+            layerDiv.className = 'layer active-layer';
+        } else {
+            layerDiv.className = 'layer';
+        }
+    }
+}

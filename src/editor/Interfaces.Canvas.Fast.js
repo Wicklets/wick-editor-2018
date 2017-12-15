@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
     
-var PixiCanvas = function (wickEditor) {
+var FastCanvas = function (wickEditor) {
 
 	var self = this;
 

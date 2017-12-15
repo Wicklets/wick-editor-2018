@@ -251,9 +251,9 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             return selectionInfo.object.paper && selectionInfo.object.paper.strokeWidth;
         }, 
         onChangeFn: function (val) {
-            wickEditor.guiActionHandler.doAction("changeStrokeWidthOfSelection", {
+            /*wickEditor.guiActionHandler.doAction("changeStrokeWidthOfSelection", {
                 strokeWidth: eval(val)
-            });
+            });*/
             wickEditor.syncInterfaces();
         }
     }));
@@ -269,7 +269,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
                 && selectionInfo.object.paper.strokeColor.toCSS();
         }, 
         onChangeFn: function (val) {
-            wickEditor.guiActionHandler.doAction("changeStrokeColorOfSelection", {color: val});
+            //wickEditor.guiActionHandler.doAction("changeStrokeColorOfSelection", {color: val});
             wickEditor.syncInterfaces();
         }
     }));
@@ -285,7 +285,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
                 && selectionInfo.object.paper.fillColor.toCSS();
         }, 
         onChangeFn: function (val) {
-            wickEditor.guiActionHandler.doAction("changeFillColorOfSelection", {color: val});
+            //wickEditor.guiActionHandler.doAction("changeFillColorOfSelection", {color: val});
             wickEditor.syncInterfaces();
         }
     }));

@@ -36,8 +36,8 @@ var CanvasInterface = function (wickEditor) {
         canvasBackdrop = new CanvasBackdrop(wickEditor, canvasContainer);
         canvasBackdrop.setup();
 
-        interactiveCanvas = new PaperCanvas(wickEditor);
-        fastCanvas = new PixiCanvas(wickEditor);
+        interactiveCanvas = new InteractiveCanvas(wickEditor);
+        fastCanvas = new FastCanvas(wickEditor);
 
         fastCanvas.setup();
         interactiveCanvas.setup();

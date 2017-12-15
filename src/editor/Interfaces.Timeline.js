@@ -241,3 +241,350 @@ TimelineInterface.Timeline = function (wickEditor) {
         document.body.style.setProperty('--frame-handle-width', newHandleWidth+'px');
     }
 }
+
+TimelineInterface.HorizontalScrollBar = function (wickEditor, timeline) {
+    var that = this;
+
+    this.elem = null;
+
+    var leftButton;
+    var rightButton;
+    var head;
+
+    var scrollbar;
+
+    var heldDownInterval;
+
+    this.build = function () {
+        this.elem = document.createElement('div');
+        this.elem.className = 'scrollbar horizontal-scrollbar';
+
+        head = document.createElement('div');
+        head.className = 'scrollbar-head scrollbar-head-horizontal';
+        head.addEventListener('mousedown', function (e) {
+            timeline.interactions.start('dragHorizontalScrollbarHead')
+        })
+        this.elem.appendChild(head);
+
+        leftButton = document.createElement('div');
+        leftButton.className = 'scrollbar-button scrollbar-button-left';
+        leftButton.addEventListener('mousedown', function (e) {
+            //that.scroll(-10);
+            clearInterval(heldDownInterval);
+            heldDownInterval = setInterval(function () {
+                that.scroll(-3);
+            }, 1000/30)
+        });
+        leftButton.addEventListener('mouseup', function (e) {
+            clearInterval(heldDownInterval);
+        });
+        this.elem.appendChild(leftButton);
+
+        rightButton = document.createElement('div');
+        rightButton.className = 'scrollbar-button scrollbar-button-right';
+        rightButton.addEventListener('mousedown', function (e) {
+            //that.scroll(10);
+            clearInterval(heldDownInterval);
+            heldDownInterval = setInterval(function () {
+                that.scroll(3);
+            }, 1000/30)
+        });
+        rightButton.addEventListener('mouseup', function (e) {
+            clearInterval(heldDownInterval);
+        });
+        this.elem.appendChild(rightButton);
+
+        scrollbar = new Scrollbar(10, 20, 30);
+        setTimeout(function () {
+            scrollbar.setScrollbarContainerSize(that.elem.offsetWidth-30);
+            scrollbar.setViewboxSize(that.elem.offsetWidth);
+        }, 100);
+
+        $(window).resize(function() {
+            scrollbar.setScrollbarContainerSize(that.elem.offsetWidth-30);
+            scrollbar.setViewboxSize(that.elem.offsetWidth);
+            that.update()
+        });
+    }
+
+    this.update = function () {
+        var frameCount = wickEditor.project.getCurrentObject().getTotalTimelineLength();
+        var buffer = 1000 + window.innerWidth;
+        var contentSize = frameCount * cssVar('--frame-width') + buffer;
+        scrollbar.setContentSize(contentSize)
+        head.style.marginLeft = scrollbar.barPosition + cssVar('--scrollbar-thickness') + 'px';
+        head.style.width = scrollbar.barSize + 'px';
+    }
+
+    this.scroll = function (scrollAmt) {
+        scrollbar.setBarPosition(scrollbar.barPosition + scrollAmt);
+        timeline.framesContainer.update();
+        timeline.numberLine.update();
+        timeline.playhead.update();
+        that.update();
+    }
+
+    this.getScrollPosition = function () {
+        return scrollbar.viewboxPosition;
+    }
+
+    this.reset = function () {
+        scrollbar.setBarPosition(0);
+    }
+}
+
+TimelineInterface.VerticalScrollBar = function (wickEditor, timeline) {
+    var that = this;
+
+    this.elem = null;
+
+    var topButton;
+    var bottomButton
+    var head;
+
+    var scrollbar;
+
+    var heldDownInterval;
+
+    this.build = function () {
+        this.elem = document.createElement('div');
+        this.elem.className = 'scrollbar vertical-scrollbar';
+
+        head = document.createElement('div');
+        head.className = 'scrollbar-head scrollbar-head-vertical';
+        head.addEventListener('mousedown', function (e) {
+            timeline.interactions.start('dragVerticalScrollbarHead');
+        })
+        this.elem.appendChild(head);
+
+        topButton = document.createElement('div');
+        topButton.className = 'scrollbar-button scrollbar-button-top';
+        topButton.addEventListener('mousedown', function (e) {
+            //that.scroll(-20)
+            clearInterval(heldDownInterval);
+            heldDownInterval = setInterval(function () {
+                that.scroll(-3);
+            }, 1000/30)
+        });
+        topButton.addEventListener('mouseup', function (e) {
+            clearInterval(heldDownInterval);
+        });
+        this.elem.appendChild(topButton);
+
+        bottomButton = document.createElement('div');
+        bottomButton.className = 'scrollbar-button scrollbar-button-bottom';
+        bottomButton.addEventListener('mousedown', function (e) {
+            //that.scroll(20)
+            clearInterval(heldDownInterval);
+            heldDownInterval = setInterval(function () {
+                that.scroll(3);
+            }, 1000/30)
+        });
+        bottomButton.addEventListener('mouseup', function (e) {
+            clearInterval(heldDownInterval);
+        });
+        this.elem.appendChild(bottomButton);
+
+        scrollbar = new Scrollbar(10, 100, 300);
+    },
+
+    this.update = function () {
+        var nLayers = wickEditor.project.getCurrentObject().layers.length;
+
+        if(nLayers < 4) {
+            this.elem.style.display = 'none';
+            return;
+        }
+        this.elem.style.display = 'block';
+
+        //head.style.height = parseInt(timeline.elem.style.height)/4 + 'px';
+        //head.style.marginTop = scrollbar.barPosition + cssVar('--scrollbar-thickness') + cssVar('--number-line-height') + 'px';
+    
+        scrollbar.setScrollbarContainerSize(that.elem.offsetHeight);
+        scrollbar.setViewboxSize(that.elem.offsetHeight-10);
+        var contentSize = nLayers * cssVar('--layer-height');
+        scrollbar.setContentSize(contentSize);
+        head.style.marginTop = scrollbar.barPosition + cssVar('--scrollbar-thickness') + 'px';
+        head.style.height = scrollbar.barSize - 30 + 'px';
+    }
+
+    this.scroll = function (scrollAmt) {
+        scrollbar.setBarPosition(scrollbar.barPosition+scrollAmt);
+        timeline.framesContainer.update();
+        that.update();
+    }
+
+    this.getScrollPosition = function () {
+        return scrollbar.viewboxPosition;
+    }
+
+    this.reset = function () {
+        scrollbar.setBarPosition(0);
+    }
+}
+
+TimelineInterface.NumberLine = function (wickEditor, timeline) {
+    var that = this;
+
+    this.elem = null;
+
+    this.playRanges = null;
+
+    var numberlineContainer;
+    var numbers = [];
+    var bars = [];
+
+    this.build = function () {
+        this.elem = document.createElement('div');
+        this.elem.addEventListener('mousedown', function (e) {
+            timeline.interactions.start("dragPlayhead", e, {});
+        })
+        this.elem.className = 'number-line';
+
+        numberlineContainer = document.createElement('span');
+        numberlineContainer.className = 'numberline-container';
+        this.elem.appendChild(numberlineContainer);
+
+        this.playRanges = [];
+    }
+
+    this.update = function () {
+        var shift = -timeline.horizontalScrollBar.getScrollPosition();
+
+        this.elem.style.left = shift+cssVar('--layers-width')+'px';
+
+        numberlineContainer.style.left = -shift+(shift%cssVar('--frame-width'))+'px';
+
+        this.playRanges.forEach(function (playRange) {
+            //playRange.update();
+        });
+
+        for(var i = 0; i < numbers.length; i++) {
+            var num = i+1+Math.floor(-shift/cssVar('--frame-width'));
+            numbers[i].innerHTML = num;
+            numbers[i].className = 'number-line-cell-number';
+            //if(wickEditor.project.smallFramesMode) {
+                if(num % 5 !== 0 && num !== 1)  {
+                    numbers[i].innerHTML = '';
+                    bars[i].style.opacity = '0.2';
+                } else {
+                    bars[i].style.opacity = '1.0';
+                }
+                numbers[i].className += ' number-line-cell-number-small';
+            //}
+        }
+    }
+
+    this.rebuild = function () {
+
+        this.elem.innerHTML = ''
+        this.elem.appendChild(numberlineContainer)
+        numberlineContainer.innerHTML = ""
+
+        numbers = []
+        bars = []
+        for(var i = 0; i < 70; i++) {
+            var numberLineCell = document.createElement('div');
+            numberLineCell.className = 'number-line-cell';
+            numberLineCell.style.left = i*cssVar('--frame-width') +cssVar('--frames-cell-first-padding') + 'px'
+            
+            var bar = document.createElement('div');
+            bar.className = 'number-line-cell-bar';
+            numberLineCell.appendChild(bar);
+            bars.push(bar);
+
+            var number = document.createElement('div');
+            number.className = 'number-line-cell-number';
+            numberLineCell.appendChild(number);
+            numbers.push(number);
+            
+            numberlineContainer.appendChild(numberLineCell);
+        }
+
+        /*this.playRanges.forEach(function (playrange) {
+            that.elem.removeChild(playrange.elem);
+        });*/
+
+        this.playRanges = [];
+
+        /*wickEditor.project.getCurrentObject().playRanges.forEach(function (wickPlayrange) {
+            var newPlayrange = new TimelineInterface.PlayRange(wickEditor, timeline);
+            newPlayrange.wickPlayrange = wickPlayrange;
+            newPlayrange.build();
+            that.elem.appendChild(newPlayrange.elem);
+            that.playRanges.push(newPlayrange)
+        });*/
+    }
+}
+
+TimelineInterface.Playhead = function (wickEditor, timeline) {
+    var self = this;
+
+    self.elem = null;
+    self.pos = null;
+
+    var framePosCached = 0;
+
+    self.build = function () {
+        self.elem = document.createElement('div');
+        self.elem.className = 'playhead';
+
+        var playheadNub = document.createElement('div');
+        playheadNub.className = 'playhead-nub';
+        self.elem.addEventListener('mousedown', function (e) {
+            timeline.interactions.start("dragPlayhead", e, {});
+        });
+        self.elem.appendChild(playheadNub);
+
+        window.addEventListener('mousemove', function (e) {
+            self.elem.style.pointerEvents = (e.y>60) ? 'none' : 'auto';
+        });
+
+        var playheadBody = document.createElement('div');
+        playheadBody.className = 'playhead-body';
+        self.elem.appendChild(playheadBody);
+    }
+
+    self.update = function () {
+        self.setPosition(wickEditor.project.currentObject.playheadPosition * cssVar('--frame-width'));
+        snapPosition()
+        updateView();
+    }
+
+    self.setPosition = function (pos) {
+        self.pos = pos;
+        updateView();
+    }
+
+    self.snap = function () {
+        snapPosition();
+        updateView();
+    }
+
+    self.getFramePosition = function () {
+        var framePos = Math.floor(self.pos/cssVar('--frame-width'));
+        return framePos;
+    }
+
+    self.frameDidChange = function () {
+        if(!framePosCached) {
+            framePosCached = self.getFramePosition();
+            return true;
+        } else {
+            var newFramePos = self.getFramePosition();
+            var frameChanged = newFramePos !== framePosCached;
+            framePosCached = newFramePos;
+            return frameChanged;
+        }
+    }
+
+    function updateView () {
+        var shift = -timeline.horizontalScrollBar.getScrollPosition();
+        self.elem.style.left = (self.pos+132+shift)+'px';
+    }
+
+    function snapPosition () {
+        self.pos = Math.floor(self.pos/cssVar('--frame-width'))*cssVar('--frame-width')
+        self.pos += cssVar('--frame-width')/2;
+    }
+}
