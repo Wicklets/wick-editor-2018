@@ -95,6 +95,7 @@ var InteractiveCanvas = function (wickEditor) {
                 wickObject.paper.position.x = absPos.x;
                 wickObject.paper.position.y = absPos.y;
                 wickObject.svgStrokeWidth = wickObject.paper.strokeWidth;
+                wickObject.paper.opacity = wickObject.opacity;
                 
                 wickObject.paper.wick = wickObject;
             });
@@ -113,7 +114,8 @@ var InteractiveCanvas = function (wickEditor) {
     }
 
     self.getItemAtPoint = function (point, tolerance) {
-        if(tolerance === undefined) tolerance = 5;
+        if(tolerance === undefined) tolerance = 3;
+        var zoom = wickEditor.canvas.getZoom()
 
         return paper.project.hitTest(point, {
             segments: true,
@@ -121,7 +123,7 @@ var InteractiveCanvas = function (wickEditor) {
             curves: true,
             handles: false,
             stroke: true,
-            tolerance: tolerance / wickEditor.canvas.getZoom()
+            tolerance: tolerance / zoom
         });
     }
 

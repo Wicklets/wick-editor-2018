@@ -70,7 +70,8 @@ Tools.Zoom = function (wickEditor) {
         e.preventDefault()
         if(wickEditor.inputHandler.specialKeys["Modifier"]) {
             var e = window.event || e;
-            var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+            //var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+            var delta = (e.wheelDelta || -e.detail)*0.01
             var mouse = wickEditor.inputHandler.mouse;
             wickEditor.canvas.zoomToPoint(1.0 + delta*SCROLL_ZOOM_AMT, mouse.x, mouse.y);
         }

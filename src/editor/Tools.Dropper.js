@@ -65,9 +65,6 @@ Tools.Dropper = function (wickEditor) {
         wickEditor.canvas.getCanvasRenderer().getCanvasAsDataURL(function (dataURL) {
             var image = new Image();
             image.onload = function () {
-                /*document.body.innerHTML = ''
-                document.body.appendChild(image);*/
-
                 var mouse = wickEditor.inputHandler.mouse;
                 var localMouse = wickEditor.canvas.screenToCanvasSpace(mouse.x, mouse.y);
                 localMouse.x = Math.floor(localMouse.x)
