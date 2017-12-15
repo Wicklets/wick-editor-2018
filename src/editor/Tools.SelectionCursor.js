@@ -17,7 +17,7 @@
 
 if(!window.Tools) Tools = {};
 
-Tools.Cursor = function (wickEditor) {
+Tools.SelectionCursor = function (wickEditor) {
 
     var that = this;
 
@@ -246,7 +246,7 @@ Tools.Cursor = function (wickEditor) {
                 hitResult.segment.point.x + event.delta.x, 
                 hitResult.segment.point.y + event.delta.y
             );
-            hitResult.segment.smooth();
+            //hitResult.segment.smooth();
             /*if(event.modifiers.shift) {
                 hitResult.segment.clearHandles()
             }*/

@@ -75,22 +75,20 @@ var InteractiveCanvas = function (wickEditor) {
         self.show();
 
         if(self.needsUpdate) {
-            paper.project.activeLayer.removeChildren();
-
-            var activeObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
-            activeObjects.forEach(function (wickObject) {
-                if(!wickObject.isPath) return;
-
-                var layer = wickObject.parentFrame.parentLayer;
-                if(layer.locked || layer.hidden) return;
-
-                var xmlString = wickObject.pathData
-                  , parser = new DOMParser()
-                  , doc = parser.parseFromString(xmlString, "text/xml");
-                wickObject.paper = paper.project.importSVG(doc, {insert:false});
-
-                paper.project.activeLayer.addChild(wickObject.paper);
-
+            function createPathForWickobject (wickObject) {
+                if(wickObject.isPath) {
+                    var xmlString = wickObject.pathData
+                      , parser = new DOMParser()
+                      , doc = parser.parseFromString(xmlString, "text/xml");
+                    wickObject.paper = paper.project.importSVG(doc, {insert:false});
+                } else if (wickObject.isSymbol) {
+                    wickObject.paper = new paper.Group();
+                    wickObject.getAllActiveChildObjects().forEach(function (child) {
+                        createPathForWickobject(child)
+                        wickObject.paper.addChild(child.paper);
+                        child.paper._isPartOfGroup = true;
+                    });
+                }
                 var absPos = wickObject.getAbsolutePosition();
                 wickObject.paper.position.x = absPos.x;
                 wickObject.paper.position.y = absPos.y;
@@ -98,6 +96,20 @@ var InteractiveCanvas = function (wickEditor) {
                 wickObject.paper.opacity = wickObject.opacity;
                 
                 wickObject.paper.wick = wickObject;
+            }
+
+            paper.project.activeLayer.removeChildren();
+
+            var activeObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
+            activeObjects.forEach(function (wickObject) {
+                if(!wickObject.isSymbol && !wickObject.isPath) return;
+
+                var layer = wickObject.parentFrame.parentLayer;
+                if(layer.locked || layer.hidden) return;
+
+                var newPath = createPathForWickobject(wickObject);
+                paper.project.activeLayer.addChild(wickObject.paper);
+                wickObject.paper._isPartOfGroup = false;
             });
         }
         self.needsUpdate = false;
@@ -117,7 +129,7 @@ var InteractiveCanvas = function (wickEditor) {
         if(tolerance === undefined) tolerance = 3;
         var zoom = wickEditor.canvas.getZoom()
 
-        return paper.project.hitTest(point, {
+        var hitResult = paper.project.hitTest(point, {
             segments: true,
             fill: true,
             curves: true,
@@ -125,11 +137,12 @@ var InteractiveCanvas = function (wickEditor) {
             stroke: true,
             tolerance: tolerance / zoom
         });
+
+        if(hitResult && hitResult.item.parent._isPartOfGroup)
+            hitResult = null;
+
+        return hitResult;
     }
-
-
-
-
 
 // Move this to selection cursor
 // Also we need two cursors

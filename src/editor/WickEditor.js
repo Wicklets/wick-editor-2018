@@ -77,7 +77,7 @@ var WickEditor = function () {
 
     // Load all tools
     this.tools = {
-        "cursor"           : new Tools.Cursor(this),
+        "selectioncursor"  : new Tools.SelectionCursor(this),
         "paintbrush"       : new Tools.Paintbrush(this),
         "pencil"           : new Tools.Pencil(this),
         "eraser"           : new Tools.Eraser(this),
@@ -91,7 +91,7 @@ var WickEditor = function () {
         "zoom"             : new Tools.Zoom(this),
         "pan"              : new Tools.Pan(this),
     }
-    this.currentTool = this.tools.cursor;
+    this.currentTool = this.tools.selectioncursor;
     this.lastTool = this.currentTool;
 
     // Setup all tools + interfaces

@@ -285,8 +285,8 @@ var GuiActionHandler = function (wickEditor) {
         'Select All',
         {},
         function(args) {
-            if(!(wickEditor.currentTool instanceof Tools.Cursor))
-                wickEditor.currentTool = wickEditor.tools.cursor;
+            if(!(wickEditor.currentTool instanceof Tools.SelectionCursor))
+                wickEditor.currentTool = wickEditor.tools.selectioncursor;
 
             wickEditor.project.clearSelection();
             wickEditor.project.currentObject.getAllActiveChildObjects().forEach(function (obj) {
@@ -613,20 +613,20 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.syncInterfaces();
         });
 
-    registerAction('useTools.cursor',
+    registerAction('useTools.selectioncursor',
         ['C'],
-        'Switch to Cursor',
+        'Switch to Selection Cursor',
         {},
         function(args) {
-            wickEditor.changeTool(wickEditor.tools.cursor);
+            wickEditor.changeTool(wickEditor.tools.selectioncursor);
         });
 
-    registerAction('useTools.pathCursor',
+    registerAction('useTools.vectorcursor',
         ['P'],
         'Switch to Path Cursor',
         {},
         function (args) {
-            wickEditor.changeTool(wickEditor.tools.pathCursor);
+            wickEditor.changeTool(wickEditor.tools.vectorcursor);
         });
 
     registerAction('useTools.pencil',
