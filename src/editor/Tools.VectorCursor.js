@@ -141,14 +141,16 @@ Tools.VectorCursor = function (wickEditor) {
     }
 
     this.paperTool.onMouseMove = function(event) {
-        wickEditor.canvas.getInteractiveCanvas().highlightHoveredOverObject(event);
+        paper.project.activeLayer.selected = false;
+        paper.project.deselectAll();
+        hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point);
+        if(hitResult && hitResult.item && !hitResult.item._wickInteraction)
+            hitResult.item.selected = true;
         wickEditor.cursorIcon.setImageForPaperEvent(event)
         //wickEditor.canvas.getInteractiveCanvas().updateCursorIcon(event);
     }
 
     this.paperTool.onMouseDrag = function(event) {
-
-        wickEditor.canvas.getInteractiveCanvas().highlightHoveredOverObject(event);
 
         if(!hitResult) return;
 

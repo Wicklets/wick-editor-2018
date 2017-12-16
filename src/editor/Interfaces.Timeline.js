@@ -61,6 +61,10 @@ var TimelineInterface = function (wickEditor) {
         timeline.verticalScrollBar.reset();
     }
 
+    self.updateZoomBox = function () {
+        timeline.updateZoomBox();
+    }
+
 }
 
 TimelineInterface.Timeline = function (wickEditor) {

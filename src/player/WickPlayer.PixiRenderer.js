@@ -167,7 +167,7 @@ var WickPixiRenderer = function (canvasContainer) {
 
         if (wickObject.asset && wickObject.asset.type === 'image') {
             type = 'image';
-        } else if (wickObject.pathData) {
+        } else if (wickObject.isPath && wickObject.pathData) {
             type = 'svg';
         } else if (wickObject.isText) {
             type = 'text';

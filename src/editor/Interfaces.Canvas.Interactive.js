@@ -57,16 +57,6 @@ var InteractiveCanvas = function (wickEditor) {
         paperCanvas.style.display = 'none'
     }
 
-    self.highlightHoveredOverObject = function (event) {
-        updateSelection()
-
-        /*if (event.item && !event.item._wickInteraction) 
-            event.item.selected = true;*/
-        hitResult = self.getItemAtPoint(event.point);
-        if(hitResult && hitResult.item && !hitResult.item._wickInteraction)
-            hitResult.item.selected = true;
-    }
-
     self.update = function () {
 
         self.updateViewTransforms();
@@ -113,8 +103,6 @@ var InteractiveCanvas = function (wickEditor) {
             });
         }
         self.needsUpdate = false;
-
-        updateSelection();
     }
 
     self.updateViewTransforms = function () {
@@ -142,78 +130,6 @@ var InteractiveCanvas = function (wickEditor) {
             hitResult = null;
 
         return hitResult;
-    }
-
-// Move this to selection cursor
-// Also we need two cursors
-
-    var selectionRect;
-    var selectionBoundsRect;
-    var scaleBR;
-    var rotate;
-    var GUI_DOTS_SIZE = 5;
-
-    self.getSelectionRect = function () {
-        return selectionBoundsRect;
-    }
-
-    self.forceUpdateSelection = function () {
-        updateSelection();
-    }
-
-    function updateSelection () {
-        paper.settings.handleSize = 10;
-        paper.project.activeLayer.selected = false;
-        paper.project.deselectAll();
-        paper.project.activeLayer.children.forEach(function (child) {
-            if(!child.wick) return;
-            if(wickEditor.project.isObjectSelected(child.wick)) {
-                //child.selected = true;
-                //child.fullySelected = true;
-                if(!selectionBoundsRect) {
-                    selectionBoundsRect = child.bounds.clone()
-                } else {
-                    selectionBoundsRect = selectionBoundsRect.unite(child.bounds);
-                }
-            }
-        });
-
-        selectionBoundsRect = null;
-
-        paper.project.activeLayer.children.forEach(function (child) {
-            if(!child.wick) return;
-            if(wickEditor.project.isObjectSelected(child.wick)) {
-                if(!selectionBoundsRect) {
-                    selectionBoundsRect = child.bounds.clone()
-                } else {
-                    selectionBoundsRect = selectionBoundsRect.unite(child.bounds);
-                }
-            }
-        });
-
-        if(selectionRect) selectionRect.remove();
-        if(scaleBR) scaleBR.remove();
-        if(rotate) rotate.remove();
-
-        if(selectionBoundsRect) {
-            selectionBoundsRect = selectionBoundsRect.expand(10);
-
-            selectionRect = new paper.Path.Rectangle(selectionBoundsRect);
-            selectionRect.strokeColor = 'purple';
-            selectionRect.strokeWidth = 1/wickEditor.canvas.getZoom();
-            selectionRect._wickInteraction = 'selectionRect';
-            selectionRect.locked = true;
-
-            scaleBR = new paper.Path.Circle(selectionBoundsRect.bottomRight, GUI_DOTS_SIZE/wickEditor.canvas.getZoom());
-            scaleBR.fillColor = 'purple'
-            scaleBR._wickInteraction = 'scaleBR';
-            scaleBR._cursor = 'nwse-resize';
-
-            rotate = new paper.Path.Circle(selectionBoundsRect.topRight.add(new paper.Point(20,-20)), GUI_DOTS_SIZE/wickEditor.canvas.getZoom());
-            rotate.fillColor = 'purple'
-            rotate._wickInteraction = 'rotate';
-            rotate._cursor = 'grab';
-        }
     }
 
  }

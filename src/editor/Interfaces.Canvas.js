@@ -101,18 +101,26 @@ var CanvasInterface = function (wickEditor) {
         pan.y = centerY;
         zoom = 1.0;
 
-        interactiveCanvas.updateViewTransforms();
-        fastCanvas.updateViewTransforms();
-        canvasBackdrop.updateViewTransforms();
+        updateViewTransforms()
     }
 
     self.panByAmount = function (x, y) {
         pan.x += x;
         pan.y += y;
 
-        interactiveCanvas.updateViewTransforms();
-        fastCanvas.updateViewTransforms();
-        canvasBackdrop.updateViewTransforms();
+        updateViewTransforms();
+    }
+
+    self.setZoom = function (newZoom) {
+        var oldZoom = zoom;
+        var zoomAmount = newZoom / oldZoom;
+
+        pan.x += ((window.innerWidth/2) -pan.x)*(1-zoomAmount);
+        pan.y += ((window.innerHeight/2)-pan.y)*(1-zoomAmount);
+
+        zoom = newZoom;
+
+        updateViewTransforms();
     }
 
     self.zoomToPoint = function (zoomAmount, x, y) {
@@ -121,9 +129,7 @@ var CanvasInterface = function (wickEditor) {
         pan.x += (x-pan.x)*(1-zoomAmount);
         pan.y += (y-pan.y)*(1-zoomAmount);
 
-        interactiveCanvas.updateViewTransforms();
-        fastCanvas.updateViewTransforms();
-        canvasBackdrop.updateViewTransforms();
+        updateViewTransforms()
     }
 
     self.screenToCanvasSpace = function (x,y) {
@@ -131,6 +137,13 @@ var CanvasInterface = function (wickEditor) {
             x: (x - pan.x)/zoom,
             y: (y - pan.y)/zoom
         }
+    }
+
+    function updateViewTransforms () {
+        interactiveCanvas.updateViewTransforms();
+        fastCanvas.updateViewTransforms();
+        canvasBackdrop.updateViewTransforms();
+        wickEditor.timeline.updateZoomBox();
     }
 
 }

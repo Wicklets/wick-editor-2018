@@ -102,6 +102,8 @@ Tools.SelectionCursor = function (wickEditor) {
             selectionSquareBottomRight = event.point
         }
 
+        updateSelection()
+
     }
 
     this.paperTool.onDoubleClick = function (event) {
@@ -109,32 +111,32 @@ Tools.SelectionCursor = function (wickEditor) {
     }
 
     this.paperTool.onMouseMove = function(event) {
-        //wickEditor.canvas.getInteractiveCanvas().highlightHoveredOverObject(event);
         //wickEditor.cursorIcon.setImageForPaperEvent(event)
         //wickEditor.canvas.getInteractiveCanvas().updateCursorIcon(event);
+        updateSelection()
     }
 
     this.paperTool.onMouseDrag = function(event) {
 
         if(transformMode === 'scaleBR') {
-            var rect = wickEditor.canvas.getInteractiveCanvas().getSelectionRect();
+            var rect = selectionBoundsRect
             wickEditor.project.getSelectedObjects().forEach(function (o) {
                 var resizeRatio = event.point.subtract(rect.topLeft);
                 resizeRatio.x /= rect.width;
                 resizeRatio.y /= rect.height;
                 o.paper.scale(resizeRatio.x, resizeRatio.y, rect.topLeft);
-                wickEditor.canvas.getInteractiveCanvas().forceUpdateSelection()
+                updateSelection()
             });
             return;
         }
         if(transformMode === 'rotate') {
-            var rect = wickEditor.canvas.getInteractiveCanvas().getSelectionRect();
+            var rect = selectionBoundsRect
             wickEditor.project.getSelectedObjects().forEach(function (o) {
                 var pivot = rect.center;
                 var oldAngle = event.lastPoint.subtract(pivot).angle;
                 var newAngle = event.point.subtract(pivot).angle;
                 o.paper.rotate(newAngle-oldAngle, pivot);
-                //wickEditor.canvas.getInteractiveCanvas().forceUpdateSelection()
+                //updateSelection()
             });
             return;
         }
@@ -152,11 +154,17 @@ Tools.SelectionCursor = function (wickEditor) {
             selectionSquare.strokeColor = 'rgba(100,100,255,0.7)';
             selectionSquare.strokeWidth = 1;
             selectionSquare.fillColor = 'rgba(100,100,255,0.15)';
-
-            return;
+        } else {
+            if(hitResult.item) {
+                wickEditor.project.getSelectedObjects().forEach(function (o) {
+                    o.paper.position = new paper.Point(
+                        o.paper.position.x + event.delta.x,
+                        o.paper.position.y + event.delta.y
+                    );
+                });
+                updateSelection()
+            }
         }
-
-        //wickEditor.canvas.getInteractiveCanvas().highlightHoveredOverObject(event);
 
     }
 
@@ -226,6 +234,65 @@ Tools.SelectionCursor = function (wickEditor) {
             wickObject.x = wickObject.paper.position.x - parentAbsPos.x;
             wickObject.y = wickObject.paper.position.y - parentAbsPos.y;
         });
+    }
+
+    var selectionRect;
+    var selectionBoundsRect;
+    var scaleBR;
+    var rotate;
+    var GUI_DOTS_SIZE = 5;
+
+    function updateSelection () {
+        paper.settings.handleSize = 10;
+        paper.project.activeLayer.children.forEach(function (child) {
+            if(!child.wick) return;
+            if(wickEditor.project.isObjectSelected(child.wick)) {
+                //child.selected = true;
+                //child.fullySelected = true;
+                if(!selectionBoundsRect) {
+                    selectionBoundsRect = child.bounds.clone()
+                } else {
+                    selectionBoundsRect = selectionBoundsRect.unite(child.bounds);
+                }
+            }
+        });
+
+        selectionBoundsRect = null;
+
+        paper.project.activeLayer.children.forEach(function (child) {
+            if(!child.wick) return;
+            if(wickEditor.project.isObjectSelected(child.wick)) {
+                if(!selectionBoundsRect) {
+                    selectionBoundsRect = child.bounds.clone()
+                } else {
+                    selectionBoundsRect = selectionBoundsRect.unite(child.bounds);
+                }
+            }
+        });
+
+        if(selectionRect) selectionRect.remove();
+        if(scaleBR) scaleBR.remove();
+        if(rotate) rotate.remove();
+
+        if(selectionBoundsRect) {
+            //selectionBoundsRect = selectionBoundsRect.expand(10);
+
+            selectionRect = new paper.Path.Rectangle(selectionBoundsRect);
+            selectionRect.strokeColor = 'purple';
+            selectionRect.strokeWidth = 1/wickEditor.canvas.getZoom();
+            selectionRect._wickInteraction = 'selectionRect';
+            selectionRect.locked = true;
+
+            scaleBR = new paper.Path.Circle(selectionBoundsRect.bottomRight, GUI_DOTS_SIZE/wickEditor.canvas.getZoom());
+            scaleBR.fillColor = 'purple'
+            scaleBR._wickInteraction = 'scaleBR';
+            scaleBR._cursor = 'nwse-resize';
+
+            rotate = new paper.Path.Circle(selectionBoundsRect.topRight.add(new paper.Point(20,-20)), GUI_DOTS_SIZE/wickEditor.canvas.getZoom());
+            rotate.fillColor = 'purple'
+            rotate._wickInteraction = 'rotate';
+            rotate._cursor = 'grab';
+        }
     }
 
 }
