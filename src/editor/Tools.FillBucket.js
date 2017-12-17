@@ -51,7 +51,7 @@ Tools.FillBucket = function (wickEditor) {
     this.paperTool.onMouseDown = function (event) {
         
         if(wickEditor.currentTool instanceof Tools.FillBucket) {
-            hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point, 0);
+            hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point, {tolerance:0});
             if(!hitResult) {
                 //console.log(PaperHoleFinder.getHoleShapeAtPosition(paper.project, event.point));
                 /*var hole = PaperHoleFinder.getHoleShapeAtPosition(paper.project, event.point);

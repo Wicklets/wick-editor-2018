@@ -113,8 +113,9 @@ var InteractiveCanvas = function (wickEditor) {
         paper.view.matrix.scale(zoom)
     }
 
-    self.getItemAtPoint = function (point, tolerance) {
-        if(tolerance === undefined) tolerance = 3;
+    self.getItemAtPoint = function (point, args) {
+        if(!args) args = {};
+        if(args.tolerance === undefined) args.tolerance = 3;
         var zoom = wickEditor.canvas.getZoom()
 
         var hitResult = paper.project.hitTest(point, {
@@ -123,11 +124,16 @@ var InteractiveCanvas = function (wickEditor) {
             curves: true,
             handles: false,
             stroke: true,
-            tolerance: tolerance / zoom
+            tolerance: args.tolerance / zoom
         });
 
-        if(hitResult && hitResult.item.parent._isPartOfGroup)
-            hitResult = null;
+        if(hitResult && hitResult.item.parent._isPartOfGroup) {
+            if(args.allowGroups) {
+                hitResult.item = hitResult.item.parent;
+            } else {
+                hitResult.item = null;
+            }
+        }
 
         return hitResult;
     }

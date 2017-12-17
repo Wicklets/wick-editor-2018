@@ -219,25 +219,11 @@ Tools.VectorCursor = function (wickEditor) {
         if(!hitResult) return;
         if(!hitResult.item) return;
 
-        wickEditor.project.getSelectedObjects().forEach(function (wickObject) {
-            wickObject.paper.applyMatrix = true;
-            wickObject.paper.rotate(wickObject.rotation);
-            wickObject.paper.scaling.x = wickObject.scaleX;
-            wickObject.paper.scaling.y = wickObject.scaleY;
-            if(wickObject.flipX) {
-                wickObject.paper.scale(-1, 1)
-            }
-            if(wickObject.flipY) {
-                wickObject.paper.scale(1, -1)
-            }
+        var wickObject = hitResult.item.parent.wick;
 
-            wickObject.rotation = 0;
-            wickObject.scaleX = 1;
-            wickObject.scaleY = 1;
+        //wickEditor.project.getSelectedObjects().forEach(function (wickObject) {
             wickObject.width = wickObject.paper.bounds._width;
             wickObject.height = wickObject.paper.bounds._height;
-            wickObject.flipX = false;
-            wickObject.flipY = false;
 
             wickObject.pathData = wickObject.paper.exportSVG({asString:true});
 
@@ -252,7 +238,7 @@ Tools.VectorCursor = function (wickEditor) {
 
             wickObject.x = wickObject.paper.position.x - parentAbsPos.x;
             wickObject.y = wickObject.paper.position.y - parentAbsPos.y;
-        });
+        //});
     }
 
 }
