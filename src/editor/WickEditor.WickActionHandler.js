@@ -83,10 +83,10 @@ var WickActionHandler = function (wickEditor) {
         wickEditor.project.unsaved = true;
         wickEditor.project.rootObject.generateParentObjectReferences();
         wickEditor.project.regenAssetReferences();
-        wickEditor.syncInterfaces();
+        if(!args.dontSync) wickEditor.syncInterfaces();
     }
 
-    // scrap function, 
+    // scrap function, call if you need to cancel an action for some reason
     var scrap = function (dontUndo) {
         actionBeingDone = false;
 
@@ -225,8 +225,6 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             args.restoredObjects = [];
             args.restoredFrames = [];
-            args.restoredPlayRanges = [];
-            //args.restoredTweens = [];
             args.oldZIndices = [];
 
             // Store the old z index vars for each object.
@@ -247,15 +245,7 @@ var WickActionHandler = function (wickEditor) {
                     args.restoredFrames.push(object);
                     object.remove();
                     wickEditor.project.currentObject.framesDirty = true;
-                } else if (object instanceof WickPlayRange) {
-                    wickEditor.project.currentObject.removePlayRange(object);
-                    args.restoredPlayRanges.push(object)
-                    wickEditor.project.currentObject.framesDirty = true;
-                }/* else if (object instanceof WickTween) {
-                    wickEditor.project.getSelectedObjectByType(WickObject).removeTween(object);
-                    args.restoredTweens.push(object)
-                    wickEditor.project.currentObject.framesDirty = true;
-                }*/
+                }
             });
 
             wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
@@ -266,26 +256,16 @@ var WickActionHandler = function (wickEditor) {
                 wickEditor.project.addObject(args.restoredObjects[i], args.oldZIndices[i], true);
             }
 
-            args.restoredPlayRanges.forEach(function (restorePlayRange) {
-                wickEditor.project.getCurrentObject().addPlayRange(restorePlayRange);
-                wickEditor.project.currentObject.framesDirty = true;
-            });
-
             args.restoredFrames.forEach(function (restoreFrame) {
                 restoreFrame.parentLayer.addFrame(restoreFrame);
                 wickEditor.project.currentObject.framesDirty = true;
             });
 
-            /*args.restoredTweens.forEach(function (restoreTween) {
-                restoreFrame.parentLayer.addTween(restoreTween);
-                wickEditor.project.currentObject.framesDirty = true;
-            });*/
-
             wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
             done(args);
         });
 
-    var modifyableAttributes = ["x","y","scaleX","scaleY","rotation","opacity","flipX","flipY","pathData","textData","width"];
+    var modifyableAttributes = ["x","y","scaleX","scaleY","rotation","opacity","flipX","flipY","pathData","svgX","svgY","width","height"];
 
     registerAction('modifyObjects',
         function (args) {
@@ -306,21 +286,8 @@ var WickActionHandler = function (wickEditor) {
                     }
                 });
 
-                if(wickObj.pathData) {
-                    if(args.modifiedStates[i]['pathData'] 
-                    || args.modifiedStates[i]['rotation'] !== 0 
-                    || args.modifiedStates[i]['scaleX'] !== 1
-                    || args.modifiedStates[i]['scaleY'] !== 1
-                    || args.modifiedStates[i]['flipX'] !== false
-                    || args.modifiedStates[i]['flipY'] !== false) {
-                        wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(wickObj);
-                        wickObj._renderDirty = true;
-                    }
-                }
-                if(wickObj.textData) {
-                    if(args.modifiedStates[i]['textData']) {
-                        wickObj._renderDirty = true;
-                    }
+                if(wickObj.pathData && args.modifiedStates[i]['pathData']) {
+                    wickObj._renderDirty = true;
                 }
 
                 var frame = wickObj.parentFrame;
@@ -348,17 +315,13 @@ var WickActionHandler = function (wickEditor) {
 
                 // Revert the object's state to it's original pre-transformation state
                 modifyableAttributes.forEach(function(attrib) {
-                    if(attrib === 'pathData') wickObj.forceFabricCanvasRegen = true;
                     if(args.originalStates[i][attrib] !== undefined) {
                         wickObj[attrib] = deepCopy(args.originalStates[i][attrib]);
                     }
                 });
 
                 if(wickObj.pathData) {
-                    if(args.originalStates[i]['rotation'] || args.originalStates[i]['scaleX'] || args.originalStates[i]['scaleY']) {
-                        wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(wickObj);
-                        wickObj._renderDirty = true;
-                    }
+                    wickObj._renderDirty = true;
                 }
                 
                 wickObj.updateFrameTween();
@@ -388,9 +351,6 @@ var WickActionHandler = function (wickEditor) {
             args.createdSymbol = symbol;
 
             if(args.button) {
-                /*symbol.addPlayRange(new WickPlayRange(0,1,'mouseup','#4a6588'));
-                symbol.addPlayRange(new WickPlayRange(1,2,'mouseover','#4a6588'));
-                symbol.addPlayRange(new WickPlayRange(2,3,'mousedown','#4a6588'));*/
                 symbol.layers[0].frames.push(symbol.layers[0].frames[0].copy());
                 symbol.layers[0].frames.push(symbol.layers[0].frames[0].copy());
 
@@ -442,25 +402,6 @@ var WickActionHandler = function (wickEditor) {
 
             done(args);
         });
-
-    /*registerAction('convertFramesToSymbol', 
-        function (args) {
-            args.createdSymbol = WickObject.createSymbolFromWickFrames(args.frames);
-
-            wickEditor.actionHandler.doAction('deleteObjects', {objects:args.frames});
-
-            var newFrame = new WickFrame();
-            newFrame.playheadPosition = wickEditor.project.getCurrentObject().playheadPosition;
-            newFrame.wickObjects = [args.createdSymbol];
-            wickEditor.actionHandler.doAction('addFrame', {frame:newFrame, layer:wickEditor.project.getCurrentObject().getCurrentLayer()});
-
-            done(args); 
-        }, 
-        function (args) {
-            console.error("convertFramesToSymbol undo NYI!");
-
-            done(args); 
-        });*/
 
     registerAction('breakApartSymbol',
         function (args) {
@@ -518,7 +459,6 @@ var WickActionHandler = function (wickEditor) {
         },
         function (args) {
             var currentObject = wickEditor.project.currentObject;
-            //args.layer.frames.pop();
             args.layer.removeFrame(args.frame);
 
             args.movePlayheadAction.undoAction();
@@ -541,8 +481,7 @@ var WickActionHandler = function (wickEditor) {
             });
 
             currentObject.framesDirty = true;
-            wickEditor.project.rootObject.generateParentObjectReferences()
-            //wickEditor.thumbnailRenderer.renderAllThumbsOnTimeline();
+            wickEditor.project.rootObject.generateParentObjectReferences();
 
             done(args);
         },
@@ -681,24 +620,6 @@ var WickActionHandler = function (wickEditor) {
             args.oldLayer.removeFrame(args.frame);
             args.newLayer.addFrame(args.frame);
 
-            //args.oldProjectPlayheadPosition = wickEditor.project.getCurrentObject().playheadPosition;
-            //wickEditor.project.getCurrentObject().playheadPosition = args.newPlayheadPosition;
-
-            /*var touching = false;
-            args.newLayer.frames.forEach(function (frame) {
-                if(frame!==args.frame && frame.touchesFrame(args.frame)) {
-                    touching = true;
-                }
-            });
-            if(touching) {
-                scrap();return;
-            }*/
-
-            /*wickEditor.actionHandler.doAction('movePlayhead', {
-                obj: wickEditor.project.currentObject,
-                newPlayheadPosition: args.newPlayheadPosition
-            });*/
-
             wickEditor.project.currentObject.framesDirty = true;
             done(args);
         },
@@ -707,8 +628,6 @@ var WickActionHandler = function (wickEditor) {
 
             args.newLayer.removeFrame(args.frame);
             args.oldLayer.addFrame(args.frame);
-
-            //wickEditor.project.getCurrentObject().playheadPosition = args.oldProjectPlayheadPosition;
 
             wickEditor.project.currentObject.framesDirty = true;
             done(args);
@@ -913,7 +832,6 @@ var WickActionHandler = function (wickEditor) {
             args.prevEditedObject = wickEditor.project.currentObject;
             wickEditor.project.currentObject = args.objectToEdit;
 
-            //wickEditor.thumbnailRenderer.renderAllThumbsOnTimeline();
             wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
 
             wickEditor.timeline.resetScrollbars();
@@ -971,19 +889,8 @@ var WickActionHandler = function (wickEditor) {
 
             args.objs.forEach(function (obj) {
                 var oldIndex = currFrame.wickObjects.indexOf(obj);
-                //console.log(oldIndex)
                 currFrame.wickObjects.move(oldIndex, args.newZIndex);
             });
-
-            /*for(var i = 0; i < args.objs.length; i++) {
-                var obj = args.objs[i]
-                var frame = wickEditor.project.getCurrentFrame();
-                var oldZIndex = frame.wickObjects.indexOf(obj);
-                var newIndex = args.newIndex;
-
-                wickEditor.project.getCurrentFrame().wickObjects.splice(args.oldZIndexes[i], 1);
-                wickEditor.project.getCurrentFrame().wickObjects.splice(args.newZIndex, 0, obj);
-            }*/
 
             done(args);
         },
@@ -1206,7 +1113,6 @@ var WickActionHandler = function (wickEditor) {
             });
 
             wickEditor.project.getCurrentLayer().addFrame(copiedFrame);
-            // wickEditor.project.getCurrentObject().playheadPosition = copiedFrame.playheadPosition;
             wickEditor.project.clearSelection();
             wickEditor.project.selectObject(copiedFrame);
 
@@ -1242,34 +1148,6 @@ var WickActionHandler = function (wickEditor) {
             args.changedFrame.length = args.oldLength;
 
             wickEditor.project.currentObject.framesDirty = true;
-            done(args);
-        });
-
-    registerAction('doBooleanOperation',
-        function (args) {
-            var removeObjs = args.objs;
-            if(args.boolFnName === 'subtract') {
-                removeObjs = [args.objs[0]];
-            }
-            if(args.boolFnName === 'intersect') {
-                removeObjs = [args.objs[args.objs.length-1]];
-            }
-
-            args.deleteAction = wickEditor.actionHandler.doAction('deleteObjects', {
-                objects: removeObjs,
-                dontAddToStack: true
-            });
-            args.addAction = wickEditor.actionHandler.doAction('addObjects', {
-                wickObjects: [wickEditor.canvas.getInteractiveCanvas().pathRoutines.getBooleanOpResult(args.boolFnName, args.objs)],
-                dontAddToStack: true
-            });
-
-            done(args);
-        }, 
-        function (args) {
-            args.addAction.undoAction();
-            args.deleteAction.undoAction();
-
             done(args);
         });
 

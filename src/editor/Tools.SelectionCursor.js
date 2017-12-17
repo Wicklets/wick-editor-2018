@@ -40,7 +40,7 @@ Tools.SelectionCursor = function (wickEditor) {
 
     var GUI_DOTS_SIZE = 5;
     var GUI_DOTS_FILLCOLOR = 'rgba(255,255,255,0.3)';
-    var GUI_DOTS_STROKECOLOR = 'rgba(100,100,255,1.0)'
+    var GUI_DOTS_STROKECOLOR = 'rgba(100,150,255,1.0)'
 
     this.getCursorImage = function () {
         return "auto"
@@ -89,7 +89,7 @@ Tools.SelectionCursor = function (wickEditor) {
             return;
         }
 
-        if(hitResult) {
+        if(hitResult && !hitResult.item._wickInteraction) {
             //if(hitResult.type === 'fill') {
                 var selectCheckWickObj = hitResult.item.parent.wick;
                 var newlySelected = false;
@@ -137,6 +137,8 @@ Tools.SelectionCursor = function (wickEditor) {
 
         if(hitResult && hitResult.item._cursor)
             document.body.style.cursor = hitResult.item._cursor;
+        else if (hitResult && !hitResult.item._wickInteraction)
+            document.body.style.cursor = 'move';
         else
             wickEditor.canvas.updateCursor();
     }
@@ -270,7 +272,7 @@ Tools.SelectionCursor = function (wickEditor) {
             selectionSquare.strokeWidth = 1;
             selectionSquare.fillColor = 'rgba(100,100,255,0.15)';
         } else {
-            if(hitResult.item) {
+            if(hitResult && hitResult.item) {
                 wickEditor.project.getSelectedObjects().forEach(function (o) {
                     o.paper.position = new paper.Point(
                         o.paper.position.x + event.delta.x,
@@ -315,7 +317,9 @@ Tools.SelectionCursor = function (wickEditor) {
         if(!hitResult) return;
         if(!hitResult.item) return;
 
-        wickEditor.project.getSelectedObjects().forEach(function (wickObject) {
+        var objs = wickEditor.project.getSelectedObjects();
+        var modifiedStates = [];
+        objs.forEach(function (wickObject) {
             if(wickObject.isSymbol) return;
 
             wickObject.paper.applyMatrix = true;
@@ -332,15 +336,8 @@ Tools.SelectionCursor = function (wickEditor) {
             wickObject.rotation = 0;
             wickObject.scaleX = 1;
             wickObject.scaleY = 1;
-            wickObject.width = wickObject.paper.bounds._width;
-            wickObject.height = wickObject.paper.bounds._height;
             wickObject.flipX = false;
             wickObject.flipY = false;
-
-            wickObject.pathData = wickObject.paper.exportSVG({asString:true});
-
-            wickObject.svgX = wickObject.paper.bounds._x;
-            wickObject.svgY = wickObject.paper.bounds._y;
 
             var parentAbsPos;
             if(wickObject.parentObject)
@@ -348,8 +345,19 @@ Tools.SelectionCursor = function (wickEditor) {
             else 
                 parentAbsPos = {x:0,y:0};
 
-            wickObject.x = wickObject.paper.position.x - parentAbsPos.x;
-            wickObject.y = wickObject.paper.position.y - parentAbsPos.y;
+            modifiedStates.push({
+                x : wickObject.paper.position.x - parentAbsPos.x,
+                y : wickObject.paper.position.y - parentAbsPos.y,
+                svgX : wickObject.paper.bounds._x,
+                svgY : wickObject.paper.bounds._y,
+                width : wickObject.paper.bounds._width,
+                height : wickObject.paper.bounds._height,
+                pathData : wickObject.paper.exportSVG({asString:true}),
+            });
+        });
+        wickEditor.actionHandler.doAction('modifyObjects', {
+            objs: objs,
+            modifiedStates: modifiedStates
         });
     }
 
@@ -451,7 +459,7 @@ Tools.SelectionCursor = function (wickEditor) {
             scaleR._wickInteraction = 'scaleR';
             scaleR._cursor = 'ew-resize';
 
-            rotate = new paper.Path.Circle(selectionBoundsRect.topRight.add(new paper.Point(20,-20)), GUI_DOTS_SIZE/wickEditor.canvas.getZoom());
+            rotate = new paper.Path.Circle(selectionBoundsRect.topCenter.add(new paper.Point(0,-20)), GUI_DOTS_SIZE/wickEditor.canvas.getZoom());
             rotate.fillColor = GUI_DOTS_FILLCOLOR
             rotate.strokeColor = GUI_DOTS_STROKECOLOR
             rotate._wickInteraction = 'rotate';

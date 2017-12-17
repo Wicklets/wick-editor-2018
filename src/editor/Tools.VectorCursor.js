@@ -48,7 +48,6 @@ Tools.VectorCursor = function (wickEditor) {
     var addedPoint;
 
     var lastEvent;
-    var transformMode;
 
     this.paperTool.onMouseDown = function(event) {
 
@@ -63,12 +62,13 @@ Tools.VectorCursor = function (wickEditor) {
         
         hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point);
 
-        if(hitResult && hitResult.item && hitResult.item._wickInteraction) {
-            transformMode = hitResult.item._wickInteraction
-            return;
-        }
-
         if(hitResult) {
+            if(hitResult.item.parent.wick) {
+                wickEditor.project.clearSelection();
+                wickEditor.project.selectObject(hitResult.item.parent.wick);
+                wickEditor.syncInterfaces();
+            }
+
             if(hitResult.type === 'fill') {
                 
             }
@@ -119,6 +119,9 @@ Tools.VectorCursor = function (wickEditor) {
             } else {
                 addedPoint = null;
             }
+        } else {
+            wickEditor.project.clearSelection();
+            wickEditor.syncInterfaces();
         }
 
     }
@@ -143,10 +146,18 @@ Tools.VectorCursor = function (wickEditor) {
     this.paperTool.onMouseMove = function(event) {
         paper.project.activeLayer.selected = false;
         paper.project.deselectAll();
+
         hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point);
+
         if(hitResult && hitResult.item && !hitResult.item._wickInteraction)
             hitResult.item.selected = true;
+        var selectedWickObject = wickEditor.project.getSelectedObject();
+        if(selectedWickObject && selectedWickObject.paper) {
+            selectedWickObject.paper.selected = true;
+        }
+
         wickEditor.cursorIcon.setImageForPaperEvent(event)
+
         //wickEditor.canvas.getInteractiveCanvas().updateCursorIcon(event);
     }
 
@@ -221,24 +232,24 @@ Tools.VectorCursor = function (wickEditor) {
 
         var wickObject = hitResult.item.parent.wick;
 
-        //wickEditor.project.getSelectedObjects().forEach(function (wickObject) {
-            wickObject.width = wickObject.paper.bounds._width;
-            wickObject.height = wickObject.paper.bounds._height;
+        var parentAbsPos;
+        if(wickObject.parentObject)
+            parentAbsPos = wickObject.parentObject.getAbsolutePosition();
+        else 
+            parentAbsPos = {x:0,y:0};
 
-            wickObject.pathData = wickObject.paper.exportSVG({asString:true});
-
-            wickObject.svgX = wickObject.paper.bounds._x;
-            wickObject.svgY = wickObject.paper.bounds._y;
-
-            var parentAbsPos;
-            if(wickObject.parentObject)
-                parentAbsPos = wickObject.parentObject.getAbsolutePosition();
-            else 
-                parentAbsPos = {x:0,y:0};
-
-            wickObject.x = wickObject.paper.position.x - parentAbsPos.x;
-            wickObject.y = wickObject.paper.position.y - parentAbsPos.y;
-        //});
+        wickEditor.actionHandler.doAction('modifyObjects', {
+            objs: [wickObject],
+            modifiedStates: [{
+                x: wickObject.paper.position.x - parentAbsPos.x,
+                y: wickObject.paper.position.y - parentAbsPos.y,
+                svgX: wickObject.paper.bounds._x,
+                svgY: wickObject.paper.bounds._y,
+                width: wickObject.paper.bounds._width,
+                height: wickObject.paper.bounds._height,
+                pathData: wickObject.paper.exportSVG({asString:true}),
+            }]
+        });
     }
 
 }

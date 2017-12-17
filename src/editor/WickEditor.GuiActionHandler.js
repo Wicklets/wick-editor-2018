@@ -71,19 +71,6 @@ var GuiActionHandler = function (wickEditor) {
     GuiAction Definitions
 *****************************/
 
-    registerAction('openTools.Pan',
-        ['SPACE'],
-        'Pan',
-        {},
-        function(args) {
-            if(!(wickEditor.currentTool instanceof Tools.Pan)) {
-                wickEditor.lastTool = wickEditor.currentTool;
-                wickEditor.currentTool = wickEditor.tools.pan;
-                wickEditor.canvas.updateCursor();
-                wickEditor.syncInterfaces();
-            }
-        });
-
     registerAction('previewToggle',
         ['ENTER'],
         'Play/Pause Preview',
@@ -433,8 +420,6 @@ var GuiActionHandler = function (wickEditor) {
             })
         });
 
-    // BACKSPACE
-    // Delete Selected Objects
     registerAction('deleteSelectedObjects',
         ['BACKSPACE'],
         null,
@@ -451,8 +436,6 @@ var GuiActionHandler = function (wickEditor) {
             }
         });
 
-    // Delete
-    // Delete Selected Objects
     registerAction('deleteSelectedObjects2',
         ['DELETE'],
         'Delete Selection',
@@ -481,8 +464,6 @@ var GuiActionHandler = function (wickEditor) {
                 copyType = 'text/wickframesjson';
             }
             polyfillClipboardData.setData(copyType, copyData);
-
-            //wickEditor.syncInterfaces();
         });
 
     registerAction('cut',
@@ -514,7 +495,6 @@ var GuiActionHandler = function (wickEditor) {
                 
                 if(fileType === 'text/wickobjectsjson') {
                     var objs = WickObject.fromJSONArray(JSON.parse(file));
-                    // Make sure to reset uuids!
                     objs.forEachBackwards(function (obj) {
                         if(obj.name) obj.name = undefined;
                         obj.getAllChildObjectsRecursive().forEach(function (child) {
@@ -556,7 +536,6 @@ var GuiActionHandler = function (wickEditor) {
                         frames:frames
                     });
                 } else if (fileType.includes('image')) {
-                    //console.log(items[i])
                     reader = new FileReader();
                     reader.onload = function(evt) {
                         var asset = new WickAsset(evt.target.result, 'image', 'Pasted Image');
@@ -718,11 +697,24 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.pan',
-        [/*'P'*/],
+        [],
         [],
         {},
         function(args) {
             wickEditor.changeTool(wickEditor.tools.pan);
+        });
+
+    registerAction('panWithSpace',
+        ['SPACE'],
+        'Pan',
+        {},
+        function(args) {
+            if(!(wickEditor.currentTool instanceof Tools.Pan)) {
+                wickEditor.lastTool = wickEditor.currentTool;
+                wickEditor.currentTool = wickEditor.tools.pan;
+                wickEditor.canvas.updateCursor();
+                wickEditor.syncInterfaces();
+            }
         });
 
     registerAction('editScripts',
@@ -973,10 +965,6 @@ var GuiActionHandler = function (wickEditor) {
         function(args) {
             var frame = wickEditor.project.getCurrentFrame();
 
-            //var frameEndingIndex = wickEditor.project.currentObject.getPlayheadPositionAtFrame(frame) + frame.frameLength - 1;
-            //var framesToShrink = frameEndingIndex - wickEditor.project.currentObject.playheadPosition;
-            //framesToShrink = Math.max(1, framesToShrink)
-
             wickEditor.actionHandler.doAction('shrinkFrame', {
                 nFramesToShrinkBy: 1,
                 frame: frame
@@ -1117,7 +1105,6 @@ var GuiActionHandler = function (wickEditor) {
 
             selectedObjects.forEach(function (selectedObject) {
                 var copy = selectedObject.copy();
-                //var absPos = selectedObject.getAbsolutePosition();
                 copy.x += 50;
                 copy.y += 50;
                 duplicates.push(copy);

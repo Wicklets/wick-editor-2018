@@ -90,6 +90,27 @@ var InteractiveCanvas = function (wickEditor) {
 
             paper.project.activeLayer.removeChildren();
 
+            var currentObj = wickEditor.project.getCurrentObject();
+            if(!currentObj.isRoot) {
+                var fullscreenRect = new paper.Path.Rectangle(
+                    new paper.Point(-10000,-10000),
+                    new paper.Point(10000,10000))
+                fullscreenRect.fillColor = 'rgba(0,0,0,0.2)';
+                fullscreenRect._isGUI = 'gui';
+
+                var originPos = currentObj.getAbsolutePosition();
+                var path = new paper.Path([100, 100], [100, 200]);
+                var path2 = new paper.Path([50, 150], [150, 150]);
+                var group = new paper.Group([path, path2]);
+                group.strokeColor = '#777777';
+                group._isGUI = 'gui';
+                path._isGUI = 'gui';
+                path2._isGUI = 'gui';
+
+                group.position.x = originPos.x;
+                group.position.y = originPos.y;
+            }
+
             var activeObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
             activeObjects.forEach(function (wickObject) {
                 if(!wickObject.isSymbol && !wickObject.isPath) return;
