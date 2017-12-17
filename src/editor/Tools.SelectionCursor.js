@@ -19,7 +19,7 @@ if(!window.Tools) Tools = {};
 
 Tools.SelectionCursor = function (wickEditor) {
 
-    var that = this;
+    var self = this;
 
     var makingSelectionSquare = false;
     var selectionSquare = null;
@@ -77,7 +77,7 @@ Tools.SelectionCursor = function (wickEditor) {
         && event.timeStamp-lastEvent.timeStamp<300 
         && event.point.x===lastEvent.point.x
         && event.point.y===lastEvent.point.y) {
-            that.paperTool.onDoubleClick(event);
+            self.paperTool.onDoubleClick(event);
             return;
         }
         lastEvent = event;
@@ -359,6 +359,10 @@ Tools.SelectionCursor = function (wickEditor) {
             objs: objs,
             modifiedStates: modifiedStates
         });
+    }
+
+    self.forceUpdateSelection = function () {
+        updateSelection();
     }
 
     function updateSelection () {

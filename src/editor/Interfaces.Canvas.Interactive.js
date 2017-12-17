@@ -123,6 +123,17 @@ var InteractiveCanvas = function (wickEditor) {
                 wickObject.paper._isPartOfGroup = false;
             });
         }
+
+        wickEditor.project.getCurrentObject().getAllActiveChildObjects().forEach(function (wickObject) {
+            if(wickEditor.project.isObjectSelected(wickObject)) {
+                if(wickEditor.currentTool == wickEditor.tools.vectorcursor) {
+                    wickObject.paper.selected = true;
+                } else if(wickEditor.currentTool == wickEditor.tools.selectioncursor) {
+                    wickEditor.tools.selectioncursor.forceUpdateSelection();
+                }
+            }
+        });
+        
         self.needsUpdate = false;
     }
 
@@ -136,7 +147,7 @@ var InteractiveCanvas = function (wickEditor) {
 
     self.getItemAtPoint = function (point, args) {
         if(!args) args = {};
-        if(args.tolerance === undefined) args.tolerance = 3;
+        if(args.tolerance === undefined) args.tolerance = 5;
         var zoom = wickEditor.canvas.getZoom()
 
         var hitResult = paper.project.hitTest(point, {
