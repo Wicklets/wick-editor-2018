@@ -83,7 +83,7 @@ var WickActionHandler = function (wickEditor) {
         wickEditor.project.unsaved = true;
         wickEditor.project.rootObject.generateParentObjectReferences();
         wickEditor.project.regenAssetReferences();
-        if(!args.dontSync) wickEditor.syncInterfaces();
+        if(!args || !args.dontSync) wickEditor.syncInterfaces();
     }
 
     // scrap function, call if you need to cancel an action for some reason

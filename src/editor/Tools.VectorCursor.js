@@ -149,8 +149,9 @@ Tools.VectorCursor = function (wickEditor) {
 
         hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point);
 
-        if(hitResult && hitResult.item && !hitResult.item._wickInteraction)
+        if(hitResult && hitResult.item && !hitResult.item._wickInteraction) {
             hitResult.item.selected = true;
+        }
         /*var selectedWickObject = wickEditor.project.getSelectedObject();
         if(selectedWickObject && selectedWickObject.paper) {
             selectedWickObject.paper.selected = true;

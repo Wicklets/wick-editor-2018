@@ -71,6 +71,19 @@ var InteractiveCanvas = function (wickEditor) {
                       , parser = new DOMParser()
                       , doc = parser.parseFromString(xmlString, "text/xml");
                     wickObject.paper = paper.project.importSVG(doc, {insert:false});
+                } else if (wickObject.isImage) {
+                    
+                    var raster = new paper.Raster(wickObject.asset.data);
+                    /*var xmlString = wickObject.pathData
+                      , parser = new DOMParser()
+                      , doc = parser.parseFromString(xmlString, "text/xml");
+                    var mask = paper.project.importSVG(doc, {insert:false});*/
+                    var mask = new paper.Path.Rectangle([0,0],[80,80])
+                    wickObject.paper = new paper.Group(mask,raster);
+                    wickObject.paper.clipped = true;
+                    wickObject.paper.fillColor = 'red';
+                    
+                    //wickObject.paper = new paper.Raster(wickObject.asset.data);
                 } else if (wickObject.isSymbol) {
                     wickObject.paper = new paper.Group();
                     wickObject.getAllActiveChildObjects().forEach(function (child) {
@@ -80,6 +93,7 @@ var InteractiveCanvas = function (wickEditor) {
                     });
                     wickObject.paper.pivot = new paper.Point(wickObject.x,wickObject.y);
                 }
+
                 var absPos = wickObject.getAbsolutePosition();
                 wickObject.paper.position.x = absPos.x;
                 wickObject.paper.position.y = absPos.y;
@@ -121,7 +135,7 @@ var InteractiveCanvas = function (wickEditor) {
 
             var activeObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
             activeObjects.forEach(function (wickObject) {
-                if(!wickObject.isSymbol && !wickObject.isPath) return;
+                if(!wickObject.isSymbol && !wickObject.isPath && !wickObject.isImage) return;
 
                 var layer = wickObject.parentFrame.parentLayer;
                 if(layer.locked || layer.hidden) return;
@@ -158,7 +172,7 @@ var InteractiveCanvas = function (wickEditor) {
         if(args.tolerance === undefined) args.tolerance = 5;
         var zoom = wickEditor.canvas.getZoom()
 
-        var hitResult = paper.project.hitTest(point, {
+        var hitResult = paper.project._activeLayer.children[0].children[0].hitTest(point, {
             segments: true,
             fill: true,
             curves: true,
@@ -166,6 +180,7 @@ var InteractiveCanvas = function (wickEditor) {
             stroke: true,
             tolerance: args.tolerance / zoom
         });
+        console.log(hitResult)
 
         if(hitResult && hitResult.item.parent._isPartOfGroup) {
             if(args.allowGroups) {

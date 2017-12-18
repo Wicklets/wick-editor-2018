@@ -328,7 +328,7 @@ Tools.SelectionCursor = function (wickEditor) {
                     scaleX: wickObject.paper.scaling.x,
                     scaleY: wickObject.paper.scaling.y,
                 });
-            } else {
+            } else if (wickObject.isPath) {
                 wickObject.paper.applyMatrix = true;
                 //wickObject.paper.rotate(wickObject.rotation);
                 //wickObject.paper.scaling.x = wickObject.scaleX;
@@ -361,6 +361,8 @@ Tools.SelectionCursor = function (wickEditor) {
                     height : wickObject.paper.bounds._height,
                     pathData : wickObject.paper.exportSVG({asString:true}),
                 });
+            } else if (wickObject.isImage) {
+                modifiedStates.push({})
             }
         });
         wickEditor.actionHandler.doAction('modifyObjects', {

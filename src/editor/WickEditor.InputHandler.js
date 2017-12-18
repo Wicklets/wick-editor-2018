@@ -354,7 +354,7 @@ var InputHandler = function (wickEditor) {
             wickPath.y = paperPath.position.y;
             wickPath.width = paperPath.bounds._width;
             wickPath.height = paperPath.bounds._height;
-            wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(wickPath);
+            //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(wickPath);
             allPaths.push(wickPath);
         }
 
@@ -423,8 +423,18 @@ var InputHandler = function (wickEditor) {
         wickObj.assetUUID = wickEditor.project.library.addAsset(asset);
         wickObj.isImage = true;
         wickObj.name = filename;
-        
-        callback(wickObj);
+
+        var img = new Image();
+        img.onload = function () {
+            var from = new paper.Point(0,0)
+            var to = new paper.Point(200,200)
+            var rect = new paper.Path.Rectangle(from,to);
+            var group = new paper.Group({insert:false});
+            group.addChild(rect)
+            wickObj.pathData = group.exportSVG({asString:true});
+            callback(wickObj);
+        }
+        img.src = src;
     }
 
     var loadAudio = function (src, filename, callback) {
@@ -556,13 +566,21 @@ var InputHandler = function (wickEditor) {
      Drag-to-upload
 *************************/
     
+    var dropMessageDiv = document.getElementById('dropFileMessage');
+    dropMessageDiv.addEventListener('mousemove', function (e) {
+        dropMessageDiv.style.display = 'none';
+    })
     $("#editor").on('dragover', function(e) {
+        dropMessageDiv.style.display = 'block';
         return false;
     });
     $("#editor").on('dragleave', function(e) {
+        //dropMessageDiv.style.display = 'none';
         return false;
     });
     $("#editor").on('drop', function(e) {
+
+        dropMessageDiv.style.display = 'none';
 
         // prevent browser from opening the file
         e.stopPropagation();
