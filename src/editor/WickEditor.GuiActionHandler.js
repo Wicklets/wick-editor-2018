@@ -786,7 +786,7 @@ var GuiActionHandler = function (wickEditor) {
             objs.forEach(function (obj) {
                 var wickObj = obj;
                 modifiedStates.push({
-                    flipX : !obj.flipX,
+                    scaleX : -obj.scaleX,
                     rotation: -obj.rotation,
                     x: -(obj.x-centerX)+centerX,
                 });
@@ -815,7 +815,7 @@ var GuiActionHandler = function (wickEditor) {
             objs.forEach(function (obj) {
                 var wickObj = obj;
                 modifiedStates.push({
-                    flipY : !obj.flipY,
+                    scaleY : -obj.scaleY,
                     rotation: -obj.rotation,
                     y: -(obj.y-centerY)+centerY,
                 });

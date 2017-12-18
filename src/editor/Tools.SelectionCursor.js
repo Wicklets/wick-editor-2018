@@ -330,15 +330,15 @@ Tools.SelectionCursor = function (wickEditor) {
                 });
             } else {
                 wickObject.paper.applyMatrix = true;
-                wickObject.paper.rotate(wickObject.rotation);
-                wickObject.paper.scaling.x = wickObject.scaleX;
-                wickObject.paper.scaling.y = wickObject.scaleY;
-                if(wickObject.flipX) {
+                //wickObject.paper.rotate(wickObject.rotation);
+                //wickObject.paper.scaling.x = wickObject.scaleX;
+                //wickObject.paper.scaling.y = wickObject.scaleY;
+                /*if(wickObject.flipX) {
                     wickObject.paper.scale(-1, 1)
                 }
                 if(wickObject.flipY) {
                     wickObject.paper.scale(1, -1)
-                }
+                }*/
 
                 wickObject.rotation = 0;
                 wickObject.scaleX = 1;

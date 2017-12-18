@@ -605,7 +605,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
 
     properties.push(new InspectorInterface.Divider());
 
-    properties.push(new InspectorInterface.InspectorButton({
+    /*properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Unite Paths",
         icon: "./resources/inspector-unite.png",
         colorClass: 'all-paths',
@@ -642,7 +642,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         buttonAction: function () {
             wickEditor.guiActionHandler.doAction('doBooleanOperation', {boolFnName:'intersect'});
         }
-    }));
+    }));*/
 
     /*properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Divide Paths",
