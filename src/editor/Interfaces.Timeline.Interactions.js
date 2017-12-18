@@ -69,7 +69,7 @@ TimelineInterface.Interactions = function (wickEditor, timeline) {
             });
         }), 
         'update' : (function (e) {
-            if(e.movementX !== 0 || e.movementY !== 0) interactionData.moved = true;
+            //if(e.movementX !== 0 || e.movementY !== 0) interactionData.moved = true;
 
             interactionData.movedDistance.x += e.movementX;
             interactionData.movedDistance.y += e.movementY;

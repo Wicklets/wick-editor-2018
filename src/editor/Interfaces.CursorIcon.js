@@ -53,12 +53,12 @@ var CursorIconInterface = function (wickEditor) {
 
         hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point);
 
-        if(hitResult && hitResult.item._cursor)
+        if(hitResult && hitResult.item && hitResult.item._cursor)
             document.body.style.cursor = hitResult.item._cursor;
         else
             wickEditor.canvas.updateCursor();
 
-        if(hitResult) {
+        if(hitResult && hitResult.item) {
             if (hitResult.item._wickInteraction) {
                 self.hide()
             } else if(hitResult.item.parent && hitResult.item.parent._isPartOfGroup) {

@@ -175,7 +175,7 @@ var InteractiveCanvas = function (wickEditor) {
             }
         }
 
-        if(hitResult && hitResult.item._isGUI) {
+        if(hitResult && hitResult.item && hitResult.item._isGUI) {
             hitResult = null;
         }
 
