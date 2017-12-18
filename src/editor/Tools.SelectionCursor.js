@@ -125,7 +125,7 @@ Tools.SelectionCursor = function (wickEditor) {
     }
 
     this.paperTool.onDoubleClick = function (event) {
-        
+
     }
 
     this.paperTool.onMouseMove = function(event) {
@@ -320,40 +320,48 @@ Tools.SelectionCursor = function (wickEditor) {
         var objs = wickEditor.project.getSelectedObjects();
         var modifiedStates = [];
         objs.forEach(function (wickObject) {
-            if(wickObject.isSymbol) return;
+            if(wickObject.isSymbol) {
+                modifiedStates.push({
+                    rotation: wickObject.paper.rotation,
+                    x: wickObject.paper.position.x,
+                    y: wickObject.paper.position.y,
+                    scaleX: wickObject.paper.scaling.x,
+                    scaleY: wickObject.paper.scaling.y,
+                });
+            } else {
+                wickObject.paper.applyMatrix = true;
+                wickObject.paper.rotate(wickObject.rotation);
+                wickObject.paper.scaling.x = wickObject.scaleX;
+                wickObject.paper.scaling.y = wickObject.scaleY;
+                if(wickObject.flipX) {
+                    wickObject.paper.scale(-1, 1)
+                }
+                if(wickObject.flipY) {
+                    wickObject.paper.scale(1, -1)
+                }
 
-            wickObject.paper.applyMatrix = true;
-            wickObject.paper.rotate(wickObject.rotation);
-            wickObject.paper.scaling.x = wickObject.scaleX;
-            wickObject.paper.scaling.y = wickObject.scaleY;
-            if(wickObject.flipX) {
-                wickObject.paper.scale(-1, 1)
+                wickObject.rotation = 0;
+                wickObject.scaleX = 1;
+                wickObject.scaleY = 1;
+                wickObject.flipX = false;
+                wickObject.flipY = false;
+
+                var parentAbsPos;
+                if(wickObject.parentObject)
+                    parentAbsPos = wickObject.parentObject.getAbsolutePosition();
+                else 
+                    parentAbsPos = {x:0,y:0};
+
+                modifiedStates.push({
+                    x : wickObject.paper.position.x - parentAbsPos.x,
+                    y : wickObject.paper.position.y - parentAbsPos.y,
+                    svgX : wickObject.paper.bounds._x,
+                    svgY : wickObject.paper.bounds._y,
+                    width : wickObject.paper.bounds._width,
+                    height : wickObject.paper.bounds._height,
+                    pathData : wickObject.paper.exportSVG({asString:true}),
+                });
             }
-            if(wickObject.flipY) {
-                wickObject.paper.scale(1, -1)
-            }
-
-            wickObject.rotation = 0;
-            wickObject.scaleX = 1;
-            wickObject.scaleY = 1;
-            wickObject.flipX = false;
-            wickObject.flipY = false;
-
-            var parentAbsPos;
-            if(wickObject.parentObject)
-                parentAbsPos = wickObject.parentObject.getAbsolutePosition();
-            else 
-                parentAbsPos = {x:0,y:0};
-
-            modifiedStates.push({
-                x : wickObject.paper.position.x - parentAbsPos.x,
-                y : wickObject.paper.position.y - parentAbsPos.y,
-                svgX : wickObject.paper.bounds._x,
-                svgY : wickObject.paper.bounds._y,
-                width : wickObject.paper.bounds._width,
-                height : wickObject.paper.bounds._height,
-                pathData : wickObject.paper.exportSVG({asString:true}),
-            });
         });
         wickEditor.actionHandler.doAction('modifyObjects', {
             objs: objs,
@@ -463,7 +471,7 @@ Tools.SelectionCursor = function (wickEditor) {
             scaleR._wickInteraction = 'scaleR';
             scaleR._cursor = 'ew-resize';
 
-            rotate = new paper.Path.Circle(selectionBoundsRect.topCenter.add(new paper.Point(0,-20)), GUI_DOTS_SIZE/wickEditor.canvas.getZoom());
+            rotate = new paper.Path.Circle(selectionBoundsRect.topCenter.add(new paper.Point(0,-20/wickEditor.canvas.getZoom())), GUI_DOTS_SIZE/wickEditor.canvas.getZoom());
             rotate.fillColor = GUI_DOTS_FILLCOLOR
             rotate.strokeColor = GUI_DOTS_STROKECOLOR
             rotate._wickInteraction = 'rotate';

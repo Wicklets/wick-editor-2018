@@ -78,12 +78,20 @@ var InteractiveCanvas = function (wickEditor) {
                         wickObject.paper.addChild(child.paper);
                         child.paper._isPartOfGroup = true;
                     });
+                    wickObject.paper.pivot = new paper.Point(wickObject.x,wickObject.y);
                 }
                 var absPos = wickObject.getAbsolutePosition();
                 wickObject.paper.position.x = absPos.x;
                 wickObject.paper.position.y = absPos.y;
-                wickObject.svgStrokeWidth = wickObject.paper.strokeWidth;
+                //wickObject.paper.rotate(wickObject.rotation);
+                //wickObject.paper.scale(wickObject.scaleX, wickObject.scaleY);
+                wickObject.paper.applyMatrix = false;
+                wickObject.paper.rotation = wickObject.rotation;
+                wickObject.paper.scaling.x = wickObject.scaleX;
+                wickObject.paper.scaling.y = wickObject.scaleY;
+
                 wickObject.paper.opacity = wickObject.opacity;
+                wickObject.svgStrokeWidth = wickObject.paper.strokeWidth;
                 
                 wickObject.paper.wick = wickObject;
             }
@@ -165,6 +173,10 @@ var InteractiveCanvas = function (wickEditor) {
             } else {
                 hitResult.item = null;
             }
+        }
+
+        if(hitResult && hitResult.item._isGUI) {
+            hitResult = null;
         }
 
         return hitResult;
