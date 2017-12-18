@@ -123,8 +123,6 @@ Tools.Paintbrush = function (wickEditor) {
             pathWickObject.width = 1;
             pathWickObject.height = 1;
 
-            wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(pathWickObject);
-
             wickEditor.actionHandler.doAction('addObjects', {
                 wickObjects: [pathWickObject],
                 dontSelectObjects: true,

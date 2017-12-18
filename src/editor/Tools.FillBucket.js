@@ -133,7 +133,7 @@ Tools.FillBucket = function (wickEditor) {
                                 pathWickObject.width = 1;
                                 pathWickObject.height = 1;
 
-                                wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(pathWickObject);
+                                //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(pathWickObject);
                                 
                                 pathWickObject.x = tempPaperForPosition.position.x - wickEditor.project.width/2;
                                 pathWickObject.y = tempPaperForPosition.position.y - wickEditor.project.height/2;
@@ -142,8 +142,8 @@ Tools.FillBucket = function (wickEditor) {
                                     wickObjects: [pathWickObject],
                                     dontSelectObjects: true,
                                 });
-                                PaperHoleFinder.expandHole(pathWickObject.paper);
-                                wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshSVGWickObject(pathWickObject.paper.children[0]);
+                                //PaperHoleFinder.expandHole(pathWickObject.paper);
+                                //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshSVGWickObject(pathWickObject.paper.children[0]);
                                 wickEditor.actionHandler.doAction('moveObjectToZIndex', {
                                     objs:[pathWickObject],
                                     newZIndex: 0,
