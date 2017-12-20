@@ -73,17 +73,19 @@ var InteractiveCanvas = function (wickEditor) {
                     wickObject.paper = paper.project.importSVG(doc, {insert:false});
                 } else if (wickObject.isImage) {
                     
-                    var raster = new paper.Raster(wickObject.asset.data);
+                    //var raster = new paper.Raster(wickObject.asset.data);
                     /*var xmlString = wickObject.pathData
                       , parser = new DOMParser()
                       , doc = parser.parseFromString(xmlString, "text/xml");
                     var mask = paper.project.importSVG(doc, {insert:false});*/
-                    var mask = new paper.Path.Rectangle([0,0],[80,80])
+                    /*var mask = new paper.Path.Rectangle([0,0],[80,80])
                     wickObject.paper = new paper.Group(mask,raster);
                     wickObject.paper.clipped = true;
-                    wickObject.paper.fillColor = 'red';
+                    wickObject.paper.fillColor = 'red';*/
                     
-                    //wickObject.paper = new paper.Raster(wickObject.asset.data);
+                    var raster = new paper.Raster(wickObject.asset.data);
+                    wickObject.paper = new paper.Group();
+                    wickObject.paper.addChild(raster);
                 } else if (wickObject.isSymbol) {
                     wickObject.paper = new paper.Group();
                     wickObject.getAllActiveChildObjects().forEach(function (child) {
@@ -172,21 +174,22 @@ var InteractiveCanvas = function (wickEditor) {
         if(args.tolerance === undefined) args.tolerance = 5;
         var zoom = wickEditor.canvas.getZoom()
 
-        var hitResult = paper.project._activeLayer.children[0].children[0].hitTest(point, {
+        var hitOptions = {
             segments: true,
             fill: true,
             curves: true,
             handles: false,
             stroke: true,
             tolerance: args.tolerance / zoom
-        });
-        console.log(hitResult)
+        }
+
+        var hitResult = paper.project.hitTest(point, hitOptions);
 
         if(hitResult && hitResult.item.parent._isPartOfGroup) {
             if(args.allowGroups) {
                 hitResult.item = hitResult.item.parent;
             } else {
-                hitResult.item = null;
+                hitResult = null;
             }
         }
 

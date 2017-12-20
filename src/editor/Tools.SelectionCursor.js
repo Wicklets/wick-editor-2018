@@ -320,6 +320,12 @@ Tools.SelectionCursor = function (wickEditor) {
         var objs = wickEditor.project.getSelectedObjects();
         var modifiedStates = [];
         objs.forEach(function (wickObject) {
+            var parentAbsPos;
+                if(wickObject.parentObject)
+                    parentAbsPos = wickObject.parentObject.getAbsolutePosition();
+                else 
+                    parentAbsPos = {x:0,y:0};
+                
             if(wickObject.isSymbol) {
                 modifiedStates.push({
                     rotation: wickObject.paper.rotation,
@@ -346,12 +352,6 @@ Tools.SelectionCursor = function (wickEditor) {
                 wickObject.flipX = false;
                 wickObject.flipY = false;
 
-                var parentAbsPos;
-                if(wickObject.parentObject)
-                    parentAbsPos = wickObject.parentObject.getAbsolutePosition();
-                else 
-                    parentAbsPos = {x:0,y:0};
-
                 modifiedStates.push({
                     x : wickObject.paper.position.x - parentAbsPos.x,
                     y : wickObject.paper.position.y - parentAbsPos.y,
@@ -362,7 +362,13 @@ Tools.SelectionCursor = function (wickEditor) {
                     pathData : wickObject.paper.exportSVG({asString:true}),
                 });
             } else if (wickObject.isImage) {
-                modifiedStates.push({})
+                modifiedStates.push({
+                    x : wickObject.paper.position.x - parentAbsPos.x,
+                    y : wickObject.paper.position.y - parentAbsPos.y,
+                    scaleX : wickObject.paper.scaling.x,
+                    scaleY : wickObject.paper.scaling.y,
+                    rotation : wickObject.paper.rotation,
+                })
             }
         });
         wickEditor.actionHandler.doAction('modifyObjects', {
