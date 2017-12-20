@@ -42,6 +42,12 @@ Tools.SelectionCursor = function (wickEditor) {
     var GUI_DOTS_FILLCOLOR = 'rgba(255,255,255,0.3)';
     var GUI_DOTS_STROKECOLOR = 'rgba(100,150,255,1.0)'
 
+    var hitResult;
+    var addedPoint;
+
+    var lastEvent;
+    var transformMode;
+
     this.getCursorImage = function () {
         return "auto"
     };
@@ -55,7 +61,7 @@ Tools.SelectionCursor = function (wickEditor) {
     }
 
     this.setup = function () {
-
+        this.paperTool = new paper.Tool();
     }
 
     this.onSelected = function () {
@@ -63,13 +69,18 @@ Tools.SelectionCursor = function (wickEditor) {
         wickEditor.project.clearSelection();
     }
 
-    this.paperTool = new paper.Tool();
+    this.paperTool.onMouseMove = function(event) {
+        updateSelection()
 
-    var hitResult;
-    var addedPoint;
+        hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point, {allowGroups:true});
 
-    var lastEvent;
-    var transformMode;
+        if(hitResult && hitResult.item._cursor)
+            document.body.style.cursor = hitResult.item._cursor;
+        else if (hitResult && !hitResult.item._wickInteraction)
+            document.body.style.cursor = 'move';
+        else
+            wickEditor.canvas.updateCursor();
+    }
 
     this.paperTool.onMouseDown = function(event) {
 
@@ -90,26 +101,25 @@ Tools.SelectionCursor = function (wickEditor) {
         }
 
         if(hitResult && !hitResult.item._wickInteraction) {
-            //if(hitResult.type === 'fill') {
-                var selectCheckWickObj = hitResult.item.parent.wick;
-                var newlySelected = false;
-                if(selectCheckWickObj)
-                    newlySelected = !wickEditor.project.isObjectSelected(selectCheckWickObj)
 
-                var wickObj = hitResult.item.parent.wick;
-                if(wickObj) {
-                    if(!wickEditor.project.isObjectSelected(wickObj)) {
-                        if(!event.modifiers.shift) {
-                            wickEditor.project.clearSelection();
-                        }
-                        wickEditor.project.selectObject(wickObj);
+            var selectCheckWickObj = hitResult.item.parent.wick;
+            var newlySelected = false;
+            if(selectCheckWickObj)
+                newlySelected = !wickEditor.project.isObjectSelected(selectCheckWickObj)
+
+            var wickObj = hitResult.item.parent.wick;
+            if(wickObj) {
+                if(!wickEditor.project.isObjectSelected(wickObj)) {
+                    if(!event.modifiers.shift) {
+                        wickEditor.project.clearSelection();
                     }
-                    wickEditor.syncInterfaces();
+                    wickEditor.project.selectObject(wickObj);
                 }
+                wickEditor.syncInterfaces();
+            }
 
-                //if(newlySelected) return;
-            //}
         } else {
+
             if(!event.modifiers.shift) {
                 wickEditor.project.clearSelection();
             }
@@ -118,6 +128,7 @@ Tools.SelectionCursor = function (wickEditor) {
             makingSelectionSquare = true;
             selectionSquareTopLeft = event.point;
             selectionSquareBottomRight = event.point
+            
         }
 
         updateSelection()
@@ -126,21 +137,6 @@ Tools.SelectionCursor = function (wickEditor) {
 
     this.paperTool.onDoubleClick = function (event) {
 
-    }
-
-    this.paperTool.onMouseMove = function(event) {
-        //wickEditor.cursorIcon.setImageForPaperEvent(event)
-        //wickEditor.canvas.getInteractiveCanvas().updateCursorIcon(event);
-        updateSelection()
-
-        hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point, {allowGroups:true});
-
-        if(hitResult && hitResult.item._cursor)
-            document.body.style.cursor = hitResult.item._cursor;
-        else if (hitResult && !hitResult.item._wickInteraction)
-            document.body.style.cursor = 'move';
-        else
-            wickEditor.canvas.updateCursor();
     }
 
     this.paperTool.onMouseDrag = function(event) {
@@ -321,11 +317,11 @@ Tools.SelectionCursor = function (wickEditor) {
         var modifiedStates = [];
         objs.forEach(function (wickObject) {
             var parentAbsPos;
-                if(wickObject.parentObject)
-                    parentAbsPos = wickObject.parentObject.getAbsolutePosition();
-                else 
-                    parentAbsPos = {x:0,y:0};
-                
+            if(wickObject.parentObject)
+                parentAbsPos = wickObject.parentObject.getAbsolutePosition();
+            else 
+                parentAbsPos = {x:0,y:0};
+
             if(wickObject.isSymbol) {
                 modifiedStates.push({
                     rotation: wickObject.paper.rotation,
@@ -336,15 +332,6 @@ Tools.SelectionCursor = function (wickEditor) {
                 });
             } else if (wickObject.isPath) {
                 wickObject.paper.applyMatrix = true;
-                //wickObject.paper.rotate(wickObject.rotation);
-                //wickObject.paper.scaling.x = wickObject.scaleX;
-                //wickObject.paper.scaling.y = wickObject.scaleY;
-                /*if(wickObject.flipX) {
-                    wickObject.paper.scale(-1, 1)
-                }
-                if(wickObject.flipY) {
-                    wickObject.paper.scale(1, -1)
-                }*/
 
                 wickObject.rotation = 0;
                 wickObject.scaleX = 1;
@@ -386,8 +373,6 @@ Tools.SelectionCursor = function (wickEditor) {
         paper.project.activeLayer.children.forEach(function (child) {
             if(!child.wick) return;
             if(wickEditor.project.isObjectSelected(child.wick)) {
-                //child.selected = true;
-                //child.fullySelected = true;
                 if(!selectionBoundsRect) {
                     selectionBoundsRect = child.bounds.clone()
                 } else {
