@@ -61,13 +61,15 @@ Tools.SelectionCursor = function (wickEditor) {
     }
 
     this.setup = function () {
-        this.paperTool = new paper.Tool();
+        
     }
 
     this.onSelected = function () {
         wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
         wickEditor.project.clearSelection();
     }
+
+    this.paperTool = new paper.Tool();
 
     this.paperTool.onMouseMove = function(event) {
         updateSelection()
@@ -468,7 +470,7 @@ Tools.SelectionCursor = function (wickEditor) {
             rotate.fillColor = GUI_DOTS_FILLCOLOR
             rotate.strokeColor = GUI_DOTS_STROKECOLOR
             rotate._wickInteraction = 'rotate';
-            rotate._cursor = 'move';
+            rotate._cursor = 'url("resources/cursor-rotate.png") 32 32,default';
         }
     }
 

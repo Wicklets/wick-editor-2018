@@ -34,13 +34,15 @@ Tools.VectorCursor = function (wickEditor) {
     }
 
     this.setup = function () {
-        this.paperTool = new paper.Tool();
+
     }
 
     this.onSelected = function () {
         wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
         wickEditor.project.clearSelection();
     }
+
+    this.paperTool = new paper.Tool();
 
     var hitResult;
     var addedPoint;
