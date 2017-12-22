@@ -1155,14 +1155,24 @@ var GuiActionHandler = function (wickEditor) {
             });
         });
 
+    
     registerAction('createObjectFromAsset',
         [],
         [],
         {},
         function (args) {
             var asset = args.asset;
+            if (!asset) return;
 
             var screenPos = wickEditor.canvas.screenToCanvasSpace(args.x, args.y)
+            var screenPos = wickEditor.canvas.getFabricCanvas().screenToCanvasSpace(args.x, args.y); // Where did they drop the object?
+            var wickObj = new WickObject();
+
+            wickObj.assetUUID = asset.uuid;
+            wickObj.x = screenPos.x;
+            wickObj.y = screenPos.y;
+
+
             if(asset.type === 'image') {
                 var wickObj = new WickObject();
                 wickObj.assetUUID = asset.uuid;
@@ -1173,12 +1183,11 @@ var GuiActionHandler = function (wickEditor) {
                     wickObjects:[wickObj]
                 });
             } else if(asset.type === 'audio') {
-                wickEditor.actionHandler.doAction('addSoundToFrame', {
-                    frame: wickEditor.project.getCurrentFrame(),
-                    asset: args.asset
-                });
+                wickObj.isSound = true; 
+                wickObj.volume = 1.0; 
+                wickObj.width = 100; 
+                wickObj.height = 100; 
             }
-
         });
 
     registerAction('createSoundFromAsset',

@@ -265,7 +265,7 @@ var WickActionHandler = function (wickEditor) {
             done(args);
         });
 
-    var modifyableAttributes = ["x","y","scaleX","scaleY","rotation","opacity","flipX","flipY","pathData","svgX","svgY","width","height"];
+    var modifyableAttributes = ["x","y","scaleX","scaleY","rotation","opacity","flipX","flipY","pathData","svgX","svgY","width","height","volume", "loop"];
 
     registerAction('modifyObjects',
         function (args) {
@@ -551,8 +551,14 @@ var WickActionHandler = function (wickEditor) {
 
             // Add an empty frame
             var newLayer = new WickLayer();
-            newLayer.frames = [new WickFrame()];
-            newLayer.frames[0].playheadPosition = 0;
+            newLayer.frames = []; // Make sure the layer has no frames 
+
+            if (args.isSoundLayer) {
+                newLayer.isSoundLayer = true; 
+            } else {
+                newLayer.isSoundLayer = false; 
+            }
+
             currentObject.addLayer(newLayer);
 
             // Go to last added layer
@@ -1029,13 +1035,36 @@ var WickActionHandler = function (wickEditor) {
 
     registerAction('addSoundToFrame', 
         function (args) {
-            args.oldAssetUUID = args.frame.audioAssetUUID;
-            args.frame.audioAssetUUID = args.asset.uuid;
+            if (!args.asset) return; 
+            var asset = args.asset;
+
+            currentLayer = wickEditor.project.getCurrentLayer();
+
+            if (!currentLayer.isSoundLayer) {
+                args.addLayerAction = wickEditor.actionHandler.doAction('addNewLayer', {isSoundLayer: true, dontAddToStack: true});
+                currentLayer = wickEditor.project.getCurrentLayer();
+                wickEditor.project.rootObject.generateParentObjectReferences();
+                args.addedNewLayer = true; 
+            }
+
+            currentFrame = currentLayer.getFrameAtPlayheadPosition(args.playheadPosition);
+
+            if (currentFrame === null) {
+                var newFrame = new WickFrame(); 
+                newFrame.playheadPosition = args.playheadPosition;
+                currentFrame = newFrame; 
+
+                args.addFrameAction = wickEditor.actionHandler.doAction('addFrame', {frame:newFrame, layer:currentLayer, dontAddToStack:true});
+                args.addedNewFrame = true; 
+            }
+
+            currentFrame.audioAssetUUID = asset.uuid; 
 
             done(args);
         },
         function (args) {
-            args.frame.audioAssetUUID = args.oldAssetUUID;
+            if (args.addFrameAction) args.addFrameAction.undoAction();
+            if (args.addLayerAction) args.addLayerAction.undoAction();
 
             done(args);
         });

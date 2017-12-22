@@ -782,3 +782,16 @@ hr.hotkeyhr {
 #wick-editor-version:hover {
     color: gray;
 }
+
+#treeFilterInput {
+    color: #4E4D4D;
+    width: 100%;
+    padding-left: 2px;
+    background: #A2A2A2 url(../resources/icon_search.png) no-repeat scroll 3px 3px;
+    background-size: 12px 12px;
+    padding-left:20px;
+    text-overflow: ellipsis; 
+    display: block;
+    border-radius: 2px 2px 0px 0px;
+
+}

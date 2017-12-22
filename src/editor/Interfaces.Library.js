@@ -23,6 +23,7 @@ var LibraryInterface = function (wickEditor) {
     var draggedNode;
 
     var draggedAssetElem;
+    var isDraggingAsset = false; 
 
     this.setup = function () {
         //$("#tree").fancytree();
@@ -30,8 +31,18 @@ var LibraryInterface = function (wickEditor) {
             wickEditor.project.clearSelection();
             //wickEditor.syncInterfaces();
         });
+        
+        $("#tree").mousedown(function() {
+            wickEditor.project.clearSelection();
+            //wickEditor.syncInterfaces();
+        });
 
         $("#tree").fancytree({
+            extensions: ["filter"],
+            filter: { 
+                counter: false, 
+                mode: "hide",
+            },
             //checkbox: true,
             selectMode: 1,
             //source: SOURCE,
@@ -56,19 +67,27 @@ var LibraryInterface = function (wickEditor) {
             }*/
         });
 
+        var filterInput = $('#treeFilterInput');
+        filterInput.bind("propertychange change click keyup input paste", function(event){
+            $("#tree").fancytree("getTree").filterNodes(filterInput.val());
+        });
+
         draggedAssetElem = document.createElement('div');
         draggedAssetElem.id = 'draggedAsset';
         document.getElementById('tree').addEventListener('mousedown', function (e) {
             draggedNode = selectedNode;
             draggedAssetElem.style.display = 'block';
             var asset = self.getSelectedAsset();
+            if (!asset) return; 
+
             var assetURL;
             if(asset.type === 'image') {
                 assetURL = asset.data;
             } else if(self.getSelectedAsset().type === 'audio') {
-                assetURL = 'resources/audio.png';
+                assetURL = 'resources/icon_sound_canvas.png';
             }
             draggedAssetElem.style.backgroundImage = 'url('+assetURL+')';
+            isDraggingAsset = true; 
         });
         window.addEventListener('mouseup', function (e) {
             if(!draggedNode) return;
@@ -80,12 +99,8 @@ var LibraryInterface = function (wickEditor) {
                     x: e.x,
                     y: e.y
                 });
-            } else if (e.target.className === 'frame') {
-                wickEditor.guiActionHandler.doAction("createSoundFromAsset", {
-                    asset: self.getSelectedAsset(),
-                    frame: e.target.wickData.wickFrame
-                });
-            }
+            } 
+            isDraggingAsset = false; 
         });
         window.addEventListener('mousemove', function (e) {
             if(!draggedAssetElem) return;
@@ -109,7 +124,7 @@ var LibraryInterface = function (wickEditor) {
             var asset = library.assets[uuid];
             var iconSrc = {
                 image : 'resources/library-image.png',
-                audio : 'resources/library-audio.png',
+                audio : 'resources/icon_sound.png',
             }[asset.type]
             newTreeChildren.push({ 
                 title: asset.filename,
@@ -137,7 +152,12 @@ var LibraryInterface = function (wickEditor) {
     }
 
     this.getSelectedAsset = function () {
+        if (!selectedNode) return; 
         return wickEditor.project.library.getAsset(selectedNode.data.uuid)
+    }
+
+    this.isDraggingAsset = function () {
+        return isDraggingAsset; 
     }
 
 }

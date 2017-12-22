@@ -63,7 +63,13 @@ WickFrame.prototype.tick = function () {
         (wickPlayer || wickEditor).project.runScript(this, 'load');
         (wickPlayer || wickEditor).project.runScript(this, 'update');
 
-        if(wickPlayer) wickPlayer.audioPlayer.playSound(this.audioAssetUUID);
+        // if(wickPlayer) wickPlayer.audioPlayer.playSound(this.audioAssetUUID);
+
+        if (this.audioAssetUUID) {
+            this._updateAudio();
+            this._playSound(); 
+        }
+
     }
     // Active -> Active
     // Frame is active!
@@ -73,6 +79,9 @@ WickFrame.prototype.tick = function () {
     // Active -> Inactive
     // Frame just stopped being active. Clean up!
     else if (this._wasActiveLastTick && !this._active) {
+        if (this.audioAssetUUID) {
+            this._stopSound();
+        }
         
     }
     
@@ -433,3 +442,22 @@ WickFrame.prototype.applyTween = function () {
     });
 
 }
+
+WickFrame.prototype._updateAudio = function () {
+    if (!this.audioAssetUUID) return; 
+    // Lazily create sound objects
+    if (!this.howl) {
+        this.howl = wickPlayer.audioPlayer.makeSound(this.audioAssetUUID); 
+    }
+}
+
+WickFrame.prototype._playSound = function () {
+    if (!this.howl) return; 
+    var howlerID = this.howl.play(); 
+}
+
+WickFrame.prototype._stopSound = function () {
+    if (!this.howl) return; 
+    this.howl.stop(); 
+}
+

@@ -52,6 +52,15 @@ var WickObject = function () {
 
     this.isText = false;
 
+// Images
+
+    this.isImage = false;
+
+// Sounds
+
+    this.isSound = false;
+    this.loop = false;
+
 // Symbols
 
     this.isSymbol = false;
@@ -1380,11 +1389,22 @@ WickObject.prototype.tick = function () {
         (wickPlayer || wickEditor).project.runScript(this, 'load');
         (wickPlayer || wickEditor).project.runScript(this, 'update');
 
+        
+        if (this.isSound) {
+            this._updateAudio(); 
+            this._playSound(); 
+        }
+
+
         this.advanceTimeline();
     }
     // Active -> Active
     else if (this._wasActiveLastTick && this._active) {
         (wickPlayer || wickEditor).project.runScript(this, 'update');
+
+        if (this.isSound) {
+            this._updateAudio(); 
+        }
 
         this.advanceTimeline();
     }
@@ -1392,6 +1412,10 @@ WickObject.prototype.tick = function () {
     else if (this._wasActiveLastTick && !this._active) {
         if(!this.parentFrame.alwaysSaveState) {
             wickPlayer.resetStateOfObject(this);
+        }
+
+        if (this.isSound) {
+            this._stopSound(); 
         }
     }
     
@@ -1437,3 +1461,18 @@ WickObject.prototype.pointTo = function ( x2, y2 ) {
     
     this.rotation = Math.atan2(dy,dx) * 180 / Math.PI - 90;
 };
+
+WickObject.prototype._updateAudio = function () {
+    if (!this.isSound) return; 
+    // Lazily create sound objects
+    if (!this.howl) {
+        this.howl = wickPlayer.audioPlayer.makeSound(this.assetUUID, this.loop, this.volume); 
+    }
+    this.howl.volume = this.volume; 
+    this.howl.loop = this.loop; 
+}
+
+WickObject.prototype._playSound = function () {
+    if (!this.isSound) return; 
+    var howlerID = this.howl.play(); 
+}

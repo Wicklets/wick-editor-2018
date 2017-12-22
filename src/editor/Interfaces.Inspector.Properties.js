@@ -67,7 +67,9 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         title: 'Scale W',
         otherTitle: 'H',
         isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
+            return selectionInfo.numObjects === 1 
+            && selectionInfo.type == 'wickobject'
+            && selectionInfo.dataType !== 'sound';
         },
         getValueFn: function () {
             return {
@@ -133,7 +135,9 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.StringInput({
         title: 'Opacity',
         isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
+            return selectionInfo.numObjects === 1 
+            && selectionInfo.type == 'wickobject'
+            && selectionInfo.dataType !== 'sound';
         },
         getValueFn: function () {
             return roundToHundredths(selectionInfo.object.opacity);
@@ -451,6 +455,42 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.StringInput({
+        title: 'Volume',
+        isActiveFn: function () {
+            return selectionInfo.dataType === 'sound' && selectionInfo.numObjects === 1;
+        },
+        getValueFn: function () {
+            return selectionInfo.object.volume;
+        }, 
+        onChangeFn: function (val) {
+            wickEditor.actionHandler.doAction('modifyObjects', {
+                objs: [selectionInfo.object],
+                modifiedStates: [{
+                    volume: eval(val),
+                }]
+            });
+        }
+    }));
+
+    properties.push(new InspectorInterface.CheckboxInput({
+        title: 'Loop',
+        isActiveFn: function () {
+            return selectionInfo.dataType === 'sound' && selectionInfo.numObjects === 1;
+        },
+        getValueFn: function () {
+            return selectionInfo.object.loop;
+        }, 
+        onChangeFn: function (val) {
+            wickEditor.actionHandler.doAction('modifyObjects', {
+                objs: [selectionInfo.object],
+                modifiedStates: [{
+                    loop: val,
+                }]
+            });
+        }
+    }));
+    
+    properties.push(new InspectorInterface.StringInput({
         title: 'Rotations',
         isActiveFn: function () {
             return selectionInfo.type === 'frame' 
@@ -677,7 +717,8 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         isActiveFn: function () {
             return selectionInfo.numObjects > 0 
                 && (selectionInfo.type === 'wickobject' || selectionInfo.type === 'multiple') 
-                && selectionInfo.dataType !== 'symbol';
+                && selectionInfo.dataType !== 'symbol'
+                && selectionInfo.dataType !== 'sound';
         },
         buttonAction: function () {
             wickEditor.guiActionHandler.doAction("convertToGroup");
@@ -691,7 +732,8 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         isActiveFn: function () {
             return selectionInfo.numObjects > 0 
                 && (selectionInfo.type === 'wickobject' || selectionInfo.type === 'multiple') 
-                && selectionInfo.dataType !== 'symbol';
+                && selectionInfo.dataType !== 'symbol'
+                && selectionInfo.dataType !== 'sound';
         },
         buttonAction: function () {
             wickEditor.guiActionHandler.doAction("convertToSymbol")
@@ -705,7 +747,8 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         isActiveFn: function () {
             return selectionInfo.numObjects > 0 
                 && (selectionInfo.type === 'wickobject' || selectionInfo.type === 'multiple') 
-                && selectionInfo.dataType !== 'symbol';
+                && selectionInfo.dataType !== 'symbol'
+                && selectionInfo.dataType !== 'sound';
         },
         buttonAction: function () {
             wickEditor.guiActionHandler.doAction("convertToButton")
