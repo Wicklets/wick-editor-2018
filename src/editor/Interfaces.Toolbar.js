@@ -101,10 +101,10 @@ var ToolbarInterface = function (wickEditor) {
                 wickEditor.settings.setValue('strokeJoin', 'round');
             }
             strokeWidthPreview.refresh();
-            /*wickEditor.guiActionHandler.doAction("changeStrokeCapAndJoinOfSelection", {
+            wickEditor.guiActionHandler.doAction("changePathProperties", {
                 strokeCap: wickEditor.settings.strokeCap,
                 strokeJoin: wickEditor.settings.strokeJoin
-            });*/
+            });
         }
         strokeWidthPreview.refresh();
 
@@ -114,9 +114,9 @@ var ToolbarInterface = function (wickEditor) {
             },
             onhardchange: function (e) {
                 wickEditor.settings.setValue('strokeWidth', parseInt(e));
-                /*wickEditor.guiActionHandler.doAction("changeStrokeWidthOfSelection", {
+                wickEditor.guiActionHandler.doAction("changePathProperties", {
                     strokeWidth: wickEditor.settings.strokeWidth
-                });*/
+                });
                 wickEditor.syncInterfaces();
             },
             min: 0,
@@ -210,11 +210,15 @@ var ToolbarInterface = function (wickEditor) {
         colorPickerContainer.onclick = function () {
             wickEditor.colorPicker.open(function (color) {
                 wickEditor.settings.setValue(settingsVal, color);
-                /*if(settingsVal === 'fillColor') {
-                    wickEditor.guiActionHandler.doAction("changeFillColorOfSelection", {color: color});
+                if(settingsVal === 'fillColor') {
+                    wickEditor.guiActionHandler.doAction("changePathProperties", {
+                        fillColor: color
+                    });
                 } else if (settingsVal === 'strokeColor') {
-                    wickEditor.guiActionHandler.doAction("changeStrokeColorOfSelection", {color: color});
-                }*/
+                    wickEditor.guiActionHandler.doAction("changePathProperties", {
+                        strokeColor: color
+                    });
+                }
                 wickEditor.syncInterfaces();
             }, 
             wickEditor.settings[settingsVal],

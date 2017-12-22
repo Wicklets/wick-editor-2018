@@ -1194,7 +1194,28 @@ var GuiActionHandler = function (wickEditor) {
                     asset: args.asset
                 });
             }
-
         });
+
+    registerAction('changePathProperties',
+        [],
+        [],
+        {},
+        function (args) {
+            var objs = wickEditor.project.getSelectedObjects();
+            var modifiedStates = [];
+            objs.forEach(function (wickObject) {
+                if(!wickObject.isPath) return;
+                for(key in args) {
+                    wickObject.paper.children[0][key] = args[key];
+                    modifiedStates.push({
+                        pathData : wickObject.paper.exportSVG({asString:true}),
+                    })
+                }
+            })
+            wickEditor.actionHandler.doAction('modifyObjects', {
+                objs: objs,
+                modifiedStates: modifiedStates
+            });
+        })
 
 }

@@ -251,9 +251,9 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             return selectionInfo.object.paper && selectionInfo.object.paper.strokeWidth;
         }, 
         onChangeFn: function (val) {
-            /*wickEditor.guiActionHandler.doAction("changeStrokeWidthOfSelection", {
+            wickEditor.guiActionHandler.doAction("changePathProperties", {
                 strokeWidth: eval(val)
-            });*/
+            });
             wickEditor.syncInterfaces();
         }
     }));
@@ -269,7 +269,9 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
                 && selectionInfo.object.paper.strokeColor.toCSS();
         }, 
         onChangeFn: function (val) {
-            //wickEditor.guiActionHandler.doAction("changeStrokeColorOfSelection", {color: val});
+            wickEditor.guiActionHandler.doAction("changePathProperties", {
+                strokeColor: val
+            });
             wickEditor.syncInterfaces();
         }
     }));
@@ -285,7 +287,9 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
                 && selectionInfo.object.paper.fillColor.toCSS();
         }, 
         onChangeFn: function (val) {
-            //wickEditor.guiActionHandler.doAction("changeFillColorOfSelection", {color: val});
+            wickEditor.guiActionHandler.doAction("changePathProperties", {
+                fillColor: val
+            });
             wickEditor.syncInterfaces();
         }
     }));
@@ -302,16 +306,10 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         onChangeFn: function (val) {
             if(!selectionInfo.object.paper) return;
             var closed = selectionInfo.object.paper.children[0].closed;
-            selectionInfo.object.paper.children[0].closed = !closed;
-
-            wickEditor.actionHandler.doAction('modifyObjects', {
-                objs: [selectionInfo.object],
-                modifiedStates: [{
-                    pathData : selectionInfo.object.paper.exportSVG({asString:true})
-                }]
+            wickEditor.guiActionHandler.doAction("changePathProperties", {
+                closed: !closed
             });
-
-            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
+            wickEditor.syncInterfaces();
         }
     }));
 
