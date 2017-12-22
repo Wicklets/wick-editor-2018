@@ -21,7 +21,9 @@ Tools.Zoom = function (wickEditor) {
 
     var self = this;
 
-    var startX,startY;
+    var zoomboxRect;
+    var zoomboxStartPoint;
+    var zoomboxEndPoint;
 
     var CLICK_ZOOM_AMT = 0.15;
     var SCROLL_ZOOM_AMT = 0.1;
@@ -51,16 +53,53 @@ Tools.Zoom = function (wickEditor) {
     }
 
     this.paperTool.onMouseDown = function(event) {
+        zoomboxStartPoint = {
+            x:wickEditor.inputHandler.mouse.x,
+            y:wickEditor.inputHandler.mouse.y
+        }
+    }
 
+    this.paperTool.onMouseDrag = function(event) {
+        zoomboxEndPoint = {
+            x:wickEditor.inputHandler.mouse.x,
+            y:wickEditor.inputHandler.mouse.y
+        }
+
+        if(zoomboxRect) zoomboxRect.remove();
+        zoomboxRect = new paper.Path.Rectangle(event.point, event.downPoint);
+        zoomboxRect.strokeColor = 'red';
+        zoomboxRect.strokeWidth = 1/wickEditor.canvas.getZoom();
+        zoomboxRect.strokeColor = 'black';
+        zoomboxRect.fillColor = 'rgba(255,255,255,0.1)';
     }
 
     this.paperTool.onMouseUp = function(event) {
-        var mouse = wickEditor.inputHandler.mouse;
-        if(wickEditor.inputHandler.specialKeys["Modifier"]) {
-            wickEditor.canvas.zoomToPoint(1-CLICK_ZOOM_AMT, mouse.x, mouse.y);
+
+        if(zoomboxStartPoint && zoomboxEndPoint) {
+            var startX = zoomboxStartPoint.x;
+            var startY = zoomboxStartPoint.y;
+            var endX = zoomboxEndPoint.x;
+            var endY = zoomboxEndPoint.y;
+            diffX = Math.abs(endX-startX);
+            diffY = Math.abs(endY-startY);
+            var wZoom = window.innerWidth/diffX*0.8;
+            var hZoom = window.innerHeight/diffY*0.8;
+            wickEditor.canvas.zoomToPoint(Math.min(wZoom, hZoom), (startX+endX)/2, (startY+endY)/2);
         } else {
-            wickEditor.canvas.zoomToPoint(1+CLICK_ZOOM_AMT, mouse.x, mouse.y);
+            var mouse = wickEditor.inputHandler.mouse;
+            console.log(mouse)
+            if(wickEditor.inputHandler.specialKeys["Modifier"]) {
+                wickEditor.canvas.zoomToPoint(1-CLICK_ZOOM_AMT, mouse.x, mouse.y);
+            } else {
+                wickEditor.canvas.zoomToPoint(1+CLICK_ZOOM_AMT, mouse.x, mouse.y);
+            }
         }
+
+        zoomboxStartPoint = null;
+        zoomboxEndPoint = null;
+        paperStart =null;
+        paperEnd = null;
+        if(zoomboxRect) zoomboxRect.remove();
     }
 
 // Scroll-to-zoom

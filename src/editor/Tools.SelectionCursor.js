@@ -267,7 +267,7 @@ Tools.SelectionCursor = function (wickEditor) {
                     new paper.Point(selectionSquareTopLeft.x, selectionSquareTopLeft.y), 
                     new paper.Point(selectionSquareBottomRight.x, selectionSquareBottomRight.y));
             selectionSquare.strokeColor = 'rgba(100,100,255,0.7)';
-            selectionSquare.strokeWidth = 1;
+            selectionSquare.strokeWidth = 1/wickEditor.canvas.getZoom();
             selectionSquare.fillColor = 'rgba(100,100,255,0.15)';
         } else {
             if(hitResult && hitResult.item) {
