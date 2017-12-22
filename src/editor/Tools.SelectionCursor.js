@@ -138,7 +138,11 @@ Tools.SelectionCursor = function (wickEditor) {
     }
 
     this.paperTool.onDoubleClick = function (event) {
-
+        if(hitResult) {
+            wickEditor.guiActionHandler.doAction('editObject');
+        } else {
+            wickEditor.guiActionHandler.doAction('finishEditingObject');
+        }
     }
 
     this.paperTool.onMouseDrag = function(event) {

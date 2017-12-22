@@ -857,6 +857,7 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.currentObject = wickEditor.project.currentObject.parentObject;
 
             wickEditor.timeline.resetScrollbars();
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
 
             done(args);
         },
@@ -865,6 +866,7 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.currentObject = args.prevEditedObject;
 
             wickEditor.timeline.resetScrollbars();
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
 
             done(args);
         });
