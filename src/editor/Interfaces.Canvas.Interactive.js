@@ -71,21 +71,22 @@ var InteractiveCanvas = function (wickEditor) {
                       , parser = new DOMParser()
                       , doc = parser.parseFromString(xmlString, "text/xml");
                     wickObject.paper = paper.project.importSVG(doc, {insert:false});
+                    if(wickObject.paper._class === 'Group') {
+                        wickObject.paper = wickObject.paper.children[0]
+                    }
                 } else if (wickObject.isImage) {
-                    
-                    //var raster = new paper.Raster(wickObject.asset.data);
-                    /*var xmlString = wickObject.pathData
-                      , parser = new DOMParser()
-                      , doc = parser.parseFromString(xmlString, "text/xml");
-                    var mask = paper.project.importSVG(doc, {insert:false});*/
-                    /*var mask = new paper.Path.Rectangle([0,0],[80,80])
-                    wickObject.paper = new paper.Group(mask,raster);
-                    wickObject.paper.clipped = true;
-                    wickObject.paper.fillColor = 'red';*/
-                    
                     var raster = new paper.Raster(wickObject.asset.data);
                     wickObject.paper = new paper.Group();
                     wickObject.paper.addChild(raster);
+                } else if (wickObject.isText) {
+                    wickObject.paper = new paper.PointText({
+                        point: paper.view.center,
+                        justification: 'left',
+                        fontSize: 30,
+                        fillColor: 'white',
+                        content: wickObject.textData.text,
+                        fontWeight: 'italic bold',
+                    });
                 } else if (wickObject.isSymbol) {
                     wickObject.paper = new paper.Group();
                     wickObject.getAllActiveChildObjects().forEach(function (child) {
@@ -93,14 +94,11 @@ var InteractiveCanvas = function (wickEditor) {
                         wickObject.paper.addChild(child.paper);
                         child.paper._isPartOfGroup = true;
                     });
-                    wickObject.paper.pivot = new paper.Point(wickObject.x,wickObject.y);
+                    wickObject.paper.pivot = new paper.Point(0,0);
                 }
 
-                var absPos = wickObject.getAbsolutePosition();
-                wickObject.paper.position.x = absPos.x;
-                wickObject.paper.position.y = absPos.y;
-                //wickObject.paper.rotate(wickObject.rotation);
-                //wickObject.paper.scale(wickObject.scaleX, wickObject.scaleY);
+                wickObject.paper.position.x = wickObject.x;
+                wickObject.paper.position.y = wickObject.y;
                 wickObject.paper.applyMatrix = false;
                 wickObject.paper.rotation = wickObject.rotation;
                 wickObject.paper.scaling.x = wickObject.scaleX;
@@ -137,12 +135,13 @@ var InteractiveCanvas = function (wickEditor) {
 
             var activeObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
             activeObjects.forEach(function (wickObject) {
-                if(!wickObject.isSymbol && !wickObject.isPath && !wickObject.isImage) return;
-
                 var layer = wickObject.parentFrame.parentLayer;
                 if(layer.locked || layer.hidden) return;
 
-                var newPath = createPathForWickobject(wickObject);
+                createPathForWickobject(wickObject);
+                var originPos = wickEditor.project.getCurrentObject().getAbsolutePosition();
+                wickObject.paper.position.x += originPos.x
+                wickObject.paper.position.y += originPos.y
                 paper.project.activeLayer.addChild(wickObject.paper);
                 wickObject.paper._isPartOfGroup = false;
             });
@@ -185,9 +184,16 @@ var InteractiveCanvas = function (wickEditor) {
 
         var hitResult = paper.project.hitTest(point, hitOptions);
 
-        if(hitResult && hitResult.item.parent._isPartOfGroup) {
+        if(hitResult && hitResult.item._isPartOfGroup) {
             if(args.allowGroups) {
-                hitResult.item = hitResult.item.parent;
+                function getRootParent (item) {
+                    if(item.parent._class === 'Layer') {
+                        return item;
+                    } else {
+                        return getRootParent(item.parent)
+                    }
+                }
+                hitResult.item = getRootParent(hitResult.item);
             } else {
                 hitResult = null;
             }

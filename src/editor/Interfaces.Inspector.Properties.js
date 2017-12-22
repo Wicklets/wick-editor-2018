@@ -301,11 +301,11 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         },
         getValueFn: function () {
             if(!selectionInfo.object.paper) return false;
-            return selectionInfo.object.paper.children[0].closed;
+            return selectionInfo.object.paper.closed;
         }, 
         onChangeFn: function (val) {
             if(!selectionInfo.object.paper) return;
-            var closed = selectionInfo.object.paper.children[0].closed;
+            var closed = selectionInfo.object.paper.closed;
             wickEditor.guiActionHandler.doAction("changePathProperties", {
                 closed: !closed
             });

@@ -109,7 +109,7 @@ Tools.SelectionCursor = function (wickEditor) {
             if(selectCheckWickObj)
                 newlySelected = !wickEditor.project.isObjectSelected(selectCheckWickObj)
 
-            var wickObj = hitResult.item.parent.wick;
+            var wickObj = hitResult.item.wick || hitResult.item.parent.wick;
             if(wickObj) {
                 if(!wickEditor.project.isObjectSelected(wickObj)) {
                     if(!event.modifiers.shift) {
@@ -139,8 +139,12 @@ Tools.SelectionCursor = function (wickEditor) {
 
     this.paperTool.onDoubleClick = function (event) {
         if(hitResult) {
+            var selected = wickEditor.project.getSelectedObject();
+            if(!selected) return;
+            if(!selected.isSymbol) return;
             wickEditor.guiActionHandler.doAction('editObject');
         } else {
+            if(wickEditor.project.getCurrentObject().isRoot) return;
             wickEditor.guiActionHandler.doAction('finishEditingObject');
         }
     }
@@ -331,8 +335,8 @@ Tools.SelectionCursor = function (wickEditor) {
             if(wickObject.isSymbol) {
                 modifiedStates.push({
                     rotation: wickObject.paper.rotation,
-                    x: wickObject.paper.position.x,
-                    y: wickObject.paper.position.y,
+                    x: wickObject.paper.position.x - parentAbsPos.x,
+                    y: wickObject.paper.position.y - parentAbsPos.y,
                     scaleX: wickObject.paper.scaling.x,
                     scaleY: wickObject.paper.scaling.y,
                 });

@@ -218,7 +218,7 @@ Tools.VectorCursor = function (wickEditor) {
 
         if(event.delta.x === 0 && event.delta.y === 0) return;
 
-        var wickObject = hitResult.item.parent.wick;
+        var wickObject = hitResult.item.wick || hitResult.item.parent.wick;
 
         var parentAbsPos;
         if(wickObject.parentObject)

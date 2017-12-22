@@ -387,6 +387,8 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.clearSelection()
             wickEditor.project.selectObject(symbol)
 
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
+
             done(args);
         },
         function (args) {
@@ -399,6 +401,8 @@ var WickActionHandler = function (wickEditor) {
             });
 
             wickEditor.project.currentObject.removeChild(args.createdSymbol);
+
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
 
             done(args);
         });
@@ -418,6 +422,8 @@ var WickActionHandler = function (wickEditor) {
 
             wickEditor.project.currentObject.removeChild(args.obj);
 
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
+
             done(args);
         },
         function (args) {
@@ -428,6 +434,8 @@ var WickActionHandler = function (wickEditor) {
             });
 
             wickEditor.project.addObject(args.symbol);
+
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
 
             done(args);
         });
