@@ -1023,7 +1023,7 @@ var WickActionHandler = function (wickEditor) {
             var asset = args.asset;
             
             args.oldName =  args.asset.filename;
-            args.asset.filename = prompt("Enter a new name for the asset:") || "Untitled";
+            args.asset.filename = args.newFilename; 
 
             done(args);
         },

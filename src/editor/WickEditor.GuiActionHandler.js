@@ -1140,9 +1140,13 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function (args) {
+            var asset = wickEditor.library.getSelectedAsset(); 
+
+            if (asset == null) return; 
             wickEditor.actionHandler.doAction('deleteAsset', {
-                asset: wickEditor.library.getSelectedAsset()
+                asset: asset,
             });
+
         });
 
     registerAction('renameAsset',
@@ -1150,9 +1154,18 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function (args) {
+            var asset = wickEditor.library.getSelectedAsset(); 
+            if (asset == null) return; // No asset selected
+            
+            var oldAssetName = asset.filename; 
+            var newName = prompt("Rename " + oldAssetName + " to:");
+
+            if (newName == null) return; // No name input
             wickEditor.actionHandler.doAction('renameAsset', {
-                asset: wickEditor.library.getSelectedAsset()
+                asset: wickEditor.library.getSelectedAsset(),
+                newFilename: newName,
             });
+
         });
 
     
@@ -1165,7 +1178,6 @@ var GuiActionHandler = function (wickEditor) {
             if (!asset) return;
 
             var screenPos = wickEditor.canvas.screenToCanvasSpace(args.x, args.y)
-            var screenPos = wickEditor.canvas.getFabricCanvas().screenToCanvasSpace(args.x, args.y); // Where did they drop the object?
             var wickObj = new WickObject();
 
             wickObj.assetUUID = asset.uuid;

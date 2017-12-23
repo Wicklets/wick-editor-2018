@@ -14,6 +14,14 @@
 
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
+
+var LibraryInterface = function (wickEditor) {
+    var self = this; 
+
+    this.setup = function () {
+
+    }
+}
     
 var LibraryInterface = function (wickEditor) {
 
@@ -26,50 +34,42 @@ var LibraryInterface = function (wickEditor) {
     var isDraggingAsset = false; 
 
     this.setup = function () {
-        //$("#tree").fancytree();
         $("#tree").mousedown(function() {
             wickEditor.project.clearSelection();
-            //wickEditor.syncInterfaces();
         });
         
-        $("#tree").mousedown(function() {
-            wickEditor.project.clearSelection();
-            //wickEditor.syncInterfaces();
-        });
-
         $("#tree").fancytree({
             extensions: ["filter"],
             filter: { 
                 counter: false, 
                 mode: "hide",
             },
-            //checkbox: true,
             selectMode: 1,
-            //source: SOURCE,
             activate: function(event, data) {
                 selectedNode = data.node;
-                //console.log(data.node)
-                //console.log(data.node.data)
             },
             select: function(event, data) {
-                // Display list of selected nodes
-                //var s = data.tree.getSelectedNodes().join(", ");
-                //console.log(s);
             },
             dblclick: function(event, data) {
-                //data.node.toggleSelected();
             },
-            /*keydown: function(event, data) {
-                if( event.which === 32 ) {
-                    data.node.toggleSelected();
-                    return false;
-                }
-            }*/
         });
 
+        // Setup the filter
         var filterInput = $('#treeFilterInput');
         filterInput.bind("propertychange change click keyup input paste", function(event){
             $("#tree").fancytree("getTree").filterNodes(filterInput.val());
+        });
+
+        // Enable the delete asset button
+        var deleteAssetButton = $('#deleteAssetButton');
+        deleteAssetButton.bind("mouseup", function(event) {
+            wickEditor.guiActionHandler.doAction('deleteAsset'); 
+        });
+
+        // Enable rename asset button
+        var renameAssetButton = $('#renameAssetButton');
+        renameAssetButton.bind("mouseup", function(event) {
+            wickEditor.guiActionHandler.doAction('renameAsset'); 
         });
 
         draggedAssetElem = document.createElement('div');
