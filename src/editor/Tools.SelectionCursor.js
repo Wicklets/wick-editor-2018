@@ -366,6 +366,10 @@ Tools.SelectionCursor = function (wickEditor) {
                     scaleY : wickObject.paper.scaling.y,
                     rotation : wickObject.paper.rotation,
                 })
+            } else if (wickObject.isText) {
+                modifiedStates.push({
+                    
+                });
             }
         });
         wickEditor.actionHandler.doAction('modifyObjects', {

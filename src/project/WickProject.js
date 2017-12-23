@@ -154,6 +154,7 @@ WickProject.fixForBackwardsCompatibility = function (project) {
     var allObjectsInProject = project.rootObject.getAllChildObjectsRecursive();
     allObjectsInProject.push(project.rootObject);
     allObjectsInProject.forEach(function (wickObj) {
+        // Tweens belong to frames now
         if(wickObj.tweens) wickObj.tweens = null;
 
         if(!wickObj.isSymbol) return
@@ -162,6 +163,7 @@ WickProject.fixForBackwardsCompatibility = function (project) {
             if(!layer.hidden) layer.hidden = false;
             layer.frames.forEach(function (frame) {
                 if(!frame.tweens) frame.tweens = [];
+                // Make sure tweens have rotations now
                 frame.tweens.forEach(function (tween) {
                     if(!tween.rotations) tween.rotations = 0;
                 });
@@ -169,14 +171,12 @@ WickProject.fixForBackwardsCompatibility = function (project) {
         });
     });
 
+    // Selection is handled in the project now
     if(!project._selection){
         project._selection = [];
     }
 
-    if(!project.smallFramesMode) {
-        project.smallFramesMode = false;
-    }
-
+    // Data for sounds and images is stored in the asset library now
     if(!project.library) {
         project.library = new AssetLibrary();
 

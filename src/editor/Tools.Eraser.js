@@ -120,23 +120,43 @@ Tools.Eraser = function (wickEditor) {
         if (path) {
             path.closed = true;
             path.smooth();
-            path = path.unite(new paper.Path())
+            //path = path.unite(new paper.Path());
             var t = wickEditor.settings.brushThickness;
             var z = wickEditor.canvas.getZoom();
             path.simplify(t / z * 0.2);
 
-            var group = new paper.Group({insert:false});
-            group.addChild(path);
-
-            var svgString = group.exportSVG({asString:true});
-            wickEditor.canvas.getInteractiveCanvas().pathRoutines.eraseWithPath({
-                pathData:svgString,
-                pathX: path.position.x,
-                pathY: path.position.y
+            var eraseObjects = wickEditor.project.getCurrentFrame().wickObjects
+            eraseObjects = eraseObjects.filter(function (wickObject) {
+                return wickObject.paper && wickObject.paper.closed;
             });
+
+            var modifiedStates = [];
+            eraseObjects.forEach(function (wickObject) {
+                var parentAbsPos;
+                if(wickObject.parentObject)
+                    parentAbsPos = wickObject.parentObject.getAbsolutePosition();
+                else 
+                    parentAbsPos = {x:0,y:0};
+
+                wickObject.paper = wickObject.paper.subtract(path);
+                modifiedStates.push({
+                    x: wickObject.paper.position.x - parentAbsPos.x,
+                    y: wickObject.paper.position.y - parentAbsPos.y,
+                    svgX: wickObject.paper.bounds._x,
+                    svgY: wickObject.paper.bounds._y,
+                    width: wickObject.paper.bounds._width,
+                    height: wickObject.paper.bounds._height,
+                    pathData: wickObject.paper.exportSVG({asString:true}),
+                })
+            })
+
+            wickEditor.actionHandler.doAction('modifyObjects', {
+                objs: eraseObjects,
+                modifiedStates: modifiedStates,
+            });
+
             path.remove();
             path = null;
         } 
     }
-
 }

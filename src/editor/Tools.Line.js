@@ -79,8 +79,10 @@ Tools.Line = function (wickEditor) {
         var pathWickObject = WickObject.createPathObject(svgString);
         pathWickObject.x = (drawingLine.segments[0].point.x + drawingLine.segments[1].point.x)/2;
         pathWickObject.y = (drawingLine.segments[0].point.y + drawingLine.segments[1].point.y)/2;
-        pathWickObject.width = 1;
-        pathWickObject.height = 1;
+        pathWickObject.width = drawingLine.bounds._width;
+        pathWickObject.height = drawingLine.bounds._height;
+        pathWickObject.svgX = drawingLine.bounds._x;
+        pathWickObject.svgY = drawingLine.bounds._y;
 
         //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(pathWickObject);
 

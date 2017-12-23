@@ -84,8 +84,10 @@ Tools.Rectangle = function (wickEditor) {
         var pathWickObject = WickObject.createPathObject(svgString);
         pathWickObject.x = topLeft.x+(bottomRight.x-topLeft.x)/2;
         pathWickObject.y = topLeft.y+(bottomRight.y-topLeft.y)/2;
-        pathWickObject.width = 1;
-        pathWickObject.height = 1;
+        pathWickObject.width = tempGroup.bounds._width;
+        pathWickObject.height = tempGroup.bounds._height;
+        pathWickObject.svgX = tempGroup.bounds._x;
+        pathWickObject.svgY = tempGroup.bounds._y;
 
         //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(pathWickObject);
 

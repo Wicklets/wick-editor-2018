@@ -81,11 +81,12 @@ var InteractiveCanvas = function (wickEditor) {
                 } else if (wickObject.isText) {
                     wickObject.paper = new paper.PointText({
                         point: paper.view.center,
-                        justification: 'left',
-                        fontSize: 30,
-                        fillColor: 'white',
+                        justification: wickObject.textData.textAlign,
+                        fontSize: wickObject.textData.fontSize,
+                        fillColor: wickObject.textData.fill,
+                        fontFamily: wickObject.textData.fontFamily,
                         content: wickObject.textData.text,
-                        fontWeight: 'italic bold',
+                        fontWeight: wickObject.textData.fontWeight + ' ' + wickObject.textData.fontStyle,
                     });
                 } else if (wickObject.isSymbol) {
                     wickObject.paper = new paper.Group();
@@ -95,6 +96,13 @@ var InteractiveCanvas = function (wickEditor) {
                         child.paper._isPartOfGroup = true;
                     });
                     wickObject.paper.pivot = new paper.Point(0,0);
+                }
+
+                if(!wickObject.paper){
+                    wickEditor.actionHandler.doAction('deleteObjects', {
+                        objects: [wickObject]
+                    });
+                    return false;
                 }
 
                 wickObject.paper.position.x = wickObject.x;
@@ -108,6 +116,7 @@ var InteractiveCanvas = function (wickEditor) {
                 wickObject.svgStrokeWidth = wickObject.paper.strokeWidth;
                 
                 wickObject.paper.wick = wickObject;
+                return wickObject.paper;
             }
 
             paper.project.activeLayer.removeChildren();
@@ -138,12 +147,13 @@ var InteractiveCanvas = function (wickEditor) {
                 var layer = wickObject.parentFrame.parentLayer;
                 if(layer.locked || layer.hidden) return;
 
-                createPathForWickobject(wickObject);
-                var originPos = wickEditor.project.getCurrentObject().getAbsolutePosition();
-                wickObject.paper.position.x += originPos.x
-                wickObject.paper.position.y += originPos.y
-                paper.project.activeLayer.addChild(wickObject.paper);
-                wickObject.paper._isPartOfGroup = false;
+                if(createPathForWickobject(wickObject)) {
+                    var originPos = wickEditor.project.getCurrentObject().getAbsolutePosition();
+                    wickObject.paper.position.x += originPos.x
+                    wickObject.paper.position.y += originPos.y
+                    paper.project.activeLayer.addChild(wickObject.paper);
+                    wickObject.paper._isPartOfGroup = false;
+                }
             });
         }
 

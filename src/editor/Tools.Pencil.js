@@ -113,8 +113,10 @@ Tools.Pencil = function (wickEditor) {
             var pathWickObject = WickObject.createPathObject(svgString);
             pathWickObject.x = group.position.x;
             pathWickObject.y = group.position.y;
-            pathWickObject.width = 1;
-            pathWickObject.height = 1;
+            pathWickObject.width = group.bounds._width;
+            pathWickObject.height = group.bounds._height;
+            pathWickObject.svgX = group.bounds._x;
+            pathWickObject.svgY = group.bounds._y;
 
             //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(pathWickObject);
 

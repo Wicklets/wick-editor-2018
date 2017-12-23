@@ -176,6 +176,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }, 
         onChangeFn: function (val) {
             selectionInfo.object.textData.fontFamily = val;
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
             wickEditor.syncInterfaces();
         }
     }));
@@ -212,8 +213,9 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             if(vals[2]) {
                 if(currentAlign !== 'right') selectionInfo.object.textData.textAlign = 'right';
             }
-            selectionInfo.object.textData.fontWeight = vals[3] ? 'bold' : 'normal';
-            selectionInfo.object.textData.fontStyle = vals[4] ? 'italic' : 'normal';
+            selectionInfo.object.textData.fontWeight = vals[3] ? 'bold' : '';
+            selectionInfo.object.textData.fontStyle = vals[4] ? 'italic' : '';
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
             wickEditor.syncInterfaces();
         }
     }));
@@ -228,6 +230,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         },
         onChangeFn: function (val) {
             selectionInfo.object.textData.fontSize = eval(val);
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
             wickEditor.syncInterfaces();
         }
     }));
@@ -242,6 +245,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }, 
         onChangeFn: function (val) {
             selectionInfo.object.textData.fill = val;
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
             wickEditor.syncInterfaces();
         }
     }));
