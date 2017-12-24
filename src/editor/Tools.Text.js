@@ -54,7 +54,7 @@ Tools.Text = function (wickEditor) {
                 document.body.style.cursor = 'text';
             }
         } else {
-            document.body.style.cursor = 'default';
+            document.body.style.cursor = 'crosshair';
         }
     }
 
@@ -65,11 +65,13 @@ Tools.Text = function (wickEditor) {
             wickEditor.syncInterfaces();
         } else {
             wickEditor.project.clearSelection();
-            wickEditor.syncInterfaces();
+            var m = wickEditor.inputHandler.mouse;
+            var ms = wickEditor.canvas.screenToCanvasSpace(m.x,m.y)
+            addText(ms.x, ms.y);
         }
     }
 
-    self.addText = function (x,y) {                                                     
+    function addText (x,y) {                                                     
     	var newWickObject = WickObject.createTextObject('Click to edit text');
 
         if(x && y) {

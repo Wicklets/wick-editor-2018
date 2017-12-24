@@ -29,7 +29,7 @@ var TextEditBox = function (wickEditor) {
         box.style.border = 'none';
         box.style.overflow = 'hidden';
         box.style.resize = 'none';
-        box.onkeyup = function () {
+        box.oninput = function () {
             var selectedObj = wickEditor.project.getSelectedObject();
             if(selectedObj) {
                 selectedObj.textData.text = box.value;
@@ -38,7 +38,7 @@ var TextEditBox = function (wickEditor) {
                 wickEditor.syncInterfaces();
             }
         }
-        document.body.appendChild(box);
+        document.getElementById('editorCanvasContainer').appendChild(box);
     }
 
     this.syncWithEditorState = function () {
@@ -56,9 +56,10 @@ var TextEditBox = function (wickEditor) {
             var w = selectedObj.width;
             var h = selectedObj.height;
             var zoom = wickEditor.canvas.getZoom();
+            var TOP_OFFSET = -2;
 
             box.style.left   = x-(w*zoom/2) + 'px';
-            box.style.top    = y-(h*zoom/2) + 'px';
+            box.style.top    = y-(h*zoom/2)+TOP_OFFSET + 'px';
             box.style.width  = w*zoom + 'px';
             box.style.height = h*zoom + 'px';
 
