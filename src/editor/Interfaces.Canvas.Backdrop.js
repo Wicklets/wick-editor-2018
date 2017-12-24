@@ -19,15 +19,11 @@ var CanvasBackdrop = function (wickEditor, canvasContainer) {
 
     var self = this;
 
-    var backdropDiv;
-
-    self.setup = function () {
-        backdropDiv = document.createElement('div');
-        backdropDiv.style.position = 'absolute';
-        backdropDiv.style.top = '0px';
-        backdropDiv.style.left = '0px';
-        canvasContainer.appendChild(backdropDiv);
-    }
+    var backdropDiv = document.createElement('div');
+    backdropDiv.style.position = 'absolute';
+    backdropDiv.style.top = '0px';
+    backdropDiv.style.left = '0px';
+    canvasContainer.appendChild(backdropDiv);
 
     self.update = function () {
         self.updateViewTransforms();

@@ -70,6 +70,7 @@ var WickEditor = function () {
     this.cursorIcon = registerInterface(new CursorIconInterface(this));
     this.colorPicker = registerInterface(new ColorPickerInterface(this));
     this.editorSettings = registerInterface(new EditorSettings(this));
+    this.textEditBox = registerInterface(new TextEditBox(this));
 
     // Setup editor logic handlers
     this.actionHandler = new WickActionHandler(this);
@@ -88,7 +89,7 @@ var WickEditor = function () {
         "line"             : new Tools.Line(this),
         //"pen"              : new Tools.Pen(this),
         "dropper"          : new Tools.Dropper(this),
-        //"text"             : new Tools.Text(this),
+        "text"             : new Tools.Text(this),
         "zoom"             : new Tools.Zoom(this),
         "pan"              : new Tools.Pan(this),
     }

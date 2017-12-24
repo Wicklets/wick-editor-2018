@@ -225,7 +225,7 @@ var WickPixiRenderer = function (canvasContainer) {
                 fill : textData.fill,
                 wordWrap : true,
                 wordWrapWidth : wickObject.width*SVG_SCALE,
-                align: textData.textAlign
+                align: textData.textAlign,
             };
             var pixiText = new PIXI.Text(textData.text, style);
             var textWidth = pixiText.width/SVG_SCALE;

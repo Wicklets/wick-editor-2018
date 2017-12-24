@@ -21,7 +21,8 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         title: 'X',
         otherTitle: 'Y',
         isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
+            return selectionInfo.numObjects === 1 
+                && selectionInfo.type == 'wickobject';
         },
         getValueFn: function () {
             return {
@@ -44,7 +45,9 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         title: 'Size W',
         otherTitle: 'H',
         isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
+            return selectionInfo.numObjects === 1 
+                && selectionInfo.type == 'wickobject'
+                && selectionInfo.dataType !== 'text';
         },
         getValueFn: function () {
             return {
@@ -68,8 +71,9 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         otherTitle: 'H',
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 
-            && selectionInfo.type == 'wickobject'
-            && selectionInfo.dataType !== 'sound';
+                && selectionInfo.type == 'wickobject'
+                && selectionInfo.dataType !== 'sound'
+                && selectionInfo.dataType !== 'text';
         },
         getValueFn: function () {
             return {
@@ -169,7 +173,9 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         title: 'Font Family',
         options: getAvailableFonts(),
         isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isText;
+            return selectionInfo.numObjects === 1 
+                && selectionInfo.type == 'wickobject' 
+                && selectionInfo.object.isText;
         },
         getValueFn: function () {
             return selectionInfo.object.textData.fontFamily;

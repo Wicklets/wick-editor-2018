@@ -22,7 +22,7 @@ Tools.Text = function (wickEditor) {
     var self = this;
 
     this.getCursorImage = function () {
-        return "text";
+        return "default";
     }
 
     this.getToolbarIcon = function () {
@@ -34,17 +34,44 @@ Tools.Text = function (wickEditor) {
     }
 
     this.setup = function () {
-        /*wickEditor.canvas.getFabricCanvas().canvas.on('mouse:down', function (e) {
-            if(wickEditor.currentTool instanceof Tools.Text && e.e.buttons === 1) {
-                var mouseCanvasSpace = wickEditor.canvas.getFabricCanvas().screenToCanvasSpace(wickEditor.inputHandler.mouse.x, wickEditor.inputHandler.mouse.y)
-                wickEditor.currentTool = wickEditor.tools.cursor;
-                self.addText(mouseCanvasSpace.x, mouseCanvasSpace.y);
+        
+    }
+
+    this.onSelected = function () {
+        //wickEditor.project.clearSelection();
+        wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
+    }
+
+    this.onDeselected = function () {
+        
+    }
+
+    this.paperTool = new paper.Tool();
+
+    this.paperTool.onMouseMove = function(event) {
+        if(event.item) {
+            if(event.item.wick && event.item.wick.isText) {
+                document.body.style.cursor = 'text';
             }
-        });*/
+        } else {
+            document.body.style.cursor = 'default';
+        }
+    }
+
+    this.paperTool.onMouseDown = function (event) {
+        if(event.item && event.item.wick && event.item.wick.isText) {
+            wickEditor.project.clearSelection();
+            wickEditor.project.selectObject(event.item.wick)
+            wickEditor.syncInterfaces();
+        } else {
+            wickEditor.project.clearSelection();
+            wickEditor.syncInterfaces();
+        }
     }
 
     self.addText = function (x,y) {                                                     
     	var newWickObject = WickObject.createTextObject('Click to edit text');
+
         if(x && y) {
             newWickObject.x = x;
             newWickObject.y = y;
@@ -52,7 +79,7 @@ Tools.Text = function (wickEditor) {
             newWickObject.x = wickEditor.project.width/2;
             newWickObject.y = wickEditor.project.height/2;
         }
+
         wickEditor.actionHandler.doAction('addObjects', {wickObjects:[newWickObject]});
     }
-
 }

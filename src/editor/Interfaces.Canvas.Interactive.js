@@ -88,6 +88,8 @@ var InteractiveCanvas = function (wickEditor) {
                         content: wickObject.textData.text,
                         fontWeight: wickObject.textData.fontWeight + ' ' + wickObject.textData.fontStyle,
                     });
+                    wickObject.width = wickObject.paper.bounds.width;
+                    wickObject.height = wickObject.paper.bounds.height;
                 } else if (wickObject.isSymbol) {
                     wickObject.paper = new paper.Group();
                     wickObject.getAllActiveChildObjects().forEach(function (child) {

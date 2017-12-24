@@ -141,8 +141,11 @@ Tools.SelectionCursor = function (wickEditor) {
         if(hitResult) {
             var selected = wickEditor.project.getSelectedObject();
             if(!selected) return;
-            if(!selected.isSymbol) return;
-            wickEditor.guiActionHandler.doAction('editObject');
+            if(selected.isSymbol) {
+                wickEditor.guiActionHandler.doAction('editObject');
+            } else if (selected.isText) {
+                wickEditor.guiActionHandler.doAction('useTools.text')
+            }
         } else {
             if(wickEditor.project.getCurrentObject().isRoot) return;
             wickEditor.guiActionHandler.doAction('finishEditingObject');
@@ -368,7 +371,9 @@ Tools.SelectionCursor = function (wickEditor) {
                 })
             } else if (wickObject.isText) {
                 modifiedStates.push({
-                    
+                    x : wickObject.paper.position.x - parentAbsPos.x,
+                    y : wickObject.paper.position.y - parentAbsPos.y,
+                    rotation : wickObject.paper.rotation,
                 });
             }
         });

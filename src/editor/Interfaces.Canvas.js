@@ -34,8 +34,6 @@ var CanvasInterface = function (wickEditor) {
         canvasContainer = document.getElementById('editorCanvasContainer')
 
         canvasBackdrop = new CanvasBackdrop(wickEditor, canvasContainer);
-        canvasBackdrop.setup();
-
         interactiveCanvas = new InteractiveCanvas(wickEditor);
         fastCanvas = new FastCanvas(wickEditor);
 
@@ -136,6 +134,13 @@ var CanvasInterface = function (wickEditor) {
         return {
             x: (x - pan.x)/zoom,
             y: (y - pan.y)/zoom
+        }
+    }
+
+    self.canvasToScreenSpace = function (x,y) {
+        return {
+            x: (x * zoom) + pan.x,
+            y: (y * zoom) + pan.y
         }
     }
 
