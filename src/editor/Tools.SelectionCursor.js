@@ -104,14 +104,13 @@ Tools.SelectionCursor = function (wickEditor) {
 
         if(hitResult && !hitResult.item._wickInteraction) {
 
-            var selectCheckWickObj = hitResult.item.parent.wick;
-            var newlySelected = false;
-            if(selectCheckWickObj)
-                newlySelected = !wickEditor.project.isObjectSelected(selectCheckWickObj)
-
             var wickObj = hitResult.item.wick || hitResult.item.parent.wick;
             if(wickObj) {
-                if(!wickEditor.project.isObjectSelected(wickObj)) {
+                if(wickEditor.project.isObjectSelected(wickObj)) {
+                    if(event.modifiers.shift) {
+                        wickEditor.project.deselectObject(wickObj);
+                    }
+                } else {
                     if(!event.modifiers.shift) {
                         wickEditor.project.clearSelection();
                     }

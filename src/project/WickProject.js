@@ -590,6 +590,16 @@ WickProject.prototype.clearSelection = function () {
     this._selection = [];
 }
 
+WickProject.prototype.deselectObject = function (obj) {
+    wickEditor.inspector.clearSpecialMode();
+    for ( var i = 0; i < this._selection.length; i++ ) {
+        var uuid = this._selection[i];
+        if(obj.uuid === uuid) {
+            this._selection[i] = null;
+        }
+    }
+}
+
 WickProject.prototype.deselectObjectType = function (type) {
     var deselectionHappened = false;
     
@@ -608,12 +618,6 @@ WickProject.prototype.deselectObjectType = function (type) {
     });
 
     return deselectionHappened;
-}
-
-WickProject.prototype.getIntersectingPaths = function (path) {
-
-    return [];
-
 }
 
 WickProject.prototype.loadBuiltinFunctions = function (contextObject) {

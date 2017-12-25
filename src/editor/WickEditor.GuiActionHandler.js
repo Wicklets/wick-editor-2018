@@ -1227,7 +1227,8 @@ var GuiActionHandler = function (wickEditor) {
             objs.forEach(function (wickObject) {
                 if(!wickObject.isPath) return;
                 for(key in args) {
-                    wickObject.paper.children[0][key] = args[key];
+                    console.log(wickObject.paper)
+                    wickObject.paper[key] = args[key];
                     modifiedStates.push({
                         pathData : wickObject.paper.exportSVG({asString:true}),
                     })
