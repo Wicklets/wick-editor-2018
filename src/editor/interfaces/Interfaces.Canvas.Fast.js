@@ -53,7 +53,7 @@ var FastCanvas = function (wickEditor) {
         }
 
         inactiveObjects = inactiveObjects.concat(wickEditor.project.currentObject.getAllActiveChildObjects().filter(function (c) {
-            return c.parentFrame.parentLayer.locked;
+            return c.parentFrame.parentLayer.locked && !c.parentFrame.parentLayer.hidden;
         }));
 
         pixiRenderer.renderWickObjects(wickEditor.project, inactiveObjects, 2);

@@ -68,9 +68,9 @@ Tools.Pen = function (wickEditor) {
             var segments = drawingPath.segments;
             var firstSegment = segments[0];
 
-            var lastSegment = segments[segments.length-1];
-            lastSegment.handleOut.x = -lastSegment.handleIn.x
-            lastSegment.handleOut.y = -lastSegment.handleIn.y
+            //var lastSegment = segments[segments.length-1];
+            //lastSegment.handleOut.x = -lastSegment.handleIn.x
+            //lastSegment.handleOut.y = -lastSegment.handleIn.y
 
             if(hitResult && hitResult.segment === firstSegment) {
                 drawingPath.closePath();

@@ -424,18 +424,7 @@ var InputHandler = function (wickEditor) {
         wickObj.assetUUID = wickEditor.project.library.addAsset(asset);
         wickObj.isImage = true;
         wickObj.name = filename;
-
-        var img = new Image();
-        img.onload = function () {
-            var from = new paper.Point(0,0)
-            var to = new paper.Point(200,200)
-            var rect = new paper.Path.Rectangle(from,to);
-            var group = new paper.Group({insert:false});
-            group.addChild(rect)
-            wickObj.pathData = group.exportSVG({asString:true});
-            callback(wickObj);
-        }
-        img.src = src;
+        callback(wickObj)
     }
 
     var loadAudio = function (src, filename, callback) {

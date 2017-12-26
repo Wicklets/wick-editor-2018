@@ -78,6 +78,8 @@ var InteractiveCanvas = function (wickEditor) {
                     var raster = new paper.Raster(wickObject.asset.data);
                     wickObject.paper = new paper.Group();
                     wickObject.paper.addChild(raster);
+                    wickObject.width = wickObject.paper.bounds._width;
+                    wickObject.height = wickObject.paper.bounds._height;
                 } else if (wickObject.isText) {
                     wickObject.paper = new paper.PointText({
                         point: paper.view.center,

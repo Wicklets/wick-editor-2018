@@ -308,6 +308,8 @@ Tools.SelectionCursor = function (wickEditor) {
                 wickEditor.project.clearSelection()
             }
             wickEditor.project.getCurrentObject().getAllActiveChildObjects().forEach(function (wickObject) {
+                if(!wickObject.paper) return;
+                if(wickObject.parentFrame.parentLayer.locked || wickObject.parentFrame.parentLayer.hidden) return;
                 if(selectionSquare.bounds.contains(wickObject.paper.bounds)) {
                     wickEditor.project.selectObject(wickObject)
                 }

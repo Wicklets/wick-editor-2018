@@ -114,6 +114,7 @@ TimelineInterface.Layer = function (wickEditor, timeline) {
         lockLayerButton.className = 'layer-lock-button';
         lockLayerButton.onclick = function (e) {
             that.wickLayer.locked = !that.wickLayer.locked;
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
             wickEditor.syncInterfaces();
             e.stopPropagation();
         }
@@ -123,6 +124,7 @@ TimelineInterface.Layer = function (wickEditor, timeline) {
         hideLayerButton.className = 'layer-hide-button';
         hideLayerButton.onclick = function (e) {
             that.wickLayer.hidden = !that.wickLayer.hidden;
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
             wickEditor.syncInterfaces();
         }
         this.elem.appendChild(hideLayerButton);
