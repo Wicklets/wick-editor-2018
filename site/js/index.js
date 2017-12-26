@@ -22,9 +22,9 @@ $(document).ready(function() {
         window.location.hash = "tutorials"
     });
 
-    $( ".examples-button" ).click(function() {
-        frame.src = "site/pages/examples.html"
-        window.location.hash = "examples"
+    $( ".gallery-button" ).click(function() {
+        frame.src = "site/pages/gallery.html"
+        window.location.hash = "gallery"
     });
 
     $( ".reference-button" ).click(function() {

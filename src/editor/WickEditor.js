@@ -77,22 +77,22 @@ var WickEditor = function () {
     this.guiActionHandler = new GuiActionHandler(this);
 
     // Load all tools
-    this.tools = {
-        "selectioncursor"  : new Tools.SelectionCursor(this),
-        "vectorcursor"     : new Tools.VectorCursor(this),
-        "paintbrush"       : new Tools.Paintbrush(this),
-        "pencil"           : new Tools.Pencil(this),
-        "eraser"           : new Tools.Eraser(this),
-        "fillbucket"       : new Tools.FillBucket(this),
-        "rectangle"        : new Tools.Rectangle(this),
-        "ellipse"          : new Tools.Ellipse(this),
-        "line"             : new Tools.Line(this),
-        //"pen"              : new Tools.Pen(this),
-        "dropper"          : new Tools.Dropper(this),
-        "text"             : new Tools.Text(this),
-        "zoom"             : new Tools.Zoom(this),
-        "pan"              : new Tools.Pan(this),
-    }
+    this.tools = {};
+    this.tools.selectioncursor = new Tools.SelectionCursor(this);
+    this.tools.vectorcursor = new Tools.VectorCursor(this);
+    this.tools.paintbrush = new Tools.Paintbrush(this);
+    this.tools.pencil = new Tools.Pencil(this);
+    this.tools.eraser = new Tools.Eraser(this);
+    this.tools.fillbucket = new Tools.FillBucket(this);
+    this.tools.rectangle = new Tools.Rectangle(this);
+    this.tools.ellipse = new Tools.Ellipse(this);
+    this.tools.line = new Tools.Line(this);
+    this.tools.pen = new Tools.Pen(this);
+    this.tools.dropper = new Tools.Dropper(this);
+    this.tools.text = new Tools.Text(this);
+    this.tools.zoom = new Tools.Zoom(this);
+    this.tools.pan = new Tools.Pan(this);
+    
     this.currentTool = this.tools.selectioncursor;
     this.lastTool = this.currentTool;
 

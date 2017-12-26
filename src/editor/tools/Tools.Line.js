@@ -84,8 +84,6 @@ Tools.Line = function (wickEditor) {
         pathWickObject.svgX = drawingLine.bounds._x;
         pathWickObject.svgY = drawingLine.bounds._y;
 
-        //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(pathWickObject);
-
         wickEditor.actionHandler.doAction('addObjects', {
             wickObjects: [pathWickObject],
             dontSelectObjects: true,

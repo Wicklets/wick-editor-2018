@@ -96,7 +96,7 @@ Tools.Pencil = function (wickEditor) {
 
                 if(wickEditor.settings.brushSmoothingAmount > 0) {
                     var t = wickEditor.settings.strokeWidth;
-                    var s = wickEditor.settings.brushSmoothingAmount/100;
+                    var s = wickEditor.settings.brushSmoothingAmount/100*10;
                     var z = wickEditor.canvas.getZoom();
                     path.simplify(t / z * s);
                 }
