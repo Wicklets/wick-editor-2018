@@ -40,6 +40,9 @@ Tools.FillBucket = function (wickEditor) {
     this.onSelected = function () {
         wickEditor.project.clearSelection();
         wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
+        wickEditor.canvas.getCanvasRenderer().getCanvasAsDataURL(function (dataurl) {
+
+        });
     }
 
     this.paperTool = new paper.Tool();
@@ -89,7 +92,7 @@ Tools.FillBucket = function (wickEditor) {
                         var mouseCanvasSpace = wickEditor.canvas.screenToCanvasSpace(wickEditor.inputHandler.mouse.x + wickEditor.project.width/2, wickEditor.inputHandler.mouse.y + wickEditor.project.height/2)
                         context.drawImage(img, 0, 0);
                         context.fillStyle = "rgba(123,123,123,1)";
-                        context.fillFlood(mouseCanvasSpace.x, mouseCanvasSpace.y, 10);
+                        context.fillFlood(mouseCanvasSpace.x, mouseCanvasSpace.y, 20);
                         //var win = window.open('', 'Title', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width='+wickEditor.project.width+', height='+wickEditor.project.height+', top=100, left=100');
 
                         //win.document.body.innerHTML = '<div><img src= '+canvas.toDataURL()+'></div>';
@@ -128,21 +131,22 @@ Tools.FillBucket = function (wickEditor) {
                                 var tempPaperForPosition = paper.project.importSVG(doc, {insert:false});
 
                                 var pathWickObject = WickObject.createPathObject(svgString);
-                                pathWickObject.x = 0;
-                                pathWickObject.y = 0;
-                                pathWickObject.width = 1;
-                                pathWickObject.height = 1;
+                                pathWickObject.width = tempPaperForPosition.bounds.width;
+                                pathWickObject.height = tempPaperForPosition.bounds.height;
 
                                 //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(pathWickObject);
                                 
                                 pathWickObject.x = tempPaperForPosition.position.x - wickEditor.project.width/2;
                                 pathWickObject.y = tempPaperForPosition.position.y - wickEditor.project.height/2;
+                                pathWickObject.svgX = tempPaperForPosition.bounds._x;
+                                pathWickObject.svgY = tempPaperForPosition.bounds._y;
 
                                 wickEditor.actionHandler.doAction('addObjects', {
                                     wickObjects: [pathWickObject],
                                     dontSelectObjects: true,
                                 });
-                                //PaperHoleFinder.expandHole(pathWickObject.paper);
+                                expandHole(tempPaperForPosition);
+                                pathWickObject.pathData = tempPaperForPosition.exportSVG({asString:true});
                                 //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshSVGWickObject(pathWickObject.paper.children[0]);
                                 wickEditor.actionHandler.doAction('moveObjectToZIndex', {
                                     objs:[pathWickObject],
@@ -169,6 +173,46 @@ Tools.FillBucket = function (wickEditor) {
             
             return;
         }
+    }
+
+    function expandHole (group) {
+        var path = group.children[0]
+
+        var children;
+        if(path instanceof paper.Path) {
+            children = [path];
+        } else if(path instanceof paper.CompoundPath) {
+            children = path.children;
+        }
+
+        children.forEach(function (hole) {
+            var normals = [];
+            hole.closePath();
+            hole.segments.forEach(function (segment) {
+                var a = segment.previous.point;
+                var b = segment.point;
+                var c = segment.next.point;
+
+                var ab = {x: b.x-a.x, y: b.y-a.y};
+                var cb = {x: b.x-c.x, y: b.y-c.y};
+
+                var d = {x: ab.x-cb.x, y: ab.y-cb.y};
+                d.h = Math.sqrt((d.x*d.x)+(d.y*d.y));
+                d.x /= d.h;
+                d.y /= d.h;
+
+                d = rotate_point(d.x, d.y, 0, 0, 90);
+
+                normals.push({x:d.x,y:d.y});
+            });
+
+            for (var i = 0; i < hole.segments.length; i++) {
+                var segment = hole.segments[i];
+                var normal = normals[i];
+                segment.point.x += normal.x*1.0;
+                segment.point.y += normal.y*1.0;
+            }
+        });
     }
 
 }
