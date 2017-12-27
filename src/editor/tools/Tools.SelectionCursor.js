@@ -37,6 +37,7 @@ Tools.SelectionCursor = function (wickEditor) {
     var scaleL;
     var scaleR;
     var rotate;
+    var individualObjectBoxes;
 
     var GUI_DOTS_SIZE = 5;
     var GUI_DOTS_FILLCOLOR = 'rgba(255,255,255,0.3)';
@@ -424,13 +425,19 @@ Tools.SelectionCursor = function (wickEditor) {
         if(scaleL) scaleL.remove();
         if(scaleR) scaleR.remove();
         if(rotate) rotate.remove();
+        if(individualObjectBoxes) {
+            individualObjectBoxes.forEach(function (o) {
+                o.remove();
+            })
+        }
 
         if(selectionBoundsRect) {
             //selectionBoundsRect = selectionBoundsRect.expand(10);
+            var strokeWidth = 1/wickEditor.canvas.getZoom();
 
             selectionRect = new paper.Path.Rectangle(selectionBoundsRect);
             selectionRect.strokeColor = GUI_DOTS_STROKECOLOR;
-            selectionRect.strokeWidth = 1/wickEditor.canvas.getZoom();
+            selectionRect.strokeWidth = strokeWidth;
             selectionRect._wickInteraction = 'selectionRect';
             selectionRect.locked = true;
 
@@ -439,56 +446,78 @@ Tools.SelectionCursor = function (wickEditor) {
             scaleBR = new paper.Path.Circle(selectionBoundsRect.bottomRight, dotSize);
             scaleBR.fillColor = GUI_DOTS_FILLCOLOR;
             scaleBR.strokeColor = GUI_DOTS_STROKECOLOR;
+            scaleBR.strokeWidth = strokeWidth;
             scaleBR._wickInteraction = 'scaleBR';
             scaleBR._cursor = 'nwse-resize';
 
             scaleBL = new paper.Path.Circle(selectionBoundsRect.bottomLeft, dotSize);
             scaleBL.fillColor = GUI_DOTS_FILLCOLOR;
             scaleBL.strokeColor = GUI_DOTS_STROKECOLOR;
+            scaleBL.strokeWidth = strokeWidth;
             scaleBL._wickInteraction = 'scaleBL';
             scaleBL._cursor = 'nesw-resize';
 
             scaleTL = new paper.Path.Circle(selectionBoundsRect.topLeft, dotSize);
             scaleTL.fillColor = GUI_DOTS_FILLCOLOR;
             scaleTL.strokeColor = GUI_DOTS_STROKECOLOR;
+            scaleTL.strokeWidth = strokeWidth;
             scaleTL._wickInteraction = 'scaleTL';
             scaleTL._cursor = 'nwse-resize';
 
             scaleTR = new paper.Path.Circle(selectionBoundsRect.topRight, dotSize);
             scaleTR.fillColor = GUI_DOTS_FILLCOLOR;
             scaleTR.strokeColor = GUI_DOTS_STROKECOLOR;
+            scaleTR.strokeWidth = strokeWidth;
             scaleTR._wickInteraction = 'scaleTR';
             scaleTR._cursor = 'nesw-resize';
 
             scaleT = new paper.Path.Circle(selectionBoundsRect.topCenter, dotSize);
             scaleT.fillColor = GUI_DOTS_FILLCOLOR;
             scaleT.strokeColor = GUI_DOTS_STROKECOLOR;
+            scaleT.strokeWidth = strokeWidth;
             scaleT._wickInteraction = 'scaleT';
             scaleT._cursor = 'ns-resize';
 
             scaleB = new paper.Path.Circle(selectionBoundsRect.bottomCenter, dotSize);
             scaleB.fillColor = GUI_DOTS_FILLCOLOR;
             scaleB.strokeColor = GUI_DOTS_STROKECOLOR;
+            scaleB.strokeWidth = strokeWidth;
             scaleB._wickInteraction = 'scaleB';
             scaleB._cursor = 'ns-resize';
 
             scaleL = new paper.Path.Circle(selectionBoundsRect.leftCenter, dotSize);
             scaleL.fillColor = GUI_DOTS_FILLCOLOR;
             scaleL.strokeColor = GUI_DOTS_STROKECOLOR;
+            scaleL.strokeWidth = strokeWidth;
             scaleL._wickInteraction = 'scaleL';
             scaleL._cursor = 'ew-resize';
 
             scaleR = new paper.Path.Circle(selectionBoundsRect.rightCenter, dotSize);
             scaleR.fillColor = GUI_DOTS_FILLCOLOR;
             scaleR.strokeColor = GUI_DOTS_STROKECOLOR;
+            scaleR.strokeWidth = strokeWidth;
             scaleR._wickInteraction = 'scaleR';
             scaleR._cursor = 'ew-resize';
 
             rotate = new paper.Path.Circle(selectionBoundsRect.topCenter.add(new paper.Point(0,-20/wickEditor.canvas.getZoom())), GUI_DOTS_SIZE/wickEditor.canvas.getZoom());
             rotate.fillColor = GUI_DOTS_FILLCOLOR
             rotate.strokeColor = GUI_DOTS_STROKECOLOR
+            rotate.strokeWidth = strokeWidth;
             rotate._wickInteraction = 'rotate';
             rotate._cursor = 'url("resources/cursor-rotate.png") 32 32,default';
+
+            individualObjectBoxes = [];
+            var selectedObjs = wickEditor.project.getSelectedObjects()
+            if(selectedObjs.length > 1) {
+                selectedObjs.forEach(function (o) {
+                    var oRect = new paper.Rectangle(o.paper.bounds);
+                    var oPaperRect = new paper.Path.Rectangle(oRect);
+                    oPaperRect.strokeWidth = strokeWidth;
+                    oPaperRect.strokeColor = GUI_DOTS_STROKECOLOR;
+                    oPaperRect._wickInteraction = 'individualObjectBox';
+                    individualObjectBoxes.push(oPaperRect);
+                });
+            }
         }
     }
 

@@ -139,6 +139,9 @@ var MenuBarInterface = function (wickEditor) {
             new TabButton('Export ZIP', function () {
                 wickEditor.guiActionHandler.doAction("exportProjectZIP");
             }),
+            new TabButton('Export JSON', function () {
+                wickEditor.guiActionHandler.doAction("exportProjectJSON");
+            }),
             new TabSpacer(),
             
             new TabButton('Project settings', function () {
