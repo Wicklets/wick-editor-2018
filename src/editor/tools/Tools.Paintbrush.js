@@ -68,6 +68,7 @@ Tools.Paintbrush = function (wickEditor) {
     var path;
     var totalDelta;
     var lastEvent;
+    var lastAngle;
 
     this.paperTool.onMouseDown = function (event) {
         
@@ -102,6 +103,8 @@ Tools.Paintbrush = function (wickEditor) {
 
     this.paperTool.onMouseUp = function (event) {
         if (path) {
+            addNextSegment(event, true)
+
             path.closed = true;
             path.smooth();
             if(wickEditor.settings.brushSmoothingAmount > 0) {
@@ -134,18 +137,27 @@ Tools.Paintbrush = function (wickEditor) {
         } 
     }
 
-    function addNextSegment (event) {
+    function addNextSegment (event, useLastAngle) {
         var thickness = event.delta.length;
         thickness /= wickEditor.settings.brushThickness/2;
         thickness *= wickEditor.canvas.getZoom();
         
         var penPressure = wickEditor.inputHandler.getPenPressure();
 
-        var step = event.delta.divide(thickness).multiply(penPressure);
-        step.angle = step.angle + 90;
+        if(useLastAngle) {
+            angle = lastAngle;
+        } else {
+            var step = event.delta.divide(thickness).multiply(penPressure);
+            step.angle = step.angle + 90;
+            lastAngle = step.angle;
+        }
 
         var top = event.middlePoint.add(step);
         var bottom = event.middlePoint.subtract(step);
+        if(useLastAngle) {
+            top = event.point.add(step);
+            bottom = event.point.subtract(step);
+        }
 
         path.add(top);
         path.insert(0, bottom);

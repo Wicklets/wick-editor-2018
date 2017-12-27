@@ -162,8 +162,6 @@ Tools.FillBucket = function (wickEditor) {
                     img.src = dataURL;
                 });
             } else {
-                console.log(hitResult.type)
-                console.log(hitResult.item)
                 if(hitResult.type === 'fill') {
                     hitResult.item.fillColor = wickEditor.settings.fillColor;
                 } else if (hitResult.type === 'stroke') {
