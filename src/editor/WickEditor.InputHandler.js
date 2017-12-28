@@ -82,33 +82,39 @@ var InputHandler = function (wickEditor) {
 
         if(event.key === 'Tab' && document.activeElement.nodeName !== "INPUT") event.preventDefault()
 
+        console.log(event)
+
         for(actionName in wickEditor.guiActionHandler.guiActions) {
-            var doAction = true;
+            var hotkeysMatch = true;
             var action = wickEditor.guiActionHandler.guiActions[actionName];
 
-            if(action.hotkeys.length < 1 || action.hotkeys[0] !== event.code) doAction=false;
+            if(action.hotkeys.length < 1 || action.hotkeys[0] !== event.code) hotkeysMatch=false;
 
             if(action.modifierKey) {
-                if(!event.metaKey && !event.ctrlKey) doAction=false;
+                if(!event.metaKey && !event.ctrlKey) hotkeysMatch=false;
             } else {
-                if(event.metaKey || event.ctrlKey) doAction=false;
+                if(event.metaKey || event.ctrlKey) hotkeysMatch=false;
             }
 
             if(action.shiftKey) {
-                if(!event.shiftKey) doAction=false;
+                if(!event.shiftKey) hotkeysMatch=false;
             } else {
-                if(event.shiftKey) doAction=false;
+                if(event.shiftKey) hotkeysMatch=false;
             }
 
-            if(doAction) {
-                if(activeElemIsTextBox() && !action.requiredParams.usableInTextBoxes) return;
-                if(document.activeElement.id === 'canvasTextEdit') return;
-                if(action.requiredParams.disabledInScriptingIDE && (document.activeElement.className === 'ace_text-input')) return;
+            if(hotkeysMatch) {
+                var specialParamsMatch = true;
 
-                wickEditor.rightclickmenu.open = false;
+                if(activeElemIsTextBox() && !action.requiredParams.usableInTextBoxes) specialParamsMatch=false;
+                if(document.activeElement.id === 'canvasTextEdit') specialParamsMatch=false;
+                if(action.requiredParams.disabledInScriptingIDE && (document.activeElement.className === 'ace_text-input')) specialParamsMatch=false;
 
-                event.preventDefault();
-                action.doAction({});
+                if(specialParamsMatch) {
+                    wickEditor.rightclickmenu.open = false;
+
+                    event.preventDefault();
+                    action.doAction({});
+                }
             }
         }
 

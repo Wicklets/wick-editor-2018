@@ -113,7 +113,7 @@ Tools.Zoom = function (wickEditor) {
         }
 
         e.preventDefault()
-        if(wickEditor.inputHandler.specialKeys["Modifier"]) {
+        if(e.ctrlKey || e.metaKey) {
             var e = window.event || e;
             var delta = (e.wheelDelta || -e.detail)*0.01
             var mouse = wickEditor.inputHandler.mouse;
