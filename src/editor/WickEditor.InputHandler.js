@@ -61,54 +61,61 @@ var InputHandler = function (wickEditor) {
      Keyboard
 *************************/
 
+    var modifierKeys = ['Shift','Control']
+
     /* Set up vars needed for input listening. */
     this.keys = [];
-    this.specialKeys = [];
-    var editingTextBox = false;
-
-    /* Define special keys */
-    var modifierKeys = ["WINDOWS","COMMAND","FIREFOXCOMMAND","CTRL","RIGHT CLICK"]; 
-    var shiftKeys = ["SHIFT"];
-
-    var activeElemIsTextBox = function () {
-        var activeElem = document.activeElement.nodeName;
-        editingTextBox = activeElem == 'TEXTAREA' || activeElem == 'INPUT';
-        return editingTextBox;
-    }
-
-    // Hack to prevent keys getting stuck
-    $(window).focus(function() {
-        that.keys = [];
-        that.specialKeys = [];
-    });
-    $(window).blur(function() {
-        that.keys = [];
-        that.specialKeys = [];
-    });
 
     document.body.addEventListener("keydown", function (event) {
         handleKeyEvent(event, "keydown");
     });
     document.body.addEventListener("keyup", function (event) {
-        handleKeyEvent(event, "keyup");
+        // Why is this here
+        if(event.keyCode == 32 && !activeElemIsTextBox()) {
+            wickEditor.useLastUsedTool();
+            wickEditor.canvas.updateCursor();
+            wickEditor.syncInterfaces();
+        }
     });
 
-    var handleKeyEvent = function (event, eventType) {
+    var handleKeyEvent = function (event) {
 
-        console.log(event)
+        if(event.key === 'Tab' && document.activeElement.nodeName !== "INPUT") event.preventDefault()
 
-        var keyChar = codeToKeyChar[event.keyCode];
+        for(actionName in wickEditor.guiActionHandler.guiActions) {
+            var doAction = true;
+            var action = wickEditor.guiActionHandler.guiActions[actionName];
+
+            if(action.hotkeys.length < 1 || action.hotkeys[0] !== event.code) doAction=false;
+
+            if(action.modifierKey) {
+                if(!event.metaKey && !event.ctrlKey) doAction=false;
+            } else {
+                if(event.metaKey || event.ctrlKey) doAction=false;
+            }
+
+            if(action.shiftKey) {
+                if(!event.shiftKey) doAction=false;
+            } else {
+                if(event.shiftKey) doAction=false;
+            }
+
+            if(doAction) {
+                if(activeElemIsTextBox() && !action.requiredParams.usableInTextBoxes) return;
+                if(document.activeElement.id === 'canvasTextEdit') return;
+                if(action.requiredParams.disabledInScriptingIDE && (document.activeElement.className === 'ace_text-input')) return;
+
+                wickEditor.rightclickmenu.open = false;
+
+                event.preventDefault();
+                action.doAction({});
+            }
+        }
+
+        /*var keyChar = codeToKeyChar[event.keyCode];
         if(keyChar === 'TAB' && document.activeElement.nodeName !== "INPUT") event.preventDefault()
         var keyDownEvent = eventType === 'keydown';
-        if (modifierKeys.indexOf(keyChar) !== -1) {
-            that.specialKeys["Modifier"] = keyDownEvent;
-            that.keys = [];
-        } else if (shiftKeys.indexOf(keyChar) !== -1) {
-            that.specialKeys["SHIFT"] = keyDownEvent;
-            that.keys = [];
-        } else {
-            that.keys[event.keyCode] = keyDownEvent;
-        }
+        that.keys[event.keyCode] = keyDownEvent;
 
         // get this outta here
         if(event.keyCode == 32 && eventType === 'keyup' && !activeElemIsTextBox()) {
@@ -117,32 +124,28 @@ var InputHandler = function (wickEditor) {
             wickEditor.syncInterfaces();
         }
 
+        var stringkeys = [];
+        for (var numkey in that.keys) {
+            if (that.keys.hasOwnProperty(numkey) && that.keys[numkey]) {
+                stringkeys.push(codeToKeyChar[numkey]);
+            }
+        }
+        console.log(stringkeys)
+
         for(actionName in wickEditor.guiActionHandler.guiActions) { (function () {
             var guiAction = wickEditor.guiActionHandler.guiActions[actionName];
 
             if (wickEditor.builtinplayer.running && !guiAction.requiredParams.builtinplayerRunning) return;
 
-            var stringkeys = [];
-            for (var numkey in that.keys) {
-                if (that.keys.hasOwnProperty(numkey) && that.keys[numkey]) {
-                    stringkeys.push(codeToKeyChar[numkey]);
-                }
-            }
-            var stringspecialkeys = [];
-            for (var numkey in that.specialKeys) {
-                if (that.specialKeys.hasOwnProperty(numkey) && that.specialKeys[numkey]) {
-                    stringspecialkeys.push(numkey);
-                }
-            }
-
             var cmpArrays = function (a,b) {
                 return a.sort().join(',') === b.sort().join(',');
             }
 
-            var hotkeysMatch = cmpArrays(guiAction.hotkeys, stringkeys)
-            var specialKeysMatch = cmpArrays(guiAction.specialKeys, stringspecialkeys);
+            var hotkeysMatch = cmpArrays(guiAction.hotkeys, stringkeys);
+            var modifierKeysMatch = false;
 
-            if(!hotkeysMatch || !specialKeysMatch) return;
+
+            if(!hotkeysMatch || !modifierKeysMatch) return;
             if(guiAction.hotkeys.length === 0) return;
             if(activeElemIsTextBox() && !guiAction.requiredParams.usableInTextBoxes) return;
             if(document.activeElement.id === 'canvasTextEdit') return;
@@ -152,12 +155,8 @@ var InputHandler = function (wickEditor) {
             event.preventDefault();
             guiAction.doAction({});
             that.keys = [];
-        })()};
+        })()};*/
     };
-
-    this.shiftDown = function () {
-        return wickEditor.inputHandler.specialKeys["SHIFT"];
-    }
 
     // In order to ensure that the browser will fire clipboard events, we always need to have something selected
     var focusHiddenArea = function () {
@@ -165,6 +164,12 @@ var InputHandler = function (wickEditor) {
             $("#hidden-input").val(' ');
             $("#hidden-input").focus().select();
         }
+    }
+
+    var activeElemIsTextBox = function () {
+        var activeElem = document.activeElement.nodeName;
+        editingTextBox = activeElem == 'TEXTAREA' || activeElem == 'INPUT';
+        return editingTextBox;
     }
 
 /*************************
@@ -282,7 +287,7 @@ var InputHandler = function (wickEditor) {
 
     var activeElemIsTextBox = function () {
         var activeElem = document.activeElement.nodeName;
-        editingTextBox = activeElem == 'TEXTAREA' || activeElem == 'INPUT';
+        var editingTextBox = activeElem == 'TEXTAREA' || activeElem == 'INPUT';
         return editingTextBox;
     };
 
