@@ -430,7 +430,9 @@ var GuiActionHandler = function (wickEditor) {
         null,
         {},
         function(args) {
-            wickEditor.guiActionHandler.doAction('deleteSelectedObjects');
+            wickEditor.actionHandler.doAction('deleteObjects', {
+                objects: wickEditor.project.getSelectedObjects()
+            });
         });
 
     registerAction('deleteSelectedObjects2',
