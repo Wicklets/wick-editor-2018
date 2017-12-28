@@ -95,6 +95,8 @@ var InputHandler = function (wickEditor) {
 
     var handleKeyEvent = function (event, eventType) {
 
+        console.log(event)
+
         var keyChar = codeToKeyChar[event.keyCode];
         if(keyChar === 'TAB' && document.activeElement.nodeName !== "INPUT") event.preventDefault()
         var keyDownEvent = eventType === 'keydown';
@@ -458,7 +460,11 @@ var InputHandler = function (wickEditor) {
         if(tempJsonObj.rootObject) {
             var project = WickProject.fromJSON(json);
             var filenameParts = filename.split('-');
-            project.name = filenameParts[0] || 'New Project';
+            var name = filenameParts[0];
+            if(name.includes('.json')) {
+                name = name.split('.json')[0];
+            }
+            project.name = name || 'New Project';
             wickEditor.guiActionHandler.doAction('openProject', {project:project})
         } else {
             callback(WickObject.fromJSON(json));

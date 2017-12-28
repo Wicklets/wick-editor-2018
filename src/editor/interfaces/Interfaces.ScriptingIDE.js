@@ -45,7 +45,9 @@ var ScriptingIDEInterface = function (wickEditor) {
             that.aceEditor.commands.addCommand({
                 name: "...",
                 exec: function() {
-                    wickEditor.guiActionHandler.doAction('editScripts');
+                    //wickEditor.guiActionHandler.doAction('editScripts');
+                    that.open = false;
+                    that.syncWithEditorState();
                 },
                 bindKey: {mac: "`", win: "`"}
             })
@@ -234,7 +236,7 @@ var ScriptingIDEInterface = function (wickEditor) {
             }
 
         } else {
-            //$("#scriptingGUI").css('display', 'none');
+            $("#scriptingGUI").css('display', 'none');
             $("#noSelectionDiv").css('display', 'none');
             $("#scriptingGUI").css('height', '24px');
             this.justOpened = true;

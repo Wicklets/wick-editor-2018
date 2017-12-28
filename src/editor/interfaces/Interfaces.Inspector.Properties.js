@@ -7,7 +7,9 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.StringInput({
         title: 'Name',
         isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
+            return selectionInfo.numObjects === 1 
+                && selectionInfo.type == 'wickobject'
+                && !selectionInfo.object.isPath;
         },
         getValueFn: function () {
             return selectionInfo.object.name || "";
@@ -141,7 +143,8 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 
             && selectionInfo.type == 'wickobject'
-            && selectionInfo.dataType !== 'sound';
+            && selectionInfo.dataType !== 'sound'
+            && selectionInfo.dataType !== 'path';
         },
         getValueFn: function () {
             return roundToHundredths(selectionInfo.object.opacity);

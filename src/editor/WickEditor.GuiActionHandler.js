@@ -1225,13 +1225,15 @@ var GuiActionHandler = function (wickEditor) {
             var objs = wickEditor.project.getSelectedObjects();
             var modifiedStates = [];
             objs.forEach(function (wickObject) {
-                if(!wickObject.isPath) return;
-                for(key in args) {
-                    console.log(wickObject.paper)
-                    wickObject.paper[key] = args[key];
-                    modifiedStates.push({
-                        pathData : wickObject.paper.exportSVG({asString:true}),
-                    })
+                if(!wickObject.isPath) {
+                    modifiedStates.push({});
+                } else {
+                    for(key in args) {
+                        wickObject.paper[key] = args[key];
+                        modifiedStates.push({
+                            pathData : wickObject.paper.exportSVG({asString:true}),
+                        })
+                    }
                 }
             })
             wickEditor.actionHandler.doAction('modifyObjects', {

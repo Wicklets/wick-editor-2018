@@ -375,7 +375,8 @@ var WickActionHandler = function (wickEditor) {
             });
             wickEditor.project.addObject(symbol, undefined, true);
 
-            if(args.symbolName) {
+            symbol.name = '';
+            /*if(args.symbolName) {
                 symbol.name = wickEditor.project.getNextAvailableName(args.symbolName);
             } else if(args.button) {
                 symbol.name = wickEditor.project.getNextAvailableName("New Button");
@@ -383,7 +384,7 @@ var WickActionHandler = function (wickEditor) {
                 symbol.name = wickEditor.project.getNextAvailableName("New Group");
             } else {
                 symbol.name = wickEditor.project.getNextAvailableName("New Clip");
-            }
+            }*/
 
             wickEditor.project.clearSelection()
             wickEditor.project.selectObject(symbol)

@@ -117,6 +117,9 @@ Tools.SelectionCursor = function (wickEditor) {
                     }
                     wickEditor.project.selectObject(wickObj);
                 }
+
+                var currObj = wickEditor.project.getCurrentObject();
+                currObj.currentLayer = currObj.layers.indexOf(wickObj.parentFrame.parentLayer);
                 wickEditor.syncInterfaces();
             }
 
@@ -443,6 +446,19 @@ Tools.SelectionCursor = function (wickEditor) {
 
             var dotSize = GUI_DOTS_SIZE/wickEditor.canvas.getZoom();
 
+            individualObjectBoxes = [];
+            var selectedObjs = wickEditor.project.getSelectedObjects()
+            if(selectedObjs.length > 1) {
+                selectedObjs.forEach(function (o) {
+                    var oRect = new paper.Rectangle(o.paper.bounds);
+                    var oPaperRect = new paper.Path.Rectangle(oRect);
+                    oPaperRect.strokeWidth = strokeWidth;
+                    oPaperRect.strokeColor = GUI_DOTS_STROKECOLOR;
+                    oPaperRect._wickInteraction = 'individualObjectBox';
+                    individualObjectBoxes.push(oPaperRect);
+                });
+            }
+
             scaleBR = new paper.Path.Circle(selectionBoundsRect.bottomRight, dotSize);
             scaleBR.fillColor = GUI_DOTS_FILLCOLOR;
             scaleBR.strokeColor = GUI_DOTS_STROKECOLOR;
@@ -505,19 +521,6 @@ Tools.SelectionCursor = function (wickEditor) {
             rotate.strokeWidth = strokeWidth;
             rotate._wickInteraction = 'rotate';
             rotate._cursor = 'url("resources/cursor-rotate.png") 32 32,default';
-
-            individualObjectBoxes = [];
-            var selectedObjs = wickEditor.project.getSelectedObjects()
-            if(selectedObjs.length > 1) {
-                selectedObjs.forEach(function (o) {
-                    var oRect = new paper.Rectangle(o.paper.bounds);
-                    var oPaperRect = new paper.Path.Rectangle(oRect);
-                    oPaperRect.strokeWidth = strokeWidth;
-                    oPaperRect.strokeColor = GUI_DOTS_STROKECOLOR;
-                    oPaperRect._wickInteraction = 'individualObjectBox';
-                    individualObjectBoxes.push(oPaperRect);
-                });
-            }
         }
     }
 
