@@ -193,7 +193,8 @@ var ScriptingIDEInterface = function (wickEditor) {
         updateHeaderText()
 
         if(this.open) {
-            $("#scriptingGUI").css('display', 'block');
+            //$("#scriptingGUI").css('display', 'block');
+            $("#scriptEditor").css('display', 'block');
             if(this.justOpened) {
                 //this.aceEditor.focus()
                 this.justOpened = false;
@@ -236,7 +237,7 @@ var ScriptingIDEInterface = function (wickEditor) {
             }
 
         } else {
-            $("#scriptingGUI").css('display', 'none');
+            $("#scriptEditor").css('display', 'none');
             $("#noSelectionDiv").css('display', 'none');
             $("#scriptingGUI").css('height', '24px');
             this.justOpened = true;

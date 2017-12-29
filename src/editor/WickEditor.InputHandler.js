@@ -82,8 +82,6 @@ var InputHandler = function (wickEditor) {
 
         if(event.key === 'Tab' && document.activeElement.nodeName !== "INPUT") event.preventDefault()
 
-        console.log(event)
-
         for(actionName in wickEditor.guiActionHandler.guiActions) {
             var hotkeysMatch = true;
             var action = wickEditor.guiActionHandler.guiActions[actionName];

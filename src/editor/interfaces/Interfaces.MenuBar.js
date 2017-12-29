@@ -144,6 +144,9 @@ var MenuBarInterface = function (wickEditor) {
             }),
             new TabSpacer(),
             
+            new TabButton('Run project', function () {
+                wickEditor.guiActionHandler.doAction("runProject");
+            }),
             new TabButton('Project settings', function () {
                 wickEditor.guiActionHandler.doAction("openProjectSettings");
             }),
@@ -202,20 +205,19 @@ var MenuBarInterface = function (wickEditor) {
             new TabButton('Hotkeys', function () {
                 wickEditor.guiActionHandler.doAction("openEditorSettings");
             }),
+            new TabButton('Examples', function () {
+                alert("NYI!")
+            }),
+        ]);
+
+        addTab('About', [
             new TabButton('Source code', function () {
                 window.open('https://www.github.com/zrispo/wick/');
             }),
             new TabButton('About Wick', function () {
                 window.open('http://www.wickeditor.com/#about');
             }),
-            /*new TabSpacer(),
-
-            new TabButton('Reset editor settings', function () {
-                wickEditor.guiActionHandler.doAction('resetSettings');
-            })*/
         ]);
-        
-        addTab('Run', [], function () { wickEditor.guiActionHandler.doAction("runProject"); });
     }
 
     var addTab = function (name, buttons, func) {
