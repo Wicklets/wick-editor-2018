@@ -115,6 +115,7 @@ var GuiActionHandler = function (wickEditor) {
         function(args) {
             if(!wickEditor.builtinplayer.running) return;
             wickEditor.builtinplayer.stopRunningProject();
+            $('#editorCanvasContainer').focus().select();
         });
 
     registerAction('redo',

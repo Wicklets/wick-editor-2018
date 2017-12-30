@@ -297,8 +297,7 @@ var InputHandler = function (wickEditor) {
 
     // Set clipboard event listeners on the document. 
     ['cut', 'copy', 'paste'].forEach(function(event) {
-        document.addEventListener(event, function(e) {
-            //console.log(event);
+        window.addEventListener(event, function(e) {
             if (isIe) {
                 ieClipboardEvent(event);
             } else {

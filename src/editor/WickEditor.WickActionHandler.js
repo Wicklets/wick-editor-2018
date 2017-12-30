@@ -622,7 +622,7 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.currentObject.layers.move(args.newIndex, args.oldIndex);
             wickEditor.project.currentObject.currentLayer = args.oldIndex;
 
-            currentObject.framesDirty = true;
+            wickEditor.project.currentObject.framesDirty = true;
 
             done(args);
         });

@@ -1040,9 +1040,11 @@ WickObject.prototype.gotoPrevFrame = function () {
 WickObject.prototype.getFramesEnd = function() {
     endFrame = 0; 
 
-    this.getCurrentLayer().frames.forEach( function (frame) {
-        endFrame = Math.max (frame.getFrameEnd(), endFrame); 
-    })
+    this.layers.forEach(function (layer) {
+        layer.frames.forEach( function (frame) {
+            endFrame = Math.max (frame.getFrameEnd(), endFrame); 
+        })
+    });
 
     return endFrame;
 
