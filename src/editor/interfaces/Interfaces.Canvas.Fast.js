@@ -43,33 +43,38 @@ var FastCanvas = function (wickEditor) {
     this.update = function () {
         updateCanvasTransforms();
         canvasContainer.style.display = 'block';
-        canvasContainer.style.opacity = '0.5';
-        
-        var nearbyObjects = wickEditor.project.currentObject.getAllInactiveSiblings();
-        var inactiveObjects = nearbyObjects;
+
+        var bgRenderObjects = wickEditor.project.currentObject.getAllInactiveSiblings();
         if (wickEditor.project.onionSkinning) {
             var onionSkinObjects = wickEditor.project.currentObject.getNearbyObjects(1,1);
-            inactiveObjects = inactiveObjects.concat(onionSkinObjects)
+            bgRenderObjects = bgRenderObjects.concat(onionSkinObjects)
         }
 
-        inactiveObjects = inactiveObjects.concat(wickEditor.project.currentObject.getAllActiveChildObjects().filter(function (c) {
+        bgRenderObjects = bgRenderObjects.concat(wickEditor.project.currentObject.getAllActiveChildObjects().filter(function (c) {
             return c.parentFrame.parentLayer.locked && !c.parentFrame.parentLayer.hidden;
         }));
 
-        pixiRenderer.renderWickObjects(wickEditor.project, inactiveObjects, 2);
+        bgRenderObjects.forEach(function (o) {
+            o._renderAsBGObject = true;
+        })
+
+        pixiRenderer.renderWickObjects(wickEditor.project, bgRenderObjects, 2);
     }
 
     this.startFastRendering = function () {
         clearInterval(fastRenderIntervalID);
         
         fastRendering = true;
-        canvasContainer.style.opacity = '1.0';
 
         wickEditor.canvas.getInteractiveCanvas().hide();
 
         function proceed () {
             wickEditor.project.applyTweens();
-            pixiRenderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 2);
+            var renderObjects = wickEditor.project.rootObject.getAllActiveChildObjects();
+            renderObjects.forEach(function (o) {
+                o._renderAsBGObject = true;
+            });
+            pixiRenderer.renderWickObjects(wickEditor.project, renderObjects, 2);
         }
 
         proceed();
@@ -78,7 +83,6 @@ var FastCanvas = function (wickEditor) {
 
     this.stopFastRendering = function () {
         fastRendering = true;
-        canvasContainer.style.opacity = '0.5';
 
         wickEditor.canvas.getInteractiveCanvas().show();
 
