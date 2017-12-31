@@ -148,7 +148,7 @@ Tools.Pen = function (wickEditor) {
                     svgY: wickObject.paper.bounds._y,
                     width: wickObject.paper.bounds._width,
                     height: wickObject.paper.bounds._height,
-                    pathData: wickObject.paper.exportSVG({asString:true}),
+                    //pathData: wickObject.paper.exportSVG({asString:true}),
                 }],
             });
 

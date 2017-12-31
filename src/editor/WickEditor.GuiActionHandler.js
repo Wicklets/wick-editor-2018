@@ -82,6 +82,7 @@ var GuiActionHandler = function (wickEditor) {
         {},
         function(args) {
             wickEditor.canvas.getFastCanvas().togglePreviewPlaying();
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
         });
 
     registerAction('previewToggleAndLoop',
@@ -90,6 +91,7 @@ var GuiActionHandler = function (wickEditor) {
         {},
         function(args) {
             wickEditor.guiActionHandler.doAction('previewPlay', {loop:true});
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
         });
 
     registerAction('previewPlay',
@@ -106,6 +108,7 @@ var GuiActionHandler = function (wickEditor) {
         {},
         function(args) {
             wickEditor.canvas.getFastCanvas().stopPreviewPlaying();
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
         });
 
     registerAction('stopRunningProject',

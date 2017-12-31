@@ -276,6 +276,10 @@ var WickActionHandler = function (wickEditor) {
             for(var i = 0; i < args.objs.length; i++) {
                 var wickObj = args.objs[i];
 
+                if(wickObj.isPath) {
+                    args.modifiedStates[i]['pathData'] = wickObj.paper.exportSVG({asString:true});
+                }
+
                 args.originalStates[i] = {};
                 modifyableAttributes.forEach(function(attrib) {
                     args.originalStates[i][attrib] = deepCopy(wickObj[attrib]);

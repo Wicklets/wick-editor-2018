@@ -97,7 +97,9 @@ Tools.VectorCursor = function (wickEditor) {
                 }
             }
 
-            if (hitResult.type == 'stroke') {
+            console.log(hitResult)
+
+            if (hitResult.type == 'stroke' || hitResult.type == 'curve') {
                 var location = hitResult.location;
                 var path = hitResult.item;
 
@@ -153,6 +155,7 @@ Tools.VectorCursor = function (wickEditor) {
                 hitResult.segment.handleOut.y = 0;
             }
         }
+        console.error("ACTION HERE!!!!!!! or undo wont work")
     }
 
     this.paperTool.onMouseDrag = function(event) {
@@ -235,7 +238,7 @@ Tools.VectorCursor = function (wickEditor) {
                 svgY: wickObject.paper.bounds._y,
                 width: wickObject.paper.bounds._width,
                 height: wickObject.paper.bounds._height,
-                pathData: wickObject.paper.exportSVG({asString:true}),
+                //pathData: wickObject.paper.exportSVG({asString:true}),
             }],
         });
     }

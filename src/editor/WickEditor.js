@@ -152,7 +152,6 @@ WickEditor.prototype.changeTool = function (newTool) {
     this.currentTool = newTool;
     if(newTool.onSelected) newTool.onSelected();
 
-    this.canvas.updateCursor();
     this.syncInterfaces();
 
     this.guiActionHandler.doAction('previewPause');

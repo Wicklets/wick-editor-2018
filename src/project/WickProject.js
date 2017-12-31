@@ -587,7 +587,10 @@ WickProject.prototype.selectObjectByUUID = function (uuid) {
 }
 
 WickProject.prototype.clearSelection = function () {
+    var thingsWereCleared = false;
+    if(this._selection.length > 0)  thingsWereCleared = true;
     this._selection = [];
+    return thingsWereCleared;
 }
 
 WickProject.prototype.deselectObject = function (obj) {

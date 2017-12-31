@@ -116,17 +116,17 @@ Tools.Paintbrush = function (wickEditor) {
             path = path.unite(new paper.Path())
             path.remove();
 
-            var group = new paper.Group({insert:false});
-            group.addChild(path);
+            //var group = new paper.Group({insert:false});
+            //group.addChild(path);
 
-            var svgString = group.exportSVG({asString:true});
+            var svgString = path.exportSVG({asString:true});
             var pathWickObject = WickObject.createPathObject(svgString);
-            pathWickObject.x = group.position.x;
-            pathWickObject.y = group.position.y;
-            pathWickObject.width = group.bounds._width;
-            pathWickObject.height = group.bounds._height;
-            pathWickObject.svgX = group.bounds._x;
-            pathWickObject.svgY = group.bounds._y;
+            pathWickObject.x = path.position.x;
+            pathWickObject.y = path.position.y;
+            pathWickObject.width = path.bounds._width;
+            pathWickObject.height = path.bounds._height;
+            pathWickObject.svgX = path.bounds._x;
+            pathWickObject.svgY = path.bounds._y;
 
             wickEditor.actionHandler.doAction('addObjects', {
                 wickObjects: [pathWickObject],

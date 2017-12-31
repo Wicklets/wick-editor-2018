@@ -72,7 +72,7 @@ var FastCanvas = function (wickEditor) {
             wickEditor.project.applyTweens();
             var renderObjects = wickEditor.project.rootObject.getAllActiveChildObjects();
             renderObjects.forEach(function (o) {
-                o._renderAsBGObject = true;
+                o._renderAsBGObject = false;
             });
             pixiRenderer.renderWickObjects(wickEditor.project, renderObjects, 2);
         }

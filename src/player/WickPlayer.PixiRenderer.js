@@ -137,7 +137,11 @@ var WickPixiRenderer = function (canvasContainer) {
             sprite.alpha = absTransforms.opacity;
             sprite.scale.x *= (absTransforms.flip.x ? -1 : 1);
             sprite.scale.y *= (absTransforms.flip.y ? -1 : 1);
-            if(wickObject._renderAsBGObject) sprite.tint = 0xCCCCCC;
+            if(wickObject._renderAsBGObject) {
+                sprite.tint = 0xCCCCCC;
+            } else {
+                sprite.tint = 0xFFFFFF;
+            }
             //sprite.blendMode = PIXI.BLEND_MODES.MULTIPLY;
         }
 

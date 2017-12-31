@@ -51,6 +51,7 @@ var CanvasInterface = function (wickEditor) {
         interactiveCanvas.update();
         fastCanvas.update();
         canvasBackdrop.update();
+        self.updateCursor();
     }
 
     self.getCanvasContainer = function () {

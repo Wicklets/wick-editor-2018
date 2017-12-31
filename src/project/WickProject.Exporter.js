@@ -190,6 +190,7 @@ WickProject.Exporter = (function () {
         "_pixiTextureCached",
         "_hitBox",
         "sourceUUID",
+        "_renderAsBGObject",
     ];
 
     projectExporter.JSONReplacer = function(key, value) {

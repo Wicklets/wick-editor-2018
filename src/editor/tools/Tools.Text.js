@@ -64,10 +64,14 @@ Tools.Text = function (wickEditor) {
             wickEditor.project.selectObject(event.item.wick)
             wickEditor.syncInterfaces();
         } else {
-            wickEditor.project.clearSelection();
-            var m = wickEditor.inputHandler.mouse;
-            var ms = wickEditor.canvas.screenToCanvasSpace(m.x,m.y)
-            addText(ms.x, ms.y);
+            if(!wickEditor.project.clearSelection()) {
+                var m = wickEditor.inputHandler.mouse;
+                var ms = wickEditor.canvas.screenToCanvasSpace(m.x,m.y)
+                addText(ms.x, ms.y);
+            } else {
+                wickEditor.syncInterfaces();
+            }
+
         }
     }
 
