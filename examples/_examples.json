@@ -1,0 +1,65 @@
+﻿{
+	"demos": [
+		{
+			"name" : "Follow Mouse",
+			"projectPath" : "FollowMouse.json",
+			"thumbPath" : "FollowMouse.png",
+			"tutorialPath" : null,
+			"tags": ["games"]
+		}, {
+			"name" : "Playing Timeline",
+			"projectPath" : "PlayingTimeline.json",
+			"thumbPath" : "PlayingTimeline.png",
+			"tutorialPath" : null,
+			"tags": ["games"]
+		}, {
+			"name" : "Moving Timeline",
+			"projectPath" : "MovingTimeline.json",
+			"thumbPath" : "MovingTimeline.png",
+			"tutorialPath" : null,
+			"tags": ["games"]
+		}, {
+			"name" : "Random Frame",
+			"projectPath" : "RandomFrame.json",
+			"thumbPath" : "RandomFrame.png",
+			"tutorialPath" : null,
+			"tags": ["games"]
+		}, {
+			"name" : "Multiple Rooms",
+			"projectPath" : "MultipleRooms.json",
+			"thumbPath" : "MultipleRooms.png",
+			"tutorialPath" : null,
+			"tags": ["games"]
+		}, {
+			"name" : "Popup",
+			"projectPath" : "Popup.json",
+			"thumbPath" : "Popup.png",
+			"tutorialPath" : null,
+			"tags": ["games"]
+		}, {
+			"name" : "Playing Clips",
+			"projectPath" : "PlayingClips.json",
+			"thumbPath" : "PlayingClips.png",
+			"tutorialPath" : null,
+			"tags": ["games"]
+		}, {
+			"name" : "Drag And Drop",
+			"projectPath" : "DragAndDrop.json",
+			"thumbPath" : "DragAndDrop.png",
+			"tutorialPath" : null,
+			"tags": ["games"]
+		}, {
+			"name" : "Hit Test",
+			"projectPath" : "HitTest.json",
+			"thumbPath" : "HitTest.png",
+			"tutorialPath" : null,
+			"tags": ["games"]
+		}, {
+			"name" : "Smooth Follow Mouse",
+			"projectPath" : "FollowMouseSmooth.json",
+			"thumbPath" : "FollowMouseSmooth.png",
+			"tutorialPath" : null,
+			"tags": ["games"]
+		}
+	]
+}
