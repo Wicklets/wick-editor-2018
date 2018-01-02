@@ -198,7 +198,7 @@ var InteractiveCanvas = function (wickEditor) {
 
         var hitResult = paper.project.hitTest(point, hitOptions);
 
-        if(hitResult && hitResult.item._isPartOfGroup) {
+        if(hitResult && (hitResult.item._isPartOfGroup || hitResult.item.parent._isPartOfGroup)) {
             if(args.allowGroups) {
                 function getRootParent (item) {
                     if(item.parent._class === 'Layer') {

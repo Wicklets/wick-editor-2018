@@ -50,13 +50,14 @@ var FastCanvas = function (wickEditor) {
             bgRenderObjects = bgRenderObjects.concat(onionSkinObjects)
         }
 
-        bgRenderObjects = bgRenderObjects.concat(wickEditor.project.currentObject.getAllActiveChildObjects().filter(function (c) {
-            return c.parentFrame.parentLayer.locked && !c.parentFrame.parentLayer.hidden;
-        }));
-
         bgRenderObjects.forEach(function (o) {
             o._renderAsBGObject = true;
         })
+
+        bgRenderObjects = bgRenderObjects.concat(wickEditor.project.currentObject.getAllActiveChildObjects().filter(function (c) {
+            c._renderAsBGObject = false;
+            return c.parentFrame.parentLayer.locked && !c.parentFrame.parentLayer.hidden;
+        }));
 
         pixiRenderer.renderWickObjects(wickEditor.project, bgRenderObjects, 2);
     }

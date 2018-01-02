@@ -352,10 +352,10 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
                 this.elem.style.backgroundColor = '#e4eafb';
             } else if(this.wickFrame.wickObjects.length > 0) {
                 this.elem.style.backgroundColor = '#EEE';
-                thumbnailDiv.src = '/resources/fullframe.svg';
+                thumbnailDiv.src = 'resources/fullframe.svg';
             } else {
                 this.elem.style.backgroundColor = '#FFF';
-                thumbnailDiv.src = '/resources/emptyframe.svg';
+                thumbnailDiv.src = 'resources/emptyframe.svg';
             }
             /* else if(!src || wickEditor.project.smallFramesMode) {
                 thumbnailDiv.style.display = 'block';
