@@ -50,16 +50,7 @@ Tools.VectorCursor = function (wickEditor) {
     var lastEvent;
 
     this.paperTool.onMouseMove = function(event) {
-        paper.project.activeLayer.selected = false;
-        paper.project.deselectAll();
-
-        hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point);
-
-        if(hitResult && hitResult.item && !hitResult.item._wickInteraction) {
-            hitResult.item.selected = true;
-        }
-
-        wickEditor.cursorIcon.setImageForPaperEvent(event)
+        resetSelection(event);
     }
 
     this.paperTool.onMouseDown = function(event) {
@@ -94,10 +85,9 @@ Tools.VectorCursor = function (wickEditor) {
                     event.modifiers.shift ||
                     event.event.button === 2) {
                     hitResult.segment.remove();
+                    modifySelectedPath();
                 }
             }
-
-            console.log(hitResult)
 
             if (hitResult.type == 'stroke' || hitResult.type == 'curve') {
                 var location = hitResult.location;
@@ -154,8 +144,8 @@ Tools.VectorCursor = function (wickEditor) {
                 hitResult.segment.handleOut.x = 0;
                 hitResult.segment.handleOut.y = 0;
             }
+            modifySelectedPath();
         }
-        console.error("ACTION HERE!!!!!!! or undo wont work")
     }
 
     this.paperTool.onMouseDrag = function(event) {
@@ -221,6 +211,25 @@ Tools.VectorCursor = function (wickEditor) {
 
         if(event.delta.x === 0 && event.delta.y === 0) return;
 
+        modifySelectedPath();
+
+        resetSelection(event);
+    }
+
+    function resetSelection (event) {
+        paper.project.activeLayer.selected = false;
+        paper.project.deselectAll();
+
+        hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point);
+
+        if(hitResult && hitResult.item && !hitResult.item._wickInteraction) {
+            hitResult.item.selected = true;
+        }
+
+        wickEditor.cursorIcon.setImageForPaperEvent(event)
+    }
+
+    function modifySelectedPath () {
         var wickObject = hitResult.item.wick || hitResult.item.parent.wick;
 
         var parentAbsPos;
