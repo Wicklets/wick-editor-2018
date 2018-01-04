@@ -145,6 +145,7 @@ Tools.VectorCursor = function (wickEditor) {
                 hitResult.segment.handleOut.y = 0;
             }
             modifySelectedPath();
+            resetSelection(event)
         }
     }
 
@@ -217,13 +218,15 @@ Tools.VectorCursor = function (wickEditor) {
     }
 
     function resetSelection (event) {
-        paper.project.activeLayer.selected = false;
-        paper.project.deselectAll();
+        
 
         hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point);
 
         if(hitResult && hitResult.item && !hitResult.item._wickInteraction) {
+            paper.project.activeLayer.selected = false;
+            paper.project.deselectAll();
             hitResult.item.selected = true;
+            hitResult.item.fullySelected = true;
         }
 
         wickEditor.cursorIcon.setImageForPaperEvent(event)

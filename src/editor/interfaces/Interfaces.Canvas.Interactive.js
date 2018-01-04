@@ -191,7 +191,7 @@ var InteractiveCanvas = function (wickEditor) {
             segments: true,
             fill: true,
             curves: true,
-            handles: false,
+            handles: true,
             stroke: true,
             tolerance: args.tolerance / zoom
         }
