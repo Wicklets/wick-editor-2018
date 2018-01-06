@@ -111,7 +111,11 @@ var InteractiveCanvas = function (wickEditor) {
 
                 wickObject.paper.position.x = wickObject.x;
                 wickObject.paper.position.y = wickObject.y;
-                wickObject.paper.applyMatrix = false;
+                if(wickObject.isPath) {
+                    wickObject.paper.applyMatrix = true;
+                } else {
+                    wickObject.paper.applyMatrix = false;
+                }
                 wickObject.paper.rotation = wickObject.rotation;
                 wickObject.paper.scaling.x = wickObject.scaleX;
                 wickObject.paper.scaling.y = wickObject.scaleY;
