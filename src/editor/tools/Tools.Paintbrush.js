@@ -68,20 +68,22 @@ Tools.Paintbrush = function (wickEditor) {
     var path;
     var totalDelta;
     var lastEvent;
-    var lastAngle;
 
     this.paperTool.onMouseDown = function (event) {
-        
-    }
-
-    this.paperTool.onMouseDrag = function (event) {
         if (!path) {
             path = new paper.Path({
-                fillColor: wickEditor.settings.fillColor,
-                //strokeColor: '#000',
+                //fillColor: wickEditor.settings.fillColor,
+                strokeColor: wickEditor.settings.strokeColor,
+                strokeCap: 'round',
+                strokeWidth: wickEditor.settings.brushThickness/wickEditor.canvas.getZoom(),
             });
             //path.add(event.lastPoint);
         }
+
+        path.add(event.point);
+    }
+
+    this.paperTool.onMouseDrag = function (event) {
 
         if(!totalDelta) {
             totalDelta = event.delta;
@@ -90,78 +92,86 @@ Tools.Paintbrush = function (wickEditor) {
             totalDelta.y += event.delta.y;
         }
 
-        if (totalDelta.length > wickEditor.settings.brushThickness/4/wickEditor.canvas.getZoom()) {
+        if (totalDelta.length > 2/wickEditor.canvas.getZoom()) {
 
             totalDelta.x = 0;
             totalDelta.y = 0;
 
-            addNextSegment(event)
+            path.add(event.point)
+            path.smooth();
             lastEvent = event;
 
         }
     }
 
     this.paperTool.onMouseUp = function (event) {
+        console.log(event)
         if (path) {
-            addNextSegment(event, true)
 
-            path.closed = true;
-            path.smooth();
-            if(wickEditor.settings.brushSmoothingAmount > 0) {
-                var t = wickEditor.settings.brushThickness;
-                var s = wickEditor.settings.brushSmoothingAmount/100;
-                var z = wickEditor.canvas.getZoom();
-                path.simplify(t / z * s);
-            }
-            path = path.unite(new paper.Path())
+            path.add(event.point)
+            
+            /*if(path.segments.length > 2) {
+                path.smooth();
+
+                if(wickEditor.settings.brushSmoothingAmount > 0) {
+                    var t = wickEditor.settings.strokeWidth;
+                    var s = wickEditor.settings.brushSmoothingAmount/100*10;
+                    var z = wickEditor.canvas.getZoom();
+                    path.simplify(t / z * s);
+                }
+
+                path.join(path, 10/wickEditor.canvas.getZoom())
+            }*/
+
             path.remove();
 
-            //var group = new paper.Group({insert:false});
-            //group.addChild(path);
+            var raster = path.rasterize();
+            var rasterDataURL = raster.toDataURL()
 
-            var svgString = path.exportSVG({asString:true});
-            var pathWickObject = WickObject.createPathObject(svgString);
-            pathWickObject.x = path.position.x;
-            pathWickObject.y = path.position.y;
-            pathWickObject.width = path.bounds._width;
-            pathWickObject.height = path.bounds._height;
-            pathWickObject.svgX = path.bounds._x;
-            pathWickObject.svgY = path.bounds._y;
+            var final = new Image();
+            final.onload = function () {
+                //var win = window.open('', 'Title', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width='+wickEditor.project.width+', height='+wickEditor.project.height+', top=100, left=100');
 
-            wickEditor.actionHandler.doAction('addObjects', {
-                wickObjects: [pathWickObject],
-                dontSelectObjects: true,
-            });
+                //win.document.body.innerHTML = '<div><img src= '+final.src+'></div>';
 
-            path = null;
-        } 
-    }
 
-    function addNextSegment (event, useLastAngle) {
-        var thickness = event.delta.length;
-        thickness /= wickEditor.settings.brushThickness/2;
-        thickness *= wickEditor.canvas.getZoom();
-        
-        var penPressure = wickEditor.inputHandler.getPenPressure();
+                potraceImage(final, function (svgString) {
+                    var xmlString = svgString
+                      , parser = new DOMParser()
+                      , doc = parser.parseFromString(xmlString, "text/xml");
+                    var tempPaperForPosition = paper.project.importSVG(doc, {insert:false});
 
-        if(useLastAngle) {
-            angle = lastAngle;
-        } else {
-            var step = event.delta.divide(thickness).multiply(penPressure);
-            step.angle = step.angle + 90;
-            lastAngle = step.angle;
+                    var pathWickObject = WickObject.createPathObject(svgString);
+                    pathWickObject.width = tempPaperForPosition.bounds.width;
+                    pathWickObject.height = tempPaperForPosition.bounds.height;
+
+                    //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(pathWickObject);
+                    
+                    pathWickObject.x = path.position.x// - wickEditor.project.width/2;
+                    pathWickObject.y = path.position.y// - wickEditor.project.height/2;
+                    //pathWickObject.svgX = tempPaperForPosition.bounds._x;
+                    //pathWickObject.svgY = tempPaperForPosition.bounds._y;
+
+                    wickEditor.actionHandler.doAction('addObjects', {
+                        wickObjects: [pathWickObject],
+                        dontSelectObjects: true,
+                    });
+                    //expandHole(tempPaperForPosition);
+                    pathWickObject.pathData = tempPaperForPosition.exportSVG({asString:true});
+                    //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshSVGWickObject(pathWickObject.paper.children[0]);
+                    wickEditor.actionHandler.doAction('moveObjectToZIndex', {
+                        objs:[pathWickObject],
+                        newZIndex: 0,
+                        dontAddToStack: true
+                    });
+                    path = null
+                    wickEditor.syncInterfaces();
+
+                }, wickEditor.settings.fillColor);
+            }
+            final.src = rasterDataURL;
+
         }
-
-        var top = event.middlePoint.add(step);
-        var bottom = event.middlePoint.subtract(step);
-        if(useLastAngle) {
-            top = event.point.add(step);
-            bottom = event.point.subtract(step);
-        }
-
-        path.add(top);
-        path.insert(0, bottom);
-        path.smooth();
     }
 
 }
