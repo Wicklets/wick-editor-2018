@@ -123,7 +123,7 @@ Tools.Paintbrush = function (wickEditor) {
                 path.join(path, 10/wickEditor.canvas.getZoom())
             }*/
 
-            path.remove();
+            
 
             var raster = path.rasterize();
             var rasterDataURL = raster.toDataURL()
@@ -164,6 +164,7 @@ Tools.Paintbrush = function (wickEditor) {
                         newZIndex: 0,
                         dontAddToStack: true
                     });
+                    path.remove();
                     path = null
                     wickEditor.syncInterfaces();
 
