@@ -73,7 +73,7 @@ Tools.Paintbrush = function (wickEditor) {
         if (!path) {
             path = new paper.Path({
                 //fillColor: wickEditor.settings.fillColor,
-                strokeColor: wickEditor.settings.strokeColor,
+                strokeColor: wickEditor.settings.fillColor,
                 strokeCap: 'round',
                 strokeWidth: wickEditor.settings.brushThickness/wickEditor.canvas.getZoom(),
             });
@@ -105,7 +105,6 @@ Tools.Paintbrush = function (wickEditor) {
     }
 
     this.paperTool.onMouseUp = function (event) {
-        console.log(event)
         if (path) {
 
             path.add(event.point)
@@ -134,36 +133,29 @@ Tools.Paintbrush = function (wickEditor) {
 
                 //win.document.body.innerHTML = '<div><img src= '+final.src+'></div>';
 
-
                 potraceImage(final, function (svgString) {
                     var xmlString = svgString
                       , parser = new DOMParser()
                       , doc = parser.parseFromString(xmlString, "text/xml");
                     var tempPaperForPosition = paper.project.importSVG(doc, {insert:false});
+                    tempPaperForPosition.closed = true;
+                    tempPaperForPosition.children.forEach(function (c) {
+                        c.closed = true;
+                    })
 
                     var pathWickObject = WickObject.createPathObject(svgString);
                     pathWickObject.width = tempPaperForPosition.bounds.width;
                     pathWickObject.height = tempPaperForPosition.bounds.height;
 
-                    //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(pathWickObject);
-                    
                     pathWickObject.x = path.position.x// - wickEditor.project.width/2;
                     pathWickObject.y = path.position.y// - wickEditor.project.height/2;
-                    //pathWickObject.svgX = tempPaperForPosition.bounds._x;
-                    //pathWickObject.svgY = tempPaperForPosition.bounds._y;
 
                     wickEditor.actionHandler.doAction('addObjects', {
                         wickObjects: [pathWickObject],
                         dontSelectObjects: true,
                     });
-                    //expandHole(tempPaperForPosition);
                     pathWickObject.pathData = tempPaperForPosition.exportSVG({asString:true});
-                    //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshSVGWickObject(pathWickObject.paper.children[0]);
-                    wickEditor.actionHandler.doAction('moveObjectToZIndex', {
-                        objs:[pathWickObject],
-                        newZIndex: 0,
-                        dontAddToStack: true
-                    });
+                    
                     path.remove();
                     path = null
                     wickEditor.syncInterfaces();

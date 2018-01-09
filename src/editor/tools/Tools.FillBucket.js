@@ -40,9 +40,6 @@ Tools.FillBucket = function (wickEditor) {
     this.onSelected = function () {
         wickEditor.project.clearSelection();
         wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
-        wickEditor.canvas.getCanvasRenderer().getCanvasAsDataURL(function (dataurl) {
-
-        });
     }
 
     this.paperTool = new paper.Tool();
@@ -52,165 +49,64 @@ Tools.FillBucket = function (wickEditor) {
     }
 
     this.paperTool.onMouseDown = function (event) {
-        
-        if(wickEditor.currentTool instanceof Tools.FillBucket) {
-            hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point, {tolerance:0});
-            if(!hitResult) {
-                //console.log(PaperHoleFinder.getHoleShapeAtPosition(paper.project, event.point));
-                /*var hole = PaperHoleFinder.getHoleShapeAtPosition(paper.project, event.point);
-                if(hole) {
-                    PaperHoleFinder.expandHole(hole);
-                    hole.fillColor = wickEditor.settings.fillColor;
-                    hole.strokeColor = wickEditor.settings.fillColor;
-                    hole.strokeWidth = 0;
-                    (hole.children || []).forEach(function (child) {
-                        child.segments.forEach(function (segment) {
-                            if(isNaN(segment.point.x)) segment.point.x = 0;
-                            if(isNaN(segment.point.y)) segment.point.y = 0;
-                        })
-                    });
-                    var superPathString = hole.exportSVG({asString:true});
-                    var svgString = '<svg id="svg" version="1.1" width="'+hole.bounds._width+'" height="'+hole.bounds._height+'" xmlns="http://www.w3.org/2000/svg">' +superPathString+ '</svg>'
-                    var superPathWickObject = WickObject.createPathObject(svgString);
-                    superPathWickObject.x = hole.position.x;
-                    superPathWickObject.y = hole.position.y;
-                    wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(superPathWickObject)
-                    wickEditor.actionHandler.doAction('addObjects', {
-                        wickObjects: [superPathWickObject],
-                        sendToBack: true,
-                        dontSelectObjects: true
-                    });
-                }*/
+        var superPath = null;
+        paper.project._activeLayer.children.forEach(function (child) {
+            // TODO: Only include paths whos bounding boxes include the cursor position.
+            // TODO: Only include paths who are on the active layer.
+            if(!child.closed) return;
+            if(!superPath) superPath = child.clone({insert:false});
+            superPath = superPath.unite(child);
+        });
 
-                wickEditor.canvas.getCanvasRenderer().getCanvasAsDataURL(function (dataURL) {
-                    var img = document.createElement('img');
-                    img.onload = function () {
-                        var canvas = document.createElement('canvas');
-                        var context = canvas.getContext("2d");
-                        canvas.width = wickEditor.project.width*2;
-                        canvas.height = wickEditor.project.height*2;
-                        var mouseCanvasSpace = wickEditor.canvas.screenToCanvasSpace(wickEditor.inputHandler.mouse.x + wickEditor.project.width/2, wickEditor.inputHandler.mouse.y + wickEditor.project.height/2)
-                        context.drawImage(img, 0, 0);
-                        context.fillStyle = "rgba(123,123,123,1)";
-                        context.fillFlood(mouseCanvasSpace.x, mouseCanvasSpace.y, 20);
-                        //var win = window.open('', 'Title', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width='+wickEditor.project.width+', height='+wickEditor.project.height+', top=100, left=100');
+        var invertPath = new paper.Path.Rectangle(superPath.bounds);
+        invertPath.fillColor = 'black';
 
-                        //win.document.body.innerHTML = '<div><img src= '+canvas.toDataURL()+'></div>';
+        invertPath = invertPath.subtract(superPath);
 
-                        var imageData = context.getImageData(0, 0, img.width, img.height);
-                        var data = imageData.data;
-
-                        for(var i = 0; i < data.length; i += 4) {
-                          if(data[i] !== 123) {
-                            data[i] = 0;
-                            data[i+1] = 0;
-                            data[i+2] = 0;
-                            data[i+3] = 0;
-                          } else {
-                            data[i] = 255;
-                            data[i+1] = 255;
-                            data[i+2] = 255;
-                            data[i+3] = 255;
-                          }
-                        }
-
-                        // overwrite original image
-                        context.putImageData(imageData, 0, 0);
-
-                        var final = new Image();
-                        final.onload = function () {
-                            //var win = window.open('', 'Title', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width='+wickEditor.project.width+', height='+wickEditor.project.height+', top=100, left=100');
-
-                            //win.document.body.innerHTML = '<div><img src= '+final.src+'></div>';
-
-
-                            potraceImage(final, function (svgString) {
-                                var xmlString = svgString
-                                  , parser = new DOMParser()
-                                  , doc = parser.parseFromString(xmlString, "text/xml");
-                                var tempPaperForPosition = paper.project.importSVG(doc, {insert:false});
-
-                                var pathWickObject = WickObject.createPathObject(svgString);
-                                pathWickObject.width = tempPaperForPosition.bounds.width;
-                                pathWickObject.height = tempPaperForPosition.bounds.height;
-
-                                //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(pathWickObject);
-                                
-                                pathWickObject.x = tempPaperForPosition.position.x - wickEditor.project.width/2;
-                                pathWickObject.y = tempPaperForPosition.position.y - wickEditor.project.height/2;
-                                pathWickObject.svgX = tempPaperForPosition.bounds._x;
-                                pathWickObject.svgY = tempPaperForPosition.bounds._y;
-
-                                wickEditor.actionHandler.doAction('addObjects', {
-                                    wickObjects: [pathWickObject],
-                                    dontSelectObjects: true,
-                                });
-                                expandHole(tempPaperForPosition);
-                                pathWickObject.pathData = tempPaperForPosition.exportSVG({asString:true});
-                                //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshSVGWickObject(pathWickObject.paper.children[0]);
-                                wickEditor.actionHandler.doAction('moveObjectToZIndex', {
-                                    objs:[pathWickObject],
-                                    newZIndex: 0,
-                                    dontAddToStack: true
-                                });
-                                wickEditor.syncInterfaces();
-
-                            }, wickEditor.settings.fillColor);
-                        }
-                        final.src = canvas.toDataURL();
+        invertPath.children.forEach(function (c) {
+            var clone = c.clone({insert:false})
+            clone.clockwise = false;
+            clone.fillColor = wickEditor.settings.fillColor;
+            if(clone.contains(event.point)) {
+                invertPath.children.forEach(function (co) {
+                    if(c.area !== co.area) {
+                        clone.clockwise = false;
+                        clone = clone.subtract(co)
                     }
-                    img.src = dataURL;
                 });
-            } else {
-                if(hitResult.type === 'fill') {
-                    hitResult.item.fillColor = wickEditor.settings.fillColor;
-                } else if (hitResult.type === 'stroke') {
-                    hitResult.item.strokeColor = wickEditor.settings.strokeColor;
-                }
-            }
-            
-            return;
-        }
-    }
 
-    function expandHole (group) {
-        var path = group.children[0]
+                PaperHoleFinder.expandHole(clone);
+                var svgString = clone.exportSVG({asString:true});
+                var pathWickObject = WickObject.createPathObject(svgString);
+                pathWickObject.x = clone.position.x;
+                pathWickObject.y = clone.position.y;
+                pathWickObject.width = clone.bounds._width;
+                pathWickObject.height = clone.bounds._height;
+                pathWickObject.svgX = clone.bounds._x;
+                pathWickObject.svgY = clone.bounds._y;
 
-        var children;
-        if(path instanceof paper.Path) {
-            children = [path];
-        } else if(path instanceof paper.CompoundPath) {
-            children = path.children;
-        }
+                wickEditor.actionHandler.doAction('addObjects', {
+                    wickObjects: [pathWickObject],
+                    dontSelectObjects: true,
+                });
 
-        children.forEach(function (hole) {
-            var normals = [];
-            hole.closePath();
-            hole.segments.forEach(function (segment) {
-                var a = segment.previous.point;
-                var b = segment.point;
-                var c = segment.next.point;
-
-                var ab = {x: b.x-a.x, y: b.y-a.y};
-                var cb = {x: b.x-c.x, y: b.y-c.y};
-
-                var d = {x: ab.x-cb.x, y: ab.y-cb.y};
-                d.h = Math.sqrt((d.x*d.x)+(d.y*d.y));
-                d.x /= d.h;
-                d.y /= d.h;
-
-                d = rotate_point(d.x, d.y, 0, 0, 90);
-
-                normals.push({x:d.x,y:d.y});
-            });
-
-            for (var i = 0; i < hole.segments.length; i++) {
-                var segment = hole.segments[i];
-                var normal = normals[i];
-                segment.point.x += normal.x*1.0;
-                segment.point.y += normal.y*1.0;
+                return;
             }
         });
+
+        /*var svgString = invertPath.exportSVG({asString:true});
+        var pathWickObject = WickObject.createPathObject(svgString);
+        pathWickObject.x = superPath.position.x;
+        pathWickObject.y = superPath.position.y;
+        pathWickObject.width = superPath.bounds._width;
+        pathWickObject.height = superPath.bounds._height;
+        pathWickObject.svgX = superPath.bounds._x;
+        pathWickObject.svgY = superPath.bounds._y;
+
+        wickEditor.actionHandler.doAction('addObjects', {
+            wickObjects: [pathWickObject],
+            dontSelectObjects: true,
+        });*/
     }
 
 }
