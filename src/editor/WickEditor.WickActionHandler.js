@@ -841,6 +841,8 @@ var WickActionHandler = function (wickEditor) {
             args.obj.playheadPosition = args.oldPlayheadPosition;
             args.obj.currentLayer = args.oldLayer;
 
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
+
             done(args);
         });
 

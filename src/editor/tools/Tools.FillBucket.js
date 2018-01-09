@@ -60,11 +60,17 @@ Tools.FillBucket = function (wickEditor) {
 
         var invertPath = new paper.Path.Rectangle(superPath.bounds);
         invertPath.fillColor = 'black';
-
         invertPath = invertPath.subtract(superPath);
 
+        var pathsContainingCursor = [];
         invertPath.children.forEach(function (c) {
-            var clone = c.clone({insert:false})
+            c = c.clone({insert:false})
+            c.clockwise = false;
+            c.fillColor = wickEditor.settings.fillColor
+            if(c.contains(event.point)) {
+                pathsContainingCursor.push(c);
+            }
+            /*var clone = c.clone({insert:false})
             clone.clockwise = false;
             clone.fillColor = wickEditor.settings.fillColor;
             if(clone.contains(event.point)) {
@@ -89,24 +95,36 @@ Tools.FillBucket = function (wickEditor) {
                     wickObjects: [pathWickObject],
                     dontSelectObjects: true,
                 });
+            }*/
+        });
 
-                return;
+        pathsContainingCursor.sort(function (a,b) {
+            return a.area < b.area;
+        });
+        var holePath = pathsContainingCursor[0];
+
+        invertPath.children.forEach(function (c) {
+            c.clockwise = false;
+            holePath.clockwise = false;
+
+            if(holePath.area < c.area) {
+                holePath = holePath.subtract(c)
             }
         });
 
-        /*var svgString = invertPath.exportSVG({asString:true});
-        var pathWickObject = WickObject.createPathObject(svgString);
-        pathWickObject.x = superPath.position.x;
-        pathWickObject.y = superPath.position.y;
-        pathWickObject.width = superPath.bounds._width;
-        pathWickObject.height = superPath.bounds._height;
-        pathWickObject.svgX = superPath.bounds._x;
-        pathWickObject.svgY = superPath.bounds._y;
+        PaperHoleFinder.expandHole(holePath);
+        var pathWickObject = WickObject.createPathObject(holePath.exportSVG({asString:true}));
+        pathWickObject.x = holePath.position.x;
+        pathWickObject.y = holePath.position.y;
+        pathWickObject.width = holePath.bounds._width;
+        pathWickObject.height = holePath.bounds._height;
+        pathWickObject.svgX = holePath.bounds._x;
+        pathWickObject.svgY = holePath.bounds._y;
 
         wickEditor.actionHandler.doAction('addObjects', {
             wickObjects: [pathWickObject],
             dontSelectObjects: true,
-        });*/
+        });
     }
 
 }
