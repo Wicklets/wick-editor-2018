@@ -52,7 +52,7 @@ Tools.Eraser = function (wickEditor) {
     }
 
     this.setup = function () {
-        
+
     }
 
     this.onSelected = function () {
@@ -69,21 +69,19 @@ Tools.Eraser = function (wickEditor) {
     var totalDelta;
     var lastEvent;
 
-    this.paperTool.onMouseDown = function(event) {
-        
-    }
-
-    this.paperTool.onMouseDrag = function(event) {
-        lastEvent = {
-            delta: event.delta,
-            middlePoint: event.middlePoint,
-        }
-
+    this.paperTool.onMouseDown = function (event) {
         if (!path) {
             path = new paper.Path({
-                fillColor: '#FFFFFF',
+                strokeColor: 'white',
+                strokeCap: 'round',
+                strokeWidth: wickEditor.settings.brushThickness/wickEditor.canvas.getZoom(),
             });
         }
+
+        path.add(event.point);
+    }
+
+    this.paperTool.onMouseDrag = function (event) {
 
         if(!totalDelta) {
             totalDelta = event.delta;
@@ -92,31 +90,84 @@ Tools.Eraser = function (wickEditor) {
             totalDelta.y += event.delta.y;
         }
 
-        if (totalDelta.length > wickEditor.settings.brushThickness/2/wickEditor.canvas.getZoom()) {
+        if (totalDelta.length > 2/wickEditor.canvas.getZoom()) {
 
             totalDelta.x = 0;
             totalDelta.y = 0;
 
-            var thickness = event.delta.length;
-            thickness /= wickEditor.settings.brushThickness/2;
-            thickness *= wickEditor.canvas.getZoom();
-            
-            var penPressure = wickEditor.inputHandler.getPenPressure(); 
-
-            var step = event.delta.divide(thickness).multiply(penPressure);
-            step.angle = step.angle + 90;
-
-            var top = event.middlePoint.add(step);
-            var bottom = event.middlePoint.subtract(step);
-
-            path.add(top);
-            path.insert(0, bottom);
+            path.add(event.point)
             path.smooth();
+            lastEvent = event;
 
         }
     }
 
-    this.paperTool.onMouseUp = function(event) {
+    this.paperTool.onMouseUp = function (event) {
+        if (path) {
+
+            path.add(event.point)
+            
+            var raster = path.rasterize(paper.view.resolution*wickEditor.canvas.getZoom());
+            var rasterDataURL = raster.toDataURL()
+
+            var final = new Image();
+            final.onload = function () {
+                potraceImage(final, function (svgString) {
+                    var xmlString = svgString
+                      , parser = new DOMParser()
+                      , doc = parser.parseFromString(xmlString, "text/xml");
+                    var tempPaperForPosition = paper.project.importSVG(doc, {insert:false});
+
+                    tempPaperForPosition.position.x = path.position.x;
+                    tempPaperForPosition.position.y = path.position.y;
+                    tempPaperForPosition.closed = true;
+                    tempPaperForPosition.children.forEach(function (c) {
+                        c.closed = true;
+                    })
+                    tempPaperForPosition.applyMatrix = true;
+                    tempPaperForPosition.scale(1/wickEditor.canvas.getZoom())
+                    
+                    var eraseObjects = wickEditor.project.getCurrentFrame().wickObjects
+                    eraseObjects = eraseObjects.filter(function (wickObject) {
+                        return wickObject.paper && wickObject.paper.closed;
+                    });
+
+                    var modifiedStates = [];
+                    eraseObjects.forEach(function (wickObject) {
+                        var parentAbsPos;
+                        if(wickObject.parentObject)
+                            parentAbsPos = wickObject.parentObject.getAbsolutePosition();
+                        else 
+                            parentAbsPos = {x:0,y:0};
+
+                        wickObject.paper = wickObject.paper.subtract(tempPaperForPosition);
+                        modifiedStates.push({
+                            x: wickObject.paper.position.x - parentAbsPos.x,
+                            y: wickObject.paper.position.y - parentAbsPos.y,
+                            svgX: wickObject.paper.bounds._x,
+                            svgY: wickObject.paper.bounds._y,
+                            width: wickObject.paper.bounds._width,
+                            height: wickObject.paper.bounds._height,
+                            //pathData: wickObject.paper.exportSVG({asString:true}),
+                        })
+                    })
+
+                    wickEditor.actionHandler.doAction('modifyObjects', {
+                        objs: eraseObjects,
+                        modifiedStates: modifiedStates,
+                    });
+
+                    path.remove();
+                    path = null;
+
+                }, wickEditor.settings.fillColor);
+            }
+            final.src = rasterDataURL;
+
+        }
+    }
+
+    /*this.paperTool.onMouseUp = function(event) {
         if (path) {
             path.closed = true;
             path.smooth();
@@ -158,5 +209,5 @@ Tools.Eraser = function (wickEditor) {
             path.remove();
             path = null;
         } 
-    }
+    }*/
 }

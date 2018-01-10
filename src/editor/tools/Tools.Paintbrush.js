@@ -72,12 +72,10 @@ Tools.Paintbrush = function (wickEditor) {
     this.paperTool.onMouseDown = function (event) {
         if (!path) {
             path = new paper.Path({
-                //fillColor: wickEditor.settings.fillColor,
                 strokeColor: wickEditor.settings.fillColor,
                 strokeCap: 'round',
                 strokeWidth: wickEditor.settings.brushThickness/wickEditor.canvas.getZoom(),
             });
-            //path.add(event.lastPoint);
         }
 
         path.add(event.point);
@@ -109,30 +107,11 @@ Tools.Paintbrush = function (wickEditor) {
 
             path.add(event.point)
             
-            /*if(path.segments.length > 2) {
-                path.smooth();
-
-                if(wickEditor.settings.brushSmoothingAmount > 0) {
-                    var t = wickEditor.settings.strokeWidth;
-                    var s = wickEditor.settings.brushSmoothingAmount/100*10;
-                    var z = wickEditor.canvas.getZoom();
-                    path.simplify(t / z * s);
-                }
-
-                path.join(path, 10/wickEditor.canvas.getZoom())
-            }*/
-
-            
-
-            var raster = path.rasterize();
+            var raster = path.rasterize(paper.view.resolution*wickEditor.canvas.getZoom());
             var rasterDataURL = raster.toDataURL()
 
             var final = new Image();
             final.onload = function () {
-                //var win = window.open('', 'Title', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width='+wickEditor.project.width+', height='+wickEditor.project.height+', top=100, left=100');
-
-                //win.document.body.innerHTML = '<div><img src= '+final.src+'></div>';
-
                 potraceImage(final, function (svgString) {
                     var xmlString = svgString
                       , parser = new DOMParser()
@@ -142,10 +121,25 @@ Tools.Paintbrush = function (wickEditor) {
                     tempPaperForPosition.children.forEach(function (c) {
                         c.closed = true;
                     })
+                    tempPaperForPosition.applyMatrix = true;
+                    tempPaperForPosition.scale(1/wickEditor.canvas.getZoom())
+                    tempPaperForPosition.children.forEach(function (c) {
+                        c.smooth();
+                        if(wickEditor.settings.brushSmoothingAmount > 0) {
+                            var t = wickEditor.settings.strokeWidth;
+                            var s = wickEditor.settings.brushSmoothingAmount/100*10;
+                            var z = wickEditor.canvas.getZoom();
+                            c.simplify(t / z * s);
+                        }
+                    })
 
-                    var pathWickObject = WickObject.createPathObject(svgString);
+                    var pathData = tempPaperForPosition.exportSVG({asString:true})
+
+                    var pathWickObject = WickObject.createPathObject(pathData);
                     pathWickObject.width = tempPaperForPosition.bounds.width;
                     pathWickObject.height = tempPaperForPosition.bounds.height;
+                    pathWickObject.svgX = tempPaperForPosition.bounds._x;
+                    pathWickObject.svgY = tempPaperForPosition.bounds._y;
 
                     pathWickObject.x = path.position.x// - wickEditor.project.width/2;
                     pathWickObject.y = path.position.y// - wickEditor.project.height/2;
@@ -154,7 +148,7 @@ Tools.Paintbrush = function (wickEditor) {
                         wickObjects: [pathWickObject],
                         dontSelectObjects: true,
                     });
-                    pathWickObject.pathData = tempPaperForPosition.exportSVG({asString:true});
+                    pathWickObject.pathData = pathData;
                     
                     path.remove();
                     path = null
