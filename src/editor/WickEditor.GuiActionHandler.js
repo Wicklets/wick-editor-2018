@@ -477,7 +477,7 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.guiActionHandler.doAction('copy');
             wickEditor.guiActionHandler.doAction('deleteSelectedObjects');
         });
-
+    
     registerAction('paste',
         pasteKeys,
         'Paste',
@@ -486,7 +486,7 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.rightclickmenu.open = false;
             that.keys = [];
 
-            var clipboardData = window.polyfillClipboardData//(window.polyfillClipboardData || args.clipboardData);
+            var clipboardData = window.polyfillClipboardData;
             if(args.clipboardData) clipboardData = args.clipboardData;
             if(!clipboardData) return;
             var items = clipboardData.items || clipboardData.types;
@@ -499,7 +499,9 @@ var GuiActionHandler = function (wickEditor) {
                 if(fileType === 'text/wickobjectsjson') {
                     var objs = WickObject.fromJSONArray(JSON.parse(file));
                     objs.forEachBackwards(function (obj) {
-                        if(obj.name) obj.name = undefined;
+                        wickEditor.project.getAllActiveChildObjects().forEach(function (c) {
+                            if(c.name === obj.name) obj.name = undefined;
+                        });
                         obj.getAllChildObjectsRecursive().forEach(function (child) {
                             child.uuid = random.uuid4();
                             (child.layers||[]).forEach(function (layer) {
@@ -507,7 +509,6 @@ var GuiActionHandler = function (wickEditor) {
                                     frame.uuid = random.uuid4();
                                 })
                             });
-                            child.name = undefined;
                         });
                         obj.getAllFrames().forEach(function (frame) {
                             frame.uuid = random.uuid4();

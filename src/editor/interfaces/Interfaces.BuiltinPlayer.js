@@ -47,13 +47,6 @@ var BuiltinPlayerInterface = function (wickEditor) {
             }
         }
 
-        var duplicateName = wickEditor.project.getDuplicateName();
-        if(duplicateName) {
-            if(!confirm('Warning: Duplicate objects named "'+duplicateName+'". Are you sure you want to run it?')) {
-                return;
-            }
-        }
-
         that.running = true;
         wickEditor.syncInterfaces();
 

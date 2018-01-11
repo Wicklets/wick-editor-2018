@@ -17,7 +17,7 @@
 
 var ScriptingIDEInterface = function (wickEditor) {
 
-    var that = this;
+    var self = this;
 
     var maximized;
     var objectBeingScripted;
@@ -25,39 +25,38 @@ var ScriptingIDEInterface = function (wickEditor) {
     var changeAnnotationTimer;
     var SYNTAX_ERROR_MSG_DELAY = 800;
 
-    var reference = new ScriptingIDEReference(this, wickEditor);
-
-    this.justOpened = true;
+    var reference;
 
     this.setup = function () {
-        var proceed = function () {
-            maximized = false;
-            objectBeingScripted = null;
+        maximized = false;
+        objectBeingScripted = null;
 
-            that.open = false;
+        self.open = false;
 
-            that.aceEditor = ace.edit("scriptEditor");
-            that.aceEditor.setTheme("ace/theme/idle_fingers");
-            that.aceEditor.getSession().setMode("ace/mode/javascript");
-            that.aceEditor.$blockScrolling = Infinity; // Makes that weird message go away
-            that.aceEditor.setAutoScrollEditorIntoView(true);
+        reference = new ScriptingIDEReference(this, wickEditor);
+        window.wickDocsKeywords = "";
+        window.wickDocsKeyworksArray = [];
+        window.wickDocs.forEach(function (doc) {
+            doc.properties.forEach(function (prop) {
+                window.wickDocsKeywords += prop.name.split('(')[0] + "|"
+                window.wickDocsKeyworksArray.push(prop.name.split('(')[0]);
+            });
+        });
+        reference.setup();
 
-            that.aceEditor.commands.addCommand({
-                name: "...",
-                exec: function() {
-                    //wickEditor.guiActionHandler.doAction('editScripts');
-                    that.open = false;
-                    that.syncWithEditorState();
-                },
-                bindKey: {mac: "`", win: "`"}
-            })
+        var beautify = ace.require("ace/ext/beautify");
+        var langTools = ace.require('ace/ext/language_tools');
 
-            that.aceEditor.setOptions({
-                enableBasicAutocompletion: true,
-                enableLiveAutocompletion: true,
-            })
-            var langTools = ace.require('ace/ext/language_tools');
-            var staticWordCompleter = {
+        self.aceEditor = ace.edit("scriptEditor");
+        self.aceEditor.setTheme("ace/theme/idle_fingers");
+        self.aceEditor.getSession().setMode("ace/mode/javascript");
+        self.aceEditor.$blockScrolling = Infinity;
+        self.aceEditor.setAutoScrollEditorIntoView(true);
+        self.aceEditor.setOptions({
+            enableBasicAutocompletion: true,
+            enableLiveAutocompletion: true,
+        })
+        self.aceEditor.completers = [{
             getCompletions: function(editor, session, pos, prefix, callback) {
                 var wordList = window.wickDocsKeyworksArray;
                 callback(null, wordList.map(function(word) {
@@ -67,124 +66,79 @@ var ScriptingIDEInterface = function (wickEditor) {
                         meta: "static"
                     };
                 }));
-
-                }
             }
-            that.aceEditor.completers = [staticWordCompleter]
+        }];
 
-            that.beautify = ace.require("ace/ext/beautify");
+        self.aceEditor.getSession().on('change', onChange);
+        self.aceEditor.getSession().on("changeAnnotation", onChangeAnnotation);
+        self.aceEditor.on('changeSelection', onChangeSelection);
 
-            // Update selected objects scripts when script editor text changes
-            that.aceEditor.getSession().on('change', function (e) {
-                if(!objectBeingScripted) return;
-                objectBeingScripted.wickScript = that.aceEditor.getValue();
-            });
+        self.aceEditor.commands.addCommand({
+            name: "...",
+            exec: function() {
+                self.open = false;
+                self.syncWithEditorState();
+            },
+            bindKey: {mac: "`", win: "`"}
+        })
 
-            that.aceEditor.getSession().on("changeAnnotation", function(){
-
-                if(objectBeingScripted && objectBeingScripted.scriptError && objectBeingScripted.scriptError.type === 'syntax')
-                    objectBeingScripted.scriptError = null;
-                updateHeaderText()
-
-                clearTimeout(changeAnnotationTimer);
-                changeAnnotationTimer = setTimeout (function () {
-                    if(!that.open)return;
-
-                    var annot = that.aceEditor.getSession().getAnnotations();
-
-                    // Look for errors
-                    if(!objectBeingScripted) return;
-
-                    if(objectBeingScripted.scriptError && objectBeingScripted.scriptError.type === 'syntax')
-                        objectBeingScripted.scriptError = null;
-
-                    for (var key in annot){
-                        if (annot.hasOwnProperty(key)) {
-                            if(annot[key].type === 'error') {
-                                // There's a syntax error. Set the projectHasErrors flag so the project won't run.
-                                //that.projectHasErrors = true;
-                                if(!objectBeingScripted.scriptError || objectBeingScripted.scriptError.type === 'runtime') {
-                                    objectBeingScripted.scriptError = {
-                                        message: annot[key].text,
-                                        line: annot[key].row+1,
-                                        type: 'syntax'
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    updateHeaderText()
-                },SYNTAX_ERROR_MSG_DELAY);
-            });
-
-            that.aceEditor.on('changeSelection', function(e) {
-                var position = that.aceEditor.getCursorPosition();
-                var token = that.aceEditor.session.getTokenAt(position.row, position.column);
-                if(token) {
-                    reference.highlightPropButton(token.value);
-                }
-            });
-
-            var resizer = document.getElementById('resizeScriptingGUIBar');
-            resizer.resizing = false;
-            resizer.addEventListener('mousedown', function (e) {
-                if(that.open && !maximized){
-                    resizer.resizing = true;
-                } else {
-                    that.open = true;
-                    that.clearError();
-                    that.syncWithEditorState();
-                }
-
-            });
-            window.addEventListener('mousemove', function (e) {
-                if(resizer.resizing) {
-                    var newIDEHeight = wickEditor.settings.scriptingIDEHeight - e.movementY;
-                    wickEditor.settings.setValue('scriptingIDEHeight', newIDEHeight)
-                    document.getElementById('scriptingGUI').style.height = wickEditor.settings.scriptingIDEHeight+'px';
-                    that.resize()
-                }
-            });
-            window.addEventListener('mouseup', function (e) {
-                resizer.resizing = false
-            });
-
-            that.resize = function () {
-                //var GUIWidth = parseInt($("#scriptingGUI").css("width"));
-                //$("#scriptingGUI").css('left', (window.innerWidth/2 - GUIWidth/2)+'px');
-                that.aceEditor.resize();
+        var resizer = document.getElementById('resizeScriptingGUIBar');
+        resizer.resizing = false;
+        resizer.addEventListener('mousedown', function (e) {
+            if(self.open && !maximized){
+                resizer.resizing = true;
+            } else {
+                self.open = true;
+                self.clearError();
+                self.syncWithEditorState();
             }
 
-            window.addEventListener('resize', function(e) {
-                that.resize();
-            });
-            that.resize();
-        }
-        $.ajax({
-            url: "./src/project/Docs.json",
-            type: 'GET',
-            data: {},
-            success: function(data) {
-                window.wickDocsKeywords = "";
-                window.wickDocsKeyworksArray = [];
-                window.wickDocs = data.docs;
-                if(!data.docs) return;
-                data.docs.forEach(function (doc) {
-                    doc.properties.forEach(function (prop) {
-                        window.wickDocsKeywords += prop.name.split('(')[0] + "|"
-                        window.wickDocsKeyworksArray.push(prop.name.split('(')[0]);
-                    });
-                });
-
-                reference.setup();
-            },
-            error: function () {
-                console.log("ajax: error")
-            },
-            complete: function(response, textStatus) {
-                proceed();
+        });
+        window.addEventListener('mousemove', function (e) {
+            if(resizer.resizing) {
+                var newIDEHeight = wickEditor.settings.scriptingIDEHeight - e.movementY;
+                wickEditor.settings.setValue('scriptingIDEHeight', newIDEHeight)
+                document.getElementById('scriptingGUI').style.height = wickEditor.settings.scriptingIDEHeight+'px';
+                self.resize()
             }
         });
+        window.addEventListener('mouseup', function (e) {
+            resizer.resizing = false
+        });
+
+        self.resize = function () {
+            self.aceEditor.resize();
+        }
+
+        window.addEventListener('resize', function(e) {
+            self.resize();
+        });
+        self.resize();
+
+        $("#closeScriptingGUIButton").on("click", function (e) {
+            self.open = false;
+            self.clearError();
+            self.syncWithEditorState();
+        });
+        $("#openScriptingGUIButton").on("click", function (e) {
+            self.open = true;
+            self.clearError();
+            self.syncWithEditorState();
+        });
+
+        $("#beautifyButton").on("click", function (e) {
+            beautifyCode();
+        });
+
+        $("#expandScriptingGUIButton").on("click", function (e) {
+            maximized = true;
+            self.syncWithEditorState();
+        });
+        $("#minimizeScriptingGUIButton").on("click", function (e) {
+            maximized = false;
+            self.syncWithEditorState();
+        });
+        
     }
 
     this.syncWithEditorState = function () {
@@ -193,12 +147,7 @@ var ScriptingIDEInterface = function (wickEditor) {
         updateHeaderText()
 
         if(this.open) {
-            //$("#scriptingGUI").css('display', 'block');
             $("#scriptEditor").css('display', 'block');
-            if(this.justOpened) {
-                //this.aceEditor.focus()
-                this.justOpened = false;
-            }
 
             if(maximized) {
                 document.getElementById('scriptingGUI').style.height = 'calc(100% - 24px)';
@@ -223,8 +172,8 @@ var ScriptingIDEInterface = function (wickEditor) {
                 $("#scriptObjectDiv").css('display', 'block');
 
                 var script = objectBeingScripted.wickScript;
-                if(that.aceEditor.getValue() !== objectBeingScripted.wickScript)
-                    that.aceEditor.setValue(script, -1);
+                if(self.aceEditor.getValue() !== objectBeingScripted.wickScript)
+                    self.aceEditor.setValue(script, -1);
             } else {
                 $("#noSelectionDiv").css('display', 'block');
                 $("#scriptObjectDiv").css('display', 'none');
@@ -240,7 +189,6 @@ var ScriptingIDEInterface = function (wickEditor) {
             $("#scriptEditor").css('display', 'none');
             $("#noSelectionDiv").css('display', 'none');
             $("#scriptingGUI").css('height', '24px');
-            this.justOpened = true;
 
             document.getElementById('expandScriptingGUIButton').style.display = 'none';
             document.getElementById('minimizeScriptingGUIButton').style.display = 'none';
@@ -252,7 +200,7 @@ var ScriptingIDEInterface = function (wickEditor) {
         }
     }
 
-    this.showError = function (obj, scriptError) {
+    self.displayError = function (obj, scriptError) {
         var object = wickEditor.project.getObjectByUUID(obj.uuid);
         var frame = wickEditor.project.getFrameByUUID(obj.uuid);
 
@@ -272,25 +220,9 @@ var ScriptingIDEInterface = function (wickEditor) {
 
         this.aceEditor.selection.moveCursorToPosition({row: scriptError.line-1, column: 0});
         this.aceEditor.selection.selectLine();
-        /*setTimeout(function () {
-            if(object) object.causedAnException = true;
-
-            that.open = true;
-
-            document.getElementById("errorMessage").innerHTML = errorMessage;
-            if(lineNumber) document.getElementById("errorMessage").innerHTML += ", line " + lineNumber;
-            document.getElementById("errorMessage").style.display = "block";
-
-            wickEditor.syncInterfaces();
-        }, 100);*/
-
-    
     }
 
-    this.clearError = function () {
-        /*document.getElementById("errorMessage").innerHTML = "";
-        document.getElementById("errorMessage").style.display = "hidden";*/
-
+    self.clearError = function () {
         var framesAndObjects = (wickEditor.project.getAllFrames().concat(wickEditor.project.getAllObjects()));
         framesAndObjects.forEach(function (obj) {
             if(obj.scriptError && obj.scriptError.type === 'runtime') {
@@ -299,17 +231,66 @@ var ScriptingIDEInterface = function (wickEditor) {
         })
     }
 
-    this.beautifyCode = function () {
-        var val = that.aceEditor.session.getValue();
-        val = js_beautify(val);
-        that.aceEditor.session.setValue(val);
-        
-        var row = that.aceEditor.session.getLength() - 1;
-        var column = that.aceEditor.session.getLine(row).length;
-        that.aceEditor.gotoLine(row + 1, column);
+    function onChange (e) {
+        if(!objectBeingScripted) return;
+            objectBeingScripted.wickScript = self.aceEditor.getValue();
     }
 
-    var updateHeaderText = function () {
+    function onChangeAnnotation (e) {
+        if(objectBeingScripted && objectBeingScripted.scriptError && objectBeingScripted.scriptError.type === 'syntax')
+            objectBeingScripted.scriptError = null;
+        updateHeaderText()
+
+        clearTimeout(changeAnnotationTimer);
+        changeAnnotationTimer = setTimeout (function () {
+            if(!self.open)return;
+
+            var annot = self.aceEditor.getSession().getAnnotations();
+
+            // Look for errors
+            if(!objectBeingScripted) return;
+
+            if(objectBeingScripted.scriptError && objectBeingScripted.scriptError.type === 'syntax')
+                objectBeingScripted.scriptError = null;
+
+            for (var key in annot){
+                if (annot.hasOwnProperty(key)) {
+                    if(annot[key].type === 'error') {
+                        // There's a syntax error. Set the projectHasErrors flag so the project won't run.
+                        //self.projectHasErrors = true;
+                        if(!objectBeingScripted.scriptError || objectBeingScripted.scriptError.type === 'runtime') {
+                            objectBeingScripted.scriptError = {
+                                message: annot[key].text,
+                                line: annot[key].row+1,
+                                type: 'syntax'
+                            }
+                        }
+                    }
+                }
+            }
+            updateHeaderText()
+        },SYNTAX_ERROR_MSG_DELAY);
+    }
+
+    function onChangeSelection () {
+        var position = self.aceEditor.getCursorPosition();
+        var token = self.aceEditor.session.getTokenAt(position.row, position.column);
+        if(token) {
+            reference.highlightPropButton(token.value);
+        }
+    }
+
+    function beautifyCode () {
+        var val = self.aceEditor.session.getValue();
+        val = js_beautify(val);
+        self.aceEditor.session.setValue(val);
+        
+        var row = self.aceEditor.session.getLength() - 1;
+        var column = self.aceEditor.session.getLine(row).length;
+        self.aceEditor.gotoLine(row + 1, column);
+    }
+
+    function updateHeaderText () {
         var header = document.getElementById('scriptingIDEHeader');
 
         //header.style.color = 'white'
@@ -353,45 +334,5 @@ var ScriptingIDEInterface = function (wickEditor) {
             }
         }
     }
-
-// Other buttons
-
-    $("#closeScriptingGUIButton").on("click", function (e) {
-        that.open = false;
-        that.clearError();
-        that.syncWithEditorState();
-    });
-    $("#openScriptingGUIButton").on("click", function (e) {
-        that.open = true;
-        that.clearError();
-        that.syncWithEditorState();
-    });
-
-    $("#beautifyButton").on("click", function (e) {
-        that.beautifyCode();
-    });
-
-    $("#expandScriptingGUIButton").on("click", function (e) {
-        maximized = true;
-        that.syncWithEditorState();
-    });
-    $("#minimizeScriptingGUIButton").on("click", function (e) {
-        maximized = false;
-        that.syncWithEditorState();
-    });
-
-    /*$("#scriptingIDEHeader").on("click", function (e) {
-        that.open = !that.open;
-        that.clearError();
-        that.syncWithEditorState();
-    });
-    $("#scriptingIDEHeader").on("mouseover", function (e) {
-        if(!that.open)
-            $("#scriptingGUI").css('height', '32px');
-    });
-    $("#scriptingIDEHeader").on("mouseout", function (e) {
-        if(!that.open)
-            $("#scriptingGUI").css('height', '30px');
-    });*/
 
 }

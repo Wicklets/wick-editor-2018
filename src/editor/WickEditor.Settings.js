@@ -33,7 +33,7 @@ var WickEditorSettings = function () {
 WickEditorSettings.prototype.getDefaults = function () {
     return {
         brushThickness : 5,
-        brushSmoothingAmount : 50,
+        brushSmoothingAmount : 0,
         strokeWidth : 5,
         strokeColor : "#000000",
         fillColor : "#9999FF",
@@ -71,12 +71,6 @@ WickEditorSettings.prototype.save = function () {
 WickEditorSettings.prototype.load = function () {
 
     var savedSettings = JSON.parse(localStorage.wickEditorSettings);
-
-    // backwards compat
-    if(savedSettings.drawingColor) {
-        this.setDefaults();
-        return;
-    }
 
     for (key in savedSettings) {
         this[key] = savedSettings[key];

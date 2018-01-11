@@ -44,8 +44,6 @@ var WickProject = function () {
 
     this.uuid = random.uuid4();
 
-    //this.assets = {};
-
     this._selection = [];
 
     if(window.wickVersion) this.wickVersion = window.wickVersion;
@@ -58,7 +56,6 @@ WickProject.prototype.createNewRootObject = function () {
     rootObject.isRoot = true;
     rootObject.playheadPosition = 0;
     rootObject.currentLayer = 0;
-    rootObject.playRanges = [];
     var firstLayer = new WickLayer();
     firstLayer.identifier = "Layer 1";
     rootObject.layers = [firstLayer];
@@ -68,10 +65,6 @@ WickProject.prototype.createNewRootObject = function () {
     this.rootObject = rootObject;
     this.rootObject.generateParentObjectReferences();
 }
-
-/*****************************
-    Import/Export
-*****************************/
 
 WickProject.fromFile = function (file, callback) {
 
@@ -233,18 +226,12 @@ WickProject.prototype.getCopyData = function () {
         objectJSONs.push(objects[i].getAsJSON());
     }
     var clipboardObject = {
-        /*position: {top  : group.top  + group.height/2,
-                   left : group.left + group.width/2},*/
         groupPosition: {x : 0,
                         y : 0},
         wickObjectArray: objectJSONs
     }
     return JSON.stringify(clipboardObject);
 }
-
-/*********************************
-    Access project wickobjects
-*********************************/
 
 WickProject.prototype.getCurrentObject = function () {
     return this.currentObject;
@@ -468,7 +455,7 @@ WickProject.prototype.handleWickError = function (e, objectCausedError) {
         
         wickEditor.builtinplayer.stopRunningProject()
 
-        wickEditor.scriptingide.showError(objectCausedError, {
+        wickEditor.scriptingide.displayError(objectCausedError, {
             message: e,
             line: lineNumber,
             type: 'runtime'
@@ -753,7 +740,7 @@ WickProject.prototype.loadScriptOfObject = function (obj) {
             //console.log(e.stack.split("\n"))
             //if(wickEditor.builtinplayer.running) wickEditor.builtinplayer.stopRunningProject()
             wickEditor.builtinplayer.stopRunningProject()
-            wickEditor.scriptingide.showError(obj, {
+            wickEditor.scriptingide.displayError(obj, {
                 message: e,
                 line: lineNumber,
                 type: 'runtime'
@@ -774,42 +761,6 @@ WickProject.prototype.regenAssetReferences = function () {
         obj.asset = self.library.getAsset(obj.assetUUID);
     });
 
-}
-
-WickProject.prototype.getDuplicateName = function () {
-    var foundDuplicate = null;
-
-    this.getAllObjects().forEach(function (object) {
-        object.getAllFrames().forEach(function (frame) {
-            var names = [];
-            frame.wickObjects.forEach(function (obj) {
-                names.push(obj.name);
-            });
-
-            names = names.filter(function (n) {
-                return n !== undefined && n !== '';
-            });
-
-            //http://stackoverflow.com/questions/840781/easiest-way-to-find-duplicate-values-in-a-javascript-array
-            var uniq = names
-            .map(function (name) {
-              return {count: 1, name: name}
-            })
-            .reduce(function (a, b) {
-              a[b.name] = (a[b.name] || 0) + b.count
-              return a
-            }, {})
-
-            //var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1)
-            var duplicates = Object.keys(uniq).filter(function (a) {
-                return uniq[a] > 1;
-            });
-
-            if(duplicates.length > 0) foundDuplicate = duplicates[0];
-        });
-    });
-
-    return foundDuplicate;
 }
 
 WickProject.prototype.prepareForPlayer = function () {

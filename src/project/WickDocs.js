@@ -1,5 +1,4 @@
-{
-  "docs": [
+window.wickDocs = 
     {
       "name": "Timeline",
       "properties": [
@@ -694,4 +693,4 @@
         }
     ]}
   ]
-}
+

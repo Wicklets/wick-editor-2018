@@ -49,6 +49,24 @@ Tools.FillBucket = function (wickEditor) {
     }
 
     this.paperTool.onMouseDown = function (event) {
+        if(<event point touches fill>) {
+            changeFillColorOfItem(<args>)
+        } else if (<event point touches stroke) {
+            changeStrokeColorOfItem(<args>)
+        } else {
+            fillHole(event);
+        }
+    }
+
+    function changeFillColorOfItem (event) {
+        // TODO
+    }
+
+    function changeStrokeColorOfItem (event) {
+        // TODO
+    }
+
+    function fillHole (event) {
         var superPath = null;
         paper.project._activeLayer.children.forEach(function (child) {
             // TODO: Only include paths whos bounding boxes include the cursor position.
@@ -71,32 +89,6 @@ Tools.FillBucket = function (wickEditor) {
             if(c.contains(event.point)) {
                 pathsContainingCursor.push(c);
             }
-            /*var clone = c.clone({insert:false})
-            clone.clockwise = false;
-            clone.fillColor = wickEditor.settings.fillColor;
-            if(clone.contains(event.point)) {
-                invertPath.children.forEach(function (co) {
-                    if(c.area !== co.area) {
-                        clone.clockwise = false;
-                        clone = clone.subtract(co)
-                    }
-                });
-
-                PaperHoleFinder.expandHole(clone);
-                var svgString = clone.exportSVG({asString:true});
-                var pathWickObject = WickObject.createPathObject(svgString);
-                pathWickObject.x = clone.position.x;
-                pathWickObject.y = clone.position.y;
-                pathWickObject.width = clone.bounds._width;
-                pathWickObject.height = clone.bounds._height;
-                pathWickObject.svgX = clone.bounds._x;
-                pathWickObject.svgY = clone.bounds._y;
-
-                wickEditor.actionHandler.doAction('addObjects', {
-                    wickObjects: [pathWickObject],
-                    dontSelectObjects: true,
-                });
-            }*/
         });
 
         pathsContainingCursor.sort(function (a,b) {
@@ -112,6 +104,8 @@ Tools.FillBucket = function (wickEditor) {
                 holePath = holePath.subtract(c)
             }
         });
+
+        // TODO: Ignore resulting paths of leaky holes being filled.
 
         holePath.clockwise = false;
         PaperHoleFinder.expandHole(holePath);

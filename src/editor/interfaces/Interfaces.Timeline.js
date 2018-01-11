@@ -432,8 +432,6 @@ TimelineInterface.NumberLine = function (wickEditor, timeline) {
 
     this.elem = null;
 
-    this.playRanges = null;
-
     var numberlineContainer;
     var numbers = [];
     var bars = [];
@@ -448,8 +446,6 @@ TimelineInterface.NumberLine = function (wickEditor, timeline) {
         numberlineContainer = document.createElement('span');
         numberlineContainer.className = 'numberline-container';
         this.elem.appendChild(numberlineContainer);
-
-        this.playRanges = [];
     }
 
     this.update = function () {
@@ -458,10 +454,6 @@ TimelineInterface.NumberLine = function (wickEditor, timeline) {
         this.elem.style.left = shift+cssVar('--layers-width')+'px';
 
         numberlineContainer.style.left = -shift+(shift%cssVar('--frame-width'))+'px';
-
-        this.playRanges.forEach(function (playRange) {
-            //playRange.update();
-        });
 
         for(var i = 0; i < numbers.length; i++) {
             var num = i+1+Math.floor(-shift/cssVar('--frame-width'));
@@ -504,20 +496,6 @@ TimelineInterface.NumberLine = function (wickEditor, timeline) {
             
             numberlineContainer.appendChild(numberLineCell);
         }
-
-        /*this.playRanges.forEach(function (playrange) {
-            that.elem.removeChild(playrange.elem);
-        });*/
-
-        this.playRanges = [];
-
-        /*wickEditor.project.getCurrentObject().playRanges.forEach(function (wickPlayrange) {
-            var newPlayrange = new TimelineInterface.PlayRange(wickEditor, timeline);
-            newPlayrange.wickPlayrange = wickPlayrange;
-            newPlayrange.build();
-            that.elem.appendChild(newPlayrange.elem);
-            that.playRanges.push(newPlayrange)
-        });*/
     }
 }
 

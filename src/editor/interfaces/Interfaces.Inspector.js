@@ -116,9 +116,6 @@ var InspectorInterface = function (wickEditor) {
             } else if (selectionInfo.object instanceof WickFrame) {
                 selectionInfo.type = 'frame';
                 selectionInfo.dataType = 'frame';
-            } else if (selectionInfo.object instanceof WickPlayRange) {
-                selectionInfo.type = 'playrange';
-                selectionInfo.dataType = 'playrange';
             }
         } else {
             if(selectionInfo.numObjects === 0) {
@@ -130,9 +127,6 @@ var InspectorInterface = function (wickEditor) {
                 } else if(selectionInfo.objects[0] instanceof WickFrame) {
                     selectionInfo.type = 'frame'
                     selectionInfo.dataType = 'frame';
-                } else if(selectionInfo.objects[0] instanceof WickPlayRange) {
-                    selectionInfo.type = 'playrange'
-                    selectionInfo.dataType = 'playrange';
                 }
 
                 // Check for special selection cases
@@ -233,9 +227,6 @@ var InspectorInterface = function (wickEditor) {
 
         } else if (selectionInfo.type === 'frame') {
             title = "Frame";  
-            image = "./resources/inspector-edit-timeline.svg"
-        } else if (selectionInfo.type === 'playrange') {
-            title = "PlayRange";   
             image = "./resources/inspector-edit-timeline.svg"
         }
 

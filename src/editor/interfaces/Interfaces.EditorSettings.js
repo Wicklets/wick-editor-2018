@@ -32,7 +32,7 @@ var EditorSettings = function (wickEditor) {
             var action = guiActions[key];
             if(action.hotkeys.length === 0 || !action.title) continue;
             var hotkeysString = action.hotkeys.map(function (k) {
-                // Remove extra works from key string
+                // Remove extra words from key string
                 var splitByKey = k.split('Key')
                 k = splitByKey[splitByKey.length-1]
                 var splitByArrow = k.split('Arrow')

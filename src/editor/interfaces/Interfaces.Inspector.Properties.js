@@ -94,32 +94,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
-    /*properties.push(new InspectorInterface.StringInput({
-        title: 'Volume',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
-        },
-        getValueFn: function () {
-            return roundToHundredths(selectionInfo.object.volume);
-        }, 
-        onChangeFn: function (val) {
-            selectionInfo.object.volume = eval(val);
-        }
-    }));
-
-    properties.push(new InspectorInterface.CheckboxInput({
-        title: 'Loop',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject';
-        },
-        getValueFn: function () {
-            return selectionInfo.object.loop;
-        }, 
-        onChangeFn: function (val) {
-            selectionInfo.object.loop = val;
-        }
-    }));*/
-
     properties.push(new InspectorInterface.StringInput({
         title: 'Rotation',
         isActiveFn: function () {
@@ -158,19 +132,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             });
         }
     }));
-
-    /*properties.push(new InspectorInterface.StringInput({
-        title: 'Variable',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isText;
-        },
-        getValueFn: function () {
-            return selectionInfo.object.varName || "";
-        },
-        onChangeFn: function (val) {
-            selectionInfo.object.varName = val;
-        }
-    }));*/
 
     properties.push(new InspectorInterface.SelectInput({
         title: 'Font Family',
@@ -394,52 +355,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.StringInput({
         title: 'Name',
         isActiveFn: function () {
-            return selectionInfo.type === 'playrange' && selectionInfo.numObjects === 1;
-        },
-        getValueFn: function () {
-            return selectionInfo.object.identifier || "";
-        }, 
-        onChangeFn: function (val) {
-            selectionInfo.object.identifier = val;
-            wickEditor.syncInterfaces()
-        }
-    }));
-
-    properties.push(new InspectorInterface.StringInput({
-        title: 'Start',
-        isActiveFn: function () {
-            return selectionInfo.type === 'playrange' && selectionInfo.numObjects === 1;
-        },
-        getValueFn: function () {
-            return selectionInfo.object.start+1;
-        }, 
-        onChangeFn: function (val) {
-            wickEditor.actionHandler.doAction('modifyPlayRange', {
-                playRange: selectionInfo.object,
-                start: eval(val)-1
-            });
-        }
-    }));
-
-    properties.push(new InspectorInterface.StringInput({
-        title: 'End',
-        isActiveFn: function () {
-            return selectionInfo.type === 'playrange' && selectionInfo.numObjects === 1;
-        },
-        getValueFn: function () {
-            return selectionInfo.object.end+1;
-        }, 
-        onChangeFn: function (val) {
-            wickEditor.actionHandler.doAction('modifyPlayRange', {
-                playRange: selectionInfo.object,
-                end: eval(val)-1
-            });
-        }
-    }));
-
-    properties.push(new InspectorInterface.StringInput({
-        title: 'Name',
-        isActiveFn: function () {
             return selectionInfo.type === 'frame' && selectionInfo.numObjects === 1;
         },
         getValueFn: function () {
@@ -653,73 +568,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             wickEditor.guiActionHandler.doAction('editScripts');
         }
     }));
-
-    properties.push(new InspectorInterface.Divider());
-
-    /*properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Unite Paths",
-        icon: "./resources/inspector-unite.png",
-        colorClass: 'all-paths',
-        isActiveFn: function () {
-            return selectionInfo.numObjects > 1 
-                && selectionInfo.special.allPaths;
-        },
-        buttonAction: function () {
-            wickEditor.guiActionHandler.doAction('doBooleanOperation', {boolFnName:'unite'});
-        }
-    }));
-
-     properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Subtract Paths",
-        icon: "./resources/inspector-subtract.png",
-        colorClass: 'all-paths',
-        isActiveFn: function () {
-            return selectionInfo.numObjects > 1 
-                && selectionInfo.special.allPaths;
-        },
-        buttonAction: function () {
-            wickEditor.guiActionHandler.doAction('doBooleanOperation', {boolFnName:'subtract'});
-        }
-    }));
-
-    properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Intersect Paths",
-        icon: "./resources/inspector-unite.png",
-        colorClass: 'all-paths',
-        isActiveFn: function () {
-            return selectionInfo.numObjects > 1 
-                && selectionInfo.special.allPaths;
-        },
-        buttonAction: function () {
-            wickEditor.guiActionHandler.doAction('doBooleanOperation', {boolFnName:'intersect'});
-        }
-    }));*/
-
-    /*properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Divide Paths",
-        icon: "./resources/inspector-unite.png",
-        colorClass: 'all-paths',
-        isActiveFn: function () {
-            return selectionInfo.numObjects > 1 
-                && selectionInfo.special.allPaths;
-        },
-        buttonAction: function () {
-            wickEditor.guiActionHandler.doAction('doBooleanOperation', {boolFnName:'divide'});
-        }
-    }));
-
-    properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Exclude Paths",
-        icon: "./resources/inspector-unite.png",
-        colorClass: 'all-paths',
-        isActiveFn: function () {
-            return selectionInfo.numObjects > 1 
-                && selectionInfo.special.allPaths;
-        },
-        buttonAction: function () {
-            wickEditor.guiActionHandler.doAction('doBooleanOperation', {boolFnName:'exclude'});
-        }
-    }));*/
 
     properties.push(new InspectorInterface.Divider());
 

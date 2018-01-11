@@ -53,7 +53,6 @@ var ScriptingIDEReference = function (scriptingIDE, wickEditor) {
                     var cursorPos = scriptingIDE.aceEditor.getCursorPosition();
                     scriptingIDE.aceEditor.session.insert(cursorPos, formatSnippet(prop.snippet));
                     scriptingIDE.aceEditor.focus();
-                    //scriptingIDE.beautifyCode();
                 }
                 referenceGroup.appendChild(propertyButton);
             })

@@ -45,12 +45,6 @@ var CursorIconInterface = function (wickEditor) {
     }
 
     this.setImageForPaperEvent = function (event) {
-        /*if(event.item && event.item.wick && 
-           !wickEditor.project.isObjectSelected(event.item.wick)) {
-            self.setImage('resources/cursor-fill.png')
-            return;
-        }*/
-
         hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point);
 
         if(hitResult && hitResult.item && hitResult.item._cursor)
