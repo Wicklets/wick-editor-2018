@@ -107,11 +107,12 @@ Tools.FillBucket = function (wickEditor) {
             c.clockwise = false;
             holePath.clockwise = false;
 
-            if(holePath.area < c.area) {
+            if(holePath.area < c.area && Math.abs(c.area) > 1) {
                 holePath = holePath.subtract(c)
             }
         });
 
+        holePath.clockwise = false;
         PaperHoleFinder.expandHole(holePath);
         var pathWickObject = WickObject.createPathObject(holePath.exportSVG({asString:true}));
         pathWickObject.x = holePath.position.x;

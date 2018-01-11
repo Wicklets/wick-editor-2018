@@ -124,8 +124,8 @@ Tools.Paintbrush = function (wickEditor) {
                     tempPaperForPosition.applyMatrix = true;
                     tempPaperForPosition.scale(1/wickEditor.canvas.getZoom())
                     tempPaperForPosition.children.forEach(function (c) {
-                        c.smooth();
                         if(wickEditor.settings.brushSmoothingAmount > 0) {
+                            c.smooth();
                             var t = wickEditor.settings.strokeWidth;
                             var s = wickEditor.settings.brushSmoothingAmount/100*10;
                             var z = wickEditor.canvas.getZoom();
