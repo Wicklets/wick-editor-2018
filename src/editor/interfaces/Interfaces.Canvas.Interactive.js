@@ -100,6 +100,8 @@ var InteractiveCanvas = function (wickEditor) {
                         child.paper._isPartOfGroup = true;
                     });
                     wickObject.paper.pivot = new paper.Point(0,0);
+                } else if (wickObject.isSound) {
+                    console.error("oh no!");
                 }
 
                 if(!wickObject.paper){

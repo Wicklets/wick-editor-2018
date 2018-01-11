@@ -103,6 +103,20 @@ var FastCanvas = function (wickEditor) {
 
         function proceed () {
             var currObj = wickEditor.project.currentObject;
+            currObj.layers.forEach(function (wickLayer) {
+                wickLayer.frames.forEach(function (wickFrame) {
+                    if(wickFrame.audioAssetUUID) { 
+                        if(wickFrame.playheadPosition === currObj.playheadPosition) {
+                            wickFrame._updateAudio();
+                            wickFrame._playSound(); 
+                        } else if (wickFrame.playheadPosition+wickFrame.length-1 === currObj.playheadPosition) {
+                            wickFrame._updateAudio();
+                            wickFrame._stopSound(); 
+                        }
+                    }
+                });
+            });
+
             currObj.playheadPosition ++;
 
             if(currObj.playheadPosition >= currObj.getTotalTimelineLength()) {

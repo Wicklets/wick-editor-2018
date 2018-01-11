@@ -1043,37 +1043,13 @@ var WickActionHandler = function (wickEditor) {
 
     registerAction('addSoundToFrame', 
         function (args) {
-            if (!args.asset) return; 
-            var asset = args.asset;
-
-            currentLayer = wickEditor.project.getCurrentLayer();
-
-            if (!currentLayer.isSoundLayer) {
-                args.addLayerAction = wickEditor.actionHandler.doAction('addNewLayer', {isSoundLayer: true, dontAddToStack: true});
-                currentLayer = wickEditor.project.getCurrentLayer();
-                wickEditor.project.rootObject.generateParentObjectReferences();
-                args.addedNewLayer = true; 
-            }
-
-            currentFrame = currentLayer.getFrameAtPlayheadPosition(args.playheadPosition);
-
-            if (currentFrame === null) {
-                var newFrame = new WickFrame(); 
-                newFrame.playheadPosition = args.playheadPosition;
-                currentFrame = newFrame; 
-
-                args.addFrameAction = wickEditor.actionHandler.doAction('addFrame', {frame:newFrame, layer:currentLayer, dontAddToStack:true});
-                args.addedNewFrame = true; 
-            }
-
-            currentFrame.audioAssetUUID = asset.uuid; 
+            if(!args.frame.audioAssetUUID)
+                args.frame.audioAssetUUID = args.asset.uuid;
 
             done(args);
         },
         function (args) {
-            if (args.addFrameAction) args.addFrameAction.undoAction();
-            if (args.addLayerAction) args.addLayerAction.undoAction();
-
+            args.frame.audioAssetUUID = null;
             done(args);
         });
 

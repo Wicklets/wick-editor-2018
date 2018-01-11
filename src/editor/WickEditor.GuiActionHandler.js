@@ -1194,30 +1194,15 @@ var GuiActionHandler = function (wickEditor) {
                 wickObj.isImage = true;
                 wickObj.x = screenPos.x;
                 wickObj.y = screenPos.y;
-                wickEditor.actionHandler.doAction('addObjects', {
-                    wickObjects:[wickObj]
-                });
             } else if(asset.type === 'audio') {
                 wickObj.isSound = true; 
                 wickObj.volume = 1.0; 
                 wickObj.width = 100; 
                 wickObj.height = 100; 
             }
-        });
-
-    registerAction('createSoundFromAsset',
-        [],
-        [],
-        {},
-        function (args) {
-            var asset = args.asset;
-
-            if(asset.type === 'audio') {
-                wickEditor.actionHandler.doAction('addSoundToFrame', {
-                    frame: args.frame,
-                    asset: args.asset
-                });
-            }
+            wickEditor.actionHandler.doAction('addObjects', {
+                wickObjects:[wickObj]
+            });
         });
 
     registerAction('changePathProperties',

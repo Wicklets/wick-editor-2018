@@ -191,6 +191,7 @@ WickProject.Exporter = (function () {
         "_hitBox",
         "sourceUUID",
         "_renderAsBGObject",
+        "howl",
     ];
 
     projectExporter.JSONReplacer = function(key, value) {

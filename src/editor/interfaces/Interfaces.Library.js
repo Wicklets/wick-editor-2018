@@ -94,12 +94,25 @@ var LibraryInterface = function (wickEditor) {
             draggedNode = null;
             draggedAssetElem.style.display = 'none';
             if(e.target.nodeName === 'CANVAS') {
-                wickEditor.guiActionHandler.doAction("createObjectFromAsset", {
-                    asset: self.getSelectedAsset(),
-                    x: e.x,
-                    y: e.y
+                if(self.getSelectedAsset().type === 'audio') {
+                    wickEditor.actionHandler.doAction('addSoundToFrame', {
+                        frame: wickEditor.project.getCurrentFrame(),
+                        asset: self.getSelectedAsset()
+                    });
+                } else {
+                    wickEditor.guiActionHandler.doAction("createObjectFromAsset", {
+                        asset: self.getSelectedAsset(),
+                        x: e.x,
+                        y: e.y
+                    });
+                }
+            }
+            if(e.target.className === 'frame') {
+                wickEditor.actionHandler.doAction('addSoundToFrame', {
+                    frame: e.target.wickData.wickFrame,
+                    asset: self.getSelectedAsset()
                 });
-            } 
+            }
             isDraggingAsset = false; 
         });
         window.addEventListener('mousemove', function (e) {

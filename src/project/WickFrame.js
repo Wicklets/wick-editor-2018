@@ -444,20 +444,23 @@ WickFrame.prototype.applyTween = function () {
 }
 
 WickFrame.prototype._updateAudio = function () {
-    if (!this.audioAssetUUID) return; 
     // Lazily create sound objects
     if (!this.howl) {
-        this.howl = wickPlayer.audioPlayer.makeSound(this.audioAssetUUID); 
+        if(window.wickPlayer) {
+            this.howl = wickPlayer.audioPlayer.makeSound(this.audioAssetUUID); 
+        } else {
+            this.howl = new Howl({
+                src: [wickEditor.project.library.getAsset(this.audioAssetUUID).getData()]
+            });
+        }
     }
 }
 
 WickFrame.prototype._playSound = function () {
-    if (!this.howl) return; 
     var howlerID = this.howl.play(); 
 }
 
 WickFrame.prototype._stopSound = function () {
-    if (!this.howl) return; 
     this.howl.stop(); 
 }
 
