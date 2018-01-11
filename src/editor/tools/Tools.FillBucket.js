@@ -53,6 +53,7 @@ Tools.FillBucket = function (wickEditor) {
         paper.project._activeLayer.children.forEach(function (child) {
             // TODO: Only include paths whos bounding boxes include the cursor position.
             // TODO: Only include paths who are on the active layer.
+            if(child._isGUI) return;
             if(!child.closed) return;
             if(!superPath) superPath = child.clone({insert:false});
             superPath = superPath.unite(child);
