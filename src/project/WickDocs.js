@@ -1,5 +1,5 @@
 window.wickDocs = 
-    {
+    [{
       "name": "Timeline",
       "properties": [
         {
@@ -692,5 +692,6 @@ window.wickDocs =
           ]
         }
     ]}
-  ]
+  ];
+  
 

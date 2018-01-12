@@ -49,21 +49,35 @@ Tools.FillBucket = function (wickEditor) {
     }
 
     this.paperTool.onMouseDown = function (event) {
-        if(<event point touches fill>) {
-            changeFillColorOfItem(<args>)
-        } else if (<event point touches stroke) {
-            changeStrokeColorOfItem(<args>)
+        var hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point);
+
+        if(hitResult) {
+            if(hitResult.type === 'fill') {
+                changeFillColorOfItem(hitResult.item)
+            } else if (hitResult.type === 'stroke') {
+                changeStrokeColorOfItem(hitResult.item)
+            }
         } else {
             fillHole(event);
         }
     }
 
-    function changeFillColorOfItem (event) {
-        // TODO
+    function changeFillColorOfItem (item) {
+        wickEditor.project.selectObject(item.wick)
+        wickEditor.guiActionHandler.doAction("changePathProperties", {
+            fillColor: wickEditor.settings.fillColor
+        });
+        wickEditor.project.clearSelection();
+        wickEditor.syncInterfaces();
     }
 
-    function changeStrokeColorOfItem (event) {
-        // TODO
+    function changeStrokeColorOfItem (item) {
+        wickEditor.project.selectObject(item.wick)
+        wickEditor.guiActionHandler.doAction("changePathProperties", {
+            strokeColor: wickEditor.settings.strokeColor
+        });
+        wickEditor.project.clearSelection();
+        wickEditor.syncInterfaces();
     }
 
     function fillHole (event) {

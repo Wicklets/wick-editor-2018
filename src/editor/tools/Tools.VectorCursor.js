@@ -82,8 +82,7 @@ Tools.VectorCursor = function (wickEditor) {
                     event.modifiers.command ||
                     event.modifiers.control ||
                     event.modifiers.option ||
-                    event.modifiers.shift ||
-                    event.event.button === 2) {
+                    event.modifiers.shift) {
                     hitResult.segment.remove();
                     modifySelectedPath();
                 }
