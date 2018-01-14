@@ -1209,6 +1209,11 @@ WickObject.prototype.tick = function () {
         this._wasClicked = false;
     }
 
+    if(this._beingClicked) {
+        (wickPlayer || wickEditor).project.runScript(this, 'mouseDown');
+        this._wasClicked = false;
+    }
+
     if(this._wasClickedOff) {
         (wickPlayer || wickEditor).project.runScript(this, 'mouseReleased');
         this._wasClickedOff = false;

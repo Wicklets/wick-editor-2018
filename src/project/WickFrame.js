@@ -90,6 +90,10 @@ WickFrame.prototype.tick = function () {
         this._wasClicked = false;
     }
 
+    if(this._beingClicked) {
+        (wickPlayer || wickEditor).project.runScript(this, 'mouseDown');
+    }
+
     if(this._wasHoveredOver) {
         (wickPlayer || wickEditor).project.runScript(this, 'mouseHover');
         this._wasHoveredOver = false;

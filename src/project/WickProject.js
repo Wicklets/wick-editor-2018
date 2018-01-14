@@ -674,6 +674,7 @@ var WickObjectBuiltins = [
     'load',
     'update',
     'mousePressed',
+    'mouseDown',
     'mouseReleased',
     'mouseHover',
     'mouseEnter',
@@ -699,6 +700,7 @@ WickProject.prototype.loadScriptOfObject = function (obj) {
         var keyDown = undefined;
         var keyPressed = undefined;
         var keyReleased = undefined;
+        var mouseDown = undefined;
         obj._scopeWrapper = function () {
             var dummyLoaderScript = "";
             WickObjectBuiltins.forEach(function (builtinName) {

@@ -82,8 +82,16 @@ window.wickDocs =
         {
           "name": "mousePressed",
           "description": "Gets called once when the object is pressed",
-          "example": "// Delete this object when it's pressed.\nfunction mousedown() {\n    this.delete();\n}",
+          "example": "// Delete this object when it's pressed.\nfunction mousePressed() {\n    this.delete();\n}",
           "snippet": "function mousePressed() {\n    // Do something here!\n}\n",
+          "return": null,
+          "args": []
+        },
+        {
+          "name": "mouseDown",
+          "description": "Gets called every tick if the mouse is down and hovered over the object.",
+          "example": "\nfunction mouseDown() {\n    this.x = mouseX;\n    this.y = mouseY\n}",
+          "snippet": "function mouseDown() {\n    // Do something here!\n}\n",
           "return": null,
           "args": []
         },
