@@ -127,7 +127,7 @@ Tools.Paintbrush = function (wickEditor) {
                         if(wickEditor.settings.brushSmoothingAmount > 0) {
                             c.smooth();
                             var t = wickEditor.settings.strokeWidth;
-                            var s = wickEditor.settings.brushSmoothingAmount/100*10;
+                            var s = wickEditor.settings.brushSmoothingAmount/333*10;
                             var z = wickEditor.canvas.getZoom();
                             c.simplify(t / z * s);
                         }

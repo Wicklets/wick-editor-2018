@@ -499,7 +499,7 @@ var GuiActionHandler = function (wickEditor) {
                 if(fileType === 'text/wickobjectsjson') {
                     var objs = WickObject.fromJSONArray(JSON.parse(file));
                     objs.forEachBackwards(function (obj) {
-                        wickEditor.project.getAllActiveChildObjects().forEach(function (c) {
+                        wickEditor.project.currentObject.getAllActiveChildObjects().forEach(function (c) {
                             if(c.name === obj.name) obj.name = undefined;
                         });
                         obj.getAllChildObjectsRecursive().forEach(function (child) {
