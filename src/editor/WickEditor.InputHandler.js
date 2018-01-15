@@ -61,110 +61,106 @@ var InputHandler = function (wickEditor) {
      Keyboard
 *************************/
 
+    var modifierKeys = ['Shift','Control']
+
     /* Set up vars needed for input listening. */
     this.keys = [];
-    this.specialKeys = [];
-    var editingTextBox = false;
-
-    /* Define special keys */
-    var modifierKeys = ["WINDOWS","COMMAND","FIREFOXCOMMAND","CTRL","RIGHT CLICK"]; 
-    var shiftKeys = ["SHIFT"];
-
-    var activeElemIsTextBox = function () {
-        var activeElem = document.activeElement.nodeName;
-        editingTextBox = activeElem == 'TEXTAREA' || activeElem == 'INPUT';
-        return editingTextBox;
-    }
-
-    // Hack to prevent keys getting stuck
-    $(window).focus(function() {
-        that.keys = [];
-        that.specialKeys = [];
-    });
-    $(window).blur(function() {
-        that.keys = [];
-        that.specialKeys = [];
-    });
-
-    function isFabricEditingText () {
-        var activeObj = wickEditor.canvas.getFabricCanvas().canvas.getActiveObject();
-        if(!activeObj) {
-            return false;
-        } else {
-            return activeObj.isEditing;
-        }
-    }
 
     document.body.addEventListener("keydown", function (event) {
-        if(isFabricEditingText()) return;
         handleKeyEvent(event, "keydown");
     });
     document.body.addEventListener("keyup", function (event) {
-        if(isFabricEditingText()) return;
-        handleKeyEvent(event, "keyup");
+        // Why is this here
+        if(event.keyCode == 32 && !activeElemIsTextBox()) {
+            wickEditor.useLastUsedTool();
+            wickEditor.canvas.updateCursor();
+            wickEditor.syncInterfaces();
+        }
     });
 
-    var handleKeyEvent = function (event, eventType) {
+    var handleKeyEvent = function (event) {
 
-        var keyChar = codeToKeyChar[event.keyCode];
+        if(event.key === 'Tab' && document.activeElement.nodeName !== "INPUT") event.preventDefault()
+
+        for(actionName in wickEditor.guiActionHandler.guiActions) {
+            var hotkeysMatch = true;
+            var action = wickEditor.guiActionHandler.guiActions[actionName];
+
+            if(action.hotkeys.length < 1 || action.hotkeys[0] !== event.code) hotkeysMatch=false;
+
+            if(action.modifierKey) {
+                if(!event.metaKey && !event.ctrlKey) hotkeysMatch=false;
+            } else {
+                if(event.metaKey || event.ctrlKey) hotkeysMatch=false;
+            }
+
+            if(action.shiftKey) {
+                if(!event.shiftKey) hotkeysMatch=false;
+            } else {
+                if(event.shiftKey) hotkeysMatch=false;
+            }
+
+            if(hotkeysMatch) {
+                var specialParamsMatch = true;
+
+                if(activeElemIsTextBox() && !action.requiredParams.usableInTextBoxes) specialParamsMatch=false;
+                if(document.activeElement.id === 'canvasTextEdit') specialParamsMatch=false;
+                if(action.requiredParams.disabledInScriptingIDE && (document.activeElement.className === 'ace_text-input')) specialParamsMatch=false;
+
+                if(specialParamsMatch) {
+                    wickEditor.rightclickmenu.open = false;
+
+                    event.preventDefault();
+                    action.doAction({});
+                }
+            }
+        }
+
+        /*var keyChar = codeToKeyChar[event.keyCode];
         if(keyChar === 'TAB' && document.activeElement.nodeName !== "INPUT") event.preventDefault()
         var keyDownEvent = eventType === 'keydown';
-        if (modifierKeys.indexOf(keyChar) !== -1) {
-            that.specialKeys["Modifier"] = keyDownEvent;
-            that.keys = [];
-        } else if (shiftKeys.indexOf(keyChar) !== -1) {
-            that.specialKeys["SHIFT"] = keyDownEvent;
-            that.keys = [];
-        } else {
-            that.keys[event.keyCode] = keyDownEvent;
-        }
+        that.keys[event.keyCode] = keyDownEvent;
 
         // get this outta here
         if(event.keyCode == 32 && eventType === 'keyup' && !activeElemIsTextBox()) {
             wickEditor.useLastUsedTool();
+            wickEditor.canvas.updateCursor();
             wickEditor.syncInterfaces();
         }
+
+        var stringkeys = [];
+        for (var numkey in that.keys) {
+            if (that.keys.hasOwnProperty(numkey) && that.keys[numkey]) {
+                stringkeys.push(codeToKeyChar[numkey]);
+            }
+        }
+        console.log(stringkeys)
 
         for(actionName in wickEditor.guiActionHandler.guiActions) { (function () {
             var guiAction = wickEditor.guiActionHandler.guiActions[actionName];
 
             if (wickEditor.builtinplayer.running && !guiAction.requiredParams.builtinplayerRunning) return;
 
-            var stringkeys = [];
-            for (var numkey in that.keys) {
-                if (that.keys.hasOwnProperty(numkey) && that.keys[numkey]) {
-                    stringkeys.push(codeToKeyChar[numkey]);
-                }
-            }
-            var stringspecialkeys = [];
-            for (var numkey in that.specialKeys) {
-                if (that.specialKeys.hasOwnProperty(numkey) && that.specialKeys[numkey]) {
-                    stringspecialkeys.push(numkey);
-                }
-            }
-
             var cmpArrays = function (a,b) {
                 return a.sort().join(',') === b.sort().join(',');
             }
 
-            var hotkeysMatch = cmpArrays(guiAction.hotkeys, stringkeys)
-            var specialKeysMatch = cmpArrays(guiAction.specialKeys, stringspecialkeys);
+            var hotkeysMatch = cmpArrays(guiAction.hotkeys, stringkeys);
+            var modifierKeysMatch = false;
 
-            if(!hotkeysMatch || !specialKeysMatch) return;
+
+            if(!hotkeysMatch || !modifierKeysMatch) return;
             if(guiAction.hotkeys.length === 0) return;
             if(activeElemIsTextBox() && !guiAction.requiredParams.usableInTextBoxes) return;
+            if(document.activeElement.id === 'canvasTextEdit') return;
             if(guiAction.requiredParams.disabledInScriptingIDE && (document.activeElement.className === 'ace_text-input')) return;
 
             wickEditor.rightclickmenu.open = false;
             event.preventDefault();
             guiAction.doAction({});
             that.keys = [];
-        })()};
+        })()};*/
     };
-
-    this.shiftDown = function () {
-        return wickEditor.inputHandler.specialKeys["SHIFT"];
-    }
 
     // In order to ensure that the browser will fire clipboard events, we always need to have something selected
     var focusHiddenArea = function () {
@@ -172,6 +168,12 @@ var InputHandler = function (wickEditor) {
             $("#hidden-input").val(' ');
             $("#hidden-input").focus().select();
         }
+    }
+
+    var activeElemIsTextBox = function () {
+        var activeElem = document.activeElement.nodeName;
+        editingTextBox = activeElem == 'TEXTAREA' || activeElem == 'INPUT';
+        return editingTextBox;
     }
 
 /*************************
@@ -289,14 +291,13 @@ var InputHandler = function (wickEditor) {
 
     var activeElemIsTextBox = function () {
         var activeElem = document.activeElement.nodeName;
-        editingTextBox = activeElem == 'TEXTAREA' || activeElem == 'INPUT';
+        var editingTextBox = activeElem == 'TEXTAREA' || activeElem == 'INPUT';
         return editingTextBox;
     };
 
     // Set clipboard event listeners on the document. 
     ['cut', 'copy', 'paste'].forEach(function(event) {
-        document.addEventListener(event, function(e) {
-            //console.log(event);
+        window.addEventListener(event, function(e) {
             if (isIe) {
                 ieClipboardEvent(event);
             } else {
@@ -304,7 +305,7 @@ var InputHandler = function (wickEditor) {
                 standardClipboardEvent(event, e);
                 focusHiddenArea();
                 e.preventDefault();
-                $('#fabricCanvas').focus().select();
+                $('#editorCanvasContainer').focus().select();
                 //console.log(document.activeElement.nodeName)
             }
         });
@@ -364,7 +365,7 @@ var InputHandler = function (wickEditor) {
             wickPath.y = paperPath.position.y;
             wickPath.width = paperPath.bounds._width;
             wickPath.height = paperPath.bounds._height;
-            wickEditor.canvas.getPaperCanvas().pathRoutines.refreshPathData(wickPath);
+            //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(wickPath);
             allPaths.push(wickPath);
         }
 
@@ -433,8 +434,7 @@ var InputHandler = function (wickEditor) {
         wickObj.assetUUID = wickEditor.project.library.addAsset(asset);
         wickObj.isImage = true;
         wickObj.name = filename;
-        
-        callback(wickObj);
+        callback(wickObj)
     }
 
     var loadAudio = function (src, filename, callback) {
@@ -468,7 +468,11 @@ var InputHandler = function (wickEditor) {
         if(tempJsonObj.rootObject) {
             var project = WickProject.fromJSON(json);
             var filenameParts = filename.split('-');
-            project.name = filenameParts[0] || 'New Project';
+            var name = filenameParts[0];
+            if(name.includes('.json')) {
+                name = name.split('.json')[0];
+            }
+            project.name = name || 'New Project';
             wickEditor.guiActionHandler.doAction('openProject', {project:project})
         } else {
             callback(WickObject.fromJSON(json));
@@ -547,9 +551,9 @@ var InputHandler = function (wickEditor) {
             fromContstructors[fileType](fr.result, file.name, function (newWickObject) {
                 var m
                 if(e && e.originalEvent && e.originalEvent.clientX) {
-                    m = wickEditor.canvas.getFabricCanvas().screenToCanvasSpace(e.originalEvent.clientX, e.originalEvent.clientY);
+                    m = wickEditor.canvas.screenToCanvasSpace(e.originalEvent.clientX, e.originalEvent.clientY);
                 } else {
-                    m = wickEditor.canvas.getFabricCanvas().screenToCanvasSpace(window.innerWidth/2, window.innerHeight/2);
+                    m = wickEditor.canvas.screenToCanvasSpace(window.innerWidth/2, window.innerHeight/2);
                 }
                 newWickObject.x = m.x;
                 newWickObject.y = m.y;
@@ -566,13 +570,21 @@ var InputHandler = function (wickEditor) {
      Drag-to-upload
 *************************/
     
+    var dropMessageDiv = document.getElementById('dropFileMessage');
+    dropMessageDiv.addEventListener('mousemove', function (e) {
+        dropMessageDiv.style.display = 'none';
+    })
     $("#editor").on('dragover', function(e) {
+        dropMessageDiv.style.display = 'block';
         return false;
     });
     $("#editor").on('dragleave', function(e) {
+        //dropMessageDiv.style.display = 'none';
         return false;
     });
     $("#editor").on('drop', function(e) {
+
+        dropMessageDiv.style.display = 'none';
 
         // prevent browser from opening the file
         e.stopPropagation();

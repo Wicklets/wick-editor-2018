@@ -147,3 +147,7 @@ WickLayer.prototype.getLastFrame = function (playheadPosition) {
 
     return lastFrame;
 }
+
+WickLayer.prototype.containsWickObject = function (o) {
+    
+}

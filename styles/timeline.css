@@ -24,7 +24,7 @@ body {
     --layer-height: 30px;
 
 
-    --frame-width: 69px;
+    --frame-width: 20px;
     --frame-handle-width: 8px;
 
     --frame-padding-width: 4px;
@@ -235,8 +235,6 @@ body {
 
     position: absolute;
 
-    cursor: move;
-
     box-shadow: var(--border);
 
     font-size: 12px;
@@ -244,25 +242,42 @@ body {
     font-style: Bold; 
 }
 
+.soundLayer {
+    background-color: #47ad8a;
+}
+
 .layer-name {
     cursor: text;
     width: 100px;
     height: 25px;
-    margin-left: 50px;
+    margin-left: 60px;
     text-align: left;
 }
 
 .layer-rename-textfield {
     display: none;
-    width: 100px;
+    width: 60px;
     height: 15px;
     z-index: 999;
     position: absolute;
     top: 5px;
-    left: 50px;
+    left: 60px;
     font-size: 12px;
     font-family: "Anonymous Pro";
     font-style: Bold; 
+}
+
+.layer-gnurl {
+    width: 15px;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    position: absolute;
+    cursor: move;
+    background-image: url('../resources/layer-handle.svg');
+    background-size: 15px 100%;
+    background-repeat: no-repeat;
+    background-position: left;
 }
 
 .active-layer {
@@ -274,13 +289,17 @@ body {
 
 }
 
+.active-soundLayer {
+    background-color: #60e5b6;
+}
+
 .layer-lock-button {
     border-radius: 7px;
     width: 15px;
     height: 15px;
     position: absolute;
     top: 5px;
-    left: 3px;
+    left: 19px;
     background-color: transparent;
     background-image: url('../resources/lock-layer.svg');
     background-size: 13px 13px;
@@ -307,7 +326,7 @@ body {
     height: 15px;
     position: absolute;
     top: 5px;
-    left: 20px;
+    left: 36px;
     background-color: transparent;
     background-image: url('../resources/hide-layer.svg');
     background-size: 13px 13px;

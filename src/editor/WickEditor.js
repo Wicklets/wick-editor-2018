@@ -22,7 +22,7 @@ var WickEditor = function () {
     var self = this;
 
     // http://semver.org/
-    self.version = "0.11";
+    self.version = "0.12";
     document.getElementById('wick-editor-version').innerHTML = 'Wick Editor ' + self.version;
     console.log("Wick Editor version " + self.version)
     if(localStorage.wickVersion !== self.version) {
@@ -41,8 +41,8 @@ var WickEditor = function () {
     console.log('%cYou are free to change any of the internal editor stuff from here.', 'color: #7744bb; font-size: 12px;');
     console.log('%cTry typing "wickEditor" into the console to see some stuff!.', 'color: #22bb99; font-size: 12px;');
 
-    // Setup connection to backend
-    this.backend = new WickDemoLoader(this);
+    // Setup demo loader for website
+    this.demoLoader = new WickDemoLoader(this);
 
     // Setup init project
     this.project = new WickProject();
@@ -56,9 +56,6 @@ var WickEditor = function () {
         self.interfaces.push(interface);
         return interface;
     }
-
-    //this.thumbnailRenderer = registerInterface(new ThumbnailRendererInterface(this));
-    //this.gifRenderer = registerInterface(new GIFRendererInterface(this));
     this.builtinplayer = registerInterface(new BuiltinPlayerInterface(this));
     this.scriptingide = registerInterface(new ScriptingIDEInterface(this));
     this.timeline = registerInterface(new TimelineInterface(this));
@@ -67,38 +64,36 @@ var WickEditor = function () {
     this.inspector = registerInterface(new InspectorInterface(this));
     this.rightclickmenu = registerInterface(new RightClickMenuInterface(this));
     this.canvas = registerInterface(new CanvasInterface(this));
-    //this.paper = registerInterface(new PaperInterface(this));
-    //this.fabric = registerInterface(new FabricInterface(this));
     this.menubar = registerInterface(new MenuBarInterface(this));
     this.breadcrumbs = registerInterface(new BreadcrumbsInterface(this));
     this.alertbox = registerInterface(new AlertBoxInterface(this));
-    //this.previewplayer = registerInterface(new PreviewPlayer(this));
     this.cursorIcon = registerInterface(new CursorIconInterface(this));
     this.colorPicker = registerInterface(new ColorPickerInterface(this));
     this.editorSettings = registerInterface(new EditorSettings(this));
+    this.textEditBox = registerInterface(new TextEditBox(this));
 
     // Setup editor logic handlers
     this.actionHandler = new WickActionHandler(this);
     this.guiActionHandler = new GuiActionHandler(this);
 
     // Load all tools
-    this.tools = {
-        "cursor"           : new Tools.Cursor(this),
-        "pathCursor"       : new Tools.PathCursor(this),
-        "paintbrush"       : new Tools.Paintbrush(this),
-        "pencil"           : new Tools.Pencil(this),
-        //"eraser"           : new Tools.Eraser(this),
-        "fillbucket"       : new Tools.FillBucket(this),
-        "rectangle"        : new Tools.Rectangle(this),
-        "ellipse"          : new Tools.Ellipse(this),
-        "line"             : new Tools.Line(this),
-        "pen"              : new Tools.Pen(this),
-        "dropper"          : new Tools.Dropper(this),
-        "text"             : new Tools.Text(this),
-        "zoom"             : new Tools.Zoom(this),
-        "pan"              : new Tools.Pan(this),
-    }
-    this.currentTool = this.tools.cursor;
+    this.tools = {};
+    this.tools.selectioncursor = new Tools.SelectionCursor(this);
+    this.tools.vectorcursor = new Tools.VectorCursor(this);
+    this.tools.paintbrush = new Tools.Paintbrush(this);
+    this.tools.pencil = new Tools.Pencil(this);
+    this.tools.eraser = new Tools.Eraser(this);
+    this.tools.fillbucket = new Tools.FillBucket(this);
+    this.tools.rectangle = new Tools.Rectangle(this);
+    this.tools.ellipse = new Tools.Ellipse(this);
+    this.tools.line = new Tools.Line(this);
+    this.tools.pen = new Tools.Pen(this);
+    this.tools.dropper = new Tools.Dropper(this);
+    this.tools.text = new Tools.Text(this);
+    this.tools.zoom = new Tools.Zoom(this);
+    this.tools.pan = new Tools.Pan(this);
+    
+    this.currentTool = this.tools.selectioncursor;
     this.lastTool = this.currentTool;
 
     // Setup all tools + interfaces
@@ -117,7 +112,7 @@ var WickEditor = function () {
     // This is put after the first sync so the page loads before the editor asks to load an autosaved project
     // (and we gotta wait a little bit before loading it ... we want to make sure the editor is ready)
     setTimeout(function () {
-        if(!self.backend.active) {
+        if(!self.demoLoader.active) {
             WickProject.Exporter.getAutosavedProject(function (project) {
                 wickEditor.guiActionHandler.doAction('openProject', {
                     project: project,

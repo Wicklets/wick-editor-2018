@@ -42,11 +42,7 @@ var WickProject = function () {
 
     this.framerate = 12;
 
-    this.fitScreen = false;
-
     this.uuid = random.uuid4();
-
-    //this.assets = {};
 
     this._selection = [];
 
@@ -60,7 +56,6 @@ WickProject.prototype.createNewRootObject = function () {
     rootObject.isRoot = true;
     rootObject.playheadPosition = 0;
     rootObject.currentLayer = 0;
-    rootObject.playRanges = [];
     var firstLayer = new WickLayer();
     firstLayer.identifier = "Layer 1";
     rootObject.layers = [firstLayer];
@@ -70,10 +65,6 @@ WickProject.prototype.createNewRootObject = function () {
     this.rootObject = rootObject;
     this.rootObject.generateParentObjectReferences();
 }
-
-/*****************************
-    Import/Export
-*****************************/
 
 WickProject.fromFile = function (file, callback) {
 
@@ -156,6 +147,7 @@ WickProject.fixForBackwardsCompatibility = function (project) {
     var allObjectsInProject = project.rootObject.getAllChildObjectsRecursive();
     allObjectsInProject.push(project.rootObject);
     allObjectsInProject.forEach(function (wickObj) {
+        // Tweens belong to frames now
         if(wickObj.tweens) wickObj.tweens = null;
 
         if(!wickObj.isSymbol) return
@@ -164,6 +156,7 @@ WickProject.fixForBackwardsCompatibility = function (project) {
             if(!layer.hidden) layer.hidden = false;
             layer.frames.forEach(function (frame) {
                 if(!frame.tweens) frame.tweens = [];
+                // Make sure tweens have rotations now
                 frame.tweens.forEach(function (tween) {
                     if(!tween.rotations) tween.rotations = 0;
                 });
@@ -171,14 +164,12 @@ WickProject.fixForBackwardsCompatibility = function (project) {
         });
     });
 
+    // Selection is handled in the project now
     if(!project._selection){
         project._selection = [];
     }
 
-    if(!project.smallFramesMode) {
-        project.smallFramesMode = false;
-    }
-
+    // Data for sounds and images is stored in the asset library now
     if(!project.library) {
         project.library = new AssetLibrary();
 
@@ -235,18 +226,12 @@ WickProject.prototype.getCopyData = function () {
         objectJSONs.push(objects[i].getAsJSON());
     }
     var clipboardObject = {
-        /*position: {top  : group.top  + group.height/2,
-                   left : group.left + group.width/2},*/
         groupPosition: {x : 0,
                         y : 0},
         wickObjectArray: objectJSONs
     }
     return JSON.stringify(clipboardObject);
 }
-
-/*********************************
-    Access project wickobjects
-*********************************/
 
 WickProject.prototype.getCurrentObject = function () {
     return this.currentObject;
@@ -470,7 +455,7 @@ WickProject.prototype.handleWickError = function (e, objectCausedError) {
         
         wickEditor.builtinplayer.stopRunningProject()
 
-        wickEditor.scriptingide.showError(objectCausedError, {
+        wickEditor.scriptingide.displayError(objectCausedError, {
             message: e,
             line: lineNumber,
             type: 'runtime'
@@ -589,7 +574,20 @@ WickProject.prototype.selectObjectByUUID = function (uuid) {
 }
 
 WickProject.prototype.clearSelection = function () {
+    var thingsWereCleared = false;
+    if(this._selection.length > 0)  thingsWereCleared = true;
     this._selection = [];
+    return thingsWereCleared;
+}
+
+WickProject.prototype.deselectObject = function (obj) {
+    wickEditor.inspector.clearSpecialMode();
+    for ( var i = 0; i < this._selection.length; i++ ) {
+        var uuid = this._selection[i];
+        if(obj.uuid === uuid) {
+            this._selection[i] = null;
+        }
+    }
 }
 
 WickProject.prototype.deselectObjectType = function (type) {
@@ -610,12 +608,6 @@ WickProject.prototype.deselectObjectType = function (type) {
     });
 
     return deselectionHappened;
-}
-
-WickProject.prototype.getIntersectingPaths = function (path) {
-
-    return [];
-
 }
 
 WickProject.prototype.loadBuiltinFunctions = function (contextObject) {
@@ -682,6 +674,7 @@ var WickObjectBuiltins = [
     'load',
     'update',
     'mousePressed',
+    'mouseDown',
     'mouseReleased',
     'mouseHover',
     'mouseEnter',
@@ -707,6 +700,7 @@ WickProject.prototype.loadScriptOfObject = function (obj) {
         var keyDown = undefined;
         var keyPressed = undefined;
         var keyReleased = undefined;
+        var mouseDown = undefined;
         obj._scopeWrapper = function () {
             var dummyLoaderScript = "";
             WickObjectBuiltins.forEach(function (builtinName) {
@@ -748,7 +742,7 @@ WickProject.prototype.loadScriptOfObject = function (obj) {
             //console.log(e.stack.split("\n"))
             //if(wickEditor.builtinplayer.running) wickEditor.builtinplayer.stopRunningProject()
             wickEditor.builtinplayer.stopRunningProject()
-            wickEditor.scriptingide.showError(obj, {
+            wickEditor.scriptingide.displayError(obj, {
                 message: e,
                 line: lineNumber,
                 type: 'runtime'
@@ -769,42 +763,6 @@ WickProject.prototype.regenAssetReferences = function () {
         obj.asset = self.library.getAsset(obj.assetUUID);
     });
 
-}
-
-WickProject.prototype.getDuplicateName = function () {
-    var foundDuplicate = null;
-
-    this.getAllObjects().forEach(function (object) {
-        object.getAllFrames().forEach(function (frame) {
-            var names = [];
-            frame.wickObjects.forEach(function (obj) {
-                names.push(obj.name);
-            });
-
-            names = names.filter(function (n) {
-                return n !== undefined && n !== '';
-            });
-
-            //http://stackoverflow.com/questions/840781/easiest-way-to-find-duplicate-values-in-a-javascript-array
-            var uniq = names
-            .map(function (name) {
-              return {count: 1, name: name}
-            })
-            .reduce(function (a, b) {
-              a[b.name] = (a[b.name] || 0) + b.count
-              return a
-            }, {})
-
-            //var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1)
-            var duplicates = Object.keys(uniq).filter(function (a) {
-                return uniq[a] > 1;
-            });
-
-            if(duplicates.length > 0) foundDuplicate = duplicates[0];
-        });
-    });
-
-    return foundDuplicate;
 }
 
 WickProject.prototype.prepareForPlayer = function () {

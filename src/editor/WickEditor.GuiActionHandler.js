@@ -57,13 +57,18 @@ var GuiActionHandler = function (wickEditor) {
         /* Array of key strings which trigger the action function. */
         this.hotkeys = hotkeys;
         this.specialKeys = [];
-        if(this.hotkeys.indexOf("Modifier") !== -1) {
-            this.specialKeys.push("Modifier");
-            this.hotkeys.splice(this.hotkeys.indexOf("Modifier"), 1);
+        if(this.hotkeys.indexOf("MODIFIER") !== -1) {
+            this.modifierKey = true;
+            this.hotkeys.splice(this.hotkeys.indexOf("MODIFIER"), 1);
+        } else {
+            this.modifierKey = false;
         }
+
         if(this.hotkeys.indexOf("SHIFT") !== -1) {
-            this.specialKeys.push("SHIFT");
+            this.shiftKey = true;
             this.hotkeys.splice(this.hotkeys.indexOf("SHIFT"), 1);
+        } else {
+            this.shiftKey = false;
         }
     }
 
@@ -71,32 +76,22 @@ var GuiActionHandler = function (wickEditor) {
     GuiAction Definitions
 *****************************/
 
-    registerAction('openTools.Pan',
-        ['SPACE'],
-        'Pan',
-        {},
-        function(args) {
-            if(!(wickEditor.currentTool instanceof Tools.Pan)) {
-                wickEditor.lastTool = wickEditor.currentTool;
-                wickEditor.currentTool = wickEditor.tools.pan;
-                wickEditor.syncInterfaces();
-            }
-        });
-
     registerAction('previewToggle',
-        ['ENTER'],
+        ['Enter'],
         'Play/Pause Preview',
         {},
         function(args) {
-            wickEditor.canvas.getPixiCanvas().togglePreviewPlaying();
+            wickEditor.canvas.getFastCanvas().togglePreviewPlaying();
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
         });
 
     registerAction('previewToggleAndLoop',
-        ['SHIFT','ENTER'],
+        ['SHIFT','Enter'],
         'Loop Preview',
         {},
         function(args) {
             wickEditor.guiActionHandler.doAction('previewPlay', {loop:true});
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
         });
 
     registerAction('previewPlay',
@@ -104,7 +99,7 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function(args) {
-            wickEditor.canvas.getPixiCanvas().startPreviewPlaying(args.loop);
+            wickEditor.canvas.getFastCanvas().startPreviewPlaying(args.loop);
         });
 
     registerAction('previewPause',
@@ -112,20 +107,22 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function(args) {
-            wickEditor.canvas.getPixiCanvas().stopPreviewPlaying();
+            wickEditor.canvas.getFastCanvas().stopPreviewPlaying();
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
         });
 
     registerAction('stopRunningProject',
-        ['ESC'],
+        ['Escape'],
         'Stop Running Project',
         {builtinplayerRunning:true},
         function(args) {
             if(!wickEditor.builtinplayer.running) return;
             wickEditor.builtinplayer.stopRunningProject();
+            $('#editorCanvasContainer').focus().select();
         });
 
     registerAction('redo',
-        ['Modifier','SHIFT','Z'],
+        ['MODIFIER','SHIFT','KeyZ'],
         'Redo',
         {},
         function(args) {
@@ -133,7 +130,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('undo',
-        ['Modifier','Z'],
+        ['MODIFIER','KeyZ'],
         'Undo',
         {},
         function(args) {
@@ -141,7 +138,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('runProject',
-        ['Modifier','ENTER'],
+        ['MODIFIER','Enter'],
         'Run Project',
         {usableInTextBoxes:true},
         function(args) {
@@ -164,7 +161,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('openProjectAsNewWindow',
-        ['Modifier','SHIFT','ENTER'],
+        ['MODIFIER','SHIFT','Enter'],
         'Run Project in New Window',
         {usableInTextBoxes:true},
         function(args) {
@@ -174,14 +171,12 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('recenterCanvas',
-        ['Modifier','0'],
+        ['MODIFIER','Digit0'],
         'Recenter Canvas',
         {},
         function(args) {
-            wickEditor.canvas.getFabricCanvas().recenterCanvas();
-            wickEditor.canvas.getPaperCanvas().updateViewTransforms();
-            wickEditor.canvas.getPixiCanvas().updateViewTransforms();
-            wickEditor.canvas.getBackdrop().updateViewTransforms();
+            wickEditor.canvas.recenterCanvas();
+            wickEditor.syncInterfaces();
         });
 
     registerAction('exportProjectZIP',
@@ -196,7 +191,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('saveProject',
-        ['Modifier','SHIFT','S'],
+        ['MODIFIER','SHIFT','KeyS'],
         'Force autosave',
         {usableInTextBoxes:true},
         function(args) {
@@ -207,7 +202,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('exportProjectHTML',
-        ['Modifier','S'],
+        ['MODIFIER','KeyS'],
         ['Save Project'],
         {usableInTextBoxes:true},
         function(args) {
@@ -231,7 +226,7 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function (args) {
-            GIFRenderer.renderProjectAsGIF(function (blob) {
+            wickEditor.canvas.getCanvasRenderer().renderProjectAsGIF(function (blob) {
                 saveAs(blob, wickEditor.project.name+".gif");
             });
         });
@@ -241,8 +236,8 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function (args) {
-            wickEditor.guiActionHandler.doAction('useTools.pathCursor')
-            wickEditor.canvas.getPaperCanvas().pathRoutines.getProjectAsSVG()
+            wickEditor.guiActionHandler.doAction('useTools.cursor')
+            wickEditor.canvas.getInteractiveCanvas().pathRoutines.getProjectAsSVG()
         });
 
     registerAction('exportProjectPNG',
@@ -250,7 +245,7 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function (args) {
-            GIFRenderer.renderProjectAsPNG(function (blob) {
+            wickEditor.canvas.getCanvasRenderer().renderProjectAsPNG(function (blob) {
                 saveAs(blob, wickEditor.project.name+".png");
             });
         });
@@ -264,7 +259,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('openFile',
-        ['Modifier','O'],
+        ['MODIFIER','KeyO'],
         'Open',
         {},
         function(args) {
@@ -282,12 +277,12 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('selectAll',
-        ['Modifier','A'],
+        ['MODIFIER','KeyA'],
         'Select All',
         {},
         function(args) {
-            if(!(wickEditor.currentTool instanceof Tools.PathCursor))
-                wickEditor.currentTool = wickEditor.tools.cursor;
+            if(!(wickEditor.currentTool instanceof Tools.SelectionCursor))
+                wickEditor.currentTool = wickEditor.tools.selectioncursor;
 
             wickEditor.project.clearSelection();
             wickEditor.project.currentObject.getAllActiveChildObjects().forEach(function (obj) {
@@ -324,7 +319,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('deselectAll',
-        ['Modifier','SHIFT','A'],
+        ['MODIFIER','SHIFT','KeyA'],
         'Deselect All',
         {},
         function(args) {
@@ -333,7 +328,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('moveSelectionUp',
-        ['UP'],
+        ['ArrowUp'],
         'Move selection up 1px',
         {},
         function(args) {
@@ -343,7 +338,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('moveSelectionDown',
-        ['DOWN'],
+        ['ArrowDown'],
         'Move selection down 1px',
         {},
         function(args) {
@@ -353,7 +348,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('moveSelectionLeft',
-        ['LEFT'],
+        ['ArrowLeft'],
         'Move selection left 1px',
         {},
         function(args) {
@@ -363,7 +358,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('moveSelectionRight',
-        ['RIGHT'],
+        ['ArrowRight'],
         'Move selection right 1px',
         {},
         function(args) {
@@ -373,7 +368,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('moveSelectionUp10x',
-        ['SHIFT', 'UP'],
+        ['SHIFT', 'ArrowUp'],
         'Move selection up 10px',
         {},
         function(args) {
@@ -383,7 +378,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('moveSelectionDown10x',
-        ['SHIFT', 'DOWN'],
+        ['SHIFT', 'ArrowDown'],
         'Move selection down 10px',
         {},
         function(args) {
@@ -393,7 +388,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('moveSelectionLeft10x',
-        ['SHIFT', 'LEFT'],
+        ['SHIFT', 'ArrowLeft'],
         'Move selection left 10px',
         {},
         function(args) {
@@ -403,7 +398,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('moveSelectionRight10x',
-        ['SHIFT', 'RIGHT'],
+        ['SHIFT', 'ArrowRight'],
         'Move selection right 10px',
         {},
         function(args) {
@@ -413,7 +408,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('movePlayheadLeft',
-        [','],
+        ['Comma'],
         'Previous frame',
         {},
         function(args) {
@@ -424,7 +419,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('movePlayheadRight',
-        ['.'],
+        ['Period'],
         'Next frame',
         {},
         function(args) {
@@ -434,37 +429,27 @@ var GuiActionHandler = function (wickEditor) {
             })
         });
 
-    // BACKSPACE
-    // Delete Selected Objects
     registerAction('deleteSelectedObjects',
-        ['BACKSPACE'],
+        ['Backspace'],
         null,
         {},
         function(args) {
-            if(wickEditor.project.isTypeSelected(WickTween)) {
-                wickEditor.actionHandler.doAction('deleteObjects', {
-                    objects: [wickEditor.project.getSelectedObjectByType(WickTween)]
-                });
-            } else {
-                wickEditor.actionHandler.doAction('deleteObjects', {
-                    objects: wickEditor.project.getSelectedObjects()
-                });
-            }
+            wickEditor.actionHandler.doAction('deleteObjects', {
+                objects: wickEditor.project.getSelectedObjects()
+            });
         });
 
-    // Delete
-    // Delete Selected Objects
     registerAction('deleteSelectedObjects2',
-        ['DELETE'],
+        ['Delete'],
         'Delete Selection',
         {},
         function(args) {
             wickEditor.guiActionHandler.doAction('deleteSelectedObjects');
         });
 
-    var copyKeys  = isChrome ? [] : ['Modifier',"C"];
-    var cutKeys   = isChrome ? [] : ['Modifier',"X"];
-    var pasteKeys = isChrome ? [] : ['Modifier',"V"];
+    var copyKeys  = isChrome ? [] : ['MODIFIER',"KeyC"];
+    var cutKeys   = isChrome ? [] : ['MODIFIER',"KeyX"];
+    var pasteKeys = isChrome ? [] : ['MODIFIER',"KeyV"];
 
     registerAction('copy',
         copyKeys,
@@ -482,8 +467,6 @@ var GuiActionHandler = function (wickEditor) {
                 copyType = 'text/wickframesjson';
             }
             polyfillClipboardData.setData(copyType, copyData);
-
-            //wickEditor.syncInterfaces();
         });
 
     registerAction('cut',
@@ -494,7 +477,7 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.guiActionHandler.doAction('copy');
             wickEditor.guiActionHandler.doAction('deleteSelectedObjects');
         });
-
+    
     registerAction('paste',
         pasteKeys,
         'Paste',
@@ -503,7 +486,7 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.rightclickmenu.open = false;
             that.keys = [];
 
-            var clipboardData = window.polyfillClipboardData//(window.polyfillClipboardData || args.clipboardData);
+            var clipboardData = window.polyfillClipboardData;
             if(args.clipboardData) clipboardData = args.clipboardData;
             if(!clipboardData) return;
             var items = clipboardData.items || clipboardData.types;
@@ -515,9 +498,10 @@ var GuiActionHandler = function (wickEditor) {
                 
                 if(fileType === 'text/wickobjectsjson') {
                     var objs = WickObject.fromJSONArray(JSON.parse(file));
-                    // Make sure to reset uuids!
                     objs.forEachBackwards(function (obj) {
-                        if(obj.name) obj.name = undefined;
+                        wickEditor.project.currentObject.getAllActiveChildObjects().forEach(function (c) {
+                            if(c.name === obj.name) obj.name = undefined;
+                        });
                         obj.getAllChildObjectsRecursive().forEach(function (child) {
                             child.uuid = random.uuid4();
                             (child.layers||[]).forEach(function (layer) {
@@ -525,7 +509,6 @@ var GuiActionHandler = function (wickEditor) {
                                     frame.uuid = random.uuid4();
                                 })
                             });
-                            child.name = undefined;
                         });
                         obj.getAllFrames().forEach(function (frame) {
                             frame.uuid = random.uuid4();
@@ -557,7 +540,6 @@ var GuiActionHandler = function (wickEditor) {
                         frames:frames
                     });
                 } else if (fileType.includes('image')) {
-                    //console.log(items[i])
                     reader = new FileReader();
                     reader.onload = function(evt) {
                         var asset = new WickAsset(evt.target.result, 'image', 'Pasted Image');
@@ -607,32 +589,31 @@ var GuiActionHandler = function (wickEditor) {
 
             wickEditor.actionHandler.clearHistory();
 
-            wickEditor.canvas.getFabricCanvas().recenterCanvas();
+            wickEditor.canvas.recenterCanvas();
             wickEditor.guiActionHandler.doAction("openProjectSettings");
-            wickEditor.canvas.getPaperCanvas().needsUpdate = true;
-            //wickEditor.thumbnailRenderer.renderAllThumbsOnTimeline();
             wickEditor.project.currentObject.framesDirty = true;
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
             wickEditor.syncInterfaces();
         });
 
-    registerAction('useTools.cursor',
-        ['C'],
-        'Switch to Cursor',
+    registerAction('useTools.selectioncursor',
+        ['KeyC'],
+        'Switch to Selection Cursor',
         {},
         function(args) {
-            wickEditor.changeTool(wickEditor.tools.cursor);
+            wickEditor.changeTool(wickEditor.tools.selectioncursor);
         });
 
-    registerAction('useTools.pathCursor',
-        ['P'],
+    registerAction('useTools.vectorcursor',
+        ['KeyP'],
         'Switch to Path Cursor',
         {},
         function (args) {
-            wickEditor.changeTool(wickEditor.tools.pathCursor);
+            wickEditor.changeTool(wickEditor.tools.vectorcursor);
         });
 
     registerAction('useTools.pencil',
-        ['V'],
+        ['KeyV'],
         'Switch to Pencil',
         {},
         function(args) {
@@ -640,7 +621,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.paintbrush',
-        ['B'],
+        ['KeyB'],
         'Switch to Brush',
         {},
         function(args) {
@@ -648,7 +629,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.line',
-        ['L'],
+        ['KeyL'],
         'Switch to Line',
         {},
         function(args) {
@@ -656,7 +637,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.eraser',
-        ['E'],
+        ['KeyE'],
         'Switch to Eraser',
         {},
         function(args) {
@@ -664,7 +645,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.fillbucket',
-        ['G'],
+        ['KeyG'],
         'Switch to Fill Bucket',
         {},
         function(args) {
@@ -672,7 +653,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.rectangle',
-        ['R'],
+        ['KeyR'],
         'Switch to Rectangle',
         {},
         function(args) {
@@ -680,7 +661,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.ellipse',
-        ['S'],
+        ['KeyS'],
         'Switch to Ellipse',
         {},
         function(args) {
@@ -688,7 +669,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.pen',
-        ['O'],
+        ['KeyO'],
         'Switch to Pen',
         {},
         function(args) {
@@ -696,7 +677,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.dropper',
-        ['D'],
+        ['KeyD'],
         'Switch to Eyedropper',
         {},
         function(args) {
@@ -704,7 +685,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.text',
-        ['T'],
+        ['KeyT'],
         'Switch to Text',
         {},
         function(args) {
@@ -712,7 +693,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.zoom',
-        ['Z'],
+        ['KeyZ'],
         'Switch to Zoom',
         {},
         function(args) {
@@ -720,15 +701,28 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('useTools.pan',
-        [/*'P'*/],
+        [],
         [],
         {},
         function(args) {
             wickEditor.changeTool(wickEditor.tools.pan);
         });
 
+    registerAction('panWithSpace',
+        ['Space'],
+        'Pan',
+        {},
+        function(args) {
+            if(!(wickEditor.currentTool instanceof Tools.Pan)) {
+                wickEditor.lastTool = wickEditor.currentTool;
+                wickEditor.currentTool = wickEditor.tools.pan;
+                wickEditor.canvas.updateCursor();
+                wickEditor.syncInterfaces();
+            }
+        });
+
     registerAction('editScripts',
-        ['`'],
+        ['Backquote'],
         'Open Scripting Window',
         {},
         function(args) {
@@ -738,7 +732,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('bringToFront',
-        ['Modifier', "SHIFT", "UP"],
+        ['MODIFIER', "SHIFT", "ArrowUp"],
         'Bring to Front',
         {},
         function(args) {
@@ -749,7 +743,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('sendToBack',
-        ['Modifier', "SHIFT", "DOWN"],
+        ['MODIFIER', "SHIFT", "ArrowDown"],
         'Send to Back',
         {},
         function(args) {
@@ -760,7 +754,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('moveBackwards',
-        ['Modifier', "DOWN"],
+        ['MODIFIER', "ArrowDown"],
         'Move Backwards',
         {},
         function(args) {
@@ -770,7 +764,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('moveForwards',
-        ['Modifier', "UP"],
+        ['MODIFIER', "ArrowUp"],
         'Move Forwards',
         {},
         function(args) {
@@ -796,7 +790,7 @@ var GuiActionHandler = function (wickEditor) {
             objs.forEach(function (obj) {
                 var wickObj = obj;
                 modifiedStates.push({
-                    flipX : !obj.flipX,
+                    scaleX : -obj.scaleX,
                     rotation: -obj.rotation,
                     x: -(obj.x-centerX)+centerX,
                 });
@@ -825,7 +819,7 @@ var GuiActionHandler = function (wickEditor) {
             objs.forEach(function (obj) {
                 var wickObj = obj;
                 modifiedStates.push({
-                    flipY : !obj.flipY,
+                    scaleY : -obj.scaleY,
                     rotation: -obj.rotation,
                     y: -(obj.y-centerY)+centerY,
                 });
@@ -877,7 +871,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('convertToGroup',
-        ['Modifier', 'G'],
+        ['MODIFIER', 'KeyG'],
         'Group Selection',
         {},
         function(args) {
@@ -898,7 +892,7 @@ var GuiActionHandler = function (wickEditor) {
         })
 
     registerAction('breakApart',
-        ["Modifier", "B"],
+        ["MODIFIER", "KeyB"],
         'Break Apart Selection',
         {},
         function(args) {
@@ -948,7 +942,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('extendFrame',
-        ['SHIFT', '.'],
+        ['SHIFT', 'Period'],
         'Extend Frame',
         {},
         function(args) {
@@ -969,15 +963,11 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('shrinkFrame',
-        ['SHIFT', ','],
+        ['SHIFT', 'Comma'],
         'Shrink Frame',
         {},
         function(args) {
             var frame = wickEditor.project.getCurrentFrame();
-
-            //var frameEndingIndex = wickEditor.project.currentObject.getPlayheadPositionAtFrame(frame) + frame.frameLength - 1;
-            //var framesToShrink = frameEndingIndex - wickEditor.project.currentObject.playheadPosition;
-            //framesToShrink = Math.max(1, framesToShrink)
 
             wickEditor.actionHandler.doAction('shrinkFrame', {
                 nFramesToShrinkBy: 1,
@@ -1057,8 +1047,8 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('finishEditingTextbox',
-        ['ENTER'],
-        null,
+        ['Enter'],
+        'Finish editing text box',
         {usableInTextBoxes:true, disabledInScriptingIDE:true},
         function (args) {
             $(":focus").blur();
@@ -1093,46 +1083,6 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.syncInterfaces();
         });
 
-    registerAction('changeFillColorOfSelection', 
-        [],
-        [],
-        {},
-        function (args) {
-            wickEditor.project.getSelectedObjects().forEach(function (obj) {
-                if(obj.isText) {
-                    obj.textData.fill = args.color;
-                }
-            })
-            wickEditor.canvas.getPaperCanvas().pathRoutines.setFillColor(wickEditor.project.getSelectedObjects(), args.color);
-        });
-
-    registerAction('changeStrokeColorOfSelection', 
-        [],
-        [],
-        {},
-        function (args) {
-            wickEditor.canvas.getPaperCanvas().pathRoutines.setStrokeColor(wickEditor.project.getSelectedObjects(), args.color);
-        });
-
-    registerAction('changeStrokeWidthOfSelection',
-        [],
-        [],
-        {},
-        function (args) {
-            wickEditor.canvas.getPaperCanvas().pathRoutines.setStrokeWidth(wickEditor.project.getSelectedObjects(), args.strokeWidth);
-        });
-
-    registerAction('changeStrokeCapAndJoinOfSelection',
-        [],
-        [],
-        {},
-        function (args) {
-            wickEditor.canvas.getPaperCanvas().pathRoutines.setStrokeCapAndJoin(
-                wickEditor.project.getSelectedObjects(), 
-                args.strokeCap,
-                args.strokeJoin);
-        });
-
     registerAction('copyFrameForward', 
         [],
         [],
@@ -1150,7 +1100,7 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('duplicateSelection',
-        ['Modifier', 'D'],
+        ['MODIFIER', 'KeyD'],
         'Duplicate Selection',
         {},
         function (args) {
@@ -1159,7 +1109,6 @@ var GuiActionHandler = function (wickEditor) {
 
             selectedObjects.forEach(function (selectedObject) {
                 var copy = selectedObject.copy();
-                //var absPos = selectedObject.getAbsolutePosition();
                 copy.x += 50;
                 copy.y += 50;
                 duplicates.push(copy);
@@ -1195,9 +1144,13 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function (args) {
+            var asset = wickEditor.library.getSelectedAsset(); 
+
+            if (asset == null) return; 
             wickEditor.actionHandler.doAction('deleteAsset', {
-                asset: wickEditor.library.getSelectedAsset()
+                asset: asset,
             });
+
         });
 
     registerAction('renameAsset',
@@ -1205,50 +1158,77 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function (args) {
+            var asset = wickEditor.library.getSelectedAsset(); 
+            if (asset == null) return; // No asset selected
+            
+            var oldAssetName = asset.filename; 
+            var newName = prompt("Rename " + oldAssetName + " to:");
+
+            if (newName == null) return; // No name input
             wickEditor.actionHandler.doAction('renameAsset', {
-                asset: wickEditor.library.getSelectedAsset()
+                asset: wickEditor.library.getSelectedAsset(),
+                newFilename: newName,
             });
+
         });
 
+    
     registerAction('createObjectFromAsset',
         [],
         [],
         {},
         function (args) {
             var asset = args.asset;
+            if (!asset) return;
+
+            var screenPos = wickEditor.canvas.screenToCanvasSpace(args.x, args.y)
+            var wickObj = new WickObject();
+
+            wickObj.assetUUID = asset.uuid;
+            wickObj.x = screenPos.x;
+            wickObj.y = screenPos.y;
+
 
             if(asset.type === 'image') {
                 var wickObj = new WickObject();
                 wickObj.assetUUID = asset.uuid;
                 wickObj.isImage = true;
-                wickObj.x = args.x;
-                wickObj.y = args.y;
-                wickEditor.actionHandler.doAction('addObjects', {
-                    wickObjects:[wickObj]
-                });
+                wickObj.x = screenPos.x;
+                wickObj.y = screenPos.y;
             } else if(asset.type === 'audio') {
-                wickEditor.actionHandler.doAction('addSoundToFrame', {
-                    frame: wickEditor.project.getCurrentFrame(),
-                    asset: args.asset
-                });
+                wickObj.isSound = true; 
+                wickObj.volume = 1.0; 
+                wickObj.width = 100; 
+                wickObj.height = 100; 
             }
-
+            wickEditor.actionHandler.doAction('addObjects', {
+                wickObjects:[wickObj]
+            });
         });
 
-    registerAction('createSoundFromAsset',
+    registerAction('changePathProperties',
         [],
         [],
         {},
         function (args) {
-            var asset = args.asset;
-
-            if(asset.type === 'audio') {
-                wickEditor.actionHandler.doAction('addSoundToFrame', {
-                    frame: args.frame,
-                    asset: args.asset
-                });
-            }
-
-        });
+            var objs = wickEditor.project.getSelectedObjects();
+            var modifiedStates = [];
+            objs.forEach(function (wickObject) {
+                if(!wickObject.isPath) {
+                    modifiedStates.push({});
+                } else {
+                    for(key in args) {
+                        wickObject.paper[key] = args[key];
+                        modifiedStates.push({
+                            pathData : wickObject.paper.exportSVG({asString:true}),
+                        })
+                    }
+                }
+            })
+            wickEditor.actionHandler.doAction('modifyObjects', {
+                objs: objs,
+                modifiedStates: modifiedStates
+            });
+        })
 
 }

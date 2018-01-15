@@ -58,16 +58,14 @@
 	height:auto;
 	padding-top: 5px;
 	padding-bottom: 10px;
-
-	display: -webkit-flex;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 }
 
 .inspector-buttons-container {
-	width: 85%;
-	padding-left: 12%;
+	width: calc(100% - 20px);
+	padding-left: 10px;
 	height:auto;
 	padding-bottom: 15px;
 
@@ -128,7 +126,7 @@
 }
 
 .inspector-input-togglebutton {
-	width: 18.9px;
+	width: 17px;
 	height: 19px;
 	border-radius: 2px;
 	cursor: pointer;
@@ -193,7 +191,7 @@
 	width: 30px;
 	height: 30px;
 
-	margin: 5px;
+	margin: 6px;
 
 	border-radius: 4px;
 

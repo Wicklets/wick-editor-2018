@@ -57,6 +57,7 @@ WickTween.prototype.copy = function () {
     copy.opacity = this.opacity;
 
     copy.playheadPosition = this.playheadPosition;
+    copy.rotations = this.rotations;
 
     copy.tweenType = this.tweenType;
     copy.tweenDir = this.tweenDir;

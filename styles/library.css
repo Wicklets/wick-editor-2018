@@ -1,9 +1,11 @@
 #treeContainer {
 	position: absolute;
-	bottom: 38px;
+    top: 70%;
+    bottom: 40px;
 	left: 10px;
+    right: 10px;
+    /*height: 100%;*/
 	width: calc(100% - 20px);
-	height: 200px;
 	overflow: hidden;
   	border-radius: 3px;
 }
@@ -19,9 +21,10 @@
 	width: 100%;
 	border: none;
 	background-color: white;
-	height: 175px;
+	height: calc(100% - 60px);
 	overflow-y: auto;
 	background-color: #CFCFCF;
+    box-sizing:border-box;
 }
 
 #draggedAsset {
@@ -40,4 +43,90 @@
 #fancytree-container {
 	border-radius: 2px;
 	background-color: rgba(0,0,0,0);
+}
+
+#treeFilterInput {
+    color: #4E4D4D;
+    width: 100%;
+    background: #A2A2A2 url(../resources/icon_search.png) no-repeat scroll 3px 3px;
+    background-size: 12px 12px;
+    padding-left:20px;
+    text-overflow: ellipsis; 
+    display: block;
+    border-radius: 2px 2px 0px 0px;
+    box-sizing:border-box;
+
+}
+
+#treeOptionsContainer {
+    position: absolute;
+    height: 20px;
+    background-color: #CFCFCF;
+    width: 100%;
+    bottom: 0px;
+    border-top: #A2A2A2 1px solid;
+    border-radius: 0px 0px 2px 2px;
+}
+
+.assetLibraryButton {
+    padding-right:2px;
+    text-align: right; 
+}
+
+.fancytree-expander {
+    width: 1px !important; 
+    height: 1px !important; 
+}
+
+span.fancytree-title {
+    border-radius: 3px !important; 
+    color: #585757     !important;
+}
+
+.fancytree-plain.fancytree-container.fancytree-treefocus span.fancytree-active span.fancytree-title,
+.fancytree-plain.fancytree-container.fancytree-treefocus span.fancytree-selected span.fancytree-title {
+    background-color: #CFCFCF !important;
+    border-color: #585757     !important;
+    color:#585757             !important;
+}
+
+span.fancytree-title:hover {
+    background-color: #585757 !important; 
+    border-color: #585757     !important;
+    color: #CFCFCF            !important;
+}
+
+span.fancytree-title:active {
+    background-color: #585757 !important; 
+    border-color: #585757     !important;
+    color: #CFCFCF            !important;
+}
+
+.assetLibraryButton {
+    height: 20px; 
+    width: 20px;
+    float: right; 
+    background: #CFCFCF no-repeat 1px 0px;
+    background-size: 20px 20px;
+    border-radius: 2px;
+}
+
+.assetLibraryButton:hover {
+    background: #A2A2A2 no-repeat 1px 0px;
+    background-size: 20px 20px;
+    cursor: pointer;
+}
+
+.assetLibraryButton:active {
+    background: #CFCFCF no-repeat 1px 0px;
+    background-size: 20px 20px;
+    cursor: pointer;
+}
+
+#deleteAssetButton {
+    background-image: url(../resources/delete_layer.png);
+}
+
+#renameAssetButton {
+    background-image: url(../resources/rename.png);
 }

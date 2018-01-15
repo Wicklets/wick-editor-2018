@@ -63,7 +63,13 @@ WickFrame.prototype.tick = function () {
         (wickPlayer || wickEditor).project.runScript(this, 'load');
         (wickPlayer || wickEditor).project.runScript(this, 'update');
 
-        if(wickPlayer) wickPlayer.audioPlayer.playSound(this.audioAssetUUID);
+        // if(wickPlayer) wickPlayer.audioPlayer.playSound(this.audioAssetUUID);
+
+        if (this.audioAssetUUID) {
+            this._updateAudio();
+            this._playSound(); 
+        }
+
     }
     // Active -> Active
     // Frame is active!
@@ -73,39 +79,46 @@ WickFrame.prototype.tick = function () {
     // Active -> Inactive
     // Frame just stopped being active. Clean up!
     else if (this._wasActiveLastTick && !this._active) {
+        if (this.audioAssetUUID) {
+            this._stopSound();
+        }
         
     }
     
     if(this._wasClicked) {
-        (wickPlayer || wickEditor).project.runScript(this, 'mousedown');
+        (wickPlayer || wickEditor).project.runScript(this, 'mousePressed');
         this._wasClicked = false;
     }
 
+    if(this._beingClicked) {
+        (wickPlayer || wickEditor).project.runScript(this, 'mouseDown');
+    }
+
     if(this._wasHoveredOver) {
-        (wickPlayer || wickEditor).project.runScript(this, 'mouseover');
+        (wickPlayer || wickEditor).project.runScript(this, 'mouseHover');
         this._wasHoveredOver = false;
     }
 
     if(this._mouseJustLeft) {
-        (wickPlayer || wickEditor).project.runScript(this, 'mouseout');
+        (wickPlayer || wickEditor).project.runScript(this, 'mouseLeave');
         this._mouseJustLeft = false;
     }
 
     if(this._wasClickedOff) {
-        (wickPlayer || wickEditor).project.runScript(this, 'mouseup');
+        (wickPlayer || wickEditor).project.runScript(this, 'mouseReleased');
         this._wasClickedOff = false;
     }
 
     wickPlayer.inputHandler.getAllKeysJustReleased().forEach(function (key) {
-        (wickPlayer || wickEditor).project.runScript(self, 'keyreleased', key);
+        (wickPlayer || wickEditor).project.runScript(self, 'keyRelease', key);
     });
 
     wickPlayer.inputHandler.getAllKeysJustPressed().forEach(function (key) {
-        (wickPlayer || wickEditor).project.runScript(self, 'keypressed', key);
+        (wickPlayer || wickEditor).project.runScript(self, 'keyPressed', key);
     });
 
     wickPlayer.inputHandler.getAllKeysDown().forEach(function (key) {
-        (wickPlayer || wickEditor).project.runScript(self, 'keydown', key);
+        (wickPlayer || wickEditor).project.runScript(self, 'keyDown', key);
     });
 
     this.wickObjects.forEach(function (wickObject) {
@@ -433,3 +446,25 @@ WickFrame.prototype.applyTween = function () {
     });
 
 }
+
+WickFrame.prototype._updateAudio = function () {
+    // Lazily create sound objects
+    if (!this.howl) {
+        if(window.wickPlayer) {
+            this.howl = wickPlayer.audioPlayer.makeSound(this.audioAssetUUID); 
+        } else {
+            this.howl = new Howl({
+                src: [wickEditor.project.library.getAsset(this.audioAssetUUID).getData()]
+            });
+        }
+    }
+}
+
+WickFrame.prototype._playSound = function () {
+    var howlerID = this.howl.play(); 
+}
+
+WickFrame.prototype._stopSound = function () {
+    this.howl.stop(); 
+}
+
