@@ -106,7 +106,6 @@ Tools.Paintbrush = function (wickEditor) {
         if (path) {
 
             path.add(event.point)
-            
             var raster = path.rasterize(paper.view.resolution*wickEditor.canvas.getZoom());
             var rasterDataURL = raster.toDataURL()
 

@@ -190,7 +190,7 @@ var InteractiveCanvas = function (wickEditor) {
 
     self.getItemAtPoint = function (point, args) {
         if(!args) args = {};
-        if(args.tolerance === undefined) args.tolerance = 5;
+        if(args.tolerance === undefined) args.tolerance = 3;
         var zoom = wickEditor.canvas.getZoom()
 
         var hitOptions = {

@@ -118,6 +118,7 @@ var WickPlayer = function () {
 
     self.cloneObject = function (wickObj) {
         var clone = wickObj.copy();
+        clone.name = undefined;
         clone.isClone = true;
         clone.asset = wickObj.asset;
 

@@ -155,7 +155,7 @@ var WickPixiRenderer = function (canvasContainer) {
     function preloadAllAssets (project) {
         project.getAllObjects().forEach(function (wickObject) {
             createPixiSprite(wickObject);
-        })
+        });
     }
 
     function createPixiSprite (wickObject) {
@@ -166,7 +166,7 @@ var WickPixiRenderer = function (canvasContainer) {
                 wickObject.alphaMask = wickProject.getObjectByUUID(wickObject.sourceUUID).alphaMask
                 container.addChild(pixiSprite);
                 pixiSprites[wickObject.uuid] = pixiSprite;
-                pixiSprites[wickObject.uuid].visible = false;
+                pixiSprite.visible = false;
                 return;
             }
         }

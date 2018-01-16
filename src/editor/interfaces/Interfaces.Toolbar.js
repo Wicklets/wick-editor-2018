@@ -110,10 +110,10 @@ var ToolbarInterface = function (wickEditor) {
 
         var numberInput = new SlideyNumberInput({
             onsoftchange: function (e) {
-                strokeWidthPreview.refresh(parseInt(e));
+                strokeWidthPreview.refresh(parseFloat(e));
             },
             onhardchange: function (e) {
-                wickEditor.settings.setValue('strokeWidth', parseInt(e));
+                wickEditor.settings.setValue('strokeWidth', parseFloat(e));
                 wickEditor.guiActionHandler.doAction("changePathProperties", {
                     strokeWidth: wickEditor.settings.strokeWidth
                 });
