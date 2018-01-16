@@ -66,6 +66,25 @@ var InteractiveCanvas = function (wickEditor) {
 
         if(self.needsUpdate) {
             function createPathForWickobject (wickObject) {
+                function proceed () {
+                    wickObject.paper.position.x = wickObject.x;
+                    wickObject.paper.position.y = wickObject.y;
+                    if(wickObject.isPath) {
+                        wickObject.paper.applyMatrix = true;
+                    } else {
+                        wickObject.paper.applyMatrix = false;
+                    }
+                    wickObject.paper.rotation = wickObject.rotation;
+                    wickObject.paper.scaling.x = wickObject.scaleX;
+                    wickObject.paper.scaling.y = wickObject.scaleY;
+
+                    wickObject.paper.opacity = wickObject.opacity;
+                    wickObject.svgStrokeWidth = wickObject.paper.strokeWidth;
+                    
+                    wickObject.paper.wick = wickObject;
+                    return wickObject.paper;
+                }
+
                 if(wickObject.isPath) {
                     var xmlString = wickObject.pathData
                       , parser = new DOMParser()
@@ -74,12 +93,14 @@ var InteractiveCanvas = function (wickEditor) {
                     if(wickObject.paper._class === 'Group') {
                         wickObject.paper = wickObject.paper.children[0]
                     }
+                    return proceed();
                 } else if (wickObject.isImage) {
                     var raster = new paper.Raster(wickObject.asset.data);
                     wickObject.paper = new paper.Group();
                     wickObject.paper.addChild(raster);
                     wickObject.width = wickObject.paper.bounds._width;
                     wickObject.height = wickObject.paper.bounds._height;
+                    return proceed();
                 } else if (wickObject.isText) {
                     wickObject.paper = new paper.PointText({
                         point: paper.view.center,
@@ -92,6 +113,7 @@ var InteractiveCanvas = function (wickEditor) {
                     });
                     wickObject.width = wickObject.paper.bounds.width;
                     wickObject.height = wickObject.paper.bounds.height;
+                    return proceed();
                 } else if (wickObject.isSymbol) {
                     wickObject.paper = new paper.Group();
                     wickObject.getAllActiveChildObjects().forEach(function (child) {
@@ -100,33 +122,19 @@ var InteractiveCanvas = function (wickEditor) {
                         child.paper._isPartOfGroup = true;
                     });
                     wickObject.paper.pivot = new paper.Point(0,0);
+                    return proceed();
                 } else if (wickObject.isSound) {
-                    
+                    var soundImg = new Image();
+                    soundImg.onload = function () {
+                        var raster = new paper.Raster(soundImg);
+                        wickObject.paper = new paper.Group();
+                        wickObject.paper.addChild(raster);
+                        wickObject.width = wickObject.paper.bounds._width;
+                        wickObject.height = wickObject.paper.bounds._height;
+                        proceed();
+                    }
+                    soundImg.src = 'resources/icon_sound_canvas.png';
                 }
-
-                if(!wickObject.paper){
-                    wickEditor.actionHandler.doAction('deleteObjects', {
-                        objects: [wickObject]
-                    });
-                    return false;
-                }
-
-                wickObject.paper.position.x = wickObject.x;
-                wickObject.paper.position.y = wickObject.y;
-                if(wickObject.isPath) {
-                    wickObject.paper.applyMatrix = true;
-                } else {
-                    wickObject.paper.applyMatrix = false;
-                }
-                wickObject.paper.rotation = wickObject.rotation;
-                wickObject.paper.scaling.x = wickObject.scaleX;
-                wickObject.paper.scaling.y = wickObject.scaleY;
-
-                wickObject.paper.opacity = wickObject.opacity;
-                wickObject.svgStrokeWidth = wickObject.paper.strokeWidth;
-                
-                wickObject.paper.wick = wickObject;
-                return wickObject.paper;
             }
 
             paper.project.activeLayer.removeChildren();

@@ -373,7 +373,7 @@ Tools.SelectionCursor = function (wickEditor) {
                     width : wickObject.paper.bounds._width,
                     height : wickObject.paper.bounds._height,
                 });
-            } else if (wickObject.isImage) {
+            } else if (wickObject.isImage || wickObject.isSound) {
                 modifiedStates.push({
                     x : wickObject.paper.position.x - parentAbsPos.x,
                     y : wickObject.paper.position.y - parentAbsPos.y,
