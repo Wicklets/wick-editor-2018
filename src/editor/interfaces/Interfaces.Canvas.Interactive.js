@@ -101,7 +101,7 @@ var InteractiveCanvas = function (wickEditor) {
                     });
                     wickObject.paper.pivot = new paper.Point(0,0);
                 } else if (wickObject.isSound) {
-                    console.error("oh no!");
+                    
                 }
 
                 if(!wickObject.paper){
