@@ -564,7 +564,7 @@ window.wickDocs =
         },
         {
           "name": "camera.followObject(wickObject, smoothness)",
-          "description": "Generates a random boolean (true or false).",
+          "description": "Makes the camera follow the wickObject that is passed in.",
           "example": "// Follow this object nice and smoothly.\ncamera.followObject(wickObject, 0.1)",
           "snippet": "camera.followObject(wickObject, 0.1)",
           "return": null,
