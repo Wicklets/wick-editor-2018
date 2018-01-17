@@ -106,6 +106,7 @@ Tools.Paintbrush = function (wickEditor) {
         if (path) {
 
             path.add(event.point)
+
             var raster = path.rasterize(paper.view.resolution*wickEditor.canvas.getZoom());
             var rasterDataURL = raster.toDataURL()
 
@@ -121,12 +122,17 @@ Tools.Paintbrush = function (wickEditor) {
                         c.closed = true;
                     })
                     tempPaperForPosition.applyMatrix = true;
-                    tempPaperForPosition.scale(1/wickEditor.canvas.getZoom())
+                    tempPaperForPosition.scale(1/wickEditor.canvas.getZoom()); // Account for Zoom 
+                    tempPaperForPosition.scale(1/window.devicePixelRatio); // Account for retina displays
+                    
                     tempPaperForPosition.children.forEach(function (c) {
                         if(wickEditor.settings.brushSmoothingAmount > 0) {
                             c.smooth();
                             var t = wickEditor.settings.strokeWidth;
-                            var s = wickEditor.settings.brushSmoothingAmount/333*10;
+
+                            var smoothingDenominatorConstant = 333 // This makes smoothing feel good
+                            var smoothingNumeratorConstant = 10 
+                            var s = wickEditor.settings.brushSmoothingAmount/smoothingDenominatorConstant*smoothingNumeratorConstant;
                             var z = wickEditor.canvas.getZoom();
                             c.simplify(t / z * s);
                         }
