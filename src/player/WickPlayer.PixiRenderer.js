@@ -107,6 +107,12 @@ var WickPixiRenderer = function (canvasContainer) {
         renderer.render(container);
     }
 
+    self.cleanupObjectTextures = function (wickObj) {
+        var sprite = pixiSprites[wickObj.uuid];
+        if(sprite)
+            sprite.parent.removeChild(sprite);
+    }
+
     function renderWickObject (wickObject) {
         var sprite = pixiSprites[wickObject.uuid];
         if(!sprite && !wickObject.isSymbol) {
@@ -144,7 +150,6 @@ var WickPixiRenderer = function (canvasContainer) {
                 sprite.tint = 0xFFFFFF;
                 sprite.alpha = 1.0;
             }
-            //sprite.blendMode = PIXI.BLEND_MODES.MULTIPLY;
         }
 
         wickObject.getAllActiveChildObjects().forEach(function (child) {

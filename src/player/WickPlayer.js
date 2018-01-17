@@ -134,14 +134,8 @@ var WickPlayer = function () {
     }
 
     self.deleteObject = function (wickObj) {
-        //project.currentObject.removeChildByID(wickObj.id);
-        // So for now don't actually delete it, just make it go away somehow cos i'm lazy
-        wickObj._deleted = true;
-        // JUST GET IT OUTTA HERE I DONT CARE ................. 
-        // it's like 8am pls forgive me for this
-        wickObj.x = 80608060 + Math.random()*10000;
-        wickObj.y = 80608060 + Math.random()*10000;
-        wickObj.name = undefined;
+        self.renderer.cleanupObjectTextures(wickObj);
+        wickObj.remove();
     }
 
     self.resetStateOfObject = function (wickObject) {

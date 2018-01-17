@@ -1177,8 +1177,6 @@ WickObject.prototype.getCurrentFrames = function () {
 
 WickObject.prototype.tick = function () {
     var self = this;
-    
-    if(this._deleted) return;
 
     if(this.isSymbol) {
         this.layers.forEach(function (layer) {
