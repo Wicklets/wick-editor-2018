@@ -103,7 +103,7 @@ TimelineInterface.FramesContainer = function (wickEditor, timeline) {
         this.frameStrips = [];
 
         this.elem.appendChild(framesStripCellContainer)
-        this.elem.appendChild(this.hoverHighlightOverlay)
+        //this.elem.appendChild(this.hoverHighlightOverlay)
 
         var wickLayers = wickEditor.project.currentObject.layers;
         wickLayers.forEach(function (wickLayer) {

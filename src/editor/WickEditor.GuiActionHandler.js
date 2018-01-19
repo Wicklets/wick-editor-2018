@@ -324,6 +324,7 @@ var GuiActionHandler = function (wickEditor) {
         {},
         function(args) {
             wickEditor.project.clearSelection();
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
             wickEditor.syncInterfaces();
         });
 
