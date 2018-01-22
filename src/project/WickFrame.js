@@ -82,7 +82,6 @@ WickFrame.prototype.tick = function () {
         if (this.audioAssetUUID) {
             this._stopSound();
         }
-        
     }
     
     if(this._wasClicked) {

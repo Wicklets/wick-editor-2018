@@ -142,7 +142,7 @@ var WickPlayer = function () {
 
         // Clones go away because they have no original state! :O
         if(wickObject.isClone) {
-            project.currentObject.removeChild(wickObject);
+            self.deleteObject(wickObject)
             return;
         }
 

@@ -198,6 +198,24 @@ var InteractiveCanvas = function (wickEditor) {
         paper.view.matrix.scale(zoom)
     }
 
+    self.getColorAtPoint = function (point) {
+        var hitResult = paper.project.hitTest(point, {
+            segments: false,
+            fill: true,
+            curves: true,
+            handles: false,
+            stroke: true,
+        });
+        if(hitResult) {
+            var item = hitResult.item;
+            if(hitResult.type === 'stroke' && item.strokeColor) {
+                return { type: 'stroke', color:item.strokeColor.toCSS() };
+            } else if(hitResult.type === 'fill' && item.fillColor) {
+                return { type: 'fill', color:item.fillColor.toCSS() };
+            }
+        }
+    }
+
     self.getItemAtPoint = function (point, args) {
         if(!args) args = {};
         if(args.tolerance === undefined) args.tolerance = 3;

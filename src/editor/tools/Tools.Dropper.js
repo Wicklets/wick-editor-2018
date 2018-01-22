@@ -21,7 +21,7 @@ Tools.Dropper = function (wickEditor) {
 
     var that = this;
 
-    var colorVar = 'fillColor';
+    var PREVIEW_IMG = 'resources/colorpreviewcursoricon.png';
 
     this.paperTool = new paper.Tool();
 
@@ -37,12 +37,9 @@ Tools.Dropper = function (wickEditor) {
         return "Eyedropper (D)";
     }
 
-    this.setColorVar = function (newColorVar) {
-        colorVar = newColorVar;
-    }
-
     this.onSelected = function () {
         wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
+        wickEditor.project.clearSelection();
     }
 
     this.onDeselected = function () {
@@ -50,35 +47,27 @@ Tools.Dropper = function (wickEditor) {
     }
 
     this.setup = function () {
-        window.addEventListener('mousedown', function (e) {
-            if(e.target.className !== 'paperCanvas') return;
-            if(wickEditor.currentTool instanceof Tools.Dropper && !wickEditor.colorPicker.isOpen()) {
-                that.getColorAtCursor(function (color) {
-                    wickEditor.settings.setValue(colorVar, color);
-                    wickEditor.syncInterfaces();
-                });
-            }
-        });
+        
     }
 
-    this.getColorAtCursor = function (callback) {
-        wickEditor.canvas.getCanvasRenderer().getCanvasAsDataURL(function (dataURL) {
-            var image = new Image();
-            image.onload = function () {
-                var mouse = wickEditor.inputHandler.mouse;
-                var localMouse = wickEditor.canvas.screenToCanvasSpace(mouse.x, mouse.y);
-                localMouse.x = Math.floor(localMouse.x)
-                localMouse.y = Math.floor(localMouse.y)
-                var color = GetColorAtCoords(
-                    image,
-                    localMouse.x*window.devicePixelRatio+wickEditor.project.width/2, 
-                    localMouse.y*window.devicePixelRatio+wickEditor.project.height/2, 
-                    "hex");
-                console.log(color)
-                callback(color);
-            };
-            image.src = dataURL;
-        });
+    this.paperTool = new paper.Tool();
+
+    this.paperTool.onMouseMove = function(event) {
+        var colorResult = wickEditor.canvas.getInteractiveCanvas().getColorAtPoint(event.point)
+        if(colorResult) {
+            wickEditor.cursorIcon.setImage(PREVIEW_IMG, colorResult.color);
+        } else {
+            wickEditor.cursorIcon.hide();
+        }
+    }
+
+    this.paperTool.onMouseDown = function(event) {
+        var colorResult = wickEditor.canvas.getInteractiveCanvas().getColorAtPoint(event.point)
+        if(colorResult) {
+            wickEditor.settings.setValue('fillColor', colorResult.color);
+            wickEditor.colorPicker.setColor(colorResult.color)
+            wickEditor.syncInterfaces();
+        }
     }
 
 }

@@ -707,7 +707,7 @@ WickObject.prototype.removeChild = function (childToRemove) {
     }
 
     var that = this;
-    this.getAllActiveChildObjects().forEach(function(child) {
+    this.getAllChildObjects().forEach(function(child) {
         if(child == childToRemove) {
             var index = child.parentFrame.wickObjects.indexOf(child);
             child.parentFrame.wickObjects.splice(index, 1);

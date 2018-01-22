@@ -99,12 +99,8 @@ var ColorPickerInterface = function (wickEditor) {
             if(!isOpen) return;
 
             var t = e.target;
-            if (t.className === 'upper-canvas ' && wickEditor.currentTool === wickEditor.tools.dropper) {
-                wickEditor.tools.dropper.getColorAtCursor(function (color) {
-                    wickEditor.useLastUsedTool();
-                    currentColor = color;
-                    self.close();
-                });
+            if (t.className === 'paperCanvas' && wickEditor.currentTool === wickEditor.tools.dropper) {
+                
             } else if(!elementInsideElement(t, colorPickerContainer)) {
                 self.close();
             }
@@ -151,6 +147,10 @@ var ColorPickerInterface = function (wickEditor) {
 
     self.syncWithEditorState = function () {
 
+    }
+
+    self.setColor = function (color) {
+        spectrumContainer.spectrum("set", color);
     }
 
     self.isOpen = function () {

@@ -29,6 +29,9 @@ var CursorIconInterface = function (wickEditor) {
             if(wickEditor.currentTool instanceof Tools.FillBucket) {
                 imgOffset.x = 0;
                 imgOffset.y = 2;
+            } else if (wickEditor.currentTool instanceof Tools.Dropper) {
+                imgOffset.x = 15;
+                imgOffset.y = -29;
             }
 
             cursorIconDiv.style.top = e.y + imgOffset.y + 'px';
@@ -73,7 +76,12 @@ var CursorIconInterface = function (wickEditor) {
         }
     }
 
-    this.setImage = function (url) {
+    this.setImage = function (url, color) {
+        if(color) {
+            cursorIconDiv.style.backgroundColor = color;
+        } else {
+            cursorIconDiv.style.backgroundColor = 'rgba(0,0,0,0)';
+        }
         cursorIconDiv.style.backgroundImage = 'url('+url+')'
         cursorIconDiv.style.display = "block";
     }
