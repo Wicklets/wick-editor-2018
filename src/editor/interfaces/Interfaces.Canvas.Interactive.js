@@ -121,6 +121,7 @@ var InteractiveCanvas = function (wickEditor) {
                         wickObject.paper.addChild(child.paper);
                         child.paper._isPartOfGroup = true;
                     });
+                    wickObject.paper._inLockedLayer = wickObject.parentFrame.parentLayer.locked;
                     wickObject.paper.pivot = new paper.Point(0,0);
                     return proceed();
                 } else if (wickObject.isSound) {
@@ -163,12 +164,13 @@ var InteractiveCanvas = function (wickEditor) {
             var activeObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
             activeObjects.forEach(function (wickObject) {
                 var layer = wickObject.parentFrame.parentLayer;
-                if(layer.locked || layer.hidden) return;
+                if(layer.hidden) return;
 
                 if(createPathForWickobject(wickObject)) {
                     var originPos = wickEditor.project.getCurrentObject().getAbsolutePosition();
                     wickObject.paper.position.x += originPos.x
                     wickObject.paper.position.y += originPos.y
+                    wickObject.paper._inLockedLayer = layer.locked;
                     paper.project.activeLayer.addChild(wickObject.paper);
                     wickObject.paper._isPartOfGroup = false;
                 }
@@ -228,6 +230,10 @@ var InteractiveCanvas = function (wickEditor) {
         }
 
         if(hitResult && hitResult.item && hitResult.item._isGUI) {
+            hitResult = null;
+        }
+
+        if(hitResult && hitResult.item && hitResult.item._inLockedLayer) {
             hitResult = null;
         }
 

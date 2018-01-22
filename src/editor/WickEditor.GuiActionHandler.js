@@ -276,22 +276,6 @@ var GuiActionHandler = function (wickEditor) {
             $('#importButton').click();
         });
 
-    registerAction('selectAll',
-        ['MODIFIER','KeyA'],
-        'Select All',
-        {},
-        function(args) {
-            if(!(wickEditor.currentTool instanceof Tools.SelectionCursor))
-                wickEditor.currentTool = wickEditor.tools.selectioncursor;
-
-            wickEditor.project.clearSelection();
-            wickEditor.project.currentObject.getAllActiveChildObjects().forEach(function (obj) {
-                if(obj.parentFrame.parentLayer !== wickEditor.project.getCurrentLayer()) return;
-                wickEditor.project.selectObject(obj);
-            });
-            wickEditor.syncInterfaces();
-        });
-
     registerAction('moveSelection',
         [],
         [],
@@ -316,6 +300,23 @@ var GuiActionHandler = function (wickEditor) {
                 objs: objs,
                 modifiedStates: modifiedStates
             });
+        });
+
+    registerAction('selectAll',
+        ['MODIFIER','KeyA'],
+        'Select All',
+        {},
+        function(args) {
+            if(!(wickEditor.currentTool instanceof Tools.SelectionCursor))
+                wickEditor.currentTool = wickEditor.tools.selectioncursor;
+
+            wickEditor.project.clearSelection();
+            wickEditor.project.currentObject.getAllActiveChildObjects().forEach(function (obj) {
+                if(obj.parentFrame.parentLayer !== wickEditor.project.getCurrentLayer()) return;
+                if(obj.parentFrame.parentLayer.locked || obj.parentFrame.parentLayer.hidden) return;
+                wickEditor.project.selectObject(obj);
+            });
+            wickEditor.syncInterfaces();
         });
 
     registerAction('deselectAll',

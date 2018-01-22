@@ -44,7 +44,6 @@ var CanvasInterface = function (wickEditor) {
 
         pan = {x:0,y:0};
         zoom = 1.0;
-        window.addEventListener('resize', self.recenterCanvas, false);
     }
 
     self.syncWithEditorState = function () {

@@ -75,7 +75,10 @@ Tools.SelectionCursor = function (wickEditor) {
     this.paperTool.onMouseMove = function(event) {
         updateSelection()
 
-        hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point, {allowGroups:true});
+        hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point, {
+            allowGroups: true, 
+            tolerance: 0
+        });
 
         if(hitResult && hitResult.item._cursor)
             document.body.style.cursor = hitResult.item._cursor;

@@ -43,23 +43,14 @@ var FastCanvas = function (wickEditor) {
     this.update = function () {
         updateCanvasTransforms();
         canvasContainer.style.display = 'block';
+        canvasContainer.style.opacity = 0.5;
 
-        var bgRenderObjects = wickEditor.project.currentObject.getAllInactiveSiblings();
         if (wickEditor.project.onionSkinning) {
             var onionSkinObjects = wickEditor.project.currentObject.getNearbyObjects(1,1);
-            bgRenderObjects = bgRenderObjects.concat(onionSkinObjects)
+            pixiRenderer.renderWickObjects(wickEditor.project, onionSkinObjects, 2);
+        } else {
+            pixiRenderer.renderWickObjects(wickEditor.project, [], 2);
         }
-
-        bgRenderObjects.forEach(function (o) {
-            o._renderAsBGObject = true;
-        })
-
-        bgRenderObjects = bgRenderObjects.concat(wickEditor.project.currentObject.getAllActiveChildObjects().filter(function (c) {
-            c._renderAsBGObject = false;
-            return c.parentFrame.parentLayer.locked && !c.parentFrame.parentLayer.hidden;
-        }));
-
-        pixiRenderer.renderWickObjects(wickEditor.project, bgRenderObjects, 2);
     }
 
     this.startFastRendering = function () {
@@ -70,6 +61,7 @@ var FastCanvas = function (wickEditor) {
         wickEditor.canvas.getInteractiveCanvas().hide();
 
         function proceed () {
+            canvasContainer.style.opacity = 1.0;
             wickEditor.project.applyTweens();
             var renderObjects = wickEditor.project.rootObject.getAllActiveChildObjects();
             renderObjects.forEach(function (o) {

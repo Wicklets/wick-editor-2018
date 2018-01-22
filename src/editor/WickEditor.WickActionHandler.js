@@ -355,6 +355,7 @@ var WickActionHandler = function (wickEditor) {
             var symbol = new WickObject.createSymbolFromWickObjects(objects);
             args.createdSymbol = symbol;
 
+            symbol.name = args.symbolName;
             if(args.button) {
                 symbol.layers[0].frames.push(symbol.layers[0].frames[0].copy());
                 symbol.layers[0].frames.push(symbol.layers[0].frames[0].copy());
@@ -365,12 +366,16 @@ var WickActionHandler = function (wickEditor) {
                 symbol.layers[0].frames[1].playheadPosition = 1;
                 symbol.layers[0].frames[2].name = 'mousePressed';
                 symbol.layers[0].frames[2].playheadPosition = 2;
+                symbol.name = 'New Button'
 
                 symbol.isButton = true;
             }
             if(args.group) {
                 symbol.isGroup = true;
                 symbol.layers[0].frames[0].wickScript = 'stop();';
+                symbol.name = 'New Group'
+            } else {
+                symbol.name = 'New Clip'
             }
 
             // Remove objects from original parent (they are inside the symbol now.)
@@ -378,17 +383,6 @@ var WickActionHandler = function (wickEditor) {
                 wickEditor.project.currentObject.removeChild(wickObject);
             });
             wickEditor.project.addObject(symbol, undefined, true);
-
-            symbol.name = '';
-            /*if(args.symbolName) {
-                symbol.name = wickEditor.project.getNextAvailableName(args.symbolName);
-            } else if(args.button) {
-                symbol.name = wickEditor.project.getNextAvailableName("New Button");
-            } else if(args.group) {
-                symbol.name = wickEditor.project.getNextAvailableName("New Group");
-            } else {
-                symbol.name = wickEditor.project.getNextAvailableName("New Clip");
-            }*/
 
             wickEditor.project.clearSelection()
             wickEditor.project.selectObject(symbol)

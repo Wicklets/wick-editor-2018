@@ -143,13 +143,6 @@ var WickPixiRenderer = function (canvasContainer) {
             sprite.alpha = absTransforms.opacity;
             sprite.scale.x *= (absTransforms.flip.x ? -1 : 1);
             sprite.scale.y *= (absTransforms.flip.y ? -1 : 1);
-            if(wickObject._renderAsBGObject) {
-                sprite.tint = 0xCCCCCC;
-                sprite.alpha = 0.5;
-            } else {
-                sprite.tint = 0xFFFFFF;
-                sprite.alpha = 1.0;
-            }
         }
 
         wickObject.getAllActiveChildObjects().forEach(function (child) {
