@@ -42,7 +42,7 @@ Tools.Dropper = function (wickEditor) {
     }
 
     this.onDeselected = function () {
-       
+       wickEditor.cursorIcon.hide();
     }
 
     this.setup = function () {
