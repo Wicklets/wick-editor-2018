@@ -161,8 +161,7 @@ var FastCanvas = function (wickEditor) {
 
         var width = wickEditor.project.width;
         var height = wickEditor.project.height;
-
-        //pan = {x:0,y:0}
+        
         var tx = (pan.x)+width *2*(zoom-1)/2;
         var ty = (pan.y)+height*2*(zoom-1)/2;
         tx -= width /2*(zoom);

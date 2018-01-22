@@ -22,7 +22,7 @@ var WickEditor = function () {
     var self = this;
 
     // http://semver.org/
-    self.version = "0.12";
+    self.version = "0.12.1";
     document.getElementById('wick-editor-version').innerHTML = 'Wick Editor ' + self.version;
     console.log("Wick Editor version " + self.version)
     if(localStorage.wickVersion !== self.version) {
