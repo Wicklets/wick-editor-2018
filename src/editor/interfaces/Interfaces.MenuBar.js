@@ -218,6 +218,10 @@ var MenuBarInterface = function (wickEditor) {
                 window.open('http://www.wickeditor.com/#about');
             }),
         ]);
+
+        addTab('Run', [], function () {
+                wickEditor.guiActionHandler.doAction("runProject");
+            }); 
     }
 
     var addTab = function (name, buttons, func) {
