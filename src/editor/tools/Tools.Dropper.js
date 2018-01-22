@@ -38,8 +38,7 @@ Tools.Dropper = function (wickEditor) {
     }
 
     this.onSelected = function () {
-        wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
-        wickEditor.project.clearSelection();
+        
     }
 
     this.onDeselected = function () {
@@ -64,7 +63,7 @@ Tools.Dropper = function (wickEditor) {
     this.paperTool.onMouseDown = function(event) {
         var colorResult = wickEditor.canvas.getInteractiveCanvas().getColorAtPoint(event.point)
         if(colorResult) {
-            wickEditor.settings.setValue('fillColor', colorResult.color);
+            if(!wickEditor.colorPicker.isOpen()) wickEditor.settings.setValue('fillColor', colorResult.color);
             wickEditor.colorPicker.setColor(colorResult.color)
             wickEditor.syncInterfaces();
         }
