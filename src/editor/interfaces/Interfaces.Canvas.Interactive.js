@@ -161,7 +161,7 @@ var InteractiveCanvas = function (wickEditor) {
                 group.position.y = originPos.y;
             }
 
-            var activeObjects = wickEditor.project.getCurrentObject().getAllActiveChildObjects();
+            var activeObjects = currentObj.getAllActiveChildObjects();
             activeObjects.forEach(function (wickObject) {
                 var layer = wickObject.parentFrame.parentLayer;
                 if(layer.hidden) return;

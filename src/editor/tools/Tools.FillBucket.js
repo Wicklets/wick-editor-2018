@@ -87,6 +87,7 @@ Tools.FillBucket = function (wickEditor) {
             // TODO: Only include paths who are on the active layer.
             if(child._isGUI) return;
             if(!child.closed) return;
+            if(child.wick.parentFrame.parentLayer !== wickEditor.project.getCurrentLayer()) return;
             if(!superPath) superPath = child.clone({insert:false});
             superPath = superPath.unite(child);
         });

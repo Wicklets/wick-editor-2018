@@ -45,12 +45,12 @@ var FastCanvas = function (wickEditor) {
         canvasContainer.style.display = 'block';
         canvasContainer.style.opacity = 0.5;
 
+        var inactiveObjects = wickEditor.project.currentObject.getAllInactiveSiblings();
         if (wickEditor.project.onionSkinning) {
             var onionSkinObjects = wickEditor.project.currentObject.getNearbyObjects(1,1);
-            pixiRenderer.renderWickObjects(wickEditor.project, onionSkinObjects, 2);
-        } else {
-            pixiRenderer.renderWickObjects(wickEditor.project, [], 2);
+            inactiveObjects = inactiveObjects.concat(onionSkinObjects);
         }
+        pixiRenderer.renderWickObjects(wickEditor.project, inactiveObjects, 2);
     }
 
     this.startFastRendering = function () {
