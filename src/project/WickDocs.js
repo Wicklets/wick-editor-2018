@@ -130,16 +130,16 @@ window.wickDocs =
         {
           "name": "keyPressed",
           "description": "Gets called once when a key is first pressed.",
-          "example": "function keypressed(key) {\n    if (key == 'UP') {\n        this.x += 20; //Move 20 pixels to the right\n    }\n}",
-          "snippet": "function keypressed(key) {\n    // Do something here!\n}\n",
+          "example": "function keyPressed(key) {\n    if (key == 'UP') {\n        this.x += 20; //Move 20 pixels to the right\n    }\n}",
+          "snippet": "function keyPressed(key) {\n    // Do something here!\n}\n",
           "return": null,
           "args": []
         },
         {
           "name": "keyReleased",
           "description": "Gets called once when a key is released.",
-          "example": "function keyreleased(key) {\n    if (key == 'z') {\n        //user is no longer pressing z\n    }\n}",
-          "snippet": "function keyreleased(key) {\n    // Do something here!\n}\n",
+          "example": "function keyReleased(key) {\n    if (key == 'z') {\n        //user is no longer pressing z\n    }\n}",
+          "snippet": "function keyReleased(key) {\n    // Do something here!\n}\n",
           "return": null,
           "args": []
         },

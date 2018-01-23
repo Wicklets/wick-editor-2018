@@ -22,8 +22,13 @@ var WickPlayer = function () {
     self.running = false;
 
     var initialStateProject;
+    var stats;
 
     self.runProject = function (projectJSON) {
+
+        /*stats = new Stats();
+        stats.showPanel(0);
+        document.body.appendChild( stats.dom );*/
 
         try {
             if(window.parent && window.parent.wickEditor) window.wickEditor = window.parent.wickEditor;
@@ -87,6 +92,8 @@ var WickPlayer = function () {
 
         if(!self.running) return;
 
+        if(stats) stats.begin();
+
         if(self.project.framerate < 60) {
             loopTimeout = setTimeout(function() {
 
@@ -110,6 +117,8 @@ var WickPlayer = function () {
             self.inputHandler.update();
 
         }
+
+        if(stats) stats.end();
 
     }
 

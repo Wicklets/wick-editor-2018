@@ -109,7 +109,7 @@ WickFrame.prototype.tick = function () {
     }
 
     wickPlayer.inputHandler.getAllKeysJustReleased().forEach(function (key) {
-        (wickPlayer || wickEditor).project.runScript(self, 'keyRelease', key);
+        (wickPlayer || wickEditor).project.runScript(self, 'keyReleased', key);
     });
 
     wickPlayer.inputHandler.getAllKeysJustPressed().forEach(function (key) {
