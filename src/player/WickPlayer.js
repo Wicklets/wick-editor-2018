@@ -27,8 +27,8 @@ var WickPlayer = function () {
     self.runProject = function (projectJSON) {
 
         /*stats = new Stats();
-        stats.showPanel(0);
-        document.body.appendChild( stats.dom );*/
+        stats.showPanel(1);
+        document.body.appendChild(stats.dom);*/
 
         try {
             if(window.parent && window.parent.wickEditor) window.wickEditor = window.parent.wickEditor;
@@ -121,9 +121,6 @@ var WickPlayer = function () {
         if(stats) stats.end();
 
     }
-
-
-///////////// DEPRECATED ZOOOOOONE!!!!!!!!!!!!!!!!!!!!!!!
 
     self.cloneObject = function (wickObj) {
         var clone = wickObj.copy();

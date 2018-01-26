@@ -64,7 +64,7 @@ var ToolbarInterface = function (wickEditor) {
 
         brushSizePreview = new BrushSizePreview();
         toolbarDiv.appendChild(brushSizePreview);
-        brushSizePreview.onclick = function (e) {
+        /*brushSizePreview.onclick = function (e) {
             brushSizeSettingsWindow.toggleOpen(
                 brushSizePreview.getBoundingClientRect().left,
                 brushSizePreview.getBoundingClientRect().top)
@@ -72,7 +72,7 @@ var ToolbarInterface = function (wickEditor) {
         brushSizePreview.refresh();
 
         var brushSizeSettingsWindow = new BrushSizeSettingsWindow();
-        toolbarDiv.parentElement.parentElement.appendChild(brushSizeSettingsWindow);
+        toolbarDiv.parentElement.parentElement.appendChild(brushSizeSettingsWindow);*/
 
         var numberInput = new SlideyNumberInput({
             onsoftchange: function (e) {

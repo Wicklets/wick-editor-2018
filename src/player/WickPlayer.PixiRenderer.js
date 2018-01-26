@@ -77,8 +77,8 @@ var WickPixiRenderer = function (canvasContainer) {
             renderer.resize(w, h);
             renderer.view.style.width  = w + "px";
             renderer.view.style.height = h + "px";
-            container.scale.x = w / project.width;
-            container.scale.y = h / project.height;
+            container.scale.x = 1//w / project.width;
+            container.scale.y = 1//h / project.height;
         } else {
             container.position.x = 0;
             container.position.y = 0;

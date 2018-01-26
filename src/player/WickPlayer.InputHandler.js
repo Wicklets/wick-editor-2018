@@ -340,10 +340,15 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
     }
 
     var getWindowScale = function () {
+        // Fit to screen disabled for now.
         return {
+            x:1,
+            y:1
+        }
+        /*return {
             x: wickProject.width / window.innerWidth,
             y: wickProject.height / window.innerHeight
-        }
+        }*/
     }
 
 }

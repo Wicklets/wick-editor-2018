@@ -77,8 +77,9 @@ var WickActionHandler = function (wickEditor) {
     }
 
     // done function, call when a WickAction is finished
-    var done = function (args) {
+    function done (args) {
         // Sync interfaces + do other post-action cleanup
+        wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
         if(args && args.dontAddToStack) return;
         wickEditor.project.unsaved = true;
         wickEditor.project.rootObject.generateParentObjectReferences();
@@ -88,7 +89,7 @@ var WickActionHandler = function (wickEditor) {
     }
 
     // scrap function, call if you need to cancel an action for some reason
-    var scrap = function (dontUndo) {
+    function scrap (dontUndo) {
         actionBeingDone = false;
 
         if(!dontUndo) {
@@ -207,7 +208,6 @@ var WickActionHandler = function (wickEditor) {
                 });
             }
             
-            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
             done(args);
         },
         function (args) {
@@ -218,7 +218,6 @@ var WickActionHandler = function (wickEditor) {
 
             if(args.addFrameAction) args.addFrameAction.undoAction();
 
-            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
             done(args);
         });
 
@@ -245,11 +244,9 @@ var WickActionHandler = function (wickEditor) {
                 } else if (object instanceof WickFrame) {
                     args.restoredFrames.push(object);
                     object.remove();
-                    wickEditor.project.currentObject.framesDirty = true;
                 }
             });
 
-            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
             done(args);
         },
         function (args) {
@@ -262,7 +259,6 @@ var WickActionHandler = function (wickEditor) {
                 wickEditor.project.currentObject.framesDirty = true;
             });
 
-            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
             done(args);
         });
 
@@ -296,7 +292,7 @@ var WickActionHandler = function (wickEditor) {
                 }
 
                 var frame = wickObj.parentFrame;
-                if(frame.tweens.length > 0) {
+                if(frame && frame.tweens.length > 0) {
                     if(!frame.getTweenAtFrame(wickObj.parentObject.playheadPosition)) {
                         args.createTweenAction = wickEditor.actionHandler.doAction('createMotionTween', { 
                             dontAddToStack: true,
@@ -309,7 +305,6 @@ var WickActionHandler = function (wickEditor) {
                 wickObj.updateFrameTween();
             };
 
-            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
             done(args);
         },
         function (args) {
@@ -332,7 +327,6 @@ var WickActionHandler = function (wickEditor) {
                 wickObj.updateFrameTween();
             }
 
-            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
             done(args);
         });
 
@@ -387,8 +381,6 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.clearSelection()
             wickEditor.project.selectObject(symbol)
 
-            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
-
             done(args);
         },
         function (args) {
@@ -401,8 +393,6 @@ var WickActionHandler = function (wickEditor) {
             });
 
             wickEditor.project.currentObject.removeChild(args.createdSymbol);
-
-            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
 
             done(args);
         });
@@ -422,8 +412,6 @@ var WickActionHandler = function (wickEditor) {
 
             wickEditor.project.currentObject.removeChild(args.obj);
 
-            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
-
             done(args);
         },
         function (args) {
@@ -434,8 +422,6 @@ var WickActionHandler = function (wickEditor) {
             });
 
             wickEditor.project.addObject(args.symbol);
-
-            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
 
             done(args);
         });
@@ -756,16 +742,12 @@ var WickActionHandler = function (wickEditor) {
                 args.obj.currentLayer = args.obj.layers.indexOf(args.newLayer)
             }
 
-            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
-
             done(args);
             
         },
         function (args) {
             args.obj.playheadPosition = args.oldPlayheadPosition;
             args.obj.currentLayer = args.oldLayer;
-
-            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
 
             done(args);
         });
@@ -778,8 +760,6 @@ var WickActionHandler = function (wickEditor) {
             args.prevEditedObject = wickEditor.project.currentObject;
             wickEditor.project.currentObject = args.objectToEdit;
 
-            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
-
             wickEditor.timeline.resetScrollbars();
 
             done(args);
@@ -787,8 +767,6 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             wickEditor.project.clearSelection();
             wickEditor.project.currentObject = args.prevEditedObject;
-
-            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
 
             wickEditor.timeline.resetScrollbars();
 
@@ -803,7 +781,6 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.currentObject = wickEditor.project.currentObject.parentObject;
 
             wickEditor.timeline.resetScrollbars();
-            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
 
             done(args);
         },
@@ -812,15 +789,12 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.currentObject = args.prevEditedObject;
 
             wickEditor.timeline.resetScrollbars();
-            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
 
             done(args);
         });
 
     registerAction('moveObjectToZIndex',
         function (args) {
-            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
-
             var currFrame = args.objs[0].parentFrame;
 
             args.oldZIndexes = [];
@@ -843,8 +817,6 @@ var WickActionHandler = function (wickEditor) {
             done(args);
         },
         function (args) {
-            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
-            
             var currFrame = wickEditor.project.getCurrentFrame();
 
             args.objs.sort(function (a,b) {

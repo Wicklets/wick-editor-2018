@@ -126,6 +126,7 @@ Tools.Paintbrush = function (wickEditor) {
                     tempPaperForPosition.scale(1/window.devicePixelRatio); // Account for retina displays
                     
                     tempPaperForPosition.children.forEach(function (c) {
+                        wickEditor.settings.brushSmoothingAmount = 5;
                         if(wickEditor.settings.brushSmoothingAmount > 0) {
                             c.smooth();
                             var t = wickEditor.settings.strokeWidth;

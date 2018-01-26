@@ -94,6 +94,7 @@ Tools.Pencil = function (wickEditor) {
             if(path.segments.length > 2) {
                 path.smooth();
 
+                wickEditor.settings.brushSmoothingAmount = 5;
                 if(wickEditor.settings.brushSmoothingAmount > 0) {
                     var t = wickEditor.settings.strokeWidth;
                     var s = wickEditor.settings.brushSmoothingAmount/100*10;

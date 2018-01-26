@@ -413,6 +413,7 @@ TimelineInterface.Tween = function (wickEditor, timeline) {
             /*wickEditor.project.deselectObjectType(WickTween);
             wickEditor.project.selectObject(self.wickTween);
             wickEditor.project.selectObject(self.wickObject);*/
+            wickEditor.project.clearSelection();
             wickEditor.project.selectObject(self.wickFrame);
             wickEditor.syncInterfaces();
 
