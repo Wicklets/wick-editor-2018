@@ -243,6 +243,7 @@ var WickActionHandler = function (wickEditor) {
                     wickEditor.project.currentObject.removeChild(object);
                 } else if (object instanceof WickFrame) {
                     args.restoredFrames.push(object);
+                    wickEditor.project.currentObject.framesDirty = true;
                     object.remove();
                 }
             });

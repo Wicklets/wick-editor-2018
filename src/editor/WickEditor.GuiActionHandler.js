@@ -1233,4 +1233,19 @@ var GuiActionHandler = function (wickEditor) {
             });
         })
 
+    registerAction('printBrowserInfo', 
+        [],
+        [],
+        {},
+        function (args) {
+            var myWindow = window.open("", "MsgWindow", "width=500,height=300");
+            var info = getBrowserAndOSInfo()
+            myWindow.document.write('Browser: ' + info.browser + '<br />');
+            myWindow.document.write('Browser version: ' + info.browserVersion + '<br />');
+            myWindow.document.write('Navigator App Name: ' + info.navigatorAppName + '<br />');
+            myWindow.document.write('Navigator User Agent: ' + info.navigatorUserAgent + '<br />');
+            myWindow.document.write('devicePixelRatio: ' + info.devicePixelRatio + '<br />');
+            myWindow.document.write('WickEditor Version: ' + wickEditor.version + '<br />');
+        });
+
 }

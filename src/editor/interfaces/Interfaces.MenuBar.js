@@ -127,19 +127,22 @@ var MenuBarInterface = function (wickEditor) {
             }),
             new TabSpacer(),
 
-            new TabButton('Export Animated GIF', function () {
+            new TabButton('Render Animated GIF', function () {
                 wickEditor.guiActionHandler.doAction("exportProjectGIF");
             }),
-            new TabButton('Export SVG', function () {
+            /*new TabButton('Export SVG', function () {
                 wickEditor.guiActionHandler.doAction("exportFrameSVG");
             }),
             new TabButton('Export PNG', function () {
                 wickEditor.guiActionHandler.doAction("exportProjectPNG");
+            }),*/
+            new TabButton('Export Project as HTML', function () {
+                wickEditor.guiActionHandler.doAction("exportProjectHTML");
             }),
-            new TabButton('Export ZIP', function () {
+            new TabButton('Export Project as ZIP', function () {
                 wickEditor.guiActionHandler.doAction("exportProjectZIP");
             }),
-            new TabButton('Export JSON', function () {
+            new TabButton('Export Project as JSON', function () {
                 wickEditor.guiActionHandler.doAction("exportProjectJSON");
             }),
             new TabSpacer(),
@@ -206,7 +209,10 @@ var MenuBarInterface = function (wickEditor) {
                 wickEditor.guiActionHandler.doAction("openEditorSettings");
             }),
             new TabButton('Examples', function () {
-                alert("NYI!")
+                window.open('http://www.wickeditor.com/#examples')
+            }),
+            new TabButton('Browser Info', function () {
+                wickEditor.guiActionHandler.doAction('printBrowserInfo');
             }),
         ]);
 
