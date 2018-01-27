@@ -26,9 +26,11 @@ var WickPlayer = function () {
 
     self.runProject = function (projectJSON) {
 
-        /*stats = new Stats();
-        stats.showPanel(1);
-        document.body.appendChild(stats.dom);*/
+        if(localStorage.enableStats) {
+            stats = new Stats();
+            stats.showPanel(1);
+            document.body.appendChild(stats.dom);
+        }
 
         try {
             if(window.parent && window.parent.wickEditor) window.wickEditor = window.parent.wickEditor;
@@ -173,7 +175,8 @@ var WickPlayer = function () {
         // Don't forget to reset the childrens states
         if(wickObject.isSymbol) {
             wickObject.getAllChildObjects().forEach(function (child) {
-                wickPlayer.resetStateOfObject(child);
+                if(child.isSymbol)
+                    wickPlayer.resetStateOfObject(child);
             });
         }
 
