@@ -92,6 +92,11 @@ Tools.FillBucket = function (wickEditor) {
             superPath = superPath.unite(child);
         });
 
+        if(!superPath) {
+            console.log('No paths found to make hole.')
+            return;
+        }
+
         var invertPath = new paper.Path.Rectangle(superPath.bounds);
         invertPath.fillColor = 'black';
         invertPath = invertPath.subtract(superPath);
@@ -111,6 +116,11 @@ Tools.FillBucket = function (wickEditor) {
         });
         var holePath = pathsContainingCursor[0];
 
+        if(!holePath) {
+            console.log('No fillable holes found.')
+            return;
+        }
+
         invertPath.children.forEach(function (c) {
             c.clockwise = false;
             holePath.clockwise = false;
@@ -119,6 +129,8 @@ Tools.FillBucket = function (wickEditor) {
                 holePath = holePath.subtract(c)
             }
         });
+
+        console.log(holePath)
 
         // TODO: Ignore resulting paths of leaky holes being filled.
 
