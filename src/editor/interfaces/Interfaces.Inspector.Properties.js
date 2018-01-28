@@ -435,7 +435,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.SelectInput({
-        title: 'Direction',
+        title: 'Easing',
         options: ['None', 'In', 'Out', 'InOut'],
         isActiveFn: function () {
             return selectionInfo.type === 'frame' 
