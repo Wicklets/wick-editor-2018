@@ -57,6 +57,7 @@ Tools.Ellipse = function (wickEditor) {
     this.paperTool.onMouseDown = function (event) {
         tempGroup = new paper.Group();
         topLeft = event.point;
+        bottomRight = null;
     }
 
     this.paperTool.onMouseDrag = function (event) {
@@ -80,6 +81,9 @@ Tools.Ellipse = function (wickEditor) {
     }
 
     this.paperTool.onMouseUp = function (event) {
+
+        if(!bottomRight)
+            return;
 
         var svgString = tempGroup.exportSVG({asString:true});
         tempGroup.remove();

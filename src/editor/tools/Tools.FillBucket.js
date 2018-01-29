@@ -81,13 +81,27 @@ Tools.FillBucket = function (wickEditor) {
     }
 
     function fillHole (event) {
-        var superPath = null;
+        var children = [];
         paper.project._activeLayer.children.forEach(function (child) {
             // TODO: Only include paths whos bounding boxes include the cursor position.
             // TODO: Only include paths who are on the active layer.
             if(child._isGUI) return;
+            if(!child.wick || child.wick.parentFrame.parentLayer !== wickEditor.project.getCurrentLayer()) return;
             if(!child.closed) return;
-            if(child.wick.parentFrame.parentLayer !== wickEditor.project.getCurrentLayer()) return;
+
+            var nextPath;
+            if(!child.closed) {
+                nextPath = offsetStroke(child, child.strokeWidth);
+            } else {
+                nextPath = child;
+            }
+            nextPath.resolveCrossings()
+
+            children.push(nextPath)
+        });
+
+        var superPath = null;
+        children.forEach(function (child) {
             if(!superPath) superPath = child.clone({insert:false});
             superPath = superPath.unite(child);
         });
@@ -100,6 +114,10 @@ Tools.FillBucket = function (wickEditor) {
         var invertPath = new paper.Path.Rectangle(superPath.bounds);
         invertPath.fillColor = 'black';
         invertPath = invertPath.subtract(superPath);
+
+        if(!invertPath || !invertPath.children || invertPath.children.length < 1) {
+            return;
+        }
 
         var pathsContainingCursor = [];
         invertPath.children.forEach(function (c) {
