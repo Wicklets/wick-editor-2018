@@ -50,75 +50,77 @@ var WickFrame = function () {
 WickFrame.prototype.tick = function () {
     var self = this;
 
-    // Inactive -> Inactive
-    // Do nothing, frame is still inactive
-    if (!this._wasActiveLastTick && !this._active) {
+    if(this.wickScript !== '') {
+        // Inactive -> Inactive
+        // Do nothing, frame is still inactive
+        if (!this._wasActiveLastTick && !this._active) {
 
-    }
-    // Inactive -> Active
-    // Frame just became active! It's fresh!
-    else if (!this._wasActiveLastTick && this._active) {
-        (wickPlayer || wickEditor).project.loadScriptOfObject(this);
+        }
+        // Inactive -> Active
+        // Frame just became active! It's fresh!
+        else if (!this._wasActiveLastTick && this._active) {
+            (wickPlayer || wickEditor).project.loadScriptOfObject(this);
+            
+            (wickPlayer || wickEditor).project.runScript(this, 'load');
+            (wickPlayer || wickEditor).project.runScript(this, 'update');
+
+            // if(wickPlayer) wickPlayer.audioPlayer.playSound(this.audioAssetUUID);
+
+            if (this.audioAssetUUID) {
+                this._updateAudio();
+                this._playSound(); 
+            }
+
+        }
+        // Active -> Active
+        // Frame is active!
+        else if (this._wasActiveLastTick && this._active) {
+            (wickPlayer || wickEditor).project.runScript(this, 'update');
+        }    
+        // Active -> Inactive
+        // Frame just stopped being active. Clean up!
+        else if (this._wasActiveLastTick && !this._active) {
+            if (this.audioAssetUUID) {
+                this._stopSound();
+            }
+        }
         
-        (wickPlayer || wickEditor).project.runScript(this, 'load');
-        (wickPlayer || wickEditor).project.runScript(this, 'update');
-
-        // if(wickPlayer) wickPlayer.audioPlayer.playSound(this.audioAssetUUID);
-
-        if (this.audioAssetUUID) {
-            this._updateAudio();
-            this._playSound(); 
+        if(this._wasClicked) {
+            (wickPlayer || wickEditor).project.runScript(this, 'mousePressed');
+            this._wasClicked = false;
         }
 
-    }
-    // Active -> Active
-    // Frame is active!
-    else if (this._wasActiveLastTick && this._active) {
-        (wickPlayer || wickEditor).project.runScript(this, 'update');
-    }    
-    // Active -> Inactive
-    // Frame just stopped being active. Clean up!
-    else if (this._wasActiveLastTick && !this._active) {
-        if (this.audioAssetUUID) {
-            this._stopSound();
+        if(this._beingClicked) {
+            (wickPlayer || wickEditor).project.runScript(this, 'mouseDown');
         }
+
+        if(this._wasHoveredOver) {
+            (wickPlayer || wickEditor).project.runScript(this, 'mouseHover');
+            this._wasHoveredOver = false;
+        }
+
+        if(this._mouseJustLeft) {
+            (wickPlayer || wickEditor).project.runScript(this, 'mouseLeave');
+            this._mouseJustLeft = false;
+        }
+
+        if(this._wasClickedOff) {
+            (wickPlayer || wickEditor).project.runScript(this, 'mouseReleased');
+            this._wasClickedOff = false;
+        }
+
+        wickPlayer.inputHandler.getAllKeysJustReleased().forEach(function (key) {
+            (wickPlayer || wickEditor).project.runScript(self, 'keyReleased', key);
+        });
+
+        wickPlayer.inputHandler.getAllKeysJustPressed().forEach(function (key) {
+            (wickPlayer || wickEditor).project.runScript(self, 'keyPressed', key);
+        });
+
+        wickPlayer.inputHandler.getAllKeysDown().forEach(function (key) {
+            (wickPlayer || wickEditor).project.runScript(self, 'keyDown', key);
+        });
     }
-    
-    if(this._wasClicked) {
-        (wickPlayer || wickEditor).project.runScript(this, 'mousePressed');
-        this._wasClicked = false;
-    }
-
-    if(this._beingClicked) {
-        (wickPlayer || wickEditor).project.runScript(this, 'mouseDown');
-    }
-
-    if(this._wasHoveredOver) {
-        (wickPlayer || wickEditor).project.runScript(this, 'mouseHover');
-        this._wasHoveredOver = false;
-    }
-
-    if(this._mouseJustLeft) {
-        (wickPlayer || wickEditor).project.runScript(this, 'mouseLeave');
-        this._mouseJustLeft = false;
-    }
-
-    if(this._wasClickedOff) {
-        (wickPlayer || wickEditor).project.runScript(this, 'mouseReleased');
-        this._wasClickedOff = false;
-    }
-
-    wickPlayer.inputHandler.getAllKeysJustReleased().forEach(function (key) {
-        (wickPlayer || wickEditor).project.runScript(self, 'keyReleased', key);
-    });
-
-    wickPlayer.inputHandler.getAllKeysJustPressed().forEach(function (key) {
-        (wickPlayer || wickEditor).project.runScript(self, 'keyPressed', key);
-    });
-
-    wickPlayer.inputHandler.getAllKeysDown().forEach(function (key) {
-        (wickPlayer || wickEditor).project.runScript(self, 'keyDown', key);
-    });
 
     this.wickObjects.forEach(function (wickObject) {
         wickObject.tick();

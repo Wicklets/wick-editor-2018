@@ -1201,87 +1201,89 @@ WickObject.prototype.tick = function () {
     }
 
     if(this.isSymbol) {
-        // Input events
+        if(true) {
+            window.tickData.osr++
 
-        if(this._wasClicked) {
-            (wickPlayer || wickEditor).project.runScript(this, 'mousePressed');
-            this._wasClicked = false;
-        }
-
-        if(this._beingClicked) {
-            (wickPlayer || wickEditor).project.runScript(this, 'mouseDown');
-            this._wasClicked = false;
-        }
-
-        if(this._wasClickedOff) {
-            (wickPlayer || wickEditor).project.runScript(this, 'mouseReleased');
-            this._wasClickedOff = false;
-        }
-
-        if(this.isHoveredOver()) {
-            (wickPlayer || wickEditor).project.runScript(this, 'mouseHover');
-        }
-
-        if(this._wasHoveredOver) {
-            (wickPlayer || wickEditor).project.runScript(this, 'mouseEnter');
-            this._wasHoveredOver = false;
-        }
-
-        if(this._mouseJustLeft) {
-            (wickPlayer || wickEditor).project.runScript(this, 'mouseLeave');
-            this._mouseJustLeft = false;
-        }
-
-        wickPlayer.inputHandler.getAllKeysJustReleased().forEach(function (key) {
-            (wickPlayer || wickEditor).project.runScript(self, 'keyReleased', key);
-        });
-
-        wickPlayer.inputHandler.getAllKeysJustPressed().forEach(function (key) {
-            (wickPlayer || wickEditor).project.runScript(self, 'keyPressed', key);
-        });
-
-        wickPlayer.inputHandler.getAllKeysDown().forEach(function (key) {
-            (wickPlayer || wickEditor).project.runScript(self, 'keyDown', key);
-        });
-
-        // Inactive -> Inactive
-        if (!this._wasActiveLastTick && !this._active) {
-            
-        }
-        // Inactive -> Active
-        else if (!this._wasActiveLastTick && this._active) {
-            (wickPlayer || wickEditor).project.loadScriptOfObject(this);
-
-            (wickPlayer || wickEditor).project.runScript(this, 'load');
-            (wickPlayer || wickEditor).project.runScript(this, 'update');
-
-            
-            if (this.isSound) {
-                this._updateAudio(); 
-                this._playSound(); 
+            if(this._wasClicked) {
+                (wickPlayer || wickEditor).project.runScript(this, 'mousePressed');
+                this._wasClicked = false;
             }
 
+            if(this._beingClicked) {
+                (wickPlayer || wickEditor).project.runScript(this, 'mouseDown');
+                this._wasClicked = false;
+            }
+
+            if(this._wasClickedOff) {
+                (wickPlayer || wickEditor).project.runScript(this, 'mouseReleased');
+                this._wasClickedOff = false;
+            }
+
+            if(this.isHoveredOver()) {
+                (wickPlayer || wickEditor).project.runScript(this, 'mouseHover');
+            }
+
+            if(this._wasHoveredOver) {
+                (wickPlayer || wickEditor).project.runScript(this, 'mouseEnter');
+                this._wasHoveredOver = false;
+            }
+
+            if(this._mouseJustLeft) {
+                (wickPlayer || wickEditor).project.runScript(this, 'mouseLeave');
+                this._mouseJustLeft = false;
+            }
+
+            wickPlayer.inputHandler.getAllKeysJustReleased().forEach(function (key) {
+                (wickPlayer || wickEditor).project.runScript(self, 'keyReleased', key);
+            });
+
+            wickPlayer.inputHandler.getAllKeysJustPressed().forEach(function (key) {
+                (wickPlayer || wickEditor).project.runScript(self, 'keyPressed', key);
+            });
+
+            wickPlayer.inputHandler.getAllKeysDown().forEach(function (key) {
+                (wickPlayer || wickEditor).project.runScript(self, 'keyDown', key);
+            });
+
+            // Inactive -> Inactive
+            if (!this._wasActiveLastTick && !this._active) {
+                
+            }
+            // Inactive -> Active
+            else if (!this._wasActiveLastTick && this._active) {
+                (wickPlayer || wickEditor).project.loadScriptOfObject(this);
+
+                (wickPlayer || wickEditor).project.runScript(this, 'load');
+                (wickPlayer || wickEditor).project.runScript(this, 'update');
+
+                
+                if (this.isSound) {
+                    this._updateAudio(); 
+                    this._playSound(); 
+                }
+            }
+            // Active -> Active
+            else if (this._wasActiveLastTick && this._active) {
+                (wickPlayer || wickEditor).project.runScript(this, 'update');
+
+                if (this.isSound) {
+                    this._updateAudio(); 
+                }
+            }
+            // Active -> Inactive
+            else if (this._wasActiveLastTick && !this._active) {
+                if(!this.parentFrame.alwaysSaveState) {
+                    wickPlayer.resetStateOfObject(this);
+                }
+
+                if (this.isSound) {
+                    this._stopSound(); 
+                }
+            }
+        }
+
+        if(this._active) {
             this.advanceTimeline();
-        }
-        // Active -> Active
-        else if (this._wasActiveLastTick && this._active) {
-            (wickPlayer || wickEditor).project.runScript(this, 'update');
-
-            if (this.isSound) {
-                this._updateAudio(); 
-            }
-
-            this.advanceTimeline();
-        }
-        // Active -> Inactive
-        else if (this._wasActiveLastTick && !this._active) {
-            if(!this.parentFrame.alwaysSaveState) {
-                wickPlayer.resetStateOfObject(this);
-            }
-
-            if (this.isSound) {
-                this._stopSound(); 
-            }
         }
     
         this.currentFrameNumber = this.playheadPosition+1;

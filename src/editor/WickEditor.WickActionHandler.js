@@ -189,6 +189,8 @@ var WickActionHandler = function (wickEditor) {
                 });
             }
             var currentFrame = wickEditor.project.getCurrentFrame();
+
+            console.log(currentFrame)
             
             // Save references to added wick objects so they can be removed on undo
             if(args.addedObjects) {

@@ -102,36 +102,9 @@ var WickPlayer = function () {
 
         if(stats) stats.begin();
 
-        /*if(self.project.framerate < 60) {
-            loopTimeout = setTimeout(function() {
-
-                if(self.running) {
-
-                    if(!firstTick) self.project.tick();
-                    if(self.project) self.renderer.renderWickObjects(self.project, self.project.rootObject.getAllActiveChildObjects(), null, true);
-                    self.inputHandler.update();
-
-                    update(false);
-                }
-            }, 1000 / self.project.framerate);
-
-        } else {
-
-            if(self.running) {
-                requestAnimationFrame(function () { update(false) });
-            }
-            startTiming()
-            if(!firstTick) self.project.tick();
-            stopTiming('tick', 10)
-            
-            stopTiming('render', 10)
-            self.inputHandler.update();
-
-        }*/
-
-        startTiming()
+        window.tickData = {osr:0}
         if(!firstTick) self.project.tick();
-        stopTiming('tick', 10)
+        //console.log(window.tickData)
 
         requestAnimationFrame(function() { update(false); });
 
@@ -141,10 +114,8 @@ var WickPlayer = function () {
         var fpsInterval = 1000/self.project.framerate;
         if (self.project.framerate === 60 || elapsed > fpsInterval) {
             then = now - (elapsed % fpsInterval);
-
-            startTiming()
+            
             self.renderer.renderWickObjects(self.project, self.project.rootObject.getAllActiveChildObjects(), null, true);
-            stopTiming('redner', 10)
             self.inputHandler.update();
         }
 
