@@ -183,14 +183,22 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.clearSelection();
 
             // Make a new frame if one doesn't exist at the playhead position
-            if(!wickEditor.project.getCurrentFrame()) {
+            var currentFrame = wickEditor.project.getCurrentFrame();
+            if(!currentFrame) {
                 args.addFrameAction = wickEditor.actionHandler.doAction('addNewFrame', {
                     dontAddToStack: true
                 });
+            } else {
+                if(currentFrame.tweens.length > 0) {
+                    args.addLayerAction = wickEditor.actionHandler.doAction('addNewLayer', {
+                        dontAddToStack: true
+                    });
+                    wickEditor.project.rootObject.generateParentObjectReferences()
+                    args.addFrameAction = wickEditor.actionHandler.doAction('addNewFrame', {
+                        dontAddToStack: true
+                    });
+                }
             }
-            var currentFrame = wickEditor.project.getCurrentFrame();
-
-            console.log(currentFrame)
             
             // Save references to added wick objects so they can be removed on undo
             if(args.addedObjects) {
@@ -218,6 +226,7 @@ var WickActionHandler = function (wickEditor) {
                 wickEditor.project.currentObject.removeChild(wickObject);
             });
 
+            //if(args.addLayerAction) args.addLayerAction.undoAction();
             if(args.addFrameAction) args.addFrameAction.undoAction();
 
             done(args);
