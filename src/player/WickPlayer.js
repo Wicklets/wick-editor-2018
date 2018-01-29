@@ -69,7 +69,7 @@ var WickPlayer = function () {
         self.inputHandler.setup(); 
         if(!bowser.mobile && !bowser.tablet) self.audioPlayer.setup();
 
-        update(false);
+        startUpdate();
     }
 
     window.runProject = function (projectJSON) {
@@ -89,6 +89,12 @@ var WickPlayer = function () {
         self.audioPlayer.cleanup();
     }
 
+    function startUpdate(fps) {
+        then = Date.now();
+        startTime = then;
+        update(false);
+    }
+
     var loopTimeout;
     var update = function (firstTick) {
 
@@ -96,16 +102,16 @@ var WickPlayer = function () {
 
         if(stats) stats.begin();
 
-        if(self.project.framerate < 60) {
+        /*if(self.project.framerate < 60) {
             loopTimeout = setTimeout(function() {
 
                 if(self.running) {
 
                     if(!firstTick) self.project.tick();
                     if(self.project) self.renderer.renderWickObjects(self.project, self.project.rootObject.getAllActiveChildObjects(), null, true);
-                    self.inputHandler.update(false);
+                    self.inputHandler.update();
 
-                    update();
+                    update(false);
                 }
             }, 1000 / self.project.framerate);
 
@@ -114,10 +120,32 @@ var WickPlayer = function () {
             if(self.running) {
                 requestAnimationFrame(function () { update(false) });
             }
+            startTiming()
             if(!firstTick) self.project.tick();
-            self.renderer.renderWickObjects(self.project, self.project.rootObject.getAllActiveChildObjects(), null, true);
+            stopTiming('tick', 10)
+            
+            stopTiming('render', 10)
             self.inputHandler.update();
 
+        }*/
+
+        startTiming()
+        if(!firstTick) self.project.tick();
+        stopTiming('tick', 10)
+
+        requestAnimationFrame(function() { update(false); });
+
+        now = Date.now();
+        elapsed = now - then;
+
+        var fpsInterval = 1000/self.project.framerate;
+        if (self.project.framerate === 60 || elapsed > fpsInterval) {
+            then = now - (elapsed % fpsInterval);
+
+            startTiming()
+            self.renderer.renderWickObjects(self.project, self.project.rootObject.getAllActiveChildObjects(), null, true);
+            stopTiming('redner', 10)
+            self.inputHandler.update();
         }
 
         if(stats) stats.end();
@@ -135,8 +163,9 @@ var WickPlayer = function () {
         clone.prepareForPlayer()
 
         clone.parentObject = wickObj.parentObject;
+        clone.parentFrame = wickObj.parentFrame;
         clone.parentObject.getCurrentLayer().getCurrentFrame().wickObjects.push(clone);
-        self.project.rootObject.generateParentObjectReferences();
+        clone.generateParentObjectReferences();
 
         return clone;
     }

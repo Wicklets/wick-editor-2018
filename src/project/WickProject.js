@@ -660,10 +660,11 @@ WickProject.prototype.runScript = function (obj, fnName, arg1, arg2, arg3) {
 
     window.errorCausingObject = obj;
 
-    this.loadBuiltinFunctions(obj);
-
     try {
-        if(obj[fnName]) obj[fnName](arg1, arg2, arg3);
+        if(obj[fnName]) {
+            this.loadBuiltinFunctions(obj);
+            obj[fnName](arg1, arg2, arg3);
+        }
     } catch (e) {
         this.handleWickError(e,obj);
     }
