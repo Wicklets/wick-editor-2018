@@ -39,7 +39,7 @@
 								"flipX": false,
 								"flipY": false,
 								"opacity": 1,
-								"wickScript": "dragging%20=%20false;%0A%0Afunction%20update()%20%7B%0A%20%20%20%20if%20(dragging)%20%7B%0A%20%20%20%20%20%20%20%20this.x%20=%20mouseX%0A%20%20%20%20%20%20%20%20this.y%20=%20mouseY%0A%20%20%20%20%7D%0A%7D%0A%0Afunction%20mousePressed%20()%20%7B%0A%20%20%20%20dragging%20=%20true%0A%7D%0A%0Afunction%20mouseReleased%20()%20%7B%0A%20%20%20%20dragging%20=%20false%0A%7D",
+								"wickScript": "this.dragging%20=%20false;%0A%0Afunction%20update()%20%7B%0A%20%20%20%20if%20(this.dragging)%20%7B%0A%20%20%20%20%20%20%20%20this.x%20=%20mouseX%0A%20%20%20%20%20%20%20%20this.y%20=%20mouseY%0A%20%20%20%20%7D%0A%7D%0A%0Afunction%20mousePressed%20()%20%7B%0A%20%20%20%20this.dragging%20=%20true%0A%7D%0A%0Afunction%20mouseReleased%20()%20%7B%0A%20%20%20%20this.dragging%20=%20false%0A%7D",
 								"assetUUID": null,
 								"loop": false,
 								"isText": false,
@@ -1794,10 +1794,11 @@
 	"wickVersion": "0.12",
 	"metaInfo": {
 		"browser": "Chrome",
-		"browserVersion": "63.0.3239.84",
+		"browserVersion": "63.0.3239.132",
 		"navigatorAppName": "Netscape",
-		"navigatorUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36",
-		"wickVersion": "0.12",
-		"dateSaved": "Thu, 28 Dec 2017 04:23:13 GMT"
+		"navigatorUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36",
+		"devicePixelRatio": 1,
+		"wickVersion": "0.12.2",
+		"dateSaved": "Mon, 29 Jan 2018 21:03:11 GMT"
 	}
 }
