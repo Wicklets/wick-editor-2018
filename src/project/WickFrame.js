@@ -50,7 +50,7 @@ var WickFrame = function () {
 WickFrame.prototype.tick = function () {
     var self = this;
 
-    if(this.wickScript !== '') {
+    if(this.wickScript !== '' || this.isSound) {
         // Inactive -> Inactive
         // Do nothing, frame is still inactive
         if (!this._wasActiveLastTick && !this._active) {

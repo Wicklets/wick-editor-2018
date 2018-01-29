@@ -1200,7 +1200,7 @@ WickObject.prototype.tick = function () {
         }
     }
 
-    if(this.isSymbol) {
+    if(this.isSymbol || this.isSound) {
         if(true) {
             if(this._wasClicked) {
                 (wickPlayer || wickEditor).project.runScript(this, 'mousePressed');
@@ -1254,7 +1254,6 @@ WickObject.prototype.tick = function () {
                 (wickPlayer || wickEditor).project.runScript(this, 'load');
                 (wickPlayer || wickEditor).project.runScript(this, 'update');
 
-                
                 if (this.isSound) {
                     this._updateAudio(); 
                     this._playSound(); 
@@ -1280,18 +1279,20 @@ WickObject.prototype.tick = function () {
             }
         }
 
-        if(this._active) {
-            this.advanceTimeline();
-        }
-    
-        this.currentFrameNumber = this.playheadPosition+1;
-        var self = this;
-        this.layers.forEach(function (layer) {
-            var frame = layer.getCurrentFrame();
-            if(frame && frame.name) {
-                self.currentFrameName = frame.name;
+        if(this.isSymbol) {
+            if(this._active) {
+                this.advanceTimeline();
             }
-        })
+        
+            this.currentFrameNumber = this.playheadPosition+1;
+            var self = this;
+            this.layers.forEach(function (layer) {
+                var frame = layer.getCurrentFrame();
+                if(frame && frame.name) {
+                    self.currentFrameName = frame.name;
+                }
+            })
+        }
     }
 
 }
