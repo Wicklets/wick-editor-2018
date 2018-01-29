@@ -102,10 +102,6 @@ var WickPlayer = function () {
 
         if(stats) stats.begin();
 
-        window.tickData = {osr:0}
-        if(!firstTick) self.project.tick();
-        //console.log(window.tickData)
-
         requestAnimationFrame(function() { update(false); });
 
         now = Date.now();
@@ -115,6 +111,12 @@ var WickPlayer = function () {
         if (self.project.framerate === 60 || elapsed > fpsInterval) {
             then = now - (elapsed % fpsInterval);
             
+            deleteObjects = [];
+            if(!firstTick) self.project.tick();
+            deleteObjects.forEach(function (d) {
+                self.renderer.cleanupObjectTextures(d);
+                d.remove();
+            })
             self.renderer.renderWickObjects(self.project, self.project.rootObject.getAllActiveChildObjects(), null, true);
             self.inputHandler.update();
         }
@@ -142,8 +144,8 @@ var WickPlayer = function () {
     }
 
     self.deleteObject = function (wickObj) {
-        self.renderer.cleanupObjectTextures(wickObj);
-        wickObj.remove();
+        deleteObjects.push(wickObj);
+        
     }
 
     self.resetStateOfObject = function (wickObject) {

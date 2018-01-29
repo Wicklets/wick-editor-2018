@@ -1202,8 +1202,6 @@ WickObject.prototype.tick = function () {
 
     if(this.isSymbol) {
         if(true) {
-            window.tickData.osr++
-
             if(this._wasClicked) {
                 (wickPlayer || wickEditor).project.runScript(this, 'mousePressed');
                 this._wasClicked = false;
