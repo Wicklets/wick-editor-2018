@@ -177,15 +177,8 @@ var InteractiveCanvas = function (wickEditor) {
             });
         }
 
-        wickEditor.project.getCurrentObject().getAllActiveChildObjects().forEach(function (wickObject) {
-            if(wickEditor.project.isObjectSelected(wickObject)) {
-                if(wickEditor.currentTool == wickEditor.tools.vectorcursor) {
-                    wickObject.paper.selected = true;
-                } else if(wickEditor.currentTool == wickEditor.tools.selectioncursor) {
-                    wickEditor.tools.selectioncursor.forceUpdateSelection();
-                }
-            }
-        });
+        if(wickEditor.currentTool.forceUpdateSelection) 
+            wickEditor.currentTool.forceUpdateSelection()
         
         self.needsUpdate = false;
     }
@@ -216,24 +209,11 @@ var InteractiveCanvas = function (wickEditor) {
         }
     }
 
-    self.getItemAtPoint = function (point, args) {
-        if(!args) args = {};
-        if(args.tolerance === undefined) args.tolerance = 3;
-        var zoom = wickEditor.canvas.getZoom()
-
-        var hitOptions = {
-            segments: true,
-            fill: true,
-            curves: true,
-            handles: true,
-            stroke: true,
-            tolerance: args.tolerance / zoom
-        }
-
+    self.getItemAtPoint = function (point, hitOptions) {
         var hitResult = paper.project.hitTest(point, hitOptions);
 
         if(hitResult && (hitResult.item._isPartOfGroup || hitResult.item.parent._isPartOfGroup)) {
-            if(args.allowGroups) {
+            if(hitOptions.allowGroups) {
                 function getRootParent (item) {
                     if(item.parent._class === 'Layer') {
                         return item;

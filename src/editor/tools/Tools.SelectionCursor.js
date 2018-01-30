@@ -36,7 +36,10 @@ Tools.SelectionCursor = function (wickEditor) {
     var scaleB;
     var scaleL;
     var scaleR;
-    var rotate;
+    var rotateTL;
+    var rotateTR;
+    var rotateBL;
+    var rotateBR;
     var individualObjectBoxes;
 
     var GUI_DOTS_SIZE = 5;
@@ -48,6 +51,8 @@ Tools.SelectionCursor = function (wickEditor) {
 
     var lastEvent;
     var transformMode;
+
+    var pathHoverGhost;
 
     this.getCursorImage = function () {
         return "auto"
@@ -72,13 +77,19 @@ Tools.SelectionCursor = function (wickEditor) {
 
     this.paperTool = new paper.Tool();
 
+    var hitOptions = {
+        allowGroups: true,
+        segments: false,
+        fill: true,
+        curves: true,
+        handles: false,
+        stroke: true,
+    }
+
     this.paperTool.onMouseMove = function(event) {
         updateSelection()
 
-        hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point, {
-            allowGroups: true, 
-            tolerance: 0
-        });
+        hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point, hitOptions);
 
         if(hitResult && hitResult.item._cursor)
             document.body.style.cursor = hitResult.item._cursor;
@@ -86,9 +97,21 @@ Tools.SelectionCursor = function (wickEditor) {
             document.body.style.cursor = 'move';
         else
             wickEditor.canvas.updateCursor();
+
+        if(pathHoverGhost) pathHoverGhost.remove();
+        pathHoverGhost = null;
+        if(hitResult && !hitResult.item._wickInteraction) {
+            pathHoverGhost = hitResult.item.clone();
+            pathHoverGhost._wickInteraction = 'pathHoverGhost';
+            pathHoverGhost.fillColor = 'rgba(0,0,0,0)';
+            pathHoverGhost.strokeColor = GUI_DOTS_STROKECOLOR;
+            pathHoverGhost.strokeWidth = 1.5/wickEditor.canvas.getZoom();
+        }
     }
 
     this.paperTool.onMouseDown = function(event) {
+
+        if(pathHoverGhost) pathHoverGhost.remove();
 
         if(lastEvent 
         && event.timeStamp-lastEvent.timeStamp<300 
@@ -99,8 +122,6 @@ Tools.SelectionCursor = function (wickEditor) {
         }
         lastEvent = event;
         
-        hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point, {allowGroups:true});
-
         if(hitResult && hitResult.item && hitResult.item._wickInteraction) {
             transformMode = hitResult.item._wickInteraction
             return;
@@ -269,7 +290,7 @@ Tools.SelectionCursor = function (wickEditor) {
                 //updateSelection()
             });
             selectionRect.rotate(rotationAmount, pivot);
-            rotate.rotate(rotationAmount, pivot);
+            //rotate.rotate(rotationAmount, pivot);
             scaleBR.rotate(rotationAmount, pivot);
             scaleBL.rotate(rotationAmount, pivot);
             scaleTR.rotate(rotationAmount, pivot);
@@ -325,8 +346,11 @@ Tools.SelectionCursor = function (wickEditor) {
             wickEditor.project.getCurrentObject().getAllActiveChildObjects().forEach(function (wickObject) {
                 if(!wickObject.paper) return;
                 if(wickObject.parentFrame.parentLayer.locked || wickObject.parentFrame.parentLayer.hidden) return;
-                if(selectionSquare.bounds.contains(wickObject.paper.bounds)) {
-                    wickEditor.project.selectObject(wickObject)
+                if(selectionSquare.bounds.intersects(wickObject.paper.bounds)) {
+                    if(selectionSquare.bounds.contains(wickObject.paper.bounds)
+                    || (selectionSquare.intersects(wickObject.paper)) && !event.modifiers.alt) {
+                        wickEditor.project.selectObject(wickObject)
+                    }
                 }
             });
             wickEditor.syncInterfaces()
@@ -437,7 +461,10 @@ Tools.SelectionCursor = function (wickEditor) {
         if(scaleB) scaleB.remove();
         if(scaleL) scaleL.remove();
         if(scaleR) scaleR.remove();
-        if(rotate) rotate.remove();
+        if(rotateTL) rotateTL.remove();
+        if(rotateTR) rotateTR.remove();
+        if(rotateBL) rotateBL.remove();
+        if(rotateBR) rotateBR.remove();
         if(individualObjectBoxes) {
             individualObjectBoxes.forEach(function (o) {
                 o.remove();
@@ -468,6 +495,26 @@ Tools.SelectionCursor = function (wickEditor) {
                     individualObjectBoxes.push(oPaperRect);
                 });
             }
+
+            rotateTL = new paper.Path.Circle(selectionBoundsRect.topLeft, GUI_DOTS_SIZE*5/wickEditor.canvas.getZoom());
+            rotateTL.fillColor = 'rgba(0,0,0,0.01)';
+            rotateTL._wickInteraction = 'rotate';
+            rotateTL._cursor = 'url("resources/cursor-rotate.png") 32 32,default';
+
+            rotateTR = new paper.Path.Circle(selectionBoundsRect.topRight, GUI_DOTS_SIZE*5/wickEditor.canvas.getZoom());
+            rotateTR.fillColor = 'rgba(0,0,0,0.01)';
+            rotateTR._wickInteraction = 'rotate';
+            rotateTR._cursor = 'url("resources/cursor-rotate.png") 32 32,default';
+
+            rotateBL = new paper.Path.Circle(selectionBoundsRect.bottomLeft, GUI_DOTS_SIZE*5/wickEditor.canvas.getZoom());
+            rotateBL.fillColor = 'rgba(0,0,0,0.01)';
+            rotateBL._wickInteraction = 'rotate';
+            rotateBL._cursor = 'url("resources/cursor-rotate.png") 32 32,default';
+
+            rotateBR = new paper.Path.Circle(selectionBoundsRect.bottomRight, GUI_DOTS_SIZE*5/wickEditor.canvas.getZoom());
+            rotateBR.fillColor = 'rgba(0,0,0,0.01)';
+            rotateBR._wickInteraction = 'rotate';
+            rotateBR._cursor = 'url("resources/cursor-rotate.png") 32 32,default';
 
             scaleBR = new paper.Path.Circle(selectionBoundsRect.bottomRight, dotSize);
             scaleBR.fillColor = GUI_DOTS_FILLCOLOR;
@@ -524,13 +571,6 @@ Tools.SelectionCursor = function (wickEditor) {
             scaleR.strokeWidth = strokeWidth;
             scaleR._wickInteraction = 'scaleR';
             scaleR._cursor = 'ew-resize';
-
-            rotate = new paper.Path.Circle(selectionBoundsRect.topCenter.add(new paper.Point(0,-20/wickEditor.canvas.getZoom())), GUI_DOTS_SIZE/wickEditor.canvas.getZoom());
-            rotate.fillColor = GUI_DOTS_FILLCOLOR
-            rotate.strokeColor = GUI_DOTS_STROKECOLOR
-            rotate.strokeWidth = strokeWidth;
-            rotate._wickInteraction = 'rotate';
-            rotate._cursor = 'url("resources/cursor-rotate.png") 32 32,default';
         }
     }
 

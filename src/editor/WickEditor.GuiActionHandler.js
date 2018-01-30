@@ -1221,10 +1221,10 @@ var GuiActionHandler = function (wickEditor) {
                 } else {
                     for(key in args) {
                         wickObject.paper[key] = args[key];
-                        modifiedStates.push({
-                            pathData : wickObject.paper.exportSVG({asString:true}),
-                        })
                     }
+                    modifiedStates.push({
+                        pathData : wickObject.paper.exportSVG({asString:true}),
+                    })
                 }
             })
             wickEditor.actionHandler.doAction('modifyObjects', {

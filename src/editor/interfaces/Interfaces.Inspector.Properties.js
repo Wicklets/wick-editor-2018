@@ -291,6 +291,44 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
+    properties.push(new InspectorInterface.SelectInput({
+        title: 'Stroke Caps',
+        options: ['Round', 'Square'],
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isPath;
+        },
+        getValueFn: function () {
+            if(!selectionInfo.object.paper) return '';
+            var c = selectionInfo.object.paper.strokeCap;
+            if(c === 'round') {
+                return 'Round'
+            } else if (c === 'square') {
+                return 'Square'
+            } else {
+                return 'Square';
+            }
+        }, 
+        onChangeFn: function (val) {
+            if(!selectionInfo.object.paper) return;
+            
+            var newCap; 
+            var newJoin;
+            if(val === 'Square') {
+                newCap = 'square';
+                newJoin = 'miter';
+            } else if (val === 'Round') {
+                newCap = 'round';
+                newJoin = 'round';
+            }
+
+            wickEditor.guiActionHandler.doAction("changePathProperties", {
+                strokeCap: newCap,
+                strokeJoin: newJoin,
+            });
+            wickEditor.syncInterfaces();
+        }
+    }));
+
     properties.push(new InspectorInterface.StringInput({
         title: 'Name',
         isActiveFn: function () {

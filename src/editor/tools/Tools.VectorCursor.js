@@ -56,7 +56,7 @@ Tools.VectorCursor = function (wickEditor) {
     this.paperTool.onMouseDown = function(event) {
 
         if(lastEvent 
-        && event.timeStamp-lastEvent.timeStamp<300 
+        && event.timeStamp-lastEvent.timeStamp<300
         && event.point.x===lastEvent.point.x
         && event.point.y===lastEvent.point.y) {
             that.paperTool.onDoubleClick(event);
@@ -225,7 +225,7 @@ Tools.VectorCursor = function (wickEditor) {
             paper.project.activeLayer.selected = false;
             paper.project.deselectAll();
             hitResult.item.selected = true;
-            hitResult.item.fullySelected = true;
+            //hitResult.item.fullySelected = true;
         }
 
         wickEditor.cursorIcon.setImageForPaperEvent(event)
