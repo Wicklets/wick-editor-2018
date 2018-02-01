@@ -96,15 +96,13 @@ Tools.Pen = function (wickEditor) {
 
         if(drawingPath) {
 
-            /*if(currentSegment === drawingPath.firstSegment) {
-                console.log("???")
+            if(currentSegment === drawingPath.firstSegment) {
+                drawingPath.firstSegment.handleIn.x = -drawingPath.firstSegment.handleOut.x
+                drawingPath.firstSegment.handleIn.y = -drawingPath.firstSegment.handleOut.y
+            } else if(currentSegment === drawingPath.lastSegment) {
                 drawingPath.lastSegment.handleOut.x = -drawingPath.lastSegment.handleIn.x
                 drawingPath.lastSegment.handleOut.y = -drawingPath.lastSegment.handleIn.y
-            } else if(currentSegment === drawingPath.lastSegment) {
-                console.log("!!!")
-                drawingPath.firstSegment.handleOut.x = -drawingPath.firstSegment.handleIn.x
-                drawingPath.firstSegment.handleOut.y = -drawingPath.firstSegment.handleIn.y
-            }*/
+            }
 
             if(hitResult && 
                 ((hitResult.segment === drawingPath.firstSegment && currentSegment === drawingPath.lastSegment) || 
@@ -112,13 +110,15 @@ Tools.Pen = function (wickEditor) {
             ) {
                 drawingPath.closePath();
                 drawingPath.fillColor = wickEditor.settings.fillColor;
-                currentSegment = drawingPath.firstSegment
+                if(currentSegment === drawingPath.firstSegment) {
+                    currentSegmentIndex = drawingPath.lastSegment.index
+                } else if(currentSegment === drawingPath.lastSegment) {
+                    currentSegmentIndex = drawingPath.firstSegment.index
+                }
             } else {
                 if(currentSegment === drawingPath.firstSegment) {
-                    console.log('first')
                     currentSegmentIndex = drawingPath.insert(0, event.point).index;
                 } else if(currentSegment === drawingPath.lastSegment) {
-                    console.log('last')
                     currentSegmentIndex = drawingPath.add(event.point).index;
                 }
             } 
@@ -158,14 +158,21 @@ Tools.Pen = function (wickEditor) {
 
     this.paperTool.onMouseDrag = function(event) {
         if(currentSegment) {
-            var delta = event.delta.clone();
-            currentSegment.handleIn.x -= delta.x;
-            currentSegment.handleIn.y -= delta.y;
-            currentSegment.handleOut.x += delta.x;
-            currentSegment.handleOut.y += delta.y;
+            if(currentSegment === drawingPath.lastSegment) {
+                currentSegment.handleIn.x -= event.delta.x;
+                currentSegment.handleIn.y -= event.delta.y;
+                currentSegment.handleOut.x += event.delta.x;
+                currentSegment.handleOut.y += event.delta.y;
+            } else {
+                currentSegment.handleIn.x += event.delta.x;
+                currentSegment.handleIn.y += event.delta.y;
+                currentSegment.handleOut.x -= event.delta.x;
+                currentSegment.handleOut.y -= event.delta.y;
+            }
         } else {
             //wickEditor.tools.vectorcursor.paperTool.onMouseDrag(event)
         }
+        updateDrawingPath()
     }
 
     this.paperTool.onMouseUp = function (event) {
