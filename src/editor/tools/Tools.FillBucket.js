@@ -89,20 +89,25 @@ Tools.FillBucket = function (wickEditor) {
             if(!child.wick || child.wick.parentFrame.parentLayer !== wickEditor.project.getCurrentLayer()) return;
 
             var nextPath;
-            if(!child.closed) {
-                var offset = child.strokeWidth/2;
-                var outerPath = OffsetUtils.offsetPath(child, offset, true);
-                var innerPath = OffsetUtils.offsetPath(child, -offset, true);
-                nextPath = OffsetUtils.joinOffsets(outerPath.clone(), innerPath.clone(), child, offset);
-                nextPath = nextPath.unite();
-                nextPath.fillColor = wickEditor.settings.fillColor;
+            if(!child.closed || !child.fillColor || child.fillColor.alpha === 0) {
+                var path = child.clone({insert:false});
+                var offset = path.strokeWidth/2;
+                var outerPath = OffsetUtils.offsetPath(path, offset, true);
+                var innerPath = OffsetUtils.offsetPath(path, -offset, true);
+                path = OffsetUtils.joinOffsets(outerPath.clone(), innerPath.clone(), path, offset);
+                //path = path.unite();
+                path.fillColor = wickEditor.settings.fillColor;
+                nextPath = path;
             } else {
+                console.log(child.fillColor)
                 nextPath = child;
                 nextPath.resolveCrossings()
             }
 
             children.push(nextPath)
         });
+
+        console.log(children)
 
         var superPath = null;
         children.forEach(function (child) {
@@ -152,8 +157,6 @@ Tools.FillBucket = function (wickEditor) {
             }
         });
 
-        console.log(holePath)
-
         // TODO: Ignore resulting paths of leaky holes being filled.
 
         holePath.clockwise = false;
@@ -169,6 +172,7 @@ Tools.FillBucket = function (wickEditor) {
         wickEditor.actionHandler.doAction('addObjects', {
             wickObjects: [pathWickObject],
             dontSelectObjects: true,
+            sendToBack: true,
         });
     }
 

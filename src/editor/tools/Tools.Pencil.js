@@ -96,10 +96,9 @@ Tools.Pencil = function (wickEditor) {
             if(path.segments.length > 2) {
                 path.smooth();
 
-                wickEditor.settings.pencilSmoothing = 30;
                 if(wickEditor.settings.pencilSmoothing > 0) {
                     var t = wickEditor.settings.strokeWidth;
-                    var s = wickEditor.settings.pencilSmoothing/100;
+                    var s = wickEditor.settings.pencilSmoothing/100*10;
                     var z = wickEditor.canvas.getZoom();
                     path.simplify(t / z * s);
                 }

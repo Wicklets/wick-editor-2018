@@ -114,7 +114,7 @@ Tools.Paintbrush = function (wickEditor) {
                     var t = wickEditor.settings.strokeWidth;
                     var s = wickEditor.settings.brushSmoothing/100*10;
                     var z = wickEditor.canvas.getZoom();
-                    path.simplify(100/*t / z * s*/);
+                    path.simplify(t / z * s);
                 }
 
                 path.join(path, 10/wickEditor.canvas.getZoom())
@@ -122,8 +122,8 @@ Tools.Paintbrush = function (wickEditor) {
 
             path.remove();
 
-            path.strokeCap = 'round'
-            path.strokeJoin = 'round'
+            path.strokeCap = 'round';
+            path.strokeJoin = 'round';
 
             var offset = path.strokeWidth/2;
             var outerPath = OffsetUtils.offsetPath(path, offset, true);

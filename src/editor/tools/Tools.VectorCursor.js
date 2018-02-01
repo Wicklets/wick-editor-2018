@@ -72,7 +72,8 @@ Tools.VectorCursor = function (wickEditor) {
         if(pathHoverGhost) pathHoverGhost.remove();
         pathHoverGhost = null;
         if(hitResult && !hitResult.item._wickInteraction) {
-            if(!wickEditor.project.isObjectSelected(hitResult.item.wick)) {
+            var wickObj = hitResult.item.wick || hitResult.item.parent.wick;
+            if(!wickEditor.project.isObjectSelected(wickObj)) {
                 pathHoverGhost = hitResult.item.clone({insert:false});
                 paper._guiLayer.addChild(pathHoverGhost)
                 pathHoverGhost._wickInteraction = 'pathHoverGhost';
@@ -372,17 +373,17 @@ Tools.VectorCursor = function (wickEditor) {
             }
             selectionSquare = null;
             makingSelectionSquare = false;
-            return;
+        } else {
+            console.log(hitResult)
+            if(hitResult && hitResult.item && !(event.delta.x === 0 && event.delta.y === 0)) {
+                modifySelectedPath();
+            }
         }
 
-        if(!hitResult) return;
-        if(!hitResult.item) return;
-
-        if(event.delta.x === 0 && event.delta.y === 0) return;
-
-        modifySelectedPath();
-
         resetSelection(event);
+
+        hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point, hitOptions);
+
     }
 
     function resetSelection (event) {
@@ -412,6 +413,8 @@ Tools.VectorCursor = function (wickEditor) {
     }
 
     function modifySelectedPath () {
+        console.log('modifySelectedPath')
+
         var objs = wickEditor.project.getSelectedObjects();
         var modifiedStates = [];
         objs.forEach(function (wickObject) {
@@ -430,6 +433,8 @@ Tools.VectorCursor = function (wickEditor) {
                     scaleY: wickObject.paper.scaling.y,
                 });
             } else if (wickObject.isPath) {
+                console.log('mod')
+
                 wickObject.paper.applyMatrix = true;
 
                 wickObject.rotation = 0;

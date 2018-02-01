@@ -103,7 +103,56 @@ Tools.Eraser = function (wickEditor) {
     }
 
     this.paperTool.onMouseUp = function (event) {
-        if (path) {
+        if(!path) return;
+
+        path.add(event.point)
+        path.simplify(10);
+
+        path.remove();
+
+        path.strokeCap = 'round';
+        path.strokeJoin = 'round';
+
+        var offset = path.strokeWidth/2;
+        var outerPath = OffsetUtils.offsetPath(path, offset, true);
+        var innerPath = OffsetUtils.offsetPath(path, -offset, true);
+        path = OffsetUtils.joinOffsets(outerPath.clone(), innerPath.clone(), path, offset);
+        path = path.unite();
+        path.fillColor = wickEditor.settings.fillColor;
+
+        var eraseObjects = wickEditor.project.getCurrentFrame().wickObjects
+        eraseObjects = eraseObjects.filter(function (wickObject) {
+            return wickObject.paper && wickObject.paper.closed;
+        });
+
+        var modifiedStates = [];
+        eraseObjects.forEach(function (wickObject) {
+            var parentAbsPos;
+            if(wickObject.parentObject)
+                parentAbsPos = wickObject.parentObject.getAbsolutePosition();
+            else 
+                parentAbsPos = {x:0,y:0};
+
+            wickObject.paper = wickObject.paper.subtract(path);
+            modifiedStates.push({
+                x: wickObject.paper.position.x - parentAbsPos.x,
+                y: wickObject.paper.position.y - parentAbsPos.y,
+                svgX: wickObject.paper.bounds._x,
+                svgY: wickObject.paper.bounds._y,
+                width: wickObject.paper.bounds._width,
+                height: wickObject.paper.bounds._height,
+                pathData: wickObject.paper.exportSVG({asString:true}),
+            })
+        })
+
+        wickEditor.actionHandler.doAction('modifyObjects', {
+            objs: eraseObjects,
+            modifiedStates: modifiedStates,
+        });
+
+        path = null;
+
+        /*if (path) {
 
             path.add(event.point)
             
@@ -164,6 +213,6 @@ Tools.Eraser = function (wickEditor) {
             }
             final.src = rasterDataURL;
 
-        }
+        }*/
     }
 }
