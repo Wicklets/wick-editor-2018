@@ -47,6 +47,11 @@ var InteractiveCanvas = function (wickEditor) {
         paper.view.viewSize.height = window.innerHeight;
         document.getElementById('editorCanvasContainer').appendChild(paperCanvas);
 
+        paper._mainLayer = new paper.Layer();
+        paper._guiLayer = new paper.Layer();
+        paper._guiLayer.locked = true;
+        paper._mainLayer.activate();
+
     }
 
     self.show = function () {
@@ -211,6 +216,10 @@ var InteractiveCanvas = function (wickEditor) {
     }
 
     self.getItemAtPoint = function (point, hitOptions) {
+        if(hitOptions && hitOptions.tolerance) {
+            hitOptions.tolerance /= wickEditor.canvas.getZoom();
+        }
+
         var hitResult = paper.project.hitTest(point, hitOptions);
 
         if(hitResult && (hitResult.item._isPartOfGroup || hitResult.item.parent._isPartOfGroup)) {

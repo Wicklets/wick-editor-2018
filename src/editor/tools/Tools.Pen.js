@@ -47,6 +47,7 @@ Tools.Pen = function (wickEditor) {
         drawingPathUUID = null
         drawingPath = null
         currentSegment = null
+        if(previewStroke) previewStroke.remove();
     }
 
     this.paperTool = new paper.Tool();
@@ -59,13 +60,30 @@ Tools.Pen = function (wickEditor) {
         })*/
 
         updateDrawingPath();
+
+        if(previewStroke) previewStroke.remove();
+        if(drawingPath) {
+            previewStroke = new paper.Path({insert:false});
+            previewStroke.strokeColor = GUI_DOTS_STROKECOLOR;
+            previewStroke.strokeWidth = 1;
+            previewStroke.add(currentSegment.clone())
+            previewStroke.add(event.point)
+            previewStroke.segments[0].handleIn.x *= -1
+            previewStroke.segments[0].handleIn.y *= -1
+            previewStroke.segments[0].handleOut.x *= -1
+            previewStroke.segments[0].handleOut.y *= -1
+            previewStroke.selected = false;
+            paper._guiLayer.addChild(previewStroke)
+        }
     }
 
     var drawingPath;
     var currentSegment;
     var currentSegmentIndex;
+    var previewStroke;
 
     this.paperTool.onMouseDown = function (event) {
+        if(previewStroke) previewStroke.remove();
         /*drawingPath = null;
         paper.project.selectedItems.forEach(function (item) {
             if(item instanceof paper.Group) return;
