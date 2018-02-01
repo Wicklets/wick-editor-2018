@@ -17,6 +17,10 @@
 
 if(!window.Tools) Tools = {};
 
+var GUI_DOTS_SIZE = 5;
+var GUI_DOTS_FILLCOLOR = 'rgba(255,255,255,0.3)';
+var GUI_DOTS_STROKECOLOR = 'rgba(100,150,255,1.0)'
+
 Tools.SelectionCursor = function (wickEditor) {
 
     var self = this;
@@ -41,10 +45,6 @@ Tools.SelectionCursor = function (wickEditor) {
     var rotateBL;
     var rotateBR;
     var individualObjectBoxes;
-
-    var GUI_DOTS_SIZE = 5;
-    var GUI_DOTS_FILLCOLOR = 'rgba(255,255,255,0.3)';
-    var GUI_DOTS_STROKECOLOR = 'rgba(100,150,255,1.0)'
 
     var hitResult;
     var addedPoint;
@@ -72,7 +72,6 @@ Tools.SelectionCursor = function (wickEditor) {
 
     this.onSelected = function () {
         wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
-        wickEditor.project.clearSelection();
     }
 
     this.paperTool = new paper.Tool();
@@ -87,7 +86,7 @@ Tools.SelectionCursor = function (wickEditor) {
     }
 
     this.paperTool.onMouseMove = function(event) {
-        updateSelection()
+        //updateSelection()
 
         hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point, hitOptions);
 
@@ -101,11 +100,13 @@ Tools.SelectionCursor = function (wickEditor) {
         if(pathHoverGhost) pathHoverGhost.remove();
         pathHoverGhost = null;
         if(hitResult && !hitResult.item._wickInteraction) {
-            pathHoverGhost = hitResult.item.clone();
-            pathHoverGhost._wickInteraction = 'pathHoverGhost';
-            pathHoverGhost.fillColor = 'rgba(0,0,0,0)';
-            pathHoverGhost.strokeColor = GUI_DOTS_STROKECOLOR;
-            pathHoverGhost.strokeWidth = 1.5/wickEditor.canvas.getZoom();
+            if(!wickEditor.project.isObjectSelected(hitResult.item.wick)) {
+                pathHoverGhost = hitResult.item.clone();
+                pathHoverGhost._wickInteraction = 'pathHoverGhost';
+                pathHoverGhost.fillColor = 'rgba(0,0,0,0)';
+                pathHoverGhost.strokeColor = GUI_DOTS_STROKECOLOR;
+                pathHoverGhost.strokeWidth = 1.5/wickEditor.canvas.getZoom();
+            }
         }
     }
 
@@ -160,7 +161,7 @@ Tools.SelectionCursor = function (wickEditor) {
             
         }
 
-        updateSelection()
+        //updateSelection()
 
     }
 

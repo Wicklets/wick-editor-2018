@@ -307,7 +307,8 @@ var GuiActionHandler = function (wickEditor) {
         'Select All',
         {},
         function(args) {
-            if(!(wickEditor.currentTool instanceof Tools.SelectionCursor))
+            if(!(wickEditor.currentTool instanceof Tools.SelectionCursor)
+            && !(wickEditor.currentTool instanceof Tools.VectorCursor))
                 wickEditor.currentTool = wickEditor.tools.selectioncursor;
 
             wickEditor.project.clearSelection();

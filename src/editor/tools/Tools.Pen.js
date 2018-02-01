@@ -41,17 +41,17 @@ Tools.Pen = function (wickEditor) {
     }
 
     this.onSelected = function () {
+        wickEditor.project.clearSelection();
         wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
     }
 
     this.paperTool = new paper.Tool();
 
     this.paperTool.onMouseMove = function (event) {
-        wickEditor.tools.vectorcursor.paperTool.onMouseMove(event)
 
-        wickEditor.project.getSelectedObjects().forEach(function (wo) {
+        /*wickEditor.project.getSelectedObjects().forEach(function (wo) {
             wo.paper.selected = true;
-        })
+        })*/
     }
 
     this.paperTool.onMouseDown = function (event) {
@@ -79,7 +79,6 @@ Tools.Pen = function (wickEditor) {
                 currentSegment = drawingPath.add(event.point);
                 currentSegment.selected = true;
             } else {
-                wickEditor.tools.vectorcursor.paperTool.onMouseDown(event)
             }
         } else {
             if(!hitResult) {
@@ -104,14 +103,8 @@ Tools.Pen = function (wickEditor) {
                 wickEditor.actionHandler.doAction('addObjects', {
                     wickObjects: [pathWickObject]
                 });
-                paper.project.selectedItems.forEach(function (item) {
-                    if(item instanceof paper.Group) return;
-                    drawingPath = item;
-                    currentSegment = drawingPath.segments[0];
-                    currentSegment.selected = true;
-                })
+                drawingPath = pathWickObject.paper
             } else {
-                wickEditor.tools.vectorcursor.paperTool.onMouseDown(event)
             }
         }
 
@@ -125,7 +118,6 @@ Tools.Pen = function (wickEditor) {
             currentSegment.handleOut.x += delta.x;
             currentSegment.handleOut.y += delta.y;
         } else {
-            wickEditor.tools.vectorcursor.paperTool.onMouseDrag(event)
         }
     }
 
@@ -159,7 +151,6 @@ Tools.Pen = function (wickEditor) {
             currentSegment = null;
             drawingPath = null;
         } else {
-            wickEditor.tools.vectorcursor.paperTool.onMouseUp(event)
         }
     }
 

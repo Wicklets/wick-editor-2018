@@ -177,8 +177,9 @@ var InteractiveCanvas = function (wickEditor) {
             });
         }
 
-        if(wickEditor.currentTool.forceUpdateSelection) 
+        if(wickEditor.currentTool.forceUpdateSelection) {
             wickEditor.currentTool.forceUpdateSelection()
+        }
         
         self.needsUpdate = false;
     }

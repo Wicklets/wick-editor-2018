@@ -109,8 +109,10 @@ Tools.Zoom = function (wickEditor) {
     function MouseWheelHandler(e) {
         if(wickEditor.currentTool !== wickEditor.tools.zoom) {
             if(wickEditor.project.getSelectedObjects().length > 0) {
-                wickEditor.project.clearSelection();
-                wickEditor.syncInterfaces();
+                //wickEditor.project.clearSelection();
+                //wickEditor.syncInterfaces();
+                if(wickEditor.currentTool.forceUpdateSelection)
+                    wickEditor.currentTool.forceUpdateSelection();
             }
         }
 
