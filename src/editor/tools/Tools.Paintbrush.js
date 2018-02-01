@@ -106,64 +106,43 @@ Tools.Paintbrush = function (wickEditor) {
         if (path) {
 
             path.add(event.point)
+            
+            if(path.segments.length > 2) {
+                path.smooth();
 
-            var raster = path.rasterize(paper.view.resolution*wickEditor.canvas.getZoom());
-            var rasterDataURL = raster.toDataURL()
+                wickEditor.settings.brushSmoothingAmount = 30;
+                if(wickEditor.settings.brushSmoothingAmount > 0) {
+                    var t = wickEditor.settings.strokeWidth;
+                    var s = wickEditor.settings.brushSmoothingAmount/100*10;
+                    var z = wickEditor.canvas.getZoom();
+                    path.simplify(t / z * s);
+                }
 
-            var final = new Image();
-            final.onload = function () {
-                potraceImage(final, function (svgString) {
-                    var xmlString = svgString
-                      , parser = new DOMParser()
-                      , doc = parser.parseFromString(xmlString, "text/xml");
-                    var tempPaperForPosition = paper.project.importSVG(doc, {insert:false});
-                    tempPaperForPosition.closed = true;
-                    tempPaperForPosition.children.forEach(function (c) {
-                        c.closed = true;
-                    })
-                    tempPaperForPosition.applyMatrix = true;
-                    tempPaperForPosition.scale(1/wickEditor.canvas.getZoom()); // Account for Zoom 
-                    tempPaperForPosition.scale(1/window.devicePixelRatio); // Account for retina displays
-                    
-                    tempPaperForPosition.children.forEach(function (c) {
-                        wickEditor.settings.brushSmoothingAmount = 5;
-                        if(wickEditor.settings.brushSmoothingAmount > 0) {
-                            c.smooth();
-                            var t = wickEditor.settings.strokeWidth;
-
-                            var smoothingDenominatorConstant = 333 // This makes smoothing feel good
-                            var smoothingNumeratorConstant = 10 
-                            var s = wickEditor.settings.brushSmoothingAmount/smoothingDenominatorConstant*smoothingNumeratorConstant;
-                            var z = wickEditor.canvas.getZoom();
-                            c.simplify(t / z * s);
-                        }
-                    })
-
-                    var pathData = tempPaperForPosition.exportSVG({asString:true})
-
-                    var pathWickObject = WickObject.createPathObject(pathData);
-                    pathWickObject.width = tempPaperForPosition.bounds.width;
-                    pathWickObject.height = tempPaperForPosition.bounds.height;
-                    pathWickObject.svgX = tempPaperForPosition.bounds._x;
-                    pathWickObject.svgY = tempPaperForPosition.bounds._y;
-
-                    pathWickObject.x = path.position.x// - wickEditor.project.width/2;
-                    pathWickObject.y = path.position.y// - wickEditor.project.height/2;
-
-                    wickEditor.actionHandler.doAction('addObjects', {
-                        wickObjects: [pathWickObject],
-                        dontSelectObjects: true,
-                    });
-                    pathWickObject.pathData = pathData;
-                    
-                    path.remove();
-                    path = null
-                    wickEditor.syncInterfaces();
-
-                }, wickEditor.settings.fillColor);
+                path.join(path, 10/wickEditor.canvas.getZoom())
             }
-            final.src = rasterDataURL;
 
+            path.remove();
+
+            var group = new paper.Group({insert:false});
+            group.addChild(path);
+
+            var svgString = group.exportSVG({asString:true});
+            var pathWickObject = WickObject.createPathObject(svgString);
+            pathWickObject.x = group.position.x;
+            pathWickObject.y = group.position.y;
+            pathWickObject.width = group.bounds._width;
+            pathWickObject.height = group.bounds._height;
+            pathWickObject.svgX = group.bounds._x;
+            pathWickObject.svgY = group.bounds._y;
+
+            //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(pathWickObject);
+
+            wickEditor.actionHandler.doAction('addObjects', {
+                wickObjects: [pathWickObject],
+                dontSelectObjects: true,
+            });
+
+            path = null;
         }
     }
 

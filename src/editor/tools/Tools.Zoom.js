@@ -89,7 +89,7 @@ Tools.Zoom = function (wickEditor) {
             var mouse = wickEditor.inputHandler.mouse;
             if(event.modifiers.alt ||
                event.modifiers.command ||
-               evemt.modifiers.meta || 
+               event.modifiers.meta || 
                event.modifiers.option) {
                 wickEditor.canvas.zoomToPoint(1-CLICK_ZOOM_AMT, mouse.x, mouse.y);
             } else {

@@ -285,7 +285,7 @@ var WickActionHandler = function (wickEditor) {
                 var wickObj = args.objs[i];
 
                 if(wickObj.isPath && args.modifiedStates[i]['svgX']) {
-                    args.modifiedStates[i]['pathData'] = wickObj.paper.exportSVG({asString:true});
+                    //args.modifiedStates[i]['pathData'] = wickObj.paper.exportSVG({asString:true});
                 }
 
                 args.originalStates[i] = {};
