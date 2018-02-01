@@ -51,6 +51,16 @@ Tools.Pen = function (wickEditor) {
     }
 
     this.paperTool = new paper.Tool();
+    
+    var hitOptions = {
+        tolerance: 3,
+        allowGroups: true,
+        segments: true,
+        fill: false,
+        curves: false,
+        handles: true,
+        stroke: false,
+    }
 
     this.paperTool.onMouseMove = function (event) {
         /*wickEditor.tools.vectorcursor.paperTool.onMouseMove(event)
@@ -61,19 +71,27 @@ Tools.Pen = function (wickEditor) {
 
         updateDrawingPath();
 
+        hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point, hitOptions);
+
         if(previewStroke) previewStroke.remove();
         if(drawingPath) {
-            previewStroke = new paper.Path({insert:false});
-            previewStroke.strokeColor = GUI_DOTS_STROKECOLOR;
-            previewStroke.strokeWidth = 1;
-            previewStroke.add(currentSegment.clone())
-            previewStroke.add(event.point)
-            previewStroke.segments[0].handleIn.x *= -1
-            previewStroke.segments[0].handleIn.y *= -1
-            previewStroke.segments[0].handleOut.x *= -1
-            previewStroke.segments[0].handleOut.y *= -1
-            previewStroke.selected = false;
-            paper._guiLayer.addChild(previewStroke)
+            if(hitResult && hitResult.type.startsWith('handle')) {
+
+            } else if (hitResult && hitResult.item !== drawingPath && (hitResult.segment === hitResult.item.lastSegment || hitResult.segment === hitResult.item.firstSegment)) {
+
+            } else {
+                previewStroke = new paper.Path({insert:false});
+                previewStroke.strokeColor = GUI_DOTS_STROKECOLOR;
+                previewStroke.strokeWidth = 1;
+                previewStroke.add(currentSegment.clone())
+                previewStroke.add(event.point)
+                previewStroke.segments[0].handleIn.x *= -1
+                previewStroke.segments[0].handleIn.y *= -1
+                previewStroke.segments[0].handleOut.x *= -1
+                previewStroke.segments[0].handleOut.y *= -1
+                previewStroke.selected = false;
+                paper._guiLayer.addChild(previewStroke)
+            }
         }
     }
 
@@ -93,7 +111,9 @@ Tools.Pen = function (wickEditor) {
 
         
 
-        hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point);
+        hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point, hitOptions);
+
+        console.log(hitResult)
         
         if(hitResult && hitResult.type === 'segment' && hitResult.item.wick.uuid !== drawingPathUUID) {
             if (hitResult.segment === hitResult.item.firstSegment) {
@@ -114,32 +134,37 @@ Tools.Pen = function (wickEditor) {
 
         if(drawingPath) {
 
-            if(currentSegment === drawingPath.firstSegment) {
-                drawingPath.firstSegment.handleIn.x = -drawingPath.firstSegment.handleOut.x
-                drawingPath.firstSegment.handleIn.y = -drawingPath.firstSegment.handleOut.y
-            } else if(currentSegment === drawingPath.lastSegment) {
-                drawingPath.lastSegment.handleOut.x = -drawingPath.lastSegment.handleIn.x
-                drawingPath.lastSegment.handleOut.y = -drawingPath.lastSegment.handleIn.y
-            }
+            if(hitResult && (hitResult.type === 'handle-in' || hitResult.type === 'handle-out')) {
 
-            if(hitResult && 
-                ((hitResult.segment === drawingPath.firstSegment && currentSegment === drawingPath.lastSegment) || 
-                 (hitResult.segment === drawingPath.lastSegment && currentSegment === drawingPath.firstSegment))
-            ) {
-                drawingPath.closePath();
-                drawingPath.fillColor = wickEditor.settings.fillColor;
-                if(currentSegment === drawingPath.firstSegment) {
-                    currentSegmentIndex = drawingPath.lastSegment.index
-                } else if(currentSegment === drawingPath.lastSegment) {
-                    currentSegmentIndex = drawingPath.firstSegment.index
-                }
             } else {
+
                 if(currentSegment === drawingPath.firstSegment) {
-                    currentSegmentIndex = drawingPath.insert(0, event.point).index;
+                    drawingPath.firstSegment.handleIn.x = -drawingPath.firstSegment.handleOut.x
+                    drawingPath.firstSegment.handleIn.y = -drawingPath.firstSegment.handleOut.y
                 } else if(currentSegment === drawingPath.lastSegment) {
-                    currentSegmentIndex = drawingPath.add(event.point).index;
+                    drawingPath.lastSegment.handleOut.x = -drawingPath.lastSegment.handleIn.x
+                    drawingPath.lastSegment.handleOut.y = -drawingPath.lastSegment.handleIn.y
                 }
-            } 
+
+                if(hitResult && 
+                    ((hitResult.segment === drawingPath.firstSegment && currentSegment === drawingPath.lastSegment) || 
+                     (hitResult.segment === drawingPath.lastSegment && currentSegment === drawingPath.firstSegment))
+                ) {
+                    drawingPath.closePath();
+                    drawingPath.fillColor = wickEditor.settings.fillColor;
+                    if(currentSegment === drawingPath.firstSegment) {
+                        currentSegmentIndex = drawingPath.lastSegment.index
+                    } else if(currentSegment === drawingPath.lastSegment) {
+                        currentSegmentIndex = drawingPath.firstSegment.index
+                    }
+                } else {
+                    if(currentSegment === drawingPath.firstSegment) {
+                        currentSegmentIndex = drawingPath.insert(0, event.point).index;
+                    } else if(currentSegment === drawingPath.lastSegment) {
+                        currentSegmentIndex = drawingPath.add(event.point).index;
+                    }
+                } 
+            }
             
         } else {
             //if(!hitResult) {
@@ -175,7 +200,19 @@ Tools.Pen = function (wickEditor) {
     }
 
     this.paperTool.onMouseDrag = function(event) {
-        if(currentSegment) {
+        if(hitResult && (hitResult.type === 'handle-in' || hitResult.type === 'handle-out')) {
+            if(hitResult.type === 'handle-in') {
+                hitResult.segment.handleIn.x += event.delta.x;
+                hitResult.segment.handleIn.y += event.delta.y;
+                hitResult.segment.handleOut.x -= event.delta.x;
+                hitResult.segment.handleOut.y -= event.delta.y;
+            } else if (hitResult.type === 'handle-out') {
+                hitResult.segment.handleIn.x -= event.delta.x;
+                hitResult.segment.handleIn.y -= event.delta.y;
+                hitResult.segment.handleOut.x += event.delta.x;
+                hitResult.segment.handleOut.y += event.delta.y;
+            }
+        } else if(currentSegment) {
             if(currentSegment === drawingPath.lastSegment) {
                 currentSegment.handleIn.x -= event.delta.x;
                 currentSegment.handleIn.y -= event.delta.y;
@@ -221,9 +258,11 @@ Tools.Pen = function (wickEditor) {
                 currentSegmentIndex = null;
                 drawingPath = null;
                 drawingPathUUID = null;
+                wickEditor.project.clearSelection();
+                wickEditor.syncInterfaces();
             }
         } else {
-            wickEditor.tools.vectorcursor.paperTool.onMouseUp(event)
+            //wickEditor.tools.vectorcursor.paperTool.onMouseUp(event)
         }
         updateDrawingPath()
     }
