@@ -52,6 +52,8 @@ var InteractiveCanvas = function (wickEditor) {
         paper._guiLayer.locked = true;
         paper._mainLayer.activate();
 
+        //paper.install(window)
+
     }
 
     self.show = function () {

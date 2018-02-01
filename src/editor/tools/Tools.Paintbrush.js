@@ -90,7 +90,7 @@ Tools.Paintbrush = function (wickEditor) {
             totalDelta.y += event.delta.y;
         }
 
-        if (totalDelta.length > 2/wickEditor.canvas.getZoom()) {
+        if (totalDelta.length > 10/wickEditor.canvas.getZoom()) {
 
             totalDelta.x = 0;
             totalDelta.y = 0;
@@ -110,18 +110,27 @@ Tools.Paintbrush = function (wickEditor) {
             if(path.segments.length > 2) {
                 path.smooth();
 
-                wickEditor.settings.brushSmoothingAmount = 30;
-                if(wickEditor.settings.brushSmoothingAmount > 0) {
+                if(wickEditor.settings.brushSmoothing > 0) {
                     var t = wickEditor.settings.strokeWidth;
-                    var s = wickEditor.settings.brushSmoothingAmount/100*10;
+                    var s = wickEditor.settings.brushSmoothing/100*10;
                     var z = wickEditor.canvas.getZoom();
-                    path.simplify(t / z * s);
+                    path.simplify(100/*t / z * s*/);
                 }
 
                 path.join(path, 10/wickEditor.canvas.getZoom())
             }
 
             path.remove();
+
+            path.strokeCap = 'round'
+            path.strokeJoin = 'round'
+
+            var offset = path.strokeWidth/2;
+            var outerPath = OffsetUtils.offsetPath(path, offset, true);
+            var innerPath = OffsetUtils.offsetPath(path, -offset, true);
+            path = OffsetUtils.joinOffsets(outerPath.clone(), innerPath.clone(), path, offset);
+            path = path.unite();
+            path.fillColor = wickEditor.settings.fillColor;
 
             var group = new paper.Group({insert:false});
             group.addChild(path);

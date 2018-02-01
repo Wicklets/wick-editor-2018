@@ -79,6 +79,8 @@ Tools.Pencil = function (wickEditor) {
             totalDelta.x = 0;
             totalDelta.y = 0;
 
+            console.log('check for danger angle here')
+
             path.add(event.point)
             path.smooth();
             lastEvent = event;
@@ -94,10 +96,10 @@ Tools.Pencil = function (wickEditor) {
             if(path.segments.length > 2) {
                 path.smooth();
 
-                wickEditor.settings.brushSmoothingAmount = 30;
-                if(wickEditor.settings.brushSmoothingAmount > 0) {
+                wickEditor.settings.pencilSmoothing = 30;
+                if(wickEditor.settings.pencilSmoothing > 0) {
                     var t = wickEditor.settings.strokeWidth;
-                    var s = wickEditor.settings.brushSmoothingAmount/100*10;
+                    var s = wickEditor.settings.pencilSmoothing/100;
                     var z = wickEditor.canvas.getZoom();
                     path.simplify(t / z * s);
                 }
@@ -106,6 +108,9 @@ Tools.Pencil = function (wickEditor) {
             }
 
             path.remove();
+
+            path.strokeCap = 'round'
+            path.strokeJoin = 'round'
 
             var group = new paper.Group({insert:false});
             group.addChild(path);

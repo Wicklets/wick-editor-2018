@@ -87,15 +87,19 @@ Tools.FillBucket = function (wickEditor) {
             // TODO: Only include paths who are on the active layer.
             if(child._isGUI) return;
             if(!child.wick || child.wick.parentFrame.parentLayer !== wickEditor.project.getCurrentLayer()) return;
-            if(!child.closed) return;
 
             var nextPath;
             if(!child.closed) {
-                nextPath = offsetStroke(child, child.strokeWidth);
+                var offset = child.strokeWidth/2;
+                var outerPath = OffsetUtils.offsetPath(child, offset, true);
+                var innerPath = OffsetUtils.offsetPath(child, -offset, true);
+                nextPath = OffsetUtils.joinOffsets(outerPath.clone(), innerPath.clone(), child, offset);
+                nextPath = nextPath.unite();
+                nextPath.fillColor = wickEditor.settings.fillColor;
             } else {
                 nextPath = child;
+                nextPath.resolveCrossings()
             }
-            nextPath.resolveCrossings()
 
             children.push(nextPath)
         });

@@ -113,18 +113,14 @@ Tools.Pen = function (wickEditor) {
 
         hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point, hitOptions);
 
-        console.log(hitResult)
-        
         if(hitResult && hitResult.type === 'segment' && hitResult.item.wick.uuid !== drawingPathUUID) {
             if (hitResult.segment === hitResult.item.firstSegment) {
-                console.log('first')
                 drawingPathUUID = hitResult.item.wick.uuid;
                 currentSegmentIndex = hitResult.segment.index;
                 updateDrawingPath();
                 return;
             }
             if (hitResult.segment === hitResult.item.lastSegment) {
-                console.log('last')
                 drawingPathUUID = hitResult.item.wick.uuid;
                 currentSegmentIndex = hitResult.segment.index;
                 updateDrawingPath();
