@@ -54,7 +54,7 @@ Tools.VectorCursor = function (wickEditor) {
     var lastEvent;
 
     var hitOptions = {
-        allowGroups: true,
+        allowGroups: false,
         segments: true,
         fill: true,
         curves: true,
@@ -74,7 +74,11 @@ Tools.VectorCursor = function (wickEditor) {
         if(hitResult && !hitResult.item._wickInteraction) {
             var wickObj = hitResult.item.wick || hitResult.item.parent.wick;
             if(!wickEditor.project.isObjectSelected(wickObj)) {
-                pathHoverGhost = hitResult.item.clone({insert:false});
+                if(hitResult.item.wick.isSymbol) {
+                    pathHoverGhost = new paper.Path.Rectangle(hitResult.item.bounds);
+                } else {
+                    pathHoverGhost = hitResult.item.clone({insert:false});
+                }
                 paper._guiLayer.addChild(pathHoverGhost)
                 pathHoverGhost._wickInteraction = 'pathHoverGhost';
                 pathHoverGhost.fillColor = 'rgba(0,0,0,0)';
@@ -403,7 +407,11 @@ Tools.VectorCursor = function (wickEditor) {
         paper.project.activeLayer.children.forEach(function (child) {
             if(!child.wick) return;
             if(wickEditor.project.isObjectSelected(child.wick)) {
-                child.selected = true;
+                if(child.wick.isSymbol) {
+
+                } else {
+                    child.selected = true;
+                }
             }
         });
     }

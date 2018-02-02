@@ -101,7 +101,11 @@ Tools.SelectionCursor = function (wickEditor) {
         pathHoverGhost = null;
         if(hitResult && !hitResult.item._wickInteraction) {
             if(!wickEditor.project.isObjectSelected(hitResult.item.wick)) {
-                pathHoverGhost = hitResult.item.clone({insert:false});
+                if(hitResult.item.wick.isSymbol) {
+                    pathHoverGhost = new paper.Path.Rectangle(hitResult.item.bounds);
+                } else {
+                    pathHoverGhost = hitResult.item.clone({insert:false});
+                }
                 paper._guiLayer.addChild(pathHoverGhost)
                 pathHoverGhost._wickInteraction = 'pathHoverGhost';
                 pathHoverGhost.fillColor = 'rgba(0,0,0,0)';
