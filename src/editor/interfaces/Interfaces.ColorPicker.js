@@ -24,6 +24,7 @@ var ColorPickerInterface = function (wickEditor) {
     var colorPickerContainer;
     var currentColor;
     var currentDoneFn;
+    var previewType;
 
     var isOpen;
 
@@ -61,7 +62,14 @@ var ColorPickerInterface = function (wickEditor) {
             showAlpha: true,
             maxSelectionSize: 6,
             move: function (color) {
-                currentColor = color.toString();
+                var colorString = color.toString();
+                if(previewType) {
+                    wickEditor.project.getSelectedObjects().forEach(function (o) {
+                        if(!o.paper) return;
+                        o.paper[previewType] = colorString;
+                    });
+                }
+                currentColor = colorString;
             },
             show: function () {
 
@@ -73,10 +81,10 @@ var ColorPickerInterface = function (wickEditor) {
             },
             palette: [
                 ["rgba(0,0,0,1)",   
-                 "rgba(67,67,67,1)",  
-                 "rgba(102,102,102,1)", 
-                 "rgba(204,204,204,1)", 
-                 "rgba(217,217,217,1)", 
+                 "rgba(50,50,50,1)",  
+                 "rgba(100,100,100,1)", 
+                 "rgba(150,150,150,1)", 
+                 "rgba(200,200,200,1)", 
                  "rgba(255,255,255,1)"],
                 ["rgba(255,0,0,1,1)", 
                  "rgba(255,153,0,1,1)", 
@@ -118,7 +126,8 @@ var ColorPickerInterface = function (wickEditor) {
         });
     }
 
-    self.open = function (doneFn,color,x,y) {
+    self.open = function (doneFn,color,x,y,pt) {
+        previewType = pt;
         if(!x) x = wickEditor.inputHandler.mouse.x;
         if(!y) y = wickEditor.inputHandler.mouse.y;
 

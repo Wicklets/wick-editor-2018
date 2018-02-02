@@ -47,7 +47,7 @@ var ToolbarInterface = function (wickEditor) {
         strokeColorBackground.className = 'toolbar-stroke-color-background';
         colorPickerContainer.appendChild(strokeColorBackground);
 
-        var strokeColorPicker = new ColorPicker('strokeColor', 'toolbar-stroke-color');
+        var strokeColorPicker = new ColorPicker('strokeColor', 'toolbar-stroke-color', 'strokeColor');
         colorPickerDivs.push(strokeColorPicker);
         var strokeInnerRect = document.createElement('div');
         strokeInnerRect.className = 'toolbar-stroke-color-inner-rect';
@@ -58,7 +58,7 @@ var ToolbarInterface = function (wickEditor) {
         fillColorBackground.className = 'toolbar-fill-color-background';
         colorPickerContainer.appendChild(fillColorBackground);
 
-        var fillColorPicker = new ColorPicker('fillColor', 'toolbar-fill-color');
+        var fillColorPicker = new ColorPicker('fillColor', 'toolbar-fill-color', 'fillColor');
         colorPickerDivs.push(fillColorPicker);
         colorPickerContainer.appendChild(fillColorPicker);
 
@@ -202,7 +202,7 @@ var ToolbarInterface = function (wickEditor) {
         return toolDiv;
     }
 
-    var ColorPicker = function (settingsVal, className) {
+    var ColorPicker = function (settingsVal, className, previewType) {
         var colorPickerContainer = document.createElement('div');
         colorPickerContainer.className = 'toolbar-color ' + className;
         colorPickerContainer.wickSettingsVal = settingsVal;
@@ -221,9 +221,10 @@ var ToolbarInterface = function (wickEditor) {
                 }
                 wickEditor.syncInterfaces();
             }, 
-            wickEditor.settings[settingsVal],
-            colorPickerContainer.getBoundingClientRect().left,
-            colorPickerContainer.getBoundingClientRect().top)
+                wickEditor.settings[settingsVal],
+                colorPickerContainer.getBoundingClientRect().left,
+                colorPickerContainer.getBoundingClientRect().top,
+                previewType)
         }
 
         return colorPickerContainer;

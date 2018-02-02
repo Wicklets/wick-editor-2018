@@ -74,7 +74,7 @@ Tools.VectorCursor = function (wickEditor) {
         if(hitResult && !hitResult.item._wickInteraction) {
             var wickObj = hitResult.item.wick || hitResult.item.parent.wick;
             if(!wickEditor.project.isObjectSelected(wickObj)) {
-                if(hitResult.item.wick.isSymbol) {
+                if(wickObj.isSymbol) {
                     pathHoverGhost = new paper.Path.Rectangle(hitResult.item.bounds);
                 } else {
                     pathHoverGhost = hitResult.item.clone({insert:false});

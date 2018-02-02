@@ -87,6 +87,7 @@ Tools.FillBucket = function (wickEditor) {
             // TODO: Only include paths who are on the active layer.
             if(child._isGUI) return;
             if(!child.wick || child.wick.parentFrame.parentLayer !== wickEditor.project.getCurrentLayer()) return;
+            if(child.wick.isSymbol) return;
 
             var nextPath;
             if(!child.closed || !child.fillColor || child.fillColor.alpha === 0) {

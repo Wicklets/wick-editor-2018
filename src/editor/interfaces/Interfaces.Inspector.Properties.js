@@ -238,6 +238,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
 
     properties.push(new InspectorInterface.ColorPickerInput({
         title: 'StrokeColor',
+        previewType: 'strokeColor',
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isPath;
         },
@@ -256,6 +257,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
 
     properties.push(new InspectorInterface.ColorPickerInput({
         title: 'Fill Color',
+        previewType: 'fillColor',
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isPath;
         },

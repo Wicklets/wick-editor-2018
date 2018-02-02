@@ -130,6 +130,7 @@ InspectorInterface.ColorPickerInput = function (args) {
     self.getValueFn = args.getValueFn;
     self.onChangeFn = args.onChangeFn;
     self.isActiveFn = args.isActiveFn;
+    self.previewType = args.previewType;
 
     self.updateViewValue = function () {
         if(self.isActiveFn()) {
@@ -163,7 +164,8 @@ InspectorInterface.ColorPickerInput = function (args) {
             }, 
             self.getValueFn(),
             self.valueDiv.getBoundingClientRect().left,
-            self.valueDiv.getBoundingClientRect().top)
+            self.valueDiv.getBoundingClientRect().top,
+            self.previewType)
         }
 
         self.propertyDiv = document.createElement('div');
