@@ -122,7 +122,7 @@ Tools.Eraser = function (wickEditor) {
 
         var eraseObjects = wickEditor.project.getCurrentFrame().wickObjects
         eraseObjects = eraseObjects.filter(function (wickObject) {
-            return wickObject.paper && wickObject.paper.closed;
+            return wickObject.paper;
         });
 
         var modifiedStates = [];
@@ -133,7 +133,14 @@ Tools.Eraser = function (wickEditor) {
             else 
                 parentAbsPos = {x:0,y:0};
 
-            wickObject.paper = wickObject.paper.subtract(path);
+            if(!wickObject.paper.closed) {
+                wickObject.paper.getIntersections(path).forEach(function(cl) {
+                    wickObject.paper.splitAt(wickObject.paper.getNearestLocation(cl.point));
+                });
+            } else {
+                wickObject.paper = wickObject.paper.subtract(path);
+            }
+
             modifiedStates.push({
                 x: wickObject.paper.position.x - parentAbsPos.x,
                 y: wickObject.paper.position.y - parentAbsPos.y,
@@ -142,8 +149,8 @@ Tools.Eraser = function (wickEditor) {
                 width: wickObject.paper.bounds._width,
                 height: wickObject.paper.bounds._height,
                 pathData: wickObject.paper.exportSVG({asString:true}),
-            })
-        })
+            });
+        });
 
         wickEditor.actionHandler.doAction('modifyObjects', {
             objs: eraseObjects,
@@ -151,68 +158,5 @@ Tools.Eraser = function (wickEditor) {
         });
 
         path = null;
-
-        /*if (path) {
-
-            path.add(event.point)
-            
-            var raster = path.rasterize(paper.view.resolution*wickEditor.canvas.getZoom());
-            var rasterDataURL = raster.toDataURL()
-
-            var final = new Image();
-            final.onload = function () {
-                potraceImage(final, function (svgString) {
-                    var xmlString = svgString
-                      , parser = new DOMParser()
-                      , doc = parser.parseFromString(xmlString, "text/xml");
-                    var tempPaperForPosition = paper.project.importSVG(doc, {insert:false});
-
-                    tempPaperForPosition.position.x = path.position.x;
-                    tempPaperForPosition.position.y = path.position.y;
-                    tempPaperForPosition.closed = true;
-                    tempPaperForPosition.children.forEach(function (c) {
-                        c.closed = true;
-                    })
-                    tempPaperForPosition.applyMatrix = true;
-                    tempPaperForPosition.scale(1/wickEditor.canvas.getZoom())
-                    
-                    var eraseObjects = wickEditor.project.getCurrentFrame().wickObjects
-                    eraseObjects = eraseObjects.filter(function (wickObject) {
-                        return wickObject.paper && wickObject.paper.closed;
-                    });
-
-                    var modifiedStates = [];
-                    eraseObjects.forEach(function (wickObject) {
-                        var parentAbsPos;
-                        if(wickObject.parentObject)
-                            parentAbsPos = wickObject.parentObject.getAbsolutePosition();
-                        else 
-                            parentAbsPos = {x:0,y:0};
-
-                        wickObject.paper = wickObject.paper.subtract(tempPaperForPosition);
-                        modifiedStates.push({
-                            x: wickObject.paper.position.x - parentAbsPos.x,
-                            y: wickObject.paper.position.y - parentAbsPos.y,
-                            svgX: wickObject.paper.bounds._x,
-                            svgY: wickObject.paper.bounds._y,
-                            width: wickObject.paper.bounds._width,
-                            height: wickObject.paper.bounds._height,
-                            pathData: wickObject.paper.exportSVG({asString:true}),
-                        })
-                    })
-
-                    wickEditor.actionHandler.doAction('modifyObjects', {
-                        objs: eraseObjects,
-                        modifiedStates: modifiedStates,
-                    });
-
-                    path.remove();
-                    path = null;
-
-                }, wickEditor.settings.fillColor);
-            }
-            final.src = rasterDataURL;
-
-        }*/
     }
 }

@@ -79,8 +79,6 @@ Tools.Pencil = function (wickEditor) {
             totalDelta.x = 0;
             totalDelta.y = 0;
 
-            console.log('check for danger angle here')
-
             path.add(event.point)
             path.smooth();
             lastEvent = event;

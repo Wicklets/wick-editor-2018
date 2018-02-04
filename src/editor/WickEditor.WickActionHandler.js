@@ -1082,4 +1082,125 @@ var WickActionHandler = function (wickEditor) {
             done(args);
         });
 
+    registerAction('doBooleanOperation',
+        function (args) {
+            args.objs.forEach(function(obj) {
+                obj._tempZIndex = wickEditor.project.getCurrentFrame().wickObjects.indexOf(obj);
+            })
+            args.objs.sort(function (a,b) {
+                return b._tempZIndex - a._tempZIndex;
+            });
+
+            if(args.boolFnName === 'unite') {
+                var removeObjs = [];
+                for (var i = 1; i < args.objs.length; i++) {
+                    removeObjs.push(args.objs[i]);
+                }
+                var superPath = args.objs[0];
+                removeObjs.forEach(function (ro) {
+                    superPath.paper = superPath.paper.unite(ro.paper);
+                });
+                var parentAbsPos = wickEditor.parentObject ? wickObject.parentObject.getAbsolutePosition() : {x:0,y:0};
+                args.modAction = wickEditor.actionHandler.doAction('modifyObjects', {
+                    objs: [superPath],
+                    modifiedStates: [{
+                        x: superPath.paper.position.x - parentAbsPos.x,
+                        y: superPath.paper.position.y - parentAbsPos.y,
+                        svgX: superPath.paper.bounds._x,
+                        svgY: superPath.paper.bounds._y,
+                        width: superPath.paper.bounds._width,
+                        height: superPath.paper.bounds._height,
+                        pathData: superPath.paper.exportSVG({asString:true}),
+                    }],
+                    dontAddToStack: true,
+                });
+                args.deleteAction = wickEditor.actionHandler.doAction('deleteObjects', {
+                    objects: removeObjs,
+                    dontAddToStack: true
+                });
+            } else if (args.boolFnName === 'subtract') {
+                var cuttingPath = args.objs[0];
+                var cutPaths = [];
+                for (var i = 1; i < args.objs.length; i++) {
+                    cutPaths.push(args.objs[i]);
+                }
+                var modifiedStates = [];
+                var modifiedObjects = [];
+                cutPaths.forEach(function (cp) {
+                    cp.paper = cp.paper.subtract(cuttingPath.paper);
+                    modifiedObjects.push(cp);
+                    var parentAbsPos = wickEditor.parentObject ? wickObject.parentObject.getAbsolutePosition() : {x:0,y:0};
+                    modifiedStates.push({
+                        x: cp.paper.position.x - parentAbsPos.x,
+                        y: cp.paper.position.y - parentAbsPos.y,
+                        svgX: cp.paper.bounds._x,
+                        svgY: cp.paper.bounds._y,
+                        width: cp.paper.bounds._width,
+                        height: cp.paper.bounds._height,
+                        pathData: cp.paper.exportSVG({asString:true}),
+                    });
+                });
+                args.modAction = wickEditor.actionHandler.doAction('modifyObjects', {
+                    objs: modifiedObjects,
+                    modifiedStates: modifiedStates,
+                    dontAddToStack: true,
+                });
+            }
+
+            /*var removeObjs = args.objs;
+            if(args.boolFnName === 'subtract') {
+                removeObjs = [args.objs[0]];
+            }
+            if(args.boolFnName === 'intersect') {
+                removeObjs = [args.objs[args.objs.length-1]];
+            }
+
+            args.deleteAction = wickEditor.actionHandler.doAction('deleteObjects', {
+                objects: removeObjs,
+                dontAddToStack: true
+            });
+            args.addAction = wickEditor.actionHandler.doAction('addObjects', {
+                wickObjects: [wickEditor.canvas.getPaperCanvas().pathRoutines.getBooleanOpResult(args.boolFnName, args.objs)],
+                dontAddToStack: true
+            });*/
+
+            /*args.objs.forEach(function (wickObject) {
+                var parentAbsPos;
+                if(wickObject.parentObject) {
+                    parentAbsPos = wickObject.parentObject.getAbsolutePosition();
+                } else {
+                    parentAbsPos = {x:0,y:0};
+                }
+
+                if(!wickObject.paper.closed) {
+                    wickObject.paper = wickObject.paper[args.boolFnName](path);
+
+                    modifiedStates.push({
+                        x: wickObject.paper.position.x - parentAbsPos.x,
+                        y: wickObject.paper.position.y - parentAbsPos.y,
+                        svgX: wickObject.paper.bounds._x,
+                        svgY: wickObject.paper.bounds._y,
+                        width: wickObject.paper.bounds._width,
+                        height: wickObject.paper.bounds._height,
+                        pathData: wickObject.paper.exportSVG({asString:true}),
+                    });
+                } else {
+                    modifiedStates.push({});
+                }
+            });
+
+            wickEditor.actionHandler.doAction('modifyObjects', {
+                objs: objs,
+                modifiedStates: modifiedStates,
+            });*/
+
+            done(args);
+        }, 
+        function (args) {
+            if(args.modAction) args.modAction.undoAction();
+            if(args.deleteAction) args.deleteAction.undoAction();
+
+            done(args);
+        });
+
 }
