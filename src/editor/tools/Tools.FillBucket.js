@@ -19,6 +19,8 @@ if(!window.Tools) Tools = {};
 
 Tools.FillBucket = function (wickEditor) {
 
+    var RES = 7;
+
     var that = this;
 
     this.getCursorImage = function () {
@@ -74,106 +76,141 @@ Tools.FillBucket = function (wickEditor) {
     function changeStrokeColorOfItem (item) {
         wickEditor.project.selectObject(item.wick)
         wickEditor.guiActionHandler.doAction("changePathProperties", {
-            strokeColor: wickEditor.settings.strokeColor
+            strokeColor: wickEditor.settings.fillColor
         });
         wickEditor.project.clearSelection();
         wickEditor.syncInterfaces();
     }
 
     function fillHole (event) {
-        var children = [];
-        paper.project._activeLayer.children.forEach(function (child) {
-            // TODO: Only include paths whos bounding boxes include the cursor position.
-            // TODO: Only include paths who are on the active layer.
-            if(child._isGUI) return;
-            if(!child.wick || child.wick.parentFrame.parentLayer !== wickEditor.project.getCurrentLayer()) return;
-            if(child.wick.isSymbol) return;
-
-            var nextPath;
-            if(!child.closed || !child.fillColor || child.fillColor.alpha === 0) {
-                var path = child.clone({insert:false});
-                var offset = path.strokeWidth/2;
-                var outerPath = OffsetUtils.offsetPath(path, offset, true);
-                var innerPath = OffsetUtils.offsetPath(path, -offset, true);
-                path = OffsetUtils.joinOffsets(outerPath.clone(), innerPath.clone(), path, offset);
-                //path = path.unite();
-                path.fillColor = wickEditor.settings.fillColor;
-                nextPath = path;
-            } else {
-                console.log(child.fillColor)
-                nextPath = child;
-                nextPath.resolveCrossings()
-            }
-
-            children.push(nextPath)
+        var superGroup = new paper.Group({insert:false});
+        wickEditor.project.getCurrentFrame().wickObjects.forEach(function (wo) {
+            if(!wo.paper) return;
+            if(wo.paper._class !== 'Path') return;
+            //wo.paper.strokeWidth = 1/RES;
+            superGroup.addChild(wo.paper.clone({insert:false}));
         });
-
-        console.log(children)
-
-        var superPath = null;
-        children.forEach(function (child) {
-            if(!superPath) superPath = child.clone({insert:false});
-            superPath = superPath.unite(child);
-        });
-
-        if(!superPath) {
-            console.log('No paths found to make hole.')
-            return;
+        if(superGroup.children.length > 0) {
+            var raster = superGroup.rasterize(paper.view.resolution*RES, {insert:false});
+            var rasterPosition = raster.bounds.topLeft;
+            var x = (event.point.x - rasterPosition.x) * RES;
+            var y = (event.point.y - rasterPosition.y) * RES;
+            generateFloodFillImage(raster, x, y, function (floodFillImage) {
+                imageToPath(floodFillImage, function (path) {
+                    addFilledHoleToProject(path, rasterPosition.x, rasterPosition.y);
+                });
+            });
+        } else {
+            console.log('No paths to find holes of!');
         }
+    }
 
-        var invertPath = new paper.Path.Rectangle(superPath.bounds);
-        invertPath.fillColor = 'black';
-        invertPath = invertPath.subtract(superPath);
+    function generateFloodFillImage (raster, x, y, callback) {
+        x = Math.round(x);
+        y = Math.round(y);
 
-        if(!invertPath || !invertPath.children || invertPath.children.length < 1) {
-            return;
+        var rasterCanvas = raster.canvas;
+        var rasterCtx = rasterCanvas.getContext('2d');
+        var rasterImageData = rasterCtx.getImageData(0, 0, raster.width, raster.height);
+
+        var floodFillCanvas = document.createElement('canvas');
+        floodFillCanvas.width = rasterCanvas.width;
+        floodFillCanvas.height = rasterCanvas.height;
+        var floodFillCtx = floodFillCanvas.getContext('2d');
+        floodFillCtx.putImageData(rasterImageData, 0, 0);
+        floodFillCtx.fillStyle = "rgba(123,123,123,1)";
+        floodFillCtx.fillFlood(x, y, 20);
+        var floodFillImageData = floodFillCtx.getImageData(0,0,floodFillCanvas.width,floodFillCanvas.height);
+        var floodFillImageDataRaw = floodFillImageData.data;
+        for(var i = 0; i < floodFillImageDataRaw.length; i += 4) {
+          if(floodFillImageDataRaw[i] !== 123) {
+            floodFillImageDataRaw[i] = 0;
+            floodFillImageDataRaw[i+1] = 0;
+            floodFillImageDataRaw[i+2] = 0;
+            floodFillImageDataRaw[i+3] = 0;
+          } else {
+            floodFillImageDataRaw[i] = 0;
+            floodFillImageDataRaw[i+1] = 0;
+            floodFillImageDataRaw[i+2] = 0;
+            floodFillImageDataRaw[i+3] = 255;
+          }
         }
+        floodFillCtx.putImageData(floodFillImageData, 0, 0);
 
-        var pathsContainingCursor = [];
-        invertPath.children.forEach(function (c) {
-            c = c.clone({insert:false})
-            c.clockwise = false;
-            c.fillColor = wickEditor.settings.fillColor
-            if(c.contains(event.point)) {
-                pathsContainingCursor.push(c);
-            }
-        });
-
-        pathsContainingCursor.sort(function (a,b) {
-            return a.area < b.area;
-        });
-        var holePath = pathsContainingCursor[0];
-
-        if(!holePath) {
-            console.log('No fillable holes found.')
-            return;
+        var floodFillImage = new Image();
+        floodFillImage.onload = function () {
+            callback(floodFillImage);
         }
+        floodFillImage.src = floodFillCanvas.toDataURL();
+    }
 
-        invertPath.children.forEach(function (c) {
-            c.clockwise = false;
-            holePath.clockwise = false;
+    function imageToPath (image, callback) {
+        potraceImage(image, function (svgString) {
+            var xmlString = svgString
+              , parser = new DOMParser()
+              , doc = parser.parseFromString(xmlString, "text/xml");
+            callback(paper.project.importSVG(doc, {insert:true}));
+        }, wickEditor.settings.fillColor);
+    }
 
-            if(holePath.area < c.area && Math.abs(c.area) > 1) {
-                holePath = holePath.subtract(c)
-            }
-        });
-
-        // TODO: Ignore resulting paths of leaky holes being filled.
-
-        holePath.clockwise = false;
-        PaperHoleFinder.expandHole(holePath);
-        var pathWickObject = WickObject.createPathObject(holePath.exportSVG({asString:true}));
-        pathWickObject.x = holePath.position.x;
-        pathWickObject.y = holePath.position.y;
-        pathWickObject.width = holePath.bounds._width;
-        pathWickObject.height = holePath.bounds._height;
-        pathWickObject.svgX = holePath.bounds._x;
-        pathWickObject.svgY = holePath.bounds._y;
-
+    function addFilledHoleToProject (path, x, y) {
+        path.scale(1/RES, new paper.Point(0,0))
+        expandHole(path);
+        var pathWickObject = WickObject.createPathObject(path.exportSVG({asString:true}));
+        pathWickObject.width = path.bounds.width;
+        pathWickObject.height = path.bounds.height;
+        pathWickObject.x = path.position.x+x// - wickEditor.project.width/2;
+        pathWickObject.y = path.position.y+y// - wickEditor.project.height/2;
+        pathWickObject.svgX = path.bounds._x;
+        pathWickObject.svgY = path.bounds._y;
         wickEditor.actionHandler.doAction('addObjects', {
             wickObjects: [pathWickObject],
             dontSelectObjects: true,
             sendToBack: true,
+        });
+    }
+
+    function expandHole (path) {
+        var HOLE_EXPAND_AMT = -0.4;
+
+        if(path instanceof paper.Group) {
+            path = path.children[0];
+        }
+
+        var children;
+        if(path instanceof paper.Path) {
+            children = [path];
+        } else if(path instanceof paper.CompoundPath) {
+            children = path.children;
+        }
+
+        children.forEach(function (hole) {
+            var normals = [];
+            hole.closePath();
+            hole.segments.forEach(function (segment) {
+                var a = segment.previous.point;
+                var b = segment.point;
+                var c = segment.next.point;
+
+                var ab = {x: b.x-a.x, y: b.y-a.y};
+                var cb = {x: b.x-c.x, y: b.y-c.y};
+
+                var d = {x: ab.x-cb.x, y: ab.y-cb.y};
+                d.h = Math.sqrt((d.x*d.x)+(d.y*d.y));
+                d.x /= d.h;
+                d.y /= d.h;
+
+                d = rotate_point(d.x, d.y, 0, 0, 90);
+
+                normals.push({x:d.x,y:d.y});
+            });
+
+            for (var i = 0; i < hole.segments.length; i++) {
+                var segment = hole.segments[i];
+                var normal = normals[i];
+                segment.point.x += normal.x*-HOLE_EXPAND_AMT;
+                segment.point.y += normal.y*-HOLE_EXPAND_AMT;
+            }
         });
     }
 
