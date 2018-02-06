@@ -19,12 +19,12 @@ if(!window.Tools) Tools = {};
 
 Tools.FillBucket = function (wickEditor) {
 
-    var RES = 1.5;
+    var RES = 1.75;
     var FILL_TOLERANCE = 35;
     var PREVIEW_IMAGE = true;
     var N_RASTER_CLONE = 1;
     var CLONE_WIDTH_SHRINK = 0.6;
-    var SHRINK_AMT = 0.5;
+    var SHRINK_AMT = 0.85;
 
     var that = this;
 
@@ -210,7 +210,7 @@ Tools.FillBucket = function (wickEditor) {
 
     function addFilledHoleToProject (path, x, y) {
         path.scale(1/RES, new paper.Point(0,0))
-        expandHole(path, -SHRINK_AMT);
+        expandHole(path, SHRINK_AMT);
         var pathWickObject = WickObject.createPathObject(path.exportSVG({asString:true}));
         pathWickObject.width = path.bounds.width;
         pathWickObject.height = path.bounds.height;
