@@ -213,7 +213,7 @@ var InspectorInterface = function (wickEditor) {
                 image = "./resources/inspector-edit-timeline.svg"
             } else if (selectionInfo.dataType === 'path') {
                 title = "Path";
-                image = "./resources/path.png"
+                image = "./resources/tools/Path.svg"
             } else if (selectionInfo.dataType === 'image') {
                 title = "Image"; 
                 image = "./resources/image.png"
