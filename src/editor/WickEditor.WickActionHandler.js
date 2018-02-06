@@ -492,6 +492,8 @@ var WickActionHandler = function (wickEditor) {
             done(args);
         },
         function (args) {
+            var currentLayer = currentObject.getCurrentLayer();
+            
             args.frames.forEach(function (frame) {
                 currentLayer.removeFrame(frame);
             });

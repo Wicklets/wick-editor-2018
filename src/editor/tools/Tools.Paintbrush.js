@@ -21,6 +21,8 @@ Tools.Paintbrush = function (wickEditor) {
 
     var that = this;
 
+    var MIN_SEGMENT_LENGTH = 5;
+
     this.getCursorImage = function () {
         var canvas = document.createElement("canvas");
         canvas.width = 128;
@@ -90,7 +92,7 @@ Tools.Paintbrush = function (wickEditor) {
             totalDelta.y += event.delta.y;
         }
 
-        if (totalDelta.length > 10/wickEditor.canvas.getZoom()) {
+        if (totalDelta.length > MIN_SEGMENT_LENGTH/wickEditor.canvas.getZoom()) {
 
             totalDelta.x = 0;
             totalDelta.y = 0;
@@ -135,6 +137,7 @@ Tools.Paintbrush = function (wickEditor) {
 
                 if(path.segments && path.segments.length < 1){
                     console.error('offset.js generated a bad SVG. Ignoring current brush stroke')
+                    path = null;
                     return;
                 }
             }catch(e){

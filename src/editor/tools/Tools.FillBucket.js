@@ -102,7 +102,7 @@ Tools.FillBucket = function (wickEditor) {
         });
         if(superGroup.children.length > 0) {
             startTiming()
-            var raster = superGroup.rasterize(paper.view.resolution*RES, {insert:false});
+            var raster = superGroup.rasterize(paper.view.resolution*RES/window.devicePixelRatio, {insert:false});
             var rasterPosition = raster.bounds.topLeft;
             var x = (event.point.x - rasterPosition.x) * RES;
             var y = (event.point.y - rasterPosition.y) * RES;
@@ -223,20 +223,6 @@ Tools.FillBucket = function (wickEditor) {
             dontSelectObjects: true,
             sendToBack: true,
         });
-        /*expandHole(path, 1);
-        path.fillColor = 'red';
-        var pathWickObject = WickObject.createPathObject(path.exportSVG({asString:true}));
-        pathWickObject.width = path.bounds.width;
-        pathWickObject.height = path.bounds.height;
-        pathWickObject.x = path.position.x+x// - wickEditor.project.width/2;
-        pathWickObject.y = path.position.y+y// - wickEditor.project.height/2;
-        pathWickObject.svgX = path.bounds._x;
-        pathWickObject.svgY = path.bounds._y;
-        wickEditor.actionHandler.doAction('addObjects', {
-            wickObjects: [pathWickObject],
-            dontSelectObjects: true,
-            sendToBack: true,
-        });*/
     }
 
     function expandHole (path, HOLE_EXPAND_AMT) {

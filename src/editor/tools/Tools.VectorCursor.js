@@ -61,7 +61,7 @@ Tools.VectorCursor = function (wickEditor) {
         curves: true,
         handles: false,
         stroke: true,
-        tolerance: 3,
+        tolerance: 5,
     }
 
     var hitResult;
