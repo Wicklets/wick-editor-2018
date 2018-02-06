@@ -219,11 +219,11 @@ var InteractiveCanvas = function (wickEditor) {
 
     self.getItemAtPoint = function (point, hitOptions) {
         if(!hitOptions) hitOptions = {};
-        if(hitOptions && hitOptions.tolerance) {
-            hitOptions.tolerance /= wickEditor.canvas.getZoom();
-        }
 
-        var hitResult = paper.project.hitTest(point, hitOptions);
+        options = JSON.parse(JSON.stringify(hitOptions));
+        if(!options.tolerance) options.tolerance = paper.settings.hitTolerance;
+        options.tolerance /= wickEditor.canvas.getZoom();
+        var hitResult = paper.project.hitTest(point, options);
 
         if(hitResult && (hitResult.item._isPartOfGroup || hitResult.item.parent._isPartOfGroup)) {
             if(hitOptions.allowGroups) {

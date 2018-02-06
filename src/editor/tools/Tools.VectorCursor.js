@@ -53,6 +53,7 @@ Tools.VectorCursor = function (wickEditor) {
 
     var lastEvent;
 
+    var baseTol = 3;
     var hitOptions = {
         allowGroups: false,
         segments: true,
@@ -67,6 +68,7 @@ Tools.VectorCursor = function (wickEditor) {
     var pathHoverGhost;
 
     this.paperTool.onMouseMove = function(event) {
+        //hitOptions.tolerance = baseTol / wickEditor.canvas.getZoom();
         hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point, hitOptions);
 
         if(pathHoverGhost) pathHoverGhost.remove();
@@ -219,6 +221,7 @@ Tools.VectorCursor = function (wickEditor) {
     }
 
     this.paperTool.onDoubleClick = function (event) {
+        //hitOptions.tolerance = baseTol / wickEditor.canvas.getZoom();
         hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point, hitOptions);
 
         if (hitResult && hitResult.type === 'segment') {
@@ -386,6 +389,7 @@ Tools.VectorCursor = function (wickEditor) {
 
         resetSelection(event);
 
+        //hitOptions.tolerance = baseTol / wickEditor.canvas.getZoom();
         hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point, hitOptions);
 
     }

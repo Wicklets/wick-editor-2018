@@ -19,7 +19,12 @@ if(!window.Tools) Tools = {};
 
 Tools.FillBucket = function (wickEditor) {
 
-    var RES = 7;
+    var RES = 1.5;
+    var FILL_TOLERANCE = 35;
+    var PREVIEW_IMAGE = true;
+    var N_RASTER_CLONE = 1;
+    var CLONE_WIDTH_SHRINK = 0.6;
+    var SHRINK_AMT = 0.5;
 
     var that = this;
 
@@ -86,17 +91,27 @@ Tools.FillBucket = function (wickEditor) {
         var superGroup = new paper.Group({insert:false});
         wickEditor.project.getCurrentFrame().wickObjects.forEach(function (wo) {
             if(!wo.paper) return;
-            if(wo.paper._class !== 'Path') return;
-            //wo.paper.strokeWidth = 1/RES;
-            superGroup.addChild(wo.paper.clone({insert:false}));
+            if(wo.paper._class !== 'Path' && wo.paper._class !== 'CompoundPath') return;
+            //var clone = wo.paper.clone({insert:false});
+            //superGroup.addChild(clone);
+            for(var i = 0; i < N_RASTER_CLONE; i++) {
+                var clone = wo.paper.clone({insert:false});
+                clone.strokeWidth *= CLONE_WIDTH_SHRINK;
+                superGroup.addChild(clone);
+            }
         });
         if(superGroup.children.length > 0) {
+            startTiming()
             var raster = superGroup.rasterize(paper.view.resolution*RES, {insert:false});
             var rasterPosition = raster.bounds.topLeft;
             var x = (event.point.x - rasterPosition.x) * RES;
             var y = (event.point.y - rasterPosition.y) * RES;
+            stopTiming('rasterize')
             generateFloodFillImage(raster, x, y, function (floodFillImage) {
+                stopTiming('generateFloodFillImage')
+                //if(PREVIEW_IMAGE) previewImage(floodFillImage)
                 imageToPath(floodFillImage, function (path) {
+                    stopTiming('imageToPath')
                     addFilledHoleToProject(path, rasterPosition.x, rasterPosition.y);
                 });
             });
@@ -118,21 +133,61 @@ Tools.FillBucket = function (wickEditor) {
         floodFillCanvas.height = rasterCanvas.height;
         var floodFillCtx = floodFillCanvas.getContext('2d');
         floodFillCtx.putImageData(rasterImageData, 0, 0);
-        floodFillCtx.fillStyle = "rgba(123,123,123,1)";
-        floodFillCtx.fillFlood(x, y, 20);
+        floodFillCtx.fillStyle = "rgba(123,124,125,1)";
+        floodFillCtx.fillFlood(x, y, FILL_TOLERANCE);
         var floodFillImageData = floodFillCtx.getImageData(0,0,floodFillCanvas.width,floodFillCanvas.height);
         var floodFillImageDataRaw = floodFillImageData.data;
         for(var i = 0; i < floodFillImageDataRaw.length; i += 4) {
-          if(floodFillImageDataRaw[i] !== 123) {
-            floodFillImageDataRaw[i] = 0;
-            floodFillImageDataRaw[i+1] = 0;
-            floodFillImageDataRaw[i+2] = 0;
-            floodFillImageDataRaw[i+3] = 0;
-          } else {
+          if(floodFillImageDataRaw[i] === 123 && floodFillImageDataRaw[i+1] === 124 && floodFillImageDataRaw[i+2] === 125) {
             floodFillImageDataRaw[i] = 0;
             floodFillImageDataRaw[i+1] = 0;
             floodFillImageDataRaw[i+2] = 0;
             floodFillImageDataRaw[i+3] = 255;
+          } else if(floodFillImageDataRaw[i+3] !== 0) {
+            floodFillImageDataRaw[i] = 255;
+            floodFillImageDataRaw[i+1] = 0;
+            floodFillImageDataRaw[i+2] = 0;
+            floodFillImageDataRaw[i+3] = 255;
+          } else {
+            floodFillImageDataRaw[i] = 1;
+            floodFillImageDataRaw[i+1] = 0;
+            floodFillImageDataRaw[i+2] = 0;
+            floodFillImageDataRaw[i+3] = 0;
+          }
+        }
+
+        var w = floodFillCanvas.width;
+        var h = floodFillCanvas.height;
+        var r = 4;
+        for(var this_x = 0; this_x < w; this_x++) {
+            for(var this_y = 0; this_y < h; this_y++) {
+                var thisPix = getPixelAt(this_x, this_y, w, h, floodFillImageDataRaw);
+                if(thisPix && thisPix.r === 255) {
+                    for(var offset_x = -r; offset_x <= r; offset_x++) {
+                        for(var offset_y = -r; offset_y <= r; offset_y++) {
+                            var other_x = this_x+offset_x;
+                            var other_y = this_y+offset_y;
+                            var otherPix = getPixelAt(other_x, other_y, w, h, floodFillImageDataRaw);
+                            if(otherPix && otherPix.r === 0) {
+                                setPixelAt(this_x, this_y, w, h, floodFillImageDataRaw, {
+                                    r: 1,
+                                    g: 255,
+                                    b: 0,
+                                    a: 255,
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        for(var i = 0; i < floodFillImageDataRaw.length; i += 4) {
+          if(floodFillImageDataRaw[i] === 255) {
+            floodFillImageDataRaw[i] = 0;
+            floodFillImageDataRaw[i+1] = 0;
+            floodFillImageDataRaw[i+2] = 0;
+            floodFillImageDataRaw[i+3] = 0;
           }
         }
         floodFillCtx.putImageData(floodFillImageData, 0, 0);
@@ -155,7 +210,7 @@ Tools.FillBucket = function (wickEditor) {
 
     function addFilledHoleToProject (path, x, y) {
         path.scale(1/RES, new paper.Point(0,0))
-        expandHole(path);
+        expandHole(path, -SHRINK_AMT);
         var pathWickObject = WickObject.createPathObject(path.exportSVG({asString:true}));
         pathWickObject.width = path.bounds.width;
         pathWickObject.height = path.bounds.height;
@@ -168,10 +223,24 @@ Tools.FillBucket = function (wickEditor) {
             dontSelectObjects: true,
             sendToBack: true,
         });
+        /*expandHole(path, 1);
+        path.fillColor = 'red';
+        var pathWickObject = WickObject.createPathObject(path.exportSVG({asString:true}));
+        pathWickObject.width = path.bounds.width;
+        pathWickObject.height = path.bounds.height;
+        pathWickObject.x = path.position.x+x// - wickEditor.project.width/2;
+        pathWickObject.y = path.position.y+y// - wickEditor.project.height/2;
+        pathWickObject.svgX = path.bounds._x;
+        pathWickObject.svgY = path.bounds._y;
+        wickEditor.actionHandler.doAction('addObjects', {
+            wickObjects: [pathWickObject],
+            dontSelectObjects: true,
+            sendToBack: true,
+        });*/
     }
 
-    function expandHole (path) {
-        var HOLE_EXPAND_AMT = -0.4;
+    function expandHole (path, HOLE_EXPAND_AMT) {
+        //HOLE_EXPAND_AMT*=-1;
 
         if(path instanceof paper.Group) {
             path = path.children[0];
@@ -188,6 +257,8 @@ Tools.FillBucket = function (wickEditor) {
             var normals = [];
             hole.closePath();
             hole.segments.forEach(function (segment) {
+                //var n = segment.path.getNormalAt(segment.path.getOffsetOf(segment.point))
+                //normals.push(n);
                 var a = segment.previous.point;
                 var b = segment.point;
                 var c = segment.next.point;
@@ -210,6 +281,11 @@ Tools.FillBucket = function (wickEditor) {
                 var normal = normals[i];
                 segment.point.x += normal.x*-HOLE_EXPAND_AMT;
                 segment.point.y += normal.y*-HOLE_EXPAND_AMT;
+            }
+
+            for (var i = 0; i < hole.segments.length; i++) {
+                var segment = hole.segments[i];
+                
             }
         });
     }
