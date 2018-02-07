@@ -21,7 +21,7 @@ Tools.Paintbrush = function (wickEditor) {
 
     var that = this;
 
-    var MIN_SEGMENT_LENGTH = 5;
+    var MIN_SEGMENT_LENGTH = 3;
 
     this.getCursorImage = function () {
         var canvas = document.createElement("canvas");

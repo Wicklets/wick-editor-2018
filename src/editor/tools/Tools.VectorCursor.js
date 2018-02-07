@@ -59,7 +59,7 @@ Tools.VectorCursor = function (wickEditor) {
         segments: true,
         fill: true,
         curves: true,
-        handles: false,
+        handles: true,
         stroke: true,
         tolerance: 5,
     }
@@ -270,13 +270,34 @@ Tools.VectorCursor = function (wickEditor) {
                     child.position.y += event.delta.y;
                 }
             });
-        } if (hitResult.type === 'segment') {
+        } 
+
+        if (hitResult.type === 'segment') {
 
             hitResult.segment.point = new paper.Point(
                 hitResult.segment.point.x + event.delta.x, 
                 hitResult.segment.point.y + event.delta.y
             );
 
+        }
+
+        if( hitResult.type.startsWith('handle')) {
+            var otherHandle;
+            var handle;
+            if(hitResult.type === 'handle-in') {
+                handle = hitResult.segment.handleIn;
+                otherHandle = hitResult.segment.handleOut;
+            } else if (hitResult.type === 'handle-out') {
+                handle = hitResult.segment.handleOut;
+                otherHandle = hitResult.segment.handleIn;
+            }
+
+            handle.x += event.delta.x;
+            handle.y += event.delta.y;
+            if(!event.modifiers.shift) {
+                otherHandle.x -= event.delta.x;
+                otherHandle.y -= event.delta.y;
+            }
         }
 
         if(addedPoint) {
@@ -381,7 +402,6 @@ Tools.VectorCursor = function (wickEditor) {
             selectionSquare = null;
             makingSelectionSquare = false;
         } else {
-            console.log(hitResult)
             if(hitResult && hitResult.item && !(event.delta.x === 0 && event.delta.y === 0)) {
                 modifySelectedPath();
             }
@@ -414,7 +434,8 @@ Tools.VectorCursor = function (wickEditor) {
                 if(child.wick.isSymbol) {
 
                 } else {
-                    child.selected = true;
+                    //child.selected = true;
+                    child.fullySelected = true;
                 }
             }
         });
@@ -425,7 +446,6 @@ Tools.VectorCursor = function (wickEditor) {
     }
 
     function modifySelectedPath () {
-        console.log('modifySelectedPath')
 
         var objs = wickEditor.project.getSelectedObjects();
         var modifiedStates = [];
@@ -445,8 +465,6 @@ Tools.VectorCursor = function (wickEditor) {
                     scaleY: wickObject.paper.scaling.y,
                 });
             } else if (wickObject.isPath) {
-                console.log('mod')
-
                 wickObject.paper.applyMatrix = true;
 
                 wickObject.rotation = 0;

@@ -21,10 +21,12 @@ Tools.FillBucket = function (wickEditor) {
 
     var RES = 1.75;
     var FILL_TOLERANCE = 35;
-    var PREVIEW_IMAGE = true;
     var N_RASTER_CLONE = 1;
     var CLONE_WIDTH_SHRINK = 0.6;
     var SHRINK_AMT = 0.85;
+
+    var PREVIEW_IMAGE = true;
+    var LOG_PERFORMANCE = false;
 
     var that = this;
 
@@ -87,13 +89,14 @@ Tools.FillBucket = function (wickEditor) {
         wickEditor.syncInterfaces();
     }
 
+    // This is zach's secret vector fill bucket technique
+    // Will document how it works later but trust me it's great
+
     function fillHole (event) {
         var superGroup = new paper.Group({insert:false});
         wickEditor.project.getCurrentFrame().wickObjects.forEach(function (wo) {
             if(!wo.paper) return;
             if(wo.paper._class !== 'Path' && wo.paper._class !== 'CompoundPath') return;
-            //var clone = wo.paper.clone({insert:false});
-            //superGroup.addChild(clone);
             for(var i = 0; i < N_RASTER_CLONE; i++) {
                 var clone = wo.paper.clone({insert:false});
                 clone.strokeWidth *= CLONE_WIDTH_SHRINK;
@@ -106,12 +109,12 @@ Tools.FillBucket = function (wickEditor) {
             var rasterPosition = raster.bounds.topLeft;
             var x = (event.point.x - rasterPosition.x) * RES;
             var y = (event.point.y - rasterPosition.y) * RES;
-            stopTiming('rasterize')
+            if(LOG_PERFORMANCE) stopTiming('rasterize')
             generateFloodFillImage(raster, x, y, function (floodFillImage) {
-                stopTiming('generateFloodFillImage')
-                //if(PREVIEW_IMAGE) previewImage(floodFillImage)
+                if(LOG_PERFORMANCE) stopTiming('generateFloodFillImage')
+                if(PREVIEW_IMAGE) previewImage(floodFillImage)
                 imageToPath(floodFillImage, function (path) {
-                    stopTiming('imageToPath')
+                    if(LOG_PERFORMANCE) stopTiming('imageToPath')
                     addFilledHoleToProject(path, rasterPosition.x, rasterPosition.y);
                 });
             });
@@ -226,8 +229,6 @@ Tools.FillBucket = function (wickEditor) {
     }
 
     function expandHole (path, HOLE_EXPAND_AMT) {
-        //HOLE_EXPAND_AMT*=-1;
-
         if(path instanceof paper.Group) {
             path = path.children[0];
         }
