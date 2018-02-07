@@ -589,6 +589,7 @@ var GuiActionHandler = function (wickEditor) {
             var project = args.project;
 
             wickEditor.project = project;
+            wickEditor.project.loadFonts();
 
             wickEditor.actionHandler.clearHistory();
 

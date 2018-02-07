@@ -766,10 +766,21 @@ WickProject.prototype.regenAssetReferences = function () {
 
 }
 
+WickProject.prototype.loadFonts = function () {
+    var self = this;
+    self.getAllObjects().filter(function (o) {
+        return o.isText;
+    }).forEach(function (o) {
+        loadGoogleFont(o.textData.fontFamily);
+    });
+}
+
 WickProject.prototype.prepareForPlayer = function () {
     var self = this;
 
     self.regenAssetReferences();
+
+    self.loadFonts();
 
     self.getAllObjects().forEach(function (obj) {
         obj.prepareForPlayer();

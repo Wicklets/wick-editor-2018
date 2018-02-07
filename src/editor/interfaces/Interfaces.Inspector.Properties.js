@@ -135,7 +135,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
 
     properties.push(new InspectorInterface.SelectInput({
         title: 'Font Family',
-        options: getAvailableFonts(),
+        options: getAllGoogleFonts(),
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 
                 && selectionInfo.type == 'wickobject' 
@@ -145,6 +145,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             return selectionInfo.object.textData.fontFamily;
         }, 
         onChangeFn: function (val) {
+            loadGoogleFont(val);
             selectionInfo.object.textData.fontFamily = val;
             wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
             wickEditor.syncInterfaces();
