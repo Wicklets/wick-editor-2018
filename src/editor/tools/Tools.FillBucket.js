@@ -25,7 +25,7 @@ Tools.FillBucket = function (wickEditor) {
     var CLONE_WIDTH_SHRINK = 0.6;
     var SHRINK_AMT = 0.85;
 
-    var PREVIEW_IMAGE = true;
+    var PREVIEW_IMAGE = false;
     var LOG_PERFORMANCE = false;
 
     var that = this;
@@ -63,7 +63,6 @@ Tools.FillBucket = function (wickEditor) {
             stroke: true,
             curves: true,
         });
-        console.log(hitResult)
         if(hitResult) {
             if(hitResult.type === 'fill') {
                 changeFillColorOfItem(hitResult.item)
