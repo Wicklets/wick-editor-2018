@@ -1214,7 +1214,7 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function (args) {
-            var objs = wickEditor.project.getSelectedObjects();
+            var objs = args.objs || wickEditor.project.getSelectedObjects();
             var modifiedStates = [];
             objs.forEach(function (wickObject) {
                 if(!wickObject.isPath) {

@@ -58,8 +58,12 @@ Tools.FillBucket = function (wickEditor) {
     }
 
     this.paperTool.onMouseDown = function (event) {
-        var hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point);
-
+        var hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point, {
+            fill: true,
+            stroke: true,
+            curves: true,
+        });
+        console.log(hitResult)
         if(hitResult) {
             if(hitResult.type === 'fill') {
                 changeFillColorOfItem(hitResult.item)
@@ -72,21 +76,17 @@ Tools.FillBucket = function (wickEditor) {
     }
 
     function changeFillColorOfItem (item) {
-        wickEditor.project.selectObject(item.wick)
         wickEditor.guiActionHandler.doAction("changePathProperties", {
-            fillColor: wickEditor.settings.fillColor
+            fillColor: wickEditor.settings.fillColor,
+            objs: [item.wick],
         });
-        wickEditor.project.clearSelection();
-        wickEditor.syncInterfaces();
     }
 
     function changeStrokeColorOfItem (item) {
-        wickEditor.project.selectObject(item.wick)
         wickEditor.guiActionHandler.doAction("changePathProperties", {
-            strokeColor: wickEditor.settings.fillColor
+            strokeColor: wickEditor.settings.fillColor,
+            objs: [item.wick],
         });
-        wickEditor.project.clearSelection();
-        wickEditor.syncInterfaces();
     }
 
     // This is zach's secret vector fill bucket technique
