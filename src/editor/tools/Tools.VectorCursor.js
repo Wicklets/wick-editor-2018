@@ -208,7 +208,7 @@ Tools.VectorCursor = function (wickEditor) {
             }
 
         } else {
-            if(!event.modifiers.shift) {
+            if(!event.modifiers.shift && !wickEditor.colorPicker.isOpen()) {
                 wickEditor.project.clearSelection();
             }
             wickEditor.syncInterfaces();

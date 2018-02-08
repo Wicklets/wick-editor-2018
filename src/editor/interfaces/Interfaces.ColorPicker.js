@@ -65,7 +65,7 @@ var ColorPickerInterface = function (wickEditor) {
                 var colorString = color.toString();
                 if(previewType) {
                     wickEditor.project.getSelectedObjects().forEach(function (o) {
-                        if(!o.paper) return;
+                        if(!o.paper || o.isSymbol) return;
                         o.paper[previewType] = colorString;
                     });
                 }

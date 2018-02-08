@@ -117,7 +117,6 @@ Tools.SelectionCursor = function (wickEditor) {
     }
 
     this.paperTool.onMouseDown = function(event) {
-
         if(pathHoverGhost) pathHoverGhost.remove();
 
         if(lastEvent 
@@ -156,7 +155,7 @@ Tools.SelectionCursor = function (wickEditor) {
 
         } else {
 
-            if(!event.modifiers.shift) {
+            if(!event.modifiers.shift && !wickEditor.colorPicker.isOpen()) {
                 wickEditor.project.clearSelection();
             }
             wickEditor.syncInterfaces();

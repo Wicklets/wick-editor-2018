@@ -127,24 +127,6 @@ Tools.Paintbrush = function (wickEditor) {
             path.strokeCap = 'round';
             path.strokeJoin = 'round';
 
-            try{
-                var offset = path.strokeWidth/2;
-                var outerPath = OffsetUtils.offsetPath(path, offset, true);
-                var innerPath = OffsetUtils.offsetPath(path, -offset, true);
-                path = OffsetUtils.joinOffsets(outerPath.clone(), innerPath.clone(), path, offset);
-                path = path.unite();
-                path.fillColor = wickEditor.settings.fillColor;
-
-                if(path.segments && path.segments.length < 1){
-                    console.error('offset.js generated a bad SVG. Ignoring current brush stroke')
-                    path = null;
-                    return;
-                }
-            }catch(e){
-                path = null;
-                return;
-            }
-
             var group = new paper.Group({insert:false});
             group.addChild(path);
 
