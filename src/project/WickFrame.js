@@ -180,6 +180,7 @@ WickFrame.prototype.copy = function () {
     copiedFrame.length = this.length;
     copiedFrame.wickScript = this.wickScript;
     copiedFrame.uuid = random.uuid4();
+    copiedFrame.sourceUUID = this.uuid;
 
     this.wickObjects.forEach(function (wickObject) {
         copiedFrame.wickObjects.push(wickObject.copy());

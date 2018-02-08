@@ -859,8 +859,6 @@ WickObject.prototype.gotoAndPlay = function (frame) {
 
 WickObject.prototype.movePlayheadTo = function (frame) {
 
-    this._forceNewPlayheadPosition = true;
-
     var oldFrame = this.getCurrentLayer().getCurrentFrame();
 
     // Frames are zero-indexed internally but start at one in the editor GUI, so you gotta subtract 1.
@@ -935,6 +933,7 @@ WickObject.prototype.hitTest = function (otherObj) {
 }
 
 WickObject.prototype.regenBounds = function () {
+    // THIS NEEDS TO BE RECURSIVE
     this.bounds = {
         left: this.x - this.width/2,
         right: this.x + this.width/2,
@@ -1031,6 +1030,9 @@ WickObject.prototype.prepareForPlayer = function () {
         this.getAllFrames().forEach(function (frame) {
             //frame.prepareForPlayer();
         });
+        this.getAllChildObjects().forEach(function (o) {
+            o.prepareForPlayer();
+        })
     }
 
     // Reset the mouse hovered over state flag
@@ -1152,6 +1154,8 @@ WickObject.prototype.tick = function () {
 
                 (wickPlayer || wickEditor).project.runScript(this, 'load');
                 (wickPlayer || wickEditor).project.runScript(this, 'update');
+
+                if(this._newPlayheadPosition!==undefined) this.playheadPosition = this._newPlayheadPosition;
 
                 if (this.isSound) {
                     this._updateAudio(); 

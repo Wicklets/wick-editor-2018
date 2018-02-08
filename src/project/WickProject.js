@@ -677,66 +677,22 @@ WickProject.prototype.loadScriptOfObject = function (obj) {
 
     if(!window.cachedWickScripts) window.cachedWickScripts = {};
 
-    //try { 
-        //obj._scopeWrapper = function () {
-            var dummyInitScript = "";
-            WickObjectBuiltins.forEach(function (builtinName) {
-                //dummyInitScript += '\nvar '+builtinName+"=function(){return;};"
-                dummyInitScript += 'function ' + builtinName + ' (){return;};\n'
-            });
+    var dummyInitScript = "";
+    var dummyLoaderScript = "";
+    WickObjectBuiltins.forEach(function (builtinName) {
+        dummyInitScript += 'function ' + builtinName + ' (){return;};\n';
+        dummyLoaderScript += '\nthis.'+builtinName+"="+builtinName+";";
+    });
 
-            var dummyLoaderScript = "";
-            WickObjectBuiltins.forEach(function (builtinName) {
-                dummyLoaderScript += '\nthis.'+builtinName+"="+builtinName+";"
-            });
-
-            //(wickPlayer || wickEditor).project.loadBuiltinFunctions(obj);
-            var evalScriptTag = '<script>\nwindow.cachedWickScripts["'+obj.uuid+'"] = function () {\n' + dummyInitScript + obj.wickScript + dummyLoaderScript + '\n}\n<'+'/'+'script>';
-            $('head').append(evalScriptTag);
-            //console.log(evalScriptTag)
-            //eval(evalScriptTag);
-            //console.log(evalScriptTag);
-        //}
-        //obj._scopeWrapper();
-    /*} catch (e) { 
-        if (window.wickEditor) {
-            //if(!wickEditor.builtinplayer.running) return;
-
-            console.log("Exception thrown while running script of WickObject: " + obj.name);
-            console.log(e);
-            var lineNumber = null;
-            if(e.stack) {
-                e.stack.split('\n').forEach(function (line) {
-                    if(lineNumber) return;
-                    if(!line.includes("<anonymous>:")) return;
-
-                    lineNumber = parseInt(line.split("<anonymous>:")[1].split(":")[0]);
-                });
-            }
-
-            //console.log(e.stack.split("\n")[1].split('<anonymous>:')[1].split(":")[0]);
-            //console.log(e.stack.split("\n"))
-            //if(wickEditor.builtinplayer.running) wickEditor.builtinplayer.stopRunningProject()
-            wickEditor.builtinplayer.stopRunningProject()
-            wickEditor.scriptingide.displayError(obj, {
-                message: e,
-                line: lineNumber,
-                type: 'runtime'
-            });
-
-        } else {
-            alert("An exception was thrown while running a WickObject script. See console!");
-            console.log(e);
-        }
-    };*/
-
+    var evalScriptTag = '<script>\nwindow.cachedWickScripts["'+obj.uuid+'"] = function () {\n' + dummyInitScript + obj.wickScript + dummyLoaderScript + '\n}\n<'+'/'+'script>';
+    $('head').append(evalScriptTag);
 }
 
 WickProject.prototype.initScript = function (obj) {
     window.errorCausingObject = obj;
     
     if(!obj.cachedWickScript) {
-        if(obj.isClone) {
+        if(obj.sourceUUID) {
             obj.cachedWickScript = window.cachedWickScripts[obj.sourceUUID];
         } else {
             obj.cachedWickScript = window.cachedWickScripts[obj.uuid];
@@ -783,8 +739,9 @@ WickProject.prototype.prepareForPlayer = function () {
 
     self.regenAssetReferences();
 
+    self.rootObject.prepareForPlayer();
+
     self.getAllObjects().forEach(function (obj) {
-        obj.prepareForPlayer();
         self.loadScriptOfObject(obj);
     });
     self.getAllFrames().forEach(function (obj) {
@@ -806,7 +763,6 @@ WickProject.prototype.tick = function () {
 
     allObjectsInProject.forEach(function (obj) {
         obj._newPlayheadPosition = undefined;
-        obj._forceNewPlayheadPosition = undefined;
     });
     allObjectsInProject.forEach(function (obj) {
         obj.getAllFrames().forEach(function (frame) {
@@ -821,16 +777,6 @@ WickProject.prototype.tick = function () {
     
     this.rootObject.tick();
     this.updateCamera();
-    
-    // If a playhead position was changed through a script, make sure the 
-    // change is reflected on next render (things look more responsive)
-    allObjectsInProject.forEach(function (obj) {
-        if(obj._newPlayheadPosition !== undefined && obj._forceNewPlayheadPosition) {
-            //obj.playheadPosition = obj._newPlayheadPosition;
-            //obj._newPlayheadPosition = null;
-            //obj._forceNewPlayheadPosition = null;
-        }
-    });
 }
 
 WickProject.prototype.applyTweens = function () {
