@@ -273,7 +273,7 @@ window.wickDocs =
             "description": "True if the objects collide, false otherwise."
           }
         },
-        {
+        /*{
           "name": "getHitInfo(otherObject)",
           "description": "Returns information about a collision between two objects if they are touching.",
           "example": "// If there's a collision, move this object so that the objects are no longer touching.\nvar hitInfo = this.getHitInfo(other_object_name);\nif (hitInfo.hit) {\n      this.x -= hitInfo.overlapX\n      this.y -= hitInfo.overlapY\n}",
@@ -289,7 +289,7 @@ window.wickDocs =
             "type": "HitInfo",
             "description": "An object holdng the information about the collision."
           }
-        },
+        },*/
         {
           "name": "pointTo(x,y)",
           "description": "Rotates this object so that it is facing in the direction of the given point (x,y)",

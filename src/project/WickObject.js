@@ -927,121 +927,20 @@ WickObject.prototype.getFramesEnd = function() {
 
 }
 
-WickObject.prototype.hitTestRectangles = function (otherObj) {
-    var A = this;
-    var B = otherObj;
-    var V = SAT.Vector;
-    var P = SAT.Polygon;
-
-    var At = A.getAbsoluteTransformations();
-    var Bt = B.getAbsoluteTransformations();
-
-    var AWidth = (A.width * At.scale.x) / 2;
-    var BWidth = (B.width * Bt.scale.x) / 2;
-    var AHeight = (A.height * At.scale.y) / 2;
-    var BHeight = (B.height * Bt.scale.y) / 2;
-
-    var Ax = (At.position.x);
-    var Bx = (Bt.position.x);
-    var Ay = (At.position.y);
-    var By = (Bt.position.y);
-
-    var ALeft = (-AWidth);
-    var ARight = (AWidth);
-    var ATop = (-AHeight);
-    var ABottom = (AHeight);
-
-    var BLeft = (-BWidth);
-    var BRight = (BWidth);
-    var BTop = (-BHeight);
-    var BBottom = (BHeight);
-
-    var polygon1 = new P(new V(Ax, Ay), [
-      new SAT.Vector(ARight, ATop),
-      new SAT.Vector(ARight, ABottom), 
-      new SAT.Vector(ALeft, ABottom), 
-      new SAT.Vector(ALeft, ATop),
-    ]);
-    polygon1.rotate(At.rotation * 0.0174533);
-
-    var polygon2 = new P(new V(Bx, By), [
-      new SAT.Vector(BRight, BTop), 
-      new SAT.Vector(BRight, BBottom), 
-      new SAT.Vector(BLeft, BBottom), 
-      new SAT.Vector(BLeft, BTop),
-    ]);
-    polygon2.rotate(Bt.rotation * 0.0174533);
-
-    var response = new SAT.Response();
-    var collided = SAT.testPolygonPolygon(polygon1, polygon2, response);
-    if(collided) {
-        if(response.overlapV.x !== 0) response.dirX = (polygon1.pos.x > polygon2.pos.x) ? 'left' : 'right';
-        if(response.overlapV.y !== 0) response.dirY = (polygon1.pos.y > polygon2.pos.y) ? 'up' : 'down';
-        return response;
-    } else {
-        return null;
-    }
-}
-
-WickObject.prototype.getHitResult = function (otherObj) {
-    if (otherObj === undefined || !otherObj._active) {
-        return false;
-    }
-
-    // Generate lists of all children of both objects
-
-    var otherObjChildren = otherObj.getAllActiveChildObjectsRecursive(false);
-    if(!otherObj.isSymbol) {
-        otherObjChildren.push(otherObj);
-    }
-
-    var thisObjChildren = this.getAllActiveChildObjectsRecursive(false);
-    if(!this.isSymbol) {
-        thisObjChildren.push(this);
-    }
-
-    var results = [];
-    for (var i = 0; i < otherObjChildren.length; i++) {
-        for (var j = 0; j < thisObjChildren.length; j++) {
-            var objA = thisObjChildren[j];
-            var objB = otherObjChildren[i];
-            var result = objA["hitTestRectangles"](objB)
-            if (result) {
-                //return result;
-                results.push(result);
-            }
-        }
-    }
-
-    if(results.length === 0)  {
-        return {
-            hit: false,
-            overlapX: 0,
-            overlapY: 0,
-        };
-    }
-
-    var finalResult = {
-        hit: true,
-        overlapX: 0,
-        overlapY: 0,
-    }
-    results.forEach(function (result) {
-        finalResult.overlapX += result.overlapV.x;
-        finalResult.overlapY += result.overlapV.y;
-        if(result.dirX) finalResult.dirX = result.dirX;
-        if(result.dirY) finalResult.dirY = result.dirY;
-    });
-    return finalResult;
-
-}
-
 WickObject.prototype.hitTest = function (otherObj) {
-    return this.getHitInfo(otherObj).hit;
+    this.regenBounds();
+    otherObj.regenBounds();
+
+    return intersectRect(this.bounds, otherObj.bounds);
 }
 
-WickObject.prototype.getHitInfo = function (otherObj) {
-    return this.getHitResult(otherObj);
+WickObject.prototype.regenBounds = function () {
+    this.bounds = {
+        left: this.x - this.width/2,
+        right: this.x + this.width/2,
+        top: this.y - this.height/2,
+        bottom: this.y + this.height/2,
+    };
 }
 
 WickObject.prototype.isPointInside = function(point) {
@@ -1249,7 +1148,7 @@ WickObject.prototype.tick = function () {
             }
             // Inactive -> Active
             else if (!this._wasActiveLastTick && this._active) {
-                (wickPlayer || wickEditor).project.loadScriptOfObject(this);
+                (wickPlayer || wickEditor).project.initScript(this);
 
                 (wickPlayer || wickEditor).project.runScript(this, 'load');
                 (wickPlayer || wickEditor).project.runScript(this, 'update');

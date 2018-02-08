@@ -59,7 +59,7 @@ WickFrame.prototype.tick = function () {
         // Inactive -> Active
         // Frame just became active! It's fresh!
         else if (!this._wasActiveLastTick && this._active) {
-            (wickPlayer || wickEditor).project.loadScriptOfObject(this);
+            (wickPlayer || wickEditor).project.initScript(this);
             
             (wickPlayer || wickEditor).project.runScript(this, 'load');
             (wickPlayer || wickEditor).project.runScript(this, 'update');

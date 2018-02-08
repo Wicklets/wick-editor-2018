@@ -448,6 +448,7 @@ WickProject.prototype.handleWickError = function (e, objectCausedError) {
                 lineNumber = parseInt(line.split("<anonymous>:")[1].split(":")[0]);
             });
         }
+        if(lineNumber) lineNumber -= 12;
 
         //console.log(e.stack.split("\n")[1].split('<anonymous>:')[1].split(":")[0]);
         //console.log(e.stack.split("\n"))
@@ -656,21 +657,6 @@ WickProject.prototype.loadBuiltinFunctions = function (contextObject) {
 
 }
 
-WickProject.prototype.runScript = function (obj, fnName, arg1, arg2, arg3) {
-
-    window.errorCausingObject = obj;
-
-    try {
-        if(obj[fnName]) {
-            this.loadBuiltinFunctions(obj);
-            obj[fnName](arg1, arg2, arg3);
-        }
-    } catch (e) {
-        this.handleWickError(e,obj);
-    }
-
-}
-
 var WickObjectBuiltins = [
     'load',
     'update',
@@ -688,42 +674,31 @@ var WickObjectBuiltins = [
 WickProject.prototype.loadScriptOfObject = function (obj) {
 
     if(obj.wickScript === '') return;
-    
-    try { 
-        var dummy = {};
-        var load = undefined;
-        var update = undefined;
-        var mousePressed = undefined;
-        var mouseReleased = undefined;
-        var mouseHover = undefined;
-        var mouseEnter = undefined;
-        var mouseLeave = undefined;
-        var keyDown = undefined;
-        var keyPressed = undefined;
-        var keyReleased = undefined;
-        var mouseDown = undefined;
-        obj._scopeWrapper = function () {
-            var dummyLoaderScript = "";
+
+    if(!window.cachedWickScripts) window.cachedWickScripts = {};
+
+    //try { 
+        //obj._scopeWrapper = function () {
+            var dummyInitScript = "";
             WickObjectBuiltins.forEach(function (builtinName) {
-                dummyLoaderScript += '\ndummy.'+builtinName+"="+builtinName+";"
+                //dummyInitScript += '\nvar '+builtinName+"=function(){return;};"
+                dummyInitScript += 'function ' + builtinName + ' (){return;};\n'
             });
 
-            (wickPlayer || wickEditor).project.loadBuiltinFunctions(obj);
+            var dummyLoaderScript = "";
+            WickObjectBuiltins.forEach(function (builtinName) {
+                dummyLoaderScript += '\nthis.'+builtinName+"="+builtinName+";"
+            });
 
-            var evalScript = obj.wickScript + dummyLoaderScript;
-            eval(evalScript);
-        }
-        obj._scopeWrapper();
-
-        WickObjectBuiltins.forEach(function (builtinName) {
-            var fn = dummy[builtinName];
-            if(fn) {
-                obj[builtinName] = fn;
-            } else {
-                obj[builtinName] = function () { return; };
-            }
-        })
-    } catch (e) { 
+            //(wickPlayer || wickEditor).project.loadBuiltinFunctions(obj);
+            var evalScriptTag = '<script>\nwindow.cachedWickScripts["'+obj.uuid+'"] = function () {\n' + dummyInitScript + obj.wickScript + dummyLoaderScript + '\n}\n<'+'/'+'script>';
+            $('head').append(evalScriptTag);
+            //console.log(evalScriptTag)
+            //eval(evalScriptTag);
+            //console.log(evalScriptTag);
+        //}
+        //obj._scopeWrapper();
+    /*} catch (e) { 
         if (window.wickEditor) {
             //if(!wickEditor.builtinplayer.running) return;
 
@@ -753,7 +728,44 @@ WickProject.prototype.loadScriptOfObject = function (obj) {
             alert("An exception was thrown while running a WickObject script. See console!");
             console.log(e);
         }
-    };
+    };*/
+
+}
+
+WickProject.prototype.initScript = function (obj) {
+    window.errorCausingObject = obj;
+    
+    if(!obj.cachedWickScript) {
+        if(obj.isClone) {
+            obj.cachedWickScript = window.cachedWickScripts[obj.sourceUUID];
+        } else {
+            obj.cachedWickScript = window.cachedWickScripts[obj.uuid];
+        }
+    }
+
+    if(obj.cachedWickScript) {
+        this.loadBuiltinFunctions(obj);
+        try {
+            obj.cachedWickScript();
+        } catch (e) {
+            this.handleWickError(e,obj);
+        }
+    }
+}
+
+WickProject.prototype.runScript = function (obj, fnName, arg1, arg2, arg3) {
+
+    window.errorCausingObject = obj;
+
+    try {
+        if(obj[fnName]) {
+            this.loadBuiltinFunctions(obj);
+            obj[fnName](arg1, arg2, arg3);
+        }
+    } catch (e) {
+        this.handleWickError(e,obj);
+    }
+
 }
 
 WickProject.prototype.regenAssetReferences = function () {
@@ -773,6 +785,10 @@ WickProject.prototype.prepareForPlayer = function () {
 
     self.getAllObjects().forEach(function (obj) {
         obj.prepareForPlayer();
+        self.loadScriptOfObject(obj);
+    });
+    self.getAllFrames().forEach(function (obj) {
+        self.loadScriptOfObject(obj);
     });
 }
 
