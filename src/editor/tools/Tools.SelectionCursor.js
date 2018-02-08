@@ -174,16 +174,18 @@ Tools.SelectionCursor = function (wickEditor) {
     this.paperTool.onDoubleClick = function (event) {
         if(hitResult) {
             var selected = wickEditor.project.getSelectedObject();
-            if(!selected) return;
-            if(selected.isSymbol) {
-                wickEditor.guiActionHandler.doAction('editObject');
-            } else if (selected.isText) {
-                wickEditor.guiActionHandler.doAction('useTools.text')
+            if(selected)  {
+                if(selected.isSymbol) {
+                    wickEditor.guiActionHandler.doAction('editObject');
+                } else if (selected.isText) {
+                    wickEditor.guiActionHandler.doAction('useTools.text')
+                }
             }
         } else {
             if(wickEditor.project.getCurrentObject().isRoot) return;
             wickEditor.guiActionHandler.doAction('finishEditingObject');
         }
+        hitResult = null;
     }
 
     this.paperTool.onMouseDrag = function(event) {

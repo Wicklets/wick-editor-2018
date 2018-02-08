@@ -1000,8 +1000,8 @@ WickObject.prototype.isPointInside = function(point) {
     return hit;
 }
 
-WickObject.prototype.clone = function () {
-    return wickPlayer.cloneObject(this);
+WickObject.prototype.clone = function (args) {
+    return wickPlayer.cloneObject(this, args);
 };
 
 WickObject.prototype.delete = function () {
