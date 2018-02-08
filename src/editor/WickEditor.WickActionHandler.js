@@ -259,6 +259,8 @@ var WickActionHandler = function (wickEditor) {
                 }
             });
 
+            // Clear selection after deletion.
+            wickEditor.project.clearSelection()
             done(args);
         },
         function (args) {

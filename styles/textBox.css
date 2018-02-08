@@ -1,0 +1,10 @@
+.canvasTextEdit {
+	position: absolute;
+	background-color: 'white';
+	border: rgb(100, 100, 100);
+	border-style: dotted;
+	border-width: 1px;
+	resize: none;
+	overflow: hidden;
+	padding: 0px; 
+}

@@ -70,13 +70,14 @@ Tools.Text = function (wickEditor) {
                 addText(ms.x, ms.y);
             } else {
                 wickEditor.syncInterfaces();
+                console.log("bleh")
             }
 
         }
     }
 
     function addText (x,y) {                                                     
-    	var newWickObject = WickObject.createTextObject('Click to edit text');
+    	var newWickObject = WickObject.createTextObject('Text');
 
         if(x && y) {
             newWickObject.x = x;
