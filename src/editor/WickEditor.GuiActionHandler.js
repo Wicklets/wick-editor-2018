@@ -433,8 +433,8 @@ var GuiActionHandler = function (wickEditor) {
         });
 
     registerAction('deleteSelectedObjects',
-        ['Backspace'],
-        null,
+        [],
+        'Delete Selection',
         {},
         function(args) {
             wickEditor.actionHandler.doAction('deleteObjects', {
@@ -442,9 +442,17 @@ var GuiActionHandler = function (wickEditor) {
             });
         });
 
-    registerAction('deleteSelectedObjects2',
+    registerAction('deleteSelectedObjectsBackspace',
+        ['Backspace'],
+        null,
+        {},
+        function(args) {
+           wickEditor.guiActionHandler.doAction('deleteSelectedObjects');
+        });
+
+    registerAction('deleteSelectedObjectsDelete',
         ['Delete'],
-        'Delete Selection',
+        null,
         {},
         function(args) {
             wickEditor.guiActionHandler.doAction('deleteSelectedObjects');

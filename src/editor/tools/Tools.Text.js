@@ -70,6 +70,7 @@ Tools.Text = function (wickEditor) {
                 addText(ms.x, ms.y);
             } else {
                 wickEditor.syncInterfaces();
+                console.log("bleh")
             }
 
         }
