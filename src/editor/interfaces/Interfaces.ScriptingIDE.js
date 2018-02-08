@@ -142,6 +142,7 @@ var ScriptingIDEInterface = function (wickEditor) {
     }
 
     this.syncWithEditorState = function () {
+        oldObjectBeingScripting = objectBeingScripted;
         objectBeingScripted = wickEditor.project.getSelectedObject() || wickEditor.project.getCurrentFrame();
 
         updateHeaderText()
@@ -199,6 +200,10 @@ var ScriptingIDEInterface = function (wickEditor) {
             document.getElementById('openScriptingGUIButton').style.display = 'block';
 
             document.getElementById('beautifyButton').style.display = 'none';
+        }
+
+        if(objectBeingScripted !== oldObjectBeingScripting) {
+            self.aceEditor.getSession().setUndoManager(new ace.UndoManager())
         }
     }
 
