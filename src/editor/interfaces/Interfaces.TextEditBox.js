@@ -23,12 +23,7 @@ var TextEditBox = function (wickEditor) {
 
     this.setup = function () {
         box = document.createElement('textarea');
-        box.id = 'canvasTextEdit';
-        box.style.position = 'absolute';
-        box.style.backgroundColor = 'white';
-        box.style.border = 'none';
-        box.style.overflow = 'hidden';
-        box.style.resize = 'none';
+        box.className = 'canvasTextEdit';
         box.oninput = function () {
             var selectedObj = wickEditor.project.getSelectedObject();
             if(selectedObj) {
@@ -60,7 +55,7 @@ var TextEditBox = function (wickEditor) {
 
             box.style.left   = x-(w*zoom/2) + 'px';
             box.style.top    = y-(h*zoom/2)+TOP_OFFSET + 'px';
-            box.style.width  = w*zoom + 'px';
+            box.style.width  = w*zoom+1 + 'px'; // Slightly increase text box size to avoid text box resizing issues.
             box.style.height = h*zoom + 'px';
 
             box.value = selectedObj.textData.text;

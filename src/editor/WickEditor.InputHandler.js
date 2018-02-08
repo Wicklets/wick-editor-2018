@@ -104,7 +104,7 @@ var InputHandler = function (wickEditor) {
                 var specialParamsMatch = true;
 
                 if(activeElemIsTextBox() && !action.requiredParams.usableInTextBoxes) specialParamsMatch=false;
-                if(document.activeElement.id === 'canvasTextEdit') specialParamsMatch=false;
+                if(document.activeElement.className === 'canvasTextEdit') specialParamsMatch=false;
                 if(action.requiredParams.disabledInScriptingIDE && (document.activeElement.className === 'ace_text-input')) specialParamsMatch=false;
 
                 if(specialParamsMatch) {

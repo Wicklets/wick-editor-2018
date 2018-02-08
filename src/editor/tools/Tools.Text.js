@@ -76,7 +76,7 @@ Tools.Text = function (wickEditor) {
     }
 
     function addText (x,y) {                                                     
-    	var newWickObject = WickObject.createTextObject('Click to edit text');
+    	var newWickObject = WickObject.createTextObject('Text');
 
         if(x && y) {
             newWickObject.x = x;
