@@ -1022,6 +1022,8 @@ WickObject.prototype.prepareForPlayer = function () {
         // Set this object to it's first frame
         this.playheadPosition = 0;
 
+        this.clones = [];
+
         // Start the object playing
         this._playing = true;
         this._active = false;

@@ -168,6 +168,7 @@ WickProject.Exporter = (function () {
 
     var dontJSONVars = [
         "thumbnail",
+        "clones",
         "currentObject",
         "parentObject",
         "causedAnException",

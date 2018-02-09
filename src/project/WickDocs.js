@@ -239,7 +239,7 @@ window.wickDocs =
         },
         {
           "name": "clone()",
-          "description": "The resulting clone.",
+          "description": "Makes a clone of the WickObject.",
           "example": "// Creates a clone of the current wick object and stores it in the variable myClone\nvar myClone = this.clone();",
           "snippet": "var clone = this.clone()",
           "args": [],
@@ -247,6 +247,14 @@ window.wickDocs =
             "type": "WickObject",
             "description": "A clone of the object that called clone()."
           }
+        },
+        {
+          "name": "clones",
+          "description": "An array of all of the clones of the WickObject.",
+          "example": "// This will delete all of the clones of this Wick Object.\nfor (var i = 0; i < this.clones.length; i++) {\n    this.clones[i].delete();\n}",
+          "snippet": "for (var i = 0; i < this.clones.length; i++) {\n    \n}",
+          "args": [],
+          "return": null,
         },
         {
           "name": "delete()",

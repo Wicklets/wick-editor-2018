@@ -116,6 +116,12 @@ var WickPlayer = function () {
             deleteObjects.forEach(function (d) {
                 self.renderer.cleanupObjectTextures(d);
                 d.remove();
+                if(d.objectClonedFrom) {
+                    var removeIndex = d.objectClonedFrom.clones.indexOf(d);
+                    if(removeIndex !== -1) {
+                        d.objectClonedFrom.clones.splice(removeIndex, 1);
+                    }
+                }
             })
             self.renderer.renderWickObjects(self.project, self.project.rootObject.getAllActiveChildObjects(), null, true);
             self.inputHandler.update();
@@ -133,6 +139,8 @@ var WickPlayer = function () {
             clone[key] = args[key];
         }
         clone.asset = wickObj.asset;
+
+        wickObj.clones.push(clone);
 
         clone.objectClonedFrom = wickObj;
 
