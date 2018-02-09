@@ -162,7 +162,8 @@ var WickPixiRenderer = function (canvasContainer) {
             if(pixiTexture) {
                 var pixiSprite = new PIXI.Sprite(pixiTexture);
                 wickObject.alphaMask = wickProject.getObjectByUUID(wickObject.sourceUUID).alphaMask
-                container.addChild(pixiSprite);
+                var sourceIndex = container.children.indexOf(pixiSprites[wickObject.sourceUUID])
+                container.addChildAt(pixiSprite, sourceIndex);
                 pixiSprites[wickObject.uuid] = pixiSprite;
                 pixiSprite.visible = false;
                 return;
