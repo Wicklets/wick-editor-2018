@@ -933,13 +933,30 @@ WickObject.prototype.hitTest = function (otherObj) {
 }
 
 WickObject.prototype.regenBounds = function () {
-    // THIS NEEDS TO BE RECURSIVE
-    this.bounds = {
-        left: this.x - this.width/2,
-        right: this.x + this.width/2,
-        top: this.y - this.height/2,
-        bottom: this.y + this.height/2,
-    };
+    var self = this;
+    if(this.isSymbol) {
+        this.bounds = {
+            left: Infinity,
+            right: -Infinity,
+            top: Infinity,
+            bottom: -Infinity,
+        }
+        this.getAllActiveChildObjects().forEach(function (child) {
+            child.regenBounds();
+            self.bounds.left = Math.min(child.bounds.left, self.bounds.left)
+            self.bounds.right = Math.max(child.bounds.right, self.bounds.right)
+            self.bounds.top = Math.min(child.bounds.top, self.bounds.top)
+            self.bounds.bottom = Math.max(child.bounds.bottom, self.bounds.bottom)
+        });
+    } else {
+        var absPos = this.getAbsolutePosition();
+        this.bounds = {
+            left: absPos.x - this.width/2,
+            right: absPos.x + this.width/2,
+            top: absPos.y - this.height/2,
+            bottom: absPos.y + this.height/2,
+        };
+    }
 }
 
 WickObject.prototype.isPointInside = function(point) {
