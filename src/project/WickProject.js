@@ -734,12 +734,25 @@ WickProject.prototype.regenAssetReferences = function () {
 
 }
 
+WickProject.prototype.loadFonts = function () {
+    var self = this;
+    var fontsInProject = [];
+    self.getAllObjects().forEach(function (o) {
+        if(o.isText)
+            fontsInProject.push(o.textData.fontFamily);
+    });
+    loadGoogleFonts(fontsInProject, function () {
+        wickEditor.syncInterfaces();
+    });
+}
+
 WickProject.prototype.prepareForPlayer = function () {
     var self = this;
 
     self.regenAssetReferences();
 
     self.rootObject.prepareForPlayer();
+    self.loadFonts();
 
     self.getAllObjects().forEach(function (obj) {
         self.loadScriptOfObject(obj);

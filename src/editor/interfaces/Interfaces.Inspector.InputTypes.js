@@ -17,6 +17,7 @@ InspectorInterface.StringInput = function (args) {
         try {
             self.onChangeFn(self.valueDiv.value);
         } catch (e) {
+            console.log(e)
             self.updateViewValue();
         }
     }
@@ -79,6 +80,7 @@ InspectorInterface.TwoStringInput = function (args) {
                 right: self.rightValueDiv.value
             });
         } catch (e) {
+            console.log(e)
             self.updateViewValue();
         }
     }
@@ -144,6 +146,7 @@ InspectorInterface.ColorPickerInput = function (args) {
         try {
             self.onChangeFn(self.valueDiv.value);
         } catch (e) {
+            console.log(e)
             self.updateViewValue();
         }
     }
@@ -198,6 +201,7 @@ InspectorInterface.SelectInput = function (args) {
         try {
             self.onChangeFn(self.valueDiv.value);
         } catch (e) {
+            console.log(e)
             self.updateViewValue();
         }
     }
@@ -248,6 +252,7 @@ InspectorInterface.CheckboxInput = function (args) {
         try {
             self.onChangeFn(self.valueDiv.checked);
         } catch (e) {
+            console.log(e)
             self.updateViewValue();
         }
     }
