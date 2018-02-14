@@ -22,7 +22,7 @@ Tools.FillBucket = function (wickEditor) {
     var RES = 1.75;
     var FILL_TOLERANCE = 35;
     var N_RASTER_CLONE = 1;
-    var CLONE_WIDTH_SHRINK = 0.6;
+    var CLONE_WIDTH_SHRINK = 1.0;
     var SHRINK_AMT = 0.85;
 
     var PREVIEW_IMAGE = false;
