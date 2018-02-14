@@ -315,7 +315,7 @@ var WickActionHandler = function (wickEditor) {
                     }
                 }
 
-                wickObj.updateFrameTween();
+                if(wickObj.updateFrameTween) wickObj.updateFrameTween();
             };
 
             done(args);

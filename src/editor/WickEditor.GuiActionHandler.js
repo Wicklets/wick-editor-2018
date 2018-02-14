@@ -1250,7 +1250,6 @@ var GuiActionHandler = function (wickEditor) {
                     })
                 }
             })
-            console.log(modifiedStates)
             wickEditor.actionHandler.doAction('modifyObjects', {
                 objs: objs,
                 modifiedStates: modifiedStates
