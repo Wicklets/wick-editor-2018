@@ -476,24 +476,42 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
-    properties.push(new InspectorInterface.SelectInput({
+    properties.push(new InspectorInterface.MultiCheckboxInput({
         title: 'Easing',
-        options: ['None', 'In', 'Out', 'InOut'],
+        icons: [
+            'resources/ease-none.png',
+            'resources/ease-in.png', 
+            'resources/ease-out.png',
+            'resources/ease-in-out.png',
+        ],
         isActiveFn: function () {
             return selectionInfo.type === 'frame' 
                 && selectionInfo.numObjects === 1 
                 && selectionInfo.object.getCurrentTween();
         },
         getValueFn: function () {
-            return selectionInfo.object.getCurrentTween().tweenDir;
+            var tweenDir = selectionInfo.object.getCurrentTween().tweenDir
+            return [
+                tweenDir === 'None',
+                tweenDir === 'In',
+                tweenDir === 'Out',
+                tweenDir === 'InOut',
+            ];
         }, 
-        onChangeFn: function (val) {
+        onChangeFn: function (vals) {
             var tween = selectionInfo.object.getCurrentTween();
 
-            tween.tweenDir = val;
-            if(val === 'None') {
-                tween.tweenType = 'Linear';
-            } else {
+            if(vals[0] && tween.tweenDir !== 'None') {
+                tween.tweenDir = 'None';
+                tween.tweenType = 'Linear'
+            } else if (vals[1] && tween.tweenDir !== 'In') {
+                tween.tweenDir = 'In';
+                tween.tweenType = 'Quadratic';
+            } else if (vals[2] && tween.tweenDir !== 'Out') {
+                tween.tweenDir = 'Out';
+                tween.tweenType = 'Quadratic';
+            } else if (vals[3] && tween.tweenDir !== 'InOut') {
+                tween.tweenDir = 'InOut';
                 tween.tweenType = 'Quadratic';
             }
             wickEditor.syncInterfaces();
