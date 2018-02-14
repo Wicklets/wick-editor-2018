@@ -108,10 +108,16 @@ WickProject.Exporter = (function () {
 
     projectExporter.exportProject = function (wickProject, args) {
 
-        if(args && args.json) {
+        if(args && (args.json || args.wick)) {
             wickProject.getAsJSON(function(JSONProject) {
+                var extension;
+                if(args.json) {
+                    extension = '.json';
+                } else if (args.wick) {
+                    extension = '.wick';
+                }
                 var blob = new Blob([JSONProject], {type: "text/plain;charset=utf-8"});
-                saveAs(blob, wickProject.name+".json");
+                saveAs(blob, wickProject.name+'-'+timeStamp()+extension);
             }, '\t');
             return;
         }

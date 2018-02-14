@@ -101,7 +101,7 @@ Tools.Pencil = function (wickEditor) {
                     path.simplify(t / z * s);
                 }
 
-                path.join(path, 10/wickEditor.canvas.getZoom())
+                path.join(path, 5/wickEditor.canvas.getZoom())
             }
 
             path.remove();

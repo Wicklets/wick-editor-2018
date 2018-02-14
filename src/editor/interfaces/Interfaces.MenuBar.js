@@ -123,7 +123,7 @@ var MenuBarInterface = function (wickEditor) {
                 wickEditor.guiActionHandler.doAction("openFile");
             }),
             new TabButton('Save Project', function () {
-                wickEditor.guiActionHandler.doAction("exportProjectHTML");
+                wickEditor.guiActionHandler.doAction("exportProjectWick");
             }),
             new TabSpacer(),
 

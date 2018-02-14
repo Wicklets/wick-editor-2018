@@ -503,6 +503,10 @@ var InputHandler = function (wickEditor) {
 
     var loadFileIntoWickObject = function (e,file,fileType) {
 
+        if(file.name.endsWith('.wick')) {
+            fileType = 'application/json'
+        }
+
         if(fileType === 'text/html') {
             loadHTML(file)
             return;

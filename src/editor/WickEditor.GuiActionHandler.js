@@ -201,9 +201,20 @@ var GuiActionHandler = function (wickEditor) {
             //wickEditor.guiActionHandler.doAction('exportProjectJSON');
         });
 
-    registerAction('exportProjectHTML',
+    registerAction('exportProjectWick',
         ['MODIFIER','KeyS'],
         ['Save Project'],
+        {usableInTextBoxes:true},
+        function(args) {
+            that.keys = [];
+            that.specialKeys = [];
+            WickProject.Exporter.autosaveProject(wickEditor.project);
+            WickProject.Exporter.exportProject(wickEditor.project, {wick:true});
+        });
+
+    registerAction('exportProjectHTML',
+        [],
+        [],
         {usableInTextBoxes:true},
         function(args) {
             that.keys = [];
@@ -1234,9 +1245,12 @@ var GuiActionHandler = function (wickEditor) {
                     }
                     modifiedStates.push({
                         pathData : wickObject.paper.exportSVG({asString:true}),
+                        svgX : wickObject.paper.bounds._x,
+                        svgY : wickObject.paper.bounds._y
                     })
                 }
             })
+            console.log(modifiedStates)
             wickEditor.actionHandler.doAction('modifyObjects', {
                 objs: objs,
                 modifiedStates: modifiedStates
