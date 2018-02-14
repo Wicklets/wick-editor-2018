@@ -19,6 +19,9 @@ var CanvasInterface = function (wickEditor) {
 
     var self = this;
 
+    var ZOOM_MIN = 0.1;
+    var ZOOM_MAX = 50;
+
     var pan;
     var zoom;
 
@@ -111,18 +114,24 @@ var CanvasInterface = function (wickEditor) {
 
     self.setZoom = function (newZoom) {
         var oldZoom = zoom;
-        var zoomAmount = newZoom / oldZoom;
+        zoom = newZoom;
+        lockZoomToRange();
+        
+        var zoomAmount = zoom / oldZoom;
 
         pan.x += ((window.innerWidth/2) -pan.x)*(1-zoomAmount);
         pan.y += ((window.innerHeight/2)-pan.y)*(1-zoomAmount);
 
-        zoom = newZoom;
-
         updateViewTransforms();
     }
 
-    self.zoomToPoint = function (zoomAmount, x, y) {
-        zoom *= zoomAmount;
+    self.zoomToPoint = function (zoomFactor, x, y) {
+        var oldZoom = zoom;
+        var newZoom = zoom * zoomFactor;
+        zoom = newZoom;
+        lockZoomToRange();
+
+        var zoomAmount = zoom / oldZoom;
 
         pan.x += (x-pan.x)*(1-zoomAmount);
         pan.y += (y-pan.y)*(1-zoomAmount);
@@ -142,6 +151,13 @@ var CanvasInterface = function (wickEditor) {
             x: (x * zoom) + pan.x,
             y: (y * zoom) + pan.y
         }
+    }
+
+    function lockZoomToRange () {
+        if(zoom < ZOOM_MIN) 
+            zoom = ZOOM_MIN;
+        if(zoom > ZOOM_MAX)
+            zoom = ZOOM_MAX;
     }
 
     function updateViewTransforms () {
