@@ -108,16 +108,31 @@ WickProject.Exporter = (function () {
 
     projectExporter.exportProject = function (wickProject, args) {
 
-        if(args && (args.json || args.wick)) {
+        if(args.wick) {
             wickProject.getAsJSON(function(JSONProject) {
-                var extension;
-                if(args.json) {
-                    extension = '.json';
-                } else if (args.wick) {
-                    extension = '.wick';
+                // convert base64 string to byte array
+                /*var byteCharacters = atob(LZString.compressToBase64(JSONProject));
+                var byteNumbers = new Array(byteCharacters.length);
+                for (var i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
                 }
+                var byteArray = new Uint8Array(byteNumbers);*/
+
+                var byteArray = LZString.compressToUint8Array(JSONProject);
+                
+                // now that we have the byte array, construct the blob from it
+                var blob1 = new Blob([byteArray], {type: "application/octet-stream"});
+
+                var fileName1 = "cool.binary";
+                saveAs(blob1, fileName1);
+            });
+            return;
+        }
+
+        if(args && args.json) {
+            wickProject.getAsJSON(function(JSONProject) {
                 var blob = new Blob([JSONProject], {type: "text/plain;charset=utf-8"});
-                saveAs(blob, wickProject.name+'-'+timeStamp()+extension);
+                saveAs(blob, wickProject.name+'-'+timeStamp()+'.json');
             }, '\t');
             return;
         }
