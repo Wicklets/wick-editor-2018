@@ -110,21 +110,11 @@ WickProject.Exporter = (function () {
 
         if(args.wick) {
             wickProject.getAsJSON(function(JSONProject) {
-                // convert base64 string to byte array
-                /*var byteCharacters = atob(LZString.compressToBase64(JSONProject));
-                var byteNumbers = new Array(byteCharacters.length);
-                for (var i = 0; i < byteCharacters.length; i++) {
-                    byteNumbers[i] = byteCharacters.charCodeAt(i);
-                }
-                var byteArray = new Uint8Array(byteNumbers);*/
-
                 var byteArray = LZString.compressToUint8Array(JSONProject);
                 
-                // now that we have the byte array, construct the blob from it
                 var blob1 = new Blob([byteArray], {type: "application/octet-stream"});
 
-                var fileName1 = "cool.binary";
-                saveAs(blob1, fileName1);
+                saveAs(blob1, wickProject.name+'-'+timeStamp()+".wick");
             });
             return;
         }
