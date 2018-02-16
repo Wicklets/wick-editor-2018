@@ -744,6 +744,22 @@ var GuiActionHandler = function (wickEditor) {
             }
         });
 
+    registerAction('zoomIn',
+        ['Equal'],
+        'Zoom In',
+        {},
+        function(args) {
+            wickEditor.canvas.zoomToPoint(1.1, window.innerWidth/2, window.innerHeight/2);
+        });
+
+    registerAction('zoomOut',
+        ['Minus'],
+        'Zoom Out',
+        {},
+        function(args) {
+            wickEditor.canvas.zoomToPoint(0.9, window.innerWidth/2, window.innerHeight/2);
+        });
+
     registerAction('editScripts',
         ['Backquote'],
         'Open Scripting Window',
