@@ -202,3 +202,24 @@ function runProject (json) {
     window.wickPlayer = new WickPlayer(); 
     window.wickPlayer.runProject(json);
 }
+
+function tryToLoadProjectFromWindowHash () {
+    if(window.location.hash) {
+        var projectPath = window.location.hash.slice(1); // remove first char (the hash)
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', projectPath, true);
+        xhr.responseType = 'arraybuffer';
+
+        xhr.onload = function(e) {
+          if (this.status == 200) {
+            var byteArray = new Uint8Array(this.response);
+            var wickProjectJSON = LZString.decompressFromUint8Array(byteArray);
+            runProject(wickProjectJSON);
+          }
+        };
+
+        xhr.send();
+    }
+}
+tryToLoadProjectFromWindowHash();
