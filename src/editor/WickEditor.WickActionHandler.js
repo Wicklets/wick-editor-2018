@@ -376,8 +376,7 @@ var WickActionHandler = function (wickEditor) {
                 symbol.name = 'New Button'
 
                 symbol.isButton = true;
-            }
-            if(args.group) {
+            } else if(args.group) {
                 symbol.isGroup = true;
                 symbol.layers[0].frames[0].wickScript = 'stop();';
                 symbol.name = 'New Group'
