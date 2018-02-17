@@ -194,17 +194,17 @@ Tools.VectorCursor = function (wickEditor) {
                 if(wickEditor.project.isObjectSelected(wickObj)) {
                     if(event.modifiers.shift) {
                         wickEditor.project.deselectObject(wickObj);
+                        wickEditor.syncInterfaces();
                     }
                 } else {
                     if(!event.modifiers.shift) {
                         wickEditor.project.clearSelection();
                     }
                     wickEditor.project.selectObject(wickObj);
+                    var currObj = wickEditor.project.getCurrentObject();
+                    currObj.currentLayer = currObj.layers.indexOf(wickObj.parentFrame.parentLayer);
+                    wickEditor.syncInterfaces();
                 }
-
-                var currObj = wickEditor.project.getCurrentObject();
-                currObj.currentLayer = currObj.layers.indexOf(wickObj.parentFrame.parentLayer);
-                wickEditor.syncInterfaces();
             }
 
         } else {
