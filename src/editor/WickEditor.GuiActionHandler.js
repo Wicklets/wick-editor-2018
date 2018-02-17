@@ -744,12 +744,14 @@ var GuiActionHandler = function (wickEditor) {
             }
         });
 
+    var ZOOM_PLUS_MINUS_KEY_AMT = 1.2;
+
     registerAction('zoomIn',
         ['Equal'],
         'Zoom In',
         {},
         function(args) {
-            wickEditor.canvas.zoomToPoint(1.1, window.innerWidth/2, window.innerHeight/2);
+            wickEditor.canvas.zoomToPoint(ZOOM_PLUS_MINUS_KEY_AMT, window.innerWidth/2, window.innerHeight/2);
         });
 
     registerAction('zoomOut',
@@ -757,7 +759,7 @@ var GuiActionHandler = function (wickEditor) {
         'Zoom Out',
         {},
         function(args) {
-            wickEditor.canvas.zoomToPoint(0.9, window.innerWidth/2, window.innerHeight/2);
+            wickEditor.canvas.zoomToPoint(1/ZOOM_PLUS_MINUS_KEY_AMT, window.innerWidth/2, window.innerHeight/2);
         });
 
     registerAction('editScripts',
