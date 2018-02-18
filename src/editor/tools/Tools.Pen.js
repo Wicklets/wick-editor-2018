@@ -40,7 +40,7 @@ Tools.Pen = function (wickEditor) {
     }
 
     this.onSelected = function () {
-        wickEditor.inspector.clearSpecialMode();
+        wickEditor.inspector.openToolSettings('pen');
         wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
     }
 

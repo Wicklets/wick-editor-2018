@@ -201,8 +201,23 @@ var InspectorInterface = function (wickEditor) {
 
         } else if(selectionInfo.type === 'rectangle') {
 
-            title = "Rectangle"
+            title = "Rectangle Options"
             image = "./resources/tools/Square.svg";
+
+        } else if(selectionInfo.type === 'ellipse') {
+
+            title = "Ellipse Options"
+            image = "./resources/tools/Circle.svg";
+
+        } else if(selectionInfo.type === 'pen') {
+
+            title = "Pen Options"
+            image = "./resources/tools/Path.svg";
+
+        } else if(selectionInfo.type === 'line') {
+
+            title = "Line Options"
+            image = "./resources/tools/Line.svg";
 
         } else if(selectionInfo.type === 'none') {
 

@@ -40,7 +40,7 @@ Tools.Ellipse = function (wickEditor) {
     }
 
     this.onSelected = function () {
-        wickEditor.inspector.clearSpecialMode();
+        wickEditor.inspector.openToolSettings('ellipse');
         wickEditor.project.clearSelection();
         wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
     }
