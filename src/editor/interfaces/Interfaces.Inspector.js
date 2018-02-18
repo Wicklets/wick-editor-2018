@@ -36,18 +36,16 @@ var InspectorInterface = function (wickEditor) {
     var selectionInfo = this.selectionInfo;
 
     this.setup = function () {
-        var inspectorDiv = document.getElementById('inspectorGUI')
-        selectionTitleBar = buildDiv('inspector-title-bar', inspectorDiv);
-        selectionIcon = buildDiv('inspector-selection-icon', selectionTitleBar);
-        selectionTitle = buildDiv('inspector-selection-title', selectionTitleBar);
+        selectionTitleBar = document.getElementById('inspector-title-bar');
+        selectionIcon = document.getElementsByClassName('inspector-selection-icon')[0];
+        selectionTitle = document.getElementsByClassName('inspector-selection-title')[0];
         inspectorTitle = document.getElementById('inspector-title');
 
-        specialMode = 'project';
+        allItemsContainer = document.getElementsByClassName('inspector-allitems-container')[0];
+        propertiesContainer = document.getElementsByClassName('inspector-properties-container')[0];
+        buttonsContainer = document.getElementsByClassName('inspector-buttons-container')[0];
 
-        inspectorDiv = document.getElementById('inspectorGUI');
-        allItemsContainer = buildDiv('inspector-allitems-container', inspectorDiv);
-        propertiesContainer = buildDiv('inspector-properties-container', allItemsContainer);
-        buttonsContainer = buildDiv('inspector-buttons-container', allItemsContainer);
+        specialMode = 'project';
 
         inputs = InspectorInterface.getProperties(wickEditor, this);
         inputs.forEach(function (input) {
@@ -61,13 +59,6 @@ var InspectorInterface = function (wickEditor) {
     }
 
     this.syncWithEditorState = function () {
-
-        var lastSelectionInfo = {
-            numObjects: selectionInfo.numObjects,
-            type: selectionInfo.type,
-            dataType: selectionInfo.dataType,
-            uuids: selectionInfo.uuids ? selectionInfo.uuids.slice() : []//copy
-        }
 
         inputs.forEach(function (input) {
             if(input.isFocused && input.isFocused()) {

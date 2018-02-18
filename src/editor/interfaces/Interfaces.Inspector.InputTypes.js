@@ -30,7 +30,8 @@ InspectorInterface.StringInput = function (args) {
     self.valueDiv;
     self.getPropertyDiv = function () {
         var title = document.createElement('span');
-        title.className = "inspector-input-title";
+        title.className = "inspector-input-title tooltipElem";
+        title.setAttribute('alt', args.tooltip);
         title.innerHTML = args.title;
 
         self.valueDiv = document.createElement('input');
@@ -95,7 +96,8 @@ InspectorInterface.TwoStringInput = function (args) {
     self.rightValueDiv;
     self.getPropertyDiv = function () {
         var title = document.createElement('span');
-        title.className = "inspector-input-title";
+        title.className = "inspector-input-title tooltipElem";
+        title.setAttribute('alt', args.tooltip);
         title.innerHTML = args.title;
 
         self.leftValueDiv = document.createElement('input');
@@ -105,7 +107,8 @@ InspectorInterface.TwoStringInput = function (args) {
         }
 
         var otherTitle = document.createElement('span');
-        otherTitle.className = "inspector-input-title inspector-input-title-small";
+        otherTitle.className = "inspector-input-title inspector-input-title-small tooltipElem";
+        otherTitle.setAttribute('alt', args.otherTooltip);
         otherTitle.innerHTML = args.otherTitle;
 
         self.rightValueDiv = document.createElement('input');
@@ -155,7 +158,8 @@ InspectorInterface.ColorPickerInput = function (args) {
     self.valueDiv;
     self.getPropertyDiv = function () {
         var title = document.createElement('span');
-        title.className = "inspector-input-title";
+        title.className = "inspector-input-title tooltipElem";
+        title.setAttribute('alt', args.tooltip);
         title.innerHTML = args.title;
 
         self.valueDiv = document.createElement('div');
@@ -175,6 +179,88 @@ InspectorInterface.ColorPickerInput = function (args) {
         self.propertyDiv.className = 'inspector-property';
         self.propertyDiv.appendChild(title);
         self.propertyDiv.appendChild(self.valueDiv);
+
+        return self.propertyDiv;
+    }
+
+}
+
+InspectorInterface.TwoColorPickerInput = function (args) {
+
+    var self = this;
+    self.getValueFn = args.getValueFn;
+    self.onChangeFn = args.onChangeFn;
+    self.isActiveFn = args.isActiveFn;
+    self.previewTypeLeft = args.previewTypeLeft;
+    self.previewTypeRight = args.previewTypeRight;
+
+    self.updateViewValue = function () {
+        if(self.isActiveFn()) {
+            self.propertyDiv.style.display = 'block';
+            self.leftValueDiv.style.backgroundColor = self.getValueFn().left;
+            self.rightValueDiv.style.backgroundColor = self.getValueFn().right;
+        } else {
+            self.propertyDiv.style.display = 'none';
+        }
+    }
+    self.updateModelValue = function () {
+        try {
+            self.onChangeFn({
+                left : self.leftValueDiv.value, 
+                right : self.rightValueDiv.value
+            });
+        } catch (e) {
+            console.log(e)
+            self.updateViewValue();
+        }
+    }
+
+    self.propertyDiv;
+    self.leftValueDiv;
+    self.rightValueDiv;
+    self.getPropertyDiv = function () {
+        var titleLeft = document.createElement('span');
+        titleLeft.className = "inspector-input-title inspector-input-title tooltipElem";
+        titleLeft.setAttribute('alt', args.rightTooltip);
+        titleLeft.innerHTML = args.titleLeft;
+
+        var titleRight = document.createElement('span');
+        titleRight.className = "inspector-input-title inspector-input-title-small tooltipElem";
+        titleRight.setAttribute('alt', args.leftTooltip);
+        titleRight.innerHTML = args.titleRight;
+
+        self.leftValueDiv = document.createElement('div');
+        self.leftValueDiv.className = 'inspector-input inspector-color-picker inspector-color-picker-small';
+        self.leftValueDiv.onclick = function () {
+            wickEditor.colorPicker.open(function (color) {
+                self.onChangeFn({left:color})
+                wickEditor.syncInterfaces();
+            }, 
+            self.getValueFn(),
+            self.leftValueDiv.getBoundingClientRect().left,
+            self.leftValueDiv.getBoundingClientRect().top,
+            self.previewTypeLeft)
+        }
+
+        self.rightValueDiv = document.createElement('div');
+        self.rightValueDiv.className = 'inspector-input inspector-color-picker inspector-color-picker-small';
+        self.rightValueDiv.onclick = function () {
+            wickEditor.colorPicker.open(function (color) {
+                self.onChangeFn({right:color})
+                wickEditor.syncInterfaces();
+            }, 
+            self.getValueFn(),
+            self.rightValueDiv.getBoundingClientRect().left,
+            self.rightValueDiv.getBoundingClientRect().top,
+            self.previewTypeRight)
+        }
+
+        self.propertyDiv = document.createElement('div');
+        self.propertyDiv.className = 'inspector-property';
+        self.propertyDiv.appendChild(titleLeft);
+        self.propertyDiv.appendChild(self.leftValueDiv);
+        self.propertyDiv.appendChild(titleRight);
+        self.propertyDiv.appendChild(self.rightValueDiv);
 
         return self.propertyDiv;
     }
@@ -210,7 +296,8 @@ InspectorInterface.SelectInput = function (args) {
     self.valueDiv;
     self.getPropertyDiv = function () {
         var title = document.createElement('span');
-        title.className = "inspector-input-title";
+        title.className = "inspector-input-title tooltipElem";
+        title.setAttribute('alt', args.tooltip);
         title.innerHTML = args.title;
 
         self.valueDiv = document.createElement('SELECT');
@@ -261,7 +348,8 @@ InspectorInterface.CheckboxInput = function (args) {
     self.valueDiv;
     self.getPropertyDiv = function () {
         var title = document.createElement('span');
-        title.className = "inspector-input-title";
+        title.className = "inspector-input-title tooltipElem";
+        title.setAttribute('alt', args.tooltip);
         title.innerHTML = args.title;
 
         self.valueDiv = document.createElement('input');
@@ -319,7 +407,8 @@ InspectorInterface.MultiCheckboxInput = function (args) {
     self.valueDivs;
     self.getPropertyDiv = function () {
         var title = document.createElement('span');
-        title.className = "inspector-input-title";
+        title.className = "inspector-input-title tooltipElem";
+        title.setAttribute('alt', args.tooltip);
         title.innerHTML = args.title;
 
         self.valueDivs = [];

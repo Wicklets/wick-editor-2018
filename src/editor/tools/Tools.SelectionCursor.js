@@ -20,7 +20,8 @@ if(!window.Tools) Tools = {};
 var GUI_DOTS_SIZE = 5;
 var GUI_DOTS_FILLCOLOR = 'rgba(255,255,255,0.3)';
 var GUI_DOTS_STROKECOLOR = 'rgba(100,150,255,1.0)'
-var HIDDEN_ROTATE_HANDLE_COLOR = 'rgba(0,0,0,0.001)'
+var HIDDEN_ROTATE_HANDLE_COLOR = 'rgba(0,0,0,0.0001)'
+var ROTATE_HANDLE_LENGTH = 0.5;
 
 Tools.SelectionCursor = function (wickEditor) {
 
@@ -505,22 +506,22 @@ Tools.SelectionCursor = function (wickEditor) {
                 });
             }
 
-            rotateTL = new paper.Path.Circle(selectionBoundsRect.topLeft, GUI_DOTS_SIZE*5/wickEditor.canvas.getZoom());
+            rotateTL = new paper.Path.Rectangle(selectionBoundsRect.topLeft.add(0,-10), selectionBoundsRect.topRight)
             rotateTL.fillColor = HIDDEN_ROTATE_HANDLE_COLOR;
             rotateTL._wickInteraction = 'rotate';
             rotateTL._cursor = 'url("resources/cursor-rotate.png") 32 32,default';
 
-            rotateTR = new paper.Path.Circle(selectionBoundsRect.topRight, GUI_DOTS_SIZE*5/wickEditor.canvas.getZoom());
+            rotateTR = new paper.Path.Rectangle(selectionBoundsRect.topRight.add(10,0), selectionBoundsRect.bottomRight)
             rotateTR.fillColor = HIDDEN_ROTATE_HANDLE_COLOR;
             rotateTR._wickInteraction = 'rotate';
             rotateTR._cursor = 'url("resources/cursor-rotate.png") 32 32,default';
 
-            rotateBL = new paper.Path.Circle(selectionBoundsRect.bottomLeft, GUI_DOTS_SIZE*5/wickEditor.canvas.getZoom());
+            rotateBL = new paper.Path.Rectangle(selectionBoundsRect.bottomLeft.add(0,10), selectionBoundsRect.bottomRight)
             rotateBL.fillColor = HIDDEN_ROTATE_HANDLE_COLOR;
             rotateBL._wickInteraction = 'rotate';
             rotateBL._cursor = 'url("resources/cursor-rotate.png") 32 32,default';
 
-            rotateBR = new paper.Path.Circle(selectionBoundsRect.bottomRight, GUI_DOTS_SIZE*5/wickEditor.canvas.getZoom());
+            rotateBR = new paper.Path.Rectangle(selectionBoundsRect.topLeft.add(-10,0), selectionBoundsRect.bottomLeft)
             rotateBR.fillColor = HIDDEN_ROTATE_HANDLE_COLOR;
             rotateBR._wickInteraction = 'rotate';
             rotateBR._cursor = 'url("resources/cursor-rotate.png") 32 32,default';
