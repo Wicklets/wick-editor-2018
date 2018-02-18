@@ -41,6 +41,10 @@ Tools.Zoom = function (wickEditor) {
     this.getTooltipName = function () {
         return "Zoom (Z/Command+Scroll)";
     }
+
+    this.onSelected = function () {
+        wickEditor.inspector.clearSpecialMode();
+    }
     
     this.setup = function () {
         var sq = document.getElementById("editorCanvasContainer");

@@ -39,6 +39,7 @@ Tools.Text = function (wickEditor) {
 
     this.onSelected = function () {
         //wickEditor.project.clearSelection();
+        wickEditor.inspector.clearSpecialMode();
         wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
     }
 

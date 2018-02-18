@@ -58,6 +58,7 @@ Tools.Paintbrush = function (wickEditor) {
     }
 
     this.onSelected = function () {
+        wickEditor.inspector.openToolSettings('paintbrush');
         wickEditor.project.clearSelection();
         wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
     }

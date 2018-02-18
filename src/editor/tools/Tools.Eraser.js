@@ -56,6 +56,7 @@ Tools.Eraser = function (wickEditor) {
     }
 
     this.onSelected = function () {
+        wickEditor.inspector.clearSpecialMode();
         wickEditor.project.clearSelection();
         wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
     }
@@ -134,9 +135,7 @@ Tools.Eraser = function (wickEditor) {
                 parentAbsPos = {x:0,y:0};
 
             if(!wickObject.paper.closed) {
-                wickObject.paper.getIntersections(path).forEach(function(cl) {
-                    wickObject.paper.splitAt(wickObject.paper.getNearestLocation(cl.point));
-                });
+                
             } else {
                 wickObject.paper = wickObject.paper.subtract(path);
             }

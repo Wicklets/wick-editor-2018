@@ -17,7 +17,7 @@
 
 var WickFrame = function () {
     // Identifier so we can do e.g. movePlayheadTo("menu") 
-    this.name = "";
+    this.name = "New Frame";
 
     // Store all objects in frame. 
     this.wickObjects = [];

@@ -35,6 +35,10 @@ Tools.Pan = function (wickEditor) {
 
     this.paperTool = new paper.Tool();
     
+    this.onSelected = function () {
+        wickEditor.inspector.clearSpecialMode();
+    }
+
     this.setup = function () {
         
     }

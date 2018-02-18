@@ -659,13 +659,13 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.changeTool(wickEditor.tools.line);
         });
 
-    /*registerAction('useTools.eraser',
+    registerAction('useTools.eraser',
         ['KeyE'],
         'Switch to Eraser',
         {},
         function(args) {
             wickEditor.changeTool(wickEditor.tools.eraser);
-        });*/
+        });
 
     registerAction('useTools.fillbucket',
         ['KeyG'],

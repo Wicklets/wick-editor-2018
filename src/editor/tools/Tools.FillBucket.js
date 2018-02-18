@@ -47,6 +47,7 @@ Tools.FillBucket = function (wickEditor) {
     }
 
     this.onSelected = function () {
+        wickEditor.inspector.openToolSettings('fillbucket');
         wickEditor.project.clearSelection();
         wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
     }

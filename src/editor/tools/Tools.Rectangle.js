@@ -43,6 +43,7 @@ Tools.Rectangle = function (wickEditor) {
     }
 
     this.onSelected = function () {
+        wickEditor.inspector.openToolSettings('rectangle');
         wickEditor.project.clearSelection();
         wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
     }

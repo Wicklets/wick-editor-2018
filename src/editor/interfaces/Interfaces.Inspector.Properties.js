@@ -308,9 +308,20 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
                 && selectionInfo.object.isPath;
         },
         getValueFn: function () {
+            if(!selectionInfo.object.paper) {
+                return {left:null,right:null};
+            }
+            var left;
+            var right;
+            if(selectionInfo.object.paper.fillColor) {
+                left = selectionInfo.object.paper.fillColor.toCSS()
+            }
+            if(selectionInfo.object.paper.strokeColor) {
+                right = selectionInfo.object.paper.strokeColor.toCSS()
+            }
             return {
-                left: selectionInfo.object.paper.fillColor.toCSS(),
-                right: selectionInfo.object.paper.strokeColor.toCSS()
+                left: left,
+                right: right
             };
         }, 
         onChangeFn: function (val) {
@@ -495,6 +506,38 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }, 
         onChangeFn: function (val) {
             wickEditor.project.backgroundColor = val;
+            wickEditor.syncInterfaces();
+        }
+    }));
+
+    properties.push(new InspectorInterface.SliderInput({
+        title: '<img src="resources/inspector-icons/name.svg" class="inspector-icon"/>',
+        tooltip: 'Brush Smoothness',
+        max: 100,
+        min: 0,
+        isActiveFn: function () {
+            return selectionInfo.type === 'paintbrush';
+        },
+        getValueFn: function () {
+            return wickEditor.settings.brushSmoothing;
+        }, 
+        onChangeFn: function (val) {
+            wickEditor.settings.setValue('brushSmoothing', eval(val));
+            wickEditor.syncInterfaces();
+        }
+    }));
+
+    properties.push(new InspectorInterface.StringInput({
+        title: '<img src="resources/inspector-icons/name.svg" class="inspector-icon"/>',
+        tooltip: 'Brush Size',
+        isActiveFn: function () {
+            return selectionInfo.type === 'paintbrush';
+        },
+        getValueFn: function () {
+            return wickEditor.settings.brushThickness;
+        }, 
+        onChangeFn: function (val) {
+            wickEditor.settings.setValue('brushThickness', eval(val));
             wickEditor.syncInterfaces();
         }
     }));

@@ -38,6 +38,7 @@ Tools.Pencil = function (wickEditor) {
     }
 
     this.onSelected = function () {
+        wickEditor.inspector.openToolSettings('pencil');
         wickEditor.project.clearSelection();
         wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
     }

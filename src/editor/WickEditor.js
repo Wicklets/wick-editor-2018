@@ -22,7 +22,7 @@ var WickEditor = function () {
     var self = this;
 
     // http://semver.org/
-    self.version = "0.13.2";
+    self.version = "0.14";
     document.getElementById('wick-editor-version').innerHTML = 'Wick Editor ' + self.version;
     console.log("Wick Editor version " + self.version)
     if(localStorage.wickVersion !== self.version) {
@@ -82,7 +82,7 @@ var WickEditor = function () {
     this.tools.vectorcursor = new Tools.VectorCursor(this);
     this.tools.paintbrush = new Tools.Paintbrush(this);
     this.tools.pencil = new Tools.Pencil(this);
-    //this.tools.eraser = new Tools.Eraser(this);
+    this.tools.eraser = new Tools.Eraser(this);
     this.tools.fillbucket = new Tools.FillBucket(this);
     this.tools.rectangle = new Tools.Rectangle(this);
     this.tools.ellipse = new Tools.Ellipse(this);

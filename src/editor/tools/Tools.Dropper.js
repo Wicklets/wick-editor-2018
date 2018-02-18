@@ -38,7 +38,7 @@ Tools.Dropper = function (wickEditor) {
     }
 
     this.onSelected = function () {
-        
+        wickEditor.inspector.clearSpecialMode();
     }
 
     this.onDeselected = function () {

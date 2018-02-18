@@ -154,6 +154,10 @@ var InspectorInterface = function (wickEditor) {
         specialMode = 'project';
     }
 
+    this.openToolSettings = function (tool) {
+        specialMode = tool;
+    }
+
     this.getButtons = function () {
         var buttons = [];
         inputs.forEach(function (input) {
@@ -174,6 +178,26 @@ var InspectorInterface = function (wickEditor) {
 
             title = "Project Settings"
             image = "./resources/settings.png";
+
+        } else if(selectionInfo.type === 'paintbrush') {
+
+            title = "Brush Options"
+            image = "./resources/tools/Paintbrush.svg";
+
+        } else if(selectionInfo.type === 'pencil') {
+
+            title = "Pencil Options"
+            image = "./resources/tools/Pencil.svg";
+
+        } else if(selectionInfo.type === 'fillbucket') {
+
+            title = "Fill Options"
+            image = "./resources/tools/Bucket.svg";
+
+        } else if(selectionInfo.type === 'rectangle') {
+
+            title = "Rectangle"
+            image = "./resources/tools/Square.svg";
 
         } else if(selectionInfo.type === 'none') {
 

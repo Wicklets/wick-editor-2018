@@ -305,6 +305,9 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
         }
 
         nameDiv.innerHTML = this.wickFrame.name || '';
+        if(this.wickFrame.name === 'New Frame') {
+            nameDiv.innerHTML = '';
+        }
 
         if(this.wickFrame.audioAssetUUID) {
             thumbnailDiv.style.display = 'none';

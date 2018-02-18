@@ -58,6 +58,74 @@ InspectorInterface.StringInput = function (args) {
 
 }
 
+InspectorInterface.SliderInput = function (args) {
+
+    var self = this;
+    self.getValueFn = args.getValueFn;
+    self.onChangeFn = args.onChangeFn;
+    self.isActiveFn = args.isActiveFn;
+
+    self.updateViewValue = function () {
+        if(self.isActiveFn()) {
+            self.propertyDiv.style.display = 'block';
+            self.valueDiv.value = self.getValueFn();
+            self.sliderDiv.value = self.getValueFn();
+        } else {
+            self.propertyDiv.style.display = 'none';
+        }
+    }
+    self.updateModelValue = function () {
+        try {
+            self.valueDiv.value = Math.min(self.valueDiv.value, args.max)
+            self.valueDiv.value = Math.max(self.valueDiv.value, args.min)
+            self.onChangeFn(self.valueDiv.value);
+        } catch (e) {
+            console.log(e)
+            self.updateViewValue();
+        }
+    }
+
+    self.isFocused = function () {
+        return document.activeElement === self.valueDiv;
+    }
+
+    self.propertyDiv;
+    self.valueDiv;
+    self.getPropertyDiv = function () {
+        var title = document.createElement('span');
+        title.className = "inspector-input-title tooltipElem";
+        title.setAttribute('alt', args.tooltip);
+        title.innerHTML = args.title;
+
+        self.valueDiv = document.createElement('input');
+        self.valueDiv.className = 'inspector-input inspector-input-string inspector-input-string-tiny ' + args.className;
+        self.valueDiv.onchange = function (e) {
+            self.updateModelValue();
+        }
+
+        self.sliderDiv = document.createElement('input');
+        self.sliderDiv.type = 'range';
+        self.sliderDiv.min = args.min;
+        self.sliderDiv.max = args.max;
+        self.sliderDiv.onchange = function (e) {
+            self.updateModelValue(self.valueDiv.value);
+        }
+        self.sliderDiv.oninput = function (e) {
+            self.valueDiv.value = self.sliderDiv.value;
+        }
+        self.sliderDiv.className = 'inspector-input-slider';
+
+        self.propertyDiv = document.createElement('div');
+        self.propertyDiv.className = 'inspector-property';
+        self.propertyDiv.appendChild(title);
+        self.propertyDiv.appendChild(self.valueDiv);
+        self.propertyDiv.appendChild(self.sliderDiv);
+
+        return self.propertyDiv;
+    }
+
+}
+
 InspectorInterface.TwoStringInput = function (args) {
 
     var self = this;
