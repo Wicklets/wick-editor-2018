@@ -585,7 +585,8 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.MultiCheckboxInput({
-        title: '',
+        title: '<img src="resources/inspector-icons/ease.svg" class="inspector-icon"/>',
+        tooltip: 'Easing Direction',
         icons: [
             'resources/ease-none.png',
             'resources/ease-in.png', 
