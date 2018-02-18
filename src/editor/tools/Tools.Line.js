@@ -41,6 +41,7 @@ Tools.Line = function (wickEditor) {
     }
 
     this.onSelected = function () {
+        wickEditor.inspector.clearSpecialMode();
         wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
         wickEditor.project.clearSelection();
     }

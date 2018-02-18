@@ -57,7 +57,7 @@ Tools.Pencil = function (wickEditor) {
             path = new paper.Path({
                 //fillColor: wickEditor.settings.fillColor,
                 strokeColor: wickEditor.settings.strokeColor,
-                strokeCap: wickEditor.settings.strokeCap,
+                strokeCap: 'round',
                 strokeWidth: wickEditor.settings.strokeWidth,
             });
             //path.add(event.lastPoint);

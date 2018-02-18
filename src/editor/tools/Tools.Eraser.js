@@ -56,7 +56,7 @@ Tools.Eraser = function (wickEditor) {
     }
 
     this.onSelected = function () {
-        wickEditor.inspector.clearSpecialMode();
+        wickEditor.inspector.openToolSettings('eraser');
         wickEditor.project.clearSelection();
         wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
     }

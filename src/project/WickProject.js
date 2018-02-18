@@ -742,6 +742,7 @@ WickProject.prototype.loadFonts = function () {
             fontsInProject.push(o.textData.fontFamily);
     });
     loadGoogleFonts(fontsInProject, function () {
+        wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
         wickEditor.syncInterfaces();
     });
 }

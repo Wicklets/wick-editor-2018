@@ -194,6 +194,11 @@ var InspectorInterface = function (wickEditor) {
             title = "Fill Options"
             image = "./resources/tools/Bucket.svg";
 
+        } else if(selectionInfo.type === 'eraser') {
+
+            title = "Eraser Options"
+            image = "./resources/tools/Erase.svg";
+
         } else if(selectionInfo.type === 'rectangle') {
 
             title = "Rectangle"

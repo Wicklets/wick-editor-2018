@@ -23,7 +23,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.TwoStringInput({
         title: '<img src="resources/inspector-icons/position.svg" class="inspector-icon"/>',
         tooltip: 'Position (x,y)',
-        otherTitle: ',',
+        otherTitle: 'x',
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 
                 && selectionInfo.type == 'wickobject';
@@ -48,7 +48,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.TwoStringInput({
         title: '<img src="resources/inspector-icons/size.svg" class="inspector-icon"/>',
         tooltip: 'Width / Height',
-        otherTitle: ',',
+        otherTitle: 'x',
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 
                 && selectionInfo.type == 'wickobject'
@@ -137,7 +137,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));*/
 
-    properties.push(new InspectorInterface.TwoStringInput({
+    /*properties.push(new InspectorInterface.TwoStringInput({
         title: '<img src="resources/inspector-icons/rotation.svg" class="inspector-icon"/>',
         tooltip: 'Rotation',
         otherTitle: '<img src="resources/inspector-icons/opacity.svg" class="inspector-icon"/>',
@@ -163,6 +163,54 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
                 }]
             });
         }
+    }));*/
+
+    properties.push(new InspectorInterface.SliderInput({
+        title: '<img src="resources/inspector-icons/rotation.svg" class="inspector-icon"/>',
+        tooltip: 'Rotation',
+        className: 'inspector-input-string-small',
+        max: 360,
+        min: 0,
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 
+                && selectionInfo.type == 'wickobject'
+                && selectionInfo.dataType !== 'sound'
+                && selectionInfo.dataType !== 'text';
+            },
+        getValueFn: function () {
+            return selectionInfo.object.rotation;
+        }, 
+        onChangeFn: function (val) {
+            wickEditor.actionHandler.doAction('modifyObjects', {
+                objs: [selectionInfo.object],
+                modifiedStates: [{rotation: eval(val)}]
+            });
+        }
+    }));
+
+    properties.push(new InspectorInterface.SliderInput({
+        title: '<img src="resources/inspector-icons/opacity.svg" class="inspector-icon"/>',
+        tooltip: 'Opacity',
+        className: 'inspector-input-string-small',
+        max: 1,
+        min: 0,
+        step: 0.01,
+        liveUpdateType: 'opacity',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 
+                && selectionInfo.type == 'wickobject'
+                && selectionInfo.dataType !== 'sound'
+                && selectionInfo.dataType !== 'text';
+            },
+        getValueFn: function () {
+            return selectionInfo.object.opacity;
+        }, 
+        onChangeFn: function (val) {
+            wickEditor.actionHandler.doAction('modifyObjects', {
+                objs: [selectionInfo.object],
+                modifiedStates: [{opacity: eval(val)}]
+            });
+        }
     }));
 
     properties.push(new InspectorInterface.SelectInput({
@@ -186,9 +234,12 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
-    properties.push(new InspectorInterface.StringInput({
+    properties.push(new InspectorInterface.SliderInput({
         title: '<img src="resources/inspector-icons/fontsize.svg" class="inspector-icon"/>',
         tooltip: 'Font Size',
+        liveUpdateType: 'fontSize',
+        min: 1,
+        max: 150,
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isText;
         },
@@ -295,6 +346,27 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));*/
 
+    properties.push(new InspectorInterface.SliderInput({
+        title: '<img src="resources/inspector-icons/strokewidth.png" class="inspector-icon"/>',
+        tooltip: 'Stroke Width',
+        className: 'inspector-input-string-small',
+        max: 30,
+        min: 0,
+        liveUpdateType: 'strokeWidth',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isPath;
+        },
+        getValueFn: function () {
+            return selectionInfo.object.paper && selectionInfo.object.paper.strokeWidth;
+        }, 
+        onChangeFn: function (val) {
+            wickEditor.guiActionHandler.doAction("changePathProperties", {
+                strokeWidth: eval(val)
+            });
+            wickEditor.syncInterfaces();
+        }
+    }));
+
     properties.push(new InspectorInterface.TwoColorPickerInput({
         previewTypeLeft: 'fillColor',
         previewTypeRight: 'strokeColor',
@@ -329,24 +401,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             if(val.left) modifyState.fillColor = val.left;
             if(val.right) modifyState.strokeColor = val.right;
             wickEditor.guiActionHandler.doAction("changePathProperties", modifyState);
-            wickEditor.syncInterfaces();
-        }
-    }));
-
-    properties.push(new InspectorInterface.StringInput({
-        title: '<img src="resources/inspector-icons/strokewidth.png" class="inspector-icon"/>',
-        tooltip: 'Stroke Width',
-        className: 'inspector-input-string-small',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 && selectionInfo.type == 'wickobject' && selectionInfo.object.isPath;
-        },
-        getValueFn: function () {
-            return selectionInfo.object.paper && selectionInfo.object.paper.strokeWidth;
-        }, 
-        onChangeFn: function (val) {
-            wickEditor.guiActionHandler.doAction("changePathProperties", {
-                strokeWidth: eval(val)
-            });
             wickEditor.syncInterfaces();
         }
     }));
@@ -511,7 +565,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.SliderInput({
-        title: '<img src="resources/inspector-icons/name.svg" class="inspector-icon"/>',
+        title: '<img src="resources/inspector-icons/brushsmoothness.svg" class="inspector-icon"/>',
         tooltip: 'Brush Smoothness',
         max: 100,
         min: 0,
@@ -527,9 +581,11 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
-    properties.push(new InspectorInterface.StringInput({
-        title: '<img src="resources/inspector-icons/name.svg" class="inspector-icon"/>',
+    properties.push(new InspectorInterface.SliderInput({
+        title: '<img src="resources/inspector-icons/brushsize.svg" class="inspector-icon"/>',
         tooltip: 'Brush Size',
+        max: 100,
+        min: 1,
         isActiveFn: function () {
             return selectionInfo.type === 'paintbrush';
         },
@@ -538,6 +594,57 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }, 
         onChangeFn: function (val) {
             wickEditor.settings.setValue('brushThickness', eval(val));
+            wickEditor.syncInterfaces();
+        }
+    }));
+
+    properties.push(new InspectorInterface.SliderInput({
+        title: '<img src="resources/inspector-icons/brushsmoothness.svg" class="inspector-icon"/>',
+        tooltip: 'Line Smoothness',
+        max: 100,
+        min: 0,
+        isActiveFn: function () {
+            return selectionInfo.type === 'pencil';
+        },
+        getValueFn: function () {
+            return wickEditor.settings.pencilSmoothing;
+        }, 
+        onChangeFn: function (val) {
+            wickEditor.settings.setValue('pencilSmoothing', eval(val));
+            wickEditor.syncInterfaces();
+        }
+    }));
+
+    properties.push(new InspectorInterface.SliderInput({
+        title: '<img src="resources/inspector-icons/strokewidth.png" class="inspector-icon"/>',
+        tooltip: 'Stroke Width',
+        max: 100,
+        min: 1,
+        isActiveFn: function () {
+            return selectionInfo.type === 'pencil';
+        },
+        getValueFn: function () {
+            return wickEditor.settings.strokeWidth;
+        }, 
+        onChangeFn: function (val) {
+            wickEditor.settings.setValue('strokeWidth', eval(val));
+            wickEditor.syncInterfaces();
+        }
+    }));
+
+    properties.push(new InspectorInterface.SliderInput({
+        title: '<img src="resources/inspector-icons/cornerroundness.svg" class="inspector-icon"/>',
+        tooltip: 'Corner Roundess',
+        max: 100,
+        min: 0,
+        isActiveFn: function () {
+            return selectionInfo.type === 'rectangle';
+        },
+        getValueFn: function () {
+            return wickEditor.settings.rectangleCornerRadius;
+        }, 
+        onChangeFn: function (val) {
+            wickEditor.settings.setValue('rectangleCornerRadius', eval(val));
             wickEditor.syncInterfaces();
         }
     }));
@@ -574,8 +681,12 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
-    properties.push(new InspectorInterface.StringInput({
-        title: 'Volume',
+    properties.push(new InspectorInterface.SliderInput({
+        title: '<img src="resources/inspector-icons/volume.svg" class="inspector-icon"/>',
+        tooltip: 'Volume',
+        min: 0,
+        max: 1,
+        step: 0.01,
         isActiveFn: function () {
             return selectionInfo.dataType === 'sound' && selectionInfo.numObjects === 1;
         },
@@ -593,7 +704,8 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.CheckboxInput({
-        title: 'Loop',
+        title: '<img src="resources/inspector-icons/rotation.svg" class="inspector-icon"/>',
+        tooltip: 'Loop',
         isActiveFn: function () {
             return selectionInfo.dataType === 'sound' && selectionInfo.numObjects === 1;
         },

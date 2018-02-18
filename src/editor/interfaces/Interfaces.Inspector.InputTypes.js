@@ -107,13 +107,21 @@ InspectorInterface.SliderInput = function (args) {
         self.sliderDiv.type = 'range';
         self.sliderDiv.min = args.min;
         self.sliderDiv.max = args.max;
+        if(args.step) self.sliderDiv.step = args.step;
         self.sliderDiv.onchange = function (e) {
             self.updateModelValue(self.valueDiv.value);
+            $('.inspector-input').blur()
         }
         self.sliderDiv.oninput = function (e) {
             self.valueDiv.value = self.sliderDiv.value;
+            if(args.liveUpdateType) {
+                wickEditor.project.getSelectedObjects().forEach(function (o) {
+                    if(!o.paper || o.isSymbol) return;
+                    o.paper[args.liveUpdateType] = self.valueDiv.value;
+                });
+            }
         }
-        self.sliderDiv.className = 'inspector-input-slider';
+        self.sliderDiv.className = 'inspector-input inspector-input-slider';
 
         self.propertyDiv = document.createElement('div');
         self.propertyDiv.className = 'inspector-property';
