@@ -149,14 +149,14 @@
     appearance: none;
     width: 15px;
     height: 22px;
-    background: #4CAF50;
+    background: #fff;
     cursor: pointer;
     border-radius: 2px;
 }
 .inspector-input-slider::-moz-range-thumb {
     width: 22px;
     height: 22px;
-    background: #4CAF50;
+    background: #fff;
     cursor: pointer;
     border-radius: 2px;
 }

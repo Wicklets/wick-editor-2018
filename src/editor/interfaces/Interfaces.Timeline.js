@@ -149,6 +149,30 @@ TimelineInterface.Timeline = function (wickEditor) {
         });
         this.elem.appendChild(previewPauseButton);
 
+        /*var fpsBox = document.createElement('div');
+        fpsBox.className = 'fps-box';
+        this.elem.appendChild(fpsBox);
+        self.fpsNumberInput = new SlideyNumberInput({
+            onsoftchange: function (e) {
+                //wickEditor.canvas.setZoom(e/100, true);
+            },
+            onhardchange: function (e) {
+                //wickEditor.canvas.setZoom(e/100, true);
+                wickEditor.project.framerate = e;
+                wickEditor.syncInterfaces()
+            },
+            min: 1,
+            max: 60,
+            moveFactor: 1,
+            initValue: wickEditor.project.framerate,
+        });
+        self.fpsNumberInput.className = 'timeline-number-input';
+        fpsBox.appendChild(self.fpsNumberInput);
+        var fpsIcon = document.createElement('div');
+        fpsIcon.className = 'timeline-fps-icon tooltipElem';
+        fpsIcon.setAttribute('alt', "Framerate");
+        fpsBox.appendChild(fpsIcon);*/
+
         /*var previewStepForwardButton = document.createElement('div');
         previewStepForwardButton.className = 'layer-tools-button step-forward-preview-button tooltipElem';
         previewStepForwardButton.setAttribute('alt', "Step Forwards (.)");

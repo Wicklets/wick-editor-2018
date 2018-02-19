@@ -1102,7 +1102,7 @@ var WickActionHandler = function (wickEditor) {
                 removeObjs.forEach(function (ro) {
                     superPath.paper = superPath.paper.unite(ro.paper);
                 });
-                var parentAbsPos = wickEditor.parentObject ? wickObject.parentObject.getAbsolutePosition() : {x:0,y:0};
+                var parentAbsPos = wickEditor.project.currentObject.getAbsolutePosition();
                 args.modAction = wickEditor.actionHandler.doAction('modifyObjects', {
                     objs: [superPath],
                     modifiedStates: [{
@@ -1131,7 +1131,7 @@ var WickActionHandler = function (wickEditor) {
                 cutPaths.forEach(function (cp) {
                     cp.paper = cp.paper.subtract(cuttingPath.paper);
                     modifiedObjects.push(cp);
-                    var parentAbsPos = wickEditor.parentObject ? wickObject.parentObject.getAbsolutePosition() : {x:0,y:0};
+                    var parentAbsPos = wickEditor.project.currentObject.getAbsolutePosition();
                     modifiedStates.push({
                         x: cp.paper.position.x - parentAbsPos.x,
                         y: cp.paper.position.y - parentAbsPos.y,

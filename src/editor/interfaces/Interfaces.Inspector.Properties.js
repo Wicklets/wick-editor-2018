@@ -443,7 +443,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));*/
 
-    properties.push(new InspectorInterface.MultiCheckboxInput({
+    /*properties.push(new InspectorInterface.MultiCheckboxInput({
         title: '',
         icons: [
             'resources/inspector-icons/strokecapround.png',
@@ -478,7 +478,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
 
             wickEditor.syncInterfaces();
         }
-    }));
+    }));*/
 
     /*properties.push(new InspectorInterface.CheckboxInput({
         title: 'Closed',
@@ -619,9 +619,13 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         title: '<img src="resources/inspector-icons/strokewidth.png" class="inspector-icon"/>',
         tooltip: 'Stroke Width',
         max: 100,
-        min: 1,
+        min: 0,
         isActiveFn: function () {
-            return selectionInfo.type === 'pencil';
+            return selectionInfo.type === 'pencil'
+                || selectionInfo.type === 'rectangle'
+                || selectionInfo.type === 'ellipse'
+                || selectionInfo.type === 'pen'
+                || selectionInfo.type === 'line';
         },
         getValueFn: function () {
             return wickEditor.settings.strokeWidth;

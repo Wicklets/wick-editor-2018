@@ -877,6 +877,25 @@ body {
     background-color: #252525;
 }
 
+.fps-box {
+    position: absolute;
+    width: 62px;
+    height: var(--scrollbar-thickness);
+    bottom: 0px;
+    left: 80px;
+}
+
+.timeline-fps-icon {
+    width: 15px;
+    height: 100%;
+    background-image: url('../resources/framerate.svg');
+    background-size: 11px 11px;
+    background-repeat: no-repeat;
+    background-position: left;
+    float: left;
+    opacity: 1.0;
+}
+
 .timeline-number-input {
     position: absolute;
     width: 30px;
