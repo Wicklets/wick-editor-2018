@@ -128,6 +128,19 @@ Tools.Paintbrush = function (wickEditor) {
             path.strokeCap = 'round';
             path.strokeJoin = 'round';
 
+            var offset = path.strokeWidth/2;
+            var outerPath = OffsetUtils.offsetPath(path, offset, true);
+            var innerPath = OffsetUtils.offsetPath(path, -offset, true);
+            path = OffsetUtils.joinOffsets(outerPath.clone(), innerPath.clone(), path, offset);
+            path = path.unite();
+            path.fillColor = wickEditor.settings.fillColor;
+
+            if(!path || path.segments.length === 0) {
+                console.log('Path offset failed. Throwing away new brush path.');
+                path = null;
+                return;
+            }
+
             var group = new paper.Group({insert:false});
             group.addChild(path);
 

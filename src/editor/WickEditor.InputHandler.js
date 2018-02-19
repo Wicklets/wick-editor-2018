@@ -478,6 +478,9 @@ var InputHandler = function (wickEditor) {
             if(name.includes('.json')) {
                 name = name.split('.json')[0];
             }
+            if(name.includes('.wick')) {
+                name = name.split('.wick')[0];
+            }
             project.name = name || 'New Project';
             wickEditor.guiActionHandler.doAction('openProject', {project:project})
         } else {

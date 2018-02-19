@@ -201,7 +201,7 @@ var InspectorInterface = function (wickEditor) {
 
         } else if(selectionInfo.type === 'rectangle') {
 
-            title = "Rectangle Options"
+            title = "<p style='font-size:18px;'>Rectangle Options</p>"
             image = "./resources/tools/Square.svg";
 
         } else if(selectionInfo.type === 'ellipse') {
