@@ -492,6 +492,7 @@ var WickActionHandler = function (wickEditor) {
             done(args);
         },
         function (args) {
+            var currentObject = wickEditor.project.getCurrentObject();
             var currentLayer = currentObject.getCurrentLayer();
             
             args.frames.forEach(function (frame) {
