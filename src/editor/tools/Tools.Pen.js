@@ -24,7 +24,7 @@ Tools.Pen = function (wickEditor) {
     var drawingPathUUID;
 
     this.getCursorImage = function () {
-        return "auto"
+        return "crosshair"
     };
 
     this.getToolbarIcon = function () {
@@ -76,7 +76,7 @@ Tools.Pen = function (wickEditor) {
 
         if(previewStroke) previewStroke.remove();
         if(drawingPath) {
-            if(hitResult && hitResult.type.startsWith('handle')) {
+            if(hitResult && hitResult.type.startsWith('handle') && hitResult.item === drawingPath) {
 
             } else if (hitResult && hitResult.item !== drawingPath && (hitResult.segment === hitResult.item.lastSegment || hitResult.segment === hitResult.item.firstSegment)) {
 
@@ -94,6 +94,21 @@ Tools.Pen = function (wickEditor) {
                 paper._guiLayer.addChild(previewStroke)
             }
         }
+
+        if(!hitResult) {
+            wickEditor.cursorIcon.hide()
+        } else if(hitResult.type === 'segment' && hitResult.segment) {
+            if(hitResult.segment === drawingPath.firstSegment ||
+               hitResult.segment === drawingPath.lastSegment) {
+                wickEditor.cursorIcon.setImage('resources/cursor-segment.png')
+            }
+        } else if((hitResult.type === 'handle-in' ||
+                  hitResult.type === 'handle-out') &&
+                 hitResult.item === drawingPath) {
+            wickEditor.cursorIcon.setImage('resources/cursor-segment.png')
+        } else {
+            wickEditor.cursorIcon.hide()
+        }
     }
 
     var drawingPath;
@@ -109,8 +124,6 @@ Tools.Pen = function (wickEditor) {
             if(item.closed) return;
             drawingPath = item;
         })*/
-
-        
 
         hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point, hitOptions);
 
@@ -197,7 +210,7 @@ Tools.Pen = function (wickEditor) {
     }
 
     this.paperTool.onMouseDrag = function(event) {
-        if(hitResult && (hitResult.type === 'handle-in' || hitResult.type === 'handle-out')) {
+        if(hitResult && hitResult.item === drawingPath && (hitResult.type === 'handle-in' || hitResult.type === 'handle-out')) {
             if(hitResult.type === 'handle-in') {
                 hitResult.segment.handleIn.x += event.delta.x;
                 hitResult.segment.handleIn.y += event.delta.y;
