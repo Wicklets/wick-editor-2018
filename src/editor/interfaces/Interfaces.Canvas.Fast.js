@@ -54,6 +54,8 @@ var FastCanvas = function (wickEditor) {
     }
 
     this.startFastRendering = function () {
+        pixiRenderer.reorderAllObjects(wickEditor.project)
+
         clearInterval(fastRenderIntervalID);
         
         fastRendering = true;

@@ -46,6 +46,9 @@ var WickPixiRenderer = function (canvasContainer) {
     
     container.addChild(graphics);
 
+    _cached_w = 0;
+    _cached_h = 0;
+
     self.renderWickObjects = function (project, wickObjects, renderExtraSpace, fitToScreen) {
         window._lastRender = {
             project: project,
@@ -74,11 +77,15 @@ var WickPixiRenderer = function (canvasContainer) {
             var h = window.innerHeight;
             canvasContainer.style.width  = w + 'px';
             canvasContainer.style.height = h + 'px';
-            renderer.resize(w, h);
-            renderer.view.style.width  = w + "px";
-            renderer.view.style.height = h + "px";
-            container.scale.x = 1//w / project.width;
-            container.scale.y = 1//h / project.height;
+            if(_cached_w !== w || _cached_h !== h) {
+                renderer.resize(w, h);
+                _cached_w = w;
+                _cached_h = h;
+                renderer.view.style.width  = w + "px";
+                renderer.view.style.height = h + "px";
+                container.scale.x = 1//w / project.width;
+                container.scale.y = 1//h / project.height;
+            }
         } else {
             container.position.x = 0;
             container.position.y = 0;
@@ -105,6 +112,19 @@ var WickPixiRenderer = function (canvasContainer) {
             renderWickObject(wickObject);
         });
         renderer.render(container);
+    }
+
+    self.reorderAllObjects = function (project) {
+        var objectsToReorder = container.removeChildren(0, container.children.length);
+        var allWickObjects = project.getAllObjects();
+
+        allWickObjects.forEach(function (wickObject) {
+            objectsToReorder.forEach(function (pixiObject) {
+                if(pixiSprites[wickObject.uuid] === pixiObject) {
+                    container.addChild(pixiObject);
+                }
+            });
+        });
     }
 
     self.cleanupObjectTextures = function (wickObj) {

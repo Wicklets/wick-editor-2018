@@ -182,13 +182,15 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
 
     var onMouseMove = function (evt) {
 
-        setMousePos(getMousePos(canvasContainer, evt));
+        setMousePos(calcMousePos(canvasContainer, evt));
 
         canvasContainer.style.cursor = "default";
 
         // Check if we're hovered over a clickable object...
         var hoveredOverObj = null;
         wickProject.rootObject.getAllActiveChildObjectsRecursive(true).forEachBackwards(function(child) {
+            if(!child.isSymbol) return;
+
             if(!(hoveredOverObj && hoveredOverObj.isButton) && child.isPointInside(self.getMouse())) {
                 if(!child.hoveredOver) {
                     child._wasHoveredOver = true;
@@ -305,7 +307,7 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
 
     }
 
-    var getMousePos = function (canvas, evt) {
+    var calcMousePos = function (canvas, evt) {
         var canvasBoundingClientRect = canvas.getBoundingClientRect();
 
         var mouseX = evt.clientX;
