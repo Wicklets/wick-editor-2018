@@ -190,7 +190,6 @@ Tools.Paintbrush = function (wickEditor) {
     function getBrushSmoothFactor () {
         var bi = 100-wickEditor.settings.brushSmoothing;
         var smoothFactor = convertRange(bi, [0,100], [0.3,1]);
-        console.log(smoothFactor)
         return smoothFactor;
     }
 }
