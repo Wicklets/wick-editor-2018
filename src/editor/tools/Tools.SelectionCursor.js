@@ -507,22 +507,24 @@ Tools.SelectionCursor = function (wickEditor) {
                 });
             }
 
-            rotateTL = new paper.Path.Rectangle(selectionBoundsRect.topLeft.add(0,-ROTATE_HANDLE_LENGTH), selectionBoundsRect.topRight)
+            var rotateHandleLength = ROTATE_HANDLE_LENGTH/wickEditor.canvas.getZoom()
+
+            rotateTL = new paper.Path.Rectangle(selectionBoundsRect.topLeft.add(0,-rotateHandleLength), selectionBoundsRect.topRight)
             rotateTL.fillColor = HIDDEN_ROTATE_HANDLE_COLOR;
             rotateTL._wickInteraction = 'rotate';
             rotateTL._cursor = 'url("resources/cursor-rotate.png") 32 32,default';
 
-            rotateTR = new paper.Path.Rectangle(selectionBoundsRect.topRight.add(ROTATE_HANDLE_LENGTH,0), selectionBoundsRect.bottomRight)
+            rotateTR = new paper.Path.Rectangle(selectionBoundsRect.topRight.add(rotateHandleLength,0), selectionBoundsRect.bottomRight)
             rotateTR.fillColor = HIDDEN_ROTATE_HANDLE_COLOR;
             rotateTR._wickInteraction = 'rotate';
             rotateTR._cursor = 'url("resources/cursor-rotate.png") 32 32,default';
 
-            rotateBL = new paper.Path.Rectangle(selectionBoundsRect.bottomLeft.add(0,ROTATE_HANDLE_LENGTH), selectionBoundsRect.bottomRight)
+            rotateBL = new paper.Path.Rectangle(selectionBoundsRect.bottomLeft.add(0,rotateHandleLength), selectionBoundsRect.bottomRight)
             rotateBL.fillColor = HIDDEN_ROTATE_HANDLE_COLOR;
             rotateBL._wickInteraction = 'rotate';
             rotateBL._cursor = 'url("resources/cursor-rotate.png") 32 32,default';
 
-            rotateBR = new paper.Path.Rectangle(selectionBoundsRect.topLeft.add(-ROTATE_HANDLE_LENGTH,0), selectionBoundsRect.bottomLeft)
+            rotateBR = new paper.Path.Rectangle(selectionBoundsRect.topLeft.add(-rotateHandleLength,0), selectionBoundsRect.bottomLeft)
             rotateBR.fillColor = HIDDEN_ROTATE_HANDLE_COLOR;
             rotateBR._wickInteraction = 'rotate';
             rotateBR._cursor = 'url("resources/cursor-rotate.png") 32 32,default';
