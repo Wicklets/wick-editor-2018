@@ -51,7 +51,7 @@ var CursorIconInterface = function (wickEditor) {
         hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point);
 
         if(hitResult && hitResult.item && hitResult.item._cursor)
-            document.body.style.cursor = hitResult.item._cursor;
+            wickEditor.canvas.getCanvasContainer().style.cursor = hitResult.item._cursor;
         else
             wickEditor.canvas.updateCursor();
 

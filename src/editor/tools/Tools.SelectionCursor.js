@@ -94,9 +94,9 @@ Tools.SelectionCursor = function (wickEditor) {
         hitResult = wickEditor.canvas.getInteractiveCanvas().getItemAtPoint(event.point, hitOptions);
 
         if(hitResult && hitResult.item._cursor)
-            document.body.style.cursor = hitResult.item._cursor;
+            wickEditor.canvas.getCanvasContainer().style.cursor = hitResult.item._cursor;
         else if (hitResult && !hitResult.item._wickInteraction)
-            document.body.style.cursor = 'move';
+            wickEditor.canvas.getCanvasContainer().style.cursor = 'move';
         else
             wickEditor.canvas.updateCursor();
 

@@ -52,10 +52,10 @@ Tools.Text = function (wickEditor) {
     this.paperTool.onMouseMove = function(event) {
         if(event.item) {
             if(event.item.wick && event.item.wick.isText) {
-                document.body.style.cursor = 'text';
+                wickEditor.canvas.getCanvasContainer().style.cursor = 'text';
             }
         } else {
-            document.body.style.cursor = 'crosshair';
+            wickEditor.canvas.getCanvasContainer().style.cursor = 'crosshair';
         }
     }
 

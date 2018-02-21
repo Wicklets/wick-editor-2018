@@ -165,6 +165,8 @@ Tools.Paintbrush = function (wickEditor) {
                 pathWickObject.height = tempPaperForPosition.bounds.height;
                 pathWickObject.x = path.position.x;
                 pathWickObject.y = path.position.y;
+                pathWickObject.svgX = tempPaperForPosition.bounds._x;
+                pathWickObject.svgY = tempPaperForPosition.bounds._y;
                 pathWickObject.pathData = tempPaperForPosition.exportSVG({asString:true});
 
                 wickEditor.actionHandler.doAction('addObjects', {
