@@ -106,7 +106,7 @@ Tools.Paintbrush = function (wickEditor) {
     }
 
     this.paperTool.onMouseUp = function (event) {
-        if (path) {
+        /*if (path) {
 
             path.add(event.point)
             
@@ -121,24 +121,6 @@ Tools.Paintbrush = function (wickEditor) {
                 }
 
                 path.join(path, 10/wickEditor.canvas.getZoom())
-            }
-
-            path.remove();
-
-            path.strokeCap = 'round';
-            path.strokeJoin = 'round';
-
-            var offset = path.strokeWidth/2;
-            var outerPath = OffsetUtils.offsetPath(path, offset, true);
-            var innerPath = OffsetUtils.offsetPath(path, -offset, true);
-            path = OffsetUtils.joinOffsets(outerPath.clone(), innerPath.clone(), path, offset);
-            path = path.unite();
-            path.fillColor = wickEditor.settings.fillColor;
-
-            if(!path || path.segments.length === 0) {
-                console.log('Path offset failed. Throwing away new brush path.');
-                path = null;
-                return;
             }
 
             var group = new paper.Group({insert:false});
@@ -161,7 +143,54 @@ Tools.Paintbrush = function (wickEditor) {
             });
 
             path = null;
+        }*/
+
+        var smoothing = getBrushSmoothFactor();
+        var raster = path.rasterize(paper.view.resolution/window.devicePixelRatio*smoothing);
+        //raster.remove()
+        var rasterDataURL = raster.toDataURL()
+        path.remove()
+
+        var final = new Image();
+        final.onload = function () {
+            potraceImage(final, function (svgString) {
+                var xmlString = svgString
+                  , parser = new DOMParser()
+                  , doc = parser.parseFromString(xmlString, "text/xml");
+                var tempPaperForPosition = paper.project.importSVG(doc, {insert:false});
+
+                var pathWickObject = WickObject.createPathObject(svgString);
+                pathWickObject.width = tempPaperForPosition.bounds.width;
+                pathWickObject.height = tempPaperForPosition.bounds.height;
+
+                pathWickObject.x = path.position.x;
+                pathWickObject.y = path.position.y;
+
+                tempPaperForPosition.scale(1/smoothing);
+                pathWickObject.pathData = tempPaperForPosition.exportSVG({asString:true});
+
+                wickEditor.actionHandler.doAction('addObjects', {
+                    wickObjects: [pathWickObject],
+                    dontSelectObjects: true,
+                });
+                path = null
+                //wickEditor.syncInterfaces();
+
+            }, wickEditor.settings.fillColor);
         }
+        final.src = rasterDataURL;
+
     }
 
+    // https://stackoverflow.com/questions/14224535/scaling-between-two-number-ranges
+    function convertRange( value, r1, r2 ) { 
+        return ( value - r1[ 0 ] ) * ( r2[ 1 ] - r2[ 0 ] ) / ( r1[ 1 ] - r1[ 0 ] ) + r2[ 0 ];
+    }
+
+    function getBrushSmoothFactor () {
+        var bi = 100-wickEditor.settings.brushSmoothing;
+        var smoothFactor = convertRange(bi, [0,100], [0.3,1]);
+        console.log(smoothFactor)
+        return smoothFactor;
+    }
 }
