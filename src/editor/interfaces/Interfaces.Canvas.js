@@ -85,7 +85,7 @@ var CanvasInterface = function (wickEditor) {
     }
 
     self.updateCursor = function () {
-        document.body.style.cursor = wickEditor.currentTool.getCursorImage();
+        canvasContainer.style.cursor = wickEditor.currentTool.getCursorImage();
     }
 
     self.recenterCanvas = function () {

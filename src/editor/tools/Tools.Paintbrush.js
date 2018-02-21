@@ -158,23 +158,20 @@ Tools.Paintbrush = function (wickEditor) {
                   , parser = new DOMParser()
                   , doc = parser.parseFromString(xmlString, "text/xml");
                 var tempPaperForPosition = paper.project.importSVG(doc, {insert:false});
+                tempPaperForPosition.scale(1/smoothing);
 
                 var pathWickObject = WickObject.createPathObject(svgString);
                 pathWickObject.width = tempPaperForPosition.bounds.width;
                 pathWickObject.height = tempPaperForPosition.bounds.height;
-
                 pathWickObject.x = path.position.x;
                 pathWickObject.y = path.position.y;
-
-                tempPaperForPosition.scale(1/smoothing);
                 pathWickObject.pathData = tempPaperForPosition.exportSVG({asString:true});
 
                 wickEditor.actionHandler.doAction('addObjects', {
                     wickObjects: [pathWickObject],
                     dontSelectObjects: true,
                 });
-                path = null
-                //wickEditor.syncInterfaces();
+                path = null;
 
             }, wickEditor.settings.fillColor);
         }
