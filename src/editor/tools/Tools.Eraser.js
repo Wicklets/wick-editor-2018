@@ -107,7 +107,7 @@ Tools.Eraser = function (wickEditor) {
         if(!path) return;
 
         path.add(event.point)
-        path.simplify(10);
+        path.simplify(5);
 
         path.remove();
 

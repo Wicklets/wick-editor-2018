@@ -106,8 +106,7 @@ Tools.Paintbrush = function (wickEditor) {
     }
 
     this.paperTool.onMouseUp = function (event) {
-        /*if (path) {
-
+        if (path) {
             path.add(event.point)
             
             if(path.segments.length > 2) {
@@ -122,6 +121,13 @@ Tools.Paintbrush = function (wickEditor) {
 
                 path.join(path, 10/wickEditor.canvas.getZoom())
             }
+
+            var offset = path.strokeWidth/2;
+            var outerPath = OffsetUtils.offsetPath(path, offset, true);
+            var innerPath = OffsetUtils.offsetPath(path, -offset, true);
+            path = OffsetUtils.joinOffsets(outerPath.clone(), innerPath.clone(), path, offset);
+            path = path.unite();
+            path.fillColor = wickEditor.settings.fillColor;
 
             var group = new paper.Group({insert:false});
             group.addChild(path);
@@ -143,13 +149,13 @@ Tools.Paintbrush = function (wickEditor) {
             });
 
             path = null;
-        }*/
+        }
 
-        var smoothing = getBrushSmoothFactor();
+        /*var smoothing = getBrushSmoothFactor();
         var raster = path.rasterize(paper.view.resolution/window.devicePixelRatio*smoothing);
-        //raster.remove()
+        raster.remove()
         var rasterDataURL = raster.toDataURL()
-        path.remove()
+        //path.remove()
 
         var final = new Image();
         final.onload = function () {
@@ -177,7 +183,7 @@ Tools.Paintbrush = function (wickEditor) {
 
             }, wickEditor.settings.fillColor);
         }
-        final.src = rasterDataURL;
+        final.src = rasterDataURL;*/
 
     }
 
