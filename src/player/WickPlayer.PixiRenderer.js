@@ -60,18 +60,29 @@ var WickPixiRenderer = function (canvasContainer) {
         var loadedAssetCount = 0;
         console.log('total: '+assetsToLoad.length)
         assetsToLoad.forEach(function (o) {
-            if(pixiTextures[o.uuid]) {
-                loadedAssetCount++;
+            function checkIfDone () {
                 if(loadedAssetCount === assetsToLoad.length) {
                     callback();
                 }
-            } else {
+            }
+
+            if (!pixiSprites[o.uuid]) {
+                console.log('new one')
                 createPixiSprite(o, function () {
                     loadedAssetCount++;
-                    if(loadedAssetCount === assetsToLoad.length) {
-                        callback();
-                    }
+                    checkIfDone()
                 });
+            } else if(o._renderDirty) {
+                console.log('regen')
+                regenPixiPath(o, pixiSprites[o.uuid], function () {
+                    loadedAssetCount++;
+                    checkIfDone()
+                });
+                o._renderDirty = false;
+            } else if(pixiTextures[o.uuid]) {
+                console.log('exists')
+                loadedAssetCount++;
+                checkIfDone()
             }
         });
     }
@@ -145,6 +156,7 @@ var WickPixiRenderer = function (canvasContainer) {
         var objectsToReorder = container.removeChildren(0, container.children.length);
         var allWickObjects = project.getAllObjects();
 
+        container.addChild(graphics);
         allWickObjects.forEach(function (wickObject) {
             objectsToReorder.forEach(function (pixiObject) {
                 if(pixiSprites[wickObject.uuid] === pixiObject) {
@@ -229,7 +241,7 @@ var WickPixiRenderer = function (canvasContainer) {
 
         if(type) {
             var newPixiSprite = WickToPixiSprite[type](wickObject, callback);
-            if(!callback) container.addChild(newPixiSprite);
+            container.addChild(newPixiSprite);
             pixiSprites[wickObject.uuid] = newPixiSprite;
 
             var textureSrc = newPixiSprite.texture.baseTexture.imageUrl;
@@ -238,10 +250,13 @@ var WickPixiRenderer = function (canvasContainer) {
         }
     }
 
-    function regenPixiPath (wickObject, pixiSprite) {
+    function regenPixiPath (wickObject, pixiSprite, callback) {
         var base64svg = getBase64SVG(wickObject);
         var texture = PIXI.Texture.fromImage(base64svg, undefined, undefined, SVG_SCALE);
         pixiSprite.setTexture(texture);
+        texture.baseTexture.on('loaded', function(){
+            if(callback) callback();
+        });
     }
 
     function regenPixiText (wickObject, pixiSprite) {

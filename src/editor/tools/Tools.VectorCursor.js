@@ -193,7 +193,7 @@ Tools.VectorCursor = function (wickEditor) {
             var wickObj = hitResult.item.wick || hitResult.item.parent.wick;
             if(wickObj) {
                 if(wickEditor.project.isObjectSelected(wickObj)) {
-                    if(event.modifiers.shift) {
+                    if(event.modifiers.shift && !hitResult.type.startsWith('handle')) {
                         wickEditor.project.deselectObject(wickObj);
                         wickEditor.syncInterfaces();
                     }

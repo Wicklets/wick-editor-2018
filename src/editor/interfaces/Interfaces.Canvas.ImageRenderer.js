@@ -26,10 +26,13 @@ var ImageRenderer = function () {
 
         retrieveCanvas();
 
+        self.renderer.reorderAllObjects(wickEditor.project)
+
         self.renderer.preloadAllAssets(wickEditor.project, function () {
 
             function buildAndSaveGIF () {
                 gifFrameImages.forEach(function (gifFrameImage) {
+                    //previewImage(gifFrameImage)
                     gif.addFrame(gifFrameImage, {delay: 1000/wickEditor.project.framerate});
                 });
 
@@ -37,7 +40,9 @@ var ImageRenderer = function () {
 
                 gif.on('finished', function(blob) {
                     callback(blob);
-                });     
+                    self.renderer.renderWickObjects(wickEditor.project, [], 2);
+                    wickEditor.canvas.getInteractiveCanvas().show();
+                });
             }
 
             var gifFrameDataURLs = [];
