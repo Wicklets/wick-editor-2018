@@ -80,12 +80,10 @@ Tools.FillBucket = function (wickEditor) {
                 wickEditor.canvas.getCanvasContainer().style.cursor = 'wait';
             }, 0); 
 
-            function changeBack() {
-                wickEditor.canvas.getCanvasContainer().style.cursor = that.getCursorImage();
-            }
-
             setTimeout(function () {
-                fillHole(event, changeBack);
+                fillHole(event, function () {
+                    wickEditor.canvas.getCanvasContainer().style.cursor = that.getCursorImage();
+                });
             }, FILLBUCKETMOUSE_DELAY);
         }
     }
@@ -107,7 +105,7 @@ Tools.FillBucket = function (wickEditor) {
     // This is zach's secret vector fill bucket technique
     // Will document how it works later but trust me it's great
 
-    function fillHole (event) {
+    function fillHole (event, callback) {
         var superGroup = new paper.Group({insert:false});
         wickEditor.project.getCurrentFrame().wickObjects.forEach(function (wo) {
             if(!wo.paper) return;
@@ -124,6 +122,10 @@ Tools.FillBucket = function (wickEditor) {
             var rasterPosition = raster.bounds.topLeft;
             var x = (event.point.x - rasterPosition.x) * RES;
             var y = (event.point.y - rasterPosition.y) * RES;
+            if(x<0 || y<0) {
+                callback();
+                return;
+            } 
             if(LOG_PERFORMANCE) stopTiming('rasterize')
             generateFloodFillImage(raster, x, y, function (floodFillImage) {
                 if(LOG_PERFORMANCE) stopTiming('generateFloodFillImage')
