@@ -58,13 +58,21 @@ var WickPixiRenderer = function (canvasContainer) {
         });
 
         var loadedAssetCount = 0;
+        console.log('total: '+assetsToLoad.length)
         assetsToLoad.forEach(function (o) {
-            createPixiSprite(o, function () {
+            if(pixiTextures[o.uuid]) {
                 loadedAssetCount++;
                 if(loadedAssetCount === assetsToLoad.length) {
                     callback();
                 }
-            });
+            } else {
+                createPixiSprite(o, function () {
+                    loadedAssetCount++;
+                    if(loadedAssetCount === assetsToLoad.length) {
+                        callback();
+                    }
+                });
+            }
         });
     }
 

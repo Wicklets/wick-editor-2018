@@ -70,9 +70,9 @@ Tools.FillBucket = function (wickEditor) {
         });
         if(hitResult) {
             if(hitResult.type === 'fill') {
-                changeFillColorOfItem(hitResult.item)
+                changeFillColorOfItem(hitResult.item);
             } else if (hitResult.type === 'stroke') {
-                changeStrokeColorOfItem(hitResult.item)
+                changeStrokeColorOfItem(hitResult.item);
             }
         } else {
             fillHole(event);

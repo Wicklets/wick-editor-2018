@@ -108,7 +108,7 @@ WickProject.Exporter = (function () {
 
     projectExporter.exportProject = function (wickProject, args) {
 
-        if(args.wick) {
+        if(args && args.wick) {
             wickProject.getAsJSON(function(JSONProject) {
                 var byteArray = LZString.compressToUint8Array(JSONProject);
                 
