@@ -81,6 +81,9 @@ var WickPixiRenderer = function (canvasContainer) {
             } else if(pixiTextures[o.uuid]) {
                 loadedAssetCount++;
                 checkIfDone()
+            } else {
+                loadedAssetCount++;
+                checkIfDone();
             }
         });
     }
