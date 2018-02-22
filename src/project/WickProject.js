@@ -691,6 +691,8 @@ WickProject.prototype.loadScriptOfObject = function (obj) {
 
 WickProject.prototype.initScript = function (obj) {
     window.errorCausingObject = obj;
+
+    if(!window.cachedWickScripts) window.cachedWickScripts = {};
     
     if(!obj.cachedWickScript) {
         if(obj.sourceUUID) {

@@ -69,7 +69,9 @@ var WickPlayer = function () {
         self.inputHandler.setup(); 
         if(!bowser.mobile && !bowser.tablet) self.audioPlayer.setup();
 
-        startUpdate();
+        self.renderer.preloadAllAssets(self.project, function () {
+            startUpdate();
+        });
     }
 
     window.runProject = function (projectJSON) {
@@ -122,7 +124,7 @@ var WickPlayer = function () {
                         d.objectClonedFrom.clones.splice(removeIndex, 1);
                     }
                 }
-            })
+            });
             self.renderer.renderWickObjects(self.project, self.project.rootObject.getAllActiveChildObjects(), null, true);
             self.inputHandler.update();
         }

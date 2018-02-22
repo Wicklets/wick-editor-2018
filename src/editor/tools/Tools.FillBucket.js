@@ -17,6 +17,10 @@
 
 if(!window.Tools) Tools = {};
 
+// IMPROVEMENTS
+// Extend paths by CLONE_WIDTH_SHRINK
+// Use paper.js bounds to ignore paths that definitely won't be part of the fill process
+
 Tools.FillBucket = function (wickEditor) {
 
     var RES = 1.75;
