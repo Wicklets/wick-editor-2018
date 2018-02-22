@@ -640,7 +640,8 @@ var GuiActionHandler = function (wickEditor) {
         'Switch to Pencil',
         {},
         function(args) {
-            wickEditor.changeTool(wickEditor.tools.pencil);
+            console.error('pencil disabled')
+            //wickEditor.changeTool(wickEditor.tools.pencil);
         });
 
     registerAction('useTools.paintbrush',

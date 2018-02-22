@@ -107,6 +107,8 @@ Tools.Paintbrush = function (wickEditor) {
 
     this.paperTool.onMouseUp = function (event) {
         if (path) {
+            var pathWickObject;
+
             path.add(event.point)
             
             if(path.segments.length > 2) {
@@ -120,26 +122,36 @@ Tools.Paintbrush = function (wickEditor) {
                 }
 
                 path.join(path, 5/wickEditor.canvas.getZoom())
+
+                var offset = path.strokeWidth/2;
+                var outerPath = OffsetUtils.offsetPath(path, offset, true);
+                var innerPath = OffsetUtils.offsetPath(path, -offset, true);
+                path = OffsetUtils.joinOffsets(outerPath.clone(), innerPath.clone(), path, offset);
+                path = path.unite();
+                path.fillColor = wickEditor.settings.fillColor;
+
+                var group = new paper.Group({insert:false});
+                group.addChild(path);
+
+                var svgString = group.exportSVG({asString:true});
+                pathWickObject = WickObject.createPathObject(svgString);
+                pathWickObject.x = group.position.x;
+                pathWickObject.y = group.position.y;
+                pathWickObject.width = group.bounds._width;
+                pathWickObject.height = group.bounds._height;
+                pathWickObject.svgX = group.bounds._x;
+                pathWickObject.svgY = group.bounds._y;
+            } else {
+                
+                var svgString = group.exportSVG({asString:true});
+                pathWickObject = WickObject.createPathObject(svgString);
+                pathWickObject.x = group.position.x;
+                pathWickObject.y = group.position.y;
+                pathWickObject.width = group.bounds._width;
+                pathWickObject.height = group.bounds._height;
+                pathWickObject.svgX = group.bounds._x;
+                pathWickObject.svgY = group.bounds._y;
             }
-
-            var offset = path.strokeWidth/2;
-            var outerPath = OffsetUtils.offsetPath(path, offset, true);
-            var innerPath = OffsetUtils.offsetPath(path, -offset, true);
-            path = OffsetUtils.joinOffsets(outerPath.clone(), innerPath.clone(), path, offset);
-            path = path.unite();
-            path.fillColor = wickEditor.settings.fillColor;
-
-            var group = new paper.Group({insert:false});
-            group.addChild(path);
-
-            var svgString = group.exportSVG({asString:true});
-            var pathWickObject = WickObject.createPathObject(svgString);
-            pathWickObject.x = group.position.x;
-            pathWickObject.y = group.position.y;
-            pathWickObject.width = group.bounds._width;
-            pathWickObject.height = group.bounds._height;
-            pathWickObject.svgX = group.bounds._x;
-            pathWickObject.svgY = group.bounds._y;
 
             //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(pathWickObject);
 
