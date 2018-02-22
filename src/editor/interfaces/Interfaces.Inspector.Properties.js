@@ -373,7 +373,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         titleRight: '<img src="resources/inspector-icons/strokecolor.svg" class="inspector-icon"/>',
         leftTooltip: 'Stroke Color',
         titleLeft: '<img src="resources/inspector-icons/fillcolor.svg" class="inspector-icon"/>',
-        rightTooltop: 'Fill Color',
+        rightTooltip: 'Fill Color',
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 
                 && selectionInfo.type == 'wickobject' 

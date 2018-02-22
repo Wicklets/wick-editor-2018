@@ -312,7 +312,7 @@ InspectorInterface.TwoColorPickerInput = function (args) {
                 self.onChangeFn({left:color})
                 wickEditor.syncInterfaces();
             }, 
-            self.getValueFn(),
+            self.getValueFn().left,
             self.leftValueDiv.getBoundingClientRect().left,
             self.leftValueDiv.getBoundingClientRect().top,
             self.previewTypeLeft)
@@ -325,7 +325,7 @@ InspectorInterface.TwoColorPickerInput = function (args) {
                 self.onChangeFn({right:color})
                 wickEditor.syncInterfaces();
             }, 
-            self.getValueFn(),
+            self.getValueFn().right,
             self.rightValueDiv.getBoundingClientRect().left,
             self.rightValueDiv.getBoundingClientRect().top,
             self.previewTypeRight)
