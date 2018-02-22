@@ -142,7 +142,10 @@ Tools.Paintbrush = function (wickEditor) {
                 pathWickObject.svgX = group.bounds._x;
                 pathWickObject.svgY = group.bounds._y;
             } else {
-                
+                path = new paper.Path.Circle(path.position, wickEditor.settings.brushThickness/2);
+                path.fillColor = wickEditor.settings.fillColor;
+                var group = new paper.Group({insert:false});
+                group.addChild(path);
                 var svgString = group.exportSVG({asString:true});
                 pathWickObject = WickObject.createPathObject(svgString);
                 pathWickObject.x = group.position.x;
