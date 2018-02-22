@@ -50,6 +50,8 @@ var WickPixiRenderer = function (canvasContainer) {
     _cached_h = 0;
 
     self.preloadAllAssets = function (project, callback) {
+        currentProjectUUID = project.uuid;
+
         var assetsToLoad = [];
         project.getAllObjects().forEach(function (o) {
             if(o.isPath && o.pathData) {
@@ -58,7 +60,6 @@ var WickPixiRenderer = function (canvasContainer) {
         });
 
         var loadedAssetCount = 0;
-        console.log('total: '+assetsToLoad.length)
         assetsToLoad.forEach(function (o) {
             function checkIfDone () {
                 if(loadedAssetCount === assetsToLoad.length) {
@@ -67,20 +68,17 @@ var WickPixiRenderer = function (canvasContainer) {
             }
 
             if (!pixiSprites[o.uuid]) {
-                console.log('new one')
                 createPixiSprite(o, function () {
                     loadedAssetCount++;
                     checkIfDone()
                 });
             } else if(o._renderDirty) {
-                console.log('regen')
                 regenPixiPath(o, pixiSprites[o.uuid], function () {
                     loadedAssetCount++;
                     checkIfDone()
                 });
                 o._renderDirty = false;
             } else if(pixiTextures[o.uuid]) {
-                console.log('exists')
                 loadedAssetCount++;
                 checkIfDone()
             }
