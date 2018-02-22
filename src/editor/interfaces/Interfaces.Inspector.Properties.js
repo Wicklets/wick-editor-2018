@@ -637,6 +637,23 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.SliderInput({
+        title: '<img src="resources/inspector-icons/brushsize.svg" class="inspector-icon"/>',
+        tooltip: 'Eraser Size',
+        max: 100,
+        min: 1,
+        isActiveFn: function () {
+            return selectionInfo.type === 'eraser';
+        },
+        getValueFn: function () {
+            return wickEditor.settings.brushThickness;
+        }, 
+        onChangeFn: function (val) {
+            wickEditor.settings.setValue('brushThickness', eval(val));
+            wickEditor.syncInterfaces();
+        }
+    }));
+
+    properties.push(new InspectorInterface.SliderInput({
         title: '<img src="resources/inspector-icons/cornerroundness.svg" class="inspector-icon"/>',
         tooltip: 'Corner Roundess',
         max: 100,
