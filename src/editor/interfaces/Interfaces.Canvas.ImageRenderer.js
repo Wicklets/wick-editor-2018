@@ -1,3 +1,35 @@
+// https://stackoverflow.com/questions/20958078/resize-a-base-64-image-in-javascript-without-using-canvas
+// Takes a data URI and returns the Data URI corresponding to the resized image at the wanted size.
+function resizedataURL(datas, wantedWidth, wantedHeight, callback)
+    {
+        // We create an image to receive the Data URI
+        var img = document.createElement('img');
+
+        // When the event "onload" is triggered we can resize the image.
+        img.onload = function()
+            {        
+                // We create a canvas and get its context.
+                var canvas = document.createElement('canvas');
+                var ctx = canvas.getContext('2d');
+
+                // We set the dimensions at the wanted size.
+                canvas.width = wantedWidth;
+                canvas.height = wantedHeight;
+
+                // We resize the image with the canvas method drawImage();
+                ctx.drawImage(this, 0, 0, wantedWidth, wantedHeight);
+
+                var dataURI = canvas.toDataURL();
+
+                callback(dataURI);
+            };
+
+        // We put the Data URI in the image's src attribute
+        img.src = datas;
+    }
+// Use it like that : resizedataURL('yourDataURIHere', 50, 50);
+
+
 /* Wick - (c) 2017 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
 /*  This file is part of Wick. 
@@ -32,7 +64,6 @@ var ImageRenderer = function () {
 
             function buildAndSaveGIF () {
                 gifFrameImages.forEach(function (gifFrameImage) {
-                    //previewImage(gifFrameImage)
                     gif.addFrame(gifFrameImage, {delay: 1000/wickEditor.project.framerate});
                 });
 
@@ -69,14 +100,17 @@ var ImageRenderer = function () {
             var gifFrameImages = [];
 
             gifFrameDataURLs.forEach(function (gifFrameDataURL) {
-                var gifFrameImage = new Image();
-                gifFrameImage.onload = function () {
-                    gifFrameImages.push(gifFrameImage);
-                    if(gifFrameImages.length === gifFrameDataURLs.length) {
-                        buildAndSaveGIF();
+                resizedataURL(gifFrameDataURL, wickEditor.project.width, wickEditor.project.height, function (resizedGifFrameDataURL) {
+                    var gifFrameImage = new Image();
+                    gifFrameImage.onload = function () {
+                        gifFrameImages.push(gifFrameImage);
+                        if(gifFrameImages.length === gifFrameDataURLs.length) {
+                            buildAndSaveGIF();
+                        }
                     }
-                }
-                gifFrameImage.src = gifFrameDataURL;
+
+                    gifFrameImage.src = resizedGifFrameDataURL;
+                })
             });
         });
 

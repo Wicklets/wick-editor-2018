@@ -61,12 +61,16 @@ var CursorIconInterface = function (wickEditor) {
             } else if(hitResult.item.parent && hitResult.item.parent._isPartOfGroup) {
                 self.hide()
             } else if(hitResult.type === 'curve' || hitResult.type === 'stroke') {
+                console.log('curve'); 
                 self.setImage('resources/cursor-curve.png')
+
             } else if(hitResult.type === 'fill') {
                 self.setImage('resources/cursor-fill.png')
+                console.log('fill'); 
             } else if(hitResult.type === 'segment' ||
                       hitResult.type === 'handle-in' ||
                       hitResult.type === 'handle-out') {
+                console.log('segment'); 
                 self.setImage('resources/cursor-segment.png')
             } else {
                 self.hide()
