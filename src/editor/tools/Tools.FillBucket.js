@@ -28,7 +28,8 @@ Tools.FillBucket = function (wickEditor) {
     var N_RASTER_CLONE = 1;
     var CLONE_WIDTH_SHRINK = 1.0;
     var SHRINK_AMT = 0.85;
-
+    var FILLBUCKETMOUSE_DELAY = 50; // milliseconds
+    
     var PREVIEW_IMAGE = false;
     var LOG_PERFORMANCE = false;
 
@@ -75,7 +76,17 @@ Tools.FillBucket = function (wickEditor) {
                 changeStrokeColorOfItem(hitResult.item);
             }
         } else {
-            fillHole(event);
+            setTimeout(function () {
+                wickEditor.canvas.getCanvasContainer().style.cursor = 'wait';
+            }, 0); 
+
+            function changeBack() {
+                wickEditor.canvas.getCanvasContainer().style.cursor = that.getCursorImage();
+            }
+
+            setTimeout(function () {
+                fillHole(event, changeBack);
+            }, FILLBUCKETMOUSE_DELAY);
         }
     }
 
