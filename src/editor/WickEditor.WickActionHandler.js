@@ -1035,7 +1035,7 @@ var WickActionHandler = function (wickEditor) {
 
     registerAction('copyFrameForward',
         function (args) {
-            var frame = wickEditor.project.getSelectedObject();
+            var frame = wickEditor.project.getSelectedObject() || wickEditor.project.getCurrentFrame();
             var copiedFrame = frame.copy();
             copiedFrame.playheadPosition = frame.getNextOpenPlayheadPosition();
 
