@@ -103,7 +103,7 @@ Tools.SelectionCursor = function (wickEditor) {
         if(pathHoverGhost) pathHoverGhost.remove();
         pathHoverGhost = null;
         if(hitResult && !hitResult.item._wickInteraction) {
-            if(!wickEditor.project.isObjectSelected(hitResult.item.wick)) {
+            if(hitResult.item.wick && !wickEditor.project.isObjectSelected(hitResult.item.wick)) {
                 if(hitResult.item.wick.isSymbol) {
                     pathHoverGhost = new paper.Path.Rectangle(hitResult.item.bounds);
                 } else {
