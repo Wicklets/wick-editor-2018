@@ -517,6 +517,25 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
+    properties.push(new InspectorInterface.SliderInput({
+        title: '<img src="resources/inspector-icons/volume.svg" class="inspector-icon"/>',
+        tooltip: 'Volume',
+        min: 0,
+        max: 1,
+        step:.01,
+        isActiveFn: function () {
+                return selectionInfo.type === 'frame' 
+                && selectionInfo.numObjects === 1 
+                && selectionInfo.object.audioAssetUUID
+        },
+        getValueFn: function () {
+            return selectionInfo.object.volume; 
+        },
+        onChangeFn: function (val) {
+            selectionInfo.object.volume = parseInt(val);
+        }
+    }));
+
     properties.push(new InspectorInterface.MultiCheckboxInput({
         title: '<img src="resources/inspector-icons/ease.svg" class="inspector-icon"/>',
         tooltip: 'Easing Direction',
