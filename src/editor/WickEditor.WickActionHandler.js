@@ -554,12 +554,6 @@ var WickActionHandler = function (wickEditor) {
             var newLayer = new WickLayer();
             newLayer.frames = []; // Make sure the layer has no frames 
 
-            if (args.isSoundLayer) {
-                newLayer.isSoundLayer = true; 
-            } else {
-                newLayer.isSoundLayer = false; 
-            }
-
             currentObject.addLayer(newLayer);
 
             // Go to last added layer

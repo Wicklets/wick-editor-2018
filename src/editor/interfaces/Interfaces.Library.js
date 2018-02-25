@@ -93,13 +93,6 @@ var LibraryInterface = function (wickEditor) {
             if(!draggedNode) return;
             draggedNode = null;
             draggedAssetElem.style.display = 'none';
-            if(e.target.nodeName === 'CANVAS') {
-                wickEditor.guiActionHandler.doAction("createObjectFromAsset", {
-                    asset: self.getSelectedAsset(),
-                    x: e.x,
-                    y: e.y
-                });
-            }
             if(e.target.className === 'frame') {
                 wickEditor.actionHandler.doAction('addSoundToFrame', {
                     frame: e.target.wickData.wickFrame,

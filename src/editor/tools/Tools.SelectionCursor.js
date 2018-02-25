@@ -411,7 +411,7 @@ Tools.SelectionCursor = function (wickEditor) {
                     height : wickObject.paper.bounds._height,
                     pathData: wickObject.paper.exportSVG({asString:true}),
                 });
-            } else if (wickObject.isImage || wickObject.isSound) {
+            } else if (wickObject.isImage) {
                 modifiedStates.push({
                     x : wickObject.paper.position.x - parentAbsPos.x,
                     y : wickObject.paper.position.y - parentAbsPos.y,
