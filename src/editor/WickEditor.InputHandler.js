@@ -544,6 +544,8 @@ var InputHandler = function (wickEditor) {
             'audio/x-wav'      : loadUncompressedAudio,
             'audio/x-pn-wav'   : loadUncompressedAudio,
             'audio/ogg'        : loadAudio,
+            'video/ogg'        : loadAudio,
+            'application/ogg'  : loadAudio,
             'audio/flac'       : loadAudio,
             'audio/x-flac'     : loadAudio,
             "audio/x-m4a"      : loadAudio,
