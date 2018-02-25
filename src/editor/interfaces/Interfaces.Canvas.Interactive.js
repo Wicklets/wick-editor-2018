@@ -131,17 +131,6 @@ var InteractiveCanvas = function (wickEditor) {
                     wickObject.paper._inLockedLayer = wickObject.parentFrame.parentLayer.locked;
                     wickObject.paper.pivot = new paper.Point(0,0);
                     return proceed();
-                } else if (wickObject.isSound) {
-                    var soundImg = new Image();
-                    soundImg.onload = function () {
-                        var raster = new paper.Raster(soundImg);
-                        wickObject.paper = new paper.Group();
-                        wickObject.paper.addChild(raster);
-                        wickObject.width = wickObject.paper.bounds._width;
-                        wickObject.height = wickObject.paper.bounds._height;
-                        proceed();
-                    }
-                    soundImg.src = 'resources/icon_sound_canvas.png';
                 }
             }
 

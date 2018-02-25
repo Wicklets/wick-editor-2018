@@ -101,9 +101,6 @@ var InspectorInterface = function (wickEditor) {
             } else if (selectionInfo.object.isSymbol) {
                 selectionInfo.type = 'wickobject';
                 selectionInfo.dataType = 'symbol';
-            } else if (selectionInfo.object.isSound) {
-                selectionInfo.type = 'wickobject';
-                selectionInfo.dataType = 'sound';
             } else if (selectionInfo.object instanceof WickFrame) {
                 selectionInfo.type = 'frame';
                 selectionInfo.dataType = 'frame';

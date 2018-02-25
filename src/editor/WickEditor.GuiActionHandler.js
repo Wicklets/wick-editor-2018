@@ -1214,7 +1214,6 @@ var GuiActionHandler = function (wickEditor) {
 
         });
 
-    
     registerAction('createObjectFromAsset',
         [],
         [],
@@ -1237,11 +1236,6 @@ var GuiActionHandler = function (wickEditor) {
                 wickObj.isImage = true;
                 wickObj.x = screenPos.x;
                 wickObj.y = screenPos.y;
-            } else if(asset.type === 'audio') {
-                wickObj.isSound = true; 
-                wickObj.volume = 1.0; 
-                wickObj.width = 100; 
-                wickObj.height = 100; 
             }
             wickEditor.actionHandler.doAction('addObjects', {
                 wickObjects:[wickObj]

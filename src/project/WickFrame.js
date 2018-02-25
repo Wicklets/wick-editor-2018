@@ -49,8 +49,8 @@ var WickFrame = function () {
     
 WickFrame.prototype.tick = function () {
     var self = this;
-
-    if(this.wickScript !== '' || this.isSound) {
+    
+    if(this.wickScript !== '' || this.audioAssetUUID) {
         // Inactive -> Inactive
         // Do nothing, frame is still inactive
         if (!this._wasActiveLastTick && !this._active) {
@@ -59,12 +59,12 @@ WickFrame.prototype.tick = function () {
         // Inactive -> Active
         // Frame just became active! It's fresh!
         else if (!this._wasActiveLastTick && this._active) {
-            (wickPlayer || wickEditor).project.initScript(this);
-            
-            (wickPlayer || wickEditor).project.runScript(this, 'load');
-            (wickPlayer || wickEditor).project.runScript(this, 'update');
-
-            // if(wickPlayer) wickPlayer.audioPlayer.playSound(this.audioAssetUUID);
+            if(this.wickScript !== '') {
+                (wickPlayer || wickEditor).project.initScript(this);
+                
+                (wickPlayer || wickEditor).project.runScript(this, 'load');
+                (wickPlayer || wickEditor).project.runScript(this, 'update');
+            }
 
             if (this.audioAssetUUID) {
                 this._updateAudio();
@@ -75,7 +75,9 @@ WickFrame.prototype.tick = function () {
         // Active -> Active
         // Frame is active!
         else if (this._wasActiveLastTick && this._active) {
-            (wickPlayer || wickEditor).project.runScript(this, 'update');
+            if(this.wickScript !== '') {
+                (wickPlayer || wickEditor).project.runScript(this, 'update');
+            }
         }    
         // Active -> Inactive
         // Frame just stopped being active. Clean up!
