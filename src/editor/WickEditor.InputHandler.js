@@ -115,51 +115,6 @@ var InputHandler = function (wickEditor) {
                 }
             }
         }
-
-        /*var keyChar = codeToKeyChar[event.keyCode];
-        if(keyChar === 'TAB' && document.activeElement.nodeName !== "INPUT") event.preventDefault()
-        var keyDownEvent = eventType === 'keydown';
-        that.keys[event.keyCode] = keyDownEvent;
-
-        // get this outta here
-        if(event.keyCode == 32 && eventType === 'keyup' && !activeElemIsTextBox()) {
-            wickEditor.useLastUsedTool();
-            wickEditor.canvas.updateCursor();
-            wickEditor.syncInterfaces();
-        }
-
-        var stringkeys = [];
-        for (var numkey in that.keys) {
-            if (that.keys.hasOwnProperty(numkey) && that.keys[numkey]) {
-                stringkeys.push(codeToKeyChar[numkey]);
-            }
-        }
-        console.log(stringkeys)
-
-        for(actionName in wickEditor.guiActionHandler.guiActions) { (function () {
-            var guiAction = wickEditor.guiActionHandler.guiActions[actionName];
-
-            if (wickEditor.builtinplayer.running && !guiAction.requiredParams.builtinplayerRunning) return;
-
-            var cmpArrays = function (a,b) {
-                return a.sort().join(',') === b.sort().join(',');
-            }
-
-            var hotkeysMatch = cmpArrays(guiAction.hotkeys, stringkeys);
-            var modifierKeysMatch = false;
-
-
-            if(!hotkeysMatch || !modifierKeysMatch) return;
-            if(guiAction.hotkeys.length === 0) return;
-            if(activeElemIsTextBox() && !guiAction.requiredParams.usableInTextBoxes) return;
-            if(document.activeElement.id === 'canvasTextEdit') return;
-            if(guiAction.requiredParams.disabledInScriptingIDE && (document.activeElement.className === 'ace_text-input')) return;
-
-            wickEditor.rightclickmenu.open = false;
-            event.preventDefault();
-            guiAction.doAction({});
-            that.keys = [];
-        })()};*/
     };
 
     // In order to ensure that the browser will fire clipboard events, we always need to have something selected
@@ -311,9 +266,6 @@ var InputHandler = function (wickEditor) {
         });
     });
 
-    // Keep the hidden text area selected
-    //$(document).mouseup(focusHiddenArea);
-
 /*************************
      Tooltips
 *************************/
@@ -365,7 +317,6 @@ var InputHandler = function (wickEditor) {
             wickPath.y = paperPath.position.y;
             wickPath.width = paperPath.bounds._width;
             wickPath.height = paperPath.bounds._height;
-            //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(wickPath);
             allPaths.push(wickPath);
         }
 
@@ -441,22 +392,12 @@ var InputHandler = function (wickEditor) {
         var asset = new WickAsset(src, 'audio', filename);
         var assetUUID = wickEditor.project.library.addAsset(asset);
         wickEditor.syncInterfaces();
-
-        /*var currentFrame = wickEditor.project.getCurrentFrame();
-        if(currentFrame) {
-            currentFrame.audioAssetUUID = assetUUID;
-        }*/
     }
 
     var loadUncompressedAudio = function (src, filename, callback) {
         var asset = new WickAsset(src, 'audio', filename, true);
         var assetUUID = wickEditor.project.library.addAsset(asset);
         wickEditor.syncInterfaces();
-
-        /*var currentFrame = wickEditor.project.getCurrentFrame();
-        if(currentFrame) {
-            currentFrame.audioAssetUUID = assetUUID;
-        }*/
     }
 
     var loadPlaintext = function (text, filename, callback) {
@@ -562,8 +503,6 @@ var InputHandler = function (wickEditor) {
                 console.error(fileType + " has no constructor!");
                 return;
             }
-
-            //var filenameNoExt = file.name.split('.')[0];
 
             fromContstructors[fileType](fr.result, file.name, function (newWickObject) {
                 var m
