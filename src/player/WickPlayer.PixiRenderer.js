@@ -54,7 +54,7 @@ var WickPixiRenderer = function (canvasContainer) {
 
         var assetsToLoad = [];
         project.getAllObjects().forEach(function (o) {
-            if(o.isPath && o.pathData) {
+            if((o.isPath && o.pathData) || o.isImage) {
                 assetsToLoad.push(o);
             }
         });
@@ -269,9 +269,18 @@ var WickPixiRenderer = function (canvasContainer) {
     }
 
     var WickToPixiSprite = {
-        'image': function (wickObject) {
+        'image': function (wickObject, callback) {
             var pixiTexture = PIXI.Texture.fromImage(wickObject.asset.getData());
             var pixiSprite = new PIXI.Sprite(pixiTexture);
+            pixiSprite.texture.baseTexture.on('loaded', function(){
+                if(window._lastRender) {
+                    self.renderWickObjects(
+                        window._lastRender.project, 
+                        window._lastRender.wickObjects, 
+                        window._lastRender.renderExtraSpace);
+                }
+                if(callback) callback();
+            });
             pixiTextures[wickObject.uuid] = pixiTexture;
             return pixiSprite;
         },

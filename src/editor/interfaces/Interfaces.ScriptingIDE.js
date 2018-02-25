@@ -168,7 +168,7 @@ var ScriptingIDEInterface = function (wickEditor) {
                 document.getElementById('minimizeScriptingGUIButton').style.display = 'none';
             }
 
-            if(objectBeingScripted && wickEditor.project.getNumSelectedObjects() < 2 && ((objectBeingScripted instanceof WickObject && !objectBeingScripted.isPath) || objectBeingScripted instanceof WickFrame)) {
+            if(objectBeingScripted && wickEditor.project.getNumSelectedObjects() < 2 && ((objectBeingScripted instanceof WickObject && !objectBeingScripted.isPath && !objectBeingScripted.isImage) || objectBeingScripted instanceof WickFrame)) {
                 $("#noSelectionDiv").css('display', 'none');
                 $("#scriptObjectDiv").css('display', 'block');
 
@@ -181,6 +181,8 @@ var ScriptingIDEInterface = function (wickEditor) {
 
                 if(objectBeingScripted && objectBeingScripted.isPath) {
                     document.getElementById('noSelectionText').innerHTML = "Paths can't be scripted. <br />Group it, or convert it to a Clip or Button!";
+                } else if(objectBeingScripted && objectBeingScripted.isImage) {
+                    document.getElementById('noSelectionText').innerHTML = "Images can't be scripted. <br />Group it, or convert it to a Clip or Button!";
                 } else if(wickEditor.project.getNumSelectedObjects() < 2) {
                     document.getElementById('noSelectionText').innerHTML = "No scriptable object selected!";
                 } else {
