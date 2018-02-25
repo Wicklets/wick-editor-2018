@@ -558,6 +558,7 @@ var InputHandler = function (wickEditor) {
         var fr = new FileReader();
         fr.onloadend = function() {
             if(!fromContstructors[fileType]) { 
+                alert("Wick cannot import '" + file.name + "'\n\nWick does not support '" + fileType + "' files yet."); 
                 console.error(fileType + " has no constructor!");
                 return;
             }
