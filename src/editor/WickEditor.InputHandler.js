@@ -389,6 +389,11 @@ var InputHandler = function (wickEditor) {
     }
 
     var loadAudio = function (src, filename, callback) {
+        // Firefox reads Ogg files as video/ogg which breaks howler. Hacky fix for that here:
+        if(src.includes('video/ogg')) {
+            src = src.replace('video/ogg', 'audio/ogg');
+        }
+        
         var asset = new WickAsset(src, 'audio', filename);
         var assetUUID = wickEditor.project.library.addAsset(asset);
         wickEditor.syncInterfaces();
