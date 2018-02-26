@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100px" height="100px" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.1 (47250) - http://www.bohemiancoding.com/sketch -->
+    <title>Artboard 3</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="24" y="44" width="41" height="41"></rect>
+    </defs>
+    <g id="Assets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard-3">
+            <circle id="Oval-5" stroke="#D8D8D8" fill="#FFFFFF" cx="68" cy="44" r="24"></circle>
+            <polygon id="Triangle-2" stroke="#D8D8D8" fill="#FFFFFF" points="31.5 11 54 51 9 51"></polygon>
+            <g id="Rectangle-6">
+                <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                <rect stroke="#D8D8D8" stroke-width="1" x="24.5" y="44.5" width="40" height="40"></rect>
+            </g>
+        </g>
+    </g>
+</svg>
