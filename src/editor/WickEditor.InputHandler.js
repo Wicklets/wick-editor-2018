@@ -385,7 +385,7 @@ var InputHandler = function (wickEditor) {
         wickObj.assetUUID = wickEditor.project.library.addAsset(asset);
         wickObj.isImage = true;
         wickObj.name = filename;
-        callback(wickObj)
+        callback(wickObj);
     }
 
     var loadAudio = function (src, filename, callback) {
@@ -393,7 +393,7 @@ var InputHandler = function (wickEditor) {
         if(src.includes('video/ogg')) {
             src = src.replace('video/ogg', 'audio/ogg');
         }
-        
+
         var asset = new WickAsset(src, 'audio', filename);
         var assetUUID = wickEditor.project.library.addAsset(asset);
         wickEditor.syncInterfaces();

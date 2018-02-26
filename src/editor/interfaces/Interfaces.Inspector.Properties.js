@@ -724,6 +724,21 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.Divider());
 
     properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Edit JavaScript",
+        icon: "./resources/javascript.png",
+        colorClass: 'symbol',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 
+                && selectionInfo.type === 'wickobject'
+                && selectionInfo.dataType === 'symbol'
+                && (!selectionInfo.object.isGroup);
+        },
+        buttonAction: function () {
+            wickEditor.guiActionHandler.doAction("editScripts");
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Edit Frames",
         icon: "./resources/inspector-edit-timeline.svg",
         colorClass: 'symbol',
@@ -814,19 +829,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Extend Frame To Position",
-        icon: "./resources/inspector-flip-vertically.svg",
-        colorClass: 'frames',
-        isActiveFn: function () {
-            return selectionInfo.numObjects > 0 
-                && selectionInfo.dataType === 'frame';
-        },
-        buttonAction: function () {
-            wickEditor.guiActionHandler.doAction('extendFrameToPosition')
-        }
-    }));
-
-    properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Delete Frame(s)",
         icon: "./resources/inspector-delete.svg",
         colorClass: 'frames',
@@ -850,6 +852,19 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         },
         buttonAction: function () {
             wickEditor.guiActionHandler.doAction('deleteMotionTween');
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Edit JavaScript",
+        icon: "./resources/javascript.png",
+        colorClass: 'frames',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 
+                && selectionInfo.dataType === 'frame';
+        },
+        buttonAction: function () {
+            wickEditor.guiActionHandler.doAction("editScripts");
         }
     }));
 
