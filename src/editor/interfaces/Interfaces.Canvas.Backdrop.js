@@ -45,7 +45,11 @@ var CanvasBackdrop = function (wickEditor, canvasContainer) {
         backdropDiv.style["-webkit-transform"] = transform;
         backdropDiv.style["transform"] = transform;
 
-        backdropDiv.style.backgroundColor = wickEditor.project.backgroundColor;
+        self.setColor(wickEditor.project.backgroundColor);
+    }
+
+    self.setColor = function (color) {
+        backdropDiv.style.backgroundColor = color;
     }
 
 }

@@ -96,13 +96,15 @@ var WickPixiRenderer = function (canvasContainer) {
         }
         if(!renderExtraSpace) renderExtraSpace = 1;
 
-        graphics.clear();
-        graphics.beginFill(parseInt(project.backgroundColor.replace("#","0x")));
-        graphics.moveTo(0, 0);
-        graphics.lineTo(project.width, 0);
-        graphics.lineTo(project.width, project.height);
-        graphics.lineTo(0, project.height);
-        graphics.endFill();
+        if(renderExtraSpace === 1) {
+            graphics.clear();
+            graphics.beginFill(parseInt(project.backgroundColor.replace("#","0x")));
+            graphics.moveTo(0, 0);
+            graphics.lineTo(project.width, 0);
+            graphics.lineTo(project.width, project.height);
+            graphics.lineTo(0, project.height);
+            graphics.endFill();
+        }
 
         wickProject = project;
 

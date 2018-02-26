@@ -350,6 +350,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.ColorPickerInput({
         title: '<img src="resources/inspector-icons/paint.svg" class="inspector-icon"/>',
         tooltip: 'Background Color',
+        previewType: 'background-color',
         isActiveFn: function () {
             return selectionInfo.type === 'project';
         },

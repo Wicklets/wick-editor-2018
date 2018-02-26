@@ -225,11 +225,11 @@ var InspectorInterface = function (wickEditor) {
         } else if(selectionInfo.numObjects > 1) {
 
             if(selectionInfo.type === 'wickobject') {
-                title = "Multiple Objects"
-                image = null;
+                title = "<p style='font-size:18px;'>Multiple Objects</p>"
+                image = './resources/inspector-icons/multipleobjects.svg';
             } else if (selectionInfo.type === 'frame') {
                 title = "Multiple Frames"
-                image = null;
+                image = "./resources/inspector-edit-timeline.svg"
             }
 
         } else if(selectionInfo.type === 'wickobject') {

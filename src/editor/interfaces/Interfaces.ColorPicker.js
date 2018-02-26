@@ -63,7 +63,9 @@ var ColorPickerInterface = function (wickEditor) {
             maxSelectionSize: 6,
             move: function (color) {
                 var colorString = color.toString();
-                if(previewType) {
+                if(previewType && previewType === 'background-color') {
+                    wickEditor.canvas.getBackdrop().setColor(colorString)
+                } else if (previewType) {
                     wickEditor.project.getSelectedObjects().forEach(function (o) {
                         if(!o.paper || o.isSymbol) return;
                         o.paper[previewType] = colorString;
