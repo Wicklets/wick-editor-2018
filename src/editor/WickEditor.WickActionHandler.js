@@ -948,9 +948,11 @@ var WickActionHandler = function (wickEditor) {
 
     registerAction('addSoundToFrame', 
         function (args) {
-            if(!args.frame.audioAssetUUID)
+            if(!args.frame.audioAssetUUID) {
                 args.frame.audioAssetUUID = args.asset.uuid;
-
+                args.frame.volume = 1; 
+            } 
+            
             done(args);
         },
         function (args) {
