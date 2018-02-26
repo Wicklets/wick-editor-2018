@@ -532,7 +532,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             return selectionInfo.object.volume; 
         },
         onChangeFn: function (val) {
-            selectionInfo.object.volume = parseInt(val);
+            selectionInfo.object.volume = parseFloat(val);
         }
     }));
 

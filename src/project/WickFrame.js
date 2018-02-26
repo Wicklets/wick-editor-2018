@@ -465,6 +465,9 @@ WickFrame.prototype._updateAudio = function () {
 }
 
 WickFrame.prototype._playSound = function () {
+    if (this.volume) {
+        this.howl.volume(this.volume);
+    }
     var howlerID = this.howl.play(); 
 }
 
