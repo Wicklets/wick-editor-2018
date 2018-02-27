@@ -21,14 +21,18 @@
 	var f3 = new AnimationTimeline.Frame({start:2, end:3});
 	var f4 = new AnimationTimeline.Frame({start:3, end:4});
 	var f5 = new AnimationTimeline.Frame({start:4, end:5});
+
 	var l1 = new AnimationTimeline.Layer({start:5, end:6});
 	l1.addFrame(f1)
 	l1.addFrame(f2)
+
 	var l2 = new AnimationTimeline.Layer();
 	l2.addFrame(f3)
+
 	var l3 = new AnimationTimeline.Layer();
 	l3.addFrame(f4)
 	l3.addFrame(f5)
+	
 	var t = new AnimationTimeline.Timeline();
 	t.addLayer(l1)
 	t.addLayer(l2)
