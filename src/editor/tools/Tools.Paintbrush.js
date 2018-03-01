@@ -114,9 +114,11 @@ Tools.Paintbrush = function (wickEditor) {
             if(path.segments.length > 2) {
                 path.smooth();
 
-                if(wickEditor.settings.brushSmoothing > 0) {
+                var smoothingScaled = convertRange(wickEditor.settings.brushSmoothing, [0,100], [1,30]);
+                console.log(smoothingScaled)
+                if(smoothingScaled > 0) {
                     var t = wickEditor.settings.strokeWidth;
-                    var s = wickEditor.settings.brushSmoothing/100*10;
+                    var s = smoothingScaled;
                     var z = wickEditor.canvas.getZoom();
                     path.simplify(t / z * s);
                 }
