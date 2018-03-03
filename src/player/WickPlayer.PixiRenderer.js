@@ -54,7 +54,7 @@ var WickPixiRenderer = function (canvasContainer) {
 
         var assetsToLoad = [];
         project.getAllObjects().forEach(function (o) {
-            if((o.isPath && o.pathData) || o.isImage) {
+            if((o.isPath && o.pathData) || o.isImage || o.isText) {
                 assetsToLoad.push(o);
             }
         });
@@ -302,7 +302,7 @@ var WickPixiRenderer = function (canvasContainer) {
             pixiTextures[wickObject.uuid] = pixiTexture;
             return newSprite;
         },
-        'text': function (wickObject) {
+        'text': function (wickObject, callback) {
             var textData = wickObject.textData;
             var style = {
                 font : textData.fontWeight + " " + textData.fontStyle + " " + (textData.fontSize*SVG_SCALE) + "px " + textData.fontFamily,
@@ -321,6 +321,7 @@ var WickPixiRenderer = function (canvasContainer) {
             } else if (textData.textAlign === 'right') {
                 pixiText.textboxOffset = -(textboxWidth-textWidth)/2;
             }
+            if(callback) callback();
             return pixiText;
         }
     }
