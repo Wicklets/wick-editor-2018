@@ -307,7 +307,7 @@ var WickPixiRenderer = function (canvasContainer) {
             var style = {
                 font : textData.fontWeight + " " + textData.fontStyle + " " + (textData.fontSize*SVG_SCALE) + "px " + textData.fontFamily,
                 fill : textData.fill,
-                wordWrap : true,
+                wordWrap : false,
                 wordWrapWidth : wickObject.width*SVG_SCALE,
                 align: textData.textAlign,
             };
