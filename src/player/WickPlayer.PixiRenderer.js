@@ -189,7 +189,7 @@ var WickPixiRenderer = function (canvasContainer) {
             wickObject._renderDirty = false;
         }
         if(sprite) {
-            sprite.visible = true;
+            sprite.visible = !wickObject.parentFrame.parentLayer.hidden;
             sprite.anchor = new PIXI.Point(0.5, 0.5);
             var textureScale = (wickObject.pathData || wickObject.isText ? SVG_SCALE : 1);
 

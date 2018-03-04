@@ -311,6 +311,7 @@ var WickActionHandler = function (wickEditor) {
                         args.createTweenAction = wickEditor.actionHandler.doAction('createMotionTween', { 
                             dontAddToStack: true,
                             frame: frame,
+                            playheadPosition: wickEditor.project.getCurrentObject().playheadPosition,
                         });
                     }
                 }
@@ -963,7 +964,7 @@ var WickActionHandler = function (wickEditor) {
     registerAction('createMotionTween', 
         function (args) {
             var frame = args.frame;
-            
+
             if(frame.wickObjects.length > 1 || frame.wickObjects[0].isPath) {
                 args.createClipAction = wickEditor.actionHandler.doAction('convertObjectsToSymbol', {
                     objects: frame.wickObjects,

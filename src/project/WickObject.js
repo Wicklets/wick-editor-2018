@@ -1041,6 +1041,10 @@ WickObject.prototype.prepareForPlayer = function () {
         this._active = false;
         this._wasActiveLastTick = false;
 
+        this.layers.forEach(function (layer) {
+            layer.hidden = false;
+        })
+
         this.getAllFrames().forEach(function (frame) {
             //frame.prepareForPlayer();
         });
