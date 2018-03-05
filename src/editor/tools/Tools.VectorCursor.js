@@ -306,6 +306,7 @@ Tools.VectorCursor = function (wickEditor) {
                 addedPoint.point.x + event.delta.x, 
                 addedPoint.point.y + event.delta.y
             );
+            addedPoint.smooth()
         }
 
         /*if(!hitResult) return;

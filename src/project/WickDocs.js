@@ -298,7 +298,7 @@ window.wickDocs =
             "description": "An object holdng the information about the collision."
           }
         },*/
-        {
+        /*{
           "name": "pointTo(x,y)",
           "description": "Rotates this object so that it is facing in the direction of the given point (x,y)",
           "example": "// Make this object point towards the mouse\nthis.pointTo(mouseX, mouseY)",
@@ -316,7 +316,7 @@ window.wickDocs =
             }
           ],
           "return": null
-        },
+        },*/
         {
           "name": "play()",
           "description": "Plays this objects timeline (only usable for Clips). ",
@@ -376,8 +376,8 @@ window.wickDocs =
           "return": null
         },
         { "name": "setText(text)",
-          "description": "Dynamically updates the text for a text object. (only works on Text).",
-          "example": "//Dynamically update with mouseX position\nfunction update () {\n this.setText('mouseX:' + mouseX);\n}",
+          "description": "Changes the text of a text object.",
+          "example": "//Update with mouse position\nfunction update () {\n this.setText('mouseX:' + mouseX);\n}",
           "snippet": "this.setText('update text here')",
           "args": [
             {
@@ -551,7 +551,7 @@ window.wickDocs =
         }
       ]
     },
-    {
+    /*{
       "name": "Camera",
       "properties": [
         {
@@ -587,8 +587,8 @@ window.wickDocs =
             }]
         }
       ]
-    },
-    {
+    },*/
+    /*{
       "name": "Scope",
       "properties": [
         {
@@ -616,9 +616,9 @@ window.wickDocs =
           "return": null
         }
       ]
-    },
+    },*/
     {
-      "name": "Storage",
+      "name": "Utilities",
       "properties": [
         {
           "name": "saveData(key,data)",
@@ -650,13 +650,8 @@ window.wickDocs =
               "description": "The name of the data you wish to load."
             }
           ]
-        }
-      ]
-    },
-    {
-      "name": "Random",
-      "properties": [
-      {
+        },
+        {
           "name": "randomBool()",
           "description": "Generates a random boolean (true or false).",
           "example": "// Use randomBool to simulate a coin flip.\nvar coinFlip = randomBool();\nif(coinFlip == true) {\n    alert('You&#8217;re lucky!!');\n}",
@@ -707,7 +702,8 @@ window.wickDocs =
             }
           ]
         }
-    ]}
+      ]
+    },
   ];
   
 

@@ -817,7 +817,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Copy Frame Forward",
+        tooltipTitle: "Clone Frame",
         icon: "./resources/inspector-duplicate.svg",
         colorClass: 'frames',
         isActiveFn: function () {
