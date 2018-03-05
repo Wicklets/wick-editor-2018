@@ -156,7 +156,6 @@ Tools.SelectionCursor = function (wickEditor) {
             }
 
         } else {
-
             if(!event.modifiers.shift && !wickEditor.colorPicker.isOpen()) {
                 wickEditor.project.clearSelection();
             }
@@ -165,7 +164,6 @@ Tools.SelectionCursor = function (wickEditor) {
             makingSelectionSquare = true;
             selectionSquareTopLeft = event.point;
             selectionSquareBottomRight = event.point
-            
         }
 
         //updateSelection()
@@ -174,7 +172,7 @@ Tools.SelectionCursor = function (wickEditor) {
 
     this.paperTool.onDoubleClick = function (event) {
         if(hitResult) {
-            var selected = wickEditor.project.getSelectedObject();
+            var selected = wickEditor.project.getSelectedObjectsByType(WickObject)[0];
             if(selected)  {
                 if(selected.isSymbol) {
                     wickEditor.guiActionHandler.doAction('editObject');
@@ -193,7 +191,7 @@ Tools.SelectionCursor = function (wickEditor) {
 
         if(transformMode === 'scaleBR') {
             var rect = selectionBoundsRect
-            wickEditor.project.getSelectedObjects().forEach(function (o) {
+            wickEditor.project.getSelectedObjectsByType(WickObject).forEach(function (o) {
                 var resizeRatio = event.point.subtract(rect.topLeft);
                 if(resizeRatio.x < 1 || resizeRatio.y < 1) return;
                 resizeRatio.x /= rect.width;
@@ -205,7 +203,7 @@ Tools.SelectionCursor = function (wickEditor) {
         }
         if(transformMode === 'scaleTL') {
             var rect = selectionBoundsRect
-            wickEditor.project.getSelectedObjects().forEach(function (o) {
+            wickEditor.project.getSelectedObjectsByType(WickObject).forEach(function (o) {
                 var resizeRatio = rect.bottomRight.subtract(event.point);
                 if(resizeRatio.x < 1 || resizeRatio.y < 1) return;
                 resizeRatio.x /= rect.width;
@@ -217,7 +215,7 @@ Tools.SelectionCursor = function (wickEditor) {
         }
         if(transformMode === 'scaleBL') {
             var rect = selectionBoundsRect
-            wickEditor.project.getSelectedObjects().forEach(function (o) {
+            wickEditor.project.getSelectedObjectsByType(WickObject).forEach(function (o) {
                 var resizeRatio = {
                     x: rect.topRight.x - event.point.x,
                     y: event.point.y - rect.topRight.y,
@@ -232,7 +230,7 @@ Tools.SelectionCursor = function (wickEditor) {
         }
         if(transformMode === 'scaleTR') {
             var rect = selectionBoundsRect
-            wickEditor.project.getSelectedObjects().forEach(function (o) {
+            wickEditor.project.getSelectedObjectsByType(WickObject).forEach(function (o) {
                 var resizeRatio = {
                     x: event.point.x - rect.bottomLeft.x,
                     y: rect.bottomLeft.y - event.point.y,
@@ -247,7 +245,7 @@ Tools.SelectionCursor = function (wickEditor) {
         }
         if(transformMode === 'scaleT') {
             var rect = selectionBoundsRect
-            wickEditor.project.getSelectedObjects().forEach(function (o) {
+            wickEditor.project.getSelectedObjectsByType(WickObject).forEach(function (o) {
                 var resizeY = rect.bottomCenter.y - event.point.y
                 if(resizeY < 1) return;
                 resizeY /= rect.height;
@@ -258,7 +256,7 @@ Tools.SelectionCursor = function (wickEditor) {
         }
         if(transformMode === 'scaleB') {
             var rect = selectionBoundsRect
-            wickEditor.project.getSelectedObjects().forEach(function (o) {
+            wickEditor.project.getSelectedObjectsByType(WickObject).forEach(function (o) {
                 var resizeY = event.point.y - rect.topCenter.y
                 if(resizeY < 1) return;
                 resizeY /= rect.height;
@@ -269,7 +267,7 @@ Tools.SelectionCursor = function (wickEditor) {
         }
         if(transformMode === 'scaleR') {
             var rect = selectionBoundsRect
-            wickEditor.project.getSelectedObjects().forEach(function (o) {
+            wickEditor.project.getSelectedObjectsByType(WickObject).forEach(function (o) {
                 var resizeX = event.point.x - rect.leftCenter.x
                 if(resizeX < 1) return;
                 resizeX /= rect.width;
@@ -280,7 +278,7 @@ Tools.SelectionCursor = function (wickEditor) {
         }
         if(transformMode === 'scaleL') {
             var rect = selectionBoundsRect
-            wickEditor.project.getSelectedObjects().forEach(function (o) {
+            wickEditor.project.getSelectedObjectsByType(WickObject).forEach(function (o) {
                 var resizeX = rect.rightCenter.x - event.point.x
                 if(resizeX < 1) return;
                 resizeX /= rect.width;
@@ -295,7 +293,7 @@ Tools.SelectionCursor = function (wickEditor) {
             var oldAngle = event.lastPoint.subtract(pivot).angle;
             var newAngle = event.point.subtract(pivot).angle;
             var rotationAmount = newAngle-oldAngle;
-            wickEditor.project.getSelectedObjects().forEach(function (o) {
+            wickEditor.project.getSelectedObjectsByType(WickObject).forEach(function (o) {
                 o.paper.rotate(rotationAmount, pivot);
                 //updateSelection()
             });
@@ -327,7 +325,7 @@ Tools.SelectionCursor = function (wickEditor) {
             selectionSquare.fillColor = 'rgba(100,100,255,0.15)';
         } else {
             if(hitResult && hitResult.item) {
-                wickEditor.project.getSelectedObjects().forEach(function (o) {
+                wickEditor.project.getSelectedObjectsByType(WickObject).forEach(function (o) {
                     o.paper.position = new paper.Point(
                         o.paper.position.x + event.delta.x,
                         o.paper.position.y + event.delta.y
@@ -376,7 +374,7 @@ Tools.SelectionCursor = function (wickEditor) {
         if(!hitResult) return;
         if(!hitResult.item) return;
 
-        var objs = wickEditor.project.getSelectedObjects();
+        var objs = wickEditor.project.getSelectedObjectsByType(WickObject);
         var modifiedStates = [];
         objs.forEach(function (wickObject) {
             var parentAbsPos;
@@ -495,7 +493,7 @@ Tools.SelectionCursor = function (wickEditor) {
             var dotSize = GUI_DOTS_SIZE/wickEditor.canvas.getZoom();
 
             individualObjectBoxes = [];
-            var selectedObjs = wickEditor.project.getSelectedObjects()
+            var selectedObjs = wickEditor.project.getSelectedObjectsByType(WickObject)
             if(selectedObjs.length > 1) {
                 selectedObjs.forEach(function (o) {
                     var oRect = new paper.Rectangle(o.paper.bounds);

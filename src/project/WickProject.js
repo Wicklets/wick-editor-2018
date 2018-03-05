@@ -520,6 +520,16 @@ WickProject.prototype.getSelectedObjectByType = function (type) {
     return returnObject;
 }
 
+WickProject.prototype.getSelectedObjectsByType = function (type) {
+    var selectedObjects = this.getSelectedObjects();
+    
+    selectedObjects = selectedObjects.filter(function (obj) {
+        return (obj instanceof type);
+    })
+
+    return selectedObjects;
+}
+
 WickProject.prototype.getSelectedObjects = function () {
     var self = this;
 

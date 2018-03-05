@@ -3878,7 +3878,7 @@ WickTween.interpolateTweens = function (tweenA, tweenB, t) {
 
 var WickFrame = function () {
     // Identifier so we can do e.g. movePlayheadTo("menu") 
-    this.name = "";
+    this.name = "New Frame";
 
     // Store all objects in frame. 
     this.wickObjects = [];
@@ -3910,8 +3910,8 @@ var WickFrame = function () {
     
 WickFrame.prototype.tick = function () {
     var self = this;
-
-    if(this.wickScript !== '' || this.isSound) {
+    
+    if(this.wickScript !== '' || this.audioAssetUUID) {
         // Inactive -> Inactive
         // Do nothing, frame is still inactive
         if (!this._wasActiveLastTick && !this._active) {
@@ -3920,12 +3920,12 @@ WickFrame.prototype.tick = function () {
         // Inactive -> Active
         // Frame just became active! It's fresh!
         else if (!this._wasActiveLastTick && this._active) {
-            (wickPlayer || wickEditor).project.initScript(this);
-            
-            (wickPlayer || wickEditor).project.runScript(this, 'load');
-            (wickPlayer || wickEditor).project.runScript(this, 'update');
-
-            // if(wickPlayer) wickPlayer.audioPlayer.playSound(this.audioAssetUUID);
+            if(this.wickScript !== '') {
+                (wickPlayer || wickEditor).project.initScript(this);
+                
+                (wickPlayer || wickEditor).project.runScript(this, 'load');
+                (wickPlayer || wickEditor).project.runScript(this, 'update');
+            }
 
             if (this.audioAssetUUID) {
                 this._updateAudio();
@@ -3936,7 +3936,9 @@ WickFrame.prototype.tick = function () {
         // Active -> Active
         // Frame is active!
         else if (this._wasActiveLastTick && this._active) {
-            (wickPlayer || wickEditor).project.runScript(this, 'update');
+            if(this.wickScript !== '') {
+                (wickPlayer || wickEditor).project.runScript(this, 'update');
+            }
         }    
         // Active -> Inactive
         // Frame just stopped being active. Clean up!
@@ -4324,6 +4326,9 @@ WickFrame.prototype._updateAudio = function () {
 }
 
 WickFrame.prototype._playSound = function () {
+    if (this.volume) {
+        this.howl.volume(this.volume);
+    }
     var howlerID = this.howl.play(); 
 }
 
@@ -4543,11 +4548,6 @@ var WickObject = function () {
 // Images
 
     this.isImage = false;
-
-// Sounds
-
-    this.isSound = false;
-    this.loop = false;
 
 // Symbols
 
@@ -5534,6 +5534,10 @@ WickObject.prototype.prepareForPlayer = function () {
         this._active = false;
         this._wasActiveLastTick = false;
 
+        this.layers.forEach(function (layer) {
+            layer.hidden = false;
+        })
+
         this.getAllFrames().forEach(function (frame) {
             //frame.prepareForPlayer();
         });
@@ -5608,7 +5612,7 @@ WickObject.prototype.tick = function () {
         }
     }
 
-    if(this.isSymbol || this.isSound) {
+    if(this.isSymbol) {
         if(true) {
             if(this._wasClicked) {
                 (wickPlayer || wickEditor).project.runScript(this, 'mousePressed');
@@ -5663,28 +5667,15 @@ WickObject.prototype.tick = function () {
                 (wickPlayer || wickEditor).project.runScript(this, 'update');
 
                 if(this._newPlayheadPosition!==undefined) this.playheadPosition = this._newPlayheadPosition;
-
-                if (this.isSound) {
-                    this._updateAudio(); 
-                    this._playSound(); 
-                }
             }
             // Active -> Active
             else if (this._wasActiveLastTick && this._active) {
                 (wickPlayer || wickEditor).project.runScript(this, 'update');
-
-                if (this.isSound) {
-                    this._updateAudio(); 
-                }
             }
             // Active -> Inactive
             else if (this._wasActiveLastTick && !this._active) {
                 if(!this.parentFrame.alwaysSaveState) {
                     wickPlayer.resetStateOfObject(this);
-                }
-
-                if (this.isSound) {
-                    this._stopSound(); 
                 }
             }
         }
@@ -5733,21 +5724,6 @@ WickObject.prototype.pointTo = function ( x2, y2 ) {
     
     this.rotation = Math.atan2(dy,dx) * 180 / Math.PI - 90;
 };
-
-WickObject.prototype._updateAudio = function () {
-    if (!this.isSound) return; 
-    // Lazily create sound objects
-    if (!this.howl) {
-        this.howl = wickPlayer.audioPlayer.makeSound(this.assetUUID, this.loop, this.volume); 
-    }
-    this.howl.volume = this.volume; 
-    this.howl.loop = this.loop; 
-}
-
-WickObject.prototype._playSound = function () {
-    if (!this.isSound) return; 
-    var howlerID = this.howl.play(); 
-}
 </script>
 <script>/* Wick - (c) 2017 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
@@ -6016,7 +5992,8 @@ WickProject.prototype.getCopyData = function () {
     var objectJSONs = [];
     var objects = this.getSelectedObjects();
     objects.forEach(function(obj) {
-        obj._tempZIndex = wickEditor.project.getCurrentFrame().wickObjects.indexOf(obj);
+        if(obj instanceof WickObject)
+            obj._tempZIndex = wickEditor.project.getCurrentFrame().wickObjects.indexOf(obj);
     })
     objects.sort(function (a,b) {
         return a._tempZIndex - b._tempZIndex;
@@ -6489,6 +6466,8 @@ WickProject.prototype.loadScriptOfObject = function (obj) {
 
 WickProject.prototype.initScript = function (obj) {
     window.errorCausingObject = obj;
+
+    if(!window.cachedWickScripts) window.cachedWickScripts = {};
     
     if(!obj.cachedWickScript) {
         if(obj.sourceUUID) {
@@ -6541,6 +6520,7 @@ WickProject.prototype.loadFonts = function () {
             fontsInProject.push(o.textData.fontFamily);
     });
     loadGoogleFonts(fontsInProject, function () {
+        wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
         wickEditor.syncInterfaces();
     });
 }
@@ -6903,6 +6883,48 @@ var WickPixiRenderer = function (canvasContainer) {
     
     container.addChild(graphics);
 
+    _cached_w = 0;
+    _cached_h = 0;
+
+    self.preloadAllAssets = function (project, callback) {
+        currentProjectUUID = project.uuid;
+
+        var assetsToLoad = [];
+        project.getAllObjects().forEach(function (o) {
+            if((o.isPath && o.pathData) || o.isImage || o.isText) {
+                assetsToLoad.push(o);
+            }
+        });
+
+        var loadedAssetCount = 0;
+        assetsToLoad.forEach(function (o) {
+            function checkIfDone () {
+                if(loadedAssetCount === assetsToLoad.length) {
+                    callback();
+                }
+            }
+
+            if (!pixiSprites[o.uuid]) {
+                createPixiSprite(o, function () {
+                    loadedAssetCount++;
+                    checkIfDone()
+                });
+            } else if(o._renderDirty) {
+                regenPixiPath(o, pixiSprites[o.uuid], function () {
+                    loadedAssetCount++;
+                    checkIfDone()
+                });
+                o._renderDirty = false;
+            } else if(pixiTextures[o.uuid]) {
+                loadedAssetCount++;
+                checkIfDone()
+            } else {
+                loadedAssetCount++;
+                checkIfDone();
+            }
+        });
+    }
+
     self.renderWickObjects = function (project, wickObjects, renderExtraSpace, fitToScreen) {
         window._lastRender = {
             project: project,
@@ -6911,19 +6933,21 @@ var WickPixiRenderer = function (canvasContainer) {
         }
         if(!renderExtraSpace) renderExtraSpace = 1;
 
-        graphics.clear();
-        graphics.beginFill(parseInt(project.backgroundColor.replace("#","0x")));
-        graphics.moveTo(0, 0);
-        graphics.lineTo(project.width, 0);
-        graphics.lineTo(project.width, project.height);
-        graphics.lineTo(0, project.height);
-        graphics.endFill();
+        if(renderExtraSpace === 1) {
+            graphics.clear();
+            graphics.beginFill(parseInt(project.backgroundColor.replace("#","0x")));
+            graphics.moveTo(0, 0);
+            graphics.lineTo(project.width, 0);
+            graphics.lineTo(project.width, project.height);
+            graphics.lineTo(0, project.height);
+            graphics.endFill();
+        }
 
         wickProject = project;
 
         if(currentProjectUUID !== project.uuid) {
             currentProjectUUID = project.uuid;
-            preloadAllAssets(project);
+            loadAllAssets(project);
         }
 
         if(fitToScreen) {
@@ -6931,11 +6955,15 @@ var WickPixiRenderer = function (canvasContainer) {
             var h = window.innerHeight;
             canvasContainer.style.width  = w + 'px';
             canvasContainer.style.height = h + 'px';
-            renderer.resize(w, h);
-            renderer.view.style.width  = w + "px";
-            renderer.view.style.height = h + "px";
-            container.scale.x = 1//w / project.width;
-            container.scale.y = 1//h / project.height;
+            if(_cached_w !== w || _cached_h !== h) {
+                renderer.resize(w, h);
+                _cached_w = w;
+                _cached_h = h;
+                renderer.view.style.width  = w + "px";
+                renderer.view.style.height = h + "px";
+                container.scale.x = 1//w / project.width;
+                container.scale.y = 1//h / project.height;
+            }
         } else {
             container.position.x = 0;
             container.position.y = 0;
@@ -6964,6 +6992,20 @@ var WickPixiRenderer = function (canvasContainer) {
         renderer.render(container);
     }
 
+    self.reorderAllObjects = function (project) {
+        var objectsToReorder = container.removeChildren(0, container.children.length);
+        var allWickObjects = project.getAllObjects();
+
+        container.addChild(graphics);
+        allWickObjects.forEach(function (wickObject) {
+            objectsToReorder.forEach(function (pixiObject) {
+                if(pixiSprites[wickObject.uuid] === pixiObject) {
+                    container.addChild(pixiObject);
+                }
+            });
+        });
+    }
+
     self.cleanupObjectTextures = function (wickObj) {
         var sprite = pixiSprites[wickObj.uuid];
         if(sprite)
@@ -6984,7 +7026,7 @@ var WickPixiRenderer = function (canvasContainer) {
             wickObject._renderDirty = false;
         }
         if(sprite) {
-            sprite.visible = true;
+            sprite.visible = !wickObject.parentFrame.parentLayer.hidden;
             sprite.anchor = new PIXI.Point(0.5, 0.5);
             var textureScale = (wickObject.pathData || wickObject.isText ? SVG_SCALE : 1);
 
@@ -7007,13 +7049,13 @@ var WickPixiRenderer = function (canvasContainer) {
         });
     }
 
-    function preloadAllAssets (project) {
+    function loadAllAssets (project) {
         project.getAllObjects().forEach(function (wickObject) {
             createPixiSprite(wickObject);
         });
     }
 
-    function createPixiSprite (wickObject) {
+    function createPixiSprite (wickObject, callback) {
         if(wickObject.sourceUUID) {
             var pixiTexture = pixiTextures[wickObject.sourceUUID];
             if(pixiTexture) {
@@ -7038,7 +7080,7 @@ var WickPixiRenderer = function (canvasContainer) {
         }
 
         if(type) {
-            var newPixiSprite = WickToPixiSprite[type](wickObject);
+            var newPixiSprite = WickToPixiSprite[type](wickObject, callback);
             container.addChild(newPixiSprite);
             pixiSprites[wickObject.uuid] = newPixiSprite;
 
@@ -7048,10 +7090,13 @@ var WickPixiRenderer = function (canvasContainer) {
         }
     }
 
-    function regenPixiPath (wickObject, pixiSprite) {
+    function regenPixiPath (wickObject, pixiSprite, callback) {
         var base64svg = getBase64SVG(wickObject);
         var texture = PIXI.Texture.fromImage(base64svg, undefined, undefined, SVG_SCALE);
         pixiSprite.setTexture(texture);
+        texture.baseTexture.on('loaded', function(){
+            if(callback) callback();
+        });
     }
 
     function regenPixiText (wickObject, pixiSprite) {
@@ -7063,31 +7108,43 @@ var WickPixiRenderer = function (canvasContainer) {
     }
 
     var WickToPixiSprite = {
-        'image': function (wickObject) {
+        'image': function (wickObject, callback) {
             var pixiTexture = PIXI.Texture.fromImage(wickObject.asset.getData());
             var pixiSprite = new PIXI.Sprite(pixiTexture);
+            pixiSprite.texture.baseTexture.on('loaded', function(){
+                if(window._lastRender) {
+                    self.renderWickObjects(
+                        window._lastRender.project, 
+                        window._lastRender.wickObjects, 
+                        window._lastRender.renderExtraSpace);
+                }
+                if(callback) callback();
+            });
             pixiTextures[wickObject.uuid] = pixiTexture;
             return pixiSprite;
         },
-        'svg': function (wickObject) {
+        'svg': function (wickObject, callback) {
             var base64svg = getBase64SVG(wickObject);
             var pixiTexture = PIXI.Texture.fromImage(base64svg, undefined, undefined, SVG_SCALE);
             var newSprite = new PIXI.Sprite(pixiTexture);
             newSprite.texture.baseTexture.on('loaded', function(){
-                self.renderWickObjects(
-                    window._lastRender.project, 
-                    window._lastRender.wickObjects, 
-                    window._lastRender.renderExtraSpace)
+                if(window._lastRender) {
+                    self.renderWickObjects(
+                        window._lastRender.project, 
+                        window._lastRender.wickObjects, 
+                        window._lastRender.renderExtraSpace);
+                }
+                if(callback) callback();
             });
             pixiTextures[wickObject.uuid] = pixiTexture;
             return newSprite;
         },
-        'text': function (wickObject) {
+        'text': function (wickObject, callback) {
             var textData = wickObject.textData;
             var style = {
                 font : textData.fontWeight + " " + textData.fontStyle + " " + (textData.fontSize*SVG_SCALE) + "px " + textData.fontFamily,
                 fill : textData.fill,
-                wordWrap : true,
+                wordWrap : false,
                 wordWrapWidth : wickObject.width*SVG_SCALE,
                 align: textData.textAlign,
             };
@@ -7101,6 +7158,7 @@ var WickPixiRenderer = function (canvasContainer) {
             } else if (textData.textAlign === 'right') {
                 pixiText.textboxOffset = -(textboxWidth-textWidth)/2;
             }
+            if(callback) callback();
             return pixiText;
         }
     }
@@ -7418,13 +7476,15 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
 
     var onMouseMove = function (evt) {
 
-        setMousePos(getMousePos(canvasContainer, evt));
+        setMousePos(calcMousePos(canvasContainer, evt));
 
         canvasContainer.style.cursor = "default";
 
         // Check if we're hovered over a clickable object...
         var hoveredOverObj = null;
         wickProject.rootObject.getAllActiveChildObjectsRecursive(true).forEachBackwards(function(child) {
+            if(!child.isSymbol) return;
+
             if(!(hoveredOverObj && hoveredOverObj.isButton) && child.isPointInside(self.getMouse())) {
                 if(!child.hoveredOver) {
                     child._wasHoveredOver = true;
@@ -7541,7 +7601,7 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
 
     }
 
-    var getMousePos = function (canvas, evt) {
+    var calcMousePos = function (canvas, evt) {
         var canvasBoundingClientRect = canvas.getBoundingClientRect();
 
         var mouseX = evt.clientX;
@@ -7659,7 +7719,9 @@ var WickPlayer = function () {
         self.inputHandler.setup(); 
         if(!bowser.mobile && !bowser.tablet) self.audioPlayer.setup();
 
-        startUpdate();
+        self.renderer.preloadAllAssets(self.project, function () {
+            startUpdate();
+        });
     }
 
     window.runProject = function (projectJSON) {
@@ -7712,7 +7774,7 @@ var WickPlayer = function () {
                         d.objectClonedFrom.clones.splice(removeIndex, 1);
                     }
                 }
-            })
+            });
             self.renderer.renderWickObjects(self.project, self.project.rootObject.getAllActiveChildObjects(), null, true);
             self.inputHandler.update();
         }
