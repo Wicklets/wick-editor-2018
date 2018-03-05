@@ -109,9 +109,9 @@ WickProject.fromWebpage = function (webpageString) {
     }
 }
 
-WickProject.fromJSON = function (rawJSONProject) {
+WickProject.fromJSON = function (rawJSONProject, uncompressed) {
 
-    var JSONString = WickProject.Compressor.decompressProject(rawJSONProject);
+    var JSONString = uncompressed ? rawJSONProject : WickProject.Compressor.decompressProject(rawJSONProject);
 
     // Replace current project with project in JSON
     var projectFromJSON = JSON.parse(JSONString);
@@ -745,8 +745,10 @@ WickProject.prototype.loadFonts = function () {
             fontsInProject.push(o.textData.fontFamily);
     });
     loadGoogleFonts(fontsInProject, function () {
-        wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
-        wickEditor.syncInterfaces();
+        if(window.wickEditor) {
+            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
+            wickEditor.syncInterfaces();
+        }
     });
 }
 

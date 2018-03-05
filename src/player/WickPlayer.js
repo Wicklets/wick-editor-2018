@@ -224,4 +224,4 @@ function tryToLoadProjectFromWindowHash () {
         xhr.send();
     }
 }
-tryToLoadProjectFromWindowHash();
+if(!window.WickEditor) tryToLoadProjectFromWindowHash();

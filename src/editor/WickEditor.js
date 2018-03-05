@@ -21,28 +21,15 @@ var WickEditor = function () {
 
     var self = this;
 
-    // http://semver.org/
-    self.version = "0.14";
+    self.version = "0.14.1";
     document.getElementById('wick-editor-version').innerHTML = 'Wick Editor ' + self.version;
     console.log("Wick Editor version " + self.version)
-    if(localStorage.wickVersion !== self.version) {
-        // Wick has either
-        //   (1) never been used on this machine/browser or
-        //   (2) wick updated since it was last used on this machine/browser
-        // So we need to show the update message screen!
-        // (We don't have an update message screen yet, so just console.log)
-        localStorage.wickVersion = self.version;
-        console.log("Looks like wick updated! See the update notes here: http://wickeditor.com/#updates");
-    }
     window.wickVersion = self.version;
 
     // Friendly console message ~~~
     console.log('%cWelcome to the javascript console! ', 'color: #ff99bb; font-size: 20px; font-weight: bold; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;');
     console.log('%cYou are free to change any of the internal editor stuff from here.', 'color: #7744bb; font-size: 12px;');
     console.log('%cTry typing "wickEditor" into the console to see some stuff!.', 'color: #22bb99; font-size: 12px;');
-
-    // Setup demo loader for website
-    this.demoLoader = new WickDemoLoader(this);
 
     // Setup init project
     this.project = new WickProject();
@@ -109,17 +96,10 @@ var WickEditor = function () {
 
     self.syncInterfaces();
 
-    // This is put after the first sync so the page loads before the editor asks to load an autosaved project
+    // This is put after the first sync so the page loads before the editor asks to load a project
     // (and we gotta wait a little bit before loading it ... we want to make sure the editor is ready)
     setTimeout(function () {
-        if(!self.demoLoader.active) {
-            WickProject.Exporter.getAutosavedProject(function (project) {
-                wickEditor.guiActionHandler.doAction('openProject', {
-                    project: project,
-                    dontWarn: true
-                })
-            });
-        }
+        self.tryToLoadProject();
     }, 100);
 
 }
@@ -159,4 +139,36 @@ WickEditor.prototype.changeTool = function (newTool) {
 
 WickEditor.prototype.useLastUsedTool = function () {
     this.currentTool = this.lastTool;
+}
+
+WickEditor.prototype.tryToLoadProject = function () {
+    if(window.location.hash) {
+        var projectPath = window.location.hash.slice(1); // remove first char (the hash)
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', projectPath, true);
+        xhr.responseType = 'arraybuffer';
+
+        xhr.onload = function(e) {
+          if (this.status == 200) {
+            var byteArray = new Uint8Array(this.response);
+            var wickProjectJSON = LZString.decompressFromUint8Array(byteArray);
+            var wickProject = WickProject.fromJSON(wickProjectJSON, true);
+            wickEditor.guiActionHandler.doAction('openProject', {
+                project:wickProject,
+                dontWarn: true
+            });
+          }
+        };
+
+        xhr.send();
+    } else {
+        WickProject.Exporter.getAutosavedProject(function (project) {
+            wickEditor.guiActionHandler.doAction('openProject', {
+                project: project,
+                dontWarn: true
+            })
+        });
+    }
+    window.location.hash = '';
 }
