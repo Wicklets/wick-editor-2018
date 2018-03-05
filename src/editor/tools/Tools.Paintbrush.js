@@ -115,7 +115,6 @@ Tools.Paintbrush = function (wickEditor) {
                 path.smooth();
 
                 var smoothingScaled = convertRange(wickEditor.settings.brushSmoothing, [0,100], [1,30]);
-                console.log(smoothingScaled)
                 if(smoothingScaled > 0) {
                     var t = wickEditor.settings.strokeWidth;
                     var s = smoothingScaled;

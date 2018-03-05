@@ -226,8 +226,8 @@ var WickActionHandler = function (wickEditor) {
                 wickEditor.project.currentObject.removeChild(wickObject);
             });
 
-            //if(args.addLayerAction) args.addLayerAction.undoAction();
             if(args.addFrameAction) args.addFrameAction.undoAction();
+            if(args.addLayerAction) args.addLayerAction.undoAction();
 
             done(args);
         });
