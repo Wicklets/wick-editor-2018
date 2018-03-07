@@ -24,48 +24,15 @@ var WickHowlerAudioPlayer = function () {
     var frameWaveforms = {};
     var framesActiveSoundID = {};
 
-    var muted;
+    var muted = false;
 
     var projectFramerateForSeekAmt;
-
-    self.setup = function () {
-        muted = false;
-    }
 
     self.reloadSoundsInProject = function (project) {
         projectFramerateForSeekAmt = project.framerate;
 
-        project.library.getAllAssets('audio').forEach(function (asset) {
-            if(howlSoundInstances[asset.uuid]) return;
-
-            var audioData = asset.getData();
-
-            howlSoundInstances[asset.uuid] = new Howl({
-                src: [audioData],
-                loop: false,
-                volume: 1.0
-            });
-        });
-
-        project.getAllFrames().filter(function (frame) {
-            return frame.hasSound() && !frameSoundsMappings[frame.uuid];
-        }).forEach(function (frame) {
-            var howlerSound = howlSoundInstances[frame.audioAssetUUID];
-            frameSoundsMappings[frame.uuid] = howlerSound;
-            framesActiveSoundID[frame.uuid] = null;
-
-            if(window.WickEditor) {
-                var asset = wickEditor.project.library.getAsset(frame.audioAssetUUID);
-                var src = asset.getData();
-                var scwf = new SCWF();
-                scwf.generate(src, {
-                    onComplete: function(png, pixels) {
-                        frameWaveforms[frame.uuid] = png;
-                        window.wickEditor.syncInterfaces();
-                    }
-                });
-            }
-        });
+        initHowlerInstancesForAllAssets(project);
+        initSoundsOnFrames(project);
     }
 
     self.playSoundFromLibrary = function (asset) {
@@ -115,6 +82,10 @@ var WickHowlerAudioPlayer = function () {
         }
     }
 
+    this.getDurationOfSound = function (assetUUID) {
+        return howlSoundInstances[assetUUID].duration();
+    }
+
     /* Wick player API functions */
 
     window.playSound = function (assetFilename) {
@@ -135,5 +106,53 @@ var WickHowlerAudioPlayer = function () {
 
     window.unmute = function () {
         muted = false;
+    }
+
+    /* Util */
+
+    function initHowlerInstancesForAllAssets (project) {
+
+        project.library.getAllAssets('audio').forEach(function (asset) {
+            if(howlSoundInstances[asset.uuid]) return;
+
+            var audioData = asset.getData();
+
+            howlSoundInstances[asset.uuid] = new Howl({
+                src: [audioData],
+                loop: false,
+                volume: 1.0
+            });
+        });
+
+    }
+
+    function initSoundsOnFrames (project) {
+
+        project.getAllFrames().filter(function (frame) {
+            return frame.hasSound() && !frameSoundsMappings[frame.uuid];
+        }).forEach(function (frame) {
+            var howlerSound = howlSoundInstances[frame.audioAssetUUID];
+            frameSoundsMappings[frame.uuid] = howlerSound;
+            framesActiveSoundID[frame.uuid] = null;
+
+            if(window.WickEditor) {
+                generateWaveformForFrame(frame);
+            }
+        });
+
+    }
+
+    function generateWaveformForFrame (frame) {
+
+        var asset = window.wickEditor.project.library.getAsset(frame.audioAssetUUID);
+        var src = asset.getData();
+        var scwf = new SCWF();
+        scwf.generate(src, {
+            onComplete: function(png, pixels) {
+                frameWaveforms[frame.uuid] = png;
+                window.wickEditor.syncInterfaces();
+            }
+        });
+        
     }
 }

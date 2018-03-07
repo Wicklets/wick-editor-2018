@@ -65,11 +65,9 @@ var WickPlayer = function () {
         self.renderer = new WickPixiRenderer(self.canvasContainer);
         self.inputHandler = new WickPlayerInputHandler(self.canvasContainer, self.project);
         self.audioPlayer = new WickHowlerAudioPlayer(self.project);
-        self.audioPlayer.setup();
         self.audioPlayer.reloadSoundsInProject(self.project);
 
-        self.inputHandler.setup(); 
-        if(!bowser.mobile && !bowser.tablet) self.audioPlayer.setup();
+        self.inputHandler.setup();
 
         self.renderer.preloadAllAssets(self.project, function () {
             startUpdate();

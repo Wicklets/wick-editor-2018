@@ -23,7 +23,7 @@ var CanvasBackdrop = function (wickEditor, canvasContainer) {
     backdropDiv.style.position = 'absolute';
     backdropDiv.style.top = '0px';
     backdropDiv.style.left = '0px';
-    canvasContainer.appendChild(backdropDiv);
+    canvasContainer.prepend(backdropDiv);
 
     self.update = function () {
         self.updateViewTransforms();

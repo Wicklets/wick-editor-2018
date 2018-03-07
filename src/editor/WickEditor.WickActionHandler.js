@@ -950,13 +950,23 @@ var WickActionHandler = function (wickEditor) {
     registerAction('addSoundToFrame', 
         function (args) {
             args.oldAudioAssetUUID = args.frame.audioAssetUUID;
+            args.oldFrameLength = args.frame.length;
+
             args.frame.audioAssetUUID = args.asset.uuid;
             args.frame.volume = 1; 
-            
+
+            var frameLengthInSeconds = wickEditor.audioPlayer.getDurationOfSound(args.asset.uuid)
+            var frameLengthInFrames = Math.ceil(frameLengthInSeconds*wickEditor.project.framerate);
+            args.frame.length = frameLengthInFrames;
+
+            wickEditor.project.getCurrentObject().framesDirty = true;
             done(args);
         },
         function (args) {
             args.frame.audioAssetUUID = args.oldAudioAssetUUID;
+            args.frame.length = args.oldFrameLength;
+
+            wickEditor.project.getCurrentObject().framesDirty = true;
             done(args);
         });
 

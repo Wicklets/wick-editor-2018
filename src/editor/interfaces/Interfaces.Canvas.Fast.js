@@ -19,10 +19,7 @@ var FastCanvas = function (wickEditor) {
 
 	var self = this;
 
-    var fastRenderer;
     var canvasContainer;
-
-    var audioPlayer;
 
     var fastRenderIntervalID;
     var previewPlayIntervalID;
@@ -34,18 +31,11 @@ var FastCanvas = function (wickEditor) {
         fastRendering = false;
         previewPlaying = false;
 
-        canvasContainer = document.createElement('div');
-        canvasContainer.id = 'previewRenderContainer';
-        canvasContainer.style.width = wickEditor.project.width+'px';
-        canvasContainer.style.height = wickEditor.project.height+'px';
-        document.getElementById('editorCanvasContainer').appendChild(canvasContainer);
-        fastRenderer = new WickPixiRenderer(canvasContainer);
-        audioPlayer = new WickHowlerAudioPlayer(wickEditor.project);
-        audioPlayer.setup();
+        canvasContainer = document.getElementById('previewRenderContainer');
     }
 
     this.update = function () {
-        audioPlayer.reloadSoundsInProject(wickEditor.project);
+        wickEditor.audioPlayer.reloadSoundsInProject(wickEditor.project);
 
         updateCanvasTransforms();
         canvasContainer.style.display = 'block';
@@ -56,11 +46,11 @@ var FastCanvas = function (wickEditor) {
             var onionSkinObjects = wickEditor.project.currentObject.getNearbyObjects(1,1);
             inactiveObjects = inactiveObjects.concat(onionSkinObjects);
         }
-        fastRenderer.renderWickObjects(wickEditor.project, inactiveObjects, 2);
+        wickEditor.fastRenderer.renderWickObjects(wickEditor.project, inactiveObjects, 2);
     }
 
     this.startFastRendering = function () {
-        fastRenderer.reorderAllObjects(wickEditor.project)
+        wickEditor.fastRenderer.reorderAllObjects(wickEditor.project)
 
         clearInterval(fastRenderIntervalID);
         
@@ -75,7 +65,7 @@ var FastCanvas = function (wickEditor) {
             renderObjects.forEach(function (o) {
                 o._renderAsBGObject = false;
             });
-            fastRenderer.renderWickObjects(wickEditor.project, renderObjects, 2);
+            wickEditor.fastRenderer.renderWickObjects(wickEditor.project, renderObjects, 2);
         }
 
         proceed();
@@ -101,10 +91,10 @@ var FastCanvas = function (wickEditor) {
             currObj.playheadPosition = 0;
         }
 
-        audioPlayer.reloadSoundsInProject(wickEditor.project);
+        wickEditor.audioPlayer.reloadSoundsInProject(wickEditor.project);
         currObj.getActiveFrames().forEach(function (frame) {
             if(frame.hasSound() && frame.playheadPosition !== currObj.playheadPosition)
-                audioPlayer.playSoundOnFrame(frame);
+                wickEditor.audioPlayer.playSoundOnFrame(frame);
         });
 
         function proceed () {
@@ -112,9 +102,9 @@ var FastCanvas = function (wickEditor) {
             currObj.getAllFrames().forEach(function (frame) {
                 if(frame.hasSound()) { 
                     if(frame.playheadPosition === currObj.playheadPosition) {
-                        audioPlayer.playSoundOnFrame(frame);
+                        wickEditor.audioPlayer.playSoundOnFrame(frame);
                     } else if (frame.playheadPosition+frame.length === currObj.playheadPosition) {
-                        audioPlayer.stopSoundOnFrame(frame);
+                        wickEditor.audioPlayer.stopSoundOnFrame(frame);
                     }
                 }
             });
@@ -124,7 +114,7 @@ var FastCanvas = function (wickEditor) {
             if(currObj.playheadPosition >= currObj.getTotalTimelineLength()) {
                 if(loop) {
                     currObj.playheadPosition = 0;
-                    audioPlayer.stopAllSounds()
+                    wickEditor.audioPlayer.stopAllSounds()
                 } else {
                     currObj.playheadPosition -= 1;
                     self.stopPreviewPlaying();
@@ -141,7 +131,7 @@ var FastCanvas = function (wickEditor) {
     this.stopPreviewPlaying = function () {
         previewPlaying = false;
         self.stopFastRendering();
-        audioPlayer.stopAllSounds();
+        wickEditor.audioPlayer.stopAllSounds();
 
         clearInterval(previewPlayIntervalID);
 
@@ -158,7 +148,7 @@ var FastCanvas = function (wickEditor) {
 
     this.getRenderer = function () {
         return {
-            renderer: fastRenderer,
+            renderer: wickEditor.fastRenderer,
             canvasContainer: canvasContainer
         };
     }
@@ -168,7 +158,7 @@ var FastCanvas = function (wickEditor) {
     }
 
     this.getWaveformForFrameSound = function (frame) {
-        return audioPlayer.getWaveformOfFrame(frame)
+        return wickEditor.audioPlayer.getWaveformOfFrame(frame)
     }
 
     function updateCanvasTransforms () {

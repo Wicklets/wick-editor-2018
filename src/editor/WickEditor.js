@@ -37,6 +37,10 @@ var WickEditor = function () {
     // Load settings
     this.settings = new WickEditorSettings();
 
+    // Load audio player and renderer
+    this.fastRenderer = new WickPixiRenderer(document.getElementById('previewRenderContainer'));
+    this.audioPlayer = new WickHowlerAudioPlayer(this.project);
+
     // Load all interfaces
     this.interfaces = [];
     function registerInterface (interface) {
