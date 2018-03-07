@@ -65,6 +65,8 @@ var WickPlayer = function () {
         self.renderer = new WickPixiRenderer(self.canvasContainer);
         self.inputHandler = new WickPlayerInputHandler(self.canvasContainer, self.project);
         self.audioPlayer = new WickHowlerAudioPlayer(self.project);
+        self.audioPlayer.setup();
+        self.audioPlayer.reloadSoundsInProject(self.project);
 
         self.inputHandler.setup(); 
         if(!bowser.mobile && !bowser.tablet) self.audioPlayer.setup();
@@ -125,12 +127,29 @@ var WickPlayer = function () {
                     }
                 }
             });
-            self.renderer.renderWickObjects(self.project, self.project.rootObject.getAllActiveChildObjects(), null, true);
+            var activeObjs = self.project.rootObject.getAllActiveChildObjects();
+            self.renderer.renderWickObjects(self.project, activeObjs, null, true);
+            
+            checkForSounds();
+
             self.inputHandler.update();
         }
 
         if(stats) stats.end();
 
+    }
+
+    function checkForSounds () {
+        self.project.getAllFrames().forEach(function (frame) {
+            if(frame._wantsToPlaySound) {
+                self.audioPlayer.playSoundOnFrame(frame);
+                frame._wantsToPlaySound = false;
+            }
+            if(frame._wantsToStopSound) {
+                self.audioPlayer.stopSoundOnFrame(frame);
+                frame._wantsToStopSound = false;
+            }
+        });
     }
 
     self.cloneObject = function (wickObj, args) {

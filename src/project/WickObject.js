@@ -455,6 +455,22 @@ WickObject.prototype.updateFrameTween = function (relativePlayheadPosition) {
     }
 }
 
+WickObject.prototype.getActiveFrames = function () {
+    if(!this.isSymbol) {
+        return [];
+    }
+    
+    var activeFrames = [];
+
+    this.layers.forEach(function (layer) {
+        var frame = layer.getCurrentFrame();
+        if(frame)
+            activeFrames.push(frame);
+    });
+
+    return activeFrames;
+}
+
 /* Return all child objects of a parent object */
 WickObject.prototype.getAllChildObjects = function () {
 
@@ -1173,7 +1189,11 @@ WickObject.prototype.tick = function () {
                 (wickPlayer || wickEditor).project.runScript(this, 'load');
                 (wickPlayer || wickEditor).project.runScript(this, 'update');
 
-                if(this._newPlayheadPosition!==undefined) this.playheadPosition = this._newPlayheadPosition;
+                this._wantsToPlaySound = true;
+
+                if(this._newPlayheadPosition !== undefined) {
+                    this._oldPlayheadPosition = this.playheadPosition;
+                }
             }
             // Active -> Active
             else if (this._wasActiveLastTick && this._active) {
@@ -1181,6 +1201,8 @@ WickObject.prototype.tick = function () {
             }
             // Active -> Inactive
             else if (this._wasActiveLastTick && !this._active) {
+                this._wantsToStopSound = true;
+
                 if(!this.parentFrame.alwaysSaveState) {
                     wickPlayer.resetStateOfObject(this);
                 }
@@ -1194,12 +1216,9 @@ WickObject.prototype.tick = function () {
         
             this.currentFrameNumber = this.playheadPosition+1;
             var self = this;
-            this.layers.forEach(function (layer) {
-                var frame = layer.getCurrentFrame();
-                if(frame && frame.name) {
-                    self.currentFrameName = frame.name;
-                }
-            })
+            this.getActiveFrames().forEach(function (frame) {
+                self.currentFrameName = frame.name;
+            });
         }
     }
 

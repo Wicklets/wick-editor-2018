@@ -527,7 +527,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         isActiveFn: function () {
                 return selectionInfo.type === 'frame' 
                 && selectionInfo.numObjects === 1 
-                && selectionInfo.object.audioAssetUUID
+                && selectionInfo.object.hasSound()
         },
         getValueFn: function () {
             return selectionInfo.object.volume; 

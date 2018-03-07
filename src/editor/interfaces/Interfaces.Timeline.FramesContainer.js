@@ -309,39 +309,24 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
             nameDiv.innerHTML = '';
         }
 
-        if(this.wickFrame.audioAssetUUID) {
+        if(this.wickFrame.hasSound()) {
             thumbnailDiv.style.display = 'none';
             waveformDiv.style.display = 'block';
-            if(this.wickFrame.audioAssetUUID) {
+            if(this.wickFrame.hasSound()) {
                 if(!this.wickFrame._soundDataForPreview) {
                     self.wickFrame._soundDataForPreview = {};
                     var canvas = document.createElement('canvas');
                     canvas.width = 600;
                     canvas.height = 40;
-                    var asset = wickEditor.project.library.getAsset(this.wickFrame.audioAssetUUID);
-                    var src = asset.getData();
-                    var scwf = new SCWF();
-                    scwf.generate(src, {
-                        onComplete: function(png, pixels) {
-                            self.wickFrame._soundDataForPreview.waveform = png;
-                        }
-                    });
-                    this.wickFrame._soundDataForPreview.howl = new Howl({
-                        src: [src],
-                        loop: false,
-                        volume: 1.0,
-                        onend:  function(id) { return;self.onSoundEnd(id); },
-                        onStop: function(id) { return;self.onSoundStop(id); },
-                        onPlay: function(id) { return;self.onSoundPlay(id); }
-                    });
                     //self.wickFrame._soundDataForPreview.howl.play();
                 } else {
-                    if(self.wickFrame._soundDataForPreview.howl._sprite.__default) {
-                        waveformDiv.src = self.wickFrame._soundDataForPreview.waveform;
+                    var waveform = wickEditor.canvas.getFastCanvas().getWaveformForFrameSound(self.wickFrame)
+                    if(waveform) {
+                        waveformDiv.src = waveform.src;
                         var baseWidth = 200*(12.0/10.0);
                         var waveformWidth = baseWidth;
                         waveformWidth = waveformWidth/(12.0/wickEditor.project.framerate);
-                        waveformWidth = waveformWidth * (self.wickFrame._soundDataForPreview.howl._sprite.__default[1]/1000.0)
+                        waveformWidth = waveformWidth * (waveform.length)
                         waveformDiv.style.width = waveformWidth + 'px';
                     }
                 }

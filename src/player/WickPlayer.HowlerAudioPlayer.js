@@ -15,83 +15,112 @@
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
 
-var WickHowlerAudioPlayer = function (project) {
+var WickHowlerAudioPlayer = function () {
 
     var self = this;
 
-    var sounds = {};
+    var howlSoundInstances = {};
+    var frameSoundsMappings = {};
+    var frameWaveforms = {};
+    var framesActiveSoundID = {};
 
     var muted;
 
-    self.setup = function () {
+    var projectFramerateForSeekAmt;
 
+    self.setup = function () {
         muted = false;
+    }
+
+    self.reloadSoundsInProject = function (project) {
+        projectFramerateForSeekAmt = project.framerate;
 
         project.library.getAllAssets('audio').forEach(function (asset) {
+            if(howlSoundInstances[asset.uuid]) return;
+
             var audioData = asset.getData();
 
-            sounds[asset.uuid] = new Howl({
+            howlSoundInstances[asset.uuid] = new Howl({
                 src: [audioData],
                 loop: false,
-                volume: 1.0,
-                onend: function(id) { self.onSoundEnd(id); },
-                onStop: function(id) { self.onSoundStop(id); },
-                onPlay: function(id) { self.onSoundPlay(id); }
+                volume: 1.0
             });
         });
 
-    }
+        project.getAllFrames().filter(function (frame) {
+            return frame.hasSound() && !frameSoundsMappings[frame.uuid];
+        }).forEach(function (frame) {
+            var howlerSound = howlSoundInstances[frame.audioAssetUUID];
+            frameSoundsMappings[frame.uuid] = howlerSound;
+            framesActiveSoundID[frame.uuid] = null;
 
-    self.makeSound = function (assetUUID, objLoop, objVolume) {
-        var asset = project.library.getAsset(assetUUID);
-        if (!asset) return; 
-        var audioData = asset.getData();
-
-        howl = new Howl({
-            src: [audioData],
-            loop: objLoop,
-            volume: objVolume,
-            onend: function(id) { self.onSoundEnd(id); },
-            onStop: function(id) { self.onSoundStop(id); },
-            onPlay: function(id) { self.onSoundPlay(id); }
+            if(window.WickEditor) {
+                var asset = wickEditor.project.library.getAsset(frame.audioAssetUUID);
+                var src = asset.getData();
+                var scwf = new SCWF();
+                scwf.generate(src, {
+                    onComplete: function(png, pixels) {
+                        frameWaveforms[frame.uuid] = png;
+                        window.wickEditor.syncInterfaces();
+                    }
+                });
+            }
         });
-
-        return howl;
     }
 
-    self.playSound = function (assetUUID) {
-        if(muted) return;
-        if(!sounds[assetUUID]) return;
-        var howlerID = sounds[assetUUID].play();
-    }
-
-    // TODO : Do this only for playing sounds
-    this.stopAllSounds = function () {
-        for (var sound in sounds) {
-            sounds[sound].stop();
+    self.playSoundFromLibrary = function (asset) {
+        if(!muted) {
+            var howlerSound = howlSoundInstances[asset.uuid];
+            var howlerID = howlerSound.play();
         }
     }
 
-    self.cleanup = function () {
-
+    self.playSoundOnFrame = function (frame) {
+        if(!muted) {
+            var howlerSound = frameSoundsMappings[frame.uuid];
+            var howlerID = howlerSound.play();
+            
+            var seekAmtFrames = frame.parentObject.playheadPosition - frame.playheadPosition;
+            var seekAmtSeconds = seekAmtFrames / projectFramerateForSeekAmt;
+            howlerSound.volume(frame.volume);
+            howlerSound.seek(seekAmtSeconds, howlerID);
+            framesActiveSoundID[frame.uuid] = howlerID;
+        }
     }
 
-    self.onSoundEnd = function (howlid) {
-
+    self.stopSoundOnFrame = function (frame) {
+        if(!muted) {
+            var howlerSound = frameSoundsMappings[frame.uuid];
+            var howlerID = framesActiveSoundID[frame.uuid];
+            howlerSound.stop(howlerID);
+        }
     }
 
-    self.onSoundStop = function (howlid) {
-
+    this.stopAllSounds = function () {
+        for(uuid in howlSoundInstances) {
+            howlSoundInstances[uuid].stop();
+        }
     }
 
-    self.onSoundPlay = function (howlid) {
-
+    this.cleanup = function () {
+        // todo
     }
+
+    this.getWaveformOfFrame = function (frame) {
+        if(frameWaveforms[frame.uuid]) {
+            return {
+                src: frameWaveforms[frame.uuid],
+                length: frameSoundsMappings[frame.uuid].duration()
+            }
+        }
+    }
+
+    /* Wick player API functions */
 
     window.playSound = function (assetFilename) {
-        var asset = project.library.getAssetByName(assetFilename);
+        var asset = (wickPlayer || wickEditor).project.library.getAssetByName(assetFilename);
         if(asset) {
-            self.playSound(asset.uuid);
+            self.playSoundFromLibrary(asset);
         }
     }
 
@@ -107,5 +136,4 @@ var WickHowlerAudioPlayer = function (project) {
     window.unmute = function () {
         muted = false;
     }
-
 }

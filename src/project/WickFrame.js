@@ -42,51 +42,50 @@ var WickFrame = function () {
     // The layer that this frame belongs to
     this.parentLayer = null;
 
-    // Set all scripts to defaults
-    //this.wickScript = "function load() {\n\t\n}\n\nfunction update() {\n\t\n}\n";
+    // Set script to default
     this.wickScript = "";
+
+    this.audioAssetUUID = null;
 };
     
 WickFrame.prototype.tick = function () {
     var self = this;
     
-    if(this.wickScript !== '' || this.audioAssetUUID) {
-        // Inactive -> Inactive
-        // Do nothing, frame is still inactive
-        if (!this._wasActiveLastTick && !this._active) {
+    // Inactive -> Inactive
+    // Do nothing, frame is still inactive
+    if (!this._wasActiveLastTick && !this._active) {
 
+    }
+    // Inactive -> Active
+    // Frame just became active! It's fresh!
+    else if (!this._wasActiveLastTick && this._active) {
+        if(this.hasScript()) {
+            (wickPlayer || wickEditor).project.initScript(this);
+            
+            (wickPlayer || wickEditor).project.runScript(this, 'load');
+            (wickPlayer || wickEditor).project.runScript(this, 'update');
         }
-        // Inactive -> Active
-        // Frame just became active! It's fresh!
-        else if (!this._wasActiveLastTick && this._active) {
-            if(this.wickScript !== '') {
-                (wickPlayer || wickEditor).project.initScript(this);
-                
-                (wickPlayer || wickEditor).project.runScript(this, 'load');
-                (wickPlayer || wickEditor).project.runScript(this, 'update');
-            }
 
-            if (this.audioAssetUUID) {
-                this._updateAudio();
-                this._playSound(); 
-            }
+        if(this.hasSound()) {
+            this._wantsToPlaySound = true;
+        }
+    }
+    // Active -> Active
+    // Frame is still active!
+    else if (this._wasActiveLastTick && this._active) {
+        if(this.hasScript()) {
+            (wickPlayer || wickEditor).project.runScript(this, 'update');
+        }
+    }    
+    // Active -> Inactive
+    // Frame just stopped being active. Clean up!
+    else if (this._wasActiveLastTick && !this._active) {
+        if(this.hasSound()) {
+            this._wantsToStopSound = true;
+        }
+    }
 
-        }
-        // Active -> Active
-        // Frame is active!
-        else if (this._wasActiveLastTick && this._active) {
-            if(this.wickScript !== '') {
-                (wickPlayer || wickEditor).project.runScript(this, 'update');
-            }
-        }    
-        // Active -> Inactive
-        // Frame just stopped being active. Clean up!
-        else if (this._wasActiveLastTick && !this._active) {
-            if (this.audioAssetUUID) {
-                this._stopSound();
-            }
-        }
-        
+    if(this.hasScript()) {
         if(this._wasClicked) {
             (wickPlayer || wickEditor).project.runScript(this, 'mousePressed');
             this._wasClicked = false;
@@ -451,27 +450,6 @@ WickFrame.prototype.applyTween = function () {
 
 }
 
-WickFrame.prototype._updateAudio = function () {
-    // Lazily create sound objects
-    if (!this.howl) {
-        if(window.wickPlayer) {
-            this.howl = wickPlayer.audioPlayer.makeSound(this.audioAssetUUID); 
-        } else {
-            this.howl = new Howl({
-                src: [wickEditor.project.library.getAsset(this.audioAssetUUID).getData()]
-            });
-        }
-    }
+WickFrame.prototype.hasSound = function () {
+    return this.audioAssetUUID;
 }
-
-WickFrame.prototype._playSound = function () {
-    if (this.volume) {
-        this.howl.volume(this.volume);
-    }
-    var howlerID = this.howl.play(); 
-}
-
-WickFrame.prototype._stopSound = function () {
-    this.howl.stop(); 
-}
-
