@@ -93,8 +93,9 @@ var FastCanvas = function (wickEditor) {
 
         wickEditor.audioPlayer.reloadSoundsInProject(wickEditor.project);
         currObj.getActiveFrames().forEach(function (frame) {
-            if(frame.hasSound() && frame.playheadPosition !== currObj.playheadPosition)
+            if(frame.hasSound() && frame.playheadPosition !== currObj.playheadPosition) {
                 wickEditor.audioPlayer.playSoundOnFrame(frame);
+            }
         });
 
         function proceed () {

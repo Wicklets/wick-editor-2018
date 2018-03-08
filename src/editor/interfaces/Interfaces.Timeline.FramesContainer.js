@@ -205,6 +205,8 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
 
             if(e.button === 2)
                 wickEditor.rightclickmenu.openMenu();
+            else
+                wickEditor.rightclickmenu.closeMenu();
 
             if(!wickEditor.project.isObjectSelected(self.wickFrame)) {
                 if(!e.shiftKey) wickEditor.project.clearSelection();
@@ -389,6 +391,12 @@ TimelineInterface.Tween = function (wickEditor, timeline) {
         self.elem.className = 'tween';
 
         self.elem.addEventListener('mousedown', function (e) {
+
+            if(e.button === 2)
+                wickEditor.rightclickmenu.openMenu();
+            else
+                wickEditor.rightclickmenu.closeMenu();
+
             //console.log(e)
             e.stopPropagation();
 
@@ -480,7 +488,7 @@ TimelineInterface.FramesStrip = function (wickEditor, timeline) {
 
             var playheadPosition = Math.round((e.clientX - timeline.framesContainer.elem.getBoundingClientRect().left - cssVar('--frame-width')/2 - 9) / cssVar('--frame-width'));
 
-            if(wickEditor.library.isDraggingAsset()) { 
+            /*if(wickEditor.library.isDraggingAsset()) { 
                 var asset = wickEditor.library.getSelectedAsset(); 
 
                 if (asset.type == 'audio') {
@@ -490,7 +498,7 @@ TimelineInterface.FramesStrip = function (wickEditor, timeline) {
                     });
                 }
                 return; 
-            }
+            }*/
             
 
             if (playheadPosition < 0) return; // You're behind position 0!

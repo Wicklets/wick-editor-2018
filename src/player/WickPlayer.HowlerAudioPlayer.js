@@ -44,9 +44,14 @@ var WickHowlerAudioPlayer = function () {
 
     self.playSoundOnFrame = function (frame) {
         if(!muted) {
+            if(framesActiveSoundID[frame.uuid]) {
+                framesActiveSoundID[frame.uuid] = null;
+                self.stopSoundOnFrame(frame);
+            }
+
             var howlerSound = frameSoundsMappings[frame.uuid];
             var howlerID = howlerSound.play();
-            
+
             var seekAmtFrames = frame.parentObject.playheadPosition - frame.playheadPosition;
             var seekAmtSeconds = seekAmtFrames / projectFramerateForSeekAmt;
             howlerSound.volume(frame.volume);
@@ -60,12 +65,16 @@ var WickHowlerAudioPlayer = function () {
             var howlerSound = frameSoundsMappings[frame.uuid];
             var howlerID = framesActiveSoundID[frame.uuid];
             howlerSound.stop(howlerID);
+            framesActiveSoundID[frame.uuid] = null;
         }
     }
 
     this.stopAllSounds = function () {
         for(uuid in howlSoundInstances) {
             howlSoundInstances[uuid].stop();
+        }
+        for(uuid in frameSoundsMappings) {
+            frameSoundsMappings[uuid].stop();
         }
     }
 

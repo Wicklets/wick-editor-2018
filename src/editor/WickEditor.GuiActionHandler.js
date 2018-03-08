@@ -982,27 +982,6 @@ var GuiActionHandler = function (wickEditor) {
             });
         });
 
-    registerAction('extendFrame',
-        ['SHIFT', 'Period'],
-        'Extend Frame',
-        {},
-        function(args) {
-            var frame = wickEditor.project.getCurrentFrame();
-            if(!frame) {
-                var frames = wickEditor.project.currentObject.getCurrentLayer().frames;
-                frame = frames[frames.length - 1];
-            }
-
-            var frameEndingIndex = frame.playheadPosition + frame.length - 1;
-
-            var framesToExtend = wickEditor.project.currentObject.playheadPosition - frameEndingIndex;
-
-            wickEditor.actionHandler.doAction('extendFrame', {
-                nFramesToExtendBy: Math.max(1, framesToExtend),
-                frame: frame
-            });
-        });
-
     registerAction('shrinkFrame',
         ['SHIFT', 'Comma'],
         'Shrink Frame',

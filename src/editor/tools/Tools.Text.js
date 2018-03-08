@@ -38,7 +38,7 @@ Tools.Text = function (wickEditor) {
     }
 
     this.onSelected = function () {
-        //wickEditor.project.clearSelection();
+        wickEditor.project.clearSelection();
         wickEditor.inspector.clearSpecialMode();
         wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
     }
@@ -71,7 +71,6 @@ Tools.Text = function (wickEditor) {
                 addText(ms.x, ms.y);
             } else {
                 wickEditor.syncInterfaces();
-                console.log("bleh")
             }
 
         }

@@ -1188,12 +1188,6 @@ WickObject.prototype.tick = function () {
 
                 (wickPlayer || wickEditor).project.runScript(this, 'load');
                 (wickPlayer || wickEditor).project.runScript(this, 'update');
-
-                this._wantsToPlaySound = true;
-
-                if(this._newPlayheadPosition !== undefined) {
-                    this._oldPlayheadPosition = this.playheadPosition;
-                }
             }
             // Active -> Active
             else if (this._wasActiveLastTick && this._active) {
@@ -1201,8 +1195,6 @@ WickObject.prototype.tick = function () {
             }
             // Active -> Inactive
             else if (this._wasActiveLastTick && !this._active) {
-                this._wantsToStopSound = true;
-
                 if(!this.parentFrame.alwaysSaveState) {
                     wickPlayer.resetStateOfObject(this);
                 }

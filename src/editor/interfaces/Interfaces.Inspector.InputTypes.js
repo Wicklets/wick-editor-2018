@@ -30,8 +30,11 @@ InspectorInterface.StringInput = function (args) {
     self.valueDiv;
     self.getPropertyDiv = function () {
         var title = document.createElement('span');
-        title.className = "inspector-input-title tooltipElem";
-        title.setAttribute('alt', args.tooltip);
+        title.className = "inspector-input-title";
+        if(args.tooltip) {
+            title.className += ' tooltipElem';
+            title.setAttribute('alt', args.tooltip);
+        }
         title.innerHTML = args.title;
 
         self.valueDiv = document.createElement('input');
@@ -172,8 +175,11 @@ InspectorInterface.TwoStringInput = function (args) {
     self.rightValueDiv;
     self.getPropertyDiv = function () {
         var title = document.createElement('span');
-        title.className = "inspector-input-title tooltipElem";
-        title.setAttribute('alt', args.tooltip);
+        title.className = "inspector-input-title";
+        if(args.tooltip) {
+            title.className += ' tooltipElem';
+            title.setAttribute('alt', args.tooltip);
+        }
         title.innerHTML = args.title;
 
         self.leftValueDiv = document.createElement('input');
@@ -183,8 +189,11 @@ InspectorInterface.TwoStringInput = function (args) {
         }
 
         var otherTitle = document.createElement('span');
-        otherTitle.className = "inspector-input-title inspector-input-title-small tooltipElem";
-        otherTitle.setAttribute('alt', args.otherTooltip);
+        otherTitle.className = "inspector-input-title inspector-input-title-small";
+        if(args.otherTooltip) {
+            otherTitle.className += ' tooltipElem';
+            otherTitle.setAttribute('alt', args.otherTooltip);
+        }
         otherTitle.innerHTML = args.otherTitle;
 
         self.rightValueDiv = document.createElement('input');

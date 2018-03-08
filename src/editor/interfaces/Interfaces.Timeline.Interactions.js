@@ -397,6 +397,7 @@ TimelineInterface.Interactions = function (wickEditor, timeline) {
     var timelineOffset = 186;
     interactions['dragPlayhead'] = {
         'start' : (function (e) {
+            wickEditor.canvas.getFastCanvas().stopPreviewPlaying();
             var shift = -timeline.horizontalScrollBar.getScrollPosition();
             timeline.playhead.setPosition(e.pageX-timelineOffset-shift);
             wickEditor.project.getCurrentObject().playheadPosition = timeline.playhead.getFramePosition();

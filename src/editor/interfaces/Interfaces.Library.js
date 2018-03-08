@@ -98,6 +98,12 @@ var LibraryInterface = function (wickEditor) {
                     frame: e.target.wickData.wickFrame,
                     asset: self.getSelectedAsset()
                 });
+            } else if(e.target.nodeName === 'CANVAS' && self.getSelectedAsset().type === 'image') {
+                wickEditor.guiActionHandler.doAction("createObjectFromAsset", {
+                    asset: self.getSelectedAsset(),
+                    x: e.x,
+                    y: e.y
+                });
             }
             isDraggingAsset = false; 
         });
