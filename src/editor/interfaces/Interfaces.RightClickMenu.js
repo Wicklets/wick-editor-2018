@@ -177,7 +177,7 @@ var RightClickMenuInterface = function (wickEditor) {
         buttons.push(new RightClickMenuButtonGroup([
             new RightClickMenuButton(
                 "Add Frame", 
-                'url(./resources/todo.svg)', 
+                'url(./resources/inspector-duplicate.svg)', 
                 function () { wickEditor.actionHandler.doAction('addNewFrame'); }),
             ], function () {return wickEditor.project.getSelectedObjects().length < 1 && timelineMode && !wickEditor.library.isSelected()}, false ));
 

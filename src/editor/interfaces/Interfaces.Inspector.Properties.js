@@ -838,64 +838,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.Divider());
 
     properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Add Keyframe",
-        icon: "./resources/todo.svg",
-        colorClass: 'tweens',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 
-                && selectionInfo.dataType === 'frame'
-                && !selectionInfo.object.getCurrentTween();
-        },
-        buttonAction: function () {
-            wickEditor.guiActionHandler.doAction('createMotionTween');
-        }
-    }));
-
-    properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Paste Keyframe",
-        icon: "./resources/todo.svg",
-        colorClass: 'tweens',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 
-                && selectionInfo.dataType === 'frame'
-                && !selectionInfo.object.getCurrentTween();
-        },
-        buttonAction: function () {
-            wickEditor.guiActionHandler.doAction('deleteMotionTween');
-        }
-    }));
-
-    properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Copy Keyframe",
-        icon: "./resources/todo.svg",
-        colorClass: 'tweens',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 
-                && selectionInfo.dataType === 'frame'
-                && selectionInfo.object.getCurrentTween();
-        },
-        buttonAction: function () {
-            wickEditor.guiActionHandler.doAction('deleteMotionTween');
-        }
-    }));
-
-    properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Delete Keyframe",
-        icon: "./resources/todo.svg",
-        colorClass: 'tweens',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 
-                && selectionInfo.dataType === 'frame'
-                && selectionInfo.object.getCurrentTween();
-        },
-        buttonAction: function () {
-            wickEditor.guiActionHandler.doAction('deleteMotionTween');
-        }
-    }));
-
-    properties.push(new InspectorInterface.Divider());
-
-    properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Clone Frame",
         icon: "./resources/inspector-duplicate.svg",
         colorClass: 'frames',
@@ -923,7 +865,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
 
     properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Extend Frame to Playhead",
-        icon: "./resources/todo.svg",
+        icon: "./resources/inspector-edit-timeline.svg",
         colorClass: 'frames',
         isActiveFn: function () {
             return selectionInfo.numObjects > 0 
@@ -944,6 +886,64 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         },
         buttonAction: function () {
             wickEditor.guiActionHandler.doAction("editScripts");
+        }
+    }));
+
+    properties.push(new InspectorInterface.Divider());
+
+    properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Add Keyframe",
+        icon: "./resources/add-tween.png",
+        colorClass: 'tweens',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 
+                && selectionInfo.dataType === 'frame'
+                && !selectionInfo.object.getCurrentTween();
+        },
+        buttonAction: function () {
+            wickEditor.guiActionHandler.doAction('createMotionTween');
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Paste Keyframe",
+        icon: "./resources/paste-tween.png",
+        colorClass: 'tweens',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 
+                && selectionInfo.dataType === 'frame'
+                && !selectionInfo.object.getCurrentTween();
+        },
+        buttonAction: function () {
+            wickEditor.guiActionHandler.doAction('deleteMotionTween');
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Copy Keyframe",
+        icon: "./resources/copy-tween.png",
+        colorClass: 'tweens',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 
+                && selectionInfo.dataType === 'frame'
+                && selectionInfo.object.getCurrentTween();
+        },
+        buttonAction: function () {
+            wickEditor.guiActionHandler.doAction('deleteMotionTween');
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Delete Keyframe",
+        icon: "./resources/delete-tween.png",
+        colorClass: 'tweens',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 
+                && selectionInfo.dataType === 'frame'
+                && selectionInfo.object.getCurrentTween();
+        },
+        buttonAction: function () {
+            wickEditor.guiActionHandler.doAction('deleteMotionTween');
         }
     }));
 
