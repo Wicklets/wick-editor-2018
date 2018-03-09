@@ -48,7 +48,8 @@ TimelineInterface.FramesContainer = function (wickEditor, timeline) {
             wickEditor.project.clearSelection();
             if(e.button === 2) {
                 var layer = wickEditor.project.getCurrentLayer();
-                var frame = layer.getLastFrame(wickEditor.project.getCurrentObject().playheadPosition);
+                //var frame = layer.getLastFrame(wickEditor.project.getCurrentObject().playheadPosition);
+                var frame = layer.getFrameAtPlayheadPosition(wickEditor.project.getCurrentObject().playheadPosition)
                 if(frame) wickEditor.project.selectObject(frame);
                 wickEditor.syncInterfaces();
             }
@@ -204,7 +205,7 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
         this.elem.addEventListener('mousedown', function (e) {
 
             if(e.button === 2)
-                wickEditor.rightclickmenu.openMenu();
+                wickEditor.rightclickmenu.openMenu(null, true);
             else
                 wickEditor.rightclickmenu.closeMenu();
 
@@ -393,7 +394,7 @@ TimelineInterface.Tween = function (wickEditor, timeline) {
         self.elem.addEventListener('mousedown', function (e) {
 
             if(e.button === 2)
-                wickEditor.rightclickmenu.openMenu();
+                wickEditor.rightclickmenu.openMenu(null, true);
             else
                 wickEditor.rightclickmenu.closeMenu();
 

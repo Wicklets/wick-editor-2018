@@ -22,6 +22,7 @@ var RightClickMenuInterface = function (wickEditor) {
     var menu;
 
     var enabled = true;
+    var timelineMode = false;
 
 // menu object definitions
 
@@ -59,6 +60,7 @@ var RightClickMenuInterface = function (wickEditor) {
                         return;
                     }
                     self.open = true;
+                    timelineMode = e.target.className.includes('frame');
                 } else {
                     self.open = false;
                 }
@@ -172,6 +174,13 @@ var RightClickMenuInterface = function (wickEditor) {
     self.setup = function () {
         var buttons = []
 
+        buttons.push(new RightClickMenuButtonGroup([
+            new RightClickMenuButton(
+                "Add Frame", 
+                'url(./resources/todo.svg)', 
+                function () { wickEditor.actionHandler.doAction('addNewFrame'); }),
+            ], function () {return wickEditor.project.getSelectedObjects().length < 1 && timelineMode && !wickEditor.library.isSelected()}, false ));
+
         wickEditor.inspector.getButtons().forEach(function (button) {
             var group = new RightClickMenuButtonGroup([
                 new RightClickMenuButton(button.name, button.icon, button.buttonAction),
@@ -185,30 +194,35 @@ var RightClickMenuInterface = function (wickEditor) {
                 'url(./resources/copy.svg)', 
                 function () { wickEditor.guiActionHandler.doAction("copy") }),
             ], function () {return !wickEditor.library.isSelected()}, false ));
+
         buttons.push(new RightClickMenuButtonGroup([
             new RightClickMenuButton(
                 "Cut", 
                 'url(./resources/cut.svg)', 
                 function () { wickEditor.guiActionHandler.doAction("cut") }),
             ], function () {return !wickEditor.library.isSelected()}, false ));
+
         buttons.push(new RightClickMenuButtonGroup([
             new RightClickMenuButton(
                 "Paste", 
                 'url(./resources/paste.svg)', 
                 function () { wickEditor.guiActionHandler.doAction("paste") }),
             ], function () {return !wickEditor.library.isSelected()}, false ));
+
         /*buttons.push(new RightClickMenuButtonGroup([
             new RightClickMenuButton(
                 "Create Object from Asset", 
                 'url(./resources/inspector-duplicate.svg)', 
                 function () { wickEditor.guiActionHandler.doAction("createObjectFromAsset") }),
             ], function () {return wickEditor.library.isSelected()}, true ));*/
+
         buttons.push(new RightClickMenuButtonGroup([
             new RightClickMenuButton(
                 "Delete Asset", 
                 'url(./resources/delete-layer.svg)', 
                 function () { wickEditor.guiActionHandler.doAction("deleteAsset") }),
             ], function () {return wickEditor.library.isSelected()}, true ));
+
         buttons.push(new RightClickMenuButtonGroup([
             new RightClickMenuButton(
                 "Rename Asset", 
@@ -225,8 +239,9 @@ var RightClickMenuInterface = function (wickEditor) {
         menu.updateElem();
     }
 
-    self.openMenu = function (specialMode) {
+    self.openMenu = function (specialMode, _timelineMode) {
         if(!enabled) return;
+        timelineMode = _timelineMode;
         menu.open = true;
         self.syncWithEditorState();
     }

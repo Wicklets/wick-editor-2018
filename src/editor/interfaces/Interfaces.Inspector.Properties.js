@@ -518,6 +518,57 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
+    properties.push(new InspectorInterface.SelectInput({
+        title: '<img src="resources/inspector-icons/sound.svg" class="inspector-icon"/>',
+        tooltip: 'Sound',
+        optionsFn: function () {
+            var audioAssetFilenames = wickEditor.project.library.getAllAssets().filter(function (asset) {
+                return asset.type === 'audio';
+            }).map(function (asset) {
+                return asset.filename;
+            });
+            return ['None'].concat(audioAssetFilenames);
+        },
+        isActiveFn: function () {
+            return selectionInfo.type === 'frame' 
+                && selectionInfo.numObjects === 1;
+        },
+        getValueFn: function () {
+            if(selectionInfo.object.hasSound()) {
+                return wickEditor.project.library.getAsset(selectionInfo.object.audioAssetUUID).filename; 
+            } else {
+                return 'None'
+            }
+        },
+        onChangeFn: function (val) {
+            wickEditor.actionHandler.doAction('addSoundToFrame', {
+                frame: selectionInfo.object,
+                asset: wickEditor.project.library.getAssetByName(val),
+            });
+        }
+    }));
+
+    /*properties.push(new InspectorInterface.SelectInput({
+        title: '<img src="resources/inspector-icons/fontfamily.svg" class="inspector-icon"/>',
+        tooltip: 'Font Family',
+        options: getAllGoogleFonts(),
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 
+                && selectionInfo.type == 'wickobject' 
+                && selectionInfo.object.isText;
+        },
+        getValueFn: function () {
+            return selectionInfo.object.textData.fontFamily;
+        }, 
+        onChangeFn: function (val) {
+            loadGoogleFonts([val], function () {
+                selectionInfo.object.textData.fontFamily = val;
+                wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
+                wickEditor.syncInterfaces();
+            });
+        }
+    }));*/
+
     properties.push(new InspectorInterface.SliderInput({
         title: '<img src="resources/inspector-icons/volume.svg" class="inspector-icon"/>',
         tooltip: 'Volume',
@@ -525,7 +576,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         max: 1,
         step:.01,
         isActiveFn: function () {
-                return selectionInfo.type === 'frame' 
+            return selectionInfo.type === 'frame' 
                 && selectionInfo.numObjects === 1 
                 && selectionInfo.object.hasSound()
         },
@@ -787,7 +838,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.Divider());
 
     properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Add Tween Keyframe",
+        tooltipTitle: "Add Keyframe",
         icon: "./resources/todo.svg",
         colorClass: 'tweens',
         isActiveFn: function () {
@@ -801,7 +852,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Paste Motion Tween",
+        tooltipTitle: "Paste Keyframe",
         icon: "./resources/todo.svg",
         colorClass: 'tweens',
         isActiveFn: function () {
@@ -815,7 +866,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Copy Motion Tween",
+        tooltipTitle: "Copy Keyframe",
         icon: "./resources/todo.svg",
         colorClass: 'tweens',
         isActiveFn: function () {
@@ -829,7 +880,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Delete Motion Tween",
+        tooltipTitle: "Delete Keyframe",
         icon: "./resources/todo.svg",
         colorClass: 'tweens',
         isActiveFn: function () {

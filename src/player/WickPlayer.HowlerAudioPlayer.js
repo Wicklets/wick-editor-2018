@@ -82,6 +82,11 @@ var WickHowlerAudioPlayer = function () {
         // todo
     }
 
+    this.clearCacheForFrame = function (frame) {
+        frameSoundsMappings[frame.uuid] = null;
+        frameWaveforms[frame.uuid] = null;
+    }
+
     this.getWaveformOfFrame = function (frame) {
         if(frameWaveforms[frame.uuid]) {
             return {

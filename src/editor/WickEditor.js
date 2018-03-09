@@ -146,7 +146,8 @@ WickEditor.prototype.useLastUsedTool = function () {
 }
 
 WickEditor.prototype.tryToLoadProject = function () {
-    if(window.location.hash) {
+    // Load .wick from hash - for new site 
+    /*if(window.location.hash) {
         var projectPath = window.location.hash.slice(1); // remove first char (the hash)
 
         var xhr = new XMLHttpRequest();
@@ -174,5 +175,47 @@ WickEditor.prototype.tryToLoadProject = function () {
             })
         });
     }
-    window.location.hash = '';
+    window.location.hash = '';*/
+
+    var demoName = URLParameterUtils.getParameterByName("demo");
+    if(demoName) {
+        console.log("Trying to load demo:");
+        console.log("demoName: " + demoName);
+
+        $.ajax({
+            url: "../examples/" + demoName,
+            type: 'GET',
+            data: {},
+            success: function(data) {
+                console.log("ajax: success");
+                if(data === "NEW_PROJECT") {
+                    wickEditor.project = new WickProject();
+                } else {
+                    //wickEditor.project = WickProject.fromWebpage(data);
+                    wickEditor.guiActionHandler.doAction('openProject', {
+                        project:WickProject.fromJSON(JSON.stringify(data)),
+                        dontWarn: true
+                    })
+                }
+                wickEditor.syncInterfaces();
+            },
+            error: function () {
+                console.log("ajax: error");
+                wickEditor.syncInterfaces();
+            },
+            complete: function(response, textStatus) {
+                console.log("ajax: complete")
+                console.log(response)
+                console.log(textStatus)
+                URLParameterUtils.clearURLParam("demo")
+            }
+        });
+    } else {
+        WickProject.Exporter.getAutosavedProject(function (project) {
+            wickEditor.guiActionHandler.doAction('openProject', {
+                project: project,
+                dontWarn: true
+            })
+        });
+    }
 }

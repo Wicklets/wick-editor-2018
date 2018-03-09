@@ -359,8 +359,15 @@ InspectorInterface.SelectInput = function (args) {
     self.onChangeFn = args.onChangeFn;
     self.isActiveFn = args.isActiveFn;
     self.options    = args.options;
+    self.optionsFn  = args.optionsFn;
 
     self.updateViewValue = function () {
+        self.valueDiv.innerHTML = '';
+        (self.options || self.optionsFn()).forEach(function (optionText) {
+            var option = document.createElement("option");
+            option.text = optionText;
+            self.valueDiv.add(option);
+        });
         if(self.isActiveFn()) {
             self.propertyDiv.style.display = 'block';
             self.valueDiv.value = self.getValueFn();
@@ -387,11 +394,11 @@ InspectorInterface.SelectInput = function (args) {
 
         self.valueDiv = document.createElement('SELECT');
         self.valueDiv.className = 'inspector-input inspector-input-select ' + args.className;
-        self.options.forEach(function (optionText) {
+        (self.options || self.optionsFn()).forEach(function (optionText) {
             var option = document.createElement("option");
             option.text = optionText;
             self.valueDiv.add(option);
-        })
+        });
         self.valueDiv.onchange = function (e) {
             self.updateModelValue();
         }

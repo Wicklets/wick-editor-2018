@@ -954,6 +954,8 @@ var WickActionHandler = function (wickEditor) {
 
             args.frame.audioAssetUUID = args.asset.uuid;
             args.frame.volume = 1; 
+            args.frame._soundDataForPreview = null;
+            wickEditor.audioPlayer.clearCacheForFrame(args.frame)
 
             var frameLengthInSeconds = wickEditor.audioPlayer.getDurationOfSound(args.asset.uuid)
             var frameLengthInFrames = Math.ceil(frameLengthInSeconds*wickEditor.project.framerate);
