@@ -1037,10 +1037,12 @@ var GuiActionHandler = function (wickEditor) {
             var frame = wickEditor.project.getSelectedObject();
             var currentObject = wickEditor.project.getCurrentObject()
 
-            wickEditor.actionHandler.doAction('createMotionTween', {
-                frame: frame,
-                playheadPosition: currentObject.playheadPosition-frame.playheadPosition
-            });
+            if(frame.wickObjects.length > 0) {
+                wickEditor.actionHandler.doAction('createMotionTween', {
+                    frame: frame,
+                    playheadPosition: currentObject.playheadPosition-frame.playheadPosition
+                });
+            }
         });
     
     registerAction('deleteMotionTween',
@@ -1113,12 +1115,17 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.actionHandler.doAction('copyFrameForward');
         });
 
-    registerAction('extendFrameToPosition',
+    registerAction('extendFrameToPlayhead',
         [],
         [],
         {},
         function (args) {
-            wickEditor.actionHandler.doAction('extendFrameToPosition');
+            var frame = wickEditor.project.getSelectedObject()
+            var length = wickEditor.project.getCurrentObject().playheadPosition - frame.playheadPosition + 1;
+            wickEditor.actionHandler.doAction('changeFrameLength', {
+                frame: frame,
+                newFrameLength: length
+            });
         });
 
     registerAction('duplicateSelection',

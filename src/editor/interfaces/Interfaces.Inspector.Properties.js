@@ -898,7 +898,8 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 
                 && selectionInfo.dataType === 'frame'
-                && !selectionInfo.object.getCurrentTween();
+                && !selectionInfo.object.getCurrentTween()
+                && selectionInfo.object.wickObjects.length > 0;
         },
         buttonAction: function () {
             wickEditor.guiActionHandler.doAction('createMotionTween');
@@ -912,10 +913,19 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 
                 && selectionInfo.dataType === 'frame'
-                && !selectionInfo.object.getCurrentTween();
+                && !selectionInfo.object.getCurrentTween()
+                && selectionInfo.object.wickObjects.length > 0;
         },
         buttonAction: function () {
-            wickEditor.guiActionHandler.doAction('deleteMotionTween');
+            if(wickEditor.project.tweenClipboardData) {
+                var pastedTween = JSON.parse(wickEditor.project.tweenClipboardData);
+                pastedTween.__proto__ = WickTween.prototype;
+                pastedTween.playheadPosition = wickEditor.project.getCurrentObject().playheadPosition - selectionInfo.object.playheadPosition;
+                wickEditor.actionHandler.doAction('addKeyframe', {
+                    frame: selectionInfo.object,
+                    tween: pastedTween
+                })
+            }
         }
     }));
 
@@ -929,7 +939,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
                 && selectionInfo.object.getCurrentTween();
         },
         buttonAction: function () {
-            wickEditor.guiActionHandler.doAction('deleteMotionTween');
+            wickEditor.project.tweenClipboardData = JSON.stringify(selectionInfo.object.getCurrentTween());
         }
     }));
 

@@ -993,6 +993,20 @@ var WickActionHandler = function (wickEditor) {
             done(args);
         });
 
+    registerAction('addKeyframe',
+        function (args) {
+            args.frame.addTween(args.tween);
+
+            wickEditor.project.getCurrentObject().framesDirty = true;
+            done(args);
+        },
+        function (args) {
+            args.frame.removeTween(args.tween);
+
+            wickEditor.project.getCurrentObject().framesDirty = true;
+            done(args);
+        })
+
     registerAction('deleteMotionTween', 
         function (args) {
             var frame = args.frame;
@@ -1055,27 +1069,6 @@ var WickActionHandler = function (wickEditor) {
             wickEditor.project.getCurrentLayer().removeFrame(args.copiedFrame);
 
             args.movePlayheadAction.undoAction();
-
-            wickEditor.project.currentObject.framesDirty = true;
-            done(args);
-        });
-
-    registerAction('extendFrameToPosition',
-        function (args) {
-            var frame = wickEditor.project.getSelectedObject();
-            var timelinePlayheadPosition = wickEditor.project.getCurrentObject().playheadPosition;
-            var framePlayheadPosition = frame.playheadPosition;
-
-            args.changedFrame = frame;
-            args.oldLength = frame.length;
-            var numFramesToExtend = timelinePlayheadPosition - framePlayheadPosition + 1;
-            frame.length = numFramesToExtend;
-
-            wickEditor.project.currentObject.framesDirty = true;
-            done(args);
-        }, 
-        function (args) {
-            args.changedFrame.length = args.oldLength;
 
             wickEditor.project.currentObject.framesDirty = true;
             done(args);
@@ -1145,53 +1138,6 @@ var WickActionHandler = function (wickEditor) {
                     dontAddToStack: true,
                 });
             }
-
-            /*var removeObjs = args.objs;
-            if(args.boolFnName === 'subtract') {
-                removeObjs = [args.objs[0]];
-            }
-            if(args.boolFnName === 'intersect') {
-                removeObjs = [args.objs[args.objs.length-1]];
-            }
-
-            args.deleteAction = wickEditor.actionHandler.doAction('deleteObjects', {
-                objects: removeObjs,
-                dontAddToStack: true
-            });
-            args.addAction = wickEditor.actionHandler.doAction('addObjects', {
-                wickObjects: [wickEditor.canvas.getPaperCanvas().pathRoutines.getBooleanOpResult(args.boolFnName, args.objs)],
-                dontAddToStack: true
-            });*/
-
-            /*args.objs.forEach(function (wickObject) {
-                var parentAbsPos;
-                if(wickObject.parentObject) {
-                    parentAbsPos = wickObject.parentObject.getAbsolutePosition();
-                } else {
-                    parentAbsPos = {x:0,y:0};
-                }
-
-                if(!wickObject.paper.closed) {
-                    wickObject.paper = wickObject.paper[args.boolFnName](path);
-
-                    modifiedStates.push({
-                        x: wickObject.paper.position.x - parentAbsPos.x,
-                        y: wickObject.paper.position.y - parentAbsPos.y,
-                        svgX: wickObject.paper.bounds._x,
-                        svgY: wickObject.paper.bounds._y,
-                        width: wickObject.paper.bounds._width,
-                        height: wickObject.paper.bounds._height,
-                        pathData: wickObject.paper.exportSVG({asString:true}),
-                    });
-                } else {
-                    modifiedStates.push({});
-                }
-            });
-
-            wickEditor.actionHandler.doAction('modifyObjects', {
-                objs: objs,
-                modifiedStates: modifiedStates,
-            });*/
 
             done(args);
         }, 
