@@ -268,16 +268,20 @@ body {
 }
 
 .layer-gnurl {
-    width: 15px;
-    height: 100%;
-    left: 0px;
-    top: 0px;
+    width: 14px;
+    height: 21px;
+    left: 2px;
+    top: 2px;
     position: absolute;
     cursor: move;
-    background-image: url('../resources/layer-handle.svg');
-    background-size: 15px 100%;
+    background-image: url('../resources/layer-gnurl.svg');
+    background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: left;
+    opacity: 0.6;
+}
+.layer-gnurl:hover {
+    opacity: 0.95;
 }
 
 .active-layer {
@@ -866,6 +870,15 @@ body {
     bottom: 0px;
     left: calc(100% - var(--scrollbar-thickness));
     background-color: #252525;
+}
+
+.resize-timeline-bar {
+    height: var(--scrollbar-thickness);
+    width: 100%;
+    bottom: 0px;
+    position: absolute;
+    left: 0px;
+    cursor: ns-resize;
 }
 
 .zoom-box {

@@ -68,6 +68,8 @@ var TimelineInterface = function (wickEditor) {
 }
 
 TimelineInterface.Timeline = function (wickEditor) {
+    var self = this;
+
     this.elem = null;
 
     this.layersContainer = new TimelineInterface.LayersContainer(wickEditor, this);
@@ -105,6 +107,31 @@ TimelineInterface.Timeline = function (wickEditor) {
         var hideLayersPiece = document.createElement('div');
         hideLayersPiece.className = 'layer-toolbar';
         this.elem.appendChild(hideLayersPiece);
+
+        var resizeTimelineBar = document.createElement('div');
+        resizeTimelineBar.className = 'resize-timeline-bar';
+        resizeTimelineBar.addEventListener('mousedown', function (e) {
+            resizeTimelineBar.beingDragged = true
+            resizeTimelineBar.origY = e.pageY
+        });
+        document.body.addEventListener('mouseup', function (e) {
+            resizeTimelineBar.beingDragged = false
+        });
+        document.body.addEventListener('mousemove', function (e) {
+            if(resizeTimelineBar.beingDragged) {
+                var diffY = resizeTimelineBar.origY - e.pageY;
+                resizeTimelineBar.origY = e.pageY
+                if(!wickEditor.project.timelineHeight) {
+                    wickEditor.project.timelineHeight = self.calculateHeight();
+                }
+                wickEditor.project.timelineHeight -= diffY
+                if(wickEditor.project.timelineHeight > 240 ) wickEditor.project.timelineHeight = 240;
+                if(wickEditor.project.timelineHeight < 70 ) wickEditor.project.timelineHeight = 70;
+
+                self.elem.style.height = self.calculateHeight() + "px";
+            }
+        });
+        this.elem.appendChild(resizeTimelineBar);
 
         var addLayerButton = document.createElement('div');
         addLayerButton.className = 'layer-tools-button add-layer-button tooltipElem';
@@ -151,52 +178,9 @@ TimelineInterface.Timeline = function (wickEditor) {
         });
         this.elem.appendChild(previewPauseButton);
 
-        /*var fpsBox = document.createElement('div');
-        fpsBox.className = 'fps-box';
-        this.elem.appendChild(fpsBox);
-        self.fpsNumberInput = new SlideyNumberInput({
-            onsoftchange: function (e) {
-                //wickEditor.canvas.setZoom(e/100, true);
-            },
-            onhardchange: function (e) {
-                //wickEditor.canvas.setZoom(e/100, true);
-                wickEditor.project.framerate = e;
-                wickEditor.syncInterfaces()
-            },
-            min: 1,
-            max: 60,
-            moveFactor: 1,
-            initValue: wickEditor.project.framerate,
-        });
-        self.fpsNumberInput.className = 'timeline-number-input';
-        fpsBox.appendChild(self.fpsNumberInput);
-        var fpsIcon = document.createElement('div');
-        fpsIcon.className = 'timeline-fps-icon tooltipElem';
-        fpsIcon.setAttribute('alt', "Framerate");
-        fpsBox.appendChild(fpsIcon);*/
-
-        /*var previewStepForwardButton = document.createElement('div');
-        previewStepForwardButton.className = 'layer-tools-button step-forward-preview-button tooltipElem';
-        previewStepForwardButton.setAttribute('alt', "Step Forwards (.)");
-        previewStepForwardButton.addEventListener('mousedown', function (e) {
-            wickEditor.guiActionHandler.doAction('movePlayheadRight');
-        });
-        this.elem.appendChild(previewStepForwardButton);
-
-        var previewStepBackwardButton = document.createElement('div');
-        previewStepBackwardButton.className = 'layer-tools-button step-backward-preview-button tooltipElem';
-        previewStepBackwardButton.setAttribute('alt', "Step Backwards (,)");
-        previewStepBackwardButton.addEventListener('mousedown', function (e) {
-            wickEditor.guiActionHandler.doAction('movePlayheadLeft');
-        });
-        this.elem.appendChild(previewStepBackwardButton);*/
-
         this.horizontalScrollBar.build();
         this.elem.appendChild(this.horizontalScrollBar.elem);
 
-        /*var hideScrollbarConnectPiece  = document.createElement('div'); 
-        hideScrollbarConnectPiece.className = 'hide-scrollbar-connect-piece';
-        this.elem.appendChild(hideScrollbarConnectPiece); */
         var zoomBox = document.createElement('div');
         zoomBox.className = 'zoom-box';
         this.elem.appendChild(zoomBox);
@@ -259,9 +243,13 @@ TimelineInterface.Timeline = function (wickEditor) {
     }
 
     this.calculateHeight = function () {
-        var maxTimelineHeight = cssVar("--max-timeline-height");
-        var expectedTimelineHeight = this.layersContainer.layers.length * cssVar("--layer-height") + 44; 
-        return Math.min(expectedTimelineHeight, maxTimelineHeight); 
+        if(!wickEditor.project.timelineHeight) { 
+            var maxTimelineHeight = cssVar("--max-timeline-height");
+            var expectedTimelineHeight = this.layersContainer.layers.length * cssVar("--layer-height") + 44; 
+            return Math.min(expectedTimelineHeight, maxTimelineHeight); 
+        } else {
+            return wickEditor.project.timelineHeight;
+        }
     }
 
     var resetFrameSize = function () {
