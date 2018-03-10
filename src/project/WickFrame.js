@@ -199,7 +199,7 @@ WickFrame.prototype.remove = function () {
     this.parentLayer.removeFrame(this);
 }
 
-WickFrame.prototype.touchesFrame = function (frame) {
+WickFrame.prototype.getFramesDistance = function (frame) {
     var A = this;
     var B = frame;
 
@@ -211,7 +211,18 @@ WickFrame.prototype.touchesFrame = function (frame) {
     var BStart = B.playheadPosition;
     var BEnd = B.playheadPosition + B.length;
 
-    return !(BStart >= AEnd || BEnd <= AStart);
+    var distA = BStart-AEnd;
+    var distB = BEnd-AStart;
+
+    return {
+        distA: distA,
+        distB: distB
+    };
+}
+
+WickFrame.prototype.touchesFrame = function (frame) {
+    var framesDist = this.getFramesDistance(frame);
+    return framesDist.distA < 0 && framesDist.distB > 0;
 }
 
 WickFrame.prototype.encodeStrings = function () {

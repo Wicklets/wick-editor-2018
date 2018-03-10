@@ -118,7 +118,9 @@ TimelineInterface.Timeline = function (wickEditor) {
         deleteLayerButton.className = 'layer-tools-button delete-layer-button tooltipElem';
         deleteLayerButton.setAttribute('alt', "Delete Layer");
         deleteLayerButton.addEventListener('mousedown', function (e) {
-            wickEditor.guiActionHandler.doAction('removeLayer');
+            wickEditor.guiActionHandler.doAction('removeLayer', {
+                layer: wickEditor.project.getCurrentObject().getCurrentLayer()
+            });
         });
         this.elem.appendChild(deleteLayerButton);
 

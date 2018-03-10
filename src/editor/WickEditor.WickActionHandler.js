@@ -235,7 +235,6 @@ var WickActionHandler = function (wickEditor) {
     registerAction('deleteObjects',
         function (args) {
             args.restoredObjects = [];
-            args.restoredFrames = [];
             args.oldZIndices = [];
 
             // Store the old z index vars for each object.
@@ -249,14 +248,8 @@ var WickActionHandler = function (wickEditor) {
 
             // Now remove them
             args.objects.forEach(function (object) {
-                if(object instanceof WickObject) {
-                    args.restoredObjects.push(object);
-                    wickEditor.project.currentObject.removeChild(object);
-                } else if (object instanceof WickFrame) {
-                    args.restoredFrames.push(object);
-                    wickEditor.project.currentObject.framesDirty = true;
-                    object.remove();
-                }
+                args.restoredObjects.push(object);
+                wickEditor.project.currentObject.removeChild(object);
             });
 
             // Clear selection after deletion.
@@ -267,11 +260,6 @@ var WickActionHandler = function (wickEditor) {
             for(var i = 0; i < args.restoredObjects.length; i++) {
                 wickEditor.project.addObject(args.restoredObjects[i], args.oldZIndices[i], true);
             }
-
-            args.restoredFrames.forEach(function (restoreFrame) {
-                restoreFrame.parentLayer.addFrame(restoreFrame);
-                wickEditor.project.currentObject.framesDirty = true;
-            });
 
             done(args);
         });
@@ -285,10 +273,6 @@ var WickActionHandler = function (wickEditor) {
 
             for(var i = 0; i < args.objs.length; i++) {
                 var wickObj = args.objs[i];
-
-                if(wickObj.isPath && args.modifiedStates[i]['svgX']) {
-                    //args.modifiedStates[i]['pathData'] = wickObj.paper.exportSVG({asString:true});
-                }
 
                 args.originalStates[i] = {};
                 modifyableAttributes.forEach(function(attrib) {
@@ -582,8 +566,9 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             var currentObject = wickEditor.project.currentObject;
             if(currentObject.layers.length > 1) {
-                args.removedLayer = currentObject.getCurrentLayer();
-                currentObject.removeLayer(currentObject.getCurrentLayer());
+                args.removedLayer = args.layer;
+                args.removedLayerPosition = currentObject.layers.indexOf(args.removedLayer);
+                currentObject.removeLayer(args.removedLayer);
                 currentObject.currentLayer = currentObject.layers.length-1;
             }
 
@@ -594,7 +579,8 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             if(args.removedLayer) {
                 var currentObject = wickEditor.project.currentObject;
-                currentObject.addLayer(args.removedLayer);
+                //currentObject.addLayer(args.removedLayer);
+                currentObject.layers.splice(args.removedLayerPosition, 0, args.removedLayer);
             }
 
             currentObject.framesDirty = true;
@@ -714,13 +700,10 @@ var WickActionHandler = function (wickEditor) {
             var touching = false;
             args.frame.parentLayer.frames.forEach(function (frame) {
                 if(frame!==args.frame && frame.touchesFrame(args.frame)) {
-                    touching = true;
+                    var overlap = frame.getFramesDistance(args.frame).distB;
+                    args.frame.length -= overlap;
                 }
             });
-            if(touching) {
-                scrap();
-                return;
-            }
 
             wickEditor.project.currentObject.framesDirty = true;
             done(args);
@@ -959,7 +942,12 @@ var WickActionHandler = function (wickEditor) {
 
             var frameLengthInSeconds = wickEditor.audioPlayer.getDurationOfSound(args.asset.uuid)
             var frameLengthInFrames = Math.ceil(frameLengthInSeconds*wickEditor.project.framerate);
-            args.frame.length = frameLengthInFrames;
+            
+            args.changeLengthAction = wickEditor.actionHandler.doAction('changeFrameLength', {
+                frame: args.frame, 
+                newFrameLength: frameLengthInFrames,
+                dontAddToStack: true,
+            });
 
             wickEditor.project.getCurrentObject().framesDirty = true;
             done(args);

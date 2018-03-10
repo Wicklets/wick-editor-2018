@@ -1008,7 +1008,9 @@ var GuiActionHandler = function (wickEditor) {
         [],
         {},
         function(args) {
-            wickEditor.actionHandler.doAction('removeLayer', {});
+            wickEditor.actionHandler.doAction('removeLayer', {
+                layer: wickEditor.project.getCurrentObject().getCurrentLayer()
+            });
         });
 
     registerAction('moveLayerUp',
