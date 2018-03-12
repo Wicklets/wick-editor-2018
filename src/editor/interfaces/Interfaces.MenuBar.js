@@ -220,7 +220,7 @@ var MenuBarInterface = function (wickEditor) {
             new TabButton('Source code', function () {
                 window.open('https://www.github.com/zrispo/wick/');
             }),
-            new TabButton('About Wick', function () {
+            new TabButton('Credits', function () {
                 window.open('http://www.wickeditor.com/#about');
             }),
         ]);

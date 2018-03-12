@@ -150,7 +150,7 @@ select {
     text-align: left;
     text-indent: 5px;
     z-index: 10;
-    box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border-radius: 3px;
     /*background-color: black;*/
 }
@@ -375,7 +375,7 @@ select {
     z-index: 11110;
     border-radius: 3px;
     padding: 3px;
-    box-shadow: 2px 2px 2px #000;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .rightClickMenuButton {
     padding: 2px;
@@ -536,7 +536,7 @@ select {
     padding-left:5px;
     padding-right: 5px;
     max-width: 300px;
-    box-shadow: 2px 2px 2px #AAA;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     padding: 2px;
     opacity: 0.0;
     pointer-events: none;
@@ -555,7 +555,7 @@ select {
     height: 50px;
     z-index: 999999;
     background-color: #777;
-    box-shadow: 2px 2px 2px black;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     background-color: #585757;
 
     border-radius: 5px;
@@ -616,9 +616,9 @@ select {
     left: 0px;
     top: 0px;
     border: none;
-    -webkit-box-shadow: 3px 3px 12px 0px rgba(0,0,0,0.73);
-    -moz-box-shadow: 3px 3px 12px 0px rgba(0,0,0,0.73);
-    box-shadow: 3px 3px 12px 0px rgba(0,0,0,0.73);
+    -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 #cursorIcon {
@@ -644,7 +644,7 @@ select {
     width: 300px;
     height: 115px;
     background-color: #e05a12;
-    box-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     z-index: 999999999;
     font-size: 18px;
     border-radius: 3px;
@@ -700,10 +700,10 @@ select {
     left: 50%;
     top: 50%;
     width: 500px;
-    height: 500px;
+    height: 80%;
     position: absolute;
     z-index: 10;
-    box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     transform: translateX(-50%) translateY(-50%);
     display: none;
 }
@@ -739,6 +739,41 @@ select {
     height: 90%;
     overflow-y: scroll;
     font-size: 14px;
+}
+.editorCreditsContent {
+    color: white;
+    width: 100%;
+    height: 100%;
+}
+#editorCreditsGUI {
+    border-radius: 3px;
+    left: 50%;
+    top: 50%;
+    width: 500px;
+    height: 400px;
+    position: absolute;
+    z-index: 10;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    transform: translateX(-50%) translateY(-50%);
+    display: none;
+}
+.editorCreditsCloseButton {
+    position: absolute;
+    right: 6px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    background-color: transparent;
+    cursor: pointer;
+
+    background-image: url("../resources/close.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 12px 12px;
+}
+.editorCreditsCloseButton:hover {
+    background-color: rgba(255,255,255,0.5);
 }
 .hotkey {
     margin-left: 5%;

@@ -1097,6 +1097,15 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.syncInterfaces();
         });
 
+    registerAction('openEditorCredits',
+        [],
+        [],
+        {},
+        function (args) {
+            wickEditor.editorCredits.open();
+            wickEditor.syncInterfaces();
+        });
+
     registerAction('toggleProjectSettings',
         [],
         [],

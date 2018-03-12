@@ -61,6 +61,7 @@ var WickEditor = function () {
     this.cursorIcon = registerInterface(new CursorIconInterface(this));
     this.colorPicker = registerInterface(new ColorPickerInterface(this));
     this.editorSettings = registerInterface(new EditorSettings(this));
+    this.editorCredits = registerInterface(new EditorCredits(this));
     this.textEditBox = registerInterface(new TextEditBox(this));
 
     // Setup editor logic handlers
