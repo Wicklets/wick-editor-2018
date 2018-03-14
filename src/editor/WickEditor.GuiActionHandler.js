@@ -448,9 +448,18 @@ var GuiActionHandler = function (wickEditor) {
         'Delete Selection',
         {},
         function(args) {
-            wickEditor.actionHandler.doAction('deleteObjects', {
-                objects: wickEditor.project.getSelectedObjects()
-            });
+            var selection = wickEditor.project.getSelectedObjects();
+            if(selection.length === 0) {
+                // Ignore
+            } else if (selection[0] instanceof WickFrame) {
+                wickEditor.actionHandler.doAction('deleteFrames', {
+                    frames: wickEditor.project.getSelectedObjectsByType(WickFrame)
+                });
+            } else if (selection[0] instanceof WickObject) {
+                wickEditor.actionHandler.doAction('deleteObjects', {
+                    objects: wickEditor.project.getSelectedObjectsByType(WickObject)
+                });
+            }
         });
 
     registerAction('deleteSelectedObjectsBackspace',

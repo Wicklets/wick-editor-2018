@@ -264,6 +264,28 @@ var WickActionHandler = function (wickEditor) {
             done(args);
         });
 
+    registerAction('deleteFrames',
+        function (args) {
+            args.restoredFrames = [];
+            args.frames.forEach(function (frame) {
+                args.restoredFrames.push(frame);
+                frame.parentLayer.removeFrame(frame);
+            });
+
+            wickEditor.project.getCurrentObject().framesDirty = true;
+            wickEditor.project.clearSelection()
+            done(args);
+        },
+        function (args) {
+            for(var i = 0; i < args.restoredFrames.length; i++) {
+                var frame = args.restoredFrames[i];
+                frame.parentLayer.addFrame(frame);
+            }
+
+            wickEditor.project.getCurrentObject().framesDirty = true;
+            done(args);
+        });
+
     var modifyableAttributes = ["x","y","scaleX","scaleY","rotation","opacity","flipX","flipY","pathData","svgX","svgY","width","height","volume", "loop"];
 
     registerAction('modifyObjects',
@@ -452,7 +474,7 @@ var WickActionHandler = function (wickEditor) {
             var currentObject = wickEditor.project.currentObject;
             args.layer.removeFrame(args.frame);
 
-            args.movePlayheadAction.undoAction();
+            if(args.movePlayheadAction) args.movePlayheadAction.undoAction();
 
             currentObject.framesDirty = true;
 
@@ -503,28 +525,6 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             var currentObject = wickEditor.project.currentObject;
             currentObject.getCurrentLayer().frames.pop();
-
-            currentObject.framesDirty = true;
-
-            done(args);
-        });
-
-    registerAction('deleteFrame',
-        function (args) {
-            if(!args.frame) return;
-
-            // Add an empty frame
-            var frameRemovedData = args.layer.deleteFrame(args.frame);
-
-            args.frameRemoved = frameRemovedData.frame;
-            args.frameRemovedIndex = frameRemovedData.i;
-
-            currentObject.framesDirty = true;
-
-            done(args);
-        },
-        function (args) {
-            args.layer.addFrame(args.frameRemoved, args.frameRemovedIndex);
 
             currentObject.framesDirty = true;
 

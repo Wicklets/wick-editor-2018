@@ -55,9 +55,7 @@ WickLayer.prototype.getCurrentFrame = function () {
 }
 
 
-WickLayer.prototype.addFrame = function(newFrame, i) {
-    if(i) console.error("DEPERACATED! TELL ZJ!");
-
+WickLayer.prototype.addFrame = function(newFrame) {
     this.frames.push(newFrame);
 }
 
