@@ -838,6 +838,74 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.Divider());
 
     properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Add Tween Keyframe",
+        icon: "./resources/add-tween.png",
+        colorClass: 'tweens',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 
+                && selectionInfo.dataType === 'frame'
+                && !selectionInfo.object.getCurrentTween()
+                && selectionInfo.object.wickObjects.length > 0;
+        },
+        buttonAction: function () {
+            wickEditor.guiActionHandler.doAction('createMotionTween');
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Paste Tween Keyframe",
+        icon: "./resources/paste-tween.png",
+        colorClass: 'tweens',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 
+                && selectionInfo.dataType === 'frame'
+                && !selectionInfo.object.getCurrentTween()
+                && selectionInfo.object.wickObjects.length > 0;
+        },
+        buttonAction: function () {
+            if(wickEditor.project.tweenClipboardData) {
+                var pastedTween = JSON.parse(wickEditor.project.tweenClipboardData);
+                pastedTween.__proto__ = WickTween.prototype;
+                pastedTween.playheadPosition = wickEditor.project.getCurrentObject().playheadPosition - selectionInfo.object.playheadPosition;
+                wickEditor.actionHandler.doAction('addKeyframe', {
+                    frame: selectionInfo.object,
+                    tween: pastedTween
+                })
+            }
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Copy Tween Keyframe",
+        icon: "./resources/copy-tween.png",
+        colorClass: 'tweens',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 
+                && selectionInfo.dataType === 'frame'
+                && selectionInfo.object.getCurrentTween();
+        },
+        buttonAction: function () {
+            wickEditor.project.tweenClipboardData = JSON.stringify(selectionInfo.object.getCurrentTween());
+        }
+    }));
+
+    properties.push(new InspectorInterface.InspectorButton({
+        tooltipTitle: "Delete Tween Keyframe",
+        icon: "./resources/delete-tween.png",
+        colorClass: 'tweens',
+        isActiveFn: function () {
+            return selectionInfo.numObjects === 1 
+                && selectionInfo.dataType === 'frame'
+                && selectionInfo.object.getCurrentTween();
+        },
+        buttonAction: function () {
+            wickEditor.guiActionHandler.doAction('deleteMotionTween');
+        }
+    }));
+
+    properties.push(new InspectorInterface.Divider());
+
+    properties.push(new InspectorInterface.InspectorButton({
         tooltipTitle: "Clone Frame",
         icon: "./resources/inspector-duplicate.svg",
         colorClass: 'frames',
@@ -886,74 +954,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         },
         buttonAction: function () {
             wickEditor.guiActionHandler.doAction("editScripts");
-        }
-    }));
-
-    properties.push(new InspectorInterface.Divider());
-
-    properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Add Keyframe",
-        icon: "./resources/add-tween.png",
-        colorClass: 'tweens',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 
-                && selectionInfo.dataType === 'frame'
-                && !selectionInfo.object.getCurrentTween()
-                && selectionInfo.object.wickObjects.length > 0;
-        },
-        buttonAction: function () {
-            wickEditor.guiActionHandler.doAction('createMotionTween');
-        }
-    }));
-
-    properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Paste Keyframe",
-        icon: "./resources/paste-tween.png",
-        colorClass: 'tweens',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 
-                && selectionInfo.dataType === 'frame'
-                && !selectionInfo.object.getCurrentTween()
-                && selectionInfo.object.wickObjects.length > 0;
-        },
-        buttonAction: function () {
-            if(wickEditor.project.tweenClipboardData) {
-                var pastedTween = JSON.parse(wickEditor.project.tweenClipboardData);
-                pastedTween.__proto__ = WickTween.prototype;
-                pastedTween.playheadPosition = wickEditor.project.getCurrentObject().playheadPosition - selectionInfo.object.playheadPosition;
-                wickEditor.actionHandler.doAction('addKeyframe', {
-                    frame: selectionInfo.object,
-                    tween: pastedTween
-                })
-            }
-        }
-    }));
-
-    properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Copy Keyframe",
-        icon: "./resources/copy-tween.png",
-        colorClass: 'tweens',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 
-                && selectionInfo.dataType === 'frame'
-                && selectionInfo.object.getCurrentTween();
-        },
-        buttonAction: function () {
-            wickEditor.project.tweenClipboardData = JSON.stringify(selectionInfo.object.getCurrentTween());
-        }
-    }));
-
-    properties.push(new InspectorInterface.InspectorButton({
-        tooltipTitle: "Delete Keyframe",
-        icon: "./resources/delete-tween.png",
-        colorClass: 'tweens',
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 
-                && selectionInfo.dataType === 'frame'
-                && selectionInfo.object.getCurrentTween();
-        },
-        buttonAction: function () {
-            wickEditor.guiActionHandler.doAction('deleteMotionTween');
         }
     }));
 
