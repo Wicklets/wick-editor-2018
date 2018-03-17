@@ -211,6 +211,12 @@ var MenuBarInterface = function (wickEditor) {
             new TabButton('Examples', function () {
                 window.open('http://www.wickeditor.com/#examples')
             }),
+            new TabButton('Tutorials', function () {
+                window.open('http://www.wickeditor.com/#tutorials')
+            }),
+            new TabButton('Forums', function () {
+                window.open('http://forum.wickeditor.com/')
+            }),
             new TabButton('Browser Info', function () {
                 wickEditor.guiActionHandler.doAction('printBrowserInfo');
             }),
