@@ -233,7 +233,7 @@ var InteractiveCanvas = function (wickEditor) {
             hitResult = null;
         }
 
-        if(hitResult && hitResult.item && hitResult.item._inLockedLayer) {
+        if(hitResult && hitResult.item && (hitResult.item._inLockedLayer || hitResult.item.parent._inLockedLayer)) {
             hitResult = null;
         }
 
