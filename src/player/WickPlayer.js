@@ -114,7 +114,10 @@ var WickPlayer = function () {
             then = now - (elapsed % fpsInterval);
             
             deleteObjects = [];
-            if(!firstTick) self.project.tick();
+            if(!firstTick) {
+                self.project.rootObject.generateObjectNameReferences()
+                self.project.tick();
+            }
             deleteObjects.forEach(function (d) {
                 self.renderer.cleanupObjectTextures(d);
                 d.remove();

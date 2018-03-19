@@ -779,8 +779,6 @@ WickProject.prototype.prepareForPlayer = function () {
 }
 
 WickProject.prototype.tick = function () {
-    this.applyTweens();
-
     var allObjectsInProject = this.rootObject.getAllChildObjectsRecursive();
 
     // Make sure all playhead positions are up to date 
@@ -806,6 +804,7 @@ WickProject.prototype.tick = function () {
     
     this.rootObject.tick();
     this.updateCamera();
+    this.applyTweens();
 }
 
 WickProject.prototype.applyTweens = function () {

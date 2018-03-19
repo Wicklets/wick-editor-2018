@@ -398,6 +398,9 @@ WickObject.prototype.generateObjectNameReferences = function () {
             child.generateObjectNameReferences();
         }
     });
+    this.getAllActiveChildObjects().forEach(function(child) {
+        that[child.name] = child;
+    });
 
 }
 
