@@ -906,7 +906,7 @@ WickObject.prototype.movePlayheadTo = function (frame) {
 WickObject.prototype.gotoNextFrame = function () {
 
     var nextFramePos = this.playheadPosition+1;
-    var totalLength = this.layers[this.currentLayer].getTotalLength();
+    var totalLength = this.getTotalTimelineLength();
     if(nextFramePos >= totalLength) {
         nextFramePos = 0;
     }

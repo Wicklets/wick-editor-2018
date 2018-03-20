@@ -205,6 +205,7 @@ WickProject.Exporter = (function () {
         "sourceUUID",
         "_renderAsBGObject",
         "howl",
+        "tweenClipboardData",
     ];
 
     projectExporter.JSONReplacer = function(key, value) {
