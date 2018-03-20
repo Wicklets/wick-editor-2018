@@ -317,7 +317,7 @@ var WickActionHandler = function (wickEditor) {
                         args.createTweenAction = wickEditor.actionHandler.doAction('createMotionTween', { 
                             dontAddToStack: true,
                             frame: frame,
-                            playheadPosition: wickEditor.project.getCurrentObject().playheadPosition,
+                            playheadPosition: wickEditor.project.getCurrentObject().playheadPosition-frame.playheadPosition,
                         });
                     }
                 }
