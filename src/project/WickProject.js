@@ -319,9 +319,9 @@ WickProject.prototype.getFrameByUUID = function (uuid) {
     return foundFrame;
 }
 
-WickProject.prototype.addObject = function (wickObject, zIndex, ignoreSymbolOffset) {
+WickProject.prototype.addObject = function (wickObject, zIndex, ignoreSymbolOffset, frame) {
 
-    var frame = this.getCurrentFrame();
+    var frame = frame || this.getCurrentFrame();
 
     if(!ignoreSymbolOffset) {
         var insideSymbolOffset = this.currentObject.getAbsolutePosition();
