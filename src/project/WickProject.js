@@ -747,17 +747,20 @@ WickProject.prototype.regenAssetReferences = function () {
 
 }
 
-WickProject.prototype.loadFonts = function () {
+WickProject.prototype.loadFonts = function (callback) {
     var self = this;
     var fontsInProject = [];
     self.getAllObjects().forEach(function (o) {
-        if(o.isText)
+        if(o.isText && o.textData.fontFamily !== 'Arial' && fontsInProject.indexOf(o.textData.fontFamily))
             fontsInProject.push(o.textData.fontFamily);
     });
     loadGoogleFonts(fontsInProject, function () {
         if(window.wickEditor) {
             wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
             wickEditor.syncInterfaces();
+        }
+        if(callback) {
+            callback();
         }
     });
 }
@@ -768,7 +771,7 @@ WickProject.prototype.prepareForPlayer = function () {
     self.regenAssetReferences();
 
     self.rootObject.prepareForPlayer();
-    self.loadFonts();
+    if(window.WickEditor) self.loadFonts();
 
     self.getAllObjects().forEach(function (obj) {
         self.loadScriptOfObject(obj);
