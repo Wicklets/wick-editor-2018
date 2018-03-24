@@ -1,35 +1,3 @@
-// https://stackoverflow.com/questions/20958078/resize-a-base-64-image-in-javascript-without-using-canvas
-// Takes a data URI and returns the Data URI corresponding to the resized image at the wanted size.
-function resizedataURL(datas, wantedWidth, wantedHeight, callback)
-    {
-        // We create an image to receive the Data URI
-        var img = document.createElement('img');
-
-        // When the event "onload" is triggered we can resize the image.
-        img.onload = function()
-            {        
-                // We create a canvas and get its context.
-                var canvas = document.createElement('canvas');
-                var ctx = canvas.getContext('2d');
-
-                // We set the dimensions at the wanted size.
-                canvas.width = wantedWidth;
-                canvas.height = wantedHeight;
-
-                // We resize the image with the canvas method drawImage();
-                ctx.drawImage(this, 0, 0, wantedWidth, wantedHeight);
-
-                var dataURI = canvas.toDataURL();
-
-                callback(dataURI);
-            };
-
-        // We put the Data URI in the image's src attribute
-        img.src = datas;
-    }
-// Use it like that : resizedataURL('yourDataURIHere', 50, 50);
-
-
 /* Wick - (c) 2017 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
 /*  This file is part of Wick. 
@@ -47,9 +15,6 @@ function resizedataURL(datas, wantedWidth, wantedHeight, callback)
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
     
-
-/* move this to Interfaces.Canvas and call it ImageRenderer or something */
-
 var ImageRenderer = function () {
 
 	var self = this;
@@ -114,6 +79,68 @@ var ImageRenderer = function () {
             });
         });
 
+    }
+
+    self.generateSoundTrack = function (callback) {
+        wickEditor.audioPlayer.reloadSoundsInProject(wickEditor.project);
+        wickEditor.project.rootObject.getAllFrames().forEach(function (frame) {
+            if(frame.hasSound()) {
+                console.log(frame);
+                wickEditor.audioPlayer.playSoundOnFrame(frame);
+            }
+        });
+    }
+
+    self.renderProjectAsWebm = function (callback) {
+        retrieveCanvas();
+
+        self.renderer.reorderAllObjects(wickEditor.project);
+        self.renderer.preloadAllAssets(wickEditor.project, function () {
+            var frameDataURLs = [];
+            wickEditor.project.currentObject = wickEditor.project.rootObject;
+            var len = wickEditor.project.rootObject.getTotalTimelineLength();
+            for (var i = 0; i < len; i++) {
+                wickEditor.project.rootObject.playheadPosition = i;
+                wickEditor.project.applyTweens();
+                self.renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 1);
+                var canvas = self.canvasContainer.children[0];
+                frameDataURLs.push(canvas.toDataURL());
+            }
+
+            var frameImages = []
+            frameDataURLs.forEach(function (frameDataURL) {
+                resizedataURL(frameDataURL, wickEditor.project.width, wickEditor.project.height, function (resizedFrameDataURL) {
+                    var frameImage = new Image();
+                    frameImage.onload = function () {
+                        frameImages.push(frameImage);
+                        if(frameImages.length === frameDataURLs.length) {
+                            generateWebM(frameImages);
+                        }
+                    }
+                    frameImage.src = resizedFrameDataURL;
+                })
+            });
+        });
+
+        function generateWebM (frameImages) {
+            var video = new Whammy.Video(wickEditor.project.framerate);
+
+            var canvas = document.createElement('canvas');
+            var ctx = canvas.getContext('2d');
+            frameImages.forEach(function (frameImage) {
+                ctx.drawImage(frameImage, 0, 0, frameImage.width, frameImage.height);
+                video.add(ctx);
+            });
+
+            var start_time = +new Date;
+            video.compile(false, function(output){
+                var end_time = +new Date;
+                var url = webkitURL.createObjectURL(output);
+                console.log(output)
+                console.log("Compiled Video in " + (end_time - start_time) + "ms, file size: " + Math.ceil(output.size / 1024) + "KB");
+                callback(output)
+            });
+        }
     }
 
     self.renderProjectAsPNG = function (callback) {
