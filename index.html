@@ -45,6 +45,8 @@
     <link rel="stylesheet" type="text/css" href="lib/rangeslider.css">
     <link rel="stylesheet" type="text/css" href="lib/nouislider.css">
     <link rel="stylesheet" type="text/css" href="lib/spectrum.css">
+    <link rel="stylesheet" type="text/css" href="styles/progressBar.css">
+
 
 
     <script src="lib/jquery.min.js"></script>
@@ -204,6 +206,16 @@
             <div class="editorSettingsGUITitle">Hotkeys</div>
             <div class="editorSettingsGUICloseButton"></div>
             <div class="editorSettingsGUIHotkeys"></div>
+        </div>
+
+        <div id="videoExportGUI" class="GUIBox">
+            <div class="GUIBoxTitle videoExportGUITitle">Wick Video Export</div>
+            <div class="GUIBoxCloseButton videoExportGUICloseButton"></div>
+            <div id="videoExportProgressBarContainer" class="meter animate wickGreen">
+                <span id="videoExportProgressBar" style="width: 10%;"><span></span></span>
+            </div>  
+            <div id="videoDownloadButton" class="downloadButton">Download File</div>
+        </div>  
         </div>
 
         <div id="editorCreditsGUI" class="GUIBox">
