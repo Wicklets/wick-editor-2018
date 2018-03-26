@@ -63,6 +63,7 @@ var WickEditor = function () {
     this.editorSettings = registerInterface(new EditorSettings(this));
     this.editorCredits = registerInterface(new EditorCredits(this));
     this.textEditBox = registerInterface(new TextEditBox(this));
+    this.videoExporter = registerInterface(new VideoExporter(this)); 
 
     // Setup editor logic handlers
     this.actionHandler = new WickActionHandler(this);

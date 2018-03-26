@@ -748,7 +748,7 @@ select {
     left: 50%;
     top: 50%;
     width: 500px;
-    height: 40%;
+    height: 200px;
     position: absolute;
     z-index: 10;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -761,6 +761,7 @@ select {
     width: 100%;
     height: 100%;
 }
+
 #editorCreditsGUI {
     border-radius: 3px;
     left: 50%;
@@ -819,7 +820,11 @@ select {
 }
 
 .downloadButton:hover {
-    background-color: #31E19C;
+    background-color: #00D9A7;
+}
+
+.downloadButton:active {
+    background-color: #01C094;
 }
 
 #videoDownloadButton {
@@ -829,10 +834,24 @@ select {
     width: 160px;
 }
 
-#videoExportProgressBarContainer {
-    width: 80%;
-    margin: 0 auto; 
+#videoExportProgressBarContainer {  
+    width: 85%;
+    margin-left: 5%;
+    position: absolute; 
+    bottom: 80px; 
 }
+
+#videoExportSparkText {
+  margin-left: 7%; 
+  position: absolute;
+  bottom: 130px; 
+}
+
+.sparkText {
+  color: white; 
+  font-family: nunito; 
+}
+
 
 .editorCreditsCloseButton {
     position: absolute;
