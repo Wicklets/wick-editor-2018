@@ -678,6 +678,12 @@ WickObject.prototype.getAllFrames = function () {
     return allFrames;
 }
 
+WickObject.prototype.getAllFramesWithSound = function () {
+    return this.getAllFrames().filter(function (frame) {
+        return frame.hasSound();
+    });
+}
+
 WickObject.prototype.getFrameWithChild = function (child) {
 
     var foundFrame = null;
