@@ -107,6 +107,7 @@ var VideoExporter = function (wickEditor) {
     }
     
     self.exportVideo = function () {
+      self.open(); 
       // Render webm of frames
       // Render sound file
       // Combine Assets
