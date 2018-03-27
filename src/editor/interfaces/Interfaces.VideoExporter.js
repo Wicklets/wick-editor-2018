@@ -105,4 +105,11 @@ var VideoExporter = function (wickEditor) {
     self.close = function () {
       videoExportWindow.style.display = "none";
     }
+    
+    self.exportVideo = function () {
+      // Render webm of frames
+      // Render sound file
+      // Combine Assets
+      // Approve Download
+    }
 }
