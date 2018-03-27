@@ -69,8 +69,10 @@ var WickPlayer = function () {
 
         self.inputHandler.setup();
 
-        self.renderer.preloadAllAssets(self.project, function () {
-            startUpdate();
+        self.project.loadFonts(function () {
+            self.renderer.preloadAllAssets(self.project, function () {
+                startUpdate();
+            });
         });
     }
 

@@ -258,7 +258,7 @@ var WickActionHandler = function (wickEditor) {
         },
         function (args) {
             for(var i = 0; i < args.restoredObjects.length; i++) {
-                wickEditor.project.addObject(args.restoredObjects[i], args.oldZIndices[i], true);
+                wickEditor.project.addObject(args.restoredObjects[i], args.oldZIndices[i], true, args.restoredObjects[i].parentFrame);
             }
 
             done(args);
