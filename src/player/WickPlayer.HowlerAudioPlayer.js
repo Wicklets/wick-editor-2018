@@ -100,6 +100,23 @@ var WickHowlerAudioPlayer = function () {
         return howlSoundInstances[assetUUID].duration();
     }
 
+    this.generateAudioTrack = function (frames) {
+        var frame = frames[0]
+        var howlerSound = frameSoundsMappings[frame.uuid];
+
+        console.log(howlerSound)
+
+        var data = atob(howlerSound._src.split(',')[1]);
+        var dataView = new Uint8Array(data.length);
+        for (var i=0; i<data.length; ++i) {
+            dataView[i] = data.charCodeAt(i);
+        }
+
+        Howler.ctx.decodeAudioData(dataView.buffer, function(buffer) {
+            console.log(buffer)
+        })
+    }
+
     /* Wick player API functions */
 
     window.playSound = function (assetFilename) {

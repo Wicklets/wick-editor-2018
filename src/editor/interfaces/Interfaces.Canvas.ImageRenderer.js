@@ -86,7 +86,7 @@ var ImageRenderer = function () {
         wickEditor.project.rootObject.getAllFrames().forEach(function (frame) {
             if(frame.hasSound()) {
                 console.log(frame);
-                wickEditor.audioPlayer.playSoundOnFrame(frame);
+                wickEditor.audioPlayer.generateAudioTrack([frame]);
             }
         });
     }
@@ -126,6 +126,8 @@ var ImageRenderer = function () {
             var video = new Whammy.Video(wickEditor.project.framerate);
 
             var canvas = document.createElement('canvas');
+            canvas.width = wickEditor.project.width;
+            canvas.height = wickEditor.project.height;
             var ctx = canvas.getContext('2d');
             frameImages.forEach(function (frameImage) {
                 ctx.drawImage(frameImage, 0, 0, frameImage.width, frameImage.height);
@@ -138,6 +140,7 @@ var ImageRenderer = function () {
                 var url = webkitURL.createObjectURL(output);
                 console.log(output)
                 console.log("Compiled Video in " + (end_time - start_time) + "ms, file size: " + Math.ceil(output.size / 1024) + "KB");
+                saveAs(output, "wicketysplit.webm");
                 callback(output)
             });
         }

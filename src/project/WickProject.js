@@ -754,15 +754,19 @@ WickProject.prototype.loadFonts = function (callback) {
         if(o.isText && o.textData.fontFamily !== 'Arial' && fontsInProject.indexOf(o.textData.fontFamily))
             fontsInProject.push(o.textData.fontFamily);
     });
-    loadGoogleFonts(fontsInProject, function () {
-        if(window.wickEditor) {
-            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
-            wickEditor.syncInterfaces();
-        }
-        if(callback) {
-            callback();
-        }
-    });
+    if(fontsInProject.length === 0 && callback) {
+        callback()
+    } else {
+        loadGoogleFonts(fontsInProject, function () {
+            if(window.wickEditor) {
+                wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
+                wickEditor.syncInterfaces();
+            }
+            if(callback) {
+                callback();
+            }
+        });
+    }   
 }
 
 WickProject.prototype.prepareForPlayer = function () {
