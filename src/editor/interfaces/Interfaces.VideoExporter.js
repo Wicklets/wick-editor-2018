@@ -129,13 +129,16 @@ var VideoExporterInterface = function (wickEditor) {
 
     function renderWebm (callback) {
         wickEditor.canvas.getCanvasRenderer().renderProjectAsWebm(function (blob) {
+            var url = webkitURL.createObjectURL(blob);
             var arrayBuffer;
             var fileReader = new FileReader();
             fileReader.onload = function() {
                 var buffer = new Uint8Array(this.result);
-                callback(buffer);
+                //callback(buffer);
             };
             fileReader.readAsArrayBuffer(blob);
+
+            saveAs(blob, 'asdas.webm')
         })
     }
 
