@@ -114,8 +114,8 @@ var WickPixiRenderer = function (canvasContainer) {
         }
 
         if(fitToScreen) {
-            var w = window.innerWidth;
-            var h = window.innerHeight;
+            var w = project.width;
+            var h = project.height;
             canvasContainer.style.width  = w + 'px';
             canvasContainer.style.height = h + 'px';
             if(_cached_w !== w || _cached_h !== h) {
