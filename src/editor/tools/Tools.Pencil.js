@@ -53,6 +53,9 @@ Tools.Pencil = function (wickEditor) {
     var lastEvent;
 
     this.paperTool.onMouseDown = function (event) {
+        if(wickEditor.settings.strokeWidth === 0)
+            wickEditor.settings.setValue('strokeWidth', 1);
+
         if (!path) {
             path = new paper.Path({
                 //fillColor: wickEditor.settings.fillColor,

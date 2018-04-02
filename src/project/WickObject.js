@@ -861,6 +861,19 @@ WickObject.prototype.getFrameById = function (identifier) {
     return foundFrame;
 }
 
+WickObject.prototype.getFrameByPlayheadPosition = function (php) {
+    var foundFrame = null;
+
+    this.getAllFrames().forEach(function (frame) {
+        if(frame.playheadPosition === php) {
+            foundFrame = frame;
+        }
+    });
+
+    return foundFrame;
+}
+
+
 WickObject.prototype.gotoAndStop = function (frame) {
     this.movePlayheadTo(frame);
     this.stop();
@@ -1127,14 +1140,14 @@ WickObject.prototype.tick = function () {
     if(this.isButton) {
         this.stop();
         if(this._beingClicked) {
-            if(this.getFrameById('mousePressed'))
-                this.movePlayheadTo('mousePressed');
+            if(this.getFrameByPlayheadPosition(2))
+                this.movePlayheadTo(3);
         } else if (this.hoveredOver) {
-            if(this.getFrameById('mouseHover'))
-                this.movePlayheadTo('mouseHover');
+            if(this.getFrameByPlayheadPosition(1))
+                this.movePlayheadTo(2);
         } else {
-            if(this.getFrameById('mouseReleased'))
-                this.movePlayheadTo('mouseReleased');
+            if(this.getFrameByPlayheadPosition(0))
+                this.movePlayheadTo(1);
         }
     }
 

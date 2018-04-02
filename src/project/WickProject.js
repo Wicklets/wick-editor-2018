@@ -789,7 +789,7 @@ WickProject.prototype.tick = function () {
     var allObjectsInProject = this.rootObject.getAllChildObjectsRecursive();
 
     // Make sure all playhead positions are up to date 
-    // (this is deferred to outside the main tick code so things don't get confusing)
+    // (this is deferred to outside the main tick code so timeline changes happen all at once right here)
     allObjectsInProject.forEach(function (obj) {
         if(obj._newPlayheadPosition !== undefined)
             obj.playheadPosition = obj._newPlayheadPosition;

@@ -250,6 +250,7 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
 
         thumbnailDiv = document.createElement('img');
         thumbnailDiv.className = "frame-thumbnail";
+        thumbnailDiv.style.marginLeft = cssVar('--frame-width')===20 ? '4px' : '11px';
         this.elem.appendChild(thumbnailDiv);
 
         waveformDiv = document.createElement('img');

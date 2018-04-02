@@ -215,6 +215,8 @@ TimelineInterface.Timeline = function (wickEditor) {
     }
     
     this.rebuild = function () {
+        resetFrameSize();
+
         this.layersContainer.rebuild();
         this.framesContainer.rebuild();
         this.numberLine.rebuild();
@@ -253,7 +255,7 @@ TimelineInterface.Timeline = function (wickEditor) {
     }
 
     var resetFrameSize = function () {
-        var newFrameWidth = 20;
+        var newFrameWidth = wickEditor.project.getCurrentObject().isButton ? 35 : 20;
         var newHandleWidth = 5;
         document.body.style.setProperty('--frame-width', newFrameWidth+'px');
         document.body.style.setProperty('--frame-handle-width', newHandleWidth+'px');
@@ -473,7 +475,12 @@ TimelineInterface.NumberLine = function (wickEditor, timeline) {
             var num = i+1+Math.floor(-shift/cssVar('--frame-width'));
             numbers[i].innerHTML = num;
             numbers[i].className = 'number-line-cell-number';
-            //if(wickEditor.project.smallFramesMode) {
+            if(wickEditor.project.getCurrentObject().isButton) {
+                var buttonNames = ['Up', 'Over', 'Down']
+                numbers[i].innerHTML = i < 3 ? buttonNames[i] : '';
+                numbers[i].style.fontSize = '12px';
+                bars[i].style.opacity = '0.5';
+            } else {
                 if(num % 5 !== 0 && num !== 1)  {
                     numbers[i].innerHTML = '';
                     bars[i].style.opacity = '0.2';
@@ -481,7 +488,7 @@ TimelineInterface.NumberLine = function (wickEditor, timeline) {
                     bars[i].style.opacity = '1.0';
                 }
                 numbers[i].className += ' number-line-cell-number-small';
-            //}
+            }
         }
     }
 
