@@ -101,7 +101,7 @@ var WickHowlerAudioPlayer = function () {
     }
 
     this.generateAudioTrack = function (frames) {
-        var frame = frames[0]
+        var frame = frames[0];
         var howlerSound = frameSoundsMappings[frame.uuid];
 
         console.log(howlerSound)

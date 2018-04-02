@@ -145,6 +145,9 @@ var MenuBarInterface = function (wickEditor) {
             new TabButton('Export Project as JSON', function () {
                 wickEditor.guiActionHandler.doAction("exportProjectJSON");
             }),
+            new TabButton('Export Project as Video', function () {
+                wickEditor.guiActionHandler.doAction("exportProjectVideo");
+            }),
             new TabSpacer(),
             
             new TabButton('Run project', function () {

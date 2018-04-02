@@ -52,6 +52,8 @@ var WickPixiRenderer = function (canvasContainer) {
     self.preloadAllAssets = function (project, callback) {
         currentProjectUUID = project.uuid;
 
+        wickProject = project;
+
         var assetsToLoad = [];
         project.getAllObjects().forEach(function (o) {
             if((o.isPath && o.pathData) || o.isImage || o.isText) {
@@ -248,7 +250,7 @@ var WickPixiRenderer = function (canvasContainer) {
             pixiSprites[wickObject.uuid] = newPixiSprite;
 
             var textureSrc = newPixiSprite.texture.baseTexture.imageUrl;
-            if(textureSrc)
+            if(textureSrc && !wickProject.disableAlphaMaskGeneration)
                 wickObject.generateAlphaMask(textureSrc);
         }
     }

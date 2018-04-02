@@ -707,6 +707,7 @@ select {
     transform: translateX(-50%) translateY(-50%);
     display: none;
 }
+
 .editorSettingsGUITitle {
     color: white;
     width: 100%;
@@ -716,6 +717,7 @@ select {
     font-weight: bold;
     font-size: 14px;
 }
+
 .editorSettingsGUICloseButton {
     position: absolute;
     right: 6px;
@@ -740,11 +742,26 @@ select {
     overflow-y: scroll;
     font-size: 14px;
 }
+
+#videoExportGUI {
+    border-radius: 3px;
+    left: 50%;
+    top: 50%;
+    width: 500px;
+    height: 200px;
+    position: absolute;
+    z-index: 10;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    transform: translateX(-50%) translateY(-50%);
+    display: none;
+}
+
 .editorCreditsContent {
     color: white;
     width: 100%;
     height: 100%;
 }
+
 #editorCreditsGUI {
     border-radius: 3px;
     left: 50%;
@@ -757,6 +774,85 @@ select {
     transform: translateX(-50%) translateY(-50%);
     display: none;
 }
+
+.GUIBoxCloseButton {
+    position: absolute;
+    right: 6px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    background-color: transparent;
+    cursor: pointer;
+
+    background-image: url("../resources/close.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 12px 12px;
+}
+
+.GUIBoxCloseButton:hover {
+    background-color: rgba(255,255,255,0.5);
+}
+
+.GUIBoxTitle {
+    color: white;
+    width: 100%;
+    height: 25px;
+    text-align: center;
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.downloadButton {
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    font-size: 18px; 
+    background-color: #333; 
+    text-align: center;
+    padding: 6px;
+
+    -webkit-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+}
+
+.downloadButton:hover {
+    background-color: #00D9A7;
+}
+
+.downloadButton:active {
+    background-color: #01C094;
+}
+
+#videoDownloadButton {
+    position: absolute;
+    bottom: 10px; 
+    right: 10px;
+    width: 160px;
+}
+
+#videoExportProgressBarContainer {  
+    width: 85%;
+    margin-left: 5%;
+    position: absolute; 
+    bottom: 80px; 
+}
+
+#videoExportSparkText {
+  margin-left: 7%; 
+  position: absolute;
+  bottom: 130px; 
+}
+
+.sparkText {
+  color: white; 
+  font-family: nunito; 
+}
+
+
 .editorCreditsCloseButton {
     position: absolute;
     right: 6px;
@@ -772,9 +868,11 @@ select {
     background-position: center;
     background-size: 12px 12px;
 }
+
 .editorCreditsCloseButton:hover {
     background-color: rgba(255,255,255,0.5);
 }
+
 .hotkey {
     margin-left: 5%;
     width: 90%;

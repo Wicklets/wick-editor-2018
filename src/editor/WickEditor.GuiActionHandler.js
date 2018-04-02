@@ -189,6 +189,16 @@ var GuiActionHandler = function (wickEditor) {
             WickProject.Exporter.autosaveProject(wickEditor.project);
             WickProject.Exporter.exportProject(wickEditor.project, {zipped:true});
         });
+  
+    registerAction('exportProjectVideo',
+                   [],
+                   ['Export Project as Video'],
+                   {usableInTextBoxes:true},
+                   function (args) {
+                      that.keys = [];
+                      that.specialKeys = [];
+                      wickEditor.videoExporter.exportVideo();
+                   });
 
     registerAction('saveProject',
         ['MODIFIER','SHIFT','KeyS'],

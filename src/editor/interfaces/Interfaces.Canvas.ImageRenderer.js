@@ -140,7 +140,7 @@ var ImageRenderer = function () {
                 var url = webkitURL.createObjectURL(output);
                 console.log(output)
                 console.log("Compiled Video in " + (end_time - start_time) + "ms, file size: " + Math.ceil(output.size / 1024) + "KB");
-                saveAs(output, "wicketysplit.webm");
+                //saveAs(output, "wicketysplit.webm");
                 callback(output)
             });
         }

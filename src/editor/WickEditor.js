@@ -21,7 +21,7 @@ var WickEditor = function () {
 
     var self = this;
 
-    self.version = "0.14.1";
+    self.version = "0.15 Prerelease";
     document.getElementById('wick-editor-version').innerHTML = 'Wick Editor ' + self.version;
     console.log("Wick Editor version " + self.version)
     window.wickVersion = self.version;
@@ -63,6 +63,7 @@ var WickEditor = function () {
     this.editorSettings = registerInterface(new EditorSettings(this));
     this.editorCredits = registerInterface(new EditorCredits(this));
     this.textEditBox = registerInterface(new TextEditBox(this));
+    this.videoExporter = registerInterface(new VideoExporterInterface(this)); 
 
     // Setup editor logic handlers
     this.actionHandler = new WickActionHandler(this);

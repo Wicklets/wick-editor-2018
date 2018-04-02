@@ -678,6 +678,12 @@ WickObject.prototype.getAllFrames = function () {
     return allFrames;
 }
 
+WickObject.prototype.getAllFramesWithSound = function () {
+    return this.getAllFrames().filter(function (frame) {
+        return frame.hasSound();
+    });
+}
+
 WickObject.prototype.getFrameWithChild = function (child) {
 
     var foundFrame = null;
@@ -1204,6 +1210,13 @@ WickObject.prototype.tick = function () {
 
                 (wickPlayer || wickEditor).project.runScript(this, 'load');
                 (wickPlayer || wickEditor).project.runScript(this, 'update');
+
+                // Force playhead update on first tick to fix:
+                // https://github.com/zrispo/wick-editor/issues/810
+                if(this._newPlayheadPosition) {
+                    this.playheadPosition = this._newPlayheadPosition;
+                    this._newPlayheadPosition = undefined;
+                }
             }
             // Active -> Active
             else if (this._wasActiveLastTick && this._active) {
