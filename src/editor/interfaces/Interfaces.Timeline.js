@@ -479,7 +479,7 @@ TimelineInterface.NumberLine = function (wickEditor, timeline) {
                 var buttonNames = ['Up', 'Over', 'Down']
                 numbers[i].innerHTML = i < 3 ? buttonNames[i] : '';
                 numbers[i].style.fontSize = '12px';
-                bars[i].style.opacity = '0.5';
+                bars[i].style.opacity = '0.2';
             } else {
                 if(num % 5 !== 0 && num !== 1)  {
                     numbers[i].innerHTML = '';
