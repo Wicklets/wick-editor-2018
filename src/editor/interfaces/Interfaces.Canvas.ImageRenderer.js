@@ -91,7 +91,7 @@ var ImageRenderer = function () {
         });
     }
 
-    self.renderProjectAsWebm = function (callback) {
+    self.getProjectFrames = function (callback) {
         retrieveCanvas();
 
         self.renderer.reorderAllObjects(wickEditor.project);
@@ -114,7 +114,7 @@ var ImageRenderer = function () {
                     frameImage.onload = function () {
                         frameImages.push(frameImage);
                         if(frameImages.length === frameDataURLs.length) {
-                            generateWebM(frameImages);
+                            callback(frameImages);
                         }
                     }
                     frameImage.src = resizedFrameDataURL;
@@ -122,28 +122,7 @@ var ImageRenderer = function () {
             });
         });
 
-        function generateWebM (frameImages) {
-            var video = new Whammy.Video(wickEditor.project.framerate);
 
-            var canvas = document.createElement('canvas');
-            canvas.width = wickEditor.project.width;
-            canvas.height = wickEditor.project.height;
-            var ctx = canvas.getContext('2d');
-            frameImages.forEach(function (frameImage) {
-                ctx.drawImage(frameImage, 0, 0, frameImage.width, frameImage.height);
-                video.add(ctx);
-            });
-
-            var start_time = +new Date;
-            video.compile(false, function(output){
-                var end_time = +new Date;
-                var url = webkitURL.createObjectURL(output);
-                console.log(output)
-                console.log("Compiled Video in " + (end_time - start_time) + "ms, file size: " + Math.ceil(output.size / 1024) + "KB");
-                //saveAs(output, "wicketysplit.webm");
-                callback(output)
-            });
-        }
     }
 
     self.renderProjectAsPNG = function (callback) {
