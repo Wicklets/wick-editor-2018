@@ -1,7 +1,7 @@
 /* Wick - (c) 2017 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-/*  This file is part of Wick. 
-    
+/*  This file is part of Wick.
+
     Wick is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -14,11 +14,12 @@
 
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
-    
+
 var MenuBarInterface = function (wickEditor) {
 
     var editorElem;
     var menuElem;
+    var tabContainer;
     var projectNameElem;
     var projectSettingsElem;
 
@@ -49,7 +50,7 @@ var MenuBarInterface = function (wickEditor) {
                 }
                 self.elem.style.left = (tabElem.offsetLeft-8) + 'px';
             }
-            menuElem.appendChild(tabElem);
+            tabContainer.appendChild(tabElem);
 
             this.elem = document.createElement('div');
             this.elem.className ='GUIBox menubarMenu';
@@ -88,18 +89,21 @@ var MenuBarInterface = function (wickEditor) {
 
     this.setup = function () {
         editorElem = document.getElementById('editor');
-        
+
         menuElem = document.createElement('div');
         menuElem.id = "menuBarGUI";
         menuElem.className = "GUIBox";
         editorElem.appendChild(menuElem);
+
+        tabContainer = document.createElement('div');
+        tabContainer.className = "tab-container";
+        menuElem.appendChild(tabContainer);
 
         projectNameElem = document.createElement('div');
         projectNameElem.className = "menuBarProjectTitle";
         projectNameElem.onclick = function () {
             wickEditor.guiActionHandler.doAction('saveProject')
         }
-        menuElem.appendChild(projectNameElem);
 
         projectSettingsElem = document.createElement('div');
         projectSettingsElem.className = 'tooltipElem menuBarProjectSettingsButton';
@@ -107,7 +111,12 @@ var MenuBarInterface = function (wickEditor) {
         projectSettingsElem.onclick = function () {
             wickEditor.guiActionHandler.doAction("toggleProjectSettings");
         }
-        menuElem.appendChild(projectSettingsElem);
+
+        var menuBarProjectControls = document.createElement('div');
+        menuBarProjectControls.className = "menuBarProjectControls";
+        menuBarProjectControls.appendChild(projectNameElem);
+        menuBarProjectControls.appendChild(projectSettingsElem);
+        menuElem.appendChild(menuBarProjectControls);
 
         tabs = [];
 
@@ -149,7 +158,7 @@ var MenuBarInterface = function (wickEditor) {
                 wickEditor.guiActionHandler.doAction("exportProjectVideo");
             }),
             new TabSpacer(),
-            
+
             new TabButton('Run project', function () {
                 wickEditor.guiActionHandler.doAction("runProject");
             }),
@@ -236,7 +245,7 @@ var MenuBarInterface = function (wickEditor) {
 
         addTab('Run', [], function () {
                 wickEditor.guiActionHandler.doAction("runProject");
-            }); 
+            });
     }
 
     var addTab = function (name, buttons, func) {
