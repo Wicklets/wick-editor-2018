@@ -113,8 +113,6 @@ var VideoExporterInterface = function (wickEditor) {
 
         if(!videoExporter) {
             videoExporter = new VideoExporter();
-            console.log(videoExporter)
-            videoExporter.setVerbose(true);
             videoExporter.init();
         }
 
