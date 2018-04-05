@@ -137,14 +137,17 @@ var VideoExporterInterface = function (wickEditor) {
         wickEditor.canvas.getCanvasRenderer().getProjectFrames(function (frames) {
             console.log('Converting video frames to video...')
             renderVideoFromFrames(frames, function (videoBuffer) {
-                var dl = document.createElement('a');
-                dl.id = "invisibleDownloadElement"; 
-                dl.style.display = "none"; 
-                var blob = new Blob([videoBuffer]);
-                var src = window.URL.createObjectURL(blob);
-                dl.download = 'adasdasdsad.mp4'; 
-                dl.href = src; 
-                dl.dispatchEvent(new MouseEvent('click'));
+                console.log(videoBuffer)
+                console.log('Generating audio track...')
+                generateAudioTrack(function (audioBuffer) {
+                    console.log(audioBuffer)
+                    console.log('Merging audio and video...')
+                    mergeAudioTrackWithVideo(videoBuffer, audioBuffer, function (finalVideoBuffer) {
+                        var blob = new Blob([finalVideoBuffer], {type: "application/octet-stream"});
+                        var fileName = 'wick-video-export.mp4';
+                        saveAs(blob, fileName);
+                    });
+                });
             });
         });
 
@@ -154,24 +157,9 @@ var VideoExporterInterface = function (wickEditor) {
         videoExporter.renderVideoFromFrames({
             frames: frames,
             completedCallback: function (videoArrayBuffer) {
-                //var videoBuffer = new Uint8Array(videoArrayBuffer);
-                callback(videoArrayBuffer);
+                var videoBuffer = new Uint8Array(videoArrayBuffer);
+                callback(videoBuffer);
             }
-        })
-    }
-
-    function renderWebm (callback) {
-        wickEditor.canvas.getCanvasRenderer().renderProjectAsWebm(function (blob) {
-            var url = webkitURL.createObjectURL(blob);
-            var arrayBuffer;
-            var fileReader = new FileReader();
-            fileReader.onload = function() {
-                var buffer = new Uint8Array(this.result);
-                callback(buffer);
-            };
-            fileReader.readAsArrayBuffer(blob);
-
-            //saveAs(blob, 'asdas.webm')
         })
     }
 
@@ -193,16 +181,12 @@ var VideoExporterInterface = function (wickEditor) {
         videoExporter.mergeAudioTracks({
             callback: function (soundTrackArrayBuffer) {
                 var soundBuffer = new Uint8Array(soundTrackArrayBuffer);
-                console.log('CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC')
-                console.log(soundBuffer)
                 callback(soundBuffer);
             }
         })
     }
 
     function mergeAudioTrackWithVideo (videoBuffer, audioBuffer, callback) {
-        console.log('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB')
-        console.log(callback)
         videoExporter.exportVideo({
             videoBuffer: videoBuffer,
             soundBuffer: audioBuffer,
