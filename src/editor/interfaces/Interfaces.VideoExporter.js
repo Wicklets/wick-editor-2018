@@ -118,21 +118,6 @@ var VideoExporterInterface = function (wickEditor) {
             videoExporter.init();
         }
 
-        /*console.log('%cRendering WebM...', 'color: #22bb99; font-size: 12px;')
-        renderWebm(function (videoBuffer) {
-            console.log(videoBuffer)
-            return;
-            console.log('%cMerging audio tracks...', 'color: #22bb99; font-size: 12px;')
-            generateAudioTrack(function (audioBuffer) {
-                console.log(audioBuffer)
-                console.log(videoBuffer)
-                console.log('%cMerging audio and video...', 'color: #22bb99; font-size: 12px;')
-                mergeAudioTrackWithVideo(videoBuffer, audioBuffer, function (finalVideoBuffer) {
-                    console.log(finalVideoBuffer)
-                });
-            })
-        });*/
-
         console.log('Rendering project frames...')
         wickEditor.canvas.getCanvasRenderer().getProjectFrames(function (frames) {
             console.log('Converting video frames to video...')
