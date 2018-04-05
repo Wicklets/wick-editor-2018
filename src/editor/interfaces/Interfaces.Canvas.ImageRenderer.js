@@ -92,35 +92,38 @@ var ImageRenderer = function () {
     }
 
     self.getProjectFrames = function (callback) {
-        retrieveCanvas();
+        setTimeout(function () {
+            retrieveCanvas();
 
-        self.renderer.reorderAllObjects(wickEditor.project);
-        self.renderer.preloadAllAssets(wickEditor.project, function () {
-            var frameDataURLs = [];
-            wickEditor.project.currentObject = wickEditor.project.rootObject;
-            var len = wickEditor.project.rootObject.getTotalTimelineLength();
-            for (var i = 0; i < len; i++) {
-                wickEditor.project.rootObject.playheadPosition = i;
-                wickEditor.project.applyTweens();
-                self.renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 1);
-                var canvas = self.canvasContainer.children[0];
-                frameDataURLs.push(canvas.toDataURL());
-            }
+            self.renderer.reorderAllObjects(wickEditor.project);
+            self.renderer.preloadAllAssets(wickEditor.project, function () {
+                var frameDataURLs = [];
+                wickEditor.project.currentObject = wickEditor.project.rootObject;
+                var len = wickEditor.project.rootObject.getTotalTimelineLength();
+                for (var i = 0; i < len; i++) {
+                    wickEditor.project.rootObject.playheadPosition = i;
+                    wickEditor.project.applyTweens();
+                    self.renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 1);
+                    var canvas = self.canvasContainer.children[0];
+                    frameDataURLs.push(canvas.toDataURL());
+                    wickEditor.videoExporter.setProgressBarPercent(frameDataURLs.length/len)
+                }
 
-            var frameImages = []
-            frameDataURLs.forEach(function (frameDataURL) {
-                resizedataURL(frameDataURL, wickEditor.project.width, wickEditor.project.height, function (resizedFrameDataURL) {
-                    var frameImage = new Image();
-                    frameImage.onload = function () {
-                        frameImages.push(frameImage);
-                        if(frameImages.length === frameDataURLs.length) {
-                            callback(frameImages);
+                var frameImages = []
+                frameDataURLs.forEach(function (frameDataURL) {
+                    resizedataURL(frameDataURL, wickEditor.project.width, wickEditor.project.height, function (resizedFrameDataURL) {
+                        var frameImage = new Image();
+                        frameImage.onload = function () {
+                            frameImages.push(frameImage);
+                            if(frameImages.length === frameDataURLs.length) {
+                                callback(frameImages);
+                            }
                         }
-                    }
-                    frameImage.src = resizedFrameDataURL;
-                }, true)
+                        frameImage.src = resizedFrameDataURL;
+                    }, true)
+                });
             });
-        });
+        },10);
 
 
     }

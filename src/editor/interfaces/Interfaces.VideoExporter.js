@@ -26,14 +26,6 @@ var VideoExporterInterface = function (wickEditor) {
     var videoExporter;
 
     self.setup = function () {
-      self.buildWindow(); 
-    }
-    
-    self.syncWithEditorState = function () {
-
-    }
-  
-    self.buildWindow = function() {
         // Add title
         var title = document.createElement('div');
         title.className = "GUIBoxTitle"; 
@@ -45,12 +37,8 @@ var VideoExporterInterface = function (wickEditor) {
         closeButton = document.createElement('div'); 
         closeButton.className = "GUIBoxCloseButton"; 
         closeButton.id = "videoExportGUICloseButton"; 
+        closeButton.addEventListener('click', self.close);
         videoExportWindow.appendChild(closeButton); 
-
-        // Add close button interactions
-        closeButton.addEventListener('click', function(event) {
-        self.close(); 
-        });
 
         // Add Progress Bar
         var progressBarContainer = document.createElement('div'); 
@@ -75,16 +63,21 @@ var VideoExporterInterface = function (wickEditor) {
         downloadButton = document.createElement('div'); 
         downloadButton.id = "videoDownloadButton"; 
         downloadButton.className = "downloadButton"; 
-        downloadButton.innerHTML = "Download Video"; 
+        downloadButton.innerHTML = "Export Video"; 
+        downloadButton.addEventListener('click', self.exportVideo);
         videoExportWindow.appendChild(downloadButton); 
-      
-    } 
+    }
     
-    // percent: number from 1-100
-    self.setProgressBarPercent = function(percent) {
+    self.syncWithEditorState = function () {
+
+    }
+    
+    self.setProgressBarPercent = function (percent) {
+        percent = percent*100
+
         if (typeof percent != "number") {
             console.error("Error: Input percentage is not a number."); 
-        return; 
+            return; 
         }
 
         if(percent >= 100) {
@@ -95,12 +88,15 @@ var VideoExporterInterface = function (wickEditor) {
             progressBar.style.width = percent + "%";
         }
     }
-    
-    self.setGUISparkText = function (text) {
-        sparkText.innerHTML = text; 
+
+    self.setSparkText = function (newSparkText) {
+        self.setProgressBarPercent(0)
+        sparkText.innerHTML = newSparkText; 
     }
     
     self.open = function () {
+        self.setSparkText('')
+        self.setProgressBarPercent(0)
         videoExportWindow.style.display = "block"; 
     }
     
@@ -109,23 +105,24 @@ var VideoExporterInterface = function (wickEditor) {
     }
     
     self.exportVideo = function () {
-        self.open(); 
-
         if(!videoExporter) {
             videoExporter = new VideoExporter();
+            videoExporter.setProgressBarFn(self.setProgressBarPercent)
             videoExporter.init();
         }
 
-        console.log('Rendering project frames...')
+        console.log('Rendering frames...')
+        self.setSparkText('Rendering frames...')
         wickEditor.canvas.getCanvasRenderer().getProjectFrames(function (frames) {
-            console.log('Converting video frames to video...')
+            self.setSparkText('Converting frames to video...')
             renderVideoFromFrames(frames, function (videoBuffer) {
-                console.log(videoBuffer)
                 console.log('Generating audio track...')
+                self.setSparkText('Generating audio track...')
                 generateAudioTrack(function (audioBuffer) {
-                    console.log(audioBuffer)
                     console.log('Merging audio and video...')
+                    self.setSparkText('Merging audio and video...')
                     mergeAudioTrackWithVideo(videoBuffer, audioBuffer, function (finalVideoBuffer) {
+                        self.setSparkText('Finished! Thank you for exporting your video with Wick Editor Dot Com!')
                         var blob = new Blob([finalVideoBuffer], {type: "application/octet-stream"});
                         var fileName = 'wick-video-export.mp4';
                         saveAs(blob, fileName);
@@ -170,7 +167,7 @@ var VideoExporterInterface = function (wickEditor) {
     }
 
     function mergeAudioTrackWithVideo (videoBuffer, audioBuffer, callback) {
-        videoExporter.exportVideo({
+        videoExporter.combineAudioAndVideo({
             videoBuffer: videoBuffer,
             soundBuffer: audioBuffer,
             framerate: 30,

@@ -190,14 +190,12 @@ var GuiActionHandler = function (wickEditor) {
             WickProject.Exporter.exportProject(wickEditor.project, {zipped:true});
         });
   
-    registerAction('exportProjectVideo',
+    registerAction('openProjectExportWindow',
                    [],
-                   ['Export Project as Video'],
+                   [],
                    {usableInTextBoxes:true},
                    function (args) {
-                      that.keys = [];
-                      that.specialKeys = [];
-                      wickEditor.videoExporter.exportVideo();
+                      wickEditor.videoExporter.open();
                    });
 
     registerAction('saveProject',
