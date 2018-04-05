@@ -118,7 +118,7 @@ var VideoExporterInterface = function (wickEditor) {
             videoExporter.init();
         }
 
-        console.log('%cRendering WebM...', 'color: #22bb99; font-size: 12px;')
+        /*console.log('%cRendering WebM...', 'color: #22bb99; font-size: 12px;')
         renderWebm(function (videoBuffer) {
             console.log(videoBuffer)
             return;
@@ -131,7 +131,33 @@ var VideoExporterInterface = function (wickEditor) {
                     console.log(finalVideoBuffer)
                 });
             })
+        });*/
+
+        console.log('Rendering project frames...')
+        wickEditor.canvas.getCanvasRenderer().getProjectFrames(function (frames) {
+            console.log('Converting video frames to video...')
+            renderVideoFromFrames(frames, function (videoBuffer) {
+                var dl = document.createElement('a');
+                dl.id = "invisibleDownloadElement"; 
+                dl.style.display = "none"; 
+                var blob = new Blob([videoBuffer]);
+                var src = window.URL.createObjectURL(blob);
+                dl.download = 'adasdasdsad.mp4'; 
+                dl.href = src; 
+                dl.dispatchEvent(new MouseEvent('click'));
+            });
         });
+
+    }
+
+    function renderVideoFromFrames (frames, callback) {
+        videoExporter.renderVideoFromFrames({
+            frames: frames,
+            completedCallback: function (videoArrayBuffer) {
+                //var videoBuffer = new Uint8Array(videoArrayBuffer);
+                callback(videoArrayBuffer);
+            }
+        })
     }
 
     function renderWebm (callback) {

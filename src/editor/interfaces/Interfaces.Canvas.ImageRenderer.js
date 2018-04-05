@@ -113,12 +113,13 @@ var ImageRenderer = function () {
                     var frameImage = new Image();
                     frameImage.onload = function () {
                         frameImages.push(frameImage);
+                        previewImage(frameImage)
                         if(frameImages.length === frameDataURLs.length) {
                             callback(frameImages);
                         }
                     }
                     frameImage.src = resizedFrameDataURL;
-                })
+                }, true)
             });
         });
 
