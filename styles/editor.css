@@ -1,7 +1,7 @@
 /* Wick - (c) 2017 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-/*  This file is part of Wick. 
-    
+/*  This file is part of Wick.
+
     Wick is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -107,6 +107,7 @@ select {
 }
 
 #menuBarGUI {
+    display: flex;
     top: 0px;
     left: 0px;
     height: 28px;
@@ -169,17 +170,27 @@ select {
     border-radius: 3px;
 }
 
+.tab-container{
+    flex: 0 0 auto;
+}
+
+.menuBarProjectControls{
+    display: flex;
+    flex-grow: 1;
+    max-width: calc(100% - 383px);
+}
+
 .menuBarProjectTitle {
-    position: absolute;
-    right: 40px;
-    top: 8px;
-    width: 500px;
-    height: 100%;
-    background-color: none;
-    text-align: right;
     color: white;
     cursor: pointer;
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow: hidden;
     opacity: 1.0;
+    padding: 6px 0;
+    text-overflow: ellipsis;
+    text-align: right;
+    white-space: nowrap;
 }
 .menuBarProjectTitle:hover {
     opacity: 0.8;
@@ -189,11 +200,10 @@ select {
     color: red;
 }
 .menuBarProjectSettingsButton {
-    position: absolute;
-    right: 2px;
-    top: 0px;
-    width: 30px;
-    height: 30px;
+    flex-shrink: 0;
+    flex-grow: 0;
+    width: 28px;
+    height: 28px;
     background-image: url("../resources/settings.png");
     background-repeat: no-repeat;
     background-position: center;
@@ -211,12 +221,12 @@ select {
     background: #58F9BA;
     color: #0b2018;
     box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
-    border-radius: 8px; 
+    border-radius: 8px;
     float: center;
-    width: 180px; 
+    width: 180px;
     text-align: center;
-    font-weight: bold; 
-    margin:0 auto; 
+    font-weight: bold;
+    margin:0 auto;
     margin-top:5px;
     padding: 7px;
 }
@@ -241,11 +251,11 @@ select {
 }
 
 .jscolor {
-    border-radius: 8px; 
+    border-radius: 8px;
 }
 
 .jscolorInline {
-    padding-left: 10px; 
+    padding-left: 10px;
 }
 
 #statusBarGUI {
@@ -278,10 +288,10 @@ select {
 }
 
 .rangeslider_handle {
-    
+
     background-color: aliceblue;
-    
-    
+
+
 }
 
 
@@ -809,8 +819,8 @@ select {
     border-radius: 5px;
     cursor: pointer;
     color: white;
-    font-size: 18px; 
-    background-color: #333; 
+    font-size: 18px;
+    background-color: #333;
     text-align: center;
     padding: 6px;
 
@@ -829,27 +839,27 @@ select {
 
 #videoDownloadButton {
     position: absolute;
-    bottom: 10px; 
+    bottom: 10px;
     right: 10px;
     width: 160px;
 }
 
-#videoExportProgressBarContainer {  
+#videoExportProgressBarContainer {
     width: 85%;
     margin-left: 5%;
-    position: absolute; 
-    bottom: 80px; 
+    position: absolute;
+    bottom: 80px;
 }
 
 #videoExportSparkText {
-  margin-left: 7%; 
+  margin-left: 7%;
   position: absolute;
-  bottom: 130px; 
+  bottom: 130px;
 }
 
 .sparkText {
-  color: white; 
-  font-family: nunito; 
+  color: white;
+  font-family: nunito;
 }
 
 
@@ -923,7 +933,7 @@ hr.hotkeyhr {
     background: #A2A2A2 url(../resources/icon_search.png) no-repeat scroll 3px 3px;
     background-size: 12px 12px;
     padding-left:20px;
-    text-overflow: ellipsis; 
+    text-overflow: ellipsis;
     display: block;
     border-radius: 2px 2px 0px 0px;
 
