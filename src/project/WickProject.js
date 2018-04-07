@@ -126,6 +126,7 @@ WickProject.fromJSON = function (rawJSONProject, uncompressed) {
 
     // Decode scripts back to human-readble and eval()-able format
     projectFromJSON.rootObject.decodeStrings();
+    projectFromJSON.library.decodeStrings();
 
     // Add references to wickobject's parents (optimization)
     projectFromJSON.rootObject.generateParentObjectReferences();
@@ -198,6 +199,7 @@ WickProject.prototype.getAsJSON = function (callback, format) {
 
     // Encode scripts/text to avoid JSON format problems
     self.rootObject.encodeStrings();
+    self.library.encodeStrings();
 
     // Add some browser/OS/wick editor version info for debugging other ppl's projects
     self.metaInfo = getBrowserAndOSInfo();
@@ -208,6 +210,7 @@ WickProject.prototype.getAsJSON = function (callback, format) {
     
     // Decode scripts back to human-readble and eval()-able format
     self.rootObject.decodeStrings();
+    self.library.decodeStrings();
 
     callback(JSONProject);
 

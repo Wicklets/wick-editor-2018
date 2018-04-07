@@ -100,6 +100,18 @@ AssetLibrary.prototype.printInfo = function () {
 
 }
 
+AssetLibrary.prototype.encodeStrings = function () {
+    this.getAllAssets().forEach(function (asset) {
+        asset.filename = WickProject.Compressor.encodeString(asset.filename);
+    });
+}
+
+AssetLibrary.prototype.decodeStrings = function () {
+    this.getAllAssets().forEach(function (asset) {
+        asset.filename = WickProject.Compressor.decodeString(asset.filename);
+    });
+}
+
 AssetLibrary.addPrototypes = function (library) {
 
     for (assetUUID in library.assets) {
