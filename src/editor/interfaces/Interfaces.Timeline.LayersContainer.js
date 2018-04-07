@@ -73,16 +73,24 @@ TimelineInterface.Layer = function (wickEditor, timeline) {
         this.elem.wickData = {wickLayer:this.wickLayer};
 
         this.elem.appendChild((function () {
-            var nameElem = document.createElement('div');
-            nameElem.innerHTML = that.wickLayer.identifier;
-            nameElem.className = 'layer-name';
-            nameElem.addEventListener('mousedown', function (e) {
-                renameLayerTextfield.select();
-                renameLayerTextfield.value = that.wickLayer.identifier;
-                renameLayerTextfield.style.display = 'block';
-                e.stopPropagation();
+            that.nameElem = document.createElement('div');
+            that.nameElem.innerHTML = that.wickLayer.identifier;
+            that.nameElem.className = 'layer-name';
+            that.nameElem.addEventListener('mousedown', function (e) {
+                if(wickEditor.project.getCurrentLayer() === that.wickLayer) {
+                    renameLayerTextfield.select();
+                    renameLayerTextfield.value = that.wickLayer.identifier;
+                    renameLayerTextfield.style.display = 'block';
+                    e.stopPropagation();
+                } else {
+                    wickEditor.actionHandler.doAction('movePlayhead', {
+                        obj: wickEditor.project.currentObject,
+                        newPlayheadPosition: wickEditor.project.currentObject.playheadPosition,
+                        newLayer: that.wickLayer
+                    });
+                }
             });
-            return nameElem;
+            return that.nameElem;
         })());
 
         var renameLayerTextfield = document.createElement('input');
@@ -166,8 +174,10 @@ TimelineInterface.Layer = function (wickEditor, timeline) {
         var layerDiv = this.elem;
         if (layerIsSelected === true) {
             layerDiv.className = 'layer active-layer';
+            that.nameElem.style.cursor = 'text';
         } else {
             layerDiv.className = 'layer';
+            that.nameElem.style.cursor = 'pointer';
         }
     }
 }
