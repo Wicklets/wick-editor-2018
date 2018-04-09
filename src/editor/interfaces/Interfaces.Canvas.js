@@ -164,7 +164,6 @@ var CanvasInterface = function (wickEditor) {
         interactiveCanvas.updateViewTransforms();
         fastCanvas.updateViewTransforms();
         canvasBackdrop.updateViewTransforms();
-        wickEditor.timeline.updateZoomBox();
     }
 
 }

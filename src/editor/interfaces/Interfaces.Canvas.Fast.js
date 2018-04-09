@@ -121,11 +121,8 @@ var FastCanvas = function (wickEditor) {
                     self.stopPreviewPlaying();
                 }
             }
-
-            wickEditor.timeline.getElem().playhead.update();
         }
 
-        wickEditor.timeline.getElem().playhead.update();
         previewPlayIntervalID = setInterval(proceed, 1000/wickEditor.project.framerate);
     }
 

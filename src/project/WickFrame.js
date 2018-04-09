@@ -464,3 +464,7 @@ WickFrame.prototype.applyTween = function () {
 WickFrame.prototype.hasSound = function () {
     return this.audioAssetUUID;
 }
+
+WickFrame.prototype.getLayerIndex = function () {
+    return this.parentLayer.parentWickObject.layers.indexOf(this.parentLayer)
+}

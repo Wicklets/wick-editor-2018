@@ -663,6 +663,19 @@ WickObject.prototype.getTotalNumChildren = function () {
     return count;
 }
 
+WickObject.prototype.getAllLayers = function () {
+
+    if(!this.isSymbol) return [];
+
+    var allLayers = [];
+
+    this.layers.forEach(function (layer) {
+        allLayers.push(layer);
+    });
+
+    return allLayers;
+}
+
 WickObject.prototype.getAllFrames = function () {
 
     if(!this.isSymbol) return [];

@@ -755,15 +755,11 @@ var WickActionHandler = function (wickEditor) {
             args.prevEditedObject = wickEditor.project.currentObject;
             wickEditor.project.currentObject = args.objectToEdit;
 
-            wickEditor.timeline.resetScrollbars();
-
             done(args);
         },
         function (args) {
             wickEditor.project.clearSelection();
             wickEditor.project.currentObject = args.prevEditedObject;
-
-            wickEditor.timeline.resetScrollbars();
 
             done(args);
         });
@@ -775,15 +771,11 @@ var WickActionHandler = function (wickEditor) {
             args.prevEditedObject = wickEditor.project.currentObject;
             wickEditor.project.currentObject = wickEditor.project.currentObject.parentObject;
 
-            wickEditor.timeline.resetScrollbars();
-
             done(args);
         },
         function (args) {
             wickEditor.project.clearSelection();
             wickEditor.project.currentObject = args.prevEditedObject;
-
-            wickEditor.timeline.resetScrollbars();
 
             done(args);
         });
