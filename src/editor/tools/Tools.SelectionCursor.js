@@ -507,22 +507,34 @@ Tools.SelectionCursor = function (wickEditor) {
 
             var rotateHandleLength = ROTATE_HANDLE_LENGTH/wickEditor.canvas.getZoom()
 
-            rotateTL = new paper.Path.Rectangle(selectionBoundsRect.topLeft.add(0,-rotateHandleLength), selectionBoundsRect.topRight)
+            rotateTL = new paper.Path.Ellipse({
+                center: selectionBoundsRect.topLeft,
+                radius: rotateHandleLength
+            });
             rotateTL.fillColor = HIDDEN_ROTATE_HANDLE_COLOR;
             rotateTL._wickInteraction = 'rotate';
             rotateTL._cursor = 'url("resources/cursor-rotate.png") 32 32,default';
 
-            rotateTR = new paper.Path.Rectangle(selectionBoundsRect.topRight.add(rotateHandleLength,0), selectionBoundsRect.bottomRight)
+            rotateTR = new paper.Path.Ellipse({
+                center: selectionBoundsRect.topRight,
+                radius: rotateHandleLength
+            });
             rotateTR.fillColor = HIDDEN_ROTATE_HANDLE_COLOR;
             rotateTR._wickInteraction = 'rotate';
             rotateTR._cursor = 'url("resources/cursor-rotate.png") 32 32,default';
 
-            rotateBL = new paper.Path.Rectangle(selectionBoundsRect.bottomLeft.add(0,rotateHandleLength), selectionBoundsRect.bottomRight)
+            rotateBL = new paper.Path.Ellipse({
+                center: selectionBoundsRect.bottomLeft,
+                radius: rotateHandleLength
+            });
             rotateBL.fillColor = HIDDEN_ROTATE_HANDLE_COLOR;
             rotateBL._wickInteraction = 'rotate';
             rotateBL._cursor = 'url("resources/cursor-rotate.png") 32 32,default';
 
-            rotateBR = new paper.Path.Rectangle(selectionBoundsRect.topLeft.add(-rotateHandleLength,0), selectionBoundsRect.bottomLeft)
+            rotateBR = new paper.Path.Ellipse({
+                center: selectionBoundsRect.bottomRight,
+                radius: rotateHandleLength
+            });
             rotateBR.fillColor = HIDDEN_ROTATE_HANDLE_COLOR;
             rotateBR._wickInteraction = 'rotate';
             rotateBR._cursor = 'url("resources/cursor-rotate.png") 32 32,default';
