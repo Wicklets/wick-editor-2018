@@ -82,6 +82,8 @@ var ImageRenderer = function () {
     }
 
     self.getProjectFrames = function (callback) {
+        console.log('Rendering frames...');
+        wickEditor.videoExporter.setSparkText('Rendering frames...');
 
         retrieveCanvas();
 
@@ -93,59 +95,40 @@ var ImageRenderer = function () {
         self.renderer.preloadAllAssets(wickEditor.project, function () {
             function proceed (i) {
                 if(i === len) {
-                    callback(imgs)
+                    callback(imgs);
                     return;
                 }
 
-                resizedataURL(getFrameAsDataURL(i), wickEditor.project.width, wickEditor.project.height, function (resizedFrameDataURL) {
-                    var frameImage = new Image();
-                    frameImage.onload = function () {
-                        imgs.push(frameImage);
-                        setTimeout(function () {
-                            proceed(i+1)
-                        })
-                    }
-                    frameImage.src = resizedFrameDataURL;
-                }, true)
+                getFrameAsDataURL(i, function (img) {
+                    imgs.push(img);
+                    // Force next frame render to be scheduled later so the DOM can update
+                    setTimeout(function () {
+                        proceed(i+1)
+                    });
+                });
                 
-                wickEditor.videoExporter.setProgressBarPercent(i/len)
+                wickEditor.videoExporter.setProgressBarPercent(i/len);
             }
-            proceed(0)
-            /*
-            var frameDataURLs = [];
-            wickEditor.project.currentObject = wickEditor.project.rootObject;
-            var len = wickEditor.project.rootObject.getTotalTimelineLength();
-            for (var i = 0; i < len; i++) {
-                wickEditor.project.rootObject.playheadPosition = i;
-                wickEditor.project.applyTweens();
-                self.renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 1);
-                var canvas = self.canvasContainer.children[0];
-                frameDataURLs.push(canvas.toDataURL());
-            }
-
-            var frameImages = []
-            frameDataURLs.forEach(function (frameDataURL) {
-                resizedataURL(frameDataURL, wickEditor.project.width, wickEditor.project.height, function (resizedFrameDataURL) {
-                    var frameImage = new Image();
-                    frameImage.onload = function () {
-                        frameImages.push(frameImage);
-                        if(frameImages.length === frameDataURLs.length) {
-                            callback(frameImages);
-                        }
-                    }
-                    frameImage.src = resizedFrameDataURL;
-                }, true)
-            });
-            */
+            proceed(0);
         });
     }
 
-    function getFrameAsDataURL (i) {
+    function getFrameAsDataURL (i, callback) {
         wickEditor.project.rootObject.playheadPosition = i;
         wickEditor.project.applyTweens();
         self.renderer.renderWickObjects(wickEditor.project, wickEditor.project.rootObject.getAllActiveChildObjects(), 1);
         var canvas = self.canvasContainer.children[0];
-        return canvas.toDataURL();
+        var canvasDataURL = canvas.toDataURL();
+
+        resizedataURL(canvasDataURL, wickEditor.project.width, wickEditor.project.height, function (resizedFrameDataURL) {
+            var frameImage = new Image();
+            frameImage.onload = function () {
+                setTimeout(function () {
+                    callback(frameImage)
+                })
+            }
+            frameImage.src = resizedFrameDataURL;
+        }, true)
     }
 
     self.renderProjectAsPNG = function (callback) {

@@ -111,21 +111,13 @@ var VideoExporterInterface = function (wickEditor) {
             videoExporter.init();
         }
 
-        console.log('Rendering frames...')
-        self.setSparkText('Rendering frames...')
+
+
         wickEditor.canvas.getCanvasRenderer().getProjectFrames(function (frames) {
-            self.setSparkText('Converting frames to video...')
             renderVideoFromFrames(frames, function (videoBuffer) {
-                console.log('Generating audio track...')
-                self.setSparkText('Generating audio track...')
                 generateAudioTrack(function (audioBuffer) {
-                    console.log('Merging audio and video...')
-                    self.setSparkText('Merging audio and video...')
                     mergeAudioTrackWithVideo(videoBuffer, audioBuffer, function (finalVideoBuffer) {
-                        self.setSparkText('Finished! Thank you for exporting your video with Wick Editor Dot Com!')
-                        var blob = new Blob([finalVideoBuffer], {type: "application/octet-stream"});
-                        var fileName = 'wick-video-export.mp4';
-                        saveAs(blob, fileName);
+                        downloadVideo(finalVideoBuffer);
                     });
                 });
             });
@@ -134,6 +126,8 @@ var VideoExporterInterface = function (wickEditor) {
     }
 
     function renderVideoFromFrames (frames, callback) {
+        self.setSparkText('Converting frames to video...')
+
         videoExporter.renderVideoFromFrames({
             frames: frames,
             completedCallback: function (videoArrayBuffer) {
@@ -144,6 +138,8 @@ var VideoExporterInterface = function (wickEditor) {
     }
 
     function generateAudioTrack (callback) {
+        self.setSparkText('Generating audio track...')
+
         var soundFrames = wickEditor.project.rootObject.getAllFramesWithSound();
 
         soundFrames.forEach(function (soundFrame) {
@@ -167,6 +163,8 @@ var VideoExporterInterface = function (wickEditor) {
     }
 
     function mergeAudioTrackWithVideo (videoBuffer, audioBuffer, callback) {
+        self.setSparkText('Merging audio and video...')
+
         videoExporter.combineAudioAndVideo({
             videoBuffer: videoBuffer,
             soundBuffer: audioBuffer,
@@ -176,5 +174,12 @@ var VideoExporterInterface = function (wickEditor) {
             percentCallback: console.log,
             completedCallback: callback,
         })
+    }
+
+    function downloadVideo (videoBuffer) {
+        self.setSparkText('Finished exporting!')
+        var blob = new Blob([finalVideoBuffer], {type: "application/octet-stream"});
+        var fileName = 'wick-video-export.mp4';
+        saveAs(blob, fileName);
     }
 }
