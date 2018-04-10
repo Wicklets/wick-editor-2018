@@ -172,8 +172,6 @@ var VideoExporterInterface = function (wickEditor) {
             videoExporter.init();
         }
 
-
-
         wickEditor.canvas.getCanvasRenderer().getProjectFrames(function (frames) {
             renderVideoFromFrames(frames, function (videoBuffer) {
                 generateAudioTrack(function (audioBuffer) {
@@ -195,6 +193,7 @@ var VideoExporterInterface = function (wickEditor) {
 
         videoExporter.renderVideoFromFrames({
             frames: frames,
+            framerate: wickEditor.project.framerate,
             completedCallback: function (videoArrayBuffer) {
                 var videoBuffer = new Uint8Array(videoArrayBuffer);
                 callback(videoBuffer);
@@ -209,6 +208,7 @@ var VideoExporterInterface = function (wickEditor) {
         if(soundFrames.length === 0) {
             console.log('Video has no sound. Skipping audio export.')
             callback(null);
+            return;
         }
 
         soundFrames.forEach(function (soundFrame) {
@@ -218,8 +218,8 @@ var VideoExporterInterface = function (wickEditor) {
             videoExporter.addAudioTrack(
                 convertDataURIToBinary(src),
                 0,
-                1000,
-                1,
+                soundFrame.length / wickEditor.project.framerate,
+                1 + (soundFrame.playheadPosition / wickEditor.project.framerate * 1000),
             )
         })
 
@@ -237,9 +237,8 @@ var VideoExporterInterface = function (wickEditor) {
         videoExporter.combineAudioAndVideo({
             videoBuffer: videoBuffer,
             soundBuffer: audioBuffer,
-            framerate: 30,
+            framerate: wickEditor.project.framerate,
             filename: 'test.mp4',
-            videoLengthMs: 30000,
             percentCallback: console.log,
             completedCallback: callback,
         })
@@ -247,6 +246,7 @@ var VideoExporterInterface = function (wickEditor) {
 
     function downloadVideo (videoBuffer) {
         self.setSparkText('Finished exporting!')
+        self.setProgressBarPercent(1);
         var blob = new Blob([videoBuffer], {type: "application/octet-stream"});
         var fileName = wickEditor.project.name + '.mp4';
         saveAs(blob, fileName);
