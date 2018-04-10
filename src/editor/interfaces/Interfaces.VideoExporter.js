@@ -178,7 +178,7 @@ var VideoExporterInterface = function (wickEditor) {
 
     function downloadVideo (videoBuffer) {
         self.setSparkText('Finished exporting!')
-        var blob = new Blob([finalVideoBuffer], {type: "application/octet-stream"});
+        var blob = new Blob([videoBuffer], {type: "application/octet-stream"});
         var fileName = 'wick-video-export.mp4';
         saveAs(blob, fileName);
     }
