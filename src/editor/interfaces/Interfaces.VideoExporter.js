@@ -116,9 +116,13 @@ var VideoExporterInterface = function (wickEditor) {
         wickEditor.canvas.getCanvasRenderer().getProjectFrames(function (frames) {
             renderVideoFromFrames(frames, function (videoBuffer) {
                 generateAudioTrack(function (audioBuffer) {
-                    mergeAudioTrackWithVideo(videoBuffer, audioBuffer, function (finalVideoBuffer) {
-                        downloadVideo(finalVideoBuffer);
-                    });
+                    if(!audioBuffer) {
+                        downloadVideo(videoBuffer);
+                    } else {
+                        mergeAudioTrackWithVideo(videoBuffer, audioBuffer, function (finalVideoBuffer) {
+                            downloadVideo(finalVideoBuffer);
+                        });
+                    }
                 });
             });
         });
@@ -141,6 +145,10 @@ var VideoExporterInterface = function (wickEditor) {
         self.setSparkText('Generating audio track...')
 
         var soundFrames = wickEditor.project.rootObject.getAllFramesWithSound();
+        if(soundFrames.length === 0) {
+            console.log('Video has no sound. Skipping audio export.')
+            callback(null);
+        }
 
         soundFrames.forEach(function (soundFrame) {
             var library = wickEditor.project.library;
@@ -179,7 +187,7 @@ var VideoExporterInterface = function (wickEditor) {
     function downloadVideo (videoBuffer) {
         self.setSparkText('Finished exporting!')
         var blob = new Blob([videoBuffer], {type: "application/octet-stream"});
-        var fileName = 'wick-video-export.mp4';
+        var fileName = wickEditor.project.name + '.mp4';
         saveAs(blob, fileName);
     }
 }
