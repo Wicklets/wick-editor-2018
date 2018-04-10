@@ -25,18 +25,23 @@ var VideoExporterInterface = function (wickEditor) {
 
     var videoExporter;
 
-    var qualityOptions = ["Ultra", "High", "Medium", "Low"]; 
+    var qualityOptions = {
+        "Ultra" : 1, 
+        "High" : 5, 
+        "Medium" : 15, 
+        "Low" : 31,
+    }; 
     var defaultQuality = "High"; 
     var chosenQuality = defaultQuality; 
     var qualityDropdown; 
 
     self.setup = function () {
         // Add title
-        var title = document.createElement('div');
+        /*var title = document.createElement('div');
         title.className = "GUIBoxTitle"; 
         title.id = "videoExportGUITitle";
         title.innerHTML = "Wick Video Exporter"; 
-        videoExportWindow.appendChild(title); 
+        videoExportWindow.appendChild(title); */
 
         // Add Close Button
         closeButton = document.createElement('div'); 
@@ -45,48 +50,12 @@ var VideoExporterInterface = function (wickEditor) {
         closeButton.addEventListener('click', self.close);
         videoExportWindow.appendChild(closeButton);
 
-        // Add Settings Menu
-        var settingsContainer = document.createElement('div');
-        settingsContainer.id = "videoExportSettingsContainer";
-
-        var qualityContainer = document.createElement('div');
-        var qualitySettingTitle = document.createElement('div'); 
-        qualitySettingTitle.innerText = "Quality: ";  
-        qualitySettingTitle.id = "qualitySettingTitle"; 
-        qualityContainer.appendChild(qualitySettingTitle); 
-        qualityContainer.className = "quality-container"; 
-
-        qualityDropdown = document.createElement('div'); 
-        qualityDropdown.id="videoExportQualityDropdown";
-        qualityDropdown.className="dropbtn"; 
-
-        var dropdownTitleDiv = document.createElement('div'); 
-        dropdownTitleDiv.id = "videoExportQualityTitleDiv"; 
-        dropdownTitleDiv.innerText=chosenQuality;
-        dropdownTitleDiv.class="title-div";
-        qualityDropdown.appendChild(dropdownTitleDiv); 
-
-
-        var dropdownContainer = document.createElement('div'); 
-        dropdownContainer.className = "dropdown-content"; 
-
-        qualityDropdown.onclick = function () {
-            dropdownContainer.classList.toggle("show")
-        };
-
-        qualityOptions.forEach(function (quality) {
-            var elem = document.createElement('div'); 
-            elem.innerHTML = quality; 
-            elem.className = "dropdown-item";
-            elem.onclick = function () {
-                self.setVideoQuality(quality); 
-            }; 
-            dropdownContainer.appendChild(elem); 
-        });
-        qualityDropdown.appendChild(dropdownContainer); 
-        qualityContainer.appendChild(qualityDropdown); 
-        settingsContainer.appendChild(qualityContainer); 
-        videoExportWindow.appendChild(settingsContainer); 
+        // Add Spark Text
+        sparkText = document.createElement('div'); 
+        sparkText.id = "videoExportSparkText"; 
+        sparkText.className = "sparkText"; 
+        sparkText.innerHTML = "Exporting Your Video...";
+        videoExportWindow.appendChild(sparkText); 
 
         // Add Progress Bar
         var progressBarContainer = document.createElement('div'); 
@@ -100,26 +69,62 @@ var VideoExporterInterface = function (wickEditor) {
         progressBar.appendChild(extraSpan); 
         videoExportWindow.appendChild(progressBarContainer); 
 
-        // Add Spark Text
-        sparkText = document.createElement('div'); 
-        sparkText.id = "videoExportSparkText"; 
-        sparkText.className = "sparkText"; 
-        sparkText.innerHTML = "Exporting Your Video...";
-        videoExportWindow.appendChild(sparkText); 
+        // Add Settings Menu
+        var settingsContainer = document.createElement('div');
+        settingsContainer.id = "videoExportSettingsContainer";
+        videoExportWindow.appendChild(settingsContainer); 
+
+        var qualityContainer = document.createElement('div');
+        qualityContainer.className = "quality-container"; 
+        settingsContainer.appendChild(qualityContainer);
+
+        var qualitySettingTitle = document.createElement('div'); 
+        qualitySettingTitle.innerText = "Quality: ";  
+        qualitySettingTitle.id = "qualitySettingTitle"; 
+        qualityContainer.appendChild(qualitySettingTitle); 
+
+        qualityDropdown = document.createElement('div'); 
+        qualityDropdown.id="videoExportQualityDropdown";
+        qualityDropdown.className="dropbtn"; 
+        qualityDropdown.onclick = function () {
+            dropdownContainer.classList.toggle("show")
+        };
+        qualityContainer.appendChild(qualityDropdown); 
+
+        var dropdownTitleDiv = document.createElement('div'); 
+        dropdownTitleDiv.id = "videoExportQualityTitleDiv"; 
+        dropdownTitleDiv.innerText=chosenQuality;
+        dropdownTitleDiv.class="title-div";
+        qualityDropdown.appendChild(dropdownTitleDiv); 
+
+        var dropdownContainer = document.createElement('div'); 
+        dropdownContainer.className = "dropdown-content"; 
+
+        for(quality in qualityOptions) {
+            var elem = document.createElement('div'); 
+            elem.innerHTML = quality; 
+            elem.className = "dropdown-item";
+            (function (q) {
+                elem.onclick = function () {
+                    self.setVideoQuality(q); 
+                };
+            })(quality); 
+            dropdownContainer.appendChild(elem); 
+        }
+        qualityDropdown.appendChild(dropdownContainer); 
 
         // Add Download Button
         downloadButton = document.createElement('div'); 
-        downloadButton.id = "videoDownloadButton"; 
-        downloadButton.className = "downloadButton"; 
+        downloadButton.className = "videoDownloadButton"; 
         downloadButton.innerHTML = "Export Video"; 
         downloadButton.addEventListener('click', self.exportVideo);
-        videoExportWindow.appendChild(downloadButton); 
+        settingsContainer.appendChild(downloadButton); 
     }
     
     self.setVideoQuality = function (qualitySetting) {
         var titleDiv = qualityDropdown.querySelector("#videoExportQualityTitleDiv"); 
 
-        if (qualityOptions.includes(qualitySetting)) {
+        if (qualityOptions[qualitySetting]) {
             chosenQuality = qualitySetting; 
             titleDiv.textContent = chosenQuality; 
         } else {
@@ -192,6 +197,7 @@ var VideoExporterInterface = function (wickEditor) {
         self.setSparkText('Converting frames to video...')
 
         videoExporter.renderVideoFromFrames({
+            quality: qualityOptions[chosenQuality],
             frames: frames,
             framerate: wickEditor.project.framerate,
             completedCallback: function (videoArrayBuffer) {

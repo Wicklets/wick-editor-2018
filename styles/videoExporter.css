@@ -1,13 +1,59 @@
-.dropbtn {
+#videoExportGUI {
+    padding: 20px;
+    border-radius: 3px;
+    left: 50%;
+    top: 50%;
+    width: 500px;
+    height: 106px;
     position: absolute;
+    z-index: 10;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    transform: translateX(-50%) translateY(-50%);
+    display: none;
+}
+
+.sparkText {
+    color: white;
+    height: 15px;
+}
+
+#videoExportProgressBarContainer {
+    width: 95%;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+#videoExportSettingsContainer {
+    
+}
+
+.quality-container {
+    color: #FFF;
+    display: flex;
+    flex-direction: row;
+    float:left;
+}
+
+#qualitySettingTitle {
+    padding-top: 5px;
+    margin-right: 5px;
+}
+
+.dropbtn {
+    width: 60px;
+    height: 16px;
+    padding: 6px;
+
     background-color: #3498DB;
     color: white;
-    padding: 8px;
-    font-size: 16px;
-    width: 60px;
+    
     border: none;
+    border-radius: 5px;
     cursor: pointer;
-    left: 80%; 
+
+    text-align: center;
+    font-size: 16px;
 }
 
 .dropbtn:hover, .dropbtn:focus {
@@ -41,13 +87,31 @@
     background-color: #FFF;
 }
 
-.quality-container {
-    color: #FFF;
-}
 .show {
     display:block;
 }
 
-#qualitySettingTitle {
-    left: 60%;  
+.videoDownloadButton {
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    font-size: 18px;
+    background-color: #333;
+    text-align: center;
+    padding: 6px;
+    height: 20px;
+    width: 160px;
+    float:right;
+
+    -webkit-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+}
+
+.videoDownloadButton:hover {
+    background-color: #00D9A7;
+}
+
+.videoDownloadButton:active {
+    background-color: #01C094;
 }

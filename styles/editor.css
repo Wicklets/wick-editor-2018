@@ -753,19 +753,6 @@ select {
     font-size: 14px;
 }
 
-#videoExportGUI {
-    border-radius: 3px;
-    left: 50%;
-    top: 50%;
-    width: 500px;
-    height: 200px;
-    position: absolute;
-    z-index: 10;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    transform: translateX(-50%) translateY(-50%);
-    display: none;
-}
-
 .editorCreditsContent {
     color: white;
     width: 100%;
@@ -814,53 +801,6 @@ select {
     font-weight: bold;
     font-size: 14px;
 }
-
-.downloadButton {
-    border-radius: 5px;
-    cursor: pointer;
-    color: white;
-    font-size: 18px;
-    background-color: #333;
-    text-align: center;
-    padding: 6px;
-
-    -webkit-transition: background-color 100ms linear;
-    -ms-transition: background-color 100ms linear;
-    transition: background-color 100ms linear;
-}
-
-.downloadButton:hover {
-    background-color: #00D9A7;
-}
-
-.downloadButton:active {
-    background-color: #01C094;
-}
-
-#videoDownloadButton {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    width: 160px;
-}
-
-#videoExportProgressBarContainer {
-    width: 85%;
-    margin-left: 5%;
-    position: absolute;
-    bottom: 80px;
-}
-
-#videoExportSparkText {
-  margin-left: 7%;
-  position: absolute;
-  bottom: 130px;
-}
-
-.sparkText {
-  color: white;
-}
-
 
 .editorCreditsCloseButton {
     position: absolute;
