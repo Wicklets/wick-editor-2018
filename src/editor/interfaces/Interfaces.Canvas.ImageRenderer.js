@@ -95,6 +95,7 @@ var ImageRenderer = function () {
         self.renderer.preloadAllAssets(wickEditor.project, function () {
             function proceed (i) {
                 if(i === len) {
+                    console.log(imgs)
                     callback(imgs);
                     return;
                 }
