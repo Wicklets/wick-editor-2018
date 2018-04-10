@@ -25,6 +25,11 @@ var VideoExporterInterface = function (wickEditor) {
 
     var videoExporter;
 
+    var qualityOptions = ["Ultra", "High", "Medium", "Low"]; 
+    var defaultQuality = "High"; 
+    var chosenQuality = defaultQuality; 
+    var qualityDropdown; 
+
     self.setup = function () {
         // Add title
         var title = document.createElement('div');
@@ -38,7 +43,50 @@ var VideoExporterInterface = function (wickEditor) {
         closeButton.className = "GUIBoxCloseButton"; 
         closeButton.id = "videoExportGUICloseButton"; 
         closeButton.addEventListener('click', self.close);
-        videoExportWindow.appendChild(closeButton); 
+        videoExportWindow.appendChild(closeButton);
+
+        // Add Settings Menu
+        var settingsContainer = document.createElement('div');
+        settingsContainer.id = "videoExportSettingsContainer";
+
+        var qualityContainer = document.createElement('div');
+        var qualitySettingTitle = document.createElement('div'); 
+        qualitySettingTitle.innerText = "Quality: ";  
+        qualitySettingTitle.id = "qualitySettingTitle"; 
+        qualityContainer.appendChild(qualitySettingTitle); 
+        qualityContainer.className = "quality-container"; 
+
+        qualityDropdown = document.createElement('div'); 
+        qualityDropdown.id="videoExportQualityDropdown";
+        qualityDropdown.className="dropbtn"; 
+
+        var dropdownTitleDiv = document.createElement('div'); 
+        dropdownTitleDiv.id = "videoExportQualityTitleDiv"; 
+        dropdownTitleDiv.innerText=chosenQuality;
+        dropdownTitleDiv.class="title-div";
+        qualityDropdown.appendChild(dropdownTitleDiv); 
+
+
+        var dropdownContainer = document.createElement('div'); 
+        dropdownContainer.className = "dropdown-content"; 
+
+        qualityDropdown.onclick = function () {
+            dropdownContainer.classList.toggle("show")
+        };
+
+        qualityOptions.forEach(function (quality) {
+            var elem = document.createElement('div'); 
+            elem.innerHTML = quality; 
+            elem.className = "dropdown-item";
+            elem.onclick = function () {
+                self.setVideoQuality(quality); 
+            }; 
+            dropdownContainer.appendChild(elem); 
+        });
+        qualityDropdown.appendChild(dropdownContainer); 
+        qualityContainer.appendChild(qualityDropdown); 
+        settingsContainer.appendChild(qualityContainer); 
+        videoExportWindow.appendChild(settingsContainer); 
 
         // Add Progress Bar
         var progressBarContainer = document.createElement('div'); 
@@ -68,6 +116,19 @@ var VideoExporterInterface = function (wickEditor) {
         videoExportWindow.appendChild(downloadButton); 
     }
     
+    self.setVideoQuality = function (qualitySetting) {
+        var titleDiv = qualityDropdown.querySelector("#videoExportQualityTitleDiv"); 
+
+        if (qualityOptions.includes(qualitySetting)) {
+            chosenQuality = qualitySetting; 
+            titleDiv.textContent = chosenQuality; 
+        } else {
+            chosenQuality = defaultQuality; 
+            titleDiv.textContent = chosenQuality;
+            console.error(qualitySetting + " is not a valid video quality setting! Defaulting to High Quality."); 
+        }
+    }
+
     self.syncWithEditorState = function () {
 
     }
