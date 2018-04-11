@@ -102,10 +102,8 @@ var InteractiveCanvas = function (wickEditor) {
                     }
                     return proceed();
                 } else if (wickObject.isImage) {
-                    var raster = new paper.Raster(
-                        wickObject.asset.data, 
-                        new paper.Point(wickObject.x,wickObject.y));
-                    wickObject.paper = new paper.Group();
+                    var raster = new paper.Raster(wickObject.asset.data, {insert:false});
+                    wickObject.paper = new paper.Group({insert:false});
                     wickObject.paper.addChild(raster);
                     return proceed();
                 } else if (wickObject.isText) {

@@ -749,7 +749,7 @@ var WickActionHandler = function (wickEditor) {
         function (args) {
             wickEditor.project.clearSelection();
 
-            wickEditor.project.currentObject.playheadPosition = 0;
+            //wickEditor.project.currentObject.playheadPosition = 0;
 
             // Set the editor to be editing this object at its first frame
             args.prevEditedObject = wickEditor.project.currentObject;
