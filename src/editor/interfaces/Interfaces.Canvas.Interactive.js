@@ -108,6 +108,8 @@ var InteractiveCanvas = function (wickEditor) {
                     wickObject.paper.addChild(raster);
                     wickObject.width = wickObject.paper.bounds._width;
                     wickObject.height = wickObject.paper.bounds._height;*/
+                    wickObject.width = wickObject.paper.bounds._width;
+                    wickObject.height = wickObject.paper.bounds._height;
                     return proceed();
                 } else if (wickObject.isText) {
                     wickObject.paper = new paper.PointText({

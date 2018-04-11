@@ -115,8 +115,9 @@ Tools.Zoom = function (wickEditor) {
             if(wickEditor.project.getSelectedObjects().length > 0) {
                 //wickEditor.project.clearSelection();
                 //wickEditor.syncInterfaces();
-                if(wickEditor.currentTool.forceUpdateSelection)
-                    wickEditor.currentTool.forceUpdateSelection();
+                
+                /*if(wickEditor.currentTool.forceUpdateSelection)
+                    wickEditor.currentTool.forceUpdateSelection();*/
             }
         }
 
