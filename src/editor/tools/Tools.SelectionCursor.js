@@ -104,7 +104,7 @@ Tools.SelectionCursor = function (wickEditor) {
         pathHoverGhost = null;
         if(hitResult && !hitResult.item._wickInteraction) {
             if(hitResult.item.wick && !wickEditor.project.isObjectSelected(hitResult.item.wick)) {
-                if(hitResult.item.wick.isSymbol) {
+                if(hitResult.item.wick.isSymbol || hitResult.item.wick.isImage) {
                     pathHoverGhost = new paper.Path.Rectangle(hitResult.item.bounds);
                 } else {
                     pathHoverGhost = hitResult.item.clone({insert:false});
