@@ -161,8 +161,8 @@ var VideoExporterInterface = function (wickEditor) {
     }
     
     self.open = function () {
-        self.setSparkText('')
-        self.setProgressBarPercent(0)
+        self.setSparkText('Ready to export video.');
+        self.setProgressBarPercent(0);
         videoExportWindow.style.display = "block"; 
     }
     
