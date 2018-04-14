@@ -14,18 +14,12 @@
 
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
-
-var LibraryInterface = function (wickEditor) {
-    var self = this; 
-
-    this.setup = function () {
-
-    }
-}
     
 var LibraryInterface = function (wickEditor) {
 
     var self = this;
+
+    self.dirty = false;
 
     var selectedNode;
     var draggedNode;
@@ -116,8 +110,11 @@ var LibraryInterface = function (wickEditor) {
     }
 
     this.syncWithEditorState = function () {
-        this.clear();
-        this.populate();
+        if(this.dirty) {
+            this.dirty = false;
+            this.clear();
+            this.populate();
+        }
     }
 
     this.populate = function () {

@@ -548,27 +548,6 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
-    /*properties.push(new InspectorInterface.SelectInput({
-        title: '<img src="resources/inspector-icons/fontfamily.svg" class="inspector-icon"/>',
-        tooltip: 'Font Family',
-        options: getAllGoogleFonts(),
-        isActiveFn: function () {
-            return selectionInfo.numObjects === 1 
-                && selectionInfo.type == 'wickobject' 
-                && selectionInfo.object.isText;
-        },
-        getValueFn: function () {
-            return selectionInfo.object.textData.fontFamily;
-        }, 
-        onChangeFn: function (val) {
-            loadGoogleFonts([val], function () {
-                selectionInfo.object.textData.fontFamily = val;
-                wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
-                wickEditor.syncInterfaces();
-            });
-        }
-    }));*/
-
     properties.push(new InspectorInterface.SliderInput({
         title: '<img src="resources/inspector-icons/volume.svg" class="inspector-icon"/>',
         tooltip: 'Volume',

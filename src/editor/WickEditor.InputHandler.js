@@ -389,7 +389,8 @@ var InputHandler = function (wickEditor) {
     }
 
     var loadAudio = function (src, filename, callback) {
-        // Firefox reads Ogg files as video/ogg which breaks howler. Hacky fix for that here:
+        // Firefox reads Ogg files as video/ogg which breaks howler. 
+        // This forces howler to not think ogg files are videos in firefox.
         if(src.includes('video/ogg')) {
             src = src.replace('video/ogg', 'audio/ogg');
         }

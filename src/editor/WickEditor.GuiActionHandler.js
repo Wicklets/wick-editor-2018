@@ -633,6 +633,7 @@ var GuiActionHandler = function (wickEditor) {
             wickEditor.guiActionHandler.doAction("openProjectSettings");
             wickEditor.project.currentObject.framesDirty = true;
             wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
+            wickEditor.library.dirty = true;
             wickEditor.syncInterfaces();
         });
 
@@ -1201,6 +1202,8 @@ var GuiActionHandler = function (wickEditor) {
         function (args) {
             var asset = wickEditor.library.getSelectedAsset(); 
 
+            wickEditor.library.dirty = true;
+
             if (asset == null) return; 
             wickEditor.actionHandler.doAction('deleteAsset', {
                 asset: asset,
@@ -1218,6 +1221,8 @@ var GuiActionHandler = function (wickEditor) {
             
             var oldAssetName = asset.filename; 
             var newName = prompt("Rename " + oldAssetName + " to:");
+
+            wickEditor.library.dirty = true;
 
             if (newName == null) return; // No name input
             wickEditor.actionHandler.doAction('renameAsset', {

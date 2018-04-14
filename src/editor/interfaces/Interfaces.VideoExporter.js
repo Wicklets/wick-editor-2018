@@ -147,7 +147,7 @@ var VideoExporterInterface = function (wickEditor) {
         }
 
         if(percent >= 100) {
-            progressBar.style.width = "100%"; 
+            progressBar.style.width = "100%";
         } else if (percent <= 0) {
             progressBar.style.width = "0%";
         } else {

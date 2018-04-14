@@ -112,6 +112,9 @@ var WickEditor = function () {
 
 WickEditor.prototype.syncInterfaces = function () {
     var enablePerfTests = false;
+    if(enablePerfTests) {
+        console.log('---------Begin timing sync-------')
+    }
 
     //startTiming();
 
@@ -123,8 +126,8 @@ WickEditor.prototype.syncInterfaces = function () {
         interface.syncWithEditorState();
         if(enablePerfTests) {
             stopTiming('interface:');
-            console.log(interface)
-            console.log(' ')
+            console.log(interface.__proto__.constructor)
+            //console.log(' ')
         }
     });
 

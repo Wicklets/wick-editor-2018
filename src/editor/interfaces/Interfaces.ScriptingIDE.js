@@ -19,6 +19,8 @@ var ScriptingIDEInterface = function (wickEditor) {
 
     var self = this;
 
+    var openLast;
+
     var maximized;
     var objectBeingScripted;
 
@@ -32,6 +34,7 @@ var ScriptingIDEInterface = function (wickEditor) {
         objectBeingScripted = null;
 
         self.open = false;
+        openLast = false;
 
         reference = new ScriptingIDEReference(this, wickEditor);
         window.wickDocsKeywords = "";
@@ -207,6 +210,11 @@ var ScriptingIDEInterface = function (wickEditor) {
         if(objectBeingScripted !== oldObjectBeingScripting) {
             self.aceEditor.getSession().setUndoManager(new ace.UndoManager())
         }
+
+        if(openLast && !self.open) {
+            document.activeElement.blur();
+        }
+        openLast = self.open;
     }
 
     self.displayError = function (obj, scriptError) {
