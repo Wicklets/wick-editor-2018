@@ -21,7 +21,7 @@ var WickEditor = function () {
 
     var self = this;
 
-    self.version = "0.15 Prerelease";
+    self.version = "0.15";
     document.getElementById('wick-editor-version').innerHTML = 'Wick Editor ' + self.version;
     console.log("Wick Editor version " + self.version)
     window.wickVersion = self.version;
