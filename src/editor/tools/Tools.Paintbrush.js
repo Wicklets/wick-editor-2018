@@ -19,9 +19,7 @@ if(!window.Tools) Tools = {};
 
 Tools.Paintbrush = function (wickEditor) {
 
-    var that = this;
-
-    var MIN_SEGMENT_LENGTH = 3;
+    var self = this;
 
     this.getCursorImage = function () {
         var canvas = document.createElement("canvas");
@@ -72,19 +70,25 @@ Tools.Paintbrush = function (wickEditor) {
     var totalDelta;
     var lastEvent;
 
-    this.paperTool.onMouseDown = function (event) {
-        if (!path) {
-            path = new paper.Path({
-                strokeColor: wickEditor.settings.fillColor,
-                strokeCap: 'round',
-                strokeWidth: wickEditor.settings.brushThickness/wickEditor.canvas.getZoom(),
-            });
-        }
+    var BRUSH_MIN_DISTANCE = 0.5;
 
-        path.add(event.point);
+    this.paperTool.onMouseDown = function (event) {
+        
     }
 
     this.paperTool.onMouseDrag = function (event) {
+        lastEvent = {
+            delta: event.delta,
+            middlePoint: event.middlePoint,
+        }
+
+        if (!path) {
+            path = new paper.Path({
+                fillColor: wickEditor.settings.fillColor,
+                //strokeColor: '#000',
+            });
+            //path.add(event.lastPoint);
+        }
 
         if(!totalDelta) {
             totalDelta = event.delta;
@@ -93,71 +97,40 @@ Tools.Paintbrush = function (wickEditor) {
             totalDelta.y += event.delta.y;
         }
 
-        if (totalDelta.length > MIN_SEGMENT_LENGTH/wickEditor.canvas.getZoom()) {
+        if (totalDelta.length > wickEditor.settings.brushThickness*BRUSH_MIN_DISTANCE/wickEditor.canvas.getZoom()) {
 
             totalDelta.x = 0;
             totalDelta.y = 0;
 
-            path.add(event.point)
-            path.smooth();
-            lastEvent = event;
+            addNextSegment(event)
 
         }
     }
 
     this.paperTool.onMouseUp = function (event) {
         if (path) {
-            var pathWickObject;
-
-            path.add(event.point)
-            
-            if(path.segments.length > 2) {
-                path.smooth();
-
-                var smoothingScaled = convertRange(wickEditor.settings.brushSmoothing, [0,100], [1,30]);
-                if(smoothingScaled > 0) {
-                    var t = wickEditor.settings.strokeWidth;
-                    var s = smoothingScaled;
-                    var z = wickEditor.canvas.getZoom();
-                    path.simplify(t / z * s);
-                }
-
-                path.join(path, 5/wickEditor.canvas.getZoom())
-
-                var offset = path.strokeWidth/2;
-                var outerPath = OffsetUtils.offsetPath(path, offset, true);
-                var innerPath = OffsetUtils.offsetPath(path, -offset, true);
-                path = OffsetUtils.joinOffsets(outerPath.clone(), innerPath.clone(), path, offset);
-                path = path.unite();
-                path.fillColor = wickEditor.settings.fillColor;
-
-                var group = new paper.Group({insert:false});
-                group.addChild(path);
-
-                var svgString = group.exportSVG({asString:true});
-                pathWickObject = WickObject.createPathObject(svgString);
-                pathWickObject.x = group.position.x;
-                pathWickObject.y = group.position.y;
-                pathWickObject.width = group.bounds._width;
-                pathWickObject.height = group.bounds._height;
-                pathWickObject.svgX = group.bounds._x;
-                pathWickObject.svgY = group.bounds._y;
-            } else {
-                path = new paper.Path.Circle(path.position, wickEditor.settings.brushThickness/2);
-                path.fillColor = wickEditor.settings.fillColor;
-                var group = new paper.Group({insert:false});
-                group.addChild(path);
-                var svgString = group.exportSVG({asString:true});
-                pathWickObject = WickObject.createPathObject(svgString);
-                pathWickObject.x = group.position.x;
-                pathWickObject.y = group.position.y;
-                pathWickObject.width = group.bounds._width;
-                pathWickObject.height = group.bounds._height;
-                pathWickObject.svgX = group.bounds._x;
-                pathWickObject.svgY = group.bounds._y;
+            path.closed = true;
+            path.smooth();
+            if(wickEditor.settings.brushSmoothingAmount > 0) {
+                var t = wickEditor.settings.brushThickness;
+                var s = wickEditor.settings.brushSmoothingAmount/100;
+                var z = wickEditor.canvas.getZoom();
+                path.simplify(t / z * s);
             }
+            path = path.unite(new paper.Path())
+            path.remove();
 
-            //wickEditor.canvas.getInteractiveCanvas().pathRoutines.refreshPathData(pathWickObject);
+            var group = new paper.Group({insert:false});
+            group.addChild(path);
+
+            var svgString = group.exportSVG({asString:true});
+            pathWickObject = WickObject.createPathObject(svgString);
+            pathWickObject.x = group.position.x;
+            pathWickObject.y = group.position.y;
+            pathWickObject.width = group.bounds._width;
+            pathWickObject.height = group.bounds._height;
+            pathWickObject.svgX = group.bounds._x;
+            pathWickObject.svgY = group.bounds._y;
 
             wickEditor.actionHandler.doAction('addObjects', {
                 wickObjects: [pathWickObject],
@@ -165,42 +138,25 @@ Tools.Paintbrush = function (wickEditor) {
             });
 
             path = null;
-        }
+        } 
+    }
 
-        /*var smoothing = getBrushSmoothFactor();
-        var raster = path.rasterize(paper.view.resolution/window.devicePixelRatio*smoothing);
-        raster.remove()
-        var rasterDataURL = raster.toDataURL()
-        //path.remove()
+    var addNextSegment = function (event) {
+        var thickness = event.delta.length;
+        thickness /= wickEditor.settings.brushThickness/2;
+        thickness *= wickEditor.canvas.getZoom();
+        
+        var penPressure = wickEditor.inputHandler.getPenPressure();
 
-        var final = new Image();
-        final.onload = function () {
-            potraceImage(final, function (svgString) {
-                var xmlString = svgString
-                  , parser = new DOMParser()
-                  , doc = parser.parseFromString(xmlString, "text/xml");
-                var tempPaperForPosition = paper.project.importSVG(doc, {insert:false});
-                tempPaperForPosition.scale(1/smoothing);
+        var step = event.delta.divide(thickness).multiply(penPressure);
+        step.angle = step.angle + 90;
 
-                var pathWickObject = WickObject.createPathObject(svgString);
-                pathWickObject.width = tempPaperForPosition.bounds.width;
-                pathWickObject.height = tempPaperForPosition.bounds.height;
-                pathWickObject.x = path.position.x;
-                pathWickObject.y = path.position.y;
-                pathWickObject.svgX = tempPaperForPosition.bounds._x;
-                pathWickObject.svgY = tempPaperForPosition.bounds._y;
-                pathWickObject.pathData = tempPaperForPosition.exportSVG({asString:true});
+        var top = event.middlePoint.add(step);
+        var bottom = event.middlePoint.subtract(step);
 
-                wickEditor.actionHandler.doAction('addObjects', {
-                    wickObjects: [pathWickObject],
-                    dontSelectObjects: true,
-                });
-                path = null;
-
-            }, wickEditor.settings.fillColor);
-        }
-        final.src = rasterDataURL;*/
-
+        path.add(top);
+        path.insert(0, bottom);
+        path.smooth();
     }
 
     // https://stackoverflow.com/questions/14224535/scaling-between-two-number-ranges
