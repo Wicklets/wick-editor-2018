@@ -698,7 +698,23 @@ WickProject.prototype.loadScriptOfObject = function (obj) {
         dummyLoaderScript += '\nthis.'+builtinName+"="+builtinName+";";
     });
 
-    var evalScriptTag = '<script>\nwindow.cachedWickScripts["'+obj.uuid+'"] = function () {\n' + dummyInitScript + obj.wickScript + dummyLoaderScript + '\n}\n<'+'/'+'script>';
+    var scriptEventsReplaced = obj.wickScript;
+    var onEventFinderRegex = /on *\( *[a-zA-Z]+ *\)/g
+    var m;
+    do {
+        m = onEventFinderRegex.exec(scriptEventsReplaced, 'g');
+        if (m) {
+            eventName = m[0].split('(')[1].split(')')[0]
+            scriptEventsReplaced = scriptEventsReplaced.replace(m[0], 'function ' + eventName + '()')
+        }
+    } while (m);
+
+    var evalScriptTag = 
+        '<script>\nwindow.cachedWickScripts["'+obj.uuid+'"] = function () {\n' + 
+        dummyInitScript + 
+        scriptEventsReplaced + 
+        dummyLoaderScript + 
+        '\n}\n<'+'/'+'script>';
     $('head').append(evalScriptTag);
 }
 
