@@ -21,26 +21,11 @@ Tools.Paintbrush = function (wickEditor) {
 
     var self = this;
 
+    var croquis;
+    var croquisDOMElement;
+
     this.getCursorImage = function () {
-        var canvas = document.createElement("canvas");
-        canvas.width = 128;
-        canvas.height = 128;
-        var context = canvas.getContext('2d');
-        var centerX = canvas.width / 2;
-        var centerY = canvas.height / 2;
-        var radius = wickEditor.settings.brushThickness/2;
-
-        context.beginPath();
-        context.arc(centerX, centerY, radius+1, 0, 2 * Math.PI, false);
-        context.fillStyle = invertColor(wickEditor.settings.fillColor);
-        context.fill();
-
-        context.beginPath();
-        context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-        context.fillStyle = wickEditor.settings.fillColor;
-        context.fill();
-
-        return 'url(' + canvas.toDataURL() + ') 64 64,default';
+        return 'crosshair'
     };
 
     this.getToolbarIcon = function () {
@@ -52,121 +37,95 @@ Tools.Paintbrush = function (wickEditor) {
     }
 
     this.setup = function () {
+        croquis = new Croquis();
+        croquis.setCanvasSize(window.innerWidth, window.innerHeight);
+        croquis.addLayer();
+        croquis.fillLayer('rgba(0,0,0,0)');
+        croquis.addLayer();
+        croquis.selectLayer(1);
 
+        var brush = new Croquis.Brush();
+        brush.setSize(40);
+        brush.setColor('#000');
+        brush.setSpacing(0.2);
+
+        croquis.setTool(brush);
+        croquis.setToolStabilizeLevel(20);
+        croquis.setToolStabilizeWeight(0.2);
+
+        croquisDOMElement = croquis.getDOMElement();
+        croquisDOMElement.style.display = 'none'
+        croquisDOMElement.style.pointerEvents = 'none';
+        document.getElementById('editorCanvasContainer').appendChild(croquisDOMElement);
     }
 
     this.onSelected = function () {
         wickEditor.inspector.openToolSettings('paintbrush');
         wickEditor.project.clearSelection();
         wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
+        croquisDOMElement.style.display = 'block'
     }
 
     this.onDeselected = function () {
-        if(path) path.remove();
+        croquisDOMElement.style.display = 'none'
     }
 
     this.paperTool = new paper.Tool();
-    var path;
-    var totalDelta;
-    var lastEvent;
-
-    var BRUSH_MIN_DISTANCE = 0.5;
 
     this.paperTool.onMouseDown = function (event) {
-        
+        e = event.event
+        var pointerPosition = getRelativePosition(e.clientX, e.clientY);
+        croquis.down(pointerPosition.x, pointerPosition.y, e.pointerType === "pen" ? e.pressure : 1);
     }
 
     this.paperTool.onMouseDrag = function (event) {
-        lastEvent = {
-            delta: event.delta,
-            middlePoint: event.middlePoint,
-        }
-
-        if (!path) {
-            path = new paper.Path({
-                fillColor: wickEditor.settings.fillColor,
-                //strokeColor: '#000',
-            });
-            //path.add(event.lastPoint);
-        }
-
-        if(!totalDelta) {
-            totalDelta = event.delta;
-        } else {
-            totalDelta.x += event.delta.x;
-            totalDelta.y += event.delta.y;
-        }
-
-        if (totalDelta.length > wickEditor.settings.brushThickness*BRUSH_MIN_DISTANCE/wickEditor.canvas.getZoom()) {
-
-            totalDelta.x = 0;
-            totalDelta.y = 0;
-
-            addNextSegment(event)
-
-        }
+        e = event.event
+        var pointerPosition = getRelativePosition(e.clientX, e.clientY);
+        croquis.move(pointerPosition.x, pointerPosition.y, e.pointerType === "pen" ? e.pressure : 1);
     }
 
     this.paperTool.onMouseUp = function (event) {
-        if (path) {
-            path.closed = true;
-            path.smooth();
-            if(wickEditor.settings.brushSmoothingAmount > 0) {
-                var t = wickEditor.settings.brushThickness;
-                var s = wickEditor.settings.brushSmoothingAmount/100;
-                var z = wickEditor.canvas.getZoom();
-                path.simplify(t / z * s);
-            }
-            path = path.unite(new paper.Path())
-            path.remove();
-
-            var group = new paper.Group({insert:false});
-            group.addChild(path);
-
-            var svgString = group.exportSVG({asString:true});
-            pathWickObject = WickObject.createPathObject(svgString);
-            pathWickObject.x = group.position.x;
-            pathWickObject.y = group.position.y;
-            pathWickObject.width = group.bounds._width;
-            pathWickObject.height = group.bounds._height;
-            pathWickObject.svgX = group.bounds._x;
-            pathWickObject.svgY = group.bounds._y;
-
-            wickEditor.actionHandler.doAction('addObjects', {
-                wickObjects: [pathWickObject],
-                dontSelectObjects: true,
-            });
-
-            path = null;
-        } 
-    }
-
-    var addNextSegment = function (event) {
-        var thickness = event.delta.length;
-        thickness /= wickEditor.settings.brushThickness/2;
-        thickness *= wickEditor.canvas.getZoom();
+        e = event.event
+        var pointerPosition = getRelativePosition(e.clientX, e.clientY);
+        croquis.up(pointerPosition.x, pointerPosition.y, e.pointerType === "pen" ? e.pressure : 1);
         
-        var penPressure = wickEditor.inputHandler.getPenPressure();
+        setTimeout(function () {
+            var i = new Image();
+            i.onload = function () {
+                //previewImage(i)
+                potraceImage(i, function (svgString) {
+                    var xmlString = svgString
+                      , parser = new DOMParser()
+                      , doc = parser.parseFromString(xmlString, "text/xml");
+                    var tempPaperForPosition = paper.project.importSVG(doc, {insert:false});
 
-        var step = event.delta.divide(thickness).multiply(penPressure);
-        step.angle = step.angle + 90;
+                    var pathWickObject = WickObject.createPathObject(svgString);
+                    pathWickObject.width = tempPaperForPosition.bounds.width;
+                    pathWickObject.height = tempPaperForPosition.bounds.height;
 
-        var top = event.middlePoint.add(step);
-        var bottom = event.middlePoint.subtract(step);
+                    console.log(tempPaperForPosition)
+                    pathWickObject.x = tempPaperForPosition.position.x - wickEditor.canvas.getPan().x;
+                    pathWickObject.y = tempPaperForPosition.position.y - wickEditor.canvas.getPan().y;
 
-        path.add(top);
-        path.insert(0, bottom);
-        path.smooth();
+                    console.log(wickEditor.canvas)
+
+                    //tempPaperForPosition.scale(1/smoothing);
+                    pathWickObject.pathData = tempPaperForPosition.exportSVG({asString:true});
+
+                    wickEditor.actionHandler.doAction('addObjects', {
+                        wickObjects: [pathWickObject],
+                        dontSelectObjects: true,
+                    });
+
+                    //croquis.clearLayer();
+                });
+            }
+            i.src = document.getElementsByClassName('croquis-layer-canvas')[1].toDataURL();
+        }, 20);
     }
 
-    // https://stackoverflow.com/questions/14224535/scaling-between-two-number-ranges
-    function convertRange( value, r1, r2 ) { 
-        return ( value - r1[ 0 ] ) * ( r2[ 1 ] - r2[ 0 ] ) / ( r1[ 1 ] - r1[ 0 ] ) + r2[ 0 ];
-    }
-
-    function getBrushSmoothFactor () {
-        var bi = 100-wickEditor.settings.brushSmoothing;
-        var smoothFactor = convertRange(bi, [0,100], [0.3,1]);
-        return smoothFactor;
+    function getRelativePosition(absoluteX, absoluteY) {
+        var rect = croquisDOMElement.getBoundingClientRect();
+        return {x: absoluteX - rect.left, y: absoluteY - rect.top};
     }
 }
