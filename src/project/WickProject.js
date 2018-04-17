@@ -699,7 +699,7 @@ WickProject.prototype.loadScriptOfObject = function (obj) {
     });
 
     var scriptEventsReplaced = obj.wickScript;
-    var onEventFinderRegex = /on *\( *[a-zA-Z]+ *\)/g
+    var onEventFinderRegex = /^on *\( *[a-zA-Z]+ *\)/g
     var m;
     do {
         m = onEventFinderRegex.exec(scriptEventsReplaced, 'g');
