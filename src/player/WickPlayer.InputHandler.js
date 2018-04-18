@@ -226,7 +226,7 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
         
         var clickedObj;
         wickProject.rootObject.getAllActiveChildObjectsRecursive(true).forEachBackwards(function(child) {
-            if(!(clickedObj && clickedObj.isButton) && child.isPointInside(self.getMouse())) {
+            if(!clickedObj && child.mousePressed && child.isPointInside(self.getMouse())) {
                 child._wasClicked = true;
                 child._beingClicked = true;
                 clickedObj = child;

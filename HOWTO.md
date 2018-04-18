@@ -2,6 +2,11 @@
 
 **Note:** The `Modifier` key in this document refers to the `Control` key in Windows, and the `Command` key on MacOS.
 
+## Brower Support
+
+- All features of the Wick Editor are supported in Firefox and Chrome.
+- All features of the Wick Player are supported by most major browsers, including mobile browsers.
+
 ## Canvas
 
  - Pan canvas with `Spacebar`
@@ -29,7 +34,11 @@
 
 **TODO**
 
-## Tools
+## Toolbar
+
+### Color Picker
+
+**TODO**
 
 ### Selection Cursor
 
@@ -159,21 +168,6 @@ Rectangle settings
 - Move frame(s) by clicking and dragging selected frames
 - Change the duration of frame(s) by dragging the left or right edges of the selection box
 
-### Tweens
-
-- Create a motion tween on a frame by right clicking a frame and selecting `Create Motion Tween`.
-- If there are multiple objects on the frame when a motion tween is created, they will be automatically grouped into a single object.
-- Create keyframes by right clicking and selecting `Insert Keyframe`.
-- Copy and paste keyframes by right clicking a keyframe and selecting `Copy Keyframe` or `Paste Keyframe`.
-- Keyframes will be automatically added if an object is modified while the playhead is over a point on the frame without a keyframe.
-- You can change the "easing" of a tween in the Inspector. The current options are `None`, `Ease In`, `Ease Out`, and `Ease In-Out`.
-- If you want to rotate an object 360 degrees or more in a tween, use the `Number of Rotations` value in the Inspector. _Note: You can rotate objects counter-clockwise by using a negative value here._
-- Tweening of all transformations (x, y, scale, rotation) is possible, as well as opacity.
-
-### Sounds
-
-**TODO**
-
 ### Playhead
 
 - Move the playhead by dragging it, or by using the `<` and `>` keys.
@@ -190,6 +184,21 @@ Rectangle settings
 - Layers can be locked by clicking the lock icon on that layer
 - Layers can be hidden by clicking the eye icon in that layer
 - Layers can be reordered by dragging them by the three lines icon on the left
+
+### Tweens
+
+- Create a motion tween on a frame by right clicking a frame and selecting `Create Motion Tween`.
+- If there are multiple objects on the frame when a motion tween is created, they will be automatically grouped into a single object.
+- Create keyframes by right clicking and selecting `Insert Keyframe`.
+- Copy and paste keyframes by right clicking a keyframe and selecting `Copy Keyframe` or `Paste Keyframe`.
+- Keyframes will be automatically added if an object is modified while the playhead is over a point on the frame without a keyframe.
+- You can change the "easing" of a tween in the Inspector. The current options are `None`, `Ease In`, `Ease Out`, and `Ease In-Out`.
+- If you want to rotate an object 360 degrees or more in a tween, use the `Number of Rotations` value in the Inspector. _Note: You can rotate objects counter-clockwise by using a negative value here._
+- Tweening of all transformations (x, y, scale, rotation) is possible, as well as opacity.
+
+### Sounds
+
+**TODO**
 
 ### Onion Skinning
 
@@ -215,11 +224,14 @@ Start frame
 Play once/twice/loop forever
 Autoplay?
 
+Asset dropdown
+
 ## Buttons
 
 Create a button by
 Edit button states double clicking or right clicking
 Leave button timeline by using breadcrumbs or by double clicking
+Asset dropdown
 
 ## Import
 
@@ -229,11 +241,10 @@ Import images by dragging them into the editor or by selecting `Import` -> `Imag
 
 _Supported image types:_
 
-- `PNG`
-- `JPEG`
-- `BMP`
-- `TIFF`
-- `GIF` (_Animated GIFs are converted into clips with all the frames of the original GIF_)
+- `png`
+- `jpeg`
+- `bmp`
+- `gif` (_Animated GIFs are converted into clips with all the frames of the original GIF_)
 
 ### Sounds
 
@@ -255,15 +266,38 @@ Import SVGs by dragging them into the editor or by selecting `Import` -> `SVG` i
 
 ## Scripting Window
 
-**TODO**
+Autocomplete
+Reference Section
+Syntax Errors
+Runtime Errors
 
 ## Writing Scripts
+
+### Events
+
+**TODO**
+
+### Function Calls
+
+**TODO**
+
+### Variables
+
+**TODO**
+
+### If Statements
 
 **TODO**
 
 ## Script Reference
 
-**TODO**
+### Scope
+
+Name | Description
+--- | ---
+`this` | TODO
+`parent` | TODO
+`root` | TODO
 
 ### Events
 
@@ -296,13 +330,13 @@ Name | Description
 `flipX` | TODO
 `flipY` | TODO
 `opacity` | TODO
-`currentFrameName` | TODO
 
 ### Clip Attributes
 
 Name | Description
 --- | ---
 `currentPlayheadPosition` | TODO
+`currentFrameName` | TODO
 `clones` | TODO
 
 ### Object Methods
@@ -310,6 +344,7 @@ Name | Description
 Name | Description
 --- | ---
 `clone()` | TODO
+`delete()` | TODO
 `hitTest(object)` | TODO
 
 ### Mouse Input
