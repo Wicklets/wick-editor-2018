@@ -32,17 +32,12 @@ AssetLibrary.prototype.addAsset = function (asset) {
 
         return uuid;
     }
-
-    wickEditor.library.dirty = true;
-
 }
 
 AssetLibrary.prototype.deleteAsset = function (uuid) {
 
     this.assets[uuid] = null;
     delete this.assets[uuid];
-    
-    wickEditor.library.dirty = true;
 
 }
 

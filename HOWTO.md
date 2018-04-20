@@ -32,13 +32,30 @@
 
 ### Ordering
 
-**TODO**
+- Move object(s) forward by right clicking and selecting `Move Forwards` or pressing `Modifier` + `Up`
+- Move object(s) backwards by right clicking and selecting `Move Backwards` or pressing `Modifier` + `Down`
+- Move object(s) to the front by right clicking and selecting `Move To Front` or pressing `Modifier` + `Shift` + `Up`
+- Move object(s) to the back by right clicking and selecting `Move To Back` or pressing `Modifier` + `Shift` + `Down`
+
+### Snapping
+
+- Snapping can be enabled in the Inspector when a cursor tool is selected (Selection Cursor or Path Cursor).
+
+_Snap Align_
+
+ - Enables selections to snap to nearby objects. Useful for lining things up precicely.
 
 ## Toolbar
 
 ### Color Picker
 
-**TODO**
+- Click either box to change the current fill or stroke color.
+- The filled box changes the fill color, and the unfilled box changes the stroke color.
+- The default pallete contains twelve basic colors.
+- The color picker saves the last six colors used below the default pallete.
+- Click and drag the largest square to change the saturation and lightness of the current color.
+- Click and drag the vertical rectangle to change the hue of the current color.
+- Click and drag the horizontal rectangle to change to opacity of the current color.
 
 ### Selection Cursor
 
@@ -63,100 +80,90 @@ _Modifying selections_
 
 _Making selections_
 
-<ul>
-	<li>Drag to select objects touching box</li>
-	<li>Alt+drag to select objects only inside box</li>
-</ul>
-Modifying selections
-<ul>
-	<li>Drag points to move points</li>
-	<li>Click stroke to add new point</li>
-	<li>Double click to straighten/smooth points</li>
-	<li>Command+click to remove points</li>
-	<li>Drag handles to change curves</li>
+- Click any path to select it
+- Drag to select paths touching the selection box
+- Alt+drag to select objects strictly inside the selection box
 
-Brush settings
-	<ul>
-		<li>Change fill color to set brush color</li>
-		<li>Change brush size in inspector</li>
-		<li>Change smoothness in inspector</li>
-	</ul>
+_Modifying Path Segments_
 
-Pencil settings
-			<ul>
-				<li>Change stroke color to set pencil color</li>
-				<li>Change stroke width in inspector</li>
-				<li>Change smoothness in inspector</li>
-			</ul>
+- Click and drag points to move them
+- Click on a stroke to add a point on that part of the stroke
+- Hold `Modifier` and click a point to remove it
 
-<div class='tutorial-step-content'>
-			Change colors of shapes
-			Fill holes
-		</div>
+_Modifying Path Curves_
 
-Rectangle settings
-		<ul>
-			<li>Change corner roundness in inspector</li>
-		</ul>
+- Double click a path to straighten and smooth its curves
+- Drag handles to change curvature of strokes
 
+### Brush
 
-<div class='tutorial-step-title'>Ellipse</div>
-<div class='tutorial-step-content'>
-	Draws circles
-</div>
+_Brush Options_
 
-<div class='tutorial-step-title'>Line</div>
-<div class='tutorial-step-content'>
-	Draws lines
-</div>
+- Color
+	- The brush uses the current fill color as its drawing color.
+- Size
+- Smoothness
+- Stabilizer Level
+- Pressure Sensitivity Enabled
+- Pressure Sensitivity Level
+   - A higher Pressure Sensitivity level makes the pressure from a tablet have more impact on the size of the brush.
+- Blob Detail
+	- A higher Blob Detail value will give your strokes more detail when they are converted to paths, but will make drawing strokes slower.
 
-<div class='tutorial-step'>
-	<div class='tutorial-step-title'>Pen</div>
-	<div class='tutorial-step-content'>
-		Click and drag to create points and curves
-		Click first point to close shape
-		Click the ends of an existing shape to add more curves to that shape
-	</div>
-</div>
-<hr/>
+### Pencil
 
-<div class='tutorial-step'>
-	<div class='tutorial-step-title'>Eyedropper</div>
-	<div class='tutorial-step-content'>
-		Picks colors
-	</div>
-</div>
-<hr/>
+_Pencil Options_
 
-<div class='tutorial-step'>
-	<div class='tutorial-step-title'>Text</div>
-	<div class='tutorial-step-content'>
-		Click to create a text box
-		Double click any text to edit it
-		Text options in inspector
-	</div>
-</div>
-<hr/>
+- Color
+	- The pencil uses the current stroke color as its drawing color.
+- Stroke width
+- Smoothness
 
-<div class='tutorial-step'>
-	<div class='tutorial-step-title'>Zoom</div>
-	<div class='tutorial-step-content'>
-		Click to zoom in
-		Alt+click to zoom out
-		Drag to zoom into a section of the screen
-		Also can use + and - to zoom
-		Also can command+scroll to zoom
-		Also can use zoom box thing near timeline
-	</div>
-</div>
-<hr/>
+### Fill Bucket
 
-<div class='tutorial-step'>
-	<div class='tutorial-step-title'>Pan</div>
-	<div class='tutorial-step-content'>
-		Click and drag to pan
-	</div>
-</div>
+- Click any path to change it's fill or stroke color
+- Click any holes created by paths to fill that hole
+
+### Rectangle
+
+- Click and drag to draw a rectangle
+- Hold shift while dragging to draw a perfect square
+- Change corner roundness in inspector
+
+### Ellipse
+
+- Click and drag to draw an ellipse
+- Hold shift while dragging to draw a perfect circle
+
+### Line
+
+- Click and drag to draw a line
+- Hold shift while dragging to draw horizontal/vertical/diagonal line
+
+### Pen
+
+- Click to create a new point
+- Click and drag to create a new point and change it's curvature
+- Click first point to close shape
+- Click the ends of an existing shape to add more curves to that shape
+
+### Eyedropper
+
+- Click any path to set the current fill or stroke color to that path's color.
+
+### Text
+
+**DESIGN TODO**
+
+### Zoom
+
+- Click to zoom in
+- Hold `Alt` and click to zoom out
+- Click and drag, draw a rectangle, and release to zoom into a section of the screen
+
+### Pan
+
+- Click and drag to pan
 
 ## Timeline
 
@@ -205,15 +212,43 @@ Rectangle settings
 - Click the onion icon to enable onion skinning
 - Control how many frames are shown in onion skin by dragging the edges of the box near the playhead.
 
-## Groups
+## Wick Objects
+
+all wick objects have **TODO**
+
+### Paths
+
+**TODO**
+
+### Images
+
+**TODO**
+
+### Text
+
+- static
+- dynamic
+
+### Groups
 
 Create a group by 
 Edit group by double clicking or right clicking
 Leave group by using breadcrumbs or by double clicking
 
-## Clips
+### Buttons
+
+Create a button by
+The button is added to the asset library
+A "library link" is added - to remove/change it, use the dropdown menu in the inspector
+
+Edit button states double clicking or right clicking
+Leave button timeline by using breadcrumbs or by double clicking
+
+### Clips
 
 Create a clip by
+The clip is added to the asset library
+A "library link" is added - to remove/change it, use the dropdown menu in the inspector
 
 Clips have their own timelines
 
@@ -223,15 +258,6 @@ Leave button timeline by using breadcrumbs or by double clicking
 Start frame
 Play once/twice/loop forever
 Autoplay?
-
-Asset dropdown
-
-## Buttons
-
-Create a button by
-Edit button states double clicking or right clicking
-Leave button timeline by using breadcrumbs or by double clicking
-Asset dropdown
 
 ## Import
 
@@ -273,21 +299,36 @@ Runtime Errors
 
 ## Writing Scripts
 
+Clips and buttons can be scripted
+
+### Object Access
+
+- named objects
+- 'root' and 'parent'
+
 ### Events
 
-**TODO**
+- use events to run code only when a certain event happens, such as when an object is clicked, or when an object is first loaded
 
 ### Function Calls
 
-**TODO**
+- calling fuctions is like giving a command
+- they can have options, too (arguments)
 
 ### Variables
 
-**TODO**
+- store information by using variables
+- objects have many builtin variables
+- you can make your own variables too
+- put variables that you want to access everywhere in `root`
 
 ### If Statements
 
-**TODO**
+- use if statements to run code only if certain parameters are met
+
+### For Loops / For In (?)
+
+**DESIGN WIP**
 
 ## Script Reference
 
@@ -299,14 +340,6 @@ Name | Description
 `parent` | TODO
 `root` | TODO
 
-### Events
-
-Name | Description
---- | ---
-`on(update)` | TODO
-`on(load)` | TODO
-`on(click)` | TODO
-
 ### Timeline
 
 Name | Description
@@ -317,8 +350,29 @@ Name | Description
 `gotoAndPlay(frame)` | TODO
 `gotoNextFrame()` | TODO
 `gotoPrevFrame()` | TODO
+`currentFrameNumber` | TODO
+`currentFrameName` | TODO
 
-### All Objects Attributes
+### Events
+
+**TODO** Note mobile equivalents
+
+Name | Description
+--- | ---
+`on(update)` | TODO
+`on(load)` | TODO
+`on(click)` | TODO
+`on(mousedown)` | TODO
+`on(mouseup)` | TODO
+`on(mouseenter)` | TODO
+`on(mouseleave)` | TODO
+`on(mousehover)` | TODO
+`on(mousedrag)` | TODO
+`on(keypressed)` | TODO
+`on(keydown)` | TODO
+`on(keyup)` | TODO
+
+### Wick Object Attributes
 
 Name | Description
 --- | ---
@@ -331,21 +385,12 @@ Name | Description
 `flipY` | TODO
 `opacity` | TODO
 
-### Clip Attributes
+### Wick Object Methods
 
 Name | Description
 --- | ---
-`currentPlayheadPosition` | TODO
-`currentFrameName` | TODO
-`clones` | TODO
-
-### Object Methods
-
-Name | Description
---- | ---
-`clone()` | TODO
+`hitTest()` | TODO
 `delete()` | TODO
-`hitTest(object)` | TODO
 
 ### Mouse Input
 
@@ -360,14 +405,9 @@ Name | Description
 
 Name | Description
 --- | ---
+`key` | TODO
 `keyIsDown(key)` | TODO
 `keyJustPressed(key)` | TODO
-
-### Keyboard Keys
-
-Name | Description
---- | ---
-`KEY_A` | TODO
 
 ### Sound
 
@@ -375,8 +415,13 @@ Name | Description
 --- | ---
 `playSound(filename)` | TODO
 `stopAllSounds()` | TODO
-`mute()` | TODO
-`unmute()` | TODO
+
+### Creating Objects
+
+Name | Description
+--- | ---
+`createInstanceOf(assetName)` | TODO
+`getAllInstancesOf(assetName)` | TODO
 
 ## Saving Projects
 
@@ -404,11 +449,6 @@ Name | Description
 - `File` -> `Export HTML File`
 - HTML files can be opened by all web browsers and can play the Wick project inside.
 - HTML files can easily be embedded inside another webpage (see `Embedding Projects`)
-
-### Animated GIF
-
-- `File` -> `Export Animated GIF`
-- Scripts do not work in animated GIFs, only the animation will play.
 
 ### Video
 

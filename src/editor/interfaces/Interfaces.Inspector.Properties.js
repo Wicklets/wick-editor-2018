@@ -144,6 +144,31 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.SelectInput({
+        title: '<img src="resources/image.png" class="inspector-icon"/>',
+        tooltip: 'Image',
+        optionsFn: function () {
+            var imageAssetFilenames = wickEditor.project.library.getAllAssets().filter(function (asset) {
+                return asset.type === 'image';
+            }).map(function (asset) {
+                return asset.filename;
+            });
+            return imageAssetFilenames;
+        },
+        isActiveFn: function () {
+            return selectionInfo.type == 'wickobject'
+                && selectionInfo.dataType == 'image'
+                && selectionInfo.numObjects === 1;
+        },
+        getValueFn: function () {
+            return wickEditor.project.library.getAsset(selectionInfo.object.assetUUID).filename; 
+        },
+        onChangeFn: function (val) {
+            console.error('!! Need action for this !!')
+            selectionInfo.object.assetUUID = wickEditor.project.library.getAssetByName(val).uuid
+        }
+    }));
+
+    properties.push(new InspectorInterface.SelectInput({
         title: '<img src="resources/inspector-icons/fontfamily.svg" class="inspector-icon"/>',
         tooltip: 'Font Family',
         options: getAllGoogleFonts(),

@@ -110,11 +110,11 @@ var LibraryInterface = function (wickEditor) {
     }
 
     this.syncWithEditorState = function () {
-        if(this.dirty) {
+        //if(this.dirty) {
             this.dirty = false;
             this.clear();
             this.populate();
-        }
+        //}
     }
 
     this.populate = function () {
