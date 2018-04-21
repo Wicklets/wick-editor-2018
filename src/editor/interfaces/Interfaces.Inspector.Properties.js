@@ -145,7 +145,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
 
     properties.push(new InspectorInterface.SelectInput({
         title: '<img src="resources/image.png" class="inspector-icon"/>',
-        tooltip: 'Image',
+        tooltip: 'Image Resource',
         optionsFn: function () {
             var imageAssetFilenames = wickEditor.project.library.getAllAssets().filter(function (asset) {
                 return asset.type === 'image';
@@ -545,7 +545,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
 
     properties.push(new InspectorInterface.SelectInput({
         title: '<img src="resources/inspector-icons/sound.svg" class="inspector-icon"/>',
-        tooltip: 'Sound',
+        tooltip: 'Sound Resource',
         optionsFn: function () {
             var audioAssetFilenames = wickEditor.project.library.getAllAssets().filter(function (asset) {
                 return asset.type === 'audio';
@@ -573,7 +573,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
-    properties.push(new InspectorInterface.SliderInput({
+    /*properties.push(new InspectorInterface.SliderInput({
         title: '<img src="resources/inspector-icons/volume.svg" class="inspector-icon"/>',
         tooltip: 'Volume',
         min: 0,
@@ -590,7 +590,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         onChangeFn: function (val) {
             selectionInfo.object.volume = parseFloat(val);
         }
-    }));
+    }));*/
 
     properties.push(new InspectorInterface.MultiCheckboxInput({
         title: '<img src="resources/inspector-icons/ease.svg" class="inspector-icon"/>',

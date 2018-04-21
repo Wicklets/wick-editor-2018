@@ -37,14 +37,6 @@
 - Move object(s) to the front by right clicking and selecting `Move To Front` or pressing `Modifier` + `Shift` + `Up`
 - Move object(s) to the back by right clicking and selecting `Move To Back` or pressing `Modifier` + `Shift` + `Down`
 
-### Snapping
-
-- Snapping can be enabled in the Inspector when a cursor tool is selected (Selection Cursor or Path Cursor).
-
-_Snap Align_
-
- - Enables selections to snap to nearby objects. Useful for lining things up precicely.
-
 ## Toolbar
 
 ### Color Picker
@@ -153,7 +145,8 @@ _Pencil Options_
 
 ### Text
 
-**DESIGN TODO**
+- Click and drag to create a text box
+- Click text objects to edit them
 
 ### Zoom
 
@@ -205,7 +198,7 @@ _Pencil Options_
 
 ### Sounds
 
-**TODO**
+- Add a sound to a frame by dragging it from the asset library onto a frame, or by selecing a frame and choosing a sound from the dropdown menu in the Inspector.
 
 ### Onion Skinning
 
@@ -214,46 +207,58 @@ _Pencil Options_
 
 ## Wick Objects
 
-all wick objects have **TODO**
-
 ### Paths
 
-**TODO**
+- fill color
+- stroke color
+- stroke width
+- boolean ops
 
 ### Images
 
-**TODO**
+- asset source
 
 ### Text
 
-- static
-- dynamic
+- Font family
+- Font size
+- Font color
+- Text align
+- Bold
+- Italic
 
 ### Groups
 
-Create a group by 
-Edit group by double clicking or right clicking
-Leave group by using breadcrumbs or by double clicking
+- Create a group by right clicking wick object(s) and selecting `Group Objects` or by pressing `Modifier` + `G`.
+- Edit group by double clicking or right clicking and selecting `Edit Group`.
+- Leave group by using breadcrumbs or by double clicking
+- Break apart a group by right clicking and selecting `Break Apart` or by pressing `Modifier` + `B`
 
 ### Buttons
 
 Create a button by
-The button is added to the asset library
-A "library link" is added - to remove/change it, use the dropdown menu in the inspector
+(copy this part from clip section)
 
+Button states
 Edit button states double clicking or right clicking
-Leave button timeline by using breadcrumbs or by double clicking
+Leave button by using breadcrumbs or by double clicking
 
 ### Clips
 
-Create a clip by
-The clip is added to the asset library
-A "library link" is added - to remove/change it, use the dropdown menu in the inspector
+_Creating a Clip_
 
-Clips have their own timelines
+- Right click a selection of wick object(s) and select `Create Clip from Objects`.
+- A dialog box will open up prompting you to name the new Clip
+- You also have the option of creating an asset out of the new Clip. If you do, the new Clip will use that asset as its source. _(to change this later, select a different "clip resource" in the inspector)_
 
-Edit timeline by double clicking or right clicking
-Leave button timeline by using breadcrumbs or by double clicking
+_Clip timelines_
+
+- Clips have their own timelines.
+- Clip timelines run independently of the main timeline.
+- Edit the timeline of a Clip by double clicking or right clicking the Clip and selecting `Edit Timeline`.
+- Leave the timeline of the clip by using breadcrumbs or by double clicking the canvas.
+
+_Clip options_
 
 Start frame
 Play once/twice/loop forever
@@ -288,7 +293,10 @@ Import SVGs by dragging them into the editor or by selecting `Import` -> `SVG` i
 
 ### Asset Library
 
-**TODO**
+- All assets used in the project are stored in the Asset Library.
+- Reorganize assets by clicking and dragging them.
+- Rename assets by selecting an asset and clicking the `Rename Asset` button.
+- Delete assets by selecting an asset and clicking the `Delete Asset` button.
 
 ## Scripting Window
 
@@ -326,9 +334,13 @@ Clips and buttons can be scripted
 
 - use if statements to run code only if certain parameters are met
 
+### Creating Objects Programmatically
+
 ### For Loops / For In (?)
 
-**DESIGN WIP**
+use:
+
+`for (obj in getAllInstancesOf('thingy')) {`
 
 ## Script Reference
 
@@ -354,8 +366,6 @@ Name | Description
 `currentFrameName` | TODO
 
 ### Events
-
-**TODO** Note mobile equivalents
 
 Name | Description
 --- | ---
@@ -444,12 +454,6 @@ Name | Description
 - The exported .zip archive will contain the Wick Player bundled into an html file named `index.html`, as well as your project named `wick-project.wick`.
 - Most Flash/HTML5 game websites accept `.zip` files in this format.
 
-### .html file
-
-- `File` -> `Export HTML File`
-- HTML files can be opened by all web browsers and can play the Wick project inside.
-- HTML files can easily be embedded inside another webpage (see `Embedding Projects`)
-
 ### Video
 
 - `File` -> `Export Video`
@@ -465,18 +469,8 @@ Name | Description
 
 ## Embedding Projects
 
-### Embedding an HTML file
-
-You can embed a Wick project exported as an HTML file by using an iframe.
-
-_Example:_
-
-`<iframe src="myproject.html" width="720" height="480"></iframe>`
-
-### Embedding a .wick file
-
 To embed a .wick file, you will need the Wick Player html file. Download it **TODO** here.
 
-Then embed the player in an iframe and add the filename of your project with an `#` after `player.html` as shown here:
+Then, embed the player in an iframe and add the filename of your project with an `#` after `player.html` as shown here:
 
 `<iframe width="720" height="480" src="player.html#myproject.wick"></iframe>`
