@@ -31,8 +31,8 @@ WickProject.Exporter = (function () {
 
         // All libs needed by the player. 
         var requiredLibFiles = [
-            "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.6/pixi.min.js",
-            "https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js",
+            "lib/pixi.4.5.6.min.js",
+            "lib/webfont.js",
             //"https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.min.js",
             "lib/lz-string.min.js",
             "lib/polyfills.js",

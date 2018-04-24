@@ -77,7 +77,9 @@ var LibraryInterface = function (wickEditor) {
             var assetURL;
             if(asset.type === 'image') {
                 assetURL = asset.data;
-            } else if(self.getSelectedAsset().type === 'audio') {
+            } else if(asset.type === 'audio') {
+                assetURL = 'resources/icon_sound_canvas.png';
+            } else if (asset.type === 'symbol') {
                 assetURL = 'resources/icon_sound_canvas.png';
             }
             draggedAssetElem.style.backgroundImage = 'url('+assetURL+')';
@@ -92,7 +94,7 @@ var LibraryInterface = function (wickEditor) {
                     frame: e.target.wickData.wickFrame,
                     asset: self.getSelectedAsset()
                 });
-            } else if(e.target.nodeName === 'CANVAS' && self.getSelectedAsset().type === 'image') {
+            } else if(e.target.nodeName === 'CANVAS' && (self.getSelectedAsset().type === 'image' || self.getSelectedAsset().type === 'symbol')) {
                 wickEditor.guiActionHandler.doAction("createObjectFromAsset", {
                     asset: self.getSelectedAsset(),
                     x: e.x,

@@ -24,6 +24,8 @@ Tools.Paintbrush = function (wickEditor) {
     var croquis;
     var croquisDOMElement;
 
+    var brush;
+
     this.getCursorImage = function () {
         return 'crosshair'
     };
@@ -44,14 +46,9 @@ Tools.Paintbrush = function (wickEditor) {
         croquis.addLayer();
         croquis.selectLayer(1);
 
-        var brush = new Croquis.Brush();
-        brush.setSize(40);
-        brush.setColor('#000');
-        brush.setSpacing(0.2);
+        brush = new Croquis.Brush();
 
         croquis.setTool(brush);
-        croquis.setToolStabilizeLevel(20);
-        croquis.setToolStabilizeWeight(0.2);
 
         croquisDOMElement = croquis.getDOMElement();
         croquisDOMElement.style.display = 'none'
@@ -73,21 +70,30 @@ Tools.Paintbrush = function (wickEditor) {
     this.paperTool = new paper.Tool();
 
     this.paperTool.onMouseDown = function (event) {
+        brush.setSize(wickEditor.settings.brushThickness);
+        brush.setColor(wickEditor.settings.fillColor);
+        brush.setSpacing(0.2);
+        croquis.setToolStabilizeLevel(10);
+        croquis.setToolStabilizeWeight(wickEditor.settings.brushSmoothing / 100);
+
         e = event.event
         var pointerPosition = getRelativePosition(e.clientX, e.clientY);
-        croquis.down(pointerPosition.x, pointerPosition.y, e.pointerType === "pen" ? e.pressure : 1);
+        var penPressure = wickEditor.inputHandler.getPenPressure();
+        croquis.down(pointerPosition.x, pointerPosition.y, penPressure);
     }
 
     this.paperTool.onMouseDrag = function (event) {
         e = event.event
         var pointerPosition = getRelativePosition(e.clientX, e.clientY);
-        croquis.move(pointerPosition.x, pointerPosition.y, e.pointerType === "pen" ? e.pressure : 1);
+        var penPressure = wickEditor.inputHandler.getPenPressure();
+        croquis.move(pointerPosition.x, pointerPosition.y, penPressure);
     }
 
     this.paperTool.onMouseUp = function (event) {
         e = event.event
         var pointerPosition = getRelativePosition(e.clientX, e.clientY);
-        croquis.up(pointerPosition.x, pointerPosition.y, e.pointerType === "pen" ? e.pressure : 1);
+        var penPressure = wickEditor.inputHandler.getPenPressure();
+        croquis.up(pointerPosition.x, pointerPosition.y, penPressure);
         
         setTimeout(function () {
             var i = new Image();
@@ -103,13 +109,11 @@ Tools.Paintbrush = function (wickEditor) {
                     pathWickObject.width = tempPaperForPosition.bounds.width;
                     pathWickObject.height = tempPaperForPosition.bounds.height;
 
-                    console.log(tempPaperForPosition)
                     pathWickObject.x = tempPaperForPosition.position.x - wickEditor.canvas.getPan().x;
                     pathWickObject.y = tempPaperForPosition.position.y - wickEditor.canvas.getPan().y;
 
-                    console.log(wickEditor.canvas)
-
                     //tempPaperForPosition.scale(1/smoothing);
+                    tempPaperForPosition.fillColor = wickEditor.settings.fillColor;
                     pathWickObject.pathData = tempPaperForPosition.exportSVG({asString:true});
 
                     wickEditor.actionHandler.doAction('addObjects', {
@@ -117,7 +121,7 @@ Tools.Paintbrush = function (wickEditor) {
                         dontSelectObjects: true,
                     });
 
-                    //croquis.clearLayer();
+                    croquis.clearLayer();
                 });
             }
             i.src = document.getElementsByClassName('croquis-layer-canvas')[1].toDataURL();

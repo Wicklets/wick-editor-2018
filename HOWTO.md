@@ -162,11 +162,12 @@ _Pencil Options_
 
 ### Frames
 
+**DESIGN TODO**
+
 - To add a frame, double click an empty space on the timeline or right click and select `Add Frame`
+- Change the length of frame(s) by dragging the edges left or right.
 - Select frames by clicking and dragging, all frames inside the selection box will be selected.
 - Delete selected frames by pressing `Delete` or right clicking and selecting `Delete Frame`
-- Move frame(s) by clicking and dragging selected frames
-- Change the duration of frame(s) by dragging the left or right edges of the selection box
 
 ### Playhead
 
@@ -257,7 +258,9 @@ _Attributes:_
 - Fill color
 - Stroke color
 - Stroke width
-- Boolean ops
+- Boolean Operations
+ - Unite: Combines two or more paths into one path.
+ - Subtract: Uses the topmost path to cut out a portion of other selected paths.
 
 ### Images
 
