@@ -483,7 +483,7 @@ Name | Description
 - A .wick file is the native filetype for Wick projects.
 - .wick files can be opened in the editor by dragging them into the browser window, or by clicking `File` -> `Open Project` and selecting them.
 
-##Exporting Projects
+## Exporting Projects
 
 ### .zip archive
 
