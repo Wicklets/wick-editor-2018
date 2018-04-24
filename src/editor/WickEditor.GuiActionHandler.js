@@ -1232,6 +1232,17 @@ var GuiActionHandler = function (wickEditor) {
 
         });
 
+    registerAction('createAssetFromSelection',
+        [],
+        [],
+        {},
+        function (args) {
+            var json = wickEditor.project.getSelectedObject().getAsJSON();
+            var asset = new WickAsset(json, 'symbol', prompt('Name ur new thing'));
+            wickEditor.project.library.addAsset(asset);
+            wickEditor.project.getSelectedObject().assetUUID = asset.uuid;
+        });
+
     registerAction('createObjectFromAsset',
         [],
         [],
