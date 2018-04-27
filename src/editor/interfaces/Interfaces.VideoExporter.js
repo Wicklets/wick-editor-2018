@@ -225,7 +225,7 @@ var VideoExporterInterface = function (wickEditor) {
                 convertDataURIToBinary(src),
                 0,
                 soundFrame.length / wickEditor.project.framerate,
-                1 + (soundFrame.playheadPosition / wickEditor.project.framerate * 1000),
+                1 + (soundFrame.playheadPosition / wickEditor.project.framerate * 1000)
             )
         })
 
