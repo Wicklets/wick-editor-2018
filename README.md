@@ -5,6 +5,8 @@ Wick is a browser-based hybrid animation/coding environment for making interacti
 # How to contribute to Wick
 Want to help us make Wick? There's plenty to do, we'd love your help.
 
+Be sure to read the [code of conduct](https://github.com/zrispo/wick-editor/blob/master/code-of-conduct.md)!!
+
 ### Create tutorials
 Wick needs tutorials! If you're interested in making text or video tutorials, contact [@zrispo](https://twitter.com/zrispo), especially if you want to make non-english tutorials! The [tutorial page](http://wickeditor.com/#tutorials) is a good place to start if you want a template.
 
