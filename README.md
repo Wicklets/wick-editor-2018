@@ -8,7 +8,7 @@ Want to help us make Wick? There's plenty to do, we'd love your help.
 Be sure to read the [code of conduct](https://github.com/zrispo/wick-editor/blob/master/code-of-conduct.md)!!
 
 ### Create tutorials
-Wick needs tutorials! If you're interested in making text or video tutorials, contact [@zrispo](https://twitter.com/zrispo), especially if you want to make non-english tutorials! The [tutorial page](http://wickeditor.com/#tutorials) is a good place to start if you want a template.
+Wick needs tutorials! If you're interested in making text or video tutorials, contact us at *contact@wickeditor.com*, especially if you want to make non-english tutorials! The [tutorial page](http://wickeditor.com/#tutorials) is a good place to start if you want a template.
 
 ### Report bugs and submit bug fixes
 Found a bug? Add it to the [issue tracker](https://github.com/zrispo/wick/issues). You can also look at existing bugs in the issue tracker. If you're just getting started, check out the bugs tagged as `small-bugs` - these are smaller fixes that you can do to get acquainted with the codebase.
@@ -29,4 +29,4 @@ If you're a creator that wants to support Wick, one of the most helpful things t
   * `http-server` to start
 * Open a browser window, and go to `http://localhost:8000/`
 
-Need help? Feel free to contact [@zrispo](https://twitter.com/zrispo) (that's me).
+Need help? Feel free to contact us at *contact@wickeditor.com*
