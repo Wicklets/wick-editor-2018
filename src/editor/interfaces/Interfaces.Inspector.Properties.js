@@ -168,6 +168,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
+    //font family
     properties.push(new InspectorInterface.SelectInput({
         title: '<img src="resources/inspector-icons/fontfamily.svg" class="inspector-icon"/>',
         tooltip: 'Font Family',
@@ -181,14 +182,20 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             return selectionInfo.object.textData.fontFamily;
         }, 
         onChangeFn: function (val) {
-            loadGoogleFonts([val], function () {
+            //these variables will be attached to the font name in the WebFont Importer
+            var weight = ":"+selectionInfo.object.textData.fontWeight;
+            var italic = (selectionInfo.object.textData.fontStyle == "italic") ? 'i' : '';
+            console.log(val+weight+italic);
+            //example: "Open Sans:300i"
+            //reload Google Font with new weight and italic value
+            loadGoogleFonts([val+weight+italic], function () {
                 selectionInfo.object.textData.fontFamily = val;
                 wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
                 wickEditor.syncInterfaces();
             });
         }
     }));
-
+    
     properties.push(new InspectorInterface.SliderInput({
         title: '<img src="resources/inspector-icons/fontsize.svg" class="inspector-icon"/>',
         tooltip: 'Font Size',
@@ -211,7 +218,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.MultiCheckboxInput({
         title: '',
         icons: [
-            'resources/align-left.svg', 
+            'resources/align-left.svg',
             'resources/align-center.svg',
             'resources/align-right.svg',
             'resources/text-bold.svg',
@@ -222,11 +229,11 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         },
         getValueFn: function () {
             return [
-                selectionInfo.object.textData.textAlign === 'left',
-                selectionInfo.object.textData.textAlign === 'center',
-                selectionInfo.object.textData.textAlign === 'right',
-                selectionInfo.object.textData.fontWeight === 'bold',
-                selectionInfo.object.textData.fontStyle === 'italic'
+                selectionInfo.object.textData.textAlign === 'left', //vals[0]
+                selectionInfo.object.textData.textAlign === 'center', //vals[1]
+                selectionInfo.object.textData.textAlign === 'right', //vals[2]
+                selectionInfo.object.textData.fontWeight === 'bold', //vals[3]
+                selectionInfo.object.textData.fontStyle === 'italic' //vals[4]
             ];
         }, 
         onChangeFn: function (vals) {
@@ -242,8 +249,14 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             }
             selectionInfo.object.textData.fontWeight = vals[3] ? 'bold' : '';
             selectionInfo.object.textData.fontStyle = vals[4] ? 'italic' : '';
-            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
-            wickEditor.syncInterfaces();
+            //these variables will be attached to the font name in the WebFont Importer
+            var weight = ":"+selectionInfo.object.textData.fontWeight;
+            var italic = (selectionInfo.object.textData.fontStyle == "italic") ? 'i' : '';
+            //reload Google Font with new weight and italic value
+            loadGoogleFonts([selectionInfo.object.textData.fontFamily+weight+italic], function () {
+                wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
+                wickEditor.syncInterfaces();
+            });
         }
     }));
 
