@@ -100,6 +100,7 @@ var ScriptingIDEInterface = function (wickEditor) {
         window.addEventListener('mousemove', function (e) {
             if(resizer.resizing) {
                 var newIDEHeight = wickEditor.settings.scriptingIDEHeight - e.movementY;
+                newIDEHeight = Math.max(newIDEHeight, 50);
                 wickEditor.settings.setValue('scriptingIDEHeight', newIDEHeight)
                 document.getElementById('scriptingGUI').style.height = wickEditor.settings.scriptingIDEHeight+'px';
                 self.resize()
@@ -156,6 +157,8 @@ var ScriptingIDEInterface = function (wickEditor) {
             if(maximized) {
                 document.getElementById('scriptingGUI').style.height = 'calc(100% - 24px)';
             } else {
+                if(wickEditor.settings.scriptingIDEHeight < 50)
+                    wickEditor.settings.scriptingIDEHeight = 50;
                 document.getElementById('scriptingGUI').style.height = wickEditor.settings.scriptingIDEHeight+'px';
             }
             
