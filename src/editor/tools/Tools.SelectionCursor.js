@@ -188,101 +188,29 @@ Tools.SelectionCursor = function (wickEditor) {
     }
 
     this.paperTool.onMouseDrag = function(event) {
+        if(transformMode && transformMode.startsWith('scale')) {
+            var keepAspectRatio = event.modifiers.shift;
+            var rect = selectionBoundsRect
 
-        if(transformMode === 'scaleBR') {
-            var rect = selectionBoundsRect
             wickEditor.project.getSelectedObjectsByType(WickObject).forEach(function (o) {
-                var resizeRatio = event.point.subtract(rect.topLeft);
+                var resizeRatio;
+                var referencePos = {x:0,y:0};
+                if(transformMode === 'scaleBR') { referencePos = rect.topLeft;      resizeRatio = event.point.subtract(rect.topLeft); }
+                if(transformMode === 'scaleTL') { referencePos = rect.bottomRight;  resizeRatio = rect.bottomRight.subtract(event.point); }
+                if(transformMode === 'scaleBL') { referencePos = rect.topRight;     resizeRatio = { x: rect.topRight.x - event.point.x, y: event.point.y - rect.topRight.y }; }
+                if(transformMode === 'scaleTR') { referencePos = rect.bottomLeft;   resizeRatio = { x: event.point.x - rect.bottomLeft.x, y: rect.bottomLeft.y - event.point.y }; }
+                if(transformMode === 'scaleT')  { referencePos = rect.bottomCenter; resizeRatio = { x: rect.width, y: rect.bottomCenter.y - event.point.y }; keepAspectRatio = false; }
+                if(transformMode === 'scaleB')  { referencePos = rect.topCenter;    resizeRatio = { x: rect.width, y: event.point.y - rect.topCenter.y }; keepAspectRatio = false; }
+                if(transformMode === 'scaleR')  { referencePos = rect.leftCenter;   resizeRatio = { x: event.point.x - rect.leftCenter.x, y: rect.height }; keepAspectRatio = false; }
+                if(transformMode === 'scaleL')  { referencePos = rect.rightCenter;  resizeRatio = { x: rect.rightCenter.x - event.point.x, y: rect.height }; keepAspectRatio = false; }
+
                 if(resizeRatio.x < 1 || resizeRatio.y < 1) return;
                 resizeRatio.x /= rect.width;
                 resizeRatio.y /= rect.height;
-                o.paper.scale(resizeRatio.x, resizeRatio.y, rect.topLeft);
-                updateSelection()
-            });
-            return;
-        }
-        if(transformMode === 'scaleTL') {
-            var rect = selectionBoundsRect
-            wickEditor.project.getSelectedObjectsByType(WickObject).forEach(function (o) {
-                var resizeRatio = rect.bottomRight.subtract(event.point);
-                if(resizeRatio.x < 1 || resizeRatio.y < 1) return;
-                resizeRatio.x /= rect.width;
-                resizeRatio.y /= rect.height;
-                o.paper.scale(resizeRatio.x, resizeRatio.y, rect.bottomRight);
-                updateSelection()
-            });
-            return;
-        }
-        if(transformMode === 'scaleBL') {
-            var rect = selectionBoundsRect
-            wickEditor.project.getSelectedObjectsByType(WickObject).forEach(function (o) {
-                var resizeRatio = {
-                    x: rect.topRight.x - event.point.x,
-                    y: event.point.y - rect.topRight.y,
+                if (keepAspectRatio) {
+                    resizeRatio.x = resizeRatio.y = Math.max(resizeRatio.x, resizeRatio.y);
                 }
-                if(resizeRatio.x < 1 || resizeRatio.y < 1) return;
-                resizeRatio.x /= rect.width;
-                resizeRatio.y /= rect.height;
-                o.paper.scale(resizeRatio.x, resizeRatio.y, rect.topRight);
-                updateSelection()
-            });
-            return;
-        }
-        if(transformMode === 'scaleTR') {
-            var rect = selectionBoundsRect
-            wickEditor.project.getSelectedObjectsByType(WickObject).forEach(function (o) {
-                var resizeRatio = {
-                    x: event.point.x - rect.bottomLeft.x,
-                    y: rect.bottomLeft.y - event.point.y,
-                }
-                if(resizeRatio.x < 1 || resizeRatio.y < 1) return;
-                resizeRatio.x /= rect.width;
-                resizeRatio.y /= rect.height;
-                o.paper.scale(resizeRatio.x, resizeRatio.y, rect.bottomLeft);
-                updateSelection()
-            });
-            return;
-        }
-        if(transformMode === 'scaleT') {
-            var rect = selectionBoundsRect
-            wickEditor.project.getSelectedObjectsByType(WickObject).forEach(function (o) {
-                var resizeY = rect.bottomCenter.y - event.point.y
-                if(resizeY < 1) return;
-                resizeY /= rect.height;
-                o.paper.scale(1, resizeY, rect.bottomCenter);
-                updateSelection()
-            });
-            return;
-        }
-        if(transformMode === 'scaleB') {
-            var rect = selectionBoundsRect
-            wickEditor.project.getSelectedObjectsByType(WickObject).forEach(function (o) {
-                var resizeY = event.point.y - rect.topCenter.y
-                if(resizeY < 1) return;
-                resizeY /= rect.height;
-                o.paper.scale(1, resizeY, rect.topCenter);
-                updateSelection()
-            });
-            return;
-        }
-        if(transformMode === 'scaleR') {
-            var rect = selectionBoundsRect
-            wickEditor.project.getSelectedObjectsByType(WickObject).forEach(function (o) {
-                var resizeX = event.point.x - rect.leftCenter.x
-                if(resizeX < 1) return;
-                resizeX /= rect.width;
-                o.paper.scale(resizeX, 1, rect.leftCenter);
-                updateSelection()
-            });
-            return;
-        }
-        if(transformMode === 'scaleL') {
-            var rect = selectionBoundsRect
-            wickEditor.project.getSelectedObjectsByType(WickObject).forEach(function (o) {
-                var resizeX = rect.rightCenter.x - event.point.x
-                if(resizeX < 1) return;
-                resizeX /= rect.width;
-                o.paper.scale(resizeX, 1, rect.rightCenter);
+                o.paper.scale(resizeRatio.x, resizeRatio.y, referencePos);
                 updateSelection()
             });
             return;
