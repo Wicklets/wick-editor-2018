@@ -405,7 +405,8 @@ TimelineInterface.Interactions = function (wickEditor, timeline) {
         }), 
         'update' : (function (e) {
             var shift = -timeline.horizontalScrollBar.getScrollPosition();
-            timeline.playhead.setPosition(e.pageX-timelineOffset-shift);
+            timeline.playhead.setPosition(Math.max(0, e.pageX-timelineOffset-shift));
+            timeline.playhead.snap();
             if(timeline.playhead.frameDidChange()) {
                 wickEditor.project.getCurrentObject().playheadPosition = timeline.playhead.getFramePosition();
             }
