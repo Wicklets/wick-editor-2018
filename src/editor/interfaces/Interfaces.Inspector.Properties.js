@@ -185,14 +185,28 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             //these variables will be attached to the font name in the WebFont Importer
             var weight = ":"+selectionInfo.object.textData.fontWeight;
             var italic = (selectionInfo.object.textData.fontStyle == "italic") ? 'i' : '';
+            //log stuff like "Open Sans:boldi" for testing
             console.log(val+weight+italic);
-            //example: "Open Sans:300i"
-            //reload Google Font with new weight and italic value
-            loadGoogleFonts([val+weight+italic], function () {
+            
+            //if font is loaded succesfully, update canvas and setting
+            var callback = function () {
                 selectionInfo.object.textData.fontFamily = val;
                 wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
                 wickEditor.syncInterfaces();
+                wickEditor.alertbox.hide();
+            };
+            
+            //reload Google Font with new weight and italic value.
+            //if you enable bold and/or italic then change to a font that doesn't support one of those, Wick will load Regular
+            //and reset the Bold and Italic buttons. Trying to load every single variant to check its validity takes too long.
+            //This problem can be alleviated using a Google Web Font API Key.
+            
+            loadGoogleFonts([val+weight+italic], callback, function () {
+                loadGoogleFonts([val], callback);
+                selectionInfo.object.textData.fontWeight = '';
+                selectionInfo.object.textData.fontStyle == '';
             });
+            wickEditor.alertbox.showMessage("Loading font...", 0);
         }
     }));
     
