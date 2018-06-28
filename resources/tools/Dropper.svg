@@ -13,7 +13,7 @@
    viewBox="0 0 400 400"
    version="1.1"
    id="svg2"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
    sodipodi:docname="Dropper.svg">
   <metadata
      id="metadata46">
@@ -40,7 +40,7 @@
      id="namedview44"
      showgrid="false"
      inkscape:zoom="0.59"
-     inkscape:cx="200"
+     inkscape:cx="91.525424"
      inkscape:cy="200"
      inkscape:window-x="0"
      inkscape:window-y="0"
@@ -127,64 +127,13 @@
          id="feColorMatrix28" />
     </filter>
   </defs>
-  <g
-     id="Page-1"
-     transform="matrix(1.1036324,0,0,1.0950716,-21.587891,-17.190314)"
-     style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:1">
-    <g
-       id="Artboard-6-Copy"
-       transform="translate(-390,-2309)">
-      <use
-         id="Rectangle-4-Copy-4"
-         mask="url(#mask-2)"
-         xlink:href="#path-1"
-         style="stroke:#979797;stroke-width:2;stroke-opacity:0"
-         x="0"
-         y="0"
-         width="100%"
-         height="100%" />
-      <g
-         id="Dropper"
-         transform="translate(460,2384)">
-        <g
-           id="Fill-33-Copy-5">
-          <use
-             xlink:href="#path-3"
-             id="use35"
-             style="fill:#000000;fill-opacity:1;filter:url(#filter-4)"
-             x="0"
-             y="0"
-             width="100%"
-             height="100%" />
-          <use
-             xlink:href="#path-3"
-             id="use37"
-             style="fill:#bfbfbf;fill-rule:evenodd"
-             x="0"
-             y="0"
-             width="100%"
-             height="100%" />
-        </g>
-        <g
-           id="Fill-33-Copy-6">
-          <use
-             xlink:href="#path-5"
-             id="use40"
-             style="fill:#000000;fill-opacity:1;filter:url(#filter-6)"
-             x="0"
-             y="0"
-             width="100%"
-             height="100%" />
-          <use
-             xlink:href="#path-5"
-             id="use42"
-             style="fill:#ffffff;fill-rule:evenodd"
-             x="0"
-             y="0"
-             width="100%"
-             height="100%" />
-        </g>
-      </g>
-    </g>
-  </g>
+  <use
+     xlink:href="#path-5"
+     id="use42"
+     style="fill:#ffffff;fill-rule:evenodd;stroke:none;stroke-width:1"
+     x="0"
+     y="0"
+     width="100%"
+     height="100%"
+     transform="matrix(1.1036324,0,0,1.0950716,46.315338,64.35864)" />
 </svg>

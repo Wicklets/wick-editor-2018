@@ -5,7 +5,6 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="400px"
@@ -13,7 +12,7 @@
    viewBox="0 0 400 400"
    version="1.1"
    id="svg2"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
    sodipodi:docname="Text.svg">
   <metadata
      id="metadata46">
@@ -40,7 +39,7 @@
      id="namedview44"
      showgrid="false"
      inkscape:zoom="0.59"
-     inkscape:cx="200"
+     inkscape:cx="85.59322"
      inkscape:cy="200"
      inkscape:window-x="0"
      inkscape:window-y="0"
@@ -55,10 +54,9 @@
      id="defs8">
     <text
        id="text-1"
-       font-family="ArialRoundedMTBold, Arial Rounded MT Bold"
        font-size="270"
        font-weight="normal"
-       fill="#BFBFBF">
+       style="font-weight:normal;font-size:270px;line-height:0%;font-family:ArialRoundedMTBold, 'Arial Rounded MT Bold';fill:#bfbfbf">
       <tspan
          x="0"
          y="255"
@@ -90,10 +88,9 @@
     </filter>
     <text
        id="text-3"
-       font-family="ArialRoundedMTBold, Arial Rounded MT Bold"
        font-size="270"
        font-weight="normal"
-       fill="#FFFFFF">
+       style="font-weight:normal;font-size:270px;line-height:0%;font-family:ArialRoundedMTBold, 'Arial Rounded MT Bold';fill:#ffffff">
       <tspan
          x="16"
          y="255"
@@ -125,63 +122,12 @@
     </filter>
   </defs>
   <g
-     id="Page-1"
-     stroke="none"
-     stroke-width="1"
-     fill="none"
-     fill-rule="evenodd">
-    <g
-       id="Artboard-6-Copy"
-       transform="matrix(1.3220339,0,0,1.2781122,-576.61017,-3620.9764)">
-      <g
-         id="Text"
-         transform="translate(485,2828)"
-         style="fill-opacity:1">
-        <g
-           id="A-Copy"
-           style="fill:#bfbfbf">
-          <use
-             xlink:href="#text-1"
-             id="use34"
-             style="filter:url(#filter-2)"
-             x="0"
-             y="0"
-             width="100%"
-             height="100%" />
-          <use
-             xlink:href="#text-1"
-             id="use36"
-             x="0"
-             y="0"
-             width="100%"
-             height="100%" />
-        </g>
-        <g
-           id="A-Copy-2"
-           style="fill:#ffffff">
-          <use
-             xlink:href="#text-3"
-             id="use39"
-             style="filter:url(#filter-4)"
-             x="0"
-             y="0"
-             width="100%"
-             height="100%" />
-          <use
-             xlink:href="#text-3"
-             id="use41"
-             x="0"
-             y="0"
-             width="100%"
-             height="100%" />
-        </g>
-      </g>
-      <rect
-         id="Rectangle-4-Copy-5"
-         x="390"
-         y="2784"
-         width="400"
-         height="400" />
-    </g>
+     aria-label="A"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:376.5039978px;line-height:1.25;font-family:'Nunito Bold';-inkscape-font-specification:'Nunito Bold, ';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:9.41259956"
+     id="text14898">
+    <path
+       d="m 329.32912,304.10334 q 2.25902,4.89455 2.25902,9.7891 0,8.65959 -7.15357,14.68366 -6.77707,6.02406 -15.81317,6.02406 -6.02406,0 -11.29512,-3.01203 -5.27106,-3.38854 -8.28309,-10.16561 L 266.45295,270.97099 H 133.92354 l -22.59024,50.45153 q -3.01203,6.77707 -8.28308,10.16561 -5.271059,3.01203 -11.671627,3.01203 -8.659592,0 -15.813168,-6.02406 -7.153576,-6.02407 -7.153576,-14.68366 0,-4.89455 2.259024,-9.7891 L 174.58598,80.836468 q 3.38853,-7.53008 10.1656,-11.29512 7.15358,-4.141544 15.06016,-4.141544 7.90659,0 14.68366,4.141544 7.15358,3.76504 10.54211,11.29512 z m -178.8394,-70.78275 h 99.39706 L 200.18825,121.4989 Z"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Nunito;-inkscape-font-specification:'Nunito Bold';fill:#ffffff;stroke-width:9.41259956"
+       id="path14900" />
   </g>
 </svg>
