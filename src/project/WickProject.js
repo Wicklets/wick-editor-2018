@@ -771,7 +771,7 @@ WickProject.prototype.loadFonts = function (callback) {
     var self = this;
     var fontsInProject = [];
     self.getAllObjects().forEach(function (o) {
-        if(o.isText && o.textData.fontFamily !== 'Arial' && fontsInProject.indexOf(o.textData.fontFamily))
+        if(o.isText && o.textData.fontFamily !== 'Arial' && o.textData.fontFamily !== 'arial' && fontsInProject.indexOf(o.textData.fontFamily))
             fontsInProject.push(o.textData.fontFamily);
     });
     if(fontsInProject.length === 0 && callback) {
