@@ -8,7 +8,7 @@
     overflow: hidden;
     border-right: 0px;
     border-bottom: 0px;
-    font-family: "Open Sans";
+    font-family: var(--ui-font);
     padding: 5px;
 }
 

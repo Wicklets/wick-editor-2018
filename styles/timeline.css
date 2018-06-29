@@ -219,11 +219,8 @@ body {
     background-size: 15px 17px;
     background-repeat: no-repeat;
     background-position: left;*/
-    
-    
     width:  calc(100% - 10px);
     height: calc(var(--layer-height) - 5px);
-    
     margin: calc(var(--common-padding) / 2);
     margin-top: 9px;
     margin-left: 5px;
@@ -232,14 +229,11 @@ body {
     text-align: center;
     line-height: calc(var(--layer-height) - 5px);
     color: white;
-
     position: absolute;
-
     box-shadow: var(--border);
-
     font-size: 12px;
-    font-family: "Anonymous Pro";
-    font-style: Bold; 
+    font-family: var(--ui-font);
+    font-style: Bold;
 }
 
 .soundLayer {
@@ -263,7 +257,7 @@ body {
     top: 5px;
     left: 60px;
     font-size: 12px;
-    font-family: "Anonymous Pro";
+    font-family: var(--ui-font);
     font-style: Bold; 
 }
 
@@ -285,12 +279,11 @@ body {
 }
 
 .active-layer {
-    background-color: #46bbf8;
+    background-color: var(--ui-accent1);
     border-style: solid;
     border-color: white;
     border-width: 1px;
-/*    box-shadow: 0 0 10px 3px rgba(255,255,255,0.18);*/
-
+    /*    box-shadow: 0 0 10px 3px rgba(255,255,255,0.18);*/
 }
 
 .active-soundLayer {
@@ -708,8 +701,7 @@ body {
 
     font-size: 14px;
     font-weight: bold;
-    /*font-size: vmin;*/
-    font-family: "Anonymous Pro" ;
+    font-family: "arial", sans-serif;
 }
 .number-line-cell-number-small {
     font-size: 12px;

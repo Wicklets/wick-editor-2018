@@ -268,8 +268,7 @@ hr {
 .toolbar-brush-settings-window-smoothness-label {
   width: 120px;
   height: 20px;
-  font-family:"Open Sans";
-  src: url("Open_Sans/OpenSans-Regular.ttf");
+  font-family: var(--ui-font);
   color: white;
   font-size: 12px;
   position: absolute;
