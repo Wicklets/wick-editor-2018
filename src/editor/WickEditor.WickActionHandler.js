@@ -326,7 +326,7 @@ var WickActionHandler = function (wickEditor) {
                 if(wickObj.updateFrameTween) wickObj.updateFrameTween();
             };
 
-            var source = wickObj.getSourceInside();
+            var source = (wickObj != undefined) ? wickObj.getSourceInside() : undefined;
             if(source) {
                 var asset = wickEditor.project.library.getAsset(source.assetUUID);
                 asset.data = source.getAsJSON();
