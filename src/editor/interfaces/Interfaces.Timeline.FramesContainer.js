@@ -343,7 +343,7 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
             waveformDiv.style.display = 'none';
             if(this.wickFrame.tweens.length > 0) {
                 thumbnailDiv.style.display = 'none';
-                this.elem.style.backgroundColor = '#e4eafb';
+                this.elem.style.background = 'var(--tween-background)';
             } else if(this.wickFrame.wickObjects.length > 0) {
                 this.elem.style.backgroundColor = '#EEE';
                 thumbnailDiv.src = 'resources/fullframe.svg';

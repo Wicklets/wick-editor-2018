@@ -21,19 +21,16 @@ body {
     --max-timeline-height: 160px; 
 
     --layers-width: 135px;
-    --layer-height: 30px;
+    --layer-height: 20px;
 
 
-    --frame-width: 20px;
+    --frame-width: 15px;
     --frame-handle-width: 8px;
 
     --frame-padding-width: 4px;
-    --frame-padding-height: 4px;
+    --frame-padding-height: 2px;
 
-    --frames-strip-padding-vertical: 3px;
-
-    --shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
-    --border: inset 0px 0px 1px #555;
+    --frames-strip-padding-vertical: 4px;
     
     --timeline-left-padding: 5px; 
     --timeline-top-padding: 6px; 
@@ -44,12 +41,13 @@ body {
     --scrollbar-thickness: 14px;
 
 
-    --number-line-height: 16px;
-    
+    --number-line-height: 17px;
+
+    --tween-background: linear-gradient(to right, #76ffc9, #e3c4ff, #ffc4c8);
 }
 
 .timeline {
-    background-color: #585757;
+    background-color: var(--ui-base-dark1);
 
     margin: 0px;
     padding: 0px;
@@ -93,7 +91,6 @@ body {
 
 .layers-container {
     background-color: #414141;
-/*    border-right-color: #878787;*/
     width: var(--layers-width);
     height: 1000%;
     left: 0px;
@@ -101,8 +98,6 @@ body {
 
     position: absolute;
     overflow: hidden;
-
-    box-shadow: var(--border);
 }
 
 .layer-tools-button {
@@ -128,36 +123,36 @@ body {
 
 .add-layer-button {
     position: absolute;
-    top: 5px;
+    top: 0px;
     left: 5px;
     background-image: url("../resources/plusButton.svg");
 }
 .add-layer-button:hover {
-    background-color: #31E19C;
+    background-color: var(--ui-accent1-bright1);
 }
 
 .delete-layer-button {
     position: absolute;
-    top: 5px;
+    top: 0px;
     left: 25px;
     background-image: url("../resources/minusButton.svg");
     
 }
 .delete-layer-button:hover {
     /*width: 100px;*/
-    background-color: #31E19C;
+    background-color: var(--ui-accent1-bright1);
 }
 
 .onion-skin-button {
     position: absolute;
-    top: 5px;
+    top: 0px;
     left: 110px;
     border-radius: 7px;
     background-image: url("../resources/onion.png");
     
 }
 .onion-skin-button:hover {
-    background-color: #31E19C;
+    background-color: var(--ui-accent1-bright1);
 }
 
 .small-frames-button {
@@ -167,7 +162,7 @@ body {
     background-image: url('../resources/zoomin.png');
 }
 .small-frames-button:hover {
-    background-color: #31E19C;
+    background-color: var(--ui-accent1-bright1);
 }
 
 .play-preview-button {
@@ -179,7 +174,7 @@ body {
     background-size: 8px 8px;
 }
 .play-preview-button:hover {
-    background-color: #31E19C;
+    background-color: var(--ui-accent1-bright1);
 }
 
 .pause-preview-button {
@@ -190,7 +185,7 @@ body {
     background-size: 8px 8px;
 }
 .pause-preview-button:hover {
-    background-color: #31E19C;
+    background-color: var(--ui-accent1-bright1);
 }
 
 .step-backward-preview-button {
@@ -200,7 +195,7 @@ body {
     background-image: url('../resources/step-backward.png');
 }
 .step-backward-preview-button:hover {
-    background-color: #31E19C;
+    background-color: var(--ui-accent1-bright1);
 }
 
 .step-forward-preview-button {
@@ -210,11 +205,12 @@ body {
     background-image: url('../resources/step-forward.png');
 }
 .step-forward-preview-button:hover {
-    background-color: #31E19C;
+    background-color: var(--ui-accent1-bright1);
 }
 
 .layer {
-    background-color: #4a6588;
+    /*I think this should be a random accent color*/
+    background-color: var(--ui-accent1-dark1);
     /*background-image: url('../resources/layer-handle.svg');
     background-size: 15px 17px;
     background-repeat: no-repeat;
@@ -230,14 +226,12 @@ body {
     line-height: calc(var(--layer-height) - 5px);
     color: white;
     position: absolute;
-    box-shadow: var(--border);
     font-size: 12px;
     font-family: var(--ui-font);
-    font-style: Bold;
 }
 
 .soundLayer {
-    background-color: #47ad8a;
+    background-color: var(--ui-accent3-dark1);
 }
 
 .layer-name {
@@ -254,28 +248,23 @@ body {
     height: 15px;
     z-index: 999;
     position: absolute;
-    top: 5px;
+    top: 0px;
     left: 60px;
     font-size: 12px;
     font-family: var(--ui-font);
-    font-style: Bold; 
 }
 
 .layer-gnurl {
-    width: 14px;
-    height: 21px;
+    width: 13px;
+    height: 13px;
     left: 2px;
-    top: 2px;
+    top: 1px;
     position: absolute;
     cursor: move;
     background-image: url('../resources/layer-gnurl.svg');
     background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: left;
-    opacity: 0.6;
-}
-.layer-gnurl:hover {
-    opacity: 0.95;
 }
 
 .active-layer {
@@ -283,11 +272,10 @@ body {
     border-style: solid;
     border-color: white;
     border-width: 1px;
-    /*    box-shadow: 0 0 10px 3px rgba(255,255,255,0.18);*/
 }
 
 .active-soundLayer {
-    background-color: #60e5b6;
+    background-color: var(--ui-accent3);
 }
 
 .layer-lock-button {
@@ -295,26 +283,23 @@ body {
     width: 15px;
     height: 15px;
     position: absolute;
-    top: 5px;
+    top: 0px;
     left: 19px;
     background-color: transparent;
-    background-image: url('../resources/lock-layer.svg');
-    background-size: 13px 13px;
+    background-image: url('../resources/lock-layer-disabled.svg');
+    background-size: 15px 15px;
     background-repeat: no-repeat;
     background-position: center;
     cursor: pointer;
-    opacity: 0.6;
 }
 .layer-lock-button:hover {
-    background-color: rgba(255,255,255,0.4);
+    background-color: var(--ui-accent1-dark1);
 }
 .layer-lock-button:active {
-    background-color: rgba(255,255,255,0.8);;
-    opacity: 1.0;
+    background-color: var(--ui-accent1-dark2);
 }
 .layer-locked {
-    opacity: 1.0;
-    background-color: rgba(255,255,255,0.5);
+    background-image: url('../resources/lock-layer.svg');
 }
 
 .layer-hide-button {
@@ -322,30 +307,27 @@ body {
     width: 15px;
     height: 15px;
     position: absolute;
-    top: 5px;
+    top: 0px;
     left: 36px;
     background-color: transparent;
-    background-image: url('../resources/hide-layer.svg');
+    background-image: url('../resources/hide-layer-disabled.svg');
     background-size: 13px 13px;
     background-repeat: no-repeat;
     background-position: center;
     cursor: pointer;
-    opacity: 0.6;
 }
 .layer-hide-button:hover {
-    background-color: rgba(255,255,255,0.4);
+    background-color: var(--ui-accent1-dark1);
 }
 .layer-hide-button:active {
-    background-color: rgba(255,255,255,0.8);
-    opacity: 1.0;
+    background-color: var(--ui-accent1-dark2);
 }
 .layer-hidden {
-    opacity: 1.0;
-    background-color: rgba(255,255,255,0.5);
+    background-image: url('../resources/hide-layer.svg');
 }
 
 .frames-container {
-    background-color: #3C3C3C;
+    background-color: var(--ui-base);
 
     width: 10000%;
     height: 1000%;
@@ -356,8 +338,6 @@ body {
     overflow: hidden;
     
     display: inline-block;
-
-    box-shadow: var(--border);
 }
 
 .frames-cell {
@@ -367,13 +347,13 @@ body {
     height: 200px;
 
     /*box-shadow: inset 0px 0px 1px #555;*/
-    border-left: 1px solid #444;
+    border-left: 1px dashed var(--ui-base-light1);
 
     position: absolute;
 }
 
 .frames-strip {
-    background-color: #C2C2C2;
+    background-color: var(--ui-base-light2);
 
     width: 100%;
     height: calc(var(--layer-height) - var(--frames-strip-padding-vertical)*2);
@@ -381,8 +361,6 @@ body {
     margin-top: calc(var(--frames-strip-padding-vertical) * 3);
     left: 5px;
     position: absolute;
-
-    box-shadow: var(--border);
 
     overflow: hidden;
     
@@ -396,9 +374,7 @@ body {
 
     width: var(--frame-width);
     height: calc(var(--layer-height) - var(--frames-strip-padding-vertical)*2);
-
-    /*box-shadow: inset 0px 0px 1px #555;*/
-    border-left: 1px solid #999;
+    border-left: 1px solid var(--ui-base-light3);
 
     position: absolute;
 }
@@ -408,8 +384,7 @@ body {
 }
 
 .frame {
-    background-color: #FFFFFF;
-/*    opacity: 0.5;*/
+    background-color: var(--ui-white);
     cursor: move;
 
     width:  calc(var(--frame-width)      - var(--common-padding));
@@ -419,7 +394,6 @@ body {
     overflow: hidden;
     margin-top: 7px;
     margin-left: 15px;
-/*  box-shadow: var(--border), var(--shadow);*/
     
     border-radius: 1px;
 }
@@ -429,7 +403,7 @@ body {
     max-width: 100%;
     width:  12px;
     height: 12px;
-    margin-top: 12px;
+    margin-top: 3px;
     padding: 0px;
 
     display: block;
@@ -455,7 +429,8 @@ body {
     height: 100%;
     pointer-events: none;
     font-size: 10px;
-    color: black;
+    color: var(--ui-black);
+    font-weight: 500;
 }
 
 .has-scripts-icon {
@@ -476,16 +451,15 @@ body {
     cursor: pointer;
 }
 .has-scripts-icon:hover {
-    background-color: #31E19C;
+    background-color: var(--ui-accent1-bright1);
 }
 
 .frame-tween-mode {
-
 }
 
 .frame-extender-handle {
     background-color: rgba(0,0,0,0);
-
+    
     cursor: ew-resize;
     width: var(--frame-handle-width);
     height: 100%;
@@ -529,7 +503,7 @@ body {
     height: 100%;
     position: absolute;
     pointer-events: none;
-    box-shadow: inset 0px 0px 0px 3px #5BBEDB, 0px 0px 0px 2px #48A5BE; 
+    box-shadow: inset 0px 0px 0px 3px var(--ui-accent1-bright1), 0px 0px 0px 2px var(--ui-accent1-bright1); 
 /*  background-color: cyan;*/
 /*
     border-color: red;
@@ -566,8 +540,8 @@ body {
 }
 
 .selection-box {
-    background-color: #AAAAFF;
-    box-shadow: inset 0px 0px 1px #0000FF;
+    background-color: var(--ui-accent1-bright1);
+    box-shadow: inset 0px 0px 2px var(--ui-accent1);
     opacity: 0.5;
     position: absolute;
     pointer-events: none;
@@ -609,7 +583,7 @@ body {
     width: var(--scrollbar-thickness);
     height: var(--scrollbar-thickness);
     position: absolute;
-    background-color: #2E2E2E; 
+    background-color: transparent;
     opacity: 1.0;
 }
 .scrollbar-button:hover {
@@ -626,7 +600,7 @@ body {
 }
 
 .scrollbar-button-right {
-    color: blue;
+    color: blue; /*is this for testing or something? :V*/
     right: 0px;
     top: 0px;
 
@@ -685,23 +659,22 @@ body {
 
     cursor: default;
 
-    background-color: #252525;
+    background-color: var(--ui-base-dark2);
 }
 
 .number-line-cell {
     position: absolute;
     height: var(--number-line-height);
-    color: #fafafa;
+    color: var(--ui-complement);
 }
 
 .number-line-cell-number {
     position: absolute;
     top: 1px;
     left: 10px;
-
     font-size: 14px;
     font-weight: bold;
-    font-family: "arial", sans-serif;
+    font-family: var(--ui-font);
 }
 .number-line-cell-number-small {
     font-size: 12px;
@@ -840,7 +813,7 @@ body {
     height: var(--number-line-height);
     top: 0px;
     left: 0px;
-    background-color: #252525;
+    background-color: var(--ui-base-dark1);
 }
 
 .layer-toolbar {
@@ -851,7 +824,7 @@ body {
     left: 0px;
     border-top: 1px; 
     border-color: black; 
-    background-color: #252525;
+    background-color: var(--ui-base-dark1);
 }
 
 .hide-scrollbar-connect-piece {
@@ -860,7 +833,7 @@ body {
     height: var(--scrollbar-thickness);
     bottom: 0px;
     left: calc(100% - var(--scrollbar-thickness));
-    background-color: #252525;
+    background-color: var(--ui-base-dark1);
 }
 
 .resize-timeline-bar {
@@ -878,7 +851,7 @@ body {
     height: var(--scrollbar-thickness);
     bottom: 0px;
     left: calc(100% - var(--scrollbar-thickness) - 49px);
-    background-color: #252525;
+    background-color: var(--ui-base-dark1);
 }
 
 .fps-box {
@@ -927,7 +900,7 @@ body {
 }
 
 .timeline-zoom-percent-sign {
-    color: white;
+    color: var(--ui-white);
     position: absolute;
     width: 12px;
     height: 12px;
@@ -942,35 +915,36 @@ body {
 /* Breadcrumbs */
 
 #breadcrumbsGUI {
-    top: 30px;
+    top: 25px;
     left: 46px;
     width: calc(100% - 266px);
-    height: 15px;
-    background-color: #000;
+    height: 20px;
+    background-color: var(--ui-base-dark2);
     overflow: hidden;
-    color: white;
+    color: var(--ui-white);
     padding-left: 5px;
 }
 
 .breadcrumbs-button {
+    height: 17px;
     width: auto;
-    border-radius: 4px;
-    color: white;
+    border-radius: 0px;
+    color: var(--ui-white);
     float: left;
     cursor: pointer;
-    font-size: 14px;
-    margin-top: 2px;
+    font-size: 12px;
+    margin-top: 0px;
 
-    -webkit-transition: background-color 100ms linear;
-    -ms-transition: background-color 100ms linear;
-    transition: background-color 100ms linear;
+    -webkit-transition: background-color 100ms ease-in-out;
+    -ms-transition: background-color 100ms ease-in-out;
+    transition: background-color 100ms ease-in-out;
 }
 .breadcrumbs-button:hover {
-    background-color: #31E19C;
-    color: black;
+    border-bottom: 2px solid var(--ui-accent1-bright1);
+    background-color: var(--ui-accent1-dark2);
 }
 .breadcrumbs-spacer {
-    color:white;
+    color: var(--ui-white);
     float: left;
     margin-left: 15px;
     margin-right: 15px;
@@ -994,7 +968,7 @@ body {
     left: 0px;
     width: 14px;
     height: 14px;
-    margin-top: 6px;
+    margin-top: 4px;
     margin-left: 3px;
     background-color: none;
     cursor: pointer;
@@ -1005,7 +979,7 @@ body {
     background-position: left;
 }
 .tween:hover {
-    box-shadow: inset 1px 1px 2px yellow;
+    box-shadow: inset 0px 0px 0px 2px yellow;
 }
 
 .hover-highlight-overlay {

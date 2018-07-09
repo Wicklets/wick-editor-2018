@@ -35,24 +35,32 @@
 html, body { width:100%; height:100%; overflow: hidden; } /* just to be sure these are full screen*/
 
 :root {
+    --ui-white: white;
+    --ui-black: black;
     --ui-base: #333333;
     --ui-base-light1: #555555;
     --ui-base-light2: #777777;
+    --ui-base-light3: #848484;
     --ui-base-dark1: #111111;
     --ui-base-dark2: #000000;
     --ui-complement: #DDDDDD;
     --ui-complement-light1: #EEEEEE;
-    --ui-complement-light2: #FFFFFF;
+    --ui-complement-light2: #F0F0F0;
     --ui-complement-dark1: #BBBBBB;
     --ui-complement-dark2: #999999;
-    --ui-accent1: #23d891;
-    --ui-accent1-dark1: #33846d;
+    --ui-accent1-bright1: #23d891;
+    --ui-accent1: #0ebb7e;
+    --ui-accent1-dark1: #2b6b59;
+    --ui-accent1-dark2: #2b4c43;
     --ui-accent1-light1: #76ffc9;
-    --ui-accent2: #e4748f
+    --ui-accent2: #e4748f;
     --ui-accent2-light1: #ffc4c8;
     --ui-accent2-dark1: #a23956;
     --ui-accent2-dark2: #561829;
-    --ui-warningText: #FF0000;
+    --ui-accent3: #786fc7;
+    --ui-accent3-dark1: #786fc7;
+    --ui-accent3-dark2: #786fc7;
+    --ui-warning-text: #FF0000;
     --ui-shadow1: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
     --ui-font: "San Franscisco", "Segoe UI", sans-serif;
@@ -156,7 +164,7 @@ select {
     top: 30px;
     left: 0px;
     min-width: 70px;
-    border-left: 2px solid var(--ui-accent1-dark1);
+    border-left: 2px solid var(--ui-accent1);
     border-top:none;
     text-align: left;
     z-index: 10;
@@ -173,7 +181,7 @@ select {
 
 .menubarButton, .rightClickMenuButton {
     cursor: pointer;
-    color: var(--ui-complement-light2);
+    color: var(--ui-white);
     padding: 8px;
     -webkit-transition: background-color 100ms ease-in-out;
     -ms-transition: background-color 100ms ease-in-out;
@@ -181,7 +189,7 @@ select {
 }
 .menubarButton:hover, .rightClickMenuButton:hover {
     cursor: pointer;
-    background-color: var(--ui-accent1-dark1);
+    background-color: var(--ui-accent1);
 }
 
 .rightClickMenuButtonIcon {
@@ -209,7 +217,7 @@ select {
 
 .menuBarProjectTitle {
     margin-top: 3px;
-    color: var(--ui-complement-light2);
+    color: var(--ui-white);
     cursor: pointer;
     flex-grow: 1;
     flex-shrink: 1;
@@ -226,7 +234,7 @@ select {
 }
 
 .unsavedText {
-    color: var(--ui-warningText);
+    color: var(--ui-warning-text);
 }
 .menuBarProjectSettingsButton {
     flex-shrink: 0;
@@ -579,7 +587,7 @@ select {
     text-overflow: clip;
     background-size: 30px 30px;
 
-    color: var(--ui-complement-light2);
+    color: var(--ui-white);
 
     float: left;
     width: 50px;
@@ -588,7 +596,7 @@ select {
 .alert-box-text {
     float: right;
 
-    color: var(--ui-complement-light2);
+    color: var(--ui-white);
     font-size: 24px;
 
     text-align: center;
@@ -640,17 +648,16 @@ select {
     position: absolute;
     right: 15px;
     top: 15px;
-    width: 300px;
-    height: 115px;
-    background-color: var(--ui-accent2);
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    width: 320px;
+    height: 105px;
+    background-color: var(--ui-base-light1);
+    box-shadow: var(--ui-shadow1);
     z-index: 999999999;
-    font-size: 18px;
+    font-size: 16px;
     border-radius: 3px;
-
-    font-weight: bold;
+    font-weight: 500;
     font-family: var(--ui-font);
-    color: var(--ui-accent2-dark3);
+    color: var(--ui-complement-dark1);
 }
 
 .alpha-warning-text {
@@ -815,7 +822,7 @@ select {
     margin-left: 5%;
     width: 90%;
     height: 17px;
-    color: white;
+    color: var(--ui-white);
 }
 .hotkey-title {
     width: 47%;
@@ -845,7 +852,7 @@ hr.hotkeyhr {
     bottom: 0px;
     margin-bottom: 3px;
     right: 0px;
-    color: white;
+    color: var(--ui-white);
     font-family: var(--ui-font);
     text-align: center;
     cursor: pointer;

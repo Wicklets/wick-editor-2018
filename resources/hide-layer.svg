@@ -1,13 +1,67 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 43.1 (39012) - http://www.bohemiancoding.com/sketch -->
-    <title>hide-layer</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="AllEx()" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="hide-layer">
-            <path d="M0,0 L24,0 L24,24 L0,24 L0,0 Z M0,0 L24,0 L24,24 L0,24 L0,0 Z M0,0 L24,0 L24,24 L0,24 L0,0 Z M0,0 L24,0 L24,24 L0,24 L0,0 Z" id="Shape"></path>
-            <path d="M12,7 C14.76,7 17,9.24 17,12 C17,12.65 16.87,13.26 16.64,13.83 L19.56,16.75 C21.07,15.49 22.26,13.86 22.99,12 C21.26,7.61 16.99,4.5 11.99,4.5 C10.59,4.5 9.25,4.75 8.01,5.2 L10.17,7.36 C10.74,7.13 11.35,7 12,7 Z M2,4.27 L4.28,6.55 L4.74,7.01 C3.08,8.3 1.78,10.02 1,12 C2.73,16.39 7,19.5 12,19.5 C13.55,19.5 15.03,19.2 16.38,18.66 L16.8,19.08 L19.73,22 L21,20.73 L3.27,3 L2,4.27 Z M7.53,9.8 L9.08,11.35 C9.03,11.56 9,11.78 9,12 C9,13.66 10.34,15 12,15 C12.22,15 12.44,14.97 12.65,14.92 L14.2,16.47 C13.53,16.8 12.79,17 12,17 C9.24,17 7,14.76 7,12 C7,11.21 7.2,10.47 7.53,9.8 L7.53,9.8 Z M11.84,9.02 L14.99,12.17 L15.01,12.01 C15.01,10.35 13.67,9.01 12.01,9.01 L11.84,9.02 Z" id="Shape" fill="#FFFFFF" fill-rule="nonzero"></path>
-        </g>
-    </g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24px"
+   height="24px"
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg5895"
+   sodipodi:docname="hide-layer.svg"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)">
+  <metadata
+     id="metadata5899">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="640"
+     inkscape:window-height="480"
+     id="namedview5897"
+     showgrid="false"
+     inkscape:zoom="5.9375"
+     inkscape:cx="13.305263"
+     inkscape:cy="12"
+     inkscape:current-layer="svg5895" />
+  <!-- Generator: Sketch 43.1 (39012) - http://www.bohemiancoding.com/sketch -->
+  <title
+     id="title5884">hide-layer</title>
+  <desc
+     id="desc5886">Created with Sketch.</desc>
+  <defs
+     id="defs5888" />
+  <path
+     d="M 0,0 H 24 V 24 H 0 Z M 0,0 H 24 V 24 H 0 Z M 0,0 H 24 V 24 H 0 Z M 0,0 H 24 V 24 H 0 Z"
+     id="Shape"
+     style="fill:#ffffff;fill-rule:evenodd;stroke:none;stroke-width:1"
+     inkscape:connector-curvature="0" />
+  <path
+     style="fill:#ffffff;fill-rule:nonzero;stroke:none;stroke-width:1"
+     d="M 3.2695312 3 L 2 4.2695312 L 4.2792969 6.5507812 L 4.7402344 7.0097656 C 3.0802344 8.2997656 1.78 10.02 1 12 C 2.73 16.39 7 19.5 12 19.5 C 13.55 19.5 15.030859 19.200156 16.380859 18.660156 L 16.800781 19.080078 L 19.730469 22 L 21 20.730469 L 3.2695312 3 z M 11.990234 4.5 C 10.870489 4.5 9.7920454 4.6647125 8.7695312 4.9589844 L 10.939453 7.1289062 C 11.281282 7.0512633 11.632614 7 12 7 C 14.76 7 17 9.24 17 12 C 17 12.367386 16.948737 12.718718 16.871094 13.060547 L 20.074219 16.263672 C 21.333514 15.078554 22.347887 13.636665 22.990234 12 C 21.260234 7.61 16.990234 4.5 11.990234 4.5 z M 13.001953 9.1914062 L 14.830078 11.019531 C 14.52969 10.16287 13.858513 9.4920075 13.001953 9.1914062 z M 7.5292969 9.8007812 L 9.0800781 11.349609 C 9.0300781 11.559609 9 11.78 9 12 C 9 13.66 10.34 15 12 15 C 12.22 15 12.440391 14.969922 12.650391 14.919922 L 14.199219 16.470703 C 13.529219 16.800703 12.79 17 12 17 C 9.24 17 7 14.76 7 12 C 7 11.21 7.1992969 10.470781 7.5292969 9.8007812 z "
+     id="path5891" />
+  <path
+     style="fill:#ffffff;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 2.4105263,3.8594737 1.0402631,5.2297369 18.789473,22.978948 20.140526,21.589474 Z"
+     id="path6444"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="ccccc" />
 </svg>
