@@ -34,12 +34,12 @@ var ColorPickerInterface = function (wickEditor) {
         colorPickerContainer = document.getElementById('colorPickerGUI');
         colorPickerContainer.style.display = 'none';
 
-        var closeButton = document.createElement('div');
+        /*var closeButton = document.createElement('div');
         closeButton.className = 'color-picker-close-button';
         closeButton.onclick = function () {
             self.close();
         }
-        colorPickerContainer.appendChild(closeButton);
+        colorPickerContainer.appendChild(closeButton);*/
 
         colorPicker = document.createElement('input');
         colorPicker.type = 'text';

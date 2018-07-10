@@ -230,6 +230,7 @@ body {
     position: absolute;
     font-size: 12px;
     font-family: var(--ui-font);
+    border-radius: 2px;
 }
 
 .soundLayer {

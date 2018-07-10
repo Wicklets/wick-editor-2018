@@ -6,7 +6,7 @@
     height: 300px;
     z-index: 4;
     /* transition: height 0.2s ease; */
-    border-radius: 9px 9px 0px 0px;
+    border-radius: 0px;
 }
 
 #errorMessage {
@@ -106,7 +106,7 @@
     -webkit-transition: background-color 500ms linear;
     -ms-transition: background-color 500ms linear;
     transition: background-color 500ms linear;
-    border-radius: 0;
+    border-radius: 0px;
 }
 /*#scriptingIDEHeader:hover {
     box-shadow: inset 0 0 1px #fff;

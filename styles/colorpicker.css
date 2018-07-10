@@ -1,10 +1,10 @@
 #colorPickerGUI {
-	width: 335px;
-	height: 250px;
+	width: 294px;
+	height: 192px;
 	position: absolute;
 	left: 0px;
 	top: 0px;
-	border: 1px solid white;
+	border: 1px solid var(--ui-white);
 	z-index: 9;
 	border-radius: 4px;
 	background-color: var(--ui-base);
@@ -35,17 +35,17 @@
 	float: right;
 	cursor: pointer;
 	background-image: url("../resources/tools/Dropper.svg");
-    background-repeat: no-repeat;
-    background-position: center;
-    text-overflow: clip;
-    overflow: hidden;
-    background-size: 25px 25px;
-    opacity: 1.0;
-    margin-top: 3px;
+	background-repeat: no-repeat;
+	background-position: center;
+	text-overflow: clip;
+	overflow: hidden;
+	background-size: 25px 25px;
+	opacity: 1.0;
+	margin-top: 3px;
 	margin-right: 3px;
 	position: absolute;
-	left: 122px;
-	top: 203px;
+	left: 164px;
+	top: 161px;
 	z-index: 99999999999;
 }
 .color-picker-dropper-button:hover {
