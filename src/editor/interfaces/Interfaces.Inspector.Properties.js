@@ -23,7 +23,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.TwoStringInput({
         title: '<img src="resources/inspector-icons/position.svg" class="inspector-icon"/>',
         tooltip: 'Position (X, Y)',
-        otherTitle: 'x',
+        otherTitle: '×',
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 
                 && selectionInfo.type == 'wickobject';
@@ -48,7 +48,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.TwoStringInput({
         title: '<img src="resources/inspector-icons/size.svg" class="inspector-icon"/>',
         tooltip: 'Width, Height',
-        otherTitle: 'x',
+        otherTitle: '×',
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 
                 && selectionInfo.type == 'wickobject'
@@ -74,7 +74,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.TwoStringInput({
         title: '<img src="resources/inspector-icons/scale.svg" class="inspector-icon"/>',
         tooltip: 'Scale',
-        otherTitle: 'x',
+        otherTitle: '×',
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 
                 && selectionInfo.type == 'wickobject'
@@ -340,7 +340,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.TwoStringInput({
         title: '<img src="resources/inspector-icons/size.svg" class="inspector-icon"/>',
         tooltip: 'Project Size',
-        otherTitle: 'x',
+        otherTitle: '×',
         isActiveFn: function () {
             return selectionInfo.type === 'project';
         },
