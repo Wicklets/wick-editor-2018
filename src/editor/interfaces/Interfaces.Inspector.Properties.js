@@ -22,7 +22,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
 
     properties.push(new InspectorInterface.TwoStringInput({
         title: '<img src="resources/inspector-icons/position.svg" class="inspector-icon"/>',
-        tooltip: 'Position (x,y)',
+        tooltip: 'Position (X, Y)',
         otherTitle: 'x',
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 
@@ -47,7 +47,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
 
     properties.push(new InspectorInterface.TwoStringInput({
         title: '<img src="resources/inspector-icons/size.svg" class="inspector-icon"/>',
-        tooltip: 'Width / Height',
+        tooltip: 'Width, Height',
         otherTitle: 'x',
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 

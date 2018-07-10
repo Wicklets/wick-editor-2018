@@ -67,6 +67,7 @@ body {
 
     pointer-events: none;
     cursor: pointer;
+    z-index: 0;
 }
 .playhead-body {
     width: 100%;
@@ -98,6 +99,7 @@ body {
 
     position: absolute;
     overflow: hidden;
+    z-index: 1;
 }
 
 .layer-tools-button {
@@ -474,9 +476,9 @@ body {
 .frame-extender-handle-right:hover {
     float: right;
     background: rgba(249,221,0,0.34);
-    border-right: 2px solid #F9DE00;
-    border-top: 2px solid #F9DE00;
-    border-bottom: 2px solid #F9DE00;
+    border-right: 2px solid #ffff00;
+    border-top: 2px solid #ffff00;
+    border-bottom: 2px solid #ffff00;
     box-sizing: border-box;    
     border-top-right-radius: 0.8;
     border-bottom-right-radius: 0.8; 
@@ -946,8 +948,9 @@ body {
 .breadcrumbs-spacer {
     color: var(--ui-white);
     float: left;
-    margin-left: 15px;
-    margin-right: 15px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: -2px;
 }
 
 .numberline-container {

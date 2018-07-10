@@ -7,7 +7,7 @@
 	border: 1px solid white;
 	z-index: 9;
 	border-radius: 4px;
-	background-color: #444;
+	background-color: var(--ui-base);
 }
 
 .color-picker-close-button {

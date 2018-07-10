@@ -92,25 +92,21 @@
     left: 0px;
     top: 0px;
     width: calc(100% - 7px);
-    height: 23px;
+    height: 20;
     position: absolute;
     color: white;
-    padding-top: 6px;
+    padding-top: 3px;
     padding-left: 7px;
     text-align: left;
-
     font-size: 14px;
-
+    z-index: -1;
     background-color: none;
     /*cursor: pointer;*/
-
     box-shadow: none;
-
     -webkit-transition: background-color 500ms linear;
     -ms-transition: background-color 500ms linear;
     transition: background-color 500ms linear;
-
-    border-radius: 7px;
+    border-radius: 0;
 }
 /*#scriptingIDEHeader:hover {
     box-shadow: inset 0 0 1px #fff;
@@ -207,14 +203,13 @@
 }
 
 .sidebarTitle {
-    font-weight: bold;
+    font-weight: 600;
     margin-left: 6px;
     border-radius: 3px;
-    color: #BBB;
+    color: var(--ui-complement);
     padding-left: 3px;
-
+    line-height: 100%;
     width: 90%;
-
     -webkit-transition: background-color 50ms linear;
     -ms-transition: background-color 50ms linear;
     transition: background-color 50ms linear;
@@ -228,16 +223,16 @@
 }
 
 .sidebarGroupElement {
+    font-size: 12px;
     cursor: pointer;
     margin-left: 18px;
     border-radius: 3px;
-    color: #BBB;
+    color: var(--ui-complement-dark1);
     padding-left: 3px;
 }
 .sidebarGroupElement:hover {
-    background-color: #31E19C;
-    color: black;
-
+    background-color: var(--ui-accent1);
+    color: var(--ui-white);
     -webkit-transition: background-color 50ms linear;
     -ms-transition: background-color 50ms linear;
     transition: background-color 50ms linear;

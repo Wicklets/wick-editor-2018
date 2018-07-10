@@ -43,21 +43,22 @@
 .dropbtn {
     width: 60px;
     height: 16px;
-    padding: 6px;
-
-    background-color: #3498DB;
+    padding: 4px;
+    padding-bottom: 10px;
+    background-color: var(--ui-accent2);
     color: white;
-    
     border: none;
     border-radius: 5px;
     cursor: pointer;
-
     text-align: center;
     font-size: 16px;
 }
 
 .dropbtn:hover, .dropbtn:focus {
-    background-color: #2980B9;
+    background-color: var(--ui-accent2-dark1);
+    -webkit-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
 }
 
 .dropdown {
@@ -68,23 +69,23 @@
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #f1f1f1;
-    min-width: 120px;
+    background-color: var(--ui-base-light1);
+    min-width: 100px;
     overflow: auto;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
 }
 
 .dropdown-item {
-    color: black;
-    padding: 6px 8px;
+    color: var(--ui-white);
+    padding: 6px 2px;
     text-decoration: none;
     display: block; 
     z-index: 12;
 }
 
 .dropdown-item:hover {
-    background-color: #FFF;
+    background-color: var(--ui-accent1);
 }
 
 .show {
@@ -94,12 +95,13 @@
 .videoDownloadButton {
     border-radius: 5px;
     cursor: pointer;
-    color: white;
-    font-size: 18px;
-    background-color: #333;
+    color: var(--ui-white);
+    font-size: 16px;
+    background-color: var(--ui-base-light1);
     text-align: center;
-    padding: 6px;
-    height: 20px;
+    padding: 4px;
+    padding-bottom: 10px;
+    height: 16px;
     width: 160px;
     float:right;
 
@@ -109,9 +111,9 @@
 }
 
 .videoDownloadButton:hover {
-    background-color: #00D9A7;
+    background-color: var(--ui-accent1);
 }
 
 .videoDownloadButton:active {
-    background-color: #01C094;
+    background-color: var(--ui-accent1);
 }

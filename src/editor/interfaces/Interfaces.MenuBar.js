@@ -25,6 +25,9 @@ var MenuBarInterface = function (wickEditor) {
 
     var tabs;
 
+    //only one tab can be open at a time
+    var openTabName;
+
 	var Tab = function (name, buttons, func) {
         this.buttons = buttons;
         this.name = name;
@@ -36,19 +39,34 @@ var MenuBarInterface = function (wickEditor) {
             tabElem.className = "menubarTab";
             tabElem.id = 'menubarMenu' + this.name;
             tabElem.innerHTML = this.name;
-            tabElem.onclick = function () {
+            var openUp = function () {
                 if(func) {
                     func();
                     return;
                 }
                 var visible = self.elem.style.display === "block";
                 closeAllMenus();
+                openTabName = tabElem.id;
                 if(visible) {
                     self.elem.style.display = "none";
                 } else {
                     self.elem.style.display = "block";
                 }
                 self.elem.style.left = (tabElem.offsetLeft-8) + 'px';
+            }
+            tabElem.onclick = openUp;
+            tabElem.onmouseover = function() {
+                if (openTabName !== tabElem.id && openTabName !== undefined) {
+                    var visible = self.elem.style.display === "block";
+                    closeAllMenus();
+                    openTabName = tabElem.id;
+                    if(visible) {
+                        self.elem.style.display = "none";
+                    } else {
+                        self.elem.style.display = "block";
+                    }
+                    self.elem.style.left = (tabElem.offsetLeft-8) + 'px';
+                }
             }
             tabContainer.appendChild(tabElem);
 
@@ -125,13 +143,13 @@ var MenuBarInterface = function (wickEditor) {
         });
 
         addTab('File', [
-            new TabButton('New Project', function () {
+            new TabButton('New Project...', function () {
                 wickEditor.guiActionHandler.doAction("newProject");
             }),
-            new TabButton('Open Project', function () {
+            new TabButton('Open Project...', function () {
                 wickEditor.guiActionHandler.doAction("openFile");
             }),
-            new TabButton('Save Project', function () {
+            new TabButton('Save Project To Disk...', function () {
                 wickEditor.guiActionHandler.doAction("exportProjectWick");
             }),
             new TabSpacer(),
@@ -142,27 +160,27 @@ var MenuBarInterface = function (wickEditor) {
             new TabButton('Export PNG', function () {
                 wickEditor.guiActionHandler.doAction("exportProjectPNG");
             }),*/
-            new TabButton('Export HTML', function () {
+            new TabButton('Export HTML...', function () {
                 wickEditor.guiActionHandler.doAction("exportProjectHTML");
             }),
-            new TabButton('Export ZIP', function () {
+            new TabButton('Export ZIP...', function () {
                 wickEditor.guiActionHandler.doAction("exportProjectZIP");
             }),
             /*new TabButton('Export Project as JSON', function () {
                 wickEditor.guiActionHandler.doAction("exportProjectJSON");
             }),*/
-            new TabButton('Export Animated GIF', function () {
+            new TabButton('Export Animated GIF...', function () {
                 wickEditor.guiActionHandler.doAction("exportProjectGIF");
             }),
-            new TabButton('Export Video', function () {
+            new TabButton('Export MP4 Video...', function () {
                 wickEditor.guiActionHandler.doAction("openProjectExportWindow");
             }),
             new TabSpacer(),
 
-            new TabButton('Run project', function () {
+            new TabButton('Run Project...', function () {
                 wickEditor.guiActionHandler.doAction("runProject");
             }),
-            new TabButton('Project settings', function () {
+            new TabButton('Project Settings', function () {
                 wickEditor.guiActionHandler.doAction("openProjectSettings");
             }),
         ]);
@@ -199,13 +217,13 @@ var MenuBarInterface = function (wickEditor) {
         ]);
 
         addTab('Import', [
-            new TabButton('Image', function () {
+            new TabButton('Image...', function () {
                 wickEditor.guiActionHandler.doAction("importFile");
             }),
-            new TabButton('Sound', function () {
+            new TabButton('Sound...', function () {
                 wickEditor.guiActionHandler.doAction("importFile");
             }),
-            new TabButton('SVG', function () {
+            new TabButton('SVG...', function () {
                 wickEditor.guiActionHandler.doAction("importFile");
             }),
             /*new TabButton('JSON', function () {
@@ -217,33 +235,33 @@ var MenuBarInterface = function (wickEditor) {
         ]);
 
         addTab('Help', [
-            new TabButton('Hotkeys', function () {
+            new TabButton('Keyboard Shortcuts...', function () {
                 wickEditor.guiActionHandler.doAction("openEditorSettings");
             }),
-            new TabButton('Examples', function () {
+            new TabButton('Examples...', function () {
                 window.open('http://www.wickeditor.com/#examples')
             }),
-            new TabButton('Tutorials', function () {
+            new TabButton('Tutorials...', function () {
                 window.open('http://www.wickeditor.com/#tutorials')
             }),
-            new TabButton('Forums', function () {
+            new TabButton('Wick Forums...', function () {
                 window.open('http://forum.wickeditor.com/')
             }),
-            new TabButton('Browser Info', function () {
+            new TabButton('Browser Info...', function () {
                 wickEditor.guiActionHandler.doAction('printBrowserInfo');
             }),
         ]);
 
         addTab('About', [
-            new TabButton('Source code', function () {
+            new TabButton('Source Code...', function () {
                 window.open('https://www.github.com/zrispo/wick/');
             }),
-            new TabButton('Credits', function () {
+            new TabButton('Credits...', function () {
                 window.open('http://www.wickeditor.com/#about');
             }),
         ]);
 
-        addTab('Run', [], function () {
+        addTab('<strong>Run...</strong>', [], function () {
                 wickEditor.guiActionHandler.doAction("runProject");
             });
     }
@@ -255,9 +273,10 @@ var MenuBarInterface = function (wickEditor) {
     }
 
     var closeAllMenus = function () {
+        openTabName = undefined;
         tabs.forEach(function (tab) {
             tab.elem.style.display = "none";
-        })
+        });
     }
 
     this.syncWithEditorState = function () {
