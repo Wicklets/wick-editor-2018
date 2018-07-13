@@ -53,16 +53,16 @@ html, body { width:100%; height:100%; overflow: hidden; } /* just to be sure the
     --ui-accent1-dark1: #2b6b59;
     --ui-accent1-dark2: #2b4c43;
     --ui-accent1-light1: #76ffc9;
-    --ui-accent2: #e4748f;
+    --ui-accent2: #dc576d;
     --ui-accent2-light1: #ffc4c8;
-    --ui-accent2-dark1: #a23956;
-    --ui-accent2-dark2: #561829;
-    --ui-accent3: #786fc7;
-    --ui-accent3-dark1: #786fc7;
-    --ui-accent3-dark2: #786fc7;
+    --ui-accent2-dark1: #a24f5f;
+    --ui-accent2-dark2: #5a3640;
+    --ui-accent3: #77658a;
+    --ui-accent3-dark1: #5b5267;
+    --ui-accent3-dark2: #3e3c48;
+    --ui-accent4: #d6bb24;
     --ui-warning-text: #FF0000;
     --ui-shadow1: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-
     --ui-font: "San Franscisco", "Segoe UI", sans-serif;
     --ui-system-sans-font: "San Franscisco", "Segoe UI", "Helvetica Neue", sans-serif;
 }

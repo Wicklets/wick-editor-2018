@@ -272,7 +272,7 @@
 }
 
 .inspector-button-multiple {
-	background-color: #556270;
+	background-color: var(--ui-accent3);
 }
 
 .inspector-button-symbol {

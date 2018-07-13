@@ -476,7 +476,7 @@ body {
 
 .frame-extender-handle-right:hover {
     float: right;
-    background: rgba(249,221,0,0.34);
+    background: #ffffff;
     border-right: 2px solid #ffff00;
     border-top: 2px solid #ffff00;
     border-bottom: 2px solid #ffff00;

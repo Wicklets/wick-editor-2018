@@ -125,7 +125,7 @@ var MenuBarInterface = function (wickEditor) {
 
         projectSettingsElem = document.createElement('div');
         projectSettingsElem.className = 'tooltipElem menuBarProjectSettingsButton';
-        projectSettingsElem.setAttribute('alt', "Project settings");
+        projectSettingsElem.setAttribute('alt', "Project Settings");
         projectSettingsElem.onclick = function () {
             wickEditor.guiActionHandler.doAction("toggleProjectSettings");
         }
