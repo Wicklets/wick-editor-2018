@@ -61,6 +61,7 @@ var ColorPickerInterface = function (wickEditor) {
             localStorageKey: "spectrum.demo",
             showAlpha: true,
             maxSelectionSize: 6,
+            clickoutFiresChange: true,
             move: function (color) {
                 var colorString = color.toString();
                 if(previewType && previewType === 'background-color') {
