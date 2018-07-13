@@ -28,12 +28,12 @@ body {
     --frame-handle-width: 8px;
 
     --frame-padding-width: 4px;
-    --frame-padding-height: 2px;
+    --frame-padding-height: 4px;
 
     --frames-strip-padding-vertical: 4px;
     
     --timeline-left-padding: 5px; 
-    --timeline-top-padding: 6px; 
+    --timeline-top-padding: 5px; 
     --timeline-bottom-padding: 5px; 
 
     --frames-cell-first-padding: 5px;
@@ -91,7 +91,7 @@ body {
 }
 
 .layers-container {
-    background-color: #414141;
+    background-color: var(--ui-base-dark1);
     width: var(--layers-width);
     height: 1000%;
     left: 0px;
@@ -121,6 +121,7 @@ body {
     background-position: 50% 50%;
     background-size: 12px 12px;
     background-size: 12px 12px;
+    z-index: 2;
 }
 
 .add-layer-button {
@@ -816,7 +817,7 @@ body {
     height: var(--number-line-height);
     top: 0px;
     left: 0px;
-    background-color: var(--ui-base-dark1);
+    background-color: var(--ui-base-dark2);
 }
 
 .layer-toolbar {

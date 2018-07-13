@@ -276,7 +276,7 @@
 }
 
 .inspector-button-symbol {
-	background-color: #FF6B6B;
+	background-color: var(--ui-accent2);
 }
 
 .inspector-button-all-paths {
@@ -284,7 +284,7 @@
 }
 
 .inspector-button-frames {
-	background-color: var(--ui-accent2);
+	background-color: var(--ui-accent3);
 }
 
 .inspector-button-playranges {
@@ -292,7 +292,7 @@
 }
 
 .inspector-button-tweens {
-	background-color: #556270;
+	background-color: var(--ui-accent3-dark1);
 }
 
 .inspector-divider {
