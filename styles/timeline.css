@@ -433,7 +433,7 @@ body {
     pointer-events: none;
     font-size: 10px;
     color: var(--ui-black);
-    font-weight: 500;
+    font-weight: 550;
 }
 
 .has-scripts-icon {

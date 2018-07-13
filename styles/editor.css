@@ -650,7 +650,7 @@ select {
     z-index: 999999999;
     font-size: 16px;
     border-radius: 3px;
-    font-weight: 500;
+    font-weight: 550;
     font-family: var(--ui-font);
     color: var(--ui-complement-dark1);
 }

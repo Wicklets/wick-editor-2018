@@ -260,7 +260,7 @@ var MenuBarInterface = function (wickEditor) {
             }),
         ]);
 
-        addTab('<strong>Run...</strong>', [], function () {
+        addTab('Run...', [], function () {
                 wickEditor.guiActionHandler.doAction("runProject");
             });
     }
