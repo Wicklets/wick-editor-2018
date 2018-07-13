@@ -669,15 +669,24 @@ function getAllGoogleFonts () {
   return GOOGLE_FONTS;
 }
 
-function loadGoogleFonts (fontFamilyArray, callback) {
+function loadGoogleFonts (fontFamilyArray, callback, failedCallback) {
   if(fontFamilyArray.length === 0) return;
   WebFont.load({
     google: {
       families: fontFamilyArray,
     },
+    //what should be done if this function succeeds?
     active: callback,
+    //what should be done if this function fails?
+    inactive: (failedCallback == undefined)
+    ? function () {
+        //provide a default value for failedCallback so it doesn't always have to be defined
+        console.log("Font(s) \'"+fontFamilyArray+"\' could not be loaded.");
+    }
+    : failedCallback,
   });
 }
+    
 </script>
 <script>// https://www.npmjs.com/package/keycode
 // Original key mappings lifted from http://jsfiddle.net/vWx8V/ via http://stackoverflow.com/questions/5603195/full-list-of-javascript-keycodes
