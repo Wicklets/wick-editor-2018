@@ -39,22 +39,21 @@ var MenuBarInterface = function (wickEditor) {
             tabElem.className = "menubarTab";
             tabElem.id = 'menubarMenu' + this.name;
             tabElem.innerHTML = this.name;
-            var openUp = function () {
+            tabElem.onclick = function () {
                 if(func) {
                     func();
                     return;
                 }
                 var visible = self.elem.style.display === "block";
                 closeAllMenus();
-                openTabName = tabElem.id;
                 if(visible) {
                     self.elem.style.display = "none";
                 } else {
+                    openTabName = tabElem.id;
                     self.elem.style.display = "block";
                 }
                 self.elem.style.left = (tabElem.offsetLeft-8) + 'px';
             }
-            tabElem.onclick = openUp;
             tabElem.onmouseover = function() {
                 if (openTabName !== tabElem.id && openTabName !== undefined) {
                     var visible = self.elem.style.display === "block";
