@@ -676,7 +676,7 @@ body {
     top: 1px;
     left: 10px;
     font-size: 14px;
-    font-weight: bold;
+    font-weight: 550;
     font-family: var(--ui-font);
 }
 .number-line-cell-number-small {
@@ -885,6 +885,8 @@ body {
     left: 17px;
     top: 1px;
     text-align: center;
+    font-family: var(--ui-font);
+    font-weight:  550;
 }
 
 .timeline-zoom-icon {
