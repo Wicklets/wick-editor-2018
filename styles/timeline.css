@@ -96,7 +96,6 @@ body {
     height: 1000%;
     left: 0px;
     top: 0px;
-
     position: absolute;
     overflow: hidden;
     z-index: 1;
@@ -227,7 +226,7 @@ body {
     border-radius: 1px;
     text-align: center;
     line-height: calc(var(--layer-height) - 5px);
-    color: white;
+    color: var(--ui-white);
     position: absolute;
     font-size: 12px;
     font-family: var(--ui-font);
@@ -818,6 +817,7 @@ body {
     top: 0px;
     left: 0px;
     background-color: var(--ui-base-dark2);
+    z-index: 2;
 }
 
 .layer-toolbar {
@@ -826,9 +826,10 @@ body {
     height: var(--scrollbar-thickness);
     bottom: 0px;
     left: 0px;
-    border-top: 1px; 
-    border-color: black; 
+    border-top: 1px;
+    border-color: black;
     background-color: var(--ui-base-dark1);
+    z-index: 2;
 }
 
 .hide-scrollbar-connect-piece {
@@ -842,11 +843,13 @@ body {
 
 .resize-timeline-bar {
     height: var(--scrollbar-thickness);
-    width: 100%;
+    margin-left: 50px;
+    width: 84px;
     bottom: 0px;
     position: absolute;
     left: 0px;
     cursor: ns-resize;
+    z-index:  2;
 }
 
 .zoom-box {

@@ -145,7 +145,7 @@ TimelineInterface.FramesContainer = function (wickEditor, timeline) {
 
         var scrollX = -timeline.horizontalScrollBar.getScrollPosition();
         var scrollY = -timeline.verticalScrollBar.getScrollPosition();
-        if(wickEditor.project.getCurrentObject().layers.length < 4) {
+        if(wickEditor.project.getCurrentObject().layers.length*(cssVar('--layer-height')+cssVar('--common-padding')) < wickEditor.project.timelineHeight) {
             scrollY = 0;
             timeline.verticalScrollBar.reset();
         }
