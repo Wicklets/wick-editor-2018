@@ -1,5 +1,5 @@
 #toolbarGUI {
-    top: 30px;
+    top: 25px;
     left: 0px;
     height: calc(100%);
     width: 40px;
@@ -7,8 +7,8 @@
     padding: 3px;
     padding-top: 5px;
     overflow: hidden;
-/*    border-left-color: #585757;*/
-/*    border-bottom-color: #585757;*/
+    /*    border-left-color: #585757;*/
+    /*    border-bottom-color: #585757;*/
 }
 
 #toolOptionsGUI {

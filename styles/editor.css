@@ -67,7 +67,7 @@ html, body { width:100%; height:100%; overflow: hidden; } /* just to be sure the
 }
 
 body {
-    background-color: var(--ui-base-dark1);
+    background-color: var(--ui-complement-dark2);
 }
 
 canvas { display:block; } /* To remove the scrollbars */
