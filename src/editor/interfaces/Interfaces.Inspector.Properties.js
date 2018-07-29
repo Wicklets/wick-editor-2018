@@ -185,8 +185,13 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             //these variables will be attached to the font name in the WebFont Importer
             var weight = ":"+selectionInfo.object.textData.fontWeight;
             var italic = (selectionInfo.object.textData.fontStyle == "italic") ? 'i' : '';
-            //log stuff like "Open Sans:boldi" for testing
-            console.log(val+weight+italic);
+            //console.log(val+weight+italic);
+
+            //only webfonts need those two variables, not the default font, Arial
+            if (selectionInfo.object.textData.fontFamily === 'Arial'
+            || selectionInfo.object.textData.fontFamily === 'arial') {
+                weight = italic = "";
+            }
             
             //if font is loaded succesfully, update canvas and setting
             var callback = function () {
@@ -199,7 +204,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             //reload Google Font with new weight and italic value.
             //if you enable bold and/or italic then change to a font that doesn't support one of those, Wick will load Regular
             //and reset the Bold and Italic buttons. Trying to load every single variant to check its validity takes too long.
-            //This problem can be alleviated using a Google Web Font API Key.
+            //This problem could be alleviated if Wick Editor had a Google Web Font API Key.
             
             loadGoogleFonts([val+weight+italic], callback, function () {
                 loadGoogleFonts([val], callback);
@@ -266,11 +271,20 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             //these variables will be attached to the font name in the WebFont Importer
             var weight = ":"+selectionInfo.object.textData.fontWeight;
             var italic = (selectionInfo.object.textData.fontStyle == "italic") ? 'i' : '';
-            //reload Google Font with new weight and italic value
-            loadGoogleFonts([selectionInfo.object.textData.fontFamily+weight+italic], function () {
+            
+            //only webfonts need those two variables, not the default font, Arial
+            if (selectionInfo.object.textData.fontFamily === 'Arial'
+            || selectionInfo.object.textData.fontFamily === 'arial') {
+                weight = italic = "";
                 wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
                 wickEditor.syncInterfaces();
-            });
+            } else {
+                //reload Google Font with new weight and italic value
+                loadGoogleFonts([selectionInfo.object.textData.fontFamily+weight+italic], function () {
+                    wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
+                    wickEditor.syncInterfaces();
+                });
+            }
         }
     }));
 

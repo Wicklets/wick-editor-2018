@@ -6525,8 +6525,17 @@ WickProject.prototype.loadFonts = function () {
     var self = this;
     var fontsInProject = [];
     self.getAllObjects().forEach(function (o) {
-        if(o.isText)
-            fontsInProject.push(o.textData.fontFamily);
+        if(o.isText) {
+            //these variables will be attached to the font name in the WebFont Importer
+            var weight = ":"+o.textData.fontWeight;
+            var italic = (o.textData.fontStyle == "italic") ? 'i' : '';
+            //only webfonts need those two variables, not the default font, Arial
+            if (o.textData.fontFamily === 'Arial' || o.textData.fontFamily === 'arial') {
+                weight = italic = "";
+            } else {
+                fontsInProject.push(o.textData.fontFamily+weight+italic);
+            }
+        }
     });
     loadGoogleFonts(fontsInProject, function () {
         wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;

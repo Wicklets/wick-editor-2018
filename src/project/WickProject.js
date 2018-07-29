@@ -771,8 +771,12 @@ WickProject.prototype.loadFonts = function (callback) {
     var self = this;
     var fontsInProject = [];
     self.getAllObjects().forEach(function (o) {
-        if(o.isText && o.textData.fontFamily !== 'Arial' && o.textData.fontFamily !== 'arial' && fontsInProject.indexOf(o.textData.fontFamily))
-            fontsInProject.push(o.textData.fontFamily);
+        if(o.isText && o.textData.fontFamily !== 'Arial' && o.textData.fontFamily !== 'arial' && fontsInProject.indexOf(o.textData.fontFamily+weight+italic)) {
+            //these variables will be attached to the font name in the WebFont Importer
+            var weight = ":"+o.textData.fontWeight;
+            var italic = (o.textData.fontStyle == "italic") ? 'i' : '';
+            fontsInProject.push(o.textData.fontFamily+weight+italic);
+        }
     });
     if(fontsInProject.length === 0 && callback) {
         callback()
