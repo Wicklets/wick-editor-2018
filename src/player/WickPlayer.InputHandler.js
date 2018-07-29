@@ -275,27 +275,27 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
         
         keys[event.keyCode] = false;
     }
-
+    
     var onTouchStart = function (evt) {
 
-        document.getElementById('rendererCanvas').focus();
+        canvasContainer.focus();
 
         evt.preventDefault();
-
-        // on iOS, WebAudio context only gets 'unmuted' after first user interaction
-        if(!audioContext) {
-            wickPlayer.audioPlayer.setup(wickProject);
-        }
 
         var touchPos = getTouchPos(canvasContainer, evt);
         setMousePos(touchPos);
 
+        var currFrame = wickProject.getCurrentFrame();
+        if(currFrame) {
+            currFrame._wasClicked = true;
+            currFrame._beingClicked = true;
+        }
+       
         wickProject.rootObject.getAllActiveChildObjects().forEach(function(child) {
             if(child.isPointInside(touchPos)) {
                 child._wasClicked = true;
             }
-        });
-        
+        });       
 
     }
 
