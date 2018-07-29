@@ -285,12 +285,6 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
         var touchPos = getTouchPos(canvasContainer, evt);
         setMousePos(touchPos);
 
-        var currFrame = wickProject.getCurrentFrame();
-        if(currFrame) {
-            currFrame._wasClicked = true;
-            currFrame._beingClicked = true;
-        }
-       
         wickProject.rootObject.getAllActiveChildObjects().forEach(function(child) {
             if(child.isPointInside(touchPos)) {
                 child._wasClicked = true;
