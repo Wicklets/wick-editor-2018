@@ -11,20 +11,22 @@
 }
 
 #asset-library-title {
+	width: 100%;
+	font-weight: 550;
 	color: white;
-	margin-bottom: 3px;
+	margin-bottom: 1px;
+	text-align:  center;
 }
 
 #tree {
-  	border-radius: 0px 0px 2px 2px;
-	position: absolute;
-	width: 100%;
-	border: none;
-	background-color: white;
-	height: calc(100% - 60px);
-	overflow-y: auto;
-	background-color: #CFCFCF;
-    box-sizing:border-box;
+  	position: absolute;
+  	width: 100%;
+  	border: none;
+  	background-color: white;
+  	height: calc(100% - 60px);
+  	overflow-y: auto;
+  	background-color: var(--ui-complement);
+  	box-sizing:border-box;
 }
 
 #draggedAsset {
@@ -46,31 +48,25 @@
 }
 
 #treeFilterInput {
-    color: #4E4D4D;
+    color: var(--ui-black);
     width: 100%;
-    background: #A2A2A2 url(../resources/icon_search.png) no-repeat scroll 3px 3px;
+    background: var(--ui-white) url(../resources/icon_search.png) no-repeat scroll 3px 3px;
     background-size: 12px 12px;
     padding-left:20px;
     text-overflow: ellipsis; 
     display: block;
-    border-radius: 2px 2px 0px 0px;
+    border-radius: 3px 3px 0px 0px;
     box-sizing:border-box;
 
 }
 
 #treeOptionsContainer {
     position: absolute;
-    height: 20px;
-    background-color: #CFCFCF;
+    height: 16px;
+    background-color: var(--ui-base-light1);
     width: 100%;
-    bottom: 0px;
-    border-top: #A2A2A2 1px solid;
-    border-radius: 0px 0px 2px 2px;
-}
-
-.assetLibraryButton {
-    padding-right:2px;
-    text-align: right; 
+    bottom: 3px;
+    border-radius: 0px 0px 3px 3px;
 }
 
 .fancytree-expander {
@@ -103,30 +99,38 @@ span.fancytree-title:active {
 }
 
 .assetLibraryButton {
-    height: 20px; 
-    width: 20px;
-    float: right; 
-    background: #CFCFCF no-repeat 1px 0px;
-    background-size: 20px 20px;
+    height: 16px;
+    width: 15px;
+    float: right;
+    background-size: 16px 16px;
+    background-repeat: no-repeat;
+    background-position: center;
     border-radius: 2px;
+    margin-right: 4px;
+    padding-right: 2px;
 }
 
 .assetLibraryButton:hover {
-    background: #A2A2A2 no-repeat 1px 0px;
-    background-size: 20px 20px;
+    background: var(--ui-accent1);
+    background-size: 16px 16px;
+    background-repeat: no-repeat;
+    background-position: center;
     cursor: pointer;
 }
 
 .assetLibraryButton:active {
-    background: #CFCFCF no-repeat 1px 0px;
-    background-size: 20px 20px;
+    background: var(--ui-base-light2);
+    background-size: 16px 16px;
+    background-repeat: no-repeat;
+    background-position: center;
     cursor: pointer;
 }
 
 #deleteAssetButton {
-    background-image: url(../resources/delete_layer.png);
+    background-image: url(../resources/delete-layer.svg);
 }
 
 #renameAssetButton {
-    background-image: url(../resources/rename.png);
+    background-image: url(../resources/inspector-icons/name.svg);
+    background-size: 14px;
 }

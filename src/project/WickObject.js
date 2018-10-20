@@ -17,16 +17,8 @@
 
 var WickObject = function () {
 
-// Internals
-
-    // Unique id
     this.uuid = random.uuid4();
-
-    // Name is optional, added by user
     this.name = undefined;
-
-// Positioning
-
     this.x = 0;
     this.y = 0;
     this.width = undefined;
@@ -37,40 +29,18 @@ var WickObject = function () {
     this.flipX = false;
     this.flipY = false;
     this.opacity = 1;
-
-// Common
-    
-    //this.wickScript = "function load() {\n\t\n}\n\nfunction update() {\n\t\n}\n";
     this.wickScript = "";
-
-// Static
-
     this.assetUUID = null;
     this.loop = false;
-
-// Text
-
     this.isText = false;
-
-// Images
-
     this.isImage = false;
-
-// Symbols
-
     this.isSymbol = false;
     this.isButton = false;
     this.isGroup = false;
-
-    // Used to keep track of what frame is being edited
     this.playheadPosition = null;
     this.currentLayer = null;
-
-    // List of layers, only used by symbols
     this.layers = undefined;
 
-// Render
-    
     this._renderDirty = false;  // Tell the renderer if this object has changed. 
 
 };
@@ -1095,6 +1065,44 @@ WickObject.prototype.prepareForPlayer = function () {
     this.hoveredOver = false;
 }
 
+WickObject.prototype.regenerateAssetLinkedSymbols = function () {
+    if(this.assetUUID && this.isSymbol && this !== wickEditor.project.getCurrentObject()) {
+        var asset = wickEditor.project.library.getAsset(this.assetUUID)
+        var source = WickObject.fromJSON(asset.data);
+        for(key in source) {
+            if(key !== 'x' && 
+               key !== 'y' && 
+               key !== 'scaleX' && 
+               key !== 'scaleY' && 
+               key !== 'flipX' && 
+               key !== 'flipY' && 
+               key !== 'rotation' &&
+               key !== 'opacity' &&
+               key !== 'name' &&
+               key !== 'uuid' && 
+               key !== 'assetUUID') {
+                this[key] = source[key];
+            }
+        }
+        var self = this;
+        this.getAllChildObjectsRecursive().forEach(function (child) {
+            if(self !== child) child.uuid = random.uuid4();
+            (child.layers||[]).forEach(function (layer) {
+                layer.frames.forEach(function (frame) {
+                    frame.uuid = random.uuid4();
+                })
+            });
+        });
+        this.getAllFrames().forEach(function (frame) {
+            frame.uuid = random.uuid4();
+        });
+    }
+
+    this.getAllChildObjects().forEach(function (o) {
+        o.regenerateAssetLinkedSymbols();
+    })
+}
+
 /* Generate alpha mask for per-pixel hit detection */
 WickObject.prototype.generateAlphaMask = function (imageData) {
 
@@ -1287,3 +1295,13 @@ WickObject.prototype.pointTo = function ( x2, y2 ) {
     
     this.rotation = Math.atan2(dy,dx) * 180 / Math.PI - 90;
 };
+
+WickObject.prototype.getSourceInside = function () {
+    if(this.isRoot) {
+        return null;
+    } else if(this.assetUUID && this.isSymbol) {
+        return this;
+    } else {
+        return this.parentObject.getSourceInside();
+    }
+}

@@ -145,7 +145,7 @@ TimelineInterface.FramesContainer = function (wickEditor, timeline) {
 
         var scrollX = -timeline.horizontalScrollBar.getScrollPosition();
         var scrollY = -timeline.verticalScrollBar.getScrollPosition();
-        if(wickEditor.project.getCurrentObject().layers.length < 4) {
+        if(wickEditor.project.getCurrentObject().layers.length*(cssVar('--layer-height')+cssVar('--common-padding')) < wickEditor.project.timelineHeight) {
             scrollY = 0;
             timeline.verticalScrollBar.reset();
         }
@@ -343,7 +343,7 @@ TimelineInterface.Frame = function (wickEditor, timeline) {
             waveformDiv.style.display = 'none';
             if(this.wickFrame.tweens.length > 0) {
                 thumbnailDiv.style.display = 'none';
-                this.elem.style.backgroundColor = '#e4eafb';
+                this.elem.style.background = 'var(--tween-background)';
             } else if(this.wickFrame.wickObjects.length > 0) {
                 this.elem.style.backgroundColor = '#EEE';
                 thumbnailDiv.src = 'resources/fullframe.svg';

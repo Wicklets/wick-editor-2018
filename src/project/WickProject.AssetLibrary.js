@@ -32,17 +32,12 @@ AssetLibrary.prototype.addAsset = function (asset) {
 
         return uuid;
     }
-
-    wickEditor.library.dirty = true;
-
 }
 
 AssetLibrary.prototype.deleteAsset = function (uuid) {
 
     this.assets[uuid] = null;
     delete this.assets[uuid];
-    
-    wickEditor.library.dirty = true;
 
 }
 
@@ -107,12 +102,14 @@ AssetLibrary.prototype.printInfo = function () {
 AssetLibrary.prototype.encodeStrings = function () {
     this.getAllAssets().forEach(function (asset) {
         asset.filename = WickProject.Compressor.encodeString(asset.filename);
+        asset.data = WickProject.Compressor.encodeString(asset.data);
     });
 }
 
 AssetLibrary.prototype.decodeStrings = function () {
     this.getAllAssets().forEach(function (asset) {
         asset.filename = WickProject.Compressor.decodeString(asset.filename);
+        asset.data = WickProject.Compressor.decodeString(asset.data);
     });
 }
 

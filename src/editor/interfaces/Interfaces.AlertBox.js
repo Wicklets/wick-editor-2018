@@ -41,14 +41,18 @@ var AlertBoxInterface = function (wickEditor) {
         if(!alertBoxDiv) return;
     }
 
-    self.showMessage = function (message) {
+    self.showMessage = function (message, displayLength) {
         alertBoxText.innerHTML = message;
         self.show();
 
-        clearTimeout(fadeTimeout);
-        fadeTimeout = setTimeout(function () {
-            self.hide();
-        }, 3000);
+        //set displayLength to 0 to display message forever, or until further notice
+        if (displayLength != 0 || displayLength == undefined) {
+            clearTimeout(fadeTimeout);
+            fadeTimeout = setTimeout(function () {
+                self.hide();
+            },
+            displayLength == undefined ? 3000 : displayLength);
+        }
     }
 
     self.showProjectSavedMessage = function () {

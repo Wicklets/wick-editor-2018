@@ -17,11 +17,6 @@
 
 * { margin:0; padding:0; } /* to remove the top and left whitespace */
 
-@font-face {
-    font-family:"Open Sans";
-    src: url("Open_Sans/OpenSans-Regular.ttf");
-}
-
 .noselect {
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none;   /* Chrome/Safari/Opera */
@@ -39,8 +34,40 @@
 
 html, body { width:100%; height:100%; overflow: hidden; } /* just to be sure these are full screen*/
 
+:root {
+    --ui-white: white;
+    --ui-black: black;
+    --ui-base: #333333;
+    --ui-base-light1: #555555;
+    --ui-base-light2: #777777;
+    --ui-base-light3: #848484;
+    --ui-base-dark1: #111111;
+    --ui-base-dark2: #000000;
+    --ui-complement: #DDDDDD;
+    --ui-complement-light1: #EEEEEE;
+    --ui-complement-light2: #F0F0F0;
+    --ui-complement-dark1: #BBBBBB;
+    --ui-complement-dark2: #999999;
+    --ui-accent1-bright1: #23d891;
+    --ui-accent1: #0ebb7e;
+    --ui-accent1-dark1: #2b6b59;
+    --ui-accent1-dark2: #2b4c43;
+    --ui-accent1-light1: #76ffc9;
+    --ui-accent2: #dc576d;
+    --ui-accent2-light1: #ffc4c8;
+    --ui-accent2-dark1: #a24f5f;
+    --ui-accent2-dark2: #5a3640;
+    --ui-accent3: #8781b1;
+    --ui-accent3-dark1: #624e8a;
+    --ui-accent3-dark2: #413c50;
+    --ui-warning-text: #FF0000;
+    --ui-shadow1: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    --ui-font: "San Franscisco", "Segoe UI", sans-serif;
+    --ui-system-sans-font: "San Franscisco", "Segoe UI", "Helvetica Neue", sans-serif;
+}
+
 body {
-    background-color: #B7B7B7;
+    background-color: var(--ui-complement-dark2);
 }
 
 canvas { display:block; } /* To remove the scrollbars */
@@ -66,24 +93,19 @@ canvas:focus {
 
 input {
     font-size: 16px;
-    color: #666;
     border: none;
 }
 select {
     font-size: 16px;
-    color: #666;
     width: 80px;
 }
 
 .GUIBox {
     position: absolute;
-    font-size: 16px;
-    font-family: "Anonymous Pro", "Helvetica", "Arial", sans-serif;
-    color: #666;
-    background-color: #585757;
-
-/*    border: 1px solid #878787;*/
-
+    font-size: 14px;
+    font-family: var(--ui-font);
+    color: var(--ui-base);
+    background-color: var(--ui-base);
 }
 
 #dropFileMessage {
@@ -110,16 +132,10 @@ select {
     display: flex;
     top: 0px;
     left: 0px;
-    height: 28px;
+    height: 25px;
     width: calc(100% - 2px);
-    /*background-color: #31E19C;*/
-    background-color: black;
-    border: 1px solid #585757;
-/*
-    border-top-color: black;
-    border-left-color: black;
-    border-right-color: black;
-*/
+    background-color: var(--ui-base-dark2);
+    border: none;
 }
 .menubarTab {
     float:left;
@@ -128,50 +144,67 @@ select {
     margin-right: 10px;
     cursor: pointer;
     color: white;
-    padding: 3px;
+    padding-left: 3px;
+    padding-right: 3px;
+    border-radius: 2px;
 
-    -webkit-transition: background-color 100ms linear;
-    -ms-transition: background-color 100ms linear;
-    transition: background-color 100ms linear;
+    -webkit-transition: background-color 100ms ease-in-out;
+    -ms-transition: background-color 100ms ease-in-out;
+    transition: background-color 100ms ease-in-out;
 }
 .menubarTab:hover {
     cursor: pointer;
-    background-color: #6EF8B0;
-    border-radius: 3px;
-    color: black;
+    background-color: var(--ui-accent1-dark1);
+    /*color: var(--ui-base-dark2);*/
+}
+
+.menubarMenu, #rightClickMenu {
+    top: 30px;
+    left: 0px;
+    min-width: 70px;
+    border-left: 2px solid var(--ui-accent1);
+    border-top:none;
+    text-align: left;
+    z-index: 10;
+    box-shadow: var(--ui-shadow1);
 }
 
 .menubarMenu {
-    top: 30px;
-    left: 0px;
-    line-height: 30px;
-    padding: 5px;
-    min-width: 70px;
-    border-top:none;
-    text-align: left;
-    text-indent: 5px;
-    z-index: 10;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    border-radius: 3px;
-    /*background-color: black;*/
+    line-height: 15px;
 }
 
-.menubarButton {
-    cursor: pointer;
-    color: #FFFFFF;
-
-    -webkit-transition: background-color 100ms linear;
-    -ms-transition: background-color 100ms linear;
-    transition: background-color 100ms linear;
+#rightClickMenu {
+    line-height: 8px;
 }
-.menubarButton:hover {
+
+.menubarButton, .rightClickMenuButton {
     cursor: pointer;
-    background-color: #31E19C;
-    border-radius: 3px;
+    color: var(--ui-white);
+    padding: 8px;
+    -webkit-transition: background-color 100ms ease-in-out;
+    -ms-transition: background-color 100ms ease-in-out;
+    transition: background-color 100ms ease-in-out;
+}
+.menubarButton:hover, .rightClickMenuButton:hover {
+    cursor: pointer;
+    background-color: var(--ui-accent1);
+}
+
+.rightClickMenuButtonIcon {
+    background-repeat: no-repeat;
+    background-position: center;
+    text-overflow: clip;
+    background-size: 13px 13px;
+    width: 13px;
+    height: 13px;
+    float: left;
+    margin-right: 3px;
+    margin-top: -2px;
+
 }
 
 .tab-container{
-    flex: 0 0 auto;
+    flex: 1 0 auto;
 }
 
 .menuBarProjectControls{
@@ -181,13 +214,15 @@ select {
 }
 
 .menuBarProjectTitle {
-    color: white;
+    margin-top: 3px;
+    color: var(--ui-white);
     cursor: pointer;
     flex-grow: 1;
     flex-shrink: 1;
     overflow: hidden;
     opacity: 1.0;
-    padding: 6px 0;
+    padding-left: 3px 0;
+    padding-right: 3px 0;
     text-overflow: ellipsis;
     text-align: right;
     white-space: nowrap;
@@ -197,7 +232,7 @@ select {
 }
 
 .unsavedText {
-    color: red;
+    color: var(--ui-warning-text);
 }
 .menuBarProjectSettingsButton {
     flex-shrink: 0;
@@ -218,7 +253,7 @@ select {
 }
 
 .scriptButton {
-    background: #58F9BA;
+    background: var(--ui-accent1);
     color: #0b2018;
     box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
     border-radius: 8px;
@@ -233,17 +268,17 @@ select {
 
 .scriptButton:hover {
     cursor: pointer;
-    background: #009688;
+    background: var(--ui-accent1);
 }
 
 .scriptbutton:active {
     cursor: pointer;
-    background-color: #009688;
+    background: var(--ui-accent1);
 }
 
 .scriptbutton:selected {
     cursor: pointer;
-    background-color: #009688;
+    background: var(--ui-accent1);
 }
 
 .fontSelector {
@@ -268,7 +303,7 @@ select {
     padding-right: 5px;
     font-size: 16px;
     margin-top: 3px;
-    color: #888;
+    color: var(--ui-base);
 }
 
 #splashScreenGUI {
@@ -289,7 +324,7 @@ select {
 
 .rangeslider_handle {
 
-    background-color: aliceblue;
+    background-color: var(--ui-complement);
 
 
 }
@@ -314,11 +349,7 @@ select {
     width: 100%;
     height: 100%;
 }
-#rendererCanvas {
-    /*-webkit-box-shadow: 3px 3px 12px 0px rgba(0,0,0,0.73);
-    -moz-box-shadow: 3px 3px 12px 0px rgba(0,0,0,0.73);
-    box-shadow: 3px 3px 12px 0px rgba(0,0,0,0.73);*/
-}
+
 #builtinPlayerGUI {
     top: 0px;
     left: 0px;
@@ -352,7 +383,7 @@ select {
     left: 0px;
     width: 0px;
     height: 0px;
-    color: #888;
+    color: var(--ui-white);
     font-weight: bold;
     text-align: left;
     font-size: 18px;
@@ -373,41 +404,7 @@ select {
 }
 
 #objectTypeName {
-    color: #FAFAFA
-}
-
-#rightClickMenu {
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    background-color: #2b2b2b;
-    display: none;
-    z-index: 11110;
-    border-radius: 3px;
-    padding: 3px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-.rightClickMenuButton {
-    padding: 2px;
-    background-color: transparent;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-}
-.rightClickMenuButton:hover {
-    background-color: #31E19C;
-    color: black;
-}
-.rightClickMenuButtonIcon {
-    background-repeat: no-repeat;
-    background-position: center;
-    text-overflow: clip;
-    background-size: 10px 10px;
-    width: 13px;
-    height: 13px;
-    float: left;
-    margin-right: 3px;
-
+    color: #FAFAFA;
 }
 
 #popupGUI {
@@ -424,7 +421,6 @@ select {
 .button:hover {
     cursor: pointer;
     background-color: #a5a5a5;
-/*    border-radius: 2px;*/
 }
 .button:active {
     cursor: pointer;
@@ -472,7 +468,7 @@ select {
     left:46px; /*0px;*/
     /*padding: 10px;*/
     width: calc(100% - 266px);
-    background-color: #E6E6E6;
+    background-color: var(--ui-complement);
     overflow: hidden;
 }
 
@@ -481,7 +477,7 @@ select {
     left: 35px;
     width: 33px;
     height: /*84px;*/ 10px;
-    background-color: #E6E6E6;
+    background-color: var(--ui-complement);
 }
 
 #timelineScrollbar {
@@ -543,11 +539,11 @@ select {
     display: none;
     z-index: 1000;
     border: none;
-    padding-left:5px;
+    padding: 3px;
+    padding-left: 5px;
     padding-right: 5px;
     max-width: 300px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    padding: 2px;
+    box-shadow: var(--ui-shadow1);
     opacity: 0.0;
     pointer-events: none;
     border-radius: 2px;
@@ -564,9 +560,8 @@ select {
     width: 300px;
     height: 50px;
     z-index: 999999;
-    background-color: #777;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    background-color: #585757;
+    box-shadow: var(--ui-shadow1);
+    background-color: var(--ui-base);
 
     border-radius: 5px;
 
@@ -579,18 +574,18 @@ select {
     cursor: pointer;
 }
 #alert-box:hover {
-    background-color: #31E19C;
+    background-color: var(--ui-accent1-dark1);
 }
 
 
 .alert-box-icon {
-    background-image: url("../resources/check-sign.svg");
+    background-image: url("../resources/info.svg");
     background-repeat: no-repeat;
     background-position: center;
     text-overflow: clip;
     background-size: 30px 30px;
 
-    color: white;
+    color: var(--ui-white);
 
     float: left;
     width: 50px;
@@ -598,13 +593,10 @@ select {
 }
 .alert-box-text {
     float: right;
-
-    color: white;
+    color: var(--ui-white);
     font-size: 24px;
-
     text-align: center;
-    margin-top: 10px;
-
+    margin-top: 7px;
     width: 250px;
     height: 50px;
 }
@@ -651,17 +643,16 @@ select {
     position: absolute;
     right: 15px;
     top: 15px;
-    width: 300px;
-    height: 115px;
-    background-color: #e05a12;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    width: 320px;
+    height: 105px;
+    background-color: var(--ui-base-light1);
+    box-shadow: var(--ui-shadow1);
     z-index: 999999999;
-    font-size: 18px;
+    font-size: 16px;
     border-radius: 3px;
-
-    font-weight: normal;
-    font-family: "Anonymous Pro", "Helvetica", "Arial", sans-serif;
-    color: #FFFFFF;
+    font-weight: 550;
+    font-family: var(--ui-font);
+    color: var(--ui-complement-dark1);
 }
 
 .alpha-warning-text {
@@ -767,7 +758,7 @@ select {
     height: 400px;
     position: absolute;
     z-index: 10;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: var(--ui-shadow1);
     transform: translateX(-50%) translateY(-50%);
     display: none;
 }
@@ -826,7 +817,7 @@ select {
     margin-left: 5%;
     width: 90%;
     height: 17px;
-    color: white;
+    color: var(--ui-white);
 }
 .hotkey-title {
     width: 47%;
@@ -852,12 +843,12 @@ hr.hotkeyhr {
     position: absolute;
     width: 220px;
     height: 15px;
-    font-size: 13px;
+    font-size: 12px;
     bottom: 0px;
     margin-bottom: 3px;
     right: 0px;
-    color: white;
-    font-family: "Anonymous Pro", "Helvetica", "Arial", sans-serif;
+    color: var(--ui-white);
+    font-family: var(--ui-font);
     text-align: center;
     cursor: pointer;
 }
@@ -866,14 +857,14 @@ hr.hotkeyhr {
 }
 
 #treeFilterInput {
-    color: #4E4D4D;
+    color: var(--ui-base-dark3);
     width: 100%;
     padding-left: 2px;
-    background: #A2A2A2 url(../resources/icon_search.png) no-repeat scroll 3px 3px;
+    background: var(--ui-complement) url(../resources/icon_search.png) no-repeat scroll 3px 3px;
     background-size: 12px 12px;
     padding-left:20px;
     text-overflow: ellipsis;
     display: block;
     border-radius: 2px 2px 0px 0px;
-
+    font-family: var(--ui-font);
 }

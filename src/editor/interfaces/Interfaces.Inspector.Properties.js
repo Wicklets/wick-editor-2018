@@ -22,7 +22,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
 
     properties.push(new InspectorInterface.TwoStringInput({
         title: '<img src="resources/inspector-icons/position.svg" class="inspector-icon"/>',
-        tooltip: 'Position (x,y)',
+        tooltip: 'Position (X, Y)',
         otherTitle: 'x',
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 
@@ -47,7 +47,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
 
     properties.push(new InspectorInterface.TwoStringInput({
         title: '<img src="resources/inspector-icons/size.svg" class="inspector-icon"/>',
-        tooltip: 'Width / Height',
+        tooltip: 'Width, Height',
         otherTitle: 'x',
         isActiveFn: function () {
             return selectionInfo.numObjects === 1 
@@ -144,6 +144,32 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     }));
 
     properties.push(new InspectorInterface.SelectInput({
+        title: '<img src="resources/image.png" class="inspector-icon"/>',
+        tooltip: 'Image Resource',
+        optionsFn: function () {
+            var imageAssetFilenames = wickEditor.project.library.getAllAssets().filter(function (asset) {
+                return asset.type === 'image';
+            }).map(function (asset) {
+                return asset.filename;
+            });
+            return imageAssetFilenames;
+        },
+        isActiveFn: function () {
+            return selectionInfo.type == 'wickobject'
+                && selectionInfo.dataType == 'image'
+                && selectionInfo.numObjects === 1;
+        },
+        getValueFn: function () {
+            return wickEditor.project.library.getAsset(selectionInfo.object.assetUUID).filename; 
+        },
+        onChangeFn: function (val) {
+            console.error('!! Need action for this !!')
+            selectionInfo.object.assetUUID = wickEditor.project.library.getAssetByName(val).uuid
+        }
+    }));
+
+    //font family
+    properties.push(new InspectorInterface.SelectInput({
         title: '<img src="resources/inspector-icons/fontfamily.svg" class="inspector-icon"/>',
         tooltip: 'Font Family',
         options: getAllGoogleFonts(),
@@ -156,14 +182,39 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             return selectionInfo.object.textData.fontFamily;
         }, 
         onChangeFn: function (val) {
-            loadGoogleFonts([val], function () {
+            //these variables will be attached to the font name in the WebFont Importer
+            var weight = ":"+selectionInfo.object.textData.fontWeight;
+            var italic = (selectionInfo.object.textData.fontStyle == "italic") ? 'i' : '';
+            //console.log(val+weight+italic);
+
+            //only webfonts need those two variables, not the default font, Arial
+            if (selectionInfo.object.textData.fontFamily === 'Arial'
+            || selectionInfo.object.textData.fontFamily === 'arial') {
+                weight = italic = "";
+            }
+            
+            //if font is loaded succesfully, update canvas and setting
+            var callback = function () {
                 selectionInfo.object.textData.fontFamily = val;
                 wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
                 wickEditor.syncInterfaces();
+                wickEditor.alertbox.hide();
+            };
+            
+            //reload Google Font with new weight and italic value.
+            //if you enable bold and/or italic then change to a font that doesn't support one of those, Wick will load Regular
+            //and reset the Bold and Italic buttons. Trying to load every single variant to check its validity takes too long.
+            //This problem could be alleviated if Wick Editor had a Google Web Font API Key.
+            
+            loadGoogleFonts([val+weight+italic], callback, function () {
+                loadGoogleFonts([val], callback);
+                selectionInfo.object.textData.fontWeight = '';
+                selectionInfo.object.textData.fontStyle == '';
             });
+            wickEditor.alertbox.showMessage("Loading font...", 0);
         }
     }));
-
+    
     properties.push(new InspectorInterface.SliderInput({
         title: '<img src="resources/inspector-icons/fontsize.svg" class="inspector-icon"/>',
         tooltip: 'Font Size',
@@ -186,7 +237,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
     properties.push(new InspectorInterface.MultiCheckboxInput({
         title: '',
         icons: [
-            'resources/align-left.svg', 
+            'resources/align-left.svg',
             'resources/align-center.svg',
             'resources/align-right.svg',
             'resources/text-bold.svg',
@@ -197,11 +248,11 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         },
         getValueFn: function () {
             return [
-                selectionInfo.object.textData.textAlign === 'left',
-                selectionInfo.object.textData.textAlign === 'center',
-                selectionInfo.object.textData.textAlign === 'right',
-                selectionInfo.object.textData.fontWeight === 'bold',
-                selectionInfo.object.textData.fontStyle === 'italic'
+                selectionInfo.object.textData.textAlign === 'left', //vals[0]
+                selectionInfo.object.textData.textAlign === 'center', //vals[1]
+                selectionInfo.object.textData.textAlign === 'right', //vals[2]
+                selectionInfo.object.textData.fontWeight === 'bold', //vals[3]
+                selectionInfo.object.textData.fontStyle === 'italic' //vals[4]
             ];
         }, 
         onChangeFn: function (vals) {
@@ -217,8 +268,23 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
             }
             selectionInfo.object.textData.fontWeight = vals[3] ? 'bold' : '';
             selectionInfo.object.textData.fontStyle = vals[4] ? 'italic' : '';
-            wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
-            wickEditor.syncInterfaces();
+            //these variables will be attached to the font name in the WebFont Importer
+            var weight = ":"+selectionInfo.object.textData.fontWeight;
+            var italic = (selectionInfo.object.textData.fontStyle == "italic") ? 'i' : '';
+            
+            //only webfonts need those two variables, not the default font, Arial
+            if (selectionInfo.object.textData.fontFamily === 'Arial'
+            || selectionInfo.object.textData.fontFamily === 'arial') {
+                weight = italic = "";
+                wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
+                wickEditor.syncInterfaces();
+            } else {
+                //reload Google Font with new weight and italic value
+                loadGoogleFonts([selectionInfo.object.textData.fontFamily+weight+italic], function () {
+                    wickEditor.canvas.getInteractiveCanvas().needsUpdate = true;
+                    wickEditor.syncInterfaces();
+                });
+            }
         }
     }));
 
@@ -520,7 +586,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
 
     properties.push(new InspectorInterface.SelectInput({
         title: '<img src="resources/inspector-icons/sound.svg" class="inspector-icon"/>',
-        tooltip: 'Sound',
+        tooltip: 'Sound Resource',
         optionsFn: function () {
             var audioAssetFilenames = wickEditor.project.library.getAllAssets().filter(function (asset) {
                 return asset.type === 'audio';
@@ -548,7 +614,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         }
     }));
 
-    properties.push(new InspectorInterface.SliderInput({
+    /*properties.push(new InspectorInterface.SliderInput({
         title: '<img src="resources/inspector-icons/volume.svg" class="inspector-icon"/>',
         tooltip: 'Volume',
         min: 0,
@@ -565,7 +631,7 @@ InspectorInterface.getProperties = function (wickEditor, inspector) {
         onChangeFn: function (val) {
             selectionInfo.object.volume = parseFloat(val);
         }
-    }));
+    }));*/
 
     properties.push(new InspectorInterface.MultiCheckboxInput({
         title: '<img src="resources/inspector-icons/ease.svg" class="inspector-icon"/>',

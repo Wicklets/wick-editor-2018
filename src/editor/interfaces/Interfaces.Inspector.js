@@ -21,7 +21,6 @@ var InspectorInterface = function (wickEditor) {
 
     var selectionIcon;
     var selectionTitle;
-    var inspectorTitle;
 
     var specialMode;
 
@@ -39,7 +38,6 @@ var InspectorInterface = function (wickEditor) {
         selectionTitleBar = document.getElementById('inspector-title-bar');
         selectionIcon = document.getElementsByClassName('inspector-selection-icon')[0];
         selectionTitle = document.getElementsByClassName('inspector-selection-title')[0];
-        inspectorTitle = document.getElementById('inspector-title');
 
         allItemsContainer = document.getElementsByClassName('inspector-allitems-container')[0];
         propertiesContainer = document.getElementsByClassName('inspector-properties-container')[0];
@@ -167,7 +165,6 @@ var InspectorInterface = function (wickEditor) {
 
     var updateSelectonTypeTitle = function () {
 
-        var noSelectionTitle = "Inspector";
         var title; 
         var image;
 
@@ -217,10 +214,9 @@ var InspectorInterface = function (wickEditor) {
             image = "./resources/tools/Line.svg";
 
         } else if(selectionInfo.type === 'none') {
-
-            noSelectionTitle = "Inspector (No Selection)"
-            title = ""
-            image = null;
+            
+            title = "Nothing selected."
+            image = "./resources/flashy-white-icon.svg";
 
         } else if(selectionInfo.numObjects > 1) {
 
@@ -263,7 +259,6 @@ var InspectorInterface = function (wickEditor) {
         }
 
         selectionTitle.innerHTML = title;
-        inspectorTitle.innerHTML = noSelectionTitle;
         if(image)
             selectionIcon.style.backgroundImage = 'url('+image+')';
         else

@@ -86,7 +86,7 @@ License: MIT
     width: 6px;
     left: 50%;
     cursor: pointer;
-    border: 1px solid black;
+    border: 2px solid black;
     background: white;
     opacity: .8;
 }
@@ -99,7 +99,6 @@ License: MIT
     height: 8px;
 }
 .sp-alpha-inner {
-    border: solid 1px #333;
 }
 
 .sp-clear {
@@ -216,7 +215,7 @@ License: MIT
 /* Clearfix hack */
 .sp-cf:before, .sp-cf:after { content: ""; display: table; }
 .sp-cf:after { clear: both; }
-.sp-cf { *zoom: 1; border-radius: 3px; }
+.sp-cf { *zoom: 1;border-radius: 3px;}
 
 /* Mobile devices, make hue slider bigger so it is easier to slide */
 @media (max-device-width: 480px) {
@@ -228,8 +227,8 @@ License: MIT
    border-radius: 5px;
    height: 5px;
    width: 5px;
-   border: 1px solid #fff;
-   background: #000;
+   border: 2px solid black;
+   background: white;
    cursor: pointer;
    position:absolute;
    top:0;
@@ -242,7 +241,7 @@ License: MIT
     height: 3px;
     left: -1px;
     right: -1px;
-    border: 1px solid #000;
+    border: 2px solid #000;
     background: white;
     opacity: .8;
 }
@@ -260,7 +259,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
     padding: 0;
 }
 .sp-container, .sp-container button, .sp-container input, .sp-color, .sp-hue, .sp-clear {
-    font: normal 12px "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+    font: var(--ui-font);
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     -ms-box-sizing: border-box;
@@ -269,9 +268,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 .sp-top {
     margin-bottom: 3px;
 }
-.sp-color, .sp-hue, .sp-clear {
-    border: solid 1px #666;
-}
+.sp-color, .sp-hue, .sp-clear {box-shadow: var(--ui-shadow1);}
 
 /* Input */
 .sp-input-container {
@@ -284,13 +281,13 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 }
 .sp-input {
    font-size: 12px !important;
-   border: 1px inset;
-   padding: 4px 5px;
-   margin: 0;
-   width: 100%;
-   background:#FFF;
+   border: 0px inset;
+   padding: 3px 5px;
+   margin-left: 5px;
+   width: 95%;
+   background: var(--ui-white);
    border-radius: 3px;
-   color: #222;
+   color: var(--ui-black);
 }
 .sp-input:focus  {
     border: 1px solid orange;
@@ -302,12 +299,12 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 .sp-picker-container , .sp-palette-container {
     float:left;
     position: relative;
-    padding: 10px;
+    padding: 5px;
     padding-bottom: 300px;
     margin-bottom: -290px;
 }
 .sp-picker-container {
-    width: 172px;
+    width: 162px;
     border-left: solid 1px #fff;
 }
 
@@ -343,8 +340,8 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
     border: solid 1px #333;
 }
 .sp-initial span {
-    width: 30px;
-    height: 25px;
+    width: 20px;
+    height: 20px;
     border:none;
     display:block;
     float:left;
@@ -412,7 +409,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
     width: 16px;
     height: 16px;
     margin:2px 1px;
-    border: solid 1px #AAA;
+    box-shadow: 0px 2px 7px #000000a6;
 }
 
 .sp-container {

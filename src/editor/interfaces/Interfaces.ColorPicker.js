@@ -34,12 +34,12 @@ var ColorPickerInterface = function (wickEditor) {
         colorPickerContainer = document.getElementById('colorPickerGUI');
         colorPickerContainer.style.display = 'none';
 
-        var closeButton = document.createElement('div');
+        /*var closeButton = document.createElement('div');
         closeButton.className = 'color-picker-close-button';
         closeButton.onclick = function () {
             self.close();
         }
-        colorPickerContainer.appendChild(closeButton);
+        colorPickerContainer.appendChild(closeButton);*/
 
         colorPicker = document.createElement('input');
         colorPicker.type = 'text';
@@ -61,6 +61,7 @@ var ColorPickerInterface = function (wickEditor) {
             localStorageKey: "spectrum.demo",
             showAlpha: true,
             maxSelectionSize: 6,
+            clickoutFiresChange: true,
             move: function (color) {
                 var colorString = color.toString();
                 if(previewType && previewType === 'background-color') {

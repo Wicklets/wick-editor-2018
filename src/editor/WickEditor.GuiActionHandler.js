@@ -1232,6 +1232,17 @@ var GuiActionHandler = function (wickEditor) {
 
         });
 
+    registerAction('createAssetFromSelection',
+        [],
+        [],
+        {},
+        function (args) {
+            var json = wickEditor.project.getSelectedObject().getAsJSON();
+            var asset = new WickAsset(json, 'symbol', prompt('Name ur new thing'));
+            wickEditor.project.library.addAsset(asset);
+            wickEditor.project.getSelectedObject().assetUUID = asset.uuid;
+        });
+
     registerAction('createObjectFromAsset',
         [],
         [],
@@ -1243,18 +1254,28 @@ var GuiActionHandler = function (wickEditor) {
             var screenPos = wickEditor.canvas.screenToCanvasSpace(args.x, args.y)
             var wickObj = new WickObject();
 
+            if(asset.type === 'image') {
+                var wickObj = new WickObject();
+                wickObj.isImage = true;
+            } else if (asset.type === 'symbol') {
+                var wickObj = WickObject.fromJSON(asset.data);
+                wickObj.getAllChildObjectsRecursive().forEach(function (child) {
+                    child.uuid = random.uuid4();
+                    (child.layers||[]).forEach(function (layer) {
+                        layer.frames.forEach(function (frame) {
+                            frame.uuid = random.uuid4();
+                        })
+                    });
+                });
+                wickObj.getAllFrames().forEach(function (frame) {
+                    frame.uuid = random.uuid4();
+                });
+            }
+
             wickObj.assetUUID = asset.uuid;
             wickObj.x = screenPos.x;
             wickObj.y = screenPos.y;
 
-
-            if(asset.type === 'image') {
-                var wickObj = new WickObject();
-                wickObj.assetUUID = asset.uuid;
-                wickObj.isImage = true;
-                wickObj.x = screenPos.x;
-                wickObj.y = screenPos.y;
-            }
             wickEditor.actionHandler.doAction('addObjects', {
                 wickObjects:[wickObj]
             });

@@ -1,50 +1,53 @@
 #inspectorGUI {
     right: 0px;
     top: 0px;
-    margin-top: 30px;
+    margin-top: 25px;
     height: calc(100% - 25px);
     width: 210px;
     display: inline;
     overflow: hidden;
     border-right: 0px;
     border-bottom: 0px;
-    font-family: "Open Sans";
+    font-family: var(--ui-font);
     padding: 5px;
 }
 
-#inspector-title {
-	color: #BBB;
+#inspector-title { /*not used anymore*/
+	color: var(--ui-complement-dark1);
 	text-align: center;
-	background-color: #666;
+	background-color: var(--ui-base-light1);
 	width: 100%;
 	border-radius: 3px;
 }
 
 .inspector-selection-icon {
-	width: 50px;
-	height: 50px;
-
+	width: 32px;
+	height: 32px;
+	margin-left: 9px;
+	margin-top: 3px;
 	background-repeat: no-repeat;
-    background-position: center;
-    text-overflow: clip;
-    overflow: hidden;
-    background-size: 60% 60%;
-    float: left;
+	background-position: center;
+	text-overflow: clip;
+	overflow: hidden;
+	background-size: 100% 100%;
+	float: left;
 }
 
 .inspector-title-bar {
-	height: 50px;
 	width: 100%;
+	height: 40px;
+	margin-bottom: 5px;
 }
 
 .inspector-selection-title {
 	color: white;
-	font-size: 20px;
+	font-size: 18px;
+	font-weight: 550;
 	width: calc(100% - 55px);
-	height: 45px;
 	float: right;
-	margin-top: 12px;
-	margin-left: 5px;
+	margin-left: 10px;
+	margin-top: 5px;
+	margin-bottom: 0px;
 }
 
 .inspector-allitems-container {
@@ -56,11 +59,10 @@
 .inspector-properties-container {
 	width: 100%;
 	height:auto;
-	padding-top: 5px;
 	padding-bottom: 10px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
 }
 
 .inspector-buttons-container {
@@ -111,16 +113,14 @@
 
 .inspector-input-string {
 	border-radius: 4px;
-
 	width: 65%;
-	height: 22px;
-
+	height: 21px;
 	float: left;
-	margin-bottom: 4px;
-
+	margin-bottom: 1px;
+	padding-bottom: 1px;
 	text-align: center;
-
 	font-size: 14px;
+	font-family: var(--ui-font);
 }
 .inspector-input-string-small {
 	width: 25%;
@@ -132,14 +132,14 @@
 .inspector-input-slider {
 	width: 45%;
 	-webkit-appearance: none;
-    height: 22px;
-    background: #d3d3d3;
-    outline: none;
-    opacity: 0.7;
-    -webkit-transition: .2s;
-    transition: opacity .2s;
-    margin-left: 10px;
-    border-radius: 3px;
+	height: 22px;
+	background: var(--ui-base-light2);
+	outline: none;
+	opacity: 0.7;
+	-webkit-transition: .2s;
+	transition: opacity .2s;
+	margin-left: 10px;
+	border-radius: 3px;
 }
 .inspector-input-slider:hover {
 	opacity: 1.0;
@@ -208,9 +208,13 @@
 .inspector-input-select {
 	width: 65%;
 	height: 22px;
-
 	float: left;
 	margin-bottom: 4px;
+	padding-bottom:  1px;
+	font-size: 14px;
+	font-family: var(--ui-font);
+	border: 0px;
+	border-radius: 3px;
 }
 
 .inspector-color-picker {
@@ -252,7 +256,7 @@
     overflow: hidden;
     background-size: 60% 60%;
 
-    box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+    box-shadow: var(--ui-shadow1);
 
     cursor: pointer;
 
@@ -264,15 +268,15 @@
 }
 
 .inspector-button-common {
-	background-color: #4ECDC4;
+	background-color: var(--ui-accent1);
 }
 
 .inspector-button-multiple {
-	background-color: #556270;
+	background-color: var(--ui-accent3);
 }
 
 .inspector-button-symbol {
-	background-color: #FF6B6B;
+	background-color: var(--ui-accent2);
 }
 
 .inspector-button-all-paths {
@@ -280,7 +284,7 @@
 }
 
 .inspector-button-frames {
-	background-color: #C44D58;
+	background-color: var(--ui-accent3);
 }
 
 .inspector-button-playranges {
@@ -288,7 +292,7 @@
 }
 
 .inspector-button-tweens {
-	background-color: #556270;
+	background-color: var(--ui-accent3-dark1);
 }
 
 .inspector-divider {
