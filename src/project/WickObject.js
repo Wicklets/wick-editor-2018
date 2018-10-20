@@ -1280,6 +1280,22 @@ WickObject.prototype.pointTo = function ( x2, y2 ) {
     this.rotation = Math.atan2(dy,dx) * 180 / Math.PI - 90;
 };
 
+WickObject.prototype.moveUp = function ( d ) {
+    this.y -= d === undefined ? 1 : d;
+}
+
+WickObject.prototype.moveDown = function ( d ) {
+    this.y += d === undefined ? 1 : d;
+}
+
+WickObject.prototype.moveLeft = function ( d ) {
+    this.x -= d === undefined ? 1 : d;
+}
+
+WickObject.prototype.moveRight = function ( d ) {
+    this.x += d === undefined ? 1 : d;
+}
+
 WickObject.prototype.getSourceInside = function () {
     if(this.isRoot) {
         return null;
