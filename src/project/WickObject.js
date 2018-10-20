@@ -1265,6 +1265,22 @@ WickObject.prototype.setText = function (text) {
     this._renderDirty = true;  
 }
 
+WickObject.prototype.moveUp = function ( d ) {
+    this.y -= d === undefined ? 1 : d;
+}
+
+WickObject.prototype.moveDown = function ( d ) {
+    this.y += d === undefined ? 1 : d;
+}
+
+WickObject.prototype.moveLeft = function ( d ) {
+    this.x -= d === undefined ? 1 : d;
+}
+
+WickObject.prototype.moveRight = function ( d ) {
+    this.x += d === undefined ? 1 : d;
+}
+
 WickObject.prototype.pointTo = function ( x2, y2 ) {
     var dx = this.x - x2,
         dy = this.y - y2;
