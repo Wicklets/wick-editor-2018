@@ -106,7 +106,7 @@ Tools.Paintbrush = function (wickEditor) {
     }
 
     this.paperTool.onMouseUp = function (event) {
-        if (path) {
+        /*if (path) {
             var pathWickObject;
 
             path.add(event.point)
@@ -165,9 +165,9 @@ Tools.Paintbrush = function (wickEditor) {
             });
 
             path = null;
-        }
+        }*/
 
-        /*var smoothing = getBrushSmoothFactor();
+        var smoothing = getBrushSmoothFactor();
         var raster = path.rasterize(paper.view.resolution/window.devicePixelRatio*smoothing);
         raster.remove()
         var rasterDataURL = raster.toDataURL()
@@ -189,6 +189,7 @@ Tools.Paintbrush = function (wickEditor) {
                 pathWickObject.y = path.position.y;
                 pathWickObject.svgX = tempPaperForPosition.bounds._x;
                 pathWickObject.svgY = tempPaperForPosition.bounds._y;
+                tempPaperForPosition.children[0].closed = true;
                 pathWickObject.pathData = tempPaperForPosition.exportSVG({asString:true});
 
                 wickEditor.actionHandler.doAction('addObjects', {
@@ -199,7 +200,7 @@ Tools.Paintbrush = function (wickEditor) {
 
             }, wickEditor.settings.fillColor);
         }
-        final.src = rasterDataURL;*/
+        final.src = rasterDataURL;
 
     }
 

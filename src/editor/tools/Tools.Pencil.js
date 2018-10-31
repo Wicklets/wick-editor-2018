@@ -98,14 +98,14 @@ Tools.Pencil = function (wickEditor) {
             if(path.segments.length > 2) {
                 path.smooth();
 
-                if(wickEditor.settings.pencilSmoothing > 0) {
+                /*if(wickEditor.settings.pencilSmoothing > 0) {
                     var t = wickEditor.settings.strokeWidth;
                     var s = wickEditor.settings.pencilSmoothing/100*10;
                     var z = wickEditor.canvas.getZoom();
                     path.simplify(t / z * s);
                 }
 
-                path.join(path, 5/wickEditor.canvas.getZoom())
+                path.join(path, 5/wickEditor.canvas.getZoom())*/
             }
 
             path.remove();
