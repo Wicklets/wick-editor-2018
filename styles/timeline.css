@@ -1,7 +1,7 @@
 /* Wick - (c) 2017 Zach Rispoli, Luca Damasco, and Josh Rispoli */
 
-/*  This file is part of Wick. 
-    
+/*  This file is part of Wick.
+
     Wick is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -14,11 +14,11 @@
 
     You should have received a copy of the GNU General Public License
     along with Wick.  If not, see <http://www.gnu.org/licenses/>. */
-    
+
 body {
     --common-padding: 2px;
-    
-    --max-timeline-height: 160px; 
+
+    --max-timeline-height: 160px;
 
     --layers-width: 135px;
     --layer-height: 30px;
@@ -34,10 +34,10 @@ body {
 
     --shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
     --border: inset 0px 0px 1px #555;
-    
-    --timeline-left-padding: 5px; 
-    --timeline-top-padding: 6px; 
-    --timeline-bottom-padding: 5px; 
+
+    --timeline-left-padding: 5px;
+    --timeline-top-padding: 6px;
+    --timeline-bottom-padding: 5px;
 
     --frames-cell-first-padding: 5px;
 
@@ -45,7 +45,7 @@ body {
 
 
     --number-line-height: 16px;
-    
+
 }
 
 .timeline {
@@ -53,9 +53,9 @@ body {
 
     margin: 0px;
     padding: 0px;
-    
+
     width: 100%;
-    height: 100px;  
+    height: 100px;
 
     overflow: hidden;
 }
@@ -107,14 +107,14 @@ body {
 
 .layer-tools-button {
     position: absolute;
-    
+
     top: 0px;
     left: 0px;
     width: var(--scrollbar-thickness);
     height: var(--scrollbar-thickness);
 
     background-color: #F0EFEF;
-    
+
     border-radius: 2px;
     margin-left: 5px;
 
@@ -141,7 +141,7 @@ body {
     top: 5px;
     left: 25px;
     background-image: url("../resources/minusButton.svg");
-    
+
 }
 .delete-layer-button:hover {
     /*width: 100px;*/
@@ -154,7 +154,7 @@ body {
     left: 110px;
     border-radius: 7px;
     background-image: url("../resources/onion.png");
-    
+
 }
 .onion-skin-button:hover {
     background-color: #31E19C;
@@ -219,11 +219,11 @@ body {
     background-size: 15px 17px;
     background-repeat: no-repeat;
     background-position: left;*/
-    
-    
+
+
     width:  calc(100% - 10px);
     height: calc(var(--layer-height) - 5px);
-    
+
     margin: calc(var(--common-padding) / 2);
     margin-top: 9px;
     margin-left: 5px;
@@ -239,7 +239,7 @@ body {
 
     font-size: 12px;
     font-family: "Anonymous Pro";
-    font-style: Bold; 
+    font-style: Bold;
 }
 
 .soundLayer {
@@ -264,7 +264,7 @@ body {
     left: 60px;
     font-size: 12px;
     font-family: "Anonymous Pro";
-    font-style: Bold; 
+    font-style: Bold;
 }
 
 .layer-gnurl {
@@ -361,7 +361,7 @@ body {
 
     position: absolute;
     overflow: hidden;
-    
+
     display: inline-block;
 
     box-shadow: var(--border);
@@ -392,7 +392,7 @@ body {
     box-shadow: var(--border);
 
     overflow: hidden;
-    
+
     border-radius: 5px;
 
     /*pointer-events:none;*/
@@ -427,12 +427,12 @@ body {
     margin-top: 7px;
     margin-left: 15px;
 /*  box-shadow: var(--border), var(--shadow);*/
-    
+
     border-radius: 1px;
 }
 
 .frame-thumbnail {
-    max-height: 100%; 
+    max-height: 100%;
     max-width: 100%;
     width:  12px;
     height: 12px;
@@ -510,14 +510,14 @@ body {
     border-right: 2px solid #F9DE00;
     border-top: 2px solid #F9DE00;
     border-bottom: 2px solid #F9DE00;
-    box-sizing: border-box;    
+    box-sizing: border-box;
     border-top-right-radius: 0.8;
-    border-bottom-right-radius: 0.8; 
+    border-bottom-right-radius: 0.8;
 }
 /*
 
 .flame-extender-handle-right:hover {
-    
+
 }
 */
 
@@ -526,7 +526,7 @@ body {
 
 .frame-extender-handle-left {
     background-color: red;
-    position: absolute; 
+    position: absolute;
     left: 0px;
     top: 0px;
 }
@@ -536,7 +536,7 @@ body {
     height: 100%;
     position: absolute;
     pointer-events: none;
-    box-shadow: inset 0px 0px 0px 3px #5BBEDB, 0px 0px 0px 2px #48A5BE; 
+    box-shadow: inset 0px 0px 0px 3px #5BBEDB, 0px 0px 0px 2px #48A5BE;
 /*  background-color: cyan;*/
 /*
     border-color: red;
@@ -547,18 +547,18 @@ body {
     top:0px;
 }
 .selection-overlay-error {
-    box-shadow: inset 0px 0px 0px 3px #FF0000, 0px 0px 0px 2px #EE3333; 
+    box-shadow: inset 0px 0px 0px 3px #FF0000, 0px 0px 0px 2px #EE3333;
 }
 
 .add-frame-overlay {
-    width: calc(var(--frame-width) / 1.5); 
+    width: calc(var(--frame-width) / 1.5);
     height: calc(var(--layer-height) / 1.8);
     position: absolute;
     margin-left: calc(var(--frame-width)  / 2 - var(--frame-width)  / 1.5 / 2 + 10px);
     margin-top:  calc(var(--layer-height) / 2 - var(--layer-height) / 1.8 / 2 + 6px);
     background-color: #ffffff;
     border-radius: 3px;
-    box-shadow: 0 0 1px 0 rgba(0,0,0,0.12), 0 1px 1px 0 rgba(0,0,0,0.24), 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24); 
+    box-shadow: 0 0 1px 0 rgba(0,0,0,0.12), 0 1px 1px 0 rgba(0,0,0,0.24), 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
     pointer-events: none;
     z-index: 10;
 }
@@ -600,7 +600,7 @@ body {
     right: calc(var(--scrollbar-thickness) + 50px);
     width: calc(100% - var(--layers-width) - var(--scrollbar-thickness) - 50px);
     height: var(--scrollbar-thickness);
-    
+
 
 }
 
@@ -616,7 +616,7 @@ body {
     width: var(--scrollbar-thickness);
     height: var(--scrollbar-thickness);
     position: absolute;
-    background-color: #2E2E2E; 
+    background-color: #2E2E2E;
     opacity: 1.0;
 }
 .scrollbar-button:hover {
@@ -640,7 +640,7 @@ body {
     background-image: url('../resources/scrollbararrow-right.svg');
     background-repeat: no-repeat;
     background-position: center;
-    
+
 }
 
 .scrollbar-button-top {
@@ -680,7 +680,7 @@ body {
 .scrollbar-head-vertical {
     width: calc(var(--scrollbar-thickness) - 4px);
     margin: 0 auto;
-    /* Height depends on number of layers */ 
+    /* Height depends on number of layers */
 }
 
 .number-line {
@@ -740,7 +740,7 @@ body {
 
     background-color: none;
     opacity: 1.0;
-    
+
     color: #FAFAFA;
 
     /*-webkit-box-shadow:inset 0px 0px 0px 2px #fff;
@@ -857,8 +857,8 @@ body {
     height: var(--scrollbar-thickness);
     bottom: 0px;
     left: 0px;
-    border-top: 1px; 
-    border-color: black; 
+    border-top: 1px;
+    border-color: black;
     background-color: #252525;
 }
 
@@ -953,7 +953,7 @@ body {
     top: 30px;
     left: 46px;
     width: calc(100% - 266px);
-    height: 15px;
+    height: 20px;
     background-color: #000;
     overflow: hidden;
     color: white;

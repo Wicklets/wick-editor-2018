@@ -468,7 +468,7 @@ select {
 }
 
 #timelineGUI {
-    top: 45px;
+    top: 50px;
     left:46px; /*0px;*/
     /*padding: 10px;*/
     width: calc(100% - 266px);
