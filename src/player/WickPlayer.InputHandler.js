@@ -275,17 +275,12 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
         
         keys[event.keyCode] = false;
     }
-
+    
     var onTouchStart = function (evt) {
 
-        document.getElementById('rendererCanvas').focus();
+        canvasContainer.focus();
 
         evt.preventDefault();
-
-        // on iOS, WebAudio context only gets 'unmuted' after first user interaction
-        if(!audioContext) {
-            wickPlayer.audioPlayer.setup(wickProject);
-        }
 
         var touchPos = getTouchPos(canvasContainer, evt);
         setMousePos(touchPos);
@@ -294,8 +289,7 @@ WickPlayerInputHandler = function (canvasContainer, wickProject) {
             if(child.isPointInside(touchPos)) {
                 child._wasClicked = true;
             }
-        });
-        
+        });       
 
     }
 
